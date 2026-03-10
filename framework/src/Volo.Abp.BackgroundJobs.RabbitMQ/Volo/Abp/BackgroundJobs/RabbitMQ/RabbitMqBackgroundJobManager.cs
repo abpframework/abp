@@ -1,5 +1,7 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 
@@ -11,12 +13,14 @@ public class RabbitMqBackgroundJobManager : IBackgroundJobManager, ITransientDep
     protected IJobQueueManager JobQueueManager { get; }
     protected IAnonymousJobHandlerRegistry AnonymousJobHandlerRegistry { get; }
     protected IJsonSerializer JsonSerializer { get; }
+    public ILogger<RabbitMqBackgroundJobManager> Logger { get; set; }
 
     public RabbitMqBackgroundJobManager(IJobQueueManager jobQueueManager, IAnonymousJobHandlerRegistry anonymousJobHandlerRegistry, IJsonSerializer jsonSerializer)
     {
         JobQueueManager = jobQueueManager;
         AnonymousJobHandlerRegistry = anonymousJobHandlerRegistry;
         JsonSerializer = jsonSerializer;
+        Logger = NullLogger<RabbitMqBackgroundJobManager>.Instance;
     }
 
     public virtual async Task<string> EnqueueAsync<TArgs>(
@@ -36,6 +40,11 @@ public class RabbitMqBackgroundJobManager : IBackgroundJobManager, ITransientDep
     {
         if (ShouldWrapAsAnonymousJob(jobName))
         {
+            Logger.LogInformation(
+                "Wrapping job into anonymous transport. TransportJobName: {TransportJobName}, EffectiveJobName: {EffectiveJobName}",
+                AnonymousJobArgs.JobNameConstant,
+                jobName
+            );
             var jsonData = JsonSerializer.Serialize(args);
             var anonymousArgs = new AnonymousJobArgs(jobName, jsonData);
             return await EnqueueAsync(AnonymousJobArgs.JobNameConstant, anonymousArgs, priority, delay);

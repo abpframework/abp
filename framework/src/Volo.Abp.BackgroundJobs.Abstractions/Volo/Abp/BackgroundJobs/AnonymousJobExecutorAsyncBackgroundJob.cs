@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.BackgroundJobs;
@@ -20,6 +21,12 @@ public class AnonymousJobExecutorAsyncBackgroundJob : AsyncBackgroundJob<Anonymo
 
     public override async Task ExecuteAsync(AnonymousJobArgs args)
     {
+        Logger.LogInformation(
+            "Executing anonymous transport job. TransportJobName: {TransportJobName}, EffectiveJobName: {EffectiveJobName}",
+            AnonymousJobArgs.JobNameConstant,
+            args.JobName
+        );
+
         var handler = HandlerRegistry.Get(args.JobName);
         if (handler == null)
         {

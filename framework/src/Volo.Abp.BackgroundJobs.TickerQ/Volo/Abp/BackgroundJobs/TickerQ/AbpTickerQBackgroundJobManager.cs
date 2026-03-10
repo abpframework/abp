@@ -1,6 +1,8 @@
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using TickerQ.Utilities;
 using TickerQ.Utilities.Entities;
@@ -20,6 +22,7 @@ public class AbpTickerQBackgroundJobManager : IBackgroundJobManager, ITransientD
     protected AbpBackgroundJobsTickerQOptions TickerQOptions { get; }
     protected IAnonymousJobHandlerRegistry AnonymousJobHandlerRegistry { get; }
     protected IJsonSerializer JsonSerializer { get; }
+    public ILogger<AbpTickerQBackgroundJobManager> Logger { get; set; }
 
     public AbpTickerQBackgroundJobManager(
         ITimeTickerManager<TimeTickerEntity> timeTickerManager,
@@ -33,6 +36,7 @@ public class AbpTickerQBackgroundJobManager : IBackgroundJobManager, ITransientD
         TickerQOptions = tickerQOptions.Value;
         AnonymousJobHandlerRegistry = anonymousJobHandlerRegistry;
         JsonSerializer = jsonSerializer;
+        Logger = NullLogger<AbpTickerQBackgroundJobManager>.Instance;
     }
 
     public virtual async Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
@@ -45,6 +49,11 @@ public class AbpTickerQBackgroundJobManager : IBackgroundJobManager, ITransientD
     {
         if (ShouldWrapAsAnonymousJob(jobName))
         {
+            Logger.LogInformation(
+                "Wrapping job into anonymous transport. TransportJobName: {TransportJobName}, EffectiveJobName: {EffectiveJobName}",
+                AnonymousJobArgs.JobNameConstant,
+                jobName
+            );
             var jsonData = JsonSerializer.Serialize(args);
             var anonymousArgs = new AnonymousJobArgs(jobName, jsonData);
             return await EnqueueAsync(AnonymousJobArgs.JobNameConstant, anonymousArgs, priority, delay);

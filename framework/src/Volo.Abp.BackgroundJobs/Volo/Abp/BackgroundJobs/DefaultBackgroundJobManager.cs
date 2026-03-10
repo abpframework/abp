@@ -1,5 +1,7 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.DependencyInjection;
@@ -21,6 +23,7 @@ public class DefaultBackgroundJobManager : IBackgroundJobManager, ITransientDepe
     protected IAnonymousJobHandlerRegistry AnonymousJobHandlerRegistry { get; }
     protected IOptions<AbpBackgroundJobOptions> BackgroundJobOptions { get; }
     protected IOptions<AbpBackgroundJobWorkerOptions> BackgroundJobWorkerOptions { get; }
+    public ILogger<DefaultBackgroundJobManager> Logger { get; set; }
 
     public DefaultBackgroundJobManager(
         IClock clock,
@@ -38,6 +41,7 @@ public class DefaultBackgroundJobManager : IBackgroundJobManager, ITransientDepe
         BackgroundJobOptions = backgroundJobOptions;
         BackgroundJobWorkerOptions = backgroundJobWorkerOptions;
         Store = store;
+        Logger = NullLogger<DefaultBackgroundJobManager>.Instance;
     }
 
     public virtual async Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
@@ -50,6 +54,11 @@ public class DefaultBackgroundJobManager : IBackgroundJobManager, ITransientDepe
     {
         if (ShouldWrapAsAnonymousJob(jobName))
         {
+            Logger.LogInformation(
+                "Wrapping job into anonymous transport. TransportJobName: {TransportJobName}, EffectiveJobName: {EffectiveJobName}",
+                AnonymousJobArgs.JobNameConstant,
+                jobName
+            );
             var jsonData = Serializer.Serialize(args);
             var anonymousArgs = new AnonymousJobArgs(jobName, jsonData);
             return await EnqueueAsync(AnonymousJobArgs.JobNameConstant, anonymousArgs, priority, delay);

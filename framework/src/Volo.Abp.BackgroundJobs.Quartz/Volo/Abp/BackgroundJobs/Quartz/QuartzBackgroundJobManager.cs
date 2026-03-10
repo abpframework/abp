@@ -1,5 +1,7 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Quartz;
 using Volo.Abp.DependencyInjection;
@@ -20,6 +22,7 @@ public class QuartzBackgroundJobManager : IBackgroundJobManager, ITransientDepen
     protected IJsonSerializer JsonSerializer { get; }
 
     protected IAnonymousJobHandlerRegistry AnonymousJobHandlerRegistry { get; }
+    public ILogger<QuartzBackgroundJobManager> Logger { get; set; }
 
     public QuartzBackgroundJobManager(IScheduler scheduler, IOptions<AbpBackgroundJobQuartzOptions> options, IJsonSerializer jsonSerializer, IAnonymousJobHandlerRegistry anonymousJobHandlerRegistry)
     {
@@ -27,6 +30,7 @@ public class QuartzBackgroundJobManager : IBackgroundJobManager, ITransientDepen
         JsonSerializer = jsonSerializer;
         Options = options.Value;
         AnonymousJobHandlerRegistry = anonymousJobHandlerRegistry;
+        Logger = NullLogger<QuartzBackgroundJobManager>.Instance;
     }
 
     public virtual async Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal,
@@ -40,6 +44,11 @@ public class QuartzBackgroundJobManager : IBackgroundJobManager, ITransientDepen
     {
         if (ShouldWrapAsAnonymousJob(jobName))
         {
+            Logger.LogInformation(
+                "Wrapping job into anonymous transport. TransportJobName: {TransportJobName}, EffectiveJobName: {EffectiveJobName}",
+                AnonymousJobArgs.JobNameConstant,
+                jobName
+            );
             var jsonData = JsonSerializer.Serialize(args);
             var anonymousArgs = new AnonymousJobArgs(jobName, jsonData);
             return await EnqueueAsync(AnonymousJobArgs.JobNameConstant, anonymousArgs, priority, delay);

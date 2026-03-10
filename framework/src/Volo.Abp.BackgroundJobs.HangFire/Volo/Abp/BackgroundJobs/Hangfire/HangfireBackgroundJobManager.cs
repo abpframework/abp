@@ -3,6 +3,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Hangfire;
 using Hangfire.States;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Hangfire;
@@ -17,6 +19,7 @@ public class HangfireBackgroundJobManager : IBackgroundJobManager, ITransientDep
     protected IOptions<AbpHangfireOptions> HangfireOptions { get; }
     protected IJsonSerializer JsonSerializer { get; }
     protected IAnonymousJobHandlerRegistry AnonymousJobHandlerRegistry { get; }
+    public ILogger<HangfireBackgroundJobManager> Logger { get; set; }
 
     public HangfireBackgroundJobManager(
         IOptions<AbpBackgroundJobOptions> backgroundJobOptions,
@@ -28,6 +31,7 @@ public class HangfireBackgroundJobManager : IBackgroundJobManager, ITransientDep
         HangfireOptions = hangfireOptions;
         JsonSerializer = jsonSerializer;
         AnonymousJobHandlerRegistry = anonymousJobHandlerRegistry;
+        Logger = NullLogger<HangfireBackgroundJobManager>.Instance;
     }
 
     public virtual Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal,
@@ -48,6 +52,11 @@ public class HangfireBackgroundJobManager : IBackgroundJobManager, ITransientDep
     {
         if (ShouldWrapAsAnonymousJob(jobName))
         {
+            Logger.LogInformation(
+                "Wrapping job into anonymous transport. TransportJobName: {TransportJobName}, EffectiveJobName: {EffectiveJobName}",
+                AnonymousJobArgs.JobNameConstant,
+                jobName
+            );
             var jsonData = JsonSerializer.Serialize(args);
             var anonymousArgs = new AnonymousJobArgs(jobName, jsonData);
             return EnqueueAsync(AnonymousJobArgs.JobNameConstant, anonymousArgs, priority, delay);
