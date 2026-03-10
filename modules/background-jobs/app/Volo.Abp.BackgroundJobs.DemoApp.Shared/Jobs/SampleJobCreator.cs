@@ -28,14 +28,16 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
         {
             _anonymousJobHandlerRegistry.Register("RuntimeAnonymousJob", (context, ct) =>
             {
-                using var doc = JsonDocument.Parse(context.JsonData);
-                var value = doc.RootElement.TryGetProperty("value", out var prop)
-                    ? prop.GetString()
-                    : doc.RootElement.TryGetProperty("Value", out prop)
+                using (var doc = JsonDocument.Parse(context.JsonData))
+                {
+                    var value = doc.RootElement.TryGetProperty("value", out var prop)
                         ? prop.GetString()
-                        : null;
-                Console.WriteLine($"[ANONYMOUS-RUNTIME] {value}");
-                return Task.CompletedTask;
+                        : doc.RootElement.TryGetProperty("Value", out prop)
+                            ? prop.GetString()
+                            : null;
+                    Console.WriteLine($"[ANONYMOUS-RUNTIME] {value}");
+                    return Task.CompletedTask;
+                }
             });
 
             // Type-safe enqueue (existing)

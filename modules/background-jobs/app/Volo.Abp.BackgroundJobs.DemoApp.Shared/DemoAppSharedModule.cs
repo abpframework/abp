@@ -15,16 +15,18 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared
         {
             Configure<AbpBackgroundJobOptions>(options =>
             {
-                options.AddAnonymousJobHandler("CompileTimeAnonymousJob", (context, ct) =>
+                options.AddAnonymousJobHandler("CompileTimeAnonymousJob", (ctx, ct) =>
                 {
-                    using var doc = JsonDocument.Parse(context.JsonData);
-                    var value = doc.RootElement.TryGetProperty("value", out var prop)
-                        ? prop.GetString()
-                        : doc.RootElement.TryGetProperty("Value", out prop)
+                    using (var doc = JsonDocument.Parse(ctx.JsonData))
+                    {
+                        var value = doc.RootElement.TryGetProperty("value", out var prop)
                             ? prop.GetString()
-                            : null;
-                    Console.WriteLine($"[ANONYMOUS-COMPILE] {value}");
-                    return Task.CompletedTask;
+                            : doc.RootElement.TryGetProperty("Value", out prop)
+                                ? prop.GetString()
+                                : null;
+                        Console.WriteLine($"[ANONYMOUS-COMPILE] {value}");
+                        return Task.CompletedTask;
+                    }
                 });
             });
         }
