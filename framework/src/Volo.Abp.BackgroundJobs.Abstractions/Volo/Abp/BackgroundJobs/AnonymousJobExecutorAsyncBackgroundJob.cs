@@ -1,8 +1,9 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundJobs;
 
@@ -33,6 +34,8 @@ public class AnonymousJobExecutorAsyncBackgroundJob : AsyncBackgroundJob<Anonymo
             throw new AbpException("No anonymous job handler registered for: " + args.JobName);
         }
 
-        await handler(args.JsonData, ServiceProvider, default(CancellationToken));
+        var cancellationToken = ServiceProvider.GetRequiredService<ICancellationTokenProvider>().Token;
+        var executionContext = new AnonymousJobExecutionContext(args.JobName, args.JsonData, ServiceProvider);
+        await handler(executionContext, cancellationToken);
     }
 }

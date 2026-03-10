@@ -15,9 +15,9 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared
         {
             Configure<AbpBackgroundJobOptions>(options =>
             {
-                options.AddAnonymousJobHandler("CompileTimeAnonymousJob", (jsonData, sp, ct) =>
+                options.AddAnonymousJobHandler("CompileTimeAnonymousJob", (context, ct) =>
                 {
-                    using var doc = JsonDocument.Parse(jsonData);
+                    using var doc = JsonDocument.Parse(context.JsonData);
                     var value = doc.RootElement.TryGetProperty("value", out var prop)
                         ? prop.GetString()
                         : doc.RootElement.TryGetProperty("Value", out prop)

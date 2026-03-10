@@ -164,9 +164,9 @@ public class BackgroundJobExecuter_Tests : BackgroundJobsTestBase
         var handlerRegistry = GetRequiredService<IAnonymousJobHandlerRegistry>();
         var executedValues = new List<string>();
 
-        handlerRegistry.Register("RuntimeAnonymousJob", (jsonData, sp, ct) =>
+        handlerRegistry.Register("RuntimeAnonymousJob", (context, ct) =>
         {
-            executedValues.Add(jsonData);
+            executedValues.Add(context.JsonData);
             return Task.CompletedTask;
         });
 

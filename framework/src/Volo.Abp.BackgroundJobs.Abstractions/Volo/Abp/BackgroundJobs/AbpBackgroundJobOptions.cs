@@ -11,7 +11,7 @@ public class AbpBackgroundJobOptions
 {
     private readonly Dictionary<Type, BackgroundJobConfiguration> _jobConfigurationsByArgsType;
     private readonly ConcurrentDictionary<string, BackgroundJobConfiguration> _jobConfigurationsByName;
-    private readonly ConcurrentDictionary<string, Func<string, IServiceProvider, CancellationToken, Task>> _anonymousHandlers = new();
+    private readonly ConcurrentDictionary<string, Func<AnonymousJobExecutionContext, CancellationToken, Task>> _anonymousHandlers = new();
 
     /// <summary>
     /// Default: true.
@@ -86,7 +86,7 @@ public class AbpBackgroundJobOptions
         _jobConfigurationsByName[jobConfiguration.JobName] = jobConfiguration;
     }
 
-    public void AddAnonymousJobHandler(string jobName, Func<string, IServiceProvider, CancellationToken, Task> handler)
+    public void AddAnonymousJobHandler(string jobName, Func<AnonymousJobExecutionContext, CancellationToken, Task> handler)
     {
         Check.NotNullOrWhiteSpace(jobName, nameof(jobName));
         Check.NotNull(handler, nameof(handler));
@@ -94,16 +94,16 @@ public class AbpBackgroundJobOptions
         _anonymousHandlers[jobName] = handler;
     }
 
-    public void AddAnonymousJobHandler(string jobName, Action<string, IServiceProvider, CancellationToken> handler)
+    public void AddAnonymousJobHandler(string jobName, Action<AnonymousJobExecutionContext, CancellationToken> handler)
     {
-        AddAnonymousJobHandler(jobName, (jsonData, sp, ct) =>
+        AddAnonymousJobHandler(jobName, (context, ct) =>
         {
-            handler(jsonData, sp, ct);
+            handler(context, ct);
             return Task.CompletedTask;
         });
     }
 
-    internal bool TryGetAnonymousHandler(string jobName, out Func<string, IServiceProvider, CancellationToken, Task>? handler)
+    internal bool TryGetAnonymousHandler(string jobName, out Func<AnonymousJobExecutionContext, CancellationToken, Task>? handler)
     {
         return _anonymousHandlers.TryGetValue(jobName, out handler);
     }

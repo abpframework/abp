@@ -17,10 +17,10 @@ public class AbpBackgroundJobsTestModule : AbpModule
 
         Configure<AbpBackgroundJobOptions>(options =>
         {
-            options.AddAnonymousJobHandler("TestAnonymousJob", (jsonData, sp, ct) =>
+            options.AddAnonymousJobHandler("TestAnonymousJob", (context, ct) =>
             {
-                var tracker = sp.GetRequiredService<AnonymousJobExecutionTracker>();
-                tracker.ExecutedJsonData.Add(jsonData);
+                var tracker = context.ServiceProvider.GetRequiredService<AnonymousJobExecutionTracker>();
+                tracker.ExecutedJsonData.Add(context.JsonData);
                 return System.Threading.Tasks.Task.CompletedTask;
             });
         });

@@ -26,9 +26,9 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
 
         public async Task CreateJobsAsync()
         {
-            _anonymousJobHandlerRegistry.Register("RuntimeAnonymousJob", (jsonData, sp, ct) =>
+            _anonymousJobHandlerRegistry.Register("RuntimeAnonymousJob", (context, ct) =>
             {
-                using var doc = JsonDocument.Parse(jsonData);
+                using var doc = JsonDocument.Parse(context.JsonData);
                 var value = doc.RootElement.TryGetProperty("value", out var prop)
                     ? prop.GetString()
                     : doc.RootElement.TryGetProperty("Value", out prop)
@@ -62,18 +62,14 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
                 (object)new { Value = "test 3 (yellow) - by name, anonymous", Time = DateTime.Now }
             );
 
-            // Anonymous job enqueue (compile-time and runtime handlers)
-            if (!_backgroundJobManager.GetType().Name.ToUpperInvariant().Contains("RABBITMQ"))
-            {
-                await _backgroundJobManager.EnqueueAsync(
-                    "CompileTimeAnonymousJob",
-                    new { Value = "test 4 (anonymous) - compile-time" }
-                );
-                await _backgroundJobManager.EnqueueAsync(
-                    "RuntimeAnonymousJob",
-                    new { Value = "test 5 (anonymous) - runtime" }
-                );
-            }
+            await _backgroundJobManager.EnqueueAsync(
+                "CompileTimeAnonymousJob",
+                new { Value = "test 4 (anonymous) - compile-time" }
+            );
+            await _backgroundJobManager.EnqueueAsync(
+                "RuntimeAnonymousJob",
+                new { Value = "test 5 (anonymous) - runtime" }
+            );
         }
     }
 }

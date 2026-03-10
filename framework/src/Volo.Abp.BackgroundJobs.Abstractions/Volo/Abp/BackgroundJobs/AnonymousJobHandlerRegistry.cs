@@ -9,7 +9,7 @@ namespace Volo.Abp.BackgroundJobs;
 
 public class AnonymousJobHandlerRegistry : IAnonymousJobHandlerRegistry, ISingletonDependency
 {
-    private readonly ConcurrentDictionary<string, Func<string, IServiceProvider, CancellationToken, Task>> _handlers = new();
+    private readonly ConcurrentDictionary<string, Func<AnonymousJobExecutionContext, CancellationToken, Task>> _handlers = new();
     private readonly AbpBackgroundJobOptions _options;
 
     public AnonymousJobHandlerRegistry(IOptions<AbpBackgroundJobOptions> options)
@@ -17,7 +17,7 @@ public class AnonymousJobHandlerRegistry : IAnonymousJobHandlerRegistry, ISingle
         _options = options.Value;
     }
 
-    public virtual void Register(string jobName, Func<string, IServiceProvider, CancellationToken, Task> handler)
+    public virtual void Register(string jobName, Func<AnonymousJobExecutionContext, CancellationToken, Task> handler)
     {
         Check.NotNullOrWhiteSpace(jobName, nameof(jobName));
         Check.NotNull(handler, nameof(handler));
@@ -25,11 +25,11 @@ public class AnonymousJobHandlerRegistry : IAnonymousJobHandlerRegistry, ISingle
         _handlers[jobName] = handler;
     }
 
-    public virtual void Register(string jobName, Action<string, IServiceProvider, CancellationToken> handler)
+    public virtual void Register(string jobName, Action<AnonymousJobExecutionContext, CancellationToken> handler)
     {
-        Register(jobName, (jsonData, sp, ct) =>
+        Register(jobName, (context, ct) =>
         {
-            handler(jsonData, sp, ct);
+            handler(context, ct);
             return Task.CompletedTask;
         });
     }
@@ -44,7 +44,7 @@ public class AnonymousJobHandlerRegistry : IAnonymousJobHandlerRegistry, ISingle
         return _handlers.ContainsKey(jobName) || _options.IsAnonymousJobRegistered(jobName);
     }
 
-    public virtual Func<string, IServiceProvider, CancellationToken, Task>? Get(string jobName)
+    public virtual Func<AnonymousJobExecutionContext, CancellationToken, Task>? Get(string jobName)
     {
         if (_handlers.TryGetValue(jobName, out var handler))
         {

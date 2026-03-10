@@ -197,6 +197,72 @@ Enqueue method gets some optional arguments to control the background job:
 * **priority** is used to control priority of the job item. It gets an `BackgroundJobPriority` enum which has `Low`, `BelowNormal`, `Normal` (default), `AboveNormal` and `Hight` fields.
 * **delay** is used to wait a while (`TimeSpan`) before first try.
 
+### Queue by Job Name
+
+You can also enqueue jobs by their name at runtime:
+
+```csharp
+await _backgroundJobManager.EnqueueAsync(
+    "emails",
+    new
+    {
+        EmailAddress = "user@abp.io",
+        Subject = "Welcome",
+        Body = "..."
+    }
+);
+```
+
+In this case, ABP resolves the target job configuration by `jobName` and serializes the `args` object.
+If the `args` runtime type does not match the configured argument type, ABP normalizes the payload by serializing and deserializing it to the expected argument type.
+
+### Anonymous Job Handlers
+
+ABP supports registering runtime-resolved anonymous handlers keyed by a job name.
+
+You can register handlers at startup:
+
+```csharp
+Configure<AbpBackgroundJobOptions>(options =>
+{
+    options.AddAnonymousJobHandler("ProcessOrder", (context, cancellationToken) =>
+    {
+        // Parse or deserialize context.JsonData and run your logic.
+        return Task.CompletedTask;
+    });
+});
+```
+
+You can also register/unregister handlers at runtime:
+
+```csharp
+public class MyService : ITransientDependency
+{
+    private readonly IAnonymousJobHandlerRegistry _anonymousJobHandlerRegistry;
+
+    public MyService(IAnonymousJobHandlerRegistry anonymousJobHandlerRegistry)
+    {
+        _anonymousJobHandlerRegistry = anonymousJobHandlerRegistry;
+    }
+
+    public void Register()
+    {
+        _anonymousJobHandlerRegistry.Register("ProcessOrder", (context, cancellationToken) =>
+        {
+            return Task.CompletedTask;
+        });
+    }
+}
+```
+
+Then enqueue it by name:
+
+```csharp
+await _backgroundJobManager.EnqueueAsync("ProcessOrder", new { OrderId = "42" });
+```
+
+ABP keeps a stable internal transport job name (`AnonymousJob`) for provider compatibility, while preserving your effective job name (`ProcessOrder`) in the payload.
+
 ### Disable Job Execution
 
 You may want to disable background job execution for your application. This is generally needed if you want to execute background jobs in another process and disable it for the current process.
