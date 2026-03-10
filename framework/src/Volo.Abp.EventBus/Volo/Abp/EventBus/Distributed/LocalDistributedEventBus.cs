@@ -190,7 +190,7 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
-        if (await AddToInboxAsync(Guid.NewGuid().ToString(), EventNameAttribute.GetNameOrDefault(eventType), eventType, eventData, null))
+        if (await AddToInboxAsync(Guid.NewGuid().ToString(), GetEventName(eventType, eventData), eventType, eventData, null))
         {
             return;
         }
