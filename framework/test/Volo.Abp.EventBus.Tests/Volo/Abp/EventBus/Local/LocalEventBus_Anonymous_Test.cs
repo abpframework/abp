@@ -48,7 +48,7 @@ public class LocalEventBus_Anonymous_Test : EventBusTestBase
     [Fact]
     public async Task Should_Convert_Dictionary_To_Typed_Handler()
     {
-        MySimpleEventData receivedData = null!;
+        MySimpleEventData? receivedData = null;
 
         using var subscription = LocalEventBus.Subscribe<MySimpleEventData>(async (data) =>
         {
@@ -118,28 +118,29 @@ public class LocalEventBus_Anonymous_Test : EventBusTestBase
     }
 
     [Fact]
-    public async Task Should_Ignore_Unknown_Event_Name()
+    public async Task Should_Throw_For_Unknown_Event_Name()
     {
-        await LocalEventBus.PublishAsync("NonExistentEvent", new { Value = 1 });
+        await Assert.ThrowsAsync<AbpException>(() =>
+            LocalEventBus.PublishAsync("NonExistentEvent", new { Value = 1 }));
     }
 
     [Fact]
     public async Task Should_ConvertToTypedObject_In_Anonymous_Handler()
     {
-        object receivedData = null!;
+        object? receivedData = null;
         var eventName = "TestEvent-" + Guid.NewGuid().ToString("N");
 
         using var subscription = LocalEventBus.Subscribe(eventName,
             new SingleInstanceHandlerFactory(new ActionEventHandler<AnonymousEventData>(async (d) =>
             {
-                receivedData = AnonymousEventDataConverter.ConvertToLooseObject(d);
+                receivedData = d.ConvertToTypedObject();
                 await Task.CompletedTask;
             })));
 
         await LocalEventBus.PublishAsync(eventName, new { Name = "Hello", Count = 42 });
 
         receivedData.ShouldNotBeNull();
-        var dict = receivedData.ShouldBeOfType<Dictionary<string, object>>();
+        var dict = receivedData.ShouldBeOfType<Dictionary<string, object?>>();
         dict["Name"].ShouldBe("Hello");
         dict["Count"].ShouldBe(42L);
     }
@@ -147,13 +148,13 @@ public class LocalEventBus_Anonymous_Test : EventBusTestBase
     [Fact]
     public async Task Should_ConvertToTypedObject_Generic_In_Anonymous_Handler()
     {
-        MySimpleEventData receivedData = null!;
+        MySimpleEventData? receivedData = null;
         var eventName = "TestEvent-" + Guid.NewGuid().ToString("N");
 
         using var subscription = LocalEventBus.Subscribe(eventName,
             new SingleInstanceHandlerFactory(new ActionEventHandler<AnonymousEventData>(async (d) =>
             {
-                receivedData = AnonymousEventDataConverter.ConvertToTypedObject<MySimpleEventData>(d);
+                receivedData = d.ConvertToTypedObject<MySimpleEventData>();
                 await Task.CompletedTask;
             })));
 
@@ -161,24 +162,5 @@ public class LocalEventBus_Anonymous_Test : EventBusTestBase
 
         receivedData.ShouldNotBeNull();
         receivedData.Value.ShouldBe(99);
-    }
-
-    [Fact]
-    public void Should_Roundtrip_Raw_Json_Without_Object_Deserialization()
-    {
-        var eventData = AnonymousEventData.FromJson("TestEvent", "{\"Value\":42,\"Name\":\"hello\"}");
-
-        eventData.EventName.ShouldBe("TestEvent");
-        AnonymousEventDataConverter.GetJsonData(eventData).ShouldBe("{\"Value\":42,\"Name\":\"hello\"}");
-        AnonymousEventDataConverter.ConvertToTypedObject<MySimpleEventData>(eventData).Value.ShouldBe(42);
-    }
-
-    [Fact]
-    public void Should_Preserve_String_Payload_As_Raw_Json()
-    {
-        var eventData = AnonymousEventData.FromJson("TestEvent", "\"hello\"");
-
-        AnonymousEventDataConverter.GetJsonData(eventData).ShouldBe("\"hello\"");
-        AnonymousEventDataConverter.ConvertToTypedObject<string>(eventData).ShouldBe("hello");
     }
 }

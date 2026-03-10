@@ -174,7 +174,9 @@ public abstract class EventBusBase : IEventBus
             actualEventType.GetGenericArguments().Length == 1 &&
             typeof(IEventDataWithInheritableGenericArgument).IsAssignableFrom(actualEventType))
         {
-            var resolvedEventData = ResolveActualEventData(eventData, actualEventType);
+            var resolvedEventData = eventData is AnonymousEventData aed
+                ? aed.ConvertToTypedObject(actualEventType)
+                : eventData;
 
             var genericArg = actualEventType.GetGenericArguments()[0];
             var baseArg = genericArg.GetTypeInfo().BaseType;
@@ -207,22 +209,12 @@ public abstract class EventBusBase : IEventBus
     {
         if (eventData is AnonymousEventData anonymousEventData && handlerEventType != typeof(AnonymousEventData))
         {
-            return AnonymousEventDataConverter.ConvertToTypedObject(anonymousEventData, handlerEventType);
+            return anonymousEventData.ConvertToTypedObject(handlerEventType);
         }
 
         if (handlerEventType == typeof(AnonymousEventData) && eventData is not AnonymousEventData)
         {
             return new AnonymousEventData(EventNameAttribute.GetNameOrDefault(sourceEventType), eventData);
-        }
-
-        return eventData;
-    }
-
-    protected virtual object ResolveActualEventData(object eventData, Type actualEventType)
-    {
-        if (eventData is AnonymousEventData anonymousEventData)
-        {
-            return AnonymousEventDataConverter.ConvertToTypedObject(anonymousEventData, actualEventType);
         }
 
         return eventData;

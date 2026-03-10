@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -96,11 +96,30 @@ public class AbpAspNetCoreMvcDaprEventBusModule : AbpModule
 
         if (IsAbpDaprEventData(data))
         {
-            await TryHandleAbpDaprEnvelopeAsync(distributedEventBus, daprSerializer, data);
+            var daprEventData = daprSerializer.Deserialize(data, typeof(AbpDaprEventData)).As<AbpDaprEventData>();
+            var eventType = distributedEventBus.GetEventType(daprEventData.Topic);
+            if (eventType != null)
+            {
+                var eventData = daprSerializer.Deserialize(daprEventData.JsonData, eventType);
+                await distributedEventBus.TriggerHandlersAsync(eventType, eventData, daprEventData.MessageId, daprEventData.CorrelationId);
+            }else if (distributedEventBus.IsAnonymousEvent(daprEventData.Topic))
+            {
+                var eventData = daprSerializer.Deserialize(daprEventData.JsonData, typeof(object));
+                await distributedEventBus.TriggerHandlersAsync(typeof(AnonymousEventData), new AnonymousEventData(daprEventData.Topic, eventData), daprEventData.MessageId, daprEventData.CorrelationId);
+            }
         }
         else
         {
-            await TryHandleDirectDaprEventAsync(distributedEventBus, daprSerializer, topic!, data);
+            var eventType = distributedEventBus.GetEventType(topic);
+            if (eventType != null)
+            {
+                var eventData = daprSerializer.Deserialize(data, eventType);
+                await distributedEventBus.TriggerHandlersAsync(eventType, eventData);
+            }else if (distributedEventBus.IsAnonymousEvent(topic))
+            {
+                var eventData = daprSerializer.Deserialize(data, typeof(object));
+                await distributedEventBus.TriggerHandlersAsync(typeof(AnonymousEventData), new AnonymousEventData(topic, eventData));
+            }
         }
 
         httpContext.Response.StatusCode = 200;
@@ -116,61 +135,5 @@ public class AbpAspNetCoreMvcDaprEventBusModule : AbpModule
                objects.Any(x => x.Name.Equals("MessageId", StringComparison.CurrentCultureIgnoreCase)) &&
                objects.Any(x => x.Name.Equals("JsonData", StringComparison.CurrentCultureIgnoreCase)) &&
                objects.Any(x => x.Name.Equals("CorrelationId", StringComparison.CurrentCultureIgnoreCase));
-    }
-
-    private static async Task TryHandleAbpDaprEnvelopeAsync(
-        DaprDistributedEventBus distributedEventBus,
-        IDaprSerializer daprSerializer,
-        string data)
-    {
-        var daprEventData = daprSerializer.Deserialize(data, typeof(AbpDaprEventData)).As<AbpDaprEventData>();
-        if (!TryResolveIncomingEvent(distributedEventBus, daprSerializer, daprEventData.Topic, daprEventData.JsonData, out var eventType, out var eventData))
-        {
-            return;
-        }
-
-        await distributedEventBus.TriggerHandlersAsync(eventType, eventData, daprEventData.MessageId, daprEventData.CorrelationId);
-    }
-
-    private static async Task TryHandleDirectDaprEventAsync(
-        DaprDistributedEventBus distributedEventBus,
-        IDaprSerializer daprSerializer,
-        string topic,
-        string data)
-    {
-        if (!TryResolveIncomingEvent(distributedEventBus, daprSerializer, topic, data, out var eventType, out var eventData))
-        {
-            return;
-        }
-
-        await distributedEventBus.TriggerHandlersAsync(eventType, eventData);
-    }
-
-    private static bool TryResolveIncomingEvent(
-        DaprDistributedEventBus distributedEventBus,
-        IDaprSerializer daprSerializer,
-        string topic,
-        string data,
-        out Type eventType,
-        out object eventData)
-    {
-        var typedEventType = distributedEventBus.GetEventType(topic);
-        if (typedEventType != null)
-        {
-            eventType = typedEventType;
-            eventData = daprSerializer.Deserialize(data, typedEventType);
-            return true;
-        }
-
-        if (!distributedEventBus.IsAnonymousEvent(topic))
-        {
-            eventType = default!;
-            eventData = default!;
-            return false;
-        }
-
-        eventType = typeof(AnonymousEventData);
-        eventData = AnonymousEventData.FromJson(topic, data);
-        return true;
     }
 }

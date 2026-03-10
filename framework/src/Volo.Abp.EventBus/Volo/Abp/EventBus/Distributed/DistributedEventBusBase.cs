@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -113,9 +112,15 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         bool onUnitOfWorkComplete = true,
         bool useOutbox = true)
     {
-        var anonymousEventData = CreateAnonymousEnvelope(eventName, eventData);
-        return TryPublishTypedByEventNameAsync(eventName, anonymousEventData, onUnitOfWorkComplete, useOutbox)
-            ?? PublishAnonymousByEventNameAsync(anonymousEventData, onUnitOfWorkComplete, useOutbox);
+        var eventType = GetEventTypeByEventName(eventName);
+        var anonymousEventData = eventData as AnonymousEventData ?? new AnonymousEventData(eventName, eventData);
+
+        if (eventType != null)
+        {
+            return PublishAsync(eventType, anonymousEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete, useOutbox);
+        }
+
+        return PublishAsync(typeof(AnonymousEventData), anonymousEventData, onUnitOfWorkComplete, useOutbox);
     }
 
     public abstract Task PublishFromOutboxAsync(
@@ -147,14 +152,14 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
             if (outboxConfig.Selector == null || outboxConfig.Selector(eventType))
             {
                 var eventOutbox = (IEventOutbox)unitOfWork.ServiceProvider.GetRequiredService(outboxConfig.ImplementationType);
-                var (eventName, resolvedEventData) = ResolveEventForPublishing(eventType, eventData);
+                (var eventName, eventData) = ResolveEventForPublishing(eventType, eventData);
 
-                await OnAddToOutboxAsync(eventName, eventType, resolvedEventData);
+                await OnAddToOutboxAsync(eventName, eventType, eventData);
 
                 var outgoingEventInfo = new OutgoingEventInfo(
                     GuidGenerator.Create(),
                     eventName,
-                    SerializeEventData(resolvedEventData),
+                    Serialize(eventData),
                     Clock.Now
                 );
 
@@ -209,11 +214,13 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
                         }
                     }
                     
+                    eventData = GetEventData(eventData);
+
                     var incomingEventInfo = new IncomingEventInfo(
                         GuidGenerator.Create(),
                         messageId!,
                         eventName,
-                        SerializeEventData(eventData),
+                        Serialize(eventData),
                         Clock.Now
                     );
                     incomingEventInfo.SetCorrelationId(correlationId!);
@@ -227,55 +234,6 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
     }
 
     protected abstract byte[] Serialize(object eventData);
-
-    protected virtual byte[] SerializeEventData(object eventData)
-    {
-        if (eventData is AnonymousEventData anonymousEventData)
-        {
-            return Encoding.UTF8.GetBytes(AnonymousEventDataConverter.GetJsonData(anonymousEventData));
-        }
-
-        return Serialize(eventData);
-    }
-
-    protected virtual AnonymousEventData CreateAnonymousEventData(string eventName, byte[] eventData)
-    {
-        return AnonymousEventData.FromJson(eventName, Encoding.UTF8.GetString(eventData));
-    }
-
-    protected virtual AnonymousEventData CreateAnonymousEventData(string eventName, string eventData)
-    {
-        return AnonymousEventData.FromJson(eventName, eventData);
-    }
-
-    protected virtual AnonymousEventData CreateAnonymousEnvelope(string eventName, object eventData)
-    {
-        return eventData as AnonymousEventData ?? new AnonymousEventData(eventName, eventData);
-    }
-
-    protected virtual Task? TryPublishTypedByEventNameAsync(
-        string eventName,
-        AnonymousEventData anonymousEventData,
-        bool onUnitOfWorkComplete,
-        bool useOutbox)
-    {
-        var eventType = GetEventTypeByEventName(eventName);
-        if (eventType == null)
-        {
-            return null;
-        }
-
-        var typedEventData = AnonymousEventDataConverter.ConvertToTypedObject(anonymousEventData, eventType);
-        return PublishAsync(eventType, typedEventData, onUnitOfWorkComplete, useOutbox);
-    }
-
-    protected virtual Task PublishAnonymousByEventNameAsync(
-        AnonymousEventData anonymousEventData,
-        bool onUnitOfWorkComplete,
-        bool useOutbox)
-    {
-        return PublishAsync(typeof(AnonymousEventData), anonymousEventData, onUnitOfWorkComplete, useOutbox);
-    }
 
     protected virtual async Task TriggerHandlersDirectAsync(Type eventType, object eventData)
     {
@@ -339,7 +297,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
     {
         if (eventData is AnonymousEventData anonymousEventData)
         {
-            return AnonymousEventDataConverter.ConvertToLooseObject(anonymousEventData);
+            return anonymousEventData.Data;
         }
 
         return eventData;

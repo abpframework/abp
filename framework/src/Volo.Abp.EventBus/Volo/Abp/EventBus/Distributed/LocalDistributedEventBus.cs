@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -77,8 +76,7 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
     {
         AnonymousEventNames.GetOrAdd(eventName, true);
-        LocalEventBus.Subscribe(eventName, handler);
-        return new AnonymousEventHandlerFactoryUnregistrar(this, eventName, handler);
+        return LocalEventBus.Subscribe(eventName, handler);
     }
 
     /// <inheritdoc/>
@@ -86,8 +84,7 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     {
         var eventName = EventNameAttribute.GetNameOrDefault(eventType);
         EventTypes.GetOrAdd(eventName, eventType);
-        LocalEventBus.Subscribe(eventType, factory);
-        return new EventHandlerFactoryUnregistrar(this, eventType, factory);
+        return LocalEventBus.Subscribe(eventType, factory);
     }
 
     public override void Unsubscribe<TEvent>(Func<TEvent, Task> action)
@@ -109,14 +106,12 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
     {
         LocalEventBus.Unsubscribe(eventName, factory);
-        CleanupAnonymousEventName(eventName);
     }
 
     /// <inheritdoc/>
     public override void Unsubscribe(string eventName, IEventHandler handler)
     {
         LocalEventBus.Unsubscribe(eventName, handler);
-        CleanupAnonymousEventName(eventName);
     }
 
     /// <inheritdoc/>
@@ -129,7 +124,6 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     public override void UnsubscribeAll(string eventName)
     {
         LocalEventBus.UnsubscribeAll(eventName);
-        CleanupAnonymousEventName(eventName);
     }
 
     /// <inheritdoc/>
@@ -178,14 +172,25 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     /// <inheritdoc/>
     public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true)
     {
-        var anonymousEventData = CreateAnonymousEnvelope(eventName, eventData);
-        return TryPublishTypedByEventNameAsync(eventName, anonymousEventData, onUnitOfWorkComplete, useOutbox)
-            ?? PublishAnonymousByEventNameAsync(anonymousEventData, onUnitOfWorkComplete, useOutbox);
+        var eventType = EventTypes.GetOrDefault(eventName);
+        var anonymousEventData = eventData as AnonymousEventData ?? new AnonymousEventData(eventName, eventData);
+
+        if (eventType != null)
+        {
+            return PublishAsync(eventType, anonymousEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete, useOutbox);
+        }
+
+        if (!AnonymousEventNames.ContainsKey(eventName))
+        {
+            throw new AbpException($"Unknown event name: {eventName}");
+        }
+
+        return PublishAsync(typeof(AnonymousEventData), anonymousEventData, onUnitOfWorkComplete, useOutbox);
     }
 
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
-        if (await AddToInboxAsync(Guid.NewGuid().ToString(), GetEventName(eventType, eventData), eventType, eventData, null))
+        if (await AddToInboxAsync(Guid.NewGuid().ToString(), EventNameAttribute.GetNameOrDefault(eventType), eventType, eventData, null))
         {
             return;
         }
@@ -214,12 +219,30 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             EventData = outgoingEvent.EventData
         });
 
-        if (!TryResolveStoredEventType(outgoingEvent.EventName, out var eventType))
+        var eventType = EventTypes.GetOrDefault(outgoingEvent.EventName);
+        if (eventType == null)
         {
-            return;
+            var isAnonymous = AnonymousEventNames.ContainsKey(outgoingEvent.EventName);
+            if (!isAnonymous)
+            {
+                return;
+            }
+
+            eventType = typeof(AnonymousEventData);
         }
 
-        var eventData = DeserializeStoredEventData(outgoingEvent.EventName, outgoingEvent.EventData, eventType);
+        object eventData;
+        if (eventType == typeof(AnonymousEventData))
+        {
+            eventData = new AnonymousEventData(
+                outgoingEvent.EventName,
+                JsonSerializer.Deserialize<object>(outgoingEvent.EventData)!);
+        }
+        else
+        {
+            eventData = JsonSerializer.Deserialize(outgoingEvent.EventData, eventType)!;
+        }
+
         if (await AddToInboxAsync(Guid.NewGuid().ToString(), outgoingEvent.EventName, eventType, eventData, null))
         {
             return;
@@ -238,12 +261,30 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     public async override Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)
     {
-        if (!TryResolveStoredEventType(incomingEvent.EventName, out var eventType))
+        var eventType = EventTypes.GetOrDefault(incomingEvent.EventName);
+        if (eventType == null)
         {
-            return;
+            var isAnonymous = AnonymousEventNames.ContainsKey(incomingEvent.EventName);
+            if (!isAnonymous)
+            {
+                return;
+            }
+
+            eventType = typeof(AnonymousEventData);
         }
 
-        var eventData = DeserializeStoredEventData(incomingEvent.EventName, incomingEvent.EventData, eventType);
+        object eventData;
+        if (eventType == typeof(AnonymousEventData))
+        {
+            eventData = new AnonymousEventData(
+                incomingEvent.EventName,
+                JsonSerializer.Deserialize<object>(incomingEvent.EventData)!);
+        }
+        else
+        {
+            eventData = JsonSerializer.Deserialize(incomingEvent.EventData, eventType)!;
+        }
+
         var exceptions = new List<Exception>();
         using (CorrelationIdProvider.Change(incomingEvent.GetCorrelationId()))
         {
@@ -257,7 +298,7 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     protected override byte[] Serialize(object eventData)
     {
-        return Encoding.UTF8.GetBytes(JsonSerializer.Serialize(eventData));
+        return JsonSerializer.SerializeToUtf8Bytes(eventData);
     }
 
     protected override Task OnAddToOutboxAsync(string eventName, Type eventType, object eventData)
@@ -282,90 +323,5 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     protected override Type? GetEventTypeByEventName(string eventName)
     {
         return EventTypes.GetOrDefault(eventName);
-    }
-
-    protected override AnonymousEventData CreateAnonymousEnvelope(string eventName, object eventData)
-    {
-        return eventData as AnonymousEventData ?? new AnonymousEventData(eventName, eventData);
-    }
-
-    protected override Task? TryPublishTypedByEventNameAsync(
-        string eventName,
-        AnonymousEventData anonymousEventData,
-        bool onUnitOfWorkComplete,
-        bool useOutbox)
-    {
-        var eventType = EventTypes.GetOrDefault(eventName);
-        if (eventType == null)
-        {
-            return null;
-        }
-
-        var typedEventData = AnonymousEventDataConverter.ConvertToTypedObject(anonymousEventData, eventType);
-        return PublishAsync(eventType, typedEventData, onUnitOfWorkComplete, useOutbox);
-    }
-
-    protected override Task PublishAnonymousByEventNameAsync(
-        AnonymousEventData anonymousEventData,
-        bool onUnitOfWorkComplete,
-        bool useOutbox)
-    {
-        if (!HasAnonymousEventName(anonymousEventData.EventName))
-        {
-            return Task.CompletedTask;
-        }
-
-        return PublishAsync(typeof(AnonymousEventData), anonymousEventData, onUnitOfWorkComplete, useOutbox);
-    }
-
-    protected virtual bool TryResolveStoredEventType(string eventName, out Type eventType)
-    {
-        eventType = EventTypes.GetOrDefault(eventName)!;
-        if (eventType != null)
-        {
-            return true;
-        }
-
-        if (!HasAnonymousEventName(eventName))
-        {
-            return false;
-        }
-
-        eventType = typeof(AnonymousEventData);
-        return true;
-    }
-
-    protected virtual object DeserializeStoredEventData(string eventName, byte[] eventData, Type eventType)
-    {
-        if (eventType == typeof(AnonymousEventData))
-        {
-            return CreateAnonymousEventData(eventName, eventData);
-        }
-
-        return JsonSerializer.Deserialize(Encoding.UTF8.GetString(eventData), eventType)!;
-    }
-
-    protected virtual void CleanupAnonymousEventName(string eventName)
-    {
-        if (!LocalEventBus.GetAnonymousEventHandlerFactories(eventName).Any())
-        {
-            AnonymousEventNames.TryRemove(eventName, out _);
-        }
-    }
-
-    protected virtual bool HasAnonymousEventName(string eventName)
-    {
-        if (!AnonymousEventNames.ContainsKey(eventName))
-        {
-            return false;
-        }
-
-        if (!LocalEventBus.GetAnonymousEventHandlerFactories(eventName).Any())
-        {
-            AnonymousEventNames.TryRemove(eventName, out _);
-            return false;
-        }
-
-        return true;
     }
 }
