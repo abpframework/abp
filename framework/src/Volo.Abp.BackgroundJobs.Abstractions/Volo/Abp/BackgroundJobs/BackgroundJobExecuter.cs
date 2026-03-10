@@ -2,8 +2,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
@@ -31,52 +29,7 @@ public class BackgroundJobExecuter : IBackgroundJobExecuter, ITransientDependenc
 
     public virtual async Task ExecuteAsync(JobExecutionContext context)
     {
-        if (context.JobName != null)
-        {
-            var jobConfig = Options.GetJobOrNull(context.JobName);
-            if (jobConfig?.DynamicHandler != null)
-            {
-                await ExecuteDynamicHandlerAsync(context, jobConfig);
-                return;
-            }
-        }
-
         await ExecuteTypedHandlerAsync(context);
-    }
-
-    protected virtual async Task ExecuteDynamicHandlerAsync(JobExecutionContext context, BackgroundJobConfiguration jobConfig)
-    {
-        try
-        {
-            var cancellationTokenProvider =
-                context.ServiceProvider.GetRequiredService<ICancellationTokenProvider>();
-
-            using (cancellationTokenProvider.Use(context.CancellationToken))
-            {
-                var dictArgs = EnsureDictionaryArgs(context.JobArgs);
-                var dynamicContext = new DynamicBackgroundJobContext(
-                    context.ServiceProvider,
-                    dictArgs,
-                    context.CancellationToken
-                );
-
-                await jobConfig.DynamicHandler!(dynamicContext);
-            }
-        }
-        catch (Exception ex)
-        {
-            Logger.LogException(ex);
-
-            await context.ServiceProvider
-                .GetRequiredService<IExceptionNotifier>()
-                .NotifyAsync(new ExceptionNotificationContext(ex));
-
-            throw new BackgroundJobExecutionException("A background job execution is failed. See inner exception for details.", ex)
-            {
-                JobType = context.JobName!,
-                JobArgs = context.JobArgs
-            };
-        }
     }
 
     protected virtual async Task ExecuteTypedHandlerAsync(JobExecutionContext context)
@@ -129,24 +82,6 @@ public class BackgroundJobExecuter : IBackgroundJobExecuter, ITransientDependenc
                 JobArgs = context.JobArgs
             };
         }
-    }
-
-    protected virtual Dictionary<string, object> EnsureDictionaryArgs(object jobArgs)
-    {
-        if (jobArgs is Dictionary<string, object> dict)
-        {
-            return dict;
-        }
-
-        if (jobArgs is JsonElement jsonElement)
-        {
-            return JsonSerializer.Deserialize<Dictionary<string, object>>(jsonElement.GetRawText())
-                   ?? new Dictionary<string, object>();
-        }
-
-        var json = JsonSerializer.Serialize(jobArgs);
-        return JsonSerializer.Deserialize<Dictionary<string, object>>(json)
-               ?? new Dictionary<string, object>();
     }
 
     protected virtual Guid? GetJobArgsTenantId(object jobArgs)

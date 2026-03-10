@@ -13,14 +13,14 @@ public class AbpBackgroundJobsTestModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddSingleton<DynamicJobExecutionTracker>();
+        context.Services.AddSingleton<AnonymousJobExecutionTracker>();
 
         Configure<AbpBackgroundJobOptions>(options =>
         {
-            options.AddDynamicJob("TestDynamicJob", context =>
+            options.AddAnonymousJobHandler("TestAnonymousJob", (jsonData, sp, ct) =>
             {
-                var tracker = context.ServiceProvider.GetRequiredService<DynamicJobExecutionTracker>();
-                tracker.ExecutedArgs.Add(context.Args);
+                var tracker = sp.GetRequiredService<AnonymousJobExecutionTracker>();
+                tracker.ExecutedJsonData.Add(jsonData);
                 return System.Threading.Tasks.Task.CompletedTask;
             });
         });

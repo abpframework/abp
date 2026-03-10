@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
@@ -9,14 +9,14 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
     public class SampleJobCreator : ITransientDependency
     {
         private readonly IBackgroundJobManager _backgroundJobManager;
-        private readonly IDynamicBackgroundJobHandlerProvider _dynamicBackgroundJobHandlerProvider;
+        private readonly IAnonymousJobHandlerRegistry _anonymousJobHandlerRegistry;
 
         public SampleJobCreator(
             IBackgroundJobManager backgroundJobManager,
-            IDynamicBackgroundJobHandlerProvider dynamicBackgroundJobHandlerProvider)
+            IAnonymousJobHandlerRegistry anonymousJobHandlerRegistry)
         {
             _backgroundJobManager = backgroundJobManager;
-            _dynamicBackgroundJobHandlerProvider = dynamicBackgroundJobHandlerProvider;
+            _anonymousJobHandlerRegistry = anonymousJobHandlerRegistry;
         }
 
         public void CreateJobs()
@@ -26,10 +26,11 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
 
         public async Task CreateJobsAsync()
         {
-            _dynamicBackgroundJobHandlerProvider.Register("RuntimeDynamicJob", context =>
+            _anonymousJobHandlerRegistry.Register("RuntimeAnonymousJob", (jsonData, sp, ct) =>
             {
-                context.Args.TryGetValue("Value", out var valueObj);
-                Console.WriteLine($"[DYNAMIC-RUNTIME] {valueObj}");
+                var doc = JsonDocument.Parse(jsonData);
+                var value = doc.RootElement.TryGetProperty("Value", out var prop) ? prop.GetString() : null;
+                Console.WriteLine($"[ANONYMOUS-RUNTIME] {value}");
                 return Task.CompletedTask;
             });
 
@@ -57,16 +58,16 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
                 (object)new { Value = "test 3 (yellow) - by name, anonymous", Time = DateTime.Now }
             );
 
-            // Dynamic enqueue (compile-time and runtime handlers)
-            if (!_backgroundJobManager.GetType().Name.Contains("RabbitMq", StringComparison.OrdinalIgnoreCase))
+            // Anonymous job enqueue (compile-time and runtime handlers)
+            if (!_backgroundJobManager.GetType().Name.ToUpperInvariant().Contains("RABBITMQ"))
             {
                 await _backgroundJobManager.EnqueueAsync(
-                    "CompileTimeDynamicJob",
-                    (object)new Dictionary<string, object> { ["Value"] = "test 4 (dynamic) - compile-time" }
+                    "CompileTimeAnonymousJob",
+                    new { Value = "test 4 (anonymous) - compile-time" }
                 );
                 await _backgroundJobManager.EnqueueAsync(
-                    "RuntimeDynamicJob",
-                    (object)new Dictionary<string, object> { ["Value"] = "test 5 (dynamic) - runtime" }
+                    "RuntimeAnonymousJob",
+                    new { Value = "test 5 (anonymous) - runtime" }
                 );
             }
         }

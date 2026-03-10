@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs;
@@ -14,11 +15,11 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared
         {
             Configure<AbpBackgroundJobOptions>(options =>
             {
-                options.AddDynamicJob("CompileTimeDynamicJob", dynamicContext =>
+                options.AddAnonymousJobHandler("CompileTimeAnonymousJob", (jsonData, sp, ct) =>
                 {
-                    dynamicContext.Args.TryGetValue("Value", out var valueObj);
-                    var value = valueObj?.ToString();
-                    Console.WriteLine($"[DYNAMIC-COMPILE] {value}");
+                    var doc = JsonDocument.Parse(jsonData);
+                    var value = doc.RootElement.TryGetProperty("Value", out var prop) ? prop.GetString() : null;
+                    Console.WriteLine($"[ANONYMOUS-COMPILE] {value}");
                     return Task.CompletedTask;
                 });
             });

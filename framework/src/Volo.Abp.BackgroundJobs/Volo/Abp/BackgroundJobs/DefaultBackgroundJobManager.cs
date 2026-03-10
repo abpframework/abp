@@ -18,6 +18,7 @@ public class DefaultBackgroundJobManager : IBackgroundJobManager, ITransientDepe
     protected IBackgroundJobSerializer Serializer { get; }
     protected IGuidGenerator GuidGenerator { get; }
     protected IBackgroundJobStore Store { get; }
+    protected IAnonymousJobHandlerRegistry AnonymousJobHandlerRegistry { get; }
     protected IOptions<AbpBackgroundJobOptions> BackgroundJobOptions { get; }
     protected IOptions<AbpBackgroundJobWorkerOptions> BackgroundJobWorkerOptions { get; }
 
@@ -26,12 +27,14 @@ public class DefaultBackgroundJobManager : IBackgroundJobManager, ITransientDepe
         IBackgroundJobSerializer serializer,
         IBackgroundJobStore store,
         IGuidGenerator guidGenerator,
+        IAnonymousJobHandlerRegistry anonymousJobHandlerRegistry,
         IOptions<AbpBackgroundJobOptions> backgroundJobOptions,
         IOptions<AbpBackgroundJobWorkerOptions> backgroundJobWorkerOptions)
     {
         Clock = clock;
         Serializer = serializer;
         GuidGenerator = guidGenerator;
+        AnonymousJobHandlerRegistry = anonymousJobHandlerRegistry;
         BackgroundJobOptions = backgroundJobOptions;
         BackgroundJobWorkerOptions = backgroundJobWorkerOptions;
         Store = store;
@@ -45,6 +48,13 @@ public class DefaultBackgroundJobManager : IBackgroundJobManager, ITransientDepe
 
     public virtual async Task<string> EnqueueAsync(string jobName, object args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
     {
+        if (ShouldWrapAsAnonymousJob(jobName))
+        {
+            var jsonData = Serializer.Serialize(args);
+            var anonymousArgs = new AnonymousJobArgs(jobName, jsonData);
+            return await EnqueueAsync(AnonymousJobArgs.JobNameConstant, anonymousArgs, priority, delay);
+        }
+
         var jobInfo = new BackgroundJobInfo
         {
             Id = GuidGenerator.Create(),
@@ -64,5 +74,10 @@ public class DefaultBackgroundJobManager : IBackgroundJobManager, ITransientDepe
         await Store.InsertAsync(jobInfo);
 
         return jobInfo.Id.ToString();
+    }
+
+    protected virtual bool ShouldWrapAsAnonymousJob(string jobName)
+    {
+        return jobName != AnonymousJobArgs.JobNameConstant && AnonymousJobHandlerRegistry.IsRegistered(jobName);
     }
 }

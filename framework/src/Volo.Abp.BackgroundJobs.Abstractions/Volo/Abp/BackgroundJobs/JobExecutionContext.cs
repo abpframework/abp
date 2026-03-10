@@ -14,19 +14,15 @@ public class JobExecutionContext : IServiceProviderAccessor
 
     public CancellationToken CancellationToken { get; }
 
-    public string? JobName { get; }
-
     public JobExecutionContext(
         IServiceProvider serviceProvider,
         Type jobType,
         object jobArgs,
-        CancellationToken cancellationToken = default,
-        string? jobName = null)
+        CancellationToken cancellationToken = default)
     {
         ServiceProvider = serviceProvider;
         JobType = jobType;
         JobArgs = jobArgs;
         CancellationToken = cancellationToken;
-        JobName = jobName;
     }
 }

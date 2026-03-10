@@ -40,7 +40,7 @@ public class HangfireJobExecutionAdapter<TArgs>
         using (var scope = ServiceScopeFactory.CreateScope())
         {
             var jobConfiguration = Options.GetJob(typeof(TArgs));
-            var context = new JobExecutionContext(scope.ServiceProvider, jobConfiguration.JobType!, args!, cancellationToken: cancellationToken, jobName: jobConfiguration.JobName);
+            var context = new JobExecutionContext(scope.ServiceProvider, jobConfiguration.JobType!, args!, cancellationToken: cancellationToken);
             await JobExecuter.ExecuteAsync(context);
         }
     }
@@ -83,7 +83,7 @@ public class HangfireJobExecutionAdapter
         {
             var jobConfiguration = Options.GetJob(jobName);
             var args = JsonSerializer.Deserialize(jobConfiguration.ArgsType, serializedArgs);
-            var context = new JobExecutionContext(scope.ServiceProvider, jobConfiguration.JobType ?? typeof(object), args, cancellationToken: cancellationToken, jobName: jobName);
+            var context = new JobExecutionContext(scope.ServiceProvider, jobConfiguration.JobType, args, cancellationToken: cancellationToken);
             await JobExecuter.ExecuteAsync(context);
         }
     }

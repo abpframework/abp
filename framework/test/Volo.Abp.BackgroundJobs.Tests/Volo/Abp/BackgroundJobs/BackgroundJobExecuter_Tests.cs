@@ -139,54 +139,52 @@ public class BackgroundJobExecuter_Tests : BackgroundJobsTestBase
     }
 
     [Fact]
-    public async Task Should_Execute_Dynamic_Handler()
+    public async Task Should_Execute_Anonymous_Job_Handler()
     {
-        var tracker = GetRequiredService<DynamicJobExecutionTracker>();
-        tracker.ExecutedArgs.ShouldBeEmpty();
+        var tracker = GetRequiredService<AnonymousJobExecutionTracker>();
+        tracker.ExecutedJsonData.ShouldBeEmpty();
 
-        var args = new Dictionary<string, object> { ["Value"] = "dynamic-42" };
+        var args = new AnonymousJobArgs("TestAnonymousJob", "{\"OrderId\":\"ORD-001\"}");
 
         await _backgroundJobExecuter.ExecuteAsync(
             new JobExecutionContext(
                 ServiceProvider,
-                typeof(object),
-                args,
-                jobName: "TestDynamicJob"
+                typeof(AnonymousJobExecutorAsyncBackgroundJob),
+                args
             )
         );
 
-        tracker.ExecutedArgs.Count.ShouldBe(1);
-        tracker.ExecutedArgs[0]["Value"].ShouldBe("dynamic-42");
+        tracker.ExecutedJsonData.Count.ShouldBe(1);
+        tracker.ExecutedJsonData[0].ShouldContain("ORD-001");
     }
 
     [Fact]
-    public async Task Should_Execute_Dynamic_Handler_Registered_At_Runtime()
+    public async Task Should_Execute_Anonymous_Job_Handler_Registered_At_Runtime()
     {
-        var handlerProvider = GetRequiredService<IDynamicBackgroundJobHandlerProvider>();
+        var handlerRegistry = GetRequiredService<IAnonymousJobHandlerRegistry>();
         var executedValues = new List<string>();
 
-        handlerProvider.Register("RuntimeDynamicJob", context =>
+        handlerRegistry.Register("RuntimeAnonymousJob", (jsonData, sp, ct) =>
         {
-            executedValues.Add(context.Args["Message"]?.ToString()!);
+            executedValues.Add(jsonData);
             return Task.CompletedTask;
         });
 
-        var args = new Dictionary<string, object> { ["Message"] = "hello-runtime" };
+        var args = new AnonymousJobArgs("RuntimeAnonymousJob", "{\"Message\":\"hello-runtime\"}");
 
         await _backgroundJobExecuter.ExecuteAsync(
             new JobExecutionContext(
                 ServiceProvider,
-                typeof(object),
-                args,
-                jobName: "RuntimeDynamicJob"
+                typeof(AnonymousJobExecutorAsyncBackgroundJob),
+                args
             )
         );
 
         executedValues.Count.ShouldBe(1);
-        executedValues[0].ShouldBe("hello-runtime");
+        executedValues[0].ShouldContain("hello-runtime");
 
-        handlerProvider.IsRegistered("RuntimeDynamicJob").ShouldBeTrue();
-        handlerProvider.Unregister("RuntimeDynamicJob").ShouldBeTrue();
-        handlerProvider.IsRegistered("RuntimeDynamicJob").ShouldBeFalse();
+        handlerRegistry.IsRegistered("RuntimeAnonymousJob").ShouldBeTrue();
+        handlerRegistry.Unregister("RuntimeAnonymousJob").ShouldBeTrue();
+        handlerRegistry.IsRegistered("RuntimeAnonymousJob").ShouldBeFalse();
     }
 }

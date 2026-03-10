@@ -64,17 +64,15 @@ public class BackgroundJobManager_Tests : BackgroundJobsTestBase
     }
 
     [Fact]
-    public async Task Should_Store_Dynamic_Jobs()
+    public async Task Should_Store_Anonymous_Jobs()
     {
-        var jobIdAsString = await _backgroundJobManager.EnqueueAsync("TestDynamicJob", (object)new Dictionary<string, object>
-        {
-            ["OrderId"] = "ORD-001"
-        });
+        var jobIdAsString = await _backgroundJobManager.EnqueueAsync("TestAnonymousJob", new { OrderId = "ORD-001" });
         jobIdAsString.ShouldNotBe(default);
 
         var jobInfo = await _backgroundJobStore.FindAsync(Guid.Parse(jobIdAsString));
         jobInfo.ShouldNotBeNull();
-        jobInfo.JobName.ShouldBe("TestDynamicJob");
+        jobInfo.JobName.ShouldBe(AnonymousJobArgs.JobNameConstant);
+        jobInfo.JobArgs.ShouldContain("TestAnonymousJob");
         jobInfo.JobArgs.ShouldContain("ORD-001");
     }
 }

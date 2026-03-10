@@ -16,15 +16,18 @@ public class HangfireBackgroundJobManager : IBackgroundJobManager, ITransientDep
     protected IOptions<AbpBackgroundJobOptions> BackgroundJobOptions { get; }
     protected IOptions<AbpHangfireOptions> HangfireOptions { get; }
     protected IJsonSerializer JsonSerializer { get; }
+    protected IAnonymousJobHandlerRegistry AnonymousJobHandlerRegistry { get; }
 
     public HangfireBackgroundJobManager(
         IOptions<AbpBackgroundJobOptions> backgroundJobOptions,
         IOptions<AbpHangfireOptions> hangfireOptions,
-        IJsonSerializer jsonSerializer)
+        IJsonSerializer jsonSerializer,
+        IAnonymousJobHandlerRegistry anonymousJobHandlerRegistry)
     {
         BackgroundJobOptions = backgroundJobOptions;
         HangfireOptions = hangfireOptions;
         JsonSerializer = jsonSerializer;
+        AnonymousJobHandlerRegistry = anonymousJobHandlerRegistry;
     }
 
     public virtual Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal,
@@ -43,6 +46,13 @@ public class HangfireBackgroundJobManager : IBackgroundJobManager, ITransientDep
     public virtual Task<string> EnqueueAsync(string jobName, object args, BackgroundJobPriority priority = BackgroundJobPriority.Normal,
         TimeSpan? delay = null)
     {
+        if (ShouldWrapAsAnonymousJob(jobName))
+        {
+            var jsonData = JsonSerializer.Serialize(args);
+            var anonymousArgs = new AnonymousJobArgs(jobName, jsonData);
+            return EnqueueAsync(AnonymousJobArgs.JobNameConstant, anonymousArgs, priority, delay);
+        }
+
         var serializedArgs = JsonSerializer.Serialize(args);
         var queueName = GetQueueName(jobName);
 
@@ -54,6 +64,11 @@ public class HangfireBackgroundJobManager : IBackgroundJobManager, ITransientDep
             : BackgroundJob.Enqueue<HangfireJobExecutionAdapter>(
                 adapter => adapter.ExecuteAsync(queueName, jobName, serializedArgs, default)
             ));
+    }
+
+    protected virtual bool ShouldWrapAsAnonymousJob(string jobName)
+    {
+        return jobName != AnonymousJobArgs.JobNameConstant && AnonymousJobHandlerRegistry.IsRegistered(jobName);
     }
 
     protected virtual string GetQueueName(Type argsType)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Volo.Abp.BackgroundJobs;
@@ -10,6 +11,7 @@ public class AbpBackgroundJobOptions
 {
     private readonly Dictionary<Type, BackgroundJobConfiguration> _jobConfigurationsByArgsType;
     private readonly ConcurrentDictionary<string, BackgroundJobConfiguration> _jobConfigurationsByName;
+    private readonly ConcurrentDictionary<string, Func<string, IServiceProvider, CancellationToken, Task>> _anonymousHandlers = new();
 
     /// <summary>
     /// Default: true.
@@ -60,7 +62,7 @@ public class AbpBackgroundJobOptions
 
     public BackgroundJobConfiguration? GetJobOrNull(string name)
     {
-        return _jobConfigurationsByName.GetValueOrDefault(name);
+        return _jobConfigurationsByName.TryGetValue(name, out var config) ? config : null;
     }
 
     public IReadOnlyList<BackgroundJobConfiguration> GetJobs()
@@ -84,28 +86,30 @@ public class AbpBackgroundJobOptions
         _jobConfigurationsByName[jobConfiguration.JobName] = jobConfiguration;
     }
 
-    public void AddDynamicJob(string jobName, Func<DynamicBackgroundJobContext, Task> handler)
+    public void AddAnonymousJobHandler(string jobName, Func<string, IServiceProvider, CancellationToken, Task> handler)
     {
-        var config = new BackgroundJobConfiguration(jobName, handler);
-        _jobConfigurationsByName[jobName] = config;
+        Check.NotNullOrWhiteSpace(jobName, nameof(jobName));
+        Check.NotNull(handler, nameof(handler));
+
+        _anonymousHandlers[jobName] = handler;
     }
 
-    public void AddDynamicJob(string jobName, Action<DynamicBackgroundJobContext> handler)
+    public void AddAnonymousJobHandler(string jobName, Action<string, IServiceProvider, CancellationToken> handler)
     {
-        AddDynamicJob(jobName, context =>
+        AddAnonymousJobHandler(jobName, (jsonData, sp, ct) =>
         {
-            handler(context);
+            handler(jsonData, sp, ct);
             return Task.CompletedTask;
         });
     }
 
-    public bool RemoveDynamicJob(string name)
+    internal bool TryGetAnonymousHandler(string jobName, out Func<string, IServiceProvider, CancellationToken, Task>? handler)
     {
-        if (_jobConfigurationsByName.TryGetValue(name, out var config) && config.IsDynamic)
-        {
-            return _jobConfigurationsByName.TryRemove(name, out _);
-        }
+        return _anonymousHandlers.TryGetValue(jobName, out handler);
+    }
 
-        return false;
+    internal bool IsAnonymousJobRegistered(string jobName)
+    {
+        return _anonymousHandlers.ContainsKey(jobName);
     }
 }

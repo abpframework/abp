@@ -65,10 +65,9 @@ public class BackgroundJobWorker : AsyncPeriodicBackgroundWorkerBase, IBackgroun
                         var jobArgs = serializer.Deserialize(jobInfo.JobArgs, jobConfiguration.ArgsType);
                         var context = new JobExecutionContext(
                             workerContext.ServiceProvider,
-                            jobConfiguration.JobType ?? typeof(object),
+                            jobConfiguration.JobType,
                             jobArgs,
-                            workerContext.CancellationToken,
-                            jobName: jobInfo.JobName);
+                            workerContext.CancellationToken);
 
                         try
                         {
