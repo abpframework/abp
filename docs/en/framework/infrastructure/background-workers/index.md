@@ -140,12 +140,30 @@ await backgroundWorkerManager.AddAsync(
 );
 ```
 
+You can also **remove** a dynamic worker or **update its schedule** at runtime:
+
+```csharp
+// Remove a dynamic worker
+var removed = await backgroundWorkerManager.RemoveAsync("InventorySyncWorker");
+
+// Update the schedule of a dynamic worker
+var updated = await backgroundWorkerManager.UpdateScheduleAsync(
+    "InventorySyncWorker",
+    new DynamicBackgroundWorkerSchedule
+    {
+        Period = 60000 // change to 60 seconds
+    }
+);
+```
+
 Key points:
 
 * `workerName` is the runtime identifier of the dynamic worker.
 * The `handler` is registered at runtime and executed through the provider-specific worker manager.
 * Provider behavior is preserved. For example, providers with persistent schedulers keep their own scheduling semantics.
 * The default in-process manager uses in-memory periodic execution.
+* `RemoveAsync` stops and removes a dynamic worker. Returns `true` if the worker was found and removed.
+* `UpdateScheduleAsync` changes the schedule of an existing dynamic worker. Returns `true` if the worker was found and updated. The handler itself is not changed.
 
 ## Options
 

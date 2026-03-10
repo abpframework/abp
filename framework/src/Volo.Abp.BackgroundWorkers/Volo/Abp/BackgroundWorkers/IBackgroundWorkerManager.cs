@@ -35,4 +35,16 @@ public interface IBackgroundWorkerManager : IRunnable
         DynamicBackgroundWorkerSchedule schedule,
         Func<DynamicBackgroundWorkerExecutionContext, CancellationToken, Task> handler,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Removes a previously added dynamic worker by name.
+    /// Returns true if the worker was found and removed; false otherwise.
+    /// </summary>
+    Task<bool> RemoveAsync(string workerName, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Updates the schedule of a previously added dynamic worker.
+    /// Returns true if the worker was found and updated; false otherwise.
+    /// </summary>
+    Task<bool> UpdateScheduleAsync(string workerName, DynamicBackgroundWorkerSchedule schedule, CancellationToken cancellationToken = default);
 }

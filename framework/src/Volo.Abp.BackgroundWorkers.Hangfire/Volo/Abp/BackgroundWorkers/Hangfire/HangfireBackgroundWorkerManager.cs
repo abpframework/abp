@@ -207,6 +207,70 @@ public class HangfireBackgroundWorkerManager : BackgroundWorkerManager, ISinglet
         return Task.CompletedTask;
     }
 
+    public override Task<bool> RemoveAsync(string workerName, CancellationToken cancellationToken = default)
+    {
+        Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
+
+        if (!DynamicBackgroundWorkerHandlerRegistry.IsRegistered(workerName))
+        {
+            return Task.FromResult(false);
+        }
+
+        var recurringJobId = $"DynamicWorker:{workerName}";
+        RecurringJob.RemoveIfExists(recurringJobId);
+        DynamicBackgroundWorkerHandlerRegistry.Unregister(workerName);
+
+        return Task.FromResult(true);
+    }
+
+    public override Task<bool> UpdateScheduleAsync(string workerName, DynamicBackgroundWorkerSchedule schedule, CancellationToken cancellationToken = default)
+    {
+        Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
+        Check.NotNull(schedule, nameof(schedule));
+
+        if (!DynamicBackgroundWorkerHandlerRegistry.IsRegistered(workerName))
+        {
+            return Task.FromResult(false);
+        }
+
+        var cronExpression = schedule.CronExpression;
+        if (cronExpression.IsNullOrWhiteSpace())
+        {
+            var period = schedule.Period ?? DynamicBackgroundWorkerSchedule.DefaultPeriod;
+            cronExpression = GetCron(period);
+        }
+
+        var abpHangfireOptions = ServiceProvider.GetRequiredService<IOptions<AbpHangfireOptions>>().Value;
+        var queueName = abpHangfireOptions.DefaultQueue;
+        var recurringJobId = $"DynamicWorker:{workerName}";
+
+        if (!JobStorage.Current.HasFeature(JobStorageFeatures.JobQueueProperty))
+        {
+            RecurringJob.AddOrUpdate<HangfireDynamicBackgroundWorkerAdapter>(
+                recurringJobId,
+                adapter => adapter.DoWorkAsync(workerName, cancellationToken),
+                cronExpression,
+                new RecurringJobOptions
+                {
+                    TimeZone = TimeZoneInfo.Utc
+                });
+        }
+        else
+        {
+            RecurringJob.AddOrUpdate<HangfireDynamicBackgroundWorkerAdapter>(
+                recurringJobId,
+                queueName,
+                adapter => adapter.DoWorkAsync(workerName, cancellationToken),
+                cronExpression,
+                new RecurringJobOptions
+                {
+                    TimeZone = TimeZoneInfo.Utc
+                });
+        }
+
+        return Task.FromResult(true);
+    }
+
     private static readonly MethodInfo? GetRecurringJobIdMethodInfo = typeof(RecurringJob).GetMethod("GetRecurringJobId", BindingFlags.NonPublic | BindingFlags.Static);
     protected virtual string? GetRecurringJobId(IBackgroundWorker worker, Expression<Func<Task>> methodCall)
     {

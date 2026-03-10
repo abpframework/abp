@@ -18,6 +18,7 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
     private bool _isDisposed;
 
     private readonly List<IBackgroundWorker> _backgroundWorkers;
+    private readonly Dictionary<string, InMemoryDynamicBackgroundWorker> _dynamicWorkers;
     protected IServiceProvider ServiceProvider { get; }
     protected IDynamicBackgroundWorkerHandlerRegistry DynamicBackgroundWorkerHandlerRegistry { get; }
 
@@ -29,6 +30,7 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
         IDynamicBackgroundWorkerHandlerRegistry dynamicBackgroundWorkerHandlerRegistry)
     {
         _backgroundWorkers = new List<IBackgroundWorker>();
+        _dynamicWorkers = new Dictionary<string, InMemoryDynamicBackgroundWorker>();
         ServiceProvider = serviceProvider;
         DynamicBackgroundWorkerHandlerRegistry = dynamicBackgroundWorkerHandlerRegistry;
     }
@@ -88,7 +90,70 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
         worker.ServiceProvider = ServiceProvider;
         worker.LazyServiceProvider = ServiceProvider.GetRequiredService<IAbpLazyServiceProvider>();
 
+        _dynamicWorkers[workerName] = worker;
+
         await AddAsync(worker, cancellationToken);
+    }
+
+    public virtual async Task<bool> RemoveAsync(string workerName, CancellationToken cancellationToken = default)
+    {
+        Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
+
+        if (!_dynamicWorkers.TryGetValue(workerName, out var worker))
+        {
+            return false;
+        }
+
+        await worker.StopAsync(cancellationToken);
+        _backgroundWorkers.Remove(worker);
+        _dynamicWorkers.Remove(workerName);
+        DynamicBackgroundWorkerHandlerRegistry.Unregister(workerName);
+
+        return true;
+    }
+
+    public virtual async Task<bool> UpdateScheduleAsync(string workerName, DynamicBackgroundWorkerSchedule schedule, CancellationToken cancellationToken = default)
+    {
+        Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
+        Check.NotNull(schedule, nameof(schedule));
+
+        if (!_dynamicWorkers.TryGetValue(workerName, out var oldWorker))
+        {
+            return false;
+        }
+
+        if (schedule.Period == null && !string.IsNullOrWhiteSpace(schedule.CronExpression))
+        {
+            throw new AbpException("Default background worker manager does not support cron expression without period.");
+        }
+
+        var handler = DynamicBackgroundWorkerHandlerRegistry.Get(workerName);
+        if (handler == null)
+        {
+            return false;
+        }
+
+        await oldWorker.StopAsync(cancellationToken);
+        _backgroundWorkers.Remove(oldWorker);
+        _dynamicWorkers.Remove(workerName);
+
+        var timer = ServiceProvider.GetRequiredService<AbpAsyncTimer>();
+        var serviceScopeFactory = ServiceProvider.GetRequiredService<IServiceScopeFactory>();
+        var newWorker = new InMemoryDynamicBackgroundWorker(
+            workerName,
+            schedule,
+            timer,
+            serviceScopeFactory,
+            DynamicBackgroundWorkerHandlerRegistry
+        );
+        newWorker.ServiceProvider = ServiceProvider;
+        newWorker.LazyServiceProvider = ServiceProvider.GetRequiredService<IAbpLazyServiceProvider>();
+
+        _dynamicWorkers[workerName] = newWorker;
+
+        await AddAsync(newWorker, cancellationToken);
+
+        return true;
     }
 
     public virtual void Dispose()

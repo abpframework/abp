@@ -171,4 +171,55 @@ public class QuartzBackgroundWorkerManager : BackgroundWorkerManager, ISingleton
             await Scheduler.ScheduleJob(jobDetail, trigger, cancellationToken);
         }
     }
+
+    public override async Task<bool> RemoveAsync(string workerName, CancellationToken cancellationToken = default)
+    {
+        Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
+
+        if (!DynamicBackgroundWorkerHandlerRegistry.IsRegistered(workerName))
+        {
+            return false;
+        }
+
+        var jobKey = new JobKey($"DynamicWorker:{workerName}");
+        await Scheduler.DeleteJob(jobKey, cancellationToken);
+        DynamicBackgroundWorkerHandlerRegistry.Unregister(workerName);
+
+        return true;
+    }
+
+    public override async Task<bool> UpdateScheduleAsync(string workerName, DynamicBackgroundWorkerSchedule schedule, CancellationToken cancellationToken = default)
+    {
+        Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
+        Check.NotNull(schedule, nameof(schedule));
+
+        if (!DynamicBackgroundWorkerHandlerRegistry.IsRegistered(workerName))
+        {
+            return false;
+        }
+
+        if (schedule.Period == null && schedule.CronExpression.IsNullOrWhiteSpace())
+        {
+            throw new AbpException($"Both 'Period' and 'CronExpression' are not set for dynamic worker {workerName}. You must set at least one of them.");
+        }
+
+        var triggerKey = new TriggerKey($"DynamicWorker:{workerName}");
+        var triggerBuilder = TriggerBuilder.Create()
+            .WithIdentity(triggerKey)
+            .ForJob(new JobKey($"DynamicWorker:{workerName}"));
+
+        if (!schedule.CronExpression.IsNullOrWhiteSpace())
+        {
+            triggerBuilder.WithCronSchedule(schedule.CronExpression);
+        }
+        else
+        {
+            triggerBuilder.WithSimpleSchedule(builder =>
+                builder.WithInterval(TimeSpan.FromMilliseconds(schedule.Period!.Value)).RepeatForever());
+        }
+
+        await Scheduler.RescheduleJob(triggerKey, triggerBuilder.Build(), cancellationToken);
+
+        return true;
+    }
 }

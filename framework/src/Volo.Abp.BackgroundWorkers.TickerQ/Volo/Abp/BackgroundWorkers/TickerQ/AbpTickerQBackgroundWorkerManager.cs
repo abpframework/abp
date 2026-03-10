@@ -139,6 +139,50 @@ public class AbpTickerQBackgroundWorkerManager : BackgroundWorkerManager, ISingl
         });
     }
 
+    public override async Task<bool> RemoveAsync(string workerName, CancellationToken cancellationToken = default)
+    {
+        Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
+
+        if (!DynamicBackgroundWorkerHandlerRegistry.IsRegistered(workerName))
+        {
+            return false;
+        }
+
+        var functionName = $"DynamicWorker:{workerName}";
+        AbpTickerQFunctionProvider.Functions.Remove(functionName);
+        AbpTickerQBackgroundWorkersProvider.BackgroundWorkers.Remove(functionName);
+        DynamicBackgroundWorkerHandlerRegistry.Unregister(workerName);
+
+        return true;
+    }
+
+    public override async Task<bool> UpdateScheduleAsync(string workerName, DynamicBackgroundWorkerSchedule schedule, CancellationToken cancellationToken = default)
+    {
+        Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
+        Check.NotNull(schedule, nameof(schedule));
+
+        if (!DynamicBackgroundWorkerHandlerRegistry.IsRegistered(workerName))
+        {
+            return false;
+        }
+
+        var cronExpression = schedule.CronExpression ?? GetCron(schedule.Period ?? DynamicBackgroundWorkerSchedule.DefaultPeriod);
+        var functionName = $"DynamicWorker:{workerName}";
+
+        if (AbpTickerQBackgroundWorkersProvider.BackgroundWorkers.TryGetValue(functionName, out var existingWorker))
+        {
+            existingWorker.CronExpression = cronExpression;
+        }
+
+        await CronTickerManager.AddAsync(new CronTickerEntity
+        {
+            Function = functionName,
+            Expression = cronExpression
+        });
+
+        return true;
+    }
+
     protected virtual string GetCron(int period)
     {
         var time = TimeSpan.FromMilliseconds(period);
