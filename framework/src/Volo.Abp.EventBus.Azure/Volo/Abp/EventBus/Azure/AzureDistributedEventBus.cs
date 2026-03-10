@@ -2,7 +2,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.DependencyInjection;
@@ -92,10 +91,9 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         {
             eventData = Serializer.Deserialize(message.Body.ToArray(), eventType);
         }
-        else if (AnonymousHandlerFactories.ContainsKey(eventName))
+        else if (HasAnonymousHandlers(eventName))
         {
-            var data = Serializer.Deserialize<object>(message.Body.ToArray());
-            eventData = new AnonymousEventData(eventName, data);
+            eventData = CreateAnonymousEventData(eventName, Serializer.Deserialize<string>(message.Body.ToArray()));
             eventType = typeof(AnonymousEventData);
         }
         else
@@ -117,13 +115,20 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
     {
         var handlerFactories = GetOrCreateHandlerFactories(eventType);
+        var added = false;
+        handlerFactories.Locking(factories =>
+        {
+            if (!factory.IsInFactories(factories))
+            {
+                factories.Add(factory);
+                added = true;
+            }
+        });
 
-        if (factory.IsInFactories(handlerFactories))
+        if (!added)
         {
             return NullDisposable.Instance;
         }
-
-        handlerFactories.Add(factory);
 
         return new EventHandlerFactoryUnregistrar(this, eventType, factory);
     }
@@ -132,13 +137,20 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
     {
         var handlerFactories = GetOrCreateAnonymousHandlerFactories(eventName);
+        var added = false;
+        handlerFactories.Locking(factories =>
+        {
+            if (!handler.IsInFactories(factories))
+            {
+                factories.Add(handler);
+                added = true;
+            }
+        });
 
-        if (handler.IsInFactories(handlerFactories))
+        if (!added)
         {
             return NullDisposable.Instance;
         }
-
-        handlerFactories.Add(handler);
 
         return new AnonymousEventHandlerFactoryUnregistrar(this, eventName, handler);
     }
@@ -199,20 +211,9 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     /// <inheritdoc/>
     public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
     {
-        var eventType = EventTypes.GetOrDefault(eventName);
-        var anonymousEventData = eventData as AnonymousEventData ?? new AnonymousEventData(eventName, eventData);
-
-        if (eventType != null)
-        {
-            return PublishAsync(eventType, anonymousEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete);
-        }
-
-        if (AnonymousHandlerFactories.ContainsKey(eventName))
-        {
-            return PublishAsync(typeof(AnonymousEventData), anonymousEventData, onUnitOfWorkComplete);
-        }
-
-        throw new AbpException($"Unknown event name: {eventName}");
+        var anonymousEventData = CreateAnonymousEnvelope(eventName, eventData);
+        return TryPublishTypedByEventNameAsync(eventName, anonymousEventData, onUnitOfWorkComplete)
+            ?? PublishAnonymousByEventNameAsync(eventName, anonymousEventData, onUnitOfWorkComplete);
     }
 
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
@@ -287,20 +288,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     public async override Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)
     {
-        var eventType = EventTypes.GetOrDefault(incomingEvent.EventName);
-        object eventData;
-
-        if (eventType != null)
-        {
-            eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
-        }
-        else if (AnonymousHandlerFactories.ContainsKey(incomingEvent.EventName))
-        {
-            var element = Serializer.Deserialize<object>(incomingEvent.EventData);
-            eventData = new AnonymousEventData(incomingEvent.EventName, element);
-            eventType = typeof(AnonymousEventData);
-        }
-        else
+        if (!TryResolveStoredEventData(incomingEvent.EventName, incomingEvent.EventData, out var eventType, out var eventData))
         {
             return;
         }
@@ -400,29 +388,45 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     /// <inheritdoc/>
     public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
     {
-        GetOrCreateAnonymousHandlerFactories(eventName)
-            .Locking(factories => factories.Remove(factory));
+        if (!AnonymousHandlerFactories.TryGetValue(eventName, out var handlerFactories))
+        {
+            return;
+        }
+
+        handlerFactories.Locking(factories => factories.Remove(factory));
+        CleanupAnonymousHandlerFactoriesIfEmpty(eventName, handlerFactories);
     }
 
     /// <inheritdoc/>
     public override void Unsubscribe(string eventName, IEventHandler handler)
     {
-        GetOrCreateAnonymousHandlerFactories(eventName)
-            .Locking(factories =>
-            {
-                factories.RemoveAll(
-                    factory =>
-                        factory is SingleInstanceHandlerFactory singleFactory &&
-                        singleFactory.HandlerInstance == handler
-                );
-            });
+        if (!AnonymousHandlerFactories.TryGetValue(eventName, out var handlerFactories))
+        {
+            return;
+        }
+
+        handlerFactories.Locking(factories =>
+        {
+            factories.RemoveAll(
+                factory =>
+                    factory is SingleInstanceHandlerFactory singleFactory &&
+                    singleFactory.HandlerInstance == handler
+            );
+        });
+
+        CleanupAnonymousHandlerFactoriesIfEmpty(eventName, handlerFactories);
     }
 
     /// <inheritdoc/>
     public override void UnsubscribeAll(string eventName)
     {
-        GetOrCreateAnonymousHandlerFactories(eventName)
-            .Locking(factories => factories.Clear());
+        if (!AnonymousHandlerFactories.TryGetValue(eventName, out var handlerFactories))
+        {
+            return;
+        }
+
+        handlerFactories.Locking(factories => factories.Clear());
+        CleanupAnonymousHandlerFactoriesIfEmpty(eventName, handlerFactories);
     }
 
     protected override IEnumerable<EventTypeWithEventHandlerFactories> GetAnonymousHandlerFactories(string eventName)
@@ -446,6 +450,81 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     private List<IEventHandlerFactory> GetOrCreateAnonymousHandlerFactories(string eventName)
     {
         return AnonymousHandlerFactories.GetOrAdd(eventName, _ => new List<IEventHandlerFactory>());
+    }
+
+    private AnonymousEventData CreateAnonymousEnvelope(string eventName, object eventData)
+    {
+        return eventData as AnonymousEventData ?? new AnonymousEventData(eventName, eventData);
+    }
+
+    private Task? TryPublishTypedByEventNameAsync(string eventName, AnonymousEventData anonymousEventData, bool onUnitOfWorkComplete)
+    {
+        var eventType = EventTypes.GetOrDefault(eventName);
+        if (eventType == null)
+        {
+            return null;
+        }
+
+        var typedEventData = AnonymousEventDataConverter.ConvertToTypedObject(anonymousEventData, eventType);
+        return PublishAsync(eventType, typedEventData, onUnitOfWorkComplete);
+    }
+
+    private Task PublishAnonymousByEventNameAsync(string eventName, AnonymousEventData anonymousEventData, bool onUnitOfWorkComplete)
+    {
+        if (!HasAnonymousHandlers(eventName))
+        {
+            return Task.CompletedTask;
+        }
+
+        return PublishAsync(typeof(AnonymousEventData), anonymousEventData, onUnitOfWorkComplete);
+    }
+
+    private bool TryResolveStoredEventData(string eventName, byte[] payload, out Type eventType, out object eventData)
+    {
+        eventType = EventTypes.GetOrDefault(eventName)!;
+        if (eventType != null)
+        {
+            eventData = Serializer.Deserialize(payload, eventType);
+            return true;
+        }
+
+        if (!HasAnonymousHandlers(eventName))
+        {
+            eventData = default!;
+            eventType = default!;
+            return false;
+        }
+
+        eventType = typeof(AnonymousEventData);
+        eventData = CreateAnonymousEventData(eventName, payload);
+        return true;
+    }
+
+    private bool HasAnonymousHandlers(string eventName)
+    {
+        if (!AnonymousHandlerFactories.TryGetValue(eventName, out var handlerFactories))
+        {
+            return false;
+        }
+
+        var hasHandlers = false;
+        handlerFactories.Locking(factories => hasHandlers = factories.Count > 0);
+        if (!hasHandlers)
+        {
+            AnonymousHandlerFactories.TryRemove(eventName, out _);
+        }
+
+        return hasHandlers;
+    }
+
+    private void CleanupAnonymousHandlerFactoriesIfEmpty(string eventName, List<IEventHandlerFactory> handlerFactories)
+    {
+        var isEmpty = false;
+        handlerFactories.Locking(factories => isEmpty = factories.Count == 0);
+        if (isEmpty)
+        {
+            AnonymousHandlerFactories.TryRemove(eventName, out _);
+        }
     }
 
     private static bool ShouldTriggerEventForHandler(Type targetEventType, Type handlerEventType)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Domain.Entities.Events.Distributed;
@@ -21,20 +22,32 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
     [Fact]
     public async Task Should_Call_Handler_AndDispose()
     {
-        using var subscription = DistributedEventBus.Subscribe<MySimpleEventData, MySimpleDistributedTransientEventHandler>();
+        var handleCount = 0;
+        var disposeCount = 0;
+        var factory = new CountingDistributedEventHandlerFactory(
+            () => handleCount++,
+            () => disposeCount++);
+
+        using var subscription = DistributedEventBus.Subscribe(typeof(MySimpleEventData), factory);
 
         await DistributedEventBus.PublishAsync(new MySimpleEventData(1));
         await DistributedEventBus.PublishAsync(new MySimpleEventData(2));
         await DistributedEventBus.PublishAsync(new MySimpleEventData(3));
 
-        Assert.Equal(3, MySimpleDistributedTransientEventHandler.HandleCount);
-        Assert.Equal(3, MySimpleDistributedTransientEventHandler.DisposeCount);
+        Assert.Equal(3, handleCount);
+        Assert.Equal(3, disposeCount);
     }
 
     [Fact]
     public async Task Should_Handle_Typed_Handler_When_Published_With_EventName()
     {
-        using var subscription = DistributedEventBus.Subscribe<MySimpleEventData, MySimpleDistributedTransientEventHandler>();
+        var handleCount = 0;
+        var disposeCount = 0;
+        var factory = new CountingDistributedEventHandlerFactory(
+            () => handleCount++,
+            () => disposeCount++);
+
+        using var subscription = DistributedEventBus.Subscribe(typeof(MySimpleEventData), factory);
 
         var eventName = EventNameAttribute.GetNameOrDefault<MySimpleEventData>();
         await DistributedEventBus.PublishAsync(eventName, new MySimpleEventData(1));
@@ -44,8 +57,8 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
         });
         await DistributedEventBus.PublishAsync(eventName, new { Value = 3 });
 
-        Assert.Equal(3, MySimpleDistributedTransientEventHandler.HandleCount);
-        Assert.Equal(3, MySimpleDistributedTransientEventHandler.DisposeCount);
+        Assert.Equal(3, handleCount);
+        Assert.Equal(3, disposeCount);
     }
 
     [Fact]
@@ -82,7 +95,7 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
             new SingleInstanceHandlerFactory(new ActionEventHandler<AnonymousEventData>(async (d) =>
             {
                 handleCount++;
-                d.ConvertToTypedObject().ShouldNotBeNull();
+                AnonymousEventDataConverter.ConvertToLooseObject(d).ShouldNotBeNull();
                 await Task.CompletedTask;
             })));
 
@@ -187,16 +200,15 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
     }
 
     [Fact]
-    public async Task Should_Throw_For_Unknown_Event_Name()
+    public async Task Should_Ignore_Unknown_Event_Name()
     {
-        await Assert.ThrowsAsync<AbpException>(() =>
-            DistributedEventBus.PublishAsync("NonExistentEvent", new { Value = 1 }));
+        await DistributedEventBus.PublishAsync("NonExistentEvent", new { Value = 1 });
     }
 
     [Fact]
     public async Task Should_Convert_AnonymousEventData_To_Typed_Object()
     {
-        MySimpleEventData? receivedData = null;
+        MySimpleEventData receivedData = null!;
 
         using var subscription = DistributedEventBus.Subscribe<MySimpleEventData>(async (data) =>
         {
@@ -209,6 +221,63 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
 
         receivedData.ShouldNotBeNull();
         receivedData.Value.ShouldBe(42);
+    }
+
+    [Fact]
+    public async Task Should_Rehydrate_Anonymous_Event_From_Outbox_Using_Raw_Json()
+    {
+        var localDistributedEventBus = GetRequiredService<LocalDistributedEventBus>();
+        AnonymousEventData receivedData = null!;
+        var eventName = "MyEvent-" + Guid.NewGuid().ToString("N");
+
+        using var subscription = localDistributedEventBus.Subscribe(eventName,
+            new SingleInstanceHandlerFactory(new ActionEventHandler<AnonymousEventData>(async data =>
+            {
+                receivedData = data;
+                await Task.CompletedTask;
+            })));
+
+        var outgoingEvent = new OutgoingEventInfo(
+            Guid.NewGuid(),
+            eventName,
+            Encoding.UTF8.GetBytes("{\"Value\":42}"),
+            DateTime.UtcNow);
+
+        await localDistributedEventBus.PublishFromOutboxAsync(outgoingEvent, new OutboxConfig("Test") { DatabaseName = "Test" });
+
+        receivedData.ShouldNotBeNull();
+        receivedData.EventName.ShouldBe(eventName);
+        AnonymousEventDataConverter.GetJsonData(receivedData).ShouldBe("{\"Value\":42}");
+        AnonymousEventDataConverter.ConvertToTypedObject<MySimpleEventData>(receivedData).Value.ShouldBe(42);
+    }
+
+    [Fact]
+    public async Task Should_Rehydrate_Anonymous_Event_From_Inbox_Using_Raw_Json()
+    {
+        var localDistributedEventBus = GetRequiredService<LocalDistributedEventBus>();
+        AnonymousEventData receivedData = null!;
+        var eventName = "MyEvent-" + Guid.NewGuid().ToString("N");
+
+        using var subscription = localDistributedEventBus.Subscribe(eventName,
+            new SingleInstanceHandlerFactory(new ActionEventHandler<AnonymousEventData>(async data =>
+            {
+                receivedData = data;
+                await Task.CompletedTask;
+            })));
+
+        var incomingEvent = new IncomingEventInfo(
+            Guid.NewGuid(),
+            Guid.NewGuid().ToString("N"),
+            eventName,
+            Encoding.UTF8.GetBytes("\"hello\""),
+            DateTime.UtcNow);
+
+        await localDistributedEventBus.ProcessFromInboxAsync(incomingEvent, new InboxConfig("Test") { DatabaseName = "Test" });
+
+        receivedData.ShouldNotBeNull();
+        receivedData.EventName.ShouldBe(eventName);
+        AnonymousEventDataConverter.GetJsonData(receivedData).ShouldBe("\"hello\"");
+        AnonymousEventDataConverter.ConvertToTypedObject<string>(receivedData).ShouldBe("hello");
     }
 
     [Fact]
@@ -305,6 +374,59 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
         public Task HandleEventAsync(DistributedEventReceived eventData)
         {
             MyEventDate.Order += nameof(DistributedEventReceived);
+            return Task.CompletedTask;
+        }
+    }
+
+    private sealed class CountingDistributedEventHandlerFactory : IEventHandlerFactory
+    {
+        private readonly Action _handleAction;
+        private readonly Action _disposeAction;
+
+        public CountingDistributedEventHandlerFactory(Action handleAction, Action disposeAction)
+        {
+            _handleAction = handleAction;
+            _disposeAction = disposeAction;
+        }
+
+        public IEventHandlerDisposeWrapper GetHandler()
+        {
+            var wasHandled = false;
+            return new EventHandlerDisposeWrapper(
+                new CountingDistributedEventHandler(
+                    _handleAction,
+                    () => wasHandled = true),
+                () =>
+                {
+                    if (wasHandled)
+                    {
+                        _disposeAction();
+                    }
+                }
+            );
+        }
+
+        public bool IsInFactories(List<IEventHandlerFactory> handlerFactories)
+        {
+            return handlerFactories.Contains(this);
+        }
+    }
+
+    private sealed class CountingDistributedEventHandler : IDistributedEventHandler<MySimpleEventData>
+    {
+        private readonly Action _handleAction;
+        private readonly Action _markHandled;
+
+        public CountingDistributedEventHandler(Action handleAction, Action markHandled)
+        {
+            _handleAction = handleAction;
+            _markHandled = markHandled;
+        }
+
+        public Task HandleEventAsync(MySimpleEventData eventData)
+        {
+            _markHandled();
+            _handleAction();
             return Task.CompletedTask;
         }
     }
