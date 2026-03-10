@@ -61,12 +61,14 @@ public class AbpTickerQBackgroundJobManager : IBackgroundJobManager, ITransientD
 
     protected virtual async Task<string> EnqueueAsync(BackgroundJobConfiguration job, object args, BackgroundJobPriority priority, TimeSpan? delay)
     {
+        var normalizedArgs = NormalizeArgs(job.ArgsType, args);
+
         var timeTicker = new TimeTickerEntity
         {
             Id = Guid.NewGuid(),
             Function = job.JobName,
             ExecutionTime = delay == null ? DateTime.UtcNow : DateTime.UtcNow.Add(delay.Value),
-            Request = CreateTickerRequest(job.ArgsType, args),
+            Request = CreateTickerRequest(job.ArgsType, normalizedArgs),
         };
 
         var config = TickerQOptions.GetConfigurationOrNull(job.JobType);
@@ -79,6 +81,17 @@ public class AbpTickerQBackgroundJobManager : IBackgroundJobManager, ITransientD
 
         var result = await TimeTickerManager.AddAsync(timeTicker);
         return !result.IsSucceeded ? timeTicker.Id.ToString() : result.Result.Id.ToString();
+    }
+
+    protected virtual object NormalizeArgs(Type argsType, object args)
+    {
+        if (argsType.IsInstanceOfType(args))
+        {
+            return args;
+        }
+
+        var serialized = JsonSerializer.Serialize(args);
+        return JsonSerializer.Deserialize(argsType, serialized)!;
     }
 
     protected virtual byte[]? CreateTickerRequest(Type argsType, object args)
