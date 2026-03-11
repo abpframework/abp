@@ -71,12 +71,12 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
         Check.NotNull(schedule, nameof(schedule));
         Check.NotNull(handler, nameof(handler));
 
-        DynamicBackgroundWorkerHandlerRegistry.Register(workerName, handler);
-
         if (schedule.Period == null && !string.IsNullOrWhiteSpace(schedule.CronExpression))
         {
             throw new AbpException("Default background worker manager does not support cron expression without period.");
         }
+
+        DynamicBackgroundWorkerHandlerRegistry.Register(workerName, handler);
 
         var timer = ServiceProvider.GetRequiredService<AbpAsyncTimer>();
         var serviceScopeFactory = ServiceProvider.GetRequiredService<IServiceScopeFactory>();

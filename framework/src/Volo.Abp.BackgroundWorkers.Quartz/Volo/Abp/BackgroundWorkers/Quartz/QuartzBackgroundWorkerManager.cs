@@ -130,8 +130,6 @@ public class QuartzBackgroundWorkerManager : BackgroundWorkerManager, ISingleton
         Check.NotNull(schedule, nameof(schedule));
         Check.NotNull(handler, nameof(handler));
 
-        DynamicBackgroundWorkerHandlerRegistry.Register(workerName, handler);
-
         if (schedule.Period == null && schedule.CronExpression.IsNullOrWhiteSpace())
         {
             throw new AbpException($"Both 'Period' and 'CronExpression' are not set for dynamic worker {workerName}. You must set at least one of them.");
@@ -170,6 +168,8 @@ public class QuartzBackgroundWorkerManager : BackgroundWorkerManager, ISingleton
         {
             await Scheduler.ScheduleJob(jobDetail, trigger, cancellationToken);
         }
+
+        DynamicBackgroundWorkerHandlerRegistry.Register(workerName, handler);
     }
 
     public override async Task<bool> RemoveAsync(string workerName, CancellationToken cancellationToken = default)
@@ -182,10 +182,13 @@ public class QuartzBackgroundWorkerManager : BackgroundWorkerManager, ISingleton
         }
 
         var jobKey = new JobKey($"DynamicWorker:{workerName}");
-        await Scheduler.DeleteJob(jobKey, cancellationToken);
-        DynamicBackgroundWorkerHandlerRegistry.Unregister(workerName);
+        var deleted = await Scheduler.DeleteJob(jobKey, cancellationToken);
+        if (deleted)
+        {
+            DynamicBackgroundWorkerHandlerRegistry.Unregister(workerName);
+        }
 
-        return true;
+        return deleted;
     }
 
     public override async Task<bool> UpdateScheduleAsync(string workerName, DynamicBackgroundWorkerSchedule schedule, CancellationToken cancellationToken = default)
@@ -218,8 +221,8 @@ public class QuartzBackgroundWorkerManager : BackgroundWorkerManager, ISingleton
                 builder.WithInterval(TimeSpan.FromMilliseconds(schedule.Period!.Value)).RepeatForever());
         }
 
-        await Scheduler.RescheduleJob(triggerKey, triggerBuilder.Build(), cancellationToken);
+        var result = await Scheduler.RescheduleJob(triggerKey, triggerBuilder.Build(), cancellationToken);
 
-        return true;
+        return result != null;
     }
 }

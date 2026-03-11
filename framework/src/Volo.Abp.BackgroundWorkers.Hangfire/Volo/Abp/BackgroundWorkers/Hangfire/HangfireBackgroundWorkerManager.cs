@@ -165,8 +165,6 @@ public class HangfireBackgroundWorkerManager : BackgroundWorkerManager, ISinglet
         Check.NotNull(schedule, nameof(schedule));
         Check.NotNull(handler, nameof(handler));
 
-        DynamicBackgroundWorkerHandlerRegistry.Register(workerName, handler);
-
         var cronExpression = schedule.CronExpression;
         if (cronExpression.IsNullOrWhiteSpace())
         {
@@ -203,6 +201,8 @@ public class HangfireBackgroundWorkerManager : BackgroundWorkerManager, ISinglet
                     TimeZone = TimeZoneInfo.Utc
                 });
         }
+
+        DynamicBackgroundWorkerHandlerRegistry.Register(workerName, handler);
 
         return Task.CompletedTask;
     }

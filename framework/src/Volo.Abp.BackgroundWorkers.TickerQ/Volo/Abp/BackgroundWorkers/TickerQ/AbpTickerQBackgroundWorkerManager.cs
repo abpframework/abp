@@ -105,8 +105,6 @@ public class AbpTickerQBackgroundWorkerManager : BackgroundWorkerManager, ISingl
         Check.NotNull(schedule, nameof(schedule));
         Check.NotNull(handler, nameof(handler));
 
-        DynamicBackgroundWorkerHandlerRegistry.Register(workerName, handler);
-
         var cronExpression = schedule.CronExpression ?? GetCron(schedule.Period ?? DynamicBackgroundWorkerSchedule.DefaultPeriod);
         var functionName = $"DynamicWorker:{workerName}";
 
@@ -137,15 +135,17 @@ public class AbpTickerQBackgroundWorkerManager : BackgroundWorkerManager, ISingl
             Function = functionName,
             Expression = cronExpression
         });
+
+        DynamicBackgroundWorkerHandlerRegistry.Register(workerName, handler);
     }
 
-    public override async Task<bool> RemoveAsync(string workerName, CancellationToken cancellationToken = default)
+    public override Task<bool> RemoveAsync(string workerName, CancellationToken cancellationToken = default)
     {
         Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
 
         if (!DynamicBackgroundWorkerHandlerRegistry.IsRegistered(workerName))
         {
-            return false;
+            return Task.FromResult(false);
         }
 
         var functionName = $"DynamicWorker:{workerName}";
@@ -153,7 +153,7 @@ public class AbpTickerQBackgroundWorkerManager : BackgroundWorkerManager, ISingl
         AbpTickerQBackgroundWorkersProvider.BackgroundWorkers.Remove(functionName);
         DynamicBackgroundWorkerHandlerRegistry.Unregister(workerName);
 
-        return true;
+        return Task.FromResult(true);
     }
 
     public override async Task<bool> UpdateScheduleAsync(string workerName, DynamicBackgroundWorkerSchedule schedule, CancellationToken cancellationToken = default)

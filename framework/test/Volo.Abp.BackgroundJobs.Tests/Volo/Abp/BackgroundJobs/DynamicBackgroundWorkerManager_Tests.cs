@@ -121,7 +121,13 @@ public class DynamicBackgroundWorkerManager_Tests : BackgroundJobsTestBase
         result.ShouldBeTrue();
         _handlerRegistry.IsRegistered(workerName).ShouldBeTrue();
 
-        await Task.Delay(500);
+        var timeout = TimeSpan.FromSeconds(5);
+        var startTime = DateTime.UtcNow;
+        while (executionCount == 0 && DateTime.UtcNow - startTime < timeout)
+        {
+            await Task.Delay(50);
+        }
+
         executionCount.ShouldBeGreaterThan(0);
     }
 
