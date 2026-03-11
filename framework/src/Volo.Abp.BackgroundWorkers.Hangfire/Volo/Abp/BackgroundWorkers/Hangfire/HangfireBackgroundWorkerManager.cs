@@ -165,6 +165,8 @@ public class HangfireBackgroundWorkerManager : BackgroundWorkerManager, ISinglet
         Check.NotNull(schedule, nameof(schedule));
         Check.NotNull(handler, nameof(handler));
 
+        schedule.Validate();
+
         var cronExpression = schedule.CronExpression;
         if (cronExpression.IsNullOrWhiteSpace())
         {
@@ -227,6 +229,8 @@ public class HangfireBackgroundWorkerManager : BackgroundWorkerManager, ISinglet
     {
         Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
         Check.NotNull(schedule, nameof(schedule));
+
+        schedule.Validate();
 
         if (!DynamicBackgroundWorkerHandlerRegistry.IsRegistered(workerName))
         {

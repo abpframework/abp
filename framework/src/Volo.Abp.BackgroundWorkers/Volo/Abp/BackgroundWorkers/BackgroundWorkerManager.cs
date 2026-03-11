@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
     private bool _isDisposed;
 
     private readonly List<IBackgroundWorker> _backgroundWorkers;
-    private readonly Dictionary<string, InMemoryDynamicBackgroundWorker> _dynamicWorkers;
+    private readonly ConcurrentDictionary<string, InMemoryDynamicBackgroundWorker> _dynamicWorkers;
     protected IServiceProvider ServiceProvider { get; }
     protected IDynamicBackgroundWorkerHandlerRegistry DynamicBackgroundWorkerHandlerRegistry { get; }
 
@@ -30,7 +31,7 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
         IDynamicBackgroundWorkerHandlerRegistry dynamicBackgroundWorkerHandlerRegistry)
     {
         _backgroundWorkers = new List<IBackgroundWorker>();
-        _dynamicWorkers = new Dictionary<string, InMemoryDynamicBackgroundWorker>();
+        _dynamicWorkers = new ConcurrentDictionary<string, InMemoryDynamicBackgroundWorker>();
         ServiceProvider = serviceProvider;
         DynamicBackgroundWorkerHandlerRegistry = dynamicBackgroundWorkerHandlerRegistry;
     }
@@ -71,9 +72,17 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
         Check.NotNull(schedule, nameof(schedule));
         Check.NotNull(handler, nameof(handler));
 
+        schedule.Validate();
+
         if (schedule.Period == null && !string.IsNullOrWhiteSpace(schedule.CronExpression))
         {
             throw new AbpException("Default background worker manager does not support cron expression without period.");
+        }
+
+        if (_dynamicWorkers.TryRemove(workerName, out var existingWorker))
+        {
+            await existingWorker.StopAsync(cancellationToken);
+            _backgroundWorkers.Remove(existingWorker);
         }
 
         DynamicBackgroundWorkerHandlerRegistry.Register(workerName, handler);
@@ -106,7 +115,7 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
 
         await worker.StopAsync(cancellationToken);
         _backgroundWorkers.Remove(worker);
-        _dynamicWorkers.Remove(workerName);
+        _dynamicWorkers.TryRemove(workerName, out _);
         DynamicBackgroundWorkerHandlerRegistry.Unregister(workerName);
 
         return true;
@@ -116,6 +125,8 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
     {
         Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
         Check.NotNull(schedule, nameof(schedule));
+
+        schedule.Validate();
 
         if (!_dynamicWorkers.TryGetValue(workerName, out var oldWorker))
         {
@@ -135,7 +146,7 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
 
         await oldWorker.StopAsync(cancellationToken);
         _backgroundWorkers.Remove(oldWorker);
-        _dynamicWorkers.Remove(workerName);
+        _dynamicWorkers.TryRemove(workerName, out _);
 
         var timer = ServiceProvider.GetRequiredService<AbpAsyncTimer>();
         var serviceScopeFactory = ServiceProvider.GetRequiredService<IServiceScopeFactory>();

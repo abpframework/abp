@@ -1,3 +1,5 @@
+using System;
+
 namespace Volo.Abp.BackgroundWorkers;
 
 public class DynamicBackgroundWorkerSchedule
@@ -7,4 +9,14 @@ public class DynamicBackgroundWorkerSchedule
     public int? Period { get; set; }
 
     public string? CronExpression { get; set; }
+
+    public virtual void Validate()
+    {
+        if (Period.HasValue && Period.Value <= 0)
+        {
+            throw new ArgumentException(
+                $"Period must be greater than 0 when provided. Given value: {Period.Value}.",
+                nameof(Period));
+        }
+    }
 }

@@ -141,4 +141,72 @@ public class DynamicBackgroundWorkerManager_Tests : BackgroundJobsTestBase
 
         result.ShouldBeFalse();
     }
+
+    [Fact]
+    public async Task Should_Replace_Existing_Worker_When_Same_Name_Added()
+    {
+        var workerName = "dynamic-worker-" + Guid.NewGuid();
+        var firstHandlerCalled = false;
+        var secondHandlerTcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        await _backgroundWorkerManager.AddAsync(
+            workerName,
+            new DynamicBackgroundWorkerSchedule { Period = 60000 },
+            (_, _) =>
+            {
+                firstHandlerCalled = true;
+                return Task.CompletedTask;
+            }
+        );
+
+        await _backgroundWorkerManager.AddAsync(
+            workerName,
+            new DynamicBackgroundWorkerSchedule { Period = 50 },
+            (_, _) =>
+            {
+                secondHandlerTcs.TrySetResult(true);
+                return Task.CompletedTask;
+            }
+        );
+
+        var completedTask = await Task.WhenAny(secondHandlerTcs.Task, Task.Delay(5000));
+        completedTask.ShouldBe(secondHandlerTcs.Task);
+        (await secondHandlerTcs.Task).ShouldBeTrue();
+
+        _handlerRegistry.IsRegistered(workerName).ShouldBeTrue();
+
+        var removed = await _backgroundWorkerManager.RemoveAsync(workerName);
+        removed.ShouldBeTrue();
+        _handlerRegistry.IsRegistered(workerName).ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task Should_Throw_When_Period_Is_Zero()
+    {
+        var workerName = "dynamic-worker-" + Guid.NewGuid();
+
+        await Assert.ThrowsAsync<ArgumentException>(async () =>
+        {
+            await _backgroundWorkerManager.AddAsync(
+                workerName,
+                new DynamicBackgroundWorkerSchedule { Period = 0 },
+                (_, _) => Task.CompletedTask
+            );
+        });
+    }
+
+    [Fact]
+    public async Task Should_Throw_When_Period_Is_Negative()
+    {
+        var workerName = "dynamic-worker-" + Guid.NewGuid();
+
+        await Assert.ThrowsAsync<ArgumentException>(async () =>
+        {
+            await _backgroundWorkerManager.AddAsync(
+                workerName,
+                new DynamicBackgroundWorkerSchedule { Period = -1000 },
+                (_, _) => Task.CompletedTask
+            );
+        });
+    }
 }

@@ -105,6 +105,8 @@ public class AbpTickerQBackgroundWorkerManager : BackgroundWorkerManager, ISingl
         Check.NotNull(schedule, nameof(schedule));
         Check.NotNull(handler, nameof(handler));
 
+        schedule.Validate();
+
         var cronExpression = schedule.CronExpression ?? GetCron(schedule.Period ?? DynamicBackgroundWorkerSchedule.DefaultPeriod);
         var functionName = $"DynamicWorker:{workerName}";
 
@@ -160,6 +162,8 @@ public class AbpTickerQBackgroundWorkerManager : BackgroundWorkerManager, ISingl
     {
         Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
         Check.NotNull(schedule, nameof(schedule));
+
+        schedule.Validate();
 
         if (!DynamicBackgroundWorkerHandlerRegistry.IsRegistered(workerName))
         {

@@ -130,6 +130,8 @@ public class QuartzBackgroundWorkerManager : BackgroundWorkerManager, ISingleton
         Check.NotNull(schedule, nameof(schedule));
         Check.NotNull(handler, nameof(handler));
 
+        schedule.Validate();
+
         if (schedule.Period == null && schedule.CronExpression.IsNullOrWhiteSpace())
         {
             throw new AbpException($"Both 'Period' and 'CronExpression' are not set for dynamic worker {workerName}. You must set at least one of them.");
@@ -195,6 +197,8 @@ public class QuartzBackgroundWorkerManager : BackgroundWorkerManager, ISingleton
     {
         Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
         Check.NotNull(schedule, nameof(schedule));
+
+        schedule.Validate();
 
         if (!DynamicBackgroundWorkerHandlerRegistry.IsRegistered(workerName))
         {

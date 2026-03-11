@@ -158,10 +158,10 @@ var updated = await backgroundWorkerManager.UpdateScheduleAsync(
 
 Key points:
 
-* `workerName` is the runtime identifier of the dynamic worker.
+* `workerName` is the runtime identifier of the dynamic worker. If a worker with the same name already exists, it will be replaced.
 * The `handler` is registered at runtime and executed through the provider-specific worker manager.
 * Provider behavior is preserved. For example, providers with persistent schedulers keep their own scheduling semantics.
-* The default in-process manager uses in-memory periodic execution.
+* The default in-process manager uses in-memory periodic execution based on `Period`. **`CronExpression` is only supported by scheduler-backed providers (Hangfire, Quartz, TickerQ).** The default in-memory provider ignores `CronExpression`.
 * `RemoveAsync` stops and removes a dynamic worker. Returns `true` if the worker was found and removed.
 * `UpdateScheduleAsync` changes the schedule of an existing dynamic worker. Returns `true` if the worker was found and updated. The handler itself is not changed.
 
