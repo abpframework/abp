@@ -1994,44 +1994,6 @@
       ]
     },
     {
-      "text": "Low-Code System",
-      "items": [
-        {
-          "text": "Overview",
-          "path": "low-code",
-          "isIndex": true
-        },
-        {
-          "text": "Attributes & Fluent API",
-          "path": "low-code/fluent-api.md"
-        },
-        {
-          "text": "model.json Structure",
-          "path": "low-code/model-json.md"
-        },
-        {
-          "text": "Reference Entities",
-          "path": "low-code/reference-entities.md"
-        },
-        {
-          "text": "Interceptors",
-          "path": "low-code/interceptors.md"
-        },
-        {
-          "text": "Scripting API",
-          "path": "low-code/scripting-api.md"
-        },
-        {
-          "text": "Custom Endpoints",
-          "path": "low-code/custom-endpoints.md"
-        },
-        {
-          "text": "Foreign Access",
-          "path": "low-code/foreign-access.md"
-        }
-      ]
-    },
-    {
       "text": "Solution Templates",
       "items": [
         {
