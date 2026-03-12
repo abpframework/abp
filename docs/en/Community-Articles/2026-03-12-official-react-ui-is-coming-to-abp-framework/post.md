@@ -49,7 +49,7 @@ The current template already points to the kind of experience React developers e
 
 From the source code, it is already clear that the template is being shaped as a real ABP solution experience, not just a login page plus a few demo screens.
 
-> Image placeholder: A composite screenshot showing the React template in action, such as the login page, the main application shell, and one management page like Users, Roles, or Tenants.
+![abp-react-app-screenshot.png](images/abp-react-app-screenshot.png)
 
 ## Technologies currently in the mix
 
