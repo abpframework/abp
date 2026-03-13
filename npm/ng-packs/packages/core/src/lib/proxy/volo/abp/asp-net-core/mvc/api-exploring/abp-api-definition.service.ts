@@ -1,4 +1,5 @@
-import { RestService, Rest } from '@abp/ng.core';
+import { RestService } from '../../../../../../services';
+import { Rest } from '../../../../../../models';
 import { Injectable, inject } from '@angular/core';
 import type { ApplicationApiDescriptionModel, ApplicationApiDescriptionModelRequestDto } from '../../../http/modeling/models';
 
@@ -7,6 +8,7 @@ import type { ApplicationApiDescriptionModel, ApplicationApiDescriptionModelRequ
 })
 export class AbpApiDefinitionService {
   private restService = inject(RestService);
+
   apiName = 'abp';
   
 

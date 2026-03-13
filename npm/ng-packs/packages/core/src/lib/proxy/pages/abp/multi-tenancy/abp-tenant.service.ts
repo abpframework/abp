@@ -1,4 +1,5 @@
-import { RestService, Rest } from '@abp/ng.core';
+import { RestService } from '../../../../services';
+import { Rest } from '../../../../models';
 import { Injectable, inject } from '@angular/core';
 import type { FindTenantResultDto } from '../../../volo/abp/asp-net-core/mvc/multi-tenancy/models';
 
@@ -7,6 +8,7 @@ import type { FindTenantResultDto } from '../../../volo/abp/asp-net-core/mvc/mul
 })
 export class AbpTenantService {
   private restService = inject(RestService);
+
   apiName = 'abp';
   
 
