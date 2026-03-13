@@ -1,24 +1,20 @@
+import type { TenantUserSharingStrategy } from '../../../multi-tenancy/tenant-user-sharing-strategy.enum';
 
 export interface FindTenantResultDto {
-  success: boolean;
-  tenantId?: string;
-  name?: string;
-  normalizedName?: string;
-  isActive: boolean;
+  success?: boolean;
+  tenantId?: string | null;
+  name?: string | null;
+  normalizedName?: string | null;
+  isActive?: boolean;
 }
 
 export interface CurrentTenantDto {
-  id?: string;
-  name?: string;
-  isAvailable: boolean;
-}
-
-export enum TenantUserSharingStrategy {
-  Isolated = 0,
-  Shared = 1,
+  id?: string | null;
+  name?: string | null;
+  isAvailable?: boolean;
 }
 
 export interface MultiTenancyInfoDto {
-  isEnabled: boolean;
+  isEnabled?: boolean;
   userSharingStrategy?: TenantUserSharingStrategy;
 }

@@ -1,6 +1,5 @@
 import type { ApplicationLocalizationDto, ApplicationLocalizationRequestDto } from './models';
-import { RestService } from '../../../../../../services';
-import { Rest } from '../../../../../../models';
+import { RestService, Rest } from '@abp/ng.core';
 import { Injectable, inject } from '@angular/core';
 
 @Injectable({
@@ -8,7 +7,6 @@ import { Injectable, inject } from '@angular/core';
 })
 export class AbpApplicationLocalizationService {
   private restService = inject(RestService);
-
   apiName = 'abp';
   
 

@@ -4,5 +4,4 @@ export interface LanguageInfo {
   uiCultureName?: string;
   displayName?: string;
   twoLetterISOLanguageName?: string;
-  flagIcon?: string;
 }
