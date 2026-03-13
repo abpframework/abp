@@ -1,62 +1,84 @@
 
 export interface EntityExtensionDto {
-  properties: Record<string, ExtensionPropertyDto>;
-  configuration: Record<string, object>;
+  properties?: Record<string, ExtensionPropertyDto>;
+  configuration?: Record<string, object>;
 }
 
 export interface ExtensionEnumDto {
-  fields: ExtensionEnumFieldDto[];
-  localizationResource?: string;
+  fields?: ExtensionEnumFieldDto[];
+  localizationResource?: string | null;
 }
 
 export interface ExtensionEnumFieldDto {
-  name?: string;
-  value: object;
+  name?: string | null;
+  value?: object | null;
 }
 
 export interface ExtensionPropertyApiCreateDto {
-  isAvailable: boolean;
+  isAvailable?: boolean;
 }
 
 export interface ExtensionPropertyApiDto {
-  onGet: ExtensionPropertyApiGetDto;
-  onCreate: ExtensionPropertyApiCreateDto;
-  onUpdate: ExtensionPropertyApiUpdateDto;
+  onGet?: ExtensionPropertyApiGetDto;
+  onCreate?: ExtensionPropertyApiCreateDto;
+  onUpdate?: ExtensionPropertyApiUpdateDto;
 }
 
 export interface ExtensionPropertyApiGetDto {
-  isAvailable: boolean;
+  isAvailable?: boolean;
 }
 
 export interface ExtensionPropertyApiUpdateDto {
-  isAvailable: boolean;
+  isAvailable?: boolean;
 }
 
 export interface ExtensionPropertyAttributeDto {
   typeSimple?: string;
-  config: Record<string, object>;
+  config?: Record<string, object>;
 }
 
 export interface ExtensionPropertyDto {
   type?: string;
   typeSimple?: string;
-  displayName: LocalizableStringDto;
-  api: ExtensionPropertyApiDto;
-  ui: ExtensionPropertyUiDto;
-  attributes: ExtensionPropertyAttributeDto[];
-  configuration: Record<string, object>;
-  defaultValue: object;
+  displayName?: LocalizableStringDto | null;
+  api?: ExtensionPropertyApiDto;
+  ui?: ExtensionPropertyUiDto;
+  policy?: ExtensionPropertyPolicyDto;
+  attributes?: ExtensionPropertyAttributeDto[];
+  configuration?: Record<string, object>;
+  defaultValue?: object | null;
+}
+
+export interface ExtensionPropertyFeaturePolicyDto {
+  features?: string[];
+  requiresAll?: boolean;
+}
+
+export interface ExtensionPropertyGlobalFeaturePolicyDto {
+  features?: string[];
+  requiresAll?: boolean;
+}
+
+export interface ExtensionPropertyPermissionPolicyDto {
+  permissionNames?: string[];
+  requiresAll?: boolean;
+}
+
+export interface ExtensionPropertyPolicyDto {
+  globalFeatures?: ExtensionPropertyGlobalFeaturePolicyDto;
+  features?: ExtensionPropertyFeaturePolicyDto;
+  permissions?: ExtensionPropertyPermissionPolicyDto;
 }
 
 export interface ExtensionPropertyUiDto {
-  onTable: ExtensionPropertyUiTableDto;
-  onCreateForm: ExtensionPropertyUiFormDto;
-  onEditForm: ExtensionPropertyUiFormDto;
-  lookup: ExtensionPropertyUiLookupDto;
+  onTable?: ExtensionPropertyUiTableDto;
+  onCreateForm?: ExtensionPropertyUiFormDto;
+  onEditForm?: ExtensionPropertyUiFormDto;
+  lookup?: ExtensionPropertyUiLookupDto;
 }
 
 export interface ExtensionPropertyUiFormDto {
-  isVisible: boolean;
+  isVisible?: boolean;
 }
 
 export interface ExtensionPropertyUiLookupDto {
@@ -68,20 +90,20 @@ export interface ExtensionPropertyUiLookupDto {
 }
 
 export interface ExtensionPropertyUiTableDto {
-  isVisible: boolean;
+  isVisible?: boolean;
 }
 
 export interface LocalizableStringDto {
   name?: string;
-  resource?: string;
+  resource?: string | null;
 }
 
 export interface ModuleExtensionDto {
-  entities: Record<string, EntityExtensionDto>;
-  configuration: Record<string, object>;
+  entities?: Record<string, EntityExtensionDto>;
+  configuration?: Record<string, object>;
 }
 
 export interface ObjectExtensionsDto {
-  modules: Record<string, ModuleExtensionDto>;
-  enums: Record<string, ExtensionEnumDto>;
+  modules?: Record<string, ModuleExtensionDto>;
+  enums?: Record<string, ExtensionEnumDto>;
 }
