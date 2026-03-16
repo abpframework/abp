@@ -28,19 +28,21 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        var (innerHtml, isCheckBox, isHidden) = await GetFormInputGroupAsHtmlAsync(context, output);
+        var (innerHtml, isCheckBox) = await GetFormInputGroupAsHtmlAsync(context, output);
 
         if (isCheckBox && TagHelper.CheckBoxHiddenInputRenderMode.HasValue)
         {
             TagHelper.ViewContext.CheckBoxHiddenInputRenderMode = TagHelper.CheckBoxHiddenInputRenderMode.Value;
         }
 
+        var isHidden = await IsFormInputGroupHiddenAsync(context, output);
+
         var order = TagHelper.AspFor.ModelExplorer.GetDisplayOrder();
 
         AddGroupToFormGroupContents(
             context,
             TagHelper.AspFor.Name,
-            SurroundInnerHtmlAndGet(context, output, innerHtml, isCheckBox, isHidden),
+            GetWrappedInnerHtml(context, output, innerHtml, isCheckBox, isHidden),
             order,
             out var suppress
         );
@@ -83,17 +85,23 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
         }
     }
 
-    protected virtual async Task<(string, bool, bool)> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
+    protected virtual async Task<(string, bool)> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
     {
         var (inputTag, isCheckBox) = await GetInputTagHelperOutputAsync(context, output);
-        var isHidden = IsOutputHidden(inputTag);
 
         var inputHtml = inputTag.Render(_encoder);
         var label = await GetLabelAsHtmlAsync(context, output, inputTag, isCheckBox);
         var info = GetInfoAsHtml(context, output, inputTag, isCheckBox);
         var validation = isCheckBox ? "" : await GetValidationAsHtmlAsync(context, output, inputTag);
 
-        return (GetContent(context, output, label, inputHtml, validation, info, isCheckBox), isCheckBox, isHidden);
+        return (GetContent(context, output, label, inputHtml, validation, info, isCheckBox), isCheckBox);
+    }
+
+    protected virtual async Task<bool> IsFormInputGroupHiddenAsync(TagHelperContext context, TagHelperOutput output)
+    {
+        var (inputTag, _) = await GetInputTagHelperOutputAsync(context, output);
+
+        return IsOutputHidden(inputTag);
     }
 
     protected virtual async Task<string> GetValidationAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
@@ -123,31 +131,57 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
         return innerContent + validation + infoHtml;
     }
 
-    protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml, bool isCheckbox, bool isHidden)
+    protected virtual string GetWrappedInnerHtml(TagHelperContext context, TagHelperOutput output, string innerHtml, bool isCheckbox, bool isHidden)
     {
-        var classNames = new List<string>();
+        var html = SurroundInnerHtmlAndGet(context, output, innerHtml, isCheckbox);
 
-        if (isCheckbox)
-        {
-            classNames.Add("custom-checkbox");
-            classNames.Add("custom-control");
-        }
+        return isHidden ? RemoveMarginBottomClass(html) : html;
+    }
 
-        if (!isHidden && TagHelper.AddMarginBottomClass)
-        {
-            classNames.Add(isCheckbox ? "mb-2" : "mb-3");
-        }
+    protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml, bool isCheckbox)
+    {
+        var mb = TagHelper.AddMarginBottomClass ? (isCheckbox ? "mb-2" : "mb-3") : string.Empty;
 
-        if (isCheckbox)
-        {
-            classNames.Add("form-check");
-        }
-
-        var classAttribute = classNames.Count > 0 ? " class=\"" + string.Join(" ", classNames) + "\"" : string.Empty;
-
-        return "<div" + classAttribute + ">" +
+        return "<div class=\"" + (isCheckbox ? $"custom-checkbox custom-control {mb} form-check" : $"{mb}") + "\">" +
                 Environment.NewLine + innerHtml + Environment.NewLine +
                 "</div>";
+    }
+
+    protected virtual string RemoveMarginBottomClass(string html)
+    {
+        var openingTagEndIndex = html.IndexOf('>');
+        if (openingTagEndIndex < 0)
+        {
+            return html;
+        }
+
+        var openingTag = html.Substring(0, openingTagEndIndex);
+
+        const string classAttributePrefix = " class=\"";
+        var classAttributeIndex = openingTag.IndexOf(classAttributePrefix, StringComparison.Ordinal);
+        if (classAttributeIndex < 0)
+        {
+            return html;
+        }
+
+        var classValueStartIndex = classAttributeIndex + classAttributePrefix.Length;
+        var classValueEndIndex = openingTag.IndexOf('"', classValueStartIndex);
+        if (classValueEndIndex < 0)
+        {
+            return html;
+        }
+
+        var classNames = openingTag
+            .Substring(classValueStartIndex, classValueEndIndex - classValueStartIndex)
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .Where(className => className != "mb-2" && className != "mb-3")
+            .ToList();
+
+        var updatedOpeningTag = classNames.Count > 0
+            ? openingTag.Substring(0, classAttributeIndex) + classAttributePrefix + string.Join(" ", classNames) + "\"" + openingTag.Substring(classValueEndIndex + 1)
+            : openingTag.Remove(classAttributeIndex, classValueEndIndex - classAttributeIndex + 1);
+
+        return updatedOpeningTag + html.Substring(openingTagEndIndex);
     }
 
     protected virtual TagHelper GetInputTagHelper(TagHelperContext context, TagHelperOutput output)
