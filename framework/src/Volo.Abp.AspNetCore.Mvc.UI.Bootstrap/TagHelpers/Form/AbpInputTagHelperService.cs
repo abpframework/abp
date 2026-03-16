@@ -35,14 +35,12 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
             TagHelper.ViewContext.CheckBoxHiddenInputRenderMode = TagHelper.CheckBoxHiddenInputRenderMode.Value;
         }
 
-        var isHidden = await IsFormInputGroupHiddenAsync(context, output);
-
         var order = TagHelper.AspFor.ModelExplorer.GetDisplayOrder();
 
         AddGroupToFormGroupContents(
             context,
             TagHelper.AspFor.Name,
-            GetWrappedInnerHtml(context, output, innerHtml, isCheckBox, isHidden),
+            SurroundInnerHtmlAndGet(context, output, innerHtml, isCheckBox),
             order,
             out var suppress
         );
@@ -56,7 +54,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
             output.TagMode = TagMode.StartTagAndEndTag;
             output.TagName = "div";
             LeaveOnlyGroupAttributes(context, output);
-            if (!isHidden)
+            if (!IsInputHidden(context))
             {
                 if (TagHelper.FloatingLabel && !isCheckBox)
                 {
@@ -88,6 +86,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
     protected virtual async Task<(string, bool)> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
     {
         var (inputTag, isCheckBox) = await GetInputTagHelperOutputAsync(context, output);
+        context.Items[nameof(IsOutputHidden)] = IsOutputHidden(inputTag);
 
         var inputHtml = inputTag.Render(_encoder);
         var label = await GetLabelAsHtmlAsync(context, output, inputTag, isCheckBox);
@@ -95,13 +94,6 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
         var validation = isCheckBox ? "" : await GetValidationAsHtmlAsync(context, output, inputTag);
 
         return (GetContent(context, output, label, inputHtml, validation, info, isCheckBox), isCheckBox);
-    }
-
-    protected virtual async Task<bool> IsFormInputGroupHiddenAsync(TagHelperContext context, TagHelperOutput output)
-    {
-        var (inputTag, _) = await GetInputTagHelperOutputAsync(context, output);
-
-        return IsOutputHidden(inputTag);
     }
 
     protected virtual async Task<string> GetValidationAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
@@ -131,57 +123,13 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
         return innerContent + validation + infoHtml;
     }
 
-    protected virtual string GetWrappedInnerHtml(TagHelperContext context, TagHelperOutput output, string innerHtml, bool isCheckbox, bool isHidden)
-    {
-        var html = SurroundInnerHtmlAndGet(context, output, innerHtml, isCheckbox);
-
-        return isHidden ? RemoveMarginBottomClass(html) : html;
-    }
-
     protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml, bool isCheckbox)
     {
-        var mb = TagHelper.AddMarginBottomClass ? (isCheckbox ? "mb-2" : "mb-3") : string.Empty;
-
+        var isHidden = IsInputHidden(context);
+        var mb = !isHidden && TagHelper.AddMarginBottomClass ? (isCheckbox ? "mb-2" : "mb-3") : string.Empty;
         return "<div class=\"" + (isCheckbox ? $"custom-checkbox custom-control {mb} form-check" : $"{mb}") + "\">" +
                 Environment.NewLine + innerHtml + Environment.NewLine +
                 "</div>";
-    }
-
-    protected virtual string RemoveMarginBottomClass(string html)
-    {
-        var openingTagEndIndex = html.IndexOf('>');
-        if (openingTagEndIndex < 0)
-        {
-            return html;
-        }
-
-        var openingTag = html.Substring(0, openingTagEndIndex);
-
-        const string classAttributePrefix = " class=\"";
-        var classAttributeIndex = openingTag.IndexOf(classAttributePrefix, StringComparison.Ordinal);
-        if (classAttributeIndex < 0)
-        {
-            return html;
-        }
-
-        var classValueStartIndex = classAttributeIndex + classAttributePrefix.Length;
-        var classValueEndIndex = openingTag.IndexOf('"', classValueStartIndex);
-        if (classValueEndIndex < 0)
-        {
-            return html;
-        }
-
-        var classNames = openingTag
-            .Substring(classValueStartIndex, classValueEndIndex - classValueStartIndex)
-            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
-            .Where(className => className != "mb-2" && className != "mb-3")
-            .ToList();
-
-        var updatedOpeningTag = classNames.Count > 0
-            ? openingTag.Substring(0, classAttributeIndex) + classAttributePrefix + string.Join(" ", classNames) + "\"" + openingTag.Substring(classValueEndIndex + 1)
-            : openingTag.Remove(classAttributeIndex, classValueEndIndex - classAttributeIndex + 1);
-
-        return updatedOpeningTag + html.Substring(openingTagEndIndex);
     }
 
     protected virtual TagHelper GetInputTagHelper(TagHelperContext context, TagHelperOutput output)
@@ -568,6 +516,11 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
     protected virtual bool IsOutputHidden(TagHelperOutput inputTag)
     {
         return inputTag.Attributes.Any(a => a.Name.ToLowerInvariant() == "type" && a.Value.ToString()!.ToLowerInvariant() == "hidden");
+    }
+
+    protected virtual bool IsInputHidden(TagHelperContext context)
+    {
+        return context.Items.TryGetValue(nameof(IsOutputHidden), out var val) && val is true;
     }
 
     protected virtual string GetIdAttributeValue(TagHelperOutput inputTag)
