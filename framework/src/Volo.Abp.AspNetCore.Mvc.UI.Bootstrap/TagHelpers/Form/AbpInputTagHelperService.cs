@@ -28,7 +28,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
-        var (innerHtml, isCheckBox) = await GetFormInputGroupAsHtmlAsync(context, output);
+        var (innerHtml, isCheckBox, isHidden) = await GetFormInputGroupAsHtmlAsync(context, output);
 
         if (isCheckBox && TagHelper.CheckBoxHiddenInputRenderMode.HasValue)
         {
@@ -40,7 +40,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
         AddGroupToFormGroupContents(
             context,
             TagHelper.AspFor.Name,
-            SurroundInnerHtmlAndGet(context, output, innerHtml, isCheckBox),
+            SurroundInnerHtmlAndGet(context, output, innerHtml, isCheckBox, isHidden),
             order,
             out var suppress
         );
@@ -54,7 +54,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
             output.TagMode = TagMode.StartTagAndEndTag;
             output.TagName = "div";
             LeaveOnlyGroupAttributes(context, output);
-            if (!IsOutputHidden(output))
+            if (!isHidden)
             {
                 if (TagHelper.FloatingLabel && !isCheckBox)
                 {
@@ -83,16 +83,17 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
         }
     }
 
-    protected virtual async Task<(string, bool)> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
+    protected virtual async Task<(string, bool, bool)> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
     {
         var (inputTag, isCheckBox) = await GetInputTagHelperOutputAsync(context, output);
+        var isHidden = IsOutputHidden(inputTag);
 
         var inputHtml = inputTag.Render(_encoder);
         var label = await GetLabelAsHtmlAsync(context, output, inputTag, isCheckBox);
         var info = GetInfoAsHtml(context, output, inputTag, isCheckBox);
         var validation = isCheckBox ? "" : await GetValidationAsHtmlAsync(context, output, inputTag);
 
-        return (GetContent(context, output, label, inputHtml, validation, info, isCheckBox), isCheckBox);
+        return (GetContent(context, output, label, inputHtml, validation, info, isCheckBox), isCheckBox, isHidden);
     }
 
     protected virtual async Task<string> GetValidationAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
@@ -122,10 +123,29 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
         return innerContent + validation + infoHtml;
     }
 
-    protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml, bool isCheckbox)
+    protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml, bool isCheckbox, bool isHidden)
     {
-        var mb = TagHelper.AddMarginBottomClass ? (isCheckbox ? "mb-2" : "mb-3") : string.Empty;
-        return "<div class=\"" + (isCheckbox ? $"custom-checkbox custom-control {mb} form-check" : $"{mb}") + "\">" +
+        var classNames = new List<string>();
+
+        if (isCheckbox)
+        {
+            classNames.Add("custom-checkbox");
+            classNames.Add("custom-control");
+        }
+
+        if (!isHidden && TagHelper.AddMarginBottomClass)
+        {
+            classNames.Add(isCheckbox ? "mb-2" : "mb-3");
+        }
+
+        if (isCheckbox)
+        {
+            classNames.Add("form-check");
+        }
+
+        var classAttribute = classNames.Count > 0 ? " class=\"" + string.Join(" ", classNames) + "\"" : string.Empty;
+
+        return "<div" + classAttribute + ">" +
                 Environment.NewLine + innerHtml + Environment.NewLine +
                 "</div>";
     }
