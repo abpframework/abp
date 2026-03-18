@@ -1,4 +1,4 @@
-import { ListService, LocalizationPipe } from '@abp/ng.core';
+import { ConfigStateService, CurrentUserDto, ListService, LocalizationPipe } from '@abp/ng.core';
 import {
   ButtonComponent,
   Confirmation,
@@ -43,6 +43,7 @@ export class ResourcePermissionManagementComponent implements OnInit {
   protected readonly confirmationService = inject(ConfirmationService);
   protected readonly state = inject(ResourcePermissionStateService);
   private readonly list = inject(ListService);
+  private readonly configState = inject(ConfigStateService);
 
   readonly resourceName = input.required<string>();
   readonly resourceKey = input.required<string>();
@@ -169,6 +170,9 @@ export class ResourcePermissionManagementComponent implements OnInit {
               grant.providerKey || '',
             )
             .pipe(
+              switchMap(() =>
+                this.refreshAppConfigIfNeeded(grant.providerName || '', grant.providerKey || ''),
+              ),
               switchMap(() => this.service.getResource(this.resourceName(), this.resourceKey())),
               finalize(() => this.state.modalBusy.set(false)),
             )
@@ -201,6 +205,7 @@ export class ResourcePermissionManagementComponent implements OnInit {
         permissions: this.state.selectedPermissions(),
       })
       .pipe(
+        switchMap(() => this.refreshAppConfigIfNeeded(providerName, providerKey)),
         switchMap(() => this.service.getResource(this.resourceName(), this.resourceKey())),
         finalize(() => this.state.modalBusy.set(false)),
       )
@@ -212,5 +217,25 @@ export class ResourcePermissionManagementComponent implements OnInit {
           this.state.goToListMode();
         },
       });
+  }
+
+  private refreshAppConfigIfNeeded(providerName: string, providerKey: string) {
+    return this.shouldFetchAppConfig(providerName, providerKey)
+      ? this.configState.refreshAppState()
+      : of(null);
+  }
+
+  private shouldFetchAppConfig(providerName: string, providerKey: string) {
+    const currentUser = (this.configState.getOne('currentUser') || {}) as CurrentUserDto;
+
+    if (providerName === 'R') {
+      return (currentUser.roles || []).some(role => role === providerKey);
+    }
+
+    if (providerName === 'U') {
+      return currentUser.id === providerKey;
+    }
+
+    return false;
   }
 }
