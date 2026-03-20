@@ -9,6 +9,22 @@ HEADER = "# Package Version Changes\n"
 DOC_PATH = os.environ.get("DOC_PATH", "docs/en/package-version-changes.md")
 
 
+def extract_preamble(content):
+    """Extract content before the '# Package Version Changes' heading."""
+    header_pattern = re.compile(r"^# Package Version Changes\s*$", re.MULTILINE)
+    match = header_pattern.search(content)
+    if match:
+        return content[: match.start()]
+    return ""
+
+
+def normalize_version(version):
+    """Normalize version string: replace -preview suffix with -rc.1."""
+    if version and version.endswith("-preview"):
+        return version[: -len("-preview")] + "-rc.1"
+    return version
+
+
 def get_version():
     """Read the current version from common.props."""
     try:
@@ -275,7 +291,7 @@ def main():
     
     pr_number = f"#{pr_arg}"
 
-    version = get_version()
+    version = normalize_version(get_version())
     if not version:
         print("Could not read version from common.props.")
         sys.exit(1)
@@ -297,6 +313,7 @@ def main():
 
     # Load existing document from the base branch
     existing_content = get_existing_doc_from_base(base_ref)
+    preamble = extract_preamble(existing_content) if existing_content else ""
     sections = parse_document(existing_content) if existing_content else []
 
     # Find existing section for this version
@@ -320,6 +337,8 @@ def main():
     if doc_dir:
         os.makedirs(doc_dir, exist_ok=True)
     with open(DOC_PATH, "w") as f:
+        if preamble:
+            f.write(preamble)
         f.write(HEADER + "\n")
         for _, text in sections:
             f.write(text.rstrip("\n") + "\n\n")

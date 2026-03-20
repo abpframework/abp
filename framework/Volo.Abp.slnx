@@ -169,7 +169,6 @@
     <Project Path="src/Volo.Abp.TickerQ/Volo.Abp.TickerQ.csproj" />
     <Project Path="src/Volo.Abp.BackgroundJobs.TickerQ/Volo.Abp.BackgroundJobs.TickerQ.csproj" />
     <Project Path="src/Volo.Abp.BackgroundWorkers.TickerQ/Volo.Abp.BackgroundWorkers.TickerQ.csproj" />
-    <Project Path="src/Volo.Abp.OperationRateLimiting/Volo.Abp.OperationRateLimiting.csproj" />
   </Folder>
   <Folder Name="/test/">
     <Project Path="test/AbpTestBase/AbpTestBase.csproj" />
@@ -257,6 +256,5 @@
     <Project Path="test/Volo.Abp.Uow.Tests/Volo.Abp.Uow.Tests.csproj" />
     <Project Path="test/Volo.Abp.Validation.Tests/Volo.Abp.Validation.Tests.csproj" />
     <Project Path="test/Volo.Abp.VirtualFileSystem.Tests/Volo.Abp.VirtualFileSystem.Tests.csproj" />
-    <Project Path="test/Volo.Abp.OperationRateLimiting.Tests/Volo.Abp.OperationRateLimiting.Tests.csproj" />
   </Folder>
 </Solution>

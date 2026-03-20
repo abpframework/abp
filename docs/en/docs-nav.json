@@ -808,10 +808,6 @@
               "path": "framework/infrastructure/object-to-object-mapping.md"
             },
             {
-              "text": "Operation Rate Limiting",
-              "path": "framework/infrastructure/operation-rate-limiting.md"
-            },
-            {
               "text": "Settings",
               "path": "framework/infrastructure/settings.md"
             },
@@ -1994,44 +1990,6 @@
       ]
     },
     {
-      "text": "Low-Code System",
-      "items": [
-        {
-          "text": "Overview",
-          "path": "low-code",
-          "isIndex": true
-        },
-        {
-          "text": "Attributes & Fluent API",
-          "path": "low-code/fluent-api.md"
-        },
-        {
-          "text": "model.json Structure",
-          "path": "low-code/model-json.md"
-        },
-        {
-          "text": "Reference Entities",
-          "path": "low-code/reference-entities.md"
-        },
-        {
-          "text": "Interceptors",
-          "path": "low-code/interceptors.md"
-        },
-        {
-          "text": "Scripting API",
-          "path": "low-code/scripting-api.md"
-        },
-        {
-          "text": "Custom Endpoints",
-          "path": "low-code/custom-endpoints.md"
-        },
-        {
-          "text": "Foreign Access",
-          "path": "low-code/foreign-access.md"
-        }
-      ]
-    },
-    {
       "text": "Solution Templates",
       "items": [
         {
@@ -2614,6 +2572,10 @@
         {
           "text": "Language Management (Pro)",
           "path": "modules/language-management.md"
+        },
+        {
+          "text": "Operation Rate Limiting (Pro)",
+          "path": "modules/operation-rate-limiting.md"
         },
         {
           "text": "OpenIddict",

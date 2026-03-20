@@ -54,7 +54,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
             output.TagMode = TagMode.StartTagAndEndTag;
             output.TagName = "div";
             LeaveOnlyGroupAttributes(context, output);
-            if (!IsOutputHidden(output))
+            if (!IsInputHidden(context))
             {
                 if (TagHelper.FloatingLabel && !isCheckBox)
                 {
@@ -86,6 +86,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
     protected virtual async Task<(string, bool)> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
     {
         var (inputTag, isCheckBox) = await GetInputTagHelperOutputAsync(context, output);
+        context.Items[nameof(IsOutputHidden)] = IsOutputHidden(inputTag);
 
         var inputHtml = inputTag.Render(_encoder);
         var label = await GetLabelAsHtmlAsync(context, output, inputTag, isCheckBox);
@@ -124,7 +125,8 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
 
     protected virtual string SurroundInnerHtmlAndGet(TagHelperContext context, TagHelperOutput output, string innerHtml, bool isCheckbox)
     {
-        var mb = TagHelper.AddMarginBottomClass ? (isCheckbox ? "mb-2" : "mb-3") : string.Empty;
+        var isHidden = IsInputHidden(context);
+        var mb = !isHidden && TagHelper.AddMarginBottomClass ? (isCheckbox ? "mb-2" : "mb-3") : string.Empty;
         return "<div class=\"" + (isCheckbox ? $"custom-checkbox custom-control {mb} form-check" : $"{mb}") + "\">" +
                 Environment.NewLine + innerHtml + Environment.NewLine +
                 "</div>";
@@ -514,6 +516,11 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
     protected virtual bool IsOutputHidden(TagHelperOutput inputTag)
     {
         return inputTag.Attributes.Any(a => a.Name.ToLowerInvariant() == "type" && a.Value.ToString()!.ToLowerInvariant() == "hidden");
+    }
+
+    protected virtual bool IsInputHidden(TagHelperContext context)
+    {
+        return context.Items.TryGetValue(nameof(IsOutputHidden), out var val) && val is true;
     }
 
     protected virtual string GetIdAttributeValue(TagHelperOutput inputTag)
