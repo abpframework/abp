@@ -122,47 +122,58 @@ While we generally add workers in `OnApplicationInitializationAsync`, there are 
 
 ### Dynamic Workers (Runtime Registration)
 
-You can add a runtime worker without pre-defining a dedicated worker class by injecting `IDynamicBackgroundWorkerManager` and passing a handler directly.
+You can add a runtime worker without pre-defining a dedicated worker class. Inject `IDynamicBackgroundWorkerManager` and pass a handler directly:
 
-```csharp
-await dynamicBackgroundWorkerManager.AddAsync(
-    "InventorySyncWorker",
-    new DynamicBackgroundWorkerSchedule
+````csharp
+public class MyModule : AbpModule
+{
+    public override async Task OnApplicationInitializationAsync(
+        ApplicationInitializationContext context)
     {
-        Period = 30000 // 30 seconds
-        // CronExpression = "*/30 * * * *" // every 30 minutes, supported by Hangfire, Quartz, TickerQ
-    },
-    async (context, cancellationToken) =>
-    {
-        var inventorySyncAppService = context.ServiceProvider.GetRequiredService<IInventorySyncAppService>();
-        await inventorySyncAppService.SyncAsync(cancellationToken);
+        var dynamicWorkerManager = context.ServiceProvider
+            .GetRequiredService<IDynamicBackgroundWorkerManager>();
+
+        await dynamicWorkerManager.AddAsync(
+            "InventorySyncWorker",
+            new DynamicBackgroundWorkerSchedule
+            {
+                Period = 30000 //30 seconds
+                //CronExpression = "*/30 * * * *" //Every 30 minutes. Only for Hangfire, Quartz or TickerQ integration.
+            },
+            async (workerContext, cancellationToken) =>
+            {
+                var inventorySyncAppService = workerContext
+                    .ServiceProvider
+                    .GetRequiredService<IInventorySyncAppService>();
+
+                await inventorySyncAppService.SyncAsync(cancellationToken);
+            }
+        );
     }
-);
-```
+}
+````
 
 You can also **remove** a dynamic worker or **update its schedule** at runtime:
 
-```csharp
-// Remove a dynamic worker
-var removed = await dynamicBackgroundWorkerManager.RemoveAsync("InventorySyncWorker");
+````csharp
+//Remove a dynamic worker
+var removed = await dynamicWorkerManager.RemoveAsync("InventorySyncWorker");
 
-// Update the schedule of a dynamic worker
-var updated = await dynamicBackgroundWorkerManager.UpdateScheduleAsync(
+//Update the schedule of a dynamic worker
+var updated = await dynamicWorkerManager.UpdateScheduleAsync(
     "InventorySyncWorker",
     new DynamicBackgroundWorkerSchedule
     {
-        Period = 60000 // change to 60 seconds
+        Period = 60000 //Change to 60 seconds
     }
 );
-```
+````
 
-Key points:
-
-* `IDynamicBackgroundWorkerManager` is a separate interface from `IBackgroundWorkerManager`, dedicated to runtime (non-type-safe) worker management.
-* `workerName` is the runtime identifier of the dynamic worker. If a worker with the same name already exists, it will be replaced.
-* The `handler` receives a `DynamicBackgroundWorkerExecutionContext` containing the worker name and a scoped `IServiceProvider`.
+* `IDynamicBackgroundWorkerManager` is a **separate interface** from `IBackgroundWorkerManager`, dedicated to runtime (non-type-safe) worker management.
+* `workerName` is the runtime identifier of the dynamic worker. If a worker with the same name already exists, it will be **replaced**.
+* The `handler` receives a `DynamicBackgroundWorkerExecutionContext` containing the worker name and a scoped `IServiceProvider`. It is a good practice to **resolve dependencies** from the `workerContext.ServiceProvider` instead of constructor injection.
 * At least one of `Period` or `CronExpression` must be set in `DynamicBackgroundWorkerSchedule`.
-* **`CronExpression` is only supported by scheduler-backed providers (Hangfire, Quartz, TickerQ).** The default in-memory provider requires `Period` and does not support `CronExpression` alone.
+* **`CronExpression` is only supported by scheduler-backed providers ([Hangfire](./hangfire.md), [Quartz](./quartz.md), [TickerQ](./tickerq.md)).** The default in-memory provider requires `Period` and does not support `CronExpression` alone.
 * `RemoveAsync` stops and removes a dynamic worker. Returns `true` if the worker was found and removed.
 * `UpdateScheduleAsync` changes the schedule of an existing dynamic worker. Returns `true` if the worker was found and updated. The handler itself is not changed.
 
