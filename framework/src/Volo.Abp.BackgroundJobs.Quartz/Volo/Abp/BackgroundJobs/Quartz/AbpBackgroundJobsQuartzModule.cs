@@ -15,7 +15,6 @@ public class AbpBackgroundJobsQuartzModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddTransient(typeof(QuartzJobExecutionAdapter<>));
-        context.Services.AddTransient<QuartzJobExecutionAdapter>();
     }
 
     public override void OnPreApplicationInitialization(ApplicationInitializationContext context)

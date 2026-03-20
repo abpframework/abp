@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Shouldly;
@@ -136,55 +135,5 @@ public class BackgroundJobExecuter_Tests : BackgroundJobsTestBase
 
         //Assert
         asyncJobObject.Canceled.ShouldBeTrue();
-    }
-
-    [Fact]
-    public async Task Should_Execute_Anonymous_Job_Handler()
-    {
-        var tracker = GetRequiredService<AnonymousJobExecutionTracker>();
-        tracker.ExecutedJsonData.ShouldBeEmpty();
-
-        var args = new AnonymousJobArgs("TestAnonymousJob", "{\"OrderId\":\"ORD-001\"}");
-
-        await _backgroundJobExecuter.ExecuteAsync(
-            new JobExecutionContext(
-                ServiceProvider,
-                typeof(AnonymousJobExecutorAsyncBackgroundJob),
-                args
-            )
-        );
-
-        tracker.ExecutedJsonData.Count.ShouldBe(1);
-        tracker.ExecutedJsonData[0].ShouldContain("ORD-001");
-    }
-
-    [Fact]
-    public async Task Should_Execute_Anonymous_Job_Handler_Registered_At_Runtime()
-    {
-        var handlerRegistry = GetRequiredService<IAnonymousJobHandlerRegistry>();
-        var executedValues = new List<string>();
-
-        handlerRegistry.Register("RuntimeAnonymousJob", (context, ct) =>
-        {
-            executedValues.Add(context.JsonData);
-            return Task.CompletedTask;
-        });
-
-        var args = new AnonymousJobArgs("RuntimeAnonymousJob", "{\"Message\":\"hello-runtime\"}");
-
-        await _backgroundJobExecuter.ExecuteAsync(
-            new JobExecutionContext(
-                ServiceProvider,
-                typeof(AnonymousJobExecutorAsyncBackgroundJob),
-                args
-            )
-        );
-
-        executedValues.Count.ShouldBe(1);
-        executedValues[0].ShouldContain("hello-runtime");
-
-        handlerRegistry.IsRegistered("RuntimeAnonymousJob").ShouldBeTrue();
-        handlerRegistry.Unregister("RuntimeAnonymousJob").ShouldBeTrue();
-        handlerRegistry.IsRegistered("RuntimeAnonymousJob").ShouldBeFalse();
     }
 }

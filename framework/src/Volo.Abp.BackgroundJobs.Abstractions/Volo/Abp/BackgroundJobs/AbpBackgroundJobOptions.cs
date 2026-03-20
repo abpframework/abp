@@ -1,17 +1,13 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Volo.Abp.BackgroundJobs;
 
 public class AbpBackgroundJobOptions
 {
     private readonly Dictionary<Type, BackgroundJobConfiguration> _jobConfigurationsByArgsType;
-    private readonly ConcurrentDictionary<string, BackgroundJobConfiguration> _jobConfigurationsByName;
-    private readonly ConcurrentDictionary<string, Func<AnonymousJobExecutionContext, CancellationToken, Task>> _anonymousHandlers = new();
+    private readonly Dictionary<string, BackgroundJobConfiguration> _jobConfigurationsByName;
 
     /// <summary>
     /// Default: true.
@@ -27,7 +23,7 @@ public class AbpBackgroundJobOptions
     public AbpBackgroundJobOptions()
     {
         _jobConfigurationsByArgsType = new Dictionary<Type, BackgroundJobConfiguration>();
-        _jobConfigurationsByName = new ConcurrentDictionary<string, BackgroundJobConfiguration>();
+        _jobConfigurationsByName = new Dictionary<string, BackgroundJobConfiguration>();
         GetBackgroundJobName = BackgroundJobNameAttribute.GetName;
     }
 
@@ -62,7 +58,7 @@ public class AbpBackgroundJobOptions
 
     public BackgroundJobConfiguration? GetJobOrNull(string name)
     {
-        return _jobConfigurationsByName.TryGetValue(name, out var config) ? config : null;
+        return _jobConfigurationsByName.GetOrDefault(name);
     }
 
     public IReadOnlyList<BackgroundJobConfiguration> GetJobs()
@@ -84,34 +80,5 @@ public class AbpBackgroundJobOptions
     {
         _jobConfigurationsByArgsType[jobConfiguration.ArgsType] = jobConfiguration;
         _jobConfigurationsByName[jobConfiguration.JobName] = jobConfiguration;
-    }
-
-    public void AddAnonymousJobHandler(string jobName, Func<AnonymousJobExecutionContext, CancellationToken, Task> handler)
-    {
-        Check.NotNullOrWhiteSpace(jobName, nameof(jobName));
-        Check.NotNull(handler, nameof(handler));
-
-        _anonymousHandlers[jobName] = handler;
-    }
-
-    public void AddAnonymousJobHandler(string jobName, Action<AnonymousJobExecutionContext, CancellationToken> handler)
-    {
-        Check.NotNull(handler, nameof(handler));
-
-        AddAnonymousJobHandler(jobName, (context, ct) =>
-        {
-            handler(context, ct);
-            return Task.CompletedTask;
-        });
-    }
-
-    internal bool TryGetAnonymousHandler(string jobName, out Func<AnonymousJobExecutionContext, CancellationToken, Task>? handler)
-    {
-        return _anonymousHandlers.TryGetValue(jobName, out handler);
-    }
-
-    internal bool IsAnonymousJobRegistered(string jobName)
-    {
-        return _anonymousHandlers.ContainsKey(jobName);
     }
 }

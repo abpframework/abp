@@ -16,7 +16,7 @@ public class BackgroundJobExecuter : IBackgroundJobExecuter, ITransientDependenc
     public ILogger<BackgroundJobExecuter> Logger { protected get; set; }
 
     protected AbpBackgroundJobOptions Options { get; }
-
+    
     protected ICurrentTenant CurrentTenant { get; }
 
     public BackgroundJobExecuter(IOptions<AbpBackgroundJobOptions> options, ICurrentTenant currentTenant)
@@ -28,11 +28,6 @@ public class BackgroundJobExecuter : IBackgroundJobExecuter, ITransientDependenc
     }
 
     public virtual async Task ExecuteAsync(JobExecutionContext context)
-    {
-        await ExecuteTypedHandlerAsync(context);
-    }
-
-    protected virtual async Task ExecuteTypedHandlerAsync(JobExecutionContext context)
     {
         var job = context.ServiceProvider.GetService(context.JobType);
         if (job == null)
@@ -50,7 +45,7 @@ public class BackgroundJobExecuter : IBackgroundJobExecuter, ITransientDependenc
 
         try
         {
-            using (CurrentTenant.Change(GetJobArgsTenantId(context.JobArgs)))
+            using(CurrentTenant.Change(GetJobArgsTenantId(context.JobArgs)))
             {
                 var cancellationTokenProvider =
                     context.ServiceProvider.GetRequiredService<ICancellationTokenProvider>();
@@ -59,14 +54,15 @@ public class BackgroundJobExecuter : IBackgroundJobExecuter, ITransientDependenc
                 {
                     if (jobExecuteMethod.Name == nameof(IAsyncBackgroundJob<object>.ExecuteAsync))
                     {
-                        await ((Task)jobExecuteMethod.Invoke(job, [context.JobArgs])!);
+                        await ((Task)jobExecuteMethod.Invoke(job, new[] { context.JobArgs })!);
                     }
                     else
                     {
-                        jobExecuteMethod.Invoke(job, [context.JobArgs]);
+                        jobExecuteMethod.Invoke(job, new[] { context.JobArgs });
                     }
                 }
             }
+           
         }
         catch (Exception ex)
         {
@@ -83,7 +79,7 @@ public class BackgroundJobExecuter : IBackgroundJobExecuter, ITransientDependenc
             };
         }
     }
-
+    
     protected virtual Guid? GetJobArgsTenantId(object jobArgs)
     {
         return jobArgs switch

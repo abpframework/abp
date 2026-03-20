@@ -4,16 +4,7 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundJobs.RabbitMQ;
 
-public interface IJobQueue : IRunnable, IDisposable
-{
-    Task<string?> EnqueueAsync(
-        object args,
-        BackgroundJobPriority priority = BackgroundJobPriority.Normal,
-        TimeSpan? delay = null
-    );
-}
-
-public interface IJobQueue<in TArgs> : IJobQueue
+public interface IJobQueue<in TArgs> : IRunnable, IDisposable
 {
     Task<string?> EnqueueAsync(
         TArgs args,

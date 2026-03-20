@@ -75,20 +75,6 @@ public class JobQueue<TArgs> : IJobQueue<TArgs>
                );
     }
 
-    async Task<string?> IJobQueue.EnqueueAsync(
-        object args,
-        BackgroundJobPriority priority,
-        TimeSpan? delay)
-    {
-        if (args is TArgs typedArgs)
-        {
-            return await EnqueueAsync(typedArgs, priority, delay);
-        }
-
-        var serializedArgs = Serializer.Serialize(args);
-        return await EnqueueAsync((TArgs)Serializer.Deserialize(serializedArgs, typeof(TArgs)), priority, delay);
-    }
-
     public virtual async Task<string?> EnqueueAsync(
         TArgs args,
         BackgroundJobPriority priority = BackgroundJobPriority.Normal,

@@ -9,11 +9,11 @@ namespace Volo.Abp.BackgroundJobs;
 
 public class AnonymousJobExecutorAsyncBackgroundJob : AsyncBackgroundJob<AnonymousJobArgs>, ITransientDependency
 {
-    protected IAnonymousJobHandlerRegistry HandlerRegistry { get; }
+    protected IDynamicBackgroundJobHandlerRegistry HandlerRegistry { get; }
     protected IServiceProvider ServiceProvider { get; }
 
     public AnonymousJobExecutorAsyncBackgroundJob(
-        IAnonymousJobHandlerRegistry handlerRegistry,
+        IDynamicBackgroundJobHandlerRegistry handlerRegistry,
         IServiceProvider serviceProvider)
     {
         HandlerRegistry = handlerRegistry;
@@ -23,7 +23,7 @@ public class AnonymousJobExecutorAsyncBackgroundJob : AsyncBackgroundJob<Anonymo
     public override async Task ExecuteAsync(AnonymousJobArgs args)
     {
         Logger.LogInformation(
-            "Executing anonymous transport job. TransportJobName: {TransportJobName}, EffectiveJobName: {EffectiveJobName}",
+            "Executing dynamic job. TransportJobName: {TransportJobName}, EffectiveJobName: {EffectiveJobName}",
             AnonymousJobArgs.JobNameConstant,
             args.JobName
         );
@@ -31,11 +31,13 @@ public class AnonymousJobExecutorAsyncBackgroundJob : AsyncBackgroundJob<Anonymo
         var handler = HandlerRegistry.Get(args.JobName);
         if (handler == null)
         {
-            throw new AbpException("No anonymous job handler registered for: " + args.JobName);
+            throw new AbpException(
+                $"No dynamic job handler registered for: {args.JobName}. " +
+                $"The handler may have been unregistered or the application restarted since the job was enqueued.");
         }
 
         var cancellationToken = ServiceProvider.GetRequiredService<ICancellationTokenProvider>().Token;
-        var executionContext = new AnonymousJobExecutionContext(args.JobName, args.JsonData, ServiceProvider);
+        var executionContext = new DynamicBackgroundJobExecutionContext(args.JobName, args.JsonData, ServiceProvider);
         await handler(executionContext, cancellationToken);
     }
 }

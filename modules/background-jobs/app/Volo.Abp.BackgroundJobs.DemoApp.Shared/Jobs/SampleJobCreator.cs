@@ -9,14 +9,14 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
     public class SampleJobCreator : ITransientDependency
     {
         private readonly IBackgroundJobManager _backgroundJobManager;
-        private readonly IAnonymousJobHandlerRegistry _anonymousJobHandlerRegistry;
+        private readonly IDynamicBackgroundJobManager? _dynamicBackgroundJobManager;
 
         public SampleJobCreator(
             IBackgroundJobManager backgroundJobManager,
-            IAnonymousJobHandlerRegistry anonymousJobHandlerRegistry)
+            IDynamicBackgroundJobManager? dynamicBackgroundJobManager = null)
         {
             _backgroundJobManager = backgroundJobManager;
-            _anonymousJobHandlerRegistry = anonymousJobHandlerRegistry;
+            _dynamicBackgroundJobManager = dynamicBackgroundJobManager;
         }
 
         public void CreateJobs()
@@ -26,7 +26,17 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
 
         public async Task CreateJobsAsync()
         {
-            _anonymousJobHandlerRegistry.Register("RuntimeAnonymousJob", (context, ct) =>
+            // Type-safe enqueue (existing)
+            await _backgroundJobManager.EnqueueAsync(new WriteToConsoleGreenJobArgs { Value = "test 1 (green) - typed" });
+            await _backgroundJobManager.EnqueueAsync(new WriteToConsoleYellowJobArgs { Value = "test 1 (yellow) - typed" });
+
+            if (_dynamicBackgroundJobManager == null)
+            {
+                return;
+            }
+
+            // Register runtime dynamic handler
+            _dynamicBackgroundJobManager.RegisterHandler("RuntimeAnonymousJob", (context, ct) =>
             {
                 using (var doc = JsonDocument.Parse(context.JsonData))
                 {
@@ -40,35 +50,32 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
                 }
             });
 
-            // Type-safe enqueue (existing)
-            await _backgroundJobManager.EnqueueAsync(new WriteToConsoleGreenJobArgs { Value = "test 1 (green) - typed" });
-            await _backgroundJobManager.EnqueueAsync(new WriteToConsoleYellowJobArgs { Value = "test 1 (yellow) - typed" });
-
-            // String-based enqueue with strongly-typed args
-            await _backgroundJobManager.EnqueueAsync(
+            // String-based enqueue with typed job (by name)
+            await _dynamicBackgroundJobManager.EnqueueAsync(
                 "GreenJob",
-                (object)new WriteToConsoleGreenJobArgs { Value = "test 2 (green) - by name, typed args" }
+                new WriteToConsoleGreenJobArgs { Value = "test 2 (green) - by name, typed args" }
             );
-            await _backgroundJobManager.EnqueueAsync(
+            await _dynamicBackgroundJobManager.EnqueueAsync(
                 "YellowJob",
-                (object)new WriteToConsoleYellowJobArgs { Value = "test 2 (yellow) - by name, typed args" }
+                new WriteToConsoleYellowJobArgs { Value = "test 2 (yellow) - by name, typed args" }
             );
 
-            // String-based enqueue with anonymous object
-            await _backgroundJobManager.EnqueueAsync(
+            // String-based enqueue with anonymous object (typed job path)
+            await _dynamicBackgroundJobManager.EnqueueAsync(
                 "GreenJob",
-                (object)new { Value = "test 3 (green) - by name, anonymous", Time = DateTime.Now }
+                new { Value = "test 3 (green) - by name, anonymous", Time = DateTime.Now }
             );
-            await _backgroundJobManager.EnqueueAsync(
+            await _dynamicBackgroundJobManager.EnqueueAsync(
                 "YellowJob",
-                (object)new { Value = "test 3 (yellow) - by name, anonymous", Time = DateTime.Now }
+                new { Value = "test 3 (yellow) - by name, anonymous", Time = DateTime.Now }
             );
 
-            await _backgroundJobManager.EnqueueAsync(
+            // Dynamic job handlers
+            await _dynamicBackgroundJobManager.EnqueueAsync(
                 "CompileTimeAnonymousJob",
                 new { Value = "test 4 (anonymous) - compile-time" }
             );
-            await _backgroundJobManager.EnqueueAsync(
+            await _dynamicBackgroundJobManager.EnqueueAsync(
                 "RuntimeAnonymousJob",
                 new { Value = "test 5 (anonymous) - runtime" }
             );

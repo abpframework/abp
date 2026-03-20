@@ -11,23 +11,26 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared
     [DependsOn(typeof(AbpMultiTenancyModule))]
     public class DemoAppSharedModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            Configure<AbpBackgroundJobOptions>(options =>
+            var dynamicJobManager = context.ServiceProvider.GetService<IDynamicBackgroundJobManager>();
+            if (dynamicJobManager == null)
             {
-                options.AddAnonymousJobHandler("CompileTimeAnonymousJob", (ctx, ct) =>
+                return;
+            }
+
+            dynamicJobManager.RegisterHandler("CompileTimeAnonymousJob", (ctx, ct) =>
+            {
+                using (var doc = JsonDocument.Parse(ctx.JsonData))
                 {
-                    using (var doc = JsonDocument.Parse(ctx.JsonData))
-                    {
-                        var value = doc.RootElement.TryGetProperty("value", out var prop)
+                    var value = doc.RootElement.TryGetProperty("value", out var prop)
+                        ? prop.GetString()
+                        : doc.RootElement.TryGetProperty("Value", out prop)
                             ? prop.GetString()
-                            : doc.RootElement.TryGetProperty("Value", out prop)
-                                ? prop.GetString()
-                                : null;
-                        Console.WriteLine($"[ANONYMOUS-COMPILE] {value}");
-                        return Task.CompletedTask;
-                    }
-                });
+                            : null;
+                    Console.WriteLine($"[ANONYMOUS-COMPILE] {value}");
+                    return Task.CompletedTask;
+                }
             });
         }
 

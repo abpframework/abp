@@ -197,76 +197,6 @@ Enqueue method gets some optional arguments to control the background job:
 * **priority** is used to control priority of the job item. It gets an `BackgroundJobPriority` enum which has `Low`, `BelowNormal`, `Normal` (default), `AboveNormal` and `Hight` fields.
 * **delay** is used to wait a while (`TimeSpan`) before first try.
 
-### Enqueue by ABP Job Name
-
-You can also enqueue jobs by their ABP background job name at runtime:
-
-```csharp
-var jobName = BackgroundJobNameAttribute.GetName<EmailSendingArgs>(); // "emails" if configured via [BackgroundJobName]
-
-await _backgroundJobManager.EnqueueAsync(
-    jobName,
-    new
-    {
-        EmailAddress = "user@abp.io",
-        Subject = "Welcome",
-        Body = "..."
-    }
-);
-```
-
-`jobName` here is the ABP background job name (configuration key), not a provider queue name (like a Hangfire queue or RabbitMQ queue).
-
-In this case, ABP resolves the target job configuration by `jobName` and serializes the `args` object.
-If the `args` runtime type does not match the configured argument type, ABP normalizes the payload by serializing and deserializing it to the expected argument type.
-
-### Anonymous Job Handlers
-
-ABP supports registering runtime-resolved anonymous handlers keyed by a job name.
-
-You can register handlers at startup:
-
-```csharp
-Configure<AbpBackgroundJobOptions>(options =>
-{
-    options.AddAnonymousJobHandler("ProcessOrder", (context, cancellationToken) =>
-    {
-        // Parse or deserialize context.JsonData and run your logic.
-        return Task.CompletedTask;
-    });
-});
-```
-
-You can also register/unregister handlers at runtime:
-
-```csharp
-public class MyService : ITransientDependency
-{
-    private readonly IAnonymousJobHandlerRegistry _anonymousJobHandlerRegistry;
-
-    public MyService(IAnonymousJobHandlerRegistry anonymousJobHandlerRegistry)
-    {
-        _anonymousJobHandlerRegistry = anonymousJobHandlerRegistry;
-    }
-
-    public void Register()
-    {
-        _anonymousJobHandlerRegistry.Register("ProcessOrder", (context, cancellationToken) =>
-        {
-            return Task.CompletedTask;
-        });
-    }
-}
-```
-
-Then enqueue it by name:
-
-```csharp
-await _backgroundJobManager.EnqueueAsync("ProcessOrder", new { OrderId = "42" });
-```
-
-ABP keeps a stable internal transport job name (`Abp.AnonymousJob`) for provider compatibility, while preserving your effective job name (`ProcessOrder`) in the payload.
-
 ### Disable Job Execution
 
 You may want to disable background job execution for your application. This is generally needed if you want to execute background jobs in another process and disable it for the current process.
@@ -415,6 +345,83 @@ If you don't want to use a distributed lock provider, you may go with the follow
 
 * Stop the background job manager (set `AbpBackgroundJobOptions.IsJobExecutionEnabled` to `false` as explained in the *Disable Job Execution* section) in all application instances except one of them, so only the single instance executes the jobs (while other application instances can still queue jobs).
 * Stop the background job manager (set `AbpBackgroundJobOptions.IsJobExecutionEnabled` to `false` as explained in the *Disable Job Execution* section)  in all application instances and create a dedicated application (maybe a console application running in its own container or a Windows Service running in the background) to execute all the background jobs. This can be a good option if your background jobs consume high system resources (CPU, RAM or Disk), so you can deploy that background application to a dedicated server and your background jobs don't affect your application's performance.
+
+## Dynamic Background Jobs
+
+ABP provides `IDynamicBackgroundJobManager` for scenarios where you need to enqueue jobs by name at runtime, without requiring a strongly-typed job args class at compile time. This is useful for plugin systems, dynamic workflows, or any case where job types are not known ahead of time.
+
+### Enqueue by Job Name (Typed Job)
+
+If a typed job is already registered (e.g., via `[BackgroundJobName("emails")]`), you can enqueue it by name:
+
+````csharp
+public class MyService : ApplicationService
+{
+    private readonly IDynamicBackgroundJobManager _dynamicJobManager;
+
+    public MyService(IDynamicBackgroundJobManager dynamicJobManager)
+    {
+        _dynamicJobManager = dynamicJobManager;
+    }
+
+    public async Task DoSomethingAsync()
+    {
+        await _dynamicJobManager.EnqueueAsync("emails", new
+        {
+            EmailAddress = "user@abp.io",
+            Subject = "Hello",
+            Body = "World"
+        });
+    }
+}
+````
+
+The `IDynamicBackgroundJobManager` will look up the typed job configuration, deserialize the args to the expected type, and enqueue through the standard typed pipeline.
+
+### Dynamic Job Handlers
+
+You can also register dynamic handlers at runtime for jobs that don't have a pre-defined typed job class:
+
+````csharp
+public override void OnApplicationInitialization(ApplicationInitializationContext context)
+{
+    var dynamicJobManager = context.ServiceProvider
+        .GetRequiredService<IDynamicBackgroundJobManager>();
+
+    dynamicJobManager.RegisterHandler("ProcessOrder", async (context, ct) =>
+    {
+        var json = context.JsonData;
+        var serviceProvider = context.ServiceProvider;
+        // Process the order using JsonData and resolved services...
+    });
+}
+````
+
+Then enqueue jobs using the registered name:
+
+````csharp
+await _dynamicJobManager.EnqueueAsync("ProcessOrder", new
+{
+    OrderId = "ORD-001",
+    Amount = 99.99
+});
+````
+
+### Handler Management
+
+````csharp
+// Check if a handler is registered
+bool exists = _dynamicJobManager.IsHandlerRegistered("ProcessOrder");
+
+// Unregister a handler
+bool removed = _dynamicJobManager.UnregisterHandler("ProcessOrder");
+````
+
+### How It Works
+
+- **Typed job path**: When the job name matches a registered typed job configuration, the args are serialized to JSON and deserialized to the expected args type, then enqueued through `IBackgroundJobManager.EnqueueAsync<TArgs>`.
+- **Dynamic handler path**: When the job name matches a registered dynamic handler, the args are wrapped as `AnonymousJobArgs` (an internal transport type) and enqueued through `IBackgroundJobManager.EnqueueAsync<AnonymousJobArgs>`. When the job executes, the framework looks up the handler by name and invokes it.
+- All dynamic jobs go through the **standard typed job pipeline**, which means they work with all providers (Default, Hangfire, Quartz, RabbitMQ, TickerQ) without any provider-specific changes.
 
 ## Integrations
 

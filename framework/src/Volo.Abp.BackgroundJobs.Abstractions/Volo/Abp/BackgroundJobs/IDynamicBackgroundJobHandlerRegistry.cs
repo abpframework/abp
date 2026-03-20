@@ -1,0 +1,12 @@
+namespace Volo.Abp.BackgroundJobs;
+
+public interface IDynamicBackgroundJobHandlerRegistry
+{
+    void Register(string jobName, DynamicBackgroundJobHandler handler);
+
+    bool Unregister(string jobName);
+
+    bool IsRegistered(string jobName);
+
+    DynamicBackgroundJobHandler? Get(string jobName);
+}

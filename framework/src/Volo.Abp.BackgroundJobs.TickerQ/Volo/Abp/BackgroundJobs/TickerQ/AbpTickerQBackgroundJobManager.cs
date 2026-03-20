@@ -1,85 +1,39 @@
 using System;
-using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using TickerQ.Utilities;
 using TickerQ.Utilities.Entities;
 using TickerQ.Utilities.Interfaces.Managers;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Json;
 
 namespace Volo.Abp.BackgroundJobs.TickerQ;
 
 [Dependency(ReplaceServices = true)]
 public class AbpTickerQBackgroundJobManager : IBackgroundJobManager, ITransientDependency
 {
-    private readonly static MethodInfo CreateTickerRequestMethod = typeof(TickerHelper).GetMethod(nameof(TickerHelper.CreateTickerRequest), BindingFlags.Public | BindingFlags.Static)!;
-    
     protected ITimeTickerManager<TimeTickerEntity> TimeTickerManager { get; }
     protected AbpBackgroundJobOptions Options { get; }
     protected AbpBackgroundJobsTickerQOptions TickerQOptions { get; }
-    protected IAnonymousJobHandlerRegistry AnonymousJobHandlerRegistry { get; }
-    protected IJsonSerializer JsonSerializer { get; }
-    public ILogger<AbpTickerQBackgroundJobManager> Logger { get; set; }
 
     public AbpTickerQBackgroundJobManager(
         ITimeTickerManager<TimeTickerEntity> timeTickerManager,
         IOptions<AbpBackgroundJobOptions> options,
-        IOptions<AbpBackgroundJobsTickerQOptions> tickerQOptions,
-        IAnonymousJobHandlerRegistry anonymousJobHandlerRegistry,
-        IJsonSerializer jsonSerializer)
+        IOptions<AbpBackgroundJobsTickerQOptions> tickerQOptions)
     {
         TimeTickerManager = timeTickerManager;
         Options = options.Value;
         TickerQOptions = tickerQOptions.Value;
-        AnonymousJobHandlerRegistry = anonymousJobHandlerRegistry;
-        JsonSerializer = jsonSerializer;
-        Logger = NullLogger<AbpTickerQBackgroundJobManager>.Instance;
     }
 
     public virtual async Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
     {
         var job = Options.GetJob(typeof(TArgs));
-        return await EnqueueAsync(job, args!, priority, delay);
-    }
-
-    public virtual async Task<string> EnqueueAsync(string jobName, object args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
-    {
-        if (ShouldWrapAsAnonymousJob(jobName))
-        {
-            Logger.LogInformation(
-                "Wrapping job into anonymous transport. TransportJobName: {TransportJobName}, EffectiveJobName: {EffectiveJobName}",
-                AnonymousJobArgs.JobNameConstant,
-                jobName
-            );
-            var jsonData = JsonSerializer.Serialize(args);
-            var anonymousArgs = new AnonymousJobArgs(jobName, jsonData);
-            return await EnqueueAsync(AnonymousJobArgs.JobNameConstant, anonymousArgs, priority, delay);
-        }
-
-        var job = Options.GetJob(jobName);
-        return await EnqueueAsync(job, args, priority, delay);
-    }
-
-    protected virtual bool ShouldWrapAsAnonymousJob(string jobName)
-    {
-        return jobName != AnonymousJobArgs.JobNameConstant &&
-               AnonymousJobHandlerRegistry.IsRegistered(jobName) &&
-               Options.GetJobOrNull(jobName) == null;
-    }
-
-    protected virtual async Task<string> EnqueueAsync(BackgroundJobConfiguration job, object args, BackgroundJobPriority priority, TimeSpan? delay)
-    {
-        var normalizedArgs = NormalizeArgs(job.ArgsType, args);
-
         var timeTicker = new TimeTickerEntity
         {
             Id = Guid.NewGuid(),
             Function = job.JobName,
             ExecutionTime = delay == null ? DateTime.UtcNow : DateTime.UtcNow.Add(delay.Value),
-            Request = CreateTickerRequest(job.ArgsType, normalizedArgs),
+            Request = TickerHelper.CreateTickerRequest<TArgs>(args),
         };
 
         var config = TickerQOptions.GetConfigurationOrNull(job.JobType);
@@ -92,23 +46,5 @@ public class AbpTickerQBackgroundJobManager : IBackgroundJobManager, ITransientD
 
         var result = await TimeTickerManager.AddAsync(timeTicker);
         return !result.IsSucceeded ? timeTicker.Id.ToString() : result.Result.Id.ToString();
-    }
-
-    protected virtual object NormalizeArgs(Type argsType, object args)
-    {
-        if (argsType.IsInstanceOfType(args))
-        {
-            return args;
-        }
-
-        var serialized = JsonSerializer.Serialize(args);
-        return JsonSerializer.Deserialize(argsType, serialized)!;
-    }
-
-    protected virtual byte[]? CreateTickerRequest(Type argsType, object args)
-    {
-        return (byte[]?)CreateTickerRequestMethod
-            .MakeGenericMethod(argsType)
-            .Invoke(null, [args]);
     }
 }

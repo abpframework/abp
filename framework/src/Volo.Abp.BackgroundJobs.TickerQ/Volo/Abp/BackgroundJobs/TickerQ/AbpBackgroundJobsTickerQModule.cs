@@ -54,8 +54,8 @@ public class AbpBackgroundJobsTickerQModule : AbpModule
             {
                 var jobExecuter = serviceProvider.GetRequiredService<IBackgroundJobExecuter>();
                 var args = await TickerRequestProvider.GetRequestAsync<TArgs>(context, cancellationToken);
-                var jobConfiguration = options.GetJob(typeof(TArgs));
-                var jobExecutionContext = new JobExecutionContext(scope.ServiceProvider, jobConfiguration.JobType, args!, cancellationToken: cancellationToken);
+                var jobType = options.GetJob(typeof(TArgs)).JobType;
+                var jobExecutionContext = new JobExecutionContext(scope.ServiceProvider, jobType, args!, cancellationToken: cancellationToken);
                 await jobExecuter.ExecuteAsync(jobExecutionContext);
             }
         };

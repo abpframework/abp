@@ -2,7 +2,7 @@ using System;
 
 namespace Volo.Abp.BackgroundJobs;
 
-public class AnonymousJobExecutionContext
+public class DynamicBackgroundJobExecutionContext
 {
     public string JobName { get; }
 
@@ -10,7 +10,7 @@ public class AnonymousJobExecutionContext
 
     public IServiceProvider ServiceProvider { get; }
 
-    public AnonymousJobExecutionContext(
+    public DynamicBackgroundJobExecutionContext(
         string jobName,
         string jsonData,
         IServiceProvider serviceProvider)
