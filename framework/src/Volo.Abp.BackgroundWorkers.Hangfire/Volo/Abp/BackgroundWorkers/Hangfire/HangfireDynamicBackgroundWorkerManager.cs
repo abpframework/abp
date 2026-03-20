@@ -140,29 +140,31 @@ public class HangfireDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMa
     protected virtual string GetCron(int period)
     {
         var time = TimeSpan.FromMilliseconds(period);
-        string cron;
 
         if (time.TotalSeconds <= 59)
         {
-            cron = $"*/{time.TotalSeconds} * * * * *";
-        }
-        else if (time.TotalMinutes <= 59)
-        {
-            cron = $"*/{time.TotalMinutes} * * * *";
-        }
-        else if (time.TotalHours <= 23)
-        {
-            cron = $"0 */{time.TotalHours} * * *";
-        }
-        else if (time.TotalDays <= 31)
-        {
-            cron = $"0 0 0 1/{time.TotalDays} * *";
-        }
-        else
-        {
-            throw new AbpException($"Cannot convert period: {period} to cron expression.");
+            var seconds = (int)Math.Round(time.TotalSeconds);
+            return $"*/{seconds} * * * * *";
         }
 
-        return cron;
+        if (time.TotalMinutes <= 59)
+        {
+            var minutes = (int)Math.Round(time.TotalMinutes);
+            return $"*/{minutes} * * * *";
+        }
+
+        if (time.TotalHours <= 23)
+        {
+            var hours = (int)Math.Round(time.TotalHours);
+            return $"0 */{hours} * * *";
+        }
+
+        if (time.TotalDays <= 31)
+        {
+            var days = (int)Math.Round(time.TotalDays);
+            return $"0 0 */{days} * *";
+        }
+
+        throw new AbpException($"Cannot convert period: {period} to cron expression.");
     }
 }

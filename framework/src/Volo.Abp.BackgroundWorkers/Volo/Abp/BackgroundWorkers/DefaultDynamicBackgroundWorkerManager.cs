@@ -37,7 +37,7 @@ public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
 
         schedule.Validate();
 
-        if (schedule.Period == null && !string.IsNullOrWhiteSpace(schedule.CronExpression))
+        if (schedule.Period == null)
         {
             throw new AbpException(
                 $"The default in-memory background worker manager does not support CronExpression without Period for dynamic worker '{workerName}'. " +
@@ -79,7 +79,7 @@ public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
 
         schedule.Validate();
 
-        if (schedule.Period == null && !string.IsNullOrWhiteSpace(schedule.CronExpression))
+        if (schedule.Period == null)
         {
             throw new AbpException(
                 $"The default in-memory background worker manager does not support CronExpression without Period for dynamic worker '{workerName}'. " +

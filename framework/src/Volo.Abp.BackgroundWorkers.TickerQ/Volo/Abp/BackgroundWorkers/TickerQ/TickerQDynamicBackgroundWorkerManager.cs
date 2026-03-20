@@ -92,6 +92,10 @@ public class TickerQDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
         AbpTickerQBackgroundWorkersProvider.BackgroundWorkers.Remove(functionName);
         HandlerRegistry.Unregister(workerName);
 
+        // Note: ICronTickerManager<T> does not provide a remove API.
+        // The handler is unregistered above, so any persisted cron entry will
+        // find a null handler and skip execution silently.
+
         return Task.FromResult(true);
     }
 
@@ -138,6 +142,9 @@ public class TickerQDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
         var time = TimeSpan.FromMilliseconds(period);
         if (time.TotalMinutes < 1)
         {
+            Logger.LogWarning(
+                "TickerQ does not support sub-minute intervals. Period {Period}ms will be rounded up to every minute.",
+                period);
             return "* * * * *";
         }
 
