@@ -71,13 +71,10 @@ public class QuartzDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMana
         }
 
         var jobKey = new JobKey($"DynamicWorker:{workerName}");
-        var deleted = await Scheduler.DeleteJob(jobKey, cancellationToken);
-        if (deleted)
-        {
-            HandlerRegistry.Unregister(workerName);
-        }
+        await Scheduler.DeleteJob(jobKey, cancellationToken);
+        HandlerRegistry.Unregister(workerName);
 
-        return deleted;
+        return true;
     }
 
     public virtual async Task<bool> UpdateScheduleAsync(

@@ -1,12 +1,14 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using TickerQ.Utilities.Entities;
 using TickerQ.Utilities.Enums;
 using TickerQ.Utilities.Interfaces.Managers;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.TickerQ;
 
 namespace Volo.Abp.BackgroundWorkers.TickerQ;
@@ -57,9 +59,19 @@ public class TickerQDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
                     return;
                 }
 
-                await registeredHandler(
-                    new DynamicBackgroundWorkerExecutionContext(workerName, serviceProvider),
-                    tickerCancellationToken);
+                try
+                {
+                    await registeredHandler(
+                        new DynamicBackgroundWorkerExecutionContext(workerName, serviceProvider),
+                        tickerCancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    await serviceProvider.GetRequiredService<IExceptionNotifier>()
+                        .NotifyAsync(new ExceptionNotificationContext(ex));
+
+                    throw;
+                }
             }, 0);
 
         AbpTickerQBackgroundWorkersProvider.BackgroundWorkers[functionName] = new AbpTickerQCronBackgroundWorker
@@ -92,9 +104,12 @@ public class TickerQDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
         AbpTickerQBackgroundWorkersProvider.BackgroundWorkers.Remove(functionName);
         HandlerRegistry.Unregister(workerName);
 
-        // Note: ICronTickerManager<T> does not provide a remove API.
-        // The handler is unregistered above, so any persisted cron entry will
-        // find a null handler and skip execution silently.
+        // ICronTickerManager<T> does not provide a remove API, so the persisted
+        // cron entry will remain in storage. The handler is unregistered above,
+        // so the entry will find a null handler and skip execution silently.
+        Logger.LogWarning(
+            "Dynamic worker '{WorkerName}' removed from memory, but the persisted TickerQ cron entry may remain in storage.",
+            workerName);
 
         return Task.FromResult(true);
     }
