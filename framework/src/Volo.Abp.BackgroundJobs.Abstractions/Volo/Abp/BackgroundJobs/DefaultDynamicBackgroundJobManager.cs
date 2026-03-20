@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -102,11 +103,11 @@ public class DefaultDynamicBackgroundJobManager : IDynamicBackgroundJobManager, 
     {
         return EnqueueMethodCache.GetOrAdd(argsType, static type =>
         {
-            var method = typeof(IBackgroundJobManager).GetMethod(
-                nameof(IBackgroundJobManager.EnqueueAsync),
-                BindingFlags.Public | BindingFlags.Instance);
+            var method = typeof(IBackgroundJobManager)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Single(m => m.Name == nameof(IBackgroundJobManager.EnqueueAsync) && m.IsGenericMethodDefinition);
 
-            return method!.MakeGenericMethod(type);
+            return method.MakeGenericMethod(type);
         });
     }
 }

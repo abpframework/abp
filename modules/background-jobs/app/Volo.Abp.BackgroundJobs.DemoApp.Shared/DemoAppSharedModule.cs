@@ -13,11 +13,7 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared
     {
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            var dynamicJobManager = context.ServiceProvider.GetService<IDynamicBackgroundJobManager>();
-            if (dynamicJobManager == null)
-            {
-                return;
-            }
+            var dynamicJobManager = context.ServiceProvider.GetRequiredService<IDynamicBackgroundJobManager>();
 
             dynamicJobManager.RegisterHandler("CompileTimeAnonymousJob", (ctx, ct) =>
             {

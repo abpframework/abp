@@ -9,11 +9,11 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
     public class SampleJobCreator : ITransientDependency
     {
         private readonly IBackgroundJobManager _backgroundJobManager;
-        private readonly IDynamicBackgroundJobManager? _dynamicBackgroundJobManager;
+        private readonly IDynamicBackgroundJobManager _dynamicBackgroundJobManager;
 
         public SampleJobCreator(
             IBackgroundJobManager backgroundJobManager,
-            IDynamicBackgroundJobManager? dynamicBackgroundJobManager = null)
+            IDynamicBackgroundJobManager dynamicBackgroundJobManager)
         {
             _backgroundJobManager = backgroundJobManager;
             _dynamicBackgroundJobManager = dynamicBackgroundJobManager;
@@ -29,11 +29,6 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
             // Type-safe enqueue (existing)
             await _backgroundJobManager.EnqueueAsync(new WriteToConsoleGreenJobArgs { Value = "test 1 (green) - typed" });
             await _backgroundJobManager.EnqueueAsync(new WriteToConsoleYellowJobArgs { Value = "test 1 (yellow) - typed" });
-
-            if (_dynamicBackgroundJobManager == null)
-            {
-                return;
-            }
 
             // Register runtime dynamic handler
             _dynamicBackgroundJobManager.RegisterHandler("RuntimeAnonymousJob", (context, ct) =>

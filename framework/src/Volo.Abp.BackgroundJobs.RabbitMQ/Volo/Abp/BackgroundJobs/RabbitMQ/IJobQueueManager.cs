@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundJobs.RabbitMQ;
