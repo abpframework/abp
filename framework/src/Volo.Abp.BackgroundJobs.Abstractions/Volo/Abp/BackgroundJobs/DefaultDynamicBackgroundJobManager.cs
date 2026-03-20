@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -11,7 +12,7 @@ namespace Volo.Abp.BackgroundJobs;
 
 public class DefaultDynamicBackgroundJobManager : IDynamicBackgroundJobManager, ITransientDependency
 {
-    private static readonly ConcurrentDictionary<Type, MethodInfo> EnqueueMethodCache = new();
+    private static readonly ConcurrentDictionary<Type, Func<IBackgroundJobManager, object, BackgroundJobPriority, TimeSpan?, Task<string>>> EnqueueDelegateCache = new();
 
     protected IBackgroundJobManager BackgroundJobManager { get; }
     protected IDynamicBackgroundJobHandlerRegistry HandlerRegistry { get; }
@@ -83,9 +84,8 @@ public class DefaultDynamicBackgroundJobManager : IDynamicBackgroundJobManager, 
         var json = JsonSerializer.Serialize(args);
         var typedArgs = JsonSerializer.Deserialize(argsType, json);
 
-        var enqueueMethod = GetOrCreateEnqueueMethod(argsType);
-        var task = (Task<string>)enqueueMethod.Invoke(BackgroundJobManager, [typedArgs, priority, delay])!;
-        return await task;
+        var enqueueDelegate = GetOrCreateEnqueueDelegate(argsType);
+        return await enqueueDelegate(BackgroundJobManager, typedArgs, priority, delay);
     }
 
     protected virtual Task<string> EnqueueDynamicHandlerJobAsync(
@@ -99,15 +99,39 @@ public class DefaultDynamicBackgroundJobManager : IDynamicBackgroundJobManager, 
         return BackgroundJobManager.EnqueueAsync(dynamicArgs, priority, delay);
     }
 
-    private static MethodInfo GetOrCreateEnqueueMethod(Type argsType)
+    private static Func<IBackgroundJobManager, object, BackgroundJobPriority, TimeSpan?, Task<string>> GetOrCreateEnqueueDelegate(Type argsType)
     {
-        return EnqueueMethodCache.GetOrAdd(argsType, static type =>
+        return EnqueueDelegateCache.GetOrAdd(argsType, static type =>
         {
             var method = typeof(IBackgroundJobManager)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Single(m => m.Name == nameof(IBackgroundJobManager.EnqueueAsync) && m.IsGenericMethodDefinition);
+                .FirstOrDefault(m => m.Name == nameof(IBackgroundJobManager.EnqueueAsync)
+                                     && m.IsGenericMethodDefinition
+                                     && m.GetParameters().Length == 3);
 
-            return method.MakeGenericMethod(type);
+            if (method == null)
+            {
+                throw new AbpException(
+                    $"Could not find the generic EnqueueAsync method on {nameof(IBackgroundJobManager)}.");
+            }
+
+            var genericMethod = method.MakeGenericMethod(type);
+
+            // Build: (manager, args, priority, delay) => manager.EnqueueAsync<TArgs>((TArgs)args, priority, delay)
+            var managerParam = Expression.Parameter(typeof(IBackgroundJobManager), "manager");
+            var argsParam = Expression.Parameter(typeof(object), "args");
+            var priorityParam = Expression.Parameter(typeof(BackgroundJobPriority), "priority");
+            var delayParam = Expression.Parameter(typeof(TimeSpan?), "delay");
+
+            var call = Expression.Call(
+                managerParam,
+                genericMethod,
+                Expression.Convert(argsParam, type),
+                priorityParam,
+                delayParam);
+
+            return Expression.Lambda<Func<IBackgroundJobManager, object, BackgroundJobPriority, TimeSpan?, Task<string>>>(
+                call, managerParam, argsParam, priorityParam, delayParam).Compile();
         });
     }
 }

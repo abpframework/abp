@@ -81,7 +81,7 @@ public class BackgroundJobManager_Tests : BackgroundJobsTestBase
     [Fact]
     public async Task Should_Execute_Dynamic_Handler_Job()
     {
-        _tracker.ExecutedJsonData.ShouldBeEmpty();
+        _tracker.ExecutedJsonData.IsEmpty.ShouldBeTrue();
 
         await _backgroundJobExecuter.ExecuteAsync(
             new JobExecutionContext(
@@ -100,13 +100,20 @@ public class BackgroundJobManager_Tests : BackgroundJobsTestBase
         var typedJobName = BackgroundJobNameAttribute.GetName<MyJobArgs>();
         _dynamicBackgroundJobManager.RegisterHandler(typedJobName, (_, _) => Task.CompletedTask);
 
-        var jobIdAsString = await _dynamicBackgroundJobManager.EnqueueAsync(typedJobName, new { Value = "42" });
-        jobIdAsString.ShouldNotBe(default);
+        try
+        {
+            var jobIdAsString = await _dynamicBackgroundJobManager.EnqueueAsync(typedJobName, new { Value = "42" });
+            jobIdAsString.ShouldNotBe(default);
 
-        var jobInfo = await _backgroundJobStore.FindAsync(Guid.Parse(jobIdAsString));
-        jobInfo.ShouldNotBeNull();
-        jobInfo.JobName.ShouldBe(typedJobName);
-        jobInfo.JobName.ShouldNotBe(DynamicBackgroundJobArgs.JobNameConstant);
+            var jobInfo = await _backgroundJobStore.FindAsync(Guid.Parse(jobIdAsString));
+            jobInfo.ShouldNotBeNull();
+            jobInfo.JobName.ShouldBe(typedJobName);
+            jobInfo.JobName.ShouldNotBe(DynamicBackgroundJobArgs.JobNameConstant);
+        }
+        finally
+        {
+            _dynamicBackgroundJobManager.UnregisterHandler(typedJobName);
+        }
     }
 
     [Fact]

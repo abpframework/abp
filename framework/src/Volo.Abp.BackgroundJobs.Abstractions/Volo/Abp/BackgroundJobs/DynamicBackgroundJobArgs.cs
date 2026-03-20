@@ -12,6 +12,6 @@ public class DynamicBackgroundJobArgs
     public DynamicBackgroundJobArgs(string jobName, string jsonData)
     {
         JobName = Check.NotNullOrWhiteSpace(jobName, nameof(jobName));
-        JsonData = Check.NotNull(jsonData, nameof(jsonData));
+        JsonData = Check.NotNullOrWhiteSpace(jsonData, nameof(jsonData));
     }
 }

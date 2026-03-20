@@ -1,8 +1,8 @@
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace Volo.Abp.BackgroundJobs;
 
 public class DynamicJobExecutionTracker
 {
-    public List<string> ExecutedJsonData { get; } = new();
+    public ConcurrentBag<string> ExecutedJsonData { get; } = new();
 }
