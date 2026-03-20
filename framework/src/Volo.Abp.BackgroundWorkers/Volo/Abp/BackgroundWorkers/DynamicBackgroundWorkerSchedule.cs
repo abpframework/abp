@@ -18,5 +18,11 @@ public class DynamicBackgroundWorkerSchedule
                 $"Period must be greater than 0 when provided. Given value: {Period.Value}.",
                 nameof(Period));
         }
+
+        if (Period == null && string.IsNullOrWhiteSpace(CronExpression))
+        {
+            throw new ArgumentException(
+                "At least one of 'Period' or 'CronExpression' must be set.");
+        }
     }
 }

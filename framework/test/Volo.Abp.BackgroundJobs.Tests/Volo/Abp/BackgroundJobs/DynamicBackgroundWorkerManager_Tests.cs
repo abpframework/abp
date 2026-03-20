@@ -9,21 +9,19 @@ namespace Volo.Abp.BackgroundJobs;
 
 public class DynamicBackgroundWorkerManager_Tests : BackgroundJobsTestBase
 {
-    private readonly IBackgroundWorkerManager _backgroundWorkerManager;
-    private readonly IDynamicBackgroundWorkerHandlerRegistry _handlerRegistry;
+    private readonly IDynamicBackgroundWorkerManager _dynamicWorkerManager;
 
     public DynamicBackgroundWorkerManager_Tests()
     {
-        _backgroundWorkerManager = GetRequiredService<IBackgroundWorkerManager>();
-        _handlerRegistry = GetRequiredService<IDynamicBackgroundWorkerHandlerRegistry>();
+        _dynamicWorkerManager = GetRequiredService<IDynamicBackgroundWorkerManager>();
     }
 
     [Fact]
-    public async Task Should_Register_Dynamic_Handler_When_Added()
+    public async Task Should_Register_Dynamic_Worker()
     {
         var workerName = "dynamic-worker-" + Guid.NewGuid();
 
-        await _backgroundWorkerManager.AddAsync(
+        await _dynamicWorkerManager.AddAsync(
             workerName,
             new DynamicBackgroundWorkerSchedule
             {
@@ -32,7 +30,7 @@ public class DynamicBackgroundWorkerManager_Tests : BackgroundJobsTestBase
             (_, _) => Task.CompletedTask
         );
 
-        _handlerRegistry.IsRegistered(workerName).ShouldBeTrue();
+        _dynamicWorkerManager.IsRegistered(workerName).ShouldBeTrue();
     }
 
     [Fact]
@@ -41,7 +39,7 @@ public class DynamicBackgroundWorkerManager_Tests : BackgroundJobsTestBase
         var workerName = "dynamic-worker-" + Guid.NewGuid();
         var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        await _backgroundWorkerManager.AddAsync(
+        await _dynamicWorkerManager.AddAsync(
             workerName,
             new DynamicBackgroundWorkerSchedule
             {
@@ -64,11 +62,24 @@ public class DynamicBackgroundWorkerManager_Tests : BackgroundJobsTestBase
     }
 
     [Fact]
+    public async Task Should_Add_Dynamic_Worker_With_Default_Schedule()
+    {
+        var workerName = "dynamic-worker-" + Guid.NewGuid();
+
+        await _dynamicWorkerManager.AddAsync(
+            workerName,
+            (_, _) => Task.CompletedTask
+        );
+
+        _dynamicWorkerManager.IsRegistered(workerName).ShouldBeTrue();
+    }
+
+    [Fact]
     public async Task Should_Remove_Dynamic_Worker()
     {
         var workerName = "dynamic-worker-" + Guid.NewGuid();
 
-        await _backgroundWorkerManager.AddAsync(
+        await _dynamicWorkerManager.AddAsync(
             workerName,
             new DynamicBackgroundWorkerSchedule
             {
@@ -77,17 +88,17 @@ public class DynamicBackgroundWorkerManager_Tests : BackgroundJobsTestBase
             (_, _) => Task.CompletedTask
         );
 
-        _handlerRegistry.IsRegistered(workerName).ShouldBeTrue();
+        _dynamicWorkerManager.IsRegistered(workerName).ShouldBeTrue();
 
-        var result = await _backgroundWorkerManager.RemoveAsync(workerName);
+        var result = await _dynamicWorkerManager.RemoveAsync(workerName);
         result.ShouldBeTrue();
-        _handlerRegistry.IsRegistered(workerName).ShouldBeFalse();
+        _dynamicWorkerManager.IsRegistered(workerName).ShouldBeFalse();
     }
 
     [Fact]
     public async Task Should_Return_False_When_Removing_NonExistent_Worker()
     {
-        var result = await _backgroundWorkerManager.RemoveAsync("non-existent-worker-" + Guid.NewGuid());
+        var result = await _dynamicWorkerManager.RemoveAsync("non-existent-worker-" + Guid.NewGuid());
         result.ShouldBeFalse();
     }
 
@@ -97,7 +108,7 @@ public class DynamicBackgroundWorkerManager_Tests : BackgroundJobsTestBase
         var workerName = "dynamic-worker-" + Guid.NewGuid();
         var executionCount = 0;
 
-        await _backgroundWorkerManager.AddAsync(
+        await _dynamicWorkerManager.AddAsync(
             workerName,
             new DynamicBackgroundWorkerSchedule
             {
@@ -110,7 +121,7 @@ public class DynamicBackgroundWorkerManager_Tests : BackgroundJobsTestBase
             }
         );
 
-        var result = await _backgroundWorkerManager.UpdateScheduleAsync(
+        var result = await _dynamicWorkerManager.UpdateScheduleAsync(
             workerName,
             new DynamicBackgroundWorkerSchedule
             {
@@ -119,7 +130,7 @@ public class DynamicBackgroundWorkerManager_Tests : BackgroundJobsTestBase
         );
 
         result.ShouldBeTrue();
-        _handlerRegistry.IsRegistered(workerName).ShouldBeTrue();
+        _dynamicWorkerManager.IsRegistered(workerName).ShouldBeTrue();
 
         var timeout = TimeSpan.FromSeconds(5);
         var startTime = DateTime.UtcNow;
@@ -134,7 +145,7 @@ public class DynamicBackgroundWorkerManager_Tests : BackgroundJobsTestBase
     [Fact]
     public async Task Should_Return_False_When_Updating_NonExistent_Worker()
     {
-        var result = await _backgroundWorkerManager.UpdateScheduleAsync(
+        var result = await _dynamicWorkerManager.UpdateScheduleAsync(
             "non-existent-worker-" + Guid.NewGuid(),
             new DynamicBackgroundWorkerSchedule { Period = 1000 }
         );
@@ -146,20 +157,15 @@ public class DynamicBackgroundWorkerManager_Tests : BackgroundJobsTestBase
     public async Task Should_Replace_Existing_Worker_When_Same_Name_Added()
     {
         var workerName = "dynamic-worker-" + Guid.NewGuid();
-        var firstHandlerCalled = false;
         var secondHandlerTcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        await _backgroundWorkerManager.AddAsync(
+        await _dynamicWorkerManager.AddAsync(
             workerName,
             new DynamicBackgroundWorkerSchedule { Period = 60000 },
-            (_, _) =>
-            {
-                firstHandlerCalled = true;
-                return Task.CompletedTask;
-            }
+            (_, _) => Task.CompletedTask
         );
 
-        await _backgroundWorkerManager.AddAsync(
+        await _dynamicWorkerManager.AddAsync(
             workerName,
             new DynamicBackgroundWorkerSchedule { Period = 50 },
             (_, _) =>
@@ -173,11 +179,11 @@ public class DynamicBackgroundWorkerManager_Tests : BackgroundJobsTestBase
         completedTask.ShouldBe(secondHandlerTcs.Task);
         (await secondHandlerTcs.Task).ShouldBeTrue();
 
-        _handlerRegistry.IsRegistered(workerName).ShouldBeTrue();
+        _dynamicWorkerManager.IsRegistered(workerName).ShouldBeTrue();
 
-        var removed = await _backgroundWorkerManager.RemoveAsync(workerName);
+        var removed = await _dynamicWorkerManager.RemoveAsync(workerName);
         removed.ShouldBeTrue();
-        _handlerRegistry.IsRegistered(workerName).ShouldBeFalse();
+        _dynamicWorkerManager.IsRegistered(workerName).ShouldBeFalse();
     }
 
     [Fact]
@@ -187,7 +193,7 @@ public class DynamicBackgroundWorkerManager_Tests : BackgroundJobsTestBase
 
         await Assert.ThrowsAsync<ArgumentException>(async () =>
         {
-            await _backgroundWorkerManager.AddAsync(
+            await _dynamicWorkerManager.AddAsync(
                 workerName,
                 new DynamicBackgroundWorkerSchedule { Period = 0 },
                 (_, _) => Task.CompletedTask
@@ -202,11 +208,73 @@ public class DynamicBackgroundWorkerManager_Tests : BackgroundJobsTestBase
 
         await Assert.ThrowsAsync<ArgumentException>(async () =>
         {
-            await _backgroundWorkerManager.AddAsync(
+            await _dynamicWorkerManager.AddAsync(
                 workerName,
                 new DynamicBackgroundWorkerSchedule { Period = -1000 },
                 (_, _) => Task.CompletedTask
             );
         });
+    }
+
+    [Fact]
+    public async Task Should_Throw_When_No_Period_And_No_CronExpression()
+    {
+        var workerName = "dynamic-worker-" + Guid.NewGuid();
+
+        await Assert.ThrowsAsync<ArgumentException>(async () =>
+        {
+            await _dynamicWorkerManager.AddAsync(
+                workerName,
+                new DynamicBackgroundWorkerSchedule(),
+                (_, _) => Task.CompletedTask
+            );
+        });
+    }
+
+    [Fact]
+    public async Task Should_Continue_Running_After_Handler_Throws_Exception()
+    {
+        var workerName = "dynamic-worker-" + Guid.NewGuid();
+        var callCount = 0;
+        var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        await _dynamicWorkerManager.AddAsync(
+            workerName,
+            new DynamicBackgroundWorkerSchedule { Period = 50 },
+            (_, _) =>
+            {
+                var count = Interlocked.Increment(ref callCount);
+                if (count == 1)
+                {
+                    throw new InvalidOperationException("Simulated failure");
+                }
+
+                tcs.TrySetResult(true);
+                return Task.CompletedTask;
+            }
+        );
+
+        var completedTask = await Task.WhenAny(tcs.Task, Task.Delay(5000));
+        completedTask.ShouldBe(tcs.Task);
+        callCount.ShouldBeGreaterThan(1);
+    }
+
+    [Fact]
+    public async Task Should_Not_Be_Registered_After_Remove()
+    {
+        var workerName = "dynamic-worker-" + Guid.NewGuid();
+        _dynamicWorkerManager.IsRegistered(workerName).ShouldBeFalse();
+
+        await _dynamicWorkerManager.AddAsync(
+            workerName,
+            new DynamicBackgroundWorkerSchedule { Period = 1000 },
+            (_, _) => Task.CompletedTask
+        );
+
+        _dynamicWorkerManager.IsRegistered(workerName).ShouldBeTrue();
+
+        await _dynamicWorkerManager.RemoveAsync(workerName);
+
+        _dynamicWorkerManager.IsRegistered(workerName).ShouldBeFalse();
     }
 }

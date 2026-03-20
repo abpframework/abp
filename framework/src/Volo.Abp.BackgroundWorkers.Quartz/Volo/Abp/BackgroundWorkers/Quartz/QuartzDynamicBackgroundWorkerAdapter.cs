@@ -1,41 +1,56 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Quartz;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.ExceptionHandling;
 
 namespace Volo.Abp.BackgroundWorkers.Quartz;
 
 public class QuartzDynamicBackgroundWorkerAdapter : IJob, ITransientDependency
 {
-    protected IDynamicBackgroundWorkerHandlerRegistry DynamicBackgroundWorkerHandlerRegistry { get; }
+    protected IDynamicBackgroundWorkerHandlerRegistry HandlerRegistry { get; }
     protected IServiceProvider ServiceProvider { get; }
+    public ILogger<QuartzDynamicBackgroundWorkerAdapter> Logger { get; set; }
 
     public QuartzDynamicBackgroundWorkerAdapter(
-        IDynamicBackgroundWorkerHandlerRegistry dynamicBackgroundWorkerHandlerRegistry,
+        IDynamicBackgroundWorkerHandlerRegistry handlerRegistry,
         IServiceProvider serviceProvider)
     {
-        DynamicBackgroundWorkerHandlerRegistry = dynamicBackgroundWorkerHandlerRegistry;
+        HandlerRegistry = handlerRegistry;
         ServiceProvider = serviceProvider;
+        Logger = NullLogger<QuartzDynamicBackgroundWorkerAdapter>.Instance;
     }
 
     public virtual async Task Execute(IJobExecutionContext context)
     {
-        var workerName = context.MergedJobDataMap.GetString(QuartzBackgroundWorkerManager.DynamicWorkerNameKey);
+        var workerName = context.MergedJobDataMap.GetString(QuartzDynamicBackgroundWorkerManager.DynamicWorkerNameKey);
         if (string.IsNullOrWhiteSpace(workerName))
         {
             return;
         }
 
-        var nonNullWorkerName = workerName!;
-        var handler = DynamicBackgroundWorkerHandlerRegistry.Get(nonNullWorkerName);
+        var handler = HandlerRegistry.Get(workerName!);
         if (handler == null)
         {
+            Logger.LogWarning("No handler registered for dynamic worker: {WorkerName}", workerName);
             return;
         }
 
-        await handler(
-            new DynamicBackgroundWorkerExecutionContext(nonNullWorkerName, ServiceProvider),
-            context.CancellationToken
-        );
+        try
+        {
+            await handler(
+                new DynamicBackgroundWorkerExecutionContext(workerName!, ServiceProvider),
+                context.CancellationToken);
+        }
+        catch (Exception ex)
+        {
+            await ServiceProvider.GetRequiredService<IExceptionNotifier>()
+                .NotifyAsync(new ExceptionNotificationContext(ex));
+
+            throw;
+        }
     }
 }

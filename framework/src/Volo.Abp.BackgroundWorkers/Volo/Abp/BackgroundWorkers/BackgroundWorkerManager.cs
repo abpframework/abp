@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Concurrent;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers;
 
@@ -19,21 +16,13 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
     private bool _isDisposed;
 
     private readonly List<IBackgroundWorker> _backgroundWorkers;
-    private readonly ConcurrentDictionary<string, InMemoryDynamicBackgroundWorker> _dynamicWorkers;
-    protected IServiceProvider ServiceProvider { get; }
-    protected IDynamicBackgroundWorkerHandlerRegistry DynamicBackgroundWorkerHandlerRegistry { get; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BackgroundWorkerManager"/> class.
     /// </summary>
-    public BackgroundWorkerManager(
-        IServiceProvider serviceProvider,
-        IDynamicBackgroundWorkerHandlerRegistry dynamicBackgroundWorkerHandlerRegistry)
+    public BackgroundWorkerManager()
     {
         _backgroundWorkers = new List<IBackgroundWorker>();
-        _dynamicWorkers = new ConcurrentDictionary<string, InMemoryDynamicBackgroundWorker>();
-        ServiceProvider = serviceProvider;
-        DynamicBackgroundWorkerHandlerRegistry = dynamicBackgroundWorkerHandlerRegistry;
     }
 
     public virtual async Task AddAsync(IBackgroundWorker worker, CancellationToken cancellationToken = default)
@@ -44,127 +33,6 @@ public class BackgroundWorkerManager : IBackgroundWorkerManager, ISingletonDepen
         {
             await worker.StartAsync(cancellationToken);
         }
-    }
-
-    public virtual Task AddAsync(
-        string workerName,
-        Func<DynamicBackgroundWorkerExecutionContext, CancellationToken, Task> handler,
-        CancellationToken cancellationToken = default)
-    {
-        return AddAsync(
-            workerName,
-            new DynamicBackgroundWorkerSchedule
-            {
-                Period = DynamicBackgroundWorkerSchedule.DefaultPeriod
-            },
-            handler,
-            cancellationToken
-        );
-    }
-
-    public virtual async Task AddAsync(
-        string workerName,
-        DynamicBackgroundWorkerSchedule schedule,
-        Func<DynamicBackgroundWorkerExecutionContext, CancellationToken, Task> handler,
-        CancellationToken cancellationToken = default)
-    {
-        Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
-        Check.NotNull(schedule, nameof(schedule));
-        Check.NotNull(handler, nameof(handler));
-
-        schedule.Validate();
-
-        if (schedule.Period == null && !string.IsNullOrWhiteSpace(schedule.CronExpression))
-        {
-            throw new AbpException("Default background worker manager does not support cron expression without period.");
-        }
-
-        if (_dynamicWorkers.TryRemove(workerName, out var existingWorker))
-        {
-            await existingWorker.StopAsync(cancellationToken);
-            _backgroundWorkers.Remove(existingWorker);
-        }
-
-        DynamicBackgroundWorkerHandlerRegistry.Register(workerName, handler);
-
-        var timer = ServiceProvider.GetRequiredService<AbpAsyncTimer>();
-        var serviceScopeFactory = ServiceProvider.GetRequiredService<IServiceScopeFactory>();
-        var worker = new InMemoryDynamicBackgroundWorker(
-            workerName,
-            schedule,
-            timer,
-            serviceScopeFactory,
-            DynamicBackgroundWorkerHandlerRegistry
-        );
-        worker.ServiceProvider = ServiceProvider;
-        worker.LazyServiceProvider = ServiceProvider.GetRequiredService<IAbpLazyServiceProvider>();
-
-        _dynamicWorkers[workerName] = worker;
-
-        await AddAsync(worker, cancellationToken);
-    }
-
-    public virtual async Task<bool> RemoveAsync(string workerName, CancellationToken cancellationToken = default)
-    {
-        Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
-
-        if (!_dynamicWorkers.TryGetValue(workerName, out var worker))
-        {
-            return false;
-        }
-
-        await worker.StopAsync(cancellationToken);
-        _backgroundWorkers.Remove(worker);
-        _dynamicWorkers.TryRemove(workerName, out _);
-        DynamicBackgroundWorkerHandlerRegistry.Unregister(workerName);
-
-        return true;
-    }
-
-    public virtual async Task<bool> UpdateScheduleAsync(string workerName, DynamicBackgroundWorkerSchedule schedule, CancellationToken cancellationToken = default)
-    {
-        Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
-        Check.NotNull(schedule, nameof(schedule));
-
-        schedule.Validate();
-
-        if (!_dynamicWorkers.TryGetValue(workerName, out var oldWorker))
-        {
-            return false;
-        }
-
-        if (schedule.Period == null && !string.IsNullOrWhiteSpace(schedule.CronExpression))
-        {
-            throw new AbpException("Default background worker manager does not support cron expression without period.");
-        }
-
-        var handler = DynamicBackgroundWorkerHandlerRegistry.Get(workerName);
-        if (handler == null)
-        {
-            return false;
-        }
-
-        await oldWorker.StopAsync(cancellationToken);
-        _backgroundWorkers.Remove(oldWorker);
-        _dynamicWorkers.TryRemove(workerName, out _);
-
-        var timer = ServiceProvider.GetRequiredService<AbpAsyncTimer>();
-        var serviceScopeFactory = ServiceProvider.GetRequiredService<IServiceScopeFactory>();
-        var newWorker = new InMemoryDynamicBackgroundWorker(
-            workerName,
-            schedule,
-            timer,
-            serviceScopeFactory,
-            DynamicBackgroundWorkerHandlerRegistry
-        );
-        newWorker.ServiceProvider = ServiceProvider;
-        newWorker.LazyServiceProvider = ServiceProvider.GetRequiredService<IAbpLazyServiceProvider>();
-
-        _dynamicWorkers[workerName] = newWorker;
-
-        await AddAsync(newWorker, cancellationToken);
-
-        return true;
     }
 
     public virtual void Dispose()

@@ -120,17 +120,17 @@ So, it resolves the given background worker and adds to the `IBackgroundWorkerMa
 
 While we generally add workers in `OnApplicationInitializationAsync`, there are no restrictions on that. You can inject `IBackgroundWorkerManager` anywhere and add workers at runtime. Background worker manager will stop and release all the registered workers when your application is being shut down.
 
-### Add Dynamic Workers at Runtime (Handler in Add)
+### Dynamic Workers (Runtime Registration)
 
-You can add a runtime worker without pre-defining a dedicated worker class by passing a handler directly to `AddAsync`.
+You can add a runtime worker without pre-defining a dedicated worker class by injecting `IDynamicBackgroundWorkerManager` and passing a handler directly.
 
 ```csharp
-await backgroundWorkerManager.AddAsync(
+await dynamicBackgroundWorkerManager.AddAsync(
     "InventorySyncWorker",
     new DynamicBackgroundWorkerSchedule
     {
         Period = 30000 // 30 seconds
-        // CronExpression = "*/30 * * * * *" // optional (provider dependent)
+        // CronExpression = "*/30 * * * *" // every 30 minutes, supported by Hangfire, Quartz, TickerQ
     },
     async (context, cancellationToken) =>
     {
@@ -144,10 +144,10 @@ You can also **remove** a dynamic worker or **update its schedule** at runtime:
 
 ```csharp
 // Remove a dynamic worker
-var removed = await backgroundWorkerManager.RemoveAsync("InventorySyncWorker");
+var removed = await dynamicBackgroundWorkerManager.RemoveAsync("InventorySyncWorker");
 
 // Update the schedule of a dynamic worker
-var updated = await backgroundWorkerManager.UpdateScheduleAsync(
+var updated = await dynamicBackgroundWorkerManager.UpdateScheduleAsync(
     "InventorySyncWorker",
     new DynamicBackgroundWorkerSchedule
     {
@@ -158,10 +158,11 @@ var updated = await backgroundWorkerManager.UpdateScheduleAsync(
 
 Key points:
 
+* `IDynamicBackgroundWorkerManager` is a separate interface from `IBackgroundWorkerManager`, dedicated to runtime (non-type-safe) worker management.
 * `workerName` is the runtime identifier of the dynamic worker. If a worker with the same name already exists, it will be replaced.
-* The `handler` is registered at runtime and executed through the provider-specific worker manager.
-* Provider behavior is preserved. For example, providers with persistent schedulers keep their own scheduling semantics.
-* The default in-process manager uses in-memory periodic execution based on `Period`. **`CronExpression` is only supported by scheduler-backed providers (Hangfire, Quartz, TickerQ).** The default in-memory provider ignores `CronExpression`.
+* The `handler` receives a `DynamicBackgroundWorkerExecutionContext` containing the worker name and a scoped `IServiceProvider`.
+* At least one of `Period` or `CronExpression` must be set in `DynamicBackgroundWorkerSchedule`.
+* **`CronExpression` is only supported by scheduler-backed providers (Hangfire, Quartz, TickerQ).** The default in-memory provider requires `Period` and does not support `CronExpression` alone.
 * `RemoveAsync` stops and removes a dynamic worker. Returns `true` if the worker was found and removed.
 * `UpdateScheduleAsync` changes the schedule of an existing dynamic worker. Returns `true` if the worker was found and updated. The handler itself is not changed.
 
