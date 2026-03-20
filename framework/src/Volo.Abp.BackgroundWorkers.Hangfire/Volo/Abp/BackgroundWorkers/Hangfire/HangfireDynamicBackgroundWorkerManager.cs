@@ -116,7 +116,7 @@ public class HangfireDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMa
 
             RecurringJob.AddOrUpdate<HangfireDynamicBackgroundWorkerAdapter>(
                 recurringJobId,
-                adapter => adapter.DoWorkAsync(workerName, cancellationToken),
+                adapter => adapter.DoWorkAsync(workerName, CancellationToken.None),
                 cronExpression,
                 new RecurringJobOptions
                 {
@@ -128,7 +128,7 @@ public class HangfireDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMa
             RecurringJob.AddOrUpdate<HangfireDynamicBackgroundWorkerAdapter>(
                 recurringJobId,
                 queueName,
-                adapter => adapter.DoWorkAsync(workerName, cancellationToken),
+                adapter => adapter.DoWorkAsync(workerName, CancellationToken.None),
                 cronExpression,
                 new RecurringJobOptions
                 {

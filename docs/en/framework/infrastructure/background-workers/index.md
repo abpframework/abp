@@ -173,7 +173,8 @@ var updated = await dynamicWorkerManager.UpdateScheduleAsync(
 * `workerName` is the runtime identifier of the dynamic worker. If a worker with the same name already exists, it will be **replaced**.
 * The `handler` receives a `DynamicBackgroundWorkerExecutionContext` containing the worker name and a scoped `IServiceProvider`. It is a good practice to **resolve dependencies** from the `workerContext.ServiceProvider` instead of constructor injection.
 * At least one of `Period` or `CronExpression` must be set in `DynamicBackgroundWorkerSchedule`.
-* **`CronExpression` is only supported by scheduler-backed providers ([Hangfire](./hangfire.md), [Quartz](./quartz.md), [TickerQ](./tickerq.md)).** The default in-memory provider requires `Period` and does not support `CronExpression` alone.
+* **`CronExpression` is only supported by scheduler-backed providers ([Hangfire](./hangfire.md), [Quartz](./quartz.md)).** The default in-memory provider requires `Period` and does not support `CronExpression` alone.
+* **[TickerQ](./tickerq.md) does not support dynamic background workers** because it uses `FrozenDictionary` for function registration, which requires all functions to be registered before the application starts.
 * `RemoveAsync` stops and removes a dynamic worker. Returns `true` if the worker was found and removed.
 * `UpdateScheduleAsync` changes the schedule of an existing dynamic worker. Returns `true` if the worker was found and updated. The handler itself is not changed.
 
