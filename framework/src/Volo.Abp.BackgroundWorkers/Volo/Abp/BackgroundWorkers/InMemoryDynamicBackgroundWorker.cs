@@ -1,8 +1,6 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers;
@@ -11,12 +9,12 @@ public class InMemoryDynamicBackgroundWorker : AsyncPeriodicBackgroundWorkerBase
 {
     public string WorkerName { get; }
 
-    private readonly Func<DynamicBackgroundWorkerExecutionContext, CancellationToken, Task> _handler;
+    private readonly DynamicBackgroundWorkerHandler _handler;
 
     public InMemoryDynamicBackgroundWorker(
         string workerName,
         DynamicBackgroundWorkerSchedule schedule,
-        Func<DynamicBackgroundWorkerExecutionContext, CancellationToken, Task> handler,
+        DynamicBackgroundWorkerHandler handler,
         AbpAsyncTimer timer,
         IServiceScopeFactory serviceScopeFactory)
         : base(timer, serviceScopeFactory)

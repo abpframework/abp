@@ -1,21 +1,18 @@
-using System;
 using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.BackgroundWorkers;
 
 public class DynamicBackgroundWorkerHandlerRegistry : IDynamicBackgroundWorkerHandlerRegistry, ISingletonDependency
 {
-    protected ConcurrentDictionary<string, Func<DynamicBackgroundWorkerExecutionContext, CancellationToken, Task>> Handlers { get; }
+    protected ConcurrentDictionary<string, DynamicBackgroundWorkerHandler> Handlers { get; }
 
     public DynamicBackgroundWorkerHandlerRegistry()
     {
-        Handlers = new ConcurrentDictionary<string, Func<DynamicBackgroundWorkerExecutionContext, CancellationToken, Task>>();
+        Handlers = new ConcurrentDictionary<string, DynamicBackgroundWorkerHandler>();
     }
 
-    public virtual void Register(string workerName, Func<DynamicBackgroundWorkerExecutionContext, CancellationToken, Task> handler)
+    public virtual void Register(string workerName, DynamicBackgroundWorkerHandler handler)
     {
         Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
         Check.NotNull(handler, nameof(handler));
@@ -35,7 +32,7 @@ public class DynamicBackgroundWorkerHandlerRegistry : IDynamicBackgroundWorkerHa
         return Handlers.ContainsKey(workerName);
     }
 
-    public virtual Func<DynamicBackgroundWorkerExecutionContext, CancellationToken, Task>? Get(string workerName)
+    public virtual DynamicBackgroundWorkerHandler? Get(string workerName)
     {
         Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
         return Handlers.TryGetValue(workerName, out var handler) ? handler : null;

@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,7 +16,7 @@ public interface IDynamicBackgroundWorkerManager
     Task AddAsync(
         string workerName,
         DynamicBackgroundWorkerSchedule schedule,
-        Func<DynamicBackgroundWorkerExecutionContext, CancellationToken, Task> handler,
+        DynamicBackgroundWorkerHandler handler,
         CancellationToken cancellationToken = default);
 
     /// <summary>

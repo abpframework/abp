@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
@@ -11,7 +10,7 @@ public class TickerQDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
     public virtual Task AddAsync(
         string workerName,
         DynamicBackgroundWorkerSchedule schedule,
-        Func<DynamicBackgroundWorkerExecutionContext, CancellationToken, Task> handler,
+        DynamicBackgroundWorkerHandler handler,
         CancellationToken cancellationToken = default)
     {
         throw new AbpException(

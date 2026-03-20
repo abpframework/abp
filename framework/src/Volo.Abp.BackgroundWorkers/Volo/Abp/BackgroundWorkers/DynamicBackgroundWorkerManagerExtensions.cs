@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,7 +11,7 @@ public static class DynamicBackgroundWorkerManagerExtensions
     public static Task AddAsync(
         this IDynamicBackgroundWorkerManager manager,
         string workerName,
-        Func<DynamicBackgroundWorkerExecutionContext, CancellationToken, Task> handler,
+        DynamicBackgroundWorkerHandler handler,
         CancellationToken cancellationToken = default)
     {
         return manager.AddAsync(

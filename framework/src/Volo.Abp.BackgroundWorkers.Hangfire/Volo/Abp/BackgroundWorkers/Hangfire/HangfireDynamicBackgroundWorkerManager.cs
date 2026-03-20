@@ -31,7 +31,7 @@ public class HangfireDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMa
     public virtual Task AddAsync(
         string workerName,
         DynamicBackgroundWorkerSchedule schedule,
-        Func<DynamicBackgroundWorkerExecutionContext, CancellationToken, Task> handler,
+        DynamicBackgroundWorkerHandler handler,
         CancellationToken cancellationToken = default)
     {
         Check.NotNullOrWhiteSpace(workerName, nameof(workerName));

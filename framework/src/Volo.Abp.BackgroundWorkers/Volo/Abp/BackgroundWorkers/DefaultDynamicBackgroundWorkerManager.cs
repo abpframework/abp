@@ -30,7 +30,7 @@ public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
     public virtual async Task AddAsync(
         string workerName,
         DynamicBackgroundWorkerSchedule schedule,
-        Func<DynamicBackgroundWorkerExecutionContext, CancellationToken, Task> handler,
+        DynamicBackgroundWorkerHandler handler,
         CancellationToken cancellationToken = default)
     {
         Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
@@ -155,7 +155,7 @@ public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
     protected virtual InMemoryDynamicBackgroundWorker CreateDynamicWorker(
         string workerName,
         DynamicBackgroundWorkerSchedule schedule,
-        Func<DynamicBackgroundWorkerExecutionContext, CancellationToken, Task> handler)
+        DynamicBackgroundWorkerHandler handler)
     {
         var timer = ServiceProvider.GetRequiredService<AbpAsyncTimer>();
         var serviceScopeFactory = ServiceProvider.GetRequiredService<IServiceScopeFactory>();
