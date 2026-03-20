@@ -44,6 +44,16 @@ abp add-package Volo.AIManagement.OpenAI
 abp add-package Volo.AIManagement.Ollama
 ```
 
+> [!IMPORTANT]
+> If you use Ollama, make sure the Ollama server is installed and running, and that the models referenced by your workspace are already available locally. Before configuring an Ollama workspace, pull the chat model and any embedding model you plan to use. For example:
+>
+> ```bash
+> ollama pull llama3.2
+> ollama pull nomic-embed-text
+> ```
+>
+> Replace the model names with the exact models you configure in the workspace. `nomic-embed-text` is an embedding-only model and can't be used as a chat model.
+
 > [!TIP]
 > You can install multiple provider packages to support different AI providers simultaneously in your workspaces.
 
@@ -308,6 +318,14 @@ RAG requires an **embedder** and a **vector store** to be configured on the work
 * **Embedder**: Converts documents and queries into vector embeddings. You can use any provider that supports embedding generation (e.g., OpenAI `text-embedding-3-small`, Ollama `nomic-embed-text`).
 * **Vector Store**: Stores and retrieves vector embeddings. Supported providers: **MongoDb**, **Pgvector**, and **Qdrant**.
 
+> [!IMPORTANT]
+> If the workspace uses Ollama for chat or embeddings, the configured model names must exist in the local Ollama instance first. For example, if you configure `ModelName = "llama3.2"` and `EmbedderModelName = "nomic-embed-text"`, pull both models before using the workspace:
+>
+> ```bash
+> ollama pull llama3.2
+> ollama pull nomic-embed-text
+> ```
+
 ### Configuring RAG on a Workspace
 
 To enable RAG for a workspace, configure the embedder and vector store settings in the workspace edit page.
@@ -431,6 +449,67 @@ The options class also provides helper methods:
 
 > [!NOTE]
 > Adding new file extensions also requires a matching content extractor to be registered for document processing. The built-in extractors support `.txt`, `.md`, and `.pdf` files.
+
+#### Hosting-Level Upload Limits
+
+`WorkspaceDataSourceOptions.MaxFileSize` controls the module-level validation, but your hosting stack may reject large uploads before the request reaches AI Management. If you increase `MaxFileSize`, make sure the underlying server and proxy limits are also updated.
+
+Typical limits to review:
+
+* **ASP.NET Core form/multipart limit** (`FormOptions.MultipartBodyLengthLimit`)
+* **Kestrel request body limit** (`KestrelServerLimits.MaxRequestBodySize`)
+* **IIS request filtering limit** (`maxAllowedContentLength`)
+* **Reverse proxy limits** such as **Nginx** (`client_max_body_size`)
+
+Example ASP.NET Core configuration:
+
+```csharp
+using Microsoft.AspNetCore.Http.Features;
+
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    Configure<WorkspaceDataSourceOptions>(options =>
+    {
+        options.MaxFileSize = 50 * 1024 * 1024;
+    });
+
+    Configure<FormOptions>(options =>
+    {
+        options.MultipartBodyLengthLimit = 50 * 1024 * 1024;
+    });
+}
+```
+
+```csharp
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.Limits.MaxRequestBodySize = 50 * 1024 * 1024;
+});
+```
+
+Example IIS configuration in `web.config`:
+
+```xml
+<configuration>
+  <system.webServer>
+    <security>
+      <requestFiltering>
+        <requestLimits maxAllowedContentLength="52428800" />
+      </requestFiltering>
+    </security>
+  </system.webServer>
+</configuration>
+```
+
+Example Nginx configuration:
+
+```nginx
+server {
+    client_max_body_size 50M;
+}
+```
+
+If you are hosting behind another proxy or gateway (for example Apache, YARP, Azure App Gateway, Cloudflare, or Kubernetes ingress), ensure its request-body limit is also greater than or equal to the configured `MaxFileSize`.
 
 ## Permissions
 

@@ -1,4 +1,4 @@
-# Operation Rate Limiting in ABP Framework
+# Operation Rate Limiting in ABP
 
 Almost every user-facing system eventually runs into the same problem: **some operations cannot be allowed to run without limits**.
 
@@ -24,15 +24,9 @@ Real-world requirements tend to look like this:
 
 The pattern is clear: the identity being throttled is a **business identity** — a user, a phone number, a resource ID — not an IP address. And the action being throttled is a **business operation**, not an HTTP request.
 
-ABP Framework's **Operation Rate Limiting** module is built for exactly this. It lets you enforce limits directly in your application or domain layer, with full awareness of who is doing what.
+ABP's **Operation Rate Limiting** module is built for exactly this. It lets you enforce limits directly in your application or domain layer, with full awareness of who is doing what.
 
-Add the package to your project:
-
-```bash
-abp add-package Volo.Abp.OperationRateLimiting
-```
-
-> Operation Rate Limiting is available starting from **ABP Framework 10.3**. See the [pull request](https://github.com/abpframework/abp/pull/25024) for details.
+This module is used by the Account (Pro) modules internally and comes pre-installed in the latest startup templates. You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this module.
 
 ## Defining a Policy
 
@@ -66,7 +60,7 @@ public class SmsAppService : ApplicationService
         _rateLimitChecker = rateLimitChecker;
     }
 
-    public async Task SendCodeAsync(string phoneNumber)
+    public virtual async Task SendCodeAsync(string phoneNumber)
     {
         await _rateLimitChecker.CheckAsync("SendSmsCode", phoneNumber);
 
@@ -76,6 +70,74 @@ public class SmsAppService : ApplicationService
 ```
 
 `CheckAsync` checks the current usage against the limit and throws `AbpOperationRateLimitingException` (HTTP 429) if the limit is already exceeded. If the check passes, it then increments the counter and proceeds. ABP's exception pipeline catches this automatically and returns a standard error response. Put `CheckAsync` first — the rate limit check is the gate, and everything else only runs if it passes.
+
+## Declarative Usage with `[OperationRateLimiting]`
+
+The explicit `CheckAsync` approach is useful when you need fine-grained control — for example, when you want to check the limit conditionally, or when the parameter value comes from somewhere other than a method argument. But for the common case where you simply want to enforce a policy on every invocation of a specific method, there's a cleaner way: the `[OperationRateLimiting]` attribute.
+
+```csharp
+public class SmsAppService : ApplicationService
+{
+    [OperationRateLimiting("SendSmsCode")]
+    public virtual async Task SendCodeAsync([RateLimitingParameter] string phoneNumber)
+    {
+        // Rate limit is enforced automatically — no manual CheckAsync needed.
+        await _smsSender.SendAsync(phoneNumber, GenerateCode());
+    }
+}
+```
+
+The attribute works on both **Application Service methods** (via ABP's interceptor) and **MVC Controller actions** (via an action filter). No manual injection of `IOperationRateLimitingChecker` required.
+
+### Providing the Partition Key
+
+When using the attribute, the partition key is resolved from the method's parameters automatically:
+
+- Mark a parameter with `[RateLimitingParameter]` to use its `ToString()` value as the key — this is the most common case when the key is a single primitive like a phone number or email.
+- Have your input DTO implement `IHasOperationRateLimitingParameter` and provide a `GetPartitionParameter()` method — useful when the key is a property buried inside a complex input object.
+
+```csharp
+public class SendSmsCodeInput : IHasOperationRateLimitingParameter
+{
+    public string PhoneNumber { get; set; }
+    public string Language { get; set; }
+
+    public string? GetPartitionParameter() => PhoneNumber;
+}
+
+[OperationRateLimiting("SendSmsCode")]
+public virtual async Task SendCodeAsync(SendSmsCodeInput input)
+{
+    // input.GetPartitionParameter() = input.PhoneNumber is used as the partition key.
+}
+```
+
+If neither is provided, `Parameter` is `null` — which is perfectly valid for policies that use `PartitionByCurrentUser`, `PartitionByClientIp`, or similar partition types that don't rely on an explicit value.
+
+```csharp
+// Policy uses PartitionByCurrentUser — no partition key needed.
+[OperationRateLimiting("GenerateReport")]
+public virtual async Task<ReportDto> GenerateMonthlyReportAsync()
+{
+    // Rate limit is checked per current user, automatically.
+}
+```
+
+> The resolution order is: `[RateLimitingParameter]` first, then `IHasOperationRateLimitingParameter`, then `null`. If the method has parameters but none is resolved, a warning is logged to help you catch the misconfiguration early.
+
+You can also place `[OperationRateLimiting]` on the class itself to apply the policy to all public methods:
+
+```csharp
+[OperationRateLimiting("MyServiceLimit")]
+public class MyAppService : ApplicationService
+{
+    public virtual async Task MethodAAsync([RateLimitingParameter] string key) { ... }
+
+    public virtual async Task MethodBAsync([RateLimitingParameter] string key) { ... }
+}
+```
+
+A method-level attribute always takes precedence over the class-level one.
 
 ## Choosing a Partition Type
 
@@ -87,7 +149,7 @@ Getting this wrong can make your rate limiting completely ineffective. Using `Pa
 - **`PartitionByCurrentUser`** — uses the authenticated user's ID, with no value to pass. Perfect for "each user gets N per day" scenarios where user identity is all you need.
 - **`PartitionByClientIp`** — uses the client's IP address. Don't rely on this alone — it's too easy to rotate. Use it as a secondary layer alongside another partition type, as in the login example below.
 - **`PartitionByEmail`** and **`PartitionByPhoneNumber`** — designed for pre-authentication flows where the user isn't logged in yet. They prefer the `Parameter` value you explicitly pass, and fall back to the current user's email or phone number if none is provided.
-- **`PartitionBy`** — a custom async delegate that can produce any partition key you need. When the built-in options don't fit, you're free to implement whatever logic makes sense: look up a resource's owner in the database, derive a key from the user's subscription tier, partition by tenant — anything that returns a string.
+- **`PartitionBy`** — a named custom resolver that can produce any partition key you need. Register a resolver function under a unique name via `options.AddPartitionKeyResolver("MyResolver", ctx => ...)`, then reference it by name: `.PartitionBy("MyResolver")`. You can also register and reference in one step: `.PartitionBy("MyResolver", ctx => ...)`. When the built-in options don't fit, you're free to implement whatever logic makes sense: look up a resource's owner in the database, derive a key from the user's subscription tier, partition by tenant — anything that returns a string. Because the resolver is stored by name (not as an anonymous delegate), it can be serialized and managed from a UI or database.
 
 > The rule of thumb: partition by the identity of whoever's behavior you're trying to limit.
 
@@ -113,6 +175,70 @@ options.AddPolicy("Login", policy =>
 The two counters are completely independent. If `alice` fails 5 times, her account is locked — but other accounts from the same IP are unaffected. If an IP accumulates 20 failures, it's blocked — but `alice` can still be targeted from other IPs until their own counters fill up.
 
 When multiple rules are present, the module uses a two-phase approach: it checks all rules first, and only increments counters if every rule passes. This prevents a rule from consuming quota on a request that would have been rejected by another rule anyway.
+
+## Customizing Policies from Reusable Modules
+
+ABP modules (including your own) can ship with built-in rate limiting policies. For example, an Account module might define a `"Account.SendPasswordResetCode"` policy with conservative defaults that make sense for most applications. When you need different rules in your specific application, you have two options.
+
+**Complete replacement with `AddPolicy`:** call `AddPolicy` with the same name and the second registration wins, replacing all rules from the module:
+
+```csharp
+Configure<AbpOperationRateLimitingOptions>(options =>
+{
+    options.AddPolicy("Account.SendPasswordResetCode", policy =>
+    {
+        policy.AddRule(rule => rule
+            .WithFixedWindow(TimeSpan.FromMinutes(5), maxCount: 3)
+            .PartitionByEmail());
+    });
+});
+```
+
+**Partial modification with `ConfigurePolicy`:** when you only want to tweak part of a policy — change the error code, add a secondary rule, or tighten the window — use `ConfigurePolicy`. The builder starts pre-populated with the module's existing rules, so you only express what changes.
+
+For example, keep the module's default rules but assign your own localized error code:
+
+```csharp
+Configure<AbpOperationRateLimitingOptions>(options =>
+{
+    options.ConfigurePolicy("Account.SendPasswordResetCode", policy =>
+    {
+        policy.WithErrorCode("MyApp:PasswordResetLimit");
+    });
+});
+```
+
+Or add a secondary IP-based rule on top of what the module already defined, without touching it:
+
+```csharp
+Configure<AbpOperationRateLimitingOptions>(options =>
+{
+    options.ConfigurePolicy("Account.SendPasswordResetCode", policy =>
+    {
+        policy.AddRule(rule => rule
+            .WithFixedWindow(TimeSpan.FromHours(1), maxCount: 20)
+            .PartitionByClientIp());
+    });
+});
+```
+
+If you want a clean slate, call `ClearRules()` first and then define entirely new rules — this gives you the same result as `AddPolicy` but makes the intent explicit:
+
+```csharp
+Configure<AbpOperationRateLimitingOptions>(options =>
+{
+    options.ConfigurePolicy("Account.SendPasswordResetCode", policy =>
+    {
+        policy.ClearRules()
+              .WithFixedWindow(TimeSpan.FromMinutes(10), maxCount: 5)
+              .PartitionByEmail();
+    });
+});
+```
+
+`ConfigurePolicy` throws if the policy name doesn't exist — which catches typos at startup rather than silently doing nothing.
+
+The general rule: use `AddPolicy` for full replacements, `ConfigurePolicy` for surgical modifications.
 
 ## Beyond Just Checking
 
@@ -179,10 +305,10 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 
 ## Summary
 
-ABP's Operation Rate Limiting fills the gap that ASP.NET Core's HTTP middleware can't: rate limiting with real awareness of *who* is doing *what*. Define a named policy, pick a time window, a max count, and a partition type. Call `CheckAsync` wherever you need it. Counter storage, distributed locking, and exception handling are all taken care of.
+ABP's Operation Rate Limiting fills the gap that ASP.NET Core's HTTP middleware can't: rate limiting with real awareness of *who* is doing *what*. Define a named policy, pick a time window, a max count, and a partition type. Then either call `CheckAsync` explicitly, or just add `[OperationRateLimiting]` to your method and let the framework handle the rest. Counter storage, distributed locking, and exception handling are all taken care of.
 
 ## References
 
-- [Operation Rate Limiting](https://abp.io/docs/latest/framework/infrastructure/operation-rate-limiting)
+- [Operation Rate Limiting (Pro)](https://abp.io/docs/latest/modules/operation-rate-limiting)
 - [ASP.NET Core Rate Limiting Middleware](https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit)
 - [Exception Handling](https://abp.io/docs/latest/framework/fundamentals/exception-handling)

@@ -2,8 +2,8 @@
   "name": "@my-company-name/my-project-name",
   "version": "0.0.1",
   "peerDependencies": {
-    "@angular/common": "~19.1.0",
-    "@angular/core": "~19.1.0",
+    "@angular/common": "~21.2.0",
+    "@angular/core": "~21.2.0",
     "@abp/ng.core": "~10.2.0-rc.2",
     "@abp/ng.theme.shared": "~10.2.0-rc.2"
   },

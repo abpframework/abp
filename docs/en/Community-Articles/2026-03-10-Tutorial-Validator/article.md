@@ -1,49 +1,56 @@
-# How We Built TutorialValidator to Automatically Validate Documentation Tutorials
+# Automatically Validate Your Documentation: How We Built a Tutorial Validator
 
-Writing a tutorial is hard. Keeping it correct over time is even harder.
+Writing a tutorial is difficult. Keeping technical documentation accurate over time is even harder.
+If you maintain developer documentation, you probably know the problem: a tutorial that worked a few months ago can silently break after a framework update, dependency change, or a small missing line in a code snippet.
+New developers follow the guide, encounter an error, and quickly lose trust in the documentation.
+To solve this problem, we built the tutorial validator — an open-source AI-powered tutorial validator that automatically verifies whether a software tutorial actually works from start to finish.
+Instead of manually reviewing documentation, the tutorial validator behaves like a real developer following your guide step by step.
+It reads instructions, runs commands, writes files, executes the application, and verifies expected results.
+We initially created it to automatically validate ABP Framework tutorials, then released it as an open-source tool so anyone can use it to test their own documentation.
 
-If you maintain technical documentation, you probably know this pain: a tutorial that worked three months ago can quietly break after a framework update, a package change, or a small missing line in a code snippet. New developers follow the steps, hit an error, and lose trust in the docs.
 
-That exact problem is why we built **TutorialValidator**.
+![the tutorial validator Orchestrator](docs/images/image.png)
 
-TutorialValidator is an open-source, AI-powered tool that checks whether a software tutorial actually works from start to finish. You give it a tutorial URL, and it behaves like a real developer following the guide: it reads each step, executes commands, writes files, runs the app, and verifies expected results.
 
-We first created it to validate ABP Framework tutorials internally, then shared it publicly so anyone can use it with their own tutorials.
+## The Problem: Broken Tutorials in Technical Documentation
 
-![TutorialValidator Orchestrator](docs/images/image.png)
+Many documentation issues are difficult to catch during normal reviews.
+Common problems include:
 
-## What Problem Does It Solve?
+- A command assumes a file already exists
 
-Most documentation issues are not obvious during review:
+- A code snippet misses a namespace or import
 
-- A command assumes a file that has not been created yet
-- A code sample misses a namespace or import
-- A step relies on hidden context that is never explained
-- An endpoint is expected to respond, but does not
+- A tutorial step relies on hidden context
 
-Traditional proofreading catches wording problems. TutorialValidator targets **execution problems**.
+- An endpoint is expected to respond but fails
 
-It turns tutorials into something testable.
+- A dependency version changed and breaks the project
 
-## How It Works (Simple View)
 
-TutorialValidator runs in three phases:
+Traditional proofreading tools only check grammar or wording.
+**The tutorial validator focuses on execution correctness.**
+It treats tutorials like testable workflows, ensuring that every step works exactly as written.
+
+## How the Tutorial Validator Works?
+
+the tutorial validator validates tutorials using a three-stage pipeline:
 
 1. **Analyst**: Scrapes tutorial pages and converts instructions into a structured test plan
 2. **Executor**: Follows the plan step by step in a clean environment
 3. **Reporter**: Produces a clear result summary and optional notifications
 
-![TutorialValidator Analyst](docs/images/image-1.png)
+![the tutorial validator Analyst](docs/images/image-1.png)
 
+It identifies commands, code edits, HTTP requests, and expected outcomes.
 The key idea is simple: if a developer would need to do it, the validator does it too.
-
 That includes running terminal commands, editing files, checking HTTP responses, and validating build outcomes.
 
-![TutorialValidator Executor](docs/images/image-2.png)
+![the tutorial validator Executor](docs/images/image-2.png)
 
-## Why This Approach Is Useful
+## Why Automated Tutorial Validation Matters?
 
-TutorialValidator is designed for practical documentation quality, not just technical experimentation.
+The tutorial validator is designed for practical documentation quality, not just technical experimentation.
 
 - **Catches real-world breakages early** before readers report them
 - **Creates repeatable validation** instead of one-off manual checks
@@ -54,7 +61,7 @@ For example, `junior` and `mid` personas are great for spotting unclear document
 
 ## Built for ABP, Open for Everyone
 
-Even though TutorialValidator was born from ABP documentation needs, it is not limited to ABP content.
+Although TutorialValidator was originally built to validate **ABP Framework tutorials**, it works with **any publicly accessible software tutorial**.
 
 It supports validating any publicly accessible software tutorial and can run in:
 
@@ -63,28 +70,44 @@ It supports validating any publicly accessible software tutorial and can run in:
 
 It also supports multiple AI providers, including OpenAI, Azure OpenAI, and OpenAI-compatible endpoints.
 
-## Open Source and Extensible
+## Open Source and Easily Extensible
 
-TutorialValidator is structured as multiple focused projects:
+The tutorial validator is designed with a modular architecture.
+The project consists of multiple focused components:
 
-- Core models and shared contracts
-- Analyst for scraping and plan extraction
-- Executor for step-by-step validation
-- Orchestrator for end-to-end workflow
-- Reporter for Email/Discord notifications
+- **Core** – shared models and contracts
+- **Analyst** – tutorial scraping and step extraction
+- **Executor** – step-by-step execution engine
+- **Orchestrator** – workflow coordination
+- **Reporter** – notifications and result summaries
+
+This architecture makes it easy to extend the validator with:
+
+- new step types
+- additional AI providers
+- custom reporting integrations
 
 This architecture keeps the project easy to understand and extend. Teams can add new step types, plugins, or reporting channels based on their own workflow.
 
 ## Final Thoughts
 
+Documentation is a critical part of the product experience.
+When tutorials break, developer trust breaks too.
+TutorialValidator helps teams move from:
+
+> We believe this tutorial works 🙄
+
+to
+
+> We verified this tutorial works ✅
+
+If your team maintains **technical tutorials, developer guides, or framework documentation**, automated tutorial validation can provide a powerful safety net.
+
 Documentation is part of the product experience. When tutorials fail, trust fails.
-
-TutorialValidator helps teams move from “we think this tutorial works” to “we verified it works.”
-
 If your team maintains technical tutorials, this project can give you a practical safety net and a repeatable quality process.
 
 ---
 
-Repository: https://github.com/AbpFramework/TutorialValidator
+You can find the source-code of the tutorial validator at this repo 👉 https://github.com/abpframework/tutorial-validator
 
-If you try it in your own docs pipeline, we would love to hear your feedback and ideas.
+We would love to hear your feedback, ideas and waiting PRs to improve this application.

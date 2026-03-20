@@ -77,13 +77,13 @@ public class DemoAppTickerQModule : AbpModule
     public override Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
     {
         var abpTickerQFunctionProvider = context.ServiceProvider.GetRequiredService<AbpTickerQFunctionProvider>();
-        abpTickerQFunctionProvider.Functions.TryAdd(nameof(CleanupJobs), (string.Empty, TickerTaskPriority.Normal, new TickerFunctionDelegate(async (cancellationToken, serviceProvider, tickerFunctionContext) =>
+        abpTickerQFunctionProvider.AddFunction(nameof(CleanupJobs), async (cancellationToken, serviceProvider, tickerFunctionContext) =>
         {
             var service = new CleanupJobs();
             var request = await TickerRequestProvider.GetRequestAsync<string>(tickerFunctionContext, cancellationToken);
             var genericContext = new TickerFunctionContext<string>(tickerFunctionContext, request);
             await service.CleanupLogsAsync(genericContext, cancellationToken);
-        })));
+        }, TickerTaskPriority.Normal);
         abpTickerQFunctionProvider.RequestTypes.TryAdd(nameof(CleanupJobs), (typeof(string).FullName, typeof(string)));
         return Task.CompletedTask;
     }

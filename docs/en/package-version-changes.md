@@ -1,5 +1,19 @@
 # Package Version Changes
 
+## 10.3.0-rc.1
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| Microsoft.IdentityModel.JsonWebTokens | 8.14.0 | 8.16.0 | #25068 |
+| Microsoft.IdentityModel.Protocols.OpenIdConnect | 8.14.0 | 8.16.0 | #25068 |
+| Microsoft.IdentityModel.Tokens | 8.14.0 | 8.16.0 | #25068 |
+| MongoDB.Driver | 3.7.0 | 3.7.1 | #25114 |
+| System.IdentityModel.Tokens.Jwt | 8.14.0 | 8.16.0 | #25068 |
+| TickerQ | 10.1.1 | 10.2.0 | #25091 |
+| TickerQ.Dashboard | 10.1.1 | 10.2.0 | #25091 |
+| TickerQ.EntityFrameworkCore | 10.1.1 | 10.2.0 | #25091 |
+| TickerQ.Utilities | 10.1.1 | 10.2.0 | #25091 |
+
 ## 10.3.0-preview
 
 | Package | Old Version | New Version | PR |

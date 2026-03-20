@@ -100,7 +100,7 @@ public class IdentityUserIntegrationService : IdentityAppServiceBase, IIdentityU
     {
         using (RoleRepository.DisableTracking())
         {
-            var roles = await RoleRepository.GetListAsync(input.Filter);
+            var roles = await RoleRepository.GetListAsync(sorting: input.Sorting, maxResultCount: input.MaxResultCount, skipCount: input.SkipCount, filter: input.Filter);
             return new ListResultDto<RoleData>(roles.Select(r => new RoleData(r.Id, r.Name, r.IsDefault, r.IsStatic, r.IsPublic, r.TenantId, r.ExtraProperties)).ToList());
         }
     }

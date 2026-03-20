@@ -237,7 +237,6 @@ $projects = (
     "framework/src/Volo.Abp.Minify",
     "framework/src/Volo.Abp.ObjectExtending",
     "framework/src/Volo.Abp.ObjectMapping",
-    "framework/src/Volo.Abp.OperationRateLimiting",
     "framework/src/Volo.Abp.Quartz",
     "framework/src/Volo.Abp.RabbitMQ",
     "framework/src/Volo.Abp.RemoteServices",
