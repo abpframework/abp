@@ -119,6 +119,17 @@ public class QuartzDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMana
         return HandlerRegistry.IsRegistered(workerName);
     }
 
+    public virtual async Task StopAllAsync(CancellationToken cancellationToken = default)
+    {
+        foreach (var workerName in HandlerRegistry.GetAllNames())
+        {
+            var jobKey = new JobKey($"DynamicWorker:{workerName}");
+            await Scheduler.DeleteJob(jobKey, cancellationToken);
+        }
+
+        HandlerRegistry.Clear();
+    }
+
     protected virtual ITrigger BuildTrigger(DynamicBackgroundWorkerSchedule schedule, IJobDetail jobDetail, TriggerKey triggerKey)
     {
         var triggerBuilder = TriggerBuilder.Create()

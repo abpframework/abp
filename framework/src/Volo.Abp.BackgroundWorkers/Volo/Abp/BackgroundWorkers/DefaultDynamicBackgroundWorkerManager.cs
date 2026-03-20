@@ -10,7 +10,7 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers;
 
-public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerManager, ISingletonDependency, IDisposable
+public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerManager, ISingletonDependency
 {
     protected IServiceProvider ServiceProvider { get; }
     public ILogger<DefaultDynamicBackgroundWorkerManager> Logger { get; set; }
@@ -127,7 +127,7 @@ public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
         return _dynamicWorkers.ContainsKey(workerName);
     }
 
-    public virtual void Dispose()
+    public virtual async Task StopAllAsync(CancellationToken cancellationToken = default)
     {
         if (_isDisposed)
         {
@@ -140,7 +140,7 @@ public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
         {
             try
             {
-                kvp.Value.StopAsync(CancellationToken.None).GetAwaiter().GetResult();
+                await kvp.Value.StopAsync(cancellationToken);
             }
             catch (Exception ex)
             {

@@ -40,4 +40,9 @@ public class TickerQDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
     {
         return false;
     }
+
+    public virtual Task StopAllAsync(CancellationToken cancellationToken = default)
+    {
+        return Task.CompletedTask;
+    }
 }

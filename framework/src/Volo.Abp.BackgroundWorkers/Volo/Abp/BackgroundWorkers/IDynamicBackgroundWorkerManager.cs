@@ -38,4 +38,10 @@ public interface IDynamicBackgroundWorkerManager
     /// Checks whether a dynamic worker with the given name is registered.
     /// </summary>
     bool IsRegistered(string workerName);
+
+    /// <summary>
+    /// Stops all dynamic workers and releases resources.
+    /// Called during application shutdown.
+    /// </summary>
+    Task StopAllAsync(CancellationToken cancellationToken = default);
 }

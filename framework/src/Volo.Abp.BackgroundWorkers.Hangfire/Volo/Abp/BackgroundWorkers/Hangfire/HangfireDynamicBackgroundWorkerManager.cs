@@ -102,6 +102,18 @@ public class HangfireDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMa
         return HandlerRegistry.IsRegistered(workerName);
     }
 
+    public virtual Task StopAllAsync(CancellationToken cancellationToken = default)
+    {
+        foreach (var workerName in HandlerRegistry.GetAllNames())
+        {
+            var recurringJobId = $"DynamicWorker:{workerName}";
+            RecurringJob.RemoveIfExists(recurringJobId);
+        }
+
+        HandlerRegistry.Clear();
+        return Task.CompletedTask;
+    }
+
     protected virtual void ScheduleRecurringJob(string workerName, string cronExpression, CancellationToken cancellationToken)
     {
         var abpHangfireOptions = ServiceProvider.GetRequiredService<IOptions<AbpHangfireOptions>>().Value;
