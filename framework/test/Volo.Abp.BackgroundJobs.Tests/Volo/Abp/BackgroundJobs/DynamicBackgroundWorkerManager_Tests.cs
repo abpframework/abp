@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Shouldly;
@@ -275,6 +278,109 @@ public class DynamicBackgroundWorkerManager_Tests : BackgroundJobsTestBase
 
         await _dynamicWorkerManager.RemoveAsync(workerName);
 
+        _dynamicWorkerManager.IsRegistered(workerName).ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task Should_Handle_Concurrent_Add_With_Same_Name()
+    {
+        var workerName = "concurrent-worker-" + Guid.NewGuid();
+        var executedHandlerIds = new ConcurrentBag<int>();
+
+        var tasks = Enumerable.Range(0, 10).Select(i =>
+            _dynamicWorkerManager.AddAsync(
+                workerName,
+                new DynamicBackgroundWorkerSchedule { Period = 60000 },
+                (_, _) =>
+                {
+                    executedHandlerIds.Add(i);
+                    return Task.CompletedTask;
+                }
+            )
+        ).ToList();
+
+        await Task.WhenAll(tasks);
+
+        _dynamicWorkerManager.IsRegistered(workerName).ShouldBeTrue();
+
+        var removed = await _dynamicWorkerManager.RemoveAsync(workerName);
+        removed.ShouldBeTrue();
+        _dynamicWorkerManager.IsRegistered(workerName).ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task Should_Handle_Concurrent_Add_And_Remove()
+    {
+        var workerNames = Enumerable.Range(0, 10)
+            .Select(i => $"concurrent-worker-{i}-" + Guid.NewGuid())
+            .ToList();
+
+        var addTasks = workerNames.Select(name =>
+            _dynamicWorkerManager.AddAsync(
+                name,
+                new DynamicBackgroundWorkerSchedule { Period = 60000 },
+                (_, _) => Task.CompletedTask
+            )
+        ).ToList();
+
+        await Task.WhenAll(addTasks);
+
+        foreach (var name in workerNames)
+        {
+            _dynamicWorkerManager.IsRegistered(name).ShouldBeTrue();
+        }
+
+        var removeTasks = workerNames.Select(name =>
+            _dynamicWorkerManager.RemoveAsync(name)
+        ).ToList();
+
+        var results = await Task.WhenAll(removeTasks);
+
+        results.ShouldAllBe(r => r);
+
+        foreach (var name in workerNames)
+        {
+            _dynamicWorkerManager.IsRegistered(name).ShouldBeFalse();
+        }
+    }
+
+    [Fact]
+    public async Task Should_Handle_Concurrent_Add_Remove_Update()
+    {
+        var workerName = "concurrent-mixed-" + Guid.NewGuid();
+
+        await _dynamicWorkerManager.AddAsync(
+            workerName,
+            new DynamicBackgroundWorkerSchedule { Period = 60000 },
+            (_, _) => Task.CompletedTask
+        );
+
+        var tasks = new List<Task>
+        {
+            _dynamicWorkerManager.AddAsync(
+                workerName,
+                new DynamicBackgroundWorkerSchedule { Period = 30000 },
+                (_, _) => Task.CompletedTask
+            ),
+            _dynamicWorkerManager.UpdateScheduleAsync(
+                workerName,
+                new DynamicBackgroundWorkerSchedule { Period = 20000 }
+            ),
+            _dynamicWorkerManager.AddAsync(
+                workerName,
+                new DynamicBackgroundWorkerSchedule { Period = 10000 },
+                (_, _) => Task.CompletedTask
+            )
+        };
+
+        await Task.WhenAll(tasks);
+
+        // After all concurrent operations, worker should still be in a consistent state
+        var isRegistered = _dynamicWorkerManager.IsRegistered(workerName);
+        isRegistered.ShouldBeTrue();
+
+        var removed = await _dynamicWorkerManager.RemoveAsync(workerName);
+        removed.ShouldBeTrue();
         _dynamicWorkerManager.IsRegistered(workerName).ShouldBeFalse();
     }
 }

@@ -16,6 +16,7 @@ public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
     public ILogger<DefaultDynamicBackgroundWorkerManager> Logger { get; set; }
 
     private readonly ConcurrentDictionary<string, InMemoryDynamicBackgroundWorker> _dynamicWorkers;
+    private readonly SemaphoreSlim _semaphore;
     private bool _isDisposed;
 
     public DefaultDynamicBackgroundWorkerManager(IServiceProvider serviceProvider)
@@ -23,6 +24,7 @@ public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
         ServiceProvider = serviceProvider;
         Logger = NullLogger<DefaultDynamicBackgroundWorkerManager>.Instance;
         _dynamicWorkers = new ConcurrentDictionary<string, InMemoryDynamicBackgroundWorker>();
+        _semaphore = new SemaphoreSlim(1, 1);
     }
 
     public virtual async Task AddAsync(
@@ -44,32 +46,48 @@ public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
                 "Please set Period, or use a scheduler-backed provider (Hangfire, Quartz, TickerQ).");
         }
 
-        if (_dynamicWorkers.TryRemove(workerName, out var existingWorker))
+        await _semaphore.WaitAsync(cancellationToken);
+        try
         {
-            await existingWorker.StopAsync(cancellationToken);
-            Logger.LogInformation("Replaced existing dynamic worker: {WorkerName}", workerName);
+            if (_dynamicWorkers.TryRemove(workerName, out var existingWorker))
+            {
+                await existingWorker.StopAsync(cancellationToken);
+                Logger.LogInformation("Replaced existing dynamic worker: {WorkerName}", workerName);
+            }
+
+            var worker = CreateDynamicWorker(workerName, schedule, handler);
+            _dynamicWorkers[workerName] = worker;
+
+            await worker.StartAsync(cancellationToken);
         }
-
-        var worker = CreateDynamicWorker(workerName, schedule, handler);
-        _dynamicWorkers[workerName] = worker;
-
-        await worker.StartAsync(cancellationToken);
+        finally
+        {
+            _semaphore.Release();
+        }
     }
 
     public virtual async Task<bool> RemoveAsync(string workerName, CancellationToken cancellationToken = default)
     {
         Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
 
-        if (!_dynamicWorkers.TryRemove(workerName, out var worker))
+        await _semaphore.WaitAsync(cancellationToken);
+        try
         {
-            return false;
-        }
+            if (!_dynamicWorkers.TryRemove(workerName, out var worker))
+            {
+                return false;
+            }
 
-        await worker.StopAsync(cancellationToken);
-        return true;
+            await worker.StopAsync(cancellationToken);
+            return true;
+        }
+        finally
+        {
+            _semaphore.Release();
+        }
     }
 
-    public virtual Task<bool> UpdateScheduleAsync(
+    public virtual async Task<bool> UpdateScheduleAsync(
         string workerName,
         DynamicBackgroundWorkerSchedule schedule,
         CancellationToken cancellationToken = default)
@@ -86,13 +104,21 @@ public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
                 "Please set Period, or use a scheduler-backed provider (Hangfire, Quartz, TickerQ).");
         }
 
-        if (!_dynamicWorkers.TryGetValue(workerName, out var worker))
+        await _semaphore.WaitAsync(cancellationToken);
+        try
         {
-            return Task.FromResult(false);
-        }
+            if (!_dynamicWorkers.TryGetValue(workerName, out var worker))
+            {
+                return false;
+            }
 
-        worker.UpdateSchedule(schedule);
-        return Task.FromResult(true);
+            worker.UpdateSchedule(schedule);
+            return true;
+        }
+        finally
+        {
+            _semaphore.Release();
+        }
     }
 
     public virtual bool IsRegistered(string workerName)
@@ -123,6 +149,7 @@ public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
         }
 
         _dynamicWorkers.Clear();
+        _semaphore.Dispose();
     }
 
     protected virtual InMemoryDynamicBackgroundWorker CreateDynamicWorker(
