@@ -31,7 +31,7 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
             await _backgroundJobManager.EnqueueAsync(new WriteToConsoleYellowJobArgs { Value = "test 1 (yellow) - typed" });
 
             // Register runtime dynamic handler
-            _dynamicBackgroundJobManager.RegisterHandler("RuntimeAnonymousJob", (context, ct) =>
+            _dynamicBackgroundJobManager.RegisterHandler("RuntimeDynamicJob", (context, ct) =>
             {
                 using (var doc = JsonDocument.Parse(context.JsonData))
                 {
@@ -40,7 +40,7 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
                         : doc.RootElement.TryGetProperty("Value", out prop)
                             ? prop.GetString()
                             : null;
-                    Console.WriteLine($"[ANONYMOUS-RUNTIME] {value}");
+                    Console.WriteLine($"[DYNAMIC-RUNTIME] {value}");
                     return Task.CompletedTask;
                 }
             });
@@ -58,21 +58,21 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
             // String-based enqueue with anonymous object (typed job path)
             await _dynamicBackgroundJobManager.EnqueueAsync(
                 "GreenJob",
-                new { Value = "test 3 (green) - by name, anonymous", Time = DateTime.Now }
+                new { Value = "test 3 (green) - by name, dynamic", Time = DateTime.Now }
             );
             await _dynamicBackgroundJobManager.EnqueueAsync(
                 "YellowJob",
-                new { Value = "test 3 (yellow) - by name, anonymous", Time = DateTime.Now }
+                new { Value = "test 3 (yellow) - by name, dynamic", Time = DateTime.Now }
             );
 
             // Dynamic job handlers
             await _dynamicBackgroundJobManager.EnqueueAsync(
-                "CompileTimeAnonymousJob",
-                new { Value = "test 4 (anonymous) - compile-time" }
+                "CompileTimeDynamicJob",
+                new { Value = "test 4 (dynamic) - compile-time" }
             );
             await _dynamicBackgroundJobManager.EnqueueAsync(
-                "RuntimeAnonymousJob",
-                new { Value = "test 5 (anonymous) - runtime" }
+                "RuntimeDynamicJob",
+                new { Value = "test 5 (dynamic) - runtime" }
             );
         }
     }

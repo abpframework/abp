@@ -15,7 +15,7 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared
         {
             var dynamicJobManager = context.ServiceProvider.GetRequiredService<IDynamicBackgroundJobManager>();
 
-            dynamicJobManager.RegisterHandler("CompileTimeAnonymousJob", (ctx, ct) =>
+            dynamicJobManager.RegisterHandler("CompileTimeDynamicJob", (ctx, ct) =>
             {
                 using (var doc = JsonDocument.Parse(ctx.JsonData))
                 {
@@ -24,7 +24,7 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared
                         : doc.RootElement.TryGetProperty("Value", out prop)
                             ? prop.GetString()
                             : null;
-                    Console.WriteLine($"[ANONYMOUS-COMPILE] {value}");
+                    Console.WriteLine($"[DYNAMIC-COMPILE] {value}");
                     return Task.CompletedTask;
                 }
             });

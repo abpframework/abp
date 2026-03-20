@@ -24,9 +24,9 @@ public class AbpDashboardOptionsProvider : ITransientDependency
                 var jobName = job.ToString();
                 if (job.Args.Count == 3 && job.Args.Last() is CancellationToken)
                 {
-                    if (job.Args[1] is AnonymousJobArgs anonymousJobArgs)
+                    if (job.Args[1] is DynamicBackgroundJobArgs dynamicJobArgs)
                     {
-                        jobName = anonymousJobArgs.JobName;
+                        jobName = dynamicJobArgs.JobName;
                     }
                     else
                     {

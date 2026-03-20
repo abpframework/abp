@@ -15,7 +15,7 @@ public interface IDynamicBackgroundJobManager
     /// If a typed job configuration exists for this name, the args will be
     /// deserialized to the configured args type and enqueued through the typed pipeline.
     /// If a dynamic handler is registered, the args will be wrapped as
-    /// <see cref="AnonymousJobArgs"/> and enqueued through the standard typed pipeline.
+    /// <see cref="DynamicBackgroundJobArgs"/> and enqueued through the standard typed pipeline.
     /// </summary>
     /// <param name="jobName">Name of the background job.</param>
     /// <param name="args">Job arguments (will be serialized to JSON).</param>

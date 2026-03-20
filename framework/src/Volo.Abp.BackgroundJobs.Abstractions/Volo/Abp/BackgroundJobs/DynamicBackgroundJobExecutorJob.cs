@@ -7,12 +7,12 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundJobs;
 
-public class AnonymousJobExecutorAsyncBackgroundJob : AsyncBackgroundJob<AnonymousJobArgs>, ITransientDependency
+public class DynamicBackgroundJobExecutorJob : AsyncBackgroundJob<DynamicBackgroundJobArgs>, ITransientDependency
 {
     protected IDynamicBackgroundJobHandlerRegistry HandlerRegistry { get; }
     protected IServiceProvider ServiceProvider { get; }
 
-    public AnonymousJobExecutorAsyncBackgroundJob(
+    public DynamicBackgroundJobExecutorJob(
         IDynamicBackgroundJobHandlerRegistry handlerRegistry,
         IServiceProvider serviceProvider)
     {
@@ -20,11 +20,11 @@ public class AnonymousJobExecutorAsyncBackgroundJob : AsyncBackgroundJob<Anonymo
         ServiceProvider = serviceProvider;
     }
 
-    public override async Task ExecuteAsync(AnonymousJobArgs args)
+    public override async Task ExecuteAsync(DynamicBackgroundJobArgs args)
     {
         Logger.LogInformation(
             "Executing dynamic job. TransportJobName: {TransportJobName}, EffectiveJobName: {EffectiveJobName}",
-            AnonymousJobArgs.JobNameConstant,
+            DynamicBackgroundJobArgs.JobNameConstant,
             args.JobName
         );
 

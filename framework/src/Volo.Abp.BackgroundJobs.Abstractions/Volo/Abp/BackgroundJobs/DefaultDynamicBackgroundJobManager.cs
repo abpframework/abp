@@ -47,7 +47,7 @@ public class DefaultDynamicBackgroundJobManager : IDynamicBackgroundJobManager, 
 
         if (HandlerRegistry.IsRegistered(jobName))
         {
-            return await EnqueueAnonymousJobAsync(jobName, args, priority, delay);
+            return await EnqueueDynamicHandlerJobAsync(jobName, args, priority, delay);
         }
 
         throw new AbpException(
@@ -88,15 +88,15 @@ public class DefaultDynamicBackgroundJobManager : IDynamicBackgroundJobManager, 
         return await task;
     }
 
-    protected virtual Task<string> EnqueueAnonymousJobAsync(
+    protected virtual Task<string> EnqueueDynamicHandlerJobAsync(
         string jobName,
         object args,
         BackgroundJobPriority priority,
         TimeSpan? delay)
     {
         var jsonData = JsonSerializer.Serialize(args);
-        var anonymousArgs = new AnonymousJobArgs(jobName, jsonData);
-        return BackgroundJobManager.EnqueueAsync(anonymousArgs, priority, delay);
+        var dynamicArgs = new DynamicBackgroundJobArgs(jobName, jsonData);
+        return BackgroundJobManager.EnqueueAsync(dynamicArgs, priority, delay);
     }
 
     private static MethodInfo GetOrCreateEnqueueMethod(Type argsType)

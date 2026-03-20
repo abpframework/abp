@@ -1,15 +1,15 @@
 namespace Volo.Abp.BackgroundJobs;
 
 [BackgroundJobName(JobNameConstant)]
-public class AnonymousJobArgs
+public class DynamicBackgroundJobArgs
 {
-    public const string JobNameConstant = "Abp.AnonymousJob";
+    public const string JobNameConstant = "Abp.DynamicJob";
 
     public string JobName { get; }
 
     public string JsonData { get; }
 
-    public AnonymousJobArgs(string jobName, string jsonData)
+    public DynamicBackgroundJobArgs(string jobName, string jsonData)
     {
         JobName = Check.NotNullOrWhiteSpace(jobName, nameof(jobName));
         JsonData = Check.NotNull(jsonData, nameof(jsonData));

@@ -420,7 +420,7 @@ bool removed = _dynamicJobManager.UnregisterHandler("ProcessOrder");
 ### How It Works
 
 - **Typed job path**: When the job name matches a registered typed job configuration, the args are serialized to JSON and deserialized to the expected args type, then enqueued through `IBackgroundJobManager.EnqueueAsync<TArgs>`.
-- **Dynamic handler path**: When the job name matches a registered dynamic handler, the args are wrapped as `AnonymousJobArgs` (an internal transport type) and enqueued through `IBackgroundJobManager.EnqueueAsync<AnonymousJobArgs>`. When the job executes, the framework looks up the handler by name and invokes it.
+- **Dynamic handler path**: When the job name matches a registered dynamic handler, the args are wrapped as `DynamicBackgroundJobArgs` (an internal transport type) and enqueued through `IBackgroundJobManager.EnqueueAsync<DynamicBackgroundJobArgs>`. When the job executes, the framework looks up the handler by name and invokes it.
 - All dynamic jobs go through the **standard typed job pipeline**, which means they work with all providers (Default, Hangfire, Quartz, RabbitMQ, TickerQ) without any provider-specific changes.
 
 ## Integrations

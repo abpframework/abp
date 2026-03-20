@@ -73,7 +73,7 @@ public class BackgroundJobManager_Tests : BackgroundJobsTestBase
 
         var jobInfo = await _backgroundJobStore.FindAsync(Guid.Parse(jobIdAsString));
         jobInfo.ShouldNotBeNull();
-        jobInfo.JobName.ShouldBe(AnonymousJobArgs.JobNameConstant);
+        jobInfo.JobName.ShouldBe(DynamicBackgroundJobArgs.JobNameConstant);
         jobInfo.JobArgs.ShouldContain("TestDynamicJob");
         jobInfo.JobArgs.ShouldContain("ORD-001");
     }
@@ -86,8 +86,8 @@ public class BackgroundJobManager_Tests : BackgroundJobsTestBase
         await _backgroundJobExecuter.ExecuteAsync(
             new JobExecutionContext(
                 ServiceProvider,
-                typeof(AnonymousJobExecutorAsyncBackgroundJob),
-                new AnonymousJobArgs("TestDynamicJob", "{\"OrderId\":\"ORD-001\"}")
+                typeof(DynamicBackgroundJobExecutorJob),
+                new DynamicBackgroundJobArgs("TestDynamicJob", "{\"OrderId\":\"ORD-001\"}")
             )
         );
 
@@ -106,7 +106,7 @@ public class BackgroundJobManager_Tests : BackgroundJobsTestBase
         var jobInfo = await _backgroundJobStore.FindAsync(Guid.Parse(jobIdAsString));
         jobInfo.ShouldNotBeNull();
         jobInfo.JobName.ShouldBe(typedJobName);
-        jobInfo.JobName.ShouldNotBe(AnonymousJobArgs.JobNameConstant);
+        jobInfo.JobName.ShouldNotBe(DynamicBackgroundJobArgs.JobNameConstant);
     }
 
     [Fact]
