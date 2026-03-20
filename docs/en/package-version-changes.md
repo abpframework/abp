@@ -1,5 +1,11 @@
 # Package Version Changes
 
+## 10.2.0-rc.3
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| Scriban | 6.3.0 | 6.6.0 | #25122 |
+
 ## 10.2.0-rc.1
 
 | Package | Old Version | New Version | PR |
