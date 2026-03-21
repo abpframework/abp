@@ -120,6 +120,64 @@ So, it resolves the given background worker and adds to the `IBackgroundWorkerMa
 
 While we generally add workers in `OnApplicationInitializationAsync`, there are no restrictions on that. You can inject `IBackgroundWorkerManager` anywhere and add workers at runtime. Background worker manager will stop and release all the registered workers when your application is being shut down.
 
+### Dynamic Workers (Runtime Registration)
+
+You can add a runtime worker without pre-defining a dedicated worker class. Inject `IDynamicBackgroundWorkerManager` and pass a handler directly:
+
+````csharp
+public class MyModule : AbpModule
+{
+    public override async Task OnApplicationInitializationAsync(
+        ApplicationInitializationContext context)
+    {
+        var dynamicWorkerManager = context.ServiceProvider
+            .GetRequiredService<IDynamicBackgroundWorkerManager>();
+
+        await dynamicWorkerManager.AddAsync(
+            "InventorySyncWorker",
+            new DynamicBackgroundWorkerSchedule
+            {
+                Period = 30000 //30 seconds
+                //CronExpression = "*/30 * * * *" //Every 30 minutes. Only for Hangfire, Quartz or TickerQ integration.
+            },
+            async (workerContext, cancellationToken) =>
+            {
+                var inventorySyncAppService = workerContext
+                    .ServiceProvider
+                    .GetRequiredService<IInventorySyncAppService>();
+
+                await inventorySyncAppService.SyncAsync(cancellationToken);
+            }
+        );
+    }
+}
+````
+
+You can also **remove** a dynamic worker or **update its schedule** at runtime:
+
+````csharp
+//Remove a dynamic worker
+var removed = await dynamicWorkerManager.RemoveAsync("InventorySyncWorker");
+
+//Update the schedule of a dynamic worker
+var updated = await dynamicWorkerManager.UpdateScheduleAsync(
+    "InventorySyncWorker",
+    new DynamicBackgroundWorkerSchedule
+    {
+        Period = 60000 //Change to 60 seconds
+    }
+);
+````
+
+* `IDynamicBackgroundWorkerManager` is a **separate interface** from `IBackgroundWorkerManager`, dedicated to runtime (non-type-safe) worker management.
+* `workerName` is the runtime identifier of the dynamic worker. If a worker with the same name already exists, it will be **replaced**.
+* The `handler` receives a `DynamicBackgroundWorkerExecutionContext` containing the worker name and a scoped `IServiceProvider`. It is a good practice to **resolve dependencies** from the `workerContext.ServiceProvider` instead of constructor injection.
+* At least one of `Period` or `CronExpression` must be set in `DynamicBackgroundWorkerSchedule`.
+* **`CronExpression` is only supported by scheduler-backed providers ([Hangfire](./hangfire.md), [Quartz](./quartz.md)).** The default in-memory provider requires `Period` and does not support `CronExpression` alone.
+* **[TickerQ](./tickerq.md) does not support dynamic background workers** because it uses `FrozenDictionary` for function registration, which requires all functions to be registered before the application starts.
+* `RemoveAsync` stops and removes a dynamic worker. Returns `true` if the worker was found and removed.
+* `UpdateScheduleAsync` changes the schedule of an existing dynamic worker. Returns `true` if the worker was found and updated. The handler itself is not changed.
+
 ## Options
 
 `AbpBackgroundWorkerOptions` class is used to [set options](../../fundamentals/options.md) for the background workers. Currently, there is only one option:
