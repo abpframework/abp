@@ -138,7 +138,7 @@ public class MyModule : AbpModule
             new DynamicBackgroundWorkerSchedule
             {
                 Period = 30000 //30 seconds
-                //CronExpression = "*/30 * * * *" //Every 30 minutes. Only for Hangfire, Quartz or TickerQ integration.
+                //CronExpression = "*/30 * * * *" //Every 30 minutes. Only for Hangfire or Quartz integration.
             },
             async (workerContext, cancellationToken) =>
             {
@@ -175,8 +175,8 @@ var updated = await dynamicWorkerManager.UpdateScheduleAsync(
 * At least one of `Period` or `CronExpression` must be set in `DynamicBackgroundWorkerSchedule`.
 * **`CronExpression` is only supported by scheduler-backed providers ([Hangfire](./hangfire.md), [Quartz](./quartz.md)).** The default in-memory provider requires `Period` and does not support `CronExpression` alone.
 * **[TickerQ](./tickerq.md) does not support dynamic background workers** because it uses `FrozenDictionary` for function registration, which requires all functions to be registered before the application starts.
-* `RemoveAsync` stops and removes a dynamic worker. Returns `true` if the worker was found and removed.
-* `UpdateScheduleAsync` changes the schedule of an existing dynamic worker. Returns `true` if the worker was found and updated. The handler itself is not changed. For persistent providers (Hangfire, Quartz), this also works correctly after an application restart — the persistent scheduling record is updated even if the handler is no longer registered in memory.
+* `RemoveAsync` stops and removes a dynamic worker. Returns `true` if the worker was found and removed. The exact semantics are provider-dependent — for persistent providers (Hangfire, Quartz), the persistent scheduling record is always cleaned up, but the return value may only reflect the in-memory registry state.
+* `UpdateScheduleAsync` changes the schedule of an existing dynamic worker. The handler itself is not changed. Returns `true` if the schedule was updated. The exact semantics are provider-dependent — for persistent providers (Hangfire, Quartz), this also works correctly after an application restart, updating the persistent scheduling record even if the handler is no longer registered in memory.
 
 > **Important:** Dynamic worker handlers are stored **in memory only** and are not persisted across application restarts. When using a persistent scheduler provider (Hangfire or Quartz), the recurring job entries remain in the database after a restart, but the handlers will no longer be registered. Until the handler is re-registered, each scheduled execution will be **skipped with a warning log**. To ensure handlers are always available, register them in `OnApplicationInitializationAsync` so they are re-registered on every startup.
 
