@@ -136,4 +136,42 @@ public class BackgroundJobManager_Tests : BackgroundJobsTestBase
         _dynamicBackgroundJobManager.UnregisterHandler("TestRegister").ShouldBeTrue();
         _dynamicBackgroundJobManager.IsHandlerRegistered("TestRegister").ShouldBeFalse();
     }
+
+    [Fact]
+    public void Should_GetAllNames_From_Handler_Registry()
+    {
+        var registry = GetRequiredService<IDynamicBackgroundJobHandlerRegistry>();
+
+        registry.Register("RegistryJob1", (_, _) => Task.CompletedTask);
+        registry.Register("RegistryJob2", (_, _) => Task.CompletedTask);
+
+        try
+        {
+            var names = registry.GetAllNames();
+            names.ShouldContain("RegistryJob1");
+            names.ShouldContain("RegistryJob2");
+        }
+        finally
+        {
+            registry.Unregister("RegistryJob1");
+            registry.Unregister("RegistryJob2");
+        }
+    }
+
+    [Fact]
+    public void Should_Clear_Handler_Registry()
+    {
+        var registry = GetRequiredService<IDynamicBackgroundJobHandlerRegistry>();
+
+        registry.Register("ClearJob1", (_, _) => Task.CompletedTask);
+        registry.Register("ClearJob2", (_, _) => Task.CompletedTask);
+
+        registry.GetAllNames().ShouldContain("ClearJob1");
+        registry.GetAllNames().ShouldContain("ClearJob2");
+
+        registry.Clear();
+
+        registry.IsRegistered("ClearJob1").ShouldBeFalse();
+        registry.IsRegistered("ClearJob2").ShouldBeFalse();
+    }
 }
