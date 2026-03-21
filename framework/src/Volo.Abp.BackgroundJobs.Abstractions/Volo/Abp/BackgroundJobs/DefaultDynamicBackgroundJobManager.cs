@@ -4,6 +4,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
@@ -18,6 +20,7 @@ public class DefaultDynamicBackgroundJobManager : IDynamicBackgroundJobManager, 
     protected IDynamicBackgroundJobHandlerRegistry HandlerRegistry { get; }
     protected AbpBackgroundJobOptions BackgroundJobOptions { get; }
     protected IJsonSerializer JsonSerializer { get; }
+    public ILogger<DefaultDynamicBackgroundJobManager> Logger { get; set; }
 
     public DefaultDynamicBackgroundJobManager(
         IBackgroundJobManager backgroundJobManager,
@@ -29,6 +32,7 @@ public class DefaultDynamicBackgroundJobManager : IDynamicBackgroundJobManager, 
         HandlerRegistry = handlerRegistry;
         BackgroundJobOptions = backgroundJobOptions.Value;
         JsonSerializer = jsonSerializer;
+        Logger = NullLogger<DefaultDynamicBackgroundJobManager>.Instance;
     }
 
     public virtual async Task<string> EnqueueAsync(
