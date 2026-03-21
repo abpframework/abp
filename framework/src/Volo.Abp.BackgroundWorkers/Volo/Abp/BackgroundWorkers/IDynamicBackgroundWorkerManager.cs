@@ -21,7 +21,12 @@ public interface IDynamicBackgroundWorkerManager
 
     /// <summary>
     /// Removes a previously added dynamic worker by name.
-    /// Returns true if the worker was found and removed; false otherwise.
+    /// Always attempts to remove both the in-memory handler and any persistent scheduling record
+    /// (Hangfire RecurringJob or Quartz job), regardless of current in-memory state.
+    /// Returns true if the handler was registered in memory at the time of the call, or if
+    /// the persistent scheduling record was found and deleted (provider-dependent).
+    /// May return false after an application restart even if a persistent record was cleaned up,
+    /// when the provider cannot report whether a persistent record existed (e.g. Hangfire).
     /// </summary>
     Task<bool> RemoveAsync(string workerName, CancellationToken cancellationToken = default);
 

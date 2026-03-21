@@ -22,7 +22,7 @@ public class DynamicBackgroundJobExecutorJob : AsyncBackgroundJob<DynamicBackgro
 
     public override async Task ExecuteAsync(DynamicBackgroundJobArgs args)
     {
-        Logger.LogInformation(
+        Logger.LogDebug(
             "Executing dynamic job. TransportJobName: {TransportJobName}, EffectiveJobName: {EffectiveJobName}",
             DynamicBackgroundJobArgs.JobNameConstant,
             args.JobName

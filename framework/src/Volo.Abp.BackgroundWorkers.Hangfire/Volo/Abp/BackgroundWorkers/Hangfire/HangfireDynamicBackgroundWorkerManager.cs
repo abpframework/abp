@@ -47,8 +47,17 @@ public class HangfireDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMa
             cronExpression = GetCron(period);
         }
 
-        ScheduleRecurringJob(workerName, cronExpression, cancellationToken);
+        // Register the handler first so it is available the moment the recurring job fires.
         HandlerRegistry.Register(workerName, handler);
+        try
+        {
+            ScheduleRecurringJob(workerName, cronExpression, cancellationToken);
+        }
+        catch
+        {
+            HandlerRegistry.Unregister(workerName);
+            throw;
+        }
 
         return Task.CompletedTask;
     }

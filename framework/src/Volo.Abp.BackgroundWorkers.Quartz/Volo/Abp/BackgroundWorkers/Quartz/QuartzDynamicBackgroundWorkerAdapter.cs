@@ -26,13 +26,14 @@ public class QuartzDynamicBackgroundWorkerAdapter : IJob, ITransientDependency
 
     public virtual async Task Execute(IJobExecutionContext context)
     {
-        var workerName = context.MergedJobDataMap.GetString(QuartzDynamicBackgroundWorkerManager.DynamicWorkerNameKey);
-        if (string.IsNullOrWhiteSpace(workerName))
+        var rawWorkerName = context.MergedJobDataMap.GetString(QuartzDynamicBackgroundWorkerManager.DynamicWorkerNameKey);
+        if (string.IsNullOrWhiteSpace(rawWorkerName))
         {
             return;
         }
 
-        var handler = HandlerRegistry.Get(workerName!);
+        var workerName = rawWorkerName!;
+        var handler = HandlerRegistry.Get(workerName);
         if (handler == null)
         {
             Logger.LogWarning("No handler registered for dynamic worker: {WorkerName}", workerName);
@@ -42,7 +43,7 @@ public class QuartzDynamicBackgroundWorkerAdapter : IJob, ITransientDependency
         try
         {
             await handler(
-                new DynamicBackgroundWorkerExecutionContext(workerName!, ServiceProvider),
+                new DynamicBackgroundWorkerExecutionContext(workerName, ServiceProvider),
                 context.CancellationToken);
         }
         catch (Exception ex)

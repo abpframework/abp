@@ -42,7 +42,7 @@ public class DynamicBackgroundJobHandlerRegistry : IDynamicBackgroundJobHandlerR
 
     public virtual IReadOnlyCollection<string> GetAllNames()
     {
-        return Handlers.Keys.ToList();
+        return Handlers.Keys.ToList().AsReadOnly();
     }
 
     public virtual void Clear()

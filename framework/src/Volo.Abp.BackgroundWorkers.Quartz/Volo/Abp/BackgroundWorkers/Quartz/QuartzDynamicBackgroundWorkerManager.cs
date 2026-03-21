@@ -48,16 +48,24 @@ public class QuartzDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMana
 
         var trigger = BuildTrigger(schedule, jobDetail, triggerKey);
 
-        // Use replace=true to avoid TOCTOU race between CheckExists and ScheduleJob.
-        await Scheduler.ScheduleJobs(
-            new Dictionary<IJobDetail, IReadOnlyCollection<ITrigger>>
-            {
-                { jobDetail, new[] { trigger } }
-            },
-            replace: true,
-            cancellationToken);
-
+        // Register the handler first so it is available the moment the job fires.
         HandlerRegistry.Register(workerName, handler);
+        try
+        {
+            // Use replace=true to avoid TOCTOU race between CheckExists and ScheduleJob.
+            await Scheduler.ScheduleJobs(
+                new Dictionary<IJobDetail, IReadOnlyCollection<ITrigger>>
+                {
+                    { jobDetail, new[] { trigger } }
+                },
+                replace: true,
+                cancellationToken);
+        }
+        catch
+        {
+            HandlerRegistry.Unregister(workerName);
+            throw;
+        }
     }
 
     public virtual async Task<bool> RemoveAsync(string workerName, CancellationToken cancellationToken = default)
@@ -68,10 +76,10 @@ public class QuartzDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMana
         // This ensures cleanup works correctly after an application restart, when the registry
         // is empty but the Quartz job may still exist in the scheduler store.
         var jobKey = new JobKey($"DynamicWorker:{workerName}");
-        await Scheduler.DeleteJob(jobKey, cancellationToken);
+        var deleted = await Scheduler.DeleteJob(jobKey, cancellationToken);
         var wasRegistered = HandlerRegistry.Unregister(workerName);
 
-        return wasRegistered;
+        return deleted || wasRegistered;
     }
 
     public virtual async Task<bool> UpdateScheduleAsync(
