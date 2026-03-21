@@ -7,6 +7,13 @@
 
 # Integrating the Modules: Communication via Messages (Events)
 
+```json
+//[doc-params]
+{
+  "UI": ["MVC", "NG"]
+}
+```
+
 ````json
 //[doc-params]
 {
@@ -255,11 +262,28 @@ Find the *Orders* API, click the *Try it out* button, enter a sample value the t
 
 > **IMPORTANT:** Here, you should type a valid product Id from the *CatalogProducts* table of your database!
 
-Once you press the *Execute* button, a new order is created. At that point, you can check the `/Orders` page to see if the new order is shown on the UI, and check the `/Products` page to see if the related product's stock count has decreased.
+Once you press the *Execute* button, a new order is created.
+
+{{if UI == "MVC"}}
+
+At that point, you can check the `/Orders` page to see if the new order is shown on the UI, and check the `/Products` page to see if the related product's stock count has decreased.
 
 Here are sample screenshots from the Products and Orders pages:
 
 ![products-orders-pages-crop](images/products-orders-pages-crop.png)
+
+{{else if UI == "NG"}}
+
+At that point, open the Angular UI and validate the result on the *Ordering* (`/ordering`) and *Catalog* (`/catalog`) pages. Verify that the new order is listed in Ordering and the related product's stock count is decreased in Catalog.
+
+If the Angular app is not already running, start it from the root `angular` folder:
+
+```bash
+yarn symlinks:setup
+yarn start
+```
+
+{{end}}
 
 We placed a new order for Product C. As a result, Product C's stock count has decreased from 55 to 54 and a new line is added to the Orders page.
 

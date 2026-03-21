@@ -7,6 +7,13 @@
 
 # Building the Ordering Module
 
+```json
+//[doc-params]
+{
+  "UI": ["MVC", "NG"]
+}
+```
+
 ````json
 //[doc-params]
 {
@@ -419,6 +426,8 @@ In this section, you will create a very simple user interface to demonstrate how
 
 As a first step, you can stop the application on ABP Studio's Solution Runner if it is currently running.
 
+{{if UI == "MVC"}}
+
 ### Creating the Orders Page
 
 {{if UI == "MVC"}}
@@ -615,6 +624,83 @@ You've performed a graph build since you've made a change on a module, and more 
 
 Great! We can see the list of orders. However, there is a problem: We see Product's GUID ID instead of its name. This is because the Ordering module has no integration with the Catalog module and doesn't have access to Product module's database to perform a JOIN query. We will solve this problem in the [next part](part-06.md).
 
+{{else if UI == "NG"}}
+
+### Creating the Orders Page
+
+First, run the `ModularCrm` application so the backend APIs are available.
+
+Then open a terminal in the `modules/modularcrm.ordering/angular` folder and generate (or refresh) the Angular client proxies:
+
+```bash
+abp generate-proxy -t ng
+```
+
+This command creates/updates the TypeScript client proxies under `projects/ordering/src/lib/proxy`. You will use the generated `OrderService` and DTO types to render the orders page.
+
+Now, open `projects/ordering/src/lib/components/ordering.component.ts` and update it to query and show the order list:
+
+```ts
+import { Component, OnInit, inject } from '@angular/core';
+import { OrderDto, OrderService } from '../proxy/orders';
+
+@Component({
+  selector: 'lib-ordering',
+  templateUrl: './ordering.component.html',
+})
+export class OrderingComponent implements OnInit {
+  orders: OrderDto[] = [];
+
+  protected readonly orderService = inject(OrderService);
+
+  ngOnInit(): void {
+    this.orderService.getList().subscribe(response => {
+      this.orders = response;
+    });
+  }
+}
+```
+
+Then open `projects/ordering/src/lib/components/ordering.component.html` and update it as follows:
+
+```html
+<h1>Orders</h1>
+
+<abp-card>
+  <abp-card-body>
+    <abp-list-group>
+      @for (order of orders; track order.id) {
+        <abp-list-group-item>
+          <strong>Customer:</strong> {%{{{ order.customerName }}}%} <br />
+          <strong>Product:</strong> {%{{{ order.productId }}}%} <br />
+          <strong>State:</strong> {%{{{ order.state }}}%}
+        </abp-list-group-item>
+      }
+    </abp-list-group>
+  </abp-card-body>
+</abp-card>
+```
+
+![visual-studio-ordering-contracts](images/visual-studio-ordering-contracts-v2.png)
+
+### Editing the Menu Item
+
+In a module-based Angular UI, menu and route registration are done in the config and app route files. Ensure `projects/ordering/config/src/providers/route.provider.ts` adds the `/ordering` menu route, and the main Angular app (`angular/src/app/app.routes.ts`) lazy-loads the Ordering module routes.
+
+### Building the Application
+
+Start the Angular app from the root `angular` folder:
+
+```bash
+yarn start
+```
+
+Navigate to the *Ordering* page and verify that the orders are listed. At this stage, showing `productId` is expected.
+
+![abp-studio-browser-orders-menu-item](images/abp-studio-browser-orders-menu-item-v2.png)
+
+{{end}}
+
 ## Summary
 
-In this part of the *Modular CRM* tutorial, you've built the functionality inside the Ordering module you created in the [previous part](part-04.md). In the [next part](part-06.md), you will work on establishing communication between the Orders module and the Catalog module.
+In this part of the *Modular CRM* tutorial, you've built the functionality inside the Ordering module you created in the [previous part](part-04.md) and created a basic {{if UI == "MVC"}}MVC{{else if UI == "NG"}}Angular{{end}} UI to list orders. In the [next part](part-06.md), you will work on establishing communication between the Orders module and the Catalog module.

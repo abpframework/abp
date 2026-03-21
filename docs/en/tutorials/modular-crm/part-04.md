@@ -7,6 +7,13 @@
 
 # Creating the Initial Ordering Module
 
+```json
+//[doc-params]
+{
+  "UI": ["MVC", "NG"]
+}
+```
+
 ````json
 //[doc-params]
 {
@@ -54,6 +61,12 @@ Set `ModularCrm.Ordering` as the *Module name*, leave the *Output folder* as is 
 
 You can choose the type of UI you want to support in your module or select *No UI* if you don't need a user interface. In this example, we'll select the {{if UI == "MVC"}}*MVC*{{else if UI == "BlazorWebApp"}}*Blazor WebApp*{{end}} option and click *Next*.
 
+{{else if UI == "NG"}}
+
+You can choose the type of UI you want to support in your module or select *No UI* if you don't need a user interface. In this example, we'll select the *Angular* UI option and click *Next*.
+
+{{end}}
+
 ![abp-studio-add-new-standard-module-db-dialog](images/abp-studio-add-new-standard-module-db-dialog.png)
 
 In this screen, select the *Entity Framework Core* option and click *Next*.
@@ -93,6 +106,18 @@ Select the `ModularCrm.Ordering` module and check the *Install this module* opti
 {{end}}
 
 Select the `ModularCrm.Ordering` and {{if UI == "MVC"}}`ModularCrm.Ordering.UI`{{else if UI == "BlazorWebApp"}}`ModularCrm.Ordering.Blazor`{{end}} packages from the left area. {{if UI == "MVC"}}Ensure `ModularCrm` was checked in the middle area as shown in the preceding figure.{{else if UI == "BlazorWebApp"}}For `ModularCrm.Ordering`, ensure `ModularCrm` is checked. For `ModularCrm.Ordering.Blazor`, ensure both `ModularCrm` and `ModularCrm.Client` are checked in the middle area as shown in the preceding figure.{{end}} Finally, click _OK_.
+
+{{if UI == "NG"}}
+
+After installing a new Angular module, run the symlink setup command from the root `angular` folder to align shared package versions between the main app and local module packages:
+
+```bash
+yarn symlinks:setup
+```
+
+You should run this command again whenever you add another local module with Angular packages.
+
+{{end}}
 
 ## Summary
 

@@ -70,7 +70,7 @@ Route is calculated based on some conventions:
 * Continues with a **route path**. Default value is '**/app**' and can be configured as like below:
 
 ````csharp
-Configure<AbpAspNetCoreMvcOptions>(options =>
+PreConfigure<AbpAspNetCoreMvcOptions>(options =>
 {
     options.ConventionalControllers
         .Create(typeof(BookStoreApplicationModule).Assembly, opts =>
@@ -149,7 +149,7 @@ public class PersonAppService : ApplicationService
 You can further filter classes to become an API controller by providing the `TypePredicate` option:
 
 ````csharp
-services.Configure<AbpAspNetCoreMvcOptions>(options =>
+PreConfigure<AbpAspNetCoreMvcOptions>(options =>
 {
     options.ConventionalControllers
         .Create(typeof(BookStoreApplicationModule).Assembly, opts =>

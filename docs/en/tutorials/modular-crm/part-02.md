@@ -7,6 +7,13 @@
 
 # Setting Up the Catalog Module
 
+```json
+//[doc-params]
+{
+  "UI": ["MVC", "NG"]
+}
+```
+
 ````json
 //[doc-params]
 {
@@ -68,10 +75,28 @@ Graph Build is a dotnet CLI command that recursively builds all the referenced d
 
 ## Running the Main Application
 
+{{if UI == "MVC"}}
+
 Open the *Solution Runner* panel, click the *Play* button (near to the solution root), right-click the `ModularCrm` application and select the *Browse* command. It will open the web application in the built-in browser. Then you can navigate to the *Catalog* page on the main menu of the application to see the Catalog page that is coming from the `ModularCrm.Catalog` module:
 
 ![abp-studio-solution-runner-initial-catalog-page](images/abp-studio-solution-runner-initial-catalog-page.png)
 
+{{else if UI == "NG"}}
+
+Open the *Solution Runner* panel and start the `ModularCrm` application to run the backend host.
+
+Then open a terminal in the `angular` folder and start the Angular application:
+
+```bash
+yarn start
+```
+
+After the Angular app starts, open the URL shown in the terminal (typically `http://localhost:4200`), sign in, and navigate to the *Catalog* page from the main menu to verify the `ModularCrm.Catalog` module UI is integrated.
+
+![abp-studio-solution-runner-initial-catalog-page](images/abp-studio-solution-runner-initial-catalog-page.png)
+
+{{end}}
+
 ## Summary
 
-In this part, you installed the `ModularCrm.Catalog` module to the main application and run the solution to test if it has successfully installed. In the [next part](part-03.md), you will learn how to create entities, services and a basic user interface for the catalog module.
+In this part, you installed the `ModularCrm.Catalog` module to the main application and ran the solution to verify that it was installed successfully. In the [next part](part-03.md), you will learn how to create entities, services and a basic user interface for the catalog module.

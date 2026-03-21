@@ -5,6 +5,13 @@
 }
 ```
 
+```json
+//[doc-params]
+{
+  "UI": ["MVC", "NG"]
+}
+```
+
 # Integrating the Modules: Joining the Products and Orders Data
 
 ````json
@@ -154,9 +161,9 @@ That's all. In that way, you can execute JOIN queries that use data from multipl
 
 ### Testing the Reporting Service
 
-We haven't created a UI to show list of the latest orders using `OrderReportingAppService`. However, we can use the Swagger UI again to test it.
+We haven't created a page to show the latest orders using `OrderReportingAppService` yet. However, we can use the Swagger UI again to test it.
 
-Open the ABP Studio UI, stop the application if it is running, build and run it again. Once the application starts, browse it, then add `/swagger` to the end of the URL to open the Swagger UI. Here, find the `OrderReporting` API and execute it as shown below:
+Open ABP Studio, stop the application if it is running, build and run it again. Once the application starts, open its URL, then add `/swagger` to the end of the URL to open the Swagger UI. Here, find the `OrderReporting` API and execute it as shown below:
 
 ![abp-studio-swagger-list-orders](images/abp-studio-swagger-list-orders.png)
 
@@ -184,7 +191,7 @@ See the following sections for additional resources.
 
 ### The Book Store Tutorial
 
-In this tutorial, we intentionally kept the application logic very simple and didn't build a usable user interface for the modules. Also, didn't implement authorization and localization for the modules. This was to keep your focus on modularity. If you want to learn how to build real-world user interfaces with ABP, you can check the [Book Store tutorial](../book-store/index.md). All the principles and approaches explained there are already possible with a modular system too.
+In this tutorial, we intentionally kept the application logic very simple and didn't build a usable UI for the modules. Also, didn't implement authorization and localization for the modules. This was to keep your focus on modularity. If you want to learn how to build real-world ABP UIs (MVC or Angular), you can check the [Book Store tutorial](../book-store/index.md). All the principles and approaches explained there are already possible with a modular system too.
 
 ### ABP Reusable Application Modules
 

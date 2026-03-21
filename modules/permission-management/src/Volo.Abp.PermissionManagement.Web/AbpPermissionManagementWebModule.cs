@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Localization.Resources.AbpUi;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
+using Volo.Abp.Localization;
 using Volo.Abp.Mapperly;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.Localization;
@@ -33,6 +35,13 @@ public class AbpPermissionManagementWebModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Get<AbpPermissionManagementResource>()
+                .AddBaseTypes(typeof(AbpUiResource));
+        });
+
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
             options.FileSets.AddEmbedded<AbpPermissionManagementWebModule>();

@@ -10,7 +10,7 @@ import {
   TrackByFunction,
   ViewContainerRef,
   inject,
-  input
+  input,
 } from '@angular/core';
 import clone from 'just-clone';
 import compare from 'just-compare';
@@ -42,21 +42,21 @@ export class ForDirective implements OnChanges {
   private differs = inject(IterableDiffers);
 
   // eslint-disable-next-line @angular-eslint/no-input-rename
-  readonly items = input.required<any[]>({ alias: "abpForOf" });
+  readonly items = input.required<any[]>({ alias: 'abpForOf' });
 
-  readonly orderBy = input<string>(undefined, { alias: "abpForOrderBy" });
+  readonly orderBy = input<string>(undefined, { alias: 'abpForOrderBy' });
 
-  readonly orderDir = input<'ASC' | 'DESC'>(undefined, { alias: "abpForOrderDir" });
+  readonly orderDir = input<'ASC' | 'DESC'>(undefined, { alias: 'abpForOrderDir' });
 
-  readonly filterBy = input<string>(undefined, { alias: "abpForFilterBy" });
+  readonly filterBy = input<string>(undefined, { alias: 'abpForFilterBy' });
 
-  readonly filterVal = input<any>(undefined, { alias: "abpForFilterVal" });
+  readonly filterVal = input<any>(undefined, { alias: 'abpForFilterVal' });
 
-  readonly trackBy = input<TrackByFunction<any>>(undefined, { alias: "abpForTrackBy" });
+  readonly trackBy = input<TrackByFunction<any>>(undefined, { alias: 'abpForTrackBy' });
 
-  readonly compareBy = input<CompareFn>(undefined, { alias: "abpForCompareBy" });
+  readonly compareBy = input<CompareFn>(undefined, { alias: 'abpForCompareBy' });
 
-  readonly emptyRef = input<TemplateRef<any>>(undefined, { alias: "abpForEmptyRef" });
+  readonly emptyRef = input<TemplateRef<any>>(undefined, { alias: 'abpForEmptyRef' });
 
   private differ!: IterableDiffer<any> | null;
   private lastItemsRef: any[] | null = null;
@@ -167,24 +167,13 @@ export class ForDirective implements OnChanges {
     const itemsValue = this.items();
     if (!itemsValue) return;
 
-    // Recreate differ if items array reference changed
-    if (this.lastItemsRef !== itemsValue) {
-      this.vcRef.clear();
-      this.differ = null;
-      this.lastItemsRef = itemsValue;
-    }
-
     let items = clone(itemsValue) as any[];
     if (!Array.isArray(items)) return;
 
     const compareFn = this.compareFn;
     const filterBy = this.filterBy();
     const filterVal = this.filterVal();
-    if (
-      typeof filterBy !== 'undefined' &&
-      typeof filterVal !== 'undefined' &&
-      filterVal !== ''
-    ) {
+    if (typeof filterBy !== 'undefined' && typeof filterVal !== 'undefined' && filterVal !== '') {
       items = items.filter(item => compareFn(item[filterBy], this.filterVal()));
     }
 
@@ -193,13 +182,11 @@ export class ForDirective implements OnChanges {
         this.sortItems(items);
         this.projectItems(items);
         break;
-
       case 'DESC':
         this.sortItems(items);
         items.reverse();
         this.projectItems(items);
         break;
-
       default:
         this.projectItems(items);
     }
