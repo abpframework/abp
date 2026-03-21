@@ -68,10 +68,10 @@ public class QuartzDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMana
         // This ensures cleanup works correctly after an application restart, when the registry
         // is empty but the Quartz job may still exist in the scheduler store.
         var jobKey = new JobKey($"DynamicWorker:{workerName}");
-        var deleted = await Scheduler.DeleteJob(jobKey, cancellationToken);
-        HandlerRegistry.Unregister(workerName);
+        await Scheduler.DeleteJob(jobKey, cancellationToken);
+        var wasRegistered = HandlerRegistry.Unregister(workerName);
 
-        return deleted;
+        return wasRegistered;
     }
 
     public virtual async Task<bool> UpdateScheduleAsync(
