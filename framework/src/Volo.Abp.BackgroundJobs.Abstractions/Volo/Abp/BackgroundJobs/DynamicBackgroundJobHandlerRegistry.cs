@@ -1,4 +1,6 @@
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.BackgroundJobs;
@@ -36,5 +38,15 @@ public class DynamicBackgroundJobHandlerRegistry : IDynamicBackgroundJobHandlerR
     {
         Check.NotNullOrWhiteSpace(jobName, nameof(jobName));
         return Handlers.TryGetValue(jobName, out var handler) ? handler : null;
+    }
+
+    public virtual IReadOnlyCollection<string> GetAllNames()
+    {
+        return Handlers.Keys.ToList();
+    }
+
+    public virtual void Clear()
+    {
+        Handlers.Clear();
     }
 }

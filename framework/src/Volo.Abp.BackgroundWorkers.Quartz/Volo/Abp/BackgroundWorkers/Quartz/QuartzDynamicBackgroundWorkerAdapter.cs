@@ -47,10 +47,13 @@ public class QuartzDynamicBackgroundWorkerAdapter : IJob, ITransientDependency
         }
         catch (Exception ex)
         {
+            // Swallow the exception to match the behavior of AsyncPeriodicBackgroundWorkerBase,
+            // which catches, notifies and logs without rethrowing. This prevents Quartz from
+            // treating a single failed execution as a job failure and triggering retries.
             await ServiceProvider.GetRequiredService<IExceptionNotifier>()
                 .NotifyAsync(new ExceptionNotificationContext(ex));
 
-            throw;
+            Logger.LogException(ex);
         }
     }
 }

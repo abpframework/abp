@@ -49,6 +49,11 @@ public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
         await _semaphore.WaitAsync(cancellationToken);
         try
         {
+            if (_isDisposed)
+            {
+                throw new ObjectDisposedException(nameof(DefaultDynamicBackgroundWorkerManager));
+            }
+
             if (_dynamicWorkers.TryRemove(workerName, out var existingWorker))
             {
                 await existingWorker.StopAsync(cancellationToken);
@@ -107,6 +112,11 @@ public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
         await _semaphore.WaitAsync(cancellationToken);
         try
         {
+            if (_isDisposed)
+            {
+                throw new ObjectDisposedException(nameof(DefaultDynamicBackgroundWorkerManager));
+            }
+
             if (!_dynamicWorkers.TryGetValue(workerName, out var worker))
             {
                 return false;

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Volo.Abp.BackgroundJobs;
 
 public interface IDynamicBackgroundJobHandlerRegistry
@@ -9,4 +11,8 @@ public interface IDynamicBackgroundJobHandlerRegistry
     bool IsRegistered(string jobName);
 
     DynamicBackgroundJobHandler? Get(string jobName);
+
+    IReadOnlyCollection<string> GetAllNames();
+
+    void Clear();
 }

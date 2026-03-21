@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -47,16 +48,14 @@ public class QuartzDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMana
 
         var trigger = BuildTrigger(schedule, jobDetail, triggerKey);
 
-        if (await Scheduler.CheckExists(jobDetail.Key, cancellationToken))
-        {
-            await Scheduler.AddJob(jobDetail, true, true, cancellationToken);
-            await Scheduler.ResumeJob(jobDetail.Key, cancellationToken);
-            await Scheduler.RescheduleJob(trigger.Key, trigger, cancellationToken);
-        }
-        else
-        {
-            await Scheduler.ScheduleJob(jobDetail, trigger, cancellationToken);
-        }
+        // Use replace=true to avoid TOCTOU race between CheckExists and ScheduleJob.
+        await Scheduler.ScheduleJobs(
+            new Dictionary<IJobDetail, IReadOnlyCollection<ITrigger>>
+            {
+                { jobDetail, new[] { trigger } }
+            },
+            replace: true,
+            cancellationToken);
 
         HandlerRegistry.Register(workerName, handler);
     }
@@ -65,16 +64,14 @@ public class QuartzDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMana
     {
         Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
 
-        if (!HandlerRegistry.IsRegistered(workerName))
-        {
-            return false;
-        }
-
+        // Always delete the persistent Quartz job regardless of in-memory registry state.
+        // This ensures cleanup works correctly after an application restart, when the registry
+        // is empty but the Quartz job may still exist in the scheduler store.
         var jobKey = new JobKey($"DynamicWorker:{workerName}");
-        await Scheduler.DeleteJob(jobKey, cancellationToken);
+        var deleted = await Scheduler.DeleteJob(jobKey, cancellationToken);
         HandlerRegistry.Unregister(workerName);
 
-        return true;
+        return deleted;
     }
 
     public virtual async Task<bool> UpdateScheduleAsync(

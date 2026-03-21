@@ -57,16 +57,14 @@ public class HangfireDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMa
     {
         Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
 
-        if (!HandlerRegistry.IsRegistered(workerName))
-        {
-            return Task.FromResult(false);
-        }
-
+        // Always remove the persistent recurring job regardless of in-memory registry state.
+        // This ensures cleanup works correctly after an application restart, when the registry
+        // is empty but the Hangfire recurring job may still exist in the database.
         var recurringJobId = $"DynamicWorker:{workerName}";
         RecurringJob.RemoveIfExists(recurringJobId);
-        HandlerRegistry.Unregister(workerName);
+        var wasRegistered = HandlerRegistry.Unregister(workerName);
 
-        return Task.FromResult(true);
+        return Task.FromResult(wasRegistered);
     }
 
     public virtual Task<bool> UpdateScheduleAsync(
@@ -150,19 +148,23 @@ public class HangfireDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMa
 
         if (time.TotalSeconds <= 59)
         {
-            cron = $"*/{time.TotalSeconds} * * * * *";
+            var seconds = Math.Max(1, (int)Math.Round(time.TotalSeconds));
+            cron = $"*/{seconds} * * * * *";
         }
         else if (time.TotalMinutes <= 59)
         {
-            cron = $"*/{time.TotalMinutes} * * * *";
+            var minutes = Math.Max(1, (int)Math.Round(time.TotalMinutes));
+            cron = $"*/{minutes} * * * *";
         }
         else if (time.TotalHours <= 23)
         {
-            cron = $"0 */{time.TotalHours} * * *";
+            var hours = Math.Max(1, (int)Math.Round(time.TotalHours));
+            cron = $"0 */{hours} * * *";
         }
         else if (time.TotalDays <= 31)
         {
-            cron = $"0 0 0 1/{time.TotalDays} * *";
+            var days = Math.Max(1, (int)Math.Round(time.TotalDays));
+            cron = $"0 0 0 1/{days} * *";
         }
         else
         {
