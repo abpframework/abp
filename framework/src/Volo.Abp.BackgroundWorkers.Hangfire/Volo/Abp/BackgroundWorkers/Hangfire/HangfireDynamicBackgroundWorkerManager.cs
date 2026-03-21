@@ -102,6 +102,12 @@ public class HangfireDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMa
         return HandlerRegistry.IsRegistered(workerName);
     }
 
+    public virtual Task StopAllAsync(CancellationToken cancellationToken = default)
+    {
+        HandlerRegistry.Clear();
+        return Task.CompletedTask;
+    }
+
     protected virtual void ScheduleRecurringJob(string workerName, string cronExpression, CancellationToken cancellationToken)
     {
         var abpHangfireOptions = ServiceProvider.GetRequiredService<IOptions<AbpHangfireOptions>>().Value;
@@ -140,31 +146,29 @@ public class HangfireDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMa
     protected virtual string GetCron(int period)
     {
         var time = TimeSpan.FromMilliseconds(period);
+        string cron;
 
         if (time.TotalSeconds <= 59)
         {
-            var seconds = (int)Math.Round(time.TotalSeconds);
-            return $"*/{seconds} * * * * *";
+            cron = $"*/{time.TotalSeconds} * * * * *";
         }
-
-        if (time.TotalMinutes <= 59)
+        else if (time.TotalMinutes <= 59)
         {
-            var minutes = (int)Math.Round(time.TotalMinutes);
-            return $"*/{minutes} * * * *";
+            cron = $"*/{time.TotalMinutes} * * * *";
         }
-
-        if (time.TotalHours <= 23)
+        else if (time.TotalHours <= 23)
         {
-            var hours = (int)Math.Round(time.TotalHours);
-            return $"0 */{hours} * * *";
+            cron = $"0 */{time.TotalHours} * * *";
         }
-
-        if (time.TotalDays <= 31)
+        else if (time.TotalDays <= 31)
         {
-            var days = (int)Math.Round(time.TotalDays);
-            return $"0 0 */{days} * *";
+            cron = $"0 0 0 1/{time.TotalDays} * *";
+        }
+        else
+        {
+            throw new AbpException($"Cannot convert period: {period} to cron expression.");
         }
 
-        throw new AbpException($"Cannot convert period: {period} to cron expression.");
+        return cron;
     }
 }

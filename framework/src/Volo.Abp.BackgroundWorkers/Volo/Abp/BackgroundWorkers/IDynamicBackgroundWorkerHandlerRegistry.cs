@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Volo.Abp.BackgroundWorkers;
 
 public interface IDynamicBackgroundWorkerHandlerRegistry
@@ -9,4 +11,8 @@ public interface IDynamicBackgroundWorkerHandlerRegistry
     bool IsRegistered(string workerName);
 
     DynamicBackgroundWorkerHandler? Get(string workerName);
+
+    IReadOnlyCollection<string> GetAllNames();
+
+    void Clear();
 }

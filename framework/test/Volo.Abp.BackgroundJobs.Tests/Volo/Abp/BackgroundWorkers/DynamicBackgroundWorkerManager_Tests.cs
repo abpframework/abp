@@ -5,10 +5,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp.BackgroundJobs;
 using Volo.Abp.BackgroundWorkers;
 using Xunit;
 
-namespace Volo.Abp.BackgroundJobs;
+namespace Volo.Abp.BackgroundWorkers;
 
 public class DynamicBackgroundWorkerManager_Tests : BackgroundJobsTestBase
 {

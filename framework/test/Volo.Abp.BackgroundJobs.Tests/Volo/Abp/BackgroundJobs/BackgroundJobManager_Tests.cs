@@ -81,7 +81,7 @@ public class BackgroundJobManager_Tests : BackgroundJobsTestBase
     [Fact]
     public async Task Should_Execute_Dynamic_Handler_Job()
     {
-        _tracker.ExecutedJsonData.IsEmpty.ShouldBeTrue();
+        var countBefore = _tracker.ExecutedJsonData.Count;
 
         await _backgroundJobExecuter.ExecuteAsync(
             new JobExecutionContext(
@@ -91,6 +91,7 @@ public class BackgroundJobManager_Tests : BackgroundJobsTestBase
             )
         );
 
+        _tracker.ExecutedJsonData.Count.ShouldBeGreaterThan(countBefore);
         _tracker.ExecutedJsonData.ShouldContain(d => d.Contains("ORD-001"));
     }
 

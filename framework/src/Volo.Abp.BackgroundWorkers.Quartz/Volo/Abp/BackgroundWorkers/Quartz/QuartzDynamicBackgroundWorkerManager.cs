@@ -94,22 +94,13 @@ public class QuartzDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMana
 
         var triggerKey = new TriggerKey($"DynamicWorker:{workerName}");
         var jobKey = new JobKey($"DynamicWorker:{workerName}");
+        var jobDetail = JobBuilder.Create<QuartzDynamicBackgroundWorkerAdapter>()
+            .WithIdentity(jobKey)
+            .UsingJobData(DynamicWorkerNameKey, workerName)
+            .Build();
 
-        var triggerBuilder = TriggerBuilder.Create()
-            .WithIdentity(triggerKey)
-            .ForJob(jobKey);
-
-        if (!schedule.CronExpression.IsNullOrWhiteSpace())
-        {
-            triggerBuilder.WithCronSchedule(schedule.CronExpression);
-        }
-        else
-        {
-            triggerBuilder.WithSimpleSchedule(builder =>
-                builder.WithInterval(TimeSpan.FromMilliseconds(schedule.Period!.Value)).RepeatForever());
-        }
-
-        var result = await Scheduler.RescheduleJob(triggerKey, triggerBuilder.Build(), cancellationToken);
+        var trigger = BuildTrigger(schedule, jobDetail, triggerKey);
+        var result = await Scheduler.RescheduleJob(triggerKey, trigger, cancellationToken);
         return result != null;
     }
 
@@ -117,6 +108,12 @@ public class QuartzDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMana
     {
         Check.NotNullOrWhiteSpace(workerName, nameof(workerName));
         return HandlerRegistry.IsRegistered(workerName);
+    }
+
+    public virtual Task StopAllAsync(CancellationToken cancellationToken = default)
+    {
+        HandlerRegistry.Clear();
+        return Task.CompletedTask;
     }
 
     protected virtual ITrigger BuildTrigger(DynamicBackgroundWorkerSchedule schedule, IJobDetail jobDetail, TriggerKey triggerKey)

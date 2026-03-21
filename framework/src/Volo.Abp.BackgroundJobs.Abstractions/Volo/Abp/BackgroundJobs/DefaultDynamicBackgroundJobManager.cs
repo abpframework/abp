@@ -109,9 +109,12 @@ public class DefaultDynamicBackgroundJobManager : IDynamicBackgroundJobManager, 
         {
             var method = typeof(IBackgroundJobManager)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .FirstOrDefault(m => m.Name == nameof(IBackgroundJobManager.EnqueueAsync)
-                                     && m.IsGenericMethodDefinition
-                                     && m.GetParameters().Length == 3);
+                .FirstOrDefault(m =>
+                    m.Name == nameof(IBackgroundJobManager.EnqueueAsync)
+                    && m.IsGenericMethodDefinition
+                    && m.GetParameters() is { Length: 3 } p
+                    && p[1].ParameterType == typeof(BackgroundJobPriority)
+                    && p[2].ParameterType == typeof(TimeSpan?));
 
             if (method == null)
             {

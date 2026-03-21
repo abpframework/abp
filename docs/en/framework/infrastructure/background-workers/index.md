@@ -178,6 +178,8 @@ var updated = await dynamicWorkerManager.UpdateScheduleAsync(
 * `RemoveAsync` stops and removes a dynamic worker. Returns `true` if the worker was found and removed.
 * `UpdateScheduleAsync` changes the schedule of an existing dynamic worker. Returns `true` if the worker was found and updated. The handler itself is not changed.
 
+> **Important:** Dynamic worker handlers are stored **in memory only** and are not persisted across application restarts. When using a persistent scheduler provider (Hangfire or Quartz), the recurring job entries remain in the database after a restart, but the handlers will no longer be registered. Until the handler is re-registered, each scheduled execution will be **skipped with a warning log**. To ensure handlers are always available, register them in `OnApplicationInitializationAsync` so they are re-registered on every startup.
+
 ## Options
 
 `AbpBackgroundWorkerOptions` class is used to [set options](../../fundamentals/options.md) for the background workers. Currently, there is only one option:

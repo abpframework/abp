@@ -10,14 +10,14 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers;
 
-public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerManager, ISingletonDependency, IDisposable
+public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerManager, ISingletonDependency
 {
     protected IServiceProvider ServiceProvider { get; }
     public ILogger<DefaultDynamicBackgroundWorkerManager> Logger { get; set; }
 
     private readonly ConcurrentDictionary<string, InMemoryDynamicBackgroundWorker> _dynamicWorkers;
     private readonly SemaphoreSlim _semaphore;
-    private bool _isDisposed;
+    private volatile bool _isDisposed;
 
     public DefaultDynamicBackgroundWorkerManager(IServiceProvider serviceProvider)
     {
@@ -127,29 +127,41 @@ public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
         return _dynamicWorkers.ContainsKey(workerName);
     }
 
-    public virtual void Dispose()
+    public virtual async Task StopAllAsync(CancellationToken cancellationToken = default)
     {
         if (_isDisposed)
         {
             return;
         }
 
-        _isDisposed = true;
-
-        foreach (var kvp in _dynamicWorkers)
+        await _semaphore.WaitAsync(cancellationToken);
+        try
         {
-            try
+            if (_isDisposed)
             {
-                kvp.Value.StopAsync(CancellationToken.None).GetAwaiter().GetResult();
+                return;
             }
-            catch (Exception ex)
-            {
-                Logger.LogException(ex);
-            }
-        }
 
-        _dynamicWorkers.Clear();
-        _semaphore.Dispose();
+            _isDisposed = true;
+
+            foreach (var kvp in _dynamicWorkers)
+            {
+                try
+                {
+                    await kvp.Value.StopAsync(cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogException(ex);
+                }
+            }
+
+            _dynamicWorkers.Clear();
+        }
+        finally
+        {
+            _semaphore.Release();
+        }
     }
 
     protected virtual InMemoryDynamicBackgroundWorker CreateDynamicWorker(
