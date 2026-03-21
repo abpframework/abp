@@ -38,9 +38,8 @@ public class TickerQDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
 
     public virtual bool IsRegistered(string workerName)
     {
-        throw new AbpException(
-            "TickerQ does not support dynamic background worker registration at runtime. " +
-            "Please use Hangfire or Quartz provider for dynamic background workers.");
+        // TickerQ does not support runtime registration, so there are never any registered workers.
+        return false;
     }
 
     public virtual Task StopAllAsync(CancellationToken cancellationToken = default)

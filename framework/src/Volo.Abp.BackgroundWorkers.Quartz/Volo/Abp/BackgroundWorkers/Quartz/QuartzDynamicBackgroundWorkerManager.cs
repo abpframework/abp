@@ -92,11 +92,6 @@ public class QuartzDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMana
 
         schedule.Validate();
 
-        if (!HandlerRegistry.IsRegistered(workerName))
-        {
-            return false;
-        }
-
         var triggerKey = new TriggerKey($"DynamicWorker:{workerName}");
         var jobKey = new JobKey($"DynamicWorker:{workerName}");
         var jobDetail = JobBuilder.Create<QuartzDynamicBackgroundWorkerAdapter>()
@@ -105,6 +100,11 @@ public class QuartzDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMana
             .Build();
 
         var trigger = BuildTrigger(schedule, jobDetail, triggerKey);
+
+        // Always attempt to reschedule the persistent job regardless of in-memory registry state.
+        // This ensures UpdateScheduleAsync works correctly after an application restart,
+        // when the registry is empty but the Quartz job may still exist in the scheduler store.
+        // RescheduleJob returns null if the trigger was not found, indicating the job did not exist.
         var result = await Scheduler.RescheduleJob(triggerKey, trigger, cancellationToken);
         return result != null;
     }

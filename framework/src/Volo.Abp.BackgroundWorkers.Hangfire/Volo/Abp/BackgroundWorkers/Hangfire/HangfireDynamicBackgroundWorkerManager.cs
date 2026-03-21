@@ -86,11 +86,6 @@ public class HangfireDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMa
 
         schedule.Validate();
 
-        if (!HandlerRegistry.IsRegistered(workerName))
-        {
-            return Task.FromResult(false);
-        }
-
         var cronExpression = schedule.CronExpression;
         if (cronExpression.IsNullOrWhiteSpace())
         {
@@ -98,6 +93,9 @@ public class HangfireDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMa
             cronExpression = GetCron(period);
         }
 
+        // Always update the persistent recurring job regardless of in-memory registry state.
+        // This ensures UpdateScheduleAsync works correctly after an application restart,
+        // when the registry is empty but the Hangfire recurring job may still exist in the database.
         ScheduleRecurringJob(workerName, cronExpression, cancellationToken);
 
         return Task.FromResult(true);

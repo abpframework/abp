@@ -176,7 +176,7 @@ var updated = await dynamicWorkerManager.UpdateScheduleAsync(
 * **`CronExpression` is only supported by scheduler-backed providers ([Hangfire](./hangfire.md), [Quartz](./quartz.md)).** The default in-memory provider requires `Period` and does not support `CronExpression` alone.
 * **[TickerQ](./tickerq.md) does not support dynamic background workers** because it uses `FrozenDictionary` for function registration, which requires all functions to be registered before the application starts.
 * `RemoveAsync` stops and removes a dynamic worker. Returns `true` if the worker was found and removed.
-* `UpdateScheduleAsync` changes the schedule of an existing dynamic worker. Returns `true` if the worker was found and updated. The handler itself is not changed.
+* `UpdateScheduleAsync` changes the schedule of an existing dynamic worker. Returns `true` if the worker was found and updated. The handler itself is not changed. For persistent providers (Hangfire, Quartz), this also works correctly after an application restart — the persistent scheduling record is updated even if the handler is no longer registered in memory.
 
 > **Important:** Dynamic worker handlers are stored **in memory only** and are not persisted across application restarts. When using a persistent scheduler provider (Hangfire or Quartz), the recurring job entries remain in the database after a restart, but the handlers will no longer be registered. Until the handler is re-registered, each scheduled execution will be **skipped with a warning log**. To ensure handlers are always available, register them in `OnApplicationInitializationAsync` so they are re-registered on every startup.
 
