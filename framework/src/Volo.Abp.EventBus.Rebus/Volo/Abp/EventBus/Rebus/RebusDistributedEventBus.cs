@@ -31,7 +31,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     //TODO: Accessing to the List<IEventHandlerFactory> may not be thread-safe!
     protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
     protected ConcurrentDictionary<string, Type> EventTypes { get; }
-    protected ConcurrentDictionary<string, List<IEventHandlerFactory>> AnonymousHandlerFactories { get; }
+    protected ConcurrentDictionary<string, List<IEventHandlerFactory>> DynamicHandlerFactories { get; }
     protected AbpRebusEventBusOptions AbpRebusEventBusOptions { get; }
 
     public RebusDistributedEventBus(
@@ -64,7 +64,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
         HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
         EventTypes = new ConcurrentDictionary<string, Type>();
-        AnonymousHandlerFactories = new ConcurrentDictionary<string, List<IEventHandlerFactory>>();
+        DynamicHandlerFactories = new ConcurrentDictionary<string, List<IEventHandlerFactory>>();
     }
 
     public void Initialize()
@@ -76,9 +76,9 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     {
         var messageId = MessageContext.Current.TransportMessage.GetMessageId();
         string eventName;
-        if (eventType == typeof(AnonymousEventData) && eventData is AnonymousEventData anonymousEventData)
+        if (eventType == typeof(DynamicEventData) && eventData is DynamicEventData dynamicEventData)
         {
-            eventName = anonymousEventData.EventName;
+            eventName = dynamicEventData.EventName;
         }
         else
         {
@@ -119,7 +119,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     /// <inheritdoc/>
     public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
     {
-        var handlerFactories = GetOrCreateAnonymousHandlerFactories(eventName);
+        var handlerFactories = GetOrCreateDynamicHandlerFactories(eventName);
 
         if (handler.IsInFactories(handlerFactories))
         {
@@ -128,12 +128,12 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
         handlerFactories.Add(handler);
         
-        if (AnonymousHandlerFactories.Count == 1) //TODO: Multi-threading!
+        if (DynamicHandlerFactories.Count == 1) //TODO: Multi-threading!
         {
-            Rebus.Subscribe(typeof(AnonymousEventData));
+            Rebus.Subscribe(typeof(DynamicEventData));
         }
 
-        return new AnonymousEventHandlerFactoryUnregistrar(this, eventName, handler);
+        return new DynamicEventHandlerFactoryUnregistrar(this, eventName, handler);
     }
 
     public override void Unsubscribe<TEvent>(Func<TEvent, Task> action)
@@ -194,16 +194,16 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
     {
         var eventType = EventTypes.GetOrDefault(eventName);
-        var anonymousEventData = eventData as AnonymousEventData ?? new AnonymousEventData(eventName, eventData);
+        var dynamicEventData = eventData as DynamicEventData ?? new DynamicEventData(eventName, eventData);
 
         if (eventType != null)
         {
-            return PublishAsync(eventType, anonymousEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete);
+            return PublishAsync(eventType, dynamicEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete);
         }
 
-        if (AnonymousHandlerFactories.ContainsKey(eventName))
+        if (DynamicHandlerFactories.ContainsKey(eventName))
         {
-            return PublishAsync(typeof(AnonymousEventData), anonymousEventData, onUnitOfWorkComplete);
+            return PublishAsync(typeof(DynamicEventData), dynamicEventData, onUnitOfWorkComplete);
         }
 
         throw new AbpException($"Unknown event name: {eventName}");
@@ -235,10 +235,10 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         {
             eventData = Serializer.Deserialize(outgoingEvent.EventData, eventType);
         }
-        else if (AnonymousHandlerFactories.ContainsKey(outgoingEvent.EventName))
+        else if (DynamicHandlerFactories.ContainsKey(outgoingEvent.EventName))
         {
-            eventData = new AnonymousEventData(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, typeof(object)));
-            eventType = typeof(AnonymousEventData);
+            eventData = new DynamicEventData(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, typeof(object)));
+            eventType = typeof(DynamicEventData);
         }
         else
         {
@@ -299,10 +299,10 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         {
             eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
         }
-        else if (AnonymousHandlerFactories.ContainsKey(incomingEvent.EventName))
+        else if (DynamicHandlerFactories.ContainsKey(incomingEvent.EventName))
         {
-            eventData = new AnonymousEventData(incomingEvent.EventName, Serializer.Deserialize(incomingEvent.EventData, typeof(object)));
-            eventType = typeof(AnonymousEventData);
+            eventData = new DynamicEventData(incomingEvent.EventName, Serializer.Deserialize(incomingEvent.EventData, typeof(object)));
+            eventType = typeof(DynamicEventData);
         }
         else
         {
@@ -347,7 +347,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     protected override Task OnAddToOutboxAsync(string eventName, Type eventType, object eventData)
     {
-        if (typeof(AnonymousEventData) != eventType)
+        if (typeof(DynamicEventData) != eventType)
         {
             EventTypes.GetOrAdd(eventName, eventType);
         }
@@ -377,9 +377,9 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
         }
 
-        foreach (var handlerFactory in AnonymousHandlerFactories.Where(aehf => eventNames.Contains(aehf.Key)))
+        foreach (var handlerFactory in DynamicHandlerFactories.Where(aehf => eventNames.Contains(aehf.Key)))
         {
-            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(typeof(AnonymousEventData), handlerFactory.Value));
+            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value));
         }
 
         return handlerFactoryList.ToArray();
@@ -393,13 +393,13 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     /// <inheritdoc/>
     public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
     {
-        GetOrCreateAnonymousHandlerFactories(eventName).Locking(factories => factories.Remove(factory));
+        GetOrCreateDynamicHandlerFactories(eventName).Locking(factories => factories.Remove(factory));
     }
 
     /// <inheritdoc/>
     public override void Unsubscribe(string eventName, IEventHandler handler)
     {
-        GetOrCreateAnonymousHandlerFactories(eventName)
+        GetOrCreateDynamicHandlerFactories(eventName)
             .Locking(factories =>
             {
                 factories.RemoveAll(
@@ -413,10 +413,10 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     /// <inheritdoc/>
     public override void UnsubscribeAll(string eventName)
     {
-        GetOrCreateAnonymousHandlerFactories(eventName).Locking(factories => factories.Clear());
+        GetOrCreateDynamicHandlerFactories(eventName).Locking(factories => factories.Clear());
     }
 
-    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetAnonymousHandlerFactories(string eventName)
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetDynamicHandlerFactories(string eventName)
     {
         var result = new List<EventTypeWithEventHandlerFactories>();
 
@@ -426,17 +426,17 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             result.AddRange(GetHandlerFactories(eventType));
         }
 
-        foreach (var handlerFactory in AnonymousHandlerFactories.Where(hf => hf.Key == eventName))
+        foreach (var handlerFactory in DynamicHandlerFactories.Where(hf => hf.Key == eventName))
         {
-            result.Add(new EventTypeWithEventHandlerFactories(typeof(AnonymousEventData), handlerFactory.Value));
+            result.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value));
         }
 
         return result;
     }
 
-    private List<IEventHandlerFactory> GetOrCreateAnonymousHandlerFactories(string eventName)
+    private List<IEventHandlerFactory> GetOrCreateDynamicHandlerFactories(string eventName)
     {
-        return AnonymousHandlerFactories.GetOrAdd(eventName, _ => new List<IEventHandlerFactory>());
+        return DynamicHandlerFactories.GetOrAdd(eventName, _ => new List<IEventHandlerFactory>());
     }
 
     private static bool ShouldTriggerEventForHandler(Type targetEventType, Type handlerEventType)

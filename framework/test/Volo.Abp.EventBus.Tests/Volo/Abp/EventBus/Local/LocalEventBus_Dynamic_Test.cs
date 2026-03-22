@@ -6,16 +6,16 @@ using Xunit;
 
 namespace Volo.Abp.EventBus.Local;
 
-public class LocalEventBus_Anonymous_Test : EventBusTestBase
+public class LocalEventBus_Dynamic_Test : EventBusTestBase
 {
     [Fact]
-    public async Task Should_Handle_Anonymous_Handler_With_EventName()
+    public async Task Should_Handle_Dynamic_Handler_With_EventName()
     {
         var handleCount = 0;
         var eventName = "TestEvent-" + Guid.NewGuid().ToString("N");
 
         using var subscription = LocalEventBus.Subscribe(eventName,
-            new SingleInstanceHandlerFactory(new ActionEventHandler<AnonymousEventData>(async (d) =>
+            new SingleInstanceHandlerFactory(new ActionEventHandler<DynamicEventData>(async (d) =>
             {
                 handleCount++;
                 d.EventName.ShouldBe(eventName);
@@ -67,10 +67,10 @@ public class LocalEventBus_Anonymous_Test : EventBusTestBase
     }
 
     [Fact]
-    public async Task Should_Trigger_Both_Typed_And_Anonymous_Handlers()
+    public async Task Should_Trigger_Both_Typed_And_Dynamic_Handlers()
     {
         var typedHandleCount = 0;
-        var anonymousHandleCount = 0;
+        var dynamicHandleCount = 0;
 
         using var typedSubscription = LocalEventBus.Subscribe<MySimpleEventData>(async (data) =>
         {
@@ -80,26 +80,26 @@ public class LocalEventBus_Anonymous_Test : EventBusTestBase
 
         var eventName = EventNameAttribute.GetNameOrDefault<MySimpleEventData>();
 
-        using var anonymousSubscription = LocalEventBus.Subscribe(eventName,
-            new SingleInstanceHandlerFactory(new ActionEventHandler<AnonymousEventData>(async (d) =>
+        using var dynamicSubscription = LocalEventBus.Subscribe(eventName,
+            new SingleInstanceHandlerFactory(new ActionEventHandler<DynamicEventData>(async (d) =>
             {
-                anonymousHandleCount++;
+                dynamicHandleCount++;
                 await Task.CompletedTask;
             })));
 
         await LocalEventBus.PublishAsync(new MySimpleEventData(1));
 
         typedHandleCount.ShouldBe(1);
-        anonymousHandleCount.ShouldBe(1);
+        dynamicHandleCount.ShouldBe(1);
     }
 
     [Fact]
-    public async Task Should_Unsubscribe_Anonymous_Handler()
+    public async Task Should_Unsubscribe_Dynamic_Handler()
     {
         var handleCount = 0;
         var eventName = "TestEvent-" + Guid.NewGuid().ToString("N");
 
-        var handler = new ActionEventHandler<AnonymousEventData>(async (d) =>
+        var handler = new ActionEventHandler<DynamicEventData>(async (d) =>
         {
             handleCount++;
             await Task.CompletedTask;
@@ -125,13 +125,13 @@ public class LocalEventBus_Anonymous_Test : EventBusTestBase
     }
 
     [Fact]
-    public async Task Should_ConvertToTypedObject_In_Anonymous_Handler()
+    public async Task Should_ConvertToTypedObject_In_Dynamic_Handler()
     {
         object? receivedData = null;
         var eventName = "TestEvent-" + Guid.NewGuid().ToString("N");
 
         using var subscription = LocalEventBus.Subscribe(eventName,
-            new SingleInstanceHandlerFactory(new ActionEventHandler<AnonymousEventData>(async (d) =>
+            new SingleInstanceHandlerFactory(new ActionEventHandler<DynamicEventData>(async (d) =>
             {
                 receivedData = d.ConvertToTypedObject();
                 await Task.CompletedTask;
@@ -146,13 +146,13 @@ public class LocalEventBus_Anonymous_Test : EventBusTestBase
     }
 
     [Fact]
-    public async Task Should_ConvertToTypedObject_Generic_In_Anonymous_Handler()
+    public async Task Should_ConvertToTypedObject_Generic_In_Dynamic_Handler()
     {
         MySimpleEventData? receivedData = null;
         var eventName = "TestEvent-" + Guid.NewGuid().ToString("N");
 
         using var subscription = LocalEventBus.Subscribe(eventName,
-            new SingleInstanceHandlerFactory(new ActionEventHandler<AnonymousEventData>(async (d) =>
+            new SingleInstanceHandlerFactory(new ActionEventHandler<DynamicEventData>(async (d) =>
             {
                 receivedData = d.ConvertToTypedObject<MySimpleEventData>();
                 await Task.CompletedTask;

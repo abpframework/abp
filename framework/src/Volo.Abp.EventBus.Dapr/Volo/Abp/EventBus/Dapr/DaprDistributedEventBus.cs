@@ -28,7 +28,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 
     protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
     protected ConcurrentDictionary<string, Type> EventTypes { get; }
-    protected ConcurrentDictionary<string, List<IEventHandlerFactory>> AnonymousHandlerFactories { get; }
+    protected ConcurrentDictionary<string, List<IEventHandlerFactory>> DynamicHandlerFactories { get; }
 
     public DaprDistributedEventBus(
         IServiceScopeFactory serviceScopeFactory,
@@ -59,7 +59,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 
         HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
         EventTypes = new ConcurrentDictionary<string, Type>();
-        AnonymousHandlerFactories = new ConcurrentDictionary<string, List<IEventHandlerFactory>>();
+        DynamicHandlerFactories = new ConcurrentDictionary<string, List<IEventHandlerFactory>>();
     }
 
     public void Initialize()
@@ -84,7 +84,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
     /// <inheritdoc/>
     public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
     {
-        var handlerFactories = GetOrCreateAnonymousHandlerFactories(eventName);
+        var handlerFactories = GetOrCreateDynamicHandlerFactories(eventName);
 
         if (handler.IsInFactories(handlerFactories))
         {
@@ -93,7 +93,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 
         handlerFactories.Add(handler);
 
-        return new AnonymousEventHandlerFactoryUnregistrar(this, eventName, handler);
+        return new DynamicEventHandlerFactoryUnregistrar(this, eventName, handler);
     }
 
     public override void Unsubscribe<TEvent>(Func<TEvent, Task> action)
@@ -150,16 +150,16 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
     public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
     {
         var eventType = EventTypes.GetOrDefault(eventName);
-        var anonymousEventData = eventData as AnonymousEventData ?? new AnonymousEventData(eventName, eventData);
+        var dynamicEventData = eventData as DynamicEventData ?? new DynamicEventData(eventName, eventData);
 
         if (eventType != null)
         {
-            return PublishAsync(eventType, anonymousEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete);
+            return PublishAsync(eventType, dynamicEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete);
         }
 
-        if (AnonymousHandlerFactories.ContainsKey(eventName))
+        if (DynamicHandlerFactories.ContainsKey(eventName))
         {
-            return PublishAsync(typeof(AnonymousEventData), anonymousEventData, onUnitOfWorkComplete);
+            return PublishAsync(typeof(DynamicEventData), dynamicEventData, onUnitOfWorkComplete);
         }
 
         throw new AbpException($"Unknown event name: {eventName}");
@@ -185,7 +185,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
         {
             eventData = Serializer.Deserialize(outgoingEvent.EventData, eventType);
         }
-        else if (AnonymousHandlerFactories.ContainsKey(outgoingEvent.EventName))
+        else if (DynamicHandlerFactories.ContainsKey(outgoingEvent.EventName))
         {
             eventData = Serializer.Deserialize(outgoingEvent.EventData, typeof(object));
         }
@@ -237,10 +237,10 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
         {
             eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
         }
-        else if (AnonymousHandlerFactories.ContainsKey(incomingEvent.EventName))
+        else if (DynamicHandlerFactories.ContainsKey(incomingEvent.EventName))
         {
-            eventData = new AnonymousEventData(incomingEvent.EventName, Serializer.Deserialize(incomingEvent.EventData, typeof(object)));
-            eventType = typeof(AnonymousEventData);
+            eventData = new DynamicEventData(incomingEvent.EventName, Serializer.Deserialize(incomingEvent.EventData, typeof(object)));
+            eventType = typeof(DynamicEventData);
         }
         else
         {
@@ -277,7 +277,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 
     protected override Task OnAddToOutboxAsync(string eventName, Type eventType, object eventData)
     {
-        if (typeof(AnonymousEventData) != eventType)
+        if (typeof(DynamicEventData) != eventType)
         {
             EventTypes.GetOrAdd(eventName, eventType);
         }
@@ -307,9 +307,9 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
             handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
         }
 
-        foreach (var handlerFactory in AnonymousHandlerFactories.Where(aehf => eventNames.Contains(aehf.Key)))
+        foreach (var handlerFactory in DynamicHandlerFactories.Where(aehf => eventNames.Contains(aehf.Key)))
         {
-            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(typeof(AnonymousEventData), handlerFactory.Value));
+            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value));
         }
 
         return handlerFactoryList.ToArray();
@@ -325,21 +325,21 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
         return EventTypes.GetOrDefault(eventName);
     }
     
-    public bool IsAnonymousEvent(string eventName)
+    public bool IsDynamicEvent(string eventName)
     {
-        return AnonymousHandlerFactories.ContainsKey(eventName);
+        return DynamicHandlerFactories.ContainsKey(eventName);
     }
 
     /// <inheritdoc/>
     public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
     {
-        GetOrCreateAnonymousHandlerFactories(eventName).Locking(factories => factories.Remove(factory));
+        GetOrCreateDynamicHandlerFactories(eventName).Locking(factories => factories.Remove(factory));
     }
 
     /// <inheritdoc/>
     public override void Unsubscribe(string eventName, IEventHandler handler)
     {
-        GetOrCreateAnonymousHandlerFactories(eventName)
+        GetOrCreateDynamicHandlerFactories(eventName)
             .Locking(factories =>
             {
                 factories.RemoveAll(
@@ -353,10 +353,10 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
     /// <inheritdoc/>
     public override void UnsubscribeAll(string eventName)
     {
-        GetOrCreateAnonymousHandlerFactories(eventName).Locking(factories => factories.Clear());
+        GetOrCreateDynamicHandlerFactories(eventName).Locking(factories => factories.Clear());
     }
 
-    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetAnonymousHandlerFactories(string eventName)
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetDynamicHandlerFactories(string eventName)
     {
         var result = new List<EventTypeWithEventHandlerFactories>();
 
@@ -366,17 +366,17 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
             result.AddRange(GetHandlerFactories(eventType));
         }
 
-        foreach (var handlerFactory in AnonymousHandlerFactories.Where(hf => hf.Key == eventName))
+        foreach (var handlerFactory in DynamicHandlerFactories.Where(hf => hf.Key == eventName))
         {
-            result.Add(new EventTypeWithEventHandlerFactories(typeof(AnonymousEventData), handlerFactory.Value));
+            result.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value));
         }
 
         return result;
     }
 
-    private List<IEventHandlerFactory> GetOrCreateAnonymousHandlerFactories(string eventName)
+    private List<IEventHandlerFactory> GetOrCreateDynamicHandlerFactories(string eventName)
     {
-        return AnonymousHandlerFactories.GetOrAdd(eventName, _ => new List<IEventHandlerFactory>());
+        return DynamicHandlerFactories.GetOrAdd(eventName, _ => new List<IEventHandlerFactory>());
     }
 
     private static bool ShouldTriggerEventForHandler(Type targetEventType, Type handlerEventType)

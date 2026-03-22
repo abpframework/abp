@@ -721,6 +721,86 @@ Configure<AbpDistributedEventBusOptions>(options =>
 });
 ````
 
+## Dynamic (String-Based) Events
+
+In addition to the type-safe event system described above, ABP also supports **dynamic events** that are identified by a string name rather than a CLR type. This is useful for scenarios where event types are not known at compile time, such as integrating with external systems or building plugin architectures.
+
+### Publishing Dynamic Events
+
+Use the `PublishAsync` overload that accepts a string event name:
+
+````csharp
+await distributedEventBus.PublishAsync(
+    "MyDynamicEvent",
+    new Dictionary<string, object>
+    {
+        ["UserId"] = 42,
+        ["Name"] = "John"
+    }
+);
+````
+
+If a typed event exists with the given name (via `EventNameAttribute` or convention), the data is automatically deserialized and routed to the typed handler. Otherwise, it is delivered as a `DynamicEventData` to dynamic handlers.
+
+You can also control `onUnitOfWorkComplete` and `useOutbox` parameters:
+
+````csharp
+await distributedEventBus.PublishAsync(
+    "MyDynamicEvent",
+    new { UserId = 42, Name = "John" },
+    onUnitOfWorkComplete: true,
+    useOutbox: true
+);
+````
+
+### Subscribing to Dynamic Events
+
+Use the `Subscribe` overload that accepts a string event name:
+
+````csharp
+var subscription = distributedEventBus.Subscribe(
+    "MyDynamicEvent",
+    new SingleInstanceHandlerFactory(
+        new ActionEventHandler<DynamicEventData>(eventData =>
+        {
+            // Access the event name
+            var name = eventData.EventName;
+
+            // Convert to a loosely-typed object (Dictionary/List/primitives)
+            var obj = eventData.ConvertToTypedObject();
+
+            // Or convert to a strongly-typed object
+            var typed = eventData.ConvertToTypedObject<MyEventDto>();
+
+            return Task.CompletedTask;
+        })));
+
+// Unsubscribe when done
+subscription.Dispose();
+````
+
+You can also subscribe using a typed distributed event handler:
+
+````csharp
+distributedEventBus.Subscribe("MyDynamicEvent", myDistributedEventHandler);
+````
+
+Where `myDistributedEventHandler` implements `IDistributedEventHandler<DynamicEventData>`.
+
+### Mixed Typed and Dynamic Handlers
+
+When both a typed handler and a dynamic handler are registered for the same event name, **both** handlers are triggered. The typed handler receives the deserialized typed data, while the dynamic handler receives a `DynamicEventData` wrapper.
+
+### DynamicEventData Class
+
+The `DynamicEventData` class wraps the event payload with a string-based event name:
+
+- **`EventName`**: The string name that identifies the event.
+- **`Data`**: The raw event data payload.
+- **`ConvertToTypedObject()`**: Converts data to a loosely-typed object graph (dictionaries, lists, primitives).
+- **`ConvertToTypedObject<T>()`**: Deserializes data to a strongly-typed `T` object.
+- **`ConvertToTypedObject(Type type)`**: Deserializes data to the specified type.
+
 ## See Also
 
 * [Local Event Bus](../local)

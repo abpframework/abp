@@ -249,6 +249,57 @@ If you set it to `false`, the `EntityUpdatedEventData<T>` will not be published 
 
 > This option is only used for the EF Core.
 
+## Dynamic (String-Based) Events
+
+In addition to the type-safe event system described above, ABP also supports **dynamic events** that are identified by a string name rather than a CLR type. This is useful for scenarios where event types are not known at compile time.
+
+### Publishing Dynamic Events
+
+Use the `PublishAsync` overload that accepts a string event name:
+
+````csharp
+await localEventBus.PublishAsync(
+    "MyDynamicEvent",
+    new Dictionary<string, object>
+    {
+        ["UserId"] = 42,
+        ["Name"] = "John"
+    }
+);
+````
+
+If a typed event exists with the given name (via `EventNameAttribute` or convention), the data is automatically converted and routed to the typed handler. Otherwise, it is delivered as a `DynamicEventData` to dynamic handlers.
+
+### Subscribing to Dynamic Events
+
+Use the `Subscribe` overload that accepts a string event name:
+
+````csharp
+var subscription = localEventBus.Subscribe(
+    "MyDynamicEvent",
+    new SingleInstanceHandlerFactory(
+        new ActionEventHandler<DynamicEventData>(eventData =>
+        {
+            // Access the event name
+            var name = eventData.EventName;
+
+            // Convert to a loosely-typed object (Dictionary/List/primitives)
+            var obj = eventData.ConvertToTypedObject();
+
+            // Or convert to a strongly-typed object
+            var typed = eventData.ConvertToTypedObject<MyEventDto>();
+
+            return Task.CompletedTask;
+        })));
+
+// Unsubscribe when done
+subscription.Dispose();
+````
+
+### Mixed Typed and Dynamic Handlers
+
+When both a typed handler and a dynamic handler are registered for the same event name, **both** handlers are triggered. The typed handler receives the converted typed data, while the dynamic handler receives a `DynamicEventData` wrapper.
+
 ## See Also
 
 * [Distributed Event Bus](../distributed)

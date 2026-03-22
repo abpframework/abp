@@ -26,7 +26,7 @@ public interface IEventBus
     
     /// <summary>
     /// Triggers an event by its string-based event name.
-    /// Used for anonymous (type-less) event publishing.
+    /// Used for dynamic (type-less) event publishing.
     /// </summary>
     /// <param name="eventName">Name of the event</param>
     /// <param name="eventData">Related data for the event</param>

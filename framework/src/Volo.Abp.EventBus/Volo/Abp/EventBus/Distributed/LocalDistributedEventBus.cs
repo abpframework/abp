@@ -24,7 +24,7 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 {
     protected ConcurrentDictionary<string, Type> EventTypes { get; }
 
-    protected ConcurrentDictionary<string, bool> AnonymousEventNames { get; }
+    protected ConcurrentDictionary<string, bool> DynamicEventNames { get; }
 
     public LocalDistributedEventBus(
         IServiceScopeFactory serviceScopeFactory,
@@ -47,7 +47,7 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             correlationIdProvider)
     {
         EventTypes = new ConcurrentDictionary<string, Type>();
-        AnonymousEventNames = new ConcurrentDictionary<string, bool>();
+        DynamicEventNames = new ConcurrentDictionary<string, bool>();
         Subscribe(abpDistributedEventBusOptions.Value.Handlers);
     }
 
@@ -75,7 +75,7 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     /// <inheritdoc/>
     public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
     {
-        AnonymousEventNames.GetOrAdd(eventName, true);
+        DynamicEventNames.GetOrAdd(eventName, true);
         return LocalEventBus.Subscribe(eventName, handler);
     }
 
@@ -173,19 +173,19 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true)
     {
         var eventType = EventTypes.GetOrDefault(eventName);
-        var anonymousEventData = eventData as AnonymousEventData ?? new AnonymousEventData(eventName, eventData);
+        var dynamicEventData = eventData as DynamicEventData ?? new DynamicEventData(eventName, eventData);
 
         if (eventType != null)
         {
-            return PublishAsync(eventType, anonymousEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete, useOutbox);
+            return PublishAsync(eventType, dynamicEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete, useOutbox);
         }
 
-        if (!AnonymousEventNames.ContainsKey(eventName))
+        if (!DynamicEventNames.ContainsKey(eventName))
         {
             throw new AbpException($"Unknown event name: {eventName}");
         }
 
-        return PublishAsync(typeof(AnonymousEventData), anonymousEventData, onUnitOfWorkComplete, useOutbox);
+        return PublishAsync(typeof(DynamicEventData), dynamicEventData, onUnitOfWorkComplete, useOutbox);
     }
 
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
@@ -222,19 +222,19 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         var eventType = EventTypes.GetOrDefault(outgoingEvent.EventName);
         if (eventType == null)
         {
-            var isAnonymous = AnonymousEventNames.ContainsKey(outgoingEvent.EventName);
-            if (!isAnonymous)
+            var isDynamic = DynamicEventNames.ContainsKey(outgoingEvent.EventName);
+            if (!isDynamic)
             {
                 return;
             }
 
-            eventType = typeof(AnonymousEventData);
+            eventType = typeof(DynamicEventData);
         }
 
         object eventData;
-        if (eventType == typeof(AnonymousEventData))
+        if (eventType == typeof(DynamicEventData))
         {
-            eventData = new AnonymousEventData(
+            eventData = new DynamicEventData(
                 outgoingEvent.EventName,
                 JsonSerializer.Deserialize<object>(outgoingEvent.EventData)!);
         }
@@ -264,19 +264,19 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         var eventType = EventTypes.GetOrDefault(incomingEvent.EventName);
         if (eventType == null)
         {
-            var isAnonymous = AnonymousEventNames.ContainsKey(incomingEvent.EventName);
-            if (!isAnonymous)
+            var isDynamic = DynamicEventNames.ContainsKey(incomingEvent.EventName);
+            if (!isDynamic)
             {
                 return;
             }
 
-            eventType = typeof(AnonymousEventData);
+            eventType = typeof(DynamicEventData);
         }
 
         object eventData;
-        if (eventType == typeof(AnonymousEventData))
+        if (eventType == typeof(DynamicEventData))
         {
-            eventData = new AnonymousEventData(
+            eventData = new DynamicEventData(
                 incomingEvent.EventName,
                 JsonSerializer.Deserialize<object>(incomingEvent.EventData)!);
         }
@@ -303,7 +303,7 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     protected override Task OnAddToOutboxAsync(string eventName, Type eventType, object eventData)
     {
-        if (eventType != typeof(AnonymousEventData))
+        if (eventType != typeof(DynamicEventData))
         {
             EventTypes.GetOrAdd(eventName, eventType);
         }
@@ -315,9 +315,9 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         return LocalEventBus.GetEventHandlerFactories(eventType);
     }
 
-    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetAnonymousHandlerFactories(string eventName)
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetDynamicHandlerFactories(string eventName)
     {
-        return LocalEventBus.GetAnonymousEventHandlerFactories(eventName);
+        return LocalEventBus.GetDynamicEventHandlerFactories(eventName);
     }
 
     protected override Type? GetEventTypeByEventName(string eventName)

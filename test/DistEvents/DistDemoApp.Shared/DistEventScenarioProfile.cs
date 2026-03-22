@@ -4,19 +4,19 @@ public class DistEventScenarioProfile
 {
     public string Name { get; set; } = "default";
 
-    public string AnonymousOnlyEventName { get; set; } = "dist-demo.anonymous-only";
+    public string DynamicOnlyEventName { get; set; } = "dist-demo.dynamic-only";
 
-    public string AnonymousOnlyMessage { get; set; } = "hello-anonymous";
+    public string DynamicOnlyMessage { get; set; } = "hello-dynamic";
 
     public int TypedFromTypedValue { get; set; } = 7;
 
-    public int TypedFromAnonymousValue { get; set; } = 11;
+    public int TypedFromDynamicValue { get; set; } = 11;
 
     public bool EnableTypedFromTypedScenario { get; set; } = true;
 
-    public bool EnableTypedFromAnonymousScenario { get; set; } = true;
+    public bool EnableTypedFromDynamicScenario { get; set; } = true;
 
-    public bool EnableAnonymousOnlyScenario { get; set; } = true;
+    public bool EnableDynamicOnlyScenario { get; set; } = true;
 
     public bool OnUnitOfWorkComplete { get; set; } = true;
 
@@ -38,11 +38,11 @@ public class DistEventScenarioProfile
         return new DistEventScenarioProfile
         {
             Name = "dapr-web",
-            AnonymousOnlyEventName = "dist-demo.dapr.anonymous-only",
-            AnonymousOnlyMessage = "hello-dapr-web",
+            DynamicOnlyEventName = "dist-demo.dapr.dynamic-only",
+            DynamicOnlyMessage = "hello-dapr-web",
             EnableTypedFromTypedScenario = false,
-            EnableTypedFromAnonymousScenario = false,
-            EnableAnonymousOnlyScenario = false
+            EnableTypedFromDynamicScenario = false,
+            EnableDynamicOnlyScenario = false
         };
     }
 
@@ -51,10 +51,10 @@ public class DistEventScenarioProfile
         return new DistEventScenarioProfile
         {
             Name = "azure-emulator",
-            AnonymousOnlyEventName = "DistDemoApp.Azure.AnonymousOnly",
-            AnonymousOnlyMessage = "hello-azure-emulator",
+            DynamicOnlyEventName = "DistDemoApp.Azure.DynamicOnly",
+            DynamicOnlyMessage = "hello-azure-emulator",
             TypedFromTypedValue = 21,
-            TypedFromAnonymousValue = 34
+            TypedFromDynamicValue = 34
         };
     }
 }

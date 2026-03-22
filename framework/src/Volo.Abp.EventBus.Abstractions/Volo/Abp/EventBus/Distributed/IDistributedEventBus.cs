@@ -45,15 +45,15 @@ public interface IDistributedEventBus : IEventBus
     /// <summary>
     /// Registers to an event by its string-based event name.
     /// Same (given) instance of the handler is used for all event occurrences.
-    /// Wraps the handler as <see cref="IDistributedEventHandler{AnonymousEventData}"/>.
+    /// Wraps the handler as <see cref="IDistributedEventHandler{DynamicEventData}"/>.
     /// </summary>
     /// <param name="eventName">Name of the event</param>
     /// <param name="handler">Object to handle the event</param>
-    IDisposable Subscribe(string eventName, IDistributedEventHandler<AnonymousEventData> handler);
+    IDisposable Subscribe(string eventName, IDistributedEventHandler<DynamicEventData> handler);
 
     /// <summary>
     /// Triggers an event by its string-based event name.
-    /// Used for anonymous (type-less) event publishing over distributed event bus.
+    /// Used for dynamic (type-less) event publishing over distributed event bus.
     /// </summary>
     /// <param name="eventName">Name of the event</param>
     /// <param name="eventData">Related data for the event</param>

@@ -35,7 +35,7 @@ public sealed class NullLocalEventBus : ILocalEventBus
     }
 
     /// <inheritdoc/>
-    public List<EventTypeWithEventHandlerFactories> GetAnonymousEventHandlerFactories(string eventName)
+    public List<EventTypeWithEventHandlerFactories> GetDynamicEventHandlerFactories(string eventName)
     {
         return new List<EventTypeWithEventHandlerFactories>();
     }

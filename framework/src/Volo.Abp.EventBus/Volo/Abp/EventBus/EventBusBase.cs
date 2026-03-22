@@ -174,7 +174,7 @@ public abstract class EventBusBase : IEventBus
             actualEventType.GetGenericArguments().Length == 1 &&
             typeof(IEventDataWithInheritableGenericArgument).IsAssignableFrom(actualEventType))
         {
-            var resolvedEventData = eventData is AnonymousEventData aed
+            var resolvedEventData = eventData is DynamicEventData aed
                 ? aed.ConvertToTypedObject(actualEventType)
                 : eventData;
 
@@ -194,11 +194,11 @@ public abstract class EventBusBase : IEventBus
         Type eventType,
         object eventData)
     {
-        if (eventData is AnonymousEventData anonymousEventData)
+        if (eventData is DynamicEventData dynamicEventData)
         {
             return (
-                GetAnonymousHandlerFactories(anonymousEventData.EventName).ToList(),
-                GetEventTypeByEventName(anonymousEventData.EventName)
+                GetDynamicHandlerFactories(dynamicEventData.EventName).ToList(),
+                GetEventTypeByEventName(dynamicEventData.EventName)
             );
         }
 
@@ -207,14 +207,14 @@ public abstract class EventBusBase : IEventBus
 
     protected virtual object ResolveEventDataForHandler(object eventData, Type sourceEventType, Type handlerEventType)
     {
-        if (eventData is AnonymousEventData anonymousEventData && handlerEventType != typeof(AnonymousEventData))
+        if (eventData is DynamicEventData dynamicEventData && handlerEventType != typeof(DynamicEventData))
         {
-            return anonymousEventData.ConvertToTypedObject(handlerEventType);
+            return dynamicEventData.ConvertToTypedObject(handlerEventType);
         }
 
-        if (handlerEventType == typeof(AnonymousEventData) && eventData is not AnonymousEventData)
+        if (handlerEventType == typeof(DynamicEventData) && eventData is not DynamicEventData)
         {
-            return new AnonymousEventData(EventNameAttribute.GetNameOrDefault(sourceEventType), eventData);
+            return new DynamicEventData(EventNameAttribute.GetNameOrDefault(sourceEventType), eventData);
         }
 
         return eventData;
@@ -256,7 +256,7 @@ public abstract class EventBusBase : IEventBus
 
     protected abstract IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType);
 
-    protected abstract IEnumerable<EventTypeWithEventHandlerFactories> GetAnonymousHandlerFactories(string eventName);
+    protected abstract IEnumerable<EventTypeWithEventHandlerFactories> GetDynamicHandlerFactories(string eventName);
 
     protected abstract Type? GetEventTypeByEventName(string eventName);
 

@@ -49,13 +49,13 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
     }
 
     [Fact]
-    public async Task Should_Handle_Anonymous_Handler_When_Published_With_EventName()
+    public async Task Should_Handle_Dynamic_Handler_When_Published_With_EventName()
     {
         var handleCount = 0;
         var eventName = "MyEvent-" + Guid.NewGuid().ToString("N");
 
         using var subscription = DistributedEventBus.Subscribe(eventName,
-            new SingleInstanceHandlerFactory(new ActionEventHandler<AnonymousEventData>(async (d) =>
+            new SingleInstanceHandlerFactory(new ActionEventHandler<DynamicEventData>(async (d) =>
             {
                 handleCount++;
                 await Task.CompletedTask;
@@ -73,58 +73,58 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
     }
 
     [Fact]
-    public async Task Should_Handle_Anonymous_Handler_When_Published_With_AnonymousEventData()
+    public async Task Should_Handle_Dynamic_Handler_When_Published_With_DynamicEventData()
     {
         var handleCount = 0;
         var eventName = "MyEvent-" + Guid.NewGuid().ToString("N");
 
         using var subscription = DistributedEventBus.Subscribe(eventName,
-            new SingleInstanceHandlerFactory(new ActionEventHandler<AnonymousEventData>(async (d) =>
+            new SingleInstanceHandlerFactory(new ActionEventHandler<DynamicEventData>(async (d) =>
             {
                 handleCount++;
                 d.ConvertToTypedObject().ShouldNotBeNull();
                 await Task.CompletedTask;
             })));
 
-        await DistributedEventBus.PublishAsync(new AnonymousEventData(eventName, new MySimpleEventData(1)));
-        await DistributedEventBus.PublishAsync(new AnonymousEventData(eventName, new Dictionary<string, object>()
+        await DistributedEventBus.PublishAsync(new DynamicEventData(eventName, new MySimpleEventData(1)));
+        await DistributedEventBus.PublishAsync(new DynamicEventData(eventName, new Dictionary<string, object>()
         {
             {"Value", 2}
         }));
-        await DistributedEventBus.PublishAsync(new AnonymousEventData(eventName, new { Value = 3 }));
+        await DistributedEventBus.PublishAsync(new DynamicEventData(eventName, new { Value = 3 }));
 
         Assert.Equal(3, handleCount);
     }
 
     [Fact]
-    public async Task Should_Handle_Typed_Handler_When_Published_With_AnonymousEventData()
+    public async Task Should_Handle_Typed_Handler_When_Published_With_DynamicEventData()
     {
         using var subscription = DistributedEventBus.Subscribe<MySimpleEventData, MySimpleDistributedTransientEventHandler>();
 
         var eventName = EventNameAttribute.GetNameOrDefault<MySimpleEventData>();
 
-        await DistributedEventBus.PublishAsync(new AnonymousEventData(eventName, new MySimpleEventData(1)));
-        await DistributedEventBus.PublishAsync(new AnonymousEventData(eventName, new Dictionary<string, object>()
+        await DistributedEventBus.PublishAsync(new DynamicEventData(eventName, new MySimpleEventData(1)));
+        await DistributedEventBus.PublishAsync(new DynamicEventData(eventName, new Dictionary<string, object>()
         {
             {"Value", 2}
         }));
-        await DistributedEventBus.PublishAsync(new AnonymousEventData(eventName, new { Value = 3 }));
+        await DistributedEventBus.PublishAsync(new DynamicEventData(eventName, new { Value = 3 }));
 
         Assert.Equal(3, MySimpleDistributedTransientEventHandler.HandleCount);
     }
 
     [Fact]
-    public async Task Should_Trigger_Both_Typed_And_Anonymous_Handlers_For_Typed_Event()
+    public async Task Should_Trigger_Both_Typed_And_Dynamic_Handlers_For_Typed_Event()
     {
         using var typedSubscription = DistributedEventBus.Subscribe<MySimpleEventData, MySimpleDistributedTransientEventHandler>();
 
         var eventName = EventNameAttribute.GetNameOrDefault<MySimpleEventData>();
 
-        var anonymousHandleCount = 0;
+        var dynamicHandleCount = 0;
 
-        using var anonymousSubscription = DistributedEventBus.Subscribe(eventName, new SingleInstanceHandlerFactory(new ActionEventHandler<AnonymousEventData>(async (d) =>
+        using var dynamicSubscription = DistributedEventBus.Subscribe(eventName, new SingleInstanceHandlerFactory(new ActionEventHandler<DynamicEventData>(async (d) =>
         {
-            anonymousHandleCount++;
+            dynamicHandleCount++;
             await Task.CompletedTask;
         })));
 
@@ -133,42 +133,42 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
         await DistributedEventBus.PublishAsync(new MySimpleEventData(3));
 
         Assert.Equal(3, MySimpleDistributedTransientEventHandler.HandleCount);
-        Assert.Equal(3, anonymousHandleCount);
+        Assert.Equal(3, dynamicHandleCount);
     }
 
     [Fact]
-    public async Task Should_Trigger_Both_Handlers_For_Mixed_Typed_And_Anonymous_Publish()
+    public async Task Should_Trigger_Both_Handlers_For_Mixed_Typed_And_Dynamic_Publish()
     {
         using var typedSubscription = DistributedEventBus.Subscribe<MySimpleEventData, MySimpleDistributedTransientEventHandler>();
 
         var eventName = EventNameAttribute.GetNameOrDefault<MySimpleEventData>();
 
-        var anonymousHandleCount = 0;
+        var dynamicHandleCount = 0;
 
-        using var anonymousSubscription = DistributedEventBus.Subscribe(eventName, new SingleInstanceHandlerFactory(new ActionEventHandler<AnonymousEventData>(async (d) =>
+        using var dynamicSubscription = DistributedEventBus.Subscribe(eventName, new SingleInstanceHandlerFactory(new ActionEventHandler<DynamicEventData>(async (d) =>
         {
-            anonymousHandleCount++;
+            dynamicHandleCount++;
             await Task.CompletedTask;
         })));
 
         await DistributedEventBus.PublishAsync(new MySimpleEventData(1));
-        await DistributedEventBus.PublishAsync(new AnonymousEventData(eventName, new Dictionary<string, object>()
+        await DistributedEventBus.PublishAsync(new DynamicEventData(eventName, new Dictionary<string, object>()
         {
             {"Value", 2}
         }));
-        await DistributedEventBus.PublishAsync(new AnonymousEventData(eventName, new { Value = 3 }));
+        await DistributedEventBus.PublishAsync(new DynamicEventData(eventName, new { Value = 3 }));
 
         Assert.Equal(3, MySimpleDistributedTransientEventHandler.HandleCount);
-        Assert.Equal(3, anonymousHandleCount);
+        Assert.Equal(3, dynamicHandleCount);
     }
 
     [Fact]
-    public async Task Should_Unsubscribe_Anonymous_Handler()
+    public async Task Should_Unsubscribe_Dynamic_Handler()
     {
         var handleCount = 0;
         var eventName = "MyEvent-" + Guid.NewGuid().ToString("N");
 
-        var handler = new ActionEventHandler<AnonymousEventData>(async (d) =>
+        var handler = new ActionEventHandler<DynamicEventData>(async (d) =>
         {
             handleCount++;
             await Task.CompletedTask;
@@ -194,7 +194,7 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
     }
 
     [Fact]
-    public async Task Should_Convert_AnonymousEventData_To_Typed_Object()
+    public async Task Should_Convert_DynamicEventData_To_Typed_Object()
     {
         MySimpleEventData? receivedData = null;
 

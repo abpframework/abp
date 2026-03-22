@@ -28,10 +28,10 @@ public class DistEventScenarioRunner : IDistEventScenarioRunner, ITransientDepen
         var typedFromTypedPublish = profile.EnableTypedFromTypedScenario
             ? new TaskCompletionSource<int>(TaskCreationOptions.RunContinuationsAsynchronously)
             : null;
-        var typedFromAnonymousPublish = profile.EnableTypedFromAnonymousScenario
+        var typedFromDynamicPublish = profile.EnableTypedFromDynamicScenario
             ? new TaskCompletionSource<int>(TaskCreationOptions.RunContinuationsAsynchronously)
             : null;
-        var anonymousOnlyPublish = profile.EnableAnonymousOnlyScenario
+        var dynamicOnlyPublish = profile.EnableDynamicOnlyScenario
             ? new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously)
             : null;
 
@@ -42,28 +42,28 @@ public class DistEventScenarioRunner : IDistEventScenarioRunner, ITransientDepen
                 typedFromTypedPublish.TrySetResult(eventData.Value);
             }
 
-            if (typedFromAnonymousPublish != null && eventData.Value == profile.TypedFromAnonymousValue)
+            if (typedFromDynamicPublish != null && eventData.Value == profile.TypedFromDynamicValue)
             {
-                typedFromAnonymousPublish.TrySetResult(eventData.Value);
+                typedFromDynamicPublish.TrySetResult(eventData.Value);
             }
 
             return Task.CompletedTask;
         });
 
-        IDisposable? anonymousOnlySubscription = null;
-        if (profile.EnableAnonymousOnlyScenario)
+        IDisposable? dynamicOnlySubscription = null;
+        if (profile.EnableDynamicOnlyScenario)
         {
-            anonymousOnlySubscription = _distributedEventBus.Subscribe(
-                profile.AnonymousOnlyEventName,
+            dynamicOnlySubscription = _distributedEventBus.Subscribe(
+                profile.DynamicOnlyEventName,
                 new SingleInstanceHandlerFactory(
-                    new ActionEventHandler<AnonymousEventData>(eventData =>
+                    new ActionEventHandler<DynamicEventData>(eventData =>
                     {
-                        var converted = AnonymousEventDataConverter.ConvertToLooseObject(eventData);
+                        var converted = DynamicEventDataConverter.ConvertToLooseObject(eventData);
                         if (converted is Dictionary<string, object> payload &&
                             payload.TryGetValue("Message", out var message) &&
-                            message?.ToString() == profile.AnonymousOnlyMessage)
+                            message?.ToString() == profile.DynamicOnlyMessage)
                         {
-                            anonymousOnlyPublish!.TrySetResult(true);
+                            dynamicOnlyPublish!.TrySetResult(true);
                         }
 
                         return Task.CompletedTask;
@@ -88,17 +88,17 @@ public class DistEventScenarioRunner : IDistEventScenarioRunner, ITransientDepen
             await typedFromTypedPublish.Task.WaitAsync(TimeSpan.FromSeconds(profile.TimeoutSeconds));
         }
 
-        if (typedFromAnonymousPublish != null)
+        if (typedFromDynamicPublish != null)
         {
-            await typedFromAnonymousPublish.Task.WaitAsync(TimeSpan.FromSeconds(profile.TimeoutSeconds));
+            await typedFromDynamicPublish.Task.WaitAsync(TimeSpan.FromSeconds(profile.TimeoutSeconds));
         }
 
-        if (anonymousOnlyPublish != null)
+        if (dynamicOnlyPublish != null)
         {
-            await anonymousOnlyPublish.Task.WaitAsync(TimeSpan.FromSeconds(profile.TimeoutSeconds));
+            await dynamicOnlyPublish.Task.WaitAsync(TimeSpan.FromSeconds(profile.TimeoutSeconds));
         }
 
-        anonymousOnlySubscription?.Dispose();
+        dynamicOnlySubscription?.Dispose();
 
         Console.WriteLine($"All distributed event scenarios passed ({profile.Name}).");
     }
@@ -113,20 +113,20 @@ public class DistEventScenarioRunner : IDistEventScenarioRunner, ITransientDepen
                 useOutbox: profile.UseOutbox);
         }
 
-        if (profile.EnableTypedFromAnonymousScenario)
+        if (profile.EnableTypedFromDynamicScenario)
         {
             await _distributedEventBus.PublishAsync(
                 typedEventName,
-                new { Value = profile.TypedFromAnonymousValue },
+                new { Value = profile.TypedFromDynamicValue },
                 onUnitOfWorkComplete: profile.OnUnitOfWorkComplete,
                 useOutbox: profile.UseOutbox);
         }
 
-        if (profile.EnableAnonymousOnlyScenario)
+        if (profile.EnableDynamicOnlyScenario)
         {
             await _distributedEventBus.PublishAsync(
-                profile.AnonymousOnlyEventName,
-                new { Message = profile.AnonymousOnlyMessage },
+                profile.DynamicOnlyEventName,
+                new { Message = profile.DynamicOnlyMessage },
                 onUnitOfWorkComplete: profile.OnUnitOfWorkComplete,
                 useOutbox: profile.UseOutbox);
         }

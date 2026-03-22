@@ -50,7 +50,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
     }
 
     /// <inheritdoc/>
-    public virtual IDisposable Subscribe(string eventName, IDistributedEventHandler<AnonymousEventData> handler)
+    public virtual IDisposable Subscribe(string eventName, IDistributedEventHandler<DynamicEventData> handler)
     {
         return Subscribe(eventName, (IEventHandler)handler);
     }
@@ -113,14 +113,14 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         bool useOutbox = true)
     {
         var eventType = GetEventTypeByEventName(eventName);
-        var anonymousEventData = eventData as AnonymousEventData ?? new AnonymousEventData(eventName, eventData);
+        var dynamicEventData = eventData as DynamicEventData ?? new DynamicEventData(eventName, eventData);
 
         if (eventType != null)
         {
-            return PublishAsync(eventType, anonymousEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete, useOutbox);
+            return PublishAsync(eventType, dynamicEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete, useOutbox);
         }
 
-        return PublishAsync(typeof(AnonymousEventData), anonymousEventData, onUnitOfWorkComplete, useOutbox);
+        return PublishAsync(typeof(DynamicEventData), dynamicEventData, onUnitOfWorkComplete, useOutbox);
     }
 
     public abstract Task PublishFromOutboxAsync(
@@ -285,9 +285,9 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
 
     protected virtual string GetEventName(Type eventType, object eventData)
     {
-        if (eventData is AnonymousEventData anonymousEventData)
+        if (eventData is DynamicEventData dynamicEventData)
         {
-            return anonymousEventData.EventName;
+            return dynamicEventData.EventName;
         }
 
         return EventNameAttribute.GetNameOrDefault(eventType);
@@ -295,9 +295,9 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
 
     protected virtual object GetEventData(object eventData)
     {
-        if (eventData is AnonymousEventData anonymousEventData)
+        if (eventData is DynamicEventData dynamicEventData)
         {
-            return anonymousEventData.Data;
+            return dynamicEventData.Data;
         }
 
         return eventData;

@@ -30,7 +30,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     protected IAzureServiceBusSerializer Serializer { get; }
     protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
     protected ConcurrentDictionary<string, Type> EventTypes  { get; }
-    protected ConcurrentDictionary<string, List<IEventHandlerFactory>> AnonymousHandlerFactories { get; }
+    protected ConcurrentDictionary<string, List<IEventHandlerFactory>> DynamicHandlerFactories { get; }
     protected IAzureServiceBusMessageConsumer Consumer { get; private set; } = default!;
 
     public AzureDistributedEventBus(
@@ -63,7 +63,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         PublisherPool = publisherPool;
         HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
         EventTypes = new ConcurrentDictionary<string, Type>();
-        AnonymousHandlerFactories = new ConcurrentDictionary<string, List<IEventHandlerFactory>>();
+        DynamicHandlerFactories = new ConcurrentDictionary<string, List<IEventHandlerFactory>>();
     }
 
     public void Initialize()
@@ -92,11 +92,11 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         {
             eventData = Serializer.Deserialize(message.Body.ToArray(), eventType);
         }
-        else if (AnonymousHandlerFactories.ContainsKey(eventName))
+        else if (DynamicHandlerFactories.ContainsKey(eventName))
         {
             var data = Serializer.Deserialize<object>(message.Body.ToArray());
-            eventData = new AnonymousEventData(eventName, data);
-            eventType = typeof(AnonymousEventData);
+            eventData = new DynamicEventData(eventName, data);
+            eventType = typeof(DynamicEventData);
         }
         else
         {
@@ -131,7 +131,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     /// <inheritdoc/>
     public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
     {
-        var handlerFactories = GetOrCreateAnonymousHandlerFactories(eventName);
+        var handlerFactories = GetOrCreateDynamicHandlerFactories(eventName);
 
         if (handler.IsInFactories(handlerFactories))
         {
@@ -140,7 +140,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
         handlerFactories.Add(handler);
 
-        return new AnonymousEventHandlerFactoryUnregistrar(this, eventName, handler);
+        return new DynamicEventHandlerFactoryUnregistrar(this, eventName, handler);
     }
 
     public override void Unsubscribe<TEvent>(Func<TEvent, Task> action)
@@ -200,16 +200,16 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
     {
         var eventType = EventTypes.GetOrDefault(eventName);
-        var anonymousEventData = eventData as AnonymousEventData ?? new AnonymousEventData(eventName, eventData);
+        var dynamicEventData = eventData as DynamicEventData ?? new DynamicEventData(eventName, eventData);
 
         if (eventType != null)
         {
-            return PublishAsync(eventType, anonymousEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete);
+            return PublishAsync(eventType, dynamicEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete);
         }
 
-        if (AnonymousHandlerFactories.ContainsKey(eventName))
+        if (DynamicHandlerFactories.ContainsKey(eventName))
         {
-            return PublishAsync(typeof(AnonymousEventData), anonymousEventData, onUnitOfWorkComplete);
+            return PublishAsync(typeof(DynamicEventData), dynamicEventData, onUnitOfWorkComplete);
         }
 
         throw new AbpException($"Unknown event name: {eventName}");
@@ -294,11 +294,11 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         {
             eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
         }
-        else if (AnonymousHandlerFactories.ContainsKey(incomingEvent.EventName))
+        else if (DynamicHandlerFactories.ContainsKey(incomingEvent.EventName))
         {
             var element = Serializer.Deserialize<object>(incomingEvent.EventData);
-            eventData = new AnonymousEventData(incomingEvent.EventName, element);
-            eventType = typeof(AnonymousEventData);
+            eventData = new DynamicEventData(incomingEvent.EventName, element);
+            eventType = typeof(DynamicEventData);
         }
         else
         {
@@ -354,7 +354,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     protected override Task OnAddToOutboxAsync(string eventName, Type eventType, object eventData)
     {
-        if (typeof(AnonymousEventData) != eventType)
+        if (typeof(DynamicEventData) != eventType)
         {
             EventTypes.GetOrAdd(eventName, eventType);
         }
@@ -384,9 +384,9 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
         }
 
-        foreach (var handlerFactory in AnonymousHandlerFactories.Where(aehf => eventNames.Contains(aehf.Key)))
+        foreach (var handlerFactory in DynamicHandlerFactories.Where(aehf => eventNames.Contains(aehf.Key)))
         {
-            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(typeof(AnonymousEventData), handlerFactory.Value));
+            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value));
         }
 
         return handlerFactoryList.ToArray();
@@ -400,14 +400,14 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     /// <inheritdoc/>
     public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
     {
-        GetOrCreateAnonymousHandlerFactories(eventName)
+        GetOrCreateDynamicHandlerFactories(eventName)
             .Locking(factories => factories.Remove(factory));
     }
 
     /// <inheritdoc/>
     public override void Unsubscribe(string eventName, IEventHandler handler)
     {
-        GetOrCreateAnonymousHandlerFactories(eventName)
+        GetOrCreateDynamicHandlerFactories(eventName)
             .Locking(factories =>
             {
                 factories.RemoveAll(
@@ -421,11 +421,11 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     /// <inheritdoc/>
     public override void UnsubscribeAll(string eventName)
     {
-        GetOrCreateAnonymousHandlerFactories(eventName)
+        GetOrCreateDynamicHandlerFactories(eventName)
             .Locking(factories => factories.Clear());
     }
 
-    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetAnonymousHandlerFactories(string eventName)
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetDynamicHandlerFactories(string eventName)
     {
         var result = new List<EventTypeWithEventHandlerFactories>();
 
@@ -435,17 +435,17 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             result.AddRange(GetHandlerFactories(eventType));
         }
 
-        foreach (var handlerFactory in AnonymousHandlerFactories.Where(hf => hf.Key == eventName))
+        foreach (var handlerFactory in DynamicHandlerFactories.Where(hf => hf.Key == eventName))
         {
-            result.Add(new EventTypeWithEventHandlerFactories(typeof(AnonymousEventData), handlerFactory.Value));
+            result.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value));
         }
 
         return result;
     }
 
-    private List<IEventHandlerFactory> GetOrCreateAnonymousHandlerFactories(string eventName)
+    private List<IEventHandlerFactory> GetOrCreateDynamicHandlerFactories(string eventName)
     {
-        return AnonymousHandlerFactories.GetOrAdd(eventName, _ => new List<IEventHandlerFactory>());
+        return DynamicHandlerFactories.GetOrAdd(eventName, _ => new List<IEventHandlerFactory>());
     }
 
     private static bool ShouldTriggerEventForHandler(Type targetEventType, Type handlerEventType)

@@ -29,5 +29,5 @@ public interface ILocalEventBus : IEventBus
     /// </summary>
     /// <param name="eventName">Name of the event</param>
     /// <returns>List of event handler factories registered for the given event name</returns>
-    List<EventTypeWithEventHandlerFactories> GetAnonymousEventHandlerFactories(string eventName);
+    List<EventTypeWithEventHandlerFactories> GetDynamicEventHandlerFactories(string eventName);
 }

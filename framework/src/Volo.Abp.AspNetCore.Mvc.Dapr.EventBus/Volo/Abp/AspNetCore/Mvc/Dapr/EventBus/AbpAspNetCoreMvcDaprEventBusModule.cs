@@ -102,10 +102,11 @@ public class AbpAspNetCoreMvcDaprEventBusModule : AbpModule
             {
                 var eventData = daprSerializer.Deserialize(daprEventData.JsonData, eventType);
                 await distributedEventBus.TriggerHandlersAsync(eventType, eventData, daprEventData.MessageId, daprEventData.CorrelationId);
-            }else if (distributedEventBus.IsAnonymousEvent(daprEventData.Topic))
+            }
+            else if (distributedEventBus.IsDynamicEvent(daprEventData.Topic))
             {
                 var eventData = daprSerializer.Deserialize(daprEventData.JsonData, typeof(object));
-                await distributedEventBus.TriggerHandlersAsync(typeof(AnonymousEventData), new AnonymousEventData(daprEventData.Topic, eventData), daprEventData.MessageId, daprEventData.CorrelationId);
+                await distributedEventBus.TriggerHandlersAsync(typeof(DynamicEventData), new DynamicEventData(daprEventData.Topic, eventData), daprEventData.MessageId, daprEventData.CorrelationId);
             }
         }
         else
@@ -115,10 +116,11 @@ public class AbpAspNetCoreMvcDaprEventBusModule : AbpModule
             {
                 var eventData = daprSerializer.Deserialize(data, eventType);
                 await distributedEventBus.TriggerHandlersAsync(eventType, eventData);
-            }else if (distributedEventBus.IsAnonymousEvent(topic))
+            }
+            else if (distributedEventBus.IsDynamicEvent(topic))
             {
                 var eventData = daprSerializer.Deserialize(data, typeof(object));
-                await distributedEventBus.TriggerHandlersAsync(typeof(AnonymousEventData), new AnonymousEventData(topic, eventData));
+                await distributedEventBus.TriggerHandlersAsync(typeof(DynamicEventData), new DynamicEventData(topic, eventData));
             }
         }
 

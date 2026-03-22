@@ -51,7 +51,7 @@ public sealed class NullDistributedEventBus : IDistributedEventBus
     }
 
     /// <inheritdoc/>
-    public IDisposable Subscribe(string eventName, IDistributedEventHandler<AnonymousEventData> handler)
+    public IDisposable Subscribe(string eventName, IDistributedEventHandler<DynamicEventData> handler)
     {
         return NullDisposable.Instance;
     }
