@@ -358,13 +358,13 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 
     protected override IEnumerable<EventTypeWithEventHandlerFactories> GetDynamicHandlerFactories(string eventName)
     {
-        var result = new List<EventTypeWithEventHandlerFactories>();
-
         var eventType = GetEventTypeByEventName(eventName);
         if (eventType != null)
         {
-            result.AddRange(GetHandlerFactories(eventType));
+            return GetHandlerFactories(eventType);
         }
+
+        var result = new List<EventTypeWithEventHandlerFactories>();
 
         foreach (var handlerFactory in DynamicHandlerFactories.Where(hf => hf.Key == eventName))
         {
