@@ -725,6 +725,8 @@ Configure<AbpDistributedEventBusOptions>(options =>
 
 In addition to the type-safe event system described above, ABP also supports **dynamic events** that are identified by a string name rather than a CLR type. This is useful for scenarios where event types are not known at compile time, such as integrating with external systems or building plugin architectures.
 
+> **Note:** Dynamic event subscriptions are supported by RabbitMQ, Kafka, Azure Service Bus, and Rebus providers. The **Dapr provider does not support dynamic events** because Dapr requires topic subscriptions to be declared at application startup and cannot add subscriptions at runtime. Attempting to call `Subscribe(string, ...)` on the Dapr provider will throw an `AbpException`.
+
 ### Publishing Dynamic Events
 
 Use the `PublishAsync` overload that accepts a string event name:
