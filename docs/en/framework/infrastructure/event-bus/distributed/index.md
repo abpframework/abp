@@ -763,14 +763,9 @@ var subscription = distributedEventBus.Subscribe(
     new SingleInstanceHandlerFactory(
         new ActionEventHandler<DynamicEventData>(eventData =>
         {
-            // Access the event name
+            // Access the event name and raw data
             var name = eventData.EventName;
-
-            // Convert to a loosely-typed object (Dictionary/List/primitives)
-            var obj = eventData.ConvertToTypedObject();
-
-            // Or convert to a strongly-typed object
-            var typed = eventData.ConvertToTypedObject<MyEventDto>();
+            var data = eventData.Data;
 
             return Task.CompletedTask;
         })));
@@ -789,17 +784,16 @@ Where `myDistributedEventHandler` implements `IDistributedEventHandler<DynamicEv
 
 ### Mixed Typed and Dynamic Handlers
 
-When both a typed handler and a dynamic handler are registered for the same event name, **both** handlers are triggered. The typed handler receives the deserialized typed data, while the dynamic handler receives a `DynamicEventData` wrapper.
+When both a typed handler and a dynamic handler are registered for the same event name, **both** handlers are triggered. The typed handler receives the converted typed data, while the dynamic handler receives a `DynamicEventData` wrapper.
 
 ### DynamicEventData Class
 
-The `DynamicEventData` class wraps the event payload with a string-based event name:
+The `DynamicEventData` class is a simple data object that wraps the event payload:
 
 - **`EventName`**: The string name that identifies the event.
 - **`Data`**: The raw event data payload.
-- **`ConvertToTypedObject()`**: Converts data to a loosely-typed object graph (dictionaries, lists, primitives).
-- **`ConvertToTypedObject<T>()`**: Deserializes data to a strongly-typed `T` object.
-- **`ConvertToTypedObject(Type type)`**: Deserializes data to the specified type.
+
+> If a typed handler exists for the same event name, the framework automatically converts the data to the expected type using the event bus serialization pipeline. Dynamic handlers receive the raw `Data` as-is.
 
 ## See Also
 

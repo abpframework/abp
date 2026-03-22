@@ -117,7 +117,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
 
         if (eventType != null)
         {
-            return PublishAsync(eventType, dynamicEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete, useOutbox);
+            return PublishAsync(eventType, ConvertDynamicEventData(dynamicEventData.Data, eventType), onUnitOfWorkComplete, useOutbox);
         }
 
         return PublishAsync(typeof(DynamicEventData), dynamicEventData, onUnitOfWorkComplete, useOutbox);

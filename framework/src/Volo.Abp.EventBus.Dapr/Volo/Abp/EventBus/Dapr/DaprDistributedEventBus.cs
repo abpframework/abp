@@ -154,7 +154,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 
         if (eventType != null)
         {
-            return PublishAsync(eventType, dynamicEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete);
+            return PublishAsync(eventType, ConvertDynamicEventData(dynamicEventData.Data, eventType), onUnitOfWorkComplete);
         }
 
         if (DynamicHandlerFactories.ContainsKey(eventName))

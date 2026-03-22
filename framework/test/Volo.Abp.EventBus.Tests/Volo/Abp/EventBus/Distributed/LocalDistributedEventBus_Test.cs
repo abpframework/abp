@@ -82,7 +82,7 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
             new SingleInstanceHandlerFactory(new ActionEventHandler<DynamicEventData>(async (d) =>
             {
                 handleCount++;
-                d.ConvertToTypedObject().ShouldNotBeNull();
+                d.Data.ShouldNotBeNull();
                 await Task.CompletedTask;
             })));
 
@@ -212,6 +212,69 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
     }
 
     [Fact]
+    public async Task Should_Subscribe_With_IDistributedEventHandler()
+    {
+        var handleCount = 0;
+        var eventName = "MyEvent-" + Guid.NewGuid().ToString("N");
+
+        using var subscription = DistributedEventBus.Subscribe(eventName,
+            new TestDynamicDistributedEventHandler(() => handleCount++));
+
+        await DistributedEventBus.PublishAsync(eventName, new { Value = 1 });
+        await DistributedEventBus.PublishAsync(eventName, new { Value = 2 });
+
+        Assert.Equal(2, handleCount);
+    }
+
+    [Fact]
+    public async Task Should_Handle_Multiple_Dynamic_Events_Independently()
+    {
+        var countA = 0;
+        var countB = 0;
+        var eventNameA = "EventA-" + Guid.NewGuid().ToString("N");
+        var eventNameB = "EventB-" + Guid.NewGuid().ToString("N");
+
+        using var subA = DistributedEventBus.Subscribe(eventNameA,
+            new SingleInstanceHandlerFactory(new ActionEventHandler<DynamicEventData>(async (d) =>
+            {
+                countA++;
+                await Task.CompletedTask;
+            })));
+
+        using var subB = DistributedEventBus.Subscribe(eventNameB,
+            new SingleInstanceHandlerFactory(new ActionEventHandler<DynamicEventData>(async (d) =>
+            {
+                countB++;
+                await Task.CompletedTask;
+            })));
+
+        await DistributedEventBus.PublishAsync(eventNameA, new { Value = 1 });
+        await DistributedEventBus.PublishAsync(eventNameB, new { Value = 2 });
+        await DistributedEventBus.PublishAsync(eventNameA, new { Value = 3 });
+
+        Assert.Equal(2, countA);
+        Assert.Equal(1, countB);
+    }
+
+    [Fact]
+    public async Task Should_Receive_EventName_In_DynamicEventData()
+    {
+        string? receivedEventName = null;
+        var eventName = "TestEvent-" + Guid.NewGuid().ToString("N");
+
+        using var subscription = DistributedEventBus.Subscribe(eventName,
+            new SingleInstanceHandlerFactory(new ActionEventHandler<DynamicEventData>(async (d) =>
+            {
+                receivedEventName = d.EventName;
+                await Task.CompletedTask;
+            })));
+
+        await DistributedEventBus.PublishAsync(eventName, new { Value = 1 });
+
+        receivedEventName.ShouldBe(eventName);
+    }
+
+    [Fact]
     public async Task Should_Change_TenantId_If_EventData_Is_MultiTenant()
     {
         var tenantId = Guid.NewGuid();
@@ -309,4 +372,19 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
         }
     }
 
+    class TestDynamicDistributedEventHandler : IDistributedEventHandler<DynamicEventData>
+    {
+        private readonly Action _onHandle;
+
+        public TestDynamicDistributedEventHandler(Action onHandle)
+        {
+            _onHandle = onHandle;
+        }
+
+        public Task HandleEventAsync(DynamicEventData eventData)
+        {
+            _onHandle();
+            return Task.CompletedTask;
+        }
+    }
 }

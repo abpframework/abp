@@ -125,7 +125,7 @@ public class LocalEventBus_Dynamic_Test : EventBusTestBase
     }
 
     [Fact]
-    public async Task Should_ConvertToTypedObject_In_Dynamic_Handler()
+    public async Task Should_Access_Data_In_Dynamic_Handler()
     {
         object? receivedData = null;
         var eventName = "TestEvent-" + Guid.NewGuid().ToString("N");
@@ -133,34 +133,126 @@ public class LocalEventBus_Dynamic_Test : EventBusTestBase
         using var subscription = LocalEventBus.Subscribe(eventName,
             new SingleInstanceHandlerFactory(new ActionEventHandler<DynamicEventData>(async (d) =>
             {
-                receivedData = d.ConvertToTypedObject();
+                receivedData = d.Data;
                 await Task.CompletedTask;
             })));
 
         await LocalEventBus.PublishAsync(eventName, new { Name = "Hello", Count = 42 });
 
         receivedData.ShouldNotBeNull();
-        var dict = receivedData.ShouldBeOfType<Dictionary<string, object?>>();
-        dict["Name"].ShouldBe("Hello");
-        dict["Count"].ShouldBe(42L);
     }
 
     [Fact]
-    public async Task Should_ConvertToTypedObject_Generic_In_Dynamic_Handler()
+    public async Task Should_Receive_Typed_Data_Via_Typed_Handler_From_Dynamic_Publish()
     {
         MySimpleEventData? receivedData = null;
-        var eventName = "TestEvent-" + Guid.NewGuid().ToString("N");
+        var eventName = EventNameAttribute.GetNameOrDefault<MySimpleEventData>();
 
-        using var subscription = LocalEventBus.Subscribe(eventName,
-            new SingleInstanceHandlerFactory(new ActionEventHandler<DynamicEventData>(async (d) =>
-            {
-                receivedData = d.ConvertToTypedObject<MySimpleEventData>();
-                await Task.CompletedTask;
-            })));
+        using var subscription = LocalEventBus.Subscribe<MySimpleEventData>(async (d) =>
+        {
+            receivedData = d;
+            await Task.CompletedTask;
+        });
 
         await LocalEventBus.PublishAsync(eventName, new MySimpleEventData(99));
 
         receivedData.ShouldNotBeNull();
         receivedData.Value.ShouldBe(99);
+    }
+
+    [Fact]
+    public async Task Should_Unsubscribe_All_Dynamic_Handlers()
+    {
+        var handleCount = 0;
+        var eventName = "TestEvent-" + Guid.NewGuid().ToString("N");
+
+        LocalEventBus.Subscribe(eventName,
+            new SingleInstanceHandlerFactory(new ActionEventHandler<DynamicEventData>(async (d) =>
+            {
+                handleCount++;
+                await Task.CompletedTask;
+            })));
+
+        LocalEventBus.Subscribe(eventName,
+            new SingleInstanceHandlerFactory(new ActionEventHandler<DynamicEventData>(async (d) =>
+            {
+                handleCount++;
+                await Task.CompletedTask;
+            })));
+
+        await LocalEventBus.PublishAsync(eventName, new { Value = 1 });
+        handleCount.ShouldBe(2);
+
+        LocalEventBus.UnsubscribeAll(eventName);
+
+        // After UnsubscribeAll, publishing still works (key exists) but no handlers are invoked
+        await LocalEventBus.PublishAsync(eventName, new { Value = 2 });
+        handleCount.ShouldBe(2);
+    }
+
+    [Fact]
+    public async Task Should_Handle_Multiple_Dynamic_Events_Independently()
+    {
+        var countA = 0;
+        var countB = 0;
+        var eventNameA = "EventA-" + Guid.NewGuid().ToString("N");
+        var eventNameB = "EventB-" + Guid.NewGuid().ToString("N");
+
+        using var subA = LocalEventBus.Subscribe(eventNameA,
+            new SingleInstanceHandlerFactory(new ActionEventHandler<DynamicEventData>(async (d) =>
+            {
+                countA++;
+                await Task.CompletedTask;
+            })));
+
+        using var subB = LocalEventBus.Subscribe(eventNameB,
+            new SingleInstanceHandlerFactory(new ActionEventHandler<DynamicEventData>(async (d) =>
+            {
+                countB++;
+                await Task.CompletedTask;
+            })));
+
+        await LocalEventBus.PublishAsync(eventNameA, new { Value = 1 });
+        await LocalEventBus.PublishAsync(eventNameB, new { Value = 2 });
+        await LocalEventBus.PublishAsync(eventNameA, new { Value = 3 });
+
+        countA.ShouldBe(2);
+        countB.ShouldBe(1);
+    }
+
+    [Fact]
+    public async Task Should_Receive_EventName_In_DynamicEventData()
+    {
+        string? receivedEventName = null;
+        var eventName = "TestEvent-" + Guid.NewGuid().ToString("N");
+
+        using var subscription = LocalEventBus.Subscribe(eventName,
+            new SingleInstanceHandlerFactory(new ActionEventHandler<DynamicEventData>(async (d) =>
+            {
+                receivedEventName = d.EventName;
+                await Task.CompletedTask;
+            })));
+
+        await LocalEventBus.PublishAsync(eventName, new { Value = 1 });
+
+        receivedEventName.ShouldBe(eventName);
+    }
+
+    [Fact]
+    public async Task Should_Convert_Anonymous_Object_To_Typed_Handler()
+    {
+        MySimpleEventData? receivedData = null;
+        var eventName = EventNameAttribute.GetNameOrDefault<MySimpleEventData>();
+
+        using var subscription = LocalEventBus.Subscribe<MySimpleEventData>(async (d) =>
+        {
+            receivedData = d;
+            await Task.CompletedTask;
+        });
+
+        await LocalEventBus.PublishAsync(eventName, new { Value = 77 });
+
+        receivedData.ShouldNotBeNull();
+        receivedData.Value.ShouldBe(77);
     }
 }

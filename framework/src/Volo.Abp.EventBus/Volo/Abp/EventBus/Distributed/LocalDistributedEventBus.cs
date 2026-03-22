@@ -177,7 +177,7 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
         if (eventType != null)
         {
-            return PublishAsync(eventType, dynamicEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete, useOutbox);
+            return PublishAsync(eventType, ConvertDynamicEventData(dynamicEventData.Data, eventType), onUnitOfWorkComplete, useOutbox);
         }
 
         if (!DynamicEventNames.ContainsKey(eventName))
@@ -236,11 +236,11 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         {
             eventData = new DynamicEventData(
                 outgoingEvent.EventName,
-                JsonSerializer.Deserialize<object>(outgoingEvent.EventData)!);
+                System.Text.Json.JsonSerializer.Deserialize<object>(outgoingEvent.EventData)!);
         }
         else
         {
-            eventData = JsonSerializer.Deserialize(outgoingEvent.EventData, eventType)!;
+            eventData = System.Text.Json.JsonSerializer.Deserialize(outgoingEvent.EventData, eventType)!;
         }
 
         if (await AddToInboxAsync(Guid.NewGuid().ToString(), outgoingEvent.EventName, eventType, eventData, null))
@@ -278,11 +278,11 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         {
             eventData = new DynamicEventData(
                 incomingEvent.EventName,
-                JsonSerializer.Deserialize<object>(incomingEvent.EventData)!);
+                System.Text.Json.JsonSerializer.Deserialize<object>(incomingEvent.EventData)!);
         }
         else
         {
-            eventData = JsonSerializer.Deserialize(incomingEvent.EventData, eventType)!;
+            eventData = System.Text.Json.JsonSerializer.Deserialize(incomingEvent.EventData, eventType)!;
         }
 
         var exceptions = new List<Exception>();
@@ -298,7 +298,7 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     protected override byte[] Serialize(object eventData)
     {
-        return JsonSerializer.SerializeToUtf8Bytes(eventData);
+        return System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(eventData);
     }
 
     protected override Task OnAddToOutboxAsync(string eventName, Type eventType, object eventData)

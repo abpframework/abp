@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using System.Text.Json;
 using Volo.Abp.Collections;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.EventBus.Distributed;
@@ -175,7 +176,7 @@ public abstract class EventBusBase : IEventBus
             typeof(IEventDataWithInheritableGenericArgument).IsAssignableFrom(actualEventType))
         {
             var resolvedEventData = eventData is DynamicEventData aed
-                ? aed.ConvertToTypedObject(actualEventType)
+                ? ConvertDynamicEventData(aed.Data, actualEventType)
                 : eventData;
 
             var genericArg = actualEventType.GetGenericArguments()[0];
@@ -209,7 +210,7 @@ public abstract class EventBusBase : IEventBus
     {
         if (eventData is DynamicEventData dynamicEventData && handlerEventType != typeof(DynamicEventData))
         {
-            return dynamicEventData.ConvertToTypedObject(handlerEventType);
+            return ConvertDynamicEventData(dynamicEventData.Data, handlerEventType);
         }
 
         if (handlerEventType == typeof(DynamicEventData) && eventData is not DynamicEventData)
@@ -218,6 +219,17 @@ public abstract class EventBusBase : IEventBus
         }
 
         return eventData;
+    }
+
+    protected virtual object ConvertDynamicEventData(object data, Type targetType)
+    {
+        if (targetType.IsInstanceOfType(data))
+        {
+            return data;
+        }
+
+        var json = JsonSerializer.Serialize(data);
+        return JsonSerializer.Deserialize(json, targetType)!;
     }
 
     protected void ThrowOriginalExceptions(Type eventType, List<Exception> exceptions)

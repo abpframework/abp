@@ -94,8 +94,7 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         }
         else if (DynamicHandlerFactories.ContainsKey(eventName))
         {
-            var element = Serializer.Deserialize<object>(message.Value);
-            eventData = new DynamicEventData(eventName, element);
+            eventData = new DynamicEventData(eventName, Serializer.Deserialize<object>(message.Value));
             eventType = typeof(DynamicEventData);
         }
         else
@@ -205,7 +204,7 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
         if (eventType != null)
         {
-            return PublishAsync(eventType, dynamicEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete);
+            return PublishAsync(eventType, ConvertDynamicEventData(dynamicEventData.Data, eventType), onUnitOfWorkComplete);
         }
 
         if (DynamicHandlerFactories.ContainsKey(eventName))
@@ -334,8 +333,7 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         }
         else if (DynamicHandlerFactories.ContainsKey(incomingEvent.EventName))
         {
-            var element = Serializer.Deserialize<object>(incomingEvent.EventData);
-            eventData = new DynamicEventData(incomingEvent.EventName, element);
+            eventData = new DynamicEventData(incomingEvent.EventName, Serializer.Deserialize<object>(incomingEvent.EventData));
             eventType = typeof(DynamicEventData);
         }
         else

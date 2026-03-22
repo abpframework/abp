@@ -178,7 +178,7 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
 
         if (eventType != null)
         {
-            return PublishAsync(eventType, dynamicEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete);
+            return PublishAsync(eventType, ConvertDynamicEventData(dynamicEventData.Data, eventType), onUnitOfWorkComplete);
         }
 
         var isDynamic = DynamicEventHandlerFactories.ContainsKey(eventName);

@@ -94,8 +94,8 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         }
         else if (DynamicHandlerFactories.ContainsKey(eventName))
         {
-            var data = Serializer.Deserialize<object>(message.Body.ToArray());
-            eventData = new DynamicEventData(eventName, data);
+            var rawBytes = message.Body.ToArray();
+            eventData = new DynamicEventData(eventName, Serializer.Deserialize<object>(rawBytes));
             eventType = typeof(DynamicEventData);
         }
         else
@@ -204,7 +204,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
         if (eventType != null)
         {
-            return PublishAsync(eventType, dynamicEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete);
+            return PublishAsync(eventType, ConvertDynamicEventData(dynamicEventData.Data, eventType), onUnitOfWorkComplete);
         }
 
         if (DynamicHandlerFactories.ContainsKey(eventName))
@@ -296,8 +296,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         }
         else if (DynamicHandlerFactories.ContainsKey(incomingEvent.EventName))
         {
-            var element = Serializer.Deserialize<object>(incomingEvent.EventData);
-            eventData = new DynamicEventData(incomingEvent.EventName, element);
+            eventData = new DynamicEventData(incomingEvent.EventName, Serializer.Deserialize<object>(incomingEvent.EventData));
             eventType = typeof(DynamicEventData);
         }
         else

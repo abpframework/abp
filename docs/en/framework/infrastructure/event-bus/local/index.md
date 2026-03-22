@@ -280,14 +280,9 @@ var subscription = localEventBus.Subscribe(
     new SingleInstanceHandlerFactory(
         new ActionEventHandler<DynamicEventData>(eventData =>
         {
-            // Access the event name
+            // Access the event name and raw data
             var name = eventData.EventName;
-
-            // Convert to a loosely-typed object (Dictionary/List/primitives)
-            var obj = eventData.ConvertToTypedObject();
-
-            // Or convert to a strongly-typed object
-            var typed = eventData.ConvertToTypedObject<MyEventDto>();
+            var data = eventData.Data;
 
             return Task.CompletedTask;
         })));
@@ -295,6 +290,13 @@ var subscription = localEventBus.Subscribe(
 // Unsubscribe when done
 subscription.Dispose();
 ````
+
+The `DynamicEventData` class is a simple data object with two properties:
+
+- **`EventName`**: The string name that identifies the event.
+- **`Data`**: The raw event data payload.
+
+> If a typed handler exists for the same event name, the framework automatically converts the data to the expected type. Dynamic handlers receive the raw `Data` as-is.
 
 ### Mixed Typed and Dynamic Handlers
 

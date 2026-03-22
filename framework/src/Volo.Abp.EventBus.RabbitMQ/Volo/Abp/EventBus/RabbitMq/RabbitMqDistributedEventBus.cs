@@ -111,8 +111,9 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         }
         else if (DynamicHandlerFactories.ContainsKey(eventName))
         {
+            var rawBytes = ea.Body.ToArray();
             eventType = typeof(DynamicEventData);
-            eventData = new DynamicEventData(eventName, Serializer.Deserialize<object>(ea.Body.ToArray()));
+            eventData = new DynamicEventData(eventName, Serializer.Deserialize<object>(rawBytes));
         }
         else
         {
@@ -232,7 +233,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
 
         if (eventType != null)
         {
-            return PublishAsync(eventType, dynamicEventData.ConvertToTypedObject(eventType), onUnitOfWorkComplete);
+            return PublishAsync(eventType, ConvertDynamicEventData(dynamicEventData.Data, eventType), onUnitOfWorkComplete);
         }
 
         if (DynamicHandlerFactories.ContainsKey(eventName))
