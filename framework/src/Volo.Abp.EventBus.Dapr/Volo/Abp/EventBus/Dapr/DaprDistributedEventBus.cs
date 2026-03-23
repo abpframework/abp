@@ -288,11 +288,6 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
     {
         return EventTypes.GetOrDefault(eventName);
     }
-    
-    public bool IsDynamicEvent(string eventName)
-    {
-        return false;
-    }
 
     /// <inheritdoc/>
     public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
