@@ -356,7 +356,7 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
 
     private static bool IsNetworkSource(string source)
     {
-        return source.ToLower().StartsWith("http");
+        return source.ToLowerInvariant().StartsWith("http");
     }
 
     private List<(string TemplateName, string Version)> GetLocalTemplates()
