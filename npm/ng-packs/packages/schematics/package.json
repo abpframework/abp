@@ -4,16 +4,16 @@
   "author": "",
   "schematics": "./collection.json",
   "dependencies": {
-    "@angular-devkit/core": "~21.0.0",
-    "@angular-devkit/schematics": "~21.0.0",
-    "@angular/cli": "~21.0.0",
+    "@angular-devkit/core": "~21.2.0",
+    "@angular-devkit/schematics": "~21.2.0",
+    "@angular/cli": "~21.2.0",
     "got": "^11.5.2",
     "jsonc-parser": "^2.3.0",
     "should-quote": "^1.0.0",
     "typescript": "~5.9.0"
   },
   "devDependencies": {
-    "@schematics/angular": "~21.0.0",
+    "@schematics/angular": "~21.2.0",
     "@types/jest": "29.4.4",
     "@types/node": "20.2.5",
     "jest": "29.4.3",

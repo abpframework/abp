@@ -10,6 +10,7 @@ public class EntityCacheWithObjectMapper<TEntity, TEntityCacheItem, TKey> :
     EntityCacheBase<TEntity, TEntityCacheItem, TKey>
     where TEntity : Entity<TKey>
     where TEntityCacheItem : class
+    where TKey : notnull
 {
     protected IObjectMapper ObjectMapper { get; }
 
@@ -30,11 +31,16 @@ public class EntityCacheWithObjectMapper<TEntity, TEntityCacheItem, TKey> :
             return null;
         }
 
+        return new EntityCacheItemWrapper<TEntityCacheItem>(MapToValue(entity));
+    }
+
+    protected virtual TEntityCacheItem MapToValue(TEntity entity)
+    {
         if (typeof(TEntity) == typeof(TEntityCacheItem))
         {
-            return new EntityCacheItemWrapper<TEntityCacheItem>(entity.As<TEntityCacheItem>());
+            return entity.As<TEntityCacheItem>();
         }
 
-        return new EntityCacheItemWrapper<TEntityCacheItem>(ObjectMapper.Map<TEntity, TEntityCacheItem>(entity));
+        return ObjectMapper.Map<TEntity, TEntityCacheItem>(entity);
     }
 }
