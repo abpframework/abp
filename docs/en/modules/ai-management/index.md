@@ -813,7 +813,7 @@ Your application acts as a proxy, forwarding these requests to the AI Management
 | **3. Client Remote**      | No                | Remote Service | Remote Service | No          | Microservices consuming AI centrally      |
 | **4. Client Proxy**       | No                | Remote Service | Remote Service | Yes         | API Gateway pattern, proxy services       |
 
-### OpenAI-Compatible API
+## OpenAI-Compatible API
 
 The AI Management module exposes an **OpenAI-compatible REST API** at the `/v1` path. This allows any application or tool that supports the OpenAI API format -- such as [AnythingLLM](https://anythingllm.com/), [Open WebUI](https://openwebui.com/), [Dify](https://dify.ai/), or custom scripts using the OpenAI SDK -- to connect directly to your AI Management instance.
 
