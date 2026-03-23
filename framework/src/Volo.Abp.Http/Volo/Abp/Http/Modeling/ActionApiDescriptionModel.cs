@@ -32,6 +32,14 @@ public class ActionApiDescriptionModel
 
     public string? ImplementFrom { get; set; }
 
+    public string? Summary { get; set; }
+
+    public string? Remarks { get; set; }
+
+    public string? Description { get; set; }
+
+    public string? DisplayName { get; set; }
+
     public ActionApiDescriptionModel()
     {
 

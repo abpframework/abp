@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Asp.Versioning;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Mvc.ApiExploring;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.Utils;
 using Volo.Abp.DependencyInjection;
@@ -29,26 +33,30 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
     private readonly IApiDescriptionGroupCollectionProvider _descriptionProvider;
     private readonly AbpAspNetCoreMvcOptions _abpAspNetCoreMvcOptions;
     private readonly AbpApiDescriptionModelOptions _modelOptions;
+    private readonly IXmlDocumentationProvider _xmlDocProvider;
 
     public AspNetCoreApiDescriptionModelProvider(
         IOptions<AspNetCoreApiDescriptionModelProviderOptions> options,
         IApiDescriptionGroupCollectionProvider descriptionProvider,
         IOptions<AbpAspNetCoreMvcOptions> abpAspNetCoreMvcOptions,
-        IOptions<AbpApiDescriptionModelOptions> modelOptions)
+        IOptions<AbpApiDescriptionModelOptions> modelOptions,
+        IXmlDocumentationProvider xmlDocProvider)
     {
         _options = options.Value;
         _descriptionProvider = descriptionProvider;
         _abpAspNetCoreMvcOptions = abpAspNetCoreMvcOptions.Value;
         _modelOptions = modelOptions.Value;
+        _xmlDocProvider = xmlDocProvider;
 
         Logger = NullLogger<AspNetCoreApiDescriptionModelProvider>.Instance;
     }
 
-    public ApplicationApiDescriptionModel CreateApiModel(ApplicationApiDescriptionModelRequestDto input)
+    public virtual async Task<ApplicationApiDescriptionModel> CreateApiModelAsync(ApplicationApiDescriptionModelRequestDto input)
     {
         //TODO: Can cache the model?
 
         var model = ApplicationApiDescriptionModel.Create();
+        var populatedControllers = new HashSet<ControllerApiDescriptionModel>();
 
         foreach (var descriptionGroupItem in _descriptionProvider.ApiDescriptionGroups.Items)
         {
@@ -59,7 +67,7 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
                     continue;
                 }
 
-                AddApiDescriptionToModel(apiDescription, model, input);
+                await AddApiDescriptionToModelAsync(apiDescription, model, input, populatedControllers);
             }
         }
 
@@ -80,10 +88,11 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
         return model;
     }
 
-    private void AddApiDescriptionToModel(
+    private async Task AddApiDescriptionToModelAsync(
         ApiDescription apiDescription,
         ApplicationApiDescriptionModel applicationModel,
-        ApplicationApiDescriptionModelRequestDto input)
+        ApplicationApiDescriptionModelRequestDto input,
+        HashSet<ControllerApiDescriptionModel> populatedControllers)
     {
         var controllerType = apiDescription
             .ActionDescriptor
@@ -139,10 +148,21 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
 
         var implementFrom = controllerType.FullName;
 
-        var interfaceType = controllerType.GetInterfaces().FirstOrDefault(i => i.GetMethods().Any(x => x.ToString() == method.ToString()));
-        if (interfaceType != null)
+        foreach (var iface in controllerType.GetInterfaces())
         {
-            implementFrom = TypeHelper.GetFullNameHandlingNullableAndGenerics(interfaceType);
+            try
+            {
+                var map = controllerType.GetInterfaceMap(iface);
+                if (Array.IndexOf(map.TargetMethods, method) >= 0)
+                {
+                    implementFrom = TypeHelper.GetFullNameHandlingNullableAndGenerics(iface);
+                    break;
+                }
+            }
+            catch (ArgumentException)
+            {
+                // GetInterfaceMap is not supported for some generic interface edge cases
+            }
         }
 
         var actionModel = controllerModel.AddAction(
@@ -161,10 +181,22 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
 
         if (input.IncludeTypes)
         {
-            AddCustomTypesToModel(applicationModel, method);
+            await AddCustomTypesToModelAsync(applicationModel, method, input.IncludeDescriptions);
         }
 
         AddParameterDescriptionsToModel(actionModel, method, apiDescription);
+
+        if (input.IncludeDescriptions)
+        {
+            if (populatedControllers.Add(controllerModel))
+            {
+                await PopulateControllerDescriptionsAsync(controllerModel, controllerType);
+            }
+
+            var interfaceMethod = GetInterfaceMethod(method);
+            await PopulateActionDescriptionsAsync(actionModel, method, interfaceMethod);
+            await PopulateParameterDescriptionsAsync(actionModel, method, interfaceMethod);
+        }
     }
 
     private static List<string> GetSupportedVersions(Type controllerType, MethodInfo method,
@@ -191,18 +223,18 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
         return supportedVersions.Select(v => v.ToString()).Distinct().ToList();
     }
 
-    private void AddCustomTypesToModel(ApplicationApiDescriptionModel applicationModel, MethodInfo method)
+    private async Task AddCustomTypesToModelAsync(ApplicationApiDescriptionModel applicationModel, MethodInfo method, bool includeDescriptions)
     {
         foreach (var parameterInfo in method.GetParameters())
         {
-            AddCustomTypesToModel(applicationModel, parameterInfo.ParameterType);
+            await AddCustomTypesToModelAsync(applicationModel, parameterInfo.ParameterType, includeDescriptions);
         }
 
-        AddCustomTypesToModel(applicationModel, method.ReturnType);
+        await AddCustomTypesToModelAsync(applicationModel, method.ReturnType, includeDescriptions);
     }
 
-    private static void AddCustomTypesToModel(ApplicationApiDescriptionModel applicationModel,
-        Type? type)
+    private async Task AddCustomTypesToModelAsync(ApplicationApiDescriptionModel applicationModel,
+        Type? type, bool includeDescriptions)
     {
         if (type == null)
         {
@@ -229,14 +261,14 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
 
         if (TypeHelper.IsDictionary(type, out var keyType, out var valueType))
         {
-            AddCustomTypesToModel(applicationModel, keyType);
-            AddCustomTypesToModel(applicationModel, valueType);
+            await AddCustomTypesToModelAsync(applicationModel, keyType, includeDescriptions);
+            await AddCustomTypesToModelAsync(applicationModel, valueType, includeDescriptions);
             return;
         }
 
         if (TypeHelper.IsEnumerable(type, out var itemType))
         {
-            AddCustomTypesToModel(applicationModel, itemType);
+            await AddCustomTypesToModelAsync(applicationModel, itemType, includeDescriptions);
             return;
         }
 
@@ -244,11 +276,11 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
         {
             var genericTypeDefinition = type.GetGenericTypeDefinition();
 
-            AddCustomTypesToModel(applicationModel, genericTypeDefinition);
+            await AddCustomTypesToModelAsync(applicationModel, genericTypeDefinition, includeDescriptions);
 
             foreach (var genericArgument in type.GetGenericArguments())
             {
-                AddCustomTypesToModel(applicationModel, genericArgument);
+                await AddCustomTypesToModelAsync(applicationModel, genericArgument, includeDescriptions);
             }
 
             return;
@@ -262,11 +294,16 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
 
         applicationModel.Types[typeName] = TypeApiDescriptionModel.Create(type);
 
-        AddCustomTypesToModel(applicationModel, type.BaseType);
+        if (includeDescriptions)
+        {
+            await PopulateTypeDescriptionsAsync(applicationModel.Types[typeName], type);
+        }
+
+        await AddCustomTypesToModelAsync(applicationModel, type.BaseType, includeDescriptions);
 
         foreach (var propertyInfo in type.GetProperties().Where(p => p.DeclaringType == type))
         {
-            AddCustomTypesToModel(applicationModel, propertyInfo.PropertyType);
+            await AddCustomTypesToModelAsync(applicationModel, propertyInfo.PropertyType, includeDescriptions);
         }
     }
 
@@ -413,5 +450,150 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
         }
 
         return null;
+    }
+
+    protected virtual async Task PopulateControllerDescriptionsAsync(ControllerApiDescriptionModel controllerModel, Type controllerType)
+    {
+        controllerModel.Summary = await _xmlDocProvider.GetSummaryAsync(controllerType);
+        controllerModel.Remarks = await _xmlDocProvider.GetRemarksAsync(controllerType);
+
+        if (controllerModel.Summary == null && controllerModel.Remarks == null)
+        {
+            foreach (var interfaceType in GetDirectInterfaces(controllerType).Where(i => !_modelOptions.IgnoredInterfaces.Contains(i)))
+            {
+                controllerModel.Summary = await _xmlDocProvider.GetSummaryAsync(interfaceType);
+                controllerModel.Remarks = await _xmlDocProvider.GetRemarksAsync(interfaceType);
+                if (controllerModel.Summary != null || controllerModel.Remarks != null)
+                {
+                    break;
+                }
+            }
+        }
+
+        controllerModel.Description = controllerType.GetCustomAttribute<DescriptionAttribute>()?.Description;
+        controllerModel.DisplayName = controllerType.GetCustomAttribute<DisplayAttribute>()?.Name;
+    }
+
+    protected virtual async Task PopulateActionDescriptionsAsync(ActionApiDescriptionModel actionModel, MethodInfo method, MethodInfo? interfaceMethod)
+    {
+        actionModel.Summary = await _xmlDocProvider.GetSummaryAsync(method);
+        actionModel.Remarks = await _xmlDocProvider.GetRemarksAsync(method);
+
+        if (actionModel.Summary == null && actionModel.Remarks == null && interfaceMethod != null)
+        {
+            actionModel.Summary = await _xmlDocProvider.GetSummaryAsync(interfaceMethod);
+            actionModel.Remarks = await _xmlDocProvider.GetRemarksAsync(interfaceMethod);
+        }
+
+        actionModel.Description = method.GetCustomAttribute<DescriptionAttribute>()?.Description;
+        actionModel.DisplayName = method.GetCustomAttribute<DisplayAttribute>()?.Name;
+
+        actionModel.ReturnValue.Summary = await _xmlDocProvider.GetReturnsAsync(method);
+        if (actionModel.ReturnValue.Summary == null && interfaceMethod != null)
+        {
+            actionModel.ReturnValue.Summary = await _xmlDocProvider.GetReturnsAsync(interfaceMethod);
+        }
+    }
+
+    protected virtual async Task PopulateParameterDescriptionsAsync(ActionApiDescriptionModel actionModel, MethodInfo method, MethodInfo? interfaceMethod)
+    {
+        var methodParameters = method.GetParameters();
+
+        foreach (var param in actionModel.ParametersOnMethod)
+        {
+            var paramInfo = methodParameters.FirstOrDefault(p => p.Name == param.Name);
+            if (paramInfo == null)
+            {
+                continue;
+            }
+
+            param.Summary = await _xmlDocProvider.GetParameterSummaryAsync(method, param.Name);
+            if (param.Summary == null && interfaceMethod != null)
+            {
+                param.Summary = await _xmlDocProvider.GetParameterSummaryAsync(interfaceMethod, param.Name);
+            }
+
+            param.Description = paramInfo.GetCustomAttribute<DescriptionAttribute>()?.Description;
+            param.DisplayName = paramInfo.GetCustomAttribute<DisplayAttribute>()?.Name;
+        }
+
+        foreach (var param in actionModel.Parameters)
+        {
+            // Skip expanded properties from complex types - their descriptions
+            // should come from type-level documentation (PopulateTypeDescriptionsAsync)
+            if (!string.IsNullOrEmpty(param.DescriptorName) && param.Name != param.NameOnMethod)
+            {
+                continue;
+            }
+
+            param.Summary = await _xmlDocProvider.GetParameterSummaryAsync(method, param.NameOnMethod);
+            if (param.Summary == null && interfaceMethod != null)
+            {
+                param.Summary = await _xmlDocProvider.GetParameterSummaryAsync(interfaceMethod, param.NameOnMethod);
+            }
+
+            var paramInfo = methodParameters.FirstOrDefault(p => p.Name == param.NameOnMethod);
+            if (paramInfo != null)
+            {
+                param.Description = paramInfo.GetCustomAttribute<DescriptionAttribute>()?.Description;
+                param.DisplayName = paramInfo.GetCustomAttribute<DisplayAttribute>()?.Name;
+            }
+        }
+    }
+
+    private MethodInfo? GetInterfaceMethod(MethodInfo method)
+    {
+        var declaringType = method.DeclaringType;
+        if (declaringType == null || declaringType.IsInterface)
+        {
+            return null;
+        }
+
+        foreach (var interfaceType in GetDirectInterfaces(declaringType).Where(i => !_modelOptions.IgnoredInterfaces.Contains(i)))
+        {
+            var map = declaringType.GetInterfaceMap(interfaceType);
+            for (var i = 0; i < map.TargetMethods.Length; i++)
+            {
+                if (map.TargetMethods[i] == method)
+                {
+                    return map.InterfaceMethods[i];
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private static IEnumerable<Type> GetDirectInterfaces(Type type)
+    {
+        var allInterfaces = type.GetInterfaces();
+        var baseInterfaces = type.BaseType?.GetInterfaces() ?? Type.EmptyTypes;
+        return allInterfaces.Except(baseInterfaces);
+    }
+
+    protected virtual async Task PopulateTypeDescriptionsAsync(TypeApiDescriptionModel typeModel, Type type)
+    {
+        typeModel.Summary = await _xmlDocProvider.GetSummaryAsync(type);
+        typeModel.Remarks = await _xmlDocProvider.GetRemarksAsync(type);
+        typeModel.Description = type.GetCustomAttribute<DescriptionAttribute>()?.Description;
+        typeModel.DisplayName = type.GetCustomAttribute<DisplayAttribute>()?.Name;
+
+        if (typeModel.Properties == null)
+        {
+            return;
+        }
+
+        foreach (var propModel in typeModel.Properties)
+        {
+            var propInfo = type.GetProperty(propModel.Name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
+            if (propInfo == null)
+            {
+                continue;
+            }
+
+            propModel.Summary = await _xmlDocProvider.GetSummaryAsync(propInfo);
+            propModel.Description = propInfo.GetCustomAttribute<DescriptionAttribute>()?.Description;
+            propModel.DisplayName = propInfo.GetCustomAttribute<DisplayAttribute>()?.Name;
+        }
     }
 }
