@@ -28,15 +28,14 @@
     <ng-template #abpBody>
       @if (form) {
         <form [formGroup]="form" (ngSubmit)="save()">
-          <ul ngbNav #nav="ngbNav" class="nav-tabs">
-            <li ngbNavItem>
+          <ul ngbNav #newUserNav="ngbNav" class="nav-tabs" [(activeId)]="selectedTab">
+            <li ngbNavItem="user-info">
               <a ngbNavLink>{{ 'AbpIdentity::UserInformations' | abpLocalization }}</a>
               <ng-template ngbNavContent>
                 <abp-extensible-form [selectedRecord]="selected"></abp-extensible-form>
               </ng-template>
             </li>
-
-            <li ngbNavItem>
+            <li ngbNavItem="roles">
               <a ngbNavLink>{{ 'AbpIdentity::Roles' | abpLocalization }}</a>
               <ng-template ngbNavContent>
                 @for (roleGroup of roleGroups; track $index; let i = $index) {
@@ -60,7 +59,8 @@
               </ng-template>
             </li>
           </ul>
-          <div class="mt-2 fade-in-top" [ngbNavOutlet]="nav"></div>
+
+          <div class="mt-2 fade-in-top" [ngbNavOutlet]="newUserNav"></div>
         </form>
       } @else {
         <div class="text-center"><i class="fa fa-pulse fa-spinner" aria-hidden="true"></i></div>

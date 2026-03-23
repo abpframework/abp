@@ -1,4 +1,4 @@
-import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
+import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/vitest';
 import { LocalizationPipe } from '../pipes/localization.pipe';
 import { LocalizationService } from '../services/localization.service';
 
@@ -19,7 +19,7 @@ describe('LocalizationPipe', () => {
   });
 
   it('should call getLocalization selector', () => {
-    const translateSpy = jest.spyOn(localizationService, 'instant');
+    const translateSpy = vi.spyOn(localizationService, 'instant');
 
     pipe.transform('test', '1', '2');
     pipe.transform('test2', ['3', '4'] as any);

@@ -71,7 +71,7 @@ public class CommentSummarization
 > [!NOTE]
 > If you don't specify the workspace name, the full name of the class will be used as the workspace name.
 
-You can resolve generic versions of `IChatClient` and `IChatClientAccessor` services for a specific workspace as generic arguments. If Chat Client is not configured for a workspace, you will get `null` from the accessor services. You should check the accessor before using it. This applies only for specified workspaces. Another workspace may have a configured Chat Client.
+You can resolve generic versions of `IChatClient` and `IChatClientAccessor` services for a specific workspace as generic arguments. If Chat Client is not configured for a workspace, the default workspace's chat client is returned. Only if both the workspace-specific and default chat clients are not configured will you get `null` from the accessor services. You should check the accessor before using it. This applies only for specified workspaces. Another workspace may have a configured Chat Client.
 
 `IChatClient<TWorkSpace>` or `IChatClientAccessor<TWorkSpace>` can be resolved to access a specific workspace's chat client. This is a typed chat client and can be configured separately from the default chat client.
 

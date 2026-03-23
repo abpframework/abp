@@ -10,13 +10,12 @@ import {
   Component,
   ElementRef,
   inject,
-  Input,
-  QueryList,
   Renderer2,
   TrackByFunction,
-  ViewChildren,
+  input,
+  viewChildren
 } from '@angular/core';
-import { NgTemplateOutlet, NgClass, AsyncPipe } from '@angular/common';
+import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterLink } from '@angular/router';
 import { EllipsisDirective } from '@abp/ng.theme.shared';
@@ -26,7 +25,6 @@ import { EllipsisDirective } from '@abp/ng.theme.shared';
   templateUrl: 'routes.component.html',
   imports: [
     NgTemplateOutlet,
-    NgClass,
     AsyncPipe,
     RouterLink,
     NgbDropdownModule,
@@ -40,9 +38,9 @@ export class RoutesComponent {
   public readonly routesService = inject(RoutesService);
   protected renderer = inject(Renderer2);
 
-  @Input() smallScreen?: boolean;
+  readonly smallScreen = input<boolean>(undefined);
 
-  @ViewChildren('childrenContainer') childrenContainers!: QueryList<ElementRef<HTMLDivElement>>;
+  readonly childrenContainers = viewChildren<ElementRef<HTMLDivElement>>('childrenContainer');
 
   rootDropdownExpand = {} as { [key: string]: boolean };
 
@@ -53,7 +51,7 @@ export class RoutesComponent {
   }
 
   closeDropdown() {
-    this.childrenContainers.forEach(({ nativeElement }) => {
+    this.childrenContainers().forEach(({ nativeElement }) => {
       this.renderer.addClass(nativeElement, 'd-none');
       setTimeout(() => this.renderer.removeClass(nativeElement, 'd-none'), 0);
     });

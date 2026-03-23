@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, Input, inject, output } from '@angular/core';
 import { Router } from '@angular/router';
-import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/jest';
+import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/vitest';
 import { BehaviorSubject } from 'rxjs';
 import { ReplaceableTemplateDirective } from '../directives/replaceable-template.directive';
 import { ReplaceableComponents } from '../models/replaceable-components';
@@ -18,11 +18,9 @@ class DefaultComponent {
   @Input()
   twoWay: boolean;
 
-  @Output()
-  readonly twoWayChange = new EventEmitter<boolean>();
+  readonly twoWayChange = output<boolean>();
 
-  @Output()
-  readonly someOutput = new EventEmitter<string>();
+  readonly someOutput = output<string>();
 
   setTwoWay(value) {
     this.twoWay = value;
@@ -50,8 +48,8 @@ describe('ReplaceableTemplateDirective', () => {
   });
 
   describe('without external component', () => {
-    const twoWayChange = jest.fn(a => a);
-    const someOutput = jest.fn(a => a);
+    const twoWayChange = vi.fn(a => a);
+    const someOutput = vi.fn(a => a);
 
     beforeEach(() => {
       spectator = createDirective(
@@ -88,8 +86,8 @@ describe('ReplaceableTemplateDirective', () => {
           hostProps: {
             oneWay: { label: 'Test' },
             twoWay: false,
-            twoWayChange: jest.fn(),
-            someOutput: jest.fn(),
+            twoWayChange: vi.fn(),
+            someOutput: vi.fn(),
           },
         },
       );

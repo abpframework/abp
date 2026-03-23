@@ -1,6 +1,6 @@
-import { Component, forwardRef, Input } from '@angular/core';
+import { Component, forwardRef, input } from '@angular/core';
 import { FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { NgClass } from '@angular/common';
+
 import { AbstractNgModelComponent } from '@abp/ng.core';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 
@@ -10,7 +10,7 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
  */
 @Component({
   selector: 'abp-password',
-  imports: [NgClass, FormsModule, NgxValidateCoreModule],
+  imports: [FormsModule, NgxValidateCoreModule],
   templateUrl: `./password.component.html`,
   providers: [
     {
@@ -21,8 +21,8 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
   ],
 })
 export class PasswordComponent extends AbstractNgModelComponent {
-  @Input() inputId!: string;
-  @Input() formControlName!: string;
+  readonly inputId = input.required<string>();
+  readonly formControlName = input.required<string>();
   fieldTextType?: boolean;
 
   toggleFieldTextType() {

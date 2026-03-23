@@ -1,4 +1,4 @@
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/vitest';
 import { SafeHtmlPipe } from '../pipes';
 
 describe('SafeHtmlPipe', () => {
@@ -27,7 +27,7 @@ describe('SafeHtmlPipe', () => {
   });
 
   it('should sanitize unsafe HTML content', () => {
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     const input = `<script>alert("hello world");</script><p><a href='#' onclick="alert('This is an XSS attack!')">Click here!</a></p>`;
     const result = pipe.transform(input);
     expect(result).toBe(`<p><a href="#">Click here!</a></p>`);

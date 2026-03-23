@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using NSubstitute;
+using Shouldly;
 using Volo.Abp.Auditing.App.Entities;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -819,6 +820,167 @@ public class Auditing_Tests : AbpAuditingTestBase
                                                                      x.EntityChanges[0].PropertyChanges[2].PropertyTypeFullName == typeof(string).FullName));
         AuditingStore.ClearReceivedCalls();
 #pragma warning restore 4014
+    }
+
+    [Fact]
+    public async Task Should_Write_AuditLog_For_Complex_Property_Changes()
+    {
+        var entityId = Guid.NewGuid();
+        var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppEntityWithComplexProperty, Guid>>();
+
+        using (var scope = _auditingManager.BeginScope())
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var entity = new AppEntityWithComplexProperty(entityId, "Test Entity")
+                {
+                    ContactInformation = new AppEntityContactInformation
+                    {
+                        Street = "First Street",
+                        Location = new AppEntityContactLocation
+                        {
+                            City = "First City"
+                        }
+                    },
+                    DisabledContactInformation = new AppEntityContactInformation
+                    {
+                        Street = "Disabled Street",
+                        Location = new AppEntityContactLocation
+                        {
+                            City = "Disabled City"
+                        }
+                    }
+                };
+
+                await repository.InsertAsync(entity);
+
+                await uow.CompleteAsync();
+                await scope.SaveAsync();
+            }
+        }
+
+#pragma warning disable 4014
+        AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 1 &&
+                                                                     x.EntityChanges[0].ChangeType == EntityChangeType.Created &&
+                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithComplexProperty).FullName &&
+                                                                     x.EntityChanges[0].PropertyChanges.Count == 3 &&
+                                                                     x.EntityChanges[0].PropertyChanges.Any(pc =>
+                                                                         pc.PropertyName == nameof(AppEntityWithComplexProperty.Name) &&
+                                                                         pc.OriginalValue == null &&
+                                                                         pc.NewValue == "\"Test Entity\"" &&
+                                                                         pc.PropertyTypeFullName == typeof(string).FullName) &&
+                                                                     x.EntityChanges[0].PropertyChanges.Any(pc =>
+                                                                         pc.PropertyName == "ContactInformation.Street" &&
+                                                                         pc.OriginalValue == null &&
+                                                                         pc.NewValue == "\"First Street\"" &&
+                                                                         pc.PropertyTypeFullName == typeof(string).FullName) &&
+                                                                     x.EntityChanges[0].PropertyChanges.Any(pc =>
+                                                                         pc.PropertyName == "ContactInformation.Location.City" &&
+                                                                         pc.OriginalValue == null &&
+                                                                         pc.NewValue == "\"First City\"" &&
+                                                                         pc.PropertyTypeFullName == typeof(string).FullName) &&
+                                                                     x.EntityChanges[0].PropertyChanges.All(pc =>
+                                                                         !pc.PropertyName.StartsWith(nameof(AppEntityWithComplexProperty.DisabledContactInformation)))));
+        AuditingStore.ClearReceivedCalls();
+#pragma warning restore 4014
+
+        using (var scope = _auditingManager.BeginScope())
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var entity = await repository.GetAsync(entityId);
+
+                entity.ContactInformation.Location.City = "Updated City";
+                entity.DisabledContactInformation.Street = "Updated Disabled Street";
+
+                await repository.UpdateAsync(entity);
+
+                await uow.CompleteAsync();
+                await scope.SaveAsync();
+            }
+        }
+
+#pragma warning disable 4014
+        AuditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x => x.EntityChanges.Count == 1 &&
+                                                                     x.EntityChanges[0].ChangeType == EntityChangeType.Updated &&
+                                                                     x.EntityChanges[0].EntityTypeFullName == typeof(AppEntityWithComplexProperty).FullName &&
+                                                                     x.EntityChanges[0].PropertyChanges.Count == 1 &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].PropertyName == "ContactInformation.Location.City" &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].OriginalValue == "\"First City\"" &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].NewValue == "\"Updated City\"" &&
+                                                                     x.EntityChanges[0].PropertyChanges[0].PropertyTypeFullName == typeof(string).FullName));
+        AuditingStore.ClearReceivedCalls();
+#pragma warning restore 4014
+    }
+
+    [Fact]
+    public async Task Should_Not_Update_Modification_Audit_Properties_When_Only_Disabled_Complex_Property_Changes()
+    {
+        var entityId = Guid.NewGuid();
+        var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppEntityWithComplexProperty, Guid>>();
+
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            var entity = new AppEntityWithComplexProperty(entityId, "Test Entity")
+            {
+                ContactInformation = new AppEntityContactInformation
+                {
+                    Street = "First Street",
+                    Location = new AppEntityContactLocation
+                    {
+                        City = "First City"
+                    }
+                },
+                DisabledContactInformation = new AppEntityContactInformation
+                {
+                    Street = "Disabled Street",
+                    Location = new AppEntityContactLocation
+                    {
+                        City = "Disabled City"
+                    }
+                }
+            };
+
+            await repository.InsertAsync(entity);
+
+            await uow.CompleteAsync();
+        }
+
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            var entity = await repository.GetAsync(entityId);
+            entity.Name = "Updated Test Entity";
+
+            await repository.UpdateAsync(entity);
+            await uow.CompleteAsync();
+        }
+
+        DateTime? lastModificationTime;
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            var entity = await repository.GetAsync(entityId);
+            lastModificationTime = entity.LastModificationTime;
+            lastModificationTime.ShouldNotBeNull();
+            await uow.CompleteAsync();
+        }
+
+        await Task.Delay(10);
+
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            var entity = await repository.GetAsync(entityId);
+            entity.DisabledContactInformation.Street = "Updated Disabled Street";
+
+            await repository.UpdateAsync(entity);
+            await uow.CompleteAsync();
+        }
+
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            var entity = await repository.GetAsync(entityId);
+            entity.LastModificationTime.ShouldBe(lastModificationTime);
+            await uow.CompleteAsync();
+        }
     }
 }
 

@@ -9,7 +9,7 @@
 
 ABP provides a pre-built and standard endpoint that contains some useful information about the application/service. Here, is the list of some fundamental information at this endpoint:
 
-* Granted [policies](../../fundamentals/authorization.md) (permissions) for the current user.
+* Granted [policies](../../fundamentals/authorization/index.md) (permissions) for the current user.
 * [Setting](../../infrastructure/settings.md) values for the current user.
 * Info about the [current user](../../infrastructure/current-user.md) (like id and user name).
 * Info about the current [tenant](../../architecture/multi-tenancy) (like id and name).

@@ -1,23 +1,25 @@
-import { CoreTestingModule } from '@abp/ng.core/testing';
-import { NgModule } from '@angular/core';
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import { ContentProjectionService } from '@abp/ng.core';
+import { ComponentRef } from '@angular/core';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { ToastContainerComponent } from '../components/toast-container/toast-container.component';
-import { ToastComponent } from '../components/toast/toast.component';
 import { ToasterService } from '../services/toaster.service';
-
-@NgModule({
-  exports: [ToastContainerComponent],
-  declarations: [],
-  imports: [CoreTestingModule.withConfig(), ToastContainerComponent, ToastComponent],
-})
-export class MockModule {}
 
 describe('ToasterService', () => {
   let spectator: SpectatorService<ToasterService>;
   let service: ToasterService;
+  const mockComponentRef = {
+    changeDetectorRef: { detectChanges: vi.fn() },
+    instance: {} as ToastContainerComponent,
+  } as unknown as ComponentRef<ToastContainerComponent>;
+
+  const contentProjectionService = {
+    projectContent: vi.fn().mockReturnValue(mockComponentRef),
+  } satisfies Partial<ContentProjectionService>;
+  
   const createService = createServiceFactory({
     service: ToasterService,
-    imports: [CoreTestingModule.withConfig(), MockModule],
+    providers: [{ provide: ContentProjectionService, useValue: contentProjectionService }],
   });
 
   beforeEach(() => {

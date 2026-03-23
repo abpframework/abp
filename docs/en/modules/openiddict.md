@@ -332,7 +332,7 @@ Configure<TokenCleanupOptions>(options =>
 
 #### Updating Claims In Access_token and Id_token
 
-[Claims Principal Factory](../framework/fundamentals/authorization.md#claims-principal-factory) can be used to add/remove claims to the `ClaimsPrincipal`.
+[Claims Principal Factory](../framework/fundamentals/authorization/index.md#claims-principal-factory) can be used to add/remove claims to the `ClaimsPrincipal`.
 
 The `AbpDefaultOpenIddictClaimsPrincipalHandler` service will add `Name`, `Email,` and `Role` types of Claims to `access_token` and `id_token`, other claims are only added to `access_token` by default, and remove the `SecurityStampClaimType` secret claim of `Identity`.
 

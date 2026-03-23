@@ -12,7 +12,7 @@ import {
   inject,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CommonModule } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LocalizationPipe } from '@abp/ng.core';
 import { Subject, Observable, debounceTime, distinctUntilChanged, of, finalize } from 'rxjs';
@@ -29,7 +29,7 @@ export type LookupSearchFn<T = LookupItem> = (filter: string) => Observable<T[]>
   selector: 'abp-lookup-search',
   templateUrl: './lookup-search.component.html',
   styleUrl: './lookup-search.component.scss',
-  imports: [CommonModule, FormsModule, LocalizationPipe],
+  imports: [FormsModule, LocalizationPipe, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LookupSearchComponent<T extends LookupItem = LookupItem> implements OnInit {

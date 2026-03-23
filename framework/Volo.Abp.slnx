@@ -181,6 +181,7 @@
     <Project Path="test/Volo.Abp.AspNetCore.Mvc.UI.Tests/Volo.Abp.AspNetCore.Mvc.UI.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.Mvc.Versioning.Tests/Volo.Abp.AspNetCore.Mvc.Versioning.Tests.csproj" />
+    <Project Path="test/Volo.Abp.AspNetCore.Mvc.Client.Tests/Volo.Abp.AspNetCore.Mvc.Client.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.Serilog.Tests/Volo.Abp.AspNetCore.Serilog.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.SignalR.Tests/Volo.Abp.AspNetCore.SignalR.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.Tests/Volo.Abp.AspNetCore.Tests.csproj" />

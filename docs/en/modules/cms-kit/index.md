@@ -38,6 +38,56 @@ All features are individually usable. If you disable a feature, it completely di
 - CMS Kit uses [distributed cache](../../framework/fundamentals/caching.md) for responding faster. 
 > Using a distributed cache, such as [Redis](../../framework/fundamentals/redis-cache.md), is highly recommended for data consistency in distributed/clustered deployments.
 
+## Identity Integration for User Lookup
+
+CMS Kit uses `ICmsUserLookupService` when it needs user information for features such as comments, ratings, blog post management and user synchronization.
+
+If the CMS Kit and Identity modules run in the same application, no extra configuration is typically needed.
+
+If the Identity module runs in another application or service (for example, in a tiered or distributed solution), CMS Kit may need to call the Identity integration endpoints remotely to create or update `CmsUser` records.
+
+In that case, the calling application should:
+
+* Depend on `Volo.Abp.Identity.HttpApi.Client`.
+* Add `AbpIdentityHttpApiClientModule` and an IdentityModel module (`AbpHttpClientIdentityModelWebModule` for web applications or `AbpHttpClientIdentityModelModule` for non-web hosts).
+* Configure `RemoteServices:AbpIdentity` to point to the application that hosts the Identity module.
+* Configure `IdentityClients` for client credentials flow so the lookup can use server-to-server authentication.
+* Expose integration services on the application that hosts the Identity module.
+
+Example module dependency for a web application:
+
+```csharp
+[DependsOn(
+    typeof(AbpIdentityHttpApiClientModule),
+    typeof(AbpHttpClientIdentityModelWebModule)
+)]
+public class MyWebModule : AbpModule
+{
+}
+```
+
+Example `appsettings.json` configuration:
+
+```json
+"RemoteServices": {
+  "AbpIdentity": {
+    "BaseUrl": "https://localhost:44388/",
+    "UseCurrentAccessToken": false
+  }
+},
+"IdentityClients": {
+  "Default": {
+    "GrantType": "client_credentials",
+    "ClientId": "MyProject_Web",
+    "ClientSecret": "your-client-secret",
+    "Authority": "https://localhost:44322/",
+    "Scope": "your-internal-api-scope"
+  }
+}
+```
+
+See the [Identity module's External User Lookup Service section](../identity.md#external-user-lookup-service) and the [Synchronous Interservice Communication guide](../../guides/synchronous-interservice-communication.md) for the complete setup.
+
 ## How to Install
 
 [ABP CLI](../../cli) allows installing a module to a solution using the `add-module` command. You can install the CMS Kit module in a command-line terminal with the following command:

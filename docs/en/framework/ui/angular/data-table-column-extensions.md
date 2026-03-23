@@ -342,4 +342,5 @@ export const identityEntityPropContributors = {
 
 ## See Also
 
+- [Extensible Table Row Detail](extensible-table-row-detail.md)
 - [Customizing Application Modules Guide](../../architecture/modularity/extending/customizing-application-modules-guide.md)

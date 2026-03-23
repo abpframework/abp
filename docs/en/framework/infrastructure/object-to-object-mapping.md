@@ -313,6 +313,34 @@ It is suggested to use the `MapExtraPropertiesAttribute` attribute if both class
 
 Mapperly requires that properties of both source and destination objects have `setter` methods. Otherwise, the property will be ignored. You can use `protected set` or `private set` to control the visibility of the `setter` method, but each property must have a `setter` method.
 
+### Nullable Reference Types
+
+Mapperly respects C# nullable reference types (NRT). If your project enables NRT via `<Nullable>enable</Nullable>` in the project file, Mapperly will treat reference type properties as **non-nullable by default**.
+
+That means:
+
+- If a property can be `null`, declare it as nullable so Mapperly (and the compiler) understands it can be missing.
+- If you declare a property as non-nullable, Mapperly assumes it is not `null`.
+
+Otherwise, the generated mapping code may throw runtime exceptions (e.g., `NullReferenceException`) if a value is actually `null` during the mapping process.
+
+Example:
+
+````xml
+<!-- .csproj -->
+<PropertyGroup>
+    <Nullable>enable</Nullable>
+</PropertyGroup>
+````
+
+````csharp
+public class PersonDto
+{
+    public Country? Country { get; set; } // Nullable (can be null)
+    public City City { get; set; } = default!; // Non-nullable (cannot be null)
+}
+````
+
 ### Deep Cloning
 
 By default, Mapperly does not create deep copies of objects to improve performance. If an object can be directly assigned to the target, it will do so (e.g., if the source and target type are both `List<T>`, the list and its entries will not be cloned). To create deep copies, set the `UseDeepCloning` property on the `MapperAttribute` to `true`.
@@ -504,6 +532,7 @@ Each solution has its own advantages:
 - **Solution 3** maintains separation of concerns and reusability but requires manual mapping in the `AfterMap` method.
 
 Choose the approach that best aligns with your application's architecture and maintainability requirements.
+
 
 ### More Mapperly Features
 

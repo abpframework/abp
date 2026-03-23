@@ -149,7 +149,7 @@ namespace MyProject
 Hangfire Dashboard provides information about your background jobs, including method names and serialized arguments as well as gives you an opportunity to manage them by performing different actions – retry, delete, trigger, etc. So it is important to restrict access to the Dashboard.
 To make it secure by default, only local requests are allowed, however you can change this by following the [official documentation](http://docs.hangfire.io/en/latest/configuration/using-dashboard.html) of Hangfire.
 
-You can integrate the Hangfire dashboard to [ABP authorization system](../../fundamentals/authorization.md) using the **AbpHangfireAuthorizationFilter**
+You can integrate the Hangfire dashboard to [ABP authorization system](../../fundamentals/authorization/index.md) using the **AbpHangfireAuthorizationFilter**
 class. This class is defined in the `Volo.Abp.Hangfire` package. The following example, checks if the current user is logged in to the application:
 
 ```csharp

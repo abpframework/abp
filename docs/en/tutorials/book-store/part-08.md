@@ -183,7 +183,7 @@ public class AuthorAppService : BookStoreAppService, IAuthorAppService
 }
 ````
 
-* `[Authorize(BookStorePermissions.Authors.Default)]` is a declarative way to check a permission (policy) to authorize the current user. See the [authorization document](../../framework/fundamentals/authorization.md) for more. `BookStorePermissions` class will be updated below, don't worry for the compile error for now.
+* `[Authorize(BookStorePermissions.Authors.Default)]` is a declarative way to check a permission (policy) to authorize the current user. See the [authorization document](../../framework/fundamentals/authorization/index.md) for more. `BookStorePermissions` class will be updated below, don't worry for the compile error for now.
 * Derived from the `BookStoreAppService`, which is a simple base class comes with the startup template. It is derived from the standard `ApplicationService` class.
 * Implemented the `IAuthorAppService` which was defined above.
 * Injected the `IAuthorRepository` and `AuthorManager` to use in the service methods.

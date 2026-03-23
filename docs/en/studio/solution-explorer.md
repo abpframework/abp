@@ -11,7 +11,7 @@
 //[doc-nav]
 {
   "Next": {
-    "Name": "Running Applications",
+    "Name": "Solution Runner",
     "Path": "studio/running-applications"
   }
 }

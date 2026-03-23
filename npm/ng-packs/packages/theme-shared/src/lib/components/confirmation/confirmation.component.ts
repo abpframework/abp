@@ -1,4 +1,4 @@
-import { NgClass, AsyncPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { Confirmation } from '../../models/confirmation';
@@ -9,7 +9,7 @@ import { LocalizationPipe } from '@abp/ng.core';
   selector: 'abp-confirmation',
   templateUrl: './confirmation.component.html',
   styleUrls: ['./confirmation.component.scss'],
-  imports: [NgClass, AsyncPipe, LocalizationPipe],
+  imports: [AsyncPipe, LocalizationPipe],
 })
 export class ConfirmationComponent {
   private icons = inject<ConfirmationIcons>(CONFIRMATION_ICONS);

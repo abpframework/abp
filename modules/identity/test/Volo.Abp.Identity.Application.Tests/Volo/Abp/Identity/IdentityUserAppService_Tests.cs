@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.Identity;
+using Volo.Abp.Security.Claims;
 using Xunit;
 
 namespace Volo.Abp.Identity;
@@ -16,6 +19,7 @@ public class IdentityUserAppService_Tests : AbpIdentityApplicationTestBase
     private readonly IPermissionManager _permissionManager;
     private readonly UserPermissionManagementProvider _userPermissionManagementProvider;
     private readonly IdentityTestData _testData;
+    private readonly ICurrentPrincipalAccessor _currentPrincipalAccessor;
 
     public IdentityUserAppService_Tests()
     {
@@ -24,6 +28,7 @@ public class IdentityUserAppService_Tests : AbpIdentityApplicationTestBase
         _permissionManager = GetRequiredService<IPermissionManager>();
         _userPermissionManagementProvider = GetRequiredService<UserPermissionManagementProvider>();
         _testData = GetRequiredService<IdentityTestData>();
+        _currentPrincipalAccessor = GetRequiredService<ICurrentPrincipalAccessor>();
     }
 
     [Fact]
@@ -237,6 +242,137 @@ public class IdentityUserAppService_Tests : AbpIdentityApplicationTestBase
         roleNames.ShouldContain("admin");
         roleNames.ShouldContain("moderator");
         roleNames.ShouldContain("manager");
+    }
+
+    [Fact]
+    public async Task UpdateRolesAsync_Should_Not_Assign_Roles_Operator_Does_Not_Have()
+    {
+        // neo only has "supporter" role
+        using (_currentPrincipalAccessor.Change(new Claim(AbpClaimTypes.UserId, _testData.UserNeoId.ToString())))
+        {
+            // Try to assign "admin" and "supporter" to david (who has no roles)
+            await _userAppService.UpdateRolesAsync(
+                _testData.UserDavidId,
+                new IdentityUserUpdateRolesDto
+                {
+                    RoleNames = new[] { "admin", "supporter" }
+                }
+            );
+        }
+
+        // Only "supporter" should be assigned (admin filtered out since neo doesn't have it)
+        var roleNames = await _userRepository.GetRoleNamesAsync(_testData.UserDavidId);
+        roleNames.ShouldContain("supporter");
+        roleNames.ShouldNotContain("admin");
+    }
+
+    [Fact]
+    public async Task UpdateRolesAsync_Should_Preserve_Unmanageable_Roles()
+    {
+        // john.nash has direct roles: moderator, supporter
+        // neo only has "supporter" role, so "moderator" is unmanageable for neo
+        using (_currentPrincipalAccessor.Change(new Claim(AbpClaimTypes.UserId, _testData.UserNeoId.ToString())))
+        {
+            await _userAppService.UpdateRolesAsync(
+                _testData.UserJohnId,
+                new IdentityUserUpdateRolesDto
+                {
+                    RoleNames = new[] { "supporter" }
+                }
+            );
+        }
+
+        // "moderator" should be preserved (unmanageable), "supporter" kept (in input)
+        var roleNames = await _userRepository.GetRoleNamesAsync(_testData.UserJohnId);
+        roleNames.ShouldContain("moderator");
+        roleNames.ShouldContain("supporter");
+    }
+
+    [Fact]
+    public async Task UpdateRolesAsync_Should_Only_Remove_Manageable_Roles()
+    {
+        // john.nash has direct roles: moderator, supporter
+        // neo only has "supporter" role
+        using (_currentPrincipalAccessor.Change(new Claim(AbpClaimTypes.UserId, _testData.UserNeoId.ToString())))
+        {
+            // Input is empty - try to remove all roles
+            await _userAppService.UpdateRolesAsync(
+                _testData.UserJohnId,
+                new IdentityUserUpdateRolesDto
+                {
+                    RoleNames = Array.Empty<string>()
+                }
+            );
+        }
+
+        // "moderator" should be preserved (neo can't manage it), "supporter" removed (neo has it and it's not in input)
+        var roleNames = await _userRepository.GetRoleNamesAsync(_testData.UserJohnId);
+        roleNames.ShouldContain("moderator");
+        roleNames.ShouldNotContain("supporter");
+    }
+
+    [Fact]
+    public async Task UpdateRolesAsync_Admin_Can_Assign_Any_Role()
+    {
+        // admin user can assign roles they do not have (e.g. "sale")
+        using (_currentPrincipalAccessor.Change(new[]
+               {
+                   new Claim(AbpClaimTypes.UserId, _testData.UserAdminId.ToString()),
+                   new Claim(AbpClaimTypes.Role, "admin")
+               }))
+        {
+            await _userAppService.UpdateRolesAsync(
+                _testData.UserDavidId,
+                new IdentityUserUpdateRolesDto
+                {
+                    RoleNames = new[] { "sale" }
+                }
+            );
+        }
+
+        var roleNames = await _userRepository.GetRoleNamesAsync(_testData.UserDavidId);
+        roleNames.ShouldContain("sale");
+    }
+
+    [Fact]
+    public async Task UpdateRolesAsync_Self_Cannot_Add_New_Roles()
+    {
+        // neo only has "supporter", tries to add "admin" to self
+        using (_currentPrincipalAccessor.Change(new Claim(AbpClaimTypes.UserId, _testData.UserNeoId.ToString())))
+        {
+            await _userAppService.UpdateRolesAsync(
+                _testData.UserNeoId,
+                new IdentityUserUpdateRolesDto
+                {
+                    RoleNames = new[] { "supporter", "admin" }
+                }
+            );
+        }
+
+        // "admin" should not be added (neo doesn't have it), "supporter" kept
+        var roleNames = await _userRepository.GetRoleNamesAsync(_testData.UserNeoId);
+        roleNames.ShouldContain("supporter");
+        roleNames.ShouldNotContain("admin");
+    }
+
+    [Fact]
+    public async Task UpdateRolesAsync_Self_Can_Remove_Own_Roles()
+    {
+        // admin user has: admin, moderator, supporter, manager
+        // Remove supporter and manager from self
+        await _userAppService.UpdateRolesAsync(
+            _testData.UserAdminId,
+            new IdentityUserUpdateRolesDto
+            {
+                RoleNames = new[] { "admin", "moderator" }
+            }
+        );
+
+        var roleNames = await _userRepository.GetRoleNamesAsync(_testData.UserAdminId);
+        roleNames.ShouldContain("admin");
+        roleNames.ShouldContain("moderator");
+        roleNames.ShouldNotContain("supporter");
+        roleNames.ShouldNotContain("manager");
     }
 
     private static string CreateRandomEmail()

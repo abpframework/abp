@@ -1,0 +1,30 @@
+<abp-page [title]="'CmsKit::Tags' | abpLocalization" [toolbar]="data.items">
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12">
+          <div class="input-group">
+            <input
+              type="search"
+              class="form-control"
+              [placeholder]="'AbpUi::PagerSearch' | abpLocalization"
+              [(ngModel)]="filter"
+              (keyup.enter)="onSearch()"
+            />
+            <button class="btn btn-primary" type="button" (click)="onSearch()">
+              <i class="fa fa-search" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <abp-extensible-table [data]="data.items" [recordsTotal]="data.totalCount" [list]="list" />
+  </div>
+
+  @if (isModalVisible) {
+    <abp-tag-modal [selected]="selected" (visibleChange)="onVisibleModalChange($event)" />
+  }
+</abp-page>

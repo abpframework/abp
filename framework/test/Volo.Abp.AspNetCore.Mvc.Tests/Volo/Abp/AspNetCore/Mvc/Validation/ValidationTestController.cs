@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Shouldly;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.TestApp.Application;
 using Volo.Abp.Validation;
 
 namespace Volo.Abp.AspNetCore.Mvc.Validation;
@@ -118,6 +119,16 @@ public class ValidationTestController : AbpController
 
             public static string MaxValue3 { get; set; } = "3/4/2004";
         }
+    }
+
+    [HttpPost]
+    [Route("fluent-validation-action")]
+    public Task<string> FluentValidationAction([FromBody] FluentValidationTestInput input)
+    {
+        // This action uses a DTO that has a FluentValidator registered,
+        // but since this is a regular AbpController (not IValidationEnabled),
+        // FluentValidation should NOT be triggered by AbpValidationActionFilter.
+        return Task.FromResult(input.Name);
     }
 
     public class CustomValidateModel : IValidatableObject

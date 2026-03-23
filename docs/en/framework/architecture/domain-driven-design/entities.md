@@ -135,6 +135,29 @@ if (book1.EntityEquals(book2)) //Check equality
 }
 ```
 
+### `IKeyedObject` Interface
+
+ABP entities implement the `IKeyedObject` interface, which provides a way to get the entity's primary key as a string:
+
+```csharp
+public interface IKeyedObject
+{
+    string? GetObjectKey();
+}
+```
+
+The `GetObjectKey()` method returns a string representation of the entity's primary key. For entities with a single key (like `Entity<Guid>` or `Entity<int>`), it returns the `Id` property converted to a string. For entities with composite keys, it returns the keys combined with a comma separator.
+
+This interface is particularly useful for scenarios where you need to identify an entity by its key in a type-agnostic way, such as:
+
+* **Resource-based authorization**: When checking or granting permissions for specific entity instances
+* **Caching**: When creating cache keys based on entity identifiers
+* **Logging and auditing**: When recording entity identifiers in a consistent format
+
+Since all ABP entities implement this interface through the `IEntity` interface, you can use `GetObjectKey()` on any entity without additional implementation.
+
+> See the [Resource-Based Authorization](../../fundamentals/authorization/resource-based-authorization.md) documentation for a practical example of using `IKeyedObject` with the permission system.
+
 ## AggregateRoot Class
 
 "*Aggregate is a pattern in Domain-Driven Design. A DDD aggregate is a cluster of domain objects that can be treated as a single unit. An example may be an order and its line-items, these will be separate objects, but it's useful to treat the order (together with its line items) as a single aggregate.*" (see the [full description](http://martinfowler.com/bliki/DDD_Aggregate.html))

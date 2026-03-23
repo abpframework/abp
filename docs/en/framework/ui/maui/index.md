@@ -42,15 +42,29 @@ You can examine the [Users Page](#users-page) or any other pre-defined page to s
 
 ### Android
 
-If you get the following error when connecting to the emulator or a physical phone, you need to set up port mapping.
+If you get the following error when connecting to the emulator or a physical phone, you need to set up port mapping using the `adb` tool:
 
 ```
 Cannot connect to the backend on localhost. 
 ```
 
-Open a command line terminal and run the `adb reverse` command to expose a port on your Android device to a port on your computer. For example:
+**How to get and use `adb` tool:**
 
-`adb reverse tcp:44305 tcp:44305`
+- **Option 1: Install `adb` globally**  
+  Download and install the [Android SDK Platform-Tools](https://developer.android.com/tools/releases/platform-tools) to get the [`adb`](https://developer.android.com/tools/adb) command-line tool.
+- **Option 2: Use Visual Studio’s built-in `adb` command prompt**  
+  If you are using Visual Studio, you can access the `adb` command prompt directly from the IDE:  
+  ![Android Adb Command Prompt](../../../images/adb-command-prompt.png)
+
+> For more information on setting up your environment for Android development and debugging, refer to the [Microsoft MAUI Android device setup guide](https://learn.microsoft.com/en-us/dotnet/maui/android/device/setup).
+
+**Port mapping command:**
+
+Once `adb` is available, run the following command in your terminal (or Visual Studio's `adb` command prompt) to map the backend port to your Android device:
+
+```bash
+adb reverse tcp:44305 tcp:44305
+```
 
 > Replace `44305` with the port number your backend application is running on.
 >

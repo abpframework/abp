@@ -92,6 +92,14 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
             b.Property(x => x.HasDefaultValue).HasDefaultValue(DateTime.Now);
             b.Property(x => x.TenantId).HasColumnName("Tenant_Id");
             b.Property(x => x.IsDeleted).HasColumnName("Is_Deleted");
+            b.ComplexProperty(x => x.ContactInformation, cb =>
+            {
+                cb.Property(x => x.Street).IsRequired();
+                cb.ComplexProperty(x => x.Location, locationBuilder =>
+                {
+                    locationBuilder.Property(x => x.City).IsRequired();
+                });
+            });
         });
 
         modelBuilder

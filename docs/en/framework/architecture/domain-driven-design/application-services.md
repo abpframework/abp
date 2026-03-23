@@ -218,7 +218,7 @@ See the [validation document](../../fundamentals/validation.md) for more.
 
 It's possible to use declarative and imperative authorization for application service methods.
 
-See the [authorization document](../../fundamentals/authorization.md) for more.
+See the [authorization document](../../fundamentals/authorization/index.md) for more.
 
 ## CRUD Application Services
 

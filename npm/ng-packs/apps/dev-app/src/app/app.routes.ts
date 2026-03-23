@@ -7,6 +7,14 @@ export const appRoutes: Routes = [
     loadComponent: () => import('./home/home.component').then(m => m.HomeComponent),
   },
   {
+    path: 'dynamic-form',
+    loadComponent: () => import('./dynamic-form-page/dynamic-form-page.component').then(m => m.DynamicFormPageComponent),
+  },
+  {
+    path: 'localization-test',
+    loadComponent: () => import('./localization-test/localization-test.component').then(m => m.LocalizationTestComponent),
+  },
+  {
     path: 'account',
     loadChildren: () => import('@abp/ng.account').then(m => m.createRoutes()),
   },

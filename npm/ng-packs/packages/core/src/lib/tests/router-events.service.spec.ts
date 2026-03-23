@@ -1,6 +1,6 @@
 import { Router, RouterEvent, NavigationStart, ResolveStart, NavigationError, NavigationEnd, ResolveEnd, NavigationCancel } from '@angular/router';
 import { Subject } from 'rxjs';
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/vitest';
 import { take } from 'rxjs/operators';
 import { NavigationEventKey, RouterEvents } from '../services/router-events.service';
 

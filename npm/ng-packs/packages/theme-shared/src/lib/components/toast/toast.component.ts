@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NgClass } from '@angular/common';
+import { Component, OnInit, input, output } from '@angular/core';
 import { Toaster } from '../../models/toaster';
 import { LocalizationPipe } from '@abp/ng.core';
 
@@ -7,27 +6,27 @@ import { LocalizationPipe } from '@abp/ng.core';
   selector: 'abp-toast',
   templateUrl: './toast.component.html',
   styleUrls: ['./toast.component.scss'],
-  imports: [NgClass, LocalizationPipe],
+  imports: [LocalizationPipe],
 })
 export class ToastComponent implements OnInit {
-  @Input()
-  toast!: Toaster.Toast;
+  readonly toast = input.required<Toaster.Toast>();
 
-  @Output() remove = new EventEmitter<number>();
+  readonly remove = output<number>();
 
   get severityClass(): string {
-    if (!this.toast || !this.toast.severity) return '';
-    return `abp-toast-${this.toast.severity}`;
+    const toast = this.toast();
+    if (!toast || !toast.severity) return '';
+    return `abp-toast-${toast.severity}`;
   }
 
   get iconClass(): string {
-    const { iconClass } = this.toast.options || {};
+    const { iconClass } = this.toast().options || {};
 
     if (iconClass) {
       return iconClass;
     }
 
-    switch (this.toast.severity) {
+    switch (this.toast().severity) {
       case 'success':
         return 'bi-check';
       case 'info':
@@ -42,7 +41,7 @@ export class ToastComponent implements OnInit {
   }
 
   ngOnInit() {
-    const { sticky, life } = this.toast.options || {};
+    const { sticky, life } = this.toast().options || {};
 
     if (sticky) return;
     const timeout = life || 5000;
@@ -52,10 +51,10 @@ export class ToastComponent implements OnInit {
   }
 
   close() {
-    this.remove.emit(this.toast.options?.id);
+    this.remove.emit(this.toast().options?.id);
   }
 
   tap() {
-    if (this.toast.options?.tapToDismiss) this.close();
+    if (this.toast().options?.tapToDismiss) this.close();
   }
 }

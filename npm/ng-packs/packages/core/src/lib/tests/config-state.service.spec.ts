@@ -1,6 +1,6 @@
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/vitest';
 import { of } from 'rxjs';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 import {
@@ -132,7 +132,7 @@ describe('ConfigStateService', () => {
       },
       {
         provide: AbpApplicationLocalizationService,
-        useValue: { get: () => APPLICATION_LOCALIZATION_DATA },
+        useValue: { get: () => of(APPLICATION_LOCALIZATION_DATA) },
       },
       IncludeLocalizationResourcesProvider,
     ],
@@ -142,84 +142,84 @@ describe('ConfigStateService', () => {
     spectator = createService();
     configState = spectator.service;
 
-    jest.spyOn(configState, 'getAll').mockReturnValue(CONFIG_STATE_DATA);
-    jest.spyOn(configState, 'getAll$').mockReturnValue(of(CONFIG_STATE_DATA));
-    jest.spyOn(configState, 'getOne').mockImplementation((key) => {
+    vi.spyOn(configState, 'getAll').mockReturnValue(CONFIG_STATE_DATA);
+    vi.spyOn(configState, 'getAll$').mockReturnValue(of(CONFIG_STATE_DATA));
+    vi.spyOn(configState, 'getOne').mockImplementation((key) => {
       if (key === 'localization') return CONFIG_STATE_DATA.localization;
       return undefined;
     });
-    jest.spyOn(configState, 'getOne$').mockImplementation((key) => {
+    vi.spyOn(configState, 'getOne$').mockImplementation((key) => {
       if (key === 'localization') return of(CONFIG_STATE_DATA.localization);
       return of(undefined);
     });
-    jest.spyOn(configState, 'getDeep').mockImplementation((key) => {
+    vi.spyOn(configState, 'getDeep').mockImplementation((key) => {
       if (key === 'localization.languages') return CONFIG_STATE_DATA.localization.languages;
       if (key === 'test') return undefined;
       return undefined;
     });
-    jest.spyOn(configState, 'getDeep$').mockImplementation((key) => {
+    vi.spyOn(configState, 'getDeep$').mockImplementation((key) => {
       if (key === 'localization.languages') return of(CONFIG_STATE_DATA.localization.languages);
       return of(undefined);
     });
-    jest.spyOn(configState, 'getFeature').mockImplementation((key) => {
+    vi.spyOn(configState, 'getFeature').mockImplementation((key) => {
       if (key === 'Chat.Enable') return CONFIG_STATE_DATA.features.values['Chat.Enable'];
       return undefined;
     });
-    jest.spyOn(configState, 'getFeature$').mockImplementation((key) => {
+    vi.spyOn(configState, 'getFeature$').mockImplementation((key) => {
       if (key === 'Chat.Enable') return of(CONFIG_STATE_DATA.features.values['Chat.Enable']);
       return of(undefined);
     });
-    jest.spyOn(configState, 'getSetting').mockImplementation((key) => {
+    vi.spyOn(configState, 'getSetting').mockImplementation((key) => {
       if (key === 'Abp.Localization.DefaultLanguage') return CONFIG_STATE_DATA.setting.values['Abp.Localization.DefaultLanguage'];
       return undefined;
     });
-    jest.spyOn(configState, 'getSetting$').mockImplementation((key) => {
+    vi.spyOn(configState, 'getSetting$').mockImplementation((key) => {
       if (key === 'Abp.Localization.DefaultLanguage') return of(CONFIG_STATE_DATA.setting.values['Abp.Localization.DefaultLanguage']);
       return of(undefined);
     });
-    jest.spyOn(configState, 'getSettings').mockImplementation((keyword) => {
+    vi.spyOn(configState, 'getSettings').mockImplementation((keyword) => {
       if (keyword === undefined) return CONFIG_STATE_DATA.setting.values;
       if (keyword === 'localization') return { 'Abp.Localization.DefaultLanguage': 'en' };
       if (keyword === 'Localization') return { 'Abp.Localization.DefaultLanguage': 'en' };
       return {};
     });
-    jest.spyOn(configState, 'getSettings$').mockImplementation((keyword) => {
+    vi.spyOn(configState, 'getSettings$').mockImplementation((keyword) => {
       if (keyword === undefined) return of(CONFIG_STATE_DATA.setting.values);
       if (keyword === 'localization') return of({ 'Abp.Localization.DefaultLanguage': 'en' });
       if (keyword === 'Localization') return of({ 'Abp.Localization.DefaultLanguage': 'en' });
       return of({});
     });
-    jest.spyOn(configState, 'getFeatures').mockImplementation((keys) => {
+    vi.spyOn(configState, 'getFeatures').mockImplementation((keys) => {
       if (keys.includes('Chat.Enable')) {
         return { 'Chat.Enable': 'True' };
       }
       return {};
     });
-    jest.spyOn(configState, 'getFeatures$').mockImplementation((keys) => {
+    vi.spyOn(configState, 'getFeatures$').mockImplementation((keys) => {
       if (keys.includes('Chat.Enable')) {
         return of({ 'Chat.Enable': 'True' });
       }
       return of({});
     });
-    jest.spyOn(configState, 'getFeatureIsEnabled').mockImplementation((key) => {
+    vi.spyOn(configState, 'getFeatureIsEnabled').mockImplementation((key) => {
       if (key === 'Chat.Enable') return true;
       return false;
     });
-    jest.spyOn(configState, 'getFeatureIsEnabled$').mockImplementation((key) => {
+    vi.spyOn(configState, 'getFeatureIsEnabled$').mockImplementation((key) => {
       if (key === 'Chat.Enable') return of(true);
       return of(false);
     });
-    jest.spyOn(configState, 'getGlobalFeatures').mockReturnValue({
+    vi.spyOn(configState, 'getGlobalFeatures').mockReturnValue({
       enabledFeatures: ['Feature1', 'Feature2']
     });
-    jest.spyOn(configState, 'getGlobalFeatures$').mockReturnValue(of({
+    vi.spyOn(configState, 'getGlobalFeatures$').mockReturnValue(of({
       enabledFeatures: ['Feature1', 'Feature2']
     }));
-    jest.spyOn(configState, 'getGlobalFeatureIsEnabled').mockImplementation((key) => {
+    vi.spyOn(configState, 'getGlobalFeatureIsEnabled').mockImplementation((key) => {
       if (key === 'Feature1') return true;
       return false;
     });
-    jest.spyOn(configState, 'getGlobalFeatureIsEnabled$').mockImplementation((key) => {
+    vi.spyOn(configState, 'getGlobalFeatureIsEnabled$').mockImplementation((key) => {
       if (key === 'Feature1') return of(true);
       return of(false);
     });

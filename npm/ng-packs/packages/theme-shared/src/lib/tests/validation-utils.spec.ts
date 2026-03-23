@@ -1,8 +1,9 @@
 import { AbpApplicationConfigurationService, ConfigStateService } from '@abp/ng.core';
 import { CoreTestingModule } from '@abp/ng.core/testing';
+import { AbpApplicationLocalizationService } from '@abp/ng.core';
 import { HttpClient } from '@angular/common/http';
 import { Component, Injector } from '@angular/core';
-import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
+import { createComponentFactory, Spectator } from '@ngneat/spectator/vitest';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { of } from 'rxjs';
 import { getPasswordValidators, validatePassword } from '../utils';
@@ -31,6 +32,44 @@ describe('ValidationUtils', () => {
                   'Abp.Identity.Password.RequireUppercase': 'True',
                   'Abp.Identity.Password.RequireDigit': 'True',
                 },
+              },
+              localization: {
+                values: {},
+                languages: [],
+                currentCulture: {
+                  cultureName: 'en',
+                  displayName: 'English',
+                  englishName: 'English',
+                  threeLetterIsoLanguageName: 'eng',
+                  twoLetterIsoLanguageName: 'en',
+                  isRightToLeft: false,
+                  name: 'en',
+                  nativeName: 'English',
+                  dateTimeFormat: {
+                    calendarAlgorithmType: 'SolarCalendar',
+                    dateTimeFormatLong: 'dddd, MMMM d, yyyy',
+                    shortDatePattern: 'M/d/yyyy',
+                    fullDateTimePattern: 'dddd, MMMM d, yyyy h:mm:ss tt',
+                    dateSeparator: '/',
+                    shortTimePattern: 'h:mm tt',
+                    longTimePattern: 'h:mm:ss tt',
+                  },
+                },
+                defaultResourceName: null,
+                resources: {},
+                languagesMap: {},
+                languageFilesMap: {},
+              },
+            }),
+        },
+      },
+      {
+        provide: AbpApplicationLocalizationService,
+        useValue: {
+          get: () =>
+            of({
+              resources: {
+                Default: { texts: {}, baseResources: [] },
               },
             }),
         },

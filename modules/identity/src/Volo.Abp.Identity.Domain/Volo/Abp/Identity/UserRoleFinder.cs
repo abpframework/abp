@@ -35,10 +35,10 @@ public class UserRoleFinder : IUserRoleFinder, ITransientDependency
         {
             page = page < 1 ? 1 : page;
             var users = await IdentityUserRepository.GetListAsync(filter: filter, skipCount: (page - 1) * 10, maxResultCount: 10);
-            return users.Select(user => new UserFinderResult
+            return users.Select(x => new UserFinderResult
             {
-                Id = user.Id,
-                UserName = user.UserName
+                Id = x.Id,
+                UserName = x.UserName
             }).ToList();
         }
     }
@@ -49,10 +49,10 @@ public class UserRoleFinder : IUserRoleFinder, ITransientDependency
         {
             page = page < 1 ? 1 : page;
             var roles = await IdentityRoleRepository.GetListAsync(filter: filter, skipCount: (page - 1) * 10, maxResultCount: 10);
-            return roles.Select(user => new RoleFinderResult
+            return roles.Select(x => new RoleFinderResult
             {
-                Id = user.Id,
-                RoleName = user.Name
+                Id = x.Id,
+                RoleName = x.Name
             }).ToList();
         }
     }
@@ -62,10 +62,10 @@ public class UserRoleFinder : IUserRoleFinder, ITransientDependency
         using (IdentityUserRepository.DisableTracking())
         {
             var users = await IdentityUserRepository.GetListByIdsAsync(ids);
-            return users.Select(user => new UserFinderResult
+            return users.Select(x => new UserFinderResult
             {
-                Id = user.Id,
-                UserName = user.UserName
+                Id = x.Id,
+                UserName = x.UserName
             }).ToList();
         }
     }
@@ -75,10 +75,10 @@ public class UserRoleFinder : IUserRoleFinder, ITransientDependency
         using (IdentityUserRepository.DisableTracking())
         {
             var roles = await IdentityRoleRepository.GetListAsync(names);
-            return roles.Select(user => new RoleFinderResult
+            return roles.Select(x => new RoleFinderResult
             {
-                Id = user.Id,
-                RoleName = user.Name
+                Id = x.Id,
+                RoleName = x.Name
             }).ToList();
         }
     }

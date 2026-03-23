@@ -102,7 +102,7 @@ protected override async ValueTask SetToolbarItemsAsync()
 
 #### Permissions
 
-If your button/component should be available based on a [permission/policy](../../fundamentals/authorization.md), you can pass the permission/policy name as the `RequiredPolicyName` parameter to the `AddButton` and `AddComponent` methods.
+If your button/component should be available based on a [permission/policy](../../fundamentals/authorization/index.md), you can pass the permission/policy name as the `RequiredPolicyName` parameter to the `AddButton` and `AddComponent` methods.
 
 ### Add a Page Toolbar Contributor
 

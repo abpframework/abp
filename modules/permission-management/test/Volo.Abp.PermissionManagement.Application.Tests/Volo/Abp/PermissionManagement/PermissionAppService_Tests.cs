@@ -16,12 +16,14 @@ public class PermissionAppService_Tests : AbpPermissionManagementApplicationTest
     private readonly IPermissionAppService _permissionAppService;
     private readonly IPermissionGrantRepository _permissionGrantRepository;
     private readonly ICurrentPrincipalAccessor _currentPrincipalAccessor;
+    private readonly FakePermissionChecker _fakePermissionChecker;
 
     public PermissionAppService_Tests()
     {
         _permissionAppService = GetRequiredService<IPermissionAppService>();
         _permissionGrantRepository = GetRequiredService<IPermissionGrantRepository>();
         _currentPrincipalAccessor = GetRequiredService<ICurrentPrincipalAccessor>();
+        _fakePermissionChecker = GetRequiredService<FakePermissionChecker>();
     }
 
     [Fact]
@@ -134,5 +136,123 @@ public class PermissionAppService_Tests : AbpPermissionManagementApplicationTest
 
         (await _permissionGrantRepository.FindAsync("MyPermission1", "Test",
             "Test")).ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task Get_Should_Mark_Permissions_As_Non_Editable_When_Current_User_Does_Not_Have_Them()
+    {
+        // Current user only has MyPermission1 and MyPermission2
+        _fakePermissionChecker.SetGrantedPermissions("MyPermission1", "MyPermission2");
+
+        var result = await _permissionAppService.GetAsync(
+            UserPermissionValueProvider.ProviderName,
+            PermissionTestDataBuilder.User1Id.ToString());
+
+        var testGroup = result.Groups.FirstOrDefault(g => g.Name == "TestGroup");
+        testGroup.ShouldNotBeNull();
+
+        // Permissions the current user has -> IsEditable = true
+        testGroup.Permissions.First(p => p.Name == "MyPermission1").IsEditable.ShouldBeTrue();
+        testGroup.Permissions.First(p => p.Name == "MyPermission2").IsEditable.ShouldBeTrue();
+
+        // Permissions the current user does NOT have -> IsEditable = false
+        testGroup.Permissions.First(p => p.Name == "MyPermission2.ChildPermission1").IsEditable.ShouldBeFalse();
+        testGroup.Permissions.First(p => p.Name == "MyPermission3").IsEditable.ShouldBeFalse();
+        testGroup.Permissions.First(p => p.Name == "MyPermission4").IsEditable.ShouldBeFalse();
+        testGroup.Permissions.First(p => p.Name == "MyPermission6").IsEditable.ShouldBeFalse();
+        testGroup.Permissions.First(p => p.Name == "MyPermission6.ChildPermission2").IsEditable.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task Get_Should_Allow_Admin_To_Edit_All_Permissions()
+    {
+        // Current user does NOT have these permissions, but has admin role
+        _fakePermissionChecker.SetGrantedPermissions("MyPermission1");
+
+        using (_currentPrincipalAccessor.Change(new Claim(AbpClaimTypes.Role, "admin")))
+        {
+            var result = await _permissionAppService.GetAsync(
+                UserPermissionValueProvider.ProviderName,
+                PermissionTestDataBuilder.User1Id.ToString());
+
+            var testGroup = result.Groups.FirstOrDefault(g => g.Name == "TestGroup");
+            testGroup.ShouldNotBeNull();
+
+            testGroup.Permissions.First(p => p.Name == "MyPermission3").IsEditable.ShouldBeTrue();
+            testGroup.Permissions.First(p => p.Name == "MyPermission6").IsEditable.ShouldBeTrue();
+        }
+    }
+
+    [Fact]
+    public async Task Update_Should_Not_Grant_Permission_That_Current_User_Does_Not_Have()
+    {
+        // Current user only has MyPermission1, NOT MyPermission2
+        _fakePermissionChecker.SetGrantedPermissions("MyPermission1");
+
+        // Try to grant both MyPermission1 and MyPermission2
+        await _permissionAppService.UpdateAsync("Test", "Test", new UpdatePermissionsDto()
+        {
+            Permissions = new UpdatePermissionDto[]
+            {
+                new UpdatePermissionDto() { IsGranted = true, Name = "MyPermission1" },
+                new UpdatePermissionDto() { IsGranted = true, Name = "MyPermission2" }
+            }
+        });
+
+        // MyPermission1 should be granted (current user has it)
+        (await _permissionGrantRepository.FindAsync("MyPermission1", "Test", "Test")).ShouldNotBeNull();
+
+        // MyPermission2 should NOT be granted (current user doesn't have it, filtered out)
+        (await _permissionGrantRepository.FindAsync("MyPermission2", "Test", "Test")).ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task Update_Should_Not_Revoke_Permission_That_Current_User_Does_Not_Have()
+    {
+        // First, grant both permissions
+        await _permissionGrantRepository.InsertAsync(
+            new PermissionGrant(Guid.NewGuid(), "MyPermission1", "Test", "Test"));
+        await _permissionGrantRepository.InsertAsync(
+            new PermissionGrant(Guid.NewGuid(), "MyPermission2", "Test", "Test"));
+
+        // Current user only has MyPermission1, NOT MyPermission2
+        _fakePermissionChecker.SetGrantedPermissions("MyPermission1");
+
+        // Try to revoke both
+        await _permissionAppService.UpdateAsync("Test", "Test", new UpdatePermissionsDto()
+        {
+            Permissions = new UpdatePermissionDto[]
+            {
+                new UpdatePermissionDto() { IsGranted = false, Name = "MyPermission1" },
+                new UpdatePermissionDto() { IsGranted = false, Name = "MyPermission2" }
+            }
+        });
+
+        // MyPermission1 should be revoked (current user has it)
+        (await _permissionGrantRepository.FindAsync("MyPermission1", "Test", "Test")).ShouldBeNull();
+
+        // MyPermission2 should still be granted (current user doesn't have it, revoke filtered out)
+        (await _permissionGrantRepository.FindAsync("MyPermission2", "Test", "Test")).ShouldNotBeNull();
+    }
+
+    [Fact]
+    public async Task Update_Should_Allow_Admin_To_Grant_Permissions_Without_Having_Them()
+    {
+        (await _permissionGrantRepository.FindAsync("MyPermission2", "Test", "Test")).ShouldBeNull();
+
+        _fakePermissionChecker.SetGrantedPermissions();
+
+        using (_currentPrincipalAccessor.Change(new Claim(AbpClaimTypes.Role, "admin")))
+        {
+            await _permissionAppService.UpdateAsync("Test", "Test", new UpdatePermissionsDto()
+            {
+                Permissions = new UpdatePermissionDto[]
+                {
+                    new UpdatePermissionDto() { IsGranted = true, Name = "MyPermission2" }
+                }
+            });
+        }
+
+        (await _permissionGrantRepository.FindAsync("MyPermission2", "Test", "Test")).ShouldNotBeNull();
     }
 }

@@ -1,0 +1,28 @@
+<abp-modal [visible]="true" (visibleChange)="onVisibleChange($event)">
+  <ng-template #abpHeader>
+    <h3>
+      {{ (selected()?.id ? 'AbpUi::Edit' : 'AbpUi::New') | abpLocalization }}
+    </h3>
+  </ng-template>
+
+  <ng-template #abpBody>
+    @if (form) {
+      <form [formGroup]="form" (ngSubmit)="save()" validateOnSubmit>
+        <abp-extensible-form [selectedRecord]="selected()" />
+      </form>
+    } @else {
+      <div class="text-center">
+        <i class="fa fa-pulse fa-spinner" aria-hidden="true"></i>
+      </div>
+    }
+  </ng-template>
+
+  <ng-template #abpFooter>
+    <button type="button" class="btn btn-outline-primary" abpClose>
+      {{ 'AbpUi::Cancel' | abpLocalization }}
+    </button>
+    <abp-button iconClass="fa fa-check" [disabled]="form?.invalid" (click)="save()">
+      {{ 'AbpUi::Save' | abpLocalization }}
+    </abp-button>
+  </ng-template>
+</abp-modal>

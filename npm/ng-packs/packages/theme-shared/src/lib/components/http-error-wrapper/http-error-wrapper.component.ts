@@ -6,15 +6,15 @@ import {
   ElementRef,
   EmbeddedViewRef,
   Type,
-  ViewChild,
   AfterViewInit,
   OnDestroy,
   createComponent,
   EnvironmentInjector,
   DestroyRef,
+  viewChild
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import { Router } from '@angular/router';
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
@@ -25,7 +25,7 @@ import { ErrorScreenErrorCodes } from '../../models';
   selector: 'abp-http-error-wrapper',
   templateUrl: './http-error-wrapper.component.html',
   styleUrls: ['http-error-wrapper.component.scss'],
-  imports: [CommonModule, LocalizationPipe],
+  imports: [LocalizationPipe],
 })
 export class HttpErrorWrapperComponent implements OnInit, AfterViewInit, OnDestroy {
   protected readonly destroyRef = inject(DestroyRef);
@@ -53,8 +53,7 @@ export class HttpErrorWrapperComponent implements OnInit, AfterViewInit, OnDestr
 
   isHomeShow = true;
 
-  @ViewChild('container', { static: false })
-  containerRef?: ElementRef<HTMLDivElement>;
+  readonly containerRef = viewChild<ElementRef<HTMLDivElement>>('container');
 
   get statusText(): string {
     return this.status ? `[${this.status}]` : '';
@@ -86,8 +85,9 @@ export class HttpErrorWrapperComponent implements OnInit, AfterViewInit, OnDestr
 
       this.appRef.attachView(customComponentRef.hostView);
 
-      if (this.containerRef) {
-        this.containerRef.nativeElement.appendChild(
+      const containerRef = this.containerRef();
+      if (containerRef) {
+        containerRef.nativeElement.appendChild(
           (customComponentRef.hostView as EmbeddedViewRef<any>).rootNodes[0],
         );
       }

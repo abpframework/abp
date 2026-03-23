@@ -112,4 +112,4 @@ Also, see the following documents:
 
 * See [the localization document](../../../fundamentals/localization.md) to learn how to extend existing localization resources.
 * See [the settings document](../../../infrastructure/settings.md) to learn how to change setting definitions of a depended module.
-* See [the authorization document](../../../fundamentals/authorization.md) to learn how to change permission definitions of a depended module.
+* See [the authorization document](../../../fundamentals/authorization/index.md) to learn how to change permission definitions of a depended module.

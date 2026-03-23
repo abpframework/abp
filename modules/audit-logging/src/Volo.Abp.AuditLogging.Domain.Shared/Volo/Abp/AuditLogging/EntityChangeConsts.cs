@@ -3,9 +3,9 @@
 public class EntityChangeConsts
 {
     /// <summary>
-    /// Default value: 128
+    /// Default value: 512
     /// </summary>
-    public static int MaxEntityTypeFullNameLength { get; set; } = 128;
+    public static int MaxEntityTypeFullNameLength { get; set; } = 512;
 
     /// <summary>
     /// Default value: 128

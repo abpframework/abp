@@ -1,4 +1,4 @@
-import { EventEmitter } from '@angular/core';
+import { EventEmitter, OutputEmitterRef } from '@angular/core';
 
 export namespace FeatureManagement {
   export interface FeatureManagementComponentInputs {
@@ -8,6 +8,6 @@ export namespace FeatureManagement {
   }
 
   export interface FeatureManagementComponentOutputs {
-    readonly visibleChange: EventEmitter<boolean>;
+    readonly visibleChange: EventEmitter<boolean> | OutputEmitterRef<boolean>;
   }
 }

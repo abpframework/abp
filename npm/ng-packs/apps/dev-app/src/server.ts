@@ -11,9 +11,7 @@ import {environment} from './environments/environment';
 import * as oidc from 'openid-client';
 import { ServerCookieParser } from '@abp/ng.core';
 
-if (environment.production === false) {
-  process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
-}
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');

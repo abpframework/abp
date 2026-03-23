@@ -7,6 +7,6 @@ export const checkAccessToken: CheckAuthenticationStateFn = function (injector: 
   const configState = injector.get(ConfigStateService);
   const oAuth = injector.get(OAuthService);
   if (oAuth.hasValidAccessToken() && !configState.getDeep('currentUser.id')) {
-    clearOAuthStorage(this.injector);
+    clearOAuthStorage(injector);
   }
 };

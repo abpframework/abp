@@ -1,4 +1,4 @@
-import { InjectionToken, InjectOptions, Type } from '@angular/core';
+import { InjectionToken, InjectOptions, InputSignal, isSignal, Type } from '@angular/core';
 import { LinkedList } from '@abp/utils';
 import { ePropType } from '../enums/props.enum';
 import { FormPropTooltip } from './form-props';
@@ -11,19 +11,28 @@ export abstract class PropData<R = any> {
     notFoundValue?: T,
     options?: InjectOptions,
   ) => T;
-  index?: number;
-  abstract record: R;
+  index?: number | InputSignal<number | undefined>;
+  abstract record: R | InputSignal<R>;
 
   get data(): ReadonlyPropData<R> {
     return {
       getInjected: this.getInjected,
-      index: this.index,
-      record: this.record,
+      // `record` / `index` may be signals; always use `data.record` / `data.index`.
+      index: isSignal(this.index) ? this.index() : this.index,
+      record: isSignal(this.record) ? this.record() : this.record,
     };
   }
 }
 
-export type ReadonlyPropData<R = any> = Readonly<Omit<PropData<R>, 'data'>>;
+export type ReadonlyPropData<R = any> = Readonly<{
+  getInjected: <T>(
+    token: Type<T> | InjectionToken<T>,
+    notFoundValue?: T,
+    options?: InjectOptions,
+  ) => T;
+  index?: number;
+  record: R;
+}>;
 
 export abstract class Prop<R = any> {
   constructor(
@@ -43,9 +52,9 @@ export abstract class Prop<R = any> {
   }
 }
 
-export type PropCallback<T, R = any> = (data: Omit<PropData<T>, 'data'>, auxData?: any) => R;
-export type PropPredicate<T> = (data?: Omit<PropData<T>, 'data'>, auxData?: any) => boolean;
-export type PropDisplayTextResolver<T> = (data?: Omit<PropData<T>, 'data'>) => string;
+export type PropCallback<T, R = any> = (data: ReadonlyPropData<T>, auxData?: any) => R;
+export type PropPredicate<T> = (data?: ReadonlyPropData<T>, auxData?: any) => boolean;
+export type PropDisplayTextResolver<T> = (data?: ReadonlyPropData<T>) => string;
 
 export abstract class PropsFactory<C extends Props<any>> {
   protected abstract _ctor: Type<C>;

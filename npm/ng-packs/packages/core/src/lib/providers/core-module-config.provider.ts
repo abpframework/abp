@@ -23,7 +23,12 @@ import { RoutesHandler } from '../handlers';
 import { ABP, SortableItem } from '../models';
 import { AuthErrorFilterService } from '../abstracts';
 import { DEFAULT_DYNAMIC_LAYOUTS } from '../constants';
-import { LocalizationService, LocalStorageListenerService, AbpTitleStrategy } from '../services';
+import {
+  LocalizationService,
+  LocalStorageListenerService,
+  AbpTitleStrategy,
+  UILocalizationService,
+} from '../services';
 import { DefaultQueueManager, getInitialData } from '../utils';
 import { CookieLanguageProvider, IncludeLocalizationResourcesProvider, LocaleProvider } from './';
 import { timezoneInterceptor, transferStateInterceptor } from '../interceptors';
@@ -113,6 +118,11 @@ export function provideAbpCore(...features: CoreFeature<CoreFeatureKind>[]) {
       inject(LocalizationService);
       inject(LocalStorageListenerService);
       inject(RoutesHandler);
+      // Initialize UILocalizationService if UI-only mode is enabled
+      const options = inject(CORE_OPTIONS);
+      if (options?.uiLocalization?.enabled) {
+        inject(UILocalizationService);
+      }
       await getInitialData();
     }),
     LocaleProvider,

@@ -47,6 +47,7 @@ public class AbpAuthorizationModule : AbpModule
 
             options.ResourceValueProviders.Add<UserResourcePermissionValueProvider>();
             options.ResourceValueProviders.Add<RoleResourcePermissionValueProvider>();
+            options.ResourceValueProviders.Add<ClientResourcePermissionValueProvider>();
         });
 
         Configure<AbpVirtualFileSystemOptions>(options =>

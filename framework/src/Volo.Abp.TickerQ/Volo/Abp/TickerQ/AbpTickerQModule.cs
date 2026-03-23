@@ -10,7 +10,10 @@ public class AbpTickerQModule : AbpModule
     {
         context.Services.AddTickerQ(options =>
         {
-            options.SetInstanceIdentifier(context.Services.GetApplicationName());
+            options.ConfigureScheduler(scheduler =>
+            {
+                scheduler.NodeIdentifier = context.Services.GetApplicationName();
+            });
         });
     }
 }

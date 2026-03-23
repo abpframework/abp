@@ -8,14 +8,12 @@
           <p class="lead text-muted mb-2">
             {{ '::LongWelcomeMessage' | abpLocalization }}
           </p>
-          <a (click)="login()" class="px-4 btn btn-primary mb-4" role="button"
-            ><i class="fa fa-sign-in"></i> {{ 'AbpAccount::Login' | abpLocalization }}</a
-          >
+          <a (click)="login()" class="px-4 btn btn-primary mb-4" role="button"><i class="fa fa-sign-in"></i> {{
+            'AbpAccount::Login' | abpLocalization }}</a>
           }
 
           <h3>Getting Started</h3>
-          <ng-container
-            *ngTemplateOutlet="
+          <ng-container *ngTemplateOutlet="
               startingContentTemplate;
               context: {
                 $implicit: {
@@ -25,12 +23,10 @@
                   label: 'Getting Started'
                 }
               }
-            "
-          ></ng-container>
+            "></ng-container>
 
           <h4>Web Application Development Tutorial</h4>
-          <ng-container
-            *ngTemplateOutlet="
+          <ng-container *ngTemplateOutlet="
               startingContentTemplate;
               context: {
                 $implicit: {
@@ -40,17 +36,12 @@
                   label: 'Explore Tutorial'
                 }
               }
-            "
-          ></ng-container>
+            "></ng-container>
 
           <h4>Customize Lepton Theme</h4>
           <p class="text-muted mb-2">Learn how to customize LeptonX Theme as you wish.</p>
-          <a
-            href="https://abp.io/docs/latest/framework/ui/angular/theming"
-            class="btn btn-primary soft mb-5 mb-xl-0"
-            target="_blank"
-            >Customize Lepton</a
-          >
+          <a href="https://abp.io/docs/latest/framework/ui/angular/theming" class="btn btn-primary soft mb-5 mb-xl-0"
+            target="_blank">Customize Lepton</a>
         </div>
 
         <img class="card-bg-image" src="assets/images/getting-started/bg-01.png" />
@@ -59,8 +50,7 @@
   </div>
   <div class="col-xl-3 col-md-6 d-flex">
     <div class="row">
-      <ng-container
-        *ngTemplateOutlet="
+      <ng-container *ngTemplateOutlet="
           visitLinkTemplate;
           context: {
             $implicit: {
@@ -74,10 +64,8 @@
               logo: 'abp-support abp-logo mb-2'
             }
           }
-        "
-      ></ng-container>
-      <ng-container
-        *ngTemplateOutlet="
+        "></ng-container>
+      <ng-container *ngTemplateOutlet="
           visitLinkTemplate;
           context: {
             $implicit: {
@@ -91,8 +79,7 @@
               logo: 'abp-blog abp-logo mb-2'
             }
           }
-        "
-      ></ng-container>
+        "></ng-container>
     </div>
   </div>
   <div class="col-xl-3 col-md-6 d-flex">
@@ -107,17 +94,14 @@
           Explore all ABP users' experiences with the ABP Framework, discover articles and videos on
           how to use ABP, and join raffles for a chance to win surprise gifts!
         </p>
-        <a class="btn btn-brand soft mb-3" href="https://abp.io/community/" target="_blank"
-          >Join ABP Community</a
-        >
+        <a class="btn btn-brand soft mb-3" href="https://abp.io/community/" target="_blank">Join ABP Community</a>
       </div>
       <img class="mt-3" src="assets/images/getting-started/img-community.png" />
     </div>
   </div>
 </div>
 <div class="row">
-  <ng-container
-    *ngTemplateOutlet="
+  <ng-container *ngTemplateOutlet="
       tableTemplate;
       context: {
         $implicit: {
@@ -166,8 +150,7 @@
           ]
         }
       }
-    "
-  ></ng-container>
+    "></ng-container>
   <div class="col-xl-6 col-lg-8 d-flex">
     <div class="card">
       <div class="card-body d-flex">
@@ -180,18 +163,12 @@
               understanding of the framework and modern web application development techniques.
             </p>
             <div class="d-md-flex mb-2 mb-md-0">
-              <a
-                href="https://www.amazon.com/gp/product/B097Z2DM8Q"
-                target="_blank"
-                class="btn btn-primary soft me-md-2 mb-2 mb-md-0"
-              >
+              <a href="https://www.amazon.com/gp/product/B097Z2DM8Q" target="_blank"
+                class="btn btn-primary soft me-md-2 mb-2 mb-md-0">
                 Buy on Amazon US
               </a>
-              <a
-                href="https://www.packtpub.com/product/mastering-abp-framework/9781801079242"
-                target="_blank"
-                class="btn btn-primary soft mb-2 mb-md-0"
-              >
+              <a href="https://www.packtpub.com/product/mastering-abp-framework/9781801079242" target="_blank"
+                class="btn btn-primary soft mb-2 mb-md-0">
                 Buy on PACKT
               </a>
             </div>
@@ -203,8 +180,7 @@
       </div>
     </div>
   </div>
-  <ng-container
-    *ngTemplateOutlet="
+  <ng-container *ngTemplateOutlet="
       tableTemplate;
       context: {
         $implicit: {
@@ -242,8 +218,7 @@
           ]
         }
       }
-    "
-  ></ng-container>
+    "></ng-container>
 </div>
 
 <ng-template #startingContentTemplate let-context>
@@ -278,10 +253,7 @@
               <tr>
                 <td class="ps-0 d-flex" [class.border-bottom-0]="last">
                   @if(item.icon){
-                  <div
-                    [ngClass]="item.iconClass"
-                    [style]="item.style ? 'width: 20px; height: 20px' : ''"
-                  >
+                  <div [class]="item.iconClass" [style]="item.style ? 'width: 20px; height: 20px' : ''">
                     @if(item.iconType === 'image'){
                     <img [src]="item.icon" class="me-2" />
                     }@else if(item.iconType === 'icon'){

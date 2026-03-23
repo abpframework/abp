@@ -91,17 +91,19 @@ Kubernetes integration in ABP Studio enables users to deploy solutions directly 
 
 This pane is dedicated to managing [Helm](https://helm.sh/) charts, which are packages used in Kubernetes deployments. It simplifies the process of building images and installing charts.
 
-![kubernetes-integration-helm-pane](./images/overview/kubernetes-integration-helm.png)
+![kubernetes-integration-helm-panel](./images/overview/kubernetes-integration-helm.png)
 
 #### Kubernetes 
 
 This pane is dedicated to managing Kubernetes services. It simplifies the process of redeploying and intercepting application service.
 
-![kubernetes-integration-kubernetes-pane](./images/overview/kubernetes-integration-kubernetes.png)
+![kubernetes-integration-kubernetes-panel](./images/overview/kubernetes-integration-kubernetes.png)
 
 ### AI Assistant
 
 The AI Assistant is an integrated chat interface within ABP Studio that provides intelligent assistance for ABP-related questions. You can access it from the left sidebar by clicking the AI icon.
+
+For external AI tool integrations through MCP, see the [Model Context Protocol (MCP)](./model-context-protocol.md) documentation.
 
 ![ai-assistant](./images/overview/ai-assistant.png)
 

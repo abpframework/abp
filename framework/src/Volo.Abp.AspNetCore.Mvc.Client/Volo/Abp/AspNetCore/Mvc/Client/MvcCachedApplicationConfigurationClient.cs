@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
@@ -7,6 +8,7 @@ using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Localization;
 using Volo.Abp.Threading;
 using Volo.Abp.Users;
 
@@ -14,7 +16,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Client;
 
 public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigurationClient, ITransientDependency
 {
-    private const string ApplicationConfigurationDtoCacheKey = "ApplicationConfigurationDto_CacheKey";
+    private const string HttpContextItemsCacheKeyFormat = "ApplicationConfigurationDto_{0}_{1}_CacheKey";
 
     protected IHttpContextAccessor HttpContextAccessor { get; }
     protected AbpApplicationConfigurationClientProxy ApplicationConfigurationAppService { get; }
@@ -46,7 +48,8 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
     {
         string? cacheKey = null;
         var httpContext = HttpContextAccessor?.HttpContext;
-        if (httpContext != null && httpContext.Items[ApplicationConfigurationDtoCacheKey] is string key)
+        var itemsKey = GetHttpContextItemsCacheKey();
+        if (httpContext != null && httpContext.Items[itemsKey] is string key)
         {
             cacheKey = key;
         }
@@ -56,7 +59,7 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
             cacheKey = await CreateCacheKeyAsync();
             if (httpContext != null)
             {
-                httpContext.Items[ApplicationConfigurationDtoCacheKey] = cacheKey;
+                httpContext.Items[itemsKey] = cacheKey;
             }
         }
 
@@ -82,32 +85,52 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
         return configuration;
     }
 
-    private async Task<ApplicationConfigurationDto> GetRemoteConfigurationAsync()
+    protected virtual async Task<ApplicationConfigurationDto> GetRemoteConfigurationAsync()
     {
-        var config = await ApplicationConfigurationAppService.GetAsync(
+        var cultureName = CultureInfo.CurrentUICulture.Name;
+
+        var configTask = ApplicationConfigurationAppService.GetAsync(
             new ApplicationConfigurationRequestOptions
             {
                 IncludeLocalizationResources = false
             }
         );
 
-        var localizationDto = await ApplicationLocalizationClientProxy.GetAsync(
-            new ApplicationLocalizationRequestDto {
-                CultureName = config.Localization.CurrentCulture.Name,
+        var localizationTask = ApplicationLocalizationClientProxy.GetAsync(
+            new ApplicationLocalizationRequestDto
+            {
+                CultureName = cultureName,
                 OnlyDynamics = true
             }
         );
+
+        await Task.WhenAll(configTask, localizationTask);
+
+        var config = configTask.Result;
+        var localizationDto = localizationTask.Result;
+
+        if (!CultureHelper.IsCompatibleCulture(config.Localization.CurrentCulture.Name, cultureName))
+        {
+            localizationDto = await ApplicationLocalizationClientProxy.GetAsync(
+                new ApplicationLocalizationRequestDto
+                {
+                    CultureName = config.Localization.CurrentCulture.Name,
+                    OnlyDynamics = true
+                }
+            );
+        }
 
         config.Localization.Resources = localizationDto.Resources;
 
         return config;
     }
 
-    public ApplicationConfigurationDto Get()
+    public virtual ApplicationConfigurationDto Get()
     {
         string? cacheKey = null;
         var httpContext = HttpContextAccessor?.HttpContext;
-        if (httpContext != null && httpContext.Items[ApplicationConfigurationDtoCacheKey] is string key)
+        var itemsKey = GetHttpContextItemsCacheKey();
+        if (httpContext != null && httpContext.Items[itemsKey] is string key)
         {
             cacheKey = key;
         }
@@ -117,7 +140,7 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
             cacheKey = AsyncHelper.RunSync(CreateCacheKeyAsync);
             if (httpContext != null)
             {
-                httpContext.Items[ApplicationConfigurationDtoCacheKey] = cacheKey;
+                httpContext.Items[itemsKey] = cacheKey;
             }
         }
 
@@ -132,5 +155,10 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
     protected virtual async Task<string> CreateCacheKeyAsync()
     {
         return await CacheHelper.CreateCacheKeyAsync(CurrentUser.Id);
+    }
+
+    protected virtual string GetHttpContextItemsCacheKey()
+    {
+        return string.Format(CultureInfo.InvariantCulture, HttpContextItemsCacheKeyFormat, CurrentUser.Id?.ToString("N") ?? "Anonymous", CultureInfo.CurrentUICulture.Name);
     }
 }

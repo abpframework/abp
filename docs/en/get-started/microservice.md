@@ -126,6 +126,12 @@ Click the Next button to see *Additional Services* screen:
 
 On that screen, allows you to include extra microservices in your ABP solution during the creation process. This feature lets you extend your solution with business-specific services right from the start.
 
+Click the Next button to see *Admin Password* screen:
+
+![abp-studio-new-solution-dialog-admin-password](images/abp-studio-new-solution-dialog-admin-password.png)
+
+Here, you can set the initial password for the `admin` user of your application. By default, it is set to `1q2w3E*`, but you can change it to a more secure password of your choice.
+
 Now, we are ready to allow ABP Studio to create our solution. Just click the *Create* button and let the ABP Studio do the rest for you. After clicking the *Create* button, the dialog is closed and your solution is loaded into ABP Studio:
 
 ![abp-studio-created-new-microservice-solution](images/abp-studio-created-new-microservice-solution.png)

@@ -10,6 +10,7 @@
     "LoginIsNotAllowed": "Δεν επιτρέπεται να συνδεθείτε! Ο λογαριασμός σας είναι ανενεργός ή χρειάζεται να επιβεβαιώσετε το email/τον αριθμό τηλεφώνου σας.",
     "InvalidUsername": "Μη έγκυρο όνομα ή κωδικός!",
     "InvalidAuthenticatorCode": "Μη έγκυρος κωδικός ελέγχου ταυτότητας!",
-    "TheTargetUserIsNotLinkedToYou": "Ο χρήστης-στόχος δεν είναι συνδεδεμένος με εσάς!"
+    "TheTargetUserIsNotLinkedToYou": "Ο χρήστης-στόχος δεν είναι συνδεδεμένος με εσάς!",
+    "ClientResourcePermissionProviderKeyLookupService": "Πελάτης"
   }
 }

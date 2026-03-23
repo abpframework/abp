@@ -23,15 +23,15 @@
                         <EditForm id="ChangePasswordForm" Model="@ChangePasswordModel" OnValidSubmit="ChangePasswordAsync">
                             <Field>
                                 <FieldLabel>@L["DisplayName:CurrentPassword"]</FieldLabel>
-                                <TextEdit Role="@TextRole.Password" @bind-Text="@ChangePasswordModel.CurrentPassword" />
+                                <TextInput Role="@TextRole.Password" @bind-Value="@ChangePasswordModel.CurrentPassword" />
                             </Field>
                             <Field>
                                 <FieldLabel>@L["DisplayName:NewPassword"]</FieldLabel>
-                                <TextEdit Role="@TextRole.Password" @bind-Text="@ChangePasswordModel.NewPassword" />
+                                <TextInput Role="@TextRole.Password" @bind-Value="@ChangePasswordModel.NewPassword" />
                             </Field>
                             <Field>
                                 <FieldLabel>@L["DisplayName:NewPasswordConfirm"]</FieldLabel>
-                                <TextEdit Role="@TextRole.Password" @bind-Text="@ChangePasswordModel.NewPasswordConfirm" />
+                                <TextInput Role="@TextRole.Password" @bind-Value="@ChangePasswordModel.NewPasswordConfirm" />
                             </Field>
                             <Field>
                                 <SubmitButton Form="ChangePasswordForm" Clicked="@ChangePasswordAsync" />
@@ -45,25 +45,25 @@
                         <EditForm id="UpdatePersonalInfoForm" Model="@PersonalInfoModel" OnValidSubmit="UpdatePersonalInfoAsync">
                             <Field>
                                 <FieldLabel>@L["DisplayName:UserName"]</FieldLabel>
-                                <TextEdit @bind-Text="@PersonalInfoModel.UserName" />
+                                <TextInput @bind-Value="@PersonalInfoModel.UserName" />
                             </Field>
                             <Fields>
                                 <Field ColumnSize="ColumnSize.Is6">
                                     <FieldLabel>@L["DisplayName:Name"]</FieldLabel>
-                                    <TextEdit @bind-Text="@PersonalInfoModel.Name" />
+                                    <TextInput @bind-Value="@PersonalInfoModel.Name" />
                                 </Field>
                                 <Field ColumnSize="ColumnSize.Is6">
                                     <FieldLabel>@L["DisplayName:Surname"]</FieldLabel>
-                                    <TextEdit @bind-Text="@PersonalInfoModel.Surname" />
+                                    <TextInput @bind-Value="@PersonalInfoModel.Surname" />
                                 </Field>
                             </Fields>
                             <Field>
                                 <FieldLabel>@L["DisplayName:Email"]</FieldLabel>
-                                <TextEdit @bind-Text="@PersonalInfoModel.Email" />
+                                <TextInput @bind-Value="@PersonalInfoModel.Email" />
                             </Field>
                             <Field>
                                 <FieldLabel>@L["DisplayName:PhoneNumber"]</FieldLabel>
-                                <TextEdit @bind-Text="@PersonalInfoModel.PhoneNumber" />
+                                <TextInput @bind-Value="@PersonalInfoModel.PhoneNumber" />
                             </Field>
 
                             // TODO: Move this logic to 'ExtensionProperties' component.

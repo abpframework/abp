@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -19,6 +20,9 @@ public class AbpIdentityAspNetCoreModule : AbpModule
             builder
                 .AddDefaultTokenProviders()
                 .AddTokenProvider<LinkUserTokenProvider>(LinkUserTokenProviderConsts.LinkUserTokenProviderName)
+                .AddTokenProvider<AbpPasswordResetTokenProvider>(AbpPasswordResetTokenProvider.ProviderName)
+                .AddTokenProvider<AbpEmailConfirmationTokenProvider>(AbpEmailConfirmationTokenProvider.ProviderName)
+                .AddTokenProvider<AbpChangeEmailTokenProvider>(AbpChangeEmailTokenProvider.ProviderName)
                 .AddSignInManager<AbpSignInManager>()
                 .AddUserValidator<AbpIdentityUserValidator>();
         });
@@ -26,6 +30,13 @@ public class AbpIdentityAspNetCoreModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        Configure<IdentityOptions>(options =>
+        {
+            options.Tokens.PasswordResetTokenProvider = AbpPasswordResetTokenProvider.ProviderName;
+            options.Tokens.EmailConfirmationTokenProvider = AbpEmailConfirmationTokenProvider.ProviderName;
+            options.Tokens.ChangeEmailTokenProvider = AbpChangeEmailTokenProvider.ProviderName;
+        });
+
         //(TODO: Extract an extension method like IdentityBuilder.AddAbpSecurityStampValidator())
         context.Services.AddScoped<AbpSecurityStampValidator>();
         context.Services.AddScoped(typeof(SecurityStampValidator<IdentityUser>), provider => provider.GetService(typeof(AbpSecurityStampValidator)));
@@ -47,6 +58,8 @@ public class AbpIdentityAspNetCoreModule : AbpModule
 
     public override void PostConfigureServices(ServiceConfigurationContext context)
     {
+        // Replace the default UserValidator with AbpIdentityUserValidator
+        context.Services.RemoveAll(x => x.ServiceType == typeof(IUserValidator<IdentityUser>) && x.ImplementationType == typeof(UserValidator<IdentityUser>));
         context.Services.AddAbpOptions<SecurityStampValidatorOptions>()
             .Configure<IServiceProvider>((securityStampValidatorOptions, serviceProvider) =>
             {

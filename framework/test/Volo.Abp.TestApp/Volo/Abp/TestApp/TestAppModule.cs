@@ -30,8 +30,22 @@ public class TestAppModule : AbpModule
 
         context.Services.AddHttpContextAccessor();
         context.Services.Replace(ServiceDescriptor.Singleton<IDistributedCache, TestMemoryDistributedCache>());
-        context.Services.AddEntityCache<Product, Guid>();
-        context.Services.AddEntityCache<Product, ProductCacheItem, Guid>();
+        context.Services.AddEntityCache<Product, Guid>(new DistributedCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(7)
+        });
+        context.Services.AddEntityCache<Product, ProductCacheItem, Guid>(new DistributedCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(9)
+        });
+        context.Services.AddEntityCache<Product, ProductCacheItem2, Guid>();
+
+        // Test ReplaceEntityCache: first add default, then replace with custom implementation
+        context.Services.AddEntityCache<Product, CustomProductCacheItem, Guid>();
+        context.Services.ReplaceEntityCache<CustomProductEntityCache, Product, CustomProductCacheItem, Guid>();
+
+        // Test ReplaceEntityCache without prior registration
+        context.Services.ReplaceEntityCache<CustomProductEntityCacheWithoutPriorRegistration, Product, CustomProductCacheItemWithoutPriorRegistration, Guid>();
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

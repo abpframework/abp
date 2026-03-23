@@ -73,7 +73,9 @@ Here is the list of all available commands before explaining their details:
 * **[`clear-download-cache`](../cli#clear-download-cache)**: Clears the templates download cache.
 * **[`check-extensions`](../cli#check-extensions)**: Checks the latest version of the ABP CLI extensions.
 * **[`install-old-cli`](../cli#install-old-cli)**: Installs old ABP CLI.
+* **[`mcp-studio`](../cli#mcp-studio)**: Starts ABP Studio MCP bridge for AI tools (requires ABP Studio running).
 * **[`generate-razor-page`](../cli#generate-razor-page)**: Generates a page class that you can use it in the ASP NET Core pipeline to return an HTML page.
+* **[`generate-jwks`](../cli#generate-jwks)**: Generates an RSA key pair (JWKS public key + PEM private key) for OpenIddict `private_key_jwt` client authentication.
 
 ### help
 
@@ -981,6 +983,35 @@ Usage:
 abp install-old-cli [options]
 ```
 
+### mcp-studio
+
+Starts an MCP stdio bridge for AI tools (Cursor, Claude Desktop, VS Code, etc.) that connects to the local ABP Studio instance. ABP Studio must be running for this command to work.
+
+> You do not need to run this command manually. It is invoked automatically by your AI tool once you add the MCP configuration to your IDE. See the [Configuration](#configuration) examples below.
+
+> This command connects to the **local ABP Studio** instance. It is separate from the `abp mcp` command, which connects to the ABP.IO cloud MCP service and requires an active license.
+
+Usage:
+
+```bash
+abp mcp-studio [options]
+```
+
+Options:
+
+* `--endpoint` or `-e`: Overrides ABP Studio MCP endpoint. Default value is `http://localhost:38280/mcp/`.
+
+Example:
+
+```bash
+abp mcp-studio
+abp mcp-studio --endpoint http://localhost:38280/mcp/
+```
+
+For detailed configuration examples (Cursor, Claude Desktop, VS Code) and the full list of available MCP tools, see the [Model Context Protocol (MCP)](../studio/model-context-protocol.md) documentation.
+
+> You can also run `abp help mcp-studio` to see available options and example IDE configuration snippets directly in your terminal.
+
 ### generate-razor-page
 
 `generate-razor-page` command to generate a page class and then use it in the ASP NET Core pipeline to return an HTML page.
@@ -1096,6 +1127,99 @@ app.Use(async (httpContext, next) =>
 #### Options
 
 * ```--version``` or ```-v```: Specifies the version for ABP CLI to be installed.
+
+### generate-jwks
+
+Generates an RSA key pair for use with OpenIddict `private_key_jwt` client authentication.
+
+The command produces two files:
+
+| File | Description |
+|---|---|
+| `<prefix>.json` | JWKS (JSON Web Key Set) containing the **public key**. Paste this into the **JSON Web Key Set** field of your OpenIddict application in the ABP management UI. |
+| `<prefix>-private.pem` | PKCS#8 PEM **private key**. Store this securely in your client application and use it to sign JWT client assertions. |
+
+> **Security notice:** Never commit the private key file to source control. Add it to `.gitignore`. Only the JWKS (public key) needs to be shared with the authorization server.
+
+Usage:
+
+```bash
+abp generate-jwks [options]
+```
+
+#### Options
+
+* `--output` or `-o`: Output directory. Defaults to the current directory.
+* `--key-size` or `-s`: RSA key size in bits. Supported values: `2048` (default), `4096`.
+* `--alg`: Signing algorithm. Supported values: `RS256` (default), `RS384`, `RS512`, `PS256`, `PS384`, `PS512`.
+* `--kid`: Custom Key ID. Auto-generated if not specified.
+* `--file` or `-f`: Output file name prefix. Defaults to `jwks`. Generates `<prefix>.json` and `<prefix>-private.pem`.
+
+#### Examples
+
+```bash
+# Generate with defaults (2048-bit RS256, current directory)
+abp generate-jwks
+
+# Generate with RS512 and 4096-bit key
+abp generate-jwks --alg RS512 --key-size 4096
+
+# Output to a specific directory with a custom file prefix
+abp generate-jwks -o ./keys -f myapp
+```
+
+#### Workflow
+
+1. Run `abp generate-jwks` to generate the key pair.
+
+2. Open the ABP OpenIddict application management UI, select your **Confidential** application, choose **JWKS (private_key_jwt)** as the authentication method, and paste the contents of `jwks.json` into the **JSON Web Key Set** field.
+
+3. In your client application, load the private key from the PEM file and sign JWT client assertions:
+
+```csharp
+// Load private key from PEM file
+using var rsa = RSA.Create();
+rsa.ImportFromPem(await File.ReadAllTextAsync("jwks-private.pem"));
+
+// The kid must match the "kid" field in the JWKS registered on the server
+var signingKey = new RsaSecurityKey(rsa) { KeyId = "<kid-from-jwks.json>" };
+var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.RsaSha256);
+
+var now = DateTime.UtcNow;
+var jwtHandler = new JsonWebTokenHandler();
+var clientAssertion = jwtHandler.CreateToken(new SecurityTokenDescriptor
+{
+    // OpenIddict requires typ = "client-authentication+jwt"
+    TokenType = "client-authentication+jwt",
+    // iss and sub must both equal the client_id
+    Issuer = "<your-client-id>",
+    Audience = "<authorization-server-issuer-uri>",
+    Subject = new ClaimsIdentity(new[]
+    {
+        new Claim(JwtRegisteredClaimNames.Sub, "<your-client-id>"),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+    }),
+    IssuedAt = now,
+    NotBefore = now,
+    Expires = now.AddMinutes(5),
+    SigningCredentials = signingCredentials,
+});
+
+// Use the assertion in the token request
+var tokenResponse = await httpClient.RequestClientCredentialsTokenAsync(
+    new ClientCredentialsTokenRequest
+    {
+        Address = "<token-endpoint>",
+        ClientId = "<your-client-id>",
+        ClientCredentialStyle = ClientCredentialStyle.PostBody,
+        ClientAssertion = new ClientAssertion
+        {
+            Type = OidcConstants.ClientAssertionTypes.JwtBearer,
+            Value = clientAssertion,
+        },
+        Scope = "<requested-scopes>",
+    });
+```
 
 ## See Also
 

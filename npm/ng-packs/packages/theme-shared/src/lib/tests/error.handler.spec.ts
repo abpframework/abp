@@ -2,46 +2,48 @@ import { HttpErrorReporterService } from '@abp/ng.core';
 import { CoreTestingModule } from '@abp/ng.core/testing';
 import { APP_BASE_HREF } from '@angular/common';
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { NgModule } from '@angular/core';
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/vitest';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { of, Subject } from 'rxjs';
-import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
 import { ErrorHandler } from '../handlers';
 import { ConfirmationService } from '../services';
+import { CreateErrorComponentService } from '../services/create-error-component.service';
+import { RouterErrorHandlerService } from '../services/router-error-handler.service';
 import { CUSTOM_ERROR_HANDLERS, HTTP_ERROR_CONFIG } from '../tokens/http-error.token';
 import { CustomHttpErrorHandlerService } from '../models';
 
 const customHandlerMock: CustomHttpErrorHandlerService = {
   priority: 100,
-  canHandle: jest.fn().mockReturnValue(true),
-  execute: jest.fn(),
+  canHandle: vi.fn().mockReturnValue(true),
+  execute: vi.fn(),
 };
 
 const reporter$ = new Subject();
 
-@NgModule({
-  exports: [HttpErrorWrapperComponent],
-  declarations: [],
-  imports: [CoreTestingModule, HttpErrorWrapperComponent],
-})
-class MockModule {}
-
 let spectator: SpectatorService<ErrorHandler>;
 let service: ErrorHandler;
 let httpErrorReporter: HttpErrorReporterService;
-const errorConfirmation: jest.Mock = jest.fn(() => of(null));
-const CONFIRMATION_BUTTONS = {
-  hideCancelBtn: true,
-  yesText: 'AbpAccount::Close',
-};
+const errorConfirmation = vi.fn(() => of(null));
+
 
 describe('ErrorHandler', () => {
   const createService = createServiceFactory({
     service: ErrorHandler,
-    imports: [CoreTestingModule.withConfig(), MockModule],
+    imports: [CoreTestingModule.withConfig()],
     mocks: [OAuthService],
     providers: [
+      {
+        provide: RouterErrorHandlerService,
+        useValue: {
+          listen: vi.fn(),
+        },
+      },
+      {
+        provide: CreateErrorComponentService,
+        useValue: {
+          execute: vi.fn(),
+        },
+      },
       {
         provide: HttpErrorReporterService,
         useValue: {
@@ -65,7 +67,10 @@ describe('ErrorHandler', () => {
       },
       {
         provide: HTTP_ERROR_CONFIG,
-        useFactory: () => ({}),
+        useValue: {
+          skipHandledErrorCodes: [],
+          errorScreen: {},
+        },
       },
     ],
   });

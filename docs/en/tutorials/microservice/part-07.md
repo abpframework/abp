@@ -216,7 +216,7 @@ Implementing `ITransientDependency` registers the `OrderEventHandler` class to t
 
 ### Testing the Order Creation
 
-To keep this tutorial simple, we will not implement a user interface for creating orders. Instead, we will use the Swagger UI to create an order. Open the *Solution Runner* panel in ABP Studio and use the *Start* action to launch the `CloudCrm.OrderingService` and `CloudCrm.CatalogService` applications. Then, use the *Start All* action to start the remaining applications listed in the [Solution Runner root item](../../studio/running-applications.md#run).
+To keep this tutorial simple, we will not implement a user interface for creating orders. Instead, we will use the Swagger UI to create an order. Open the *Solution Runner* panel in ABP Studio and use the *Start* action to launch the `CloudCrm.OrderingService` and `CloudCrm.CatalogService` applications. Then, use the *Start All* action to start the remaining applications listed in the [Solution Runner root item](../../studio/running-applications.md#startall).
 
 Once the application is running and ready, [Browse](../../studio/running-applications.md#c-application) the `CloudCrm.OrderingService` application. Use the `POST /api/ordering/order` endpoint to create a new order:
 

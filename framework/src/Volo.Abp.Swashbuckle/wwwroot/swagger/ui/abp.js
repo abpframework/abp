@@ -2,11 +2,7 @@ var abp = abp || {};
 (function () {
 
     /* Application paths *****************************************/
-
-    //Current application root path (including virtual directory if exists).
-    var baseElement = document.querySelector('base');
-    var baseHref = baseElement ? baseElement.getAttribute('href') : null;
-    abp.appPath = baseHref || abp.appPath || '/';
+    abp.appPath = abp.appPath || '/';
 
     /* UTILS ***************************************************/
 

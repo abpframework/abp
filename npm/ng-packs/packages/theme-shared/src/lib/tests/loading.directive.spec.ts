@@ -1,4 +1,4 @@
-import { SpectatorDirective, createDirectiveFactory } from '@ngneat/spectator/jest';
+import { SpectatorDirective, createDirectiveFactory } from '@ngneat/spectator/vitest';
 import { LoadingDirective } from '../directives';
 import { LoadingComponent } from '../components';
 import { Component } from '@angular/core';
@@ -29,10 +29,11 @@ describe('LoadingDirective', () => {
       expect(spectator.directive).toBeTruthy();
     });
 
-    it('should handle loading input', () => {
-      spectator.setHostInput({ loading: false });
-      spectator.detectChanges();
+    it('should handle loading input', async () => {
+      spectator.directive.loading = false;
+      await new Promise(resolve => setTimeout(resolve, 10));
       expect(spectator.directive).toBeTruthy();
+      expect(spectator.directive.loading).toBe(false);
     });
   });
 
@@ -53,19 +54,19 @@ describe('LoadingDirective', () => {
       expect(spectator.directive.targetElement).toBe(mockTarget);
     });
 
-    it('should handle delay input', () => {
-      spectator.setHostInput({ delay: 100 });
-      spectator.detectChanges();
+    it('should handle delay input', async () => {
+      spectator.directive.delay = 100;
+      await new Promise(resolve => setTimeout(resolve, 10));
       expect(spectator.directive).toBeTruthy();
     });
 
-    it('should handle loading state changes', () => {
-      spectator.setHostInput({ loading: false });
-      spectator.detectChanges();
+    it('should handle loading state changes', async() => {
+      spectator.directive.loading = false;
+      await new Promise(resolve => setTimeout(resolve, 10));
       expect(spectator.directive).toBeTruthy();
       
-      spectator.setHostInput({ loading: true });
-      spectator.detectChanges();
+      spectator.directive.loading = true;
+      await new Promise(resolve => setTimeout(resolve, 10));
       expect(spectator.directive).toBeTruthy();
     });
   });

@@ -27,7 +27,6 @@
   <abp-permission-checkbox-list [permissions]="state.permissionDefinitions()" idPrefix="add" />
 } @else {
   <div class="mb-3" id="permissionList">
-    <h4>{{ 'AbpPermissionManagement::Permissions' | abpLocalization }}</h4>
     <abp-permission-checkbox-list
       [permissions]="state.permissionsWithProvider()"
       idPrefix="edit"

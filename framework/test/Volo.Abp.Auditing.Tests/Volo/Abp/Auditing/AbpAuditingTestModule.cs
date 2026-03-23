@@ -61,6 +61,7 @@ public class AbpAuditingTestModule : AbpModule
             );
 
             options.EntityHistorySelectors.Add(new NamedTypeSelector(nameof(AppEntityWithJsonProperty), type => type == typeof(AppEntityWithJsonProperty)));
+            options.EntityHistorySelectors.Add(new NamedTypeSelector(nameof(AppEntityWithComplexProperty), type => type == typeof(AppEntityWithComplexProperty)));
         });
 
         context.Services.AddType<Auditing_Tests.MyAuditedObject1>();

@@ -333,12 +333,16 @@
                   "path": "studio/solution-explorer.md"
                 },
                 {
-                  "text": "Running Applications",
+                  "text": "Solution Runner",
                   "path": "studio/running-applications.md"
                 },
                 {
                   "text": "Monitoring Applications",
                   "path": "studio/monitoring-applications.md"
+                },
+                {
+                  "text": "Model Context Protocol (MCP)",
+                  "path": "studio/model-context-protocol.md"
                 },
                 {
                   "text": "Working with Kubernetes",
@@ -347,6 +351,10 @@
                 {
                   "text": "Working with ABP Suite",
                   "path": "studio/working-with-suite.md"
+                },
+                {
+                  "text": "Custom Commands",
+                  "path": "studio/custom-commands.md"
                 }
               ]
             },
@@ -458,12 +466,16 @@
               "items": [
                 {
                   "text": "Overview",
-                  "path": "framework/fundamentals/authorization.md",
+                  "path": "framework/fundamentals/authorization/index.md",
                   "isIndex": true
                 },
                 {
                   "text": "Dynamic Claims",
                   "path": "framework/fundamentals/dynamic-claims.md"
+                },
+                {
+                  "text": "Resource Based Authorization",
+                  "path": "framework/fundamentals/authorization/resource-based-authorization.md"
                 }
               ]
             },
@@ -688,6 +700,10 @@
             {
               "text": "Concurrency Check",
               "path": "framework/infrastructure/concurrency-check.md"
+            },
+            {
+              "text": "Correlation ID",
+              "path": "framework/infrastructure/correlation-id.md"
             },
             {
               "text": "Current User",
@@ -1284,7 +1300,7 @@
                     },
                     {
                       "text": "LeptonX Lite",
-                      "path": "ui-themes/lepton-x-lite/mvc.md"
+                      "path": "ui-themes/lepton-x-lite/asp-net-core.md"
                     },
                     {
                       "text": "LeptonX",
@@ -1612,6 +1628,10 @@
                       "path": "framework/ui/angular/localization.md"
                     },
                     {
+                      "text": "Hybrid Localization",
+                      "path": "framework/ui/angular/hybrid-localization.md"
+                    },
+                    {
                       "text": "Form Validation",
                       "path": "framework/ui/angular/form-validation.md"
                     },
@@ -1825,6 +1845,10 @@
                     {
                       "text": "Card",
                       "path": "framework/ui/angular/card-component.md"
+                    },
+                    {
+                      "text": "Dynamic Forms",
+                      "path": "framework/ui/angular/dynamic-form-module.md"
                     },
                     {
                       "text": "Password Complexity Indicator",
@@ -2548,6 +2572,10 @@
         {
           "text": "Language Management (Pro)",
           "path": "modules/language-management.md"
+        },
+        {
+          "text": "Operation Rate Limiting (Pro)",
+          "path": "modules/operation-rate-limiting.md"
         },
         {
           "text": "OpenIddict",

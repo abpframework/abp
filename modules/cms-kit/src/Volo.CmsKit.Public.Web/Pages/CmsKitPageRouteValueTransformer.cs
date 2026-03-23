@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Volo.Abp.Auditing;
 using Volo.Abp.Caching;
 using Volo.Abp.Features;
 using Volo.Abp.MultiTenancy;
@@ -16,18 +17,21 @@ public class CmsKitPageRouteValueTransformer : CmsKitDynamicRouteValueTransforme
     protected IFeatureChecker FeatureChecker { get; }
     protected IPagePublicAppService PagePublicAppService { get; }
     protected IDistributedCache<PageCacheItem> PageCache { get; }
+    protected IAuditingHelper AuditingHelper { get; }
 
     public CmsKitPageRouteValueTransformer(
         ICurrentTenant currentTenant,
         ITenantConfigurationProvider tenantConfigurationProvider,
         IFeatureChecker featureChecker,
         IPagePublicAppService pagePublicAppService,
-        IDistributedCache<PageCacheItem> pageCache)
+        IDistributedCache<PageCacheItem> pageCache,
+        IAuditingHelper auditingHelper)
         : base(currentTenant, tenantConfigurationProvider)
     {
         FeatureChecker = featureChecker;
         PagePublicAppService = pagePublicAppService;
         PageCache = pageCache;
+        AuditingHelper = auditingHelper;
     }
 
     protected async override ValueTask<RouteValueDictionary> DoTransformAsync(HttpContext httpContext, RouteValueDictionary values)
@@ -44,7 +48,10 @@ public class CmsKitPageRouteValueTransformer : CmsKitDynamicRouteValueTransforme
             var exist = await PageCache.GetAsync(PageCacheItem.GetKey(slug)) != null;
             if (!exist)
             {
-                exist = await PagePublicAppService.DoesSlugExistAsync(slug);
+                using (AuditingHelper.DisableAuditing())
+                {
+                    exist = await PagePublicAppService.DoesSlugExistAsync(slug);
+                }
             }
 
             if (exist)

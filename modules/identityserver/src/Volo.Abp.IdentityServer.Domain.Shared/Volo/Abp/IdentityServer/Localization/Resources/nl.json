@@ -11,6 +11,7 @@
     "InvalidUsername": "Ongeldige gebruikersnaam of wachtwoord!",
     "InvalidAuthenticatorCode": "Ongeldige authenticatiecode!",
     "InvalidRecoveryCode": "Ongeldige herstelcode!",
-    "TheTargetUserIsNotLinkedToYou": "De beoogde gebruiker is niet aan jou gekoppeld!"
+    "TheTargetUserIsNotLinkedToYou": "De beoogde gebruiker is niet aan jou gekoppeld!",
+    "ClientResourcePermissionProviderKeyLookupService": "Client"
   }
 }

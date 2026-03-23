@@ -75,7 +75,7 @@ You can manage permissions of a role:
 
 * A permission is an **action of the application** granted to roles and users.
 * A user with a role will **inherit** all the permissions granted for the role.
-* Any module can **[define permissions](../framework/fundamentals/authorization.md#permission-system)**. Once you define a new permission, it will be available in this page.
+* Any module can **[define permissions](../framework/fundamentals/authorization/index.md#permission-system)**. Once you define a new permission, it will be available in this page.
 * Left side is the **list of modules**. Once you click to a module name, you can check/uncheck permissions related to that module.
 
 ##### Role claims

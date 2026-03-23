@@ -14,7 +14,7 @@ public class InitialMigrationCreator : ITransientDependency
     public ICmdHelper CmdHelper { get; }
     public DotnetEfToolManager DotnetEfToolManager { get; }
     public ILogger<InitialMigrationCreator> Logger { get; set; }
-    
+
     public InitialMigrationCreator(ICmdHelper cmdHelper, DotnetEfToolManager dotnetEfToolManager)
     {
         CmdHelper = cmdHelper;
@@ -30,11 +30,11 @@ public class InitialMigrationCreator : ITransientDependency
             Logger.LogError($"This path doesn't exist: {targetProjectFolder}");
             return false;
         }
-        
+
         Logger.LogInformation("Creating initial migrations...");
 
         await DotnetEfToolManager.BeSureInstalledAsync();
-        
+
         var tenantDbContextName = FindTenantDbContextName(targetProjectFolder);
         var dbContextName = tenantDbContextName != null ?
             FindDbContextName(targetProjectFolder)
@@ -60,7 +60,7 @@ public class InitialMigrationCreator : ITransientDependency
 
         return migrationSuccess;
     }
-    
+
     private string FindTenantDbContextName(string projectFolder)
     {
         var tenantDbContext = Directory.GetFiles(projectFolder, "*TenantMigrationsDbContext.cs", SearchOption.AllDirectories)
@@ -93,6 +93,12 @@ public class InitialMigrationCreator : ITransientDependency
 
     private string AddMigrationAndGetOutput(string dbMigrationsFolder, string dbContext, string outputDirectory)
     {
+        var output = CmdHelper.RunCmdAndGetOutput("dotnet build", out int buildExitCode, dbMigrationsFolder);
+        if (buildExitCode != 0)
+        {
+            return output;
+        }
+
         var dbContextOption = string.IsNullOrWhiteSpace(dbContext)
             ? string.Empty
             : $"--context {dbContext}";

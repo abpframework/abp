@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Settings;
 
 namespace Volo.Abp.Identity.AspNetCore;
@@ -12,10 +13,9 @@ namespace Volo.Abp.Identity.AspNetCore;
 public class AbpSignInManager : SignInManager<IdentityUser>
 {
     protected AbpIdentityOptions AbpOptions { get; }
-
     protected ISettingProvider SettingProvider { get; }
-
-    private readonly IdentityUserManager _identityUserManager;
+    protected IdentityUserManager IdentityUserManager { get; }
+    protected ICurrentTenant CurrentTenant { get; }
 
     public AbpSignInManager(
         IdentityUserManager userManager,
@@ -26,7 +26,8 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         IAuthenticationSchemeProvider schemes,
         IUserConfirmation<IdentityUser> confirmation,
         IOptions<AbpIdentityOptions> options,
-        ISettingProvider settingProvider) : base(
+        ISettingProvider settingProvider,
+        ICurrentTenant currentTenant) : base(
         userManager,
         contextAccessor,
         claimsFactory,
@@ -35,9 +36,10 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         schemes,
         confirmation)
     {
-        SettingProvider = settingProvider;
         AbpOptions = options.Value;
-        _identityUserManager = userManager;
+        SettingProvider = settingProvider;
+        IdentityUserManager = userManager;
+        CurrentTenant = currentTenant;
     }
 
     public override async Task<SignInResult> PasswordSignInAsync(
@@ -46,6 +48,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         bool isPersistent,
         bool lockoutOnFailure)
     {
+        IdentityUser user;
         foreach (var externalLoginProviderInfo in AbpOptions.ExternalLoginProviders.Values)
         {
             var externalLoginProvider = (IExternalLoginProvider)Context.RequestServices
@@ -53,7 +56,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
 
             if (await externalLoginProvider.TryAuthenticateAsync(userName, password))
             {
-                var user = await UserManager.FindByNameAsync(userName);
+                user = await FindByNameAsync(userName);
                 if (user == null)
                 {
                     if (externalLoginProvider is IExternalLoginProviderWithPassword externalLoginProviderWithPassword)
@@ -67,21 +70,67 @@ public class AbpSignInManager : SignInManager<IdentityUser>
                 }
                 else
                 {
-                    if (externalLoginProvider is IExternalLoginProviderWithPassword externalLoginProviderWithPassword)
+                    using (CurrentTenant.Change(user.TenantId))
                     {
-                        await externalLoginProviderWithPassword.UpdateUserAsync(user, externalLoginProviderInfo.Name, password);
-                    }
-                    else
-                    {
-                        await externalLoginProvider.UpdateUserAsync(user, externalLoginProviderInfo.Name);
+                        if (externalLoginProvider is IExternalLoginProviderWithPassword externalLoginProviderWithPassword)
+                        {
+                            await externalLoginProviderWithPassword.UpdateUserAsync(user, externalLoginProviderInfo.Name, password);
+                        }
+                        else
+                        {
+                            await externalLoginProvider.UpdateUserAsync(user, externalLoginProviderInfo.Name);
+                        }
                     }
                 }
 
-                return await SignInOrTwoFactorAsync(user, isPersistent);
+                using (CurrentTenant.Change(user.TenantId))
+                {
+                    return await SignInOrTwoFactorAsync(user, isPersistent);
+                }
             }
         }
 
-        return await base.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
+        user = await FindByNameAsync(userName);
+        if (user == null)
+        {
+            return SignInResult.Failed;
+        }
+
+        using (CurrentTenant.Change(user.TenantId))
+        {
+            return await PasswordSignInAsync(user, password, isPersistent, lockoutOnFailure);
+        }
+    }
+
+    public override async Task<SignInResult> ExternalLoginSignInAsync(string loginProvider, string providerKey, bool isPersistent, bool bypassTwoFactor)
+    {
+        var user = await FindByLoginAsync(loginProvider, providerKey);
+        if (user == null)
+        {
+            return SignInResult.Failed;
+        }
+
+        var error = await PreSignInCheck(user);
+        if (error != null)
+        {
+            return error;
+        }
+        return await SignInOrTwoFactorAsync(user, isPersistent, loginProvider, bypassTwoFactor);
+    }
+
+    public virtual async Task<IdentityUser> FindByEmailAsync(string email)
+    {
+        return await IdentityUserManager.FindSharedUserByEmailAsync(email);
+    }
+
+    public virtual async Task<IdentityUser> FindByNameAsync(string userName)
+    {
+        return await IdentityUserManager.FindSharedUserByNameAsync(userName);
+    }
+
+    public virtual async Task<IdentityUser> FindByLoginAsync(string loginProvider, string providerKey)
+    {
+        return await IdentityUserManager.FindSharedUserByLoginAsync(loginProvider, providerKey);
     }
 
     /// <summary>
@@ -108,7 +157,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
             return SignInResult.NotAllowed;
         }
 
-        if (await _identityUserManager.ShouldPeriodicallyChangePasswordAsync(user))
+        if (await IdentityUserManager.ShouldPeriodicallyChangePasswordAsync(user))
         {
             return SignInResult.NotAllowed;
         }

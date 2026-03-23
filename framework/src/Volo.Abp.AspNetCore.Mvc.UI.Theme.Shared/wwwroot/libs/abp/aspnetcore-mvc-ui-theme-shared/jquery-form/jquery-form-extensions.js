@@ -1,5 +1,5 @@
 (function ($) {
-    if (!$ || !$.fn.ajaxForm) {
+    if (!$) {
         return;
     }
 
@@ -87,7 +87,66 @@
             userOptions.complete && userOptions.complete.apply(this, arguments);
         };
 
-        return $form.ajaxForm(options);
+        $form.off("submit.abpAjaxForm").on("submit.abpAjaxForm", function (e) {
+            e.preventDefault();
+
+            var formEl = $form[0];
+
+            var arr = $form.serializeArray();
+
+            if (options.beforeSubmit && options.beforeSubmit.call(formEl, arr, $form) === false) {
+                return;
+            }
+
+            var formData = new FormData(formEl);
+            var submitter = e.originalEvent && e.originalEvent.submitter;
+            if (submitter && submitter.name) {
+                formData.append(submitter.name, submitter.value);
+                arr.push({ name: submitter.name, value: submitter.value });
+            }
+
+            var method = (options.method || $form.attr("method") || "POST").toUpperCase();
+            var url = $form.attr("action") || window.location.href;
+
+            var ajaxOptions = {
+                url: url,
+                type: method,
+                dataType: options.dataType,
+                timeout: options.timeout,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            };
+
+            if (method === "GET") {
+                var query = $.param(arr);
+                if (query) {
+                    url += (url.indexOf("?") >= 0 ? "&" : "?") + query;
+                }
+                ajaxOptions.url = url;
+            } else {
+                ajaxOptions.data = formData;
+                ajaxOptions.processData = false;
+                ajaxOptions.contentType = false;
+            }
+
+            var jqXhrForComplete = null;
+            $.ajax(ajaxOptions)
+                .done(function (data, statusText, jqXhr) {
+                    jqXhrForComplete = jqXhr;
+                    options.success && options.success.call(formEl, data, statusText, jqXhr, $form);
+                })
+                .fail(function (jqXhr, statusText, errorThrown) {
+                    jqXhrForComplete = jqXhr;
+                    options.error && options.error.call(formEl, jqXhr, statusText, errorThrown);
+                })
+                .always(function (dataOrJqXhr, statusText, jqXhrOrError) {
+                    var jqXhr = jqXhrForComplete || (dataOrJqXhr && dataOrJqXhr.status !== undefined ? dataOrJqXhr : jqXhrOrError);
+                    options.complete && options.complete.call(formEl, jqXhr, statusText, $form);
+                });
+        });
+
+        return $form;
     };
 
     $.fn.abpAjaxForm.defaults = {

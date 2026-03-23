@@ -94,6 +94,6 @@ If you want to add your own dynamic claims contributor, you can create a class t
   
 ## See Also
 
-* [Authorization](./authorization.md)
+* [Authorization](./authorization/index.md)
 * [Claims-based authorization in ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/security/authorization/claims)
 * [Mapping, customizing, and transforming claims in ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/claims)

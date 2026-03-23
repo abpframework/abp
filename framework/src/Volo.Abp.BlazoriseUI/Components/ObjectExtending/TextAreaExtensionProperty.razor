@@ -1,4 +1,4 @@
-@typeparam TEntity
+﻿@typeparam TEntity
 @typeparam TResourceType
 @using Volo.Abp.BlazoriseUI
 @using Volo.Abp.Localization
@@ -9,11 +9,11 @@
     <Validation Validator="@Validate" MessageLocalizer="@LH.Localize">
         <Field>
             <FieldLabel>@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)</FieldLabel>
-            <MemoEdit @bind-Text="@Value" AutoSize Disabled="IsReadonlyField">
+            <MemoInput @bind-Value="@Value" AutoSize Disabled="IsReadonlyField">
                 <Feedback>
                     <ValidationError/>
                 </Feedback>
-            </MemoEdit>
+            </MemoInput>
         </Field>
     </Validation>
 }
