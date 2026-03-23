@@ -206,12 +206,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             return PublishAsync(eventType, ConvertDynamicEventData(dynamicEventData.Data, eventType), onUnitOfWorkComplete);
         }
 
-        if (DynamicHandlerFactories.ContainsKey(eventName))
-        {
-            return PublishAsync(typeof(DynamicEventData), dynamicEventData, onUnitOfWorkComplete);
-        }
-
-        throw new AbpException($"Unknown event name: {eventName}");
+        return PublishAsync(typeof(DynamicEventData), dynamicEventData, onUnitOfWorkComplete);
     }
 
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)

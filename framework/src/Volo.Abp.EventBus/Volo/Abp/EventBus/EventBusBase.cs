@@ -6,10 +6,10 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using System.Text.Json;
 using Volo.Abp.Collections;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.Json;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
 using Volo.Abp.Uow;
@@ -228,8 +228,10 @@ public abstract class EventBusBase : IEventBus
             return data;
         }
 
-        var json = JsonSerializer.Serialize(data);
-        return JsonSerializer.Deserialize(json, targetType)!;
+        using var scope = ServiceScopeFactory.CreateScope();
+        var jsonSerializer = scope.ServiceProvider.GetRequiredService<IJsonSerializer>();
+        var json = jsonSerializer.Serialize(data);
+        return jsonSerializer.Deserialize(targetType, json);
     }
 
     protected void ThrowOriginalExceptions(Type eventType, List<Exception> exceptions)

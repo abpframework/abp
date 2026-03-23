@@ -180,11 +180,6 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             return PublishAsync(eventType, ConvertDynamicEventData(dynamicEventData.Data, eventType), onUnitOfWorkComplete, useOutbox);
         }
 
-        if (!DynamicEventNames.ContainsKey(eventName))
-        {
-            throw new AbpException($"Unknown event name: {eventName}");
-        }
-
         return PublishAsync(typeof(DynamicEventData), dynamicEventData, onUnitOfWorkComplete, useOutbox);
     }
 

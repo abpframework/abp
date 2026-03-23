@@ -118,10 +118,10 @@ public class LocalEventBus_Dynamic_Test : EventBusTestBase
     }
 
     [Fact]
-    public async Task Should_Throw_For_Unknown_Event_Name()
+    public async Task Should_Not_Throw_For_Unknown_Event_Name()
     {
-        await Assert.ThrowsAsync<AbpException>(() =>
-            LocalEventBus.PublishAsync("NonExistentEvent", new { Value = 1 }));
+        // Publishing to an unknown event name should not throw (consistent with typed PublishAsync behavior)
+        await LocalEventBus.PublishAsync("NonExistentEvent", new { Value = 1 });
     }
 
     [Fact]

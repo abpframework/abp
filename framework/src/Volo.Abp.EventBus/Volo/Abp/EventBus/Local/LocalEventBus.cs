@@ -181,12 +181,6 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
             return PublishAsync(eventType, ConvertDynamicEventData(dynamicEventData.Data, eventType), onUnitOfWorkComplete);
         }
 
-        var isDynamic = DynamicEventHandlerFactories.ContainsKey(eventName);
-        if (!isDynamic)
-        {
-            throw new AbpException($"Unknown event name: {eventName}");
-        }
-
         return PublishAsync(typeof(DynamicEventData), dynamicEventData, onUnitOfWorkComplete);
     }
 
