@@ -13,27 +13,23 @@
 | TickerQ.Dashboard | 10.1.1 | 10.2.0 | #25091 |
 | TickerQ.EntityFrameworkCore | 10.1.1 | 10.2.0 | #25091 |
 | TickerQ.Utilities | 10.1.1 | 10.2.0 | #25091 |
-
-## 10.3.0-preview
-
-| Package | Old Version | New Version | PR |
-|---------|-------------|-------------|-----|
 | OpenIddict.Abstractions | 7.2.0 | 7.3.0 | #25053 |
 | OpenIddict.Core | 7.2.0 | 7.3.0 | #25053 |
 | OpenIddict.Server.AspNetCore | 7.2.0 | 7.3.0 | #25053 |
 | OpenIddict.Validation.AspNetCore | 7.2.0 | 7.3.0 | #25053 |
 | OpenIddict.Validation.ServerIntegration | 7.2.0 | 7.3.0 | #25053 |
 
+## 10.2.0-rc.3
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| Scriban | 6.3.0 | 6.6.0 | #25122 |
+
 ## 10.2.0-rc.1
 
 | Package | Old Version | New Version | PR |
 |---------|-------------|-------------|-----|
 | MongoDB.Driver | 3.6.0 | 3.7.0 | #25003 |
-
-## 10.2.0-preview
-
-| Package | Old Version | New Version | PR |
-|---------|-------------|-------------|-----|
 | Blazorise | 1.8.8 | 2.0.0 | #24906 |
 | Blazorise.Components | 1.8.8 | 2.0.0 | #24906 |
 | Blazorise.DataGrid | 1.8.8 | 2.0.0 | #24906 |
@@ -49,4 +45,3 @@
 |---------|-------------|-------------|-----|
 | Microsoft.SemanticKernel | 1.67.1 | 1.71.0 | [#24891](https://github.com/abpframework/abp/pull/24891) |
 | Microsoft.SemanticKernel.Abstractions | 1.67.1 | 1.71.0 | [#24891](https://github.com/abpframework/abp/pull/24891) |
-
