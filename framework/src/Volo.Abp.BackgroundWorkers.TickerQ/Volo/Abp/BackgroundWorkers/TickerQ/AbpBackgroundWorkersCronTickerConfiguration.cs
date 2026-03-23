@@ -9,4 +9,6 @@ public class AbpBackgroundWorkersCronTickerConfiguration
     public int[]? RetryIntervals { get; set; }
 
     public TickerTaskPriority? Priority { get; set; }
+
+    public int? MaxConcurrency { get; set; }
 }

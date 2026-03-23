@@ -11,6 +11,8 @@ public class ReturnValueApiDescriptionModel
 
     public string TypeSimple { get; set; } = default!;
 
+    public string? Summary { get; set; }
+
     public ReturnValueApiDescriptionModel()
     {
 

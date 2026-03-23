@@ -15,6 +15,13 @@
 # Integrating the Modules: Joining the Products and Orders Data
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC","BlazorWebApp"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Previous": {
@@ -176,7 +183,7 @@ Now, you know the fundamental principles and mechanics of building sophisticated
 
 ## Download the Source Code
 
-You can download the completed sample solution [here](https://github.com/abpframework/abp-samples/tree/master/ModularCRM).
+You can download the completed sample solution [here](https://github.com/abpframework/abp-samples/tree/master/ModularCRM-BlazorWebApp).
 
 ## See Also
 
