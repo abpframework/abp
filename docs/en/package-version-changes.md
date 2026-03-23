@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the latest package version changes in ABP Framework, detailing updates and improvements for enhanced development efficiency."
+}
+```
+
 # Package Version Changes
 
 ## 10.3.0-rc.1
