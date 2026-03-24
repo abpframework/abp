@@ -12,6 +12,13 @@ public class AbpAutoMapperOptions
 
     public ITypeList<Profile> ValidatingProfiles { get; set; }
 
+    /// <summary>
+    /// Default MaxDepth applied to all maps that don't have an explicit MaxDepth configured.
+    /// Set to null to disable the default MaxDepth behavior.
+    /// Default: 64.
+    /// </summary>
+    public int? DefaultMaxDepth { get; set; } = 64;
+
     public AbpAutoMapperOptions()
     {
         Configurators = new List<Action<IAbpAutoMapperConfigurationContext>>();
