@@ -9,7 +9,12 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 2.2.1 (2026-02-20) Latest
+## 2.2.3 (2026-03-24) Latest
+
+- Fix PostHog environment detection
+- Update version to release 2.2.3 with 10.1.1
+
+## 2.2.1 (2026-02-20)
 
 * Added `abp run` and `abp watch` commands to Studio CLI.
 * Added "Start and wait for ready" option in Solution Runner.
