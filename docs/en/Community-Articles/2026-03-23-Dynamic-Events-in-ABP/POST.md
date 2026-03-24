@@ -1,5 +1,7 @@
 # Dynamic Events in ABP
 
+> This feature is available since ABP 10.3.
+
 ABP's Event Bus is a core infrastructure piece. The **Local Event Bus** handles in-process communication between services. The **Distributed Event Bus** handles cross-service communication over message brokers like RabbitMQ, Kafka, Azure Service Bus, and Rebus.
 
 Both are fully type-safe — you define event types at compile time, register handlers via DI, and everything is wired up automatically. This works great, but it has one assumption: **you know all your event types at compile time**.

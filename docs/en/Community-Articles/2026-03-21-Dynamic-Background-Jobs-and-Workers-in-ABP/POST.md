@@ -1,5 +1,7 @@
 # Dynamic Background Jobs and Workers in ABP
 
+> This feature is available since ABP 10.3.
+
 ABP's Background Jobs and Background Workers are two well-established infrastructure pieces. Background jobs handle fire-and-forget async tasks — sending emails, generating reports, processing orders. Background workers handle continuously running periodic tasks — syncing inventory, cleaning up expired data, pushing scheduled notifications.
 
 This works great, but it has one assumption: **you know all your job and worker types at compile time**.
