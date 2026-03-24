@@ -29,6 +29,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     protected IAzureServiceBusSerializer Serializer { get; }
     protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
     protected ConcurrentDictionary<string, Type> EventTypes  { get; }
+    protected ConcurrentDictionary<string, List<IEventHandlerFactory>> DynamicHandlerFactories { get; }
     protected IAzureServiceBusMessageConsumer Consumer { get; private set; } = default!;
 
     public AzureDistributedEventBus(
@@ -61,6 +62,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         PublisherPool = publisherPool;
         HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
         EventTypes = new ConcurrentDictionary<string, Type>();
+        DynamicHandlerFactories = new ConcurrentDictionary<string, List<IEventHandlerFactory>>();
     }
 
     public void Initialize()
@@ -81,13 +83,24 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         {
             return;
         }
+
         var eventType = EventTypes.GetOrDefault(eventName);
-        if (eventType == null)
+        object eventData;
+
+        if (eventType != null)
+        {
+            eventData = Serializer.Deserialize(message.Body.ToArray(), eventType);
+        }
+        else if (DynamicHandlerFactories.ContainsKey(eventName))
+        {
+            var rawBytes = message.Body.ToArray();
+            eventData = new DynamicEventData(eventName, Serializer.Deserialize<object>(rawBytes));
+            eventType = typeof(DynamicEventData);
+        }
+        else
         {
             return;
         }
-
-        var eventData = Serializer.Deserialize(message.Body.ToArray(), eventType);
 
         if (await AddToInboxAsync(message.MessageId, eventName, eventType, eventData, message.CorrelationId))
         {
@@ -98,6 +111,113 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         {
             await TriggerHandlersDirectAsync(eventType, eventData);
         }
+    }
+
+    public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
+    {
+        var handlerFactories = GetOrCreateHandlerFactories(eventType);
+
+        if (factory.IsInFactories(handlerFactories))
+        {
+            return NullDisposable.Instance;
+        }
+
+        handlerFactories.Add(factory);
+
+        return new EventHandlerFactoryUnregistrar(this, eventType, factory);
+    }
+
+    /// <inheritdoc/>
+    public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
+    {
+        var handlerFactories = GetOrCreateDynamicHandlerFactories(eventName);
+
+        if (handler.IsInFactories(handlerFactories))
+        {
+            return NullDisposable.Instance;
+        }
+
+        handlerFactories.Add(handler);
+
+        return new DynamicEventHandlerFactoryUnregistrar(this, eventName, handler);
+    }
+
+    public override void Unsubscribe<TEvent>(Func<TEvent, Task> action)
+    {
+        Check.NotNull(action, nameof(action));
+
+        GetOrCreateHandlerFactories(typeof(TEvent))
+            .Locking(factories =>
+            {
+                factories.RemoveAll(
+                    factory =>
+                    {
+                        var singleInstanceFactory = factory as SingleInstanceHandlerFactory;
+                        if (singleInstanceFactory == null)
+                        {
+                            return false;
+                        }
+
+                        var actionHandler = singleInstanceFactory.HandlerInstance as ActionEventHandler<TEvent>;
+                        if (actionHandler == null)
+                        {
+                            return false;
+                        }
+
+                        return actionHandler.Action == action;
+                    });
+            });
+    }
+
+    public override void Unsubscribe(Type eventType, IEventHandler handler)
+    {
+        GetOrCreateHandlerFactories(eventType)
+            .Locking(factories =>
+            {
+                factories.RemoveAll(
+                    factory =>
+                        factory is SingleInstanceHandlerFactory handlerFactory &&
+                        handlerFactory.HandlerInstance == handler
+                );
+            });
+    }
+
+    public override void Unsubscribe(Type eventType, IEventHandlerFactory factory)
+    {
+        GetOrCreateHandlerFactories(eventType)
+            .Locking(factories => factories.Remove(factory));
+    }
+
+    /// <inheritdoc/>
+    public override void UnsubscribeAll(Type eventType)
+    {
+        GetOrCreateHandlerFactories(eventType)
+            .Locking(factories => factories.Clear());
+    }
+
+    /// <inheritdoc/>
+    public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
+    {
+        var eventType = EventTypes.GetOrDefault(eventName);
+        var dynamicEventData = eventData as DynamicEventData ?? new DynamicEventData(eventName, eventData);
+
+        if (eventType != null)
+        {
+            return PublishAsync(eventType, ConvertDynamicEventData(dynamicEventData.Data, eventType), onUnitOfWorkComplete);
+        }
+
+        return PublishAsync(typeof(DynamicEventData), dynamicEventData, onUnitOfWorkComplete);
+    }
+
+    protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
+    {
+        var (eventName, resolvedData) = ResolveEventForPublishing(eventType, eventData);
+        await PublishAsync(eventName, resolvedData);
+    }
+
+    protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
+    {
+        unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
     }
 
     public async override Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
@@ -162,12 +282,21 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     public async override Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)
     {
         var eventType = EventTypes.GetOrDefault(incomingEvent.EventName);
-        if (eventType == null)
+        object eventData;
+
+        if (eventType != null)
+        {
+            eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
+        }
+        else if (DynamicHandlerFactories.ContainsKey(incomingEvent.EventName))
+        {
+            eventData = new DynamicEventData(incomingEvent.EventName, Serializer.Deserialize<object>(incomingEvent.EventData));
+            eventType = typeof(DynamicEventData);
+        }
+        else
         {
             return;
         }
-
-        var eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
         var exceptions = new List<Exception>();
         using (CorrelationIdProvider.Change(incomingEvent.GetCorrelationId()))
         {
@@ -182,82 +311,6 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     protected override byte[] Serialize(object eventData)
     {
         return Serializer.Serialize(eventData);
-    }
-
-    public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
-    {
-        var handlerFactories = GetOrCreateHandlerFactories(eventType);
-
-        if (factory.IsInFactories(handlerFactories))
-        {
-            return NullDisposable.Instance;
-        }
-
-        handlerFactories.Add(factory);
-
-        return new EventHandlerFactoryUnregistrar(this, eventType, factory);
-    }
-
-    public override void Unsubscribe<TEvent>(Func<TEvent, Task> action)
-    {
-        Check.NotNull(action, nameof(action));
-
-        GetOrCreateHandlerFactories(typeof(TEvent))
-            .Locking(factories =>
-            {
-                factories.RemoveAll(
-                    factory =>
-                    {
-                        var singleInstanceFactory = factory as SingleInstanceHandlerFactory;
-                        if (singleInstanceFactory == null)
-                        {
-                            return false;
-                        }
-
-                        var actionHandler = singleInstanceFactory.HandlerInstance as ActionEventHandler<TEvent>;
-                        if (actionHandler == null)
-                        {
-                            return false;
-                        }
-
-                        return actionHandler.Action == action;
-                    });
-            });
-    }
-
-    public override void Unsubscribe(Type eventType, IEventHandler handler)
-    {
-        GetOrCreateHandlerFactories(eventType)
-            .Locking(factories =>
-            {
-                factories.RemoveAll(
-                    factory =>
-                        factory is SingleInstanceHandlerFactory handlerFactory &&
-                        handlerFactory.HandlerInstance == handler
-                );
-            });
-    }
-
-    public override void Unsubscribe(Type eventType, IEventHandlerFactory factory)
-    {
-        GetOrCreateHandlerFactories(eventType)
-            .Locking(factories => factories.Remove(factory));
-    }
-
-    public override void UnsubscribeAll(Type eventType)
-    {
-        GetOrCreateHandlerFactories(eventType)
-            .Locking(factories => factories.Clear());
-    }
-
-    protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
-    {
-        await PublishAsync(EventNameAttribute.GetNameOrDefault(eventType), eventData);
-    }
-
-    protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
-    {
-        unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
     }
 
     protected virtual Task PublishAsync(string eventName, object eventData)
@@ -292,23 +345,12 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         await publisher.SendMessageAsync(message);
     }
 
-    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
-    {
-        return HandlerFactories
-            .Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key))
-            .Select(handlerFactory =>
-                new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value))
-            .ToArray();
-    }
-
-    private static bool ShouldTriggerEventForHandler(Type targetEventType, Type handlerEventType)
-    {
-        return handlerEventType == targetEventType || handlerEventType.IsAssignableFrom(targetEventType);
-    }
-
     protected override Task OnAddToOutboxAsync(string eventName, Type eventType, object eventData)
     {
-        EventTypes.GetOrAdd(eventName, eventType);
+        if (typeof(DynamicEventData) != eventType)
+        {
+            EventTypes.GetOrAdd(eventName, eventType);
+        }
         return base.OnAddToOutboxAsync(eventName, eventType, eventData);
     }
 
@@ -323,5 +365,84 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
                 return new List<IEventHandlerFactory>();
             }
         );
+    }
+
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
+    {
+        var handlerFactoryList = new List<EventTypeWithEventHandlerFactories>();
+        var eventNames = EventTypes.Where(x => ShouldTriggerEventForHandler(eventType, x.Value)).Select(x => x.Key).ToList();
+
+        foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
+        {
+            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
+        }
+
+        foreach (var handlerFactory in DynamicHandlerFactories.Where(aehf => eventNames.Contains(aehf.Key)))
+        {
+            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value));
+        }
+
+        return handlerFactoryList.ToArray();
+    }
+
+    protected override Type? GetEventTypeByEventName(string eventName)
+    {
+        return EventTypes.GetOrDefault(eventName);
+    }
+
+    /// <inheritdoc/>
+    public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
+    {
+        GetOrCreateDynamicHandlerFactories(eventName)
+            .Locking(factories => factories.Remove(factory));
+    }
+
+    /// <inheritdoc/>
+    public override void Unsubscribe(string eventName, IEventHandler handler)
+    {
+        GetOrCreateDynamicHandlerFactories(eventName)
+            .Locking(factories =>
+            {
+                factories.RemoveAll(
+                    factory =>
+                        factory is SingleInstanceHandlerFactory singleFactory &&
+                        singleFactory.HandlerInstance == handler
+                );
+            });
+    }
+
+    /// <inheritdoc/>
+    public override void UnsubscribeAll(string eventName)
+    {
+        GetOrCreateDynamicHandlerFactories(eventName)
+            .Locking(factories => factories.Clear());
+    }
+
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetDynamicHandlerFactories(string eventName)
+    {
+        var eventType = GetEventTypeByEventName(eventName);
+        if (eventType != null)
+        {
+            return GetHandlerFactories(eventType);
+        }
+
+        var result = new List<EventTypeWithEventHandlerFactories>();
+
+        foreach (var handlerFactory in DynamicHandlerFactories.Where(hf => hf.Key == eventName))
+        {
+            result.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value));
+        }
+
+        return result;
+    }
+
+    private List<IEventHandlerFactory> GetOrCreateDynamicHandlerFactories(string eventName)
+    {
+        return DynamicHandlerFactories.GetOrAdd(eventName, _ => new List<IEventHandlerFactory>());
+    }
+
+    private static bool ShouldTriggerEventForHandler(Type targetEventType, Type handlerEventType)
+    {
+        return handlerEventType == targetEventType || handlerEventType.IsAssignableFrom(targetEventType);
     }
 }
