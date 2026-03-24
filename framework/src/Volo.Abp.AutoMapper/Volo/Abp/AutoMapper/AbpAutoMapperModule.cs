@@ -40,13 +40,16 @@ public class AbpAutoMapperModule : AbpModule
                     configurator(autoMapperConfigurationContext);
                 }
 
-                mapperConfigurationExpression.Internal().ForAllMaps((typeMap, _) =>
+                if (options.DefaultMaxDepth.HasValue)
                 {
-                    if (typeMap.MaxDepth == 0)
+                    mapperConfigurationExpression.Internal().ForAllMaps((typeMap, _) =>
                     {
-                        typeMap.MaxDepth = 64;
-                    }
-                });
+                        if (typeMap.MaxDepth == 0)
+                        {
+                            typeMap.MaxDepth = options.DefaultMaxDepth.Value;
+                        }
+                    });
+                }
 
                 var mapperConfiguration = new MapperConfiguration(mapperConfigurationExpression);
 

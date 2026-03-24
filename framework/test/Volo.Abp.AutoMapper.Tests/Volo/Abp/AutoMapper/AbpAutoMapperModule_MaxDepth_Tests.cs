@@ -63,3 +63,40 @@ public class AbpAutoMapperModule_CustomMaxDepth_Tests : AbpIntegratedTest<AbpAut
         }
     }
 }
+
+public class AbpAutoMapperModule_DisabledMaxDepth_Tests : AbpIntegratedTest<AbpAutoMapperModule_DisabledMaxDepth_Tests.TestModule>
+{
+    private readonly IConfigurationProvider _configurationProvider;
+
+    public AbpAutoMapperModule_DisabledMaxDepth_Tests()
+    {
+        _configurationProvider = ServiceProvider.GetRequiredService<IConfigurationProvider>();
+    }
+
+    [Fact]
+    public void Should_Not_Set_MaxDepth_When_Disabled()
+    {
+        var typeMap = _configurationProvider.Internal().FindTypeMapFor<MyEntity, MyEntityDto>();
+        typeMap.ShouldNotBeNull();
+        typeMap.MaxDepth.ShouldBe(0);
+    }
+
+    [DependsOn(
+        typeof(AbpAutoMapperModule),
+        typeof(AbpObjectExtendingTestModule)
+    )]
+    public class TestModule : AbpModule
+    {
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.DefaultMaxDepth = null;
+                options.Configurators.Add(ctx =>
+                {
+                    ctx.MapperConfiguration.CreateMap<MyEntity, MyEntityDto>();
+                });
+            });
+        }
+    }
+}
