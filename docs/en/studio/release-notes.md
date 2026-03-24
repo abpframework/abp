@@ -9,7 +9,20 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 2.2.1 (2026-02-20) Latest
+## 2.2.2 (2026-03-24) Latest
+
+- Fix tiered Blazor WebApp template HttpApi reference
+- Add LeptonX theme templates AuthServer and HttpApi projects
+- Enable razor runtime compilation on templates
+- Configure HttpClientFactoryOptions for CLI client
+- Bump ABP to 10.1.1 and LeptonX to 5.1.1
+- Blazor & Angular UIs: Add AI Management option to the Startup Templates (app-nolayers, app, ms templates)
+- Handle docker container start failures in solution runner
+- Fix import module version dropdown ordering
+- Add PostHog integration for Studio and CLI
+- Update version to release 2.2.2 with 10.1.1
+
+## 2.2.1 (2026-02-20)
 
 * Added `abp run` and `abp watch` commands to Studio CLI.
 * Added "Start and wait for ready" option in Solution Runner.
