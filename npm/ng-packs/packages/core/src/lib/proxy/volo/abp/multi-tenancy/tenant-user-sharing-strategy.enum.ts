@@ -1,4 +1,4 @@
-import { mapEnumToOptions } from '@abp/ng.core';
+import { mapEnumToOptions } from '../../../../utils/form-utils';
 
 export enum TenantUserSharingStrategy {
   Isolated = 0,
