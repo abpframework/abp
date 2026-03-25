@@ -32,9 +32,9 @@ public class CmdHelper_Tests : AbpCliTestBase
 
         string output = null;
         var cmdTask = Task.Run(() => output = _cmdHelper.RunCmdAndGetOutput(command));
-        var completed = await Task.WhenAny(cmdTask, Task.Delay(TimeSpan.FromSeconds(30)));
+        var completed = await Task.WhenAny(cmdTask, Task.Delay(TimeSpan.FromSeconds(10)));
 
-        // The original sequential code deadlocked here; 30 s is a generous upper bound.
+        // The original sequential code deadlocked here; 10 s is a generous upper bound.
         (completed == cmdTask).ShouldBeTrue(
             "RunCmdAndGetOutput should not deadlock when both stdout and stderr produce large output");
 
