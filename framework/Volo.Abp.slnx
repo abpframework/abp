@@ -54,6 +54,7 @@
     <Project Path="src/Volo.Abp.Autofac.WebAssembly/Volo.Abp.Autofac.WebAssembly.csproj" />
     <Project Path="src/Volo.Abp.Autofac/Volo.Abp.Autofac.csproj" />
     <Project Path="src/Volo.Abp.AutoMapper/Volo.Abp.AutoMapper.csproj" />
+    <Project Path="src/Volo.Abp.LuckyPenny.AutoMapper/Volo.Abp.LuckyPenny.AutoMapper.csproj" />
     <Project Path="src/Volo.Abp.AzureServiceBus/Volo.Abp.AzureServiceBus.csproj" />
     <Project Path="src/Volo.Abp.BackgroundJobs.Abstractions/Volo.Abp.BackgroundJobs.Abstractions.csproj" />
     <Project Path="src/Volo.Abp.BackgroundJobs.HangFire/Volo.Abp.BackgroundJobs.HangFire.csproj" />
@@ -196,6 +197,7 @@
     <Project Path="test/Volo.Abp.Authorization.Tests/Volo.Abp.Authorization.Tests.csproj" />
     <Project Path="test/Volo.Abp.Autofac.Tests/Volo.Abp.Autofac.Tests.csproj" />
     <Project Path="test/Volo.Abp.AutoMapper.Tests/Volo.Abp.AutoMapper.Tests.csproj" />
+    <Project Path="test/Volo.Abp.LuckyPenny.AutoMapper.Tests/Volo.Abp.LuckyPenny.AutoMapper.Tests.csproj" />
     <Project Path="test/Volo.Abp.BackgroundJobs.Tests/Volo.Abp.BackgroundJobs.Tests.csproj" />
     <Project Path="test/Volo.Abp.BlobStoring.Aliyun.Tests/Volo.Abp.BlobStoring.Aliyun.Tests.csproj" />
     <Project Path="test/Volo.Abp.BlobStoring.Aws.Tests/Volo.Abp.BlobStoring.Aws.Tests.csproj" />

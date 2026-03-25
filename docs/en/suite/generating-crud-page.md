@@ -323,6 +323,17 @@ There are some adjustments you may need to make before generating CRUD pages for
   - Project key is in kebab case. E.g. `book-store`.
   - Project is defined as `defaultProject`.
 
+### What to Check If CRUD Generation Fails After Migrating to Mapperly
+
+If you migrated an existing solution from AutoMapper to Mapperly and ABP Suite starts appending mappings to the wrong file or generating duplicate/inconsistent mapper classes, check your mapper file layout.
+
+- Keep the main Suite-managed files, such as `*ApplicationMappers.cs`, `*BlazorMappers.cs` and `*WebMappers.cs`, reserved for ABP Suite updates.
+- Move manual or AI-generated Mapperly classes to separate files.
+- Avoid naming those manual files with the same conventional suffixes that ABP Suite scans, otherwise Suite may choose the wrong file while generating CRUD pages.
+- If you temporarily excluded a Suite-managed mapper file from the build, add it back after reorganizing your mappings.
+
+After reorganizing the files, clean the solution, rebuild it, and try generating the entity again.
+
 ## Generating CRUD Pages via Command Line
 
 You can generate CRUD pages via [ABP CLI](../cli), without opening ABP Suite's user interface. 

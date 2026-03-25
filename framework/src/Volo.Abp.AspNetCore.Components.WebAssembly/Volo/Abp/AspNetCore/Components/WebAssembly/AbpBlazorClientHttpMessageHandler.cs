@@ -53,7 +53,10 @@ public class AbpBlazorClientHttpMessageHandler : DelegatingHandler, ITransientDe
                 options.Type = UiPageProgressType.Info;
             });
 
-            request.SetBrowserRequestStreamingEnabled(true);
+            if (request.RequestUri?.Scheme == Uri.UriSchemeHttps)
+            {
+                request.SetBrowserRequestStreamingEnabled(true);
+            }
             await SetLanguageAsync(request, cancellationToken);
             await SetAntiForgeryTokenAsync(request);
             await SetTimeZoneAsync(request);

@@ -7,6 +7,13 @@
 
 # Integrating the Modules: Implementing Integration Services
 
+```json
+//[doc-params]
+{
+  "UI": ["MVC", "NG"]
+}
+```
+
 ````json
 //[doc-params]
 {
@@ -332,10 +339,26 @@ That's all. Now, you can graph build the main application and run it in ABP Stud
 
 As you can see, we can see the product names instead of product IDs.
 
+{{else if UI == "NG"}}
+
+Open the `ordering.component.html` file in the `modules/modularcrm.ordering/angular/projects/ordering/src/lib/components` folder, and replace the `productId` display with `productName`:
+
+```html
+<strong>Product:</strong> {%{{{ order.productName }}}%} <br />
+```
+
+If your generated Angular proxy files are not up to date, run `abp generate-proxy -t ng` in the `modules/modularcrm.ordering/angular` folder.
+
+Then run the Angular app (`yarn start` in the `angular` folder), navigate to the *Ordering* page, and verify product names are shown instead of product IDs.
+
+![abp-studio-browser-list-of-orders-with-product-name](images/abp-studio-browser-list-of-orders-with-product-name.png)
+
+{{end}}
+
 > **Design Tip**
 >
 > It is suggested that you keep that type of communication to a minimum and not couple your modules with each other. It can make your solution complicated and may also decrease your system performance. When you need to do it, think about performance and try to make some optimizations. For example, if the Ordering module frequently needs product data, you can use a kind of [cache layer](../../framework/fundamentals/caching.md), so it doesn't make frequent requests to the Catalog module. Especially if you consider converting your system to a microservice solution in the future, too many direct integration API calls can be a performance bottleneck.
 
 ## Conclusion
 
-In the way explained in this part of this tutorial, you can easily create integration services for your modules and consume these integration services in any other module. In the [next part](part-07.md), we will explore event based messaging between the modules.
+In this part of the tutorial, you created and consumed an integration service between modules, then reflected the product name on the {{if UI == "MVC"}}MVC{{else if UI == "NG"}}Angular{{end}} UI. In the [next part](part-07.md), we will explore event based messaging between the modules.

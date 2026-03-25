@@ -4,7 +4,8 @@
       "Bash(yarn nx g:*)",
       "Bash(npx vitest:*)",
       "Bash(xargs:*)",
-      "Bash(dotnet build:*)"
+      "Bash(dotnet build:*)",
+      "Bash(git show:*)"
     ]
   }
 }

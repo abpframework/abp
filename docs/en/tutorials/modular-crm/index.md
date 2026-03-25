@@ -7,6 +7,13 @@
 
 # Modular Monolith Application Development Tutorial
 
+```json
+//[doc-params]
+{
+  "UI": ["MVC", "NG"]
+}
+```
+
 ````json
 //[doc-params]
 {
@@ -24,9 +31,9 @@
 }
 ````
 
-ABP provides a great infrastructure and tooling to build modular software solutions. In this tutorial, you will learn how to create application modules, compose and communicate them to build a monolith modular web application.
+ABP provides great infrastructure and tooling to build modular software solutions. In this tutorial, you will learn how to create application modules, compose and communicate them to build a modular monolith web application with the {{UI_Value}} UI.
 
-> **This tutorial focuses on modularity.** The example application's functionality and user interface are intentionally kept simple. If you want to learn real world, full featured application logic development with ABP, please follow the [Book Store tutorial](../book-store/index.md).
+> **This tutorial focuses on modularity.** The sample application's UI is intentionally kept simple so you can focus on module design and integration. For a real-world, full-featured application walkthrough with ABP, follow the [Book Store tutorial](../book-store/index.md).
 
 ## Tutorial Outline
 

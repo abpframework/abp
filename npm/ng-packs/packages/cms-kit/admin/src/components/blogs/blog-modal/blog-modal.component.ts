@@ -2,6 +2,7 @@ import { Component, OnInit, inject, Injector, input, output, DestroyRef } from '
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
+import { finalize } from 'rxjs/operators';
 import { LocalizationPipe } from '@abp/ng.core';
 import {
   ExtensibleFormComponent,
@@ -45,6 +46,8 @@ export class BlogModalComponent implements OnInit {
   selected = input<BlogDto>();
   visibleChange = output<BlogModalVisibleChange>();
 
+  modalBusy = false;
+
   form: FormGroup;
 
   ngOnInit() {
@@ -62,6 +65,11 @@ export class BlogModalComponent implements OnInit {
   }
 
   save() {
+    if (this.modalBusy) {
+      return;
+    }
+    this.modalBusy = true;
+
     if (!this.form.valid) {
       return;
     }
@@ -78,7 +86,7 @@ export class BlogModalComponent implements OnInit {
       } as UpdateBlogDto);
     }
 
-    observable$.subscribe(() => {
+    observable$.pipe(finalize(() => (this.modalBusy = false))).subscribe(() => {
       this.onVisibleChange(false, true);
       this.toasterService.success('AbpUi::SavedSuccessfully');
     });

@@ -126,6 +126,58 @@ Configure<AbpSecurityLogOptions>(options =>
 });
 ```
 
+### External User Lookup Service
+
+`UserLookupService<TUser, TUserRepository>` first queries the local user store. If an `IExternalUserLookupServiceProvider` implementation is available, it can also query an external source, create the local copy of the user and keep the local data synchronized.
+
+The Identity module provides two common implementations:
+
+* `IdentityUserRepositoryExternalUserLookupServiceProvider`: Uses `IIdentityUserRepository` for in-process lookups.
+* `HttpClientExternalUserLookupServiceProvider`: Uses `IIdentityUserIntegrationService` to resolve users from a remote Identity application.
+
+This is especially useful for reusable modules, such as CMS Kit, that keep module-specific user records but still need to resolve users from the Identity module.
+
+If your application is monolithic, this typically works without any extra configuration.
+
+If the Identity module runs in another application or service (for example, in a tiered or distributed solution), then the calling application should:
+
+* Depend on `Volo.Abp.Identity.HttpApi.Client`.
+* Add `AbpIdentityHttpApiClientModule` and an IdentityModel module (`AbpHttpClientIdentityModelWebModule` for web applications or `AbpHttpClientIdentityModelModule` for non-web hosts).
+* Configure the `RemoteServices:AbpIdentity` endpoint.
+* Configure an `IdentityClients` entry for server-to-server authentication.
+* Expose integration services on the application that hosts the Identity module.
+
+Example configuration for the application that exposes the Identity integration endpoints:
+
+```csharp
+Configure<AbpAspNetCoreMvcOptions>(options =>
+{
+    options.ExposeIntegrationServices = true;
+});
+```
+
+Example configuration for the calling application:
+
+```json
+"RemoteServices": {
+  "AbpIdentity": {
+    "BaseUrl": "https://localhost:44388/",
+    "UseCurrentAccessToken": false
+  }
+},
+"IdentityClients": {
+  "Default": {
+    "GrantType": "client_credentials",
+    "ClientId": "MyProject_Web",
+    "ClientSecret": "your-client-secret",
+    "Authority": "https://localhost:44322/",
+    "Scope": "your-internal-api-scope"
+  }
+}
+```
+
+The exact `ClientId`, `ClientSecret` and `Scope` values depend on the application that hosts the Identity module. See the [Integration Services](../framework/api-development/integration-services.md) and [Synchronous Interservice Communication](../guides/synchronous-interservice-communication.md) documents for the full setup.
+
 ## Options
 
 `IdentityOptions` is the standard [options class](../framework/fundamentals/options.md) provided by the Microsoft [Identity library](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity). So, you can set these options in the `ConfigureServices` method of your [module](../framework/architecture/modularity/basics.md) class.
@@ -274,10 +326,11 @@ Following custom repositories are defined for this module:
 #### Application Services
 
 * `IdentityUserAppService` (implements `IIdentityUserAppService`): Implements the use cases of the user management UI.
+* `IdentityUserIntegrationService` (implements `IIdentityUserIntegrationService`): Used for module-to-module and service-to-service user and role lookup operations.
 * `IdentityRoleAppService` (implement `IIdentityRoleAppService`): Implements the use cases of the role management UI.
 * `IdentityClaimTypeAppService` (implements `IIdentityClaimTypeAppService`): Implements the use cases of the claim type management UI.
 * `IdentitySettingsAppService` (implements `IIdentitySettingsAppService`): Used to get and update settings for the Identity module.
-* `IdentityUserLookupAppService` (implements `IIdentityUserLookupAppService`): Used to get information for a user by `id` or `userName`. It is aimed to be used internally by the ABP.
+* `IdentityUserLookupAppService` (implements `IIdentityUserLookupAppService`): Kept for backward compatibility and internally delegates to `IIdentityUserIntegrationService`.
 * `ProfileAppService` (implements `IProfileAppService`): Used to change a user's profile and the password.
 * ```IdentitySecurityLogAppService``` (implements ```IIdentitySecurityLogAppService```): Implements the use cases of the security logs UI.
 * ```OrganizationUnitAppService``` (implements ```OrganizationUnitAppService```): Implements the use cases of the organization unit management UI.

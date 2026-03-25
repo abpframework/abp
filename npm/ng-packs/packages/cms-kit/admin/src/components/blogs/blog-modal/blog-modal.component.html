@@ -1,4 +1,4 @@
-<abp-modal [visible]="true" (visibleChange)="onVisibleChange($event)">
+<abp-modal [visible]="true" (visibleChange)="onVisibleChange($event)" [busy]="modalBusy">
   <ng-template #abpHeader>
     <h3>
       {{ (selected()?.id ? 'AbpUi::Edit' : 'AbpUi::New') | abpLocalization }}

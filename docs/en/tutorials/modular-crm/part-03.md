@@ -7,6 +7,13 @@
 
 # Building the Catalog Module
 
+```json
+//[doc-params]
+{
+  "UI": ["MVC", "NG"]
+}
+```
+
 ````json
 //[doc-params]
 {
@@ -447,6 +454,8 @@ In this section, you will create a very simple user interface to demonstrate how
 
 As a first step, you can stop the application on ABP Studio's Solution Runner if it is currently running.
 
+{{if UI == "MVC"}}
+
 ### Creating the Products Page
 
 {{if UI == "MVC"}}
@@ -559,6 +568,75 @@ Now, you can browse the *Catalog* page to see the list of the products:
 
 As you can see, developing a UI page in a modular ABP application is pretty straightforward. We kept the UI very simple to focus on modularity. To learn how to build complex application UIs, please check the [Book Store Tutorial](../book-store/index.md).
 
+{{else if UI == "NG"}}
+
+### Updating the Catalog Angular Page
+
+First, run the `ModularCrm` application so the backend APIs are available.
+
+Then open a terminal in the `modules/modularcrm.catalog/angular` folder and run the proxy generation command:
+
+```bash
+abp generate-proxy -t ng
+```
+
+This command generates or updates TypeScript client proxies for the `catalog` APIs under `projects/catalog/src/lib/proxy`. You will use the generated `ProductService` and related DTOs in the Catalog UI project.
+
+Now, open the `projects/catalog/src/lib/components/catalog.component.ts` file and replace its content with the following code:
+
+```ts
+import { Component, OnInit, inject } from '@angular/core';
+import { ProductDto, ProductService } from '../proxy/products';
+
+@Component({
+  selector: 'lib-catalog',
+  templateUrl: './catalog.component.html',
+})
+export class CatalogComponent implements OnInit {
+  products: ProductDto[] = [];
+
+  protected readonly productService = inject(ProductService);
+
+  ngOnInit(): void {
+    this.productService.getList().subscribe(response => {
+      this.products = response;
+    });
+  }
+}
+```
+
+Now, open the `projects/catalog/src/lib/components/catalog.component.html` file and replace its content with the following code:
+
+```html
+<h1>Products</h1>
+
+<abp-card>
+  <abp-card-body>
+    <abp-list-group>
+      @for (product of products; track product.id) {
+        <abp-list-group-item>
+          {%{{{ product.name }}}%} <span class="text-muted">(stock: {%{{{ product.stockCount }}}%})</span>
+        </abp-list-group-item>
+      }
+    </abp-list-group>
+  </abp-card-body>
+</abp-card>
+```
+
+In a module-based Angular UI, the route and menu are configured in the module's config project. Ensure `projects/catalog/config/src/providers/route.provider.ts` includes the `/catalog` route, and `projects/catalog/src/lib/catalog.routes.ts` lazy-loads `CatalogComponent`.
+
+![vscode-catalog-cshtml](images/vscode-catalog-cshtml.png)
+
+Finally, start the Angular app from the root `angular` folder and navigate to the *Catalog* page to see the products list:
+
+```bash
+yarn start
+```
+
+![abp-studio-browser-list-of-products](images/abp-studio-browser-list-of-products.png)
+
+{{end}}
+
 ## Summary
 
-In this part of the tutorial, you've built the functionality inside the _Catalog_ module, which was created in the [previous part](part-02.md). In the next part, you will create a new _Ordering_ module and install it into the main application.
+In this part of the tutorial, you've built the functionality inside the _Catalog_ module, which was created in the [previous part](part-02.md), and created a basic {{if UI == "MVC"}}MVC{{else if UI == "NG"}}Angular{{end}} UI to list products. In the next part, you will create a new _Ordering_ module and install it into the main application.

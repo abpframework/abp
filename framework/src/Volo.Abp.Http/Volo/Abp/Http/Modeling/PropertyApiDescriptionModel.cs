@@ -32,6 +32,12 @@ public class PropertyApiDescriptionModel
 
     public bool IsNullable { get; set; }
 
+    public string? Summary { get; set; }
+
+    public string? Description { get; set; }
+
+    public string? DisplayName { get; set; }
+
     public static PropertyApiDescriptionModel Create(PropertyInfo propertyInfo)
     {
         var customAttributes = propertyInfo.GetCustomAttributes(true);

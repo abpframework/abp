@@ -47,8 +47,15 @@ public class ManageModel : AccountPageModel
         return Page();
     }
 
-    public virtual Task<IActionResult> OnPostAsync()
+    public virtual async Task<IActionResult> OnPostAsync()
     {
-        return Task.FromResult<IActionResult>(Page());
+        ProfileManagementPageCreationContext = new ProfileManagementPageCreationContext(ServiceProvider);
+
+        foreach (var contributor in Options.Contributors)
+        {
+            await contributor.ConfigureAsync(ProfileManagementPageCreationContext);
+        }
+
+        return Page();
     }
 }

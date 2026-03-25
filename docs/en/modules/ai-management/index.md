@@ -44,6 +44,16 @@ abp add-package Volo.AIManagement.OpenAI
 abp add-package Volo.AIManagement.Ollama
 ```
 
+> [!IMPORTANT]
+> If you use Ollama, make sure the Ollama server is installed and running, and that the models referenced by your workspace are already available locally. Before configuring an Ollama workspace, pull the chat model and any embedding model you plan to use. For example:
+>
+> ```bash
+> ollama pull llama3.2
+> ollama pull nomic-embed-text
+> ```
+>
+> Replace the model names with the exact models you configure in the workspace. `nomic-embed-text` is an embedding-only model and can't be used as a chat model.
+
 > [!TIP]
 > You can install multiple provider packages to support different AI providers simultaneously in your workspaces.
 
@@ -171,11 +181,15 @@ When a workspace has MCP servers associated, the AI model can invoke tools from 
 
 Workspace Data Sources page is used to upload and manage RAG documents per workspace. Uploaded files are processed and indexed in the background.
 
-* Supported file extensions: `.txt`, `.md`, `.pdf`
-* Maximum file size: `10 MB`
+* Supported file extensions: `.txt`, `.md`, `.pdf` (configurable)
+* Maximum file size: `10 MB` (configurable)
 * Each uploaded file can be re-indexed individually or re-indexed in bulk per workspace
+* Deleting a data source also removes its vector embeddings and document chunks
 
 > Access the page from workspace details, or navigate to `/AIManagement/WorkspaceDataSources?WorkspaceId={WorkspaceId}`.
+
+> [!TIP]
+> You can customize the allowed file extensions and maximum file size via `WorkspaceDataSourceOptions`. See [Configuring Data Source Upload Options](#configuring-data-source-upload-options) for details.
 
 ## Workspace Configuration
 
@@ -286,11 +300,16 @@ The AI Management module supports RAG (Retrieval-Augmented Generation), which en
 
 ### Supported File Formats
 
+By default, the following file formats are supported:
+
 * **PDF** (.pdf)
 * **Markdown** (.md)
 * **Text** (.txt)
 
-Maximum file size: **10 MB**.
+Default maximum file size: **10 MB**.
+
+> [!TIP]
+> Both the allowed file extensions and the maximum file size are configurable via `WorkspaceDataSourceOptions`. See [Configuring Data Source Upload Options](#configuring-data-source-upload-options) for details.
 
 ### Prerequisites
 
@@ -298,6 +317,14 @@ RAG requires an **embedder** and a **vector store** to be configured on the work
 
 * **Embedder**: Converts documents and queries into vector embeddings. You can use any provider that supports embedding generation (e.g., OpenAI `text-embedding-3-small`, Ollama `nomic-embed-text`).
 * **Vector Store**: Stores and retrieves vector embeddings. Supported providers: **MongoDb**, **Pgvector**, and **Qdrant**.
+
+> [!IMPORTANT]
+> If the workspace uses Ollama for chat or embeddings, the configured model names must exist in the local Ollama instance first. For example, if you configure `ModelName = "llama3.2"` and `EmbedderModelName = "nomic-embed-text"`, pull both models before using the workspace:
+>
+> ```bash
+> ollama pull llama3.2
+> ollama pull nomic-embed-text
+> ```
 
 ### Configuring RAG on a Workspace
 
@@ -361,7 +388,7 @@ The module exposes workspace data source endpoints under `/api/ai-management/wor
 * `GET /by-workspace/{workspaceId}`: List data sources for a workspace.
 * `GET /{id}`: Get a data source.
 * `PUT /{id}`: Update data source metadata.
-* `DELETE /{id}`: Delete data source and underlying blob.
+* `DELETE /{id}`: Delete data source, its vector embeddings, document chunks, and underlying blob.
 * `GET /{id}/download`: Download original file.
 * `POST /{id}/reindex`: Re-index a single file.
 * `POST /workspace/{workspaceId}/reindex-all`: Re-index all files in a workspace.
@@ -381,6 +408,108 @@ When workspace embedder or vector store configuration changes, AI Management aut
 * Initializes the new vector store configuration (if needed).
 * Deletes existing embeddings when embedder provider/model changes.
 * Re-queues all workspace data sources for re-indexing.
+
+### Configuring Data Source Upload Options
+
+The `WorkspaceDataSourceOptions` class allows you to customize the file upload constraints for workspace data sources. You can configure the allowed file extensions, maximum file size, and content type mappings.
+
+```csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    Configure<WorkspaceDataSourceOptions>(options =>
+    {
+        // Add support for additional file types
+        options.AllowedFileExtensions = new[] { ".txt", ".md", ".pdf", ".docx", ".csv" };
+
+        // Increase the maximum file size to 50 MB
+        options.MaxFileSize = 50 * 1024 * 1024;
+
+        // Add content type mappings for new extensions
+        options.ContentTypeMap[".docx"] = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        options.ContentTypeMap[".csv"] = "text/csv";
+    });
+}
+```
+
+#### Available Properties
+
+| Property                | Type                         | Default                                      | Description                                                |
+| ----------------------- | ---------------------------- | -------------------------------------------- | ---------------------------------------------------------- |
+| `AllowedFileExtensions` | `string[]`                   | `{ ".txt", ".md", ".pdf" }`                  | File extensions allowed for upload                         |
+| `MaxFileSize`           | `long`                       | `10485760` (10 MB)                           | Maximum file size in bytes                                 |
+| `ContentTypeMap`        | `Dictionary<string, string>` | `.txt`, `.md`, `.pdf` with their MIME types   | Maps file extensions to MIME content types                 |
+
+The options class also provides helper methods:
+
+| Method                       | Description                                                          |
+| ---------------------------- | -------------------------------------------------------------------- |
+| `GetMaxFileSizeDisplay()`    | Returns a human-readable size string (e.g., "10MB", "512KB")        |
+| `GetAllowedExtensionsDisplay()` | Returns a comma-separated display string (e.g., ".txt, .md, .pdf")  |
+| `GetAcceptAttribute()`       | Returns a string for the HTML `accept` attribute (e.g., ".txt,.md,.pdf") |
+
+> [!NOTE]
+> Adding new file extensions also requires a matching content extractor to be registered for document processing. The built-in extractors support `.txt`, `.md`, and `.pdf` files.
+
+#### Hosting-Level Upload Limits
+
+`WorkspaceDataSourceOptions.MaxFileSize` controls the module-level validation, but your hosting stack may reject large uploads before the request reaches AI Management. If you increase `MaxFileSize`, make sure the underlying server and proxy limits are also updated.
+
+Typical limits to review:
+
+* **ASP.NET Core form/multipart limit** (`FormOptions.MultipartBodyLengthLimit`)
+* **Kestrel request body limit** (`KestrelServerLimits.MaxRequestBodySize`)
+* **IIS request filtering limit** (`maxAllowedContentLength`)
+* **Reverse proxy limits** such as **Nginx** (`client_max_body_size`)
+
+Example ASP.NET Core configuration:
+
+```csharp
+using Microsoft.AspNetCore.Http.Features;
+
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    Configure<WorkspaceDataSourceOptions>(options =>
+    {
+        options.MaxFileSize = 50 * 1024 * 1024;
+    });
+
+    Configure<FormOptions>(options =>
+    {
+        options.MultipartBodyLengthLimit = 50 * 1024 * 1024;
+    });
+}
+```
+
+```csharp
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.Limits.MaxRequestBodySize = 50 * 1024 * 1024;
+});
+```
+
+Example IIS configuration in `web.config`:
+
+```xml
+<configuration>
+  <system.webServer>
+    <security>
+      <requestFiltering>
+        <requestLimits maxAllowedContentLength="52428800" />
+      </requestFiltering>
+    </security>
+  </system.webServer>
+</configuration>
+```
+
+Example Nginx configuration:
+
+```nginx
+server {
+    client_max_body_size 50M;
+}
+```
+
+If you are hosting behind another proxy or gateway (for example Apache, YARP, Azure App Gateway, Cloudflare, or Kubernetes ingress), ensure its request-body limit is also greater than or equal to the configured `MaxFileSize`.
 
 ## Permissions
 
@@ -684,7 +813,7 @@ Your application acts as a proxy, forwarding these requests to the AI Management
 | **3. Client Remote**      | No                | Remote Service | Remote Service | No          | Microservices consuming AI centrally      |
 | **4. Client Proxy**       | No                | Remote Service | Remote Service | Yes         | API Gateway pattern, proxy services       |
 
-### OpenAI-Compatible API
+## OpenAI-Compatible API
 
 The AI Management module exposes an **OpenAI-compatible REST API** at the `/v1` path. This allows any application or tool that supports the OpenAI API format -- such as [AnythingLLM](https://anythingllm.com/), [Open WebUI](https://openwebui.com/), [Dify](https://dify.ai/), or custom scripts using the OpenAI SDK -- to connect directly to your AI Management instance.
 
@@ -1239,6 +1368,7 @@ The following custom repositories are defined:
 - `VectorStoreInitializer`: Initializes vector store artifacts for newly configured workspaces.
 - `RagService`: Generates query embeddings and retrieves relevant chunks from vector stores.
 - `DocumentProcessingManager`: Extracts and chunks uploaded document contents.
+- `WorkspaceDataSourceManager`: Manages data source lifecycle including file deletion with full cleanup (vector embeddings, document chunks, and blob storage).
 
 #### Integration Services
 
