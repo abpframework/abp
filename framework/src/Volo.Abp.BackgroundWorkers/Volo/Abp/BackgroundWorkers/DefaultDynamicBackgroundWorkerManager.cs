@@ -144,7 +144,7 @@ public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
             return;
         }
 
-        await _semaphore.WaitAsync(cancellationToken);
+        await _semaphore.WaitAsync(CancellationToken.None);
         try
         {
             if (_isDisposed)
