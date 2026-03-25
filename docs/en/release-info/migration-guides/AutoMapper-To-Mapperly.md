@@ -174,6 +174,16 @@ public partial class IdentityUserToIdentityUserDtoMapper : MapperBase<IdentityUs
 }
 ```
 
+## ABP Suite Compatibility Note
+
+If you still use [ABP Suite](../../suite/index.md) to generate CRUD pages after migrating to Mapperly, keep the main Suite-managed mapper files reserved for Suite updates.
+
+- Keep the conventional files such as `*ApplicationMappers.cs`, `*BlazorMappers.cs` and `*WebMappers.cs` as the files that ABP Suite updates.
+- Move manual or AI-generated Mapperly classes into separate files.
+- Avoid creating extra manual files with the same conventional suffixes that ABP Suite scans, because Suite may pick the wrong file when generating or updating mappings.
+
+For example, names like `IdentityUserMapperlyMappings.cs`, `CustomObjectMappings.cs` or `ManualOrderMappings.cs` are safer for your hand-written mappers.
+
 ## AI Prompt for Migrating AutoMapper to Mapperly
 
 If you have AI tools like Cursor, you can use the following prompt to migrate your AutoMapper mappings to Mapperly automatically:
@@ -187,6 +197,8 @@ Please help me migrate AutoMapper Profile classes to Mapperly. I have AutoMapper
 
 1. **Convert AutoMapper Profile to Mapperly Mappers**: Transform each `CreateMap` into a separate Mapperly mapper class
 2. **Rename the file**: Change from `XXXAutoMapperProfile.cs` to `XXXMappers.cs`
+
+   > If you still use **ABP Suite**, keep Suite-managed mapper files separate from your manual/AI-generated mapper files. See the **ABP Suite Compatibility Note** section above.
 3. **Use proper Mapperly attributes**: 
    - `[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]` for each mapper class
    - `[MapExtraProperties]` for classes that need extra properties mapping
