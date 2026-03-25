@@ -11,7 +11,7 @@ This document provides a general overview of the relationship between various ve
 
 | **ABP Studio Version** | **ABP Version of Startup Template**           |
 |------------------------|---------------------------|
-| 2.2.2 - 2.2.3          | 10.1.1                    |
+| 2.2.2 - 2.2.4          | 10.1.1                      |
 | 2.2.1                  | 10.1.0                    |
 | 2.1.5 - 2.1.9          | 10.0.2                    |
 | 2.1.0 - 2.1.4          | 10.0.1                    |
@@ -43,7 +43,6 @@ This document provides a general overview of the relationship between various ve
 | 0.7.0 to 0.7.3         | 8.2.0                     |
 | 0.6.8 - 0.6.9          | 8.1.3                     |
 | 0.6.7                  | 8.1.1                     |
-
 # Working with ABP's Preview Versions
 
 By default, ABP Studio uses stable versions to create solutions. Therefore, if you want to create a solution with a preview version, first you need to create a solution and then switch your solution to the preview version from the ABP Studio UI:
