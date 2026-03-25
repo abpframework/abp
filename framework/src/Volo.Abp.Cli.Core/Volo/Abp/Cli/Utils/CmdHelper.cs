@@ -141,10 +141,8 @@ public class CmdHelper : ICmdHelper, ITransientDependency
             var outputTask = process.StandardOutput.ReadToEndAsync();
             var errorTask = process.StandardError.ReadToEndAsync();
 
-            output = Task.WhenAll(outputTask, errorTask).GetAwaiter().GetResult()
-                is { Length: 2 } results
-                ? results[0] + results[1]
-                : string.Empty;
+            var results = Task.WhenAll(outputTask, errorTask).GetAwaiter().GetResult();
+            output = results[0] + results[1];
 
             process.WaitForExit();
 
