@@ -9,7 +9,12 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 2.2.3 (2026-03-24) Latest
+## 2.2.4 (2026-03-25) Latest
+
+- Add `Template Create and Build` workflow
+- Disable NuGetAudit in template common.props to prevent CLI deadlock during initial migration
+
+## 2.2.3 (2026-03-24)
 
 - Fix PostHog environment detection
 
