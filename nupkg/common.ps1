@@ -142,6 +142,7 @@ $projects = (
     "framework/src/Volo.Abp.Autofac",
     "framework/src/Volo.Abp.Autofac.WebAssembly",
     "framework/src/Volo.Abp.AutoMapper",
+    "framework/src/Volo.Abp.LuckyPenny.AutoMapper",
     "framework/src/Volo.Abp.AzureServiceBus",
     "framework/src/Volo.Abp.BackgroundJobs.Abstractions",
     "framework/src/Volo.Abp.BackgroundJobs",

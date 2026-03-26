@@ -15,6 +15,13 @@
 ```
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC","BlazorWebApp"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Previous": {
@@ -165,13 +172,21 @@ In the opening dialog, find and select the `ModularCrm.Ordering` module, check t
 
 Once you click the OK button, the Ordering module is imported to the Catalog module, and an installation dialog is open:
 
+{{if UI == "MVC"}}
 ![abp-studio-install-module-dialog-for-ordering](images/abp-studio-install-module-dialog-for-ordering-v2.png)
+{{else if UI == "BlazorWebApp"}}
+![abp-studio-install-module-dialog-for-ordering](images/abp-studio-install-module-dialog-for-ordering-v2-blazor-webapp.png)
+{{end}}
 
 Here, select the `ModularCrm.Ordering.Contracts` package on the left side (because we want to add that package reference) and `ModularCrm.Catalog` package on the middle area (because we want to add the package reference to that project). Also, select the `ModularCrm.Ordering` package on the right side, and unselect all packages on the middle area (we don't need the implementation or any other packages). Then, click the OK button to finish the installation operation.
 
 You can check the ABP Studio's *Solution Explorer* panel to see the module import and the project reference (dependency).
 
+{{if UI == "MVC"}}
 ![abp-studio-imports-and-dependencies](images/abp-studio-imports-and-dependencies-v2.png)
+{{else if UI == "BlazorWebApp"}}
+![abp-studio-imports-and-dependencies](images/abp-studio-imports-and-dependencies-v2-blazor-webapp.png)
+{{end}}
 
 ### Handling the `OrderPlacedEto` Event
 

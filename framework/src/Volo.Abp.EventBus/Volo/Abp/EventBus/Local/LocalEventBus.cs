@@ -30,6 +30,10 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
 
     protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
 
+    protected ConcurrentDictionary<string, Type> EventTypes { get; }
+
+    protected ConcurrentDictionary<string, List<IEventHandlerFactory>> DynamicEventHandlerFactories { get; }
+
     public LocalEventBus(
         IOptions<AbpLocalEventBusOptions> options,
         IServiceScopeFactory serviceScopeFactory,
@@ -42,6 +46,8 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
         Logger = NullLogger<LocalEventBus>.Instance;
 
         HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
+        EventTypes = new ConcurrentDictionary<string, Type>();
+        DynamicEventHandlerFactories = new ConcurrentDictionary<string, List<IEventHandlerFactory>>();
         SubscribeHandlers(Options.Handlers);
     }
 
@@ -52,8 +58,24 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
     }
 
     /// <inheritdoc/>
+    public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
+    {
+        GetOrCreateDynamicHandlerFactories(eventName).Locking(factories =>
+        {
+            if (!handler.IsInFactories(factories))
+            {
+                factories.Add(handler);
+            }
+        });
+
+        return new DynamicEventHandlerFactoryUnregistrar(this, eventName, handler);
+    }
+
+    /// <inheritdoc/>
     public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
     {
+        EventTypes.GetOrAdd(EventNameAttribute.GetNameOrDefault(eventType), eventType);
+
         GetOrCreateHandlerFactories(eventType)
             .Locking(factories =>
                 {
@@ -116,9 +138,50 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
     }
 
     /// <inheritdoc/>
+    public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
+    {
+        GetOrCreateDynamicHandlerFactories(eventName).Locking(factories => factories.Remove(factory));
+    }
+
+    /// <inheritdoc/>
+    public override void Unsubscribe(string eventName, IEventHandler handler)
+    {
+        GetOrCreateDynamicHandlerFactories(eventName)
+            .Locking(factories =>
+            {
+                factories.RemoveAll(
+                    factory =>
+                        factory is SingleInstanceHandlerFactory singleFactory &&
+                        singleFactory.HandlerInstance == handler
+                );
+            });
+    }
+
+    /// <inheritdoc/>
     public override void UnsubscribeAll(Type eventType)
     {
         GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
+    }
+
+    /// <inheritdoc/>
+    public override void UnsubscribeAll(string eventName)
+    {
+        GetOrCreateDynamicHandlerFactories(eventName).Locking(factories => factories.Clear());
+    }
+
+    /// <inheritdoc/>
+    public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
+    {
+        var eventType = EventTypes.GetOrDefault(eventName);
+
+        var dynamicEventData = eventData as DynamicEventData ?? new DynamicEventData(eventName, eventData);
+
+        if (eventType != null)
+        {
+            return PublishAsync(eventType, ConvertDynamicEventData(dynamicEventData.Data, eventType), onUnitOfWorkComplete);
+        }
+
+        return PublishAsync(typeof(DynamicEventData), dynamicEventData, onUnitOfWorkComplete);
     }
 
     protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
@@ -141,9 +204,17 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
         return GetHandlerFactories(eventType).ToList();
     }
 
+    /// <inheritdoc/>
+    public virtual List<EventTypeWithEventHandlerFactories> GetDynamicEventHandlerFactories(string eventName)
+    {
+        return GetDynamicHandlerFactories(eventName).ToList();
+    }
+
     protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
     {
         var handlerFactoryList = new List<Tuple<IEventHandlerFactory, Type, int>>();
+        var eventNames = EventTypes.Where(x => ShouldTriggerEventForHandler(eventType, x.Value)).Select(x => x.Key).ToList();
+
         foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
         {
             foreach (var factory in handlerFactory.Value)
@@ -155,7 +226,52 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
             }
         }
 
+        foreach (var handlerFactory in DynamicEventHandlerFactories.Where(aehf => eventNames.Contains(aehf.Key)))
+        {
+            foreach (var factory in handlerFactory.Value)
+            {
+                handlerFactoryList.Add(new Tuple<IEventHandlerFactory, Type, int>(
+                    factory,
+                    typeof(DynamicEventData),
+                    ReflectionHelper.GetAttributesOfMemberOrDeclaringType<LocalEventHandlerOrderAttribute>(factory.GetHandler().EventHandler.GetType()).FirstOrDefault()?.Order ?? 0));
+            }
+        }
+
         return handlerFactoryList.OrderBy(x => x.Item3).Select(x => new EventTypeWithEventHandlerFactories(x.Item2, new List<IEventHandlerFactory> {x.Item1})).ToArray();
+    }
+
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetDynamicHandlerFactories(string eventName)
+    {
+        var eventType = EventTypes.GetOrDefault(eventName);
+        if (eventType != null)
+        {
+            return GetHandlerFactories(eventType);
+        }
+
+        var handlerFactoryList = new List<Tuple<IEventHandlerFactory, Type, int>>();
+
+        foreach (var handlerFactory in DynamicEventHandlerFactories.Where(aehf => aehf.Key == eventName))
+        {
+            foreach (var factory in handlerFactory.Value)
+            {
+                using var handler = factory.GetHandler();
+                var handlerType = handler.EventHandler.GetType();
+                handlerFactoryList.Add(new Tuple<IEventHandlerFactory, Type, int>(
+                    factory,
+                    typeof(DynamicEventData),
+                    ReflectionHelper
+                        .GetAttributesOfMemberOrDeclaringType<LocalEventHandlerOrderAttribute>(handlerType)
+                        .FirstOrDefault()?.Order ?? 0));
+            }
+        }
+
+        return handlerFactoryList.OrderBy(x => x.Item3).Select(x =>
+            new EventTypeWithEventHandlerFactories(x.Item2, new List<IEventHandlerFactory> { x.Item1 })).ToArray();
+    }
+
+    protected override Type? GetEventTypeByEventName(string eventName)
+    {
+        return EventTypes.GetOrDefault(eventName);
     }
 
     private List<IEventHandlerFactory> GetOrCreateHandlerFactories(Type eventType)
@@ -163,15 +279,18 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
         return HandlerFactories.GetOrAdd(eventType, (type) => new List<IEventHandlerFactory>());
     }
 
+    private List<IEventHandlerFactory> GetOrCreateDynamicHandlerFactories(string eventName)
+    {
+        return DynamicEventHandlerFactories.GetOrAdd(eventName, (name) => new List<IEventHandlerFactory>());
+    }
+
     private static bool ShouldTriggerEventForHandler(Type targetEventType, Type handlerEventType)
     {
-        //Should trigger same type
         if (handlerEventType == targetEventType)
         {
             return true;
         }
 
-        //Should trigger for inherited types
         if (handlerEventType.IsAssignableFrom(targetEventType))
         {
             return true;
