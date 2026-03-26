@@ -112,14 +112,7 @@
                                             }
                                             else
                                             {
-                                                if (column.DisplayFormat == null)
-                                                {
-                                                    @(propertyValue)
-                                                }
-                                                else
-                                                {
-                                                    @(string.Format(column.DisplayFormatProvider, column.DisplayFormat, propertyValue))
-                                                }
+                                                @((MarkupString)GetConvertedFieldValue(propertyValue, column))
                                             }
                                         }
                                     }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -83,6 +84,43 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
         }
 
         return convertedValue;
+    }
+
+    protected virtual string GetConvertedFieldValue(object? value, TableColumn columnDefinition)
+    {
+        if (value is DateTime dateTime)
+        {
+            var converted = Clock.ConvertToUserTime(dateTime);
+            if (!columnDefinition.DisplayFormat.IsNullOrEmpty())
+            {
+                return string.Format(columnDefinition.DisplayFormatProvider, columnDefinition.DisplayFormat!, converted);
+            }
+
+            return converted.ToString(columnDefinition.DisplayFormatProvider as CultureInfo ?? CultureInfo.CurrentCulture);
+        }
+
+        if (value is DateTimeOffset dateTimeOffset)
+        {
+            var converted = Clock.ConvertToUserTime(dateTimeOffset);
+            if (!columnDefinition.DisplayFormat.IsNullOrEmpty())
+            {
+                return string.Format(columnDefinition.DisplayFormatProvider, columnDefinition.DisplayFormat!, converted);
+            }
+
+            return converted.ToString(columnDefinition.DisplayFormatProvider as CultureInfo ?? CultureInfo.CurrentCulture);
+        }
+
+        if (value == null)
+        {
+            return string.Empty;
+        }
+
+        if (!columnDefinition.DisplayFormat.IsNullOrEmpty())
+        {
+            return string.Format(columnDefinition.DisplayFormatProvider, columnDefinition.DisplayFormat!, value);
+        }
+
+        return value.ToString() ?? string.Empty;
     }
 
     protected virtual object GetPropertyValue(TItem item, string propertyPath)

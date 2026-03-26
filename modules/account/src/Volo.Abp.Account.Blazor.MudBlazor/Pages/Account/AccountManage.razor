@@ -36,8 +36,7 @@
                 {
                     <MudForm @ref="@_personalInfoForm" Model="@PersonalInfoModel">
                         <MudTextField @bind-Value="@PersonalInfoModel.UserName"
-                                     Label="@L["DisplayName:UserName"]"
-                                     Disabled="true" />
+                                     Label="@L["DisplayName:UserName"]" />
                         <MudGrid>
                             <MudItem xs="12" sm="6">
                                 <MudTextField @bind-Value="@PersonalInfoModel.Name"

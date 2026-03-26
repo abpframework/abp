@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.WebAssembly.Theming.MudBlazor\Volo.Abp.AspNetCore.Components.WebAssembly.Theming.MudBlazor.csproj" />
+        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.WebAssembly.Theming.MudBlazor.Bundling\Volo.Abp.AspNetCore.Components.WebAssembly.Theming.MudBlazor.Bundling.csproj" />
     </ItemGroup>
 
 </Project>

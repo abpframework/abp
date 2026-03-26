@@ -5,8 +5,10 @@
 @using global::Localization.Resources.AbpUi
 @using Microsoft.AspNetCore.Components.Authorization
 @using Volo.Abp.UI.Navigation
+@implements IDisposable
 @inject ICurrentUser CurrentUser
 @inject ICurrentTenant CurrentTenant
+@inject NavigationManager Navigation
 @inject IStringLocalizer<AbpUiResource> L
 
 <AuthorizeView>
@@ -35,20 +37,3 @@
         <MudButton Variant="Variant.Text" Href="Account/Login">@L["Login"]</MudButton>
     </NotAuthorized>
 </AuthorizeView>
-
-@code {
-    [Inject] protected NavigationManager Navigation { get; set; } = default!;
-    [Inject] protected IMenuManager MenuManager { get; set; } = default!;
-
-    protected ApplicationMenu? Menu { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        Menu = await MenuManager.GetAsync(StandardMenus.User);
-    }
-
-    protected void Logout()
-    {
-        Navigation.NavigateTo("/Account/Logout", forceLoad: true);
-    }
-}

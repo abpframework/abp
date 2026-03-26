@@ -4,7 +4,6 @@
 
 @if (EmailSettings != null)
 {
-    <MudForm>
         <MudForm @ref="@_emailFormRef" Model="@EmailSettings">
             <MudGrid>
                 <MudItem xs="12">
@@ -60,6 +59,7 @@
                 @if (HasSendTestEmailPermission)
                 {
                     <MudButton Color="Color.Primary"
+                              Variant="Variant.Outlined"
                               OnClick="@OpenSendTestEmailDialogAsync"
                               Class="me-2">
                         @L["SendTestEmail"]
@@ -72,7 +72,6 @@
                 </MudButton>
             </MudItem>
         </MudGrid>
-    </MudForm>
 
     @if (HasSendTestEmailPermission)
     {

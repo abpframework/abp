@@ -52,9 +52,9 @@
                                 @foreach (var permission in group.Permissions)
                                 {
                                     var depth = GetPermissionDepthOrDefault(permission.Name);
-                                    <div style="margin-left: @(depth * 20)px;">
+                                    <div style="margin-inline-start: @(depth * 20)px;">
                                         <MudCheckBox
-                                                    TValue="bool" 
+                                                    T="bool" 
                                                     Disabled="@(IsDisabledPermission(permission))"
                                                     Value="@permission.IsGranted"
                                                     ValueChanged="@(async (bool b) => await PermissionChanged(b, group, permission))"

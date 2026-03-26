@@ -4,9 +4,9 @@
 @using Microsoft.Extensions.Options
 @using Microsoft.JSInterop
 @using Volo.Abp.AspNetCore.Components.Web
-@using Volo.Abp.AspNetCore.Components.WebAssembly.MudBlazorBasicTheme
 @using Volo.Abp.AspNetCore.Components.Web.Security
 @using Volo.Abp.UI.Navigation
+@implements IDisposable
 @inherits AbpComponentBase
 @inject IJSRuntime JsRuntime
 @inject NavigationManager Navigation
@@ -31,43 +31,14 @@
             {
                 @foreach (var menuItem in Menu.Items)
                 {
-                    <MudMenuItem Href="@menuItem.Url?.TrimStart('/', '~')" Target="@menuItem.Target">@menuItem.DisplayName</MudMenuItem>
+                    <MudMenuItem OnClick="@(() => NavigateToAsync(menuItem.Url, menuItem.Target))">@menuItem.DisplayName</MudMenuItem>
                 }
             }
             <MudDivider />
-            <MudMenuItem OnClick="Logout">@UiLocalizer["Logout"]</MudMenuItem>
+            <MudMenuItem OnClick="BeginSignOut">@UiLocalizer["Logout"]</MudMenuItem>
         </MudMenu>
     </Authorized>
     <NotAuthorized>
         <MudButton Variant="Variant.Text" Href="@AuthenticationOptions.Value.LoginUrl">@UiLocalizer["Login"]</MudButton>
     </NotAuthorized>
 </AuthorizeView>
-
-@code {
-    [Inject] protected IMenuManager MenuManager { get; set; } = default!;
-    [Inject] protected ApplicationConfigurationChangedService ApplicationConfigurationChangedService { get; set; } = default!;
-
-    protected ApplicationMenu? Menu { get; set; }
-
-    protected async override Task OnInitializedAsync()
-    {
-        Menu = await MenuManager.GetAsync(StandardMenus.User);
-        ApplicationConfigurationChangedService.Changed += ApplicationConfigurationChanged;
-    }
-
-    private async void ApplicationConfigurationChanged()
-    {
-        Menu = await MenuManager.GetAsync(StandardMenus.User);
-        await InvokeAsync(StateHasChanged);
-    }
-
-    public void Dispose()
-    {
-        ApplicationConfigurationChangedService.Changed -= ApplicationConfigurationChanged;
-    }
-
-    protected void Logout()
-    {
-        Navigation.NavigateTo("/Account/Logout", forceLoad: true);
-    }
-}

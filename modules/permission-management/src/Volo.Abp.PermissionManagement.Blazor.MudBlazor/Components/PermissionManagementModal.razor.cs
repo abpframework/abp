@@ -30,8 +30,6 @@ public partial class PermissionManagementModal
     protected List<PermissionGroupDto>? _allGroups;
     protected List<PermissionGroupDto>? _groups;
 
-    protected List<PermissionGrantInfoDto> _disabledPermissions = new List<PermissionGrantInfoDto>();
-
     protected int _activeTabIndex = 0;
 
     protected bool _selectAllDisabled;
@@ -109,19 +107,6 @@ public partial class PermissionManagementModal
         }
 
         _selectAllDisabled = _groups.All(IsPermissionGroupDisabled);
-
-        if (checkDisabledPermissions)
-        {
-            _disabledPermissions.Clear();
-        }
-
-        foreach (var permission in _groups.SelectMany(x => x.Permissions))
-        {
-            if (checkDisabledPermissions && permission.IsGranted && permission.GrantedProviders.All(x => x.ProviderName != _providerName))
-            {
-                _disabledPermissions.Add(permission);
-            }
-        }
 
         foreach (var group in _groups)
         {
