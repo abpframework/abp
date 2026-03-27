@@ -150,7 +150,7 @@
     <PackageVersion Include="Rebus" Version="8.8.0" />
     <PackageVersion Include="Rebus.ServiceProvider" Version="10.5.0" />
     <PackageVersion Include="Riok.Mapperly" Version="4.3.1" />
-    <PackageVersion Include="Scriban" Version="6.6.0" />
+    <PackageVersion Include="Scriban" Version="7.0.0" />
     <PackageVersion Include="Serilog" Version="4.3.0" />
     <PackageVersion Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageVersion Include="Serilog.Extensions.Hosting" Version="9.0.0" />
