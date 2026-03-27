@@ -10,5 +10,7 @@ public class AbpBackgroundJobsTimeTickerConfiguration
 
     public TickerTaskPriority? Priority { get; set; }
 
+    public int? MaxConcurrency { get; set; }
+
     public RunCondition? RunCondition { get; set; }
 }

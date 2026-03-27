@@ -15,6 +15,13 @@
 ```
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC","BlazorWebApp"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Previous": {
@@ -47,10 +54,12 @@ That command opens a dialog to define the properties of the new module:
 Set `ModularCrm.Ordering` as the *Module name*, leave the *Output folder* as is and click the *Next* button.
 
 {{if UI == "MVC"}}
-
 ![abp-studio-add-new-standard-module-ui-dialog](images/abp-studio-add-new-standard-module-ui-dialog.png)
+{{else if UI == "BlazorWebApp"}}
+![abp-studio-add-new-standard-module-ui-dialog](images/abp-studio-add-new-standard-module-ui-dialog-blazor-webapp.png)
+{{end}}
 
-You can choose the type of UI you want to support in your module or select *No UI* if you don't need a user interface. In this example, we'll select the *MVC* option and click *Next*.
+You can choose the type of UI you want to support in your module or select *No UI* if you don't need a user interface. In this example, we'll select the {{if UI == "MVC"}}*MVC*{{else if UI == "BlazorWebApp"}}*Blazor WebApp*{{end}} option and click *Next*.
 
 {{else if UI == "NG"}}
 
@@ -68,7 +77,11 @@ You can include or not include unit tests for the new module here. We are unchec
 
 Here is the final solution structure after adding the `ModularCrm.Ordering` module:
 
+{{if UI == "MVC"}}
 ![abp-studio-modular-crm-with-standard-module](images/abp-studio-modular-crm-with-standard-module.png)
+{{else if UI == "BlazorWebApp"}}
+![abp-studio-modular-crm-with-standard-module](images/abp-studio-modular-crm-with-standard-module-blazor-webapp.png)
+{{end}}
 
 ## Installing into the Main Application
 
@@ -86,9 +99,13 @@ That command opens the *Import Module* dialog:
 
 Select the `ModularCrm.Ordering` module and check the *Install this module* option as shown in the preceding figure. When you click the OK button, a new dialog is shown to select the packages to install:
 
+{{if UI == "MVC"}}
 ![abp-studio-install-module-dialog](images/abp-studio-install-module-dialog-v2.png)
+{{else if UI == "BlazorWebApp"}}
+![abp-studio-install-module-dialog](images/abp-studio-install-module-dialog-blazor-webapp.png)
+{{end}}
 
-Select the `ModularCrm.Ordering` and `ModularCrm.Ordering.UI` packages from the left area and ensure the  `ModularCrm` package from the middle area was checked as shown in the preceding figure. Finally, click _OK_.
+Select the `ModularCrm.Ordering` and {{if UI == "MVC"}}`ModularCrm.Ordering.UI`{{else if UI == "BlazorWebApp"}}`ModularCrm.Ordering.Blazor`{{end}} packages from the left area. {{if UI == "MVC"}}Ensure `ModularCrm` was checked in the middle area as shown in the preceding figure.{{else if UI == "BlazorWebApp"}}For `ModularCrm.Ordering`, ensure `ModularCrm` is checked. For `ModularCrm.Ordering.Blazor`, ensure both `ModularCrm` and `ModularCrm.Client` are checked in the middle area as shown in the preceding figure.{{end}} Finally, click _OK_.
 
 {{if UI == "NG"}}
 

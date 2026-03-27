@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,6 +79,15 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
         return new EventHandlerFactoryUnregistrar(this, eventType, factory);
     }
 
+    /// <inheritdoc/>
+    public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
+    {
+        throw new AbpException(
+            "Dapr distributed event bus does not support dynamic event subscriptions. " +
+            "Dapr requires topic subscriptions to be declared at startup and cannot add subscriptions at runtime. " +
+            "Use a typed event handler (IDistributedEventHandler<T>) instead.");
+    }
+
     public override void Unsubscribe<TEvent>(Func<TEvent, Task> action)
     {
         Check.NotNull(action, nameof(action));
@@ -129,9 +138,26 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
         GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
     }
 
+    /// <inheritdoc/>
+    public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
+    {
+        var eventType = EventTypes.GetOrDefault(eventName);
+        if (eventType != null)
+        {
+            var dynamicEventData = eventData as DynamicEventData ?? new DynamicEventData(eventName, eventData);
+            return PublishAsync(eventType, ConvertDynamicEventData(dynamicEventData.Data, eventType), onUnitOfWorkComplete);
+        }
+
+        throw new AbpException(
+            "Dapr distributed event bus does not support dynamic event publishing. " +
+            "Dapr requires topic subscriptions to be declared at startup. " +
+            "Use a typed event (PublishAsync<TEvent>) or ensure the event name matches a registered typed event.");
+    }
+
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
-        await PublishToDaprAsync(eventType, eventData, null, CorrelationIdProvider.Get());
+        var (eventName, resolvedData) = ResolveEventForPublishing(eventType, eventData);
+        await PublishToDaprAsync(eventName, resolvedData, null, CorrelationIdProvider.Get());
     }
 
     protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
@@ -139,27 +165,16 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
         unitOfWork.AddOrReplaceDistributedEvent(eventRecord);
     }
 
-    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
-    {
-        var handlerFactoryList = new List<EventTypeWithEventHandlerFactories>();
-
-        foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
-        {
-            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
-        }
-
-        return handlerFactoryList.ToArray();
-    }
-
     public async override Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
     {
-        var eventType = GetEventType(outgoingEvent.EventName);
+        var eventType = EventTypes.GetOrDefault(outgoingEvent.EventName);
         if (eventType == null)
         {
             return;
         }
 
-        await PublishToDaprAsync(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, eventType), outgoingEvent.Id, outgoingEvent.GetCorrelationId());
+        var eventData = Serializer.Deserialize(outgoingEvent.EventData, eventType);
+        await PublishToDaprAsync(outgoingEvent.EventName, eventData, outgoingEvent.Id, outgoingEvent.GetCorrelationId());
 
         using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
         {
@@ -182,7 +197,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 
     public virtual async Task TriggerHandlersAsync(Type eventType, object eventData, string? messageId = null, string? correlationId = null)
     {
-        if (await AddToInboxAsync(messageId, EventNameAttribute.GetNameOrDefault(eventType), eventType, eventData, correlationId))
+        if (await AddToInboxAsync(messageId, GetEventName(eventType, eventData), eventType, eventData, correlationId))
         {
             return;
         }
@@ -195,13 +210,16 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 
     public async override Task ProcessFromInboxAsync(IncomingEventInfo incomingEvent, InboxConfig inboxConfig)
     {
-        var eventType = GetEventType(incomingEvent.EventName);
+        var eventType = EventTypes.GetOrDefault(incomingEvent.EventName);
+        object eventData;
+
         if (eventType == null)
         {
             return;
         }
 
-        var eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
+        eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
+
         var exceptions = new List<Exception>();
         using (CorrelationIdProvider.Change(incomingEvent.GetCorrelationId()))
         {
@@ -216,6 +234,18 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
     protected override byte[] Serialize(object eventData)
     {
         return Serializer.Serialize(eventData);
+    }
+
+    protected virtual async Task PublishToDaprAsync(Type eventType, object eventData, Guid? messageId = null, string? correlationId = null)
+    {
+        await PublishToDaprAsync(EventNameAttribute.GetNameOrDefault(eventType), eventData, messageId, correlationId);
+    }
+
+    protected virtual async Task PublishToDaprAsync(string eventName, object eventData, Guid? messageId = null, string? correlationId = null)
+    {
+        var client = await DaprClientFactory.CreateAsync();
+        var data = new AbpDaprEventData(DaprEventBusOptions.PubSubName, eventName, (messageId ?? GuidGenerator.Create()).ToString("N"), Serializer.SerializeToString(eventData), correlationId);
+        await client.PublishEventAsync(pubsubName: DaprEventBusOptions.PubSubName, topicName: eventName, data: data);
     }
 
     protected override Task OnAddToOutboxAsync(string eventName, Type eventType, object eventData)
@@ -237,21 +267,55 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
         );
     }
 
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
+    {
+        var handlerFactoryList = new List<EventTypeWithEventHandlerFactories>();
+
+        foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
+        {
+            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
+        }
+
+        return handlerFactoryList.ToArray();
+    }
+
+    protected override Type? GetEventTypeByEventName(string eventName)
+    {
+        return EventTypes.GetOrDefault(eventName);
+    }
+
     public Type? GetEventType(string eventName)
     {
         return EventTypes.GetOrDefault(eventName);
     }
 
-    protected virtual async Task PublishToDaprAsync(Type eventType, object eventData, Guid? messageId = null, string? correlationId = null)
+    /// <inheritdoc/>
+    public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
     {
-        await PublishToDaprAsync(EventNameAttribute.GetNameOrDefault(eventType), eventData, messageId, correlationId);
+        throw new AbpException("Dapr distributed event bus does not support dynamic event subscriptions.");
     }
 
-    protected virtual async Task PublishToDaprAsync(string eventName, object eventData, Guid? messageId = null, string? correlationId = null)
+    /// <inheritdoc/>
+    public override void Unsubscribe(string eventName, IEventHandler handler)
     {
-        var client = await DaprClientFactory.CreateAsync();
-        var data = new AbpDaprEventData(DaprEventBusOptions.PubSubName, eventName, (messageId ?? GuidGenerator.Create()).ToString("N"), Serializer.SerializeToString(eventData), correlationId);
-        await client.PublishEventAsync(pubsubName: DaprEventBusOptions.PubSubName, topicName: eventName, data: data);
+        throw new AbpException("Dapr distributed event bus does not support dynamic event subscriptions.");
+    }
+
+    /// <inheritdoc/>
+    public override void UnsubscribeAll(string eventName)
+    {
+        throw new AbpException("Dapr distributed event bus does not support dynamic event subscriptions.");
+    }
+
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetDynamicHandlerFactories(string eventName)
+    {
+        var eventType = GetEventTypeByEventName(eventName);
+        if (eventType != null)
+        {
+            return GetHandlerFactories(eventType);
+        }
+
+        return Array.Empty<EventTypeWithEventHandlerFactories>();
     }
 
     private static bool ShouldTriggerEventForHandler(Type targetEventType, Type handlerEventType)
