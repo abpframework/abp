@@ -30,7 +30,7 @@
                                 <div style="@GetFeatureStyles(feature)">
                                     @if (feature.ValueType is FreeTextStringValueType)
                                     {
-                                        <MudTextField Label="@GetShownName(feature)" Disabled="@disabled" Value="@feature.Value"
+                                        <MudTextField Margin="Margin.Dense" Label="@GetShownName(feature)" Disabled="@disabled" Value="@feature.Value"
                                             ValueChanged="@(async ([CanBeNull] string v) => await OnFeatureValueChangedAsync(v, feature))" />
                                         @if (feature.Description != null)
                                         {
@@ -42,7 +42,7 @@
                                     {
                                         var items = ((SelectionStringValueType)feature.ValueType).ItemSource.Items;
                                         var selectedValue = SelectionStringValues[feature.Name];
-                                        <MudSelect T="string" Label="@GetShownName(feature)" Disabled="@disabled"
+                                        <MudSelect Margin="Margin.Dense" T="string" Label="@GetShownName(feature)" Disabled="@disabled"
                                             Value="@selectedValue" ValueChanged="@(s => SelectionStringValues[feature.Name] = s)">
                                             @foreach (var item in items)
                                             {

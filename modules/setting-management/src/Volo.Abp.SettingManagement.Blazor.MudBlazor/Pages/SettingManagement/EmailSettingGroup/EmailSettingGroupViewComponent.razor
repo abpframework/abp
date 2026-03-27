@@ -7,23 +7,23 @@
         <MudForm @ref="@_emailFormRef" Model="@EmailSettings">
             <MudGrid>
                 <MudItem xs="12">
-                    <MudTextField @bind-Value="@EmailSettings.DefaultFromDisplayName"
+                    <MudTextField Margin="Margin.Dense" @bind-Value="@EmailSettings.DefaultFromDisplayName"
                                  Label="@L["DefaultFromDisplayName"]"
                                  Required="true"
                                  RequiredError="@L["ThisFieldIsRequired."]" />
                 </MudItem>
                 <MudItem xs="12">
-                    <MudTextField @bind-Value="@EmailSettings.DefaultFromAddress"
+                    <MudTextField Margin="Margin.Dense" @bind-Value="@EmailSettings.DefaultFromAddress"
                                  Label="@L["DefaultFromAddress"]"
                                  Required="true"
                                  RequiredError="@L["ThisFieldIsRequired."]" />
                 </MudItem>
                 <MudItem xs="12">
-                    <MudTextField @bind-Value="@EmailSettings.SmtpHost"
+                    <MudTextField Margin="Margin.Dense" @bind-Value="@EmailSettings.SmtpHost"
                                  Label="@L["SmtpHost"]" />
                 </MudItem>
                 <MudItem xs="12">
-                    <MudNumericField @bind-Value="@EmailSettings.SmtpPort"
+                    <MudNumericField Margin="Margin.Dense" @bind-Value="@EmailSettings.SmtpPort"
                                          Label="@L["SmtpPort"]" />
                 </MudItem>
                 <MudItem xs="12">
@@ -37,15 +37,15 @@
                 @if (!EmailSettings.SmtpUseDefaultCredentials)
                 {
                     <MudItem xs="12">
-                        <MudTextField @bind-Value="@EmailSettings.SmtpDomain"
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@EmailSettings.SmtpDomain"
                                      Label="@L["SmtpDomain"]" />
                     </MudItem>
                     <MudItem xs="12">
-                        <MudTextField @bind-Value="@EmailSettings.SmtpUserName"
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@EmailSettings.SmtpUserName"
                                      Label="@L["SmtpUserName"]" />
                     </MudItem>
                     <MudItem xs="12">
-                        <MudTextField @bind-Value="@EmailSettings.SmtpPassword"
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@EmailSettings.SmtpPassword"
                                      Label="@L["SmtpPassword"]"
                                      InputType="InputType.Password"
                                      Placeholder="@L["SmtpPasswordPlaceholder"]" />
@@ -81,20 +81,20 @@
             </TitleContent>
             <DialogContent>
                 <MudForm @ref="@_testEmailFormRef" Model="@SendTestEmailInput">
-                    <MudTextField @bind-Value="@SendTestEmailInput.SenderEmailAddress"
+                    <MudTextField Margin="Margin.Dense" @bind-Value="@SendTestEmailInput.SenderEmailAddress"
                                  Label="@L["SenderEmailAddress"]"
                                  Required="true"
                                  RequiredError="@L["ThisFieldIsRequired."]"
                                  AutoFocus="true" />
-                    <MudTextField @bind-Value="@SendTestEmailInput.TargetEmailAddress"
+                    <MudTextField Margin="Margin.Dense" @bind-Value="@SendTestEmailInput.TargetEmailAddress"
                                  Label="@L["TargetEmailAddress"]"
                                  Required="true"
                                  RequiredError="@L["ThisFieldIsRequired."]" />
-                    <MudTextField @bind-Value="@SendTestEmailInput.Subject"
+                    <MudTextField Margin="Margin.Dense" @bind-Value="@SendTestEmailInput.Subject"
                                  Label="@L["Subject"]"
                                  Required="true"
                                  RequiredError="@L["ThisFieldIsRequired."]" />
-                    <MudTextField @bind-Value="@SendTestEmailInput.Body"
+                    <MudTextField Margin="Margin.Dense" @bind-Value="@SendTestEmailInput.Body"
                                  Label="@L["Body"]"
                                  Lines="5" />
                 </MudForm>

@@ -38,7 +38,7 @@
         </TitleContent>
         <DialogContent>
             <MudForm @ref="@CreateFormRef" Model="@NewEntity">
-                <MudTextField @bind-Value="@NewEntity.Name"
+                <MudTextField Margin="Margin.Dense" @bind-Value="@NewEntity.Name"
                              Label="@L["DisplayName:RoleName"]"
                              Required="true"
                              RequiredError="@L["The {0} field is required.", L["DisplayName:RoleName"]]" />
@@ -64,7 +64,7 @@
         <DialogContent>
             <MudForm @ref="@EditFormRef" Model="@EditingEntity">
                 <input type="hidden" @bind-value="@EditingEntity.ConcurrencyStamp" />
-                <MudTextField @bind-Value="@EditingEntity.Name"
+                <MudTextField Margin="Margin.Dense" @bind-Value="@EditingEntity.Name"
                              Label="@L["DisplayName:RoleName"]"
                              Required="true"
                              RequiredError="@L["The {0} field is required.", L["DisplayName:RoleName"]]" />

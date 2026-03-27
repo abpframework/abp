@@ -95,7 +95,7 @@
                         <MudRadio T="string" Option="@keyLookupService.Name">@keyLookupService.DisplayName</MudRadio>
                     }
                 </MudRadioGroup>
-                <MudAutocomplete T="SearchProviderKeyInfo"
+                <MudAutocomplete Margin="Margin.Dense" T="SearchProviderKeyInfo"
                                Value="@_selectedProviderKey"
                                ValueChanged="@SelectedProviderKeyChanged"
                                SearchFunc="@SearchProviderKeyAsync"

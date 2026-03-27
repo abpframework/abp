@@ -13,13 +13,13 @@
                 @if (ChangePasswordModel != null)
                 {
                     <MudForm @ref="@_changePasswordForm" Model="@ChangePasswordModel">
-                        <MudTextField @bind-Value="@ChangePasswordModel.CurrentPassword"
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@ChangePasswordModel.CurrentPassword"
                                      Label="@L["DisplayName:CurrentPassword"]"
                                      InputType="InputType.Password" />
-                        <MudTextField @bind-Value="@ChangePasswordModel.NewPassword"
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@ChangePasswordModel.NewPassword"
                                      Label="@L["DisplayName:NewPassword"]"
                                      InputType="InputType.Password" />
-                        <MudTextField @bind-Value="@ChangePasswordModel.NewPasswordConfirm"
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@ChangePasswordModel.NewPasswordConfirm"
                                      Label="@L["DisplayName:NewPasswordConfirm"]"
                                      InputType="InputType.Password" />
                         <MudButton ButtonType="ButtonType.Submit"
@@ -35,21 +35,21 @@
                 @if (PersonalInfoModel != null)
                 {
                     <MudForm @ref="@_personalInfoForm" Model="@PersonalInfoModel">
-                        <MudTextField @bind-Value="@PersonalInfoModel.UserName"
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@PersonalInfoModel.UserName"
                                      Label="@L["DisplayName:UserName"]" />
                         <MudGrid>
                             <MudItem xs="12" sm="6">
-                                <MudTextField @bind-Value="@PersonalInfoModel.Name"
+                                <MudTextField Margin="Margin.Dense" @bind-Value="@PersonalInfoModel.Name"
                                              Label="@L["DisplayName:Name"]" />
                             </MudItem>
                             <MudItem xs="12" sm="6">
-                                <MudTextField @bind-Value="@PersonalInfoModel.Surname"
+                                <MudTextField Margin="Margin.Dense" @bind-Value="@PersonalInfoModel.Surname"
                                              Label="@L["DisplayName:Surname"]" />
                             </MudItem>
                         </MudGrid>
-                        <MudTextField @bind-Value="@PersonalInfoModel.Email"
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@PersonalInfoModel.Email"
                                      Label="@L["DisplayName:Email"]" />
-                        <MudTextField @bind-Value="@PersonalInfoModel.PhoneNumber"
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@PersonalInfoModel.PhoneNumber"
                                      Label="@L["DisplayName:PhoneNumber"]" />
 
                         @* Extension Properties *@

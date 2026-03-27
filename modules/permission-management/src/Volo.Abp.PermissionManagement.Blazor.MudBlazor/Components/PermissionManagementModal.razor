@@ -10,7 +10,7 @@
     <DialogContent>
         <MudGrid Class="mb-2">
             <MudItem xs="12" sm="8">
-                <MudTextField Value="@_permissionGroupSearchText"
+                <MudTextField Margin="Margin.Dense" Value="@_permissionGroupSearchText"
                              ValueChanged="@(async ([CanBeNull] string b) => await OnPermissionGroupSearchTextChangedAsync(b))"
                              Label="@L["Search"]"
                              Adornment="Adornment.Start"

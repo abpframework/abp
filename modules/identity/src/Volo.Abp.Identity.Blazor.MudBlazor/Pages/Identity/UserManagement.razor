@@ -21,7 +21,7 @@
         <MudGrid>
             <MudItem xs="12" sm="8"></MudItem>
             <MudItem xs="12" sm="4">
-                <MudTextField @bind-Value="GetListInput.Filter"
+                <MudTextField Margin="Margin.Dense" @bind-Value="GetListInput.Filter"
                              Label="@L["Search"]"
                              Adornment="Adornment.Start"
                              AdornmentIcon="@Icons.Material.Filled.Search"
@@ -51,15 +51,15 @@
             <MudForm @ref="@CreateFormRef" Model="@NewEntity">
                 <MudTabs @bind-ActivePanelIndex="@_createTabIndex" PanelClass="pa-4">
                     <MudTabPanel Text="@L["UserInformations"]">
-                        <MudTextField @bind-Value="@NewEntity.UserName"
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@NewEntity.UserName"
                                      Label="@L["DisplayName:UserName"]"
                                      Required="true"
                                      RequiredError="@L["The {0} field is required.", L["DisplayName:UserName"]]" />
-                        <MudTextField @bind-Value="@NewEntity.Name"
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@NewEntity.Name"
                                      Label="@L["DisplayName:Name"]" />
-                        <MudTextField @bind-Value="@NewEntity.Surname"
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@NewEntity.Surname"
                                      Label="@L["DisplayName:Surname"]" />
-                        <MudTextField @bind-Value="@NewEntity.Password"
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@NewEntity.Password"
                                      Label="@L["DisplayName:Password"]"
                                      InputType="@(_showPassword ? InputType.Text : InputType.Password)"
                                      Required="true"
@@ -67,11 +67,11 @@
                                      Adornment="Adornment.End"
                                      AdornmentIcon="@(_showPassword ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff)"
                                      OnAdornmentClick="@(() => _showPassword = !_showPassword)" />
-                        <MudTextField @bind-Value="@NewEntity.Email"
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@NewEntity.Email"
                                      Label="@L["DisplayName:Email"]"
                                      Required="true"
                                      RequiredError="@L["The {0} field is required.", L["DisplayName:Email"]]" />
-                        <MudTextField @bind-Value="@NewEntity.PhoneNumber"
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@NewEntity.PhoneNumber"
                                      Label="@L["DisplayName:PhoneNumber"]" />
                         <MudCheckBox T="bool" @bind-Value="@NewEntity.IsActive" Label="@L["DisplayName:IsActive"]" />
                         <MudTooltip Text="@L["Description:LockoutEnabled"]">
@@ -116,25 +116,25 @@
                 <input type="hidden" @bind-value="@EditingEntity.ConcurrencyStamp" />
                 <MudTabs @bind-ActivePanelIndex="@_editTabIndex" PanelClass="pa-4">
                     <MudTabPanel Text="@L["UserInformations"]">
-                        <MudTextField @bind-Value="@EditingEntity.UserName"
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@EditingEntity.UserName"
                                      Label="@L["DisplayName:UserName"]"
                                      Required="true"
                                      RequiredError="@L["The {0} field is required.", L["DisplayName:UserName"]]" />
-                        <MudTextField @bind-Value="@EditingEntity.Name"
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@EditingEntity.Name"
                                      Label="@L["DisplayName:Name"]" />
-                        <MudTextField @bind-Value="@EditingEntity.Surname"
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@EditingEntity.Surname"
                                      Label="@L["DisplayName:Surname"]" />
-                        <MudTextField @bind-Value="@EditingEntity.Password"
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@EditingEntity.Password"
                                      Label="@L["DisplayName:Password"]"
                                      InputType="@(_showPassword ? InputType.Text : InputType.Password)"
                                      Adornment="Adornment.End"
                                      AdornmentIcon="@(_showPassword ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff)"
                                      OnAdornmentClick="@(() => _showPassword = !_showPassword)" />
-                        <MudTextField @bind-Value="@EditingEntity.Email"
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@EditingEntity.Email"
                                      Label="@L["DisplayName:Email"]"
                                      Required="true"
                                      RequiredError="@L["The {0} field is required.", L["DisplayName:Email"]]" />
-                        <MudTextField @bind-Value="@EditingEntity.PhoneNumber"
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@EditingEntity.PhoneNumber"
                                      Label="@L["DisplayName:PhoneNumber"]" />
                         @if (!IsEditCurrentUser)
                         {

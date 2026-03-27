@@ -37,17 +37,17 @@
         </TitleContent>
         <DialogContent>
             <MudForm @ref="@_createFormRef" Model="@NewEntity">
-                <MudTextField @bind-Value="@NewEntity.Name"
+                <MudTextField Margin="Margin.Dense" @bind-Value="@NewEntity.Name"
                              Label="@L["TenantName"]"
                              Required="true"
                              RequiredError="@L["ThisFieldIsRequired."]"
                              AutoFocus="true" />
-                <MudTextField @bind-Value="@NewEntity.AdminEmailAddress"
+                <MudTextField Margin="Margin.Dense" @bind-Value="@NewEntity.AdminEmailAddress"
                              Label="@L["DisplayName:AdminEmailAddress"]"
                              Required="true"
                              RequiredError="@L["ThisFieldIsRequired."]"
                              InputType="InputType.Email" />
-                <MudTextField @bind-Value="@NewEntity.AdminPassword"
+                <MudTextField Margin="Margin.Dense" @bind-Value="@NewEntity.AdminPassword"
                              Label="@L["DisplayName:AdminPassword"]"
                              Required="true"
                              RequiredError="@L["ThisFieldIsRequired."]"
@@ -75,7 +75,7 @@
         </TitleContent>
         <DialogContent>
             <MudForm @ref="@_editFormRef" Model="@EditingEntity">
-                <MudTextField @bind-Value="@EditingEntity.Name"
+                <MudTextField Margin="Margin.Dense" @bind-Value="@EditingEntity.Name"
                              Label="@L["TenantName"]"
                              Required="true"
                              RequiredError="@L["ThisFieldIsRequired."]"
