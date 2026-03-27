@@ -21,14 +21,12 @@
                 <MudText Typo="Typo.caption" Class="mt-1">@L["TimezoneHelpText"]</MudText>
             </MudItem>
         </MudGrid>
-        <MudGrid>
-            <MudItem xs="12">
-                <MudButton Color="Color.Primary"
-                          Variant="Variant.Filled"
-                          OnClick="@UpdateSettingsAsync">
-                    @L["Save"]
-                </MudButton>
-            </MudItem>
-        </MudGrid>
+        <div class="d-flex justify-end mt-3">
+            <MudButton Color="Color.Primary"
+                      Variant="Variant.Filled"
+                      OnClick="@UpdateSettingsAsync">
+                @L["Save"]
+            </MudButton>
+        </div>
     </MudForm>
 }

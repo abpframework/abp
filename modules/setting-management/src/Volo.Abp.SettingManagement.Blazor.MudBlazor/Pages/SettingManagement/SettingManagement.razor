@@ -19,11 +19,12 @@
             <MudTabs @bind-ActivePanelIndex="@_activeTabIndex"
                     Variant="Variant.Pills"
                     Position="Position.Left"
-                    PanelClass="pa-4">
+                    PanelClass="pa-4 overflow-auto"
+                    Style="min-width: 0; overflow: hidden;">
                 @foreach (var group in SettingComponentCreationContext.Groups)
                 {
                     <MudTabPanel Text="@group.DisplayName">
-                        <div class="abp-md-form" style="width: 100%">
+                        <div style="width: 100%">
                             @{
                                 SettingItemRenders.Add(builder =>
                                 {

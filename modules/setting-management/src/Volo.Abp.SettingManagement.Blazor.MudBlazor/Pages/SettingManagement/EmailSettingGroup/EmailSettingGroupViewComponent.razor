@@ -54,24 +54,22 @@
             </MudGrid>
         </MudForm>
         <MudDivider Class="my-3" />
-        <MudGrid>
-            <MudItem xs="12">
-                @if (HasSendTestEmailPermission)
-                {
-                    <MudButton Color="Color.Primary"
-                              Variant="Variant.Outlined"
-                              OnClick="@OpenSendTestEmailDialogAsync"
-                              Class="me-2">
-                        @L["SendTestEmail"]
-                    </MudButton>
-                }
+        <div class="d-flex justify-end mt-3">
+            @if (HasSendTestEmailPermission)
+            {
                 <MudButton Color="Color.Primary"
-                          Variant="Variant.Filled"
-                          OnClick="@UpdateSettingsAsync">
-                    @L["Save"]
+                          Variant="Variant.Outlined"
+                          OnClick="@OpenSendTestEmailDialogAsync"
+                          Class="me-2">
+                    @L["SendTestEmail"]
                 </MudButton>
-            </MudItem>
-        </MudGrid>
+            }
+            <MudButton Color="Color.Primary"
+                      Variant="Variant.Filled"
+                      OnClick="@UpdateSettingsAsync">
+                @L["Save"]
+            </MudButton>
+        </div>
 
     @if (HasSendTestEmailPermission)
     {
