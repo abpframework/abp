@@ -52,9 +52,9 @@ public partial class TenantManagement
 
     protected override ValueTask SetBreadcrumbItemsAsync()
     {
-        BreadcrumbItems.Add(new BreadcrumbItem(LUiNavigation["Menu:Administration"].Value, "#"));
-        BreadcrumbItems.Add(new BreadcrumbItem(L["Menu:TenantManagement"].Value, "#"));
-        BreadcrumbItems.Add(new BreadcrumbItem(L["Tenants"].Value, "#"));
+        BreadcrumbItems.Add(new BreadcrumbItem(LUiNavigation["Menu:Administration"].Value,  null, disabled: true));
+        BreadcrumbItems.Add(new BreadcrumbItem(L["Menu:TenantManagement"].Value,  null, disabled: true));
+        BreadcrumbItems.Add(new BreadcrumbItem(L["Tenants"].Value,  null, disabled: true));
         return base.SetBreadcrumbItemsAsync();
     }
 

@@ -81,9 +81,9 @@ public partial class UserManagement
 
     protected override ValueTask SetBreadcrumbItemsAsync()
     {
-        BreadcrumbItems.Add(new BreadcrumbItem(LUiNavigation["Menu:Administration"].Value, "#"));
-        BreadcrumbItems.Add(new BreadcrumbItem(L["Menu:IdentityManagement"].Value, "#"));
-        BreadcrumbItems.Add(new BreadcrumbItem(L["Users"].Value, "#"));
+        BreadcrumbItems.Add(new BreadcrumbItem(LUiNavigation["Menu:Administration"].Value,  null, disabled: true));
+        BreadcrumbItems.Add(new BreadcrumbItem(L["Menu:IdentityManagement"].Value,  null, disabled: true));
+        BreadcrumbItems.Add(new BreadcrumbItem(L["Users"].Value,  null, disabled: true));
         return base.SetBreadcrumbItemsAsync();
     }
 

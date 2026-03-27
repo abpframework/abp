@@ -53,9 +53,9 @@ public partial class RoleManagement
 
     protected override ValueTask SetBreadcrumbItemsAsync()
     {
-        BreadcrumbItems.Add(new BreadcrumbItem(LUiNavigation["Menu:Administration"].Value, "#"));
-        BreadcrumbItems.Add(new BreadcrumbItem(L["Menu:IdentityManagement"].Value, "#"));
-        BreadcrumbItems.Add(new BreadcrumbItem(L["Roles"].Value, "#"));
+        BreadcrumbItems.Add(new BreadcrumbItem(LUiNavigation["Menu:Administration"].Value,  null, disabled: true));
+        BreadcrumbItems.Add(new BreadcrumbItem(L["Menu:IdentityManagement"].Value,  null, disabled: true));
+        BreadcrumbItems.Add(new BreadcrumbItem(L["Roles"].Value,  null, disabled: true));
         return base.SetBreadcrumbItemsAsync();
     }
 
