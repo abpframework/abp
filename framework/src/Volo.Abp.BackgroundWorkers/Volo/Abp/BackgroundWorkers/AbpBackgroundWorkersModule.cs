@@ -49,6 +49,10 @@ public class AbpBackgroundWorkersModule : AbpModule
             await context.ServiceProvider
                 .GetRequiredService<IBackgroundWorkerManager>()
                 .StopAsync(cancellationToken);
+
+            await context.ServiceProvider
+                .GetRequiredService<IDynamicBackgroundWorkerManager>()
+                .StopAllAsync(cancellationToken);
         }
     }
 
