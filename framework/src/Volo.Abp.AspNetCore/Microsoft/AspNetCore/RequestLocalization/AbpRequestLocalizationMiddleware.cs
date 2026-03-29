@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Localization.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Middleware;
@@ -39,7 +40,8 @@ public class AbpRequestLocalizationMiddleware : AbpMiddlewareBase, ITransientDep
             if (context.Items[HttpContextItemName] == null)
             {
                 var requestCultureFeature = context.Features.Get<IRequestCultureFeature>();
-                if (requestCultureFeature?.Provider is QueryStringRequestCultureProvider)
+                if (requestCultureFeature?.Provider is QueryStringRequestCultureProvider
+                    or RouteDataRequestCultureProvider)
                 {
                     AbpRequestCultureCookieHelper.SetCultureCookie(
                         context,

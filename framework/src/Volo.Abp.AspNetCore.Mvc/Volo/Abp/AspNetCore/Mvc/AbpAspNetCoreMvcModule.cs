@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
@@ -212,6 +214,41 @@ public class AbpAspNetCoreMvcModule : AbpModule
         {
             preConfigureActions.Configure(options);
         });
+
+        ConfigureRouteBasedCulture(context);
+    }
+
+    protected virtual void ConfigureRouteBasedCulture(ServiceConfigurationContext context)
+    {
+        context.Services
+            .AddOptions<AbpEndpointRouterOptions>()
+            .PostConfigure<IOptions<AbpRequestLocalizationOptions>>((routerOptions, abpLocOptions) =>
+            {
+                if (abpLocOptions.Value.UseRouteBasedCulture)
+                {
+                    routerOptions.EndpointConfigureActions.Insert(0, endpointContext =>
+                    {
+                        endpointContext.Endpoints.MapControllerRoute(
+                            "AbpCultureRoute",
+                            AbpCultureRoutePagesConvention.CultureRouteTemplate + "/{controller=Home}/{action=Index}/{id?}");
+                    });
+                }
+            });
+
+        context.Services
+            .AddOptions<RazorPagesOptions>()
+            .PostConfigure<IOptions<AbpRequestLocalizationOptions>>((pagesOptions, abpLocOptions) =>
+            {
+                if (abpLocOptions.Value.UseRouteBasedCulture &&
+                    !pagesOptions.Conventions.OfType<AbpCultureRoutePagesConvention>().Any())
+                {
+                    pagesOptions.Conventions.Add(new AbpCultureRoutePagesConvention());
+                }
+            });
+
+        context.Services.TryAddSingleton<UrlHelperFactory>();
+        context.Services.Replace(ServiceDescriptor.Singleton<IUrlHelperFactory, AbpCultureRouteUrlHelperFactory>());
+        context.Services.AddTransient<IMenuItemUrlProvider, AbpCultureMenuItemUrlProvider>();
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
