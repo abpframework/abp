@@ -138,7 +138,7 @@ Blazor Server uses SignalR (WebSocket) for the interactive circuit. The HTTP mid
 }
 ````
 
-> This applies to your own application pages. ABP built-in module pages (Identity, Tenant Management, etc.) do not need this change because language switching uses `forceLoad: true`, which always triggers a full HTTP request through the middleware pipeline.
+> This applies to your own application pages. ABP built-in module pages (Identity, Tenant Management, Settings, Account, etc.) already include `@page "/{culture}/..."` routes out of the box — you do not need to add them manually.
 
 ### Example module configuration
 
@@ -241,4 +241,4 @@ ASP.NET Core does not provide an `IPageRouteModelConvention` equivalent for Blaz
 
 ### Do I need to add `{culture}` routes to ABP module pages (Identity, Settings, etc.)?
 
-No. Language switching in Blazor always uses `forceLoad: true`, which triggers a full HTTP request. The server-side middleware detects the culture from the URL path and sets the cookie. The interactive circuit then uses the cookie-based culture. Module pages work correctly without any changes.
+No. ABP built-in module pages already ship with `@page "/{culture}/..."` route variants. You only need to add these routes to your own application pages.

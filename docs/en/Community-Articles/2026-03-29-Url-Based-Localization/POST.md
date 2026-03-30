@@ -124,7 +124,7 @@ You must **manually** add the `{culture}` route to each of your own Blazor pages
 }
 ```
 
-> **ABP's built-in module pages** (Identity, Tenant Management, Settings, etc.) do **not** need this change. Language switching always uses `forceLoad: true`, which triggers a full HTTP request through the middleware pipeline. The `{culture}` route is only needed for direct URL access like `/zh-Hans/Products`.
+> **ABP's built-in module pages** (Identity, Tenant Management, Settings, Account, etc.) already ship with `@page "/{culture}/..."` route variants. You only need to add these routes to your own application pages.
 
 ### Language switching uses forceLoad
 
