@@ -111,7 +111,7 @@ Blazor Server uses SignalR (WebSocket) for the interactive circuit. The HTTP mid
 |---|---|
 | **Culture detection** | `RouteDataRequestCultureProvider` reads `{culture}` from the URL on the initial HTTP request (SSR). |
 | **Cookie persistence** | The middleware automatically saves the detected culture to `.AspNetCore.Culture` cookie, which persists across the WebSocket connection. |
-| **Menu URLs** | `AbpCultureMenuItemUrlProvider` prepends the culture prefix. In the interactive circuit (where `HttpContext` has no route values), it falls back to `CultureInfo.CurrentUICulture`. |
+| **Menu URLs** | `AbpCultureMenuItemUrlProvider` prepends the culture prefix. In the interactive circuit (where `HttpContext` is null — no active HTTP request), it falls back to `CultureInfo.CurrentCulture`. |
 | **Language switching** | The built-in `LanguageSwitch` component navigates to `/Abp/Languages/Switch` with `forceLoad: true`, triggering a full HTTP reload. The culture segment in the return URL is automatically replaced. |
 
 ### What requires manual changes

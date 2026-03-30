@@ -62,9 +62,10 @@ public class AbpCultureMenuItemUrlProvider : IMenuItemUrlProvider
         }
 
         // Blazor interactive circuits: HttpContext is null because there is
-        // no active HTTP request. Fall back to CultureInfo.CurrentUICulture
-        // which was set by the middleware during SSR and persisted in the circuit.
-        var currentCulture = CultureInfo.CurrentUICulture.Name;
+        // no active HTTP request. Fall back to CultureInfo.CurrentCulture
+        // (set by the middleware during SSR and persisted in the circuit).
+        // CurrentCulture corresponds to the {culture} route segment, not ui-culture.
+        var currentCulture = CultureInfo.CurrentCulture.Name;
         var isKnownCulture = AbpLocalizationOptions.Value.Languages
             .Any(l => string.Equals(l.CultureName, currentCulture, StringComparison.OrdinalIgnoreCase));
 

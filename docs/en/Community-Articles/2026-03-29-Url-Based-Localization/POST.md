@@ -93,7 +93,7 @@ Blazor WebAssembly (WebApp) is similar. The server renders the first page via SS
 |---|---|
 | **Culture detection** | `RouteDataRequestCultureProvider` reads `{culture}` from the URL on the initial HTTP request (SSR). |
 | **Cookie persistence** | The middleware saves the detected culture to the `.AspNetCore.Culture` cookie, which persists across the WebSocket connection. |
-| **Menu URLs** | `AbpCultureMenuItemUrlProvider` prepends the culture prefix. In Blazor interactive circuits (where `HttpContext` is unavailable), it falls back to `CultureInfo.CurrentUICulture`. |
+| **Menu URLs** | `AbpCultureMenuItemUrlProvider` prepends the culture prefix. In Blazor interactive circuits (where `HttpContext` is null — no active HTTP request), it falls back to `CultureInfo.CurrentCulture`. |
 | **Language switching** | The built-in `LanguageSwitch` component navigates to `/Abp/Languages/Switch` with `forceLoad: true`, triggering a full HTTP reload. The culture segment in the return URL is automatically replaced. |
 
 ### Important: Blazor component route limitation

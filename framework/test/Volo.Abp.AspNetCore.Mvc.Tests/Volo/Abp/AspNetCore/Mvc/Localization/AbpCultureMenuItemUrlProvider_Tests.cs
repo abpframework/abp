@@ -51,24 +51,26 @@ public class AbpCultureMenuItemUrlProvider_Tests
     }
 
     [Fact]
-    public async Task Should_Use_CurrentUICulture_Fallback_When_No_HttpContext()
+    public async Task Should_Use_CurrentCulture_Fallback_When_No_HttpContext()
     {
-        // Simulates Blazor interactive circuit: no HttpContext, but CurrentUICulture is set
+        // Simulates Blazor interactive circuit: no HttpContext, but CurrentCulture is set.
+        // CurrentCulture (not CurrentUICulture) is used because {culture} route segments
+        // represent the culture, not the UI culture.
         var provider = CreateProviderWithoutHttpContext(
             useRouteBasedCulture: true,
             knownLanguages: new[] { "en", "zh-Hans", "tr" });
 
         var menu = CreateMenuWithItems("/home", "/about");
 
-        var previousCulture = CultureInfo.CurrentUICulture;
+        var previousCulture = CultureInfo.CurrentCulture;
         try
         {
-            CultureInfo.CurrentUICulture = new CultureInfo("zh-Hans");
+            CultureInfo.CurrentCulture = new CultureInfo("zh-Hans");
             await provider.HandleAsync(new MenuItemUrlProviderContext(menu));
         }
         finally
         {
-            CultureInfo.CurrentUICulture = previousCulture;
+            CultureInfo.CurrentCulture = previousCulture;
         }
 
         menu.Items[0].Url.ShouldBe("/zh-Hans/home");
@@ -85,15 +87,15 @@ public class AbpCultureMenuItemUrlProvider_Tests
 
         var menu = CreateMenuWithItems("/home", "/about");
 
-        var previousCulture = CultureInfo.CurrentUICulture;
+        var previousCulture = CultureInfo.CurrentCulture;
         try
         {
-            CultureInfo.CurrentUICulture = new CultureInfo("fr");
+            CultureInfo.CurrentCulture = new CultureInfo("fr");
             await provider.HandleAsync(new MenuItemUrlProviderContext(menu));
         }
         finally
         {
-            CultureInfo.CurrentUICulture = previousCulture;
+            CultureInfo.CurrentCulture = previousCulture;
         }
 
         menu.Items[0].Url.ShouldBe("/home");
