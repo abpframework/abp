@@ -28,22 +28,22 @@ public partial class LoginDisplay : IDisposable
 
     private ApplicationConfigurationDto _config;
 
-    protected string LoginUrl
+    protected string LoginUrl => PrependCulturePrefix(AuthenticationOptions.Value.LoginUrl);
+
+    protected string LogoutUrl => PrependCulturePrefix(AuthenticationOptions.Value.LogoutUrl);
+
+    protected string PrependCulturePrefix(string url)
     {
-        get
+        if (_config?.Localization.UseRouteBasedCulture != true)
         {
-            var loginUrl = AuthenticationOptions.Value.LoginUrl;
-            if (_config?.Localization.UseRouteBasedCulture != true)
-            {
-                return loginUrl;
-            }
-
-            var currentCulture = CultureInfo.CurrentCulture.Name;
-            var isKnownCulture = _config.Localization.Languages
-                .Any(l => string.Equals(l.CultureName, currentCulture, StringComparison.OrdinalIgnoreCase));
-
-            return isKnownCulture ? $"{currentCulture}/{loginUrl}" : loginUrl;
+            return url;
         }
+
+        var currentCulture = CultureInfo.CurrentCulture.Name;
+        var isKnownCulture = _config.Localization.Languages
+            .Any(l => string.Equals(l.CultureName, currentCulture, StringComparison.OrdinalIgnoreCase));
+
+        return isKnownCulture ? $"{currentCulture}/{url}" : url;
     }
 
     protected async override Task OnInitializedAsync()
@@ -76,13 +76,15 @@ public partial class LoginDisplay : IDisposable
 
     private async Task NavigateToAsync(string uri, string target = null)
     {
+        uri = uri?.TrimStart('~', '/') ?? uri;
+
         if (target == "_blank")
         {
-            await JsRuntime.InvokeVoidAsync("open", uri, target);
+            await JsRuntime.InvokeVoidAsync("open", Navigation.ToAbsoluteUri(uri).ToString(), target);
         }
         else
         {
-            Navigation.NavigateTo(uri?.TrimStart('~', '/') ?? uri);
+            Navigation.NavigateTo(uri);
         }
     }
 
@@ -90,11 +92,11 @@ public partial class LoginDisplay : IDisposable
     {
         if (AbpAspNetCoreComponentsWebOptions.Value.IsBlazorWebApp)
         {
-            Navigation.NavigateTo(AuthenticationOptions.Value.LogoutUrl, forceLoad: true);
+            Navigation.NavigateTo(LogoutUrl, forceLoad: true);
         }
         else
         {
-            Navigation.NavigateToLogout(AuthenticationOptions.Value.LogoutUrl);
+            Navigation.NavigateToLogout(LogoutUrl);
         }
     }
 }
