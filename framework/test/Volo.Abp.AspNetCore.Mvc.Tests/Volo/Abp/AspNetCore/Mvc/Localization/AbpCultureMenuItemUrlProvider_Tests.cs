@@ -38,13 +38,48 @@ public class AbpCultureMenuItemUrlProvider_Tests
     }
 
     [Fact]
-    public async Task Should_Not_Add_Prefix_When_No_Culture_Route_Value()
+    public async Task Should_Not_Add_Prefix_When_HttpContext_Has_No_Culture_Route()
     {
-        // MVC request with no {culture} route value (e.g. user visits /About directly)
+        // HttpContext exists but has no {culture} route value (e.g. MVC request to /about).
+        // No prefix should be added to keep URL style consistent with the current page.
         var provider = CreateProvider(useRouteBasedCulture: true, cultureName: null);
         var menu = CreateMenuWithItems("/home", "/about");
 
         await provider.HandleAsync(new MenuItemUrlProviderContext(menu));
+
+        menu.Items[0].Url.ShouldBe("/home");
+        menu.Items[1].Url.ShouldBe("/about");
+    }
+
+    [Fact]
+    public async Task Should_Not_Add_Prefix_When_HttpContext_Has_No_Culture_Route_Even_With_Known_Languages()
+    {
+        // HttpContext exists but has no {culture} route value, even though CurrentCulture
+        // matches a known language. No prefix should be added because the current request
+        // does not have a culture segment in the URL.
+        var httpContext = new DefaultHttpContext(); // no culture route value
+        var httpContextAccessor = new HttpContextAccessor { HttpContext = httpContext };
+        var localizationOptions = MsOptions.Create(
+            new AbpRequestLocalizationOptions { UseRouteBasedCulture = true });
+        var abpLocOptions = new AbpLocalizationOptions();
+        abpLocOptions.Languages.Add(new LanguageInfo("en"));
+        abpLocOptions.Languages.Add(new LanguageInfo("zh-Hans"));
+        abpLocOptions.Languages.Add(new LanguageInfo("tr"));
+        var provider = new AbpCultureMenuItemUrlProvider(
+            httpContextAccessor, localizationOptions, MsOptions.Create(abpLocOptions));
+
+        var menu = CreateMenuWithItems("/home", "/about");
+
+        var previousCulture = CultureInfo.CurrentCulture;
+        try
+        {
+            CultureInfo.CurrentCulture = new CultureInfo("zh-Hans");
+            await provider.HandleAsync(new MenuItemUrlProviderContext(menu));
+        }
+        finally
+        {
+            CultureInfo.CurrentCulture = previousCulture;
+        }
 
         menu.Items[0].Url.ShouldBe("/home");
         menu.Items[1].Url.ShouldBe("/about");
@@ -120,6 +155,25 @@ public class AbpCultureMenuItemUrlProvider_Tests
         parent.Url.ShouldBe("/tr/parent");
         child.Url.ShouldBe("/tr/child");
         grandChild.Url.ShouldBe("/tr/grandchild");
+    }
+
+    [Fact]
+    public async Task Should_Handle_Tilde_Slash_Urls()
+    {
+        // ~/identity/users is the pattern used by ABP module menu contributors (e.g. Identity)
+        var provider = CreateProvider(useRouteBasedCulture: true, cultureName: "zh-Hans");
+
+        var menu = new ApplicationMenu("TestMenu");
+        menu.AddItem(new ApplicationMenuItem("Users", "Users", url: "~/identity/users"));
+        menu.AddItem(new ApplicationMenuItem("Roles", "Roles", url: "~/identity/roles"));
+
+        await provider.HandleAsync(new MenuItemUrlProviderContext(menu));
+
+        // ~/identity/users → ~/zh-Hans/identity/users
+        // Blazor theme strips "~/" via TrimStart('/', '~') → "zh-Hans/identity/users"
+        // With <base href="/"> resolves to /zh-Hans/identity/users
+        menu.Items[0].Url.ShouldBe("~/zh-Hans/identity/users");
+        menu.Items[1].Url.ShouldBe("~/zh-Hans/identity/roles");
     }
 
     [Fact]

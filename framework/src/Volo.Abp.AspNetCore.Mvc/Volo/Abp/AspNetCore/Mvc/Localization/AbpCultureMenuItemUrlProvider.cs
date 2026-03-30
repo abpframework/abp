@@ -6,17 +6,16 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.UI.Navigation;
 
 namespace Volo.Abp.AspNetCore.Mvc.Localization;
 
 /// <summary>
-/// Prepends the culture route prefix to all local menu item URLs
-/// when the current request has a {culture} route value.
-/// Only activates when <see cref="AbpRequestLocalizationOptions.UseRouteBasedCulture"/> is <c>true</c>.
+/// Prepends the culture route prefix to menu item URLs when route-based culture is enabled.
 /// </summary>
-public class AbpCultureMenuItemUrlProvider : IMenuItemUrlProvider
+public class AbpCultureMenuItemUrlProvider : IMenuItemUrlProvider, ITransientDependency
 {
     protected IHttpContextAccessor HttpContextAccessor { get; }
     protected IOptions<AbpRequestLocalizationOptions> LocalizationOptions { get; }
@@ -56,15 +55,10 @@ public class AbpCultureMenuItemUrlProvider : IMenuItemUrlProvider
         var httpContext = HttpContextAccessor.HttpContext;
         if (httpContext != null)
         {
-            // MVC, Razor Pages, or Blazor SSR — read from route data.
-            // If no {culture} route value, the URL has no culture prefix → return null.
             return httpContext.GetRouteValue("culture")?.ToString();
         }
 
-        // Blazor interactive circuits: HttpContext is null because there is
-        // no active HTTP request. Fall back to CultureInfo.CurrentCulture
-        // (set by the middleware during SSR and persisted in the circuit).
-        // CurrentCulture corresponds to the {culture} route segment, not ui-culture.
+        // No HttpContext: Blazor interactive circuit or WASM client.
         var currentCulture = CultureInfo.CurrentCulture.Name;
         var isKnownCulture = AbpLocalizationOptions.Value.Languages
             .Any(l => string.Equals(l.CultureName, currentCulture, StringComparison.OrdinalIgnoreCase));
@@ -76,9 +70,16 @@ public class AbpCultureMenuItemUrlProvider : IMenuItemUrlProvider
     {
         foreach (var item in menuWithItems.Items)
         {
-            if (item.Url != null && item.Url.StartsWith('/'))
+            if (item.Url != null)
             {
-                item.Url = prefix + item.Url;
+                if (item.Url.StartsWith("~/"))
+                {
+                    item.Url = "~" + prefix + item.Url[1..];
+                }
+                else if (item.Url.StartsWith('/'))
+                {
+                    item.Url = prefix + item.Url;
+                }
             }
 
             PrependCulturePrefix(item, prefix);

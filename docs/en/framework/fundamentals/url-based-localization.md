@@ -34,7 +34,8 @@ When you set `UseRouteBasedCulture` to `true`, ABP automatically registers the f
 * **`{culture}/{controller}/{action}` route** — A conventional route for MVC controllers.
 * **`AbpCultureRoutePagesConvention`** — An `IPageRouteModelConvention` that adds `{culture}/...` route selectors to all Razor Pages.
 * **`AbpCultureRouteUrlHelperFactory`** — Replaces the default `IUrlHelperFactory` to auto-inject culture into `Url.Page()` and `Url.Action()` calls.
-* **`AbpCultureMenuItemUrlProvider`** — Prepends the culture prefix to navigation menu item URLs.
+* **`AbpCultureMenuItemUrlProvider`** — Prepends the culture prefix to navigation menu item URLs (MVC / Blazor Server).
+* **`AbpWasmCultureMenuItemUrlProvider`** — Prepends the culture prefix to menu item URLs in Blazor WebAssembly (reads the `UseRouteBasedCulture` flag from `/api/abp/application-configuration`).
 
 You do not need to configure these individually.
 
@@ -68,7 +69,7 @@ Menu items registered via `IMenuContributor` also automatically get the culture 
 
 ## Language Switching
 
-ABP's built-in language switcher (the `/Abp/Languages/Switch` action) automatically replaces the culture segment in the `returnUrl`. The controller reads `CultureInfo.CurrentCulture` to identify the current culture and replaces it with the new one:
+ABP's built-in language switcher (the `/Abp/Languages/Switch` action) automatically replaces the culture segment in the `returnUrl`. The controller reads the culture from the request cookie to identify the current page culture and replaces it with the new one:
 
 | Before switching | After switching to English |
 |---|---|
@@ -172,8 +173,9 @@ Blazor WebAssembly (WASM) runs in the browser. On the **first page load**, the s
 |---|---|
 | **SSR culture detection** | Same as Blazor Server — `RouteDataRequestCultureProvider` reads `{culture}` on the initial HTTP request. |
 | **Cookie persistence** | The cookie is set during SSR, ensuring the WASM client inherits the correct culture. |
-| **Menu URLs** | `AbpCultureMenuItemUrlProvider` handles culture prefix for menu items. |
-| **Language switching** | Uses the server's `/Abp/Languages/Switch` endpoint, which rewrites the culture segment in the URL and redirects. |
+| **Menu URLs** | `AbpWasmCultureMenuItemUrlProvider` prepends the culture prefix to menu items. The `UseRouteBasedCulture` flag is read from `/api/abp/application-configuration`. |
+| **Language switching** | The built-in `LanguageSwitch` component replaces the culture segment in the current URL and navigates with `forceLoad: true`, triggering a full page reload with the new culture. |
+| **Login link** | The `LoginDisplay` component automatically prepends the culture prefix to the login URL when route-based culture is active. |
 
 ### What requires manual changes
 
@@ -188,7 +190,8 @@ Configure<AbpRequestLocalizationOptions>(options =>
     options.UseRouteBasedCulture = true;
 });
 
-// WASM client project — no special configuration needed
+// WASM client project — no special UseRouteBasedCulture configuration needed.
+// The WASM client reads the flag from the server via /api/abp/application-configuration.
 ````
 
 ### Example middleware pipeline
@@ -216,29 +219,19 @@ Language switching also supports tenant-prefixed URLs. For example, `/tenant-a/z
 
 Routes like `/api/products` have no `{culture}` segment, so `RouteDataRequestCultureProvider` returns `null` and falls through to the next provider (Cookie → `Accept-Language` → default). API routes are completely unaffected.
 
-## FAQ
+## Culture Detection Priority
 
-### What happens with an invalid culture code in the URL?
-
-If `/xyz1234/page` is requested and `xyz1234` is not a valid culture, `RequestLocalizationMiddleware` ignores it and falls through to the default culture. No error is thrown.
-
-### Can I mix URL-based and QueryString-based culture detection?
-
-Yes. All providers work together in priority order:
+All request culture providers work together in priority order. When `UseRouteBasedCulture` is enabled, the route-based provider is added as the highest priority:
 
 1. `RouteDataRequestCultureProvider` (URL path — highest priority when enabled)
 2. `QueryStringRequestCultureProvider`
 3. `CookieRequestCultureProvider`
 4. `AcceptLanguageHeaderRequestCultureProvider`
 
-### Should I keep both localized and non-localized routes?
+If a URL contains an invalid culture code (e.g. `/xyz1234/page`), `RequestLocalizationMiddleware` ignores it and falls through to the next provider. No error is thrown.
 
-Yes. ABP automatically registers both `{culture}/{controller}/{action}` and `{controller}/{action}` routes. The second route handles direct navigation to `/` and any controller action that doesn't have a culture prefix.
+## Route Registration
 
-### Why do Blazor pages need manual `@page "/{culture}/..."` routes?
+ABP automatically registers both `{culture}/{controller}/{action}` and `{controller}/{action}` routes. The non-prefixed route handles direct navigation to `/` and URLs without a culture segment.
 
-ASP.NET Core does not provide an `IPageRouteModelConvention` equivalent for Blazor components. Razor Pages routes are discovered through `PageRouteModel` which supports conventions, but Blazor component routes are compiled from `@page` directives into `[RouteAttribute]` at build time, with no runtime extension point. This is an ASP.NET Core platform limitation.
-
-### Do I need to add `{culture}` routes to ABP module pages (Identity, Settings, etc.)?
-
-No. ABP built-in module pages already ship with `@page "/{culture}/..."` route variants. You only need to add these routes to your own application pages.
+> ABP built-in module pages (Identity, Tenant Management, Settings, Account, etc.) already include `@page "/{culture}/..."` route variants out of the box. You only need to add these routes to your own application pages.

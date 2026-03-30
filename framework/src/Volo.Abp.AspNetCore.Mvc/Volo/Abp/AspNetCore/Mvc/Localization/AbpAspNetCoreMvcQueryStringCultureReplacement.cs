@@ -6,8 +6,17 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.Localization;
 
-public class AbpAspNetCoreMvcQueryStringCultureReplacement : IQueryStringCultureReplacement, ITransientDependency
+public partial class AbpAspNetCoreMvcQueryStringCultureReplacement : IQueryStringCultureReplacement, ITransientDependency
 {
+    private static readonly Regex CultureQueryStringRegex = GetCultureQueryStringRegex();
+    private static readonly Regex UiCultureQueryStringRegex = GetUiCultureQueryStringRegex();
+
+    [GeneratedRegex("culture=[A-Za-z-]+", RegexOptions.IgnoreCase)]
+    private static partial Regex GetCultureQueryStringRegex();
+
+    [GeneratedRegex("ui-culture=[A-Za-z-]+", RegexOptions.IgnoreCase)]
+    private static partial Regex GetUiCultureQueryStringRegex();
+
     public virtual Task ReplaceAsync(QueryStringCultureReplacementContext context)
     {
         if (string.IsNullOrWhiteSpace(context.ReturnUrl))
@@ -32,17 +41,13 @@ public class AbpAspNetCoreMvcQueryStringCultureReplacement : IQueryStringCulture
         if (context.ReturnUrl.Contains("culture=", StringComparison.OrdinalIgnoreCase) &&
             context.ReturnUrl.Contains("ui-Culture=", StringComparison.OrdinalIgnoreCase))
         {
-            context.ReturnUrl = Regex.Replace(
+            context.ReturnUrl = CultureQueryStringRegex.Replace(
                 context.ReturnUrl,
-                "culture=[A-Za-z-]+",
-                $"culture={context.RequestCulture.Culture}",
-                RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                $"culture={context.RequestCulture.Culture}");
 
-            context.ReturnUrl = Regex.Replace(
+            context.ReturnUrl = UiCultureQueryStringRegex.Replace(
                 context.ReturnUrl,
-                "ui-culture=[A-Za-z-]+",
-                $"ui-culture={context.RequestCulture.UICulture}",
-                RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                $"ui-culture={context.RequestCulture.UICulture}");
         }
 
         return Task.CompletedTask;

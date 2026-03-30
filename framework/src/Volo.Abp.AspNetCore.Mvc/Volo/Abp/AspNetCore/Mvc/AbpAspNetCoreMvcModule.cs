@@ -248,7 +248,6 @@ public class AbpAspNetCoreMvcModule : AbpModule
 
         context.Services.TryAddSingleton<UrlHelperFactory>();
         context.Services.Replace(ServiceDescriptor.Singleton<IUrlHelperFactory, AbpCultureRouteUrlHelperFactory>());
-        context.Services.AddTransient<IMenuItemUrlProvider, AbpCultureMenuItemUrlProvider>();
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

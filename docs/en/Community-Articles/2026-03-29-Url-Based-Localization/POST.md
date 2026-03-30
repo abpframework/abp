@@ -89,12 +89,12 @@ Blazor WebAssembly (WebApp) is similar. The server renders the first page via SS
 
 ### What works automatically
 
-| Feature | How it works |
-|---|---|
-| **Culture detection** | `RouteDataRequestCultureProvider` reads `{culture}` from the URL on the initial HTTP request (SSR). |
-| **Cookie persistence** | The middleware saves the detected culture to the `.AspNetCore.Culture` cookie, which persists across the WebSocket connection. |
-| **Menu URLs** | `AbpCultureMenuItemUrlProvider` prepends the culture prefix. In Blazor interactive circuits (where `HttpContext` is null — no active HTTP request), it falls back to `CultureInfo.CurrentCulture`. |
-| **Language switching** | The built-in `LanguageSwitch` component navigates to `/Abp/Languages/Switch` with `forceLoad: true`, triggering a full HTTP reload. The culture segment in the return URL is automatically replaced. |
+| Feature | Blazor Server | Blazor WebApp (WASM) |
+|---|---|---|
+| **Culture detection** | `RouteDataRequestCultureProvider` reads `{culture}` on the initial HTTP request (SSR). | Same — SSR on first load. |
+| **Cookie persistence** | Middleware saves the culture to `.AspNetCore.Culture` cookie, which persists across the WebSocket connection. | Cookie is set during SSR. WASM reads the `UseRouteBasedCulture` flag from `/api/abp/application-configuration`. |
+| **Menu URLs** | `AbpCultureMenuItemUrlProvider` prepends the culture prefix. Falls back to `CultureInfo.CurrentCulture` in interactive circuits where `HttpContext` is null. | `AbpWasmCultureMenuItemUrlProvider` reads the flag and language list from the cached application configuration. |
+| **Language switching** | `LanguageSwitch` navigates to `/Abp/Languages/Switch` with `forceLoad: true`, triggering a full HTTP reload. | `LanguageSwitch` replaces the culture segment in the URL client-side and navigates with `forceLoad: true`. |
 
 ### Important: Blazor component route limitation
 
@@ -128,14 +128,26 @@ You must **manually** add the `{culture}` route to each of your own Blazor pages
 
 ### Language switching uses forceLoad
 
-Language switching in Blazor triggers a **full page reload** rather than a SPA-style client navigation. This is by design — switching languages requires the server-side middleware to set the new culture, update the cookie, and re-render all localized text (menus, labels, content). This is the same behavior as ABP's built-in `LanguageSwitch` component:
+Language switching in Blazor triggers a **full page reload** rather than a SPA-style client navigation. This is by design — switching languages requires re-rendering all localized text (menus, labels, content) with the new culture.
+
+**Blazor Server** navigates to `/Abp/Languages/Switch` on the server, which rewrites the culture segment and redirects back:
 
 ```csharp
-// ABP BasicTheme LanguageSwitch.razor
 NavigationManager.NavigateTo(
     $"Abp/Languages/Switch?culture={language.CultureName}&uiCulture={language.UiCultureName}&returnUrl={relativeUrl}",
     forceLoad: true
 );
+```
+
+**Blazor WebApp (WASM)** replaces the culture segment directly in the URL client-side and navigates with `forceLoad: true`:
+
+```csharp
+var relativePath = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+// Replace the first path segment if it matches a known culture
+var newRelativePath = language.CultureName + remainingPath;
+NavigationManager.NavigateTo(
+    NavigationManager.ToAbsoluteUri(newRelativePath).ToString(),
+    forceLoad: true);
 ```
 
 Normal page-to-page navigation (within the same language) remains client-side and fast. Only language switching triggers a reload.
@@ -143,25 +155,29 @@ Normal page-to-page navigation (within the same language) remains client-side an
 ### Example module configuration
 
 ```csharp
+// Server project
 Configure<AbpRequestLocalizationOptions>(options =>
 {
     options.UseRouteBasedCulture = true;
 });
+
+// WASM client project — no UseRouteBasedCulture configuration needed.
+// The WASM client reads the flag from the server via /api/abp/application-configuration.
 ```
 
 ## Multi-Tenancy
 
 URL-based localization is fully compatible with ABP's multi-tenant routing. The culture route is handled as a separate routing layer from the tenant. Language switching explicitly supports tenant-prefixed URLs, so `/tenant-a/zh-Hans/About → /tenant-a/en/About` works without any additional configuration.
 
-> For details on combining tenant routing with culture routing, see the [Multi-Tenancy](https://docs.abp.io/en/abp/latest/Multi-Tenancy) documentation.
+> For details on combining tenant routing with culture routing, see the [Multi-Tenancy](https://abp.io/docs/latest/framework/architecture/multi-tenancy) documentation.
 
 ## UI Framework Support Overview
 
 | UI Framework | Route Registration | URL Generation | Menu URLs | Language Switch | Manual Work |
 |---|---|---|---|---|---|
-| **MVC / Razor Pages** | Automatic | Automatic | Automatic | Automatic | None |
-| **Blazor Server** | Manual `@page` routes | N/A | Automatic | Automatic (forceLoad) | Add `{culture}` route to pages |
-| **Blazor WebApp (WASM)** | Manual `@page` routes | N/A | Automatic | Automatic (forceLoad) | Add `{culture}` route to pages |
+| **MVC / Razor Pages** | Automatic | Automatic | Automatic | Server-side redirect | None |
+| **Blazor Server** | Manual `@page` routes | N/A | Automatic | Server-side redirect (forceLoad) | Add `{culture}` route to pages |
+| **Blazor WebApp (WASM)** | Manual `@page` routes | N/A | Automatic | Client-side URL replace (forceLoad) | Add `{culture}` route to pages |
 
 ## Summary
 
@@ -177,8 +193,8 @@ A runnable sample demonstrating this feature is available at [abp-samples/UrlBas
 
 ## References
 
-- [URL-Based Localization — ABP Documentation](https://docs.abp.io/en/abp/latest/URL-Based-Localization)
-- [Localization — ABP Documentation](https://docs.abp.io/en/abp/latest/Localization)
+- [URL-Based Localization — ABP Documentation](https://abp.io/docs/latest/framework/fundamentals/url-based-localization)
+- [Localization — ABP Documentation](https://abp.io/docs/latest/framework/fundamentals/localization)
 - [abp-samples/UrlBasedLocalization — GitHub](https://github.com/abpframework/abp-samples/tree/master/UrlBasedLocalization)
 - [Request Localization in ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/localization/select-language-culture)
 - [IETF BCP 47 Language Tags](https://www.rfc-editor.org/info/bcp47)
