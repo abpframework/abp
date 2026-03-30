@@ -77,7 +77,9 @@ public class DefaultAbpRequestLocalizationOptionsProvider :
 
                         if (abpRequestLocalizationOptions.UseRouteBasedCulture)
                         {
-                            options.RequestCultureProviders.Insert(0, new RouteDataRequestCultureProvider());
+                            options.RequestCultureProviders.InsertAfter(
+                                p => p is QueryStringRequestCultureProvider,
+                                new RouteDataRequestCultureProvider());
                         }
 
                         foreach (var configurator in abpRequestLocalizationOptions.RequestLocalizationOptionConfigurators)
