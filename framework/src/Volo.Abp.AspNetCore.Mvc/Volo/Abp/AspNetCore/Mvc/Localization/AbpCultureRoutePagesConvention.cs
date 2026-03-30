@@ -17,7 +17,7 @@ public class AbpCultureRoutePagesConvention : IPageRouteModelConvention
     /// </summary>
     internal const string CultureRouteTemplate = "{culture:regex(^[a-zA-Z]{{2,8}}(-[a-zA-Z0-9]{{1,8}})*$)}";
 
-    public void Apply(PageRouteModel model)
+    public virtual void Apply(PageRouteModel model)
     {
         var selectorsToAdd = new List<SelectorModel>();
 

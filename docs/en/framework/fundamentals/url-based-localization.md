@@ -79,17 +79,142 @@ ABP's built-in language switcher (the `/Abp/Languages/Switch` action) automatica
 
 No changes are needed in any theme or language switcher component.
 
+## MVC / Razor Pages
+
+MVC and Razor Pages have the most complete support. Everything works automatically when `UseRouteBasedCulture = true`:
+
+| Feature | How it works |
+|---|---|
+| **Route registration** | `AbpCultureRoutePagesConvention` adds `{culture}/...` route selectors to every Razor Page. MVC controllers get a `{culture}/{controller}/{action}` conventional route. |
+| **URL generation** | `AbpCultureRouteUrlHelperFactory` wraps `IUrlHelperFactory` to auto-inject the `{culture}` route value into `Url.Page()`, `Url.Action()`, and tag helpers. |
+| **Menu URLs** | `AbpCultureMenuItemUrlProvider` prepends the culture prefix to all local menu item URLs. |
+| **Language switching** | The `/Abp/Languages/Switch` action replaces the culture segment in the return URL and sets the cookie. |
+
+**No code changes are needed in your pages or controllers.** The framework handles everything.
+
+### Example middleware pipeline
+
+````csharp
+app.UseRouting();
+app.UseAbpRequestLocalization();
+app.UseAuthorization();
+app.UseConfiguredEndpoints();
+````
+
 ## Blazor Server
 
-Blazor Server uses SignalR (WebSocket), which does not re-run the HTTP middleware pipeline after the initial connection. ABP automatically persists the detected URL culture to a **Cookie** on the first request, so the entire Blazor circuit uses the correct language.
+Blazor Server uses SignalR (WebSocket) for the interactive circuit. The HTTP middleware pipeline only runs on the **initial page load** — subsequent interactions happen over the WebSocket connection. ABP handles this by persisting the detected URL culture to a **Cookie** on the first request, so the entire Blazor circuit uses the correct language.
 
-No additional configuration is needed beyond `UseRouteBasedCulture = true` and the correct middleware order.
+### What works automatically
 
-## Blazor WebAssembly
+| Feature | How it works |
+|---|---|
+| **Culture detection** | `RouteDataRequestCultureProvider` reads `{culture}` from the URL on the initial HTTP request (SSR). |
+| **Cookie persistence** | The middleware automatically saves the detected culture to `.AspNetCore.Culture` cookie, which persists across the WebSocket connection. |
+| **Menu URLs** | `AbpCultureMenuItemUrlProvider` prepends the culture prefix. In the interactive circuit (where `HttpContext` has no route values), it falls back to `CultureInfo.CurrentUICulture`. |
+| **Language switching** | The built-in `LanguageSwitch` component navigates to `/Abp/Languages/Switch` with `forceLoad: true`, triggering a full HTTP reload. The culture segment in the return URL is automatically replaced. |
 
-The server project handles culture detection via routing. The WebAssembly client reads the culture from the server's application configuration API, which already reflects the URL-based culture.
+### What requires manual changes
 
-No code changes are required in the WASM project.
+**Blazor component routes**: ASP.NET Core does not provide an `IPageRouteModelConvention` equivalent for Blazor components. You must manually add the `{culture}` route to each page:
+
+````razor
+@page "/"
+@page "/{culture}"
+
+@code {
+    [Parameter]
+    public string? Culture { get; set; }
+}
+````
+
+````razor
+@page "/About"
+@page "/{culture}/About"
+
+@code {
+    [Parameter]
+    public string? Culture { get; set; }
+}
+````
+
+> This applies to your own application pages. ABP built-in module pages (Identity, Tenant Management, etc.) do not need this change because language switching uses `forceLoad: true`, which always triggers a full HTTP request through the middleware pipeline.
+
+### Example module configuration
+
+````csharp
+PreConfigure<AbpAspNetCoreComponentsWebOptions>(options =>
+{
+    options.IsBlazorWebApp = true;
+});
+
+Configure<AbpRequestLocalizationOptions>(options =>
+{
+    options.UseRouteBasedCulture = true;
+});
+````
+
+### Example middleware pipeline
+
+````csharp
+app.UseRouting();
+app.UseAbpRequestLocalization();
+app.UseAntiforgery();
+app.UseConfiguredEndpoints(builder =>
+{
+    builder.MapRazorComponents<App>()
+        .AddInteractiveServerRenderMode();
+});
+````
+
+## Blazor WebAssembly (WebApp)
+
+Blazor WebAssembly (WASM) runs in the browser. On the **first page load**, the server renders the page via SSR, and the culture is detected from the URL. After WASM downloads, subsequent renders run in the browser. The WASM app fetches `/api/abp/application-configuration` from the server to get the current culture, so the culture stays consistent.
+
+### What works automatically
+
+| Feature | How it works |
+|---|---|
+| **SSR culture detection** | Same as Blazor Server — `RouteDataRequestCultureProvider` reads `{culture}` on the initial HTTP request. |
+| **Cookie persistence** | The cookie is set during SSR, ensuring the WASM client inherits the correct culture. |
+| **Menu URLs** | `AbpCultureMenuItemUrlProvider` handles culture prefix for menu items. |
+| **Language switching** | Uses the server's `/Abp/Languages/Switch` endpoint, which rewrites the culture segment in the URL and redirects. |
+
+### What requires manual changes
+
+Same as Blazor Server — you must manually add `@page "/{culture}/..."` routes to your Blazor pages.
+
+### Example module configuration
+
+````csharp
+// Server project
+PreConfigure<AbpAspNetCoreComponentsWebOptions>(options =>
+{
+    options.IsBlazorWebApp = true;
+});
+
+Configure<AbpRequestLocalizationOptions>(options =>
+{
+    options.UseRouteBasedCulture = true;
+});
+
+// WASM client project — no special configuration needed
+````
+
+### Example middleware pipeline
+
+````csharp
+app.UseRouting();
+app.UseAbpRequestLocalization();
+app.UseAntiforgery();
+app.UseConfiguredEndpoints(builder =>
+{
+    builder.MapRazorComponents<App>()
+        .AddInteractiveServerRenderMode()
+        .AddInteractiveWebAssemblyRenderMode()
+        .AddAdditionalAssemblies(clientAssembly);
+});
+````
 
 ## Multi-Tenancy Compatibility
 
@@ -119,3 +244,11 @@ Yes. All providers work together in priority order:
 ### Should I keep both localized and non-localized routes?
 
 Yes. ABP automatically registers both `{culture}/{controller}/{action}` and `{controller}/{action}` routes. The second route handles direct navigation to `/` and any controller action that doesn't have a culture prefix.
+
+### Why do Blazor pages need manual `@page "/{culture}/..."` routes?
+
+ASP.NET Core does not provide an `IPageRouteModelConvention` equivalent for Blazor components. Razor Pages routes are discovered through `PageRouteModel` which supports conventions, but Blazor component routes are compiled from `@page` directives into `[RouteAttribute]` at build time, with no runtime extension point. This is an ASP.NET Core platform limitation.
+
+### Do I need to add `{culture}` routes to ABP module pages (Identity, Settings, etc.)?
+
+No. Language switching in Blazor always uses `forceLoad: true`, which triggers a full HTTP request. The server-side middleware detects the culture from the URL path and sets the cookie. The interactive circuit then uses the cookie-based culture. Module pages work correctly without any changes.

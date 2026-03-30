@@ -81,11 +81,92 @@ Reading from the request cookie (rather than `CultureInfo.CurrentCulture`) is im
 
 No theme changes, no language switcher changes — the existing UI component just works.
 
+## Blazor Server & Blazor WebAssembly (WebApp)
+
+Blazor Server uses SignalR (WebSocket) for its interactive circuit. The HTTP middleware pipeline only runs on the **initial page load** — subsequent interactions happen over the WebSocket. ABP handles this by persisting the detected URL culture to a cookie on the first request, so the entire Blazor circuit uses the correct language.
+
+Blazor WebAssembly (WebApp) is similar. The server renders the first page via SSR and detects the culture from the URL. After WASM downloads, subsequent renders run in the browser. The WASM app reads the culture from the server's `/api/abp/application-configuration` response, so the culture stays consistent.
+
+### What works automatically
+
+| Feature | How it works |
+|---|---|
+| **Culture detection** | `RouteDataRequestCultureProvider` reads `{culture}` from the URL on the initial HTTP request (SSR). |
+| **Cookie persistence** | The middleware saves the detected culture to the `.AspNetCore.Culture` cookie, which persists across the WebSocket connection. |
+| **Menu URLs** | `AbpCultureMenuItemUrlProvider` prepends the culture prefix. In Blazor interactive circuits (where `HttpContext` is unavailable), it falls back to `CultureInfo.CurrentUICulture`. |
+| **Language switching** | The built-in `LanguageSwitch` component navigates to `/Abp/Languages/Switch` with `forceLoad: true`, triggering a full HTTP reload. The culture segment in the return URL is automatically replaced. |
+
+### Important: Blazor component route limitation
+
+In MVC / Razor Pages, ABP uses `AbpCultureRoutePagesConvention` (an `IPageRouteModelConvention`) to **automatically** add `{culture}/...` route selectors to every page at startup. No code changes needed.
+
+**Blazor components do not have this capability.** ASP.NET Core does not provide an `IPageRouteModelConvention` equivalent for Blazor components. Blazor routes are compiled from `@page` directives into `[RouteAttribute]` at build time, with no runtime extension point. This is an [ASP.NET Core platform limitation](https://github.com/dotnet/aspnetcore/issues/57167), not an ABP limitation.
+
+You must **manually** add the `{culture}` route to each of your own Blazor pages:
+
+```razor
+@page "/"
+@page "/{culture}"
+
+@code {
+    [Parameter]
+    public string? Culture { get; set; }
+}
+```
+
+```razor
+@page "/Products"
+@page "/{culture}/Products"
+
+@code {
+    [Parameter]
+    public string? Culture { get; set; }
+}
+```
+
+> **ABP's built-in module pages** (Identity, Tenant Management, Settings, etc.) do **not** need this change. Language switching always uses `forceLoad: true`, which triggers a full HTTP request through the middleware pipeline. The `{culture}` route is only needed for direct URL access like `/zh-Hans/Products`.
+
+### Language switching uses forceLoad
+
+Language switching in Blazor triggers a **full page reload** rather than a SPA-style client navigation. This is by design — switching languages requires the server-side middleware to set the new culture, update the cookie, and re-render all localized text (menus, labels, content). This is the same behavior as ABP's built-in `LanguageSwitch` component:
+
+```csharp
+// ABP BasicTheme LanguageSwitch.razor
+NavigationManager.NavigateTo(
+    $"Abp/Languages/Switch?culture={language.CultureName}&uiCulture={language.UiCultureName}&returnUrl={relativeUrl}",
+    forceLoad: true
+);
+```
+
+Normal page-to-page navigation (within the same language) remains client-side and fast. Only language switching triggers a reload.
+
+### Example module configuration
+
+```csharp
+PreConfigure<AbpAspNetCoreComponentsWebOptions>(options =>
+{
+    options.IsBlazorWebApp = true;
+});
+
+Configure<AbpRequestLocalizationOptions>(options =>
+{
+    options.UseRouteBasedCulture = true;
+});
+```
+
 ## Multi-Tenancy
 
 URL-based localization is fully compatible with ABP's multi-tenant routing. The culture route is handled as a separate routing layer from the tenant. Language switching explicitly supports tenant-prefixed URLs, so `/tenant-a/zh-Hans/About → /tenant-a/en/About` works without any additional configuration.
 
 > For details on combining tenant routing with culture routing, see the [Multi-Tenancy](https://docs.abp.io/en/abp/latest/Multi-Tenancy) documentation.
+
+## UI Framework Support Overview
+
+| UI Framework | Route Registration | URL Generation | Menu URLs | Language Switch | Manual Work |
+|---|---|---|---|---|---|
+| **MVC / Razor Pages** | Automatic | Automatic | Automatic | Automatic | None |
+| **Blazor Server** | Manual `@page` routes | N/A | Automatic | Automatic (forceLoad) | Add `{culture}` route to pages |
+| **Blazor WebApp (WASM)** | Manual `@page` routes | N/A | Automatic | Automatic (forceLoad) | Add `{culture}` route to pages |
 
 ## Summary
 
@@ -93,10 +174,11 @@ To add SEO-friendly localized URL paths to your ABP application:
 
 1. Set `options.UseRouteBasedCulture = true` in your module.
 2. Ensure `UseAbpRequestLocalization()` comes after `UseRouting()` in the pipeline.
+3. For **Blazor** projects, add `@page "/{culture}/..."` routes to your own pages.
 
 ABP automatically registers the culture route, adds `{culture}/...` selectors to all Razor Pages, rewrites URLs generated by `Url.Page()` and `Url.Action()`, updates navigation menus, and handles language switching — all without any changes to themes, menu contributors, or views.
 
-A runnable sample demonstrating this feature is available at [abp-samples/UrlBasedLocalization](https://github.com/abpframework/abp-samples/tree/master/UrlBasedLocalization). It includes English, Turkish, French, and Simplified Chinese, and is the quickest way to see the feature in action before integrating it into your own project.
+A runnable sample demonstrating this feature is available at [abp-samples/UrlBasedLocalization](https://github.com/abpframework/abp-samples/tree/master/UrlBasedLocalization). It includes MVC, Blazor Server, and Blazor WebApp projects with English, Turkish, French, and Simplified Chinese.
 
 ## References
 
