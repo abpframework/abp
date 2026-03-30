@@ -143,11 +143,6 @@ Normal page-to-page navigation (within the same language) remains client-side an
 ### Example module configuration
 
 ```csharp
-PreConfigure<AbpAspNetCoreComponentsWebOptions>(options =>
-{
-    options.IsBlazorWebApp = true;
-});
-
 Configure<AbpRequestLocalizationOptions>(options =>
 {
     options.UseRouteBasedCulture = true;

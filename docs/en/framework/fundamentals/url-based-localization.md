@@ -143,11 +143,6 @@ Blazor Server uses SignalR (WebSocket) for the interactive circuit. The HTTP mid
 ### Example module configuration
 
 ````csharp
-PreConfigure<AbpAspNetCoreComponentsWebOptions>(options =>
-{
-    options.IsBlazorWebApp = true;
-});
-
 Configure<AbpRequestLocalizationOptions>(options =>
 {
     options.UseRouteBasedCulture = true;
@@ -188,11 +183,6 @@ Same as Blazor Server — you must manually add `@page "/{culture}/..."` routes 
 
 ````csharp
 // Server project
-PreConfigure<AbpAspNetCoreComponentsWebOptions>(options =>
-{
-    options.IsBlazorWebApp = true;
-});
-
 Configure<AbpRequestLocalizationOptions>(options =>
 {
     options.UseRouteBasedCulture = true;
