@@ -2,12 +2,14 @@
 @using System.Globalization
 @using System.Collections.Immutable
 @using Volo.Abp.AspNetCore.Components.Web
+@using Volo.Abp.AspNetCore.Components.WebAssembly
 @using Volo.Abp.AspNetCore.Mvc.Client
 @inject ILanguageProvider LanguageProvider
 @inject IJSRuntime JsRuntime
 @inject ICookieService CookieService
 @inject NavigationManager NavigationManager
 @inject ICachedApplicationConfigurationClient ConfigurationClient
+@inject IRouteBasedCultureNavigationHelper CultureNavigationHelper
 @if (_otherLanguages != null && _otherLanguages.Any())
 {
     <BarDropdown RightAligned="true">
@@ -66,19 +68,8 @@
     {
         if (_useRouteBasedCulture)
         {
-            var relativePath = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
-            var slashIndex = relativePath.IndexOf('/');
-            var firstSegment = slashIndex >= 0 ? relativePath[..slashIndex] : relativePath;
-
-            var allCultures = _otherLanguages
-                .Select(l => l.CultureName)
-                .Append(_currentLanguage.CultureName);
-
-            var newRelativePath = allCultures.Any(c => string.Equals(c, firstSegment, StringComparison.OrdinalIgnoreCase))
-                ? language.CultureName + (slashIndex >= 0 ? relativePath[slashIndex..] : string.Empty)
-                : language.CultureName + "/" + relativePath;
-
-            NavigationManager.NavigateTo(NavigationManager.ToAbsoluteUri(newRelativePath).ToString(), forceLoad: true);
+            await CultureNavigationHelper.NavigateToNewCultureAsync(
+                NavigationManager, language, _otherLanguages.Append(_currentLanguage));
             return;
         }
 
