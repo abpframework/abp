@@ -62,7 +62,8 @@ As always, exciting articles have been contributed by the ABP community. I will 
    - [Operation Rate Limiting in ABP Framework](https://abp.io/community/articles/operation-rate-limiting-in-abp-framework-f4jtd6sn)
    - [Resource-Based Authorization in ABP Framework](https://abp.io/community/articles/resourcebased-authorization-in-abp-framework-choku1sn)
 - [One Endpoint, Many AI Clients: Turning ABP Workspaces into OpenAI-Compatible Models](https://abp.io/community/articles/turning-abp-workspaces-into-openai-compatible-endpoints-u3ls1gp4) by [Engincan Veske](https://abp.io/community/members/EngincanV)
-- [Automatically Validate Your Documentation: How We Built a Tutorial Validator](https://abp.io/community/articles/automatically-validate-your-documentation-m3ozgkhv) by [Mansur Besleney](https://abp.io/community/members/mansur.besleney)- [Automate Localhost Access for Expo: A Guide to Dynamic Cloudflare Tunnels & Dev Builds](https://abp.io/community/articles/automate-localhost-access-for-expo-a-guide-to-dynamic-7cblqtj3) by [Sumeyye Kurtulus](https://abp.io/community/members/sumeyye.kurtulus)
+- [Automatically Validate Your Documentation: How We Built a Tutorial Validator](https://abp.io/community/articles/automatically-validate-your-documentation-m3ozgkhv) by [Mansur Besleney](https://abp.io/community/members/mansur.besleney)
+- [Automate Localhost Access for Expo: A Guide to Dynamic Cloudflare Tunnels & Dev Builds](https://abp.io/community/articles/automate-localhost-access-for-expo-a-guide-to-dynamic-7cblqtj3) by [Sumeyye Kurtulus](https://abp.io/community/members/sumeyye.kurtulus)
 
 Thanks to the ABP Community for all the content they have published. You can also [post your ABP related (text or video) content](https://abp.io/community/posts/create) to the ABP Community.
 
