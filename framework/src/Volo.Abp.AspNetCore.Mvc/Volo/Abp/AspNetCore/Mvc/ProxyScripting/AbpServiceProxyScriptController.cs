@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Auditing;
 using Volo.Abp.Http;
@@ -29,11 +30,11 @@ public class AbpServiceProxyScriptController : AbpController
 
     [HttpGet]
     [Produces(MimeTypes.Application.Javascript, MimeTypes.Text.Plain)]
-    public virtual ActionResult GetAll(ServiceProxyGenerationModel model)
+    public virtual async Task<ActionResult> GetAll(ServiceProxyGenerationModel model)
     {
         model.Normalize();
 
-        var script = ProxyScriptManager.GetScript(model.CreateOptions());
+        var script = await ProxyScriptManager.GetScriptAsync(model.CreateOptions());
 
         return Content(
             Options.MinifyGeneratedScript == true

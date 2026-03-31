@@ -59,7 +59,7 @@ public class SolutionRenamer
         RenameHelper.RenameAll(_entries, _projectNamePlaceHolder.ToCamelCase(), ToCamelCaseWithNamespace(_projectName));
         RenameHelper.RenameAll(_entries, _projectNamePlaceHolder.ToKebabCase(), _projectName.ToKebabCase());
         RenameHelper.RenameAll(_entries, _projectNamePlaceHolder.ToLowerInvariant(), _projectName.ToLowerInvariant());
-        RenameHelper.RenameAll(_entries, _projectNamePlaceHolder.ToSnakeCase().ToUpper(), _projectName.ToSnakeCase().ToUpper());
+        RenameHelper.RenameAll(_entries, _projectNamePlaceHolder.ToSnakeCase().ToUpperInvariant(), _projectName.ToSnakeCase().ToUpperInvariant());
     }
 
     private static string ToCamelCaseWithNamespace(string name)
