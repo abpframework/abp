@@ -23,6 +23,11 @@ public class AbpWasmCultureMenuItemUrlProvider : IMenuItemUrlProvider, ITransien
 
     public virtual async Task HandleAsync(MenuItemUrlProviderContext context)
     {
+        if (!OperatingSystem.IsBrowser())
+        {
+            return;
+        }
+
         var config = await ConfigurationClient.GetAsync();
         if (!config.Localization.UseRouteBasedCulture)
         {
@@ -35,7 +40,7 @@ public class AbpWasmCultureMenuItemUrlProvider : IMenuItemUrlProvider, ITransien
             return;
         }
 
-        PrependCulturePrefix(context.Menu, "/" + culture);
+        MenuItemCulturePrefixHelper.PrependCulturePrefix(context.Menu, "/" + culture);
     }
 
     protected virtual string? GetCulture(Mvc.ApplicationConfigurations.ApplicationConfigurationDto config)
@@ -53,23 +58,4 @@ public class AbpWasmCultureMenuItemUrlProvider : IMenuItemUrlProvider, ITransien
         return isKnownCulture ? currentCulture : null;
     }
 
-    protected virtual void PrependCulturePrefix(IHasMenuItems menuWithItems, string prefix)
-    {
-        foreach (var item in menuWithItems.Items)
-        {
-            if (item.Url != null)
-            {
-                if (item.Url.StartsWith("~/"))
-                {
-                    item.Url = "~" + prefix + item.Url[1..];
-                }
-                else if (item.Url.StartsWith('/'))
-                {
-                    item.Url = prefix + item.Url;
-                }
-            }
-
-            PrependCulturePrefix(item, prefix);
-        }
-    }
 }

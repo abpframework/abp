@@ -44,8 +44,7 @@ public class AbpCultureMenuItemUrlProvider : IMenuItemUrlProvider, ITransientDep
             return Task.CompletedTask;
         }
 
-        var prefix = "/" + culture;
-        PrependCulturePrefix(context.Menu, prefix);
+        MenuItemCulturePrefixHelper.PrependCulturePrefix(context.Menu, "/" + culture);
 
         return Task.CompletedTask;
     }
@@ -66,23 +65,4 @@ public class AbpCultureMenuItemUrlProvider : IMenuItemUrlProvider, ITransientDep
         return isKnownCulture ? currentCulture : null;
     }
 
-    protected virtual void PrependCulturePrefix(IHasMenuItems menuWithItems, string prefix)
-    {
-        foreach (var item in menuWithItems.Items)
-        {
-            if (item.Url != null)
-            {
-                if (item.Url.StartsWith("~/"))
-                {
-                    item.Url = "~" + prefix + item.Url[1..];
-                }
-                else if (item.Url.StartsWith('/'))
-                {
-                    item.Url = prefix + item.Url;
-                }
-            }
-
-            PrependCulturePrefix(item, prefix);
-        }
-    }
 }
