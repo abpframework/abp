@@ -7,7 +7,13 @@
 
 # Package Version Changes
 
-## 10.3.0-rc.1
+## 10.2.0-rc.4
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| Scriban | 6.6.0 | 7.0.0 | #25170 |
+
+## 10.2.0-rc.3
 
 | Package | Old Version | New Version | PR |
 |---------|-------------|-------------|-----|
