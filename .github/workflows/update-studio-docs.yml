@@ -18,9 +18,9 @@ on:
         description: 'Release URL'
         required: true
       target_branch:
-        description: 'Target branch (default: dev)'
+        description: 'Target branch (leave empty to auto-detect from latest stable ABP release)'
         required: false
-        default: 'dev'
+        default: ''
 
 jobs:
   update-docs:
@@ -41,7 +41,7 @@ jobs:
             echo "version=${{ github.event.client_payload.version }}" >> $GITHUB_OUTPUT
             echo "name=${{ github.event.client_payload.name }}" >> $GITHUB_OUTPUT
             echo "url=${{ github.event.client_payload.url }}" >> $GITHUB_OUTPUT
-            echo "target_branch=${{ github.event.client_payload.target_branch || 'dev' }}" >> $GITHUB_OUTPUT
+            echo "target_branch=${{ github.event.client_payload.target_branch }}" >> $GITHUB_OUTPUT
             
             # Save notes to environment variable (multiline)
             {
@@ -53,7 +53,7 @@ jobs:
             echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
             echo "name=${{ github.event.inputs.name }}" >> $GITHUB_OUTPUT
             echo "url=${{ github.event.inputs.url }}" >> $GITHUB_OUTPUT
-            echo "target_branch=${{ github.event.inputs.target_branch || 'dev' }}" >> $GITHUB_OUTPUT
+            echo "target_branch=${{ github.event.inputs.target_branch }}" >> $GITHUB_OUTPUT
             
             # Save notes to environment variable (multiline)
             {
@@ -63,12 +63,55 @@ jobs:
             } >> $GITHUB_ENV
           fi
 
+      # -------------------------------------------------
+      # Resolve target branch (auto-detect from latest stable ABP if not provided)
+      # -------------------------------------------------
+      - name: Resolve target branch
+        id: resolve_branch
+        run: |
+          TARGET_BRANCH="${{ steps.payload.outputs.target_branch }}"
+          
+          if [ -z "$TARGET_BRANCH" ]; then
+            echo "🔍 No target_branch provided - fetching latest stable ABP release..."
+            
+            RELEASES=$(curl -fsS \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/repos/abpframework/abp/releases?per_page=20")
+            
+            ABP_VERSION=$(echo "$RELEASES" | jq -r '
+              [.[] | select(
+                (.prerelease == false) and
+                (.tag_name | test("preview|rc|beta|dev"; "i") | not)
+              )] | first | .tag_name
+            ')
+            
+            if [ -z "$ABP_VERSION" ] || [ "$ABP_VERSION" = "null" ]; then
+              echo "❌ Could not determine latest stable ABP version"
+              exit 1
+            fi
+            
+            # Derive rel-X.Y from X.Y.Z (e.g., 10.1.1 -> rel-10.1)
+            TARGET_BRANCH=$(echo "$ABP_VERSION" | grep -oE '^[0-9]+\.[0-9]+' | sed 's/^/rel-/')
+            
+            if [ -z "$TARGET_BRANCH" ]; then
+              echo "❌ Could not derive target branch from version: $ABP_VERSION"
+              exit 1
+            fi
+            
+            echo "✅ Auto-detected target branch: $TARGET_BRANCH (from ABP $ABP_VERSION)"
+          else
+            echo "✅ Using provided target branch: $TARGET_BRANCH"
+          fi
+          
+          echo "target_branch=$TARGET_BRANCH" >> $GITHUB_OUTPUT
+
       - name: Validate payload
         env:
           VERSION: ${{ steps.payload.outputs.version }}
           NAME: ${{ steps.payload.outputs.name }}
           URL: ${{ steps.payload.outputs.url }}
-          TARGET_BRANCH: ${{ steps.payload.outputs.target_branch }}
+          TARGET_BRANCH: ${{ steps.resolve_branch.outputs.target_branch }}
         run: |
           if [ -z "$VERSION" ] || [ "$VERSION" = "null" ]; then
             echo "❌ Missing: version"
@@ -98,7 +141,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ steps.payload.outputs.target_branch }}
+          ref: ${{ steps.resolve_branch.outputs.target_branch }}
           fetch-depth: 0
 
       - name: Configure git
@@ -563,7 +606,7 @@ jobs:
           VERSION: ${{ steps.payload.outputs.version }}
           NAME: ${{ steps.payload.outputs.name }}
           URL: ${{ steps.payload.outputs.url }}
-          TARGET_BRANCH: ${{ steps.payload.outputs.target_branch }}
+          TARGET_BRANCH: ${{ steps.resolve_branch.outputs.target_branch }}
         run: |
           # Check for existing PR
           EXISTING_PR=$(gh pr list \
@@ -593,7 +636,8 @@ jobs:
             
             gh pr edit "$EXISTING_PR" \
               --title "docs(studio): release $VERSION - $NAME" \
-              --body "$PR_BODY"
+              --body "$PR_BODY" \
+              --add-reviewer skoc10
             
             echo "PR_NUMBER=$EXISTING_PR" >> $GITHUB_ENV
           else
@@ -605,7 +649,8 @@ jobs:
               --title "docs(studio): release $VERSION - $NAME" \
               --body "$PR_BODY" \
               --base "$TARGET_BRANCH" \
-              --head "$BRANCH")
+              --head "$BRANCH" \
+              --reviewer skoc10)
             
             PR_NUMBER=$(echo "$PR_URL" | grep -oE '[0-9]+$')
             echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
@@ -643,7 +688,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Version**: $VERSION" >> $GITHUB_STEP_SUMMARY
           echo "**Release**: ${{ steps.payload.outputs.name }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Target Branch**: ${{ steps.payload.outputs.target_branch }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Target Branch**: ${{ steps.resolve_branch.outputs.target_branch }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
           if [ "${{ steps.changes.outputs.has_changes }}" = "true" ]; then
