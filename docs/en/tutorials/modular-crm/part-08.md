@@ -5,21 +5,14 @@
 }
 ```
 
-```json
-//[doc-params]
-{
-  "UI": ["MVC", "NG"]
-}
-```
-
-# Integrating the Modules: Joining the Products and Orders Data
-
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","BlazorWebApp"]
+    "UI": ["MVC", "BlazorWebApp", "NG"]
 }
 ````
+
+# Integrating the Modules: Joining the Products and Orders Data
 
 ````json
 //[doc-nav]

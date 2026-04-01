@@ -7,17 +7,10 @@
 
 # Integrating the Modules: Implementing Integration Services
 
-```json
-//[doc-params]
-{
-  "UI": ["MVC", "NG"]
-}
-```
-
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","BlazorWebApp"]
+    "UI": ["MVC", "BlazorWebApp", "NG"]
 }
 ````
 
@@ -293,6 +286,12 @@ Open the `Index.cshtml` file, and change the `@order.ProductId` part to `@order.
 </abp-card>
 ````
 
+That's all. Now, you can graph build the main application and run it in ABP Studio to see the result:
+
+![abp-studio-browser-list-of-orders-with-product-name](images/abp-studio-browser-list-of-orders-with-product-name.png)
+
+As you can see, we can see the product names instead of product IDs.
+
 {{else if UI == "BlazorWebApp"}}
 
 Open the `Index.razor` file, and change the `@order.ProductId` part to `@order.ProductName` to write the product name instead of the product ID. The final `Index.razor` content should be the following:
@@ -331,8 +330,6 @@ Open the `Index.razor` file, and change the `@order.ProductId` part to `@order.P
 }
 ````
 
-{{end}}
-
 That's all. Now, you can graph build the main application and run it in ABP Studio to see the result:
 
 ![abp-studio-browser-list-of-orders-with-product-name](images/abp-studio-browser-list-of-orders-with-product-name.png)
@@ -361,4 +358,4 @@ Then run the Angular app (`yarn start` in the `angular` folder), navigate to the
 
 ## Conclusion
 
-In this part of the tutorial, you created and consumed an integration service between modules, then reflected the product name on the {{if UI == "MVC"}}MVC{{else if UI == "NG"}}Angular{{end}} UI. In the [next part](part-07.md), we will explore event based messaging between the modules.
+In this part of the tutorial, you created and consumed an integration service between modules, then reflected the product name on the {{if UI == "MVC"}}MVC{{else if UI == "BlazorWebApp"}}Blazor WebApp{{else if UI == "NG"}}Angular{{end}} UI. In the [next part](part-07.md), we will explore event based messaging between the modules.
