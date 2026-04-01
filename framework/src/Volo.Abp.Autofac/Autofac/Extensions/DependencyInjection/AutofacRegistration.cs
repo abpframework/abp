@@ -337,7 +337,6 @@ public static class AutofacRegistration
 
                     var serviceProvider = context.Resolve<IServiceProvider>();
 
-                    var keyedService = (Autofac.Core.KeyedService)requestContext.Service;
                     var key = requestContext.Parameters.KeyedServiceKey<object>();
 
                     return descriptor.KeyedImplementationFactory(serviceProvider, key);
