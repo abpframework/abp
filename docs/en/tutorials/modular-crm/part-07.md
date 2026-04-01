@@ -7,17 +7,10 @@
 
 # Integrating the Modules: Communication via Messages (Events)
 
-```json
-//[doc-params]
-{
-  "UI": ["MVC", "NG"]
-}
-```
-
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","BlazorWebApp"]
+    "UI": ["MVC", "BlazorWebApp", "NG"]
 }
 ````
 
