@@ -28,15 +28,15 @@ Here is a brief list of titles explained in the next sections:
 - Entity Cache: New Batch APIs (`FindMany*` / `GetMany*`)
 - Angular: User/Tenant Sharing and Tenant Switch Experience
 - Angular: Upgrade to 21.2 + TypeScript 5.9
-- Security Improvements (Commercial Account Module)
-- `Volo.Abp.LuckyPenny.AutoMapper` Package for Commercial AutoMapper Integration
+- Security Improvements (Account Pro Module)
+- `Volo.Abp.LuckyPenny.AutoMapper` Package for Pro AutoMapper Integration
 
 ### OpenIddict: `private_key_jwt` Client Authentication + `abp generate-jwks`
 
 ABP v10.3 introduces end-to-end support for OpenIddict `private_key_jwt` client authentication.  
 Instead of using a shared `client_secret`, clients can now authenticate with an asymmetric key pair: keep the private key on the client, and register the public key (JWKS) on the authorization server.
 
-On the open-source side, ABP CLI now includes the `abp generate-jwks` command (and the OpenIddict demo was updated accordingly). On the commercial side, OpenIddict application management now supports storing and validating JWKS for confidential applications.
+On the open-source side, ABP CLI now includes the `abp generate-jwks` command (and the OpenIddict demo was updated accordingly). On the Pro side, OpenIddict application management now supports storing and validating JWKS for confidential applications.
 
 This is especially useful for machine-to-machine and compliance-focused environments where shared secrets are not preferred.
 
@@ -46,6 +46,7 @@ This is especially useful for machine-to-machine and compliance-focused environm
 abp generate-jwks --alg RS256 --key-size 2048 -o ./keys -f my-client
 ```
 > For a full walkthrough, check the community article: [Secure Client Authentication with private_key_jwt in ABP 10.3](https://abp.io/community/articles/secure-client-authentication-with-privatekeyjwt-in-abp-b2rf18bc).
+> This is especially useful for Pro solutions that manage confidential clients in the administration UI.
 
 ### Event Bus: String-Based Event Publishing with Dynamic Payload
 
@@ -175,16 +176,50 @@ The existing `Volo.Abp.AutoMapper` package remains unchanged, and migration is s
 
 This update also addresses the AutoMapper 14.x vulnerability context ([GHSA-rvv3-g6hj-g44x](https://github.com/advisories/GHSA-rvv3-g6hj-g44x)), and ABP documentation was expanded with installation, usage, and migration guidance. To more information, please refer to the documentation: [LuckyPenny AutoMapper Integration](https://abp.io/docs/10.3/framework/infrastructure/luckypenny-automapper)
 
-### Security Improvements (Commercial Account Module)
+### Security Improvements (Account Pro Module)
 
-ABP Commercial v10.3 RC also includes notable account security improvements:
+ABP Commercial v10.3 RC also includes notable account security hardening:
 
 - Optional CAPTCHA for forgot-password flow
-- New/updated rate limiting for account confirmation/token operations
-- Session revocation after sensitive credential operations
-- Stronger profile picture upload validation (size/type/magic bytes)
+- Operation-based rate limiting policies for account confirmation/token operations (including updated/default policies for reset and token endpoints)
+- Session revocation after sensitive credential operations (password change/reset/admin reset)
+- Stronger profile picture upload validation (allowed extensions, max size, and magic-bytes checks)
 
-These improvements are security-focused and may require minor configuration review depending on your application behavior.
+These changes are security-focused and are designed to be practical for real projects. Here are the key points and how you can tune them:
+
+- **Forgot-password abuse protection**: You can enable CAPTCHA for forgot-password flows to reduce automated reset attempts.
+- **Operation-level rate limiting**: Token/confirmation/reset operations now rely on policy-based limits, so you can centralize and customize limits per operation.
+- **Safer session behavior**: Password changes/resets now revoke sessions to reduce risk from stolen or long-lived sessions.
+- **Profile picture hardening**: Uploads are checked by extension, size, and file signature (magic bytes), not only by client-provided metadata.
+
+**Example - Tune profile picture upload restrictions:**
+
+```csharp
+Configure<AbpProfilePictureOptions>(options =>
+{
+    options.AllowedFileExtensions = new[] { ".jpg", ".jpeg", ".png" };
+    options.MaxFileSizeInBytes = 2 * 1024 * 1024; // 2 MB
+});
+```
+
+**Example - Override account operation rate-limiting policies:**
+
+```csharp
+Configure<AbpOperationRateLimitingOptions>(options =>
+{
+    options.ConfigurePolicy(
+        AbpAccountOperationRateLimitPolicies.SendPasswordResetCode,
+        policy =>
+        {
+            policy.ClearRules();
+            policy.PerHour(5);
+            policy.PerDay(20);
+        });
+});
+```
+
+For conceptual guidance, you can also check:
+- [Operation Rate Limiting in ABP Framework](https://abp.io/community/articles/operation-rate-limiting-in-abp-framework-f4jtd6sn)
 
 ### Other Improvements and Enhancements
 
