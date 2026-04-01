@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
@@ -47,6 +48,17 @@ public class AbpRequestLocalizationMiddleware : AbpMiddlewareBase, ITransientDep
                         context,
                         requestCultureFeature.RequestCulture
                     );
+                }
+
+                // Only manage HasRouteCulture cookie for Blazor component page requests.
+                // This cookie is used by AbpCultureMenuItemUrlProvider to determine if the
+                // initial SSR page had a culture prefix, since the Blazor interactive circuit
+                // (/_blazor) does not carry the original route values.
+                var endpoint = context.GetEndpoint();
+                if (endpoint?.Metadata.Any(m => m.GetType().Name == "ComponentTypeMetadata") == true)
+                {
+                    AbpRequestCultureCookieHelper.SetHasRouteCultureCookie(
+                        context, requestCultureFeature?.Provider is RouteDataRequestCultureProvider);
                 }
             }
 

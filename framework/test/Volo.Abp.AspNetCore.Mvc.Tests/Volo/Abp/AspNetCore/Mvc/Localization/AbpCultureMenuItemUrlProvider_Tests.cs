@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -38,33 +39,18 @@ public class AbpCultureMenuItemUrlProvider_Tests
     }
 
     [Fact]
-    public async Task Should_Not_Add_Prefix_When_HttpContext_Has_No_Culture_Route()
+    public async Task Should_Not_Add_Prefix_For_Mvc_Request_Without_Culture()
     {
-        // HttpContext exists but has no {culture} route value (e.g. MVC request to /about).
-        // No prefix should be added to keep URL style consistent with the current page.
-        var provider = CreateProvider(useRouteBasedCulture: true, cultureName: null);
-        var menu = CreateMenuWithItems("/home", "/about");
-
-        await provider.HandleAsync(new MenuItemUrlProviderContext(menu));
-
-        menu.Items[0].Url.ShouldBe("/home");
-        menu.Items[1].Url.ShouldBe("/about");
-    }
-
-    [Fact]
-    public async Task Should_Not_Add_Prefix_When_HttpContext_Has_No_Culture_Route_Even_With_Known_Languages()
-    {
-        // HttpContext exists but has no {culture} route value, even though CurrentCulture
-        // matches a known language. No prefix should be added because the current request
-        // does not have a culture segment in the URL.
-        var httpContext = new DefaultHttpContext(); // no culture route value
+        // MVC request to /about (no culture, no HasRouteCulture cookie).
+        var httpContext = new DefaultHttpContext();
+        httpContext.Request.RouteValues["controller"] = "Home";
+        httpContext.Request.RouteValues["action"] = "About";
         var httpContextAccessor = new HttpContextAccessor { HttpContext = httpContext };
         var localizationOptions = MsOptions.Create(
             new AbpRequestLocalizationOptions { UseRouteBasedCulture = true });
         var abpLocOptions = new AbpLocalizationOptions();
         abpLocOptions.Languages.Add(new LanguageInfo("en"));
         abpLocOptions.Languages.Add(new LanguageInfo("zh-Hans"));
-        abpLocOptions.Languages.Add(new LanguageInfo("tr"));
         var provider = new AbpCultureMenuItemUrlProvider(
             httpContextAccessor, localizationOptions, MsOptions.Create(abpLocOptions));
 
@@ -83,6 +69,39 @@ public class AbpCultureMenuItemUrlProvider_Tests
 
         menu.Items[0].Url.ShouldBe("/home");
         menu.Items[1].Url.ShouldBe("/about");
+    }
+
+    [Fact]
+    public async Task Should_Fallback_To_CurrentCulture_In_Blazor_Circuit()
+    {
+        // Blazor Server interactive circuit: HttpContext exists (SignalR) but has
+        // no route culture. Cookie was set during SSR indicating route culture was used.
+        var httpContext = new DefaultHttpContext();
+        httpContext.Request.Headers["Cookie"] = $"{AbpRequestCultureCookieHelper.HasRouteCultureCookieName}=1";
+        var httpContextAccessor = new HttpContextAccessor { HttpContext = httpContext };
+        var localizationOptions = MsOptions.Create(
+            new AbpRequestLocalizationOptions { UseRouteBasedCulture = true });
+        var abpLocOptions = new AbpLocalizationOptions();
+        abpLocOptions.Languages.Add(new LanguageInfo("en"));
+        abpLocOptions.Languages.Add(new LanguageInfo("zh-Hans"));
+        var provider = new AbpCultureMenuItemUrlProvider(
+            httpContextAccessor, localizationOptions, MsOptions.Create(abpLocOptions));
+
+        var menu = CreateMenuWithItems("/home", "/about");
+
+        var previousCulture = CultureInfo.CurrentCulture;
+        try
+        {
+            CultureInfo.CurrentCulture = new CultureInfo("zh-Hans");
+            await provider.HandleAsync(new MenuItemUrlProviderContext(menu));
+        }
+        finally
+        {
+            CultureInfo.CurrentCulture = previousCulture;
+        }
+
+        menu.Items[0].Url.ShouldBe("/zh-Hans/home");
+        menu.Items[1].Url.ShouldBe("/zh-Hans/about");
     }
 
     [Fact]
@@ -257,4 +276,5 @@ public class AbpCultureMenuItemUrlProvider_Tests
         }
         return menu;
     }
+
 }

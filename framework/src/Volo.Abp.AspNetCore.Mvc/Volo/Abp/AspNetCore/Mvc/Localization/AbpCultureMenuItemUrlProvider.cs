@@ -54,10 +54,10 @@ public class AbpCultureMenuItemUrlProvider : IMenuItemUrlProvider, ITransientDep
         var httpContext = HttpContextAccessor.HttpContext;
         if (httpContext != null)
         {
-            return httpContext.GetRouteValue("culture")?.ToString();
+            return AbpRequestCultureCookieHelper.GetRouteCulture(httpContext);
         }
 
-        // No HttpContext: Blazor interactive circuit or WASM client.
+        // No HttpContext: fallback to CurrentCulture.
         var currentCulture = CultureInfo.CurrentCulture.Name;
         var isKnownCulture = AbpLocalizationOptions.Value.Languages
             .Any(l => string.Equals(l.CultureName, currentCulture, StringComparison.OrdinalIgnoreCase));

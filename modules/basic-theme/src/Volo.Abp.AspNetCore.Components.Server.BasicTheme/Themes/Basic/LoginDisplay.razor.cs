@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.RequestLocalization;
 using Volo.Abp.UI.Navigation;
 
 namespace Volo.Abp.AspNetCore.Components.Server.BasicTheme.Themes.Basic;
@@ -27,7 +27,7 @@ public partial class LoginDisplay : IDisposable
 
     protected string GetLoginUrl()
     {
-        var culture = HttpContextAccessor.HttpContext?.GetRouteValue("culture")?.ToString();
+        var culture = AbpRequestCultureCookieHelper.GetRouteCulture(HttpContextAccessor.HttpContext);
         return string.IsNullOrEmpty(culture) ? "Account/Login" : $"{culture}/Account/Login";
     }
 
