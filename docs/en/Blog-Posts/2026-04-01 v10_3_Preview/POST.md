@@ -28,8 +28,8 @@ Here is a brief list of titles explained in the next sections:
 - Entity Cache: New Batch APIs (`FindMany*` / `GetMany*`)
 - Angular: User/Tenant Sharing and Tenant Switch Experience
 - Angular: Upgrade to 21.2 + TypeScript 5.9
+- Introducing the `Volo.Abp.LuckyPenny.AutoMapper` Provider
 - Security Improvements (Account Pro Module)
-- `Volo.Abp.LuckyPenny.AutoMapper` Package for Pro AutoMapper Integration
 
 ### OpenIddict: `private_key_jwt` Client Authentication + `abp generate-jwks`
 
@@ -45,16 +45,16 @@ This is especially useful for machine-to-machine and compliance-focused environm
 ```bash
 abp generate-jwks --alg RS256 --key-size 2048 -o ./keys -f my-client
 ```
-> For a full walkthrough, check the community article: [Secure Client Authentication with private_key_jwt in ABP 10.3](https://abp.io/community/articles/secure-client-authentication-with-privatekeyjwt-in-abp-b2rf18bc).
-> This is especially useful for Pro solutions that manage confidential clients in the administration UI.
+> See the community article [Secure Client Authentication with private_key_jwt in ABP 10.3](https://abp.io/community/articles/secure-client-authentication-with-privatekeyjwt-in-abp-b2rf18bc) for a full walkthrough.
+> This approach is especially useful for Pro solutions that manage confidential clients in the administration UI.
 
 ### Event Bus: String-Based Event Publishing with Dynamic Payload
 
-ABP v10.3 makes event-driven integrations significantly more flexible with string-based publishing and subscription APIs.
+ABP v10.3 adds string-based publishing and subscription APIs for event-driven integrations.
 
 When you do not know event types at compile time, you can now publish and handle events by name without introducing extra wrapper contracts up front. This is especially useful for plugin ecosystems, partner integrations, and metadata-driven application flows.
 
-Best of all, this is not a separate eventing model. Dynamic events run through the same ABP infrastructure you already rely on (including outbox/inbox when configured), can be handled through `DynamicEventData`, and can coexist with typed handlers for the same event name. Distributed providers support this approach except Dapr, which requires startup-time topic declarations.
+This is not a separate eventing model. Dynamic events run through the same ABP infrastructure (including outbox/inbox when configured), can be handled through `DynamicEventData`, and can coexist with typed handlers for the same event name. Distributed providers support this approach except Dapr, which requires startup-time topic declarations.
 
 **Example - Publish by event name:**
 
@@ -81,7 +81,7 @@ public class PartnerOrderHandler : IDistributedEventHandler<DynamicEventData>
 }
 ```
 
-> You can check the [Dynamic Events in ABP](https://github.com/abpframework/abp/blob/dev/docs/en/Community-Articles/2026-03-23-Dynamic-Events-in-ABP/POST.md) post for more information.
+> See the community article [Dynamic Events in ABP](https://abp.io/community/articles/dynamic-events-in-abp-dukq95m1) for details.
 
 ### Background Jobs/Workers: String-Based Publishing with Dynamic Payload
 
@@ -111,7 +111,7 @@ await workerManager.UpdateScheduleAsync(
 );
 ```
 
-> See [abpframework/abp#25059](https://github.com/abpframework/abp/pull/25059) and the community article [Dynamic Background Jobs and Workers in ABP](https://abp.io/community/articles/dynamic-background-jobs-and-workers-in-abp-wfdkdsq9) for full examples and provider-specific details.
+> See [#25059](https://github.com/abpframework/abp/pull/25059) and the community article [Dynamic Background Jobs and Workers in ABP](https://abp.io/community/articles/dynamic-background-jobs-and-workers-in-abp-wfdkdsq9) for details.
 
 ### API Definition Endpoint: Descriptions and Documentation Support
 
@@ -119,7 +119,7 @@ The API definition endpoint can now optionally return richer metadata such as su
 
 This is particularly useful for dynamic client generation, API explorers, and tooling that consumes ABP API metadata directly without requiring OpenAPI parsing.
 
-> See [abpframework/abp#25022](https://github.com/abpframework/abp/pull/25022) for details.
+> See [#25022](https://github.com/abpframework/abp/pull/25022) for details.
 
 ### Entity Cache: New Batch APIs (`FindMany*` / `GetMany*`)
 
@@ -150,7 +150,7 @@ if (nullableProductsById.TryGetValue(id1, out var product) && product != null)
 
 All of these methods are optimized for bulk scenarios by internally batching cache misses via distributed cache multi-get/multi-add operations.
 
-> See [abpframework/abp#25088](https://github.com/abpframework/abp/pull/25088) and [abpframework/abp#25090](https://github.com/abpframework/abp/pull/25090) for details.
+> See [#25088](https://github.com/abpframework/abp/pull/25088) and [#25090](https://github.com/abpframework/abp/pull/25090) for details.
 
 ### Angular: User/Tenant Sharing and Tenant Switch Experience
 
@@ -158,7 +158,7 @@ ABP v10.3 enhances Angular UX for shared-user multi-tenancy scenarios, including
 
 This improves the out-of-the-box experience for applications using tenant user sharing.
 
-> See [abpframework/abp#25051](https://github.com/abpframework/abp/pull/25051) for details.
+> See [#25051](https://github.com/abpframework/abp/pull/25051) for details.
 
 ### Angular: Upgrade to 21.2 + TypeScript 5.9
 
@@ -166,15 +166,15 @@ ABP v10.3 upgrades Angular to **21.2** and TypeScript to **5.9**, bringing the A
 
 This helps you stay current with the modern Angular and TypeScript ecosystem while benefiting from newer compiler/tooling improvements and maintaining compatibility with the ABP Angular packages in this release.
 
-> See [abpframework/abp#25072](https://github.com/abpframework/abp/pull/25072) for details.
+> See [#25072](https://github.com/abpframework/abp/pull/25072) for details.
 
-### `Volo.Abp.LuckyPenny.AutoMapper` Package for LuckyPenny AutoMapper Integration
+### Introducing the `Volo.Abp.LuckyPenny.AutoMapper` Provider
 
-ABP v10.3 introduces `Volo.Abp.LuckyPenny.AutoMapper` as a new optional integration package and an alternative module for projects that want to use the LuckyPenny-maintained AutoMapper line.
+ABP v10.3 introduces `Volo.Abp.LuckyPenny.AutoMapper` as a new optional provider integration for projects that want to use the LuckyPenny-maintained AutoMapper package.
 
 The existing `Volo.Abp.AutoMapper` package remains unchanged, and migration is straightforward: replace `AbpAutoMapperModule` with `AbpLuckyPennyAutoMapperModule` in your module dependencies while keeping the same ABP-facing namespaces and APIs. 
 
-This update also addresses the AutoMapper 14.x vulnerability context ([GHSA-rvv3-g6hj-g44x](https://github.com/advisories/GHSA-rvv3-g6hj-g44x)), and ABP documentation was expanded with installation, usage, and migration guidance. To more information, please refer to the documentation: [LuckyPenny AutoMapper Integration](https://abp.io/docs/10.3/framework/infrastructure/luckypenny-automapper)
+This update also addresses the AutoMapper 14.x vulnerability context ([GHSA-rvv3-g6hj-g44x](https://github.com/advisories/GHSA-rvv3-g6hj-g44x)), and ABP documentation was expanded with installation, usage, and migration guidance. For more information, see the documentation: [LuckyPenny AutoMapper Integration](https://abp.io/docs/10.3/framework/infrastructure/luckypenny-automapper).
 
 ### Security Improvements (Account Pro Module)
 
@@ -218,15 +218,14 @@ Configure<AbpOperationRateLimitingOptions>(options =>
 });
 ```
 
-For conceptual guidance, you can also check:
-- [Operation Rate Limiting in ABP Framework](https://abp.io/community/articles/operation-rate-limiting-in-abp-framework-f4jtd6sn)
+> See the community article [Operation Rate Limiting in ABP Framework](https://abp.io/community/articles/operation-rate-limiting-in-abp-framework-f4jtd6sn) for conceptual guidance.
 
 ### Other Improvements and Enhancements
 
-- **Permission integration endpoint update**: `PermissionIntegrationController.IsGrantedAsync` now uses `HttpPost` for large payload scenarios ([abpframework/abp#25177](https://github.com/abpframework/abp/pull/25177)).
-- **OpenIddict dependency update**: Upgraded to OpenIddict 7.3.0 ([abpframework/abp#25053](https://github.com/abpframework/abp/pull/25053)).
-- **Autofac integration update**: Upgraded `Autofac.Extensions.DependencyInjection` to 11.0.0 ([abpframework/abp#25190](https://github.com/abpframework/abp/pull/25190)).
-- **MongoDB dependency update**: Bumped MongoDB.Driver to 3.7.1 ([abpframework/abp#25114](https://github.com/abpframework/abp/pull/25114)).
+- **Permission integration endpoint update**: `PermissionIntegrationController.IsGrantedAsync` now uses `HttpPost` for large payload scenarios ([#25177](https://github.com/abpframework/abp/pull/25177)).
+- **OpenIddict dependency update**: Upgraded to OpenIddict 7.3.0 ([#25053](https://github.com/abpframework/abp/pull/25053)).
+- **Autofac integration update**: Upgraded `Autofac.Extensions.DependencyInjection` to 11.0.0 ([#25190](https://github.com/abpframework/abp/pull/25190)).
+- **MongoDB dependency update**: Bumped MongoDB.Driver to 3.7.1 ([#25114](https://github.com/abpframework/abp/pull/25114)).
 - **OIDC auth storage options for Angular UI (pro)**: OIDC auth storage is now configurable.
 
 ## Community News
