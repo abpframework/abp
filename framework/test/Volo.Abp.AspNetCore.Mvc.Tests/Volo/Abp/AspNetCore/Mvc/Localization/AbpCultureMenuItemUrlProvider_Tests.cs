@@ -52,7 +52,7 @@ public class AbpCultureMenuItemUrlProvider_Tests
         abpLocOptions.Languages.Add(new LanguageInfo("en"));
         abpLocOptions.Languages.Add(new LanguageInfo("zh-Hans"));
         var provider = new AbpCultureMenuItemUrlProvider(
-            httpContextAccessor, localizationOptions, MsOptions.Create(abpLocOptions));
+            httpContextAccessor, localizationOptions, MsOptions.Create(abpLocOptions), new MenuItemCulturePrefixHelper());
 
         var menu = CreateMenuWithItems("/home", "/about");
 
@@ -85,7 +85,7 @@ public class AbpCultureMenuItemUrlProvider_Tests
         abpLocOptions.Languages.Add(new LanguageInfo("en"));
         abpLocOptions.Languages.Add(new LanguageInfo("zh-Hans"));
         var provider = new AbpCultureMenuItemUrlProvider(
-            httpContextAccessor, localizationOptions, MsOptions.Create(abpLocOptions));
+            httpContextAccessor, localizationOptions, MsOptions.Create(abpLocOptions), new MenuItemCulturePrefixHelper());
 
         var menu = CreateMenuWithItems("/home", "/about");
 
@@ -247,7 +247,7 @@ public class AbpCultureMenuItemUrlProvider_Tests
         var abpLocalizationOptions = MsOptions.Create(new AbpLocalizationOptions());
 
         return new AbpCultureMenuItemUrlProvider(
-            httpContextAccessor, localizationOptions, abpLocalizationOptions);
+            httpContextAccessor, localizationOptions, abpLocalizationOptions, new MenuItemCulturePrefixHelper());
     }
 
     private static AbpCultureMenuItemUrlProvider CreateProviderWithoutHttpContext(
@@ -264,7 +264,7 @@ public class AbpCultureMenuItemUrlProvider_Tests
         }
 
         return new AbpCultureMenuItemUrlProvider(
-            httpContextAccessor, localizationOptions, MsOptions.Create(abpLocOptions));
+            httpContextAccessor, localizationOptions, MsOptions.Create(abpLocOptions), new MenuItemCulturePrefixHelper());
     }
 
     private static ApplicationMenu CreateMenuWithItems(params string[] urls)
