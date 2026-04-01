@@ -11,11 +11,11 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization;
 public class AbpCultureRoutePagesConvention : IPageRouteModelConvention
 {
     /// <summary>
-    /// Route parameter template for culture with a regex constraint matching IETF BCP 47 language tags
-    /// (e.g. "en", "zh-Hans", "sr-Latn-RS"). The double braces are required by the route template
-    /// parser to represent literal { } characters inside the regex constraint.
+    /// Route parameter template using the custom "culture" route constraint registered in
+    /// <see cref="AbpCultureRouteConstraint"/>. The constraint only matches culture values
+    /// configured in <see cref="Volo.Abp.Localization.AbpLocalizationOptions.Languages"/>.
     /// </summary>
-    internal const string CultureRouteTemplate = "{culture:regex(^[a-zA-Z]{{2,8}}(-[a-zA-Z0-9]{{1,8}})*$)}";
+    internal const string CultureRouteTemplate = "{culture:culture}";
 
     public virtual void Apply(PageRouteModel model)
     {
@@ -34,7 +34,7 @@ public class AbpCultureRoutePagesConvention : IPageRouteModelConvention
                 AttributeRouteModel = new AttributeRouteModel
                 {
                     Template = AttributeRouteModel.CombineTemplates(CultureRouteTemplate, originalTemplate),
-                    Order = -1
+                    Order = 1
                 }
             });
         }

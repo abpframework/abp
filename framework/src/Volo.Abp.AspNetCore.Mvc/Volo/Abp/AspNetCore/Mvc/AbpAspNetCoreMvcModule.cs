@@ -220,6 +220,11 @@ public class AbpAspNetCoreMvcModule : AbpModule
 
     protected virtual void ConfigureRouteBasedCulture(ServiceConfigurationContext context)
     {
+        context.Services.Configure<RouteOptions>(options =>
+        {
+            options.ConstraintMap["culture"] = typeof(AbpCultureRouteConstraint);
+        });
+
         context.Services
             .AddOptions<AbpEndpointRouterOptions>()
             .PostConfigure<IOptions<AbpRequestLocalizationOptions>>((routerOptions, abpLocOptions) =>
