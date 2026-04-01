@@ -7,17 +7,10 @@
 
 # Creating the Initial Ordering Module
 
-```json
-//[doc-params]
-{
-  "UI": ["MVC", "NG"]
-}
-```
-
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","BlazorWebApp"]
+    "UI": ["MVC", "BlazorWebApp", "NG"]
 }
 ````
 
@@ -55,11 +48,13 @@ Set `ModularCrm.Ordering` as the *Module name*, leave the *Output folder* as is 
 
 {{if UI == "MVC"}}
 ![abp-studio-add-new-standard-module-ui-dialog](images/abp-studio-add-new-standard-module-ui-dialog.png)
+
+You can choose the type of UI you want to support in your module or select *No UI* if you don't need a user interface. In this example, we'll select the *MVC* option and click *Next*.
+
 {{else if UI == "BlazorWebApp"}}
 ![abp-studio-add-new-standard-module-ui-dialog](images/abp-studio-add-new-standard-module-ui-dialog-blazor-webapp.png)
-{{end}}
 
-You can choose the type of UI you want to support in your module or select *No UI* if you don't need a user interface. In this example, we'll select the {{if UI == "MVC"}}*MVC*{{else if UI == "BlazorWebApp"}}*Blazor WebApp*{{end}} option and click *Next*.
+You can choose the type of UI you want to support in your module or select *No UI* if you don't need a user interface. In this example, we'll select the *Blazor WebApp* option and click *Next*.
 
 {{else if UI == "NG"}}
 
