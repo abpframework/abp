@@ -25,12 +25,20 @@ Configure<AbpRequestLocalizationOptions>(options =>
 
 That is the only change you need to make.
 
+## MVC / Razor Pages
+
+MVC and Razor Pages have the most complete support — everything works automatically. No code changes needed in your pages or controllers.
+
+![MVC sample — English](images/mvc-home-en.png)
+
+![MVC sample — Turkish](images/mvc-home-tr.png)
+
 ## What Happens Automatically
 
 When you set `UseRouteBasedCulture = true`, ABP automatically:
 
 - Registers ASP.NET Core's built-in [`RouteDataRequestCultureProvider`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.localization.routing.routedatarequestcultureprovider) to detect culture from the URL path.
-- Adds a `{culture}/{controller}/{action}` conventional route for MVC controllers, with a regex constraint to prevent non-culture URL segments (like `/enterprise/products`) from matching.
+- Adds a `{culture}/{controller}/{action}` conventional route for MVC controllers, with a route constraint to prevent non-culture URL segments (like `/enterprise/products`) from matching.
 - Adds `{culture}/...` route selectors to all Razor Pages at startup.
 - Injects the current culture into all `Url.Page()` and `Url.Action()` calls, so generated URLs automatically include the culture prefix.
 - Prepends the culture prefix to navigation menu item URLs.
@@ -71,6 +79,14 @@ No theme changes, no language switcher changes — the existing UI component jus
 ## Blazor Support
 
 Blazor Server and Blazor WebAssembly (WebApp) both support URL-based localization. Culture detection and cookie persistence work automatically on the initial page load (SSR). Menu URLs and language switching also work automatically.
+
+![Blazor Server sample](images/blazor-server-zh-hans.png)
+
+![Blazor WebApp sample](images/blazor-webapp-tr.png)
+
+ABP's built-in module pages (Identity, Settings, etc.) also work with URL-based localization out of the box:
+
+![Identity module — User Management](images/module-identity-users.png)
 
 ### Manual step: Blazor component routes
 
@@ -122,6 +138,18 @@ URL-based localization is fully compatible with ABP's multi-tenant routing. Lang
 | **Blazor Server** | Manual `@page` routes | N/A | Automatic | Automatic | Add `{culture}` route to pages |
 | **Blazor WebApp (WASM)** | Manual `@page` routes | N/A | Automatic | Automatic | Add `{culture}` route to pages |
 
+## Running the Sample
+
+A runnable sample is available at [abp-samples/UrlBasedLocalization](https://github.com/abpframework/abp-samples/tree/master/UrlBasedLocalization), with three projects:
+
+| Project | UI Type | URL | Command |
+|---|---|---|---|
+| `BookStore.Mvc` | MVC / Razor Pages | `https://localhost:44335` | `dotnet run --project src/BookStore.Mvc` |
+| `BookStore.Blazor.Server` | Blazor Server | `https://localhost:44336` | `dotnet run --project src/BookStore.Blazor.Server` |
+| `BookStore.Blazor.WebApp` | Blazor WebApp (InteractiveAuto) | `https://localhost:44337` | `dotnet run --project src/BookStore.Blazor.WebApp` |
+
+Supported languages: English, Türkçe, Français, 简体中文.
+
 ## Summary
 
 To add SEO-friendly localized URL paths to your ABP application:
@@ -130,8 +158,6 @@ To add SEO-friendly localized URL paths to your ABP application:
 2. For **Blazor** projects, add `@page "/{culture}/..."` routes to your own pages.
 
 Everything else — route registration, URL generation, menu links, and language switching — is handled automatically.
-
-A runnable sample is available at [abp-samples/UrlBasedLocalization](https://github.com/abpframework/abp-samples/tree/master/UrlBasedLocalization). It includes MVC, Blazor Server, and Blazor WebApp projects with English, Turkish, French, and Simplified Chinese.
 
 ## References
 

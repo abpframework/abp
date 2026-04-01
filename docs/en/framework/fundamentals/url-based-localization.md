@@ -29,7 +29,7 @@ That's all you need. The framework automatically handles the rest.
 When you set `UseRouteBasedCulture` to `true`, ABP automatically registers the following:
 
 * **`RouteDataRequestCultureProvider`** — A built-in ASP.NET Core provider that reads `{culture}` from route data. ABP inserts it after `QueryStringRequestCultureProvider` and before `CookieRequestCultureProvider`.
-* **`{culture:regex(...)}/{controller}/{action}` route** — A conventional route for MVC controllers. The `{culture}` parameter includes a regex constraint matching IETF BCP 47 language tags, so URLs like `/enterprise/products` are not mistaken for culture-prefixed routes.
+* **`{culture}/{controller}/{action}` route** — A conventional route for MVC controllers. The `{culture}` parameter uses a custom route constraint (`AbpCultureRouteConstraint`) that only matches culture values configured in `AbpLocalizationOptions.Languages`, so URLs like `/enterprise/products` are not mistaken for culture-prefixed routes.
 * **`AbpCultureRoutePagesConvention`** — An `IPageRouteModelConvention` that adds `{culture}/...` route selectors to all Razor Pages.
 * **`AbpCultureRouteUrlHelperFactory`** — Replaces the default `IUrlHelperFactory` to auto-inject culture into `Url.Page()` and `Url.Action()` calls.
 * **`AbpCultureMenuItemUrlProvider`** — Prepends the culture prefix to navigation menu item URLs (MVC / Blazor Server).
