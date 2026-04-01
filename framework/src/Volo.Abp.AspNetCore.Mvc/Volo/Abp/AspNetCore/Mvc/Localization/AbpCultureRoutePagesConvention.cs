@@ -34,7 +34,7 @@ public class AbpCultureRoutePagesConvention : IPageRouteModelConvention
                 AttributeRouteModel = new AttributeRouteModel
                 {
                     Template = AttributeRouteModel.CombineTemplates(CultureRouteTemplate, originalTemplate),
-                    Order = 1
+                    Order = -1
                 }
             });
         }

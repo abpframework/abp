@@ -23,11 +23,12 @@ public class AbpCultureRouteConstraint : IRouteConstraint
         }
 
         var languages = httpContext?.RequestServices
-            .GetRequiredService<IOptions<AbpLocalizationOptions>>().Value.Languages;
+            .GetService<IOptions<AbpLocalizationOptions>>()?.Value.Languages;
 
         if (languages == null || languages.Count == 0)
         {
-            return false;
+            // During URL generation, HttpContext or services may not be available.
+            return routeDirection == RouteDirection.UrlGeneration;
         }
 
         return languages.Any(l =>
