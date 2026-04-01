@@ -54,8 +54,11 @@ public class AbpRequestLocalizationMiddleware : AbpMiddlewareBase, ITransientDep
                 // This cookie is used by AbpCultureMenuItemUrlProvider to determine if the
                 // initial SSR page had a culture prefix, since the Blazor interactive circuit
                 // (/_blazor) does not carry the original route values.
+                // Note: ComponentTypeMetadata is an internal ASP.NET Core type
+                // (Microsoft.AspNetCore.Components.Endpoints.ComponentTypeMetadata).
+                // We match by full type name to avoid false positives from other assemblies.
                 var endpoint = context.GetEndpoint();
-                if (endpoint?.Metadata.Any(m => m.GetType().Name == "ComponentTypeMetadata") == true)
+                if (endpoint?.Metadata.Any(m => m.GetType().FullName == "Microsoft.AspNetCore.Components.Endpoints.ComponentTypeMetadata") == true)
                 {
                     AbpRequestCultureCookieHelper.SetHasRouteCultureCookie(
                         context, requestCultureFeature?.Provider is RouteDataRequestCultureProvider);

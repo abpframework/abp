@@ -1,14 +1,11 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.JSInterop;
 using Volo.Abp.AspNetCore.Components.Web.Security;
-using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
-using Volo.Abp.AspNetCore.Mvc.Client;
+using Volo.Abp.AspNetCore.Components.WebAssembly;
 using Volo.Abp.UI.Navigation;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic;
@@ -22,33 +19,18 @@ public partial class LoginDisplay : IDisposable
     protected ApplicationConfigurationChangedService ApplicationConfigurationChangedService { get; set; }
 
     [Inject]
-    protected ICachedApplicationConfigurationClient ConfigurationClient { get; set; }
+    protected IRouteBasedCultureUrlHelper CultureUrlHelper { get; set; }
 
     protected ApplicationMenu Menu { get; set; }
 
-    private ApplicationConfigurationDto _config;
+    protected string LoginUrl { get; set; } = string.Empty;
 
-    protected string LoginUrl => PrependCulturePrefix(AuthenticationOptions.Value.LoginUrl);
-
-    protected string LogoutUrl => PrependCulturePrefix(AuthenticationOptions.Value.LogoutUrl);
-
-    protected string PrependCulturePrefix(string url)
-    {
-        if (_config?.Localization.UseRouteBasedCulture != true)
-        {
-            return url;
-        }
-
-        var currentCulture = CultureInfo.CurrentCulture.Name;
-        var isKnownCulture = _config.Localization.Languages
-            .Any(l => string.Equals(l.CultureName, currentCulture, StringComparison.OrdinalIgnoreCase));
-
-        return isKnownCulture ? $"{currentCulture}/{url}" : url;
-    }
+    protected string LogoutUrl { get; set; } = string.Empty;
 
     protected async override Task OnInitializedAsync()
     {
-        _config = await ConfigurationClient.GetAsync();
+        LoginUrl = await CultureUrlHelper.PrependCulturePrefixAsync(AuthenticationOptions.Value.LoginUrl);
+        LogoutUrl = await CultureUrlHelper.PrependCulturePrefixAsync(AuthenticationOptions.Value.LogoutUrl);
 
         Menu = await MenuManager.GetAsync(StandardMenus.User);
 
@@ -64,6 +46,8 @@ public partial class LoginDisplay : IDisposable
 
     private async void ApplicationConfigurationChanged()
     {
+        LoginUrl = await CultureUrlHelper.PrependCulturePrefixAsync(AuthenticationOptions.Value.LoginUrl);
+        LogoutUrl = await CultureUrlHelper.PrependCulturePrefixAsync(AuthenticationOptions.Value.LogoutUrl);
         Menu = await MenuManager.GetAsync(StandardMenus.User);
         await InvokeAsync(StateHasChanged);
     }
@@ -88,7 +72,7 @@ public partial class LoginDisplay : IDisposable
         }
     }
 
-    private void BeginSignOut()
+    private async Task BeginSignOut()
     {
         if (AbpAspNetCoreComponentsWebOptions.Value.IsBlazorWebApp)
         {

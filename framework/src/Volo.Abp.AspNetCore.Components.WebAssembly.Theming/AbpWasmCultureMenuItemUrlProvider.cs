@@ -14,11 +14,14 @@ namespace Volo.Abp.AspNetCore.Components.WebAssembly.Theming;
 public class AbpWasmCultureMenuItemUrlProvider : IMenuItemUrlProvider, ITransientDependency
 {
     protected ICachedApplicationConfigurationClient ConfigurationClient { get; }
+    protected IMenuItemCulturePrefixHelper MenuItemCulturePrefixHelper { get; }
 
     public AbpWasmCultureMenuItemUrlProvider(
-        ICachedApplicationConfigurationClient configurationClient)
+        ICachedApplicationConfigurationClient configurationClient,
+        IMenuItemCulturePrefixHelper menuItemCulturePrefixHelper)
     {
         ConfigurationClient = configurationClient;
+        MenuItemCulturePrefixHelper = menuItemCulturePrefixHelper;
     }
 
     public virtual async Task HandleAsync(MenuItemUrlProviderContext context)
@@ -40,7 +43,7 @@ public class AbpWasmCultureMenuItemUrlProvider : IMenuItemUrlProvider, ITransien
             return;
         }
 
-        MenuItemCulturePrefixHelper.PrependCulturePrefix(context.Menu, "/" + culture);
+        await MenuItemCulturePrefixHelper.PrependCulturePrefixAsync(context.Menu, "/" + culture);
     }
 
     protected virtual string? GetCulture(Mvc.ApplicationConfigurations.ApplicationConfigurationDto config)
@@ -57,5 +60,4 @@ public class AbpWasmCultureMenuItemUrlProvider : IMenuItemUrlProvider, ITransien
 
         return isKnownCulture ? currentCulture : null;
     }
-
 }

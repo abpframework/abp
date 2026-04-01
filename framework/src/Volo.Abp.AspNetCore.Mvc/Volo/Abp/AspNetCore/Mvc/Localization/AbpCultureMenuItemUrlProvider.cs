@@ -20,33 +20,34 @@ public class AbpCultureMenuItemUrlProvider : IMenuItemUrlProvider, ITransientDep
     protected IHttpContextAccessor HttpContextAccessor { get; }
     protected IOptions<AbpRequestLocalizationOptions> LocalizationOptions { get; }
     protected IOptions<AbpLocalizationOptions> AbpLocalizationOptions { get; }
+    protected IMenuItemCulturePrefixHelper MenuItemCulturePrefixHelper { get; }
 
     public AbpCultureMenuItemUrlProvider(
         IHttpContextAccessor httpContextAccessor,
         IOptions<AbpRequestLocalizationOptions> localizationOptions,
-        IOptions<AbpLocalizationOptions> abpLocalizationOptions)
+        IOptions<AbpLocalizationOptions> abpLocalizationOptions,
+        IMenuItemCulturePrefixHelper menuItemCulturePrefixHelper)
     {
         HttpContextAccessor = httpContextAccessor;
         LocalizationOptions = localizationOptions;
         AbpLocalizationOptions = abpLocalizationOptions;
+        MenuItemCulturePrefixHelper = menuItemCulturePrefixHelper;
     }
 
-    public virtual Task HandleAsync(MenuItemUrlProviderContext context)
+    public virtual async Task HandleAsync(MenuItemUrlProviderContext context)
     {
         if (!LocalizationOptions.Value.UseRouteBasedCulture)
         {
-            return Task.CompletedTask;
+            return;
         }
 
         var culture = GetCulture();
         if (string.IsNullOrEmpty(culture))
         {
-            return Task.CompletedTask;
+            return;
         }
 
-        MenuItemCulturePrefixHelper.PrependCulturePrefix(context.Menu, "/" + culture);
-
-        return Task.CompletedTask;
+        await MenuItemCulturePrefixHelper.PrependCulturePrefixAsync(context.Menu, "/" + culture);
     }
 
     protected virtual string? GetCulture()

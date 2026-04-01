@@ -1,8 +1,17 @@
+using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
+
 namespace Volo.Abp.UI.Navigation;
 
-public static class MenuItemCulturePrefixHelper
+public class MenuItemCulturePrefixHelper : IMenuItemCulturePrefixHelper, ITransientDependency
 {
-    public static void PrependCulturePrefix(IHasMenuItems menuWithItems, string prefix)
+    public virtual Task PrependCulturePrefixAsync(IHasMenuItems menuWithItems, string prefix)
+    {
+        PrependCulturePrefix(menuWithItems, prefix);
+        return Task.CompletedTask;
+    }
+
+    protected virtual void PrependCulturePrefix(IHasMenuItems menuWithItems, string prefix)
     {
         foreach (var item in menuWithItems.Items)
         {
