@@ -757,7 +757,44 @@ await distributedEventBus.PublishAsync(
 
 ### Subscribing to Dynamic Events
 
-Use the `Subscribe` overload that accepts a string event name:
+The recommended way to subscribe is to implement `IDistributedEventHandler<DynamicEventData>` and use `IocEventHandlerFactory`. This mirrors how ABP manages typed handlers — it creates a new DI scope per event, resolves a fresh handler instance, calls `HandleEventAsync`, then disposes the scope:
+
+````csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    context.Services.AddTransient<MyDynamicEventHandler>();
+}
+
+public override void OnApplicationInitialization(ApplicationInitializationContext context)
+{
+    var eventBus = context.ServiceProvider.GetRequiredService<IDistributedEventBus>();
+    var scopeFactory = context.ServiceProvider.GetRequiredService<IServiceScopeFactory>();
+    eventBus.Subscribe("MyDynamicEvent", new IocEventHandlerFactory(scopeFactory, typeof(MyDynamicEventHandler)));
+}
+````
+
+The handler uses normal constructor injection — no manual scope management needed:
+
+````csharp
+public class MyDynamicEventHandler : IDistributedEventHandler<DynamicEventData>
+{
+    private readonly IMyService _myService;
+
+    public MyDynamicEventHandler(IMyService myService)
+    {
+        _myService = myService;
+    }
+
+    public async Task HandleEventAsync(DynamicEventData eventData)
+    {
+        await _myService.ProcessAsync(eventData.EventName, eventData.Data);
+    }
+}
+````
+
+`Subscribe` returns an `IDisposable`. Call `Dispose()` to unsubscribe at runtime.
+
+For simple stateless handlers that do not need DI services, you can also use `SingleInstanceHandlerFactory` with an inline handler:
 
 ````csharp
 var subscription = distributedEventBus.Subscribe(
@@ -765,10 +802,8 @@ var subscription = distributedEventBus.Subscribe(
     new SingleInstanceHandlerFactory(
         new ActionEventHandler<DynamicEventData>(eventData =>
         {
-            // Access the event name and raw data
             var name = eventData.EventName;
             var data = eventData.Data;
-
             return Task.CompletedTask;
         })));
 
@@ -776,13 +811,7 @@ var subscription = distributedEventBus.Subscribe(
 subscription.Dispose();
 ````
 
-You can also subscribe using a typed distributed event handler:
-
-````csharp
-distributedEventBus.Subscribe("MyDynamicEvent", myDistributedEventHandler);
-````
-
-Where `myDistributedEventHandler` implements `IDistributedEventHandler<DynamicEventData>`.
+> Do not inject `IServiceProvider` directly into a `SingleInstanceHandlerFactory`-based handler. Since the same instance is reused for every event, resolving scoped services directly from the root container causes a captive dependency and may throw a scope validation exception in development. Use `IocEventHandlerFactory` instead.
 
 ### Mixed Typed and Dynamic Handlers
 
