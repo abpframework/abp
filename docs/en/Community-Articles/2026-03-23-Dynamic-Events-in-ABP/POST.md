@@ -127,6 +127,7 @@ public class PartnerOrderHandler : IDistributedEventHandler<DynamicEventData>
 Typed and dynamic handlers coexist naturally. When both are registered for the same event name, **both are triggered** — the framework automatically converts the data to the appropriate format for each handler.
 
 ```csharp
+var eventBus = context.ServiceProvider.GetRequiredService<IDistributedEventBus>();
 var scopeFactory = context.ServiceProvider.GetRequiredService<IServiceScopeFactory>();
 
 // Typed handler — receives OrderPlacedEto
