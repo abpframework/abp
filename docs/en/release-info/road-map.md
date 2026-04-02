@@ -13,7 +13,7 @@ This document provides a road map, release schedule, and planned features for th
 
 ### v10.4
 
-The next version will be 10.4 and is planned to be released as a stable version in May 2026. We will be mostly working on the following topics:
+After v10.3 reaches stable, the next planned version will be 10.4, which is scheduled to be released as a stable version in May 2026. We will be mostly working on the following topics:
 
 * Framework
   * Blazor UI: Moving from Blazorise to MudBlazor
@@ -36,7 +36,7 @@ The next version will be 10.4 and is planned to be released as a stable version 
   * AI Management: Chat History & Multi-Tenancy Features
   * New Module: Chat with your data
   * QA Module: AI Answer Suggest
-  * CMS Kit: Codemirror v6 Compatibility Update
+  * CMS Kit: CodeMirror v6 Compatibility Update
   * Payment Module: Email Notification Improvements
   * UI/UX Improvements on Existing Application Modules
 
