@@ -206,13 +206,45 @@ public class LanguageSwitchRouteCultureReplacement_Tests
     }
 
     [Fact]
-    public async Task Should_Not_Replace_Query_String_When_Only_One_Param()
+    public async Task Should_Replace_Culture_When_Only_Culture_Param_Present()
     {
-        // Only culture= without ui-culture= — should not replace
+        // culture= and ui-culture= are now handled independently
         var context = new QueryStringCultureReplacementContext(
             new DefaultHttpContext(), new RequestCulture("en"), "/?culture=tr");
         await _replacement.ReplaceAsync(context);
-        context.ReturnUrl.ShouldBe("/?culture=tr");
+        context.ReturnUrl.ShouldBe("/?culture=en");
+    }
+
+    [Fact]
+    public async Task Should_Replace_UiCulture_When_Only_UiCulture_Param_Present()
+    {
+        var context = new QueryStringCultureReplacementContext(
+            new DefaultHttpContext(), new RequestCulture("en"), "/?ui-culture=tr");
+        await _replacement.ReplaceAsync(context);
+        context.ReturnUrl.ShouldBe("/?ui-culture=en");
+    }
+
+    [Fact]
+    public async Task Should_Support_Numeric_Region_Culture_Tag()
+    {
+        // es-419 (Latin America Spanish) contains a digit — previously the regex
+        // [A-Za-z-]+ would not match it, leaving the query string unreplaced.
+        var context = new QueryStringCultureReplacementContext(
+            new DefaultHttpContext(),
+            new RequestCulture("es-419", "es-419"),
+            "/home?culture=tr&ui-culture=tr");
+        await _replacement.ReplaceAsync(context);
+        context.ReturnUrl.ShouldBe("/home?culture=es-419&ui-culture=es-419");
+    }
+
+    [Fact]
+    public async Task Should_Replace_Only_First_Culture_Occurrence_In_Path()
+    {
+        // /en/products/en/details — the second "/en" is part of the path content,
+        // not a culture prefix, and must not be replaced.
+        var context = CreateContext("en", "tr", "/en/products/en/details");
+        await _replacement.ReplaceAsync(context);
+        context.ReturnUrl.ShouldBe("/tr/products/en/details");
     }
 
     private static QueryStringCultureReplacementContext CreateContext(

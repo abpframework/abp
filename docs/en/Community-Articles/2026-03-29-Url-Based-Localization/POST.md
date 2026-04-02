@@ -6,7 +6,7 @@ Consider a book-store app where users browse in their language:
 
 - A Spanish user shares a product link. The recipient opens it in English because the cookie on *their* machine says `en`.
 - Search engines crawl the same URL in every language, making it impossible to create separate sitemaps per locale.
-- A user bookmarks `/Books/Detail?id=42&culture=es`. After a cookie reset, the `?culture=` parameter is missing from the bookmark — the page loads in the wrong language.
+- A user shares a link like `/Books/Detail?id=42&culture=es`. When the server processes the request, it sets the culture cookie and then redirects to `/Books/Detail?id=42` — stripping the `?culture=` parameter. The shared link no longer carries the intended language.
 
 Embedding the culture in the URL path — `/es/books`, `/zh-Hans/about` — solves all three. Each language has its own stable URL, readable by humans and index-friendly for search engines.
 
