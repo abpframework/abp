@@ -384,7 +384,7 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
         services.AddSingleton<ITestCounterService>(
             new TestCounterService(() => handleCount++, () => disposeCount++));
         services.AddTransient<DynamicIocEventHandlerWithCounter>();
-        var provider = services.BuildServiceProvider();
+        using var provider = services.BuildServiceProvider();
         var scopeFactory = provider.GetRequiredService<IServiceScopeFactory>();
 
         using var subscription = DistributedEventBus.Subscribe(
@@ -410,7 +410,7 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
         var services = new ServiceCollection();
         services.AddSingleton<ITestCounterService>(new TestCounterService(() => callCount++));
         services.AddTransient<DynamicIocEventHandlerWithService>();
-        var provider = services.BuildServiceProvider();
+        using var provider = services.BuildServiceProvider();
         var scopeFactory = provider.GetRequiredService<IServiceScopeFactory>();
 
         using var subscription = DistributedEventBus.Subscribe(
