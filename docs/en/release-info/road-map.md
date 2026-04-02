@@ -35,7 +35,6 @@ After v10.3 reaches stable, the next planned version will be 10.4, which is sche
 * Application Modules
   * AI Management: Chat History & Multi-Tenancy Features
   * New Module: Chat with your data
-  * QA Module: AI Answer Suggest
   * CMS Kit: CodeMirror v6 Compatibility Update
   * Payment Module: Email Notification Improvements
   * UI/UX Improvements on Existing Application Modules
