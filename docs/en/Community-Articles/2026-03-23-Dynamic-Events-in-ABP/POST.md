@@ -120,13 +120,16 @@ public class PartnerOrderHandler : IDistributedEventHandler<DynamicEventData>
 - **`EventName`** — the string name that identifies the event
 - **`Data`** — the raw event data payload (the deserialized `object` from the broker)
 
-> `Subscribe` returns an `IDisposable`. Call `Dispose()` to unsubscribe the handler at runtime. For application-lifetime subscriptions, prefer module initialization (`OnApplicationInitializationAsync`) over subscribing inside an application service.
+> `Subscribe` returns an `IDisposable`. Call `Dispose()` to unsubscribe the handler at runtime. For application-lifetime subscriptions, prefer module initialization (`OnApplicationInitialization` / `OnApplicationInitializationAsync`) over subscribing inside an application service.
 
 ## Mixed Typed and Dynamic Handlers
 
 Typed and dynamic handlers coexist naturally. When both are registered for the same event name, **both are triggered** — the framework automatically converts the data to the appropriate format for each handler.
 
 ```csharp
+var eventBus = context.ServiceProvider.GetRequiredService<IDistributedEventBus>();
+var scopeFactory = context.ServiceProvider.GetRequiredService<IServiceScopeFactory>();
+
 // Typed handler — receives OrderPlacedEto
 eventBus.Subscribe<OrderPlacedEto, OrderEmailHandler>();
 
