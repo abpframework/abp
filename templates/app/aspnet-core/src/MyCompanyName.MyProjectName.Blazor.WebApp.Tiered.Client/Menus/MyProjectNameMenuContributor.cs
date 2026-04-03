@@ -66,22 +66,26 @@ public class MyProjectNameMenuContributor : IMenuContributor
 
     private Task ConfigureUserMenuAsync(MenuConfigurationContext context)
     {
-        if (!OperatingSystem.IsBrowser())
-        {
-            return Task.CompletedTask;
-        }
-
-        var authServerUrl = _configuration["AuthServer:Authority"] ?? "";
         var accountStringLocalizer = context.GetLocalizer<AccountResource>();
 
-        context.Menu.AddItem(new ApplicationMenuItem(
-                "Account.Manage",
-                accountStringLocalizer["MyAccount"],
-                $"{authServerUrl.EnsureEndsWith('/')}Account/Manage",
-                icon: "fa fa-cog",
-                order: 1000,
-                target: "_blank")
-            .RequireAuthenticated());
+        if (OperatingSystem.IsBrowser())
+        {
+            var authServerUrl = _configuration["AuthServer:Authority"] ?? "";
+
+            context.Menu.AddItem(new ApplicationMenuItem(
+                    "Account.Manage",
+                    accountStringLocalizer["MyAccount"],
+                    $"{authServerUrl.EnsureEndsWith('/')}Account/Manage",
+                    icon: "fa fa-cog",
+                    order: 1000,
+                    target: "_blank")
+                .RequireAuthenticated());
+        }
+        else
+        {
+            context.Menu.AddItem(new ApplicationMenuItem("Account.Manage", accountStringLocalizer["MyAccount"], "/Account/Manage", icon: "fa fa-cog", order: 1000).RequireAuthenticated());
+            context.Menu.AddItem(new ApplicationMenuItem("Account.Logout", accountStringLocalizer["Logout"], url: "/Account/Logout", icon: "fa fa-power-off", order: 1001).RequireAuthenticated());
+        }
 
         return Task.CompletedTask;
     }
