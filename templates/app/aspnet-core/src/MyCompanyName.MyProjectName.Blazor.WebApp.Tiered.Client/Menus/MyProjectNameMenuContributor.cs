@@ -84,7 +84,7 @@ public class MyProjectNameMenuContributor : IMenuContributor
         else
         {
             context.Menu.AddItem(new ApplicationMenuItem("Account.Manage", accountStringLocalizer["MyAccount"], "/Account/Manage", icon: "fa fa-cog", order: 1000).RequireAuthenticated());
-            context.Menu.AddItem(new ApplicationMenuItem("Account.Logout", accountStringLocalizer["Logout"], url: "/Account/Logout", icon: "fa fa-power-off", order: 1001).RequireAuthenticated());
+            context.Menu.AddItem(new ApplicationMenuItem("Account.Logout", accountStringLocalizer["Logout"], url: "/Account/Logout", icon: "fa fa-power-off", order: int.MaxValue - 1000).RequireAuthenticated());
         }
 
         return Task.CompletedTask;
