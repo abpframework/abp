@@ -1,5 +1,6 @@
 import {
   ABP,
+  AbpRouteCultureUrlPipe,
   AsyncLocalizationPipe,
   LocalizationPipe,
   PermissionDirective,
@@ -32,6 +33,7 @@ import { EllipsisDirective } from '@abp/ng.theme.shared';
     PermissionDirective,
     EllipsisDirective,
     LocalizationPipe,
+    AbpRouteCultureUrlPipe,
   ],
 })
 export class RoutesComponent {
