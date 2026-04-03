@@ -108,6 +108,49 @@ Culture detection, cookie persistence, menu URLs, and language switching all wor
 
 Same as Blazor Server — you must manually add `@page "/{culture}/..."` routes to your Blazor pages.
 
+## Angular
+
+The [ABP Angular UI](../ui/angular/quick-start.md) runs in the browser. The server still applies `UseRouteBasedCulture`; the client reads **`localization.useRouteBasedCulture`** from `/api/abp/application-configuration` (same payload as other UI types). There is no separate Angular setting.
+
+### Routing
+
+Angular does not add a culture segment to your route config automatically. Use **`withOptionalRouteCulturePrefix`** from **`@abp/ng.core`** so one route tree matches both **`/identity/users`** and **`/en/identity/users`** (the first path segment is matched only when it looks like a culture code, e.g. `en`, `tr`, `zh-Hans`).
+
+````typescript
+import { Routes } from '@angular/router';
+import { withOptionalRouteCulturePrefix } from '@abp/ng.core';
+
+const appRoutesCore: Routes = [
+  // ... your routes (path: '', 'account', 'identity', lazy children, etc.)
+];
+
+export const appRoutes = withOptionalRouteCulturePrefix(appRoutesCore);
+````
+
+![Angular: routes wrapped with optional culture prefix](../../images/url-based-localization-angular-routes.png)
+
+### URL → session language
+
+When **`useRouteBasedCulture`** is **true**, **`RouteBasedCultureService`** (from `@abp/ng.core`) keeps the session language aligned with the first URL segment after navigation. This runs during application bootstrap and on each **`NavigationEnd`**.
+
+### Menu links, breadcrumbs, and `routerLink`
+
+Menu paths from **`RoutesService`** are usually **without** a culture prefix (`/identity/users`). Use the **`abpRouteCultureUrl`** pipe on **`routerLink`** (or **`RouteBasedCultureUrlService.prefixPathWithCulture`**) so links navigate to **`/en/identity/users`** when route-based culture is enabled. The **Basic** theme navigation and **Theme Shared** breadcrumb links follow this pattern.
+
+![Angular: culture-prefixed menu or URL bar](../../images/url-based-localization-angular-menu-url.png)
+
+### Language switcher (toolbar)
+
+If the user selects a language in the UI, call **`RouteBasedCultureUrlService.applyLanguageSelection(cultureName)`** (or **`navigateToUrlWithCulture`**) instead of only updating the session language. That rewrites the current URL’s culture segment (or prepends it) so the address bar and session stay consistent; **`RouteBasedCultureService`** then picks up the culture from the URL after navigation.
+
+### Active menu, breadcrumbs, and route matching
+
+The browser URL may be **`/en/identity/users`** while menu items and **`RoutesService`** paths stay **`/identity/users`**. For comparisons (active state, **`findRoute`**, permission guard, dynamic layout), normalize the current URL with **`RouteBasedCultureUrlService.normalizeForMenuMatch`** (or **`stripCulturePrefixIfEnabled`**) or use **`getRoutePathForMatching`** where **`getRoutePath`** was used.
+
+### Configuration refresh
+
+**`RouteBasedCultureUrlService`** refreshes its cached **`useRouteBasedCulture`** and **languages** when application configuration is updated (for example after **`refreshAppState`**), so hot paths do not query configuration on every change detection cycle.
+
 ## Multi-Tenancy Compatibility
 
 URL-based localization is fully compatible with [multi-tenancy URL routing](../architecture/multi-tenancy/index.md). The culture route is registered as a conventional route `{culture}/{controller}/{action}`. If your application uses tenant routing (e.g., `/{tenant}/...`), the tenant middleware strips the tenant segment before routing, and the culture segment is handled separately.
