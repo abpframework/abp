@@ -32,7 +32,7 @@
 @* ************************* CREATE DIALOG ************************* *@
 @if (HasCreatePermission)
 {
-    <MudDialog @ref="_createDialog" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })" CloseOnEscapeKey="true">
+    <MudDialog @ref="_createDialog" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseOnEscapeKey = true })">
         <TitleContent>
             <MudText Typo="Typo.h6">@L["NewRole"]</MudText>
         </TitleContent>
@@ -57,7 +57,7 @@
 @* ************************* EDIT DIALOG ************************* *@
 @if (HasUpdatePermission)
 {
-    <MudDialog @ref="_editDialog" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })" CloseOnEscapeKey="true">
+    <MudDialog @ref="_editDialog" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseOnEscapeKey = true })">
         <TitleContent>
             <MudText Typo="Typo.h6">@L["Edit"]</MudText>
         </TitleContent>
