@@ -2,7 +2,9 @@
 @using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Components.LayoutHooks
 @using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Components
 @using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Layout
+@using Volo.Abp.Ui.Branding
 @inherits LayoutComponentBase
+@inject IBrandingProvider BrandingProvider
 
 <MudThemeProvider />
 <MudPopoverProvider />
@@ -15,13 +17,15 @@
                        Color="Color.Inherit"
                        Edge="Edge.Start"
                        OnClick="@ToggleDrawer" />
+        <MudText Typo="Typo.h6">@BrandingProvider.AppName</MudText>
         <MudSpacer />
         <NavToolbar />
     </MudAppBar>
 
     <MudDrawer @bind-Open="@_drawerOpen"
+               ClipMode="DrawerClipMode.Always"
                Elevation="1"
-               Width="280px">
+               Width="300px">
         <NavMenu />
     </MudDrawer>
 

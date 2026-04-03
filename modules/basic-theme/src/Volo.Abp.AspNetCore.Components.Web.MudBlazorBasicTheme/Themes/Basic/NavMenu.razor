@@ -1,9 +1,4 @@
-@using Volo.Abp.Ui.Branding
-@inject IBrandingProvider BrandingProvider
-
 <MudNavMenu>
-    <MudText Typo="Typo.h6" Class="px-4 pt-2">@BrandingProvider.AppName</MudText>
-    <MudDivider Class="my-1"/>
     @if(Menu != null && !Menu.Items.IsNullOrEmpty())
     {
         foreach (var menuItem in Menu.Items)

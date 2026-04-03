@@ -16,7 +16,11 @@
 
 <AuthorizeView>
     <Authorized>
-        <MudMenu Icon="@Icons.Material.Filled.AccountCircle">
+        <MudMenu>
+            <ActivatorContent>
+                <MudIconButton Icon="@Icons.Material.Outlined.AccountCircle" Color="Color.Inherit" />
+            </ActivatorContent>
+            <ChildContent>
             <MudMenuItem>
                 @if (CurrentTenant.Name != null)
                 {
@@ -36,6 +40,7 @@
             }
             <MudDivider />
             <MudMenuItem OnClick="BeginSignOut">@UiLocalizer["Logout"]</MudMenuItem>
+            </ChildContent>
         </MudMenu>
     </Authorized>
     <NotAuthorized>

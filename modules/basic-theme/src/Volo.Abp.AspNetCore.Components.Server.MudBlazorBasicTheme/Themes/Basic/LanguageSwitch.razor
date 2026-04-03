@@ -8,13 +8,18 @@
 
 @if (_otherLanguages != null && _otherLanguages.Any())
 {
-    <MudMenu Icon="@Icons.Material.Filled.Language">
+    <MudMenu>
+        <ActivatorContent>
+            <MudIconButton Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" />
+        </ActivatorContent>
+        <ChildContent>
         <MudMenuItem Disabled="true">@_currentLanguage.DisplayName</MudMenuItem>
         <MudDivider />
         @foreach (var language in _otherLanguages)
         {
             <MudMenuItem OnClick="@(() => ChangeLanguage(language))">@language.DisplayName</MudMenuItem>
         }
+        </ChildContent>
     </MudMenu>
 }
 

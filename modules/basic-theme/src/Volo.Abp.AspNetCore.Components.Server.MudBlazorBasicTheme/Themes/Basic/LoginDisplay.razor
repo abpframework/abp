@@ -13,7 +13,11 @@
 
 <AuthorizeView>
     <Authorized>
-        <MudMenu Icon="@Icons.Material.Filled.AccountCircle">
+        <MudMenu>
+            <ActivatorContent>
+                <MudIconButton Icon="@Icons.Material.Outlined.AccountCircle" Color="Color.Inherit" />
+            </ActivatorContent>
+            <ChildContent>
             <MudMenuItem>
                 @if (CurrentTenant.Name != null)
                 {
@@ -31,6 +35,7 @@
                     <MudMenuItem Href="@menuItem.Url?.TrimStart('/', '~')" Target="@menuItem.Target">@menuItem.DisplayName</MudMenuItem>
                 }
             }
+            </ChildContent>
         </MudMenu>
     </Authorized>
     <NotAuthorized>
