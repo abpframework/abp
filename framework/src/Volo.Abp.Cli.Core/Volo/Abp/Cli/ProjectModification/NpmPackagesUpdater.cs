@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -379,13 +378,17 @@ public class NpmPackagesUpdater : ITransientDependency
         return abpPackages;
     }
 
-    private static readonly Regex ValidNpmPackageNameRegex = new(
-        @"^@[a-zA-Z0-9][a-zA-Z0-9._-]*/[a-zA-Z0-9][a-zA-Z0-9._-]*$",
-        RegexOptions.Compiled);
-
     public static bool IsValidNpmPackageName(string packageName)
     {
-        return ValidNpmPackageNameRegex.IsMatch(packageName);
+        try
+        {
+            NpmHelper.EnsureSafePackageName(packageName);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     protected virtual async Task RunInstallLibsAsync(string fileDirectory)

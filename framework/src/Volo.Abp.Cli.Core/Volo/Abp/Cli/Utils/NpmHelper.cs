@@ -85,12 +85,12 @@ public class NpmHelper : ITransientDependency
         RegexOptions.Compiled);
 
     private static readonly Regex SafeVersionRegex = new(
-        @"^[a-zA-Z0-9._~^><=|\-+]+$",
+        @"^[a-zA-Z0-9._~^+\-]+$",
         RegexOptions.Compiled);
 
     public static void EnsureSafePackageName(string packageName)
     {
-        if (!SafePackageNameRegex.IsMatch(packageName))
+        if (string.IsNullOrWhiteSpace(packageName) || !SafePackageNameRegex.IsMatch(packageName))
         {
             throw new CliUsageException($"Invalid npm package name detected: {SanitizeForLog(packageName)}");
         }
@@ -106,6 +106,11 @@ public class NpmHelper : ITransientDependency
 
     public static string SanitizeForLog(string value)
     {
+        if (value == null)
+        {
+            return "(null)";
+        }
+
         return Regex.Replace(value, @"[\x00-\x1F\x7F]", "?");
     }
 
