@@ -371,7 +371,7 @@ public class NpmPackagesUpdater : ITransientDependency
                 }
                 else
                 {
-                    Logger.LogWarning($"Skipping invalid npm package name: {p.Name}");
+                    Logger.LogWarning($"Skipping invalid npm package name: {NpmHelper.SanitizeForLog(p.Name)}");
                 }
             }
         }

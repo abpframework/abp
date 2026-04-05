@@ -73,6 +73,7 @@ public class ProjectNpmPackageAdder : ITransientDependency
         }
 
         NpmHelper.EnsureSafePackageName(npmPackage.Name);
+        NpmHelper.EnsureSafeVersion(version);
 
         Logger.LogInformation($"Installing '{npmPackage.Name}' package to the project '{packageJsonFilePath}'...");
 
@@ -147,6 +148,8 @@ public class ProjectNpmPackageAdder : ITransientDependency
         {
             version = DetectAbpVersionOrNull(Path.Combine(directory, "package.json"));
         }
+
+        NpmHelper.EnsureSafeVersion(version);
 
         var versionPostfix = version != null ? $"@{version}" : string.Empty;
 

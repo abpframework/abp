@@ -67,6 +67,7 @@ public class NpmHelper : ITransientDependency
     public void NpmInstallPackage(string package, string version, string directory)
     {
         EnsureSafePackageName(package);
+        EnsureSafeVersion(version);
         var packageVersion = !string.IsNullOrWhiteSpace(version) ? $"@{version}" : string.Empty;
         CmdHelper.RunCmd("npm install --ignore-scripts " + package + packageVersion, workingDirectory: directory);
     }
@@ -74,6 +75,7 @@ public class NpmHelper : ITransientDependency
     public void YarnAddPackage(string package, string version, string directory)
     {
         EnsureSafePackageName(package);
+        EnsureSafeVersion(version);
         var packageVersion = !string.IsNullOrWhiteSpace(version) ? $"@{version}" : string.Empty;
         CmdHelper.RunCmd("npx yarn add " + package + packageVersion + " --ignore-scripts", workingDirectory: directory);
     }
@@ -82,12 +84,29 @@ public class NpmHelper : ITransientDependency
         @"^(@[a-zA-Z0-9][a-zA-Z0-9._-]*/)?[a-zA-Z0-9][a-zA-Z0-9._-]*$",
         RegexOptions.Compiled);
 
+    private static readonly Regex SafeVersionRegex = new(
+        @"^[a-zA-Z0-9._~^><=|\-+]+$",
+        RegexOptions.Compiled);
+
     public static void EnsureSafePackageName(string packageName)
     {
         if (!SafePackageNameRegex.IsMatch(packageName))
         {
-            throw new InvalidOperationException($"Invalid npm package name detected: {packageName}");
+            throw new CliUsageException($"Invalid npm package name detected: {SanitizeForLog(packageName)}");
         }
+    }
+
+    public static void EnsureSafeVersion(string version)
+    {
+        if (!string.IsNullOrWhiteSpace(version) && !SafeVersionRegex.IsMatch(version))
+        {
+            throw new CliUsageException($"Invalid npm package version detected: {SanitizeForLog(version)}");
+        }
+    }
+
+    public static string SanitizeForLog(string value)
+    {
+        return Regex.Replace(value, @"[\x00-\x1F\x7F]", "?");
     }
 
     public string GetInstalledNpmPackages()
