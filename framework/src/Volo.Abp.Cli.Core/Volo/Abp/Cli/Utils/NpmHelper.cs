@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NuGet.Versioning;
@@ -65,14 +66,28 @@ public class NpmHelper : ITransientDependency
     [Obsolete("This method is deprecated. Use 'YarnAddPackage' instead (it uses 'npx', so there is no need for 'yarn' to be globally installed.")]
     public void NpmInstallPackage(string package, string version, string directory)
     {
+        EnsureSafePackageName(package);
         var packageVersion = !string.IsNullOrWhiteSpace(version) ? $"@{version}" : string.Empty;
         CmdHelper.RunCmd("npm install --ignore-scripts " + package + packageVersion, workingDirectory: directory);
     }
 
     public void YarnAddPackage(string package, string version, string directory)
     {
+        EnsureSafePackageName(package);
         var packageVersion = !string.IsNullOrWhiteSpace(version) ? $"@{version}" : string.Empty;
         CmdHelper.RunCmd("npx yarn add " + package + packageVersion + " --ignore-scripts", workingDirectory: directory);
+    }
+
+    private static readonly Regex SafePackageNameRegex = new(
+        @"^(@[a-zA-Z0-9][a-zA-Z0-9._-]*/)?[a-zA-Z0-9][a-zA-Z0-9._-]*$",
+        RegexOptions.Compiled);
+
+    public static void EnsureSafePackageName(string packageName)
+    {
+        if (!SafePackageNameRegex.IsMatch(packageName))
+        {
+            throw new InvalidOperationException($"Invalid npm package name detected: {packageName}");
+        }
     }
 
     public string GetInstalledNpmPackages()

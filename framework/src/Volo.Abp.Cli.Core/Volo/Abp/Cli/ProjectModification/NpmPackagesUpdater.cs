@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -359,16 +360,32 @@ public class NpmPackagesUpdater : ITransientDependency
 
             var properties = dependencies.Properties().ToList();
 
-            abpPackages
-                .AddRange(
-                properties.Where(
-                      p => p.Name.StartsWith("@abp/")
-                        || p.Name.StartsWith("@volo/")
-                        || p.Name.StartsWith("@volosoft/")).ToList()
-                );
+            foreach (var p in properties.Where(
+                         p => p.Name.StartsWith("@abp/")
+                           || p.Name.StartsWith("@volo/")
+                           || p.Name.StartsWith("@volosoft/")))
+            {
+                if (IsValidNpmPackageName(p.Name))
+                {
+                    abpPackages.Add(p);
+                }
+                else
+                {
+                    Logger.LogWarning($"Skipping invalid npm package name: {p.Name}");
+                }
+            }
         }
 
         return abpPackages;
+    }
+
+    private static readonly Regex ValidNpmPackageNameRegex = new(
+        @"^@[a-zA-Z0-9][a-zA-Z0-9._-]*/[a-zA-Z0-9][a-zA-Z0-9._-]*$",
+        RegexOptions.Compiled);
+
+    public static bool IsValidNpmPackageName(string packageName)
+    {
+        return ValidNpmPackageNameRegex.IsMatch(packageName);
     }
 
     protected virtual async Task RunInstallLibsAsync(string fileDirectory)

@@ -72,6 +72,8 @@ public class ProjectNpmPackageAdder : ITransientDependency
             return;
         }
 
+        NpmHelper.EnsureSafePackageName(npmPackage.Name);
+
         Logger.LogInformation($"Installing '{npmPackage.Name}' package to the project '{packageJsonFilePath}'...");
 
         if (!File.ReadAllText(packageJsonFilePath).Contains($"\"{npmPackage.Name}\""))
@@ -130,6 +132,8 @@ public class ProjectNpmPackageAdder : ITransientDependency
     public async Task AddMvcPackageAsync(string directory, NpmPackageInfo npmPackage, string version = null,
         bool skipInstallingLibs = false)
     {
+        NpmHelper.EnsureSafePackageName(npmPackage.Name);
+
         var packageJsonFilePath = Path.Combine(directory, "package.json");
         if (!File.Exists(packageJsonFilePath) ||
             File.ReadAllText(packageJsonFilePath).Contains($"\"{npmPackage.Name}\""))
