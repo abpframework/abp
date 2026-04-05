@@ -53,26 +53,26 @@ public class NpmHelper : ITransientDependency
     public void RunNpmInstall(string directory, params string[] args)
     {
         Logger.LogInformation($"Running npm install on {directory}");
-        CmdHelper.RunCmd($"npm install {args.JoinAsString(" ")}", directory);
+        CmdHelper.RunCmd($"npm install --ignore-scripts {args.JoinAsString(" ")}", directory);
     }
 
     public void RunYarn(string directory)
     {
         Logger.LogInformation($"Running Yarn on {directory}");
-        CmdHelper.RunCmd($"npx yarn", directory);
+        CmdHelper.RunCmd($"npx yarn --ignore-scripts", directory);
     }
 
     [Obsolete("This method is deprecated. Use 'YarnAddPackage' instead (it uses 'npx', so there is no need for 'yarn' to be globally installed.")]
     public void NpmInstallPackage(string package, string version, string directory)
     {
         var packageVersion = !string.IsNullOrWhiteSpace(version) ? $"@{version}" : string.Empty;
-        CmdHelper.RunCmd("npm install " + package + packageVersion, workingDirectory: directory);
+        CmdHelper.RunCmd("npm install --ignore-scripts " + package + packageVersion, workingDirectory: directory);
     }
 
     public void YarnAddPackage(string package, string version, string directory)
     {
         var packageVersion = !string.IsNullOrWhiteSpace(version) ? $"@{version}" : string.Empty;
-        CmdHelper.RunCmd("npx yarn add " + package + packageVersion, workingDirectory: directory);
+        CmdHelper.RunCmd("npx yarn add " + package + packageVersion + " --ignore-scripts", workingDirectory: directory);
     }
 
     public string GetInstalledNpmPackages()
