@@ -11,6 +11,20 @@
 
 | Package | Old Version | New Version | PR |
 |---------|-------------|-------------|-----|
+| Autofac | 8.4.0 | 9.1.0 | #25190 |
+| Autofac.Extensions.DependencyInjection | 10.0.0 | 11.0.0 | #25190 |
+| Microsoft.Bcl.AsyncInterfaces | 10.0.2 | 10.0.4 | #25190 |
+
+## 10.2.0-rc.4
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| Scriban | 6.6.0 | 7.0.0 | #25170 |
+
+## 10.2.0-rc.3
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
 | Microsoft.IdentityModel.JsonWebTokens | 8.14.0 | 8.16.0 | #25068 |
 | Microsoft.IdentityModel.Protocols.OpenIdConnect | 8.14.0 | 8.16.0 | #25068 |
 | Microsoft.IdentityModel.Tokens | 8.14.0 | 8.16.0 | #25068 |
@@ -52,3 +66,4 @@
 |---------|-------------|-------------|-----|
 | Microsoft.SemanticKernel | 1.67.1 | 1.71.0 | [#24891](https://github.com/abpframework/abp/pull/24891) |
 | Microsoft.SemanticKernel.Abstractions | 1.67.1 | 1.71.0 | [#24891](https://github.com/abpframework/abp/pull/24891) |
+

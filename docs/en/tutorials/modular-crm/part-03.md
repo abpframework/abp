@@ -7,17 +7,10 @@
 
 # Building the Catalog Module
 
-```json
-//[doc-params]
-{
-  "UI": ["MVC", "NG"]
-}
-```
-
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","BlazorWebApp"]
+    "UI": ["MVC", "BlazorWebApp", "NG"]
 }
 ````
 
@@ -639,4 +632,4 @@ yarn start
 
 ## Summary
 
-In this part of the tutorial, you've built the functionality inside the _Catalog_ module, which was created in the [previous part](part-02.md), and created a basic {{if UI == "MVC"}}MVC{{else if UI == "NG"}}Angular{{end}} UI to list products. In the next part, you will create a new _Ordering_ module and install it into the main application.
+In this part of the tutorial, you've built the functionality inside the _Catalog_ module, which was created in the [previous part](part-02.md), and created a basic {{if UI == "MVC"}}MVC{{else if UI == "BlazorWebApp"}}Blazor WebApp{{else if UI == "NG"}}Angular{{end}} UI to list products. In the next part, you will create a new _Ordering_ module and install it into the main application.
