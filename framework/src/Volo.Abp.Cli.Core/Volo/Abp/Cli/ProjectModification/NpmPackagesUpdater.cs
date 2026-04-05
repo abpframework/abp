@@ -385,7 +385,7 @@ public class NpmPackagesUpdater : ITransientDependency
             NpmHelper.EnsureSafePackageName(packageName);
             return true;
         }
-        catch
+        catch (CliUsageException)
         {
             return false;
         }
