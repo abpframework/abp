@@ -294,6 +294,10 @@ Configure<AbpLocalizationOptions>(options =>
 });
 ```
 
+## URL-Based Localization
+
+ABP supports embedding the culture code directly in the URL path (e.g. `/en/products`, `/zh-Hans/about`), which is useful for SEO-friendly and shareable localized URLs. See the [URL-Based Localization](./url-based-localization.md) document for details.
+
 ## The Client Side
 
 See the following documents to learn how to reuse the same localization texts in the JavaScript side;
