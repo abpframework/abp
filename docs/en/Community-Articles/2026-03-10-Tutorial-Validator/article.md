@@ -1,4 +1,6 @@
-# Automatically Validate Your Documentation: How We Built a Tutorial Validator
+# Automatically Validate Your Documentation: How We Built an AI Tutorial Validator
+
+> If you're in a hurry and want to quickly check the repository, you can find the source code of the AI Tutorial Validator here 👉 [github.com/abpframework/ai-tutorial-validator](https://github.com/abpframework/ai-tutorial-validator)
 
 Writing a tutorial is difficult. Keeping technical documentation accurate over time is even harder.
 If you maintain developer documentation, you probably know the problem: a tutorial that worked a few months ago can silently break after a framework update, dependency change, or a small missing line in a code snippet.
@@ -34,7 +36,7 @@ It treats tutorials like testable workflows, ensuring that every step works exac
 
 ## How the Tutorial Validator Works?
 
-the tutorial validator validates tutorials using a three-stage pipeline:
+The tutorial validator validates tutorials using a three-stage pipeline:
 
 1. **Analyst**: Scrapes tutorial pages and converts instructions into a structured test plan
 2. **Executor**: Follows the plan step by step in a clean environment
@@ -43,7 +45,7 @@ the tutorial validator validates tutorials using a three-stage pipeline:
 ![the tutorial validator Analyst](docs/images/image-1.png)
 
 It identifies commands, code edits, HTTP requests, and expected outcomes.
-The key idea is simple: if a developer would need to do it, the validator does it too.
+The key idea is simple: if a developer needs to do it, the validator does it too.
 That includes running terminal commands, editing files, checking HTTP responses, and validating build outcomes.
 
 ![the tutorial validator Executor](docs/images/image-2.png)
@@ -108,6 +110,6 @@ If your team maintains technical tutorials, this project can give you a practica
 
 ---
 
-You can find the source-code of the tutorial validator at this repo 👉 https://github.com/abpframework/tutorial-validator
+You can find the source-code of the tutorial validator at this repo 👉 [github.com/abpframework/tutorial-validator](https://github.com/abpframework/ai-tutorial-validator)
 
 We would love to hear your feedback, ideas and waiting PRs to improve this application.
