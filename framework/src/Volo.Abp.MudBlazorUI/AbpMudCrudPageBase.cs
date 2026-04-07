@@ -203,6 +203,22 @@ public abstract class AbpMudCrudPageBase<
     protected MudDialog? _createDialog;
     protected MudDialog? _editDialog;
 
+    protected virtual DialogOptions CreateDialogOptions => new DialogOptions
+    {
+        MaxWidth = MaxWidth.Medium,
+        FullWidth = true,
+        CloseOnEscapeKey = true,
+        BackdropClick = false
+    };
+
+    protected virtual DialogOptions EditDialogOptions => new DialogOptions
+    {
+        MaxWidth = MaxWidth.Medium,
+        FullWidth = true,
+        CloseOnEscapeKey = true,
+        BackdropClick = false
+    };
+
     protected AbpMudExtensibleDataGrid<TListViewModel> _dataGrid = default!;
 
     protected AbpMudCrudPageBase()

@@ -3,7 +3,7 @@
 @using JetBrains.Annotations
 @using Volo.Abp.PermissionManagement.Localization
 
-<MudDialog @bind-Visible="@_isVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.Large, FullWidth = true, CloseOnEscapeKey = true })">
+<MudDialog @bind-Visible="@_isVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.Large, FullWidth = true, CloseOnEscapeKey = true, BackdropClick = false })">
     <TitleContent>
         <MudText Typo="Typo.h6">@L["Permissions"] - @_entityDisplayName</MudText>
     </TitleContent>
