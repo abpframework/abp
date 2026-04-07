@@ -13,6 +13,9 @@ namespace Volo.Abp.SettingManagement.Blazor.MudBlazor.Pages.SettingManagement;
 
 public partial class SettingManagement
 {
+    [Parameter]
+    public string? Culture { get; set; }
+
     [Inject]
     protected IServiceProvider ServiceProvider { get; set; } = default!;
 

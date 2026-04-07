@@ -17,6 +17,9 @@ namespace Volo.Abp.Identity.Blazor.MudBlazor.Pages.Identity;
 
 public partial class RoleManagement
 {
+    [Parameter]
+    public string? Culture { get; set; }
+
     protected const string PermissionProviderName = "R";
 
     protected PermissionManagementModal? PermissionManagementModal;

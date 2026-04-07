@@ -5,6 +5,7 @@
 <RemoteAuthenticatorView Action="@Action" OnLogInSucceeded="OnLogInSucceeded" OnLogOutSucceeded="OnLogOutSucceeded" />
 @inject WebAssemblyCachedApplicationConfigurationClient WebAssemblyCachedApplicationConfigurationClient
 @code{
+    [Parameter] public string? Culture { get; set; }
     [Parameter] public string? Action { get; set; }
 
     private async Task OnLogInSucceeded(RemoteAuthenticationState state)

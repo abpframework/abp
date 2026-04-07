@@ -12,6 +12,9 @@ namespace Volo.Abp.Account.Blazor.MudBlazor.Pages.Account;
 
 public partial class AccountManage
 {
+    [Parameter]
+    public string? Culture { get; set; }
+
     [Inject] protected IProfileAppService ProfileAppService { get; set; } = default!;
 
     [Inject] protected IUiMessageService UiMessageService { get; set; } = default!;

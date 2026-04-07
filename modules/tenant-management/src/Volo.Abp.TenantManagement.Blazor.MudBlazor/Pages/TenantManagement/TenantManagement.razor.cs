@@ -17,6 +17,9 @@ namespace Volo.Abp.TenantManagement.Blazor.MudBlazor.Pages.TenantManagement;
 
 public partial class TenantManagement
 {
+    [Parameter]
+    public string? Culture { get; set; }
+
     protected const string FeatureProviderName = "T";
 
     protected bool HasManageFeaturesPermission;
