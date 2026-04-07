@@ -110,6 +110,6 @@ If your team maintains technical tutorials, this project can give you a practica
 
 ---
 
-You can find the source-code of the tutorial validator at this repo 👉 [github.com/abpframework/tutorial-validator](https://github.com/abpframework/ai-tutorial-validator)
+You can find the source code of the tutorial validator at this repo 👉 [github.com/abpframework/ai-tutorial-validator](https://github.com/abpframework/ai-tutorial-validator)
 
 We would love to hear your feedback, ideas and waiting PRs to improve this application.
