@@ -27,11 +27,11 @@
                                          Label="@L["SmtpPort"]" />
                 </MudItem>
                 <MudItem xs="12">
-                    <MudCheckBox T="bool" @bind-Value="@EmailSettings.SmtpEnableSsl"
+                    <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default" T="bool" @bind-Value="@EmailSettings.SmtpEnableSsl"
                                 Label="@L["SmtpEnableSsl"]" />
                 </MudItem>
                 <MudItem xs="12">
-                    <MudCheckBox T="bool" @bind-Value="@EmailSettings.SmtpUseDefaultCredentials"
+                    <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default" T="bool" @bind-Value="@EmailSettings.SmtpUseDefaultCredentials"
                                 Label="@L["SmtpUseDefaultCredentials"]" />
                 </MudItem>
                 @if (!EmailSettings.SmtpUseDefaultCredentials)

@@ -58,7 +58,7 @@
 
                                     @if (feature.ValueType is ToggleStringValueType)
                                     {
-                                        <MudCheckBox Disabled="@disabled" Value="@ToggleValues[feature.Name]"
+                                        <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default" Disabled="@disabled" Value="@ToggleValues[feature.Name]"
                                             ValueChanged="@(async (bool v) => await OnSelectedValueChangedAsync(v, feature))"
                                             Label="@GetShownName(feature)" />
                                         @if (feature.Description != null)

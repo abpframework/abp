@@ -43,8 +43,8 @@
                              Required="true"
                              RequiredError="@L["The {0} field is required.", L["DisplayName:RoleName"]]" />
                 <MudExtensionProperties TEntityType="IdentityRoleCreateDto" TResourceType="IdentityResource" Entity="@NewEntity" LH="@_localizerHelper" ModalType="ExtensionPropertyModalType.CreateModal" />
-                <MudCheckBox T="bool" @bind-Value="@NewEntity.IsDefault" Label="@L["DisplayName:IsDefault"]" />
-                <MudCheckBox T="bool" @bind-Value="@NewEntity.IsPublic" Label="@L["DisplayName:IsPublic"]" />
+                <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default" T="bool" @bind-Value="@NewEntity.IsDefault" Label="@L["DisplayName:IsDefault"]" />
+                <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default" T="bool" @bind-Value="@NewEntity.IsPublic" Label="@L["DisplayName:IsPublic"]" />
             </MudForm>
         </DialogContent>
         <DialogActions>
@@ -69,8 +69,8 @@
                              Required="true"
                              RequiredError="@L["The {0} field is required.", L["DisplayName:RoleName"]]" />
                 <MudExtensionProperties TEntityType="IdentityRoleUpdateDto" TResourceType="IdentityResource" Entity="@EditingEntity" LH="@_localizerHelper" ModalType="ExtensionPropertyModalType.EditModal" />
-                <MudCheckBox T="bool" @bind-Value="@EditingEntity.IsDefault" Label="@L["DisplayName:IsDefault"]" />
-                <MudCheckBox T="bool" @bind-Value="@EditingEntity.IsPublic" Label="@L["DisplayName:IsPublic"]" />
+                <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default" T="bool" @bind-Value="@EditingEntity.IsDefault" Label="@L["DisplayName:IsDefault"]" />
+                <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default" T="bool" @bind-Value="@EditingEntity.IsPublic" Label="@L["DisplayName:IsPublic"]" />
             </MudForm>
         </DialogContent>
         <DialogActions>

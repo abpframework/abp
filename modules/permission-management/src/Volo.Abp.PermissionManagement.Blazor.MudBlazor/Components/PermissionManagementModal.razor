@@ -18,7 +18,7 @@
                              Immediate="true" />
             </MudItem>
             <MudItem xs="12" sm="4" Class="d-flex align-items-center">
-                <MudCheckBox T="bool"
+                <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default" T="bool"
                             Disabled="@_selectAllDisabled"
                             Value="@GrantAll"
                             Indeterminate="@GrantAny"
@@ -41,7 +41,7 @@
                     {
                         <MudTabPanel Text="@($"{group.DisplayName} ({group.Permissions.Count(x => x.IsGranted)})")">
                             <div>
-                                <MudCheckBox 
+                                <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default" 
                                             T="bool"
                                             Disabled="@(IsPermissionGroupDisabled(group))"
                                             Value="@(group.Permissions.All(x => x.IsGranted))"
@@ -53,7 +53,7 @@
                                 {
                                     var depth = GetPermissionDepthOrDefault(permission.Name);
                                     <div style="margin-inline-start: @(depth * 20)px;">
-                                        <MudCheckBox
+                                        <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default"
                                                     T="bool" 
                                                     Disabled="@(IsDisabledPermission(permission))"
                                                     Value="@permission.IsGranted"

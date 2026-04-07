@@ -92,7 +92,7 @@
                 <MudRadioGroup T="string" SelectedOption="@CurrentLookupService" SelectedOptionChanged="@OnLookupServiceCheckedValueChanged">
                     @foreach (var keyLookupService in ResourceProviderKeyLookupServices)
                     {
-                        <MudRadio T="string" Option="@keyLookupService.Name">@keyLookupService.DisplayName</MudRadio>
+                        <MudRadio Color="Color.Primary" T="string" Option="@keyLookupService.Name">@keyLookupService.DisplayName</MudRadio>
                     }
                 </MudRadioGroup>
                 <MudAutocomplete Margin="Margin.Dense" T="SearchProviderKeyInfo"
@@ -105,13 +105,13 @@
                                RequiredError="@L["ThisFieldIsRequired."]"
                                Class="mt-2" />
                 <MudText Typo="Typo.subtitle1" Class="mb-2 mt-4">@L["ResourcePermissionPermissions"]</MudText>
-                <MudSwitch T="bool" Value="@_grantAllCreate" 
+                <MudSwitch Color="Color.Primary" T="bool" Value="@_grantAllCreate" 
                           ValueChanged="@(async (bool b) => await GrantAllCreateAsync(b))"
                           Label="@L["GrantAllResourcePermissions"]" />
                 <div class="mt-2">
                     @foreach (var permission in CreateEntity.Permissions)
                     {
-                        <MudCheckBox T="bool" @bind-Value="@permission.IsGranted" 
+                        <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default" T="bool" @bind-Value="@permission.IsGranted" 
                                     Label="@permission.DisplayName" />
                     }
                 </div>
@@ -134,13 +134,13 @@
         <DialogContent>
             <MudForm @ref="@_editFormRef" Model="@EditEntity">
                 <MudText Typo="Typo.subtitle1" Class="mb-2">@L["ResourcePermissionPermissions"]</MudText>
-                <MudSwitch T="bool" Value="@_grantAllEdit" 
+                <MudSwitch Color="Color.Primary" T="bool" Value="@_grantAllEdit" 
                           ValueChanged="@(async (bool b) => await GrantAllEditAsync(b))"
                           Label="@L["GrantAllResourcePermissions"]" />
                 <div class="mt-2">
                     @foreach (var permission in EditEntity.Permissions)
                     {
-                        <MudCheckBox T="bool" @bind-Value="@permission.IsGranted" 
+                        <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default" T="bool" @bind-Value="@permission.IsGranted" 
                                     Label="@permission.DisplayName" />
                     }
                 </div>
