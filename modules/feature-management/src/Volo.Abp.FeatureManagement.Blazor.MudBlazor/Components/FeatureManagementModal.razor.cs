@@ -169,7 +169,7 @@ public partial class FeatureManagementModal
 
     protected virtual string GetFeatureStyles(FeatureDto feature)
     {
-        return $"margin-left: {feature.Depth * 20}px";
+        return $"margin-inline-start: {feature.Depth * 20}px";
     }
 
     protected virtual bool IsDisabled(FeatureDto feature)
