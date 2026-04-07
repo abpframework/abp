@@ -24,6 +24,12 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
 
     protected Regex ExtensionPropertiesRegex = new Regex(@"ExtraProperties\[(.*?)\]");
 
+    /// <summary>
+    /// Maps SortBy func references to their corresponding property names.
+    /// Used to resolve property names from MudBlazor SortDefinition.SortFunc.
+    /// </summary>
+    private readonly Dictionary<Func<TItem, object>, string> _sortFuncToPropertyMap = new();
+
     [Parameter] public Func<GridState<TItem>, Task<GridData<TItem>>>? ServerData { get; set; }
 
     [Parameter] public bool Loading { get; set; }
@@ -57,6 +63,23 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
         {
             await _dataGrid.ReloadServerData();
         }
+    }
+
+    /// <summary>
+    /// Resolves the property name for a given SortDefinition by matching its SortFunc reference.
+    /// When MudBlazor uses Func for SortBy on TemplateColumn, it returns an internal GUID identifier
+    /// instead of the property name. This method looks up the original property name from the
+    /// registered sort function mapping.
+    /// </summary>
+    /// <returns>The property name if found in the mapping, otherwise falls back to SortDefinition.SortBy.</returns>
+    public virtual string ResolveSortPropertyName(SortDefinition<TItem> sortDefinition)
+    {
+        if (sortDefinition.SortFunc != null && _sortFuncToPropertyMap.TryGetValue(sortDefinition.SortFunc, out var propertyName))
+        {
+            return propertyName;
+        }
+
+        return sortDefinition.SortBy;
     }
 
     protected virtual RenderFragment RenderCustomTableColumnComponent(Type type, object data)
@@ -176,8 +199,7 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
             return null;
         }
 
-        // Return PropertyName if available, otherwise use Data
-        // PropertyName is preferred as it's explicitly set for sorting
+        // Determine the property path for sorting
         string? propertyPath = null;
         if (!string.IsNullOrEmpty(column.PropertyName))
         {
@@ -193,30 +215,36 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
             return null;
         }
 
-        // Create a property accessor lambda that MudBlazor can understand
-        // This uses the property name from propertyPath to build a proper expression
         var properties = propertyPath.Split('.');
-        
+
         // Build a lambda expression that directly accesses the property
-        // This allows MudBlazor to extract the property name for sorting
         var parameter = System.Linq.Expressions.Expression.Parameter(typeof(TItem), "x");
         System.Linq.Expressions.Expression expression = parameter;
-        
+
+        Func<TItem, object>? sortFunc = null;
         foreach (var prop in properties)
         {
             var propertyInfo = expression.Type.GetProperty(prop, BindingFlags.Public | BindingFlags.Instance);
             if (propertyInfo == null)
             {
                 // Fallback to GetPropertyValue if property not found
-                return item => GetPropertyValue(item, propertyPath);
+                sortFunc = item => GetPropertyValue(item, propertyPath);
+                break;
             }
             expression = System.Linq.Expressions.Expression.Property(expression, propertyInfo);
         }
-        
-        // Convert to object and create lambda
-        var convertExpression = System.Linq.Expressions.Expression.Convert(expression, typeof(object));
-        var lambda = System.Linq.Expressions.Expression.Lambda<Func<TItem, object>>(convertExpression, parameter);
-        return lambda.Compile();
+
+        if (sortFunc == null)
+        {
+            var convertExpression = System.Linq.Expressions.Expression.Convert(expression, typeof(object));
+            var lambda = System.Linq.Expressions.Expression.Lambda<Func<TItem, object>>(convertExpression, parameter);
+            sortFunc = lambda.Compile();
+        }
+
+        // Register the mapping so we can resolve property name from SortDefinition.SortFunc later
+        _sortFuncToPropertyMap[sortFunc] = propertyPath;
+
+        return sortFunc;
     }
 
     protected virtual Func<TItem, object>? GetExtensionPropertySortFunc(TableColumn column)
@@ -233,11 +261,16 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
         }
 
         var propertyName = match.Groups[1].Value;
-        return item =>
+        Func<TItem, object> sortFunc = item =>
         {
             var entity = item as IHasExtraProperties;
             return entity?.GetProperty(propertyName) ?? string.Empty;
         };
+
+        // Register the mapping so we can resolve property name from SortDefinition.SortFunc later
+        _sortFuncToPropertyMap[sortFunc] = propertyName;
+
+        return sortFunc;
     }
 
     protected virtual Color GetColor(object? color)

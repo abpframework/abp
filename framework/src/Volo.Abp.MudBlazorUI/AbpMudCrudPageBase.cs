@@ -292,46 +292,6 @@ public abstract class AbpMudCrudPageBase<
             return sortBy;
         }
 
-        // When MudBlazor uses Func for SortBy, it returns an internal identifier (GUID) instead of property name
-        // We need to map it back to the actual property name from column.Data or column.PropertyName
-        
-        // Check if sortBy looks like an internal identifier (GUID format or contains lowercase letters and numbers)
-        // GUID format: 8-4-4-4-12 hexadecimal digits
-        var isGuidFormat = System.Guid.TryParse(sortBy, out _);
-        var looksLikeInternalId = isGuidFormat || (sortBy.Length > 0 && char.IsLower(sortBy[0]) && sortBy.Any(char.IsDigit));
-        
-        if (looksLikeInternalId)
-        {
-            // Get all sortable columns that are not extension properties, in order
-            var sortableColumns = columns
-                .Where(c => c.Sortable && 
-                           !string.IsNullOrEmpty(c.Data) && 
-                           !c.Data.StartsWith("ExtraProperties["))
-                .ToList();
-            
-            // Since we can't reliably match GUID to specific column,
-            // we use the first sortable column's property name
-            // This works when there's only one sortable column being sorted
-            // For multiple columns, this is a limitation - we'd need to track the mapping
-            var sortableColumn = sortableColumns.FirstOrDefault();
-            
-            if (sortableColumn != null)
-            {
-                // Prefer PropertyName if available, otherwise use Data
-                if (!string.IsNullOrEmpty(sortableColumn.PropertyName))
-                {
-                    return sortableColumn.PropertyName;
-                }
-                
-                if (!string.IsNullOrEmpty(sortableColumn.Data))
-                {
-                    return sortableColumn.Data;
-                }
-            }
-        }
-
-        // If sortBy doesn't look like an internal identifier, return it as-is
-        // It might already be the correct property name
         return sortBy;
     }
 
@@ -371,11 +331,8 @@ public abstract class AbpMudCrudPageBase<
 
     protected virtual async Task<GridData<TListViewModel>> OnDataGridReadAsync(GridState<TListViewModel> state)
     {
-        // Map sort field names from MudBlazor to actual property names
-        // When using Func for SortBy, MudBlazor returns internal identifiers (GUIDs) instead of property names
-        var columns = TableColumns.GetOrAdd(GetType().FullName!, () => new List<TableColumn>());
         CurrentSorting = state.SortDefinitions
-            .Select(s => MapSortFieldToPropertyName(s.SortBy, columns) + (s.Descending ? " DESC" : ""))
+            .Select(s => _dataGrid.ResolveSortPropertyName(s) + (s.Descending ? " DESC" : ""))
             .JoinAsString(",");
         CurrentPage = state.Page + 1;
         if (state.PageSize > 0)
