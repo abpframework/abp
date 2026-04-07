@@ -21,7 +21,7 @@ public class QueryStringTenantResolveContributor : HttpTenantResolveContributorB
                 var tenantValue = httpContext.Request.Query[tenantKey].ToString();
                 if (!tenantValue.IsNullOrWhiteSpace())
                 {
-                    return Task.FromResult(tenantValue)!;
+                    return Task.FromResult<string?>(tenantValue);
                 }
             }
         }
