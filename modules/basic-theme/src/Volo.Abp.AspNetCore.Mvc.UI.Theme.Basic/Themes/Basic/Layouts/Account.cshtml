@@ -68,6 +68,7 @@
                     <h2 class="brand-text">@BrandingProvider.AppName</h2>
                 </div>
                 @if (MultiTenancyOptions.Value.IsEnabled &&
+                  MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Isolated &&
                   (TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(CookieTenantResolveContributor.ContributorName) == true ||
                    TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(QueryStringTenantResolveContributor.ContributorName) == true))
                 {
