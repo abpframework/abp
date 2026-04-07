@@ -72,40 +72,45 @@ Publishing by name with `new { OrderId = ..., CustomerEmail = ... }` triggers th
 
 Dynamic subscription lets you register event handlers at runtime, using a string event name.
 
+The recommended approach is to use `IocEventHandlerFactory`, which is the same mechanism ABP uses internally for typed handlers. It creates a new DI scope for each event, resolves a fresh handler instance, calls `HandleEventAsync`, then disposes the scope — so the handler can use normal constructor injection without any manual scope management:
+
 ```csharp
-public override async Task OnApplicationInitializationAsync(
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    context.Services.AddTransient<PartnerOrderHandler>();
+}
+
+public override void OnApplicationInitialization(
     ApplicationInitializationContext context)
 {
     var eventBus = context.ServiceProvider
         .GetRequiredService<IDistributedEventBus>();
+    var scopeFactory = context.ServiceProvider
+        .GetRequiredService<IServiceScopeFactory>();
 
     // Subscribe to a dynamic event — no event class needed
     eventBus.Subscribe("PartnerOrderReceived",
-        new PartnerOrderHandler(context.ServiceProvider));
+        new IocEventHandlerFactory(scopeFactory, typeof(PartnerOrderHandler)));
 }
 ```
 
-The handler implements `IDistributedEventHandler<DynamicEventData>`:
+The handler implements `IDistributedEventHandler<DynamicEventData>` and injects its dependencies normally:
 
 ```csharp
 public class PartnerOrderHandler : IDistributedEventHandler<DynamicEventData>
 {
-    private readonly IServiceProvider _serviceProvider;
+    private readonly IPartnerOrderProcessor _orderProcessor;
 
-    public PartnerOrderHandler(IServiceProvider serviceProvider)
+    public PartnerOrderHandler(IPartnerOrderProcessor orderProcessor)
     {
-        _serviceProvider = serviceProvider;
+        _orderProcessor = orderProcessor;
     }
 
     public async Task HandleEventAsync(DynamicEventData eventData)
     {
         // eventData.EventName = "PartnerOrderReceived"
         // eventData.Data = the raw payload from the broker
-
-        var orderProcessor = _serviceProvider
-            .GetRequiredService<IPartnerOrderProcessor>();
-
-        await orderProcessor.ProcessAsync(eventData.EventName, eventData.Data);
+        await _orderProcessor.ProcessAsync(eventData.EventName, eventData.Data);
     }
 }
 ```
@@ -115,18 +120,22 @@ public class PartnerOrderHandler : IDistributedEventHandler<DynamicEventData>
 - **`EventName`** — the string name that identifies the event
 - **`Data`** — the raw event data payload (the deserialized `object` from the broker)
 
-> `Subscribe` returns an `IDisposable`. Call `Dispose()` to unsubscribe the handler at runtime.
+> `Subscribe` returns an `IDisposable`. Call `Dispose()` to unsubscribe the handler at runtime. For application-lifetime subscriptions, prefer module initialization (`OnApplicationInitialization` / `OnApplicationInitializationAsync`) over subscribing inside an application service.
 
 ## Mixed Typed and Dynamic Handlers
 
 Typed and dynamic handlers coexist naturally. When both are registered for the same event name, **both are triggered** — the framework automatically converts the data to the appropriate format for each handler.
 
 ```csharp
+var eventBus = context.ServiceProvider.GetRequiredService<IDistributedEventBus>();
+var scopeFactory = context.ServiceProvider.GetRequiredService<IServiceScopeFactory>();
+
 // Typed handler — receives OrderPlacedEto
 eventBus.Subscribe<OrderPlacedEto, OrderEmailHandler>();
 
 // Dynamic handler — receives DynamicEventData for the same event
-eventBus.Subscribe("OrderPlaced", new AuditLogHandler());
+eventBus.Subscribe("OrderPlaced",
+    new IocEventHandlerFactory(scopeFactory, typeof(AuditLogHandler)));
 ```
 
 When `OrderPlacedEto` is published (by type or by name), both handlers fire. The typed handler receives a fully deserialized `OrderPlacedEto` object. The dynamic handler receives a `DynamicEventData` wrapping the raw payload.

@@ -7,17 +7,10 @@
 
 # Setting Up the Catalog Module
 
-```json
-//[doc-params]
-{
-  "UI": ["MVC", "NG"]
-}
-```
-
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","BlazorWebApp"]
+    "UI": ["MVC", "BlazorWebApp", "NG"]
 }
 ````
 

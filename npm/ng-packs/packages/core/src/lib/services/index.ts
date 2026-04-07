@@ -16,6 +16,8 @@ export * from './resource-wait.service';
 export * from './rest.service';
 export * from './router-events.service';
 export * from './router-wait.service';
+export * from './route-based-culture.service';
+export * from './route-based-culture-url.service';
 export * from './routes.service';
 export * from './session-state.service';
 export * from './subscription.service';

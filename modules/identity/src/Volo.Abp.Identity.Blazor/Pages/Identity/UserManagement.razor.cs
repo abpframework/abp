@@ -18,6 +18,9 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity;
 
 public partial class UserManagement
 {
+    [Parameter]
+    public string? Culture { get; set; }
+
     protected const string PermissionProviderName = "U";
 
     protected const string DefaultSelectedTab = "UserInformations";

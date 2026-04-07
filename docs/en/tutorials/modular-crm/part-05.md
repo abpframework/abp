@@ -7,17 +7,10 @@
 
 # Building the Ordering Module
 
-```json
-//[doc-params]
-{
-  "UI": ["MVC", "NG"]
-}
-```
-
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","BlazorWebApp"]
+    "UI": ["MVC", "BlazorWebApp", "NG"]
 }
 ````
 
@@ -703,4 +696,4 @@ Navigate to the *Ordering* page and verify that the orders are listed. At this s
 
 ## Summary
 
-In this part of the *Modular CRM* tutorial, you've built the functionality inside the Ordering module you created in the [previous part](part-04.md) and created a basic {{if UI == "MVC"}}MVC{{else if UI == "NG"}}Angular{{end}} UI to list orders. In the [next part](part-06.md), you will work on establishing communication between the Orders module and the Catalog module.
+In this part of the *Modular CRM* tutorial, you've built the functionality inside the Ordering module you created in the [previous part](part-04.md) and created a basic {{if UI == "MVC"}}MVC{{else if UI == "BlazorWebApp"}}Blazor WebApp{{else if UI == "NG"}}Angular{{end}} UI to list orders. In the [next part](part-06.md), you will work on establishing communication between the Orders module and the Catalog module.

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EventBus.Local;
@@ -372,6 +373,57 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
         }
     }
 
+    [Fact]
+    public async Task IocEventHandlerFactory_Should_Create_New_Scope_And_Dispose_Handler_Per_Event()
+    {
+        var handleCount = 0;
+        var disposeCount = 0;
+        var eventName = "IocEvent-" + Guid.NewGuid().ToString("N");
+
+        var services = new ServiceCollection();
+        services.AddSingleton<ITestCounterService>(
+            new TestCounterService(() => handleCount++, () => disposeCount++));
+        services.AddTransient<DynamicIocEventHandlerWithCounter>();
+        using var provider = services.BuildServiceProvider();
+        var scopeFactory = provider.GetRequiredService<IServiceScopeFactory>();
+
+        using var subscription = DistributedEventBus.Subscribe(
+            eventName,
+            new IocEventHandlerFactory(scopeFactory, typeof(DynamicIocEventHandlerWithCounter)));
+
+        await DistributedEventBus.PublishAsync(eventName, new { Value = 1 });
+        await DistributedEventBus.PublishAsync(eventName, new { Value = 2 });
+        await DistributedEventBus.PublishAsync(eventName, new { Value = 3 });
+
+        // Handler is invoked exactly once per event.
+        Assert.Equal(3, handleCount);
+        // Handler is disposed at least once per event (the scope is always cleaned up).
+        Assert.True(disposeCount >= handleCount);
+    }
+
+    [Fact]
+    public async Task IocEventHandlerFactory_Should_Resolve_DI_Services_In_Handler_Constructor()
+    {
+        var callCount = 0;
+        var eventName = "IocEvent-" + Guid.NewGuid().ToString("N");
+
+        var services = new ServiceCollection();
+        services.AddSingleton<ITestCounterService>(new TestCounterService(() => callCount++));
+        services.AddTransient<DynamicIocEventHandlerWithService>();
+        using var provider = services.BuildServiceProvider();
+        var scopeFactory = provider.GetRequiredService<IServiceScopeFactory>();
+
+        using var subscription = DistributedEventBus.Subscribe(
+            eventName,
+            new IocEventHandlerFactory(scopeFactory, typeof(DynamicIocEventHandlerWithService)));
+
+        await DistributedEventBus.PublishAsync(eventName, new { Value = 1 });
+        await DistributedEventBus.PublishAsync(eventName, new { Value = 2 });
+
+        // The handler resolved ITestCounterService via constructor injection
+        Assert.Equal(2, callCount);
+    }
+
     class TestDynamicDistributedEventHandler : IDistributedEventHandler<DynamicEventData>
     {
         private readonly Action _onHandle;
@@ -384,6 +436,64 @@ public class LocalDistributedEventBus_Test : LocalDistributedEventBusTestBase
         public Task HandleEventAsync(DynamicEventData eventData)
         {
             _onHandle();
+            return Task.CompletedTask;
+        }
+    }
+
+    interface ITestCounterService
+    {
+        void OnHandle();
+        void OnDispose();
+    }
+
+    class TestCounterService : ITestCounterService
+    {
+        private readonly Action _onHandle;
+        private readonly Action? _onDispose;
+
+        public TestCounterService(Action onHandle, Action? onDispose = null)
+        {
+            _onHandle = onHandle;
+            _onDispose = onDispose;
+        }
+
+        public void OnHandle() => _onHandle();
+        public void OnDispose() => _onDispose?.Invoke();
+    }
+
+    class DynamicIocEventHandlerWithCounter : IDistributedEventHandler<DynamicEventData>, IDisposable
+    {
+        private readonly ITestCounterService _counterService;
+
+        public DynamicIocEventHandlerWithCounter(ITestCounterService counterService)
+        {
+            _counterService = counterService;
+        }
+
+        public Task HandleEventAsync(DynamicEventData eventData)
+        {
+            _counterService.OnHandle();
+            return Task.CompletedTask;
+        }
+
+        public void Dispose()
+        {
+            _counterService.OnDispose();
+        }
+    }
+
+    class DynamicIocEventHandlerWithService : IDistributedEventHandler<DynamicEventData>
+    {
+        private readonly ITestCounterService _counterService;
+
+        public DynamicIocEventHandlerWithService(ITestCounterService counterService)
+        {
+            _counterService = counterService;
+        }
+
+        public Task HandleEventAsync(DynamicEventData eventData)
+        {
+            _counterService.OnHandle();
             return Task.CompletedTask;
         }
     }

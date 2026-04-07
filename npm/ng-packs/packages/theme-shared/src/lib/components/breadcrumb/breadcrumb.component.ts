@@ -1,6 +1,6 @@
 import {
   ABP,
-  getRoutePath,
+  RouteBasedCultureUrlService,
   RouterEvents,
   RoutesService,
   SubscriptionService,
@@ -25,6 +25,7 @@ export class BreadcrumbComponent implements OnInit {
   private routes = inject(RoutesService);
   private subscription = inject(SubscriptionService);
   private routerEvents = inject(RouterEvents);
+  private routeCultureUrl = inject(RouteBasedCultureUrlService);
 
   segments: Partial<ABP.Route>[] = [];
 
@@ -32,7 +33,9 @@ export class BreadcrumbComponent implements OnInit {
     this.subscription.addOne(
       this.routerEvents.getNavigationEvents('End').pipe(
         startWith(null),
-        map(() => this.routes.search({ path: getRoutePath(this.router) })),
+        map(() =>
+          this.routes.search({ path: this.routeCultureUrl.getRoutePathForMatching(this.router) }),
+        ),
       ),
       route => {
         this.segments = [];

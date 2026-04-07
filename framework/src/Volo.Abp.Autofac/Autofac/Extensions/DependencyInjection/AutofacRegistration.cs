@@ -119,7 +119,6 @@ public static class AutofacRegistration
             .SingleInstance();
 
         // Shims for keyed service compatibility.
-        builder.RegisterSource<AnyKeyRegistrationSource>();
         builder.ComponentRegistryBuilder.Registered += AddFromKeyedServiceParameterMiddleware;
 
         Register(builder, services, lifetimeScopeTagForSingletons);
@@ -212,11 +211,15 @@ public static class AutofacRegistration
         this IRegistrationBuilder<object, TActivatorData, TRegistrationStyle> registrationBuilder,
         ServiceDescriptor descriptor)
     {
+        // If it's keyed, the service key won't be null. A null key results in it _not_ being a keyed service.
         if (descriptor.IsKeyedService)
         {
             var key = descriptor.ServiceKey!;
+            if (key.Equals(Microsoft.Extensions.DependencyInjection.KeyedService.AnyKey))
+            {
+                key = Autofac.Core.KeyedService.AnyKey;
+            }
 
-            // If it's keyed, the service key won't be null. A null key results in it _not_ being a keyed service.
             registrationBuilder.Keyed(key, descriptor.ServiceType);
         }
         else
@@ -334,9 +337,7 @@ public static class AutofacRegistration
 
                     var serviceProvider = context.Resolve<IServiceProvider>();
 
-                    var keyedService = (Autofac.Core.KeyedService)requestContext.Service;
-
-                    var key = keyedService.ServiceKey;
+                    var key = requestContext.Parameters.KeyedServiceKey<object>();
 
                     return descriptor.KeyedImplementationFactory(serviceProvider, key);
                 })
@@ -349,8 +350,7 @@ public static class AutofacRegistration
 
                 continue;
             }
-
-            if (!descriptor.IsKeyedService && descriptor.ImplementationFactory != null)
+            else if (!descriptor.IsKeyedService && descriptor.ImplementationFactory != null)
             {
                 var registration = RegistrationBuilder.ForDelegate(descriptor.ServiceType, (context, parameters) =>
                     {
@@ -371,7 +371,8 @@ public static class AutofacRegistration
             builder
                 .RegisterInstance(descriptor.NormalizedImplementationInstance()!)
                 .ConfigureServiceType(descriptor)
-                .ConfigureLifecycle(descriptor.Lifetime, null);
+                .ConfigureLifecycle(descriptor.Lifetime, null)
+                .ExternallyOwned();
         }
     }
 }

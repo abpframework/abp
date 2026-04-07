@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Localization.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
@@ -70,9 +71,18 @@ public class DefaultAbpRequestLocalizationOptionsProvider :
                                     .ToArray()
                             };
 
-                        foreach (var configurator in serviceScope.ServiceProvider
-                                     .GetRequiredService<IOptions<AbpRequestLocalizationOptions>>()
-                                     .Value.RequestLocalizationOptionConfigurators)
+                        var abpRequestLocalizationOptions = serviceScope.ServiceProvider
+                            .GetRequiredService<IOptions<AbpRequestLocalizationOptions>>()
+                            .Value;
+
+                        if (abpRequestLocalizationOptions.UseRouteBasedCulture)
+                        {
+                            options.RequestCultureProviders.InsertAfter(
+                                p => p is QueryStringRequestCultureProvider,
+                                new RouteDataRequestCultureProvider());
+                        }
+
+                        foreach (var configurator in abpRequestLocalizationOptions.RequestLocalizationOptionConfigurators)
                         {
                             await configurator(serviceScope.ServiceProvider, options);
                         }

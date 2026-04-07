@@ -1,4 +1,4 @@
-import { registerLocaleData } from '@angular/common';
+import { Location, registerLocaleData } from '@angular/common';
 import { inject, Injector } from '@angular/core';
 import { tap, catchError } from 'rxjs/operators';
 import { firstValueFrom, lastValueFrom, of, throwError, timeout } from 'rxjs';
@@ -7,6 +7,7 @@ import { Environment } from '../models/environment';
 import { CurrentTenantDto } from '../proxy/volo/abp/asp-net-core/mvc/multi-tenancy/models';
 import { ConfigStateService } from '../services/config-state.service';
 import { EnvironmentService } from '../services/environment.service';
+import { RouteBasedCultureService } from '../services/route-based-culture.service';
 import { SessionStateService } from '../services/session-state.service';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { APP_INIT_ERROR_HANDLERS } from '../tokens/app-config.token';
@@ -62,6 +63,9 @@ export async function getInitialData() {
   } else {
     await lastValueFrom(result$);
   }
+
+  const routeBasedCulture = injector.get(RouteBasedCultureService);
+  routeBasedCulture.syncLanguageFromUrl(injector.get(Location).path());
 
   await localeInitializer(injector);
 }
