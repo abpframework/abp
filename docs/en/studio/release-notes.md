@@ -12,7 +12,6 @@ This document contains **brief release notes** for each ABP Studio release. Rele
 ## 2.2.6 (2026-04-08) Latest
 
 - Disable Scriban 7.0 cumulative output limit for template rendering
-- Update version to release  2.2.6 with 10.2.0
 
 ## 2.2.5 (2026-04-08)
 
