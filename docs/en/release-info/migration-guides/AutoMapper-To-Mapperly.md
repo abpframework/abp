@@ -6,6 +6,8 @@ The AutoMapper library is **no longer free for commercial use**. For more detail
 
 ABP Framework provides both AutoMapper and Mapperly integrations. If your project currently uses AutoMapper and you don't have a commercial license, you can switch to Mapperly by following the steps outlined below.
 
+> **Already have a commercial AutoMapper license?** Use the [Volo.Abp.LuckyPenny.AutoMapper](../../framework/infrastructure/luckypenny-automapper.md) package instead. It is a drop-in replacement for `Volo.Abp.AutoMapper` built on the patched commercial version of AutoMapper, requiring only two changes to your project.
+
 ## Migration Steps
 
 Please open your project in an IDE(`Visual Studio`, `VS Code` or `JetBrains Rider`), then perform the following global search and replace operations:
