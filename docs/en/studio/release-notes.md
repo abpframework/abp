@@ -11,26 +11,13 @@ This document contains **brief release notes** for each ABP Studio release. Rele
 
 ## 2.2.5 (2026-04-08) Latest
 
-- React Native- Clearing/Refactoring React Native Temp
-- Add step to resolve target ABP branch from latest stable release in w…
-- Add missing AI management providers to Angular host template
-- Add missing blob storing setup to AI management service template
-- Upgrade Scriban to 7.0.0 in Volo.Abp.Studio.Build
-- Improvements for the monitoring area (http requests & exceptions)
-- Update gpt-5 to gpt-5.4 on AI Integration tab
-- Auto-detect DBMS from connection string when `--dbms` is not specified
-- Fix AI management MongoDB microservice template build errors
-- Fix AI management MAUI template build errors
-- Add CLI `--ai-management` and `--ai-providers` options for template build testing
-- Include solution and project context in PostHog telemetry
-- Target `rel-2.2` - Upgrade to ABP 10.2 (abp&volo `rel-10.2` branch)
-- Fix cross-platform path in `StudioRunAppTelemetryInfoProvider` tests
-- Apply Homebrew CN mirrors only for Chinese mainland users
-- Change `template-create-and-build` workflow to manual trigger only
-- Fix `dev-login-helper` hint spacing on non-floating login forms
-- Show notification toast always on front
-- Set PostHog log level to Warning
-- Update version to release 2.2.5 with 10.2.0
+- Upgraded GPT-5 → GPT-5.4 and improved AI management (providers, blob storage, CLI options)
+- Fixed critical build issues (MongoDB, MAUI) and improved overall stability
+- Enhanced monitoring (HTTP requests & exceptions)
+- Added DBMS auto-detection from connection string
+- Upgraded to ABP 10.2 and Scriban 7.0.0
+- Improved developer experience and telemetry (PostHog)
+- Minor UI fixes and workflow adjustments (manual build trigger)
 
 ## 2.2.4 (2026-03-25)
 
