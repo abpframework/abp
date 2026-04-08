@@ -9,7 +9,11 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 2.2.5 (2026-04-08) Latest
+## 2.2.6 (2026-04-08) Latest
+
+- Disable Scriban 7.0 cumulative output limit for template rendering
+
+## 2.2.5 (2026-04-08)
 
 - Upgraded GPT-5 → GPT-5.4 and improved AI management (providers, blob storage, CLI options)
 - Fixed critical build issues (MongoDB, MAUI) and improved overall stability
