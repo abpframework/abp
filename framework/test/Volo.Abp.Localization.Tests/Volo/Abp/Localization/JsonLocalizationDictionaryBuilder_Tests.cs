@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NSubstitute.ExceptionExtensions;
-using Shouldly;
+﻿using Shouldly;
 using Volo.Abp.Localization.Json;
-using Volo.Abp.Testing;
 using Xunit;
 
 namespace Volo.Abp.Localization;
@@ -12,14 +7,28 @@ namespace Volo.Abp.Localization;
 /// <summary>
 /// Testing edge cases for <see cref="JsonLocalizationDictionaryBuilder"/>
 /// </summary>
-public class JsonLocalizationDictionaryBuilder_Tests : AbpIntegratedTest<AbpLocalizationTestModule>
+public class JsonLocalizationDictionaryBuilder_Tests
 {
     [Fact]
     public void JsonLocalizationDictionaryBuilder_Should_Handle_Duplicates()
     {
-        var localizationDictionary = JsonLocalizationDictionaryBuilder
-            .BuildFromJsonString("{\r\n  \"culture\": \"en\",\r\n  \"texts\": {\r\n    \"ThisFieldIsRequired\": \"This field is required\",\r\n    \"MaxLenghtErrorMessage\": \"This field can be maximum of '{0}' chars\",\r\n    \"Enum:BookType.Undefined\": \"Undefined from ValidationResource\",\r\n    \"Enum:BookType.0\": \"Undefined with value 0 from ValidationResource\",\r\n    \"BookType.Adventure\": \"Adventure from ValidationResource\",\r\n    \"BookType.1\": \"Adventure with value 1 from ValidationResource\",\r\n    \"Biography\": \"Biography from ValidationResource\",\r\n    \"ThisFieldIsRequired\": \"This field is required again\"\r\n  }\r\n}");
+        var input = """
+            {
+              "culture": "en",
+              "texts": {
+                "ThisFieldIsRequired": "This field is required",
+                "MaxLenghtErrorMessage": "This field can be maximum of '{0}' chars",
+                "Enum:BookType.Undefined": "Undefined from ValidationResource",
+                "Enum:BookType.0": "Undefined with value 0 from ValidationResource",
+                "BookType.Adventure": "Adventure from ValidationResource",
+                "BookType.1": "Adventure with value 1 from ValidationResource",
+                "Biography": "Biography from ValidationResource",
+                "ThisFieldIsRequired": "This field is required again"
+              }
+            }
+            """;
 
+        var localizationDictionary = JsonLocalizationDictionaryBuilder.BuildFromJsonString(input);
         var localizationString = localizationDictionary.GetOrNull("ThisFieldIsRequired");
         localizationString.ShouldNotBeNull();
 
@@ -29,18 +38,20 @@ public class JsonLocalizationDictionaryBuilder_Tests : AbpIntegratedTest<AbpLoca
     [Fact]
     public void JsonLocalizationDictionaryBuilder_Should_Handle_Deep_Duplicates()
     {
-        var input = @"{
-""culture"": ""en"",
-""texts"": {
-    ""ThisFieldIsRequired"": ""This field is required"",
-    ""DeepLocaliaztionKey"": {""DeepKey"": ""DeepValue""},
-    ""DeepLocaliaztionKey__DeepKey"": ""Another translation""
-}
-}";
+        var input = """
+            {
+              "culture": "en",
+              "texts": {
+                "ThisFieldIsRequired": "This field is required",
+                "DeepLocalizationKey": { "DeepKey": "DeepValue" },
+                "DeepLocalizationKey__DeepKey": "Another translation"
+              }
+            }
+            """;
 
         var localizationDictionary = JsonLocalizationDictionaryBuilder.BuildFromJsonString(input);
         localizationDictionary.ShouldNotBeNull();
-        var localizationString = localizationDictionary.GetOrNull("DeepLocaliaztionKey__DeepKey");
+        var localizationString = localizationDictionary.GetOrNull("DeepLocalizationKey__DeepKey");
         localizationString.ShouldNotBeNull();
         localizationString.Value.ShouldBe("Another translation");
     }

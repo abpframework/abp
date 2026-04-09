@@ -13,6 +13,4 @@ public interface ILocalizationDictionary
     LocalizedString? GetOrNull(string name);
 
     void Fill(Dictionary<string, LocalizedString> dictionary);
-
-    void Merge(ILocalizationDictionary dictionary);
 }

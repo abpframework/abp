@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -90,13 +91,10 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
     {
         var dictionaries = new Dictionary<string, ILocalizationDictionary>();
 
-        foreach (var file in _virtualFileProvider.GetDirectoryContents(_virtualPath))
+        foreach (var file in _virtualFileProvider.GetDirectoryContents(_virtualPath)
+                     .Where(f => !f.IsDirectory && CanParseFile(f))
+                     .OrderBy(f => f.Name, StringComparer.Ordinal))
         {
-            if (file.IsDirectory || !CanParseFile(file))
-            {
-                continue;
-            }
-
             var dictionary = CreateDictionaryFromFile(file);
 
             if (dictionary == null)
@@ -110,7 +108,10 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
             }
             else
             {
-                dictionaries[dictionary.CultureName].Merge(dictionary);
+                var merged = new Dictionary<string, LocalizedString>();
+                dictionaries[dictionary.CultureName].Fill(merged);
+                dictionary.Fill(merged);
+                dictionaries[dictionary.CultureName] = new StaticLocalizationDictionary(dictionary.CultureName, merged);
             }
         }
 

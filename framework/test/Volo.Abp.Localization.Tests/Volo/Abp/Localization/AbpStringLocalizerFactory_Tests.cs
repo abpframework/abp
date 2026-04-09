@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 using Shouldly;
 using Volo.Abp.DynamicProxy;
@@ -92,7 +93,7 @@ public class AbpStringLocalizerFactory_Tests : AbpIntegratedTest<AbpLocalization
     }
 
     [Fact]
-    public async Task Should_Create_Resource_By_Name_FromSplitFiles()
+    public void Should_Create_Resource_By_Name_FromSplitFiles()
     {
         using (CultureHelper.Use("en"))
         {
@@ -100,6 +101,39 @@ public class AbpStringLocalizerFactory_Tests : AbpIntegratedTest<AbpLocalization
             localizer.ShouldNotBeNull();
             localizer["Base.Id"].Value.ShouldBe("Id");
             localizer["Book.Id"].Value.ShouldBe("ISBN");
+            localizer["ThisIsRequiredValue"].Value.ShouldBe("This is required value (this will be used)");
+        }
+    }
+
+    [Fact]
+    public void Should_Get_All_Strings_From_Split_Files()
+    {
+        using (CultureHelper.Use("en"))
+        {
+            var localizer = _factory.CreateByResourceNameOrNull("LocalizationTestFilesSplit");
+            localizer.ShouldNotBeNull();
+
+            var allStrings = localizer.GetAllStrings().ToList();
+
+            allStrings.ShouldContain(ls => ls.Name == "Base.Id" && ls.Value == "Id");
+            allStrings.ShouldContain(ls => ls.Name == "Base.Name" && ls.Value == "Name");
+            allStrings.ShouldContain(ls => ls.Name == "Book.Id" && ls.Value == "ISBN");
+            allStrings.ShouldContain(ls => ls.Name == "Book.Name" && ls.Value == "Title");
+            allStrings.ShouldContain(ls => ls.Name == "ThisIsRequiredValue" && ls.Value == "This is required value (this will be used)");
+        }
+    }
+
+    [Fact]
+    public void Should_Override_Value_From_Later_Split_File()
+    {
+        using (CultureHelper.Use("en"))
+        {
+            var localizer = _factory.CreateByResourceNameOrNull("LocalizationTestFilesSplit");
+            localizer.ShouldNotBeNull();
+
+            // !en_First.json defines "This is required value"
+            // zen_Last.json defines "This is required value (this will be used)"
+            // zen_Last.json sorts after !en_First.json (ordinal: '!' < 'z'), so its value wins
             localizer["ThisIsRequiredValue"].Value.ShouldBe("This is required value (this will be used)");
         }
     }

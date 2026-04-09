@@ -240,18 +240,26 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalizationTestModule
         using (CultureHelper.Use(CultureInfo.GetCultureInfo("de")))
         {
             _localizer["Car"].Value.ShouldBe("Auto");
-        }
-        using (CultureHelper.Use(CultureInfo.GetCultureInfo("de")))
-        {
             _localizer["CarPlural"].Value.ShouldBe("Autos");
-        }
-        using (CultureHelper.Use(CultureInfo.GetCultureInfo("de")))
-        {
             _localizer["Biography"].Value.ShouldBe("Biografie");
+            _localizer["Enum:BookType.Undefined"].Value.ShouldBe("Nicht definiert");
         }
+    }
+
+    [Fact]
+    public void GetAllStrings_Should_Contain_Values_From_All_Split_Files()
+    {
         using (CultureHelper.Use(CultureInfo.GetCultureInfo("de")))
         {
-            _localizer["Enum:BookType.Undefined"].Value.ShouldBe("Nicht definiert");
+            var allStrings = _localizer.GetAllStrings(false).ToList();
+
+            // From de.json
+            allStrings.ShouldContain(ls => ls.Name == "Car" && ls.Value == "Auto");
+            allStrings.ShouldContain(ls => ls.Name == "FortyTwo" && ls.Value == "Zweiundvierzig");
+
+            // From de_Book.json
+            allStrings.ShouldContain(ls => ls.Name == "Biography" && ls.Value == "Biografie");
+            allStrings.ShouldContain(ls => ls.Name == "Enum:BookType.Undefined" && ls.Value == "Nicht definiert");
         }
     }
 

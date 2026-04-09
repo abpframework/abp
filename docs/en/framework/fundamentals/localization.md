@@ -128,7 +128,7 @@ var str3 = L["Hi__1"]; // Hello World!
 
 You can have more than one localization file with the same culture: files will be merged.
 
-> Note: if you have the same key with the same culture then last value will win. This is true in case of file-per-culture and several files per culture. Files are ordered alphabetically, so if a same key defined in files `!en.json` and `z_en.json` then value from file `z_en.json` will be used.
+> Note: If the same key is defined in multiple files for the same culture, the last value wins. Files are sorted by name using ordinal (byte-order) string comparison before merging, so if `!en.json` and `zen_Book.json` both define the same key, the value from `zen_Book.json` is used.
 
 ### Default Resource
 
