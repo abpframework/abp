@@ -24,7 +24,9 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Reflection;
 using Autofac.Builder;
 using Autofac.Core;
@@ -33,7 +35,9 @@ using Autofac.Core.Activators.Delegate;
 using Autofac.Core.Activators.Reflection;
 using Autofac.Core.Resolving.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Volo.Abp;
+using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 
 namespace Autofac.Extensions.DependencyInjection;
@@ -301,6 +305,10 @@ public static class AutofacRegistration
         var registrationActionList = services.GetRegistrationActionList();
         var activatedActionList = services.GetServiceActivatedActionList();
 
+        // Assemblies where property injection was skipped because they are not in the module chain.
+        // Collected in EnablePropertyInjection when a type registration's assembly is not part of any loaded module.
+        var nonModuleAssemblies = new HashSet<Assembly>();
+
         foreach (var descriptor in services)
         {
             var implementationType = descriptor.NormalizedImplementationType();
@@ -314,7 +322,7 @@ public static class AutofacRegistration
                         .RegisterGeneric(implementationType)
                         .ConfigureServiceType(descriptor)
                         .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
-                        .ConfigureAbpConventions(descriptor, moduleContainer, registrationActionList, activatedActionList);
+                        .ConfigureAbpConventions(descriptor, moduleContainer, registrationActionList, activatedActionList, nonModuleAssemblies);
                 }
                 else
                 {
@@ -322,7 +330,7 @@ public static class AutofacRegistration
                         .RegisterType(implementationType)
                         .ConfigureServiceType(descriptor)
                         .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
-                        .ConfigureAbpConventions(descriptor, moduleContainer, registrationActionList, activatedActionList);
+                        .ConfigureAbpConventions(descriptor, moduleContainer, registrationActionList, activatedActionList, nonModuleAssemblies);
                 }
 
                 continue;
@@ -373,6 +381,50 @@ public static class AutofacRegistration
                 .ConfigureServiceType(descriptor)
                 .ConfigureLifecycle(descriptor.Lifetime, null)
                 .ExternallyOwned();
+        }
+
+        WarnForOrphanedAbpModules(services, moduleContainer, nonModuleAssemblies);
+    }
+
+    private static void WarnForOrphanedAbpModules(
+        IServiceCollection services,
+        IModuleContainer moduleContainer,
+        HashSet<Assembly> nonModuleAssemblies)
+    {
+        if (nonModuleAssemblies.Count == 0)
+        {
+            return;
+        }
+
+        var logger = services.GetInitLogger<AbpAutofacServiceProviderFactory>();
+
+        var loadedModuleTypes = new HashSet<Type>(
+            moduleContainer.Modules.Select(m => m.Type));
+
+        foreach (var assembly in nonModuleAssemblies)
+        {
+            Type[] types;
+            try
+            {
+                types = assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                types = ex.Types.Where(t => t != null).ToArray()!;
+            }
+
+            foreach (var type in types)
+            {
+                if (AbpModule.IsAbpModule(type) && !loadedModuleTypes.Contains(type))
+                {
+                    logger.LogWarning(
+                        $"Assembly '{assembly.GetName().Name}' has services registered in the DI container, " +
+                        $"but its ABP module '{type.FullName}' is not in the [DependsOn] chain. " +
+                        "Property injection (e.g. LazyServiceProvider) will not work for these types " +
+                        "and may cause NullReferenceException at runtime. " +
+                        $"Add typeof({type.Name}) to your module's [DependsOn] attribute to fix this.");
+                }
+            }
         }
     }
 }
