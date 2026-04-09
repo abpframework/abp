@@ -27,6 +27,10 @@ export class AbpTitleStrategy extends TitleStrategy {
 
   override updateTitle(routerState: RouterStateSnapshot) {
     this.routerState = routerState;
+    if (!routerState?.root) {
+      return;
+    }
+
     const title = this.buildTitle(routerState);
 
     const projectName = this.localizationService.instant({
