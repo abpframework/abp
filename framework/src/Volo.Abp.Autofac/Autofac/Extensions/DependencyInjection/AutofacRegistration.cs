@@ -396,21 +396,30 @@ public static class AutofacRegistration
             return;
         }
 
-        var logger = services.GetInitLogger<AbpAutofacServiceProviderFactory>();
+        var logger = services.GetInitLogger<AbpAutofacModule>();
 
         var loadedModuleTypes = new HashSet<Type>(
             moduleContainer.Modules.Select(m => m.Type));
 
+        // Only assemblies that directly reference Volo.Abp.Core can contain AbpModule subclasses.
+        // This skips framework/third-party assemblies (Microsoft.Extensions.*, etc.) cheaply.
+        var abpCoreAssemblyName = typeof(AbpModule).Assembly.GetName().Name;
+
         foreach (var assembly in nonModuleAssemblies)
         {
+            if (!assembly.GetReferencedAssemblies().Any(r => r.Name == abpCoreAssemblyName))
+            {
+                continue;
+            }
+
             Type[] types;
             try
             {
                 types = assembly.GetTypes();
             }
-            catch (ReflectionTypeLoadException ex)
+            catch (Exception)
             {
-                types = ex.Types.Where(t => t != null).ToArray()!;
+                continue;
             }
 
             foreach (var type in types)
