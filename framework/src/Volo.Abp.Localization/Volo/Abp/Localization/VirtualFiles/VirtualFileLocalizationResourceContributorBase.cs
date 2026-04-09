@@ -20,7 +20,6 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
     private Dictionary<string, ILocalizationDictionary>? _dictionaries;
     private bool _subscribedForChanges;
     private readonly object _syncObj = new object();
-    private LocalizationResourceBase _resource = default!;
 
     protected VirtualFileLocalizationResourceContributorBase(string virtualPath)
     {
@@ -29,7 +28,6 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
 
     public virtual void Initialize(LocalizationResourceInitializationContext context)
     {
-        _resource = context.Resource;
         _virtualFileProvider = context.ServiceProvider.GetRequiredService<IVirtualFileProvider>();
     }
 

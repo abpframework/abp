@@ -113,7 +113,7 @@ public class AbpStringLocalizerFactory_Tests : AbpIntegratedTest<AbpLocalization
             var localizer = _factory.CreateByResourceNameOrNull("LocalizationTestFilesSplit");
             localizer.ShouldNotBeNull();
 
-            var allStrings = localizer.GetAllStrings().ToList();
+            var allStrings = localizer.GetAllStrings(includeParentCultures: false).ToList();
 
             allStrings.ShouldContain(ls => ls.Name == "Base.Id" && ls.Value == "Id");
             allStrings.ShouldContain(ls => ls.Name == "Base.Name" && ls.Value == "Name");
