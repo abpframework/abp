@@ -1,0 +1,7 @@
+{
+  "culture": "en",
+  "texts": {
+    "Base.Id": "Id",
+    "Base.Name": "Name"
+  }
+}
