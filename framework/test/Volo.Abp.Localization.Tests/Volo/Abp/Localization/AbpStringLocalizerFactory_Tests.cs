@@ -90,4 +90,17 @@ public class AbpStringLocalizerFactory_Tests : AbpIntegratedTest<AbpLocalization
             localizer2["CarPlural"].Value.ShouldBe("CarPlural");
         }
     }
+
+    [Fact]
+    public async Task Should_Create_Resource_By_Name_FromSplitFiles()
+    {
+        using (CultureHelper.Use("en"))
+        {
+            var localizer = _factory.CreateByResourceNameOrNull("LocalizationTestFilesSplit");
+            localizer.ShouldNotBeNull();
+            localizer["Base.Id"].Value.ShouldBe("Id");
+            localizer["Book.Id"].Value.ShouldBe("ISBN");
+            localizer["ThisIsRequiredValue"].Value.ShouldBe("This is required value (this will be used)");
+        }
+    }
 }

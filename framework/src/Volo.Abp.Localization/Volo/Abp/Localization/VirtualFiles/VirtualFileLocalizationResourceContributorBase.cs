@@ -104,12 +104,14 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
                 continue;
             }
 
-            if (dictionaries.ContainsKey(dictionary.CultureName))
+            if (!dictionaries.ContainsKey(dictionary.CultureName))
             {
-                throw new AbpException($"{file.GetVirtualOrPhysicalPathOrNull()} dictionary has a culture name '{dictionary.CultureName}' which is already defined! Localization resource: {_resource.ResourceName}");
+                dictionaries[dictionary.CultureName] = dictionary;
             }
-
-            dictionaries[dictionary.CultureName] = dictionary;
+            else
+            {
+                dictionaries[dictionary.CultureName].Merge(dictionary);
+            }
         }
 
         return dictionaries;

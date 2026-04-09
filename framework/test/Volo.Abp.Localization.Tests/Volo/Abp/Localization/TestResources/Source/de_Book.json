@@ -1,0 +1,10 @@
+{
+  "culture": "de",
+  "texts": {
+    "Enum:BookType.Undefined": "Nicht definiert",
+    "Enum:BookType.0": "Undefiniert mit Wert 0",
+    "BookType.Adventure": "Abenteuer",
+    "BookType.1": "Abenteuer mit Wert 1",
+    "Biography": "Biografie"
+  }
+}

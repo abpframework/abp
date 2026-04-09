@@ -235,6 +235,27 @@ public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalizationTestModule
     }
 
     [Fact]
+    public void Should_Get_Localized_Text_If_Defined_In_Requested_Culture_Defined_In_Different_Files()
+    {
+        using (CultureHelper.Use(CultureInfo.GetCultureInfo("de")))
+        {
+            _localizer["Car"].Value.ShouldBe("Auto");
+        }
+        using (CultureHelper.Use(CultureInfo.GetCultureInfo("de")))
+        {
+            _localizer["CarPlural"].Value.ShouldBe("Autos");
+        }
+        using (CultureHelper.Use(CultureInfo.GetCultureInfo("de")))
+        {
+            _localizer["Biography"].Value.ShouldBe("Biografie");
+        }
+        using (CultureHelper.Use(CultureInfo.GetCultureInfo("de")))
+        {
+            _localizer["Enum:BookType.Undefined"].Value.ShouldBe("Nicht definiert");
+        }
+    }
+
+    [Fact]
     public void GetAllStrings_With_Parents()
     {
         using (CultureHelper.Use("tr"))
