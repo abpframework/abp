@@ -126,6 +126,10 @@ var str2 = L["Hi__0"]; // Bye World!
 var str3 = L["Hi__1"]; // Hello World!
 ````
 
+You can have more than one localization file with the same culture: files will be merged.
+
+> Note: if you have the same key with the same culture then last value will win. This is true in case of file-per-culture and several files per culture. Files are ordered alphabetically, so if a same key defined in files `!en.json` and `z_en.json` then value from file `z_en.json` will be used.
+
 ### Default Resource
 
 `AbpLocalizationOptions.DefaultResourceType` can be set to a resource type, so it is used when the localization resource was not specified:
