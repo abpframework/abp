@@ -138,7 +138,10 @@ public abstract class AbpApplicationBase : IAbpApplication
 
         foreach (var entry in initLoggerFactory.GetAllEntries())
         {
-            var logger = loggerFactory.CreateLogger(entry.CategoryName);
+            var categoryName = string.IsNullOrEmpty(entry.CategoryName)
+                ? nameof(AbpApplicationBase)
+                : entry.CategoryName;
+            var logger = loggerFactory.CreateLogger(categoryName);
             logger.Log(entry.LogLevel, entry.EventId, entry.State, entry.Exception, entry.Formatter);
         }
 

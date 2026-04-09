@@ -112,7 +112,7 @@ public static class AbpRegistrationBuilderExtensions
                 registrationBuilder = registrationBuilder.PropertiesAutowired(new AbpPropertySelector(false));
             }
         }
-        else
+        else if (implementationType.GetCustomAttributes(typeof(DisablePropertyInjectionAttribute), true).IsNullOrEmpty())
         {
             nonModuleAssemblies?.Add(implementationType.Assembly);
         }

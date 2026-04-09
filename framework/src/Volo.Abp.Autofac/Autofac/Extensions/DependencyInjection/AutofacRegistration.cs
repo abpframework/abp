@@ -417,6 +417,10 @@ public static class AutofacRegistration
             {
                 types = assembly.GetTypes();
             }
+            catch (ReflectionTypeLoadException ex)
+            {
+                types = ex.Types.Where(t => t != null).ToArray()!;
+            }
             catch (Exception)
             {
                 continue;
