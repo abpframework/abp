@@ -105,14 +105,16 @@ public static class AbpRegistrationBuilderExtensions
         where TActivatorData : ReflectionActivatorData
     {
         // Enable Property Injection only for types in an assembly containing an AbpModule and without a DisablePropertyInjection attribute on class or properties.
+        if (!implementationType.GetCustomAttributes(typeof(DisablePropertyInjectionAttribute), true).IsNullOrEmpty())
+        {
+            return registrationBuilder;
+        }
+
         if (moduleContainer.Modules.Any(m => m.AllAssemblies.Contains(implementationType.Assembly)))
         {
-            if (implementationType.GetCustomAttributes(typeof(DisablePropertyInjectionAttribute), true).IsNullOrEmpty())
-            {
-                registrationBuilder = registrationBuilder.PropertiesAutowired(new AbpPropertySelector(false));
-            }
+            registrationBuilder = registrationBuilder.PropertiesAutowired(new AbpPropertySelector(false));
         }
-        else if (implementationType.GetCustomAttributes(typeof(DisablePropertyInjectionAttribute), true).IsNullOrEmpty())
+        else
         {
             nonModuleAssemblies?.Add(implementationType.Assembly);
         }
