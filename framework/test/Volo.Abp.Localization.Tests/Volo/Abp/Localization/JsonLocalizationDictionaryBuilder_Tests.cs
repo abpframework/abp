@@ -10,29 +10,25 @@ namespace Volo.Abp.Localization;
 public class JsonLocalizationDictionaryBuilder_Tests
 {
     [Fact]
-    public void JsonLocalizationDictionaryBuilder_Should_Handle_Duplicates()
+    public void Should_Use_Nested_Value_When_Flat_Key_Is_Defined_Before_Nested_Object()
     {
+        // When a flat key (e.g. "Foo__Bar") appears before a nested object (e.g. "Foo": {"Bar": ...}),
+        // the nested value wins because FlattenTexts processes keys in order and last-write wins.
         var input = """
             {
               "culture": "en",
               "texts": {
-                "ThisFieldIsRequired": "This field is required",
-                "MaxLenghtErrorMessage": "This field can be maximum of '{0}' chars",
-                "Enum:BookType.Undefined": "Undefined from ValidationResource",
-                "Enum:BookType.0": "Undefined with value 0 from ValidationResource",
-                "BookType.Adventure": "Adventure from ValidationResource",
-                "BookType.1": "Adventure with value 1 from ValidationResource",
-                "Biography": "Biography from ValidationResource",
-                "ThisFieldIsRequired": "This field is required again"
+                "DeepLocalizationKey__DeepKey": "FlatValue",
+                "DeepLocalizationKey": { "DeepKey": "NestedValue" }
               }
             }
             """;
 
         var localizationDictionary = JsonLocalizationDictionaryBuilder.BuildFromJsonString(input);
-        var localizationString = localizationDictionary.GetOrNull("ThisFieldIsRequired");
+        localizationDictionary.ShouldNotBeNull();
+        var localizationString = localizationDictionary.GetOrNull("DeepLocalizationKey__DeepKey");
         localizationString.ShouldNotBeNull();
-
-        localizationString.Value.ShouldBe("This field is required again");
+        localizationString.Value.ShouldBe("NestedValue");
     }
 
     [Fact]

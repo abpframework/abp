@@ -93,7 +93,7 @@ public class AbpStringLocalizerFactory_Tests : AbpIntegratedTest<AbpLocalization
     }
 
     [Fact]
-    public void Should_Create_Resource_By_Name_FromSplitFiles()
+    public void Should_Create_Resource_By_Name_From_Split_Files()
     {
         using (CultureHelper.Use("en"))
         {

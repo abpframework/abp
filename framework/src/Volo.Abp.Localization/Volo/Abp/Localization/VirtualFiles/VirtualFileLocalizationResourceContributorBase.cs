@@ -89,7 +89,7 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
 
     private Dictionary<string, ILocalizationDictionary> CreateDictionaries()
     {
-        var dictionaries = new Dictionary<string, ILocalizationDictionary>();
+        var rawDictionaries = new Dictionary<string, Dictionary<string, LocalizedString>>();
 
         foreach (var file in _virtualFileProvider.GetDirectoryContents(_virtualPath)
                      .Where(f => !f.IsDirectory && CanParseFile(f))
@@ -102,20 +102,19 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
                 continue;
             }
 
-            if (!dictionaries.ContainsKey(dictionary.CultureName))
+            if (!rawDictionaries.TryGetValue(dictionary.CultureName, out var raw))
             {
-                dictionaries[dictionary.CultureName] = dictionary;
+                raw = new Dictionary<string, LocalizedString>();
+                rawDictionaries[dictionary.CultureName] = raw;
             }
-            else
-            {
-                var merged = new Dictionary<string, LocalizedString>();
-                dictionaries[dictionary.CultureName].Fill(merged);
-                dictionary.Fill(merged);
-                dictionaries[dictionary.CultureName] = new StaticLocalizationDictionary(dictionary.CultureName, merged);
-            }
+
+            dictionary.Fill(raw);
         }
 
-        return dictionaries;
+        return rawDictionaries.ToDictionary(
+            kvp => kvp.Key,
+            kvp => (ILocalizationDictionary)new StaticLocalizationDictionary(kvp.Key, kvp.Value)
+        );
     }
 
     protected abstract bool CanParseFile(IFileInfo file);
