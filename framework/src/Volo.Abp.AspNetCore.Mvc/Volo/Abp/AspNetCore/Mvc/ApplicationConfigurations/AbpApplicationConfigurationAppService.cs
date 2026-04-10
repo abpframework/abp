@@ -175,10 +175,14 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         var abpPolicyNames = new List<string>();
         var otherPolicyNames = new List<string>();
 
+        var permissionNameSet = new HashSet<string>(
+            (await _permissionDefinitionManager.GetPermissionsAsync()).Select(p => p.Name),
+            StringComparer.Ordinal);
+
         foreach (var policyName in policyNames)
         {
             if (await _defaultAuthorizationPolicyProvider.GetPolicyAsync(policyName) == null &&
-                await _permissionDefinitionManager.GetOrNullAsync(policyName) != null)
+                permissionNameSet.Contains(policyName))
             {
                 abpPolicyNames.Add(policyName);
             }
