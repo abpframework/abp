@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using Volo.Abp.Text.Formatting;
 
 namespace Volo.Abp.PermissionManagement;
 
@@ -28,7 +26,8 @@ public class PermissionGrantCacheItem
 
     public static string GetPermissionNameFormCacheKeyOrNull(string cacheKey)
     {
-        var result = FormattedStringValueExtracter.Extract(cacheKey, CacheKeyFormat, true);
-        return result.IsMatch ? result.Matches.Last().Value : null;
+        const string separator = ",n:";
+        var index = cacheKey.LastIndexOf(separator, StringComparison.Ordinal);
+        return index >= 0 ? cacheKey.Substring(index + separator.Length) : null;
     }
 }
