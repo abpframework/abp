@@ -144,11 +144,11 @@ public class ResourcePermissionChecker : IResourcePermissionChecker, ITransientD
         if (pendingStateCheck.Count > 0)
         {
             var stateCheckResult = await StateCheckerManager.IsEnabledAsync(pendingStateCheck.ToArray());
-            foreach (var (perm, enabled) in stateCheckResult)
+            foreach (var item in stateCheckResult)
             {
-                if (enabled)
+                if (item.Value)
                 {
-                    permissionDefinitions.Add(perm);
+                    permissionDefinitions.Add(item.Key);
                 }
             }
         }
