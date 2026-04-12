@@ -5,7 +5,7 @@ using Volo.Abp.AspNetCore.Components.Web.MudBlazorBasicTheme;
 using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Toolbars;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.Modularity;
-using BlazorStandardBundles = Volo.Abp.AspNetCore.Components.Server.Theming.MudBlazor.Bundling.BlazorStandardBundles;
+using BlazorStandardBundles = Volo.Abp.AspNetCore.Components.Server.Theming.MudBlazor.Bundling.BlazorServerMudBlazorStandardBundles;
 
 namespace Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme;
 
