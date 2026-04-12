@@ -22,10 +22,13 @@ public partial class NavMenu : IDisposable
         ApplicationConfigurationChangedService.Changed += ApplicationConfigurationChanged;
     }
 
-    private async void ApplicationConfigurationChanged()
+    private void ApplicationConfigurationChanged()
     {
-        Menu = await MenuManager.GetMainMenuAsync();
-        await InvokeAsync(StateHasChanged);
+        _ = InvokeAsync(async () =>
+        {
+            Menu = await MenuManager.GetMainMenuAsync();
+            StateHasChanged();
+        });
     }
 
     public void Dispose()

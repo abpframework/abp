@@ -1,6 +1,6 @@
 namespace Volo.Abp.AspNetCore.Components.Server.Theming.MudBlazor.Bundling;
 
-public class BlazorStandardBundles
+public class BlazorServerMudBlazorStandardBundles
 {
     public static class Styles
     {

@@ -44,10 +44,13 @@
         }
     }
 
-    private async void ApplicationConfigurationChanged()
+    private void ApplicationConfigurationChanged()
     {
-        await GetToolbarItemRendersAsync();
-        await InvokeAsync(StateHasChanged);
+        _ = InvokeAsync(async () =>
+        {
+            await GetToolbarItemRendersAsync();
+            StateHasChanged();
+        });
     }
 
     public void Dispose()

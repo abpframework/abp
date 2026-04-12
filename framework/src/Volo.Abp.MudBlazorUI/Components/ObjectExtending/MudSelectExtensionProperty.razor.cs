@@ -52,10 +52,7 @@ public partial class MudSelectExtensionProperty<TEntity, TResourceType>
             var isNullableType = Nullable.GetUnderlyingType(PropertyInfo.Type!) != null;
             if (!isNullableType)
             {
-                var enumType = isNullableType
-                    ? Nullable.GetUnderlyingType(PropertyInfo.Type)!
-                    : PropertyInfo.Type;
-                SelectedValue = (int)enumType.GetEnumValues().GetValue(0)!;
+                SelectedValue = (int)PropertyInfo.Type.GetEnumValues().GetValue(0)!;
             }
         }
     }

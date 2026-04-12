@@ -83,7 +83,7 @@ public partial class MudDateTimeOffsetExtensionProperty<TEntity, TResourceType>
             return dataFormatString.Replace("{0:", "").Replace("}", "");
         }
 
-        return PropertyInfo.IsDate() ? "yyyy-MM-dd" : "yyyy-MM-dd";
+        return PropertyInfo.IsDate() ? "yyyy-MM-dd" : "yyyy-MM-dd HH:mm";
     }
 
     protected string GetTimeLabel()

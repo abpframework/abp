@@ -5,7 +5,7 @@
 @if (EmailSettings != null)
 {
         <MudForm @ref="@_emailFormRef" Model="@EmailSettings">
-            <MudGrid>
+            <MudGrid Spacing="2">
                 <MudItem xs="12">
                     <MudTextField Margin="Margin.Dense" @bind-Value="@EmailSettings.DefaultFromDisplayName"
                                  Label="@L["DefaultFromDisplayName"]"
@@ -27,11 +27,11 @@
                                          Label="@L["SmtpPort"]" />
                 </MudItem>
                 <MudItem xs="12">
-                    <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default" T="bool" @bind-Value="@EmailSettings.SmtpEnableSsl"
+                    <MudCheckBox Dense="true" Color="Color.Primary" UncheckedColor="Color.Default" T="bool" @bind-Value="@EmailSettings.SmtpEnableSsl"
                                 Label="@L["SmtpEnableSsl"]" />
                 </MudItem>
                 <MudItem xs="12">
-                    <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default" T="bool" @bind-Value="@EmailSettings.SmtpUseDefaultCredentials"
+                    <MudCheckBox Dense="true" Color="Color.Primary" UncheckedColor="Color.Default" T="bool" @bind-Value="@EmailSettings.SmtpUseDefaultCredentials"
                                 Label="@L["SmtpUseDefaultCredentials"]" />
                 </MudItem>
                 @if (!EmailSettings.SmtpUseDefaultCredentials)
@@ -58,7 +58,7 @@
             @if (HasSendTestEmailPermission)
             {
                 <MudButton Color="Color.Primary"
-                          Variant="Variant.Outlined"
+                         
                           OnClick="@OpenSendTestEmailDialogAsync"
                           Class="me-2">
                     @L["SendTestEmail"]
@@ -73,7 +73,7 @@
 
     @if (HasSendTestEmailPermission)
     {
-        <MudDialog @bind-Visible="@_sendTestEmailDialogVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseOnEscapeKey = true })">
+        <MudDialog @bind-Visible="@_sendTestEmailDialogVisible" Options="@(new DialogOptions { BackdropClick = false, MaxWidth = MaxWidth.Medium, FullWidth = true, CloseOnEscapeKey = true })">
             <TitleContent>
                 <MudText Typo="Typo.h6">@L["SendTestEmail"]</MudText>
             </TitleContent>

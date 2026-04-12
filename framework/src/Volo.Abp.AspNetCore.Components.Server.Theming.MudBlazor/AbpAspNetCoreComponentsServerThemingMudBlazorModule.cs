@@ -20,14 +20,14 @@ public class AbpAspNetCoreComponentsServerThemingMudBlazorModule : AbpModule
         {
             options
                 .StyleBundles
-                .Add(BlazorStandardBundles.Styles.Global, bundle =>
+                .Add(BlazorServerMudBlazorStandardBundles.Styles.Global, bundle =>
                 {
                     bundle.AddContributors(typeof(BlazorServerMudBlazorStyleContributor));
                 });
 
             options
                 .ScriptBundles
-                .Add(BlazorStandardBundles.Scripts.Global, bundle =>
+                .Add(BlazorServerMudBlazorStandardBundles.Scripts.Global, bundle =>
                 {
                     bundle.AddContributors(typeof(BlazorServerMudBlazorScriptContributor));
                 });
