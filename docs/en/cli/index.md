@@ -28,9 +28,7 @@ dotnet tool update -g Volo.Abp.Studio.Cli
 While each command may have a set of options, there are some global options that can be used with any command:
 
 - `--skip-cli-version-check` or `-scvc`: Skips checking the latest version of the ABP CLI. If you don't specify, it will check the latest version and shows a warning message if there is a newer version of the ABP CLI.
-
 - `--skip-extension-version-check` or `-sevc`: Skips checking the latest version of the ABP CLI extensions. If you don't specify, it will check the latest version and download the latest version if there is a newer version of the ABP CLI extensions.
-
 - `--old`: ABP CLI has two variations: `Volo.Abp.Studio.Cli` and `Volo.Abp.Cli`. New features/templates are added to the `Volo.Abp.Studio.Cli`. But if you want to use the old version, you can use this option **at the end of your commands**. For example, `abp new Acme.BookStore --old`.
 - `--help` or `-h`: Shows help for the specified command.
 
@@ -39,7 +37,7 @@ While each command may have a set of options, there are some global options that
 Here is the list of all available commands before explaining their details:
 
 - `**[help](../cli#help)`**: Shows help on the usage of the ABP CLI.
-- `**[cli](../cli#cli)**`: Update or remove ABP CLI.
+- `**[cli](../cli#cli)`**: Update or remove ABP CLI.
 - `**[new](../cli#new)**`: Generates a new solution based on the ABP [startup templates](../solution-templates/index.md). Use `--modern` to create solutions with the modern template system (React UI).
 - `**[new-module](../cli#new-module)**`: Generates a new module based on the given template.
 - `**[new-package](../cli#new-package)**`: Generates a new package based on the given template.
@@ -55,9 +53,9 @@ Here is the list of all available commands before explaining their details:
 - `**[add-source-code](../cli#add-source-code)**`: Downloads the source code and replaces package references with project references.
 - `**[init-solution](../cli#init-solution)**`: Creates ABP Studio configuration files for a given solution.
 - `**[kube-connect](../cli#kube-connect)**`: Connects to kubernetes environment. (*Available for* ***Business*** *or higher licenses*)
-- `**[kube-intercept](../cli#kube-intercept)*`*: Intercepts a service running in Kubernetes environment. (*Available for* ***Business*** *or higher licenses*)
-- `**[list-module-sources](../cli#list-module-sources)*`*: Lists the remote module sources.
-- `**[add-module-source](../cli#add-module-source)**`: Adds a remote module source.
+- `**[kube-intercept](../cli#kube-intercept)`**: Intercepts a service running in Kubernetes environment. (*Available for* ***Business*** *or higher licenses*)
+- `**[list-module-sources](../cli#list-module-sources)`**: Lists the remote module sources.
+- `**[add-module-source](../cli#add-module-source)*`*: Adds a remote module source.
 - `**[delete-module-source](../cli#delete-module-source)**`: Deletes a remote module source.
 - `**[generate-proxy](../cli#generate-proxy)**`: Generates client side proxies to use HTTP API endpoints.
 - `**[remove-proxy](../cli#remove-proxy)**`: Removes previously generated client side proxies.
@@ -141,8 +139,8 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
 #### Options
 
 - `--template` or `-t`: Specifies the template name. Default template name is `app`, which generates a application solution. Available templates:
-  - `**empty*`*: Empty solution template.
-  - `**app**`: Application template. Additional options:
+  - `**empty`**: Empty solution template.
+  - `**app*`*: Application template. Additional options:
     - `--ui-framework` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       - `mvc`: ASP.NET Core MVC. There are some additional options for this template:
         - `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios. (*Available for* ***Team*** *or higher licenses*)
@@ -181,7 +179,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
       - `leptonx-lite`: LeptonX-Lite Theme.
       - `basic`: Basic Theme.
     - `--use-open-source-template`or `-uost`: Uses the open-source template. (*Available for* ***Team*** *or higher licenses*)
-  - `**app-nolayers*`*: Single-layer application template. Additional options:
+  - `**app-nolayers`**: Single-layer application template. Additional options:
     - `--ui-framework` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       - `mvc`: ASP.NET Core MVC. There are some additional options for this template:
       - `angular`: Angular UI. There are some additional options for this template:
@@ -1284,3 +1282,4 @@ var tokenResponse = await httpClient.RequestClientCredentialsTokenAsync(
 
 - [Examples for the new command](./new-command-samples.md)
 - [Video tutorial](https://abp.io/video-courses/essentials/abp-cli)
+
