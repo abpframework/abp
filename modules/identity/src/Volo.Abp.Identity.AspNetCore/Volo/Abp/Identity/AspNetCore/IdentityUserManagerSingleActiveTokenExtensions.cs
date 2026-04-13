@@ -40,4 +40,21 @@ public static class IdentityUserManagerSingleActiveTokenExtensions
         var name = manager.Options.Tokens.ChangeEmailTokenProvider + ":" + UserManager<IdentityUser>.GetChangeEmailTokenPurpose(newEmail);
         return manager.RemoveAuthenticationTokenAsync(user, AbpSingleActiveTokenProvider.InternalLoginProvider, name);
     }
+
+    public static Task<string> GenerateEmailLoginTokenAsync(this IdentityUserManager manager, IdentityUser user)
+    {
+        return manager.GenerateUserTokenAsync(user, AbpEmailLoginTokenProvider.ProviderName, AbpEmailLoginTokenPurposes.EmailLogin);
+    }
+
+    public static Task<bool> VerifyEmailLoginTokenAsync(this IdentityUserManager manager, IdentityUser user, string token)
+    {
+        return manager.VerifyUserTokenAsync(user, AbpEmailLoginTokenProvider.ProviderName, AbpEmailLoginTokenPurposes.EmailLogin, token);
+    }
+
+    public static Task<IdentityResult> RemoveEmailLoginTokenAsync(this IdentityUserManager manager, IdentityUser user)
+    {
+        var name = AbpEmailLoginTokenProvider.ProviderName + ":" + AbpEmailLoginTokenPurposes.EmailLogin;
+        return manager.RemoveAuthenticationTokenAsync(user, AbpSingleActiveTokenProvider.InternalLoginProvider, name);
+    }
+
 }

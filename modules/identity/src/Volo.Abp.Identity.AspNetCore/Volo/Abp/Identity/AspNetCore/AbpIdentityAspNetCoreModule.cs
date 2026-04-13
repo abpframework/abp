@@ -23,6 +23,7 @@ public class AbpIdentityAspNetCoreModule : AbpModule
                 .AddTokenProvider<AbpPasswordResetTokenProvider>(AbpPasswordResetTokenProvider.ProviderName)
                 .AddTokenProvider<AbpEmailConfirmationTokenProvider>(AbpEmailConfirmationTokenProvider.ProviderName)
                 .AddTokenProvider<AbpChangeEmailTokenProvider>(AbpChangeEmailTokenProvider.ProviderName)
+                .AddTokenProvider<AbpEmailLoginTokenProvider>(AbpEmailLoginTokenProvider.ProviderName)
                 .AddSignInManager<AbpSignInManager>()
                 .AddUserValidator<AbpIdentityUserValidator>();
         });
