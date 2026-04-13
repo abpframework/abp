@@ -26,13 +26,13 @@ The React UI is built on a modern, industry-standard stack:
 | [React Router](https://reactrouter.com/) | Client-side routing |
 | [OpenID Connect / OIDC](https://openid.net/connect/) | Authentication (via the ABP Auth Server) |
 
-## Two React Applications
+## React App and Admin Console
 
-When you create a solution with React UI, ABP generates **two separate React applications**:
+Every modern React solution consists of two parts: **your React application** and the **ABP Admin Console**.
 
-### 1. React App (Your Application)
+### React App (Your Application)
 
-Located at `apps/react/`, this is **your application** — the public-facing or user-facing SPA that you own and customize freely. It comes with:
+This is **your application** — the user-facing SPA that you own and customize freely. It comes with:
 
 - A sample **Books CRUD page** (when `--sample-crud-page` is used) demonstrating how to build a full create/read/update/delete page with the ABP backend
 - A plain **Users page** as a minimal reference
@@ -41,9 +41,16 @@ Located at `apps/react/`, this is **your application** — the public-facing or 
 
 This is where you build your business-specific pages and features.
 
-### 2. React Admin Console (`Volo.Abp.AdminConsole`)
+The location of the React app differs by template type:
 
-Located at `apps/react-admin-console/`, this is the **ABP Admin Console** — a pre-built React application powered by the `Volo.Abp.AdminConsole` NuGet package. It hosts all the standard ABP module management pages, including:
+- **Layered (`app --modern`) and Single-layer (`app-nolayers --modern`)**: the React app lives at the **root of the solution** (alongside the backend projects).
+- **Microservice (`microservice --modern`)**: the React app lives at `apps/react/`.
+
+### React Admin Console (`Volo.Abp.AdminConsole`)
+
+The **ABP Admin Console** is a pre-built React application that provides all standard ABP module management pages. It is delivered via the `Volo.Abp.AdminConsole` NuGet package and requires no modification on your part — it is updated automatically when you update your ABP packages.
+
+The Admin Console includes pages for:
 
 - Users & Roles management
 - Organization Units
@@ -56,46 +63,12 @@ Located at `apps/react-admin-console/`, this is the **ABP Admin Console** — a 
 - SaaS / Tenant Management *(if included)*
 - And all other optional module pages based on your solution configuration
 
-The Admin Console is served at the `/admin-console/` path of your backend host (e.g., `https://localhost:44300/admin-console/`). It is hosted by the `Volo.Abp.AdminConsole` package inside your `*.HttpApi.Host` project and is accessible from the main React app via a navigation link.
+How the Admin Console is hosted also differs by template type:
 
-> You do not need to modify the Admin Console application. It is managed by ABP and updated automatically when you update your ABP packages.
+- **Layered and Single-layer templates**: The `Volo.Abp.AdminConsole` package is added directly to your `*.HttpApi.Host` project. It serves the Admin Console React app at the `/admin-console/*` path of your backend (e.g., `https://localhost:44300/admin-console/`). There is no separate `apps/react-admin-console/` folder — the Admin Console UI is embedded in and served by the backend.
+- **Microservice template**: The Admin Console runs as a standalone React app at `apps/react-admin-console/`, served through the Web Gateway (YARP) alongside the main React app.
 
-## Architecture Overview
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                    Browser                              │
-│                                                         │
-│  ┌─────────────────┐    ┌──────────────────────────┐   │
-│  │   React App     │    │  React Admin Console     │   │
-│  │  (apps/react/)  │───▶│ (apps/react-admin-       │   │
-│  │                 │    │  console/)               │   │
-│  │  Your pages,    │    │  /admin-console/*        │   │
-│  │  CRUD, etc.     │    │  Users, Roles, Settings  │   │
-│  └────────┬────────┘    └──────────┬───────────────┘   │
-│           │                        │                    │
-└───────────┼────────────────────────┼────────────────────┘
-            │                        │
-            ▼                        ▼
-┌─────────────────────────────────────────────────────────┐
-│              ABP Backend (*.HttpApi.Host)                │
-│                                                         │
-│  • REST APIs (Auto API Controllers)                     │
-│  • Hosts Admin Console at /admin-console/*              │
-│  • OpenIddict Auth Server (or separate)                 │
-└─────────────────────────────────────────────────────────┘
-```
-
-For the **microservice** modern template, the architecture expands with dedicated gateways:
-
-```
-React App ──────────────────────▶ Web Gateway (YARP)
-React Admin Console ─────────────▶ Web Gateway (YARP)
-                                        │
-                                        ├──▶ Identity Service
-                                        ├──▶ Administration Service
-                                        └──▶ Your Services...
-```
+In both cases the Admin Console is accessible from the main React app via a navigation link.
 
 ## Creating a Solution
 
@@ -134,30 +107,64 @@ Open ABP Studio and use the **New Solution** wizard. Select the **Modern** templ
 
 ## Solution Structure
 
-After creating a solution (e.g., `Acme.BookStore --template app --modern`), the React-related files are organized as follows:
+The layout of the React-related files depends on the template type.
+
+### Layered and Single-layer Templates
+
+For `app --modern` and `app-nolayers --modern`, the React app lives at the root of the solution alongside the backend projects. The Admin Console is embedded in the backend via the `Volo.Abp.AdminConsole` NuGet package — there is no separate React Admin Console folder.
+
+```
+Acme.BookStore/
+├── react/                              # Your React application
+│   ├── src/
+│   │   ├── pages/                      # Your page components
+│   │   │   ├── books/                  # Sample Books CRUD page
+│   │   │   └── users/                  # Sample Users page
+│   │   ├── components/                 # Shared UI components
+│   │   ├── lib/                        # Utilities, API clients
+│   │   ├── hooks/                      # Custom React hooks
+│   │   └── main.tsx                    # Entry point
+│   ├── public/
+│   │   └── dynamic-env.json            # Runtime configuration
+│   ├── package.json
+│   └── vite.config.ts
+├── src/
+│   ├── Acme.BookStore.Application/
+│   ├── Acme.BookStore.Domain/
+│   ├── Acme.BookStore.EntityFrameworkCore/
+│   └── Acme.BookStore.HttpApi.Host/    # Hosts Admin Console at /admin-console/*
+└── ...
+```
+
+### Microservice Template
+
+For `microservice --modern`, both the React app and the React Admin Console are standalone apps under the `apps/` directory, each served through the Web Gateway (YARP).
 
 ```
 Acme.BookStore/
 ├── apps/
 │   ├── react/                          # Your React application
 │   │   ├── src/
-│   │   │   ├── pages/                  # Your page components
-│   │   │   │   ├── books/              # Sample Books CRUD page
-│   │   │   │   └── users/              # Sample Users page
-│   │   │   ├── components/             # Shared UI components
-│   │   │   ├── lib/                    # Utilities, API clients
-│   │   │   ├── hooks/                  # Custom React hooks
-│   │   │   └── main.tsx                # Entry point
+│   │   │   ├── pages/
+│   │   │   ├── components/
+│   │   │   ├── lib/
+│   │   │   ├── hooks/
+│   │   │   └── main.tsx
 │   │   ├── public/
 │   │   │   └── dynamic-env.json        # Runtime configuration
 │   │   ├── package.json
 │   │   └── vite.config.ts
-│   └── react-admin-console/            # ABP Admin Console (managed by ABP)
-├── src/
-│   ├── Acme.BookStore.Application/
-│   ├── Acme.BookStore.Domain/
-│   ├── Acme.BookStore.EntityFrameworkCore/
-│   └── Acme.BookStore.HttpApi.Host/    # Hosts the Admin Console
+│   ├── react-admin-console/            # ABP Admin Console (managed by ABP)
+│   │   ├── public/
+│   │   │   └── dynamic-env.json
+│   │   └── ...
+│   └── auth-server/                    # OpenIddict Auth Server
+├── gateways/
+│   └── web/                            # YARP reverse proxy for React apps
+├── services/
+│   ├── identity/
+│   ├── administration/
+│   └── ...
 └── ...
 ```
 
@@ -195,20 +202,18 @@ For the **microservice** modern template, the `apis.default.url` points to the *
 
 ### Admin Console Configuration
 
-The Admin Console is configured similarly via its own `dynamic-env.json` and uses a separate OpenIddict client (`Acme.BookStore_AdminConsole`).
+For the **microservice** template, the Admin Console has its own `dynamic-env.json` (at `apps/react-admin-console/public/dynamic-env.json`) and uses a separate OpenIddict client (`<ProjectName>_AdminConsole`).
+
+For **layered and single-layer** templates, the Admin Console is embedded in the backend via the `Volo.Abp.AdminConsole` package and does not have a separate configuration file — it inherits its settings from the backend host.
 
 ## Authentication
 
-Both React applications authenticate using **OpenID Connect (OIDC)** against the ABP Auth Server (OpenIddict). The auth flow is handled transparently — when a user visits a protected page, they are redirected to the Auth Server login page and returned to the app after successful authentication.
+Both the React app and the Admin Console authenticate using **OpenID Connect (OIDC)** against the ABP Auth Server (OpenIddict). The auth flow is handled transparently — when a user visits a protected page, they are redirected to the Auth Server login page and returned to the app after successful authentication. All clients use the **Authorization Code flow with PKCE**, which is the recommended flow for SPAs.
 
-Two OpenIddict clients are automatically seeded during database migration:
+The number of seeded OpenIddict clients depends on the template:
 
-| Client ID | Application |
-|---|---|
-| `<ProjectName>_App` | Main React SPA |
-| `<ProjectName>_AdminConsole` | React Admin Console |
-
-Both clients use the **Authorization Code flow with PKCE**, which is the recommended flow for SPAs.
+- **Layered and Single-layer templates**: one client is seeded — `<ProjectName>_App` for the React SPA. The Admin Console is embedded in the backend and shares the same authentication context.
+- **Microservice template**: two clients are seeded — `<ProjectName>_App` for the main React SPA and `<ProjectName>_AdminConsole` for the standalone React Admin Console app.
 
 ## Making API Calls
 
@@ -339,7 +344,17 @@ npm run test:coverage
 ### Development
 
 1. Start the backend (from ABP Studio or `dotnet run` in the `*.HttpApi.Host` project).
-2. Navigate to the React app directory and start the dev server:
+2. Navigate to the React app directory and start the dev server.
+
+For **layered and single-layer** templates, the React app is at the solution root:
+
+````bash
+cd react
+npm install
+npm run dev
+````
+
+For the **microservice** template, it is under `apps/`:
 
 ````bash
 cd apps/react
@@ -349,13 +364,18 @@ npm run dev
 
 The app will be available at `https://localhost:3000` (or the port configured in `vite.config.ts`).
 
-3. Access the Admin Console at the backend URL + `/admin-console/` (e.g., `https://localhost:44300/admin-console/`).
+3. Access the Admin Console:
+   - **Layered / Single-layer**: navigate to the backend URL + `/admin-console/` (e.g., `https://localhost:44300/admin-console/`).
+   - **Microservice**: navigate to the Web Gateway URL + `/admin-console/`.
 
 ### Production Build
 
 ````bash
-cd apps/react
-npm run build
+# Layered / Single-layer
+cd react && npm run build
+
+# Microservice
+cd apps/react && npm run build
 ````
 
 The output is placed in `dist/` and can be served by any static file host or CDN.
