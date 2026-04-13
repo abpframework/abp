@@ -11,6 +11,8 @@ $i = 0
 $errorCount = 0
 $totalProjectsCount = $projects.length
 $nugetUrl = "https://api.nuget.org/v3/index.json"
+$maxQuotaRetryCount = 3
+$quotaRetryDelaysInSeconds = @(30, 60, 120)
 Set-Location $packFolder
 
 foreach($project in $projects) {
@@ -24,7 +26,31 @@ foreach($project in $projects) {
 	
 	if ($nugetPackageExists)
 	{
-		dotnet nuget push $nugetPackageName --skip-duplicate -s $nugetUrl --api-key "$apiKey"		
+		$attempt = 0
+		while ($true)
+		{
+			$attempt += 1
+			$pushOutput = dotnet nuget push $nugetPackageName --skip-duplicate -s $nugetUrl --api-key "$apiKey" 2>&1
+			$pushOutput | ForEach-Object { Write-Host $_ }
+
+			$pushSucceeded = $LASTEXITCODE -eq 0
+			if ($pushSucceeded)
+			{
+				break
+			}
+
+			$quotaExceeded = ($pushOutput | Out-String) -match "403 \(Quota Exceeded\)"
+			$canRetry = $quotaExceeded -and $attempt -le $maxQuotaRetryCount
+
+			if (-not $canRetry)
+			{
+				break
+			}
+
+			$retryDelay = $quotaRetryDelaysInSeconds[$attempt - 1]
+			Write-Warning "NuGet quota exceeded for $nugetPackageName. Retrying in $retryDelay seconds (retry $attempt/$maxQuotaRetryCount)..."
+			Start-Sleep -Seconds $retryDelay
+		}
 		#Write-Host ("Deleting package from local: " + $nugetPackageName)
 		#Remove-Item $nugetPackageName -Force
 	}
