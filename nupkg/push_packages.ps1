@@ -9,8 +9,11 @@ $version = $commonPropsXml.Project.PropertyGroup.Version
 # Publish all packages
 $i = 0
 $errorCount = 0
+$failedPackages = @()
 $totalProjectsCount = $projects.length
 $nugetUrl = "https://api.nuget.org/v3/index.json"
+$maxQuotaRetryCount = 3
+$quotaRetryDelaysInSeconds = @(30, 60, 120)
 Set-Location $packFolder
 
 foreach($project in $projects) {
@@ -24,7 +27,39 @@ foreach($project in $projects) {
 	
 	if ($nugetPackageExists)
 	{
-		dotnet nuget push $nugetPackageName --skip-duplicate -s $nugetUrl --api-key "$apiKey"		
+		$attempt = 0
+		$pushSucceeded = $false
+		while ($true)
+		{
+			$attempt += 1
+			$pushOutput = dotnet nuget push $nugetPackageName --skip-duplicate -s $nugetUrl --api-key "$apiKey" 2>&1
+			$pushOutput | ForEach-Object { Write-Host $_ }
+
+			$pushSucceeded = $LASTEXITCODE -eq 0
+			if ($pushSucceeded)
+			{
+				break
+			}
+
+			$clientError = ($pushOutput | Out-String) -match "Response status code does not indicate success:\s*4\d\d"
+			$canRetry = $clientError -and $attempt -le $maxQuotaRetryCount
+
+			if (-not $canRetry)
+			{
+				break
+			}
+
+			$retryDelay = $quotaRetryDelaysInSeconds[$attempt - 1]
+			Write-Warning "NuGet push returned a 4xx response for $nugetPackageName. Retrying in $retryDelay seconds (retry $attempt/$maxQuotaRetryCount)..."
+			Start-Sleep -Seconds $retryDelay
+		}
+
+		if (-not $pushSucceeded)
+		{
+			Write-Host ("********** ERROR PUSH FAILED: " + $nugetPackageName) -ForegroundColor red
+			$errorCount += 1
+			$failedPackages += $nugetPackageName
+		}
 		#Write-Host ("Deleting package from local: " + $nugetPackageName)
 		#Remove-Item $nugetPackageName -Force
 	}
@@ -41,4 +76,5 @@ foreach($project in $projects) {
 if ($errorCount > 0)
 {
 	Write-Host ("******* $errorCount error(s) occured *******") -ForegroundColor red
+	exit 1
 }
