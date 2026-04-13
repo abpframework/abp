@@ -1,7 +1,6 @@
 . ".\common.ps1"
 
 $apiKey = $args[0]
-$discordWebhookUrl = if ($args.Length -gt 1) { $args[1] } else { $env:DISCORD_WEBHOOK_URL }
 
 # Get the version
 [xml]$commonPropsXml = Get-Content (Join-Path $rootFolder "common.props")
@@ -77,24 +76,5 @@ foreach($project in $projects) {
 if ($errorCount > 0)
 {
 	Write-Host ("******* $errorCount error(s) occured *******") -ForegroundColor red
-
-	if (-not [string]::IsNullOrWhiteSpace($discordWebhookUrl))
-	{
-		try
-		{
-			$messageLines = @(
-				"NuGet push completed with failures (ABP).",
-				"Failed package count: $errorCount",
-				"Failed packages:"
-			) + ($failedPackages | ForEach-Object { "- $_" })
-
-			$payload = @{ content = ($messageLines -join "`n") } | ConvertTo-Json -Compress
-			Invoke-RestMethod -Uri $discordWebhookUrl -Method Post -ContentType "application/json" -Body $payload | Out-Null
-			Write-Info "Discord notification sent for failed packages."
-		}
-		catch
-		{
-			Write-Warning "Failed to send Discord webhook notification: $($_.Exception.Message)"
-		}
-	}
+	exit 1
 }

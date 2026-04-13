@@ -1,7 +1,6 @@
 param(
   [string]$source,
-  [string]$apikey,
-  [string]$discordWebhookUrl
+  [string]$apikey
 )
 
 if (!$source)
@@ -12,11 +11,6 @@ if (!$source)
 if (!$apikey)
 {
 	$apikey = "dummy"
-}
-
-if (!$discordWebhookUrl)
-{
-	$discordWebhookUrl = $env:DISCORD_WEBHOOK_URL
 }
 
 $maxRetryCount = 3
@@ -67,26 +61,5 @@ if ($failedPackages.Count -gt 0)
 {
 	$errorCount = $failedPackages.Count
 	Write-Host ("******* $errorCount error(s) occured *******") -ForegroundColor red
-
-	if (-not [string]::IsNullOrWhiteSpace($discordWebhookUrl))
-	{
-		try
-		{
-			$messageLines = @(
-				"Nightly NuGet push completed with failures (ABP).",
-				"Failed package count: $errorCount",
-				"Failed packages:"
-			) + ($failedPackages | ForEach-Object { "- $_" })
-
-			$payload = @{ content = ($messageLines -join "`n") } | ConvertTo-Json -Compress
-			Invoke-RestMethod -Uri $discordWebhookUrl -Method Post -ContentType "application/json" -Body $payload | Out-Null
-			Write-Host "Discord notification sent for failed packages."
-		}
-		catch
-		{
-			Write-Warning "Failed to send Discord webhook notification: $($_.Exception.Message)"
-		}
-	}
-
 	exit 1
 }
