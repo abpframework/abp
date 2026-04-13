@@ -34,7 +34,7 @@ public class AbpEmailLoginTokenProvider_Tests : AbpSingleActiveTokenProviderTest
     [Fact]
     public async Task RemoveEmailLoginTokenAsync_Should_Invalidate_Token()
     {
-        using (var uow = UnitOfWorkManager.Begin(new AbpUnitOfWorkOptions()))
+        using (var uow = UnitOfWorkManager.Begin())
         {
             var john = await UserRepository.GetAsync(TestData.UserJohnId);
 

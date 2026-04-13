@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Identity;
 namespace Volo.Abp.Identity.AspNetCore;
 
 /// <summary>
-/// Provides extension methods on <see cref="IdentityUserManager"/> for invalidating
-/// single-active tokens managed by <see cref="AbpSingleActiveTokenProvider"/>.
-/// These helpers live in the AspNetCore layer because they depend on
-/// <see cref="AbpSingleActiveTokenProvider.InternalLoginProvider"/>.
+/// Provides extension methods on <see cref="IdentityUserManager"/> for generating,
+/// verifying, and invalidating single-active tokens managed by
+/// <see cref="AbpSingleActiveTokenProvider"/>. These helpers live in the AspNetCore
+/// layer because they depend on <see cref="AbpSingleActiveTokenProvider.InternalLoginProvider"/>.
 /// </summary>
 public static class IdentityUserManagerSingleActiveTokenExtensions
 {
