@@ -36,16 +36,16 @@ $(function () {
             $("#ViewModel_Style").val(styleEditor.getValue());
             $("#ViewModel_Script").val(scriptEditor.getValue());
 
-            $createForm.ajaxSubmit({
-                success: function (result) {
-                    abp.notify.success(l('SavedSuccessfully'));
-                    abp.ui.clearBusy();
-                    location.href = "../Pages";
-                },
-                error: function (result) {
-                    abp.ui.clearBusy();
-                    abp.notify.error(result.responseJSON.error.message);
-                }
+            abp.ajax({
+                url: $createForm.attr("action"),
+                data: new FormData($createForm[0]),
+                processData: false,
+                contentType: false
+            }).done(function () {
+                abp.notify.success(l('SavedSuccessfully'));
+                location.href = "../Pages";
+            }).always(function () {
+                abp.ui.clearBusy();
             });
         }
     });
