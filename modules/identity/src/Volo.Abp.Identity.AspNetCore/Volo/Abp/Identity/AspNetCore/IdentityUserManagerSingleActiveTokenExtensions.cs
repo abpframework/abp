@@ -41,16 +41,27 @@ public static class IdentityUserManagerSingleActiveTokenExtensions
         return manager.RemoveAuthenticationTokenAsync(user, AbpSingleActiveTokenProvider.InternalLoginProvider, name);
     }
 
+    /// <summary>
+    /// Generates a new email login token for <paramref name="user"/>.
+    /// Any previously issued email login token is automatically invalidated.
+    /// </summary>
     public static Task<string> GenerateEmailLoginTokenAsync(this IdentityUserManager manager, IdentityUser user)
     {
         return manager.GenerateUserTokenAsync(user, AbpEmailLoginTokenProvider.ProviderName, AbpEmailLoginTokenPurposes.EmailLogin);
     }
 
+    /// <summary>
+    /// Verifies the email login token for <paramref name="user"/>.
+    /// </summary>
     public static Task<bool> VerifyEmailLoginTokenAsync(this IdentityUserManager manager, IdentityUser user, string token)
     {
         return manager.VerifyUserTokenAsync(user, AbpEmailLoginTokenProvider.ProviderName, AbpEmailLoginTokenPurposes.EmailLogin, token);
     }
 
+    /// <summary>
+    /// Removes the stored email login token hash for <paramref name="user"/>,
+    /// immediately invalidating any previously issued email login token.
+    /// </summary>
     public static Task<IdentityResult> RemoveEmailLoginTokenAsync(this IdentityUserManager manager, IdentityUser user)
     {
         var name = AbpEmailLoginTokenProvider.ProviderName + ":" + AbpEmailLoginTokenPurposes.EmailLogin;
