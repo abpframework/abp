@@ -1,6 +1,7 @@
 . ".\common.ps1"
 
 $apiKey = $args[0]
+$discordWebhookUrl = if ($args.Length -gt 1) { $args[1] } else { $env:DISCORD_WEBHOOK_URL }
 
 # Get the version
 [xml]$commonPropsXml = Get-Content (Join-Path $rootFolder "common.props")
@@ -9,6 +10,7 @@ $version = $commonPropsXml.Project.PropertyGroup.Version
 # Publish all packages
 $i = 0
 $errorCount = 0
+$failedPackages = @()
 $totalProjectsCount = $projects.length
 $nugetUrl = "https://api.nuget.org/v3/index.json"
 $maxQuotaRetryCount = 3
@@ -27,6 +29,7 @@ foreach($project in $projects) {
 	if ($nugetPackageExists)
 	{
 		$attempt = 0
+		$pushSucceeded = $false
 		while ($true)
 		{
 			$attempt += 1
@@ -51,6 +54,13 @@ foreach($project in $projects) {
 			Write-Warning "NuGet push returned a 4xx response for $nugetPackageName. Retrying in $retryDelay seconds (retry $attempt/$maxQuotaRetryCount)..."
 			Start-Sleep -Seconds $retryDelay
 		}
+
+		if (-not $pushSucceeded)
+		{
+			Write-Host ("********** ERROR PUSH FAILED: " + $nugetPackageName) -ForegroundColor red
+			$errorCount += 1
+			$failedPackages += $nugetPackageName
+		}
 		#Write-Host ("Deleting package from local: " + $nugetPackageName)
 		#Remove-Item $nugetPackageName -Force
 	}
@@ -67,4 +77,24 @@ foreach($project in $projects) {
 if ($errorCount > 0)
 {
 	Write-Host ("******* $errorCount error(s) occured *******") -ForegroundColor red
+
+	if (-not [string]::IsNullOrWhiteSpace($discordWebhookUrl))
+	{
+		try
+		{
+			$messageLines = @(
+				"NuGet push completed with failures (ABP).",
+				"Failed package count: $errorCount",
+				"Failed packages:"
+			) + ($failedPackages | ForEach-Object { "- $_" })
+
+			$payload = @{ content = ($messageLines -join "`n") } | ConvertTo-Json -Compress
+			Invoke-RestMethod -Uri $discordWebhookUrl -Method Post -ContentType "application/json" -Body $payload | Out-Null
+			Write-Info "Discord notification sent for failed packages."
+		}
+		catch
+		{
+			Write-Warning "Failed to send Discord webhook notification: $($_.Exception.Message)"
+		}
+	}
 }
