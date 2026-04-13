@@ -39,8 +39,8 @@ foreach($project in $projects) {
 				break
 			}
 
-			$quotaExceeded = ($pushOutput | Out-String) -match "403 \(Quota Exceeded\)"
-			$canRetry = $quotaExceeded -and $attempt -le $maxQuotaRetryCount
+			$clientError = ($pushOutput | Out-String) -match "Response status code does not indicate success:\s*4\d\d"
+			$canRetry = $clientError -and $attempt -le $maxQuotaRetryCount
 
 			if (-not $canRetry)
 			{
@@ -48,7 +48,7 @@ foreach($project in $projects) {
 			}
 
 			$retryDelay = $quotaRetryDelaysInSeconds[$attempt - 1]
-			Write-Warning "NuGet quota exceeded for $nugetPackageName. Retrying in $retryDelay seconds (retry $attempt/$maxQuotaRetryCount)..."
+			Write-Warning "NuGet push returned a 4xx response for $nugetPackageName. Retrying in $retryDelay seconds (retry $attempt/$maxQuotaRetryCount)..."
 			Start-Sleep -Seconds $retryDelay
 		}
 		#Write-Host ("Deleting package from local: " + $nugetPackageName)
