@@ -2574,6 +2574,10 @@
           "path": "modules/language-management.md"
         },
         {
+          "text": "Operation Rate Limiting (Pro)",
+          "path": "modules/operation-rate-limiting.md"
+        },
+        {
           "text": "OpenIddict",
           "isLazyExpandable": true,
           "path": "modules/openiddict.md",

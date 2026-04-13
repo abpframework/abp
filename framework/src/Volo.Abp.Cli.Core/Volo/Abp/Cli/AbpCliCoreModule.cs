@@ -80,6 +80,7 @@ public class AbpCliCoreModule : AbpModule
             options.Commands[RecreateInitialMigrationCommand.Name] = typeof(RecreateInitialMigrationCommand);
             options.Commands[GenerateRazorPage.Name] = typeof(GenerateRazorPage);
             options.Commands[McpCommand.Name] = typeof(McpCommand);
+            options.Commands[GenerateJwksCommand.Name] = typeof(GenerateJwksCommand);
 
             options.DisabledModulesToAddToSolution.Add("Volo.Abp.LeptonXTheme.Pro");
             options.DisabledModulesToAddToSolution.Add("Volo.Abp.LeptonXTheme.Lite");
