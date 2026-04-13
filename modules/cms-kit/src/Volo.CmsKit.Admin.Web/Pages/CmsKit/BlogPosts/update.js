@@ -54,7 +54,7 @@ $(function () {
                 else {
                     finishSaving(result);
                 }
-            }).always(function () {
+            }).fail(function () {
                 abp.ui.clearBusy();
             });
         }

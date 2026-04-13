@@ -67,7 +67,7 @@ $(function () {
                             else {
                                 finishSaving();
                             }
-                        }).always(function () {
+                        }).fail(function () {
                             abp.ui.clearBusy();
                         });
                     }
