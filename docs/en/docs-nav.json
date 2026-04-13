@@ -1867,6 +1867,16 @@
               ]
             },
             {
+              "text": "React",
+              "items": [
+                {
+                  "text": "Overview",
+                  "path": "framework/ui/react/index.md",
+                  "isIndex": true
+                }
+              ]
+            },
+            {
               "text": "React Native",
               "items": [
                 {
