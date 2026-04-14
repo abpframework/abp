@@ -88,6 +88,10 @@
         };
 
         $form.off("submit.abpAjaxForm").on("submit.abpAjaxForm", function (e) {
+            if (e.isDefaultPrevented()) {
+                return;
+            }
+
             e.preventDefault();
 
             var formEl = $form[0];
