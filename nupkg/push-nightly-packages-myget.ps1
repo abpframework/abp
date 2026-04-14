@@ -16,6 +16,8 @@ if (!$apikey)
 $maxRetryCount = 3
 $retryDelaysInSeconds = @(30, 60, 120)
 $failedPackages = @()
+$failedPackagesFilePath = Join-Path (Get-Location) "failed-packages.txt"
+if (Test-Path $failedPackagesFilePath) { Remove-Item $failedPackagesFilePath -Force }
 
 $packages = Get-ChildItem -Filter *.nupkg | Sort-Object Name
 
@@ -61,5 +63,6 @@ if ($failedPackages.Count -gt 0)
 {
 	$errorCount = $failedPackages.Count
 	Write-Host ("******* $errorCount error(s) occured *******") -ForegroundColor red
+	$failedPackages | Set-Content -Path $failedPackagesFilePath
 	exit 1
 }
