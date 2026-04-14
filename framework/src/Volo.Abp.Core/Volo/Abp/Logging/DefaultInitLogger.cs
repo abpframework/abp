@@ -17,6 +17,7 @@ public class DefaultInitLogger<T> : IInitLogger<T>
     {
         Entries.Add(new AbpInitLogEntry
         {
+            CategoryName = typeof(T).FullName!,
             LogLevel = logLevel,
             EventId = eventId,
             State = state!,

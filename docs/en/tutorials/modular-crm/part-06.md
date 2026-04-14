@@ -7,12 +7,12 @@
 
 # Integrating the Modules: Implementing Integration Services
 
-```json
+````json
 //[doc-params]
 {
-  "UI": ["MVC", "NG"]
+    "UI": ["MVC", "BlazorWebApp", "NG"]
 }
-```
+````
 
 ````json
 //[doc-nav]
@@ -145,7 +145,11 @@ Open the ABP Studio UI and stop the application if it is already running. Then o
 
 In the opening dialog, select the *This solution* tab, find and check the `ModularCrm.Catalog.Contracts` package and click the OK button:
 
+{{if UI == "MVC"}}
 ![abp-studio-add-package-reference-dialog-3](images/abp-studio-add-package-reference-dialog-3.png)
+{{else if UI == "BlazorWebApp"}}
+![abp-studio-add-package-reference-dialog-3](images/abp-studio-add-package-reference-dialog-3-blazor-webapp.png)
+{{end}}
 
 ABP Studio adds the package reference and arranges the [module](../../framework/architecture/modularity/basics.md) dependency.
 
@@ -258,7 +262,7 @@ Let's see what we've changed:
 
 {{if UI == "MVC"}}
 
-Open the `Index.cshtml` file, and change the `@order.ProductId` part by `@order.ProductName` to write the product name instead of the product ID. The final `Index.cshtml` content should be the following:
+Open the `Index.cshtml` file, and change the `@order.ProductId` part to `@order.ProductName` to write the product name instead of the product ID. The final `Index.cshtml` content should be the following:
 
 ````html
 @page
@@ -280,6 +284,50 @@ Open the `Index.cshtml` file, and change the `@order.ProductId` part by `@order.
         </abp-list-group>
     </abp-card-body>
 </abp-card>
+````
+
+That's all. Now, you can graph build the main application and run it in ABP Studio to see the result:
+
+![abp-studio-browser-list-of-orders-with-product-name](images/abp-studio-browser-list-of-orders-with-product-name.png)
+
+As you can see, we can see the product names instead of product IDs.
+
+{{else if UI == "BlazorWebApp"}}
+
+Open the `Index.razor` file, and change the `@order.ProductId` part to `@order.ProductName` to write the product name instead of the product ID. The final `Index.razor` content should be the following:
+
+````razor
+@page "/ordering"
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using ModularCrm.Ordering
+@inject IOrderAppService OrderAppService
+
+<h1>Orders</h1>
+
+<Card>
+    <CardBody>
+        <ListGroup>
+            @foreach (var order in Orders)
+            {
+                <ListGroupItem>
+                    <strong>Customer:</strong> @order.CustomerName <br />
+                    <strong>Product:</strong> @order.ProductName <br />
+                    <strong>State:</strong> @order.State
+                </ListGroupItem>
+            }
+        </ListGroup>
+    </CardBody>
+</Card>
+
+@code {
+    private List<OrderDto> Orders { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Orders = await OrderAppService.GetListAsync();
+    }
+}
 ````
 
 That's all. Now, you can graph build the main application and run it in ABP Studio to see the result:
@@ -310,4 +358,4 @@ Then run the Angular app (`yarn start` in the `angular` folder), navigate to the
 
 ## Conclusion
 
-In this part of the tutorial, you created and consumed an integration service between modules, then reflected the product name on the {{if UI == "MVC"}}MVC{{else if UI == "NG"}}Angular{{end}} UI. In the [next part](part-07.md), we will explore event based messaging between the modules.
+In this part of the tutorial, you created and consumed an integration service between modules, then reflected the product name on the {{if UI == "MVC"}}MVC{{else if UI == "BlazorWebApp"}}Blazor WebApp{{else if UI == "NG"}}Angular{{end}} UI. In the [next part](part-07.md), we will explore event based messaging between the modules.

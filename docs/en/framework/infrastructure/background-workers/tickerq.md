@@ -83,13 +83,13 @@ public class CleanupJobs
 public override Task OnPreApplicationInitializationAsync(ApplicationInitializationContext context)
 {
 	var abpTickerQFunctionProvider = context.ServiceProvider.GetRequiredService<AbpTickerQFunctionProvider>();
-	abpTickerQFunctionProvider.Functions.TryAdd(nameof(CleanupJobs), (string.Empty, TickerTaskPriority.Normal, new TickerFunctionDelegate(async (cancellationToken, serviceProvider, tickerFunctionContext) =>
+	abpTickerQFunctionProvider.AddFunction(nameof(CleanupJobs), async (cancellationToken, serviceProvider, tickerFunctionContext) =>
 	{
 		var service = new CleanupJobs(); // Or get it from the serviceProvider
 		var request = await TickerRequestProvider.GetRequestAsync<string>(tickerFunctionContext, cancellationToken);
 		var genericContext = new TickerFunctionContext<string>(tickerFunctionContext, request);
 		await service.CleanupLogsAsync(genericContext, cancellationToken);
-	})));
+	}, TickerTaskPriority.Normal);
 	abpTickerQFunctionProvider.RequestTypes.TryAdd(nameof(CleanupJobs), (typeof(string).FullName, typeof(string)));
 	return Task.CompletedTask;
 }
@@ -112,11 +112,11 @@ await cronTickerManager.AddAsync(new CronTickerEntity
 You can specify a cron expression instead of using `ICronTickerManager<CronTickerEntity>` to add a worker:
 
 ```csharp
-abpTickerQFunctionProvider.Functions.TryAdd(nameof(CleanupJobs), (string.Empty, TickerTaskPriority.Normal, new TickerFunctionDelegate(async (cancellationToken, serviceProvider, tickerFunctionContext) =>
+abpTickerQFunctionProvider.AddFunction(nameof(CleanupJobs), async (cancellationToken, serviceProvider, tickerFunctionContext) =>
 {
 	var service = new CleanupJobs();
 	var request = await TickerRequestProvider.GetRequestAsync<string>(tickerFunctionContext, cancellationToken);
 	var genericContext = new TickerFunctionContext<string>(tickerFunctionContext, request);
 	await service.CleanupLogsAsync(genericContext, cancellationToken);
-})));
+}, TickerTaskPriority.Normal);
 ```

@@ -284,11 +284,53 @@ In addition to updated icons, the library will generate splash screens. However,
 
 ## 3. Configure Service Worker
 
-### 3.1 Modify Asset Groups
+Once the PWA schematic is installed and the manifest is customized, you should review and tune the Angular service worker configuration.
 
-Angular has defined some static files to be cached by the service worker, but they are not 100% accurate. Let's change it.
+The configuration lives in `ngsw-config.json` and controls **what is cached**, **how it is cached**, and **for how long**. See Angular’s [service worker configuration](https://angular.dev/ecosystem/service-workers/config) for full details.
 
-Open _ngsw-config.json_ file and replace its content with this:
+
+
+### 3.1. Minimal starter configuration
+
+This is a **simple, safe default** that works well for most ABP Angular applications:
+
+```json
+{
+  "$schema": "./node_modules/@angular/service-worker/config/schema.json",
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "resources": {
+        "files": ["/favicon.ico", "/index.html", "/manifest.webmanifest", "/*.css", "/*.js"]
+      }
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/assets/**",
+          "/*.(eot|svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)"
+        ]
+      }
+    }
+  ]
+}
+```
+
+- `app` group: prefetches the application shell (HTML, JS, CSS, manifest) so the UI loads quickly and works offline after first visit.
+- `assets` group: lazily caches static assets (images, fonts, etc.) as they are requested.
+
+> **Note**: The `"/*.js"` pattern is intentionally generic to work with modern Angular build outputs. Always adapt patterns to match your actual `dist/<project>/browser` files if you customize the build.
+
+
+
+### 3.2. Advanced: separate lazy modules
+
+If your app uses many lazy‑loaded feature modules and you want more control over their caching, you can split them into a dedicated group:
 
 ```json
 {
@@ -304,11 +346,10 @@ Open _ngsw-config.json_ file and replace its content with this:
           "/index.html",
           "/manifest.webmanifest",
           "/*.css",
-          "/common-es2015.*.js",
-          "/main-es2015.*.js",
-          "/polyfills-es2015.*.js",
-          "/runtime-es2015.*.js",
-          "/vendor-es2015.*.js"
+          "/main.*.js",
+          "/polyfills.*.js",
+          "/runtime.*.js",
+          "/vendor.*.js"
         ]
       }
     },
@@ -317,14 +358,7 @@ Open _ngsw-config.json_ file and replace its content with this:
       "installMode": "lazy",
       "updateMode": "prefetch",
       "resources": {
-        "files": [
-          "/*-es2015.*.js",
-          "!/common-es2015.*.js",
-          "!/main-es2015.*.js",
-          "!/polyfills-es2015.*.js",
-          "!/runtime-es2015.*.js",
-          "!/vendor-es2015.*.js"
-        ]
+        "files": ["/*.*.js", "!/main.*.js", "!/polyfills.*.js", "!/runtime.*.js", "!/vendor.*.js"]
       }
     },
     {
@@ -334,7 +368,7 @@ Open _ngsw-config.json_ file and replace its content with this:
       "resources": {
         "files": [
           "/assets/**",
-          "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"
+          "/*.(eot|svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)"
         ]
       }
     }
@@ -342,8 +376,76 @@ Open _ngsw-config.json_ file and replace its content with this:
 }
 ```
 
-In case you want to cache other static files, please refer to the [service worker configuration document](https://angular.dev/ecosystem/service-workers/config) on Angular.dev.
+- `app`: core shell bundles that should always be prefetched.
+- `modules`: lazy‑loaded feature bundles that are cached only when actually used, then updated in the background.
+- `assets`: all static files.
 
-### 3.2 Set Data Groups
+For ABP Angular apps that use `index.csr.html` (CSR/SSR setups), you can add it into the `app` group as well:
 
-This part is unique to your project. We recommend being very careful about which endpoints to cache. Please refer to [service worker configuration document](https://angular.dev/ecosystem/service-workers/config) on Angular.dev for details.
+```json
+"/index.csr.html",
+"/index.html",
+```
+
+
+
+### 3.3. Example `dataGroups` for API caching
+
+`dataGroups` control **HTTP request caching**. This is highly application‑specific, but a small, explicit example is very helpful:
+
+```json
+{
+  "$schema": "./node_modules/@angular/service-worker/config/schema.json",
+  "index": "/index.html",
+  "assetGroups": [
+    // ...
+  ],
+  "dataGroups": [
+    {
+      "name": "api",
+      "urls": ["/api/**"],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxSize": 50,
+        "maxAge": "1h",
+        "timeout": "5s"
+      }
+    }
+  ]
+}
+```
+
+- `urls`: which HTTP URLs are cached (`/api/**` is an example; narrow this to specific APIs in real apps).
+- `strategy: "freshness"`: try network first, fall back to cache if the network is too slow (`timeout`) or offline.
+- `maxSize`: maximum number of request entries stored.
+- `maxAge`: how long a cached response is considered fresh.
+
+For endpoints where stale data is acceptable and you want faster responses, you can use `"strategy": "performance"` instead.
+
+> **Important**: Be careful not to cache authenticated or highly dynamic endpoints unless you fully understand the implications (stale user data, security, GDPR, etc.).
+
+
+
+### 3.4. Build and verify
+
+After changing `ngsw-config.json`:
+
+1. **Build with service worker enabled** (production config):
+
+   ```bash
+   ng build --configuration production
+   ```
+
+2. **Serve the built app over HTTP/HTTPS** and open it in the browser.
+
+3. In Chrome DevTools → **Application**:
+   - **Service Workers**: ensure `ngsw-worker.js` is _installed_ and _controlling the page_.
+   - **Manifest**: verify the manifest and that the app is installable.
+
+4. **Test offline**:
+   - Load the app once while online.
+   - Enable “Offline” in DevTools → Network and reload.
+   - The shell and static assets configured in `assetGroups` should still work.
+
+For further customization, refer to the official Angular service worker docs:  
+[https://angular.dev/ecosystem/service-workers/config](https://angular.dev/ecosystem/service-workers/config).

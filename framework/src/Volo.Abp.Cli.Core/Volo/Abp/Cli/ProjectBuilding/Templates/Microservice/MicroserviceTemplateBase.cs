@@ -41,7 +41,7 @@ public abstract class MicroserviceTemplateBase : TemplateInfo
 
         if (context.BuildArgs.Theme != Theme.NotSpecified)
         {
-            context.Symbols.Add(context.BuildArgs.Theme.Value.ToString().ToUpper());
+            context.Symbols.Add(context.BuildArgs.Theme.Value.ToString().ToUpperInvariant());
         }
 
         if (context.BuildArgs.Theme == Theme.LeptonX)
