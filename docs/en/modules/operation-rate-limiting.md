@@ -15,7 +15,7 @@ ABP provides an operation rate limiting system that allows you to control the fr
 * Do not allow generating a "monthly sales report" more than 2 times per day for each user (if generating the report is resource-intensive).
 * Restrict login attempts per IP address to prevent brute-force attacks.
 
-> This is not for [ASP.NET Core's built-in rate limiting middleware](https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit) which works at the HTTP request pipeline level. This module works at the **application/domain code level** and is called explicitly from your services. See the [Combining with ASP.NET Core Rate Limiting](#combining-with-aspnet-core-rate-limiting) section for a comparison.
+> This is not for [ASP.NET Core's built-in rate limiting middleware](https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit), which works at the HTTP request pipeline level. This module works at the **application/domain code level** and is called explicitly from your services. See the [ASP.NET Core Rate Limiting vs ABP Operation Rate Limiting](#combining-with-aspnet-core-rate-limiting) section for the complete comparison.
 
 ## How to Install
 
