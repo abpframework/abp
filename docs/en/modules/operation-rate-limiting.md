@@ -324,6 +324,8 @@ await checker.CheckAsync("SendSmsCode",
     new OperationRateLimitingContext { Parameter = phoneNumber });
 ````
 
+> **Important:** `PartitionByParameter` uses the parameter value **as-is** without any normalization. If you pass user-supplied values (e.g., email addresses, phone numbers), you are responsible for normalizing them before passing. For example, `user@example.com` and `User@Example.COM` will be treated as **different** partition keys. Use `PartitionByEmail` or `PartitionByPhoneNumber` instead when the parameter is an email or phone number — they handle normalization automatically.
+
 ### PartitionByCurrentUser
 
 Uses `ICurrentUser.Id` as the partition key. The user must be authenticated:
@@ -357,7 +359,7 @@ policy.WithFixedWindow(TimeSpan.FromMinutes(15), maxCount: 10)
 
 ### PartitionByEmail
 
-Resolves from `context.Parameter` first, then falls back to `ICurrentUser.Email`:
+Resolves from `context.Parameter` first, then falls back to `ICurrentUser.Email`. The value is automatically **normalized to uppercase** (using `ToUpperInvariant()`) so that `user@example.com` and `User@Example.COM` share the same rate limit counter:
 
 ````csharp
 policy.WithFixedWindow(TimeSpan.FromMinutes(1), maxCount: 1)
@@ -370,7 +372,7 @@ await checker.CheckAsync("SendEmailCode",
 
 ### PartitionByPhoneNumber
 
-Works the same way as `PartitionByEmail`: resolves from `context.Parameter` first, then falls back to `ICurrentUser.PhoneNumber`.
+Works the same way as `PartitionByEmail`: resolves from `context.Parameter` first, then falls back to `ICurrentUser.PhoneNumber`. The value is automatically **normalized** by stripping formatting characters (spaces, dashes, dots, parentheses) while keeping `+` and digits, so that `+1-555-123-4567` and `+15551234567` share the same counter.
 
 ### Custom Partition (PartitionBy)
 
