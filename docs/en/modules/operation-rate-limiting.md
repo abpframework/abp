@@ -15,7 +15,7 @@ ABP provides an operation rate limiting system that allows you to control the fr
 * Do not allow generating a "monthly sales report" more than 2 times per day for each user (if generating the report is resource-intensive).
 * Restrict login attempts per IP address to prevent brute-force attacks.
 
-> This is not for [ASP.NET Core's built-in rate limiting middleware](https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit), which works at the HTTP request pipeline level. This module works at the **application/domain code level** and is called explicitly from your services. See the [ASP.NET Core Rate Limiting vs ABP Operation Rate Limiting](#combining-with-aspnet-core-rate-limiting) section for the complete comparison.
+> This is not for [ASP.NET Core's built-in rate limiting middleware](https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit), which works at the HTTP request pipeline level. This module works at the **application/domain code level** and is called explicitly from your services. See the [ASP.NET Core Rate Limiting vs ABP Operation Rate Limiting](#aspnet-core-rate-limiting-vs-abp-operation-rate-limiting) section for the complete comparison.
 
 ## How to Install
 
@@ -652,9 +652,9 @@ await checker.CheckAsync("UserApiLimit",
 
 This approach gives you full flexibility while keeping the API simple — `PartitionByCurrentUser()` is a convenience shortcut for "always use the current authenticated user", and `PartitionByParameter()` is for "I want to specify the value explicitly".
 
-### Combining with ASP.NET Core Rate Limiting
+### ASP.NET Core Rate Limiting vs ABP Operation Rate Limiting
 
-This module and ASP.NET Core's built-in [rate limiting middleware](https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit) serve different purposes and can be used together:
+This module and ASP.NET Core's built-in [rate limiting middleware](https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit) serve different purposes but can be used together. See the below comparison table:
 
 | | ASP.NET Core Rate Limiting | Operation Rate Limiting |
 |---|---|---|
