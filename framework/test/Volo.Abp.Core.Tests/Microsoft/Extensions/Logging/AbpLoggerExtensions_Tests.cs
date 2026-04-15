@@ -1,0 +1,155 @@
+using System;
+using System.Collections.Generic;
+using Shouldly;
+using Xunit;
+
+namespace Microsoft.Extensions.Logging;
+
+public class AbpLoggerExtensions_Tests
+{
+    [Fact]
+    public void LogException_Should_Format_String_Data()
+    {
+        var logger = new FakeLogger();
+        var exception = new Exception("test");
+        exception.Data["Name"] = "John";
+
+        logger.LogException(exception);
+
+        logger.LastLoggedMessage.ShouldContain("Name = John");
+    }
+
+    [Fact]
+    public void LogException_Should_Format_Primitive_Data()
+    {
+        var logger = new FakeLogger();
+        var exception = new Exception("test");
+        exception.Data["Count"] = 42;
+        exception.Data["IsActive"] = true;
+
+        logger.LogException(exception);
+
+        logger.LastLoggedMessage.ShouldContain("Count = 42");
+        logger.LastLoggedMessage.ShouldContain("IsActive = True");
+    }
+
+    [Fact]
+    public void LogException_Should_Format_Complex_Object_As_Json()
+    {
+        var logger = new FakeLogger();
+        var exception = new Exception("test");
+        exception.Data["Details"] = new Dictionary<string, object>
+        {
+            { "RuleName", "FixedWindow" },
+            { "Limit", 10 }
+        };
+
+        logger.LogException(exception);
+
+        logger.LastLoggedMessage.ShouldContain("\"RuleName\":\"FixedWindow\"");
+        logger.LastLoggedMessage.ShouldContain("\"Limit\":10");
+    }
+
+    [Fact]
+    public void LogException_Should_Format_List_Of_Complex_Objects_As_Json()
+    {
+        var logger = new FakeLogger();
+        var exception = new Exception("test");
+        exception.Data["RuleDetails"] = new List<Dictionary<string, object>>
+        {
+            new() { { "RuleName", "FixedWindow" }, { "Limit", 10 } },
+            new() { { "RuleName", "SlidingWindow" }, { "Limit", 20 } }
+        };
+
+        logger.LogException(exception);
+
+        var message = logger.LastLoggedMessage;
+        message.ShouldNotContain("System.Collections.Generic.List");
+        message.ShouldContain("FixedWindow");
+        message.ShouldContain("SlidingWindow");
+    }
+
+    [Fact]
+    public void LogException_Should_Format_Null_Data_As_Empty()
+    {
+        var logger = new FakeLogger();
+        var exception = new Exception("test");
+        exception.Data["NullKey"] = null;
+
+        logger.LogException(exception);
+
+        logger.LastLoggedMessage.ShouldContain("NullKey = ");
+    }
+
+    [Fact]
+    public void LogException_Should_Format_Enum_Data()
+    {
+        var logger = new FakeLogger();
+        var exception = new Exception("test");
+        exception.Data["Level"] = LogLevel.Warning;
+
+        logger.LogException(exception);
+
+        logger.LastLoggedMessage.ShouldContain("Level = Warning");
+    }
+
+    [Fact]
+    public void LogException_Should_Format_DateTime_Data()
+    {
+        var logger = new FakeLogger();
+        var exception = new Exception("test");
+        var now = new DateTime(2025, 1, 15, 10, 30, 0);
+        exception.Data["Timestamp"] = now;
+
+        logger.LogException(exception);
+
+        logger.LastLoggedMessage.ShouldContain($"Timestamp = {now}");
+    }
+
+    [Fact]
+    public void LogException_Should_Format_Guid_Data()
+    {
+        var logger = new FakeLogger();
+        var exception = new Exception("test");
+        var id = Guid.NewGuid();
+        exception.Data["Id"] = id;
+
+        logger.LogException(exception);
+
+        logger.LastLoggedMessage.ShouldContain($"Id = {id}");
+    }
+
+    [Fact]
+    public void LogException_Should_Format_Anonymous_Object_As_Json()
+    {
+        var logger = new FakeLogger();
+        var exception = new Exception("test");
+        exception.Data["Info"] = new { Name = "Test", Value = 123 };
+
+        logger.LogException(exception);
+
+        var message = logger.LastLoggedMessage;
+        message.ShouldContain("\"Name\":\"Test\"");
+        message.ShouldContain("\"Value\":123");
+    }
+
+    private class FakeLogger : ILogger
+    {
+        public string? LastLoggedMessage { get; private set; }
+
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
+        {
+            LastLoggedMessage = formatter(state, exception);
+        }
+
+        public bool IsEnabled(LogLevel logLevel) => true;
+
+        public IDisposable BeginScope<TState>(TState state) where TState : notnull => NullDisposable.Instance;
+
+        private class NullDisposable : IDisposable
+        {
+            public static readonly NullDisposable Instance = new();
+            public void Dispose() { }
+        }
+    }
+}
