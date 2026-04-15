@@ -1,5 +1,14 @@
 # Package Version Changes
 
+## 10.2.1
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| Blazorise | 2.0.0 | 2.0.4 | #25264 |
+| Blazorise.Components | 2.0.0 | 2.0.4 | #25264 |
+| Blazorise.DataGrid | 2.0.0 | 2.0.4 | #25264 |
+| Blazorise.Snackbar | 2.0.0 | 2.0.4 | #25264 |
+
 ## 10.2.0-rc.4
 
 | Package | Old Version | New Version | PR |
