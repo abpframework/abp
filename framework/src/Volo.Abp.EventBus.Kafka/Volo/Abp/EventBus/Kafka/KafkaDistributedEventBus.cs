@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +29,7 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     protected IProducerPool ProducerPool { get; }
     protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
     protected ConcurrentDictionary<string, Type> EventTypes { get; }
+    protected ConcurrentDictionary<string, List<IEventHandlerFactory>> DynamicHandlerFactories { get; }
     protected IKafkaMessageConsumer Consumer { get; private set; } = default!;
 
     public KafkaDistributedEventBus(
@@ -63,6 +64,7 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
         HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
         EventTypes = new ConcurrentDictionary<string, Type>();
+        DynamicHandlerFactories = new ConcurrentDictionary<string, List<IEventHandlerFactory>>();
     }
 
     public void Initialize()
@@ -80,14 +82,24 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     {
         var eventName = message.Key;
         var eventType = EventTypes.GetOrDefault(eventName);
-        if (eventType == null)
+
+        var messageId = message.GetMessageId();
+        var correlationId = message.GetCorrelationId();
+        object eventData;
+
+        if (eventType != null)
+        {
+            eventData = Serializer.Deserialize(message.Value, eventType);
+        }
+        else if (DynamicHandlerFactories.ContainsKey(eventName))
+        {
+            eventData = new DynamicEventData(eventName, Serializer.Deserialize<object>(message.Value));
+            eventType = typeof(DynamicEventData);
+        }
+        else
         {
             return;
         }
-
-        var messageId = message.GetMessageId();
-        var eventData = Serializer.Deserialize(message.Value, eventType);
-        var correlationId = message.GetCorrelationId();
 
         if (await AddToInboxAsync(messageId, eventName, eventType, eventData, correlationId))
         {
@@ -112,6 +124,21 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         handlerFactories.Add(factory);
 
         return new EventHandlerFactoryUnregistrar(this, eventType, factory);
+    }
+
+    /// <inheritdoc/>
+    public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
+    {
+        var handlerFactories = GetOrCreateDynamicHandlerFactories(eventName);
+
+        if (handler.IsInFactories(handlerFactories))
+        {
+            return NullDisposable.Instance;
+        }
+
+        handlerFactories.Add(handler);
+
+        return new DynamicEventHandlerFactoryUnregistrar(this, eventName, handler);
     }
 
     /// <inheritdoc/>
@@ -166,6 +193,20 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     public override void UnsubscribeAll(Type eventType)
     {
         GetOrCreateHandlerFactories(eventType).Locking(factories => factories.Clear());
+    }
+
+    /// <inheritdoc/>
+    public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
+    {
+        var eventType = EventTypes.GetOrDefault(eventName);
+        var dynamicEventData = eventData as DynamicEventData ?? new DynamicEventData(eventName, eventData);
+
+        if (eventType != null)
+        {
+            return PublishAsync(eventType, ConvertDynamicEventData(dynamicEventData.Data, eventType), onUnitOfWorkComplete);
+        }
+
+        return PublishAsync(typeof(DynamicEventData), dynamicEventData, onUnitOfWorkComplete);
     }
 
     protected override async Task PublishToEventBusAsync(Type eventType, object eventData)
@@ -278,12 +319,21 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         InboxConfig inboxConfig)
     {
         var eventType = EventTypes.GetOrDefault(incomingEvent.EventName);
-        if (eventType == null)
+        object eventData;
+
+        if (eventType != null)
+        {
+            eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
+        }
+        else if (DynamicHandlerFactories.ContainsKey(incomingEvent.EventName))
+        {
+            eventData = new DynamicEventData(incomingEvent.EventName, Serializer.Deserialize<object>(incomingEvent.EventData));
+            eventType = typeof(DynamicEventData);
+        }
+        else
         {
             return;
         }
-
-        var eventData = Serializer.Deserialize(incomingEvent.EventData, eventType);
         var exceptions = new List<Exception>();
         using (CorrelationIdProvider.Change(incomingEvent.GetCorrelationId()))
         {
@@ -302,8 +352,8 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     private async Task PublishAsync(string topicName, Type eventType, object eventData, Headers headers)
     {
-        var eventName = EventNameAttribute.GetNameOrDefault(eventType);
-        var body = Serializer.Serialize(eventData);
+        var (eventName, resolvedData) = ResolveEventForPublishing(eventType, eventData);
+        var body = Serializer.Serialize(resolvedData);
 
         var result = await PublishAsync(topicName, eventName, body, headers);
         if (result.Status != PersistenceStatus.Persisted)
@@ -332,7 +382,10 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     protected override Task OnAddToOutboxAsync(string eventName, Type eventType, object eventData)
     {
-        EventTypes.GetOrAdd(eventName, eventType);
+        if (typeof(DynamicEventData) != eventType)
+        {
+            EventTypes.GetOrAdd(eventName, eventType);
+        }
         return base.OnAddToOutboxAsync(eventName, eventType, eventData);
     }
 
@@ -352,15 +405,73 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
     {
         var handlerFactoryList = new List<EventTypeWithEventHandlerFactories>();
+        var eventNames = EventTypes.Where(x => ShouldTriggerEventForHandler(eventType, x.Value)).Select(x => x.Key).ToList();
 
-        foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key))
-        )
+        foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
         {
-            handlerFactoryList.Add(
-                new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
+            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
+        }
+
+        foreach (var handlerFactory in DynamicHandlerFactories.Where(aehf => eventNames.Contains(aehf.Key)))
+        {
+            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value));
         }
 
         return handlerFactoryList.ToArray();
+    }
+
+    protected override Type? GetEventTypeByEventName(string eventName)
+    {
+        return EventTypes.GetOrDefault(eventName);
+    }
+
+    /// <inheritdoc/>
+    public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
+    {
+        GetOrCreateDynamicHandlerFactories(eventName).Locking(factories => factories.Remove(factory));
+    }
+
+    /// <inheritdoc/>
+    public override void Unsubscribe(string eventName, IEventHandler handler)
+    {
+        GetOrCreateDynamicHandlerFactories(eventName)
+            .Locking(factories =>
+            {
+                factories.RemoveAll(
+                    factory =>
+                        factory is SingleInstanceHandlerFactory singleFactory &&
+                        singleFactory.HandlerInstance == handler
+                );
+            });
+    }
+
+    /// <inheritdoc/>
+    public override void UnsubscribeAll(string eventName)
+    {
+        GetOrCreateDynamicHandlerFactories(eventName).Locking(factories => factories.Clear());
+    }
+
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetDynamicHandlerFactories(string eventName)
+    {
+        var eventType = GetEventTypeByEventName(eventName);
+        if (eventType != null)
+        {
+            return GetHandlerFactories(eventType);
+        }
+
+        var result = new List<EventTypeWithEventHandlerFactories>();
+
+        foreach (var handlerFactory in DynamicHandlerFactories.Where(hf => hf.Key == eventName))
+        {
+            result.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value));
+        }
+
+        return result;
+    }
+
+    private List<IEventHandlerFactory> GetOrCreateDynamicHandlerFactories(string eventName)
+    {
+        return DynamicHandlerFactories.GetOrAdd(eventName, _ => new List<IEventHandlerFactory>());
     }
 
     private static bool ShouldTriggerEventForHandler(Type targetEventType, Type handlerEventType)

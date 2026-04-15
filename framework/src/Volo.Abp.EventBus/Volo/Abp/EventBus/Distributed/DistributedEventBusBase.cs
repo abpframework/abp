@@ -43,16 +43,25 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         CorrelationIdProvider = correlationIdProvider;
     }
 
+    /// <inheritdoc/>
     public virtual IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
     {
         return Subscribe(typeof(TEvent), handler);
     }
 
+    /// <inheritdoc/>
+    public virtual IDisposable Subscribe(string eventName, IDistributedEventHandler<DynamicEventData> handler)
+    {
+        return Subscribe(eventName, (IEventHandler)handler);
+    }
+
+    /// <inheritdoc/>
     public override Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true)
     {
         return PublishAsync(eventType, eventData, onUnitOfWorkComplete, useOutbox: true);
     }
 
+    /// <inheritdoc/>
     public virtual Task PublishAsync<TEvent>(
         TEvent eventData,
         bool onUnitOfWorkComplete = true,
@@ -62,6 +71,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         return PublishAsync(typeof(TEvent), eventData, onUnitOfWorkComplete, useOutbox);
     }
 
+    /// <inheritdoc/>
     public virtual async Task PublishAsync(
         Type eventType,
         object eventData,
@@ -90,9 +100,27 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         await TriggerDistributedEventSentAsync(new DistributedEventSent()
         {
             Source = DistributedEventSource.Direct,
-            EventName = EventNameAttribute.GetNameOrDefault(eventType),
-            EventData = eventData
+            EventName = GetEventName(eventType, eventData),
+            EventData = GetEventData(eventData)
         });
+    }
+
+    /// <inheritdoc/>
+    public virtual Task PublishAsync(
+        string eventName,
+        object eventData,
+        bool onUnitOfWorkComplete = true,
+        bool useOutbox = true)
+    {
+        var eventType = GetEventTypeByEventName(eventName);
+        var dynamicEventData = eventData as DynamicEventData ?? new DynamicEventData(eventName, eventData);
+
+        if (eventType != null)
+        {
+            return PublishAsync(eventType, ConvertDynamicEventData(dynamicEventData.Data, eventType), onUnitOfWorkComplete, useOutbox);
+        }
+
+        return PublishAsync(typeof(DynamicEventData), dynamicEventData, onUnitOfWorkComplete, useOutbox);
     }
 
     public abstract Task PublishFromOutboxAsync(
@@ -124,7 +152,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
             if (outboxConfig.Selector == null || outboxConfig.Selector(eventType))
             {
                 var eventOutbox = (IEventOutbox)unitOfWork.ServiceProvider.GetRequiredService(outboxConfig.ImplementationType);
-                var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+                (var eventName, eventData) = ResolveEventForPublishing(eventType, eventData);
 
                 await OnAddToOutboxAsync(eventName, eventType, eventData);
 
@@ -181,12 +209,12 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
                     {
                         if (await eventInbox.ExistsByMessageIdAsync(messageId!))
                         {
-                            // Message already exists in the inbox, no need to add again.
-                            // This can happen in case of retries from the sender side.
                             addToInbox = true;
                             continue;
                         }
                     }
+                    
+                    eventData = GetEventData(eventData);
 
                     var incomingEventInfo = new IncomingEventInfo(
                         GuidGenerator.Create(),
@@ -212,8 +240,8 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         await TriggerDistributedEventReceivedAsync(new DistributedEventReceived
         {
             Source = DistributedEventSource.Direct,
-            EventName = EventNameAttribute.GetNameOrDefault(eventType),
-            EventData = eventData
+            EventName = GetEventName(eventType, eventData),
+            EventData = GetEventData(eventData)
         });
 
         await TriggerHandlersAsync(eventType, eventData);
@@ -224,8 +252,8 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         await TriggerDistributedEventReceivedAsync(new DistributedEventReceived
         {
             Source = DistributedEventSource.Inbox,
-            EventName = EventNameAttribute.GetNameOrDefault(eventType),
-            EventData = eventData
+            EventName = GetEventName(eventType, eventData),
+            EventData = GetEventData(eventData)
         });
 
         await TriggerHandlersAsync(eventType, eventData, exceptions, inboxConfig);
@@ -253,5 +281,30 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         {
             // ignored
         }
+    }
+
+    protected virtual string GetEventName(Type eventType, object eventData)
+    {
+        if (eventData is DynamicEventData dynamicEventData)
+        {
+            return dynamicEventData.EventName;
+        }
+
+        return EventNameAttribute.GetNameOrDefault(eventType);
+    }
+
+    protected virtual object GetEventData(object eventData)
+    {
+        if (eventData is DynamicEventData dynamicEventData)
+        {
+            return dynamicEventData.Data;
+        }
+
+        return eventData;
+    }
+
+    protected virtual (string EventName, object EventData) ResolveEventForPublishing(Type eventType, object eventData)
+    {
+        return (GetEventName(eventType, eventData), GetEventData(eventData));
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
@@ -46,7 +46,7 @@ public class AbpBackgroundJobOptions
 
     public BackgroundJobConfiguration GetJob(string name)
     {
-        var jobConfiguration = _jobConfigurationsByName.GetOrDefault(name);
+        var jobConfiguration = GetJobOrNull(name);
 
         if (jobConfiguration == null)
         {
@@ -54,6 +54,11 @@ public class AbpBackgroundJobOptions
         }
 
         return jobConfiguration;
+    }
+
+    public BackgroundJobConfiguration? GetJobOrNull(string name)
+    {
+        return _jobConfigurationsByName.GetOrDefault(name);
     }
 
     public IReadOnlyList<BackgroundJobConfiguration> GetJobs()

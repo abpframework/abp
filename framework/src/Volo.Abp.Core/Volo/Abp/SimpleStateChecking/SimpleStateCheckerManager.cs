@@ -83,6 +83,17 @@ public class SimpleStateCheckerManager<TState> : ISimpleStateCheckerManager<TSta
 
     protected virtual async Task<bool> InternalIsEnabledAsync(TState state, bool useBatchChecker)
     {
+        var hasStateCheckers = state.StateCheckers
+            .WhereIf(!useBatchChecker, x => x is not ISimpleBatchStateChecker<TState>)
+            .Any();
+        var hasGlobalCheckers = Options.GlobalStateCheckers
+            .WhereIf(!useBatchChecker, x => !typeof(ISimpleBatchStateChecker<TState>).IsAssignableFrom(x))
+            .Any();
+        if (!hasStateCheckers && !hasGlobalCheckers)
+        {
+            return true;
+        }
+
         using (var scope = ServiceProvider.CreateScope())
         {
             var context = new SimpleStateCheckerContext<TState>(scope.ServiceProvider.GetRequiredService<ICachedServiceProvider>(), state);

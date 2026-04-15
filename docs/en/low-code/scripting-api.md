@@ -21,8 +21,7 @@ The `db` object is the main entry point for all data operations.
 
 ```javascript
 // Immutable pattern — each call creates a new builder
-var entityTable = await db.query('Entity');
-var baseQuery = await entityTable.where(x => x.Active);
+var baseQuery = db.query('Entity').where(x => x.Active);
 var cheap = baseQuery.where(x => x.Price < 100);     // baseQuery unchanged
 var expensive = baseQuery.where(x => x.Price > 500);  // baseQuery unchanged
 ```
@@ -32,15 +31,13 @@ var expensive = baseQuery.where(x => x.Price > 500);  // baseQuery unchanged
 ### Basic Queries
 
 ```javascript
-var productTable = await db.query('LowCodeDemo.Products.Product');
-var products = await productTable
+var products = await db.query('LowCodeDemo.Products.Product')
     .where(x => x.Price > 100)
     .orderBy(x => x.Price)
     .take(10)
     .toList();
 
-var resultTable = await db.query('LowCodeDemo.Products.Product');
-var result = await resultTable
+var result = await db.query('LowCodeDemo.Products.Product')
     .where(x => x.Price > 100 && x.Price < 500)
     .where(x => x.StockCount > 0)
     .orderByDescending(x => x.Price)
@@ -66,12 +63,9 @@ var result = await resultTable
 | `all(x => condition)` | Check if all records match | `Promise<boolean>` |
 | `isEmpty()` | Check if no results | `Promise<boolean>` |
 | `isSingle()` | Check if exactly one result | `Promise<boolean>` |
-| `first()` | Return first match, throws if empty | `Promise<object>` |
-| `firstOrDefault()` | Return first match or null | `Promise<object\|null>` |
-| `last()` | Return last match, throws if empty | `Promise<object>` |
-| `lastOrDefault()` | Return last match or null | `Promise<object\|null>` |
-| `single()` | Return single match, throws if empty/multiple | `Promise<object>` |
-| `singleOrDefault()` | Return single match or null (throws if multiple) | `Promise<object\|null>` |
+| `first()` / `firstOrDefault()` | Return first match or null | `Promise<object\|null>` |
+| `last()` / `lastOrDefault()` | Return last match or null | `Promise<object\|null>` |
+| `single()` / `singleOrDefault()` | Return single match or null | `Promise<object\|null>` |
 | `elementAt(index)` | Return element at index | `Promise<object\|null>` |
 | `select(x => projection)` | Project to custom shape | `QueryBuilder` |
 | `join(entity, alias, condition)` | Inner join | `QueryBuilder` |
@@ -98,18 +92,16 @@ var minPrice = 100;
 var config = { minStock: 10 };
 var nested = { range: { min: 50, max: 200 } };
 
-var entityTable = await db.query('Entity');
-var result = await entityTable.where(x => x.Price > minPrice).toList();
-var result2 = await entityTable.where(x => x.StockCount > config.minStock).toList();
-var result3 = await entityTable.where(x => x.Price >= nested.range.min).toList();
+var result = await db.query('Entity').where(x => x.Price > minPrice).toList();
+var result2 = await db.query('Entity').where(x => x.StockCount > config.minStock).toList();
+var result3 = await db.query('Entity').where(x => x.Price >= nested.range.min).toList();
 ```
 
 ### Contains / IN Operator
 
 ```javascript
 var targetPrices = [50, 100, 200];
-var entityTable = await db.query('Entity');
-var products = await entityTable
+var products = await db.query('Entity')
     .where(x => targetPrices.includes(x.Price))
     .toList();
 ```
@@ -117,8 +109,7 @@ var products = await entityTable
 ### Select Projection
 
 ```javascript
-var productTable = await db.query('LowCodeDemo.Products.Product');
-var projected = await productTable
+var projected = await db.query('LowCodeDemo.Products.Product')
     .where(x => x.Price > 0)
     .select(x => ({ ProductName: x.Name, ProductPrice: x.Price }))
     .toList();
@@ -129,8 +120,7 @@ var projected = await productTable
 ### Explicit Joins
 
 ```javascript
-var orderLineTable = await db.query('LowCodeDemo.Orders.OrderLine');
-var orderLines = await orderLineTable
+var orderLines = await db.query('LowCodeDemo.Orders.OrderLine')
     .join('LowCodeDemo.Products.Product', 'p', (ol, p) => ol.ProductId === p.Id)
     .take(10)
     .toList();
@@ -145,8 +135,7 @@ orderLines.forEach(line => {
 ### Left Join
 
 ```javascript
-var orderTable = await db.query('LowCodeDemo.Orders.Order');
-var orders = await orderTable
+var orders = await db.query('LowCodeDemo.Orders.Order')
     .leftJoin('LowCodeDemo.Products.Product', 'p', (o, p) => o.CustomerId === p.Id)
     .toList();
 
@@ -160,22 +149,18 @@ orders.forEach(order => {
 ### LINQ-Style Join
 
 ```javascript
-var orderTable = await db.query('Order');
-await orderTable.join(
-  'LowCodeDemo.Products.Product',
-  o => o.ProductId,
-  p => p.Id
-);
+db.query('Order')
+  .join('LowCodeDemo.Products.Product',
+        o => o.ProductId,
+        p => p.Id)
 ```
 
 ### Join with Filtered Query
 
 ```javascript
-var productTable = await db.query('Product');
-var expensiveProducts = await productTable.where(p => p.Price > 100);
+var expensiveProducts = db.query('Product').where(p => p.Price > 100);
 
-var orderLineTable = await db.query('OrderLine');
-var orders = await orderLineTable
+var orders = await db.query('OrderLine')
   .join(expensiveProducts,
         ol => ol.ProductId,
         p => p.Id)
@@ -194,9 +179,8 @@ Set operations execute at the database level using SQL:
 | `except(query)` | `EXCEPT` | Elements in first, not second |
 
 ```javascript
-var productTable = await db.query('Product');
-var cheap = await productTable.where(x => x.Price <= 100);
-var popular = await productTable.where(x => x.Rating > 4);
+var cheap = db.query('Product').where(x => x.Price <= 100);
+var popular = db.query('Product').where(x => x.Rating > 4);
 
 var bestDeals = await cheap.intersect(popular).toList();
 var underrated = await cheap.except(popular).toList();
@@ -216,17 +200,15 @@ All aggregations execute as SQL statements:
 | `groupBy(x => x.Property)` | `GROUP BY ...` | `Promise<GroupResult[]>` |
 
 ```javascript
-var productTable = await db.query('Product');
-var totalValue = await productTable.sum(x => x.Price);
-var avgPrice = await (await productTable.where(x => x.InStock)).average(x => x.Price);
-var cheapest = await productTable.min(x => x.Price);
+var totalValue = await db.query('Product').sum(x => x.Price);
+var avgPrice = await db.query('Product').where(x => x.InStock).average(x => x.Price);
+var cheapest = await db.query('Product').min(x => x.Price);
 ```
 
 ### GroupBy with Select
 
 ```javascript
-var productTable = await db.query('Product');
-var grouped = await productTable
+var grouped = await db.query('Product')
     .groupBy(x => x.Category)
     .select(g => ({
         Category: g.Key,
@@ -255,8 +237,7 @@ var grouped = await productTable
 ### GroupBy with Items
 
 ```javascript
-var productTable = await db.query('Product');
-var grouped = await productTable
+var grouped = await db.query('Product')
     .groupBy(x => x.Category)
     .select(g => ({
         Category: g.Key,
@@ -277,12 +258,11 @@ var grouped = await productTable
 Math functions translate to SQL functions (ROUND, FLOOR, CEILING, ABS, etc.):
 
 ```javascript
-var productTable = await db.query('Product');
-var products = await productTable
+var products = await db.query('Product')
     .where(x => Math.round(x.Price) > 100)
     .toList();
 
-var result = await productTable
+var result = await db.query('Product')
     .where(x => Math.abs(x.Balance) < 10 && Math.floor(x.Rating) >= 4)
     .toList();
 ```
@@ -400,8 +380,7 @@ All values are parameterized:
 ```javascript
 var malicious = "'; DROP TABLE Products;--";
 // Safely treated as a literal string — no injection
-var entityTable = await db.query('Entity');
-var result = await (await entityTable.where(x => x.Name.includes(malicious))).count();
+var result = await db.query('Entity').where(x => x.Name.includes(malicious)).count();
 ```
 
 ### Blocked Features
@@ -418,8 +397,7 @@ if (!context.commandArgs.getValue('Email').includes('@')) {
 
 // Try-catch for safe execution
 try {
-    var entityTable = await db.query('Entity');
-    var products = await entityTable.where(x => x.Price > 0).toList();
+    var products = await db.query('Entity').where(x => x.Price > 0).toList();
 } catch (error) {
     context.log('Query failed: ' + error.message);
 }
@@ -444,8 +422,7 @@ try {
 var productId = context.commandArgs.getValue('ProductId');
 var quantity = context.commandArgs.getValue('Quantity');
 
-var productTable = await db.query('LowCodeDemo.Products.Product');
-var product = await productTable
+var product = await db.query('LowCodeDemo.Products.Product')
     .where(x => x.Id === productId)
     .first();
 
@@ -458,10 +435,11 @@ context.commandArgs.setValue('TotalAmount', product.Price * quantity);
 ### Sales Dashboard (Custom Endpoint)
 
 ```javascript
-var orderTable = await db.query('LowCodeDemo.Orders.Order');
-var totalOrders = await orderTable.count();
-var delivered = await (await orderTable.where(x => x.IsDelivered === true)).count();
-var revenue = await (await orderTable.where(x => x.IsDelivered === true)).sum(x => x.TotalAmount);
+var totalOrders = await db.query('LowCodeDemo.Orders.Order').count();
+var delivered = await db.query('LowCodeDemo.Orders.Order')
+    .where(x => x.IsDelivered === true).count();
+var revenue = await db.query('LowCodeDemo.Orders.Order')
+    .where(x => x.IsDelivered === true).sum(x => x.TotalAmount);
 
 return ok({
     orders: totalOrders,

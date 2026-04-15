@@ -21,7 +21,7 @@
                   "parametersOnMethod": [
                     {
                       "name": "input",
-                      "typeAsString": "System.Collections.Generic.List`1[[Volo.Abp.PermissionManagement.IsGrantedRequest, Volo.Abp.PermissionManagement.Domain.Shared, Version=10.1.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib",
+                      "typeAsString": "System.Collections.Generic.List`1[[Volo.Abp.PermissionManagement.IsGrantedRequest, Volo.Abp.PermissionManagement.Domain.Shared, Version=10.3.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib",
                       "type": "System.Collections.Generic.List<Volo.Abp.PermissionManagement.IsGrantedRequest>",
                       "typeSimple": "[Volo.Abp.PermissionManagement.IsGrantedRequest]",
                       "isOptional": false,
@@ -40,13 +40,13 @@
             "IsGrantedAsyncByInput": {
               "uniqueName": "IsGrantedAsyncByInput",
               "name": "IsGrantedAsync",
-              "httpMethod": "GET",
+              "httpMethod": "POST",
               "url": "integration-api/permission-management/permissions/is-granted",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
                   "name": "input",
-                  "typeAsString": "System.Collections.Generic.List`1[[Volo.Abp.PermissionManagement.IsGrantedRequest, Volo.Abp.PermissionManagement.Domain.Shared, Version=10.1.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib",
+                  "typeAsString": "System.Collections.Generic.List`1[[Volo.Abp.PermissionManagement.IsGrantedRequest, Volo.Abp.PermissionManagement.Domain.Shared, Version=10.3.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib",
                   "type": "System.Collections.Generic.List<Volo.Abp.PermissionManagement.IsGrantedRequest>",
                   "typeSimple": "[Volo.Abp.PermissionManagement.IsGrantedRequest]",
                   "isOptional": false,
@@ -63,7 +63,7 @@
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
+                  "bindingSourceId": "Body",
                   "descriptorName": ""
                 }
               ],

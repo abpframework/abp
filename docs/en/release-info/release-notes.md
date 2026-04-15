@@ -14,9 +14,23 @@ Also see the following notes about ABP releases:
 * [ABP Studio release notes](../studio/release-notes.md)
 * [Change logs for ABP pro packages](https://abp.io/pro-releases)
 
+## 10.3 (2026-04-01)
+
+> This is currently an RC (release-candidate) and you can see the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-3-release-candidate-hgnpr9jq)** for the v10.3 release.
+
+* OpenIddict: `private_key_jwt` Client Authentication + `abp generate-jwks`
+* Event Bus: String-Based Event Publishing with Dynamic Payload
+* Background Jobs/Workers: String-Based Publishing with Dynamic Payload
+* API Definition Endpoint: Descriptions and Documentation Support
+* Entity Cache: New Batch APIs (`FindMany*` / `GetMany*`)
+* Angular: User/Tenant Sharing and Tenant Switch Experience
+* Angular: Upgrade to 21.2 + TypeScript 5.9
+* Introducing the `Volo.Abp.LuckyPenny.AutoMapper` Provider
+* Security Improvements (Account Pro Module)
+
 ## 10.2 (2026-02-24)
 
-> This is currently an RC (release-candidate) and you can see the detailed **[blog post / announcement](https://abp.io/community/articles/announcing-abp-10-2-release-candidate-05zatjfq)** for the v10.2 release.
+See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-2-stable-release-x47ytfww)** for the v10.2 release.
 
 * Multi-Tenant Account Usage: Shared User Accounts
 * Prevent Privilege Escalation: Assignment Restrictions for Roles and Permissions
