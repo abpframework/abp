@@ -145,7 +145,8 @@ public class AbpLoggerExtensions_Tests
         logger.LogException(exception);
 
         logger.LastLoggedMessage.ShouldNotBeNull();
-        logger.LastLoggedMessage.ShouldContain("BadObject = ");
+        logger.LastLoggedMessage.ShouldContain("BadObject = SelfRef:Loop");
+        logger.LastLoggedMessage.ShouldNotContain("\"Name\"");
     }
 
     [Fact]
@@ -172,6 +173,7 @@ public class AbpLoggerExtensions_Tests
     private class SelfReferencingObject
     {
         public string Name { get; set; } = default!;
+        public override string ToString() => $"SelfRef:{Name}";
         public SelfReferencingObject? Self { get; set; }
     }
 

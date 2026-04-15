@@ -100,6 +100,7 @@ public static class AbpLoggerExtensions
     }
 
     private const int MaxDataValueLength = 4096;
+    private const string TruncationSuffix = "...(truncated)";
 
     private static string FormatDataValue(object? value)
     {
@@ -119,7 +120,7 @@ public static class AbpLoggerExtensions
             var json = JsonSerializer.Serialize(value);
             if (json.Length > MaxDataValueLength)
             {
-                return json.Substring(0, MaxDataValueLength) + "...(truncated)";
+                return json.Substring(0, MaxDataValueLength - TruncationSuffix.Length) + TruncationSuffix;
             }
 
             return json;
