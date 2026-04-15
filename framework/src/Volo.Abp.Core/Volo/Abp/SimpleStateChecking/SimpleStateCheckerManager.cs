@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -73,7 +73,7 @@ public class SimpleStateCheckerManager<TState> : ISimpleStateCheckerManager<TSta
             {
                 if (result[state])
                 {
-                    result[state] = await InternalIsEnabledAsync(state, false);
+                    result[state] = await EvaluateCheckersAsync(state, false, scope);
                 }
             }
 
@@ -96,27 +96,36 @@ public class SimpleStateCheckerManager<TState> : ISimpleStateCheckerManager<TSta
 
         using (var scope = ServiceProvider.CreateScope())
         {
-            var context = new SimpleStateCheckerContext<TState>(scope.ServiceProvider.GetRequiredService<ICachedServiceProvider>(), state);
-
-            foreach (var provider in state.StateCheckers.WhereIf(!useBatchChecker, x => x is not ISimpleBatchStateChecker<TState>))
-            {
-                if (!await provider.IsEnabledAsync(context))
-                {
-                    return false;
-                }
-            }
-
-            foreach (ISimpleStateChecker<TState> provider in Options.GlobalStateCheckers
-                .WhereIf(!useBatchChecker, x => !typeof(ISimpleBatchStateChecker<TState>).IsAssignableFrom(x))
-                .Select(x => ServiceProvider.GetRequiredService(x)))
-            {
-                if (!await provider.IsEnabledAsync(context))
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return await EvaluateCheckersAsync(state, useBatchChecker, scope);
         }
+    }
+
+    protected virtual async Task<bool> EvaluateCheckersAsync(TState state, bool useBatchChecker, IServiceScope scope)
+    {
+        var context = new SimpleStateCheckerContext<TState>(
+            !useBatchChecker
+                ? scope.ServiceProvider.GetRequiredService<ITransientCachedServiceProvider>()
+                : scope.ServiceProvider.GetRequiredService<ICachedServiceProvider>(),
+            state);
+
+        foreach (var provider in state.StateCheckers.WhereIf(!useBatchChecker, x => x is not ISimpleBatchStateChecker<TState>))
+        {
+            if (!await provider.IsEnabledAsync(context))
+            {
+                return false;
+            }
+        }
+
+        foreach (ISimpleStateChecker<TState> provider in Options.GlobalStateCheckers
+            .WhereIf(!useBatchChecker, x => !typeof(ISimpleBatchStateChecker<TState>).IsAssignableFrom(x))
+            .Select(x => ServiceProvider.GetRequiredService(x)))
+        {
+            if (!await provider.IsEnabledAsync(context))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
