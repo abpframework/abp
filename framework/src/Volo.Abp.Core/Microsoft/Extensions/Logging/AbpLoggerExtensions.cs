@@ -99,6 +99,8 @@ public static class AbpLoggerExtensions
         logger.LogWithLevel(logLevel, exceptionData.ToString());
     }
 
+    private const int MaxDataValueLength = 4096;
+
     private static string FormatDataValue(object? value)
     {
         if (value == null)
@@ -114,7 +116,13 @@ public static class AbpLoggerExtensions
 
         try
         {
-            return JsonSerializer.Serialize(value);
+            var json = JsonSerializer.Serialize(value);
+            if (json.Length > MaxDataValueLength)
+            {
+                return json.Substring(0, MaxDataValueLength) + "...(truncated)";
+            }
+
+            return json;
         }
         catch
         {

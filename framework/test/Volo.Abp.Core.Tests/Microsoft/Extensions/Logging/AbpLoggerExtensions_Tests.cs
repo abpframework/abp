@@ -133,6 +133,48 @@ public class AbpLoggerExtensions_Tests
         message.ShouldContain("\"Value\":123");
     }
 
+    [Fact]
+    public void LogException_Should_Fallback_To_ToString_For_Non_Serializable_Object()
+    {
+        var logger = new FakeLogger();
+        var exception = new Exception("test");
+        var selfRef = new SelfReferencingObject { Name = "Loop" };
+        selfRef.Self = selfRef;
+        exception.Data["BadObject"] = selfRef;
+
+        logger.LogException(exception);
+
+        logger.LastLoggedMessage.ShouldNotBeNull();
+        logger.LastLoggedMessage.ShouldContain("BadObject = ");
+    }
+
+    [Fact]
+    public void LogException_Should_Truncate_Large_Json_Output()
+    {
+        var logger = new FakeLogger();
+        var exception = new Exception("test");
+        var largeList = new List<Dictionary<string, string>>();
+        for (var i = 0; i < 500; i++)
+        {
+            largeList.Add(new Dictionary<string, string>
+            {
+                { "Key", new string('x', 100) }
+            });
+        }
+        exception.Data["LargeData"] = largeList;
+
+        logger.LogException(exception);
+
+        logger.LastLoggedMessage.ShouldNotBeNull();
+        logger.LastLoggedMessage.ShouldContain("...(truncated)");
+    }
+
+    private class SelfReferencingObject
+    {
+        public string Name { get; set; } = default!;
+        public SelfReferencingObject? Self { get; set; }
+    }
+
     private class FakeLogger : ILogger
     {
         public string? LastLoggedMessage { get; private set; }
