@@ -14,7 +14,7 @@
 }
 
 <ng-template #linkTemplate let-item>
-  <a [routerLink]="item.path"> {{ item.name | abpLocalization }}</a>
+  <a [routerLink]="item.path | abpRouteCultureUrl"> {{ item.name | abpLocalization }}</a>
 </ng-template>
 
 <ng-template #textTemplate let-item>
