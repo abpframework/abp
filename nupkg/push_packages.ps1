@@ -14,7 +14,9 @@ $totalProjectsCount = $projects.length
 $nugetUrl = "https://api.nuget.org/v3/index.json"
 $maxQuotaRetryCount = 3
 $quotaRetryDelaysInSeconds = @(30, 60, 120)
+$failedPackagesFilePath = Join-Path $packFolder "failed-packages.txt"
 Set-Location $packFolder
+if (Test-Path $failedPackagesFilePath) { Remove-Item $failedPackagesFilePath -Force }
 
 foreach($project in $projects) {
 	$i += 1
@@ -76,5 +78,6 @@ foreach($project in $projects) {
 if ($errorCount > 0)
 {
 	Write-Host ("******* $errorCount error(s) occured *******") -ForegroundColor red
+	$failedPackages | Set-Content -Path $failedPackagesFilePath
 	exit 1
 }
