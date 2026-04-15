@@ -57,7 +57,7 @@ public class SimpleStateCheckerManager<TState> : ISimpleStateCheckerManager<TSta
 
             foreach (ISimpleBatchStateChecker<TState> globalStateChecker in Options.GlobalStateCheckers
                 .Where(x => typeof(ISimpleBatchStateChecker<TState>).IsAssignableFrom(x))
-                .Select(x => ServiceProvider.GetRequiredService(x)))
+                .Select(x => scope.ServiceProvider.GetRequiredService(x)))
             {
                 var context = new SimpleBatchStateCheckerContext<TState>(
                     scope.ServiceProvider.GetRequiredService<ICachedServiceProvider>(),
@@ -118,7 +118,7 @@ public class SimpleStateCheckerManager<TState> : ISimpleStateCheckerManager<TSta
 
         foreach (ISimpleStateChecker<TState> provider in Options.GlobalStateCheckers
             .WhereIf(!useBatchChecker, x => !typeof(ISimpleBatchStateChecker<TState>).IsAssignableFrom(x))
-            .Select(x => ServiceProvider.GetRequiredService(x)))
+            .Select(x => scope.ServiceProvider.GetRequiredService(x)))
         {
             if (!await provider.IsEnabledAsync(context))
             {
