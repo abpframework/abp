@@ -478,6 +478,11 @@
                 <td><a href="https://docs.aspnetzero.com/en/common/latest/Rapid-Application-Development" target="_blank">Power Tools</a></td>
             </tr>
             <tr>
+                <td>AI Agent</td>
+                <td>ABP Studio AI Agent</a></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
+            </tr>
+            <tr>
                 <td colspan="3"><strong>Support</strong></td>
             </tr>
             <tr>

@@ -70,4 +70,18 @@ public class StaticPermissionDefinitionStore_Tests : AuthorizationTestBase
         permissions.ShouldContain(x => x.Name == "MyResourcePermission6");
         permissions.ShouldContain(x => x.Name == "MyResourcePermission7");
     }
+
+    [Fact]
+    public async Task GetResourcePermissionsAsync_Same_Name_In_Different_Resources_Should_Both_Be_Returned()
+    {
+        // MyResourcePermission7 is defined for both TestEntityResource and TestEntityResource2.
+        // GetResourcePermissionsAsync must return both entries because resource permissions are
+        // unique by (ResourceName, Name), not by Name alone.
+        var permissions = await _store.GetResourcePermissionsAsync();
+
+        permissions.ShouldContain(x =>
+            x.Name == "MyResourcePermission7" && x.ResourceName == TestEntityResource.ResourceName);
+        permissions.ShouldContain(x =>
+            x.Name == "MyResourcePermission7" && x.ResourceName == TestEntityResource2.ResourceName);
+    }
 }

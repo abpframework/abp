@@ -92,6 +92,12 @@ public class MenuManager : IMenuManager, ITransientDependency
 
                 await CheckPermissionsAsync(scope.ServiceProvider, menu);
             }
+
+            var urlProviderContext = new MenuItemUrlProviderContext(menu);
+            foreach (var urlProvider in scope.ServiceProvider.GetServices<IMenuItemUrlProvider>())
+            {
+                await urlProvider.HandleAsync(urlProviderContext);
+            }
         }
 
         NormalizeMenu(menu);
