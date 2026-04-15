@@ -69,9 +69,13 @@ public class SimpleStateCheckerManager<TState> : ISimpleStateCheckerManager<TSta
                 }
             }
 
+            var hasNonBatchGlobalCheckers = Options.GlobalStateCheckers
+                .Any(x => !typeof(ISimpleBatchStateChecker<TState>).IsAssignableFrom(x));
+
             foreach (var state in states)
             {
-                if (result[state])
+                if (result[state] &&
+                    (hasNonBatchGlobalCheckers || state.StateCheckers.Any(x => x is not ISimpleBatchStateChecker<TState>)))
                 {
                     result[state] = await EvaluateCheckersAsync(state, false, scope);
                 }
