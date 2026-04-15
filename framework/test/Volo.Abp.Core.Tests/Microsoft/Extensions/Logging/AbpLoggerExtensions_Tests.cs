@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Shouldly;
 using Xunit;
 
@@ -103,7 +104,7 @@ public class AbpLoggerExtensions_Tests
 
         logger.LogException(exception);
 
-        logger.LastLoggedMessage.ShouldContain($"Timestamp = {now}");
+        logger.LastLoggedMessage.ShouldContain($"Timestamp = {now.ToString(CultureInfo.CurrentCulture)}");
     }
 
     [Fact]
