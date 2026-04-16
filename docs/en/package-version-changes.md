@@ -7,14 +7,19 @@
 
 # Package Version Changes
 
-## 10.3.1
+## 10.3.0
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| System.Security.Cryptography.Xml | 10.0.2 | 10.0.6 | #25279 |
+
+## 10.3.0-rc.1
 
 | Package | Old Version | New Version | PR |
 |---------|-------------|-------------|-----|
 | Autofac | 8.4.0 | 9.1.0 | #25190 |
 | Autofac.Extensions.DependencyInjection | 10.0.0 | 11.0.0 | #25190 |
 | Microsoft.Bcl.AsyncInterfaces | 10.0.2 | 10.0.4 | #25190 |
-| System.Security.Cryptography.Xml | 10.0.2 | 10.0.6 | #25279 |
 
 ## 10.2.1
 
