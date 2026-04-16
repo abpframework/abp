@@ -32,7 +32,16 @@ def check_tag_exists(tag):
         capture_output=True,
         text=True,
     )
-    return result.returncode == 0
+    if result.returncode == 0:
+        return True
+    if result.returncode == 2:
+        return False
+
+    stderr = (result.stderr or "").strip()
+    raise RuntimeError(
+        f"Failed to check whether git tag '{tag}' exists on remote 'origin' "
+        f"(exit code {result.returncode}): {stderr or 'No error output provided.'}"
+    )
 
 
 def bump_patch_if_released(version, tag_exists_fn=None):
