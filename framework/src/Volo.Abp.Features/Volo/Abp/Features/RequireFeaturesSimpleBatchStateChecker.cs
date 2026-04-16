@@ -49,17 +49,33 @@ public class RequireFeaturesSimpleBatchStateChecker<TState> : SimpleBatchStateCh
 
         var result = new SimpleStateCheckerResult<TState>(context.States);
 
-        var relevantModels = _models
-            .Where(x => context.States.Any(s => s.Equals(x.State)))
-            .ToList();
+        var stateSet = new HashSet<TState>(context.States);
+        var modelLookup = new Dictionary<TState, RequireFeaturesSimpleBatchStateCheckerModel<TState>>();
+        var allFeatures = new HashSet<string>();
 
-        var features = relevantModels.SelectMany(x => x.FeatureNames).Distinct().ToArray();
-        var featureValues = await featureChecker.IsEnabledAsync(features);
+        foreach (var model in _models)
+        {
+            if (!stateSet.Contains(model.State))
+            {
+                continue;
+            }
+
+            if (!modelLookup.ContainsKey(model.State))
+            {
+                modelLookup[model.State] = model;
+            }
+
+            foreach (var featureName in model.FeatureNames)
+            {
+                allFeatures.Add(featureName);
+            }
+        }
+
+        var featureValues = await featureChecker.IsEnabledAsync(allFeatures.ToArray());
 
         foreach (var state in context.States)
         {
-            var model = relevantModels.FirstOrDefault(x => x.State.Equals(state));
-            if (model != null)
+            if (modelLookup.TryGetValue(state, out var model))
             {
                 if (model.RequiresAll)
                 {
