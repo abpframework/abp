@@ -64,8 +64,15 @@ public static class VirtualFileSetListExtensions
 
     public static void ReplaceEmbeddedByPhysical<T>(
         [NotNull] this VirtualFileSetList fileSets,
+        [NotNull] string physicalPath)
+    {
+        ReplaceEmbeddedByPhysical<T>(fileSets, physicalPath, ExclusionFilters.Sensitive);
+    }
+
+    public static void ReplaceEmbeddedByPhysical<T>(
+        [NotNull] this VirtualFileSetList fileSets,
         [NotNull] string physicalPath,
-        ExclusionFilters exclusionFilters = ExclusionFilters.Sensitive)
+        ExclusionFilters exclusionFilters)
     {
         Check.NotNull(fileSets, nameof(fileSets));
         Check.NotNullOrWhiteSpace(physicalPath, nameof(physicalPath));
