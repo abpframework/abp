@@ -28,11 +28,11 @@ def normalize_version(version):
 def check_tag_exists(tag):
     """Check if a git tag exists on the remote."""
     result = subprocess.run(
-        ["git", "ls-remote", "--tags", "origin", tag],
+        ["git", "ls-remote", "--exit-code", "--tags", "origin", f"refs/tags/{tag}"],
         capture_output=True,
         text=True,
     )
-    return result.returncode == 0 and result.stdout.strip() != ""
+    return result.returncode == 0
 
 
 def bump_patch_if_released(version, tag_exists_fn=None):
