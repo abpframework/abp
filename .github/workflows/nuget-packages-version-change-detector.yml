@@ -44,10 +44,8 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 1
 
-      - name: Fetch base branch and tags
-        run: |
-          git fetch origin ${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }} --depth=1
-          git fetch --tags origin
+      - name: Fetch base branch
+        run: git fetch origin ${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }} --depth=1
 
       - uses: actions/setup-python@v5
         with:
