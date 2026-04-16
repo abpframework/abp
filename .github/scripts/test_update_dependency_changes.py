@@ -14,7 +14,7 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(__file__))
 
-from update_dependency_changes import merge_changes, render_section, normalize_version, extract_preamble
+from update_dependency_changes import merge_changes, render_section, normalize_version, extract_preamble, bump_patch_if_released
 
 
 def test_update_then_revert():
@@ -438,6 +438,55 @@ def test_normalize_version_stable():
     print("✓ Passed: stable versions unchanged\n")
 
 
+def test_bump_patch_no_tag():
+    """Test: version tag does not exist, should return as-is."""
+    print("Test 23: bump_patch_if_released - no tag exists")
+    tag_exists = lambda t: False
+    assert bump_patch_if_released("10.3.0", tag_exists) == "10.3.0"
+    assert bump_patch_if_released("10.2.0", tag_exists) == "10.2.0"
+    print("✓ Passed: version unchanged when tag does not exist\n")
+
+
+def test_bump_patch_tag_exists():
+    """Test: version tag exists, should bump patch."""
+    print("Test 24: bump_patch_if_released - tag exists")
+    existing_tags = {"10.3.0"}
+    tag_exists = lambda t: t in existing_tags
+    assert bump_patch_if_released("10.3.0", tag_exists) == "10.3.1", \
+        f"Expected '10.3.1', got: {bump_patch_if_released('10.3.0', tag_exists)}"
+    print("✓ Passed: version bumped to 10.3.1\n")
+
+
+def test_bump_patch_multiple_tags():
+    """Test: multiple consecutive tags exist, should bump past all."""
+    print("Test 25: bump_patch_if_released - multiple tags exist")
+    existing_tags = {"10.3.0", "10.3.1", "10.3.2"}
+    tag_exists = lambda t: t in existing_tags
+    assert bump_patch_if_released("10.3.0", tag_exists) == "10.3.3", \
+        f"Expected '10.3.3', got: {bump_patch_if_released('10.3.0', tag_exists)}"
+    print("✓ Passed: version bumped past all existing tags\n")
+
+
+def test_bump_patch_prerelease_skipped():
+    """Test: pre-release versions should not be bumped."""
+    print("Test 26: bump_patch_if_released - pre-release skipped")
+    tag_exists = lambda t: True  # all tags "exist"
+    assert bump_patch_if_released("10.3.0-rc.1", tag_exists) == "10.3.0-rc.1"
+    assert bump_patch_if_released("10.3.0-rc.2", tag_exists) == "10.3.0-rc.2"
+    assert bump_patch_if_released("10.3.0-preview", tag_exists) == "10.3.0-preview"
+    print("✓ Passed: pre-release versions not bumped\n")
+
+
+def test_bump_patch_non_zero_patch():
+    """Test: version with non-zero patch, tag exists, should bump."""
+    print("Test 27: bump_patch_if_released - non-zero patch version")
+    existing_tags = {"10.3.1"}
+    tag_exists = lambda t: t in existing_tags
+    assert bump_patch_if_released("10.3.1", tag_exists) == "10.3.2", \
+        f"Expected '10.3.2', got: {bump_patch_if_released('10.3.1', tag_exists)}"
+    print("✓ Passed: non-zero patch correctly bumped\n")
+
+
 def run_all_tests():
     """Run all test cases."""
     print("=" * 70)
@@ -466,9 +515,14 @@ def run_all_tests():
     test_normalize_version_preview()
     test_normalize_version_rc()
     test_normalize_version_stable()
+    test_bump_patch_no_tag()
+    test_bump_patch_tag_exists()
+    test_bump_patch_multiple_tags()
+    test_bump_patch_prerelease_skipped()
+    test_bump_patch_non_zero_patch()
 
     print("=" * 70)
-    print("All 22 tests passed! ✓")
+    print("All 27 tests passed! ✓")
     print("=" * 70)
     print("\nTest coverage summary:")
     print("  ✓ Basic scenarios (update, add, remove)")
@@ -478,6 +532,7 @@ def run_all_tests():
     print("  ✓ Document format validation")
     print("  ✓ Preamble extraction (SEO block, no preamble, no heading)")
     print("  ✓ Version normalization (preview -> rc.1)")
+    print("  ✓ Patch version bump when tag already released")
     print("=" * 70)
 
 

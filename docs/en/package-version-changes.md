@@ -7,6 +7,12 @@
 
 # Package Version Changes
 
+## 10.3.1
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| System.Security.Cryptography.Xml | 10.0.2 | 10.0.6 | #25279 |
+
 ## 10.3.0-rc.1
 
 | Package | Old Version | New Version | PR |
