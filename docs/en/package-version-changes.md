@@ -7,7 +7,7 @@
 
 # Package Version Changes
 
-## 10.3.1
+## 10.3.0
 
 | Package | Old Version | New Version | PR |
 |---------|-------------|-------------|-----|
