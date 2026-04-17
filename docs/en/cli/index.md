@@ -39,7 +39,7 @@ Here is the list of all available commands before explaining their details:
 - `**[help](../cli#help)`**: Shows help on the usage of the ABP CLI.
 - `**[cli](../cli#cli)`**: Update or remove ABP CLI.
 - `**[new](../cli#new)**`: Generates a new solution based on the ABP [startup templates](../solution-templates/index.md). Use `--modern` to create solutions with the modern template system (React UI).
-- `**[new-module](../cli#new-module)**`: Generates a new module based on the given template.
+- `**[new-module](../cli#new-module)**`: Generates a new module based on the given template. Use `--modern` to use modern module templates.
 - `**[new-package](../cli#new-package)**`: Generates a new package based on the given template.
 - `**[update](../cli#update)**`: Automatically updates all ABP related NuGet and NPM packages in a solution.
 - `**[clean](../cli#clean)**`: Deletes all `BIN` and `OBJ` folders in the current folder.
@@ -251,6 +251,17 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
 - `--legacy`: Generates a legacy solution.
   - `trust-version`: Trusts the user's version and does not check if the version exists or not. If the template with the given version is found in the cache, it will be used, otherwise throws an exception.
 
+##### Modern Template Options
+
+The following options apply only when `--modern` is used:
+
+| Option | Description | Templates |
+| --- | --- | --- |
+| `--shadcn-theme <theme>` | Shadcn/UI color theme. See [Shadcn Theme Values](#shadcn-theme-values). | all `--modern` templates |
+| `--admin-password <password>` | Initial admin user password. | all `--modern` templates |
+| `--modular` | Generates a modular monolith variant. | `app-nolayers --modern` |
+| `--services <list>` | Comma-separated additional microservice names (for example: `Ordering,Shipping`). | `microservice --modern` |
+
 #### Modern Templates
 
 Add `--modern` to any template to use its modern variant. Modern templates use a different template source (shipped with ABP Studio) compared to legacy templates (which use NuGet extension packages). They are **React-first** and have a narrower set of supported options.
@@ -270,6 +281,10 @@ abp new Acme.BookStore --template microservice --modern
 
 
 > Blazor, Angular, MVC, and MAUI Blazor UI frameworks are **not** supported with `--modern`. The `maui` mobile option is also not supported with `--modern`.
+>
+> Options that are not supported by a modern template are ignored with a warning in the CLI output.
+>
+> `--modern` can also be used with `--ready-config-path` and `--solution-history-id`. In these cases, the template in the JSON configuration is mapped to its modern variant.
 
 When using `--template microservice --modern`, the generated solution includes:
 
@@ -303,6 +318,17 @@ abp new Acme.BookStore --template microservice --modern --database-management-sy
 abp new Acme.BookStore --template microservice --modern --mobile react-native
 ```
 
+##### Shadcn Theme Values
+
+Use `--shadcn-theme <theme>` with `--modern` templates:
+
+- `slate` (default)
+- `pink`
+- `blue`
+- `turquoise`
+- `orange`
+- `purple`
+
 ### new-module
 
 Generates a new module.
@@ -320,6 +346,7 @@ abp new-module Acme.BookStore -t module:ddd
 #### options
 
 - `--template` or `-t`: Specifies the template name. Default template name is `module:ddd`, which generates a DDD module. Module templates are provided by the main template, see their own startup template documentation for available modules. `empty:empty` and `module:ddd` template is available for all solution structure.
+- `--modern`: Uses the modern variant of the selected module template.
 - `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
 - `--target-solution` or `-ts`: If set, the new module will be added to the given solution. Otherwise the new module will added to the closest solution in the file system. If no solution found, it will throw an error.
 - `--solution-folder` or `-sf`: Specifies the target folder in the [Solution Explorer](../studio/solution-explorer.md#folder)  virtual folder system.
@@ -331,6 +358,20 @@ abp new-module Acme.BookStore -t module:ddd
   - `angular`: Angular UI.
   - `blazor`: Blazor UI.
   - `blazor-server`: Blazor Server UI.
+
+#### Modern Module Templates
+
+Add `--modern` to use the modern module variant:
+
+```bash
+abp new-module Acme.BookStore.Orders --modern
+abp new-module Acme.BookStore.Orders --modern -t module:ddd
+abp new-module Acme.BookStore.Orders --modern -t module:standard
+```
+
+When the target solution itself is modern, the modern module variant is selected automatically even if `--modern` is not passed.
+
+Options that are not supported by a modern module template are ignored with a warning in the CLI output.
 
 ### new-package
 
