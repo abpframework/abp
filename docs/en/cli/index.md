@@ -128,7 +128,7 @@ abp new <solution-name> [options]
 Examples:
 
 ```bash
-abp new Acme.BookStore
+abp new Acme.BookStore --template app --modern
 ```
 
 - `Acme.BookStore` is the solution name here.
