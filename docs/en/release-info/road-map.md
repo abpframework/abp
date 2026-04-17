@@ -13,7 +13,7 @@ This document provides a road map, release schedule, and planned features for th
 
 ### v10.4
 
-After v10.3 reaches stable, the next planned version will be 10.4, which is scheduled to be released as a stable version in May 2026. We will be mostly working on the following topics:
+The next planned version will be 10.4, which is scheduled to be released as a stable version in May 2026. We will be mostly working on the following topics:
 
 * Framework
   * Blazor UI: Moving from Blazorise to MudBlazor
