@@ -17,9 +17,9 @@ We'll check the AI models against these topics:
 
 ---
 
-## 🏆 1. GPT-5 (OpenAI) — The All-Round Beast
+## 🏆 1. GPT-5.4 (OpenAI) — The All-Round Beast
 
-Let’s not dance around it—**GPT-5 is still the most versatile coding model right now.**
+Let’s not dance around it—**GPT-5.4 is still the most versatile coding model right now.**
 
 ### Why it’s #1
 
@@ -48,9 +48,9 @@ If you want a **default “just works” coding AI**, this is it.
 
 ---
 
-## 🥈 2. Claude 4 (Anthropic) — The Clean Code Specialist
+## 🥈 2. Claude 4.7 (Anthropic) — The Clean Code Specialist
 
-Claude 4 has built a reputation for writing code that feels like it came from a senior engineer who drinks too much coffee but cares deeply about readability.
+Claude 4.7 has built a reputation for writing code that feels like it came from a senior engineer who drinks too much coffee but cares deeply about readability.
 
 ### Strengths
 
@@ -80,9 +80,9 @@ Perfect if you care about **maintainability over raw speed**.
 
 ---
 
-## 🥉 3. Gemini 2.5 (Google) — The Multimodal Powerhouse
+## 🥉 3. Gemini 3.1 (Google) — The Multimodal Powerhouse
 
-Gemini 2.5 is where things get interesting.
+Gemini 3.1 is where things get interesting.
 
 This isn’t just a coding model—it’s a **multi-input problem solver**.
 
@@ -114,7 +114,7 @@ If your workflow includes **visual debugging or cloud-heavy systems**, this is i
 
 ## ⚡ 4. Mistral Code (Open Models) — The Speed King
 
-Mistral AI’s coding models are gaining serious attraction.
+Mistral AI’s coding models are gaining serious attention.
 
 ### Why devs love it
 
@@ -141,9 +141,9 @@ Best choice for:
 
 ---
 
-## 🧠 5. Code Llama 3 — The Open-Source Veteran
+## 🧠 5. Code Llama 4 — The Open-Source Veteran
 
-Code Llama 3 is still very relevant, especially in enterprise setups.
+Code Llama 4 is still very relevant, especially in enterprise setups.
 
 ### Strengths
 
@@ -166,11 +166,11 @@ If your company says “no cloud AI,” this is your friend.
 
 | Model        | Best For                 | Weakness              |
 | ------------ | ------------------------ | --------------------- |
-| GPT-5        | Everything               | Slightly slower       |
-| Claude 4     | Clean, maintainable code | Less aggressive fixes |
-| Gemini 2.5   | Multimodal workflows     | Inconsistent style    |
+| GPT-5.4        | Everything               | Slightly slower       |
+| Claude 4.7     | Clean, maintainable code | Less aggressive fixes |
+| Gemini 3.1   | Multimodal workflows     | Inconsistent style    |
 | Mistral Code | Speed & local usage      | Shallow reasoning     |
-| Code Llama 3 | Open-source flexibility  | Needs tuning          |
+| Code Llama 4 | Open-source flexibility  | Needs tuning          |
 
 Image Prompt:
 A sleek table-style infographic comparing AI models with icons, performance bars, and labels like “Best for speed”, “Best for reasoning”.
@@ -179,7 +179,7 @@ A sleek table-style infographic comparing AI models with icons, performance bars
 
 ## 🤔 When to Use What (Real Scenarios)
 
-### Use GPT-5 if:
+### Use GPT-5.4 if:
 
 * You’re building a full product
 * You need architecture + implementation
@@ -187,7 +187,7 @@ A sleek table-style infographic comparing AI models with icons, performance bars
 
 ---
 
-### Use Claude 4 if:
+### Use Claude 4.7 if:
 
 * You’re reviewing code
 * You care about readability
@@ -195,7 +195,7 @@ A sleek table-style infographic comparing AI models with icons, performance bars
 
 ---
 
-### Use Gemini 2.5 if:
+### Use Gemini 3.1 if:
 
 * You debug using screenshots/logs
 * You work with cloud infrastructure
@@ -215,7 +215,7 @@ A sleek table-style infographic comparing AI models with icons, performance bars
 
 If you're working with **ASP.NET Core and the ABP Framework**, these models can seriously boost productivity:
 
-* GPT-5 → Generate **application services, DTOs, and modules**
+* GPT-5.4 → Generate **application services, DTOs, and modules**
 * Claude → Clean up **domain layer logic**
 * Gemini → Help debug **UI + backend integration issues**
 
