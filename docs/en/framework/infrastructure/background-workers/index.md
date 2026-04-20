@@ -152,9 +152,9 @@ If multiple applications share the same storage for background jobs and workers 
 Set `ApplicationName` property in `AbpBackgroundJobWorkerOptions` to your application's name:
 
 ````csharp
-public override void PreConfigureServices(ServiceConfigurationContext context)
+public override void ConfigureServices(ServiceConfigurationContext context)
 {
-    PreConfigure<AbpBackgroundJobWorkerOptions>(options =>
+    Configure<AbpBackgroundJobWorkerOptions>(options =>
     {
         options.ApplicationName = context.Services.GetApplicationName()!;
     });
