@@ -9,7 +9,23 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 2.2.6 (2026-04-08) Latest
+## 2.2.7 (2026-04-20) Latest
+
+- Remove `HttpApi` project reference from tiered Blazor WebApp template
+- Send application version with PostHog events
+- Fix basic theme public website templates
+- Use official pgvector image in templates
+- Upgrade `MessageBox.Avalonia` to fix `StaticBinding` compatibility
+- Add `BookController` to Blazor.WebApp for tiered CRUD support
+- Rn modernization
+- Abp 10.3 & blazorise 2.0.4
+- Fix pwsh working directory resolution for run profiles
+- Update ABP and LeptonX versions to 10.3.0
+- Upgrade Blazorise packages to version 2.0.4
+- Update version to release 2.2.7 with 10.3.0
+- Add `Volo.AIManagement` and `Volo.Abp.OperationRateLimiting` to `ModuleList.json`
+
+## 2.2.6 (2026-04-08)
 
 - Disable Scriban 7.0 cumulative output limit for template rendering
 
