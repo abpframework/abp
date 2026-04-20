@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Authorization\Volo.Abp.Authorization.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Features\Volo.Abp.Features.csproj" />
     <ProjectReference Include="..\Volo.Abp.UI\Volo.Abp.UI.csproj" />
     <ProjectReference Include="..\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.csproj" />
   </ItemGroup>
