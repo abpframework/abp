@@ -197,29 +197,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
     protected virtual EfCoreDatabaseProvider? GetDatabaseProviderOrNull(ModelBuilder modelBuilder)
     {
-        switch (Database.ProviderName)
-        {
-            case "Microsoft.EntityFrameworkCore.SqlServer":
-                return EfCoreDatabaseProvider.SqlServer;
-            case "Npgsql.EntityFrameworkCore.PostgreSQL":
-                return EfCoreDatabaseProvider.PostgreSql;
-            case "Pomelo.EntityFrameworkCore.MySql":
-            case "MySql.Data.MySqlClient":
-                return EfCoreDatabaseProvider.MySql;
-            case "Oracle.EntityFrameworkCore":
-            case "Devart.Data.Oracle.Entity.EFCore":
-                return EfCoreDatabaseProvider.Oracle;
-            case "Microsoft.EntityFrameworkCore.Sqlite":
-                return EfCoreDatabaseProvider.Sqlite;
-            case "Microsoft.EntityFrameworkCore.InMemory":
-                return EfCoreDatabaseProvider.InMemory;
-            case "FirebirdSql.EntityFrameworkCore.Firebird":
-                return EfCoreDatabaseProvider.Firebird;
-            case "Microsoft.EntityFrameworkCore.Cosmos":
-                return EfCoreDatabaseProvider.Cosmos;
-            default:
-                return null;
-        }
+        return EfCoreDatabaseProviderHelper.GetDatabaseProviderOrNull(Database.ProviderName);
     }
 
     public async override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
