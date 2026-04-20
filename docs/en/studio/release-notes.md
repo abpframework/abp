@@ -11,19 +11,16 @@ This document contains **brief release notes** for each ABP Studio release. Rele
 
 ## 2.2.7 (2026-04-20) Latest
 
-- Remove `HttpApi` project reference from tiered Blazor WebApp template
-- Send application version with PostHog events
-- Fix basic theme public website templates
-- Use official pgvector image in templates
-- Upgrade `MessageBox.Avalonia` to fix `StaticBinding` compatibility
-- Add `BookController` to Blazor.WebApp for tiered CRUD support
-- Rn modernization
-- Abp 10.3 & blazorise 2.0.4
-- Fix pwsh working directory resolution for run profiles
-- Update ABP and LeptonX versions to 10.3.0
-- Upgrade Blazorise packages to version 2.0.4
-- Update version to release 2.2.7 with 10.3.0
-- Add `Volo.AIManagement` and `Volo.Abp.OperationRateLimiting` to `ModuleList.json`
+* Improved Blazor WebApp template setup for easier tiered application development
+* Added application version tracking in analytics events
+* Fixed issues in Basic Theme public website templates
+* Improved PostgreSQL vector database support in templates
+* Enhanced Blazor CRUD support with built-in Book management example
+* Modernized React Native template components
+* Updated to ABP 10.3 and Blazorise 2.0.4
+* Improved run profile and PowerShell execution reliability
+* Added AI Management and Rate Limiting modules to available module options  
+
 
 ## 2.2.6 (2026-04-08)
 
