@@ -47,13 +47,33 @@ public class RequirePermissionsSimpleBatchStateChecker<TState> : SimpleBatchStat
 
         var result = new SimpleStateCheckerResult<TState>(context.States);
 
-        var permissions = _models.Where(x => context.States.Any(s => s.Equals(x.State))).SelectMany(x => x.Permissions).Distinct().ToArray();
-        var grantResult = await permissionChecker.IsGrantedAsync(permissions);
+        var stateSet = new HashSet<TState>(context.States);
+        var modelLookup = new Dictionary<TState, RequirePermissionsSimpleBatchStateCheckerModel<TState>>();
+        var allPermissions = new HashSet<string>();
+
+        foreach (var model in _models)
+        {
+            if (!stateSet.Contains(model.State))
+            {
+                continue;
+            }
+
+            if (!modelLookup.ContainsKey(model.State))
+            {
+                modelLookup[model.State] = model;
+            }
+
+            foreach (var permission in model.Permissions)
+            {
+                allPermissions.Add(permission);
+            }
+        }
+
+        var grantResult = await permissionChecker.IsGrantedAsync(allPermissions.ToArray());
 
         foreach (var state in context.States)
         {
-            var model = _models.FirstOrDefault(x => x.State.Equals(state));
-            if (model != null)
+            if (modelLookup.TryGetValue(state, out var model))
             {
                 if (model.RequiresAll)
                 {
