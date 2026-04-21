@@ -618,6 +618,66 @@ public class SharedTenantUserSharingStrategy_IdentityUserManager_Tests : AbpIden
         }
     }
 
+    [Fact]
+    public async Task FindSharedUserByIdAsync_Should_Find_Tenant_User_From_Host_Context()
+    {
+        var tenantId = Guid.NewGuid();
+        IdentityUser tenantUser;
+
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            tenantUser = await CreateUserAsync(tenantId, "shared-id-tenant-only", "shared-id-tenant-only@abp.io");
+            await uow.CompleteAsync();
+        }
+
+        // Simulates the 2FA mid-flow on a Shared deployment: CurrentTenant is null
+        // but the user row only exists under a tenant. FindByIdAsync alone would be
+        // filtered out by the IMultiTenant filter, so FindSharedUserByIdAsync must
+        // disable the filter and still return the tenant user.
+        using (_currentTenant.Change(null))
+        {
+            var user = await _identityUserManager.FindSharedUserByIdAsync(tenantUser.Id.ToString());
+
+            user.ShouldNotBeNull();
+            user.Id.ShouldBe(tenantUser.Id);
+            user.TenantId.ShouldBe(tenantId);
+            user.UserName.ShouldBe("shared-id-tenant-only");
+        }
+    }
+
+    [Fact]
+    public async Task FindSharedUserByIdAsync_Should_Find_Host_User_From_Tenant_Context()
+    {
+        var tenantId = Guid.NewGuid();
+        IdentityUser hostUser;
+
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            hostUser = await CreateUserAsync(null, "shared-id-host-only", "shared-id-host-only@abp.io");
+            await uow.CompleteAsync();
+        }
+
+        using (_currentTenant.Change(tenantId))
+        {
+            var user = await _identityUserManager.FindSharedUserByIdAsync(hostUser.Id.ToString());
+
+            user.ShouldNotBeNull();
+            user.Id.ShouldBe(hostUser.Id);
+            user.TenantId.ShouldBeNull();
+            user.UserName.ShouldBe("shared-id-host-only");
+        }
+    }
+
+    [Fact]
+    public async Task FindSharedUserByIdAsync_Should_Return_Null_For_Unknown_Id()
+    {
+        using (_currentTenant.Change(null))
+        {
+            var user = await _identityUserManager.FindSharedUserByIdAsync(Guid.NewGuid().ToString());
+            user.ShouldBeNull();
+        }
+    }
+
     private async Task<IdentityUser> CreateUserAsync(
         Guid? tenantId,
         string userName,

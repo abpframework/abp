@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -131,6 +132,23 @@ public class AbpSignInManager : SignInManager<IdentityUser>
     public virtual async Task<IdentityUser> FindByLoginAsync(string loginProvider, string providerKey)
     {
         return await IdentityUserManager.FindSharedUserByLoginAsync(loginProvider, providerKey);
+    }
+
+    public override async Task<IdentityUser> GetTwoFactorAuthenticationUserAsync()
+    {
+        var result = await Context.AuthenticateAsync(IdentityConstants.TwoFactorUserIdScheme);
+        if (result?.Principal == null)
+        {
+            return null;
+        }
+
+        var userId = result.Principal.FindFirstValue(ClaimTypes.Name);
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            return null;
+        }
+
+        return await IdentityUserManager.FindSharedUserByIdAsync(userId);
     }
 
     /// <summary>
