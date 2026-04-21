@@ -11,6 +11,7 @@
 
 | Package | Old Version | New Version | PR |
 |---------|-------------|-------------|-----|
+| MongoDB.Driver | 3.7.1 | 3.8.0 | #25302 |
 | System.Security.Cryptography.Xml | 10.0.2 | 10.0.6 | #25279 |
 
 ## 10.3.0-rc.1
