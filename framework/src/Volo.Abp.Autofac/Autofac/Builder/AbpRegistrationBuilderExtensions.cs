@@ -20,7 +20,8 @@ public static class AbpRegistrationBuilderExtensions
             ServiceDescriptor serviceDescriptor,
             IModuleContainer moduleContainer,
             ServiceRegistrationActionList registrationActionList,
-            ServiceActivatedActionList activatedActionList)
+            ServiceActivatedActionList activatedActionList,
+            HashSet<Assembly>? nonModuleAssemblies = null)
         where TActivatorData : ReflectionActivatorData
     {
         registrationBuilder = registrationBuilder.InvokeActivatedActions(activatedActionList, serviceDescriptor);
@@ -37,7 +38,7 @@ public static class AbpRegistrationBuilderExtensions
             return registrationBuilder;
         }
 
-        registrationBuilder = registrationBuilder.EnablePropertyInjection(moduleContainer, implementationType);
+        registrationBuilder = registrationBuilder.EnablePropertyInjection(moduleContainer, implementationType, nonModuleAssemblies);
         registrationBuilder = registrationBuilder.InvokeRegistrationActions(registrationActionList, serviceType, implementationType, serviceDescriptor.ServiceKey);
 
         return registrationBuilder;
@@ -99,14 +100,23 @@ public static class AbpRegistrationBuilderExtensions
     private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> EnablePropertyInjection<TLimit, TActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
             IModuleContainer moduleContainer,
-            Type implementationType)
+            Type implementationType,
+            HashSet<Assembly>? nonModuleAssemblies)
         where TActivatorData : ReflectionActivatorData
     {
         // Enable Property Injection only for types in an assembly containing an AbpModule and without a DisablePropertyInjection attribute on class or properties.
-        if (moduleContainer.Modules.Any(m => m.AllAssemblies.Contains(implementationType.Assembly)) &&
-            implementationType.GetCustomAttributes(typeof(DisablePropertyInjectionAttribute), true).IsNullOrEmpty())
+        if (!implementationType.GetCustomAttributes(typeof(DisablePropertyInjectionAttribute), true).IsNullOrEmpty())
+        {
+            return registrationBuilder;
+        }
+
+        if (moduleContainer.Modules.Any(m => m.AllAssemblies.Contains(implementationType.Assembly)))
         {
             registrationBuilder = registrationBuilder.PropertiesAutowired(new AbpPropertySelector(false));
+        }
+        else
+        {
+            nonModuleAssemblies?.Add(implementationType.Assembly);
         }
 
         return registrationBuilder;

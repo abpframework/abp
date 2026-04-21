@@ -128,20 +128,24 @@ public abstract class AbpApplicationBase : IAbpApplication
 
     protected virtual void WriteInitLogs(IServiceProvider serviceProvider)
     {
-        var logger = serviceProvider.GetService<ILogger<AbpApplicationBase>>();
-        if (logger == null)
+        var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
+        if (loggerFactory == null)
         {
             return;
         }
 
-        var initLogger = serviceProvider.GetRequiredService<IInitLoggerFactory>().Create<AbpApplicationBase>();
+        var initLoggerFactory = serviceProvider.GetRequiredService<IInitLoggerFactory>();
 
-        foreach (var entry in initLogger.Entries)
+        foreach (var entry in initLoggerFactory.GetAllEntries())
         {
+            var categoryName = string.IsNullOrEmpty(entry.CategoryName)
+                ? nameof(AbpApplicationBase)
+                : entry.CategoryName;
+            var logger = loggerFactory.CreateLogger(categoryName);
             logger.Log(entry.LogLevel, entry.EventId, entry.State, entry.Exception, entry.Formatter);
         }
 
-        initLogger.Entries.Clear();
+        initLoggerFactory.ClearAllEntries();
     }
 
     protected virtual IReadOnlyList<IAbpModuleDescriptor> LoadModules(IServiceCollection services, AbpApplicationCreationOptions options)

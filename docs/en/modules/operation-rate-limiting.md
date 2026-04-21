@@ -15,7 +15,7 @@ ABP provides an operation rate limiting system that allows you to control the fr
 * Do not allow generating a "monthly sales report" more than 2 times per day for each user (if generating the report is resource-intensive).
 * Restrict login attempts per IP address to prevent brute-force attacks.
 
-> This is not for [ASP.NET Core's built-in rate limiting middleware](https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit) which works at the HTTP request pipeline level. This module works at the **application/domain code level** and is called explicitly from your services. See the [Combining with ASP.NET Core Rate Limiting](#combining-with-aspnet-core-rate-limiting) section for a comparison.
+> This is not for [ASP.NET Core's built-in rate limiting middleware](https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit), which works at the HTTP request pipeline level. This module works at the **application/domain code level** and is called explicitly from your services. See the [ASP.NET Core Rate Limiting vs ABP Operation Rate Limiting](#aspnet-core-rate-limiting-vs-abp-operation-rate-limiting) section for the complete comparison.
 
 ## How to Install
 
@@ -324,6 +324,8 @@ await checker.CheckAsync("SendSmsCode",
     new OperationRateLimitingContext { Parameter = phoneNumber });
 ````
 
+> **Important:** `PartitionByParameter` uses the parameter value **as-is** without any normalization. If you pass user-supplied values (e.g., email addresses, phone numbers), you are responsible for normalizing them before passing. For example, `user@example.com` and `User@Example.COM` will be treated as **different** partition keys. Use `PartitionByEmail` or `PartitionByPhoneNumber` instead when the parameter is an email or phone number — they handle normalization automatically.
+
 ### PartitionByCurrentUser
 
 Uses `ICurrentUser.Id` as the partition key. The user must be authenticated:
@@ -357,7 +359,7 @@ policy.WithFixedWindow(TimeSpan.FromMinutes(15), maxCount: 10)
 
 ### PartitionByEmail
 
-Resolves from `context.Parameter` first, then falls back to `ICurrentUser.Email`:
+Resolves from `context.Parameter` first, then falls back to `ICurrentUser.Email`. The value is automatically **normalized to uppercase** (using `ToUpperInvariant()`) so that `user@example.com` and `User@Example.COM` share the same rate limit counter:
 
 ````csharp
 policy.WithFixedWindow(TimeSpan.FromMinutes(1), maxCount: 1)
@@ -370,7 +372,7 @@ await checker.CheckAsync("SendEmailCode",
 
 ### PartitionByPhoneNumber
 
-Works the same way as `PartitionByEmail`: resolves from `context.Parameter` first, then falls back to `ICurrentUser.PhoneNumber`.
+Works the same way as `PartitionByEmail`: resolves from `context.Parameter` first, then falls back to `ICurrentUser.PhoneNumber`. The value is automatically **normalized** by stripping formatting characters (spaces, dashes, dots, parentheses) while keeping `+` and digits, so that `+1-555-123-4567` and `+15551234567` share the same counter.
 
 ### Custom Partition (PartitionBy)
 
@@ -650,9 +652,9 @@ await checker.CheckAsync("UserApiLimit",
 
 This approach gives you full flexibility while keeping the API simple — `PartitionByCurrentUser()` is a convenience shortcut for "always use the current authenticated user", and `PartitionByParameter()` is for "I want to specify the value explicitly".
 
-### Combining with ASP.NET Core Rate Limiting
+### ASP.NET Core Rate Limiting vs ABP Operation Rate Limiting
 
-This module and ASP.NET Core's built-in [rate limiting middleware](https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit) serve different purposes and can be used together:
+This module and ASP.NET Core's built-in [rate limiting middleware](https://learn.microsoft.com/en-us/aspnet/core/performance/rate-limit) serve different purposes but can be used together. See the below comparison table:
 
 | | ASP.NET Core Rate Limiting | Operation Rate Limiting |
 |---|---|---|

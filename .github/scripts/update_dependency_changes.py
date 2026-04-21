@@ -25,6 +25,55 @@ def normalize_version(version):
     return version
 
 
+def check_tag_exists(tag):
+    """Check if a git tag exists on the remote."""
+    result = subprocess.run(
+        ["git", "ls-remote", "--exit-code", "--tags", "origin", f"refs/tags/{tag}"],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode == 0:
+        return True
+    if result.returncode == 2:
+        return False
+
+    stderr = (result.stderr or "").strip()
+    raise RuntimeError(
+        f"Failed to check whether git tag '{tag}' exists on remote 'origin' "
+        f"(exit code {result.returncode}): {stderr or 'No error output provided.'}"
+    )
+
+
+def bump_patch_if_released(version, tag_exists_fn=None):
+    """If the version tag already exists, bump the patch version.
+
+    Only applies to stable versions (no pre-release suffix like -rc.N).
+    """
+    if tag_exists_fn is None:
+        tag_exists_fn = check_tag_exists
+
+    # Only bump stable versions (no pre-release suffix)
+    if "-" in version:
+        return version
+
+    parts = version.split(".")
+    if len(parts) != 3:
+        return version
+
+    major, minor = parts[0], parts[1]
+    try:
+        patch = int(parts[2])
+    except ValueError:
+        return version
+
+    current = version
+    while tag_exists_fn(current):
+        patch += 1
+        current = f"{major}.{minor}.{patch}"
+
+    return current
+
+
 def get_version():
     """Read the current version from common.props."""
     try:
@@ -295,6 +344,9 @@ def main():
     if not version:
         print("Could not read version from common.props.")
         sys.exit(1)
+
+    version = bump_patch_if_released(version)
+    print(f"Resolved version: {version}")
 
     diff = get_diff(base_ref)
     if not diff:

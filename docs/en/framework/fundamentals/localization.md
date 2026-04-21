@@ -126,6 +126,43 @@ var str2 = L["Hi__0"]; // Bye World!
 var str3 = L["Hi__1"]; // Hello World!
 ````
 
+You can have more than one localization file with the same culture: files will be merged. This is useful for large modules where splitting translations by feature keeps each file manageable.
+
+**Example file structure:**
+
+```
+Localization/
+└── MyResource/
+    ├── en.json            ← base / shared strings
+    ├── en_Authors.json    ← Author feature strings
+    ├── en_Books.json      ← Book feature strings
+    └── en_Users.json      ← User feature strings
+```
+
+Files are sorted by name (ordinal order) before merging, so the effective merge order is `en.json` → `en_Authors.json` → `en_Books.json` → `en_Users.json`.
+
+```
+en.json            en_Authors.json    en_Books.json
+┌─────────────────┐ ┌───────────────┐ ┌──────────────────┐
+│ DisplayName=Name│ │ Author.Id=Id  │ │ Book.Id=ISBN     │
+│ SaveButton=Save │ │ Author.Bio=.. │ │ Book.Title=Title │
+└─────────────────┘ └───────────────┘ └──────────────────┘
+         │                  │                  │
+         └──────────────────┴──────────────────┘
+                            │ merge (later file wins on duplicate keys)
+                            ▼
+                 ┌────────────────────┐
+                 │ DisplayName = Name │
+                 │ SaveButton  = Save │
+                 │ Author.Id   = Id   │
+                 │ Author.Bio  = ...  │
+                 │ Book.Id     = ISBN │
+                 │ Book.Title  = Title│
+                 └────────────────────┘
+```
+
+> Note: If the same key is defined in multiple files, the value from the last file (in sort order) wins.
+
 ### Default Resource
 
 `AbpLocalizationOptions.DefaultResourceType` can be set to a resource type, so it is used when the localization resource was not specified:

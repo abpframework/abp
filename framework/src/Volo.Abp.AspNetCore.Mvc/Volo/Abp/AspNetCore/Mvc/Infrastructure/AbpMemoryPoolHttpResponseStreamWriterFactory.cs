@@ -12,7 +12,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Infrastructure;
 /// </summary>
 public class AbpMemoryPoolHttpResponseStreamWriterFactory : IHttpResponseStreamWriterFactory
 {
-    public const int DefaultBufferSize = 32 * 1024;
+    public const int DefaultBufferSize = 256 * 1024;
 
     private readonly ArrayPool<byte> _bytePool;
     private readonly ArrayPool<char> _charPool;

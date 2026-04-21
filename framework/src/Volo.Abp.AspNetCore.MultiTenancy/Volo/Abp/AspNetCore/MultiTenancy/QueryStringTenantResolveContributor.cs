@@ -19,13 +19,10 @@ public class QueryStringTenantResolveContributor : HttpTenantResolveContributorB
             if (httpContext.Request.Query.ContainsKey(tenantKey))
             {
                 var tenantValue = httpContext.Request.Query[tenantKey].ToString();
-                if (tenantValue.IsNullOrWhiteSpace())
+                if (!tenantValue.IsNullOrWhiteSpace())
                 {
-                    context.Handled = true;
-                    return Task.FromResult<string?>(null);
+                    return Task.FromResult<string?>(tenantValue);
                 }
-
-                return Task.FromResult(tenantValue)!;
             }
         }
 

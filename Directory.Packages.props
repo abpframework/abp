@@ -19,10 +19,10 @@
     <PackageVersion Include="Azure.Identity" Version="1.14.2" />
     <PackageVersion Include="Azure.Messaging.ServiceBus" Version="7.20.1" />
     <PackageVersion Include="Azure.Storage.Blobs" Version="12.25.0" />
-    <PackageVersion Include="Blazorise" Version="2.0.0" />
-    <PackageVersion Include="Blazorise.Components" Version="2.0.0" />
-    <PackageVersion Include="Blazorise.DataGrid" Version="2.0.0" />
-    <PackageVersion Include="Blazorise.Snackbar" Version="2.0.0" />
+    <PackageVersion Include="Blazorise" Version="2.0.4" />
+    <PackageVersion Include="Blazorise.Components" Version="2.0.4" />
+    <PackageVersion Include="Blazorise.DataGrid" Version="2.0.4" />
+    <PackageVersion Include="Blazorise.Snackbar" Version="2.0.4" />
     <PackageVersion Include="MudBlazor" Version="8.0.0" />
     <PackageVersion Include="Castle.Core" Version="5.2.1" />
     <PackageVersion Include="Castle.Core.AsyncInterceptor" Version="2.1.0" />
@@ -175,7 +175,7 @@
     <PackageVersion Include="System.Linq.Dynamic.Core" Version="1.6.7" />
     <PackageVersion Include="System.Linq.Queryable" Version="4.3.0" />
     <PackageVersion Include="System.Runtime.Loader" Version="4.3.0" />
-    <PackageVersion Include="System.Security.Cryptography.Xml" Version="10.0.2" />
+    <PackageVersion Include="System.Security.Cryptography.Xml" Version="10.0.6" />
     <PackageVersion Include="System.Security.Permissions" Version="10.0.2" />
     <PackageVersion Include="System.Security.Principal.Windows" Version="5.0.0" />
     <PackageVersion Include="System.Text.Encoding.CodePages" Version="10.0.2" />
