@@ -678,6 +678,34 @@ public class SharedTenantUserSharingStrategy_IdentityUserManager_Tests : AbpIden
         }
     }
 
+    [Fact]
+    public async Task Login_Then_TwoFactor_MidFlow_Should_Resolve_Same_Tenant_User_In_Shared_Mode()
+    {
+        // Covers the data-access contract behind the 2FA redirect bug:
+        // 1. login lookup (by user name) must find a tenant user from a host context,
+        // 2. the 2FA mid-flow lookup (by id) must then return the same tenant user
+        //    from the same host context. Regressing either side re-opens the bug.
+        var tenantId = Guid.NewGuid();
+
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            await CreateUserAsync(tenantId, "shared-2fa-linked", "shared-2fa-linked@abp.io");
+            await uow.CompleteAsync();
+        }
+
+        using (_currentTenant.Change(null))
+        {
+            var loginUser = await _identityUserManager.FindSharedUserByNameAsync("shared-2fa-linked");
+            loginUser.ShouldNotBeNull();
+            loginUser.TenantId.ShouldBe(tenantId);
+
+            var twoFactorUser = await _identityUserManager.FindSharedUserByIdAsync(loginUser.Id.ToString());
+            twoFactorUser.ShouldNotBeNull();
+            twoFactorUser.Id.ShouldBe(loginUser.Id);
+            twoFactorUser.TenantId.ShouldBe(tenantId);
+        }
+    }
+
     private async Task<IdentityUser> CreateUserAsync(
         Guid? tenantId,
         string userName,
