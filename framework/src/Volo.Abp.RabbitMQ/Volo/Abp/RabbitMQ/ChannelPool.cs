@@ -61,8 +61,6 @@ public class ChannelPool : IChannelPool, ISingletonDependency
             }
         }
 
-        poolItem.Acquire();
-
         if (poolItem.Channel.IsClosed)
         {
             await poolItem.DisposeAsync();
@@ -80,9 +78,9 @@ public class ChannelPool : IChannelPool, ISingletonDependency
                     Channels.TryAdd(channelName, poolItem);
                 }
             }
-
-            poolItem.Acquire();
         }
+
+        poolItem.Acquire();
 
         return new ChannelAccessor(
             poolItem.Channel,
