@@ -142,6 +142,30 @@ Configure<AbpIdentityPendingTenantUserOptions>(options =>
 
 ![new-user--join-strategy-inform](../../images/new-user-join-strategy-inform.png)
 
+## Tenant Admin vs Host Admin Operations
+
+When the Shared strategy is enabled, a user is a **global resource** across host and all tenants. Their identity, activation state, lockout, password policy and two-factor settings live at the host level. Therefore some user management operations are restricted to host administrators and are not available to tenant administrators.
+
+### Host-only operations
+
+The following operations can only be performed by a host administrator when Shared is enabled. Both the Identity Pro UI (MVC + Blazor) and the `IdentityUserAppService` enforce this — a direct API call from a tenant context will be rejected with a `UserFriendlyException`:
+
+- Delete a user
+- Activate / deactivate a user (`IsActive`)
+- Lock / unlock a user
+- Enable or disable two-factor authentication
+- Change `LockoutEnabled` or `ShouldChangePasswordOnNextLogin`
+
+### What tenant admins can do
+
+- Invite users to the tenant (see the Invitation flow above)
+- Manage role and organization-unit assignments within the tenant
+- View audit / security logs scoped to the tenant
+
+### What a user can do for themselves
+
+Users can leave a tenant from their own account menu (`Switch Tenant` → `Leave`). Leaving marks the tenant membership as `Leaved = true` and preserves the user's host identity, so they can be re-invited later with the same `UserId`.
+
 ## Migration Guide
 
 If you plan to migrate an existing multi-tenant application from an isolated strategy to Shared User Accounts, keep the following in mind:
