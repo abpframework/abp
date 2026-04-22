@@ -346,6 +346,87 @@ If you don't want to use a distributed lock provider, you may go with the follow
 * Stop the background job manager (set `AbpBackgroundJobOptions.IsJobExecutionEnabled` to `false` as explained in the *Disable Job Execution* section) in all application instances except one of them, so only the single instance executes the jobs (while other application instances can still queue jobs).
 * Stop the background job manager (set `AbpBackgroundJobOptions.IsJobExecutionEnabled` to `false` as explained in the *Disable Job Execution* section)  in all application instances and create a dedicated application (maybe a console application running in its own container or a Windows Service running in the background) to execute all the background jobs. This can be a good option if your background jobs consume high system resources (CPU, RAM or Disk), so you can deploy that background application to a dedicated server and your background jobs don't affect your application's performance.
 
+## Dynamic Background Jobs
+
+ABP provides `IDynamicBackgroundJobManager` for scenarios where you need to enqueue jobs by name at runtime, without requiring a strongly-typed job args class at compile time. This is useful for plugin systems, dynamic workflows, or any case where job types are not known ahead of time.
+
+### Enqueue by Job Name (Typed Job)
+
+If a typed job is already registered (e.g., via `[BackgroundJobName("emails")]`), you can enqueue it by name:
+
+````csharp
+public class MyService : ApplicationService
+{
+    private readonly IDynamicBackgroundJobManager _dynamicJobManager;
+
+    public MyService(IDynamicBackgroundJobManager dynamicJobManager)
+    {
+        _dynamicJobManager = dynamicJobManager;
+    }
+
+    public async Task DoSomethingAsync()
+    {
+        await _dynamicJobManager.EnqueueAsync("emails", new
+        {
+            EmailAddress = "user@abp.io",
+            Subject = "Hello",
+            Body = "World"
+        });
+    }
+}
+````
+
+The `IDynamicBackgroundJobManager` will look up the typed job configuration, deserialize the args to the expected type, and enqueue through the standard typed pipeline.
+
+### Dynamic Job Handlers
+
+You can also register dynamic handlers at runtime for jobs that don't have a pre-defined typed job class:
+
+````csharp
+public override void OnApplicationInitialization(ApplicationInitializationContext context)
+{
+    var dynamicJobManager = context.ServiceProvider
+        .GetRequiredService<IDynamicBackgroundJobManager>();
+
+    dynamicJobManager.RegisterHandler("ProcessOrder", async (context, ct) =>
+    {
+        var json = context.JsonData;
+        var serviceProvider = context.ServiceProvider;
+        // Process the order using JsonData and resolved services...
+    });
+}
+````
+
+Then enqueue jobs using the registered name:
+
+````csharp
+await _dynamicJobManager.EnqueueAsync("ProcessOrder", new
+{
+    OrderId = "ORD-001",
+    Amount = 99.99
+});
+````
+
+### Handler Management
+
+````csharp
+// Check if a handler is registered
+bool exists = _dynamicJobManager.IsHandlerRegistered("ProcessOrder");
+
+// Unregister a handler
+bool removed = _dynamicJobManager.UnregisterHandler("ProcessOrder");
+````
+
+### How It Works
+
+- **Typed job path**: When the job name matches a registered typed job configuration, the args are serialized to JSON and deserialized to the expected args type, then enqueued through `IBackgroundJobManager.EnqueueAsync<TArgs>`.
+- **Dynamic handler path**: When the job name matches a registered dynamic handler, the args are wrapped as `DynamicBackgroundJobArgs` (a public transport type used internally by the framework) and enqueued through `IBackgroundJobManager.EnqueueAsync<DynamicBackgroundJobArgs>`. When the job executes, the framework looks up the handler by name and invokes it.
+- All dynamic jobs go through the **standard typed job pipeline**, which means they work with all providers (Default, Hangfire, Quartz, RabbitMQ, TickerQ) without any provider-specific changes.
+
+> **Note:** If the job name matches both a registered typed job configuration and a dynamic handler, **the typed job takes priority** and the dynamic handler is ignored. To avoid confusion, use distinct names for dynamic handlers that do not conflict with existing typed job names.
+
+> **Important:** Dynamic job handlers are stored **in memory only** and are not persisted across application restarts. When using a persistent provider (Hangfire, Quartz, RabbitMQ, TickerQ), enqueued jobs survive a restart but if no handler is re-registered, the job executor will throw an exception when the job is picked up. To ensure handlers are always available, register them in `OnApplicationInitialization` so they are re-registered on every startup.
+
 ## Integrations
 
 Background job system is extensible and you can change the default background job manager with your own implementation or on of the pre-built integrations.

@@ -3,9 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Text.Json;
-using System.Text.Unicode;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -25,6 +23,8 @@ namespace Volo.Abp.EventBus.Distributed;
 public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDependency
 {
     protected ConcurrentDictionary<string, Type> EventTypes { get; }
+
+    protected ConcurrentDictionary<string, bool> DynamicEventNames { get; }
 
     public LocalDistributedEventBus(
         IServiceScopeFactory serviceScopeFactory,
@@ -47,6 +47,7 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             correlationIdProvider)
     {
         EventTypes = new ConcurrentDictionary<string, Type>();
+        DynamicEventNames = new ConcurrentDictionary<string, bool>();
         Subscribe(abpDistributedEventBusOptions.Value.Handlers);
     }
 
@@ -71,6 +72,14 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         }
     }
 
+    /// <inheritdoc/>
+    public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
+    {
+        DynamicEventNames.GetOrAdd(eventName, true);
+        return LocalEventBus.Subscribe(eventName, handler);
+    }
+
+    /// <inheritdoc/>
     public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
     {
         var eventName = EventNameAttribute.GetNameOrDefault(eventType);
@@ -93,11 +102,31 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         LocalEventBus.Unsubscribe(eventType, factory);
     }
 
+    /// <inheritdoc/>
+    public override void Unsubscribe(string eventName, IEventHandlerFactory factory)
+    {
+        LocalEventBus.Unsubscribe(eventName, factory);
+    }
+
+    /// <inheritdoc/>
+    public override void Unsubscribe(string eventName, IEventHandler handler)
+    {
+        LocalEventBus.Unsubscribe(eventName, handler);
+    }
+
+    /// <inheritdoc/>
     public override void UnsubscribeAll(Type eventType)
     {
         LocalEventBus.UnsubscribeAll(eventType);
     }
 
+    /// <inheritdoc/>
+    public override void UnsubscribeAll(string eventName)
+    {
+        LocalEventBus.UnsubscribeAll(eventName);
+    }
+
+    /// <inheritdoc/>
     public async override Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true)
     {
         if (onUnitOfWorkComplete && UnitOfWorkManager.Current != null)
@@ -120,23 +149,43 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         await TriggerDistributedEventSentAsync(new DistributedEventSent()
         {
             Source = DistributedEventSource.Direct,
-            EventName = EventNameAttribute.GetNameOrDefault(eventType),
-            EventData = eventData
+            EventName = GetEventName(eventType, eventData),
+            EventData = GetEventData(eventData)
         });
 
         await TriggerDistributedEventReceivedAsync(new DistributedEventReceived
         {
             Source = DistributedEventSource.Direct,
-            EventName = EventNameAttribute.GetNameOrDefault(eventType),
-            EventData = eventData
+            EventName = GetEventName(eventType, eventData),
+            EventData = GetEventData(eventData)
         });
 
         await PublishToEventBusAsync(eventType, eventData);
     }
 
+    /// <inheritdoc/>
+    public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
+    {
+        return PublishAsync(eventName, eventData, onUnitOfWorkComplete, useOutbox: true);
+    }
+
+    /// <inheritdoc/>
+    public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true)
+    {
+        var eventType = EventTypes.GetOrDefault(eventName);
+        var dynamicEventData = eventData as DynamicEventData ?? new DynamicEventData(eventName, eventData);
+
+        if (eventType != null)
+        {
+            return PublishAsync(eventType, ConvertDynamicEventData(dynamicEventData.Data, eventType), onUnitOfWorkComplete, useOutbox);
+        }
+
+        return PublishAsync(typeof(DynamicEventData), dynamicEventData, onUnitOfWorkComplete, useOutbox);
+    }
+
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
-        if (await AddToInboxAsync(Guid.NewGuid().ToString(), EventNameAttribute.GetNameOrDefault(eventType), eventType, eventData, null))
+        if (await AddToInboxAsync(Guid.NewGuid().ToString(), GetEventName(eventType, eventData), eventType, eventData, null))
         {
             return;
         }
@@ -168,10 +217,27 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         var eventType = EventTypes.GetOrDefault(outgoingEvent.EventName);
         if (eventType == null)
         {
-            return;
+            var isDynamic = DynamicEventNames.ContainsKey(outgoingEvent.EventName);
+            if (!isDynamic)
+            {
+                return;
+            }
+
+            eventType = typeof(DynamicEventData);
         }
 
-        var eventData = JsonSerializer.Deserialize(Encoding.UTF8.GetString(outgoingEvent.EventData), eventType)!;
+        object eventData;
+        if (eventType == typeof(DynamicEventData))
+        {
+            eventData = new DynamicEventData(
+                outgoingEvent.EventName,
+                System.Text.Json.JsonSerializer.Deserialize<object>(outgoingEvent.EventData)!);
+        }
+        else
+        {
+            eventData = System.Text.Json.JsonSerializer.Deserialize(outgoingEvent.EventData, eventType)!;
+        }
+
         if (await AddToInboxAsync(Guid.NewGuid().ToString(), outgoingEvent.EventName, eventType, eventData, null))
         {
             return;
@@ -193,10 +259,27 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         var eventType = EventTypes.GetOrDefault(incomingEvent.EventName);
         if (eventType == null)
         {
-            return;
+            var isDynamic = DynamicEventNames.ContainsKey(incomingEvent.EventName);
+            if (!isDynamic)
+            {
+                return;
+            }
+
+            eventType = typeof(DynamicEventData);
         }
 
-        var eventData = JsonSerializer.Deserialize(incomingEvent.EventData, eventType);
+        object eventData;
+        if (eventType == typeof(DynamicEventData))
+        {
+            eventData = new DynamicEventData(
+                incomingEvent.EventName,
+                System.Text.Json.JsonSerializer.Deserialize<object>(incomingEvent.EventData)!);
+        }
+        else
+        {
+            eventData = System.Text.Json.JsonSerializer.Deserialize(incomingEvent.EventData, eventType)!;
+        }
+
         var exceptions = new List<Exception>();
         using (CorrelationIdProvider.Change(incomingEvent.GetCorrelationId()))
         {
@@ -210,17 +293,30 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     protected override byte[] Serialize(object eventData)
     {
-        return Encoding.UTF8.GetBytes(JsonSerializer.Serialize(eventData));
+        return System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(eventData);
     }
 
     protected override Task OnAddToOutboxAsync(string eventName, Type eventType, object eventData)
     {
-        EventTypes.GetOrAdd(eventName, eventType);
+        if (eventType != typeof(DynamicEventData))
+        {
+            EventTypes.GetOrAdd(eventName, eventType);
+        }
         return base.OnAddToOutboxAsync(eventName, eventType, eventData);
     }
 
     protected override IEnumerable<EventTypeWithEventHandlerFactories> GetHandlerFactories(Type eventType)
     {
         return LocalEventBus.GetEventHandlerFactories(eventType);
+    }
+
+    protected override IEnumerable<EventTypeWithEventHandlerFactories> GetDynamicHandlerFactories(string eventName)
+    {
+        return LocalEventBus.GetDynamicEventHandlerFactories(eventName);
+    }
+
+    protected override Type? GetEventTypeByEventName(string eventName)
+    {
+        return EventTypes.GetOrDefault(eventName);
     }
 }
