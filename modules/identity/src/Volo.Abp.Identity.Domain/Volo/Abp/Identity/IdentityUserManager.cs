@@ -745,4 +745,21 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
             }
         }
     }
+
+    public override async Task<IdentityUser> FindByIdAsync(string userId)
+    {
+        // In shared user sharing strategy, a user id is globally unique. Fall back to
+        // a cross-tenant lookup so callers that hit FindByIdAsync from a non-matching
+        // tenant context (notably the 2FA mid-flow invoked by ASP.NET Core Identity
+        // base SignInManager paths) can still resolve the user by id.
+        // Downstream operations on the returned entity should still be scoped to
+        // user.TenantId explicitly via CurrentTenant.Change.
+        var user = await base.FindByIdAsync(userId);
+        if (user != null || MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Isolated)
+        {
+            return user;
+        }
+
+        return await FindSharedUserByIdAsync(userId);
+    }
 }
