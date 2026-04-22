@@ -17,6 +17,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
     protected ISettingProvider SettingProvider { get; }
     protected IdentityUserManager IdentityUserManager { get; }
     protected ICurrentTenant CurrentTenant { get; }
+    protected IOptions<IdentityOptions> IdentityOptionsAccessor { get; }
 
     public AbpSignInManager(
         IdentityUserManager userManager,
@@ -41,6 +42,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         SettingProvider = settingProvider;
         IdentityUserManager = userManager;
         CurrentTenant = currentTenant;
+        IdentityOptionsAccessor = optionsAccessor;
     }
 
     public override async Task<SignInResult> PasswordSignInAsync(
@@ -86,6 +88,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
 
                 using (CurrentTenant.Change(user.TenantId))
                 {
+                    await IdentityOptionsAccessor.SetAsync();
                     return await SignInOrTwoFactorAsync(user, isPersistent);
                 }
             }
@@ -99,6 +102,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
 
         using (CurrentTenant.Change(user.TenantId))
         {
+            await IdentityOptionsAccessor.SetAsync();
             return await PasswordSignInAsync(user, password, isPersistent, lockoutOnFailure);
         }
     }
