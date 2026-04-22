@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -131,6 +132,61 @@ public class AbpSignInManager : SignInManager<IdentityUser>
     public virtual async Task<IdentityUser> FindByLoginAsync(string loginProvider, string providerKey)
     {
         return await IdentityUserManager.FindSharedUserByLoginAsync(loginProvider, providerKey);
+    }
+
+    public override async Task<IdentityUser> GetTwoFactorAuthenticationUserAsync()
+    {
+        var result = await Context.AuthenticateAsync(IdentityConstants.TwoFactorUserIdScheme);
+        if (result?.Principal == null)
+        {
+            return null;
+        }
+
+        var userId = result.Principal.FindFirstValue(ClaimTypes.Name);
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            return null;
+        }
+
+        return await IdentityUserManager.FindSharedUserByIdAsync(userId);
+    }
+
+    public override async Task<SignInResult> TwoFactorSignInAsync(string provider, string code, bool isPersistent, bool rememberClient)
+    {
+        var user = await GetTwoFactorAuthenticationUserAsync();
+        if (user == null)
+        {
+            return SignInResult.Failed;
+        }
+
+        using (CurrentTenant.Change(user.TenantId))
+        {
+            return await base.TwoFactorSignInAsync(provider, code, isPersistent, rememberClient);
+        }
+    }
+
+    public override async Task<SignInResult> TwoFactorRecoveryCodeSignInAsync(string recoveryCode)
+    {
+        var user = await GetTwoFactorAuthenticationUserAsync();
+        if (user == null)
+        {
+            return SignInResult.Failed;
+        }
+
+        using (CurrentTenant.Change(user.TenantId))
+        {
+            // Base TwoFactorRecoveryCodeSignInAsync does not invoke PreSignInCheck, which means
+            // AbpSignInManager's IsActive / ShouldChangePassword checks would be bypassed. Run the
+            // same pre-sign-in checks here so recovery-code sign-in has the same gating as the
+            // regular two-factor sign-in path.
+            var preSignInCheckResult = await PreSignInCheck(user);
+            if (preSignInCheckResult != null)
+            {
+                return preSignInCheckResult;
+            }
+
+            return await base.TwoFactorRecoveryCodeSignInAsync(recoveryCode);
+        }
     }
 
     /// <summary>

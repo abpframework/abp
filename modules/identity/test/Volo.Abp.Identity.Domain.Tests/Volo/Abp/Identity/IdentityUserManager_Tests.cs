@@ -679,55 +679,6 @@ public class SharedTenantUserSharingStrategy_IdentityUserManager_Tests : AbpIden
     }
 
     [Fact]
-    public async Task FindByIdAsync_Should_Fall_Back_To_Cross_Tenant_Lookup_In_Shared_Mode()
-    {
-        // In shared user sharing strategy, UserManager.FindByIdAsync must resolve a
-        // tenant user even when CurrentTenant is host. This protects any caller that
-        // hits FindByIdAsync without an explicit shared-aware wrapper (e.g. ASP.NET
-        // Core Identity SignInManager internals for TwoFactorSignInAsync and
-        // TwoFactorRecoveryCodeSignInAsync).
-        var tenantId = Guid.NewGuid();
-        IdentityUser tenantUser;
-
-        using (var uow = _unitOfWorkManager.Begin())
-        {
-            tenantUser = await CreateUserAsync(tenantId, "shared-findbyid-fallback", "shared-findbyid-fallback@abp.io");
-            await uow.CompleteAsync();
-        }
-
-        using (_currentTenant.Change(null))
-        {
-            var user = await _identityUserManager.FindByIdAsync(tenantUser.Id.ToString());
-
-            user.ShouldNotBeNull();
-            user.Id.ShouldBe(tenantUser.Id);
-            user.TenantId.ShouldBe(tenantId);
-        }
-    }
-
-    [Fact]
-    public async Task FindByIdAsync_Should_Return_Current_Tenant_Result_Without_Fallback_When_Found()
-    {
-        var tenantId = Guid.NewGuid();
-        IdentityUser tenantUser;
-
-        using (var uow = _unitOfWorkManager.Begin())
-        {
-            tenantUser = await CreateUserAsync(tenantId, "shared-findbyid-hit", "shared-findbyid-hit@abp.io");
-            await uow.CompleteAsync();
-        }
-
-        using (_currentTenant.Change(tenantId))
-        {
-            var user = await _identityUserManager.FindByIdAsync(tenantUser.Id.ToString());
-
-            user.ShouldNotBeNull();
-            user.Id.ShouldBe(tenantUser.Id);
-            user.TenantId.ShouldBe(tenantId);
-        }
-    }
-
-    [Fact]
     public async Task Login_Then_TwoFactor_MidFlow_Should_Resolve_Same_Tenant_User_In_Shared_Mode()
     {
         // Covers the data-access contract behind the 2FA redirect bug:

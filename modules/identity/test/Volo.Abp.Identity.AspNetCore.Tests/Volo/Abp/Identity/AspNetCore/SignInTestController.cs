@@ -45,4 +45,18 @@ public class SignInTestController : AbpController
         var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
         return Content(user?.Id.ToString() ?? "null");
     }
+
+    [Route("two-factor-signin")]
+    public async Task<ActionResult> TwoFactorSignIn(string provider, string code)
+    {
+        var result = await _signInManager.TwoFactorSignInAsync(provider, code, false, false);
+        return Content(result.ToString());
+    }
+
+    [Route("two-factor-recovery-signin")]
+    public async Task<ActionResult> TwoFactorRecoverySignIn(string recoveryCode)
+    {
+        var result = await _signInManager.TwoFactorRecoveryCodeSignInAsync(recoveryCode);
+        return Content(result.ToString());
+    }
 }
