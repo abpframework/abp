@@ -31,16 +31,7 @@ public class GetTwoFactorAuthenticationUser_Tests : SharedAbpIdentityAspNetCoreT
             await uow.CompleteAsync();
         }
 
-        var writeResponse = await Client.GetAsync($"/api/signin-test/write-two-factor-cookie?userId={tenantUserId}");
-        writeResponse.EnsureSuccessStatusCode();
-
-        if (writeResponse.Headers.TryGetValues("Set-Cookie", out var setCookies))
-        {
-            foreach (var cookie in setCookies)
-            {
-                Client.DefaultRequestHeaders.Add("Cookie", cookie.Split(';').First());
-            }
-        }
+        await WriteTwoFactorCookieAsync(tenantUserId);
 
         var getResponse = await Client.GetAsync("/api/signin-test/get-two-factor-user");
         getResponse.EnsureSuccessStatusCode();
