@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
@@ -26,5 +28,21 @@ public class SignInTestController : AbpController
         );
 
         return Content(result.ToString());
+    }
+
+    [Route("write-two-factor-cookie")]
+    public async Task<ActionResult> WriteTwoFactorCookie(string userId)
+    {
+        var identity = new ClaimsIdentity(IdentityConstants.TwoFactorUserIdScheme);
+        identity.AddClaim(new Claim(ClaimTypes.Name, userId));
+        await HttpContext.SignInAsync(IdentityConstants.TwoFactorUserIdScheme, new ClaimsPrincipal(identity));
+        return Content("OK");
+    }
+
+    [Route("get-two-factor-user")]
+    public async Task<ActionResult> GetTwoFactorUser()
+    {
+        var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
+        return Content(user?.Id.ToString() ?? "null");
     }
 }
