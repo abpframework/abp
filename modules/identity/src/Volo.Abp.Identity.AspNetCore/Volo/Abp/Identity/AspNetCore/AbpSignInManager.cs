@@ -115,12 +115,17 @@ public class AbpSignInManager : SignInManager<IdentityUser>
             return SignInResult.Failed;
         }
 
-        var error = await PreSignInCheck(user);
-        if (error != null)
+        using (CurrentTenant.Change(user.TenantId))
         {
-            return error;
+            await IdentityOptionsAccessor.SetAsync();
+
+            var error = await PreSignInCheck(user);
+            if (error != null)
+            {
+                return error;
+            }
+            return await SignInOrTwoFactorAsync(user, isPersistent, loginProvider, bypassTwoFactor);
         }
-        return await SignInOrTwoFactorAsync(user, isPersistent, loginProvider, bypassTwoFactor);
     }
 
     public virtual async Task<IdentityUser> FindByEmailAsync(string email)
@@ -165,6 +170,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
 
         using (CurrentTenant.Change(user.TenantId))
         {
+            await IdentityOptionsAccessor.SetAsync();
             return await base.TwoFactorSignInAsync(provider, code, isPersistent, rememberClient);
         }
     }
@@ -179,6 +185,8 @@ public class AbpSignInManager : SignInManager<IdentityUser>
 
         using (CurrentTenant.Change(user.TenantId))
         {
+            await IdentityOptionsAccessor.SetAsync();
+
             // Base TwoFactorRecoveryCodeSignInAsync does not invoke PreSignInCheck, which means
             // AbpSignInManager's IsActive / ShouldChangePassword checks would be bypassed. Run the
             // same pre-sign-in checks here so recovery-code sign-in has the same gating as the

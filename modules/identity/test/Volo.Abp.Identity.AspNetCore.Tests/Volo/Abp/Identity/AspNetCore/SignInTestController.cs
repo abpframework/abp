@@ -59,4 +59,11 @@ public class SignInTestController : AbpController
         var result = await _signInManager.TwoFactorRecoveryCodeSignInAsync(recoveryCode);
         return Content(result.ToString());
     }
+
+    [Route("external-login-signin")]
+    public async Task<ActionResult> ExternalLoginSignIn(string loginProvider, string providerKey)
+    {
+        var result = await _signInManager.ExternalLoginSignInAsync(loginProvider, providerKey, false, false);
+        return Content(result.ToString());
+    }
 }
