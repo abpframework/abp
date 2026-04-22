@@ -7,6 +7,16 @@
 
 # Package Version Changes
 
+## 10.4.0-rc.1
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| OpenIddict.Abstractions | 7.3.0 | 7.5.0 | #25306 |
+| OpenIddict.Core | 7.3.0 | 7.5.0 | #25306 |
+| OpenIddict.Server.AspNetCore | 7.3.0 | 7.5.0 | #25306 |
+| OpenIddict.Validation.AspNetCore | 7.3.0 | 7.5.0 | #25306 |
+| OpenIddict.Validation.ServerIntegration | 7.3.0 | 7.5.0 | #25306 |
+
 ## 10.3.1
 
 | Package | Old Version | New Version | PR |
