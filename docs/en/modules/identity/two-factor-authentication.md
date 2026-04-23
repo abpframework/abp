@@ -121,3 +121,81 @@ Configure<CookieAuthenticationOptions>(IdentityConstants.TwoFactorRememberMeSche
      options.Cookie.Name = "MyRememberMeCookieName"; //override the cookie name
 });
 ```
+
+## How the Verification Code Is Generated
+
+The code that is delivered by the **Email** and **SMS** verification providers is produced by ASP.NET Core Identity's built-in `EmailTokenProvider<TUser>` and `PhoneNumberTokenProvider<TUser>`. ABP registers them through `AddDefaultTokenProviders()` in `AbpIdentityAspNetCoreModule` and does not replace them, so the mechanics described below are the stock Identity behavior. The `Authenticator` provider is overridden by `AbpAuthenticatorTokenProvider` to additionally require a registered authenticator device before a code can be generated.
+
+Both `EmailTokenProvider<TUser>` and `PhoneNumberTokenProvider<TUser>` derive from `TotpSecurityStampBasedTokenProvider<TUser>`, which implements TOTP as described in [RFC 6238](https://datatracker.ietf.org/doc/html/rfc6238). The six-digit value is a pure function of the user's security stamp, the current timestep and a provider-specific modifier:
+
+```text
+code     = Truncate(HMAC-SHA1(key = SecurityStamp, message = timestep || modifier))
+timestep = floor(UtcNow.UnixSeconds / 180)     // 3-minute step by default
+modifier = "Email:{purpose}:{email}" or "Phone:{purpose}:{phoneNumber}"
+```
+
+The code itself is **not persisted anywhere**. Verification recomputes the value for the current timestep (and one previous timestep to tolerate clock drift and delivery latency) and compares it against the submitted input. This statelessness has a few behaviors that are worth being explicit about:
+
+1. **Two requests in the same timestep return the same code.** If a user presses "Resend code" several times within a few seconds, all deliveries contain an identical value. Nothing is regenerated because nothing is stored — the formula just produces the same output.
+2. **A generated code is not single-use.** Successful verification does not mark the code as consumed. Within its validity window the same code can be submitted again, for example from a concurrent session.
+3. **Generating a new code does not invalidate the previous one.** Any still-valid code remains valid until the window slides past.
+4. **Effective validity is roughly 3–6 minutes.** The current and previous timesteps are both accepted.
+5. **Security stamp rotation is the only natural invalidation.** Operations such as password change or an explicit `UserManager.UpdateSecurityStampAsync` call change the HMAC key and invalidate any outstanding code. Rotating the stamp mid-login will also invalidate the `RequiresTwoFactor` token produced by `SignInManager`, so avoid doing it between the credential step and the verification step.
+
+These properties match the RFC 6238 design and are consistent with how most TOTP-based authenticator apps behave.
+
+## Customizing the Verification Code Provider
+
+Applications with stronger single-use or replay-resistance requirements can replace the Email and/or Phone providers with a custom implementation of `IUserTwoFactorTokenProvider<IdentityUser>` that stores the generated code in a cache or database, overwrites the entry on regeneration and removes it on successful validation. Because ABP does not register a custom provider for the `Email` and `Phone` keys, adding one in your own module is enough — `AddTokenProvider` with an existing key replaces the previous descriptor in `TokenOptions.ProviderMap`:
+
+```csharp
+public class SingleUseEmailOtpTokenProvider : IUserTwoFactorTokenProvider<IdentityUser>
+{
+    private static readonly TimeSpan Ttl = TimeSpan.FromMinutes(3);
+    private readonly IDistributedCache _cache;
+
+    public SingleUseEmailOtpTokenProvider(IDistributedCache cache)
+    {
+        _cache = cache;
+    }
+
+    public Task<bool> CanGenerateTwoFactorTokenAsync(UserManager<IdentityUser> manager, IdentityUser user)
+        => Task.FromResult(true);
+
+    public async Task<string> GenerateAsync(string purpose, UserManager<IdentityUser> manager, IdentityUser user)
+    {
+        var code = RandomNumberGenerator.GetInt32(0, 1_000_000).ToString("D6");
+        await _cache.SetStringAsync(
+            Key(user.Id, purpose),
+            code,
+            new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = Ttl });
+        return code;
+    }
+
+    public async Task<bool> ValidateAsync(string purpose, string token, UserManager<IdentityUser> manager, IdentityUser user)
+    {
+        var key = Key(user.Id, purpose);
+        var stored = await _cache.GetStringAsync(key);
+        if (stored is null || !CryptographicOperations.FixedTimeEquals(
+                Encoding.UTF8.GetBytes(stored),
+                Encoding.UTF8.GetBytes(token)))
+        {
+            return false;
+        }
+        await _cache.RemoveAsync(key);
+        return true;
+    }
+
+    private static string Key(Guid userId, string purpose) => $"otp:email:{purpose}:{userId:N}";
+}
+```
+
+Register the provider in your module's `ConfigureServices`:
+
+```csharp
+context.Services.AddIdentityCore<IdentityUser>()
+    .AddTokenProvider<SingleUseEmailOtpTokenProvider>(TokenOptions.DefaultEmailProvider)
+    .AddTokenProvider<SingleUsePhoneOtpTokenProvider>(TokenOptions.DefaultPhoneProvider);
+```
+
+`AccountAppService.SendTwoFactorCodeAsync` and `SignInManager.TwoFactorSignInAsync` call through `UserManager.GenerateTwoFactorTokenAsync` and `UserManager.VerifyTwoFactorTokenAsync` respectively, so the new provider is invoked without any further wiring. The `RequiresTwoFactor` sentinel token consumed by `SendTwoFactorCodeAsync` uses a separate provider (`TokenOptions.DefaultProvider`, the `DataProtectorTokenProvider`) and is not affected.
