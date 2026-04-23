@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -63,14 +64,22 @@ public class ChannelPool : IChannelPool, ISingletonDependency
 
         if (poolItem.Channel.IsClosed)
         {
-            await poolItem.DisposeAsync();
-            Channels.TryRemove(channelName, out _);
-
             using (await Semaphore.LockAsync())
             {
-                if (Channels.TryGetValue(channelName, out var existingChannelPoolItem3))
+                if (Channels.TryGetValue(channelName, out var currentChannelPoolItem) &&
+                    ReferenceEquals(currentChannelPoolItem, poolItem))
                 {
-                    poolItem = existingChannelPoolItem3;
+                    // This caller is the first to notice the cached channel is closed; rebuild it.
+                    await poolItem.DisposeAsync();
+                    Channels.TryRemove(new KeyValuePair<string, ChannelPoolItem>(channelName, poolItem));
+
+                    poolItem = new ChannelPoolItem(await CreateChannelAsync(channelName, connectionName));
+                    Channels.TryAdd(channelName, poolItem);
+                }
+                else if (currentChannelPoolItem != null)
+                {
+                    // Another caller already rebuilt the channel; use the fresh one.
+                    poolItem = currentChannelPoolItem;
                 }
                 else
                 {

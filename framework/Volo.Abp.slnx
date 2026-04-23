@@ -240,6 +240,7 @@
     <Project Path="test/Volo.Abp.MultiTenancy.Tests/Volo.Abp.MultiTenancy.Tests.csproj" />
     <Project Path="test/Volo.Abp.ObjectExtending.Tests/Volo.Abp.ObjectExtending.Tests.csproj" />
     <Project Path="test/Volo.Abp.ObjectMapping.Tests/Volo.Abp.ObjectMapping.Tests.csproj" />
+    <Project Path="test/Volo.Abp.RabbitMQ.Tests/Volo.Abp.RabbitMQ.Tests.csproj" />
     <Project Path="test/Volo.Abp.RemoteServices.Tests/Volo.Abp.RemoteServices.Tests.csproj" />
     <Project Path="test/Volo.Abp.Security.Tests/Volo.Abp.Security.Tests.csproj" />
     <Project Path="test/Volo.Abp.Serialization.Tests/Volo.Abp.Serialization.Tests.csproj" />
