@@ -21,6 +21,7 @@
 | Microsoft.AspNetCore.Components.WebAssembly.Authentication | 10.0.2 | 10.0.7 | #25313 |
 | Microsoft.AspNetCore.Components.WebAssembly.DevServer | 10.0.2 | 10.0.7 | #25313 |
 | Microsoft.AspNetCore.Components.WebAssembly.Server | 10.0.2 | 10.0.7 | #25313 |
+| Microsoft.AspNetCore.Components.WebView.Maui | 10.0.20 | 10.0.51 | #25313 |
 | Microsoft.AspNetCore.DataProtection.StackExchangeRedis | 10.0.2 | 10.0.7 | #25313 |
 | Microsoft.AspNetCore.Mvc.NewtonsoftJson | 10.0.2 | 10.0.7 | #25313 |
 | Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation | 10.0.2 | 10.0.7 | #25313 |
@@ -59,6 +60,7 @@
 | Microsoft.Extensions.Logging.Console | 10.0.2 | 10.0.7 | #25313 |
 | Microsoft.Extensions.Options | 10.0.2 | 10.0.7 | #25313 |
 | Microsoft.Extensions.Options.ConfigurationExtensions | 10.0.2 | 10.0.7 | #25313 |
+| Microsoft.Maui.Controls | 10.0.20 | 10.0.51 | #25313 |
 | OpenIddict.Abstractions | 7.3.0 | 7.5.0 | #25306 |
 | OpenIddict.Core | 7.3.0 | 7.5.0 | #25306 |
 | OpenIddict.Server.AspNetCore | 7.3.0 | 7.5.0 | #25306 |
