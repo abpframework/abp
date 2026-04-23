@@ -63,12 +63,14 @@ public class ChannelPool : IChannelPool, ISingletonDependency
 
         if (poolItem.Channel.IsClosed)
         {
+            ChannelPoolItem? staleItem = null;
+
             using (await Semaphore.LockAsync())
             {
                 if (Channels.TryGetValue(channelName, out var currentChannelPoolItem) &&
                     ReferenceEquals(currentChannelPoolItem, poolItem))
                 {
-                    await poolItem.DisposeAsync();
+                    staleItem = poolItem;
                     Channels.TryRemove(channelName, out _);
 
                     poolItem = new ChannelPoolItem(await CreateChannelAsync(channelName, connectionName));
@@ -83,6 +85,11 @@ public class ChannelPool : IChannelPool, ISingletonDependency
                     poolItem = new ChannelPoolItem(await CreateChannelAsync(channelName, connectionName));
                     Channels.TryAdd(channelName, poolItem);
                 }
+            }
+
+            if (staleItem != null)
+            {
+                await staleItem.DisposeAsync();
             }
         }
 

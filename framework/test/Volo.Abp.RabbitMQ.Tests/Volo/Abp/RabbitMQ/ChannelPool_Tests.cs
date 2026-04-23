@@ -33,8 +33,8 @@ public class ChannelPool_Tests
 
         fixture.Channel1.IsClosed.Returns(true);
         fixture.Channel1
-            .When(x => x.DisposeAsync())
-            .Do(_ => Thread.Sleep(300));
+            .DisposeAsync()
+            .Returns(_ => new ValueTask(Task.Delay(300)));
 
         using var barrier = new Barrier(2);
 
@@ -57,6 +57,8 @@ public class ChannelPool_Tests
         winner.ShouldBe(
             completed,
             $"AcquireAsync is hanging on a stale poolItem. firstCaller={firstCaller.Status}, secondCaller={secondCaller.Status}");
+
+        await completed;
     }
 
     /// <summary>
