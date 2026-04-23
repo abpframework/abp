@@ -64,32 +64,36 @@ public class ChannelPool : IChannelPool, ISingletonDependency
         if (poolItem.Channel.IsClosed)
         {
             ChannelPoolItem? staleItem = null;
-
-            using (await Semaphore.LockAsync())
+            try
             {
-                if (Channels.TryGetValue(channelName, out var currentChannelPoolItem) &&
-                    ReferenceEquals(currentChannelPoolItem, poolItem))
+                using (await Semaphore.LockAsync())
                 {
-                    staleItem = poolItem;
-                    Channels.TryRemove(channelName, out _);
+                    if (Channels.TryGetValue(channelName, out var currentChannelPoolItem) &&
+                        ReferenceEquals(currentChannelPoolItem, poolItem))
+                    {
+                        staleItem = poolItem;
+                        Channels.TryRemove(channelName, out _);
 
-                    poolItem = new ChannelPoolItem(await CreateChannelAsync(channelName, connectionName));
-                    Channels.TryAdd(channelName, poolItem);
-                }
-                else if (currentChannelPoolItem != null)
-                {
-                    poolItem = currentChannelPoolItem;
-                }
-                else
-                {
-                    poolItem = new ChannelPoolItem(await CreateChannelAsync(channelName, connectionName));
-                    Channels.TryAdd(channelName, poolItem);
+                        poolItem = new ChannelPoolItem(await CreateChannelAsync(channelName, connectionName));
+                        Channels.TryAdd(channelName, poolItem);
+                    }
+                    else if (currentChannelPoolItem != null)
+                    {
+                        poolItem = currentChannelPoolItem;
+                    }
+                    else
+                    {
+                        poolItem = new ChannelPoolItem(await CreateChannelAsync(channelName, connectionName));
+                        Channels.TryAdd(channelName, poolItem);
+                    }
                 }
             }
-
-            if (staleItem != null)
+            finally
             {
-                await staleItem.DisposeAsync();
+                if (staleItem != null)
+                {
+                    await staleItem.DisposeAsync();
+                }
             }
         }
 

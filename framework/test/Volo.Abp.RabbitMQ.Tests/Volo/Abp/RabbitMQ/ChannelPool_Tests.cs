@@ -243,6 +243,42 @@ public class ChannelPool_Tests
     }
 
     [Fact]
+    public async Task AcquireAsync_Should_Dispose_Stale_Channel_Even_When_Recreate_Fails()
+    {
+        var staleChannel = Substitute.For<IChannel>();
+        staleChannel.IsClosed.Returns(false);
+
+        var connection = Substitute.For<IConnection>();
+        var attempts = 0;
+        connection
+            .CreateChannelAsync(Arg.Any<CreateChannelOptions?>(), Arg.Any<CancellationToken>())
+            .Returns(_ =>
+            {
+                var n = Interlocked.Increment(ref attempts);
+                if (n == 1)
+                {
+                    return Task.FromResult(staleChannel);
+                }
+                throw new InvalidOperationException("broker still down");
+            });
+
+        var connectionPool = Substitute.For<IConnectionPool>();
+        connectionPool.GetAsync(Arg.Any<string?>()).Returns(Task.FromResult(connection));
+
+        var channelPool = new TestChannelPool(connectionPool);
+
+        using (await channelPool.AcquireAsync("q"))
+        {
+        }
+
+        staleChannel.IsClosed.Returns(true);
+
+        await Should.ThrowAsync<InvalidOperationException>(() => channelPool.AcquireAsync("q"));
+
+        await staleChannel.Received(1).DisposeAsync();
+    }
+
+    [Fact]
     public async Task AcquireAsync_Should_Throw_After_Pool_Disposed()
     {
         var fixture = BuildConnectionPool();
