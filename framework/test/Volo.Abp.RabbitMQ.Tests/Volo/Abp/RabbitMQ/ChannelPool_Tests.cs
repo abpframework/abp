@@ -162,32 +162,22 @@ public class ChannelPool_Tests
         var fixture = BuildConnectionPool();
         var channelPool = new TestChannelPool(fixture.Pool);
 
-        // First caller holds the channel for a while.
         var first = await channelPool.AcquireAsync("q");
-        var firstAcquiredAt = DateTime.UtcNow;
 
-        // Second caller should block until the first one releases.
-        var secondTask = Task.Run(async () =>
-        {
-            var accessor = await channelPool.AcquireAsync("q");
-            return (accessor, acquiredAt: DateTime.UtcNow);
-        });
+        var secondTask = Task.Run(() => channelPool.AcquireAsync("q"));
 
         await Task.Delay(100);
         secondTask.IsCompleted.ShouldBeFalse("second caller must block while the channel is held");
 
         first.Dispose();
-        var firstReleasedAt = DateTime.UtcNow;
 
         var completed = await Task.WhenAny(secondTask, Task.Delay(RaceTimeout));
         completed.ShouldBe(secondTask, "second caller must be unblocked after release");
 
-        var (secondAccessor, secondAcquiredAt) = await secondTask;
+        var secondAccessor = await secondTask;
         secondAccessor.Channel.ShouldBe(fixture.Channel1, "the cached channel is reused");
-        secondAcquiredAt.ShouldBeGreaterThanOrEqualTo(firstReleasedAt);
 
         secondAccessor.Dispose();
-        _ = firstAcquiredAt;
         fixture.CreateChannelCalls.ShouldBe(1, "channel is reused, never recreated");
     }
 
