@@ -92,6 +92,7 @@ public class ChannelPool : IChannelPool, ISingletonDependency
             {
                 if (staleItem != null)
                 {
+                    staleItem.WaitIfInUse(TotalDisposeWaitDuration);
                     await staleItem.DisposeAsync();
                 }
             }

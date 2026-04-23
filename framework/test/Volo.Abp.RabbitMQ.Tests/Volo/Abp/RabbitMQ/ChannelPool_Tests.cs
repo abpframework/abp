@@ -40,13 +40,13 @@ public class ChannelPool_Tests
 
         var firstCaller = Task.Run(async () =>
         {
-            barrier.SignalAndWait();
+            barrier.SignalAndWait(RaceTimeout);
             using var accessor = await channelPool.AcquireAsync("q");
         });
 
         var secondCaller = Task.Run(async () =>
         {
-            barrier.SignalAndWait();
+            barrier.SignalAndWait(RaceTimeout);
             await Task.Delay(50);
             using var accessor = await channelPool.AcquireAsync("q");
         });
@@ -85,7 +85,7 @@ public class ChannelPool_Tests
         {
             tasks[i] = Task.Run(async () =>
             {
-                barrier.SignalAndWait();
+                barrier.SignalAndWait(RaceTimeout);
                 using var accessor = await channelPool.AcquireAsync("q");
                 return accessor.Channel;
             });
@@ -292,7 +292,7 @@ public class ChannelPool_Tests
         {
             tasks[i] = Task.Run(async () =>
             {
-                barrier.SignalAndWait();
+                barrier.SignalAndWait(RaceTimeout);
                 using var accessor = await channelPool.AcquireAsync("q");
                 return accessor.Channel;
             });
