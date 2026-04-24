@@ -93,7 +93,7 @@ public abstract class AbpTwoFactorTokenProvider : IUserTwoFactorTokenProvider<Id
             return false;
         }
 
-        if (ToUnixSeconds(Clock.Now) > expiresAtUnixSeconds)
+        if (ToUnixSeconds(Clock.Now) >= expiresAtUnixSeconds)
         {
             await TryRemoveStoredTokenAsync(manager, user, tokenName);
             return false;
