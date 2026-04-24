@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -47,7 +46,7 @@ public abstract class AbpTwoFactorTokenProviderTestBase : AbpIdentityAspNetCoreT
     protected virtual Task<bool> VerifyTokenAsync(IdentityUser user, string token, string purpose = TwoFactorPurpose)
         => UserManager.VerifyUserTokenAsync(user, GetTokenProviderName(), purpose, token);
 
-    private string GetTokenName(string purpose) => GetInternalProviderName() + ":" + purpose;
+    protected string GetTokenName(string purpose) => GetInternalProviderName() + ":" + purpose;
 
     /// <summary>Deterministically produce a code that is guaranteed not to equal <paramref name="code"/>.</summary>
     private static string DifferentCode(string code)

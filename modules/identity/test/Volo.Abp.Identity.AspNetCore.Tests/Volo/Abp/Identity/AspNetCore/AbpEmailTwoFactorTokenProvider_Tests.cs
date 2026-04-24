@@ -233,7 +233,4 @@ public class AbpEmailTwoFactorTokenProvider_Tests : AbpTwoFactorTokenProviderTes
 
         await uow.CompleteAsync();
     }
-
-    private string GetTokenName(string purpose)
-        => AbpEmailTwoFactorTokenProvider.ProviderName + ":" + purpose;
 }
