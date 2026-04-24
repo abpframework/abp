@@ -268,7 +268,7 @@ public abstract class AbpTwoFactorTokenProviderTestBase : AbpIdentityAspNetCoreT
     }
 
     [Fact]
-    public async Task Token_Hash_Should_Persist_Across_UnitOfWork_Boundaries()
+    public async Task Stored_Token_Data_Should_Persist_Across_UnitOfWork_Boundaries()
     {
         string code;
 
