@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -16,6 +17,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
     protected ISettingProvider SettingProvider { get; }
     protected IdentityUserManager IdentityUserManager { get; }
     protected ICurrentTenant CurrentTenant { get; }
+    protected IOptions<IdentityOptions> IdentityOptionsAccessor { get; }
 
     public AbpSignInManager(
         IdentityUserManager userManager,
@@ -40,6 +42,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         SettingProvider = settingProvider;
         IdentityUserManager = userManager;
         CurrentTenant = currentTenant;
+        IdentityOptionsAccessor = optionsAccessor;
     }
 
     public override async Task<SignInResult> PasswordSignInAsync(
@@ -85,6 +88,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
 
                 using (CurrentTenant.Change(user.TenantId))
                 {
+                    await IdentityOptionsAccessor.SetAsync();
                     return await SignInOrTwoFactorAsync(user, isPersistent);
                 }
             }
@@ -98,6 +102,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
 
         using (CurrentTenant.Change(user.TenantId))
         {
+            await IdentityOptionsAccessor.SetAsync();
             return await PasswordSignInAsync(user, password, isPersistent, lockoutOnFailure);
         }
     }
@@ -110,12 +115,17 @@ public class AbpSignInManager : SignInManager<IdentityUser>
             return SignInResult.Failed;
         }
 
-        var error = await PreSignInCheck(user);
-        if (error != null)
+        using (CurrentTenant.Change(user.TenantId))
         {
-            return error;
+            await IdentityOptionsAccessor.SetAsync();
+
+            var error = await PreSignInCheck(user);
+            if (error != null)
+            {
+                return error;
+            }
+            return await SignInOrTwoFactorAsync(user, isPersistent, loginProvider, bypassTwoFactor);
         }
-        return await SignInOrTwoFactorAsync(user, isPersistent, loginProvider, bypassTwoFactor);
     }
 
     public virtual async Task<IdentityUser> FindByEmailAsync(string email)
@@ -131,6 +141,64 @@ public class AbpSignInManager : SignInManager<IdentityUser>
     public virtual async Task<IdentityUser> FindByLoginAsync(string loginProvider, string providerKey)
     {
         return await IdentityUserManager.FindSharedUserByLoginAsync(loginProvider, providerKey);
+    }
+
+    public override async Task<IdentityUser> GetTwoFactorAuthenticationUserAsync()
+    {
+        var result = await Context.AuthenticateAsync(IdentityConstants.TwoFactorUserIdScheme);
+        if (result?.Principal == null)
+        {
+            return null;
+        }
+
+        var userId = result.Principal.FindFirstValue(ClaimTypes.Name);
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            return null;
+        }
+
+        return await IdentityUserManager.FindSharedUserByIdAsync(userId);
+    }
+
+    public override async Task<SignInResult> TwoFactorSignInAsync(string provider, string code, bool isPersistent, bool rememberClient)
+    {
+        var user = await GetTwoFactorAuthenticationUserAsync();
+        if (user == null)
+        {
+            return SignInResult.Failed;
+        }
+
+        using (CurrentTenant.Change(user.TenantId))
+        {
+            await IdentityOptionsAccessor.SetAsync();
+            return await base.TwoFactorSignInAsync(provider, code, isPersistent, rememberClient);
+        }
+    }
+
+    public override async Task<SignInResult> TwoFactorRecoveryCodeSignInAsync(string recoveryCode)
+    {
+        var user = await GetTwoFactorAuthenticationUserAsync();
+        if (user == null)
+        {
+            return SignInResult.Failed;
+        }
+
+        using (CurrentTenant.Change(user.TenantId))
+        {
+            await IdentityOptionsAccessor.SetAsync();
+
+            // Base TwoFactorRecoveryCodeSignInAsync does not invoke PreSignInCheck, which means
+            // AbpSignInManager's IsActive / ShouldChangePassword checks would be bypassed. Run the
+            // same pre-sign-in checks here so recovery-code sign-in has the same gating as the
+            // regular two-factor sign-in path.
+            var preSignInCheckResult = await PreSignInCheck(user);
+            if (preSignInCheckResult != null)
+            {
+                return preSignInCheckResult;
+            }
+
+            return await base.TwoFactorRecoveryCodeSignInAsync(recoveryCode);
+        }
     }
 
     /// <summary>

@@ -190,4 +190,90 @@ public class AbpIdentityUserValidator_SharedUser_Tests : AbpIdentityAspNetCoreTe
             result.Errors.First().Code.ShouldBe("InvalidEmail");
         }
     }
+
+    [Fact]
+    public async Task Should_Allow_Update_Without_UserName_Or_Email_Changes()
+    {
+        var tenantId = Guid.NewGuid();
+
+        using (_currentTenant.Change(tenantId))
+        {
+            var user = new IdentityUser(Guid.NewGuid(), "unchanged-user", "unchanged@volosoft.com") { Name = "Original" };
+            (await _identityUserManager.CreateAsync(user)).Succeeded.ShouldBeTrue();
+
+            user.Name = "Changed";
+            (await _identityUserManager.UpdateAsync(user)).Succeeded.ShouldBeTrue();
+        }
+    }
+
+    [Fact]
+    public async Task Should_Allow_Update_Changing_UserName_To_A_Globally_Unique_Value()
+    {
+        var tenantId = Guid.NewGuid();
+
+        using (_currentTenant.Change(tenantId))
+        {
+            var user = new IdentityUser(Guid.NewGuid(), "rename-start", "rename@volosoft.com");
+            (await _identityUserManager.CreateAsync(user)).Succeeded.ShouldBeTrue();
+
+            var result = await _identityUserManager.SetUserNameAsync(user, "rename-end");
+            result.Succeeded.ShouldBeTrue();
+        }
+    }
+
+    [Fact]
+    public async Task Should_Allow_Update_Changing_Email_To_A_Globally_Unique_Value()
+    {
+        var tenantId = Guid.NewGuid();
+
+        using (_currentTenant.Change(tenantId))
+        {
+            var user = new IdentityUser(Guid.NewGuid(), "email-change", "email-before@volosoft.com");
+            (await _identityUserManager.CreateAsync(user)).Succeeded.ShouldBeTrue();
+
+            var result = await _identityUserManager.SetEmailAsync(user, "email-after@volosoft.com");
+            result.Succeeded.ShouldBeTrue();
+        }
+    }
+
+    // Host-user scenarios (TenantId == null): still must enforce global uniqueness on Create.
+    [Fact]
+    public async Task Should_Reject_Duplicate_UserName_Between_Host_User_And_Tenant_User()
+    {
+        var tenantId = Guid.NewGuid();
+        const string sharedName = "host-vs-tenant-name";
+
+        // Host user first.
+        var hostUser = new IdentityUser(Guid.NewGuid(), sharedName, "host-side@volosoft.com");
+        (await _identityUserManager.CreateAsync(hostUser)).Succeeded.ShouldBeTrue();
+
+        using (_currentTenant.Change(tenantId))
+        {
+            var tenantUser = new IdentityUser(Guid.NewGuid(), sharedName, "tenant-side@volosoft.com");
+            var result = await _identityUserManager.CreateAsync(tenantUser);
+
+            result.Succeeded.ShouldBeFalse();
+            result.Errors.Any(e => e.Code == "DuplicateUserName").ShouldBeTrue();
+        }
+    }
+
+    [Fact]
+    public async Task Should_Reject_Duplicate_Email_Between_Host_User_And_Tenant_User()
+    {
+        var tenantId = Guid.NewGuid();
+        const string sharedEmail = "host-vs-tenant-email@volosoft.com";
+
+        var hostUser = new IdentityUser(Guid.NewGuid(), "host-email-user", sharedEmail);
+        (await _identityUserManager.CreateAsync(hostUser)).Succeeded.ShouldBeTrue();
+
+        using (_currentTenant.Change(tenantId))
+        {
+            var tenantUser = new IdentityUser(Guid.NewGuid(), "tenant-email-user", sharedEmail);
+            var result = await _identityUserManager.CreateAsync(tenantUser);
+
+            result.Succeeded.ShouldBeFalse();
+            result.Errors.Any(e => e.Code == "DuplicateEmail").ShouldBeTrue();
+        }
+    }
+
 }
