@@ -718,4 +718,31 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         }
     }
 
+    public virtual async Task<IdentityUser> FindSharedUserByIdAsync(string userId)
+    {
+        if (MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Isolated)
+        {
+            return await base.FindByIdAsync(userId);
+        }
+
+        using (CurrentTenant.Change(null))
+        {
+            using (DataFilter.Disable<IMultiTenant>())
+            {
+                var user = await base.FindByIdAsync(userId);
+                if (user == null)
+                {
+                    return null;
+                }
+
+                using (DataFilter.Enable<IMultiTenant>())
+                {
+                    using (CurrentTenant.Change(user.TenantId))
+                    {
+                        return await base.FindByIdAsync(userId);
+                    }
+                }
+            }
+        }
+    }
 }
