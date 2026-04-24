@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -126,14 +125,12 @@ public abstract class AbpTwoFactorTokenProvider : IUserTwoFactorTokenProvider<Id
         }
 
         // Translate ConcurrencyStamp failure (another request won the consume race) to false,
-        // so legitimate concurrent verification doesn't surface as a 500. Other persistence
-        // failures propagate so operators can see real errors.
+        // so legitimate concurrent verification doesn't surface as a 500.
         try
         {
             await RemoveStoredTokenAsync(manager, user, tokenName);
         }
-        catch (AbpIdentityResultException ex) when (
-            ex.IdentityResult.Errors.Any(e => e.Code == nameof(IdentityErrorDescriber.ConcurrencyFailure)))
+        catch (AbpIdentityResultException)
         {
             return false;
         }
