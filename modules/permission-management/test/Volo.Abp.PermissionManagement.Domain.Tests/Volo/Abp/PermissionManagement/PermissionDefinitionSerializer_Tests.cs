@@ -57,7 +57,7 @@ public class PermissionDefinitionSerializer_Tests : PermissionTestBase
             .WithProperty("CustomProperty2", "CustomValue2")
             .RequireAuthenticated() //For for testing, not so meaningful
             .RequireGlobalFeatures("GlobalFeature1", "GlobalFeature2")
-            .RequireFeatures("Feature1", "Feature2")
+            .RequireFeatures(requiresAll: true, batchCheck: false, "Feature1", "Feature2")
             .RequirePermissions(requiresAll: false, batchCheck: false,"Permission2", "Permission3");
 
         // Act
@@ -96,7 +96,7 @@ public class PermissionDefinitionSerializer_Tests : PermissionTestBase
             .WithProperty("CustomProperty2", "CustomValue2")
             .RequireAuthenticated() //For for testing, not so meaningful
             .RequireGlobalFeatures("GlobalFeature1", "GlobalFeature2")
-            .RequireFeatures("Feature1", "Feature2")
+            .RequireFeatures(requiresAll: true, batchCheck: false, "Feature1", "Feature2")
             .RequirePermissions(requiresAll: false, batchCheck: false,"Permission2", "Permission3");
 
         // Act

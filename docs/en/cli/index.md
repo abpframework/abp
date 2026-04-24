@@ -241,6 +241,8 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
   * `-no-text-template-management`: Skips the Text Template Management module.
   * `-file-management`: Includes the File Management module.
   * `-chat`: Includes the Chat module.
+  * `-ai-management`: Includes the [AI Management](./../modules/ai-management/index.md) module.
+  * `-ai-providers <providers>`: AI providers (comma-separated). Valid values: `Ollama`, `OpenAI`. (Requires `-ai-management`)
 * `--legacy`: Generates a legacy solution.
   * `trust-version`: Trusts the user's version and does not check if the version exists or not. If the template with the given version is found in the cache, it will be used, otherwise throws an exception.
 

@@ -9,7 +9,20 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 2.2.6 (2026-04-08) Latest
+## 2.2.7 (2026-04-20) Latest
+
+* Improved Blazor WebApp template setup for easier tiered application development
+* Added application version tracking in analytics events
+* Fixed issues in Basic Theme public website templates
+* Improved PostgreSQL vector database support in templates
+* Enhanced Blazor CRUD support with built-in Book management example
+* Modernized React Native template components
+* Updated to ABP 10.3 and Blazorise 2.0.4
+* Improved run profile and PowerShell execution reliability
+* Added AI Management and Rate Limiting modules to available module options  
+
+
+## 2.2.6 (2026-04-08)
 
 - Disable Scriban 7.0 cumulative output limit for template rendering
 

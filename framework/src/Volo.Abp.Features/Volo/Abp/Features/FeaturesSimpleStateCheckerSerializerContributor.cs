@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Text.Json.Nodes;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.SimpleStateChecking;
@@ -10,7 +10,7 @@ public class FeaturesSimpleStateCheckerSerializerContributor :
     ISingletonDependency
 {
     public const string CheckerShortName = "F";
-    
+
     public string? SerializeToJson<TState>(ISimpleStateChecker<TState> checker)
         where TState : IHasSimpleStateCheckers<TState>
     {
