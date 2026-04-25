@@ -120,11 +120,15 @@ public abstract class IdentityUserManager_SharedUser_SeparateDatabase_Tests<TSta
 
         using (CurrentTenant.Change(TenantAId))
         {
-            (await IdentityUserManager.FindByEmailAsync(email)).UserName.ShouldBe(nameA);
+            var userA = await IdentityUserManager.FindByEmailAsync(email);
+            userA.ShouldNotBeNull();
+            userA.UserName.ShouldBe(nameA);
         }
         using (CurrentTenant.Change(TenantBId))
         {
-            (await IdentityUserManager.FindByEmailAsync(email)).UserName.ShouldBe(nameB);
+            var userB = await IdentityUserManager.FindByEmailAsync(email);
+            userB.ShouldNotBeNull();
+            userB.UserName.ShouldBe(nameB);
         }
     }
 
@@ -150,11 +154,15 @@ public abstract class IdentityUserManager_SharedUser_SeparateDatabase_Tests<TSta
 
         using (CurrentTenant.Change(TenantAId))
         {
-            (await IdentityUserManager.FindByNameAsync(userName)).Email.ShouldBe(emailA);
+            var userInTenantA = await IdentityUserManager.FindByNameAsync(userName);
+            userInTenantA.ShouldNotBeNull();
+            userInTenantA.Email.ShouldBe(emailA);
         }
         using (CurrentTenant.Change(TenantBId))
         {
-            (await IdentityUserManager.FindByNameAsync(userName)).Email.ShouldBe(emailB);
+            var userInTenantB = await IdentityUserManager.FindByNameAsync(userName);
+            userInTenantB.ShouldNotBeNull();
+            userInTenantB.Email.ShouldBe(emailB);
         }
     }
 }

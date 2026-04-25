@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -31,10 +31,10 @@ public class AbpIdentitySharedUserSeparateDbEntityFrameworkCoreTestModule : AbpM
     public static readonly Guid TenantBId =
         IdentityUserManager_SharedUser_SeparateDatabase_Tests<AbpIdentitySharedUserSeparateDbEntityFrameworkCoreTestModule>.TenantBId;
 
-    // Static cache so the in-memory SQLite databases survive for the full process lifetime
-    // (without an open connection, in-memory shared-cache databases are discarded). One entry
-    // per unique connection string.
-    private static readonly ConcurrentDictionary<string, SqliteConnection> _keepAlive = new();
+    // Per-app keep-alive connections so the in-memory SQLite databases survive for the test's
+    // lifetime (without an open connection, shared-cache in-memory databases are discarded).
+    // Disposed in OnApplicationShutdown so connections do not accumulate across tests.
+    private readonly List<SqliteConnection> _keepAlive = new();
 
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
@@ -98,16 +98,20 @@ public class AbpIdentitySharedUserSeparateDbEntityFrameworkCoreTestModule : AbpM
         context.Services.AddAlwaysDisableUnitOfWorkTransaction();
     }
 
-    private static void EnsureDatabase(string connectionString)
+    public override void OnApplicationShutdown(ApplicationShutdownContext context)
     {
-        if (_keepAlive.ContainsKey(connectionString))
+        foreach (var connection in _keepAlive)
         {
-            return;
+            connection.Dispose();
         }
+        _keepAlive.Clear();
+    }
 
+    private void EnsureDatabase(string connectionString)
+    {
         var keepAlive = new SqliteConnection(connectionString);
         keepAlive.Open();
-        _keepAlive[connectionString] = keepAlive;
+        _keepAlive.Add(keepAlive);
 
         new IdentityDbContext(
             new DbContextOptionsBuilder<IdentityDbContext>().UseSqlite(connectionString).Options)
