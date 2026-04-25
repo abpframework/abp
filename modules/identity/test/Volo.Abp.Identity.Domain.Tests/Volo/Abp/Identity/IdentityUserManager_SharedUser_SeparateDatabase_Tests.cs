@@ -1,0 +1,7 @@
+using Volo.Abp.Identity.EntityFrameworkCore;
+
+namespace Volo.Abp.Identity;
+
+public class IdentityUserManager_SharedUser_SeparateDatabase_Tests : IdentityUserManager_SharedUser_SeparateDatabase_Tests<AbpIdentitySharedUserSeparateDbEntityFrameworkCoreTestModule>
+{
+}
