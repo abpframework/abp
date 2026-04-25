@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp.Data;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
@@ -29,6 +30,7 @@ public abstract class IdentityUserManager_SharedUser_SeparateDatabase_Tests<TSta
     protected IIdentityUserRepository IdentityUserRepository { get; }
     protected ICurrentTenant CurrentTenant { get; }
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
+    protected IDataFilter DataFilter { get; }
 
     protected IdentityUserManager_SharedUser_SeparateDatabase_Tests()
     {
@@ -36,25 +38,38 @@ public abstract class IdentityUserManager_SharedUser_SeparateDatabase_Tests<TSta
         IdentityUserRepository = GetRequiredService<IIdentityUserRepository>();
         CurrentTenant = GetRequiredService<ICurrentTenant>();
         UnitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
+        DataFilter = GetRequiredService<IDataFilter>();
     }
 
     [Fact]
     public virtual async Task Tenant_Connection_Should_Not_See_Host_Rows()
     {
+        // Disables IMultiTenant before querying so this test fails if connection routing is
+        // broken (a tenant context unexpectedly hitting the host db) rather than being masked
+        // by the data filter.
         var probeEmail = $"infra-host-{Guid.NewGuid():N}@abp.io";
+        Guid hostUserId;
 
         using (CurrentTenant.Change(null))
         using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
         {
             var hostUser = new IdentityUser(Guid.NewGuid(), $"infra-host-{Guid.NewGuid():N}", probeEmail, null);
             await IdentityUserRepository.InsertAsync(hostUser);
+            hostUserId = hostUser.Id;
+            await uow.CompleteAsync();
+        }
+
+        using (CurrentTenant.Change(TenantAId))
+        using (DataFilter.Disable<IMultiTenant>())
+        using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
+        {
+            (await IdentityUserRepository.GetListAsync()).ShouldNotContain(u => u.Id == hostUserId);
             await uow.CompleteAsync();
         }
 
         using (CurrentTenant.Change(TenantAId))
         {
-            var foundInTenantA = await IdentityUserManager.FindByEmailAsync(probeEmail);
-            foundInTenantA.ShouldBeNull();
+            (await IdentityUserManager.FindByEmailAsync(probeEmail)).ShouldBeNull();
         }
     }
 
@@ -62,19 +77,28 @@ public abstract class IdentityUserManager_SharedUser_SeparateDatabase_Tests<TSta
     public virtual async Task Host_Connection_Should_Not_See_Tenant_Rows()
     {
         var probeEmail = $"infra-tenant-{Guid.NewGuid():N}@abp.io";
+        Guid tenantUserId;
 
         using (CurrentTenant.Change(TenantAId))
         using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
         {
             var tenantUser = new IdentityUser(Guid.NewGuid(), $"infra-t-{Guid.NewGuid():N}", probeEmail, TenantAId);
             await IdentityUserRepository.InsertAsync(tenantUser);
+            tenantUserId = tenantUser.Id;
+            await uow.CompleteAsync();
+        }
+
+        using (CurrentTenant.Change(null))
+        using (DataFilter.Disable<IMultiTenant>())
+        using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
+        {
+            (await IdentityUserRepository.GetListAsync()).ShouldNotContain(u => u.Id == tenantUserId);
             await uow.CompleteAsync();
         }
 
         using (CurrentTenant.Change(null))
         {
-            var foundInHost = await IdentityUserManager.FindByEmailAsync(probeEmail);
-            foundInHost.ShouldBeNull();
+            (await IdentityUserManager.FindByEmailAsync(probeEmail)).ShouldBeNull();
         }
     }
 
@@ -82,19 +106,28 @@ public abstract class IdentityUserManager_SharedUser_SeparateDatabase_Tests<TSta
     public virtual async Task TenantA_Connection_Should_Not_See_TenantB_Rows()
     {
         var probeEmail = $"infra-cross-{Guid.NewGuid():N}@abp.io";
+        Guid tenantBUserId;
 
-        using (CurrentTenant.Change(TenantAId))
+        using (CurrentTenant.Change(TenantBId))
         using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
         {
-            var u = new IdentityUser(Guid.NewGuid(), $"a-{Guid.NewGuid():N}", probeEmail, TenantAId);
+            var u = new IdentityUser(Guid.NewGuid(), $"b-{Guid.NewGuid():N}", probeEmail, TenantBId);
             await IdentityUserRepository.InsertAsync(u);
+            tenantBUserId = u.Id;
             await uow.CompleteAsync();
         }
 
-        using (CurrentTenant.Change(TenantBId))
+        using (CurrentTenant.Change(TenantAId))
+        using (DataFilter.Disable<IMultiTenant>())
+        using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
         {
-            var foundInB = await IdentityUserManager.FindByEmailAsync(probeEmail);
-            foundInB.ShouldBeNull();
+            (await IdentityUserRepository.GetListAsync()).ShouldNotContain(u => u.Id == tenantBUserId);
+            await uow.CompleteAsync();
+        }
+
+        using (CurrentTenant.Change(TenantAId))
+        {
+            (await IdentityUserManager.FindByEmailAsync(probeEmail)).ShouldBeNull();
         }
     }
 
