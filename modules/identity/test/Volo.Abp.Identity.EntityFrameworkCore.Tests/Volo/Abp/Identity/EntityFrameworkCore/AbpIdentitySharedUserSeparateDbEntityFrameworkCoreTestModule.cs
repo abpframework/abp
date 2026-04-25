@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -33,8 +32,10 @@ public class AbpIdentitySharedUserSeparateDbEntityFrameworkCoreTestModule : AbpM
 
     // Per-app keep-alive connections so the in-memory SQLite databases survive for the test's
     // lifetime (without an open connection, shared-cache in-memory databases are discarded).
-    // Disposed in OnApplicationShutdown so connections do not accumulate across tests.
-    private readonly List<SqliteConnection> _keepAlive = new();
+    // Uses AbpUnitTestSqliteConnection (SemaphoreSlim around CreateCommand) — SQLite isn't
+    // thread-safe and parallel xUnit collections would otherwise race. Disposed in
+    // OnApplicationShutdown so connections do not accumulate across tests.
+    private readonly List<AbpUnitTestSqliteConnection> _keepAlive = new();
 
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
@@ -109,7 +110,7 @@ public class AbpIdentitySharedUserSeparateDbEntityFrameworkCoreTestModule : AbpM
 
     private void EnsureDatabase(string connectionString)
     {
-        var keepAlive = new SqliteConnection(connectionString);
+        var keepAlive = new AbpUnitTestSqliteConnection(connectionString);
         keepAlive.Open();
         _keepAlive.Add(keepAlive);
 
