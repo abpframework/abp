@@ -13,14 +13,16 @@ namespace Volo.Abp.Identity.MongoDB;
 [DependsOn(typeof(AbpIdentityMongoDbTestModule))]
 public class AbpIdentitySharedUserSeparateDbMongoDbTestModule : AbpModule
 {
-    public static readonly Guid TenantAId = Guid.Parse("11111111-1111-1111-1111-111111111111");
-    public static readonly Guid TenantBId = Guid.Parse("22222222-2222-2222-2222-222222222222");
+    public static readonly Guid TenantAId = IdentitySharedUserSeparateDbConstants.TenantAId;
+    public static readonly Guid TenantBId = IdentitySharedUserSeparateDbConstants.TenantBId;
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        // Fixed db names so MongoSandbox's embedded mongod does not accumulate one db per test
-        // method. Each test method generates unique email / userName so cross-test data does not
-        // collide on those fields.
+        // Fixed tenant db names so MongoSandbox's embedded mongod does not accumulate one tenant
+        // db per test method. The host/default database is still configured by
+        // AbpIdentityMongoDbTestModule (random per test run), since AbpIdentityTestBaseModule
+        // re-seeds the host admin/role on every AbpApplication initialization. Each test method
+        // generates unique email / userName so cross-test data does not collide.
         var tenantAConnection = MongoDbFixture.GetConnectionString("AbpIdentity_SharedSeparateDb_TenantA");
         var tenantBConnection = MongoDbFixture.GetConnectionString("AbpIdentity_SharedSeparateDb_TenantB");
 

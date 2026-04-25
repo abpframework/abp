@@ -25,10 +25,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore;
     typeof(AbpEntityFrameworkCoreSqliteModule))]
 public class AbpIdentitySharedUserSeparateDbEntityFrameworkCoreTestModule : AbpModule
 {
-    public static readonly Guid TenantAId =
-        IdentityUserManager_SharedUser_SeparateDatabase_Tests<AbpIdentitySharedUserSeparateDbEntityFrameworkCoreTestModule>.TenantAId;
-    public static readonly Guid TenantBId =
-        IdentityUserManager_SharedUser_SeparateDatabase_Tests<AbpIdentitySharedUserSeparateDbEntityFrameworkCoreTestModule>.TenantBId;
+    public static readonly Guid TenantAId = IdentitySharedUserSeparateDbConstants.TenantAId;
+    public static readonly Guid TenantBId = IdentitySharedUserSeparateDbConstants.TenantBId;
 
     // Per-app keep-alive connections so the in-memory SQLite databases survive for the test's
     // lifetime (without an open connection, shared-cache in-memory databases are discarded).
