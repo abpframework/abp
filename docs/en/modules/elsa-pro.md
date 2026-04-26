@@ -46,7 +46,7 @@ After adding the package references, open the module class of the project (e.g.:
 
 ### `AbpElsaAspNetCoreModule` and `AbpElsaIdentityModule`
 
-These two modules generally will be added to your authentication project. Please add `Volo.Elsa.Abp.AspNetCore` and `Volo.Elsa.Abp.Identity` packages to your project and add the `AbpElsaAspNetCoreModule` and `AbpElsaIdentityModule` to the `DependsOn` attribute of your module class based on your project structure:
+These two modules generally will be added to your authentication project. Please add `Volo.Abp.Elsa.AspNetCore` and `Volo.Abp.Elsa.Identity` packages to your project and add the `AbpElsaAspNetCoreModule` and `AbpElsaIdentityModule` to the `DependsOn` attribute of your module class based on your project structure:
 
 ```xml
 <PackageReference Include="Volo.Abp.Elsa.AspNetCore" Version="x.x.x" />
@@ -65,20 +65,20 @@ These two modules generally will be added to your authentication project. Please
 
 The Elsa Workflows has its own database provider, and also has a Tenant/Role/User system. They are under active development, so the ABP Elsa module is not yet fully integrated. Below is the current status of each module in the ABP's Elsa Module:
 
-- `AbpElsaAspNetCoreModule(Volo.Elsa.Abp.AspNetCore)` module is used to integrate Elsa authentication.
-- `AbpElsaIdentityModule(Volo.Elsa.Abp.Identity)` module is used to integrate ABP Identity authentication.
-- `AbpElsaApplicationModule(Volo.Elsa.Abp.Application)` and `AbpElsaApplicationContractsModule(Volo.Elsa.Abp.Application.Contracts)` modules are used to define the Elsa permissions.
+- `AbpElsaAspNetCoreModule(Volo.Abp.Elsa.AspNetCore)` module is used to integrate Elsa authentication.
+- `AbpElsaIdentityModule(Volo.Abp.Elsa.Identity)` module is used to integrate ABP Identity authentication.
+- `AbpElsaApplicationModule(Volo.Abp.Elsa.Application)` and `AbpElsaApplicationContractsModule(Volo.Abp.Elsa.Application.Contracts)` modules are used to define the Elsa permissions.
 
 The rest of the projects/modules are basically empty and will be implemented in the future based on the Elsa features:
 
-- `AbpElsaDomainModule(Volo.Elsa.Abp.Domain)`
-- `AbpElsaEntityFrameworkCoreModule(Volo.Elsa.Abp.EntityFrameworkCore)`
-- `AbpElsaHttpApiModule(Volo.Elsa.Abp.HttpApi)`
-- `AbpElsaHttpApiClientModule(Volo.Elsa.Abp.HttpApi.Client)`
-- `AbpElsaBlazorModule(Volo.Elsa.Abp.Blazor)`
-- `AbpElsaBlazorServerModule(Volo.Elsa.Abp.Blazor.Server)`
-- `AbpElsaBlazorWebAssemblyModule(Volo.Elsa.Abp.Blazor.WebAssembly)`
-- `AbpElsaWebModule(Volo.Elsa.Abp.Web)`
+- `AbpElsaDomainModule(Volo.Abp.Elsa.Domain)`
+- `AbpElsaEntityFrameworkCoreModule(Volo.Abp.Elsa.EntityFrameworkCore)`
+- `AbpElsaHttpApiModule(Volo.Abp.Elsa.HttpApi)`
+- `AbpElsaHttpApiClientModule(Volo.Abp.Elsa.HttpApi.Client)`
+- `AbpElsaBlazorModule(Volo.Abp.Elsa.Blazor)`
+- `AbpElsaBlazorServerModule(Volo.Abp.Elsa.Blazor.Server)`
+- `AbpElsaBlazorWebAssemblyModule(Volo.Abp.Elsa.Blazor.WebAssembly)`
+- `AbpElsaWebModule(Volo.Abp.Elsa.Web)`
 
 ## Configure the Elsa Server
 
@@ -129,7 +129,7 @@ The Elsa Workflow API endpoints check permissions. Also, it has a `*` wildcard p
 
 The ABP Elsa module defines all permissions that are used in the Elsa workflow. You can use ABP Permission Management module to manage the permissions.
 
-`AbpElsaAspNetCoreModule(Volo.Elsa.Abp.AspNetCore)` module will check and add these permissions to the current user's claims:
+`AbpElsaAspNetCoreModule(Volo.Abp.Elsa.AspNetCore)` module will check and add these permissions to the current user's claims:
 
 ![Elsa Permissions](../images/elsa-permissions.png)
 
@@ -158,7 +158,7 @@ Elsa Studio requires authentication and there are two ways to authenticate Elsa 
 
 ##### Elsa Studio - Password Flow Authentication
 
-The `AbpElsaIdentityModule(Volo.Elsa.Abp.Identity)` module is used to integrate with [ABP Identity module](./identity-pro.md) to check Elsa Studio *username* and *password* against ABP Identity. 
+The `AbpElsaIdentityModule(Volo.Abp.Elsa.Identity)` module is used to integrate with [ABP Identity module](./identity-pro.md) to check Elsa Studio *username* and *password* against ABP Identity. 
 
 You need to replace `UseIdentity` with `UseAbpIdentity` when configuring Elsa in your Elsa server project as follows:
 
