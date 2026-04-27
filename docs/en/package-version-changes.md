@@ -9,14 +9,6 @@
 
 ## 10.4.0-rc.1
 
-**Added:**
-
-| Package | Version | PR |
-|---------|---------|-----|
-| MudBlazor | 8.0.0 | #25235 |
-
-**Updated:**
-
 | Package | Old Version | New Version | PR |
 |---------|-------------|-------------|-----|
 | Microsoft.AspNetCore.Authentication.JwtBearer | 10.0.2 | 10.0.7 | #25313 |
@@ -81,6 +73,12 @@
 | System.Text.Encoding.CodePages | 10.0.2 | 10.0.7 | #25313 |
 | System.Text.Encodings.Web | 10.0.2 | 10.0.7 | #25313 |
 | System.Text.Json | 10.0.2 | 10.0.7 | #25313 |
+
+**Added:**
+
+| Package | Version | PR |
+|---------|---------|-----|
+| MudBlazor | 8.0.0 | #25235 |
 
 ## 10.3.1
 
