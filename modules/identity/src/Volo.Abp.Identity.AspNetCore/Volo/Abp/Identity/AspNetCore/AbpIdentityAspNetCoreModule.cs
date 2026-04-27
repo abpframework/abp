@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +23,8 @@ public class AbpIdentityAspNetCoreModule : AbpModule
                 .AddTokenProvider<AbpPasswordResetTokenProvider>(AbpPasswordResetTokenProvider.ProviderName)
                 .AddTokenProvider<AbpEmailConfirmationTokenProvider>(AbpEmailConfirmationTokenProvider.ProviderName)
                 .AddTokenProvider<AbpChangeEmailTokenProvider>(AbpChangeEmailTokenProvider.ProviderName)
+                .AddTokenProvider<AbpEmailTwoFactorTokenProvider>(TokenOptions.DefaultEmailProvider)
+                .AddTokenProvider<AbpPhoneNumberTwoFactorTokenProvider>(TokenOptions.DefaultPhoneProvider)
                 .AddSignInManager<AbpSignInManager>()
                 .AddUserValidator<AbpIdentityUserValidator>();
         });
