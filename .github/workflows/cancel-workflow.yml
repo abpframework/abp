@@ -1,6 +1,6 @@
 # This workflow is intentionally disabled.
-# Cancellation of redundant runs is now handled natively via the `concurrency`
-# block defined in each individual workflow (e.g. build-and-test.yml).
+# The workflows that previously depended on this file now handle cancellation
+# natively via per-workflow `concurrency` blocks.
 # The styfle/cancel-workflow-action has been archived upstream and is no longer maintained.
 #
 # To re-enable manual cancellation, change `on: workflow_dispatch` back to `on: [push]`

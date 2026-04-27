@@ -23,6 +23,7 @@ on:
   pull_request:
     branches:
       - dev
+      - 'rel-*'
     paths:
       - 'framework/**/*.cs'
       - 'framework/**/*.cshtml'
@@ -51,6 +52,7 @@ concurrency:
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   build-test:
@@ -58,7 +60,7 @@ jobs:
     timeout-minutes: 50
     if: ${{ !github.event.pull_request.draft }}
     steps:
-    - uses: jlumbroso/free-disk-space@v1
+    - uses: jlumbroso/free-disk-space@v1.3.1
     - uses: actions/checkout@v4
     - uses: actions/setup-dotnet@v4
       with:
@@ -81,7 +83,8 @@ jobs:
       shell: pwsh
 
     - name: Codecov
+      if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
       uses: codecov/codecov-action@v5
       with:
-        token: ${{ secrets.CODECOV_TOKEN }}
+        use_oidc: true
         fail_ci_if_error: true
