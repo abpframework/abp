@@ -1,0 +1,32 @@
+@using Volo.Abp.SettingManagement.Localization
+@using global::MudBlazor
+@inherits Volo.Abp.AspNetCore.Components.AbpComponentBase
+
+@if (TimezoneSettings != null)
+{
+    <MudForm>
+        <MudGrid>
+            <MudItem xs="12">
+                <MudSelect Margin="Margin.Dense" T="string"
+                          Label="@L["DisplayName:Timezone"]"
+                          Required="true"
+                          RequiredError="@L["ThisFieldIsRequired."]"
+                          Value="@TimezoneSettings.Timezone"
+                          ValueChanged="@OnSelectedValueChangedAsync">
+                    @foreach (var item in TimezoneSettings.TimeZoneItems)
+                    {
+                        <MudSelectItem Value="@item.Value">@item.Name</MudSelectItem>
+                    }
+                </MudSelect>
+                <MudText Typo="Typo.caption" Class="mt-1">@L["TimezoneHelpText"]</MudText>
+            </MudItem>
+        </MudGrid>
+        <div class="d-flex justify-end mt-3">
+            <MudButton Color="Color.Primary"
+                      Variant="Variant.Filled"
+                      OnClick="@UpdateSettingsAsync">
+                @L["Save"]
+            </MudButton>
+        </div>
+    </MudForm>
+}

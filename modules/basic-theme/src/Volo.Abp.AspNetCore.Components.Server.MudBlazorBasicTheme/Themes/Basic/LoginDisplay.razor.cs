@@ -1,0 +1,43 @@
+using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.RequestLocalization;
+using Volo.Abp.UI.Navigation;
+
+namespace Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme.Themes.Basic;
+
+public partial class LoginDisplay : IDisposable
+{
+    [Inject]
+    protected IMenuManager MenuManager { get; set; }
+
+    [Inject]
+    protected IHttpContextAccessor HttpContextAccessor { get; set; }
+
+    protected ApplicationMenu Menu { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Menu = await MenuManager.GetAsync(StandardMenus.User);
+
+        Navigation.LocationChanged += OnLocationChanged;
+    }
+
+    protected string GetLoginUrl()
+    {
+        var culture = AbpRequestCultureCookieHelper.GetRouteCulture(HttpContextAccessor.HttpContext);
+        return string.IsNullOrEmpty(culture) ? "Account/Login" : $"{culture}/Account/Login";
+    }
+
+    protected virtual void OnLocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= OnLocationChanged;
+    }
+}

@@ -1,21 +1,19 @@
-﻿using System;
+using System;
 using System.Net.Http;
-using Blazorise.Bootstrap5;
-using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Client.Menus;
 using Volo.Abp.AspNetCore.Components.Web;
-using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
-using Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme;
+using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Routing;
+using Volo.Abp.AspNetCore.Components.WebAssembly.MudBlazorBasicTheme;
 using Volo.Abp.Autofac.WebAssembly;
 using Volo.Abp.Mapperly;
-using Volo.Abp.Identity.Blazor.WebAssembly;
+using Volo.Abp.Identity.Blazor.MudBlazor.WebAssembly;
 using Volo.Abp.Modularity;
-using Volo.Abp.SettingManagement.Blazor.WebAssembly;
-using Volo.Abp.TenantManagement.Blazor.WebAssembly;
+using Volo.Abp.SettingManagement.Blazor.MudBlazor.WebAssembly;
+using Volo.Abp.TenantManagement.Blazor.MudBlazor.WebAssembly;
 using Volo.Abp.UI.Navigation;
 
 namespace MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Client;
@@ -23,10 +21,10 @@ namespace MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Client;
 [DependsOn(
     typeof(AbpAutofacWebAssemblyModule),
     typeof(MyProjectNameHttpApiClientModule),
-    typeof(AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeModule),
-    typeof(AbpIdentityBlazorWebAssemblyModule),
-    typeof(AbpTenantManagementBlazorWebAssemblyModule),
-    typeof(AbpSettingManagementBlazorWebAssemblyModule)
+    typeof(AbpAspNetCoreComponentsWebAssemblyMudBlazorBasicThemeModule),
+    typeof(AbpIdentityBlazorMudBlazorWebAssemblyModule),
+    typeof(AbpTenantManagementBlazorMudBlazorWebAssemblyModule),
+    typeof(AbpSettingManagementBlazorMudBlazorWebAssemblyModule)
 )]
 public class MyProjectNameBlazorClientModule : AbpModule
 {
@@ -45,7 +43,6 @@ public class MyProjectNameBlazorClientModule : AbpModule
 
         ConfigureAuthentication(builder);
         ConfigureHttpClient(context, environment);
-        ConfigureBlazorise(context);
         ConfigureRouter(context);
         ConfigureMenu(context);
 
@@ -68,12 +65,6 @@ public class MyProjectNameBlazorClientModule : AbpModule
         });
     }
 
-    private void ConfigureBlazorise(ServiceConfigurationContext context)
-    {
-        context.Services
-            .AddBootstrap5Providers()
-            .AddFontAwesomeIcons();
-    }
 
     private static void ConfigureAuthentication(WebAssemblyHostBuilder builder)
     {

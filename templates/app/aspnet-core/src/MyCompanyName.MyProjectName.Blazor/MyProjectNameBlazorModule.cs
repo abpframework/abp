@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyCompanyName.MyProjectName.Blazor.Client;
 using Volo.Abp;
-using Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme.Bundling;
+using Volo.Abp.AspNetCore.Components.WebAssembly.MudBlazorBasicTheme.Bundling;
 using Volo.Abp.AspNetCore.Components.WebAssembly.WebApp;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.Autofac;
@@ -15,7 +15,7 @@ namespace MyCompanyName.MyProjectName.Blazor;
 [DependsOn(
     typeof(AbpAutofacModule),
     typeof(AbpAspNetCoreMvcUiBundlingModule),
-    typeof(AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeBundlingModule)
+    typeof(AbpAspNetCoreComponentsWebAssemblyMudBlazorBasicThemeBundlingModule)
 )]
 public class MyProjectNameBlazorModule : AbpModule
 {

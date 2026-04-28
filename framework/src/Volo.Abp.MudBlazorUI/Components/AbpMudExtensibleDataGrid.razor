@@ -1,0 +1,133 @@
+@typeparam TItem
+@using MudBlazor
+@using Volo.Abp.Data
+
+<MudDataGrid @ref="_dataGrid" T="TItem" ServerData="@ServerData" Loading="@Loading" Dense="true" Striped="true"
+    Bordered="false" Hover="true" Class="@Class" RowsPerPage="@PageSize" CurrentPage="@ZeroBasedCurrentPage">
+    <LoadingContent>
+        <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+    </LoadingContent>
+    <NoRecordsContent>
+        <MudText Typo="Typo.body1" Class="pa-4" Align="Align.Center">
+            @UiLocalizer["NoDataAvailableInDatatable"]
+        </MudText>
+    </NoRecordsContent>
+    <Columns>
+        @if (Columns != null)
+        {
+            @foreach (var column in Columns)
+            {
+                if (column.Actions.Any())
+                {
+                    <TemplateColumn T="TItem" Title="@column.Title" Sortable="false" CellStyle="@($"width: {ActionColumnWidth}")">
+                        <CellTemplate>
+                            @{
+                                var effectiveActions = column.Actions
+                                .Where(a => a.Visible?.Invoke(context.Item!) != false)
+                                .ToList();
+                                var entityActionType = effectiveActions.Count == 1 ? MudActionType.Button : MudActionType.Dropdown;
+                            }
+                            <MudEntityActions Type="@entityActionType" TItem="TItem">
+                                @foreach (var action in column.Actions)
+                                {
+                                    if (action.ConfirmationMessage != null)
+                                    {
+                                        <MudEntityAction TItem="TItem" Color="@GetColor(action.Color)" Icon="@action.Icon"
+                                            Clicked="async () => await action.Clicked(context.Item!)"
+                                            ConfirmationMessage="() => action.ConfirmationMessage.Invoke(context.Item!)"
+                                            Visible="@(action.Visible != null ? action.Visible(context.Item!) : true)" Text="@action.Text"
+                                            Disabled="@action.Disabled">
+                                        </MudEntityAction>
+                                    }
+                                    else
+                                    {
+                                        <MudEntityAction TItem="TItem" Clicked="async () => await action.Clicked(context.Item!)"
+                                            Color="@GetColor(action.Color)" Icon="@action.Icon"
+                                            Visible="@(action.Visible != null ? action.Visible(context.Item!) : true)" Text="@action.Text"
+                                            Disabled="@action.Disabled">
+                                        </MudEntityAction>
+                                    }
+                                }
+                            </MudEntityActions>
+                        </CellTemplate>
+                    </TemplateColumn>
+                }
+                else
+                {
+                    @if (column.Component != null)
+                    {
+                        <TemplateColumn T="TItem" Title="@column.Title" Sortable="@column.Sortable" SortBy="@GetSortByFunc(column)"
+                            Hidden="@(!column.Visible)" CellStyle="@GetColumnStyle(column)">
+                            <CellTemplate>
+                                @RenderCustomTableColumnComponent(column.Component, context.Item!)
+                            </CellTemplate>
+                        </TemplateColumn>
+                    }
+                    else
+                    {
+                        var hasExtensionPropertyData = !string.IsNullOrWhiteSpace(column.Data) && ExtensionPropertiesRegex.IsMatch(column.Data!);
+                        if (!hasExtensionPropertyData)
+                        {
+                            @if (column.ValueConverter == null)
+                            {
+                                <PropertyColumn T="TItem" TProperty="object" Property="@(x => GetPropertyValue(x, column.Data))"
+                                    Title="@column.Title" Sortable="@column.Sortable" Hidden="@(!column.Visible)"
+                                    CellStyle="@GetColumnStyle(column)" />
+                            }
+                            else
+                            {
+                                <TemplateColumn T="TItem" Title="@column.Title" Sortable="@column.Sortable" Hidden="@(!column.Visible)"
+                                    CellStyle="@GetColumnStyle(column)">
+                                    <CellTemplate>
+                                        @((MarkupString)GetConvertedFieldValue(context.Item, column))
+                                    </CellTemplate>
+                                </TemplateColumn>
+                            }
+                        }
+                        else
+                        {
+                            <TemplateColumn T="TItem" Title="@column.Title" SortBy="@GetExtensionPropertySortFunc(column)"
+                                Hidden="@(!column.Visible)" CellStyle="@GetColumnStyle(column)">
+                                <CellTemplate>
+                                    @{
+                                        var entity = context.Item as IHasExtraProperties;
+                                        var propertyName = ExtensionPropertiesRegex.Match(column.Data!).Groups[1].Value;
+                                        var propertyValue = entity?.GetProperty(propertyName);
+                                        if (propertyValue != null && propertyValue.GetType() == typeof(bool))
+                                        {
+                                            if ((bool)propertyValue)
+                                            {
+                                                <MudIcon Icon="@Icons.Material.Filled.Check" Color="Color.Success" />
+                                            }
+                                            else
+                                            {
+                                                <MudIcon Icon="@Icons.Material.Filled.Close" Color="Color.Error" />
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (column.ValueConverter != null)
+                                            {
+                                                @((MarkupString)GetConvertedFieldValue(context.Item, column))
+                                            }
+                                            else
+                                            {
+                                                @((MarkupString)GetConvertedFieldValue(propertyValue, column))
+                                            }
+                                        }
+                                    }
+                                </CellTemplate>
+                            </TemplateColumn>
+                        }
+                    }
+                }
+            }
+        }
+    </Columns>
+    <PagerContent>
+        @if (ShowPager)
+        {
+            <MudDataGridPager T="TItem" />
+        }
+    </PagerContent>
+</MudDataGrid>

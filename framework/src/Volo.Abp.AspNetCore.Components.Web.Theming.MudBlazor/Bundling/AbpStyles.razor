@@ -1,0 +1,75 @@
+@implements IDisposable
+@inject IComponentBundleManager BundleManager
+@inject PersistentComponentState ApplicationState
+@if (StyleFiles != null)
+{
+    foreach (var file in StyleFiles)
+    {
+        var href = file;
+        if (!AppBasePath.IsNullOrWhiteSpace())
+        {
+            href = AppBasePath.EnsureEndsWith('/') + file.RemovePreFix("/");
+        }
+        <link rel="stylesheet" href="@href" />
+    }
+}
+
+@code {
+
+    private const string PrerenderedKey = "abp_style_prerendered";
+
+    [Parameter]
+    public List<string>? WebAssemblyStyleFiles { get; set; }
+
+    [Parameter]
+    public string? BundleName { get; set; }
+
+    [Parameter]
+    public string? AppBasePath { get; set; }
+
+    private List<string>? StyleFiles { get; set; }
+
+    private PersistingComponentStateSubscription _persistingSubscription;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _persistingSubscription = ApplicationState.RegisterOnPersisting(Callback);
+        if (!ApplicationState.TryTakeFromJson<List<string>>(PrerenderedKey, out var scriptFiles))
+        {
+            // We are in prerendering mode
+            if (!BundleName.IsNullOrWhiteSpace())
+            {
+                StyleFiles = (await BundleManager.GetStyleBundleFilesAsync(BundleName!)).ToList();
+            }
+        }
+        else
+        {
+            StyleFiles = scriptFiles;
+            if (OperatingSystem.IsBrowser() && StyleFiles != null && WebAssemblyStyleFiles != null)
+            {
+                StyleFiles.AddIfNotContains(WebAssemblyStyleFiles);
+            }
+        }
+    }
+
+    private bool _hasRemoveServerStyle = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!_hasRemoveServerStyle && OperatingSystem.IsBrowser() && WebAssemblyStyleFiles != null)
+        {
+            _hasRemoveServerStyle = true;
+            await Task.Delay(3000);
+            StyleFiles = WebAssemblyStyleFiles;
+            StateHasChanged();
+        }
+    }
+
+    private Task Callback()
+    {
+        ApplicationState.PersistAsJson(PrerenderedKey, StyleFiles);
+        return Task.CompletedTask;
+    }
+
+    public void Dispose() => _persistingSubscription.Dispose();
+}

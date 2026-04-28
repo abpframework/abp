@@ -1,0 +1,18 @@
+@typeparam TEntity
+@typeparam TResourceType
+@using Volo.Abp.Localization
+@inherits MudExtensionPropertyComponentBase<TEntity, TResourceType>
+
+@if (PropertyInfo != null && Entity != null)
+{
+    <MudSelect T="int?"
+               Label="@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+               @bind-Value="@SelectedValue"
+               Disabled="IsReadonlyField"
+               Validation="@((Func<int?, string?>)(v => Validate(v)))">
+        @foreach (var item in SelectItems)
+        {
+            <MudSelectItem T="int?" Value="@item.Value">@item.Text</MudSelectItem>
+        }
+    </MudSelect>
+}

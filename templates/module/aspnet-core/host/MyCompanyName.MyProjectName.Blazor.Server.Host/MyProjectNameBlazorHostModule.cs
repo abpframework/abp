@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using Blazorise.Bootstrap5;
-using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,9 +18,9 @@ using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Components.Web;
-using Volo.Abp.AspNetCore.Components.Server.BasicTheme;
-using Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling;
-using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
+using Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme;
+using Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme.Bundling;
+using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Routing;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
@@ -36,7 +34,7 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
-using Volo.Abp.Identity.Blazor.Server;
+using Volo.Abp.Identity.Blazor.MudBlazor.Server;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -45,11 +43,11 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.SettingManagement;
-using Volo.Abp.SettingManagement.Blazor.Server;
+using Volo.Abp.SettingManagement.Blazor.MudBlazor.Server;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement;
-using Volo.Abp.TenantManagement.Blazor.Server;
+using Volo.Abp.TenantManagement.Blazor.MudBlazor.Server;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.UI.Navigation.Urls;
@@ -68,20 +66,20 @@ namespace MyCompanyName.MyProjectName.Blazor.Server.Host;
     typeof(AbpAccountWebOpenIddictModule),
     typeof(AbpAccountApplicationModule),
     typeof(AbpAccountHttpApiModule),
-    typeof(AbpAspNetCoreComponentsServerBasicThemeModule),
+    typeof(AbpAspNetCoreComponentsServerMudBlazorBasicThemeModule),
     typeof(AbpIdentityApplicationModule),
     typeof(AbpIdentityEntityFrameworkCoreModule),
     typeof(AbpAuditLoggingEntityFrameworkCoreModule),
-    typeof(AbpIdentityBlazorServerModule),
+    typeof(AbpIdentityBlazorMudBlazorServerModule),
     typeof(AbpFeatureManagementApplicationModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
-    typeof(AbpTenantManagementBlazorServerModule),
+    typeof(AbpTenantManagementBlazorMudBlazorServerModule),
     typeof(AbpTenantManagementApplicationModule),
     typeof(AbpTenantManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AbpPermissionManagementApplicationModule),
-    typeof(AbpSettingManagementBlazorServerModule),
+    typeof(AbpSettingManagementBlazorMudBlazorServerModule),
     typeof(AbpSettingManagementApplicationModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(MyProjectNameBlazorServerModule)
@@ -152,7 +150,7 @@ public class MyProjectNameBlazorHostModule : AbpModule
 
                 //BLAZOR UI
                 options.StyleBundles.Configure(
-                BlazorBasicThemeBundles.Styles.Global,
+                BlazorMudBlazorBasicThemeBundles.Styles.Global,
                 bundle =>
                 {
                     bundle.AddFiles("/blazor-global-styles.css");
@@ -209,10 +207,6 @@ public class MyProjectNameBlazorHostModule : AbpModule
         {
             options.IsEnabled = MultiTenancyConsts.IsEnabled;
         });
-
-        context.Services
-            .AddBootstrap5Providers()
-            .AddFontAwesomeIcons();
 
         Configure<AbpNavigationOptions>(options =>
         {

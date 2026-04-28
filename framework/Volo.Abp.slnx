@@ -10,13 +10,19 @@
     <Project Path="src/Volo.Abp.AspNetCore.Bundling/Volo.Abp.AspNetCore.Bundling.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Components.MauiBlazor.Bundling/Volo.Abp.AspNetCore.Components.MauiBlazor.Bundling.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.Bundling/Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.Bundling.csproj" />
+    <Project Path="src/Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.MudBlazor.Bundling/Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.MudBlazor.Bundling.csproj" />
+    <Project Path="src/Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.MudBlazor/Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.MudBlazor.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Components.MauiBlazor.Theming/Volo.Abp.AspNetCore.Components.MauiBlazor.Theming.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Components.MauiBlazor/Volo.Abp.AspNetCore.Components.MauiBlazor.csproj" />
+    <Project Path="src/Volo.Abp.AspNetCore.Components.Server.Theming.MudBlazor/Volo.Abp.AspNetCore.Components.Server.Theming.MudBlazor.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Components.Server.Theming/Volo.Abp.AspNetCore.Components.Server.Theming.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Components.Server/Volo.Abp.AspNetCore.Components.Server.csproj" />
+    <Project Path="src/Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor/Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Components.Web.Theming/Volo.Abp.AspNetCore.Components.Web.Theming.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Components.Web/Volo.Abp.AspNetCore.Components.Web.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Bundling/Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Bundling.csproj" />
+    <Project Path="src/Volo.Abp.AspNetCore.Components.WebAssembly.Theming.MudBlazor.Bundling/Volo.Abp.AspNetCore.Components.WebAssembly.Theming.MudBlazor.Bundling.csproj" />
+    <Project Path="src/Volo.Abp.AspNetCore.Components.WebAssembly.Theming.MudBlazor/Volo.Abp.AspNetCore.Components.WebAssembly.Theming.MudBlazor.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/Volo.Abp.AspNetCore.Components.WebAssembly.Theming.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Components.WebAssembly/Volo.Abp.AspNetCore.Components.WebAssembly.csproj" />
     <Project Path="src/Volo.Abp.AspNetCore.Components/Volo.Abp.AspNetCore.Components.csproj" />
@@ -137,6 +143,7 @@
     <Project Path="src/Volo.Abp.MemoryDb/Volo.Abp.MemoryDb.csproj" />
     <Project Path="src/Volo.Abp.Minify/Volo.Abp.Minify.csproj" />
     <Project Path="src/Volo.Abp.MongoDB/Volo.Abp.MongoDB.csproj" />
+    <Project Path="src/Volo.Abp.MudBlazorUI/Volo.Abp.MudBlazorUI.csproj" />
     <Project Path="src/Volo.Abp.MultiLingualObjects/Volo.Abp.MultiLingualObjects.csproj" />
     <Project Path="src/Volo.Abp.MultiTenancy.Abstractions/Volo.Abp.MultiTenancy.Abstractions.csproj" />
     <Project Path="src/Volo.Abp.MultiTenancy/Volo.Abp.MultiTenancy.csproj" />

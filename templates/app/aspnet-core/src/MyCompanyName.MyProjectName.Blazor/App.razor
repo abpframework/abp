@@ -7,6 +7,7 @@
     <title>MyCompanyName.MyProjectName.Blazor</title>
     <base href="/" />
 
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
     <link href="global.css" rel="stylesheet"/>
     <link href="main.css" rel="stylesheet"/>
     <link href="MyCompanyName.MyProjectName.Blazor.Client.styles.css" rel="stylesheet"/>
@@ -20,15 +21,11 @@
     <HeadOutlet @rendermode="new InteractiveWebAssemblyRenderMode(prerender: false)" />
 </head>
 
-<body class="abp-application-layout bg-light">
+<body>
 
     <script src="_framework/blazor.web.js"></script>
 
     <div id="ApplicationContainer">
-        <div class="spinner">
-            <div class="double-bounce1"></div>
-            <div class="double-bounce2"></div>
-        </div>
 
         <Routes @rendermode="new InteractiveWebAssemblyRenderMode(prerender: false)"/>
     </div>

@@ -1,0 +1,75 @@
+@inherits Volo.Abp.AspNetCore.Components.AbpComponentBase
+@using global::MudBlazor
+@using JetBrains.Annotations
+@using Volo.Abp.PermissionManagement.Localization
+
+<MudDialog @bind-Visible="@_isVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.Large, FullWidth = true, CloseOnEscapeKey = true, BackdropClick = false })">
+    <TitleContent>
+        <MudText Typo="Typo.h6">@L["Permissions"] - @_entityDisplayName</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudGrid Class="mb-2">
+            <MudItem xs="12" sm="8">
+                <MudTextField Margin="Margin.Dense" Value="@_permissionGroupSearchText"
+                             ValueChanged="@(async ([CanBeNull] string b) => await OnPermissionGroupSearchTextChangedAsync(b))"
+                             Label="@L["Search"]"
+                             Adornment="Adornment.Start"
+                             AdornmentIcon="@Icons.Material.Filled.Search"
+                             Immediate="true" />
+            </MudItem>
+            <MudItem xs="12" sm="4" Class="d-flex align-items-center">
+                <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default" T="bool"
+                            Disabled="@_selectAllDisabled"
+                            Value="@GrantAll"
+                            Indeterminate="@GrantAny"
+                            ValueChanged="@(async (bool b) => await GrantAllAsync(b))"
+                            Label="@L["SelectAllInAllTabs"]" />
+            </MudItem>
+        </MudGrid>
+
+        <MudPaper Elevation="1" Class="pa-4">
+            <MudText Typo="Typo.h6" Class="mb-3">@L["PermissionGroup"]</MudText>
+
+            @if (_groups != null && _groups.Any())
+            {
+                <MudTabs @bind-ActivePanelIndex="@_activeTabIndex"
+                        Variant="Variant.Pills"
+                        Position="Position.Left"
+                        PanelClass="pa-4"
+                        Style="max-height: 600px; overflow-y: auto;">
+                    @foreach (var group in _groups)
+                    {
+                        <MudTabPanel Text="@($"{group.DisplayName} ({group.Permissions.Count(x => x.IsGranted)})")">
+                            <div>
+                                <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default" 
+                                            T="bool"
+                                            Disabled="@(IsPermissionGroupDisabled(group))"
+                                            Value="@(group.Permissions.All(x => x.IsGranted))"
+                                            ValueChanged="@(async (bool b) => await GroupGrantAllChanged(b, group))"
+                                            Label="@L["SelectAllInThisTab"]" />
+                                <MudDivider Class="my-2" />
+
+                                @foreach (var permission in group.Permissions)
+                                {
+                                    var depth = GetPermissionDepthOrDefault(permission.Name);
+                                    <div style="margin-inline-start: @(depth * 20)px;">
+                                        <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default"
+                                                    T="bool" 
+                                                    Disabled="@(IsDisabledPermission(permission))"
+                                                    Value="@permission.IsGranted"
+                                                    ValueChanged="@(async (bool b) => await PermissionChanged(b, group, permission))"
+                                                    Label="@GetShownName(permission)" />
+                                    </div>
+                                }
+                            </div>
+                        </MudTabPanel>
+                    }
+                </MudTabs>
+            }
+        </MudPaper>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@CloseModal">@L["Cancel"]</MudButton>
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="@SaveAsync">@L["Save"]</MudButton>
+    </DialogActions>
+</MudDialog>

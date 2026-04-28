@@ -10,7 +10,7 @@
 
     <link href="global.css" rel="stylesheet"/>
     <link href="main.css" rel="stylesheet"/>
-    <link href="MyCompanyName.MyProjectName.Blazor.styles.css" rel="stylesheet"/>
+    <link href="MyCompanyName.MyProjectName.Blazor.WebAssembly.Server.Mongo.styles.css" rel="stylesheet"/>
 
     <!-- <TEMPLATE-REMOVE IF-NOT='PWA'> -->
     <link href="manifest.json" rel="manifest" />
@@ -26,10 +26,6 @@
     <script src="_framework/blazor.web.js"></script>
 
     <div id="ApplicationContainer">
-        <div class="spinner">
-            <div class="double-bounce1"></div>
-            <div class="double-bounce2"></div>
-        </div>
 
         <Routes @rendermode="new InteractiveWebAssemblyRenderMode(prerender: false)"/>
     </div>

@@ -74,6 +74,12 @@
 | System.Text.Encodings.Web | 10.0.2 | 10.0.7 | #25313 |
 | System.Text.Json | 10.0.2 | 10.0.7 | #25313 |
 
+**Added:**
+
+| Package | Version | PR |
+|---------|---------|-----|
+| MudBlazor | 8.0.0 | #25235 |
+
 ## 10.3.1
 
 | Package | Old Version | New Version | PR |
