@@ -12,6 +12,11 @@ on:
       - synchronize
       - reopened
       - ready_for_review
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     if: github.event.pull_request.head.repo.full_name == github.repository && !github.event.pull_request.draft
@@ -23,5 +28,3 @@ jobs:
 
       - name: Compress Images
         uses: calibreapp/image-actions@main
-        with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
