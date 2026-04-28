@@ -20,7 +20,7 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor\Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.csproj" />
     <!-- </TEMPLATE-REMOVE> -->
     <ProjectReference Include="..\..\..\..\modules\basic-theme\src\Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme\Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme.csproj" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="5.0.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" Version="5.4.0-preview" />
   </ItemGroup>
 
   <ItemGroup>
