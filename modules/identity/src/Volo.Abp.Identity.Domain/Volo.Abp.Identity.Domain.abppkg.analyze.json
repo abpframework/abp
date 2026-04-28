@@ -3677,6 +3677,23 @@
               "isOptional": false
             }
           ]
+        },
+        {
+          "returnType": "IdentityUser",
+          "namespace": "Volo.Abp.Identity",
+          "name": "FindSharedUserByIdAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "userId",
+              "isOptional": false
+            }
+          ]
         }
       ],
       "implementingInterfaces": [
