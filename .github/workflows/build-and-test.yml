@@ -61,6 +61,8 @@ jobs:
     if: ${{ !github.event.pull_request.draft }}
     steps:
     - uses: jlumbroso/free-disk-space@v1.3.1
+    - name: Install PowerShell
+      run: sudo apt-get install -y powershell
     - uses: actions/checkout@v4
     - uses: actions/setup-dotnet@v4
       with:
