@@ -34,6 +34,11 @@ public class ComponentBundleUrlBuilder : IComponentBundleUrlBuilder, ITransientD
             return Task.FromResult(fileName);
         }
 
+        if (fileName.StartsWith(normalized, StringComparison.Ordinal))
+        {
+            return Task.FromResult(fileName);
+        }
+
         return Task.FromResult(normalized + fileName.RemovePreFix("/"));
     }
 
