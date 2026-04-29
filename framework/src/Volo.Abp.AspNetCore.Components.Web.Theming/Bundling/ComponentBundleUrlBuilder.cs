@@ -14,11 +14,16 @@ public class ComponentBundleUrlBuilder : IComponentBundleUrlBuilder, ITransientD
     {
         Check.NotNull(fileName, nameof(fileName));
 
-        var pathBase = !string.IsNullOrEmpty(appBasePath)
+        if (IsExternalUrl(fileName))
+        {
+            return Task.FromResult(fileName);
+        }
+
+        var pathBase = !string.IsNullOrWhiteSpace(appBasePath)
             ? appBasePath
             : ExtractPathBaseFromNavigationBaseUri(navigationBaseUri);
 
-        if (string.IsNullOrEmpty(pathBase))
+        if (string.IsNullOrWhiteSpace(pathBase))
         {
             return Task.FromResult(fileName);
         }
@@ -32,9 +37,15 @@ public class ComponentBundleUrlBuilder : IComponentBundleUrlBuilder, ITransientD
         return Task.FromResult(normalized + fileName.RemovePreFix("/"));
     }
 
+    protected virtual bool IsExternalUrl([NotNull] string fileName)
+    {
+        return fileName.StartsWith("//", StringComparison.Ordinal) ||
+               (fileName.Contains(':') && Uri.TryCreate(fileName, UriKind.Absolute, out _));
+    }
+
     protected virtual string? ExtractPathBaseFromNavigationBaseUri([CanBeNull] string? navigationBaseUri)
     {
-        if (string.IsNullOrEmpty(navigationBaseUri))
+        if (string.IsNullOrWhiteSpace(navigationBaseUri))
         {
             return null;
         }

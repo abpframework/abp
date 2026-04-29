@@ -84,4 +84,22 @@ public class ComponentBundleUrlBuilder_Tests
         await Should.ThrowAsync<System.ArgumentNullException>(async () =>
             await _builder.BuildAsync(null!, appBasePath: "/foo", navigationBaseUri: null));
     }
+
+    [Theory]
+    [InlineData("https://cdn.example.com/foo.css")]
+    [InlineData("http://cdn.example.com/foo.css")]
+    [InlineData("//cdn.example.com/foo.css")]
+    [InlineData("data:text/css;base64,Zm9vIA==")]
+    public async Task Should_Not_Prefix_External_Urls(string externalUrl)
+    {
+        (await _builder.BuildAsync(externalUrl, appBasePath: "/foo", navigationBaseUri: "https://localhost/foo/"))
+            .ShouldBe(externalUrl);
+    }
+
+    [Fact]
+    public async Task Should_Treat_Whitespace_AppBasePath_As_Not_Provided()
+    {
+        (await _builder.BuildAsync("/__bundles/Global.css", appBasePath: "   ", navigationBaseUri: "https://localhost/foo/"))
+            .ShouldBe("/foo/__bundles/Global.css");
+    }
 }
