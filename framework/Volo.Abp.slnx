@@ -180,6 +180,7 @@
     <Project Path="test/Volo.Abp.AspNetCore.Mvc.PlugIn/Volo.Abp.AspNetCore.Mvc.PlugIn.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.Mvc.Tests/Volo.Abp.AspNetCore.Mvc.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.Mvc.UI.Tests/Volo.Abp.AspNetCore.Mvc.UI.Tests.csproj" />
+    <Project Path="test/Volo.Abp.AspNetCore.Components.Web.Theming.Tests/Volo.Abp.AspNetCore.Components.Web.Theming.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.Mvc.Versioning.Tests/Volo.Abp.AspNetCore.Mvc.Versioning.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.Mvc.Client.Tests/Volo.Abp.AspNetCore.Mvc.Client.Tests.csproj" />
