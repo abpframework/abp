@@ -26,7 +26,6 @@ Here is a brief list of titles explained in the next sections:
 - Blazor UI: MudBlazor Support
 - Identity: Single-Use Email/SMS 2FA Token Providers
 - Account Pro: Passwordless Email Login
-- QA Module: AI Suggest
 - AI Management: MCP Server Enhancements
 - LeptonX: URL-Based Localization and Theme Improvements
 - Dependency and Security Updates
@@ -139,14 +138,6 @@ The feature is designed with security in mind:
 - Email enumeration behavior follows the existing account security setting.
 
 This feature is especially useful for applications that want a smoother sign-in experience without removing the tenant-aware and security-focused account flow of ABP.
-
-### QA Module: AI Suggest
-
-The QA module now includes an AI Suggest feature for answer writers.
-
-When enabled, authorized users can generate a suggested answer based on the question content and existing answers. The generated text is inserted into the editor so the user can review, edit, and submit it manually.
-
-Administrators can enable the feature from QA settings, configure the prompt and character limits, and control access through the new AI Suggest permission.
 
 ### AI Management: MCP Server Enhancements
 
