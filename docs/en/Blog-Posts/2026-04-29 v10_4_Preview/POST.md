@@ -10,7 +10,7 @@ You can check the [Get Started page](https://abp.io/get-started) to see how to g
 
 By default, ABP Studio uses stable versions to create solutions. Therefore, if you want to create a solution with a preview version, first you need to create a solution and then switch your solution to the preview version from the ABP Studio UI:
 
-![studio-switch-to-preview.png](studio-switch-to-preview.png)
+![studio-switch-to-preview](studio-switch-to-preview.png)
 
 ## Migration Guide
 
@@ -45,7 +45,7 @@ Configure<AbpRequestLocalizationOptions>(options =>
 });
 ```
 
-When enabled, ABP automatically handles route registration, URL generation, menu links, and language switching for MVC, Razor Pages, Blazor Server, Blazor WebAssembly, and Angular applications.
+When enabled, ABP automatically handles route registration, URL generation, menu links, and language switching for MVC/Razor Pages, Blazor, and Angular UIs.
 
 For Angular applications, route trees can be wrapped with `withOptionalRouteCulturePrefix` so the same route configuration can handle both `/identity/users` and `/en/identity/users`:
 
@@ -90,7 +90,7 @@ ABP merges these files into the same localization dictionary. Files are sorted b
 
 ### Blazor UI: MudBlazor Support
 
-ABP v10.4 starts the MudBlazor integration work for the Blazor UI stack.
+ABP v10.4 starts the [MudBlazor](https://mudblazor.com/) integration work for the Blazor UI stack.
 
 This release adds MudBlazor-based package infrastructure, template integration, and module/theme support needed to build ABP Blazor applications with MudBlazor. The existing Blazorise-based UI remains available, while MudBlazor support provides a new path for modern Blazor UI development.
 
@@ -129,6 +129,8 @@ ABP Commercial v10.4 RC introduces passwordless email login for the Account Pro 
 
 Users can sign in by receiving an email login link and/or a one-time password (OTP), depending on the configured login type. Administrators can enable the feature, choose the login mode, and configure token lifetime from the account settings.
 
+![account-settings](account-settings.png)
+
 The feature is designed with security in mind:
 
 - Login links and OTPs are single-use.
@@ -138,6 +140,14 @@ The feature is designed with security in mind:
 - Email enumeration behavior follows the existing account security setting.
 
 This feature is especially useful for applications that want a smoother sign-in experience without removing the tenant-aware and security-focused account flow of ABP.
+
+***"Login via email":***
+
+![login-via-email](login-via-email.png)
+
+***Type the One-time Password (OTP) to login:***
+
+![login-via-email2](login-via-email2.png)
 
 ### AI Management: MCP Server Enhancements
 
@@ -161,6 +171,8 @@ ABP v10.4 RC includes several dependency updates and security-related package bu
 - `System.Security.Cryptography.Xml` upgraded to **10.0.6**
 - `@abp/lodash` lodash dependency updated
 
+> Check [Package Version Changes](https://abp.io/docs/10.4/package-version-changes) document for all updates.
+
 ### Other Improvements and Enhancements
 
 - **Virtual File System**: `ReplaceEmbeddedByPhysical` can now receive exclusion filters, which gives developers more control over included/excluded physical files during development ([#25284](https://github.com/abpframework/abp/pull/25284)).
@@ -176,8 +188,8 @@ ABP v10.4 RC includes several dependency updates and security-related package bu
 
 As always, exciting articles have been contributed by the ABP community. I will highlight some of them here:
 
-- [URL-Based Localization](https://abp.io/community/posts/urlbased-localization-3ivzinbb)
-- [Automatically Validate Your Documentation: How We Built an AI Tutorial Validator](https://abp.io/community/articles/automatically-validate-your-documentation-m3ozgkhv)
+- [Stop Sprinkling [RequiresFeature] Everywhere — A Centralized Feature Gate for ABP.IO](https://abp.io/community/articles/stop-sprinkling-requiresfeature-everywhere-a-centralized-7znie818) by [Mohammad AlMohammad AlMahmoud](https://abp.io/community/members/Mohammad97Dev)
+- [Top AI Coding Models in 2026: Which One Should Developers Actually Use?](https://abp.io/community/articles/top-ai-coding-models-in-2026-which-one-should-developers-use-rivh8x15) by [Alper Ebiçoğlu](https://abp.io/community/members/alper)
 
 Thanks to the ABP Community for all the content they have published. You can also [post your ABP related (text or video) content](https://abp.io/community/posts/create) to the ABP Community.
 
