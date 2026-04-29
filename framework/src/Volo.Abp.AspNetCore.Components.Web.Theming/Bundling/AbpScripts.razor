@@ -45,7 +45,7 @@
         {
             if (OperatingSystem.IsBrowser() && WebAssemblyScriptFiles != null)
             {
-                ScriptFiles = WebAssemblyScriptFiles;
+                ScriptFiles = await ResolveAsync(WebAssemblyScriptFiles);
             }
         }
     }
