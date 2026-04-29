@@ -102,4 +102,18 @@ public class ComponentBundleUrlBuilder_Tests
         (await _builder.BuildAsync("/__bundles/Global.css", appBasePath: "   ", navigationBaseUri: "https://localhost/foo/"))
             .ShouldBe("/foo/__bundles/Global.css");
     }
+
+    [Fact]
+    public async Task Should_Be_Idempotent_For_Already_Prefixed_FileName()
+    {
+        (await _builder.BuildAsync("/foo/__bundles/Global.css", appBasePath: "/foo", navigationBaseUri: null))
+            .ShouldBe("/foo/__bundles/Global.css");
+    }
+
+    [Fact]
+    public async Task Should_Be_Idempotent_When_PathBase_Resolved_From_NavigationBaseUri()
+    {
+        (await _builder.BuildAsync("/foo/__bundles/Global.css", appBasePath: null, navigationBaseUri: "https://localhost/foo/"))
+            .ShouldBe("/foo/__bundles/Global.css");
+    }
 }
