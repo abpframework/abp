@@ -151,7 +151,7 @@ This feature is especially useful for applications that want a smoother sign-in 
 
 ### AI Management: MCP Server Enhancements
 
-The AI Management module continues to improve its MCP (Model Context Protocol) support.
+The [AI Management module](https://abp.io/docs/latest/modules/ai-management) continues to improve its MCP (Model Context Protocol) support.
 
 In this release, MCP server configuration has been enhanced for `stdio` transport scenarios and workspace relationships. This makes it easier to connect local or process-based MCP servers to AI workspaces and use their tools from the chat playground.
 

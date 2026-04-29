@@ -14,6 +14,19 @@ Also see the following notes about ABP releases:
 - [ABP Studio release notes](../studio/release-notes.md)
 - [Change logs for ABP pro packages](https://abp.io/pro-releases)
 
+## 10.4 (2026-04-29)
+
+ABP v10.4 is currently in the release candidate stage; the stable version has not been released yet. See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-4-release-candidate-7ukyudm0)** for the v10.4 RC release.
+
+- URL-Based Localization
+- Localization File Splitting
+- Blazor UI: MudBlazor Support
+- Identity: Single-Use Email/SMS 2FA Token Providers
+- Account Pro: Passwordless Email Login
+- AI Management: MCP Server Enhancements
+- LeptonX: URL-Based Localization and Theme Improvements
+- OpenIddict 7.5.0, MongoDB.Driver 3.8.0, and security-focused dependency updates
+
 ## 10.3 (2026-04-15)
 
 See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-3-release-candidate-hgnpr9jq)** for the v10.3 release.
