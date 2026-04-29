@@ -46,7 +46,7 @@
             StyleFiles = scriptFiles;
             if (OperatingSystem.IsBrowser() && StyleFiles != null && WebAssemblyStyleFiles != null)
             {
-                StyleFiles.AddIfNotContains(WebAssemblyStyleFiles);
+                StyleFiles.AddIfNotContains(await ResolveAsync(WebAssemblyStyleFiles));
             }
         }
     }
@@ -59,7 +59,7 @@
         {
             _hasRemoveServerStyle = true;
             await Task.Delay(3000);
-            StyleFiles = WebAssemblyStyleFiles;
+            StyleFiles = await ResolveAsync(WebAssemblyStyleFiles);
             StateHasChanged();
         }
     }
