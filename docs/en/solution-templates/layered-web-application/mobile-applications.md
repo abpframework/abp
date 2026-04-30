@@ -100,6 +100,8 @@ You can follow [Mobile Application Development Tutorial - MAUI](../../tutorials/
 
 This is the mobile application that is built based on Facebook's [React Native framework](https://reactnative.dev/) and [Expo](https://expo.dev/). It will be in the solution only if you've selected React Native as your mobile application option.
 
+The UI is built with **[NativeWind v4](https://www.nativewind.dev/)** (Tailwind CSS for React Native) on top of a shadcn-inspired neutral palette, with full **light/dark mode** support. See [Styling with NativeWind](../../framework/ui/react-native/styling-with-nativewind.md) for the styling system reference.
+
 #### Project Structure
 - **Environment.ts**: file using for provide application level variables like `apiUrl`, `oAuthConfig` and etc.
 
@@ -110,15 +112,19 @@ This is the mobile application that is built based on Facebook's [React Native f
 
 - **contexts**: `contexts` folder contains [react context](https://react.dev/reference/react/createContext). You can expots your contexts in this folder. `Localization context provided in here`
 
-- **navigators**: folder contains [react-native stacks](https://reactnavigation.org/docs/stack-navigator/). After create new *FeatureName*Navigator we need to provide in `DrawerNavigator.tsx` file as `Drawer.Screen`
+- **hooks**: folder contains custom [React hooks](https://react.dev/reference/react/hooks) used across the app. The template ships with `useThemeColors` (theme-aware color values for components that can't use `className`) and `useLogout`, among others.
 
-- **screens**: is the content of navigated page. We'll pass as component property to [Stack.Screen](https://reactnavigation.org/docs/native-stack-navigator/)
+- **navigators**: folder contains [React Navigation](https://reactnavigation.org/) stacks. The template includes `BottomTabNavigator`, `DrawerNavigator`, `HomeNavigator`, `SettingsNavigator` and `AccountNavigator`. After creating a new *FeatureName*Navigator, register it in the appropriate parent navigator (e.g. `DrawerNavigator.tsx` or `BottomTabNavigator.tsx`).
+
+- **screens**: contains the content of each navigated page. The template ships with screens for `Home`, `Account`, `Settings`, `Login`, `Register`, `ForgotPassword`, `ResetPassword`, `ChangePassword` and `ProfilePicture`. Each screen is wired to a navigator as a [Stack.Screen](https://reactnavigation.org/docs/native-stack-navigator/) component.
 
 - **store**: folder manages state-management operations. We will define `actions`, `listeners`, `reducers`, and `selectors` here.
 
-- **styles**: folder contains app styles. `system-style.ts` comes built in template we can also add new styles.
+- **theme**: folder exposes Paper-only theme colors used by `react-native-paper`'s `TextInput`. Most theming now lives in `tailwind.config.js` (see below).
 
 - **utils**: folder contains helper functions that we can use in application
+
+In addition to `src/`, the project root contains the NativeWind configuration: `tailwind.config.js` (design tokens, dark mode, color palette), `global.css` (Tailwind directives), `metro.config.js` and `babel.config.js` (NativeWind wiring), and `nativewind-env.d.ts` (TypeScript types for the `className` prop).
 
 #### Running the Application
 

@@ -18,6 +18,8 @@
 
 The ABP platform provides a basic [React Native](https://reactnative.dev/) startup template to develop mobile applications **integrated with your ABP-based backends**.
 
+> The startup template UI is built with **[NativeWind v4](https://www.nativewind.dev/)** (Tailwind CSS for React Native) on top of a shadcn-inspired neutral palette, with full **light/dark mode** support. See [Styling with NativeWind](styling-with-nativewind.md) for the styling system reference.
+
 ![React Native gif](../../../images/react-native-introduction.gif)
 
 ## How to Prepare Development Environment
@@ -137,18 +139,84 @@ In the image above, you can start the application on an Android emulator, an iOS
 
 ### Expo
 
-![React Native login screen on iPhone 16](../../../images/rn-login-iphone.png)
+Press **i** to open the iOS simulator, or scan the QR code from the Expo CLI with your phone to run on a physical device.
 
 ### Android Studio
 
 1. Start the emulator in **Android Studio** before running the `yarn start` or `npm start` command.
 2. Press **a** to open in Android Studio.
 
-![React Native login screen on Android Device](../../../images/rn-login-android-studio.png)
+<img width="360" src="../../../images/rn-login-iphone.png" alt="React Native login screen" />
 
 Enter **admin** as the username and **1q2w3E\*** as the password to log in to the application.
 
 The application is up and running. You can continue to develop your application based on this startup template.
+
+## Navigation
+
+The startup template ships with **two navigation styles**, switchable when the project is created:
+
+- **Bottom Tab** — *the default* — three tabs at the bottom of the screen: **Home**, **Settings** and **Account**.
+- **Drawer** — a side menu (hamburger) with two items: **Home** and **Settings**.
+
+<img width="600" src="../../../images/rn-nav-comparison.png" alt="Bottom Tab vs Drawer navigation comparison" />
+
+
+Each top-level destination is its own native stack (`@react-navigation/native-stack`), so deeper navigation inside a tab/drawer item keeps that area's history isolated. Both modes share the same screens — only the entry surface and the auth flow placement change.
+
+> **How to choose:** The mode is selected in **ABP Studio** during the *Mobile Framework* step (or via the `navigation_type` template config when using the CLI). To switch later, you can manually replace `BottomTabNavigator` with `DrawerNavigator` (or vice versa) in `src/AppContainer.tsx` and adjust `src/navigators/types.ts` accordingly.
+
+### Bottom Tab Navigation (default)
+
+The root navigator is `BottomTabNavigator` (`src/navigators/BottomTabNavigator.tsx`) with three stacks:
+
+- **HomeTab** → `HomeNavigator` → `HomeScreen` (hero greeting + feature cards).
+- **SettingsTab** → `SettingsNavigator` → `SettingsScreen` (language, theme, profile/password shortcuts).
+- **AccountTab** → `AccountNavigator` — *conditional stack* based on the authentication state read from Redux:
+  - **Authenticated:** `AccountScreen` → `ChangePasswordScreen`, `ProfilePictureScreen`.
+  - **Guest:** `LoginScreen` → `RegisterScreen`, `ForgotPasswordScreen`, `ResetPasswordScreen`.
+
+Tab bar colors (active/inactive tint, background, border) are sourced from the `useThemeColors` hook so the bar follows the active light/dark theme.
+
+#### The Account Screen
+
+`AccountScreen` (`src/screens/Account/AccountScreen.tsx`) is the home of the AccountTab when the user is signed in. Its layout follows an iOS-style grouped pattern:
+
+1. **Profile header** — circular avatar (profile picture or first-letter fallback), full name and email, centered at the top.
+2. **Account actions card** — a single rounded card containing two rows with leading icon chips:
+   - **Profile Picture** → navigates to `ProfilePictureScreen`.
+   - **Change Password** → navigates to `ChangePasswordScreen`.
+3. **Destructive logout button** — an outlined `destructive`-colored button that calls the `useLogout` hook.
+
+### Drawer Navigation (alternative)
+
+When the drawer mode is selected, `DrawerNavigator` (`src/navigators/DrawerNavigator.tsx`) replaces the bottom tabs. It exposes two drawer items:
+
+- **HomeStack** → `HomeNavigator` → `HomeScreen`, plus the auth flow (`LoginScreen`, `RegisterScreen`, `ForgotPasswordScreen`, `ResetPasswordScreen`).
+- **SettingsStack** → `SettingsNavigator` → `SettingsScreen`, `ChangePasswordScreen`, `ProfilePictureScreen`.
+
+Note that there is **no `AccountTab` / `AccountScreen` in drawer mode** — auth lives in the Home stack and profile/password actions live in the Settings stack. The drawer side panel itself is fully custom.
+
+#### The Drawer Content
+
+`DrawerContent` (`src/components/DrawerContent/DrawerContent.tsx`) is the custom side panel rendered by `DrawerNavigator` via the `drawerContent` prop. From top to bottom:
+
+1. **User header** — circular avatar (image or first-letter fallback) + full name + email when authenticated.
+2. **Divider**.
+3. **Navigation items** — Home and Settings rows with leading Ionicons; tapping navigates and closes the drawer.
+4. **Auth row** — when authenticated, a **Logout** row that calls `useLogout`; when guest, a **Login** row that navigates to the Login screen inside `HomeStack`.
+
+The whole panel uses NativeWind classes with `dark:` variants, so it follows the active theme automatically.
+
+### Adding a New Screen
+
+To add a screen to either navigation mode:
+
+1. Create the screen component under `src/screens/<FeatureName>/<FeatureName>Screen.tsx` and export it from `src/screens/index.ts`.
+2. Register it as a `Stack.Screen` inside the appropriate navigator (e.g. `HomeNavigator`, `SettingsNavigator`, or `AccountNavigator`).
+3. Add the route to the matching `*ParamList` in `src/navigators/types.ts` so the screen props stay typed.
+
+If the new screen needs to appear at the *root* level (a new tab or drawer item rather than a child of an existing stack), edit `BottomTabNavigator.tsx` or `DrawerNavigator.tsx` and update the corresponding `BottomTabParamList` / `RootDrawerParamList` type.
 
 ## How to Configure & Run the Backend (Required for Emulator/Simulator Testing)
 
