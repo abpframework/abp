@@ -8,6 +8,8 @@ Try this version and provide feedback for a more stable version of ABP v10.4! Th
 
 You can check the [Get Started page](https://abp.io/get-started) to see how to get started with ABP. You can either download [ABP Studio](https://abp.io/get-started#abp-studio-tab) (**recommended**, if you prefer a user-friendly GUI application - desktop application) or use the [ABP CLI](https://abp.io/docs/latest/cli).
 
+> The v10.4 RC versions of ABP Studio and the ABP CLI are still being tested and will be released shortly.
+
 By default, ABP Studio uses stable versions to create solutions. Therefore, if you want to create a solution with a preview version, first you need to create a solution and then switch your solution to the preview version from the ABP Studio UI:
 
 ![studio-switch-to-preview](studio-switch-to-preview.png)
@@ -92,9 +94,21 @@ ABP merges these files into the same localization dictionary. Files are sorted b
 
 ABP v10.4 starts the [MudBlazor](https://mudblazor.com/) integration work for the Blazor UI stack.
 
-This release adds MudBlazor-based package infrastructure, template integration, and module/theme support needed to build ABP Blazor applications with MudBlazor. The existing Blazorise-based UI remains available, while MudBlazor support provides a new path for modern Blazor UI development.
+This release adds MudBlazor-based package infrastructure, template integration, and module/theme support needed to build ABP Blazor applications with MudBlazor. Blazorise and MudBlazor are now supported side by side, the LeptonX theme works with both UI libraries, and when creating a new Blazor project you can pick which UI library to use.
 
 This is a major UI foundation change, so we especially encourage Blazor users to try the RC and share feedback before the stable release.
+
+***Selecting the UI library when creating a new Blazor project in ABP Studio:***
+
+![mud-studio](mud-studio.png)
+
+***MudBlazor-based application home page:***
+
+![mud-index](mud-index.png)
+
+***MudBlazor-based Identity management page:***
+
+![mud-identity](mud-identity.png)
 
 > See [#25235](https://github.com/abpframework/abp/pull/25235) for details.
 
