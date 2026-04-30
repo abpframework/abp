@@ -20,8 +20,6 @@ The ABP platform provides a basic [React Native](https://reactnative.dev/) start
 
 > The startup template UI is built with **[NativeWind v4](https://www.nativewind.dev/)** (Tailwind CSS for React Native) on top of a shadcn-inspired neutral palette, with full **light/dark mode** support. See [Styling with NativeWind](styling-with-nativewind.md) for the styling system reference.
 
-![React Native gif](../../../images/react-native-introduction.gif)
-
 ## How to Prepare Development Environment
 
 Please follow the steps below to prepare your development environment for React Native.
@@ -164,7 +162,7 @@ The startup template ships with **two navigation styles**, switchable when the p
 
 Each top-level destination is its own native stack (`@react-navigation/native-stack`), so deeper navigation inside a tab/drawer item keeps that area's history isolated. Both modes share the same screens — only the entry surface and the auth flow placement change.
 
-> **How to choose:** The mode is selected in **ABP Studio** during the *Mobile Framework* step (or via the `navigation_type` template config when using the CLI). To switch later, you can manually replace `BottomTabNavigator` with `DrawerNavigator` (or vice versa) in `src/AppContainer.tsx` and adjust `src/navigators/types.ts` accordingly.
+> **How to choose:** The mode is selected in **ABP Studio** during the *Mobile Framework* step. Switching modes after the project is generated is not a one-line change — you would need to add the missing navigator (and its `@react-navigation/drawer` or `@react-navigation/bottom-tabs` dependency) manually, then update `src/AppContainer.tsx` and `src/navigators/types.ts` to match. Pick the mode upfront when possible.
 
 ### Bottom Tab Navigation (default)
 
