@@ -375,7 +375,7 @@ public abstract class AbpMudCrudPageBase<
 
             if (_createDialog != null)
             {
-                await _createDialog.ShowAsync();
+                await InvokeAsync(() => _createDialog.ShowAsync());
             }
         }
         catch (Exception ex)
@@ -384,13 +384,14 @@ public abstract class AbpMudCrudPageBase<
         }
     }
 
-    protected virtual async Task CloseCreateDialogAsync()
+    protected virtual Task CloseCreateDialogAsync()
     {
         NewEntity = new TCreateViewModel();
         if (_createDialog != null)
         {
-            await _createDialog.CloseAsync();
+            return InvokeAsync(() => _createDialog.CloseAsync());
         }
+        return Task.CompletedTask;
     }
 
     protected virtual async Task OpenEditDialogAsync(TListViewModel entity)
@@ -406,7 +407,7 @@ public abstract class AbpMudCrudPageBase<
 
             if (_editDialog != null)
             {
-                await _editDialog.ShowAsync();
+                await InvokeAsync(() => _editDialog.ShowAsync());
             }
         }
         catch (Exception ex)
@@ -440,12 +441,13 @@ public abstract class AbpMudCrudPageBase<
         return ObjectMapper.Map<TUpdateViewModel, TUpdateInput>(updateViewModel);
     }
 
-    protected virtual async Task CloseEditDialogAsync()
+    protected virtual Task CloseEditDialogAsync()
     {
         if (_editDialog != null)
         {
-            await _editDialog.CloseAsync();
+            return InvokeAsync(() => _editDialog.CloseAsync());
         }
+        return Task.CompletedTask;
     }
 
     protected virtual async Task CreateEntityAsync()
