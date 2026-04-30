@@ -69,7 +69,7 @@ public partial class MudEntityAction<TItem> : ComponentBase
         {
             if (await UiMessageService.Confirm(ConfirmationMessage()))
             {
-                await InvokeAsync(Clicked.InvokeAsync);
+                await InvokeAsync(() => Clicked.InvokeAsync());
             }
         }
         else
