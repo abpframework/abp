@@ -216,15 +216,14 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
         }
 
         var idAttr = inputTagHelperOutput.Attributes.FirstOrDefault(a => a.Name == "id");
+        var idValue = idAttr?.Value?.ToString();
 
-        if (idAttr == null)
+        if (string.IsNullOrEmpty(idValue))
         {
             return;
         }
 
-        var infoText = _tagHelperLocalizer.GetLocalizedText(idAttr.Value + "InfoText", TagHelper.AspFor.ModelExplorer);
-
-        inputTagHelperOutput.Attributes.SetAttribute("aria-describedby", infoText);
+        inputTagHelperOutput.Attributes.SetAttribute("aria-describedby", idValue + "InfoText");
     }
 
     protected virtual string GetInfoAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
@@ -249,14 +248,18 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
         }
 
         var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
+        var idValue = idAttr?.Value?.ToString();
         var localizedText = _tagHelperLocalizer.GetLocalizedText(text, TagHelper.AspFor.ModelExplorer);
 
         var div = new TagBuilder("div");
-        div.Attributes.Add("id", idAttr?.Value + "InfoText");
         div.AddCssClass("form-text");
         div.InnerHtml.Append(localizedText);
 
-        inputTag.Attributes.SetAttribute("aria-describedby", idAttr?.Value + "InfoText");
+        if (!string.IsNullOrEmpty(idValue))
+        {
+            div.Attributes.Add("id", idValue + "InfoText");
+            inputTag.Attributes.SetAttribute("aria-describedby", idValue + "InfoText");
+        }
 
         return div.ToHtmlString();
     }

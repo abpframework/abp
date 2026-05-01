@@ -56,6 +56,29 @@ public class AbpSelectTagHelperService_Tests
     }
 
     [Fact]
+    public async Task Info_text_should_skip_id_and_aria_describedby_when_select_has_no_id()
+    {
+        var service = new TestAbpSelectTagHelperService(selectId: null);
+        var tagHelper = new AbpSelectTagHelper(service)
+        {
+            AspFor = CreateModelExpression(),
+            InfoText = "Description"
+        };
+
+        var output = CreateOutput();
+
+        await tagHelper.ProcessAsync(CreateContext(), output);
+
+        service.LastGroupHtml.ShouldContain("<div class=\"form-text\"");
+        service.LastGroupHtml.ShouldContain("Description");
+        service.LastGroupHtml.ShouldNotContain("id=\"InfoText\"");
+        service.LastGroupHtml.ShouldNotContain("aria-describedby=\"InfoText\"");
+
+        service.LastSelectTag.ShouldNotBeNull();
+        service.LastSelectTag!.Attributes.ContainsName("aria-describedby").ShouldBeFalse();
+    }
+
+    [Fact]
     public async Task InputInfoText_attribute_should_render_info_text_with_single_aria_describedby()
     {
         var service = new TestAbpSelectTagHelperService();
@@ -119,20 +142,29 @@ public class AbpSelectTagHelperService_Tests
 
     private sealed class TestAbpSelectTagHelperService : AbpSelectTagHelperService
     {
+        private readonly string? _selectId;
+
         public string LastGroupHtml { get; private set; } = string.Empty;
 
         public TagHelperOutput? LastSelectTag { get; private set; }
 
-        public TestAbpSelectTagHelperService()
+        public TestAbpSelectTagHelperService(string? selectId = "TestSelect")
             : base(null!, HtmlEncoder.Default, new FakeTagHelperLocalizer(), null!, null!)
         {
+            _selectId = selectId;
         }
 
         protected override Task<TagHelperOutput> GetSelectTagAsync(TagHelperContext context, TagHelperOutput output, TagHelperContent childContent)
         {
+            var attributes = new TagHelperAttributeList();
+            if (!string.IsNullOrEmpty(_selectId))
+            {
+                attributes.Add("id", _selectId);
+            }
+
             LastSelectTag = new TagHelperOutput(
                 "select",
-                new TagHelperAttributeList { { "id", "TestSelect" } },
+                attributes,
                 (_, _) => Task.FromResult<TagHelperContent>(new DefaultTagHelperContent()))
             {
                 TagMode = TagMode.StartTagAndEndTag
