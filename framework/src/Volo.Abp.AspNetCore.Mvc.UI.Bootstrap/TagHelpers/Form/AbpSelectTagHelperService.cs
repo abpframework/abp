@@ -223,7 +223,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
             return;
         }
 
-        inputTagHelperOutput.Attributes.SetAttribute("aria-describedby", idValue + "InfoText");
+        inputTagHelperOutput.AppendAriaDescribedby(idValue + "InfoText");
     }
 
     protected virtual string GetInfoAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
@@ -258,7 +258,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
         if (!string.IsNullOrEmpty(idValue))
         {
             div.Attributes.Add("id", idValue + "InfoText");
-            inputTag.Attributes.SetAttribute("aria-describedby", idValue + "InfoText");
+            inputTag.AppendAriaDescribedby(idValue + "InfoText");
         }
 
         return div.ToHtmlString();

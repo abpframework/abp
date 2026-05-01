@@ -79,6 +79,25 @@ public class AbpSelectTagHelperService_Tests
     }
 
     [Fact]
+    public async Task Aria_describedby_should_preserve_existing_value_set_by_caller()
+    {
+        var service = new TestAbpSelectTagHelperService(existingAriaDescribedby: "custom-id");
+        var tagHelper = new AbpSelectTagHelper(service)
+        {
+            AspFor = CreateModelExpression(),
+            InfoText = "Description"
+        };
+
+        var output = CreateOutput();
+
+        await tagHelper.ProcessAsync(CreateContext(), output);
+
+        service.LastSelectTag.ShouldNotBeNull();
+        service.LastSelectTag!.Attributes["aria-describedby"].Value.ToString().ShouldBe("custom-id TestSelectInfoText");
+        service.LastGroupHtml.ShouldContain("aria-describedby=\"custom-id TestSelectInfoText\"");
+    }
+
+    [Fact]
     public async Task InputInfoText_attribute_should_render_info_text_with_single_aria_describedby()
     {
         var service = new TestAbpSelectTagHelperService();
@@ -143,15 +162,17 @@ public class AbpSelectTagHelperService_Tests
     private sealed class TestAbpSelectTagHelperService : AbpSelectTagHelperService
     {
         private readonly string? _selectId;
+        private readonly string? _existingAriaDescribedby;
 
         public string LastGroupHtml { get; private set; } = string.Empty;
 
         public TagHelperOutput? LastSelectTag { get; private set; }
 
-        public TestAbpSelectTagHelperService(string? selectId = "TestSelect")
+        public TestAbpSelectTagHelperService(string? selectId = "TestSelect", string? existingAriaDescribedby = null)
             : base(null!, HtmlEncoder.Default, new FakeTagHelperLocalizer(), null!, null!)
         {
             _selectId = selectId;
+            _existingAriaDescribedby = existingAriaDescribedby;
         }
 
         protected override Task<TagHelperOutput> GetSelectTagAsync(TagHelperContext context, TagHelperOutput output, TagHelperContent childContent)
@@ -160,6 +181,10 @@ public class AbpSelectTagHelperService_Tests
             if (!string.IsNullOrEmpty(_selectId))
             {
                 attributes.Add("id", _selectId);
+            }
+            if (!string.IsNullOrEmpty(_existingAriaDescribedby))
+            {
+                attributes.Add("aria-describedby", _existingAriaDescribedby);
             }
 
             LastSelectTag = new TagHelperOutput(

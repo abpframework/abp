@@ -266,7 +266,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
             return;
         }
 
-        inputTagHelperOutput.Attributes.SetAttribute("aria-describedby", idValue + "InfoText");
+        inputTagHelperOutput.AppendAriaDescribedby(idValue + "InfoText");
     }
 
     protected virtual bool IsInputCheckbox(TagHelperContext context, TagHelperOutput output, TagHelperAttributeList attributes)
@@ -365,7 +365,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
         if (!string.IsNullOrEmpty(idValue))
         {
             div.Attributes.Add("id", idValue + "InfoText");
-            inputTag.Attributes.SetAttribute("aria-describedby", idValue + "InfoText");
+            inputTag.AppendAriaDescribedby(idValue + "InfoText");
         }
 
         return div.ToHtmlString();
