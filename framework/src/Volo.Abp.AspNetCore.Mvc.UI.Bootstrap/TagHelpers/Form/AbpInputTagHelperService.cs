@@ -88,10 +88,10 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
         var (inputTag, isCheckBox) = await GetInputTagHelperOutputAsync(context, output);
         context.Items[nameof(IsOutputHidden)] = IsOutputHidden(inputTag);
 
-        var inputHtml = inputTag.Render(_encoder);
         var label = await GetLabelAsHtmlAsync(context, output, inputTag, isCheckBox);
         var info = GetInfoAsHtml(context, output, inputTag, isCheckBox);
         var validation = isCheckBox ? "" : await GetValidationAsHtmlAsync(context, output, inputTag);
+        var inputHtml = inputTag.Render(_encoder);
 
         return (GetContent(context, output, label, inputHtml, validation, info, isCheckBox), isCheckBox);
     }
@@ -267,7 +267,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
 
         var infoText = _tagHelperLocalizer.GetLocalizedText(idAttr.Value + "InfoText", TagHelper.AspFor.ModelExplorer);
 
-        inputTagHelperOutput.Attributes.Add("aria-describedby", infoText);
+        inputTagHelperOutput.Attributes.SetAttribute("aria-describedby", infoText);
     }
 
     protected virtual bool IsInputCheckbox(TagHelperContext context, TagHelperOutput output, TagHelperAttributeList attributes)
@@ -363,7 +363,7 @@ public class AbpInputTagHelperService : AbpTagHelperService<AbpInputTagHelper>
         div.AddCssClass("form-text");
         div.InnerHtml.Append(localizedText);
 
-        inputTag.Attributes.Add("aria-describedby", idAttr?.Value + "InfoText");
+        inputTag.Attributes.SetAttribute("aria-describedby", idAttr?.Value + "InfoText");
 
         return div.ToHtmlString();
     }

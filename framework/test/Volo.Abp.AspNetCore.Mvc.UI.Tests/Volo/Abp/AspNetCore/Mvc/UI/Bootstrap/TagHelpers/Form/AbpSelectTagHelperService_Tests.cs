@@ -1,6 +1,7 @@
 #nullable enable
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -51,6 +52,30 @@ public class AbpSelectTagHelperService_Tests
         service.LastSelectTag.ShouldNotBeNull();
         service.LastSelectTag!.Attributes.ContainsName("aria-describedby").ShouldBeTrue();
         service.LastSelectTag.Attributes["aria-describedby"].Value.ToString().ShouldBe("TestSelectInfoText");
+        service.LastGroupHtml.ShouldContain("aria-describedby=\"TestSelectInfoText\"");
+    }
+
+    [Fact]
+    public async Task InputInfoText_attribute_should_render_info_text_with_single_aria_describedby()
+    {
+        var service = new TestAbpSelectTagHelperService();
+        var tagHelper = new AbpSelectTagHelper(service)
+        {
+            AspFor = CreateModelExpressionWithInputInfoText()
+        };
+
+        var output = CreateOutput();
+
+        await tagHelper.ProcessAsync(CreateContext(), output);
+
+        service.LastGroupHtml.ShouldContain("<div class=\"form-text\"");
+        service.LastGroupHtml.ShouldContain("Description from attribute");
+        service.LastGroupHtml.ShouldNotContain("<small");
+
+        service.LastSelectTag.ShouldNotBeNull();
+        var ariaDescribedby = service.LastSelectTag!.Attributes.Where(a => a.Name == "aria-describedby").ToList();
+        ariaDescribedby.Count.ShouldBe(1);
+        ariaDescribedby[0].Value.ToString().ShouldBe("TestSelectInfoText");
     }
 
     private static TagHelperContext CreateContext()
@@ -77,6 +102,21 @@ public class AbpSelectTagHelperService_Tests
             metadataProvider.GetModelExplorerForType(typeof(string), null));
     }
 
+    private static ModelExpression CreateModelExpressionWithInputInfoText()
+    {
+        var metadataProvider = new EmptyModelMetadataProvider();
+        var modelExplorer = metadataProvider
+            .GetModelExplorerForType(typeof(TestModelWithInputInfoText), null)
+            .GetExplorerForProperty(nameof(TestModelWithInputInfoText.TestSelect));
+        return new ModelExpression(nameof(TestModelWithInputInfoText.TestSelect), modelExplorer);
+    }
+
+    private class TestModelWithInputInfoText
+    {
+        [InputInfoText("Description from attribute")]
+        public string TestSelect { get; set; } = string.Empty;
+    }
+
     private sealed class TestAbpSelectTagHelperService : AbpSelectTagHelperService
     {
         public string LastGroupHtml { get; private set; } = string.Empty;
@@ -97,6 +137,8 @@ public class AbpSelectTagHelperService_Tests
             {
                 TagMode = TagMode.StartTagAndEndTag
             };
+
+            AddInfoTextId(LastSelectTag);
 
             return Task.FromResult(LastSelectTag);
         }

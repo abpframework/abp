@@ -73,10 +73,10 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
     protected virtual async Task<string> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperContent childContent)
     {
         var selectTag = await GetSelectTagAsync(context, output, childContent);
-        var selectAsHtml = selectTag.Render(_encoder);
         var label = await GetLabelAsHtmlAsync(context, output, selectTag);
         var validation = await GetValidationAsHtmlAsync(context, output, selectTag);
         var infoText = GetInfoAsHtml(context, output, selectTag);
+        var selectAsHtml = selectTag.Render(_encoder);
 
         return TagHelper.FloatingLabel ? selectAsHtml + Environment.NewLine + label + Environment.NewLine + infoText + Environment.NewLine + validation :
                                          label + Environment.NewLine + selectAsHtml + Environment.NewLine + infoText + Environment.NewLine + validation;
@@ -224,7 +224,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
 
         var infoText = _tagHelperLocalizer.GetLocalizedText(idAttr.Value + "InfoText", TagHelper.AspFor.ModelExplorer);
 
-        inputTagHelperOutput.Attributes.Add("aria-describedby", infoText);
+        inputTagHelperOutput.Attributes.SetAttribute("aria-describedby", infoText);
     }
 
     protected virtual string GetInfoAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
@@ -256,7 +256,7 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
         div.AddCssClass("form-text");
         div.InnerHtml.Append(localizedText);
 
-        inputTag.Attributes.Add("aria-describedby", idAttr?.Value + "InfoText");
+        inputTag.Attributes.SetAttribute("aria-describedby", idAttr?.Value + "InfoText");
 
         return div.ToHtmlString();
     }
