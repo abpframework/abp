@@ -98,6 +98,24 @@ public class AbpSelectTagHelperService_Tests
     }
 
     [Fact]
+    public async Task Aria_describedby_should_split_on_html_whitespace_separators()
+    {
+        var service = new TestAbpSelectTagHelperService(existingAriaDescribedby: "id1\tid2");
+        var tagHelper = new AbpSelectTagHelper(service)
+        {
+            AspFor = CreateModelExpression(),
+            InfoText = "Description"
+        };
+
+        var output = CreateOutput();
+
+        await tagHelper.ProcessAsync(CreateContext(), output);
+
+        service.LastSelectTag.ShouldNotBeNull();
+        service.LastSelectTag!.Attributes["aria-describedby"].Value.ToString().ShouldBe("id1\tid2 TestSelectInfoText");
+    }
+
+    [Fact]
     public async Task InputInfoText_attribute_should_render_info_text_with_single_aria_describedby()
     {
         var service = new TestAbpSelectTagHelperService();

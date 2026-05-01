@@ -8,6 +8,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
 public static class TagHelperOutputExtensions
 {
+    // ASCII whitespace per the HTML5 spec, used to tokenize space-separated
+    // attribute values such as aria-describedby.
+    private static readonly char[] HtmlAsciiWhitespace = { ' ', '\t', '\n', '\r', '\f' };
+
     public static string Render(this TagHelperOutput output, HtmlEncoder htmlEncoder)
     {
         using (var writer = new StringWriter())
@@ -30,15 +34,16 @@ public static class TagHelperOutputExtensions
         }
 
         var existing = output.Attributes
-            .FirstOrDefault(a => a.Name == "aria-describedby")?.Value?.ToString();
+            .FirstOrDefault(a => string.Equals(a.Name, "aria-describedby", StringComparison.OrdinalIgnoreCase))
+            ?.Value?.ToString();
 
-        if (string.IsNullOrEmpty(existing))
+        if (string.IsNullOrWhiteSpace(existing))
         {
             output.Attributes.SetAttribute("aria-describedby", token);
             return;
         }
 
-        var tokens = existing.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        var tokens = existing.Split(HtmlAsciiWhitespace, StringSplitOptions.RemoveEmptyEntries);
         if (tokens.Any(t => t == token))
         {
             return;
