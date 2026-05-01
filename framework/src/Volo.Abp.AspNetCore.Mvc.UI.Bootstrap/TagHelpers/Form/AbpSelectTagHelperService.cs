@@ -251,12 +251,14 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
         var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
         var localizedText = _tagHelperLocalizer.GetLocalizedText(text, TagHelper.AspFor.ModelExplorer);
 
-        var small = new TagBuilder("small");
-        small.Attributes.Add("id", idAttr?.Value?.ToString() + "InfoText");
-        small.AddCssClass("form-text");
-        small.InnerHtml.Append(localizedText);
+        var div = new TagBuilder("div");
+        div.Attributes.Add("id", idAttr?.Value + "InfoText");
+        div.AddCssClass("form-text");
+        div.InnerHtml.Append(localizedText);
 
-        return small.ToHtmlString();
+        inputTag.Attributes.Add("aria-describedby", idAttr?.Value + "InfoText");
+
+        return div.ToHtmlString();
     }
 
     protected virtual List<SelectListItem> GetSelectItemsFromEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer)
