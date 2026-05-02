@@ -41,14 +41,11 @@ public class OrganizationUnitManager : DomainService
     [UnitOfWork]
     public virtual async Task CreateAsync(OrganizationUnit organizationUnit)
     {
-        using (CurrentTenant.Change(organizationUnit.TenantId))
-        {
-            await ValidateParentTenantAsync(organizationUnit.ParentId, organizationUnit.TenantId);
+        await ValidateParentTenantAsync(organizationUnit.ParentId, organizationUnit.TenantId);
 
-            organizationUnit.Code = await GetNextChildCodeAsync(organizationUnit.ParentId);
-            await ValidateOrganizationUnitAsync(organizationUnit);
-            await OrganizationUnitRepository.InsertAsync(organizationUnit);
-        }
+        organizationUnit.Code = await GetNextChildCodeAsync(organizationUnit.ParentId);
+        await ValidateOrganizationUnitAsync(organizationUnit);
+        await OrganizationUnitRepository.InsertAsync(organizationUnit);
     }
 
     public virtual async Task UpdateAsync(OrganizationUnit organizationUnit)
@@ -112,31 +109,28 @@ public class OrganizationUnitManager : DomainService
             return;
         }
 
-        using (CurrentTenant.Change(organizationUnit.TenantId))
+        await ValidateParentTenantAsync(parentId, organizationUnit.TenantId);
+
+        //Should find children before Code change
+        var children = await FindChildrenAsync(id, true);
+
+        //Store old code of OU
+        var oldCode = organizationUnit.Code;
+
+        //Move OU
+        organizationUnit.Code = await GetNextChildCodeAsync(parentId);
+        organizationUnit.ParentId = parentId;
+
+        await ValidateOrganizationUnitAsync(organizationUnit);
+
+        //Update Children Codes
+        foreach (var child in children)
         {
-            await ValidateParentTenantAsync(parentId, organizationUnit.TenantId);
-
-            //Should find children before Code change
-            var children = await FindChildrenAsync(id, true);
-
-            //Store old code of OU
-            var oldCode = organizationUnit.Code;
-
-            //Move OU
-            organizationUnit.Code = await GetNextChildCodeAsync(parentId);
-            organizationUnit.ParentId = parentId;
-
-            await ValidateOrganizationUnitAsync(organizationUnit);
-
-            //Update Children Codes
-            foreach (var child in children)
-            {
-                child.Code = OrganizationUnit.AppendCode(organizationUnit.Code, OrganizationUnit.GetRelativeCode(child.Code, oldCode));
-                await OrganizationUnitRepository.UpdateAsync(child);
-            }
-
-            await OrganizationUnitRepository.UpdateAsync(organizationUnit);
+            child.Code = OrganizationUnit.AppendCode(organizationUnit.Code, OrganizationUnit.GetRelativeCode(child.Code, oldCode));
+            await OrganizationUnitRepository.UpdateAsync(child);
         }
+
+        await OrganizationUnitRepository.UpdateAsync(organizationUnit);
     }
 
     public virtual async Task<string> GetCodeOrDefaultAsync(Guid id)
@@ -165,12 +159,7 @@ public class OrganizationUnitManager : DomainService
             return;
         }
 
-        OrganizationUnit parent;
-        using (CurrentTenant.Change(tenantId))
-        {
-            parent = await OrganizationUnitRepository.FindAsync(parentId.Value);
-        }
-
+        var parent = await OrganizationUnitRepository.FindAsync(parentId.Value);
         if (parent == null || parent.TenantId != tenantId)
         {
             throw new BusinessException(IdentityErrorCodes.OrganizationUnitParentTenantMismatch)

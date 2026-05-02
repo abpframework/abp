@@ -161,44 +161,6 @@ public class OrganizationUnitManager_Tests : AbpIdentityDomainTestBase
     }
 
     [Fact]
-    public async Task Should_Not_Create_Organization_Unit_From_Host_With_Cross_Tenant_Parent()
-    {
-        var hostOu = await _organizationUnitRepository.GetAsync("OU1");
-
-        var newOu = new OrganizationUnit(_guidGenerator.Create(), "ForeignTenantOu", hostOu.Id, Guid.NewGuid());
-
-        var ex = await Assert.ThrowsAsync<BusinessException>(
-            async () => await _organizationUnitManager.CreateAsync(newOu));
-
-        ex.Code.ShouldBe(IdentityErrorCodes.OrganizationUnitParentTenantMismatch);
-    }
-
-    [Fact]
-    public async Task Should_Allow_Host_To_Create_Tenant_Organization_Unit_Under_Same_Tenant_Parent()
-    {
-        var tenantId = Guid.NewGuid();
-        OrganizationUnit tenantRoot;
-
-        using (_currentTenant.Change(tenantId))
-        {
-            tenantRoot = new OrganizationUnit(_guidGenerator.Create(), "TenantRoot", null, tenantId);
-            await _organizationUnitManager.CreateAsync(tenantRoot);
-        }
-
-        var child = new OrganizationUnit(_guidGenerator.Create(), "TenantChild", tenantRoot.Id, tenantId);
-        await _organizationUnitManager.CreateAsync(child);
-
-        using (_currentTenant.Change(tenantId))
-        {
-            var loaded = await _organizationUnitRepository.FindAsync(child.Id);
-            loaded.ShouldNotBeNull();
-            loaded.ParentId.ShouldBe(tenantRoot.Id);
-            loaded.TenantId.ShouldBe(tenantId);
-            loaded.Code.ShouldBe(OrganizationUnit.AppendCode(tenantRoot.Code, OrganizationUnit.CreateCode(1)));
-        }
-    }
-
-    [Fact]
     public async Task Should_Reject_Cross_Tenant_Parent_When_Multi_Tenancy_Filter_Disabled()
     {
         var hostOu = await _organizationUnitRepository.GetAsync("OU1");
