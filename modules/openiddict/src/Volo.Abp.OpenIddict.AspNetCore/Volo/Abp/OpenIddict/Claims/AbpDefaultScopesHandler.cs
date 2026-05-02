@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
@@ -68,14 +67,7 @@ public class AbpDefaultScopesHandler : IAbpOpenIddictClaimsPrincipalHandler, ITr
             string.Join(", ", scopes));
 
         context.Principal.SetScopes(scopes);
-
-        var resources = new List<string>();
-        await foreach (var resource in scopeManager.ListResourcesAsync(scopes))
-        {
-            resources.Add(resource);
-        }
-
-        context.Principal.SetResources(resources);
+        context.Principal.SetResources(await scopeManager.ListResourcesAsync(scopes).ToListAsync());
     }
 
     protected virtual bool IsDefaultScopesEnabled(OpenIddictRequest request, AbpOpenIddictAspNetCoreOptions options)
