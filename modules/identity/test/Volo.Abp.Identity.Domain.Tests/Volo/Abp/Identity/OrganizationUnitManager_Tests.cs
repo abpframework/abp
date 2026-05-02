@@ -156,4 +156,17 @@ public class OrganizationUnitManager_Tests : AbpIdentityDomainTestBase
             ex.Code.ShouldBe(IdentityErrorCodes.OrganizationUnitParentTenantMismatch);
         }
     }
+
+    [Fact]
+    public async Task Should_Not_Create_Organization_Unit_From_Host_With_Cross_Tenant_Parent()
+    {
+        var hostOu = await _organizationUnitRepository.GetAsync("OU1");
+
+        var newOu = new OrganizationUnit(_guidGenerator.Create(), "ForeignTenantOu", hostOu.Id, Guid.NewGuid());
+
+        var ex = await Assert.ThrowsAsync<BusinessException>(
+            async () => await _organizationUnitManager.CreateAsync(newOu));
+
+        ex.Code.ShouldBe(IdentityErrorCodes.OrganizationUnitParentTenantMismatch);
+    }
 }
