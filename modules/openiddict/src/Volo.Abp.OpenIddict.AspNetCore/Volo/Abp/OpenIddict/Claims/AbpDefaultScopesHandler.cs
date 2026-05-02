@@ -16,7 +16,7 @@ public class AbpDefaultScopesHandler : IAbpOpenIddictClaimsPrincipalHandler, ITr
     public ILogger<AbpDefaultScopesHandler> Logger { get; set; }
         = NullLogger<AbpDefaultScopesHandler>.Instance;
 
-    public async Task HandleAsync(AbpOpenIddictClaimsPrincipalHandlerContext context)
+    public virtual async Task HandleAsync(AbpOpenIddictClaimsPrincipalHandlerContext context)
     {
         var options = context.ScopeServiceProvider
             .GetRequiredService<IOptions<AbpOpenIddictAspNetCoreOptions>>().Value;
