@@ -3,6 +3,7 @@ using Shouldly;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp.Data;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
@@ -20,6 +21,7 @@ public class OrganizationUnitManager_Tests : AbpIdentityDomainTestBase
     private readonly IUnitOfWorkManager _unitOfWorkManager;
     private readonly IGuidGenerator _guidGenerator;
     private readonly ICurrentTenant _currentTenant;
+    private readonly IDataFilter _dataFilter;
     public OrganizationUnitManager_Tests()
     {
         _organizationUnitManager = GetRequiredService<OrganizationUnitManager>();
@@ -30,6 +32,7 @@ public class OrganizationUnitManager_Tests : AbpIdentityDomainTestBase
         _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
         _guidGenerator = GetService<IGuidGenerator>();
         _currentTenant = GetRequiredService<ICurrentTenant>();
+        _dataFilter = GetRequiredService<IDataFilter>();
     }
 
     [Fact]
@@ -191,6 +194,27 @@ public class OrganizationUnitManager_Tests : AbpIdentityDomainTestBase
             loaded.ShouldNotBeNull();
             loaded.ParentId.ShouldBe(tenantRoot.Id);
             loaded.TenantId.ShouldBe(tenantId);
+            loaded.Code.ShouldBe(OrganizationUnit.AppendCode(tenantRoot.Code, OrganizationUnit.CreateCode(1)));
+        }
+    }
+
+    [Fact]
+    public async Task Should_Reject_Cross_Tenant_Parent_When_Multi_Tenancy_Filter_Disabled()
+    {
+        var hostOu = await _organizationUnitRepository.GetAsync("OU1");
+
+        using (_dataFilter.Disable<IMultiTenant>())
+        {
+            var tenantId = Guid.NewGuid();
+            using (_currentTenant.Change(tenantId))
+            {
+                var newOu = new OrganizationUnit(_guidGenerator.Create(), "Cross", hostOu.Id, tenantId);
+
+                var ex = await Assert.ThrowsAsync<BusinessException>(
+                    async () => await _organizationUnitManager.CreateAsync(newOu));
+
+                ex.Code.ShouldBe(IdentityErrorCodes.OrganizationUnitParentTenantMismatch);
+            }
         }
     }
 }
