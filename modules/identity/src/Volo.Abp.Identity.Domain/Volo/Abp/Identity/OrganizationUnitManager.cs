@@ -159,8 +159,13 @@ public class OrganizationUnitManager : DomainService
             return;
         }
 
-        var parent = await OrganizationUnitRepository.FindAsync(parentId.Value);
-        if (parent == null || parent.TenantId != tenantId)
+        OrganizationUnit parent;
+        using (CurrentTenant.Change(tenantId))
+        {
+            parent = await OrganizationUnitRepository.FindAsync(parentId.Value);
+        }
+
+        if (parent == null)
         {
             throw new BusinessException(IdentityErrorCodes.OrganizationUnitParentTenantMismatch)
                 .WithData("ParentId", parentId);

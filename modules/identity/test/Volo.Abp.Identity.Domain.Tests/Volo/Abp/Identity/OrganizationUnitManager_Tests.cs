@@ -169,4 +169,28 @@ public class OrganizationUnitManager_Tests : AbpIdentityDomainTestBase
 
         ex.Code.ShouldBe(IdentityErrorCodes.OrganizationUnitParentTenantMismatch);
     }
+
+    [Fact]
+    public async Task Should_Allow_Host_To_Create_Tenant_Organization_Unit_Under_Same_Tenant_Parent()
+    {
+        var tenantId = Guid.NewGuid();
+        OrganizationUnit tenantRoot;
+
+        using (_currentTenant.Change(tenantId))
+        {
+            tenantRoot = new OrganizationUnit(_guidGenerator.Create(), "TenantRoot", null, tenantId);
+            await _organizationUnitManager.CreateAsync(tenantRoot);
+        }
+
+        var child = new OrganizationUnit(_guidGenerator.Create(), "TenantChild", tenantRoot.Id, tenantId);
+        await _organizationUnitManager.CreateAsync(child);
+
+        using (_currentTenant.Change(tenantId))
+        {
+            var loaded = await _organizationUnitRepository.FindAsync(child.Id);
+            loaded.ShouldNotBeNull();
+            loaded.ParentId.ShouldBe(tenantRoot.Id);
+            loaded.TenantId.ShouldBe(tenantId);
+        }
+    }
 }
