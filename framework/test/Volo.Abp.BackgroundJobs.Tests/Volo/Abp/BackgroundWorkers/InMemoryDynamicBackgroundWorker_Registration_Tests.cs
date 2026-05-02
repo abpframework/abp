@@ -8,26 +8,30 @@ namespace Volo.Abp.BackgroundWorkers;
 
 public class InMemoryDynamicBackgroundWorker_Registration_Tests
 {
+    // Reproduces the original failure: ASP.NET Core in Development enables ValidateOnBuild,
+    // and InMemoryDynamicBackgroundWorker has a `string workerName` constructor parameter
+    // that DI cannot resolve. Without [DisableConventionalRegistration] this throws:
+    //   Unable to resolve service for type 'System.String' while attempting to activate
+    //   'Volo.Abp.BackgroundWorkers.InMemoryDynamicBackgroundWorker'.
     [Fact]
-    public async Task Should_Not_Be_Auto_Registered_To_DI_Container()
+    public async Task BuildServiceProvider_With_ValidateOnBuild_Should_Not_Throw()
     {
-        // Regression guard: IBackgroundWorker derives from ISingletonDependency, so without
-        // [DisableConventionalRegistration] the conventional registration would register
-        // InMemoryDynamicBackgroundWorker as a Singleton. Its constructor takes a `string
-        // workerName` parameter that the DI container cannot resolve, which broke any host
-        // running ServiceCollection validation (e.g. ASP.NET Core in Development, where
-        // WebApplicationBuilder.Build() enables ValidateOnBuild).
         using var application = await AbpApplicationFactory.CreateAsync<AbpBackgroundWorkersModule>();
 
-        application.Services
-            .Any(d => d.ServiceType == typeof(InMemoryDynamicBackgroundWorker))
-            .ShouldBeFalse(
-                "InMemoryDynamicBackgroundWorker is created on demand by DefaultDynamicBackgroundWorkerManager " +
-                "and must not be auto-registered as a service.");
-
-        // Building a fresh provider with ValidateOnBuild = true must not throw.
-        await using var validatingProvider = application.Services.BuildServiceProvider(
+        var act = () => application.Services.BuildServiceProvider(
             new ServiceProviderOptions { ValidateOnBuild = true });
-        validatingProvider.ShouldNotBeNull();
+
+        act.ShouldNotThrow();
+    }
+
+    // Verifies the fix: InMemoryDynamicBackgroundWorker is created on demand by
+    // DefaultDynamicBackgroundWorkerManager (`new InMemoryDynamicBackgroundWorker(...)`)
+    // and must stay out of the conventional registration loop.
+    [Fact]
+    public async Task InMemoryDynamicBackgroundWorker_Should_Not_Be_Registered_As_Service()
+    {
+        using var application = await AbpApplicationFactory.CreateAsync<AbpBackgroundWorkersModule>();
+
+        application.Services.ShouldNotContain(d => d.ServiceType == typeof(InMemoryDynamicBackgroundWorker));
     }
 }
