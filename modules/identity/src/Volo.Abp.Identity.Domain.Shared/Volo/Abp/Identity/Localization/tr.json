@@ -77,6 +77,7 @@
     "Volo.Abp.Identity:010007": "İki faktörlü ayarınızı değiştiremezsiniz.",
     "Volo.Abp.Identity:010008": "İki faktörlü ayarın değiştirilmesine izin verilmez.",
     "Volo.Abp.Identity:010009": "Kendinizi yetkilendiremezsiniz.",
+    "Volo.Abp.Identity:010010": "Üst birim ('{ParentId}') mevcut değil veya farklı bir kiracıya ait.",
     "Volo.Abp.Identity:010021": "{0} isminde bir birim zaten var.",
     "Volo.Abp.Identity:010022": "Bir statik izin tipi değiştirilemez.",
     "Volo.Abp.Identity:010023": "Bir statik izin tipi silinemez.",
