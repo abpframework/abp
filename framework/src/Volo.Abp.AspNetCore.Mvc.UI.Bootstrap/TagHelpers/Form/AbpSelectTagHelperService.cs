@@ -73,10 +73,10 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
     protected virtual async Task<string> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperContent childContent)
     {
         var selectTag = await GetSelectTagAsync(context, output, childContent);
-        var selectAsHtml = selectTag.Render(_encoder);
         var label = await GetLabelAsHtmlAsync(context, output, selectTag);
         var validation = await GetValidationAsHtmlAsync(context, output, selectTag);
         var infoText = GetInfoAsHtml(context, output, selectTag);
+        var selectAsHtml = selectTag.Render(_encoder);
 
         return TagHelper.FloatingLabel ? selectAsHtml + Environment.NewLine + label + Environment.NewLine + infoText + Environment.NewLine + validation :
                                          label + Environment.NewLine + selectAsHtml + Environment.NewLine + infoText + Environment.NewLine + validation;
@@ -216,15 +216,14 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
         }
 
         var idAttr = inputTagHelperOutput.Attributes.FirstOrDefault(a => a.Name == "id");
+        var idValue = idAttr?.Value?.ToString();
 
-        if (idAttr == null)
+        if (string.IsNullOrEmpty(idValue))
         {
             return;
         }
 
-        var infoText = _tagHelperLocalizer.GetLocalizedText(idAttr.Value + "InfoText", TagHelper.AspFor.ModelExplorer);
-
-        inputTagHelperOutput.Attributes.Add("aria-describedby", infoText);
+        inputTagHelperOutput.AppendAriaDescribedby(idValue + "InfoText");
     }
 
     protected virtual string GetInfoAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
@@ -249,14 +248,20 @@ public class AbpSelectTagHelperService : AbpTagHelperService<AbpSelectTagHelper>
         }
 
         var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
+        var idValue = idAttr?.Value?.ToString();
         var localizedText = _tagHelperLocalizer.GetLocalizedText(text, TagHelper.AspFor.ModelExplorer);
 
-        var small = new TagBuilder("small");
-        small.Attributes.Add("id", idAttr?.Value?.ToString() + "InfoText");
-        small.AddCssClass("form-text");
-        small.InnerHtml.Append(localizedText);
+        var div = new TagBuilder("div");
+        div.AddCssClass("form-text");
+        div.InnerHtml.Append(localizedText);
 
-        return small.ToHtmlString();
+        if (!string.IsNullOrEmpty(idValue))
+        {
+            div.Attributes.Add("id", idValue + "InfoText");
+            inputTag.AppendAriaDescribedby(idValue + "InfoText");
+        }
+
+        return div.ToHtmlString();
     }
 
     protected virtual List<SelectListItem> GetSelectItemsFromEnum(TagHelperContext context, TagHelperOutput output, ModelExplorer explorer)
