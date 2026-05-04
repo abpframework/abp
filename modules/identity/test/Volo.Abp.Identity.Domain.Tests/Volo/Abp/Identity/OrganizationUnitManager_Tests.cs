@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Shouldly;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp.Data;
 using Volo.Abp.Guids;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 using Xunit;
 
@@ -17,6 +20,8 @@ public class OrganizationUnitManager_Tests : AbpIdentityDomainTestBase
     private readonly ILookupNormalizer _lookupNormalizer;
     private readonly IUnitOfWorkManager _unitOfWorkManager;
     private readonly IGuidGenerator _guidGenerator;
+    private readonly ICurrentTenant _currentTenant;
+    private readonly IDataFilter _dataFilter;
     public OrganizationUnitManager_Tests()
     {
         _organizationUnitManager = GetRequiredService<OrganizationUnitManager>();
@@ -26,6 +31,8 @@ public class OrganizationUnitManager_Tests : AbpIdentityDomainTestBase
         _testData = GetRequiredService<IdentityTestData>();
         _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
         _guidGenerator = GetService<IGuidGenerator>();
+        _currentTenant = GetRequiredService<ICurrentTenant>();
+        _dataFilter = GetRequiredService<IDataFilter>();
     }
 
     [Fact]
@@ -116,5 +123,60 @@ public class OrganizationUnitManager_Tests : AbpIdentityDomainTestBase
         await _organizationUnitManager.RemoveRoleFromOrganizationUnitAsync(adminRole.Id, ou.Id);
         ou = await _organizationUnitRepository.GetAsync("OU1", includeDetails: true);
         ou.Roles.FirstOrDefault(r => r.RoleId == adminRole.Id).ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task Should_Not_Create_Organization_Unit_With_Cross_Tenant_Parent()
+    {
+        var hostOu = await _organizationUnitRepository.GetAsync("OU1");
+
+        using (_currentTenant.Change(Guid.NewGuid()))
+        {
+            var newOu = new OrganizationUnit(_guidGenerator.Create(), "Cross", hostOu.Id, _currentTenant.Id);
+
+            var ex = await Assert.ThrowsAsync<BusinessException>(
+                async () => await _organizationUnitManager.CreateAsync(newOu));
+
+            ex.Code.ShouldBe(IdentityErrorCodes.OrganizationUnitParentTenantMismatch);
+        }
+    }
+
+    [Fact]
+    public async Task Should_Not_Move_Organization_Unit_To_Cross_Tenant_Parent()
+    {
+        var hostOu1 = await _organizationUnitRepository.GetAsync("OU1");
+
+        OrganizationUnit tenantOu;
+        var tenantId = Guid.NewGuid();
+        using (_currentTenant.Change(tenantId))
+        {
+            tenantOu = new OrganizationUnit(_guidGenerator.Create(), "TenantRoot", null, tenantId);
+            await _organizationUnitManager.CreateAsync(tenantOu);
+
+            var ex = await Assert.ThrowsAsync<BusinessException>(
+                async () => await _organizationUnitManager.MoveAsync(tenantOu.Id, hostOu1.Id));
+
+            ex.Code.ShouldBe(IdentityErrorCodes.OrganizationUnitParentTenantMismatch);
+        }
+    }
+
+    [Fact]
+    public async Task Should_Reject_Cross_Tenant_Parent_When_Multi_Tenancy_Filter_Disabled()
+    {
+        var hostOu = await _organizationUnitRepository.GetAsync("OU1");
+
+        using (_dataFilter.Disable<IMultiTenant>())
+        {
+            var tenantId = Guid.NewGuid();
+            using (_currentTenant.Change(tenantId))
+            {
+                var newOu = new OrganizationUnit(_guidGenerator.Create(), "Cross", hostOu.Id, tenantId);
+
+                var ex = await Assert.ThrowsAsync<BusinessException>(
+                    async () => await _organizationUnitManager.CreateAsync(newOu));
+
+                ex.Code.ShouldBe(IdentityErrorCodes.OrganizationUnitParentTenantMismatch);
+            }
+        }
     }
 }
