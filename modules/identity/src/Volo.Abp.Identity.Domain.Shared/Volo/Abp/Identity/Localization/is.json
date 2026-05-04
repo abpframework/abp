@@ -77,6 +77,7 @@
     "Volo.Abp.Identity:010007": "Þú getur ekki breytt tveggja þátta stillingu þinni.",
     "Volo.Abp.Identity:010008": "Það er ekki leyfilegt að breyta tvíþátta stillingu.",
     "Volo.Abp.Identity:010009": "Þú getur ekki delegað þér sjálfum.",
+    "Volo.Abp.Identity:010010": "Yfirskipulagseiningin ('{ParentId}') er ekki til eða tilheyrir öðrum leigjanda.",
     "Volo.Abp.Identity:010021": "Nafnið '{0}' er þegar í notkun.",
     "Volo.Abp.Identity:010022": "Ekki er hægt að breyta static hlutverk.",
     "Volo.Abp.Identity:010023": "Ekki er hægt að eyða static hlutverkum.",
