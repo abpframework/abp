@@ -55,7 +55,7 @@ Example of resolving a typed kernel accessor:
 public class MyService
 {
     private readonly IKernelAccessor<CommentSummarization> _kernelAccessor;
-}
+
     public async Task<string> GetResponseAsync(string prompt)
     {
         var kernel = _kernelAccessor.Kernel;
