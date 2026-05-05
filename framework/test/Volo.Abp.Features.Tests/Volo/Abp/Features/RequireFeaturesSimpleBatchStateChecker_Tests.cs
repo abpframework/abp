@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.MultiTenancy;
@@ -84,6 +85,21 @@ public class RequireFeaturesSimpleBatchStateChecker_Tests : FeatureTestBase
         }
     }
 
+    [Fact]
+    public async Task Current_Should_Not_Be_Null_In_Fresh_ExecutionContext()
+    {
+        _ = RequireFeaturesSimpleBatchStateChecker<MyStateEntity3>.Current;
+
+        Task<RequireFeaturesSimpleBatchStateChecker<MyStateEntity3>> task;
+        using (ExecutionContext.SuppressFlow())
+        {
+            task = Task.Run(() => RequireFeaturesSimpleBatchStateChecker<MyStateEntity3>.Current);
+        }
+
+        var current = await task;
+        current.ShouldNotBeNull();
+    }
+
     class MyStateEntity : IHasSimpleStateCheckers<MyStateEntity>
     {
         public List<ISimpleStateChecker<MyStateEntity>> StateCheckers { get; }
@@ -101,6 +117,16 @@ public class RequireFeaturesSimpleBatchStateChecker_Tests : FeatureTestBase
         public MyStateEntity2()
         {
             StateCheckers = new List<ISimpleStateChecker<MyStateEntity2>>();
+        }
+    }
+
+    class MyStateEntity3 : IHasSimpleStateCheckers<MyStateEntity3>
+    {
+        public List<ISimpleStateChecker<MyStateEntity3>> StateCheckers { get; }
+
+        public MyStateEntity3()
+        {
+            StateCheckers = new List<ISimpleStateChecker<MyStateEntity3>>();
         }
     }
 }
