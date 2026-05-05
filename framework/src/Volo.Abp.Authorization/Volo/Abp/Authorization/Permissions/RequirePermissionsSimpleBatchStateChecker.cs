@@ -11,15 +11,21 @@ namespace Volo.Abp.Authorization.Permissions;
 public class RequirePermissionsSimpleBatchStateChecker<TState> : SimpleBatchStateCheckerBase<TState>
     where TState : IHasSimpleStateCheckers<TState>
 {
-    public static RequirePermissionsSimpleBatchStateChecker<TState> Current => _current.Value!;
-    private static readonly AsyncLocal<RequirePermissionsSimpleBatchStateChecker<TState>> _current = new AsyncLocal<RequirePermissionsSimpleBatchStateChecker<TState>>();
+    public static RequirePermissionsSimpleBatchStateChecker<TState> Current
+    {
+        get
+        {
+            if (_current.Value == null)
+            {
+                _current.Value = new RequirePermissionsSimpleBatchStateChecker<TState>();
+            }
+
+            return _current.Value;
+        }
+    }
+    private static readonly AsyncLocal<RequirePermissionsSimpleBatchStateChecker<TState>?> _current = new AsyncLocal<RequirePermissionsSimpleBatchStateChecker<TState>?>();
 
     private readonly List<RequirePermissionsSimpleBatchStateCheckerModel<TState>> _models;
-
-    static RequirePermissionsSimpleBatchStateChecker()
-    {
-        _current.Value = new RequirePermissionsSimpleBatchStateChecker<TState>();
-    }
 
     public RequirePermissionsSimpleBatchStateChecker()
     {
