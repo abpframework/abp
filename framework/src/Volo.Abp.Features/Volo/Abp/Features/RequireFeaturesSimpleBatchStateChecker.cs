@@ -11,15 +11,21 @@ namespace Volo.Abp.Features;
 public class RequireFeaturesSimpleBatchStateChecker<TState> : SimpleBatchStateCheckerBase<TState>
     where TState : IHasSimpleStateCheckers<TState>
 {
-    public static RequireFeaturesSimpleBatchStateChecker<TState> Current => _current.Value!;
-    private static readonly AsyncLocal<RequireFeaturesSimpleBatchStateChecker<TState>> _current = new();
+    public static RequireFeaturesSimpleBatchStateChecker<TState> Current
+    {
+        get
+        {
+            if (_current.Value == null)
+            {
+                _current.Value = new RequireFeaturesSimpleBatchStateChecker<TState>();
+            }
+
+            return _current.Value;
+        }
+    }
+    private static readonly AsyncLocal<RequireFeaturesSimpleBatchStateChecker<TState>?> _current = new();
 
     private readonly List<RequireFeaturesSimpleBatchStateCheckerModel<TState>> _models;
-
-    static RequireFeaturesSimpleBatchStateChecker()
-    {
-        _current.Value = new RequireFeaturesSimpleBatchStateChecker<TState>();
-    }
 
     public RequireFeaturesSimpleBatchStateChecker()
     {
