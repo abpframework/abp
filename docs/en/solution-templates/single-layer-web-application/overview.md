@@ -92,6 +92,7 @@ The solution comes with a main web application with the following UI Framework o
 * **MVC / Razor Pages UI**
 * **Blazor WebAssembly**
 * **Blazor Server**
+* **[React UI](../../framework/ui/react/index.md)**
 
 ### Multi-Tenancy & SaaS Module **\***
 

@@ -57,6 +57,7 @@ The following options are provided while [creating the solution](../../get-start
 * Angular
 * Blazor WebAssembly
 * Blazor Server
+* React UI
 * MAUI Blazor (Hybrid)
 
 The following sections explain each of these UI types.
@@ -76,6 +77,10 @@ If you've selected the Blazor WebAssembly UI while creating your solution, `Acme
 ### Blazor Server Web Application
 
 If you've selected the Blazor Server UI while creating your solution, `Acme.CloudCrm.Blazor` project is included in the `apps` folder of the solution. That folder contains the main web application of the solution that is implemented using Blazor Server.
+
+### React Web Application
+
+If you've selected the React UI while creating your solution, the `react` application is included in the `apps` folder of the solution. The template also includes the React Admin Console surface. Both are served through the Web Gateway and authenticate with the AuthServer using OpenID Connect.
 
 ### MAUI Blazor (Hybrid) Web Application
 

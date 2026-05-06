@@ -47,7 +47,7 @@ The following features are built and pre-configured for you in the solution.
 * **Authentication** is fully configured based on best practices;
   * **JWT Bearer Authentication** for microservices and applications.
   * **OpenId Connect Authentication**, if you have selected the MVC UI.
-  * **Authorization code flow** is implemented, if you have selected a SPA UI (Angular or Blazor WASM).
+  * **Authorization code flow** is implemented, if you have selected a SPA UI (Angular, Blazor WASM or React).
   * Other flows (resource owner password, client credentials...) are easy to use when you need them.
 * **[Permission](../../framework/fundamentals/authorization/index.md)** (authorization), **[setting](../../framework/infrastructure/settings.md)**, **[feature](../../framework/infrastructure/features.md)** and the **[localization](../../framework/fundamentals/localization.md)** management systems are pre-configured and ready to use.
 * **[Background job system](../../framework/infrastructure/background-jobs/index.md)** with [RabbitMQ integrated](../../framework/infrastructure/background-jobs/rabbitmq.md).
@@ -105,6 +105,7 @@ The solution comes with a main web application with the following UI Framework o
 * **MVC / Razor Pages UI**
 * **Blazor WebAssembly**
 * **Blazor Server**
+* **[React UI](../../framework/ui/react/index.md)**
 * **MAUI with Blazor (Hybrid)**
 
 ### The Mobile Application

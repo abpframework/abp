@@ -19,7 +19,7 @@ The source code of this module can be accessed [here](https://github.com/abpfram
 
 ## User Interface
 
-This module provides [Blazor](../framework/ui/blazor/overall.md), [Angular](../framework/ui/angular/quick-start.md) and [MVC / Razor Pages](../framework/ui/mvc-razor-pages/overall.md) UI options.
+This module provides [Blazor](../framework/ui/blazor/overall.md), [Angular](../framework/ui/angular/quick-start.md), [React](../framework/ui/react/index.md) and [MVC / Razor Pages](../framework/ui/mvc-razor-pages/overall.md) UI options.
 
 ### Menu Items
 

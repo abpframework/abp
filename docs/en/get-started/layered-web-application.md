@@ -10,7 +10,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC", "Blazor", "BlazorServer", "BlazorWebApp", "NG"],
+    "UI": ["MVC", "Blazor", "BlazorServer", "BlazorWebApp", "NG", "React"],
     "DB": ["EF", "Mongo"],
     "Tiered": ["Yes", "No"]
 }
@@ -62,6 +62,8 @@ Once your configuration is done, click the *Next* button to navigate to the *UI 
 ![abp-studio-new-solution-dialog-ui-framework-blazor-webapp](images/abp-studio-new-solution-dialog-ui-framework-blazor-webapp_dark.png)
 {{ else if UI == "NG" }}
 ![abp-studio-new-solution-dialog-ui-framework-ng](images/abp-studio-new-solution-dialog-ui-framework-ng_dark.png)
+{{ else if UI == "React" }}
+React UI is available in the modern template flow with ABP Studio v3.0+. Select **React** in the UI Framework list to create the React app and Admin Console integration.
 {{ end }}
 
 Here, you see all the possible UI options supported by that startup solution template. Pick the **{{ UI_Value }}**.
@@ -192,6 +194,9 @@ You can start the following application(s):
 {{ if UI == "NG" }}
 {{ if Tiered == "No" }}- `Acme.BookStore.HttpApi.Host`{{ end }}
 - `Acme.BookStore.Angular`
+{{ else if UI == "React" }}
+{{ if Tiered == "No" }}- `Acme.BookStore.HttpApi.Host`{{ end }}
+- `react`
 {{ else if UI == "Blazor" }}
 {{ if Tiered == "No" }}- `Acme.BookStore.HttpApi.Host`{{ end }}
 - `Acme.BookStore.Blazor`
@@ -207,7 +212,7 @@ You can start the following application(s):
 > Notice that the services running in docker-compose are exposed to your localhost. If any service in your localhost is already using the same port(s), you will get an error. In that case, stop your local services first.
 {{ end }}
 
-Once the `Acme.BookStore.{{ if UI == "NG" }}Angular{{ else if UI == "BlazorServer" || UI == "Blazor" || UI == "BlazorWebApp" }}Blazor{{ else }}Web{{ end }}` application started, you can right-click it and select the *Browse* command:
+Once the {{ if UI == "React" }}`react`{{ else }}`Acme.BookStore.{{ if UI == "NG" }}Angular{{ else if UI == "BlazorServer" || UI == "Blazor" || UI == "BlazorWebApp" }}Blazor{{ else }}Web{{ end }}`{{ end }} application started, you can right-click it and select the *Browse* command:
 
 ![abp-studio-quick-start-browse-command](images/abp-studio-quick-start-browse-command_dark.png)
 
@@ -239,7 +244,11 @@ Once the solution is opened in Visual Studio, you should see a screen like shown
 
 ![visual-studio-bookstore-application](images/visual-studio-bookstore-application_dark.png)
 
+{{ if UI == "React" }}
+Right-click the `Acme.BookStore.HttpApi.Host` project and select the *Set as Startup Project* command. You can then hit *F5* or *Ctrl + F5* to run the backend host application. Start the React application from the `react` folder with `npm run dev`, then browse the React UI.
+{{ else }}
 Right-click the `Acme.BookStore.{{ if UI == "NG" || UI == "Blazor" }}HttpApi.Host{{ else if UI == "BlazorServer" || UI == "BlazorWebApp" }}Blazor{{ else }}Web{{ end }}` project and select the *Set as Startup Project* command. You can then hit *F5* or *Ctrl + F5* to run the web application. It will run and open the application UI in your default browser:
+{{ end }}
 
 ![bookstore-browser-users-page](images/bookstore-browser-users-page_dark.png)
 
@@ -257,7 +266,7 @@ You can start the following application(s):
 - `Docker-Dependencies`
 - `Acme.BookStore.AuthServer`
 - `Acme.BookStore.HttpApi.Host`
-{{ else if UI == "NG" || UI == "Blazor" }}
+{{ else if UI == "NG" || UI == "Blazor" || UI == "React" }}
 - `Acme.BookStore.HttpApi.Host`
 {{ else if UI == "BlazorServer" }}
 - `Acme.BookStore.Blazor`

@@ -27,6 +27,7 @@ The web applications are the main user interfaces of the solution. They are the 
 
 - **MVC / Razor Pages**: This is an ASP.NET Core MVC application. It is a traditional web application that serves HTML pages to users and is suitable for building web applications with server-side rendering.  
 - **Angular**: This is an Angular application, a single-page application (SPA) that runs on the client side. It communicates with the server using HTTP requests and is ideal for building modern web applications with rich user interfaces.  
+- **React UI**: This is a React application, a single-page application (SPA) that runs on the client side. It communicates with the server using HTTP requests and includes the React-based ABP Admin Console integration.
 - **Blazor UI**: A flexible framework for building web applications with .NET. It supports various hosting models:
   - **Blazor WebAssembly**: This is a client-side SPA that runs entirely in the user's browser. It communicates with the server using HTTP requests and is suitable for modern web applications with rich interactivity and offline capabilities.  
   - **Blazor Server**: This is a server-side SPA that runs on the server and communicates with the client in real time using SignalR. It is ideal for applications requiring constant connectivity and rapid server updates.  
@@ -129,6 +130,18 @@ See the [testing document](https://angular.dev/guide/testing).
 * [angular-oauth2-oidc](https://github.com/manfredsteyer/angular-oauth2-oidc) is used to support for OAuth 2 and OpenId Connect (OIDC).
 * [Chart.js](https://www.chartjs.org/) is used to create widgets.
 * [ngx-validate](https://github.com/ng-turkey/ngx-validate) is used for dynamic validation of reactive forms.
+
+## React UI
+
+React UI is a modern SPA option built with React, Vite, TanStack Router, TanStack Query, shadcn/ui-style components, Axios, and Vitest.
+
+When you select the React option in the Layered Solution Template, it generates:
+
+- A React application located under the solution's root folder, typically named `react`.
+- An ASP.NET Core application, named `*.HttpApi.Host`, where the server-side HTTP APIs run.
+- An embedded React Admin Console hosted by the backend through the `Volo.Abp.AdminConsole` package.
+
+The React application communicates with the server by sending HTTP requests to the `*.HttpApi.Host` application. See the [React UI documentation](../../framework/ui/react/index.md) for details.
 
 ## Blazor UI
 

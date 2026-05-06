@@ -96,6 +96,7 @@ The solution comes with a main web application with the following UI Framework o
 * **Blazor WebAssembly**
 * **Blazor Server**
 * **Blazor WebApp**
+* **[React UI](../../framework/ui/react/index.md)**
 * **MAUI with Blazor (Hybrid)** **\***
 
 ### The Mobile Application
