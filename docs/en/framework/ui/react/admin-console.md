@@ -108,6 +108,44 @@ This endpoint provides Admin Console runtime settings such as authority, client 
 
 Host applications can configure Admin Console options from the `AdminConsole` configuration section.
 
+## `appsettings.json` Customization
+
+In layered and single-layer modern React templates, the embedded Admin Console is configured from the backend host application's `appsettings.json` file. The generated template includes an `AdminConsole` section similar to the following:
+
+```json
+{
+  "AdminConsole": {
+    "IsEnabled": true,
+    "RedirectRootToAdminConsole": true,
+    "Authority": "https://localhost:44300",
+    "ClientId": "Acme_BookStore_AdminConsole",
+    "Scope": "openid profile email offline_access Acme_BookStore",
+    "LocalizationLanguages": [ "en", "tr" ],
+    "ThemeOverrideCssPath": "/theme-override.css",
+    "InitialTheme": "system",
+    "CustomizationPermissionName": "AdminConsole.Customization"
+  }
+}
+```
+
+The most commonly changed options are:
+
+| Option | Description |
+| --- | --- |
+| `IsEnabled` | Enables or disables the embedded Admin Console SPA middleware. |
+| `RedirectRootToAdminConsole` | Redirects the backend root path (`/`) to `/admin-console`. |
+| `Authority` | OpenID Connect authority URL. If it is `null`, the host origin is used. |
+| `ClientId` | OpenIddict client ID used by the Admin Console SPA. |
+| `Scope` | Space-separated OAuth scopes requested by the Admin Console. |
+| `LocalizationLanguages` | UI language codes exposed to the Admin Console. If empty, the frontend falls back to `en`. |
+| `ThemeOverrideCssPath` | Optional CSS path or absolute URL injected into the Admin Console HTML. |
+| `InitialTheme` | Initial theme behavior: `light`, `dark`, `system`, or `both`. |
+| `CustomizationPermissionName` | Permission required to show and use the Admin Console customization page. If not set, customization is disabled. |
+
+The `ApplicationName`, `LogoUrl`, `InitialTheme`, and `ThemeOverrideCssPath` values can also be changed from the Admin Console customization UI when `CustomizationPermissionName` is configured and the current user has that permission. Values saved from the customization UI are stored as settings and override the defaults from configuration.
+
+In microservice solutions, the Admin Console is a separate React app under `apps/react-admin-console/`. It still uses its own OpenIddict client (`<ProjectName>_AdminConsole`) and runtime configuration, while the backend exposes the same `/admin-console/api/config` and `/admin-console/api/modules` endpoints.
+
 ## Permissions
 
 Admin Console routes still require permissions. For example:
