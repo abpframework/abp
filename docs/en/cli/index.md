@@ -9,6 +9,8 @@
 
 ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions or [ABP Studio](../studio/index.md) features.
 
+This document describes `Volo.Abp.Studio.Cli`, the ABP CLI package that works with the ABP Studio template system. Modern templates, including React UI support, are available through this package. If you need to run the legacy `Volo.Abp.Cli`, pass `--old` at the end of the command.
+
 ## Installation
 
 ABP CLI is a [dotnet global tool](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools). Install it using a command line window:
@@ -29,53 +31,53 @@ While each command may have a set of options, there are some global options that
 
 - `--skip-cli-version-check` or `-scvc`: Skips checking the latest version of the ABP CLI. If you don't specify, it will check the latest version and shows a warning message if there is a newer version of the ABP CLI.
 - `--skip-extension-version-check` or `-sevc`: Skips checking the latest version of the ABP CLI extensions. If you don't specify, it will check the latest version and download the latest version if there is a newer version of the ABP CLI extensions.
-- `--old`: ABP CLI has two variations: `Volo.Abp.Studio.Cli` and `Volo.Abp.Cli`. New features/templates are added to the `Volo.Abp.Studio.Cli`. But if you want to use the old version, you can use this option **at the end of your commands**. For example, `abp new Acme.BookStore --old`.
+- `--old`: ABP CLI has two variations: `Volo.Abp.Studio.Cli` and `Volo.Abp.Cli`. New features and templates are added to `Volo.Abp.Studio.Cli`. If you want to use the old version, use this option **at the end of your commands**. For example, `abp new Acme.BookStore --old`.
 - `--help` or `-h`: Shows help for the specified command.
 
 ## Commands
 
 Here is the list of all available commands before explaining their details:
 
-- `**[help](../cli#help)`**: Shows help on the usage of the ABP CLI.
-- `**[cli](../cli#cli)`**: Update or remove ABP CLI.
-- `**[new](../cli#new)**`: Generates a new solution based on the ABP [startup templates](../solution-templates/index.md). Use `--modern` to create solutions with the modern template system (React UI).
-- `**[new-module](../cli#new-module)**`: Generates a new module based on the given template. Use `--modern` to use modern module templates.
-- `**[new-package](../cli#new-package)**`: Generates a new package based on the given template.
-- `**[update](../cli#update)**`: Automatically updates all ABP related NuGet and NPM packages in a solution.
-- `**[clean](../cli#clean)**`: Deletes all `BIN` and `OBJ` folders in the current folder.
-- `**[add-package](../cli#add-package)**`: Adds an ABP package to a project.
-- `**[add-package-ref](../cli#add-package-ref)**`: Adds package to given project.
-- `**[install-module](../cli#install-module)**`: Adds a [multi-package application module](../modules/index.md) to a given module.
-- `**[install-local-module](../cli#install-local-module)**`: Installs a local module to given module.
-- `**[list-modules](../cli#list-modules)**`: Lists names of application modules.
-- `**[list-templates](../cli#list-templates)**`: Lists the names of available templates to create a solution.
-- `**[get-source](../cli#get-source)**`: Downloads the source code of a module.
-- `**[add-source-code](../cli#add-source-code)**`: Downloads the source code and replaces package references with project references.
-- `**[init-solution](../cli#init-solution)**`: Creates ABP Studio configuration files for a given solution.
-- `**[kube-connect](../cli#kube-connect)**`: Connects to kubernetes environment. (*Available for* ***Business*** *or higher licenses*)
-- `**[kube-intercept](../cli#kube-intercept)`**: Intercepts a service running in Kubernetes environment. (*Available for* ***Business*** *or higher licenses*)
-- `**[list-module-sources](../cli#list-module-sources)`**: Lists the remote module sources.
-- `**[add-module-source](../cli#add-module-source)*`*: Adds a remote module source.
-- `**[delete-module-source](../cli#delete-module-source)**`: Deletes a remote module source.
-- `**[generate-proxy](../cli#generate-proxy)**`: Generates client side proxies to use HTTP API endpoints.
-- `**[remove-proxy](../cli#remove-proxy)**`: Removes previously generated client side proxies.
-- `**[switch-to-preview](../cli#switch-to-preview)**`: Switches to the latest preview version of the ABP.
-- `**[switch-to-nightly](../cli#switch-to-nightly)**`: Switches to the latest [nightly builds](../release-info/nightly-builds.md) of the ABP related packages on a solution.
-- `**[switch-to-stable](../cli#switch-to-stable)**`: Switches to the latest stable versions of the ABP related packages on a solution.
-- `**[switch-to-local](../cli#switch-to-local)**`: Changes NuGet package references on a solution to local project references.
-- `**[upgrade](../cli#upgrade)**`: It converts the application to use pro modules.
-- `**[translate](../cli#translate)**`: Simplifies to translate localization files when you have multiple JSON [localization](../framework/fundamentals/localization.md) files in a source control repository.
-- `**[login](../cli#login)**`: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
-- `**[login-info](../cli#login-info)**`: Shows the current user's login information.
-- `**[logout](../cli#logout)**`: Logouts from your computer if you've authenticated before.
-- `**[bundle](../cli#bundle)**`: Generates script and style references for ABP Blazor and MAUI Blazor project. 
-- `**[install-libs](../cli#install-libs)**`: Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.
-- `**[clear-download-cache](../cli#clear-download-cache)**`: Clears the templates download cache.
-- `**[check-extensions](../cli#check-extensions)**`: Checks the latest version of the ABP CLI extensions.
-- `**[install-old-cli](../cli#install-old-cli)**`: Installs old ABP CLI.
-- `**[mcp-studio](../cli#mcp-studio)**`: Starts ABP Studio MCP bridge for AI tools (requires ABP Studio running).
-- `**[generate-razor-page](../cli#generate-razor-page)**`: Generates a page class that you can use it in the ASP NET Core pipeline to return an HTML page.
-- `**[generate-jwks](../cli#generate-jwks)**`: Generates an RSA key pair (JWKS public key + PEM private key) for OpenIddict `private_key_jwt` client authentication.
+- [help](../cli#help): Shows help on the usage of the ABP CLI.
+- [cli](../cli#cli): Update or remove ABP CLI.
+- [new](../cli#new): Generates a new solution based on the ABP [startup templates](../solution-templates/index.md). Use `--modern` to create solutions with the modern template system and React UI.
+- [new-module](../cli#new-module): Generates a new module based on the given template. Use `--modern` to use modern module templates.
+- [new-package](../cli#new-package): Generates a new package based on the given template.
+- [update](../cli#update): Automatically updates all ABP related NuGet and NPM packages in a solution.
+- [clean](../cli#clean): Deletes all `BIN` and `OBJ` folders in the current folder.
+- [add-package](../cli#add-package): Adds an ABP package to a project.
+- [add-package-ref](../cli#add-package-ref): Adds package to given project.
+- [install-module](../cli#install-module): Adds a [multi-package application module](../modules/index.md) to a given module.
+- [install-local-module](../cli#install-local-module): Installs a local module to given module.
+- [list-modules](../cli#list-modules): Lists names of application modules.
+- [list-templates](../cli#list-templates): Lists the names of available templates to create a solution.
+- [get-source](../cli#get-source): Downloads the source code of a module.
+- [add-source-code](../cli#add-source-code): Downloads the source code and replaces package references with project references.
+- [init-solution](../cli#init-solution): Creates ABP Studio configuration files for a given solution.
+- [kube-connect](../cli#kube-connect): Connects to Kubernetes environment. (*Available for* ***Business*** *or higher licenses*)
+- [kube-intercept](../cli#kube-intercept): Intercepts a service running in Kubernetes environment. (*Available for* ***Business*** *or higher licenses*)
+- [list-module-sources](../cli#list-module-sources): Lists the remote module sources.
+- [add-module-source](../cli#add-module-source): Adds a remote module source.
+- [delete-module-source](../cli#delete-module-source): Deletes a remote module source.
+- [generate-proxy](../cli#generate-proxy): Generates client side proxies to use HTTP API endpoints.
+- [remove-proxy](../cli#remove-proxy): Removes previously generated client side proxies.
+- [switch-to-preview](../cli#switch-to-preview): Switches to the latest preview version of the ABP.
+- [switch-to-nightly](../cli#switch-to-nightly): Switches to the latest [nightly builds](../release-info/nightly-builds.md) of the ABP related packages on a solution.
+- [switch-to-stable](../cli#switch-to-stable): Switches to the latest stable versions of the ABP related packages on a solution.
+- [switch-to-local](../cli#switch-to-local): Changes NuGet package references on a solution to local project references.
+- [upgrade](../cli#upgrade): It converts the application to use pro modules.
+- [translate](../cli#translate): Simplifies to translate localization files when you have multiple JSON [localization](../framework/fundamentals/localization.md) files in a source control repository.
+- [login](../cli#login): Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
+- [login-info](../cli#login-info): Shows the current user's login information.
+- [logout](../cli#logout): Logouts from your computer if you've authenticated before.
+- [bundle](../cli#bundle): Generates script and style references for ABP Blazor and MAUI Blazor project.
+- [install-libs](../cli#install-libs): Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.
+- [clear-download-cache](../cli#clear-download-cache): Clears the templates download cache.
+- [check-extensions](../cli#check-extensions): Checks the latest version of the ABP CLI extensions.
+- [install-old-cli](../cli#install-old-cli): Installs old ABP CLI.
+- [mcp-studio](../cli#mcp-studio): Starts ABP Studio MCP bridge for AI tools (requires ABP Studio running).
+- [generate-razor-page](../cli#generate-razor-page): Generates a page class that you can use it in the ASP NET Core pipeline to return an HTML page.
+- [generate-jwks](../cli#generate-jwks): Generates an RSA key pair (JWKS public key + PEM private key) for OpenIddict `private_key_jwt` client authentication.
 
 ### help
 
@@ -117,7 +119,9 @@ abp cli clear-cache
 
 ### new
 
-Generates a new solution based on the ABP [startup templates](../solution-templates). See [new solution create sample commands](new-command-samples.md)
+Generates a new solution based on the ABP [startup templates](../solution-templates). See [new solution create sample commands](new-command-samples.md).
+
+The `new` command uses the ABP Studio template system by default. Add `--modern` to create a solution from the modern template system. Modern templates are React-first and are not available through the legacy CLI (`--old`).
 
 Usage:
 
@@ -138,9 +142,9 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
 
 #### Options
 
-- `--template` or `-t`: Specifies the template name. Default template name is `app`, which generates a application solution. Available templates:
-  - `**empty`**: Empty solution template.
-  - `**app*`*: Application template. Additional options:
+- `--template` or `-t`: Specifies the template name. Default template name is `app`, which generates an application solution. Available templates:
+  - **`empty`**: Empty solution template.
+  - **`app`**: Application template. Additional options:
     - `--ui-framework` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       - `mvc`: ASP.NET Core MVC. There are some additional options for this template:
         - `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios. (*Available for* ***Team*** *or higher licenses*)
@@ -148,10 +152,10 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
         - `--tiered`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side. (*Available for* ***Team*** *or higher licenses*)
         - `--progressive-web-app` or `-pwa`: Specifies the project as Progressive Web Application.
       - `blazor-webapp`: Blazor Web App UI. There are some additional options for this template:
-        - `--tiered`: The Auth Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *AuthServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project.
+        - `--tiered`: The Auth Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *AuthServer* and *Blazor* and each runs on different endpoints. If not specified, you will have a single endpoint for your web project.
         - `--progressive-web-app` or `-pwa`: Specifies the project as Progressive Web Application.
       - `blazor`: Blazor UI. There are some additional options for this template:
-        - `--tiered`The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side. (*Available for* ***Team*** *or higher licenses*)
+        - `--tiered`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side. (*Available for* ***Team*** *or higher licenses*)
         - `--progressive-web-app` or `-pwa`: Specifies the project as Progressive Web Application.
       - `blazor-server`: Blazor Server UI. There are some additional options for this template:
         - `--tiered`: The Auth Server and the API Host project comes as separate projects and run at different endpoints. It has 3 startup projects: *HttpApi.Host*, *AuthServer* and *Blazor* and and each runs on different endpoints. If not specified, you will have a single endpoint for your web project. (*Available for* ***Team*** *or higher licenses*)
@@ -174,12 +178,12 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
       - `--without-cms-kit`: When you add a public website to your solution, it automatically includes the [CmsKit](./../modules/cms-kit-pro/index.md) module. If you don't want to include *CmsKit*, you can use this parameter.
     - `--separate-tenant-schema`: Creates a different DbContext for tenant schema. If not specified, the tenant schema is shared with the host schema. This option is only included in PRO templates.
     - `--sample-crud-page` or `-scp`: It adds the [BookStore](./../tutorials/book-store/index.md) sample to your solution.
-    - `--theme` or `-th`: Specifes the theme. Default theme is `leptonx`. Available themes:
+    - `--theme` or `-th`: Specifies the theme. Default theme is `leptonx`. Available themes:
       - `leptonx`: LeptonX Theme. (*Available for* ***Team*** *or higher licenses*)
       - `leptonx-lite`: LeptonX-Lite Theme.
       - `basic`: Basic Theme.
-    - `--use-open-source-template`or `-uost`: Uses the open-source template. (*Available for* ***Team*** *or higher licenses*)
-  - `**app-nolayers`**: Single-layer application template. Additional options:
+    - `--use-open-source-template` or `-uost`: Uses the open-source template. (*Available for* ***Team*** *or higher licenses*)
+  - **`app-nolayers`**: Single-layer application template. Additional options:
     - `--ui-framework` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       - `mvc`: ASP.NET Core MVC. There are some additional options for this template:
       - `angular`: Angular UI. There are some additional options for this template:
@@ -194,12 +198,12 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
     - `--skip-migrations` or `-sm`: Skips the creating initial database migration step.
     - `--skip-migrator` or `-smr`: Skips the run database migrator step.
     - `--sample-crud-page` or `-scp`: It adds the [BookStore](./../tutorials/book-store/index.md) sample to your solution.
-    - `--theme`: Specifes the theme. Default theme is `leptonx`. Available themes:
+    - `--theme`: Specifies the theme. Default theme is `leptonx`. Available themes:
       - `leptonx`: LeptonX Theme. (*Available for* ***Team*** *or higher licenses*)
       - `leptonx-lite`: LeptonX-Lite Theme.
       - `basic`: Basic Theme.
-    - `--use-open-source-template`or `-uost`: Uses the open-source template. (*Available for* ***Team*** *or higher licenses*)
-  - `**microservice`**: Microservice solution template (*Available for* ***Business*** *or higher licenses*).  Additional options:
+    - `--use-open-source-template` or `-uost`: Uses the open-source template. (*Available for* ***Team*** *or higher licenses*)
+  - **`microservice`**: Microservice solution template (*Available for* ***Business*** *or higher licenses*). Additional options:
     - `--ui-framework` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
       - `mvc`: ASP.NET Core MVC. There are some additional options for this template:
       - `angular`: Angular UI. There are some additional options for this template:
@@ -215,7 +219,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
     - `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
       - `ef`: Entity Framework Core.
       - `mongodb`: MongoDB.
-    - `--theme`: Specifes the theme. Default theme is `leptonx`. Available themes:
+    - `--theme`: Specifies the theme. Default theme is `leptonx`. Available themes:
       - `leptonx`: LeptonX Theme.
       - `basic`: Basic Theme.
     - `--public-website`: Public Website is a front-facing website for describing your project, listing your products and doing SEO for marketing purposes. Users can login and register on your website with this website. This option is only included in PRO templates.
@@ -234,7 +238,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
 - `--dont-run-install-libs`: Skip installing client side packages.
 - `--dont-run-bundling`: Skip bundling for Blazor packages.
 - `--no-kubernetes-configuration` or `-nkc`: Skips the Kubernetes configuration files.
-- `--no-social-logins` or `-nsl`: Skipts the social login configuration.
+- `--no-social-logins` or `-nsl`: Skips the social login configuration.
 - `--no-multi-tenancy`: Disables multi-tenancy support in the generated solution.
 - `--no-tests` or `-ntp`: Does not add test projects.
 - *Module Options*: You can skip some modules if you don't want to add them to your solution, or include if you want them (*Available for* ***Team*** *or higher licenses*). Available commands:
@@ -257,14 +261,14 @@ The following options apply only when `--modern` is used:
 
 | Option | Description | Templates |
 | --- | --- | --- |
-| `--shadcn-theme <theme>` | Shadcn/UI color theme. See [Shadcn Theme Values](#shadcn-theme-values). | all `--modern` templates |
-| `--admin-password <password>` | Initial admin user password. | all `--modern` templates |
+| `--shadcn-theme <theme>` | Sets the shadcn/ui color theme for the generated React apps. See [Shadcn Theme Values](#shadcn-theme-values). | all `--modern` templates |
+| `--admin-password <password>` | Sets the initial admin user password. | all `--modern` templates |
 | `--modular` | Generates a modular monolith variant. | `app-nolayers --modern` |
-| `--services <list>` | Comma-separated additional microservice names (for example: `Ordering,Shipping`). | `microservice --modern` |
+| `--services <list>` | Adds extra microservice names as a comma-separated list (for example, `Ordering,Shipping`). | `microservice --modern` |
 
 #### Modern Templates
 
-Add `--modern` to any template to use its modern variant. Modern templates use a different template source (shipped with ABP Studio) compared to legacy templates (which use NuGet extension packages). They are **React-first** and have a narrower set of supported options.
+Add `--modern` to a supported template to use its modern variant. Modern templates use a different template source, shipped with ABP Studio, compared to legacy templates that use NuGet extension packages. They are **React-first** and have a narrower set of supported options.
 
 ```bash
 abp new Acme.BookStore --template app --modern
@@ -272,19 +276,19 @@ abp new Acme.BookStore --template app-nolayers --modern
 abp new Acme.BookStore --template microservice --modern
 ```
 
-
 | Template + `--modern`   | UI Framework                                               | Mobile                   |
 | ----------------------- | ---------------------------------------------------------- | ------------------------ |
 | `app --modern`          | `react` (default) or `no-ui`                               | `none` or `react-native` |
 | `app-nolayers --modern` | `react` (default) or `no-ui`                               | `none` or `react-native` |
 | `microservice --modern` | `react` (default, includes React Admin Console) or `no-ui` | `none` or `react-native` |
 
-
 > Blazor, Angular, MVC, and MAUI Blazor UI frameworks are **not** supported with `--modern`. The `maui` mobile option is also not supported with `--modern`.
 >
 > Options that are not supported by a modern template are ignored with a warning in the CLI output.
 >
-> `--modern` can also be used with `--ready-config-path` and `--solution-history-id`. In these cases, the template in the JSON configuration is mapped to its modern variant.
+> `--modern` can also be used with `--ready-config-path` (`-rcp`) and `--solution-history-id` (`-shi`). In these cases, the template in the JSON configuration or solution history record is mapped to its modern variant. See [Using Existing Configuration](new-command-samples.md#using-existing-configuration) for configuration-file and solution-history examples.
+
+For `app --modern` and `app-nolayers --modern`, the generated solution includes a `react/` folder for your application. The ABP Admin Console is hosted by the backend through the `Volo.Abp.AdminConsole` package and is served from `/admin-console/`; there is no separate `apps/react-admin-console/` folder.
 
 When using `--template microservice --modern`, the generated solution includes:
 
@@ -311,8 +315,14 @@ abp new Acme.BookStore --template microservice --modern
 # Modern microservice with no UI
 abp new Acme.BookStore --template microservice --modern --ui-framework no-ui
 
+# Modern single-layer modular monolith
+abp new Acme.BookStore --template app-nolayers --modern --modular
+
 # Modern microservice with PostgreSQL
 abp new Acme.BookStore --template microservice --modern --database-management-system postgresql
+
+# Modern microservice with additional services
+abp new Acme.BookStore --template microservice --modern --services Ordering,Shipping
 
 # Modern microservice with React Native mobile
 abp new Acme.BookStore --template microservice --modern --mobile react-native

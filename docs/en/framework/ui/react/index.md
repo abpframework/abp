@@ -9,9 +9,9 @@
 
 ## Introduction
 
-ABP provides a **React UI** option for building modern, client-side web applications. The React UI is part of the **modern template system** and is only available when creating a solution with the `--modern` flag via the [ABP CLI](../../../cli/index.md) or through the **Modern Wizard** in [ABP Studio](../../../studio/index.md).
+ABP provides a **React UI** option for building modern, client-side web applications. The React UI is part of the **modern template system** and is available when you create a solution through the **Modern Wizard** in [ABP Studio](../../../studio/index.md) or with `abp new --modern` using [ABP CLI](../../../cli/index.md).
 
-> React UI is **not** available in the legacy (non-modern) templates. You must use the modern template system to get a React-based solution. See [Creating a Solution](#creating-a-solution) below.
+> React UI is **not** available in the legacy (non-modern) templates. Use `Volo.Abp.Studio.Cli` or ABP Studio's modern template flow to create a React-based solution. The legacy CLI path (`--old`) does not create modern React solutions.
 
 The React UI is built on a modern, industry-standard stack:
 
@@ -28,13 +28,13 @@ The React UI is built on a modern, industry-standard stack:
 
 ## React App and Admin Console
 
-Every modern React solution consists of two parts: **your React application** and the **ABP Admin Console**.
+When you create a modern solution with React UI, it contains two UI surfaces: **your React application** and the **ABP Admin Console**.
 
 ### React App (Your Application)
 
 This is **your application** — the user-facing SPA that you own and customize freely. It comes with:
 
-- A sample **Books CRUD page** (when `--sample-crud-page` is used) demonstrating how to build a full create/read/update/delete page with the ABP backend
+- A sample **Books CRUD page** when the template is generated with sample CRUD support, demonstrating how to build a full create/read/update/delete page with the ABP backend
 - A plain **Users page** as a minimal reference
 - Pre-configured authentication via OIDC against the ABP Auth Server
 - Pre-configured HTTP client (Axios) with ABP API integration
@@ -43,7 +43,7 @@ This is where you build your business-specific pages and features.
 
 The location of the React app differs by template type:
 
-- **Layered (`app --modern`) and Single-layer (`app-nolayers --modern`)**: the React app lives at the **root of the solution** (alongside the backend projects).
+- **Layered (`app --modern`) and Single-layer (`app-nolayers --modern`)**: the React app lives in the `react/` folder at the solution root.
 - **Microservice (`microservice --modern`)**: the React app lives at `apps/react/`.
 
 ### React Admin Console (`Volo.Abp.AdminConsole`)
@@ -74,7 +74,7 @@ In both cases the Admin Console is accessible from the main React app via a navi
 
 ### Using ABP CLI
 
-Pass the `--modern` flag to `abp new`:
+Install or update `Volo.Abp.Studio.Cli`, then pass the `--modern` flag to `abp new`:
 
 ````bash
 # Layered app with React UI (default when --modern is used)
@@ -99,11 +99,11 @@ To create a solution without any UI (API-only backend):
 abp new Acme.BookStore --template app --modern --ui-framework no-ui
 ````
 
-See the [ABP CLI documentation](../../../cli/index.md#modern-templates) for the full list of options.
+See the [ABP CLI documentation](../../../cli/index.md#modern-templates) for the full list of modern templates, supported UI/mobile combinations, and modern-only options like `--shadcn-theme`, `--admin-password`, `--modular`, and `--services`.
 
 ### Using ABP Studio
 
-Open ABP Studio and use the **New Solution** wizard. Select the **Modern** template variant and choose **React** as the UI framework. The wizard guides you through all available options and generates the solution.
+Open ABP Studio and use the **New Solution** wizard. Choose the modern template flow, select the solution type you want to create, and use **React** as the UI framework. The wizard shows the options supported by the selected modern template and generates the solution with the same modern template system used by `abp new --modern`.
 
 ## Solution Structure
 
@@ -111,7 +111,7 @@ The layout of the React-related files depends on the template type.
 
 ### Layered and Single-layer Templates
 
-For `app --modern` and `app-nolayers --modern`, the React app lives at the root of the solution alongside the backend projects. The Admin Console is embedded in the backend via the `Volo.Abp.AdminConsole` NuGet package — there is no separate React Admin Console folder.
+For `app --modern` and `app-nolayers --modern`, the React app lives in the `react/` folder at the solution root. The Admin Console is embedded in the backend via the `Volo.Abp.AdminConsole` NuGet package; there is no separate React Admin Console folder.
 
 ```
 Acme.BookStore/
@@ -172,7 +172,7 @@ Acme.BookStore/
 
 ### Runtime Configuration (`dynamic-env.json`)
 
-The React app reads its runtime configuration from `public/dynamic-env.json`. This file is loaded at startup and allows you to change settings without rebuilding the application — useful for different environments (development, staging, production).
+The React app reads its runtime configuration from `public/dynamic-env.json`. This file is loaded at startup and allows you to change settings without rebuilding the application, which is useful for different environments like development, staging, and production.
 
 ```json
 {
@@ -346,7 +346,7 @@ npm run test:coverage
 1. Start the backend (from ABP Studio or `dotnet run` in the `*.HttpApi.Host` project).
 2. Navigate to the React app directory and start the dev server.
 
-For **layered and single-layer** templates, the React app is at the solution root:
+For **layered and single-layer** templates, the React app is in the `react/` folder at the solution root:
 
 ````bash
 cd react
@@ -354,7 +354,7 @@ npm install
 npm run dev
 ````
 
-For the **microservice** template, it is under `apps/`:
+For the **microservice** template, the React app is under `apps/`:
 
 ````bash
 cd apps/react
@@ -382,7 +382,7 @@ The output is placed in `dist/` and can be served by any static file host or CDN
 
 ## Accessing the Admin Console
 
-The Admin Console is accessible from within the main React app. After logging in, you will find a link to the Admin Console in the navigation. Clicking it opens the Admin Console, which is served by the backend at `/admin-console/*`.
+The Admin Console is accessible from within the main React app. After logging in, you will find a link to the Admin Console in the navigation. In layered and single-layer solutions it is served by the backend at `/admin-console/*`; in microservice solutions it is served as a standalone React app through the Web Gateway.
 
 The Admin Console provides full management capabilities for:
 
