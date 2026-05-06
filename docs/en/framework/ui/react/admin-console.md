@@ -106,9 +106,9 @@ GET /admin-console/api/config
 
 This endpoint provides Admin Console runtime settings such as authority, client ID, scopes, application name, customization options, and localization language configuration.
 
-Host applications can configure Admin Console options from the `AdminConsole` configuration section.
+Host applications can configure Admin Console options from the `AdminConsole` configuration section or by configuring `AbpAdminConsoleOptions`.
 
-## `appsettings.json` Customization
+## Configuring the Admin Console
 
 In layered and single-layer modern React templates, the embedded Admin Console is configured from the backend host application's `appsettings.json` file. The generated template includes an `AdminConsole` section similar to the following:
 
@@ -125,6 +125,26 @@ In layered and single-layer modern React templates, the embedded Admin Console i
     "InitialTheme": "system",
     "CustomizationPermissionName": "AdminConsole.Customization"
   }
+}
+```
+
+You can also configure the same values in the module class with `AbpAdminConsoleOptions`:
+
+```csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    Configure<AbpAdminConsoleOptions>(options =>
+    {
+        options.IsEnabled = true;
+        options.RedirectRootToAdminConsole = true;
+        options.Authority = "https://localhost:44300";
+        options.ClientId = "Acme_BookStore_AdminConsole";
+        options.Scope = "openid profile email offline_access Acme_BookStore";
+        options.LocalizationLanguages = new[] { "en", "tr" };
+        options.ThemeOverrideCssPath = "/theme-override.css";
+        options.InitialTheme = "system";
+        options.CustomizationPermissionName = "AdminConsole.Customization";
+    });
 }
 ```
 
