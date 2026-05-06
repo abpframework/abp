@@ -9,7 +9,15 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 2.2.7 (2026-04-20) Latest
+## 3.0.1 (2026-05-06) Latest
+
+- Refactor build steps for ABP Studio in macOS pipeline to improve clarity and structure
+- Skip method renaming for UI.Core to preserve params
+- Fix React admin console template findings
+- Update version to release 3.0.1
+- Fix modern wizard optional module step
+
+## 2.2.7 (2026-04-20)
 
 * Improved Blazor WebApp template setup for easier tiered application development
 * Added application version tracking in analytics events
