@@ -12,52 +12,31 @@ This document contains **brief release notes** for each ABP Studio release. Rele
 ## 3.0.0 (2026-05-06) Latest
 
 - Update version to release 2.2.0 with 10.1.0
-- Cakma cursor custom provider
-- Prefix dotnet file extensions with '*'
-- Update Oracle.EntityFrameworkCore to 10.x
+- Introducing ABP AI Agent
+- Prefix dotnet file extensions with '*' char
+- Update Oracle.EntityFrameworkCore to `10.x`
 - Integrate React auth/config npm packs with local debug linking
-- Update code coverage report by [bot] in https://github.com/volosoft/abp-studio/pull/4606
 - Configure OIDC storage in React template
 - Use the cms-kit newsletter component on public-website when cmskit is selected
 - Apply Homebrew CN mirrors only for Chinese mainland users
-- Upgrade Scriban to 6.6.0
+- Upgrade Scriban to `6.6.0`
 - Verify CMSKit newsletter namespace coverage in public website templates
 - Improve CLI help output format
-- Message section redesign
 - Apply bento-style container to ABP Agent panel
-- Agent messages content styles
-- Mainarea tabs style changes
 - Agent-plan-ask mode colors + splash + abp ai agent logos
-- Update code coverage report by [bot] in https://github.com/volosoft/abp-studio/pull/4743
-- Update code coverage report by [bot] in https://github.com/volosoft/abp-studio/pull/4750
-- Update code coverage report by [bot] in https://github.com/volosoft/abp-studio/pull/4754
 - Layout style changes + one side bar
-- Agent settings
+- Add agent settings
 - GitHub and Sidebar Redesign
 - Fix duplicate `postgresql.yml` output in microservice template
-- Wizard styles
-- Studio styles part 2
 - Fix Solution Runner JSON formatting for arrays
 - Reduce PostHog exception burst noise
-- Studio styles part 3
 - Skip press-enter prompt on `abp login`
 - Add drag & drop support for .sln, .slnx, and .abpsln files
-- Studio styles part 2
-- Switch templates to ABP package references
-- Github issues prs - change group style
 - ABP Thin UI: Layered Template React UI
 - Rename legacy solution system to classic
-- Update classic solution system icon
-- Revert "Build Scriban task before validation"
-- Fix modern wizard DBMS selection reset
-- Modern wizard merge resolve fixes
-- Converted Ai Asistant from abp-helper to ABP Coding Agent
-- Skoc/action templates
+- Converted AI Asistant from abp-helper to ABP Coding Agent
 - Fix microservice MongoDB service template build
 - Abp Studio enhanncements about Shell commands & Browser
-- Update workflow to merge rel-3.0 with rel-2.2
-- Merge branch rel-3.0 with rel-2.2 by [bot] in https://github.com/volosoft/abp-studio/pull/4811
-- Update auto-pr workflow to merge dev with rel-3.0
 - Update version to release 3.0.0 with 10.3.0
 
 ## 2.2.7 (2026-04-20)
