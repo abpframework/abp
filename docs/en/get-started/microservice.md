@@ -64,8 +64,6 @@ On that screen, you can enable multi-tenancy for your solution. After selecting 
 
 Here, you see all the possible UI options supported by that startup solution template. You can pick your favorite one and click the *Next* button for the *Mobile Framework* selection screen:
 
-If you select **React**, the solution includes the main React application and the React Admin Console surface. The Admin Console uses its own OpenIddict client and is served through the Web Gateway with the rest of the solution.
-
 ![abp-studio-new-solution-dialog-mobile-framework](images/abp-studio-new-solution-dialog-mobile-framework-microservice.png)
 
 Here, you see all the mobile applications available in that startup solution template. These mobile applications are well-integrated into your solution and can use the same backend with your web application. They are simple (do not have pre-built features as much as the web application) but a very good starting point to build your mobile application.
@@ -202,7 +200,7 @@ You can click the *Play* button on the root item in *Solution Runner* to start a
 >
 > Some applications/services may fail on the first run. That may be because of service and database dependencies were not satisfied and an error occurs on the application startup. ABP Studio automatically restarts failing services until it is successfully started. Being completely ready for such a distributed solution may take a while, but it will be eventually started.
 
-Once all the applications are ready, you can right-click the main web application and select the *Browse* command. For React UI solutions, this is the `react` application.
+Once all the applications are ready, you can right-click the `Web` application and select the *Browse* command:
 
 ![abp-studio-microservice-solution-runner-browse](images/abp-studio-microservice-solution-runner-browse.png)
 

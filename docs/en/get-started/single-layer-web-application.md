@@ -10,7 +10,7 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC", "Blazor", "BlazorServer", "BlazorWebApp", "NG", "React"],
+    "UI": ["MVC", "Blazor", "BlazorServer", "BlazorWebApp", "NG"],
     "DB": ["EF", "Mongo"]
 }
 ````
@@ -62,8 +62,6 @@ Once your configuration is done, click the *Next* button to navigate to the *UI 
 ![abp-studio-new-solution-dialog-ui-framework-blazor-webapp](images/abp-studio-no-layers-new-solution-dialog-ui-framework-blazor-webapp_dark.png)
 {{ else if UI == "NG" }}
 ![abp-studio-new-solution-dialog-ui-framework-ng](images/abp-studio-no-layers-new-solution-dialog-ui-framework-ng_dark.png)
-{{ else if UI == "React" }}
-React UI is available in the modern template flow with ABP Studio v3.0+. Select **React** in the UI Framework list to create the React app and Admin Console integration.
 {{ end }}
 
 Here, you see all the possible UI options supported by that startup solution template. Pick the **{{ UI_Value }}**. 
@@ -148,9 +146,9 @@ In the Solution Runner section (on the left side) you can see all the runnable a
 
 To start an application, either click the *Play* icon near to the application or right-click and select the *Run* -> *Start* context menu item.
 
-You can start the `Acme.BookStore`{{ if UI == "NG" }} and `Acme.BookStore.Angular`{{ else if UI == "React" }} and `react`{{ end }}. 
+You can start the `Acme.BookStore`{{ if UI == "NG" }} and `Acme.BookStore.Angular`{{ end }}. 
 
-Once the {{ if UI == "React" }}`react`{{ else }}`Acme.BookStore{{ if UI == "NG" }}.Angular{{ end }}`{{ end }} application started, you can right-click it and select the *Browse* command:
+Once the `Acme.BookStore{{ if UI == "NG" }}.Angular{{ end }}` application started, you can right-click it and select the *Browse* command:
 
 ![abp-studio-quick-start-browse-command](images/abp-studio-no-layers-quick-start-browse-command_dark.png)
 
@@ -182,11 +180,7 @@ Once the solution is opened in Visual Studio, you should see a screen like shown
 
 ![visual-studio-bookstore-application](images/no-layers-visual-studio-bookstore-application_dark.png)
 
-{{ if UI == "React" }}
-You can then hit *F5* or *Ctrl + F5* to run the backend host application. Start the React application from the `react` folder with `npm run dev`, then browse the React UI.
-{{ else }}
 You can then hit *F5* or *Ctrl + F5* to run the web application. It will run and open the application UI in your default browser:
-{{ end }}
 
 ![bookstore-browser-users-page](images/no-layers-bookstore-browser-users-page_dark.png)
 
