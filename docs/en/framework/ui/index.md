@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Explore ABP's UI options, including MVC, Blazor, Angular, React Native, and MAUI, to build dynamic applications effortlessly."
+    "Description": "Explore ABP's UI options, including React, MVC, Blazor, Angular, React Native, and MAUI, to build dynamic applications effortlessly."
 }
 ```
 
@@ -9,6 +9,7 @@
 
 ABP provides several options for building the user interface (UI) in your applications. Here are some of the officially supported UI options you can use with ABP:
 
+* [React](./react/index.md) *(modern template system only)*
 * [MVC / Razor Pages](./mvc-razor-pages/overall.md)
 * [Blazor](./blazor/overall.md)
 * [Angular](./angular/quick-start.md)
