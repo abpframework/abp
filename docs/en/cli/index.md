@@ -9,7 +9,7 @@
 
 ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions or [ABP Studio](../studio/index.md) features.
 
-This document describes `Volo.Abp.Studio.Cli`, the ABP CLI package that works with the ABP Studio template system. Modern templates, including React UI support, are available through this package. If you need to run the legacy `Volo.Abp.Cli`, pass `--old` at the end of the command.
+This document describes `Volo.Abp.Studio.Cli`, the ABP CLI package that works with the ABP Studio template system. Modern templates, including React UI support, are available through this package. If you need to run the classic `Volo.Abp.Cli`, pass `--old` at the end of the command.
 
 ## Installation
 
@@ -121,7 +121,7 @@ abp cli clear-cache
 
 Generates a new solution based on the ABP [startup templates](../solution-templates). See [new solution create sample commands](new-command-samples.md).
 
-The `new` command uses the ABP Studio template system by default. Add `--modern` to create a solution from the modern template system. Modern templates are React-first and are not available through the legacy CLI (`--old`).
+The `new` command uses the ABP Studio template system by default. Add `--modern` to create a solution from the modern template system. Modern templates are React-first and are not available through the classic CLI (`--old`).
 
 Usage:
 
@@ -252,7 +252,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
   - `-chat`: Includes the Chat module.
   - `--ai-management`: Includes the AI Management module.
   - `--ai-providers`: Specifies AI providers (comma-separated). Available values: `Ollama`, `OpenAI`. Requires `--ai-management`.
-- `--legacy`: Generates a legacy solution.
+- `--legacy`: Generates a classic solution.
   - `trust-version`: Trusts the user's version and does not check if the version exists or not. If the template with the given version is found in the cache, it will be used, otherwise throws an exception.
 
 ##### Modern Template Options
@@ -268,7 +268,7 @@ The following options apply only when `--modern` is used:
 
 #### Modern Templates
 
-Add `--modern` to a supported template to use its modern variant. Modern templates use a different template source, shipped with ABP Studio, compared to legacy templates that use NuGet extension packages. They are **React-first** and have a narrower set of supported options.
+Add `--modern` to a supported template to use its modern variant. Modern templates use a different template source, shipped with ABP Studio, compared to classic templates that use NuGet extension packages. They are **React-first** and have a narrower set of supported options.
 
 ```bash
 abp new Acme.BookStore --template app --modern

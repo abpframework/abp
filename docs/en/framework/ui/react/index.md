@@ -11,7 +11,7 @@
 
 ABP provides a **React UI** option for building modern, client-side web applications. The React UI is part of the **modern template system** and is available when you create a solution through the **Modern Wizard** in [ABP Studio](../../../studio/index.md) or with `abp new --modern` using [ABP CLI](../../../cli/index.md).
 
-> React UI is **not** available in the legacy (non-modern) templates. Use `Volo.Abp.Studio.Cli` or ABP Studio's modern template flow to create a React-based solution. The legacy CLI path (`--old`) does not create modern React solutions.
+> React UI is **not** available in the classic (non-modern) templates. Use `Volo.Abp.Studio.Cli` or ABP Studio's modern template flow to create a React-based solution. The classic CLI path (`--old`) does not create modern React solutions.
 
 The React UI is built on a modern, industry-standard stack:
 
