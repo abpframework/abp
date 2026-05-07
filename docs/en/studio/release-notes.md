@@ -9,7 +9,21 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 2.2.7 (2026-04-20) Latest
+## 3.0.0 (2026-05-06) Latest
+
+* Introducing ABP AI Agent: A next-generation smart assistant to accelerate your development
+* Enhanced ABP Coding Agent: Smarter code generation and guidance integrated directly into your workflow
+* Modern UI Redesign: New "Bento-style" dashboard and a streamlined single sidebar for better focus
+* Drag & Drop Support: Easily open your projects by dragging .sln, .slnx, or .abpsln files into the app
+* Improved React Templates: Optimized authentication, local debugging, and a new "Thin UI" layered template option
+* CMS Kit Newsletter Integration: Ready-to-use newsletter component for public websites
+* Faster CLI Experience: Simplified abp login process and improved help output for better usability
+* Enhanced Solution Runner: Smarter project management and more reliable configuration handling
+* Simplified Project Structure: Legacy systems renamed to "Classic" for a cleaner transition to modern architectures
+* System Stability: Significant reduction in background noise/errors and optimized performance
+* Global Platform Update: Fully updated to the latest underlying framework versions (v10.3.0)
+
+## 2.2.7 (2026-04-20)
 
 * Improved Blazor WebApp template setup for easier tiered application development
 * Added application version tracking in analytics events
@@ -24,38 +38,38 @@ This document contains **brief release notes** for each ABP Studio release. Rele
 
 ## 2.2.6 (2026-04-08)
 
-- Disable Scriban 7.0 cumulative output limit for template rendering
+* Disable Scriban 7.0 cumulative output limit for template rendering
 
 ## 2.2.5 (2026-04-08)
 
-- Upgraded GPT-5 → GPT-5.4 and improved AI management (providers, blob storage, CLI options)
-- Fixed critical build issues (MongoDB, MAUI) and improved overall stability
-- Enhanced monitoring (HTTP requests & exceptions)
-- Added DBMS auto-detection from connection string
-- Upgraded to ABP 10.2 and Scriban 7.0.0
-- Improved developer experience and telemetry (PostHog)
-- Minor UI fixes and workflow adjustments (manual build trigger)
+* Upgraded GPT-5 → GPT-5.4 and improved AI management (providers, blob storage, CLI options)
+* Fixed critical build issues (MongoDB, MAUI) and improved overall stability
+* Enhanced monitoring (HTTP requests & exceptions)
+* Added DBMS auto-detection from connection string
+* Upgraded to ABP 10.2 and Scriban 7.0.0
+* Improved developer experience and telemetry (PostHog)
+* Minor UI fixes and workflow adjustments (manual build trigger)
 
 ## 2.2.4 (2026-03-25)
 
-- Add `Template Create and Build` workflow
-- Disable NuGetAudit in template common.props to prevent CLI deadlock during initial migration
+* Add `Template Create and Build` workflow
+* Disable NuGetAudit in template common.props to prevent CLI deadlock during initial migration
 
 ## 2.2.3 (2026-03-24)
 
-- Fix PostHog environment detection
+* Fix PostHog environment detection
 
 ## 2.2.1 (2026-02-20)
 
-- Fix tiered Blazor WebApp template HttpApi reference
-- Add LeptonX theme templates AuthServer and HttpApi projects
-- Enable razor runtime compilation on templates
-- Configure HttpClientFactoryOptions for CLI client
-- Bump ABP to 10.1.1 and LeptonX to 5.1.1
-- Blazor & Angular UIs: Add AI Management option to the Startup Templates (app-nolayers, app, ms templates)
-- Handle docker container start failures in solution runner
-- Fix import module version dropdown ordering
-- Add PostHog integration for Studio and CLI
+* Fix tiered Blazor WebApp template HttpApi reference
+* Add LeptonX theme templates AuthServer and HttpApi projects
+* Enable razor runtime compilation on templates
+* Configure HttpClientFactoryOptions for CLI client
+* Bump ABP to 10.1.1 and LeptonX to 5.1.1
+* Blazor & Angular UIs: Add AI Management option to the Startup Templates (app-nolayers, app, ms templates)
+* Handle docker container start failures in solution runner
+* Fix import module version dropdown ordering
+* Add PostHog integration for Studio and CLI
 
 
 ## 2.2.1 (2026-02-20)
