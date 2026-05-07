@@ -1,8 +1,10 @@
-# Official React UI for ABP Framework Is Here
+# Official React UI for ABP Framework Is Finally Here
 
-The official React UI for ABP Framework is no longer just something on the way.
+For a long time, official React support in ABP felt like one of those things people kept asking for, hoping for, and waiting to see become real.
 
-With **ABP 10.4.0-rc.1**, the new React UI is available as a beta/preview experience in the modern template system. This RC gives the community an early chance to try it, share feedback, and help us polish the final details before **ABP 10.4 stable**, where we plan to make the React UI generally available.
+With **ABP 10.4.0-rc.1**, that wait ends. You can now create, run, and explore the React UI today as a beta/preview experience in the modern template system.
+
+As part of the ABP Framework team, and as one of the developers working on this React effort, I am genuinely happy to finally share it. This RC gives the community an early chance to try it, share feedback, and help us polish the final details before **ABP 10.4 stable**, where we plan to make the React UI generally available.
 
 ![abp-studio-project-creation-react](images/abp-studio-project-creation-react.png)
 
@@ -57,7 +59,7 @@ The current template already points to the kind of experience React developers e
 - Vitest for frontend tests
 - A dedicated Admin Console for ABP module administration
 
-From the source code and the documentation, it is clear that the React UI is being built as a real ABP solution experience, not just a login page plus a few demo screens.
+Even in its current form, the React UI already feels like a real ABP solution experience, not just a login page plus a few demo screens.
 
 ![abp-react-app-screenshot.png](images/abp-react-app-screenshot.png)
 
@@ -101,6 +103,6 @@ Once ABP 10.4 stable is released, the same modern React experience is planned to
 
 ## What's next
 
-The React UI is now real in ABP 10.4 RC, and the final polishing work continues toward the stable release. The big story is no longer a roadmap promise. The big story is that **official React support has arrived in ABP Framework**, and it is being prepared for GA with ABP 10.4 stable.
+The React UI is now real in ABP 10.4 RC, and the final polishing work continues toward the stable release. If you have been waiting for an official React path in ABP, this is the point where it stops being a wish and starts becoming something you can actually build with.
 
-If you have been waiting for an official React path in ABP, this is the right time to try it and share feedback.
+Try it, explore it, and share feedback with us while we keep polishing it for **ABP 10.4 stable**.
