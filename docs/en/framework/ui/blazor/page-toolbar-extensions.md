@@ -60,7 +60,7 @@ protected override async ValueTask SetToolbarItemsAsync()
     {
         //TODO: Write your custom code
         return Task.CompletedTask;
-    }, MudBlazor.Icons.Material.Filled.FileUpload, MudBlazor.Color.Secondary);
+    }, MudBlazor.Icons.Material.Filled.Upload, MudBlazor.Color.Secondary);
 }
 ```
 
@@ -120,7 +120,7 @@ namespace MyCompanyName.MyProjectName.Blazor.Pages.Identity
             {
                 //TODO: Write your custom code
                 return Task.CompletedTask;
-            }, MudBlazor.Icons.Material.Filled.FileUpload, MudBlazor.Color.Secondary);
+            }, MudBlazor.Icons.Material.Filled.Upload, MudBlazor.Color.Secondary);
         }
     }
 }

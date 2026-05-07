@@ -96,21 +96,26 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public virtual bool IsParameterVisible(DocumentParameterDto parameter)
         {
+            return IsParameterVisibleGiven(parameter, UserPreferences);
+        }
+
+        // Per-rule semantics for a (parameter, current selection) context:
+        //   - rule.Value == null              : malformed list, skip the rule (fail-open)
+        //   - key not in current document     : rule references an unknown parameter, skip (fail-open)
+        //   - rule.Value.Count == 0           : explicit empty allow-list, hide the parameter (author intent: "never show")
+        //   - selected value not in allow-list: hide
+        //   - selected value in allow-list    : pass this rule
+        protected virtual bool IsParameterVisibleGiven(DocumentParameterDto parameter, IReadOnlyDictionary<string, string> selectedValues)
+        {
             if (parameter.DependsOn == null || parameter.DependsOn.Count == 0)
             {
                 return true;
             }
 
-            // Per-rule semantics:
-            //   - rule.Value == null            : malformed list, skip the rule (fail-open)
-            //   - key not in current document   : rule references an unknown parameter, skip (fail-open)
-            //   - rule.Value.Count == 0         : explicit empty allow-list, hide the parameter (author intent: "never show")
-            //   - current value not in allow-list: hide
-            //   - current value in allow-list   : pass this rule
             return parameter.DependsOn.All(rule =>
                 rule.Value == null || !RenderedParameterNames.Contains(rule.Key)
                 || (rule.Value.Count > 0
-                    && UserPreferences.TryGetValue(rule.Key, out var current)
+                    && selectedValues.TryGetValue(rule.Key, out var current)
                     && rule.Value.Contains(current)));
         }
 
@@ -872,13 +877,16 @@ namespace Volo.Docs.Pages.Documents.Project
         {
             if (!DocumentPreferences?.Parameters?.Any() ?? true)
             {
-                return; 
+                return;
             }
 
-            AlternativeOptionLinkQueries = CollectAlternativeOptionLinksRecursively();
+            AlternativeOptionLinkQueries = CollectAlternativeOptionLinksRecursively(0, new Dictionary<string, string>());
         }
 
-        private List<string> CollectAlternativeOptionLinksRecursively(int index = 0)
+        // Generates all parameter combinations as query strings, but skips parameters whose DependsOn rules
+        // aren't satisfied by the partially-built selection. This avoids producing nonsensical combinations
+        // (e.g. UI=MVC&BlazorUI=MudBlazor when BlazorUI depends on UI ∈ {Blazor, BlazorServer, BlazorWebApp}).
+        private List<string> CollectAlternativeOptionLinksRecursively(int index, Dictionary<string, string> selected)
         {
             if (index >= DocumentPreferences.Parameters.Count)
             {
@@ -886,13 +894,22 @@ namespace Volo.Docs.Pages.Documents.Project
             }
 
             var option = DocumentPreferences.Parameters[index];
+
+            // If this parameter is hidden in the current selection context, omit it from the query
+            // and continue with the next parameter (no Cartesian fan-out for this option).
+            if (!IsParameterVisibleGiven(option, selected))
+            {
+                return CollectAlternativeOptionLinksRecursively(index + 1, selected);
+            }
+
             var queries = new List<string>();
 
             foreach (var key in option.Values.Keys)
             {
-                var linkQuery = new StringBuilder($"{option.Name}={key}");
+                var linkQuery = $"{option.Name}={key}";
 
-                var restOfQueries = CollectAlternativeOptionLinksRecursively(index + 1);
+                var nextSelected = new Dictionary<string, string>(selected) { [option.Name] = key };
+                var restOfQueries = CollectAlternativeOptionLinksRecursively(index + 1, nextSelected);
 
                 if (restOfQueries.Any())
                 {
@@ -903,7 +920,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 }
                 else
                 {
-                    queries.Add($"{linkQuery}");
+                    queries.Add(linkQuery);
                 }
             }
 

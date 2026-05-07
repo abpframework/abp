@@ -26,7 +26,7 @@ LeptonX theme is implemented and ready to use with ABP. No custom implementation
 > * `Volo.Abp.AspNetCore.Components.{Server,WebAssembly}.MudBlazorLeptonXTheme`
 > * `Volo.Abp.AspNetCore.Components.{Server,WebAssembly}.MudBlazorLeptonXTheme.Bundling`
 > * Module types: `Abp{...}MudBlazorLeptonXThemeModule`, `Abp{...}MudBlazorLeptonXThemeBundlingModule`
-> * Layout namespace: `Volo.Abp.AspNetCore.Components.{Server,WebAssembly}.MudBlazorLeptonXTheme.Themes.MudBlazorLeptonX`
+> * Layout components live under `Volo.Abp.AspNetCore.Components.{Web,Server,WebAssembly}.MudBlazorLeptonXTheme.Components.ApplicationLayout` (with `SideMenu`, `TopMenu`, and `PublicWebsiteLayout` sub-namespaces).
 
 {{end}}
 

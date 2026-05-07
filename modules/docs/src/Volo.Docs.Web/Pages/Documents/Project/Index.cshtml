@@ -474,7 +474,14 @@
             <div class="docs-content-field">
                 <div class="docs-text-field">
                     <div class="position-relative">
-                        @if (Model.DocumentPreferences != null && Model.DocumentPreferences.Parameters != null && Model.DocumentPreferences.Parameters.Any())
+                        @{
+                            // Filter the parameters that should actually be shown (after applying DependsOn rules)
+                            // before computing the grid layout, otherwise hidden parameters would still occupy a column slot.
+                            var visibleParameters = Model.DocumentPreferences?.Parameters?
+                                .Where(p => Model.IsParameterVisible(p))
+                                .ToList() ?? new List<DocumentParameterDto>();
+                        }
+                        @if (visibleParameters.Count > 0)
                         {
                             <div class="alert alert-primary alert-criteria">
                                 <abp-row>
@@ -488,10 +495,12 @@
                                 <abp-row class="gx-2">
                                     @{
                                         const int maxCellCount = 3;
-                                        var count = Model.DocumentPreferences.Parameters.Count;
+                                        var count = visibleParameters.Count;
                                         var rowCount = count / maxCellCount + (count % maxCellCount > 0 ? 1 : 0);
                                         var cellSize = 12 / (count > maxCellCount ? maxCellCount : count);
-                                        var latestCellSize = 12 / count - (rowCount - 1) * maxCellCount;
+                                        // Last row may have fewer items than maxCellCount; size them to fill the row width.
+                                        var lastRowCellCount = count - (rowCount - 1) * maxCellCount;
+                                        var latestCellSize = 12 / lastRowCellCount;
 
                                         string BuildParameterDivClass(int index)
                                         {
@@ -503,10 +512,9 @@
 
                                         for (var i = 0; i < count; ++i)
                                         {
-                                            var parameter = Model.DocumentPreferences.Parameters[i];
-                                            var hiddenStyle = Model.IsParameterVisible(parameter) ? null : "display:none;";
+                                            var parameter = visibleParameters[i];
 
-                                            <div class="@BuildParameterDivClass(i)" style="@hiddenStyle">
+                                            <div class="@BuildParameterDivClass(i)">
                                                 <div class="custom-input-group">
                                                     <span class="input-group-text" id="@("Section" + parameter.Name + "ComboboxAddonId")">@(parameter.DisplayName)</span>
                                                     <select class="doc-section-combobox form-select"
