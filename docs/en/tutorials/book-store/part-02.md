@@ -651,9 +651,9 @@ Open the `Books.razor` and replace the content as the following:
         </CardHeaderContent>
     </MudCardHeader>
     <MudCardContent>
-        <AbpMudExtensibleDataGrid T="BookDto"
-                                  ServerData="OnDataGridReadAsync"
-                                  RowsPerPage="@PageSize">
+        <MudDataGrid T="BookDto"
+                     ServerData="OnDataGridReadAsync"
+                     RowsPerPage="@PageSize">
             <Columns>
                 <PropertyColumn Property="x => x.Name"
                                 Title="@L["Name"]" />
@@ -678,7 +678,7 @@ Open the `Books.razor` and replace the content as the following:
                     </CellTemplate>
                 </PropertyColumn>
             </Columns>
-        </AbpMudExtensibleDataGrid>
+        </MudDataGrid>
     </MudCardContent>
 </MudCard>
 
@@ -696,7 +696,7 @@ Open the `Books.razor` and replace the content as the following:
 * Inherited from `AbpMudCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>` which implements all the CRUD details for us.
 * `Entities`, `TotalCount`, `PageSize`, `OnDataGridReadAsync` are defined in the base class.
 * `LocalizationResource` is set to the `BookStoreResource` to localize the texts.
-* `AbpMudExtensibleDataGrid` is the ABP-extended `MudDataGrid` that supports the [data table column extension system](../../framework/ui/blazor/data-table-column-extensions.md).
+* This page uses the standard MudBlazor `MudDataGrid` with `<PropertyColumn>` definitions. ABP also ships an `AbpMudExtensibleDataGrid` that integrates with the [data table column extension system](../../framework/ui/blazor/data-table-column-extensions.md) when you need to extend module pages.
 
 While the code above is pretty easy to understand, you can check the MudBlazor [Card](https://mudblazor.com/components/card) and [DataGrid](https://mudblazor.com/components/datagrid) documents to understand them better.
 

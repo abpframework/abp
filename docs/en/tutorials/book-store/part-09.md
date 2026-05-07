@@ -1413,8 +1413,9 @@ public partial class Authors
     private async Task<GridData<AuthorDto>> OnDataGridReadAsync(GridState<AuthorDto> state)
     {
         CurrentSorting = state.SortDefinitions
-            .Select(s => s.SortBy + (s.Descending ? " DESC" : ""))
-            .Aggregate("", (a, b) => string.IsNullOrEmpty(a) ? b : a + "," + b);
+            .Where(s => !string.IsNullOrWhiteSpace(s.SortBy?.ToString()))
+            .Select(s => $"{s.SortBy}{(s.Descending ? " DESC" : "")}")
+            .JoinAsString(",");
         CurrentPage = state.Page;
 
         await GetAuthorsAsync();
@@ -1426,12 +1427,12 @@ public partial class Authors
     {
         NewAuthor = new CreateAuthorDto();
         if (CreateFormRef != null) await CreateFormRef.ResetAsync();
-        await CreateAuthorDialog.ShowAsync();
+        await InvokeAsync(() => CreateAuthorDialog.ShowAsync());
     }
 
     private Task CloseCreateAuthorDialogAsync()
     {
-        return CreateAuthorDialog.CloseAsync();
+        return InvokeAsync(() => CreateAuthorDialog.CloseAsync());
     }
 
     private async Task OpenEditAuthorDialogAsync(AuthorDto author)
@@ -1439,12 +1440,12 @@ public partial class Authors
         EditingAuthorId = author.Id;
         EditingAuthor = ObjectMapper.Map<AuthorDto, UpdateAuthorDto>(author);
         if (EditFormRef != null) await EditFormRef.ResetAsync();
-        await EditAuthorDialog.ShowAsync();
+        await InvokeAsync(() => EditAuthorDialog.ShowAsync());
     }
 
     private Task CloseEditAuthorDialogAsync()
     {
-        return EditAuthorDialog.CloseAsync();
+        return InvokeAsync(() => EditAuthorDialog.CloseAsync());
     }
 
     private async Task DeleteAuthorAsync(AuthorDto author)
@@ -1475,7 +1476,7 @@ public partial class Authors
             {
                 await AuthorAppService.CreateAsync(NewAuthor);
                 await GetAuthorsAsync();
-                await CreateAuthorDialog.CloseAsync();
+                await InvokeAsync(() => CreateAuthorDialog.CloseAsync());
             }
         }
         catch(Exception ex)
@@ -1493,7 +1494,7 @@ public partial class Authors
             {
                 await AuthorAppService.UpdateAsync(EditingAuthorId, EditingAuthor);
                 await GetAuthorsAsync();
-                await EditAuthorDialog.CloseAsync();
+                await InvokeAsync(() => EditAuthorDialog.CloseAsync());
             }
         }
         catch(Exception ex)

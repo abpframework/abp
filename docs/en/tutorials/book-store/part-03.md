@@ -1253,7 +1253,7 @@ Open the `Books.razor` and add the following code to the end of the page:
 
 * The form uses `[Required]`/DataAnnotations for validation; messages are localized via the same `AbpResource` localization system.
 * The `_createDialog` field, `CloseCreateDialogAsync`, `CreateFormRef` and `CreateEntityAsync` are all defined in `AbpMudCrudPageBase`. Check the [MudBlazor documentation](https://mudblazor.com/components/dialog) if you want to understand the `MudDialog` and other components.
-* `MudDatePicker.@bind-Date` requires a nullable `DateTime?`. If your DTO uses non-nullable `DateTime`, change it to `DateTime?` (`public DateTime? PublishDate { get; set; }`) when using the MudBlazor variant — see [abp-samples/MudBlazorSample](https://github.com/abpframework/abp-samples/tree/master/MudBlazorSample) for a complete reference.
+* `MudDatePicker.@bind-Date` requires a nullable `DateTime?`. If your DTO uses non-nullable `DateTime`, change it to `DateTime?` (`public DateTime? PublishDate { get; set; }`) when using the MudBlazor variant.
 
 {{end}}
 
@@ -1291,23 +1291,23 @@ The `DataGridEntityActionsColumn` component is used to show an "Actions" dropdow
 
 {{if BlazorUI == "MudBlazor"}}
 
-Open the `Books.razor` and add the following `MudDataGridEntityActionsColumn` as the first column inside the `<Columns>` section of the `AbpMudExtensibleDataGrid`:
+Open the `Books.razor` and add the following `TemplateColumn` as the first column inside the `<Columns>` section of the `MudDataGrid`:
 
 ````razor
-<MudDataGridEntityActionsColumn T="BookDto" @ref="@EntityActionsColumn">
+<TemplateColumn T="BookDto" Title="@L["Actions"]" Sortable="false">
     <CellTemplate>
-        <MudEntityActions T="BookDto" Context="entityContext">
-            <MudEntityAction T="BookDto"
-                             Text="@L["Edit"]"
-                             Clicked="() => OpenEditDialogAsync(entityContext)" />
-        </MudEntityActions>
+        <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true">
+            <MudMenuItem OnClick="@(() => OpenEditDialogAsync(context.Item))">
+                @L["Edit"]
+            </MudMenuItem>
+        </MudMenu>
     </CellTemplate>
-</MudDataGridEntityActionsColumn>
+</TemplateColumn>
 ````
 
 * `OpenEditDialogAsync` is defined in the base class which takes the entity (book) to edit.
 
-The `MudDataGridEntityActionsColumn` component is used to show an "Actions" menu for each row in the data grid. It shows a **single icon button** when there is only one available action and a dropdown menu when there are multiple actions.
+This renders an "Actions" dropdown menu (`MudMenu`) for each row in the data grid. We will add the **Delete** menu item later in the *Deleting a Book* section.
 
 {{end}}
 
@@ -1463,13 +1463,17 @@ Add the following `EntityAction` code under the "Edit" action inside `EntityActi
 
 {{if BlazorUI == "MudBlazor"}}
 
-Add the following `MudEntityAction` code under the "Edit" action inside `MudEntityActions`:
+Add the following `MudMenuItem` after the "Edit" item inside the actions `MudMenu`:
 
 ````razor
-<MudEntityAction T="BookDto"
-                 Text="@L["Delete"]"
-                 Clicked="() => DeleteEntityAsync(entityContext)"
-                 ConfirmationMessage="() => GetDeleteConfirmationMessage(entityContext)" />
+<MudMenuItem OnClick="@(async () => {
+    if (await Message.Confirm(GetDeleteConfirmationMessage(context.Item)))
+    {
+        await DeleteEntityAsync(context.Item);
+    }
+})">
+    @L["Delete"]
+</MudMenuItem>
 ````
 
 {{end}}
@@ -1706,23 +1710,18 @@ Here's the complete code to create the book management CRUD page, that has been 
         </CardHeaderActions>
     </MudCardHeader>
     <MudCardContent>
-        <AbpMudExtensibleDataGrid T="BookDto"
-                                  ServerData="OnDataGridReadAsync"
-                                  RowsPerPage="@PageSize">
+        <MudDataGrid T="BookDto"
+                     ServerData="OnDataGridReadAsync"
+                     RowsPerPage="@PageSize">
             <Columns>
-                <MudDataGridEntityActionsColumn T="BookDto" @ref="@EntityActionsColumn">
+                <TemplateColumn T="BookDto" Title="@L["Actions"]" Sortable="false">
                     <CellTemplate>
-                        <MudEntityActions T="BookDto" Context="entityContext">
-                            <MudEntityAction T="BookDto"
-                                             Text="@L["Edit"]"
-                                             Clicked="() => OpenEditDialogAsync(entityContext)" />
-                            <MudEntityAction T="BookDto"
-                                             Text="@L["Delete"]"
-                                             Clicked="() => DeleteEntityAsync(entityContext)"
-                                             ConfirmationMessage="() => GetDeleteConfirmationMessage(entityContext)" />
-                        </MudEntityActions>
+                        <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true">
+                            <MudMenuItem OnClick="@(() => OpenEditDialogAsync(context.Item))">@L["Edit"]</MudMenuItem>
+                            <MudMenuItem OnClick="@(async () => { if (await Message.Confirm(GetDeleteConfirmationMessage(context.Item))) { await DeleteEntityAsync(context.Item); } })">@L["Delete"]</MudMenuItem>
+                        </MudMenu>
                     </CellTemplate>
-                </MudDataGridEntityActionsColumn>
+                </TemplateColumn>
                 <PropertyColumn Property="x => x.Name" Title="@L["Name"]" />
                 <PropertyColumn Property="x => x.Type" Title="@L["Type"]">
                     <CellTemplate>
@@ -1741,7 +1740,7 @@ Here's the complete code to create the book management CRUD page, that has been 
                     </CellTemplate>
                 </PropertyColumn>
             </Columns>
-        </AbpMudExtensibleDataGrid>
+        </MudDataGrid>
     </MudCardContent>
 </MudCard>
 
