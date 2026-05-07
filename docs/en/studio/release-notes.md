@@ -11,33 +11,17 @@ This document contains **brief release notes** for each ABP Studio release. Rele
 
 ## 3.0.0 (2026-05-06) Latest
 
-- Update version to release 2.2.0 with 10.1.0
-- Introducing ABP AI Agent
-- Prefix dotnet file extensions with '*' char
-- Update Oracle.EntityFrameworkCore to `10.x`
-- Integrate React auth/config npm packs with local debug linking
-- Configure OIDC storage in React template
-- Use the cms-kit newsletter component on public-website when cmskit is selected
-- Apply Homebrew CN mirrors only for Chinese mainland users
-- Upgrade Scriban to `6.6.0`
-- Verify CMSKit newsletter namespace coverage in public website templates
-- Improve CLI help output format
-- Apply bento-style container to ABP Agent panel
-- Agent-plan-ask mode colors + splash + abp ai agent logos
-- Layout style changes + one side bar
-- Add agent settings
-- GitHub and Sidebar Redesign
-- Fix duplicate `postgresql.yml` output in microservice template
-- Fix Solution Runner JSON formatting for arrays
-- Reduce PostHog exception burst noise
-- Skip press-enter prompt on `abp login`
-- Add drag & drop support for .sln, .slnx, and .abpsln files
-- ABP Thin UI: Layered Template React UI
-- Rename legacy solution system to classic
-- Converted AI Asistant from abp-helper to ABP Coding Agent
-- Fix microservice MongoDB service template build
-- Abp Studio enhanncements about Shell commands & Browser
-- Update version to release 3.0.0 with 10.3.0
+* Introducing ABP AI Agent: A next-generation smart assistant to accelerate your development
+* Enhanced ABP Coding Agent: Smarter code generation and guidance integrated directly into your workflow
+* Modern UI Redesign: New "Bento-style" dashboard and a streamlined single sidebar for better focus
+* Drag & Drop Support: Easily open your projects by dragging .sln, .slnx, or .abpsln files into the app
+* Improved React Templates: Optimized authentication, local debugging, and a new "Thin UI" layered template option
+* CMS Kit Newsletter Integration: Ready-to-use newsletter component for public websites
+* Faster CLI Experience: Simplified abp login process and improved help output for better usability
+* Enhanced Solution Runner: Smarter project management and more reliable configuration handling
+* Simplified Project Structure: Legacy systems renamed to "Classic" for a cleaner transition to modern architectures
+* System Stability: Significant reduction in background noise/errors and optimized performance
+* Global Platform Update: Fully updated to the latest underlying framework versions (v10.3.0)
 
 ## 2.2.7 (2026-04-20)
 
@@ -54,38 +38,38 @@ This document contains **brief release notes** for each ABP Studio release. Rele
 
 ## 2.2.6 (2026-04-08)
 
-- Disable Scriban 7.0 cumulative output limit for template rendering
+* Disable Scriban 7.0 cumulative output limit for template rendering
 
 ## 2.2.5 (2026-04-08)
 
-- Upgraded GPT-5 → GPT-5.4 and improved AI management (providers, blob storage, CLI options)
-- Fixed critical build issues (MongoDB, MAUI) and improved overall stability
-- Enhanced monitoring (HTTP requests & exceptions)
-- Added DBMS auto-detection from connection string
-- Upgraded to ABP 10.2 and Scriban 7.0.0
-- Improved developer experience and telemetry (PostHog)
-- Minor UI fixes and workflow adjustments (manual build trigger)
+* Upgraded GPT-5 → GPT-5.4 and improved AI management (providers, blob storage, CLI options)
+* Fixed critical build issues (MongoDB, MAUI) and improved overall stability
+* Enhanced monitoring (HTTP requests & exceptions)
+* Added DBMS auto-detection from connection string
+* Upgraded to ABP 10.2 and Scriban 7.0.0
+* Improved developer experience and telemetry (PostHog)
+* Minor UI fixes and workflow adjustments (manual build trigger)
 
 ## 2.2.4 (2026-03-25)
 
-- Add `Template Create and Build` workflow
-- Disable NuGetAudit in template common.props to prevent CLI deadlock during initial migration
+* Add `Template Create and Build` workflow
+* Disable NuGetAudit in template common.props to prevent CLI deadlock during initial migration
 
 ## 2.2.3 (2026-03-24)
 
-- Fix PostHog environment detection
+* Fix PostHog environment detection
 
 ## 2.2.1 (2026-02-20)
 
-- Fix tiered Blazor WebApp template HttpApi reference
-- Add LeptonX theme templates AuthServer and HttpApi projects
-- Enable razor runtime compilation on templates
-- Configure HttpClientFactoryOptions for CLI client
-- Bump ABP to 10.1.1 and LeptonX to 5.1.1
-- Blazor & Angular UIs: Add AI Management option to the Startup Templates (app-nolayers, app, ms templates)
-- Handle docker container start failures in solution runner
-- Fix import module version dropdown ordering
-- Add PostHog integration for Studio and CLI
+* Fix tiered Blazor WebApp template HttpApi reference
+* Add LeptonX theme templates AuthServer and HttpApi projects
+* Enable razor runtime compilation on templates
+* Configure HttpClientFactoryOptions for CLI client
+* Bump ABP to 10.1.1 and LeptonX to 5.1.1
+* Blazor & Angular UIs: Add AI Management option to the Startup Templates (app-nolayers, app, ms templates)
+* Handle docker container start failures in solution runner
+* Fix import module version dropdown ordering
+* Add PostHog integration for Studio and CLI
 
 
 ## 2.2.1 (2026-02-20)
