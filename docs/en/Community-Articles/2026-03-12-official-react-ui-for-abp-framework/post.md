@@ -82,25 +82,25 @@ That is the core value: developers get a clean React application to build their 
 During the RC period, you can create a modern React solution with ABP 10.4.0-rc.1:
 
 ```bash
-abp new Acme.BookStore --template app --modern --version 10.4.0-rc.1
+abp new Acme.BookStore --template app --modern
 ```
 
 The React UI is the default UI option when `--modern` is used, but you can also pass it explicitly:
 
 ```bash
-abp new Acme.BookStore --template app --modern --ui-framework react --version 10.4.0-rc.1
+abp new Acme.BookStore --template app --modern --ui-framework react
 ```
 
 For a single-layer application:
 
 ```bash
-abp new Acme.BookStore --template app-nolayers --modern --version 10.4.0-rc.1
+abp new Acme.BookStore --template app-nolayers --modern
 ```
 
 For a microservice solution:
 
 ```bash
-abp new Acme.BookStore --template microservice --modern --version 10.4.0-rc.1
+abp new Acme.BookStore --template microservice --modern
 ```
 
 Once ABP 10.4 stable is released, the same modern React experience is planned to become generally available without needing to target the RC version explicitly.
