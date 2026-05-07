@@ -27,6 +27,7 @@ Second, there is the **ABP Admin Console**. The Admin Console is a pre-built Rea
 For layered and single-layer modern applications, the Admin Console is hosted by the backend and served under `/admin-console/*`. For microservice solutions, it runs as a separate React app under `apps/react-admin-console/`, with its own runtime configuration and the same `/admin-console/` base path. In both cases, the main React app can link users into the Admin Console when they need full administrative screens.
 
 This split is a practical design choice. Your business UI stays yours, while administration capabilities remain available, consistent, and upgradeable.
+![react-ui-and-admin-console](images/react-ui-and-admin-console.png)
 
 ## A different frontend philosophy
 
@@ -103,6 +104,8 @@ abp new Acme.BookStore --template microservice --modern --version 10.4.0-rc.1
 ```
 
 Once ABP 10.4 stable is released, the same modern React experience is planned to become generally available without needing to target the RC version explicitly.
+
+![ABP Framework React UI Modern Template Demo](images/abp-react-ui-modern-template-demo.gif)
 
 ## What's next
 
