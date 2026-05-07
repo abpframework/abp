@@ -1217,29 +1217,31 @@ This code requires a service; Inject the `AbpBlazorMessageLocalizerHelper<T>` at
 Open the `Books.razor` and add the following code to the end of the page:
 
 ````razor
-<MudDialog @ref="_createDialog">
+<MudDialog @ref="_createDialog" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })">
     <TitleContent>
         <MudText Typo="Typo.h6">@L["NewBook"]</MudText>
     </TitleContent>
     <DialogContent>
         <MudForm @ref="@CreateFormRef" Model="@NewEntity">
-            <MudTextField @bind-Value="@NewEntity.Name"
-                          Label="@L["Name"]"
-                          For="@(() => NewEntity.Name)"
-                          Required="true" />
-            <MudSelect T="BookType"
-                       @bind-Value="@NewEntity.Type"
-                       Label="@L["Type"]">
-                @foreach (BookType bookTypeValue in Enum.GetValues(typeof(BookType)))
-                {
-                    <MudSelectItem Value="@bookTypeValue">@L[$"Enum:BookType.{(int)bookTypeValue}"]</MudSelectItem>
-                }
-            </MudSelect>
-            <MudDatePicker @bind-Date="@NewEntity.PublishDate"
-                           Label="@L["PublishDate"]" />
-            <MudNumericField T="float"
-                             @bind-Value="@NewEntity.Price"
-                             Label="@L["Price"]" />
+            <MudStack Spacing="3">
+                <MudTextField @bind-Value="@NewEntity.Name"
+                              Label="@L["Name"]"
+                              For="@(() => NewEntity.Name)"
+                              Required="true" />
+                <MudSelect T="BookType"
+                           @bind-Value="@NewEntity.Type"
+                           Label="@L["Type"]">
+                    @foreach (BookType bookTypeValue in Enum.GetValues(typeof(BookType)))
+                    {
+                        <MudSelectItem Value="@bookTypeValue">@L[$"Enum:BookType.{(int)bookTypeValue}"]</MudSelectItem>
+                    }
+                </MudSelect>
+                <MudDatePicker @bind-Date="@NewEntity.PublishDate"
+                               Label="@L["PublishDate"]" />
+                <MudNumericField T="float"
+                                 @bind-Value="@NewEntity.Price"
+                                 Label="@L["Price"]" />
+            </MudStack>
         </MudForm>
     </DialogContent>
     <DialogActions>
@@ -1253,6 +1255,8 @@ Open the `Books.razor` and add the following code to the end of the page:
 
 * The form uses `[Required]`/DataAnnotations for validation; messages are localized via the same `AbpResource` localization system.
 * The `_createDialog` field, `CloseCreateDialogAsync`, `CreateFormRef` and `CreateEntityAsync` are all defined in `AbpMudCrudPageBase`. Check the [MudBlazor documentation](https://mudblazor.com/components/dialog) if you want to understand the `MudDialog` and other components.
+* `MudDialog.Options` widens the dialog (`MaxWidth.Medium` + `FullWidth`) so the form fields are not cramped.
+* `MudStack` with `Spacing="3"` keeps the inputs visually separated; without it MudBlazor inputs render flush against each other.
 * `MudDatePicker.@bind-Date` requires a nullable `DateTime?`. If your DTO uses non-nullable `DateTime`, change it to `DateTime?` (`public DateTime? PublishDate { get; set; }`) when using the MudBlazor variant.
 
 {{end}}
@@ -1379,29 +1383,31 @@ We can now define a modal to edit the book. Add the following code to the end of
 {{if BlazorUI == "MudBlazor"}}
 
 ````razor
-<MudDialog @ref="_editDialog">
+<MudDialog @ref="_editDialog" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })">
     <TitleContent>
         <MudText Typo="Typo.h6">@EditingEntity.Name</MudText>
     </TitleContent>
     <DialogContent>
         <MudForm @ref="@EditFormRef" Model="@EditingEntity">
-            <MudTextField @bind-Value="@EditingEntity.Name"
-                          Label="@L["Name"]"
-                          For="@(() => EditingEntity.Name)"
-                          Required="true" />
-            <MudSelect T="BookType"
-                       @bind-Value="@EditingEntity.Type"
-                       Label="@L["Type"]">
-                @foreach (BookType bookTypeValue in Enum.GetValues(typeof(BookType)))
-                {
-                    <MudSelectItem Value="@bookTypeValue">@L[$"Enum:BookType.{(int)bookTypeValue}"]</MudSelectItem>
-                }
-            </MudSelect>
-            <MudDatePicker @bind-Date="@EditingEntity.PublishDate"
-                           Label="@L["PublishDate"]" />
-            <MudNumericField T="float"
-                             @bind-Value="@EditingEntity.Price"
-                             Label="@L["Price"]" />
+            <MudStack Spacing="3">
+                <MudTextField @bind-Value="@EditingEntity.Name"
+                              Label="@L["Name"]"
+                              For="@(() => EditingEntity.Name)"
+                              Required="true" />
+                <MudSelect T="BookType"
+                           @bind-Value="@EditingEntity.Type"
+                           Label="@L["Type"]">
+                    @foreach (BookType bookTypeValue in Enum.GetValues(typeof(BookType)))
+                    {
+                        <MudSelectItem Value="@bookTypeValue">@L[$"Enum:BookType.{(int)bookTypeValue}"]</MudSelectItem>
+                    }
+                </MudSelect>
+                <MudDatePicker @bind-Date="@EditingEntity.PublishDate"
+                               Label="@L["PublishDate"]" />
+                <MudNumericField T="float"
+                                 @bind-Value="@EditingEntity.Price"
+                                 Label="@L["Price"]" />
+            </MudStack>
         </MudForm>
     </DialogContent>
     <DialogActions>
@@ -1744,29 +1750,31 @@ Here's the complete code to create the book management CRUD page, that has been 
     </MudCardContent>
 </MudCard>
 
-<MudDialog @ref="_createDialog">
+<MudDialog @ref="_createDialog" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })">
     <TitleContent>
         <MudText Typo="Typo.h6">@L["NewBook"]</MudText>
     </TitleContent>
     <DialogContent>
         <MudForm @ref="@CreateFormRef" Model="@NewEntity">
-            <MudTextField @bind-Value="@NewEntity.Name"
-                          Label="@L["Name"]"
-                          For="@(() => NewEntity.Name)"
-                          Required="true" />
-            <MudSelect T="BookType"
-                       @bind-Value="@NewEntity.Type"
-                       Label="@L["Type"]">
-                @foreach (BookType bookTypeValue in Enum.GetValues(typeof(BookType)))
-                {
-                    <MudSelectItem Value="@bookTypeValue">@L[$"Enum:BookType.{(int)bookTypeValue}"]</MudSelectItem>
-                }
-            </MudSelect>
-            <MudDatePicker @bind-Date="@NewEntity.PublishDate"
-                           Label="@L["PublishDate"]" />
-            <MudNumericField T="float"
-                             @bind-Value="@NewEntity.Price"
-                             Label="@L["Price"]" />
+            <MudStack Spacing="3">
+                <MudTextField @bind-Value="@NewEntity.Name"
+                              Label="@L["Name"]"
+                              For="@(() => NewEntity.Name)"
+                              Required="true" />
+                <MudSelect T="BookType"
+                           @bind-Value="@NewEntity.Type"
+                           Label="@L["Type"]">
+                    @foreach (BookType bookTypeValue in Enum.GetValues(typeof(BookType)))
+                    {
+                        <MudSelectItem Value="@bookTypeValue">@L[$"Enum:BookType.{(int)bookTypeValue}"]</MudSelectItem>
+                    }
+                </MudSelect>
+                <MudDatePicker @bind-Date="@NewEntity.PublishDate"
+                               Label="@L["PublishDate"]" />
+                <MudNumericField T="float"
+                                 @bind-Value="@NewEntity.Price"
+                                 Label="@L["Price"]" />
+            </MudStack>
         </MudForm>
     </DialogContent>
     <DialogActions>
@@ -1777,29 +1785,31 @@ Here's the complete code to create the book management CRUD page, that has been 
     </DialogActions>
 </MudDialog>
 
-<MudDialog @ref="_editDialog">
+<MudDialog @ref="_editDialog" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })">
     <TitleContent>
         <MudText Typo="Typo.h6">@EditingEntity.Name</MudText>
     </TitleContent>
     <DialogContent>
         <MudForm @ref="@EditFormRef" Model="@EditingEntity">
-            <MudTextField @bind-Value="@EditingEntity.Name"
-                          Label="@L["Name"]"
-                          For="@(() => EditingEntity.Name)"
-                          Required="true" />
-            <MudSelect T="BookType"
-                       @bind-Value="@EditingEntity.Type"
-                       Label="@L["Type"]">
-                @foreach (BookType bookTypeValue in Enum.GetValues(typeof(BookType)))
-                {
-                    <MudSelectItem Value="@bookTypeValue">@L[$"Enum:BookType.{(int)bookTypeValue}"]</MudSelectItem>
-                }
-            </MudSelect>
-            <MudDatePicker @bind-Date="@EditingEntity.PublishDate"
-                           Label="@L["PublishDate"]" />
-            <MudNumericField T="float"
-                             @bind-Value="@EditingEntity.Price"
-                             Label="@L["Price"]" />
+            <MudStack Spacing="3">
+                <MudTextField @bind-Value="@EditingEntity.Name"
+                              Label="@L["Name"]"
+                              For="@(() => EditingEntity.Name)"
+                              Required="true" />
+                <MudSelect T="BookType"
+                           @bind-Value="@EditingEntity.Type"
+                           Label="@L["Type"]">
+                    @foreach (BookType bookTypeValue in Enum.GetValues(typeof(BookType)))
+                    {
+                        <MudSelectItem Value="@bookTypeValue">@L[$"Enum:BookType.{(int)bookTypeValue}"]</MudSelectItem>
+                    }
+                </MudSelect>
+                <MudDatePicker @bind-Date="@EditingEntity.PublishDate"
+                               Label="@L["PublishDate"]" />
+                <MudNumericField T="float"
+                                 @bind-Value="@EditingEntity.Price"
+                                 Label="@L["Price"]" />
+            </MudStack>
         </MudForm>
     </DialogContent>
     <DialogActions>

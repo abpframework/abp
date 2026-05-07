@@ -71,22 +71,24 @@ The most common pattern is wrapping inputs in a `<MudForm>` and binding the form
 @using System.ComponentModel.DataAnnotations
 
 <MudForm @ref="_form" @bind-IsValid="@_isValid" Model="@_model">
-    <MudTextField @bind-Value="_model.Name"
-                  Label="Name"
-                  Required="true"
-                  RequiredError="Please enter the name." />
+    <MudStack Spacing="3">
+        <MudTextField @bind-Value="_model.Name"
+                      Label="Name"
+                      Required="true"
+                      RequiredError="Please enter the name." />
 
-    <MudTextField @bind-Value="_model.Email"
-                  Label="Email"
-                  Required="true"
-                  Validation="@(new EmailAddressAttribute() { ErrorMessage = "Enter a valid email." })" />
+        <MudTextField @bind-Value="_model.Email"
+                      Label="Email"
+                      Required="true"
+                      Validation="@(new EmailAddressAttribute() { ErrorMessage = "Enter a valid email." })" />
 
-    <MudButton OnClick="@SubmitAsync"
-               Disabled="@(!_isValid)"
-               Variant="Variant.Filled"
-               Color="Color.Primary">
-        Submit
-    </MudButton>
+        <MudButton OnClick="@SubmitAsync"
+                   Disabled="@(!_isValid)"
+                   Variant="Variant.Filled"
+                   Color="Color.Primary">
+            Submit
+        </MudButton>
+    </MudStack>
 </MudForm>
 
 @code {

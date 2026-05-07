@@ -1083,21 +1083,23 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the {{ if UI == "B
     </MudCardContent>
 </MudCard>
 
-<MudDialog @ref="CreateAuthorDialog">
+<MudDialog @ref="CreateAuthorDialog" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })">
     <TitleContent>
         <MudText Typo="Typo.h6">@L["NewAuthor"]</MudText>
     </TitleContent>
     <DialogContent>
         <MudForm @ref="@CreateFormRef" Model="@NewAuthor">
-            <MudTextField @bind-Value="@NewAuthor.Name"
-                          Label="@L["Name"]"
-                          For="@(() => NewAuthor.Name)"
-                          Required="true" />
-            <MudDatePicker @bind-Date="@NewAuthorBirthDate"
-                           Label="@L["BirthDate"]" />
-            <MudTextField @bind-Value="@NewAuthor.ShortBio"
-                          Label="@L["ShortBio"]"
-                          Lines="5" />
+            <MudStack Spacing="3">
+                <MudTextField @bind-Value="@NewAuthor.Name"
+                              Label="@L["Name"]"
+                              For="@(() => NewAuthor.Name)"
+                              Required="true" />
+                <MudDatePicker @bind-Date="@NewAuthorBirthDate"
+                               Label="@L["BirthDate"]" />
+                <MudTextField @bind-Value="@NewAuthor.ShortBio"
+                              Label="@L["ShortBio"]"
+                              Lines="5" />
+            </MudStack>
         </MudForm>
     </DialogContent>
     <DialogActions>
@@ -1108,21 +1110,23 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the {{ if UI == "B
     </DialogActions>
 </MudDialog>
 
-<MudDialog @ref="EditAuthorDialog">
+<MudDialog @ref="EditAuthorDialog" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })">
     <TitleContent>
         <MudText Typo="Typo.h6">@EditingAuthor.Name</MudText>
     </TitleContent>
     <DialogContent>
         <MudForm @ref="@EditFormRef" Model="@EditingAuthor">
-            <MudTextField @bind-Value="@EditingAuthor.Name"
-                          Label="@L["Name"]"
-                          For="@(() => EditingAuthor.Name)"
-                          Required="true" />
-            <MudDatePicker @bind-Date="@EditingAuthorBirthDate"
-                           Label="@L["BirthDate"]" />
-            <MudTextField @bind-Value="@EditingAuthor.ShortBio"
-                          Label="@L["ShortBio"]"
-                          Lines="5" />
+            <MudStack Spacing="3">
+                <MudTextField @bind-Value="@EditingAuthor.Name"
+                              Label="@L["Name"]"
+                              For="@(() => EditingAuthor.Name)"
+                              Required="true" />
+                <MudDatePicker @bind-Date="@EditingAuthorBirthDate"
+                               Label="@L["BirthDate"]" />
+                <MudTextField @bind-Value="@EditingAuthor.ShortBio"
+                              Label="@L["ShortBio"]"
+                              Lines="5" />
+            </MudStack>
         </MudForm>
     </DialogContent>
     <DialogActions>
