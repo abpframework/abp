@@ -9,7 +9,14 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 3.0.0 (2026-05-06) Latest
+## 3.0.1 (2026-05-06) Latest
+
+* Enhanced Project Wizard: Fixed the optional module selection step for a smoother project setup experience
+* React Admin Console Improvements: Resolved identified issues in the React administration templates for better stability
+* MacOS Performance: Optimized the internal build pipeline for a more reliable experience on Apple devices
+* Stability Fixes: Improved core UI components to ensure parameter consistency across updates
+
+## 3.0.0 (2026-05-06)
 
 * Introducing ABP AI Agent: A next-generation smart assistant to accelerate your development
 * Enhanced ABP Coding Agent: Smarter code generation and guidance integrated directly into your workflow
