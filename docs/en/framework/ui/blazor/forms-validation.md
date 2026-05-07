@@ -1,11 +1,20 @@
 ```json
+//[doc-params]
+{
+    "BlazorUI": ["Blazorise", "MudBlazor"]
+}
+```
+
+```json
 //[doc-seo]
 {
-    "Description": "Learn how to implement form validation in ABP Blazor UI using Blazorise's validation infrastructure with practical examples."
+    "Description": "Learn how to implement form validation in ABP Blazor UI using Blazorise or MudBlazor with practical examples."
 }
 ```
 
 # Blazor UI: Forms & Validation
+
+{{if BlazorUI == "Blazorise"}}
 
 ABP Blazor UI is based on the [Blazorise](https://blazorise.com/docs) and does not have a built-in form validation infrastructure. However, you can use the [Blazorise validation infrastructure](https://blazorise.com/docs/components/validation) to validate your forms.
 
@@ -45,3 +54,90 @@ _The example is provided by official Blazorise documentation._
 ```
 
 > Check the [Blazorise documentation](https://blazorise.com/docs/components/validation) for more information and examples.
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+ABP Blazor UI built on top of [MudBlazor](https://mudblazor.com) uses MudBlazor's built-in form components and validation infrastructure. MudBlazor integrates with ASP.NET Core's `DataAnnotations` and supports custom validation through `IValidationRule`, `Func<T, IEnumerable<string>>`, or fluent validators.
+
+## Sample
+
+The most common pattern is wrapping inputs in a `<MudForm>` and binding the form's validation state through `IsValid`:
+
+> Standard MudBlazor and ABP usings (`@using MudBlazor`, `@using Volo.Abp.MudBlazorUI`, etc.) come from the project's `_Imports.razor`. The example below only adds the additional usings needed for validation.
+
+```razor
+@using System.ComponentModel.DataAnnotations
+
+<MudForm @ref="_form" @bind-IsValid="@_isValid" Model="@_model">
+    <MudTextField @bind-Value="_model.Name"
+                  Label="Name"
+                  Required="true"
+                  RequiredError="Please enter the name." />
+
+    <MudTextField @bind-Value="_model.Email"
+                  Label="Email"
+                  Required="true"
+                  Validation="@(new EmailAddressAttribute() { ErrorMessage = "Enter a valid email." })" />
+
+    <MudButton OnClick="@SubmitAsync"
+               Disabled="@(!_isValid)"
+               Variant="Variant.Filled"
+               Color="Color.Primary">
+        Submit
+    </MudButton>
+</MudForm>
+
+@code {
+    private MudForm _form;
+    private bool _isValid;
+    private SampleModel _model = new();
+
+    private async Task SubmitAsync()
+    {
+        await _form.Validate();
+        if (_isValid)
+        {
+            // ...
+        }
+    }
+
+    public class SampleModel
+    {
+        [Required]
+        public string Name { get; set; }
+
+        [Required, EmailAddress]
+        public string Email { get; set; }
+    }
+}
+```
+
+### Inputs Used in CRUD Pages
+
+ABP's MudBlazor CRUD pages (see `AbpMudCrudPageBase`) use a `<MudDialog>` containing a `<MudForm>` and standard MudBlazor inputs:
+
+* `<MudTextField>` / `<MudTextField Lines="N">` for text and multi-line text
+* `<MudSelect>` / `<MudSelectItem>` for dropdowns
+* `<MudCheckBox>` for booleans
+* `<MudDatePicker>` / `<MudTimePicker>` for date and time
+* `<MudNumericField>` for numbers
+
+The page base validates the entire form before calling the application service:
+
+```csharp
+protected override async Task OnCreatingEntityAsync()
+{
+    await _form.Validate();
+    if (!_isValid)
+    {
+        return;
+    }
+    // ... call AppService
+}
+```
+
+> Check the [MudBlazor documentation](https://mudblazor.com/components/form) for the full list of validation modes and the [MudBlazor inputs reference](https://mudblazor.com/components/textfield).
+
+{{end}}

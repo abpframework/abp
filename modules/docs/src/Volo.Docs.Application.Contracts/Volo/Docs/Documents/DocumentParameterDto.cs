@@ -9,5 +9,13 @@ namespace Volo.Docs.Documents
         public string DisplayName { get; set; }
 
         public Dictionary<string, string> Values { get; set; }
+
+        /// <summary>
+        /// Conditional visibility: this parameter is shown only when the keyed parameter's
+        /// current value is one of the listed values.
+        /// Example: "DependsOn": { "UI": [ "Blazor", "BlazorServer", "BlazorWebApp" ] }
+        /// When null or empty the parameter is always shown.
+        /// </summary>
+        public Dictionary<string, List<string>> DependsOn { get; set; }
     }
 }

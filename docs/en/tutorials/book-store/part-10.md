@@ -10,7 +10,8 @@
 //[doc-params]
 {
     "UI": ["MVC","Blazor","BlazorServer","BlazorWebApp","NG", "MAUIBlazor"],
-    "DB": ["EF","Mongo"]
+    "DB": ["EF","Mongo"],
+    "BlazorUI": ["Blazorise", "MudBlazor"]
 }
 ````
 
@@ -1115,13 +1116,25 @@ That's all. Just run the application and try to create or edit an author.
 
 ### The Book List
 
-It is very easy to show the *Author Name* in the book list. Open the `/Pages/Books.razor` file in the {{ if UI == "BlazorServer" }}`Acme.BookStore.Blazor` {{ else if UI == "MAUIBlazor" }}`Acme.BookStore.MauiBlazor` {{ else }}`Acme.BookStore.Blazor.Client`{{ end }} project and add the following `DataGridColumn` definition just after the `Name` (book name) column:
+It is very easy to show the *Author Name* in the book list. Open the `/Pages/Books.razor` file in the {{ if UI == "BlazorServer" }}`Acme.BookStore.Blazor` {{ else if UI == "MAUIBlazor" }}`Acme.BookStore.MauiBlazor` {{ else }}`Acme.BookStore.Blazor.Client`{{ end }} project and add the following column definition just after the `Name` (book name) column:
+
+{{if BlazorUI == "Blazorise"}}
 
 ````xml
 <DataGridColumn TItem="BookDto"
                 Field="@nameof(BookDto.AuthorName)"
                 Caption="@L["Author"]"></DataGridColumn>
 ````
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+````razor
+<PropertyColumn Property="x => x.AuthorName" Title="@L["Author"]" />
+````
+
+{{end}}
 
 When you run the application, you can see the *Author* column on the table:
 
@@ -1146,6 +1159,8 @@ protected override async Task OnInitializedAsync()
 ````
 
 * It is essential to call the `base.OnInitializedAsync()` since `AbpCrudPageBase` has some initialization code to be executed.
+
+{{if BlazorUI == "Blazorise"}}
 
 Override the `OpenCreateModalAsync` method and adding the following code:
 
@@ -1199,7 +1214,67 @@ The final `@code` block should be the following:
 }
 ````
 
-Finally, add the following `Field` definition into the `ModalBody` of the *Create* modal, as the first item, before the `Name` field:
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+Override the `OpenCreateDialogAsync` method and adding the following code:
+
+````csharp
+protected override async Task OpenCreateDialogAsync()
+{
+    if (!authorList.Any())
+    {
+        throw new UserFriendlyException(message: L["AnAuthorIsRequiredForCreatingBook"]);
+    }
+
+    await base.OpenCreateDialogAsync();
+    NewEntity.AuthorId = authorList.First().Id;
+}
+````
+
+The final `@code` block should be the following:
+
+````csharp
+@code
+{
+    //ADDED A NEW FIELD
+    IReadOnlyList<AuthorLookupDto> authorList = Array.Empty<AuthorLookupDto>();
+
+    public Books() // Constructor
+    {
+        LocalizationResource = typeof(BookStoreResource);
+
+        CreatePolicyName = BookStorePermissions.Books.Create;
+        UpdatePolicyName = BookStorePermissions.Books.Edit;
+        DeletePolicyName = BookStorePermissions.Books.Delete;
+    }
+
+    //GET AUTHORS ON INITIALIZATION
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        authorList = (await AppService.GetAuthorLookupAsync()).Items;
+    }
+
+    protected override async Task OpenCreateDialogAsync()
+    {
+        if (!authorList.Any())
+        {
+            throw new UserFriendlyException(message: L["AnAuthorIsRequiredForCreatingBook"]);
+        }
+
+        await base.OpenCreateDialogAsync();
+        NewEntity.AuthorId = authorList.First().Id;
+    }
+}
+````
+
+{{end}}
+
+Finally, add the following field definition into the *Create* modal/dialog, as the first item, before the `Name` field:
+
+{{if BlazorUI == "Blazorise"}}
 
 ````xml
 <Field>
@@ -1215,6 +1290,21 @@ Finally, add the following `Field` definition into the `ModalBody` of the *Creat
 </Field>
 ````
 
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+````razor
+<MudSelect T="Guid" @bind-Value="@NewEntity.AuthorId" Label="@L["Author"]">
+    @foreach (var author in authorList)
+    {
+        <MudSelectItem Value="@author.Id">@author.Name</MudSelectItem>
+    }
+</MudSelect>
+````
+
+{{end}}
+
 This requires to add a new localization key to the `en.json` file:
 
 ````js
@@ -1227,7 +1317,9 @@ You can run the application to see the *Author Selection* while creating a new b
 
 ### Edit Book Modal
 
-Add the following `Field` definition into the `ModalBody` of the *Edit* modal, as the first item, before the `Name` field:
+Add the following field definition into the *Edit* modal/dialog, as the first item, before the `Name` field:
+
+{{if BlazorUI == "Blazorise"}}
 
 ````xml
 <Field>
@@ -1242,6 +1334,21 @@ Add the following `Field` definition into the `ModalBody` of the *Edit* modal, a
     </Select>
 </Field>
 ````
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+````razor
+<MudSelect T="Guid" @bind-Value="@EditingEntity.AuthorId" Label="@L["Author"]">
+    @foreach (var author in authorList)
+    {
+        <MudSelectItem Value="@author.Id">@author.Name</MudSelectItem>
+    }
+</MudSelect>
+````
+
+{{end}}
 
 That's all. We are reusing the `authorList` defined for the *Create* modal.
 

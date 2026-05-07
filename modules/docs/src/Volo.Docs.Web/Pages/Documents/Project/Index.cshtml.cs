@@ -90,6 +90,23 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public DocumentRenderParameters UserPreferences { get; set; } = new DocumentRenderParameters();
 
+        public virtual bool IsParameterVisible(DocumentParameterDto parameter)
+        {
+            if (parameter.DependsOn == null || parameter.DependsOn.Count == 0)
+            {
+                return true;
+            }
+
+            var renderedKeys = DocumentPreferences?.Parameters?.Select(p => p.Name).ToHashSet() ?? new HashSet<string>();
+
+            // A rule passes if it's malformed/irrelevant (fail-open) OR the current value matches the allow-list.
+            return parameter.DependsOn.All(rule =>
+                rule.Value == null || !renderedKeys.Contains(rule.Key) // skip malformed / unknown-key rules
+                || (rule.Value.Count > 0
+                    && UserPreferences.TryGetValue(rule.Key, out var current)
+                    && rule.Value.Contains(current)));
+        }
+
         public List<string> AlternativeOptionLinkQueries { get; set; } = new List<string>();
 
         public bool FullSearchEnabled { get; set; }
@@ -827,7 +844,8 @@ namespace Volo.Docs.Pages.Documents.Project
                     {
                         Name = parameter.Name,
                         DisplayName = parameter.DisplayName,
-                        Values = new Dictionary<string, string>()
+                        Values = new Dictionary<string, string>(),
+                        DependsOn = parameter.DependsOn
                     };
 
                     foreach (var value in parameter.Values)
