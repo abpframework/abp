@@ -1,8 +1,8 @@
-# Official React UI for ABP Framework Is Finally Here
+# React UI for ABP Framework Is Finally Here
 
-For a long time, official React support in ABP felt like one of those things people kept asking for, hoping for, and waiting to see become real.
+If you have followed ABP for a while, you probably know that React support has been one of the most requested topics in the community.
 
-With **ABP 10.4.0-rc.1**, that wait ends. You can now create, run, and explore the React UI today as a beta/preview experience in the modern template system.
+With **ABP 10.4.0-rc.1**, that wait ends. React in ABP is no longer just something people ask about, hope for, or imagine as the next step. You can now create it, run it, and explore it today as a beta/preview experience in the modern template system.
 
 As part of the ABP Framework team, and as one of the developers working on this React effort, I am genuinely happy to finally share it. This RC gives the community an early chance to try it, share feedback, and help us polish the final details before **ABP 10.4 stable**, where we plan to make the React UI generally available.
 
@@ -10,7 +10,7 @@ As part of the ABP Framework team, and as one of the developers working on this 
 
 ## Why this matters
 
-ABP Framework has always been about helping teams build modern, maintainable, production-ready applications faster. With the official React UI, we are extending that same vision to teams who want ABP on the backend and React on the frontend without losing the built-in application features that make ABP productive from day one.
+ABP Framework has always been about helping teams build modern, maintainable, production-ready applications faster. With the new React UI, we are extending that same vision to teams who want ABP on the backend and React on the frontend without losing the built-in application features that make ABP productive from day one.
 
 This is not another empty starter. The goal is a **first-class UI option** that fits into the ABP application startup experience and works naturally with familiar ABP concepts such as authentication, authorization, localization, multi-tenancy, modularity, runtime configuration, and deployment.
 
@@ -18,13 +18,13 @@ There is one important detail: the React UI belongs to ABP's **modern template s
 
 ## A quick look at the architecture
 
-The final shape is clearer now: a modern React solution consists of two main parts.
+The final shape is clearer now: a modern React solution gives you a real React application in the solution, plus the ABP administration experience.
 
-First, there is **your React application**. This is the application-facing SPA that you own and customize. It contains the frontend code you work with every day, including pages, components, routing, API integration, runtime configuration, and authentication setup.
+First, there is **your React application**. In the modern templates, this lives directly in the solution as a real app under `react/` or `apps/react/`. It contains the frontend code you work with every day, including pages, components, routing, API integration, runtime configuration, and authentication setup.
 
 Second, there is the **ABP Admin Console**. The Admin Console is a pre-built React application that provides the standard ABP module management pages. It is delivered through the `Volo.Abp.AdminConsole` NuGet package, so it can evolve with ABP package updates while your own React application stays focused on your product's business features.
 
-For layered and single-layer modern applications, the Admin Console is embedded in the backend and served under `/admin-console/*`. For microservice solutions, it runs as a standalone React app under `apps/react-admin-console/` and is served through the web gateway. In both cases, the main React app can link users into the Admin Console when they need administrative screens.
+For layered and single-layer modern applications, the Admin Console is hosted by the backend and served under `/admin-console/*`. For microservice solutions, it runs as a separate React app under `apps/react-admin-console/`, with its own runtime configuration and the same `/admin-console/` base path. In both cases, the main React app can link users into the Admin Console when they need full administrative screens.
 
 This split is a practical design choice. Your business UI stays yours, while administration capabilities remain available, consistent, and upgradeable.
 
@@ -40,7 +40,7 @@ The Admin Console covers ABP's standard module administration pages. Your own Re
 
 The new React UI is also shaped for the era of **AI-assisted development**.
 
-React, TypeScript, Vite, React Router, Axios, Zod, React Hook Form, and shadcn/ui are technologies that modern coding assistants understand very well. Just as importantly, the generated application contains real frontend code in the solution. That gives AI tools and coding agents concrete project context to read, extend, and refactor.
+React, TypeScript, Vite, TanStack Router, TanStack Query, Axios, Zod, React Hook Form, and shadcn/ui are technologies that modern coding assistants understand very well. Just as importantly, the generated application contains real frontend code in the solution. That gives AI tools and coding agents concrete project context to read, extend, and refactor.
 
 This direction also fits the broader ABP AI story. ABP Studio already includes an AI assistant experience, and the new **ABP AI Agent** is being introduced to bring code generation, project understanding, issue fixing, and natural-language application evolution directly into the ABP workflow. You can follow that work here: [The Future of ABP Studio: AI Agent + Code Generation](https://abp.io/community/events/community-talks/the-future-of-abp-studio-ai-agent-code-generation-live-fekeoyjr). For the wider toolset, see the [ABP AI Toolkit](https://abp.io/ai/toolkit).
 
@@ -49,12 +49,13 @@ This direction also fits the broader ABP AI story. ABP Studio already includes a
 The current template already points to the kind of experience React developers expect from a modern application:
 
 - A Vite-powered React + TypeScript frontend
-- React Router for client-side routing
+- TanStack Router for client-side routing
+- TanStack Query for server state and data fetching
 - OIDC authentication against the ABP Auth Server
 - Axios-based HTTP client integration
 - Runtime configuration through `dynamic-env.json`
 - Localization and permission-aware behavior integrated with ABP application configuration
-- shadcn/ui components that live in your project and can be customized directly
+- Tailwind CSS and shadcn/ui components that live in your project and can be customized directly
 - Zod and React Hook Form for form handling and validation
 - Vitest for frontend tests
 - A dedicated Admin Console for ABP module administration
@@ -67,7 +68,9 @@ Even in its current form, the React UI already feels like a real ABP solution ex
 
 The generated React app is intentionally small enough to understand, but it is not empty.
 
-Depending on the selected options, it can include a sample Books CRUD page that demonstrates how to build a full create/read/update/delete flow against an ABP backend. It also includes simple reference pages and pre-configured application plumbing such as authentication, HTTP client setup, localization, and permission checks.
+Out of the box, you already get the kind of foundation most teams expect: login, registration, forgot-password and reset-password flows, runtime configuration, localization, permission-aware routing, API proxy generation, and a simple users page that can deep-link into the Admin Console when full user management is needed.
+
+Depending on the selected options, it can also include a sample Books CRUD page that demonstrates how to build a full create/read/update/delete flow against an ABP backend.
 
 The Admin Console provides the standard management experience for ABP modules, including identity management, roles, organization units, settings, audit logs, OpenIddict administration, language management, text templates, GDPR, SaaS and tenant management, and other module pages depending on your solution configuration.
 
@@ -103,6 +106,8 @@ Once ABP 10.4 stable is released, the same modern React experience is planned to
 
 ## What's next
 
-The React UI is now real in ABP 10.4 RC, and the final polishing work continues toward the stable release. If you have been waiting for an official React path in ABP, this is the point where it stops being a wish and starts becoming something you can actually build with.
+The React UI is now real in ABP 10.4 RC, and the final polishing work continues toward the stable release. If you have been waiting for a real React path in ABP, this is the point where it stops being a wish and starts becoming something you can actually build with.
+
+For me, one of the nicest parts of this RC is that we can finally stop talking about React support in ABP as a future idea and start improving something real together.
 
 Try it, explore it, and share feedback with us while we keep polishing it for **ABP 10.4 stable**.
