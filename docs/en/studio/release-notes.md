@@ -11,11 +11,10 @@ This document contains **brief release notes** for each ABP Studio release. Rele
 
 ## 3.0.1 (2026-05-06) Latest
 
-* Refactor build steps for ABP Studio in macOS pipeline to improve clarity and structure
-* Skip method renaming for UI.Core to preserve params
-* Fix React admin console template findings
-* Update version to release 3.0.1
-* Fix modern wizard optional module step
+* Enhanced Project Wizard: Fixed the optional module selection step for a smoother project setup experience
+* React Admin Console Improvements: Resolved identified issues in the React administration templates for better stability
+* MacOS Performance: Optimized the internal build pipeline for a more reliable experience on Apple devices
+* Stability Fixes: Improved core UI components to ensure parameter consistency across updates
 
 ## 3.0.0 (2026-05-06)
 
