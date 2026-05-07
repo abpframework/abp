@@ -1253,6 +1253,7 @@ Open the `Books.razor` and add the following code to the end of the page:
 
 * The form uses `[Required]`/DataAnnotations for validation; messages are localized via the same `AbpResource` localization system.
 * The `_createDialog` field, `CloseCreateDialogAsync`, `CreateFormRef` and `CreateEntityAsync` are all defined in `AbpMudCrudPageBase`. Check the [MudBlazor documentation](https://mudblazor.com/components/dialog) if you want to understand the `MudDialog` and other components.
+* `MudDatePicker.@bind-Date` requires a nullable `DateTime?`. If your DTO uses non-nullable `DateTime`, change it to `DateTime?` (`public DateTime? PublishDate { get; set; }`) when using the MudBlazor variant — see [abp-samples/MudBlazorSample](https://github.com/abpframework/abp-samples/tree/master/MudBlazorSample) for a complete reference.
 
 {{end}}
 

@@ -124,17 +124,13 @@ ABP's MudBlazor CRUD pages (see `AbpMudCrudPageBase`) use a `<MudDialog>` contai
 * `<MudDatePicker>` / `<MudTimePicker>` for date and time
 * `<MudNumericField>` for numbers
 
-The page base validates the entire form before calling the application service:
+`AbpMudCrudPageBase.CreateEntityAsync` and `UpdateEntityAsync` validate the form for you (`CreateFormRef.Validate()` / `EditFormRef.Validate()`) and only call the corresponding hook when the form is valid. To inject custom logic before the application service call, override `OnCreatingEntityAsync` / `OnUpdatingEntityAsync` (do **not** re-validate inside the override):
 
 ```csharp
-protected override async Task OnCreatingEntityAsync()
+protected override Task OnCreatingEntityAsync()
 {
-    await _form.Validate();
-    if (!_isValid)
-    {
-        return;
-    }
-    // ... call AppService
+    // mutate NewEntity here if needed
+    return base.OnCreatingEntityAsync();
 }
 ```
 
