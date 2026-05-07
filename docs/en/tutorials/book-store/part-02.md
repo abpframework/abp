@@ -660,7 +660,7 @@ Open the `Books.razor` and replace the content as the following:
                 <PropertyColumn Property="x => x.Type"
                                 Title="@L["Type"]">
                     <CellTemplate>
-                        @L[$"Enum:BookType.{context.Item.Type}"]
+                        @L[$"Enum:BookType.{(int)context.Item.Type}"]
                     </CellTemplate>
                 </PropertyColumn>
                 <PropertyColumn Property="x => x.PublishDate"

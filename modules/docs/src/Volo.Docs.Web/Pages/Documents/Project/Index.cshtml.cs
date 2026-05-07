@@ -90,6 +90,10 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public DocumentRenderParameters UserPreferences { get; set; } = new DocumentRenderParameters();
 
+        private HashSet<string>? _renderedParameterNamesCache;
+        private HashSet<string> RenderedParameterNames =>
+            _renderedParameterNamesCache ??= (DocumentPreferences?.Parameters?.Select(p => p.Name).ToHashSet() ?? new HashSet<string>());
+
         public virtual bool IsParameterVisible(DocumentParameterDto parameter)
         {
             if (parameter.DependsOn == null || parameter.DependsOn.Count == 0)
@@ -97,11 +101,14 @@ namespace Volo.Docs.Pages.Documents.Project
                 return true;
             }
 
-            var renderedKeys = DocumentPreferences?.Parameters?.Select(p => p.Name).ToHashSet() ?? new HashSet<string>();
-
-            // A rule passes if it's malformed/irrelevant (fail-open) OR the current value matches the allow-list.
+            // Per-rule semantics:
+            //   - rule.Value == null            : malformed list, skip the rule (fail-open)
+            //   - key not in current document   : rule references an unknown parameter, skip (fail-open)
+            //   - rule.Value.Count == 0         : explicit empty allow-list, hide the parameter (author intent: "never show")
+            //   - current value not in allow-list: hide
+            //   - current value in allow-list   : pass this rule
             return parameter.DependsOn.All(rule =>
-                rule.Value == null || !renderedKeys.Contains(rule.Key) // skip malformed / unknown-key rules
+                rule.Value == null || !RenderedParameterNames.Contains(rule.Key)
                 || (rule.Value.Count > 0
                     && UserPreferences.TryGetValue(rule.Key, out var current)
                     && rule.Value.Contains(current)));

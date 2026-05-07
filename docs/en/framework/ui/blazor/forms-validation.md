@@ -59,7 +59,7 @@ _The example is provided by official Blazorise documentation._
 
 {{if BlazorUI == "MudBlazor"}}
 
-ABP Blazor UI built on top of [MudBlazor](https://mudblazor.com) uses MudBlazor's built-in form components and validation infrastructure. MudBlazor integrates with ASP.NET Core's `DataAnnotations` and supports custom validation through `IValidationRule`, `Func<T, IEnumerable<string>>`, or fluent validators.
+ABP Blazor UI built on top of [MudBlazor](https://mudblazor.com) uses MudBlazor's built-in form components and validation infrastructure. MudBlazor accepts a `ValidationAttribute` (e.g. `[Required]`, `[EmailAddress]` from ASP.NET Core's `DataAnnotations`) on the input's `Validation` parameter, plus custom `Func<T, string>` / `Func<T, IEnumerable<string>>` delegates. FluentValidation can be plugged in the same way.
 
 ## Sample
 
