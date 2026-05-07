@@ -45,7 +45,7 @@
         "MudBlazor": "MudBlazor"
       },
       "dependsOn": {
-        "UI": ["Blazor", "BlazorServer", "BlazorWebApp"]
+        "UI": ["Blazor", "BlazorServer", "BlazorWebApp", "MAUIBlazor"]
       }
     }
   ]
