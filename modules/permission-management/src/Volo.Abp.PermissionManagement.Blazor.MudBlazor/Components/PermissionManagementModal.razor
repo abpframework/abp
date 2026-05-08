@@ -41,10 +41,11 @@
                     {
                         <MudTabPanel Text="@($"{group.DisplayName} ({group.Permissions.Count(x => x.IsGranted)})")">
                             <div>
-                                <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default" 
+                                <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default"
                                             T="bool"
                                             Disabled="@(IsPermissionGroupDisabled(group))"
                                             Value="@(group.Permissions.All(x => x.IsGranted))"
+                                            Indeterminate="@(group.Permissions.Any(x => x.IsGranted) && !group.Permissions.All(x => x.IsGranted))"
                                             ValueChanged="@(async (bool b) => await GroupGrantAllChanged(b, group))"
                                             Label="@L["SelectAllInThisTab"]" />
                                 <MudDivider Class="my-2" />
