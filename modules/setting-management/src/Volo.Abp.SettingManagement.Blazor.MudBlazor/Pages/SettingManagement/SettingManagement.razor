@@ -13,9 +13,15 @@
 @* ************************* PAGE HEADER ************************* *@
 <PageHeader Title="@L["Settings"]" BreadcrumbItems="@BreadcrumbItems" />
 
-<MudCard>
+<MudCard Style="min-height: 400px;">
     <MudCardContent Class="pt-3">
-        @if (!string.IsNullOrEmpty(SelectedGroup))
+        @if (string.IsNullOrEmpty(SelectedGroup))
+        {
+            <div class="d-flex justify-center align-center" style="min-height: 360px;">
+                <MudProgressCircular Indeterminate="true" Color="Color.Primary" />
+            </div>
+        }
+        else
         {
             <MudTabs @bind-ActivePanelIndex="@_activeTabIndex"
                     Variant="Variant.Pills"
@@ -42,3 +48,4 @@
         }
     </MudCardContent>
 </MudCard>
+
