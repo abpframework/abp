@@ -203,6 +203,9 @@ public abstract class AbpMudCrudPageBase<
     protected MudDialog? _createDialog;
     protected MudDialog? _editDialog;
 
+    protected bool IsCreating { get; set; }
+    protected bool IsUpdating { get; set; }
+
     protected virtual DialogOptions CreateDialogOptions => new DialogOptions
     {
         MaxWidth = MaxWidth.Medium,
@@ -452,8 +455,16 @@ public abstract class AbpMudCrudPageBase<
 
     protected virtual async Task CreateEntityAsync()
     {
+        if (IsCreating)
+        {
+            return;
+        }
+
         try
         {
+            IsCreating = true;
+            await InvokeAsync(StateHasChanged);
+
             var isValid = true;
             if (CreateFormRef != null)
             {
@@ -476,6 +487,11 @@ public abstract class AbpMudCrudPageBase<
         {
             await HandleErrorAsync(ex);
         }
+        finally
+        {
+            IsCreating = false;
+            await InvokeAsync(StateHasChanged);
+        }
     }
 
     protected virtual Task OnCreatingEntityAsync()
@@ -497,8 +513,16 @@ public abstract class AbpMudCrudPageBase<
 
     protected virtual async Task UpdateEntityAsync()
     {
+        if (IsUpdating)
+        {
+            return;
+        }
+
         try
         {
+            IsUpdating = true;
+            await InvokeAsync(StateHasChanged);
+
             var isValid = true;
             if (EditFormRef != null)
             {
@@ -520,6 +544,11 @@ public abstract class AbpMudCrudPageBase<
         catch (Exception ex)
         {
             await HandleErrorAsync(ex);
+        }
+        finally
+        {
+            IsUpdating = false;
+            await InvokeAsync(StateHasChanged);
         }
     }
 
