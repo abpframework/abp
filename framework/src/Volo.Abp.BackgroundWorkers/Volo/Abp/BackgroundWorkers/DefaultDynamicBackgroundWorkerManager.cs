@@ -14,6 +14,12 @@ public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
 {
     protected IServiceProvider ServiceProvider { get; }
     public ILogger<DefaultDynamicBackgroundWorkerManager> Logger { get; set; }
+    public virtual DynamicBackgroundWorkerManagerCapabilities Capabilities { get; } =
+        new DynamicBackgroundWorkerManagerCapabilities
+        {
+            SupportsDynamicRegistration = true,
+            SupportsCronExpression = false
+        };
 
     private readonly ConcurrentDictionary<string, InMemoryDynamicBackgroundWorker> _dynamicWorkers;
     private readonly SemaphoreSlim _semaphore;
@@ -39,11 +45,11 @@ public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
 
         schedule.Validate();
 
-        if (schedule.Period == null)
+        if (!schedule.CronExpression.IsNullOrWhiteSpace())
         {
             throw new AbpException(
-                $"The default in-memory background worker manager does not support CronExpression without Period for dynamic worker '{workerName}'. " +
-                "Please set Period, or use a scheduler-backed provider (Hangfire, Quartz, TickerQ).");
+                $"The default in-memory background worker manager does not support CronExpression for dynamic worker '{workerName}'. " +
+                "Please set Period, or use a scheduler-backed provider (Hangfire or Quartz).");
         }
 
         await _semaphore.WaitAsync(cancellationToken);
@@ -102,11 +108,11 @@ public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
 
         schedule.Validate();
 
-        if (schedule.Period == null)
+        if (!schedule.CronExpression.IsNullOrWhiteSpace())
         {
             throw new AbpException(
-                $"The default in-memory background worker manager does not support CronExpression without Period for dynamic worker '{workerName}'. " +
-                "Please set Period, or use a scheduler-backed provider (Hangfire, Quartz, TickerQ).");
+                $"The default in-memory background worker manager does not support CronExpression for dynamic worker '{workerName}'. " +
+                "Please set Period, or use a scheduler-backed provider (Hangfire or Quartz).");
         }
 
         await _semaphore.WaitAsync(cancellationToken);

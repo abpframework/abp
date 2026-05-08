@@ -10,6 +10,11 @@ namespace Volo.Abp.BackgroundWorkers;
 public interface IDynamicBackgroundWorkerManager
 {
     /// <summary>
+    /// Describes the scheduling and runtime-registration capabilities of the active dynamic worker provider.
+    /// </summary>
+    DynamicBackgroundWorkerManagerCapabilities Capabilities { get; }
+
+    /// <summary>
     /// Adds a dynamic worker by name, schedule and handler.
     /// If a worker with the same name already exists, it will be replaced.
     /// </summary>

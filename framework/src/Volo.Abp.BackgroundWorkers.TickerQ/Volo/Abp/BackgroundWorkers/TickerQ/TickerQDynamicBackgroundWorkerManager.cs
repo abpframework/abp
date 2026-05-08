@@ -7,6 +7,13 @@ namespace Volo.Abp.BackgroundWorkers.TickerQ;
 [Dependency(ReplaceServices = true)]
 public class TickerQDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerManager, ISingletonDependency
 {
+    public virtual DynamicBackgroundWorkerManagerCapabilities Capabilities { get; } =
+        new DynamicBackgroundWorkerManagerCapabilities
+        {
+            SupportsDynamicRegistration = false,
+            SupportsCronExpression = false
+        };
+
     public virtual Task AddAsync(
         string workerName,
         DynamicBackgroundWorkerSchedule schedule,

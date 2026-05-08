@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.BackgroundWorkers;
 using Xunit;
@@ -18,6 +19,13 @@ public class DynamicBackgroundWorkerManager_Tests : BackgroundJobsTestBase
     public DynamicBackgroundWorkerManager_Tests()
     {
         _dynamicWorkerManager = GetRequiredService<IDynamicBackgroundWorkerManager>();
+    }
+
+    [Fact]
+    public void Should_Report_Provider_Capabilities()
+    {
+        _dynamicWorkerManager.Capabilities.SupportsDynamicRegistration.ShouldBeTrue();
+        _dynamicWorkerManager.Capabilities.SupportsCronExpression.ShouldBeFalse();
     }
 
     [Fact]
@@ -230,6 +238,25 @@ public class DynamicBackgroundWorkerManager_Tests : BackgroundJobsTestBase
             await _dynamicWorkerManager.AddAsync(
                 workerName,
                 new DynamicBackgroundWorkerSchedule(),
+                (_, _) => Task.CompletedTask
+            );
+        });
+    }
+
+    [Fact]
+    public async Task Should_Throw_When_CronExpression_Is_Set()
+    {
+        var workerName = "dynamic-worker-" + Guid.NewGuid();
+
+        await Assert.ThrowsAsync<AbpException>(async () =>
+        {
+            await _dynamicWorkerManager.AddAsync(
+                workerName,
+                new DynamicBackgroundWorkerSchedule
+                {
+                    Period = 1000,
+                    CronExpression = "0 */5 * * * *"
+                },
                 (_, _) => Task.CompletedTask
             );
         });

@@ -17,6 +17,8 @@ public class QuartzDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMana
     protected IScheduler Scheduler { get; }
     protected IDynamicBackgroundWorkerHandlerRegistry HandlerRegistry { get; }
     public ILogger<QuartzDynamicBackgroundWorkerManager> Logger { get; set; }
+    public virtual DynamicBackgroundWorkerManagerCapabilities Capabilities { get; } =
+        new DynamicBackgroundWorkerManagerCapabilities();
 
     public QuartzDynamicBackgroundWorkerManager(
         IScheduler scheduler,
