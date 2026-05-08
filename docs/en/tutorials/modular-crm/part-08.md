@@ -176,7 +176,19 @@ Now, you know the fundamental principles and mechanics of building sophisticated
 
 ## Download the Source Code
 
+{{if UI == "MVC"}}
+
+You can download the completed sample solution [here](https://github.com/abpframework/abp-samples/tree/master/ModularCRM).
+
+{{else if UI == "BlazorWebApp"}}
+
 You can download the completed sample solution [here](https://github.com/abpframework/abp-samples/tree/master/ModularCRM-BlazorWebApp).
+
+{{else if UI == "NG"}}
+
+You can download the completed sample solution [here](https://github.com/abpframework/abp-samples/tree/master/NG.ModularCRM).
+
+{{end}}
 
 ## See Also
 
