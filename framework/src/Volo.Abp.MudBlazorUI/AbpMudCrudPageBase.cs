@@ -598,7 +598,10 @@ public abstract class AbpMudCrudPageBase<
 
     protected virtual async Task OnDeletedEntityAsync()
     {
-        await _dataGrid.ReloadServerDataAsync();
+        if (_dataGrid != null)
+        {
+            await InvokeAsync(() => _dataGrid.ReloadServerDataAsync());
+        }
         Snackbar.Add(GetDeleteMessage(), Severity.Success);
     }
 
