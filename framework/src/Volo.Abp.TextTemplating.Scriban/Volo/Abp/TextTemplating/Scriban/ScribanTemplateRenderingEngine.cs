@@ -14,6 +14,15 @@ public class ScribanTemplateRenderingEngine : TemplateRenderingEngineBase, ITran
     public const string EngineName = "Scriban";
     public override string Name => EngineName;
 
+    /// <inheritdoc />
+    /// <remarks>
+    /// Scriban interprets templates as a restricted DSL without direct .NET interop.
+    /// Templates cannot invoke arbitrary BCL types unless explicitly imported into the
+    /// script object by the host, so editing template content is safe for non-developer
+    /// users.
+    /// </remarks>
+    public override bool IsSandboxed => true;
+
     public ScribanTemplateRenderingEngine(
         ITemplateDefinitionManager templateDefinitionManager,
         ITemplateContentProvider templateContentProvider,

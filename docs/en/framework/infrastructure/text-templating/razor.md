@@ -10,6 +10,14 @@
 
 The Razor template is a standard C# class, so you can freely use the functions of C#, such as `dependency injection`, using `LINQ`, custom methods, and even using `Repository`.
 
+> ⚠ **Security notice**
+>
+> The Razor rendering engine compiles template content into a fully-trusted .NET assembly via Roslyn and executes it in the host process. **Editing a Razor template at runtime is functionally equivalent to executing arbitrary server-side code** — the template can access the filesystem, environment variables, the application's DI container, secrets, and any other .NET API.
+>
+> The framework reflects this fact through the `ITemplateRenderingEngine.IsSandboxed` property: `RazorTemplateRenderingEngine.IsSandboxed == false`. The [Text Template Management](../../../modules/text-template-management.md) module reads this flag and requires the dedicated `TextTemplateManagement.TextTemplates.EditNonSandboxedContents` permission (in addition to `EditContents`) before allowing such templates to be edited via its UI.
+>
+> Treat the ability to edit Razor template content as equivalent to granting shell access to the application server, and grant the related permission only to fully trusted developers/operators. If you need a sandboxed engine for content editors, consider [Scriban](scriban.md), whose templates cannot invoke arbitrary .NET APIs.
+
 
 ## Installation
 

@@ -17,6 +17,15 @@ public class RazorTemplateRenderingEngine : TemplateRenderingEngineBase, ITransi
     public const string EngineName = "Razor";
     public override string Name => EngineName;
 
+    /// <inheritdoc />
+    /// <remarks>
+    /// Razor templates are compiled into .NET assemblies via Roslyn and executed in the
+    /// host process with full access to the BCL and DI container. They are NOT sandboxed,
+    /// and editing template contents is functionally equivalent to granting server-side
+    /// code execution.
+    /// </remarks>
+    public override bool IsSandboxed => false;
+
     protected readonly IServiceScopeFactory ServiceScopeFactory;
 
     public RazorTemplateRenderingEngine(

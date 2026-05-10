@@ -10,6 +10,26 @@ public interface ITemplateRenderingEngine
     string Name { get; }
 
     /// <summary>
+    /// Indicates whether this engine renders template content in a sandboxed way that
+    /// prevents the content from accessing the host runtime (filesystem, environment,
+    /// arbitrary .NET APIs, etc.).
+    /// <para>
+    /// Sandboxed engines (e.g. Scriban, Liquid) interpret templates as a restricted DSL
+    /// without .NET interop. Non-sandboxed engines (e.g. Razor) compile templates into
+    /// fully-trusted .NET code that runs with the same privileges as the host process.
+    /// </para>
+    /// <para>
+    /// Implementations are required to declare this explicitly. The recommended
+    /// secure-by-default value is <c>false</c>: any engine that doesn't have a clear
+    /// sandboxing story should return <c>false</c> so callers such as the
+    /// TextTemplateManagement module treat its templates as requiring elevated trust
+    /// to edit. <see cref="TemplateRenderingEngineBase"/> provides a virtual default
+    /// of <c>false</c> for engines deriving from it.
+    /// </para>
+    /// </summary>
+    bool IsSandboxed { get; }
+
+    /// <summary>
     /// Renders a text template.
     /// </summary>
     /// <param name="templateName">The template name</param>

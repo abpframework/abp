@@ -164,6 +164,22 @@ See the [connection strings](../framework/fundamentals/connection-strings.md) do
 
 See the `TextTemplateManagementPermissions` class members for all permissions defined for this module.
 
+The module exposes two edit-time permissions with different risk levels:
+
+| Permission | Required to edit | Default grant |
+|------------|------------------|---------------|
+| `TextTemplateManagement.TextTemplates.EditContents` | Templates rendered by a sandboxed engine (e.g. Scriban). Editing such templates is safe for content editors because the engine cannot execute arbitrary .NET code. | Granted to roles that need to edit template text. |
+| `TextTemplateManagement.TextTemplates.EditNonSandboxedContents` | Templates rendered by a **non-sandboxed** engine (e.g. Razor). Editing such templates is functionally equivalent to granting server-side code execution because the engine compiles the content into a .NET assembly that runs with the host process's privileges. | **Not granted to any role by default**, including `admin`. Must be granted explicitly. |
+
+Whether a template is sandboxed is determined by `ITemplateRenderingEngine.IsSandboxed` on the engine that renders it. Editing a non-sandboxed template requires **both** `EditContents` and `EditNonSandboxedContents`.
+
+The Text Template Management UI surfaces this distinction:
+
+- A warning banner is rendered above the editor for non-sandboxed templates.
+- The save and restore buttons are disabled when the current user lacks `EditNonSandboxedContents` for a non-sandboxed template.
+
+> Treat `EditNonSandboxedContents` as equivalent to granting shell access to the application server. Only assign it to fully trusted developers or operators.
+
 
 ### Angular UI
 
