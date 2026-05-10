@@ -8,7 +8,6 @@ public abstract class TemplateRenderingEngineBase : ITemplateRenderingEngine
 {
     public abstract string Name { get; }
 
-    /// <inheritdoc cref="ITemplateRenderingEngine.IsSandboxed" />
     public virtual bool IsSandboxed => false;
 
     protected readonly ITemplateDefinitionManager TemplateDefinitionManager;
