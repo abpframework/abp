@@ -46,7 +46,7 @@ public class DefaultDynamicBackgroundWorkerManager :
         {
             throw new AbpException(
                 $"The default in-memory background worker manager does not support CronExpression for dynamic worker '{workerName}'. " +
-                "Please set Period, or use a scheduler-backed provider (Hangfire or Quartz).");
+                "Please clear CronExpression and use Period-based scheduling, or use a scheduler-backed provider (Hangfire or Quartz).");
         }
 
         await _semaphore.WaitAsync(cancellationToken);
@@ -109,7 +109,7 @@ public class DefaultDynamicBackgroundWorkerManager :
         {
             throw new AbpException(
                 $"The default in-memory background worker manager does not support CronExpression for dynamic worker '{workerName}'. " +
-                "Please set Period, or use a scheduler-backed provider (Hangfire or Quartz).");
+                "Please clear CronExpression and use Period-based scheduling, or use a scheduler-backed provider (Hangfire or Quartz).");
         }
 
         await _semaphore.WaitAsync(cancellationToken);

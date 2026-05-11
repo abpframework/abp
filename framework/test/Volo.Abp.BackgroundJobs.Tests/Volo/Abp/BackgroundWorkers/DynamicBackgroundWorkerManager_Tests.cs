@@ -263,6 +263,30 @@ public class DynamicBackgroundWorkerManager_Tests : BackgroundJobsTestBase
     }
 
     [Fact]
+    public async Task Should_Throw_When_CronExpression_Is_Set_On_UpdateSchedule()
+    {
+        var workerName = "dynamic-worker-" + Guid.NewGuid();
+
+        await _dynamicWorkerManager.AddAsync(
+            workerName,
+            new DynamicBackgroundWorkerSchedule { Period = 1000 },
+            (_, _) => Task.CompletedTask
+        );
+
+        await Assert.ThrowsAsync<AbpException>(async () =>
+        {
+            await _dynamicWorkerManager.UpdateScheduleAsync(
+                workerName,
+                new DynamicBackgroundWorkerSchedule
+                {
+                    Period = 1000,
+                    CronExpression = "0 */5 * * * *"
+                }
+            );
+        });
+    }
+
+    [Fact]
     public async Task Should_Continue_Running_After_Handler_Throws_Exception()
     {
         var workerName = "dynamic-worker-" + Guid.NewGuid();
