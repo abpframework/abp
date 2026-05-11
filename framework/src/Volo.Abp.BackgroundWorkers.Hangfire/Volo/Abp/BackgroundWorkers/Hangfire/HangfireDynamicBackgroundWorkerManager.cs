@@ -13,13 +13,15 @@ using Volo.Abp.Hangfire;
 namespace Volo.Abp.BackgroundWorkers.Hangfire;
 
 [Dependency(ReplaceServices = true)]
-public class HangfireDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerManager, ISingletonDependency
+public class HangfireDynamicBackgroundWorkerManager :
+    IDynamicBackgroundWorkerManager,
+    ISupportsRuntimeRegistration,
+    ISupportsCronScheduling,
+    ISingletonDependency
 {
     protected IServiceProvider ServiceProvider { get; }
     protected IDynamicBackgroundWorkerHandlerRegistry HandlerRegistry { get; }
     public ILogger<HangfireDynamicBackgroundWorkerManager> Logger { get; set; }
-    public virtual DynamicBackgroundWorkerManagerCapabilities Capabilities { get; } =
-        new DynamicBackgroundWorkerManagerCapabilities();
 
     public HangfireDynamicBackgroundWorkerManager(
         IServiceProvider serviceProvider,

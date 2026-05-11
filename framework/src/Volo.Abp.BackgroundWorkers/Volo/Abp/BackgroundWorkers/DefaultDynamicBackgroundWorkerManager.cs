@@ -10,16 +10,13 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers;
 
-public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerManager, ISingletonDependency
+public class DefaultDynamicBackgroundWorkerManager :
+    IDynamicBackgroundWorkerManager,
+    ISupportsRuntimeRegistration,
+    ISingletonDependency
 {
     protected IServiceProvider ServiceProvider { get; }
     public ILogger<DefaultDynamicBackgroundWorkerManager> Logger { get; set; }
-    public virtual DynamicBackgroundWorkerManagerCapabilities Capabilities { get; } =
-        new DynamicBackgroundWorkerManagerCapabilities
-        {
-            SupportsDynamicRegistration = true,
-            SupportsCronExpression = false
-        };
 
     private readonly ConcurrentDictionary<string, InMemoryDynamicBackgroundWorker> _dynamicWorkers;
     private readonly SemaphoreSlim _semaphore;

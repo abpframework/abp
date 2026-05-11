@@ -22,10 +22,10 @@ public class DynamicBackgroundWorkerManager_Tests : BackgroundJobsTestBase
     }
 
     [Fact]
-    public void Should_Report_Provider_Capabilities()
+    public void Should_Report_Provider_Capabilities_Using_Marker_Interfaces()
     {
-        _dynamicWorkerManager.Capabilities.SupportsDynamicRegistration.ShouldBeTrue();
-        _dynamicWorkerManager.Capabilities.SupportsCronExpression.ShouldBeFalse();
+        (_dynamicWorkerManager is ISupportsRuntimeRegistration).ShouldBeTrue();
+        (_dynamicWorkerManager is ISupportsCronScheduling).ShouldBeFalse();
     }
 
     [Fact]
