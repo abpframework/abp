@@ -291,7 +291,7 @@ public partial class ResourcePermissionManagementModal
 
     protected virtual async Task DeleteResourcePermissionAsync(ResourcePermissionGrantInfoDto permission)
     {
-        var confirmed = await DialogService.ShowMessageBox(
+        var confirmed = await DialogService.ShowMessageBoxAsync(
             L["AreYouSure"],
             L["ResourcePermissionDeletionConfirmationMessage"],
             yesText: L["Yes"],

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Authorization;
@@ -332,7 +333,7 @@ public abstract class AbpMudCrudPageBase<
         }
     }
 
-    protected virtual async Task<GridData<TListViewModel>> OnDataGridReadAsync(GridState<TListViewModel> state)
+    protected virtual async Task<GridData<TListViewModel>> OnDataGridReadAsync(GridState<TListViewModel> state, CancellationToken cancellationToken = default)
     {
         CurrentSorting = state.SortDefinitions
             .Select(s => _dataGrid.ResolveSortPropertyName(s) + (s.Descending ? " DESC" : ""))
@@ -617,7 +618,7 @@ public abstract class AbpMudCrudPageBase<
 
     protected virtual async Task<bool> ConfirmDeleteAsync(TListViewModel entity)
     {
-        var result = await DialogService.ShowMessageBox(
+        var result = await DialogService.ShowMessageBoxAsync(
             UiLocalizer["AreYouSure"],
             GetDeleteConfirmationMessage(entity),
             yesText: UiLocalizer["Yes"],

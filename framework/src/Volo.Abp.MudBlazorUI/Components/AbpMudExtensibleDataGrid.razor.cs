@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Components;
@@ -28,9 +29,9 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
     /// Maps SortBy func references to their corresponding property names.
     /// Used to resolve property names from MudBlazor SortDefinition.SortFunc.
     /// </summary>
-    private readonly Dictionary<Func<TItem, object>, string> _sortFuncToPropertyMap = new();
+    private readonly Dictionary<Func<TItem, object?>, string> _sortFuncToPropertyMap = new();
 
-    [Parameter] public Func<GridState<TItem>, Task<GridData<TItem>>>? ServerData { get; set; }
+    [Parameter] public Func<GridState<TItem>, CancellationToken, Task<GridData<TItem>>>? ServerData { get; set; }
 
     [Parameter] public bool Loading { get; set; }
 
@@ -192,7 +193,7 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
         return string.Empty;
     }
 
-    protected virtual Func<TItem, object>? GetSortByFunc(TableColumn column)
+    protected virtual Func<TItem, object?>? GetSortByFunc(TableColumn column)
     {
         if (!column.Sortable)
         {
@@ -221,7 +222,7 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
         var parameter = System.Linq.Expressions.Expression.Parameter(typeof(TItem), "x");
         System.Linq.Expressions.Expression expression = parameter;
 
-        Func<TItem, object>? sortFunc = null;
+        Func<TItem, object?>? sortFunc = null;
         foreach (var prop in properties)
         {
             var propertyInfo = expression.Type.GetProperty(prop, BindingFlags.Public | BindingFlags.Instance);
@@ -237,7 +238,7 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
         if (sortFunc == null)
         {
             var convertExpression = System.Linq.Expressions.Expression.Convert(expression, typeof(object));
-            var lambda = System.Linq.Expressions.Expression.Lambda<Func<TItem, object>>(convertExpression, parameter);
+            var lambda = System.Linq.Expressions.Expression.Lambda<Func<TItem, object?>>(convertExpression, parameter);
             sortFunc = lambda.Compile();
         }
 
@@ -247,7 +248,7 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
         return sortFunc;
     }
 
-    protected virtual Func<TItem, object>? GetExtensionPropertySortFunc(TableColumn column)
+    protected virtual Func<TItem, object?>? GetExtensionPropertySortFunc(TableColumn column)
     {
         if (!column.Sortable || string.IsNullOrWhiteSpace(column.Data))
         {
@@ -261,7 +262,7 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
         }
 
         var propertyName = match.Groups[1].Value;
-        Func<TItem, object> sortFunc = item =>
+        Func<TItem, object?> sortFunc = item =>
         {
             var entity = item as IHasExtraProperties;
             return entity?.GetProperty(propertyName) ?? string.Empty;
