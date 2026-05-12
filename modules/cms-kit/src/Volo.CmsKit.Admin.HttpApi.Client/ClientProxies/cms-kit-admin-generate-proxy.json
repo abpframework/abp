@@ -406,7 +406,7 @@
               "uniqueName": "MoveAllBlogPostsAsyncByBlogIdAndAssignToBlogId",
               "name": "MoveAllBlogPostsAsync",
               "httpMethod": "PUT",
-              "url": "api/cms-kit-admin/blogs/{id}/move-all-blog-posts",
+              "url": "api/cms-kit-admin/blogs/{blogId}/move-all-blog-posts",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
@@ -436,7 +436,7 @@
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
+                  "bindingSourceId": "Path",
                   "descriptorName": ""
                 },
                 {
@@ -449,18 +449,6 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Query",
-                  "descriptorName": ""
-                },
-                {
-                  "nameOnMethod": "id",
-                  "name": "id",
-                  "jsonName": null,
-                  "type": null,
-                  "typeSimple": null,
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": [],
-                  "bindingSourceId": "Path",
                   "descriptorName": ""
                 }
               ],
