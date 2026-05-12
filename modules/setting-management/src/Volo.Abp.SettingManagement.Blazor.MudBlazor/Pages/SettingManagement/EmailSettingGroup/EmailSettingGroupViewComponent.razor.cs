@@ -68,7 +68,7 @@ public partial class EmailSettingGroupViewComponent
                 return;
             }
             
-            await _emailFormRef.Validate();
+            await _emailFormRef.ValidateAsync();
             if (!_emailFormRef.IsValid)
             {
                 return;
@@ -132,7 +132,7 @@ public partial class EmailSettingGroupViewComponent
                 return;
             }
 
-            await _testEmailFormRef.Validate();
+            await _testEmailFormRef.ValidateAsync();
             if (!_testEmailFormRef.IsValid)
             {
                 return;

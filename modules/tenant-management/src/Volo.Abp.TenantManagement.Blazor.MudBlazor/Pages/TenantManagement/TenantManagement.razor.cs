@@ -163,7 +163,7 @@ public partial class TenantManagement
             return;
         }
 
-        await _createFormRef.Validate();
+        await _createFormRef.ValidateAsync();
         if (!_createFormRef.IsValid)
         {
             return;
@@ -179,7 +179,7 @@ public partial class TenantManagement
             return;
         }
 
-        await _editFormRef.Validate();
+        await _editFormRef.ValidateAsync();
         if (!_editFormRef.IsValid)
         {
             return;

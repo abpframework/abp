@@ -469,7 +469,7 @@ public abstract class AbpMudCrudPageBase<
             var isValid = true;
             if (CreateFormRef != null)
             {
-                await CreateFormRef.Validate();
+                await CreateFormRef.ValidateAsync();
                 isValid = CreateFormRef.IsValid;
             }
 
@@ -527,7 +527,7 @@ public abstract class AbpMudCrudPageBase<
             var isValid = true;
             if (EditFormRef != null)
             {
-                await EditFormRef.Validate();
+                await EditFormRef.ValidateAsync();
                 isValid = EditFormRef.IsValid;
             }
 

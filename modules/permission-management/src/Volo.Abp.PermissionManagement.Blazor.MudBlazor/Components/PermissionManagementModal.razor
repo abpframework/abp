@@ -12,7 +12,7 @@
             <MudItem xs="12" sm="8">
                 <MudTextField Margin="Margin.Dense" Value="@_permissionGroupSearchText"
                              ValueChanged="@(async ([CanBeNull] string b) => await OnPermissionGroupSearchTextChangedAsync(b))"
-                             Label="@L["Search"]"
+                             Placeholder="@L["Search"]"
                              Adornment="Adornment.Start"
                              AdornmentIcon="@Icons.Material.Filled.Search"
                              Immediate="true" />
