@@ -83,3 +83,11 @@
     white-space: nowrap;
 }
 
+
+/* Picker label (date / time / color picker): when label is long it overflows into the
+   toggle icon on the right and visually overlaps the calendar/clock icon.
+   Reserve ~40px on the right for the end-adornment toggle icon so the label truncates with ellipsis. */
+.mud-picker .mud-input-label.mud-input-label-inputcontrol {
+    max-width: calc(100% - 40px);
+}
+
