@@ -91,3 +91,10 @@
     max-width: calc(100% - 40px);
 }
 
+
+/* Input label: increase line-height slightly so descenders (g, p, q, y) in the floated
+   label text are not clipped by the input baseline immediately below. */
+.mud-input-control .mud-input-label-inputcontrol {
+    line-height: 1.4rem;
+}
+
