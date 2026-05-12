@@ -35,8 +35,7 @@
                 <MudTabs @bind-ActivePanelIndex="@_activeTabIndex"
                         Variant="Variant.Pills"
                         Position="Position.Left"
-                        PanelClass="pa-4"
-                        Style="max-height: 600px; overflow-y: auto;">
+                        PanelClass="pa-4">
                     @foreach (var group in _groups)
                     {
                         <MudTabPanel Text="@($"{group.DisplayName} ({group.Permissions.Count(x => x.IsGranted)})")">
