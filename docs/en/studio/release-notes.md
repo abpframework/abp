@@ -9,7 +9,20 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 3.0.1 (2026-05-06) Latest
+## 3.0.2 (2026-05-12) Latest
+
+- Refactor macOS build steps in Azure DevOps pipelines to remove specif…
+- Modern template osx fix
+- Update dark theme - BackgroundColorLighter
+- Fix initial task warning handling
+- Abp Studio ai agent cont
+- Add Volo.Abp.Elsa to module list
+- Register reCAPTCHA in HttpApi host templates for CmsKit contact endpoint
+- Optimized system prompt in ABP Studio
+- Update version to release 3.0.2 with 10.3.0
+- Register `MVC.RootUrl` in `HttpApi.Host` template
+
+## 3.0.1 (2026-05-06)
 
 * Enhanced Project Wizard: Fixed the optional module selection step for a smoother project setup experience
 * React Admin Console Improvements: Resolved identified issues in the React administration templates for better stability
