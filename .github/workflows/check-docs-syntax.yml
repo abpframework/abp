@@ -179,7 +179,11 @@ jobs:
             }
 
       - name: Resolve previous failure comment on success
-        if: success() && (steps.changed.outputs.count != '0' || steps.changed.outputs.paramsChanged == 'true')
+        # Clear any stale failure comment whenever this workflow run is green,
+        # even if the syntax checker step was skipped (e.g. when a later
+        # commit reverts the earlier failure so no markdown files appear in
+        # the PR's net diff).
+        if: success()
         uses: actions/github-script@v7
         with:
           script: |
