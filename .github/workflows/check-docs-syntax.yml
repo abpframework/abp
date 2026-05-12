@@ -13,7 +13,7 @@ on:
 
 permissions:
   contents: read
-  pull-requests: read
+  pull-requests: write
 
 jobs:
   check-scriban-syntax:
@@ -78,6 +78,7 @@ jobs:
             }
 
       - name: Run syntax checker
+        id: checker
         if: steps.changed.outputs.count != '0' || steps.changed.outputs.paramsChanged == 'true'
         env:
           CHANGED_FILES: ${{ steps.changed.outputs.files }}
@@ -105,5 +106,112 @@ jobs:
             fi
           fi
 
+          # Capture the checker's stdout so a follow-up step can post it as a PR
+          # comment when the run fails, while still streaming it to the job log.
+          set -o pipefail
           dotnet run --project .github/scripts/CheckDocsSyntax/CheckDocsSyntax.csproj \
-            -c Release --no-build -- "${args[@]}"
+            -c Release --no-build -- "${args[@]}" 2>&1 | tee checker-output.txt
+
+      - name: Upsert PR comment on failure
+        if: failure() && steps.checker.conclusion == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const MARKER = '<!-- check-docs-syntax-bot -->';
+            const prNumber = context.payload.pull_request.number;
+
+            let report = '';
+            try {
+              report = fs.readFileSync('checker-output.txt', 'utf8').trim();
+            } catch (e) {
+              report = '(checker output was not captured)';
+            }
+
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const body = [
+              MARKER,
+              '### Docs syntax check failed',
+              '',
+              'The Scriban syntax checker reported issues in the Markdown files this PR changes. Wrap inline Scriban-looking text with `{%{{{ ... }}}%}` or wrap whole code blocks with `{%{` ... `}%}` to keep it from being parsed as a template.',
+              '',
+              '<details><summary>Checker output</summary>',
+              '',
+              '```',
+              report,
+              '```',
+              '',
+              '</details>',
+              '',
+              `[Full run log](${runUrl})`,
+            ].join('\n');
+
+            // Find an existing bot comment to update (idempotent across re-runs).
+            let existing = null;
+            for (let page = 1; ; page++) {
+              const { data } = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                per_page: 100,
+                page,
+              });
+              existing = data.find(c => c.body && c.body.startsWith(MARKER));
+              if (existing || data.length < 100) break;
+            }
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+              core.info(`Updated existing bot comment (#${existing.id}).`);
+            } else {
+              const { data: created } = await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body,
+              });
+              core.info(`Created bot comment (#${created.id}).`);
+            }
+
+      - name: Resolve previous failure comment on success
+        if: success() && (steps.changed.outputs.count != '0' || steps.changed.outputs.paramsChanged == 'true')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const MARKER = '<!-- check-docs-syntax-bot -->';
+            const prNumber = context.payload.pull_request.number;
+
+            for (let page = 1; ; page++) {
+              const { data } = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                per_page: 100,
+                page,
+              });
+
+              const existing = data.find(c => c.body && c.body.startsWith(MARKER));
+              if (existing) {
+                const body = [
+                  MARKER,
+                  '### Docs syntax check passed',
+                  '',
+                  'The previously reported issues are no longer present in this PR.',
+                ].join('\n');
+                await github.rest.issues.updateComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: existing.id,
+                  body,
+                });
+                core.info(`Cleared bot comment (#${existing.id}).`);
+                break;
+              }
+
+              if (data.length < 100) break;
+            }
