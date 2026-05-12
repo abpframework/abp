@@ -2,7 +2,9 @@
 
 The new ABP Studio release introduces a deeply integrated set of features designed around one idea: an AI coding agent that truly understands ABP solutions, sitting inside an IDE that already knows how to build, run, monitor, and iterate on them.
 
-At the center is **ABP Agent**, our AI coding assistant. Around it are three long-standing ABP Studio capabilities that have been brought together into a single development loop: the **Solution Runner**, the **Analyze** engine, and a complete **Git & GitHub integration**. Together they turn ABP Studio into a single place where you plan, generate, run, debug, review and commit your ABP solutions.
+At the center is **ABP Agent**, our AI coding assistant. Around it are long-standing ABP Studio capabilities that have been brought together into a single development loop. Together they turn ABP Studio into a single place where you architect and code your ABP solutions.
+
+![abp-studio-ui](abp-studio-new-design.png)
 
 ---
 
@@ -10,7 +12,7 @@ At the center is **ABP Agent**, our AI coding assistant. Around it are three lon
 
 General-purpose AI coding tools (Cursor, Claude Code, Windsurf, opencode and similar) are excellent for horizontal, file-shaped work. They read source files, edit them, and run shell commands. That works well for small scripts or front-end apps.
 
-ABP solutions are different. A typical ABP solution is **system-shaped**, not file-shaped:
+ABP solutions are different. A typical ABP solution is **system-shaped**, not just file-shaped: the important context is not only where files are located, but how modules, layers, permissions, contracts, localization, persistence, and UI pieces work together:
 
 - It is split across multiple modules and layers (Domain, Application, EntityFrameworkCore, HttpApi, Web, etc.) with strict dependency rules.
 - It is composed of many runnable units: HTTP services, gateways, identity servers, background workers, SPAs, mobile apps, plus the Docker containers they depend on.
@@ -66,7 +68,7 @@ The agent also scopes builds intelligently. It can build a single project, a sin
 
 ## Solution Runner & Live Runtime Monitor
 
-This is the half of ABP Agent that no general-purpose AI IDE can replicate, because no general-purpose IDE has a first-class runner for distributed .NET solutions.
+This is the half of ABP Agent that no general-purpose AI IDE can replicate, because no general-purpose AI IDE has a first-class runner for distributed .NET solutions.
 
 **Solution Runner** is the ABP Studio feature that knows about every runnable thing in your solution: web apps, microservices, gateways, identity servers, background workers, CLI applications, mobile and SPA front-ends, plus the Docker containers your stack depends on (databases, caches, message brokers). Apps are grouped into folders and can be launched as a coherent set under a named *run profile*. You start everything with one click; ABP Studio handles ports, dependencies, restart-on-failure, and embedded browser previews.
 
@@ -145,7 +147,7 @@ Two AI-assisted touches make this loop especially smooth:
 - **AI-generated commit messages.** Click "Generate with AI" and ABP Agent writes a Conventional Commits-style message from the staged diff. Edit it if you want, then commit.
 - **AI Code Review on the diff.** Select the files you want reviewed, run AI review, and inline suggestions stream into the IDE as the analysis runs. Crucially, this is not a generic code review; it is an **ABP-aware** review. The reviewer looks for ABP-specific pattern violations: plain POCOs where ABP base classes belong, direct `DbContext` injection where a repository should be used, hardcoded strings where localization should be used, plain exceptions where `BusinessException` belongs, role-based authorization where ABP Permissions are the right answer, and so on. When the reviewer is unsure, it consults the official ABP documentation before flagging an issue.
 
-The result is a *closed loop*: the agent writes the change, you (or the AI reviewer) review the diff, you fix the comments, you commit with an AI-suggested message, you push, and you head to GitHub for the pull request, all from inside ABP Studio.
+The result is a *closed loop*: the agent writes the change, you (or the AI reviewer agent) review the diff, you let the agent fix the comments, you commit with an AI-suggested message, you push, and you head to GitHub for the pull request, all from inside ABP Studio.
 
 ---
 
@@ -219,9 +221,6 @@ This release is the first step. The features below are already on our short-term
 - **Custom Workflows improvements**: more step types, richer conditions, finer-grained targets, and better visibility into which workflow ran for which agent turn.
 - **GitHub integration improvements**: in-IDE pull request creation (no more jumping to the GitHub website), richer review handling, and more first-class issue and PR actions for the agent.
 - **Git integration improvements**: more advanced day-to-day Git operations available without leaving the IDE.
-- **Automatic rules and skills for your solution**: ABP Studio will analyze your codebase and generate solution-specific rules and skills automatically, so the agent learns your conventions without you writing anything by hand.
 - **Design helper**: ABP Agent will generate images.
 - **Create a new project with the agent**: an AI-driven solution creation flow where you describe the application you want and ABP Agent helps choose the right template, modules, and configuration.
 - **ABP Suite integration**: ABP Agent will be able to invoke ABP Suite for CRUD-page generation. Instead of asking the LLM to write the full set of layers for a CRUD page (which spends a lot of tokens and time), the agent will hand the task to ABP Suite, get a deterministic, production-quality result back, and continue with the parts that actually need the AI.
-
-Happy building.
