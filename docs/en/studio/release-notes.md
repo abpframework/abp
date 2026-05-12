@@ -11,16 +11,14 @@ This document contains **brief release notes** for each ABP Studio release. Rele
 
 ## 3.0.2 (2026-05-12) Latest
 
-- Refactor macOS build steps in Azure DevOps pipelines to remove specif…
-- Modern template osx fix
-- Update dark theme - BackgroundColorLighter
-- Fix initial task warning handling
-- Abp Studio ai agent cont
-- Add Volo.Abp.Elsa to module list
-- Register reCAPTCHA in HttpApi host templates for CmsKit contact endpoint
-- Optimized system prompt in ABP Studio
-- Update version to release 3.0.2 with 10.3.0
-- Register `MVC.RootUrl` in `HttpApi.Host` template
+* Modern template osx fix
+* Update dark theme - BackgroundColorLighter
+* Fix initial task warning handling
+* Abp Studio ai agent cont
+* Add Volo.Abp.Elsa to module list
+* Register reCAPTCHA in HttpApi host templates for CmsKit contact endpoint
+* Optimized system prompt in ABP Studio
+* Register `MVC.RootUrl` in `HttpApi.Host` template
 
 ## 3.0.1 (2026-05-06)
 
