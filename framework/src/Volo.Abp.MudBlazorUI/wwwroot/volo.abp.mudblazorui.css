@@ -98,3 +98,15 @@
     line-height: 1.4rem;
 }
 
+
+/* Vertical MudTabs (Position="Left"/"Right"): add horizontal gap between the tabbar
+   and the panels container so the active tab indicator does not visually touch the
+   panel content. v9 default puts them flush against each other. */
+.mud-tabs.mud-tabs-vertical > .mud-tabs-panels {
+    padding-inline-start: 16px;
+}
+
+.mud-tabs.mud-tabs-vertical-reverse > .mud-tabs-panels {
+    padding-inline-end: 16px;
+}
+
