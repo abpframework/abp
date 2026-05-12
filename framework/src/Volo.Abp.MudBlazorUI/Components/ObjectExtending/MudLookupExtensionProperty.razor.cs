@@ -58,7 +58,7 @@ public partial class MudLookupExtensionProperty<TEntity, TResourceType>
         if (firstRender)
         {
             LookupItems = await GetLookupItemsAsync(string.Empty);
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         }
     }
 

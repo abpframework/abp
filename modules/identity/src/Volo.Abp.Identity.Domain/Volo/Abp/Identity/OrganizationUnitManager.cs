@@ -41,6 +41,8 @@ public class OrganizationUnitManager : DomainService
     [UnitOfWork]
     public virtual async Task CreateAsync(OrganizationUnit organizationUnit)
     {
+        await ValidateParentTenantAsync(organizationUnit.ParentId, organizationUnit.TenantId);
+
         organizationUnit.Code = await GetNextChildCodeAsync(organizationUnit.ParentId);
         await ValidateOrganizationUnitAsync(organizationUnit);
         await OrganizationUnitRepository.InsertAsync(organizationUnit);
@@ -107,6 +109,8 @@ public class OrganizationUnitManager : DomainService
             return;
         }
 
+        await ValidateParentTenantAsync(parentId, organizationUnit.TenantId);
+
         //Should find children before Code change
         var children = await FindChildrenAsync(id, true);
 
@@ -145,6 +149,21 @@ public class OrganizationUnitManager : DomainService
         {
             throw new BusinessException(IdentityErrorCodes.DuplicateOrganizationUnitDisplayName)
                 .WithData("0", organizationUnit.DisplayName);
+        }
+    }
+
+    protected virtual async Task ValidateParentTenantAsync(Guid? parentId, Guid? tenantId)
+    {
+        if (!parentId.HasValue)
+        {
+            return;
+        }
+
+        var parent = await OrganizationUnitRepository.FindAsync(parentId.Value);
+        if (parent == null || parent.TenantId != tenantId)
+        {
+            throw new BusinessException(IdentityErrorCodes.OrganizationUnitParentTenantMismatch)
+                .WithData("ParentId", parentId);
         }
     }
 

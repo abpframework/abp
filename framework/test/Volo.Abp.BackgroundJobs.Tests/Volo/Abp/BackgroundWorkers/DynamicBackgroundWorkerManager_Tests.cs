@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.BackgroundWorkers;
 using Xunit;
@@ -18,6 +19,13 @@ public class DynamicBackgroundWorkerManager_Tests : BackgroundJobsTestBase
     public DynamicBackgroundWorkerManager_Tests()
     {
         _dynamicWorkerManager = GetRequiredService<IDynamicBackgroundWorkerManager>();
+    }
+
+    [Fact]
+    public void Should_Report_Provider_Capabilities_Using_Marker_Interfaces()
+    {
+        (_dynamicWorkerManager is ISupportsRuntimeRegistration).ShouldBeTrue();
+        (_dynamicWorkerManager is ISupportsCronScheduling).ShouldBeFalse();
     }
 
     [Fact]
@@ -231,6 +239,49 @@ public class DynamicBackgroundWorkerManager_Tests : BackgroundJobsTestBase
                 workerName,
                 new DynamicBackgroundWorkerSchedule(),
                 (_, _) => Task.CompletedTask
+            );
+        });
+    }
+
+    [Fact]
+    public async Task Should_Throw_When_CronExpression_Is_Set()
+    {
+        var workerName = "dynamic-worker-" + Guid.NewGuid();
+
+        await Assert.ThrowsAsync<AbpException>(async () =>
+        {
+            await _dynamicWorkerManager.AddAsync(
+                workerName,
+                new DynamicBackgroundWorkerSchedule
+                {
+                    Period = 1000,
+                    CronExpression = "0 */5 * * * *"
+                },
+                (_, _) => Task.CompletedTask
+            );
+        });
+    }
+
+    [Fact]
+    public async Task Should_Throw_When_CronExpression_Is_Set_On_UpdateSchedule()
+    {
+        var workerName = "dynamic-worker-" + Guid.NewGuid();
+
+        await _dynamicWorkerManager.AddAsync(
+            workerName,
+            new DynamicBackgroundWorkerSchedule { Period = 1000 },
+            (_, _) => Task.CompletedTask
+        );
+
+        await Assert.ThrowsAsync<AbpException>(async () =>
+        {
+            await _dynamicWorkerManager.UpdateScheduleAsync(
+                workerName,
+                new DynamicBackgroundWorkerSchedule
+                {
+                    Period = 1000,
+                    CronExpression = "0 */5 * * * *"
+                }
             );
         });
     }

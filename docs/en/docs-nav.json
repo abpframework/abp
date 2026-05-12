@@ -1867,6 +1867,68 @@
               ]
             },
             {
+              "text": "React",
+              "items": [
+                {
+                  "text": "Overview",
+                  "path": "framework/ui/react/index.md",
+                  "isIndex": true
+                },
+                {
+                  "text": "Configuration and Development",
+                  "items": [
+                    {
+                      "text": "Environment Variables",
+                      "path": "framework/ui/react/environment-variables.md"
+                    },
+                    {
+                      "text": "Unit Testing",
+                      "path": "framework/ui/react/unit-testing.md"
+                    }
+                  ]
+                },
+                {
+                  "text": "Core Features",
+                  "items": [
+                    {
+                      "text": "Authorization",
+                      "path": "framework/ui/react/authorization.md"
+                    },
+                    {
+                      "text": "Localization",
+                      "path": "framework/ui/react/localization.md"
+                    },
+                    {
+                      "text": "Permission Management",
+                      "path": "framework/ui/react/permission-management.md"
+                    },
+                    {
+                      "text": "HTTP Requests",
+                      "path": "framework/ui/react/http-requests.md"
+                    }
+                  ]
+                },
+                {
+                  "text": "Customization and Components",
+                  "items": [
+                    {
+                      "text": "Customization",
+                      "path": "framework/ui/react/customization.md"
+                    },
+                    {
+                      "text": "Components",
+                      "path": "framework/ui/react/components/index.md",
+                      "isIndex": true
+                    }
+                  ]
+                },
+                {
+                  "text": "Admin Console",
+                  "path": "framework/ui/react/admin-console.md"
+                }
+              ]
+            },
+            {
               "text": "React Native",
               "items": [
                 {

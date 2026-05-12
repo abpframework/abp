@@ -61,7 +61,7 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
     {
         if (_dataGrid != null && ServerData != null)
         {
-            await _dataGrid.ReloadServerData();
+            await InvokeAsync(() => _dataGrid.ReloadServerData());
         }
     }
 
