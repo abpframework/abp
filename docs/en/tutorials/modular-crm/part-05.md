@@ -10,7 +10,8 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC", "BlazorWebApp", "NG"]
+    "UI": ["MVC", "BlazorWebApp", "NG"],
+    "BlazorUI": ["Blazorise", "MudBlazor"]
 }
 ````
 
@@ -525,6 +526,8 @@ public class OrderingMenuContributor : IMenuContributor
 
 Replace the `Index.razor` content in the `Pages/Ordering` folder of the `ModularCrm.Ordering.Blazor` project with the following code block:
 
+{{if BlazorUI == "Blazorise"}}
+
 ````razor
 @page "/ordering"
 @using System.Collections.Generic
@@ -558,6 +561,46 @@ Replace the `Index.razor` content in the `Pages/Ordering` folder of the `Modular
     }
 }
 ````
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+````razor
+@page "/ordering"
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using ModularCrm.Ordering
+@inject IOrderAppService OrderAppService
+
+<MudText Typo="Typo.h4">Orders</MudText>
+
+<MudCard>
+    <MudCardContent>
+        <MudList T="OrderDto">
+            @foreach (var order in Orders)
+            {
+                <MudListItem T="OrderDto" Value="@order">
+                    <strong>Customer:</strong> @order.CustomerName <br />
+                    <strong>Product:</strong> @order.ProductId <br />
+                    <strong>State:</strong> @order.State
+                </MudListItem>
+            }
+        </MudList>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    private List<OrderDto> Orders { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Orders = await OrderAppService.GetListAsync();
+    }
+}
+````
+
+{{end}}
 
 This page shows a list of orders on the UI. You haven't created a UI to create new orders, and we will not do it to keep this tutorial simple. If you want to learn how to create advanced UIs with ABP, please follow the [Book Store tutorial](../book-store/index.md).
 

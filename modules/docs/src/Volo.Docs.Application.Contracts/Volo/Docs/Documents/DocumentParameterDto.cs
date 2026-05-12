@@ -9,5 +9,7 @@ namespace Volo.Docs.Documents
         public string DisplayName { get; set; }
 
         public Dictionary<string, string> Values { get; set; }
+
+        public Dictionary<string, List<string>> DependsOn { get; set; }
     }
 }
