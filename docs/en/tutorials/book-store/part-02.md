@@ -10,7 +10,8 @@
 //[doc-params]
 {
     "UI": ["MVC","Blazor","BlazorServer", "BlazorWebApp", "NG", "MAUIBlazor"],
-    "DB": ["EF","Mongo"]
+    "DB": ["EF","Mongo"],
+    "BlazorUI": ["Blazorise", "MudBlazor"]
 }
 ````
 ````json
@@ -549,6 +550,8 @@ When you click on the Books menu item under the Book Store parent, you will be r
 
 ### Book List
 
+{{if BlazorUI == "Blazorise"}}
+
 We will use the [Blazorise library](https://blazorise.com/) as the UI component kit. It is a very powerful library that supports major HTML/CSS frameworks, including Bootstrap.
 
 ABP provides a generic base class - `AbpCrudPageBase<...>`, to create CRUD style pages. This base class is compatible with the `ICrudAppService` that was used to build the `IBookAppService`. So, we can inherit from the `AbpCrudPageBase` to automate the code behind for the standard CRUD stuff.
@@ -623,6 +626,81 @@ Open the `Books.razor` and replace the content as the following:
 * `LocalizationResource` is set to the `BookStoreResource` to localize the texts.
 
 While the code above is pretty easy to understand, you can check the Blazorise [Card](https://blazorise.com/docs/components/card/) and [DataGrid](https://blazorise.com/docs/extensions/datagrid/) documents to understand them better.
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+We will use the [MudBlazor library](https://mudblazor.com/) as the UI component kit. It is a Material Design component library built natively for Blazor.
+
+ABP provides a generic base class — `AbpMudCrudPageBase<...>`, to create CRUD style pages. This base class is compatible with the `ICrudAppService` that was used to build the `IBookAppService`. So, we can inherit from the `AbpMudCrudPageBase` to automate the code behind for the standard CRUD stuff.
+
+Open the `Books.razor` and replace the content as the following:
+
+````razor
+@page "/books"
+@using Volo.Abp.Application.Dtos
+@using Acme.BookStore.Books
+@using Acme.BookStore.Localization
+@inherits AbpMudCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>
+
+<MudCard>
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h4">@L["Books"]</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudDataGrid T="BookDto"
+                     ServerData="OnDataGridReadAsync"
+                     RowsPerPage="@PageSize">
+            <Columns>
+                <PropertyColumn Property="x => x.Name"
+                                Title="@L["Name"]" />
+                <PropertyColumn Property="x => x.Type"
+                                Title="@L["Type"]">
+                    <CellTemplate>
+                        @L[$"Enum:BookType.{(int)context.Item.Type}"]
+                    </CellTemplate>
+                </PropertyColumn>
+                <PropertyColumn Property="x => x.PublishDate"
+                                Title="@L["PublishDate"]">
+                    <CellTemplate>
+                        @context.Item.PublishDate.ToShortDateString()
+                    </CellTemplate>
+                </PropertyColumn>
+                <PropertyColumn Property="x => x.Price"
+                                Title="@L["Price"]" />
+                <PropertyColumn Property="x => x.CreationTime"
+                                Title="@L["CreationTime"]">
+                    <CellTemplate>
+                        @context.Item.CreationTime.ToLongDateString()
+                    </CellTemplate>
+                </PropertyColumn>
+            </Columns>
+        </MudDataGrid>
+    </MudCardContent>
+</MudCard>
+
+@code
+{
+    public Books() // Constructor
+    {
+        LocalizationResource = typeof(BookStoreResource);
+    }
+}
+````
+
+> If you see some syntax errors, you can ignore them if your application is properly built and running. Visual Studio still has some bugs with Blazor.
+
+* Inherited from `AbpMudCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>` which implements all the CRUD details for us.
+* `Entities`, `TotalCount`, `PageSize`, `OnDataGridReadAsync` are defined in the base class.
+* `LocalizationResource` is set to the `BookStoreResource` to localize the texts.
+* This page uses the standard MudBlazor `MudDataGrid` with `<PropertyColumn>` definitions. ABP also ships an `AbpMudExtensibleDataGrid` that integrates with the [data table column extension system](../../framework/ui/blazor/data-table-column-extensions.md) when you need to extend module pages.
+
+While the code above is pretty easy to understand, you can check the MudBlazor [Card](https://mudblazor.com/components/card) and [DataGrid](https://mudblazor.com/components/datagrid) documents to understand them better.
+
+{{end}}
 
 #### About the AbpCrudPageBase
 
