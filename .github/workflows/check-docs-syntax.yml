@@ -1,0 +1,109 @@
+# Validates Scriban template syntax in PR-changed Markdown files under docs/en/,
+# so escape issues are caught before they reach the published documentation.
+
+name: Check Docs Syntax
+
+on:
+  pull_request:
+    paths:
+      - 'docs/en/**/*.md'
+      - 'docs/en/docs-params.json'
+      - '.github/scripts/CheckDocsSyntax/**'
+      - '.github/workflows/check-docs-syntax.yml'
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  check-scriban-syntax:
+    name: Validate Scriban syntax in docs/en
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Build syntax checker
+        run: dotnet build .github/scripts/CheckDocsSyntax/CheckDocsSyntax.csproj -c Release --nologo -v minimal
+
+      - name: Get changed markdown files
+        id: changed
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const changed = [];
+            let paramsChanged = false;
+            let page = 1;
+            while (true) {
+              const { data: files } = await github.rest.pulls.listFiles({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                per_page: 100,
+                page,
+              });
+              const PARAMS_PATH = 'docs/en/docs-params.json';
+              for (const f of files) {
+                const isMutation =
+                  f.status === 'added' || f.status === 'modified' || f.status === 'renamed';
+                if (!isMutation) continue;
+                // For renames, GitHub puts the new path in `filename` and the
+                // old one in `previous_filename`. Detect docs-params.json on
+                // either side so renames into / out of that path still trigger
+                // the parameter-file validation path.
+                if (f.filename === PARAMS_PATH || f.previous_filename === PARAMS_PATH) {
+                  paramsChanged = true;
+                }
+                if (f.filename.startsWith('docs/en/') && f.filename.endsWith('.md')) {
+                  changed.push(f.filename);
+                }
+              }
+              if (files.length < 100) break;
+              page++;
+            }
+            core.setOutput('files', changed.join('\n'));
+            core.setOutput('count', changed.length.toString());
+            core.setOutput('paramsChanged', paramsChanged ? 'true' : 'false');
+            core.info(`Markdown files to check: ${changed.length}`);
+            core.info(`docs-params.json changed: ${paramsChanged}`);
+            for (const f of changed) {
+              core.info(`  - ${f}`);
+            }
+
+      - name: Run syntax checker
+        if: steps.changed.outputs.count != '0' || steps.changed.outputs.paramsChanged == 'true'
+        env:
+          CHANGED_FILES: ${{ steps.changed.outputs.files }}
+          PARAMS_CHANGED: ${{ steps.changed.outputs.paramsChanged }}
+        run: |
+          mapfile -t files <<< "$CHANGED_FILES"
+          args=()
+          for f in "${files[@]}"; do
+            if [ -n "$f" ] && [ -f "$f" ]; then
+              args+=("$f")
+            fi
+          done
+
+          if [ ${#args[@]} -eq 0 ]; then
+            if [ "$PARAMS_CHANGED" = "true" ] && [ -f "docs/en/index.md" ]; then
+              # No markdown changed, but docs-params.json did. Run the checker
+              # against a single known-clean page so BuildRenderParameters /
+              # docs-params.json parsing actually executes and fails fast on a
+              # malformed parameter file.
+              echo "docs-params.json changed but no markdown changed; validating params via docs/en/index.md."
+              args+=("docs/en/index.md")
+            else
+              echo "No existing markdown files to check (all changes are deletions)."
+              exit 0
+            fi
+          fi
+
+          dotnet run --project .github/scripts/CheckDocsSyntax/CheckDocsSyntax.csproj \
+            -c Release --no-build -- "${args[@]}"
