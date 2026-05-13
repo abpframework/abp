@@ -64,21 +64,22 @@ ABP has many **additional modules** compared to the open-source ABP project. Als
 | Account                                                      | [Basic](https://docs.abp.io/en/abp/latest/Modules/Account)   | [PRO](https://abp.io/modules/Volo.Account.Pro)  |
 | Multi-Tenancy                                                | [Basic](https://docs.abp.io/en/abp/latest/Modules/Tenant-Management) *(only tenant management)* | [PRO](https://abp.io/modules/Volo.Saas) (SaaS)  |
 | CMS Kit                                                      | [Basic](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit)   | [PRO](https://abp.io/modules/Volo.CmsKit.Pro)   |
-| [Blogging](https://docs.abp.io/en/abp/latest/Modules/Blogging) | <i class="fa fa-check text-success"></i>                     | <i class="fa fa-check text-success"></i>                   |
-| [Docs](https://docs.abp.io/en/abp/latest/Modules/Docs)       | <i class="fa fa-check text-success"></i>                     | <i class="fa fa-check text-success"></i>                   |
-| [Identity Server Integration](https://docs.abp.io/en/abp/latest/Modules/IdentityServer) | <i class="fa fa-check text-success"></i>                     | <i class="fa fa-check text-success"></i>                   |
+| [Blogging](https://abp.io/modules/blogging) | <i class="fa fa-check text-success"></i>                     | <i class="fa fa-check text-success"></i>                   |
+| [Docs](../modules/docs.md)       | <i class="fa fa-check text-success"></i>                     | <i class="fa fa-check text-success"></i>                   |
+| [Identity Server Integration](../modules/identity-server.md) | <i class="fa fa-check text-success"></i>                     | <i class="fa fa-check text-success"></i>                   |
 | [Identity Server Management UI](https://abp.io/modules/Volo.Identityserver.Ui) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [OpenIddict Integration](https://docs.abp.io/en/abp/latest/Modules/OpenIddict) | <i class="fa fa-check text-success"></i>                     | <i class="fa fa-check text-success"></i>                   |
+| [OpenIddict Integration](../modules/openiddict.md) | <i class="fa fa-check text-success"></i>                     | <i class="fa fa-check text-success"></i>                   |
 | [OpenIddictManagement UI](https://abp.io/modules/Volo.OpenIddict.Pro) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [Audit Log Reporting UI](https://abp.io/modules/Volo.AuditLogging.Ui) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [Dynamic Language Management](https://abp.io/modules/Volo.LanguageManagement) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [Payment](https://abp.io/modules/Volo.Payment)    | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [Text Template Management](https://abp.io/modules/Volo.TextTemplateManagement) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [Chat](https://abp.io/modules/Volo.Chat)          | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [File Management](https://abp.io/modules/Volo.FileManagement) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [Forms](https://abp.io/modules/Volo.Forms)        | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [Twilio SMS](https://abp.io/modules/Volo.Abp.Sms.Twilio) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [GDPR](https://docs.abp.io/en/commercial/latest/modules/gdpr) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Audit Log Reporting UI](../modules/audit-logging-pro.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Dynamic Language Management](../modules/payment.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Payment](../modules/payment.md)    | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Text Template Management](../modules/text-template-management.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Chat](../modules/chat.md)          | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [File Management](../modules/file-management.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Forms](../modules/forms.md)        | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Twilio SMS](../modules/twilio-sms.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [GDPR](../modules/gdpr.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [AI Management](../modules/ai-management/index.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
 
 Some modules have "Basic" (open-source) and "PRO" (commercial) versions. The next sections show the differences between the basic and the PRO versions.
 
