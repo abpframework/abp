@@ -29,6 +29,8 @@ The following table explains the major differences between the open-source ABP a
 | [PRO application modules](https://abp.io/modules) | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i>     |
 | [PRO UI themes](https://abp.io/themes)            | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i>     |
 | [ABP Suite](https://abp.io/tools/suite)           | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i>     |
+| [React UI](../framework/ui/react/index.md)        | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i>     |
+| [ABP Studio AI Agent](https://abp.io/studio/ai-agent) | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i>     |
 | [Premium support](https://abp.io/support)         | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i>     |
 |                                                              | [Download](https://abp.io/get-started)     | [Pricing](https://abp.io/pricing) |
 
@@ -152,6 +154,19 @@ A screenshot from the CRUD Page Generator:
 ## Is ABP Suite free?
 
 ABP Suite is a part of the ABP Platform that generates full source code from the backend to the client. ABP Suite is not a free tool for everyone. It is free for only the active ABP license holders.
+
+## React UI and ABP Studio AI Agent
+
+ABP 10.4 introduces two important license-holder capabilities that are designed for modern, AI-assisted application development:
+
+| Feature | Open Source ABP Project | ABP |
+| ------- | ----------------------- | --- |
+| [React UI](../framework/ui/react/index.md) | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i> |
+| [ABP Studio AI Agent](https://abp.io/studio/ai-agent) | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i> |
+
+[React UI](https://abp.io/community/announcements/react-ui-for-abp-framework-is-finally-here-7rfmgb2v) is available with the modern template system for ABP license holders. You can create a React-based solution with ABP Studio's Modern Wizard or with `abp new --modern --ui-framework react`. A modern React solution contains your own React application under `react/` or `apps/react/`, while ABP's standard administration pages are provided by the [ABP Admin Console](../framework/ui/react/admin-console.md). The Admin Console is delivered by the `Volo.Abp.AdminConsole` NuGet package in layered and single-layer templates, and as a separate `apps/react-admin-console/` application in microservice templates.
+
+[ABP Studio AI Agent](https://abp.io/community/announcements/introducing-abp-studio-ai-agent-o1ni0toc) is also available for ABP license holders. It works inside ABP Studio to understand ABP solution structure, plan changes, edit code, build projects, run migrations, diagnose runtime errors and keep changes Git-safe. AI Agent usage is based on AI credits: existing customers have predefined AI credits, while new customers receive new AI credits according to the current commercial offering. See the [ABP Studio AI Agent](https://abp.io/studio/ai-agent) page for the latest feature and credit details.
 
 ## LeptonX Lite (Basic Theme) vs LeptonX (PRO Theme)
 
