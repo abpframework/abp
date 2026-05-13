@@ -110,7 +110,7 @@ To create a new entity, make sure the *-New entity-* is selected in the **Entity
 
 * **Create user interface:** Creates pages, modals, components, `JavaScript`, `CSS` files and adds the new page to the main menu. If you don't have a requirement to manage the entity via user interface, you can uncheck this option.
 
-  > **Note:** This option does not generate React UI pages. ABP Suite's UI generation targets Suite-supported UI stacks such as MVC, Blazor and Angular. For React-based solutions, build the UI in the source-owned [React UI](../framework/ui/react/index.md) application.
+  > **Note:** This option does not generate React UI pages. ABP Suite's UI generation targets Suite-supported UI stacks such as MVC, Blazor and Angular. For React-based solutions, build the UI in the source-owned [React UI](../framework/ui/react/index.md) application. ABP license holders can use [ABP Studio AI Agent](https://abp.io/studio/ai-agent) with predefined AI credits to generate React pages more easily.
 
 * **Excel export**: Creates a button that exports a list of all the data that were added to the entity to an Excel file.
 
