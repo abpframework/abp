@@ -58,6 +58,8 @@ You can see the example below, which demonstrates defining a new method in the `
 
 For the UI side, ABP Suite provides convenient comment placeholders within pages for MVC, Blazor, and Angular UIs. These comment sections serve as hook points where you can add your custom code. By placing your custom logic with these hook points, you can enhance the UI to your needs without the fear of losing your changes during the next CRUD page generation.
 
+> **Note:** ABP Suite does not generate React UI pages or React customization hook points. React UI is part of ABP's modern template system and is customized directly in the source-owned [React UI](../framework/ui/react/index.md) application.
+
 ### Customizations on MVC UI
 
 If you have created your application with MVC UI, you can see the extended classes for _the code-behind classes of your pages_, under the `Pages` folder:

@@ -16,6 +16,8 @@ The are 2 template filters:
 1. **UI**:  You can switch between `Angular`, `MVC` and `Blazor` templates.
 2. **Database provider:** You can switch between `EF Core` and `MongoDb` templates.
 
+> **Note:** ABP Suite does not include React UI templates or generate React client-side code. React UI belongs to the modern template system and should be developed in the source-owned [React UI](../framework/ui/react/index.md) application.
+
 These filters are automatically selected based on your ABP solution. The selected solution is shown on the top right of the page. In the current screenshot it is "Acme.BookStore". 
 
 ABP Suite templates are embedded resources which are stored in the `Volo.Abp.Commercial.SuiteTemplates` package. When you update your project, Suite templates are also being updated. To be able to generate the correct code for your project, the version of `Volo.Abp.Commercial.SuiteTemplates` must be the same as your Suite version.

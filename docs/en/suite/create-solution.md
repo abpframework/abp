@@ -25,4 +25,6 @@
 
 From ABP Suite v8.3, **create a new solution** option has been removed. Instead, it's suggessted to use [ABP Studio](../studio/index.md) or [ABP CLI](../cli/index.md) to create a new solution. After, creating an ABP Solution, then you can generate CRUD pages via ABP Suite as always.
 
+> **Note:** ABP Suite does not generate React UI pages. If you create a modern React solution, use Suite where applicable for backend and application-layer generation, and develop the React UI in the source-owned [React UI](../framework/ui/react/index.md) application.
+
 > ABP Studio has a shortcut for running [ABP Suite](./index.md) to allow using it without starting it externally and using it on a browser, which means you can create, manage, deploy your applications in a single desktop application and also generate CRUD pages via Suite as a pre-integrated application to ABP Studio. 
