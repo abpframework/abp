@@ -224,3 +224,13 @@ This release is the first step. The features below are already on our short-term
 - **Design helper**: ABP Agent will generate images.
 - **Create a new project with the agent**: an AI-driven solution creation flow where you describe the application you want and ABP Agent helps choose the right template, modules, and configuration.
 - **ABP Suite integration**: ABP Agent will be able to invoke ABP Suite for CRUD-page generation. Instead of asking the LLM to write the full set of layers for a CRUD page (which spends a lot of tokens and time), the agent will hand the task to ABP Suite, get a deterministic, production-quality result back, and continue with the parts that actually need the AI.
+
+## Live Demo
+
+We have previewed the ABP Agent in our latest community talk. Click to watch it:
+
+[![community-talk-cover-imageAlt text](community-talk-cover-image.png)](https://www.youtube.com/watch?v=GYVFn2lRuWw)
+
+### Also see
+
+* https://abp.io/studio/ai-agent
