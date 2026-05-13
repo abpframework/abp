@@ -47,6 +47,11 @@ public class RequirePermissionsSimpleBatchStateChecker<TState> : SimpleBatchStat
         return new DisposeAction(() => _current.Value = previousValue);
     }
 
+    public virtual RequirePermissionsSimpleBatchStateCheckerModel<TState>? GetModelOrNull(TState state)
+    {
+        return _models.FirstOrDefault(m => EqualityComparer<TState>.Default.Equals(m.State, state));
+    }
+
     public override async Task<SimpleStateCheckerResult<TState>> IsEnabledAsync(SimpleBatchStateCheckerContext<TState> context)
     {
         var permissionChecker = context.ServiceProvider.GetRequiredService<IPermissionChecker>();

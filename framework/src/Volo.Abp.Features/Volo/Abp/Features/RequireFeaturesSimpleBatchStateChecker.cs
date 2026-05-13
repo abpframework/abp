@@ -48,6 +48,11 @@ public class RequireFeaturesSimpleBatchStateChecker<TState> : SimpleBatchStateCh
         return new DisposeAction(() => _current.Value = previousValue);
     }
 
+    public virtual RequireFeaturesSimpleBatchStateCheckerModel<TState>? GetModelOrNull(TState state)
+    {
+        return _models.FirstOrDefault(x => EqualityComparer<TState>.Default.Equals(x.State, state));
+    }
+
     public override async Task<SimpleStateCheckerResult<TState>> IsEnabledAsync(
         SimpleBatchStateCheckerContext<TState> context)
     {
