@@ -19,13 +19,31 @@ public class FeaturesSimpleStateCheckerSerializerContributor :
             return null;
         }
 
-        var jsonObject = new JsonObject {
+        return BuildJson(featuresSimpleStateChecker.RequiresAll, featuresSimpleStateChecker.FeatureNames);
+    }
+
+    public string? SerializeToJson<TState>(ISimpleStateChecker<TState> checker, TState state)
+        where TState : IHasSimpleStateCheckers<TState>
+    {
+        if (checker is RequireFeaturesSimpleBatchStateChecker<TState> batch)
+        {
+            var model = batch.GetModelOrNull(state);
+            return model == null ? null : BuildJson(model.RequiresAll, model.FeatureNames);
+        }
+
+        return SerializeToJson(checker);
+    }
+
+    private static string BuildJson(bool requiresAll, string[] featureNames)
+    {
+        var jsonObject = new JsonObject
+        {
             ["T"] = CheckerShortName,
-            ["A"] = featuresSimpleStateChecker.RequiresAll
+            ["A"] = requiresAll
         };
 
         var nameArray = new JsonArray();
-        foreach (var featureName in featuresSimpleStateChecker.FeatureNames)
+        foreach (var featureName in featureNames)
         {
             nameArray.Add(featureName);
         }
