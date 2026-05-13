@@ -108,7 +108,7 @@ To create a new entity, make sure the *-New entity-* is selected in the **Entity
 
   * **Update database:** When you add a new migration, ABP Suite can automatically execute update-database command so that the changes are being applied to the database.
 
-* **Create user interface:** Creates pages, modals, components, `JavaScript`, `CSS ` files and adds the new page to the main menu.  If you don't have a requirement to manage the entity via user interface, you can uncheck this option.
+* **Create user interface:** Creates pages, modals, components, `JavaScript`, `CSS` files and adds the new page to the main menu. If you don't have a requirement to manage the entity via user interface, you can uncheck this option.
 
   > **Note:** This option does not generate React UI pages. ABP Suite's UI generation targets Suite-supported UI stacks such as MVC, Blazor and Angular. For React-based solutions, build the UI in the source-owned [React UI](../framework/ui/react/index.md) application.
 
