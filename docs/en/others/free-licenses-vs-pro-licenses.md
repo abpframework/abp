@@ -71,7 +71,7 @@ ABP has many **additional modules** compared to the open-source ABP project. Als
 | [OpenIddict Integration](../modules/openiddict.md) | <i class="fa fa-check text-success"></i>                     | <i class="fa fa-check text-success"></i>                   |
 | [OpenIddictManagement UI](https://abp.io/modules/Volo.OpenIddict.Pro) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
 | [Audit Log Reporting UI](../modules/audit-logging-pro.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [Dynamic Language Management](../modules/payment.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Dynamic Language Management](../modules/language-management.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
 | [Payment](../modules/payment.md)    | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
 | [Text Template Management](../modules/text-template-management.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
 | [Chat](../modules/chat.md)          | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
