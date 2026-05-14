@@ -233,7 +233,7 @@ This release is the first step. The features below are already on our short-term
 
 We have previewed the ABP Agent in our latest community talk. Click to watch it:
 
-[![community-talk-cover-imageAlt text](community-talk-cover-image.png)](https://www.youtube.com/watch?v=GYVFn2lRuWw)
+[![ABP Agent community talk demo video cover image](community-talk-cover-image.png)](https://www.youtube.com/watch?v=GYVFn2lRuWw)
 
 ### Also see
 
