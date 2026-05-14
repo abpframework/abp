@@ -74,6 +74,23 @@ public class SkiaSharpImageResizerTests : AbpImagingSkiaSharpTestBase
     }
 
     [Fact]
+    public async Task Should_Return_Resized_Stream_Positioned_At_Start()
+    {
+        await using var jpegImage = ImageFileHelper.GetJpgTestFileStream();
+        var resizedImage = await ImageResizer.ResizeAsync(jpegImage, new ImageResizeArgs(100, 100));
+
+        resizedImage.ShouldNotBeNull();
+        resizedImage.State.ShouldBe(ImageProcessState.Done);
+        resizedImage.Result.Position.ShouldBe(0);
+
+        using var copy = new MemoryStream();
+        await resizedImage.Result.CopyToAsync(copy);
+        copy.Length.ShouldBe(resizedImage.Result.Length);
+
+        resizedImage.Result.Dispose();
+    }
+
+    [Fact]
     public async Task Should_Return_Unsupported_For_Gif_Stream()
     {
         await using var gifImage = ImageFileHelper.GetGifTestFileStream();

@@ -94,6 +94,23 @@ public class SkiaSharpImageCompressorTests : AbpImagingSkiaSharpTestBase
     }
 
     [Fact]
+    public async Task Should_Return_Compressed_Stream_Positioned_At_Start()
+    {
+        await using var jpegImage = ImageFileHelper.GetJpgTestFileStream();
+        var compressedImage = await ImageCompressor.CompressAsync(jpegImage);
+
+        compressedImage.ShouldNotBeNull();
+        compressedImage.State.ShouldBe(ImageProcessState.Done);
+        compressedImage.Result.Position.ShouldBe(0);
+
+        using var copy = new MemoryStream();
+        await compressedImage.Result.CopyToAsync(copy);
+        copy.Length.ShouldBe(compressedImage.Result.Length);
+
+        compressedImage.Result.Dispose();
+    }
+
+    [Fact]
     public async Task Should_Return_Unsupported_For_Gif_Stream()
     {
         await using var gifImage = ImageFileHelper.GetGifTestFileStream();
