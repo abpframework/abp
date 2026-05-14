@@ -28,6 +28,7 @@ public class SkiaSharpImageCompressorContributor : IImageCompressorContributor, 
         }
 
         var (memoryBitmapStream, memorySkCodecStream) = await CreateMemoryStream(stream, cancellationToken);
+        var originalLength = memoryBitmapStream.Length;
 
         try
         {
@@ -52,7 +53,7 @@ public class SkiaSharpImageCompressorContributor : IImageCompressorContributor, 
                 encoded.SaveTo(output);
                 output.Position = 0;
 
-                if (output.Length < stream.Length)
+                if (output.Length < originalLength)
                 {
                     return new ImageCompressResult<Stream>(output, ImageProcessState.Done);
                 }
