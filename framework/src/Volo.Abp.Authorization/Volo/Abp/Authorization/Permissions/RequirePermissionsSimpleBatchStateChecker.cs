@@ -27,9 +27,12 @@ public class RequirePermissionsSimpleBatchStateChecker<TState> : SimpleBatchStat
 
     private readonly List<RequirePermissionsSimpleBatchStateCheckerModel<TState>> _models;
 
+    private readonly Dictionary<TState, RequirePermissionsSimpleBatchStateCheckerModel<TState>> _modelsByState;
+
     public RequirePermissionsSimpleBatchStateChecker()
     {
         _models = new List<RequirePermissionsSimpleBatchStateCheckerModel<TState>>();
+        _modelsByState = new Dictionary<TState, RequirePermissionsSimpleBatchStateCheckerModel<TState>>();
     }
 
     public RequirePermissionsSimpleBatchStateChecker<TState> AddCheckModels(params RequirePermissionsSimpleBatchStateCheckerModel<TState>[] models)
@@ -37,6 +40,13 @@ public class RequirePermissionsSimpleBatchStateChecker<TState> : SimpleBatchStat
         Check.NotNullOrEmpty(models, nameof(models));
 
         _models.AddRange(models);
+        foreach (var model in models)
+        {
+            if (!_modelsByState.ContainsKey(model.State))
+            {
+                _modelsByState[model.State] = model;
+            }
+        }
         return this;
     }
 
@@ -49,7 +59,7 @@ public class RequirePermissionsSimpleBatchStateChecker<TState> : SimpleBatchStat
 
     public virtual RequirePermissionsSimpleBatchStateCheckerModel<TState>? GetModelOrNull(TState state)
     {
-        return _models.FirstOrDefault(m => EqualityComparer<TState>.Default.Equals(m.State, state));
+        return _modelsByState.TryGetValue(state, out var model) ? model : null;
     }
 
     public override async Task<SimpleStateCheckerResult<TState>> IsEnabledAsync(SimpleBatchStateCheckerContext<TState> context)
