@@ -72,4 +72,27 @@ public class SkiaSharpImageResizerTests : AbpImagingSkiaSharpTestBase
 
         resizedImage1.Result.Dispose();
     }
+
+    [Fact]
+    public async Task Should_Return_Unsupported_For_Gif_Stream()
+    {
+        await using var gifImage = ImageFileHelper.GetGifTestFileStream();
+        var resizedImage = await ImageResizer.ResizeAsync(gifImage, new ImageResizeArgs(100, 100));
+
+        resizedImage.ShouldNotBeNull();
+        resizedImage.State.ShouldBe(ImageProcessState.Unsupported);
+        resizedImage.Result.ShouldBe(gifImage);
+    }
+
+    [Fact]
+    public async Task Should_Return_Unsupported_For_Gif_Bytes()
+    {
+        await using var gifImage = ImageFileHelper.GetGifTestFileStream();
+        var bytes = await gifImage.GetAllBytesAsync();
+        var resizedImage = await ImageResizer.ResizeAsync(bytes, new ImageResizeArgs(100, 100));
+
+        resizedImage.ShouldNotBeNull();
+        resizedImage.State.ShouldBe(ImageProcessState.Unsupported);
+        resizedImage.Result.ShouldBe(bytes);
+    }
 }

@@ -47,34 +47,75 @@ public class SkiaSharpImageResizerContributor : IImageResizerContributor, ITrans
             return new ImageResizeResult<Stream>(stream, ImageProcessState.Unsupported);
         }
 
-        var (memoryBitmapStream, memorySkCodecStream) = await CreateMemoryStream(stream);
+        var (memoryBitmapStream, memorySkCodecStream) = await CreateMemoryStream(stream, cancellationToken);
 
-        using var original = SKBitmap.Decode(memoryBitmapStream);
-        using var resized = original.Resize(new SKImageInfo((int)resizeArgs.Width, (int)resizeArgs.Height), Options.SKSamplingOptions);
-        using var image = SKImage.FromBitmap(resized);
-        using var codec = SKCodec.Create(memorySkCodecStream);
-        var memoryStream = new MemoryStream();
-        using var skData = image.Encode(codec.EncodedFormat, Options.Quality);
-        skData.SaveTo(memoryStream);
-        return new ImageResizeResult<Stream>(memoryStream, ImageProcessState.Done);
+        try
+        {
+            using var codec = SKCodec.Create(memorySkCodecStream);
+            if (codec == null || !CanEncodeFormat(codec.EncodedFormat))
+            {
+                return new ImageResizeResult<Stream>(stream, ImageProcessState.Unsupported);
+            }
+
+            using var original = SKBitmap.Decode(memoryBitmapStream);
+            if (original == null)
+            {
+                return new ImageResizeResult<Stream>(stream, ImageProcessState.Unsupported);
+            }
+
+            using var resized = original.Resize(new SKImageInfo((int)resizeArgs.Width, (int)resizeArgs.Height), Options.SKSamplingOptions);
+            using var image = SKImage.FromBitmap(resized);
+
+            var memoryStream = new MemoryStream();
+            try
+            {
+                using var skData = image.Encode(codec.EncodedFormat, Options.Quality);
+                skData.SaveTo(memoryStream);
+                return new ImageResizeResult<Stream>(memoryStream, ImageProcessState.Done);
+            }
+            catch
+            {
+                memoryStream.Dispose();
+                throw;
+            }
+        }
+        finally
+        {
+            memoryBitmapStream.Dispose();
+            memorySkCodecStream.Dispose();
+        }
     }
 
-    protected virtual async Task<(MemoryStream, MemoryStream)> CreateMemoryStream(Stream stream)
+    protected virtual async Task<(MemoryStream, MemoryStream)> CreateMemoryStream(Stream stream, CancellationToken cancellationToken = default)
     {
-        var streamPosition = stream.Position;
+        var streamPosition = stream.CanSeek ? stream.Position : 0;
 
         var memoryBitmapStream = new MemoryStream();
         var memorySkCodecStream = new MemoryStream();
 
-        await stream.CopyToAsync(memoryBitmapStream);
-        stream.Position = streamPosition;
-        await stream.CopyToAsync(memorySkCodecStream);
-        stream.Position = streamPosition;
+        try
+        {
+            await stream.CopyToAsync(memoryBitmapStream, cancellationToken);
 
-        memoryBitmapStream.Position = 0;
-        memorySkCodecStream.Position = 0;
+            if (stream.CanSeek)
+            {
+                stream.Position = streamPosition;
+            }
 
-        return (memoryBitmapStream, memorySkCodecStream);
+            memoryBitmapStream.Position = 0;
+            await memoryBitmapStream.CopyToAsync(memorySkCodecStream, cancellationToken);
+
+            memoryBitmapStream.Position = 0;
+            memorySkCodecStream.Position = 0;
+
+            return (memoryBitmapStream, memorySkCodecStream);
+        }
+        catch
+        {
+            memoryBitmapStream.Dispose();
+            memorySkCodecStream.Dispose();
+            throw;
+        }
     }
 
     protected virtual bool CanResize(string? mimeType)
@@ -83,6 +124,17 @@ public class SkiaSharpImageResizerContributor : IImageResizerContributor, ITrans
             MimeTypes.Image.Jpeg => true,
             MimeTypes.Image.Png => true,
             MimeTypes.Image.Webp => true,
+            _ => false
+        };
+    }
+
+    protected virtual bool CanEncodeFormat(SKEncodedImageFormat format)
+    {
+        return format switch
+        {
+            SKEncodedImageFormat.Jpeg => true,
+            SKEncodedImageFormat.Png => true,
+            SKEncodedImageFormat.Webp => true,
             _ => false
         };
     }

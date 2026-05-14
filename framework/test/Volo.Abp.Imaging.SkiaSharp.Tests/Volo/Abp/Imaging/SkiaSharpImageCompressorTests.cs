@@ -92,4 +92,27 @@ public class SkiaSharpImageCompressorTests : AbpImagingSkiaSharpTestBase
 
         compressedImage1.Result.Dispose();
     }
+
+    [Fact]
+    public async Task Should_Return_Unsupported_For_Gif_Stream()
+    {
+        await using var gifImage = ImageFileHelper.GetGifTestFileStream();
+        var compressedImage = await ImageCompressor.CompressAsync(gifImage);
+
+        compressedImage.ShouldNotBeNull();
+        compressedImage.State.ShouldBe(ImageProcessState.Unsupported);
+        compressedImage.Result.ShouldBe(gifImage);
+    }
+
+    [Fact]
+    public async Task Should_Return_Unsupported_For_Gif_Bytes()
+    {
+        await using var gifImage = ImageFileHelper.GetGifTestFileStream();
+        var bytes = await gifImage.GetAllBytesAsync();
+        var compressedImage = await ImageCompressor.CompressAsync(bytes);
+
+        compressedImage.ShouldNotBeNull();
+        compressedImage.State.ShouldBe(ImageProcessState.Unsupported);
+        compressedImage.Result.ShouldBe(bytes);
+    }
 }
