@@ -58,13 +58,21 @@ There have been some important announcements for the ABP community recently. Her
 
 ![React UI for ABP Framework Is Finally Here](https://abp.io/api/posts/cover-picture-source/3a2114d0-5518-38a8-d9b3-ab5100b587a4?v=20260508112328)
 
-React support has been one of the most requested topics in the ABP community, and it is now available as a first-class UI option in the modern template system. You can read the announcement here: [React UI for ABP Framework Is Finally Here](https://abp.io/community/announcements/react-ui-for-abp-framework-is-finally-here-7rfmgb2v).
+React support has been one of the most requested topics in the ABP community, and with ABP 10.4, it becomes a first-class UI option in the modern template system. The new React UI is designed for teams that want ABP on the backend and React on the frontend while keeping ABP's built-in application features such as authentication, authorization, localization, multi-tenancy, modularity, runtime configuration, and deployment.
+
+Modern React solutions include your own React application as real source code in the solution, plus the ABP Admin Console for standard module administration screens. This means your product UI stays fully under your control, while ABP still provides a consistent and upgradeable administration experience.
+
+The React stack is built with familiar modern tools, including Vite, TypeScript, TanStack Router, TanStack Query, Axios, Zod, React Hook Form, Tailwind CSS, shadcn/ui, and Vitest. You can create a React UI solution with the `--modern` flag or by selecting the modern template flow in ABP Studio. You can read the announcement here: [React UI for ABP Framework Is Finally Here](https://abp.io/community/announcements/react-ui-for-abp-framework-is-finally-here-7rfmgb2v).
 
 #### Introducing ABP Studio AI Agent
 
 ![Introducing ABP Studio AI Agent](https://abp.io/api/posts/cover-picture-source/3a212ebc-06c1-e10f-f83c-a90079f988c1?v=20260508112328)
 
-ABP Studio now introduces a deeply integrated AI coding agent that understands ABP solutions, modules, layers, run profiles, and runtime feedback. You can read the announcement here: [Introducing ABP Studio AI Agent](https://abp.io/community/announcements/introducing-abp-studio-ai-agent-o1ni0toc).
+ABP Studio now introduces ABP Agent, a deeply integrated AI coding assistant that understands ABP solutions as complete systems, not just as files in folders. It is aware of ABP concepts such as modules, layers, aggregate roots, repositories, application services, DTOs, permissions, localization, event bus, distributed cache, background jobs, and module dependencies.
+
+ABP Agent works in three modes: Agent mode for implementation, Plan mode for read-only investigation and planning, and Ask mode for Q&A and explanations. It can use ABP Studio's analysis engine to understand the solution structure, build affected projects, start or restart applications, run tasks, generate proxies, add migrations, and inspect runtime feedback such as exceptions, logs, HTTP requests, and distributed events.
+
+The announcement also highlights the broader development loop around ABP Agent: solution runner integration, custom workflows, task runner support, Git and GitHub integration, AI-generated commit messages, and ABP-aware AI code review. You can read the announcement here: [Introducing ABP Studio AI Agent](https://abp.io/community/announcements/introducing-abp-studio-ai-agent-o1ni0toc).
 
 ### New ABP Community Articles
 
