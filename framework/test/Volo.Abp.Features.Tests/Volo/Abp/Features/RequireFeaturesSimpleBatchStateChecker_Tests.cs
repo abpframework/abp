@@ -86,6 +86,58 @@ public class RequireFeaturesSimpleBatchStateChecker_Tests : FeatureTestBase
     }
 
     [Fact]
+    public void GetModelOrNull_Returns_First_Win_When_Same_State_Registered_Twice()
+    {
+        // Mirrors IsEnabledAsync's modelLookup behaviour: when the same state is registered
+        // multiple times, the first registration wins. Backed by the dictionary index.
+
+        var checker = new RequireFeaturesSimpleBatchStateChecker<NamedState>();
+        var state = new NamedState("A");
+
+        checker.AddCheckModels(
+            new RequireFeaturesSimpleBatchStateCheckerModel<NamedState>(state, new[] { "First" }, true));
+        checker.AddCheckModels(
+            new RequireFeaturesSimpleBatchStateCheckerModel<NamedState>(state, new[] { "Second" }, true));
+
+        checker.GetModelOrNull(state)!.FeatureNames.ShouldBe(new[] { "First" });
+    }
+
+    [Fact]
+    public void GetModelOrNull_Uses_Same_Equality_As_Runtime()
+    {
+        // The runtime path (IsEnabledAsync) looks up models via HashSet<TState>(context.States),
+        // i.e. EqualityComparer<TState>.Default. GetModelOrNull must use the same semantics or
+        // a custom TState.Equals would make the runtime gate and the serializer disagree.
+
+        var checker = new RequireFeaturesSimpleBatchStateChecker<NamedState>();
+        var stateA1 = new NamedState("A");
+        var stateA2 = new NamedState("A"); // distinct instance, equal by Name
+        var stateB = new NamedState("B");
+
+        checker.AddCheckModels(
+            new RequireFeaturesSimpleBatchStateCheckerModel<NamedState>(stateA1, new[] { "F1" }, true),
+            new RequireFeaturesSimpleBatchStateCheckerModel<NamedState>(stateB, new[] { "F2" }, true));
+
+        // Same equality semantics as the runtime: A2 hits A1's model.
+        checker.GetModelOrNull(stateA1).ShouldNotBeNull();
+        checker.GetModelOrNull(stateA2).ShouldNotBeNull();
+        checker.GetModelOrNull(stateA2)!.FeatureNames.ShouldBe(new[] { "F1" });
+        checker.GetModelOrNull(new NamedState("missing")).ShouldBeNull();
+    }
+
+    private sealed class NamedState : IHasSimpleStateCheckers<NamedState>, IEquatable<NamedState>
+    {
+        public string Name { get; }
+        public List<ISimpleStateChecker<NamedState>> StateCheckers { get; } = new();
+
+        public NamedState(string name) => Name = name;
+
+        public bool Equals(NamedState? other) => other is not null && other.Name == Name;
+        public override bool Equals(object? obj) => obj is NamedState other && Equals(other);
+        public override int GetHashCode() => Name.GetHashCode();
+    }
+
+    [Fact]
     public async Task Current_Should_Not_Be_Null_In_Fresh_ExecutionContext()
     {
         _ = RequireFeaturesSimpleBatchStateChecker<MyStateEntity3>.Current;

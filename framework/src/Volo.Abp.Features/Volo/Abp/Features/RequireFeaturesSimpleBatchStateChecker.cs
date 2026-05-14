@@ -27,9 +27,12 @@ public class RequireFeaturesSimpleBatchStateChecker<TState> : SimpleBatchStateCh
 
     private readonly List<RequireFeaturesSimpleBatchStateCheckerModel<TState>> _models;
 
+    private readonly Dictionary<TState, RequireFeaturesSimpleBatchStateCheckerModel<TState>> _modelsByState;
+
     public RequireFeaturesSimpleBatchStateChecker()
     {
         _models = new List<RequireFeaturesSimpleBatchStateCheckerModel<TState>>();
+        _modelsByState = new Dictionary<TState, RequireFeaturesSimpleBatchStateCheckerModel<TState>>();
     }
 
     public RequireFeaturesSimpleBatchStateChecker<TState> AddCheckModels(
@@ -38,6 +41,13 @@ public class RequireFeaturesSimpleBatchStateChecker<TState> : SimpleBatchStateCh
         Check.NotNullOrEmpty(models, nameof(models));
 
         _models.AddRange(models);
+        foreach (var model in models)
+        {
+            if (!_modelsByState.ContainsKey(model.State))
+            {
+                _modelsByState[model.State] = model;
+            }
+        }
         return this;
     }
 
@@ -46,6 +56,11 @@ public class RequireFeaturesSimpleBatchStateChecker<TState> : SimpleBatchStateCh
         var previousValue = Current;
         _current.Value = checker;
         return new DisposeAction(() => _current.Value = previousValue);
+    }
+
+    public virtual RequireFeaturesSimpleBatchStateCheckerModel<TState>? GetModelOrNull(TState state)
+    {
+        return _modelsByState.TryGetValue(state, out var model) ? model : null;
     }
 
     public override async Task<SimpleStateCheckerResult<TState>> IsEnabledAsync(
