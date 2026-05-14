@@ -159,14 +159,11 @@ public class SkiaSharpImageResizerContributor : IImageResizerContributor, ITrans
             targetHeight = Math.Max(1, (int)Math.Round((double)source.Height * targetWidth / source.Width));
         }
 
-        var mode = resizeArgs.Mode == ImageResizeMode.Default ? ImageResizeMode.Crop : resizeArgs.Mode;
-        if (mode == ImageResizeMode.None)
-        {
-            mode = ImageResizeMode.Crop;
-        }
+        var mode = resizeArgs.Mode == ImageResizeMode.Default ? ImageResizeMode.Stretch : resizeArgs.Mode;
 
         switch (mode)
         {
+            case ImageResizeMode.None:
             case ImageResizeMode.Stretch:
                 return source.Resize(new SKImageInfo(targetWidth, targetHeight), Options.SKSamplingOptions);
 
