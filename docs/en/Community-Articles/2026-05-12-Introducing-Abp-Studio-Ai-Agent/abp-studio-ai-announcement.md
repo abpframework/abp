@@ -35,6 +35,8 @@ ABP Agent is the AI coding assistant built into ABP Studio. It operates in three
 
 The agent is **ABP-aware by default**. It is instructed to prefer ABP base classes over plain POCOs, repositories over direct `DbContext` injection, `ApplicationService` over plain services, the ABP permission system over `[Authorize(Roles=…)]`, localized strings over hardcoded text, `BusinessException`/`UserFriendlyException` over plain `Exception`, the distributed cache abstraction over raw memory cache, and background job abstractions over hand-rolled hosted services. When it is unsure about an ABP feature, it consults the official ABP documentation as a primary source of truth, not random blog posts on the web.
 
+![agent-working](abp-agent-code-generation.gif)
+
 ---
 
 ## How ABP Agent Sees Your Application: The Analyze Engine
@@ -148,6 +150,8 @@ Two AI-assisted touches make this loop especially smooth:
 - **AI Code Review on the diff.** Select the files you want reviewed, run AI review, and inline suggestions stream into the IDE as the analysis runs. Crucially, this is not a generic code review; it is an **ABP-aware** review. The reviewer looks for ABP-specific pattern violations: plain POCOs where ABP base classes belong, direct `DbContext` injection where a repository should be used, hardcoded strings where localization should be used, plain exceptions where `BusinessException` belongs, role-based authorization where ABP Permissions are the right answer, and so on. When the reviewer is unsure, it consults the official ABP documentation before flagging an issue.
 
 The result is a *closed loop*: the agent writes the change, you (or the AI reviewer agent) review the diff, you let the agent fix the comments, you commit with an AI-suggested message, you push, and you head to GitHub for the pull request, all from inside ABP Studio.
+
+![ai-review](abp-agent-ai-review.gif)
 
 ---
 
