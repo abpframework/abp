@@ -86,6 +86,23 @@ public class RequireFeaturesSimpleBatchStateChecker_Tests : FeatureTestBase
     }
 
     [Fact]
+    public void GetModelOrNull_Returns_First_Win_When_Same_State_Registered_Twice()
+    {
+        // Mirrors IsEnabledAsync's modelLookup behaviour: when the same state is registered
+        // multiple times, the first registration wins. Backed by the dictionary index.
+
+        var checker = new RequireFeaturesSimpleBatchStateChecker<NamedState>();
+        var state = new NamedState("A");
+
+        checker.AddCheckModels(
+            new RequireFeaturesSimpleBatchStateCheckerModel<NamedState>(state, new[] { "First" }, true));
+        checker.AddCheckModels(
+            new RequireFeaturesSimpleBatchStateCheckerModel<NamedState>(state, new[] { "Second" }, true));
+
+        checker.GetModelOrNull(state)!.FeatureNames.ShouldBe(new[] { "First" });
+    }
+
+    [Fact]
     public void GetModelOrNull_Uses_Same_Equality_As_Runtime()
     {
         // The runtime path (IsEnabledAsync) looks up models via HashSet<TState>(context.States),
