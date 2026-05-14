@@ -11,6 +11,7 @@
 
 | Package | Old Version | New Version | PR |
 |---------|-------------|-------------|-----|
+| Magick.NET-Q16-AnyCPU | 14.9.1 | 14.13.0 | #25427 |
 | MongoDB.Driver | 3.8.0 | 3.8.1 | #25404 |
 
 ## 10.4.0-rc.1
