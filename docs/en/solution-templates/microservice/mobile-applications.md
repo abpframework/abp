@@ -159,7 +159,7 @@ The UI is built with **[NativeWind v4](https://www.nativewind.dev/)** (Tailwind 
 
 - **hocs**: this folder is added to contain higher order components. The purpose is to wrap components with additional features or properties. It initially has a `PermissionHoc.tsx` that wraps a component to check the permission grant status.
 
-- **hooks**: covers the React Native hooks used across the app (see [the official documentation](https://react.dev/reference/react/hooks) for a reference). The template ships with `useThemeColors` (theme-aware color values for components that can't use `className`) and `useLogout`, among others.
+- **hooks**: Custom [React hooks](https://react.dev/reference/react/hooks) for shared UI and app logic. For example, `useThemeColors` returns light/dark palette values when a component needs explicit colors instead of NativeWind `className`, and `useLogout` handles signing out—plus other hooks bundled with the template.
 
 - **interceptors**: initializes a file called `APIInterceptor.ts` that has a function to manage the http operations in a better way.
 
@@ -173,7 +173,7 @@ The UI is built with **[NativeWind v4](https://www.nativewind.dev/)** (Tailwind 
 
 - **utils**: folder contains helper functions that we can use in application
 
-In addition to `src/`, the project root contains the NativeWind configuration: `tailwind.config.js` (design tokens, dark mode, color palette), `global.css` (Tailwind directives), `metro.config.js` and `babel.config.js` (NativeWind wiring), and `nativewind-env.d.ts` (TypeScript types for the `className` prop).
+In addition to `src/`, the project root hosts the NativeWind setup. `tailwind.config.js` defines design tokens, the color palette, and dark mode. `global.css` contains Tailwind's layer directives. `metro.config.js` and `babel.config.js` configure Metro and Babel so NativeWind can transform your styles. `nativewind-env.d.ts` adds TypeScript typings for the `className` prop on components.
 
 #### Running the Application
 

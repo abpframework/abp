@@ -151,7 +151,7 @@ The startup template ships with **two navigation styles**, switchable when the p
 <img width="600" src="../../../images/rn-nav-comparison.png" alt="Bottom Tab vs Drawer navigation comparison" />
 
 
-Each top-level destination is its own native stack (`@react-navigation/native-stack`), so deeper navigation inside a tab/drawer item keeps that area's history isolated. Both modes share the same screens — only the entry surface and the auth flow placement change.
+Every main tab or drawer item is wired to **its own** native stack (`@react-navigation/native-stack`). Pushing more screens stays on that branch: the Back stack belongs to that tab or drawer route and does not mix with others. Bottom Tab and Drawer use the **same screen components**; they differ in how those screens are grouped and opened from the outer shell (and where the sign‑in/sign‑up flow lives in Bottom Tab versus Drawer).
 
 > **How to choose:** The mode is selected in **ABP Studio** during the *Mobile Framework* step. Switching modes after the project is generated is not a one-line change — you would need to add the missing navigator (and its `@react-navigation/drawer` or `@react-navigation/bottom-tabs` dependency) manually, then update `src/AppContainer.tsx` and `src/navigators/types.ts` to match. Pick the mode upfront when possible.
 
