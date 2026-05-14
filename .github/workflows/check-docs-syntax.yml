@@ -1,0 +1,221 @@
+# Validates Scriban template syntax in PR-changed Markdown files under docs/en/,
+# so escape issues are caught before they reach the published documentation.
+
+name: Check Docs Syntax
+
+on:
+  pull_request:
+    paths:
+      - 'docs/en/**/*.md'
+      - 'docs/en/docs-params.json'
+      - '.github/scripts/CheckDocsSyntax/**'
+      - '.github/workflows/check-docs-syntax.yml'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  check-scriban-syntax:
+    name: Validate Scriban syntax in docs/en
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Build syntax checker
+        run: dotnet build .github/scripts/CheckDocsSyntax/CheckDocsSyntax.csproj -c Release --nologo -v minimal
+
+      - name: Get changed markdown files
+        id: changed
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const changed = [];
+            let paramsChanged = false;
+            let page = 1;
+            while (true) {
+              const { data: files } = await github.rest.pulls.listFiles({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                per_page: 100,
+                page,
+              });
+              const PARAMS_PATH = 'docs/en/docs-params.json';
+              for (const f of files) {
+                const isMutation =
+                  f.status === 'added' || f.status === 'modified' || f.status === 'renamed';
+                if (!isMutation) continue;
+                // For renames, GitHub puts the new path in `filename` and the
+                // old one in `previous_filename`. Detect docs-params.json on
+                // either side so renames into / out of that path still trigger
+                // the parameter-file validation path.
+                if (f.filename === PARAMS_PATH || f.previous_filename === PARAMS_PATH) {
+                  paramsChanged = true;
+                }
+                if (f.filename.startsWith('docs/en/') && f.filename.endsWith('.md')) {
+                  changed.push(f.filename);
+                }
+              }
+              if (files.length < 100) break;
+              page++;
+            }
+            core.setOutput('files', changed.join('\n'));
+            core.setOutput('count', changed.length.toString());
+            core.setOutput('paramsChanged', paramsChanged ? 'true' : 'false');
+            core.info(`Markdown files to check: ${changed.length}`);
+            core.info(`docs-params.json changed: ${paramsChanged}`);
+            for (const f of changed) {
+              core.info(`  - ${f}`);
+            }
+
+      - name: Run syntax checker
+        id: checker
+        if: steps.changed.outputs.count != '0' || steps.changed.outputs.paramsChanged == 'true'
+        env:
+          CHANGED_FILES: ${{ steps.changed.outputs.files }}
+          PARAMS_CHANGED: ${{ steps.changed.outputs.paramsChanged }}
+        run: |
+          mapfile -t files <<< "$CHANGED_FILES"
+          args=()
+          for f in "${files[@]}"; do
+            if [ -n "$f" ] && [ -f "$f" ]; then
+              args+=("$f")
+            fi
+          done
+
+          if [ ${#args[@]} -eq 0 ]; then
+            if [ "$PARAMS_CHANGED" = "true" ] && [ -f "docs/en/index.md" ]; then
+              # No markdown changed, but docs-params.json did. Run the checker
+              # against a single known-clean page so BuildRenderParameters /
+              # docs-params.json parsing actually executes and fails fast on a
+              # malformed parameter file.
+              echo "docs-params.json changed but no markdown changed; validating params via docs/en/index.md."
+              args+=("docs/en/index.md")
+            else
+              echo "No existing markdown files to check (all changes are deletions)."
+              exit 0
+            fi
+          fi
+
+          # Capture the checker's stdout so a follow-up step can post it as a PR
+          # comment when the run fails, while still streaming it to the job log.
+          set -o pipefail
+          dotnet run --project .github/scripts/CheckDocsSyntax/CheckDocsSyntax.csproj \
+            -c Release --no-build -- "${args[@]}" 2>&1 | tee checker-output.txt
+
+      - name: Upsert PR comment on failure
+        if: failure() && steps.checker.conclusion == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const MARKER = '<!-- check-docs-syntax-bot -->';
+            const prNumber = context.payload.pull_request.number;
+
+            let report = '';
+            try {
+              report = fs.readFileSync('checker-output.txt', 'utf8').trim();
+            } catch (e) {
+              report = '(checker output was not captured)';
+            }
+
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const body = [
+              MARKER,
+              '### Docs syntax check failed',
+              '',
+              'The Scriban syntax checker reported issues in the Markdown files this PR changes. Wrap inline Scriban-looking text with `{%{{{ ... }}}%}` or wrap whole code blocks with `{%{` ... `}%}` to keep it from being parsed as a template.',
+              '',
+              '<details><summary>Checker output</summary>',
+              '',
+              '```',
+              report,
+              '```',
+              '',
+              '</details>',
+              '',
+              `[Full run log](${runUrl})`,
+            ].join('\n');
+
+            // Find an existing bot comment to update (idempotent across re-runs).
+            let existing = null;
+            for (let page = 1; ; page++) {
+              const { data } = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                per_page: 100,
+                page,
+              });
+              existing = data.find(c => c.body && c.body.startsWith(MARKER));
+              if (existing || data.length < 100) break;
+            }
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+              core.info(`Updated existing bot comment (#${existing.id}).`);
+            } else {
+              const { data: created } = await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body,
+              });
+              core.info(`Created bot comment (#${created.id}).`);
+            }
+
+      - name: Resolve previous failure comment on success
+        # Clear any stale failure comment whenever this workflow run is green,
+        # even if the syntax checker step was skipped (e.g. when a later
+        # commit reverts the earlier failure so no markdown files appear in
+        # the PR's net diff).
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const MARKER = '<!-- check-docs-syntax-bot -->';
+            const prNumber = context.payload.pull_request.number;
+
+            for (let page = 1; ; page++) {
+              const { data } = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                per_page: 100,
+                page,
+              });
+
+              const existing = data.find(c => c.body && c.body.startsWith(MARKER));
+              if (existing) {
+                const body = [
+                  MARKER,
+                  '### Docs syntax check passed',
+                  '',
+                  'The previously reported issues are no longer present in this PR.',
+                ].join('\n');
+                await github.rest.issues.updateComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: existing.id,
+                  body,
+                });
+                core.info(`Cleared bot comment (#${existing.id}).`);
+                break;
+              }
+
+              if (data.length < 100) break;
+            }
