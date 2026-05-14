@@ -93,7 +93,7 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
                 permission.IsEnabled,
                 permission.MultiTenancySide,
                 SerializeProviders(permission.Providers),
-                SerializeStateCheckers(permission.StateCheckers)
+                SerializeStateCheckers(permission, permission.StateCheckers)
             );
 
             foreach (var property in permission.Properties)
@@ -112,8 +112,10 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
             : null;
     }
 
-    protected virtual string SerializeStateCheckers(List<ISimpleStateChecker<PermissionDefinition>> stateCheckers)
+    protected virtual string SerializeStateCheckers(
+        PermissionDefinition permission,
+        List<ISimpleStateChecker<PermissionDefinition>> stateCheckers)
     {
-        return StateCheckerSerializer.Serialize(stateCheckers);
+        return StateCheckerSerializer.Serialize(stateCheckers, permission);
     }
 }
