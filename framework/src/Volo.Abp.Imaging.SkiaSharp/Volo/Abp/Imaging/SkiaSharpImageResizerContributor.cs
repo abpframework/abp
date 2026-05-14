@@ -71,6 +71,7 @@ public class SkiaSharpImageResizerContributor : IImageResizerContributor, ITrans
             {
                 using var skData = image.Encode(codec.EncodedFormat, Options.Quality);
                 skData.SaveTo(memoryStream);
+                memoryStream.Position = 0;
                 return new ImageResizeResult<Stream>(memoryStream, ImageProcessState.Done);
             }
             catch
