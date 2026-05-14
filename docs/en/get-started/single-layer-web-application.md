@@ -17,6 +17,10 @@
 
 In this quick start guide, you will learn how to create and run a single layer web application using [ABP Studio](../studio/index.md).
 
+> This page documents the **classic** single-layer flow.
+>
+> If you want **React UI**, use the **modern** template flow instead. Modern single-layer solutions create your application in the `react/` folder and host the ABP Admin Console from the backend at `/admin-console/`. See [React UI](../framework/ui/react/index.md) and the [ABP CLI modern templates](../cli/index.md#modern-templates) section for the correct path.
+
 ## Setup your development environment
 
 First things first! Let's setup your development environment before creating the first project. The following tools should be installed on your development machine:
@@ -116,7 +120,7 @@ You can change these settings later if needed. Then click the *Next* button for 
 
 Configure any additional options as needed and click the *Next* button to continue. On the next screen, you can configure the modularity options for your solution:
 
-> If you select the *Setup as a modular solution* option, the solution is created more ready for [modular monolith development](../tutorials/modular-crm/index.md) and allows you to add sub-modules during the solution creation phase.
+> If your goal is a new modular monolith, prefer the dedicated **Modular Monolith** architecture in ABP Studio. The modularity option on this screen is the classic-host path for keeping this single-layer solution modularity-ready and allowing sub-modules during solution creation.
 
 ![abp-studio-no-layers-new-solution-modularity](images/abp-studio-no-layers-new-solution-modularity_dark.png)
 
