@@ -158,7 +158,7 @@ function DataList<T extends { id: string }>({
       data={items}
       keyExtractor={(item, index) => item?.id?.toString() ?? index.toString()}
       renderItem={render}
-      contentContainerStyle={{ flexGrow: 1, paddingBottom: 96 }}
+      contentContainerStyle={%{{{ flexGrow: 1, paddingBottom: 96 }}}%}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={accentColor} />}
       onEndReached={onEndReached}
       onEndReachedThreshold={0.4}
@@ -255,7 +255,7 @@ function AbpSelect({
           <FlatList
             data={data}
             keyExtractor={item => String(item.id)}
-            style={{ maxHeight: 360 }}
+            style={%{{{ maxHeight: 360 }}}%}
             ItemSeparatorComponent={() => (
               <View className="h-px bg-border dark:bg-border-dark mx-4" />
             )}
@@ -376,7 +376,7 @@ export default function BookStoreStackNavigator() {
           headerShadowVisible: false,
           headerRight: () => (
             <Pressable onPress={() => navigation.goBack()} hitSlop={8}>
-              <Text style={{ color: accentColor, fontWeight: '600' }}>{t('AbpUi::Cancel')}</Text>
+              <Text style={%{{{ color: accentColor, fontWeight: '600' }}}%}>{t('AbpUi::Cancel')}</Text>
             </Pressable>
           ),
         })}
@@ -391,7 +391,7 @@ export default function BookStoreStackNavigator() {
           headerShadowVisible: false,
           headerRight: () => (
             <Pressable onPress={() => navigation.goBack()} hitSlop={8}>
-              <Text style={{ color: accentColor, fontWeight: '600' }}>{t('AbpUi::Cancel')}</Text>
+              <Text style={%{{{ color: accentColor, fontWeight: '600' }}}%}>{t('AbpUi::Cancel')}</Text>
             </Pressable>
           ),
         })}
@@ -436,7 +436,7 @@ export default function BottomTabNavigator() {
     <Tab.Navigator
       id="BottomTab"
       initialRouteName="HomeTab"
-      screenOptions={{ /* ... existing screen options ... */ }}>
+      screenOptions={%{{{ /* ... existing screen options ... */ }}}%}>
       <Tab.Screen name="HomeTab" component={HomeStackNavigator} options={/* ... */} />
 
       {showBookStore ? (
@@ -857,7 +857,7 @@ function CreateUpdateBookForm({ submit, book, authors }: CreateUpdateBookFormPro
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       className="flex-1 bg-background dark:bg-background-dark">
-      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ padding: 16, paddingBottom: 32 }}>
+      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={%{{{ padding: 16, paddingBottom: 32 }}}%}>
         <View className="bg-card dark:bg-card-dark rounded-2xl border border-card-border dark:border-card-border-dark shadow-sm p-4">
           {/* Name */}
           <View className="mb-3">
@@ -869,7 +869,7 @@ function CreateUpdateBookForm({ submit, book, authors }: CreateUpdateBookFormPro
               onBlur={form.handleBlur('name')}
               error={showError('name')}
               autoCapitalize="sentences"
-              style={{ backgroundColor: primaryContainer }}
+              style={%{{{ backgroundColor: primaryContainer }}}%}
             />
             {renderError('name')}
           </View>
@@ -885,7 +885,7 @@ function CreateUpdateBookForm({ submit, book, authors }: CreateUpdateBookFormPro
                   editable={false}
                   error={showError('authorId')}
                   right={<TextInput.Icon icon="menu-down" />}
-                  style={{ backgroundColor: primaryContainer }}
+                  style={%{{{ backgroundColor: primaryContainer }}}%}
                 />
               </View>
             </Pressable>
@@ -903,7 +903,7 @@ function CreateUpdateBookForm({ submit, book, authors }: CreateUpdateBookFormPro
                   editable={false}
                   error={showError('type')}
                   right={<TextInput.Icon icon="menu-down" />}
-                  style={{ backgroundColor: primaryContainer }}
+                  style={%{{{ backgroundColor: primaryContainer }}}%}
                 />
               </View>
             </Pressable>
@@ -925,7 +925,7 @@ function CreateUpdateBookForm({ submit, book, authors }: CreateUpdateBookFormPro
                   editable={false}
                   error={showError('publishDate')}
                   right={<TextInput.Icon icon="calendar" />}
-                  style={{ backgroundColor: primaryContainer }}
+                  style={%{{{ backgroundColor: primaryContainer }}}%}
                 />
               </View>
             </Pressable>
@@ -942,7 +942,7 @@ function CreateUpdateBookForm({ submit, book, authors }: CreateUpdateBookFormPro
               onBlur={form.handleBlur('price')}
               error={showError('price')}
               keyboardType="decimal-pad"
-              style={{ backgroundColor: primaryContainer }}
+              style={%{{{ backgroundColor: primaryContainer }}}%}
             />
             {renderError('price')}
           </View>
@@ -994,7 +994,7 @@ function CreateUpdateBookForm({ submit, book, authors }: CreateUpdateBookFormPro
                 {t('BookStore::PublishDate')}
               </Text>
             </View>
-            <View style={{ backgroundColor: headerBg }}>
+            <View style={%{{{ backgroundColor: headerBg }}}%}>
               <DateTimePicker
                 value={tempDate}
                 mode="date"
@@ -1015,7 +1015,7 @@ function CreateUpdateBookForm({ submit, book, authors }: CreateUpdateBookFormPro
             {Platform.OS === 'ios' ? (
               <View className="flex-row justify-end px-4 py-3 border-t border-card-border dark:border-card-border-dark gap-x-2">
                 <Pressable onPress={() => setDateModalVisible(false)} className="px-4 py-2 rounded-md">
-                  <Text style={{ color: accentColor, fontWeight: '600' }}>{t('AbpUi::Cancel')}</Text>
+                  <Text style={%{{{ color: accentColor, fontWeight: '600' }}}%}>{t('AbpUi::Cancel')}</Text>
                 </Pressable>
                 <Pressable
                   onPress={() => {
