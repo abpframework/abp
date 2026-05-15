@@ -34,7 +34,7 @@ The next planned version will be 10.5, which is scheduled to be released as a st
   * Support Multiple Concurrent Kubernetes Deployment/Integration Scenarios
   * Improve the Module Installation Experience / Installation Guides
   * AI Coding Agent and MCP Integration
-  * Modern Solution Wizard with Low-Code Support
+  * Modern Solution Wizard with LowCode Support
   * ABP Thin UI: React Templates
   * Theme Builder: Live Preview, Project Integration and Import/Export
 
