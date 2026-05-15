@@ -329,6 +329,8 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
     private async Task<byte[]> DownloadSourceCodeContentAsync(SourceCodeDownloadInputDto input)
     {
         var url = $"{CliUrls.WwwAbpIo}api/download/{input.Type}/";
+        var isAbpIoDownload = input.TemplateSource.IsNullOrWhiteSpace();
+        var downloadUrl = isAbpIoDownload ? url : input.TemplateSource;
 
         HttpResponseMessage responseMessage = null;
 
@@ -336,7 +338,7 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         {
             var client = _cliHttpClientFactory.CreateClient(timeout: TimeSpan.FromMinutes(5));
 
-            if (input.TemplateSource.IsNullOrWhiteSpace())
+            if (isAbpIoDownload)
             {
                 responseMessage = await client.PostAsync(
                     url,
@@ -350,7 +352,15 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
                     _cliHttpClientFactory.GetCancellationToken());
             }
 
-            await EnsureAbpIoSuccessfulResponseAsync(responseMessage);
+            if (isAbpIoDownload)
+            {
+                await EnsureAbpIoSuccessfulResponseAsync(responseMessage);
+            }
+            else
+            {
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
+            }
+
             return await responseMessage.Content.ReadAsByteArrayAsync();
         }
         catch (Exception ex)
@@ -366,9 +376,13 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
                 throw;
             }
 
-            Console.WriteLine("Error occurred while downloading source-code from {0} : {1}{2}{3}", url,
+            Console.WriteLine("Error occurred while downloading source-code from {0} : {1}{2}{3}", downloadUrl,
                 responseMessage?.ToString(), Environment.NewLine, ex.Message);
             throw;
+        }
+        finally
+        {
+            responseMessage?.Dispose();
         }
     }
 

@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
 using Volo.Abp.Json;
+using NewtonsoftJsonException = Newtonsoft.Json.JsonException;
+using SystemJsonException = System.Text.Json.JsonException;
 
 namespace Volo.Abp.Cli.ProjectBuilding;
 
@@ -52,7 +54,7 @@ public class RemoteServiceExceptionHandler : IRemoteServiceExceptionHandler, ITr
                 await responseMessage.Content.ReadAsStringAsync()
             );
         }
-        catch (Exception ex) when (ex is not OperationCanceledException)
+        catch (Exception ex) when (IsJsonException(ex))
         {
             return null;
         }
@@ -95,5 +97,10 @@ public class RemoteServiceExceptionHandler : IRemoteServiceExceptionHandler, ITr
         }
 
         return sbError.ToString();
+    }
+
+    private static bool IsJsonException(Exception ex)
+    {
+        return ex is SystemJsonException or NewtonsoftJsonException;
     }
 }

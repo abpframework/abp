@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Cli.ProjectBuilding;
+using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Xunit;
 
@@ -117,6 +118,40 @@ public class RemoteServiceExceptionHandler_Tests
         result.ShouldBeNull();
     }
 
+    [Fact]
+    public async Task GetAbpRemoteServiceErrorAsync_Should_Return_Null_For_Newtonsoft_JsonException()
+    {
+        var handler = new RemoteServiceExceptionHandler(
+            new ThrowingJsonSerializer(new Newtonsoft.Json.JsonException("Invalid JSON"))
+        );
+        var response = new HttpResponseMessage(HttpStatusCode.Forbidden)
+        {
+            Content = new StringContent("{}")
+        };
+
+        var result = await handler.GetAbpRemoteServiceErrorAsync(response);
+
+        result.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task GetAbpRemoteServiceErrorAsync_Should_Propagate_Non_Json_Exceptions()
+    {
+        var handler = new RemoteServiceExceptionHandler(
+            new ThrowingJsonSerializer(new InvalidOperationException("Unexpected serializer failure"))
+        );
+        var response = new HttpResponseMessage(HttpStatusCode.Forbidden)
+        {
+            Content = new StringContent("{}")
+        };
+
+        var exception = await Should.ThrowAsync<InvalidOperationException>(
+            () => handler.GetAbpRemoteServiceErrorAsync(response)
+        );
+
+        exception.Message.ShouldBe("Unexpected serializer failure");
+    }
+
     private class CanceledStringContent : HttpContent
     {
         protected override Task SerializeToStreamAsync(System.IO.Stream stream, System.Net.TransportContext context)
@@ -128,6 +163,31 @@ public class RemoteServiceExceptionHandler_Tests
         {
             length = 0;
             return false;
+        }
+    }
+
+    private class ThrowingJsonSerializer : IJsonSerializer
+    {
+        private readonly Exception _exception;
+
+        public ThrowingJsonSerializer(Exception exception)
+        {
+            _exception = exception;
+        }
+
+        public string Serialize(object obj, bool camelCase = true, bool indented = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public T Deserialize<T>(string jsonString, bool camelCase = true)
+        {
+            throw _exception;
+        }
+
+        public object Deserialize(Type type, string jsonString, bool camelCase = true)
+        {
+            throw _exception;
         }
     }
 }
