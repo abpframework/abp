@@ -25,7 +25,7 @@ The next planned version will be 10.5, which is scheduled to be released as a st
 * ABP Suite
   * Improvements on the generated codes for nullability
   * Improvements on Master-Detail Page Design (making it more compact)
-  * LowCode System Integration
+  * Low-Code System Integration
 
 * ABP Studio
   * Allow to Directly Create New Solutions with ABP's RC (Release Candidate) Versions
@@ -34,14 +34,14 @@ The next planned version will be 10.5, which is scheduled to be released as a st
   * Support Multiple Concurrent Kubernetes Deployment/Integration Scenarios
   * Improve the Module Installation Experience / Installation Guides
   * AI Coding Agent and MCP Integration
-  * Modern Solution Wizard with LowCode Support
+  * Modern Solution Wizard with Low-Code Support
   * ABP Thin UI: React Templates
   * Theme Builder: Live Preview, Project Integration and Import/Export
 
 * Application Modules
   * AI Management: Chat History & Multi-Tenancy Features
   * New Module: Chat with your data
-  * Admin Console: LowCode Designer
+  * Admin Console: Low-Code Designer
   * CMS Kit: CodeMirror v6 Compatibility Update
   * Payment Module: Email Notification Improvements
   * UI/UX Improvements on Existing Application Modules
