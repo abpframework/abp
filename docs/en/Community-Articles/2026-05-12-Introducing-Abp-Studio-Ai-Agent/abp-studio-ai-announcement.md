@@ -35,6 +35,8 @@ ABP Agent is the AI coding assistant built into ABP Studio. It operates in three
 
 The agent is **ABP-aware by default**. It is instructed to prefer ABP base classes over plain POCOs, repositories over direct `DbContext` injection, `ApplicationService` over plain services, the ABP permission system over `[Authorize(Roles=…)]`, localized strings over hardcoded text, `BusinessException`/`UserFriendlyException` over plain `Exception`, the distributed cache abstraction over raw memory cache, and background job abstractions over hand-rolled hosted services. When it is unsure about an ABP feature, it consults the official ABP documentation as a primary source of truth, not random blog posts on the web.
 
+![agent-working](abp-agent-code-generation.gif)
+
 ---
 
 ## How ABP Agent Sees Your Application: The Analyze Engine
@@ -149,6 +151,8 @@ Two AI-assisted touches make this loop especially smooth:
 
 The result is a *closed loop*: the agent writes the change, you (or the AI reviewer agent) review the diff, you let the agent fix the comments, you commit with an AI-suggested message, you push, and you head to GitHub for the pull request, all from inside ABP Studio.
 
+![ai-review](abp-agent-ai-review.gif)
+
 ---
 
 ## The End-to-End Development Loop
@@ -224,3 +228,13 @@ This release is the first step. The features below are already on our short-term
 - **Design helper**: ABP Agent will generate images.
 - **Create a new project with the agent**: an AI-driven solution creation flow where you describe the application you want and ABP Agent helps choose the right template, modules, and configuration.
 - **ABP Suite integration**: ABP Agent will be able to invoke ABP Suite for CRUD-page generation. Instead of asking the LLM to write the full set of layers for a CRUD page (which spends a lot of tokens and time), the agent will hand the task to ABP Suite, get a deterministic, production-quality result back, and continue with the parts that actually need the AI.
+
+## Live Demo
+
+We have previewed the ABP Agent in our latest community talk. Click to watch it:
+
+[![ABP Agent community talk demo video cover image](community-talk-cover-image.png)](https://www.youtube.com/watch?v=GYVFn2lRuWw)
+
+### Also see
+
+* https://abp.io/studio/ai-agent
