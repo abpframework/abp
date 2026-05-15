@@ -248,7 +248,7 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         }
         catch (Exception ex) when (ex is not CliUsageException)
         {
-            Console.WriteLine("Error occured while getting the latest version from {0} : {1}", url, ex.Message);
+            Console.WriteLine("Error occurred while getting the latest version from {0} : {1}", url, ex.Message);
             return null;
         }
     }
@@ -351,10 +351,7 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
             }
 
             await EnsureAbpIoSuccessfulResponseAsync(responseMessage);
-            var resultAsBytes = await responseMessage.Content.ReadAsByteArrayAsync();
-            responseMessage.Dispose();
-
-            return resultAsBytes;
+            return await responseMessage.Content.ReadAsByteArrayAsync();
         }
         catch (Exception ex)
         {
@@ -369,7 +366,7 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
                 throw;
             }
 
-            Console.WriteLine("Error occured while downloading source-code from {0} : {1}{2}{3}", url,
+            Console.WriteLine("Error occurred while downloading source-code from {0} : {1}{2}{3}", url,
                 responseMessage?.ToString(), Environment.NewLine, ex.Message);
             throw;
         }

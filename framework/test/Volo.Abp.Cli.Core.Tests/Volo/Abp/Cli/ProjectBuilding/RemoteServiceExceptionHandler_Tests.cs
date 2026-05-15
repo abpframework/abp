@@ -2,7 +2,6 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 using Shouldly;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Json.SystemTextJson;
