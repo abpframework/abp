@@ -461,8 +461,7 @@ export default function BottomTabNavigator() {
 
 > Earlier versions of the template used a `DrawerNavigator`. The 2026 template defaults to `bottom-tab` instead. If your project still uses the drawer (the optional `navigation_type = "drawer"` configuration), add the same conditional `Drawer.Screen` to `DrawerNavigator.tsx` instead.
 
-<!-- TODO: capture a screenshot of the bottom tab bar with the new "Book Store" entry -->
-![Book Store Tab](../../../images/book-store-menu-item.png)
+![Book Store Tab](../../../images/book-store-menu-item-new.png)
 
 ## Creating the BookStoreScreen
 
@@ -674,8 +673,7 @@ export default BooksScreen;
 - Reading `appConfigSelector` from the Redux store (no `connectToRedux` HOC) is the new pattern. The selector lives in `./src/store/selectors/AppSelectors.ts` and returns the `appConfig` object that the template populates after login (`AppActions.fetchAppConfigAsync`).
 - `useActionSheet` is provided by `@expo/react-native-action-sheet`, already wrapped around the app in `./src/AppContent.tsx`, so we don't need to add a provider here.
 
-<!-- TODO: capture screenshots of the books list (light + dark) -->
-![Book List Page](../../../images/book-list.png)
+![Book List Page](../../../images/book-list-new.png)
 
 ## Creating a New Book
 
@@ -1044,8 +1042,7 @@ export default CreateUpdateBookForm;
 - The Android date picker is dismissed automatically once the user picks a date. On iOS we keep the date in `tempDate` and apply it only when the user taps **OK**, so the spinner feels natural.
 - `AbpSelect` is fed both for the **Type** dropdown (8 enum entries from the localization namespace) and for the **Author** dropdown (filled from the `authors` prop forwarded by the screen).
 
-<!-- TODO: capture the new-book form (light + dark) -->
-![Create New Book](../../../images/create-book.png)
+![Create New Book](../../../images/create-book-new.png)
 
 ## Updating a Book
 
@@ -1057,8 +1054,7 @@ navigation.navigate('CreateUpdateBook', { bookId: item.id });
 
 When the form submits, the screen branches between `update(payload, bookId)` and `create(payload)` based on whether `bookId` is set.
 
-<!-- TODO: capture the edit-book form -->
-![Update Book Page](../../../images/update-book.png)
+![Update Book Page](../../../images/update-book-new.png)
 
 ## Deleting a Book
 
@@ -1082,8 +1078,7 @@ const confirmDelete = (item: BookListItem) => {
 
 Incrementing `refresh` causes `DataList` to re-fetch from page zero, so the deleted row disappears as soon as the API call returns.
 
-<!-- TODO: capture the delete confirmation alert -->
-![Delete Book Alert](../../../images/delete-book-alert.png)
+![Delete Book Alert](../../../images/delete-book-alert-new.png)
 
 ## Authorization
 
@@ -1192,8 +1187,7 @@ export default CreateUpdateAuthorScreen;
 
 The form (`CreateUpdateAuthorForm.tsx`) is a stripped-down version of the book form — only the name, birth-date and short-bio fields, no `AbpSelect`. Refer to the sample source for the full file; it follows the exact same NativeWind layout used in `CreateUpdateBookForm.tsx`.
 
-<!-- TODO: capture the new-author and edit-author forms -->
-![Author Create Page](../../../images/create-author.png)
+![Author Create Page](../../../images/create-author-new.png)
 
 ## Adding the Author Relation to Books
 
@@ -1212,9 +1206,7 @@ If you want to verify the relation visually:
 4. Open the **Book Store** tab. The book list shows entries like `The Hobbit · J.R.R. Tolkien · Fantastic`.
 5. Tap **+ New Book** and confirm the **Author** dropdown lists the three seeded authors.
 
-<!-- TODO: capture book list with author column + author dropdown -->
-![Book List with Author](../../../images/book-list-with-author.png)
-![Authors in Book Form](../../../images/authors-in-book-form.png)
+![Authors in Book Form](../../../images/authors-in-book-form-new.png)
 
 ## Where to go next
 
