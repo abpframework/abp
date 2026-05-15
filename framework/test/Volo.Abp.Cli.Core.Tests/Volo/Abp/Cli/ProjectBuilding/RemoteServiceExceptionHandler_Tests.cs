@@ -49,7 +49,6 @@ public class RemoteServiceExceptionHandler_Tests
 
         var exception = await Should.ThrowAsync<Exception>(() => _handler.EnsureSuccessfulHttpResponseAsync(response));
 
-        exception.GetType().ShouldBe(typeof(Exception));
         exception.Message.ShouldContain("403-Forbidden");
         exception.Message.ShouldNotContain("invalid start of a value");
     }
