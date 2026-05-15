@@ -359,12 +359,12 @@ export default function BookStoreStackNavigator() {
       <Stack.Screen
         name="BookStore"
         component={BookStoreScreen}
-        options={{
+        options={%{{{
           title: t('BookStore::Menu:BookStore'),
           headerStyle: { backgroundColor: headerBg },
           headerTintColor: headerText,
           headerShadowVisible: false,
-        }}
+        }}}%}
       />
       <Stack.Screen
         name="CreateUpdateBook"
@@ -443,12 +443,12 @@ export default function BottomTabNavigator() {
         <Tab.Screen
           name="BookStoreTab"
           component={BookStoreStackNavigator}
-          options={{
+          options={%{{{
             title: t('BookStore::Menu:BookStore'),
             tabBarIcon: ({ focused, color, size }) => (
               <Ionicons name={focused ? 'book' : 'book-outline'} size={size} color={color} />
             ),
-          }}
+          }}}%}
         />
       ) : null}
 
