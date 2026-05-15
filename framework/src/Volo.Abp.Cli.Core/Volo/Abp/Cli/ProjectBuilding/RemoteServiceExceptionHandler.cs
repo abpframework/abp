@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
 using Volo.Abp.Json;
@@ -49,12 +48,11 @@ public class RemoteServiceExceptionHandler : IRemoteServiceExceptionHandler, ITr
         RemoteServiceErrorResponse errorResult;
         try
         {
-            errorResult = _jsonSerializer.Deserialize<RemoteServiceErrorResponse>
-            (
+            errorResult = _jsonSerializer.Deserialize<RemoteServiceErrorResponse>(
                 await responseMessage.Content.ReadAsStringAsync()
             );
         }
-        catch (JsonReaderException)
+        catch (Exception ex) when (ex is not OperationCanceledException)
         {
             return null;
         }

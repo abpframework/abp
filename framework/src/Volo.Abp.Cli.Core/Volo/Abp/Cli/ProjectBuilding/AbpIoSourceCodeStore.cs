@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -240,12 +241,12 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
             using (var response = await client.PostAsync(url, stringContent,
                 _cliHttpClientFactory.GetCancellationToken(TimeSpan.FromMinutes(10))))
             {
-                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
+                await EnsureAbpIoSuccessfulResponseAsync(response);
                 var result = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<GetVersionResultDto>(result).Version;
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not CliUsageException)
         {
             Console.WriteLine("Error occured while getting the latest version from {0} : {1}", url, ex.Message);
             return null;
@@ -273,15 +274,30 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
             using (var response = await client.PostAsync(url, stringContent,
                 _cliHttpClientFactory.GetCancellationToken(TimeSpan.FromMinutes(10))))
             {
-                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
+                await EnsureAbpIoSuccessfulResponseAsync(response);
                 var result = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<GetVersionResultDto>(result).Version;
             }
         }
-        catch (Exception)
+        catch (Exception ex) when (ex is not CliUsageException)
         {
             return null;
         }
+    }
+
+    private async Task EnsureAbpIoSuccessfulResponseAsync(HttpResponseMessage responseMessage)
+    {
+        if (responseMessage is { StatusCode: HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden })
+        {
+            throw new CliUsageException(
+                $"Remote server returns '{(int)responseMessage.StatusCode}-{responseMessage.ReasonPhrase}'. " +
+                "Authentication or license check failed while accessing abp.io. " +
+                "Please make sure you are logged in with `abp login <username>` and your ABP commercial license is active and covers the requested version. " +
+                "You can check your license at https://abp.io/my-organizations"
+            );
+        }
+
+        await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
     }
 
     private async Task<bool> IsVersionExists(string templateName, string version)
@@ -334,7 +350,7 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
                     _cliHttpClientFactory.GetCancellationToken());
             }
 
-            await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
+            await EnsureAbpIoSuccessfulResponseAsync(responseMessage);
             var resultAsBytes = await responseMessage.Content.ReadAsByteArrayAsync();
             responseMessage.Dispose();
 
@@ -342,7 +358,12 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         }
         catch (Exception ex)
         {
-            if(ex is UserFriendlyException)
+            if (ex is CliUsageException)
+            {
+                throw;
+            }
+
+            if (ex is UserFriendlyException)
             {
                 Logger.LogWarning(ex.Message);
                 throw;
