@@ -4,10 +4,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
 using Volo.Abp.Json;
+using NewtonsoftJsonException = Newtonsoft.Json.JsonException;
+using SystemJsonException = System.Text.Json.JsonException;
 
 namespace Volo.Abp.Cli.ProjectBuilding;
 
@@ -49,12 +50,11 @@ public class RemoteServiceExceptionHandler : IRemoteServiceExceptionHandler, ITr
         RemoteServiceErrorResponse errorResult;
         try
         {
-            errorResult = _jsonSerializer.Deserialize<RemoteServiceErrorResponse>
-            (
+            errorResult = _jsonSerializer.Deserialize<RemoteServiceErrorResponse>(
                 await responseMessage.Content.ReadAsStringAsync()
             );
         }
-        catch (JsonReaderException)
+        catch (Exception ex) when (IsJsonException(ex))
         {
             return null;
         }
@@ -97,5 +97,10 @@ public class RemoteServiceExceptionHandler : IRemoteServiceExceptionHandler, ITr
         }
 
         return sbError.ToString();
+    }
+
+    private static bool IsJsonException(Exception ex)
+    {
+        return ex is SystemJsonException or NewtonsoftJsonException;
     }
 }
