@@ -289,12 +289,19 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
     {
         if (responseMessage is { StatusCode: HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden })
         {
-            throw new CliUsageException(
-                $"Remote server returns '{(int)responseMessage.StatusCode}-{responseMessage.ReasonPhrase}'. " +
-                "Authentication or license check failed while accessing abp.io. " +
-                "Please make sure you are logged in with `abp login <username>` and your ABP commercial license is active and covers the requested version. " +
-                "You can check your license at https://abp.io/my-organizations"
-            );
+            var message = $"Remote server returns '{(int)responseMessage.StatusCode}-{responseMessage.ReasonPhrase}'. ";
+
+            var serverError = await RemoteServiceExceptionHandler.GetAbpRemoteServiceErrorAsync(responseMessage);
+            if (!string.IsNullOrWhiteSpace(serverError))
+            {
+                message += serverError + " ";
+            }
+
+            message += $"Authentication or license check failed while accessing {CliUrls.WwwAbpIo}. " +
+                       "Please make sure you are logged in with `abp login <username>` and your ABP commercial license is active and covers the requested version. " +
+                       $"You can check your license at {CliUrls.WwwAbpIo}my-organizations";
+
+            throw new CliUsageException(message);
         }
 
         await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
