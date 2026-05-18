@@ -4,7 +4,7 @@ The new ABP Studio release introduces a deeply integrated set of features design
 
 At the center is **ABP Agent**, our AI coding assistant. Around it are long-standing ABP Studio capabilities that have been brought together into a single development loop. Together they turn ABP Studio into a single place where you architect and code your ABP solutions.
 
-![abp-studio-ui](abp-studio-new-design.png)
+![abp-studio-ui](studio-ai-coding-assistant.jpg)
 
 ---
 
@@ -71,6 +71,8 @@ The agent also scopes builds intelligently. It can build a single project, a sin
 ---
 
 ## Solution Runner & Live Runtime Monitor
+
+![solution-runner-and-monitor](studio-solution-runner-and-monitor.png)
 
 This is the half of ABP Agent that no general-purpose AI IDE can replicate, because no general-purpose AI IDE has a first-class runner for distributed .NET solutions.
 
