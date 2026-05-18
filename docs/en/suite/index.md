@@ -36,7 +36,7 @@ When the target solution uses any Blazor UI framework (Blazor, BlazorServer, Bla
 
 The detected value is shown in the *solution info* tooltip of the CRUD Page Generator screen and is reused for two things:
 
-1. Template routing — `Frontend.Blazor.*` resource names are resolved to `Frontend.Blazor.MudBlazor.*` for MudBlazor solutions, so the generated `.razor` / `.razor.cs` files use `MudCard`, `AbpMudExtensibleDataGrid`, `MudDialog`, `MudForm` and the corresponding Mud input controls instead of the Blazorise `Card`, `DataGrid`, `Modal`, `Validations` markup.
+1. Template routing — `Frontend.Blazor.*` resource names are resolved to `Frontend.Blazor.MudBlazor.*` for MudBlazor solutions, so the generated `.razor` / `.razor.cs` files use `MudCard`, `MudDataGrid`, `MudDialog`, `MudForm` and the corresponding Mud input controls instead of the Blazorise `Card`, `DataGrid`, `Modal`, `Validations` markup.
 2. Template Management UI — the "Manage Templates" screen and the "outdated templates" check only list the variant that matches the current solution, so the Blazorise and MudBlazor template trees never appear side-by-side.
 
 Customized templates are stored under `.suite/customized-templates/` keyed by the full resource name, so MudBlazor customizations (`Frontend.Blazor.MudBlazor.*`) are physically isolated from Blazorise customizations (`Frontend.Blazor.*`) and never clash.
