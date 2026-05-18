@@ -8,6 +8,20 @@ At the center is **ABP Agent**, our AI coding assistant. Around it are long-stan
 
 ---
 
+## Meet ABP Agent
+
+ABP Agent is the AI coding assistant built into ABP Studio. It operates in three modes, each tuned for a different stage of work:
+
+- **Agent mode**: the implementation mode. The agent reads the solution, writes and edits files, builds the affected projects, runs your apps, watches the runtime, and iterates until the change works end-to-end.
+- **Plan mode**: read-only planning. The agent investigates the codebase, researches the official ABP documentation, and produces a structured implementation plan (Problem, Solution, Workflow Diagram, Files Affected, Expected Result). When you are happy with the plan, a single click promotes it into Agent mode and the implementation starts from the plan.
+- **Ask mode**: read-only Q&A. The agent explains how something works, draws diagrams, and answers questions about your code without touching any files.
+
+The agent is **ABP-aware by default**. It is instructed to prefer ABP base classes over plain POCOs, repositories over direct `DbContext` injection, `ApplicationService` over plain services, the ABP permission system over `[Authorize(Roles=…)]`, localized strings over hardcoded text, `BusinessException`/`UserFriendlyException` over plain `Exception`, the distributed cache abstraction over raw memory cache, and background job abstractions over hand-rolled hosted services. When it is unsure about an ABP feature, it consults the official ABP documentation as a primary source of truth, not random blog posts on the web.
+
+![agent-working](abp-agent-code-generation.gif)
+
+---
+
 ## Why It Was Needed
 
 General-purpose AI coding tools (Cursor, Claude Code, Windsurf, opencode and similar) are excellent for horizontal, file-shaped work. They read source files, edit them, and run shell commands. That works well for small scripts or front-end apps.
@@ -22,20 +36,6 @@ ABP solutions are different. A typical ABP solution is **system-shaped**, not ju
 A generic agent has none of that vocabulary. It does not know what a module is, which project is the Domain layer, or that an `ApplicationService` should not depend on a `DbContext` directly. It cannot start "the gateway, the auth server, and the two microservices my React app talks to". It just runs `dotnet run` in some folder and hopes. It cannot tell you that the agent's latest edit caused a runtime exception in the Identity service or made the `OrderPlacedEto` event handler silently fail, because it has no concept of "running app".
 
 ABP Agent and the surrounding ABP Studio features were built to close exactly that gap. The agent is born inside an IDE that already understands modules, run profiles, builds, migrations, proxies, Docker containers, Kubernetes services, and distributed runtime telemetry, and it uses every one of them.
-
----
-
-## Meet ABP Agent
-
-ABP Agent is the AI coding assistant built into ABP Studio. It operates in three modes, each tuned for a different stage of work:
-
-- **Agent mode**: the implementation mode. The agent reads the solution, writes and edits files, builds the affected projects, runs your apps, watches the runtime, and iterates until the change works end-to-end.
-- **Plan mode**: read-only planning. The agent investigates the codebase, researches the official ABP documentation, and produces a structured implementation plan (Problem, Solution, Workflow Diagram, Files Affected, Expected Result). When you are happy with the plan, a single click promotes it into Agent mode and the implementation starts from the plan.
-- **Ask mode**: read-only Q&A. The agent explains how something works, draws diagrams, and answers questions about your code without touching any files.
-
-The agent is **ABP-aware by default**. It is instructed to prefer ABP base classes over plain POCOs, repositories over direct `DbContext` injection, `ApplicationService` over plain services, the ABP permission system over `[Authorize(Roles=…)]`, localized strings over hardcoded text, `BusinessException`/`UserFriendlyException` over plain `Exception`, the distributed cache abstraction over raw memory cache, and background job abstractions over hand-rolled hosted services. When it is unsure about an ABP feature, it consults the official ABP documentation as a primary source of truth, not random blog posts on the web.
-
-![agent-working](abp-agent-code-generation.gif)
 
 ---
 
