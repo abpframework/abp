@@ -84,6 +84,8 @@ As can be seen in the figure above, you can search the related template file, cl
 
 ### Customizations on Blazor UI
 
+> **Blazorise vs MudBlazor templates:** Suite ships two parallel template trees for Blazor — `Frontend.Blazor.*` (Blazorise) and `Frontend.Blazor.MudBlazor.*` (MudBlazor) — and picks the right one based on the [Blazor UI library](index.md#blazor-ui-library) detected in your solution. Customized templates are stored under `.suite/customized-templates/` keyed by the full resource name, so a customization made in a MudBlazor solution is never read by a Blazorise solution (or vice versa). If you migrate an existing solution from Blazorise to MudBlazor, you need to re-apply your customizations to the new resource names.
+
 If you have created your application with Blazor UI, you can see the extended classes for _the code-behind classes of your pages_, under the `Pages` folder:
 
 ![](../images/custom-code-blazor-folder-structure.png)

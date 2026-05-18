@@ -31,7 +31,10 @@ There's a naming convention for the template files.
 * If the template name has `Server` prefix, it's used for backend code like repositories, application services, localizations, controllers, permissions, mappings, unit tests.
 * If the template name has `Frontend.Angular` prefix, it's used for Angular code generation. The Angular code is being generated via [Angular Schematics](https://angular.dev/tools/cli/schematics).
 * If the template name has `Frontend.Mvc`  prefix, it's used for razor pages, menus, JavaScript, CSS files.
-* If the template name has `Frontend.Blazor` prefix, it's used for razor components.
+* If the template name has `Frontend.Blazor` prefix (no `.MudBlazor` segment), it's used for Blazorise-based razor components.
+* If the template name has `Frontend.Blazor.MudBlazor` prefix, it's used for [MudBlazor](https://mudblazor.com)-based razor components.
+
+> The template list only shows the variant that matches your solution's [Blazor UI library](index.md#blazor-ui-library) (Blazorise or MudBlazor), so you never see both trees side-by-side and the "outdated" check only flags the active set.
 
 ## How do I edit the templates?
 
