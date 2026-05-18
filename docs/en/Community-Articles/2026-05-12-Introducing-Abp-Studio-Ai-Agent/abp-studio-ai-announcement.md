@@ -4,7 +4,21 @@ The new ABP Studio release introduces a deeply integrated set of features design
 
 At the center is **ABP Agent**, our AI coding assistant. Around it are long-standing ABP Studio capabilities that have been brought together into a single development loop. Together they turn ABP Studio into a single place where you architect and code your ABP solutions.
 
-![abp-studio-ui](abp-studio-new-design.png)
+![abp-studio-ui](studio-ai-coding-assistant.jpg)
+
+---
+
+## Meet ABP Agent
+
+![agent-working](abp-agent-code-generation.gif)
+
+ABP Agent is the AI coding assistant built into ABP Studio. It operates in three modes, each tuned for a different stage of work:
+
+- **Agent mode**: the implementation mode. The agent reads the solution, writes and edits files, builds the affected projects, runs your apps, watches the runtime, and iterates until the change works end-to-end.
+- **Plan mode**: read-only planning. The agent investigates the codebase, researches the official ABP documentation, and produces a structured implementation plan (Problem, Solution, Workflow Diagram, Files Affected, Expected Result). When you are happy with the plan, a single click promotes it into Agent mode and the implementation starts from the plan.
+- **Ask mode**: read-only Q&A. The agent explains how something works, draws diagrams, and answers questions about your code without touching any files.
+
+The agent is **ABP-aware by default**. It is instructed to prefer ABP base classes over plain POCOs, repositories over direct `DbContext` injection, `ApplicationService` over plain services, the ABP permission system over `[Authorize(Roles=…)]`, localized strings over hardcoded text, `BusinessException`/`UserFriendlyException` over plain `Exception`, the distributed cache abstraction over raw memory cache, and background job abstractions over hand-rolled hosted services. When it is unsure about an ABP feature, it consults the official ABP documentation as a primary source of truth, not random blog posts on the web.
 
 ---
 
@@ -25,21 +39,9 @@ ABP Agent and the surrounding ABP Studio features were built to close exactly th
 
 ---
 
-## Meet ABP Agent
-
-ABP Agent is the AI coding assistant built into ABP Studio. It operates in three modes, each tuned for a different stage of work:
-
-- **Agent mode**: the implementation mode. The agent reads the solution, writes and edits files, builds the affected projects, runs your apps, watches the runtime, and iterates until the change works end-to-end.
-- **Plan mode**: read-only planning. The agent investigates the codebase, researches the official ABP documentation, and produces a structured implementation plan (Problem, Solution, Workflow Diagram, Files Affected, Expected Result). When you are happy with the plan, a single click promotes it into Agent mode and the implementation starts from the plan.
-- **Ask mode**: read-only Q&A. The agent explains how something works, draws diagrams, and answers questions about your code without touching any files.
-
-The agent is **ABP-aware by default**. It is instructed to prefer ABP base classes over plain POCOs, repositories over direct `DbContext` injection, `ApplicationService` over plain services, the ABP permission system over `[Authorize(Roles=…)]`, localized strings over hardcoded text, `BusinessException`/`UserFriendlyException` over plain `Exception`, the distributed cache abstraction over raw memory cache, and background job abstractions over hand-rolled hosted services. When it is unsure about an ABP feature, it consults the official ABP documentation as a primary source of truth, not random blog posts on the web.
-
-![agent-working](abp-agent-code-generation.gif)
-
----
-
 ## How ABP Agent Sees Your Application: The Analyze Engine
+
+![abp-agent-analyze-engine](abp-agent-analyze-engine.png)
 
 Before ABP Agent answers anything, it needs to *understand* your solution. This is where the **Analyze** feature does the heavy lifting.
 
@@ -69,6 +71,8 @@ The agent also scopes builds intelligently. It can build a single project, a sin
 ---
 
 ## Solution Runner & Live Runtime Monitor
+
+![solution-runner-and-monitor](studio-solution-runner-and-monitor.png)
 
 This is the half of ABP Agent that no general-purpose AI IDE can replicate, because no general-purpose AI IDE has a first-class runner for distributed .NET solutions.
 
@@ -126,6 +130,8 @@ The Task Runner integration is what makes the *After* phase especially valuable.
 
 ## Git & GitHub: Reviewing and Committing Without Leaving the IDE
 
+![ai-review](abp-agent-ai-review.gif)
+
 ABP Studio now ships a full Git client with deep GitHub integration. The goal is simple: once the agent finishes a change, you should be able to review, commit, push, branch, and respond to review feedback **without ever leaving ABP Studio**.
 
 The Git side covers everything you'd expect:
@@ -150,8 +156,6 @@ Two AI-assisted touches make this loop especially smooth:
 - **AI Code Review on the diff.** Select the files you want reviewed, run AI review, and inline suggestions stream into the IDE as the analysis runs. Crucially, this is not a generic code review; it is an **ABP-aware** review. The reviewer looks for ABP-specific pattern violations: plain POCOs where ABP base classes belong, direct `DbContext` injection where a repository should be used, hardcoded strings where localization should be used, plain exceptions where `BusinessException` belongs, role-based authorization where ABP Permissions are the right answer, and so on. When the reviewer is unsure, it consults the official ABP documentation before flagging an issue.
 
 The result is a *closed loop*: the agent writes the change, you (or the AI reviewer agent) review the diff, you let the agent fix the comments, you commit with an AI-suggested message, you push, and you head to GitHub for the pull request, all from inside ABP Studio.
-
-![ai-review](abp-agent-ai-review.gif)
 
 ---
 
