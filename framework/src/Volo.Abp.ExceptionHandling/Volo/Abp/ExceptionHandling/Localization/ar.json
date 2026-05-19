@@ -14,7 +14,7 @@
     "DefaultErrorMessage404Detail": "تعذر العثور على المورد المطلوب.",
     "EntityNotFoundErrorMessage": "لا يوجد {0} بالمعرف = {1}.",
     "EntityNotFoundErrorMessageWithoutId": "العنصر {0} غير موجود.",
-    "AbpDbConcurrencyErrorMessage": "تم تعديل البيانات بواسطة مستخدم آخر. يرجى تحديث الصفحة والمحاولة مرة أخرى.",
+    "AbpDbConcurrencyErrorMessage": "تم تغيير البيانات التي أرسلتها بواسطة مستخدم آخر. يرجى تجاهل التغييرات التي أجريتها والمحاولة مرة أخرى.",
     "Error": "خطأ",
     "UnhandledException": "حدث استثناء غير متوقع.",
     "Authorizing": "جارٍ التحقق من الصلاحيات…",
