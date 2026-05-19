@@ -175,7 +175,7 @@ public class IdentityLinkUserManager : DomainService
         }
     }
 
-    public virtual async Task<string> GetLinkConsentAsync(IdentityLinkUserInfo sourceLinkUser, CancellationToken cancellationToken = default)
+    public virtual async Task<string?> GetLinkConsentAsync(IdentityLinkUserInfo sourceLinkUser, CancellationToken cancellationToken = default)
     {
         using (CurrentTenant.Change(sourceLinkUser.TenantId))
         {
