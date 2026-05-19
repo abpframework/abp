@@ -188,4 +188,72 @@ public class IdentityLinkUserManager_Tests : AbpIdentityDomainTestBase
         (await IdentityLinkUserManager.IsLinkedAsync(new IdentityLinkUserInfo(john.Id, john.TenantId),
             new IdentityLinkUserInfo(neo.Id, neo.TenantId))).ShouldBeFalse();
     }
+
+    [Fact]
+    public virtual async Task SetLinkConsentAsync()
+    {
+        await UsingUowAsync(async () =>
+        {
+            var john = await UserRepository.GetAsync(TestData.UserJohnId);
+            var source = new IdentityLinkUserInfo(john.Id, john.TenantId);
+
+            await IdentityLinkUserManager.SetLinkConsentAsync(source, "consent-payload");
+
+            (await IdentityLinkUserManager.GetLinkConsentAsync(source)).ShouldBe("consent-payload");
+        });
+    }
+
+    [Fact]
+    public virtual async Task SetLinkConsentAsync_Should_Overwrite_Previous_Value()
+    {
+        await UsingUowAsync(async () =>
+        {
+            var john = await UserRepository.GetAsync(TestData.UserJohnId);
+            var source = new IdentityLinkUserInfo(john.Id, john.TenantId);
+
+            await IdentityLinkUserManager.SetLinkConsentAsync(source, "first");
+            await IdentityLinkUserManager.SetLinkConsentAsync(source, "second");
+
+            (await IdentityLinkUserManager.GetLinkConsentAsync(source)).ShouldBe("second");
+        });
+    }
+
+    [Fact]
+    public virtual async Task GetLinkConsentAsync_Should_Return_Null_When_No_Consent_Written()
+    {
+        var neo = await UserRepository.GetAsync(TestData.UserNeoId);
+
+        var stored = await IdentityLinkUserManager.GetLinkConsentAsync(new IdentityLinkUserInfo(neo.Id, neo.TenantId));
+
+        stored.ShouldBeNull();
+    }
+
+    [Fact]
+    public virtual async Task GetLinkConsentAsync_Should_Return_Null_When_User_Not_Found()
+    {
+        var stored = await IdentityLinkUserManager.GetLinkConsentAsync(new IdentityLinkUserInfo(Guid.NewGuid(), null));
+
+        stored.ShouldBeNull();
+    }
+
+    [Fact]
+    public virtual async Task RemoveLinkConsentAsync()
+    {
+        await UsingUowAsync(async () =>
+        {
+            var john = await UserRepository.GetAsync(TestData.UserJohnId);
+            var source = new IdentityLinkUserInfo(john.Id, john.TenantId);
+
+            await IdentityLinkUserManager.SetLinkConsentAsync(source, "payload");
+            await IdentityLinkUserManager.RemoveLinkConsentAsync(source);
+
+            (await IdentityLinkUserManager.GetLinkConsentAsync(source)).ShouldBeNull();
+        });
+    }
+
+    [Fact]
+    public virtual async Task RemoveLinkConsentAsync_Should_Be_Noop_When_User_Not_Found()
+    {
+        await IdentityLinkUserManager.RemoveLinkConsentAsync(new IdentityLinkUserInfo(Guid.NewGuid(), null));
+    }
 }

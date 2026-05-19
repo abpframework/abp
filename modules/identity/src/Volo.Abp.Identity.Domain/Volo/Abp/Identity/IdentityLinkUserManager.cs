@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.MultiTenancy;
 
@@ -158,6 +159,50 @@ public class IdentityLinkUserManager : DomainService
                 LinkUserTokenProviderConsts.LinkUserTokenProviderName,
                 tokenPurpose,
                 token);
+        }
+    }
+
+    public virtual async Task SetLinkConsentAsync(IdentityLinkUserInfo sourceLinkUser, string consent, CancellationToken cancellationToken = default)
+    {
+        using (CurrentTenant.Change(sourceLinkUser.TenantId))
+        {
+            var user = await UserManager.GetByIdAsync(sourceLinkUser.UserId);
+            user.SetToken(
+                LinkUserTokenProviderConsts.LinkUserConsentLoginProvider,
+                LinkUserTokenProviderConsts.LinkUserConsentTokenName,
+                consent);
+            (await UserManager.UpdateAsync(user)).CheckErrors();
+        }
+    }
+
+    public virtual async Task<string> GetLinkConsentAsync(IdentityLinkUserInfo sourceLinkUser, CancellationToken cancellationToken = default)
+    {
+        using (CurrentTenant.Change(sourceLinkUser.TenantId))
+        {
+            var user = await UserManager.FindByIdAsync(sourceLinkUser.UserId.ToString());
+            if (user == null)
+            {
+                return null;
+            }
+            return user.FindToken(
+                LinkUserTokenProviderConsts.LinkUserConsentLoginProvider,
+                LinkUserTokenProviderConsts.LinkUserConsentTokenName)?.Value;
+        }
+    }
+
+    public virtual async Task RemoveLinkConsentAsync(IdentityLinkUserInfo sourceLinkUser, CancellationToken cancellationToken = default)
+    {
+        using (CurrentTenant.Change(sourceLinkUser.TenantId))
+        {
+            var user = await UserManager.FindByIdAsync(sourceLinkUser.UserId.ToString());
+            if (user == null)
+            {
+                return;
+            }
+            user.RemoveToken(
+                LinkUserTokenProviderConsts.LinkUserConsentLoginProvider,
+                LinkUserTokenProviderConsts.LinkUserConsentTokenName);
+            (await UserManager.UpdateAsync(user)).CheckErrors();
         }
     }
 }
