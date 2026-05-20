@@ -256,4 +256,31 @@ public class IdentityLinkUserManager_Tests : AbpIdentityDomainTestBase
     {
         await IdentityLinkUserManager.RemoveLinkConsentAsync(new IdentityLinkUserInfo(Guid.NewGuid(), null));
     }
+
+    [Fact]
+    public virtual async Task SetLinkConsentAsync_Should_Persist_Across_UnitOfWork()
+    {
+        var john = await UserRepository.GetAsync(TestData.UserJohnId);
+        var source = new IdentityLinkUserInfo(john.Id, john.TenantId);
+
+        await UsingUowAsync(async () =>
+        {
+            await IdentityLinkUserManager.SetLinkConsentAsync(source, "consent-payload");
+        });
+
+        await UsingUowAsync(async () =>
+        {
+            (await IdentityLinkUserManager.GetLinkConsentAsync(source)).ShouldBe("consent-payload");
+        });
+
+        await UsingUowAsync(async () =>
+        {
+            await IdentityLinkUserManager.RemoveLinkConsentAsync(source);
+        });
+
+        await UsingUowAsync(async () =>
+        {
+            (await IdentityLinkUserManager.GetLinkConsentAsync(source)).ShouldBeNull();
+        });
+    }
 }

@@ -167,11 +167,11 @@ public class IdentityLinkUserManager : DomainService
         using (CurrentTenant.Change(sourceLinkUser.TenantId))
         {
             var user = await UserManager.GetByIdAsync(sourceLinkUser.UserId);
-            user.SetToken(
+            (await UserManager.SetAuthenticationTokenAsync(
+                user,
                 LinkUserTokenProviderConsts.LinkUserConsentLoginProvider,
                 LinkUserTokenProviderConsts.LinkUserConsentTokenName,
-                consent);
-            (await UserManager.UpdateAsync(user)).CheckErrors();
+                consent)).CheckErrors();
         }
     }
 
@@ -184,9 +184,10 @@ public class IdentityLinkUserManager : DomainService
             {
                 return null;
             }
-            return user.FindToken(
+            return await UserManager.GetAuthenticationTokenAsync(
+                user,
                 LinkUserTokenProviderConsts.LinkUserConsentLoginProvider,
-                LinkUserTokenProviderConsts.LinkUserConsentTokenName)?.Value;
+                LinkUserTokenProviderConsts.LinkUserConsentTokenName);
         }
     }
 
@@ -199,10 +200,10 @@ public class IdentityLinkUserManager : DomainService
             {
                 return;
             }
-            user.RemoveToken(
+            (await UserManager.RemoveAuthenticationTokenAsync(
+                user,
                 LinkUserTokenProviderConsts.LinkUserConsentLoginProvider,
-                LinkUserTokenProviderConsts.LinkUserConsentTokenName);
-            (await UserManager.UpdateAsync(user)).CheckErrors();
+                LinkUserTokenProviderConsts.LinkUserConsentTokenName)).CheckErrors();
         }
     }
 }

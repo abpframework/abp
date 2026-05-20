@@ -9,12 +9,10 @@ namespace Volo.Abp.Identity.AspNetCore;
 
 public class LinkUserTokenProvider_Tests : AbpSingleActiveTokenProviderTestBase
 {
-    protected IIdentityLinkUserRepository IdentityLinkUserRepository { get; }
     protected IdentityLinkUserManager IdentityLinkUserManager { get; }
 
     public LinkUserTokenProvider_Tests()
     {
-        IdentityLinkUserRepository = GetRequiredService<IIdentityLinkUserRepository>();
         IdentityLinkUserManager = GetRequiredService<IdentityLinkUserManager>();
     }
 
