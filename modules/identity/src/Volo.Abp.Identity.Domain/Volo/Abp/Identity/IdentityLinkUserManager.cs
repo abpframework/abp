@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.Identity;
 
@@ -162,11 +163,16 @@ public class IdentityLinkUserManager : DomainService
         }
     }
 
+    [UnitOfWork]
     public virtual async Task SetLinkConsentAsync(IdentityLinkUserInfo sourceLinkUser, string consent, CancellationToken cancellationToken = default)
     {
         using (CurrentTenant.Change(sourceLinkUser.TenantId))
         {
-            var user = await UserManager.GetByIdAsync(sourceLinkUser.UserId);
+            var user = await UserManager.FindByIdAsync(sourceLinkUser.UserId.ToString());
+            if (user == null)
+            {
+                return;
+            }
             (await UserManager.SetAuthenticationTokenAsync(
                 user,
                 LinkUserTokenProviderConsts.LinkUserConsentLoginProvider,
@@ -175,6 +181,7 @@ public class IdentityLinkUserManager : DomainService
         }
     }
 
+    [UnitOfWork]
     public virtual async Task<string?> GetLinkConsentAsync(IdentityLinkUserInfo sourceLinkUser, CancellationToken cancellationToken = default)
     {
         using (CurrentTenant.Change(sourceLinkUser.TenantId))
@@ -191,6 +198,7 @@ public class IdentityLinkUserManager : DomainService
         }
     }
 
+    [UnitOfWork]
     public virtual async Task RemoveLinkConsentAsync(IdentityLinkUserInfo sourceLinkUser, CancellationToken cancellationToken = default)
     {
         using (CurrentTenant.Change(sourceLinkUser.TenantId))

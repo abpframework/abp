@@ -8,7 +8,7 @@ using Volo.Abp.Threading;
 namespace Volo.Abp.Identity.AspNetCore;
 
 /// <summary>
-/// Link-user token provider that enforces only the most recently issued
+/// Link-user token provider that enforces, per purpose, only the most recently issued
 /// token to be valid, with a configurable expiration period.
 /// </summary>
 public class LinkUserTokenProvider : AbpSingleActiveTokenProvider

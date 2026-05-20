@@ -34,7 +34,7 @@ public class LinkUserTokenProvider_Tests : AbpSingleActiveTokenProviderTestBase
         => LinkUserTokenProviderConsts.LinkUserTokenPurpose;
 
     [Fact]
-    public void LinkUserTokenProvider_Should_Be_Register()
+    public void LinkUserTokenProvider_Should_Be_Registered()
     {
         var identityOptions = GetRequiredService<IOptions<IdentityOptions>>().Value;
 
@@ -72,6 +72,52 @@ public class LinkUserTokenProvider_Tests : AbpSingleActiveTokenProviderTestBase
 
             john = await UserRepository.GetAsync(TestData.UserJohnId);
             (await VerifyTokenAsync(john, token)).ShouldBeFalse();
+
+            await uow.CompleteAsync();
+        }
+    }
+
+    [Fact]
+    public async Task RemoveLinkUserTokenAsync_With_Custom_Purpose_Should_Invalidate_Only_That_Purpose()
+    {
+        const string customPurpose = "CustomLinkUserPurpose";
+
+        using (var uow = UnitOfWorkManager.Begin())
+        {
+            var john = await UserRepository.GetAsync(TestData.UserJohnId);
+            var defaultPurposeToken = await GenerateTokenAsync(john);
+            var customPurposeToken = await IdentityLinkUserManager.GenerateLinkTokenAsync(
+                new IdentityLinkUserInfo(john.Id, john.TenantId),
+                customPurpose);
+
+            john = await UserRepository.GetAsync(TestData.UserJohnId);
+            (await UserManager.RemoveLinkUserTokenAsync(john, customPurpose)).Succeeded.ShouldBeTrue();
+
+            john = await UserRepository.GetAsync(TestData.UserJohnId);
+            (await IdentityLinkUserManager.VerifyLinkTokenAsync(new IdentityLinkUserInfo(john.Id, john.TenantId), customPurposeToken, customPurpose)).ShouldBeFalse();
+            (await VerifyTokenAsync(john, defaultPurposeToken)).ShouldBeTrue();
+
+            await uow.CompleteAsync();
+        }
+    }
+
+    [Fact]
+    public async Task GenerateLinkTokenAsync_With_Custom_Purpose_Should_Invalidate_Previous_Token_For_Same_Purpose()
+    {
+        const string customPurpose = "CustomLinkUserPurpose";
+
+        using (var uow = UnitOfWorkManager.Begin())
+        {
+            var john = await UserRepository.GetAsync(TestData.UserJohnId);
+            var firstToken = await IdentityLinkUserManager.GenerateLinkTokenAsync(
+                new IdentityLinkUserInfo(john.Id, john.TenantId),
+                customPurpose);
+            var secondToken = await IdentityLinkUserManager.GenerateLinkTokenAsync(
+                new IdentityLinkUserInfo(john.Id, john.TenantId),
+                customPurpose);
+
+            (await IdentityLinkUserManager.VerifyLinkTokenAsync(new IdentityLinkUserInfo(john.Id, john.TenantId), firstToken, customPurpose)).ShouldBeFalse();
+            (await IdentityLinkUserManager.VerifyLinkTokenAsync(new IdentityLinkUserInfo(john.Id, john.TenantId), secondToken, customPurpose)).ShouldBeTrue();
 
             await uow.CompleteAsync();
         }
