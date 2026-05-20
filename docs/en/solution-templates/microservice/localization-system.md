@@ -62,7 +62,7 @@ Use the locale files under `apps/react/src/locales` for UI-only strings that bel
 
 The `react-admin-console` application keeps its bundled translations under `apps/react-admin-console/src/locales/*.json` and initializes `i18next` from those files.
 
-Its supported language list is controlled by `Volo.Abp.AdminConsole.AbpAdminConsoleOptions.LocalizationLanguages`, which is exposed to the SPA through `/admin-console/api/config`. If no languages are configured, the frontend falls back to `en`.
+Its supported language list is controlled by `AbpAdminConsoleOptions` using the `AdminConsole:LocalizationLanguages` configuration key, which is exposed to the SPA through `/admin-console/api/config`. If no languages are configured, the frontend falls back to `en`.
 
 Use the admin console locale files for UI-only texts that are specific to the administration surface. Keep shared module texts in backend localization resources.
 
