@@ -9,7 +9,26 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 3.0.2 (2026-05-12) Latest
+## 3.0.3 (2026-05-20) Latest
+
+- Fix modern React templates ignoring selected languages
+- Fix AI management template EF Core downgrade
+- Fix Windows solution drag and drop on Elevated process
+- Add browser automation tools for agent
+- Sync AI workspace resource permission fix to React template
+- Icon support & polish react admin console sidebar menu
+- App Users Enhancements & Fixes
+- Fix localization selection to react app
+- Modal styles
+- Handle concurrent CLI cache writes in `StudioCliService`
+- Add missing helper texts for modern wizard Additional Options and Modularity
+- Fix(templates): avoid invalid scope on linked-account login
+- Fixes and improvements on Abp Agent
+- Add using directive for System namespace
+- Abp 10.4
+- Update version to release 3.0.3 with 10.4.0
+
+## 3.0.2 (2026-05-12)
 
 * Modern template osx fix
 * Update dark theme - BackgroundColorLighter
