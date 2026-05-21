@@ -8,7 +8,7 @@ If you've been following ABP's mobile story, you know the React Native template 
 
 We approached the refresh in two passes: first a thorough cleanup of legacy screens, dead components, and unused locales, and then a full styling-layer rewrite around NativeWind v4 with a shadcn-style design token system. Along the way we also built two sample apps on top of the new template, so the changes aren't just theoretical — they've been exercised against real screens and real flows.
 
-The changes ship to both the **`react-native-pro`** template and the **`microservice/apps/mobile/react-native`** template, so layered, single-layer (no-layers), and microservice solutions all get the same modernized mobile experience.
+The changes ship to both the **`react-native`** template and the **`microservice/apps/mobile/react-native`** template, so layered, single-layer (no-layers), and microservice solutions all get the same modernized mobile experience.
 
 ## Why we modernized
 
@@ -106,14 +106,6 @@ Navigation is where the template change is felt the most. The old template gave 
 
 To stress-test the new template and to give the community something concrete to learn from, we built **two sample apps** on top of it:
 
-### App 2 — a bigger demo
-
-**App 2** is the more substantial of the two — it covers multiple feature areas and shows how the template scales when an app actually has things to do.
-
-![App 2 — screens](images/sample-medium-screens.png)
-<!-- Placeholder: 2-3 key screens of the bigger sample app, ideally light+dark variants in one image -->
-
-
 ### Habit Tracker — a minimal demo
 
 I built **Habit Tracker** — a single-feature demo where you keep a list of daily habits and tick them off as you go through your day. Build a habit, mark it done, watch the streak grow. That's the whole loop.
@@ -128,6 +120,19 @@ The point here wasn't to ship a feature-rich productivity tool, it was to show t
   </tr>
 </table>
 
+### Hanova — a home-services demo
+
+We have also built **Hanova** that is a two-sided home-services sample where customers find local providers, request a job, negotiate the price, and chat through to confirmation. Pick a role, log in, browse open work or open requests, accept a booking, message the other party. That's basically the loop.
+
+The point here wasn't about shipping a full Uber-for-plumbers product, but it was to show a **realistic but focused** domain you can grow on top of the ABP single-layer template without rebuilding authentication, navigation, or theming from scratch. Everything around the marketplace — login/register, role selection, bottom-tab navigation, light/dark mode, localized strings, OAuth, and API wiring — comes from the template. You add the booking flow (discovery, job feed, negotiation, messaging), and the template carries everything else. Two pre-seeded personas (`ayse.kaya` / `mehmet.yilmaz`, password `Demo@1234`) populate every screen on first launch so you can explore both sides immediately.
+
+<table>
+  <tr>
+    <td align="center" width="33%"><img src="images/discovery.png" alt="Hanova — Discovery / browse providers" /></td>
+    <td align="center" width="33%"><img src="images/job-feed.png" alt="Hanova — Bookings / job feed" /></td>
+    <td align="center" width="33%"><img src="images/negotiation.png" alt="Hanova — Messages / negotiation" /></td>
+  </tr>
+</table>
 
 Both apps will be available shortly — they're useful as reference implementations, and they're also useful as a kind of regression check on the template itself.
 
@@ -149,7 +154,7 @@ For the microservice solution template:
 abp new Acme.BookStore --template microservice-pro --mobile react-native
 ```
 
-Open the generated `react-native-pro/` (or `apps/mobile/react-native/`) folder, run `npm install`, then `npx expo start`, and you'll be looking at the new UI within seconds.
+Open the generated `react-native/` (or `apps/mobile/react-native/`) folder, run `npm install`, then `npx expo start`, and you'll be looking at the new UI within seconds.
 
 If you're **upgrading an existing project**, check the new `docs/UPGRADE.md` in the template — it walks through the moving pieces (Babel/Metro config, the new `global.css` import, the `nativewind-env.d.ts` ambient types, and the locale trim).
 
@@ -157,4 +162,4 @@ If you're **upgrading an existing project**, check the new `docs/UPGRADE.md` in 
 
 The ABP React Native template is in a much better place than it was a few months ago. The legacy screens and a long tail of dead components are gone, the styling layer is now a proper token-based system powered by **NativeWind v4** and a shadcn-style neutral palette, and **dark mode** is no longer something each screen has to think about — it's just there. Navigation got a real refresh too: the old single-drawer pattern is now a revamped drawer plus a `BottomTabNavigator` and `AccountNavigator`, which is the structure most modern mobile apps actually use.
 
-We also built **two sample apps** on top of the new template — **App 2**, a more substantial demo, and **Habit Tracker**, a focused single-feature one — so the changes are exercised against real screens and real flows, not just template snapshots. If you create a new ABP solution with a React Native mobile app, all of this is what you get out of the box; if you're upgrading, the new `docs/UPGRADE.md` walks you through it. Try the template, build something on top of it, and share what you make — the whole point of moving to a token-based system is that it should be easy for everyone to extend, not just us.
+We also built **two sample apps** on top of the new template — **Habit Tracker**, a focused single-feature one, and **Hanova**, a more substantial demo — so the changes are exercised against real screens and real flows, not just template snapshots. If you create a new ABP solution with a React Native mobile app, all of this is what you get out of the box; if you're upgrading, the new `docs/UPGRADE.md` walks you through it. Try the template, build something on top of it, and share what you make — the whole point of moving to a token-based system is that it should be easy for everyone to extend, not just us.
