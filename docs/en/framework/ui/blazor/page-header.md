@@ -14,7 +14,23 @@
 
 # Blazor UI: Page Header
 
-You can use the`PageHeader` component to set the page title, the breadcrumb items and the toolbar items for a page. Before using the `PageHeader` component, you need to add a using statement for the `Volo.Abp.AspNetCore.Components.Web.Theming.Layout` namespace.
+You can use the `PageHeader` component to set the page title, the breadcrumb items and the toolbar items for a page. Before using the `PageHeader` component, you need to add a using statement for the namespace:
+
+{{if BlazorUI == "Blazorise"}}
+
+```razor
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
+```
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+```razor
+@using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Layout
+```
+
+{{end}}
 
 Once you add the `PageHeader` component to your page, you can control the related values using the parameters. 
 
