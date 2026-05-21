@@ -1,11 +1,15 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Link dynamic entities to existing C# entities like IdentityUser using Reference Entities in the ABP Low-Code System."
+    "Description": "Link dynamic entities to existing .NET entities like IdentityUser using Reference Entities in the ABP Low-Code System."
 }
 ```
 
 # Reference Entities
+
+> **Preview:** Reference entity metadata is part of the preview Low-Code System. Registration APIs, relation options, and designer behavior may change before general availability.
+
+Use the [Low-Code Designer](designer.md) to select reference entities after they are registered in application startup. This page explains the registration and metadata details behind that designer experience.
 
 Reference Entities allow you to create foreign key relationships from **dynamic entities** to **existing C# entities** that live outside the Low-Code System.
 
@@ -34,7 +38,7 @@ Dynamic entities defined via [Attributes](fluent-api.md) or [model.json](model-j
 
 ## Registering Reference Entities
 
-Register reference entities in your [Low-Code Initializer](index.md#1-create-a-low-code-initializer) using `AbpDynamicEntityConfig.ReferencedEntityList`:
+Register reference entities in startup configuration using `AbpDynamicEntityConfig.ReferencedEntityList`:
 
 ````csharp
 public static async Task InitializeAsync()

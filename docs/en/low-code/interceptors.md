@@ -7,6 +7,10 @@
 
 # Interceptors
 
+> **Preview:** Interceptors and their JavaScript context are preview extension points. Script context members, validation behavior, and lifecycle hooks may change before general availability.
+
+Use designer actions and model metadata for standard low-code behavior first. Interceptors are an advanced extension point for adding JavaScript lifecycle logic when the generated CRUD flow needs validation, transformation, or replacement behavior.
+
 Interceptors allow you to run custom JavaScript code before, after, or instead of Create, Update, and Delete operations on dynamic entities.
 
 ## Interceptor Types
@@ -22,6 +26,31 @@ Interceptors allow you to run custom JavaScript code before, after, or instead o
 | `Delete` | `Pre` | Before entity deletion — dependency checks |
 | `Delete` | `Post` | After entity deletion — cleanup |
 | `Delete` | `Replace` | Instead of entity deletion — no return value needed |
+
+## Defining Interceptors in model.json
+
+The designer stores entity interceptors in the entity `interceptors` array:
+
+```json
+{
+  "name": "LowCodeDemo.Customers.Customer",
+  "interceptors": [
+    {
+      "commandName": "Create",
+      "type": "Pre",
+      "javascript": "if (!args.getValue('Name')) {\n  globalError = 'Name is required.';\n}"
+    }
+  ]
+}
+```
+
+### Interceptor Descriptor
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `commandName` | string | `"Create"`, `"Update"`, or `"Delete"` |
+| `type` | string | `"Pre"`, `"Post"`, or `"Replace"` |
+| `javascript` | string | JavaScript code to execute |
 
 ## Defining Interceptors with Attributes
 
@@ -49,7 +78,7 @@ The `Name` parameter must be one of: `"Create"`, `"Update"`, or `"Delete"`. The 
 
 ## Defining Interceptors with Fluent API
 
-Use the `Interceptors` list on an `EntityDescriptor` to add interceptors programmatically in your [Low-Code Initializer](index.md#1-create-a-low-code-initializer):
+Use the `Interceptors` list on an `EntityDescriptor` to add interceptors programmatically in startup configuration:
 
 ````csharp
 AbpDynamicEntityConfig.EntityConfigurations.Configure(
@@ -71,32 +100,7 @@ AbpDynamicEntityConfig.EntityConfigurations.Configure(
 );
 ````
 
-See [Attributes & Fluent API](fluent-api.md#adding-interceptors) for more details on Fluent API configuration.
-
-## Defining Interceptors in model.json
-
-Add interceptors to the `interceptors` array of an entity:
-
-```json
-{
-  "name": "LowCodeDemo.Customers.Customer",
-  "interceptors": [
-    {
-      "commandName": "Create",
-      "type": "Pre",
-      "javascript": "if(context.commandArgs.data['Name'] == 'Invalid') {\n  globalError = 'Invalid Customer Name!';\n}"
-    }
-  ]
-}
-```
-
-### Interceptor Descriptor
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `commandName` | string | `"Create"`, `"Update"`, or `"Delete"` |
-| `type` | string | `"Pre"`, `"Post"`, or `"Replace"` |
-| `javascript` | string | JavaScript code to execute |
+See [Attributes & Fluent API](fluent-api.md) for more details on Fluent API configuration.
 
 ## JavaScript Context
 
@@ -153,6 +157,8 @@ Inside interceptor scripts, you have access to:
 ### `db` (Database API)
 
 Full access to the [Scripting API](scripting-api.md) for querying and mutating data.
+
+Interceptors can also use common scripting services such as `user`, `tenant`, `auth`, `settings`, `features`, `events`, `jobs`, `files`, `images`, and `attachments` when they are enabled by the scripting capability profile.
 
 ### `globalError`
 

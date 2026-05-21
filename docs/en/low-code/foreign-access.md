@@ -7,6 +7,10 @@
 
 # Foreign Access
 
+> **Preview:** Foreign access metadata is part of the preview Low-Code System. Relation behavior and designer options may change before general availability.
+
+Use the [Low-Code Designer](designer.md) to review relation metadata visually. This page explains the advanced configuration values that control how related dynamic entities can be reached from runtime pages.
+
 Foreign Access controls how related **dynamic entities** can be accessed through foreign key relationships. It determines whether users can view or manage related data directly from the **target entity's** UI.
 
 > **Important:** Foreign Access only works between **dynamic entities**. It does not apply to [reference entities](reference-entities.md) because they are read-only and don't have UI pages.
@@ -108,7 +112,7 @@ Set the `access` field on a foreign key property:
 
 When foreign access is configured between two **dynamic entities**:
 
-![Actions menu showing foreign access items (Order, Visited Country, etc.)](images/actions-menu.png)
+![Relation overview in the Low-Code Designer](images/designer-relations.png)
 
 ### `ForeignAccess.View`
 
@@ -117,8 +121,6 @@ An **action menu item** appears on the target entity's data grid row (e.g., a "V
 ### `ForeignAccess.Edit`
 
 An **action menu item** appears on the target entity's data grid row (e.g., an "Orders" item on the Customer row). Clicking it opens a fully functional CRUD modal where users can create, edit, and delete related records.
-
-![Foreign access modal with full CRUD capabilities](images/foreign-access-modal.png)
 
 ### `ForeignAccess.None`
 
