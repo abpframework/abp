@@ -14,7 +14,7 @@ Scriban's [safe runtime](https://github.com/scriban/scriban/blob/master/site/doc
 | Boundary | ABP default |
 |----------|-------------|
 | Globals exposed | Only the `globalContext` (`Dictionary<string, object>`) entries, the `model` you pass to `RenderAsync`, and the `L` localization helper. |
-| .NET member access | `TemplateContext.MemberFilter` is set to `IsMemberAllowed`, an allowlist that exposes public properties only. Methods, fields, events, and `object`-level members (`GetType`, `ToString`, ...) are not reachable, which closes reflection-based escape paths such as `{{ model.GetType.Assembly.GetType "..." }}`. |
+| .NET member access | `TemplateContext.MemberFilter` is set to `IsMemberAllowed`, an allowlist that exposes public properties only. Methods, fields, events, and `object`-level members (`GetType`, `ToString`, ...) are not reachable, which closes reflection-based escape paths such as `{%{{{ model.GetType.Assembly.GetType "..." }}}%}`. |
 | `TemplateLoader` | Not configured. `include` directives have no template loader and cannot read templates from disk or other sources unless you explicitly wire one up. |
 | Execution limits | Scriban's defaults (`LoopLimit = 1000`, `RecursiveLimit = 100`, `LimitToString = 1 MB`, `RegexTimeOut = 10s`). Override `CreateScribanTemplateContext` to tighten these for your own scenarios. |
 

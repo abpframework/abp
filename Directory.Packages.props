@@ -55,7 +55,7 @@
     <PackageVersion Include="JetBrains.Annotations" Version="2025.2.2" />
     <PackageVersion Include="LdapForNet" Version="2.7.15" />
     <PackageVersion Include="LibGit2Sharp" Version="0.31.0" />
-    <PackageVersion Include="Magick.NET-Q16-AnyCPU" Version="14.9.1" />
+    <PackageVersion Include="Magick.NET-Q16-AnyCPU" Version="14.13.0" />
     <PackageVersion Include="MailKit" Version="4.13.0" />
     <PackageVersion Include="Markdig.Signed" Version="0.42.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.7" />

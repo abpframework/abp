@@ -34,6 +34,7 @@ See the following documents to learn Non Visual UI Testing:
 * [Testing in ASP.NET Core MVC / Razor Pages](../framework/ui/mvc-razor-pages/testing.md)
 * [Testing in Angular](../framework/ui/angular/testing.md)
 * [Testing in Blazor](../framework/ui/blazor/testing.md)
+* [Testing in React](../framework/ui/react/unit-testing.md)
 
 ## Visual Tests
 

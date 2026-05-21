@@ -25,6 +25,7 @@
     <CardBody>
         @* ************************* DATA GRID ************************* *@
         <AbpExtensibleDataGrid TItem="TenantDto"
+                               Data="@Entities"
                                ReadData="@OnDataGridReadAsync"
                                TotalItems="@TotalCount"
                                ShowPager="true"
