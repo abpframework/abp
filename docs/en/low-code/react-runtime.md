@@ -151,7 +151,7 @@ The URL keeps the existing `lcFilters` query parameter shape. The runtime maps u
 
 ## Export
 
-The runtime export button opens a small menu with direct Excel and CSV actions. Direct export uses the current search, sorting, filters, and visible exportable columns from the page definition maintained in the Low-Code Designer. Use **Export options** when users need a different row or column scope.
+The runtime export button opens a small menu with direct Excel and CSV actions. If the selected page has exportable file or image fields, the menu also shows **Files (.zip)**. Direct export uses the current search, sorting, filters, and visible exportable columns from the page definition maintained in the Low-Code Designer. Use **Export options** when users need a different row, column, or file output scope.
 
 Available options:
 
@@ -163,15 +163,19 @@ Available options:
 | Columns: all exportable fields | Exports page fields marked exportable in the Low-Code Designer, including fields that are hidden from the grid |
 | File/image: file name | Writes the uploaded file name, or an empty value |
 | File/image: metadata columns | Writes file name, content type, size, width, and height columns |
-| File/image: data URL | Writes small linked files as `data:<content-type>;base64,...`; large or unavailable files are written as markers |
+| File/image: download links | Writes file name, temporary download URL, link expiry, content type, size, width, height, and status columns |
 
-The runtime first requests a short-lived token and then calls the Excel or CSV export endpoint. The token is single-use and is bound to the current page, entity, tenant, child page, and foreign-access context. Text that looks like a spreadsheet formula is escaped in exported headers and cells. If a caller manually sends a non-exportable field name, the backend rejects the request.
+Spreadsheet export stays tabular. It does not embed file bytes in cells. Use download-link columns when spreadsheet readers need a controlled way to fetch individual files, or use **Files (.zip)** when they need the actual file set. ZIP export contains `manifest.csv` and files under `files/{recordId}/{fieldName}/{safeFileName}`. The manifest reports missing, malformed, unlinked, skipped, and exported files.
+
+The runtime first requests a short-lived token and then calls the Excel, CSV, or ZIP export endpoint. The export token is single-use and is bound to the current page, entity, tenant, child page, and foreign-access context. Temporary file links use separate short-lived tokens bound to the exported record field and blob. Text that looks like a spreadsheet formula is escaped in exported headers and cells. If a caller manually sends a non-exportable field name, the backend rejects the request.
 
 | Endpoint | Description |
 |----------|-------------|
 | `GET /api/low-code/pages/{pageName}/download-token` | Gets a short-lived token |
 | `GET /api/low-code/pages/{pageName}/export/excel` | Downloads Excel |
 | `GET /api/low-code/pages/{pageName}/export/csv` | Downloads CSV |
+| `GET /api/low-code/pages/{pageName}/export/files` | Downloads a ZIP with selected file/image fields |
+| `GET /api/low-code/pages/export/files/{token}` | Downloads one temporary file link from spreadsheet link mode |
 
 Child and foreign-access pages use the matching `/children/{childEntityName}` and `/foreign-access/{sourceEntityName}` page endpoints.
 
@@ -181,7 +185,9 @@ Troubleshooting:
 |---------|--------------|
 | Invalid or expired download token | The token is single-use, expired, or was requested for a different page/context |
 | Export row limit exceeded | Narrow the filters, export the current page, or increase `LowCode:Export:MaxRows` |
-| File not exported marker | The file was missing, too large for data URL export, malformed, or no longer linked to the exported record |
+| File link expired | Re-run export; temporary file links are intentionally short-lived |
+| File not exported marker | The file was missing, malformed, no longer linked to the exported record, or skipped by ZIP file count/size limits |
+| ZIP bundle export disabled | Enable file bundle export for the page in the Low-Code Designer |
 
 ## Files and Attachments
 

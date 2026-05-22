@@ -239,6 +239,8 @@ Pages create runtime routes and menu entries. They also choose how entity data i
   "type": "dataGrid",
   "entityName": "Acme.Campaigns.Campaign",
   "group": "marketing",
+  "defaultFileExportMode": 0,
+  "allowFileBundleExport": true,
   "columns": [
     { "propertyName": "Name", "order": 0 },
     { "propertyName": "Status", "order": 1 },
@@ -258,9 +260,18 @@ Page columns support two independent flags:
 | Field | Default | Purpose |
 |-------|---------|---------|
 | `visible` | `true` | Renders the field in the React page view |
-| `exportable` | `true` | Allows the field to be included in Excel and CSV export |
+| `exportable` | `true` | Allows the field to be included in Excel, CSV, and file bundle export |
 
 If `columns` is present, export uses this list as the page-level export policy. `exportable: false` prevents the field from being exported even if a caller sends the field name manually. Server-only entity properties are never exportable.
+
+Page export settings:
+
+| Field | Default | Purpose |
+|-------|---------|---------|
+| `defaultFileExportMode` | `0` | Default spreadsheet output for file/image fields. `0` = file name, `1` = metadata columns, `2` = temporary download-link columns |
+| `allowFileBundleExport` | `true` | Allows **Files (.zip)** export for exportable file/image columns on the page |
+
+ZIP file bundle export only includes selected page columns that are file or image fields and are exportable. The ZIP contains `manifest.csv` plus files under `files/{recordId}/{fieldName}/{safeFileName}`.
 
 | Page type | Required fields | Purpose |
 |-----------|-----------------|---------|

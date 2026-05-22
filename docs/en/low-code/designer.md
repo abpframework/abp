@@ -65,10 +65,12 @@ Pages can define data grid, kanban, calendar, gallery, standalone form, and dash
 * Entity
 * Create and edit forms
 * Visible grid/card fields
-* Exportable fields for Excel and CSV
+* Exportable fields for Excel, CSV, and file bundles
 * Field labels and column widths
 * Default sorting
 * Filter fields and defaults
+* Default file/image export output
+* Whether file bundle ZIP export is allowed
 
 Kanban pages add `groupByProperty`, calendar pages add date/time properties, gallery pages can use an image property, form pages reference a named form, and dashboard pages define rows and visualizations.
 
@@ -76,7 +78,9 @@ Kanban pages add `groupByProperty`, calendar pages add date/time properties, gal
 
 Pages are exposed in React under `/dynamic/<page-name>` and can also appear as dynamic menu items.
 
-The **View Fields** section has separate **Show** and **Export** choices. Use **Show** for fields that should be rendered in the runtime view. Use **Export** for fields that may be included in Excel or CSV output. A visible field can be excluded from export, and an exportable field can be hidden from the page but still available through **Export options > All exportable fields**.
+The **View Fields** section has separate **Show** and **Export** choices. Use **Show** for fields that should be rendered in the runtime view. Use **Export** for fields that may be included in Excel, CSV, or file bundle output. A visible field can be excluded from export, and an exportable field can be hidden from the page but still available through **Export options > All exportable fields**.
+
+The **Export Settings** section controls page-level file behavior. **Default File/Image Output** selects whether spreadsheet export writes file names, metadata columns, or temporary download-link columns by default. **Allow file bundle export** controls whether the runtime can show **Files (.zip)** for this page. Disable it when files should not leave the system as a bulk download even if individual fields remain visible.
 
 ## Forms
 

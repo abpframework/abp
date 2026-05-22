@@ -22,7 +22,7 @@ Use the designer to model entities, enums, properties, relations, pages, forms, 
 * React data grid, kanban, calendar, gallery, form, and dashboard pages
 * Create and edit forms
 * Advanced filters
-* Excel and CSV export
+* Excel, CSV, and file bundle export
 
 No DTO, repository, application service, controller, or React CRUD page is required for the standard flow.
 
@@ -110,19 +110,23 @@ React low-code filters are type-aware. The runtime shows only operators that mak
 
 ## Export
 
-Every dynamic entity page can export data to Excel or CSV. Export requests use the current search, sorting, and filters from the runtime view, so a filtered page exports the matching subset instead of the whole entity.
+Every dynamic entity page can export data to Excel or CSV. Pages with file or image fields can also export a file bundle as a ZIP. Export requests use the current search, sorting, and filters from the runtime view, so a filtered page exports the matching subset instead of the whole entity.
 
 The React runtime exports visible exportable columns by default. These columns come from the page fields configured in the Low-Code Designer. A field can be visible but not exportable, or hidden but still available in the **All exportable fields** option. Use this when a page should display operational data that should not leave the system through Excel or CSV. Server-only fields are always excluded, and foreign key values are displayed through their configured display property.
 
-File and image fields are exported as file names by default. Export options can expand those fields into metadata columns or include small files as `data:<content-type>;base64,...` values. The data URL option is intended for small files only; files over the configured `LowCode:Export:MaxDataUrlFileSizeBytes` limit are skipped with a marker instead of failing the whole export.
+File and image fields are exported as file names by default. Export options can expand those fields into metadata columns or temporary download-link columns. Download-link columns include file name, URL, expiry, content type, size, dimensions, and status. The links are short-lived and should be treated like signed download links, not permanent public URLs.
 
-Export downloads require a short-lived, single-use token. The token is bound to the tenant, page, entity, child page, and foreign-access context. Spreadsheet formula-like text values are escaped before writing CSV or Excel cells.
+Use **Files (.zip)** when users need the actual uploaded files. The ZIP contains `manifest.csv` and files under `files/{recordId}/{fieldName}/{safeFileName}`. The manifest records missing, malformed, unlinked, and limit-skipped files instead of failing the whole export.
+
+Spreadsheet and ZIP exports require a short-lived, single-use download token. The token is bound to the tenant, page, entity, child page, and foreign-access context. File download links use separate short-lived tokens bound to the exported file value. Spreadsheet formula-like text values are escaped before writing CSV or Excel headers and cells.
 
 | Endpoint | Description |
 |----------|-------------|
 | `GET /api/low-code/pages/{pageName}/download-token` | Gets a short-lived download token |
 | `GET /api/low-code/pages/{pageName}/export/excel` | Exports filtered data as Excel |
 | `GET /api/low-code/pages/{pageName}/export/csv` | Exports filtered data as CSV |
+| `GET /api/low-code/pages/{pageName}/export/files` | Exports selected file/image fields as a ZIP bundle |
+| `GET /api/low-code/pages/export/files/{token}` | Downloads one temporary file link created by spreadsheet export |
 
 Useful export settings:
 
@@ -130,7 +134,9 @@ Useful export settings:
 |---------|---------|---------|
 | `LowCode:Export:MaxRows` | `100000` | Maximum rows in one all-filtered export |
 | `LowCode:Export:DownloadTokenLifetimeSeconds` | `30` | Download token lifetime |
-| `LowCode:Export:MaxDataUrlFileSizeBytes` | `16384` | Maximum file size for data URL export |
+| `LowCode:Export:FileLinkTokenLifetimeSeconds` | `900` | Temporary file link lifetime |
+| `LowCode:Export:MaxFileBundleFiles` | `1000` | Maximum files in one ZIP export |
+| `LowCode:Export:MaxFileBundleBytes` | `268435456` | Maximum total file bytes in one ZIP export |
 
 ## Advanced Configuration
 
