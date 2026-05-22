@@ -44,11 +44,20 @@ The backend ships ready-to-run. The relevant pieces consumed from React Native a
     - `GET    /api/app/book/author-lookup` — `{ items: [{ id, name }] }` for the author dropdown
     - `GET    /api/app/author` — paged list (`items: [{ id, name, birthDate, shortBio }]`)
     - `GET    /api/app/author/{id}`, `POST /api/app/author`, `PUT /api/app/author/{id}`, `DELETE /api/app/author/{id}`
-- **Permissions** (use these names from the React Native side to gate UI):
-    - `BookStore.Books`, `BookStore.Books.Create`, `BookStore.Books.Edit`, `BookStore.Books.Delete`
-    - `BookStore.Authors`, `BookStore.Authors.Create`, `BookStore.Authors.Edit`, `BookStore.Authors.Delete`
+- **Permissions** — defined in `BookStorePermissions.cs` and returned to the mobile app as `auth.grantedPolicies` from `/api/abp/application-configuration`:
 
-To run the backend, start `Acme.BookStore.DbMigrator` once (it seeds three sample authors and six sample books), then run `Acme.BookStore.HttpApi.Host`. The default `BookStore` permissions need to be granted to the `admin` user via the **Identity → Roles → admin → Permissions** screen of the web UI before testing on mobile.
+    | Policy | UI effect |
+    |--------|-----------|
+    | `BookStore.Books` | Books tab + list |
+    | `BookStore.Books.Create` | New book FAB |
+    | `BookStore.Books.Edit` | Edit in item menu |
+    | `BookStore.Books.Delete` | Delete in item menu |
+    | `BookStore.Authors` | Authors tab + list |
+    | `BookStore.Authors.Create` | New author FAB |
+    | `BookStore.Authors.Edit` | Edit in item menu |
+    | `BookStore.Authors.Delete` | Delete in item menu |
+
+To run the backend, start `Acme.BookStore.DbMigrator` once (it seeds three sample authors and six sample books), then run `Acme.BookStore.HttpApi.Host`. Grant the **Book Store** permissions to the `admin` role via **Identity → Roles → admin → Permissions** in the web UI before testing on mobile (at minimum **Books** and **Authors** so the Book Store tab appears). After changing role permissions, log in again on mobile so `fetchAppConfigAsync` reloads `grantedPolicies`.
 
 If you want to follow the backend implementation step by step instead, read the [Web Application Development tutorial](../../book-store/part-01.md). The mobile-side code below works against the API surface listed above regardless of how you produced it.
 
@@ -403,6 +412,74 @@ export default function BookStoreStackNavigator() {
 
 The screens referenced in the imports above will be created in the next sections.
 
+## Permission infrastructure
+
+The sample ships a small permission layer on top of `auth.grantedPolicies` from the application configuration. Policies are loaded on app startup and after login (`AppActions.fetchAppConfigAsync` in `AppContent.tsx` and `LoginScreen.tsx`).
+
+### Policy constants
+
+Create `./src/constants/BookStorePolicies.ts` so policy names stay aligned with `BookStorePermissions.cs`:
+
+```ts
+// ./src/constants/BookStorePolicies.ts
+export const BookStorePolicies = {
+  Books: 'BookStore.Books',
+  BooksCreate: 'BookStore.Books.Create',
+  BooksEdit: 'BookStore.Books.Edit',
+  BooksDelete: 'BookStore.Books.Delete',
+  Authors: 'BookStore.Authors',
+  AuthorsCreate: 'BookStore.Authors.Create',
+  AuthorsEdit: 'BookStore.Authors.Edit',
+  AuthorsDelete: 'BookStore.Authors.Delete',
+} as const;
+
+/** Show Book Store tab when the user can access books or authors. */
+export const BookStoreTabPolicy = `${BookStorePolicies.Books}||${BookStorePolicies.Authors}`;
+```
+
+### Selector
+
+Add `createGrantedPolicySelector` to `./src/store/selectors/AppSelectors.ts`. It supports a single policy, OR (`||`), and AND (`&&`):
+
+```ts
+export function createGrantedPolicySelector(condition: string) {
+  return createSelector([getApp], state => {
+    const grantedPolicies = state?.appConfig?.auth?.grantedPolicies;
+    if (!grantedPolicies) return false;
+
+    const hasPolicy = (policy: string) => grantedPolicies[policy.trim()] === true;
+
+    if (condition.includes('||')) {
+      return condition.split('||').some(policy => hasPolicy(policy));
+    }
+    if (condition.includes('&&')) {
+      return condition.split('&&').every(policy => hasPolicy(policy));
+    }
+    return hasPolicy(condition);
+  });
+}
+```
+
+### usePermission hook
+
+Create `./src/hooks/UsePermission.ts` and export it from `./src/hooks/index.ts`:
+
+```ts
+import { useSelector } from 'react-redux';
+import { createGrantedPolicySelector } from '../store/selectors/AppSelectors';
+
+export function usePermission(policyKey: string): boolean {
+  const selector = createGrantedPolicySelector(policyKey);
+  return useSelector(selector);
+}
+```
+
+### Permission HOC (optional)
+
+`./src/hocs/PermissionHOC.tsx` provides `withPermission(Component, policyKey)` for hiding arbitrary UI. The Book Store screens use `usePermission` directly; see `./docs/permission-guide.md` for more examples.
+
+Throughout the sections below, Book Store UI gating uses `usePermission` with `BookStorePolicies` / `BookStoreTabPolicy` instead of reading `grantedPolicies` manually.
+
 ## Adding BookStore to the BottomTabNavigator
 
 Open `./src/navigators/BottomTabNavigator.tsx` and add a `BookStoreTab` between `HomeTab` and `SettingsTab`. The tab is shown only when the user has at least one of the BookStore permissions:
@@ -412,11 +489,10 @@ Open `./src/navigators/BottomTabNavigator.tsx` and add a `BookStoreTab` between 
 import { useContext } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import { useSelector } from 'react-redux';
 
-import { useThemeColors } from '../hooks';
+import { BookStoreTabPolicy } from '../constants/BookStorePolicies';
+import { usePermission, useThemeColors } from '../hooks';
 import { LocalizationContext } from '../contexts/LocalizationContext';
-import { appConfigSelector } from '../store/selectors/AppSelectors';
 
 import HomeStackNavigator from './HomeNavigator';
 import SettingsStackNavigator from './SettingsNavigator';
@@ -429,8 +505,7 @@ export default function BottomTabNavigator() {
   const { headerBg, accentColor, iconColor } = useThemeColors();
   const { t } = useContext(LocalizationContext);
 
-  const policies = useSelector(appConfigSelector)?.auth?.grantedPolicies ?? {};
-  const showBookStore = !!policies['BookStore.Books'] || !!policies['BookStore.Authors'];
+  const showBookStore = usePermission(BookStoreTabPolicy);
 
   return (
     <Tab.Navigator
@@ -471,10 +546,10 @@ export default function BottomTabNavigator() {
 // ./src/screens/BookStore/BookStoreScreen.tsx
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
-import { useSelector } from 'react-redux';
 
+import { BookStorePolicies } from '../../constants/BookStorePolicies';
 import { LocalizationContext } from '../../contexts/LocalizationContext';
-import { appConfigSelector } from '../../store/selectors/AppSelectors';
+import { usePermission } from '../../hooks';
 import type { BookStoreScreenProps } from '../../navigators/types';
 
 import BooksScreen from './Books/BooksScreen';
@@ -485,14 +560,15 @@ interface TabDef { key: TabKey; label: string; }
 
 function BookStoreScreen({ navigation }: BookStoreScreenProps) {
   const { t } = useContext(LocalizationContext);
-  const policies = useSelector(appConfigSelector)?.auth?.grantedPolicies ?? {};
+  const canViewBooks = usePermission(BookStorePolicies.Books);
+  const canViewAuthors = usePermission(BookStorePolicies.Authors);
 
   const tabs = useMemo<TabDef[]>(() => {
     const list: TabDef[] = [];
-    if (policies['BookStore.Books']) list.push({ key: 'books', label: t('BookStore::Menu:Books') });
-    if (policies['BookStore.Authors']) list.push({ key: 'authors', label: t('BookStore::Menu:Authors') });
+    if (canViewBooks) list.push({ key: 'books', label: t('BookStore::Menu:Books') });
+    if (canViewAuthors) list.push({ key: 'authors', label: t('BookStore::Menu:Authors') });
     return list;
-  }, [policies, t]);
+  }, [canViewBooks, canViewAuthors, t]);
 
   const [activeKey, setActiveKey] = useState<TabKey | undefined>(tabs[0]?.key);
 
@@ -556,13 +632,12 @@ Create `./src/screens/BookStore/Books/BooksScreen.tsx`. The list itself is a sin
 // ./src/screens/BookStore/Books/BooksScreen.tsx
 import { useContext, useState } from 'react';
 import { Alert, View, Text, Pressable } from 'react-native';
-import { useSelector } from 'react-redux';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { Ionicons } from '@expo/vector-icons';
 
+import { BookStorePolicies } from '../../../constants/BookStorePolicies';
 import { LocalizationContext } from '../../../contexts/LocalizationContext';
-import { appConfigSelector } from '../../../store/selectors/AppSelectors';
-import { useThemeColors } from '../../../hooks';
+import { usePermission, useThemeColors } from '../../../hooks';
 import { DataList } from '../../../components';
 import { getList, remove } from '../../../api/BookAPI';
 import type { BookStoreScreenProps } from '../../../navigators/types';
@@ -579,14 +654,13 @@ interface BooksScreenInnerProps { navigation: BookStoreScreenProps['navigation']
 function BooksScreen({ navigation }: BooksScreenInnerProps) {
   const { t } = useContext(LocalizationContext);
   const { accentColor, iconColor } = useThemeColors();
-  const policies = useSelector(appConfigSelector)?.auth?.grantedPolicies ?? {};
 
   const [refresh, setRefresh] = useState(0);
   const { showActionSheetWithOptions } = useActionSheet();
 
-  const canCreate = !!policies['BookStore.Books.Create'];
-  const canEdit = !!policies['BookStore.Books.Edit'];
-  const canDelete = !!policies['BookStore.Books.Delete'];
+  const canCreate = usePermission(BookStorePolicies.BooksCreate);
+  const canEdit = usePermission(BookStorePolicies.BooksEdit);
+  const canDelete = usePermission(BookStorePolicies.BooksDelete);
 
   const openContextMenu = (item: BookListItem) => {
     const options: string[] = [];
@@ -670,7 +744,7 @@ function BooksScreen({ navigation }: BooksScreenInnerProps) {
 export default BooksScreen;
 ```
 
-- Reading `appConfigSelector` from the Redux store (no `connectToRedux` HOC) is the new pattern. The selector lives in `./src/store/selectors/AppSelectors.ts` and returns the `appConfig` object that the template populates after login (`AppActions.fetchAppConfigAsync`).
+- Permissions come from `auth.grantedPolicies` inside `appConfig`, loaded by `AppActions.fetchAppConfigAsync`. Use the `usePermission` hook with constants from `BookStorePolicies` instead of reading `grantedPolicies` manually (see [Permission infrastructure](#permission-infrastructure)).
 - `useActionSheet` is provided by `@expo/react-native-action-sheet`, already wrapped around the app in `./src/AppContent.tsx`, so we don't need to add a provider here.
 
 ![Book List Page](../../../images/book-list-new.png)
@@ -1082,14 +1156,18 @@ Incrementing `refresh` causes `DataList` to re-fetch from page zero, so the dele
 
 ## Authorization
 
-We gate the UI in four places, all driven by `useSelector(appConfigSelector)?.auth?.grantedPolicies`:
+UI gating uses `usePermission` with policy keys from `BookStorePolicies` (backed by `createGrantedPolicySelector` in `AppSelectors.ts`). The API still enforces authorization server-side; these checks only hide controls the user cannot use.
 
-1. **The Bottom Tab itself.** In `BottomTabNavigator.tsx` we render the `BookStoreTab` only when `BookStore.Books` or `BookStore.Authors` is granted (already shown above).
-2. **The Books / Authors tab strip.** `BookStoreScreen.tsx` builds its `tabs` array conditionally so a user with only `BookStore.Books` doesn't see an empty Authors tab.
-3. **The "+ New Book" button.** Inside `BooksScreen.tsx` the FAB is rendered only when `BookStore.Books.Create` is granted.
-4. **Edit / Delete entries in the action sheet.** Same screen — each entry is added based on `BookStore.Books.Edit` and `BookStore.Books.Delete` respectively.
+| Location | Hook / constant | Effect |
+|----------|-----------------|--------|
+| `BottomTabNavigator.tsx` | `usePermission(BookStoreTabPolicy)` | Book Store bottom tab (`Books` **or** `Authors`) |
+| `BookStoreScreen.tsx` | `BookStorePolicies.Books`, `.Authors` | Books / Authors sub-tabs |
+| `BooksScreen.tsx` | `.BooksCreate`, `.BooksEdit`, `.BooksDelete` | FAB, action sheet entries |
+| `AuthorsScreen.tsx` | `.AuthorsCreate`, `.AuthorsEdit`, `.AuthorsDelete` | Same pattern for authors |
 
-The same four-layer pattern applies to the Authors tab, using `BookStore.Authors.*` keys.
+If no Book Store permission is granted, `BookStoreScreen` shows `BookStore::NoAccess`. Grant permissions in the web UI (see [Backend Setup](#backend-setup-quick-reference)), then log in again on mobile to refresh `grantedPolicies`.
+
+For OR/AND policy expressions, optional `withPermission` HOC usage, and troubleshooting, see `./docs/permission-guide.md`.
 
 ## Author Section <a name="author"></a>
 
@@ -1117,13 +1195,12 @@ export const remove = (id: string) =>
 
 ### AuthorsScreen
 
-The list mirrors `BooksScreen` — same `DataList` + action sheet + FAB pattern, with `BookStore.Authors.*` permissions and `CreateUpdateAuthor` as the navigation target.
+The list mirrors `BooksScreen` — same `DataList` + action sheet + FAB pattern, with `usePermission(BookStorePolicies.AuthorsCreate|AuthorsEdit|AuthorsDelete)` and `CreateUpdateAuthor` as the navigation target.
 
 ```tsx
 // ./src/screens/BookStore/Authors/AuthorsScreen.tsx
-// (Same shape as BooksScreen — replace the imports of BookAPI with AuthorAPI,
-//  swap BookStore.Books.* permissions with BookStore.Authors.*, and route
-//  navigation calls to 'CreateUpdateAuthor' with { authorId } instead of { bookId }.)
+// (Same shape as BooksScreen — replace BookAPI with AuthorAPI, use BookStorePolicies.Authors*,
+//  and route navigation to 'CreateUpdateAuthor' with { authorId } instead of { bookId }.)
 ```
 
 The full source ships with the sample app under the path above.
@@ -1210,6 +1287,7 @@ If you want to verify the relation visually:
 
 ## Where to go next
 
-- The drawer-only template variant (`navigation_type = "drawer"`) follows the same flow — replace the `BottomTabNavigator` step with the equivalent `Drawer.Screen` in `DrawerNavigator.tsx`.
+- The drawer-only template variant (`navigation_type = "drawer"`) follows the same flow — replace the `BottomTabNavigator` step with the equivalent `Drawer.Screen` in `DrawerNavigator.tsx`, still gated with `usePermission(BookStoreTabPolicy)`.
+- Book Store permissions: `react-native/docs/permission-guide.md` (policy table, backend setup, `withPermission` examples).
 - Localization for the `BookStore::*` namespace is in `react-native/src/locales/{en,tr}.json` and the matching backend resource in `src/Acme.BookStore.Domain.Shared/Localization/BookStore/`. Adding more languages is a matter of registering them in `LocalizationService.ts` and creating the corresponding JSON files.
 - The full sample is the source of truth: any time the snippets here look incomplete, open the same path inside the downloaded `bookstore-react-native-mongodb` solution.
