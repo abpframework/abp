@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <Import Project="..\..\..\..\configureawait.props" />
+  <Import Project="..\..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.Server.Theming.MudBlazor\Volo.Abp.AspNetCore.Components.Server.Theming.MudBlazor.csproj" />
+    <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.Web.MudBlazorBasicTheme\Volo.Abp.AspNetCore.Components.Web.MudBlazorBasicTheme.csproj" />
+  </ItemGroup>
+
+</Project>

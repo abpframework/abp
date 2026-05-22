@@ -10,7 +10,8 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC", "BlazorWebApp", "NG"]
+    "UI": ["MVC", "BlazorWebApp", "NG"],
+    "BlazorUI": ["Blazorise", "MudBlazor"]
 }
 ````
 
@@ -515,6 +516,8 @@ Open the `ModularCrm.Catalog` .NET solution in your IDE, and find the `Pages/Cat
 
 Replace the `Index.razor` file with the following content:
 
+{{if BlazorUI == "Blazorise"}}
+
 ````razor
 @page "/catalog"
 @using System.Collections.Generic
@@ -546,6 +549,44 @@ Replace the `Index.razor` file with the following content:
     }
 }
 ````
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+````razor
+@page "/catalog"
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using ModularCrm.Catalog
+@inject IProductAppService ProductAppService
+
+<MudText Typo="Typo.h4">Products</MudText>
+
+<MudCard>
+    <MudCardContent>
+        <MudList T="ProductDto">
+            @foreach (var product in Products)
+            {
+                <MudListItem T="ProductDto" Value="@product">
+                    @product.Name <MudText Inline="true" Typo="Typo.caption">(stock: @product.StockCount)</MudText>
+                </MudListItem>
+            }
+        </MudList>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    private List<ProductDto> Products { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Products = await ProductAppService.GetListAsync();
+    }
+}
+````
+
+{{end}}
 
 Here, you inject `IProductAppService`, get all products in `OnInitializedAsync`, and then render the result in a simple list.
 

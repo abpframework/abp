@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Features;
 using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
@@ -37,6 +38,7 @@ public class ToolbarManager : IToolbarManager, ITransientDependency
         using (var scope = ServiceProvider.CreateScope())
         {
             using (RequirePermissionsSimpleBatchStateChecker<ToolbarItem>.Use(new RequirePermissionsSimpleBatchStateChecker<ToolbarItem>()))
+            using (RequireFeaturesSimpleBatchStateChecker<ToolbarItem>.Use(new RequireFeaturesSimpleBatchStateChecker<ToolbarItem>()))
             {
                 var context = new ToolbarConfigurationContext(ThemeManager.CurrentTheme, toolbar, scope.ServiceProvider);
 

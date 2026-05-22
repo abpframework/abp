@@ -29,6 +29,8 @@ The following table explains the major differences between the open-source ABP a
 | [PRO application modules](https://abp.io/modules) | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i>     |
 | [PRO UI themes](https://abp.io/themes)            | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i>     |
 | [ABP Suite](https://abp.io/tools/suite)           | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i>     |
+| [React UI](../framework/ui/react/index.md)        | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i>     |
+| [ABP Studio AI Agent](https://abp.io/studio/ai-agent) | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i>     |
 | [Premium support](https://abp.io/support)         | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i>     |
 |                                                              | [Download](https://abp.io/get-started)     | [Pricing](https://abp.io/pricing) |
 
@@ -62,21 +64,22 @@ ABP has many **additional modules** compared to the open-source ABP project. Als
 | Account                                                      | [Basic](https://docs.abp.io/en/abp/latest/Modules/Account)   | [PRO](https://abp.io/modules/Volo.Account.Pro)  |
 | Multi-Tenancy                                                | [Basic](https://docs.abp.io/en/abp/latest/Modules/Tenant-Management) *(only tenant management)* | [PRO](https://abp.io/modules/Volo.Saas) (SaaS)  |
 | CMS Kit                                                      | [Basic](https://docs.abp.io/en/abp/latest/Modules/Cms-Kit)   | [PRO](https://abp.io/modules/Volo.CmsKit.Pro)   |
-| [Blogging](https://docs.abp.io/en/abp/latest/Modules/Blogging) | <i class="fa fa-check text-success"></i>                     | <i class="fa fa-check text-success"></i>                   |
-| [Docs](https://docs.abp.io/en/abp/latest/Modules/Docs)       | <i class="fa fa-check text-success"></i>                     | <i class="fa fa-check text-success"></i>                   |
-| [Identity Server Integration](https://docs.abp.io/en/abp/latest/Modules/IdentityServer) | <i class="fa fa-check text-success"></i>                     | <i class="fa fa-check text-success"></i>                   |
+| [Blogging](https://abp.io/modules/blogging) | <i class="fa fa-check text-success"></i>                     | <i class="fa fa-check text-success"></i>                   |
+| [Docs](../modules/docs.md)       | <i class="fa fa-check text-success"></i>                     | <i class="fa fa-check text-success"></i>                   |
+| [Identity Server Integration](../modules/identity-server.md) | <i class="fa fa-check text-success"></i>                     | <i class="fa fa-check text-success"></i>                   |
 | [Identity Server Management UI](https://abp.io/modules/Volo.Identityserver.Ui) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [OpenIddict Integration](https://docs.abp.io/en/abp/latest/Modules/OpenIddict) | <i class="fa fa-check text-success"></i>                     | <i class="fa fa-check text-success"></i>                   |
+| [OpenIddict Integration](../modules/openiddict.md) | <i class="fa fa-check text-success"></i>                     | <i class="fa fa-check text-success"></i>                   |
 | [OpenIddictManagement UI](https://abp.io/modules/Volo.OpenIddict.Pro) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [Audit Log Reporting UI](https://abp.io/modules/Volo.AuditLogging.Ui) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [Dynamic Language Management](https://abp.io/modules/Volo.LanguageManagement) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [Payment](https://abp.io/modules/Volo.Payment)    | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [Text Template Management](https://abp.io/modules/Volo.TextTemplateManagement) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [Chat](https://abp.io/modules/Volo.Chat)          | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [File Management](https://abp.io/modules/Volo.FileManagement) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [Forms](https://abp.io/modules/Volo.Forms)        | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [Twilio SMS](https://abp.io/modules/Volo.Abp.Sms.Twilio) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
-| [GDPR](https://docs.abp.io/en/commercial/latest/modules/gdpr) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Audit Log Reporting UI](../modules/audit-logging-pro.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Dynamic Language Management](../modules/language-management.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Payment](../modules/payment.md)    | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Text Template Management](../modules/text-template-management.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Chat](../modules/chat.md)          | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [File Management](../modules/file-management.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Forms](../modules/forms.md)        | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Twilio SMS](../modules/twilio-sms.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [GDPR](../modules/gdpr.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [AI Management](../modules/ai-management/index.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
 
 Some modules have "Basic" (open-source) and "PRO" (commercial) versions. The next sections show the differences between the basic and the PRO versions.
 
@@ -152,6 +155,23 @@ A screenshot from the CRUD Page Generator:
 ## Is ABP Suite free?
 
 ABP Suite is a part of the ABP Platform that generates full source code from the backend to the client. ABP Suite is not a free tool for everyone. It is free for only the active ABP license holders.
+
+## React UI and ABP Studio AI Agent
+
+ABP 10.4 introduces two important license-holder capabilities that are designed for modern, AI-assisted application development:
+
+| Feature | Open Source ABP Project | ABP |
+| ------- | ----------------------- | --- |
+| [React UI](../framework/ui/react/index.md) | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i> |
+| [ABP Studio AI Agent](https://abp.io/studio/ai-agent) | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i> |
+
+- **[React UI](https://abp.io/community/announcements/react-ui-for-abp-framework-is-finally-here-7rfmgb2v) is available with the modern template system for ABP license holders. You can create a React-based solution with ABP Studio's Modern Wizard or with `abp new --modern --ui-framework react`. A modern React solution contains your own React application under `react/` or `apps/react/`, while ABP's standard administration pages are provided by the [ABP Admin Console](../framework/ui/react/admin-console.md). The Admin Console is delivered by the `Volo.Abp.AdminConsole` NuGet package in layered and single-layer templates, and as a separate `apps/react-admin-console/` application in microservice templates.**
+
+![React UI & Admin Console](../images/react-ui-and-admin-console.png)
+
+- **[ABP Studio AI Agent](https://abp.io/community/announcements/introducing-abp-studio-ai-agent-o1ni0toc) is also available for ABP license holders. It works inside ABP Studio to understand ABP solution structure, plan changes, edit code, build projects, run migrations, diagnose runtime errors and keep changes Git-safe. AI Agent usage is based on AI credits: existing customers have predefined AI credits, while new customers receive new AI credits according to the current commercial offering. See the [ABP Studio AI Agent](https://abp.io/studio/ai-agent) page for the latest feature and credit details**
+
+![ABP Studio AI Agent](../images/abp-studio-ai-agent.png)
 
 ## LeptonX Lite (Basic Theme) vs LeptonX (PRO Theme)
 

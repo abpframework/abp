@@ -1,0 +1,20 @@
+#nullable enable
+@typeparam TEntity
+@typeparam TResourceType
+@using Volo.Abp.Localization
+@inherits MudExtensionPropertyComponentBase<TEntity, TResourceType>
+
+@if (PropertyInfo != null && Entity != null)
+{
+    <MudAutocomplete T="MudSelectItem<object>"
+                     Label="@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                     Value="@SelectedItem"
+                     ValueChanged="@SelectedItemChanged"
+                     SearchFunc="@SearchAsync"
+                     ToStringFunc="@(item => item?.Text ?? string.Empty)"
+                     Disabled="IsReadonlyField"
+                     MinCharacters="0"
+                     ResetValueOnEmptyText="true"
+                     CoerceText="true"
+                     CoerceValue="true" />
+}

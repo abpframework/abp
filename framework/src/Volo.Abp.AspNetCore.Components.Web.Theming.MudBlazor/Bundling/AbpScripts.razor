@@ -1,0 +1,61 @@
+@implements IDisposable
+@inject IComponentBundleManager BundleManager
+@inject PersistentComponentState ApplicationState
+@if (ScriptFiles != null)
+{
+    foreach (var file in ScriptFiles)
+    {
+        var src = file;
+        if (!AppBasePath.IsNullOrWhiteSpace())
+        {
+            src = AppBasePath.EnsureEndsWith('/') + file.RemovePreFix("/");
+        }
+        <script src="@src"></script>
+    }
+}
+
+@code {
+
+    private const string PrerenderedKey = "abp_script_prerendered";
+
+    [Parameter]
+    public List<string>? WebAssemblyScriptFiles { get; set; }
+
+    [Parameter]
+    public string? BundleName { get; set; }
+
+    [Parameter]
+    public string? AppBasePath { get; set; }
+
+    private List<string>? ScriptFiles { get; set; }
+
+    private PersistingComponentStateSubscription _persistingSubscription;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _persistingSubscription = ApplicationState.RegisterOnPersisting(Callback);
+        if (!ApplicationState.TryTakeFromJson<string>(PrerenderedKey, out _))
+        {
+            // We are in prerendering mode
+            if (!BundleName.IsNullOrWhiteSpace())
+            {
+                ScriptFiles = (await BundleManager.GetScriptBundleFilesAsync(BundleName!)).ToList();
+            }
+        }
+        else
+        {
+            if (OperatingSystem.IsBrowser() && WebAssemblyScriptFiles != null)
+            {
+                ScriptFiles = WebAssemblyScriptFiles;
+            }
+        }
+    }
+
+    private Task Callback()
+    {
+        ApplicationState.PersistAsJson(PrerenderedKey, PrerenderedKey);
+        return Task.CompletedTask;
+    }
+
+    public void Dispose() => _persistingSubscription.Dispose();
+}

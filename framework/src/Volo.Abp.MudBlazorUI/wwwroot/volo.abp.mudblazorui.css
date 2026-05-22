@@ -1,0 +1,60 @@
+/* ABP MudBlazor UI Custom Styles */
+
+/* Entity Actions Styling */
+.abp-entity-actions .mud-menu-activator {
+    min-width: auto;
+}
+
+/* Data Grid Customizations */
+.abp-mud-data-grid .mud-table-container {
+    overflow-x: auto;
+}
+
+/* Extension Property Form Spacing */
+.abp-extension-property {
+    margin-bottom: 16px;
+}
+
+/* Dialog Customizations */
+.abp-mud-dialog .mud-dialog-title {
+    padding: 16px 24px;
+}
+
+.abp-mud-dialog .mud-dialog-content {
+    padding: 0 24px 16px;
+}
+
+.abp-mud-dialog .mud-dialog-actions {
+    padding: 8px 24px 16px;
+}
+
+/* Message Alert Icon Sizing */
+.abp-message-alert-icon {
+    font-size: 3rem;
+}
+
+/* Page Progress Bar */
+.abp-page-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+}
+
+/* CRUD Page Layout */
+.abp-crud-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.abp-crud-page-header-title {
+    margin: 0;
+}
+
+.abp-crud-page-header-actions {
+    display: flex;
+    gap: 8px;
+}

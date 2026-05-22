@@ -1,10 +1,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers;
 
+[DisableConventionalRegistration]
 public class InMemoryDynamicBackgroundWorker : AsyncPeriodicBackgroundWorkerBase
 {
     public string WorkerName { get; }

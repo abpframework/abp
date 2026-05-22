@@ -1,0 +1,22 @@
+@using Volo.Abp.DependencyInjection
+@using Volo.Abp.AspNetCore.Components.Web.MudBlazorBasicTheme.Themes.Basic
+@using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.MudBlazor
+@using Microsoft.Extensions.Options
+@using Volo.Abp.AspNetCore.Components.WebAssembly
+@using Volo.Abp.AspNetCore.Components.Web
+@inherits RedirectToLogin
+@attribute [ExposeServices(typeof(RedirectToLogin))]
+@attribute [Dependency(ReplaceServices = true)]
+@inject NavigationManager Navigation
+@inject IOptions<AuthenticationOptions> AuthOptions
+@inject IRouteBasedCultureUrlHelper CultureUrlHelper
+@inject IOptions<AbpAspNetCoreComponentsWebOptions> AbpAspNetCoreComponentsWebOptions
+
+@code {
+    protected override void OnInitialized() { }
+
+    protected override Task OnInitializedAsync()
+    {
+        return CultureAwareRedirectToLoginHelper.RedirectAsync(Navigation, AuthOptions.Value.LoginUrl, CultureUrlHelper, AbpAspNetCoreComponentsWebOptions);
+    }
+}

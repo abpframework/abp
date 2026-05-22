@@ -2,6 +2,9 @@
   <Folder Name="/src/">
     <Project Path="src/Volo.Abp.TenantManagement.Application.Contracts/Volo.Abp.TenantManagement.Application.Contracts.csproj" />
     <Project Path="src/Volo.Abp.TenantManagement.Application/Volo.Abp.TenantManagement.Application.csproj" />
+    <Project Path="src/Volo.Abp.TenantManagement.Blazor.MudBlazor.Server/Volo.Abp.TenantManagement.Blazor.MudBlazor.Server.csproj" />
+    <Project Path="src/Volo.Abp.TenantManagement.Blazor.MudBlazor.WebAssembly/Volo.Abp.TenantManagement.Blazor.MudBlazor.WebAssembly.csproj" />
+    <Project Path="src/Volo.Abp.TenantManagement.Blazor.MudBlazor/Volo.Abp.TenantManagement.Blazor.MudBlazor.csproj" />
     <Project Path="src/Volo.Abp.TenantManagement.Blazor.Server/Volo.Abp.TenantManagement.Blazor.Server.csproj" />
     <Project Path="src/Volo.Abp.TenantManagement.Blazor.WebAssembly/Volo.Abp.TenantManagement.Blazor.WebAssembly.csproj" />
     <Project Path="src/Volo.Abp.TenantManagement.Blazor/Volo.Abp.TenantManagement.Blazor.csproj" />

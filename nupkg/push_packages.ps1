@@ -13,7 +13,9 @@ $failedPackages = @()
 $totalProjectsCount = $projects.length
 $nugetUrl = "https://api.nuget.org/v3/index.json"
 $maxQuotaRetryCount = 3
-$quotaRetryDelaysInSeconds = @(30, 60, 120)
+$defaultQuotaRetryDelaysInSeconds = @(30, 60, 120)
+$maxPushesPerHour = 250   # NuGet.org rate limit (conservative). Set 0 to disable.
+$pushTimestamps = [System.Collections.Generic.List[datetime]]::new()
 $failedPackagesFilePath = Join-Path $packFolder "failed-packages.txt"
 Set-Location $packFolder
 if (Test-Path $failedPackagesFilePath) { Remove-Item $failedPackagesFilePath -Force }
@@ -29,6 +31,25 @@ foreach($project in $projects) {
 	
 	if ($nugetPackageExists)
 	{
+		# Sliding-window rate limiter: ensure we don't exceed $maxPushesPerHour pushes per hour
+		if ($maxPushesPerHour -gt 0)
+		{
+			$windowStart = (Get-Date).AddHours(-1)
+			$recentPushes = $pushTimestamps | Where-Object { $_ -gt $windowStart }
+			$pushTimestamps = [System.Collections.Generic.List[datetime]]$recentPushes
+
+			if ($pushTimestamps.Count -ge $maxPushesPerHour)
+			{
+				$waitUntil = $pushTimestamps[0].AddHours(1)
+				$waitSeconds = [int]([math]::Ceiling(($waitUntil - (Get-Date)).TotalSeconds)) + 1
+				if ($waitSeconds -gt 0)
+				{
+					Write-Warning "Rate limit: $($pushTimestamps.Count) pushes in the last hour (limit: $maxPushesPerHour). Pausing $waitSeconds seconds until the window resets..."
+					Start-Sleep -Seconds $waitSeconds
+				}
+			}
+		}
+
 		$attempt = 0
 		$pushSucceeded = $false
 		while ($true)
@@ -51,7 +72,17 @@ foreach($project in $projects) {
 				break
 			}
 
-			$retryDelay = $quotaRetryDelaysInSeconds[$attempt - 1]
+			# Parse the retry-after value from the NuGet response if present (e.g. "retry after: 2974s")
+			$retryAfterMatch = ($pushOutput | Out-String) | Select-String -Pattern 'retry after:\s*(\d+)s' -AllMatches
+			if ($retryAfterMatch -and $retryAfterMatch.Matches.Count -gt 0)
+			{
+				$retryDelay = [int]$retryAfterMatch.Matches[0].Groups[1].Value
+			}
+			else
+			{
+				$retryDelay = $defaultQuotaRetryDelaysInSeconds[$attempt - 1]
+			}
+
 			Write-Warning "NuGet push returned a 4xx response for $nugetPackageName. Retrying in $retryDelay seconds (retry $attempt/$maxQuotaRetryCount)..."
 			Start-Sleep -Seconds $retryDelay
 		}
@@ -61,6 +92,10 @@ foreach($project in $projects) {
 			Write-Host ("********** ERROR PUSH FAILED: " + $nugetPackageName) -ForegroundColor red
 			$errorCount += 1
 			$failedPackages += $nugetPackageName
+		}
+		else
+		{
+			$pushTimestamps.Add((Get-Date))
 		}
 		#Write-Host ("Deleting package from local: " + $nugetPackageName)
 		#Remove-Item $nugetPackageName -Force

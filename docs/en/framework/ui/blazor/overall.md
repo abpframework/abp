@@ -1,4 +1,11 @@
 ```json
+//[doc-params]
+{
+    "BlazorUI": ["Blazorise", "MudBlazor"]
+}
+```
+
+```json
 //[doc-seo]
 {
     "Description": "Explore ABP's Blazor UI integration, simplifying your development with various hosting models for building interactive web applications."
@@ -95,6 +102,8 @@ Currently, three themes are **officially provided**:
 
 There are a set of standard libraries that comes pre-installed and supported by all the themes:
 
+{{if BlazorUI == "Blazorise"}}
+
 * [Twitter Bootstrap](https://getbootstrap.com/) as the fundamental HTML/CSS framework.
 * [Blazorise](https://github.com/stsrki/Blazorise) as a component library that supports the Bootstrap and adds extra components like Data Grid and Tree.
 * [FontAwesome](https://fontawesome.com/) as the fundamental CSS font library.
@@ -105,6 +114,22 @@ These libraries are selected as the base libraries and available to the applicat
 > Bootstrap's JavaScript part is not used since the Blazorise library already provides the necessary functionalities to the Bootstrap components in a native way.
 
 > Beginning from June, 2021, the Blazorise library has dual licenses; open source & commercial. Based on your yearly revenue, you may need to buy a commercial license. See [this post](https://blazorise.com/news/announcing-2022-blazorise-plans-and-pricing-updates) to learn more. The Blazorise license is bundled with ABP and commercial customers doesn't need to buy an extra Blazorise license.
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+* [MudBlazor](https://mudblazor.com/) as the component library, providing a complete set of Material Design components built natively for Blazor (form controls, data grid, dialogs, snackbars, dates, etc.).
+* [FontAwesome](https://fontawesome.com/) as the fundamental CSS font library.
+* [Flag Icon](https://github.com/lipis/flag-icons) as a library to show flags of countries.
+
+These libraries are selected as the base libraries and available to the applications and modules.
+
+The MudBlazor variant ships its own theming, dialog, snackbar and popover providers (see [Theming](theming.md)). The MudBlazor library is MIT-licensed and is bundled with ABP at no extra cost.
+
+> Bootstrap is **not** required when using MudBlazor; MudBlazor brings its own layout and component styles.
+
+{{end}}
 
 ### The Layout
 
