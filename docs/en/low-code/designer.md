@@ -65,6 +65,7 @@ Pages can define data grid, kanban, calendar, gallery, standalone form, and dash
 * Entity
 * Create and edit forms
 * Visible grid/card fields
+* Exportable fields for Excel and CSV
 * Field labels and column widths
 * Default sorting
 * Filter fields and defaults
@@ -74,6 +75,8 @@ Kanban pages add `groupByProperty`, calendar pages add date/time properties, gal
 ![Page setup](images/designer-page-filters.png)
 
 Pages are exposed in React under `/dynamic/<page-name>` and can also appear as dynamic menu items.
+
+The **View Fields** section has separate **Show** and **Export** choices. Use **Show** for fields that should be rendered in the runtime view. Use **Export** for fields that may be included in Excel or CSV output. A visible field can be excluded from export, and an exportable field can be hidden from the page but still available through **Export options > All exportable fields**.
 
 ## Forms
 

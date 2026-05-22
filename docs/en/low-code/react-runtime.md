@@ -151,7 +151,7 @@ The URL keeps the existing `lcFilters` query parameter shape. The runtime maps u
 
 ## Export
 
-The runtime export button opens a small menu with direct Excel and CSV actions. Direct export uses the current search, sorting, filters, and visible columns from the page definition maintained in the Low-Code Designer. Use **Export options** when users need a different row or column scope.
+The runtime export button opens a small menu with direct Excel and CSV actions. Direct export uses the current search, sorting, filters, and visible exportable columns from the page definition maintained in the Low-Code Designer. Use **Export options** when users need a different row or column scope.
 
 Available options:
 
@@ -159,13 +159,13 @@ Available options:
 |--------|----------|
 | Rows: all matching records | Exports all records matching the current search, filters, and sorting |
 | Rows: current page | Exports only the current page using the runtime `skipCount` and `maxResultCount` |
-| Columns: visible columns | Exports the columns visible in the current page definition |
-| Columns: all exportable fields | Exports all non-server-only fields that can appear in generated views |
+| Columns: visible exportable columns | Exports columns that are both visible and exportable in the current page definition |
+| Columns: all exportable fields | Exports page fields marked exportable in the Low-Code Designer, including fields that are hidden from the grid |
 | File/image: file name | Writes the uploaded file name, or an empty value |
 | File/image: metadata columns | Writes file name, content type, size, width, and height columns |
 | File/image: data URL | Writes small linked files as `data:<content-type>;base64,...`; large or unavailable files are written as markers |
 
-The runtime first requests a short-lived token and then calls the Excel or CSV export endpoint. The token is single-use and is bound to the current page, entity, tenant, child page, and foreign-access context. Text that looks like a spreadsheet formula is escaped in exported cells.
+The runtime first requests a short-lived token and then calls the Excel or CSV export endpoint. The token is single-use and is bound to the current page, entity, tenant, child page, and foreign-access context. Text that looks like a spreadsheet formula is escaped in exported headers and cells. If a caller manually sends a non-exportable field name, the backend rejects the request.
 
 | Endpoint | Description |
 |----------|-------------|
