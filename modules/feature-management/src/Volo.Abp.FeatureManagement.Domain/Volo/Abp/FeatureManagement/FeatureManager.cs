@@ -148,8 +148,7 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
 
         if (feature.AllowedProviders.Any() && !feature.AllowedProviders.Contains(providerName))
         {
-            throw new AbpException(
-                $"The feature named '{name}' has not compatible with the provider named '{providerName}'");
+            throw new AbpException($"The feature named '{name}' is not compatible with the provider named '{providerName}'");
         }
 
         var providers = Enumerable

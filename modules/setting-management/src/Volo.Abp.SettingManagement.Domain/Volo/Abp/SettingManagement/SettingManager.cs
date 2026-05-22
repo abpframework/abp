@@ -129,8 +129,7 @@ public class SettingManager : ISettingManager, ISingletonDependency
 
         if (setting.Providers.Any() && !setting.Providers.Contains(providerName))
         {
-            throw new AbpException(
-                $"The setting named '{name}' has not compatible with the provider named '{providerName}'");
+            throw new AbpException($"The setting named '{name}' is not compatible with the provider named '{providerName}'");
         }
 
         var providers = Enumerable
