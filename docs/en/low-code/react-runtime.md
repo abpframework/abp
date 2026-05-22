@@ -159,15 +159,15 @@ Available options:
 |--------|----------|
 | Rows: all matching records | Exports all records matching the current search, filters, and sorting |
 | Rows: current page | Exports only the current page using the runtime `skipCount` and `maxResultCount` |
-| Columns: visible exportable columns | Exports columns that are both visible and exportable in the current page definition |
-| Columns: all exportable fields | Exports page fields marked exportable in the Low-Code Designer, including fields that are hidden from the grid |
+| Columns: visible exportable columns | Exports columns that are both visible and exportable in the current page definition, ordered by Designer export order |
+| Columns: all exportable fields | Exports page fields marked exportable in the Low-Code Designer, including fields that are hidden from the grid, ordered by Designer export order |
 | File/image: file name | Writes the uploaded file name, or an empty value |
 | File/image: metadata columns | Writes file name, content type, size, width, and height columns |
 | File/image: download links | Writes file name, temporary download URL, link expiry, content type, size, width, height, and status columns |
 
 Spreadsheet export stays tabular. It does not embed file bytes in cells. Use download-link columns when spreadsheet readers need a controlled way to fetch individual files, or use **Files (.zip)** when they need the actual file set. ZIP export contains `manifest.csv` and files under `files/{recordId}/{fieldName}/{safeFileName}`. The manifest reports missing, malformed, unlinked, skipped, and exported files.
 
-The columns available in the runtime export dialog are controlled by the page-level **Export Fields** section in the Low-Code Designer. The runtime cannot use the dialog to bypass non-exportable fields.
+The columns available in the runtime export dialog and their default order are controlled by the page-level **Export Fields** section in the Low-Code Designer. The runtime cannot use the dialog to bypass non-exportable fields.
 
 The runtime first requests a short-lived token and then calls the Excel, CSV, or ZIP export endpoint. The export token is single-use and is bound to the current page, entity, tenant, child page, and foreign-access context. Temporary file links use separate short-lived tokens bound to the exported record field and blob. Text that looks like a spreadsheet formula is escaped in exported headers and cells. If a caller manually sends a non-exportable field name, the backend rejects the request.
 

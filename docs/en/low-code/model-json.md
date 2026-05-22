@@ -242,9 +242,9 @@ Pages create runtime routes and menu entries. They also choose how entity data i
   "defaultFileExportMode": 0,
   "allowFileBundleExport": true,
   "columns": [
-    { "propertyName": "Name", "order": 0 },
-    { "propertyName": "Status", "order": 1 },
-    { "propertyName": "Budget", "order": 2, "exportable": false }
+    { "propertyName": "Name", "order": 0, "exportOrder": 0 },
+    { "propertyName": "Status", "order": 1, "exportOrder": 1 },
+    { "propertyName": "Budget", "order": 2, "exportOrder": 2, "exportable": false }
   ],
   "filters": [
     { "propertyName": "Name", "control": "text", "defaultOperator": "contains" },
@@ -260,9 +260,10 @@ Page columns support two independent flags:
 | Field | Default | Purpose |
 |-------|---------|---------|
 | `visible` | `true` | Renders the field in the React page view |
+| `exportOrder` | `order` | Optional page-level export order. Lower values are exported first |
 | `exportable` | `true` | Page-level export flag managed by **Export Fields**. Allows the field to be included in Excel, CSV, download-link columns, and file bundle export |
 
-If `columns` is present, export uses this list as the page-level export policy. `exportable: false` prevents the field from being exported even if a caller sends the field name manually. Server-only entity properties are never exportable.
+If `columns` is present, export uses this list as the page-level export policy. `exportable: false` prevents the field from being exported even if a caller sends the field name manually. `exportOrder` controls default export order without changing display order. Server-only entity properties are never exportable.
 
 Page export settings:
 
@@ -501,9 +502,9 @@ Background workers require either `period` in milliseconds or `cronExpression`.
       "entityName": "Acme.Campaigns.Campaign",
       "group": "marketing",
       "columns": [
-        { "propertyName": "Name", "order": 0 },
-        { "propertyName": "Status", "order": 1 },
-        { "propertyName": "Budget", "order": 2, "exportable": false }
+        { "propertyName": "Name", "order": 0, "exportOrder": 0 },
+        { "propertyName": "Status", "order": 1, "exportOrder": 1 },
+        { "propertyName": "Budget", "order": 2, "exportOrder": 2, "exportable": false }
       ],
       "filters": [
         { "propertyName": "Name", "control": "text", "defaultOperator": "contains" },
