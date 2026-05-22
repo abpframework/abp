@@ -78,9 +78,9 @@ Kanban pages add `groupByProperty`, calendar pages add date/time properties, gal
 
 Pages are exposed in React under `/dynamic/<page-name>` and can also appear as dynamic menu items.
 
-The **View Fields** section controls what users see in the runtime view. The separate **Export Fields** section controls what may leave the page through Excel, CSV, download-link columns, or file bundles. A visible field can be excluded from export, and an exportable field can be hidden from the page but still available through **Export options > All exportable fields**. Export fields also have their own order, so the exported spreadsheet or file manifest can follow a different sequence than the runtime view. Use the bulk actions to copy visible fields into the export policy, enable all fields, or disable all fields.
+The **View Fields** section controls what users see in the runtime view. The separate **Export Fields** section controls what may leave the page through Excel, CSV, download-link columns, or file bundles. A visible field can be excluded from export, and an exportable field can be hidden from the page but still available through **Export options > All exportable fields**. Use the bulk actions to copy visible fields into the export policy, enable all fields, or disable all fields.
 
-The **File Export Settings** section appears only when the page has file or image fields. **Default File/Image Output** selects whether spreadsheet export writes file names, metadata columns, or temporary download-link columns by default. **Allow file bundle export** controls whether the runtime can show **Files (.zip)** for this page. If all file/image fields are disabled in **Export Fields**, the file output controls stay hidden until at least one file/image field is exportable.
+Open **Export Fields > More settings** only when you need custom export details. If **Use default export settings** is enabled, export uses display labels, the view field order, file name output, and file bundle export enabled. Turn it off to customize export labels, assign a separate export order, choose **Default File/Image Output**, or disable **Allow file bundle export**. File/image output controls appear only when the page has file or image fields, and they stay inactive until at least one file/image field is exportable.
 
 ## Forms
 
