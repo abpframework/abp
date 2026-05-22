@@ -112,11 +112,11 @@ React low-code filters are type-aware. The runtime shows only operators that mak
 
 Every dynamic entity page can export data to Excel or CSV. Pages with file or image fields can also export a file bundle as a ZIP. Export requests use the current search, sorting, and filters from the runtime view, so a filtered page exports the matching subset instead of the whole entity.
 
-The React runtime exports visible exportable columns by default. These columns come from the page fields configured in the Low-Code Designer. A field can be visible but not exportable, or hidden but still available in the **All exportable fields** option. Use this when a page should display operational data that should not leave the system through Excel or CSV. Server-only fields are always excluded, and foreign key values are displayed through their configured display property.
+The React runtime exports visible exportable columns by default. These columns come from the page-level **Export Fields** settings in the Low-Code Designer. A field can be visible but not exportable, or hidden but still available in the **All exportable fields** option. Use this when a page should display operational data that should not leave the system through Excel or CSV. Server-only fields are always excluded, and foreign key values are displayed through their configured display property.
 
 File and image fields are exported as file names by default. Export options can expand those fields into metadata columns or temporary download-link columns. Download-link columns include file name, URL, expiry, content type, size, dimensions, and status. The links are short-lived and should be treated like signed download links, not permanent public URLs.
 
-Use **Files (.zip)** when users need the actual uploaded files. The ZIP contains `manifest.csv` and files under `files/{recordId}/{fieldName}/{safeFileName}`. The manifest records missing, malformed, unlinked, and limit-skipped files instead of failing the whole export.
+Use **Files (.zip)** when users need the actual uploaded files. The action appears only when the Designer allows file bundle export and at least one selected file/image field is exportable. The ZIP contains `manifest.csv` and files under `files/{recordId}/{fieldName}/{safeFileName}`. The manifest records missing, malformed, unlinked, and limit-skipped files instead of failing the whole export.
 
 Spreadsheet and ZIP exports require a short-lived, single-use download token. The token is bound to the tenant, page, entity, child page, and foreign-access context. File download links use separate short-lived tokens bound to the exported file value. Spreadsheet formula-like text values are escaped before writing CSV or Excel headers and cells.
 

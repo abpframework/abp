@@ -260,7 +260,7 @@ Page columns support two independent flags:
 | Field | Default | Purpose |
 |-------|---------|---------|
 | `visible` | `true` | Renders the field in the React page view |
-| `exportable` | `true` | Allows the field to be included in Excel, CSV, and file bundle export |
+| `exportable` | `true` | Page-level export flag managed by **Export Fields**. Allows the field to be included in Excel, CSV, download-link columns, and file bundle export |
 
 If `columns` is present, export uses this list as the page-level export policy. `exportable: false` prevents the field from being exported even if a caller sends the field name manually. Server-only entity properties are never exportable.
 

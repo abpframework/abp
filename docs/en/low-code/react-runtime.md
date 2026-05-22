@@ -151,7 +151,7 @@ The URL keeps the existing `lcFilters` query parameter shape. The runtime maps u
 
 ## Export
 
-The runtime export button opens a small menu with direct Excel and CSV actions. If the selected page has exportable file or image fields, the menu also shows **Files (.zip)**. Direct export uses the current search, sorting, filters, and visible exportable columns from the page definition maintained in the Low-Code Designer. Use **Export options** when users need a different row, column, or file output scope.
+The runtime export button opens a small menu with direct Excel and CSV actions. If the selected page has exportable file or image fields and bundle export is allowed in the Designer, the menu also shows **Files (.zip)**. Direct export uses the current search, sorting, filters, and visible exportable columns from the page definition maintained in the Low-Code Designer. Use **Export options** when users need a different row, column, or file output scope.
 
 Available options:
 
@@ -166,6 +166,8 @@ Available options:
 | File/image: download links | Writes file name, temporary download URL, link expiry, content type, size, width, height, and status columns |
 
 Spreadsheet export stays tabular. It does not embed file bytes in cells. Use download-link columns when spreadsheet readers need a controlled way to fetch individual files, or use **Files (.zip)** when they need the actual file set. ZIP export contains `manifest.csv` and files under `files/{recordId}/{fieldName}/{safeFileName}`. The manifest reports missing, malformed, unlinked, skipped, and exported files.
+
+The columns available in the runtime export dialog are controlled by the page-level **Export Fields** section in the Low-Code Designer. The runtime cannot use the dialog to bypass non-exportable fields.
 
 The runtime first requests a short-lived token and then calls the Excel, CSV, or ZIP export endpoint. The export token is single-use and is bound to the current page, entity, tenant, child page, and foreign-access context. Temporary file links use separate short-lived tokens bound to the exported record field and blob. Text that looks like a spreadsheet formula is escaped in exported headers and cells. If a caller manually sends a non-exportable field name, the backend rejects the request.
 
