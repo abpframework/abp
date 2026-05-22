@@ -38,7 +38,7 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
         {
             var groupDto = CreateFeatureGroupDto(group);
 
-            var includedFeatures = new List<FeatureDefinition>();
+            var includedFeatures = new HashSet<FeatureDefinition>();
             foreach (var featureDefinition in group.GetFeaturesWithChildren())
             {
                 if (providerName == TenantFeatureValueProvider.ProviderName &&

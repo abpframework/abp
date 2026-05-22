@@ -129,6 +129,19 @@ public class SettingManager_Basic_Tests : SettingsTestBase
     }
 
     [Fact]
+    public async Task GetAllForUser_Should_Inherit_Setting_From_Allowed_Upstream_Provider()
+    {
+        await _settingManager.SetGlobalAsync(
+            TestSettingDefinitionProvider.GlobalOnlySetting,
+            "global-value");
+
+        var userSettings = await _settingManager.GetAllForUserAsync(Guid.NewGuid());
+
+        userSettings.ShouldContain(x =>
+            x.Name == TestSettingDefinitionProvider.GlobalOnlySetting && x.Value == "global-value");
+    }
+
+    [Fact]
     public async Task GetOrNullForUser_Should_Inherit_Value_From_Allowed_Upstream_Provider()
     {
         await _settingManager.SetGlobalAsync(

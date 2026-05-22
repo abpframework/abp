@@ -93,14 +93,14 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
 
         foreach (var feature in featureDefinitions)
         {
-            if (feature.AllowedProviders.Any() && !feature.AllowedProviders.Contains(providerName))
-            {
-                continue;
-            }
-
             var featureProviderList = feature.AllowedProviders.Any()
                 ? providerList.Where(p => feature.AllowedProviders.Contains(p.Name)).ToList()
                 : providerList;
+
+            if (!featureProviderList.Any())
+            {
+                continue;
+            }
 
             var featureNameValueWithGrantedProvider = new FeatureNameValueWithGrantedProvider(feature.Name, null);
             foreach (var provider in featureProviderList)

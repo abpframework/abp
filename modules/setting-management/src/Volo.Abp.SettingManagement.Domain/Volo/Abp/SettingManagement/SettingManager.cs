@@ -73,14 +73,14 @@ public class SettingManager : ISettingManager, ISingletonDependency
 
         foreach (var setting in settingDefinitions)
         {
-            if (setting.Providers.Any() && !setting.Providers.Contains(providerName))
-            {
-                continue;
-            }
-
             var settingProviderList = setting.Providers.Any()
                 ? providerList.Where(p => setting.Providers.Contains(p.Name)).ToList()
                 : providerList;
+
+            if (!settingProviderList.Any())
+            {
+                continue;
+            }
 
             string value = null;
 
