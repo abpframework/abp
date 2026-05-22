@@ -11,6 +11,8 @@
     "@abp/core": "~10.4.0",
     "@codemirror/lang-css": "^6.0.0",
     "@codemirror/lang-javascript": "^6.0.0",
+    "@codemirror/state": "^6.0.0",
+    "@codemirror/view": "^6.0.0",
     "codemirror": "^6.0.2"
   },
   "devDependencies": {

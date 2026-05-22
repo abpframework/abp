@@ -24,3 +24,8 @@
 .abp-codemirror .cm-focused {
     outline: none;
 }
+
+.abp-codemirror:focus-within {
+    border-color: var(--bs-focus-ring-color, #86b7fe);
+    box-shadow: var(--bs-focus-ring-x, 0) var(--bs-focus-ring-y, 0) var(--bs-focus-ring-blur, 0) var(--bs-focus-ring-width, 0.25rem) var(--bs-focus-ring-color, rgba(13, 110, 253, 0.25));
+}

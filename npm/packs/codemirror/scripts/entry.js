@@ -1,6 +1,6 @@
 import { EditorState } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
-import { basicSetup } from 'codemirror';
+import { basicSetup, minimalSetup } from 'codemirror';
 import { css } from '@codemirror/lang-css';
 import { javascript } from '@codemirror/lang-javascript';
 
@@ -58,9 +58,14 @@ function createWrapper(textarea) {
     return wrapper;
 }
 
+function getEditorSetup(options) {
+    // CodeMirror 5 default: line numbers off unless lineNumbers === true
+    return options.lineNumbers === true ? basicSetup : minimalSetup;
+}
+
 function createState(textarea, options) {
     const extensions = [
-        basicSetup,
+        getEditorSetup(options),
         EditorView.updateListener.of(update => {
             if (update.docChanged) {
                 syncTextarea(textarea, update.view);

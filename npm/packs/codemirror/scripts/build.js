@@ -11,7 +11,7 @@ async function run() {
         target: ['es2019'],
         sourcemap: false,
         minify: false,
-        legalComments: 'none'
+        legalComments: 'eof'
     });
 }
 
