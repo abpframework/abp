@@ -110,13 +110,27 @@ React low-code filters are type-aware. The runtime shows only operators that mak
 
 ## Export
 
-Every dynamic entity page can export filtered data to Excel or CSV. Export requests use the same search, sorting, and filter input as the list endpoint. Server-only fields are excluded and foreign key values are displayed through their configured display property.
+Every dynamic entity page can export data to Excel or CSV. Export requests use the current search, sorting, and filters from the runtime view, so a filtered page exports the matching subset instead of the whole entity.
+
+The React runtime exports visible columns by default. These columns come from the page fields configured in the Low-Code Designer, so changing a page's visible fields also changes the quick export output. Users can open **Export options** to switch to all exportable fields or to export only the current page of rows. Server-only fields are always excluded, and foreign key values are displayed through their configured display property.
+
+File and image fields are exported as file names by default. Export options can expand those fields into metadata columns or include small files as `data:<content-type>;base64,...` values. The data URL option is intended for small files only; files over the configured `LowCode:Export:MaxDataUrlFileSizeBytes` limit are skipped with a marker instead of failing the whole export.
+
+Export downloads require a short-lived, single-use token. The token is bound to the tenant, page, entity, child page, and foreign-access context. Spreadsheet formula-like text values are escaped before writing CSV or Excel cells.
 
 | Endpoint | Description |
 |----------|-------------|
 | `GET /api/low-code/pages/{pageName}/download-token` | Gets a short-lived download token |
 | `GET /api/low-code/pages/{pageName}/export/excel` | Exports filtered data as Excel |
 | `GET /api/low-code/pages/{pageName}/export/csv` | Exports filtered data as CSV |
+
+Useful export settings:
+
+| Setting | Default | Purpose |
+|---------|---------|---------|
+| `LowCode:Export:MaxRows` | `100000` | Maximum rows in one all-filtered export |
+| `LowCode:Export:DownloadTokenLifetimeSeconds` | `30` | Download token lifetime |
+| `LowCode:Export:MaxDataUrlFileSizeBytes` | `16384` | Maximum file size for data URL export |
 
 ## Advanced Configuration
 

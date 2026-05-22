@@ -151,7 +151,21 @@ The URL keeps the existing `lcFilters` query parameter shape. The runtime maps u
 
 ## Export
 
-The runtime export button requests a download token and then calls the Excel or CSV export endpoint with the current search, sorting, and filters.
+The runtime export button opens a small menu with direct Excel and CSV actions. Direct export uses the current search, sorting, filters, and visible columns from the page definition maintained in the Low-Code Designer. Use **Export options** when users need a different row or column scope.
+
+Available options:
+
+| Option | Behavior |
+|--------|----------|
+| Rows: all matching records | Exports all records matching the current search, filters, and sorting |
+| Rows: current page | Exports only the current page using the runtime `skipCount` and `maxResultCount` |
+| Columns: visible columns | Exports the columns visible in the current page definition |
+| Columns: all exportable fields | Exports all non-server-only fields that can appear in generated views |
+| File/image: file name | Writes the uploaded file name, or an empty value |
+| File/image: metadata columns | Writes file name, content type, size, width, and height columns |
+| File/image: data URL | Writes small linked files as `data:<content-type>;base64,...`; large or unavailable files are written as markers |
+
+The runtime first requests a short-lived token and then calls the Excel or CSV export endpoint. The token is single-use and is bound to the current page, entity, tenant, child page, and foreign-access context. Text that looks like a spreadsheet formula is escaped in exported cells.
 
 | Endpoint | Description |
 |----------|-------------|
@@ -160,6 +174,14 @@ The runtime export button requests a download token and then calls the Excel or 
 | `GET /api/low-code/pages/{pageName}/export/csv` | Downloads CSV |
 
 Child and foreign-access pages use the matching `/children/{childEntityName}` and `/foreign-access/{sourceEntityName}` page endpoints.
+
+Troubleshooting:
+
+| Symptom | Likely cause |
+|---------|--------------|
+| Invalid or expired download token | The token is single-use, expired, or was requested for a different page/context |
+| Export row limit exceeded | Narrow the filters, export the current page, or increase `LowCode:Export:MaxRows` |
+| File not exported marker | The file was missing, too large for data URL export, malformed, or no longer linked to the exported record |
 
 ## Files and Attachments
 
