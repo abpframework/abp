@@ -93,8 +93,17 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
 
         foreach (var feature in featureDefinitions)
         {
+            if (feature.AllowedProviders.Any() && !feature.AllowedProviders.Contains(providerName))
+            {
+                continue;
+            }
+
+            var featureProviderList = feature.AllowedProviders.Any()
+                ? providerList.Where(p => feature.AllowedProviders.Contains(p.Name)).ToList()
+                : providerList;
+
             var featureNameValueWithGrantedProvider = new FeatureNameValueWithGrantedProvider(feature.Name, null);
-            foreach (var provider in providerList)
+            foreach (var provider in featureProviderList)
             {
                 string pk = null;
                 if (provider.Compatible(providerName))
@@ -135,6 +144,12 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
         if (feature.ValueType?.Validator.IsValid(value) == false)
         {
             throw new FeatureValueInvalidException(feature.DisplayName.Localize(StringLocalizerFactory));
+        }
+
+        if (feature.AllowedProviders.Any() && !feature.AllowedProviders.Contains(providerName))
+        {
+            throw new AbpException(
+                $"The feature named '{name}' has not compatible with the provider named '{providerName}'");
         }
 
         var providers = Enumerable
@@ -193,6 +208,11 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
         if (providerName != null)
         {
             providers = providers.SkipWhile(c => c.Name != providerName);
+        }
+
+        if (feature.AllowedProviders.Any())
+        {
+            providers = providers.Where(p => feature.AllowedProviders.Contains(p.Name));
         }
 
         var featureNameValueWithGrantedProvider = new FeatureNameValueWithGrantedProvider(name, null);
