@@ -9,6 +9,8 @@
 
 This document explains how to create a **reusable [application module](../../modules)** based on the [module development best practices & conventions](../../framework/architecture/best-practices).
 
+This page documents creating a **standalone module solution**. If you are using the modern [Modular Monolith solution template](../modular-monolith/index.md), ABP Studio can also scaffold additional modules during solution creation or later from *Solution Explorer*. The generated module structure still follows the same reusable module concepts explained here.
+
 > Notice that the application module that is created in this tutorial is not an executable application. To see the module in action, you should install it into an executable application.
 >
 > It is advised to see the *[Modular Monolith Application Development Tutorial](../../tutorials/modular-crm/index.md)* to learn how to create application modules, install them into an executable web application, run and test the application. That tutorial uses the *Standard* module template, while this document explains the *DDD* module template.
@@ -20,6 +22,8 @@ You can use the [ABP CLI](../../cli) or [ABP Studio](../../studio/overview.md) t
 First, install the ABP Studio if you haven't installed before. You can follow the [installation guide](../../studio/installation.md) for this purpose.
 
 ### Creating a New Empty Solution
+
+This empty-solution flow is for a standalone module repository. It is different from the modern modular monolith wizard, where modules are added to a main application solution.
 
 Open the ABP Studio and click the `New solution` button in the welcome page or the `File > New Solution` top menu item. Click the `empty solution` link to select the empty solution template.
 
@@ -143,7 +147,9 @@ You can still create unit tests for your classes which will be harder to write (
 
 ### Host Applications
 
-The solution doesn't have a host application to run your module. However, you can create a [single-layer](../../get-started/single-layer-web-application.md) or [layered](../../get-started/layered-web-application.md) application and [import](../../studio/solution-explorer.md#imports) the created module into the host application.
+The solution doesn't have a host application to run your module. For a new modern ABP Studio solution, the most direct host choice is the [Modular Monolith solution template](../modular-monolith/index.md). ABP Studio can add the module during solution creation or later from *Solution Explorer*.
+
+Classic single-layer and layered host applications are still valid options. You can create a [single-layer](../../get-started/single-layer-web-application.md) or [layered](../../get-started/layered-web-application.md) application and [import](../../studio/solution-explorer.md#imports) the created module into the host application.
 
 You can also see the *[Modular Monolith Application Development Tutorial](../../tutorials/modular-crm/index.md)* to learn how to create application modules, install them into an executable web application, run and test the application
 

@@ -2265,6 +2265,10 @@
           ]
         },
         {
+          "text": "Modular Monolith",
+          "path": "solution-templates/modular-monolith"
+        },
+        {
           "text": "Microservice Solution",
           "isLazyExpandable": true,
           "path": "solution-templates/microservice/index.md",

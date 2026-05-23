@@ -9,16 +9,24 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 3.0.2 (2026-05-12) Latest
+## 3.0.3 (2026-05-20) Latest
 
-* Modern template osx fix
-* Update dark theme - BackgroundColorLighter
-* Fix initial task warning handling
-* Abp Studio ai agent cont
-* Add Volo.Abp.Elsa to module list
-* Register reCAPTCHA in HttpApi host templates for CmsKit contact endpoint
-* Optimized system prompt in ABP Studio
-* Register `MVC.RootUrl` in `HttpApi.Host` template
+* AI Agent Upgrades: Added browser automation tools and overall performance fixes
+* React Language Fix: Fixed language and localization settings being ignored in React templates
+* Admin Console Polish: Added icon support and visual enhancements to the React sidebar
+* Admin Mode Drag & Drop: Fixed solution file drag-and-drop when running as Administrator on Windows
+* Project Wizard Improvements: Added helpful guidance texts for modularity and options steps
+* User & Security Fixes: Enhanced user management and fixed account-linking login permissions
+* UI & System Tweaks: Polished modal window styles and resolved minor background template issues
+
+## 3.0.2 (2026-05-12)
+
+* AI Agent Enhancements: Optimized the core system prompt and continued overall agent improvements
+* Elsa Workflow Integration: Added Volo.Abp.Elsa to the available module selection list
+* Enhanced Security: Added automatic reCAPTCHA registration for CMS Kit contact forms in API templates
+* macOS Template Fix: Resolved compatibility issues specifically affecting modern templates on macOS
+* Dark Theme Polish: Updated the dark mode with a lighter, more balanced background color contrast
+* Template Configuration Fixes: Automatically configured missing root URL settings and improved initial task warning handling
 
 ## 3.0.1 (2026-05-06)
 

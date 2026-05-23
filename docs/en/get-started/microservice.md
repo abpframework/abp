@@ -11,6 +11,8 @@
 
 In this quick start guide, you will learn how to create and run a microservice solution using [ABP Studio](../studio/index.md).
 
+This guide follows the current **modern** microservice template in ABP Studio. When you select a web UI, ABP Studio creates the main application in `apps/react`, the administration UI in `apps/react-admin-console`, and optionally the public website in `apps/react-public-web`.
+
 ## Setup your development environment
 
 First things first! Let's setup your development environment before creating the first project. The following tools should be installed on your development machine:
@@ -18,7 +20,7 @@ First things first! Let's setup your development environment before creating the
 * [Visual Studio 2026](https://visualstudio.microsoft.com/vs/) or another IDE that supports .NET development
 * [.NET 10.0+](https://dotnet.microsoft.com/en-us/download/dotnet)
 * [Node v22.11+](https://nodejs.org/)
-* [Yarn v1.22+ (not v2+)](https://classic.yarnpkg.com/en/docs/install) or npm v10+ (already installed with Node), **This is required for the Angular applications.**
+* npm v10+ (already installed with Node) or [Yarn v1.22+ (not v2+)](https://classic.yarnpkg.com/en/docs/install) for the React applications
 * [Docker Desktop (with Kubernetes enabled)](https://www.docker.com/products/docker-desktop/)
 * [Helm](https://helm.sh/docs/intro/install/)
 * [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/deploy/)
@@ -62,11 +64,11 @@ On that screen, you can enable multi-tenancy for your solution. After selecting 
 
 ![abp-studio-new-solution-dialog-ui-framework](images/abp-studio-new-solution-dialog-ui-framework-microservice.png)
 
-Here, you see all the possible UI options supported by that startup solution template. You can pick your favorite one and click the *Next* button for the *Mobile Framework* selection screen:
+For the modern microservice template, the web UI choices are `React` and `No UI`. Select `React` to create `MyCompanyName.MyProjectName.React` in `apps/react` together with the separate `MyCompanyName.MyProjectName.ReactAdminConsole` application in `apps/react-admin-console`. Then click the *Next* button for the *Mobile Framework* selection screen:
 
 ![abp-studio-new-solution-dialog-mobile-framework](images/abp-studio-new-solution-dialog-mobile-framework-microservice.png)
 
-Here, you see all the mobile applications available in that startup solution template. These mobile applications are well-integrated into your solution and can use the same backend with your web application. They are simple (do not have pre-built features as much as the web application) but a very good starting point to build your mobile application.
+For the modern microservice template, the mobile choices are `React Native` and `None`. If you select `React Native`, ABP Studio creates the mobile app under `apps/mobile/react-native` and adds the `MyCompanyName.MyProjectName.MobileGateway` application.
 
 > If you select a mobile application, an additional API Gateway is created that is only used by the mobile application. 
 
@@ -74,7 +76,7 @@ Pick the one best for you, or select the *None* if you don't want a mobile appli
 
 ![abp-studio-new-solution-dialog-public-web-site](images/abp-studio-new-solution-dialog-public-web-site.png)
 
-You can select a public website to be created in your solution. The public website is a simple landing page that can be used to introduce your product, provide documentation, and so on.
+If you enable the public website, ABP Studio creates the `MyCompanyName.MyProjectName.ReactPublicWeb` application under `apps/react-public-web` and the `MyCompanyName.MyProjectName.PublicGateway` application under `gateways/public`.
 
 ![abp-studio-new-solution-dialog-dynamic-localization](images/abp-studio-new-solution-dialog-dynamic-localization.png)
 
@@ -136,7 +138,7 @@ Now, we are ready to allow ABP Studio to create our solution. Just click the *Cr
 
 ![abp-studio-created-new-microservice-solution](images/abp-studio-created-new-microservice-solution.png)
 
-You can explore the solution, but you need to **wait for background tasks to be completed** before running any application in the solution (it can take up to a few minutes to set up all).
+You can explore the solution, but you need to **wait for background tasks to be completed** before running any application in the solution. ABP Studio uses that time to install the required client-side dependencies and create the Auth Server signing certificate.
 
 > The solution structure can be different in your case based on the options you've selected.
 
@@ -148,9 +150,13 @@ This **solution** consists of several **modules** shown in the *Solution Explore
 
 ![abp-studio-created-microservice-solution-explorer](images/abp-studio-created-microservice-solution-explorer.png)
 
-Each leaf item (e.g. `Acme.CloudCrm.IdentityService` or `Acme.CloudCrm.Web`) in the tree above is an ABP Studio module. They are grouped into solution folders (`apps`, `gateways`, and `services`).
+Each leaf item in the tree above is an ABP Studio module. They are grouped into solution folders (`apps`, `gateways`, and `services`):
 
-Each module has a separate .NET Solution. You can open a module's (or .NET solution's) folder by right-clicking a module in the *Solution Explorer* tree, select *Open with* -> *Explorer* option as shown below:
+* `apps`: contains `Acme.CloudCrm.AuthServer`, the main React UI as `Acme.CloudCrm.React`, the separate administration UI as `Acme.CloudCrm.ReactAdminConsole`, and optionally `Acme.CloudCrm.ReactPublicWeb`.
+* `gateways`: contains `Acme.CloudCrm.WebGateway` for the main web UI, and optionally `Acme.CloudCrm.PublicGateway` and `Acme.CloudCrm.MobileGateway`.
+* `services`: contains backend microservices such as `Acme.CloudCrm.AdministrationService`, `Acme.CloudCrm.IdentityService`, and the optional services selected in the wizard.
+
+The .NET applications in `apps/auth-server`, `gateways/*`, and `services/*` each have their own .NET solutions. The React applications are standard Node projects under `apps/react` and `apps/react-admin-console`, plus `apps/react-public-web` when the public website is enabled. You can open any module's folder by right-clicking it in the *Solution Explorer* tree and selecting *Open with* -> *Explorer* as shown below:
 
 ![abp-studio-open-module-folder](images/abp-studio-open-module-folder.png)
 
@@ -158,15 +164,15 @@ If we open the `Acme.CloudCrm.IdentityService` module's path in the explorer, we
 
 ![abp-studio-microservice-example-identity-service-files](images/abp-studio-microservice-example-identity-service-files.png)
 
-This microservice solution is designed to have separate .NET solutions for each service to make it possible to develop independently from the other services and applications.
+This microservice solution is designed so each backend service, gateway, and the Auth Server can be developed independently, while the React applications stay in their own app folders.
 
-You can open any module's .NET solution in your favorite IDE and make your development. The following figure is a screenshot from the *Identity* microservice opened in Visual Studio:
+You can open any backend module's .NET solution in your favorite IDE and make your development. The following figure is a screenshot from the *Identity* microservice opened in Visual Studio:
 
 ![abp-studio-microservice-example-identity-service-in-visual-studio](images/abp-studio-microservice-example-identity-service-in-visual-studio.png)
 
-If you explore that .NET solution, you will typically see some configuration code, and you won't see any business code. That's because the solution uses [pre-built application modules](../modules) as NuGet packages, and doesn't contain their source code. In this way, you can easily upgrade these application modules when a new version is available.
+If you explore that .NET solution, you will typically see composition and configuration code, and you won't see the source code of the built-in modules. That's because the solution uses [pre-built application modules](../modules) as NuGet packages. In this way, you can easily upgrade these application modules when a new version is available.
 
-You will typically add new microservices to the solution and perform your business logic inside these new services (however, you can always want to download the source code of any pre-built application module and include it into your solution to freely customize it).
+You will typically add new microservices to the solution and perform your business logic inside these new services. You can also customize the React applications in `apps/react`, `apps/react-admin-console`, and, if enabled, `apps/react-public-web` when you need UI-specific changes.
 
 ## Running the Solution
 
@@ -184,13 +190,26 @@ In the *Solution Runner* section (on the left side) you can see all the runnable
 
 > A leaf item in the *Solution Runner* is called as an *Application* as it is an executable application, excluding items under `Containers`.
 
-As shown in the figure above, the executable applications are grouped into folders like `apps`, `gateways`, and `services`. You can start/stop them all, a group (folder) of them, or one by one. The `Containers` branch contains the needed docker containers for the applications. 
+As shown in the figure above, the executable applications are grouped into folders like `apps`, `gateways`, and `services`. You can start/stop them all, a group (folder) of them, or one by one. The `Containers` branch contains the needed docker containers for the applications.
 
 Before running the applications, you can run the all application by right-clicking the root item in the *Solution Runner* and select *Build* -> *Build All* action. However, you don't need to do that, because ABP Studio builds the applications before running them by default.
 
 > If you want to change this behavior, and don't want ABP Studio to build before running the applications, you can click the *Manage start actions* button in the *Solution Runner*, which you can see from the root item or per folder.
 
 You can click the *Play* button on the root item in *Solution Runner* to start all the applications.
+
+For the common React-based web flow, the main applications are:
+
+* `Acme.CloudCrm.AuthServer`
+* `Acme.CloudCrm.WebGateway`
+* `Acme.CloudCrm.AdministrationService`
+* `Acme.CloudCrm.IdentityService`
+* `Acme.CloudCrm.React`
+* `Acme.CloudCrm.ReactAdminConsole`
+
+If you enabled optional features, also start the related applications such as `Acme.CloudCrm.ReactPublicWeb`, `Acme.CloudCrm.PublicGateway`, `Acme.CloudCrm.MobileGateway`, `Acme.CloudCrm.SaasService`, `Acme.CloudCrm.AuditLoggingService`, `Acme.CloudCrm.GdprService`, `Acme.CloudCrm.ChatService`, or `Acme.CloudCrm.FileManagementService`.
+
+> ABP Studio runs the React applications as CLI applications by executing `npm run dev` in their app folders.
 
 > **About the Docker Containers**
 >
@@ -200,29 +219,31 @@ You can click the *Play* button on the root item in *Solution Runner* to start a
 >
 > Some applications/services may fail on the first run. That may be because of service and database dependencies were not satisfied and an error occurs on the application startup. ABP Studio automatically restarts failing services until it is successfully started. Being completely ready for such a distributed solution may take a while, but it will be eventually started.
 
-Once all the applications are ready, you can right-click the `Web` application and select the *Browse* command:
+Once all the applications are ready, you can right-click the `Acme.CloudCrm.React` application and select the *Browse* command:
 
 ![abp-studio-microservice-solution-runner-browse](images/abp-studio-microservice-solution-runner-browse.png)
 
-The *Browse* command opens the web application's UI in the built-in browser of ABP Studio:
+The *Browse* command opens the main React application's UI in the built-in browser of ABP Studio:
 
 ![abp-studio-microservice-solution-runner-browse-microservice](images/abp-studio-microservice-solution-runner-browse-microservice.png)
 
-You can browse your application in a full-featured web browser in ABP Studio. Click the *Login* button in the application UI, enter `admin` as username and `1q2w3E*` as password to login to the application.
+You can browse your application in a full-featured web browser in ABP Studio. Click the *Login* button in the application UI, enter `admin` as username and `1q2w3E*` as password to log in to the application.
+
+Use the same *Browse* command on `Acme.CloudCrm.ReactAdminConsole` to open the administration UI. That application runs separately and uses `/admin-console/` as its base path.
 
 > You can also browse the other applications/services (that provides a UI) inside ABP Studio. In this way, you don't need to use an external browser or manually type the application's URL.
 
 ## Developing Services Using the Solution Runner
 
-Solution Runner not only runs a multi-applications system easier, but is also useful while developing your services and applications. In a microservice solution, you typically focus on one or a few services and applications. Assume that you want to make a development in `IdentityService`. You can use the following development flow:
+Solution Runner not only makes a multi-application system easier to run, but is also useful while developing your services and applications. In a microservice solution, you typically focus on one or a few services and applications. Assume that you want to make a development in `IdentityService`. You can use the following development flow:
 
 * Start all the applications/services in the solution and test if everything works as expected.
 * Stop the `IdentityService` in the Solution Runner.
-* Open the `IdentityService`'s .NET solution in your favorite IDE (e.g. Visual Studio). As an easy way of opening it, you can use the *Solution Explorer*, find the `Acme.CloudCrm.IdentityService` module, right-click to it and select the *Open with* -> *Visual Studio* command.
+* Open the `IdentityService`'s .NET solution in your favorite IDE (e.g. Visual Studio). As an easy way of opening it, you can use the *Solution Explorer*, find the `Acme.CloudCrm.IdentityService` module, right-click it and select the *Open with* -> *Visual Studio* command.
 * Make your development in the `IdentityService`.
 * Run (with or without debugging) your service in Visual Studio (or another IDE).
 
-Once you run the `IdentityService` in Visual Studio, it will be completely integrated into the rest of the system since they all run in your local machine. In addition, the `IdentityService` application will automatically connect to ABP Studio and send runtime data to it as it works in ABP Studio. When you run an application out of ABP Studio, it is shown as *external* in the Solution Runner and you can't stop it in ABP Studio (you should stop where you've started):
+Once you run the `IdentityService` in Visual Studio, it will be completely integrated into the rest of the system since they all run on your local machine. In addition, the `IdentityService` application will automatically connect to ABP Studio and send runtime data to it as it works in ABP Studio. When you run an application out of ABP Studio, it is shown as *external* in the Solution Runner and you can't stop it in ABP Studio (you should stop it where you've started it):
 
 ![abp-studio-microservice-solution-runner-external-service](images/abp-studio-microservice-solution-runner-external-service.png)
 
@@ -235,6 +256,8 @@ To enable watching, right-click the application/service you want to watch, selec
 ![abp-studio-microservice-solution-runner-enable-watch-2](images/abp-studio-microservice-solution-runner-enable-watch-2.png)
 
 Now, you can make your development on the `IdentityService`. Whenever you save a code file, it is automatically rebuilt and restarted by ABP Studio, so any change will be effective on the running solution in a few seconds.
+
+If you are working on the frontend instead, you can apply the same flow to `Acme.CloudCrm.React` or `Acme.CloudCrm.ReactAdminConsole`, and to `Acme.CloudCrm.ReactPublicWeb` when the public website is enabled, then continue from the related app folder with `npm run dev`.
 
 When you enable watch for an application an *eye* icon is added near to the application:
 
@@ -271,7 +294,7 @@ After building the Docker images, it is ready to install the Helm chart to Kuber
 
 > Installing chart should be fast. However, it may take time for being fully ready in Kubernetes. For example, if an image of a service (e.g. Redis, Rabbit) was not pulled before, it will need to pull image first.
 
-Once the solution is ready in Kubernetes, you can open a browser and visit the following URL: https://cloudcrm-local-web It will open a web page as shown below:
+Once the solution is ready in Kubernetes, you can open a browser and visit the following URL: `https://cloudcrm-local-web`. It opens the main web application as shown below:
 
 ![abp-studio-microservice-web-application-home-page](images/abp-studio-microservice-web-application-home-page.png)
 
@@ -335,7 +358,7 @@ It will start the interception process, and finally you will see the *intercepti
 
 ![abp-studio-microservice-kubernetes-interception-enabled](images/abp-studio-microservice-kubernetes-interception-enabled.png)
 
-From now on, all the traffic coming to the Audit Logging microservice is redirected to your local computer. If you open the Audit Logging page now (`https://cloudcrm-local-web/AuditLogs`), you get an error, because the request is redirected to your local machine but the Audit Logging service is not running on your local machine yet.
+From now on, all the traffic coming to the Audit Logging microservice is redirected to your local computer. If you open the Audit Logging page now (`https://cloudcrm-local-web/admin-console/audit-logs`), you get an error, because the request is redirected to your local machine but the Audit Logging service is not running on your local machine yet.
 
 Open the `Acme.CloudCrm.AuditLoggingService` .NET solution in your IDE (e.g. Visual Studio), set the `Acme.CloudCrm.AuditLoggingService` as startup project and run it (using F5 for debug mode or CTRL+F5 to run it without debugging).
 
@@ -355,7 +378,7 @@ A typical development flow can be as the following:
 
 * *Connect* to a Kubernetes cluster where the solution is already deployed (as explained in the *Kubernetes Integration: Connecting to the Cluster* section). You can do it yourself as explained in the *Kubernetes Integration: Working with Helm Charts* section.
 * *Intercept* a service you want to develop in your local machine.
-* Develop, run, stop, fix, debug, re-run... your service easily in your local environment. You can test your service as integrated to others and visit the application UI in the Kubernetes (you can make it for the Web application as similar).
+* Develop, run, stop, fix, debug, re-run... your service easily in your local environment. You can test your service as integrated to others and visit the application UI in Kubernetes. You can follow a similar flow for the main React application or the Admin Console.
 * Once your development is done, you can *Disable* the interception and re-deploy the service to the Kubernetes cluster.
 
 To re-deploy a service to Kubernetes, right-click the service and select *Commands* -> *Redeploy* command:

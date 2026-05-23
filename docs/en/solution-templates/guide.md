@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Explore ABP's guide to selecting the right startup template for your project, covering architectures like Microservices, N-Layered, and more."
+    "Description": "Explore ABP's guide to selecting the right classic or modern startup template for your project, covering Single-Layer, Layered, Modular Monolith, and Microservice architectures."
 }
 ```
 
@@ -9,11 +9,23 @@
 
 ABP provides several [startup templates](index.md) to you. It is important to start with the right startup template that is suitable for your **project** and **team**. This guide aims to lead you to select the most proper startup template for your requirements.
 
+ABP currently exposes two closely related template families:
+
+* **Classic templates**, documented with the `Single-Layer` and `Layered` names in this section.
+* **Modern solution wizard architectures**, which use the names `Simple Monolith`, `Layered Monolith`, `Modular Monolith`, and `Microservice`.
+
+Throughout this guide:
+
+* **Single-Layer** corresponds to the modern **Simple Monolith** architecture.
+* **N-Layered** corresponds to the modern **Layered Monolith** architecture.
+* **Modular Monolith** has a dedicated modern solution path in ABP Studio.
+* **Microservice** exists in both families, but the current microservice reference pages describe the modern React-based web structure.
+
 The following **architectures** will be discussed based on ABP startup templates:
 
-* **Single-Layer** (non-layered) application
-* **N-Layered** application
-* **Modular** application
+* **Single-Layer / Simple Monolith** application
+* **N-Layered / Layered Monolith** application
+* **Modular Monolith** application
 * **Microservice** solution
 
 ## What is a Startup Template?
@@ -24,7 +36,7 @@ In the following section, you will understand what a startup template is and wha
 
 A startup solution template is a **pre-architected** structure. For example, the [layered startup template](layered-web-application/index.md) is a great starting point if you want to build a layered application code-base based on [Domain-Driven Design](../framework/architecture/domain-driven-design/index.md) principles and patterns.
 
-However, starting with any startup template **doesn't limit you** on adding or removing projects, layers, integration packages, and creating other applications/services. You can even start with a [single-layer application template]() and convert it to a microservice solution. However, if you want to build a microservice solution, starting with the [microservice startup template](microservice/index.md) is the best.
+However, starting with any startup template **doesn't limit you** on adding or removing projects, layers, integration packages, and creating other applications/services. You can even start with a [single-layer application template](single-layer-web-application/index.md) and convert it to a microservice solution. However, if you want to build a microservice solution, starting with the [microservice startup template](microservice/index.md) is the best.
 
 So, it is **best to start with the most suitable startup template** for your purpose and then modify the solution to fit your custom requirements.
 
@@ -52,7 +64,7 @@ Up to this point, it is explained what a startup template is and the features it
 
 ### Single-Layer Application Solution Template
 
-The [single-layer solution template](single-layer-web-application/index.md) is the simplest. It provides a **minimal solution architecture** while starting a new project. Your .NET solution typically contains a **single, or a few .NET projects** depending on your UI and other preferences while creating your solution.
+The [single-layer solution template](single-layer-web-application/index.md) is the simplest classic option. It provides a **minimal solution architecture** while starting a new project. In the modern solution wizard, the comparable architecture is **Simple Monolith**. Your .NET solution typically contains a **single, or a few .NET projects** depending on your UI and other preferences while creating your solution.
 
 The following figure shows a single-project web application that has [MVC (Razor Pages) UI](../framework/ui/mvc-razor-pages/overall.md) and [Entity Framework Core](../framework/data/entity-framework-core/index.md) database provider with the default configuration:
 
@@ -85,7 +97,7 @@ These options are not implemented to keep the solution structure as simple as po
 
 ### Layered Solution Template
 
-The [layered application startup template](layered-web-application/index.md) is a .NET solution that consists of several projects. 
+The [layered application startup template](layered-web-application/index.md) is the classic layered option. In the modern solution wizard, the comparable architecture is **Layered Monolith**. It is a .NET solution that consists of several projects.
 Each project represents a layer of the application or has a specific functionality for the solution.
 
 The exact project count in your solution depends on the options you have selected. 
@@ -117,9 +129,11 @@ In the following conditions, you may consider to use the layered solution templa
 
 ### Modular Monolith Applications
 
-ABP does not provide a specific modular monolith application startup template. However, it is not needed. Let us explain why.
+ABP Studio's modern solution wizard includes a dedicated [Modular Monolith solution template](modular-monolith/index.md). It creates a main application, enables modularity automatically, and lets you scaffold additional modules while creating the solution. This is the most direct path for new modular ABP Studio solutions.
 
-The ABP Framework and [ABP Studio](../studio/index.md) are already designed to support modular application development from their beginning. ABP framework provides all the **necessary infrastructure** for [modularity](../framework/architecture/modularity/basics.md) and all other framework features are **compatible with modular solutions**.
+Classic ABP solutions can still build a modular monolith by combining a host application and reusable application modules.
+
+The ABP Framework and [ABP Studio](../studio/index.md) are designed to support modular application development. ABP framework provides all the **necessary infrastructure** for [modularity](../framework/architecture/modularity/basics.md) and all other framework features are **compatible with modular solutions**.
 
 On the other hand, the main purpose of ABP Studio's [Solution Explorer panel](../studio/solution-explorer.md) is to **architect and build modular and complex software solutions**. You can easily create new modules, arrange dependencies between the modules and import/install these modules into a monolith application. While you can do all these manually yourself, ABP Studio makes it extremely easy to do and understand it.
 
@@ -131,19 +145,20 @@ A **modular monolith** application consists of a **single host** application and
 
 In this example, `MyCrm.Host` is an almost-empty host application that has package references to other modules. Every module consists of two packages: implementation and contract packages.
 
-You can follow the steps below to create such a modular solution with ABP Studio:
+You can follow one of the paths below to create such a modular solution with ABP Studio:
 
-* **Create a new application** using either [single-layer](single-layer-web-application/index.md) or [layered](layered-web-application/index.md) application startup template. That application will be the **host application** of your solution.
-* **Create new modules** (right-click to the solution root, select the *Add* -> *New Module* -> ... command).
-* **Import & Install** these **modules** to the host application.
+* **Modern path**: Choose the [Modular Monolith solution template](modular-monolith/index.md), configure the main application, then add extra modules in the *Modularity* step or later from *Solution Explorer*.
+* **Classic composition path**: Create a host application using either the [single-layer](single-layer-web-application/index.md) or [layered](layered-web-application/index.md) template, create new modules, then import and install these modules into the host application.
 
 > You can follow the **[Modular Monolith Application Development Tutorial](../tutorials/modular-crm/index.md)** to learn how to build a modular application step by step.
 
 #### Which Startup Template should be used for a Modular Application?
 
-So, both [single-layer](single-layer-web-application/index.md) and [layered](layered-web-application/index.md) application startup templates are inherently modular. Just use one of them and start your modular solution. You may wonder which one to start:
+For a new modern ABP Studio solution, use the dedicated [Modular Monolith solution template](modular-monolith/index.md).
 
-* Use the **[single-layer startup template](single-layer-web-application/index.md)** for the host application of your modular monolith if you will leave the host application as empty. It will contain some configuration code of course, but it won't contain any actual application code. **This is the suggested approach.**
+If you are composing a modular monolith by using the classic host + module approach, both [single-layer](single-layer-web-application/index.md) and [layered](layered-web-application/index.md) application startup templates are inherently modular. In that case, you may wonder which one to start:
+
+* Use the **[single-layer startup template](single-layer-web-application/index.md)** for the host application of your modular monolith if you will leave the host application as empty. It will contain some configuration code of course, but it won't contain any actual application code. **This is the suggested classic host approach.**
 * Use the **[layered application startup template](layered-web-application/index.md)** if you will write some application code into the hosting application. You may want to write some code that makes multiple module operations that are not easy to implement in a particular module. In that case, a layered hosting application will be a better way to organize your codebase. However, this approach can quickly move your solution away from a modular system. So, take your own risk.
 
 #### When Should You Start a Modular Monolith Application?
@@ -164,7 +179,7 @@ Even if you are considering building a microservice architecture, it is usually 
 
 ### Microservice Solution Template
 
-ABP's [microservice startup template](microservice/index.md) includes multiple services, API gateways and applications that are well integrated into each other and ready to be a great **base solution for your microservice system**. 
+ABP's [microservice startup template](microservice/index.md) includes multiple services, API gateways and applications that are well integrated into each other and ready to be a great **base solution for your microservice system**. The current reference pages describe the modern React-based web structure.
 In the following picture, you can see an overall diagram that shows the main components of the solution (they vary based on the options while you are creating your solution):
 
 ![ms-overall-architecture](microservice/images/overall-architecture.png)

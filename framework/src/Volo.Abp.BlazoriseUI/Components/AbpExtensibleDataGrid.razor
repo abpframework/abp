@@ -122,7 +122,7 @@
                             <DataGridColumn TItem="TItem" Field="@nameof(IHasExtraProperties.ExtraProperties)" SortField="@column.PropertyName" Width="@BlazoriseFluentSizingParse.Parse(column.Width, SizingType.Width)" Caption="@column.Title" Displayable="column.Visible" Sortable="@column.Sortable">
                                 <DisplayTemplate>
                                     @{
-                                        var entity = context as IHasExtraProperties;
+                                        var entity = context.Item as IHasExtraProperties;
                                         var propertyName = ExtensionPropertiesRegex.Match(column.Data).Groups[1].Value;
                                         var propertyValue = entity?.GetProperty(propertyName);
                                         if (propertyValue != null && propertyValue.GetType() == typeof(bool))
