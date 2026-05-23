@@ -1,11 +1,11 @@
+# Low-Code System
+
 ```json
 //[doc-seo]
 {
     "Description": "ABP Low-Code System: Build admin panels with auto-generated CRUD UI, APIs, and permissions using C# attributes and Fluent API. No boilerplate code needed."
 }
 ```
-
-# Low-Code System
 
 > You must have an ABP Team or a higher license to use this module.
 

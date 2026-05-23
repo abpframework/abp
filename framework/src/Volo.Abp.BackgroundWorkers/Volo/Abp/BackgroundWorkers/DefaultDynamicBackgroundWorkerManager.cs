@@ -10,7 +10,10 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers;
 
-public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerManager, ISingletonDependency
+public class DefaultDynamicBackgroundWorkerManager :
+    IDynamicBackgroundWorkerManager,
+    ISupportsRuntimeRegistration,
+    ISingletonDependency
 {
     protected IServiceProvider ServiceProvider { get; }
     public ILogger<DefaultDynamicBackgroundWorkerManager> Logger { get; set; }
@@ -39,11 +42,11 @@ public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
 
         schedule.Validate();
 
-        if (schedule.Period == null)
+        if (!schedule.CronExpression.IsNullOrWhiteSpace())
         {
             throw new AbpException(
-                $"The default in-memory background worker manager does not support CronExpression without Period for dynamic worker '{workerName}'. " +
-                "Please set Period, or use a scheduler-backed provider (Hangfire, Quartz, TickerQ).");
+                $"The default in-memory background worker manager does not support CronExpression for dynamic worker '{workerName}'. " +
+                "Please clear CronExpression and use Period-based scheduling, or use a scheduler-backed provider (Hangfire or Quartz).");
         }
 
         await _semaphore.WaitAsync(cancellationToken);
@@ -102,11 +105,11 @@ public class DefaultDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerMan
 
         schedule.Validate();
 
-        if (schedule.Period == null)
+        if (!schedule.CronExpression.IsNullOrWhiteSpace())
         {
             throw new AbpException(
-                $"The default in-memory background worker manager does not support CronExpression without Period for dynamic worker '{workerName}'. " +
-                "Please set Period, or use a scheduler-backed provider (Hangfire, Quartz, TickerQ).");
+                $"The default in-memory background worker manager does not support CronExpression for dynamic worker '{workerName}'. " +
+                "Please clear CronExpression and use Period-based scheduling, or use a scheduler-backed provider (Hangfire or Quartz).");
         }
 
         await _semaphore.WaitAsync(cancellationToken);

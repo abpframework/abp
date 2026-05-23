@@ -6,6 +6,12 @@ namespace Volo.Abp.BackgroundWorkers;
 /// <summary>
 /// Manages dynamic background workers that are registered at runtime
 /// without requiring a strongly-typed worker class.
+/// <para>
+/// Implementations may differ in capabilities. Check <see cref="ISupportsRuntimeRegistration"/>
+/// before calling <see cref="AddAsync"/> / <see cref="RemoveAsync"/> / <see cref="UpdateScheduleAsync"/>,
+/// and <see cref="ISupportsCronScheduling"/> before passing
+/// <see cref="DynamicBackgroundWorkerSchedule.CronExpression"/>.
+/// </para>
 /// </summary>
 public interface IDynamicBackgroundWorkerManager
 {

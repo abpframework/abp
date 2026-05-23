@@ -10,7 +10,11 @@ using Volo.Abp.DependencyInjection;
 namespace Volo.Abp.BackgroundWorkers.Quartz;
 
 [Dependency(ReplaceServices = true)]
-public class QuartzDynamicBackgroundWorkerManager : IDynamicBackgroundWorkerManager, ISingletonDependency
+public class QuartzDynamicBackgroundWorkerManager :
+    IDynamicBackgroundWorkerManager,
+    ISupportsRuntimeRegistration,
+    ISupportsCronScheduling,
+    ISingletonDependency
 {
     public const string DynamicWorkerNameKey = "AbpDynamicWorkerName";
 
