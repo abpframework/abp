@@ -142,7 +142,13 @@ Inside interceptor scripts, you have access to:
 |--------|-------------|
 | `isAvailable` | Whether the email sender is configured and available |
 | `sendAsync(to, subject, body)` | Send a plain-text email |
+| `sendAsync(from, to, subject, body)` | Send a plain-text email with an explicit sender |
 | `sendHtmlAsync(to, subject, htmlBody)` | Send an HTML email |
+| `sendHtmlAsync(from, to, subject, htmlBody)` | Send an HTML email with an explicit sender |
+| `queueAsync(to, subject, body)` | Queue a plain-text email |
+| `queueAsync(from, to, subject, body)` | Queue a plain-text email with an explicit sender |
+| `queueHtmlAsync(to, subject, htmlBody)` | Queue an HTML email |
+| `queueHtmlAsync(from, to, subject, htmlBody)` | Queue an HTML email with an explicit sender |
 
 ### Logging
 
@@ -158,7 +164,7 @@ Inside interceptor scripts, you have access to:
 
 Full access to the [Scripting API](scripting-api.md) for querying and mutating data.
 
-Interceptors can also use common scripting services such as `user`, `tenant`, `auth`, `settings`, `features`, `events`, `jobs`, `files`, `images`, and `attachments` when they are enabled by the scripting capability profile.
+Interceptors can also use common scripting services such as `user`, `tenant`, `auth`, `settings`, `features`, `config`, `http`, `events`, `jobs`, `blob`, `encryption`, `textTemplating`, `files`, `images`, and `attachments` when they are enabled by the scripting capability profile.
 
 ### `globalError`
 

@@ -43,7 +43,7 @@ Custom endpoints are defined in `model.json` or through the Low-Code Designer. E
 | `requireAuthentication` | bool | `true` | Whether the caller must be authenticated |
 | `requiredPermissions` | string[] | null | Permission names required to call the endpoint |
 
-`requiredPermissions` is checked only when `requireAuthentication` is true. Keep endpoints authenticated by default and use `requireAuthentication: false` only for intentionally public APIs.
+Permission checks require an authorized user even when `requireAuthentication` is set to `false`. Keep endpoints authenticated by default and use `requireAuthentication: false` only for intentionally public APIs without `requiredPermissions`.
 
 ## Route and Request Data
 
@@ -194,7 +194,7 @@ Default blocked headers also include hop-by-hop headers such as `Connection`, `T
 ## Security Notes
 
 * Prefer authenticated endpoints with explicit `requiredPermissions`.
-* Treat public endpoints as public API surface.
+* Treat endpoints with `requireAuthentication: false` and no `requiredPermissions` as public API surface.
 * Keep endpoint scripts small and focused.
 * Validate route, query, and body input before using it.
 * Use `take()` for list queries.

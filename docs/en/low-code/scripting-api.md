@@ -217,7 +217,7 @@ All aggregations execute as SQL statements:
 | `min(x => x.Property)` | `SELECT MIN(...)` | `Promise<any>` |
 | `max(x => x.Property)` | `SELECT MAX(...)` | `Promise<any>` |
 | `distinct(x => x.Property)` | `SELECT DISTINCT ...` | `Promise<any[]>` |
-| `groupBy(x => x.Property)` | `GROUP BY ...` | `Promise<GroupResult[]>` |
+| `groupBy(x => x.Property)` | `GROUP BY ...` | `QueryBuilder` |
 
 ```javascript
 var productQuery = await db.query('Product');
@@ -275,7 +275,7 @@ var grouped = await productQuery
 
 | Limit | Default | Description |
 |-------|---------|-------------|
-| `MaxGroupCount` | No limit | Maximum groups |
+| `MaxGroupCount` | 500 | Maximum groups; set to `null` to disable this limit |
 
 ## Math Functions
 
