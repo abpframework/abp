@@ -14,7 +14,7 @@ public class AbpTextTagHelper : AbpTagHelper<AbpTextTagHelper, AbpTextTagHelperS
     public string? Label { get; set; }
 
     [HtmlAttributeName("label-width")]
-    public ColumnSize LabelWidth { get; set; } = ColumnSize._4;
+    public ColumnSize? LabelWidth { get; set; }
 
     [HtmlAttributeName("suppress-label")]
     public bool SuppressLabel { get; set; } = false;

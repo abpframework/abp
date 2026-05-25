@@ -1,20 +1,18 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid;
-using Volo.Abp.Localization;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 
@@ -23,20 +21,14 @@ public class AbpDynamicTextTagHelperService : AbpTagHelperService<AbpDynamicText
     protected HtmlEncoder HtmlEncoder { get; }
     protected IServiceProvider ServiceProvider { get; }
     protected List<ModelExpression> Models = new();
-    protected readonly IAbpEnumLocalizer AbpEnumLocalizer;
-    protected readonly IStringLocalizerFactory StringLocalizerFactory;
 
     public AbpDynamicTextTagHelperService(
         HtmlEncoder htmlEncoder,
-        IServiceProvider serviceProvider,
-        IAbpEnumLocalizer abpEnumLocalizer,
-        IStringLocalizerFactory stringLocalizerFactory
+        IServiceProvider serviceProvider
         )
     {
         HtmlEncoder = htmlEncoder;
         ServiceProvider = serviceProvider;
-        AbpEnumLocalizer = abpEnumLocalizer;
-        StringLocalizerFactory = stringLocalizerFactory;
     }
 
     public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -113,15 +105,15 @@ public class AbpDynamicTextTagHelperService : AbpTagHelperService<AbpDynamicText
         textTagHelper.ViewContext = TagHelper.ViewContext;
 
         var textAttribute = model.ModelExplorer.GetAttribute<AbpText>();
-        if (textAttribute != null)
+        if (textAttribute == null)
         {
-            textTagHelper.Format = textAttribute.Format;
-            textTagHelper.LabelWidth = textAttribute.LabelWidth;
-            textTagHelper.SuppressLabel = textAttribute.SuppressLabel;
+            textTagHelper.LabelWidth = TagHelper.LabelWidth;
             return textTagHelper;
         }
 
-        textTagHelper.LabelWidth = TagHelper.LabelWidth;
+        textTagHelper.Format = textAttribute.Format;
+        textTagHelper.LabelWidth = textAttribute.LabelWidth ?? TagHelper.LabelWidth;
+        textTagHelper.SuppressLabel = textAttribute.SuppressLabel;
 
         return textTagHelper;
     }

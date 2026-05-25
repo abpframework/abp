@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection.Emit;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -10,6 +9,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid;
 using Volo.Abp.Localization;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
@@ -20,6 +20,7 @@ public class AbpTextTagHelperService : AbpTagHelperService<AbpTextTagHelper>
     private readonly IAbpTagHelperLocalizer _tagHelperLocalizer;
     protected readonly IAbpEnumLocalizer _abpEnumLocalizer;
     protected readonly IStringLocalizerFactory _stringLocalizerFactory;
+    private readonly ColumnSize DefaultLabelWidth = ColumnSize._4;
 
     public AbpTextTagHelperService(
         HtmlEncoder htmlEncoder,
@@ -74,8 +75,8 @@ public class AbpTextTagHelperService : AbpTagHelperService<AbpTextTagHelper>
 
     protected virtual string GetHtml(TagHelperContext context, TagHelperOutput output)
     {
-        var labelHtml = GetLabelHtml();
-        var textHtml = GetTextHtml();
+        var label = GetLabel();
+        var text = GetText();
         var fieldId = GetFieldId();
         var value = TagHelper.AspFor.Model;
 
@@ -85,14 +86,17 @@ public class AbpTextTagHelperService : AbpTagHelperService<AbpTextTagHelper>
 
         if (!TagHelper.SuppressLabel)
         {
-            var labelWidth = $"col-{(int)TagHelper.LabelWidth}";
+            var width = TagHelper.LabelWidth ??
+                TagHelper.AspFor.ModelExplorer.GetAttribute<AbpText>()?.LabelWidth ??
+                DefaultLabelWidth;
+            var labelWidth = $"col-{(int)width}";
             contentBuilder.AppendLine($"<div class=\"{labelWidth}\">");
-            contentBuilder.AppendLine(labelHtml);
+            contentBuilder.AppendLine(label);
             contentBuilder.AppendLine("</div>");
         }
 
         contentBuilder.AppendLine($"<div class=\"col\" id=\"{fieldId}\" data-value=\"{HtmlEncoder.Encode(value?.ToString() ?? string.Empty)}\">");
-        contentBuilder.AppendLine(textHtml);
+        contentBuilder.AppendLine(text);
         contentBuilder.AppendLine("</div>");
 
         contentBuilder.AppendLine("</div>");
@@ -108,7 +112,7 @@ public class AbpTextTagHelperService : AbpTagHelperService<AbpTextTagHelper>
             .Replace("]", "_");
     }
 
-    protected virtual string GetLabelHtml()
+    protected virtual string GetLabel()
     {
         var label = TagHelper.Label ??
                TagHelper.AspFor.Metadata.DisplayName ??
@@ -118,46 +122,45 @@ public class AbpTextTagHelperService : AbpTagHelperService<AbpTextTagHelper>
         return $"<strong>{HtmlEncoder.Encode(label)}</strong>";
     }
 
-    protected virtual string GetTextHtml()
+    protected virtual string GetText()
+    {
+        if (IsEnum())
+        {
+            return EnumText();
+        }
+        if (IsDate())
+        {
+            return DateText();
+        }
+        if (IsBoolean())
+        {
+            return BooleanText();
+        }
+        if (IsFile())
+        {
+            return FileText();
+        }
+        if (IsCollection())
+        {
+            return CollectionText();
+        }
+
+        return DefaultText();
+    }
+
+    protected virtual string DefaultText()
     {
         var value = TagHelper.AspFor.Model;
-
-        if (value == null)
+        if (value == null || string.IsNullOrWhiteSpace(value.ToString()))
         {
             return "<span class=\"text-muted\">-</span>";
         }
-
-        if (IsEnum())
-        {
-            return ToFormat(GetEnumValue());
-        }
-
-        if (IsDate())
-        {
-            return GetDateValue();
-        }
-
-        if (IsBoolean())
-        {
-            return GetBooleanValue();
-        }
-
-        if (IsFile())
-        {
-            return GetFileValue();
-        }
-
-        if (IsCollection())
-        {
-            return ToFormat(GetCollectionValue());
-        }
-
-        return ToFormat(HtmlEncoder.Encode(value.ToString()!));
+        return StringFormat(HtmlEncoder.Encode(value.ToString()!));
     }
 
-    protected string ToFormat(string? value)
+    protected virtual string StringFormat(string? value)
     {
-        var format = TagHelper.Format ?? TagHelper.AspFor.ModelExplorer.GetAttribute<AbpText>()?.Format ?? string.Empty;
+        var format = GetFormatString();
         if (format.IsNullOrEmpty() || value.IsNullOrWhiteSpace())
         {
             return value ?? string.Empty;
@@ -165,9 +168,19 @@ public class AbpTextTagHelperService : AbpTagHelperService<AbpTextTagHelper>
         return string.Format(format, value);
     }
 
-    protected virtual string GetEnumValue()
+    private string GetFormatString()
+    {
+        return TagHelper.Format ?? TagHelper.AspFor.ModelExplorer.GetAttribute<AbpText>()?.Format ?? string.Empty;
+    }
+
+    protected virtual string EnumText()
     {
         var value = TagHelper.AspFor.Model;
+        if (value == null)
+        {
+            return DefaultText();
+        }
+
         var modelType = value.GetType();
         var enumType = modelType.IsEnum ? modelType : Nullable.GetUnderlyingType(modelType);
         var containerLocalizer = _tagHelperLocalizer.GetLocalizerOrNull(TagHelper.AspFor.ModelExplorer.Container.ModelType.Assembly);
@@ -177,15 +190,18 @@ public class AbpTextTagHelperService : AbpTagHelperService<AbpTextTagHelper>
                 containerLocalizer,
                 _stringLocalizerFactory.CreateDefaultOrNull()
                }!);
-        return HtmlEncoder.Encode(localizedMemberName ?? string.Empty);
+        return StringFormat(HtmlEncoder.Encode(localizedMemberName ?? string.Empty));
     }
 
-    protected virtual string GetDateValue()
+    protected virtual string DateText()
     {
         var value = TagHelper.AspFor.Model;
+        if (value == null)
+        {
+            return DefaultText();
+        }
 
-        var format = TagHelper.Format ?? TagHelper.AspFor.ModelExplorer.GetAttribute<AbpText>()?.Format;
-
+        var format = GetFormatString();
         if (value is DateTime dateTime)
         {
             return dateTime.ToString(format);
@@ -196,12 +212,16 @@ public class AbpTextTagHelperService : AbpTagHelperService<AbpTextTagHelper>
             return dateTimeOffset.ToString(format);
         }
 
-        return value.ToString() ?? string.Empty;
+        return StringFormat(value.ToString());
     }
 
-    protected virtual string GetBooleanValue()
+    protected virtual string BooleanText()
     {
         var value = TagHelper.AspFor.Model;
+        if (value == null)
+        {
+            return DefaultText();
+        }
 
         if (value is bool boolValue)
         {
@@ -210,17 +230,21 @@ public class AbpTextTagHelperService : AbpTagHelperService<AbpTextTagHelper>
                 : "<span class=\"fa fa-times\"></span>";
         }
 
-        return HtmlEncoder.Encode(value.ToString() ?? string.Empty);
+        return StringFormat(value.ToString());
     }
 
-    protected virtual string GetFileValue()
+    protected virtual string FileText()
     {
-        return "<span class=\"text-info\"><i class=\"bi bi-file\"></i> File</span>";
+        return "<span class=\"text-info\"><i class=\"bi bi-file\"></i></span>";
     }
 
-    protected virtual string GetCollectionValue()
+    protected virtual string CollectionText()
     {
         var value = TagHelper.AspFor.Model;
+        if (value == null)
+        {
+            return DefaultText();
+        }
 
         //todo Consider supporting collection render.
         if (value is System.Collections.IEnumerable enumerable)
@@ -234,7 +258,7 @@ public class AbpTextTagHelperService : AbpTagHelperService<AbpTextTagHelper>
             return count.ToString();
         }
 
-        return HtmlEncoder.Encode(value.ToString() ?? string.Empty);
+        return StringFormat(value.ToString());
     }
 
     protected virtual bool IsHidden()
