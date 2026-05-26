@@ -427,7 +427,7 @@ See [Custom Endpoints](custom-endpoints.md).
 }
 ```
 
-Background workers require either `period` in milliseconds or `cronExpression`.
+Background workers require either `period` in milliseconds or `cronExpression`. See [Script Actions](script-actions.md) for event handler, background job, background worker, code editor, and dry-run testing details.
 
 ## Complete Example
 
@@ -537,4 +537,5 @@ In ABP Studio, run the generated migration task for the solution. If you run the
 * [Attributes & Fluent API](fluent-api.md)
 * [Interceptors](interceptors.md)
 * [Custom Endpoints](custom-endpoints.md)
+* [Script Actions](script-actions.md)
 * [Scripting API](scripting-api.md)

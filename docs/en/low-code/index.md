@@ -77,7 +77,7 @@ The designer is the day-to-day entry point.
 2. Use **Pages** to choose a page type, menu placement, fields, default sorting, filters, dashboards, and linked forms.
 3. Use **Forms** to arrange create and edit forms with tabs, groups, controls, validations, and actions.
 4. Use **Permissions** to review generated permissions and control access.
-5. Use **Actions** and **Interceptors** when the standard CRUD flow needs custom logic.
+5. Use **Actions** and **Interceptors** when the standard CRUD flow needs custom logic, endpoints, event handlers, jobs, or workers.
 6. Use **Health** to review model issues before publishing changes.
 
 ![Entity properties in the designer](images/designer-properties.png)
@@ -152,6 +152,7 @@ The designer stores and reads the same model metadata described in the reference
 | [Foreign Access](foreign-access.md) | Access to related dynamic entities through relations |
 | [Interceptors](interceptors.md) | JavaScript lifecycle logic for CRUD operations |
 | [Custom Endpoints](custom-endpoints.md) | JavaScript-backed REST endpoints |
+| [Script Actions](script-actions.md) | Event handlers, background jobs, background workers, script editor, and dry-run testing |
 | [Scripting API](scripting-api.md) | Server-side script context and helpers |
 
 ## Runtime Internals

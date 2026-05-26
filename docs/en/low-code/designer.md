@@ -122,6 +122,10 @@ Generated pages and menus are permission-aware. If a user cannot access a page, 
 
 Use **Actions** only when model metadata and standard CRUD behavior are not enough. The scripting surface can define custom HTTP endpoints, distributed event handlers, background jobs, and scheduled background workers. Scripts run server-side and use the [Scripting API](scripting-api.md).
 
+JavaScript editors in the Designer provide syntax highlighting, service autocomplete, entity name autocomplete, entity property autocomplete, enum autocomplete, and an **Available context** list. The context list reflects the services enabled for the selected script type. The `fileFields` and `imageFields` context items are selector trees for `File` and `Image` properties used by the file and image helpers; they are not lists of every entity property.
+
+Endpoint and event handler editors include **Test JavaScript**. Dry-run execution runs the current editor content without saving it, rolls back database writes, captures email/event/job/file side effects, and resolves outbound HTTP calls through test mocks. See [Script Actions](script-actions.md) for action descriptors and dry-run behavior.
+
 ## Health
 
 Use **Health** before shipping changes. It helps catch missing display properties, invalid relation targets, form/page references, script problems, and other model issues that would otherwise surface at runtime.

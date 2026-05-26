@@ -15,6 +15,31 @@ The Low-Code System provides a server-side JavaScript scripting engine for execu
 
 Scripts are wrapped in an async function, so `await` and top-level `return` are supported.
 
+## Designer Code Editor
+
+JavaScript fields in the Low-Code Designer use a code editor with syntax highlighting and low-code-aware autocomplete. The editor is available for interceptors, custom endpoints, event handlers, background jobs, and background workers.
+
+The **Available context** list shows the globals enabled for the current script type. The list is based on the scripting capability profile, so an application can disable services such as HTTP, email, files, or background jobs for a specific script type.
+
+Autocomplete covers:
+
+* Common globals such as `db`, `currentUser`, `emailSender`, `http`, `events`, and `jobs`
+* Endpoint, event handler, background job, background worker, and interceptor context variables
+* Dynamic entity names in `db.query(...)`, `db.get(...)`, file, image, and attachment helpers
+* Dynamic entity properties inside query lambda parameters and query results
+* Enum names and values through `enums` and `enumValues`
+* File and image field selectors through `fileFields` and `imageFields`
+
+`fileFields` is intentionally limited to `File` properties and `imageFields` is limited to `Image` properties. They are safe selector trees for file and image helpers, not lists of every entity property.
+
+```javascript
+await files.save(fileFields.Acme.Campaigns.Campaign.Document, {
+    fileName: 'brief.pdf',
+    contentType: 'application/pdf',
+    base64: base64Content
+});
+```
+
 ## Unified Database API (`db`)
 
 The `db` object is the main entry point for all data operations.
@@ -356,7 +381,9 @@ Scripts receive a `context` object and common global shortcuts. Available servic
 | `files` | `context.files` | Low-code file field helper |
 | `images` | `context.images` | Low-code image field helper |
 | `attachments` | `context.attachments` | Record attachment helper |
-| `fields` | `context.fields` | Field selector helpers for file operations |
+| `fileFields` | `context.fileFields` | File field selector tree |
+| `imageFields` | `context.imageFields` | Image field selector tree |
+| `enums`, `enumValues` | enum registry | Low-code enum value registry |
 | `log`, `logWarning`, `logError` | logging methods | Script logging |
 
 Global helpers are also available:
@@ -409,6 +436,42 @@ Custom endpoints add request globals and response helpers. See [Custom Endpoints
 | Event handler | `handler`, `event`, `eventName`, `eventData` |
 | Background job | `job`, `jobName`, `jobData`, `jobJsonData` |
 | Background worker | `worker`, `workerName` |
+
+Event handlers, background jobs, and background workers are configured in the Designer **Actions** section or in `model.json`. See [Script Actions](script-actions.md) for descriptors, examples, and dry-run testing.
+
+Event handler example:
+
+```javascript
+log('Received event ' + eventName);
+
+if (eventData && eventData.campaignId) {
+    await jobs.enqueueAsync('SendCampaignSummary', {
+        campaignId: eventData.campaignId
+    });
+}
+```
+
+Background job example:
+
+```javascript
+var campaign = await db.get('Acme.Campaigns.Campaign', jobData.campaignId);
+if (!campaign) {
+    userFriendlyError('Campaign not found.');
+}
+
+await email.queueAsync(jobData.to, 'Campaign summary', campaign.Name);
+```
+
+Background worker example:
+
+```javascript
+var campaignQuery = await db.query('Acme.Campaigns.Campaign');
+var staleCount = await campaignQuery
+    .where(campaign => campaign.Status === 0)
+    .count();
+
+log('Stale draft campaigns: ' + staleCount);
+```
 
 ## Service Helpers
 
@@ -465,6 +528,69 @@ The file helpers use low-code page services so permissions, file validation, lin
 | `attachments.delete(...)` | Delete a record attachment |
 
 File content is passed as base64 data. File operations are subject to configured read/write size limits.
+
+Use `fileFields` and `imageFields` when you want typed selectors for file or image properties:
+
+```javascript
+await files.save(fileFields.Acme.Campaigns.Campaign.Document, {
+    fileName: 'brief.pdf',
+    contentType: 'application/pdf',
+    base64: base64Content
+});
+
+var content = await images.get(
+    imageFields.Acme.Campaigns.Campaign.BannerImage,
+    campaignId
+);
+```
+
+The selector path is based on the full entity name and the `File` or `Image` property name. Record-level attachments are entity-level, not property-level, so they use the `attachments` helper instead of field selectors.
+
+### Email
+
+The `email` and `emailSender` globals use the configured ABP `IEmailSender`.
+
+| Method | Description |
+|--------|-------------|
+| `email.sendAsync(to, subject, body)` | Send plain text email |
+| `email.sendAsync(from, to, subject, body)` | Send plain text email with explicit sender |
+| `email.sendHtmlAsync(to, subject, htmlBody)` | Send HTML email |
+| `email.sendHtmlAsync(from, to, subject, htmlBody)` | Send HTML email with explicit sender |
+| `email.queueAsync(to, subject, body)` | Queue plain text email |
+| `email.queueAsync(from, to, subject, body)` | Queue plain text email with explicit sender |
+| `email.queueHtmlAsync(to, subject, htmlBody)` | Queue HTML email |
+| `email.queueHtmlAsync(from, to, subject, htmlBody)` | Queue HTML email with explicit sender |
+
+Email operations validate the recipient address, apply allowed or blocked domain rules when configured, and enforce the per-execution email limit.
+
+```javascript
+if (email.isAvailable) {
+    await email.queueAsync(
+        'ops@example.com',
+        'Campaign completed',
+        'Campaign ' + campaignId + ' completed.'
+    );
+}
+```
+
+### Test JavaScript Dry Run
+
+The Designer can run JavaScript without saving it where the **Test JavaScript** panel is available. The built-in dry-run panel supports custom endpoints, interceptors, event handlers, background jobs, and background workers.
+
+Dry-run execution returns the endpoint response or script status, logs, captured side effects, duration, and error diagnostics.
+
+| Operation | Dry-run behavior |
+|-----------|------------------|
+| Database writes | Executed in a transaction and rolled back |
+| File, image, and attachment operations | Captured as side effects without persisting files |
+| Email send or queue | Captured as an `email` side effect; no email is sent |
+| Event publish | Captured as an `event` side effect; no event is published |
+| Background job enqueue | Captured as a `job` side effect; no job is enqueued |
+| Outbound HTTP | Resolved from configured HTTP mocks; no real HTTP request is sent |
+| Logs | Returned in the result |
+| Errors | Returned with type, message, and diagnostics when available |
+
+For endpoint dry runs, the request method, path, route values, query values, headers, and body are supplied by the test panel. Endpoint authentication and permission metadata are checked against the current user. For interceptor dry runs, the test panel supplies command metadata and command data. For event handler dry runs, it supplies `eventData`. For background job and worker dry runs, it supplies the job or worker input JSON.
 
 ## Configuration
 
@@ -658,4 +784,5 @@ return ok({
 
 * [Interceptors](interceptors.md)
 * [Custom Endpoints](custom-endpoints.md)
+* [Script Actions](script-actions.md)
 * [model.json Structure](model-json.md)

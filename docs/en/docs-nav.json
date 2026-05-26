@@ -487,6 +487,10 @@
           "path": "low-code/custom-endpoints.md"
         },
         {
+          "text": "Script Actions",
+          "path": "low-code/script-actions.md"
+        },
+        {
           "text": "Scripting API",
           "path": "low-code/scripting-api.md"
         }

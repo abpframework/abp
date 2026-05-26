@@ -161,6 +161,35 @@ Custom endpoint scripts use the same common [Scripting API](scripting-api.md) se
 }
 ```
 
+## Testing Endpoint Scripts
+
+The Low-Code Designer endpoint editor includes **Test JavaScript**. Use it to run the current editor content without saving it.
+
+The dry-run request editor lets you provide:
+
+* HTTP method
+* Request path
+* Route values
+* Query values
+* Headers
+* Body JSON
+* Outbound HTTP mocks
+
+Dry-run execution evaluates the endpoint descriptor, request context, script, authentication metadata, and required permissions against the current user. It returns the same response shape that a real endpoint execution would return.
+
+Side effects are captured instead of being sent to external systems:
+
+| Operation | Dry-run behavior |
+|-----------|------------------|
+| Database writes | Rolled back |
+| Email send or queue | Captured under **Captured Side Effects** |
+| Event publish | Captured under **Captured Side Effects** |
+| Background job enqueue | Captured under **Captured Side Effects** |
+| Outbound HTTP | Matched against HTTP mocks |
+| File, image, and attachment operations | Captured without persisting files |
+
+If a script calls the `http` helper and no mock matches the method and URL, the result contains a mock miss instead of sending a real HTTP request.
+
 ## Response Policy
 
 Dynamic endpoint responses are validated by `LowCode:Scripting:EndpointResponse`.
@@ -203,5 +232,6 @@ Default blocked headers also include hop-by-hop headers such as `Connection`, `T
 ## See Also
 
 * [Scripting API](scripting-api.md)
+* [Script Actions](script-actions.md)
 * [Interceptors](interceptors.md)
 * [model.json Structure](model-json.md)
