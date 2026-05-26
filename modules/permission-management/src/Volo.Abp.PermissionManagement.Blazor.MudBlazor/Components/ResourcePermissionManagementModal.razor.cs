@@ -231,7 +231,7 @@ public partial class ResourcePermissionManagementModal
             return;
         }
 
-        await _createFormRef.Validate();
+        await _createFormRef.ValidateAsync();
         if (!_createFormRef.IsValid)
         {
             return;
@@ -266,7 +266,7 @@ public partial class ResourcePermissionManagementModal
             return;
         }
 
-        await _editFormRef.Validate();
+        await _editFormRef.ValidateAsync();
         if (!_editFormRef.IsValid)
         {
             return;
@@ -291,7 +291,7 @@ public partial class ResourcePermissionManagementModal
 
     protected virtual async Task DeleteResourcePermissionAsync(ResourcePermissionGrantInfoDto permission)
     {
-        var confirmed = await DialogService.ShowMessageBox(
+        var confirmed = await DialogService.ShowMessageBoxAsync(
             L["AreYouSure"],
             L["ResourcePermissionDeletionConfirmationMessage"],
             yesText: L["Yes"],

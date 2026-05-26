@@ -11,8 +11,8 @@
 @if (_otherLanguages != null && _otherLanguages.Any())
 {
     <MudMenu>
-        <ActivatorContent>
-            <MudIconButton Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" />
+        <ActivatorContent Context="menuCtx">
+            <MudIconButton OnClick="@(async () => await menuCtx.ToggleAsync())" Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" />
         </ActivatorContent>
         <ChildContent>
         <MudMenuItem Disabled="true">@_currentLanguage.DisplayName</MudMenuItem>

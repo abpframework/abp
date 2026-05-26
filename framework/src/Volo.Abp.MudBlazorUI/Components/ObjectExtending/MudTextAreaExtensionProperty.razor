@@ -9,7 +9,7 @@
                   Label="@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
                   @bind-Value="@Value"
                   Lines="3"
-                  AutoGrow="true"
+                  Sizing="InputSizing.Auto"
                   Disabled="IsReadonlyField"
                   Validation="@((Func<string?, string?>)Validate)"
                   Immediate="true" />

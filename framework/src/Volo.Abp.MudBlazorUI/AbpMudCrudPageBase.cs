@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Authorization;
@@ -203,6 +204,9 @@ public abstract class AbpMudCrudPageBase<
     protected MudDialog? _createDialog;
     protected MudDialog? _editDialog;
 
+    protected bool IsCreating { get; set; }
+    protected bool IsUpdating { get; set; }
+
     protected virtual DialogOptions CreateDialogOptions => new DialogOptions
     {
         MaxWidth = MaxWidth.Medium,
@@ -329,7 +333,7 @@ public abstract class AbpMudCrudPageBase<
         }
     }
 
-    protected virtual async Task<GridData<TListViewModel>> OnDataGridReadAsync(GridState<TListViewModel> state)
+    protected virtual async Task<GridData<TListViewModel>> OnDataGridReadAsync(GridState<TListViewModel> state, CancellationToken cancellationToken = default)
     {
         CurrentSorting = state.SortDefinitions
             .Select(s => _dataGrid.ResolveSortPropertyName(s) + (s.Descending ? " DESC" : ""))
@@ -452,12 +456,20 @@ public abstract class AbpMudCrudPageBase<
 
     protected virtual async Task CreateEntityAsync()
     {
+        if (IsCreating)
+        {
+            return;
+        }
+
         try
         {
+            IsCreating = true;
+            await InvokeAsync(StateHasChanged);
+
             var isValid = true;
             if (CreateFormRef != null)
             {
-                await CreateFormRef.Validate();
+                await CreateFormRef.ValidateAsync();
                 isValid = CreateFormRef.IsValid;
             }
 
@@ -475,6 +487,11 @@ public abstract class AbpMudCrudPageBase<
         catch (Exception ex)
         {
             await HandleErrorAsync(ex);
+        }
+        finally
+        {
+            IsCreating = false;
+            await InvokeAsync(StateHasChanged);
         }
     }
 
@@ -497,12 +514,20 @@ public abstract class AbpMudCrudPageBase<
 
     protected virtual async Task UpdateEntityAsync()
     {
+        if (IsUpdating)
+        {
+            return;
+        }
+
         try
         {
+            IsUpdating = true;
+            await InvokeAsync(StateHasChanged);
+
             var isValid = true;
             if (EditFormRef != null)
             {
-                await EditFormRef.Validate();
+                await EditFormRef.ValidateAsync();
                 isValid = EditFormRef.IsValid;
             }
 
@@ -520,6 +545,11 @@ public abstract class AbpMudCrudPageBase<
         catch (Exception ex)
         {
             await HandleErrorAsync(ex);
+        }
+        finally
+        {
+            IsUpdating = false;
+            await InvokeAsync(StateHasChanged);
         }
     }
 
@@ -569,7 +599,10 @@ public abstract class AbpMudCrudPageBase<
 
     protected virtual async Task OnDeletedEntityAsync()
     {
-        await _dataGrid.ReloadServerDataAsync();
+        if (_dataGrid != null)
+        {
+            await InvokeAsync(() => _dataGrid.ReloadServerDataAsync());
+        }
         Snackbar.Add(GetDeleteMessage(), Severity.Success);
     }
 
@@ -585,7 +618,7 @@ public abstract class AbpMudCrudPageBase<
 
     protected virtual async Task<bool> ConfirmDeleteAsync(TListViewModel entity)
     {
-        var result = await DialogService.ShowMessageBox(
+        var result = await DialogService.ShowMessageBoxAsync(
             UiLocalizer["AreYouSure"],
             GetDeleteConfirmationMessage(entity),
             yesText: UiLocalizer["Yes"],
