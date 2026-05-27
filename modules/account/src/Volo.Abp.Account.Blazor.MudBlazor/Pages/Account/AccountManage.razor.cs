@@ -59,7 +59,7 @@ public partial class AccountManage
             return;
         }
 
-        await _changePasswordForm.Validate();
+        await _changePasswordForm.ValidateAsync();
         if (!_changePasswordForm.IsValid)
         {
             return;
@@ -100,7 +100,7 @@ public partial class AccountManage
             return;
         }
 
-        await _personalInfoForm.Validate();
+        await _personalInfoForm.ValidateAsync();
         
         if (!_personalInfoForm.IsValid)
         {

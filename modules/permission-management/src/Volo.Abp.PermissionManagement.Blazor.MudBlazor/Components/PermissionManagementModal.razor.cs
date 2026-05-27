@@ -144,7 +144,7 @@ public partial class PermissionManagementModal
 
             if (!updateDto.Permissions.Any(x => x.IsGranted))
             {
-                var confirmed = await DialogService.ShowMessageBox(
+                var confirmed = await DialogService.ShowMessageBoxAsync(
                     L["Warning"],
                     L["SaveWithoutAnyPermissionsWarningMessage"],
                     yesText: L["Yes"],

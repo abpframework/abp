@@ -27,9 +27,9 @@ After getting started, you can read the following documents:
 
 ### UI Framework Options
 
-ABP can work with any UI framework, while the following frameworks are supported and well-integrated out of the box:
+ABP can work with any UI framework, while the following frameworks are supported and well-integrated out of the box. React is available with the modern template system. See the [UI options](./framework/ui/index.md) page for details.
 
-<img width="340" src="images/ui-options.png" alt="ui options">
+<img width="420" src="images/ui-options.png" alt="ABP UI options including React">
 
 ### Database Provider Options
 
@@ -84,7 +84,7 @@ ABP Platform provides tooling to help you in your daily development.
 
 #### ABP CLI
 
-[ABP CLI](cli.md) is a command-line tool to create new solutions and automate the things with your ABP based solutions.
+[ABP CLI](./cli/index.md) is a command-line tool to create new solutions and automate the things with your ABP based solutions.
 
 ### Startup Templates
 

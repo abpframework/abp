@@ -7,6 +7,12 @@
 
 # Package Version Changes
 
+## 10.4.1
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| MudBlazor | 8.0.0 | 9.4.0 | #25393 |
+
 ## 10.4.0-rc.2
 
 | Package | Old Version | New Version | PR |

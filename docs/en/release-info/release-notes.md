@@ -14,9 +14,9 @@ Also see the following notes about ABP releases:
 - [ABP Studio release notes](../studio/release-notes.md)
 - [Change logs for ABP pro packages](https://abp.io/pro-releases)
 
-## 10.4 (2026-04-29)
+## 10.4 (2026-05-14)
 
-ABP v10.4 is currently in the release candidate stage; the stable version has not been released yet. See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-4-release-candidate-7ukyudm0)** for the v10.4 RC release.
+See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-4-stable-release-e0u81o2z)** for the v10.4 release.
 
 - URL-Based Localization
 - Localization File Splitting
@@ -29,7 +29,7 @@ ABP v10.4 is currently in the release candidate stage; the stable version has no
 
 ## 10.3 (2026-04-15)
 
-See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-3-release-candidate-hgnpr9jq)** for the v10.3 release.
+See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-3-stable-release-aryi10am)** for the v10.3 release.
 
 - OpenIddict: `private_key_jwt` Client Authentication + `abp generate-jwks`
 - Event Bus: String-Based Event Publishing with Dynamic Payload
