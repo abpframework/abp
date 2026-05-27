@@ -29,7 +29,7 @@ By using the ABP Suite, you can generate CRUD pages from the database to the fro
 
 ## Blazor UI library
 
-When the target solution uses any Blazor UI framework (Blazor, BlazorServer, BlazorWebApp or MauiBlazor), ABP Suite detects the underlying Blazor component library by scanning the Blazor project `.csproj` for known package references:
+When the target solution uses any Blazor UI framework (Blazor, BlazorServer, BlazorWebApp or MAUIBlazor), ABP Suite detects the underlying Blazor component library by scanning the Blazor project `.csproj` for known package references:
 
 * A reference to `Volo.Abp.MudBlazorUI`, `Volo.Abp.AspNetCore.Components.*.Theming.MudBlazor` or `*.Blazor.MudBlazor*` selects the **MudBlazor** templates.
 * Otherwise ABP Suite falls back to the **Blazorise** templates that have always shipped with Suite.
