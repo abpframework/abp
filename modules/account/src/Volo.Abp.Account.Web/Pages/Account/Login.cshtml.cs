@@ -137,7 +137,9 @@ public class LoginModel : AccountPageModel
                 using (CurrentTenant.Change(notAllowedUser.TenantId))
                 {
                     await IdentityOptions.SetAsync();
-                    if (!await UserManager.CheckPasswordAsync(notAllowedUser, LoginInput.Password))
+                    if ((notAllowedUser.ShouldChangePasswordOnNextLogin ||
+                            await UserManager.ShouldPeriodicallyChangePasswordAsync(notAllowedUser)) &&
+                        !await UserManager.CheckPasswordAsync(notAllowedUser, LoginInput.Password))
                     {
                         Alerts.Danger(L["InvalidUserNameOrPassword"]);
                         return Page();
