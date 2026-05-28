@@ -36,6 +36,8 @@ public partial class SettingManagement
 
     protected int _activeTabIndex = 0;
 
+    protected bool _loading = true;
+
     protected async override Task OnInitializedAsync()
     {
         BreadcrumbItems.Add(new BreadcrumbItem(LUiNavigation["Menu:Administration"].Value,  null, disabled: true));
@@ -55,6 +57,8 @@ public partial class SettingManagement
             SelectedGroup = GetNormalizedString(SettingComponentCreationContext.Groups.First().Id);
             _activeTabIndex = 0;
         }
+
+        _loading = false;
     }
 
     protected virtual string GetNormalizedString(string value)

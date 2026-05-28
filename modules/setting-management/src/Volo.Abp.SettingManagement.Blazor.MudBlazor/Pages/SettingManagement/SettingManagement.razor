@@ -15,13 +15,13 @@
 
 <MudCard Style="min-height: 400px;">
     <MudCardContent Class="pt-3">
-        @if (string.IsNullOrEmpty(SelectedGroup))
+        @if (_loading)
         {
             <div class="d-flex justify-center align-center" style="min-height: 360px;">
                 <MudProgressCircular Indeterminate="true" Color="Color.Primary" />
             </div>
         }
-        else
+        else if (SettingComponentCreationContext != null && SettingComponentCreationContext.Groups.Any())
         {
             <MudTabs @bind-ActivePanelIndex="@_activeTabIndex"
                     Variant="Variant.Pills"

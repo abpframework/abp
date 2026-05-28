@@ -13,6 +13,7 @@
                 <MudTextField Margin="Margin.Dense" Value="@_permissionGroupSearchText"
                              ValueChanged="@(async ([CanBeNull] string b) => await OnPermissionGroupSearchTextChangedAsync(b))"
                              Placeholder="@L["Search"]"
+                             UserAttributes="@(new Dictionary<string, object> { { "aria-label", L["Search"].Value } })"
                              Adornment="Adornment.Start"
                              AdornmentIcon="@Icons.Material.Filled.Search"
                              Immediate="true" />
