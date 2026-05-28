@@ -120,9 +120,9 @@
                         else
                         {
                             <DataGridColumn TItem="TItem" Field="@nameof(IHasExtraProperties.ExtraProperties)" SortField="@column.PropertyName" Width="@BlazoriseFluentSizingParse.Parse(column.Width, SizingType.Width)" Caption="@column.Title" Displayable="column.Visible" Sortable="@column.Sortable">
-                                <DisplayTemplate>
+                                <DisplayTemplate Context="rowContext">
                                     @{
-                                        var entity = context.Item as IHasExtraProperties;
+                                        var entity = rowContext.Item as IHasExtraProperties;
                                         var propertyName = ExtensionPropertiesRegex.Match(column.Data).Groups[1].Value;
                                         var propertyValue = entity?.GetProperty(propertyName);
                                         if (propertyValue != null && propertyValue.GetType() == typeof(bool))
@@ -140,7 +140,7 @@
                                         {
                                             if (column.ValueConverter != null)
                                             {
-                                                @((MarkupString)GetConvertedFieldValue(context.Item, column))
+                                                @((MarkupString)GetConvertedFieldValue(rowContext.Item, column))
                                             }
                                             else
                                             {
