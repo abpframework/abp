@@ -93,6 +93,7 @@ body:
         - Common (Default)
         - MVC
         - Angular
+        - React
         - Blazor
         - Blazor Server
         - React Native
