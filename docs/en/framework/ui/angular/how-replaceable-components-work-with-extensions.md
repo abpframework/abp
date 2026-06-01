@@ -9,6 +9,8 @@
 
 Additional UI extensibility points ([Entity action extensions](../angular/entity-action-extensions.md), [data table column extensions](../angular/data-table-column-extensions.md), [page toolbar extensions](../angular/page-toolbar-extensions.md) and others) are used in ABP pages to allow to control entity actions, table columns and page toolbar of a page. If you replace a page, you need to apply some configurations to be able to work extension components in your component. Let's see how to do this by replacing the roles page.
 
+> **Standalone-first:** The example below uses standalone components with an `imports` array and `inject()`. Current ABP templates follow this pattern. Module-based examples in older docs remain valid for legacy projects — see [ABP Now Supports Angular Standalone Applications](https://abp.io/community/articles/abp-now-supports-angular-standalone-applications-zzi2rr2z).
+
 Create a new component called `MyRolesComponent`:
 
 ```bash

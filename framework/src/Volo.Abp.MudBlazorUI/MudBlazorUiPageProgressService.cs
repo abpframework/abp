@@ -17,32 +17,56 @@ public class MudBlazorUiPageProgressService : IUiPageProgressService, IScopedDep
     protected virtual int HideDelayMs => 250;
 
     private int _activeCount;
-    private UiPageProgressOptions _lastOptions = new();
+    private bool _visible;
+    private UiPageProgressOptions _lastOptions;
     private readonly Timer _hideTimer;
 
     public MudBlazorUiPageProgressService()
     {
-        _hideTimer = new Timer(_ => ProgressChanged?.Invoke(this, new UiPageProgressEventArgs(-1, _lastOptions)));
+        _lastOptions = CreateDefaultOptions();
+        _hideTimer = new Timer(_ =>
+        {
+            _visible = false;
+            ProgressChanged?.Invoke(this, new UiPageProgressEventArgs(-1, _lastOptions));
+        });
     }
 
     public Task Go(int? percentage, Action<UiPageProgressOptions>? options = null)
     {
-        var opt = new UiPageProgressOptions();
+        var opt = CreateDefaultOptions();
         options?.Invoke(opt);
         _lastOptions = opt;
 
-        if (percentage == -1 && Interlocked.Decrement(ref _activeCount) <= 0)
+        if (percentage == -1)
         {
-            Interlocked.Exchange(ref _activeCount, 0);
-            _hideTimer.Change(HideDelayMs, Timeout.Infinite);
+            _activeCount--;
+            if (_activeCount <= 0)
+            {
+                _activeCount = 0;
+                _hideTimer.Change(HideDelayMs, Timeout.Infinite);
+            }
         }
-        else if (percentage == null && Interlocked.Increment(ref _activeCount) == 1)
+        else if (percentage == null)
         {
+            _activeCount++;
             _hideTimer.Change(Timeout.Infinite, Timeout.Infinite);
-            ProgressChanged?.Invoke(this, new UiPageProgressEventArgs(null, opt));
+            if (!_visible)
+            {
+                _visible = true;
+                ProgressChanged?.Invoke(this, new UiPageProgressEventArgs(null, opt));
+            }
+        }
+        else
+        {
+            ProgressChanged?.Invoke(this, new UiPageProgressEventArgs(percentage, opt));
         }
 
         return Task.CompletedTask;
+    }
+
+    protected virtual UiPageProgressOptions CreateDefaultOptions()
+    {
+        return new UiPageProgressOptions();
     }
 
     public void Dispose() => _hideTimer.Dispose();

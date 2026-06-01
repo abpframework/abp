@@ -56,6 +56,8 @@ Users can leave a tenant. After leaving, the user is no longer a member of that 
 
 > When a user leaves and later re-joins the same tenant, the `UserId` does not change and tenant-related data (roles, permissions, etc.) is preserved.
 
+Tenant administrators with the `Identity.Users.Delete` permission can also remove a member from the tenant via the **Remove from tenant** action on the user list. This is a soft removal — the global account stays and the user can be re-invited later, exactly like the self-service Leave.
+
 ## Inviting Users to a Tenant
 
 Tenant administrators can invite existing or not-yet-registered users to join a tenant. The invited user receives an email; clicking the link completes the join process. If the user doesn't have an account yet, they can register and join through the same flow.
@@ -156,9 +158,12 @@ The following operations can only be performed by a host administrator when Shar
 - Enable or disable two-factor authentication
 - Change `LockoutEnabled` or `ShouldChangePasswordOnNextLogin`
 
+> `Delete` here means deleting the **global user account**, not removing a user from a single tenant. Removing a member from one tenant is a tenant-level soft operation and is available to tenant administrators — see **Remove from tenant** below.
+
 ### What tenant admins can do
 
 - Invite users to the tenant (see the Invitation flow above)
+- Remove users from the tenant (soft removal; the global account stays)
 - Manage role and organization-unit assignments within the tenant
 - View audit / security logs scoped to the tenant
 
@@ -172,4 +177,5 @@ If you plan to migrate an existing multi-tenant application from an isolated str
 
 1. **Uniqueness check**: Before enabling Shared, ensure all existing usernames and emails are unique globally. ABP performs this check when you switch the strategy and reports conflicts.
 2. **Tenants with separate databases**: If some tenants use separate databases, you must ensure the Host database contains matching user records in the `AbpUsers` table (and, if you use social login / passkeys, also sync `AbpUserLogins` and `AbpUserPasskeys`) so the Host-side records match the tenant-side data. After that, the framework can create/manage the user-to-tenant associations.
+   - **Important — each host-side shadow row must have a new primary key (`Id`) different from the tenant user's `Id`.** Generate a fresh `Guid` for every shadow row instead of reusing the tenant user's primary key. The framework relies on this to distinguish a separate-database tenant from a shared-database one; reusing the Id can mask "Leave Tenant" and external login / passkey synchronization on legacy data. The other identifying fields (`UserName`, `Email`, `PasswordHash`, `TenantId`, etc.) should still match the tenant-side row.
 

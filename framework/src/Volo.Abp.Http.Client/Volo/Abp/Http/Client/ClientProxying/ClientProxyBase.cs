@@ -50,7 +50,9 @@ public class ClientProxyBase<TService> : ITransientDependency
 
     protected virtual async Task RequestAsync(string methodName, ClientProxyRequestTypeValue? arguments = null)
     {
-        await RequestAsync(BuildHttpProxyClientProxyContext(methodName, arguments));
+        using (await RequestAsync(BuildHttpProxyClientProxyContext(methodName, arguments)))
+        {
+        }
     }
 
     protected virtual async Task<T> RequestAsync<T>(string methodName, ClientProxyRequestTypeValue? arguments = null)
@@ -120,18 +122,21 @@ public class ClientProxyBase<TService> : ITransientDependency
                 responseContent.Headers?.ContentLength);
         }
 
-        var stringContent = await responseContent.ReadAsStringAsync();
-        if (typeof(T) == typeof(string))
+        using (responseContent)
         {
-            return (T)(object)stringContent;
-        }
+            var stringContent = await responseContent.ReadAsStringAsync();
+            if (typeof(T) == typeof(string))
+            {
+                return (T)(object)stringContent;
+            }
 
-        if (stringContent.IsNullOrWhiteSpace())
-        {
-            return default!;
-        }
+            if (stringContent.IsNullOrWhiteSpace())
+            {
+                return default!;
+            }
 
-        return JsonSerializer.Deserialize<T>(stringContent);
+            return JsonSerializer.Deserialize<T>(stringContent);
+        }
     }
 
     protected virtual async Task<HttpContent> RequestAsync(ClientProxyRequestContext requestContext)
@@ -184,7 +189,15 @@ public class ClientProxyBase<TService> : ITransientDependency
 
         if (!response.IsSuccessStatusCode)
         {
-            await ThrowExceptionForResponseAsync(response);
+            try
+            {
+                await ThrowExceptionForResponseAsync(response);
+            }
+            catch
+            {
+                response.Dispose();
+                throw;
+            }
         }
 
         return response.Content;

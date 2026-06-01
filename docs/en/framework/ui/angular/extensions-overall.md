@@ -16,6 +16,8 @@ See the documents below for the details:
 * [Page Toolbar Extension](page-toolbar-extensions.md)
 * [Dynamic Form (or Form Prop) Extensions](dynamic-form-extensions.md)
 
+> **Standalone-first:** Current ABP templates use standalone APIs (`app.config.ts`, `app.routes.ts`, and `createRoutes()`). Extension examples register contributors through route-level lazy loading — `loadChildren` returns routes from `createRoutes({ ... })`, not NgModules. Legacy NgModule projects can pass the same contributor options to `SomeModule.forLazy({ ... })` instead. See [ABP Now Supports Angular Standalone Applications](https://abp.io/community/articles/abp-now-supports-angular-standalone-applications-zzi2rr2z) for the `forLazy()` → `createRoutes()` migration.
+
 ##  Extensible Table Component
 
 Using [ngx-datatable](https://github.com/swimlane/ngx-datatable) in extensible table.
