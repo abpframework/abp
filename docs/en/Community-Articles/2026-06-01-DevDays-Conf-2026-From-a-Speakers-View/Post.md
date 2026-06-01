@@ -10,13 +10,9 @@ DevDays 2026 is a global conference that was held in Vilnius / Lithuania. The of
 
 I talked about my hands-on experiences with an AI-enabled reporting system. It’s a very good way of using AI to get information from your database.
 
-![AI-enabled reporting talk slide](devdays-2026-picture-2.png)
+![Me on the stage 1](me-collage-1.jpg)
 
-### Pictures from my talk
-
-![Me on the stage 1](C:\Users\alper\Desktop\DevDay26 Lithuania Recap\article\me-collage-1.jpg)
-
-![Me on the stage 2](C:\Users\alper\Desktop\DevDay26 Lithuania Recap\article\me-collage-2.jpg)
+![Me on the stage 2](me-collage-2.jpg)
 
 I got a satisfactory score from my talk’s feedback.
 
