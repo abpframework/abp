@@ -1939,6 +1939,10 @@
                   "text": "Overview",
                   "path": "framework/ui/react-native",
                   "isIndex": true
+                },
+                {
+                  "text": "Styling with NativeWind",
+                  "path": "framework/ui/react-native/styling-with-nativewind.md"
                 }
               ]
             },
