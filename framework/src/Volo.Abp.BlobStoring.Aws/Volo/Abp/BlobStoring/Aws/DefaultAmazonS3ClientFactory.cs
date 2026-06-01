@@ -30,6 +30,12 @@ public class DefaultAmazonS3ClientFactory : IAmazonS3ClientFactory, ITransientDe
     public virtual async Task<AmazonS3Client> GetAmazonS3Client(
         AwsBlobProviderConfiguration configuration)
     {
+        if (configuration.Region.IsNullOrWhiteSpace() && configuration.ServiceURL.IsNullOrWhiteSpace())
+        {
+            throw new AbpException(
+                $"Either {nameof(AwsBlobProviderConfiguration.Region)} or {nameof(AwsBlobProviderConfiguration.ServiceURL)} must be configured on {nameof(AwsBlobProviderConfiguration)}.");
+        }
+
         var region = !configuration.Region.IsNullOrWhiteSpace()
             ? RegionEndpoint.GetBySystemName(configuration.Region)
             : null;

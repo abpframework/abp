@@ -57,6 +57,11 @@ public class AwsBlobProviderConfiguration
         set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.Policy, value);
     }
 
+    /// <summary>
+    /// The system name of the AWS region (e.g., <c>us-east-1</c>). Required for real AWS S3.
+    /// Optional when <see cref="ServiceURL"/> is configured for an S3-compatible service;
+    /// some services accept any value (or <c>auto</c> for Cloudflare R2).
+    /// </summary>
     public string? Region {
         get => _containerConfiguration.GetConfigurationOrDefault<string>(AwsBlobProviderConfigurationNames.Region);
         set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.Region, value);
@@ -64,8 +69,8 @@ public class AwsBlobProviderConfiguration
 
     /// <summary>
     /// Custom service URL for S3-compatible APIs (e.g., MinIO, DigitalOcean Spaces, Cloudflare R2).
-    /// If not specified, the default AWS S3 service URL will be used based on the region.
-    /// Note: The AWS SDK automatically appends a trailing slash to the configured value.
+    /// When omitted, <see cref="Region"/> becomes required and the default AWS S3 endpoint for that
+    /// region is used. The AWS SDK automatically appends a trailing slash to the configured value.
     /// </summary>
     public string? ServiceURL {
         get => _containerConfiguration.GetConfigurationOrDefault<string>(AwsBlobProviderConfigurationNames.ServiceURL);
@@ -73,11 +78,12 @@ public class AwsBlobProviderConfiguration
     }
 
     /// <summary>
-    /// When true, payload signing is disabled on PutObject (and similar) requests so the SDK sends
+    /// When true, payload signing is disabled on PutObject upload requests so the SDK sends
     /// <c>x-amz-content-sha256: UNSIGNED-PAYLOAD</c> instead of the streaming chunked signature
     /// (<c>STREAMING-AWS4-HMAC-SHA256-PAYLOAD</c>) that AWS SDK v4 uses by default. Required for
     /// Cloudflare R2 and other S3-compatible services that do not implement streaming signing.
-    /// Default: false (keep AWS SDK defaults for real AWS S3).
+    /// The endpoint must be HTTPS when this option is enabled (AWS SDK rejects unsigned payloads
+    /// over HTTP). Default: false (keep AWS SDK defaults for real AWS S3 and MinIO).
     /// </summary>
     public bool DisablePayloadSigning {
         get => _containerConfiguration.GetConfigurationOrDefault(AwsBlobProviderConfigurationNames.DisablePayloadSigning, false);

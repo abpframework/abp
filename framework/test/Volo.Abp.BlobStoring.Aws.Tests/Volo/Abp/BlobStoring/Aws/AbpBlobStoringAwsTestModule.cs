@@ -56,6 +56,15 @@ public class AbpBlobStoringAwsTestModule : AbpModule
         var configuration = context.Services.GetConfiguration();
         var accessKeyId = configuration["Aws:AccessKeyId"];
         var secretAccessKey = configuration["Aws:SecretAccessKey"];
+
+        // No credentials configured (e.g., CI without user secrets) → skip container wiring.
+        // `BlobContainerConfiguration.SetConfiguration` rejects nulls, so any attempt to resolve
+        // a container with null values from configuration would throw at runtime.
+        if (string.IsNullOrEmpty(accessKeyId) || string.IsNullOrEmpty(secretAccessKey))
+        {
+            return;
+        }
+
         var region = configuration["Aws:Region"];
         var serviceUrl = configuration["Aws:ServiceURL"];
         var disablePayloadSigning = bool.TryParse(configuration["Aws:DisablePayloadSigning"], out var dps) && dps;
@@ -109,7 +118,7 @@ public class AbpBlobStoringAwsTestModule : AbpModule
 
         try
         {
-            var amazonS3Client = await context.ServiceProvider.GetRequiredService<IAmazonS3ClientFactory>()
+            using var amazonS3Client = await context.ServiceProvider.GetRequiredService<IAmazonS3ClientFactory>()
                 .GetAmazonS3Client(_configuration);
 
             if (!await AmazonS3Util.DoesS3BucketExistV2Async(amazonS3Client, _actualContainerName))

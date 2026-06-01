@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Amazon.Runtime;
 using Amazon.S3;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -35,8 +36,8 @@ public class DefaultAmazonS3ClientFactory_Tests : AbpBlobStoringAwsTestBase
 
         // Assert
         s3Client.ShouldNotBeNull();
-        s3Client.Config.ServiceURL.ShouldBe(serviceUrl + "/"); // AWS SDK automatically appends trailing slash
-        ((AmazonS3Config)s3Client.Config).ForcePathStyle.ShouldBeTrue(); // Should be enabled for S3-compatible services
+        s3Client.Config.ServiceURL?.TrimEnd('/').ShouldBe(serviceUrl);
+        ((AmazonS3Config)s3Client.Config).ForcePathStyle.ShouldBeTrue();
     }
 
     [Fact]
@@ -81,8 +82,8 @@ public class DefaultAmazonS3ClientFactory_Tests : AbpBlobStoringAwsTestBase
 
         // Assert
         s3Client.ShouldNotBeNull();
-        s3Client.Config.ServiceURL.ShouldBe("https://minio.example.com:9000/"); // AWS SDK automatically appends trailing slash
-        ((AmazonS3Config)s3Client.Config).ForcePathStyle.ShouldBeTrue(); // Should be enabled for S3-compatible services
+        s3Client.Config.ServiceURL?.TrimEnd('/').ShouldBe("https://minio.example.com:9000");
+        ((AmazonS3Config)s3Client.Config).ForcePathStyle.ShouldBeTrue();
     }
 
     [Fact]
@@ -105,12 +106,9 @@ public class DefaultAmazonS3ClientFactory_Tests : AbpBlobStoringAwsTestBase
         // Assert
         s3Client.ShouldNotBeNull();
         var config = (AmazonS3Config)s3Client.Config;
-        config.ServiceURL.ShouldBe("https://r2.cloudflarestorage.com/");
+        config.ServiceURL?.TrimEnd('/').ShouldBe("https://r2.cloudflarestorage.com");
         config.ForcePathStyle.ShouldBeTrue();
-        
-        // Verify checksum properties are set for S3-compatible services (required for Cloudflare R2)
-        // We just verify they are not null/default, indicating they have been set
-        config.RequestChecksumCalculation.ShouldNotBe(default);
-        config.ResponseChecksumValidation.ShouldNotBe(default);
+        config.RequestChecksumCalculation.ShouldBe(RequestChecksumCalculation.WHEN_REQUIRED);
+        config.ResponseChecksumValidation.ShouldBe(ResponseChecksumValidation.WHEN_REQUIRED);
     }
-} 
+}

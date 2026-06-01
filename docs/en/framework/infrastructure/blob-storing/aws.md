@@ -65,7 +65,7 @@ Configure<AbpBlobStoringOptions>(options =>
 * **UseTemporaryFederatedCredentials** (bool): Use [federated user temporary credentials](https://docs.aws.amazon.com/AmazonS3/latest/dev/AuthUsingTempFederationToken.html) to access AWS services, default : `false`.
 * **ProfileName** (string): The [name of the profile](https://docs.aws.amazon.com/sdk-for-net/v3/developer-guide/net-dg-config-creds.html) to get credentials from.
 * **ProfilesLocation** (string): The path to the aws credentials file to look at.
-* **Region** (string): The system name of the service.
+* **Region** (string): The system name of the AWS region (e.g., `us-east-1`). **Required** for real AWS S3. Optional when `ServiceURL` is configured for an S3-compatible service; some services accept any value (or `auto` for Cloudflare R2).
 * **ServiceURL** (string): Custom service URL for S3-compatible APIs (e.g., MinIO, DigitalOcean Spaces, Cloudflare R2). If not specified, the default AWS S3 service URL will be used based on the region. When using S3-compatible services, this should point to your service endpoint (e.g., `https://minio.example.com:9000`). The AWS SDK automatically appends a trailing slash to the configured value.
 * **DisablePayloadSigning** (bool): Default `false`. When set to `true`, the provider sends `x-amz-content-sha256: UNSIGNED-PAYLOAD` on `PutObject` requests instead of the streaming chunked signature (`STREAMING-AWS4-HMAC-SHA256-PAYLOAD`) that the AWS SDK v4 uses by default. Required for Cloudflare R2 and other S3-compatible services that do not implement streaming signing. The endpoint must be HTTPS when this option is enabled. Leave as `false` for real AWS S3.
 * **Policy** (string): An IAM policy in JSON format that you want to use as an inline session policy.
