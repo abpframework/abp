@@ -30,10 +30,10 @@ The React UI template is built with:
 
 The template also includes ABP-specific NPM packages:
 
-- [`@volo/abp-app-config`](https://github.com/volosoft/volo/tree/dev/abp/npm/packs/abp-app-config)
-- [`@volo/abp-oidc-auth`](https://github.com/volosoft/volo/tree/dev/abp/npm/packs/abp-oidc-auth)
-- [`@volo/abp-react-app-config`](https://github.com/volosoft/volo/tree/dev/abp/npm/packs/abp-react-app-config)
-- [`@volo/abp-react-oidc-auth`](https://github.com/volosoft/volo/tree/dev/abp/npm/packs/abp-react-oidc-auth)
+- [`@volo/abp-app-config`](https://www.npmjs.com/package/@volo/abp-app-config)
+- [`@volo/abp-oidc-auth`](https://www.npmjs.com/package/@volo/abp-oidc-auth)
+- [`@volo/abp-react-app-config`](https://www.npmjs.com/package/@volo/abp-react-app-config)
+- [`@volo/abp-react-oidc-auth`](https://www.npmjs.com/package/@volo/abp-react-oidc-auth)
 
 ## React App and Admin Console
 
