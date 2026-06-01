@@ -35,8 +35,13 @@ foreach($project in $projects) {
 		if ($maxPushesPerHour -gt 0)
 		{
 			$windowStart = (Get-Date).AddHours(-1)
-			$recentPushes = $pushTimestamps | Where-Object { $_ -gt $windowStart }
-			$pushTimestamps = [System.Collections.Generic.List[datetime]]$recentPushes
+			$recentPushes = @($pushTimestamps | Where-Object { $_ -gt $windowStart })
+			$trimmedPushTimestamps = [System.Collections.Generic.List[datetime]]::new()
+			foreach ($timestamp in $recentPushes)
+			{
+				[void]$trimmedPushTimestamps.Add($timestamp)
+			}
+			$pushTimestamps = $trimmedPushTimestamps
 
 			if ($pushTimestamps.Count -ge $maxPushesPerHour)
 			{
