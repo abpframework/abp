@@ -3,7 +3,7 @@
   <Import Project="..\..\..\common.test.props" />
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <AssemblyName>Volo.Abp.Authorization.Tests</AssemblyName>
     <PackageId>Volo.Abp.Authorization.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.ExceptionHandling\Volo.Abp.ExceptionHandling.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Abp.Features\Volo.Abp.Features.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.Authorization\Volo.Abp.Authorization.csproj" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />

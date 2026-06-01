@@ -1,27 +1,41 @@
-import { noop } from '@abp/ng.core';
+import { DOCUMENT, Injector, PLATFORM_ID } from '@angular/core';
+import { APP_STARTED_WITH_SSR, noop } from '@abp/ng.core';
 import { Params } from '@angular/router';
 import { filter, from, of, take, tap } from 'rxjs';
 import { AuthFlowStrategy } from './auth-flow-strategy';
 import { isTokenExpired } from '../utils';
+import { isPlatformBrowser } from '@angular/common';
 
 export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   readonly isInternalAuth = false;
+  private platformId: object;
+  protected appStartedWithSSR: boolean;
+  protected document: Document;
+
+  constructor(protected injector: Injector) {
+    super(injector);
+    this.platformId = injector.get(PLATFORM_ID);
+    this.appStartedWithSSR = injector.get(APP_STARTED_WITH_SSR);
+    this.document = injector.get(DOCUMENT);
+  }
 
   async init() {
     this.checkRememberMeOption();
     this.listenToTokenReceived();
-
-    return super
-      .init()
-      .then(() => this.oAuthService.tryLogin().catch(noop))
-      .then(() => this.oAuthService.setupAutomaticSilentRefresh());
+    if (!this.appStartedWithSSR && isPlatformBrowser(this.platformId)) {
+      return super
+        .init()
+        .then(() => this.oAuthService.tryLogin().catch(noop))
+        .then(() => {
+          this.oAuthService.setupAutomaticSilentRefresh();
+        });
+    }
   }
 
   private checkRememberMeOption() {
     const accessToken = this.oAuthService.getAccessToken();
     const isTokenExpire = isTokenExpired(this.oAuthService.getAccessTokenExpiration());
     let rememberMe = this.rememberMeService.get();
-
     if (accessToken && !rememberMe) {
       const rememberMeValue = this.rememberMeService.getFromToken(accessToken);
 
@@ -42,64 +56,90 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
   }
 
   protected setUICulture() {
-    const urlParams = new URLSearchParams(window.location.search);
-    this.configState.uiCultureFromAuthCodeFlow = urlParams.get('ui-culture');
+    if (isPlatformBrowser(this.platformId)) {
+      const urlParams = new URLSearchParams(window.location.search);
+      this.configState.uiCultureFromAuthCodeFlow = urlParams.get('ui-culture');
+    }
   }
 
   protected replaceURLParams() {
-    const location = this.windowService.window.location;
-    const history = this.windowService.window.history;
+    if (isPlatformBrowser(this.platformId)) {
+      const location = this.windowService.window.location;
+      const history = this.windowService.window.history;
 
-    const query = location.search
-      .replace(/([?&])iss=[^&]*&?/, '$1')
-      .replace(/([?&])culture=[^&]*&?/, '$1')
-      .replace(/([?&])ui-culture=[^&]*&?/, '$1')
-      .replace(/[?&]+$/, '');
+      const query = location.search
+        .replace(/([?&])iss=[^&]*&?/, '$1')
+        .replace(/([?&])culture=[^&]*&?/, '$1')
+        .replace(/([?&])ui-culture=[^&]*&?/, '$1')
+        .replace(/[?&]+$/, '');
 
-    const href = location.origin + location.pathname + query + location.hash;
+      const href = location.origin + location.pathname + query + location.hash;
 
-    history.replaceState(null, '', href);
+      history.replaceState(null, '', href);
+    }
   }
 
   protected listenToTokenReceived() {
-    this.oAuthService.events
-      .pipe(
-        filter(event => event.type === 'token_received'),
-        tap(() => {
-          this.setUICulture();
-          this.replaceURLParams();
-        }),
-        take(1),
-      )
-      .subscribe();
+    if (isPlatformBrowser(this.platformId) && !this.appStartedWithSSR) {
+      this.oAuthService.events
+        .pipe(
+          filter(event => event.type === 'token_received'),
+          tap(() => {
+            //TODO: Investigate how to handle with ssr
+            this.setUICulture();
+            this.replaceURLParams();
+          }),
+          take(1),
+        )
+        .subscribe();
+    }
   }
 
   navigateToLogin(queryParams?: Params) {
-    let additionalState = '';
-    if (queryParams?.returnUrl) {
-      additionalState = queryParams.returnUrl;
-    }
+    if (isPlatformBrowser(this.platformId)) {
+      if (this.appStartedWithSSR) {
+        if (this.document.defaultView) {
+          this.document.defaultView.location.replace('/authorize');
+        }
+      } else {
+        let additionalState = '';
+        if (queryParams?.returnUrl) {
+          additionalState = queryParams.returnUrl;
+        }
 
-    const cultureParams = this.getCultureParams(queryParams);
-    this.oAuthService.initCodeFlow(additionalState, cultureParams);
+        const cultureParams = this.getCultureParams(queryParams);
+        this.oAuthService.initCodeFlow(additionalState, cultureParams);
+      }
+    }
   }
 
   checkIfInternalAuth(queryParams?: Params) {
-    this.oAuthService.initCodeFlow('', this.getCultureParams(queryParams));
-    return false;
+    if (isPlatformBrowser(this.platformId)) {
+      this.oAuthService.initCodeFlow('', this.getCultureParams(queryParams));
+      return false;
+    }
   }
 
   logout(queryParams?: Params) {
     this.rememberMeService.remove();
-    if (queryParams?.noRedirectToLogoutUrl) {
-      this.router.navigate(['/']);
-      return from(this.oAuthService.revokeTokenAndLogout(true));
+
+    if (this.appStartedWithSSR) {
+      if (this.document.defaultView) {
+        this.document.defaultView.location.replace('/logout');
+      }
+    } else {
+      if (queryParams?.noRedirectToLogoutUrl) {
+        this.router.navigate(['/']);
+        return from(this.oAuthService.revokeTokenAndLogout(true));
+      }
+      return from(this.oAuthService.revokeTokenAndLogout(this.getCultureParams(queryParams)));
     }
-    return from(this.oAuthService.revokeTokenAndLogout(this.getCultureParams(queryParams)));
   }
 
   login(queryParams?: Params) {
-    this.oAuthService.initCodeFlow('', this.getCultureParams(queryParams));
-    return of(null);
+    if (isPlatformBrowser(this.platformId)) {
+      this.oAuthService.initCodeFlow('', this.getCultureParams(queryParams));
+      return of(null);
+    }
   }
 }

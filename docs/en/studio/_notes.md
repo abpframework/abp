@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the ABP Framework documentation for a comprehensive guide on creating layered web applications with customizable options and configurations."
+}
+```
+
 * Document Notes
   * Quick Start: Creating a Layered Web Application
     * **Disable the DEMO PLUGIN and re-take all screenshots**. Also, wait for the followings done:

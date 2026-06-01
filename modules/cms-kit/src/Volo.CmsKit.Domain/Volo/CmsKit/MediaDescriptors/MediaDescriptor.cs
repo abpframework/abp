@@ -7,15 +7,15 @@ namespace Volo.CmsKit.MediaDescriptors;
 
 public class MediaDescriptor : FullAuditedAggregateRoot<Guid>, IMultiTenant
 {
-    public Guid? TenantId { get; protected set; }
+    public virtual Guid? TenantId { get; protected set; }
 
-    public string EntityType { get; protected set; }
+    public virtual string EntityType { get; protected set; }
 
-    public string Name { get; protected set; }
+    public virtual string Name { get; protected set; }
 
-    public string MimeType { get; protected set; }
+    public virtual string MimeType { get; protected set; }
 
-    public long Size { get; protected set; }
+    public virtual long Size { get; protected set; }
 
     protected MediaDescriptor()
     {

@@ -29,7 +29,7 @@ public class MongoApiResourceRepository : MongoDbRepository<IAbpIdentityServerMo
         CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync(cancellationToken))
-            .Where(ar => apiResourceNames.Contains(ar.Name))
+            .Where(ar => apiResourceNames.AsEnumerable().Contains(ar.Name))
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -37,7 +37,7 @@ public class MongoApiResourceRepository : MongoDbRepository<IAbpIdentityServerMo
         CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync(cancellationToken))
-            .Where(ar => ar.Scopes.Any(x => scopeNames.Contains(x.Scope)))
+            .Where(ar => ar.Scopes.Any(x => scopeNames.AsEnumerable().Contains(x.Scope)))
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 

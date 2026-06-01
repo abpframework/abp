@@ -2,6 +2,6 @@
   "culture": "zh-Hant",
   "texts": {
     "Permission:DocumentManagement.Common": "通用文件管理",
-    "Permission:PdfGeneration": "PDF生成"
+    "Permission:PdfDownload": "PDF下載"
   }
 }

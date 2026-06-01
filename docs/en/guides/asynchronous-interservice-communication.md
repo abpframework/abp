@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement asynchronous communication between microservices using event-based methods to improve decoupling and data consistency."
+}
+```
+
 # Asynchronous Communication between Microservices
 
 > This documentation introduces guidance for event based communication between microservices. 

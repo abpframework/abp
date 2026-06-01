@@ -20,6 +20,7 @@ export interface PropertyDef {
   type: string;
   typeSimple: string;
   isRequired: boolean;
+  isNullable: boolean;
 }
 
 export interface Module {

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to create many-to-many relationships in ABP Suite using navigation collections for efficient CRUD page management."
+}
+```
+
 # Creating Many-To-Many Relationship
 
 ````json
@@ -67,5 +74,7 @@ Click the **Navigations** tab. Then click the **Add navigation collection** butt
 ##### Final look
 
 The below image is the final page created by ABP Suite. The **new book** dialog has a **Categories** tab which lists all categories of the book and allows add/remove categories.
+
+> **Note:** ABP Suite does not generate React UI for this page. The generated UI applies to Suite-supported UI stacks such as MVC, Blazor and Angular. ABP license holders can use [ABP Studio AI Agent](https://abp.io/studio/ai-agent) with predefined AI credits to generate React pages more easily.
 
 ![navigation-collection-books-page](../images/navigation-collection-books-page.8.1.png)

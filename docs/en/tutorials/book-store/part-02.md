@@ -1,9 +1,17 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore Part 2 of our Web Application Development Tutorial, focusing on the Book List Page and leveraging dynamic JavaScript proxies in ABP Framework."
+}
+```
+
 # Web Application Development Tutorial - Part 2: The Book List Page
 ````json
 //[doc-params]
 {
     "UI": ["MVC","Blazor","BlazorServer", "BlazorWebApp", "NG", "MAUIBlazor"],
-    "DB": ["EF","Mongo"]
+    "DB": ["EF","Mongo"],
+    "BlazorUI": ["Blazorise", "MudBlazor"]
 }
 ````
 ````json
@@ -308,7 +316,7 @@ This is a fully working, server side paged, sorted and localized table of books.
 
 ## Install NPM packages
 
-> Notice: This tutorial is based on the ABP v3.1.0+ If your project version is older, then please upgrade your solution. Check the [migration guide](../../framework/ui/angular/migration-guide-v3.md) if you are upgrading an existing project with v2.x.
+> Notice: This tutorial is based on the ABP v9.3.0+ If your project version is older, then please upgrade your solution. Check the [migration guide](../../framework/ui/angular/migration-guide-v3.md) if you are upgrading an existing project with v2.x.
 
 If you haven't done it before, open a new command line interface (terminal window) and go to your `angular` folder and then run the `yarn` command to install the NPM packages:
 
@@ -323,69 +331,42 @@ It's time to create something visible and usable! There are some tools that we w
 - [Ng Bootstrap](https://ng-bootstrap.github.io/#/home) will be used as the UI component library.
 - [Ngx-Datatable](https://swimlane.gitbook.io/ngx-datatable/) will be used as the datatable library.
 
-Run the following command line to create a new module, named `BookModule` in the root folder of the angular application:
+Run the following command line to create a new component, named `BookComponent` in the root folder of the angular application:
 
 ```bash
-yarn ng generate module book --module app --routing --route books
+yarn ng generate component book
 ```
 
 This command should produce the following output:
 
 ````bash
-> yarn ng generate module book --module app --routing --route books
+> yarn ng generate component book
 
-yarn run v1.19.1
-$ ng generate module book --module app --routing --route books
-CREATE src/app/book/book-routing.module.ts (336 bytes)
-CREATE src/app/book/book.module.ts (335 bytes)
-CREATE src/app/book/book.component.html (19 bytes)
-CREATE src/app/book/book.component.spec.ts (614 bytes)
-CREATE src/app/book/book.component.ts (268 bytes)
+yarn run v1.22.22
+$ ng generate component book
+CREATE src/app/book/book.component.spec.ts (537 bytes)
+CREATE src/app/book/book.component.ts (189 bytes)
 CREATE src/app/book/book.component.scss (0 bytes)
-UPDATE src/app/app-routing.module.ts (1289 bytes)
+CREATE src/app/book/book.component.html (20 bytes)
 Done in 3.88s.
 ````
 
-### BookModule
-
-Open the `/src/app/book/book.module.ts` and replace the content as shown below:
-
-````js
-import { NgModule } from '@angular/core';
-import { SharedModule } from '../shared/shared.module';
-import { BookRoutingModule } from './book-routing.module';
-import { BookComponent } from './book.component';
-
-@NgModule({
-  declarations: [BookComponent],
-  imports: [
-    BookRoutingModule,
-    SharedModule
-  ]
-})
-export class BookModule { }
-
-````
-
-* Added the `SharedModule`. `SharedModule` exports some common modules needed to create user interfaces.
-* `SharedModule` already exports the `CommonModule`, so we've removed the `CommonModule`.
-
 ### Routing
 
-The generated code places the new route definition to the `src/app/app-routing.module.ts` file as shown below:
+The generated code places the new route definition to the `src/app/app.routes.ts` file as shown below:
 
 ````js
-const routes: Routes = [
+export const routes: Routes = [
   // other route definitions...
-  { path: 'books', loadChildren: () => import('./book/book.module').then(m => m.BookModule) },
+  { path : 'books', loadComponent: () => import('./book/book.component').then(c => c.BookComponent) },
 ];
 ````
 
 Now, open the `src/app/route.provider.ts` file and replace the `configureRoutes` function declaration as shown below:
 
 ```js
-function configureRoutes(routes: RoutesService) {
-  return () => {
+function configureRoutes() {
+    const routes = inject(RoutesService);
     routes.add([
       {
         path: '/',
@@ -409,7 +390,6 @@ function configureRoutes(routes: RoutesService) {
       },
     ]);
   };
-}
 ```
 
 `RoutesService` is a service provided by the ABP to configure the main menu and the routes.
@@ -446,7 +426,7 @@ Open the `/src/app/book/book.component.ts` file and replace the content as below
 
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { BookService, BookDto } from '@proxy/books';
 
 @Component({
@@ -458,7 +438,8 @@ import { BookService, BookDto } from '@proxy/books';
 export class BookComponent implements OnInit {
   book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
 
-  constructor(public readonly list: ListService, private bookService: BookService) {}
+  public readonly list = inject(ListService);
+  private readonly bookService = inject(BookService);
 
   ngOnInit() {
     const bookStreamCreator = (query) => this.bookService.getList(query);
@@ -489,7 +470,7 @@ Open the `/src/app/book/book.component.html` and replace the content as shown be
   </div>
   <div class="card-body">
     <ngx-datatable [rows]="book.items" [count]="book.totalCount" [list]="list" default>
-      <ngx-datatable-column [name]="'::Name' | abpLocalization" prop="name"></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::Name' | abpLocalization" prop="name" />
       <ngx-datatable-column [name]="'::Type' | abpLocalization" prop="type">
         <ng-template let-row="row" ngx-datatable-cell-template>
           {%{{{ '::Enum:BookType.' + row.type | abpLocalization }}}%}
@@ -514,7 +495,7 @@ Now you can see the final result on your browser:
 
 ![Book list final result](images/bookstore-book-list-angular.png)
 
-{{else if UI == "Blazor" || UI == "BlazorServer" || UI == "BlazorWebApp"}}
+{{else if UI == "Blazor" || UI == "BlazorServer" || UI == "BlazorWebApp" || UI == "MAUIBlazor"}}
 
 ## Create a Books Page
 
@@ -568,6 +549,8 @@ Run the project, login to the application with the username `admin` and the pass
 When you click on the Books menu item under the Book Store parent, you will be redirected to the new empty Books Page.
 
 ### Book List
+
+{{if BlazorUI == "Blazorise"}}
 
 We will use the [Blazorise library](https://blazorise.com/) as the UI component kit. It is a very powerful library that supports major HTML/CSS frameworks, including Bootstrap.
 
@@ -643,6 +626,81 @@ Open the `Books.razor` and replace the content as the following:
 * `LocalizationResource` is set to the `BookStoreResource` to localize the texts.
 
 While the code above is pretty easy to understand, you can check the Blazorise [Card](https://blazorise.com/docs/components/card/) and [DataGrid](https://blazorise.com/docs/extensions/datagrid/) documents to understand them better.
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+We will use the [MudBlazor library](https://mudblazor.com/) as the UI component kit. It is a Material Design component library built natively for Blazor.
+
+ABP provides a generic base class — `AbpMudCrudPageBase<...>`, to create CRUD style pages. This base class is compatible with the `ICrudAppService` that was used to build the `IBookAppService`. So, we can inherit from the `AbpMudCrudPageBase` to automate the code behind for the standard CRUD stuff.
+
+Open the `Books.razor` and replace the content as the following:
+
+````razor
+@page "/books"
+@using Volo.Abp.Application.Dtos
+@using Acme.BookStore.Books
+@using Acme.BookStore.Localization
+@inherits AbpMudCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>
+
+<MudCard>
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h4">@L["Books"]</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudDataGrid T="BookDto"
+                     ServerData="OnDataGridReadAsync"
+                     RowsPerPage="@PageSize">
+            <Columns>
+                <PropertyColumn Property="x => x.Name"
+                                Title="@L["Name"]" />
+                <PropertyColumn Property="x => x.Type"
+                                Title="@L["Type"]">
+                    <CellTemplate>
+                        @L[$"Enum:BookType.{(int)context.Item.Type}"]
+                    </CellTemplate>
+                </PropertyColumn>
+                <PropertyColumn Property="x => x.PublishDate"
+                                Title="@L["PublishDate"]">
+                    <CellTemplate>
+                        @context.Item.PublishDate.ToShortDateString()
+                    </CellTemplate>
+                </PropertyColumn>
+                <PropertyColumn Property="x => x.Price"
+                                Title="@L["Price"]" />
+                <PropertyColumn Property="x => x.CreationTime"
+                                Title="@L["CreationTime"]">
+                    <CellTemplate>
+                        @context.Item.CreationTime.ToLongDateString()
+                    </CellTemplate>
+                </PropertyColumn>
+            </Columns>
+        </MudDataGrid>
+    </MudCardContent>
+</MudCard>
+
+@code
+{
+    public Books() // Constructor
+    {
+        LocalizationResource = typeof(BookStoreResource);
+    }
+}
+````
+
+> If you see some syntax errors, you can ignore them if your application is properly built and running. Visual Studio still has some bugs with Blazor.
+
+* Inherited from `AbpMudCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>` which implements all the CRUD details for us.
+* `Entities`, `TotalCount`, `PageSize`, `OnDataGridReadAsync` are defined in the base class.
+* `LocalizationResource` is set to the `BookStoreResource` to localize the texts.
+* This page uses the standard MudBlazor `MudDataGrid` with `<PropertyColumn>` definitions. ABP also ships an `AbpMudExtensibleDataGrid` that integrates with the [data table column extension system](../../framework/ui/blazor/data-table-column-extensions.md) when you need to extend module pages.
+
+While the code above is pretty easy to understand, you can check the MudBlazor [Card](https://mudblazor.com/components/card) and [DataGrid](https://mudblazor.com/components/datagrid) documents to understand them better.
+
+{{end}}
 
 #### About the AbpCrudPageBase
 

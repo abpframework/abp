@@ -1,17 +1,19 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MyProjectNameComponent } from './components/my-project-name.component';
 import { MyProjectNameService } from '@my-company-name/my-project-name';
 import { of } from 'rxjs';
+import { vi } from 'vitest';
 
 describe('MyProjectNameComponent', () => {
   let component: MyProjectNameComponent;
   let fixture: ComponentFixture<MyProjectNameComponent>;
-  const mockMyProjectNameService = jasmine.createSpyObj('MyProjectNameService', {
-    sample: of([]),
-  });
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [MyProjectNameComponent],
+  const mockMyProjectNameService = {
+    sample: vi.fn().mockReturnValue(of([])),
+  };
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [MyProjectNameComponent],
       providers: [
         {
           provide: MyProjectNameService,
@@ -19,7 +21,7 @@ describe('MyProjectNameComponent', () => {
         },
       ],
     }).compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MyProjectNameComponent);

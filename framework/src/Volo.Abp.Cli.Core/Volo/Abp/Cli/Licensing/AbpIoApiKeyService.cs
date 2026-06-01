@@ -51,7 +51,7 @@ public class AbpIoApiKeyService : IApiKeyService, ITransientDependency
             return _apiKeyResult;
         }
 
-        var url = $"{CliUrls.WwwAbpIo}api/license/api-key";
+        var url = $"{CliUrls.AccountAbpIo}api/license/api-key";
         var client = _cliHttpClientFactory.CreateClient();
 
         using (var response = await client.GetHttpResponseMessageWithRetryAsync(url, CancellationTokenProvider.Token, _logger))

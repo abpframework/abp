@@ -1,15 +1,18 @@
 {
   "name": "@abp/ng.setting-management",
-  "version": "9.2.0-rc.3",
+  "version": "10.4.0",
   "homepage": "https://abp.io",
   "repository": {
     "type": "git",
     "url": "https://github.com/abpframework/abp.git"
   },
   "dependencies": {
-    "@abp/ng.components": "~9.2.0-rc.3",
-    "@abp/ng.theme.shared": "~9.2.0-rc.3",
+    "@abp/ng.components": "~10.4.0",
+    "@abp/ng.theme.shared": "~10.4.0",
     "tslib": "^2.0.0"
+  },
+  "peerDependencies": {
+    "@angular/aria": "~21.2.0"
   },
   "publishConfig": {
     "access": "public"

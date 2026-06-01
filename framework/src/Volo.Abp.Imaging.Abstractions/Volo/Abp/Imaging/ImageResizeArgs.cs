@@ -4,9 +4,9 @@ namespace Volo.Abp.Imaging;
 
 public class ImageResizeArgs
 {
-    private int _width;
-    public int Width 
-    { 
+    private uint _width;
+    public uint Width
+    {
         get => _width;
         set
         {
@@ -14,14 +14,14 @@ public class ImageResizeArgs
             {
                 throw new ArgumentException("Width cannot be negative!", nameof(value));
             }
-            
+
             _width = value;
         }
     }
-    
-    private int _height;
-    public int Height 
-    { 
+
+    private uint _height;
+    public uint Height
+    {
         get => _height;
         set
         {
@@ -29,14 +29,14 @@ public class ImageResizeArgs
             {
                 throw new ArgumentException("Height cannot be negative!", nameof(value));
             }
-            
+
             _height = value;
         }
     }
-    
+
     public ImageResizeMode Mode { get; set; } = ImageResizeMode.Default;
 
-    public ImageResizeArgs(int? width = null, int? height = null, ImageResizeMode? mode = null)
+    public ImageResizeArgs(uint? width = null, uint? height = null, ImageResizeMode? mode = null)
     {
         if (mode.HasValue)
         {

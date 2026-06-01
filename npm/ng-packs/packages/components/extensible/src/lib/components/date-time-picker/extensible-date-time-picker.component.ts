@@ -3,12 +3,11 @@ import {
   ChangeDetectorRef,
   Component,
   inject,
-  Input,
+  input,
   Optional,
   SkipSelf,
-  ViewChild,
+  viewChild
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ControlContainer, ReactiveFormsModule } from '@angular/forms';
 import {
   NgbDateAdapter,
@@ -17,6 +16,7 @@ import {
   NgbTimeAdapter,
   NgbTimepicker,
   NgbTimepickerModule,
+  Placement,
 } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { DateTimeAdapter } from '@abp/ng.theme.shared';
@@ -26,7 +26,6 @@ import { selfFactory } from '../../utils/factory.util';
 @Component({
   exportAs: 'abpExtensibleDateTimePicker',
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     NgbDatepickerModule,
     NgbTimepickerModule,
@@ -35,8 +34,8 @@ import { selfFactory } from '../../utils/factory.util';
   selector: 'abp-extensible-date-time-picker',
   template: `
     <input
-      [id]="prop.id"
-      [formControlName]="prop.name"
+      [id]="prop().id"
+      [formControlName]="prop().name"
       (ngModelChange)="setTime($event)"
       (click)="datepicker.open()"
       (keyup.space)="datepicker.open()"
@@ -44,13 +43,14 @@ import { selfFactory } from '../../utils/factory.util';
       #datepicker="ngbDatepicker"
       type="text"
       class="form-control"
+      [placement]="placement()"
     />
     <ngb-timepicker
       #timepicker
-      [formControlName]="prop.name"
+      [formControlName]="prop().name"
       (ngModelChange)="setDate($event)"
-      [meridian]="meridian"
-    ></ngb-timepicker>
+      [meridian]="meridian()"
+    />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [
@@ -72,17 +72,18 @@ import { selfFactory } from '../../utils/factory.util';
 export class ExtensibleDateTimePickerComponent {
   public readonly cdRef = inject(ChangeDetectorRef);
 
-  @Input() prop!: FormProp;
-  @Input() meridian = false;
+  prop = input<FormProp>();
+  meridian = input<boolean>(false);
+  placement = input<Placement>('bottom-left');
 
-  @ViewChild(NgbInputDatepicker) date!: NgbInputDatepicker;
-  @ViewChild(NgbTimepicker) time!: NgbTimepicker;
+  readonly date = viewChild.required(NgbInputDatepicker);
+  readonly time = viewChild.required(NgbTimepicker);
 
   setDate(dateStr: string) {
-    this.date.writeValue(dateStr);
+    this.date().writeValue(dateStr);
   }
 
   setTime(dateStr: string) {
-    this.time.writeValue(dateStr);
+    this.time().writeValue(dateStr);
   }
 }

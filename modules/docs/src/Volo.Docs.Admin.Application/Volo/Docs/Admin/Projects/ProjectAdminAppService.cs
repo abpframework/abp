@@ -181,25 +181,5 @@ namespace Volo.Docs.Admin.Projects
             var projects = await _projectRepository.GetListWithoutDetailsAsync();
             return ObjectMapper.Map<List<ProjectWithoutDetails>, List<ProjectWithoutDetailsDto>>(projects);
         }
-
-        [Authorize(DocsAdminPermissions.Projects.ManagePdfFiles)]
-        public virtual async Task<PagedResultDto<ProjectPdfFileDto>> GetPdfFilesAsync(GetPdfFilesInput input)
-        {
-            var project = await _projectRepository.GetAsync(input.ProjectId, includeDetails: true);
-
-            var pdfFiles = project.PdfFiles.Skip(input.SkipCount).Take(input.MaxResultCount).ToList();
-
-            return new PagedResultDto<ProjectPdfFileDto>(
-                project.PdfFiles.Count,
-                ObjectMapper.Map<List<ProjectPdfFile>, List<ProjectPdfFileDto>>(pdfFiles)
-            );
-        }
-
-        [Authorize(DocsAdminPermissions.Projects.ManagePdfFiles)]
-        public virtual async Task DeletePdfFileAsync(DeletePdfFileInput input)
-        {
-            var project = await _projectRepository.GetAsync(input.ProjectId, includeDetails: true);
-            await _projectPdfFileStore.DeleteAsync(project, input.Version, input.LanguageCode);
-        }
     }
 }

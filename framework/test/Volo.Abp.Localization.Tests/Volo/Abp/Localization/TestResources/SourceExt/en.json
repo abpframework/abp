@@ -1,6 +1,26 @@
 {
   "culture": "en",
   "texts": {
-    "SeeYou": "See you"
+    "SeeYou": "See you",
+    "MyNestedTranslation": {
+      "SomeKey": "Some nested value",
+      "SomeOtherKey": "Some other nested value",
+      "DeeplyNested": {
+        "DeepKey": "A deeply nested value"
+      },
+      "DeeplyNestedArray": [
+        "First value in array",
+        "Second value in array",
+        {
+          "InnerDeepKey": "Inner deeply nested value"
+        },
+        {
+          "InnerDeepArray": [
+            "First inner deep array value",
+            "Second inner deep array value"
+          ]
+        }
+      ]
+    }
   }
 }

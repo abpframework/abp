@@ -15,8 +15,8 @@ public class UserMarkedItem : BasicAggregateRoot<Guid>, IHasCreationTime, IMustH
 
     public virtual DateTime CreationTime { get; set; }
 
-    public string EntityId { get; protected set; }
-    public string EntityType { get; protected set; }
+    public virtual string EntityId { get; protected set; }
+    public virtual string EntityType { get; protected set; }
 
     protected UserMarkedItem() { }
 

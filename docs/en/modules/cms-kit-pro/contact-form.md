@@ -1,6 +1,13 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to enable and utilize the CMS Kit Pro contact form widget for efficient contact management on your website with ABP Framework."
+}
+```
+
 # CMS Kit Pro: Contact Management
 
-> You must have an ABP Team or a higher license to use CMS Kit Pro module's features.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use CMS Kit Pro module's features.
 
 CMS Kit provides a widget to create a contact form on your website.
 

@@ -4,7 +4,6 @@ using Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDatepicker;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDaterangepicker;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.DatatablesNetBs5;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
-using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryForm;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryValidationUnobtrusive;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Lodash;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Luxon;
@@ -21,7 +20,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
     typeof(BootstrapScriptContributor),
     typeof(LodashScriptContributor),
     typeof(JQueryValidationUnobtrusiveScriptContributor),
-    typeof(JQueryFormScriptContributor),
     typeof(Select2ScriptContributor),
     typeof(DatatablesNetBs5ScriptContributor),
     typeof(Sweetalert2ScriptContributor),

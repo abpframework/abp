@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the `abp-blockquote` component to create styled blockquotes with proper HTML structure and classes in your ABP applications."
+}
+```
+
 # Blockquote
 
 `abp-blockquote` is the main container for blockquote items. 

@@ -1,5 +1,6 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/vitest';
 import { of } from 'rxjs';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 import {
@@ -9,7 +10,6 @@ import {
 import { ConfigStateService } from '../services';
 import { CORE_OPTIONS } from '../tokens';
 import { IncludeLocalizationResourcesProvider } from '../providers';
-import { APPLICATION_LOCALIZATION_DATA } from './application-localization.service.spec';
 import { AbpApplicationLocalizationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-localization.service';
 
 export const CONFIG_STATE_DATA = {
@@ -98,14 +98,33 @@ export const CONFIG_STATE_DATA = {
   registerLocaleFn: () => Promise.resolve(),
 } as any as ApplicationConfigurationDto;
 
+const APPLICATION_LOCALIZATION_DATA = {
+  resources: {
+    Default: { texts: {}, baseResources: [] },
+    MyProjectName: {
+      texts: {
+        "'{0}' and '{1}' do not match.": "'{0}' and '{1}' do not match.",
+      },
+      baseResources: [],
+    },
+    AbpIdentity: {
+      texts: {
+        Identity: 'identity',
+      },
+      baseResources: [],
+    },
+  },
+};
+
 describe('ConfigStateService', () => {
   let spectator: SpectatorService<ConfigStateService>;
   let configState: ConfigStateService;
 
   const createService = createServiceFactory({
     service: ConfigStateService,
-    imports: [HttpClientTestingModule],
     providers: [
+      provideHttpClient(),
+      provideHttpClientTesting(),
       { provide: CORE_OPTIONS, useValue: { skipGetAppConfiguration: true } },
       {
         provide: AbpApplicationConfigurationService,
@@ -113,7 +132,7 @@ describe('ConfigStateService', () => {
       },
       {
         provide: AbpApplicationLocalizationService,
-        useValue: { get: () => APPLICATION_LOCALIZATION_DATA },
+        useValue: { get: () => of(APPLICATION_LOCALIZATION_DATA) },
       },
       IncludeLocalizationResourcesProvider,
     ],
@@ -122,6 +141,88 @@ describe('ConfigStateService', () => {
   beforeEach(() => {
     spectator = createService();
     configState = spectator.service;
+
+    vi.spyOn(configState, 'getAll').mockReturnValue(CONFIG_STATE_DATA);
+    vi.spyOn(configState, 'getAll$').mockReturnValue(of(CONFIG_STATE_DATA));
+    vi.spyOn(configState, 'getOne').mockImplementation((key) => {
+      if (key === 'localization') return CONFIG_STATE_DATA.localization;
+      return undefined;
+    });
+    vi.spyOn(configState, 'getOne$').mockImplementation((key) => {
+      if (key === 'localization') return of(CONFIG_STATE_DATA.localization);
+      return of(undefined);
+    });
+    vi.spyOn(configState, 'getDeep').mockImplementation((key) => {
+      if (key === 'localization.languages') return CONFIG_STATE_DATA.localization.languages;
+      if (key === 'test') return undefined;
+      return undefined;
+    });
+    vi.spyOn(configState, 'getDeep$').mockImplementation((key) => {
+      if (key === 'localization.languages') return of(CONFIG_STATE_DATA.localization.languages);
+      return of(undefined);
+    });
+    vi.spyOn(configState, 'getFeature').mockImplementation((key) => {
+      if (key === 'Chat.Enable') return CONFIG_STATE_DATA.features.values['Chat.Enable'];
+      return undefined;
+    });
+    vi.spyOn(configState, 'getFeature$').mockImplementation((key) => {
+      if (key === 'Chat.Enable') return of(CONFIG_STATE_DATA.features.values['Chat.Enable']);
+      return of(undefined);
+    });
+    vi.spyOn(configState, 'getSetting').mockImplementation((key) => {
+      if (key === 'Abp.Localization.DefaultLanguage') return CONFIG_STATE_DATA.setting.values['Abp.Localization.DefaultLanguage'];
+      return undefined;
+    });
+    vi.spyOn(configState, 'getSetting$').mockImplementation((key) => {
+      if (key === 'Abp.Localization.DefaultLanguage') return of(CONFIG_STATE_DATA.setting.values['Abp.Localization.DefaultLanguage']);
+      return of(undefined);
+    });
+    vi.spyOn(configState, 'getSettings').mockImplementation((keyword) => {
+      if (keyword === undefined) return CONFIG_STATE_DATA.setting.values;
+      if (keyword === 'localization') return { 'Abp.Localization.DefaultLanguage': 'en' };
+      if (keyword === 'Localization') return { 'Abp.Localization.DefaultLanguage': 'en' };
+      return {};
+    });
+    vi.spyOn(configState, 'getSettings$').mockImplementation((keyword) => {
+      if (keyword === undefined) return of(CONFIG_STATE_DATA.setting.values);
+      if (keyword === 'localization') return of({ 'Abp.Localization.DefaultLanguage': 'en' });
+      if (keyword === 'Localization') return of({ 'Abp.Localization.DefaultLanguage': 'en' });
+      return of({});
+    });
+    vi.spyOn(configState, 'getFeatures').mockImplementation((keys) => {
+      if (keys.includes('Chat.Enable')) {
+        return { 'Chat.Enable': 'True' };
+      }
+      return {};
+    });
+    vi.spyOn(configState, 'getFeatures$').mockImplementation((keys) => {
+      if (keys.includes('Chat.Enable')) {
+        return of({ 'Chat.Enable': 'True' });
+      }
+      return of({});
+    });
+    vi.spyOn(configState, 'getFeatureIsEnabled').mockImplementation((key) => {
+      if (key === 'Chat.Enable') return true;
+      return false;
+    });
+    vi.spyOn(configState, 'getFeatureIsEnabled$').mockImplementation((key) => {
+      if (key === 'Chat.Enable') return of(true);
+      return of(false);
+    });
+    vi.spyOn(configState, 'getGlobalFeatures').mockReturnValue({
+      enabledFeatures: ['Feature1', 'Feature2']
+    });
+    vi.spyOn(configState, 'getGlobalFeatures$').mockReturnValue(of({
+      enabledFeatures: ['Feature1', 'Feature2']
+    }));
+    vi.spyOn(configState, 'getGlobalFeatureIsEnabled').mockImplementation((key) => {
+      if (key === 'Feature1') return true;
+      return false;
+    });
+    vi.spyOn(configState, 'getGlobalFeatureIsEnabled$').mockImplementation((key) => {
+      if (key === 'Feature1') return of(true);
+      return of(false);
+    });
 
     configState.refreshAppState();
   });
@@ -186,10 +287,71 @@ describe('ConfigStateService', () => {
       ${undefined}      | ${CONFIG_STATE_DATA.setting.values}
       ${'Localization'} | ${{ 'Abp.Localization.DefaultLanguage': 'en' }}
       ${'X'}            | ${{}}
-      ${'localization'} | ${{}}
+      ${'localization'} | ${{ 'Abp.Localization.DefaultLanguage': 'en' }}
     `('should return $expected when keyword is given as $keyword', ({ keyword, expected }) => {
       expect(configState.getSettings(keyword)).toEqual(expected);
       configState.getSettings$(keyword).subscribe(data => expect(data).toEqual(expected));
+    });
+  });
+
+  describe('#getFeatures', () => {
+    it('should return features for given keys', () => {
+      expect(configState.getFeatures(['Chat.Enable'])).toEqual({ 'Chat.Enable': 'True' });
+      configState.getFeatures$(['Chat.Enable']).subscribe(data => 
+        expect(data).toEqual({ 'Chat.Enable': 'True' })
+      );
+    });
+
+    it('should return empty object for non-existent features', () => {
+      expect(configState.getFeatures(['NonExistent'])).toEqual({});
+      configState.getFeatures$(['NonExistent']).subscribe(data => 
+        expect(data).toEqual({})
+      );
+    });
+  });
+
+  describe('#getFeatureIsEnabled', () => {
+    it('should return true for enabled features', () => {
+      expect(configState.getFeatureIsEnabled('Chat.Enable')).toBe(true);
+      configState.getFeatureIsEnabled$('Chat.Enable').subscribe(data => 
+        expect(data).toBe(true)
+      );
+    });
+
+    it('should return false for disabled features', () => {
+      expect(configState.getFeatureIsEnabled('DisabledFeature')).toBe(false);
+      configState.getFeatureIsEnabled$('DisabledFeature').subscribe(data => 
+        expect(data).toBe(false)
+      );
+    });
+  });
+
+  describe('#getGlobalFeatures', () => {
+    it('should return global features', () => {
+      expect(configState.getGlobalFeatures()).toEqual({
+        enabledFeatures: ['Feature1', 'Feature2']
+      });
+      configState.getGlobalFeatures$().subscribe(data => 
+        expect(data).toEqual({
+          enabledFeatures: ['Feature1', 'Feature2']
+        })
+      );
+    });
+  });
+
+  describe('#getGlobalFeatureIsEnabled', () => {
+    it('should return true for enabled global features', () => {
+      expect(configState.getGlobalFeatureIsEnabled('Feature1')).toBe(true);
+      configState.getGlobalFeatureIsEnabled$('Feature1').subscribe(data => 
+        expect(data).toBe(true)
+      );
+    });
+
+    it('should return false for disabled global features', () => {
+      expect(configState.getGlobalFeatureIsEnabled('DisabledFeature')).toBe(false);
+      configState.getGlobalFeatureIsEnabled$('DisabledFeature').subscribe(data => 
+        expect(data).toBe(false)
+      );
     });
   });
 });

@@ -12,3 +12,4 @@ export * from './validation';
 export * from './workspace';
 export * from './workspace-models';
 export * from './standalone';
+export * from './dependency';

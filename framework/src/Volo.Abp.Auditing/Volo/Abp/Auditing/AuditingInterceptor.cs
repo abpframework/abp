@@ -85,7 +85,7 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
         {
             auditLogAction = auditingHelper.CreateAuditLogAction(
                 auditLog,
-                invocation.TargetObject.GetType(),
+                invocation.TargetObject?.GetType(),
                 invocation.Method,
                 invocation.Arguments
             );

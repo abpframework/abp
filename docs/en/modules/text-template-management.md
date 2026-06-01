@@ -1,6 +1,13 @@
+```json
+//[doc-seo]
+{
+    "Description": "Manage and edit text templates effortlessly with the ABP Framework's Text Template Management Module, enhancing your application's communication features."
+}
+```
+
 # Text Template Management Module (Pro)
 
-> You must have an ABP Team or a higher license to use this module.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this module.
 
 This module is used to store and edit template contents for [the text templating system](../framework/infrastructure/text-templating/index.md) of the ABP. So, you may need to understand it to better understand the purpose of this module.
 
@@ -157,50 +164,60 @@ See the [connection strings](../framework/fundamentals/connection-strings.md) do
 
 See the `TextTemplateManagementPermissions` class members for all permissions defined for this module.
 
+The module exposes two edit-time permissions with different risk levels:
+
+| Permission | Required to edit | Default grant |
+|------------|------------------|---------------|
+| `TextTemplateManagement.TextTemplates.EditContents` | Templates rendered by a sandboxed engine (e.g. Scriban). Editing such templates is safe for content editors because the engine cannot execute arbitrary .NET code. | Granted to roles that need to edit template text. |
+| `TextTemplateManagement.TextTemplates.EditNonSandboxedContents` | Templates rendered by a **non-sandboxed** engine (e.g. Razor). Editing such templates is functionally equivalent to granting server-side code execution because the engine compiles the content into a .NET assembly that runs with the host process's privileges. | **Not granted to any role by default**, including `admin`. Must be granted explicitly. |
+
+Whether a template is sandboxed is determined by `ITemplateRenderingEngine.IsSandboxed` on the engine that renders it. Editing a non-sandboxed template requires **both** `EditContents` and `EditNonSandboxedContents`.
+
+The Text Template Management UI surfaces this distinction:
+
+- A warning banner is rendered above the editor for non-sandboxed templates.
+- The save and restore buttons are disabled when the current user lacks `EditNonSandboxedContents` for a non-sandboxed template.
+
+> Treat `EditNonSandboxedContents` as equivalent to granting shell access to the application server. Only assign it to fully trusted developers or operators.
+
 
 ### Angular UI
 
 #### Installation
 
-In order to configure the application to use the `TextTemplateManagementModule`, you first need to import `TextTemplateManagementConfigModule` from `@volo/abp.ng.text-template-management/config` to root module. `TextTemplateManagementConfigModule` has a static `forRoot` method which you should call for a proper configuration.
+In order to configure the application to use the text template management module, you first need to import `provideTextTemplateManagementConfig` from `@volo/abp.ng.text-template-management/config` to root configuration. Then, you will need to append it to the `appConfig` array.
 
 ```js
-// app.module.ts
-import { TextTemplateManagementConfigModule } from '@volo/abp.ng.text-template-management/config';
+// app.config.ts
+import { provideTextTemplateManagementConfig } from '@volo/abp.ng.text-template-management/config';
 
-@NgModule({
-  imports: [
-    // other imports
-    TextTemplateManagementConfigModule.forRoot(),
-    // other imports
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    provideTextTemplateManagementConfig()
   ],
-  // ...
-})
-export class AppModule {}
+};
 ```
 
-The `TextTemplateManagementModule` should be imported and lazy-loaded in your routing module. It has a static `forLazy` method for configuration. Available options are listed below. It is available for import from `@volo/abp.ng.text-template-management`.
+The text template management module should be imported and lazy-loaded in your routing array. It has a static `createRoutes` method for configuration. Available options are listed below. It is available for import from `@volo/abp.ng.text-template-management`.
 
 ```js
-// app-routing.module.ts
-const routes: Routes = [
-  // other route definitions
+// app.routes.ts
+const APP_ROUTES: Routes = [
+  // ...
   {
     path: 'text-template-management',
     loadChildren: () =>
-      import('@volo/abp.ng.text-template-management').then(m => m.TextTemplateManagementModule.forLazy(/* options here */)),
+      import('@volo/abp.ng.text-template-management').then(c => c.createRoutes(/* options here */)),
   },
 ];
-
-@NgModule(/* AppRoutingModule metadata */)
-export class AppRoutingModule {}
 ```
 
-> If you have generated your project via the startup template, you do not have to do anything, because it already has both `TextTemplateManagementConfigModule` and `TextTemplateManagementModule`.
+> If you have generated your project via the startup template, you do not have to do anything, because it already has both configurations implemented.
 
 <h4 id="h-text-template-management-module-options">Options</h4>
 
-You can modify the look and behavior of the module pages by passing the following options to `TextTemplateManagementModule.forLazy` static method:
+You can modify the look and behavior of the module pages by passing the following options to `createRoutes` static method:
 
 - **entityActionContributors:** Changes grid actions. Please check [Entity Action Extensions for Angular](../framework/ui/angular/entity-action-extensions.md) for details.
 - **toolbarActionContributors:** Changes page toolbar. Please check [Page Toolbar Extensions for Angular](../framework/ui/angular/page-toolbar-extensions.md) for details.

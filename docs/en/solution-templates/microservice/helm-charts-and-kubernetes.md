@@ -1,11 +1,18 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to deploy your ABP microservice solution on Kubernetes using Helm charts, complete with a guide on folder structure and requirements."
+}
+```
+
 # Microservice Solution: Helm Charts and Kubernetes
 
 ````json
 //[doc-nav]
 {
   "Next": {
-    "Name": "Miscellaneous guides in the Microservice solution",
-    "Path": "solution-templates/microservice/guides"
+    "Name": "Aspire Integration in the Microservice solution",
+    "Path": "solution-templates/microservice/aspire-integration"
   }
 }
 ````

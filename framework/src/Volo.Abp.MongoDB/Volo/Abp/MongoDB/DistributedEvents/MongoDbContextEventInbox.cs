@@ -61,10 +61,12 @@ public class MongoDbContextEventInbox<TMongoDbContext> : IMongoDbContextEventInb
             transformedFilter = InboxOutboxFilterExpressionTransformer.Transform<IIncomingEventInfo, IncomingEventRecord>(filter)!;
         }
 
+        var now = Clock.Now;
         var outgoingEventRecords = await dbContext
             .IncomingEvents
             .AsQueryable()
-            .Where(x => x.Processed == false)
+            .Where(x => x.Status == IncomingEventStatus.Pending)
+            .Where(x => x.NextRetryTime == null || x.NextRetryTime <= now)
             .WhereIf(transformedFilter != null, transformedFilter!)
             .OrderBy(x => x.CreationTime)
             .Take(maxCount)
@@ -81,7 +83,43 @@ public class MongoDbContextEventInbox<TMongoDbContext> : IMongoDbContextEventInb
         var dbContext = await DbContextProvider.GetDbContextAsync();
 
         var filter = Builders<IncomingEventRecord>.Filter.Eq(x => x.Id, id);
-        var update = Builders<IncomingEventRecord>.Update.Set(x => x.Processed, true).Set(x => x.ProcessedTime, Clock.Now);
+        var update = Builders<IncomingEventRecord>.Update.Set(x => x.Status, IncomingEventStatus.Processed).Set(x => x.HandledTime, Clock.Now);
+
+        if (dbContext.SessionHandle != null)
+        {
+            await dbContext.IncomingEvents.UpdateOneAsync(dbContext.SessionHandle, filter, update);
+        }
+        else
+        {
+            await dbContext.IncomingEvents.UpdateOneAsync(filter, update);
+        }
+    }
+
+    [UnitOfWork]
+    public virtual async Task RetryLaterAsync(Guid id, int retryCount, DateTime? nextRetryTime)
+    {
+        var dbContext = await DbContextProvider.GetDbContextAsync();
+
+        var filter = Builders<IncomingEventRecord>.Filter.Eq(x => x.Id, id);
+        var update = Builders<IncomingEventRecord>.Update.Set(x => x.RetryCount, retryCount).Set(x => x.NextRetryTime, nextRetryTime);
+
+        if (dbContext.SessionHandle != null)
+        {
+            await dbContext.IncomingEvents.UpdateOneAsync(dbContext.SessionHandle, filter, update);
+        }
+        else
+        {
+            await dbContext.IncomingEvents.UpdateOneAsync(filter, update);
+        }
+    }
+
+    [UnitOfWork]
+    public virtual async Task MarkAsDiscardAsync(Guid id)
+    {
+        var dbContext = await DbContextProvider.GetDbContextAsync();
+
+        var filter = Builders<IncomingEventRecord>.Filter.Eq(x => x.Id, id);
+        var update = Builders<IncomingEventRecord>.Update.Set(x => x.Status, IncomingEventStatus.Discarded).Set(x => x.HandledTime, Clock.Now);
 
         if (dbContext.SessionHandle != null)
         {
@@ -108,11 +146,11 @@ public class MongoDbContextEventInbox<TMongoDbContext> : IMongoDbContextEventInb
 
         if (dbContext.SessionHandle != null)
         {
-            await dbContext.IncomingEvents.DeleteManyAsync(dbContext.SessionHandle, x => x.Processed && x.CreationTime < timeToKeepEvents);
+            await dbContext.IncomingEvents.DeleteManyAsync(dbContext.SessionHandle, x => (x.Status == IncomingEventStatus.Processed || x.Status == IncomingEventStatus.Discarded) && x.CreationTime < timeToKeepEvents);
         }
         else
         {
-            await dbContext.IncomingEvents.DeleteManyAsync(x => x.Processed && x.CreationTime < timeToKeepEvents);
+            await dbContext.IncomingEvents.DeleteManyAsync(x => (x.Status == IncomingEventStatus.Processed || x.Status == IncomingEventStatus.Discarded) && x.CreationTime < timeToKeepEvents);
         }
     }
 }

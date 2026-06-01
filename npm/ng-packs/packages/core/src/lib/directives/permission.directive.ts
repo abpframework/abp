@@ -2,13 +2,12 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Directive,
-  Inject,
-  Input,
   OnChanges,
   OnDestroy,
-  Optional,
   TemplateRef,
   ViewContainerRef,
+  inject,
+  input
 } from '@angular/core';
 import { ReplaySubject, Subscription } from 'rxjs';
 import { distinctUntilChanged, take } from 'rxjs/operators';
@@ -20,9 +19,15 @@ import { QueueManager } from '../utils/queue';
   selector: '[abpPermission]',
 })
 export class PermissionDirective implements OnDestroy, OnChanges, AfterViewInit {
-  @Input('abpPermission') condition: string | undefined;
+  private templateRef = inject<TemplateRef<any>>(TemplateRef, { optional: true });
+  private vcRef = inject(ViewContainerRef);
+  private permissionService = inject(PermissionService);
+  private cdRef = inject(ChangeDetectorRef);
+  queue = inject<QueueManager>(QUEUE_MANAGER);
 
-  @Input('abpPermissionRunChangeDetection') runChangeDetection = true;
+  readonly condition = input<string | undefined>(undefined, { alias: "abpPermission" });
+
+  readonly runChangeDetection = input(true, { alias: "abpPermissionRunChangeDetection" });
 
   subscription!: Subscription;
 
@@ -30,26 +35,20 @@ export class PermissionDirective implements OnDestroy, OnChanges, AfterViewInit 
 
   rendered = false;
 
-  constructor(
-    @Optional() private templateRef: TemplateRef<any>,
-    private vcRef: ViewContainerRef,
-    private permissionService: PermissionService,
-    private cdRef: ChangeDetectorRef,
-    @Inject(QUEUE_MANAGER) public queue: QueueManager,
-  ) {}
-
   private check() {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
 
     this.subscription = this.permissionService
-      .getGrantedPolicy$(this.condition || '')
+      .getGrantedPolicy$(this.condition() || '')
       .pipe(distinctUntilChanged())
       .subscribe(isGranted => {
         this.vcRef.clear();
-        if (isGranted) this.vcRef.createEmbeddedView(this.templateRef);
-        if (this.runChangeDetection) {
+        if (isGranted && this.templateRef) {
+          this.vcRef.createEmbeddedView(this.templateRef);
+        }
+        if (this.runChangeDetection()) {
           if (!this.rendered) {
             this.cdrSubject.next();
           } else {

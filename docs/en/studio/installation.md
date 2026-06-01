@@ -1,11 +1,17 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to install ABP Studio, including system requirements and optional tools, to kickstart your development with ABP Framework."
+}
+```
+
 # Installing ABP Studio
 
-> **Warning: Beta Version Information**\
-> Currently, ABP Studio is in its beta phase and available for everyone. To access the beta version, kindly visit [this web page](https://abp.io/studio).
+This document explains how to install the ABP Studio tool.
 
 ## Pre-requirements
 
-ABP Studio now features automatic installation of most required dependencies. When you first launch the application, it will check for and install the following components:
+ABP Studio automatically installs most of the required dependencies. When you first launch the application, it will check for and install the following components if missed:
 
 * .NET SDK
 * Node.js
@@ -13,12 +19,14 @@ ABP Studio now features automatic installation of most required dependencies. Wh
 * mkcert (for HTTPS development)
 * WireGuard (for Kubernetes operations)
 
-The only manual installation required is:
+However, the following should be manually installed:
 
 ### Docker (Required for Kubernetes Operations)
-ABP Studio needs [Docker](https://www.docker.com/) for [Kubernetes](https://kubernetes.io/) operations. Install Docker by following the guidelines on the official [Docker website](https://docs.docker.com/get-docker/).
+
+ABP Studio needs [Docker](https://www.docker.com/) for Docker and [Kubernetes](https://kubernetes.io/) operations. Install Docker by following the guidelines on the official [Docker website](https://docs.docker.com/get-docker/).
 
 ### Package Manager Prerequisites
+
 * **Windows:** The automatic installation process uses `winget`. If not already installed, ABP Studio will attempt to install it.
 * **macOS:** The automatic installation process uses `brew`. If not already installed, you'll need to install it manually from [brew.sh](https://brew.sh/).
 
@@ -47,7 +55,7 @@ ABP Studio allows you to customize the user interface theme according to your pr
 
 ## Upgrading
 ABP Studio periodically checks for updates in the background, and when a new version of ABP Studio is available, you will be notified through a modal. 
-The modal will prompt you to update to the latest version as below:
+The modal will prompt you to update to the latest version as follows:
 
 ![new-version-available-window](./images/new-version-available-window.png)
 
@@ -57,3 +65,7 @@ When you see the "New Version Available" window, follow these steps to upgrade A
 2. A progress indicator will display the download status.
 3. Once the download is complete, a new modal will appear with the "Install and Relaunch" buttons.
 4. Click on the "Install and Relaunch" button to complete the installation process.
+
+## Installing a Specific Version
+
+There is no official support for installing an older version of ABP Studio yet. But, if you want to install an older version of ABP Studio, you can use approach explanined here [https://github.com/enisn/AbpDevTools?tab=readme-ov-file#switch-abp-studio-version](https://github.com/enisn/AbpDevTools?tab=readme-ov-file#switch-abp-studio-version)

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to customize and reuse ABP's pre-built application modules for efficient and modular application development."
+}
+```
+
 # Customizing the Existing Modules
 
 ABP has been designed to support to build fully [modular applications](../../modularity/basics.md) and systems. It also provides some [pre-built application modules](../../../../modules) those are **ready to use** in any kind of application.
@@ -105,4 +112,4 @@ Also, see the following documents:
 
 * See [the localization document](../../../fundamentals/localization.md) to learn how to extend existing localization resources.
 * See [the settings document](../../../infrastructure/settings.md) to learn how to change setting definitions of a depended module.
-* See [the authorization document](../../../fundamentals/authorization.md) to learn how to change permission definitions of a depended module.
+* See [the authorization document](../../../fundamentals/authorization/index.md) to learn how to change permission definitions of a depended module.

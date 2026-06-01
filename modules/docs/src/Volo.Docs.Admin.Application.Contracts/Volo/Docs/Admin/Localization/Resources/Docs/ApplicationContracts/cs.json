@@ -66,6 +66,9 @@
     "GenerateAndDownloadPdf": "Generovat a stáhnout PDF",
     "PdfFileDeletionWarningMessage": "Opravdu chcete odstranit soubor PDF \"{0}\"?",
     "ManagePdfFiles": "Správa PDF souborů",
-    "Permission:ManagePdfFiles": "Správa PDF souborů"
+    "Permission:ManagePdfFiles": "Správa PDF souborů",
+    "PdfDeletedSuccessfully": "PDF soubor byl úspěšně smazán",
+    "PdfGenerationStarted": "Generování PDF bylo zahájeno",
+    "PdfGenerationStartedInfoMessage": "Generování PDF bylo zahájeno. Po dokončení můžete zkontrolovat, zda byl soubor přidán do sekce PDF souborů."
   }
 }

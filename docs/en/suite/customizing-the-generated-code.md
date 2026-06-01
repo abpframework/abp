@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to customize generated code in ABP Suite, preserve changes, and utilize hook points for seamless CRUD page generation."
+}
+```
+
 # Customizing the Generated Code
 
 ABP Suite allows you to customize the generated code blocks and preserve your custom code changes in the next CRUD Page Generation. It specifies hook points to allow adding custom code blocks. Then, the code written by you to these hook points will be respected and will not be overridden in the next CRUD Page Generation.
@@ -50,6 +57,8 @@ You can see the example below, which demonstrates defining a new method in the `
 ## UI Side Customizations
 
 For the UI side, ABP Suite provides convenient comment placeholders within pages for MVC, Blazor, and Angular UIs. These comment sections serve as hook points where you can add your custom code. By placing your custom logic with these hook points, you can enhance the UI to your needs without the fear of losing your changes during the next CRUD page generation.
+
+> **Note:** ABP Suite does not generate React UI pages or React customization hook points. React UI is part of ABP's modern template system and is customized directly in the source-owned [React UI](../framework/ui/react/index.md) application. ABP license holders can use [ABP Studio AI Agent](https://abp.io/studio/ai-agent) with predefined AI credits to generate React pages and customize them more easily.
 
 ### Customizations on MVC UI
 

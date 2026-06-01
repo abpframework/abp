@@ -1,7 +1,7 @@
 {
   "culture": "el",
   "texts": {
-    "Permission:DocumentManagement": "Διαχείρηση αρχείων",
+    "Permission:DocumentManagement": "Διαχείριση εγγράφων",
     "Permission:Projects": "Εργα",
     "Permission:Edit": "Επεξεργασία",
     "Permission:Delete": "Διαγραφή",
@@ -65,6 +65,9 @@
     "GenerateAndDownloadPdf": "Δημιουργία και λήψη PDF",
     "PdfFileDeletionWarningMessage": "Είστε βέβαιοι ότι θέλετε να διαγράψετε το PDF αρχείο \"{0}\";",
     "ManagePdfFiles": "Διαχείρηση PDF αρχείων",
-    "Permission:ManagePdfFiles": "Διαχείρηση PDF αρχείων"
+    "Permission:ManagePdfFiles": "Διαχείρηση PDF αρχείων",
+    "PdfDeletedSuccessfully": "Το αρχείο PDF διαγράφηκε με επιτυχία",
+    "PdfGenerationStarted": "Η δημιουργία PDF ξεκίνησε",
+    "PdfGenerationStartedInfoMessage": "Η δημιουργία PDF ξεκίνησε. Μόλις ολοκληρωθεί, μπορείτε να ελέγξετε αν το αρχείο έχει προστεθεί στην ενότητα αρχείων PDF."
   }
 }

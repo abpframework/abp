@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -68,5 +69,37 @@ public class AspNetCoreMultiTenancy_Without_DomainResolver_Tests : AspNetCoreMul
 
         var result = await GetResponseAsObjectAsync<Dictionary<string, string>>("http://abp.io");
         result["TenantId"].ShouldBe(_testTenantId.ToString());
+    }
+
+    [Fact]
+    public async Task Should_Use_Header_Tenant_Id_When_QueryString_Tenant_Is_Empty()
+    {
+        Client.DefaultRequestHeaders.Add(_options.TenantKey, _testTenantId.ToString());
+
+        var result = await GetResponseAsObjectAsync<Dictionary<string, string>>($"http://abp.io?{_options.TenantKey}=");
+        result["TenantId"].ShouldBe(_testTenantId.ToString());
+    }
+
+    [Fact]
+    public async Task Should_Fallback_To_Host_When_QueryString_Tenant_Is_Empty_And_No_Other_Resolver()
+    {
+        var result = await GetResponseAsObjectAsync<Dictionary<string, string>>($"http://abp.io?{_options.TenantKey}=");
+        result["TenantId"].ShouldBe("");
+    }
+
+    [Fact]
+    public async Task Should_Use_Header_Tenant_Id_When_QueryString_Tenant_Is_Whitespace()
+    {
+        Client.DefaultRequestHeaders.Add(_options.TenantKey, _testTenantId.ToString());
+
+        var result = await GetResponseAsObjectAsync<Dictionary<string, string>>($"http://abp.io?{_options.TenantKey}=%20");
+        result["TenantId"].ShouldBe(_testTenantId.ToString());
+    }
+
+    [Fact]
+    public async Task Should_Fallback_To_Host_When_QueryString_Tenant_Is_Whitespace_And_No_Other_Resolver()
+    {
+        var result = await GetResponseAsObjectAsync<Dictionary<string, string>>($"http://abp.io?{_options.TenantKey}=%20");
+        result["TenantId"].ShouldBe("");
     }
 }

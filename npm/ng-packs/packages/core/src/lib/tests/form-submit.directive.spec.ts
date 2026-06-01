@@ -1,14 +1,14 @@
-import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/jest';
+import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/vitest';
 import { FormSubmitDirective } from '../directives/form-submit.directive';
 import { FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
-import { timer } from 'rxjs';
+import { timer, firstValueFrom } from 'rxjs';
 
 describe('FormSubmitDirective', () => {
   let spectator: SpectatorDirective<FormSubmitDirective>;
   let directive: FormSubmitDirective;
 
   const formGroup = new FormGroup({});
-  const submitEventFn = jest.fn(() => {});
+  const submitEventFn = vi.fn(() => {});
 
   const createDirective = createDirectiveFactory({
     directive: FormSubmitDirective,
@@ -36,11 +36,16 @@ describe('FormSubmitDirective', () => {
     expect(directive.debounce).toBe(20);
   });
 
-  test('should dispatch submit event on keyup event triggered after given debounce time', done => {
-    spectator.dispatchKeyboardEvent('form', 'keyup', 'Enter');
-    timer(directive.debounce + 10).subscribe(() => {
-      expect(submitEventFn).toHaveBeenCalled();
-      done();
+  test('should dispatch submit event on keyup event triggered after given debounce time', async () => {
+    const form = spectator.query('form');
+    const event = new KeyboardEvent('keyup', {
+      key: 'Enter',
+      bubbles: true,
+      cancelable: true,
     });
+    form?.dispatchEvent(event);
+    timer(0).subscribe(() => expect(submitEventFn).not.toHaveBeenCalled());
+    await firstValueFrom(timer(directive.debounce + 10));
+    expect(submitEventFn).toHaveBeenCalled();
   });
 });

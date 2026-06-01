@@ -4,7 +4,7 @@ import {
   LocalizationPipe,
   PagedAndSortedResultRequestDto,
   PagedResultDto,
-  ReplaceableTemplateDirective,
+  ReplaceableTemplateDirective
 } from '@abp/ng.core';
 import { IdentityRoleDto, IdentityRoleService } from '@abp/ng.identity/proxy';
 import {
@@ -66,19 +66,12 @@ export class RolesComponent implements OnInit {
   protected readonly service = inject(IdentityRoleService);
 
   data: PagedResultDto<IdentityRoleDto> = { items: [], totalCount: 0 };
-
   form!: UntypedFormGroup;
-
   selected?: IdentityRoleDto;
-
   isModalVisible!: boolean;
-
   visiblePermissions = false;
-
   providerKey?: string;
-
   modalBusy = false;
-
   permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
   onVisiblePermissionChange = (event: boolean) => {
@@ -142,7 +135,11 @@ export class RolesComponent implements OnInit {
   }
 
   private hookToQuery() {
-    this.list.hookToQuery(query => this.service.getList(query)).subscribe(res => (this.data = res));
+    this.list
+      .hookToQuery(query => this.service.getList(query))
+      .subscribe(res => {
+        this.data = res;
+      });
   }
 
   openPermissionsModal(providerKey: string) {

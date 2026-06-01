@@ -1,6 +1,13 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover the File Management Module for ABP Framework, enabling efficient file uploads, downloads, and organization with multi-tenancy support."
+}
+```
+
 # File Management Module (Pro)
 
-> You must have an ABP Team or a higher license to use this module.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this module.
 
 This module is used to upload, download and organize files in a hierarchical folder structure. It is also compatible to multi-tenancy and you can determine total size limit for your tenants.
 
@@ -136,6 +143,12 @@ You can upload files by clicking `Upload Files` button that located at top left 
 You can move files by clicking `Actions -> Move` on the table.
 
 You can rename a file by clicking `Actions -> Rename` on the table.
+
+###### File Sharing
+
+To share a file, click `Actions -> Share` in the table. Once sharing is enabled, you can copy the shared link directly from the table.
+
+> Anyone with the shared link will be able to access the file while sharing is enabled.
 
 ## Data Seed
 

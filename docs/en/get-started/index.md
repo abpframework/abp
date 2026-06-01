@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore ABP's startup templates for .NET applications, offering tailored solutions for single-layer, layered, and microservice architectures."
+}
+```
+
 # Get Started
 
 Great that you've decided to create a new application with ABP. ABP provides multiple startup templates for different needs. Each startup template is a fine-tuned and production-ready .NET solution that you can immediately start to develop your application based on it.
@@ -12,6 +19,8 @@ Please select one of the following documents best fits for your application:
   - [MAUI Application](maui.md)
   - [WPF Application](wpf.md)
   - [Console Application](console.md)
+
+If you seek a React-based web UI, use the **modern template system** with ABP Studio or `abp new --modern`. See [UI options](../framework/ui/index.md) for the full list of officially supported UI frameworks.
 
 ## Which Startup Template is Suitable for Me?
 

@@ -1,5 +1,5 @@
 import { registerLocaleData } from '@angular/common';
-import { Injectable, Injector, isDevMode, Optional, SkipSelf } from '@angular/core';
+import { Injectable, Injector, isDevMode, inject } from '@angular/core';
 import { BehaviorSubject, combineLatest, from, Observable, Subject } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { ABP } from '../models/common';
@@ -17,6 +17,10 @@ import { SessionStateService } from './session-state.service';
 
 @Injectable({ providedIn: 'root' })
 export class LocalizationService {
+  private sessionState = inject(SessionStateService);
+  private injector = inject(Injector);
+  private configState = inject(ConfigStateService);
+
   private latestLang = this.sessionState.getLanguage();
   private _languageChange$ = new Subject<string>();
 
@@ -44,14 +48,9 @@ export class LocalizationService {
     return this._languageChange$.asObservable();
   }
 
-  constructor(
-    private sessionState: SessionStateService,
-    private injector: Injector,
-    @Optional()
-    @SkipSelf()
-    otherInstance: LocalizationService,
-    private configState: ConfigStateService,
-  ) {
+  constructor() {
+    const otherInstance = inject(LocalizationService, { optional: true, skipSelf: true })!;
+
     if (otherInstance) throw new Error('LocalizationService should have only one instance.');
 
     this.listenToSetLanguage();
@@ -61,6 +60,8 @@ export class LocalizationService {
   private initLocalizationValues() {
     localizations$.subscribe(val => this.addLocalization(val));
 
+    // Backend-based localization loading (always enabled)
+    // UI localizations are merged via addLocalization() (UI > Backend priority)
     const legacyResources$ = this.configState.getDeep$('localization.values') as Observable<
       Record<string, Record<string, string>>
     >;
@@ -91,7 +92,8 @@ export class LocalizationService {
               const resourceName = entry[0];
               const remoteTexts = entry[1];
               let resource = local?.get(resourceName) || {};
-              resource = { ...resource, ...remoteTexts };
+              // UI > Backend priority: local texts override remote texts
+              resource = { ...remoteTexts, ...resource };
 
               local?.set(resourceName, resource);
             });
@@ -280,7 +282,7 @@ function recursivelyMergeBaseResources(
 
   return item.baseResources.reduce((acc, baseResource) => {
     const baseItem = recursivelyMergeBaseResources(baseResource, source);
-    const texts = { ...baseItem.texts, ...item.texts };
+    const texts = { ...baseItem.texts, ...acc.texts };
     return { ...acc, texts };
   }, item);
 }

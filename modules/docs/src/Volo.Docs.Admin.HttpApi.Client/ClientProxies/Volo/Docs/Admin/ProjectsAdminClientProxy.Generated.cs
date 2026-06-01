@@ -68,22 +68,6 @@ public partial class ProjectsAdminClientProxy : ClientProxyBase<IProjectAdminApp
         return await RequestAsync<List<ProjectWithoutDetailsDto>>(nameof(GetListWithoutDetailsAsync));
     }
 
-    public virtual async Task<PagedResultDto<ProjectPdfFileDto>> GetPdfFilesAsync(GetPdfFilesInput input)
-    {
-        return await RequestAsync<PagedResultDto<ProjectPdfFileDto>>(nameof(GetPdfFilesAsync), new ClientProxyRequestTypeValue
-        {
-            { typeof(GetPdfFilesInput), input }
-        });
-    }
-
-    public virtual async Task DeletePdfFileAsync(DeletePdfFileInput input)
-    {
-        await RequestAsync(nameof(DeletePdfFileAsync), new ClientProxyRequestTypeValue
-        {
-            { typeof(DeletePdfFileInput), input }
-        });
-    }
-
     public virtual async Task ReindexAsync(ReindexInput input)
     {
         await RequestAsync(nameof(ReindexAsync), new ClientProxyRequestTypeValue

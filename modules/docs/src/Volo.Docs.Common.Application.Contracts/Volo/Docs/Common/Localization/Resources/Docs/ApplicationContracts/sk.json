@@ -2,6 +2,6 @@
   "culture": "sk",
   "texts": {
     "Permission:DocumentManagement.Common": "Správa dokumentov",
-    "Permission:PdfGeneration": "Generovanie PDF"
+    "Permission:PdfDownload": "Generovanie PDF"
   }
 }

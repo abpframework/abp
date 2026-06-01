@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Volo.Abp.Users.Abstractions/Volo.Abp.Users.Abstractions.csproj" />
+    <Project Path="src/Volo.Abp.Users.Domain.Shared/Volo.Abp.Users.Domain.Shared.csproj" />
+    <Project Path="src/Volo.Abp.Users.Domain/Volo.Abp.Users.Domain.csproj" />
+    <Project Path="src/Volo.Abp.Users.EntityFrameworkCore/Volo.Abp.Users.EntityFrameworkCore.csproj" />
+    <Project Path="src/Volo.Abp.Users.Installer/Volo.Abp.Users.Installer.csproj" />
+    <Project Path="src/Volo.Abp.Users.MongoDB/Volo.Abp.Users.MongoDB.csproj" />
+  </Folder>
+</Solution>

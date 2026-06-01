@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to extend entities in ABP Framework by adding extra properties to seamlessly customize your application modules."
+}
+```
+
 # Customizing the Application Modules: Extending Entities
 
 In some cases, you may want to add some additional properties (and database fields) for an entity defined in a depended module. This section will cover some different approaches to make this possible.

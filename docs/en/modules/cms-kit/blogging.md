@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to enable and manage the blogging feature in the CMS Kit, including UI elements for blogs and blog posts."
+}
+```
+
 # CMS Kit: Blogging
 
 The blogging feature provides the necessary UI to manage and render blogs and blog posts.

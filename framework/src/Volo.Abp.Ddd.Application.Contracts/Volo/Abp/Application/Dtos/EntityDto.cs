@@ -23,4 +23,9 @@ public abstract class EntityDto<TKey> : EntityDto, IEntityDto<TKey>
     {
         return $"[DTO: {GetType().Name}] Id = {Id}";
     }
+
+    public virtual string? GetObjectKey()
+    {
+        return Id?.ToString();
+    }
 }

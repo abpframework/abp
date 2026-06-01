@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to configure CORS in ABP microservice solutions to enable secure cross-origin requests for your applications."
+}
+```
+
 # Microservice Solution: CORS Configuration
 
 ````json

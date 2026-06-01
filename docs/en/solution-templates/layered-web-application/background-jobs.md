@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to efficiently implement and manage background jobs in your layered solution using the ABP Framework for asynchronous tasks."
+}
+```
+
 # Layered Solution: Background Jobs
 
 ```json

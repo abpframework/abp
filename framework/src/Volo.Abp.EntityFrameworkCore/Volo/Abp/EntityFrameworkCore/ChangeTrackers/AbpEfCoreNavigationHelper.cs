@@ -31,14 +31,6 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
 
     protected virtual void EntityEntryTrackedOrStateChanged(EntityEntry entityEntry)
     {
-        if (entityEntry.State is EntityState.Unchanged or EntityState.Modified)
-        {
-            foreach (var entry in EntityEntries.Values.Where(x => x.NavigationEntries.Any()))
-            {
-                entry.UpdateNavigationEntries();
-            }
-        }
-
         if (entityEntry.State != EntityState.Unchanged)
         {
             return;
@@ -58,29 +50,17 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
         EntityEntries.Add(entryId, new AbpEntityEntry(entryId, entityEntry));
     }
 
-    protected virtual void DetectChanges(EntityEntry entityEntry)
-    {
-        if (entityEntry.State != EntityState.Added &&
-            entityEntry.State != EntityState.Deleted &&
-            entityEntry.State != EntityState.Modified)
-        {
-            return;
-        }
-
-        RecursiveDetectChanges(entityEntry);
-    }
-
-    protected virtual void RecursiveDetectChanges(EntityEntry entityEntry)
+    protected virtual void DetectChanges(EntityEntry entityEntry, bool checkEntityEntryState = true)
     {
         #pragma warning disable EF1001
         var stateManager = entityEntry.Context.GetDependencies().StateManager;
-        var internalEntityEntityEntry = stateManager.Entries.FirstOrDefault(x => x.Entity == entityEntry.Entity);
+        var internalEntityEntityEntry = stateManager.TryGetEntry(entityEntry.Entity, throwOnNonUniqueness: false);
         if (internalEntityEntityEntry == null)
         {
             return;
         }
 
-        var foreignKeys = entityEntry.Metadata.GetForeignKeys().ToList();
+        var foreignKeys = entityEntry.Metadata.GetForeignKeys();
         foreach (var foreignKey in foreignKeys)
         {
             var principal = stateManager.FindPrincipal(internalEntityEntityEntry, foreignKey);
@@ -95,15 +75,21 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
                 continue;
             }
 
-            if (!abpEntityEntry.IsModified)
-            {
-                abpEntityEntry.IsModified = true;
-                RecursiveDetectChanges(abpEntityEntry.EntityEntry);
-            }
-
             var navigationEntry = abpEntityEntry.NavigationEntries.FirstOrDefault(x => x.NavigationEntry.Metadata is INavigation navigationMetadata && navigationMetadata.ForeignKey == foreignKey) ??
                                   abpEntityEntry.NavigationEntries.FirstOrDefault(x => x.NavigationEntry.Metadata is ISkipNavigation skipNavigationMetadata && skipNavigationMetadata.ForeignKey == foreignKey);
-            if (navigationEntry != null)
+
+            if (navigationEntry != null && checkEntityEntryState && entityEntry.State == EntityState.Unchanged)
+            {
+                abpEntityEntry.UpdateNavigation(entityEntry, navigationEntry);
+            }
+
+            if (!abpEntityEntry.IsModified && (!checkEntityEntryState || IsEntityEntryChanged(entityEntry)))
+            {
+                abpEntityEntry.IsModified = true;
+                DetectChanges(abpEntityEntry.EntityEntry, false);
+            }
+
+            if (navigationEntry != null && IsEntityEntryChanged(entityEntry))
             {
                 navigationEntry.IsModified = true;
             }
@@ -134,21 +120,34 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
                     continue;
                 }
 
-                if (!abpEntityEntry.IsModified)
-                {
-                    abpEntityEntry.IsModified = true;
-                    RecursiveDetectChanges(abpEntityEntry.EntityEntry);
-                }
-
                 var navigationEntry = abpEntityEntry.NavigationEntries.FirstOrDefault(x => x.NavigationEntry.Metadata is INavigation navigationMetadata && navigationMetadata.ForeignKey == inverseForeignKey) ??
                                       abpEntityEntry.NavigationEntries.FirstOrDefault(x => x.NavigationEntry.Metadata is ISkipNavigation skipNavigationMetadata && skipNavigationMetadata.ForeignKey == inverseForeignKey);
-                if (navigationEntry != null)
+
+                if (navigationEntry != null && checkEntityEntryState && entityEntry.State == EntityState.Unchanged)
+                {
+                    abpEntityEntry.UpdateNavigation(entityEntry, navigationEntry);
+                }
+
+                if (!abpEntityEntry.IsModified  && (!checkEntityEntryState || IsEntityEntryChanged(entityEntry)))
+                {
+                    abpEntityEntry.IsModified = true;
+                    DetectChanges(abpEntityEntry.EntityEntry, false);
+                }
+
+                if (navigationEntry != null && (!checkEntityEntryState || IsEntityEntryChanged(entityEntry)))
                 {
                     navigationEntry.IsModified = true;
                 }
             }
         }
 #pragma warning restore EF1001
+    }
+
+    protected virtual bool IsEntityEntryChanged(EntityEntry entityEntry)
+    {
+        return entityEntry.State == EntityState.Added ||
+               entityEntry.State == EntityState.Deleted ||
+               entityEntry.State == EntityState.Modified;
     }
 
     public virtual List<EntityEntry> GetChangedEntityEntries()
@@ -223,9 +222,19 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
         return null;
     }
 
-    public virtual void RemoveChangedEntityEntries()
+    public virtual void ResetChangedFlags()
     {
-        EntityEntries.RemoveAll(x => x.Value.IsModified);
+        foreach (var entry in EntityEntries.Values)
+        {
+            if (entry.IsModified)
+            {
+                entry.IsModified = false;
+                foreach (var navigation in entry.NavigationEntries)
+                {
+                    navigation.IsModified = false;
+                }
+            }
+        }
     }
 
     public virtual void Clear()

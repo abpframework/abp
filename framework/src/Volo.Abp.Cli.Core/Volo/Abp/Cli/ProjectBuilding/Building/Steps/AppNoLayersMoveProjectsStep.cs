@@ -41,7 +41,7 @@ public class AppNoLayersMoveProjectsStep : ProjectBuildPipelineStep
 
     public void ModifySolutionFile(ProjectBuildContext context, string pathInSlnFile, string newPathInSlnFile)
     {
-        var slnFile = context.Files.First(file => file.Name.EndsWith(".sln"));
+        var slnFile = context.Files.First(file => file.Name.EndsWith(".sln") ||file.Name.EndsWith(".slnx"));
         slnFile.SetContent(slnFile.Content.Replace($"\"{pathInSlnFile}\"", $"\"{newPathInSlnFile}\""));
     }
 

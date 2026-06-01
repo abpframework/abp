@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to effectively use ABP's localization system, enhancing your applications with features from Microsoft.Extensions.Localization."
+}
+```
+
 # Localization
 
 ABP's localization system is seamlessly integrated to the `Microsoft.Extensions.Localization` package and compatible with the [Microsoft's localization documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization). It adds some useful features and enhancements to make it easier to use in real life application scenarios.
@@ -90,6 +97,71 @@ A JSON localization file content is shown below:
 * `texts` section just contains key-value collection of the localization strings (keys may have spaces too).
 
 > ABP will ignore (skip) the JSON file if the `culture` section is missing.
+
+You can also use nesting or array in localization files, like this:
+
+````json
+{
+  "culture": "en",
+  "texts": {
+    "HelloWorld": "Hello World!",
+    "Hello": {
+        "World": "Hello World!"
+    },
+    "Hi":[
+        "Bye": "Bye World!"
+        "Hello": "Hello World!"
+    ]
+  }
+}
+````
+
+Then you can use it like this:
+
+> The double underscore (`__`) is used to separate the parent key from the child key.
+
+````csharp
+var str = L["Hello__World"]; // Hello World!
+var str2 = L["Hi__0"]; // Bye World!
+var str3 = L["Hi__1"]; // Hello World!
+````
+
+You can have more than one localization file with the same culture: files will be merged. This is useful for large modules where splitting translations by feature keeps each file manageable.
+
+**Example file structure:**
+
+```
+Localization/
+└── MyResource/
+    ├── en.json            ← base / shared strings
+    ├── en_Authors.json    ← Author feature strings
+    ├── en_Books.json      ← Book feature strings
+    └── en_Users.json      ← User feature strings
+```
+
+Files are sorted by name (ordinal order) before merging, so the effective merge order is `en.json` → `en_Authors.json` → `en_Books.json` → `en_Users.json`.
+
+```
+en.json            en_Authors.json    en_Books.json
+┌─────────────────┐ ┌───────────────┐ ┌──────────────────┐
+│ DisplayName=Name│ │ Author.Id=Id  │ │ Book.Id=ISBN     │
+│ SaveButton=Save │ │ Author.Bio=.. │ │ Book.Title=Title │
+└─────────────────┘ └───────────────┘ └──────────────────┘
+         │                  │                  │
+         └──────────────────┴──────────────────┘
+                            │ merge (later file wins on duplicate keys)
+                            ▼
+                 ┌────────────────────┐
+                 │ DisplayName = Name │
+                 │ SaveButton  = Save │
+                 │ Author.Id   = Id   │
+                 │ Author.Bio  = ...  │
+                 │ Book.Id     = ISBN │
+                 │ Book.Title  = Title│
+                 └────────────────────┘
+```
+
+> Note: If the same key is defined in multiple files, the value from the last file (in sort order) wins.
 
 ### Default Resource
 
@@ -258,6 +330,10 @@ Configure<AbpLocalizationOptions>(options =>
     options.Languages.Add(new LanguageInfo("uz", "uz", "Uzbek"));
 });
 ```
+
+## URL-Based Localization
+
+ABP supports embedding the culture code directly in the URL path (e.g. `/en/products`, `/zh-Hans/about`), which is useful for SEO-friendly and shareable localized URLs. See the [URL-Based Localization](./url-based-localization.md) document for details.
 
 ## The Client Side
 

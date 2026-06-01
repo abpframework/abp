@@ -1,4 +1,19 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to integrate modules in ABP Framework by implementing integration services for seamless communication between Products and Orders modules."
+}
+```
+
 # Integrating the Modules: Implementing Integration Services
+
+````json
+//[doc-params]
+{
+    "UI": ["MVC", "BlazorWebApp", "NG"],
+    "BlazorUI": ["Blazorise", "MudBlazor"]
+}
+````
 
 ````json
 //[doc-nav]
@@ -14,13 +29,13 @@
 }
 ````
 
-In the previous parts, we created two modules: the Products module to store and manage products and the Orders module to accept orders. However, these modules were completely independent from each other. Only the main application brought them together to execute in the same application, but these modules don't communicate with each other.
+You have created two modules so far: the **Catalog** module to store and manage products and the **Ordering** module to accept orders. However, these modules were completely independent from each other. The main application brought them together to execute in the same application, but these modules don't communicate with each other.
 
-In the next three parts, you will learn to implement three patterns for integrating these modules:
+In this part and next two pars, you will learn to implement three common patterns for integrating these modules:
 
-1. The Order module will make a request to the Products module to get product information when needed.
-2. The Product module will listen to events from the Orders module, so it can decrease a product's stock count when an order is placed.
-3. Finally, we will execute a database query that includes product and order data.
+1. The Order module will make a request to the Catalog module to get product information when needed.
+2. The Catalog module will listen to events from the Ordering module, so it can decrease a product's stock count when an order is placed.
+3. Finally, you will execute a database query that includes product and order data.
 
 Let's begin from the first one: The Integration Services.
 
@@ -28,27 +43,27 @@ Let's begin from the first one: The Integration Services.
 
 Remember from the [previous part](part-05.md), the Orders page shows product's identities instead of their names:
 
-![abp-studio-browser-orders-menu-item](images/abp-studio-browser-orders-menu-item.png)
+![abp-studio-browser-orders-menu-item](images/abp-studio-browser-orders-menu-item-v2.png)
 
-That is because the Orders module has no access to the product data, so it can not perform a JOIN query to get the names of products from the `Products` table. That is a natural result of the modular design. However, we also don't want to show a product's identity on the UI, which is not a good user experience.
+That is because the Ordering module has no access to the product data, so it can not perform a JOIN query to get the names of products from the `Products` table. That is a natural result of the modular design. However, you also don't want to show a product's GUID identity on the UI, which is not a good user experience.
 
-As a solution to that problem, the Orders module may ask product names to the Product module using an [integration service](../../framework/api-development/integration-services.md). Integration service concept in ABP is designed for request/response style inter-module (in modular applications) and inter-microservice (in distributed systems) communication.
+As a solution to that problem, the Ordering module may ask product names to the Catalog module using an [integration service](../../framework/api-development/integration-services.md). Integration service concept in ABP is designed for request/response style inter-module (in modular applications) and inter-microservice (in distributed systems) communication.
 
 > When you implement integration services for inter-module communication, you can easily convert them to REST API calls if you convert your solution to a microservice system and convert your modules to services later.
 
 ## Creating a Products Integration Service
 
-The first step is to create an integration service in the Products module, so other modules can consume it.
+The first step is to create an integration service in the Catalog module, so other modules can consume it.
 
-We will define an interface in the `ModularCrm.Products.Application.Contracts` package and implement it in the  `ModularCrm.Products.Application` package.
+You will define an interface in the `ModularCrm.Catalog.Contracts` package and implement it in the  `ModularCrm.Catalog` package.
 
 ### Defining the `IProductIntegrationService` Interface
 
-Open the `ModularCrm.Products` .NET solution in your IDE, find the `ModularCrm.Products.Application.Contracts` project, create an `Integration` folder inside inside of that project and finally create an interface named `IProductIntegrationService` into that folder. The final folder structure should be like that:
+Open the `ModularCrm.Catalog` .NET solution in your IDE, find the `ModularCrm.Catalog.Contracts` project, create an `Integration` folder inside inside of that project and finally create an interface named `IProductIntegrationService` into that folder. The final folder structure should be like that:
 
-![visual-studio-product-integration-service](images/visual-studio-product-integration-service.png)
+![vscode-product-integration-service](images/vscode-product-integration-service.png)
 
-(Creating an`Integration` folder is not required, but it can be a good practice)
+Creating an`Integration` folder is not required, but it can be a good practice to isolate integration-related code from the business logic of your module.
 
 Open the `IProductIntegrationService.cs` file and replace it's content with the following code block:
 
@@ -59,13 +74,12 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Services;
 
-namespace ModularCrm.Products.Integration
+namespace ModularCrm.Catalog.Integration;
+
+[IntegrationService]
+public interface IProductIntegrationService : IApplicationService
 {
-    [IntegrationService]
-    public interface IProductIntegrationService : IApplicationService
-    {
-        Task<List<ProductDto>> GetProductsByIdsAsync(List<Guid> ids);
-    }
+    Task<List<ProductDto>> GetProductsByIdsAsync(List<Guid> ids);
 }
 ````
 
@@ -81,7 +95,7 @@ namespace ModularCrm.Products.Integration
 
 ### Implementing the `ProductIntegrationService` Class
 
-We've defined the integration service interface. Now, we can implement it in the  `ModularCrm.Products.Application` project. Create an `Integration` folder and then create a `ProductIntegrationService` class in that folder. The final folder structure should be like this:
+We've defined the integration service interface. Now, you can implement it in the  `ModularCrm.Catalog` project. Create an `Integration` folder and then create a `ProductIntegrationService` class in that folder. The final folder structure should be like this:
 
 ![visual-studio-product-integration-service-implementation](images/visual-studio-product-integration-service-implementation.png)
 
@@ -91,78 +105,76 @@ Open the `ProductIntegrationService.cs` file and replace its content with the fo
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Volo.Abp;
 using Volo.Abp.Domain.Repositories;
 
-namespace ModularCrm.Products.Integration
+namespace ModularCrm.Catalog.Integration;
+
+public class ProductIntegrationService
+    : CatalogAppService, IProductIntegrationService
 {
-    [IntegrationService]
-    public class ProductIntegrationService
-        : ProductsAppService, IProductIntegrationService
+    private readonly IRepository<Product, Guid> _productRepository;
+
+    public ProductIntegrationService(IRepository<Product, Guid> productRepository)
     {
-        private readonly IRepository<Product, Guid> _productRepository;
+        _productRepository = productRepository;
+    }
 
-        public ProductIntegrationService(IRepository<Product, Guid> productRepository)
-        {
-            _productRepository = productRepository;
-        }
+    public async Task<List<ProductDto>> GetProductsByIdsAsync(List<Guid> ids)
+    {
+        var products = await _productRepository.GetListAsync(
+            product => ids.Contains(product.Id)
+        );
 
-        public async Task<List<ProductDto>> GetProductsByIdsAsync(List<Guid> ids)
-        {
-            var products = await _productRepository.GetListAsync(
-                product => ids.Contains(product.Id)
-            );
-
-            return ObjectMapper.Map<List<Product>, List<ProductDto>>(products);
-        }
+        return ObjectMapper.Map<List<Product>, List<ProductDto>>(products);
     }
 }
 ````
 
 The implementation is pretty simple. Just using a [repository](../../framework/architecture/domain-driven-design/repositories.md) to query `Product` [entities](../../framework/architecture/domain-driven-design/entities.md).
 
-> Here, we directly used `List<T>` classes, but instead, you could wrap inputs and outputs into [DTOs](../../framework/architecture/domain-driven-design/data-transfer-objects.md). In that way, it can be possible to add new properties to these DTOs without changing the signature of your integration service method (and without introducing breaking changes for your client modules).
+> Here, you directly used `List<T>` classes, but instead, you could wrap inputs and outputs into [DTOs](../../framework/architecture/domain-driven-design/data-transfer-objects.md). In that way, it can be possible to add new properties to these DTOs without changing the signature of your integration service method (and without introducing breaking changes for your client modules).
 
 ## Consuming the Products Integration Service
 
-The Product Integration Service is ready for the other modules to use. In this section, we will use it in the Ordering module to convert product IDs to product names.
+The Product Integration Service is ready for the other modules to use. In this section, you will use it in the Ordering module to convert product IDs to product names.
 
-### Adding a Reference to the `ModularCrm.Products.Application.Contracts` Package
+### Adding a Reference of the `ModularCrm.Catalog.Contracts` Package
 
 Open the ABP Studio UI and stop the application if it is already running. Then open the *Solution Explorer* in ABP Studio, right-click the `ModularCrm.Ordering` package and select the *Add Package Reference* command:
 
-![abp-studio-add-package-reference-4](images/abp-studio-add-package-reference-4.png)
+![abp-studio-add-package-reference-4](images/abp-studio-add-package-reference-4-v2.png)
 
-In the opening dialog, select the *This solution* tab, find and check the `ModularCrm.Products.Application.Contracts` package and click the OK button:
+In the opening dialog, select the *This solution* tab, find and check the `ModularCrm.Catalog.Contracts` package and click the OK button:
 
+{{if UI == "MVC"}}
 ![abp-studio-add-package-reference-dialog-3](images/abp-studio-add-package-reference-dialog-3.png)
+{{else if UI == "BlazorWebApp"}}
+![abp-studio-add-package-reference-dialog-3](images/abp-studio-add-package-reference-dialog-3-blazor-webapp.png)
+{{end}}
 
 ABP Studio adds the package reference and arranges the [module](../../framework/architecture/modularity/basics.md) dependency.
 
-> Instead of directly adding such a package reference, it can be best to import the module first (right-click the `ModularCrm.Ordering` module, select the _Import Module_ command and import the `ModularCrm.Products` module), then install the package reference. In that way, it would be easy to see and keep track of inter-module dependencies.
+> Instead of directly adding such a package reference, it can be possible to import the module first (right-click the `ModularCrm.Ordering` module, select the _Import Module_ command and import the `ModularCrm.Catalog` module), then add the package references. ABP automatically import module when you add a package reference from a local module, but for other sources you may need to do it manually.
 
 ### Using the Products Integration Service
 
-Now, we can inject and use `IProductIntegrationService` in the Ordering module codebase.
+Now, you can inject and use `IProductIntegrationService` in the Ordering module codebase.
 
-Open the `OrderAppService` class (the `OrderAppService.cs` file under the `Services` folder of the `ModularCrm.Ordering` project of the `ModularCrm.Ordering` .NET solution) and change its content as like the following code block:
+Open the `OrderAppService` class of the `ModularCrm.Ordering` project of the `ModularCrm.Ordering` .NET solution and change its content as like the following code block:
 
 ````csharp
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ModularCrm.Ordering.Enums;
-using ModularCrm.Ordering.Entities;
-using ModularCrm.Products.Integration;
-using Volo.Abp.Application.Services;
+using ModularCrm.Catalog.Integration;
 using Volo.Abp.Domain.Repositories;
 
-namespace ModularCrm.Ordering.Services;
+namespace ModularCrm.Ordering;
 
-public class OrderAppService : ApplicationService, IOrderAppService
+public class OrderAppService : OrderingAppService, IOrderAppService
 {
-    private readonly IRepository<Order, Guid>  _orderRepository;
+    private readonly IRepository<Order, Guid> _orderRepository;
     private readonly IProductIntegrationService _productIntegrationService;
 
     public OrderAppService(
@@ -207,56 +219,51 @@ public class OrderAppService : ApplicationService, IOrderAppService
 }
 ````
 
-And also, open the `OrderDto` class (the `OrderDto.cs` file under the `Services` folder of the `ModularCrm.Ordering.Contracts` project of the `ModularCrm.Ordering` .NET solution) and add a `ProductName` property to it:
+And also, open the `OrderDto` class of the `ModularCrm.Ordering.Contracts` project of the `ModularCrm.Ordering` .NET solution and add a `ProductName` property to it:
 
 ````csharp
 using System;
-using ModularCrm.Ordering.Enums;
 
-namespace ModularCrm.Ordering.Services;
+namespace ModularCrm.Ordering;
 
 public class OrderDto
 {
     public Guid Id { get; set; }
-    public string CustomerName { get; set; }
+    public string CustomerName { get; set; } = null!;
     public Guid ProductId { get; set; }
-    public string ProductName { get; set; } // New property
     public OrderState State { get; set; }
+    public string ProductName { get; set; } = null!; // New Property
 }
 ````
 
-Lastly, open the `OrderingAutoMapperProfile` class (the `OrderingAutoMapperProfile.cs` file under the `Services` folder of the `ModularCrm.Ordering` project of the `ModularCrm.Ordering` .NET solution) and ignore the `ProductName` property in the mapping configuration:
+Lastly, open the `OrderingApplicationMappers` class (the `OrderingApplicationMappers.cs` file under the `Services` folder of the `ModularCrm.Ordering` project of the `ModularCrm.Ordering` .NET solution) and add the following mapping class:
 
 ````csharp
-using AutoMapper;
-using ModularCrm.Ordering.Services;
-using ModularCrm.Ordering.Entities;
-using Volo.Abp.AutoMapper;
-
-namespace ModularCrm.Ordering;
-
-public class OrderingApplicationAutoMapperProfile : Profile
+[Mapper]
+public partial class OrderToOrderDtoMapper : MapperBase<Order, OrderDto>
 {
-    public OrderingApplicationAutoMapperProfile()
-    {
-        CreateMap<Order, OrderDto>()
-            .Ignore(x => x.ProductName); // New line
-    }
+    [MapperIgnoreTarget(nameof(OrderDto.ProductName))]
+    public override partial OrderDto Map(Order source);
+
+    [MapperIgnoreTarget(nameof(OrderDto.ProductName))]
+    public override partial void Map(Order source, OrderDto destination);
 }
 ````
 
 Let's see what we've changed:
 
 * We've added a `ProductName` property to the `OrderDto` class to store the product name.
-* Injecting the `IProductIntegrationService` interface so we can use it to request products.
+* Injecting the `IProductIntegrationService` interface so you can use it to request products.
 * In the `GetListAsync` method;
   * First getting the orders from the ordering module's database just like done before.
-  * Next, we are preparing a unique list of product IDs since the `GetProductsByIdsAsync` method requests it.
-  * Then we are calling the `IProductIntegrationService.GetProductsByIdsAsync` method to get a `List<ProductDto>` object.
+  * Next, you are preparing a unique list of product IDs since the `GetProductsByIdsAsync` method requests it.
+  * Then you are calling the `IProductIntegrationService.GetProductsByIdsAsync` method to get a `List<ProductDto>` object.
   * In the last line, we are converting the product list to a dictionary, where the key is `Guid Id` and the value is `string Name`. That way, we can easily find a product's name with its ID.
   * Finally, we are mapping the orders to `OrderDto` objects and setting the product name by looking up the product ID in the dictionary.
 
-Open the `Index.cshtml` file, and change the `@order.ProductId` part by `@Order.ProductName` to write the product name instead of the product ID. The final `Index.cshtml` content should be the following:
+{{if UI == "MVC"}}
+
+Open the `Index.cshtml` file, and change the `@order.ProductId` part to `@order.ProductName` to write the product name instead of the product ID. The final `Index.cshtml` content should be the following:
 
 ````html
 @page
@@ -286,8 +293,112 @@ That's all. Now, you can graph build the main application and run it in ABP Stud
 
 As you can see, we can see the product names instead of product IDs.
 
-In the way explained in this section, you can easily create integration services for your modules and consume these integration services in any other module.
+{{else if UI == "BlazorWebApp"}}
+
+Open the `Index.razor` file, and change the `@order.ProductId` part to `@order.ProductName` to write the product name instead of the product ID. The final `Index.razor` content should be the following:
+
+{{if BlazorUI == "Blazorise"}}
+
+````razor
+@page "/ordering"
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using ModularCrm.Ordering
+@inject IOrderAppService OrderAppService
+
+<h1>Orders</h1>
+
+<Card>
+    <CardBody>
+        <ListGroup>
+            @foreach (var order in Orders)
+            {
+                <ListGroupItem>
+                    <strong>Customer:</strong> @order.CustomerName <br />
+                    <strong>Product:</strong> @order.ProductName <br />
+                    <strong>State:</strong> @order.State
+                </ListGroupItem>
+            }
+        </ListGroup>
+    </CardBody>
+</Card>
+
+@code {
+    private List<OrderDto> Orders { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Orders = await OrderAppService.GetListAsync();
+    }
+}
+````
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+````razor
+@page "/ordering"
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using ModularCrm.Ordering
+@inject IOrderAppService OrderAppService
+
+<MudText Typo="Typo.h4">Orders</MudText>
+
+<MudCard>
+    <MudCardContent>
+        <MudList T="OrderDto">
+            @foreach (var order in Orders)
+            {
+                <MudListItem T="OrderDto" Value="@order">
+                    <strong>Customer:</strong> @order.CustomerName <br />
+                    <strong>Product:</strong> @order.ProductName <br />
+                    <strong>State:</strong> @order.State
+                </MudListItem>
+            }
+        </MudList>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    private List<OrderDto> Orders { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Orders = await OrderAppService.GetListAsync();
+    }
+}
+````
+
+{{end}}
+
+That's all. Now, you can graph build the main application and run it in ABP Studio to see the result:
+
+![abp-studio-browser-list-of-orders-with-product-name](images/abp-studio-browser-list-of-orders-with-product-name.png)
+
+As you can see, we can see the product names instead of product IDs.
+
+{{else if UI == "NG"}}
+
+Open the `ordering.component.html` file in the `modules/modularcrm.ordering/angular/projects/ordering/src/lib/components` folder, and replace the `productId` display with `productName`:
+
+```html
+<strong>Product:</strong> {%{{{ order.productName }}}%} <br />
+```
+
+If your generated Angular proxy files are not up to date, run `abp generate-proxy -t ng` in the `modules/modularcrm.ordering/angular` folder.
+
+Then run the Angular app (`yarn start` in the `angular` folder), navigate to the *Ordering* page, and verify product names are shown instead of product IDs.
+
+![abp-studio-browser-list-of-orders-with-product-name](images/abp-studio-browser-list-of-orders-with-product-name.png)
+
+{{end}}
 
 > **Design Tip**
 >
-> It is suggested that you keep that type of communication to a minimum and not couple your modules with each other. It can make your solution complicated and may also decrease your system performance. When you need to do it, think about performance and try to make some optimizations. For example, if the Ordering module frequently needs product data, you can use a kind of [cache layer](../../framework/fundamentals/caching.md), so it doesn't make frequent requests to the Products module. Especially if you consider converting your system to a microservice solution in the future, too many direct integration API calls can be a performance bottleneck.
+> It is suggested that you keep that type of communication to a minimum and not couple your modules with each other. It can make your solution complicated and may also decrease your system performance. When you need to do it, think about performance and try to make some optimizations. For example, if the Ordering module frequently needs product data, you can use a kind of [cache layer](../../framework/fundamentals/caching.md), so it doesn't make frequent requests to the Catalog module. Especially if you consider converting your system to a microservice solution in the future, too many direct integration API calls can be a performance bottleneck.
+
+## Conclusion
+
+In this part of the tutorial, you created and consumed an integration service between modules, then reflected the product name on the {{if UI == "MVC"}}MVC{{else if UI == "BlazorWebApp"}}Blazor WebApp{{else if UI == "NG"}}Angular{{end}} UI. In the [next part](part-07.md), we will explore event based messaging between the modules.

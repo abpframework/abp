@@ -17,6 +17,7 @@
     "SentSuccessfully": "Úspešne odoslané",
     "MailSendingFailed": "Odoslanie emailu zlyhalo. Skontrolujte konfiguráciu emailu a skúste to znova.",
     "Send": "Odoslať",
+    "Menu:Settings": "Nastavenia",
     "Menu:Emailing": "Posielanie emailov",
     "Menu:TimeZone": "Časové Pásmo",
     "DisplayName:Timezone": "Časové pásmo",
@@ -34,7 +35,7 @@
     "Feature:SettingManagementGroup": "Správa nastavení",
     "Feature:SettingManagementEnable": "Povoliť správu nastavení",
     "Feature:SettingManagementEnableDescription": "Povoliť systém správy nastavení v aplikácii.",
-    "Feature:AllowChangingEmailSettings": "Povoliť zmenu nastavení e-mailu.",
+    "Feature:AllowChangingEmailSettings": "Povoliť zmenu nastavení e-mailu",
     "Feature:AllowChangingEmailSettingsDescription": "Povoliť zmenu nastavení e-mailu.",
     "SmtpPasswordPlaceholder": "Zadajte hodnotu pre aktualizáciu hesla"
   }

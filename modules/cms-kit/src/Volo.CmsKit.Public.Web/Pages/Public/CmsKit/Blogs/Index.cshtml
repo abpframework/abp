@@ -14,7 +14,8 @@
 
 @{
     const string dummyImageSource = "/cms-kit/dummy-placeholder-320x180.png";
-    var isMarkedItemFeatureEnabled = GlobalFeatureManager.Instance.IsEnabled<MarkedItemsFeature>() && Model.MarkedItemsFeature?.IsEnabled == true;
+    var isMarkedItemFeatureEnabled = GlobalFeatureManager.Instance.IsEnabled<MarkedItemsFeature>() && 
+                                     (Model.MarkedItemsFeature?.IsEnabled == true || Model.FilterOnFavorites.HasValue);
 }
 
 @section styles {
@@ -68,20 +69,20 @@
     <hr />
 }
 
+@if (isMarkedItemFeatureEnabled)
+{
+    var filterOnFavorites = Model.FilterOnFavorites.GetValueOrDefault();
+    string icon = filterOnFavorites ? "heart" : "heart-o";
+    <abp-button class="favorite-button badge text-bg-light my-2 border-light-subtle"
+                button-type="Light"
+                icon="@icon text-danger"
+                text="@L["FilterOnFavorites"]"
+                filter-on-favorites="@filterOnFavorites">
+    </abp-button>
+}
+
 @if (Model.Blogs.TotalCount > 0)
 {
-    @if (isMarkedItemFeatureEnabled)
-    {
-        var filterOnFavorties = Model.FilterOnFavorites.GetValueOrDefault();
-        string icon = filterOnFavorties ? "heart" : "heart-o";
-        <abp-button class="favorite-button badge text-bg-light my-2 border-light-subtle"
-            button-type="Light" 
-            icon="@icon text-danger"
-            text="@L["FilterOnFavorites"]" 
-            filter-on-favorites="@filterOnFavorties">
-        </abp-button>
-
-    }
     <abp-row id="blogs-container">
         @foreach (var blog in Model.Blogs.Items)
         {

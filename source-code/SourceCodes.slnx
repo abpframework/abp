@@ -1,0 +1,20 @@
+<Solution>
+  <Project Path="Volo.Abp.Account.SourceCode/Volo.Abp.Account.SourceCode.csproj" />
+  <Project Path="Volo.Abp.AuditLogging.SourceCode/Volo.Abp.AuditLogging.SourceCode.csproj" />
+  <Project Path="Volo.Abp.BackgroundJobs.SourceCode/Volo.Abp.BackgroundJobs.SourceCode.csproj" />
+  <Project Path="Volo.Abp.BasicTheme.SourceCode/Volo.Abp.BasicTheme.SourceCode.csproj" />
+  <Project Path="Volo.Abp.BlobStoring.Database.SourceCode/Volo.Abp.BlobStoring.Database.SourceCode.csproj" />
+  <Project Path="Volo.Abp.FeatureManagement.SourceCode/Volo.Abp.FeatureManagement.SourceCode.csproj" />
+  <Project Path="Volo.Abp.Identity.SourceCode/Volo.Abp.Identity.SourceCode.csproj" />
+  <Project Path="Volo.Abp.IdentityServer.SourceCode/Volo.Abp.IdentityServer.SourceCode.csproj" />
+  <Project Path="Volo.Abp.OpenIddict.SourceCode/Volo.Abp.OpenIddict.SourceCode.csproj" />
+  <Project Path="Volo.Abp.PermissionManagement.SourceCode/Volo.Abp.PermissionManagement.SourceCode.csproj" />
+  <Project Path="Volo.Abp.SettingManagement.SourceCode/Volo.Abp.SettingManagement.SourceCode.csproj" />
+  <Project Path="Volo.Abp.TenantManagement.SourceCode/Volo.Abp.TenantManagement.SourceCode.csproj" />
+  <Project Path="Volo.Abp.Users.SourceCode/Volo.Abp.Users.SourceCode.csproj" />
+  <Project Path="Volo.Abp.VirtualFileExplorer.SourceCode/Volo.Abp.VirtualFileExplorer.SourceCode.csproj" />
+  <Project Path="Volo.Blogging.SourceCode/Volo.Blogging.SourceCode.csproj" />
+  <Project Path="Volo.ClientSimulation.SourceCode/Volo.ClientSimulation.SourceCode.csproj" />
+  <Project Path="Volo.CmsKit.SourceCode/Volo.CmsKit.SourceCode.csproj" />
+  <Project Path="Volo.Docs.SourceCode/Volo.Docs.SourceCode.csproj" />
+</Solution>

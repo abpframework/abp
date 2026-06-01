@@ -7,12 +7,15 @@
 @using Volo.Abp.Identity.Localization
 @using Volo.Abp.Identity.Web.Navigation
 @using Volo.Abp.Identity.Web.Pages.Identity.Users
+@using Volo.Abp.UI.Navigation.Localization.Resource
 @model IndexModel
 @inject IHtmlLocalizer<IdentityResource> L
+@inject IHtmlLocalizer<AbpUiNavigationResource> LUiNavigation
 @inject IAuthorizationService Authorization
 @inject IPageLayout PageLayout
 @{
     PageLayout.Content.Title = L["Users"].Value;
+    PageLayout.Content.BreadCrumb.Add(LUiNavigation["Menu:Administration"].Value);
     PageLayout.Content.BreadCrumb.Add(L["Menu:IdentityManagement"].Value);
     PageLayout.Content.MenuItemName = IdentityMenuNames.Users;
 }

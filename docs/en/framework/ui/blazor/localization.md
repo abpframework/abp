@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement localization in Blazor apps using `IStringLocalizer<T>` for seamless multi-language support with ABP Framework."
+}
+```
+
 # Blazor UI: Localization
 
 Blazor applications can reuse the same `IStringLocalizer<T>` service that is explained in the [localization document](../../fundamentals/localization.md).

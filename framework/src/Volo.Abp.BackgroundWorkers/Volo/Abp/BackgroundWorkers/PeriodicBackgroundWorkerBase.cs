@@ -15,6 +15,11 @@ public abstract class PeriodicBackgroundWorkerBase : BackgroundWorkerBase
 {
     protected IServiceScopeFactory ServiceScopeFactory { get; }
     protected AbpTimer Timer { get; }
+    public int Period => Timer.Period;
+    /// <summary>
+    ///  CronExpression has high priority over Period.
+    /// </summary>
+    public string? CronExpression { get; protected set; }
 
     protected PeriodicBackgroundWorkerBase(
         AbpTimer timer,
@@ -25,13 +30,13 @@ public abstract class PeriodicBackgroundWorkerBase : BackgroundWorkerBase
         Timer.Elapsed += Timer_Elapsed;
     }
 
-    public override async Task StartAsync(CancellationToken cancellationToken = default)
+    public async override Task StartAsync(CancellationToken cancellationToken = default)
     {
         await base.StartAsync(cancellationToken);
         Timer.Start(cancellationToken);
     }
 
-    public override async Task StopAsync(CancellationToken cancellationToken = default)
+    public async override Task StopAsync(CancellationToken cancellationToken = default)
     {
         Timer.Stop(cancellationToken);
         await base.StopAsync(cancellationToken);

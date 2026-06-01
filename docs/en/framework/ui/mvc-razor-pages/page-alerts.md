@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement user alerts in ASP.NET Core MVC/Razor Pages with ABP Framework for effective communication in your applications."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages: Page Alerts
 
 It is common to show error, warning or information alerts to inform the user. An example *Service Interruption* alert is shown below:

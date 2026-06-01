@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Manage public menus dynamically with the CMS Kit Menu system. Learn how to enable features and navigate the user interface for effective menu management."
+}
+```
+
 # CMS Kit: Menus
 
 CMS Kit Menu system allows to manage public menus dynamically.

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use `GlobalFeatureManager` in Blazor to check and manage global features effectively for your applications."
+}
+```
+
 # Blazor UI: Global Features
 `GlobalFeatureManager` allows you to check the global features in your Blazor applications.
 

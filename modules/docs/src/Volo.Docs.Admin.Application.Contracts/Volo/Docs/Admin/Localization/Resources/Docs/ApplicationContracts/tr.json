@@ -1,7 +1,7 @@
 {
   "culture": "tr",
   "texts": {
-    "Permission:DocumentManagement": "Döküman yönetimi",
+    "Permission:DocumentManagement": "Belge Yönetimi",
     "Permission:Projects": "Projeler",
     "Permission:Edit": "Düzenle",
     "Permission:Delete": "Sil",
@@ -66,6 +66,9 @@
     "GenerateAndDownloadPdf": "PDF oluştur ve indir",
     "PdfFileDeletionWarningMessage": "{0} PDF dosyasını silmek istediğinizden emin misiniz?",
     "ManagePdfFiles": "PDF dosyalarını yönet",
-    "Permission:ManagePdfFiles": "PDF dosyalarını yönet"
+    "Permission:ManagePdfFiles": "PDF dosyalarını yönet",
+    "PdfDeletedSuccessfully": "PDF dosyası başarıyla silindi",
+    "PdfGenerationStarted": "PDF oluşturma başladı",
+    "PdfGenerationStartedInfoMessage": "PDF oluşturma işlemi başlatıldı. İşlem tamamlandığında, dosyanın PDF dosyaları bölümüne eklenip eklenmediğini kontrol edebilirsiniz."
   }
 }

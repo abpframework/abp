@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate Dapper with ABP Framework for high-performance data access, simplifying repository creation while leveraging EF Core."
+}
+```
+
 # Dapper Integration
 
 [Dapper](https://github.com/DapperLib/Dapper) is a simple and lightweight object mapper for .NET. A key feature of Dapper is its [high performance](https://github.com/DapperLib/Dapper#performance) compared to other ORMs.

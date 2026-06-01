@@ -8,4 +8,6 @@ namespace Volo.Abp.AuditLogging.MongoDB;
 public interface IAuditLoggingMongoDbContext : IAbpMongoDbContext
 {
     IMongoCollection<AuditLog> AuditLogs { get; }
+
+    IMongoCollection<AuditLogExcelFile> AuditLogExcelFiles { get; }
 }

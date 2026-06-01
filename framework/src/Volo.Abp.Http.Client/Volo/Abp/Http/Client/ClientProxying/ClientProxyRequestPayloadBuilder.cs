@@ -46,7 +46,7 @@ public class ClientProxyRequestPayloadBuilder : ITransientDependency
         HttpClientProxyingOptions = httpClientProxyingOptions.Value;
     }
 
-    public virtual async Task<HttpContent?> BuildContentAsync(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, IJsonSerializer jsonSerializer, ApiVersionInfo apiVersion)
+    public virtual async Task<HttpContent?> BuildContentAsync(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object?> methodArguments, IJsonSerializer jsonSerializer, ApiVersionInfo apiVersion)
     {
         var body = await GenerateBodyAsync(action, methodArguments, jsonSerializer);
         if (body != null)
@@ -59,7 +59,7 @@ public class ClientProxyRequestPayloadBuilder : ITransientDependency
         return body;
     }
 
-    protected virtual Task<HttpContent?> GenerateBodyAsync(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, IJsonSerializer jsonSerializer)
+    protected virtual Task<HttpContent?> GenerateBodyAsync(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object?> methodArguments, IJsonSerializer jsonSerializer)
     {
         var parameters = action
             .Parameters
@@ -87,7 +87,7 @@ public class ClientProxyRequestPayloadBuilder : ITransientDependency
         return Task.FromResult<HttpContent?>(new StringContent(jsonSerializer.Serialize(value), Encoding.UTF8, MimeTypes.Application.Json));
     }
 
-    protected virtual async Task<HttpContent?> GenerateFormPostDataAsync(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments)
+    protected virtual async Task<HttpContent?> GenerateFormPostDataAsync(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object?> methodArguments)
     {
         var parameters = action
             .Parameters

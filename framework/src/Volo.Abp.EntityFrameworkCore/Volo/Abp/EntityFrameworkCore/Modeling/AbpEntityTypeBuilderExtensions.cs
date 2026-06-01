@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -14,20 +15,69 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling;
 
 public static class AbpEntityTypeBuilderExtensions
 {
+    public static List<NamedEntityConfigurer> ConventionalConfigurers { get; }
+
+    static AbpEntityTypeBuilderExtensions()
+    {
+        ConventionalConfigurers = new List<NamedEntityConfigurer>
+        {
+            new NamedEntityConfigurer(
+                "ConcurrencyStamp",
+                b => b.TryConfigureConcurrencyStamp()
+            ),
+            new NamedEntityConfigurer(
+                "ExtraProperties",
+                b => b.TryConfigureExtraProperties()
+            ),
+            new NamedEntityConfigurer(
+                "ObjectExtensions",
+                b => b.TryConfigureObjectExtensions()
+            ),
+            new NamedEntityConfigurer(
+                "MayHaveCreator",
+                b => b.TryConfigureMayHaveCreator()
+            ),
+            new NamedEntityConfigurer(
+                "MustHaveCreator",
+                b => b.TryConfigureMustHaveCreator()
+            ),
+            new NamedEntityConfigurer(
+                "SoftDelete",
+                b => b.TryConfigureSoftDelete()
+            ),
+            new NamedEntityConfigurer(
+                "DeletionTime",
+                b => b.TryConfigureDeletionTime()
+            ),
+            new NamedEntityConfigurer(
+                "DeletionAudited",
+                b => b.TryConfigureDeletionAudited()
+            ),
+            new NamedEntityConfigurer(
+                "CreationTime",
+                b => b.TryConfigureCreationTime()
+            ),
+            new NamedEntityConfigurer(
+                "LastModificationTime",
+                b => b.TryConfigureLastModificationTime()
+            ),
+            new NamedEntityConfigurer(
+                "ModificationAudited",
+                b => b.TryConfigureModificationAudited()
+            ),
+            new NamedEntityConfigurer(
+                "MultiTenant",
+                b => b.TryConfigureMultiTenant()
+            )
+        };
+    }
+    
     public static void ConfigureByConvention(this EntityTypeBuilder b)
     {
-        b.TryConfigureConcurrencyStamp();
-        b.TryConfigureExtraProperties();
-        b.TryConfigureObjectExtensions();
-        b.TryConfigureMayHaveCreator();
-        b.TryConfigureMustHaveCreator();
-        b.TryConfigureSoftDelete();
-        b.TryConfigureDeletionTime();
-        b.TryConfigureDeletionAudited();
-        b.TryConfigureCreationTime();
-        b.TryConfigureLastModificationTime();
-        b.TryConfigureModificationAudited();
-        b.TryConfigureMultiTenant();
+        foreach (var configurer in ConventionalConfigurers)
+        {
+            configurer.ConfigureAction(b);
+        }
     }
 
     public static void ConfigureConcurrencyStamp<T>(this EntityTypeBuilder<T> b)
@@ -308,6 +358,4 @@ public static class AbpEntityTypeBuilderExtensions
         b.As<EntityTypeBuilder>().TryConfigureExtraProperties();
         b.As<EntityTypeBuilder>().TryConfigureConcurrencyStamp();
     }
-
-    //TODO: Add other interfaces (IAuditedObject<TUser>...)
 }

@@ -66,6 +66,9 @@
     "GenerateAndDownloadPdf": "生成并下载PDF",
     "PdfFileDeletionWarningMessage": "你確定要刪除PDF文件“{0}”嗎？",
     "ManagePdfFiles": "管理PDF文件",
-    "Permission:ManagePdfFiles": "管理PDF文件"
+    "Permission:ManagePdfFiles": "管理PDF文件",
+    "PdfDeletedSuccessfully": "PDF文件已成功刪除",
+    "PdfGenerationStarted": "PDF生成已開始",
+    "PdfGenerationStartedInfoMessage": "PDF生成已開始。完成後，您可以在PDF文件部分檢查文件是否已添加。"
   }
 }

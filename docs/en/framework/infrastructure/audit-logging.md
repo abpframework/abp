@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover ABP's extensible audit logging system, enabling automated, configurable tracking of web request activities and changes for enhanced security."
+}
+```
+
 # Audit Logging
 
 [Wikipedia](https://en.wikipedia.org/wiki/Audit_trail): "*An audit trail (also called **audit log**) is a security-relevant chronological record, set of records, and/or destination and source of records that provide documentary evidence of the sequence of activities that have affected at any time a specific operation, procedure, or event*".
@@ -162,6 +169,8 @@ public class HomeController : AbpController
 
 [Application service](../architecture/domain-driven-design/application-services.md) method calls also included into the audit log by default. You can use the `[DisableAuditing]` in service or method level.
 
+> **Blazor Server limitation (Entity history):** In `Blazor Server` applications, entity change history is currently not guaranteed to be complete for every UI interaction. Blazor Server uses SignalR-based event handling, and under some flows the audit scope/action tracking may not align with `DbContext.SaveChanges`, which can cause missing or partial entity change records. This is a known platform-level limitation and not a regular configuration issue. See [#11682](https://github.com/abpframework/abp/issues/11682) for related discussions.
+
 #### Enable/Disable for Other Services
 
 Action audit logging can be enabled for any type of class (registered to and resolved from the [dependency injection](../fundamentals/dependency-injection.md)) while it is only enabled for the controllers and the application services by default.
@@ -208,7 +217,7 @@ public class MyUser : Entity<Guid>
         
     public string Email { get; set; }
 
-    [DisableAuditing] //Ignore the Passoword on audit logging
+    [DisableAuditing] //Ignore the Password on audit logging
     public string Password { get; set; }
 }
 ````
@@ -229,6 +238,28 @@ public class MyUser : Entity<Guid>
     public string Password { get; set; }
 }
 ````
+
+#### Ignore Update Audit Properties And Publish Entity Updated Event
+
+The `[DisableAuditing]` attribute supports additional configuration options when applied to **entity properties**.
+
+* **UpdateModificationProps** (default: `true`): When set to `false`, changes to this entity property will not update audit properties (like `LastModificationTime`.
+* **PublishEntityEvent** (default: `true`): When set to `false`, changes to this entity property will not publish entity change events (`EntityUpdatedEvent`).
+
+
+````csharp
+public class MyUser : Entity<Guid>
+{
+    public string Name { get; set; }
+
+    [DisableAuditing(UpdateModificationProps = false, PublishEntityEvent = false)]
+    public string ReadCount { get; set; }
+}
+````
+
+This example will ignore update audit properties and publish entity updated event when the `ReadCount` property is updated.
+
+> The `UpdateModificationProps` and `PublishEntityEvent` only work for [Entity Framework Core](../data/entity-framework-core). It will not work for [MongoDB](../data/mongodb).
 
 ## IAuditingStore
 

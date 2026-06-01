@@ -1,0 +1,36 @@
+@if (visible()) {
+  <fieldset class="form-group-container" [formGroup]="formGroup()" role="group" [attr.aria-labelledby]="groupConfig().key + '-legend'">
+    <legend [id]="groupConfig().key + '-legend'" class="form-group-legend">
+      {{ groupConfig().label | abpLocalization }}
+    </legend>
+    
+    <div class="row">
+      @for (field of sortedChildren; track field.key) {
+        <div [ngClass]="'col-md-' + (field.gridSize || 12)">
+          
+          <!-- Nested Group (Recursive) -->
+          @if (field.type === 'group') {
+            <abp-dynamic-form-group
+              [groupConfig]="field"
+              [formGroup]="getChildFormGroup(field.key)" />
+          }
+          
+          <!-- Nested Array -->
+          @else if (field.type === 'array') {
+            <abp-dynamic-form-array
+              [arrayConfig]="field"
+              [formGroup]="formGroup()" />
+          }
+          
+          <!-- Regular Field -->
+          @else {
+            <abp-dynamic-form-field
+              [field]="field"
+              [formControlName]="field.key" />
+          }
+          
+        </div>
+      }
+    </div>
+  </fieldset>
+}

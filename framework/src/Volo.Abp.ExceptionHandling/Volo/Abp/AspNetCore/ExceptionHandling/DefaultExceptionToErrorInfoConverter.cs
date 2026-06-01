@@ -21,17 +21,20 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling;
 
 public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConverter, ITransientDependency
 {
+    protected AbpExceptionHandlingOptions ExceptionHandlingOptions { get; }
     protected AbpExceptionLocalizationOptions LocalizationOptions { get; }
     protected IStringLocalizerFactory StringLocalizerFactory { get; }
     protected IStringLocalizer<AbpExceptionHandlingResource> L { get; }
     protected IServiceProvider ServiceProvider { get; }
 
     public DefaultExceptionToErrorInfoConverter(
+        IOptions<AbpExceptionHandlingOptions> exceptionHandlingOptions,
         IOptions<AbpExceptionLocalizationOptions> localizationOptions,
         IStringLocalizerFactory stringLocalizerFactory,
         IStringLocalizer<AbpExceptionHandlingResource> stringLocalizer,
         IServiceProvider serviceProvider)
     {
+        ExceptionHandlingOptions = exceptionHandlingOptions.Value;
         ServiceProvider = serviceProvider;
         StringLocalizerFactory = stringLocalizerFactory;
         L = stringLocalizer;
@@ -195,13 +198,10 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
     {
         if (exception.EntityType != null)
         {
-            return new RemoteServiceErrorInfo(
-                string.Format(
-                    L["EntityNotFoundErrorMessage"],
-                    exception.EntityType.Name,
-                    exception.Id
-                )
-            );
+            var message = exception.Id != null
+                ? string.Format(L["EntityNotFoundErrorMessage"], exception.EntityType.Name, exception.Id)
+                : string.Format(L["EntityNotFoundErrorMessageWithoutId"], exception.EntityType.Name);
+            return new RemoteServiceErrorInfo(message);
         }
 
         return new RemoteServiceErrorInfo(exception.Message);
@@ -330,8 +330,8 @@ public class DefaultExceptionToErrorInfoConverter : IExceptionToErrorInfoConvert
     {
         return new AbpExceptionHandlingOptions
         {
-            SendExceptionsDetailsToClients = false,
-            SendStackTraceToClients = true
+            SendExceptionsDetailsToClients = ExceptionHandlingOptions.SendExceptionsDetailsToClients,
+            SendStackTraceToClients = ExceptionHandlingOptions.SendStackTraceToClients
         };
     }
 }

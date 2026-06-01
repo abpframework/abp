@@ -7,7 +7,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Packages.MarkdownIt;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -82,8 +82,7 @@ public class CmsKitAdminWebModule : AbpModule
             options.FileSets.AddEmbedded<CmsKitAdminWebModule>("Volo.CmsKit.Admin.Web");
         });
 
-        context.Services.AddAutoMapperObjectMapper<CmsKitAdminWebModule>();
-        Configure<AbpAutoMapperOptions>(options => { options.AddMaps<CmsKitAdminWebModule>(validate: true); });
+        context.Services.AddMapperlyObjectMapper<CmsKitAdminWebModule>();
 
         Configure<RazorPagesOptions>(options =>
         {

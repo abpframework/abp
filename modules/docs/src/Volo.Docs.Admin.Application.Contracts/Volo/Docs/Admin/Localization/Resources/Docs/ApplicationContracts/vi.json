@@ -66,6 +66,9 @@
     "GenerateAndDownloadPdf": "Tạo và tải xuống PDF",
     "PdfFileDeletionWarningMessage": "Bạn có chắc chắn muốn xóa tệp PDF \"{0}\" không?",
     "ManagePdfFiles": "Quản lý tệp PDF",
-    "Permission:ManagePdfFiles": "Quản lý tệp PDF"
+    "Permission:ManagePdfFiles": "Quản lý tệp PDF",
+    "PdfDeletedSuccessfully": "Tệp PDF đã được xóa thành công",
+    "PdfGenerationStarted": "Bắt đầu tạo PDF",
+    "PdfGenerationStartedInfoMessage": "Quá trình tạo PDF đã bắt đầu. Sau khi hoàn thành, bạn có thể kiểm tra xem tệp đã được thêm vào phần tệp PDF chưa."
   }
 }

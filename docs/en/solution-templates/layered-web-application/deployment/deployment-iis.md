@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to deploy your ABP Framework application on IIS with this comprehensive guide, covering prerequisites and authentication certificate setup."
+}
+```
+
 # IIS Deployment
 
 ````json
@@ -253,6 +260,39 @@ The final result should look like this (depending on your project type).
 We can visit the websites from a browser.
 
 ![Tiered IIS deployment](../../../images/iis-sample-tiered-deployment.gif)
+
+{{ if UI == "NG" }}
+## Rewrite for getEnvConfig
+
+Please add the following rewrite rules to your `web.config` file to redirect requests for `getEnvConfig` to `dynamic-env.json`:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+<system.webServer>
+ <rewrite>
+  <rules>
+    <rule name="Redirect" stopProcessing="true">
+      <match url="getEnvConfig" />
+      <action type="Redirect" url="dynamic-env.json" />
+    </rule>
+    <rule name="Angular Routes" stopProcessing="true">
+      <match url=".*" />
+      <conditions logicalGrouping="MatchAll">
+        <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+        <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+      </conditions>
+      <action type="Rewrite" url="./index.html" />
+    </rule>
+  </rules>
+ </rewrite>
+</system.webServer>
+</configuration>
+```
+
+> See [Angular RemoteEnvironment](https://abp.io/docs/latest/framework/ui/angular/environment#remoteenvironment) for more details.
+
+{{ end }}
 
 ## Fix 405 Method Not Allowed Error
 

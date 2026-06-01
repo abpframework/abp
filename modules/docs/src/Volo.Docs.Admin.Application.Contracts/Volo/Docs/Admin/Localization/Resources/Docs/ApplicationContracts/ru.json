@@ -1,7 +1,7 @@
 {
   "culture": "ru",
   "texts": {
-    "Permission:DocumentManagement": "Управление документацией",
+    "Permission:DocumentManagement": "Управление документами",
     "Permission:Projects": "Проекты",
     "Permission:Edit": "Редактировать",
     "Permission:Delete": "Удалить",
@@ -65,7 +65,10 @@
     "PdfGeneratedSuccessfully": "PDF успешно сгенерирован",
     "GenerateAndDownloadPdf": "Сгенерировать и скачать PDF",
     "PdfFileDeletionWarningMessage": "Вы уверены, что хотите удалить файл PDF \"{0}\"?",
-    "ManagePdfFiles": "Управление файлами PDF",
-    "Permission:ManagePdfFiles": "Управление файлами PDF"
+    "ManagePdfFiles": "Управление PDF файлами",
+    "Permission:ManagePdfFiles": "Управление PDF файлами",
+    "PdfDeletedSuccessfully": "PDF файл успешно удален",
+    "PdfGenerationStarted": "Началась генерация PDF",
+    "PdfGenerationStartedInfoMessage": "Началась генерация PDF. После завершения вы можете проверить, добавлен ли файл в раздел PDF файлов."
   }
 }

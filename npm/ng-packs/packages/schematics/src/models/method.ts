@@ -1,11 +1,12 @@
 import { eBindingSourceId, eMethodModifier } from '../enums';
 import { camel, camelizeHyphen } from '../utils/text';
-import { getParamName, getParamValueName } from '../utils/methods';
+import { getParamName, getParamValueName, isDictionaryType } from '../utils/methods';
 import { ParameterInBody } from './api-definition';
 import { Property } from './model';
 import { Omissible } from './util';
 import { VOLO_REMOTE_STREAM_CONTENT } from '../constants';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
+
 const shouldQuote = require('should-quote');
 
 export class Method {
@@ -40,6 +41,7 @@ export class Body {
   body?: string;
   method: string;
   params: string[] = [];
+  dictParamVar?: string;
   responseTypeWithNamespace: string;
   requestType = 'any';
   responseType: string;
@@ -57,6 +59,10 @@ export class Body {
     switch (bindingSourceId) {
       case eBindingSourceId.Model:
       case eBindingSourceId.Query:
+        if (isDictionaryType(param.type, param.typeSimple)) {
+          this.dictParamVar = value;
+          break;
+        }
         this.params.push(paramName === value ? value : `${getParamName(paramName)}: ${value}`);
         break;
       case eBindingSourceId.FormFile:

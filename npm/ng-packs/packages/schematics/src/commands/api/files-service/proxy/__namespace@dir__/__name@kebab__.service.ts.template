@@ -5,6 +5,7 @@
   providedIn: 'root',
 })
 export class <%= name %>Service {
+  private restService = inject(RestService);
   apiName = '<%= apiName %>';<%
   for (let {body, signature} of methods) { %>
   <%
@@ -20,12 +21,14 @@ export class <%= name %>Service {
       if (isBlob) { %>
       responseType: 'blob',<% } %>
       url: <%= body.url %>,<%
-      if (body.params.length) { %>
+      if (body.dictParamVar && !body.params.length) { %>
+      params: <%= body.dictParamVar %>,<% } %><%
+      if (body.dictParamVar && body.params.length) { %>
+      params: { ...<%= body.dictParamVar %>, <%= body.params.join(', ') %> },<% } %><%
+      if (!body.dictParamVar && body.params.length) { %>
       params: { <%= body.params.join(', ') %> },<% }
       if (body.body) { %>
       body: <%= body.body %>,<% } %>
     },
     { apiName: this.apiName,...config });<% } %>
-
-  constructor(private restService: RestService) {}
 }

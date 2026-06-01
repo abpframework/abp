@@ -1,0 +1,100 @@
+@page "/account/manage-profile"
+@page "/{culture}/account/manage-profile"
+@using global::MudBlazor
+@using Volo.Abp.Account.Localization
+@using Volo.Abp.MudBlazorUI.Components.ObjectExtending
+@using Volo.Abp.ObjectExtending
+
+@inherits AbpAccountComponentBase
+
+<MudGrid Spacing="0">
+    <MudItem xs="12">
+        <MudTabs @bind-ActivePanelIndex="@_activeTabIndex" PanelClass="pa-4">
+            <MudTabPanel Text="@L["ProfileTab:Password"]">
+                @if (ChangePasswordModel != null)
+                {
+                    <MudForm @ref="@_changePasswordForm" Model="@ChangePasswordModel">
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@ChangePasswordModel.CurrentPassword"
+                                     Label="@L["DisplayName:CurrentPassword"]"
+                                     InputType="InputType.Password" />
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@ChangePasswordModel.NewPassword"
+                                     Label="@L["DisplayName:NewPassword"]"
+                                     InputType="InputType.Password" />
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@ChangePasswordModel.NewPasswordConfirm"
+                                     Label="@L["DisplayName:NewPasswordConfirm"]"
+                                     InputType="InputType.Password" />
+                        <MudButton ButtonType="ButtonType.Submit"
+                                  Variant="Variant.Filled"
+                                  Color="Color.Primary"
+                                  OnClick="@ChangePasswordAsync">
+                            @L["Save"]
+                        </MudButton>
+                    </MudForm>
+                }
+            </MudTabPanel>
+            <MudTabPanel Text="@L["ProfileTab:PersonalInfo"]">
+                @if (PersonalInfoModel != null)
+                {
+                    <MudForm @ref="@_personalInfoForm" Model="@PersonalInfoModel">
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@PersonalInfoModel.UserName"
+                                     Label="@L["DisplayName:UserName"]" />
+                        <MudGrid>
+                            <MudItem xs="12" sm="6">
+                                <MudTextField Margin="Margin.Dense" @bind-Value="@PersonalInfoModel.Name"
+                                             Label="@L["DisplayName:Name"]" />
+                            </MudItem>
+                            <MudItem xs="12" sm="6">
+                                <MudTextField Margin="Margin.Dense" @bind-Value="@PersonalInfoModel.Surname"
+                                             Label="@L["DisplayName:Surname"]" />
+                            </MudItem>
+                        </MudGrid>
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@PersonalInfoModel.Email"
+                                     Label="@L["DisplayName:Email"]" />
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@PersonalInfoModel.PhoneNumber"
+                                     Label="@L["DisplayName:PhoneNumber"]" />
+
+                        @* Extension Properties *@
+                        @foreach (var propertyInfo in ObjectExtensionManager.Instance.GetProperties<PersonalInfoModel>())
+                        {
+                            var isAllowed = propertyInfo.Configuration.GetOrDefault(IdentityModuleExtensionConsts.ConfigurationNames.AllowUserToEdit);
+
+                            if (isAllowed == null || !isAllowed.Equals(true))
+                            {
+                                continue;
+                            }
+
+                            if (!propertyInfo.Name.EndsWith("_Text"))
+                            {
+                                if (propertyInfo.IsEnum())
+                                {
+                                    <MudSelectExtensionProperty PropertyInfo="@propertyInfo" Entity="@PersonalInfoModel" TEntity="PersonalInfoModel" TResourceType="AccountResource" LH="@_localizerHelper" />
+                                }
+                                else if (!propertyInfo.Lookup.Url.IsNullOrEmpty())
+                                {
+                                    <MudLookupExtensionProperty PropertyInfo="@propertyInfo" Entity="@PersonalInfoModel" TEntity="PersonalInfoModel" TResourceType="AccountResource" LH="@_localizerHelper" />
+                                }
+                                else
+                                {
+                                    var inputType = propertyInfo.GetInputType();
+                                    __builder.OpenComponent(0, inputType.MakeGenericType(new[] { typeof(PersonalInfoModel), typeof(AccountResource) }));
+                                    __builder.AddAttribute(1, "PropertyInfo", propertyInfo);
+                                    __builder.AddAttribute(2, "Entity", PersonalInfoModel);
+                                    __builder.AddAttribute(3, "LH", _localizerHelper);
+                                    __builder.CloseComponent();
+                                }
+                            }
+                        }
+
+                        <MudButton ButtonType="ButtonType.Submit"
+                                  Variant="Variant.Filled"
+                                  Color="Color.Primary"
+                                  OnClick="@UpdatePersonalInfoAsync">
+                            @L["Save"]
+                        </MudButton>
+                    </MudForm>
+                }
+            </MudTabPanel>
+        </MudTabs>
+    </MudItem>
+</MudGrid>
+

@@ -1,6 +1,13 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to build a mobile bookstore app with step-by-step tutorials for .NET MAUI or React Native, following your web development journey!"
+}
+```
+
 # Mobile Application Development Tutorial: Book Store Application
 
-> You must have an ABP Team or a higher license to be able to create a mobile application.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to be able to create a mobile application.
 
 Mobile application development tutorials are designed for developers who have completed [the web development part of the tutorial](../book-store/index.md) and wish to continue building the mobile version of the application. 
 

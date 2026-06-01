@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore best practices for implementing Aggregate Root and Entity classes in your applications using Domain-Driven Design principles."
+}
+```
+
 # Entity Best Practices & Conventions
 
 > This document offers best practices for implementing Aggregate Root and Entity classes in your modules and applications based on Domain-Driven-Design principles.

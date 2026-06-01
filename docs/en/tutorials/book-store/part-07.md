@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate the database for the Author entity in your web application using EF and various UI frameworks in this tutorial."
+}
+```
+
 # Web Application Development Tutorial - Part 7: Authors: Database Integration
 ````json
 //[doc-params]

@@ -11,9 +11,9 @@
           "name": "CmsKitAdminApplicationContractsModule"
         },
         {
-          "declaringAssemblyName": "Volo.Abp.AutoMapper",
-          "namespace": "Volo.Abp.AutoMapper",
-          "name": "AbpAutoMapperModule"
+          "declaringAssemblyName": "Volo.Abp.Mapperly",
+          "namespace": "Volo.Abp.Mapperly",
+          "name": "AbpMapperlyModule"
         },
         {
           "declaringAssemblyName": "Volo.CmsKit.Common.Application",
@@ -820,6 +820,23 @@
               "isOptional": false
             }
           ]
+        },
+        {
+          "returnType": "Int32",
+          "namespace": "Volo.CmsKit.Admin.Menus",
+          "name": "GetAvailableMenuOrderAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Nullable<Guid>",
+              "name": "parentId",
+              "isOptional": true
+            }
+          ]
         }
       ],
       "contentType": "applicationService",
@@ -938,10 +955,10 @@
     {
       "namespace": "Volo.CmsKit.Admin.GlobalResources",
       "baseClass": {
-        "name": "ApplicationService",
-        "namespace": "Volo.Abp.Application.Services",
-        "declaringAssemblyName": "Volo.Abp.Ddd.Application",
-        "fullName": "Volo.Abp.Application.Services.ApplicationService"
+        "name": "CmsKitAdminAppServiceBase",
+        "namespace": "Volo.CmsKit.Admin",
+        "declaringAssemblyName": "Volo.CmsKit.Admin.Application",
+        "fullName": "Volo.CmsKit.Admin.CmsKitAdminAppServiceBase"
       },
       "implementingInterfaces": [
         {

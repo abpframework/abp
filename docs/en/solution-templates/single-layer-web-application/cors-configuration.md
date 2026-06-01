@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to configure CORS for single-layer solutions in ABP Framework, ensuring secure cross-origin requests for your web applications."
+}
+```
+
 # Single Layer Solution: CORS Configuration
 
 ```json

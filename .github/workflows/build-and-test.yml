@@ -21,6 +21,9 @@ on:
       - '.github/workflows/build-and-test.yml'
 
   pull_request:
+    branches:
+      - dev
+      - 'rel-*'
     paths:
       - 'framework/**/*.cs'
       - 'framework/**/*.cshtml'
@@ -42,24 +45,35 @@ on:
       - synchronize
       - reopened
       - ready_for_review
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   build-test:
     runs-on: ubuntu-22.04
-    timeout-minutes: 40
+    timeout-minutes: 50
     if: ${{ !github.event.pull_request.draft }}
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-dotnet@master
+    - uses: jlumbroso/free-disk-space@v1.3.1
+    - name: Install PowerShell
+      run: sudo apt-get install -y powershell
+    - uses: actions/checkout@v4
+    - uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 9.0.100
-
-    - name: chown
-      run: |
-        sudo chown -R $USER:$USER /home/runneradmin
-
+        dotnet-version: 10.0.x
+    - name: Cache NuGet packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', 'Directory.Packages.props') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
     - name: Build All
       run: ./build-all.ps1
       working-directory: ./build
@@ -71,4 +85,8 @@ jobs:
       shell: pwsh
 
     - name: Codecov
-      uses: codecov/codecov-action@v2
+      if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+      uses: codecov/codecov-action@v5
+      with:
+        use_oidc: true
+        fail_ci_if_error: true

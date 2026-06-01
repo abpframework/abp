@@ -2,15 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Internal;
+using Volo.Abp.Internal.Telemetry;
+using Volo.Abp.Internal.Telemetry.Constants;
 using Volo.Abp.Logging;
 using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp;
 
@@ -123,20 +128,24 @@ public abstract class AbpApplicationBase : IAbpApplication
 
     protected virtual void WriteInitLogs(IServiceProvider serviceProvider)
     {
-        var logger = serviceProvider.GetService<ILogger<AbpApplicationBase>>();
-        if (logger == null)
+        var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
+        if (loggerFactory == null)
         {
             return;
         }
 
-        var initLogger = serviceProvider.GetRequiredService<IInitLoggerFactory>().Create<AbpApplicationBase>();
+        var initLoggerFactory = serviceProvider.GetRequiredService<IInitLoggerFactory>();
 
-        foreach (var entry in initLogger.Entries)
+        foreach (var entry in initLoggerFactory.GetAllEntries())
         {
+            var categoryName = string.IsNullOrEmpty(entry.CategoryName)
+                ? nameof(AbpApplicationBase)
+                : entry.CategoryName;
+            var logger = loggerFactory.CreateLogger(categoryName);
             logger.Log(entry.LogLevel, entry.EventId, entry.State, entry.Exception, entry.Formatter);
         }
 
-        initLogger.Entries.Clear();
+        initLoggerFactory.ClearAllEntries();
     }
 
     protected virtual IReadOnlyList<IAbpModuleDescriptor> LoadModules(IServiceCollection services, AbpApplicationCreationOptions options)
@@ -148,6 +157,61 @@ public abstract class AbpApplicationBase : IAbpApplication
                 StartupModuleType,
                 options.PlugInSources
             );
+    }
+    protected void SetupTelemetryTracking()
+    {
+        if (!ShouldSendTelemetryData())
+        {
+            return;
+        }
+
+        AsyncHelper.RunSync(InitializeTelemetryTracking);
+    }
+
+    protected async Task SetupTelemetryTrackingAsync()
+    {
+        if (!ShouldSendTelemetryData())
+        {
+            return;
+        }
+
+        await InitializeTelemetryTracking();
+    }
+
+    private async Task InitializeTelemetryTracking()
+    {
+        try
+        {
+            using var scope = ServiceProvider.CreateScope();
+            var telemetryService = scope.ServiceProvider.GetRequiredService<ITelemetryService>();
+            await telemetryService.AddActivityAsync(ActivityNameConsts.ApplicationRun);
+        }
+        catch (Exception ex)
+        {
+            try
+            {
+                var logger = Services.GetInitLogger<AbpApplicationBase>();
+                logger.LogException(ex, LogLevel.Trace);
+            }
+            catch
+            {
+                /* ignored */
+            }
+        }
+    }
+
+    private bool ShouldSendTelemetryData()
+    {
+        using var scope = ServiceProvider.CreateScope();
+        var abpHostEnvironment = scope.ServiceProvider.GetRequiredService<IAbpHostEnvironment>();
+        var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            return abpHostEnvironment.IsDevelopment() && configuration.GetValue<bool?>("Abp:Telemetry:IsEnabled") != false;
+        }
+
+        return false;
     }
 
     //TODO: We can extract a new class for this

@@ -3,7 +3,7 @@ $(function () {
     abp.modals.projectManagePdfFiles = function () {
 
         var l = abp.localization.getResource('Docs');
-        var projectAdminAppService = volo.docs.admin.projectsAdmin;
+        var documentPdfAdminAppService = volo.docs.admin.documentPdfAdmin;
         
         var _generatePdfModal = new abp.ModalManager({
             viewUrl: abp.appPath + 'Docs/Admin/Projects/GeneratePdf',
@@ -22,7 +22,7 @@ $(function () {
                     scrollCollapse: true,
                     order: [[2, 'desc']],
                     ajax: abp.libs.datatables.createAjax(
-                        volo.docs.admin.projectsAdmin.getPdfFiles,
+                        documentPdfAdminAppService.getPdfFiles,
                         {
                             projectId : args.projectId
                         }
@@ -37,16 +37,23 @@ $(function () {
                                             return l('PdfFileDeletionWarningMessage', data.record.fileName);
                                         },
                                         action: function (data) {
-                                            projectAdminAppService.deletePdfFile({
+                                            documentPdfAdminAppService.deletePdfFile({
                                                 projectId: data.record.projectId,
                                                 version: data.record.version,
                                                 languageCode: data.record.languageCode
                                             }).then(() => {
                                                 _dataTable.ajax.reloadEx();
-                                                abp.notify.success(l('PdfGeneratedSuccessfully'));
+                                                abp.notify.success(l('PdfDeletedSuccessfully'));
                                             })
                                         },
-                                    }
+                                    },
+                                    {
+                                        text: l('Download'),
+                                        action: function (data) {
+                                            var url = abp.appPath + 'api/docs/admin/documents/pdf/download?projectId=' + data.record.projectId + '&version=' + data.record.version + '&languageCode=' + data.record.languageCode;
+                                            window.open(url, '_blank');
+                                        },
+                                    },
                                 ],
                             },
                         },
@@ -78,12 +85,16 @@ $(function () {
             
             $('#GeneratePdfBtn').click(function () {
                 _generatePdfModal.open({
-                    Id: args.projectId,
+                    ProjectId: args.projectId,
                 });
             });
 
             _generatePdfModal.onClose(function () {
                 _dataTable.ajax.reloadEx();
+            });
+            
+            _generatePdfModal.onResult(function (){
+               abp.message.info(l('PdfGenerationStartedInfoMessage')); 
             });
         };
 

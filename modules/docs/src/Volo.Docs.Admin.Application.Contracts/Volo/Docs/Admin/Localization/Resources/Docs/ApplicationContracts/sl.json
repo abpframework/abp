@@ -66,6 +66,9 @@
     "GenerateAndDownloadPdf": "Generiraj in prenesi PDF",
     "PdfFileDeletionWarningMessage": "Ali ste prepričani, da želite izbrisati datoteko PDF »{0}«?",
     "ManagePdfFiles": "Upravljanje datotek PDF",
-    "Permission:ManagePdfFiles": "Upravljanje datotek PDF"
+    "Permission:ManagePdfFiles": "Upravljanje datotek PDF",
+    "PdfDeletedSuccessfully": "PDF datoteka je bila uspešno izbrisana",
+    "PdfGenerationStarted": "Začelo se je ustvarjanje PDF-ja",
+    "PdfGenerationStartedInfoMessage": "Začelo se je ustvarjanje PDF-ja. Ko bo končano, lahko preverite, ali je bila datoteka dodana v razdelek PDF datotek."
   }
 }

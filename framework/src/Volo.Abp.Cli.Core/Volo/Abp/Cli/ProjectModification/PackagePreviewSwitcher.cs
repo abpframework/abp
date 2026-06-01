@@ -269,7 +269,8 @@ public class PackagePreviewSwitcher : ITransientDependency
 
     private List<string> GetSolutionPaths(CommandLineArgs commandLineArgs)
     {
-        return Directory.GetFiles(GetDirectory(commandLineArgs), "*.sln", SearchOption.AllDirectories).ToList();
+        return Directory.GetFiles(GetDirectory(commandLineArgs), "*.sln", SearchOption.AllDirectories)
+            .Concat(Directory.GetFiles(GetDirectory(commandLineArgs), "*.slnx", SearchOption.AllDirectories)).ToList();
     }
 
     private List<string> GetProjectPaths(CommandLineArgs commandLineArgs)
@@ -317,7 +318,8 @@ public class PackagePreviewSwitcher : ITransientDependency
                 return Path.GetDirectoryName(projectFile);
             }
 
-            if (Directory.GetFiles(targetFolder, "*.sln", SearchOption.TopDirectoryOnly).Any())
+            if (Directory.GetFiles(targetFolder, "*.sln", SearchOption.TopDirectoryOnly)
+                .Concat(Directory.GetFiles(targetFolder, "*.slnx", SearchOption.TopDirectoryOnly)).Any())
             {
                 break;
             }

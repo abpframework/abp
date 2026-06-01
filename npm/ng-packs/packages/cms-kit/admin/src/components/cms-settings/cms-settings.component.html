@@ -1,0 +1,42 @@
+<div id="CmsSettingsForm" class="row">
+  <div class="col-md-12">
+    <ul ngbNav #nav="ngbNav" class="nav-tabs">
+      <!-- Comments -->
+      <li ngbNavItem>
+        <a ngbNavLink>{{ 'CmsKit::CmsKit:Comment' | abpLocalization }}</a>
+        <ng-template ngbNavContent>
+          <div class="abp-md-form">
+            <div (keyup.enter)="submit()">
+              <div class="mt-3">
+                <div class="form-check mb-2">
+                  <input
+                    class="form-check-input"
+                    [formControl]="commentApprovalControl"
+                    type="checkbox"
+                    id="EnableCommentApproval"
+                    [checked]="commentApprovalControl.value"
+                    (input)="commentApprovalControl.setValue($event.target.checked)"
+                  />
+                  <label class="form-check-label" for="EnableCommentApproval">
+                    {{ 'CmsKit::CmsKitCommentOptions:RequireApprovement' | abpLocalization }}
+                  </label>
+                  <br />
+                  <small class="form-text text-muted">{{
+                    'CmsKit::CmsKitCommentOptions:RequireApprovementDescription' | abpLocalization
+                  }}</small>
+                </div>
+              </div>
+              <hr class="my-3" />
+              <div>
+                <abp-button (click)="submit()" iconClass="fa fa-save" [loading]="loading">
+                  {{ 'AbpAccount::Save' | abpLocalization }}
+                </abp-button>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </li>
+    </ul>
+    <div [ngbNavOutlet]="nav"></div>
+  </div>
+</div>

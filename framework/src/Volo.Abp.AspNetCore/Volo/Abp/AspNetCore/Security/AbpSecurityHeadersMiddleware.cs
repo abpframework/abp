@@ -25,7 +25,9 @@ public class AbpSecurityHeadersMiddleware : AbpMiddlewareBase, ITransientDepende
     {
         var endpoint = context.GetEndpoint();
 
-        if (endpoint?.Metadata.GetMetadata<IgnoreAbpSecurityHeaderAttribute>() != null)
+        if (endpoint?.Metadata.GetMetadata<IgnoreAbpSecurityHeaderAttribute>() != null ||
+            await AlwaysIgnoreContentTypes(context) ||
+            Options.Value.IgnoredScriptNoncePaths.Any(x => context.Request.Path.StartsWithSegments(x.EnsureStartsWith('/'), StringComparison.OrdinalIgnoreCase)))
         {
             await next.Invoke(context);
             return;
@@ -41,13 +43,13 @@ public class AbpSecurityHeadersMiddleware : AbpMiddlewareBase, ITransientDepende
         AddHeader(context, "X-Frame-Options", "SAMEORIGIN");
 
         var requestAcceptTypeHtml = context.Request.Headers["Accept"].Any(x =>
-            x!.Contains("text/html") || x.Contains("*/*") || x.Contains("application/xhtml+xml"));
+            x!.Contains("text/html", StringComparison.OrdinalIgnoreCase) ||
+            x.Contains("*/*", StringComparison.OrdinalIgnoreCase) ||
+            x.Contains("application/xhtml+xml", StringComparison.OrdinalIgnoreCase));
 
         if (!requestAcceptTypeHtml
             || !Options.Value.UseContentSecurityPolicyHeader
-            || await AlwaysIgnoreContentTypes(context)
-            || endpoint == null
-            || Options.Value.IgnoredScriptNoncePaths.Any(x => context.Request.Path.StartsWithSegments(x.EnsureStartsWith('/'), StringComparison.OrdinalIgnoreCase)))
+            || endpoint == null)
         {
             AddOtherHeaders(context);
             await next.Invoke(context);
@@ -59,7 +61,6 @@ public class AbpSecurityHeadersMiddleware : AbpMiddlewareBase, ITransientDepende
             var randomValue = Guid.NewGuid().ToString("N");
             context.Items.Add(AbpAspNetCoreConsts.ScriptNonceKey, randomValue);
         }
-
 
         context.Response.OnStarting(() =>
         {

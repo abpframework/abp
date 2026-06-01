@@ -1,5 +1,5 @@
 import { AccountService } from '@abp/ng.account.core/proxy';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   ReactiveFormsModule,
   UntypedFormBuilder,
@@ -9,7 +9,7 @@ import {
 import { finalize } from 'rxjs/operators';
 import { LocalizationPipe } from '@abp/ng.core';
 import { ButtonComponent } from '@abp/ng.theme.shared';
-import { RouterModule } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 
 @Component({
@@ -17,23 +17,23 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
   templateUrl: 'forgot-password.component.html',
   imports: [
     ReactiveFormsModule,
-    RouterModule,
+    RouterLink,
     LocalizationPipe,
     ButtonComponent,
     NgxValidateCoreModule,
   ],
 })
 export class ForgotPasswordComponent {
+  private fb = inject(UntypedFormBuilder);
+  private accountService = inject(AccountService);
+
   form: UntypedFormGroup;
 
   inProgress?: boolean;
 
   isEmailSent = false;
 
-  constructor(
-    private fb: UntypedFormBuilder,
-    private accountService: AccountService,
-  ) {
+  constructor() {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
     });

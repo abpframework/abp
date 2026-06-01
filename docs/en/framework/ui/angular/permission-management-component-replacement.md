@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to replace the PermissionManagementComponent in your ABP Framework application with this step-by-step guide."
+}
+```
+
 # How to Replace PermissionManagementComponent
 
 ![Permission management modal](./images/permission-management-modal.png)
@@ -19,7 +26,7 @@ import {
 import { LocaleDirection } from '@abp/ng.theme.shared';
 import {
   Component,
-  EventEmitter, Inject, Input, Optional, Output, TrackByFunction
+  EventEmitter, Inject, inject, Input, Optional, Output, TrackByFunction
 } from '@angular/core';
 import { of } from 'rxjs';
 import { finalize, switchMap, tap } from 'rxjs/operators';
@@ -42,16 +49,18 @@ type PermissionWithStyle = PermissionGrantInfoDto & {
 })
 export class PermissionManagementComponent
   implements
-  PermissionManagement.PermissionManagementComponentInputs,
-  PermissionManagement.PermissionManagementComponentOutputs {
+    PermissionManagement.PermissionManagementComponentInputs,
+    PermissionManagement.PermissionManagementComponentOutputs {
+
+  private readonly service = inject(PermissionsService);
+  private readonly configState = inject(ConfigStateService);
+
   protected _providerName: string;
   @Input()
   get providerName(): string {
     if (this.replaceableData) return this.replaceableData.inputs.providerName;
-
     return this._providerName;
   }
-
   set providerName(value: string) {
     this._providerName = value;
   }
@@ -60,10 +69,8 @@ export class PermissionManagementComponent
   @Input()
   get providerKey(): string {
     if (this.replaceableData) return this.replaceableData.inputs.providerKey;
-
     return this._providerKey;
   }
-
   set providerKey(value: string) {
     this._providerKey = value;
   }
@@ -72,10 +79,8 @@ export class PermissionManagementComponent
   @Input()
   get hideBadges(): boolean {
     if (this.replaceableData) return this.replaceableData.inputs.hideBadges;
-
     return this._hideBadges;
   }
-
   set hideBadges(value: boolean) {
     this._hideBadges = value;
   }
@@ -85,7 +90,6 @@ export class PermissionManagementComponent
   get visible(): boolean {
     return this._visible;
   }
-
   set visible(value: boolean) {
     if (value === this._visible) return;
 
@@ -106,15 +110,10 @@ export class PermissionManagementComponent
   @Output() readonly visibleChange = new EventEmitter<boolean>();
 
   data: GetPermissionListResultDto = { groups: [], entityDisplayName: null };
-
   selectedGroup: PermissionGroupDto;
-
   permissions: PermissionGrantInfoDto[] = [];
-
   selectThisTab = false;
-
   selectAllTab = false;
-
   modalBusy = false;
 
   trackByFn: TrackByFunction<PermissionGroupDto> = (_, item) => item.name;
@@ -142,7 +141,6 @@ export class PermissionManagementComponent
 
   get isVisible(): boolean {
     if (!this.replaceableData) return this.visible;
-
     return this.replaceableData.inputs.visible;
   }
 
@@ -152,9 +150,7 @@ export class PermissionManagementComponent
     public replaceableData: ReplaceableComponents.ReplaceableTemplateData<
       PermissionManagement.PermissionManagementComponentInputs,
       PermissionManagement.PermissionManagementComponentOutputs
-    >,
-    private service: PermissionsService,
-    private configState: ConfigStateService
+    >
   ) {}
 
   getChecked(name: string) {
@@ -162,17 +158,11 @@ export class PermissionManagementComponent
   }
 
   isGrantedByOtherProviderName(grantedProviders: ProviderInfoDto[]): boolean {
-    if (grantedProviders.length) {
-      return grantedProviders.findIndex(p => p.providerName !== this.providerName) > -1;
-    }
-    return false;
+    return grantedProviders?.some(p => p.providerName !== this.providerName);
   }
 
   onClickCheckbox(clickedPermission: PermissionGrantInfoDto, value) {
-    if (
-      clickedPermission.isGranted &&
-      this.isGrantedByOtherProviderName(clickedPermission.grantedProviders)
-    )
+    if (clickedPermission.isGranted && this.isGrantedByOtherProviderName(clickedPermission.grantedProviders))
       return;
 
     setTimeout(() => {
@@ -184,7 +174,6 @@ export class PermissionManagementComponent
         } else if (clickedPermission.parentName === per.name && !clickedPermission.isGranted) {
           return { ...per, isGranted: true };
         }
-
         return per;
       });
 
@@ -255,16 +244,11 @@ export class PermissionManagementComponent
     this.setTabCheckboxState();
   }
 
-
   submit() {
     const unchangedPermissions = getPermissions(this.data.groups);
-
     const changedPermissions: UpdatePermissionDto[] = this.permissions
       .filter(per =>
-        unchangedPermissions.find(unchanged => unchanged.name === per.name).isGranted ===
-        per.isGranted
-          ? false
-          : true,
+        unchangedPermissions.find(unchanged => unchanged.name === per.name).isGranted !== per.isGranted
       )
       .map(({ name, isGranted }) => ({ name, isGranted }));
 
@@ -321,26 +305,23 @@ export class PermissionManagementComponent
       this.replaceableData.outputs.visibleChange(visible);
     }
   }
-  
+
   shouldFetchAppConfig() {
     const currentUser = this.configState.getOne('currentUser') as CurrentUserDto;
 
     if (this.providerName === 'R') return currentUser.roles.some(role => role === this.providerKey);
-
     if (this.providerName === 'U') return currentUser.id === this.providerKey;
 
     return false;
   }
 }
 
-function findMargin(permissions: PermissionGrantInfoDto[], permission: PermissionGrantInfoDto) {
+function findMargin(permissions: PermissionGrantInfoDto[], permission: PermissionGrantInfoDto): number {
   const parentPermission = permissions.find(per => per.name === permission.parentName);
-
   if (parentPermission && parentPermission.parentName) {
     let margin = 20;
-    return (margin += findMargin(permissions, parentPermission));
+    return margin + findMargin(permissions, parentPermission);
   }
-
   return parentPermission ? 20 : 0;
 }
 
@@ -353,7 +334,7 @@ Open the generated `permission-management.component.html` in `src/app/permission
 
 ```html
 <abp-modal [visible]="isVisible" (visibleChange)="onVisibleChange($event)" [busy]="modalBusy">
-  <ng-container *ngIf="data.entityDisplayName">
+  @if (data.entityDisplayName) {
     <ng-template #abpHeader>
       <h4>
         {%{{{ 'AbpPermissionManagement::Permissions' | abpLocalization }}}%} -
@@ -379,19 +360,22 @@ Open the generated `permission-management.component.html` in `src/app/permission
       <div class="row">
         <div class="overflow-scroll col-md-4">
           <ul class="nav nav-pills flex-column">
-            <li *ngFor="let group of data.groups; trackBy: trackByFn" class="nav-item">
-              <a
-                *ngIf="{ assignedCount: getAssignedCount(group.name) } as count"
-                class="nav-link pointer"
-                [class.active]="selectedGroup?.name === group?.name"
-                (click)="onChangeGroup(group)"
-              >
-                <div [class.font-weight-bold]="count.assignedCount">
-                  {%{{{ group?.displayName }}}%}
-                  <span>({%{{{ count.assignedCount }}}%})</span>
-                </div>
-              </a>
-            </li>
+            @for (group of data.groups; track group.name) {
+              <li class="nav-item">
+                @if ({ assignedCount: getAssignedCount(group.name) } as count) {
+                  <a
+                    class="nav-link pointer"
+                    [class.active]="selectedGroup?.name === group?.name"
+                    (click)="onChangeGroup(group)"
+                  >
+                    <div [class.font-weight-bold]="count.assignedCount">
+                      {%{{{ group?.displayName }}}%}
+                      <span>({%{{{ count.assignedCount }}}%})</span>
+                    </div>
+                  </a>
+                }
+              </li>
+            }
           </ul>
         </div>
         <div class="col-md-8 overflow-scroll">
@@ -412,34 +396,36 @@ Open the generated `permission-management.component.html` in `src/app/permission
               }}}%}</label>
             </div>
             <hr class="mb-3" />
-            <div
-              *ngFor="let permission of selectedGroupPermissions; let i = index; trackBy: trackByFn"
-              [ngStyle]="permission.style"
-              class="custom-checkbox custom-control mb-2"
-            >
-              <input
-                #permissionCheckbox
-                type="checkbox"
-                [checked]="getChecked(permission.name)"
-                [value]="getChecked(permission.name)"
-                [attr.id]="permission.name"
-                class="custom-control-input"
-                [disabled]="isGrantedByOtherProviderName(permission.grantedProviders)"
-              />
-              <label
-                class="custom-control-label"
-                [attr.for]="permission.name"
-                (click)="onClickCheckbox(permission, permissionCheckbox.value)"
-                >{%{{{ permission.displayName }}}%}
-                <ng-container *ngIf="!hideBadges">
-                  <span
-                    *ngFor="let provider of permission.grantedProviders"
-                    class="badge badge-light"
-                    >{%{{{ provider.providerName }}}%}: {%{{{ provider.providerKey }}}%}</span
-                  >
-                </ng-container>
-              </label>
-            </div>
+            @for (permission of selectedGroupPermissions; track permission.name; let i = $index) {
+              <div
+                [ngStyle]="permission.style"
+                class="custom-checkbox custom-control mb-2"
+              >
+                <input
+                  #permissionCheckbox
+                  type="checkbox"
+                  [checked]="getChecked(permission.name)"
+                  [value]="getChecked(permission.name)"
+                  [attr.id]="permission.name"
+                  class="custom-control-input"
+                  [disabled]="isGrantedByOtherProviderName(permission.grantedProviders)"
+                />
+                <label
+                  class="custom-control-label"
+                  [attr.for]="permission.name"
+                  (click)="onClickCheckbox(permission, permissionCheckbox.value)"
+                >
+                {%{{{ permission.displayName }}}%}
+                  @if (!hideBadges) {
+                    @for (provider of permission.grantedProviders; track provider.providerKey) {
+                      <span class="badge badge-light">
+                        {%{{{ provider.providerName }}}%}: {%{{{ provider.providerKey }}}%}
+                      </span>
+                    }
+                  }
+                </label>
+              </div>
+            }
           </div>
         </div>
       </div>
@@ -452,7 +438,7 @@ Open the generated `permission-management.component.html` in `src/app/permission
         'AbpIdentity::Save' | abpLocalization
       }}}%}</abp-button>
     </ng-template>
-  </ng-container>
+  }
 </abp-modal>
 ```
 
@@ -461,12 +447,12 @@ Open `app.component.ts` in `src/app` folder and modify it as shown below:
 ```js
 import { ReplaceableComponentsService } from '@abp/ng.core';
 import { ePermissionManagementComponents } from '@abp/ng.permission-management';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { PermissionManagementComponent } from './permission-management/permission-management.component';
 
 //...
 export class AppComponent implements OnInit {
-  constructor(private replaceableComponents: ReplaceableComponentsService) {} // injected ReplaceableComponentsService
+  private readonly replaceableComponents = inject(ReplaceableComponentsService); // injected ReplaceableComponentsService
 
   ngOnInit() {
     this.replaceableComponents.add({

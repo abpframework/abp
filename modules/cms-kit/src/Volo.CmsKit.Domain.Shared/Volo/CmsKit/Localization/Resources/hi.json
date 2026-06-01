@@ -234,6 +234,8 @@
     "AssignBlogPostsToOtherBlog": "अन्य ब्लॉग को ब्लॉग पोस्ट असाइन करें",
     "SelectAnBlogToAssign": "असाइन करने के लिए एक ब्लॉग चुनें",
     "DeleteAllBlogPostsOfThisBlog": "इस ब्लॉग के सभी ब्लॉग पोस्ट हटाएं",
-    "RequiredPermissionName": "आवश्यक अनुमति नाम"
+    "RequiredPermissionName": "आवश्यक अनुमति नाम",
+    "AllPosts": "सभी पोस्ट",
+    "IsReadOnly": "केवल पढ़ने के लिए"
   }
 }

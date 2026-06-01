@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how ABP simplifies handling time and time zones for global applications with built-in services like IClock for accurate date and time management."
+}
+```
+
 # Timing
 
 Working with times & [time zones](https://en.wikipedia.org/wiki/Time_zone) is always tricky, especially if you need to build a **global system** that is used by users in **different time zones**.

@@ -8,6 +8,22 @@
     "SelectAllInThisTab": "Selecteer alles",
     "SaveWithoutAnyPermissionsWarningMessage": "Weet u zeker dat u zonder rechten wilt opslaan?",
     "PermissionGroup": "Rechtengroep",
-    "Filter": "Filter"
+    "Filter": "Filter",
+    "ResourcePermissions": "Rechten",
+    "ResourcePermissionTarget": "Doel",
+    "ResourcePermissionPermissions": "Rechten",
+    "AddResourcePermission": "Recht toevoegen",
+    "ResourcePermissionDeletionConfirmationMessage": "Weet u zeker dat u alle rechten wilt verwijderen?",
+    "UpdateResourcePermission": "Recht bijwerken",
+    "GrantAllResourcePermissions": "Alles toekennen",
+    "NoResourceProviderKeyLookupServiceFound": "Er is geen service gevonden voor het opzoeken van de sleutel van de provider",
+    "NoResourcePermissionFound": "Er is geen machtiging gedefinieerd.",
+    "UpdatePermission": "Machtiging bijwerken",
+    "NoPermissionsAssigned": "Geen machtigingen toegewezen",
+    "SelectProvider": "Selecteer provider",
+    "SearchProviderKey": "Zoek provider sleutel",
+    "Provider": "Provider",
+    "ErrorLoadingPermissions": "Fout bij laden van machtigingen",
+    "PleaseSelectProviderAndPermissions": "Selecteer provider en machtigingen"
   }
 }

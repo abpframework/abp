@@ -80,11 +80,11 @@ function updateAppModule(selectedProject: string, targetThemeName: ThemeOptionsE
       isStandalone
         ? removeImportsFromStandaloneProviders(appModulePath, targetThemeName)
         : removeProviderFromNgModuleMetadata(appModulePath, targetThemeName),
+      insertHelperImports(appModulePath, targetThemeName),
       insertImports(selectedProject, targetThemeName),
       insertProviders(selectedProject, targetThemeName),
       adjustProvideAbpThemeShared(appModulePath, targetThemeName),
       updateIndexHtml(selectedProject, targetThemeName),
-      formatFile(appModulePath),
       cleanEmptyExpressions(appModulePath, isStandalone),
     ]);
   };
@@ -318,39 +318,82 @@ export function removeProviderFromNgModuleMetadata(
   };
 }
 
-export function insertImports(projectName: string, selectedTheme: ThemeOptionsEnum): Rule {
-  return addRootImport(projectName, code => {
+export function insertHelperImports(filePath: string, selectedTheme: ThemeOptionsEnum): Rule {
+  return (host: Tree) => {
     const selectedThemeImports = importMap.get(selectedTheme);
-    const selected = selectedThemeImports?.filter(s => !s.doNotImport);
-    if (!selected?.length) return code.code``;
+    const helpers = selectedThemeImports?.filter(
+      s => !s.doNotImport && s.importName && s.path && !s.expression && !s.provider
+    );
+    
+    if (!helpers || helpers.length === 0) {
+      return host;
+    }
 
-    const expressions: string[] = [];
+    const buffer = host.read(filePath);
+    if (!buffer) return host;
 
-    for (const { importName, path, expression } of selected) {
+    const sourceText = buffer.toString('utf-8');
+    const source = ts.createSourceFile(filePath, sourceText, ts.ScriptTarget.Latest, true);
+    const recorder = host.beginUpdate(filePath);
+
+    for (const { importName, path } of helpers) {
+      const existingImport = findNodes(source, ts.isImportDeclaration).find(node => {
+        const moduleSpecifier = (node.moduleSpecifier as ts.StringLiteral).text;
+        const namedBindings = node.importClause?.namedBindings;
+        
+        if (moduleSpecifier === path && namedBindings && ts.isNamedImports(namedBindings)) {
+          return namedBindings.elements.some(e => e.name.text === importName);
+        }
+        return false;
+      });
+
+      if (!existingImport) {
+        const importStatement = `import { ${importName} } from '${path}';\n`;
+        recorder.insertLeft(0, importStatement);
+      }
+    }
+
+    host.commitUpdate(recorder);
+    return host;
+  };
+}
+
+export function insertImports(projectName: string, selectedTheme: ThemeOptionsEnum): Rule {
+  const selectedThemeImports = importMap.get(selectedTheme);
+  const selected = selectedThemeImports?.filter(s => !s.doNotImport && !!s.expression);
+  
+  if (!selected || selected.length === 0) {
+    return () => {};
+  }
+
+  return addRootImport(projectName, code => {
+    const expressions = selected.map(({ importName, path, expression }) => {
       if (importName && path) {
         code.external(importName, path);
       }
-      if (expression) {
-        expressions.push(expression.trim());
-      }
-    }
-    return code.code`${expressions}`;
+      return expression!.trim();
+    });
+
+    return code.code`
+${expressions.join(',\n')}`;
   });
 }
 export function insertProviders(projectName: string, selectedTheme: ThemeOptionsEnum): Rule {
+  const selectedThemeImports = importMap.get(selectedTheme);
+  const selected = selectedThemeImports?.filter(s => !s.doNotImport && !!s.provider);
+  
+  if (!selected || selected.length === 0) {
+    return () => {};
+  }
+
   return addRootProvider(projectName, code => {
-    const selectedThemeImports = importMap.get(selectedTheme);
-    const selected = selectedThemeImports?.filter(s => !s.doNotImport);
-    if (!selected || selected.length === 0) return code.code``;
+    const providers = selected.map(({ provider, path, importName }) => {
+      code.external(importName, path);
+      return provider;
+    });
 
-    const providers = selected
-      .filter(s => !!s.provider)
-      .map(({ provider, path, importName }) => {
-        code.external(importName, path);
-        return `${provider}`;
-      });
-
-    return code.code`${providers}`;
+    return code.code`
+${providers.join(',\n')}`;
   });
 }
 

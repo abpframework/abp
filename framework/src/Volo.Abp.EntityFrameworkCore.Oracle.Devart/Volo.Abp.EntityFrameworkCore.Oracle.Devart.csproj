@@ -4,7 +4,7 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <WarningsAsErrors>Nullable</WarningsAsErrors>
         <AssemblyName>Volo.Abp.EntityFrameworkCore.Oracle.Devart</AssemblyName>
@@ -22,6 +22,7 @@
 
     <ItemGroup>
         <PackageReference Include="Devart.Data.Oracle.EFCore" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" VersionOverride="9.0.12" />
     </ItemGroup>
 
 </Project>

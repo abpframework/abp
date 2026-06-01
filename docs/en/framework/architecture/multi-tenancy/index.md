@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how ABP Framework enables developers to build powerful multi-tenant applications, optimizing resource sharing for SaaS solutions."
+}
+```
+
 # Multi-Tenancy
 
 Multi-Tenancy is a widely used architecture to create **SaaS applications** where the hardware and software **resources are shared by the customers** (tenants). ABP provides all the base functionalities to create **multi tenant applications**. 
@@ -40,7 +47,9 @@ ABP supports all the following approaches to store the tenant data in the databa
 - **Database per Tenant**: Every tenant has a separate, dedicated database to store the data related to that tenant.
 - **Hybrid**: Some tenants share a single database while some tenants may have their own databases.
 
-[Saas module (PRO)](../../../modules/saas.md) allows you to set a connection string for any tenant (as optional), so you can achieve any of the approaches.
+[SaaS module (PRO)](../../../modules/saas.md) allows you to set a connection string for any tenant (as optional), so you can achieve any of the approaches.
+
+> You can see the community article *[Multi-Tenancy with Separate Databases in .NET and ABP Framework](https://abp.io/community/articles/multitenancy-with-separate-databases-in-dotnet-and-abp-51nvl4u9)* for more details about different database architectures with practical implementation details.
 
 ## Usage
 
@@ -229,18 +238,20 @@ services.Configure<AbpAspNetCoreMultiTenancyOptions>(options =>
 If you change the `TenantKey`, make sure to pass it to `provideAbpCore` via `withOptions` method in the Angular client as follows:
 
 ```js
-@NgModule({
+// app.config.ts
+// ...
+export const appConfig: ApplicationConfig = {
   providers: [
+    // ...
     provideAbpCore(
       withOptions({
         // ...
         tenantKey: "MyTenantKey",
       })
     ),
+    // ...
   ],
-  // ...
-})
-export class AppModule {}
+};
 ```
 
 If you need to access it, you can inject it as follows:
@@ -380,6 +391,19 @@ namespace MultiTenancyDemo.Web
 * A tenant resolver should set `context.TenantIdOrName` if it can determine it. If not, just leave it as is to allow the next resolver to determine it.
 * `context.ServiceProvider` can be used if you need to additional services to resolve from the [dependency injection](../../fundamentals/dependency-injection.md) system.
 
+##### The Fallback Tenant
+
+If you want to always fallback to a tenant (in case of no tenant was found by the tenant resolution logic), you can set the `AbpTenantResolveOptions.FallbackTenant` option:
+
+```csharp
+Configure<AbpTenantResolveOptions>(options =>
+{
+    options.FallbackTenant = "acme";
+});
+```
+
+The `FallbackTenant` value can be a tenant name or tenant's Id. This option can be helpful on development time or some specific scenarios to set a constant tenant for the application. It is a simple and consistent way to ensure that a tenant context is always available when needed. However, when you do that, no way to switch to the host side. It is not something you will need it most of the time, but here if you need such a resolution logic.
+
 #### Multi-Tenancy Middleware
 
 Multi-Tenancy middleware is an ASP.NET Core request pipeline [middleware](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware) that determines the current tenant from the HTTP request and sets the `ICurrentTenant` properties.
@@ -442,9 +466,10 @@ The [Tenant Management module](../../../modules/tenant-management.md) provides a
 
 ### A note about separate database per tenant approach in open source version
 
-While ABP fully supports this option, managing connection strings of tenants from the UI is not available in open source version. You need to have [Saas module (PRO)](../../../modules/saas.md).
-Alternatively you can implement this feature yourself by customizing the tenant management module and tenant application service to create and migrate the database on the fly.
+While ABP fully supports this option, managing connection strings of tenants from the UI is not available in open source version. You need to have [SaaS module (PRO)](../../../modules/saas.md).
+Alternatively, you can implement this feature yourself by customizing the tenant management module and tenant application service to create and migrate the database on the fly.
 
 ## See Also
 
 * [Features](../../infrastructure/features.md)
+* [Article: Multi-Tenancy with Separate Databases in .NET and ABP Framework](https://abp.io/community/articles/multitenancy-with-separate-databases-in-dotnet-and-abp-51nvl4u9)

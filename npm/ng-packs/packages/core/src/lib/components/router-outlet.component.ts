@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'abp-router-outlet',
   template: ` <router-outlet></router-outlet> `,
-  imports: [RouterModule],
+  imports: [RouterOutlet],
 })
 export class RouterOutletComponent {}

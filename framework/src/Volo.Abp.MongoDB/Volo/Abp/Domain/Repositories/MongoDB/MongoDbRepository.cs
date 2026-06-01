@@ -1,12 +1,12 @@
-using JetBrains.Annotations;
-using MongoDB.Driver;
-using MongoDB.Driver.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
@@ -98,9 +98,10 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
 
     public IMongoDbBulkOperationProvider? BulkOperationProvider => LazyServiceProvider.LazyGetService<IMongoDbBulkOperationProvider>();
 
-    public IMongoDbRepositoryFilterer<TEntity> RepositoryFilterer => LazyServiceProvider.LazyGetService<IMongoDbRepositoryFilterer<TEntity>>()!;
+    public IEnumerable<IMongoDbRepositoryFilterer<TEntity>> RepositoryFilterers => LazyServiceProvider.LazyGetService<IEnumerable<IMongoDbRepositoryFilterer<TEntity>>>()!;
 
     public MongoDbRepository(IMongoDbContextProvider<TMongoDbContext> dbContextProvider)
+        : base(AbpMongoDbConsts.ProviderName)
     {
         DbContextProvider = dbContextProvider;
     }
@@ -773,7 +774,10 @@ public class MongoDbRepository<TMongoDbContext, TEntity>
     {
         if (typeof(TOtherEntity) == typeof(TEntity))
         {
-            return base.ApplyDataFilters<TQueryable, TOtherEntity>((TQueryable)RepositoryFilterer.FilterQueryable(query.As<IQueryable<TEntity>>()));
+            foreach (var filterer in RepositoryFilterers)
+            {
+                query = (TQueryable) filterer.FilterQueryable(query.As<IQueryable<TEntity>>());
+            }
         }
         return base.ApplyDataFilters<TQueryable, TOtherEntity>(query);
     }
@@ -785,7 +789,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity, TKey>
     where TMongoDbContext : IAbpMongoDbContext
     where TEntity : class, IEntity<TKey>
 {
-    public IMongoDbRepositoryFilterer<TEntity, TKey> RepositoryFiltererWithKey => LazyServiceProvider.LazyGetService<IMongoDbRepositoryFilterer<TEntity, TKey>>()!;
+    public IEnumerable<IMongoDbRepositoryFilterer<TEntity, TKey>> RepositoryFiltererWithKeys => LazyServiceProvider.LazyGetService<IEnumerable<IMongoDbRepositoryFilterer<TEntity, TKey>>>()!;
 
     public MongoDbRepository(IMongoDbContextProvider<TMongoDbContext> dbContextProvider)
         : base(dbContextProvider)
@@ -802,7 +806,7 @@ public class MongoDbRepository<TMongoDbContext, TEntity, TKey>
 
         if (entity == null)
         {
-            throw new EntityNotFoundException(typeof(TEntity), id);
+            throw new EntityNotFoundException<TEntity>(id);
         }
 
         return entity;
@@ -843,19 +847,38 @@ public class MongoDbRepository<TMongoDbContext, TEntity, TKey>
     {
         if (typeof(TOtherEntity) == typeof(TEntity))
         {
-            return base.ApplyDataFilters<TQueryable, TOtherEntity>((TQueryable)RepositoryFiltererWithKey.FilterQueryable(query.As<IQueryable<TEntity>>()));
+            foreach (var filterer in RepositoryFiltererWithKeys)
+            {
+                query = (TQueryable) filterer.FilterQueryable(query.As<IQueryable<TEntity>>());
+            }
         }
 
         return base.ApplyDataFilters<TQueryable, TOtherEntity>(query);
     }
 
-    protected async override Task<FilterDefinition<TEntity>> CreateEntityFilterAsync(TEntity entity, bool withConcurrencyStamp = false, string? concurrencyStamp = null)
+    protected override async Task<FilterDefinition<TEntity>> CreateEntityFilterAsync(TEntity entity, bool withConcurrencyStamp = false, string? concurrencyStamp = null)
     {
-        return await RepositoryFiltererWithKey.CreateEntityFilterAsync(entity, withConcurrencyStamp, concurrencyStamp);
+        FilterDefinition<TEntity> fieldDefinition = Builders<TEntity>.Filter.Empty;
+        foreach (var filterer in RepositoryFiltererWithKeys)
+        {
+            fieldDefinition = Builders<TEntity>.Filter.And(
+                fieldDefinition,
+                await filterer.CreateEntityFilterAsync(entity, withConcurrencyStamp, concurrencyStamp)
+            );
+        }
+        return fieldDefinition;
     }
 
-    protected async override Task<FilterDefinition<TEntity>> CreateEntitiesFilterAsync(IEnumerable<TEntity> entities, bool withConcurrencyStamp = false)
+    protected override async Task<FilterDefinition<TEntity>> CreateEntitiesFilterAsync(IEnumerable<TEntity> entities, bool withConcurrencyStamp = false)
     {
-        return await RepositoryFiltererWithKey.CreateEntitiesFilterAsync(entities, withConcurrencyStamp);
+        FilterDefinition<TEntity> fieldDefinition = Builders<TEntity>.Filter.Empty;
+        foreach (var filterer in RepositoryFiltererWithKeys)
+        {
+            fieldDefinition = Builders<TEntity>.Filter.And(
+                fieldDefinition,
+                await filterer.CreateEntitiesFilterAsync(entities, withConcurrencyStamp)
+            );
+        }
+        return fieldDefinition;
     }
 }

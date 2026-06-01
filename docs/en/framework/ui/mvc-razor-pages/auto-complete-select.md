@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to implement an auto-complete select component in ASP.NET Core MVC/Razor Pages with pagination and server-side search using ABP."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages: Auto-Complete Select
 A simple select component sometimes isn't useful with a huge amount of data. ABP Provides a select implementation that works with pagination and server-side search via using [Select2](https://select2.org/). It works with single or multiple choices well.
 
@@ -71,4 +78,4 @@ It'll be automatically bound to a collection of defined value type.
 
 ## Notices
 If the authenticated user doesn't have permission on the given URL, the user will get an authorization error. Be careful while designing this kind of UIs.
-You can create a specific, [unauthorized](../../fundamentals/authorization.md) endpoint/method to get the list of items, so the page can retrieve lookup data of dependent entity without giving the entire read permission to users.
+You can create a specific, [unauthorized](../../fundamentals/authorization/index.md) endpoint/method to get the list of items, so the page can retrieve lookup data of dependent entity without giving the entire read permission to users.

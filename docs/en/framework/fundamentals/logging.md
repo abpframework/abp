@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to utilize ASP.NET Core's logging system in ABP Framework for effective application logging and monitoring."
+}
+```
+
 # Logging
 
 ABP doesn't implement any logging infrastructure. It uses the [ASP.NET Core's logging system](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging).

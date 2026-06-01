@@ -1,0 +1,12 @@
+// Minimal styling - rely on Bootstrap/Lepton-X theme styles
+.form-group {
+  display: flex;
+  flex-direction: column;
+
+  // Radio group spacing (layout only)
+  .radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

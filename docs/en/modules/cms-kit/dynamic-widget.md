@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the CMS Kit's dynamic widget feature to seamlessly integrate custom components into your pages and blog posts."
+}
+```
+
 # CMS Kit: Dynamic Widget
 
 CMS Kit provides a dynamic [widget](../../framework/ui/mvc-razor-pages/widgets.md) used to render the components previously developed by the software in the content of the pages and blog posts. Its means, that in static content you can use dynamic content. We will mention how you can do it. You have two choices to define the widget in the system: Writing and UI.
@@ -117,21 +124,26 @@ In this image, after choosing your widget (on the other case, it changes automat
 
 You can edit this output manually if do any wrong coding for that (wrong value or typo) you won't see the widget, even so, your page will be viewed successfully. 
 
-## Options 
-To configure the widget, you should define the below code in YourModule.cs 
+## Options
+
+To add content widgets, you should configure the `CmsKitContentWidgetOptions` in your module's `ConfigureServices` method:
 
 ```csharp
 Configure<CmsKitContentWidgetOptions>(options =>
     {
         options.AddWidget(widgetType: "Today", widgetName: "CmsToday", parameterWidgetName: "Format");
+
+        // Alternatively, you can add a widget conditionally based on a global feature being enabled
+        options.AddWidgetIfFeatureEnabled(typeof(PagesFeature), "Today", "CmsToday", "Format");
     }); 
 ```
 
-Let's look at these parameters in detail
-* `widgetType` is used for end-user and more readable names. The following bold word represents widgetType.
-[Widget Type="**Today**" Format="yyyy-dd-mm HH:mm:ss"].
+The `CmsKitContentWidgetOptions` provides two methods for registering widgets:
 
-* `widgetName` is used for your widget name used in code for the name of the `ViewComponent`.
+- **AddWidget:** Registers a widget that will be available in the content editor. It accepts the following parameters:
+    - `widgetType` (required): A user-friendly name for the widget that appears in the widget selection dropdown and is used in content markup. For example, in `[Widget Type="Today"]`, `"Today"` is the `widgetType`.
+    - `widgetName` (required): The name of the `ViewComponent` that will be rendered. This must match the `Name` attribute of your `ViewComponent` (e.g., `[ViewComponent(Name = "CmsToday")]`).
+    - `parameterWidgetName` (optional): The name of the parameter widget that will be displayed in the "Add Widget" modal to collect parameter values from users. This is only required when your widget needs parameters.
 
-* `parameterWidgetName` is used the for editor component side to see on the `Add Widget` modal.
-After choosing the widget type from listbox (now just defined `Format`) and renders this widget automatically. It's required only to see UI once using parameters
+- **AddWidgetIfFeatureEnabled:** Registers a widget conditionally, only if a specified [global feature](../../framework/infrastructure/global-features.md) is enabled. It accepts the same parameters as `AddWidget`, plus an additional first parameter:
+    - `featureType` (required): The type of the global feature that must be enabled for the widget to be available (e.g., `typeof(PagesFeature)`).

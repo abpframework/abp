@@ -2,6 +2,6 @@
   "culture": "ru",
   "texts": {
     "Permission:DocumentManagement.Common": "Общее управление документами",
-    "Permission:PdfGeneration": "Генерация PDF"
+    "Permission:PdfDownload": "Скачивание PDF"
   }
 }

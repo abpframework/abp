@@ -635,6 +635,13 @@ public class AbpOpenIddictApplicationStore : AbpOpenIddictStoreBase<IOpenIddictA
         }
     }
 
+    public virtual async ValueTask<string> GetFrontChannelLogoutUriAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken = default)
+    {
+        Check.NotNull(application, nameof(application));
+
+        return await new ValueTask<string>(application.FrontChannelLogoutUri);
+    }
+
     public virtual ValueTask<string> GetClientUriAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken = default)
     {
         Check.NotNull(application, nameof(application));

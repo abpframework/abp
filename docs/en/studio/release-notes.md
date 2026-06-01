@@ -1,6 +1,355 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the latest features and enhancements in ABP Studio with release notes detailing major updates and improvements for developers."
+}
+```
+
 # ABP Studio Release Notes
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
+
+## 3.0.3 (2026-05-20) Latest
+
+* AI Agent Upgrades: Added browser automation tools and overall performance fixes
+* React Language Fix: Fixed language and localization settings being ignored in React templates
+* Admin Console Polish: Added icon support and visual enhancements to the React sidebar
+* Admin Mode Drag & Drop: Fixed solution file drag-and-drop when running as Administrator on Windows
+* Project Wizard Improvements: Added helpful guidance texts for modularity and options steps
+* User & Security Fixes: Enhanced user management and fixed account-linking login permissions
+* UI & System Tweaks: Polished modal window styles and resolved minor background template issues
+
+## 3.0.2 (2026-05-12)
+
+* AI Agent Enhancements: Optimized the core system prompt and continued overall agent improvements
+* Elsa Workflow Integration: Added Volo.Abp.Elsa to the available module selection list
+* Enhanced Security: Added automatic reCAPTCHA registration for CMS Kit contact forms in API templates
+* macOS Template Fix: Resolved compatibility issues specifically affecting modern templates on macOS
+* Dark Theme Polish: Updated the dark mode with a lighter, more balanced background color contrast
+* Template Configuration Fixes: Automatically configured missing root URL settings and improved initial task warning handling
+
+## 3.0.1 (2026-05-06)
+
+* Enhanced Project Wizard: Fixed the optional module selection step for a smoother project setup experience
+* React Admin Console Improvements: Resolved identified issues in the React administration templates for better stability
+* MacOS Performance: Optimized the internal build pipeline for a more reliable experience on Apple devices
+* Stability Fixes: Improved core UI components to ensure parameter consistency across updates
+
+## 3.0.0 (2026-05-06)
+
+* Introducing ABP AI Agent: A next-generation smart assistant to accelerate your development
+* Enhanced ABP Coding Agent: Smarter code generation and guidance integrated directly into your workflow
+* Modern UI Redesign: New "Bento-style" dashboard and a streamlined single sidebar for better focus
+* Drag & Drop Support: Easily open your projects by dragging .sln, .slnx, or .abpsln files into the app
+* Improved React Templates: Optimized authentication, local debugging, and a new "Thin UI" layered template option
+* CMS Kit Newsletter Integration: Ready-to-use newsletter component for public websites
+* Faster CLI Experience: Simplified abp login process and improved help output for better usability
+* Enhanced Solution Runner: Smarter project management and more reliable configuration handling
+* Simplified Project Structure: Legacy systems renamed to "Classic" for a cleaner transition to modern architectures
+* System Stability: Significant reduction in background noise/errors and optimized performance
+* Global Platform Update: Fully updated to the latest underlying framework versions (v10.3.0)
+
+## 2.2.7 (2026-04-20)
+
+* Improved Blazor WebApp template setup for easier tiered application development
+* Added application version tracking in analytics events
+* Fixed issues in Basic Theme public website templates
+* Improved PostgreSQL vector database support in templates
+* Enhanced Blazor CRUD support with built-in Book management example
+* Modernized React Native template components
+* Updated to ABP 10.3 and Blazorise 2.0.4
+* Improved run profile and PowerShell execution reliability
+* Added AI Management and Rate Limiting modules to available module options  
+
+
+## 2.2.6 (2026-04-08)
+
+* Disable Scriban 7.0 cumulative output limit for template rendering
+
+## 2.2.5 (2026-04-08)
+
+* Upgraded GPT-5 → GPT-5.4 and improved AI management (providers, blob storage, CLI options)
+* Fixed critical build issues (MongoDB, MAUI) and improved overall stability
+* Enhanced monitoring (HTTP requests & exceptions)
+* Added DBMS auto-detection from connection string
+* Upgraded to ABP 10.2 and Scriban 7.0.0
+* Improved developer experience and telemetry (PostHog)
+* Minor UI fixes and workflow adjustments (manual build trigger)
+
+## 2.2.4 (2026-03-25)
+
+* Add `Template Create and Build` workflow
+* Disable NuGetAudit in template common.props to prevent CLI deadlock during initial migration
+
+## 2.2.3 (2026-03-24)
+
+* Fix PostHog environment detection
+
+## 2.2.1 (2026-02-20)
+
+* Fix tiered Blazor WebApp template HttpApi reference
+* Add LeptonX theme templates AuthServer and HttpApi projects
+* Enable razor runtime compilation on templates
+* Configure HttpClientFactoryOptions for CLI client
+* Bump ABP to 10.1.1 and LeptonX to 5.1.1
+* Blazor & Angular UIs: Add AI Management option to the Startup Templates (app-nolayers, app, ms templates)
+* Handle docker container start failures in solution runner
+* Fix import module version dropdown ordering
+* Add PostHog integration for Studio and CLI
+
+
+## 2.2.1 (2026-02-20)
+
+* Added `abp run` and `abp watch` commands to Studio CLI.
+* Added "Start and wait for ready" option in Solution Runner.
+* Added Angular support to standard solution and module templates, with Angular templates upgraded to v21.
+* Updated ABP Framework to `10.1.0` and LeptonX to `5.0.3`.
+* Fixed various Solution Runner issues, including tooltips, log rendering, and stability problems.
+
+## 2.1.9 (2026-01-30)
+
+* Fixed MCP server CLI output problem.
+
+## 2.1.8 (2026-01-29)
+
+* Added Studio MCP server support to allow AI monitoring of applications linked to ABP Studio.
+* Added `Open with > Cursor` option.
+* Improved task failure handling and related log visibility.
+* Fixed various Solution Runner issues, including memory/crash and log scrolling problems.
+
+## 2.1.7 (2026-01-23)
+
+* Added management UI for custom solution commands.
+* Showed logs of background jobs.
+* Updated Aspire to version `13.1`.
+
+## 2.1.6 (2026-01-13)
+
+* Enhanced runnable task logs window.
+* Fixed tooltip line-height problem.
+
+## 2.1.5 (2026-01-13)
+
+* Added `version` command to Studio CLI.
+* Updated ABP Framework to `10.0.2` and LeptonX to `5.0.2`.
+* Fixed microservice solution build errors for Blazor Server and Angular.
+* Improved Solution Runner behavior to avoid re-running applications after build errors.
+* Replaced "Clear Cookies" with "Clear site data" in the tools section.
+
+## 2.1.4 (2025-12-30)
+
+* Fixed books sample for blazor-webapp tiered solution.
+* Fixed K8s cluster deployment issues for microservices.
+* Fixed docker build problem on microservice template.
+* Showed logs of the executed tasks.
+
+## 2.1.3 (2025-12-15)
+
+* Updated `createCommand` and CLI help for multi-tenancy.
+* Fixed `BookController` templating problem.
+
+## 2.1.2 (2025-12-11)
+
+* Fixed `SLNX` files in templates for macOS.
+* Fixed `DbMigrator` problem on nolayers template.
+
+## 2.1.1 (2025-12-11)
+
+* Fixed duplicate workspace seeding issue.
+* Fixed books sample problems when solution is tiered.
+* Added AI Management module to `abpmdl` file.
+* Improved skip running initial tasks text.
+* Fixed unit test failures.
+* Added `LanguageManagementDbContext` table creation in tests.
+* Removed `ConfigureHttpClientProxies` method.
+* Fixed issue with adding new services to existing Microservices.
+* Fixed AI Management template issues.
+* Reverted browser notification overlay fix.
+
+## 2.1.0 (2025-12-08)
+
+* Enhanced Module Installation UI with improved user experience.
+* Added `AI Management` option to Startup Templates (app-nolayers, app).
+* Added support for new `SLNX` solution file format.
+* Enhanced modularity step in solution creation process.
+* Fixed Swagger authorization issues when projects run via .NET Aspire.
+* Fixed browser notification overlay problems.
+* Added missing `Unit of Work` namespace in solution templates.
+* Fixed JSON file formatting issues.
+* Updated ABP Framework to `10.0.1` and LeptonX to `5.0.1`.
+* Added MySQL compatibility warnings.
+* Fixed initial tasks problems.
+* Improved AI Assistant control UI with better margins and borders.
+
+## 2.0.2 (2025-11-26)
+
+* Fixed `.NET 10` installation problems.
+* Added custom styles for code blocks in **Markdown** view.
+* Fixed `OpenIddictCoreOptions` injection to use `IOptions`.
+* Added IdentityModel package after KubernetesClient.
+
+## 2.0.1 (2025-11-21)
+
+* Added build step before adding EF Core migration.
+* Updated `KubernetesClient` to version `18.0.5`.
+
+## 2.0.0 (2025-11-20)
+
+* Major upgrade to `.NET 10.0` and `ABP Framework 10.0`
+* Replaced `IdentityModel` with `Duende.IdentityModel`.
+* Added "Open on Start in Browser" option for .NET applications in Solution Runner.
+* Added `Mapperly` configuration.
+* Enabled user and tenant impersonation in Blazor client modules.
+* Enhanced notification system to allow text copying.
+* Added environment variable support for DesignTime DbContext.
+* Used C# instead of JSON for Aspire AppHost project configuration.
+* Fixed MongoDB image pulling problems.
+* Improved AI Assistant with better code block visibility across themes.
+* Added different cache paths for each browser instance.
+* Fixed various UI issues including mouse pointer problems in trees and horizontal scrolling.
+* Added `FileManagement` download URL configuration for tiered projects.
+* Added chat SignalR configuration to Microservice Blazor apps.
+* Updated `Blazorise` packages to version `1.8.6`.
+* Fixed `BackToImpersonator` button in Microservice Template.
+* Added log recording while crashing for better debugging.
+* Enhanced tab headers for **Solution Runner** and **Kubernetes**.
+
+## 1.4.2 (2025-10-30)
+
+* Upgraded template dependencies for ABP Framework and LeptonX. (targeting ABP `9.3.6`)
+* AI Assistant is now enabled for all customers.
+* Fixed CLI default language problem during solution creation.
+* Improved task auto-start logic and notification handling.
+* Fixed Angular localization function inputs.
+* Set default mobile frameworks to **None** in the UI.
+* Disallowed dots (.) in module names of microservice sub-templates.
+* Solution Runner: show vertical scrollbar when needed and disable the Properties window while the app is running.
+
+## 1.4.1 (2025-10-16)
+
+* Fixed AI Assistant chat problems.
+* Added custom steps if built with CLI.
+* Fixed Release configuration builds.   
+
+## 1.4.0 (2025-10-15)
+
+* The **Task Panel** has been introduced, providing a centralized place to manage and monitor background operations.
+* Added **CLI application properties** window, making it easier to configure and manage command-line tool settings directly within the Studio UI.
+* Added suggestion modal for building after creating service/web/gateway module.
+* Fixed mismatching hosts file record namespace problem.
+* Allow selecting `Default Profile` in Solution Runner.
+* Refactored Angular scripts.
+* Fixed: tools not browsable in Solution Runner with Aspire after Kubernetes deployment.
+
+## 1.3.3 (2025-10-06)
+
+* Upgraded template dependencies for ABP Framework and LeptonX. (targeting ABP `9.3.5`)
+* Fixed welcome page tutorial links.
+* Improved error handling during Helm chart installation and custom command execution.
+* Fixed microservice problems.
+* Fixed connection string problems.
+
+## 1.3.2 (2025-09-25)
+
+* Enhanced AI Assistant with bug fixes and improvements.
+* Implemented new public website layout for public website projects.
+* Added container priority setting in Solution Runner.
+* Fixed relative image path problems in markdown files and added SVG support.
+* Enhanced Angular templates with application builder support.
+* Fixed Aspire profile database creation issues in microservice template.
+
+## 1.3.1 (2025-09-22)
+
+* Added Blazor WebApp application information to ReadMe in application template.
+
+## 1.3.0 (2025-09-22)
+
+* Upgraded template dependencies for ABP Framework and LeptonX. (targeting ABP `9.3.4`)
+* **Added .NET Aspire Integration** to ABP Studio and Microservice Startup Template.
+* **Introduced AI Support Assistant** for enhanced development experience.
+* Added new package option: **C# Console Application (With ABP)**.
+* Enhanced Solution Runner with double-click browse functionality.
+* Made Blazor WebApp option available for module templates.
+* Updated React Native templates to use latest Expo/React Native standards.
+* Removed LeptonX Theme Management by default from templates.
+* Added Scriban template build-time validation.
+* Enhanced MVC UI layer with localization and loading indicators.
+
+## 1.2.2 (2025-08-27)
+
+* Upgraded template dependencies for ABP Framework and LeptonX. (targeting ABP `9.3.2`)
+* Fixed LeptonX Lite logo problems.
+* Redesigned LeptonX footer component.
+* Enhanced language selection with sorting by display name.
+* Improved template configuration with default language handling.
+* Optimized search depth for restore need detection.
+
+## 1.2.1 (2025-08-14)
+
+* Upgraded template dependencies for ABP Framework and LeptonX. (targeting ABP `9.3.1`)
+* Migrated templates to standalone structure for Angular UI.
+* Allowed relating tools with Kubernetes Services (allows to browse tools dashboard those are running in k8s).
+* Made several enhancements for Solution Runner.
+* Added test projects to **Application (Single Layer)** template (optional).
+
+
+## 1.1.2 (2025-07-31)
+
+* Upgraded template dependencies for ABP Framework and LeptonX. (targeting ABP `9.2.3`)
+* Configured LeptonX Lite logos in the templates.
+* Added browser tab memory feature to remember previously selected tabs.
+* Enhanced tools section with default credentials display for first-time tool usage.
+* Improved module and package loading with better error handling.
+
+## 1.1.1 (2025-07-22)
+
+* Enhanced tools section with clear cookies option.
+* Fixed language management module name display for imported modules.
+* Improved update window messaging with "Skip this version" option.
+* Fixed Docker Compose file issues in microservice template.
+* Resolved RabbitMQ tool cookie problems.
+
+## 1.1.0 (2025-07-16)
+
+* Upgraded template dependencies for ABP Framework and LeptonX. (targeting ABP `9.2.2`)
+* Enhanced UI scaling for all windows and improved user experience.
+* Added tools section in solution runner main area with basic Grafana dashboard for microservice template.
+* Improved container management during application building.
+* Enhanced background task exception handling.
+* Added public account module package reference to Blazor WebApp client.
+* Fixed tenant database context updating errors.
+* Improved optional module selection UI with better documentation integration.
+
+## 1.0.2 (2025-06-24)
+
+* Enhanced the ABP NuGet package installation experience.
+* Upgraded template dependencies for ABP Framework and LeptonX. (targeting ABP `9.2.1`)
+* Replaced the `System.Data` package with `Microsoft.Data`.
+* Fixed a dynamic-env file path configuration issue in Angular templates.
+* Disabled Pushed Authorization for MAUI applications.
+* Improved the IDE experience by displaying the main project in a dedicated 'main' folder and hiding `.abppkg` files.
+
+## 1.0.1 (2025-06-13)
+
+* Fixed an issue with language selection during solution creation.
+* Resolved a logo visibility problem in the Angular semi-dark theme.
+* Added and corrected the handling of CEF (Chromium Embedded Framework) resources for the Windows version. 
+
+## 1.0.0 (2025-06-11)
+
+* **Solution Runner with Health Checks:** ABP Studio's Solution Runner now provides visual health monitoring that makes tracking your applications' status easily.
+* **Improved Multi-DbContext Migration Handling:** ABP Studio now prompts you to select the correct DbContext for migration operations when working with multiple DbContexts.
+* **Theme Style Selection on Project Creation:** When creating a new solution, you can now choose your theme, theme style, and layout right from the project creation wizard instead of having to configure these settings later.
+* **Solution & Module Creation:** Introduced major enhancements, including language selection, database provider choice for microservices, improved folder handling, theme visualization, and better module installation recommendations.
+* **MAUI & Blazor:** Configured the new MAUI/Blazor bundling system, added dashboard pages to MAUI projects, and applied various fixes for themes and dependencies.
+* **Solution Runner & Docker:** Added Docker container support to the solution runner, enabling users to add and manage containers within run profiles.
+* **Authentication & Authorization:** Fixed Swagger authentication, and added dynamic claims support for microservices.
+* **ABP Studio Login:** Improved login flows with selecting account and organization support.
+* **Language Selection:** Added language selection during solution creation. You can now include only the languages you need in your project.
+* **Performance:** Sped up the development cycle by skipping package restores during project runs when no dependencies have changed.
+* **Dependency Updates:** Upgraded ABP Framework, LeptonX, and other Microsoft dependencies to the latest versions. (targeting ABP `9.2.0`)
+* **User Experience:** Implemented several UI/UX improvements, such as remembering user choices in wizards and sorting items alphabetically.
+* **Testing & Internals:** Switched to `MongoSandbox` for integration tests, improved local development against abp.io websites, and made various fixes to CI/CD workflows.
 
 ## 0.9.26 (2025-04-30)
 

@@ -1,0 +1,19 @@
+<MudNavMenu>
+    @if(Menu != null && !Menu.Items.IsNullOrEmpty())
+    {
+        foreach (var menuItem in Menu.Items)
+        {
+            if (menuItem.Items.IsNullOrEmpty())
+            {
+                <MudNavLink Href="@menuItem.Url" Match="@(menuItem.Url != null ? NavLinkMatch.All : NavLinkMatch.Prefix)">
+                    <MudIcon Icon="@menuItem.Icon" Size="Size.Small" />
+                    <MudText Class="ms-1" Inline="true">@menuItem.DisplayName</MudText>
+                </MudNavLink>
+            }
+            else
+            {
+                <NavMenuItem MenuItem="menuItem" />
+            }
+        }
+    }
+</MudNavMenu>

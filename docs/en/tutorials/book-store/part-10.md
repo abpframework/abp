@@ -1,9 +1,17 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to establish a 1 to N relationship between Book and Author entities in your ABP Framework application with this step-by-step tutorial."
+}
+```
+
 # Web Application Development Tutorial - Part 10: Book to Author Relation
 ````json
 //[doc-params]
 {
     "UI": ["MVC","Blazor","BlazorServer","BlazorWebApp","NG", "MAUIBlazor"],
-    "DB": ["EF","Mongo"]
+    "DB": ["EF","Mongo"],
+    "BlazorUI": ["Blazorise", "MudBlazor"]
 }
 ````
 
@@ -578,11 +586,17 @@ Let's see the changes we've done:
 
 ### Object to Object Mapping Configuration
 
-Introduced the `AuthorLookupDto` class and used object mapping inside the `GetAuthorLookupAsync` method. So, we need to add a new mapping definition inside the `BookStoreApplicationAutoMapperProfile.cs` file of the `Acme.BookStore.Application` project:
+Introduced the `AuthorLookupDto` class and used object mapping inside the `GetAuthorLookupAsync` method. So, we need to add a new mapping definition inside the `BookStoreApplicationMappers.cs` file of the `Acme.BookStore.Application` project:
 
-````csharp
-CreateMap<Author, AuthorLookupDto>();
-````
+```csharp
+[Mapper]
+public partial class AuthorToAuthorLookupDtoMapper : MapperBase<Author, AuthorLookupDto>
+{
+    public override partial AuthorLookupDto Map(Author source);
+
+    public override partial void Map(Author source, AuthorLookupDto destination);
+}
+```
 
 ## Unit Tests
 
@@ -898,12 +912,37 @@ These changes require a small change in the `EditModal.cshtml`. Remove the `<abp
 
 ### Object to Object Mapping Configuration
 
-The changes above requires to define some object to object mappings. Open the `BookStoreWebAutoMapperProfile.cs` in the `Acme.BookStore.Web` project and add the following mapping definitions inside the constructor:
+The changes above requires to define some object to object mappings. Open the `BookStoreWebMappers.cs` in the `Acme.BookStore.Web` project and create the following mapping definitions:
 
 ```csharp
-CreateMap<Pages.Books.CreateModalModel.CreateBookViewModel, CreateUpdateBookDto>();
-CreateMap<BookDto, Pages.Books.EditModalModel.EditBookViewModel>();
-CreateMap<Pages.Books.EditModalModel.EditBookViewModel, CreateUpdateBookDto>();
+using Riok.Mapperly.Abstractions;
+using Volo.Abp.Mapperly;
+
+//...
+
+[Mapper]
+public partial class CreateBookViewModelToCreateUpdateBookDtoMapper : MapperBase<Pages.Books.CreateModalModel.CreateBookViewModel, CreateUpdateBookDto>
+{
+    public override partial CreateUpdateBookDto Map(Pages.Books.CreateModalModel.CreateBookViewModel source);
+
+    public override partial void Map(Pages.Books.CreateModalModel.CreateBookViewModel source, CreateUpdateBookDto destination);
+}
+
+[Mapper]
+public partial class BookDtoToEditBookViewModelMapper : MapperBase<BookDto, Pages.Books.EditModalModel.EditBookViewModel>
+{
+    public override partial Pages.Books.EditModalModel.EditBookViewModel Map(BookDto source);
+
+    public override partial void Map(BookDto source, Pages.Books.EditModalModel.EditBookViewModel destination);
+}
+
+[Mapper]
+public partial class EditBookViewModelToCreateUpdateBookDtoMapper : MapperBase<Pages.Books.EditModalModel.EditBookViewModel, CreateUpdateBookDto>
+{
+    public override partial CreateUpdateBookDto Map(Pages.Books.EditModalModel.EditBookViewModel source);
+
+    public override partial void Map(Pages.Books.EditModalModel.EditBookViewModel source, CreateUpdateBookDto destination);
+}
 ```
 
 You can run the application and try to create a new book or update an existing book. You will see a drop down list on the create/update form to select the author of the book:
@@ -932,7 +971,7 @@ Book list page change is trivial. Open the `/src/app/book/book.component.html` a
   [name]="'::Author' | abpLocalization"
   prop="authorName"
   [sortable]="false"
-></ngx-datatable-column>
+/>
 ````
 
 When you run the application, you can see the *Author* column on the table:
@@ -978,12 +1017,12 @@ export class BookComponent implements OnInit {
 
   isModalOpen = false;
 
-  constructor(
-    public readonly list: ListService,
-    private bookService: BookService,
-    private fb: FormBuilder,
-    private confirmation: ConfirmationService
-  ) {
+  public readonly list = inject(ListService);
+  private readonly bookService = inject(BookService);
+  private readonly fb = inject(FormBuilder);
+  private readonly confirmation = inject(ConfirmationService);
+
+  constructor() {
     this.authors$ = bookService.getAuthorLookup().pipe(map((r) => r.items));
   }
 
@@ -1060,9 +1099,11 @@ Open the `/src/app/book/book.component.html` and add the following form group ju
   <label for="author-id">Author</label><span> * </span>
   <select class="form-control" id="author-id" formControlName="authorId">
     <option [ngValue]="null">Select author</option>
-    <option [ngValue]="author.id" *ngFor="let author of authors$ | async">
-      {%{{{ author.name }}}%}
-    </option>
+    @for (author of authors$ | async; track author) {
+      <option [ngValue]="author.id">
+        {%{{{ author.name }}}%}
+      </option>
+    }
   </select>
 </div>
 ````
@@ -1075,13 +1116,25 @@ That's all. Just run the application and try to create or edit an author.
 
 ### The Book List
 
-It is very easy to show the *Author Name* in the book list. Open the `/Pages/Books.razor` file in the {{ if UI == "BlazorServer" }}`Acme.BookStore.Blazor` {{ else if UI == "MAUIBlazor" }}`Acme.BookStore.MauiBlazor` {{ else }}`Acme.BookStore.Blazor.Client`{{ end }} project and add the following `DataGridColumn` definition just after the `Name` (book name) column:
+It is very easy to show the *Author Name* in the book list. Open the `/Pages/Books.razor` file in the {{ if UI == "BlazorServer" }}`Acme.BookStore.Blazor` {{ else if UI == "MAUIBlazor" }}`Acme.BookStore.MauiBlazor` {{ else }}`Acme.BookStore.Blazor.Client`{{ end }} project and add the following column definition just after the `Name` (book name) column:
+
+{{if BlazorUI == "Blazorise"}}
 
 ````xml
 <DataGridColumn TItem="BookDto"
                 Field="@nameof(BookDto.AuthorName)"
                 Caption="@L["Author"]"></DataGridColumn>
 ````
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+````razor
+<PropertyColumn Property="x => x.AuthorName" Title="@L["Author"]" />
+````
+
+{{end}}
 
 When you run the application, you can see the *Author* column on the table:
 
@@ -1106,6 +1159,8 @@ protected override async Task OnInitializedAsync()
 ````
 
 * It is essential to call the `base.OnInitializedAsync()` since `AbpCrudPageBase` has some initialization code to be executed.
+
+{{if BlazorUI == "Blazorise"}}
 
 Override the `OpenCreateModalAsync` method and adding the following code:
 
@@ -1159,7 +1214,67 @@ The final `@code` block should be the following:
 }
 ````
 
-Finally, add the following `Field` definition into the `ModalBody` of the *Create* modal, as the first item, before the `Name` field:
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+Override the `OpenCreateDialogAsync` method and adding the following code:
+
+````csharp
+protected override async Task OpenCreateDialogAsync()
+{
+    if (!authorList.Any())
+    {
+        throw new UserFriendlyException(message: L["AnAuthorIsRequiredForCreatingBook"]);
+    }
+
+    await base.OpenCreateDialogAsync();
+    NewEntity.AuthorId = authorList.First().Id;
+}
+````
+
+The final `@code` block should be the following:
+
+````csharp
+@code
+{
+    //ADDED A NEW FIELD
+    IReadOnlyList<AuthorLookupDto> authorList = Array.Empty<AuthorLookupDto>();
+
+    public Books() // Constructor
+    {
+        LocalizationResource = typeof(BookStoreResource);
+
+        CreatePolicyName = BookStorePermissions.Books.Create;
+        UpdatePolicyName = BookStorePermissions.Books.Edit;
+        DeletePolicyName = BookStorePermissions.Books.Delete;
+    }
+
+    //GET AUTHORS ON INITIALIZATION
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        authorList = (await AppService.GetAuthorLookupAsync()).Items;
+    }
+
+    protected override async Task OpenCreateDialogAsync()
+    {
+        if (!authorList.Any())
+        {
+            throw new UserFriendlyException(message: L["AnAuthorIsRequiredForCreatingBook"]);
+        }
+
+        await base.OpenCreateDialogAsync();
+        NewEntity.AuthorId = authorList.First().Id;
+    }
+}
+````
+
+{{end}}
+
+Finally, add the following field definition into the *Create* modal/dialog, as the first item, before the `Name` field:
+
+{{if BlazorUI == "Blazorise"}}
 
 ````xml
 <Field>
@@ -1175,6 +1290,21 @@ Finally, add the following `Field` definition into the `ModalBody` of the *Creat
 </Field>
 ````
 
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+````razor
+<MudSelect T="Guid" @bind-Value="@NewEntity.AuthorId" Label="@L["Author"]">
+    @foreach (var author in authorList)
+    {
+        <MudSelectItem Value="@author.Id">@author.Name</MudSelectItem>
+    }
+</MudSelect>
+````
+
+{{end}}
+
 This requires to add a new localization key to the `en.json` file:
 
 ````js
@@ -1187,7 +1317,9 @@ You can run the application to see the *Author Selection* while creating a new b
 
 ### Edit Book Modal
 
-Add the following `Field` definition into the `ModalBody` of the *Edit* modal, as the first item, before the `Name` field:
+Add the following field definition into the *Edit* modal/dialog, as the first item, before the `Name` field:
+
+{{if BlazorUI == "Blazorise"}}
 
 ````xml
 <Field>
@@ -1202,6 +1334,21 @@ Add the following `Field` definition into the `ModalBody` of the *Edit* modal, a
     </Select>
 </Field>
 ````
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+````razor
+<MudSelect T="Guid" @bind-Value="@EditingEntity.AuthorId" Label="@L["Author"]">
+    @foreach (var author in authorList)
+    {
+        <MudSelectItem Value="@author.Id">@author.Name</MudSelectItem>
+    }
+</MudSelect>
+````
+
+{{end}}
 
 That's all. We are reusing the `authorList` defined for the *Create* modal.
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Features;
@@ -39,6 +38,8 @@ public class CreateModalModel : CmsKitAdminPageModel
 
     public virtual async Task<IActionResult> OnPostAsync()
     {
+        ViewModel.Order = await MenuAdminAppService.GetAvailableMenuOrderAsync(ViewModel.ParentId);
+
         var input = ObjectMapper.Map<MenuItemCreateViewModel, MenuItemCreateInput>(ViewModel);
 
         var dto = await MenuAdminAppService.CreateAsync(input);
@@ -46,7 +47,6 @@ public class CreateModalModel : CmsKitAdminPageModel
         return new OkObjectResult(dto);
     }
 
-    [AutoMap(typeof(MenuItemCreateInput), ReverseMap = true)]
     public class MenuItemCreateViewModel : ExtensibleObject
     {
         [HiddenInput]

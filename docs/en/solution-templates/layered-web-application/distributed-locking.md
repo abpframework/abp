@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement distributed locking in layered applications to synchronize access to shared resources effectively."
+}
+```
+
 # Layered Solution: Distributed Locking
 
 ```json

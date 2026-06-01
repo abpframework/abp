@@ -22,6 +22,7 @@ public class ScribanDocumentSectionRenderer : IDocumentSectionRenderer
     protected const string DocsParam = "//[doc-params]";
     protected const string DocsTemplates = "//[doc-template]";
     protected const string DocsNav = "//[doc-nav]";
+    protected const string DocsSeo = "//[doc-seo]";
 
     public ILogger<ScribanDocumentSectionRenderer> Logger { get; set; }
 
@@ -49,7 +50,7 @@ public class ScribanDocumentSectionRenderer : IDocumentSectionRenderer
 
         var result = await scribanTemplate.RenderAsync(parameters);
 
-        return RemoveOptionsJson(result, DocsParam, DocsNav);
+        return RemoveOptionsJson(result, DocsParam, DocsNav, DocsSeo);
     }
 
     public Task<Dictionary<string, List<string>>> GetAvailableParametersAsync(string document)
@@ -213,12 +214,15 @@ public class ScribanDocumentSectionRenderer : IDocumentSectionRenderer
                     documentContent.IndexOf(Opener, StringComparison.Ordinal) + Opener.Length
                 );
 
-                var betweenJsonOpenerAndCloser = afterJsonOpener.Substring(0,
-                    afterJsonOpener.IndexOf(Closer, StringComparison.Ordinal)
-                );
+                var closerIndex = afterJsonOpener.IndexOf(Closer, StringComparison.Ordinal);
+                if(closerIndex < 0)
+                {
+                    break;
+                }
+                var betweenJsonOpenerAndCloser = afterJsonOpener.Substring(0, closerIndex);
 
                 documentContent = afterJsonOpener.Substring(
-                    afterJsonOpener.IndexOf(Closer, StringComparison.Ordinal) + Closer.Length
+                    closerIndex + Closer.Length
                 );
 
                 if (!betweenJsonOpenerAndCloser.Contains(DocsTemplates))
@@ -257,9 +261,12 @@ public class ScribanDocumentSectionRenderer : IDocumentSectionRenderer
                     document.IndexOf(Opener, StringComparison.Ordinal) + Opener.Length
                 );
 
-                var betweenJsonOpenerAndCloser = afterJsonOpener.Substring(0,
-                    afterJsonOpener.IndexOf(Closer, StringComparison.Ordinal)
-                );
+                var closerIndex = afterJsonOpener.IndexOf(Closer, StringComparison.Ordinal);
+                if (closerIndex < 0)
+                {
+                    break;
+                }
+                var betweenJsonOpenerAndCloser = afterJsonOpener.Substring(0, closerIndex);
 
                 if (!betweenJsonOpenerAndCloser.Contains(DocsTemplates))
                 {

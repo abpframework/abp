@@ -3,6 +3,7 @@ import {
   provideHttpClient,
   withInterceptorsFromDi,
   withXsrfConfiguration,
+  withFetch,
 } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -28,6 +29,7 @@ import { ABP } from './models/common';
 import './utils/date-extensions';
 import { provideAbpCoreChild, provideAbpCore, withOptions } from './providers';
 import {
+  AsyncLocalizationPipe,
   LazyLocalizationPipe,
   UtcToLocalPipe,
   SafeHtmlPipe,
@@ -59,6 +61,7 @@ const CORE_PIPES = [
   ShortDatePipe,
   ToInjectorPipe,
   UtcToLocalPipe,
+  AsyncLocalizationPipe,
   LazyLocalizationPipe,
 ];
 
@@ -96,7 +99,7 @@ const CORE_COMPONENTS = [
     ...CORE_COMPONENTS,
   ],
   declarations: [],
-  providers: [LocalizationPipe, provideHttpClient(withInterceptorsFromDi())],
+  providers: [LocalizationPipe, provideHttpClient(withInterceptorsFromDi(), withFetch())],
 })
 export class BaseCoreModule {}
 

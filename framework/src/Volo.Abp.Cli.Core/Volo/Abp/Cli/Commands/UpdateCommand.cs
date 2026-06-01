@@ -9,6 +9,8 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Internal.Telemetry;
+using Volo.Abp.Internal.Telemetry.Constants;
 
 namespace Volo.Abp.Cli.Commands;
 
@@ -20,18 +22,21 @@ public class UpdateCommand : IConsoleCommand, ITransientDependency
 
     private readonly VoloNugetPackagesVersionUpdater _nugetPackagesVersionUpdater;
     private readonly NpmPackagesUpdater _npmPackagesUpdater;
+    private readonly ITelemetryService _telemetryService;
 
     public UpdateCommand(VoloNugetPackagesVersionUpdater nugetPackagesVersionUpdater,
-        NpmPackagesUpdater npmPackagesUpdater)
+        NpmPackagesUpdater npmPackagesUpdater, ITelemetryService telemetryService)
     {
         _nugetPackagesVersionUpdater = nugetPackagesVersionUpdater;
         _npmPackagesUpdater = npmPackagesUpdater;
+        _telemetryService = telemetryService;
 
         Logger = NullLogger<UpdateCommand>.Instance;
     }
 
     public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
     {
+        await using var _ = _telemetryService.TrackActivityAsync(ActivityNameConsts.AbpCliCommandsUpdate);
         var updateNpm = commandLineArgs.Options.ContainsKey(Options.Packages.Npm);
         var updateNuget = commandLineArgs.Options.ContainsKey(Options.Packages.NuGet);
 
@@ -64,6 +69,7 @@ public class UpdateCommand : IConsoleCommand, ITransientDependency
         if (givenSolution.IsNullOrWhiteSpace())
         {
             solutions.AddRange(Directory.GetFiles(directory, "*.sln", SearchOption.AllDirectories));
+            solutions.AddRange(Directory.GetFiles(directory, "*.slnx", SearchOption.AllDirectories));
         }
         else
         {
@@ -76,7 +82,7 @@ public class UpdateCommand : IConsoleCommand, ITransientDependency
         {
             foreach (var solution in solutions)
             {
-                var solutionName = Path.GetFileName(solution).RemovePostFix(".sln");
+                var solutionName = Path.GetFileName(solution).RemovePostFix(".slnx", ".sln");
 
                 await _nugetPackagesVersionUpdater.UpdateSolutionAsync(solution, checkAll: checkAll, version: version, leptonXVersion: leptonXVersion);
 

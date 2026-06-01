@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Dapr.Client;
+#pragma warning disable DAPR_DISTRIBUTEDLOCK
 
 namespace Volo.Abp.DistributedLocking.Dapr;
 

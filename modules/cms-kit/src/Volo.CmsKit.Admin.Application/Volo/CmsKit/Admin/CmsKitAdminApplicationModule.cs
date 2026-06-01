@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -17,23 +17,18 @@ namespace Volo.CmsKit.Admin;
 
 [DependsOn(
     typeof(CmsKitAdminApplicationContractsModule),
-    typeof(AbpAutoMapperModule),
+    typeof(AbpMapperlyModule),
     typeof(CmsKitCommonApplicationModule)
     )]
 public class CmsKitAdminApplicationModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAutoMapperObjectMapper<CmsKitAdminApplicationModule>();
+        context.Services.AddMapperlyObjectMapper<CmsKitAdminApplicationModule>();
 
         ConfigureTagOptions();
 
         ConfigureCommentOptions();
-
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddMaps<CmsKitAdminApplicationModule>(validate: true);
-        });
     }
 
     private void ConfigureTagOptions()

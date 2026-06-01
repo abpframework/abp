@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using JetBrains.Annotations;
 using Volo.Abp;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Docs.Projects
@@ -125,6 +127,35 @@ namespace Volo.Docs.Projects
             {
                 PdfFiles.Remove(pdfFile);
             }
+        }
+        
+        public virtual string GetFullVersion(string version)
+        {
+            var prefix = GetProjectVersionPrefixIfExist(this);
+            if (string.IsNullOrWhiteSpace(prefix) || version.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+            {
+                return version;
+            }
+
+            var inputVersionStringBuilder = new StringBuilder();
+            return inputVersionStringBuilder.Append(prefix).Append(version).ToString();
+        }
+        
+        protected virtual string GetProjectVersionPrefixIfExist(Project project)
+        {
+            if (GetGithubVersionProviderSource(project) != GithubVersionProviderSource.Branches)
+            {
+                return string.Empty;
+            }
+
+            return project.GetProperty<string>("VersionBranchPrefix");
+        }
+    
+        protected virtual GithubVersionProviderSource GetGithubVersionProviderSource(Project project)
+        {
+            return project.HasProperty("GithubVersionProviderSource")
+                ? project.GetProperty<GithubVersionProviderSource>("GithubVersionProviderSource")
+                : GithubVersionProviderSource.Releases;
         }
     }
 }

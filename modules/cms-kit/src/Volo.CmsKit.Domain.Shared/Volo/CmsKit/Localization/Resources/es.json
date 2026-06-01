@@ -234,6 +234,8 @@
     "AssignBlogPostsToOtherBlog": "Asignar publicaciones de blog a otro blog",
     "SelectAnBlogToAssign": "Seleccione un blog para asignar publicaciones de blog",
     "DeleteAllBlogPostsOfThisBlog": "Eliminar todas las publicaciones de blog de este blog",
-    "RequiredPermissionName": "Nombre de permiso requerido"
+    "RequiredPermissionName": "Nombre de permiso requerido",
+    "AllPosts": "Todas las publicaciones",
+    "IsReadOnly": "Solo lectura"
   }
 }

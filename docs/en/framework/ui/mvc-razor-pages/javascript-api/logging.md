@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement client-side logging with the `abp.log` API in ASP.NET Core MVC/Razor Pages for effective debugging and error tracking."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages UI: JavaScript Logging API
 
 `abp.log` API is used to write simple logs in the client side.

@@ -1,5 +1,5 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -7,18 +7,22 @@ using Volo.CmsKit.Reactions;
 using Volo.CmsKit.Web.Icons;
 using Markdig;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.CmsKit.GlobalFeatures;
+using Volo.CmsKit.Web.Contents;
 
 namespace Volo.CmsKit.Web;
 
 [DependsOn(
     typeof(AbpAspNetCoreMvcUiThemeSharedModule),
     typeof(CmsKitCommonApplicationContractsModule),
-    typeof(AbpAutoMapperModule)
+    typeof(AbpMapperlyModule)
     )]
 public class CmsKitCommonWebModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        context.Services.AddMapperlyObjectMapper<CmsKitCommonWebModule>();
+        
         Configure<CmsKitUiOptions>(options =>
         {
             options.ReactionIcons[StandardReactions.Smile] = new LocalizableIconDictionary("fas fa-smile text-warning");
@@ -51,6 +55,11 @@ public class CmsKitCommonWebModule : AbpModule
         Configure<DynamicJavaScriptProxyOptions>(options =>
         {
             options.DisableModule(CmsKitCommonRemoteServiceConsts.ModuleName);
+        });
+
+        Configure<CmsKitContentWidgetOptions>(options =>
+        {
+            options.AddWidgetIfFeatureEnabled(typeof(CommentsFeature), "Comment", "CmsCommenting", "CmsKitCommentConfiguration");
         });
     }
 }

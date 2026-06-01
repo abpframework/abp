@@ -49,9 +49,8 @@ public class RolePermissionManagementProvider : PermissionManagementProvider
 
             }
 
-            if (providerName == UserPermissionValueProvider.ProviderName)
+            if (providerName == UserPermissionValueProvider.ProviderName && Guid.TryParse(providerKey, out var userId))
             {
-                var userId = Guid.Parse(providerKey);
                 var roleNames = await UserRoleFinder.GetRoleNamesAsync(userId);
 
                 foreach (var roleName in roleNames)

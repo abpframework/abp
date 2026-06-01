@@ -1,28 +1,31 @@
 export class DomStrategy {
   constructor(
-    public target: HTMLElement = document.head,
+    private getTarget: () => HTMLElement,
     public position: InsertPosition = 'beforeend',
   ) {}
 
   insertElement<T extends HTMLElement>(element: T) {
-    this.target.insertAdjacentElement(this.position, element);
+    if (typeof document !== 'undefined') {
+      const target = this.getTarget();
+      target.insertAdjacentElement(this.position, element);
+    }
   }
 }
 
 export const DOM_STRATEGY = {
   AfterElement(element: HTMLElement) {
-    return new DomStrategy(element, 'afterend');
+    return new DomStrategy(() => element, 'afterend');
   },
   AppendToBody() {
-    return new DomStrategy(document.body, 'beforeend');
+    return new DomStrategy(() => document?.body, 'beforeend');
   },
   AppendToHead() {
-    return new DomStrategy(document.head, 'beforeend');
+    return new DomStrategy(() => document?.head, 'beforeend');
   },
   BeforeElement(element: HTMLElement) {
-    return new DomStrategy(element, 'beforebegin');
+    return new DomStrategy(() => element, 'beforebegin');
   },
   PrependToHead() {
-    return new DomStrategy(document.head, 'afterbegin');
+    return new DomStrategy(() => document?.head, 'afterbegin');
   },
 };

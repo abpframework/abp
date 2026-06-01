@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to store BLOBs in a microservice solution using ABP Framework, including database integration for efficient large object management."
+}
+```
+
 # Microservice Solution: BLOB Storing
 
 ````json

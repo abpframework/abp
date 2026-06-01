@@ -1,7 +1,7 @@
 {
   "culture": "ar",
   "texts": {
-    "Permission:DocumentManagement": "إدارة الوثائق",
+    "Permission:DocumentManagement": "إدارة المستندات",
     "Permission:Projects": "المشروعات",
     "Permission:Edit": "تعديل",
     "Permission:Delete": "حذف",
@@ -66,6 +66,9 @@
     "GenerateAndDownloadPdf": "توليد وتحميل PDF",
     "PdfFileDeletionWarningMessage": "هل أنت متأكد أنك تريد حذف ملف PDF \"{0}\"?",
     "ManagePdfFiles": "إدارة ملفات PDF",
-    "Permission:ManagePdfFiles": "إدارة ملفات PDF"
+    "Permission:ManagePdfFiles": "إدارة ملفات PDF",
+    "PdfDeletedSuccessfully": "تم حذف ملف PDF بنجاح",
+    "PdfGenerationStarted": "بدأ إنشاء ملف PDF",
+    "PdfGenerationStartedInfoMessage": "بدأ إنشاء ملف PDF. بمجرد اكتمال العملية، يمكنك التحقق مما إذا تمت إضافة الملف في قسم ملفات PDF."
   }
 }

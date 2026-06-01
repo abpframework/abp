@@ -22,9 +22,5 @@ namespace Volo.Docs.Admin.Projects
 
         Task ReindexAllAsync();
         Task<List<ProjectWithoutDetailsDto>> GetListWithoutDetailsAsync();
-
-        Task<PagedResultDto<ProjectPdfFileDto>> GetPdfFilesAsync(GetPdfFilesInput input);
-
-        Task DeletePdfFileAsync(DeletePdfFileInput input);
     }
 }

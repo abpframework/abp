@@ -17,6 +17,7 @@
     "SentSuccessfully": "أرسلت بنجاح",
     "MailSendingFailed": "فشل إرسال البريد ، يرجى التحقق من تكوين البريد الإلكتروني الخاص بك والمحاولة مرة أخرى.",
     "Send": "يرسل",
+    "Menu:Settings": "الإعدادات",
     "Menu:Emailing": "إرسال بالبريد الإلكتروني",
     "Menu:TimeZone": "وحدة زمنية",
     "DisplayName:Timezone": "وحدة زمنية",
@@ -34,8 +35,8 @@
     "Feature:SettingManagementGroup": "إدارة الإعداد",
     "Feature:SettingManagementEnable": "تمكين إدارة الإعداد",
     "Feature:SettingManagementEnableDescription": "تفعيل إعداد نظام الإدارة في التطبيق.",
-    "Feature:AllowChangingEmailSettings": "السماح لتغيير إعدادات البريد الإلكتروني.",
+    "Feature:AllowChangingEmailSettings": "السماح لتغيير إعدادات البريد الإلكتروني",
     "Feature:AllowChangingEmailSettingsDescription": "السماح لتغيير إعدادات البريد الإلكتروني.",
-    "SmtpPasswordPlaceholder": "أدخل قيمة لتحديث كلمة المرور",
+    "SmtpPasswordPlaceholder": "أدخل قيمة لتحديث كلمة المرور"
   }
 }

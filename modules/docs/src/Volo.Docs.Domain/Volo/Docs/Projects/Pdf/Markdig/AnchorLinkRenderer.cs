@@ -24,12 +24,9 @@ public class AnchorLinkRenderer : LinkInlineRenderer
             return;
         }
 
-        var anchor = ResolveRelativeMarkdownPath(_document.Document.Name, link.Url)
-            .Replace(".md",string.Empty).Replace("/","-").Replace(" ", "-").ToLower();
-        
-        renderer.Write("<a href=\"#").Write(anchor).Write("\">");
-        renderer.Write(link.FirstChild?.ToString() ?? anchor);
-        renderer.Write("</a>");
+        link.GetDynamicUrl = () => "#" + ResolveRelativeMarkdownPath(_document.Document.Name, link.Url)
+            .Replace(".md", string.Empty).Replace("/", "-").Replace(" ", "-").ToLower();
+        base.Write(renderer, link);
     }
     
     private string ResolveRelativeMarkdownPath(string currentPath, string relativePath)

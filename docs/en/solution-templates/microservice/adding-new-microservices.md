@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to add new microservices to your ABP Framework solution, utilizing templates for customization and independent development."
+}
+```
+
 # Microservice Solution: Adding New Microservices
 
 ````json

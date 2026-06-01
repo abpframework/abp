@@ -24,7 +24,7 @@ import {
   FormPropData,
   generateFormFromProps,
 } from '@abp/ng.components/extensible';
-import { Component, inject, Injector, OnInit } from '@angular/core';
+import { Component, DOCUMENT, inject, Injector, makeStateKey, OnInit } from '@angular/core';
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -68,6 +68,7 @@ export class TenantsComponent implements OnInit {
   protected readonly toasterService = inject(ToasterService);
   private readonly fb = inject(UntypedFormBuilder);
   private readonly injector = inject(Injector);
+  private document = inject(DOCUMENT);
 
   data: PagedResultDto<TenantDto> = { items: [], totalCount: 0 };
 
@@ -84,6 +85,7 @@ export class TenantsComponent implements OnInit {
   modalBusy = false;
 
   featureManagementKey = eFeatureManagementComponents.FeatureManagement;
+  TENANTS_KEY = makeStateKey<PagedResultDto<TenantDto>>('tenants');
 
   get hasSelectedTenant(): boolean {
     return Boolean(this.selected.id);
@@ -162,7 +164,7 @@ export class TenantsComponent implements OnInit {
   onSharedDatabaseChange(value: boolean) {
     if (!value) {
       setTimeout(() => {
-        const defaultConnectionString = document.getElementById(
+        const defaultConnectionString = this.document.getElementById(
           'defaultConnectionString',
         ) as HTMLInputElement;
         if (defaultConnectionString) {

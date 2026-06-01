@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to manage database configurations in ABP Framework's Layered Solution Template with customizable connection strings for different environments."
+}
+```
+
 # Layered Solution: Database configurations
 
 ```json

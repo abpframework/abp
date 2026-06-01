@@ -11,6 +11,7 @@
     "InvalidUsername": "Ogiltigt användarnamn eller lösenord!",
     "InvalidAuthenticatorCode": "Ogiltig autentiseringskod!",
     "InvalidRecoveryCode": "Ogiltig återställningskod!",
-    "TheTargetUserIsNotLinkedToYou": "Målanvändaren är inte kopplad till dig!"
+    "TheTargetUserIsNotLinkedToYou": "Målanvändaren är inte kopplad till dig!",
+    "ClientResourcePermissionProviderKeyLookupService": "Klient"
   }
 }

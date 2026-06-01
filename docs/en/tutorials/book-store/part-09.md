@@ -1,9 +1,17 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to build a CRUD interface for the Author entity in your web app using ABP Framework, featuring MVC, Blazor, and more!"
+}
+```
+
 # Web Application Development Tutorial - Part 9: Authors: User Interface
 ````json
 //[doc-params]
 {
     "UI": ["MVC","Blazor","BlazorServer","BlazorWebApp","NG", "MAUIBlazor"],
-    "DB": ["EF","Mongo"]
+    "DB": ["EF","Mongo"],
+    "BlazorUI": ["Blazorise", "MudBlazor"]
 }
 ````
 
@@ -335,27 +343,16 @@ The main reason of this decision was to show you how to use a different model cl
 * Added `[DataType(DataType.Date)]` attribute to the `BirthDate` which shows a date picker on the UI for this property.
 * Added `[TextArea]` attribute to the `ShortBio` which shows a multi-line text area instead of a standard textbox.
 
-In this way, you can specialize the view model class based on your UI requirements without touching to the DTO. As a result of this decision, we have used `ObjectMapper` to map `CreateAuthorViewModel` to `CreateAuthorDto`. To be able to do that, you need to add a new mapping code to the `BookStoreWebAutoMapperProfile` constructor:
+In this way, you can specialize the view model class based on your UI requirements without touching to the DTO. As a result of this decision, we have used `ObjectMapper` to map `CreateAuthorViewModel` to `CreateAuthorDto`. To be able to do that, you need to define a new mapping configuration in the `BookStoreWebMappers` class:
 
-````csharp
-using Acme.BookStore.Authors; // ADDED NAMESPACE IMPORT
-using Acme.BookStore.Books;
-using AutoMapper;
-
-namespace Acme.BookStore.Web;
-
-public class BookStoreWebAutoMapperProfile : Profile
+```csharp
+[Mapper]
+public partial class CreateAuthorViewModelToCreateAuthorDtoMapper : MapperBase<Pages.Authors.CreateModalModel.CreateAuthorViewModel, CreateAuthorDto>
 {
-    public BookStoreWebAutoMapperProfile()
-    {
-        CreateMap<BookDto, CreateUpdateBookDto>();
-
-        // ADD a NEW MAPPING
-        CreateMap<Pages.Authors.CreateModalModel.CreateAuthorViewModel,
-                    CreateAuthorDto>();
-    }
+    public override partial CreateAuthorDto Map(Pages.Authors.CreateModalModel.CreateAuthorViewModel source);
+    public override partial void Map(Pages.Authors.CreateModalModel.CreateAuthorViewModel source, CreateAuthorDto destination);
 }
-````
+```
 
 "New author" button will work as expected and open a new model when you run the application again:
 
@@ -456,29 +453,22 @@ This class is similar to the `CreateModal.cshtml.cs` while there are some main d
 * Uses the `IAuthorAppService.GetAsync(...)` method to get the editing author from the application layer.
 * `EditAuthorViewModel` has an additional `Id` property which is marked with the `[HiddenInput]` attribute that creates a hidden input for this property.
 
-This class requires to add two object mapping declarations to the `BookStoreWebAutoMapperProfile` class:
+This class requires to add two object mapping declarations, so open the `BookStoreWebMappers` class and add the following mappings:
 
 ```csharp
-using Acme.BookStore.Authors;
-using Acme.BookStore.Books;
-using AutoMapper;
-
-namespace Acme.BookStore.Web;
-
-public class BookStoreWebAutoMapperProfile : Profile
+[Mapper]
+public partial class AuthorDtoToEditAuthorViewModelMapper : MapperBase<AuthorDto, EditAuthorViewModel>
 {
-    public BookStoreWebAutoMapperProfile()
-    {
-        CreateMap<BookDto, CreateUpdateBookDto>();
+    public override partial EditAuthorViewModel Map(AuthorDto source);
 
-        CreateMap<Pages.Authors.CreateModalModel.CreateAuthorViewModel,
-                    CreateAuthorDto>();
+    public override partial void Map(AuthorDto source, EditAuthorViewModel destination);
+}
 
-        // ADD THESE NEW MAPPINGS
-        CreateMap<AuthorDto, Pages.Authors.EditModalModel.EditAuthorViewModel>();
-        CreateMap<Pages.Authors.EditModalModel.EditAuthorViewModel,
-                    UpdateAuthorDto>();
-    }
+[Mapper]
+public partial class EditAuthorViewModelToUpdateAuthorDtoMapper : MapperBase<Pages.Authors.EditModalModel.EditAuthorViewModel, UpdateAuthorDto>
+{
+    public override partial UpdateAuthorDto Map(Pages.Authors.EditModalModel.EditAuthorViewModel source);
+    public override partial void Map(Pages.Authors.EditModalModel.EditAuthorViewModel source, UpdateAuthorDto destination);
 }
 ```
 
@@ -488,49 +478,43 @@ That's all! You can run the application and try to edit an author.
 
 ## The Author Management Page
 
-Run the following command line to create a new module, named `AuthorModule` in the root folder of the angular application:
+Run the following command line to create a new component, named `AuthorComponent` in the root folder of the angular application:
 
 ```bash
-yarn ng generate module author --module app --routing --route authors
+yarn ng generate component author
 ```
 
 This command should produce the following output:
 
 ```bash
-> yarn ng generate module author --module app --routing --route authors
+> yarn ng generate component author
 
 yarn run v1.19.1
-$ ng generate module author --module app --routing --route authors
-CREATE src/app/author/author-routing.module.ts (344 bytes)
-CREATE src/app/author/author.module.ts (349 bytes)
+$ yarn ng generate component author
 CREATE src/app/author/author.component.html (21 bytes)
 CREATE src/app/author/author.component.spec.ts (628 bytes)
 CREATE src/app/author/author.component.ts (276 bytes)
 CREATE src/app/author/author.component.scss (0 bytes)
-UPDATE src/app/app-routing.module.ts (1396 bytes)
 Done in 2.22s.
 ```
 
-### AuthorModule
+### Author Component
 
-Open the `/src/app/author/author.module.ts` and replace the content as shown below:
+Open the `/src/app/author/author.component.ts` and replace the content as shown below:
 
 ```js
-import { NgModule } from '@angular/core';
-import { SharedModule } from '../shared/shared.module';
-import { AuthorRoutingModule } from './author-routing.module';
-import { AuthorComponent } from './author.component';
+import { Component } from '@angular/core';
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 
-@NgModule({
-  declarations: [AuthorComponent],
-  imports: [SharedModule, AuthorRoutingModule, NgbDatepickerModule],
+@Component({
+  selector: 'app-author',
+  templateUrl: './author.component.html',
+  styleUrls: ['./author.component.scss'],
+  imports: [NgbDatepickerModule],
 })
-export class AuthorModule {}
+export class AuthorComponent {}
 ```
 
-- Added the `SharedModule`. `SharedModule` exports some common modules needed to create user interfaces.
-- `SharedModule` already exports the `CommonModule`, so we've removed the `CommonModule`.
 - Added `NgbDatepickerModule` that will be used later on the author create and edit forms.
 
 ### Menu Definition
@@ -619,7 +603,7 @@ This command generates the service proxy for the author service and the related 
 Open the `/src/app/author/author.component.ts` file and replace the content as below:
 
 ```js
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ListService, PagedResultDto } from '@abp/ng.core';
 import { AuthorService, AuthorDto } from '@proxy/authors';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -641,12 +625,10 @@ export class AuthorComponent implements OnInit {
 
   selectedAuthor = {} as AuthorDto;
 
-  constructor(
-    public readonly list: ListService,
-    private authorService: AuthorService,
-    private fb: FormBuilder,
-    private confirmation: ConfirmationService
-  ) {}
+  public readonly list = inject(ListService);
+  private readonly authorService = inject(AuthorService);
+  private readonly fb = inject(FormBuilder);
+  private readonly confirmation = inject(ConfirmationService);
 
   ngOnInit(): void {
     const authorStreamCreator = (query) => this.authorService.getList(query);
@@ -766,13 +748,13 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
           </div>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column [name]="'::Name' | abpLocalization" prop="name"></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::Name' | abpLocalization" prop="name" />
       <ngx-datatable-column [name]="'::BirthDate' | abpLocalization">
         <ng-template let-row="row" ngx-datatable-cell-template>
           {%{{{ row.birthDate | date }}}%}
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column [name]="'::ShortBio' | abpLocalization" prop="shortBio"></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::ShortBio' | abpLocalization" prop="shortBio" />
     </ngx-datatable>
   </div>
 </div>
@@ -855,6 +837,8 @@ That's all! This is a fully working CRUD page, you can create, edit and delete a
 ### Authors Razor Component
 
 Create a new Razor Component Page, `/Pages/Authors.razor`, in the {{ if UI == "BlazorServer" }}`Acme.BookStore.Blazor`{{ else if UI == "MAUIBlazor" }}`Acme.BookStore.MauiBlazor`{{ else }}`Acme.BookStore.Blazor.Client`{{ end }} project with the following content:
+
+{{if BlazorUI == "Blazorise"}}
 
 ````xml
 @page "/authors"
@@ -1036,12 +1020,132 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the {{ if UI == "B
 </Modal>
 ````
 
-* This code is similar to the `Books.razor`, except it doesn't inherit from the `AbpCrudPageBase`, but uses its own implementation.
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+````razor
+@page "/authors"
+@using Acme.BookStore.Authors
+@using Acme.BookStore.Localization
+@inherits BookStoreComponentBase
+@inject IAuthorAppService AuthorAppService
+
+<MudCard>
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h4">@L["Authors"]</MudText>
+        </CardHeaderContent>
+        <CardHeaderActions>
+            @if (CanCreateAuthor)
+            {
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           OnClick="OpenCreateAuthorDialogAsync">
+                    @L["NewAuthor"]
+                </MudButton>
+            }
+        </CardHeaderActions>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudDataGrid T="AuthorDto"
+                     ServerData="OnDataGridReadAsync"
+                     RowsPerPage="@PageSize">
+            <Columns>
+                <TemplateColumn T="AuthorDto" Title="@L["Actions"]" Sortable="false">
+                    <CellTemplate>
+                        <MudMenu Icon="@Icons.Material.Filled.MoreVert"
+                                 AriaLabel="@L["Actions"]"
+                                 Dense="true">
+                            @if (CanEditAuthor)
+                            {
+                                <MudMenuItem OnClick="@(() => OpenEditAuthorDialogAsync(context.Item))">
+                                    @L["Edit"]
+                                </MudMenuItem>
+                            }
+                            @if (CanDeleteAuthor)
+                            {
+                                <MudMenuItem OnClick="@(() => DeleteAuthorAsync(context.Item))">
+                                    @L["Delete"]
+                                </MudMenuItem>
+                            }
+                        </MudMenu>
+                    </CellTemplate>
+                </TemplateColumn>
+                <PropertyColumn Property="x => x.Name" Title="@L["Name"]" />
+                <PropertyColumn Property="x => x.BirthDate" Title="@L["BirthDate"]">
+                    <CellTemplate>
+                        @context.Item.BirthDate.ToShortDateString()
+                    </CellTemplate>
+                </PropertyColumn>
+            </Columns>
+        </MudDataGrid>
+    </MudCardContent>
+</MudCard>
+
+<MudDialog @ref="CreateAuthorDialog" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })">
+    <TitleContent>
+        <MudText Typo="Typo.h6">@L["NewAuthor"]</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudForm @ref="@CreateFormRef" Model="@NewAuthor">
+            <MudStack Spacing="3">
+                <MudTextField @bind-Value="@NewAuthor.Name"
+                              Label="@L["Name"]"
+                              For="@(() => NewAuthor.Name)"
+                              Required="true" />
+                <MudDatePicker @bind-Date="@NewAuthorBirthDate"
+                               Label="@L["BirthDate"]" />
+                <MudTextField @bind-Value="@NewAuthor.ShortBio"
+                              Label="@L["ShortBio"]"
+                              Lines="5" />
+            </MudStack>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="CloseCreateAuthorDialogAsync">@L["Cancel"]</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CreateAuthorAsync">
+            @L["Save"]
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+<MudDialog @ref="EditAuthorDialog" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })">
+    <TitleContent>
+        <MudText Typo="Typo.h6">@EditingAuthor.Name</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudForm @ref="@EditFormRef" Model="@EditingAuthor">
+            <MudStack Spacing="3">
+                <MudTextField @bind-Value="@EditingAuthor.Name"
+                              Label="@L["Name"]"
+                              For="@(() => EditingAuthor.Name)"
+                              Required="true" />
+                <MudDatePicker @bind-Date="@EditingAuthorBirthDate"
+                               Label="@L["BirthDate"]" />
+                <MudTextField @bind-Value="@EditingAuthor.ShortBio"
+                              Label="@L["ShortBio"]"
+                              Lines="5" />
+            </MudStack>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="CloseEditAuthorDialogAsync">@L["Cancel"]</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="UpdateAuthorAsync">
+            @L["Save"]
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+````
+
+{{end}}
+
+* This code is similar to the `Books.razor`, except it doesn't inherit from the `AbpCrudPageBase`/`AbpMudCrudPageBase`, but uses its own implementation.
 * Injects the `IAuthorAppService` to consume the server side HTTP APIs from the UI. We can directly inject application service interfaces and use just like regular method calls by the help of [Dynamic C# HTTP API Client Proxy System](../../framework/api-development/dynamic-csharp-clients.md), which performs REST API calls for us. See the `Authors` class below to see the usage.
-* Injects the `IAuthorizationService` to check [permissions](../../framework/fundamentals/authorization.md).
-* Injects the `IObjectMapper` for [object to object mapping](../../framework/infrastructure/object-to-object-mapping.md).
 
 Create a new code behind file, `Authors.razor.cs`, under the `Pages` folder, with the following content:
+
+{{if BlazorUI == "Blazorise"}}
 
 ````csharp
 using System;
@@ -1216,19 +1320,220 @@ public partial class Authors
 }
 ````
 
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+````csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Acme.BookStore.Authors;
+using Acme.BookStore.Permissions;
+using Microsoft.AspNetCore.Authorization;
+using MudBlazor;
+using Volo.Abp.Application.Dtos;
+
+{{ if UI == "BlazorServer" }}namespace Acme.BookStore.Blazor.Pages;{{ else if UI == "MAUIBlazor" }}namespace Acme.BookStore.MauiBlazor.Pages;{{ else }}namespace Acme.BookStore.Blazor.Client.Pages;{{ end }}
+
+public partial class Authors
+{
+    private IReadOnlyList<AuthorDto> AuthorList { get; set; }
+
+    private int PageSize { get; } = LimitedResultRequestDto.DefaultMaxResultCount;
+    private int CurrentPage { get; set; }
+    private string CurrentSorting { get; set; }
+    private int TotalCount { get; set; }
+
+    private bool CanCreateAuthor { get; set; }
+    private bool CanEditAuthor { get; set; }
+    private bool CanDeleteAuthor { get; set; }
+
+    private CreateAuthorDto NewAuthor { get; set; }
+
+    private Guid EditingAuthorId { get; set; }
+    private UpdateAuthorDto EditingAuthor { get; set; }
+
+    private MudDialog CreateAuthorDialog { get; set; }
+    private MudDialog EditAuthorDialog { get; set; }
+
+    private MudForm CreateFormRef;
+    private MudForm EditFormRef;
+
+    // MudDatePicker requires nullable DateTime, while AuthorDto.BirthDate is non-nullable.
+    // Bind to a nullable wrapper and sync back to the DTO before saving.
+    private DateTime? NewAuthorBirthDate
+    {
+        get => NewAuthor?.BirthDate;
+        set { if (NewAuthor != null && value.HasValue) NewAuthor.BirthDate = value.Value; }
+    }
+
+    private DateTime? EditingAuthorBirthDate
+    {
+        get => EditingAuthor?.BirthDate;
+        set { if (EditingAuthor != null && value.HasValue) EditingAuthor.BirthDate = value.Value; }
+    }
+
+    public Authors()
+    {
+        NewAuthor = new CreateAuthorDto();
+        EditingAuthor = new UpdateAuthorDto();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await SetPermissionsAsync();
+        await GetAuthorsAsync();
+    }
+
+    private async Task SetPermissionsAsync()
+    {
+        CanCreateAuthor = await AuthorizationService
+            .IsGrantedAsync(BookStorePermissions.Authors.Create);
+
+        CanEditAuthor = await AuthorizationService
+            .IsGrantedAsync(BookStorePermissions.Authors.Edit);
+
+        CanDeleteAuthor = await AuthorizationService
+            .IsGrantedAsync(BookStorePermissions.Authors.Delete);
+    }
+
+    private async Task GetAuthorsAsync()
+    {
+        var result = await AuthorAppService.GetListAsync(
+            new GetAuthorListDto
+            {
+                MaxResultCount = PageSize,
+                SkipCount = CurrentPage * PageSize,
+                Sorting = CurrentSorting
+            }
+        );
+
+        AuthorList = result.Items;
+        TotalCount = (int)result.TotalCount;
+    }
+
+    private async Task<GridData<AuthorDto>> OnDataGridReadAsync(GridState<AuthorDto> state)
+    {
+        CurrentSorting = state.SortDefinitions
+            .Where(s => !string.IsNullOrWhiteSpace(s.SortBy?.ToString()))
+            .Select(s => $"{s.SortBy}{(s.Descending ? " DESC" : "")}")
+            .JoinAsString(",");
+        CurrentPage = state.Page;
+
+        await GetAuthorsAsync();
+
+        return new GridData<AuthorDto> { Items = AuthorList, TotalItems = TotalCount };
+    }
+
+    private async Task OpenCreateAuthorDialogAsync()
+    {
+        NewAuthor = new CreateAuthorDto();
+        if (CreateFormRef != null) await CreateFormRef.ResetAsync();
+        await InvokeAsync(() => CreateAuthorDialog.ShowAsync());
+    }
+
+    private Task CloseCreateAuthorDialogAsync()
+    {
+        return InvokeAsync(() => CreateAuthorDialog.CloseAsync());
+    }
+
+    private async Task OpenEditAuthorDialogAsync(AuthorDto author)
+    {
+        EditingAuthorId = author.Id;
+        EditingAuthor = ObjectMapper.Map<AuthorDto, UpdateAuthorDto>(author);
+        if (EditFormRef != null) await EditFormRef.ResetAsync();
+        await InvokeAsync(() => EditAuthorDialog.ShowAsync());
+    }
+
+    private Task CloseEditAuthorDialogAsync()
+    {
+        return InvokeAsync(() => EditAuthorDialog.CloseAsync());
+    }
+
+    private async Task DeleteAuthorAsync(AuthorDto author)
+    {
+        try
+        {
+            var confirmMessage = L["AuthorDeletionConfirmationMessage", author.Name];
+            if (!await Message.Confirm(confirmMessage))
+            {
+                return;
+            }
+
+            await AuthorAppService.DeleteAsync(author.Id);
+            await GetAuthorsAsync();
+        }
+        catch(Exception ex)
+        {
+            await HandleErrorAsync(ex);
+        }
+    }
+
+    private async Task CreateAuthorAsync()
+    {
+        try
+        {
+            await CreateFormRef.Validate();
+            if (CreateFormRef.IsValid)
+            {
+                await AuthorAppService.CreateAsync(NewAuthor);
+                await GetAuthorsAsync();
+                await InvokeAsync(() => CreateAuthorDialog.CloseAsync());
+            }
+        }
+        catch(Exception ex)
+        {
+            await HandleErrorAsync(ex);
+        }
+    }
+
+    private async Task UpdateAuthorAsync()
+    {
+        try
+        {
+            await EditFormRef.Validate();
+            if (EditFormRef.IsValid)
+            {
+                await AuthorAppService.UpdateAsync(EditingAuthorId, EditingAuthor);
+                await GetAuthorsAsync();
+                await InvokeAsync(() => EditAuthorDialog.CloseAsync());
+            }
+        }
+        catch(Exception ex)
+        {
+            await HandleErrorAsync(ex);
+        }
+    }
+}
+````
+
+{{end}}
+
 This class typically defines the properties and methods used by the `Authors.razor` page.
 
 ### Object Mapping
 
 `Authors` class uses the `IObjectMapper` in the `OpenEditAuthorModal` method. So, we need to define this mapping.
 
-Open the `BookStoreBlazorAutoMapperProfile.cs` in the {{ if UI == "BlazorServer" }}`Acme.BookStore.Blazor`{{ else if UI == "MAUIBlazor" }}`Acme.BookStore.MauiBlazor`{{ else }}`Acme.BookStore.Blazor.Client`{{ end }} project and add the following mapping code in the constructor:
+Open the `BookStoreBlazorMappers.cs` in the {{ if UI == "BlazorServer" }}`Acme.BookStore.Blazor`{{ else if UI == "MAUIBlazor" }}`Acme.BookStore.MauiBlazor`{{ else }}`Acme.BookStore.Blazor.Client`{{ end }} project and add the following mappings in the class:
 
-````csharp
-CreateMap<AuthorDto, UpdateAuthorDto>();
-````
+```csharp
+using Riok.Mapperly.Abstractions;
+using Volo.Abp.Mapperly;
+using Acme.BookStore.Authors;
 
-You will need to declare a `using Acme.BookStore.Authors;` statement to the beginning of the file.
+//...
+
+[Mapper]
+public partial class AuthorDtoToUpdateAuthorDtoMapper : MapperBase<AuthorDto, UpdateAuthorDto>
+{
+    public override partial UpdateAuthorDto Map(AuthorDto source);
+
+    public override partial void Map(AuthorDto source, UpdateAuthorDto destination);
+}
+```
 
 ### Add to the Main Menu
 

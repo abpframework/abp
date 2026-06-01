@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the ABP Framework's solution structure, detailing project organization, dependencies, and shared domain elements for efficient development."
+}
+```
+
 # Solution structure
 
 You will get a slightly different solution structure, based on the options you have specified.
@@ -226,25 +233,21 @@ Angular application folder structure looks like below:
 ![angular-folder-structure](../images/angular-folder-structure.png)
 
 
-Each of ABP modules is an NPM package. Some ABP modules are added as a dependency in `package.json`. These modules install with their dependencies. To see all ABP packages, you can run the following command in the `angular` folder:
+Each of ABP module is an NPM package. Some ABP modules are added as a dependency in `package.json`. These modules are installed with their dependencies. To see all ABP packages, you can run the following command in the `angular` folder:
 
 ```bash
 yarn list --pattern abp
 ```
 
-Angular application module structure:
+### Application Config
 
-![Angular template structure diagram](../images/angular-template-structure-diagram.png)
+Application config is the root module of the application. Some of ABP modules and some essential modules are imported to the `appConfig`.
 
-### AppModule
+ABP Config modules also have been imported to `appConfig`  for initially requirements of lazy-loadable ABP modules.
 
-`AppModule` is the root module of the application. Some of ABP modules and some essential modules imported to the `AppModule`.
+### APP_ROUTES
 
-ABP Config modules also have imported to `AppModule`  for initially requirements of lazy-loadable ABP modules.
-
-### AppRoutingModule
-
-There are lazy-loadable ABP modules in the `AppRoutingModule` as routes.
+There are lazy-loadable ABP modules in the `APP_ROUTES` as routes.
 
 > Paths of ABP Modules should not be changed.
 
@@ -253,7 +256,7 @@ You should add `routes` property in the `data` object to add a link on the menu 
 ```js
 {
    path: 'dashboard',
-   loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
+   loadComponent: () => import('./dashboard/dashboard.component').then(c => c.DashboardComponent),
    canActivate: [authGuard, permissionGuard],
    data: {
       routes: {
@@ -274,25 +277,19 @@ In the above example;
 
 After the above `routes` definition, if the user is authorized, the dashboard link will appear on the menu.
 
-### Shared Module
-
-The modules that may be required for all modules have imported to the `SharedModule`. You should import the `SharedModule` to all modules.
-
-See the [Sharing Modules](https://angular.io/guide/sharing-ngmodules) document.
-
 ### Environments
 
 The files under the `src/environments` folder has the essential configuration of the application.
 
-### Home Module
+### Home Component
 
-Home module is an example lazy-loadable module that loads on the root address of the application.
+Home component is an example lazy-loadable standalone component that loads on the root address of the application.
 
-### Dashboard Module
+### Dashboard Component
 
-Dashboard module is a lazy-loadable module. `HostDashboardComponent` and `TenantDashboardComponent` declared to this module. One of these components is shown according to the user's authorization. 
+Dashboard component is a lazy-loadable component. `HostDashboardComponent` and `TenantDashboardComponent` are declared within this root component. One of these components is shown according to authorization of the user. 
 
-There are four widgets in the `HostDashboardComponent` which declared in ABP modules.
+There are four widgets in the `HostDashboardComponent` which are declared in ABP modules.
 
 ### Styles
 
@@ -306,7 +303,7 @@ Lepton theme uses two logos for each style. You can change these logos with your
 
 You should create your tests in the same folder as the file file you want to test.
 
-See the [testing document](https://angular.io/guide/testing).
+See the [testing document](https://angular.dev/guide/testing).
 
 ### Depended Packages
 
@@ -328,8 +325,8 @@ React Native application folder structure is like below:
 
 ![react-native-folder-structure](../images/react-native-folder-structure.png)
 
-* `App.js` is the bootstrap component of the application.
-* `Environment.js` file has the essential configuration of the application. `prod` and `dev` configurations are defined in this file. 
+* `App.tsx` is the bootstrap component of the application.
+* `Environment.ts` file has the essential configuration of the application. `prod` and `dev` configurations are defined in this file. 
 * [Contexts](https://reactjs.org/docs/context.html) are created in the `src/contexts` folder.
 * [Higher order components](https://reactjs.org/docs/higher-order-components.html) are created in the `src/hocs` folder.
 * [Custom hooks](https://reactjs.org/docs/hooks-custom.html#extracting-a-custom-hook) are created in the `src/hooks`.
@@ -363,12 +360,11 @@ Actions, reducers, sagas, selectors are created in the `src/store` folder. Store
 * [**Store**](https://redux.js.org/basics/store) is defined in the `src/store/index.js` file.
 * [**Actions**](https://redux.js.org/basics/actions/) are payloads of information that send data from your application to your store.
 * [**Reducers**](https://redux.js.org/basics/reducers) specify how the application's state changes in response to actions sent to the store. 
-* [**Redux-Saga**](https://redux-saga.js.org/) is a library that aims to make application side effects (i.e. asynchronous things like data fetching and impure things like accessing the browser cache) easier to manage. Sagas are created in the `src/store/sagas` folder.
 * [**Reselect**](https://github.com/reduxjs/reselect) library is used to create memoized selectors. Selectors are created in the `src/store/selectors` folder.
 
 ### APIs
 
-[Axios](https://github.com/axios/axios) is used as the HTTP client library. An Axios instance is exported from  `src/api/API.js` file to make HTTP calls with the same config. `src/api` folder also has the API files that have been created for API calls.
+[Axios](https://github.com/axios/axios) is used as the HTTP client library. An Axios instance is exported from  `src/api/API.ts` file to make HTTP calls with the same config. `src/api` folder also has the API files that have been created for API calls.
 
 ### Theming
 
@@ -391,7 +387,6 @@ See the [Testing Overview](https://reactjs.org/docs/testing.html) document.
 * [Axios](https://github.com/axios/axios) is used as HTTP client library.
 * [Redux](https://redux.js.org/) is used as state management library.
 * [Redux Toolkit](https://redux-toolkit.js.org/) library is used as a toolset for efficient Redux development.
-* [Redux-Saga](https://redux-saga.js.org/) is used to manage asynchronous processes.
 * [Redux Persist](https://github.com/rt2zz/redux-persist) is used for state persistance.
 * [Reselect](https://github.com/reduxjs/reselect) is used to create memoized selectors.
 * [i18n-js](https://github.com/fnando/i18n-js) is used as i18n library.

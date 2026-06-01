@@ -1,12 +1,4 @@
-import {
-  InjectFlags,
-  InjectionToken,
-  InjectOptions,
-  Injector,
-  Pipe,
-  PipeTransform,
-  Type,
-} from '@angular/core';
+import { InjectionToken, InjectOptions, Injector, Pipe, PipeTransform, Type } from '@angular/core';
 import { HasCreateInjectorPipe, ToolbarComponent } from '../models/toolbar-actions';
 import { EXTENSIONS_ACTION_CALLBACK, EXTENSIONS_ACTION_DATA } from '../tokens/extensions.token';
 
@@ -22,7 +14,7 @@ export class CreateInjectorPipe<R> implements PipeTransform {
     const get = <T>(
       token: Type<T> | InjectionToken<T>,
       notFoundValue?: T,
-      options?: InjectOptions | InjectFlags,
+      options?: InjectOptions,
     ) => {
       const componentData = context.getData();
       const componentDataCallback = (data: any) => {

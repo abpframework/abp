@@ -61,6 +61,7 @@
     "ProfilePicture": "Poză de profil",
     "Theme": "Temă",
     "NotAssigned": "Nealocat",
-    "EntityActionsDisabledTooltip": "Nu aveți permisiune să efectuați nicio acțiune."
+    "EntityActionsDisabledTooltip": "Nu aveți permisiune să efectuați nicio acțiune.",
+    "ResourcePermissions": "Permisiuni"
   }
 }

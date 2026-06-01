@@ -3,7 +3,7 @@ using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using IdentityModel;
+using Duende.IdentityModel;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding;
@@ -47,7 +47,7 @@ public class AuthService : IAuthService, ITransientDependency
             return null;
         }
 
-        var url = $"{CliUrls.WwwAbpIo}api/license/login-info";
+        var url = $"{CliUrls.AccountAbpIo}api/license/login-info";
 
         var client = CliHttpClientFactory.CreateClient();
 
@@ -130,7 +130,7 @@ public class AuthService : IAuthService, ITransientDependency
 
     public async Task<bool> CheckMultipleOrganizationsAsync(string username)
     {
-        var url = $"{CliUrls.WwwAbpIo}api/license/check-multiple-organizations?username={username}";
+        var url = $"{CliUrls.AccountAbpIo}api/license/check-multiple-organizations?username={username}";
 
         var client = CliHttpClientFactory.CreateClient();
 

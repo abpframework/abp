@@ -32,19 +32,21 @@ public class MongoIdentityUserDelegationRepository : MongoDbRepository<IAbpIdent
 
     public virtual async Task<List<IdentityUserDelegation>> GetActiveDelegationsAsync(Guid targetUserId, CancellationToken cancellationToken = default)
     {
+        var now = Clock.Now;
         return await (await GetQueryableAsync(cancellationToken))
             .Where(x => x.TargetUserId == targetUserId)
-            .Where(x => x.StartTime <= Clock.Now && x.EndTime >= Clock.Now)
+            .Where(x => x.StartTime <= now && x.EndTime >= now)
             .ToListAsync(cancellationToken: cancellationToken);
     }
 
     public virtual async Task<IdentityUserDelegation> FindActiveDelegationByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
+        var now = Clock.Now;
         return await (await GetQueryableAsync(cancellationToken))
             .FirstOrDefaultAsync(x =>
                     x.Id == id &&
-                    x.StartTime <= Clock.Now &&
-                    x.EndTime >= Clock.Now
+                    x.StartTime <= now &&
+                    x.EndTime >= now
                 , cancellationToken: GetCancellationToken(cancellationToken));
     }
 }

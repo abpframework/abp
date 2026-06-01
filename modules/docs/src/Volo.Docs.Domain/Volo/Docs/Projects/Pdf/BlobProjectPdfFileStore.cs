@@ -53,12 +53,6 @@ public class BlobProjectPdfFileStore : IProjectPdfFileStore, ITransientDependenc
             return null;
         }
         
-        var lastModificationTime = pdfFile.LastModificationTime ?? pdfFile.CreationTime;
-        if(lastModificationTime.Add(Options.Value.PdfFileCacheExpiration) <= Clock.Now)
-        {
-            return null;
-        }
-        
         return await BlobContainer.GetOrNullAsync(Options.Value.CalculatePdfFileName(project, version, languageCode));
     }
 

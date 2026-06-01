@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Upgrade your ABP v5.2 solutions to v5.3 with this migration guide, highlighting crucial changes and AutoMapper updates for seamless transitions."
+}
+```
+
 # ABP Version 5.3 Migration Guide
 
 This document is a guide for upgrading ABP v5.2 solutions to ABP v5.3. There is a change in this version that may effect your applications, please read it carefully and apply the necessary changes to your application.

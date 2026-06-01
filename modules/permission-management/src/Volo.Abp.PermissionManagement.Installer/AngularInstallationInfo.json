@@ -1,0 +1,21 @@
+{
+	"packages":[
+		{
+			"name": "@abp/ng.permission-management",
+			"tsJsonPathRecordConfigurations":[
+				{
+					"name": "@abp/ng.permission-management",
+					"paths": [
+						"angular/projects/permission-management/src/public-api.ts"
+					]
+				},
+				{
+					"name": "@abp/ng.permission-management/proxy",
+					"paths": [
+						"angular/projects/permission-management/proxy/src/public-api.ts"
+					]
+				}
+			]
+		}
+	]
+}

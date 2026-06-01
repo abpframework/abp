@@ -1,4 +1,4 @@
-﻿using IdentityModel;
+﻿using Duende.IdentityModel;
 using Volo.Abp.AspNetCore.Components.MauiBlazor;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security.Claims;

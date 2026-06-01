@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to fix the \"filename too long\" error on Windows by enabling long path options and resolving related .NET MAUI issues."
+}
+```
+
 # KB#0001: How to Fix "Filename too long" Error on Windows
 
 If you encounter the "filename too long" or "unzip" error on Windows, it's probably related to the Windows maximum file path limitation. Windows has a maximum file path limitation of 255 characters.

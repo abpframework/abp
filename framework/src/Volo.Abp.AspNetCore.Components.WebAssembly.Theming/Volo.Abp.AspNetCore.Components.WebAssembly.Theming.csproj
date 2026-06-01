@@ -4,10 +4,14 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <WarningsAsErrors>Nullable</WarningsAsErrors>
     </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" />
+    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Bundling\Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Bundling.csproj" />

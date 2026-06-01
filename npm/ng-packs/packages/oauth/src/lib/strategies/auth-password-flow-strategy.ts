@@ -15,9 +15,10 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
     this.oAuthService.events
       .pipe(
         filter(
-          event => event instanceof OAuthInfoEvent &&
+          event =>
+            event instanceof OAuthInfoEvent &&
             event.type === 'token_expires' &&
-            event.info === 'access_token'
+            event.info === 'access_token',
         ),
       )
       .subscribe(() => {
@@ -82,7 +83,7 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
 
   protected refreshToken() {
     return this.oAuthService.refreshToken().catch(() => {
-      clearOAuthStorage();
+      clearOAuthStorage(this.injector);
       this.rememberMeService.remove();
     });
   }

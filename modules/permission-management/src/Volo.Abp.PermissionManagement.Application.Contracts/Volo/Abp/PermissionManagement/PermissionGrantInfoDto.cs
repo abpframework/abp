@@ -15,4 +15,6 @@ public class PermissionGrantInfoDto
     public List<string> AllowedProviders { get; set; }
 
     public List<ProviderInfoDto> GrantedProviders { get; set; }
+
+    public bool IsEditable { get; set; }
 }

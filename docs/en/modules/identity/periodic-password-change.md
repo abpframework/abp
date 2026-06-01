@@ -1,8 +1,15 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to configure periodic password changes with the ABP Identity PRO module, ensuring enhanced security for your users."
+}
+```
+
 # Periodic Password Change (Password Aging)
 
 ## Introduction
 
-> You must have an ABP Team or a higher license to use this module & its features.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this module & its features.
 
 The Identity PRO module has a built-in password aging function.
 

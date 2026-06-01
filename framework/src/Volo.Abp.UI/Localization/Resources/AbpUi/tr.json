@@ -61,6 +61,7 @@
     "ProfilePicture": "Profil resmi",
     "Theme": "Tema",
     "NotAssigned": "Atanmadı",
-    "EntityActionsDisabledTooltip": "Bu işlemi gerçekleştirmek için yeterli yetkiniz yok."
+    "EntityActionsDisabledTooltip": "Bu işlemi gerçekleştirmek için yeterli yetkiniz yok.",
+    "ResourcePermissions": "İzinler"
   }
 }

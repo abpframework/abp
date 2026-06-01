@@ -2,6 +2,6 @@
   "culture": "sl",
   "texts": {
     "Permission:DocumentManagement.Common": "Skupna dokumentna upravljanja",
-    "Permission:PdfGeneration": "Generiranje PDF"
+    "Permission:PdfDownload": "Prenos PDF"
   }
 }

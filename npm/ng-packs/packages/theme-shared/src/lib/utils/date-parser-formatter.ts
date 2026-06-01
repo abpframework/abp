@@ -1,6 +1,6 @@
 import { ApplicationLocalizationConfigurationDto, ConfigStateService } from '@abp/ng.core';
 import { formatDate } from '@angular/common';
-import { Inject, Injectable, LOCALE_ID } from '@angular/core';
+import { Injectable, LOCALE_ID, inject } from '@angular/core';
 import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 function isNumber(value: any): boolean {
@@ -13,9 +13,13 @@ function toInteger(value: any): number {
 
 @Injectable()
 export class DateParserFormatter extends NgbDateParserFormatter {
-  constructor(private configState: ConfigStateService, @Inject(LOCALE_ID) private locale: string) {
+  private configState = inject(ConfigStateService);
+  private locale = inject(LOCALE_ID);
+
+  constructor() {
     super();
   }
+
 
   parse(value: string): NgbDateStruct | null {
     if (value) {

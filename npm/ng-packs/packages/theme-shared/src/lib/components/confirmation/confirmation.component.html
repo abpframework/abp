@@ -1,51 +1,34 @@
 @if (confirmation$ | async; as data) {
-  <div class="confirmation">
-    <div
-      class="confirmation-backdrop"
-      (click)="data.options?.dismissible ? close(dismiss) : null"
-    ></div>
-    <div class="confirmation-dialog">
-      @if (data.severity || isCustomIconExists(data)) {
-        <div class="icon-container" [ngClass]="data.severity">
-          @if (isIconTemplateExits(data)) {
-            <div [outerHTML]="data.options.iconTemplate"></div>
-          } @else {
-            <i class="icon" [ngClass]="getIconClass(data)"></i>
-          }
-        </div>
+<div class="confirmation">
+  <div class="confirmation-backdrop" (click)="data.options?.dismissible ? close(dismiss) : null"></div>
+  <div class="confirmation-dialog">
+    @if (data.severity || isCustomIconExists(data)) {
+    <div class="icon-container" [class]="data.severity">
+      @if (isIconTemplateExits(data)) {
+      <div [outerHTML]="data.options.iconTemplate"></div>
+      } @else {
+      <i class="icon" [class]="getIconClass(data)"></i>
       }
-      <div class="content">
-        @if (data.title) {
-          <h1
-            class="title"
-            [innerHTML]="data.title | abpLocalization: data.options?.titleLocalizationParams"
-          ></h1>
-        }
-        @if (data.message) {
-          <p
-            class="message"
-            [innerHTML]="data.message | abpLocalization: data.options?.messageLocalizationParams"
-          ></p>
-        }
-      </div>
-      <div class="footer">
-        @if (!data?.options?.hideCancelBtn) {
-          <button
-            id="cancel"
-            class="btn btn-outline-primary me-2"
-            [innerHTML]="data.options?.cancelText || 'AbpUi::Cancel' | abpLocalization"
-            (click)="close(reject)"
-          ></button>
-        }
-        @if (!data?.options?.hideYesBtn) {
-          <button
-            id="confirm"
-            class="btn btn-primary"
-            [innerHTML]="data.options?.yesText || 'AbpUi::Yes' | abpLocalization"
-            (click)="close(confirm)"
-          ></button>
-        }
-      </div>
+    </div>
+    }
+    <div class="content">
+      @if (data.title) {
+      <h1 class="title" [innerHTML]="data.title | abpLocalization: data.options?.titleLocalizationParams"></h1>
+      }
+      @if (data.message) {
+      <p class="message" [innerHTML]="data.message | abpLocalization: data.options?.messageLocalizationParams"></p>
+      }
+    </div>
+    <div class="footer">
+      @if (!data?.options?.hideCancelBtn) {
+      <button id="cancel" class="btn btn-outline-primary me-2"
+        [innerHTML]="data.options?.cancelText || 'AbpUi::Cancel' | abpLocalization" (click)="close(reject)"></button>
+      }
+      @if (!data?.options?.hideYesBtn) {
+      <button id="confirm" class="btn btn-primary" [innerHTML]="data.options?.yesText || 'AbpUi::Yes' | abpLocalization"
+        (click)="close(confirm)"></button>
+      }
     </div>
   </div>
+</div>
 }

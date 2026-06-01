@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement background jobs in your ABP Framework microservice using RabbitMQ for efficient task management."
+}
+```
+
 # Microservice Solution: Background Jobs
 
 ````json

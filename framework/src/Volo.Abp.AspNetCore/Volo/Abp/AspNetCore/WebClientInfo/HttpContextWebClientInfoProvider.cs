@@ -1,7 +1,8 @@
 ﻿using System;
-using DeviceDetectorNET;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using MyCSharp.HttpUserAgentParser;
+using MyCSharp.HttpUserAgentParser.Providers;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.WebClientInfo;
@@ -11,13 +12,16 @@ public class HttpContextWebClientInfoProvider : IWebClientInfoProvider, ITransie
 {
     protected ILogger<HttpContextWebClientInfoProvider> Logger { get; }
     protected IHttpContextAccessor HttpContextAccessor { get; }
+    protected IHttpUserAgentParserProvider HttpUserAgentParser  { get; }
 
     public HttpContextWebClientInfoProvider(
         ILogger<HttpContextWebClientInfoProvider> logger,
-        IHttpContextAccessor httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor,
+        IHttpUserAgentParserProvider httpUserAgentParser)
     {
         Logger = logger;
         HttpContextAccessor = httpContextAccessor;
+        HttpUserAgentParser = httpUserAgentParser;
     }
 
     public string? BrowserInfo => GetBrowserInfo();
@@ -46,27 +50,21 @@ public class HttpContextWebClientInfoProvider : IWebClientInfoProvider, ITransie
 
     protected virtual string? GetDeviceInfo()
     {
-        string? deviceInfo = null;
-        var deviceDetector = new DeviceDetector(GetBrowserInfo());
-        deviceDetector.Parse();
-        if (!deviceDetector.IsParsed())
+        var browserInfo = GetBrowserInfo();
+        if (browserInfo.IsNullOrWhiteSpace())
         {
-            return deviceInfo;
+            return null;
         }
 
-        var osInfo = deviceDetector.GetOs();
-        if (osInfo.Success)
+        var httpUserAgentInformation = HttpUserAgentParser.Parse(browserInfo);
+        switch (httpUserAgentInformation.Type)
         {
-            deviceInfo = osInfo.Match.Name;
+            case HttpUserAgentType.Browser:
+            case HttpUserAgentType.Robot:
+                return (httpUserAgentInformation.Platform.HasValue ?  httpUserAgentInformation.Platform.Value.Name + " " : string.Empty) + httpUserAgentInformation.Name;
+            case HttpUserAgentType.Unknown:
+            default:
+                return httpUserAgentInformation.UserAgent;
         }
-
-        var clientInfo = deviceDetector.GetClient();
-        if (clientInfo.Success)
-        {
-            deviceInfo = deviceInfo.IsNullOrWhiteSpace() ? clientInfo.Match.Name : deviceInfo + " " + clientInfo.Match.Name;
-        }
-
-        return deviceInfo;
     }
-
 }

@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,6 +17,9 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity;
 
 public partial class RoleManagement
 {
+    [Parameter]
+    public string? Culture { get; set; }
+
     protected const string PermissionProviderName = "R";
 
     protected PermissionManagementModal PermissionManagementModal;
@@ -41,6 +45,7 @@ public partial class RoleManagement
 
     protected override ValueTask SetBreadcrumbItemsAsync()
     {
+        BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(LUiNavigation["Menu:Administration"].Value));
         BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Menu:IdentityManagement"].Value));
         BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Roles"].Value));
         return base.SetBreadcrumbItemsAsync();

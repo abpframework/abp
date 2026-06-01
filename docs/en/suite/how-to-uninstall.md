@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to uninstall ABP Suite effectively with step-by-step terminal commands and clean-up instructions for a seamless experience."
+}
+```
+
 # How to uninstall ABP Suite?
 
 You can simply uninstall ABP Suite with the terminal command:

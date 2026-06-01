@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Data;
 using Volo.Abp.Json;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -17,6 +18,17 @@ public class AbpBackgroundJobsAbstractionsModule : AbpModule
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         RegisterJobs(context.Services);
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        if (context.Services.IsDataMigrationEnvironment())
+        {
+            Configure<AbpBackgroundJobOptions>(options =>
+            {
+                options.IsJobExecutionEnabled = false;
+            });
+        }
     }
 
     private static void RegisterJobs(IServiceCollection services)

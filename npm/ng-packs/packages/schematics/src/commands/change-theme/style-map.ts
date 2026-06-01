@@ -272,16 +272,13 @@ importMap.set(ThemeOptionsEnum.Basic, [
     path: '@abp/ng.theme.basic',
     importName: 'ThemeBasicModule',
     expression: 'ThemeBasicModule',
-  },
-  {
-    path: '@abp/ng.theme.basic',
-    importName: 'provideThemeBasicConfig',
-    provider: 'provideThemeBasicConfig()',
+    doNotImport: true,
   },
   {
     path: '@abp/ng.theme.shared',
     importName: 'ThemeSharedModule',
     expression: 'ThemeSharedModule',
+    doNotImport: true,
   },
   {
     path: '@abp/ng.theme.shared',
@@ -292,18 +289,24 @@ importMap.set(ThemeOptionsEnum.Basic, [
     importName: 'provideAbpThemeShared',
     provider: 'provideAbpThemeShared()',
   },
+  {
+    path: '@abp/ng.theme.basic',
+    importName: 'provideThemeBasicConfig',
+    provider: 'provideThemeBasicConfig()',
+  },
 ]);
 
 importMap.set(ThemeOptionsEnum.Lepton, [
   {
-    path: '@volo/abp.ng.theme.lepton',
-    importName: 'provideThemeLepton',
-    provider: 'provideThemeLepton()',
-  },
-  {
     path: '@abp/ng.theme.shared',
     importName: 'ThemeSharedModule',
     expression: 'ThemeSharedModule',
+    doNotImport: true,
+  },
+  {
+    path: '@volo/abp.ng.theme.lepton',
+    importName: 'provideThemeLepton',
+    provider: 'provideThemeLepton()',
   },
   {
     path: '@abp/ng.theme.shared',
@@ -325,21 +328,31 @@ importMap.set(ThemeOptionsEnum.LeptonXLite, [
     path: '@abp/ng.theme.lepton-x',
     importName: 'ThemeLeptonXModule',
     expression: 'ThemeLeptonXModule.forRoot()',
+    doNotImport: true,
   },
   {
     path: '@abp/ng.theme.lepton-x/layouts',
     importName: 'SideMenuLayoutModule',
     expression: 'SideMenuLayoutModule.forRoot()',
+    doNotImport: true,
+  },
+  {
+    path: '@abp/ng.theme.lepton-x/layouts',
+    importName: 'TopMenuLayoutModule',
+    expression: 'TopMenuLayoutModule.forRoot()',
+    doNotImport: true,
   },
   {
     path: '@abp/ng.theme.lepton-x/account',
     importName: 'AccountLayoutModule',
     expression: 'AccountLayoutModule.forRoot()',
+    doNotImport: true,
   },
   {
     path: '@abp/ng.theme.shared',
     importName: 'ThemeSharedModule',
     expression: 'ThemeSharedModule',
+    doNotImport: true,
   },
   {
     path: '@abp/ng.theme.shared',
@@ -354,6 +367,22 @@ importMap.set(ThemeOptionsEnum.LeptonXLite, [
     importName: 'provideAbpThemeShared',
     provider: 'provideAbpThemeShared()',
   },
+  {
+    path: '@abp/ng.theme.lepton-x',
+    importName: 'provideThemeLeptonX',
+    provider: 'provideThemeLeptonX()',
+  },
+  {
+    path: '@abp/ng.theme.lepton-x/layouts',
+    importName: 'provideSideMenuLayout',
+    provider: 'provideSideMenuLayout()',
+  },
+  {
+    path: '@abp/ng.theme.lepton-x/layouts',
+    importName: 'provideTopMenuLayout',
+    provider: 'provideTopMenuLayout()',
+    doNotImport: true,
+  },
 ]);
 
 importMap.set(ThemeOptionsEnum.LeptonX, [
@@ -361,11 +390,13 @@ importMap.set(ThemeOptionsEnum.LeptonX, [
     path: '@volosoft/abp.ng.theme.lepton-x',
     importName: 'ThemeLeptonXModule',
     expression: 'ThemeLeptonXModule.forRoot()',
+    doNotImport: true,
   },
   {
     path: '@volosoft/abp.ng.theme.lepton-x/layouts',
     importName: 'SideMenuLayoutModule',
     expression: 'SideMenuLayoutModule.forRoot()',
+    doNotImport: true,
   },
   {
     path: '@volosoft/abp.ng.theme.lepton-x/layouts',
@@ -377,6 +408,7 @@ importMap.set(ThemeOptionsEnum.LeptonX, [
     path: '@abp/ng.theme.shared',
     importName: 'ThemeSharedModule',
     expression: 'ThemeSharedModule',
+    doNotImport: true,
   },
   {
     path: '@volosoft/abp.ng.theme.lepton-x',
@@ -389,6 +421,22 @@ importMap.set(ThemeOptionsEnum.LeptonX, [
   {
     path: '@abp/ng.theme.shared',
     importName: 'withValidationBluePrint',
+  },
+  {
+    path: '@volosoft/abp.ng.theme.lepton-x',
+    importName: 'provideThemeLeptonX',
+    provider: 'provideThemeLeptonX()',
+  },
+  {
+    path: '@volosoft/abp.ng.theme.lepton-x/layouts',
+    importName: 'provideSideMenuLayout',
+    provider: 'provideSideMenuLayout()',
+  },
+  {
+    path: '@volosoft/abp.ng.theme.lepton-x/layouts',
+    importName: 'provideTopMenuLayout',
+    provider: 'provideTopMenuLayout()',
+    doNotImport: true,
   },
   {
     path: '@abp/ng.theme.shared',

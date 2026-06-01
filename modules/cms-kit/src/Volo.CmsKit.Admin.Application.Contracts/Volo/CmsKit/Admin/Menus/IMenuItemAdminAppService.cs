@@ -23,4 +23,6 @@ public interface IMenuItemAdminAppService : IApplicationService
     Task<PagedResultDto<PageLookupDto>> GetPageLookupAsync(PageLookupInputDto input);
 
     Task<ListResultDto<PermissionLookupDto>> GetPermissionLookupAsync(PermissionLookupInputDto inputDto);
+
+    Task<int> GetAvailableMenuOrderAsync(Guid? parentId = null);
 }

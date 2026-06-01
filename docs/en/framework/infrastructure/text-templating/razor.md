@@ -1,7 +1,16 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate Razor templates in your ABP Framework project, including installation via ABP CLI or manual methods."
+}
+```
+
 # Razor Integration
 
 
 The Razor template is a standard C# class, so you can freely use the functions of C#, such as `dependency injection`, using `LINQ`, custom methods, and even using `Repository`.
+
+> The Razor engine compiles template content into a fully-trusted .NET assembly via Roslyn and executes it in the host process, so editing a Razor template at runtime is functionally equivalent to executing arbitrary server-side code. `RazorTemplateRenderingEngine.IsSandboxed` is therefore `false`, and the [Text Template Management](../../../modules/text-template-management.md) module requires the `TextTemplateManagement.TextTemplates.EditNonSandboxedContents` permission (in addition to `EditContents`) before allowing such templates to be edited via its UI. Grant the related permission only to fully trusted developers/operators. If you need a sandboxed engine for content editors, consider [Scriban](scriban.md), which is configured to honor Scriban's [safe runtime boundaries](https://github.com/scriban/scriban/blob/master/site/docs/runtime/safe-runtime.md) by default.
 
 
 ## Installation

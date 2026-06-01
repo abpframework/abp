@@ -119,7 +119,7 @@ For example, if your filename is `zh.hans.json`, ABP will generate the following
 [File] [/MyModule/Volo/Abp/MyModule/Localization/zh/hans.json]
 ```
 
-Microsoft provides the `Microsoft.Extensions.FileProviders.Manifest` library to solve this problem.
+Microsoft provides the `Microsoft.Extensions.FileProviders.Embedded` library to solve this problem.
 
 We need to add this package dependency and set `<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>` in our project:
 
@@ -136,7 +136,7 @@ We need to add this package dependency and set `<GenerateEmbeddedFilesManifest>t
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
         <PackageReference Include="Volo.Abp.VirtualFileSystem" Version="9.0.0"  />
-        <PackageReference Include="Microsoft.Extensions.FileProviders.Manifest" Version="9.0.0" />
+        <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="9.0.0" />
     </ItemGroup>
 
     <ItemGroup>

@@ -53,7 +53,7 @@ public class AbpTabTagHelperService : AbpTagHelperService<AbpTabTagHelper>
                 anchor.Attributes.Add(attr.Name, attr.Value.ToString());
             }
 
-            anchor.InnerHtml.AppendHtml(title);
+            anchor.InnerHtml.Append(title);
 
             return anchor.ToHtmlString();
         }
@@ -73,7 +73,7 @@ public class AbpTabTagHelperService : AbpTagHelperService<AbpTabTagHelper>
                 anchor.Attributes.Add(attr.Name, attr.Value.ToString());
             }
 
-            anchor.InnerHtml.AppendHtml(title);
+            anchor.InnerHtml.Append(title);
 
             var listItem = new TagBuilder("li");
             listItem.AddCssClass("nav-item");

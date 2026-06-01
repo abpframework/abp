@@ -17,6 +17,7 @@
     "SentSuccessfully": "Poslan uspješno",
     "MailSendingFailed": "Slanje e-pošte nije uspjelo, provjerite konfiguraciju e-pošte i pokušajte ponovo.",
     "Send": "Poslati",
+    "Menu:Settings": "Postavke",
     "Menu:Emailing": "Slanje e-poštom",
     "Menu:TimeZone": "Vremenska Zona",
     "DisplayName:Timezone": "Vremenska zona",
@@ -35,7 +36,7 @@
     "Feature:SettingManagementGroup": "Upravljanje postavkama",
     "Feature:SettingManagementEnable": "Omogući upravljanje postavkama",
     "Feature:SettingManagementEnableDescription": "Omogućite sustav upravljanja postavkama u aplikaciji.",
-    "Feature:AllowChangingEmailSettings": "Dopusti promjenu postavki e-pošte.",
+    "Feature:AllowChangingEmailSettings": "Dopusti promjenu postavki e-pošte",
     "Feature:AllowChangingEmailSettingsDescription": "Dopusti promjenu postavki e-pošte.",
     "SmtpPasswordPlaceholder": "Unesite vrijednost za ažuriranje lozinke"
   }

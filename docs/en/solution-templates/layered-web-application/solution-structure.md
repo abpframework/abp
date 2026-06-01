@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the layered solution structure in ABP Studio and learn how to organize your projects effectively for optimal development."
+}
+```
+
 # Layered Solution: The Structure
 
 ````json

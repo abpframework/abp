@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enhance your Angular UI data tables by adding or modifying columns with the Entity Prop Extension system in ABP Framework."
+}
+```
+
 # Data Table Column (or Entity Prop) Extensions for Angular UI
 
 ## Introduction
@@ -14,7 +21,7 @@ In this example, we will add a "Name" column and display the value of the `name`
 
 ### Step 1. Create Entity Prop Contributors
 
-The following code prepares a constant named `identityEntityPropContributors`, ready to be imported and used in your root module:
+The following code prepares a constant named `identityEntityPropContributors`, ready to be imported and used in your root application configuration:
 
 ```js
 // src/app/entity-prop-contributors.ts
@@ -52,22 +59,22 @@ The list of props, conveniently named as `propList`, is a **doubly linked list**
 
 ### Step 2. Import and Use Entity Prop Contributors
 
-Import `identityEntityPropContributors` in your routing module and pass it to the static `forLazy` method of `IdentityModule` as seen below:
+Import `identityEntityPropContributors` in your routing configuration and pass it to the static `createRoutes` method for `identity` route as seen below:
 
 ```js
-// src/app/app-routing.module.ts
+// src/app/app.routes.ts
 
 // other imports
 import { identityEntityPropContributors } from './entity-prop-contributors';
 
-const routes: Routes = [
+export const APP_ROUTES: Routes = [
   // other routes
 
   {
     path: 'identity',
     loadChildren: () =>
-      import('@abp/ng.identity').then(m =>
-        m.IdentityModule.forLazy({
+      import('@abp/ng.identity').then(c =>
+        c.createRoutes({
           entityPropContributors: identityEntityPropContributors,
         })
       ),
@@ -77,7 +84,7 @@ const routes: Routes = [
 ];
 ```
 
-That is it, `nameProp` entity prop will be added, and you will see the "Name" column next to the usernames on the grid in the users page (`UsersComponent`) of the `IdentityModule`.
+That is it, `nameProp` entity prop will be added, and you will see the "Name" column next to the usernames on the grid in the users page (`UsersComponent`) of the `identity` package.
 
 ## How to Render Custom HTML in Cells
 
@@ -164,7 +171,7 @@ It has the following properties:
 
 - **index** is the table index where the record is at.
 
-- **getInjected** is the equivalent of [Injector.get](https://angular.io/api/core/Injector#get). You can use it to reach injected dependencies of `ExtensibleTableComponent`, including, but not limited to, its parent component.
+- **getInjected** is the equivalent of [Injector.get](https://angular.dev/api/core/Injector). You can use it to reach injected dependencies of `ExtensibleTableComponent`, including, but not limited to, its parent component.
 
   ```js
   {
@@ -318,7 +325,7 @@ export function reorderUserContributors(
 
 ### EntityPropContributorCallback\<R = any\>
 
-`EntityPropContributorCallback` is the type that you can pass as entity prop contributor callbacks to static `forLazy` methods of the modules.
+`EntityPropContributorCallback` is the type that you can pass as entity prop contributor callbacks to static `createRoutes` methods of the packages.
 
 ```js
 export function isLockedOutPropContributor(
@@ -335,4 +342,5 @@ export const identityEntityPropContributors = {
 
 ## See Also
 
+- [Extensible Table Row Detail](extensible-table-row-detail.md)
 - [Customizing Application Modules Guide](../../architecture/modularity/extending/customizing-application-modules-guide.md)

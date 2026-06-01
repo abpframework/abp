@@ -33,6 +33,7 @@ public class AccountAppService : ApplicationService, IAccountAppService
         IdentityOptions = identityOptions;
 
         LocalizationResource = typeof(AccountResource);
+        ObjectMapperContext = typeof(AbpAccountApplicationModule);
     }
 
     public virtual async Task<IdentityUserDto> RegisterAsync(RegisterDto input)

@@ -1,9 +1,16 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to provision an Azure Web App using Terraform with this step-by-step guide, including prerequisites and setup for a seamless deployment."
+}
+```
+
 # Provisioning an Azure Web App using Terraform
 
 ````json
 //[doc-params]
 {
-    "UI": ["MVC", "Blazor", "BlazorServer", "NG"],
+    "UI": ["MVC", "Blazor", "BlazorServer", "BlazorWebApp", "NG"],
     "DB": ["EF", "Mongo"],
     "Tiered": ["Yes", "No"]
 }
@@ -224,33 +231,6 @@ resource "azurerm_service_plan" "appserviceplan" {
   sku_name            = "B3"
 }
 
-# Create the web app, pass in the App Service Plan ID
-resource "azurerm_linux_web_app" "authserver" {
-  name                  = "authserver-blazorserver"
-  location              = azurerm_resource_group.rg.location
-  resource_group_name   = azurerm_resource_group.rg.name
-  service_plan_id       = azurerm_service_plan.appserviceplan.id
-  https_only            = true
-  site_config {
-    application_stack {
-      dotnet_version = "6.0"
-    }
-    minimum_tls_version  = "1.2"
-  }
-}
-resource "azurerm_linux_web_app" "apihost" {
-  name                  = "apihost-blazorserver"
-  location              = azurerm_resource_group.rg.location
-  resource_group_name   = azurerm_resource_group.rg.name
-  service_plan_id       = azurerm_service_plan.appserviceplan.id
-  https_only            = true
-  site_config {
-    application_stack {
-      dotnet_version = "6.0"
-    }
-    minimum_tls_version  = "1.2"
-  }
-}
 resource "azurerm_linux_web_app" "webapp" {
   name                  = "webapp-blazorserver"
   location              = azurerm_resource_group.rg.location
@@ -350,6 +330,157 @@ resource "azurerm_linux_web_app" "webapp" {
 
 resource "azurerm_redis_cache" "redis" {
   name                = "redis-blazorserver"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  capacity            = 0
+  family              = "C"
+  sku_name            = "Basic"
+  enable_non_ssl_port = false
+  minimum_tls_version = "1.2"
+
+  redis_configuration {
+    maxmemory_reserved = 2
+    maxmemory_delta    = 2
+    maxmemory_policy   = "volatile-lru"
+  }
+}
+```
+
+    {{end}}
+    
+{{ else if UI == "BlazorWebApp" }}
+
+    {{if Tiered == "No"}}
+
+```terraform
+# Configure the Azure provider
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 3.0.0"
+    }
+  }
+  required_version = ">= 0.14.9"
+}
+provider "azurerm" {
+  features {}
+}
+
+# Create the resource group
+resource "azurerm_resource_group" "rg" {
+  name     = "blazorwebapp-app-nontier-rg"
+  location = "westeurope"
+}
+
+# Create the Linux App Service Plan
+resource "azurerm_service_plan" "appserviceplan" {
+  name                = "blazorwebapp-app-nontier-plan"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  os_type             = "Linux"
+  sku_name            = "B3"
+}
+
+resource "azurerm_linux_web_app" "webapp" {
+  name                  = "webapp-blazorwebapp"
+  location              = azurerm_resource_group.rg.location
+  resource_group_name   = azurerm_resource_group.rg.name
+  service_plan_id       = azurerm_service_plan.appserviceplan.id
+  https_only            = true
+  site_config {
+    application_stack {
+      dotnet_version = "6.0"
+    }
+    minimum_tls_version  = "1.2"
+  }
+}
+```
+    
+    {{ else }}
+
+```terraform
+# Configure the Azure provider
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 3.0.0"
+    }
+  }
+  required_version = ">= 0.14.9"
+}
+provider "azurerm" {
+  features {}
+}
+
+# Create the resource group
+resource "azurerm_resource_group" "rg" {
+  name     = "blazorwebapp-app-tier-rg"
+  location = "westeurope"
+}
+
+# Create the Linux App Service Plan
+resource "azurerm_service_plan" "appserviceplan" {
+  name                = "blazorwebapp-app-tier-plan"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  os_type             = "Linux"
+  sku_name            = "B3"
+}
+
+# Create the web app, pass in the App Service Plan ID
+resource "azurerm_linux_web_app" "authserver" {
+  name                  = "authserver-blazorwebapp"
+  location              = azurerm_resource_group.rg.location
+  resource_group_name   = azurerm_resource_group.rg.name
+  service_plan_id       = azurerm_service_plan.appserviceplan.id
+  https_only            = true
+  site_config {
+    application_stack {
+      dotnet_version = "6.0"
+    }
+    minimum_tls_version  = "1.2"
+  }
+  app_settings = {
+    "Redis__Configuration" = azurerm_redis_cache.redis.primary_connection_string
+  }
+}
+resource "azurerm_linux_web_app" "apihost" {
+  name                  = "apihost-blazorwebapp"
+  location              = azurerm_resource_group.rg.location
+  resource_group_name   = azurerm_resource_group.rg.name
+  service_plan_id       = azurerm_service_plan.appserviceplan.id
+  https_only            = true
+  site_config {
+    application_stack {
+      dotnet_version = "6.0"
+    }
+    minimum_tls_version  = "1.2"
+  }
+  app_settings = {
+    "Redis__Configuration" = azurerm_redis_cache.redis.primary_connection_string
+  }
+}
+resource "azurerm_linux_web_app" "webapp" {
+  name                  = "webapp-blazorwebapp"
+  location              = azurerm_resource_group.rg.location
+  resource_group_name   = azurerm_resource_group.rg.name
+  service_plan_id       = azurerm_service_plan.appserviceplan.id
+  https_only            = true
+  site_config {
+    application_stack {
+      dotnet_version = "6.0"
+    }
+    minimum_tls_version  = "1.2"
+  }
+  app_settings = {
+    "Redis__Configuration" = azurerm_redis_cache.redis.primary_connection_string
+  }
+}
+
+resource "azurerm_redis_cache" "redis" {
+  name                = "redis-blazorwebapp"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   capacity            = 0

@@ -34,7 +34,7 @@ public class AbpMemoryDbTestModule : AbpModule
             options.AddRepository<City, CityRepository>();
         });
 
-        context.Services.AddOptions<Utf8JsonMemoryDbSerializerOptions>()
+        context.Services.AddAbpOptions<Utf8JsonMemoryDbSerializerOptions>()
             .Configure<IServiceProvider>((options, rootServiceProvider) =>
             {
                 options.JsonSerializerOptions.Converters.Add(new EntityJsonConverter<EntityWithIntPk, int>());

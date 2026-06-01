@@ -6,12 +6,12 @@ import { fromLazyLoad } from '../utils/lazy-load-utils';
 describe('Lazy Load Utils', () => {
   describe('#fromLazyLoad', () => {
     afterEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     it('should append to head by default', () => {
       const element = document.createElement('link');
-      const spy = jest.spyOn(document.head, 'insertAdjacentElement');
+      const spy = vi.spyOn(document.head, 'insertAdjacentElement');
 
       fromLazyLoad(element);
       expect(spy).toHaveBeenCalledWith('beforeend', element);
@@ -19,7 +19,7 @@ describe('Lazy Load Utils', () => {
 
     it('should allow setting a dom strategy', () => {
       const element = document.createElement('link');
-      const spy = jest.spyOn(document.head, 'insertAdjacentElement');
+      const spy = vi.spyOn(document.head, 'insertAdjacentElement');
 
       fromLazyLoad(element, DOM_STRATEGY.PrependToHead());
       expect(spy).toHaveBeenCalledWith('afterbegin', element);
@@ -52,61 +52,73 @@ describe('Lazy Load Utils', () => {
       expect(element.getAttribute('integrity')).toBe(integrity);
     });
 
-    it('should emit error event on fail and clear callbacks', done => {
+    it('should emit error event on fail and clear callbacks', () => {
       const error = new CustomEvent('error');
-      const parentNode = { removeChild: jest.fn() };
+      const parentNode = { removeChild: vi.fn() };
       const element = { parentNode } as any as HTMLLinkElement;
 
-      fromLazyLoad(
-        element,
-        {
-          insertElement(el: HTMLLinkElement) {
-            expect(el).toBe(element);
+      return new Promise<void>((resolve, reject) => {
+        fromLazyLoad(
+          element,
+          {
+            insertElement(el: HTMLLinkElement) {
+              expect(el).toBe(element);
 
-            setTimeout(() => {
-              el.onerror(error);
-            }, 0);
+              setTimeout(() => {
+                el.onerror(error);
+              }, 0);
+            },
+          } as DomStrategy,
+          {
+            setCrossOrigin(_: HTMLLinkElement) {},
+          } as CrossOriginStrategy,
+        ).subscribe({
+          error: value => {
+            try {
+              expect(value).toBe(error);
+              expect(parentNode.removeChild).toHaveBeenCalledWith(element);
+              expect(element.onerror).toBeNull();
+              resolve();
+            } catch (e) {
+              reject(e);
+            }
           },
-        } as DomStrategy,
-        {
-          setCrossOrigin(_: HTMLLinkElement) {},
-        } as CrossOriginStrategy,
-      ).subscribe({
-        error: value => {
-          expect(value).toBe(error);
-          expect(parentNode.removeChild).toHaveBeenCalledWith(element);
-          expect(element.onerror).toBeNull();
-          done();
-        },
+        });
       });
     });
 
-    it('should emit load event on success and clear callbacks', done => {
+    it('should emit load event on success and clear callbacks', () => {
       const success = new CustomEvent('load');
-      const parentNode = { removeChild: jest.fn() };
+      const parentNode = { removeChild: vi.fn() };
       const element = { parentNode } as any as HTMLLinkElement;
 
-      fromLazyLoad(
-        element,
-        {
-          insertElement(el: HTMLLinkElement) {
-            expect(el).toBe(element);
+      return new Promise<void>((resolve, reject) => {
+        fromLazyLoad(
+          element,
+          {
+            insertElement(el: HTMLLinkElement) {
+              expect(el).toBe(element);
 
-            setTimeout(() => {
-              el.onload(success);
-            }, 0);
+              setTimeout(() => {
+                el.onload(success);
+              }, 0);
+            },
+          } as DomStrategy,
+          {
+            setCrossOrigin(_: HTMLLinkElement) {},
+          } as CrossOriginStrategy,
+        ).subscribe({
+          next: value => {
+            try {
+              expect(value).toBe(success);
+              expect(parentNode.removeChild).not.toHaveBeenCalled();
+              expect(element.onload).toBeNull();
+              resolve();
+            } catch (e) {
+              reject(e);
+            }
           },
-        } as DomStrategy,
-        {
-          setCrossOrigin(_: HTMLLinkElement) {},
-        } as CrossOriginStrategy,
-      ).subscribe({
-        next: value => {
-          expect(value).toBe(success);
-          expect(parentNode.removeChild).not.toHaveBeenCalled();
-          expect(element.onload).toBeNull();
-          done();
-        },
+        });
       });
     });
   });

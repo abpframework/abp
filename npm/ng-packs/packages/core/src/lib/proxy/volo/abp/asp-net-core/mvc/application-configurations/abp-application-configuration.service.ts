@@ -1,12 +1,14 @@
 import type { ApplicationConfigurationDto, ApplicationConfigurationRequestOptions } from './models';
 import { RestService } from '../../../../../../services';
 import { Rest } from '../../../../../../models';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AbpApplicationConfigurationService {
+  private restService = inject(RestService);
+
   apiName = 'abp';
 
 
@@ -17,6 +19,4 @@ export class AbpApplicationConfigurationService {
       params: { includeLocalizationResources: options.includeLocalizationResources },
     },
       { apiName: this.apiName, ...config });
-
-  constructor(private restService: RestService) { }
 }

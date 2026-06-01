@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to access information about the logged-in user in your ABP Framework app using the ICurrentUser service."
+}
+```
+
 # Current User
 
 It is very common to retrieve the information about the logged in user in a web application. The current user is the active user related to the current request in a web application.
@@ -94,7 +101,7 @@ For a web application, it gets the `User` property of the current `HttpContext`.
 
 ### Basic Usage
 
-You can inject `ICurrentPrincipalAccessor` and use the `Principal` property to the the current principal:
+You can inject `ICurrentPrincipalAccessor` and use the `Principal` property to get the current principal:
 
 ````csharp
 public class MyService : ITransientDependency

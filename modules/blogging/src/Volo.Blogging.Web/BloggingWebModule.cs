@@ -8,7 +8,7 @@ using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
@@ -23,7 +23,7 @@ namespace Volo.Blogging
         typeof(BloggingApplicationContractsModule),
         typeof(AbpAspNetCoreMvcUiBootstrapModule),
         typeof(AbpAspNetCoreMvcUiBundlingModule),
-        typeof(AbpAutoMapperModule)
+        typeof(AbpMapperlyModule)
     )]
     public class BloggingWebModule : AbpModule
     {
@@ -31,7 +31,11 @@ namespace Volo.Blogging
         {
             context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
             {
-                options.AddAssemblyResource(typeof(BloggingResource), typeof(BloggingWebModule).Assembly);
+                options.AddAssemblyResource(
+                    typeof(BloggingResource), 
+                    typeof(BloggingWebModule).Assembly, 
+                    typeof(BloggingApplicationContractsModule).Assembly
+                );
             });
 
             PreConfigure<IMvcBuilder>(mvcBuilder =>
@@ -42,15 +46,11 @@ namespace Volo.Blogging
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddMapperlyObjectMapper<BloggingWebModule>();
+            
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<BloggingWebModule>();
-            });
-
-            context.Services.AddAutoMapperObjectMapper<BloggingWebModule>();
-            Configure<AbpAutoMapperOptions>(options =>
-            {
-                options.AddProfile<AbpBloggingWebAutoMapperProfile>(validate: true);
             });
 
             Configure<AbpBundleContributorOptions>(options =>

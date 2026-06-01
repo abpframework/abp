@@ -1,5 +1,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.EntityFrameworkCore.TestApp.SecondContext;
 using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
@@ -27,8 +28,15 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
     public DbSet<Category> Categories { get; set; }
 
     public DbSet<AppEntityWithNavigations> AppEntityWithNavigations { get; set; }
+    public DbSet<AppEntityWithNavigationChildOneToMany> AppEntityWithNavigationChildOneToMany { get; set; }
 
     public DbSet<AppEntityWithNavigationsForeign> AppEntityWithNavigationsForeign { get; set; }
+
+    public DbSet<Blog> Blogs { get; set; }
+    public DbSet<BlogPost> BlogPosts { get; set; }
+
+    public DbSet<TestSharedEntity> TestSharedEntity => Set<TestSharedEntity>("TestSharedEntity1");
+    public DbSet<TestSharedEntity> TestSharedEntity2 => Set<TestSharedEntity>("TestSharedEntity2");
 
     public TestMigrationsDbContext(DbContextOptions<TestMigrationsDbContext> options)
         : base(options)
@@ -38,7 +46,24 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Owned and SharedTypeEntity should be configured before the base OnModelCreating call
+
         modelBuilder.Owned<District>();
+
+        Action<EntityTypeBuilder<TestSharedEntity>> sharedEntityBuildAction = b =>
+        {
+            b.ConfigureByConvention();
+            b.Property(x => x.Id);
+            b.Property(x => x.TenantId);
+            b.Property(x => x.IsDeleted);
+            b.Property(x => x.Name);
+            b.Property(x => x.Age);
+            b.Property(x => x.Birthday);
+
+            b.Property<string>("DynamicProperty");
+        };
+        modelBuilder.SharedTypeEntity("TestSharedEntity1", sharedEntityBuildAction);
+        modelBuilder.SharedTypeEntity("TestSharedEntity2", sharedEntityBuildAction);
 
         base.OnModelCreating(modelBuilder);
 
@@ -53,6 +78,14 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
             b.Property(x => x.HasDefaultValue).HasDefaultValue(DateTime.Now);
             b.Property(x => x.TenantId).HasColumnName("Tenant_Id");
             b.Property(x => x.IsDeleted).HasColumnName("Is_Deleted");
+            b.ComplexProperty(x => x.ContactInformation, cb =>
+            {
+                cb.Property(x => x.Street).IsRequired();
+                cb.ComplexProperty(x => x.Location, locationBuilder =>
+                {
+                    locationBuilder.Property(x => x.City).IsRequired();
+                });
+            });
         });
 
         modelBuilder.Entity<City>(b =>
@@ -78,7 +111,12 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
             b.HasOne(x => x.OneToOne).WithOne().HasForeignKey<AppEntityWithNavigationChildOneToOne>(x => x.Id);
             b.HasMany(x => x.OneToMany).WithOne().HasForeignKey(x => x.AppEntityWithNavigationId);
             b.HasMany(x => x.ManyToMany).WithMany(x => x.ManyToMany).UsingEntity<AppEntityWithNavigationsAndAppEntityWithNavigationChildManyToMany>();
-            b.HasOne<AppEntityWithNavigationsForeign>().WithMany().HasForeignKey(x => x.AppEntityWithNavigationForeignId).IsRequired(false);
+        });
+
+        modelBuilder.Entity<AppEntityWithNavigationsForeign>(b =>
+        {
+            b.ConfigureByConvention();
+            b.HasMany(x => x.OneToMany).WithOne().HasForeignKey(x => x.AppEntityWithNavigationForeignId);
         });
 
         modelBuilder.Entity<AppEntityWithNavigationChildOneToOne>(b =>
@@ -94,6 +132,19 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
         });
 
         modelBuilder.Entity<AppEntityWithNavigationsForeign>(b =>
+        {
+            b.ConfigureByConvention();
+        });
+
+        modelBuilder.Entity<Blog>(b =>
+        {
+            b.ConfigureByConvention();
+            b.HasMany(bp => bp.BlogPosts)
+                .WithOne(bp => bp.Blog)
+                .HasForeignKey(bp => bp.BlogId);
+        });
+
+        modelBuilder.Entity<BlogPost>(b =>
         {
             b.ConfigureByConvention();
         });

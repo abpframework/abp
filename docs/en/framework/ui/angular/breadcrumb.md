@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement and customize breadcrumb navigation in your ABP applications with the Breadcrumb Component for enhanced user experience."
+}
+```
+
 # Breadcrumb Component
 
 ABP provides a component that listens to the angular router's `NavigationEnd`

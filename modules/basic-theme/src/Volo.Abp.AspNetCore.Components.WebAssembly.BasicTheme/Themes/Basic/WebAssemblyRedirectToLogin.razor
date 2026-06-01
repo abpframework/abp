@@ -1,25 +1,22 @@
-@inject NavigationManager Navigation
 @using Volo.Abp.DependencyInjection
 @using Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using Volo.Abp.AspNetCore.Components.WebAssembly.Theming
 @using Microsoft.Extensions.Options
+@using Volo.Abp.AspNetCore.Components.WebAssembly
 @using Volo.Abp.AspNetCore.Components.Web
 @inherits RedirectToLogin
 @attribute [ExposeServices(typeof(RedirectToLogin))]
 @attribute [Dependency(ReplaceServices = true)]
-@inject IOptions<AuthenticationOptions> AuthenticationOptions
+@inject NavigationManager Navigation
+@inject IOptions<AuthenticationOptions> AuthOptions
+@inject IRouteBasedCultureUrlHelper CultureUrlHelper
 @inject IOptions<AbpAspNetCoreComponentsWebOptions> AbpAspNetCoreComponentsWebOptions
 
 @code {
-    protected override void OnInitialized()
+    protected override void OnInitialized() { }
+
+    protected override Task OnInitializedAsync()
     {
-        if (AbpAspNetCoreComponentsWebOptions.Value.IsBlazorWebApp)
-        {
-            Navigation.NavigateTo(AuthenticationOptions.Value.LoginUrl, forceLoad: true);
-        }
-        else
-        {
-            Navigation.NavigateToLogin(AuthenticationOptions.Value.LoginUrl);
-        }
+        return CultureAwareRedirectToLoginHelper.RedirectAsync(Navigation, AuthOptions.Value.LoginUrl, CultureUrlHelper, AbpAspNetCoreComponentsWebOptions);
     }
 }

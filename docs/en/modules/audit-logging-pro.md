@@ -1,6 +1,13 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover the ABP Framework's Audit Logging Module (Pro) to track changes, filter logs, and enhance application monitoring efficiently."
+}
+```
+
 # Audit Logging Module (Pro)
 
-> You must have an ABP Team or a higher license to use this module.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this module.
 
 This module implements the Audit Logging system of an application;
 
@@ -9,6 +16,8 @@ This module implements the Audit Logging system of an application;
 * See all changes of entities and filter entity change logs.
 * View details of an entity change. 
 * View all changes of an entity. 
+* Export audit logs and entity changes to Excel.
+* Receive email notifications for completed or failed exports.
 * This module also defines reusable "Average Execution Duration Per Day" and "Error Rate" widgets.
 * Periodic clean up of audit logs.
 
@@ -56,9 +65,15 @@ You can view details of an audit log by clicking the magnifier icon on each audi
 * **Actions:** This tab shows list of actions (controller actions and application service method calls with their parameters) executed during a web request.
 * **Changes:** This tab shows changed entities during the web request.
 
+##### Export to Excel
+
+You can export audit logs to Excel by clicking the "Export to Excel" button in the toolbar. If the result set is small (less than a configurable threshold), the file will be generated and downloaded immediately. For larger result sets, the export will be processed as a background job and you'll receive an email with a download link once the export is completed.
+
 #### Entity Changes
 
 Entity changes tab is used to list, view and filter entity change logs. 
+
+> **Blazor Server note:** Entity change history can be missing or incomplete in some `Blazor Server` scenarios due to known SignalR/event-pipeline limitations. See [Audit Logging](../framework/infrastructure/audit-logging.md) and [#11682](https://github.com/abpframework/abp/issues/11682).
 
 ![audit-logging-module-entity-changes-list-page](../images/audit-logging-module-entity-changes-list-page.png)
 
@@ -79,6 +94,10 @@ You can view details of an entity change log by clicking the "Change Details" ac
 You can view details of all changes of an entity by clicking the "Full Change History" action item in the entity change log list:
 
 ![audit-logging-module-full-entity-change-details-modal](../images/audit-logging-module-full-entity-change-details-modal.png)
+
+##### Export to Excel
+
+You can export entity changes to Excel by clicking the "Export to Excel" button in the toolbar. Similar to audit logs export, for large datasets the export will be processed as a background job and you'll receive an email notification once completed.
 
 #### Audit Log Settings
 
@@ -121,10 +140,41 @@ To see `AbpAuditingOptions` properties, please see its [documentation](../framew
 Configure<ExpiredAuditLogDeleterOptions>(options =>
 {
     options.Period = (int)TimeSpan.FromSeconds(30).TotalMilliseconds;
+
+    // This Cron expression only works if Hangfire or Quartz is used for background workers.
+    // The Hangfire Cron expression is different from the Quartz Cron expression, Please refer to the following links:
+    // https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontriggers.html#cron-expressions
+    // https://docs.hangfire.io/en/latest/background-methods/performing-recurrent-tasks.html
+    options.ExcelFileCleanupOptions.CronExpression = "0 23 * * *"; // Quartz Cron expression is "0 0 23 * * ?"
 });
 ```
 
 The *Period* doesn't mean the *Expired Item Deletion Period*. It's the period of the worker to run clean up service system wide. The default value is 1 day.
+
+### AuditLogExcelFileOptions
+
+`AuditLogExcelFileOptions` can be configured in the UI layer, within the `ConfigureServices` method of your [module](../framework/architecture/modularity/basics.md). Example:
+
+```csharp
+Configure<AuditLogExcelFileOptions>(options =>
+{
+    options.FileRetentionHours = 24; // How long to keep files before cleanup (default: 24 hours)
+    options.DownloadBaseUrl = "https://yourdomain.com"; // Base URL for download links in emails
+    options.ExcelFileCleanupOptions.Period = (int)TimeSpan.FromHours(24).TotalMilliseconds; // Interval of the cleanup worker (default: 24 hours)
+
+    // This Cron expression only works if Hangfire or Quartz is used for background workers.
+    // The Hangfire Cron expression is different from the Quartz Cron expression, Please refer to the following links:
+    // https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontriggers.html#cron-expressions
+    // https://docs.hangfire.io/en/latest/background-methods/performing-recurrent-tasks.html
+    options.ExcelFileCleanupOptions.CronExpression = "0 23 * * *"; // Quartz Cron expression is "0 0 23 * * ?"
+});
+```
+
+> Note: The `FileRetentionHours` value determines when files become eligible for deletion, but actual deletion depends on when the cleanup worker runs. If the worker hasn't run after the retention period expires, files will remain accessible. Therefore, `FileRetentionHours` represents the minimum intended retention time, but the actual retention time might be longer depending on the worker's execution schedule.
+
+These settings control where Excel export files are stored, how long they are kept before automatic cleanup, and what base URL is used in email download links.
+
+> You must use a valid [BLOB Storage Provider](https://abp.io/docs/latest/framework/infrastructure/blob-storing#blob-storage-providers) to use this feature.
 
 ## Internals
 
@@ -155,6 +205,15 @@ Following custom repositories are defined for this module:
 #### Application services
 
 * `AuditLogsAppService` (implements `IAuditLogsAppService`): Implements the use cases of the audit logs management UI.
+
+#### Email Templates
+
+The module provides email templates for notifications:
+
+* `AuditLogExportCompleted`: Sent when an audit log export is successfully completed, including a download link.
+* `AuditLogExportFailed`: Sent when an audit log export fails, including error details.
+* `EntityChangeExportCompleted`: Sent when an entity change export is successfully completed, including a download link.
+* `EntityChangeExportFailed`: Sent when an entity change export fails, including error details.
 
 ### Database providers
 
@@ -194,45 +253,39 @@ See the `AbpAuditLoggingPermissions` class members for all permissions defined f
 
 #### Installation
 
-In order to configure the application to use the `AuditLoggingModule`, you first need to import `AuditLoggingConfigModule` from `@volo/abp.ng.audit-logging/config` to root module. `AuditLoggingConfigModule` has a static `forRoot` method which you should call for a proper configuration.
+In order to configure the application to use the audit logging module, you first need to import `provideAuditLoggingConfig` from `@volo/abp.ng.audit-logging/config` to root configuration. Then, you will need to append it to the `appConfig` array.
 
 ```js
-// app.module.ts
-import { AuditLoggingConfigModule } from '@volo/abp.ng.audit-logging/config';
+// app.config.ts
+import { provideAuditLoggingConfig } from '@volo/abp.ng.audit-logging/config';
 
-@NgModule({
-  imports: [
-    // other imports
-    AuditLoggingConfigModule.forRoot(),
-    // other imports
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    provideAuditLoggingConfig(),
   ],
-  // ...
-})
-export class AppModule {}
+};
 ```
 
-The `AuditLoggingModule` should be imported and lazy-loaded in your routing module. It has a static `forLazy` method for configuration. Available options are listed below. It is available for import from `@volo/abp.ng.audit-logging`.
+The audit logging module should be imported and lazy-loaded in your routing array. It has a static `createRoutes` method for configuration. Available options are listed below. It is available for import from `@volo/abp.ng.audit-logging`.
 
 ```js
-// app-routing.module.ts
-const routes: Routes = [
-  // other route definitions
+// app.routes.ts
+export const APP_ROUTES: Routes = [
+  // ...
   {
     path: 'audit-logs',
-    loadChildren: () =>
-      import('@volo/abp.ng.audit-logging').then(m => m.AuditLoggingModule.forLazy(/* options here */)),
+    loadChildren: () => import('@volo/abp.ng.audit-logging').then(c => c.createRoutes(/* options here */)),
   },
 ];
 
-@NgModule(/* AppRoutingModule metadata */)
-export class AppRoutingModule {}
 ```
 
-> If you have generated your project via the startup template, you do not have to do anything, because it already has both `AuditLoggingConfigModule` and `AuditLoggingModule`.
+> If you have generated your project via the startup template, you do not have to do anything, because it already has both files configured.
 
 <h4 id="h-audit-logging-module-options">Options</h4>
 
-You can modify the look and behavior of the module pages by passing the following options to `AuditLoggingModule.forLazy` static method:
+You can modify the look and behavior of the module pages by passing the following options to `createRoutes` static method:
 
 - **entityActionContributors:** Changes grid actions. Please check [Entity Action Extensions for Angular](../framework/ui/angular/entity-action-extensions.md) for details.
 - **toolbarActionContributors:** Changes page toolbar. Please check [Page Toolbar Extensions for Angular](../framework/ui/angular/page-toolbar-extensions.md) for details.

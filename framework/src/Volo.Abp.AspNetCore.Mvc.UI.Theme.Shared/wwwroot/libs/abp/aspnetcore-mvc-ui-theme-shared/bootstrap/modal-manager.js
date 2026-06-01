@@ -104,6 +104,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                         }
                     }
 
+                    var focusElement = null;
                     if (!options.focusElement) {
                         //focuses first element if it's a typeable input.
                         var $firstVisibleInput = _$modal.find('input:not([type=hidden]):first');
@@ -120,11 +121,18 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                         }
 
                         $firstVisibleInput.focus();
+                        focusElement = $firstVisibleInput;
                     } else if (typeof options.focusElement === 'function') {
-                        var focusElement = options.focusElement();
+                        focusElement = options.focusElement();
                         focusElement.focus();
                     } else if (typeof options.focusElement === 'string') {
-                        $(options.focusElement).focus();
+                        focusElement = $(options.focusElement);
+                        focusElement.focus();
+                    }
+
+                    if (focusElement && $(focusElement).is('input')) {
+                         var value = focusElement.val();
+                        focusElement[0].setSelectionRange(value.length, value.length);
                     }
                 });
 

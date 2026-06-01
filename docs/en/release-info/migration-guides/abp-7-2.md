@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Upgrade your ABP v7.1 solutions to v7.2 with this migration guide, covering essential changes and new properties for smoother transitions."
+}
+```
+
 # ABP Version 7.2 Migration Guide
 
 This document is a guide for upgrading ABP v7.1 solutions to ABP v7.2. There are a few changes in this version that may affect your applications, please read it carefully and apply the necessary changes to your application.

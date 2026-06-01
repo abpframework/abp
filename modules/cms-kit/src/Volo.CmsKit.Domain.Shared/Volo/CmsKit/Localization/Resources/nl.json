@@ -234,6 +234,8 @@
     "AssignBlogPostsToOtherBlog": "Wijs blogberichten toe aan een andere blog",
     "SelectAnBlogToAssign": "Selecteer een blog om toe te wijzen",
     "DeleteAllBlogPostsOfThisBlog": "Verwijder alle blogberichten van deze blog",
-    "RequiredPermissionName": "Vereiste toestemming"
+    "RequiredPermissionName": "Vereiste toestemming",
+    "AllPosts": "Alle berichten",
+    "IsReadOnly": "Alleen-lezen"
   }
 }

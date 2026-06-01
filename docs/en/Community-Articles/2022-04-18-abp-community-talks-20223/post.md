@@ -6,7 +6,7 @@
  * ABP Community Talks are scheduled to be held on a monthly basis.
  * ABP Community Talks are and always will be completely free to attend. Everyone is welcome to join, ask questions and make suggestions before, during and after the event.
  * ABP Community Talks are created and announced on [Kommunity](https://kommunity.com/volosoft/events).
- * ABP Community Talks are announced regularly on [ABP Framework Twitter Account](https://twitter.com/abpframework), [Volosoft LinkedIn account](https://www.linkedin.com/company/volosoft), [Volosoft Facebook Account](https://www.facebook.com/volosoftcompany), [ABP Community Discord Server](https://discord.gg/CrYrd5vcGh). We highly encourage everyone to follow us and make suggestions.
+ * ABP Community Talks are announced regularly on [ABP Framework Twitter Account](https://twitter.com/abpframework), [Volosoft LinkedIn account](https://www.linkedin.com/company/volosoft), [Volosoft Facebook Account](https://www.facebook.com/volosoftcompany), [ABP Community Discord Server](https://abp.io/join-discord). We highly encourage everyone to follow us and make suggestions.
  * ABP Community Talks are available to watch after the event on YouTube. See [ABP Community Talks YouTube Playlist](https://www.youtube.com/playlist?list=PLsNclT2aHJcOsPustEkzG6DywiO8eh0lB).
  
 # ABP Community Talks 2022.3

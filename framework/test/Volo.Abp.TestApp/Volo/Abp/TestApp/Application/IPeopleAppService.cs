@@ -20,6 +20,10 @@ public interface IPeopleAppService : ICrudAppService<PersonDto, Guid>
 
     Task GetWithAuthorized();
 
+    Task GetWithAllowAnonymous();
+
+    Task GetWithAuthorizePolicy();
+
     Task<GetWithComplexTypeInput> GetWithComplexType(GetWithComplexTypeInput input);
 
     Task<IRemoteStreamContent> DownloadAsync();

@@ -21,9 +21,11 @@ public class LogoutCommand : IConsoleCommand, ITransientDependency
         Logger = NullLogger<LogoutCommand>.Instance;
     }
 
-    public Task ExecuteAsync(CommandLineArgs commandLineArgs)
+    public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
     {
-        return AuthService.LogoutAsync();
+        await AuthService.LogoutAsync();
+        
+        Logger.LogInformation("You are logged out.");
     }
 
     public string GetUsageInfo()

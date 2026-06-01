@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enable and configure the CMS Kit's comment system for various resources like blog posts and products efficiently."
+}
+```
+
 # CMS Kit: Comments
 
 CMS Kit provides a **comment** system to add the comment feature to any kind of resource, like blog posts, products, etc.

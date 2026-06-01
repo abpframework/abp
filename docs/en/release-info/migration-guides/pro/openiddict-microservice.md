@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to migrate your microservice application to OpenIddict with this comprehensive guide, ensuring a smooth transition with ABP Framework."
+}
+```
+
 # Migrating Microservice Application to OpenIddict Guide
 
 This guide provides guidance for migrating your existing microservice application to OpenIddict. Since OpenIddict is only available with ABP v6.0, you will need to update your existing application in order to apply OpenIddict changes.
@@ -472,16 +479,11 @@ In `appsettings.json` replace **IdentityServer** section with **OpenIddict** and
   typeof(AbpOpenIddictProWebModule),
   ```
 
-- In **IdentityServiceWebModule.cs** add object mapping configurations:
+- In **IdentityServiceWebModule.cs** add object mapping configurations for [Mapperly](https://mapperly.riok.app/) (if you are using an another mapping providers, see the [Object to Object Mapping](../../../framework/infrastructure/object-to-object-mapping.md) documentation):
 
   ```csharp
-  context.Services.AddAutoMapperObjectMapper<IdentityServiceWebModule>();
-          Configure<AbpAutoMapperOptions>(options =>
-          {
-              options.AddMaps<IdentityServiceWebModule>(validate: true);
-          });
+  context.Services.AddMapperlyObjectMapper<IdentityServiceWebModule>();
   ```
-
 
 ### Shared Hosting Module
 

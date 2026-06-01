@@ -96,7 +96,7 @@ public class AbpModalFooterTagHelperService : AbpTagHelperService<AbpModalFooter
         element.Attributes.Add("type", "button");
         element.Attributes.Add("data-bs-dismiss", "modal");
         element.AddCssClass("btn");
-        element.AddCssClass("btn-outline-primary");
+        element.AddCssClass("btn-outline-secondary");
         element.InnerHtml.Append(_localizer["Cancel"]);
 
         return element.ToHtmlString();

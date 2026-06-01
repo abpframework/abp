@@ -19,6 +19,11 @@
           "declaringAssemblyName": "Volo.Abp.Authorization.Abstractions",
           "namespace": "Volo.Abp.Authorization",
           "name": "AbpAuthorizationAbstractionsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Docs.Common.Application.Contracts",
+          "namespace": "Volo.Docs.Common",
+          "name": "DocsCommonApplicationContractsModule"
         }
       ],
       "implementingInterfaces": [

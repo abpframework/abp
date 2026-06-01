@@ -1,11 +1,13 @@
 import { LazyLoadService, LOADING_STRATEGY } from '@abp/ng.core';
 import { DocumentDirHandlerService, LocaleDirection } from '@abp/ng.theme.shared';
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, Injector, inject } from '@angular/core';
 import { LAZY_STYLES } from '../tokens/lazy-styles.token';
+import { DOCUMENT } from '@angular/common';
 export const BOOTSTRAP = 'bootstrap-{{dir}}.min.css';
 
 @Injectable()
 export class LazyStyleHandler {
+  private document = inject(DOCUMENT);
   private lazyLoad!: LazyLoadService;
   private styles!: string[];
   private _dir: LocaleDirection = 'ltr';
@@ -23,7 +25,9 @@ export class LazyStyleHandler {
     return this._dir;
   }
 
-  constructor(injector: Injector) {
+  constructor() {
+    const injector = inject(Injector);
+
     this.setStyles(injector);
     this.setLazyLoad(injector);
     this.listenToDirectionChanges(injector);
@@ -32,7 +36,7 @@ export class LazyStyleHandler {
   private getHrefFromLink(link: HTMLLinkElement | null | undefined): string {
     if (!link) return '';
 
-    const a = document.createElement('a');
+    const a = this.document.createElement('a');
     a.href = link.href;
     return a.pathname.replace(/^\//, '');
   }
@@ -40,7 +44,7 @@ export class LazyStyleHandler {
   private getLoadedBootstrap(): LoadedStyle {
     const href = createLazyStyleHref(BOOTSTRAP, this.dir);
     const selector = `[href*="${href.replace(/\.css$/, '')}"]`;
-    const link = document.querySelector<HTMLLinkElement>(selector);
+    const link = this.document.querySelector<HTMLLinkElement>(selector);
     return { href, link };
   }
 
@@ -88,8 +92,8 @@ export function createLazyStyleHref(style: string, dir: string): string {
   return style.replace(/{{\s*dir\s*}}/g, dir);
 }
 
-export function initLazyStyleHandler(injector: Injector) {
-  return () => new LazyStyleHandler(injector);
+export function initLazyStyleHandler() {
+  return () => new LazyStyleHandler();
 }
 
 interface LoadedStyle {

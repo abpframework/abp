@@ -6,6 +6,8 @@ The `Idle Session Timeout` feature allows you to automatically log out users aft
 
 You can enable/disable the `Idle Session Timeout` feature in the `Setting > Account > Idle Session Timeout` page.
 
+> This feature will be disabled if you select the `Remember Me` option on the login page.
+
 The default idle session timeout is 1 hour. You can change it by selecting a different value from the dropdown list or entering a custom value (in minutes).
 
 ![idle-setting](../../images/idle-setting.png)

@@ -17,6 +17,7 @@
     "SentSuccessfully": "Gửi thành công",
     "MailSendingFailed": "Gửi email thất bại. Vui lòng kiểm tra cấu hình email của bạn và thử lại.",
     "Send": "Gửi",
+    "Menu:Settings": "Cài đặt",
     "Menu:Emailing": "Gửi email",
     "Menu:TimeZone": "Múi Giờ",
     "DisplayName:Timezone": "Múi giờ",
@@ -34,7 +35,7 @@
     "Feature:SettingManagementGroup": "Cài đặt quản lý",
     "Feature:SettingManagementEnable": "Bật quản lý cài đặt",
     "Feature:SettingManagementEnableDescription": "Bật cài đặt hệ thống quản lý trong ứng dụng.",
-    "Feature:AllowChangingEmailSettings": "Cho phép thay đổi cài đặt email.",
+    "Feature:AllowChangingEmailSettings": "Cho phép thay đổi cài đặt email",
     "Feature:AllowChangingEmailSettingsDescription": "Cho phép thay đổi cài đặt email.",
     "SmtpPasswordPlaceholder": "Nhập một giá trị để cập nhật mật khẩu"
   }

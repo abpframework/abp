@@ -65,6 +65,9 @@
     "GenerateAndDownloadPdf": "Generate and download PDF",
     "PdfFileDeletionWarningMessage": "Are you sure you want to delete the PDF file \"{0}\"?",
     "ManagePdfFiles": "Manage PDF files",
-    "Permission:ManagePdfFiles": "Manage PDF files"
+    "Permission:ManagePdfFiles": "Manage PDF files",
+    "PdfDeletedSuccessfully": "PDF file has been deleted successfully",
+    "PdfGenerationStarted": "PDF generation has started",
+    "PdfGenerationStartedInfoMessage": "PDF generation has started. Once completed, you can check if the file has been added to the PDF files section."
   }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Blazorise;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.EntityActions;
 using Volo.Abp.AspNetCore.Components.Web.Extensibility.TableColumns;
 using Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars;
@@ -14,6 +15,9 @@ namespace Volo.Abp.TenantManagement.Blazor.Pages.TenantManagement;
 
 public partial class TenantManagement
 {
+    [Parameter]
+    public string? Culture { get; set; }
+
     protected const string FeatureProviderName = "T";
 
     protected bool HasManageFeaturesPermission;
@@ -41,6 +45,7 @@ public partial class TenantManagement
 
     protected override ValueTask SetBreadcrumbItemsAsync()
     {
+        BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(LUiNavigation["Menu:Administration"]));
         BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Menu:TenantManagement"]));
         BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Tenants"]));
         return base.SetBreadcrumbItemsAsync();

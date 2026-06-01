@@ -1,7 +1,7 @@
 {
   "culture": "ro-RO",
   "texts": {
-    "Permission:DocumentManagement": "Administrarea documentelor",
+    "Permission:DocumentManagement": "Gestionare documente",
     "Permission:Projects": "Proiecte",
     "Permission:Edit": "Editează",
     "Permission:Delete": "Şterge",
@@ -66,6 +66,9 @@
     "GenerateAndDownloadPdf": "Generare și descărcare PDF",
     "PdfFileDeletionWarningMessage": "Sunteți sigur(ă) că doriți să ștergeți fișierul PDF \"{0}\"?",
     "ManagePdfFiles": "Gestionare fișiere PDF",
-    "Permission:ManagePdfFiles": "Gestionare fișiere PDF"
+    "Permission:ManagePdfFiles": "Gestionare fișiere PDF",
+    "PdfDeletedSuccessfully": "Fișierul PDF a fost șters cu succes",
+    "PdfGenerationStarted": "Generarea PDF-ului a început",
+    "PdfGenerationStartedInfoMessage": "Generarea PDF-ului a început. După finalizare, puteți verifica dacă fișierul a fost adăugat în secțiunea de fișiere PDF."
   }
 }

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to customize your Blazor app's branding with the `IBrandingProvider` interface for a personalized user experience."
+}
+```
+
 # Blazor UI: Branding
 
 ## IBrandingProvider

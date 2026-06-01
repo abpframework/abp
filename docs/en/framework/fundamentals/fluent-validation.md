@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate FluentValidation with ABP Framework for enhanced validation capabilities in your applications."
+}
+```
+
 # FluentValidation Integration
 
 ABP [Validation](./validation.md) infrastructure is extensible. [Volo.Abp.FluentValidation](https://www.nuget.org/packages/Volo.Abp.FluentValidation) NuGet package extends the validation system to work with the [FluentValidation](https://fluentvalidation.net/) library.

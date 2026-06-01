@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore ABP's powerful tools like CLI, Suite, and Studio to boost your development productivity and streamline your workflow."
+}
+```
+
 # Tools
 
 ABP provides a comprehensive set of tools designed to enhance the development experience and improve productivity:

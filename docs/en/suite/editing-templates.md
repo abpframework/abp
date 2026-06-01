@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to edit templates in ABP Suite, customize code generation for UI frameworks and database providers to fit your project needs."
+}
+```
+
 # Editing templates
 
 ABP Suite uses templates to generate the code files. You can see the template files by clicking "Edit Templates" menu item.
@@ -8,6 +15,8 @@ The are 2 template filters:
 
 1. **UI**:  You can switch between `Angular`, `MVC` and `Blazor` templates.
 2. **Database provider:** You can switch between `EF Core` and `MongoDb` templates.
+
+> **Note:** ABP Suite does not include React UI templates or generate React client-side code. React UI belongs to the modern template system and should be developed in the source-owned [React UI](../framework/ui/react/index.md) application. ABP license holders can use [ABP Studio AI Agent](https://abp.io/studio/ai-agent) with predefined AI credits to generate React pages more easily.
 
 These filters are automatically selected based on your ABP solution. The selected solution is shown on the top right of the page. In the current screenshot it is "Acme.BookStore". 
 
@@ -20,7 +29,7 @@ There's a search box on the templates page. To find the related template, pick a
 There's a naming convention for the template files. 
 
 * If the template name has `Server` prefix, it's used for backend code like repositories, application services, localizations, controllers, permissions, mappings, unit tests.
-* If the template name has `Frontend.Angular` prefix, it's used for Angular code generation. The Angular code is being generated via [Angular Schematics](https://angular.io/guide/schematics).
+* If the template name has `Frontend.Angular` prefix, it's used for Angular code generation. The Angular code is being generated via [Angular Schematics](https://angular.dev/tools/cli/schematics).
 * If the template name has `Frontend.Mvc`  prefix, it's used for razor pages, menus, JavaScript, CSS files.
 * If the template name has `Frontend.Blazor` prefix, it's used for razor components.
 

@@ -70,14 +70,4 @@ public class AbpAspNetCoreComponentsServerModule : AbpModule
             });
         }
     }
-
-    public override void OnApplicationInitialization(ApplicationInitializationContext context)
-    {
-        context.GetEnvironment().WebRootFileProvider =
-            new CompositeFileProvider(
-                new ManifestEmbeddedFileProvider(typeof(IServerSideBlazorBuilder).Assembly),
-                new ManifestEmbeddedFileProvider(typeof(RazorComponentsEndpointRouteBuilderExtensions).Assembly),
-                context.GetEnvironment().WebRootFileProvider
-            );
-    }
 }

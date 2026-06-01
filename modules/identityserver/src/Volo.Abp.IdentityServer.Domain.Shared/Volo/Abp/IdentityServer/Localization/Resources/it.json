@@ -11,6 +11,7 @@
     "InvalidUsername": "Username o password non validi!",
     "InvalidAuthenticatorCode": "Codice autenticatore non valido!",
     "InvalidRecoveryCode": "Codice di ripristino non valido!",
-    "TheTargetUserIsNotLinkedToYou": "L'utente indicato non è collegato a te!"
+    "TheTargetUserIsNotLinkedToYou": "L'utente indicato non è collegato a te!",
+    "ClientResourcePermissionProviderKeyLookupService": "Client"
   }
 }

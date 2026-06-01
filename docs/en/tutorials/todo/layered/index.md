@@ -1,10 +1,18 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to build a simple todo application using the ABP Framework with this quick-start tutorial, complete with source code and video guide!"
+}
+```
+
 # TODO Application Tutorial with Layered Solution
 
 ````json
 //[doc-params]
 {
     "UI": ["MVC", "Blazor", "BlazorServer", "BlazorWebApp" ,"NG", "MAUIBlazor"],
-    "DB": ["EF", "Mongo"]
+    "DB": ["EF", "Mongo"],
+    "BlazorUI": ["Blazorise", "MudBlazor"]
 }
 ````
 
@@ -52,13 +60,13 @@ This documentation has a video tutorial on **YouTube**!! You can watch it here:
 
 ## Pre-Requirements
 
-* An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 9.0+](https://dotnet.microsoft.com/download/dotnet) development.
+* An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 10.0+](https://dotnet.microsoft.com/download/dotnet) development.
 * [Node v20.11+](https://nodejs.org/)
-
+{{if DB=="EF"}}
+* [SQL Server Express LocalDB](https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb)
+{{end}}
 {{if DB=="Mongo"}}
-
 * [MongoDB Server 4.0+](https://docs.mongodb.com/manual/administration/install-community/)
-
 {{end}}
 
 ## Install ABP CLI Tool
@@ -111,13 +119,11 @@ For such cases, run the `abp install-libs` command on the root directory of your
 abp install-libs
 ````
 
-> We suggest you install [Yarn v1.22+ (not v2)](https://classic.yarnpkg.com/en/docs/install) to prevent possible package inconsistencies, if you haven't installed it yet.
-
 ### Run the Application
 
 {{if UI=="MVC" || UI=="BlazorServer" || UI=="BlazorWebApp"}}
 
-It is good to run the application before starting the development. Ensure the {{if UI=="BlazorServer"}}`TodoApp.Blazor`{{else}}`TodoApp.Web`{{end}} project is the startup project, then run the application (Ctrl+F5 in Visual Studio) to see the initial UI:
+It is good to run the application before starting the development. Ensure the {{if UI=="Blazor" || UI=="BlazorServer" || UI=="BlazorWebApp"}}`TodoApp.Blazor`{{else}}`TodoApp.Web`{{end}} project is the startup project, then run the application (Ctrl+F5 in Visual Studio) to see the initial UI:
 
 {{else if UI=="Blazor" || UI=="MAUIBlazor"}}
 
@@ -134,7 +140,7 @@ Ensure the `TodoApp.HttpApi.Host` project is the startup project, then run the a
 
 ![todo-swagger-ui-initial](../images/todo-swagger-ui-initial.png)
 
-You can explore and test your HTTP API with this UI. Now, we can set the `TodoApp.Blazor` as the startup project and run it to open the actual Blazor application UI:
+You can explore and test your HTTP API with this UI. Now, we can set the {{if UI=="Blazor"}}`TodoApp.Blazor`{{else if UI=="MAUIBlazor"}}`TodoApp.MauiBlazor`{{end}} as the startup project and run it to open the actual Blazor application UI:
 
 {{else if UI=="NG"}}
 
@@ -159,7 +165,7 @@ This command takes time, but eventually runs and opens the application in your d
 
 {{end}}
 
-![todo-ui-initial](../images/todo-ui-initial.png)
+![todo-ui-initial](../images/todo-ui-initial-v2.png)
 
 You can click on the *Login* button, use `admin` as the username and `1q2w3E*` as the password to login to the application.
 
@@ -167,19 +173,19 @@ All ready. We can start coding!
 
 ## Domain Layer
 
-This application has a single [entity](../../../framework/architecture/domain-driven-design/entities.md) and we'll start by creating it. Create a new `TodoItem` class inside the *TodoApp.Domain* project:
+This application has a single [entity](../../../framework/architecture/domain-driven-design/entities.md) and we'll start by creating it. Create a new `TodoItem` class inside the *TodoApp.Domain* project under the `Entities` folder, as shown below:
 
 ````csharp
 using System;
 using Volo.Abp.Domain.Entities;
 
-namespace TodoApp
+namespace TodoApp;
+
+public class TodoItem : BasicAggregateRoot<Guid>
 {
-    public class TodoItem : BasicAggregateRoot<Guid>
-    {
-        public string Text { get; set; } = string.Empty;
-    }
+    public string Text { get; set; } = string.Empty;
 }
+
 ````
 
 `BasicAggregateRoot` is the simplest base class to create root entities, and `Guid` is the primary key (`Id`) of the entity here.
@@ -283,15 +289,15 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 
-namespace TodoApp
+namespace TodoApp;
+
+public interface ITodoAppService : IApplicationService
 {
-    public interface ITodoAppService : IApplicationService
-    {
-        Task<List<TodoItemDto>> GetListAsync();
-        Task<TodoItemDto> CreateAsync(string text);
-        Task DeleteAsync(Guid id);
-    }
+    Task<List<TodoItemDto>> GetListAsync();
+    Task<TodoItemDto> CreateAsync(string text);
+    Task DeleteAsync(Guid id);
 }
+
 ````
 
 ### Data Transfer Object
@@ -301,14 +307,14 @@ namespace TodoApp
 ````csharp
 using System;
 
-namespace TodoApp
+namespace TodoApp;
+
+public class TodoItemDto
 {
-    public class TodoItemDto
-    {
-        public Guid Id { get; set; }
-        public string Text { get; set; } = string.Empty;
-    }
+    public Guid Id { get; set; }
+    public string Text { get; set; } = string.Empty;
 }
+
 ````
 
 This is a very simple DTO class that matches our `TodoItem` entity. We are ready to implement the `ITodoAppService`.
@@ -325,19 +331,18 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 
-namespace TodoApp
-{
-    public class TodoAppService : ApplicationService, ITodoAppService
-    {
-        private readonly IRepository<TodoItem, Guid> _todoItemRepository;
+namespace TodoApp;
 
-        public TodoAppService(IRepository<TodoItem, Guid> todoItemRepository)
-        {
-            _todoItemRepository = todoItemRepository;
-        }
-        
-        // TODO: Implement the methods here...
+public class TodoAppService : ApplicationService, ITodoAppService
+{
+    private readonly IRepository<TodoItem, Guid> _todoItemRepository;
+
+    public TodoAppService(IRepository<TodoItem, Guid> todoItemRepository)
+    {
+        _todoItemRepository = todoItemRepository;
     }
+    
+    // TODO: Implement the methods here...
 }
 ````
 
@@ -414,8 +419,8 @@ Open the `Index.cshtml.cs` file in the `Pages` folder of the *TodoApp.Web* proje
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace TodoApp.Web.Pages
-{
+namespace TodoApp.Web.Pages;
+
     public class IndexModel : TodoAppPageModel
     {
         public List<TodoItemDto> TodoItems { get; set; }
@@ -432,7 +437,7 @@ namespace TodoApp.Web.Pages
             TodoItems = await _todoAppService.GetListAsync();
         }
     }
-}
+
 ````
 
 This class uses the `ITodoAppService` to get the list of todo items and assign the `TodoItems` property. We will use it to render the todo items on the razor page.
@@ -573,41 +578,50 @@ If you open the [Swagger UI](https://swagger.io/tools/swagger-ui/) by entering t
 
 ### Index.razor.cs
 
-Open the `Index.razor.cs` file in the `Pages` folder of the {{if UI=="Blazor" || UI=="BlazorWebApp"}} *TodoApp.Blazor.Client* {{else if UI=="BlazorServer"}} *TodoApp.Blazor* {{else if UI=="MAUIBlazor"}} *TodoApp.MauiBlazor* {{end}} project and replace the content with the following code block:
+Open the `Index.razor.cs` file in the `Pages` folder of the {{if UI=="Blazor" || UI=="BlazorWebApp"}} `TodoApp.Blazor.Client` {{else if UI=="BlazorServer"}} `TodoApp.Blazor` {{else if UI=="MAUIBlazor"}} `TodoApp.MauiBlazor` {{end}} project and replace the content with the following code block:
+
+{{if UI=="MAUIBlazor"}}
+_(Create this file if it doesn't exist)_
+{{end}}
 
 ```csharp
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace TodoApp.Blazor.Pages
+{{if UI=="Blazor" || UI=="BlazorWebApp"}}
+amespace TodoApp.Blazor.Client.Pages
+{{else if UI=="BlazorServer"}}
+namespace TodoApp.Blazor.Pages;
+{{else if UI=="MAUIBlazor"}}
+namespace TodoApp.MauiBlazor.Pages;
+{{end}}
+
+public partial class Index
 {
-    public partial class Index
+    [Inject]
+    private ITodoAppService TodoAppService { get; set; }
+
+    private List<TodoItemDto> TodoItems { get; set; } = new List<TodoItemDto>();
+    private string NewTodoText { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
     {
-        [Inject]
-        private ITodoAppService TodoAppService { get; set; }
+        TodoItems = await TodoAppService.GetListAsync();
+    }
+    
+    private async Task Create()
+    {
+        var result = await TodoAppService.CreateAsync(NewTodoText);
+        TodoItems.Add(result);
+        NewTodoText = null;
+    }
 
-        private List<TodoItemDto> TodoItems { get; set; } = new List<TodoItemDto>();
-        private string NewTodoText { get; set; } = string.Empty;
-
-        protected override async Task OnInitializedAsync()
-        {
-            TodoItems = await TodoAppService.GetListAsync();
-        }
-        
-        private async Task Create()
-        {
-            var result = await TodoAppService.CreateAsync(NewTodoText);
-            TodoItems.Add(result);
-            NewTodoText = null;
-        }
-
-        private async Task Delete(TodoItemDto todoItem)
-        {
-            await TodoAppService.DeleteAsync(todoItem.Id);
-            await Notify.Info("Deleted the todo item.");
-            TodoItems.Remove(todoItem);
-        }
+    private async Task Delete(TodoItemDto todoItem)
+    {
+        await TodoAppService.DeleteAsync(todoItem.Id);
+        await Notify.Info("Deleted the todo item.");
+        TodoItems.Remove(todoItem);
     }
 }
 ```
@@ -623,6 +637,8 @@ See the *Dynamic C# Proxies & Auto API Controllers* section below to learn how w
 ### Index.razor
 
 Open the `Index.razor` file in the `Pages` folder of the {{if UI=="Blazor" || UI=="BlazorWebApp"}} *TodoApp.Blazor.Client* {{else if UI=="BlazorServer"}} *TodoApp.Blazor* {{else if UI=="MAUIBlazor"}} *TodoApp.MauiBlazor* {{end}} project and replace the content with the following code block:
+
+{{if BlazorUI == "Blazorise"}}
 
 ```xml
 @page "/"
@@ -661,6 +677,47 @@ Open the `Index.razor` file in the `Pages` folder of the {{if UI=="Blazor" || UI
     </Card>
 </div>
 ```
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+```razor
+@page "/"
+@inherits TodoAppComponentBase
+
+<MudContainer>
+    <MudCard>
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h5">TODO LIST</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+            <!-- FORM FOR NEW TODO ITEMS -->
+            <MudStack Row="true" AlignItems="AlignItems.Center">
+                <MudTextField @bind-Value="@NewTodoText" Placeholder="enter text..." Variant="Variant.Outlined" />
+                <MudButton OnClick="Create" Variant="Variant.Filled" Color="Color.Primary">Submit</MudButton>
+            </MudStack>
+            <!-- TODO ITEMS LIST -->
+            <MudList T="TodoItemDto" id="TodoList">
+                @foreach (var todoItem in TodoItems)
+                {
+                    <MudListItem T="TodoItemDto" Value="@todoItem">
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                       Color="Color.Error"
+                                       Size="Size.Small"
+                                       OnClick="@(() => Delete(todoItem))" />
+                        @todoItem.Text
+                    </MudListItem>
+                }
+            </MudList>
+        </MudCardContent>
+    </MudCard>
+</MudContainer>
+```
+
+{{end}}
 
 ### Index.razor.css
 
@@ -747,45 +804,44 @@ We can then use `todoService` to use the server-side HTTP APIs, as we'll do in t
 
 Open the `/angular/src/app/home/home.component.ts` file and replace its content with the following code block:
 
-```js
+```ts
+import {Component, inject, OnInit} from '@angular/core';
+import {FormsModule} from '@angular/forms';
 import { ToasterService } from '@abp/ng.theme.shared';
-import { Component, OnInit } from '@angular/core';
 import { TodoItemDto, TodoService } from '@proxy';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    imports: [FormsModule]
 })
 export class HomeComponent implements OnInit {
 
-  todoItems: TodoItemDto[];
-  newTodoText: string;
+    todoItems: TodoItemDto[];
+    newTodoText: string;
+    readonly todoService = inject(TodoService);
+    readonly toasterService = inject(ToasterService);
 
-  constructor(
-      private todoService: TodoService,
-      private toasterService: ToasterService)
-  { }
+    ngOnInit(): void {
+        this.todoService.getList().subscribe(response => {
+            this.todoItems = response;
+        });
+    }
 
-  ngOnInit(): void {
-    this.todoService.getList().subscribe(response => {
-      this.todoItems = response;
-    });
-  }
-  
-  create(): void{
-    this.todoService.create(this.newTodoText).subscribe((result) => {
-      this.todoItems = this.todoItems.concat(result);
-      this.newTodoText = null;
-    });
-  }
+    create(): void{
+        this.todoService.create(this.newTodoText).subscribe((result) => {
+            this.todoItems = this.todoItems.concat(result);
+            this.newTodoText = null;
+        });
+    }
 
-  delete(id: string): void {
-    this.todoService.delete(id).subscribe(() => {
-      this.todoItems = this.todoItems.filter(item => item.id !== id);
-      this.toasterService.info('Deleted the todo item.');
-    });
-  }  
+    delete(id: string): void {
+        this.todoService.delete(id).subscribe(() => {
+            this.todoItems = this.todoItems.filter(item => item.id !== id);
+            this.toasterService.info('Deleted the todo item.');
+        });
+    }
 }
 
 ```
@@ -798,31 +854,35 @@ Open the `/angular/src/app/home/home.component.html` file and replace its conten
 
 ```html
 <div class="container">
-  <div class="card">
-    <div class="card-header">
-      <div class="card-title">TODO LIST</div>
-    </div>
-    <div class="card-body">
-      <!-- FORM FOR NEW TODO ITEMS -->
-      <form class="row row-cols-lg-auto g-3 align-items-center" (ngSubmit)="create()">
-        <div class="col-12">
-          <div class="input-group">
-            <input name="NewTodoText" type="text" [(ngModel)]="newTodoText" class="form-control" placeholder="enter text..." />
-          </div>
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">TODO LIST</div>
         </div>
-        <div class="col-12">
-          <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="card-body">
+            <!-- FORM FOR NEW TODO ITEMS -->
+            <form class="row row-cols-lg-auto g-3 align-items-center" (ngSubmit)="create()">
+                <div class="col-12">
+                    <div class="input-group">
+                        <input name="NewTodoText" type="text" [(ngModel)]="newTodoText" class="form-control" placeholder="enter text..." />
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+
+            <!-- TODO ITEMS LIST -->
+            <ul id="TodoList">
+                @for (todoItem of todoItems; track todoItem.id) {
+                <li>
+                    <i class="fa fa-trash-o" (click)="delete(todoItem.id)"></i> {%{{{ todoItem.text }}}%}
+                </li>
+                }
+            </ul>
         </div>
-      </form>
-      <!-- TODO ITEMS LIST -->
-      <ul id="TodoList">
-        <li *ngFor="let todoItem of todoItems">
-          <i class="fa fa-trash-o" (click)="delete(todoItem.id)"></i> {%{{{ todoItem.text }}}%}
-        </li>
-      </ul>
     </div>
-  </div>
 </div>
+
 ```
 
 ### home.component.scss

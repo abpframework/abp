@@ -10,15 +10,15 @@
     <Validation Validator="@Validate" MessageLocalizer="@LH.Localize">
         <Field>
             <FieldLabel>@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)</FieldLabel>
-            <DateEdit TValue="DateTime?"
+            <DateInput TValue="DateTime?"
                       InputMode="@(PropertyInfo.IsDate() ? DateInputMode.Date : DateInputMode.DateTime)"
                       Pattern="@PropertyInfo.GetDateEditInputFormatOrNull()"
                       Disabled="IsReadonlyField"
-                      @bind-Date="@Value">
+                      @bind-Value="@Value">
                 <Feedback>
                     <ValidationError/>
                 </Feedback>
-            </DateEdit>
+            </DateInput>
         </Field>
     </Validation>
 }

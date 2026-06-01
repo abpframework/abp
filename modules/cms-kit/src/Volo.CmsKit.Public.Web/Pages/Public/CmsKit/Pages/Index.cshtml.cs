@@ -20,6 +20,8 @@ public class IndexModel : CommonPageModel
 
     public IndexModel(IPagePublicAppService pagePublicAppService, ContentParser contentParser)
     {
+        ObjectMapperContext = typeof(CmsKitPublicWebModule);
+
         PagePublicAppService = pagePublicAppService;
         ContentParser = contentParser;
     }

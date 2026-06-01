@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
@@ -14,10 +14,17 @@ public class AbpBackgroundJobOptions
     /// </summary>
     public bool IsJobExecutionEnabled { get; set; } = true;
 
+    /// <summary>
+    /// The delegate to get the name of a background job.
+    /// Default: <see cref="BackgroundJobNameAttribute.GetName"/>.
+    /// </summary>
+    public Func<Type, string> GetBackgroundJobName { get; set; }
+
     public AbpBackgroundJobOptions()
     {
         _jobConfigurationsByArgsType = new Dictionary<Type, BackgroundJobConfiguration>();
         _jobConfigurationsByName = new Dictionary<string, BackgroundJobConfiguration>();
+        GetBackgroundJobName = BackgroundJobNameAttribute.GetName;
     }
 
     public BackgroundJobConfiguration GetJob<TArgs>()
@@ -39,7 +46,7 @@ public class AbpBackgroundJobOptions
 
     public BackgroundJobConfiguration GetJob(string name)
     {
-        var jobConfiguration = _jobConfigurationsByName.GetOrDefault(name);
+        var jobConfiguration = GetJobOrNull(name);
 
         if (jobConfiguration == null)
         {
@@ -47,6 +54,11 @@ public class AbpBackgroundJobOptions
         }
 
         return jobConfiguration;
+    }
+
+    public BackgroundJobConfiguration? GetJobOrNull(string name)
+    {
+        return _jobConfigurationsByName.GetOrDefault(name);
     }
 
     public IReadOnlyList<BackgroundJobConfiguration> GetJobs()
@@ -61,7 +73,7 @@ public class AbpBackgroundJobOptions
 
     public void AddJob(Type jobType)
     {
-        AddJob(new BackgroundJobConfiguration(jobType));
+        AddJob(new BackgroundJobConfiguration(jobType, GetBackgroundJobName(BackgroundJobArgsHelper.GetJobArgsType(jobType))));
     }
 
     public void AddJob(BackgroundJobConfiguration jobConfiguration)

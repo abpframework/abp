@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to add new API gateways to your microservice solution with ABP Framework, enhancing request routing and system organization."
+}
+```
+
 # Microservice Solution: Adding New API Gateways
 
 ````json

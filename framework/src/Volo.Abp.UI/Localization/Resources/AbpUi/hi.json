@@ -61,6 +61,7 @@
     "ProfilePicture": "प्रोफ़ाइल फोटो",
     "Theme": "विषय",
     "NotAssigned": "सौंपा नहीं गया है",
-    "EntityActionsDisabledTooltip": "आपके पास कोई कार्रवाई नहीं है जो करने के लिए है।"
+    "EntityActionsDisabledTooltip": "आपके पास कोई कार्रवाई नहीं है जो करने के लिए है।",
+    "ResourcePermissions": "अनुमतियाँ"
   }
 }

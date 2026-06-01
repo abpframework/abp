@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to create and customize alerts using the `abp-alert` component in ABP Framework, with examples and attribute details for effective notifications."
+}
+```
+
 # Alerts
 
 ## Introduction

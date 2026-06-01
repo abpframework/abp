@@ -1,6 +1,13 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to implement and manage a poll system in CMS Kit Pro, enabling user engagement with easy setup and customization features."
+}
+```
+
 # CMS Kit Pro: Poll System
 
-> You must have an ABP Team or a higher license to use CMS Kit Pro module's features.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use CMS Kit Pro module's features.
 
 CMS Kit provides a **poll** system to allow users to create, edit and delete polls. Here is a screenshot of the poll widget:
 

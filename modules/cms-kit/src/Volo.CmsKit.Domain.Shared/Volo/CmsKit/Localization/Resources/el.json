@@ -191,6 +191,8 @@
     "AssignBlogPostsToOtherBlog": "Ανάθεση αναρτήσεων ιστολογίου σε άλλο ιστολόγιο",
     "SelectAnBlogToAssign": "Επιλέξτε ένα ιστολόγιο για να αναθέσετε αναρτήσεις ιστολογίου",
     "DeleteAllBlogPostsOfThisBlog": "Διαγραφή όλων των αναρτήσεων ιστολογίου αυτού του ιστολογίου",
-    "RequiredPermissionName": "Απαιτούμενο όνομα δικαιώματος"
+    "RequiredPermissionName": "Απαιτούμενο όνομα δικαιώματος",
+    "AllPosts": "Όλες οι δημοσιεύσεις",
+    "IsReadOnly": "Μόνο για ανάγνωση"
   }
 }

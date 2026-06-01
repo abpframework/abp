@@ -1,6 +1,13 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to create a custom payment gateway in ABP Framework, enhancing your application's payment flexibility and integration."
+}
+```
+
 # Creating a Custom Payment Gateway
 
-> You must have an ABP Team or a higher license to use this module.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this module.
 
 This document explains creating custom a payment gateway that's different than the existing ones in the [Payment Module](payment#packages).
 

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to configure monitoring for your microservice solution using Prometheus and Grafana to ensure system health and performance."
+}
+```
+
 # Microservice Solution: Monitoring
 
 ````json

@@ -17,6 +17,7 @@
     "SentSuccessfully": "Gönderildi",
     "MailSendingFailed": "E-posta gönderme başarısız, lütfen e-posta yapılandırmanızı kontrol edin ve tekrar deneyin.",
     "Send": "Gönder",
+    "Menu:Settings": "Ayarlar",
     "Menu:Emailing": "Email",
     "Menu:TimeZone": "Zaman Dilimi",
     "DisplayName:Timezone": "Zaman dilimi",
@@ -34,7 +35,7 @@
     "Feature:SettingManagementGroup": "Ayar yönetimi",
     "Feature:SettingManagementEnable": "Ayar yönetimini etkinleştir",
     "Feature:SettingManagementEnableDescription": "Uygulamada ayar yönetim sistemini etkinleştirin.",
-    "Feature:AllowChangingEmailSettings": "E-posta ayarlarını değiştirmeye izin verin.",
+    "Feature:AllowChangingEmailSettings": "E-posta ayarlarını değiştirmeye izin verin",
     "Feature:AllowChangingEmailSettingsDescription": "E-posta ayarlarını değiştirmeye izin verin.",
     "SmtpPasswordPlaceholder": "Şifreyi güncellemek için bir değer girin"
   }

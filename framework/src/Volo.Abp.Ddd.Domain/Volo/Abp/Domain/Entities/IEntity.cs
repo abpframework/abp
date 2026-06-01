@@ -4,7 +4,7 @@
 /// Defines an entity. It's primary key may not be "Id" or it may have a composite primary key.
 /// Use <see cref="IEntity{TKey}"/> where possible for better integration to repositories and other structures in the framework.
 /// </summary>
-public interface IEntity
+public interface IEntity : IKeyedObject
 {
     /// <summary>
     /// Returns an array of ordered keys for this entity.

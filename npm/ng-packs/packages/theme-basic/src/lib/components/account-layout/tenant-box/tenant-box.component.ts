@@ -1,6 +1,6 @@
 import { TenantBoxService } from '@abp/ng.account.core';
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
 import { LocalizationPipe } from '@abp/ng.core';
 import { ButtonComponent, ModalCloseDirective, ModalComponent } from '@abp/ng.theme.shared';
 import { FormsModule } from '@angular/forms';
@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './tenant-box.component.html',
   providers: [TenantBoxService],
   imports: [
-    CommonModule,
+    AsyncPipe,
     FormsModule,
     ModalComponent,
     LocalizationPipe,
@@ -19,5 +19,5 @@ import { FormsModule } from '@angular/forms';
   ],
 })
 export class TenantBoxComponent {
-  constructor(public service: TenantBoxService) {}
+  service = inject(TenantBoxService);
 }

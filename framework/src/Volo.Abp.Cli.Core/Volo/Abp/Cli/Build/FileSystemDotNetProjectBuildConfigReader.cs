@@ -21,8 +21,9 @@ public class FileSystemDotNetProjectBuildConfigReader : IDotNetProjectBuildConfi
     public DotNetProjectBuildConfig Read(string directoryPath)
     {
         var buildConfig = new DotNetProjectBuildConfig();
-        var solutionFiles = Directory.GetFiles(directoryPath, "*.sln", SearchOption.TopDirectoryOnly);
-        if (solutionFiles.Length == 1)
+        var solutionFiles = Directory.GetFiles(directoryPath, "*.sln", SearchOption.TopDirectoryOnly)
+            .Concat(Directory.GetFiles(directoryPath, "*.slnx", SearchOption.TopDirectoryOnly)).ToList();
+        if (solutionFiles.Count == 1)
         {
             buildConfig.SlFilePath = solutionFiles.First();
             var configFile = GetClosestFile(directoryPath, _buildConfigName);
@@ -86,7 +87,7 @@ public class FileSystemDotNetProjectBuildConfigReader : IDotNetProjectBuildConfi
             directoryInfo = directoryInfo.Parent;
         } while (directoryInfo?.Parent != null);
 
-        throw new Exception("There is no solution file (*.sln) and " + _buildConfigName +
+        throw new Exception("There is no solution file (*.sln or *.slnx) and " + _buildConfigName +
                             " in the working directory and working directory is not a GIT repository !");
     }
 

@@ -1,0 +1,15 @@
+{
+  "role": "Volo.Docs.HttpApi.Client",
+  "proxies": {
+    "csharp": {
+      "VoloDocs.Web-docs-common": {
+        "applicationName": "VoloDocs.Web",
+        "module": "docs-common",
+        "url": "https://localhost:5001",
+        "folder": "ClientProxies",
+        "serviceType": "all",
+        "withoutContracts": true
+      }
+    }
+  }
+}

@@ -2,6 +2,6 @@
   "culture": "de",
   "texts": {
     "Permission:DocumentManagement.Common": "Dokumentenverwaltung",
-    "Permission:PdfGeneration": "PDF-Generierung"
+    "Permission:PdfDownload": "PDF-Herunterladen"
   }
 }

@@ -340,6 +340,17 @@ var abp = abp || {};
         callback && callback(result);
     };
 
+    abp.message.prompt = function (message, titleOrOptionsOrCallback, callback) {
+        abp.log.warn('abp.message.prompt is not properly implemented!');
+
+        if (titleOrOptionsOrCallback && !(typeof titleOrOptionsOrCallback == 'string')) {
+            callback = titleOrOptionsOrCallback;
+        }
+
+        var result = prompt(message);
+        callback && callback(result);
+    };
+
     /* UI *******************************************************/
 
     abp.ui = abp.ui || {};
@@ -832,7 +843,7 @@ var abp = abp || {};
     abp.clock.trySetBrowserTimeZoneToCookie = true;
 
     abp.clock.setBrowserTimeZoneToCookie = function () {
-        if (!abp.clock.trySetBrowserTimeZoneToCookie || !abp.clock.supportsMultipleTimezone() || abp.currentUser.isAuthenticated) {
+        if (!abp.clock.trySetBrowserTimeZoneToCookie || !abp.clock.supportsMultipleTimezone()) {
             return;
         }
 

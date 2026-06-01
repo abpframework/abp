@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to easily integrate SignalR into your ABP Framework application using the ABP CLI for seamless real-time communication."
+}
+```
+
 # SignalR Integration
 
 > It is already possible to follow [the standard Microsoft tutorial](https://docs.microsoft.com/en-us/aspnet/core/tutorials/signalr) to add [SignalR](https://docs.microsoft.com/en-us/aspnet/core/signalr/introduction) to your application. However, ABP provides SignalR integration packages those simplify the integration and usage.
@@ -55,10 +62,8 @@ Client side installation depends on your UI framework / client type.
 Run the following command in the root folder of your web project:
 
 ```bash
-yarn add @abp/signalr
+abp add-package @abp/signalr
 ```
-
-> This requires to [install yarn](https://yarnpkg.com/) if you haven't install before.
 
 This will add the `@abp/signalr` to the dependencies in the `package.json` of your project:
 

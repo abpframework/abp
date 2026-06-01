@@ -1,13 +1,13 @@
-import { Component, Input } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { ABP, LocalizationPipe } from '@abp/ng.core';
+import { Component, input } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { ABP, AbpRouteCultureUrlPipe, LocalizationPipe } from '@abp/ng.core';
 
 @Component({
   selector: 'abp-breadcrumb-items',
   templateUrl: './breadcrumb-items.component.html',
-  imports: [CommonModule, RouterModule, LocalizationPipe],
+  imports: [NgTemplateOutlet, RouterLink, LocalizationPipe, AbpRouteCultureUrlPipe],
 })
 export class BreadcrumbItemsComponent {
-  @Input() items: Partial<ABP.Route>[] = [];
+  readonly items = input<Partial<ABP.Route>[]>([]);
 }

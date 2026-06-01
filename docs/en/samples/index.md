@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore a variety of ABP Framework samples, complete with live demos, source code, and tutorials to enhance your development skills!"
+}
+```
+
 # ABP Samples
 
 This document provides a list of samples built with ABP. Each sample is briefly explained below, along with its live demo (if available), source code, and tutorial links (where applicable).
@@ -69,7 +76,7 @@ A modular monolith application that demonstrates how to create, compose, and com
 
 * **ModularCRM: Razor Pages UI & Entity Framework Core**
   * [Tutorial](../tutorials/modular-crm/part-01.md?UI=MVC&DB=EF)
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/ModularCrm)
+  * [Source code](https://github.com/abpframework/abp-samples/tree/master/ModularCRM)
 
 ## CloudCrm
 

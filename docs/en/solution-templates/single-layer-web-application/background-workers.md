@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement background workers in your application for efficient, long-running tasks that enhance performance and reliability."
+}
+```
+
 # Single Layer Solution: Background Workers
 
 ```json

@@ -1,0 +1,45 @@
+{
+	"packages":[
+		{
+			"name": "@abp/ng.identity",
+			"appRoutingModuleConfiguration":{
+				"routes":[
+					"{ path: 'identity', loadChildren: () => import('@abp/ng.identity').then(c => c.createRoutes()),}"
+				]
+			},
+			"appModuleConfiguration":{
+				"imports":[
+					{
+						"names":[
+							"provideIdentityConfig"
+						],
+						"namespace": "@abp/ng.identity/config"
+					}
+				],
+				"providerNames":[
+					"provideIdentityConfig()"
+				]
+			},
+			"tsJsonPathRecordConfigurations":[
+				{
+					"name": "@abp/ng.identity",
+					"paths": [
+						"angular/projects/@abp/ng.identity/src/public-api.ts"
+					]
+				},
+				{
+					"name": "@abp/ng.identity/config",
+					"paths": [
+						"angular/projects/identity/config/src/public-api.ts"
+					]
+				},
+				{
+					"name": "@abp/ng.identity/proxy",
+					"paths": [
+						"angular/projects/identity/proxy/src/public-api.ts"
+					]
+				}
+			]
+		}
+	]
+}

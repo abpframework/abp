@@ -1,0 +1,52 @@
+@page
+@using System.Web;
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.Abp.Localization
+@using Volo.Abp.PermissionManagement.Localization
+@using Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
+@model ResourcePermissionManagementModal
+@inject IHtmlLocalizer<AbpPermissionManagementResource> L
+
+@{
+    Layout = null;
+}
+
+@if(Model.HasAnyResourcePermission && Model.HasAnyResourceProviderKeyLookupService)
+{
+    <script src="/client-proxies/permissionManagement-proxy.js"></script>
+
+    <form method="post" asp-page="/AbpPermissionManagement/ResourcePermissionManagementModal">
+        <abp-modal size="ExtraLarge">
+            <abp-modal-header title="@(L["ResourcePermissions"].Value) - @Model.ResourceDisplayName"></abp-modal-header>
+            <input asp-for="@Model.ResourceName" />
+            <input asp-for="@Model.ResourceKey" />
+            <abp-modal-body>
+                <div class="d-grid gap-2 mb-2 d-md-flex justify-content-md-end">
+                    <button class="btn btn-sm btn-primary" id="addPermission" type="button">@L["AddResourcePermission"]</button>
+                </div>
+                <abp-table id="resourcePermissionTable" class="nowrap"></abp-table>
+            </abp-modal-body>
+            <abp-modal-footer buttons="@AbpModalButtons.Close"></abp-modal-footer>
+        </abp-modal>
+    </form>
+}
+else
+{
+    <abp-modal size="Large">
+        <abp-modal-header title="@(L["ResourcePermissions"].Value) - @Model.ResourceDisplayName"></abp-modal-header>
+        <abp-modal-body>
+            <div class="alert alert-warning" role="alert">
+                @if (!Model.HasAnyResourcePermission)
+                {
+                    @L["NoResourcePermissionFound"]
+                }
+                else if(!Model.HasAnyResourceProviderKeyLookupService)
+                {
+                    @L["NoResourceProviderKeyLookupServiceFound"]
+                }
+            </div>
+        </abp-modal-body>
+        <abp-modal-footer buttons="@AbpModalButtons.Close"></abp-modal-footer>
+    </abp-modal>
+}

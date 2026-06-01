@@ -1,3 +1,7 @@
+/**
+ * @deprecated use vitest instead of jest
+ * @see https://vitest.dev/guide/migration.html#jest
+ */
 const nxPreset = require('@nx/jest/preset').default;
 
 module.exports = {

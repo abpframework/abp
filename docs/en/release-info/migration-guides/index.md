@@ -1,7 +1,20 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to seamlessly migrate your ABP applications between versions with step-by-step guides to ensure a smooth upgrade process."
+}
+```
+
 # ABP Migration Guides
 
 The following documents explain how to migrate your existing ABP applications. We write migration documents only if you need to take an action while upgrading your solution. Otherwise, you can easily upgrade your solution using the [abp update command](../upgrading.md).
 
+- [10.3 to 10.4](abp-10-4.md)
+- [10.x to 10.3](abp-10-3.md)
+- [10.x to 10.2](abp-10-2.md)
+- [10.0 to 10.1](abp-10-1.md)
+- [9.x to 10.0](abp-10-0.md)
+- [9.2 to 9.3](abp-9-3.md)
 - [9.x to 9.2](abp-9-2.md)
 - [9.0 to 9.1](abp-9-1.md)
 - [8.x to 9.0](abp-9-0.md)
@@ -22,3 +35,4 @@ The following documents explain how to migrate your existing ABP applications. W
 - [4.x to 4.2](abp-4-2.md)
 - [3.3.x to 4.0](abp-4-0.md)
 - [2.9.x to 3.0](../../framework/ui/angular/migration-guide-v3.md)
+

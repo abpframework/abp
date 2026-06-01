@@ -1,3 +1,17 @@
+```json
+//[doc-params]
+{
+    "BlazorUI": ["Blazorise", "MudBlazor"]
+}
+```
+
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to add custom columns to your Blazor UI data tables with the Data Table Column Extensions, enhancing your application's functionality."
+}
+```
+
 # Data Table Column Extensions for Blazor UI
 
 Data table column extension system allows you to add a **new table column** on the user interface. The example below adds a new column with the "Email Confirmed" title:
@@ -95,6 +109,8 @@ public class CustomTableColumn
 
 Navigate to the razor file and paste the following code.
 
+{{if BlazorUI == "Blazorise"}}
+
 ```csharp
 @using System
 @using Volo.Abp.Identity
@@ -108,6 +124,27 @@ else
     <Icon class="text-danger" Name="IconName.Times" />
 }
 ```
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+```razor
+@using Volo.Abp.Identity
+
+@if (Data.As<IdentityUserDto>().EmailConfirmed)
+{
+    <MudIcon Icon="@Icons.Material.Filled.Check" Color="Color.Success" />
+}
+else
+{
+    <MudIcon Icon="@Icons.Material.Filled.Close" Color="Color.Error" />
+}
+```
+
+> When using MudBlazor, the standard data grid in module pages is `AbpMudExtensibleDataGrid`. You can replace `Component = typeof(CustomTableColumn)` exactly the same way as in Blazorise; the column system is shared across both UI libraries.
+
+{{end}}
 
 Navigate back to the `CustomizedUserManagement` class, and use `Component` property to specify the custom blazor component.
 

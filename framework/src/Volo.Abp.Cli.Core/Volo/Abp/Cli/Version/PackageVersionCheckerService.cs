@@ -247,7 +247,7 @@ public class PackageVersionCheckerService : ITransientDependency
 
                 var content = await responseMessage.Content.ReadAsStringAsync();
                 var result = JsonSerializer.Deserialize<List<LatestStableVersionResult>>(content);
-                return result.OrderBy(q => q.Type.ToLowerInvariant() == "stable").ThenBy(q => SemanticVersion.Parse(q.Version)).ToList();
+                return result.Where(q => q.Type.ToLowerInvariant() == "stable").OrderByDescending(q => SemanticVersion.Parse(q.Version)).ToList();
             }
         }
         catch

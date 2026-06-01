@@ -2,6 +2,6 @@
   "culture": "ro-RO",
   "texts": {
     "Permission:DocumentManagement.Common": "Gestionarea documentelor comune",
-    "Permission:PdfGeneration": "Generarea PDF"
+    "Permission:PdfDownload": "Descărcare PDF"
   }
 }

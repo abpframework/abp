@@ -11,6 +11,11 @@
           "name": "DocsDomainSharedModule"
         },
         {
+          "declaringAssemblyName": "Volo.Docs.Common.Application.Contracts",
+          "namespace": "Volo.Docs.Common",
+          "name": "DocsCommonApplicationContractsModule"
+        },
+        {
           "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts",
           "namespace": "Volo.Abp.Application",
           "name": "AbpDddApplicationContractsModule"

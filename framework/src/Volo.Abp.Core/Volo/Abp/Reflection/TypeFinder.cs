@@ -1,19 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
+using Microsoft.Extensions.Logging;
 
 namespace Volo.Abp.Reflection;
 
 public class TypeFinder : ITypeFinder
 {
+    private readonly ILogger<TypeFinder> _logger;
+
     private readonly IAssemblyFinder _assemblyFinder;
 
     private readonly Lazy<IReadOnlyList<Type>> _types;
 
-    public TypeFinder(IAssemblyFinder assemblyFinder)
+    public TypeFinder(ILogger<TypeFinder> logger, IAssemblyFinder assemblyFinder)
     {
         _assemblyFinder = assemblyFinder;
+        _logger = logger;
 
         _types = new Lazy<IReadOnlyList<Type>>(FindAll, LazyThreadSafetyMode.ExecutionAndPublication);
     }
@@ -37,9 +42,15 @@ public class TypeFinder : ITypeFinder
 
                 allTypes.AddRange(typesInThisAssembly.Where(type => type != null));
             }
-            catch
+            catch (ReflectionTypeLoadException e)
+            {
+                allTypes = e.Types.Select(x => x!).ToList();
+                _logger.LogException(e);
+            }
+            catch (Exception e)
             {
                 //TODO: Trigger a global event?
+                _logger.LogException(e);
             }
         }
 

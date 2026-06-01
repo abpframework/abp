@@ -42,12 +42,12 @@ public class FeatureManagementStore : IFeatureManagementStore, ITransientDepende
         if (featureValue == null)
         {
             featureValue = new FeatureValue(GuidGenerator.Create(), name, value, providerName, providerKey);
-            await FeatureValueRepository.InsertAsync(featureValue);
+            await FeatureValueRepository.InsertAsync(featureValue, true);
         }
         else
         {
             featureValue.Value = value;
-            await FeatureValueRepository.UpdateAsync(featureValue);
+            await FeatureValueRepository.UpdateAsync(featureValue, true);
         }
 
         await Cache.SetAsync(CalculateCacheKey(name, providerName, providerKey), new FeatureValueCacheItem(featureValue?.Value), considerUow: true);
@@ -59,7 +59,7 @@ public class FeatureManagementStore : IFeatureManagementStore, ITransientDepende
         var featureValues = await FeatureValueRepository.FindAllAsync(name, providerName, providerKey);
         foreach (var featureValue in featureValues)
         {
-            await FeatureValueRepository.DeleteAsync(featureValue);
+            await FeatureValueRepository.DeleteAsync(featureValue, true);
             await Cache.RemoveAsync(CalculateCacheKey(name, providerName, providerKey), considerUow: true);
         }
     }

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to configure the MinIO BLOB Storing Provider in your ABP Framework project for efficient object storage."
+}
+```
+
 # BLOB Storing Minio Provider
 
 BLOB Storing Minio Provider can store BLOBs in [MinIO Object storage](https://min.io/).
@@ -31,6 +38,7 @@ Configure<AbpBlobStoringOptions>(options =>
             minio.AccessKey = "your minio accessKey";
             minio.SecretKey = "your minio secretKey";
             minio.BucketName = "your minio bucketName";
+            minio.PresignedGetExpirySeconds = 3600;
         });
     });
 });
@@ -53,6 +61,7 @@ Configure<AbpBlobStoringOptions>(options =>
     * Buckets used with Amazon S3 Transfer Acceleration can't have dots (.) in their names. For more information about transfer acceleration, see Amazon S3 Transfer Acceleration.
 * **WithSSL** (bool): Default value is `false`,Chain to MinIO Client object to use https instead of http.
 * **CreateContainerIfNotExists** (bool): Default value is `false`, If a bucket does not exist in minio, `MinioBlobProvider` will try to create it.
+* **PresignedGetExpirySeconds** (int): Default value is `7 * 24 * 3600`, The expiration time of the pre-specified get url. The is valid within the range of 1 to 604800(corresponding to 7 days).
 
 
 ## Minio Blob Name Calculator

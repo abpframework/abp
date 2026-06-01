@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to configure AWS as a BLOB storage provider in your ABP Framework project using the Volo.Abp.BlobStoring.Aws package."
+}
+```
+
 # BLOB Storing Aws Provider
 
 BLOB Storing Aws Provider can store BLOBs in [Amazon Simple Storage Service](https://aws.amazon.com/s3/) and **S3-compatible storage services** like MinIO, DigitalOcean Spaces, Cloudflare R2, and others.

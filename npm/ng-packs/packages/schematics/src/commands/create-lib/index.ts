@@ -303,7 +303,7 @@ export function addRoutingToAppRoutingModule(
           ? `() => import('${routePath}').then(m => m.${macroName}_ROUTES)`
           : `() => import('${routePath}').then(m => m.${moduleName}.forLazy())`;
       const routeToAdd = `{ path: '${routePath}', loadChildren: ${routeExpr} }`;
-      const change = addRouteToRoutesArray(source, 'APP_ROUTES', routeToAdd);
+      const change = addRouteToRoutesArray(source, routeToAdd);
 
       if (change instanceof InsertChange) {
         const recorder = tree.beginUpdate(appRoutesPath);
@@ -355,29 +355,30 @@ export function addRoutingToAppRoutingModule(
 
 export function addRouteToRoutesArray(
   source: ts.SourceFile,
-  arrayName: string,
   routeToAdd: string,
 ): InsertChange | null {
-  const routesVar = source.statements.find(
-    stmt =>
-      ts.isVariableStatement(stmt) &&
-      stmt.declarationList.declarations.some(
+
+  // Find all variable declarations that are array literals and contain route definitions
+  const routeArrays = source.statements
+    .filter(ts.isVariableStatement)
+    .flatMap(stmt =>
+      stmt.declarationList.declarations.filter(
         decl =>
           ts.isVariableDeclaration(decl) &&
-          (decl.name.getText() === arrayName || decl.name.getText() === arrayName.toUpperCase()) &&
-          decl.initializer !== undefined &&
-          ts.isArrayLiteralExpression(decl.initializer),
+          decl.initializer &&
+          ts.isArrayLiteralExpression(decl.initializer) &&
+          decl.initializer.elements.some(el =>
+            el.getText().includes('path:')
+          ),
       ),
-  );
+    );
 
-  if (!routesVar || !ts.isVariableStatement(routesVar)) {
-    throw new Error(`Could not find routes array named "${arrayName}".`);
+  if (routeArrays.length === 0) {
+    throw new Error('No routes array found in source file.');
   }
 
-  const declaration = routesVar.declarationList.declarations.find(
-    decl => decl.name.getText() === arrayName,
-  ) as ts.VariableDeclaration;
-
+  // Select the first routes array found
+  const declaration = routeArrays[0];
   const arrayLiteral = declaration.initializer as ts.ArrayLiteralExpression;
 
   const getPathValue = (routeText: string): string | null => {

@@ -3,24 +3,33 @@ import {
   CORE_OPTIONS,
   EnvironmentService,
   ExternalHttpClient,
-  HttpErrorReporterService,
   RestService,
 } from '@abp/ng.core';
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MockRestService extends RestService {
-  constructor(
-    @Inject(CORE_OPTIONS) protected options: ABP.Root,
-    protected http: HttpClient,
-    protected externalhttp: ExternalHttpClient,
-    protected environment: EnvironmentService,
-  ) {
-    super(options, http,externalhttp, environment, null as unknown as HttpErrorReporterService);
+  protected options: ABP.Root;
+  protected http: HttpClient;
+  protected externalhttp: ExternalHttpClient;
+  protected environment: EnvironmentService;
+
+  constructor() {
+    const options = inject<ABP.Root>(CORE_OPTIONS);
+    const http = inject(HttpClient);
+    const externalhttp = inject(ExternalHttpClient);
+    const environment = inject(EnvironmentService);
+
+    super();
+  
+    this.options = options;
+    this.http = http;
+    this.externalhttp = externalhttp;
+    this.environment = environment;
   }
 
   handleError(err: any): Observable<any> {

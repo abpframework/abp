@@ -15,7 +15,7 @@ export function configureRoutes(routesService: RoutesService) {
   return () => {
     routesService.add([
       {
-        path: '/<%= kebab(libraryName) %>',
+        path: undefined,
         name: e<%= pascal(libraryName) %>RouteNames.<%= pascal(libraryName) %>,
         iconClass: 'fas fa-book',
         layout: eLayoutType.application,

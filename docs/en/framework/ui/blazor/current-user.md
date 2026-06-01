@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the `ICurrentUser` service in Blazor to access and display authenticated user information seamlessly."
+}
+```
+
 # Blazor UI: Current User
 
 `ICurrentUser` service is used to obtain information about the currently authenticated user. Inject the `ICurrentUser` into any component/page and use its properties and methods.

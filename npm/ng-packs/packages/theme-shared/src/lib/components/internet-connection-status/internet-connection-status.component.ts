@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { InternetConnectionService, LocalizationModule } from '@abp/ng.core';
+import { InternetConnectionService, LocalizationPipe } from '@abp/ng.core';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'abp-internet-status',
-  imports: [LocalizationModule, NgbTooltip],
+  imports: [LocalizationPipe, NgbTooltip],
   template: `
     @if (!isOnline()) {
       <div class="status-icon">

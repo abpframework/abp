@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MyCompanyName.MyProjectName/MyCompanyName.MyProjectName.csproj">
+      <Deploy />
+    </Project>
+  </Folder>
+</Solution>

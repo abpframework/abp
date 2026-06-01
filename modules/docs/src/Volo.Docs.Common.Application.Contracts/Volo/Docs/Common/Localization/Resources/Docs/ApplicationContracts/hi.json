@@ -2,6 +2,6 @@
   "culture": "hi",
   "texts": {
     "Permission:DocumentManagement.Common": "सामान्य दस्तावेज़ प्रबंधन",
-    "Permission:PdfGeneration": "PDF उत्पन्न करना"
+    "Permission:PdfDownload": "PDF डाउनलोड करना"
   }
 }

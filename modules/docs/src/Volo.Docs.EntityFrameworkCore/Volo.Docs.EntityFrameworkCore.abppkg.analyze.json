@@ -85,6 +85,12 @@
           "contentType": "databaseTable",
           "name": "DocumentContributors",
           "summary": null
+        },
+        {
+          "entityFullName": "Volo.Docs.Projects.ProjectPdfFile",
+          "contentType": "databaseTable",
+          "name": "ProjectPdfFiles",
+          "summary": null
         }
       ],
       "replacedDbContexts": [],

@@ -1,10 +1,9 @@
-import { createHostFactory, SpectatorHost } from '@ngneat/spectator/jest';
+import { createHostFactory, SpectatorHost } from '@ngneat/spectator/vitest';
 import {
   CardComponent,
   CardBodyComponent,
   CardFooterComponent,
   CardHeaderComponent,
-  CardHeaderDirective,
   CardTitleDirective,
   CardImgTopDirective,
   CardSubtitleDirective,

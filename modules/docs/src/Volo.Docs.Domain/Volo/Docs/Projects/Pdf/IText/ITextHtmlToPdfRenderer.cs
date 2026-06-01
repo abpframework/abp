@@ -5,47 +5,68 @@ using System.Threading.Tasks;
 using iText.Html2pdf;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Action;
+using iText.Layout.Font;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Docs.Utils;
-using ITextDocument = iText.Layout.Document;
 
 namespace Volo.Docs.Projects.Pdf.IText;
 
-public class ITextHtmlToPdfRenderer : IHtmlToPdfRenderer ,ITransientDependency
+public class ITextHtmlToPdfRenderer : IHtmlToPdfRenderer, ITransientDependency
 {
     protected IOptions<DocsProjectPdfGeneratorOptions> Options { get; }
-    
+
     public ITextHtmlToPdfRenderer(IOptions<DocsProjectPdfGeneratorOptions> options)
     {
         Options = options;
     }
-    
-    public virtual Task<MemoryStream> RenderAsync(string title, string html, List<PdfDocument> documents)
+
+    public virtual async Task<Stream> RenderAsync(string title, string html, List<PdfDocument> documents)
     {
         var pdfStream = new MemoryStream();
-        var pdfWrite = new PdfWriter(pdfStream);
-        var pdfDocument = new iText.Kernel.Pdf.PdfDocument(pdfWrite);
-        pdfDocument.GetDocumentInfo().SetTitle(title);
-        var textDocument = new ITextDocument(pdfDocument);
-        pdfWrite.SetCloseStream(false);
-        
-        var converter = new ConverterProperties();
-        var tagWorkerFactory = new HtmlIdTagWorkerFactory(pdfDocument);
-        converter.SetTagWorkerFactory(tagWorkerFactory);
-        
-        HtmlConverter.ConvertToDocument(html, pdfDocument, converter);
-        
-        tagWorkerFactory.AddNamedDestinations();
-        var pdfOutlines = pdfDocument.GetOutlines(false);
-        BuildPdfOutlines(pdfOutlines, documents);
-                
-        textDocument.Close();
+        using (var pdfWriter = new PdfWriter(pdfStream))
+        {
+            pdfWriter.SetCloseStream(false);
+            using (var pdfDocument = new iText.Kernel.Pdf.PdfDocument(pdfWriter))
+            {
+                pdfDocument.GetDocumentInfo().SetTitle(title);
+                await CreatePdfFromHtmlAsync(html, pdfDocument);
+                await AddOutlinesToPdfAsync(pdfDocument, documents);
+            }
+        }
+
         pdfStream.Position = 0;
-        return Task.FromResult(pdfStream);
+        return pdfStream;
     }
 
-    private void BuildPdfOutlines(PdfOutline parentOutline, List<PdfDocument> pdfDocumentNodes)
+    protected virtual async Task CreatePdfFromHtmlAsync(string html, iText.Kernel.Pdf.PdfDocument pdfDocument)
+    {
+        var converter = new ConverterProperties();
+        var fontProvider = await GetFontProviderAsync();
+        if (fontProvider != null)
+        {
+            converter.SetFontProvider(fontProvider);
+        }
+        var tagWorkerFactory = new HtmlIdTagWorkerFactory(pdfDocument);
+        converter.SetTagWorkerFactory(tagWorkerFactory);
+        HtmlConverter.ConvertToDocument(html, pdfDocument, converter);
+        tagWorkerFactory.AddNamedDestinations();
+    }
+
+    protected virtual Task<FontProvider> GetFontProviderAsync()
+    {
+        return Task.FromResult<FontProvider>(null);
+    }
+
+    protected virtual Task AddOutlinesToPdfAsync(iText.Kernel.Pdf.PdfDocument pdfDocument, List<PdfDocument> documents)
+    {
+        var pdfOutlines = pdfDocument.GetOutlines(false);
+        BuildPdfOutlines(pdfOutlines, documents);
+
+        return Task.CompletedTask;
+    }
+
+    protected virtual Task BuildPdfOutlines(PdfOutline parentOutline, List<PdfDocument> pdfDocumentNodes)
     {
         foreach (var pdfDocumentNode in pdfDocumentNodes)
         {
@@ -53,7 +74,7 @@ public class ITextHtmlToPdfRenderer : IHtmlToPdfRenderer ,ITransientDependency
             {
                 continue;
             }
-            
+
             var outline = parentOutline.AddOutline(pdfDocumentNode.Title);
             if (!pdfDocumentNode.Id.IsNullOrWhiteSpace())
             {
@@ -65,5 +86,7 @@ public class ITextHtmlToPdfRenderer : IHtmlToPdfRenderer ,ITransientDependency
                 BuildPdfOutlines(outline, pdfDocumentNode.Children);
             }
         }
+
+        return Task.CompletedTask;
     }
 }

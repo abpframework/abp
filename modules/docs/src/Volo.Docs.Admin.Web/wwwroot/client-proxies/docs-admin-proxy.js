@@ -5,6 +5,51 @@
 
 (function(){
 
+  // controller volo.docs.admin.documentPdfAdmin
+
+  (function(){
+
+    abp.utils.createNamespace(window, 'volo.docs.admin.documentPdfAdmin');
+
+    volo.docs.admin.documentPdfAdmin.generatePdf = function(input, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/docs/admin/documents/pdf/generate' + abp.utils.buildQueryString([{ name: 'projectId', value: input.projectId }, { name: 'version', value: input.version }, { name: 'languageCode', value: input.languageCode }]) + '',
+        type: 'GET',
+        dataType: null
+      }, ajaxParams));
+    };
+
+    volo.docs.admin.documentPdfAdmin.getPdfFiles = function(input, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/docs/admin/documents/pdf/files' + abp.utils.buildQueryString([{ name: 'projectId', value: input.projectId }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+    volo.docs.admin.documentPdfAdmin.deletePdfFile = function(input, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/docs/admin/documents/pdf/delete-file' + abp.utils.buildQueryString([{ name: 'projectId', value: input.projectId }, { name: 'version', value: input.version }, { name: 'languageCode', value: input.languageCode }]) + '',
+        type: 'DELETE',
+        dataType: null
+      }, ajaxParams));
+    };
+
+    volo.docs.admin.documentPdfAdmin.downloadPdf = function(input, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/docs/admin/documents/pdf/download' + abp.utils.buildQueryString([{ name: 'projectId', value: input.projectId }, { name: 'version', value: input.version }, { name: 'languageCode', value: input.languageCode }]) + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+    volo.docs.admin.documentPdfAdmin.exists = function(input, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/docs/admin/documents/pdf/exists' + abp.utils.buildQueryString([{ name: 'projectId', value: input.projectId }, { name: 'version', value: input.version }, { name: 'languageCode', value: input.languageCode }]) + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+  })();
+
   // controller volo.docs.admin.documentsAdmin
 
   (function(){
@@ -133,21 +178,6 @@
       return abp.ajax($.extend(true, {
         url: abp.appPath + 'api/docs/admin/projects/GetListProjectWithoutDetailsAsync',
         type: 'GET'
-      }, ajaxParams));
-    };
-
-    volo.docs.admin.projectsAdmin.getPdfFiles = function(input, ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/docs/admin/projects/PdfFiles' + abp.utils.buildQueryString([{ name: 'projectId', value: input.projectId }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
-        type: 'GET'
-      }, ajaxParams));
-    };
-
-    volo.docs.admin.projectsAdmin.deletePdfFile = function(input, ajaxParams) {
-      return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/docs/admin/projects/DeletePdfFile' + abp.utils.buildQueryString([{ name: 'projectId', value: input.projectId }, { name: 'version', value: input.version }, { name: 'languageCode', value: input.languageCode }]) + '',
-        type: 'DELETE',
-        dataType: null
       }, ajaxParams));
     };
 

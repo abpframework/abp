@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Localization;
 using Volo.Abp.PermissionManagement.Web.Utils;
@@ -105,9 +107,13 @@ public class PermissionManagementModal : AbpPageModel
             }
         );
 
-        await LocalEventBus.PublishAsync(
-            new CurrentApplicationConfigurationCacheResetEventData()
-        );
+        Guid? userId = null;
+        if (ProviderName == UserPermissionValueProvider.ProviderName && Guid.TryParse(ProviderKey, out var parsedUserId))
+        {
+            userId = parsedUserId;
+        }
+
+        await LocalEventBus.PublishAsync(new CurrentApplicationConfigurationCacheResetEventData(userId));
 
         return NoContent();
     }
@@ -129,9 +135,7 @@ public class PermissionManagementModal : AbpPageModel
 
         public bool IsDisabled(string currentProviderName)
         {
-            var grantedProviders = Permissions.SelectMany(x => x.GrantedProviders);
-         
-            return Permissions.All(x => x.IsGranted) && grantedProviders.All(p => p.ProviderName != currentProviderName);
+            return Permissions.All(p => p.IsDisabled(currentProviderName));
         }
     }
 
@@ -153,9 +157,11 @@ public class PermissionManagementModal : AbpPageModel
 
         public List<ProviderInfoViewModel> GrantedProviders { get; set; }
 
+        public bool IsEditable { get; set; }
+
         public bool IsDisabled(string currentProviderName)
         {
-            return IsGranted && GrantedProviders.All(p => p.ProviderName != currentProviderName);
+            return !IsEditable || (IsGranted && GrantedProviders.All(p => p.ProviderName != currentProviderName));
         }
 
         public string GetShownName(string currentProviderName)
@@ -165,13 +171,20 @@ public class PermissionManagementModal : AbpPageModel
                 return DisplayName;
             }
 
+            var grantedByOtherProviders = GrantedProviders
+                .Where(p => p.ProviderName != currentProviderName)
+                .Select(p => p.ProviderName)
+                .ToList();
+
+            if (!grantedByOtherProviders.Any())
+            {
+                return DisplayName;
+            }
+
             return string.Format(
                 "{0} ({1})",
                 DisplayName,
-                GrantedProviders
-                    .Where(p => p.ProviderName != currentProviderName)
-                    .Select(p => p.ProviderName)
-                    .JoinAsString(", ")
+                grantedByOtherProviders.JoinAsString(", ")
             );
         }
     }

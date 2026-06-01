@@ -2,6 +2,6 @@
   "culture": "ar",
   "texts": {
     "Permission:DocumentManagement.Common": "إدارة المستندات العامة",
-    "Permission:PdfGeneration": "إنشاء ملفات PDF"
+    "Permission:PdfDownload": "تحميل ملفات PDF"
   }
 }

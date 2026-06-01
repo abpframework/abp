@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate MongoDB with ABP applications, including installation and configuration steps for seamless database management."
+}
+```
+
 # MongoDB Integration
 
 This document explains how to integrate MongoDB as a database provider to ABP based applications and how to configure it.

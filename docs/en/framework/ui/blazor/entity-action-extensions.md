@@ -1,3 +1,17 @@
+```json
+//[doc-params]
+{
+    "BlazorUI": ["Blazorise", "MudBlazor"]
+}
+```
+
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enhance your Blazor UI by adding custom actions to entity menus with Entity Action Extensions in ABP Framework."
+}
+```
+
 # Entity Action Extensions for Blazor UI
 
 Entity action extension system allows you to add a **new action** to the action menu for an entity. A **Click Me** action was added to the *User Management* page below:
@@ -88,6 +102,8 @@ Here, the list of the properties that you use in the `EntityAction`.
 
 #### Example
 
+{{if BlazorUI == "Blazorise"}}
+
 ```csharp
 var clickMeAction = new EntityAction()
 {
@@ -108,3 +124,33 @@ var clickMeAction = new EntityAction()
     }
 };
 ```
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+```csharp
+var clickMeAction = new EntityAction()
+{
+    Text = "Click Me!",
+    Clicked = (data) =>
+    {
+        //TODO: Write your custom code
+
+        return Task.CompletedTask;
+    },
+    Color = MudBlazor.Color.Error,
+    Icon = MudBlazor.Icons.Material.Filled.PanTool,
+    ConfirmationMessage = (data) => "Are you sure you want to click to the action?",
+    Visible = (data) =>
+    {
+        //TODO: Write your custom visibility action
+        //var selectedUser = data.As<IdentityUserDto>();
+        return true;
+    }
+};
+```
+
+> The MudBlazor variant uses `MudBlazor.Color` enum values (e.g. `Color.Primary`, `Color.Error`, `Color.Success`) for `Color`, and Material Icon constants (e.g. `Icons.Material.Filled.Edit`) for `Icon`. The `EntityAction` model itself is shared with Blazorise; only the values you put inside it change.
+
+{{end}}

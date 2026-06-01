@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "This guide walks you through migrating your Angular UI to OpenIddict, ensuring seamless integration with ABP Framework for secure authentication."
+}
+```
+
 # OpenIddict Angular UI Migration Guide
 
 ## Angular Project

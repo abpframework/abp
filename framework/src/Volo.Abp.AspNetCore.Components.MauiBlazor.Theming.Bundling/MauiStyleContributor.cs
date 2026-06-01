@@ -14,5 +14,6 @@ public class MauiStyleContributor : BundleContributor
         context.Files.AddIfNotContains("_content/Blazorise/blazorise.css");
         context.Files.AddIfNotContains("_content/Blazorise.Bootstrap5/blazorise.bootstrap5.css");
         context.Files.AddIfNotContains("_content/Blazorise.Snackbar/blazorise.snackbar.css");
+        context.Files.AddIfNotContains("_content/Volo.Abp.BlazoriseUI/volo.abp.blazoriseui.css");
     }
 }

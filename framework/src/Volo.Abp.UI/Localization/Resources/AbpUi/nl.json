@@ -61,6 +61,7 @@
     "ProfilePicture": "Profielfoto",
     "Theme": "Thema",
     "NotAssigned": "Niet toegekend",
-    "EntityActionsDisabledTooltip": "U hebt geen toegang tot deze acties."
+    "EntityActionsDisabledTooltip": "U hebt geen toegang tot deze acties.",
+    "ResourcePermissions": "Machtigingen"
   }
 }

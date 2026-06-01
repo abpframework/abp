@@ -1,19 +1,118 @@
 {
   "migrations": [
     {
-      "version": "20.3.0-beta.1",
-      "description": "Update ESLint flat config to include .cjs, .mjs, .cts, and .mts files in overrides (if needed)",
-      "implementation": "./src/migrations/update-20-3-0/add-file-extensions-to-overrides",
-      "package": "@nx/eslint",
-      "name": "add-file-extensions-to-overrides"
+      "version": "22.0.0-beta.1",
+      "description": "Updates release version config based on the breaking changes in Nx v22",
+      "implementation": "./src/migrations/update-22-0-0/release-version-config-changes",
+      "package": "nx",
+      "name": "22-0-0-release-version-config-changes"
+    },
+    {
+      "version": "22.0.0-beta.2",
+      "description": "Consolidates releaseTag* options into nested releaseTag object structure",
+      "implementation": "./src/migrations/update-22-0-0/consolidate-release-tag-config",
+      "package": "nx",
+      "name": "22-0-0-consolidate-release-tag-config"
     },
     {
       "cli": "nx",
-      "version": "20.3.0-beta.2",
-      "description": "If workspace includes Module Federation projects, ensure the new @nx/module-federation package is installed.",
-      "factory": "./src/migrations/update-20-3-0/ensure-nx-module-federation-package",
+      "version": "22.1.0-beta.5",
+      "description": "Updates the nx wrapper.",
+      "implementation": "./src/migrations/update-22-1-0/update-nx-wrapper",
+      "package": "nx",
+      "name": "22-1-0-update-nx-wrapper"
+    },
+    {
+      "version": "21.5.0-beta.2",
+      "description": "Migrate the legacy 'development' custom condition to a workspace-unique custom condition name.",
+      "factory": "./src/migrations/update-21-5-0/migrate-development-custom-condition",
+      "package": "@nx/js",
+      "name": "migrate-development-custom-condition"
+    },
+    {
+      "version": "22.0.0-beta.0",
+      "description": "Remove the deprecated `external` and `externalBuildTargets` options from the `@nx/js:swc` and `@nx/js:tsc` executors.",
+      "factory": "./src/migrations/update-22-0-0/remove-external-options-from-js-executors",
+      "package": "@nx/js",
+      "name": "remove-external-options-from-js-executors"
+    },
+    {
+      "version": "22.1.0-rc.1",
+      "description": "Removes redundant TypeScript project references from project's tsconfig.json files when runtime tsconfig files (e.g., tsconfig.lib.json, tsconfig.app.json) exist.",
+      "factory": "./src/migrations/update-22-1-0/remove-redundant-ts-project-references",
+      "package": "@nx/js",
+      "name": "remove-redundant-ts-project-references"
+    },
+    {
+      "version": "21.3.0-beta.3",
+      "description": "Rename the CLI option `testPathPattern` to `testPathPatterns`.",
+      "implementation": "./src/migrations/update-21-3-0/rename-test-path-pattern",
+      "package": "@nx/jest",
+      "name": "rename-test-path-pattern"
+    },
+    {
+      "version": "22.2.0-beta.2",
+      "description": "Convert jest.config.ts files from ESM to CJS syntax (export default -> module.exports, import -> require) for projects using CommonJS resolution to ensure correct loading under Node.js type-stripping.",
+      "implementation": "./src/migrations/update-22-2-0/convert-jest-config-to-cjs",
+      "package": "@nx/jest",
+      "name": "convert-jest-config-to-cjs"
+    },
+    {
+      "cli": "nx",
+      "version": "21.3.0-beta.4",
+      "requires": { "@angular/core": ">=20.1.0" },
+      "description": "Update the @angular/cli package version to ~20.1.0.",
+      "factory": "./src/migrations/update-21-3-0/update-angular-cli",
       "package": "@nx/angular",
-      "name": "ensure-nx-module-federation-package"
+      "name": "update-angular-cli-version-20-1-0"
+    },
+    {
+      "version": "21.5.0-beta.0",
+      "description": "Set the 'tsConfig' option to build and test targets to help with Angular migration issues.",
+      "factory": "./src/migrations/update-21-5-0/set-tsconfig-option",
+      "package": "@nx/angular",
+      "name": "set-tsconfig-option"
+    },
+    {
+      "cli": "nx",
+      "version": "21.5.0-beta.2",
+      "requires": { "@angular/core": ">=20.2.0" },
+      "description": "Update the @angular/cli package version to ~20.2.0.",
+      "factory": "./src/migrations/update-21-5-0/update-angular-cli",
+      "package": "@nx/angular",
+      "name": "update-angular-cli-version-20-2-0"
+    },
+    {
+      "version": "21.5.0-beta.2",
+      "requires": { "@angular/core": ">=20.2.0" },
+      "description": "Remove any Karma configuration files that only contain the default content. The default configuration is automatically available without a specific project configurationfile.",
+      "factory": "./src/migrations/update-21-5-0/remove-default-karma-configuration-files",
+      "package": "@nx/angular",
+      "name": "remove-default-karma-configuration-files"
+    },
+    {
+      "cli": "nx",
+      "version": "21.6.1-beta.2",
+      "requires": { "@angular/core": ">=20.3.0" },
+      "description": "Update the @angular/cli package version to ~20.3.0.",
+      "factory": "./src/migrations/update-21-6-1/update-angular-cli",
+      "package": "@nx/angular",
+      "name": "update-angular-cli-version-20-3-0"
+    },
+    {
+      "version": "20.2.0",
+      "description": "Replaces usages of the deprecated Router.getCurrentNavigation method with the Router.currentNavigation signal",
+      "factory": "./bundles/router-current-navigation.cjs#migrate",
+      "optional": true,
+      "package": "@angular/core",
+      "name": "router-current-navigation"
+    },
+    {
+      "version": "20.3.0",
+      "description": "Adds `BootstrapContext` to `bootstrapApplication` calls in `main.server.ts` to support server rendering.",
+      "factory": "./bundles/add-bootstrap-context-to-server-main.cjs#migrate",
+      "package": "@angular/core",
+      "name": "add-bootstrap-context-to-server-main"
     }
   ]
 }

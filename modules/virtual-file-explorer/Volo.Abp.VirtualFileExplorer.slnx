@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/app/">
+    <Project Path="app/DemoApp.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Volo.Abp.VirtualFileExplorer.Contracts/Volo.Abp.VirtualFileExplorer.Contracts.csproj" />
+    <Project Path="src/Volo.Abp.VirtualFileExplorer.Installer/Volo.Abp.VirtualFileExplorer.Installer.csproj" />
+    <Project Path="src/Volo.Abp.VirtualFileExplorer.Web/Volo.Abp.VirtualFileExplorer.Web.csproj" />
+  </Folder>
+</Solution>

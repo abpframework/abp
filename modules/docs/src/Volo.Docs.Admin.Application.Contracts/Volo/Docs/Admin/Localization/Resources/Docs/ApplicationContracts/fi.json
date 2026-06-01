@@ -1,7 +1,7 @@
 {
   "culture": "fi",
   "texts": {
-    "Permission:DocumentManagement": "Asiakirjojen hallinta",
+    "Permission:DocumentManagement": "Asiakirjahallinta",
     "Permission:Projects": "Projektit",
     "Permission:Edit": "Muokkaus",
     "Permission:Delete": "Poisto",
@@ -66,6 +66,9 @@
     "GenerateAndDownloadPdf": "Generoi ja lataa PDF",
     "PdfFileDeletionWarningMessage": "Oletko varma, että haluat poistaa PDF-tiedoston \"{0}\"?",
     "ManagePdfFiles": "Hallitse PDF-tiedostoja",
-    "Permission:ManagePdfFiles": "Hallitse PDF-tiedostoja"
+    "Permission:ManagePdfFiles": "Hallitse PDF-tiedostoja",
+    "PdfDeletedSuccessfully": "PDF-tiedosto poistettu onnistuneesti",
+    "PdfGenerationStarted": "PDF:n luonti on aloitettu",
+    "PdfGenerationStartedInfoMessage": "PDF:n luonti on aloitettu. Kun se on valmis, voit tarkistaa, onko tiedosto lisätty PDF-tiedostot-osioon."
   }
 }

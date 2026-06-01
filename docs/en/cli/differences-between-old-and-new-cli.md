@@ -1,8 +1,15 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover the differences between the old and new ABP CLI, including features and commands, to enhance your ABP development experience."
+}
+```
+
 # Old ABP CLI vs New ABP CLI
 
-ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions or ABP Studio features. With **v8.2+**, the old/legacy ABP CLI has been replaced with a new [CLI](index.md) system to align with the new templating system and [ABP Studio](../studio/index.md). Also, some superior features/commands have been introduced with the new CLI, such as `kube-connect` and `kube-intercept` commands.
+ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions or ABP Studio features. With **v8.2+**, the old/classic ABP CLI has been replaced with a new [CLI](index.md) system to align with the new templating system and [ABP Studio](../studio/index.md). Also, some superior features/commands have been introduced with the new CLI, such as `kube-connect` and `kube-intercept` commands.
 
-In this guide, you will learn the motivation behind this change, some questions that you may have, how to use the old/legacy CLI, its features, and more...
+In this guide, you will learn the motivation behind this change, some questions that you may have, how to use the old/classic CLI, its features, and more...
 
 ## Reason For The Change
 
@@ -15,8 +22,6 @@ This change allows you to create your application with the new templating system
 ## Using The New ABP CLI
 
 > If you installed [ABP Studio](../studio/index.md) recently, then you may skip this section because ABP Studio automatically uninstalls the old CLI and replaces it with the new CLI. Therefore, you don't need to manually switch to the new ABP CLI.
-
-> 🛈 The new ABP CLI is in the beta version for now. If you have any issues, you can always use the old ABP CLI by following the instructions in the _Using the old ABP CLI_ section below.
 
 ABP CLI has two variations, which are `Volo.Abp.Studio.Cli` (new) and `Volo.Abp.Cli` (old). If you are using ABP earlier than v8.2+, then you are probably using the old ABP CLI and can easily switch to the new CLI by simply uninstalling the old one and installing the new CLI by executing the commands below:
 

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how ABP Framework simplifies Domain Driven Design (DDD) for developers with structured layers and collaboration for complex software needs."
+}
+```
+
 # Domain Driven Design
 
 ## What is DDD?

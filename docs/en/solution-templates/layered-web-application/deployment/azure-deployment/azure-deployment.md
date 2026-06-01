@@ -1,9 +1,16 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to deploy your ABP application on Azure using GitHub Actions, tailored for your chosen UI and database options."
+}
+```
+
 # Azure Deployment using Application Service
 
 ````json
 //[doc-params]
 {
-    "UI": ["MVC", "Blazor", "BlazorServer", "NG"],
+    "UI": ["MVC", "Blazor", "BlazorServer", "BlazorWebApp", "NG"],
     "DB": ["EF", "Mongo"],
     "Tiered": ["Yes", "No"]
 }

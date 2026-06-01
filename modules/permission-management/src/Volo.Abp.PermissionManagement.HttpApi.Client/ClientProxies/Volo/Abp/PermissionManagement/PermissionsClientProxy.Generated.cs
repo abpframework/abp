@@ -26,6 +26,16 @@ public partial class PermissionsClientProxy : ClientProxyBase<IPermissionAppServ
         });
     }
 
+    public virtual async Task<GetPermissionListResultDto> GetByGroupAsync(string groupName, string providerName, string providerKey)
+    {
+        return await RequestAsync<GetPermissionListResultDto>(nameof(GetByGroupAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(string), groupName },
+            { typeof(string), providerName },
+            { typeof(string), providerKey }
+        });
+    }
+
     public virtual async Task UpdateAsync(string providerName, string providerKey, UpdatePermissionsDto input)
     {
         await RequestAsync(nameof(UpdateAsync), new ClientProxyRequestTypeValue
@@ -33,6 +43,74 @@ public partial class PermissionsClientProxy : ClientProxyBase<IPermissionAppServ
             { typeof(string), providerName },
             { typeof(string), providerKey },
             { typeof(UpdatePermissionsDto), input }
+        });
+    }
+
+    public virtual async Task<GetResourceProviderListResultDto> GetResourceProviderKeyLookupServicesAsync(string resourceName)
+    {
+        return await RequestAsync<GetResourceProviderListResultDto>(nameof(GetResourceProviderKeyLookupServicesAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(string), resourceName }
+        });
+    }
+
+    public virtual async Task<SearchProviderKeyListResultDto> SearchResourceProviderKeyAsync(string resourceName, string serviceName, string filter, int page)
+    {
+        return await RequestAsync<SearchProviderKeyListResultDto>(nameof(SearchResourceProviderKeyAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(string), resourceName },
+            { typeof(string), serviceName },
+            { typeof(string), filter },
+            { typeof(int), page }
+        });
+    }
+
+    public virtual async Task<GetResourcePermissionDefinitionListResultDto> GetResourceDefinitionsAsync(string resourceName)
+    {
+        return await RequestAsync<GetResourcePermissionDefinitionListResultDto>(nameof(GetResourceDefinitionsAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(string), resourceName }
+        });
+    }
+
+    public virtual async Task<GetResourcePermissionListResultDto> GetResourceAsync(string resourceName, string resourceKey)
+    {
+        return await RequestAsync<GetResourcePermissionListResultDto>(nameof(GetResourceAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(string), resourceName },
+            { typeof(string), resourceKey }
+        });
+    }
+
+    public virtual async Task<GetResourcePermissionWithProviderListResultDto> GetResourceByProviderAsync(string resourceName, string resourceKey, string providerName, string providerKey)
+    {
+        return await RequestAsync<GetResourcePermissionWithProviderListResultDto>(nameof(GetResourceByProviderAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(string), resourceName },
+            { typeof(string), resourceKey },
+            { typeof(string), providerName },
+            { typeof(string), providerKey }
+        });
+    }
+
+    public virtual async Task UpdateResourceAsync(string resourceName, string resourceKey, UpdateResourcePermissionsDto input)
+    {
+        await RequestAsync(nameof(UpdateResourceAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(string), resourceName },
+            { typeof(string), resourceKey },
+            { typeof(UpdateResourcePermissionsDto), input }
+        });
+    }
+
+    public virtual async Task DeleteResourceAsync(string resourceName, string resourceKey, string providerName, string providerKey)
+    {
+        await RequestAsync(nameof(DeleteResourceAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(string), resourceName },
+            { typeof(string), resourceKey },
+            { typeof(string), providerName },
+            { typeof(string), providerKey }
         });
     }
 }

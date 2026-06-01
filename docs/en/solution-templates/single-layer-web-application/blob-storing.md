@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to effectively store BLOBs in a single-layer solution with ABP Framework, enhancing your distributed systems capabilities."
+}
+```
+
 # Single Layer Solution: BLOB Storing
 
 ```json

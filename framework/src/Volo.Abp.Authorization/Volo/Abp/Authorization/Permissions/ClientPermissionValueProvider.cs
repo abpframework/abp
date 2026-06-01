@@ -44,7 +44,7 @@ public class ClientPermissionValueProvider : PermissionValueProvider
         var clientId = context.Principal?.FindFirst(AbpClaimTypes.ClientId)?.Value;
         if (clientId == null)
         {
-            return new MultiplePermissionGrantResult(permissionNames); ;
+            return new MultiplePermissionGrantResult(permissionNames);
         }
 
         using (CurrentTenant.Change(null))

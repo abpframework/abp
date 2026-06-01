@@ -14,6 +14,7 @@
 - [Quick Start](https://abp.io/docs/latest/tutorials/todo) is a single-part, quick-start tutorial to build a simple application with the ABP Framework. Start with this tutorial if you want to understand how ABP works quickly.
 - [Web Application Development Tutorial](https://abp.io/docs/latest/tutorials/book-store) is a complete tutorial on developing a full-stack web application with all aspects of a real-life solution.
 - [Modular Monolith Application](https://abp.io/docs/latest/tutorials/modular-crm/index): A multi-part tutorial that demonstrates how to create application modules, compose and communicate them to build a monolith modular web application.
+- [Microservice Tutorial](https://abp.io/docs/latest/tutorials/microservice/index): A multi-part guide that walks you through building a microservice solution with ABP, from creating independent services and enabling inter-service communication to exposing them through an API Gateway and generating CRUD pages with ABP Suite.
 
 ## What ABP Provides?
 
@@ -27,7 +28,7 @@ The following diagram contains the core components of the **ABP Platform** and s
 
 ABP offers a complete architectural model to build modern enterprise software solutions. Here, the fundamental architectural structures offered and first-class supported by ABP:
 
-* [Domain Driven Design](https://abp.io/docs/latest/framework/architecture/domain-driven-design)
+* [Domain Driven Design (DDD)](https://abp.io/docs/latest/framework/architecture/domain-driven-design)
 * [Microservices](https://abp.io/docs/latest/framework/architecture/microservices)
 * [Modularity](https://abp.io/docs/latest/framework/architecture/modularity/basics)
 * [Multi-Tenancy](https://abp.io/docs/latest/framework/architecture/multi-tenancy)

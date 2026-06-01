@@ -4,6 +4,8 @@
   "projectType": "library",
   "sourceRoot": "packages/theme-shared/src",
   "prefix": "abp",
+  "tags": [],
+  "implicitDependencies": ["core", "oauth"],
   "targets": {
     "build": {
       "executor": "@nx/angular:package",
@@ -21,18 +23,16 @@
       },
       "defaultConfiguration": "production"
     },
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/packages/theme-shared"],
-      "options": {
-        "jestConfig": "packages/theme-shared/jest.config.ts"
-      }
-    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../coverage/packages/theme-shared"
+      }
     }
-  },
-  "tags": [],
-  "implicitDependencies": ["core", "oauth"]
+  }
 }

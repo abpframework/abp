@@ -2,8 +2,8 @@ import { eLayoutType, ReplaceableTemplateDirective, SubscriptionService } from '
 import { collapseWithMargin, slideFromBottom } from '@abp/ng.theme.shared';
 import { AfterViewInit, Component, inject } from '@angular/core';
 import { LayoutService } from '../../services/layout.service';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { NgTemplateOutlet } from '@angular/common';
+import { RouterOutlet } from '@angular/router';
 import { LogoComponent } from '../logo/logo.component';
 import { PageAlertContainerComponent } from '../page-alert-container/page-alert-container.component';
 import { RoutesComponent } from '../routes/routes.component';
@@ -15,13 +15,13 @@ import { NavItemsComponent } from '../nav-items/nav-items.component';
   animations: [slideFromBottom, collapseWithMargin],
   providers: [LayoutService, SubscriptionService],
   imports: [
-    CommonModule,
+    NgTemplateOutlet,
     LogoComponent,
     PageAlertContainerComponent,
     RoutesComponent,
     NavItemsComponent,
     ReplaceableTemplateDirective,
-    RouterModule,
+    RouterOutlet,
   ],
 })
 export class ApplicationLayoutComponent implements AfterViewInit {

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to configure RabbitMQ as a distributed event bus provider in your ABP Framework project with easy installation steps."
+}
+```
+
 # Distributed Event Bus RabbitMQ Integration
 
 > This document explains **how to configure the [RabbitMQ](https://www.rabbitmq.com/)** as the distributed event bus provider. See the [distributed event bus document](../distributed) to learn how to use the distributed event bus system

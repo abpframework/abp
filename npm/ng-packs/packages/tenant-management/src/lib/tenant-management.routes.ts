@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { Provider } from '@angular/core';
 import { TenantManagementConfigOptions } from './models/config-options';
 import {
   TENANT_MANAGEMENT_CREATE_FORM_PROP_CONTRIBUTORS,
@@ -19,7 +20,7 @@ import { TenantsComponent } from './components';
 import { eTenantManagementComponents } from './enums';
 import { tenantManagementExtensionsResolver } from './resolvers';
 
-export function provideTenantManagement(options: TenantManagementConfigOptions = {}) {
+export function provideTenantManagement(options: TenantManagementConfigOptions = {}): Provider[] {
   return [
     {
       provide: TENANT_MANAGEMENT_ENTITY_ACTION_CONTRIBUTORS,

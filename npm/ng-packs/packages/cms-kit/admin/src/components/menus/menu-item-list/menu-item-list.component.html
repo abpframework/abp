@@ -1,0 +1,56 @@
+<abp-page [title]="'CmsKit::MenuItems' | abpLocalization" [toolbar]="nodes">
+  <div class="card">
+    <div class="card-body">
+      @if (nodes.length > 0) {
+        <abp-tree
+          [nodes]="nodes"
+          [draggable]="draggable"
+          [expandedKeys]="expandedKeys"
+          [selectedNode]="selectedNode"
+          (selectedNodeChange)="onSelectedNodeChange($event)"
+          [beforeDrop]="beforeDrop"
+          (dropOver)="onDrop($event)"
+        >
+          <ng-template #menu let-node>
+            <button
+              class="dropdown-item"
+              (click)="edit(node.key)"
+              *abpPermission="'CmsKit.Menus.Update'"
+            >
+              <i class="fa fa-pencil me-2"></i>
+              {{ 'AbpUi::Edit' | abpLocalization }}
+            </button>
+            <button
+              class="dropdown-item"
+              (click)="addSubMenuItem(node.key)"
+              *abpPermission="'CmsKit.Menus.Create'"
+            >
+              <i class="fa fa-plus me-2"></i>
+              {{ 'CmsKit::AddSubMenuItem' | abpLocalization }}
+            </button>
+            <button
+              class="dropdown-item"
+              (click)="delete(node.key, node.title)"
+              *abpPermission="'CmsKit.Menus.Delete'"
+            >
+              <i class="fa fa-remove me-2"></i>
+              {{ 'AbpUi::Delete' | abpLocalization }}
+            </button>
+          </ng-template>
+        </abp-tree>
+      } @else {
+        <div class="text-muted text-center">
+          {{ 'CmsKit::NoMenuItems' | abpLocalization }}
+        </div>
+      }
+    </div>
+  </div>
+</abp-page>
+
+@if (isModalVisible) {
+  <abp-menu-item-modal
+    [selected]="selectedMenuItem || undefined"
+    [parentId]="parentId"
+    (visibleChange)="onVisibleModalChange($event)"
+  />
+}

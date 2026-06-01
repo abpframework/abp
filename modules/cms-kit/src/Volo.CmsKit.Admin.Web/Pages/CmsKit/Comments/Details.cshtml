@@ -3,6 +3,7 @@
 @using System.Globalization
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.Timing
 @using Volo.CmsKit.Admin.Web.Pages.CmsKit.Comments
 @using Volo.CmsKit.Admin.Web.Menus
 @using Volo.CmsKit.Comments
@@ -10,6 +11,7 @@
 
 @inject IPageLayout PageLayout
 @inject IHtmlLocalizer<CmsKitResource> L
+@inject IClock Clock
 
 @model DetailsModel
 
@@ -50,7 +52,7 @@
                         </tr>
                         <tr>
                             <td><b>@L["CreationTime"]</b>:</td>
-                            <td>@Model.CommentWithAuthorDto.CreationTime.ToString(CultureInfo.CurrentUICulture)</td>
+                            <td>@Clock.ConvertToUserTime(Model.CommentWithAuthorDto.CreationTime).ToString(CultureInfo.CurrentUICulture))</td>
                         </tr>
                         <tr>
                             <td><b>@L["Username"]</b>:</td>

@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   EXTENSIONS_FORM_PROP,
   FormProp,
@@ -24,12 +24,16 @@ import { LocalizationPipe } from '@abp/ng.core';
   imports: [ReactiveFormsModule, LocalizationPipe],
 })
 export class PersonalSettingsHalfRowComponent {
+  private propData = inject<FormProp>(EXTENSIONS_FORM_PROP);
+
   public displayName: string;
   public name: string;
   public id: string;
   public formGroup!: UntypedFormGroup;
 
-  constructor(@Inject(EXTENSIONS_FORM_PROP) private propData: FormProp) {
+  constructor() {
+    const propData = this.propData;
+
     this.displayName = propData.displayName;
     this.name = propData.name;
     this.id = propData.id || '';

@@ -24,7 +24,9 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Reflection;
 using Autofac.Builder;
 using Autofac.Core;
@@ -33,7 +35,9 @@ using Autofac.Core.Activators.Delegate;
 using Autofac.Core.Activators.Reflection;
 using Autofac.Core.Resolving.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Volo.Abp;
+using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 
 namespace Autofac.Extensions.DependencyInjection;
@@ -119,7 +123,6 @@ public static class AutofacRegistration
             .SingleInstance();
 
         // Shims for keyed service compatibility.
-        builder.RegisterSource<AnyKeyRegistrationSource>();
         builder.ComponentRegistryBuilder.Registered += AddFromKeyedServiceParameterMiddleware;
 
         Register(builder, services, lifetimeScopeTagForSingletons);
@@ -212,11 +215,15 @@ public static class AutofacRegistration
         this IRegistrationBuilder<object, TActivatorData, TRegistrationStyle> registrationBuilder,
         ServiceDescriptor descriptor)
     {
+        // If it's keyed, the service key won't be null. A null key results in it _not_ being a keyed service.
         if (descriptor.IsKeyedService)
         {
             var key = descriptor.ServiceKey!;
+            if (key.Equals(Microsoft.Extensions.DependencyInjection.KeyedService.AnyKey))
+            {
+                key = Autofac.Core.KeyedService.AnyKey;
+            }
 
-            // If it's keyed, the service key won't be null. A null key results in it _not_ being a keyed service.
             registrationBuilder.Keyed(key, descriptor.ServiceType);
         }
         else
@@ -298,6 +305,10 @@ public static class AutofacRegistration
         var registrationActionList = services.GetRegistrationActionList();
         var activatedActionList = services.GetServiceActivatedActionList();
 
+        // Assemblies where property injection was skipped because they are not in the module chain.
+        // Collected in EnablePropertyInjection when a type registration's assembly is not part of any loaded module.
+        var nonModuleAssemblies = new HashSet<Assembly>();
+
         foreach (var descriptor in services)
         {
             var implementationType = descriptor.NormalizedImplementationType();
@@ -311,7 +322,7 @@ public static class AutofacRegistration
                         .RegisterGeneric(implementationType)
                         .ConfigureServiceType(descriptor)
                         .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
-                        .ConfigureAbpConventions(descriptor, moduleContainer, registrationActionList, activatedActionList);
+                        .ConfigureAbpConventions(descriptor, moduleContainer, registrationActionList, activatedActionList, nonModuleAssemblies);
                 }
                 else
                 {
@@ -319,7 +330,7 @@ public static class AutofacRegistration
                         .RegisterType(implementationType)
                         .ConfigureServiceType(descriptor)
                         .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
-                        .ConfigureAbpConventions(descriptor, moduleContainer, registrationActionList, activatedActionList);
+                        .ConfigureAbpConventions(descriptor, moduleContainer, registrationActionList, activatedActionList, nonModuleAssemblies);
                 }
 
                 continue;
@@ -334,9 +345,7 @@ public static class AutofacRegistration
 
                     var serviceProvider = context.Resolve<IServiceProvider>();
 
-                    var keyedService = (Autofac.Core.KeyedService)requestContext.Service;
-
-                    var key = keyedService.ServiceKey;
+                    var key = requestContext.Parameters.KeyedServiceKey<object>();
 
                     return descriptor.KeyedImplementationFactory(serviceProvider, key);
                 })
@@ -349,8 +358,7 @@ public static class AutofacRegistration
 
                 continue;
             }
-
-            if (!descriptor.IsKeyedService && descriptor.ImplementationFactory != null)
+            else if (!descriptor.IsKeyedService && descriptor.ImplementationFactory != null)
             {
                 var registration = RegistrationBuilder.ForDelegate(descriptor.ServiceType, (context, parameters) =>
                     {
@@ -371,7 +379,65 @@ public static class AutofacRegistration
             builder
                 .RegisterInstance(descriptor.NormalizedImplementationInstance()!)
                 .ConfigureServiceType(descriptor)
-                .ConfigureLifecycle(descriptor.Lifetime, null);
+                .ConfigureLifecycle(descriptor.Lifetime, null)
+                .ExternallyOwned();
+        }
+
+        WarnForOrphanedAbpModules(services, moduleContainer, nonModuleAssemblies);
+    }
+
+    private static void WarnForOrphanedAbpModules(
+        IServiceCollection services,
+        IModuleContainer moduleContainer,
+        HashSet<Assembly> nonModuleAssemblies)
+    {
+        if (nonModuleAssemblies.Count == 0)
+        {
+            return;
+        }
+
+        var logger = services.GetInitLogger<AbpAutofacModule>();
+
+        var loadedModuleTypes = new HashSet<Type>(
+            moduleContainer.Modules.Select(m => m.Type));
+
+        // Only assemblies that directly reference Volo.Abp.Core can contain AbpModule subclasses.
+        // This skips framework/third-party assemblies (Microsoft.Extensions.*, etc.) cheaply.
+        var abpCoreAssemblyName = typeof(AbpModule).Assembly.GetName().Name;
+
+        foreach (var assembly in nonModuleAssemblies)
+        {
+            if (!assembly.GetReferencedAssemblies().Any(r => r.Name == abpCoreAssemblyName))
+            {
+                continue;
+            }
+
+            Type[] types;
+            try
+            {
+                types = assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                types = ex.Types.Where(t => t != null).ToArray()!;
+            }
+            catch (Exception)
+            {
+                continue;
+            }
+
+            foreach (var type in types)
+            {
+                if (AbpModule.IsAbpModule(type) && !loadedModuleTypes.Contains(type))
+                {
+                    logger.LogWarning(
+                        $"Assembly '{assembly.GetName().Name}' has services registered in the DI container, " +
+                        $"but its ABP module '{type.FullName}' is not in the [DependsOn] chain. " +
+                        "Property injection (e.g. LazyServiceProvider) will not work for these types " +
+                        "and may cause NullReferenceException at runtime. " +
+                        $"Add typeof({type.Name}) to your module's [DependsOn] attribute to fix this.");
+                }
+            }
         }
     }
 }

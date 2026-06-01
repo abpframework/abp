@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to build a web application using ABP Framework with this step-by-step tutorial series on managing books and authors."
+}
+```
+
 # Web Application Development Tutorial
 ````json
 //[doc-params]

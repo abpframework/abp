@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Services;
@@ -23,52 +23,64 @@ public class IdentityLinkUserManager : DomainService
         CurrentTenant = currentTenant;
     }
 
-    public async Task<List<IdentityLinkUser>> GetListAsync(IdentityLinkUserInfo linkUserInfo, bool includeIndirect = false, CancellationToken cancellationToken = default)
+    public async Task<List<IdentityLinkUser>> GetListAsync(IdentityLinkUserInfo linkUserInfo, bool includeIndirect = false, int batchSize = 100 * 100, CancellationToken cancellationToken = default)
     {
         using (CurrentTenant.Change(null))
         {
             var users = await IdentityLinkUserRepository.GetListAsync(linkUserInfo, cancellationToken: cancellationToken);
-            if (includeIndirect == false)
+            if (!includeIndirect)
             {
                 return users;
             }
 
-            var userInfos = new List<IdentityLinkUserInfo>()
-                {
-                    linkUserInfo
-                };
-
-            var allUsers = new List<IdentityLinkUser>();
-            allUsers.AddRange(users);
-
-            do
-            {
-                var nextUsers = new List<IdentityLinkUserInfo>();
-                foreach (var user in users)
-                {
-                    if (userInfos.Any(x => x.TenantId != user.SourceTenantId || x.UserId != user.SourceUserId))
-                    {
-                        nextUsers.Add(new IdentityLinkUserInfo(user.SourceUserId, user.SourceTenantId));
-                    }
-
-                    if (userInfos.Any(x => x.TenantId != user.TargetTenantId || x.UserId != user.TargetUserId))
-                    {
-                        nextUsers.Add(new IdentityLinkUserInfo(user.TargetUserId, user.TargetTenantId));
-                    }
-                }
-
-                users = new List<IdentityLinkUser>();
-                foreach (var next in nextUsers)
-                {
-                    users.AddRange(await IdentityLinkUserRepository.GetListAsync(next, userInfos, cancellationToken));
-                }
-
-                userInfos.AddRange(nextUsers);
-                allUsers.AddRange(users);
-            } while (users.Any());
-
-            return allUsers;
+            var allUsers = await IdentityLinkUserRepository.GetListAsync(batchSize ,cancellationToken: cancellationToken);
+            return await GetAllRelatedLinksAsync(allUsers, linkUserInfo);
         }
+    }
+
+    protected virtual Task<List<IdentityLinkUser>> GetAllRelatedLinksAsync(List<IdentityLinkUser> allUsers, IdentityLinkUserInfo userInfo)
+    {
+        var visited = new HashSet<(Guid, Guid?)>();
+        var result = new List<IdentityLinkUser>();
+        var queue = new Queue<(Guid, Guid?)>();
+
+        queue.Enqueue((userInfo.UserId, userInfo.TenantId));
+        visited.Add((userInfo.UserId, userInfo.TenantId));
+
+        while (queue.Count > 0)
+        {
+            var (currentUserId, currentTenantId) = queue.Dequeue();
+
+            var relatedLinks = allUsers.Where(x =>
+                (x.SourceUserId == currentUserId && x.SourceTenantId == currentTenantId) ||
+                (x.TargetUserId == currentUserId && x.TargetTenantId == currentTenantId)
+            ).ToList();
+
+            foreach (var link in relatedLinks)
+            {
+                var node1 = (link.SourceUserId, link.SourceTenantId);
+                var node2 = (link.TargetUserId, link.TargetTenantId);
+
+                if (!result.Contains(link))
+                {
+                    result.Add(link);
+                }
+
+                if (!visited.Contains(node1))
+                {
+                    queue.Enqueue(node1);
+                    visited.Add(node1);
+                }
+
+                if (!visited.Contains(node2))
+                {
+                    queue.Enqueue(node2);
+                    visited.Add(node2);
+                }
+            }
+        }
+
+        return Task.FromResult(result);
     }
 
     public virtual async Task LinkAsync(IdentityLinkUserInfo sourceLinkUser, IdentityLinkUserInfo targetLinkUser, CancellationToken cancellationToken = default)

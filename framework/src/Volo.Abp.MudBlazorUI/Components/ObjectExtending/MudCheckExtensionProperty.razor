@@ -1,0 +1,14 @@
+@typeparam TEntity
+@typeparam TResourceType
+@using Volo.Abp.Localization
+@inherits MudExtensionPropertyComponentBase<TEntity, TResourceType>
+
+@if (PropertyInfo != null && Entity != null)
+{
+    <MudCheckBox T="bool"
+                 Label="@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                 @bind-Value="@Value"
+                 Disabled="IsReadonlyField"
+                 Color="Color.Primary"
+                 UncheckedColor="Color.Default" />
+}

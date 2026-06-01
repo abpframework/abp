@@ -490,3 +490,4 @@ public class IdentityUserManager_Tests : AbpIdentityDomainTestBase
         TestSettingValueProvider.AddSetting(IdentitySettingNames.Password.ForceUsersToPeriodicallyChangePassword, true.ToString());
     }
 }
+

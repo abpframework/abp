@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to configure IdentityServer for deployment, including CORS origins and redirect URLs, ensuring a secure and efficient setup for your applications."
+}
+```
+
 # IdentityServer Deployment
 
 IdentityServer configuration may be different based on deployment configurations. Basically, you need update identityserver client related data and update your hosting preferences based on your deployment environment.

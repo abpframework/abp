@@ -1,10 +1,15 @@
-﻿@using Volo.Abp.Localization
+@using Volo.Abp.Localization
 @using System.Globalization
 @using System.Collections.Immutable
 @using Volo.Abp.AspNetCore.Components.Web
+@using Volo.Abp.AspNetCore.Components.WebAssembly
+@using Volo.Abp.AspNetCore.Mvc.Client
 @inject ILanguageProvider LanguageProvider
 @inject IJSRuntime JsRuntime
 @inject ICookieService CookieService
+@inject NavigationManager NavigationManager
+@inject ICachedApplicationConfigurationClient ConfigurationClient
+@inject IRouteBasedCultureNavigationHelper CultureNavigationHelper
 @if (_otherLanguages != null && _otherLanguages.Any())
 {
     <BarDropdown RightAligned="true">
@@ -22,9 +27,13 @@
 @code {
     private IReadOnlyList<LanguageInfo> _otherLanguages;
     private LanguageInfo _currentLanguage;
+    private bool _useRouteBasedCulture;
 
     protected override async Task OnInitializedAsync()
     {
+        var config = await ConfigurationClient.GetAsync();
+        _useRouteBasedCulture = config.Localization.UseRouteBasedCulture;
+
         var selectedLanguageName = await JsRuntime.InvokeAsync<string>(
             "localStorage.getItem",
             "Abp.SelectedLanguage"
@@ -57,6 +66,13 @@
 
     private async Task ChangeLanguageAsync(LanguageInfo language)
     {
+        if (_useRouteBasedCulture)
+        {
+            await CultureNavigationHelper.NavigateToNewCultureAsync(
+                NavigationManager, language, _otherLanguages.Append(_currentLanguage));
+            return;
+        }
+
         await JsRuntime.InvokeVoidAsync(
             "localStorage.setItem",
             "Abp.SelectedLanguage",

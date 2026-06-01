@@ -5,6 +5,7 @@ using Volo.Abp.Logging;
 using Volo.Abp.Modularity;
 using Volo.Abp.Reflection;
 using Volo.Abp.SimpleStateChecking;
+using Volo.Abp.StaticDefinitions;
 
 namespace Volo.Abp.Internal;
 
@@ -23,7 +24,6 @@ internal static class InternalServiceCollectionExtensions
     {
         var moduleLoader = new ModuleLoader();
         var assemblyFinder = new AssemblyFinder(abpApplication);
-        var typeFinder = new TypeFinder(assemblyFinder);
 
         if (!services.IsAdded<IConfiguration>())
         {
@@ -36,13 +36,14 @@ internal static class InternalServiceCollectionExtensions
 
         services.TryAddSingleton<IModuleLoader>(moduleLoader);
         services.TryAddSingleton<IAssemblyFinder>(assemblyFinder);
-        services.TryAddSingleton<ITypeFinder>(typeFinder);
         services.TryAddSingleton<IInitLoggerFactory>(new DefaultInitLoggerFactory());
+        var typeFinder = new TypeFinder(services.GetInitLogger<TypeFinder>(), assemblyFinder);
+        services.TryAddSingleton<ITypeFinder>(typeFinder);
 
         services.AddAssemblyOf<IAbpApplication>();
 
         services.AddTransient(typeof(ISimpleStateCheckerManager<>), typeof(SimpleStateCheckerManager<>));
-
+        services.AddSingleton(typeof(IStaticDefinitionCache<,>), typeof(StaticDefinitionCache<,>));
         services.Configure<AbpModuleLifecycleOptions>(options =>
         {
             options.Contributors.Add<OnPreApplicationInitializationModuleLifecycleContributor>();

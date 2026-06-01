@@ -1,7 +1,14 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to deploy your ABP application to Azure Web App Service using GitHub Actions, streamlining your deployment process with ease."
+}
+```
+
 ````json
 //[doc-params]
 {
-    "UI": ["MVC", "Blazor", "BlazorServer", "NG"],
+    "UI": ["MVC", "Blazor", "BlazorServer", "BlazorWebApp", "NG"],
     "DB": ["EF", "Mongo"],
     "Tiered": ["Yes", "No"]
 }
@@ -70,8 +77,8 @@ jobs:
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/apihost
         working-directory: ./aspnet-core/src/Demo.AzureAppsAngular.HttpApi.Host # Replace with your project name
 
-      - name: Generate authserver.pfx
-        run: dotnet dev-certs https -v -ep ${{env.DOTNET_ROOT}}/apihost/authserver.pfx -p 2D7AA457-5D33-48D6-936F-C48E5EF468ED # Replace with your password
+      - name: Generate openiddict.pfx
+        run: dotnet dev-certs https -v -ep ${{env.DOTNET_ROOT}}/apihost/openiddict.pfx -p 2D7AA457-5D33-48D6-936F-C48E5EF468ED # Replace with your password
 
       - name: Upload artifact for apihost
         uses: actions/upload-artifact@v4
@@ -170,8 +177,8 @@ jobs:
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/apihost
         working-directory: ./src/demo.BlazorNonTierEfCore.HttpApi.Host # Replace with your project name
 
-      - name: Generate authserver.pfx
-        run: dotnet dev-certs https -v -ep ${{env.DOTNET_ROOT}}/apihost/authserver.pfx -p 2D7AA457-5D33-48D6-936F-C48E5EF468ED # Replace with your password
+      - name: Generate openiddict.pfx
+        run: dotnet dev-certs https -v -ep ${{env.DOTNET_ROOT}}/apihost/openiddict.pfx -p 2D7AA457-5D33-48D6-936F-C48E5EF468ED # Replace with your password
       
       - name: Upload artifact for apihost
         uses: actions/upload-artifact@v4
@@ -243,6 +250,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read #This is required for actions/checkout
 
     steps:
       - uses: actions/checkout@v4
@@ -251,80 +260,63 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.x'
-          include-prerelease: true
 
       - name: Install ABP CLI
         run: |
           dotnet tool install -g Volo.Abp.Cli
           abp install-libs
         shell: bash
-    
+
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
       - name: Run migrations
-        run: dotnet run -- "${{ secrets.CONNECTION_STRING }}" # Set your connection string as a secret in your repository settings
-        working-directory: ./src/blazorservertierdemo.DbMigrator  # Replace with your project name
+        run: dotnet run
+        working-directory: ./src/BlazorServer.NonTiered.DbMigrator
 
-      - name: dotnet publish apihost
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/apihost
-        working-directory: ./src/blazorservertierdemo.HttpApi.Host # Replace with your project name
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        working-directory: './src/BlazorServer.NonTiered.Blazor'
 
-      - name: Generate authserver.pfx
-        run: dotnet dev-certs https -v -ep ${{env.DOTNET_ROOT}}/apihost/authserver.pfx -p 2D7AA457-5D33-48D6-936F-C48E5EF468ED # Replace with your password
+      - name: Generate openiddict.pfx
+        run: dotnet dev-certs https -v -ep ${{env.DOTNET_ROOT}}/myapp/openiddict.pfx -p 7015b85e-89fc-4346-bfd0-a67d81de824e # Replace with your password
 
-      - name: dotnet publish webapp
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/webapp
-        working-directory: ./src/blazorservertierdemo.Blazor # Replace with your project name
-
-      - name: Upload artifact for apihost
+      - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: .net-apihost
-          path: ${{env.DOTNET_ROOT}}/apihost
-
-      - name: Upload artifact for webapp
-        uses: actions/upload-artifact@v4
-        with:
-          name: .net-webapp
-          path: ${{env.DOTNET_ROOT}}/webapp
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
     environment:
       name: 'Production'
-      url: ${{ steps.deploy-to-webapp-3.outputs.webapp-url }}
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write #This is required for requesting the JWT
+      contents: read #This is required for actions/checkout
+
     steps:
-      - name: Download artifact from apihost
+      - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: .net-apihost
-          path: ./apihost
+          name: .net-app
+      
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_E74C791E153A4F38A50107C6B5341809 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_7EC2684BA1FB43F1B563AD3832D0A5AC }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_81FB702F1C8F43388B145043765CC189 }}
 
-      - name: Deploy apihost
-        id: deploy-to-webapp-2
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'apihost-blazorserver' # Replace with your app name
+          app-name: 'abp-blazor-webapp-layered'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.apihostblazorserverPublishSettings }} # Set your Azure Web App to publish your profile as a secret in your repository settings
-          package: ./apihost
-
-      - name: Download artifact from webapp
-        uses: actions/download-artifact@v4
-        with:
-          name: .net-webapp
-          path: ./webapp
-
-      - name: Deploy webapp
-        id: deploy-to-webapp-3
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: 'webapp-blazorserver' # Replace with your app name
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.webappblazorserverPublishSettings }} # Set your Azure Web App to publish your profile as a secret in your repository settings
-          package: ./webapp
+          package: .
 ```
 
 }%}
@@ -375,8 +367,8 @@ jobs:
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/authserver
         working-directory: ./src/blazorservertierdemo.AuthServer # Replace with your project name
 
-      - name: Generate authserver.pfx
-        run: dotnet dev-certs https -v -ep ${{env.DOTNET_ROOT}}/authserver/authserver.pfx -p 2D7AA457-5D33-48D6-936F-C48E5EF468ED # Replace with your password
+      - name: Generate openiddict.pfx
+        run: dotnet dev-certs https -v -ep ${{env.DOTNET_ROOT}}/authserver/openiddict.pfx -p 2D7AA457-5D33-48D6-936F-C48E5EF468ED # Replace with your password
 
       - name: dotnet publish apihost
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/apihost
@@ -461,6 +453,230 @@ jobs:
 
 {{end}}
 
+{{ else if UI == "BlazorWebApp" }}
+
+{{ if Tiered == "No" }}
+
+{%{
+
+```yaml
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy ASP.Net Core app to Azure Web App - abp-blazor-webapp-layered
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read #This is required for actions/checkout
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x'
+
+      - name: Install ABP CLI
+        run: |
+          dotnet tool install -g Volo.Abp.Cli
+          abp install-libs
+        shell: bash
+
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+
+      - name: Run migrations
+        run: dotnet run
+        working-directory: ./src/BlzWapp.NonTiered.DbMigrator
+
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        working-directory: './src/BlzWapp.NonTiered.Blazor'
+
+      - name: Generate openiddict.pfx
+        run: dotnet dev-certs https -v -ep ${{env.DOTNET_ROOT}}/myapp/openiddict.pfx -p 7015b85e-89fc-4346-bfd0-a67d81de824e # Replace with your password
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write #This is required for requesting the JWT
+      contents: read #This is required for actions/checkout
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: .net-app
+      
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_E74C791E153A4F38A50107C6B5341809 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_7EC2684BA1FB43F1B563AD3832D0A5AC }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_81FB702F1C8F43388B145043765CC189 }}
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'abp-blazor-webapp-layered'
+          slot-name: 'Production'
+          package: .
+```
+
+}%}
+
+{{ else }}
+
+{%{
+
+```yaml
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy ASP.Net Core with BlazorWebApp to Azure Web App
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x'
+          include-prerelease: true
+
+      - name: Install ABP CLI
+        run: |
+          dotnet tool install -g Volo.Abp.Cli
+          abp install-libs
+        shell: bash
+    
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+
+      - name: Run migrations
+        run: dotnet run -- "${{ secrets.CONNECTION_STRING }}" # Set your connection string as a secret in your repository settings
+        working-directory: ./src/BlzWapp.DbMigrator  # Replace with your project name
+
+      - name: dotnet publish authserver
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/authserver
+        working-directory: ./src/BlzWapp.AuthServer # Replace with your project name
+
+      - name: Generate openiddict.pfx
+        run: dotnet dev-certs https -v -ep ${{env.DOTNET_ROOT}}/authserver/openiddict.pfx -p 2D7AA457-5D33-48D6-936F-C48E5EF468ED # Replace with your password
+
+      - name: dotnet publish apihost
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/apihost
+        working-directory: ./src/BlzWapp.HttpApi.Host # Replace with your project name
+
+      - name: dotnet publish webapp
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/webapp
+        working-directory: ./src/BlzWapp.Blazor # Replace with your project name
+
+      - name: Upload artifact for authserver
+        uses: actions/upload-artifact@v4
+        with:
+          name: .net-authserver
+          path: ${{env.DOTNET_ROOT}}/authserver
+      
+      - name: Upload artifact for apihost
+        uses: actions/upload-artifact@v4
+        with:
+          name: .net-apihost
+          path: ${{env.DOTNET_ROOT}}/apihost
+
+      - name: Upload artifact for webapp
+        uses: actions/upload-artifact@v4
+        with:
+          name: .net-webapp
+          path: ${{env.DOTNET_ROOT}}/webapp
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp-3.outputs.webapp-url }}
+
+    steps:
+      - name: Download artifact from authserver
+        uses: actions/download-artifact@v4
+        with:
+          name: .net-authserver
+          path: ./authserver
+
+      - name: Deploy authserver
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'authserver-blazorwebapp' # Replace with your app name
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.authserverblazorwebappPublishSettings }} # Set your Azure Web App to publish your profile as a secret in your repository settings
+          package: ./authserver
+
+      - name: Download artifact from apihost
+        uses: actions/download-artifact@v4
+        with:
+          name: .net-apihost
+          path: ./apihost
+
+      - name: Deploy apihost
+        id: deploy-to-webapp-2
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'apihost-blazorwebapp' # Replace with your app name
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.apihostblazorwebappPublishSettings }} # Set your Azure Web App to publish your profile as a secret in your repository settings
+          package: ./apihost
+
+      - name: Download artifact from webapp
+        uses: actions/download-artifact@v4
+        with:
+          name: .net-webapp
+          path: ./webapp
+
+      - name: Deploy webapp
+        id: deploy-to-webapp-3
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'webapp-blazorwebapp' # Replace with your app name
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.webappblazorwebappPublishSettings }} # Set your Azure Web App publish your profile as a secret in your repository settings
+```
+
+}%}
+
+{{end}}
+
 {{ else if UI == "MVC" }}
 
 {{ if Tiered == "No" }}
@@ -509,8 +725,8 @@ jobs:
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
         working-directory: ./src/yourapp.Web # Replace with your project name
 
-    - name: Generate authserver.pfx
-        run: dotnet dev-certs https -v -ep ${{env.DOTNET_ROOT}}/myapp/authserver.pfx -p 2D7AA457-5D33-48D6-936F-C48E5EF468ED # Replace with your password
+    - name: Generate openiddict.pfx
+        run: dotnet dev-certs https -v -ep ${{env.DOTNET_ROOT}}/myapp/openiddict.pfx -p 2D7AA457-5D33-48D6-936F-C48E5EF468ED # Replace with your password
 
     - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -589,8 +805,8 @@ jobs:
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/authserver
         working-directory: ./src/mvctierdemo.AuthServer # Replace with your project name
 
-      - name: Generate authserver.pfx
-        run: dotnet dev-certs https -v -ep ${{env.DOTNET_ROOT}}/authserver/authserver.pfx -p 2D7AA457-5D33-48D6-936F-C48E5EF468ED # Replace with your password
+      - name: Generate openiddict.pfx
+        run: dotnet dev-certs https -v -ep ${{env.DOTNET_ROOT}}/authserver/openiddict.pfx -p 2D7AA457-5D33-48D6-936F-C48E5EF468ED # Replace with your password
 
       - name: dotnet publish apihost
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/apihost

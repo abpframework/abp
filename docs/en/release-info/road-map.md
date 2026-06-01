@@ -1,39 +1,52 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the ABP Platform Road Map for insights on upcoming features, release schedules, and improvements in version 10.5, planned for June 2026."
+}
+```
+
 # ABP Platform Road Map
 
 This document provides a road map, release schedule, and planned features for the ABP Platform.
 
 ## Next Versions
 
-### v9.3
+### v10.5
 
-The next version will be 9.3 and planned to release the stable 9.3 version in July 2025. We will be mostly working on the following topics:
+The next planned version will be 10.5, which is scheduled to be released as a stable version in June 2026. We will be mostly working on the following topics:
 
 * Framework
-  * Upgrading 3rd-party dependencies
-  * Enhancements in the core points
+  * Token Verification Improvements (Refresh Token Support)
+  * Dynamic Background Worker Scheduler Capabilities
+  * Default Scopes Fallback for OpenIddict Grants
+  * Upgrading 3rd-party Dependencies
+  * Enhancements in the Core Points
 
 * ABP Suite
-  * Define navigation properties without target string property dependency
-  * Improvements one-to-many scenarios
-  * File Upload Modal enhancements
-  * Master/Detail DataGrid Toggle Detail Row Enhancements for Blazor UI
-
+  * Improvements on the generated codes for nullability
+  * Improvements on Master-Detail Page Design (making it more compact)
+  * Low-Code System Integration
 
 * ABP Studio
-  * Allow to directly create new solutions with ABP's RC (Release Candidate) versions
-  * Automate more details on new service creation for a microservice solution
-  * Support multiple concurrent Kubernetes deployment/integration scenarios
-  * Improve the module installation experience / installation guides
-  * Improve client proxy generation experience
-  * Modular Monolith Application Startup Template
+  * Allow to Directly Create New Solutions with ABP's RC (Release Candidate) Versions
+  * Automate More Details on New Service Creation for a Microservice Solution
+  * Allow to Download ABP Samples from ABP Studio
+  * Support Multiple Concurrent Kubernetes Deployment/Integration Scenarios
+  * Improve the Module Installation Experience / Installation Guides
+  * AI Coding Agent and MCP Integration
+  * Modern Solution Wizard with Low-Code Support
+  * ABP Thin UI: React Templates
+  * Theme Builder: Live Preview, Project Integration and Import/Export
 
-* Application modules
-  * Account module: Support mixed social/local login scenarios & adding security related features
-  * UI/UX improvements on existing application modules
+* Application Modules
+  * AI Management: Chat History & Multi-Tenancy Features
+  * New Module: Chat with your data
+  * Admin Console: Low-Code Designer
+  * CMS Kit: CodeMirror v6 Compatibility Update
+  * Payment Module: Email Notification Improvements
+  * UI/UX Improvements on Existing Application Modules
 
-* Updating existing tutorials & documents (with other UI & DB options)
-  * Microservice development
-  * Modular monolith development
+* Updating Existing Tutorials & Documents (with Other UI & DB Options)
 
 ## Backlog Items
 
@@ -43,7 +56,6 @@ The *Next Versions* section above shows the main focus of the planned versions. 
 
 The ABP framework is [open source](https://github.com/abpframework/abp) and free for everyone. You can see its [public backlog](https://github.com/abpframework/abp/milestone/2). Here, are some of the important features you can expect from next versions:
 
-* [#236](https://github.com/abpframework/abp/issues/236) / Resource based authorization system
 * [#2882](https://github.com/abpframework/abp/issues/2882) / Providing a gRPC integration infrastructure (while it is [already possible](https://github.com/abpframework/abp-samples/tree/master/GrpcDemo) to create or consume gRPC endpoints for your application, we plan to create endpoints for the [standard application modules](../modules/index.md))
 * [#57](https://github.com/abpframework/abp/issues/57) / Built-in CQRS infrastructure
 * [#58](https://github.com/abpframework/abp/issues/58) / Content localization system (multilingual entities)
@@ -52,7 +64,6 @@ The ABP framework is [open source](https://github.com/abpframework/abp) and free
 * [#2296](https://github.com/abpframework/abp/issues/2296) / Feature toggling infrastructure
 * [#15932](https://github.com/abpframework/abp/issues/15932) / Introduce ABP Diagnostics Module
 * [#16744](https://github.com/abpframework/abp/issues/16744) / State Management API
-* [#17815](https://github.com/abpframework/abp/issues/17815) / Operation Rate Limiting
 * [#119](https://github.com/abpframework/abp/issues/119) / REST API Versioning Improvements
 * [#2087](https://github.com/abpframework/abp/issues/2087) / RavenDB Database Support
 
@@ -78,12 +89,9 @@ Here, are some of the important planned features for next ABP Studio versions:
 * Analyze user solutions to explore entities, domain services, application services, pages and other fundamental objects.
 * Swagger authentication support for the built-in browser
 * Show related requests/events (traces) together in the solution runner panel
-* Integrate common tool dashboards into ABP Studio (such a Garana, Redis, RabbitMQ, Kibana, etc)
 * Built-in command terminal
 * Automate all steps of new service creation for microservice solutions
-* Container application type support for Solution Runner (to individually control docker dependencies)
 * More options while creating new solutions
-* Downloading samples in ABP studio
 * Built-in ABP documentation experience
 * Auto-execute terminal commands in markdown files
 * Compare changes on the startup templates when a new ABP version is published

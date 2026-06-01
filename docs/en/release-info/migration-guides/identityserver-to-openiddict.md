@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to migrate from Identity Server to OpenIddict in ABP Framework with this comprehensive guide, ensuring a smooth transition."
+}
+```
+
 # Migration Identity Server to OpenIddict Guide
 
 This document explains how to migrate to [OpenIddict](https://github.com/openiddict/openiddict-core) from Identity Server. From now on the ABP startup templates uses `OpenIddict` as the auth server by default since version v6.0.0.

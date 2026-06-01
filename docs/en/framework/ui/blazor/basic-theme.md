@@ -1,9 +1,17 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the Basic Theme for Blazor UI— a minimalist base to customize and build your own themes with ease!"
+}
+```
+
 # Blazor UI: Basic Theme
 
 ````json
 //[doc-params]
 {
-    "UI": ["Blazor", "BlazorServer"]
+    "UI": ["Blazor", "BlazorServer"],
+    "BlazorUI": ["Blazorise", "MudBlazor"]
 }
 ````
 
@@ -12,6 +20,18 @@ The Basic Theme is a theme implementation for the Blazor UI. It is a minimalist 
 > If you are looking for a professional, enterprise ready theme, you can check the [Lepton Theme](https://abp.io/themes), which is a part of the [ABP](https://abp.io/).
 
 > See the [Theming document](theming.md) to learn about themes.
+
+{{if BlazorUI == "MudBlazor"}}
+
+> **MudBlazor Variant** — When the `--blazor-ui-library mudblazor` option is used, the Basic Theme ships as a MudBlazor variant. Replace `BasicTheme` with `MudBlazorBasicTheme` everywhere in this document (package names, module type names and namespaces). The MudBlazor variant is **not** based on Bootstrap — it uses MudBlazor's Material Design layout components.
+>
+> Concrete package names you will see when using the MudBlazor variant:
+>
+> * `Volo.Abp.AspNetCore.Components.{Server,WebAssembly}.MudBlazorBasicTheme`
+> * `Volo.Abp.AspNetCore.Components.{Server,WebAssembly}.MudBlazorBasicTheme.Bundling`
+> * Module types: `Abp{...}MudBlazorBasicThemeModule`, `Abp{...}MudBlazorBasicThemeBundlingModule`
+
+{{end}}
 
 ## Installation
 

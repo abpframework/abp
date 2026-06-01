@@ -8,12 +8,15 @@
 @using Volo.Abp.TenantManagement.Localization
 @using Volo.Abp.TenantManagement.Web.Navigation
 @using Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
+@using Volo.Abp.UI.Navigation.Localization.Resource
 @model IndexModel
 @inject IHtmlLocalizer<AbpTenantManagementResource> L
+@inject IHtmlLocalizer<AbpUiNavigationResource> LUiNavigation
 @inject IAuthorizationService Authorization
 @inject IPageLayout PageLayout
 @{
     PageLayout.Content.Title = L["Tenants"].Value;
+    PageLayout.Content.BreadCrumb.Add(LUiNavigation["Menu:Administration"].Value);
     PageLayout.Content.BreadCrumb.Add(L["Menu:TenantManagement"].Value);
     PageLayout.Content.MenuItemName = TenantManagementMenuNames.Tenants;
 }

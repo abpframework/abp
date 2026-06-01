@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { Provider } from '@angular/core';
 import {
   ForgotPasswordComponent,
   LoginComponent,
@@ -23,7 +24,7 @@ import {
   RouterOutletComponent,
 } from '@abp/ng.core';
 
-export function provideAccount(options: AccountConfigOptions = {}) {
+export function provideAccount(options: AccountConfigOptions = {}): Provider[] {
   return [
     { provide: ACCOUNT_CONFIG_OPTIONS, useValue: options },
     {

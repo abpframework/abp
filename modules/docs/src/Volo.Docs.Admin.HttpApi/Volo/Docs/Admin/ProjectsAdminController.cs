@@ -70,20 +70,6 @@ namespace Volo.Docs.Admin
             return _projectAppService.GetListWithoutDetailsAsync();
         }
 
-        [HttpGet]
-        [Route("PdfFiles")]
-        public Task<PagedResultDto<ProjectPdfFileDto>> GetPdfFilesAsync(GetPdfFilesInput input)
-        {
-            return _projectAppService.GetPdfFilesAsync(input);
-        }
-
-        [HttpDelete]
-        [Route("DeletePdfFile")]
-        public Task DeletePdfFileAsync(DeletePdfFileInput input)
-        {
-            return _projectAppService.DeletePdfFileAsync(input);
-        }
-
         [HttpPost]
         [Route("Reindex")]
         public Task ReindexAsync(ReindexInput input)

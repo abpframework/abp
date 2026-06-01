@@ -43,5 +43,24 @@ namespace Volo.Docs.Pages.Documents
 
             return Page();
         }
+        
+        public string GetUrlForProject(ProjectDto project = null, string language = "en", string version = null)
+        {
+            var routeValues = new Dictionary<string, object> {
+                { nameof(Project.IndexModel.Version), version ?? DocsAppConsts.Latest }
+            };
+
+            if (!_uiOptions.SingleProjectMode.Enable)
+            {
+                routeValues.Add(nameof(Project.IndexModel.ProjectName), project?.ShortName);
+            }
+            
+            if (_uiOptions.MultiLanguageMode)
+            {
+                routeValues.Add(nameof(Project.IndexModel.LanguageCode), language);
+            }
+            
+            return Url.Page("/Documents/Project/Index", routeValues);
+        }
     }
 }

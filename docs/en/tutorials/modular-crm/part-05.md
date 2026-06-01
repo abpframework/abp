@@ -1,4 +1,19 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to build the Ordering Module by creating an Order entity and adding functionality to manage orders in your ABP Framework application."
+}
+```
+
 # Building the Ordering Module
+
+````json
+//[doc-params]
+{
+    "UI": ["MVC", "BlazorWebApp", "NG"],
+    "BlazorUI": ["Blazorise", "MudBlazor"]
+}
+````
 
 ````json
 //[doc-nav]
@@ -14,7 +29,7 @@
 }
 ````
 
-In the previous part, we created Ordering module and installed it into the main application. However, the Ordering module has no functionality now. In this part, we will create an `Order` entity and add functionality to create and list the orders.
+In the [previous part](part-04), you created Ordering module and installed it into the main application. However, the Ordering module has no functionality yet. In this part, you will create an `Order` entity and add functionality to create and list the orders.
 
 ## Creating an `Order` Entity
 
@@ -24,32 +39,30 @@ Open the `ModularCrm.Ordering` .NET solution in your IDE.
 
 ### Adding an `Order` Class
 
-Create an `Order` class to the `ModularCrm.Ordering` project (open an `Entities` folder and place the `Order.cs` into that folder):
+Create an `Order` class to the `ModularCrm.Ordering` project:
 
 ````csharp
 using System;
-using ModularCrm.Ordering.Enums;
 using Volo.Abp.Domain.Entities.Auditing;
 
-namespace ModularCrm.Ordering.Entities
+namespace ModularCrm.Ordering;
+
+public class Order : CreationAuditedAggregateRoot<Guid>
 {
-    public class Order : CreationAuditedAggregateRoot<Guid>
-    {
-        public Guid ProductId { get; set; }
-        public string CustomerName { get; set; }
-        public OrderState State { get; set; }
-    }
+    public Guid ProductId { get; set; }
+    public string CustomerName { get; set; } = null!;
+    public OrderState State { get; set; }
 }
 ````
 
-We allow users to place only a single product within an order. The `Order` entity would be much more complex in a real-world application. However, the complexity of the `Order` entity doesn't affect modularity, so we keep it simple to focus on modularity in this tutorial. We are inheriting from the [`CreationAuditedAggregateRoot` class](../../framework/architecture/domain-driven-design/entities.md) since I want to know when an order has been created and who has created it.
+We allow users to place only a single product within an order. The `Order` entity would be much more complex in a real-world application. However, the complexity of the `Order` entity doesn't affect modularity. So, we keep it simple to focus on modularity in this tutorial. We are inheriting from the [`CreationAuditedAggregateRoot` class](../../framework/architecture/domain-driven-design/entities.md) since I want to know when an order has been created and who has created it.
 
 ### Adding an `OrderState` Enumeration
 
-We used an `OrderState` enumeration that has not yet been defined. Open an `Enums` folder in the `ModularCrm.Ordering.Contracts` project and create an `OrderState.cs` file inside it:
+We used an `OrderState` enumeration that has not yet been defined. Create a `OrderState.cs` file inside the `ModularCrm.Ordering.Contracts` project and define the following Enum:
 
 ````csharp
-namespace ModularCrm.Ordering.Enums;
+namespace ModularCrm.Ordering;
 
 public enum OrderState : byte
 {
@@ -61,23 +74,22 @@ public enum OrderState : byte
 
 The final structure of the Ordering module should be similar to the following figure in your IDE:
 
-![visual-studio-order-entity](images/visual-studio-order-entity.png)
+![visual-studio-order-entity](images/visual-studio-order-entity-v2.png)
 
 ## Configuring the Database Mapping
 
-The `Order` entity has been created. Now, we need to configure the database mapping for that entity. We will first define the database table mapping, create a database migration and update the database.
+The `Order` entity has been created. Now, you need to configure the database mapping for that entity. You will first define the database table mapping, create a database migration and update the database.
 
 ### Defining the Database Mappings
 
-Entity Framework Core requires defining a `DbContext` class as the main object for the database mapping. We want to use the main application's `DbContext` object. That way, we can control the database migrations at a single point, ensure database transactions on multi-module operations, and establish relations between database tables of different modules. However, the Ordering module can not use the main application's `DbContext` object because it doesn't depend on the main application, and we don't want to establish such a dependency.
+Entity Framework Core requires defining a `DbContext` class as the main object for the database mapping. We want to use the main application's `DbContext` object. That way, you can control the database migrations at a single point, ensure database transactions on multi-module operations, and establish relations between database tables of different modules. However, the Ordering module can not use the main application's `DbContext` object because it doesn't depend on the main application, and you don't want to establish such a dependency.
 
-As a solution, we will use `DbContext` interface in the Ordering module which is then implemented by the main module's `DbContext`.
+As a solution, you will use `DbContext` interface in the Ordering module which is then implemented by the main module's `DbContext`.
 
 Open your IDE, in `Data` folder under the `ModularCrm.Ordering` project, and edit `IOrderingDbContext` interface as shown:
 
 ````csharp
 using Microsoft.EntityFrameworkCore;
-using ModularCrm.Ordering.Entities;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -90,11 +102,10 @@ public interface IOrderingDbContext : IEfCoreDbContext
 }
 ````
 
-Afterwards, create *Orders* `DbSet` for the `OrderingDbContext` class in the `Data` folder under the `ModularCrm.Ordering` project.
+Afterwards, create *Orders* `DbSet` for the `OrderingDbContext` class in the `Data` folder under the `ModularCrm.Ordering` project:
 
 ````csharp
 using Microsoft.EntityFrameworkCore;
-using ModularCrm.Ordering.Entities;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -105,9 +116,10 @@ public class OrderingDbContext : AbpDbContext<OrderingDbContext>, IOrderingDbCon
 {
     public DbSet<Order> Orders { get; set; }
 
-    public OrderingDbContext(DbContextOptions<OrderingDbContext> options) : base(options)
+    public OrderingDbContext(DbContextOptions<OrderingDbContext> options)
+        : base(options)
     {
-        
+
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -119,14 +131,12 @@ public class OrderingDbContext : AbpDbContext<OrderingDbContext>, IOrderingDbCon
 }
 ````
 
+You can inject and use the `IOrderingDbContext` in the Ordering module. However, you will not usually directly use that interface. Instead, you will use ABP's [repositories](../../framework/architecture/domain-driven-design/repositories.md), which internally uses that interface.
 
-We can inject and use the `IOrderingDbContext` in the Ordering module. However, we will not usually directly use that interface. Instead, we will use ABP's [repositories](../../framework/architecture/domain-driven-design/repositories.md), which internally uses that interface.
-
-It is best to configure the database table mapping for the `Order` entity in the Ordering module. We will use the `OrderingDbContextModelCreatingExtensions` in the same `Data` folder:
+It is best to configure the database table mapping for the `Order` entity in the Ordering module. You will use the `OrderingDbContextModelCreatingExtensions` in the same `Data` folder:
 
 ````csharp
 using Microsoft.EntityFrameworkCore;
-using ModularCrm.Ordering.Entities;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
@@ -142,7 +152,8 @@ public static class OrderingDbContextModelCreatingExtensions
         builder.Entity<Order>(b =>
         {
             //Configure table name
-            b.ToTable("Orders");
+            b.ToTable(OrderingDbProperties.DbTablePrefix + "Orders", 
+                      OrderingDbProperties.DbSchema);
 
             //Always call this method to set base entity properties
             b.ConfigureByConvention();
@@ -171,7 +182,7 @@ The `ReplaceDbContext` attribute allows the use of the `ModularCrmDbContext` cla
 ````csharp
 public class ModularCrmDbContext :
     AbpDbContext<ModularCrmDbContext>,
-    IProductsDbContext,
+    ICatalogDbContext,
     IOrderingDbContext //NEW: IMPLEMENT THE INTERFACE
 {
     public DbSet<Product> Products { get; set; }
@@ -180,21 +191,21 @@ public class ModularCrmDbContext :
 }
 ````
 
-**(3)** Finally, call the `ConfigureOrdering()` extension method inside the `OnModelCreating` method after other `Configure...` module calls:
+**(3)** Finally, ensure that the `ConfigureOrdering()` extension method is called inside the `OnModelCreating` method (this should already be done from ABP Studio):
 
 ````csharp
 protected override void OnModelCreating(ModelBuilder builder)
 {
     ...
-    builder.ConfigureOrdering(); //NEW: CALL THE EXTENSION METHOD
+    builder.ConfigureOrdering();
 }
 ````
 
-In this way, the Ordering module can use 'ModularCrmDbContext' over the `IProductsDbContext` interface. This part is only needed once for a module. Next time, you can add a new database migration, as explained in the next section.
+In this way, the Ordering module can use `ModularCrmDbContext` over the `IOrderingDbContext` interface. This part is only needed once for a module. Next time, you can add a new database migration, as explained in the next section.
 
 #### Add a Database Migration
 
-Now, we can add a new database migration. You can use Entity Framework Core's `Add-Migration` (or `dotnet ef migrations add`) terminal command, but in this tutorial, we will use ABP Studio's shortcut UI.
+Now, you can add a new database migration. You can use Entity Framework Core's `Add-Migration` (or `dotnet ef migrations add`) terminal command, but in this tutorial, you will use ABP Studio's shortcut UI.
 
 Ensure that the solution has built. You can right-click the `ModularCrm` (under the `main` folder) on ABP Studio *Solution Runner* and select the *Dotnet CLI* -> *Graph Build* command.
 
@@ -204,34 +215,36 @@ Right-click the `ModularCrm` package and select the *EF Core CLI* -> *Add Migrat
 
 The *Add Migration* command opens a new dialog to get a migration name:
 
-![abp-studio-entity-framework-core-add-migration-order](images/abp-studio-entity-framework-core-add-migration-order.png)
+![abp-studio-entity-framework-core-add-migration-order](images/abp-studio-entity-framework-core-add-migration-order-v2.png)
 
 Once you click the *OK* button, a new database migration class is added to the `Migrations` folder of the `ModularCrm` project:
 
-![visual-studio-new-migration-class-2](images/visual-studio-new-migration-class-2.png)
+![visual-studio-new-migration-class-2](images/visual-studio-new-migration-class-2-v2.png)
 
 Now, you can return to ABP Studio, right-click the `ModularCrm` project and select the *EF Core CLI* -> *Update Database* command:
 
 ![abp-studio-entity-framework-core-update-database](images/abp-studio-entity-framework-core-update-database.png)
 
-After the operation completes, you can check your database to see the new `Orders` table has been created:
+After the operation completes, you can check your database to see the new `OrderingOrders` table has been created:
 
-![sql-server-products-database-table](images/sql-server-orders-database-table.png)
+![sql-server-products-database-table](images/sql-server-orders-database-table-v2.png)
+
+`Ordering` prefix is added to all table names of the Ordering module. If you want to change or remove it, see the `OrderingDbProperties` class in the Ordering module's .NET solution.
 
 ## Creating the Application Service
 
-We will create an application service to manage the `Order` entities. 
+You will create an application service to manage the `Order` entities. 
 
 ### Defining the Application Service Contract
 
-We're gonna create the `IOrderAppService` interface under the `ModularCrm.Ordering.Contracts` project. Return to your IDE, open the `ModularCrm.Ordering` module's .NET solution and create an `IOrderAppService` interface under the `Services` folder for `ModularCrm.Ordering.Contracts` project:
+You're gonna create the `IOrderAppService` interface under the `ModularCrm.Ordering.Contracts` project. Return to your IDE, open the `ModularCrm.Ordering` module's .NET solution and create an `IOrderAppService` interface in the `ModularCrm.Ordering.Contracts` project:
 
 ````csharp
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 
-namespace ModularCrm.Ordering.Services;
+namespace ModularCrm.Ordering;
 
 public interface IOrderAppService : IApplicationService
 {
@@ -242,7 +255,7 @@ public interface IOrderAppService : IApplicationService
 
 ### Defining Data Transfer Objects
 
-The `GetListAsync` and `CreateAsync` methods will use data transfer objects (DTOs) to communicate with the client. We will create two DTO classes for that purpose.
+The `GetListAsync` and `CreateAsync` methods will use data transfer objects (DTOs) to communicate with the client. You will create two DTO classes for that purpose.
 
 Create a `OrderCreationDto` class under the `ModularCrm.Ordering.Contracts` project:
 
@@ -250,13 +263,13 @@ Create a `OrderCreationDto` class under the `ModularCrm.Ordering.Contracts` proj
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ModularCrm.Ordering.Contracts.Services;
+namespace ModularCrm.Ordering;
 
 public class OrderCreationDto
 {
     [Required]
     [StringLength(150)]
-    public string CustomerName { get; set; }
+    public string CustomerName { get; set; } = null!;
 
     [Required]
     public Guid ProductId { get; set; }
@@ -267,14 +280,13 @@ Create a `OrderDto` class under the `ModularCrm.Ordering.Contracts` project:
 
 ````csharp
 using System;
-using ModularCrm.Ordering.Enums;
 
-namespace ModularCrm.Ordering.Services;
+namespace ModularCrm.Ordering;
 
 public class OrderDto
 {
     public Guid Id { get; set; }
-    public string CustomerName { get; set; }
+    public string CustomerName { get; set; } = null!;
     public Guid ProductId { get; set; }
     public OrderState State { get; set; }
 }
@@ -282,43 +294,35 @@ public class OrderDto
 
 The new files under the `ModularCrm.Ordering.Contracts` project should be like the following figure:
 
-![visual-studio-ordering-contracts](images/visual-studio-ordering-contracts.png)
+![visual-studio-ordering-contracts](images/visual-studio-ordering-contracts-v2.png)
 
 ### Implementing the Application Service
 
-Now we should configure the *AutoMapper* object to map the `Order` entity to the `OrderDto` object. We will use the `OrderingAutoMapperProfile` under the `ModularCrm.Ordering` project:
+First, create a new mapping class (under the `ModularCrm.Ordering` project) that implements the `MapperBase<Order, OrderDto>` class with the `[Mapper]` attribute to map `Order` entities to `OrderDto` objects as follows, because we will need it later:
 
-````csharp
-using AutoMapper;
-using ModularCrm.Ordering.Entities;
-using ModularCrm.Ordering.Services;
-
-namespace ModularCrm.Ordering;
-
-public class OrderingAutoMapperProfile : Profile
+```csharp
+[Mapper]
+public partial class OrderToOrderDtoMapper : MapperBase<Order, OrderDto>
 {
-    public OrderingAutoMapperProfile()
-    {
-        CreateMap<Order, OrderDto>();
-    }
-}
-````
+    public override partial OrderDto Map(Order source);
 
-Now, we can implement the `IOrderAppService` interface. Create an `OrderAppService` class under the `Services` folder of the `ModularCrm.Ordering` project:
+    public override partial void Map(Order source, OrderDto destination);
+}
+```
+
+Now, you can implement the `IOrderAppService` interface. Create an `OrderAppService` class under the `ModularCrm.Ordering` project:
 
 ````csharp
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ModularCrm.Ordering.Enums;
-using ModularCrm.Ordering.Entities;
 using Volo.Abp.Domain.Repositories;
 
-namespace ModularCrm.Ordering.Services;
+namespace ModularCrm.Ordering;
 
 public class OrderAppService : OrderingAppService, IOrderAppService
 {
-    private readonly IRepository<Order, Guid>  _orderRepository;
+    private readonly IRepository<Order, Guid> _orderRepository;
 
     public OrderAppService(IRepository<Order, Guid> orderRepository)
     {
@@ -347,51 +351,80 @@ public class OrderAppService : OrderingAppService, IOrderAppService
 
 ### Exposing Application Services as HTTP API Controllers
 
-After implementing the application service, now we need to create HTTP API endpoints for the ordering module. For that purpose, open the `ModularCrmModule` class in the main application's solution (the `ModularCrm` solution), find the `ConfigureAutoApiControllers` method and add the following lines inside that method:
+After implementing the application service, we can create HTTP API endpoints for the ordering module using the ABP's [Auto API Controllers](../../framework/api-development/auto-controllers.md) feature. For that purpose, open the `OrderingModule` class in the Ordering module's .NET solution (the `ModularCrm.Ordering` solution), find the `ConfigureServices` method and add the following lines inside that method:
 
 ````csharp
-private void ConfigureAutoApiControllers()
+Configure<AbpAspNetCoreMvcOptions>(options =>
 {
-    Configure<AbpAspNetCoreMvcOptions>(options =>
+    options.ConventionalControllers.Create(typeof(OrderingModule).Assembly, settings =>
     {
-        options.ConventionalControllers.Create(typeof(ModularCrmModule).Assembly);
-        options.ConventionalControllers.Create(typeof(ProductsApplicationModule).Assembly, settings => 
-        {
-            settings.RootPath = "products";
-        });
-
-        //ADD THE FOLLOWING LINE:
-        options.ConventionalControllers.Create(typeof(OrderingModule).Assembly, settings => 
-        {
-            settings.RootPath = "orders";
-        });
+        settings.RootPath = "ordering";
     });
+});
+````
+
+This will tell the ABP framework to create API controllers for the application services in the `ModularCrm.Ordering` assembly.
+
+{{if UI == "BlazorWebApp"}}
+
+### Configuring Client Proxies for the Ordering Module
+
+In the `ModularCrm.Client` project, configure HTTP client proxies for the Ordering contracts in the `ModularCrmClientModule` class:
+
+````csharp
+using ModularCrm.Ordering;
+
+[DependsOn(
+    typeof(OrderingContractsModule)
+    // ...other dependencies
+)]
+public class ModularCrmClientModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        ...
+        context.Services.AddHttpClientProxies(typeof(ModularCrmContractsModule).Assembly);
+        context.Services.AddHttpClientProxies(typeof(CatalogContractsModule).Assembly);
+        context.Services.AddHttpClientProxies(typeof(OrderingContractsModule).Assembly); // NEW: ADD HttpClientProxies
+    }
 }
 ````
 
+Also ensure the `ModularCrm.Ordering.Blazor` package is installed for both the `ModularCrm` and `ModularCrm.Client` projects.
+
+{{end}}
+
 ### Creating Example Orders
 
-This section will create a few example orders using the [Swagger UI](../../framework/api-development/swagger.md). Thus, we will have some sample orders to show on the UI.
+This section will create a few example orders using the [Swagger UI](../../framework/api-development/swagger.md). Thus, you will have some sample orders to show on the UI.
 
-Now, right-click the `ModularCrm` under the `main` folder in the Solution Explorer panel and select the *Dotnet CLI* -> *Graph Build* command. This will ensure that the order module and the main application are built and ready to run.
+Open the Solution Runner panel and click the *Play* button near the solution root. Once the `ModularCrm` application runs, you can right-click it and select the *Browse* command to open the user interface.
 
-After the build process completes, open the Solution Runner panel and click the *Play* button near the solution root. Once the `ModularCrm` application runs, we can right-click it and select the *Browse* command to open the user interface.
+Once you see the user interface of the web application, type `/swagger` at the end of the URL to open the Swagger UI. If you scroll down, you should see the `Order` API:
 
-Once you see the user interface of the web application, type `/swagger` at the end of the URL to open the Swagger UI. If you scroll down, you should see the `Orders` API:
+![abp-studio-ordering-swagger-ui-in-browser](images/abp-studio-ordering-swagger-ui-in-browser-v2.png)
 
-![abp-studio-ordering-swagger-ui-in-browser](images/abp-studio-ordering-swagger-ui-in-browser.png)
+> If you don't see the Order API, you may need to re-build the entire solution. Right-click the `ModularCrm` under the `main` folder in the ABP Studio Solution Explorer panel and select the *Dotnet CLI* -> *Graph Build* command. This will ensure that all the modules and the main application are completely built.
 
-Expand the `/api/orders/order` API and click the *Try it out* button. Then, create a few orders by filling in the request body and clicking the *Execute* button:
+Expand the `POST /api/ordering/order` API and click the *Try it out* button. Then, create a few orders by filling in the request body and clicking the *Execute* button:
 
-![abp-studio-swagger-ui-create-order-execute](images/abp-studio-swagger-ui-create-order-execute.png)
+![abp-studio-swagger-ui-create-order-execute](images/abp-studio-swagger-ui-create-order-execute-v2.png)
 
 If you check the database, you should see the entities created in the *Orders* table:
 
-![sql-server-orders-database-table-filled](images/sql-server-orders-database-table-filled.png)
+![sql-server-orders-database-table-filled](images/sql-server-orders-database-table-filled-v2.png)
 
 ## Creating the User Interface
 
+In this section, you will create a very simple user interface to demonstrate how to build UI in the ordering module and make it work in the main application.
+
+As a first step, you can stop the application on ABP Studio's Solution Runner if it is currently running.
+
+{{if UI == "MVC"}}
+
 ### Creating the Orders Page
+
+{{if UI == "MVC"}}
 
 Replace the `Index.cshtml.cs` content in the `Pages/Ordering` folder of the `ModularCrm.Ordering.UI` project with the following code block:
 
@@ -399,30 +432,28 @@ Replace the `Index.cshtml.cs` content in the `Pages/Ordering` folder of the `Mod
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using ModularCrm.Ordering.Services;
 
-namespace ModularCrm.Ordering.UI.Pages.Ordering
+namespace ModularCrm.Ordering.UI.Pages.Ordering;
+
+public class IndexModel : PageModel
 {
-    public class IndexModel : PageModel
+    public List<OrderDto> Orders { get; set; }
+
+    private readonly IOrderAppService _orderAppService;
+
+    public IndexModel(IOrderAppService orderAppService)
     {
-        public List<OrderDto> Orders { get; set; }
+        _orderAppService = orderAppService;
+    }
 
-        private readonly IOrderAppService _orderAppService;
-
-        public IndexModel(IOrderAppService orderAppService)
-        {
-            _orderAppService = orderAppService;
-        }
-
-        public async Task OnGetAsync()
-        {
-            Orders = await _orderAppService.GetListAsync();
-        }
+    public async Task OnGetAsync()
+    {
+        Orders = await _orderAppService.GetListAsync();
     }
 }
 ````
 
-Here, we are injecting `IOrderAppService` to query `Order` entities from the database to show on the page. Open the `Index.cshtml` file and replace the content with the following code block:
+Here, you are injecting `IOrderAppService` to query `Order` entities from the database to show on the page. Open the `Index.cshtml` file and replace the content with the following code block:
 
 ````html
 @page
@@ -446,7 +477,7 @@ Here, we are injecting `IOrderAppService` to query `Order` entities from the dat
 </abp-card>
 ````
 
-This page shows a list of orders on the UI. We haven't created a UI to create new orders, and we will not do it to keep this tutorial simple. If you want to learn how to create advanced UIs with ABP, please follow the [Book Store tutorial](../book-store/index.md).
+This page shows a list of orders on the UI. You haven't created a UI to create new orders, and we will not do it to keep this tutorial simple. If you want to learn how to create advanced UIs with ABP, please follow the [Book Store tutorial](../book-store/index.md).
 
 ### Editing the Menu Item
 
@@ -487,26 +518,225 @@ public class OrderingMenuContributor : IMenuContributor
 
 ````
 
-`OrderingMenuContributor` implements the `IMenuContributor` interface, which forces us to implement the `ConfigureMenuAsync` method. In that method, we can manipulate the menu items (add new menu items, remove existing menu items or change the properties of existing menu items). The `ConfigureMenuAsync` method is executed whenever the menu is rendered on the UI, so you can dynamically decide how to manipulate the menu items.
+`OrderingMenuContributor` implements the `IMenuContributor` interface, which forces us to implement the `ConfigureMenuAsync` method. In that method, you can manipulate the menu items (add new menu items, remove existing menu items or change the properties of existing menu items). The `ConfigureMenuAsync` method is executed whenever the menu is rendered on the UI, so you can dynamically decide how to manipulate the menu items.
 
 > You can check the [menu documentation](../../framework/ui/mvc-razor-pages/navigation-menu.md) to learn more about manipulating menu items.
 
+{{else if UI == "BlazorWebApp"}}
+
+Replace the `Index.razor` content in the `Pages/Ordering` folder of the `ModularCrm.Ordering.Blazor` project with the following code block:
+
+{{if BlazorUI == "Blazorise"}}
+
+````razor
+@page "/ordering"
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using ModularCrm.Ordering
+@inject IOrderAppService OrderAppService
+
+<h1>Orders</h1>
+
+<Card>
+    <CardBody>
+        <ListGroup>
+            @foreach (var order in Orders)
+            {
+                <ListGroupItem>
+                    <strong>Customer:</strong> @order.CustomerName <br />
+                    <strong>Product:</strong> @order.ProductId <br />
+                    <strong>State:</strong> @order.State
+                </ListGroupItem>
+            }
+        </ListGroup>
+    </CardBody>
+</Card>
+
+@code {
+    private List<OrderDto> Orders { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Orders = await OrderAppService.GetListAsync();
+    }
+}
+````
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+````razor
+@page "/ordering"
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using ModularCrm.Ordering
+@inject IOrderAppService OrderAppService
+
+<MudText Typo="Typo.h4">Orders</MudText>
+
+<MudCard>
+    <MudCardContent>
+        <MudList T="OrderDto">
+            @foreach (var order in Orders)
+            {
+                <MudListItem T="OrderDto" Value="@order">
+                    <strong>Customer:</strong> @order.CustomerName <br />
+                    <strong>Product:</strong> @order.ProductId <br />
+                    <strong>State:</strong> @order.State
+                </MudListItem>
+            }
+        </MudList>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    private List<OrderDto> Orders { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Orders = await OrderAppService.GetListAsync();
+    }
+}
+````
+
+{{end}}
+
+This page shows a list of orders on the UI. You haven't created a UI to create new orders, and we will not do it to keep this tutorial simple. If you want to learn how to create advanced UIs with ABP, please follow the [Book Store tutorial](../book-store/index.md).
+
+### Editing the Menu Item
+
+ABP provides a modular navigation [menu system](../../framework/ui/blazor/navigation-menu.md) where each module can contribute to the main menu dynamically.
+
+Edit the `OrderingMenuContributor` class in the `ModularCrm.Ordering.Blazor` project:
+
+````csharp
+using System.Threading.Tasks;
+using Volo.Abp.UI.Navigation;
+
+namespace ModularCrm.Ordering.Blazor.Menus;
+
+public class OrderingMenuContributor : IMenuContributor
+{
+    public async Task ConfigureMenuAsync(MenuConfigurationContext context)
+    {
+        if (context.Menu.Name == StandardMenus.Main)
+        {
+            await ConfigureMainMenuAsync(context);
+        }
+    }
+
+    private Task ConfigureMainMenuAsync(MenuConfigurationContext context)
+    {
+        context.Menu.AddItem(
+            new ApplicationMenuItem(
+                OrderingMenus.Prefix, // Unique menu id
+                "Orders", // Menu display text
+                "/ordering", // URL
+                "fa-solid fa-basket-shopping" // Icon CSS class
+            )
+        );
+
+        return Task.CompletedTask;
+    }
+}
+````
+
+`OrderingMenuContributor` implements the `IMenuContributor` interface, which forces us to implement the `ConfigureMenuAsync` method. In that method, you can manipulate the menu items (add new menu items, remove existing menu items or change the properties of existing menu items). The `ConfigureMenuAsync` method is executed whenever the menu is rendered on the UI, so you can dynamically decide how to manipulate the menu items.
+
+> You can check the [menu documentation](../../framework/ui/blazor/navigation-menu.md) to learn more about manipulating menu items.
+
+{{end}}
+
 ### Building the Application
 
-Now, we will run the application to see the result. Please stop the application if it is already running. Then open the *Solution Runner* panel, right-click the `ModularCrm` application, and select the *Build* -> *Graph Build* command:
+Now, you will run the application to see the result. Please stop the application if it is already running. Then open the *Solution Runner* panel, right-click the `ModularCrm` application, and select the *Build* -> *Graph Build* command:
 
 ![abp-studio-solution-runner-graph-build](images/abp-studio-solution-runner-graph-build.png)
 
-We've performed a graph build since we've made a change on a module, and more than building the main application is needed. *Graph Build* command also builds the depended modules if necessary. Alternatively, you could build the Ordering module first (on ABP Studio or your IDE). This approach can be faster if you have too many modules and you make a change in one of the modules. Now you can run the application by right-clicking the `ModularCrm` application and selecting the *Start* command.
+You've performed a graph build since you've made a change on a module, and more than building the main application is needed. *Graph Build* command also builds the depended modules if necessary. Alternatively, you could build the Ordering module first (on ABP Studio or your IDE). This approach can be faster if you have too many modules and you make a change in one of the modules. Now you can run the application by right-clicking the `ModularCrm` application and selecting the *Start* command.
 
-![abp-studio-browser-orders-menu-item](images/abp-studio-browser-orders-menu-item.png)
+![abp-studio-browser-orders-menu-item](images/abp-studio-browser-orders-menu-item-v2.png)
 
-Great! We can see the list of orders. However, there is a problem:
+Great! We can see the list of orders. However, there is a problem: We see Product's GUID ID instead of its name. This is because the Ordering module has no integration with the Catalog module and doesn't have access to Product module's database to perform a JOIN query. We will solve this problem in the [next part](part-06.md).
 
-1. We see Product's GUID ID instead of its name. This is because the Ordering module has no integration with the Products module and doesn't have access to Product module's database to perform a JOIN query.
+{{else if UI == "NG"}}
 
-We will solve this problem in the [next part](part-06.md).
+### Creating the Orders Page
+
+First, run the `ModularCrm` application so the backend APIs are available.
+
+Then open a terminal in the `modules/modularcrm.ordering/angular` folder and generate (or refresh) the Angular client proxies:
+
+```bash
+abp generate-proxy -t ng
+```
+
+This command creates/updates the TypeScript client proxies under `projects/ordering/src/lib/proxy`. You will use the generated `OrderService` and DTO types to render the orders page.
+
+Now, open `projects/ordering/src/lib/components/ordering.component.ts` and update it to query and show the order list:
+
+```ts
+import { Component, OnInit, inject } from '@angular/core';
+import { OrderDto, OrderService } from '../proxy/orders';
+
+@Component({
+  selector: 'lib-ordering',
+  templateUrl: './ordering.component.html',
+})
+export class OrderingComponent implements OnInit {
+  orders: OrderDto[] = [];
+
+  protected readonly orderService = inject(OrderService);
+
+  ngOnInit(): void {
+    this.orderService.getList().subscribe(response => {
+      this.orders = response;
+    });
+  }
+}
+```
+
+Then open `projects/ordering/src/lib/components/ordering.component.html` and update it as follows:
+
+```html
+<h1>Orders</h1>
+
+<abp-card>
+  <abp-card-body>
+    <abp-list-group>
+      @for (order of orders; track order.id) {
+        <abp-list-group-item>
+          <strong>Customer:</strong> {%{{{ order.customerName }}}%} <br />
+          <strong>Product:</strong> {%{{{ order.productId }}}%} <br />
+          <strong>State:</strong> {%{{{ order.state }}}%}
+        </abp-list-group-item>
+      }
+    </abp-list-group>
+  </abp-card-body>
+</abp-card>
+```
+
+![visual-studio-ordering-contracts](images/visual-studio-ordering-contracts-v2.png)
+
+### Editing the Menu Item
+
+In a module-based Angular UI, menu and route registration are done in the config and app route files. Ensure `projects/ordering/config/src/providers/route.provider.ts` adds the `/ordering` menu route, and the main Angular app (`angular/src/app/app.routes.ts`) lazy-loads the Ordering module routes.
+
+### Building the Application
+
+Start the Angular app from the root `angular` folder:
+
+```bash
+yarn start
+```
+
+Navigate to the *Ordering* page and verify that the orders are listed. At this stage, showing `productId` is expected.
+
+![abp-studio-browser-orders-menu-item](images/abp-studio-browser-orders-menu-item-v2.png)
+
+{{end}}
 
 ## Summary
 
-In this part of the *Modular CRM* tutorial, we've built the functionality inside the Ordering module we created in the [previous part](part-04.md). In the next part, we will work on establishing communication between the Orders module and the Products module.
+In this part of the *Modular CRM* tutorial, you've built the functionality inside the Ordering module you created in the [previous part](part-04.md) and created a basic {{if UI == "MVC"}}MVC{{else if UI == "BlazorWebApp"}}Blazor WebApp{{else if UI == "NG"}}Angular{{end}} UI to list orders. In the [next part](part-06.md), you will work on establishing communication between the Orders module and the Catalog module.

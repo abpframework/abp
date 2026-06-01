@@ -22,6 +22,8 @@ const PACKAGE_TO_BUILD = 'schematics';
 const FILES_TO_COPY_AFTER_BUILD: (FileCopy | string)[] = [
   { src: 'src/commands/create-lib/schema.json', dest: 'commands/create-lib/schema.json' },
   { src: 'src/commands/change-theme/schema.json', dest: 'commands/change-theme/schema.json' },
+  { src: 'src/commands/ai-config/schema.json', dest: 'commands/ai-config/schema.json' },
+  { src: 'src/commands/ai-config/files', dest: 'commands/ai-config/files' },
   { src: 'src/commands/create-lib/files-package', dest: 'commands/create-lib/files-package' },
   { src: 'src/commands/create-lib/files-package-standalone', dest: 'commands/create-lib/files-package-standalone' },
   {
@@ -40,6 +42,9 @@ const FILES_TO_COPY_AFTER_BUILD: (FileCopy | string)[] = [
   { src: 'src/commands/api/files-model', dest: 'commands/api/files-model' },
   { src: 'src/commands/api/files-service', dest: 'commands/api/files-service' },
   { src: 'src/commands/api/schema.json', dest: 'commands/api/schema.json' },
+  { src: 'src/commands/ssr-add/schema.json', dest: 'commands/ssr-add/schema.json' },
+  { src: 'src/commands/ssr-add/files', dest: 'commands/ssr-add/files' },
+  { src: 'src/commands/ssr-add/server', dest: 'commands/ssr-add/server' },
   { src: 'src/collection.json', dest: 'collection.json' },
   'package.json',
   'README.md',

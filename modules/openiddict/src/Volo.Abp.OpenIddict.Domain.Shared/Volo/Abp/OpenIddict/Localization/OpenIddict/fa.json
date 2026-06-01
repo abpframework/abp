@@ -10,6 +10,7 @@
     "DoYouWantToGrantAccessToYourData": "آیا می خواهید به {0} اجازه دسترسی به داده های خود را بدهید؟",
     "ScopesRequested": "محدوده های درخواستی",
     "Accept": "پذیرش",
-    "Deny": "رد"
+    "Deny": "رد",
+    "ApplicationResourcePermissionProviderKeyLookupService": "کلاینت"
   }
 }

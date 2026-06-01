@@ -10,7 +10,7 @@ public class AbpJsonNewtonsoftModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddOptions<AbpNewtonsoftJsonSerializerOptions>()
+        context.Services.AddAbpOptions<AbpNewtonsoftJsonSerializerOptions>()
             .Configure<IServiceProvider>((options, rootServiceProvider) =>
             {
                 options.JsonSerializerSettings.ContractResolver = new AbpCamelCasePropertyNamesContractResolver(

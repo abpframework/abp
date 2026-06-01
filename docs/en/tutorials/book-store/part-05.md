@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement a robust authorization system in your web applications using ABP Framework, including managing permissions for roles and users."
+}
+```
+
 # Web Application Development Tutorial - Part 5: Authorization
 ````json
 //[doc-params]
@@ -23,7 +30,7 @@
 
 ## Permissions
 
-ABP provides an [authorization system](../../framework/fundamentals/authorization.md) based on the ASP.NET Core's [authorization infrastructure](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction). One major feature added on top of the standard authorization infrastructure is the **permission system** which allows to define permissions and enable/disable per role, user or client.
+ABP provides an [authorization system](../../framework/fundamentals/authorization/index.md) based on the ASP.NET Core's [authorization infrastructure](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction). One major feature added on top of the standard authorization infrastructure is the **permission system** which allows to define permissions and enable/disable per role, user or client.
 
 ### Permission Names
 
@@ -72,7 +79,12 @@ public class BookStorePermissionDefinitionProvider : PermissionDefinitionProvide
     public override void Define(IPermissionDefinitionContext context)
     {
         var bookStoreGroup = context.AddGroup(BookStorePermissions.GroupName, L("Permission:BookStore"));
+        
+        //Dashboard permissions
+        bookStoreGroup.AddPermission(BookStorePermissions.Dashboard.Host, L("Permission:Dashboard"), MultiTenancySides.Host);
+        bookStoreGroup.AddPermission(BookStorePermissions.Dashboard.Tenant, L("Permission:Dashboard"), MultiTenancySides.Tenant);
 
+        //Books permissions
         var booksPermission = bookStoreGroup.AddPermission(BookStorePermissions.Books.Default, L("Permission:Books"));
         booksPermission.AddChild(BookStorePermissions.Books.Create, L("Permission:Books.Create"));
         booksPermission.AddChild(BookStorePermissions.Books.Edit, L("Permission:Books.Edit"));
@@ -299,23 +311,19 @@ We've only added the `.RequirePermissions(BookStorePermissions.Books.Default)` e
 
 First step of the UI is to prevent unauthorized users to see the "Books" menu item and enter to the book management page.
 
-Open the `/src/app/book/book-routing.module.ts` and replace with the following content:
+Open the `/src/app/app.routes.ts` and replace with the following content:
 
 ````js
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
 import { authGuard, permissionGuard } from '@abp/ng.core';
 import { BookComponent } from './book.component';
 
 const routes: Routes = [
-  { path: '', component: BookComponent, canActivate: [authGuard, permissionGuard] },
+{ 
+    path: 'books', 
+    loadComponent: () => import('./book/book.component').then(c => BookComponent),
+    canActivate: [authGuard, permissionGuard],
+},
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class BookRoutingModule {}
 ````
 
 * Imported `authGuard` and `permissionGuard` from the `@abp/ng.core`.

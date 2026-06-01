@@ -1,0 +1,10 @@
+{
+  "MyProjectName": {
+    "Welcome": "UI'dan Hoş Geldiniz (tr.json)",
+    "CustomKey": "Bu sadece UI'da olan bir localization",
+    "TestMessage": "UI localization çalışıyor!"
+  },
+  "AbpAccount": {
+    "Login": "Giriş Yap (UI Override)"
+  }
+}

@@ -438,6 +438,13 @@
                 date = date.local();
             }
             if (options.isIso) {
+                if(abp.clock.supportsMultipleTimezone()){
+                    var timeZone = abp.clock.timeZone();
+                    if(timeZone){
+                        return abp.clock.normalizeToString(date.toDate());
+                    }
+                }
+                
                 return date.toISOString();
             }
             return date.locale('en').format(options.inputDateFormat)

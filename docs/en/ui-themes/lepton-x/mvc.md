@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to easily implement the LeptonX MVC UI theme in your ABP project with step-by-step installation instructions."
+}
+```
+
 # LeptonX MVC UI
 LeptonX theme is implemented and ready to use with ABP. No custom implementation is needed for Razor Pages.
 

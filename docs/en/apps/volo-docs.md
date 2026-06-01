@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "VoloDocs simplifies documentation creation with GitHub integration, supporting Markdown, versioning, and collaborative editing across platforms."
+}
+```
+
 # VoloDocs 
 
 ## What is VoloDocs?

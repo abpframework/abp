@@ -17,6 +17,7 @@
     "SentSuccessfully": "सफलतापूर्वक भेज दिया गया",
     "MailSendingFailed": "मेल भेजने में विफल, कृपया अपनी ईमेल विन्यास की जाँच करें और पुनः प्रयास करें।",
     "Send": "भेजना",
+    "Menu:Settings": "समायोजन",
     "Menu:Emailing": "ईमेल से भेजना",
     "Menu:TimeZone": "समय क्षेत्र",
     "DisplayName:Timezone": "समय क्षेत्र",
