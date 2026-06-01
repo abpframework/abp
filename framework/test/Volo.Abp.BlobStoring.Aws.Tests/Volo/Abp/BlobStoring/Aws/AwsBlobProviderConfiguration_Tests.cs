@@ -49,4 +49,24 @@ public class AwsBlobProviderConfiguration_Tests : AbpBlobStoringAwsTestCommonBas
         var awsConfig = containerConfiguration.GetAwsConfiguration();
         awsConfig.ServiceURL.ShouldBe(serviceUrl);
     }
-} 
+
+    [Fact]
+    public void Should_Default_DisablePayloadSigning_To_False()
+    {
+        var containerConfiguration = new BlobContainerConfiguration();
+        var awsConfiguration = new AwsBlobProviderConfiguration(containerConfiguration);
+
+        awsConfiguration.DisablePayloadSigning.ShouldBeFalse();
+    }
+
+    [Fact]
+    public void Should_Set_And_Get_DisablePayloadSigning()
+    {
+        var containerConfiguration = new BlobContainerConfiguration();
+        var awsConfiguration = new AwsBlobProviderConfiguration(containerConfiguration);
+
+        awsConfiguration.DisablePayloadSigning = true;
+
+        awsConfiguration.DisablePayloadSigning.ShouldBeTrue();
+    }
+}

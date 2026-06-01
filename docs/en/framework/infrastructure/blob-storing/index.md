@@ -41,7 +41,7 @@ The [AWS provider](./aws.md) supports not only Amazon S3 but also **S3-compatibl
 * **Backblaze B2** - S3-compatible cloud storage
 * **Any other S3-compatible storage** - Including private cloud solutions
 
-To use S3-compatible services, simply configure the `ServiceURL` property in the AWS provider configuration to point to your S3-compatible endpoint. The provider will automatically handle the necessary protocol adjustments for compatibility.
+To use S3-compatible services, configure the `ServiceURL` property in the AWS provider configuration to point to your S3-compatible endpoint. Some services (e.g., Cloudflare R2) also require `DisablePayloadSigning = true` because they do not implement the streaming chunked payload signing that AWS SDK v4 uses by default. See the [AWS provider document](aws.md) for full configuration examples.
 
 > BLOB storing system can not work unless you **configure a storage provider**. Refer to the linked documents for the storage provider configurations.
 

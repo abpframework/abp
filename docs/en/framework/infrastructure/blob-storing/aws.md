@@ -59,7 +59,8 @@ Configure<AbpBlobStoringOptions>(options =>
 * **ProfileName** (string): The [name of the profile](https://docs.aws.amazon.com/sdk-for-net/v3/developer-guide/net-dg-config-creds.html) to get credentials from.
 * **ProfilesLocation** (string): The path to the aws credentials file to look at.
 * **Region** (string): The system name of the service.
-* **ServiceURL** (string): Custom service URL for S3-compatible APIs (e.g., MinIO, DigitalOcean Spaces). If not specified, the default AWS S3 service URL will be used based on the region. When using S3-compatible services, this should point to your service endpoint (e.g., `https://minio.example.com:9000`).
+* **ServiceURL** (string): Custom service URL for S3-compatible APIs (e.g., MinIO, DigitalOcean Spaces, Cloudflare R2). If not specified, the default AWS S3 service URL will be used based on the region. When using S3-compatible services, this should point to your service endpoint (e.g., `https://minio.example.com:9000`). The AWS SDK automatically appends a trailing slash to the configured value.
+* **DisablePayloadSigning** (bool): Default `false`. When set to `true`, the provider sends `x-amz-content-sha256: UNSIGNED-PAYLOAD` on `PutObject` requests instead of the streaming chunked signature (`STREAMING-AWS4-HMAC-SHA256-PAYLOAD`) that the AWS SDK v4 uses by default. Required for Cloudflare R2 and other S3-compatible services that do not implement streaming signing. The endpoint must be HTTPS when this option is enabled. Leave as `false` for real AWS S3.
 * **Policy** (string): An IAM policy in JSON format that you want to use as an inline session policy.
 * **DurationSeconds** (int): Validity period(s) of a temporary access certificate,minimum is 900 and the maximum is 3600. **note**: Using sub-accounts operated OSS,if the value is 0.
 * **ContainerName** (string): You can specify the container name in Aws. If this is not specified, it uses the name of the BLOB container defined with the `BlobContainerName` attribute (see the [BLOB storing document](../blob-storing)). Please note that Aws has some **rules for naming containers**. A container name must be a valid DNS name, conforming to the [following naming rules](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html):
@@ -129,6 +130,7 @@ Configure<AbpBlobStoringOptions>(options =>
             aws.SecretAccessKey = "your-r2-secret-key";
             aws.ServiceURL = "https://your-account-id.r2.cloudflarestorage.com";
             aws.Region = "auto"; // Cloudflare R2 uses 'auto' as region
+            aws.DisablePayloadSigning = true; // R2 does not implement streaming chunked payload signing
             aws.ContainerName = "my-bucket";
             aws.CreateContainerIfNotExists = true;
         });
@@ -137,6 +139,8 @@ Configure<AbpBlobStoringOptions>(options =>
 ````
 
 > **Note**: When using S3-compatible services, the provider automatically enables path-style requests which are required by most S3-compatible implementations.
+
+> **Note on `DisablePayloadSigning`**: AWS SDK v4 sends `PutObject` requests with `x-amz-content-sha256: STREAMING-AWS4-HMAC-SHA256-PAYLOAD`. Cloudflare R2 (and some other S3-compatible services) return `501 NotImplemented` for this signing mode. Setting `DisablePayloadSigning = true` switches to `UNSIGNED-PAYLOAD`, which these services accept. The endpoint must be HTTPS. Leave it `false` for real AWS S3.
 
 ## Aws Blob Name Calculator
 
