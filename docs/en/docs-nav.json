@@ -341,10 +341,6 @@
                   "path": "studio/monitoring-applications.md"
                 },
                 {
-                  "text": "Model Context Protocol (MCP)",
-                  "path": "studio/model-context-protocol.md"
-                },
-                {
                   "text": "Working with Kubernetes",
                   "path": "studio/kubernetes.md"
                 },
