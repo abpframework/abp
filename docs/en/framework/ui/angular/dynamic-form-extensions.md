@@ -16,6 +16,8 @@ Form prop extension system allows you to add a new field to the create and/or ed
 
 You can validate the field, perform visibility checks, and do more. You will also have access to the current entity when creating a contributor for an edit form.
 
+> **Standalone-first:** Current ABP templates use standalone APIs. The `loadChildren` examples below lazy-load routes from `createRoutes({ ... })` — they do not require NgModules. Legacy NgModule projects can pass the same options to `IdentityModule.forLazy({ ... })` instead. See [ABP Now Supports Angular Standalone Applications](https://abp.io/community/articles/abp-now-supports-angular-standalone-applications-zzi2rr2z).
+
 ## How to Set Up
 
 In this example, we will add a "Date of Birth" field in the user management page of the [Identity Module](../../../modules/identity.md) and validate it.
@@ -69,7 +71,7 @@ Import `identityCreateFormPropContributors` and `identityEditFormPropContributor
 ```js
 // src/app/app.routes.ts
 
-// other imports
+import { Routes } from '@angular/router';
 import {
   identityCreateFormPropContributors,
   identityEditFormPropContributors,
@@ -91,6 +93,21 @@ export const APP_ROUTES: Routes = [
 
   // other routes
 ];
+```
+
+#### Legacy NgModule projects
+
+```js
+{
+  path: 'identity',
+  loadChildren: () =>
+    import('@abp/ng.identity').then(m =>
+      m.IdentityModule.forLazy({
+        createFormPropContributors: identityCreateFormPropContributors,
+        editFormPropContributors: identityEditFormPropContributors,
+      }),
+    ),
+},
 ```
 
 That is it, `birthdayProp` form prop will be added, and you will see the datepicker for the "Date of Birth" field right before the "Email address" in the forms of the users page in the `identity` package.

@@ -7,7 +7,7 @@
 
 # ABP Angular Quick Start
 
-**In this version ABP uses Angular [21.0.x](https://github.com/angular/angular/tree/21.0.x) version. You don't have to install Angular CLI globally**
+**In this version ABP uses Angular [21.2.x](https://github.com/angular/angular/tree/21.2.x) version. You don't have to install Angular CLI globally**
 
 ## How to Prepare Development Environment
 
@@ -22,7 +22,6 @@ Please follow the steps below to prepare your development environment for Angula
    - [Visual Studio IntelliCode](https://marketplace.visualstudio.com/items?itemName=visualstudioexptteam.vscodeintellicode)
    - [Path Intellisense](https://marketplace.visualstudio.com/items?itemName=christian-kohler.path-intellisense)
    - [npm Intellisense](https://marketplace.visualstudio.com/items?itemName=christian-kohler.npm-intellisense)
-   - [Angular 10 Snippets - TypeScript, Html, Angular Material, ngRx, RxJS & Flex Layout](https://marketplace.visualstudio.com/items?itemName=Mikael.Angular-BeastCode)
    - [JavaScript (ES6) code snippets](https://marketplace.visualstudio.com/items?itemName=xabikos.JavaScriptSnippets)
    - [JavaScript Debugger](https://marketplace.visualstudio.com/items?itemName=ms-vscode.js-debug) (built-in, usually pre-installed)
    - [Git History](https://marketplace.visualstudio.com/items?itemName=donjayamanne.githistory)
@@ -167,7 +166,7 @@ When you run the development server, variables defined in _environment.ts_ take 
 2. Run `yarn` or `npm install` if you have not installed dependencies already.
 3. Run `yarn build:prod` or `npm run build:prod`.
 
-<img alt="Angular compiler optimizing the build using Terser" src="./images/quick-start---self-signed-certificate-error.png" width="400px" style="max-width:100%">
+<img alt="Browser blocking access to backend API due to self-signed certificate error" src="./images/quick-start---self-signed-certificate-error.png" width="400px" style="max-width:100%">
 
 Depending on project size, the compilation may take a few minutes. When it is finished, the compiled output will be placed inside the _/dist_ folder. Voila! You have deployment-ready build artifacts.
 
