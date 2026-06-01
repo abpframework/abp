@@ -587,6 +587,10 @@
               ]
             },
             {
+              "text": "Application URLs",
+              "path": "framework/infrastructure/app-urls.md"
+            },
+            {
               "text": "Background Jobs",
               "items": [
                 {
