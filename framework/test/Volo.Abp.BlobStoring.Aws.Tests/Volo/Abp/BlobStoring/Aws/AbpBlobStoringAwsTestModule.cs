@@ -139,9 +139,9 @@ public class AbpBlobStoringAwsTestModule : AbpModule
         }
     }
 
-    private async Task DeleteObjectsAsync(AmazonS3Client client, string prefix)
+    private async Task DeleteObjectsAsync(AmazonS3Client client, string? prefix)
     {
-        string continuationToken = null;
+        string? continuationToken = null;
         do
         {
             var listResponse = await client.ListObjectsV2Async(new ListObjectsV2Request

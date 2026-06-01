@@ -64,7 +64,15 @@ public class AwsBlobProviderConfiguration
     /// </summary>
     public string? Region {
         get => _containerConfiguration.GetConfigurationOrDefault<string>(AwsBlobProviderConfigurationNames.Region);
-        set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.Region, value);
+        set
+        {
+            if (value == null)
+            {
+                _containerConfiguration.ClearConfiguration(AwsBlobProviderConfigurationNames.Region);
+                return;
+            }
+            _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.Region, value);
+        }
     }
 
     /// <summary>
@@ -74,7 +82,15 @@ public class AwsBlobProviderConfiguration
     /// </summary>
     public string? ServiceURL {
         get => _containerConfiguration.GetConfigurationOrDefault<string>(AwsBlobProviderConfigurationNames.ServiceURL);
-        set => _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.ServiceURL, value);
+        set
+        {
+            if (value == null)
+            {
+                _containerConfiguration.ClearConfiguration(AwsBlobProviderConfigurationNames.ServiceURL);
+                return;
+            }
+            _containerConfiguration.SetConfiguration(AwsBlobProviderConfigurationNames.ServiceURL, value);
+        }
     }
 
     /// <summary>
