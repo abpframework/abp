@@ -15,7 +15,7 @@ ABP replaces the `Default`, `Email`, and `Phone` provider registrations with sin
 
 | Provider key | Provider | Default | Used by |
 | --- | --- | --- | --- |
-| `TokenOptions.DefaultProvider` (`"Default"`) | `AbpDefaultTokenProvider` | 10 minutes | Generic challenge tokens (e.g. `RequiresTwoFactor`, `ShouldChangePassword`) issued by IdentityServer / OpenIddict password flow endpoints |
+| `TokenOptions.DefaultProvider` (`"Default"`) | `AbpDefaultTokenProvider` | 10 minutes | Generic challenge tokens (e.g. `RequiresTwoFactor`, `ShouldChangePasswordOnNextLogin`, `PeriodicallyChangePassword`) issued by IdentityServer / OpenIddict password flow endpoints |
 | `AbpPasswordResetTokenProvider.ProviderName` (`"AbpPasswordReset"`) | `AbpPasswordResetTokenProvider` | 2 hours | `UserManager.GeneratePasswordResetTokenAsync` / `ResetPasswordAsync` |
 | `AbpEmailConfirmationTokenProvider.ProviderName` (`"AbpEmailConfirmation"`) | `AbpEmailConfirmationTokenProvider` | 2 hours | `UserManager.GenerateEmailConfirmationTokenAsync` / `ConfirmEmailAsync` |
 | `AbpChangeEmailTokenProvider.ProviderName` (`"AbpChangeEmail"`) | `AbpChangeEmailTokenProvider` | 2 hours | `UserManager.GenerateChangeEmailTokenAsync` / `ChangeEmailAsync` |
@@ -54,7 +54,7 @@ The DataProtector-based providers (`AbpDefaultTokenProvider`, `AbpPasswordResetT
 This has the following effects:
 
 - **Generating a new token invalidates the previous one** for the same `(user, provider, purpose)`. Multiple requests in flight will only let the most recent token complete.
-- **Per-purpose isolation.** The stored hash key includes the purpose, so a `RequiresTwoFactor` token and a `ShouldChangePassword` token issued under the same `"Default"` provider do not invalidate each other.
+- **Per-purpose isolation.** The stored hash key includes the purpose, so a `RequiresTwoFactor` token and a `ShouldChangePasswordOnNextLogin` token issued under the same `"Default"` provider do not invalidate each other.
 - **`SecurityStamp` rotation invalidates every issued token.** This is inherited from the base `DataProtectorTokenProvider` and is unchanged.
 - **Validation never throws on data corruption.** A non-hex stored hash returns `false` from `ValidateAsync` instead of propagating a `FormatException`.
 
@@ -104,7 +104,7 @@ await UserManager.RemoveLinkUserTokenAsync(user, customPurpose);
 
 Each method removes the stored hash under `"[AbpSingleActiveToken]"` for the corresponding purpose. Validation afterwards returns `false` even if the token blob itself is still within its DataProtector lifespan and the `SecurityStamp` is unchanged.
 
-For tokens issued by `AbpDefaultTokenProvider` (e.g. `RequiresTwoFactor`, `ShouldChangePassword`), call `UserManager.RemoveAuthenticationTokenAsync` directly:
+For tokens issued by `AbpDefaultTokenProvider` (e.g. `RequiresTwoFactor`, `ShouldChangePasswordOnNextLogin`, `PeriodicallyChangePassword`), call `UserManager.RemoveAuthenticationTokenAsync` directly:
 
 ```csharp
 await UserManager.RemoveAuthenticationTokenAsync(

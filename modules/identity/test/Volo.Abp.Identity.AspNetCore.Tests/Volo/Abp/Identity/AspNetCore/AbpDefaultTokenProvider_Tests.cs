@@ -12,6 +12,11 @@ public class AbpDefaultTokenProvider_Tests : AbpSingleActiveTokenProviderTestBas
 {
     private const string TestPurpose = nameof(SignInResult.RequiresTwoFactor);
 
+    // Matches ChangePasswordType.ShouldChangePasswordOnNextLogin.ToString() in
+    // AbpResourceOwnerPasswordValidator (Volo.Abp.IdentityServer.Domain). Hard-coded
+    // here to avoid taking a project dependency on the IdentityServer module.
+    private const string ChangePasswordPurpose = "ShouldChangePasswordOnNextLogin";
+
     protected override Task<string> GenerateTokenAsync(IdentityUser user)
         => UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, TestPurpose);
 
@@ -46,18 +51,16 @@ public class AbpDefaultTokenProvider_Tests : AbpSingleActiveTokenProviderTestBas
     [Fact]
     public async Task Tokens_For_Different_Purposes_Should_Be_Independent()
     {
-        const string changePasswordPurpose = "ShouldChangePasswordOnNextLogin";
-
         using (var uow = UnitOfWorkManager.Begin())
         {
             var user = await UserRepository.GetAsync(TestData.UserJohnId);
             var twoFactorToken = await UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, TestPurpose);
-            var changePasswordToken = await UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, changePasswordPurpose);
+            var changePasswordToken = await UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, ChangePasswordPurpose);
 
             user = await UserRepository.GetAsync(TestData.UserJohnId);
 
             (await UserManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, TestPurpose, twoFactorToken)).ShouldBeTrue();
-            (await UserManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, changePasswordPurpose, changePasswordToken)).ShouldBeTrue();
+            (await UserManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, ChangePasswordPurpose, changePasswordToken)).ShouldBeTrue();
 
             await uow.CompleteAsync();
         }
@@ -66,13 +69,11 @@ public class AbpDefaultTokenProvider_Tests : AbpSingleActiveTokenProviderTestBas
     [Fact]
     public async Task Regenerating_Same_Purpose_Should_Invalidate_Only_That_Purpose()
     {
-        const string changePasswordPurpose = "ShouldChangePasswordOnNextLogin";
-
         using (var uow = UnitOfWorkManager.Begin())
         {
             var user = await UserRepository.GetAsync(TestData.UserJohnId);
             var firstTwoFactorToken = await UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, TestPurpose);
-            var changePasswordToken = await UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, changePasswordPurpose);
+            var changePasswordToken = await UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, ChangePasswordPurpose);
 
             user = await UserRepository.GetAsync(TestData.UserJohnId);
             var secondTwoFactorToken = await UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, TestPurpose);
@@ -81,7 +82,7 @@ public class AbpDefaultTokenProvider_Tests : AbpSingleActiveTokenProviderTestBas
 
             (await UserManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, TestPurpose, firstTwoFactorToken)).ShouldBeFalse();
             (await UserManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, TestPurpose, secondTwoFactorToken)).ShouldBeTrue();
-            (await UserManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, changePasswordPurpose, changePasswordToken)).ShouldBeTrue();
+            (await UserManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, ChangePasswordPurpose, changePasswordToken)).ShouldBeTrue();
 
             await uow.CompleteAsync();
         }

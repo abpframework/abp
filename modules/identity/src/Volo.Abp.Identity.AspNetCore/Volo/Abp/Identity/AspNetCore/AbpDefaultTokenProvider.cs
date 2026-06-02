@@ -11,7 +11,8 @@ namespace Volo.Abp.Identity.AspNetCore;
 /// Replaces ASP.NET Identity's default <see cref="DataProtectorTokenProvider{IdentityUser}"/>
 /// registered under <see cref="TokenOptions.DefaultProvider"/> ("Default"). Used by callers such
 /// as the IdentityServer / OpenIddict token endpoints to issue short-lived challenge tokens
-/// (RequiresTwoFactor, ShouldChangePassword) and consumed back by Account / SendSecurityCode.
+/// (RequiresTwoFactor, ShouldChangePasswordOnNextLogin, PeriodicallyChangePassword)
+/// and consumed back by Account / SendSecurityCode.
 /// Enforces, per purpose, a single active token to be valid.
 /// </summary>
 public class AbpDefaultTokenProvider : AbpSingleActiveTokenProvider
