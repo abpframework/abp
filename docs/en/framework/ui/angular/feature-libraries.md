@@ -9,6 +9,8 @@
 
 ABP has an ever-growing number of feature modules and [introducing a new one](../../architecture/modularity/basics.md) is always possible. When the UI is Angular, these features have modular Angular libraries accompanying them.
 
+> **Standalone-first:** Current templates use standalone APIs. Configuration providers such as `provideIdentityConfig()` belong in `app.config.ts`, and features are lazy-loaded via `createRoutes()` in `app.routes.ts`. The `loadChildren` pattern below loads **route definitions**, not NgModules. In legacy NgModule projects, replace `createRoutes()` with `IdentityModule.forLazy()` (or the equivalent `forLazy()` method on the feature module). See [ABP Now Supports Angular Standalone Applications](https://abp.io/community/articles/abp-now-supports-angular-standalone-applications-zzi2rr2z).
+
 ## Feature Library Content
 
 Each library has at least two key elements:
@@ -84,6 +86,20 @@ const APP_ROUTES: Routes = [
 When you load the identity feature like this, the "Users" page, for example, will have a route path of `/identity/users`. <sup id="a-modify-route">[1](#f-modify-route)</sup>
 
 Depending on the library, the `.createRoutes` static method may also receive some options that configure how the feature works.
+
+#### Legacy NgModule projects
+
+If your application still uses NgModules, lazy-load the feature with `forLazy()` instead:
+
+```js
+{
+  path: "identity",
+  loadChildren: () =>
+    import("@abp/ng.identity").then((m) => m.IdentityModule.forLazy()),
+},
+```
+
+Pass the same options object to `forLazy({ ... })` that you would pass to `createRoutes({ ... })` when configuring extensions or other feature options.
 
 ---
 

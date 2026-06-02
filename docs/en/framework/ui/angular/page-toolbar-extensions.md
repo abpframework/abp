@@ -15,6 +15,8 @@ Page toolbar extension system allows you to add a new action to the toolbar of a
 
 You can take any action (open a modal, make an HTTP API call, redirect to another page... etc) by writing your custom code. You can also access to page data (the main record, usually an entity list) in your code. Additionally, you can pass in custom components instead of using the default button.
 
+> **Standalone-first:** Current ABP templates use standalone APIs. The `loadChildren` examples below lazy-load routes from `createRoutes({ ... })` — they do not require NgModules. Legacy NgModule projects can pass the same options to `IdentityModule.forLazy({ ... })` instead. See [ABP Now Supports Angular Standalone Applications](https://abp.io/community/articles/abp-now-supports-angular-standalone-applications-zzi2rr2z).
+
 ## How to Add an Action to Page Toolbar
 
 In this example, we will add a "Click Me!" action and log `userName` of all users in the user management page of the [Identity Module](../../../modules/identity.md) to the console.
@@ -65,7 +67,7 @@ Import `identityToolbarActionContributors` in your routing configuration and pas
 ```js
 // src/app/app.routes.ts
 
-// other imports
+import { Routes } from '@angular/router';
 import { identityToolbarActionContributors } from './toolbar-action-contributors';
 
 export const APP_ROUTES: Routes = [
@@ -85,6 +87,20 @@ export const APP_ROUTES: Routes = [
 ];
 ```
 
+#### Legacy NgModule projects
+
+```js
+{
+  path: 'identity',
+  loadChildren: () =>
+    import('@abp/ng.identity').then(m =>
+      m.IdentityModule.forLazy({
+        toolbarActionContributors: identityToolbarActionContributors,
+      }),
+    ),
+},
+```
+
 That is it, `logUserNames` toolbar action will be added as the first action on the page toolbar in the users page (`UsersComponent`) of the `identity` package.
 
 ## How to Add a Custom Component to Page Toolbar
@@ -100,7 +116,7 @@ We need to have a component before we can pass it to the toolbar action contribu
 ```js
 // src/app/click-me-button.component.ts
 
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { IdentityUserDto } from '@abp/ng.identity/proxy';
 import { ActionData, EXTENSIONS_ACTION_DATA } from '@abp/ng.components/extensible';
 
@@ -109,10 +125,7 @@ import { ActionData, EXTENSIONS_ACTION_DATA } from '@abp/ng.components/extensibl
   template: `<button class="btn btn-warning" (click)="handleClick()">Click Me!</button>`,
 })
 export class ClickMeButtonComponent {
-  constructor(
-    @Inject(EXTENSIONS_ACTION_DATA)
-    private data: ActionData<IdentityUserDto[]>
-  ) {}
+  private data = inject<ActionData<IdentityUserDto[]>>(EXTENSIONS_ACTION_DATA);
 
   handleClick() {
     this.data.record.forEach(user => console.log(user.userName));
@@ -168,7 +181,7 @@ Import `identityToolbarActionContributors` in your routing configuration and pas
 ```js
 // src/app/app.routes.ts
 
-// other imports
+import { Routes } from '@angular/router';
 import { identityToolbarActionContributors } from './toolbar-action-contributors';
 
 export const APP_ROUTES: Routes = [
@@ -186,6 +199,20 @@ export const APP_ROUTES: Routes = [
 
   // other routes
 ];
+```
+
+#### Legacy NgModule projects
+
+```js
+{
+  path: 'identity',
+  loadChildren: () =>
+    import('@abp/ng.identity').then(m =>
+      m.IdentityModule.forLazy({
+        toolbarActionContributors: identityToolbarActionContributors,
+      }),
+    ),
+},
 ```
 
 That is it, `logUserNames` toolbar action will be added as the first action on the page toolbar in the users page (`UsersComponent`) of the `identity` package and it will be triggered by a custom button, i.e. `ClickMeButtonComponent`. Please note that **component projection is not limited to buttons** and you may use other UI components.

@@ -50,6 +50,8 @@ After signing into a tenant, a tenant switcher appears in the user menu — clic
 
 Users can also leave a tenant. Leaving doesn't delete the association record — it marks it as inactive. This preserves foreign key relationships with other entities. If the user is invited back later, the association is simply reactivated instead of recreated.
 
+The same soft removal is available to a tenant admin from the user list — a **Remove from tenant** action that takes a user off the tenant without touching the global account. Useful for the obvious case: an employee leaves the company, the admin removes them from the tenant, but their account (and any other tenant they belong to) stays intact.
+
 Back to our earlier scenario: the financial consultant now has one account, one password. She picks which company to work in at login, switches between them during the day. The system knows it's the same person, and the audit log can trace her actions across every tenant.
 
 ## Invitations

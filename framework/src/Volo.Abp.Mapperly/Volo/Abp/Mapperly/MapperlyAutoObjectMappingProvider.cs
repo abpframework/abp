@@ -46,7 +46,7 @@ public class MapperlyAutoObjectMappingProvider : IAutoObjectMappingProvider
         {
             mapper.BeforeMap((TSource)source);
             var destination = mapper.Map((TSource)source);
-            TryMapExtraProperties(mapper.GetType().GetSingleAttributeOrNull<MapExtraPropertiesAttribute>(), (TSource)source, destination, GetExtraProperties(destination));
+            TryMapExtraProperties(mapper.GetType().GetSingleAttributeOrNull<MapExtraPropertiesAttribute>(), (TSource)source, destination, new ExtraPropertyDictionary());
             mapper.AfterMap((TSource)source, destination);
             return destination;
         }
@@ -56,7 +56,7 @@ public class MapperlyAutoObjectMappingProvider : IAutoObjectMappingProvider
         {
             reverseMapper.BeforeReverseMap((TSource)source);
             var destination = reverseMapper.ReverseMap((TSource)source);
-            TryMapExtraProperties(reverseMapper.GetType().GetSingleAttributeOrNull<MapExtraPropertiesAttribute>(), (TSource)source, destination, GetExtraProperties(destination));
+            TryMapExtraProperties(reverseMapper.GetType().GetSingleAttributeOrNull<MapExtraPropertiesAttribute>(), (TSource)source, destination, new ExtraPropertyDictionary());
             reverseMapper.AfterReverseMap((TSource)source, destination);
             return destination;
         }
