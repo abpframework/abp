@@ -23,7 +23,8 @@
             <MudItem xs="12" sm="8"></MudItem>
             <MudItem xs="12" sm="4">
                 <MudTextField Margin="Margin.Dense" @bind-Value="GetListInput.Filter"
-                             Label="@L["Search"]"
+                             Placeholder="@L["Search"]"
+                             UserAttributes="@(new Dictionary<string, object> { { "aria-label", L["Search"].Value } })"
                              Adornment="Adornment.Start"
                              AdornmentIcon="@Icons.Material.Filled.Search"
                              Immediate="true"
@@ -44,16 +45,17 @@
 @* ************************* CREATE DIALOG ************************* *@
 @if (HasCreatePermission)
 {
-    <MudDialog @ref="_createDialog" Options="@CreateDialogOptions">
+    <MudDialog DefaultFocus="DefaultFocus.None" @ref="_createDialog" Options="@CreateDialogOptions">
         <TitleContent>
             <MudText Typo="Typo.h6">@L["NewUser"]</MudText>
         </TitleContent>
         <DialogContent>
             <MudForm @ref="@CreateFormRef" Model="@NewEntity">
-                <MudTabs @bind-ActivePanelIndex="@_createTabIndex" PanelClass="pa-4">
+                <MudTabs @bind-ActivePanelIndex="@_createTabIndex" PanelClass="pa-4" KeepPanelsAlive="true">
                     <MudTabPanel Text="@L["UserInformations"]">
                         <MudTextField Margin="Margin.Dense" @bind-Value="@NewEntity.UserName"
                                      Label="@L["DisplayName:UserName"]"
+                                     AutoFocus="true"
                                      Required="true"
                                      RequiredError="@L["The {0} field is required.", L["DisplayName:UserName"]]" />
                         <MudTextField Margin="Margin.Dense" @bind-Value="@NewEntity.Name"
@@ -108,17 +110,18 @@
 @* ************************* EDIT DIALOG ************************* *@
 @if (HasUpdatePermission)
 {
-    <MudDialog @ref="_editDialog" Options="@EditDialogOptions">
+    <MudDialog DefaultFocus="DefaultFocus.None" @ref="_editDialog" Options="@EditDialogOptions">
         <TitleContent>
             <MudText Typo="Typo.h6">@L["Edit"]</MudText>
         </TitleContent>
         <DialogContent>
             <MudForm @ref="@EditFormRef" Model="@EditingEntity">
                 <input type="hidden" @bind-value="@EditingEntity.ConcurrencyStamp" />
-                <MudTabs @bind-ActivePanelIndex="@_editTabIndex" PanelClass="pa-4">
+                <MudTabs @bind-ActivePanelIndex="@_editTabIndex" PanelClass="pa-4" KeepPanelsAlive="true">
                     <MudTabPanel Text="@L["UserInformations"]">
                         <MudTextField Margin="Margin.Dense" @bind-Value="@EditingEntity.UserName"
                                      Label="@L["DisplayName:UserName"]"
+                                     AutoFocus="true"
                                      Required="true"
                                      RequiredError="@L["The {0} field is required.", L["DisplayName:UserName"]]" />
                         <MudTextField Margin="Margin.Dense" @bind-Value="@EditingEntity.Name"

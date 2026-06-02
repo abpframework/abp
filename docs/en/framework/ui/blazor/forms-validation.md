@@ -138,4 +138,33 @@ protected override Task OnCreatingEntityAsync()
 
 > Check the [MudBlazor documentation](https://mudblazor.com/components/form) for the full list of validation modes and the [MudBlazor inputs reference](https://mudblazor.com/components/textfield).
 
+### Modal Focus Behavior
+
+By default a `MudFocusTrap` inside `<MudDialog>` focuses the first tabbable child element after the dialog opens. When the dialog contains a `<MudTabs>` as the first child, that "first tabbable element" is the tab button — not the first input on the active tab — so the user has to click into the field manually.
+
+For dialogs that contain a `<MudTabs>`, use this three-part setup to focus the intended input automatically:
+
+```razor
+<MudDialog DefaultFocus="DefaultFocus.None" @ref="_createDialog" Options="@CreateDialogOptions">
+    <DialogContent>
+        <MudForm @ref="@CreateFormRef" Model="@NewEntity">
+            <MudTabs @bind-ActivePanelIndex="@_createTabIndex" KeepPanelsAlive="true">
+                <MudTabPanel Text="@L["UserInformations"]">
+                    <MudTextField @bind-Value="@NewEntity.UserName"
+                                  Label="@L["UserName"]"
+                                  AutoFocus="true"
+                                  Required="true" />
+                    ...
+                </MudTabPanel>
+                ...
+```
+
+- `DefaultFocus="DefaultFocus.None"` on the `<MudDialog>` disables the focus trap's automatic focus so it doesn't grab the tab button.
+- `KeepPanelsAlive="true"` on the `<MudTabs>` mounts every tab panel up front, so the first input's `firstRender` happens at dialog-open time (otherwise inactive panels are mounted later, and `AutoFocus` runs after the dialog is already visible).
+- `AutoFocus="true"` on the first input asks MudBlazor to focus that field on its first render.
+
+`DialogOptions.DefaultFocus` is ignored for inline dialogs (`<MudDialog @ref> + ShowAsync()`), so always set `DefaultFocus` directly on the `<MudDialog>` element.
+
+For a dialog without `<MudTabs>` (first child is the input), `DefaultFocus="DefaultFocus.FirstChild"` (the MudBlazor default) is enough and you don't need `AutoFocus`.
+
 {{end}}

@@ -33,9 +33,14 @@ public static class AbpPermissionManagementDbContextModelBuilderExtensions
 
             b.ConfigureByConvention();
 
+            // MySQL has a 3072 bytes index key length limit (utf8mb4), the composite
+            // unique index below exceeds it, so shorten these columns for MySQL only.
+            var maxResourceNameLength = builder.IsUsingMySQL() ? 128 : PermissionGrantConsts.MaxResourceNameLength;
+            var maxResourceKeyLength = builder.IsUsingMySQL() ? 128 : PermissionGrantConsts.MaxResourceKeyLength;
+
             b.Property(x => x.Name).HasMaxLength(PermissionDefinitionRecordConsts.MaxNameLength).IsRequired();
-            b.Property(x => x.ResourceName).HasMaxLength(PermissionGrantConsts.MaxResourceNameLength).IsRequired();
-            b.Property(x => x.ResourceKey).HasMaxLength(PermissionGrantConsts.MaxResourceKeyLength).IsRequired();
+            b.Property(x => x.ResourceName).HasMaxLength(maxResourceNameLength).IsRequired();
+            b.Property(x => x.ResourceKey).HasMaxLength(maxResourceKeyLength).IsRequired();
             b.Property(x => x.ProviderName).HasMaxLength(PermissionGrantConsts.MaxProviderNameLength).IsRequired();
             b.Property(x => x.ProviderKey).HasMaxLength(PermissionGrantConsts.MaxProviderKeyLength).IsRequired();
 

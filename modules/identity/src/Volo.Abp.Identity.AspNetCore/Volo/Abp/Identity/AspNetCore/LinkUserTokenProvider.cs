@@ -1,18 +1,25 @@
-﻿using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Identity;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Identity.AspNetCore;
 
-public class LinkUserTokenProvider : DataProtectorTokenProvider<IdentityUser>
+/// <summary>
+/// Link-user token provider that enforces, per purpose, only the most recently issued
+/// token to be valid, with a configurable expiration period.
+/// </summary>
+public class LinkUserTokenProvider : AbpSingleActiveTokenProvider
 {
     public LinkUserTokenProvider(
         IDataProtectionProvider dataProtectionProvider,
-        IOptions<DataProtectionTokenProviderOptions> options,
-        ILogger<DataProtectorTokenProvider<IdentityUser>> logger)
-        : base(dataProtectionProvider, options, logger)
+        IOptions<AbpLinkUserTokenProviderOptions> options,
+        ILogger<DataProtectorTokenProvider<IdentityUser>> logger,
+        IIdentityUserRepository userRepository,
+        ICancellationTokenProvider cancellationTokenProvider)
+        : base(dataProtectionProvider, options, logger, userRepository, cancellationTokenProvider)
     {
-
     }
 }

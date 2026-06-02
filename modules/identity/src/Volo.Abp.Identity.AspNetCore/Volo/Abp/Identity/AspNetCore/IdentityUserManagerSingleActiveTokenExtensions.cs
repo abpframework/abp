@@ -40,4 +40,23 @@ public static class IdentityUserManagerSingleActiveTokenExtensions
         var name = manager.Options.Tokens.ChangeEmailTokenProvider + ":" + UserManager<IdentityUser>.GetChangeEmailTokenPurpose(newEmail);
         return manager.RemoveAuthenticationTokenAsync(user, AbpSingleActiveTokenProvider.InternalLoginProvider, name);
     }
+
+    /// <summary>
+    /// Removes the stored link-user token hash for <paramref name="user"/>,
+    /// immediately invalidating any previously issued link-user token.
+    /// </summary>
+    public static Task<IdentityResult> RemoveLinkUserTokenAsync(this IdentityUserManager manager, IdentityUser user)
+    {
+        return RemoveLinkUserTokenAsync(manager, user, LinkUserTokenProviderConsts.LinkUserTokenPurpose);
+    }
+
+    /// <summary>
+    /// Removes the stored link-user token hash for <paramref name="user"/> and the given <paramref name="purpose"/>,
+    /// immediately invalidating any previously issued link-user token for that purpose.
+    /// </summary>
+    public static Task<IdentityResult> RemoveLinkUserTokenAsync(this IdentityUserManager manager, IdentityUser user, string purpose)
+    {
+        var name = LinkUserTokenProviderConsts.LinkUserTokenProviderName + ":" + purpose;
+        return manager.RemoveAuthenticationTokenAsync(user, AbpSingleActiveTokenProvider.InternalLoginProvider, name);
+    }
 }

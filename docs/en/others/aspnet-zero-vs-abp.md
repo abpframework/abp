@@ -88,13 +88,13 @@
                 <td><i class="fa fa-check text-success"></i></td>
             </tr>
             <tr>
-                <td>Blazor UI</td>
+                <td>Blazor UI (Blazorise, MudBlazor)</td>
                 <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-minus text-secondary"></i></td>
             </tr>
             <tr>
                 <td>React UI</td>
-                <td><i class="fa fa-minus text-secondary"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-check text-success"></i></td>
             </tr>
             <tr>
@@ -479,7 +479,7 @@
             </tr>
             <tr>
                 <td>AI Agent</td>
-                <td>ABP Studio AI Agent</a></td>
+                <td><a href="https://abp.io/studio/ai-agent" target="_blank">ABP Studio AI Agent</a></td>
                 <td><i class="fa fa-minus text-secondary"></i></td>
             </tr>
             <tr>

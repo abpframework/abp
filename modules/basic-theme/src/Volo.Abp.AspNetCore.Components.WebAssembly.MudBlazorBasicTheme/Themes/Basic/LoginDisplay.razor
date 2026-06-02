@@ -17,8 +17,8 @@
 <AuthorizeView>
     <Authorized>
         <MudMenu>
-            <ActivatorContent>
-                <MudIconButton Icon="@Icons.Material.Outlined.AccountCircle" Color="Color.Inherit" />
+            <ActivatorContent Context="menuCtx">
+                <MudIconButton OnClick="@(async () => await menuCtx.ToggleAsync())" Icon="@Icons.Material.Outlined.AccountCircle" Color="Color.Inherit" />
             </ActivatorContent>
             <ChildContent>
             <MudMenuItem>

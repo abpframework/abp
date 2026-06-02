@@ -41,6 +41,25 @@ public class AbpAutoMapperExtensibleDtoExtensions_Tests : AbpIntegratedTest<Mapp
     }
 
     [Fact]
+    public void MapExtraPropertiesTo_Should_Only_Map_Defined_Properties_By_Default_With_Single_Parameter_Map()
+    {
+        var person = new ExtensibleTestPerson()
+            .SetProperty("Name", "John")
+            .SetProperty("Age", 42)
+            .SetProperty("ChildCount", 2)
+            .SetProperty("Sex", "male")
+            .SetProperty("CityName", "Adana");
+
+        var personDto = _objectMapper.Map<ExtensibleTestPerson, ExtensibleTestPersonDto>(person);
+
+        personDto.GetProperty<string>("Name").ShouldBe("John"); //Defined in both classes
+        personDto.GetProperty<int>("ChildCount").ShouldBe(0); //Not defined in the source, but was set to the default value by ExtensibleTestPersonDto constructor
+        personDto.GetProperty("CityName").ShouldBeNull(); //Ignored, but was set to the default value by ExtensibleTestPersonDto constructor
+        personDto.HasProperty("Age").ShouldBeFalse(); //Not defined on the destination
+        personDto.HasProperty("Sex").ShouldBeFalse(); //Not defined in both classes
+    }
+
+    [Fact]
     public void MapExtraProperties_Also_Should_Map_To_RegularProperties()
     {
         var person = new ExtensibleTestPerson()
@@ -63,6 +82,22 @@ public class AbpAutoMapperExtensibleDtoExtensions_Tests : AbpIntegratedTest<Mapp
         //Should not clear existing values
         personDto.HasProperty("IsActive").ShouldBe(false);
         personDto.IsActive.ShouldBe(true);
+    }
+
+    [Fact]
+    public void MapExtraProperties_Also_Should_Map_To_RegularProperties_With_Single_Parameter_Map()
+    {
+        var person = new ExtensibleTestPerson()
+            .SetProperty("Name", "John")
+            .SetProperty("Age", 42);
+
+        var personDto = _objectMapper.Map<ExtensibleTestPerson, ExtensibleTestPersonWithRegularPropertiesDto>(person);
+
+        personDto.HasProperty("Name").ShouldBe(false);
+        personDto.Name.ShouldBe("John");
+
+        personDto.HasProperty("Age").ShouldBe(false);
+        personDto.Age.ShouldBe(42);
     }
 
     [Fact(Skip = "Mapperly requires IHasExtraProperties.ExtraPropertyDictionary to be marked as nullable")]

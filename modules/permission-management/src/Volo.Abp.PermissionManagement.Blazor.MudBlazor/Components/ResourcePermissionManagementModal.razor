@@ -1,7 +1,7 @@
 @using global::MudBlazor
 @inherits Volo.Abp.AspNetCore.Components.AbpComponentBase
 
-<MudDialog @bind-Visible="@_isVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true, CloseOnEscapeKey = true, BackdropClick = false })">
+<MudDialog DefaultFocus="DefaultFocus.FirstChild" @bind-Visible="@_isVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true, CloseOnEscapeKey = true, BackdropClick = false })">
     <TitleContent>
         <MudText Typo="Typo.h6">@L["ResourcePermissions"] - @ResourceDisplayName</MudText>
     </TitleContent>
@@ -82,7 +82,7 @@
 @* Create Resource Permission Dialog *@
 @if (_createDialogVisible)
 {
-    <MudDialog @bind-Visible="@_createDialogVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseOnEscapeKey = true, BackdropClick = false })">
+    <MudDialog DefaultFocus="DefaultFocus.FirstChild" @bind-Visible="@_createDialogVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseOnEscapeKey = true, BackdropClick = false })">
         <TitleContent>
             <MudText Typo="Typo.h6">@L["AddResourcePermission"]</MudText>
         </TitleContent>
@@ -127,7 +127,7 @@
 @* Edit Resource Permission Dialog *@
 @if (_editDialogVisible)
 {
-    <MudDialog @bind-Visible="@_editDialogVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseOnEscapeKey = true, BackdropClick = false })">
+    <MudDialog DefaultFocus="DefaultFocus.FirstChild" @bind-Visible="@_editDialogVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseOnEscapeKey = true, BackdropClick = false })">
         <TitleContent>
             <MudText Typo="Typo.h6">@L["UpdateResourcePermission"]</MudText>
         </TitleContent>

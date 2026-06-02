@@ -33,7 +33,7 @@
 @* ************************* CREATE DIALOG ************************* *@
 @if (HasCreatePermission)
 {
-    <MudDialog @ref="_createDialog" Options="@CreateDialogOptions">
+    <MudDialog DefaultFocus="DefaultFocus.FirstChild" @ref="_createDialog" Options="@CreateDialogOptions">
         <TitleContent>
             <MudText Typo="Typo.h6">@L["NewRole"]</MudText>
         </TitleContent>
@@ -58,7 +58,7 @@
 @* ************************* EDIT DIALOG ************************* *@
 @if (HasUpdatePermission)
 {
-    <MudDialog @ref="_editDialog" Options="@EditDialogOptions">
+    <MudDialog DefaultFocus="DefaultFocus.FirstChild" @ref="_editDialog" Options="@EditDialogOptions">
         <TitleContent>
             <MudText Typo="Typo.h6">@L["Edit"]</MudText>
         </TitleContent>

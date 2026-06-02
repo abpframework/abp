@@ -440,4 +440,5 @@ This module doesn't define any additional distributed event. See the [standard d
 * [Two Factor Authentication](./identity/two-factor-authentication.md)
 * [Session Management](./identity/session-management.md)
 * [Password History](./identity/password-history.md)
+* [Identity Token Providers](./identity/token-providers.md)
 

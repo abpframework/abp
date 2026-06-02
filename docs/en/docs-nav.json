@@ -341,10 +341,6 @@
                   "path": "studio/monitoring-applications.md"
                 },
                 {
-                  "text": "Model Context Protocol (MCP)",
-                  "path": "studio/model-context-protocol.md"
-                },
-                {
                   "text": "Working with Kubernetes",
                   "path": "studio/kubernetes.md"
                 },
@@ -585,6 +581,10 @@
                   "path": "framework/infrastructure/artificial-intelligence/microsoft-semantic-kernel.md"
                 }
               ]
+            },
+            {
+              "text": "Application URLs",
+              "path": "framework/infrastructure/app-urls.md"
             },
             {
               "text": "Background Jobs",
@@ -2263,6 +2263,10 @@
               ]
             }
           ]
+        },
+        {
+          "text": "Modular Monolith",
+          "path": "solution-templates/modular-monolith"
         },
         {
           "text": "Microservice Solution",

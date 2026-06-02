@@ -140,7 +140,7 @@ public partial class FeatureManagementModal
     {
         try
         {
-            var confirmed = await DialogService.ShowMessageBox(
+            var confirmed = await DialogService.ShowMessageBoxAsync(
                 L["AreYouSure"],
                 L["AreYouSureToResetToDefault"],
                 yesText: L["Yes"],
