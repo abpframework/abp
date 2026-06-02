@@ -19,6 +19,7 @@ public class AbpIdentityAspNetCoreModule : AbpModule
         {
             builder
                 .AddDefaultTokenProviders()
+                .AddTokenProvider<AbpDefaultTokenProvider>(TokenOptions.DefaultProvider)
                 .AddTokenProvider<LinkUserTokenProvider>(LinkUserTokenProviderConsts.LinkUserTokenProviderName)
                 .AddTokenProvider<AbpPasswordResetTokenProvider>(AbpPasswordResetTokenProvider.ProviderName)
                 .AddTokenProvider<AbpEmailConfirmationTokenProvider>(AbpEmailConfirmationTokenProvider.ProviderName)
