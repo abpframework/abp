@@ -129,11 +129,11 @@ The codes delivered by the **Email** and **SMS** verification providers are prod
 - `AbpEmailTwoFactorTokenProvider` is registered under `TokenOptions.DefaultEmailProvider` and replaces ASP.NET Core Identity's TOTP-based `EmailTokenProvider<TUser>`.
 - `AbpPhoneNumberTwoFactorTokenProvider` is registered under `TokenOptions.DefaultPhoneProvider` and replaces ASP.NET Core Identity's TOTP-based `PhoneNumberTokenProvider<TUser>`.
 
-Both derive from the abstract `AbpTwoFactorTokenProvider`. The `Authenticator` provider is unaffected: it is overridden by `AbpAuthenticatorTokenProvider`, which still relies on TOTP ([RFC 6238](https://datatracker.ietf.org/doc/html/rfc6238)) because authenticator apps require it.
+Both derive from the abstract `AbpTwoFactorTokenProvider`. The `Authenticator` provider remains ASP.NET Core Identity's built-in `AuthenticatorTokenProvider<TUser>`, because authenticator apps require TOTP ([RFC 6238](https://datatracker.ietf.org/doc/html/rfc6238)).
 
-On generation, the provider produces a cryptographically-random numeric code (default 6 digits), encrypts it together with an absolute UTC expiration via `IDataProtector`, and persists the resulting blob in the user tokens table. The plaintext code is sent to the user via email/SMS and is never stored. Validation reloads the persisted entry, verifies it has not expired, decrypts and compares constant-time against the submitted input, and — on success — removes the entry so it cannot be replayed.
+On generation, the provider produces a cryptographically-random numeric code (default 6 digits), encrypts the code with `IDataProtector`, appends the absolute expiration as a Unix-seconds value, and persists the combined string in the user tokens table. The plaintext code is sent to the user via email/SMS and is never stored. Validation reloads the persisted entry, verifies it has not expired, decrypts and compares constant-time against the submitted input, and — on success — removes the entry so it cannot be replayed.
 
-This persisted, single-use design has a few properties worth being explicit about:
+This persisted, single-use design has the following effects:
 
 1. **A generated code is single-use.** Successful verification removes the stored entry. Re-submitting the same code from a concurrent session fails.
 2. **Generating a new code invalidates the previous one.** `SetToken` overwrites the same `(provider, name)` row, so at most one code is valid at any time. Re-issuing a code (e.g. when the user requests a new one) replaces the stored entry and the previously delivered code stops working.
