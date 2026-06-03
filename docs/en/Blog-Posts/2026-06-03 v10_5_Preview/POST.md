@@ -24,10 +24,9 @@ Here is a brief list of titles explained in the next sections:
 - S3-Compatible Blob Storage Support
 - OpenIddict: Default Scope Fallback Options
 - Dynamic Background Worker Capability Markers
-- Identity: Single-Active Token Provider Improvements
+- Account: Single-Active Token Provider Improvements
 - CMS Kit: CodeMirror 6 Update
-- LowCode and Admin Console Improvements
-- Account, Shared User, and AI Management Improvements
+- Shared User Accounts: Remove Users from Tenants
 - Dependency Updates
 
 ### S3-Compatible Blob Storage Support
@@ -98,11 +97,13 @@ This is useful for modules and tools that need to adapt their UI or behavior bas
 
 > See [#25397](https://github.com/abpframework/abp/pull/25397) for details.
 
-### Identity: Single-Active Token Provider Improvements
+### Account: Single-Active Token Provider Improvements
 
-ABP continues improving token security in the Identity module.
+ABP continues improving token security in the [Account PRO module](https://abp.io/modules/account-pro).
 
 In v10.5, the link-user token provider now uses ABP's single-active token infrastructure. Only the latest generated link-user token remains valid, and applications can configure the token lifetime through dedicated options.
+
+![link account demo](link-account-demo.mp4)
 
 The default ASP.NET Core Identity token provider used by ABP has also been replaced with an ABP single-active variant. Password-flow challenge tokens, such as two-factor and password-change challenge flows, are now single-active per user and purpose with a short default lifetime.
 
@@ -120,21 +121,13 @@ This modernizes the editor infrastructure used by CMS Kit and related UI feature
 
 > See [#25358](https://github.com/abpframework/abp/pull/25358) for details.
 
-### LowCode and Admin Console Improvements
+### Shared User Accounts: Remove Users from Tenants
 
-ABP Commercial v10.5 RC includes several improvements for the LowCode module and Admin Console experience.
+ABP Commercial v10.5 RC improves shared user account administration with a new tenant-side removal action.
 
-The LowCode designer has been integrated into the Admin Console with shared layout and navigation, and the LowCode React demo/template experience has been aligned with the generated template behavior. Dynamic upload scenarios have also been improved with `IRemoteStreamContent` support.
+Administrators can now remove a shared user from the current tenant directly from the user management UI. This provides an admin-managed counterpart to the self-service leave flow and keeps shared-account administration easier to handle in multi-tenant systems.
 
-These changes make the LowCode development and administration experience more integrated and practical for real projects.
-
-### Account, Shared User, and AI Management Improvements
-
-ABP Commercial v10.5 RC also includes improvements across account, shared-user, and AI Management scenarios:
-
-- Account linking has been hardened by binding link tokens to source-side consent data.
-- Shared user account administration has been improved with fixes for host admin actions and tenant removal scenarios.
-- AI Management proxy generation has been updated for missing proxy scenarios.
+![remove shared user from tenant](remove-from-tenants.png)
 
 ### Dependency Updates
 
