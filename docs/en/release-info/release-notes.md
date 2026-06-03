@@ -14,6 +14,17 @@ Also see the following notes about ABP releases:
 - [ABP Studio release notes](../studio/release-notes.md)
 - [Change logs for ABP pro packages](https://abp.io/pro-releases)
 
+## 10.5 (2026-06-02)
+
+See the detailed **[blog post / announcement](https://abp.io/community/articles/announcing-abp-10-5-release-candidate-k6oxdfle)** for the v10.5 release.
+
+- S3-Compatible Blob Storage Support
+- OpenIddict: Default Scope Fallback Options
+- Dynamic Background Worker Capability Markers
+- Account: Single-Active Token Provider Improvements
+- CMS Kit: CodeMirror 6 Update
+- Shared User Accounts: Remove Users from Tenants
+
 ## 10.4 (2026-05-14)
 
 See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-4-stable-release-e0u81o2z)** for the v10.4 release.
