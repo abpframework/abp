@@ -10,6 +10,8 @@ You can check the [Get Started page](https://abp.io/get-started) to see how to g
 
 By default, ABP Studio uses stable versions to create solutions. Therefore, if you want to create a solution with a preview version, first you need to create a solution and then switch your solution to the preview version from the ABP Studio UI:
 
+![studio-switch-to-preview](studio-switch-to-preview.png)
+
 ## Migration Guide
 
 There are no explicitly marked breaking changes in this version. However, there are still some important migration notes for specific scenarios. Please check the migration guide if you are upgrading from v10.4 or earlier: [ABP Version 10.5 Migration Guide](https://abp.io/docs/10.5/release-info/migration-guides/abp-10-5).
@@ -154,7 +156,15 @@ ABP v10.5 RC includes several dependency and package updates:
 
 ### New ABP Community Articles
 
-As always, exciting articles have been contributed by the ABP community. In this release cycle, the community and ABP team published new content around ABP Studio AI Agent, React Native templates and sample applications, and AI-assisted development with ABP.
+As always, exciting articles have been contributed by the ABP community. I will highlight some of them here:
+
+- [Fahri Gedik](https://abp.io/community/members/fahrigedik) has published 2 new articles:
+    - [New Look for ABP React Native: NativeWind, Modernization & Two Sample Apps](https://abp.io/community/articles/new-abp-modern-react-native-template-rxjiyrpb)
+    - [The Antidote to Vibe Architecting: ABP Studio AI Agent](https://abp.io/community/articles/the-antidote-to-vibe-architecting-abp-studio-ai-agent-mpdeh3gr)
+- [Template In, Product Out: Building Hanova with the ABP AI Agent](https://abp.io/community/articles/template-in-product-out-building-hanova-with-the-abp-ai-hcntpk3j) by [Sumeyye Kurtulus](https://abp.io/community/members/sumeyye.kurtulus)
+- [Empowering AI Agents with ABP Framework: A Comprehensive Skill Collection](https://abp.io/community/articles/abp-framework-ai-agent-skills-qccn87tu) by [Burak Demir](https://abp.io/community/members/burakdemir)
+- [Google Pomelli: How to Market Your App Without Being a Designer](https://abp.io/community/articles/google-pomelli-how-to-market-your-app-1hu48pda) by [Engincan Veske](https://abp.io/community/members/EngincanV)
+- [DevDays 2026 Conf From a Speaker's View](https://abp.io/community/articles/devdays-2026-conference-from-a-speakers-view-39d007hs) by [Alper Ebiçoğlu](https://abp.io/community/members/alper)
 
 Thanks to the ABP Community for all the content they have published. You can also [post your ABP related (text or video) content](https://abp.io/community/posts/create) to the ABP Community.
 
