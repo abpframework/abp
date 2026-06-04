@@ -18,6 +18,7 @@
     "DefaultFromDisplayName": "نام نمایشی ارسال کننده پیش فرض",
     "Feature:SettingManagementGroup": "تنظیمات مدیریت",
     "Feature:SettingManagementEnable": "فعال کردن مدیریت تنظیمات",
-    "Feature:SettingManagementEnableDescription": "سیستم مدیریت تنظیمات را در برنامه فعال کنید."
+    "Feature:SettingManagementEnableDescription": "سیستم مدیریت تنظیمات را در برنامه فعال کنید.",
+    "NoSettingsAvailable": "تنظیماتی برای نمایش وجود ندارد."
   }
 }
