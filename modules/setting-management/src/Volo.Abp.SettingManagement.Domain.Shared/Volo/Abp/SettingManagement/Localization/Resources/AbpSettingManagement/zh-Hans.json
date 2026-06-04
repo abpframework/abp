@@ -37,6 +37,7 @@
     "Feature:SettingManagementEnableDescription": "在应用程序中启用设置管理系统。",
     "Feature:AllowChangingEmailSettings": "允许更改邮件设置",
     "Feature:AllowChangingEmailSettingsDescription": "允许更改邮件设置。",
-    "SmtpPasswordPlaceholder": "输入一个值以更新密码"
+    "SmtpPasswordPlaceholder": "输入一个值以更新密码",
+    "NoSettingsAvailable": "没有可显示的设置。"
   }
 }

@@ -33,6 +33,7 @@
     "Feature:SettingManagementEnableDescription": "Ενεργοποίηση συστήματος διαχείρισης ρυθμίσεων στην εφαρμογή.",
     "Feature:AllowChangingEmailSettings": "Επιτρέψτε την αλλαγή των ρυθμίσεων email",
     "Feature:AllowChangingEmailSettingsDescription": "Επιτρέψτε την αλλαγή των ρυθμίσεων email.",
-    "SmtpPasswordPlaceholder": "Εισαγάγετε μια τιμή για ενημέρωση κωδικού πρόσβασης"
+    "SmtpPasswordPlaceholder": "Εισαγάγετε μια τιμή για ενημέρωση κωδικού πρόσβασης",
+    "NoSettingsAvailable": "Δεν υπάρχουν ρυθμίσεις για εμφάνιση."
   }
 }
