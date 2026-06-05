@@ -83,8 +83,8 @@ public class EditModalModel : IdentityPageModel
             return null;
         }
 
-        var user = await IdentityUserAppService.GetAsync(userId.Value);
-        return user.UserName;
+        var user = await IdentityUserAppService.FindByIdAsync(userId.Value);
+        return user?.UserName;
     }
 
     public virtual async Task<IActionResult> OnPostAsync()

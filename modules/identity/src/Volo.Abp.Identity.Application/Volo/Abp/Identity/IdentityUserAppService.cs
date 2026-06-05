@@ -180,6 +180,14 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
         );
     }
 
+    [Authorize(IdentityPermissions.Users.Default)]
+    public virtual async Task<IdentityUserDto> FindByIdAsync(Guid id)
+    {
+        return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
+            await UserManager.FindByIdAsync(id.ToString())
+        );
+    }
+
     protected virtual async Task UpdateUserByInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
     {
         if (!string.Equals(user.Email, input.Email, StringComparison.InvariantCultureIgnoreCase))

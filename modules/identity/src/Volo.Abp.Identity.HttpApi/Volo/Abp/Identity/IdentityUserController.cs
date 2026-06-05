@@ -54,6 +54,13 @@ public class IdentityUserController : AbpControllerBase, IIdentityUserAppService
     }
 
     [HttpGet]
+    [Route("by-id/{id}")]
+    public virtual Task<IdentityUserDto> FindByIdAsync(Guid id)
+    {
+        return UserAppService.FindByIdAsync(id);
+    }
+
+    [HttpGet]
     [Route("{id}/roles")]
     public virtual Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id)
     {
