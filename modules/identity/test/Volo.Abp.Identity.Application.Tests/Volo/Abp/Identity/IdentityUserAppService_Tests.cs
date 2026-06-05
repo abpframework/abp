@@ -52,6 +52,37 @@ public class IdentityUserAppService_Tests : AbpIdentityApplicationTestBase
     }
 
     [Fact]
+    public async Task FindByIdAsync_Should_Return_User_When_Exists()
+    {
+        var johnNash = GetUser("john.nash");
+
+        var result = await _userAppService.FindByIdAsync(johnNash.Id);
+
+        result.ShouldNotBeNull();
+        result.Id.ShouldBe(johnNash.Id);
+        result.UserName.ShouldBe(johnNash.UserName);
+    }
+
+    [Fact]
+    public async Task FindByIdAsync_Should_Return_Null_When_User_Does_Not_Exist()
+    {
+        var result = await _userAppService.FindByIdAsync(Guid.NewGuid());
+
+        result.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task FindByIdAsync_Should_Return_Null_When_User_Is_Soft_Deleted()
+    {
+        var johnNash = GetUser("john.nash");
+        await _userAppService.DeleteAsync(johnNash.Id);
+
+        var result = await _userAppService.FindByIdAsync(johnNash.Id);
+
+        result.ShouldBeNull();
+    }
+
+    [Fact]
     public async Task GetListAsync()
     {
         //Act
