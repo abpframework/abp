@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Capability matrix for ABP Studio AI Agent modes, built-in tools, Studio automation tools, subagents, MCP tools, and hidden tool boundaries."
+    "Description": "Capability matrix for ABP Studio AI Agent modes, built-in tools, Studio automation tools, subagents, and hidden tool boundaries."
 }
 ```
 
@@ -17,7 +17,7 @@
 }
 ````
 
-ABP Studio exposes tools to the AI Agent based on the selected mode, run context, tool settings, permissions, and connected MCP servers. The tool list is locked per running Agent-mode session to keep prompt caching and execution stable while other sessions run in parallel.
+ABP Studio exposes tools to the AI Agent based on the selected mode, run context, tool settings, and permissions. The tool list is locked per running Agent-mode session to keep prompt caching and execution stable while other sessions run in parallel.
 
 ## Mode Capability Matrix
 
@@ -41,7 +41,6 @@ ABP Studio exposes tools to the AI Agent based on the selected mode, run context
 | Update active plan steps | Yes | No | No |
 | Search/read ABP docs directly | No | No | Yes |
 | Studio automation tools | Yes | No | No |
-| Connected MCP tools | Yes | No | No |
 | Spawn subagents | Yes | Yes | Yes |
 
 ABP documentation tools are available to Ask mode and ABP documentation subagents. The main Agent-mode tool list does not include direct ABP docs search/read tools; Agent mode can use the ABP documentation subagent when documentation research is needed.
@@ -137,16 +136,6 @@ The `spawn_subagent` tool delegates bounded research work to read-only specialis
 | `abpdocsearcher` | Searches and reads ABP documentation for framework-specific questions. |
 
 Subagents are read-only. They are intended for parallel research and return summarized findings to the main agent.
-
-## MCP Tools
-
-Connected MCP server tools are added to Agent mode when:
-
-- The MCP server is configured and enabled.
-- The server connection is successful.
-- The individual MCP tool is not disabled in settings.
-
-MCP resources are visible in settings and can be opened for inspection, but the Agent-mode callable surface is composed from MCP tools.
 
 ## Tool Execution Gates
 

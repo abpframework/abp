@@ -29,7 +29,7 @@ The selected mode determines the agent's effective permission boundary.
 
 | Mode | Purpose | Tool boundary |
 | --- | --- | --- |
-| Agent | Coding and execution | Can read and write files, run shell commands, add migrations, run enabled Studio tools, update active plan steps, and call connected MCP tools. |
+| Agent | Coding and execution | Can read and write files, run shell commands, add migrations, run enabled Studio tools, and update active plan steps. |
 | Plan | Read-only planning | Can inspect code and documentation, create or update plan files, and use read-only subagents. It cannot modify solution files or run shell/write tools. |
 | Ask | Read-only question answering | Can inspect code, search/read ABP documentation, fetch relevant AI skills, and use read-only subagents. It cannot create plans or modify files. |
 
@@ -94,4 +94,4 @@ When a run profile is active, the system prompt includes information about runna
 
 ## Privacy Boundary
 
-The agent uses the files, prompts, tool outputs, attachments, URLs, and connected tool results supplied to a session. Sensitive files can be excluded with `.abpignore`; tool permissions restrict shell commands, domain fetches, and downloads.
+The agent uses the files, prompts, Studio tool outputs, attachments, and URLs supplied to a session. Sensitive files can be excluded with `.abpignore`; tool permissions restrict shell commands, domain fetches, and downloads.

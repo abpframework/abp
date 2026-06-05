@@ -72,7 +72,7 @@ Blocking review content includes user notes and AI suggestions with severities o
 
 ## Sending Review Findings To The Agent
 
-The Git panel can send review findings to ABP Agent. Studio builds a prompt that includes:
+The Git panel can send review findings to AI Agent. Studio builds a prompt that includes:
 
 - A request to review and apply the notes for the current Git changes.
 - File paths.
@@ -93,13 +93,13 @@ The generator returns a concise past-tense commit message. It is intended to sum
 
 ## Merge Conflict Handoff
 
-When unresolved merge conflicts exist, the Git panel can send the conflict list to ABP Agent. The generated prompt asks the agent to resolve conflicts and request clarification when the correct resolution is ambiguous.
+When unresolved merge conflicts exist, the Git panel can send the conflict list to AI Agent. The generated prompt asks the agent to resolve conflicts and request clarification when the correct resolution is ambiguous.
 
 Conflict handoff can use the current session or create a new session. It starts with analysis skipped so the prompt is centered on the conflict files.
 
 ## GitHub Issue Handoff
 
-GitHub issue details can be sent to ABP Agent from Studio when GitHub integration is connected.
+GitHub issue details can be sent to AI Agent from Studio when GitHub integration is connected.
 
 The generated issue prompt includes:
 
@@ -115,7 +115,7 @@ Comments can be excluded from the AI prompt. Images that belong to excluded comm
 
 ## GitHub Pull Request Handoff
 
-Pull request details can be sent to ABP Agent when the current branch matches the PR branch.
+Pull request details can be sent to AI Agent when the current branch matches the PR branch.
 
 The generated PR prompt includes:
 
@@ -143,4 +143,4 @@ Image handling still depends on the selected model's image support. If the model
 
 Agent URL fetching can enrich GitHub URLs with issue or pull request information when GitHub integration is available. Pull request URL context can include review comments up to Studio's fetch limits.
 
-This is separate from the explicit GitHub issue/PR "Send to ABP Agent" actions in the Git UI.
+This is separate from the explicit GitHub issue/PR "Send to AI Agent" actions in the Git UI.

@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Technical guidance for coding with ABP Studio AI Agent, including mode selection, scopes, prompting, verification, Git review handoff, MCP tools, and parallel sessions."
+    "Description": "Technical guidance for coding with ABP Studio AI Agent, including mode selection, scopes, prompting, verification, Git review handoff, Studio tools, and parallel sessions."
 }
 ```
 
@@ -25,7 +25,7 @@ Use the mode that matches the expected side effect.
 
 | Work type | Mode |
 | --- | --- |
-| Code changes, migrations, builds, proxy generation, app/container control, or MCP tool execution | Agent |
+| Code changes, migrations, builds, proxy generation, app/container control, or Studio tool execution | Agent |
 | Technical implementation design before coding | Plan |
 | Explanation, source navigation, ABP documentation lookup, and codebase questions | Ask |
 
@@ -62,7 +62,7 @@ This keeps the prompt aligned with the actual Git state and avoids missing files
 
 ## AI Review Handoff
 
-AI Review is a review workflow, not an implementation workflow. After suggestions are produced, send the review content to ABP Agent when the intent is to apply fixes.
+AI Review is a review workflow, not an implementation workflow. After suggestions are produced, send the review content to AI Agent when the intent is to apply fixes.
 
 The handoff prompt contains verified suggestions, user notes, file paths, and line references. The agent then runs in the normal coding workflow and can edit files, run builds, and update active plan steps depending on the session mode and tools.
 
@@ -106,12 +106,6 @@ Workflow actions can configure:
 - C# target package.
 - Whether C# contract classes are generated.
 
-## MCP Tools
-
-Use MCP tools for external systems that are not built into ABP Studio. MCP server tools are available only in Agent mode and only when the server is connected and the tool is enabled.
-
-Because MCP tools can have arbitrary side effects depending on the server, keep MCP servers limited to trusted tools and disable tools that should not be callable by the agent.
-
 ## AI Rules And Lessons
 
 Use always-apply AI rules for standards that should affect every run, such as architecture rules, naming conventions, security requirements, or team-specific ABP patterns.
@@ -134,6 +128,6 @@ Common boundaries:
 - Files matched by `.abpignore` are inaccessible.
 - Image attachments require a model with image support.
 - Shell, URL fetch, and download operations can wait for permission.
-- Disabled Studio tools and disabled MCP tools are omitted from the tool list.
+- Disabled Studio tools are omitted from the tool list.
 - Plan and Ask modes cannot modify files.
 - Hidden internal Studio tools are not exposed to the agent.

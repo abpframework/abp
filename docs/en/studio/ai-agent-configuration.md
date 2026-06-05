@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Configuration reference for ABP Studio AI Agent models, reasoning, context limits, parallel sessions, permissions, AI rules, learned lessons, and MCP servers."
+    "Description": "Configuration reference for ABP Studio AI Agent models, reasoning, context limits, parallel sessions, permissions, AI rules, and learned lessons."
 }
 ```
 
@@ -17,7 +17,7 @@
 }
 ````
 
-AI Agent configuration controls model selection, execution limits, enabled tools, tool permissions, AI rules, learned lessons, and Model Context Protocol (MCP) servers.
+AI Agent configuration controls model selection, execution limits, enabled tools, tool permissions, AI rules, and learned lessons.
 
 ## Model Provider
 
@@ -136,43 +136,3 @@ Always-apply rules are injected into the agent's system prompt. Non-always-apply
 The `save_lesson` tool records verified corrections into `.abpstudio/ai-rules/ai-learned-lessons.mdc`. Learned lessons are injected as high-priority context in future sessions.
 
 The agent is instructed to save a lesson only after a user correction is verified against source or tool output. When the learned lessons file becomes large, Studio can consolidate it with the text processor model.
-
-## MCP Servers
-
-ABP Studio can connect to external MCP servers and expose their tools to Agent mode. MCP servers can be configured with:
-
-| Transport | Configuration |
-| --- | --- |
-| Stdio | Command, arguments, and environment variables. |
-| HTTP | URL and headers. |
-
-Studio imports MCP configuration from Cursor, Claude, VS Code, Windsurf, and bare MCP server JSON formats. Studio exports MCP server configuration in the standard `mcpServers` JSON shape.
-
-Connected MCP servers show their connection status, tool count, tools, and resources. Individual MCP tools can be disabled. Disabled MCP tools are omitted from Agent mode. MCP resources can be opened from settings for inspection.
-
-MCP tools are added only for connected and enabled servers. Plan and Ask modes do not receive MCP tools.
-
-![mcp-servers-settings](./images/ai-agent/mcp-servers-settings.png)
-
-## ABP Studio MCP Bridge
-
-The ABP CLI includes `abp mcp-studio`, a stdio bridge for external AI tools. The command forwards JSON-RPC MCP messages to ABP Studio's local MCP endpoint and requires ABP Studio to be running.
-
-Default endpoint:
-
-```text
-http://localhost:38280/mcp/
-```
-
-Example external client configuration:
-
-```json
-{
-  "mcpServers": {
-    "abp-studio": {
-      "command": "abp",
-      "args": ["mcp-studio"]
-    }
-  }
-}
-```
