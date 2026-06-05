@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Configuration reference for ABP Studio AI Agent models, reasoning, context limits, parallel sessions, permissions, AI rules, and learned lessons."
+    "Description": "Configuration reference for ABP Studio AI Agent models, reasoning, context limits, parallel sessions, permissions, MCP tool connections, AI rules, and learned lessons."
 }
 ```
 
@@ -17,7 +17,7 @@
 }
 ````
 
-AI Agent configuration controls model selection, execution limits, enabled tools, tool permissions, AI rules, and learned lessons.
+AI Agent configuration controls model selection, execution limits, enabled tools, tool permissions, MCP tool connections, AI rules, and learned lessons.
 
 ## Model Provider
 
@@ -99,6 +99,25 @@ Some tools require explicit permission before execution.
 | File downloads | Studio always asks before downloading. |
 
 Permission choices include allow once, allow always, and skip. "Allow always" persists in the AI Agent settings and is reused by future sessions.
+
+## MCP Tool Connections
+
+ABP Studio can connect to user-configured Model Context Protocol (MCP) servers and expose their tools to Agent mode. This is an MCP client integration for the AI Agent. ABP Studio AI Agent does not expose itself as an MCP server for external AI clients.
+
+MCP server connections can be configured with:
+
+| Transport | Configuration |
+| --- | --- |
+| Stdio | Command, arguments, and environment variables. |
+| HTTP | URL and headers. |
+
+Studio imports MCP server configuration from Cursor, Claude, VS Code, Windsurf, and bare MCP server JSON formats. Studio exports MCP server configuration in the standard `mcpServers` JSON shape.
+
+Connected MCP servers show their connection status, tool count, tools, and resources. Individual MCP tools can be disabled. Disabled MCP tools are omitted from Agent mode. MCP resources can be opened from settings for inspection.
+
+MCP tools are added only for connected and enabled servers. Plan and Ask modes do not receive MCP tools.
+
+![mcp-servers-settings](./images/ai-agent/mcp-servers-settings.png)
 
 ## `.abpignore`
 

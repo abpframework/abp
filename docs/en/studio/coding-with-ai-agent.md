@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Technical guidance for coding with ABP Studio AI Agent, including mode selection, scopes, prompting, verification, Git review handoff, Studio tools, and parallel sessions."
+    "Description": "Technical guidance for coding with ABP Studio AI Agent, including mode selection, scopes, prompting, verification, Git review handoff, Studio tools, MCP tools, and parallel sessions."
 }
 ```
 
@@ -25,7 +25,7 @@ Use the mode that matches the expected side effect.
 
 | Work type | Mode |
 | --- | --- |
-| Code changes, migrations, builds, proxy generation, app/container control, or Studio tool execution | Agent |
+| Code changes, migrations, builds, proxy generation, app/container control, Studio tool execution, or MCP tool execution | Agent |
 | Technical implementation design before coding | Plan |
 | Explanation, source navigation, ABP documentation lookup, and codebase questions | Ask |
 
@@ -106,6 +106,14 @@ Workflow actions can configure:
 - C# target package.
 - Whether C# contract classes are generated.
 
+## MCP Tools
+
+Use configured MCP tools when the agent must work with an external system that is not covered by built-in ABP Studio tools. MCP tools are available only in Agent mode, only when the MCP server is connected, and only when the individual tool is enabled.
+
+Because MCP tools can have side effects defined by the connected server, keep MCP connections limited to trusted servers and disable tools that should not be callable by the AI Agent.
+
+MCP tool configuration is for adding external tools to the AI Agent. It does not expose ABP Studio AI Agent as an MCP server for other AI clients.
+
 ## AI Rules And Lessons
 
 Use always-apply AI rules for standards that should affect every run, such as architecture rules, naming conventions, security requirements, or team-specific ABP patterns.
@@ -128,6 +136,6 @@ Common boundaries:
 - Files matched by `.abpignore` are inaccessible.
 - Image attachments require a model with image support.
 - Shell, URL fetch, and download operations can wait for permission.
-- Disabled Studio tools are omitted from the tool list.
+- Disabled Studio tools and disabled MCP tools are omitted from the tool list.
 - Plan and Ask modes cannot modify files.
 - Hidden internal Studio tools are not exposed to the agent.
