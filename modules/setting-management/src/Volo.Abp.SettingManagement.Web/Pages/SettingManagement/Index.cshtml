@@ -25,24 +25,34 @@
 <div id="SettingManagementWrapper">
     <abp-card>
         <abp-card-body>
-            <div class="row">
-                <div class="col-md-3">
-                    <ul class="nav flex-column nav-pills" id="tabs-nav" role="tablist">
-                        @for (var i = 0; i < Model.SettingPageCreationContext.Groups.Count; i++)
-                        {
-                            var group = Model.SettingPageCreationContext.Groups[i];
-                            var active = i == 0 ? "active" : string.Empty;
-                            <li class="nav-item">
-                                <a href="javascript:;" class="nav-link @active" data-id="@group.Id" data-bs-toggle="pill" role="tab">@group.DisplayName</a>
-                            </li>
-                        }
-                    </ul>
-                </div>
-                <div class="col-md-9">
-                    <div class="tab-content pt-0" id="tab-content">
+            @if (Model.SettingPageCreationContext.Groups.Count > 0)
+            {
+                <div class="row">
+                    <div class="col-md-3">
+                        <ul class="nav flex-column nav-pills" id="tabs-nav" role="tablist">
+                            @for (var i = 0; i < Model.SettingPageCreationContext.Groups.Count; i++)
+                            {
+                                var group = Model.SettingPageCreationContext.Groups[i];
+                                var active = i == 0 ? "active" : string.Empty;
+                                <li class="nav-item">
+                                    <a href="javascript:;" class="nav-link @active" data-id="@group.Id" data-bs-toggle="pill" role="tab">@group.DisplayName</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="tab-content pt-0" id="tab-content">
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
+            else
+            {
+                <div class="text-center text-muted py-5">
+                    <i class="bi bi-gear-fill" style="font-size: 3rem; opacity: 0.4;" aria-hidden="true"></i>
+                    <p class="mt-3 mb-0">@L["NoSettingsAvailable"]</p>
+                </div>
+            }
         </abp-card-body>
     </abp-card>
 </div>
