@@ -555,22 +555,18 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         }
         else if (Options.User.AllowedUserNameCharacters.Where(char.IsDigit).Distinct().Count() >= 4)
         {
-            // The AllowedUserNameCharacters includes 4 numbers. So, we are generating 4 random numbers and appending to the username.
-            var numbers = Options.User.AllowedUserNameCharacters.Where(char.IsDigit).OrderBy(x => Guid.NewGuid()).Take(4).ToArray();
-            var minArray = numbers.OrderBy(x => x).ToArray();
-            if (minArray[0] == '0')
-            {
-                var secondItem = minArray[1];
-                minArray[0] = secondItem;
-                minArray[1] = '0';
-            }
-            var min = int.Parse(new string(minArray));
-            var max = int.Parse(new string(numbers.OrderByDescending(x => x).ToArray()));
+            // The AllowedUserNameCharacters includes at least 4 distinct digits. So, we are picking 4 random digits from them and appending to the username.
+            var allowedDigits = Options.User.AllowedUserNameCharacters.Where(char.IsDigit).Distinct().ToArray();
             tryCount = 0;
             do
             {
-                var randomUserName = userName + RandomHelper.GetRandom(min, max);
-                if ( await ValidateUserNameAsync(randomUserName))
+                var randomDigits = new char[4];
+                for (var i = 0; i < randomDigits.Length; i++)
+                {
+                    randomDigits[i] = allowedDigits[RandomHelper.GetRandom(0, allowedDigits.Length)];
+                }
+                var randomUserName = userName + new string(randomDigits);
+                if (await ValidateUserNameAsync(randomUserName))
                 {
                     return randomUserName;
                 }
