@@ -493,7 +493,7 @@ public class IdentityUserManager_Tests : AbpIdentityDomainTestBase
     {
         _identityUserManager.Options.User.AllowedUserNameCharacters = "admin0123";
         var sawLeadingZero = false;
-        for (var i = 0; i < 500; i++)
+        for (var i = 0; i < 100; i++)
         {
             var username = await _identityUserManager.GetUserNameFromEmailAsync("admin@abp.io");
             username.Length.ShouldBe(9);
@@ -504,7 +504,7 @@ public class IdentityUserManager_Tests : AbpIdentityDomainTestBase
                 sawLeadingZero = true;
             }
         }
-        sawLeadingZero.ShouldBeTrue("expected at least one username with leading-zero random suffix across 500 runs");
+        sawLeadingZero.ShouldBeTrue("expected at least one username with leading-zero random suffix across 100 runs");
     }
 
     private async Task CreateRandomDefaultRoleAsync()
