@@ -58,6 +58,14 @@ public partial class IdentityUserClientProxy : ClientProxyBase<IIdentityUserAppS
         });
     }
 
+    public virtual async Task<IdentityUserDto> FindByIdAsync(Guid id)
+    {
+        return await RequestAsync<IdentityUserDto>(nameof(FindByIdAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(Guid), id }
+        });
+    }
+
     public virtual async Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id)
     {
         return await RequestAsync<ListResultDto<IdentityRoleDto>>(nameof(GetRolesAsync), new ClientProxyRequestTypeValue
