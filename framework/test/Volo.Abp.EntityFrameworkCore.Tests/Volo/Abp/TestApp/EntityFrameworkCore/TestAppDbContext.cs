@@ -1,12 +1,14 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.EntityFrameworkCore.TestApp.FourthContext;
 using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.TestApp.Domain;
 using Volo.Abp.TestApp.Testing;
 
@@ -32,6 +34,10 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
     public DbSet<Product> Products { get; set; }
 
     public DbSet<Category> Categories { get; set; }
+
+    public DbSet<EntityWithCustomSoftDeleteColumn> EntityWithCustomSoftDeleteColumns { get; set; }
+
+    public DbSet<EntityWithCustomTenantIdColumn> EntityWithCustomTenantIdColumns { get; set; }
 
     public DbSet<AppEntityWithNavigations> AppEntityWithNavigations { get; set; }
     public DbSet<AppEntityWithNavigationChildOneToMany> AppEntityWithNavigationChildOneToMany { get; set; }
@@ -175,5 +181,31 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
         });
 
         modelBuilder.TryConfigureObjectExtensions<TestAppDbContext>();
+    }
+
+    // Renames IsDeleted / TenantId to a custom column and re-registers the global filter so the
+    // EF.Property path captures the new column name — covered by SoftDelete_With_Custom_Column_Name_Tests
+    // and MultiTenant_With_Custom_Column_Name_Tests.
+    protected override void ConfigureBaseProperties<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
+    {
+        base.ConfigureBaseProperties<TEntity>(modelBuilder, mutableEntityType);
+
+        if (typeof(EntityWithCustomSoftDeleteColumn).IsAssignableFrom(typeof(TEntity)))
+        {
+            modelBuilder.Entity<TEntity>()
+                .Property(nameof(ISoftDelete.IsDeleted))
+                .HasColumnName("custom_is_deleted_column");
+
+            ConfigureGlobalFilters<TEntity>(modelBuilder, mutableEntityType, modelBuilder.Entity<TEntity>());
+        }
+
+        if (typeof(EntityWithCustomTenantIdColumn).IsAssignableFrom(typeof(TEntity)))
+        {
+            modelBuilder.Entity<TEntity>()
+                .Property(nameof(IMultiTenant.TenantId))
+                .HasColumnName("custom_tenant_id_column");
+
+            ConfigureGlobalFilters<TEntity>(modelBuilder, mutableEntityType, modelBuilder.Entity<TEntity>());
+        }
     }
 }
