@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Data;
@@ -29,7 +30,7 @@ public class SoftDelete_With_Custom_Column_Name_Tests : TestAppTestBase<AbpEntit
         var ctx = ServiceProvider.GetRequiredService<TestAppDbContext>();
         var isDeletedProperty = ctx.Model.FindEntityType(typeof(EntityWithCustomSoftDeleteColumn))!
             .FindProperty(nameof(ISoftDelete.IsDeleted))!;
-        isDeletedProperty.GetColumnName().ShouldBe("custom_is_deleted_column");
+        isDeletedProperty.GetColumnName().ShouldBe(EntityWithCustomSoftDeleteColumn.IsDeletedColumnName);
         isDeletedProperty.Name.ShouldBe(nameof(ISoftDelete.IsDeleted));
 
         await _repository.InsertAsync(new EntityWithCustomSoftDeleteColumn { Name = "kept" });
@@ -44,6 +45,25 @@ public class SoftDelete_With_Custom_Column_Name_Tests : TestAppTestBase<AbpEntit
             var all = await _repository.GetListAsync();
             all.Count.ShouldBe(2);
             all.ShouldContain(x => x.Name == "removed" && x.IsDeleted);
+        }
+    }
+
+    [Fact]
+    public void SoftDelete_Filter_Should_Reference_IsDeleted_By_Clr_Property_Name()
+    {
+        var ctx = ServiceProvider.GetRequiredService<TestAppDbContext>();
+        var entityType = ctx.Model.FindEntityType(typeof(EntityWithCustomSoftDeleteColumn))!;
+
+#pragma warning disable EF1001
+        var annotation = entityType.FindAnnotation(CoreAnnotationNames.QueryFilter);
+#pragma warning restore EF1001
+        annotation.ShouldNotBeNull();
+
+        var result = FilterExpressionPropertyNameInspector.Inspect(annotation.Value!);
+        result.Args.ShouldNotBeEmpty(customMessage: result.Dump);
+        foreach (var arg in result.Args)
+        {
+            arg.ShouldBe(nameof(ISoftDelete.IsDeleted), customMessage: result.Dump);
         }
     }
 }

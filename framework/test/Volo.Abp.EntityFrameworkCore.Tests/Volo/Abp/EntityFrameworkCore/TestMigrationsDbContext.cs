@@ -74,12 +74,12 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
         // Mirror the column renames in TestAppDbContext so the generated SQLite schema matches.
         modelBuilder.Entity<EntityWithCustomSoftDeleteColumn>(b =>
         {
-            b.Property(x => x.IsDeleted).HasColumnName("custom_is_deleted_column");
+            b.Property(x => x.IsDeleted).HasColumnName(EntityWithCustomSoftDeleteColumn.IsDeletedColumnName);
         });
 
         modelBuilder.Entity<EntityWithCustomTenantIdColumn>(b =>
         {
-            b.Property(x => x.TenantId).HasColumnName("custom_tenant_id_column");
+            b.Property(x => x.TenantId).HasColumnName(EntityWithCustomTenantIdColumn.TenantIdColumnName);
         });
 
         modelBuilder.Entity<Phone>(b =>

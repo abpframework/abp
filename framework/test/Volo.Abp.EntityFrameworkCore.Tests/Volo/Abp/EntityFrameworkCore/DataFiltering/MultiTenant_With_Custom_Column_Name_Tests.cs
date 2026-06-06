@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Data;
@@ -30,7 +31,7 @@ public class MultiTenant_With_Custom_Column_Name_Tests : TestAppTestBase<AbpEnti
         var ctx = ServiceProvider.GetRequiredService<TestAppDbContext>();
         var tenantIdProperty = ctx.Model.FindEntityType(typeof(EntityWithCustomTenantIdColumn))!
             .FindProperty(nameof(IMultiTenant.TenantId))!;
-        tenantIdProperty.GetColumnName().ShouldBe("custom_tenant_id_column");
+        tenantIdProperty.GetColumnName().ShouldBe(EntityWithCustomTenantIdColumn.TenantIdColumnName);
         tenantIdProperty.Name.ShouldBe(nameof(IMultiTenant.TenantId));
 
         using (_multiTenantFilter.Disable())
@@ -45,5 +46,24 @@ public class MultiTenant_With_Custom_Column_Name_Tests : TestAppTestBase<AbpEnti
         var hostScoped = await _repository.GetListAsync();
         hostScoped.Count.ShouldBe(1);
         hostScoped[0].Name.ShouldBe("host");
+    }
+
+    [Fact]
+    public void MultiTenant_Filter_Should_Reference_TenantId_By_Clr_Property_Name()
+    {
+        var ctx = ServiceProvider.GetRequiredService<TestAppDbContext>();
+        var entityType = ctx.Model.FindEntityType(typeof(EntityWithCustomTenantIdColumn))!;
+
+#pragma warning disable EF1001
+        var annotation = entityType.FindAnnotation(CoreAnnotationNames.QueryFilter);
+#pragma warning restore EF1001
+        annotation.ShouldNotBeNull();
+
+        var args = FilterExpressionPropertyNameInspector.GetEfPropertyStringArgs(annotation.Value!);
+        args.ShouldNotBeEmpty();
+        foreach (var arg in args)
+        {
+            arg.ShouldBe(nameof(IMultiTenant.TenantId));
+        }
     }
 }

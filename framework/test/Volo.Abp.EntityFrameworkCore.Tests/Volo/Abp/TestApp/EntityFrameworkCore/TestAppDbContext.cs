@@ -183,9 +183,11 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
         modelBuilder.TryConfigureObjectExtensions<TestAppDbContext>();
     }
 
-    // Renames IsDeleted / TenantId to a custom column and re-registers the global filter so the
-    // EF.Property path captures the new column name — covered by SoftDelete_With_Custom_Column_Name_Tests
-    // and MultiTenant_With_Custom_Column_Name_Tests.
+    // Renames IsDeleted / TenantId to a non-default column name and re-registers the global filter
+    // afterwards. CreateFilterExpression then captures the renamed column name; before the fix it
+    // would feed that string to EF.Property<T>(...), which expects a CLR property name and breaks
+    // translation. Covered by SoftDelete_With_Custom_Column_Name_Tests and
+    // MultiTenant_With_Custom_Column_Name_Tests.
     protected override void ConfigureBaseProperties<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
     {
         base.ConfigureBaseProperties<TEntity>(modelBuilder, mutableEntityType);
@@ -194,7 +196,7 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
         {
             modelBuilder.Entity<TEntity>()
                 .Property(nameof(ISoftDelete.IsDeleted))
-                .HasColumnName("custom_is_deleted_column");
+                .HasColumnName(EntityWithCustomSoftDeleteColumn.IsDeletedColumnName);
 
             ConfigureGlobalFilters<TEntity>(modelBuilder, mutableEntityType, modelBuilder.Entity<TEntity>());
         }
@@ -203,7 +205,7 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
         {
             modelBuilder.Entity<TEntity>()
                 .Property(nameof(IMultiTenant.TenantId))
-                .HasColumnName("custom_tenant_id_column");
+                .HasColumnName(EntityWithCustomTenantIdColumn.TenantIdColumnName);
 
             ConfigureGlobalFilters<TEntity>(modelBuilder, mutableEntityType, modelBuilder.Entity<TEntity>());
         }

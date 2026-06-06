@@ -3,7 +3,8 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.EntityFrameworkCore.DataFiltering;
 
-// Disables UseDbFunction so the EF.Property soft-delete filter path is exercised.
+// Disables UseDbFunction so the EF.Property global filter path is exercised
+// (covers both ISoftDelete and IMultiTenant filters).
 [DependsOn(typeof(AbpEntityFrameworkCoreTestModule))]
 public class AbpEntityFrameworkCoreTestModuleWithoutDbFunction : AbpModule
 {
