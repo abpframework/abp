@@ -54,6 +54,8 @@ For a deeper look at the AI Agent experience, see the original announcement: [In
 
 Downloading and running ABP Studio on Linux is simple:
 
+![abp studio download on linux](abp-studio-download-linux.png)
+
 1. Go to [abp.io/studio](https://abp.io/studio)
 2. Download the **Linux x64 AppImage**
 3. Open a terminal in the folder where the file was downloaded
