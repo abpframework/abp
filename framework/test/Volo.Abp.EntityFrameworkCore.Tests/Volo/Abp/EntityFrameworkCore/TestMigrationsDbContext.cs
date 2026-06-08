@@ -27,6 +27,8 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
 
     public DbSet<Category> Categories { get; set; }
 
+    public DbSet<EntityWithIntSoftDelete> EntityWithIntSoftDeletes { get; set; }
+
     public DbSet<AppEntityWithNavigations> AppEntityWithNavigations { get; set; }
     public DbSet<AppEntityWithNavigationChildOneToMany> AppEntityWithNavigationChildOneToMany { get; set; }
 
@@ -102,6 +104,15 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
         modelBuilder.Entity<Category>(b =>
         {
             b.HasAbpQueryFilter(e => e.Name.StartsWith("abp"));
+        });
+
+        modelBuilder.Entity<EntityWithIntSoftDelete>(b =>
+        {
+            b.Property(x => x.IsDeleted)
+                .HasColumnName(EntityWithIntSoftDelete.IsDeletedColumnName)
+                .HasConversion(
+                    v => v ? EntityWithIntSoftDelete.DeletedProviderValue : EntityWithIntSoftDelete.NotDeletedProviderValue,
+                    i => i == EntityWithIntSoftDelete.DeletedProviderValue);
         });
 
         modelBuilder.Entity<AppEntityWithNavigations>(b =>
