@@ -4,9 +4,9 @@ We are excited to announce that [ABP Studio](https://abp.io/studio), our cross-p
 
 With this release, Linux users can download and run ABP Studio as an **x64 AppImage**. This is an important step in making ABP Studio available wherever .NET and ABP developers prefer to work.
 
-## What is ABP Studio?
+## What can you do with ABP Studio?
 
-For those who are not familiar with it yet, [ABP Studio](https://abp.io/studio) is a desktop application designed to make ABP development faster, easier, and more comfortable. It offers:
+[ABP Studio](https://abp.io/studio) is a desktop application designed to make ABP development faster, easier, and more comfortable. It offers:
 
 * Easy creation of new solutions, from simple applications to distributed systems
 * Visual architecture management for modular monolith and microservice solutions
@@ -15,7 +15,7 @@ For those who are not familiar with it yet, [ABP Studio](https://abp.io/studio) 
 * Kubernetes integration capabilities
 * Built-in access to ABP-specific tooling and workflows
 
-The screenshots below were captured from ABP Studio on Windows, but the same Studio UI is available on Linux through the AppImage.
+The screenshots below were captured from ABP Studio on Linux through the AppImage.
 
 ![ABP Studio solution system selection](abp-studio-solution-system.png)
 
