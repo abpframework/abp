@@ -341,6 +341,36 @@
                   "path": "studio/monitoring-applications.md"
                 },
                 {
+                  "text": "AI Agent",
+                  "items": [
+                    {
+                      "text": "Overview",
+                      "path": "studio/ai-agent.md",
+                      "isIndex": true
+                    },
+                    {
+                      "text": "Configuration",
+                      "path": "studio/ai-agent-configuration.md"
+                    },
+                    {
+                      "text": "Workflows",
+                      "path": "studio/ai-agent-workflows.md"
+                    },
+                    {
+                      "text": "Built-in Capabilities",
+                      "path": "studio/ai-agent-built-in-capabilities.md"
+                    },
+                    {
+                      "text": "Git Integration",
+                      "path": "studio/ai-agent-git-integration.md"
+                    },
+                    {
+                      "text": "Coding with AI Agent",
+                      "path": "studio/coding-with-ai-agent.md"
+                    }
+                  ]
+                },
+                {
                   "text": "Working with Kubernetes",
                   "path": "studio/kubernetes.md"
                 },
