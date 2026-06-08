@@ -29,7 +29,7 @@ You can currently use ABP Studio on:
 
 On Linux, the current distribution format is **AppImage**, which provides a practical way to distribute a desktop application across different Linux distributions without requiring a distribution-specific installer package.
 
-## Why This Matters
+## What This Means for Developers
 
 Many ABP developers use Linux as their daily development environment. Until now, they needed to switch to another operating system to use ABP Studio. With Linux support, developers can now stay on their preferred platform and still benefit from ABP Studio's solution creation, architecture design, solution runner, monitoring, and integrated development experience.
 
@@ -82,15 +82,7 @@ Here is the current scope:
 * Depending on your Linux distribution, some native desktop or browser-related libraries may need to be installed
 * When ABP Studio can detect a known native dependency problem, it tries to show guidance in the UI instead of leaving you with an unclear failure
 
-This means Linux support is ready to use today, but it is still the first step of a broader Linux story.
-
-## Why Linux ARM Is Not Published Yet
-
-We know there is increasing interest in ARM-based Linux devices. However, for this initial Linux rollout, we decided to start with **Linux x64 only**.
-
-The main reason is practical: publishing and maintaining multiple Linux targets increases build and distribution time. We wanted to release Linux support as soon as it was ready and proven for the most common desktop target first.
-
-If we see enough demand from the community, we will evaluate publishing **Linux ARM** builds in a future release.
+This means Linux support is ready to use today, and we will continue to improve the Linux experience in future releases.
 
 ## A Better Cross-Platform Experience
 
