@@ -957,8 +957,8 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
         if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
         {
-            var softDeleteColumnName = entityTypeBuilder.Metadata.FindProperty(nameof(ISoftDelete.IsDeleted))?.GetColumnName() ?? "IsDeleted";
-            expression = e => !IsSoftDeleteFilterEnabled || !EF.Property<bool>(e, softDeleteColumnName);
+            var softDeletePropertyName = entityTypeBuilder.Metadata.FindProperty(nameof(ISoftDelete.IsDeleted))?.Name ?? nameof(ISoftDelete.IsDeleted);
+            expression = e => !IsSoftDeleteFilterEnabled || !EF.Property<bool>(e, softDeletePropertyName);
             if (UseDbFunction())
             {
                 expression = e => AbpEfCoreDataFilterDbFunctionMethods.SoftDeleteFilter(((ISoftDelete)e).IsDeleted, true);
@@ -971,8 +971,8 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
         if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
         {
-            var multiTenantColumnName = entityTypeBuilder.Metadata.FindProperty(nameof(IMultiTenant.TenantId))?.GetColumnName() ?? "TenantId";
-            Expression<Func<TEntity, bool>> multiTenantFilter = e => !IsMultiTenantFilterEnabled || EF.Property<Guid>(e, multiTenantColumnName) == CurrentTenantId;
+            var multiTenantPropertyName = entityTypeBuilder.Metadata.FindProperty(nameof(IMultiTenant.TenantId))?.Name ?? nameof(IMultiTenant.TenantId);
+            Expression<Func<TEntity, bool>> multiTenantFilter = e => !IsMultiTenantFilterEnabled || EF.Property<Guid>(e, multiTenantPropertyName) == CurrentTenantId;
             if (UseDbFunction())
             {
                 multiTenantFilter = e => AbpEfCoreDataFilterDbFunctionMethods.MultiTenantFilter(((IMultiTenant)e).TenantId, CurrentTenantId, true);

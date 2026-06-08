@@ -27,6 +27,10 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
 
     public DbSet<Category> Categories { get; set; }
 
+    public DbSet<EntityWithCustomSoftDeleteColumn> EntityWithCustomSoftDeleteColumns { get; set; }
+
+    public DbSet<EntityWithCustomTenantIdColumn> EntityWithCustomTenantIdColumns { get; set; }
+
     public DbSet<EntityWithIntSoftDelete> EntityWithIntSoftDeletes { get; set; }
 
     public DbSet<AppEntityWithNavigations> AppEntityWithNavigations { get; set; }
@@ -68,6 +72,17 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
         modelBuilder.SharedTypeEntity("TestSharedEntity2", sharedEntityBuildAction);
 
         base.OnModelCreating(modelBuilder);
+
+        // Mirror the column renames in TestAppDbContext so the generated SQLite schema matches.
+        modelBuilder.Entity<EntityWithCustomSoftDeleteColumn>(b =>
+        {
+            b.Property(x => x.IsDeleted).HasColumnName(EntityWithCustomSoftDeleteColumn.IsDeletedColumnName);
+        });
+
+        modelBuilder.Entity<EntityWithCustomTenantIdColumn>(b =>
+        {
+            b.Property(x => x.TenantId).HasColumnName(EntityWithCustomTenantIdColumn.TenantIdColumnName);
+        });
 
         modelBuilder.Entity<Phone>(b =>
         {
