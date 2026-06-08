@@ -47,6 +47,7 @@ Another common question from the community has been whether ABP Studio AI Agent 
 
 Linux users can now use ABP Studio AI Agent in their own development environment. You can ask questions about your solution, plan implementation steps before changing code, and let the agent help with coding tasks while ABP Studio understands your ABP solution structure, build flow, and runtime context.
 
+![abp studio ai agent on linux](abp-studio-ai-agent.png)
 For a deeper look at the AI Agent experience, see the original announcement: [Introducing ABP Studio AI Agent](https://abp.io/community/announcements/introducing-abp-studio-ai-agent-o1ni0toc).
 
 ## Getting Started
