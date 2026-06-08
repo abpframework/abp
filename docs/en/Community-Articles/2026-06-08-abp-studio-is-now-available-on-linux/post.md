@@ -41,6 +41,14 @@ Many ABP developers use Linux as their daily development environment. Until now,
 
 This is especially valuable for teams that already build and run their backend services on Linux-based environments and want to keep their development workflow aligned with that ecosystem.
 
+## AI Agent Is Available on Linux Too
+
+Another common question from the community has been whether ABP Studio AI Agent can be used on Linux machines. With this release, the answer is yes.
+
+Linux users can now use ABP Studio AI Agent in their own development environment. You can ask questions about your solution, plan implementation steps before changing code, and let the agent help with coding tasks while ABP Studio understands your ABP solution structure, build flow, and runtime context.
+
+For a deeper look at the AI Agent experience, see the original announcement: [Introducing ABP Studio AI Agent](https://abp.io/community/announcements/introducing-abp-studio-ai-agent-o1ni0toc).
+
 ## Getting Started
 
 Downloading and running ABP Studio on Linux is simple:
