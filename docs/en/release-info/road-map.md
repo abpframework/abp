@@ -13,7 +13,7 @@ This document provides a road map, release schedule, and planned features for th
 
 ### v10.5
 
-The next planned version will be 10.5, which is scheduled to be released as a stable version in June 2026. Based on the currently open issues and pull requests across the ABP ecosystem, we will be mostly working on the following topics:
+The next planned version will be 10.5, which is scheduled to be released as a stable version in mid-June 2026. We will be mostly working on the following topics:
 
 * Framework
   * Token verification improvements with refresh token support and distributed locking
