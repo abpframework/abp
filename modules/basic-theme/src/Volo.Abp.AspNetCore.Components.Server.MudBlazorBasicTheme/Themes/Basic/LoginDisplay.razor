@@ -32,7 +32,15 @@
             {
                 @foreach (var menuItem in Menu.Items)
                 {
-                    <MudMenuItem Href="@menuItem.Url?.TrimStart('/', '~')" Target="@menuItem.Target">@menuItem.DisplayName</MudMenuItem>
+                    var componentType = menuItem.GetComponentTypeOrDefault();
+                    if (componentType != null)
+                    {
+                        <DynamicComponent Type="@componentType" />
+                    }
+                    else
+                    {
+                        <MudMenuItem Href="@menuItem.Url?.TrimStart('/', '~')" Target="@menuItem.Target">@menuItem.DisplayName</MudMenuItem>
+                    }
                 }
             }
             </ChildContent>

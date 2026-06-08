@@ -86,7 +86,7 @@ jobs:
 
     - name: Codecov
       if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v7
       with:
         use_oidc: true
         fail_ci_if_error: true

@@ -35,7 +35,15 @@
             {
                 @foreach (var menuItem in Menu.Items)
                 {
-                    <MudMenuItem OnClick="@(() => NavigateToAsync(menuItem.Url, menuItem.Target))">@menuItem.DisplayName</MudMenuItem>
+                    var componentType = menuItem.GetComponentTypeOrDefault();
+                    if (componentType != null)
+                    {
+                        <DynamicComponent Type="@componentType" />
+                    }
+                    else
+                    {
+                        <MudMenuItem OnClick="@(() => NavigateToAsync(menuItem.Url, menuItem.Target))">@menuItem.DisplayName</MudMenuItem>
+                    }
                 }
             }
             <MudDivider />
