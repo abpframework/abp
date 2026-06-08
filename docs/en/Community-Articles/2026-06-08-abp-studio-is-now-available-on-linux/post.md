@@ -15,6 +15,12 @@ For those who are not familiar with it yet, [ABP Studio](https://abp.io/studio) 
 * Kubernetes integration capabilities
 * Built-in access to ABP-specific tooling and workflows
 
+The screenshots below were captured from ABP Studio on Windows, but the same Studio UI is available on Linux through the AppImage.
+
+![ABP Studio solution system selection](abp-studio-solution-system.png)
+
+![ABP Studio solution properties step](abp-studio-solution-properties.png)
+
 ## Linux Support Has Arrived
 
 ABP Studio has already been supporting multiple desktop environments, and now Linux joins that list.
