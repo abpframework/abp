@@ -11,8 +11,8 @@
 //[doc-nav]
 {
   "Next": {
-    "Name": "Working with Kubernetes",
-    "Path": "studio/kubernetes"
+    "Name": "AI Agent",
+    "Path": "studio/ai-agent"
   }
 }
 ````
