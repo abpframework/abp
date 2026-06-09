@@ -1,4 +1,4 @@
-# Deep Dive #2: Supported AI Models in ABP Studio + Usage Recommendations
+# Deep Dive on ABP AI Agent #2: Supported AI Models in ABP Studio + Usage Recommendations
 
 There is one question I ask almost as often as "Which mode should I use?":
 
