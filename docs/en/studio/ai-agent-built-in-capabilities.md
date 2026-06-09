@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Capability matrix for ABP Studio AI Agent modes, built-in tools, Studio automation tools, connected MCP tools, subagents, and hidden tool boundaries."
+    "Description": "Capability matrix for ABP Studio AI Agent modes, built-in tools, Studio automation tools, connected MCP tools, and subagents."
 }
 ```
 
@@ -87,9 +87,9 @@ The `ask_user` tool lets the agent request missing information during a run. Pen
 
 ## Shell And Migration Tools
 
-Agent mode can run shell commands through `run_shell_command`. Shell execution is permission-gated and can be serialized with other workspace operations when required.
+Agent mode can run shell commands through `run_shell_command`. Shell execution is permission-gated.
 
-The `add_migration` tool adds Entity Framework Core migrations for configured migration projects. Build and migration execution share a gate so concurrent sessions do not run incompatible `dotnet` operations at the same time.
+The `add_migration` tool adds Entity Framework Core migrations for configured migration projects.
 
 ## Studio Automation Tools
 
@@ -114,18 +114,6 @@ Agent mode can use enabled ABP Studio automation tools.
 | `generate_csharp_proxies` | Generates C# client proxies. |
 | `generate_angular_proxies` | Generates Angular client proxies. |
 
-Some solution-structure tools are not exposed because their information is already injected into the system prompt. This avoids redundant tool calls.
-
-## Hidden Tools
-
-The following implemented Studio tool categories are intentionally hidden from the AI Agent:
-
-- Custom command listing and execution.
-- Kubernetes chart and service listing.
-- Embedded browser tools.
-
-These tools may exist in Studio for other features, but they are not part of the AI Agent's callable tool surface.
-
 ## Subagents
 
 The `spawn_subagent` tool delegates bounded research work to read-only specialist subagents.
@@ -149,18 +137,3 @@ Configured MCP server tools can be added to Agent mode when:
 MCP resources are visible in settings and can be opened for inspection, but the Agent-mode callable surface is composed from MCP tools. Plan and Ask modes do not receive MCP tools.
 
 This capability lets the AI Agent consume tools from external MCP servers. It does not make ABP Studio AI Agent an MCP server for external clients.
-
-## Tool Execution Gates
-
-ABP Studio serializes selected operations to reduce parallel-session conflicts.
-
-| Gate | Serialized operations |
-| --- | --- |
-| Build/migration | `dotnet_build` and migration execution. |
-| Install libs | Client library installation. |
-| Generate proxies | C# and Angular proxy generation. |
-| Analysis | Studio package analysis. |
-| Run task | Per task name. |
-| Custom command | Per custom command name, for internal command execution paths. |
-
-These gates do not prevent parallel conversations; they serialize operations that would conflict at the workspace or process level.
