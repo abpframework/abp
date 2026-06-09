@@ -10,6 +10,7 @@ public class BlazorWebAssemblyMudBlazorScriptContributor : BundleContributor
         context.Files.AddIfNotContains("_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js");
         context.Files.AddIfNotContains("_content/MudBlazor/MudBlazor.min.js");
         context.Files.AddIfNotContains("_content/Volo.Abp.MudBlazorUI/abp-mud-popover-patch.js");
+        context.Files.AddIfNotContains("_content/Volo.Abp.MudBlazorUI/abp-mud-ripple-patch.js");
         context.Files.AddIfNotContains("_content/Volo.Abp.AspNetCore.Components.Web/libs/abp/js/abp.js");
         context.Files.AddIfNotContains("_content/Volo.Abp.AspNetCore.Components.Web/libs/abp/js/lang-utils.js");
         context.Files.AddIfNotContains("_content/Volo.Abp.AspNetCore.Components.Web/libs/abp/js/authentication-state-listener.js");
