@@ -75,7 +75,7 @@
                               "default": 4
                             },
                             "colStart": {
-                              "type": "integer",
+                              "type": ["integer", "null"],
                               "description": "Starting grid column from 1 to 4. Omit or null to auto-place after the previous cell.",
                               "minimum": 1,
                               "maximum": 4

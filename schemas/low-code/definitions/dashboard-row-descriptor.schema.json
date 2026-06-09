@@ -22,11 +22,12 @@
     {
       "items": [
         {
+          "name": "overview",
           "type": "numberContainer",
           "title": "Overview",
           "numberContainer": {
             "items": [
-              { "title": "Total Records", "entity": "Acme.Events.Event", "aggregation": "count" }
+              { "name": "total-records", "title": "Total Records", "entityName": "Acme.Events.Event", "aggregation": "count" }
             ]
           }
         }

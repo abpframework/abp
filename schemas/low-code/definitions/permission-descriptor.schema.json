@@ -24,7 +24,7 @@
       "type": "array",
       "description": "Child permissions forming a hierarchy. Use for feature -> operation grouping.",
       "items": {
-        "$ref": "permission-descriptor.schema.json"
+        "$ref": "#"
       }
     }
   },

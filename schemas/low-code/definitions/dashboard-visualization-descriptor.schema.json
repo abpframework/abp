@@ -90,16 +90,54 @@
   "required": ["name", "type", "title"],
   "allOf": [
     {
-      "if": { "properties": { "type": { "const": "chart" } } },
-      "then": { "required": ["chart", "entityName"] }
+      "if": {
+        "required": ["type"],
+        "properties": {
+          "type": { "enum": ["chart", "Chart"] }
+        }
+      },
+      "then": {
+        "required": ["chart", "entityName"],
+        "properties": {
+          "chart": { "$ref": "dashboard-chart-descriptor.schema.json" },
+          "entityName": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
     },
     {
-      "if": { "properties": { "type": { "const": "list" } } },
-      "then": { "required": ["list", "entityName"] }
+      "if": {
+        "required": ["type"],
+        "properties": {
+          "type": { "enum": ["list", "List"] }
+        }
+      },
+      "then": {
+        "required": ["list", "entityName"],
+        "properties": {
+          "list": { "$ref": "dashboard-list-descriptor.schema.json" },
+          "entityName": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
     },
     {
-      "if": { "properties": { "type": { "const": "numberContainer" } } },
-      "then": { "required": ["numberContainer"] }
+      "if": {
+        "required": ["type"],
+        "properties": {
+          "type": { "enum": ["numberContainer", "NumberContainer"] }
+        }
+      },
+      "then": {
+        "required": ["numberContainer"],
+        "properties": {
+          "numberContainer": { "$ref": "dashboard-number-container-descriptor.schema.json" }
+        }
+      }
     }
   ],
   "additionalProperties": false,

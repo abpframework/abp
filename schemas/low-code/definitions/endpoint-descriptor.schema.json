@@ -12,11 +12,14 @@
     },
     "name": {
       "type": "string",
-      "description": "Unique endpoint identifier used by designer/model health. Prefer PascalCase or kebab-case, for example 'SearchCustomers'."
+      "description": "Unique endpoint identifier used by designer/model health. Prefer PascalCase or kebab-case, for example 'SearchCustomers'.",
+      "minLength": 1
     },
     "route": {
       "type": "string",
-      "description": "URL route pattern. Must start with '/' and should use an application-specific prefix such as '/api/low-code/events/{id}'. Route parameters use ASP.NET style braces, for example '{id}'."
+      "description": "URL route pattern. Must start with '/' and should use an application-specific prefix such as '/api/low-code/events/{id}'. Route parameters use ASP.NET style braces, for example '{id}'.",
+      "minLength": 1,
+      "pattern": "^/"
     },
     "method": {
       "type": "string",
@@ -26,7 +29,8 @@
     },
     "javascript": {
       "type": "string",
-      "description": "JavaScript code to execute. Use context request/response helpers and services exposed by the host, such as db, currentUser/currentTenant, authorization, emailSender, config, http, event bus, background jobs, and logging helpers."
+      "description": "JavaScript code to execute. Use context request/response helpers and services exposed by the host, such as db, currentUser/currentTenant, authorization, emailSender, config, http, event bus, background jobs, and logging helpers.",
+      "minLength": 1
     },
     "requireAuthentication": {
       "type": "boolean",

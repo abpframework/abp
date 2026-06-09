@@ -36,9 +36,21 @@
   },
   "required": ["name", "javascript"],
   "anyOf": [
-    { "required": ["period"] },
+    {
+      "required": ["period"],
+      "not": {
+        "required": ["cronExpression"],
+        "properties": {
+          "cronExpression": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
     {
       "required": ["cronExpression"],
+      "not": { "required": ["period"] },
       "properties": {
         "cronExpression": {
           "type": "string",
