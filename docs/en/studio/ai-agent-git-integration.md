@@ -19,6 +19,8 @@
 
 ABP Studio integrates AI Agent features into the Git and GitHub workflow. The integration uses selected files, staged or working-tree diffs, review notes, GitHub issue/PR context, and image attachments to build prompts for dedicated AI review or coding sessions.
 
+![git-ai-review](./images/ai-agent/git-ai-review.png)
+
 ## AI Review
 
 AI Review runs from the Git panel against selected changed files. It is a dedicated review flow, separate from the normal Agent chat.

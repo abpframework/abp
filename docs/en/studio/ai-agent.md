@@ -27,11 +27,17 @@ The agent is solution-aware. Its system context includes the current solution, m
 
 The selected mode determines the agent's effective permission boundary.
 
-| Mode | Purpose | Tool boundary |
-| --- | --- | --- |
-| Agent | Coding and execution | Can read and write files, run shell commands, add migrations, run enabled Studio tools, call connected MCP tools, and update active plan steps. |
-| Plan | Read-only planning | Can inspect code and documentation, create or update plan files, and use read-only subagents. It cannot modify solution files or run shell/write tools. |
-| Ask | Read-only question answering | Can inspect code, search/read ABP documentation, fetch relevant AI skills, and use read-only subagents. It cannot create plans or modify files. |
+### Agent
+
+Agent mode is used for coding and execution. It can read and write files, run shell commands, add migrations, run enabled Studio tools, call connected MCP tools, and update active plan steps.
+
+### Plan
+
+Plan mode is used for read-only implementation planning. It can inspect code and documentation, create or update plan files, and use read-only subagents. It cannot modify solution files or run shell/write tools.
+
+### Ask
+
+Ask mode is used for read-only question answering. It can inspect code, search/read ABP documentation, fetch relevant AI skills, and use read-only subagents. It cannot create plans or modify files.
 
 Mode selection is per session. A session keeps its selected mode for subsequent prompts unless the user changes it before sending the next message.
 

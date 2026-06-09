@@ -7,16 +7,6 @@
 
 # ABP Studio: Coding with AI Agent
 
-````json
-//[doc-nav]
-{
-  "Next": {
-    "Name": "Working with Kubernetes",
-    "Path": "studio/kubernetes"
-  }
-}
-````
-
 This document describes coding practices for ABP Studio AI Agent. It focuses on how to shape agent runs so the agent receives the correct context, uses the correct tools, and verifies changes with the same ABP Studio automation available to the developer.
 
 ## Mode Selection

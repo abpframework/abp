@@ -19,6 +19,8 @@
 
 AI Agent workflows define repeatable actions that Studio can run before or after an agent task. Workflows are associated with run profiles and are selected before a session starts.
 
+![workflow-settings](./images/ai-agent/workflow-settings.png)
+
 ## Workflow Types
 
 | Type | Storage | Sharing behavior |
@@ -28,18 +30,9 @@ AI Agent workflows define repeatable actions that Studio can run before or after
 
 The shared/personal setting is fixed when the workflow is created.
 
-## Workflow Structure
+Workflow configuration includes the workflow name, description, sharing mode, before steps, and after steps.
 
-A workflow contains:
-
-- `Id`
-- `Name`
-- `Description`
-- `IsShared`
-- `BeforeTasks`
-- `AfterTasks`
-
-Each workflow task stores its action type and action-specific targets such as modules, packages, application names, folders, containers, task names, proxy options, or migration project path.
+![workflow-actions](./images/ai-agent/workflow-actions.png)
 
 ## Supported Actions
 
