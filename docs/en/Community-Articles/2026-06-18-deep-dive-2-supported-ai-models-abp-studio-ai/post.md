@@ -84,7 +84,7 @@ The Git Review model is separate too.
 
 ![ABP Agent model settings for Git Review model selection](abp-agent-model-settings-git-review.png)
 
-For Git AI Review, I like the "Ask me every time" behavior. Some reviews are routine. Some reviews deserve a stronger model because the change is large, security-sensitive, or touches architecture. Asking each time keeps that decision close to the actual change.
+For AI Review, I like the "Ask me every time" behavior. Some reviews are routine. Some reviews deserve a stronger model because the change is large, security-sensitive, or touches architecture. Asking each time keeps that decision close to the actual change.
 
 If a team wants consistent review behavior, a fixed review model also makes sense. The key is that Git Review does not have to silently follow the same model I use for ordinary chat.
 
@@ -127,7 +127,7 @@ When I choose a model in ABP Studio AI, I usually ask:
 | Research and documentation lookup | Lightweight supporting model |
 | Browser tasks with screenshots | Vision-capable browser model |
 | Error summaries and commit messages | Lightweight text processor model |
-| Important Git AI Review | Stronger model or ask each time |
+| Important AI Review | Stronger model or ask each time |
 
 That keeps the experience practical.
 
