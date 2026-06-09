@@ -21,7 +21,7 @@ AI Agent configuration controls model selection, execution limits, enabled tools
 
 ## Model Provider
 
-ABP Studio uses an OpenRouter-backed model configuration by default. Studio maintains a model list with metadata such as provider, context length, maximum completion tokens, image support, reasoning support, and tool support.
+ABP Studio maintains a model list with metadata such as provider, context length, maximum completion tokens, image support, reasoning support, and tool support.
 
 The built-in default model set includes:
 
@@ -33,7 +33,7 @@ The built-in default model set includes:
 | GPT-5.5 | Optional main/review model | 1,050,000 |
 | GLM-5.1 | Optional text/code model without image support | 200,000 |
 
-The available model catalog can be refreshed from OpenRouter and is cached locally for a limited period.
+The available model catalog can be refreshed and is cached locally for a limited period.
 
 ![model-selector-menu](./images/ai-agent/model-selector-menu.png)
 
