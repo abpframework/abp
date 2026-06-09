@@ -7,6 +7,16 @@
 
 # Package Version Changes
 
+## 10.5.0-rc.1
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| MongoDB.Driver | 3.8.1 | 3.9.0 | #25484 |
+| Blazorise | 2.0.4 | 2.1.3 | #25494 |
+| Blazorise.Components | 2.0.4 | 2.1.3 | #25494 |
+| Blazorise.DataGrid | 2.0.4 | 2.1.3 | #25494 |
+| Blazorise.Snackbar | 2.0.4 | 2.1.3 | #25494 |
+
 ## 10.4.1
 
 | Package | Old Version | New Version | PR |

@@ -11,9 +11,9 @@ This document provides a road map, release schedule, and planned features for th
 
 ## Next Versions
 
-### v10.5
+### v10.6
 
-The next planned version will be 10.5, which is scheduled to be released as a stable version in mid-June 2026. We will be mostly working on the following topics:
+The next planned version will be 10.6, which is scheduled to be released as a stable version in July 2026. We will be mostly working on the following topics:
 
 * Framework
   * Token verification improvements with refresh token support and distributed locking

@@ -49,6 +49,8 @@ The generated mobile app already includes screens and flows for:
 
 Localization is handled by the bundled locale files under `src/locales` and `src/services/LocalizationService.ts`. Theme handling lives under `src/theme`.
 
+The UI is built with [NativeWind v4](https://www.nativewind.dev/) (Tailwind CSS for React Native) with full light/dark mode support. The `useThemeColors` hook returns light/dark palette values for components that need explicit colors instead of NativeWind `className`. See [Styling with NativeWind](../../framework/ui/react-native/styling-with-nativewind.md) for the styling system reference.
+
 ## Solution Structure
 
 The React Native application is based on [React Native](https://reactnative.dev/) and [Expo](https://expo.dev/). The main files and folders in `apps/mobile/react-native` are:

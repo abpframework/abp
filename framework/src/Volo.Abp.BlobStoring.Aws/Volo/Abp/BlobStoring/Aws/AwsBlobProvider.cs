@@ -47,7 +47,8 @@ public class AwsBlobProvider : BlobProviderBase, ITransientDependency
             {
                 BucketName = containerName,
                 Key = blobName,
-                InputStream = args.BlobStream
+                InputStream = args.BlobStream,
+                DisablePayloadSigning = configuration.DisablePayloadSigning
             });
         }
     }
