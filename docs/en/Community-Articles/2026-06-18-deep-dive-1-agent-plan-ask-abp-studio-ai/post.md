@@ -1,4 +1,4 @@
-# Deep Dive #1: Agent, Plan, Ask in ABP Studio AI
+# Deep Dive on ABP AI Agent #1: Agent, Plan and Ask Modes
 
 There is a small question I like to answer before I type anything into **ABP Agent**:
 
