@@ -16,7 +16,7 @@ When I work alone, I can do those steps manually. When I work with an AI coding 
 
 That is the point of **ABP Studio AI Agent Workflows**.
 
-![](workflow.jpg)
+![ABP Studio AI Agent Workflows overview](workflow.jpg)
 
 Workflows let me define repeatable actions around an agent run. The model can focus on the ambiguous part, understanding the requirement and changing the code, while ABP Studio handles the deterministic parts that should happen before or after the work.
 
@@ -30,7 +30,7 @@ If the team always builds a package after an application service change, that sh
 
 Workflows give ABP Studio a place to encode those repeatable steps.
 
-![workflows-openning](workflows-openning.png)
+![Opening the workflow settings panel in ABP Studio](workflows-openning.png)
 
 ![ABP AI Agent workflow settings](workflow-settings.png)
 
@@ -45,7 +45,7 @@ and restart the app, and also add a migration if needed.
 
 I can configure the workflow once and let the agent session carry that context.
 
-![](sample-workflow-1.png)
+![Sample ABP AI Agent workflow configuration](sample-workflow-1.png)
 
 That makes the prompt cleaner:
 
@@ -98,7 +98,7 @@ A generic coding tool can run shell commands, and that is useful. But ABP Studio
 
 Workflows can be personal or shared.
 
-![](shared-with-team.png)
+![Sharing an ABP AI Agent workflow with the team via run profile](shared-with-team.png)
 
 - A **personal workflow** is stored locally under the solution workspace. It is useful for my own development habits. Maybe I like restarting a specific app after each agent turn. Maybe I have a local task that only makes sense on my machine.
 - A **shared workflow** is stored with the active run profile. That makes it suitable for source control and team usage.

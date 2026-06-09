@@ -29,7 +29,7 @@ For me, that changes the feeling of using an AI agent. It is no longer "here is 
 
 An AI Scope **restricts which directories the agent can access during a session**.
 
-![](auth-identity-scope.png)
+![Auth and Identity scope configuration in ABP Studio](auth-identity-scope.png)
 
 Depending on the task, a scope can include:
 
@@ -56,7 +56,7 @@ The first message of a session locks the configuration that affects the system p
 
 That matters when multiple sessions are active.
 
-![](selected-scope.png)
+![Selected AI scope shown in the agent session panel](selected-scope.png)
 
 Imagine I have one session working on a Catalog module and another session answering questions about the whole solution. Those sessions should not accidentally share a changing boundary. Each one should keep the scope it started with.
 
@@ -114,7 +114,7 @@ Which parts of the system should stay out of this session?
 - Scopes define **where** the agent can work.
 - Workflows define **what deterministic actions** should happen around that work.
 
-![](scopes-openning.png)
+![ABP AI Coding Agent panel showing scopes and workflows combined](scopes-openning.png)
 
 That combination is powerful. For example, I can scope the agent to the `Catalog` module and use a workflow that builds the affected package, regenerates proxies if contracts changed, and restarts the related application.
 
