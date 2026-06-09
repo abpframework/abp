@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "form-layout-descriptor.schema.json",
+  "title": "FormLayoutDescriptor",
+  "description": "Describes the visual layout of a form as tabs, groups, rows, and field cells.",
+  "markdownDescription": "AI guidance: the layout is a tree: tabs -> groups -> rows -> cells. Each cell `fieldId` must reference a field from the form's `fields` array. Use `colSpan` 4 for full-width fields, 2+2 for two columns, or 1+1+1+1 for four compact controls. The total effective width in a row should not exceed 4.",
+  "type": "object",
+  "properties": {
+    "tabs": {
+      "type": "array",
+      "description": "Ordered list of tabs in the form. Use one default tab named 'main' for simple forms.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for this tab. Prefer camelCase/kebab-case such as 'main' or 'advanced'.",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "description": "Display title for the tab",
+            "minLength": 1
+          },
+          "isDefault": {
+            "type": "boolean",
+            "description": "Whether this is the default tab. The designer uses the default tab as the safe target for orphaned fields.",
+            "default": false
+          },
+          "groups": {
+            "type": "array",
+            "description": "Ordered list of groups within this tab. Use one default group for simple forms.",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Unique identifier for this group. Rules can target group ids.",
+                  "minLength": 1
+                },
+                "title": {
+                  "type": ["string", "null"],
+                  "description": "Optional display title for the group. Use null or omit for an untitled group."
+                },
+                "isDefault": {
+                  "type": "boolean",
+                  "description": "Whether this is the default group. The designer uses the default group as the safe target for orphaned fields.",
+                  "default": false
+                },
+                "rows": {
+                  "type": "array",
+                  "description": "Ordered list of layout rows; each row contains one or more cells placed side-by-side.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "cells": {
+                        "type": "array",
+                        "description": "Fields placed side-by-side in this row. The sum of colSpan values should not exceed 4.",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "fieldId": {
+                              "type": "string",
+                              "description": "Reference to a field id in the form's fields array. Every field shown in the layout needs a matching field descriptor.",
+                              "minLength": 1
+                            },
+                            "colSpan": {
+                              "type": "integer",
+                              "description": "Number of grid columns this field spans from 1 to 4. Use 4 for full-width fields.",
+                              "minimum": 1,
+                              "maximum": 4,
+                              "default": 4
+                            },
+                            "colStart": {
+                              "type": "integer",
+                              "description": "Starting grid column from 1 to 4. Omit or null to auto-place after the previous cell.",
+                              "minimum": 1,
+                              "maximum": 4
+                            }
+                          },
+                          "required": ["fieldId"],
+                          "additionalProperties": false
+                        }
+                      }
+                    },
+                    "required": ["cells"],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": ["id", "rows"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["id", "title", "groups"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["tabs"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "tabs": [
+        {
+          "id": "main",
+          "title": "Main",
+          "isDefault": true,
+          "groups": [
+            {
+              "id": "details",
+              "title": "Details",
+              "isDefault": true,
+              "rows": [
+                { "cells": [{ "fieldId": "title", "colSpan": 4 }] },
+                { "cells": [{ "fieldId": "startDate", "colSpan": 2 }, { "fieldId": "endDate", "colSpan": 2 }] }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
