@@ -14,11 +14,11 @@ So I treat model selection as a practical decision, not a trophy selection.
 
 ## What ABP Studio Supports Today
 
-ABP Studio uses an OpenRouter-backed model setup by default. That gives Studio a unified way to work with different model providers while keeping the model list focused on models that make sense for an AI coding agent.
+ABP Studio gives me a curated model setup by default. It keeps the first experience simple, while still letting me choose from a broader model catalog when I want to tune the setup for a specific kind of work.
 
 The important word here is **focused**.
 
-OpenRouter may know about many models, but ABP Studio does not simply expose every model as an equally good choice for agent work. A coding agent needs things like a useful context window, tool support, text output, and reliable behavior in repeated agent loops. Studio keeps the model experience closer to that reality.
+ABP Studio does not treat every model as an equally good choice for agent work. A coding agent needs things like a useful context window, tool support, text output, and reliable behavior in repeated agent loops. Studio keeps the model experience closer to that reality.
 
 The built-in model set currently includes:
 
@@ -30,7 +30,13 @@ The built-in model set currently includes:
 | GPT-5.5 | Another strong option for main conversations or review-style work. |
 | GLM-5.1 | A text/code option for tasks that do not need image input. |
 
-I do not read this list as a ranking. I read it as a toolbox.
+I do not read this list as a ranking. I read it as the default toolbox.
+
+And it is not a closed box. If I need a different model for a specific task, I can open the Models settings, search the catalog, filter by category, and add more models to my selection.
+
+![ABP Studio Models settings showing the selectable model catalog](abp-agent-model-catalog.png)
+
+That is an important distinction. The built-in models are there so I can start with sensible defaults. They are not there to force every team, every solution, or every workflow into the same model choices.
 
 ## The Main Model
 
