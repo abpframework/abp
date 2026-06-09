@@ -1,13 +1,13 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Learn how to develop a mobile application using React Native with the ABP Framework. Build the Acme.BookStore mobile UI on top of the modernized ABP React Native template (NativeWind v4 + Bottom Tab navigation)."
+  "Description": "Learn how to develop a mobile application using React Native with the ABP Framework. Build the Acme.BookStore mobile UI on top of the modernized ABP React Native template (NativeWind v4 + Bottom Tab navigation)."
 }
 ```
 
 # Mobile Application Development Tutorial - React Native
 
-The React Native mobile option is *available for* ***Team*** *or higher licenses*. If you don't have a commercial license, follow this article by downloading the source code of the sample application linked below.
+The React Native mobile option is _available for_ **_Team_** _or higher licenses_. If you don't have a commercial license, follow this article by downloading the source code of the sample application linked below.
 
 ## About This Tutorial
 
@@ -17,6 +17,16 @@ The React Native mobile option is *available for* ***Team*** *or higher licenses
 - This tutorial only focuses on the **React Native UI side** of the `Acme.BookStore` application. It implements the CRUD operations for `Books` and `Authors`, plus the relation between them. The backend (entities, application services, permissions, seeder) is already in place in the downloadable sample.
 - The mobile template was modernized in 2026: it now uses **NativeWind v4** (Tailwind CSS for React Native) for styling, **Bottom Tab navigation** by default, and the **Redux Toolkit** store with hook-based access (`useSelector` / `useDispatch`). The `connectToRedux` HOC, the `DrawerNavigator`, and the legacy `DataList`/`AbpSelect` components from earlier versions no longer ship with the template — this tutorial walks through building the new equivalents.
 - Before starting, please make sure that the [React Native Development Environment](../../../framework/ui/react-native/index.md) is ready on your machine.
+
+## Running the Application
+
+Before implementing UI changes, run the `Acme.BookStore` mobile application and verify that login works:
+
+1. Open the solution in **ABP Studio** and run the **Initialize Solution** task once (creates SSL certificates and other one-time setup).
+2. For browser testing, follow [Running on Web](../../../framework/ui/react-native/running-on-web.md) — start the **Default** run profile; ABP Studio opens the app at **`https://localhost:8443`**.
+3. For an Android emulator or iOS simulator, follow [Running on Device](../../../framework/ui/react-native/running-on-device.md) — switch to the **MobileEmulator** run profile, update `react-native/Environment.ts`, and start the profile (or run `yarn tunnel:api` manually).
+
+See the [React Native overview](../../../framework/ui/react-native/index.md) for environment setup and project creation.
 
 ## Download the Source Code
 
@@ -1059,6 +1069,7 @@ function CreateUpdateBookForm({ submit, book, authors }: CreateUpdateBookFormPro
         }}
       />
 
+
       {/* Publish date modal */}
       <Modal visible={dateModalVisible} transparent animationType="fade" onRequestClose={() => setDateModalVisible(false)}>
         <Pressable onPress={() => setDateModalVisible(false)} className="flex-1 bg-black/50 items-center justify-center px-6">
@@ -1239,7 +1250,6 @@ function CreateUpdateAuthorScreen({ navigation, route }: CreateUpdateAuthorScree
     })();
     return () => { cancelled = true; };
   }, [authorId, dispatch]);
-
   const submit = async (data: AuthorFormValues) => {
     dispatch(LoadingActions.start({ key: 'save' }));
     try {
