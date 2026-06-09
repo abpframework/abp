@@ -1,13 +1,13 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Learn how to develop a mobile application using React Native with ABP Framework, focusing on UI for the Acme.BookStore app."
+  "Description": "Learn how to develop a mobile application using React Native with ABP Framework, focusing on UI for the Acme.BookStore app."
 }
 ```
 
 # Mobile Application Development Tutorial - React Native
 
-React Native mobile option is *available for* ***Team*** *or higher licenses*. Therefore, if you don't have a commercial license, it's suggested to follow the article by downloading the source code of the sample application as described in the next chapter.
+React Native mobile option is _available for_ **_Team_** _or higher licenses_. Therefore, if you don't have a commercial license, it's suggested to follow the article by downloading the source code of the sample application as described in the next chapter.
 
 ## About This Tutorial
 
@@ -16,6 +16,16 @@ React Native mobile option is *available for* ***Team*** *or higher licenses*. T
 - This tutorial assumes that you have completed the [Web Application Development tutorial](../../book-store/part-01.md) and built an ABP based application named `Acme.BookStore` with [React Native](../../../framework/ui/react-native) as the mobile option. Therefore, if you haven't completed the [Web Application Development tutorial](../../book-store/part-01.md), you either need to complete it or download the source code from down below and follow this tutorial.
 - In this tutorial, we will only focus on the UI side of the `Acme.BookStore` application and will implement the CRUD operations.
 - Before starting, please make sure that the [React Native Development Environment](../../../framework/ui/react-native/index.md) is ready on your machine.
+
+## Running the Application
+
+Before implementing UI changes, run the `Acme.BookStore` mobile application and verify that login works:
+
+1. Open the solution in **ABP Studio** and run the **Initialize Solution** task once (creates SSL certificates and other one-time setup).
+2. For browser testing, follow [Running on Web](../../../framework/ui/react-native/running-on-web.md) — start the **Default** run profile; ABP Studio opens the app at **`https://localhost:8443`**.
+3. For an Android emulator or iOS simulator, follow [Running on Device](../../../framework/ui/react-native/running-on-device.md) — switch to the **MobileEmulator** run profile, update `react-native/Environment.ts`, and start the profile (or run `yarn tunnel:api` manually).
+
+See the [React Native overview](../../../framework/ui/react-native/index.md) for environment setup and project creation.
 
 ## Download the Source Code
 
@@ -31,18 +41,21 @@ There is no dynamic proxy generation for the react native application, that is w
 
 ```ts
 //./src/api/BookAPI.ts
-import api from './API';
+import api from "./API";
 
-export const getList = () => api.get('/api/app/book').then(({ data }) => data);
+export const getList = () => api.get("/api/app/book").then(({ data }) => data);
 
-export const get = id => api.get(`/api/app/book/${id}`).then(({ data }) => data);
+export const get = (id) =>
+  api.get(`/api/app/book/${id}`).then(({ data }) => data);
 
-export const create = input => api.post('/api/app/book', input).then(({ data }) => data);
+export const create = (input) =>
+  api.post("/api/app/book", input).then(({ data }) => data);
 
-export const update = (input, id) => api.put(`/api/app/book/${id}`, input).then(({ data }) => data);
+export const update = (input, id) =>
+  api.put(`/api/app/book/${id}`, input).then(({ data }) => data);
 
-export const remove = id => api.delete(`/api/app/book/${id}`).then(({ data }) => data);
-
+export const remove = (id) =>
+  api.delete(`/api/app/book/${id}`).then(({ data }) => data);
 ```
 
 ### Add the `Book Store` menu item to the navigation
@@ -77,14 +90,18 @@ export default function DrawerNavigator() {
 Create the `BookStoreStackNavigator` inside `./src/navigators/BookStoreNavigator.tsx`, this navigator will be used for the BookStore menu item.
 
 ```tsx
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Button } from 'react-native-paper';
-import i18n from 'i18n-js';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Button } from "react-native-paper";
+import i18n from "i18n-js";
 
-import { BookStoreScreen, CreateUpdateAuthorScreen, CreateUpdateBookScreen } from '../screens';
+import {
+  BookStoreScreen,
+  CreateUpdateAuthorScreen,
+  CreateUpdateBookScreen,
+} from "../screens";
 
-import { HamburgerIcon } from '../components';
-import { useThemeColors } from '../hooks';
+import { HamburgerIcon } from "../components";
+import { useThemeColors } from "../hooks";
 
 const Stack = createNativeStackNavigator();
 
@@ -97,7 +114,7 @@ export default function BookStoreStackNavigator() {
         name="BookStore"
         component={BookStoreScreen}
         options={({ navigation }) => ({
-          title: i18n.t('BookStore::Menu:BookStore'),
+          title: i18n.t("BookStore::Menu:BookStore"),
           headerLeft: () => <HamburgerIcon navigation={navigation} />,
           headerStyle: { backgroundColor: background },
           headerTintColor: onBackground,
@@ -108,10 +125,15 @@ export default function BookStoreStackNavigator() {
         name="CreateUpdateBook"
         component={CreateUpdateBookScreen}
         options={({ route, navigation }) => ({
-          title: i18n.t(route.params?.bookId ? 'BookStore::Edit' : 'BookStore::NewBook'),
+          title: i18n.t(
+            route.params?.bookId ? "BookStore::Edit" : "BookStore::NewBook",
+          ),
           headerRight: () => (
-            <Button mode="text" onPress={() => navigation.navigate('BookStore')}>
-              {i18n.t('AbpUi::Cancel')}
+            <Button
+              mode="text"
+              onPress={() => navigation.navigate("BookStore")}
+            >
+              {i18n.t("AbpUi::Cancel")}
             </Button>
           ),
           headerStyle: { backgroundColor: background },
@@ -269,7 +291,7 @@ Like the `BookStoreScreen` we need to add the `CreateUpdateBookScreen` to the `.
 
 import { Button } from "react-native-paper"; //Added this line
 
-import { CreateUpdateBookScreen } from '../screens'; //Added this line
+import { CreateUpdateBookScreen } from "../screens"; //Added this line
 
 //Other codes
 
@@ -283,7 +305,7 @@ export default function BookStoreStackNavigator() {
         component={CreateUpdateBookScreen}
         options={({ route, navigation }) => ({
           title: i18n.t(
-            route.params?.bookId ? "BookStore::Edit" : "BookStore::NewBook"
+            route.params?.bookId ? "BookStore::Edit" : "BookStore::NewBook",
           ),
           headerRight: () => (
             <Button
@@ -582,9 +604,9 @@ function CreateUpdateBookForm({ submit }) {
               error={isInvalidControl('publishDate')}
               label={i18n.t('BookStore::PublishDate')}
               right={
-                <TextInput.Icon 
-                  onPress={() => setPublishDateVisible(true)} 
-                  icon="calendar" 
+                <TextInput.Icon
+                  onPress={() => setPublishDateVisible(true)}
+                  icon="calendar"
                   iconColor={bookForm.values.publishDate ? '#4CAF50' : '#666'}
                 />
               }
@@ -859,21 +881,26 @@ export default BooksScreen;
 Replace code below for `CreateUpdateBookScreen.tsx` file under the `./src/screens/BookStore/Books/CreateUpdateBook/`
 
 ```tsx
-import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 
-import { getAuthorLookup, get, create, update } from '../../../../api/BookAPI';
-import LoadingActions from '../../../../store/actions/LoadingActions';
-import { createLoadingSelector } from '../../../../store/selectors/LoadingSelectors';
-import { connectToRedux } from '../../../../utils/ReduxConnect';
-import CreateUpdateBookForm from './CreateUpdateBookForm';
+import { getAuthorLookup, get, create, update } from "../../../../api/BookAPI";
+import LoadingActions from "../../../../store/actions/LoadingActions";
+import { createLoadingSelector } from "../../../../store/selectors/LoadingSelectors";
+import { connectToRedux } from "../../../../utils/ReduxConnect";
+import CreateUpdateBookForm from "./CreateUpdateBookForm";
 
-function CreateUpdateBookScreen({ navigation, route, startLoading, clearLoading }) {
+function CreateUpdateBookScreen({
+  navigation,
+  route,
+  startLoading,
+  clearLoading,
+}) {
   const { bookId } = route.params || {};
   const [book, setBook] = useState(null);
 
   const submit = (data: any) => {
-    startLoading({ key: 'save' });
+    startLoading({ key: "save" });
 
     (data.id ? update(data, data.id) : create(data))
       .then(() => navigation.goBack())
@@ -882,7 +909,7 @@ function CreateUpdateBookScreen({ navigation, route, startLoading, clearLoading 
 
   useEffect(() => {
     if (bookId) {
-      startLoading({ key: 'fetchBookDetail' });
+      startLoading({ key: "fetchBookDetail" });
 
       get(bookId)
         .then((response: any) => setBook(response))
@@ -900,7 +927,7 @@ CreateUpdateBookScreen.propTypes = {
 
 export default connectToRedux({
   component: CreateUpdateBookScreen,
-  stateProps: state => ({ loading: createLoadingSelector()(state) }),
+  stateProps: (state) => ({ loading: createLoadingSelector()(state) }),
   dispatchProps: {
     startLoading: LoadingActions.start,
     clearLoading: LoadingActions.clear,
@@ -1241,17 +1268,22 @@ function BooksScreen() {
 ```ts
 //./src/api/AuthorAPI.ts
 
-import api from './API';
+import api from "./API";
 
-export const getList = () => api.get('/api/app/author').then(({ data }) => data);
+export const getList = () =>
+  api.get("/api/app/author").then(({ data }) => data);
 
-export const get = id => api.get(`/api/app/author/${id}`).then(({ data }) => data);
+export const get = (id) =>
+  api.get(`/api/app/author/${id}`).then(({ data }) => data);
 
-export const create = input => api.post('/api/app/author', input).then(({ data }) => data);
+export const create = (input) =>
+  api.post("/api/app/author", input).then(({ data }) => data);
 
-export const update = (input, id) => api.put(`/api/app/author/${id}`, input).then(({ data }) => data);
+export const update = (input, id) =>
+  api.put(`/api/app/author/${id}`, input).then(({ data }) => data);
 
-export const remove = id => api.delete(`/api/app/author/${id}`).then(({ data }) => data);
+export const remove = (id) =>
+  api.delete(`/api/app/author/${id}`).then(({ data }) => data);
 ```
 
 ## The Author List Page
@@ -1427,21 +1459,26 @@ export default AuthorsScreen;
 Create a `CreateUpdateAuthorScreen.tsx` file under the `./src/screens/BookStore/Authors/CreateUpdateAuthor` folder and add the code below to it.
 
 ```tsx
-import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 
-import { get, create, update } from '../../../../api/AuthorAPI';
-import LoadingActions from '../../../../store/actions/LoadingActions';
-import { createLoadingSelector } from '../../../../store/selectors/LoadingSelectors';
-import { connectToRedux } from '../../../../utils/ReduxConnect';
-import CreateUpdateAuthorForm from './CreateUpdateAuthorForm';  
+import { get, create, update } from "../../../../api/AuthorAPI";
+import LoadingActions from "../../../../store/actions/LoadingActions";
+import { createLoadingSelector } from "../../../../store/selectors/LoadingSelectors";
+import { connectToRedux } from "../../../../utils/ReduxConnect";
+import CreateUpdateAuthorForm from "./CreateUpdateAuthorForm";
 
-function CreateUpdateAuthorScreen({ navigation, route, startLoading, clearLoading }) {
+function CreateUpdateAuthorScreen({
+  navigation,
+  route,
+  startLoading,
+  clearLoading,
+}) {
   const { authorId } = route.params || {};
-  const [ author, setAuthor ] = useState(null);
+  const [author, setAuthor] = useState(null);
 
   const submit = (data: any) => {
-    startLoading({ key: 'save' });
+    startLoading({ key: "save" });
 
     (data.id ? update(data, data.id) : create(data))
       .then(() => navigation.goBack())
@@ -1450,7 +1487,7 @@ function CreateUpdateAuthorScreen({ navigation, route, startLoading, clearLoadin
 
   useEffect(() => {
     if (authorId) {
-      startLoading({ key: 'fetchAuthorDetail' });
+      startLoading({ key: "fetchAuthorDetail" });
 
       get(authorId)
         .then((response: any) => setAuthor(response))
@@ -1490,7 +1527,7 @@ import { Divider, Portal, TextInput, Text, Button, Modal } from 'react-native-pa
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { useThemeColors } from '../../../../hooks';
-import { FormButtons, ValidationMessage } from '../../../../components';  
+import { FormButtons, ValidationMessage } from '../../../../components';
 
 const validations = {
   name: Yup.string().required('AbpValidation::ThisFieldIsRequired.'),
@@ -1576,7 +1613,7 @@ function CreateUpdateAuthorForm({ submit, author = null }) {
         <ScrollView keyboardShouldPersistTaps="handled">
           <View style={styles.inputContainer}>
             <TextInput
-              mode="flat" 
+              mode="flat"
               ref={nameRef}
               error={isInvalidControl('name')}
               onSubmitEditing={() => birthDateRef.current.focus()}
@@ -1775,7 +1812,7 @@ function BooksScreen({ navigation }) {
           title={item.name}
           //Update here
           description={`${item.authorName} | ${i18n.t(
-            "BookStore::Enum:BookType." + item.type
+            "BookStore::Enum:BookType." + item.type,
           )}`}
           //Update here
           right={(props) => (
