@@ -24,7 +24,7 @@ Before implementing UI changes, run the `Acme.BookStore` mobile application and 
 
 1. Open the solution in **ABP Studio** and run the **Initialize Solution** task once (creates SSL certificates and other one-time setup).
 2. For browser testing, follow [Running on Web](../../../framework/ui/react-native/running-on-web.md) — start the **Default** run profile; ABP Studio opens the app at **`https://localhost:8443`**.
-3. For an Android emulator or iOS simulator, follow [Running on Device](../../../framework/ui/react-native/running-on-device.md) — switch to the **MobileEmulator** run profile, update `react-native/Environment.ts`, and start the profile (or run `yarn tunnel:api` manually).
+3. For an Android emulator or iOS simulator, follow [Running on Device](../../../framework/ui/react-native/running-on-device.md). The sample is a **Pro, non-tiered Monolith** solution — switch to the **MobileEmulator** run profile, update `react-native/Environment.ts`, and start the profile (or run `yarn tunnel:api` manually). For **Tiered** or **Microservice** solutions, use the manual backend steps in that guide instead.
 
 See the [React Native overview](../../../framework/ui/react-native/index.md) for environment setup and project creation.
 

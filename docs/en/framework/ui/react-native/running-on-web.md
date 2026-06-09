@@ -68,7 +68,7 @@ Run the **Initialize Solution** task from the **Tasks** tab if you have not alre
 
 ### Start the Default profile
 
-When you start the **Default** profile, ABP Studio runs these main application:
+When you start the **Default** profile, ABP Studio runs these main applications:
 
 1. The backend host
 2. **ReactNative.LocalSslProxy** — terminates HTTPS on **`https://localhost:8443`** and forwards to Expo Web on port `8081`
@@ -82,7 +82,7 @@ The solution template already adds `https://localhost:8443` to backend **CorsOri
 
 {{ end }}
 
-You can enter **admin** as the username and **1q2w3E** as the password to log in.
+You can enter **admin** as the username and **1q2w3E\*** as the password to log in.
 
 ## Manual setup (without ABP Studio)
 
@@ -107,9 +107,9 @@ yarn web
 npx local-ssl-proxy --source 8443 --target 8081 --cert localhost.pem --key localhost-key.pem
 ```
 
-Alternatively, run `yarn create:local-proxy` and set `SOURCE_PORT=8443` if your template uses a different default port since it is safer.
+Alternatively, run `yarn create:local-proxy` and set `SOURCE_PORT=8443` if your template uses a different default port.
 
-5. Open **`https://localhost:8443`** in your browser.
+1. Open **`https://localhost:8443`** in your browser.
 
 ## Next steps
 

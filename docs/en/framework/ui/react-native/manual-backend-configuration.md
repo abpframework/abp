@@ -29,7 +29,7 @@
 > **Prefer simpler options first:**
 >
 > - Browser testing → [Running on Web](./running-on-web.md) (no backend changes)
-> - Non-tiered Monolith on emulator/device → [Running on Device](./running-on-device.md) with `yarn tunnel:api` or the **MobileEmulator** profile
+> - Pro, non-tiered Monolith on emulator/device → [Running on Device](./running-on-device.md) with `yarn tunnel:api` or the **MobileEmulator** profile
 
 > React Native does not trust the auto-generated .NET HTTPS certificate. Use **HTTP** during this manual workflow.
 
@@ -119,7 +119,7 @@ Update `react-native/Environment.ts` with your local IP address instead of `loca
   }
   ```
 
-Update `react-native/Environment.ts` with your local IP address. See the image in [Running on Device](./running-on-device.md#manual-cli-without-mobileemulator-profile).
+Update `react-native/Environment.ts` with your local IP address, then start Expo as described in [Running on Device](./running-on-device.md).
 
 {{ else if Architecture == "Microservice" }}
 
@@ -241,7 +241,7 @@ Update `react-native/Environment.ts` with your local IP address. See the image i
         },
         "Language": {
           "Destinations": {
-            "Identity": {
+            "Language": {
               "Address": "http://192.168.1.36:44310/"
             }
           }
@@ -251,7 +251,7 @@ Update `react-native/Environment.ts` with your local IP address. See the image i
   }
   ```
 
-Update `apps/mobile/react-native/Environment.ts` with your local IP address. See the image in [Running on Device](./running-on-device.md#manual-cli-without-mobileemulator-profile).
+Update `apps/mobile/react-native/Environment.ts` with your local IP address, then start Expo as described in [Running on Device](./running-on-device.md).
 
 {{ end }}
 

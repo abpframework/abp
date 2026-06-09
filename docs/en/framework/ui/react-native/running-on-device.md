@@ -63,7 +63,7 @@ For browser testing, see [Running on Web](./running-on-web.md).
 
 ### MobileEmulator profile (Recommended)
 
-Monolith solutions include a **MobileEmulator** run profile in the [Solution Runner](../../../studio/running-applications). When you start it, ABP Studio specifically runs:
+**Pro, non-tiered Monolith** solutions include a **MobileEmulator** run profile in the [Solution Runner](../../../studio/running-applications). When you start it, ABP Studio specifically runs:
 
 1. The backend host
 2. **ReactNativeTunnel** — runs `node scripts/tunnel.js` to expose your local backend through a Cloudflare tunnel
@@ -76,7 +76,7 @@ Before the first run:
 
 Start an Android emulator (or connect a device), then start the **MobileEmulator** profile.
 
-<img src="../../../images/rn-mobileEmulator-profile.png" alt="React Native app demo" width="620" style="max-width:100%">
+<img src="../../../images/rn-mobileEmulator-profile.png" alt="ABP Studio Solution Runner with MobileEmulator profile selected" width="620" style="max-width:100%">
 
 See [Cloudflare tunnel (manual CLI)](#cloudflare-tunnel-manual-cli) below for what the tunnel script does, and [Automate Localhost Access for Expo](https://abp.io/community/articles/automate-localhost-access-for-expo-a-guide-to-dynamic-7cblqtj3) for architecture details and troubleshooting.
 
@@ -86,7 +86,7 @@ See [Cloudflare tunnel (manual CLI)](#cloudflare-tunnel-manual-cli) below for wh
 
 {{ else }}
 
-> **Note:** The **MobileEmulator** running profile is not included in the microservice template. Follow [Manual Backend Configuration](./manual-backend-configuration.md) and the [manual CLI steps](#manual-cli-without-mobileemulator-profile) below.
+> **Note:** The **MobileEmulator** run profile is not included in the microservice template. Follow [Manual Backend Configuration](./manual-backend-configuration.md) and the [manual CLI steps](#manual-cli-without-mobileemulator-profile) below.
 
 {{ end }}
 
@@ -182,9 +182,11 @@ If you are not using the **MobileEmulator** profile, prefer the [Cloudflare tunn
 
 > The React Native application was generated with [Expo](https://expo.io/). Expo is a set of tools built around React Native to help you quickly start an app, and it includes many features.
 
-<img src="../../../images/rn-expo-qr.png" alt="React Native app demo" width="520" style="max-width:100%">
+<img src="../../../images/rn-expo-qr.png" alt="Expo CLI showing QR code and platform launch options" width="520" style="max-width:100%">
 
 You can start the application on an Android emulator, an iOS simulator, or a physical phone by scanning the QR code or by choosing the corresponding option in the Expo CLI.
+
+Enter **admin** as the username and **1q2w3E\*** as the password to log in to the application.
 
 ### Android Studio
 
@@ -193,4 +195,4 @@ You can start the application on an Android emulator, an iOS simulator, or a phy
 
 ### iOS Simulator
 
-Enter **admin** as the username and **1q2w3E** as the password to log in to the application.
+1. Press **i** in the Expo CLI to open the iOS simulator (macOS only).

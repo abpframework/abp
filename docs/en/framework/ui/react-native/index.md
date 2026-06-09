@@ -23,7 +23,7 @@ The ABP platform provides a basic [React Native](https://reactnative.dev/) start
 
 > The startup template UI is built with **[NativeWind v4](https://www.nativewind.dev/)** (Tailwind CSS for React Native) on top of a shadcn-inspired neutral palette, with full **light/dark mode** support. See [Styling with NativeWind](styling-with-nativewind.md) for the styling system reference.
 
-<img src="../../../images/react-native-app.gif" alt="React Native MobileEmulator profile" width="420" style="max-width:100%">
+<img src="../../../images/react-native-app.gif" alt="React Native startup template running on a mobile emulator" width="420" style="max-width:100%">
 
 ## How to Prepare Development Environment
 
@@ -73,10 +73,10 @@ This command creates a solution containing an **Angular** or **MVC** project (de
 
 You can choose how you want to run the mobile app:
 
-| Goal                                        | Documentation                                                                                                                |
-| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| **Browser testing (fastest)**               | [Running on Web](./running-on-web.md) — ABP Studio **Default** profile or Expo Web + HTTPS proxy at `https://localhost:8443` |
-| **Emulator, simulator, or physical device** | [Running on Device](./running-on-device.md) — **MobileEmulator** profile or Cloudflare tunnel method (`yarn tunnel:api`)     |
+| Goal                                        | Documentation                                                                                                                                                                |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Browser testing (fastest)**               | [Running on Web](./running-on-web.md) — ABP Studio **Default** profile or Expo Web + HTTPS proxy at `https://localhost:8443`                                                 |
+| **Emulator, simulator, or physical device** | [Running on Device](./running-on-device.md) — **Pro, non-tiered Monolith:** **MobileEmulator** profile or `yarn tunnel:api`; **Tiered / Microservice:** manual backend setup |
 
 Before running, you may need to install dependencies in the React Native project folder:
 
@@ -85,7 +85,7 @@ Before running, you may need to install dependencies in the React Native project
 
 Run `yarn install` or `npm install` in that folder.
 
-> **Recommended:** We suggest starting with [Running on Web](./running-on-web.md). Because, it requires the fewest setup steps and provides faster developement and hot-reload options compared to the physical device tests.
+> **Recommended:** We suggest starting with [Running on Web](./running-on-web.md). Because it requires the fewest setup steps and provides faster development and hot-reload options compared to the physical device tests.
 
 ### Related guides
 
