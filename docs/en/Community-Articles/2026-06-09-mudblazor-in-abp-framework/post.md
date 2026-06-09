@@ -1,4 +1,4 @@
-# MudBlazor Joins Blazorise as a Blazor UI Option in ABP 10.4.2
+# ABP 10.4.2 Expands Blazor UI Options with MudBlazor Support
 
 With ABP 10.4.2, new Blazor projects can now use **MudBlazor** (Material Design) as an alternative to the long-standing default, **Blazorise** (Bootstrap 5). Framework, themes (LeptonX / LeptonX Lite / Basic), modules, solution templates, ABP Studio, and ABP Suite all support both libraries side by side. The 10.4.2 packages are live on nuget.org.
 
