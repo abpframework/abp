@@ -8,27 +8,16 @@ If I am working on the public side of a modular application, I do not want the a
 
 That is where **AI Scopes** become one of the most important control features in **ABP Studio AI Coding Agent**.
 
-![ABP AI Coding Agent panel](ai-agent-panel.png)
+![ABP AI Coding Agent panel](scopes-openning.png)
 
-> **TODO:** Replace or complement this with a screenshot of the AI Scope selector when the final UI screenshot is available.
-
-## Why Scopes Matter
+## Why Scopes Matter?
 
 Most AI coding agents are very good at reading a folder and making changes. That is useful, but an ABP solution is rarely just a folder.
 
 An ABP solution can contain modules, packages, applications, gateways, background workers, database projects, shared contracts, UI projects, and infrastructure configuration. In a microservice solution, the repository may contain multiple independently meaningful services. In a modular monolith, a single solution may still have clear business boundaries.
 
-In those situations, the question is not only:
-
-```text
-Can the agent understand the solution?
-```
-
-The better question is:
-
-```text
-Which part of the solution should the agent be allowed to work with for this task?
-```
+-> In those situations, the question is not only: **Can the agent understand the solution?** ❌
+-> The better question is: **Which part of the solution should the agent be allowed to work with for this task?** ✅
 
 AI Scopes answer that question directly.
 
@@ -36,9 +25,11 @@ They let me choose the accessible area before the session starts. The agent can 
 
 For me, that changes the feeling of using an AI agent. It is no longer "here is my whole codebase, please be careful." It becomes "here is the part of the system this task belongs to, work inside that boundary."
 
-## What An AI Scope Controls
+## What An AI Scope Controls?
 
-An AI Scope restricts which directories the agent can access during a session.
+An AI Scope **restricts which directories the agent can access during a session**.
+
+![](auth-identity-scope.png)
 
 Depending on the task, a scope can include:
 
@@ -65,6 +56,8 @@ The first message of a session locks the configuration that affects the system p
 
 That matters when multiple sessions are active.
 
+![](selected-scope.png)
+
 Imagine I have one session working on a Catalog module and another session answering questions about the whole solution. Those sessions should not accidentally share a changing boundary. Each one should keep the scope it started with.
 
 This makes scopes more predictable. I can choose the scope intentionally at the beginning of the work and trust that the session is tied to that decision.
@@ -87,51 +80,14 @@ That kind of prompt becomes much stronger when the selected scope already matche
 
 This is especially useful for ABP because ABP applications are built around clear concepts: modules, layers, packages, application services, repositories, DTOs, permissions, localization resources, DbContexts, and run profiles. A scope can follow those boundaries instead of relying only on a long prompt.
 
-## A Practical Scoped Agent Flow
-
-Let me make this more concrete.
-
-Suppose I am working on a modular monolith with these areas:
-
-* `Public` for customer-facing features,
-* `Admin` for back-office screens,
-* `Catalog` for product data,
-* `Ordering` for checkout and order management,
-* `Identity` for users, roles, and permissions.
-
-Now imagine I want to improve the product search experience on the public side.
-
-Without a scope, a generic agent may inspect the whole repository. It may read admin pages, back-office permissions, unrelated services, old tests, and shared infrastructure. It may still succeed, but it has more room to waste context or propose changes outside the intended area.
-
-With an AI Scope, I can start from a more intentional setup:
-
-1. Select a scope that includes the `Public` and `Catalog` packages.
-2. Keep `Admin`, `Ordering`, and unrelated infrastructure outside the scope.
-3. Start in **Plan** mode if I want a reviewable implementation path first.
-4. Apply the plan in **Agent** mode when the direction is clear.
-5. Use workflows or tools to build and validate only the affected surface.
-
-The prompt can stay simple:
-
-```text
-In the selected Public + Catalog scope, create a plan to improve product search filtering.
-Respect the existing ABP application service and DTO patterns.
-Call out any dependency that would require expanding the scope before implementation.
-```
-
-That last sentence is important. A good scoped workflow should not force the agent to pretend the rest of the system does not exist. If the work genuinely requires another module, the agent can explain why the scope should be expanded. But the default behavior is focused.
-
-## What Scopes Help Prevent
+## What Scopes Help Prevent?
 
 Scopes help reduce a few common AI-agent failure modes.
 
-First, they reduce **unrelated exploration**. The agent does not need to spend time discovering files that have nothing to do with the task.
-
-Second, they reduce **accidental edits**. When a task belongs to one module, the agent should not casually change another module just because it found a similar type there.
-
-Third, they improve **reviewability**. If I scoped the task to `Catalog`, and the diff changes `Identity`, that is immediately suspicious. The boundary makes the review easier.
-
-Fourth, they support **parallel work**. Different sessions can be scoped to different areas, which is useful when independent tasks are running in the same solution.
+- First, they reduce **unrelated exploration**. The agent does not need to spend time discovering files that have nothing to do with the task.
+- Second, they reduce **accidental edits**. When a task belongs to one module, the agent should not casually change another module just because it found a similar type there.
+- Third, they improve **reviewability**. If I scoped the task to `Catalog`, and the diff changes `Identity`, that is immediately suspicious. The boundary makes the review easier.
+- Fourth, they support **parallel work**. Different sessions can be scoped to different areas, which is useful when independent tasks are running in the same solution.
 
 This is one of the places where ABP AI Coding Agent feels different from a generic coding tool. The feature is not only "the model can read fewer files." It is integrated into ABP Studio's understanding of the solution.
 
@@ -153,27 +109,12 @@ Which packages are needed to make it safely?
 Which parts of the system should stay out of this session?
 ```
 
-## Demo Idea: Scoping A Modular Monolith Or Microservice Solution
-
-> **TODO:** Capture a full screenshot set for this demo after configuring it in ABP Studio:
->
-> * the solution/module layout,
-> * the AI Scope selection,
-> * the prompt sent to the agent,
-> * the agent refusing or avoiding unrelated areas,
-> * the focused diff at the end.
-
-I prepared the detailed demo outline as a separate article draft here:
-
-[Scopes Demo: Modular Monolith Or Microservice Solution](scopes-demo-modular-monolith.md)
-
-The idea is to show a realistic ABP solution where the agent is allowed to work only on the relevant business area. The demo should make the feature visible: the value is not only that the agent can change code, but that it can change code inside a deliberate boundary.
-
 ## Scopes And Workflows Work Better Together
 
-Scopes define **where** the agent can work.
+- Scopes define **where** the agent can work.
+- Workflows define **what deterministic actions** should happen around that work.
 
-Workflows define **what deterministic actions** should happen around that work.
+![](scopes-openning.png)
 
 That combination is powerful. For example, I can scope the agent to the `Catalog` module and use a workflow that builds the affected package, regenerates proxies if contracts changed, and restarts the related application.
 
@@ -181,7 +122,7 @@ The scope keeps the coding session focused. The workflow keeps the verification 
 
 This is the larger ABP Studio AI story. It is not only an AI chat window. It is an agent inside a platform that already understands ABP solutions, run profiles, tools, workflows, Git state, and runtime signals.
 
-## Why This Is Different From Generic Coding Agents
+## Why This Is Different From Generic Coding Agents?
 
 Tools like Cursor, Claude Code, Codex, and Windsurf are strong general-purpose coding tools. They can read files, edit code, run shell commands, and help with many projects.
 
