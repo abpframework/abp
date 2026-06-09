@@ -154,7 +154,103 @@ The important part is that the agent can move from implementation to validation 
 
 ## A Practical Tool Access Walkthrough
 
-//TODO: The `simple-scenerio.md` file is in draft. Once it is completed, this section will be written based on that walkthrough.
+Let me make this more concrete with a small debugging scenario.
+
+In the sample application, I deliberately added a runtime exception to the `UpdateAsync` method of `BookAppService.cs`:
+
+```csharp
+throw new Exception("Sample exception for demonstrating integrated tools!");
+```
+
+Then I started the application from ABP Studio and triggered the related request from the browser. The only purpose of this setup is to create a real runtime failure that ABP Studio Monitoring can capture.
+
+The interesting part is not the exception itself. The interesting part is how the agent behaves when the monitoring tool is disabled, and how that changes when the tool is enabled.
+
+### First, Without The Exception Tool
+
+For the first run, I kept the monitoring tool that retrieves exceptions disabled.
+
+![ABP AI Coding Agent with exception monitoring tool disabled](disabled-monitoring-tools.png)
+
+Then I asked:
+
+```text
+Can you get the latest exception from ABP Studio Monitoring and explain what failed?
+```
+
+At this point, the agent did not have direct access to the exception tool. So it tried to reason around the problem in other ways. It looked for available information, tried to inspect logs from files, and checked the codebase to understand what might be happening.
+
+![ABP AI Coding Agent result without exception tool access](without-tool-result.png)
+
+That is still useful in some cases, but it is not the best debugging flow. The agent is spending time and context trying to reconstruct a runtime failure indirectly. It may eventually find the suspicious code, but it is working from weaker evidence.
+
+This is exactly why tool access matters. Without the monitoring tool, the agent can reason from files. With the monitoring tool, it can inspect the actual runtime failure.
+
+### Then, With The Exception Tool Enabled
+
+For the second run, I enabled the monitoring tool that can retrieve exceptions, such as `get_exceptions`.
+
+![ABP AI Coding Agent with exception monitoring tool enabled](enabled-monitoring-tools.png)
+
+Then I asked:
+
+```text
+Now the get_exceptions tool is enabled. Please get the latest exception from ABP Studio Monitoring, identify the failing code path, and suggest the smallest fix.
+```
+
+This time, the behavior was very different. The agent directly used the integrated exception tool, retrieved the exception details from ABP Studio Monitoring, and connected the runtime error to the failing code path.
+
+![ABP AI Coding Agent using get_exceptions result](with-tool-result-1.png)
+
+It also used the enabled logging tool to verify the surrounding context instead of guessing from the source code alone.
+
+![ABP AI Coding Agent correlating exception with logs](with-tool-result-2.png)
+
+That is the workflow I want from an integrated coding agent. It does not only say "this code looks suspicious." It checks the exception, follows the evidence, finds the source of the problem, and proposes the smallest fix.
+
+It is also faster and more efficient. The agent does not need to spend as many tokens searching for indirect clues because ABP Studio can provide the runtime signal directly.
+
+### Adding Logs And Requests
+
+After that, I asked the agent to use the available monitoring tools together:
+
+```text
+Use the available monitoring tools to check the related logs and recent requests for this failure. Tell me whether they confirm the same root cause.
+```
+
+At this point, the agent used the enabled tools for exceptions, requests, and logs.
+
+![ABP AI Coding Agent checking monitoring tools together](step-3-1.png)
+
+![ABP AI Coding Agent reviewing exception, request, and log details](step-3-2.png)
+
+This is where the ABP Studio integration becomes even more valuable. A runtime problem is rarely just one line of code. There is usually a request, a log entry, an exception, and a running application context around it.
+
+When these tools are available together, the agent can correlate them. It can say, "this request caused this exception, the logs confirm it, and this code path is responsible."
+
+That is much better than asking the developer to copy each piece manually into the chat.
+
+### Validating The Fix
+
+Finally, I asked the agent to validate the result:
+
+```text
+Run the available build or application validation tools and confirm that the problem is fixed.
+```
+
+The agent used ABP Studio tools to stop the application, build it, and run it again.
+
+![ABP AI Coding Agent validating the fix with ABP Studio tools](validate-the-fix.png)
+
+This completes the loop. The agent did not only identify the problem. It used the integrated tools to move through the full flow:
+
+1. Read the runtime exception.
+2. Correlate it with logs and requests.
+3. Find the failing code path.
+4. Apply or suggest the focused fix.
+5. Validate the application again.
+
+That is the difference I want to highlight in this article. ABP AI Coding Agent is not only a model that can edit files. When ABP Studio tools are enabled, it can participate in the same development workflow I use: observing the running application, understanding the failure, fixing the code, and validating the result.
 
 ## Why This Is Different From Generic Coding Agents
 
