@@ -56,7 +56,7 @@ AbpDynamicEntityConfig.EntityConfigurations.Configure(
 );
 ````
 
-## Configuring in model.json
+## Configuring in JSON Descriptors
 
 Set the `access` field on a foreign key property:
 
@@ -145,6 +145,6 @@ The `DynamicEntityAppService` checks these relations when building entity action
 
 ## See Also
 
-* [model.json Structure](model-json.md)
+* [Model Descriptor Files](model-json.md)
 * [Reference Entities](reference-entities.md)
 * [Attributes & Fluent API](fluent-api.md)

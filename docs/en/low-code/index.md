@@ -140,14 +140,14 @@ Useful export settings:
 
 ## Advanced Configuration
 
-The designer stores and reads the same model metadata described in the reference pages below. Use these pages when you need source-controlled model files, custom startup wiring, script handlers, or low-level integration details.
+The designer stores and reads the same descriptor metadata described in the reference pages below. Use these pages when you need source-controlled descriptor files, custom startup wiring, script handlers, or low-level integration details.
 
 | Topic | Use it for |
 |-------|------------|
 | [Designer](designer.md) | Admin Console tabs, entity/page/form setup, permissions, and health |
 | [React Runtime](react-runtime.md) | React package wiring, routes, menu items, filters, forms, and export |
 | [Attributes & Fluent API](fluent-api.md) | Source-controlled C# metadata and runtime overrides |
-| [model.json Structure](model-json.md) | JSON descriptor format used by the designer and runtime |
+| [Model Descriptor Files](model-json.md) | JSON descriptor files and public descriptor schemas used by the designer and runtime |
 | [Reference Entities](reference-entities.md) | Lookups to existing entities such as Identity users |
 | [Foreign Access](foreign-access.md) | Access to related dynamic entities through relations |
 | [Interceptors](interceptors.md) | JavaScript lifecycle logic for CRUD operations |
@@ -170,4 +170,4 @@ The generated pages are powered by these services:
 
 * [Low-Code Designer](designer.md)
 * [React Runtime](react-runtime.md)
-* [model.json Structure](model-json.md)
+* [Model Descriptor Files](model-json.md)

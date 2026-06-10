@@ -437,7 +437,7 @@ Custom endpoints add request globals and response helpers. See [Custom Endpoints
 | Background job | `job`, `jobName`, `jobData`, `jobJsonData` |
 | Background worker | `worker`, `workerName` |
 
-Event handlers, background jobs, and background workers are configured in the Designer **Actions** section or in `model.json`. See [Script Actions](script-actions.md) for descriptors, examples, and dry-run testing.
+Event handlers, background jobs, and background workers are configured in the Designer **Actions** section or in JSON descriptor files. See [Script Actions](script-actions.md) for descriptors, examples, and dry-run testing.
 
 Event handler example:
 
@@ -785,4 +785,4 @@ return ok({
 * [Interceptors](interceptors.md)
 * [Custom Endpoints](custom-endpoints.md)
 * [Script Actions](script-actions.md)
-* [model.json Structure](model-json.md)
+* [Model Descriptor Files](model-json.md)

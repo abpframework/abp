@@ -73,7 +73,7 @@ The `Order` page now has a foreign key dropdown for Customer, and `OrderLine` is
 The Low-Code System uses a layered configuration model. From lowest to highest priority:
 
 1. **Code Layer** — C# classes with `[DynamicEntity]` and other attributes
-2. **JSON Layer** — `model.json` file (see [model.json Structure](model-json.md))
+2. **JSON Descriptor Layer** — source-controlled descriptor files under `_Dynamic` (see [Model Descriptor Files](model-json.md))
 3. **Fluent Layer** — `AbpDynamicEntityConfig.EntityConfigurations`
 
 A `DefaultLayer` runs last to fill in any missing values with conventions.
@@ -387,16 +387,16 @@ AbpDynamicEntityConfig.SourceAssemblies.Add(
     new DynamicEntityAssemblyInfo(
         typeof(MyDomainModule).Assembly,
         rootNamespace: "MyApp",
-        projectRootPath: sourcePath  // For model.json hot-reload
+        projectRootPath: sourcePath  // For descriptor hot-reload
     )
 );
 ````
 
 | Parameter | Description |
 |-----------|-------------|
-| `assembly` | The assembly containing `[DynamicEntity]` classes and/or `model.json` |
+| `assembly` | The assembly containing `[DynamicEntity]` classes and/or descriptor metadata |
 | `rootNamespace` | Root namespace for the assembly (used for embedded resource lookup) |
-| `projectRootPath` | Path to the Domain project source folder (enables `model.json` hot-reload in development) |
+| `projectRootPath` | Path to the Domain project source folder (enables descriptor hot-reload in development) |
 
 You can also register entity types directly:
 
@@ -405,21 +405,21 @@ AbpDynamicEntityConfig.DynamicEntityTypes.Add(typeof(Product));
 AbpDynamicEntityConfig.DynamicEnumTypes.Add(typeof(OrganizationType));
 ````
 
-## Combining with model.json
+## Combining with JSON Descriptors
 
-Attributes and model.json work together seamlessly. A common pattern:
+Attributes and JSON descriptors work together seamlessly. A common pattern:
 
 1. **Define core entities** with C# attributes (compile-time safety)
-2. **Add additional entities** via model.json (no recompilation needed)
+2. **Add additional entities** via descriptor files (no recompilation needed)
 3. **Fine-tune configuration** with Fluent API (overrides everything)
 
 The three-layer system merges all definitions:
 
 ```
-Fluent API (highest) > JSON (model.json) > Code (Attributes) > Defaults (lowest)
+Fluent API (highest) > JSON descriptors > Code (Attributes) > Defaults (lowest)
 ```
 
-For example, if an attribute sets `[DynamicPropertyUnique]` and model.json sets `"isUnique": false`, the JSON value wins because JSON layer has higher priority than Code layer.
+For example, if an attribute sets `[DynamicPropertyUnique]` and a descriptor sets `"isUnique": false`, the JSON value wins because the JSON descriptor layer has higher priority than the Code layer.
 
 ## End-to-End Example
 
@@ -570,6 +570,6 @@ This gives you four auto-generated pages (Customers, Products, Orders with neste
 
 ## See Also
 
-* [model.json Structure](model-json.md)
+* [Model Descriptor Files](model-json.md)
 * [Reference Entities](reference-entities.md)
 * [Interceptors](interceptors.md)

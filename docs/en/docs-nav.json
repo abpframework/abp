@@ -447,56 +447,6 @@
       ]
     },
     {
-      "text": "Low-Code",
-      "items": [
-        {
-          "text": "Overview",
-          "path": "low-code",
-          "isIndex": true
-        },
-        {
-          "text": "Low-Code Designer",
-          "path": "low-code/designer.md"
-        },
-        {
-          "text": "React Runtime",
-          "path": "low-code/react-runtime.md"
-        },
-        {
-          "text": "Attributes & Fluent API",
-          "path": "low-code/fluent-api.md"
-        },
-        {
-          "text": "model.json Structure",
-          "path": "low-code/model-json.md"
-        },
-        {
-          "text": "Reference Entities",
-          "path": "low-code/reference-entities.md"
-        },
-        {
-          "text": "Foreign Access",
-          "path": "low-code/foreign-access.md"
-        },
-        {
-          "text": "Interceptors",
-          "path": "low-code/interceptors.md"
-        },
-        {
-          "text": "Custom Endpoints",
-          "path": "low-code/custom-endpoints.md"
-        },
-        {
-          "text": "Script Actions",
-          "path": "low-code/script-actions.md"
-        },
-        {
-          "text": "Scripting API",
-          "path": "low-code/scripting-api.md"
-        }
-      ]
-    },
-    {
       "text": "Framework",
       "items": [
         {

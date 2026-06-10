@@ -9,13 +9,13 @@
 
 > **Preview:** The Low-Code Designer is part of the preview Low-Code System. Designer screens, metadata fields, and validation rules may change before general availability.
 
-The Low-Code Designer is available in ABP Admin Console. It is the main UI for building and maintaining low-code models.
+The Low-Code Designer is available in ABP Admin Console. It is the main UI for building and maintaining low-code descriptor metadata.
 
 ```text
 /admin-console/lowcode-designer
 ```
 
-The designer works with layered model metadata. In development, generated projects include a `_Dynamic/model.json` file and a generated initializer. The designer can also persist changes to the database JSON layer, depending on the selected layer and permissions.
+The designer works with layered descriptor metadata. In development, generated projects include source-controlled descriptor files under `_Dynamic` and a generated initializer. The designer can also persist changes to the database JSON layer, depending on the selected layer and permissions.
 
 ![Low-Code Designer overview](images/designer-overview.png)
 
@@ -120,7 +120,7 @@ Generated pages and menus are permission-aware. If a user cannot access a page, 
 
 ## Actions and Scripts
 
-Use **Actions** only when model metadata and standard CRUD behavior are not enough. The scripting surface can define custom HTTP endpoints, distributed event handlers, background jobs, and scheduled background workers. Scripts run server-side and use the [Scripting API](scripting-api.md).
+Use **Actions** only when descriptor metadata and standard CRUD behavior are not enough. The scripting surface can define custom HTTP endpoints, distributed event handlers, background jobs, and scheduled background workers. Scripts run server-side and use the [Scripting API](scripting-api.md).
 
 JavaScript editors in the Designer provide syntax highlighting, service autocomplete, entity name autocomplete, entity property autocomplete, enum autocomplete, and an **Available context** list. The context list reflects the services enabled for the selected script type. The `fileFields` and `imageFields` context items are selector trees for `File` and `Image` properties used by the file and image helpers; they are not lists of every entity property.
 
@@ -132,4 +132,4 @@ Use **Health** before shipping changes. It helps catch missing display propertie
 
 ## Source Control
 
-For source-controlled models, keep `_Dynamic/model.json` and the generated initializer in your application repository. Use [model.json Structure](model-json.md), [Attributes & Fluent API](fluent-api.md), and [Reference Entities](reference-entities.md) for advanced editing and integration details.
+For source-controlled models, keep the `_Dynamic` descriptor files and the generated initializer in your application repository. Use [Model Descriptor Files](model-json.md), [Attributes & Fluent API](fluent-api.md), and [Reference Entities](reference-entities.md) for advanced editing and integration details.

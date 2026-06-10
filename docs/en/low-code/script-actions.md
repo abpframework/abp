@@ -9,7 +9,7 @@
 
 > **Preview:** Script actions are part of the preview Low-Code System. Descriptor fields, designer screens, and script context members may change before general availability.
 
-Use **Actions** in the Low-Code Designer when model metadata and generated CRUD behavior are not enough. Actions can add JavaScript-backed HTTP endpoints, distributed event handlers, background jobs, and scheduled background workers.
+Use **Actions** in the Low-Code Designer when descriptor metadata and generated CRUD behavior are not enough. Actions can add JavaScript-backed HTTP endpoints, distributed event handlers, background jobs, and scheduled background workers.
 
 Custom HTTP endpoints are documented separately in [Custom Endpoints](custom-endpoints.md). This page focuses on the shared action designer experience and the event handler, background job, and background worker action types.
 
@@ -256,4 +256,4 @@ The endpoint dry-run still evaluates the endpoint authentication and permission 
 * [Custom Endpoints](custom-endpoints.md)
 * [Interceptors](interceptors.md)
 * [Scripting API](scripting-api.md)
-* [model.json Structure](model-json.md)
+* [Model Descriptor Files](model-json.md)

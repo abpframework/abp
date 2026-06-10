@@ -11,7 +11,7 @@
 
 Use generated page CRUD APIs for normal dynamic entity pages. Custom endpoints are an advanced option for exposing small model-owned REST APIs that do not map to standard list, get, create, update, delete, export, file, or attachment operations.
 
-Custom endpoints are defined in `model.json` or through the Low-Code Designer. Each endpoint executes server-side JavaScript and is registered as an ASP.NET Core route.
+Custom endpoints are defined in JSON descriptor files or through the Low-Code Designer. Each endpoint executes server-side JavaScript and is registered as an ASP.NET Core route.
 
 ## Defining Endpoints
 
@@ -234,4 +234,4 @@ Default blocked headers also include hop-by-hop headers such as `Connection`, `T
 * [Scripting API](scripting-api.md)
 * [Script Actions](script-actions.md)
 * [Interceptors](interceptors.md)
-* [model.json Structure](model-json.md)
+* [Model Descriptor Files](model-json.md)
