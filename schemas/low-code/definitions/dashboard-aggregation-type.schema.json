@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dashboard-aggregation-type.schema.json",
+  "title": "DashboardAggregationType",
+  "description": "The type of aggregation to perform. Prefer lower-case values in descriptor JSON; PascalCase aliases are accepted for compatibility.",
+  "markdownDescription": "`count` counts records and does not require a property. `sum`, `average`, `min`, and `max` require a property. `percentFilled` and `percentEmpty` calculate completeness for a nullable/string property.",
+  "type": "string",
+  "enum": [
+    "count",
+    "Count",
+    "sum",
+    "Sum",
+    "average",
+    "Average",
+    "min",
+    "Min",
+    "max",
+    "Max",
+    "percentFilled",
+    "PercentFilled",
+    "percentEmpty",
+    "PercentEmpty"
+  ],
+  "enumDescriptions": [
+    "Count matching records.",
+    "Count matching records.",
+    "Sum a numeric property.",
+    "Sum a numeric property.",
+    "Average a numeric property.",
+    "Average a numeric property.",
+    "Minimum property value.",
+    "Minimum property value.",
+    "Maximum property value.",
+    "Maximum property value.",
+    "Percentage of records where property has a value.",
+    "Percentage of records where property has a value.",
+    "Percentage of records where property is empty/null.",
+    "Percentage of records where property is empty/null."
+  ]
+}

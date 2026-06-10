@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "entity-descriptor.schema.json",
+  "title": "EntityDescriptor",
+  "description": "Describes a dynamic entity. An entity is the runtime data model: it defines a table-like aggregate, its properties, validations, parent-child relation, attachment support, and create/update/delete interceptors.",
+  "markdownDescription": "AI guidance: create one entity per aggregate/root concept. Use a stable namespace-style `name` such as `Acme.Crm.Customer`; this name is referenced by pages, forms, foreign keys, dashboards, scripts, and permissions. Put user-facing labels in `displayName`; choose `displayProperty` as a short string property used by lookups. Use `parent` only for child/detail entities that belong to a parent record.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional schema reference used when this descriptor is stored as a model descriptor file."
+    },
+    "name": {
+      "type": "string",
+      "description": "Stable full name of the entity, usually Namespace.Module.EntityName (for example 'Acme.Crm.Customer'). Must be unique across all model layers. Do not rename after data exists unless a migration/rename flow is intended.",
+      "minLength": 1
+    },
+    "displayName": {
+      "type": "string",
+      "description": "Default plural/screen label for this entity (for example 'Customers'). Page menu titles are configured separately on page descriptors.",
+      "minLength": 1
+    },
+    "displayProperty": {
+      "type": "string",
+      "description": "Property name used when another entity references this entity in a lookup/autocomplete. Prefer a required string property such as 'Name', 'Title', or 'Code'."
+    },
+    "parent": {
+      "type": "string",
+      "description": "Full name of the parent entity for parent-child/detail entities. When set, records of this entity are scoped under the parent and should include an FK property to the parent.",
+      "minLength": 1
+    },
+    "attachments": {
+      "$ref": "entity-attachment-descriptor.schema.json",
+      "description": "Record-level attachment settings. Use this for multiple arbitrary files attached to a record; use File/Image properties for first-class file fields."
+    },
+    "properties": {
+      "type": "array",
+      "description": "Entity properties. Omit framework audit/id fields such as Id, CreationTime, CreatorId, LastModificationTime, IsDeleted unless intentionally overriding metadata; the runtime supplies standard fields.",
+      "items": {
+        "$ref": "entity-property-descriptor.schema.json"
+      }
+    },
+    "crossFieldValidations": {
+      "type": "array",
+      "description": "Entity-level validation rules that compare two properties from the same entity. Use for date ranges, matching password fields, numeric min/max pairs, and other cross-field rules.",
+      "items": {
+        "$ref": "entity-cross-field-validation-descriptor.schema.json"
+      }
+    },
+    "interceptors": {
+      "type": "array",
+      "description": "Create/Update/Delete command interceptors. Use Pre interceptors to validate, normalize, or block a command; use Post interceptors for side effects after persistence.",
+      "items": {
+        "$ref": "command-interceptor-descriptor.schema.json"
+      }
+    }
+  },
+  "required": ["name"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "name": "Acme.Crm.Customer",
+      "displayName": "Customers",
+      "displayProperty": "Name",
+      "properties": [
+        { "name": "Name", "type": "string", "isRequired": true },
+        { "name": "Email", "type": "string", "validators": [{ "type": "email" }] }
+      ]
+    }
+  ]
+}

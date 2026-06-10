@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "command-interceptor-descriptor.schema.json",
+  "title": "CommandInterceptorDescriptor",
+  "description": "Describes a JavaScript interceptor for an entity Create, Update, or Delete command.",
+  "markdownDescription": "AI guidance: use `type: \"Pre\"` to validate or block before persistence and `type: \"Post\"` for side effects after persistence. Scripts can inspect `context.commandArgs` and may use services exposed on `context` such as `db`, `currentUser`, `currentTenant`, `emailSender`, `config`, `http`, and logging helpers depending on host configuration. To block the command with a user-facing error, assign `globalError = \"message\"` and return. Keep scripts idempotent where possible.",
+  "type": "object",
+  "properties": {
+    "commandName": {
+      "type": "string",
+      "description": "Entity command to intercept: Create, Update, or Delete.",
+      "enum": ["Create", "Update", "Delete"]
+    },
+    "type": {
+      "$ref": "interceptor-type.schema.json",
+      "description": "Whether the script runs before or after the command."
+    },
+    "javascript": {
+      "type": "string",
+      "description": "JavaScript code to execute. For Pre interceptors, set globalError to block the command. Example: if (!context.commandArgs.data['Name']) { globalError = 'Name is required.'; }"
+    }
+  },
+  "required": ["commandName", "type", "javascript"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "commandName": "Create",
+      "type": "Pre",
+      "javascript": "if (!context.commandArgs.data['Name']) { globalError = 'Name is required.'; }"
+    },
+    {
+      "commandName": "Delete",
+      "type": "Pre",
+      "javascript": "var record = await db.get('Acme.Events.Event', context.commandArgs.entityId); if (record && record.Status === 2) { globalError = 'Completed events cannot be deleted.'; }"
+    }
+  ]
+}

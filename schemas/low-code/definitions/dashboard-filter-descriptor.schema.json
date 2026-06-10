@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dashboard-filter-descriptor.schema.json",
+  "title": "DashboardFilterDescriptor",
+  "description": "Static filter applied to a dashboard visualization or KPI item.",
+  "markdownDescription": "AI guidance: use dashboard filters to constrain the data behind a visualization, for example only active records or only records above a threshold. Each condition property must exist on the visualization/item entity. Combine conditions with `operator: \"and\"` or `operator: \"or\"`.",
+  "type": "object",
+  "properties": {
+    "operator": {
+      "type": "string",
+      "enum": ["and", "or"],
+      "default": "and"
+    },
+    "conditions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "property": {
+            "type": "string",
+            "description": "Property name to filter on. Must exist on the visualization/item entityName."
+          },
+          "filterType": {
+            "type": "string",
+            "enum": ["equal", "notEqual", "contains", "greaterThan", "lessThan", "isNull", "isNotNull"],
+            "default": "equal"
+          },
+          "value": {
+            "description": "Filter value. Shape depends on filterType and target property type."
+          }
+        },
+        "required": ["property", "filterType"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["conditions"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "operator": "and",
+      "conditions": [
+        { "property": "Status", "filterType": "equal", "value": 1 }
+      ]
+    }
+  ]
+}
