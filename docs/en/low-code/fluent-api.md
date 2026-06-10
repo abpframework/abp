@@ -1,13 +1,15 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Define dynamic entities using C# attributes and configure them with the Fluent API in the ABP Low-Code System. The primary way to build auto-generated admin panels."
+    "Description": "Define dynamic entities using .NET attributes and configure them with the Fluent API in the ABP Low-Code System for advanced source-controlled model configuration."
 }
 ```
 
 # Attributes & Fluent API
 
-C# Attributes and the Fluent API are the **recommended way** to define dynamic entities. They provide compile-time checking, IntelliSense, refactoring support, and keep your entity definitions close to your domain code.
+> **Preview:** Attributes and Fluent API configuration for the Low-Code System are preview APIs. Prefer the designer for normal modeling work, and review release notes before relying on these APIs in long-lived integrations.
+
+Use the [Low-Code Designer](designer.md) for day-to-day entity, page, form, and filter work. C# attributes and the Fluent API are advanced configuration options for teams that need source-controlled model definitions, compile-time checking, or programmatic overrides.
 
 ## Quick Start
 
@@ -37,7 +39,7 @@ dotnet ef migrations add Added_Product
 dotnet ef database update
 ```
 
-You now have a complete Product management page with data grid, create/edit modals, search, sorting, and pagination.
+After migrations and runtime startup, the React low-code runtime can render a Product management page with data grid, create/edit forms, search, sorting, filters, and pagination.
 
 ### Step 3: Add Relationships
 
@@ -71,7 +73,7 @@ The `Order` page now has a foreign key dropdown for Customer, and `OrderLine` is
 The Low-Code System uses a layered configuration model. From lowest to highest priority:
 
 1. **Code Layer** — C# classes with `[DynamicEntity]` and other attributes
-2. **JSON Layer** — `model.json` file (see [model.json Structure](model-json.md))
+2. **JSON Descriptor Layer** — source-controlled descriptor files under `_Dynamic` (see [Model Descriptor Files](model-json.md))
 3. **Fluent Layer** — `AbpDynamicEntityConfig.EntityConfigurations`
 
 A `DefaultLayer` runs last to fill in any missing values with conventions.
@@ -257,7 +259,7 @@ Enum values can be localized using ABP's localization system. Add localization k
 }
 ```
 
-The Blazor UI automatically uses these localization keys for enum dropdowns and display values. If no localization key is found, the enum member name is used as-is.
+The React runtime automatically uses these localization keys for enum dropdowns and display values. If no localization key is found, the enum member name is used as-is.
 
 ## Fluent API
 
@@ -265,7 +267,7 @@ The Fluent API has the **highest priority** in the configuration system. Use `Ab
 
 ### Basic Usage
 
-Configure in your Low-Code Initializer (e.g. `MyAppLowCodeInitializer`):
+Configure in startup initialization code (for example `MyAppLowCodeInitializer`):
 
 ````csharp
 public static class MyAppLowCodeInitializer
@@ -378,23 +380,23 @@ entity.Interceptors.Add(new CommandInterceptorDescriptor("Create")
 
 ## Assembly Registration
 
-Register assemblies containing `[DynamicEntity]` classes in your [Low-Code Initializer](index.md#1-create-a-low-code-initializer):
+Register assemblies containing `[DynamicEntity]` classes in startup initialization code:
 
 ````csharp
 AbpDynamicEntityConfig.SourceAssemblies.Add(
     new DynamicEntityAssemblyInfo(
         typeof(MyDomainModule).Assembly,
         rootNamespace: "MyApp",
-        projectRootPath: sourcePath  // For model.json hot-reload
+        projectRootPath: sourcePath  // For descriptor hot-reload
     )
 );
 ````
 
 | Parameter | Description |
 |-----------|-------------|
-| `assembly` | The assembly containing `[DynamicEntity]` classes and/or `model.json` |
+| `assembly` | The assembly containing `[DynamicEntity]` classes and/or descriptor metadata |
 | `rootNamespace` | Root namespace for the assembly (used for embedded resource lookup) |
-| `projectRootPath` | Path to the Domain project source folder (enables `model.json` hot-reload in development) |
+| `projectRootPath` | Path to the Domain project source folder (enables descriptor hot-reload in development) |
 
 You can also register entity types directly:
 
@@ -403,21 +405,21 @@ AbpDynamicEntityConfig.DynamicEntityTypes.Add(typeof(Product));
 AbpDynamicEntityConfig.DynamicEnumTypes.Add(typeof(OrganizationType));
 ````
 
-## Combining with model.json
+## Combining with JSON Descriptors
 
-Attributes and model.json work together seamlessly. A common pattern:
+Attributes and JSON descriptors work together seamlessly. A common pattern:
 
 1. **Define core entities** with C# attributes (compile-time safety)
-2. **Add additional entities** via model.json (no recompilation needed)
+2. **Add additional entities** via descriptor files (no recompilation needed)
 3. **Fine-tune configuration** with Fluent API (overrides everything)
 
 The three-layer system merges all definitions:
 
 ```
-Fluent API (highest) > JSON (model.json) > Code (Attributes) > Defaults (lowest)
+Fluent API (highest) > JSON descriptors > Code (Attributes) > Defaults (lowest)
 ```
 
-For example, if an attribute sets `[DynamicPropertyUnique]` and model.json sets `"isUnique": false`, the JSON value wins because JSON layer has higher priority than Code layer.
+For example, if an attribute sets `[DynamicPropertyUnique]` and a descriptor sets `"isUnique": false`, the JSON value wins because the JSON descriptor layer has higher priority than the Code layer.
 
 ## End-to-End Example
 
@@ -497,7 +499,7 @@ public class OrderLine : DynamicEntityBase
 }
 ````
 
-Register everything in your [Low-Code Initializer](index.md#1-create-a-low-code-initializer):
+Register everything in startup initialization code:
 
 ````csharp
 public static class MyAppLowCodeInitializer
@@ -562,11 +564,12 @@ public class MyAppDbContextFactory : IDesignTimeDbContextFactory<MyAppDbContext>
     
     // ... BuildConfiguration method ...
 }
+````
 
 This gives you four auto-generated pages (Customers, Products, Orders with nested OrderLines), complete with permissions, menu items, foreign key lookups, and interceptor-based business rules.
 
 ## See Also
 
-* [model.json Structure](model-json.md)
+* [Model Descriptor Files](model-json.md)
 * [Reference Entities](reference-entities.md)
 * [Interceptors](interceptors.md)

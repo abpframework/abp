@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "foreign-key-descriptor.schema.json",
+  "title": "ForeignKeyDescriptor",
+  "description": "Describes a foreign key/lookup relationship from the owning entity property to another entity or reference entity.",
+  "markdownDescription": "AI guidance: put `foreignKey` on the property that stores the related record id. The property name should usually end with `Id`, for example `CustomerId`. `entityName` must match a model entity name or a registered code/reference entity such as `Volo.Abp.Identity.IdentityUser`. Use `displayPropertyName` when the target display field is not obvious. Use `dependsOn` for cascading dropdowns such as City filtered by Country. Use `access` only for reverse access from the referenced entity side: `none`, `view`, or `edit`. Do not use `lookup` as `access`; lookup is a form field/control type.",
+  "type": "object",
+  "properties": {
+    "entityName": {
+      "type": "string",
+      "description": "Full name of the related entity or registered reference entity. Must match an entity descriptor name or a known code/reference entity.",
+      "minLength": 1
+    },
+    "displayPropertyName": {
+      "type": "string",
+      "description": "Property name to display from the related entity in lookups/autocomplete. Omit to use the target entity displayProperty.",
+      "minLength": 1
+    },
+    "access": {
+      "type": "string",
+      "description": "Access level for managing this relation from the referenced entity side. 'none' means no reverse access; 'view' allows the referenced entity page to show related records; 'edit' allows managing related records from the referenced side.",
+      "enum": ["none", "None", "view", "View", "edit", "Edit"],
+      "default": "none"
+    },
+    "dependsOn": {
+      "type": "object",
+      "description": "Cascading dependency: filter this FK lookup by the value of another FK property on the same owning entity. Example: CityId depends on CountryId and filters City.CountryId.",
+      "properties": {
+        "propertyName": {
+          "type": "string",
+          "description": "Property name on the owning entity whose value provides the filter (for example 'CountryId' on an Address entity).",
+          "minLength": 1
+        },
+        "filterPropertyName": {
+          "type": "string",
+          "description": "Property name on the target lookup entity to filter by (for example 'CountryId' on City).",
+          "minLength": 1
+        }
+      },
+      "required": ["propertyName", "filterPropertyName"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["entityName"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "entityName": "Acme.Crm.Customer",
+      "displayPropertyName": "Name"
+    },
+    {
+      "entityName": "Acme.Geo.City",
+      "displayPropertyName": "Name",
+      "dependsOn": {
+        "propertyName": "CountryId",
+        "filterPropertyName": "CountryId"
+      }
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "script-event-handler-descriptor.schema.json",
+  "title": "Script Event Handler Descriptor",
+  "description": "Defines a named JavaScript handler for a distributed event name.",
+  "markdownDescription": "AI guidance: use event handlers for asynchronous reactions to domain/application events. `eventName` must match the event name published by the application or another script. Keep handlers idempotent because distributed events can be retried. Scripts can use the host-provided context, including event payload/request data where available, db, current tenant/user, email, logging, event publishing, and job enqueue helpers.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional schema reference used when this descriptor is stored as a model descriptor file."
+    },
+    "name": {
+      "type": "string",
+      "description": "Unique identifier for the handler. Prefer a descriptive name such as 'NotifyWhenEventCompleted'.",
+      "minLength": 1
+    },
+    "eventName": {
+      "type": "string",
+      "description": "Distributed event name to subscribe to. Must exactly match the publisher's event name.",
+      "minLength": 1
+    },
+    "javascript": {
+      "type": "string",
+      "description": "JavaScript code to execute when the event is received. Keep idempotent; avoid assuming one-time delivery.",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional description for designer documentation and model health context."
+    }
+  },
+  "required": ["name", "eventName", "javascript"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "name": "NotifyEventCompleted",
+      "eventName": "Acme.Events.EventCompleted",
+      "javascript": "context.log('Event completed handler executed.');"
+    }
+  ]
+}
