@@ -58,3 +58,5 @@ Thumbs.db
 .angular
 
 .nx/
+
+vitest.config.*.timestamp*

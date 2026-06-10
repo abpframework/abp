@@ -11,6 +11,7 @@
     "InvalidUsername": "Väärä käyttäjänimi tai salasana!",
     "InvalidAuthenticatorCode": "Virheellinen todennuskoodi!",
     "InvalidRecoveryCode": "Virheellinen palautuskoodi!",
-    "TheTargetUserIsNotLinkedToYou": "Kohdekäyttäjä ei ole linkitetty sinuun!"
+    "TheTargetUserIsNotLinkedToYou": "Kohdekäyttäjä ei ole linkitetty sinuun!",
+    "ClientResourcePermissionProviderKeyLookupService": "Asiakas"
   }
 }

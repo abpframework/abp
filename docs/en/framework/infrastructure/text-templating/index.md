@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover ABP's powerful text templating system for dynamic content rendering, supporting conditionals, loops, and localization for enhanced applications."
+}
+```
+
 # Text Templating
 
 ## Introduction

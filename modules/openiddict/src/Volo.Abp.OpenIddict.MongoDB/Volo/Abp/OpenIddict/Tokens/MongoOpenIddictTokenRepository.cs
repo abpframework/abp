@@ -41,7 +41,7 @@ public class MongoOpenIddictTokenRepository : MongoDbRepository<OpenIddictMongoD
     public virtual async Task DeleteManyByAuthorizationIdsAsync(Guid[] authorizationIds, bool autoSave = false, CancellationToken cancellationToken = default)
     {
         var tokens = await (await GetQueryableAsync(GetCancellationToken(cancellationToken)))
-            .Where(x => x.AuthorizationId != null && authorizationIds.Contains(x.AuthorizationId.Value))
+            .Where(x => x.AuthorizationId != null && authorizationIds.AsEnumerable().Contains(x.AuthorizationId.Value))
             .ToListAsync(GetCancellationToken(cancellationToken));
 
         await DeleteManyAsync(tokens, autoSave, GetCancellationToken(cancellationToken));

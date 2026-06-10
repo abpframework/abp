@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -17,9 +18,11 @@ public static class EntityTypeBuilderExtensions
 #pragma warning disable EF1001
         var queryFilterAnnotation = builder.Metadata.FindAnnotation(CoreAnnotationNames.QueryFilter);
 #pragma warning restore EF1001
-        if (queryFilterAnnotation != null && queryFilterAnnotation.Value != null && queryFilterAnnotation.Value is Expression<Func<TEntity, bool>> existingFilter)
+        if (queryFilterAnnotation != null && queryFilterAnnotation.Value != null && queryFilterAnnotation.Value is QueryFilterCollection queryFilterCollection)
         {
-            filter = QueryFilterExpressionHelper.CombineExpressions(filter, existingFilter);
+            filter = queryFilterCollection.Where(x => x.Expression is Expression<Func<TEntity, bool>>).Aggregate(filter,
+                (current, queryFilter) => QueryFilterExpressionHelper.CombineExpressions(current,
+                    queryFilter.Expression!.As<Expression<Func<TEntity, bool>>>()));
         }
 
         return builder.HasQueryFilter(filter);

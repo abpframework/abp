@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Prepare your development environment for ABP applications with essential prerequisites and IDE recommendations for .NET development."
+}
+```
+
 # Prerequisites for Developing ABP Applications
 
 This document will guide you through preparing your development environment for ABP based application development.
@@ -29,7 +36,7 @@ Visual Studio Code is a **free and cross-platform** lightweight code editor that
 
 ## .NET SDK
 
-ABP is based on NET, so you need to install the .NET SDK. You can download the .NET SDK from the [.NET official website](https://dotnet.microsoft.com/en-us/download/dotnet/9.0).
+ABP is based on .NET, so you need to install the .NET SDK. You can download the .NET SDK from the [.NET official website](https://dotnet.microsoft.com/en-us/download/dotnet/9.0).
 
 > Installing Visual Studio or JetBrains Rider may automatically install the .NET SDK.
 
@@ -49,7 +56,7 @@ dotnet tool update --global dotnet-ef
 
 ## Node.js
 
-ABP projects include some frontend resource packages, so you need to install Node.js/NPM manage these resource packages. You can download Node.js from the [official Node.js website](https://nodejs.org/). We recommend installing version v20.11+.
+ABP projects include some frontend resource packages, so you need to install Node.js/NPM to manage these resource packages. You can download Node.js from the [official Node.js website](https://nodejs.org/). We recommend installing version v20.11+.
 
 ## Yarn (Required Only for Angular Projects)
 
@@ -82,7 +89,7 @@ ABP startup solution templates and tools use some PowerShell scripts (`*.ps1`) t
 * [Install PowerShell on macOS](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-macos)
 * [Install PowerShell on Linux](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-linux)
 
-## MicroService Solution
+## Microservice Solution
 
 The following tools are only required to develop ABP's [microservice solution](../solution-templates/microservice/index.md)
 
@@ -101,8 +108,10 @@ If you are using Helm, you can install NGINX Ingress using the following command
 ```cs
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
-helm upgrade --install --version=4.0.19 ingress-nginx ingress-nginx/ingress-nginx
+helm upgrade --install --version=4.0.19 ingress-nginx ingress-nginx/ingress-nginx --set controller.config.enable-underscores-in-headers="true"
 ```
+
+> [enable-underscores-in-headers](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#enable-underscores-in-headers) is required to allow http request use `__tenant` to pass tenant information to the backend service.
 
 ### mkcert
 

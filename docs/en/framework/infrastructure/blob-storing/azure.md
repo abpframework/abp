@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to configure Azure Blob storage for your project using the ABP Framework with this concise guide on the BLOB Storing Azure Provider."
+}
+```
+
 # BLOB Storing Azure Provider
 
 BLOB Storing Azure Provider can store BLOBs in [Azure Blob storage](https://azure.microsoft.com/en-us/services/storage/blobs/).

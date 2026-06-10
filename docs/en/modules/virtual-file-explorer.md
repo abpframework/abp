@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to install and use the Virtual File Explorer Module in your ABP Framework application to easily manage files in a virtual file system."
+}
+```
+
 # Virtual File Explorer Module
 
 ## What is Virtual File Explorer Module?

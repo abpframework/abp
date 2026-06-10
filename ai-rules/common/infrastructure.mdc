@@ -1,0 +1,249 @@
+---
+description: "ABP infrastructure services - Settings, Features, Caching, Events, Background Jobs"
+globs:
+  - "**/*Setting*.cs"
+  - "**/*Feature*.cs"
+  - "**/*Cache*.cs"
+  - "**/*Event*.cs"
+  - "**/*Job*.cs"
+alwaysApply: false
+---
+
+# ABP Infrastructure Services
+
+> **Docs**: https://abp.io/docs/latest/framework/infrastructure
+
+## Settings
+
+### Define Settings
+```csharp
+public class MySettingDefinitionProvider : SettingDefinitionProvider
+{
+    public override void Define(ISettingDefinitionContext context)
+    {
+        context.Add(
+            new SettingDefinition("MyApp.MaxItemCount", "10"),
+            new SettingDefinition("MyApp.EnableFeature", "false"),
+            new SettingDefinition("MyApp.SecretKey", isEncrypted: true)
+        );
+    }
+}
+```
+
+### Read Settings
+```csharp
+public class MyService : ITransientDependency
+{
+    private readonly ISettingProvider _settingProvider;
+
+    public async Task DoSomethingAsync()
+    {
+        var maxCount = await _settingProvider.GetAsync<int>("MyApp.MaxItemCount");
+        var isEnabled = await _settingProvider.IsTrueAsync("MyApp.EnableFeature");
+    }
+}
+```
+
+### Setting Value Providers (Priority Order)
+1. User settings (highest)
+2. Tenant settings
+3. Global settings
+4. Configuration (appsettings.json)
+5. Default value (lowest)
+
+## Features
+
+### Define Features
+```csharp
+public class MyFeatureDefinitionProvider : FeatureDefinitionProvider
+{
+    public override void Define(IFeatureDefinitionContext context)
+    {
+        var myGroup = context.AddGroup("MyApp");
+
+        myGroup.AddFeature(
+            "MyApp.PdfReporting",
+            defaultValue: "false",
+            valueType: new ToggleStringValueType()
+        );
+
+        myGroup.AddFeature(
+            "MyApp.MaxProductCount",
+            defaultValue: "10",
+            valueType: new FreeTextStringValueType(new NumericValueValidator(1, 1000))
+        );
+    }
+}
+```
+
+### Check Features
+```csharp
+[RequiresFeature("MyApp.PdfReporting")]
+public async Task<PdfReportDto> GetPdfReportAsync()
+{
+    // Only executes if feature is enabled
+}
+
+// Or programmatically
+if (await _featureChecker.IsEnabledAsync("MyApp.PdfReporting"))
+{
+    // Feature is enabled for current tenant
+}
+
+var maxCount = await _featureChecker.GetAsync<int>("MyApp.MaxProductCount");
+```
+
+## Distributed Caching
+
+### Typed Cache
+```csharp
+public class BookService : ITransientDependency
+{
+    private readonly IDistributedCache<BookCacheItem> _cache;
+    private readonly IClock _clock;
+
+    public BookService(IDistributedCache<BookCacheItem> cache, IClock clock)
+    {
+        _cache = cache;
+        _clock = clock;
+    }
+
+    public async Task<BookCacheItem> GetAsync(Guid bookId)
+    {
+        return await _cache.GetOrAddAsync(
+            bookId.ToString(),
+            async () => await GetBookFromDatabaseAsync(bookId),
+            () => new DistributedCacheEntryOptions
+            {
+                AbsoluteExpiration = _clock.Now.AddHours(1)
+            }
+        );
+    }
+}
+
+[CacheName("Books")]
+public class BookCacheItem
+{
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+}
+```
+
+## Event Bus
+
+### Local Events (Same Process)
+```csharp
+// Event class
+public class OrderCreatedEvent
+{
+    public Order Order { get; set; }
+}
+
+// Handler
+public class OrderCreatedEventHandler : ILocalEventHandler<OrderCreatedEvent>, ITransientDependency
+{
+    public async Task HandleEventAsync(OrderCreatedEvent eventData)
+    {
+        // Handle within same transaction
+    }
+}
+
+// Publish
+await _localEventBus.PublishAsync(new OrderCreatedEvent { Order = order });
+```
+
+### Distributed Events (Cross-Service)
+```csharp
+// Event Transfer Object (in Domain.Shared)
+[EventName("MyApp.Order.Created")]
+public class OrderCreatedEto
+{
+    public Guid OrderId { get; set; }
+    public string OrderNumber { get; set; }
+}
+
+// Handler
+public class OrderCreatedEtoHandler : IDistributedEventHandler<OrderCreatedEto>, ITransientDependency
+{
+    public async Task HandleEventAsync(OrderCreatedEto eventData)
+    {
+        // Handle distributed event
+    }
+}
+
+// Publish
+await _distributedEventBus.PublishAsync(new OrderCreatedEto { ... });
+```
+
+### When to Use Which
+- **Local**: Within same module/bounded context
+- **Distributed**: Cross-module or microservice communication
+
+## Background Jobs
+
+### Define Job
+```csharp
+public class EmailSendingArgs
+{
+    public string EmailAddress { get; set; }
+    public string Subject { get; set; }
+    public string Body { get; set; }
+}
+
+public class EmailSendingJob : AsyncBackgroundJob<EmailSendingArgs>, ITransientDependency
+{
+    private readonly IEmailSender _emailSender;
+
+    public EmailSendingJob(IEmailSender emailSender)
+    {
+        _emailSender = emailSender;
+    }
+
+    public override async Task ExecuteAsync(EmailSendingArgs args)
+    {
+        await _emailSender.SendAsync(args.EmailAddress, args.Subject, args.Body);
+    }
+}
+```
+
+### Enqueue Job
+```csharp
+await _backgroundJobManager.EnqueueAsync(
+    new EmailSendingArgs
+    {
+        EmailAddress = "user@example.com",
+        Subject = "Hello",
+        Body = "..."
+    },
+    delay: TimeSpan.FromMinutes(5) // Optional delay
+);
+```
+
+## Localization
+
+### Define Resource
+```csharp
+[LocalizationResourceName("MyModule")]
+public class MyModuleResource { }
+```
+
+### JSON Structure
+```json
+{
+  "culture": "en",
+  "texts": {
+    "HelloWorld": "Hello World!",
+    "Menu:Books": "Books"
+  }
+}
+```
+
+### Usage
+- In `ApplicationService`: Use `L["Key"]` property (already available from base class)
+- In other services: Inject `IStringLocalizer<MyResource>`
+
+> **Tip**: ABP base classes already provide commonly used services as properties. Check before injecting:
+> - `StringLocalizer` (L), `Clock`, `CurrentUser`, `CurrentTenant`, `GuidGenerator`
+> - `AuthorizationService`, `FeatureChecker`, `DataFilter`
+> - `LoggerFactory`, `Logger`
+> - Methods like `CheckPolicyAsync()` for authorization checks

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement effective error handling in Blazor UI with ABP Framework, ensuring user-friendly messages and seamless integration with server-side exceptions."
+}
+```
+
 # Blazor UI: Error Handling
 
 ````json

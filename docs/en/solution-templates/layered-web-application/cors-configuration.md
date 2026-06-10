@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to configure CORS in ABP Framework's layered solution template for various web application types, enhancing security and functionality."
+}
+```
+
 # Layered Solution: CORS Configuration
 
 ```json

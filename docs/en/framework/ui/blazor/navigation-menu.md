@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to effectively add and manage navigation menus in your ABP Framework application using the modular menu infrastructure."
+}
+```
+
 # Blazor UI: Navigation / Menu
 
 Every application has a main menu to allow users to navigate to pages/screens of the application. Some applications may contain more than one menu in different sections of the UI.

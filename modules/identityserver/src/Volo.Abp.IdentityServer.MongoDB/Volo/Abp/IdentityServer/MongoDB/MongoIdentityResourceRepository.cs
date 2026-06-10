@@ -54,7 +54,7 @@ public class MongoIdentityResourceRepository : MongoDbRepository<IAbpIdentitySer
         CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync(cancellationToken))
-            .Where(ar => scopeNames.Contains(ar.Name))
+            .Where(ar => scopeNames.AsEnumerable().Contains(ar.Name))
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 

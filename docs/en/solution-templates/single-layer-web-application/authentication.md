@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the Single Layer solution for authentication using OpenIddict, offering a streamlined setup for developers with ABP Framework."
+}
+```
+
 # Single Layer Solution: Authentication
 
 ```json

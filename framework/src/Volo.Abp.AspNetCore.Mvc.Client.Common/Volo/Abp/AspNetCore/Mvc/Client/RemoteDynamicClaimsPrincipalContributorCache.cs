@@ -20,6 +20,7 @@ public class RemoteDynamicClaimsPrincipalContributorCache : RemoteDynamicClaimsP
     protected IHttpClientFactory HttpClientFactory { get; }
     protected IRemoteServiceHttpClientAuthenticator HttpClientAuthenticator { get; }
     protected IDistributedCache<ApplicationConfigurationDto> ApplicationConfigurationDtoCache { get; }
+    protected MvcCachedApplicationConfigurationClientHelper CacheHelper { get; }
     protected ICurrentUser CurrentUser { get; }
 
     public RemoteDynamicClaimsPrincipalContributorCache(
@@ -28,7 +29,8 @@ public class RemoteDynamicClaimsPrincipalContributorCache : RemoteDynamicClaimsP
         IOptions<AbpClaimsPrincipalFactoryOptions> abpClaimsPrincipalFactoryOptions,
         IRemoteServiceHttpClientAuthenticator httpClientAuthenticator,
         IDistributedCache<ApplicationConfigurationDto> applicationConfigurationDtoCache,
-        ICurrentUser currentUser)
+        ICurrentUser currentUser,
+        MvcCachedApplicationConfigurationClientHelper cacheHelper)
         : base(abpClaimsPrincipalFactoryOptions)
     {
         Cache = cache;
@@ -36,6 +38,7 @@ public class RemoteDynamicClaimsPrincipalContributorCache : RemoteDynamicClaimsP
         HttpClientAuthenticator = httpClientAuthenticator;
         ApplicationConfigurationDtoCache = applicationConfigurationDtoCache;
         CurrentUser = currentUser;
+        CacheHelper = cacheHelper;
     }
 
     protected async override Task<AbpDynamicClaimCacheItem?> GetCacheAsync(Guid userId, Guid? tenantId = null)
@@ -56,7 +59,7 @@ public class RemoteDynamicClaimsPrincipalContributorCache : RemoteDynamicClaimsP
         catch (Exception e)
         {
             Logger.LogWarning(e, $"Failed to refresh remote claims for user: {userId}");
-            await ApplicationConfigurationDtoCache.RemoveAsync(MvcCachedApplicationConfigurationClientHelper.CreateCacheKey(CurrentUser));
+            await ApplicationConfigurationDtoCache.RemoveAsync(await CacheHelper.CreateCacheKeyAsync(CurrentUser.Id));
             throw;
         }
     }

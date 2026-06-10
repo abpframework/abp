@@ -1,0 +1,6 @@
+{
+  "$schema": "../../../../node_modules/ng-packagr/ng-entrypoint.schema.json",
+  "lib": {
+    "entryFile": "src/public-api.ts"
+  }
+}

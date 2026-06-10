@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Components.Web.Configuration;
 using Volo.Abp.DependencyInjection;
@@ -16,7 +17,7 @@ public class BlazorWebAssemblyCurrentApplicationConfigurationCacheResetService :
         _webAssemblyCachedApplicationConfigurationClient = webAssemblyCachedApplicationConfigurationClient;
     }
 
-    public async Task ResetAsync()
+    public async Task ResetAsync(Guid? userId = null)
     {
         await _webAssemblyCachedApplicationConfigurationClient.InitializeAsync();
     }

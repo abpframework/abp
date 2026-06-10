@@ -72,3 +72,15 @@ body {
     border-color: transparent;
     font-size: 14px;
 }
+
+.toc-item-has-children > ul {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.toc-item-has-children.open > ul {
+    max-height: 1000px;
+    opacity: 1;
+}

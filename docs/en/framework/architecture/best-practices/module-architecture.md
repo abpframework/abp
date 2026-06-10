@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover best practices for structuring ABP modules with clear conventions on solution architecture, layered design, and package dependencies."
+}
+```
+
 # Module Architecture Best Practices & Conventions
 
 ## Solution Structure

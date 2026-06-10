@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the database tables in the ABP Framework, detailing their purposes and relationships for effective auditing and entity tracking."
+}
+```
+
 # Database Tables
 
 This documentation describes all database tables and their purposes. You can read this documentation to get general knowledge of the database tables that come from each module.

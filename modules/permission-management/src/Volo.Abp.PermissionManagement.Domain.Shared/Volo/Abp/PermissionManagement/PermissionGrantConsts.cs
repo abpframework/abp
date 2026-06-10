@@ -11,4 +11,14 @@ public static class PermissionGrantConsts
     /// Default value: 64
     /// </summary>
     public static int MaxProviderKeyLength { get; set; } = 64;
+
+    /// <summary>
+    /// Default value: 256
+    /// </summary>
+    public static int MaxResourceNameLength { get; set; } = 256;
+
+    /// <summary>
+    /// Default value: 256
+    /// </summary>
+    public static int MaxResourceKeyLength { get; set; } = 256;
 }

@@ -13,6 +13,7 @@
     "DefaultErrorMessage404": "منبع درخواستی یافت نشد!",
     "DefaultErrorMessage404Detail": "منبع درخواستی در سرور یافت نشد!",
     "EntityNotFoundErrorMessage": "هیچ موجودیتی {0} با id = {1} وجود ندارد!",
+    "EntityNotFoundErrorMessageWithoutId": "هیچ موجودیتی {0} وجود ندارد!",
     "AbpDbConcurrencyErrorMessage": "اطلاعات ارسالی شما قبلاً توسط کاربر/مشتری دیگری تغییر یافته است. لطفاً تغییراتی را که انجام داده اید لغو کنید و مجددا تلاش فرمایید.",
     "Error": "خطا",
     "UnhandledException": "خطای پیش بینی نشده!",

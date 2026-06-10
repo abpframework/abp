@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to efficiently create service proxies for Angular applications using ABP Framework, avoiding manual transformations and improving code clarity."
+}
+```
+
 # Service Proxies
 
 Calling a REST endpoint from Angular applications is common. We usually create **services** matching server-side controllers and **interfaces** matching [DTOs](../../architecture/domain-driven-design/data-transfer-objects.md) to interact with the server. This often results in manually transforming C# code into TypeScript equivalents and that is unfortunate, if not intolerable.
@@ -89,14 +96,15 @@ The `generate-proxy` command generates one service per back-end controller and a
 
 A variable named `apiName` (available as of v2.4) is defined in each service. `apiName` matches the module's `RemoteServiceName`. This variable passes to the `RestService` as a parameter at each request. If there is no microservice API defined in the environment, `RestService` uses the default. See [getting a specific API endpoint from application config](./http-requests#how-to-get-a-specific-api-endpoint-from-application-config)
 
-The `providedIn` property of the services is defined as `'root'`. Therefore there is no need to provide them in a module. You can use them directly by injecting them into the constructor as shown below:
+The `providedIn` property of the services is defined as `'root'`. Therefore there is no need to provide them in a module. You can use them directly by injecting as shown below:
 
 ```js
 import { BookService } from '@proxy/books';
+import { inject } from '@angular/core';
 
 @Component(/* component metadata here */)
 export class BookComponent implements OnInit {
-  constructor(private service: BookService) {}
+  private service = inject(BookService);
 
   ngOnInit() {
     this.service.get().subscribe(
@@ -106,7 +114,7 @@ export class BookComponent implements OnInit {
 }
 ```
 
-The Angular compiler removes the services that have not been injected anywhere from the final output. See the [tree-shakable providers documentation](https://angular.io/guide/dependency-injection-providers#tree-shakable-providers).
+The Angular compiler removes the services that have not been injected anywhere from the final output. See the [tree-shakable providers documentation](https://angular.dev/guide/di/defining-dependency-providers).
 
 ### Models
 
@@ -144,9 +152,11 @@ export class BookComponent implements OnInit {
 <!-- simplified for sake of clarity -->
 <select formControlName="genre">
   <option [ngValue]="null">Select a genre</option>
-  <option *ngFor="let genre of genres" [ngValue]="genre.value">
-    {%{{{ genre.key }}}%}
-  </option>
+  @for (genre of genres; track genre.value) {
+    <option [ngValue]="genre.value">
+      {%{{{ genre.key }}}%}
+    </option>
+  }
 </select>
 ```
 

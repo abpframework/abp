@@ -16,6 +16,7 @@
     "TestEmailBody": "Testa e-postmeddelandets brödtext här",
     "SentSuccessfully": "Skickat framgångsrikt",
     "Send": "Skicka",
+    "Menu:Settings": "Inställningar",
     "Menu:Emailing": "E-post",
     "Menu:TimeZone": "Tidszon",
     "DisplayName:Timezone": "Tidszon",
@@ -33,7 +34,7 @@
     "Feature:SettingManagementGroup": "Hantering av inställningar",
     "Feature:SettingManagementEnable": "Aktivera hantering av inställningar",
     "Feature:SettingManagementEnableDescription": "Aktivera inställningshanteringssystem i applikationen.",
-    "Feature:AllowChangingEmailSettings": "Tillåt ändring av e-postinställningar.",
+    "Feature:AllowChangingEmailSettings": "Tillåt ändring av e-postinställningar",
     "Feature:AllowChangingEmailSettingsDescription": "Tillåt ändring av e-postinställningar.",
     "SmtpPasswordPlaceholder": "Ange ett värde för att uppdatera lösenordet"
   }

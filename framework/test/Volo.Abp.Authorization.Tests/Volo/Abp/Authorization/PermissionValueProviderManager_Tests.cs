@@ -2,12 +2,11 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using Volo.Abp.Authorization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Authorization.TestServices;
 using Xunit;
 
-namespace Volo.Abp;
+namespace Volo.Abp.Authorization;
 
 public class PermissionValueProviderManager_Tests: AuthorizationTestBase
 {
@@ -17,7 +16,7 @@ public class PermissionValueProviderManager_Tests: AuthorizationTestBase
     {
         _permissionValueProviderManager = GetRequiredService<IPermissionValueProviderManager>();
     }
-    
+
     protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
     {
         options.Services.Configure<AbpPermissionOptions>(permissionOptions =>
@@ -25,7 +24,7 @@ public class PermissionValueProviderManager_Tests: AuthorizationTestBase
             permissionOptions.ValueProviders.Add<TestDuplicatePermissionValueProvider>();
         });
     }
-    
+
     [Fact]
     public void Should_Throw_Exception_If_Duplicate_Provider_Name_Detected()
     {
@@ -33,7 +32,7 @@ public class PermissionValueProviderManager_Tests: AuthorizationTestBase
         {
             var providers = _permissionValueProviderManager.ValueProviders;
         });
-        
+
         exception.Message.ShouldBe($"Duplicate permission value provider name detected: TestPermissionValueProvider1. Providers:{Environment.NewLine}{typeof(TestDuplicatePermissionValueProvider).FullName}{Environment.NewLine}{typeof(TestPermissionValueProvider1).FullName}");
     }
 }

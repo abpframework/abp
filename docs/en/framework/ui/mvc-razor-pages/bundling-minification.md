@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to efficiently bundle and minify JavaScript and CSS in ASP.NET Core MVC using ABP's built-in solutions for better performance."
+}
+```
+
 
 # ASP.NET Core MVC Bundling & Minification
 

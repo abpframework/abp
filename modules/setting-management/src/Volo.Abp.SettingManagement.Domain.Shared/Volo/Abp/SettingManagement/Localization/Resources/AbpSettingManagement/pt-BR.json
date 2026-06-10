@@ -17,6 +17,7 @@
     "SentSuccessfully": "Enviado com sucesso",
     "MailSendingFailed": "Falha no envio de e-mail, verifique sua configuração de e-mail e tente novamente.",
     "Send": "Enviar",
+    "Menu:Settings": "Configurações",
     "Menu:Emailing": "Enviando por e-mail",
     "Menu:TimeZone": "Fuso Horário",
     "DisplayName:Timezone": "Fuso horário",
@@ -34,7 +35,7 @@
     "Feature:SettingManagementGroup": "Gestão de Cenários",
     "Feature:SettingManagementEnable": "Habilitar gerenciamento de configuração",
     "Feature:SettingManagementEnableDescription": "Habilite o sistema de gerenciamento de configuração no aplicativo.",
-    "Feature:AllowChangingEmailSettings": "Permitir alterar as configurações de e-mail.",
+    "Feature:AllowChangingEmailSettings": "Permitir alterar as configurações de e-mail",
     "Feature:AllowChangingEmailSettingsDescription": "Permitir alterar as configurações de e-mail.",
     "SmtpPasswordPlaceholder": "Digite um valor para atualizar a senha"
   }

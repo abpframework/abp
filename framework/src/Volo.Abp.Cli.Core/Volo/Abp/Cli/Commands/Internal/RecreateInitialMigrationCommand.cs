@@ -47,12 +47,21 @@ public class RecreateInitialMigrationCommand : IConsoleCommand, ITransientDepend
                 Directory.Delete(Path.Combine(projectDir, "Migrations"), true);
             }
 
+            CmdHelper.RunCmd($"dotnet build", workingDirectory: projectDir);
             var separateDbContext = false;
             if (Directory.Exists(Path.Combine(projectDir, "TenantMigrations")))
             {
                 Directory.Delete(Path.Combine(projectDir, "TenantMigrations"), true);
                 separateDbContext = true;
             }
+
+            CmdHelper.RunCmd("dotnet build", workingDirectory: projectDir, exitCode: out var exitCode);
+            if (exitCode != 0)
+            {
+                Logger.LogError("Build failed for project {Project}. Skipping migration recreation.", csprojFile);
+                continue;
+            }
+
             if (!separateDbContext)
             {
                 CmdHelper.RunCmd($"dotnet ef migrations add Initial", workingDirectory: projectDir);

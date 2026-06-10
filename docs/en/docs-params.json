@@ -27,6 +27,15 @@
         "No": "Not Tiered",
         "Yes": "Tiered"
       }
+    },
+    {
+      "name": "Architecture",
+      "displayName": "Architecture",
+      "values": {
+        "Monolith": "Monolith",
+        "Tiered": "Tiered",
+        "Microservice": "Microservice"
+      }
     }
   ]
 }

@@ -1,12 +1,28 @@
-import 'jest-preset-angular/setup-jest';
-
-import { getTestBed } from '@angular/core/testing';
+import '@angular/compiler';
+import 'zone.js';
+import 'zone.js/testing';
+import { BrowserTestingModule, platformBrowserTesting } from '@angular/platform-browser/testing';
 import {
-  BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting,
-} from '@angular/platform-browser-dynamic/testing';
+  ɵgetCleanupHook as getCleanupHook,
+  getTestBed
+} from '@angular/core/testing';
 
-getTestBed().resetTestEnvironment();
-getTestBed().initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting(), {
-  teardown: { destroyAfterEach: false },
+
+beforeEach(getCleanupHook(false));
+afterEach(getCleanupHook(true));
+
+// Initialize Angular testing environment
+getTestBed().initTestEnvironment(BrowserTestingModule, platformBrowserTesting());
+
+
+// Mock window.location for test environment
+Object.defineProperty(window, 'location', {
+  value: {
+    href: 'http://localhost:4200',
+    origin: 'http://localhost:4200',
+    pathname: '/',
+    search: '',
+    hash: '',
+  },
+  writable: true,
 });

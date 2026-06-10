@@ -1,6 +1,13 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover the Lepton Theme for ABP: a responsive, Bootstrap 5-compatible theme with multiple styles and easy installation options."
+}
+```
+
 # Lepton Theme Module
 
-> You must have an ABP Team or a higher license to use this theme.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this theme.
 
 The Lepton Theme is a professional theme for the ABP.
 

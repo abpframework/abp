@@ -2,16 +2,13 @@ import {
   Directive,
   TemplateRef,
   ViewContainerRef,
-  Input,
   InjectionToken,
-  Optional,
-  Inject,
   OnInit,
   OnDestroy,
   Injector,
-  OnChanges,
-  SimpleChanges,
-  SimpleChange,
+  inject,
+  input,
+  effect
 } from '@angular/core';
 import { Observable, Subscription, of } from 'rxjs';
 
@@ -19,7 +16,7 @@ export interface PageRenderStrategy {
   shouldRender(type?: string): boolean | Observable<boolean>;
   onInit?(type?: string, injector?: Injector, context?: any): void;
   onDestroy?(type?: string, injector?: Injector, context?: any): void;
-  onContextUpdate?(change?: SimpleChange): void;
+  onContextUpdate?(context?: any): void;
 }
 
 export const PAGE_RENDER_STRATEGY = new InjectionToken<PageRenderStrategy>('PAGE_RENDER_STRATEGY');
@@ -27,15 +24,34 @@ export const PAGE_RENDER_STRATEGY = new InjectionToken<PageRenderStrategy>('PAGE
 @Directive({
   selector: '[abpPagePart]',
 })
-export class PagePartDirective implements OnInit, OnDestroy, OnChanges {
+export class PagePartDirective implements OnInit, OnDestroy {
+  private templateRef = inject<TemplateRef<any>>(TemplateRef);
+  private viewContainer = inject(ViewContainerRef);
+  private renderLogic = inject<PageRenderStrategy>(PAGE_RENDER_STRATEGY, { optional: true })!;
+  private injector = inject(Injector);
+
   hasRendered = false;
-  type!: string;
   subscription!: Subscription;
 
-  @Input('abpPagePartContext') context: any;
-  @Input() set abpPagePart(type: string) {
-    this.type = type;
-    this.createRenderStream(type);
+  readonly context = input<any>(undefined, { alias: 'abpPagePartContext' });
+  readonly abpPagePart = input<string>('');
+
+  constructor() {
+    // Watch for type changes
+    effect(() => {
+      const type = this.abpPagePart();
+      if (type) {
+        this.createRenderStream(type);
+      }
+    });
+
+    // Watch for context changes
+    effect(() => {
+      const ctx = this.context();
+      if (this.renderLogic?.onContextUpdate) {
+        this.renderLogic.onContextUpdate(ctx);
+      }
+    });
   }
 
   render = (shouldRender: boolean) => {
@@ -48,22 +64,9 @@ export class PagePartDirective implements OnInit, OnDestroy, OnChanges {
     }
   };
 
-  constructor(
-    private templateRef: TemplateRef<any>,
-    private viewContainer: ViewContainerRef,
-    @Optional() @Inject(PAGE_RENDER_STRATEGY) private renderLogic: PageRenderStrategy,
-    private injector: Injector,
-  ) {}
-
-  ngOnChanges({ context }: SimpleChanges): void {
-    if (this.renderLogic?.onContextUpdate) {
-      this.renderLogic.onContextUpdate(context);
-    }
-  }
-
   ngOnInit() {
     if (this.renderLogic?.onInit) {
-      this.renderLogic.onInit(this.type, this.injector, this.context);
+      this.renderLogic.onInit(this.abpPagePart(), this.injector, this.context());
     }
   }
 
@@ -71,7 +74,7 @@ export class PagePartDirective implements OnInit, OnDestroy, OnChanges {
     this.clearSubscription();
 
     if (this.renderLogic?.onDestroy) {
-      this.renderLogic.onDestroy(this.type, this.injector, this.context);
+      this.renderLogic.onDestroy(this.abpPagePart(), this.injector, this.context());
     }
   }
 

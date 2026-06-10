@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to create, update, and delete books in your web application using MVC, Blazor, or Angular with ABP Framework in this tutorial."
+}
+```
+
 # Web Application Development Tutorial - Part 3: Creating, Updating and Deleting Books
 ````json
 //[doc-params]
@@ -298,23 +305,17 @@ public class EditModalModel : BookStorePageModel
 
 ### Mapping from BookDto to CreateUpdateBookDto
 
-To be able to map the `BookDto` to `CreateUpdateBookDto`, configure a new mapping. To do this, open the `BookStoreWebAutoMapperProfile.cs` file in the `Acme.BookStore.Web` project and change it as shown below:
+To be able to map the `BookDto` to `CreateUpdateBookDto`, configure a new mapping. To do this, open the `BookStoreWebMappers.cs` file in the `Acme.BookStore.Web` project and change it as shown below:
 
-````csharp
-using AutoMapper;
-
-namespace Acme.BookStore.Web;
-
-public class BookStoreWebAutoMapperProfile : Profile
+```csharp
+[Mapper]
+public partial class BookDtoToCreateUpdateBookDtoMapper : MapperBase<BookDto, CreateUpdateBookDto>
 {
-    public BookStoreWebAutoMapperProfile()
-    {
-        CreateMap<BookDto, CreateUpdateBookDto>();
-    }
-}
-````
+    public override partial CreateUpdateBookDto Map(BookDto source);
 
-* We have just added `CreateMap<BookDto, CreateUpdateBookDto>();` to define this mapping.
+    public override partial void Map(BookDto source, CreateUpdateBookDto destination);
+}
+```
 
 > Notice that we do the mapping definition in the web layer as a best practice since it is only needed in this layer.
 
@@ -582,7 +583,7 @@ Open `/src/app/book/book.component.ts` and replace the content as below:
 
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { BookService, BookDto } from '@proxy/books';
 
 @Component({
@@ -594,9 +595,10 @@ import { BookService, BookDto } from '@proxy/books';
 export class BookComponent implements OnInit {
   book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
 
-  isModalOpen = false; // add this line
+  isModalOpen = false;
 
-  constructor(public readonly list: ListService, private bookService: BookService) {}
+  public readonly list = inject(ListService);
+  private readonly bookService = inject(BookService);
 
   ngOnInit() {
     const bookStreamCreator = (query) => this.bookService.getList(query);
@@ -606,7 +608,7 @@ export class BookComponent implements OnInit {
     });
   }
 
-  // add new method
+  //add new method
   createBook() {
     this.isModalOpen = true;
   }
@@ -668,13 +670,13 @@ You can open your browser and click the **New book** button to see the new modal
 
 ### Create a Reactive Form
 
-[Reactive forms](https://angular.io/guide/reactive-forms) provide a model-driven approach to handling form inputs whose values change over time.
+[Reactive forms](https://angular.dev/guide/forms/reactive-forms) provide a model-driven approach to handling form inputs whose values change over time.
 
 Open `/src/app/book/book.component.ts` and replace the content as below:
 
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { BookService, BookDto, bookTypeOptions } from '@proxy/books'; // add bookTypeOptions
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // add this
 
@@ -694,11 +696,9 @@ export class BookComponent implements OnInit {
 
   isModalOpen = false;
 
-  constructor(
-    public readonly list: ListService,
-    private bookService: BookService,
-    private fb: FormBuilder // inject FormBuilder
-  ) {}
+  public readonly list = inject(ListService);
+  private readonly bookService = inject(BookService);
+  private readonly fb = inject(FormBuilder); // inject FormBuilder
 
   ngOnInit() {
     const bookStreamCreator = (query) => this.bookService.getList(query);
@@ -708,6 +708,7 @@ export class BookComponent implements OnInit {
     });
   }
 
+  // add new method
   createBook() {
     this.buildForm(); // add this line
     this.isModalOpen = true;
@@ -741,8 +742,8 @@ export class BookComponent implements OnInit {
 * Imported `FormGroup`, `FormBuilder` and `Validators` from `@angular/forms`.
 * Added a `form: FormGroup` property.
 * Added a `bookTypes` property as a list of `BookType` enum members. That will be used in form options.
-* Injected `FormBuilder` into the constructor. [FormBuilder](https://angular.io/api/forms/FormBuilder) provides convenient methods for generating form controls. It reduces the amount of boilerplate needed to build complex forms.
-* Added a `buildForm` method to the end of the file and executed  the `buildForm()` in the `createBook` method.
+* Injected the `FormBuilder` with the inject function. [FormBuilder](https://angular.dev/api/forms/FormBuilder) provides convenient methods for generating form controls. It reduces the amount of boilerplate that is needed to build complex forms.
+* Added a `buildForm` method at the end of the file and executed  the `buildForm()` in the `createBook` method.
 * Added a `save` method.
 
 Open `/src/app/book/book.component.html` and replace `<ng-template #abpBody> </ng-template>`  with the following code part:
@@ -764,7 +765,11 @@ Open `/src/app/book/book.component.html` and replace `<ng-template #abpBody> </n
       <label for="book-type">Type</label><span> * </span>
       <select class="form-control" id="book-type" formControlName="type">
         <option [ngValue]="null">Select a book type</option>
-        <option [ngValue]="type.value" *ngFor="let type of bookTypes"> {%{{{ '::Enum:BookType.' + type.value | abpLocalization }}}%}</option>
+        @for (type of bookTypes; track type) {
+          <option [ngValue]="type.value"> 
+            {%{{{ '::Enum:BookType.' + type.value | abpLocalization }}}%}
+          </option>
+        }
       </select>
     </div>
 
@@ -803,46 +808,24 @@ Also replace `<ng-template #abpFooter> </ng-template>` with the following code p
 
 We've used [NgBootstrap datepicker](https://ng-bootstrap.github.io/#/components/datepicker/overview) in this component. So, we need to arrange the dependencies related to this component.
 
-Open `/src/app/book/book.module.ts` and replace the content as below:
-
-```js
-import { NgModule } from '@angular/core';
-import { SharedModule } from '../shared/shared.module';
-import { BookRoutingModule } from './book-routing.module';
-import { BookComponent } from './book.component';
-import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap'; // add this line
-
-@NgModule({
-  declarations: [BookComponent],
-  imports: [
-    BookRoutingModule,
-    SharedModule,
-    NgbDatepickerModule, // add this line
-  ]
-})
-export class BookModule { }
-```
-
-* We imported `NgbDatepickerModule`  to be able to use the date picker.
-
 Open `/src/app/book/book.component.ts` and replace the content as below:
 
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { BookService, BookDto, bookTypeOptions } from '@proxy/books';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-
-// added this line
-import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { NgbDateNativeAdapter, NgbDateAdapter, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
+import { ThemeSharedModule } from '@abp/ng.theme.shared';
 
 @Component({
   selector: 'app-book',
   templateUrl: './book.component.html',
   styleUrls: ['./book.component.scss'],
+  imports: [ThemeSharedModule, ReactiveFormsModule, NgbDatepickerModule],
   providers: [
     ListService,
-    { provide: NgbDateAdapter, useClass: NgbDateNativeAdapter } // add this line
+    { provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }
   ],
 })
 export class BookComponent implements OnInit {
@@ -854,11 +837,9 @@ export class BookComponent implements OnInit {
 
   isModalOpen = false;
 
-  constructor(
-    public readonly list: ListService,
-    private bookService: BookService,
-    private fb: FormBuilder
-  ) {}
+  public readonly list = inject(ListService);
+  private readonly bookService = inject(BookService);
+  private readonly fb = inject(FormBuilder);
 
   ngOnInit() {
     const bookStreamCreator = (query) => this.bookService.getList(query);
@@ -909,7 +890,7 @@ Open `/src/app/book/book.component.ts` and replace the content as shown below:
 
 ```js
 import { ListService, PagedResultDto } from '@abp/ng.core';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { BookService, BookDto, bookTypeOptions } from '@proxy/books';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
@@ -931,11 +912,9 @@ export class BookComponent implements OnInit {
 
   isModalOpen = false;
 
-  constructor(
-    public readonly list: ListService,
-    private bookService: BookService,
-    private fb: FormBuilder
-  ) {}
+  public readonly list = inject(ListService);
+  private readonly bookService = inject(BookService);
+  private readonly fb = inject(FormBuilder);
 
   ngOnInit() {
     const bookStreamCreator = (query) => this.bookService.getList(query);
@@ -1045,34 +1024,40 @@ This template will show the **Edit** text for edit record operation, **New Book*
 
 Open the `/src/app/book/book.component.ts` file and inject the `ConfirmationService`.
 
-Replace the constructor as below:
+Replace the injected services as below:
 
 ```js
 // ...
 
 // add new imports
 import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared';
+import { Component, OnInit, inject } from '@angular/core';
 
-//change the constructor
-constructor(
-  public readonly list: ListService,
-  private bookService: BookService,
-  private fb: FormBuilder,
-  private confirmation: ConfirmationService // inject the ConfirmationService
-) {}
+// ...
 
-// Add a delete method
-delete(id: string) {
-  this.confirmation.warn('::AreYouSureToDelete', '::AreYouSure').subscribe((status) => {
-    if (status === Confirmation.Status.confirm) {
-      this.bookService.delete(id).subscribe(() => this.list.get());
-    }
-  });
+export class BookComponent implements OnInit {
+  // ...
+
+  public readonly list = inject(ListService);
+  private readonly bookService = inject(BookService);
+  private readonly fb = inject(FormBuilder);
+  private readonly confirmation = inject(ConfirmationService); // inject the ConfirmationService
+
+  // ...
+
+  // Add a delete method
+  delete(id: string) {
+    this.confirmation.warn('::AreYouSureToDelete', '::AreYouSure').subscribe((status) => {
+      if (status === Confirmation.Status.confirm) {
+        this.bookService.delete(id).subscribe(() => this.list.get());
+      }
+    });
+  }
 }
 ```
 
 * We imported `ConfirmationService`.
-* We injected `ConfirmationService` to the constructor.
+* We injected `ConfirmationService` using the `inject()` function.
 * Added a `delete` method.
 
 > Check out the [Confirmation Popup documentation](../../framework/ui/angular/confirmation-service.md) for more about this service.
@@ -1288,28 +1273,26 @@ We can now define a modal to edit the book. Add the following code to the end of
 </Modal>
 ````
 
-### AutoMapper Configuration
+### Mapperly Configuration
 
 The base `AbpCrudPageBase` uses the [object to object mapping](../../framework/infrastructure/object-to-object-mapping.md) system to convert an incoming `BookDto` object to a `CreateUpdateBookDto` object. So, we need to define the mapping.
 
-Open the `BookStoreBlazorAutoMapperProfile` inside the {{ if UI == "BlazorServer" }}`Acme.BookStore.Blazor` {{ else if UI == "MAUIBlazor" }}`Acme.BookStore.MauiBlazor` {{ else }}`Acme.BookStore.Blazor.Client`{{ end }} project and change the content as the following:
+Open the `BookStoreBlazorMappers` inside the {{ if UI == "BlazorServer" }}`Acme.BookStore.Blazor` {{ else if UI == "MAUIBlazor" }}`Acme.BookStore.MauiBlazor` {{ else }}`Acme.BookStore.Blazor.Client`{{ end }} project and change the content as the following:
 
-````csharp
-using Acme.BookStore.Books;
-using AutoMapper;
+```csharp
+using Riok.Mapperly.Abstractions;
+using Volo.Abp.Mapperly;
 
 {{ if UI == "BlazorServer" }}namespace Acme.BookStore.Blazor; {{ else if UI == "MAUIBlazor" }}namespace Acme.BookStore.MauiBlazor; {{ else }}namespace Acme.BookStore.Blazor.Client;{{ end }}
 
-public class BookStoreBlazorAutoMapperProfile : Profile
+[Mapper]
+public partial class BookDtoToCreateUpdateBookDtoMapper : MapperBase<BookDto, CreateUpdateBookDto>
 {
-    public BookStoreBlazorAutoMapperProfile()
-    {
-        CreateMap<BookDto, CreateUpdateBookDto>();
-    }
-}
-````
+    public override partial CreateUpdateBookDto Map(BookDto source);
 
-* We've just added the `CreateMap<BookDto, CreateUpdateBookDto>();` line to define the mapping.
+    public override partial void Map(BookDto source, CreateUpdateBookDto destination);
+}
+```
 
 ### Test the Editing Modal
 

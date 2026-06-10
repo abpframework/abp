@@ -30,6 +30,8 @@ public class WebRequestResources : IWebRequestResources, IScopedDependency
         }
 
         Resources.Add(path, resources);
-        return resources;
+
+        // Create a new list as return value to avoid any changes to the list will affect the value in Resources dictionary.
+        return resources.ToList();
     }
 }

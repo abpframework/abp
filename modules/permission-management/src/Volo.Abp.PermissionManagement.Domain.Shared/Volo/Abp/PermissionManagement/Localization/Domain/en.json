@@ -8,6 +8,22 @@
     "SelectAllInThisTab": "Select all",
     "SaveWithoutAnyPermissionsWarningMessage": "Are you sure you want to save without any permissions?",
     "PermissionGroup": "Permission Group",
-    "Filter": "Filter"
+    "Filter": "Filter",
+    "ResourcePermissions": "Permissions",
+    "ResourcePermissionTarget": "Target",
+    "ResourcePermissionPermissions": "Permissions",
+    "AddResourcePermission": "Add permission",
+    "ResourcePermissionDeletionConfirmationMessage": "Are you sure you want to delete all permissions?",
+    "UpdateResourcePermission": "Update permission",
+    "GrantAllResourcePermissions": "Grant all",
+    "NoResourceProviderKeyLookupServiceFound": "There is no provider key lookup service was found",
+    "NoResourcePermissionFound": "There is no permission defined.",
+    "UpdatePermission": "Update permission",
+    "NoPermissionsAssigned": "No permissions assigned",
+    "SelectProvider": "Select provider",
+    "SearchProviderKey": "Search provider key",
+    "Provider": "Provider",
+    "ErrorLoadingPermissions": "Error loading permissions",
+    "PleaseSelectProviderAndPermissions": "Please select provider and permissions"
   }
 }

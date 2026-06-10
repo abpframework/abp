@@ -10,6 +10,7 @@
     "DoYouWantToGrantAccessToYourData": "Ali želite aplikaciji {0} omogočiti dostop do vaših podatkov?",
     "ScopesRequested": "Zahtevani obsegi",
     "Accept": "Sprejmi",
-    "Deny": "Zanikati"
+    "Deny": "Zanikati",
+    "ApplicationResourcePermissionProviderKeyLookupService": "Odjemalec"
   }
 }

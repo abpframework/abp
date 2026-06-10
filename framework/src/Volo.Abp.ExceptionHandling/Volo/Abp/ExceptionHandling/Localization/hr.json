@@ -13,6 +13,7 @@
     "DefaultErrorMessage404": "Resurs nije pronađen!",
     "DefaultErrorMessage404Detail": "Zatraženi resurs nije pronađen na poslužitelju!",
     "EntityNotFoundErrorMessage": "Ne postoji entitet {0} s ID = {1}!",
+    "EntityNotFoundErrorMessageWithoutId": "Ne postoji entitet {0}!",
     "AbpDbConcurrencyErrorMessage": "Podatke koje ste dostavili već je promijenio drugi korisnik/klijent. Odbacite promjene koje ste napravili i pokušajte ispočetka.",
     "Error": "Greška",
     "UnhandledException": "Neobrađena iznimka!",

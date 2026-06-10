@@ -23,7 +23,12 @@ public class SettingProvider : ISettingProvider, ITransientDependency
 
     public virtual async Task<string?> GetOrNullAsync(string name)
     {
-        var setting = await SettingDefinitionManager.GetAsync(name);
+        var setting = await SettingDefinitionManager.GetOrNullAsync(name);
+        if (setting == null)
+        {
+            return null;
+        }
+
         var providers = Enumerable
             .Reverse(SettingValueProviderManager.Providers);
 

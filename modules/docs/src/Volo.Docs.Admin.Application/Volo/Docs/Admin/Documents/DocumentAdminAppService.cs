@@ -46,6 +46,7 @@ namespace Volo.Docs.Admin.Documents
             _elasticSearchService = elasticSearchService;
 
             LocalizationResource = typeof(DocsResource);
+            ObjectMapperContext = typeof(DocsAdminApplicationModule);
         }
 
         public virtual async Task ClearCacheAsync(ClearCacheInput input)

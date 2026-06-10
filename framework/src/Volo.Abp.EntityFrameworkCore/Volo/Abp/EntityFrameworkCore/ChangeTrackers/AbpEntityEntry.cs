@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -21,10 +21,7 @@ public class AbpEntityEntry
         {
             return _isModified || EntityEntry.State == EntityState.Modified || NavigationEntries.Any(n => n.IsModified);
         }
-        set
-        {
-            _isModified = value;
-        }
+        set => _isModified = value;
     }
 
     public AbpEntityEntry(string id, EntityEntry entityEntry)
@@ -34,46 +31,29 @@ public class AbpEntityEntry
         NavigationEntries = EntityEntry.Navigations.Select(x => new AbpNavigationEntry(x, x.Metadata.Name)).ToList();
     }
 
-    public void UpdateNavigationEntries()
+    public void UpdateNavigation(EntityEntry entityEntry, AbpNavigationEntry navigationEntry)
     {
-        foreach (var navigationEntry in NavigationEntries)
+        if (IsModified ||
+            EntityEntry.State == EntityState.Modified ||
+            navigationEntry.IsModified)
         {
-            if (IsModified ||
-                EntityEntry.State == EntityState.Modified ||
-                navigationEntry.IsModified ||
-                navigationEntry.NavigationEntry.IsModified)
-            {
-                continue;
-            }
+            return;
+        }
 
-            var navigation = EntityEntry.Navigations.FirstOrDefault(n => n.Metadata.Name == navigationEntry.Name);
+        var currentValue = navigationEntry.NavigationEntry.CurrentValue;
+        if (currentValue == null)
+        {
+            return;
+        }
 
-            var currentValue = AbpNavigationEntry.GetOriginalValue(navigation?.CurrentValue);
-            if (currentValue == null)
-            {
-                continue;
-            }
-
-            switch (navigationEntry.OriginalValue)
-            {
-                case null:
-                    navigationEntry.OriginalValue = currentValue;
-                    break;
-                case IEnumerable originalValueCollection when currentValue is IEnumerable currentValueCollection:
-                {
-                    var existingList = originalValueCollection.Cast<object?>().ToList();
-                    var newList = currentValueCollection.Cast<object?>().ToList();
-                    if (newList.Count > existingList.Count)
-                    {
-                        navigationEntry.OriginalValue = currentValue;
-                    }
-
-                    break;
-                }
-                default:
-                    navigationEntry.OriginalValue = currentValue;
-                    break;
-            }
+        if (navigationEntry.NavigationEntry is CollectionEntry)
+        {
+            navigationEntry.OriginalValue ??= new List<object>();
+            navigationEntry.OriginalValue.As<List<object>>().Add(entityEntry.Entity);
+        }
+        else
+        {
+            navigationEntry.OriginalValue = currentValue;
         }
     }
 }
@@ -86,7 +66,7 @@ public class AbpNavigationEntry
 
     public bool IsModified { get; set; }
 
-    public List<object>? OriginalValue { get; set; }
+    public object? OriginalValue { get; set; }
 
     public object? CurrentValue => NavigationEntry.CurrentValue;
 
@@ -94,21 +74,9 @@ public class AbpNavigationEntry
     {
         NavigationEntry = navigationEntry;
         Name = name;
-        OriginalValue = GetOriginalValue(navigationEntry.CurrentValue);
-    }
-
-    public static List<object>? GetOriginalValue(object? currentValue)
-    {
-        if (currentValue is null)
+        if (navigationEntry.CurrentValue != null )
         {
-            return null;
+            OriginalValue = navigationEntry is CollectionEntry ? new List<object>() : navigationEntry.CurrentValue;
         }
-
-        if (currentValue is IEnumerable enumerable)
-        {
-            return enumerable.Cast<object>().ToList();
-        }
-
-        return new List<object> { currentValue };
     }
 }

@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { eLayoutType } from '@abp/ng.core';
-import { RouterModule } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'abp-layout-empty',
   template: ` <router-outlet></router-outlet> `,
-  imports: [RouterModule],
+  imports: [RouterOutlet],
 })
 export class EmptyLayoutComponent {
   static type = eLayoutType.empty;

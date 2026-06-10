@@ -1,17 +1,21 @@
+# This workflow is intentionally disabled.
+# The workflows that previously depended on this file now handle cancellation
+# natively via per-workflow `concurrency` blocks.
+# The styfle/cancel-workflow-action has been archived upstream and is no longer maintained.
+#
+# To re-enable manual cancellation, change `on: workflow_dispatch` back to `on: [push]`
+# and restore the styfle step, but the native `concurrency` approach is preferred.
 name: cancel-workflow
-on: [push]
+on:
+  workflow_dispatch:
 permissions:
   contents: read
 
 jobs:
   cancel:
-    permissions:
-      actions: write  # for styfle/cancel-workflow-action to cancel/stop running workflows
-    name: 'Cancel Previous Runs'
+    name: 'Disabled - See file header comment'
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 1
     steps:
-      - uses: styfle/cancel-workflow-action@0.6.0
-        with:
-          workflow_id: 10629,1299107,2792859,8268314
-          access_token: ${{ github.token }}
+      - name: No-op
+        run: echo "Cancellation is handled via concurrency groups in each workflow."

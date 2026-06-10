@@ -50,6 +50,6 @@ public class AbpDateTimeModelBinderProvider : IModelBinderProvider
     {
         const DateTimeStyles supportedStyles = DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AdjustToUniversal;
         var dateTimeModelBinder = new DateTimeModelBinder(supportedStyles, context.Services.GetRequiredService<ILoggerFactory>());
-        return new AbpDateTimeModelBinder(context.Services.GetRequiredService<IClock>(), dateTimeModelBinder);
+        return ActivatorUtilities.CreateInstance<AbpDateTimeModelBinder>(context.Services, dateTimeModelBinder);
     }
 }

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "This guide details the migration process to OpenIddict for Blazor Server applications, enhancing security and user authentication."
+}
+```
+
 # OpenIddict Blazor-Server UI Migration Guide
 
 ## Blazor Project (Non-Tiered Solution)

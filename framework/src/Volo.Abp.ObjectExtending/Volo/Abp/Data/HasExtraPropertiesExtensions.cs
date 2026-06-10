@@ -26,34 +26,9 @@ public static class HasExtraPropertiesExtensions
 
     public static TProperty? GetProperty<TProperty>(this IHasExtraProperties source, string name, TProperty? defaultValue = default)
     {
-        var value = source.GetProperty(name);
-        if (value == null)
-        {
-            return defaultValue;
-        }
-
-        if (TypeHelper.IsPrimitiveExtended(typeof(TProperty), includeEnums: true))
-        {
-            var conversionType = typeof(TProperty);
-            if (TypeHelper.IsNullable(conversionType))
-            {
-                conversionType = conversionType.GetFirstGenericArgumentIfNullable();
-            }
-
-            if (conversionType == typeof(Guid))
-            {
-                return (TProperty)TypeDescriptor.GetConverter(conversionType).ConvertFromInvariantString(value.ToString()!)!;
-            }
-
-            if (conversionType.IsEnum)
-            {
-                return (TProperty)Enum.Parse(conversionType, value.ToString()!);
-            }
-
-            return (TProperty)Convert.ChangeType(value, conversionType, CultureInfo.InvariantCulture);
-        }
-
-        throw new AbpException("GetProperty<TProperty> does not support non-primitive types. Use non-generic GetProperty method and handle type casting manually.");
+        return TypeHelper.ChangeTypePrimitiveExtended<TProperty>(
+            source.GetProperty(name, (object?) defaultValue)
+        ) ?? defaultValue;
     }
 
     public static TSource SetProperty<TSource>(

@@ -41,18 +41,32 @@ public class EditModalModel : IdentityPageModel
         UserInfo = ObjectMapper.Map<IdentityUserDto, UserInfoViewModel>(user);
         if (await PermissionChecker.IsGrantedAsync(IdentityPermissions.Users.ManageRoles))
         {
-            Roles = ObjectMapper.Map<IReadOnlyList<IdentityRoleDto>, AssignedRoleViewModel[]>((await IdentityUserAppService.GetAssignableRolesAsync()).Items);
-        }
-        IsEditCurrentUser = CurrentUser.Id == id;
+            var assignableRoles = (await IdentityUserAppService.GetAssignableRolesAsync()).Items;
+            var currentRoles = (await IdentityUserAppService.GetRolesAsync(id)).Items;
+            
+            // Combine assignable and current roles to show all roles user has
+            var combinedRoles = assignableRoles
+                .Concat(currentRoles)
+                .GroupBy(role => role.Id)
+                .Select(group => group.First())
+                .ToList();
 
-        var userRoleIds = (await IdentityUserAppService.GetRolesAsync(UserInfo.Id)).Items.Select(r => r.Id).ToList();
-        foreach (var role in Roles)
-        {
-            if (userRoleIds.Contains(role.Id))
+            Roles = ObjectMapper.Map<IReadOnlyList<IdentityRoleDto>, AssignedRoleViewModel[]>(combinedRoles);
+
+            var currentRoleIds = currentRoles.Select(r => r.Id).ToHashSet();
+            var assignableRoleIds = assignableRoles.Select(r => r.Id).ToHashSet();
+            foreach (var role in Roles)
             {
-                role.IsAssigned = true;
+                role.IsAssigned = currentRoleIds.Contains(role.Id);
+                role.IsAssignable = assignableRoleIds.Contains(role.Id);
             }
         }
+        else
+        {
+            Roles = Array.Empty<AssignedRoleViewModel>();
+        }
+        
+        IsEditCurrentUser = CurrentUser.Id == id;
 
         Detail = ObjectMapper.Map<IdentityUserDto, DetailViewModel>(user);
 
@@ -129,6 +143,8 @@ public class EditModalModel : IdentityPageModel
         public string Name { get; set; }
 
         public bool IsAssigned { get; set; }
+
+        public bool IsAssignable { get; set; }
     }
 
     public class DetailViewModel

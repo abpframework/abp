@@ -1,10 +1,14 @@
-import { Injector, inject, provideAppInitializer } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { Injector, inject, provideAppInitializer, PLATFORM_ID } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { SessionStateService } from '../services/session-state.service';
 import { COOKIE_LANGUAGE_KEY } from '../tokens/cookie-language-key.token';
 
 export function setLanguageToCookie() {
   const injector = inject(Injector);
+  const platformId = injector.get(PLATFORM_ID);
+
+  if (!isPlatformBrowser(platformId)) return;
+
   const sessionState = injector.get(SessionStateService);
   const document = injector.get(DOCUMENT);
   const cookieLanguageKey = injector.get(COOKIE_LANGUAGE_KEY);

@@ -60,7 +60,7 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
             return;
         }
 
-        var foreignKeys = entityEntry.Metadata.GetForeignKeys().ToList();
+        var foreignKeys = entityEntry.Metadata.GetForeignKeys();
         foreach (var foreignKey in foreignKeys)
         {
             var principal = stateManager.FindPrincipal(internalEntityEntityEntry, foreignKey);
@@ -75,15 +75,20 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
                 continue;
             }
 
-            abpEntityEntry.UpdateNavigationEntries();
+            var navigationEntry = abpEntityEntry.NavigationEntries.FirstOrDefault(x => x.NavigationEntry.Metadata is INavigation navigationMetadata && navigationMetadata.ForeignKey == foreignKey) ??
+                                  abpEntityEntry.NavigationEntries.FirstOrDefault(x => x.NavigationEntry.Metadata is ISkipNavigation skipNavigationMetadata && skipNavigationMetadata.ForeignKey == foreignKey);
+
+            if (navigationEntry != null && checkEntityEntryState && entityEntry.State == EntityState.Unchanged)
+            {
+                abpEntityEntry.UpdateNavigation(entityEntry, navigationEntry);
+            }
+
             if (!abpEntityEntry.IsModified && (!checkEntityEntryState || IsEntityEntryChanged(entityEntry)))
             {
                 abpEntityEntry.IsModified = true;
                 DetectChanges(abpEntityEntry.EntityEntry, false);
             }
 
-            var navigationEntry = abpEntityEntry.NavigationEntries.FirstOrDefault(x => x.NavigationEntry.Metadata is INavigation navigationMetadata && navigationMetadata.ForeignKey == foreignKey) ??
-                                  abpEntityEntry.NavigationEntries.FirstOrDefault(x => x.NavigationEntry.Metadata is ISkipNavigation skipNavigationMetadata && skipNavigationMetadata.ForeignKey == foreignKey);
             if (navigationEntry != null && IsEntityEntryChanged(entityEntry))
             {
                 navigationEntry.IsModified = true;
@@ -115,15 +120,20 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
                     continue;
                 }
 
-                abpEntityEntry.UpdateNavigationEntries();
+                var navigationEntry = abpEntityEntry.NavigationEntries.FirstOrDefault(x => x.NavigationEntry.Metadata is INavigation navigationMetadata && navigationMetadata.ForeignKey == inverseForeignKey) ??
+                                      abpEntityEntry.NavigationEntries.FirstOrDefault(x => x.NavigationEntry.Metadata is ISkipNavigation skipNavigationMetadata && skipNavigationMetadata.ForeignKey == inverseForeignKey);
+
+                if (navigationEntry != null && checkEntityEntryState && entityEntry.State == EntityState.Unchanged)
+                {
+                    abpEntityEntry.UpdateNavigation(entityEntry, navigationEntry);
+                }
+
                 if (!abpEntityEntry.IsModified  && (!checkEntityEntryState || IsEntityEntryChanged(entityEntry)))
                 {
                     abpEntityEntry.IsModified = true;
                     DetectChanges(abpEntityEntry.EntityEntry, false);
                 }
 
-                var navigationEntry = abpEntityEntry.NavigationEntries.FirstOrDefault(x => x.NavigationEntry.Metadata is INavigation navigationMetadata && navigationMetadata.ForeignKey == inverseForeignKey) ??
-                                      abpEntityEntry.NavigationEntries.FirstOrDefault(x => x.NavigationEntry.Metadata is ISkipNavigation skipNavigationMetadata && skipNavigationMetadata.ForeignKey == inverseForeignKey);
                 if (navigationEntry != null && (!checkEntityEntryState || IsEntityEntryChanged(entityEntry)))
                 {
                     navigationEntry.IsModified = true;
@@ -212,9 +222,19 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
         return null;
     }
 
-    public virtual void RemoveChangedEntityEntries()
+    public virtual void ResetChangedFlags()
     {
-        EntityEntries.RemoveAll(x => x.Value.IsModified);
+        foreach (var entry in EntityEntries.Values)
+        {
+            if (entry.IsModified)
+            {
+                entry.IsModified = false;
+                foreach (var navigation in entry.NavigationEntries)
+                {
+                    navigation.IsModified = false;
+                }
+            }
+        }
     }
 
     public virtual void Clear()

@@ -1,6 +1,13 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the OpenIddict Module (Pro) for ABP Framework to manage applications, API scopes, and client permissions seamlessly."
+}
+```
+
 # OpenIddict Module (Pro)
 
-> You must have an ABP Team or a higher license to use this module.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this module.
 
 This module provides integration and management functionality for the OpenIddict library;
 
@@ -377,7 +384,7 @@ PreConfigure<TokenCleanupOptions>(options =>
 
 #### Updating Claims In Access_token and Id_token
 
-[Claims Principal Factory](../framework/fundamentals/authorization.md#claims-principal-factory) can be used to add/remove claims to the `ClaimsPrincipal`.
+[Claims Principal Factory](../framework/fundamentals/authorization/index.md#claims-principal-factory) can be used to add/remove claims to the `ClaimsPrincipal`.
 
 The `AbpDefaultOpenIddictClaimDestinationsProvider` service will add `Name`, `Email,` and `Role` types of Claims to `access_token` and `id_token`, other claims are only added to `access_token` by default, and remove the `SecurityStampClaimType` secret claim of `Identity`.
 

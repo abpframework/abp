@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover the ABP Docs Module for easy software documentation management, supporting GitHub integration and versioning for streamlined workflows."
+}
+```
+
 # Docs Module
 
 ## What is Docs Module?
@@ -147,11 +154,6 @@ An ABP module must declare `[DependsOn]` attribute if it has a dependency upon a
               Configure<AbpPermissionOptions>(options =>
               {
                   options.DefinitionProviders.Add<MyProjectPermissionDefinitionProvider>();
-              });
-  
-              Configure<AbpAutoMapperOptions>(options =>
-              {
-                  options.AddProfile<MyProjectApplicationAutoMapperProfile>();
               });
           }
       }
@@ -507,7 +509,8 @@ Now you can use **Scriban** syntax to create sections in your document.
 
 For example:
 
-````text
+{%{
+```txt
 {{ if UI == "NG" }}
 
 * `-u` argument specifies the UI framework, `angular` in this case.
@@ -526,7 +529,8 @@ For example:
 
 {{ end }}
 
-````
+```
+}%}
 
 You can also use variables in a text, adding **_Value** postfix to its key:
 

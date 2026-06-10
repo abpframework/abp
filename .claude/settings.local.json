@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(yarn nx g:*)",
+      "Bash(npx vitest:*)",
+      "Bash(git show:*)"
+    ]
+  }
+}

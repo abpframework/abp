@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover the essential migration steps and breaking changes for upgrading your Angular UI from v4.x to v5.0 in the ABP Framework."
+}
+```
+
 # Angular UI v4.x to v5.0 Migration Guide
 
 > This document is for the Angular UI. See also [the main migration guide](abp-5-0.md).
@@ -97,7 +104,7 @@ If you don't want to use the NGXS, you should remove all NGXS related imports, i
 
 ## @angular/localize package
 
-[`@angular/localize`](https://angular.io/api/localize) dependency has been removed from `@abp/ng.core` package. The package must be installed in your app. Run the following command to install:
+[`@angular/localize`](https://angular.dev/guide/i18n/add-package) dependency has been removed from `@abp/ng.core` package. The package must be installed in your app. Run the following command to install:
 
 ```bash
 npm install @angular/localize@12

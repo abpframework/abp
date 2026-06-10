@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to easily migrate from MVC/Razor Pages UI 3.3 to 4.0 by updating the namespace for IBrandingProvider in ABP Framework."
+}
+```
+
 # MVC / Razor Pages UI 3.3 to 4.0 Migration Guide
 
 ## Use IBrandingProvider in the Volo.Abp.UI Package

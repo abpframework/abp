@@ -1,65 +1,39 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Timing;
 
 namespace Volo.Abp.Json.SystemTextJson.JsonConverters;
 
-public class AbpNullableDateTimeConverter : JsonConverter<DateTime?>, ITransientDependency
+public class AbpNullableDateTimeConverter : AbpDateTimeConverterBase<DateTime?>, ITransientDependency
 {
-    private readonly IClock _clock;
-    private readonly AbpJsonOptions _options;
-    private bool _skipDateTimeNormalization;
-
-    public AbpNullableDateTimeConverter(IClock clock, IOptions<AbpJsonOptions> abpJsonOptions)
+    public AbpNullableDateTimeConverter(
+        IClock clock,
+        IOptions<AbpJsonOptions> abpJsonOptions,
+        ICurrentTimezoneProvider currentTimezoneProvider,
+        ITimezoneProvider timezoneProvider)
+        : base(clock, abpJsonOptions, currentTimezoneProvider, timezoneProvider)
     {
-        _clock = clock;
-        _options = abpJsonOptions.Value;
     }
 
     public virtual AbpNullableDateTimeConverter SkipDateTimeNormalization()
     {
-        _skipDateTimeNormalization = true;
+        IsSkipDateTimeNormalization = true;
         return this;
     }
 
     public override DateTime? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        if (_options.InputDateTimeFormats.Any())
+        if (Options.InputDateTimeFormats.Any() && reader.TokenType != JsonTokenType.String)
         {
-            if (reader.TokenType == JsonTokenType.String)
-            {
-                foreach (var format in _options.InputDateTimeFormats)
-                {
-                    var s = reader.GetString();
-                    if (DateTime.TryParseExact(s, format, CultureInfo.CurrentUICulture, DateTimeStyles.None, out var d1))
-                    {
-                        return Normalize(d1);
-                    }
-                }
-            }
-            else
-            {
-                throw new JsonException("Reader's TokenType is not String!");
-            }
+            throw new JsonException("Reader's TokenType is not String!");
         }
 
-        if (reader.TryGetDateTime(out var d2))
+        if (TryReadDateTime(ref reader, out var result))
         {
-            return Normalize(d2);
-        }
-
-        var dateText = reader.GetString();
-        if (!dateText.IsNullOrWhiteSpace())
-        {
-            if (DateTime.TryParse(dateText, CultureInfo.CurrentUICulture, DateTimeStyles.None, out var d3))
-            {
-                return Normalize(d3);
-            }
+            return result;
         }
 
         return null;
@@ -70,22 +44,9 @@ public class AbpNullableDateTimeConverter : JsonConverter<DateTime?>, ITransient
         if (value == null)
         {
             writer.WriteNullValue();
+            return;
         }
-        else
-        {
-            if (_options.OutputDateTimeFormat.IsNullOrWhiteSpace())
-            {
-                writer.WriteStringValue(Normalize(value.Value));
-            }
-            else
-            {
-                writer.WriteStringValue(Normalize(value.Value).ToString(_options.OutputDateTimeFormat, CultureInfo.CurrentUICulture));
-            }
-        }
-    }
 
-    protected virtual DateTime Normalize(DateTime dateTime)
-    {
-        return _skipDateTimeNormalization ? dateTime : _clock.Normalize(dateTime);
+        WriteDateTime(writer, value.Value);
     }
 }

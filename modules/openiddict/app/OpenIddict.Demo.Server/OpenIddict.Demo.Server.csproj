@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
@@ -76,6 +76,15 @@
         </None>
         <None Update="Pages\**\*.css">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- jwks.json is the public key registered for the AbpConsoleAppWithJwks client.
+             The corresponding private key (jwks-private.pem) is used by OpenIddict.Demo.Client.Console.
+             Both files originate from the parent app/ directory. -->
+        <None Include="..\jwks.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 

@@ -22,6 +22,7 @@ public class MongoPageRepository : MongoDbRepository<ICmsKitMongoDbContext, Page
     }
 
     public virtual async Task<int> GetCountAsync(string filter = null,
+        PageStatus? status = null,
         CancellationToken cancellationToken = default)
     {
         var cancellation = GetCancellationToken(cancellationToken);
@@ -30,12 +31,14 @@ public class MongoPageRepository : MongoDbRepository<ICmsKitMongoDbContext, Page
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u.Title.ToLower().Contains(filter.ToLower()) || u.Slug.Contains(filter)
-            ).CountAsync(cancellation);
+                    u.Title.ToLower().Contains(filter.ToLower()) || u.Slug.ToLower().Contains(filter.ToLower())
+            ).WhereIf(status.HasValue, u => u.Status == status)
+            .CountAsync(cancellation);
     }
 
     public virtual async Task<List<Page>> GetListAsync(
         string filter = null,
+        PageStatus? status = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
         string sorting = null,
@@ -46,7 +49,8 @@ public class MongoPageRepository : MongoDbRepository<ICmsKitMongoDbContext, Page
         return await (await GetQueryableAsync(cancellation))
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
-                u => u.Title.ToLower().Contains(filter) || u.Slug.Contains(filter))
+                u => u.Title.ToLower().Contains(filter.ToLower()) || u.Slug.ToLower().Contains(filter.ToLower()))
+            .WhereIf(status.HasValue, u => u.Status == status)
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(Page.Title) : sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(cancellation);

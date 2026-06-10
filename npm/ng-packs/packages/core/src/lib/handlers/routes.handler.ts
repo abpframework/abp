@@ -1,4 +1,4 @@
-import { Injectable, Optional } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Route, Router } from '@angular/router';
 import { ABP } from '../models';
 import { RoutesService } from '../services/routes.service';
@@ -7,10 +7,10 @@ import { RoutesService } from '../services/routes.service';
   providedIn: 'root',
 })
 export class RoutesHandler {
-  constructor(
-    private routes: RoutesService,
-    @Optional() private router: Router,
-  ) {
+  private routes = inject(RoutesService);
+  private router = inject(Router, { optional: true })!;
+
+  constructor() {
     this.addRoutes();
   }
 

@@ -161,3 +161,5 @@ export function* allTargetOptions(
     }
   }
 }
+
+export { getWorkspace as readWorkspace } from './workspace'; // for backwards compatibility

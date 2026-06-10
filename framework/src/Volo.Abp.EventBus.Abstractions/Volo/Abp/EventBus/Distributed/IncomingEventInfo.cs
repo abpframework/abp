@@ -20,6 +20,14 @@ public class IncomingEventInfo : IIncomingEventInfo
 
     public DateTime CreationTime { get; }
 
+    public IncomingEventStatus Status { get; set; } = IncomingEventStatus.Pending;
+
+    public DateTime? HandledTime { get; set; }
+
+    public int RetryCount { get; set; } = 0;
+
+    public DateTime? NextRetryTime { get; set; } = null;
+
     protected IncomingEventInfo()
     {
         ExtraProperties = new ExtraPropertyDictionary();
@@ -31,13 +39,21 @@ public class IncomingEventInfo : IIncomingEventInfo
         string messageId,
         string eventName,
         byte[] eventData,
-        DateTime creationTime)
+        DateTime creationTime,
+        IncomingEventStatus status = IncomingEventStatus.Pending,
+        DateTime? handledTime = null,
+        int retryCount = 0,
+        DateTime? nextRetryTime = null)
     {
         Id = id;
         MessageId = messageId;
         EventName = Check.NotNullOrWhiteSpace(eventName, nameof(eventName), MaxEventNameLength);
         EventData = eventData;
         CreationTime = creationTime;
+        Status = status;
+        HandledTime = handledTime;
+        RetryCount = retryCount;
+        NextRetryTime = nextRetryTime;
         ExtraProperties = new ExtraPropertyDictionary();
         this.SetDefaultsForExtraProperties();
     }

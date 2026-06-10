@@ -1,0 +1,1 @@
+Learn how to implement API key authentication in ABP Framework applications. This comprehensive guide covers what API keys are, when to use them over OAuth2/JWT, real-world use cases for mobile apps and microservices, and a complete implementation with user-based key management, SHA-256 hashing, permission delegation, and built-in UI.

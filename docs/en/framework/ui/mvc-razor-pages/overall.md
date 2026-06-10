@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to build web applications with ABP using ASP.NET Core MVC and Razor Pages for a streamlined, maintainable development experience."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages UI
 
 ## Introduction

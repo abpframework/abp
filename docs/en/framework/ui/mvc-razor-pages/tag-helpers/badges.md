@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use ABP Tag Helpers to create stylish badges in your web applications with customizable attributes and easy examples."
+}
+```
+
 # Badges
 
 ## Introduction

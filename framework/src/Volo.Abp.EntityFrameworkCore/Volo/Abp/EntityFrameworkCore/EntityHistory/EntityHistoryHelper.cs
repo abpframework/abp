@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -108,12 +109,17 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
         }
 
         var entityType = entity.GetType();
+        var entityFullName = entityType.FullName!;
+        if (entityEntry.Metadata.HasSharedClrType && !entityEntry.Metadata.IsOwned())
+        {
+            entityFullName = entityEntry.Metadata.Name;
+        }
         var entityChange = new EntityChangeInfo
         {
             ChangeType = changeType,
             EntityEntry = entityEntry,
             EntityId = entityId,
-            EntityTypeFullName = entityType.FullName,
+            EntityTypeFullName = entityFullName,
             PropertyChanges = GetPropertyChanges(entityEntry),
             EntityTenantId = GetTenantId(entity)
         };
@@ -178,42 +184,161 @@ public class EntityHistoryHelper : IEntityHistoryHelper, ITransientDependency
         var properties = entityEntry.Metadata.GetProperties();
         var isCreated = IsCreated(entityEntry);
         var isDeleted = IsDeleted(entityEntry);
+        var isSoftDeleted = IsSoftDeleted(entityEntry);
 
         foreach (var property in properties)
         {
-            var propertyEntry = entityEntry.Property(property.Name);
-            if (ShouldSavePropertyHistory(propertyEntry, isCreated || isDeleted) && !IsSoftDeleted(entityEntry))
+            if (entityEntry.Metadata.IsMappedToJson() && property.GetJsonPropertyName() == null)
             {
+                continue;
+            }
+
+            var propertyEntry = entityEntry.Property(property.Name);
+            if (ShouldSavePropertyHistory(propertyEntry, isCreated || isDeleted) && !isSoftDeleted)
+            {
+                var propertyType = DeterminePropertyTypeFromEntry(property, propertyEntry);
+
                 propertyChanges.Add(new EntityPropertyChangeInfo
                 {
                     NewValue = isDeleted ? null : JsonSerializer.Serialize(propertyEntry.CurrentValue!).TruncateWithPostfix(EntityPropertyChangeInfo.MaxValueLength),
                     OriginalValue = isCreated ? null : JsonSerializer.Serialize(propertyEntry.OriginalValue!).TruncateWithPostfix(EntityPropertyChangeInfo.MaxValueLength),
                     PropertyName = property.Name,
-                    PropertyTypeFullName = property.ClrType.GetFirstGenericArgumentIfNullable().FullName!
+                    PropertyTypeFullName = propertyType.FullName!
                 });
             }
         }
 
-        if (AbpEfCoreNavigationHelper != null)
+        foreach (var complexPropertyEntry in entityEntry.ComplexProperties)
         {
-            foreach (var (navigationEntry, index) in entityEntry.Navigations.Select((value, i) => ( value, i )))
+            AddComplexPropertyChanges(
+                complexPropertyEntry,
+                propertyChanges,
+                isCreated,
+                isDeleted,
+                isSoftDeleted,
+                parentPath: null);
+        }
+
+        if (AbpEfCoreNavigationHelper == null)
+        {
+            return propertyChanges;
+        }
+
+        foreach (var (navigationEntry, index) in entityEntry.Navigations.Select((value, i) => ( value, i )))
+        {
+            var propertyInfo = navigationEntry.Metadata.PropertyInfo;
+            if (propertyInfo != null &&
+                propertyInfo.IsDefined(typeof(DisableAuditingAttribute), true))
             {
-                if (AbpEfCoreNavigationHelper.IsNavigationEntryModified(entityEntry, index))
+                continue;
+            }
+
+            if (navigationEntry.Metadata.TargetEntityType.IsMappedToJson() && navigationEntry is ReferenceEntry referenceEntry && referenceEntry.TargetEntry != null)
+            {
+                foreach (var propertyChange in GetPropertyChanges(referenceEntry.TargetEntry))
                 {
-                    var abpNavigationEntry = AbpEfCoreNavigationHelper.GetNavigationEntry(entityEntry, index);
-                    var isCollection = navigationEntry.Metadata.IsCollection;
-                    propertyChanges.Add(new EntityPropertyChangeInfo
-                    {
-                        PropertyName = navigationEntry.Metadata.Name,
-                        PropertyTypeFullName = navigationEntry.Metadata.ClrType.GetFirstGenericArgumentIfNullable().FullName!,
-                        OriginalValue = GetNavigationPropertyValue(abpNavigationEntry?.OriginalValue, isCollection),
-                        NewValue = GetNavigationPropertyValue(abpNavigationEntry?.CurrentValue, isCollection)
-                    });
+                    propertyChange.PropertyName = $"{referenceEntry.Metadata.Name}.{propertyChange.PropertyName}";
+                    propertyChanges.Add(propertyChange);
                 }
+
+                continue;
+            }
+
+            if (AbpEfCoreNavigationHelper.IsNavigationEntryModified(entityEntry, index))
+            {
+                var abpNavigationEntry = AbpEfCoreNavigationHelper.GetNavigationEntry(entityEntry, index);
+
+                var isCollection = navigationEntry.Metadata.IsCollection;
+                propertyChanges.Add(new EntityPropertyChangeInfo
+                {
+                    PropertyName = navigationEntry.Metadata.Name,
+                    PropertyTypeFullName = navigationEntry.Metadata.ClrType.GetFirstGenericArgumentIfNullable().FullName!,
+                    OriginalValue = GetNavigationPropertyValue(abpNavigationEntry?.OriginalValue, isCollection),
+                    NewValue = GetNavigationPropertyValue(abpNavigationEntry?.CurrentValue, isCollection)
+                });
             }
         }
 
         return propertyChanges;
+    }
+
+    protected virtual void AddComplexPropertyChanges(
+        ComplexPropertyEntry complexPropertyEntry,
+        List<EntityPropertyChangeInfo> propertyChanges,
+        bool isCreated,
+        bool isDeleted,
+        bool isSoftDeleted,
+        string? parentPath)
+    {
+        var complexPropertyInfo = complexPropertyEntry.Metadata.PropertyInfo;
+        if (complexPropertyInfo != null && complexPropertyInfo.IsDefined(typeof(DisableAuditingAttribute), true))
+        {
+            return;
+        }
+
+        var complexPropertyPath = parentPath == null
+            ? complexPropertyEntry.Metadata.Name
+            : $"{parentPath}.{complexPropertyEntry.Metadata.Name}";
+
+        foreach (var propertyEntry in complexPropertyEntry.Properties)
+        {
+            if (ShouldSavePropertyHistory(propertyEntry, isCreated || isDeleted) && !isSoftDeleted)
+            {
+                var propertyType = DeterminePropertyTypeFromEntry(propertyEntry.Metadata, propertyEntry);
+
+                propertyChanges.Add(new EntityPropertyChangeInfo
+                {
+                    NewValue = isDeleted ? null : JsonSerializer.Serialize(propertyEntry.CurrentValue!).TruncateWithPostfix(EntityPropertyChangeInfo.MaxValueLength),
+                    OriginalValue = isCreated ? null : JsonSerializer.Serialize(propertyEntry.OriginalValue!).TruncateWithPostfix(EntityPropertyChangeInfo.MaxValueLength),
+                    PropertyName = $"{complexPropertyPath}.{propertyEntry.Metadata.Name}",
+                    PropertyTypeFullName = propertyType.FullName!
+                });
+            }
+        }
+
+        foreach (var nestedComplexPropertyEntry in complexPropertyEntry.ComplexProperties)
+        {
+            AddComplexPropertyChanges(
+                nestedComplexPropertyEntry,
+                propertyChanges,
+                isCreated,
+                isDeleted,
+                isSoftDeleted,
+                complexPropertyPath);
+        }
+    }
+
+    /// <summary>
+    /// Determines the CLR type of a property based on its EF Core metadata and the values in the given <see cref="PropertyEntry"/>.
+    /// </summary>
+    /// <param name="property">The EF Core property metadata that provides the declared CLR type.</param>
+    /// <param name="propertyEntry">The property entry that contains the current and original values for the property.</param>
+    /// <returns>
+    /// The most specific CLR type inferred for the property. This is normally the property's declared CLR type (with
+    /// nullable wrappers removed). If the declared type is <see cref="object"/>, the type is inferred from the
+    /// runtime type of <see cref="PropertyEntry.CurrentValue"/> or, if that is <c>null</c>, from
+    /// <see cref="PropertyEntry.OriginalValue"/>. If both values are <c>null</c>, the declared CLR type
+    /// (which may remain <see cref="object"/>) is returned.
+    /// </returns>
+    protected virtual Type DeterminePropertyTypeFromEntry(IReadOnlyPropertyBase property, PropertyEntry propertyEntry)
+    {
+        var propertyType = property.ClrType.GetFirstGenericArgumentIfNullable();
+
+        if (propertyType != typeof(object))
+        {
+            return propertyType;
+        }
+
+        if (propertyEntry.CurrentValue != null)
+        {
+            propertyType = propertyEntry.CurrentValue.GetType().GetFirstGenericArgumentIfNullable();
+        }
+        else if (propertyEntry.OriginalValue != null)
+        {
+            propertyType = propertyEntry.OriginalValue.GetType().GetFirstGenericArgumentIfNullable();
+        }
+
+        return propertyType;
     }
 
     protected virtual string? GetNavigationPropertyValue(object? entity, bool isCollection)

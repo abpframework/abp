@@ -11,6 +11,7 @@
     "InvalidUsername": "Nume de utilizator sau parolă invalidă!",
     "InvalidAuthenticatorCode": "Cod de autentificare invalid!",
     "InvalidRecoveryCode": "Cod de recuperare nevalid!",
-    "TheTargetUserIsNotLinkedToYou": "Utilizatorul ţintă nu este conectat la dumneavoastră!"
+    "TheTargetUserIsNotLinkedToYou": "Utilizatorul ţintă nu este conectat la dumneavoastră!",
+    "ClientResourcePermissionProviderKeyLookupService": "Client"
   }
 }

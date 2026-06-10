@@ -1,23 +1,17 @@
-import { AfterViewInit, Directive, ElementRef, Input } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, inject, input } from '@angular/core';
 
 @Directive({
   selector: '[autofocus]',
 })
 export class AutofocusDirective implements AfterViewInit {
-  private _delay = 0;
+  private elRef = inject(ElementRef);
 
-  @Input('autofocus')
-  set delay(val: number | string | undefined) {
-    this._delay = Number(val) || 0;
-  }
-
-  get delay() {
-    return this._delay;
-  }
-
-  constructor(private elRef: ElementRef) {}
+  readonly delay = input(0, {
+    alias: 'autofocus',
+    transform: (v: unknown) => Number(v) || 0,
+  });
 
   ngAfterViewInit(): void {
-    setTimeout(() => this.elRef.nativeElement.focus(), this.delay as number);
+    setTimeout(() => this.elRef.nativeElement.focus(), this.delay());
   }
 }

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to manage application settings effortlessly with the ABP Framework's Setting Management Module and ISettingManager."
+}
+```
+
 # Setting Management Module
 
 Setting Management Module implements the `ISettingStore` (see [the setting system](../framework/infrastructure/settings.md)) to store the setting values in a database and provides the `ISettingManager` to manage (change) the setting values in the database.
@@ -289,16 +296,18 @@ yarn ng generate component my-settings
 Open the `app.component.ts` and modify the file as shown below:
 
 ```js
-import { Component } from '@angular/core';
-import { SettingTabsService } from '@abp/ng.setting-management/config'; // imported SettingTabsService
-import { MySettingsComponent } from './my-settings/my-settings.component'; // imported MySettingsComponent
+import { Component, inject } from '@angular/core';
+import { SettingTabsService } from '@abp/ng.setting-management/config';
+import { MySettingsComponent } from './my-settings/my-settings.component';
 
-@Component(/* component metadata */)
+@Component({
+  // component metadata
+})
 export class AppComponent {
-  constructor(private settingTabs: SettingTabsService) // injected MySettingsComponent
-  {
-    // added below
-    settingTabs.add([
+  private readonly settingTabs = inject(SettingTabsService);
+
+  constructor() {
+    this.settingTabs.add([
       {
         name: 'MySettings',
         order: 1,

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to add a new appearance to LeptonX for Angular by defining a custom theme and integrating it seamlessly into your project."
+}
+```
+
 # How to Add a New Appearance to LeptonX for Angular
 LeptonX has four appearances: light, dim, dark, and system. You can add a new appearance to LeptonX for Angular. In this document, we will show you how to add a new appearance to LeptonX for Angular.
 
@@ -37,26 +44,20 @@ export const NEW_THEME_PROVIDER = [
 In this code snippet, we create a new instance of the LpxTheme class called myNewThemeDefinition. We specify the bundles that make up the theme (e.g., "bootstrap-custom" and "custom-theme"), the style name for the theme, a label to display in the UI, and an icon (using Bootstrap icons in this example).
 
 ### Step 2: Registering the New Theme Provider
-Now that we have defined the new theme appearance, we need to register it as a provider in our Angular project. Open the app.module.ts file (or the module where LeptonX is configured), and add the following code:
+Now that we have defined the new theme appearance, we need to register it as a provider in our Angular project. Open the `app.config.ts` file (or the configuration where LeptonX is configured), and add the following code:
 
 ```js
 import { NEW_THEME_PROVIDER } from './new-theme.provider.ts';
 
-@NgModule({
-  imports: [
-    // ...
-  ],
+export const appConfig: ApplicationConfig = {
   providers: [
     // ...
-    NEW_THEME_PROVIDER,
+    NEW_THEME_PROVIDER
   ],
-  // ...
-})
-export class AppModule { }
-
+};
 ```
 
-By importing the `NEW_THEME_PROVIDER` from the file where we defined our theme, we can add it to the providers array of our Angular module. This makes the new theme appearance available throughout the application.
+By importing the `NEW_THEME_PROVIDER` from the file where we defined our theme, we can add it to the providers array of our Angular application configuration. This makes the new theme appearance available throughout the application.
 
 ### Step 3: Adding the Styles Path to angular.json
 

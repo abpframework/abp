@@ -51,7 +51,7 @@ public class MyBlazorWebAssemblyBundlingModule : AbpModule
             options.ScriptBundles.Get(BlazorWebAssemblyStandardBundles.Scripts.Global).AddContributors(typeof(MyModuleBundleScriptContributor));
 
             // Style Bundles
-            options.ScriptBundles.Get(BlazorWebAssemblyStandardBundles.Scripts.Global).AddContributors(typeof(MyModuleBundleStyleBundleContributor));
+            options.StyleBundles.Get(BlazorWebAssemblyStandardBundles.Styles.Global).AddContributors(typeof(MyModuleBundleStyleBundleContributor));
         });
     }
 }

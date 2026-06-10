@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
-import { CommonModule, NgTemplateOutlet } from '@angular/common';
+import { Component, inject, DOCUMENT, input, output, signal, effect } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ConfigStateService, LocalizationPipe, TrackByService } from '@abp/ng.core';
 import {
@@ -17,10 +17,9 @@ import {
   ModalComponent,
   ToasterService,
 } from '@abp/ng.theme.shared';
-import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { Tabs, TabList, Tab, TabPanel, TabContent } from '@angular/aria/tabs';
 import { finalize } from 'rxjs/operators';
 import { FreeTextInputDirective } from '../../directives';
-import { FeatureManagement } from '../../models';
 
 enum ValueTypes {
   ToggleStringValueType = 'ToggleStringValueType',
@@ -35,36 +34,39 @@ const DEFAULT_PROVIDER_NAME = 'D';
   templateUrl: './feature-management.component.html',
   exportAs: 'abpFeatureManagement',
   imports: [
-    CommonModule,
+    NgTemplateOutlet,
     ButtonComponent,
     ModalComponent,
     LocalizationPipe,
     FormsModule,
-    NgbNavModule,
+    Tabs,
+    TabList,
+    Tab,
+    TabPanel,
+    TabContent,
     FreeTextInputDirective,
-    NgTemplateOutlet,
     ModalCloseDirective,
   ],
 })
-export class FeatureManagementComponent
-  implements
-    FeatureManagement.FeatureManagementComponentInputs,
-    FeatureManagement.FeatureManagementComponentOutputs
-{
+export class FeatureManagementComponent {
   protected readonly track = inject(TrackByService);
   protected readonly toasterService = inject(ToasterService);
   protected readonly service = inject(FeaturesService);
   protected readonly configState = inject(ConfigStateService);
   protected readonly confirmationService = inject(ConfirmationService);
+  private document = inject(DOCUMENT);
 
-  @Input()
-  providerKey: string;
+  // Signal inputs
+  readonly providerKey = input<string | undefined>(undefined);
+  readonly providerName = input<string | undefined>(undefined);
+  readonly providerTitle = input<string | undefined>(undefined);
+  readonly visibleInput = input(false, { alias: 'visible' });
 
-  @Input()
-  providerName: string;
+  // Output signals
+  readonly visibleChange = output<boolean>();
 
-  @Input({ required: false })
-  providerTitle: string;
+  // Internal state
+  protected readonly _visible = signal(false);
 
   selectedGroupDisplayName: string;
 
@@ -78,33 +80,41 @@ export class FeatureManagementComponent
 
   defaultProviderName = DEFAULT_PROVIDER_NAME;
 
-  protected _visible;
+  modalBusy = false;
 
-  @Input()
+  // Getter/setter for backward compatibility
   get visible(): boolean {
-    return this._visible;
+    return this._visible();
   }
 
   set visible(value: boolean) {
-    if (this._visible === value) {
+    if (this._visible() === value) {
       return;
     }
 
-    this._visible = value;
+    this._visible.set(value);
     this.visibleChange.emit(value);
 
     if (value) {
       this.openModal();
-      return;
     }
   }
 
-  @Output() readonly visibleChange = new EventEmitter<boolean>();
-
-  modalBusy = false;
+  constructor() {
+    // Sync visible input to internal signal
+    effect(() => {
+      const inputValue = this.visibleInput();
+      if (this._visible() !== inputValue) {
+        this._visible.set(inputValue);
+        if (inputValue) {
+          this.openModal();
+        }
+      }
+    });
+  }
 
   openModal() {
-    if (!this.providerName) {
+    if (!this.providerName()) {
       throw new Error('providerName is required.');
     }
 
@@ -112,14 +122,14 @@ export class FeatureManagementComponent
   }
 
   getFeatures() {
-    this.service.get(this.providerName, this.providerKey).subscribe(res => {
+    this.service.get(this.providerName()!, this.providerKey()).subscribe(res => {
       if (!res.groups?.length) return;
       this.groups = res.groups.map(({ name, displayName }) => ({ name, displayName }));
       this.selectedGroupDisplayName = this.groups[0].displayName;
       this.features = res.groups.reduce(
         (acc, val) => ({
           ...acc,
-          [val.name]: mapFeatures(val.features, document.body.dir as LocaleDirection),
+          [val.name]: mapFeatures(val.features, this.document.body?.dir as LocaleDirection),
         }),
         {},
       );
@@ -145,13 +155,13 @@ export class FeatureManagementComponent
 
     this.modalBusy = true;
     this.service
-      .update(this.providerName, this.providerKey, { features: changedFeatures })
+      .update(this.providerName()!, this.providerKey(), { features: changedFeatures })
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.visible = false;
 
         this.toasterService.success('AbpUi::SavedSuccessfully');
-        if (!this.providerKey) {
+        if (!this.providerKey()) {
           // to refresh host's features
           this.configState.refreshAppState().subscribe();
         }
@@ -163,11 +173,11 @@ export class FeatureManagementComponent
       .warn('AbpFeatureManagement::AreYouSureToResetToDefault', 'AbpFeatureManagement::AreYouSure')
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.service.delete(this.providerName, this.providerKey).subscribe(() => {
+          this.service.delete(this.providerName()!, this.providerKey()).subscribe(() => {
             this.toasterService.success('AbpFeatureManagement::ResetedToDefault');
             this.visible = false;
 
-            if (!this.providerKey) {
+            if (!this.providerKey()) {
               // to refresh host's features
               this.configState.refreshAppState().subscribe();
             }
@@ -181,6 +191,23 @@ export class FeatureManagementComponent
       this.checkToggleAncestors(feature);
     } else {
       this.uncheckToggleDescendants(feature);
+    }
+  }
+
+  isParentDisabled(parentName: string, groupName: string, provider: string): boolean {
+    const children = this.features[groupName]?.filter(f => f.parentName === parentName);
+    const providerNameValue = this.providerName();
+
+    if (children?.length) {
+      return children.some(child => {
+        const childProvider = child.provider?.name;
+        return (
+          (childProvider !== providerNameValue && childProvider !== this.defaultProviderName) ||
+          (provider !== providerNameValue && provider !== this.defaultProviderName)
+        );
+      });
+    } else {
+      return provider !== providerNameValue && provider !== this.defaultProviderName;
     }
   }
 

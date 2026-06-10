@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement form validation in ABP Blazor UI using Blazorise's validation infrastructure with practical examples."
+}
+```
+
 # Blazor UI: Forms & Validation
 
 ABP Blazor UI is based on the [Blazorise](https://blazorise.com/docs) and does not have a built-in form validation infrastructure. However, you can use the [Blazorise validation infrastructure](https://blazorise.com/docs/components/validation) to validate your forms.

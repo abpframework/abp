@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the Account Module for ABP Framework, featuring essential authentication functions like login, registration, and account management with advanced integration options."
+}
+```
+
 # Account Module
 
 Account module implements the basic authentication features like **login**, **register**, **forgot password** and **account management**.

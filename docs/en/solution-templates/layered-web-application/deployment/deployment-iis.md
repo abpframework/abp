@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to deploy your ABP Framework application on IIS with this comprehensive guide, covering prerequisites and authentication certificate setup."
+}
+```
+
 # IIS Deployment
 
 ````json

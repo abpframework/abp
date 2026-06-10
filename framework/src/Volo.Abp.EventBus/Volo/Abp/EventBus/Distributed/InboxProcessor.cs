@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +26,6 @@ public class InboxProcessor : IInboxProcessor, ITransientDependency
     protected IEventInbox Inbox { get; private set; } = default!;
     protected InboxConfig InboxConfig { get; private set; } = default!;
     protected AbpEventBusBoxesOptions EventBusBoxesOptions { get; }
-
     protected DateTime? LastCleanTime { get; set; }
 
     protected string DistributedLockName { get; set; } = default!;
@@ -103,18 +103,76 @@ public class InboxProcessor : IInboxProcessor, ITransientDependency
 
                     foreach (var waitingEvent in waitingEvents)
                     {
-                        using (var uow = UnitOfWorkManager.Begin(isTransactional: true, requiresNew: true))
+                        Logger.LogInformation($"Start processing the incoming event with id = {waitingEvent.Id:N}");
+
+                        try
                         {
-                            await DistributedEventBus
-                                .AsSupportsEventBoxes()
-                                .ProcessFromInboxAsync(waitingEvent, InboxConfig);
+                            using (var uow = UnitOfWorkManager.Begin(isTransactional: true, requiresNew: true))
+                            {
+                                await DistributedEventBus
+                                    .AsSupportsEventBoxes()
+                                    .ProcessFromInboxAsync(waitingEvent, InboxConfig);
 
-                            await Inbox.MarkAsProcessedAsync(waitingEvent.Id);
+                                await Inbox.MarkAsProcessedAsync(waitingEvent.Id);
 
-                            await uow.CompleteAsync(StoppingToken);
+                                await uow.CompleteAsync(StoppingToken);
+                            }
+
+                            Logger.LogInformation($"Processed the incoming event with id = {waitingEvent.Id:N}");
                         }
+                        catch (Exception e)
+                        {
+                            Logger.LogError(e, $"Event with id = {waitingEvent.Id:N} processing failed.");
 
-                        Logger.LogInformation($"Processed the incoming event with id = {waitingEvent.Id:N}");
+                            if (EventBusBoxesOptions.InboxProcessorFailurePolicy == InboxProcessorFailurePolicy.Retry)
+                            {
+                                throw;
+                            }
+
+                            if (EventBusBoxesOptions.InboxProcessorFailurePolicy == InboxProcessorFailurePolicy.RetryLater)
+                            {
+                                using (var uow = UnitOfWorkManager.Begin(isTransactional: true, requiresNew: true))
+                                {
+                                    if (waitingEvent.NextRetryTime != null)
+                                    {
+                                        waitingEvent.RetryCount++;
+                                    }
+
+                                    if (waitingEvent.RetryCount >= EventBusBoxesOptions.InboxProcessorMaxRetryCount)
+                                    {
+                                        Logger.LogWarning($"Event with id = {waitingEvent.Id:N} has exceeded the maximum retry count. Marking it as discarded.");
+
+                                        await Inbox.RetryLaterAsync(waitingEvent.Id, waitingEvent.RetryCount, null);
+                                        await Inbox.MarkAsDiscardAsync(waitingEvent.Id);
+                                        await uow.CompleteAsync(StoppingToken);
+                                        continue;
+                                    }
+
+                                    waitingEvent.NextRetryTime = GetNextRetryTime(waitingEvent.RetryCount, EventBusBoxesOptions.InboxProcessorRetryBackoffFactor);
+
+                                    Logger.LogInformation($"Event with id = {waitingEvent.Id:N} will retry later. " +
+                                                          $"Current retry count: {waitingEvent.RetryCount}, " +
+                                                          $"Next retry time: {waitingEvent.NextRetryTime}, " +
+                                                          $"Max retry count: {EventBusBoxesOptions.InboxProcessorMaxRetryCount}.");
+
+                                    await Inbox.RetryLaterAsync(waitingEvent.Id, waitingEvent.RetryCount, GetNextRetryTime(waitingEvent.RetryCount, EventBusBoxesOptions.InboxProcessorRetryBackoffFactor));
+                                    await uow.CompleteAsync(StoppingToken);
+                                }
+                                continue;
+                            }
+
+                            if (EventBusBoxesOptions.InboxProcessorFailurePolicy == InboxProcessorFailurePolicy.Discard)
+                            {
+                                using (var uow = UnitOfWorkManager.Begin(isTransactional: true, requiresNew: true))
+                                {
+                                    Logger.LogInformation($"Event with id = {waitingEvent.Id:N} will be discarded.");
+
+                                    await Inbox.MarkAsDiscardAsync(waitingEvent.Id);
+                                    await uow.CompleteAsync(StoppingToken);
+                                }
+                                continue;
+                            }
+                        }
                     }
                 }
             }
@@ -128,6 +186,12 @@ public class InboxProcessor : IInboxProcessor, ITransientDependency
                 catch (TaskCanceledException) { }
             }
         }
+    }
+
+    protected virtual DateTime? GetNextRetryTime(int retryCount, double factor)
+    {
+        var delaySeconds = factor * Math.Pow(2, retryCount);
+        return DateTime.Now.AddSeconds(delaySeconds);
     }
 
     protected virtual async Task<List<IncomingEventInfo>> GetWaitingEventsAsync()

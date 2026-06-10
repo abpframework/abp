@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700">
+  <defs>
+    <style>
+      .box { fill: #ffffff; stroke: #1890ff; stroke-width: 2; }
+      .title-box { fill: #1890ff; stroke: #1890ff; stroke-width: 2; }
+      .text { font-family: Arial, sans-serif; font-size: 14px; fill: #333333; font-weight: 600; }
+      .title-text { font-family: Arial, sans-serif; font-size: 14px; fill: #ffffff; font-weight: 600; }
+      .small-text { font-family: Arial, sans-serif; font-size: 11px; fill: #666666; }
+      .arrow { stroke: #1890ff; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .layer-label { font-family: Arial, sans-serif; font-size: 16px; fill: #1890ff; font-weight: bold; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#1890ff" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="500" y="30" text-anchor="middle" class="layer-label" style="font-size: 20px;">Sitemap Module Architecture</text>
+  
+  <!-- Discovery Layer -->
+  <text x="50" y="80" class="layer-label">1. Discovery Layer</text>
+  <rect class="title-box" x="50" y="90" width="220" height="35" rx="5" />
+  <text class="title-text" x="160" y="112" text-anchor="middle">RazorPageDiscoveryService</text>
+  <rect class="box" x="50" y="125" width="220" height="60" rx="5" />
+  <text class="small-text" x="160" y="145" text-anchor="middle">• Scans assemblies</text>
+  <text class="small-text" x="160" y="163" text-anchor="middle">• Finds PageModel classes</text>
+  <text class="small-text" x="160" y="181" text-anchor="middle">• Extracts route metadata</text>
+  
+  <!-- Arrow down -->
+  <path class="arrow" d="M 160 185 L 160 225" />
+  
+  <!-- Source Layer -->
+  <text x="50" y="245" class="layer-label">2. Source Layer</text>
+  
+  <!-- Static Source -->
+  <rect class="title-box" x="50" y="260" width="200" height="35" rx="5" />
+  <text class="title-text" x="150" y="282" text-anchor="middle">IStaticPageSitemapSource</text>
+  <rect class="box" x="50" y="295" width="200" height="80" rx="5" />
+  <text class="small-text" x="150" y="315" text-anchor="middle">Processes attributes:</text>
+  <text class="small-text" x="150" y="333" text-anchor="middle">[IncludeSitemapXml]</text>
+  <text class="small-text" x="150" y="351" text-anchor="middle">Returns static page</text>
+  <text class="small-text" x="150" y="369" text-anchor="middle">sitemap items</text>
+  
+  <!-- Dynamic Source -->
+  <rect class="title-box" x="280" y="260" width="200" height="35" rx="5" />
+  <text class="title-text" x="380" y="282" text-anchor="middle">IGroupedSitemapSource</text>
+  <rect class="box" x="280" y="295" width="200" height="80" rx="5" />
+  <text class="small-text" x="380" y="315" text-anchor="middle">Queries repositories:</text>
+  <text class="small-text" x="380" y="333" text-anchor="middle">Books, Articles, Products</text>
+  <text class="small-text" x="380" y="351" text-anchor="middle">Returns dynamic</text>
+  <text class="small-text" x="380" y="369" text-anchor="middle">sitemap items</text>
+  
+  <!-- Custom Source -->
+  <rect class="title-box" x="510" y="260" width="200" height="35" rx="5" />
+  <text class="title-text" x="610" y="282" text-anchor="middle">Custom Sources</text>
+  <rect class="box" x="510" y="295" width="200" height="80" rx="5" />
+  <text class="small-text" x="610" y="315" text-anchor="middle">Implement</text>
+  <text class="small-text" x="610" y="333" text-anchor="middle">ISitemapItemSource</text>
+  <text class="small-text" x="610" y="351" text-anchor="middle">for custom logic</text>
+  
+  <!-- Arrows to Collection Layer -->
+  <path class="arrow" d="M 150 375 L 150 420 L 400 420 L 400 445" />
+  <path class="arrow" d="M 380 375 L 380 420 L 400 420 L 400 445" />
+  <path class="arrow" d="M 610 375 L 610 420 L 400 420 L 400 445" />
+  
+  <!-- Collection Layer -->
+  <text x="50" y="465" class="layer-label">3. Collection Layer</text>
+  <rect class="title-box" x="250" y="480" width="300" height="35" rx="5" />
+  <text class="title-text" x="400" y="502" text-anchor="middle">SitemapItemCollector</text>
+  <rect class="box" x="250" y="515" width="300" height="80" rx="5" />
+  <text class="small-text" x="400" y="535" text-anchor="middle">• Aggregates items from all sources</text>
+  <text class="small-text" x="400" y="553" text-anchor="middle">• Groups by category (Main, Blog, Products)</text>
+  <text class="small-text" x="400" y="571" text-anchor="middle">• Removes duplicates</text>
+  <text class="small-text" x="400" y="589" text-anchor="middle">• Returns Dictionary&lt;Group, Items&gt;</text>
+  
+  <!-- Arrow down -->
+  <path class="arrow" d="M 400 595 L 400 635" />
+  
+  <!-- Generation Layer -->
+  <text x="650" y="465" class="layer-label">4. Generation Layer</text>
+  <rect class="title-box" x="640" y="480" width="280" height="35" rx="5" />
+  <text class="title-text" x="780" y="502" text-anchor="middle">SitemapXmlGenerator</text>
+  <rect class="box" x="640" y="515" width="280" height="80" rx="5" />
+  <text class="small-text" x="780" y="535" text-anchor="middle">• Converts items to XML format</text>
+  <text class="small-text" x="780" y="553" text-anchor="middle">• Adds &lt;loc&gt;, &lt;lastmod&gt;, &lt;priority&gt;</text>
+  <text class="small-text" x="780" y="571" text-anchor="middle">• Validates against sitemap protocol</text>
+  <text class="small-text" x="780" y="589" text-anchor="middle">• Returns XML string</text>
+  
+  <!-- Arrow from Collection to Generation -->
+  <path class="arrow" d="M 550 555 L 640 555" />
+  
+  <!-- Management Layer -->
+  <text x="50" y="655" class="layer-label">5. Management Layer</text>
+  
+  <!-- File Generator -->
+  <rect class="title-box" x="50" y="470" width="180" height="35" rx="5" />
+  <text class="title-text" x="140" y="492" text-anchor="middle">SitemapFileGenerator</text>
+  <rect class="box" x="50" y="505" width="180" height="90" rx="5" />
+  <text class="small-text" x="140" y="525" text-anchor="middle">• Orchestrates collection</text>
+  <text class="small-text" x="140" y="543" text-anchor="middle">• Calls XML generator</text>
+  <text class="small-text" x="140" y="561" text-anchor="middle">• Writes files to disk:</text>
+  <text class="small-text" x="140" y="579" text-anchor="middle">Sitemaps/</text>
+  
+  <!-- Background Worker -->
+  <rect class="title-box" x="250" y="640" width="300" height="35" rx="5" />
+  <text class="title-text" x="400" y="662" text-anchor="middle">SitemapRegenerationWorker</text>
+  <rect class="box" x="250" y="675" width="300" height="60" rx="5" />
+  <text class="small-text" x="400" y="695" text-anchor="middle">• Runs periodically (e.g., hourly)</text>
+  <text class="small-text" x="400" y="713" text-anchor="middle">• Triggers SitemapFileGenerator</text>
+  <text class="small-text" x="400" y="731" text-anchor="middle">• Non-blocking background execution</text>
+  
+  <!-- Arrow from Worker to File Generator -->
+  <path class="arrow" d="M 250 705 L 230 550" />
+  
+  <!-- Output Files -->
+  <text x="750" y="625" class="small-text" fill="#666666">📄 sitemap.xml</text>
+  <text x="750" y="643" class="small-text" fill="#666666">📄 sitemap-Blog.xml</text>
+  <text x="750" y="661" class="small-text" fill="#666666">📄 sitemap-Products.xml</text>
+  
+  <!-- Arrow from Generation to Files -->
+  <path class="arrow" d="M 780 595 L 780 620" />
+</svg>

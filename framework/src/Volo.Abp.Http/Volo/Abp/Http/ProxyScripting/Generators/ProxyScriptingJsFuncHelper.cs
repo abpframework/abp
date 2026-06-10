@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,8 @@ internal static class ProxyScriptingJsFuncHelper
 {
     private const string ValidJsVariableNameChars = "abcdefghijklmnopqrstuxwvyzABCDEFGHIJKLMNOPQRSTUXWVYZ0123456789_";
 
-    private static readonly HashSet<string> ReservedWords = new HashSet<string> {
+    private static readonly FrozenSet<string> ReservedWords = new HashSet<string>
+        {
             "abstract",
             "else",
             "instanceof",
@@ -71,7 +73,7 @@ internal static class ProxyScriptingJsFuncHelper
             "in",
             "static",
             "with"
-        };
+        }.ToFrozenSet();
 
     public static string NormalizeJsVariableName(string name, string additionalChars = "")
     {

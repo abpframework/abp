@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to efficiently upgrade your ABP-based solutions with the ABP CLI, ensuring smooth updates and database management."
+}
+```
+
 # Upgrading ABP Based Solutions
 
 This document explains how to upgrade your existing solution when a new ABP version is published.
@@ -13,6 +20,8 @@ abp update
 Run this command in the terminal while you are in the root folder of your solution.
 
 > If your solution has the Angular UI, you probably have `aspnet-core` and `angular` folders in the solution. Run this command in the parent folder of these two folders.
+
+You can also specify a target version with `--version` parameter. See the [ABP CLI update command](../cli/index.md#update) for all available options.
 
 ### Database Migrations
 

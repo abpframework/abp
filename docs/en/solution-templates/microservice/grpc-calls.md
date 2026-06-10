@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement high-performance gRPC calls in your microservices with ABP Framework for efficient communication and scalability."
+}
+```
+
 # Microservice Solution: gRPC Calls
 
 ````json

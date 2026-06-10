@@ -24,10 +24,10 @@ public abstract class RepositoryExtensions_Tests<TStartupModule> : TestAppTestBa
         await WithUnitOfWorkAsync(async () =>
         {
             var id = Guid.NewGuid();
-            await Assert.ThrowsAsync<EntityNotFoundException>(async () =>
+            await Assert.ThrowsAsync<EntityNotFoundException<Person>>(async () =>
                 await PersonRepository.EnsureExistsAsync(Guid.NewGuid())
             );
-            await Assert.ThrowsAsync<EntityNotFoundException>(async () =>
+            await Assert.ThrowsAsync<EntityNotFoundException<Person>>(async () =>
                 await PersonRepository.EnsureExistsAsync(x => x.Id == id)
             );
 

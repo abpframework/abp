@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement distributed caching in ABP Framework microservice solutions using Redis for improved performance."
+}
+```
+
 # Microservice Solution: Distributed Cache
 
 ````json

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Easily update NPM and NuGet packages in your ABP Suite solution with a simple scan of your project files for seamless version management."
+}
+```
+
 # Updating packages
 
 ABP Suite allows you to update `NPM` and `NuGet` packages in a solution.

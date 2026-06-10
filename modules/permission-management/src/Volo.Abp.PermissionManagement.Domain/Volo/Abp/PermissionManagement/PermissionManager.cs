@@ -184,7 +184,7 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
         }
 
         permissionGrant.ProviderKey = providerKey;
-        return await PermissionGrantRepository.UpdateAsync(permissionGrant);
+        return await PermissionGrantRepository.UpdateAsync(permissionGrant, true);
     }
 
     public virtual async Task DeleteAsync(string providerName, string providerKey)
@@ -192,7 +192,7 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
         var permissionGrants = await PermissionGrantRepository.GetListAsync(providerName, providerKey);
         foreach (var permissionGrant in permissionGrants)
         {
-            await PermissionGrantRepository.DeleteAsync(permissionGrant);
+            await PermissionGrantRepository.DeleteAsync(permissionGrant, true);
         }
     }
 

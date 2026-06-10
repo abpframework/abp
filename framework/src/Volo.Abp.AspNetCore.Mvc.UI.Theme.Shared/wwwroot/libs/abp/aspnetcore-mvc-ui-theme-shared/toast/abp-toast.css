@@ -132,7 +132,8 @@
 @media only screen and (max-width: 768px) {
     .abp-toast-container {
         min-width: 100%;
-        right: 0;
+        right: 0 !important;
+        left: 0 !important;
     }
     
     .abp-toast {

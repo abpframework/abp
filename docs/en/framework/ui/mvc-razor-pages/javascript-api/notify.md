@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the Notify API in ABP Framework to create toast notifications with ease, enhancing user experience in your ASP.NET Core apps."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages UI: JavaScript Notify API
 
 Notify API is used to show toast style, auto disappearing UI notifications to the end user. 

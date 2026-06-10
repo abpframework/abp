@@ -13,6 +13,7 @@
     "DefaultErrorMessage404": "未找到资源！",
     "DefaultErrorMessage404Detail": "服务器上找不到所请求的资源！",
     "EntityNotFoundErrorMessage": "不存在 id = {1} 的实体 {0}！",
+    "EntityNotFoundErrorMessageWithoutId": "不存在实体 {0}！",
     "AbpDbConcurrencyErrorMessage": "您提交的数据已被其他用户/客户更改。请放弃您所做的更改并从头开始尝试。",
     "Error": "错误",
     "UnhandledException": "未处理异常！",

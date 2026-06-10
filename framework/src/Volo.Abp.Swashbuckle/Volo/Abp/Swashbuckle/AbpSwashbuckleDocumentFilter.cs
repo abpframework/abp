@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Volo.Abp.Swashbuckle;
@@ -13,7 +13,7 @@ public class AbpSwashbuckleDocumentFilter : IDocumentFilter
     protected virtual string[] ActionUrlPrefixes { get; set; } = new[] { "Volo." };
 
     protected virtual string RegexConstraintPattern => @":regex\(([^()]*)\)";
-    
+
     public virtual void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
     {
         var actionUrls = context.ApiDescriptions
@@ -28,6 +28,20 @@ public class AbpSwashbuckleDocumentFilter : IDocumentFilter
         swaggerDoc
             .Paths
             .RemoveAll(path => !actionUrls.Contains(path.Key));
+
+        var tags = new List<string>();
+        foreach (var path in swaggerDoc.Paths)
+        {
+            if (path.Value.Operations != null)
+            {
+                tags.AddRange(path.Value.Operations.SelectMany(x =>
+                {
+                    return x.Value.Tags?.Select(t => t.Name ?? string.Empty) ?? Array.Empty<string>();
+                }));
+            }
+        }
+        tags = tags.Distinct().ToList();
+        swaggerDoc.Tags?.RemoveAll(tag => tag.Name == null || !tags.Contains(tag.Name));
     }
 
     protected virtual string? RemoveRouteParameterConstraints(ActionDescriptor actionDescriptor)
@@ -49,7 +63,7 @@ public class AbpSwashbuckleDocumentFilter : IDocumentFilter
             {
                 break;
             }
-            
+
             route = route.Remove(startIndex, (endIndex - startIndex));
         }
 

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Upgrade your Microservice template from 4.x to 5.2 with this comprehensive guide, covering breaking changes and enhancements like Docker support."
+}
+```
+
 # Microservice Template Version 4.x to 5.2 Migration Guide
 
 This document is a guide for upgrading Microservice template version 4.4 to version 5.2. Please read them all since there are some important breaking changes. 

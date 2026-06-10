@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover ABP Studio's Layered Solution Template for building robust monolithic applications using Domain-Driven Design principles."
+}
+```
+
 # ABP Studio: Layered Solution Template
 
 ````json

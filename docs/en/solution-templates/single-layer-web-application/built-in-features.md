@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover the built-in features of the Single Layer solution template to kickstart your web application development with ABP Framework."
+}
+```
+
 # Single Layer Solution: Built-In Features
 
 ```json

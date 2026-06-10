@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Upgrade your ABP v5.x solutions to v5.2 with this comprehensive migration guide, covering key changes for MongoDB and Blazor UI."
+}
+```
+
 # ABP Version 5.2 Migration Guide
 
 This document is a guide for upgrading ABP v5.x solutions to ABP v5.2. Please read them all since v5.2 has some changes you should take care.

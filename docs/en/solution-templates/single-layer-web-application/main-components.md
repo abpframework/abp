@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the main components of the single-layer solution template, designed for building monolithic applications with ease and efficiency."
+}
+```
+
 # Single Layer Solution: Main Components
 
 ````json

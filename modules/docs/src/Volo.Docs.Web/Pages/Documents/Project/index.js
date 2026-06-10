@@ -42,8 +42,6 @@ var doc = doc || {};
 
                 $ul.append($li);
                 $lazyLiElement.append($ul)
-
-                window.Toc.helpers.initNavEvent();
             },
             loadAll : function(lazyLiElements){
                 if(doc.lazyExpandableNavigation.isAllLoaded){

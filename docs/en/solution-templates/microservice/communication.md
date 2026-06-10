@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore communication methods in ABP's microservice solution, covering synchronous and asynchronous patterns for seamless service interactions."
+}
+```
+
 # Microservice Solution: Communication
 
 > You must have an ABP Business or a higher license to be able to create a microservice solution.

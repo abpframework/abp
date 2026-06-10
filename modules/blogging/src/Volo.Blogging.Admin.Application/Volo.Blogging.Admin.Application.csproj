@@ -4,7 +4,7 @@
     <Import Project="..\..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <AssemblyName>Volo.Blogging.Admin.Application</AssemblyName>
         <PackageId>Volo.Blogging.Admin.Application</PackageId>
         <RootNamespace />
@@ -17,7 +17,7 @@
     <ItemGroup>
         <ProjectReference Include="..\Volo.Blogging.Admin.Application.Contracts\Volo.Blogging.Admin.Application.Contracts.csproj" />
         <ProjectReference Include="..\Volo.Blogging.Domain\Volo.Blogging.Domain.csproj" />
-        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
+        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Mapperly\Volo.Abp.Mapperly.csproj" />
         <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
         <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Application\Volo.Abp.Ddd.Application.csproj" />
     </ItemGroup>

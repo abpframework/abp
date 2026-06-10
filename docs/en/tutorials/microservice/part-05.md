@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to build the Ordering microservice step-by-step, implementing core functionalities and creating the Order entity without ABP Suite."
+}
+```
+
 # Microservice Tutorial Part 05: Building the Ordering service
 
 ````json
@@ -255,21 +262,20 @@ public class OrderAppService : ApplicationService, IOrderAppService
 
 In this code snippet, we inject the `IRepository<Order, Guid>` into the `OrderAppService` class. We use this repository to interact with the `Order` entity. The `GetListAsync` method retrieves a list of orders from the database and maps them to the `OrderDto` class. The `CreateAsync` method creates a new order entity and inserts it into the database.
 
-Afterward, we need to configure the *AutoMapper* object to map the `Order` entity to the `OrderDto` class. Open the `OrderingServiceApplicationAutoMapperProfile` class in the `CloudCrm.OrderingService` project, located in the `ObjectMapping` folder, and add the following code:
+Afterward, we need to configure the *Mapperly* object to map the `Order` entity to the `OrderDto` class. Open the `OrderingServiceApplicationMappers` class in the `CloudCrm.OrderingService` project, located in the `ObjectMapping` folder, and add the following code:
 
 ```csharp
-using AutoMapper;
-using CloudCrm.OrderingService.Entities;
-using CloudCrm.OrderingService.Services;
+using Riok.Mapperly.Abstractions;
+using Volo.Abp.Mapperly;
 
 namespace CloudCrm.OrderingService.ObjectMapping;
 
-public class OrderingServiceApplicationAutoMapperProfile : Profile
+[Mapper]
+public partial class OrderingServiceApplicationMappers : MapperBase<Order, OrderDto>
 {
-    public OrderingServiceApplicationAutoMapperProfile()
-    {
-        CreateMap<Order, OrderDto>();
-    }
+    public override partial OrderDto Map(Order source);
+
+    public override partial void Map(Order source, OrderDto destination);
 }
 ```
 
@@ -516,14 +522,6 @@ abp generate-proxy -t ng -m ordering -u http://localhost:44311 --target ordering
 
 For more information, please refer to the [Service Proxies](https://abp.io/docs/latest/framework/ui/angular/service-proxies) documentation.
 
-### Create Order Module
-
-Run the following command line to create a new module, named `OrderModule` in the root folder of the angular application:
-
-```bash
-yarn ng generate module order --module ordering-service --project ordering-service --routing --route orders
-```
-
 ### Add Order Route
 
 * Create `order-base.routes.ts` file under the `projects/ordering-service/config/src/providers` folder and add the following code:
@@ -565,24 +563,82 @@ function configureRoutes() {
   routesService.add(routes);
 }
 ```
+* Open the `projects/ordering-service/config/src/providers/route.provider.ts` file and add `ORDERS_ORDER_ROUTE_PROVIDER` to the `ORDER_SERVICE_PROVIDERS` array as following code:
 
-* Open the `projects/ordering-service/config/src/ordering-service-config.module.ts` file and add `ORDERS_ORDER_ROUTE_PROVIDER` to the `providers` array as following code:
-
-*ordering-service-config.module.ts*
+*route.provider.ts*
 ```typescript
-import { ModuleWithProviders, NgModule } from '@angular/core';
-import { ORDERING_SERVICE_ROUTE_PROVIDERS } from './providers/route.provider';
-import { ORDERS_ORDER_ROUTE_PROVIDER } from './providers/order-route.provider';
+import { eLayoutType, RoutesService } from '@abp/ng.core';
+import {
+  EnvironmentProviders,
+  inject,
+  makeEnvironmentProviders,
+  provideAppInitializer,
+} from '@angular/core';
+import { eOrderingServiceRouteNames } from '../enums/route-names';
+import { ORDERS_ORDER_ROUTE_PROVIDER } from './order-route.provider';
 
-@NgModule()
-export class OrderingServiceConfigModule {
-  static forRoot(): ModuleWithProviders<OrderingServiceConfigModule> {
-    return {
-      ngModule: OrderingServiceConfigModule,
-      providers: [ORDERING_SERVICE_ROUTE_PROVIDERS, ORDERS_ORDER_ROUTE_PROVIDER],
-    };
-  }
+
+export const ORDER_SERVICE_ROUTE_PROVIDERS = [
+  provideAppInitializer(() => {
+    configureRoutes();
+  }),
+];
+
+export function configureRoutes() {
+  const routesService = inject(RoutesService);
+  routesService.add([
+    {
+      path: '/order-service',
+      name: eOrderingServiceRouteNames.OrderService,
+      iconClass: 'fas fa-book',
+      layout: eLayoutType.application,
+      order: 3,
+    },
+  ]);
 }
+
+const ORDER_SERVICE_PROVIDERS: EnvironmentProviders[] = [
+  ...ORDER_SERVICE_ROUTE_PROVIDERS,
+  ...ORDERS_ORDER_ROUTE_PROVIDER
+];
+
+export function provideOrderService() {
+  return makeEnvironmentProviders(ORDER_SERVICE_PROVIDERS);
+}
+```
+
+* Do not forget adding `provideOrderService()` to the providers inside `app.config.ts` as follows:
+
+```typescript
+import { provideOrderService } from '@order-service/config';
+
+export const appConfig: ApplicationConfig = {
+  providers: [ 
+    // ...
+    provideOrderService()
+  ],
+};
+```
+
+* Lastly, you need to update the `APP_ROUTES` array in `app.routes.ts` file as follows:
+
+```typescript
+// app.routes.ts
+export const APP_ROUTES: Routes = [
+  // ...
+  {
+    path: 'order-service',
+    loadChildren: () => import('ordering-service').then(c =>c.ORDER_SERVICE_ROUTES),
+  },
+];
+```
+
+```typescript
+// order-service.routes.ts
+export const ORDER_SERVICE_ROUTES: Routes = [
+  { path: 'orders', loadComponent: () => import('./order/order.component').then(c => c.OrderComponent) },
+  { path: '**', redirectTo: 'orders' }
+];
 ```
 
 ### Create Order Page
@@ -590,25 +646,26 @@ export class OrderingServiceConfigModule {
 * Create `order.component.ts` file under the `projects/ordering-service/src/lib/order` folder as following code:
 
 ```typescript
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { OrderDto, OrderService } from './proxy/ordering-service/services';
 
 @Component({
   selector: 'lib-order',
-  standalone: false,
   templateUrl: './order.component.html',
-  styleUrl: './order.component.css'
+  styleUrl: './order.component.css',
+  imports: [CommonModule]
 })
 export class OrderComponent {
 
   items: OrderDto[] = [];
+  private readonly orderService = inject(OrderService);
 
-  constructor(private readonly proxy: OrderService) {
-    this.proxy.getList().subscribe((res) => {
+  constructor() {
+    this.orderService.getList().subscribe((res) => {
       this.items = res;
     });
   }
-  
 }
 ```
 
@@ -624,11 +681,13 @@ export class OrderComponent {
                     <th>Product Id</th>
                     <th>Customer Name</th>
                 </tr>
-                <tr *ngFor="let item of items">
-                    <td>{%{{{item.id}}}%}</td>
-                    <td>{%{{{item.productId}}}%}</td>
-                    <td>{%{{{item.customerName}}}%}</td>
-                </tr>
+                @for (item of items; track item.id) {
+                    <tr>
+                        <td>{%{{{item.id}}}%}</td>
+                        <td>{%{{{item.productId}}}%}</td>
+                        <td>{%{{{item.customerName}}}%}</td>
+                    </tr>
+                }
             </thead>
         </table>
     </div>

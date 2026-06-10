@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to create Static C# API client proxies with ABP for seamless HTTP service calls, simplifying authentication, serialization, and error handling."
+}
+```
+
 # Static C# API Client Proxies
 
 ABP can create C# API client proxy code to call your remote HTTP services (REST APIs). In this way, you don't need to deal with `HttpClient` and other low level details to call remote services and get results.

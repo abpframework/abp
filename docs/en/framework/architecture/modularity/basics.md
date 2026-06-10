@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to build modular applications with ABP Framework, including best practices, templates, and CLI support for seamless development."
+}
+```
+
 # Modularity
 
 ABP was designed to support to build fully modular applications and systems where every module may have entities, services, database integration, APIs, UI components and so on;

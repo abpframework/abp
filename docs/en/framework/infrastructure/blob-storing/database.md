@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to configure BLOB storage in relational and non-relational databases using ABP Framework's database providers for seamless data management."
+}
+```
+
 # BLOB Storing Database Provider
 
 BLOB Storing Database Storage Provider can store BLOBs in a relational or non-relational database.

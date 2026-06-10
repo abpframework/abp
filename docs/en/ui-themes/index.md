@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore ABP's official theming system, featuring the LeptonX and Basic themes, to enhance your application's UI effortlessly."
+}
+```
+
 # The Official Themes
 ABP provides a complete UI theming system. While you can build your own themes, you can directly use the following pre-built themes in your applications.
 

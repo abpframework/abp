@@ -9,6 +9,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Abp.Http.Modeling;
+using Volo.Docs.Admin.Documents;
 using Volo.Docs.Admin.Projects;
 using Volo.Docs.Common.Documents;
 
@@ -16,8 +17,8 @@ using Volo.Docs.Common.Documents;
 namespace Volo.Docs.Admin;
 
 [Dependency(ReplaceServices = true)]
-[ExposeServices(typeof(IDocumentPdfAppService), typeof(DocumentPdfAdminClientProxy))]
-public partial class DocumentPdfAdminClientProxy : ClientProxyBase<IDocumentPdfAppService>, IDocumentPdfAppService
+[ExposeServices(typeof(IDocumentPdfAdminAppService), typeof(DocumentPdfAdminClientProxy))]
+public partial class DocumentPdfAdminClientProxy : ClientProxyBase<IDocumentPdfAdminAppService>, IDocumentPdfAdminAppService
 {
     public virtual async Task GeneratePdfAsync(DocumentPdfGeneratorInput input)
     {

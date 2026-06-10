@@ -79,7 +79,8 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
                     .AllowClientCredentialsFlow()
                     .AllowRefreshTokenFlow()
                     .AllowDeviceAuthorizationFlow()
-                    .AllowNoneFlow();
+                    .AllowNoneFlow()
+                    .AllowTokenExchangeFlow();
 
                 builder.RegisterScopes(new[]
                 {

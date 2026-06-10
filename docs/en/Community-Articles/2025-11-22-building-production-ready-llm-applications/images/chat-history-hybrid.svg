@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+  <!-- Background -->
+  <rect width="800" height="450" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="400" y="30" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle" fill="#0066cc">
+    Hybrid Chat History: Truncation + RAG on History
+  </text>
+  
+  <!-- Full conversation -->
+  <rect x="50" y="60" width="250" height="200" fill="#e3f2fd" stroke="#1976d2" stroke-width="2" rx="5"/>
+  <text x="175" y="85" font-family="Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#0d47a1">
+    Full Chat History
+  </text>
+  <text x="175" y="105" font-family="Arial" font-size="10" text-anchor="middle" fill="#0d47a1">
+    (100 messages, 20K tokens)
+  </text>
+  
+  <!-- Messages visual -->
+  <rect x="60" y="120" width="230" height="15" fill="#90caf9" stroke="#1976d2" stroke-width="1" rx="2"/>
+  <text x="175" y="131" font-family="Arial" font-size="9" text-anchor="middle" fill="#0d47a1">Messages 1-10 (1 day ago)</text>
+  
+  <rect x="60" y="140" width="230" height="15" fill="#90caf9" stroke="#1976d2" stroke-width="1" rx="2"/>
+  <text x="175" y="151" font-family="Arial" font-size="9" text-anchor="middle" fill="#0d47a1">Messages 11-20 (12 hours ago)</text>
+  
+  <text x="175" y="175" font-family="Arial" font-size="11" text-anchor="middle" fill="#666">...</text>
+  
+  <rect x="60" y="190" width="230" height="15" fill="#90caf9" stroke="#1976d2" stroke-width="1" rx="2"/>
+  <text x="175" y="201" font-family="Arial" font-size="9" text-anchor="middle" fill="#0d47a1">Messages 81-90</text>
+  
+  <rect x="60" y="210" width="230" height="35" fill="#64b5f6" stroke="#1976d2" stroke-width="2" rx="2"/>
+  <text x="175" y="230" font-family="Arial" font-size="10" font-weight="bold" text-anchor="middle" fill="#0d47a1">Messages 91-100 (Last 10)</text>
+  
+  <!-- Arrow split -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#333"/>
+    </marker>
+  </defs>
+  
+  <line x1="300" y1="150" x2="370" y2="100" stroke="#d32f2f" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="300" y1="227" x2="370" y2="250" stroke="#388e3c" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <text x="310" y="130" font-family="Arial" font-size="10" fill="#d32f2f">Old Messages</text>
+  <text x="310" y="270" font-family="Arial" font-size="10" fill="#388e3c">Recent Messages</text>
+  
+  <!-- Vector DB (Long-term memory) -->
+  <rect x="370" y="60" width="180" height="100" fill="#ffebee" stroke="#d32f2f" stroke-width="2" rx="5"/>
+  <text x="460" y="85" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle" fill="#b71c1c">
+    Vector DB
+  </text>
+  <text x="460" y="105" font-family="Arial" font-size="10" text-anchor="middle" fill="#b71c1c">
+    (Long-term Memory)
+  </text>
+  <text x="460" y="125" font-family="Arial" font-size="9" text-anchor="middle" fill="#b71c1c">
+    Messages 1-90 with embeddings
+  </text>
+  <text x="460" y="140" font-family="Arial" font-size="9" text-anchor="middle" fill="#b71c1c">
+    Tool: SearchChatHistory()
+  </text>
+  
+  <!-- Short-term memory (Prompt) -->
+  <rect x="370" y="200" width="180" height="100" fill="#c8e6c9" stroke="#388e3c" stroke-width="2" rx="5"/>
+  <text x="460" y="225" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle" fill="#1b5e20">
+    Prompt (Short-term)
+  </text>
+  <text x="460" y="245" font-family="Arial" font-size="10" text-anchor="middle" fill="#1b5e20">
+    Messages 91-100
+  </text>
+  <text x="460" y="265" font-family="Arial" font-size="9" text-anchor="middle" fill="#1b5e20">
+    Truncation (Last 10 messages)
+  </text>
+  <text x="460" y="280" font-family="Arial" font-size="9" text-anchor="middle" fill="#1b5e20">
+    Low tokens, fast
+  </text>
+  
+  <!-- LLM -->
+  <line x1="550" y1="110" x2="600" y2="180" stroke="#666" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrow)"/>
+  <line x1="550" y1="250" x2="600" y2="210" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <rect x="600" y="150" width="150" height="100" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2" rx="5"/>
+  <text x="675" y="185" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#4a148c">
+    LLM
+  </text>
+  <text x="675" y="205" font-family="Arial" font-size="10" text-anchor="middle" fill="#4a148c">
+    Short-term context +
+  </text>
+  <text x="675" y="220" font-family="Arial" font-size="10" text-anchor="middle" fill="#4a148c">
+    Long-term memory via tool
+  </text>
+  <text x="675" y="235" font-family="Arial" font-size="10" text-anchor="middle" fill="#4a148c">
+    access when needed
+  </text>
+  
+  <!-- Benefits -->
+  <rect x="50" y="330" width="700" height="100" fill="#fff9c4" stroke="#f57f17" stroke-width="2" rx="5"/>
+  <text x="400" y="360" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#f57f17">
+    ✅ Hybrid Approach Benefits
+  </text>
+  
+  <g id="benefit1">
+    <circle cx="80" cy="385" r="5" fill="#fbc02d"/>
+    <text x="95" y="390" font-family="Arial" font-size="11" fill="#f57f17">
+      <tspan font-weight="bold">Low Cost:</tspan> Only last 10 messages in prompt per request (truncation)
+    </text>
+  </g>
+  
+  <g id="benefit2">
+    <circle cx="80" cy="410" r="5" fill="#fbc02d"/>
+    <text x="95" y="415" font-family="Arial" font-size="11" fill="#f57f17">
+      <tspan font-weight="bold">High Fidelity:</tspan> LLM can access old messages via SearchChatHistory tool when needed
+    </text>
+  </g>
+</svg>

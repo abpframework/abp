@@ -1,36 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 
 namespace Volo.Abp.IdentityServer;
 
-public class AllowedSigningAlgorithmsConverter :
-    IValueConverter<ICollection<string>, string>,
-    IValueConverter<string, ICollection<string>>
+public static class AllowedSigningAlgorithmsConverter
 {
-    public static AllowedSigningAlgorithmsConverter Converter = new AllowedSigningAlgorithmsConverter();
-
-    public string Convert(ICollection<string> sourceMember, ResolutionContext context)
+    private const char Separator = ',';
+    
+    public static string[] SplitToArray(string algorithms)
     {
-        if (sourceMember == null || !sourceMember.Any())
+        if (string.IsNullOrWhiteSpace(algorithms))
         {
-            return null;
+            return [];
         }
-        return sourceMember.Aggregate((x, y) => $"{x},{y}");
-    }
-
-    public ICollection<string> Convert(string sourceMember, ResolutionContext context)
-    {
-        var list = new HashSet<string>();
-        if (!String.IsNullOrWhiteSpace(sourceMember))
-        {
-            sourceMember = sourceMember.Trim();
-            foreach (var item in sourceMember.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Distinct())
-            {
-                list.Add(item);
-            }
-        }
-        return list;
+        
+        return algorithms
+            .Split([Separator], StringSplitOptions.RemoveEmptyEntries)
+            .Select(x => x.Trim())
+            .Where(x => !string.IsNullOrEmpty(x))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
     }
 }

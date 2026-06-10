@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to configure BLOB storage in Google Cloud with ABP Framework, enhancing your project's cloud capabilities effortlessly."
+}
+```
+
 # BLOB Storing Google Provider
 
 BLOB Storing Google Provider can store BLOBs in [Google Cloud Storage](https://cloud.google.com/storage).
@@ -27,11 +34,11 @@ Configure<AbpBlobStoringOptions>(options =>
     {
         container.UseGoogle(google =>
         {
-            google.ClientEmail = "your coogle client email";
-            google.ProjectId = "your coogle project id";
-            google.PrivateKey = "your coogle private key";
-            google.Scopes = "your coogle scopes";
-            google.ContainerName = "your coogle container name";
+            google.ClientEmail = "your google client email";
+            google.ProjectId = "your google project id";
+            google.PrivateKey = "your google private key";
+            google.Scopes = "your google scopes";
+            google.ContainerName = "your google container name";
             google.CreateContainerIfNotExists = true;
             //google.UseApplicationDefaultCredentials = true; // If you want to use application default credentials
         });

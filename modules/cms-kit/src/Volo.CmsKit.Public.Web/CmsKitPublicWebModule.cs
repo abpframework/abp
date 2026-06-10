@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Caching;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
@@ -67,12 +67,7 @@ public class CmsKitPublicWebModule : AbpModule
             options.FileSets.AddEmbedded<CmsKitPublicWebModule>("Volo.CmsKit.Public.Web");
         });
 
-        context.Services.AddAutoMapperObjectMapper<CmsKitPublicWebModule>();
-
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddMaps<CmsKitPublicWebModule>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<CmsKitPublicWebModule>();
 
         Configure<DynamicJavaScriptProxyOptions>(options =>
         {

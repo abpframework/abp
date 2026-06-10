@@ -31,7 +31,8 @@ public partial class SettingManagement
 
     protected async override Task OnInitializedAsync()
     {
-        BreadcrumbItems.Add(new BreadcrumbItem(@L["Settings"]));
+        BreadcrumbItems.Add(new BreadcrumbItem(LUiNavigation["Menu:Administration"].Value));
+        BreadcrumbItems.Add(new BreadcrumbItem(@L["Menu:Settings"].Value));
 
         SettingComponentCreationContext = new SettingComponentCreationContext(ServiceProvider);
 
@@ -42,21 +43,10 @@ public partial class SettingManagement
         SettingComponentCreationContext.Normalize();
         SettingItemRenders.Clear();
 
-        if (SettingComponentCreationContext.Groups.Any())
+        if(SelectedGroup.IsNullOrEmpty() && SettingComponentCreationContext.Groups.Any())
         {
             SelectedGroup = GetNormalizedString(SettingComponentCreationContext.Groups.First().Id);
         }
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await Task.Yield();
-            await InvokeAsync(StateHasChanged);
-        }
-
-        await base.OnAfterRenderAsync(firstRender);
     }
 
     protected virtual string GetNormalizedString(string value)

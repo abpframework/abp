@@ -61,6 +61,8 @@ public class PermissionGroupDefinition : ICanAddChildPermission
             isEnabled
         );
 
+        permission[PermissionDefinitionContext.KnownPropertyNames.CurrentProviderName] = this[PermissionDefinitionContext.KnownPropertyNames.CurrentProviderName];
+
         _permissions.Add(permission);
 
         return permission;

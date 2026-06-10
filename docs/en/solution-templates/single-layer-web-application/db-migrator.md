@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to manage database migrations in a Single Layer solution with ABP Framework using scripts and commands for seamless operations."
+}
+```
+
 # Single Layer Solution: Db Migrator
 
 ````json

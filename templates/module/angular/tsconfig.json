@@ -1,6 +1,8 @@
 {
   "extends": "./tsconfig.prod.json",
   "compilerOptions": {
+    "esModuleInterop": true,
+    "moduleResolution": "bundler",
     "skipLibCheck": true,
     "paths": {
       "@my-company-name/my-project-name": [

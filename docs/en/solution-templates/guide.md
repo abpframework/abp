@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore ABP's guide to selecting the right startup template for your project, covering architectures like Microservices, N-Layered, and more."
+}
+```
+
 # Solution Templates: A Guide to Select the Right One For You
 
 ABP provides several [startup templates](index.md) to you. It is important to start with the right startup template that is suitable for your **project** and **team**. This guide aims to lead you to select the most proper startup template for your requirements.
@@ -27,7 +34,7 @@ Besides the overall solution structure, the internals of each project in a solut
 
 ### Library Integrations & Configurations
 
-When you use ABP startup solution templates to create a new solution, some **fundamental library installations** ([Serilog](https://serilog.net/), [Autofac](https://autofac.org/), [AutoMapper](https://automapper.org/), [Swagger](https://swagger.io/), [HealthCheck](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks) and others..) and their fine-tuned configurations are already prepared for you. Also, required **[ABP packages](https://abp.io/packages)** are just installed based on your preferences and configured for **development and production environments**.
+When you use ABP startup solution templates to create a new solution, some **fundamental library installations** ([Serilog](https://serilog.net/), [Autofac](https://autofac.org/), [Mapperly](https://mapperly.riok.app/), [Swagger](https://swagger.io/), [HealthCheck](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks) and others..) and their fine-tuned configurations are already prepared for you. Also, required **[ABP packages](https://abp.io/packages)** are just installed based on your preferences and configured for **development and production environments**.
 
 ### Development Ready
 

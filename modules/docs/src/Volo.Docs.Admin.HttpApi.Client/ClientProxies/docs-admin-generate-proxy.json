@@ -1,0 +1,1451 @@
+{
+  "modules": {
+    "docs-admin": {
+      "rootPath": "docs-admin",
+      "remoteServiceName": "AbpDocsAdmin",
+      "controllers": {
+        "Volo.Docs.Admin.DocumentPdfAdminController": {
+          "controllerName": "DocumentPdfAdmin",
+          "controllerGroupName": "DocumentsPdfAdmin",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.Docs.Admin.DocumentPdfAdminController",
+          "interfaces": [
+            {
+              "type": "Volo.Docs.Admin.Documents.IDocumentPdfAdminAppService",
+              "name": "IDocumentPdfAdminAppService",
+              "methods": [
+                {
+                  "name": "DownloadPdfAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput, Volo.Docs.Common.Application.Contracts",
+                      "type": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                      "typeSimple": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Content.IRemoteStreamContent",
+                    "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+                  }
+                },
+                {
+                  "name": "ExistsAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput, Volo.Docs.Common.Application.Contracts",
+                      "type": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                      "typeSimple": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Boolean",
+                    "typeSimple": "boolean"
+                  }
+                },
+                {
+                  "name": "GeneratePdfAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput, Volo.Docs.Common.Application.Contracts",
+                      "type": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                      "typeSimple": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetPdfFilesAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Admin.Projects.GetPdfFilesInput, Volo.Docs.Admin.Application.Contracts",
+                      "type": "Volo.Docs.Admin.Projects.GetPdfFilesInput",
+                      "typeSimple": "Volo.Docs.Admin.Projects.GetPdfFilesInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Docs.Admin.Projects.ProjectPdfFileDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Docs.Admin.Projects.ProjectPdfFileDto>"
+                  }
+                },
+                {
+                  "name": "DeletePdfFileAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Admin.Projects.DeletePdfFileInput, Volo.Docs.Admin.Application.Contracts",
+                      "type": "Volo.Docs.Admin.Projects.DeletePdfFileInput",
+                      "typeSimple": "Volo.Docs.Admin.Projects.DeletePdfFileInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "GeneratePdfAsyncByInput": {
+              "uniqueName": "GeneratePdfAsyncByInput",
+              "name": "GeneratePdfAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/admin/documents/pdf/generate",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput, Volo.Docs.Common.Application.Contracts",
+                  "type": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                  "typeSimple": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "ProjectId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Version",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "LanguageCode",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Documents.IDocumentPdfAdminAppService"
+            },
+            "GetPdfFilesAsyncByInput": {
+              "uniqueName": "GetPdfFilesAsyncByInput",
+              "name": "GetPdfFilesAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/admin/documents/pdf/files",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Docs.Admin.Projects.GetPdfFilesInput, Volo.Docs.Admin.Application.Contracts",
+                  "type": "Volo.Docs.Admin.Projects.GetPdfFilesInput",
+                  "typeSimple": "Volo.Docs.Admin.Projects.GetPdfFilesInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "ProjectId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Docs.Admin.Projects.ProjectPdfFileDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Docs.Admin.Projects.ProjectPdfFileDto>"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Documents.IDocumentPdfAdminAppService"
+            },
+            "DeletePdfFileAsyncByInput": {
+              "uniqueName": "DeletePdfFileAsyncByInput",
+              "name": "DeletePdfFileAsync",
+              "httpMethod": "DELETE",
+              "url": "api/docs/admin/documents/pdf/delete-file",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Docs.Admin.Projects.DeletePdfFileInput, Volo.Docs.Admin.Application.Contracts",
+                  "type": "Volo.Docs.Admin.Projects.DeletePdfFileInput",
+                  "typeSimple": "Volo.Docs.Admin.Projects.DeletePdfFileInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "ProjectId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Version",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "LanguageCode",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Documents.IDocumentPdfAdminAppService"
+            },
+            "DownloadPdfAsyncByInput": {
+              "uniqueName": "DownloadPdfAsyncByInput",
+              "name": "DownloadPdfAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/admin/documents/pdf/download",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput, Volo.Docs.Common.Application.Contracts",
+                  "type": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                  "typeSimple": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "ProjectId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Version",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "LanguageCode",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Content.IRemoteStreamContent",
+                "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Documents.IDocumentPdfAdminAppService"
+            },
+            "ExistsAsyncByInput": {
+              "uniqueName": "ExistsAsyncByInput",
+              "name": "ExistsAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/admin/documents/pdf/exists",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput, Volo.Docs.Common.Application.Contracts",
+                  "type": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                  "typeSimple": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "ProjectId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Version",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "LanguageCode",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "System.Boolean",
+                "typeSimple": "boolean"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Documents.IDocumentPdfAdminAppService"
+            }
+          }
+        },
+        "Volo.Docs.Admin.DocumentsAdminController": {
+          "controllerName": "DocumentsAdmin",
+          "controllerGroupName": "DocumentsAdmin",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.Docs.Admin.DocumentsAdminController",
+          "interfaces": [
+            {
+              "type": "Volo.Docs.Admin.Documents.IDocumentAdminAppService",
+              "name": "IDocumentAdminAppService",
+              "methods": [
+                {
+                  "name": "ClearCacheAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Admin.Documents.ClearCacheInput, Volo.Docs.Admin.Application.Contracts",
+                      "type": "Volo.Docs.Admin.Documents.ClearCacheInput",
+                      "typeSimple": "Volo.Docs.Admin.Documents.ClearCacheInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "PullAllAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Admin.Documents.PullAllDocumentInput, Volo.Docs.Admin.Application.Contracts",
+                      "type": "Volo.Docs.Admin.Documents.PullAllDocumentInput",
+                      "typeSimple": "Volo.Docs.Admin.Documents.PullAllDocumentInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "PullAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Admin.Documents.PullDocumentInput, Volo.Docs.Admin.Application.Contracts",
+                      "type": "Volo.Docs.Admin.Documents.PullDocumentInput",
+                      "typeSimple": "Volo.Docs.Admin.Documents.PullDocumentInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetAllAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Admin.Documents.GetAllInput, Volo.Docs.Admin.Application.Contracts",
+                      "type": "Volo.Docs.Admin.Documents.GetAllInput",
+                      "typeSimple": "Volo.Docs.Admin.Documents.GetAllInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Docs.Admin.Documents.DocumentDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Docs.Admin.Documents.DocumentDto>"
+                  }
+                },
+                {
+                  "name": "RemoveFromCacheAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "documentId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "ReindexAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "documentId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetFilterItemsAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "System.Collections.Generic.List<Volo.Docs.Admin.Documents.DocumentInfoDto>",
+                    "typeSimple": "[Volo.Docs.Admin.Documents.DocumentInfoDto]"
+                  }
+                },
+                {
+                  "name": "GetProjectsAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "System.Collections.Generic.List<Volo.Docs.Admin.Projects.ProjectWithoutDetailsDto>",
+                    "typeSimple": "[Volo.Docs.Admin.Projects.ProjectWithoutDetailsDto]"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "ClearCacheAsyncByInput": {
+              "uniqueName": "ClearCacheAsyncByInput",
+              "name": "ClearCacheAsync",
+              "httpMethod": "POST",
+              "url": "api/docs/admin/documents/ClearCache",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Docs.Admin.Documents.ClearCacheInput, Volo.Docs.Admin.Application.Contracts",
+                  "type": "Volo.Docs.Admin.Documents.ClearCacheInput",
+                  "typeSimple": "Volo.Docs.Admin.Documents.ClearCacheInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.Docs.Admin.Documents.ClearCacheInput",
+                  "typeSimple": "Volo.Docs.Admin.Documents.ClearCacheInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Documents.IDocumentAdminAppService"
+            },
+            "PullAllAsyncByInput": {
+              "uniqueName": "PullAllAsyncByInput",
+              "name": "PullAllAsync",
+              "httpMethod": "POST",
+              "url": "api/docs/admin/documents/PullAll",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Docs.Admin.Documents.PullAllDocumentInput, Volo.Docs.Admin.Application.Contracts",
+                  "type": "Volo.Docs.Admin.Documents.PullAllDocumentInput",
+                  "typeSimple": "Volo.Docs.Admin.Documents.PullAllDocumentInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.Docs.Admin.Documents.PullAllDocumentInput",
+                  "typeSimple": "Volo.Docs.Admin.Documents.PullAllDocumentInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Documents.IDocumentAdminAppService"
+            },
+            "PullAsyncByInput": {
+              "uniqueName": "PullAsyncByInput",
+              "name": "PullAsync",
+              "httpMethod": "POST",
+              "url": "api/docs/admin/documents/Pull",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Docs.Admin.Documents.PullDocumentInput, Volo.Docs.Admin.Application.Contracts",
+                  "type": "Volo.Docs.Admin.Documents.PullDocumentInput",
+                  "typeSimple": "Volo.Docs.Admin.Documents.PullDocumentInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.Docs.Admin.Documents.PullDocumentInput",
+                  "typeSimple": "Volo.Docs.Admin.Documents.PullDocumentInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Documents.IDocumentAdminAppService"
+            },
+            "GetAllAsyncByInput": {
+              "uniqueName": "GetAllAsyncByInput",
+              "name": "GetAllAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/admin/documents/GetAll",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Docs.Admin.Documents.GetAllInput, Volo.Docs.Admin.Application.Contracts",
+                  "type": "Volo.Docs.Admin.Documents.GetAllInput",
+                  "typeSimple": "Volo.Docs.Admin.Documents.GetAllInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "ProjectId",
+                  "jsonName": null,
+                  "type": "System.Guid?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Version",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "LanguageCode",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "FileName",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Format",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "CreationTimeMin",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "CreationTimeMax",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "LastUpdatedTimeMin",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "LastUpdatedTimeMax",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "LastSignificantUpdateTimeMin",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "LastSignificantUpdateTimeMax",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "LastCachedTimeMin",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "LastCachedTimeMax",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Docs.Admin.Documents.DocumentDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Docs.Admin.Documents.DocumentDto>"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Documents.IDocumentAdminAppService"
+            },
+            "RemoveFromCacheAsyncByDocumentId": {
+              "uniqueName": "RemoveFromCacheAsyncByDocumentId",
+              "name": "RemoveFromCacheAsync",
+              "httpMethod": "PUT",
+              "url": "api/docs/admin/documents/RemoveDocumentFromCache",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "documentId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "documentId",
+                  "name": "documentId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Documents.IDocumentAdminAppService"
+            },
+            "ReindexAsyncByDocumentId": {
+              "uniqueName": "ReindexAsyncByDocumentId",
+              "name": "ReindexAsync",
+              "httpMethod": "PUT",
+              "url": "api/docs/admin/documents/ReindexDocument",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "documentId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "documentId",
+                  "name": "documentId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Documents.IDocumentAdminAppService"
+            },
+            "GetFilterItemsAsync": {
+              "uniqueName": "GetFilterItemsAsync",
+              "name": "GetFilterItemsAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/admin/documents/GetFilterItems",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<Volo.Docs.Admin.Documents.DocumentInfoDto>",
+                "typeSimple": "[Volo.Docs.Admin.Documents.DocumentInfoDto]"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Documents.IDocumentAdminAppService"
+            },
+            "GetProjectsAsync": {
+              "uniqueName": "GetProjectsAsync",
+              "name": "GetProjectsAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/admin/documents/GetProjects",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<Volo.Docs.Admin.Projects.ProjectWithoutDetailsDto>",
+                "typeSimple": "[Volo.Docs.Admin.Projects.ProjectWithoutDetailsDto]"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Documents.IDocumentAdminAppService"
+            }
+          }
+        },
+        "Volo.Docs.Admin.ProjectsAdminController": {
+          "controllerName": "ProjectsAdmin",
+          "controllerGroupName": "ProjectsAdmin",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.Docs.Admin.ProjectsAdminController",
+          "interfaces": [
+            {
+              "type": "Volo.Docs.Admin.Projects.IProjectAdminAppService",
+              "name": "IProjectAdminAppService",
+              "methods": [
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto, Volo.Abp.Ddd.Application.Contracts",
+                      "type": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto",
+                      "typeSimple": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Docs.Admin.Projects.ProjectDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Docs.Admin.Projects.ProjectDto>"
+                  }
+                },
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Docs.Admin.Projects.ProjectDto",
+                    "typeSimple": "Volo.Docs.Admin.Projects.ProjectDto"
+                  }
+                },
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Admin.Projects.CreateProjectDto, Volo.Docs.Admin.Application.Contracts",
+                      "type": "Volo.Docs.Admin.Projects.CreateProjectDto",
+                      "typeSimple": "Volo.Docs.Admin.Projects.CreateProjectDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Docs.Admin.Projects.ProjectDto",
+                    "typeSimple": "Volo.Docs.Admin.Projects.ProjectDto"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Admin.Projects.UpdateProjectDto, Volo.Docs.Admin.Application.Contracts",
+                      "type": "Volo.Docs.Admin.Projects.UpdateProjectDto",
+                      "typeSimple": "Volo.Docs.Admin.Projects.UpdateProjectDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Docs.Admin.Projects.ProjectDto",
+                    "typeSimple": "Volo.Docs.Admin.Projects.ProjectDto"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "ReindexAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Docs.Admin.Projects.ReindexInput, Volo.Docs.Admin.Application.Contracts",
+                      "type": "Volo.Docs.Admin.Projects.ReindexInput",
+                      "typeSimple": "Volo.Docs.Admin.Projects.ReindexInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "ReindexAllAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetListWithoutDetailsAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "System.Collections.Generic.List<Volo.Docs.Admin.Projects.ProjectWithoutDetailsDto>",
+                    "typeSimple": "[Volo.Docs.Admin.Projects.ProjectWithoutDetailsDto]"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "GetListAsyncByInput": {
+              "uniqueName": "GetListAsyncByInput",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/admin/projects",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto, Volo.Abp.Ddd.Application.Contracts",
+                  "type": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto",
+                  "typeSimple": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Docs.Admin.Projects.ProjectDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<Volo.Docs.Admin.Projects.ProjectDto>"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Projects.IProjectAdminAppService"
+            },
+            "GetAsyncById": {
+              "uniqueName": "GetAsyncById",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/admin/projects/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Docs.Admin.Projects.ProjectDto",
+                "typeSimple": "Volo.Docs.Admin.Projects.ProjectDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Projects.IProjectAdminAppService"
+            },
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/docs/admin/projects",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Docs.Admin.Projects.CreateProjectDto, Volo.Docs.Admin.Application.Contracts",
+                  "type": "Volo.Docs.Admin.Projects.CreateProjectDto",
+                  "typeSimple": "Volo.Docs.Admin.Projects.CreateProjectDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.Docs.Admin.Projects.CreateProjectDto",
+                  "typeSimple": "Volo.Docs.Admin.Projects.CreateProjectDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Docs.Admin.Projects.ProjectDto",
+                "typeSimple": "Volo.Docs.Admin.Projects.ProjectDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Projects.IProjectAdminAppService"
+            },
+            "UpdateAsyncByIdAndInput": {
+              "uniqueName": "UpdateAsyncByIdAndInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/docs/admin/projects/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Docs.Admin.Projects.UpdateProjectDto, Volo.Docs.Admin.Application.Contracts",
+                  "type": "Volo.Docs.Admin.Projects.UpdateProjectDto",
+                  "typeSimple": "Volo.Docs.Admin.Projects.UpdateProjectDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.Docs.Admin.Projects.UpdateProjectDto",
+                  "typeSimple": "Volo.Docs.Admin.Projects.UpdateProjectDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Docs.Admin.Projects.ProjectDto",
+                "typeSimple": "Volo.Docs.Admin.Projects.ProjectDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Projects.IProjectAdminAppService"
+            },
+            "DeleteAsyncById": {
+              "uniqueName": "DeleteAsyncById",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/docs/admin/projects",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Projects.IProjectAdminAppService"
+            },
+            "ReindexAllAsync": {
+              "uniqueName": "ReindexAllAsync",
+              "name": "ReindexAllAsync",
+              "httpMethod": "POST",
+              "url": "api/docs/admin/projects/ReindexAll",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Projects.IProjectAdminAppService"
+            },
+            "GetListWithoutDetailsAsync": {
+              "uniqueName": "GetListWithoutDetailsAsync",
+              "name": "GetListWithoutDetailsAsync",
+              "httpMethod": "GET",
+              "url": "api/docs/admin/projects/GetListProjectWithoutDetailsAsync",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<Volo.Docs.Admin.Projects.ProjectWithoutDetailsDto>",
+                "typeSimple": "[Volo.Docs.Admin.Projects.ProjectWithoutDetailsDto]"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Projects.IProjectAdminAppService"
+            },
+            "ReindexAsyncByInput": {
+              "uniqueName": "ReindexAsyncByInput",
+              "name": "ReindexAsync",
+              "httpMethod": "POST",
+              "url": "api/docs/admin/projects/Reindex",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Docs.Admin.Projects.ReindexInput, Volo.Docs.Admin.Application.Contracts",
+                  "type": "Volo.Docs.Admin.Projects.ReindexInput",
+                  "typeSimple": "Volo.Docs.Admin.Projects.ReindexInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.Docs.Admin.Projects.ReindexInput",
+                  "typeSimple": "Volo.Docs.Admin.Projects.ReindexInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Docs.Admin.Projects.IProjectAdminAppService"
+            }
+          }
+        }
+      }
+    }
+  },
+  "types": {}
+}

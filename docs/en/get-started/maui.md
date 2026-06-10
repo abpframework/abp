@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Create a minimalist MAUI app with the ABP Framework; easily set up your project and explore the solution structure for development."
+}
+```
+
 # MAUI Application Startup Template
 
 This template is used to create a minimalist MAUI application project.

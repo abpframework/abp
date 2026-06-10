@@ -847,6 +847,7 @@
     "BlazoriseSupportExplanation3": "Log into the Blazorise support website at <a href=\"https://blazorise.com/support/login\">blazorise.com/support/login</a>.",
     "BlazoriseSupportExplanation4": "If you have an active ABP Commercial license, you will also have a Blazorise PRO license. You can get your Blazorise license key at <a href=\"https://blazorise.com/support/user/manage/license\">blazorise.com/support/user/manage/license</a>.",
     "BlazoriseSupportExplanation5": "You can post your questions on the support website and generate a product token for your application.",
+    "BlazoriseSupportMoreInfo": "For more information <a href=\"{0}\">click here</a>.",
     "AbpLiveTrainingPackages": "ABP Live Training Packages",
     "Releases": "Releases",
     "ReleasesDescription": "This page contains detailed information about each release. You can see all the closed pull requests for a specific release. For overall milestone developments, you can check out the <a href=\"https://abp.io/docs/latest/release-info/release-notes\">brief release notes page</a>.",

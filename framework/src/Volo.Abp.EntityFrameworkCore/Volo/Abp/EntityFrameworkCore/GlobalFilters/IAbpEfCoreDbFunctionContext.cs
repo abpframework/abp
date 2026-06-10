@@ -12,5 +12,7 @@ public interface IAbpEfCoreDbFunctionContext
 
     IDataFilter DataFilter { get; }
 
+    bool UseDbFunction();
+
     string GetCompiledQueryCacheKey();
 }

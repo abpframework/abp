@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Compare the key differences between ABP's free open-source license and the enhanced features of ABP Pro licenses for developers."
+}
+```
+
 # Free (Open Source) License vs Commercial (Pro) Licenses
 
 [ABP](https://abp.io) is a completely free, open-source and community-driven project. It provides a base framework, [startup templates](../solution-templates), [CLI](../cli), theme called [LeptonX Lite](../ui-themes/lepton-x-lite/asp-net-core.md) and ready to use [application modules](../modules). 

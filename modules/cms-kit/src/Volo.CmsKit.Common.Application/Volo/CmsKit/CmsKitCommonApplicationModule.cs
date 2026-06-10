@@ -1,11 +1,7 @@
-﻿using Volo.Abp.Application;
-using Volo.Abp.AutoMapper;
-using Volo.Abp.GlobalFeatures;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Application;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Modularity;
-using Volo.CmsKit.Blogs;
-using Volo.CmsKit.GlobalFeatures;
-using Volo.CmsKit.MediaDescriptors;
-using Volo.CmsKit.Permissions;
 
 namespace Volo.CmsKit;
 
@@ -13,15 +9,12 @@ namespace Volo.CmsKit;
     typeof(CmsKitCommonApplicationContractsModule),
     typeof(CmsKitDomainModule),
     typeof(AbpDddApplicationModule),
-    typeof(AbpAutoMapperModule)
+    typeof(AbpMapperlyModule)
 )]
 public class CmsKitCommonApplicationModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddMaps<CmsKitCommonApplicationModule>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<CmsKitCommonApplicationModule>();
     }
 }

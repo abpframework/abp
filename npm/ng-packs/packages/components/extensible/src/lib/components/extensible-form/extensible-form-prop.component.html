@@ -1,34 +1,34 @@
-<ng-container *abpPermission="prop.permission; runChangeDetection: false">
-  @switch (getComponent(prop)) {
+<ng-container *abpPermission="prop().permission; runChangeDetection: false">
+  @switch (getComponent(prop())) {
     @case ('template') {
-      <ng-container *ngComponentOutlet="prop.template; injector: injectorForCustomComponent" />
+      <ng-container *ngComponentOutlet="prop().template; injector: injectorForCustomComponent" />
     }
   }
 
-  <div [ngClass]="containerClassName" class="mb-2">
-    @switch (getComponent(prop)) {
+  <div [class]="containerClassName" class="mb-2">
+    @switch (getComponent(prop())) {
       @case ('input') {
         <ng-template [ngTemplateOutlet]="label" />
         <input
           #field
-          [id]="prop.id"
-          [formControlName]="prop.name"
-          [autocomplete]="prop.autocomplete"
-          [type]="getType(prop)"
+          [id]="prop().id"
+          [formControlName]="prop().name"
+          [autocomplete]="prop().autocomplete"
+          [type]="getType(prop())"
           [abpDisabled]="disabled"
           [readonly]="readonly"
           class="form-control"
         />
       }
       @case ('hidden') {
-        <input [formControlName]="prop.name" type="hidden" />
+        <input [formControlName]="prop().name" type="hidden" />
       }
       @case ('checkbox') {
         <div class="form-check" validationTarget>
           <input
             #field
-            [id]="prop.id"
-            [formControlName]="prop.name"
+            [id]="prop().id"
+            [formControlName]="prop().name"
             [abpDisabled]="disabled"
             type="checkbox"
             class="form-check-input"
@@ -43,14 +43,14 @@
         <ng-template [ngTemplateOutlet]="label" />
         <select
           #field
-          [id]="prop.id"
-          [formControlName]="prop.name"
+          [id]="prop().id"
+          [formControlName]="prop().name"
           [abpDisabled]="disabled"
           class="form-select form-control"
         >
           @for (option of options$ | async; track option.value) {
             <option [ngValue]="option.value">
-              @if (prop.isExtra) {
+              @if (prop().isExtra) {
                 {{ '::' + option.key | abpLocalization }}
               } @else {
                 {{ option.key }}
@@ -62,9 +62,9 @@
       @case ('multiselect') {
         <ng-template [ngTemplateOutlet]="label"></ng-template>
         <abp-extensible-form-multi-select
-          [prop]="prop"
+          [prop]="prop()"
           [options]="options$ | async"
-          [formControlName]="prop.name"
+          [formControlName]="prop().name"
           [abpDisabled]="disabled"
         />
       }
@@ -73,8 +73,8 @@
         <div #typeahead class="position-relative" validationStyle validationTarget>
           <input
             #field
-            [id]="prop.id"
-            [autocomplete]="prop.autocomplete"
+            [id]="prop().id"
+            [autocomplete]="prop().autocomplete"
             [abpDisabled]="disabled"
             [ngbTypeahead]="search"
             [editable]="false"
@@ -87,14 +87,14 @@
             [class.is-invalid]="typeahead.classList.contains('is-invalid')"
             class="form-control"
           />
-          <input [formControlName]="prop.name" type="hidden" />
+          <input [formControlName]="prop().name" type="hidden" />
         </div>
       }
       @case ('date') {
         <ng-template [ngTemplateOutlet]="label" />
         <input
-          [id]="prop.id"
-          [formControlName]="prop.name"
+          [id]="prop().id"
+          [formControlName]="prop().name"
           (click)="datepicker.open()"
           (keyup.space)="datepicker.open()"
           ngbDatepicker
@@ -105,18 +105,18 @@
       }
       @case ('time') {
         <ng-template [ngTemplateOutlet]="label" />
-        <ngb-timepicker [formControlName]="prop.name" />
+        <ngb-timepicker [formControlName]="prop().name" />
       }
       @case ('dateTime') {
         <ng-template [ngTemplateOutlet]="label" />
-        <abp-extensible-date-time-picker [prop]="prop" [meridian]="meridian$ | async" />
+        <abp-extensible-date-time-picker [prop]="prop()" [meridian]="meridian$ | async" />
       }
       @case ('textarea') {
         <ng-template [ngTemplateOutlet]="label" />
         <textarea
           #field
-          [id]="prop.id"
-          [formControlName]="prop.name"
+          [id]="prop().id"
+          [formControlName]="prop().name"
           [abpDisabled]="disabled"
           [readonly]="readonly"
           class="form-control"
@@ -127,15 +127,15 @@
         <div class="input-group form-group" validationTarget>
           <input
             class="form-control"
-            [id]="prop.id"
-            [formControlName]="prop.name"
+            [id]="prop().id"
+            [formControlName]="prop().name"
             [abpShowPassword]="showPassword"
           />
           <button class="btn btn-secondary" type="button" (click)="showPassword = !showPassword">
             <i
               class="fa"
               aria-hidden="true"
-              [ngClass]="{
+              [class]="{
                 'fa-eye-slash': !showPassword,
                 'fa-eye': showPassword,
               }"
@@ -145,29 +145,29 @@
       }
     }
 
-    @if (prop.formText) {
-      <small class="text-muted d-block">{{ prop.formText | abpLocalization }}</small>
+    @if (prop().formText) {
+      <small class="text-muted d-block">{{ prop().formText | abpLocalization }}</small>
     }
   </div>
 </ng-container>
 
 <ng-template #label let-classes>
-  <label [htmlFor]="prop.id" [ngClass]="classes || 'form-label d-inline-block'">
+  <label [htmlFor]="prop().id" [class]="classes || 'form-label d-inline-block'">
     <span class="d-inline-flex align-items-center gap-1 text-nowrap">
-      @if (prop.displayTextResolver) {
-        {{ prop.displayTextResolver(data) | abpLocalization }}
+      @if (prop().displayTextResolver) {
+        {{ prop().displayTextResolver(data()) | abpLocalization }}
       } @else {
-        @if (prop.isExtra) {
-          {{ '::' + prop.displayName | abpLocalization }}
+        @if (prop().isExtra) {
+          {{ '::' + prop().displayName | abpLocalization }}
         } @else {
-          {{ prop.displayName | abpLocalization }}
+          {{ prop().displayName | abpLocalization }}
         }
       }
       {{ asterisk }}
-      @if (prop.tooltip) {
+      @if (prop().tooltip) {
         <i
-          [ngbTooltip]="prop.tooltip.text | abpLocalization"
-          [placement]="prop.tooltip.placement || 'auto'"
+          [ngbTooltip]="prop().tooltip.text | abpLocalization"
+          [placement]="prop().tooltip.placement || 'auto'"
           container="body"
           class="bi bi-info-circle"
         ></i>

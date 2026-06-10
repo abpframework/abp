@@ -4,6 +4,10 @@ using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
+using Volo.Abp.Features;
+using Volo.Abp.GlobalFeatures;
+using Volo.CmsKit.Features;
+using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Pages;
 
 namespace Volo.CmsKit.Menus;
@@ -12,19 +16,32 @@ public class PageChangedHandler :
     ILocalEventHandler<EntityUpdatedEventData<Page>>,
     ITransientDependency
 {
+    protected IFeatureChecker FeatureChecker { get; set; }
     protected IMenuItemRepository MenuRepository { get; }
     protected MenuItemManager MenuManager { get; }
 
     public PageChangedHandler(
+        IFeatureChecker featureChecker,
         IMenuItemRepository menuRepository,
         MenuItemManager menuManager)
     {
+        FeatureChecker = featureChecker;
         MenuRepository = menuRepository;
         MenuManager = menuManager;
     }
 
     public async Task HandleEventAsync(EntityUpdatedEventData<Page> eventData)
     {
+        if(!GlobalFeatureManager.Instance.IsEnabled<MenuFeature>())
+        {
+            return;
+        }
+
+        if(!await FeatureChecker.IsEnabledAsync(CmsKitFeatures.MenuEnable))
+        {
+            return;
+        }
+
         // TODO: Write a repository query.
         var allMenuItems = await MenuRepository.GetListAsync();
 

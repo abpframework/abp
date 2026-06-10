@@ -20,6 +20,7 @@ public class CmsKitEntityFrameworkCoreTestModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
+        PreConfigure<AbpSqliteOptions>(x => x.BusyTimeout = null);
         context.Services.AddDataMigrationEnvironment();
     }
 

@@ -16,13 +16,13 @@
     public MultiTenancyMiddlewareErrorPageModel Model { get; set; }
 }
 
-<html lang="@HtmlEncoder.Encode(CultureInfo.CurrentCulture.Name)">
+<html lang="@CultureInfo.CurrentCulture.Name">
     <head>
         <meta charset="utf-8" />
-        <title>@HtmlEncoder.Encode(Model.Message)</title>
+        <title>@Model.Message</title>
     </head>
     <body>
-        <h3>@HtmlEncoder.Encode(Model.Message)</h3>
-        <p>@HtmlEncoder.Encode(Model.Details)<p/>
+        <h3>@Model.Message</h3>
+        <p>@Model.Details<p/>
     </body>
 </html>

@@ -1,45 +1,118 @@
 {
   "migrations": [
     {
+      "version": "22.0.0-beta.1",
+      "description": "Updates release version config based on the breaking changes in Nx v22",
+      "implementation": "./src/migrations/update-22-0-0/release-version-config-changes",
+      "package": "nx",
+      "name": "22-0-0-release-version-config-changes"
+    },
+    {
+      "version": "22.0.0-beta.2",
+      "description": "Consolidates releaseTag* options into nested releaseTag object structure",
+      "implementation": "./src/migrations/update-22-0-0/consolidate-release-tag-config",
+      "package": "nx",
+      "name": "22-0-0-consolidate-release-tag-config"
+    },
+    {
       "cli": "nx",
-      "version": "21.2.0-beta.3",
-      "requires": { "@angular/core": ">=20.0.0" },
-      "description": "Update the @angular/cli package version to ~20.0.0.",
-      "factory": "./src/migrations/update-21-2-0/update-angular-cli",
-      "package": "@nx/angular",
-      "name": "update-angular-cli-version-20-0-0"
+      "version": "22.1.0-beta.5",
+      "description": "Updates the nx wrapper.",
+      "implementation": "./src/migrations/update-22-1-0/update-nx-wrapper",
+      "package": "nx",
+      "name": "22-1-0-update-nx-wrapper"
     },
     {
-      "version": "21.2.0-beta.3",
-      "requires": { "@angular/core": ">=20.0.0" },
-      "description": "Migrate imports of `provideServerRendering` from `@angular/platform-server` to `@angular/ssr`.",
-      "factory": "./src/migrations/update-21-2-0/migrate-provide-server-rendering-import",
-      "package": "@nx/angular",
-      "name": "migrate-provide-server-rendering-import"
+      "version": "21.5.0-beta.2",
+      "description": "Migrate the legacy 'development' custom condition to a workspace-unique custom condition name.",
+      "factory": "./src/migrations/update-21-5-0/migrate-development-custom-condition",
+      "package": "@nx/js",
+      "name": "migrate-development-custom-condition"
     },
     {
-      "version": "21.2.0-beta.3",
-      "requires": { "@angular/core": ">=20.0.0" },
-      "description": "Replace `provideServerRouting` and `provideServerRoutesConfig` with `provideServerRendering` using `withRoutes`.",
-      "factory": "./src/migrations/update-21-2-0/replace-provide-server-routing",
-      "package": "@nx/angular",
-      "name": "replace-provide-server-routing"
+      "version": "22.0.0-beta.0",
+      "description": "Remove the deprecated `external` and `externalBuildTargets` options from the `@nx/js:swc` and `@nx/js:tsc` executors.",
+      "factory": "./src/migrations/update-22-0-0/remove-external-options-from-js-executors",
+      "package": "@nx/js",
+      "name": "remove-external-options-from-js-executors"
     },
     {
-      "version": "21.2.0-beta.3",
-      "requires": { "@angular/core": ">=20.0.0" },
-      "description": "Update the generator defaults to maintain the previous style guide behavior.",
-      "factory": "./src/migrations/update-21-2-0/set-generator-defaults-for-previous-style-guide",
-      "package": "@nx/angular",
-      "name": "set-generator-defaults-for-previous-style-guide"
+      "version": "22.1.0-rc.1",
+      "description": "Removes redundant TypeScript project references from project's tsconfig.json files when runtime tsconfig files (e.g., tsconfig.lib.json, tsconfig.app.json) exist.",
+      "factory": "./src/migrations/update-22-1-0/remove-redundant-ts-project-references",
+      "package": "@nx/js",
+      "name": "remove-redundant-ts-project-references"
     },
     {
-      "version": "21.2.0-beta.3",
-      "requires": { "@angular/core": ">=20.0.0" },
-      "description": "Update 'moduleResolution' to 'bundler' in TypeScript configurations. You can read more about this here: https://www.typescriptlang.org/tsconfig/#moduleResolution.",
-      "factory": "./src/migrations/update-21-2-0/update-module-resolution",
+      "version": "21.3.0-beta.3",
+      "description": "Rename the CLI option `testPathPattern` to `testPathPatterns`.",
+      "implementation": "./src/migrations/update-21-3-0/rename-test-path-pattern",
+      "package": "@nx/jest",
+      "name": "rename-test-path-pattern"
+    },
+    {
+      "version": "22.2.0-beta.2",
+      "description": "Convert jest.config.ts files from ESM to CJS syntax (export default -> module.exports, import -> require) for projects using CommonJS resolution to ensure correct loading under Node.js type-stripping.",
+      "implementation": "./src/migrations/update-22-2-0/convert-jest-config-to-cjs",
+      "package": "@nx/jest",
+      "name": "convert-jest-config-to-cjs"
+    },
+    {
+      "cli": "nx",
+      "version": "21.3.0-beta.4",
+      "requires": { "@angular/core": ">=20.1.0" },
+      "description": "Update the @angular/cli package version to ~20.1.0.",
+      "factory": "./src/migrations/update-21-3-0/update-angular-cli",
       "package": "@nx/angular",
-      "name": "update-module-resolution"
+      "name": "update-angular-cli-version-20-1-0"
+    },
+    {
+      "version": "21.5.0-beta.0",
+      "description": "Set the 'tsConfig' option to build and test targets to help with Angular migration issues.",
+      "factory": "./src/migrations/update-21-5-0/set-tsconfig-option",
+      "package": "@nx/angular",
+      "name": "set-tsconfig-option"
+    },
+    {
+      "cli": "nx",
+      "version": "21.5.0-beta.2",
+      "requires": { "@angular/core": ">=20.2.0" },
+      "description": "Update the @angular/cli package version to ~20.2.0.",
+      "factory": "./src/migrations/update-21-5-0/update-angular-cli",
+      "package": "@nx/angular",
+      "name": "update-angular-cli-version-20-2-0"
+    },
+    {
+      "version": "21.5.0-beta.2",
+      "requires": { "@angular/core": ">=20.2.0" },
+      "description": "Remove any Karma configuration files that only contain the default content. The default configuration is automatically available without a specific project configurationfile.",
+      "factory": "./src/migrations/update-21-5-0/remove-default-karma-configuration-files",
+      "package": "@nx/angular",
+      "name": "remove-default-karma-configuration-files"
+    },
+    {
+      "cli": "nx",
+      "version": "21.6.1-beta.2",
+      "requires": { "@angular/core": ">=20.3.0" },
+      "description": "Update the @angular/cli package version to ~20.3.0.",
+      "factory": "./src/migrations/update-21-6-1/update-angular-cli",
+      "package": "@nx/angular",
+      "name": "update-angular-cli-version-20-3-0"
+    },
+    {
+      "version": "20.2.0",
+      "description": "Replaces usages of the deprecated Router.getCurrentNavigation method with the Router.currentNavigation signal",
+      "factory": "./bundles/router-current-navigation.cjs#migrate",
+      "optional": true,
+      "package": "@angular/core",
+      "name": "router-current-navigation"
+    },
+    {
+      "version": "20.3.0",
+      "description": "Adds `BootstrapContext` to `bootstrapApplication` calls in `main.server.ts` to support server rendering.",
+      "factory": "./bundles/add-bootstrap-context-to-server-main.cjs#migrate",
+      "package": "@angular/core",
+      "name": "add-bootstrap-context-to-server-main"
     }
   ]
 }

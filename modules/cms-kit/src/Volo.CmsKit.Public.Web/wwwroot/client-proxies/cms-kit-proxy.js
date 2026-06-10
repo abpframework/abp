@@ -20,7 +20,7 @@
 
     volo.cmsKit.public.blogs.blogPostPublic.getList = function(blogSlug, input, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/cms-kit-public/blog-posts/' + blogSlug + '' + abp.utils.buildQueryString([{ name: 'authorId', value: input.authorId }, { name: 'tagId', value: input.tagId }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
+        url: abp.appPath + 'api/cms-kit-public/blog-posts/' + blogSlug + '' + abp.utils.buildQueryString([{ name: 'authorId', value: input.authorId }, { name: 'tagId', value: input.tagId }, { name: 'filterOnFavorites', value: input.filterOnFavorites }, { name: 'sorting', value: input.sorting }, { name: 'skipCount', value: input.skipCount }, { name: 'maxResultCount', value: input.maxResultCount }]) + '',
         type: 'GET'
       }, ajaxParams));
     };

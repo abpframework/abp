@@ -1,0 +1,371 @@
+@if (visible()) {
+<div [formGroup]="fieldFormGroup" role="group" [attr.aria-labelledby]="fieldId + '-label'">
+  
+  <!-- NOTE: Group and Array types are NOT rendered here, they should be rendered at parent level -->
+  <!-- This component only handles leaf/primitive field types -->
+  
+  @if (field().type === 'text') {
+  <!-- Text Input -->
+  <div class="form-group mb-3">
+    <ng-container [ngTemplateOutlet]="labelTemplate" />
+    <input 
+      [id]="fieldId"
+      [placeholder]="(field().placeholder || '') | abpLocalization" 
+      formControlName="value"
+      [class.is-invalid]="isInvalid" 
+      class="form-control"
+      [attr.aria-required]="field().required || null"
+      [attr.aria-invalid]="isInvalid || null"
+      [attr.aria-describedby]="isInvalid ? errorId : null"
+      [attr.aria-label]="field().label | abpLocalization">
+    @if (isInvalid) {
+    <ng-container [ngTemplateOutlet]="errorTemplate" />
+    }
+  </div>
+  } @else if (field().type === 'select') {
+  <!-- Select Dropdown -->
+  <div class="form-group mb-3">
+    <ng-container [ngTemplateOutlet]="labelTemplate" />
+    <select 
+      [id]="fieldId"
+      formControlName="value" 
+      [class.is-invalid]="isInvalid" 
+      class="form-control"
+      [attr.aria-required]="field().required || null"
+      [attr.aria-invalid]="isInvalid || null"
+      [attr.aria-describedby]="isInvalid ? errorId : null"
+      [attr.aria-label]="field().label | abpLocalization">
+      <option value="">{{ '::Select' | abpLocalization }}</option>
+      @for (option of options$ | async; track option.key) {
+      <option [value]="option.key">
+        {{ option.value | abpLocalization }}
+      </option>
+      }
+    </select>
+    @if (isInvalid) {
+    <ng-container [ngTemplateOutlet]="errorTemplate" />
+    }
+  </div>
+  } @else if (field().type === 'checkbox') {
+  <!-- Checkbox -->
+  <div class="form-group form-check mb-3" role="group">
+    <abp-checkbox 
+      [label]="field().label | abpLocalization" 
+      formControlName="value" 
+      [id]="fieldId"
+      [attr.aria-required]="field().required || null"
+      [attr.aria-invalid]="isInvalid || null"
+      [attr.aria-describedby]="isInvalid ? errorId : null" />
+    @if (isInvalid) {
+    <ng-container [ngTemplateOutlet]="errorTemplate" />
+    }
+  </div>
+  } @else if (field().type === 'email') {
+  <!-- Email Input -->
+  <div class="form-group mb-3">
+    <ng-container [ngTemplateOutlet]="labelTemplate" />
+    <input 
+      type="email" 
+      [id]="fieldId"
+      formControlName="value"
+      [placeholder]="(field().placeholder || '') | abpLocalization" 
+      [class.is-invalid]="isInvalid" 
+      class="form-control"
+      [attr.aria-required]="field().required || null"
+      [attr.aria-invalid]="isInvalid || null"
+      [attr.aria-describedby]="isInvalid ? errorId : null"
+      [attr.aria-label]="field().label | abpLocalization"
+      autocomplete="email">
+    @if (isInvalid) {
+    <ng-container [ngTemplateOutlet]="errorTemplate" />
+    }
+  </div>
+  } @else if (field().type === 'textarea') {
+  <!-- Textarea -->
+  <div class="form-group mb-3">
+    <ng-container [ngTemplateOutlet]="labelTemplate" />
+    <textarea 
+      [id]="fieldId"
+      formControlName="value" 
+      [placeholder]="(field().placeholder || '') | abpLocalization"
+      [class.is-invalid]="isInvalid" 
+      rows="4" 
+      class="form-control"
+      [attr.aria-required]="field().required || null"
+      [attr.aria-invalid]="isInvalid || null"
+      [attr.aria-describedby]="isInvalid ? errorId : null"
+      [attr.aria-label]="field().label | abpLocalization">
+        </textarea>
+    @if (isInvalid) {
+    <ng-container [ngTemplateOutlet]="errorTemplate" />
+    }
+  </div>
+  } @else if (field().type === 'number') {
+  <!-- Number Input -->
+  <div class="form-group mb-3">
+    <ng-container [ngTemplateOutlet]="labelTemplate" />
+    <input 
+      type="number" 
+      [id]="fieldId"
+      formControlName="value"
+      [placeholder]="(field().placeholder || '') | abpLocalization" 
+      [class.is-invalid]="isInvalid" 
+      class="form-control"
+      [attr.min]="field().min || null"
+      [attr.max]="field().max || null"
+      [attr.step]="field().step || null"
+      [attr.aria-required]="field().required || null"
+      [attr.aria-invalid]="isInvalid || null"
+      [attr.aria-describedby]="isInvalid ? errorId : null"
+      [attr.aria-label]="field().label | abpLocalization">
+    @if (isInvalid) {
+    <ng-container [ngTemplateOutlet]="errorTemplate" />
+    }
+  </div>
+  } @else if (field().type === 'date') {
+  <!-- Date Input -->
+  <div class="form-group mb-3">
+    <ng-container [ngTemplateOutlet]="labelTemplate" />
+    <input 
+      type="date" 
+      [id]="fieldId"
+      formControlName="value"
+      [class.is-invalid]="isInvalid" 
+      class="form-control"
+      [attr.min]="field().min || null"
+      [attr.max]="field().max || null"
+      [attr.aria-required]="field().required || null"
+      [attr.aria-invalid]="isInvalid || null"
+      [attr.aria-describedby]="isInvalid ? errorId : null"
+      [attr.aria-label]="field().label | abpLocalization">
+    @if (isInvalid) {
+    <ng-container [ngTemplateOutlet]="errorTemplate" />
+    }
+  </div>
+  } @else if (field().type === 'datetime-local') {
+  <!-- DateTime Local Input -->
+  <div class="form-group mb-3">
+    <ng-container [ngTemplateOutlet]="labelTemplate" />
+    <input 
+      type="datetime-local" 
+      [id]="fieldId"
+      formControlName="value"
+      [class.is-invalid]="isInvalid" 
+      class="form-control"
+      [attr.min]="field().min || null"
+      [attr.max]="field().max || null"
+      [attr.aria-required]="field().required || null"
+      [attr.aria-invalid]="isInvalid || null"
+      [attr.aria-describedby]="isInvalid ? errorId : null"
+      [attr.aria-label]="field().label | abpLocalization">
+    @if (isInvalid) {
+    <ng-container [ngTemplateOutlet]="errorTemplate" />
+    }
+  </div>
+  } @else if (field().type === 'time') {
+  <!-- Time Input -->
+  <div class="form-group mb-3">
+    <ng-container [ngTemplateOutlet]="labelTemplate" />
+    <input 
+      type="time" 
+      [id]="fieldId"
+      formControlName="value"
+      [class.is-invalid]="isInvalid" 
+      class="form-control"
+      [attr.min]="field().min || null"
+      [attr.max]="field().max || null"
+      [attr.step]="field().step || null"
+      [attr.aria-required]="field().required || null"
+      [attr.aria-invalid]="isInvalid || null"
+      [attr.aria-describedby]="isInvalid ? errorId : null"
+      [attr.aria-label]="field().label | abpLocalization">
+    @if (isInvalid) {
+    <ng-container [ngTemplateOutlet]="errorTemplate" />
+    }
+  </div>
+  } @else if (field().type === 'password') {
+  <!-- Password Input -->
+  <div class="form-group mb-3">
+    <ng-container [ngTemplateOutlet]="labelTemplate" />
+    <input 
+      type="password" 
+      [id]="fieldId"
+      formControlName="value"
+      [placeholder]="(field().placeholder || '') | abpLocalization" 
+      [class.is-invalid]="isInvalid" 
+      class="form-control"
+      [attr.minlength]="field().minLength || null"
+      [attr.maxlength]="field().maxLength || null"
+      [attr.aria-required]="field().required || null"
+      [attr.aria-invalid]="isInvalid || null"
+      [attr.aria-describedby]="isInvalid ? errorId : null"
+      [attr.aria-label]="field().label | abpLocalization"
+      autocomplete="new-password">
+    @if (isInvalid) {
+    <ng-container [ngTemplateOutlet]="errorTemplate" />
+    }
+  </div>
+  } @else if (field().type === 'tel') {
+  <!-- Tel Input -->
+  <div class="form-group mb-3">
+    <ng-container [ngTemplateOutlet]="labelTemplate" />
+    <input 
+      type="tel" 
+      [id]="fieldId"
+      formControlName="value"
+      [placeholder]="(field().placeholder || '') | abpLocalization" 
+      [class.is-invalid]="isInvalid" 
+      class="form-control"
+      [attr.pattern]="field().pattern || null"
+      [attr.aria-required]="field().required || null"
+      [attr.aria-invalid]="isInvalid || null"
+      [attr.aria-describedby]="isInvalid ? errorId : null"
+      [attr.aria-label]="field().label | abpLocalization"
+      autocomplete="tel">
+    @if (isInvalid) {
+    <ng-container [ngTemplateOutlet]="errorTemplate" />
+    }
+  </div>
+  } @else if (field().type === 'url') {
+  <!-- URL Input -->
+  <div class="form-group mb-3">
+    <ng-container [ngTemplateOutlet]="labelTemplate" />
+    <input 
+      type="url" 
+      [id]="fieldId"
+      formControlName="value"
+      [placeholder]="(field().placeholder || '') | abpLocalization" 
+      [class.is-invalid]="isInvalid" 
+      class="form-control"
+      [attr.aria-required]="field().required || null"
+      [attr.aria-invalid]="isInvalid || null"
+      [attr.aria-describedby]="isInvalid ? errorId : null"
+      [attr.aria-label]="field().label | abpLocalization"
+      autocomplete="url">
+    @if (isInvalid) {
+    <ng-container [ngTemplateOutlet]="errorTemplate" />
+    }
+  </div>
+  } @else if (field().type === 'radio') {
+  <!-- Radio Group -->
+  <div class="form-group mb-3" role="radiogroup" [attr.aria-labelledby]="fieldId + '-label'">
+    <ng-container [ngTemplateOutlet]="labelTemplate" />
+    <div class="radio-group">
+      @for (option of options$ | async; track option.key) {
+      <div class="form-check">
+        <input 
+          type="radio" 
+          [id]="fieldId + '-' + option.key"
+          [value]="option.key"
+          formControlName="value"
+          [class.is-invalid]="isInvalid" 
+          class="form-check-input"
+          [attr.aria-required]="field().required || null"
+          [attr.aria-invalid]="isInvalid || null"
+          [attr.aria-describedby]="isInvalid ? errorId : null">
+        <label [for]="fieldId + '-' + option.key" class="form-check-label">
+          {{ option.value | abpLocalization }}
+        </label>
+      </div>
+      }
+    </div>
+    @if (isInvalid) {
+    <ng-container [ngTemplateOutlet]="errorTemplate" />
+    }
+  </div>
+  } @else if (field().type === 'file') {
+  <!-- File Input -->
+  <div class="form-group mb-3">
+    <ng-container [ngTemplateOutlet]="labelTemplate" />
+    <input 
+      type="file" 
+      [id]="fieldId"
+      (change)="onFileChange($event)"
+      [class.is-invalid]="isInvalid" 
+      class="form-control"
+      [attr.accept]="field().accept || null"
+      [attr.multiple]="field().multiple || null"
+      [attr.aria-required]="field().required || null"
+      [attr.aria-invalid]="isInvalid || null"
+      [attr.aria-describedby]="isInvalid ? errorId : null"
+      [attr.aria-label]="field().label | abpLocalization">
+    @if (isInvalid) {
+    <ng-container [ngTemplateOutlet]="errorTemplate" />
+    }
+  </div>
+  } @else if (field().type === 'range') {
+  <!-- Range Slider -->
+  <div class="form-group mb-3">
+    <ng-container [ngTemplateOutlet]="labelTemplate" />
+    <div class="d-flex align-items-center gap-3">
+      <input 
+        type="range" 
+        [id]="fieldId"
+        formControlName="value"
+        [class.is-invalid]="isInvalid" 
+        class="form-range flex-grow-1"
+        [attr.min]="field().min || 0"
+        [attr.max]="field().max || 100"
+        [attr.step]="field().step || 1"
+        [attr.aria-required]="field().required || null"
+        [attr.aria-invalid]="isInvalid || null"
+        [attr.aria-describedby]="isInvalid ? errorId : null"
+        [attr.aria-label]="field().label | abpLocalization"
+        [attr.aria-valuenow]="value.value"
+        [attr.aria-valuemin]="field().min || 0"
+        [attr.aria-valuemax]="field().max || 100">
+      <output [for]="fieldId" class="badge bg-primary">{{ value.value }}</output>
+    </div>
+    @if (isInvalid) {
+    <ng-container [ngTemplateOutlet]="errorTemplate" />
+    }
+  </div>
+  } @else if (field().type === 'color') {
+  <!-- Color Picker -->
+  <div class="form-group mb-3">
+    <ng-container [ngTemplateOutlet]="labelTemplate" />
+    <div class="d-flex align-items-center gap-3">
+      <input 
+        type="color" 
+        [id]="fieldId"
+        formControlName="value"
+        [class.is-invalid]="isInvalid" 
+        class="form-control form-control-color"
+        [attr.aria-required]="field().required || null"
+        [attr.aria-invalid]="isInvalid || null"
+        [attr.aria-describedby]="isInvalid ? errorId : null"
+        [attr.aria-label]="field().label | abpLocalization">
+      <code class="text-muted">{{ value.value || '#000000' }}</code>
+    </div>
+    @if (isInvalid) {
+    <ng-container [ngTemplateOutlet]="errorTemplate" />
+    }
+  </div>
+  }
+</div>
+}
+
+<ng-template #labelTemplate>
+  <label 
+    [for]="fieldId"
+    [id]="fieldId + '-label'"
+    [class.required]="field().required">
+    {{ field().label | abpLocalization }}
+    @if (field().required) {
+      <span class="text-danger" aria-label="required">*</span>
+    }
+  </label>
+</ng-template>
+
+<ng-template #errorTemplate>
+  <div 
+    class="invalid-feedback" 
+    [id]="errorId"
+    role="alert"
+    aria-live="polite"
+    aria-atomic="true">
+    @for (error of errors; track error) {
+    <div>{{ error | abpLocalization }}</div>
+    }
+  </div>
+</ng-template>

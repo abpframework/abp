@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the Basic Theme, a minimalist foundation for customizing Bootstrap styles across MVC, Blazor, and Angular UIs in your ABP Framework projects."
+}
+```
+
 # Basic Theme
 
 The Basic Theme is a minimalist theme that doesn't add any styling on top of the plain [Bootstrap](https://getbootstrap.com/) styles. You can take the Basic Theme as the base theme and build your own theme or styling on top of it. Here, a screenshot from the theme:

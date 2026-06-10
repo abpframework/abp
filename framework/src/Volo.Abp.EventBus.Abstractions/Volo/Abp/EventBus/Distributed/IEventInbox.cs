@@ -14,6 +14,10 @@ public interface IEventInbox
 
     Task MarkAsProcessedAsync(Guid id);
 
+    Task RetryLaterAsync(Guid id, int retryCount, DateTime? nextRetryTime);
+
+    Task MarkAsDiscardAsync(Guid id);
+
     Task<bool> ExistsByMessageIdAsync(string messageId);
 
     Task DeleteOldEventsAsync();

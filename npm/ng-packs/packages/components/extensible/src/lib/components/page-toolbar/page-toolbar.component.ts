@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, TrackByFunction } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injector, TrackByFunction, inject } from '@angular/core';
 import {
   HasCreateInjectorPipe,
   ToolbarAction,
@@ -9,8 +9,8 @@ import {
 import { EXTENSIONS_ACTION_TYPE } from '../../tokens/extensions.token';
 import { AbstractActionsComponent } from '../abstract-actions/abstract-actions.component';
 import { CreateInjectorPipe } from '../../pipes/create-injector.pipe';
-import { LocalizationModule, PermissionDirective } from '@abp/ng.core';
-import { NgClass, NgComponentOutlet } from '@angular/common';
+import { LocalizationPipe, PermissionDirective } from '@abp/ng.core';
+import { NgComponentOutlet } from '@angular/common';
 
 @Component({
   exportAs: 'abpPageToolbar',
@@ -18,8 +18,7 @@ import { NgClass, NgComponentOutlet } from '@angular/common';
   imports: [
     CreateInjectorPipe,
     PermissionDirective,
-    LocalizationModule,
-    NgClass,
+    LocalizationPipe,
     NgComponentOutlet,
   ],
   templateUrl: './page-toolbar.component.html',
@@ -33,8 +32,9 @@ import { NgClass, NgComponentOutlet } from '@angular/common';
 })
 export class PageToolbarComponent<R = any>
   extends AbstractActionsComponent<ToolbarActionList<R>>
-  implements HasCreateInjectorPipe<R>
-{
+  implements HasCreateInjectorPipe<R> {
+  readonly injector: Injector;
+
   defaultBtnClass = 'btn btn-sm btn-primary';
 
   getData = () => this.data;
@@ -42,8 +42,12 @@ export class PageToolbarComponent<R = any>
   readonly trackByFn: TrackByFunction<ToolbarComponent<R>> = (_, item) =>
     item.action || item.component;
 
-  constructor(public readonly injector: Injector) {
-    super(injector);
+  constructor() {
+    const injector = inject(Injector);
+
+    super();
+
+    this.injector = injector;
   }
 
   asToolbarAction(value: ToolbarActionDefault): { value: ToolbarAction } {

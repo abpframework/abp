@@ -13,6 +13,7 @@
     "DefaultErrorMessage404": "Auðlind fannst ekki!",
     "DefaultErrorMessage404Detail": "Auðlindin sem óskað var eftir fannst ekki á netþjóninum!",
     "EntityNotFoundErrorMessage": "Það er enginn eining {0} með id = {1}!",
+    "EntityNotFoundErrorMessageWithoutId": "Það er enginn eining {0}!",
     "AbpDbConcurrencyErrorMessage": "Gögnunum sem þú hefur sent inn hefur þegar verið breytt af öðrum notanda/viðskiptavini. Fleygðu breytingunum sem þú hefur gert og reyndu frá upphafi.",
     "Error": "Villa",
     "UnhandledException": "Ómeðhöndluð villa",

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate Entity Framework Core with ABP applications, including installation and configuration for seamless database management."
+}
+```
+
 # Entity Framework Core Integration
 
 This document explains how to integrate EF Core as an ORM provider to ABP based applications and how to configure it.
@@ -139,7 +146,7 @@ Configure<AbpDbContextOptions>(options =>
 });
 ````
 
-Add actions for the `ConfigureConventions` and `OnModelCreating` methods of the `DbContext` as shown below:
+Add actions for the `ConfigureConventions`, `OnModelCreating` and `OnConfiguring` methods of the `DbContext` as shown below:
 
 ````csharp
 Configure<AbpDbContextOptions>(options =>
@@ -162,6 +169,15 @@ Configure<AbpDbContextOptions>(options =>
     options.ConfigureOnModelCreating<YourDbContext>((dbContext, builder) =>
     {
         // This action is called for OnModelCreating method of specific DbContext.
+    });
+
+    options.ConfigureDefaultOnConfiguring((dbContext, optionsBuilder) =>
+    {
+        // This action is called for OnConfiguring method of all DbContexts.
+    });
+    options.ConfigureOnConfiguring<YourDbContext>((dbContext, optionsBuilder) =>
+    {
+        // This action is called for OnConfiguring method of specific DbContext.
     });
 });
 ````

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { Validation, ValidationErrorComponent as ErrorComponent } from '@ngx-validate/core';
 import { LocalizationPipe } from '@abp/ng.core';
@@ -14,7 +13,7 @@ import { LocalizationPipe } from '@abp/ng.core';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [CommonModule, LocalizationPipe],
+  imports: [LocalizationPipe],
 })
 export class ValidationErrorComponent extends ErrorComponent {
   get abpErrors(): (Validation.Error & { interpoliteParams?: string[] })[] {

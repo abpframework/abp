@@ -20,6 +20,8 @@ public class PageCacheItem : ExtensibleObject
 
     public string Style { get; set; }
 
+    public PageStatus Status { get; set; }
+
     public static string GetKey(string slug)
     {
         return $"CmsPage_{slug}";

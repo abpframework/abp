@@ -17,6 +17,7 @@
     "SentSuccessfully": "Trimis cu succes",
     "MailSendingFailed": "Trimiterea e-mailului a eșuat. Verificați configurația e-mailului și încercați din nou.",
     "Send": "Trimite",
+    "Menu:Settings": "Setări",
     "Menu:Emailing": "Emailing",
     "Menu:TimeZone": "Fus Orar",
     "DisplayName:Timezone": "Fus orar",
@@ -34,7 +35,7 @@
     "Feature:SettingManagementGroup": "Administrarea setărilor",
     "Feature:SettingManagementEnable": "Activează administrarea setărilor",
     "Feature:SettingManagementEnableDescription": "Activează sistemul de administrare a setărilor în aplicaţie.",
-    "Feature:AllowChangingEmailSettings": "Permiteți modificarea setărilor de e-mail.",
+    "Feature:AllowChangingEmailSettings": "Permiteți modificarea setărilor de e-mail",
     "Feature:AllowChangingEmailSettingsDescription": "Permiteți modificarea setărilor de e-mail.",
     "SmtpPasswordPlaceholder": "Introduceți o valoare pentru a actualiza parola"
   }

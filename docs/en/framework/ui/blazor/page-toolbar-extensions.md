@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enhance your Blazor UI by adding custom components to the page toolbar, like an \"Import users from Excel\" button."
+}
+```
+
 # Page Toolbar Extensions for Blazor UI
 
 Page toolbar system allows you to add components to the toolbar of any page. The page toolbar is the area right to the header of a page. A button ("Import users from excel") was added to the user management page below:
@@ -95,7 +102,7 @@ protected override async ValueTask SetToolbarItemsAsync()
 
 #### Permissions
 
-If your button/component should be available based on a [permission/policy](../../fundamentals/authorization.md), you can pass the permission/policy name as the `RequiredPolicyName` parameter to the `AddButton` and `AddComponent` methods.
+If your button/component should be available based on a [permission/policy](../../fundamentals/authorization/index.md), you can pass the permission/policy name as the `RequiredPolicyName` parameter to the `AddButton` and `AddComponent` methods.
 
 ### Add a Page Toolbar Contributor
 

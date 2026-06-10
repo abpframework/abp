@@ -234,6 +234,8 @@
     "AssignBlogPostsToOtherBlog": "將部落格文章分配給其他部落格",
     "SelectAnBlogToAssign": "選擇要分配的部落格",
     "DeleteAllBlogPostsOfThisBlog": "刪除此部落格的所有部落格文章",
-    "RequiredPermissionName": "所需權限名稱"
+    "RequiredPermissionName": "所需權限名稱",
+    "AllPosts": "所有文章",
+    "IsReadOnly": "唯讀"
   }
 }

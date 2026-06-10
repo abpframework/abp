@@ -1,0 +1,26 @@
+<Solution>
+  <Folder Name="/app/">
+    <Project Path="app/Volo.Abp.SettingManagement.DemoApp/Volo.Abp.SettingManagement.DemoApp.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Volo.Abp.SettingManagement.Application.Contracts/Volo.Abp.SettingManagement.Application.Contracts.csproj" />
+    <Project Path="src/Volo.Abp.SettingManagement.Application/Volo.Abp.SettingManagement.Application.csproj" />
+    <Project Path="src/Volo.Abp.SettingManagement.Blazor.Server/Volo.Abp.SettingManagement.Blazor.Server.csproj" />
+    <Project Path="src/Volo.Abp.SettingManagement.Blazor.WebAssembly/Volo.Abp.SettingManagement.Blazor.WebAssembly.csproj" />
+    <Project Path="src/Volo.Abp.SettingManagement.Blazor/Volo.Abp.SettingManagement.Blazor.csproj" />
+    <Project Path="src/Volo.Abp.SettingManagement.Domain.Shared/Volo.Abp.SettingManagement.Domain.Shared.csproj" />
+    <Project Path="src/Volo.Abp.SettingManagement.Domain/Volo.Abp.SettingManagement.Domain.csproj" />
+    <Project Path="src/Volo.Abp.SettingManagement.EntityFrameworkCore/Volo.Abp.SettingManagement.EntityFrameworkCore.csproj" />
+    <Project Path="src/Volo.Abp.SettingManagement.HttpApi.Client/Volo.Abp.SettingManagement.HttpApi.Client.csproj" />
+    <Project Path="src/Volo.Abp.SettingManagement.HttpApi/Volo.Abp.SettingManagement.HttpApi.csproj" />
+    <Project Path="src/Volo.Abp.SettingManagement.Installer/Volo.Abp.SettingManagement.Installer.csproj" />
+    <Project Path="src/Volo.Abp.SettingManagement.MongoDB/Volo.Abp.SettingManagement.MongoDB.csproj" />
+    <Project Path="src/Volo.Abp.SettingManagement.Web/Volo.Abp.SettingManagement.Web.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Volo.Abp.SettingManagement.EntityFrameworkCore.Tests/Volo.Abp.SettingManagement.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="test/Volo.Abp.SettingManagement.MongoDB.Tests/Volo.Abp.SettingManagement.MongoDB.Tests.csproj" />
+    <Project Path="test/Volo.Abp.SettingManagement.TestBase/Volo.Abp.SettingManagement.TestBase.csproj" />
+    <Project Path="test/Volo.Abp.SettingManagement.Tests/Volo.Abp.SettingManagement.Tests.csproj" />
+  </Folder>
+</Solution>

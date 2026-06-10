@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the JavaScript UI Block API in ASP.NET Core MVC to efficiently disable parts of your page during operations."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages UI: JavaScript UI Block/Busy API
 
 UI Block API disables (blocks) the page or a part of the page.

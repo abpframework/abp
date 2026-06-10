@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to create your initial microservice solution with ABP Framework, using Entity Framework Core and SQL Server in this tutorial."
+}
+```
+
 # Microservice Tutorial Part 01: Creating the Initial Solution
 
 ````json
@@ -18,7 +25,7 @@
 }
 ````
 
-Follow the *[Get Started](../../get-started/microservice.md)* guide to create a new layered web application with the following configurations:
+Follow the *[Get Started](../../get-started/microservice.md)* guide to create a new microservice solution with the following configurations:
 
 * **Solution name**: `CloudCrm`
 {{if DB == "EF"}}

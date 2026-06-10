@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the ABP OpenIddict Module for seamless authentication, including SSO and API access control. Easily integrate and customize for your needs."
+}
+```
+
 # ABP OpenIddict Module
 
 OpenIddict module provides an integration with the [OpenIddict](https://github.com/openiddict/openiddict-core) which provides advanced authentication features like single sign-on, single log-out, and API access control. This module persists applications, scopes, and other OpenIddict-related objects to the database.
@@ -325,7 +332,7 @@ Configure<TokenCleanupOptions>(options =>
 
 #### Updating Claims In Access_token and Id_token
 
-[Claims Principal Factory](../framework/fundamentals/authorization.md#claims-principal-factory) can be used to add/remove claims to the `ClaimsPrincipal`.
+[Claims Principal Factory](../framework/fundamentals/authorization/index.md#claims-principal-factory) can be used to add/remove claims to the `ClaimsPrincipal`.
 
 The `AbpDefaultOpenIddictClaimsPrincipalHandler` service will add `Name`, `Email,` and `Role` types of Claims to `access_token` and `id_token`, other claims are only added to `access_token` by default, and remove the `SecurityStampClaimType` secret claim of `Identity`.
 

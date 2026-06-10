@@ -78,6 +78,13 @@ public class MongoIdentityRoleRepository : MongoDbRepository<IAbpIdentityMongoDb
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    public virtual async Task<List<IdentityRole>> GetListAsync(IEnumerable<string> names, CancellationToken cancellationToken = default)
+    {
+        return await (await GetQueryableAsync(cancellationToken))
+            .Where(x => names.Contains(x.Name))
+            .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
     public virtual async Task<List<IdentityRole>> GetDefaultOnesAsync(
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
@@ -117,7 +124,7 @@ public class MongoIdentityRoleRepository : MongoDbRepository<IAbpIdentityMongoDb
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
         string filter = null,
-        bool includeDetails = true,
+        bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync(cancellationToken))

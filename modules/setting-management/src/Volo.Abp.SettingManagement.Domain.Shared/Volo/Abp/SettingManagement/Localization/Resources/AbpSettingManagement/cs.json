@@ -17,6 +17,7 @@
     "SentSuccessfully": "Úspěšně odesláno",
     "MailSendingFailed": "Odesílání e-mailu se nezdařilo. Zkontrolujte konfiguraci e-mailu a zkuste to znovu.",
     "Send": "Poslat",
+    "Menu:Settings": "Nastavení",
     "Menu:Emailing": "Zasílání e-mailem",
     "Menu:TimeZone": "Časové Pásmo",
     "DisplayName:Timezone": "Časové pásmo",
@@ -34,8 +35,8 @@
     "Feature:SettingManagementGroup": "Správa nastavení",
     "Feature:SettingManagementEnable": "Povolit správu nastavení",
     "Feature:SettingManagementEnableDescription": "Povolit systém správy nastavení v aplikaci.",
-    "Feature:AllowChangingEmailSettings": "Povolit změnu nastavení e-mailu.",
+    "Feature:AllowChangingEmailSettings": "Povolit změnu nastavení e-mailu",
     "Feature:AllowChangingEmailSettingsDescription": "Povolit změnu nastavení e-mailu.",
-    "SmtpPasswordPlaceholder": "Zadejte hodnotu pro aktualizaci hesla",
+    "SmtpPasswordPlaceholder": "Zadejte hodnotu pro aktualizaci hesla"
   }
 }

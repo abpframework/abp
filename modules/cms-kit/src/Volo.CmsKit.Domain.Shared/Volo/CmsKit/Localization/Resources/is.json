@@ -234,6 +234,8 @@
     "AssignBlogPostsToOtherBlog": "Úthluta bloggfærslum til annars bloggs",
     "SelectAnBlogToAssign": "Veldu blogg til að úthluta",
     "DeleteAllBlogPostsOfThisBlog": "Eyða öllum bloggfærslum þessa bloggs",
-    "RequiredPermissionName": "Nafn á nauðsynlegri leyfi"
+    "RequiredPermissionName": "Nafn á nauðsynlegri leyfi",
+    "AllPosts": "Allar færslur",
+    "IsReadOnly": "Skrifvarið"
   }
 }

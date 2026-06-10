@@ -3,7 +3,8 @@ $(function () {
     var l = abp.localization.getResource("CmsKit");
 
     var $formUpdate = $('#form-page-update');
-    var $buttonSubmit = $('#button-page-update');
+    var $buttonSaveDraft = $('#button-page-save-draft');
+    var $buttonPublish = $('#button-page-publish');
     var widgetModal = new abp.ModalManager({ viewUrl: abp.appPath + "CmsKit/Contents/AddWidgetModal", modalClass: "addWidgetModal" });
 
     $formUpdate.data('validator').settings.ignore = ":hidden, [contenteditable='true']:not([name]), .tui-popup-wrapper";
@@ -33,18 +34,29 @@ $(function () {
             $("#ViewModel_Style").val(styleEditor.getValue());
             $("#ViewModel_Script").val(scriptEditor.getValue());
 
-            $formUpdate.ajaxSubmit({
-                success: function (result) {
-                    abp.notify.success(l('SavedSuccessfully'));
-                    abp.ui.clearBusy();
-                    location.href = "../../Pages";
-                }
+            abp.ajax({
+                url: $formUpdate.attr("action"),
+                data: new FormData($formUpdate[0]),
+                processData: false,
+                contentType: false
+            }).done(function () {
+                abp.notify.success(l('SavedSuccessfully'));
+                location.href = "../../Pages";
+            }).always(function () {
+                abp.ui.clearBusy();
             });
         }
     });
 
-    $buttonSubmit.click(function (e) {
+    $buttonSaveDraft.click(function (e) {
         e.preventDefault();
+        $('#ViewModel_Status').val(0); // Draft = 0
+        $formUpdate.submit();
+    });
+
+    $buttonPublish.click(function (e) {
+        e.preventDefault();
+        $('#ViewModel_Status').val(1); // Published = 1
         $formUpdate.submit();
     });
 

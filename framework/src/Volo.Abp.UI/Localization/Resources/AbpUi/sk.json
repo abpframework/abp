@@ -61,6 +61,7 @@
     "ProfilePicture": "Profilový obrázok",
     "Theme": "Téma",
     "NotAssigned": "Nepridelené",
-    "EntityActionsDisabledTooltip": "Nemáte oprávnenie vykonávať žiadnu akciu."
+    "EntityActionsDisabledTooltip": "Nemáte oprávnenie vykonávať žiadnu akciu.",
+    "ResourcePermissions": "Oprávnenia"
   }
 }

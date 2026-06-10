@@ -1,12 +1,12 @@
-import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/jest';
+import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/vitest';
 import { StopPropagationDirective } from '../directives/stop-propagation.directive';
 
 describe('StopPropagationDirective', () => {
   let spectator: SpectatorDirective<StopPropagationDirective>;
   let directive: StopPropagationDirective;
   let link: HTMLAnchorElement;
-  const childClickEventFn = jest.fn(() => null);
-  const parentClickEventFn = jest.fn(() => null);
+  const childClickEventFn = vi.fn(() => null);
+  const parentClickEventFn = vi.fn(() => null);
   const createDirective = createDirectiveFactory({
     directive: StopPropagationDirective,
   });
@@ -28,12 +28,11 @@ describe('StopPropagationDirective', () => {
     expect(directive).toBeTruthy();
   });
 
-  test('should not call click event of parent when child element is clicked', done => {
+  test('should not call click event of parent when child element is clicked', () => {
     spectator.setHostInput({ parentClickEventFn, childClickEventFn });
     spectator.click('a');
     spectator.detectChanges();
     expect(childClickEventFn).toHaveBeenCalled();
     expect(parentClickEventFn).not.toHaveBeenCalled();
-    done();
   });
 });

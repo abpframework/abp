@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to create a microservice solution with ABP Framework using ABP Studio. Set up your development environment and get started quickly!"
+}
+```
+
 # Get Started with ABP: Creating a Microservice Solution
 
 > You must have an ABP Business or a higher license to use this startup template.
@@ -8,8 +15,8 @@ In this quick start guide, you will learn how to create and run a microservice s
 
 First things first! Let's setup your development environment before creating the first project. The following tools should be installed on your development machine:
 
-* [Visual Studio 2022](https://visualstudio.microsoft.com/vs/) or another IDE that supports .NET development
-* [.NET 9.0+](https://dotnet.microsoft.com/en-us/download/dotnet)
+* [Visual Studio 2026](https://visualstudio.microsoft.com/vs/) or another IDE that supports .NET development
+* [.NET 10.0+](https://dotnet.microsoft.com/en-us/download/dotnet)
 * [Node v22.11+](https://nodejs.org/)
 * [Yarn v1.22+ (not v2+)](https://classic.yarnpkg.com/en/docs/install) or npm v10+ (already installed with Node), **This is required for the Angular applications.**
 * [Docker Desktop (with Kubernetes enabled)](https://www.docker.com/products/docker-desktop/)
@@ -87,18 +94,43 @@ Once you select the desired modules, click the *Next* button for the *UI Theme* 
 
 LeptonX is the suggested UI theme that is proper for production usage. Select one of the themes and configure the additional options if you want.
 
+Click the Next button to see *Language Selection* selection:
+
+![abp-studio-new-solution-dialog-languages](images/abp-studio-new-solution-dialog-languages-microservice.png)
+
+In this step, you can choose which languages your application will support.
+
+* Default Language: Select the main language for your app.
+
+* Localizable User Interface: Turn this on to support multiple languages.
+
+* Available Languages: Check the languages you want to include.
+
+* Click Add Custom Language if you want to add a language that is not listed.
+
+Click the Next button to see *.NET Aspire* configuration selection:
+
+![abp-studio-new-solution-dialog-aspire-configuration](images/abp-studio-new-solution-dialog-aspire-configuration-microservice.png)
+
+In this step, you can enable or disable the .NET Aspire integration for your solution. If you enable it, the solution will be pre-configured to work with .NET Aspire for easier microservice development and deployment. See the [Aspire Integration](../solution-templates/microservice/aspire-integration.md) document for more information about this feature.
 
 Click the Next button to see *Additional Options* selection:
 
 ![abp-studio-new-solution-dialog-additional-options](images/abp-studio-new-solution-dialog-additional-options-microservice.png)
 
-If you unchecked the *Kubernetes Configuration* option, the solution will not include the Kubernetes configuration files which include the Helm charts and other Kubernetes related files. You can also specify *Social Logins*; if you uncheck this option, the solution will not be configured for social login. Lastly, you can specify the *Include Tests* option to include the test projects in the solution.
+If you unchecked the *Kubernetes Configuration* option, the solution will not include the Kubernetes configuration files which includes the Helm charts and other Kubernetes-related files. You can also specify *Social Logins*; if you uncheck this option, the solution will not be configured for social login. Lastly, you can specify the *Include Tests* option to include the test projects in the solution.
 
 Click the Next button to see *Additional Services* screen:
 
 ![abp-studio-new-solution-dialog-additional-services](images/abp-studio-new-solution-dialog-additional-services.png)
 
 On that screen, allows you to include extra microservices in your ABP solution during the creation process. This feature lets you extend your solution with business-specific services right from the start.
+
+Click the Next button to see *Admin Password* screen:
+
+![abp-studio-new-solution-dialog-admin-password](images/abp-studio-new-solution-dialog-admin-password.png)
+
+Here, you can set the initial password for the `admin` user of your application. By default, it is set to `1q2w3E*`, but you can change it to a more secure password of your choice.
 
 Now, we are ready to allow ABP Studio to create our solution. Just click the *Create* button and let the ABP Studio do the rest for you. After clicking the *Create* button, the dialog is closed and your solution is loaded into ABP Studio:
 
@@ -150,9 +182,9 @@ In the *Solution Runner* section (on the left side) you can see all the runnable
 
 ![abp-studio-microservice-solution-runner-applications](images/abp-studio-microservice-solution-runner-applications.png)
 
-> A leaf item in the *Solution Runner* is called as an *Application* as it is an executable application.
+> A leaf item in the *Solution Runner* is called as an *Application* as it is an executable application, excluding items under `Containers`.
 
-As shown in the figure above, the executable applications are grouped into folders like `apps`, `gateways`, `infrastructure`, and `services`. You can start/stop them all, a group (folder) of them, or one by one.
+As shown in the figure above, the executable applications are grouped into folders like `apps`, `gateways`, and `services`. You can start/stop them all, a group (folder) of them, or one by one. The `Containers` branch contains the needed docker containers for the applications. 
 
 Before running the applications, you can run the all application by right-clicking the root item in the *Solution Runner* and select *Build* -> *Build All* action. However, you don't need to do that, because ABP Studio builds the applications before running them by default.
 
@@ -271,7 +303,7 @@ Clicking the *Connect* button will start a process that establishes the VPN conn
 
 ![abp-studio-microservice-kubernetes-services](images/abp-studio-microservice-kubernetes-services.png)
 
-Now, you can access all the services inside the Kubernetes cluster, including the services those are not exposed out of the cluster. You can use the service name as DNS. For example, you can directly visit `http://cloudcrm-local-identity` in your Browser. You can also right-click to a service or application and select the Browse command to open it's UI in the built-in browser of ABP Studio:
+Now, you can access all the services inside the Kubernetes cluster, including the services those are not exposed out of the cluster. You can use the service name as DNS. For example, you can directly visit `http://cloudcrm-local-identity` in your Browser. You can also right-click to a service or application and select the Browse command to open its UI in the built-in browser of ABP Studio:
 
 ![abp-studio-microservice-kubernetes-services-browse](images/abp-studio-microservice-kubernetes-services-browse.png)
 

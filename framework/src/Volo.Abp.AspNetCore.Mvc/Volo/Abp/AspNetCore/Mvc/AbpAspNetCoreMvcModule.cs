@@ -139,19 +139,11 @@ public class AbpAspNetCoreMvcModule : AbpModule
             })
             .AddViewLocalization(); //TODO: How to configure from the application? Also, consider to move to a UI module since APIs does not care about it.
 
-        if (context.Services.GetHostingEnvironment().IsDevelopment() &&
-            context.Services.ExecutePreConfiguredActions<AbpAspNetCoreMvcOptions>().EnableRazorRuntimeCompilationOnDevelopment)
-        {
-            mvcCoreBuilder.AddAbpRazorRuntimeCompilation();
-        }
-
         mvcCoreBuilder.AddAbpJson();
 
         context.Services.ExecutePreConfiguredActions(mvcBuilder);
 
         //TODO: AddViewLocalization by default..?
-
-        context.Services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
         //Use DI to create controllers
         mvcBuilder.AddControllersAsServices();
@@ -173,7 +165,7 @@ public class AbpAspNetCoreMvcModule : AbpModule
         context.Services.AddSingleton<ValidationAttributeAdapterProvider>();
 
         context.Services.TryAddEnumerable(ServiceDescriptor.Transient<IActionDescriptorProvider, AbpMvcActionDescriptorProvider>());
-        context.Services.AddOptions<MvcOptions>()
+        context.Services.AddAbpOptions<MvcOptions>()
             .Configure<IServiceProvider>((mvcOptions, serviceProvider) =>
             {
                 mvcOptions.AddAbp(context.Services);

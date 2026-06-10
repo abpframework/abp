@@ -41,7 +41,7 @@ public class MenuItemAdminAppService : CmsKitAdminAppServiceBase, IMenuItemAdmin
 
     public virtual async Task<ListResultDto<MenuItemDto>> GetListAsync()
     {
-        var menuItems = await MenuItemRepository.GetListAsync();
+        var menuItems = await MenuItemRepository.GetOrderedListAsync();
 
         return new ListResultDto<MenuItemDto>(
                 ObjectMapper.Map<List<MenuItem>, List<MenuItemDto>>(menuItems)
@@ -135,6 +135,7 @@ public class MenuItemAdminAppService : CmsKitAdminAppServiceBase, IMenuItemAdmin
 
         var pages = await PageRepository.GetListAsync(
             input.Filter,
+            input.Status,
             input.MaxResultCount,
             input.SkipCount,
             input.Sorting
@@ -161,5 +162,11 @@ public class MenuItemAdminAppService : CmsKitAdminAppServiceBase, IMenuItemAdmin
         return new ListResultDto<PermissionLookupDto>(
             permissionLookupDtos
         );
+    }
+
+    public virtual async Task<int> GetAvailableMenuOrderAsync(Guid? parentId = null)
+    {
+        var highestOrder = await MenuItemRepository.GetHighestMenuOrderAsync(parentId);
+        return highestOrder + 1;
     }
 }

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to add custom columns to your Blazor UI data tables with the Data Table Column Extensions, enhancing your application's functionality."
+}
+```
+
 # Data Table Column Extensions for Blazor UI
 
 Data table column extension system allows you to add a **new table column** on the user interface. The example below adds a new column with the "Email Confirmed" title:

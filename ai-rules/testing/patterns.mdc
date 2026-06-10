@@ -1,0 +1,274 @@
+---
+description: "ABP testing patterns - unit tests and integration tests"
+globs:
+  - "test/**/*.cs"
+  - "tests/**/*.cs"
+  - "**/*Tests*/**/*.cs"
+  - "**/*Test*.cs"
+alwaysApply: false
+---
+
+# ABP Testing Patterns
+
+> **Docs**: https://abp.io/docs/latest/testing
+
+## Test Project Structure
+
+| Project | Purpose | Base Class |
+|---------|---------|------------|
+| `*.Domain.Tests` | Domain logic, entities, domain services | `*DomainTestBase` |
+| `*.Application.Tests` | Application services | `*ApplicationTestBase` |
+| `*.EntityFrameworkCore.Tests` | Repository implementations | `*EntityFrameworkCoreTestBase` |
+
+## Integration Test Approach
+
+ABP recommends integration tests over unit tests:
+- Tests run with real services and database (SQLite in-memory)
+- No mocking of internal services
+- Each test gets a fresh database instance
+
+## Application Service Test
+
+```csharp
+public class BookAppService_Tests : MyProjectApplicationTestBase
+{
+    private readonly IBookAppService _bookAppService;
+
+    public BookAppService_Tests()
+    {
+        _bookAppService = GetRequiredService<IBookAppService>();
+    }
+
+    [Fact]
+    public async Task Should_Get_List_Of_Books()
+    {
+        // Act
+        var result = await _bookAppService.GetListAsync(
+            new PagedAndSortedResultRequestDto()
+        );
+
+        // Assert
+        result.TotalCount.ShouldBeGreaterThan(0);
+        result.Items.ShouldContain(b => b.Name == "Test Book");
+    }
+
+    [Fact]
+    public async Task Should_Create_Book()
+    {
+        // Arrange
+        var input = new CreateBookDto
+        {
+            Name = "New Book",
+            Price = 19.99m
+        };
+
+        // Act
+        var result = await _bookAppService.CreateAsync(input);
+
+        // Assert
+        result.Id.ShouldNotBe(Guid.Empty);
+        result.Name.ShouldBe("New Book");
+        result.Price.ShouldBe(19.99m);
+    }
+
+    [Fact]
+    public async Task Should_Not_Create_Book_With_Invalid_Name()
+    {
+        // Arrange
+        var input = new CreateBookDto
+        {
+            Name = "", // Invalid
+            Price = 10m
+        };
+
+        // Act & Assert
+        await Should.ThrowAsync<AbpValidationException>(async () =>
+        {
+            await _bookAppService.CreateAsync(input);
+        });
+    }
+}
+```
+
+## Domain Service Test
+
+```csharp
+public class BookManager_Tests : MyProjectDomainTestBase
+{
+    private readonly BookManager _bookManager;
+    private readonly IBookRepository _bookRepository;
+
+    public BookManager_Tests()
+    {
+        _bookManager = GetRequiredService<BookManager>();
+        _bookRepository = GetRequiredService<IBookRepository>();
+    }
+
+    [Fact]
+    public async Task Should_Create_Book()
+    {
+        // Act
+        var book = await _bookManager.CreateAsync("Test Book", 29.99m);
+
+        // Assert
+        book.ShouldNotBeNull();
+        book.Name.ShouldBe("Test Book");
+        book.Price.ShouldBe(29.99m);
+    }
+
+    [Fact]
+    public async Task Should_Not_Allow_Duplicate_Book_Name()
+    {
+        // Arrange
+        await _bookManager.CreateAsync("Existing Book", 10m);
+
+        // Act & Assert
+        var exception = await Should.ThrowAsync<BusinessException>(async () =>
+        {
+            await _bookManager.CreateAsync("Existing Book", 20m);
+        });
+
+        exception.Code.ShouldBe("MyProject:BookNameAlreadyExists");
+    }
+}
+```
+
+## Test Naming Convention
+
+Use descriptive names:
+```csharp
+// Pattern: Should_ExpectedBehavior_When_Condition
+public async Task Should_Create_Book_When_Input_Is_Valid()
+public async Task Should_Throw_BusinessException_When_Name_Already_Exists()
+public async Task Should_Return_Empty_List_When_No_Books_Exist()
+```
+
+## Arrange-Act-Assert (AAA)
+
+```csharp
+[Fact]
+public async Task Should_Update_Book_Price()
+{
+    // Arrange
+    var bookId = await CreateTestBookAsync();
+    var newPrice = 39.99m;
+
+    // Act
+    var result = await _bookAppService.UpdateAsync(bookId, new UpdateBookDto
+    {
+        Price = newPrice
+    });
+
+    // Assert
+    result.Price.ShouldBe(newPrice);
+}
+```
+
+## Assertions with Shouldly
+
+ABP uses Shouldly library:
+```csharp
+result.ShouldNotBeNull();
+result.Name.ShouldBe("Expected Name");
+result.Price.ShouldBeGreaterThan(0);
+result.Items.ShouldContain(x => x.Id == expectedId);
+result.Items.ShouldBeEmpty();
+result.Items.Count.ShouldBe(5);
+
+// Exception assertions
+await Should.ThrowAsync<BusinessException>(async () => 
+{
+    await _service.DoSomethingAsync();
+});
+
+var ex = await Should.ThrowAsync<BusinessException>(async () => 
+{
+    await _service.DoSomethingAsync();
+});
+ex.Code.ShouldBe("MyProject:ErrorCode");
+```
+
+## Test Data Seeding
+
+```csharp
+public class MyProjectTestDataSeedContributor : IDataSeedContributor, ITransientDependency
+{
+    public static readonly Guid TestBookId = Guid.Parse("...");
+
+    private readonly IBookRepository _bookRepository;
+    private readonly IGuidGenerator _guidGenerator;
+
+    public async Task SeedAsync(DataSeedContext context)
+    {
+        await _bookRepository.InsertAsync(
+            new Book(TestBookId, "Test Book", 19.99m, Guid.Empty),
+            autoSave: true
+        );
+    }
+}
+```
+
+## Disabling Authorization in Tests
+
+```csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    context.Services.AddAlwaysAllowAuthorization();
+}
+```
+
+## Mocking External Services
+
+Use NSubstitute when needed:
+```csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    var emailSender = Substitute.For<IEmailSender>();
+    emailSender.SendAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>())
+        .Returns(Task.CompletedTask);
+
+    context.Services.AddSingleton(emailSender);
+}
+```
+
+## Testing with Specific User
+
+```csharp
+[Fact]
+public async Task Should_Get_Current_User_Books()
+{
+    // Login as specific user
+    await WithUnitOfWorkAsync(async () =>
+    {
+        using (CurrentUser.Change(TestData.UserId))
+        {
+            var result = await _bookAppService.GetMyBooksAsync();
+            result.Items.ShouldAllBe(b => b.CreatorId == TestData.UserId);
+        }
+    });
+}
+```
+
+## Testing Multi-Tenancy
+
+```csharp
+[Fact]
+public async Task Should_Filter_Books_By_Tenant()
+{
+    using (CurrentTenant.Change(TestData.TenantId))
+    {
+        var result = await _bookAppService.GetListAsync(new GetBookListDto());
+        // Results should be filtered by tenant
+    }
+}
+```
+
+## Best Practices
+
+- Each test should be independent
+- Don't share state between tests
+- Use meaningful test data
+- Test edge cases and error conditions
+- Keep tests focused on single behavior
+- Use test data seeders for common data
+- Avoid testing framework internals

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -44,7 +43,6 @@ public class CreateModalModel : CmsKitAdminPageModel
         return NoContent();
     }
 
-    [AutoMap(typeof(TagCreateDto), ReverseMap = true)]
     public class TagCreateViewModel : ExtensibleObject
     {
         [DynamicMaxLength(typeof(TagConsts), nameof(TagConsts.MaxEntityTypeLength))]

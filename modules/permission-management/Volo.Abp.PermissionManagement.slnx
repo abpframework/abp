@@ -1,0 +1,24 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Volo.Abp.PermissionManagement.Application.Contracts/Volo.Abp.PermissionManagement.Application.Contracts.csproj" />
+    <Project Path="src/Volo.Abp.PermissionManagement.Application/Volo.Abp.PermissionManagement.Application.csproj" />
+    <Project Path="src/Volo.Abp.PermissionManagement.Blazor.Server/Volo.Abp.PermissionManagement.Blazor.Server.csproj" />
+    <Project Path="src/Volo.Abp.PermissionManagement.Blazor.WebAssembly/Volo.Abp.PermissionManagement.Blazor.WebAssembly.csproj" />
+    <Project Path="src/Volo.Abp.PermissionManagement.Blazor/Volo.Abp.PermissionManagement.Blazor.csproj" />
+    <Project Path="src/Volo.Abp.PermissionManagement.Domain.Shared/Volo.Abp.PermissionManagement.Domain.Shared.csproj" />
+    <Project Path="src/Volo.Abp.PermissionManagement.Domain/Volo.Abp.PermissionManagement.Domain.csproj" />
+    <Project Path="src/Volo.Abp.PermissionManagement.EntityFrameworkCore/Volo.Abp.PermissionManagement.EntityFrameworkCore.csproj" />
+    <Project Path="src/Volo.Abp.PermissionManagement.HttpApi.Client/Volo.Abp.PermissionManagement.HttpApi.Client.csproj" />
+    <Project Path="src/Volo.Abp.PermissionManagement.HttpApi/Volo.Abp.PermissionManagement.HttpApi.csproj" />
+    <Project Path="src/Volo.Abp.PermissionManagement.Installer/Volo.Abp.PermissionManagement.Installer.csproj" />
+    <Project Path="src/Volo.Abp.PermissionManagement.MongoDB/Volo.Abp.PermissionManagement.MongoDB.csproj" />
+    <Project Path="src/Volo.Abp.PermissionManagement.Web/Volo.Abp.PermissionManagement.Web.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Volo.Abp.PermissionManagement.Application.Tests/Volo.Abp.PermissionManagement.Application.Tests.csproj" />
+    <Project Path="test/Volo.Abp.PermissionManagement.Domain.Tests/Volo.Abp.PermissionManagement.Domain.Tests.csproj" />
+    <Project Path="test/Volo.Abp.PermissionManagement.EntityFrameworkCore.Tests/Volo.Abp.PermissionManagement.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="test/Volo.Abp.PermissionManagement.MongoDB.Tests/Volo.Abp.PermissionManagement.MongoDB.Tests.csproj" />
+    <Project Path="test/Volo.Abp.PermissionManagement.TestBase/Volo.Abp.PermissionManagement.TestBase.csproj" />
+  </Folder>
+</Solution>

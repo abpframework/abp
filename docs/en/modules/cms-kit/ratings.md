@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to implement and manage a flexible rating system in CMS Kit, perfect for enhancing user engagement on your resources."
+}
+```
+
 # CMS Kit: Rating System
 
 CMS Kit provides a **rating** system to to add ratings feature to any kind of resource like blog posts, comments, etc. Here how the rating component looks like on a sample page:

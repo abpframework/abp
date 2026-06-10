@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to effortlessly integrate the ABP Chart component into your Angular app using lazy loading for optimal performance."
+}
+```
+
 # Chart Component
 
 ABP Chart component exposed by `@abp/ng.components/chart.js` is based on [`charts.js`](https://www.chartjs.org/) v3+. You don't need to install the `chart.js` package. Since the `@abp/ng.components` is dependent on the `chart.js`, the package is already installed in your project.
@@ -6,34 +13,16 @@ ABP Chart component exposed by `@abp/ng.components/chart.js` is based on [`chart
 
 ## How to Use
 
-First of all, need to import the `ChartModule` to your feature module as follows:
-
-```ts
-// your-feature.module.ts
-
-import { ChartModule } from "@abp/ng.components/chart.js";
-import { ChartDemoComponent } from "./chart-demo.component";
-
-@NgModule({
-  imports: [
-    ChartModule,
-    // ...
-  ],
-  declarations: [ChartDemoComponent],
-  // ...
-})
-export class YourFeatureModule {}
-```
-
-Then, `abp-chart` component can be used. See an example:
+First of all, need to import the `ChartComponent` to your component. Then, `abp-chart` component can be used. See an example:
 
 ```ts
 // chart-demo.component.ts
-
 import { Component } from "@angular/core";
+import { ChartComponent } from "@abp/ng.components/chart.js";
 
 @Component({
   selector: "app-chart-demo",
+  imports: [ChartComponent],
   template: ` <abp-chart type="pie" [data]="data"></abp-chart> `,
 })
 export class ChartDemoComponent {
@@ -62,9 +51,11 @@ See the result:
 
 ```ts
 import { Component } from "@angular/core";
+import { ChartComponent } from "@abp/ng.components/chart.js";
 
 @Component({
   selector: "app-chart-demo",
+  imports: [ChartComponent],
   template: `
     <abp-chart
       type="doughnut"
@@ -73,7 +64,7 @@ import { Component } from "@angular/core";
       width="400px"
       height="400px"
       [plugins]="myPlugin"
-    ></abp-chart>
+    />
   `,
 })
 export class ChartDemoComponent {
@@ -119,16 +110,18 @@ Result:
 
 ```ts
 import { Component } from "@angular/core";
+import { ChartComponent } from "@abp/ng.components/chart.js";
 
 @Component({
   selector: "app-chart-demo",
+  imports: [ChartComponent]
   template: `
     <abp-chart
       type="bar"
       [data]="data"
       width="400px"
       height="400px"
-    ></abp-chart>
+    />
   `,
 })
 export class ChartDemoComponent {
@@ -158,16 +151,18 @@ Result:
 
 ```ts
 import { Component } from "@angular/core";
+import { ChartComponent } from "@abp/ng.components/chart.js";
 
 @Component({
   selector: "app-chart-demo",
+  imports: [ChartComponent]
   template: `
     <abp-chart
       type="radar"
       [data]="data"
       width="400px"
       height="400px"
-    ></abp-chart>
+    />
 
     <button class="btn btn-primary-outline mt-4" (click)="addDataset()">
       Add dataset

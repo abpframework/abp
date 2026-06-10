@@ -10,10 +10,10 @@ namespace Volo.Abp.EventBus.Rebus;
 
 public class AbpRebusEventBusOptions
 {
-    [NotNull]
-    public string InputQueueName { get; set; } = default!;
+    public string InputQueueName { get; set; } = null!;
+    
+    public string RebusInstanceName { get; set; } = "default-instance";
 
-    [NotNull]
     public Action<RebusConfigurer> Configurer {
         get => _configurer;
         set => _configurer = Check.NotNull(value, nameof(value));

@@ -1,17 +1,17 @@
 <nz-tree
   [nzBeforeDrop]="beforeDrop"
-  [nzDraggable]="draggable"
-  [nzCheckStrictly]="checkStrictly"
-  [nzCheckable]="checkable"
+  [nzDraggable]="draggable()"
+  [nzCheckStrictly]="checkStrictly()"
+  [nzCheckable]="checkable()"
   [nzCheckedKeys]="checkedKeys"
   [nzData]="nodes"
   [nzTreeTemplate]="treeTemplate"
   [nzExpandedKeys]="expandedKeys"
-  [nzExpandedIcon]="expandedIconTemplate?.template || defaultIconTemplate"
+  [nzExpandedIcon]="expandedIconTemplate()?.template || defaultIconTemplate"
   (nzExpandChange)="onExpandedKeysChange($event)"
   (nzCheckboxChange)="onCheckboxChange($event)"
   (nzOnDrop)="onDrop($event)"
-  [nzNoAnimation]="noAnimation"
+  [nzNoAnimation]="noAnimation()"
   (nzContextMenu)="onContextMenuChange($event)"
 />
 <ng-template #treeTemplate let-node>
@@ -26,13 +26,13 @@
       <div class="d-inline-flex align-items-center abp-ellipsis-inline">
         <ng-container
           *ngTemplateOutlet="
-            customNodeTemplate ? customNodeTemplate?.template : defaultNodeTemplate;
+            customNodeTemplate() ? customNodeTemplate()?.template : defaultNodeTemplate;
             context: { $implicit: node }
           "
         />
       </div>
 
-      @if (menu) {
+      @if (menu()) {
         <div
           #dropdown="ngbDropdown"
           class="d-inline-block ms-1"
@@ -48,7 +48,7 @@
             aria-hidden="true"
           ></i>
           <div ngbDropdownMenu>
-            <ng-template *ngTemplateOutlet="menu; context: { $implicit: node }" />
+            <ng-template *ngTemplateOutlet="menu(); context: { $implicit: node }" />
           </div>
         </div>
       }

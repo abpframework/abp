@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the `IPageLayout` service in ASP.NET Core MVC/Razor Pages to effectively set page titles and manage breadcrumbs for enhanced navigation."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages: Page Header
 
 `IPageLayout` service can be used to set the page title, selected menu item and the breadcrumb items for a page. It's the [theme](theming.md)'s responsibility to render these on the page.

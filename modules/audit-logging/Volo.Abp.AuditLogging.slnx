@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Volo.Abp.AuditLogging.Domain.Shared/Volo.Abp.AuditLogging.Domain.Shared.csproj" />
+    <Project Path="src/Volo.Abp.AuditLogging.Domain/Volo.Abp.AuditLogging.Domain.csproj" />
+    <Project Path="src/Volo.Abp.AuditLogging.EntityFrameworkCore/Volo.Abp.AuditLogging.EntityFrameworkCore.csproj" />
+    <Project Path="src/Volo.Abp.AuditLogging.Installer/Volo.Abp.AuditLogging.Installer.csproj" />
+    <Project Path="src/Volo.Abp.AuditLogging.MongoDB/Volo.Abp.AuditLogging.MongoDB.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Volo.Abp.AuditLogging.EntityFrameworkCore.Tests/Volo.Abp.AuditLogging.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="test/Volo.Abp.AuditLogging.MongoDB.Tests/Volo.Abp.AuditLogging.MongoDB.Tests.csproj" />
+    <Project Path="test/Volo.Abp.AuditLogging.TestBase/Volo.Abp.AuditLogging.TestBase.csproj" />
+    <Project Path="test/Volo.Abp.AuditLogging.Tests/Volo.Abp.AuditLogging.Tests.csproj" />
+  </Folder>
+</Solution>

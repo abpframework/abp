@@ -70,15 +70,8 @@ public abstract class PermissionManagementProvider : IPermissionManagementProvid
             return;
         }
 
-        await PermissionGrantRepository.InsertAsync(
-            new PermissionGrant(
-                GuidGenerator.Create(),
-                name,
-                Name,
-                providerKey,
-                CurrentTenant.Id
-            )
-        );
+        permissionGrant = new PermissionGrant(GuidGenerator.Create(), name, Name, providerKey, CurrentTenant.Id);
+        await PermissionGrantRepository.InsertAsync(permissionGrant, true);
     }
 
     protected virtual async Task RevokeAsync(string name, string providerKey)
@@ -89,6 +82,6 @@ public abstract class PermissionManagementProvider : IPermissionManagementProvid
             return;
         }
 
-        await PermissionGrantRepository.DeleteAsync(permissionGrant);
+        await PermissionGrantRepository.DeleteAsync(permissionGrant, true);
     }
 }

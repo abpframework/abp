@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to smoothly migrate your ABP Angular UI from v2.9 to v3.0, ensuring compatibility with Angular 10 and optimizing your project."
+}
+```
+
 # v2.9 to v3.0 Angular UI Migration Guide
 
 ## What Changed in v3.0?

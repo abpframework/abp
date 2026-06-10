@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore how multi-tenancy works in ABP Framework's single-layer solution, enabling isolated environments for multiple tenants."
+}
+```
+
 # Single Layer Solution: Multi-Tenancy
 
 ```json

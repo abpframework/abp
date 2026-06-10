@@ -5,60 +5,46 @@
       <div class="col-12 col-md-3">
         <ul class="nav flex-column nav-pills" id="nav-tab" role="tablist">
           @if (!hideChangePasswordTab && (profile$ | async)) {
-            <li class="nav-item" (click)="selectedTab = 0">
-              <a
-                class="nav-link"
-                [ngClass]="{ active: selectedTab === 0 }"
-                role="tab"
-                href="javascript:void(0)"
-                >{{ 'AbpUi::ChangePassword' | abpLocalization }}</a
-              >
-            </li>
+          <li class="nav-item" (click)="selectedTab = 0">
+            <a class="nav-link" [class.active]="selectedTab === 0" role="tab" href="javascript:void(0)">{{
+              'AbpUi::ChangePassword' | abpLocalization }}</a>
+          </li>
           }
           <li class="nav-item mb-2" (click)="selectedTab = 1">
-            <a
-              class="nav-link"
-              [ngClass]="{ active: selectedTab === 1 }"
-              role="tab"
-              href="javascript:void(0)"
-              >{{ 'AbpAccount::PersonalSettings' | abpLocalization }}</a
-            >
+            <a class="nav-link" [class.active]="selectedTab === 1" role="tab" href="javascript:void(0)">{{
+              'AbpAccount::PersonalSettings' | abpLocalization }}</a>
           </li>
         </ul>
       </div>
       @if (profile$ | async) {
-        <div class="col-12 col-md-9">
-          @if (selectedTab === 0) {
-            <div class="tab-content" [@fadeIn]>
-              <div class="tab-pane active" role="tabpanel">
-                <h4>
-                  {{ 'AbpIdentity::ChangePassword' | abpLocalization }}
-                  <hr />
-                </h4>
-                <abp-change-password-form
-                  *abpReplaceableTemplate="{
+      <div class="col-12 col-md-9">
+        @if (selectedTab === 0) {
+        <div class="tab-content fade-in">
+          <div class="tab-pane active" role="tabpanel">
+            <h4>
+              {{ 'AbpIdentity::ChangePassword' | abpLocalization }}
+              <hr />
+            </h4>
+            <abp-change-password-form *abpReplaceableTemplate="{
                     componentKey: changePasswordKey
-                  }"
-                ></abp-change-password-form>
-              </div>
-            </div>
-          }
-          @if (selectedTab === 1) {
-            <div class="tab-content" [@fadeIn]>
-              <div class="tab-pane active" role="tabpanel">
-                <h4>
-                  {{ 'AbpIdentity::PersonalSettings' | abpLocalization }}
-                  <hr />
-                </h4>
-                <abp-personal-settings-form
-                  *abpReplaceableTemplate="{
-                    componentKey: personalSettingsKey
-                  }"
-                ></abp-personal-settings-form>
-              </div>
-            </div>
-          }
+                  }"></abp-change-password-form>
+          </div>
         </div>
+        }
+        @if (selectedTab === 1) {
+        <div class="tab-content fade-in">
+          <div class="tab-pane active" role="tabpanel">
+            <h4>
+              {{ 'AbpIdentity::PersonalSettings' | abpLocalization }}
+              <hr />
+            </h4>
+            <abp-personal-settings-form *abpReplaceableTemplate="{
+                    componentKey: personalSettingsKey
+                  }"></abp-personal-settings-form>
+          </div>
+        </div>
+        }
+      </div>
       }
     </div>
   </div>

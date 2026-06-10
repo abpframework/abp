@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate Swagger with ABP Framework for effective API documentation and interaction in your layered web applications."
+}
+```
+
 # Layered Solution: Swagger Integration
 
 ```json

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Trouble logging in as admin? Follow these steps to reset access and ensure your database is properly configured."
+}
+```
+
 # KB#0003: Cannot login with the admin user
 
 ## Use the Correct Username and Password

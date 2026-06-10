@@ -153,6 +153,10 @@ export function createImportRefToInterfaceReducerCreator(params: ModelGeneratorP
         type = simplifyType(prop.type);
       }
 
+      if (prop.isNullable) {
+        type = `${type} | null`;
+      }
+
       const refs = parseType(prop.type).reduce(
         (acc: string[], r) => acc.concat(parseGenerics(r).toGenerics()),
         [],
@@ -186,10 +190,7 @@ export function createRefToImportReducerCreator(params: ModelGeneratorParams) {
 }
 
 function isOptionalProperty(prop: PropertyDef) {
-  return (
-    prop.typeSimple.endsWith('?') ||
-    ((prop.typeSimple === 'string' || prop.typeSimple.includes('enum')) && !prop.isRequired)
-  );
+  return !prop.isRequired;
 }
 
 export function parseBaseTypeWithGenericTypes(type: string): string[] {
@@ -229,7 +230,7 @@ function renamePropForTenant(interfaces: Interface[]) {
       const isTenant = prop.name.toLocaleLowerCase().includes(TENANT_KEY);
       const isSaasDto = prop.refs.filter(f => f.startsWith(SAAS_NAMESPACE)).length > 0;
 
-      if (isTenant && isSaasDto) {
+      if (isTenant && isSaasDto && !prop.type.startsWith('Saas')) {
         prop.type = 'Saas' + prop.type;
       }
     }

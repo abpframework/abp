@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement pagination, sorting, and search with the ListService in ABP Framework for enhanced data management."
+}
+```
+
 # Working with Lists
 
 `ListService` is a utility service to provide easy pagination, sorting, and search implementation.
@@ -12,6 +19,7 @@
 import { ListService } from '@abp/ng.core';
 import { BookDto } from '../models';
 import { BookService } from '../services';
+import { inject } from '@angular/core';
 
 @Component({
   /* class metadata here */
@@ -32,10 +40,10 @@ class BookComponent {
   items: BookDto[] = [];
   count = 0;
 
-  constructor(
-    public readonly list: ListService,
-    private bookService: BookService,
-  ) {
+  public readonly list = inject(ListService);
+  private bookService = inject(BookService);
+
+  constructor() {
     // change ListService defaults here
     this.list.maxResultCount = 20;
   }
@@ -78,7 +86,7 @@ You can extend the query parameter of the `ListService`'s `hookToQuery` method.
 Firstly, you should pass your own type to `ListService` as shown below:
 
 ```typescript
-constructor(public readonly list: ListService<BooksSearchParamsDto>) { }
+public readonly list = inject(ListService<BooksSearchParamsDto>);
 ```
 
 Then update the `bookStreamCreator` constant like following:
@@ -118,7 +126,7 @@ Then you can place inputs to the HTML:
 
 ## Usage with Observables
 
-You may use observables in combination with [AsyncPipe](https://angular.io/guide/observables-in-angular#async-pipe) of Angular instead. Here are some possibilities:
+You may use observables in combination with [AsyncPipe](https://angular.dev/ecosystem/rxjs-interop) of Angular instead. Here are some possibilities:
 
 ```js
   book$ = this.list.hookToQuery(query => this.bookService.getListByInput(query));
@@ -151,7 +159,6 @@ import { Component, inject } from '@angular/core';
 import { BookDto, BooksService } from './books.service';
 
 @Component({
-  standalone: true,
   selector: 'app-books',
   templateUrl: './books.component.html',
   providers: [ListService, BooksService],

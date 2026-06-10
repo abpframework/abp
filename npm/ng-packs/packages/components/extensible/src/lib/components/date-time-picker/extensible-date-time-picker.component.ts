@@ -6,9 +6,8 @@ import {
   input,
   Optional,
   SkipSelf,
-  ViewChild,
+  viewChild
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ControlContainer, ReactiveFormsModule } from '@angular/forms';
 import {
   NgbDateAdapter,
@@ -27,7 +26,6 @@ import { selfFactory } from '../../utils/factory.util';
 @Component({
   exportAs: 'abpExtensibleDateTimePicker',
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     NgbDatepickerModule,
     NgbTimepickerModule,
@@ -78,14 +76,14 @@ export class ExtensibleDateTimePickerComponent {
   meridian = input<boolean>(false);
   placement = input<Placement>('bottom-left');
 
-  @ViewChild(NgbInputDatepicker) date!: NgbInputDatepicker;
-  @ViewChild(NgbTimepicker) time!: NgbTimepicker;
+  readonly date = viewChild.required(NgbInputDatepicker);
+  readonly time = viewChild.required(NgbTimepicker);
 
   setDate(dateStr: string) {
-    this.date.writeValue(dateStr);
+    this.date().writeValue(dateStr);
   }
 
   setTime(dateStr: string) {
-    this.time.writeValue(dateStr);
+    this.time().writeValue(dateStr);
   }
 }

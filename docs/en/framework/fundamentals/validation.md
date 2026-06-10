@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how ABP Framework enhances ASP.NET Core validation with automatic checks, localization, and FluentValidation integration for better input handling."
+}
+```
+
 # Validation
 
 Validation system is used to validate the user input or client request for a particular controller action or service method.
@@ -114,7 +121,7 @@ namespace Acme.BookStore
 
 #### Enabling/Disabling Validation
 
-You can use the `[DisableValidation]` to disable it for methods, classs and properties.
+You can use the `[DisableValidation]` to disable it for methods, classes and properties.
 
 ````csharp
 [DisableValidation]

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the CMS Kit Module, offering essential tools for building dynamic websites with page management, blogging, and tagging features."
+}
+```
+
 # CMS Kit Module
 
 This module provides CMS (Content Management System) capabilities for your application. It provides **core building blocks** and fully working **sub-systems** to create your own website with CMS features enabled, or use the building blocks in your web sites with any purpose.
@@ -30,6 +37,56 @@ All features are individually usable. If you disable a feature, it completely di
 
 - CMS Kit uses [distributed cache](../../framework/fundamentals/caching.md) for responding faster. 
 > Using a distributed cache, such as [Redis](../../framework/fundamentals/redis-cache.md), is highly recommended for data consistency in distributed/clustered deployments.
+
+## Identity Integration for User Lookup
+
+CMS Kit uses `ICmsUserLookupService` when it needs user information for features such as comments, ratings, blog post management and user synchronization.
+
+If the CMS Kit and Identity modules run in the same application, no extra configuration is typically needed.
+
+If the Identity module runs in another application or service (for example, in a tiered or distributed solution), CMS Kit may need to call the Identity integration endpoints remotely to create or update `CmsUser` records.
+
+In that case, the calling application should:
+
+* Depend on `Volo.Abp.Identity.HttpApi.Client`.
+* Add `AbpIdentityHttpApiClientModule` and an IdentityModel module (`AbpHttpClientIdentityModelWebModule` for web applications or `AbpHttpClientIdentityModelModule` for non-web hosts).
+* Configure `RemoteServices:AbpIdentity` to point to the application that hosts the Identity module.
+* Configure `IdentityClients` for client credentials flow so the lookup can use server-to-server authentication.
+* Expose integration services on the application that hosts the Identity module.
+
+Example module dependency for a web application:
+
+```csharp
+[DependsOn(
+    typeof(AbpIdentityHttpApiClientModule),
+    typeof(AbpHttpClientIdentityModelWebModule)
+)]
+public class MyWebModule : AbpModule
+{
+}
+```
+
+Example `appsettings.json` configuration:
+
+```json
+"RemoteServices": {
+  "AbpIdentity": {
+    "BaseUrl": "https://localhost:44388/",
+    "UseCurrentAccessToken": false
+  }
+},
+"IdentityClients": {
+  "Default": {
+    "GrantType": "client_credentials",
+    "ClientId": "MyProject_Web",
+    "ClientSecret": "your-client-secret",
+    "Authority": "https://localhost:44322/",
+    "Scope": "your-internal-api-scope"
+  }
+}
+```
+
+See the [Identity module's External User Lookup Service section](../identity.md#external-user-lookup-service) and the [Synchronous Interservice Communication guide](../../guides/synchronous-interservice-communication.md) for the complete setup.
 
 ## How to Install
 
@@ -71,6 +128,23 @@ CMS kit packages are designed for various usage scenarios. If you check the [CMS
  - `Volo.CmsKit.Admin.*` packages contain the functionalities required by admin (back office) applications.
  - `Volo.CmsKit.Public.*` packages contain the functionalities used in public websites where users read blog posts or leave comments.
  - `Volo.CmsKit.*` (without Admin/Public suffix) packages are called as unified packages. Unified packages are shortcuts for adding Admin & Public packages (of the related layer) separately. If you have a single application for administration and public web site, you can use these packages.
+
+## Integrating Public and Admin Packages in a Unified Application
+
+If you are using a single application for both admin and public web site, it's important to configure the global layout settings appropriately. By default, the layout is set for a **Public Website**, which is suitable for public-facing pages. However, when your application serves both admin and public pages, you should explicitly set the global layout for all CMS Kit pages.
+
+To do this, add a `_ViewStart.cshtml` file to your web project at `/Pages/Public/CmsKit/_ViewStart.cshtml` and configure the layout as shown below:
+
+```html
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@inject IThemeManager ThemeManager
+@{
+    // default: GetPublicLayout()
+    Layout = ThemeManager.CurrentTheme.GetApplicationLayout(); 
+}
+```
+
+> The `_ViewStart.cshtml` file is used to set the layout for all pages in the `CmsKit` folder.
 
 ## Internals
 

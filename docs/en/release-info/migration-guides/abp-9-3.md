@@ -2,6 +2,14 @@
 
 This document is a guide for upgrading ABP v9.2 solutions to ABP v9.3. There are some changes in this version that may affect your applications, please read it carefully and apply the necessary changes to your application.
 
+## Switched to `MySql.EntityFrameworkCore` for EF Core MySQL Provider
+
+In this version, we switched the EF Core MySQL provider from `Pomelo.EntityFrameworkCore.MySql` to `MySql.EntityFrameworkCore`. 
+
+If you want to use the `Pomelo.EntityFrameworkCore.MySql` provider, then you can follow the [Use Pomelo provider documentation](https://abp.io/docs/latest/framework/data/entity-framework-core/mysql#use-pomelo-provider) to migrate your application.
+
+> See the internal changes we made in [#23392](https://github.com/abpframework/abp/pull/23392), for implementation details.
+
 ## Updated `RabbitMQ.Client` to `7.x`
 
 In this version, we updated `RabbitMQ.Client` to `7.1.2`. [This is a major version update](https://github.com/rabbitmq/rabbitmq-dotnet-client/blob/main/v7-MIGRATION.md) that brings significant improvements to the library:
@@ -44,3 +52,18 @@ The main changes include:
 - Updated schematics to support both module-based and standalone templates
 
 For detailed migration steps and best practices, please refer to our upcoming documentation and/or blog post. The migration is optional, and you can continue using the module-based approach if you prefer.
+
+## Angular UI: Migrating Version to v20
+
+In this version, we've updated our Angular version to v20. This update brings our Angular user interface to the latest and most powerful version
+
+Key Updates:
+- Updated Angular packages (core, common, forms, router, etc.) to ~20.0.0
+- Updated @angular/cli and @angular-devkit/* to ~20.0.0
+- Updated Typescript to ~5.8.0
+- Updated RxJS to ~7.8.0
+- Updated third-party libraries to their latest versions compatible with Angular v20
+
+Breaking Changes:
+- Minimum required Node.js version is now v20.19.0
+- @angular/platform-browser no longer includes deprecated APIs like DOCUMENT token globally; ensure you're importing from @angular/common

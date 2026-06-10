@@ -33,7 +33,8 @@ public static class IdentityDbContextModelBuilderExtensions
                 .HasColumnName(nameof(IdentityUser.TwoFactorEnabled));
             b.Property(u => u.LockoutEnabled).HasDefaultValue(false)
                 .HasColumnName(nameof(IdentityUser.LockoutEnabled));
-
+            b.Property(u => u.Leaved).HasDefaultValue(false)
+                .HasColumnName(nameof(IdentityUser.Leaved));
             b.Property(u => u.IsExternal).IsRequired().HasDefaultValue(false)
                 .HasColumnName(nameof(IdentityUser.IsExternal));
 
@@ -46,6 +47,8 @@ public static class IdentityDbContextModelBuilderExtensions
             b.HasMany(u => u.Roles).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
             b.HasMany(u => u.Tokens).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
             b.HasMany(u => u.OrganizationUnits).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
+            b.HasMany(u => u.PasswordHistories).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
+            b.HasMany(u => u.Passkeys).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
 
             b.HasIndex(u => u.NormalizedUserName);
             b.HasIndex(u => u.NormalizedEmail);
@@ -175,6 +178,20 @@ public static class IdentityDbContextModelBuilderExtensions
             });
         }
 
+        builder.Entity<IdentityUserPasskey>(b =>
+        {
+            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "UserPasskeys", AbpIdentityDbProperties.DbSchema);
+
+            b.ConfigureByConvention();
+
+            b.HasKey(p => p.CredentialId);
+
+            b.Property(p => p.CredentialId).HasMaxLength(IdentityUserPasskeyConsts.MaxCredentialIdLength); // Defined in WebAuthn spec to be no longer than 1023 bytes
+            b.OwnsOne(p => p.Data).ToJson();
+
+            b.ApplyObjectExtensionMappings();
+        });
+
         builder.Entity<OrganizationUnit>(b =>
         {
             b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "OrganizationUnits", AbpIdentityDbProperties.DbSchema);
@@ -220,6 +237,19 @@ public static class IdentityDbContextModelBuilderExtensions
             b.HasOne<OrganizationUnit>().WithMany().HasForeignKey(ou => ou.OrganizationUnitId).IsRequired();
 
             b.HasIndex(ou => new { ou.UserId, ou.OrganizationUnitId });
+
+            b.ApplyObjectExtensionMappings();
+        });
+
+        builder.Entity<IdentityUserPasswordHistory>(b =>
+        {
+            b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "UserPasswordHistories", AbpIdentityDbProperties.DbSchema);
+
+            b.ConfigureByConvention();
+
+            b.HasKey(x => new { x.UserId, x.Password });
+
+            b.Property(x => x.Password).HasMaxLength(IdentityUserPasswordHistoriesConsts.MaxPasswordLength).IsRequired();
 
             b.ApplyObjectExtensionMappings();
         });

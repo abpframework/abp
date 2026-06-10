@@ -30,5 +30,7 @@ public class UpdatePageInputDto : ExtensibleObject, IHasConcurrencyStamp
     [DynamicMaxLength(typeof(PageConsts), nameof(PageConsts.MaxStyleLength))]
     public string Style { get; set; }
 
+    public PageStatus Status { get; set; }
+
     public string ConcurrencyStamp { get; set; }
 }

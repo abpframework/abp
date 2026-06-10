@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement and manage background jobs in your Single Layer solution using ABP Framework for efficient task handling."
+}
+```
+
 # Single Layer Solution: Background Jobs
 
 ```json

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to create many-to-many relationships in ABP Suite using navigation collections for efficient CRUD page management."
+}
+```
+
 # Creating Many-To-Many Relationship
 
 ````json

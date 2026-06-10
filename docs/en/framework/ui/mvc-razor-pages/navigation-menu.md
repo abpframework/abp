@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to effectively manage navigation menus in your ABP Framework applications, enabling modular menu item integration with ease."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages UI: Navigation Menu
 
 Every application has a main menu to allow users to navigate to pages/screens of the application. Some applications may contain more than one menu in different sections of the UI.
@@ -110,7 +117,7 @@ There are more options of a menu item (the constructor of the `ApplicationMenuIt
 
 As seen above, a menu contributor contributes to the menu dynamically. So, you can perform any custom logic or get menu items from any source.
 
-One use case is the [authorization](../../fundamentals/authorization.md). You typically want to add menu items by checking a permission.
+One use case is the [authorization](../../fundamentals/authorization/index.md). You typically want to add menu items by checking a permission.
 
 **Example: Check if the current user has a permission**
 

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate microservices using HTTP API calls in ABP Framework, enhancing communication between services for seamless functionality."
+}
+```
+
 # Microservice Tutorial Part 06: Integrating the services: HTTP API Calls
 
 ````json
@@ -216,25 +223,25 @@ public class OrderDto
 }
 ```
 
-Lastly, open the `OrderingServiceApplicationAutoMapperProfile` class (the `OrderingServiceApplicationAutoMapperProfile.cs` file under the `ObjectMapping` folder of the `CloudCrm.OrderingService` project of the `CloudCrm.OrderingService` .NET solution) and ignore the `ProductName` property in the mapping configuration:
+Lastly, open the `OrderingServiceApplicationMappers` class (the `OrderingServiceApplicationMappers.cs` file under the `ObjectMapping` folder of the `CloudCrm.OrderingService` project of the `CloudCrm.OrderingService` .NET solution) and ignore the `ProductName` property in the mapping configuration:
 
 ```csharp
-using AutoMapper;
-using CloudCrm.OrderingService.Entities;
-using CloudCrm.OrderingService.Services;
-using Volo.Abp.AutoMapper;
+using Riok.Mapperly.Abstractions;
+using Volo.Abp.Mapperly;
 
 namespace CloudCrm.OrderingService.ObjectMapping;
 
-public class OrderingServiceApplicationAutoMapperProfile : Profile
+[Mapper]
+public partial class OrderingServiceApplicationMappers : MapperBase<Order, OrderDto>
 {
-    public OrderingServiceApplicationAutoMapperProfile()
-    {
-        CreateMap<Order, OrderDto>()
-            .Ignore(x => x.ProductName); // New line
-    }
+    [MapperIgnoreTarget(nameof(OrderDto.ProductName))]
+    public override partial OrderDto Map(Order source);
+
+    [MapperIgnoreTarget(nameof(OrderDto.ProductName))]
+    public override partial void Map(Order source, OrderDto destination);
 }
 ```
+
 Let's explain the changes we made:
 
 - We added a new property named `ProductName` to the `OrderDto` class. This property will hold the product name.
@@ -307,11 +314,13 @@ Open the `order.component.html` file (the `order.component.html` file under the 
                     <th>Product Name</th>
                     <th>Customer Name</th>
                 </tr>
-                <tr *ngFor="let item of items">
-                    <td>{%{{{item.id}}}%}</td>
-                    <td>{%{{{item.productName}}}%}</td>
-                    <td>{%{{{item.customerName}}}%}</td>
-                </tr>
+                @for (item of items; track item.id) {
+                    <tr>
+                        <td>{%{{{item.id}}}%}</td>
+                        <td>{%{{{item.productName}}}%}</td>
+                        <td>{%{{{item.customerName}}}%}</td>
+                    </tr>
+                }
             </thead>
         </table>
     </div>

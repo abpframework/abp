@@ -5,7 +5,7 @@ using IdentityServer4.Stores;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Caching;
 using Volo.Abp.Domain.Entities.Events.Distributed;
@@ -28,7 +28,7 @@ namespace Volo.Abp.IdentityServer;
 
 [DependsOn(
     typeof(AbpIdentityServerDomainSharedModule),
-    typeof(AbpAutoMapperModule),
+    typeof(AbpMapperlyModule),
     typeof(AbpIdentityDomainModule),
     typeof(AbpSecurityModule),
     typeof(AbpCachingModule),
@@ -41,12 +41,7 @@ public class AbpIdentityServerDomainModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAutoMapperObjectMapper<AbpIdentityServerDomainModule>();
-
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<IdentityServerAutoMapperProfile>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<AbpIdentityServerDomainModule>();
 
         Configure<AbpDistributedEntityEventOptions>(options =>
         {

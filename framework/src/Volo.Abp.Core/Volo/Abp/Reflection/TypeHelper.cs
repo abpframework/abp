@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel;
@@ -13,14 +14,14 @@ namespace Volo.Abp.Reflection;
 
 public static class TypeHelper
 {
-    private static readonly HashSet<Type> FloatingTypes = new HashSet<Type>
+    private static readonly FrozenSet<Type> FloatingTypes = new HashSet<Type>
         {
             typeof(float),
             typeof(double),
             typeof(decimal)
-        };
+        }.ToFrozenSet();
 
-    private static readonly HashSet<Type> NonNullablePrimitiveTypes = new HashSet<Type>
+    private static readonly FrozenSet<Type> NonNullablePrimitiveTypes = new HashSet<Type>
         {
             typeof(byte),
             typeof(short),
@@ -37,7 +38,7 @@ public static class TypeHelper
             typeof(DateTimeOffset),
             typeof(TimeSpan),
             typeof(Guid)
-        };
+        }.ToFrozenSet();
 
     public static bool IsNonNullablePrimitiveType(Type type)
     {
@@ -78,6 +79,37 @@ public static class TypeHelper
         }
 
         return false;
+    }
+
+    public static TProperty? ChangeTypePrimitiveExtended<TProperty>(object? value)
+    {
+        if (value == null)
+        {
+            return default;
+        }
+
+        if (IsPrimitiveExtended(typeof(TProperty), includeEnums: true))
+        {
+            var conversionType = typeof(TProperty);
+            if (IsNullable(conversionType))
+            {
+                conversionType = conversionType.GetFirstGenericArgumentIfNullable();
+            }
+
+            if (conversionType == typeof(Guid))
+            {
+                return (TProperty)TypeDescriptor.GetConverter(conversionType).ConvertFromInvariantString(value.ToString()!)!;
+            }
+
+            if (conversionType.IsEnum)
+            {
+                return (TProperty)Enum.Parse(conversionType, value.ToString()!);
+            }
+
+            return (TProperty)Convert.ChangeType(value, conversionType, CultureInfo.InvariantCulture);
+        }
+
+        throw new AbpException("ChangeTypePrimitiveExtended<TProperty> does not support non-primitive types. Use non-generic GetProperty method and handle type casting manually.");
     }
 
     public static bool IsNullable(Type type)
@@ -176,6 +208,10 @@ public static class TypeHelper
                type == typeof(decimal) ||
                type == typeof(DateTime) ||
                type == typeof(DateTimeOffset) ||
+#if NETCOREAPP
+               type == typeof(DateOnly) ||
+               type == typeof(TimeOnly) ||
+#endif
                type == typeof(TimeSpan) ||
                type == typeof(Guid);
     }

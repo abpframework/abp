@@ -13,6 +13,7 @@
     "DefaultErrorMessage404": "Nie znaleziono zasobu!",
     "DefaultErrorMessage404Detail": "Nie znaleziono zasobu z żądania na serwerze!",
     "EntityNotFoundErrorMessage": "Nie istnieje encja {0} z id = {1}!",
+    "EntityNotFoundErrorMessageWithoutId": "Nie istnieje encja {0}!",
     "AbpDbConcurrencyErrorMessage": "Przesłane przez Ciebie dane zostały już zmienione przez innego użytkownika/klienta. Odrzuć wprowadzone zmiany i spróbuj od początku.",
     "Error": "Błąd",
     "UnhandledException": "Nieobsługiwany wyjątek!",

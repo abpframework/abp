@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to obtain and configure an SSL certificate for your application to enhance security, trust, and ownership verification."
+}
+```
+
 # Configuring SSL certificate(HTTPS)
 
 A website needs an SSL certificate to keep user data secure, verify ownership, prevent attackers from creating a fake version of the site, and gain user trust.

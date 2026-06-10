@@ -7,6 +7,7 @@ export namespace Rest {
     skipAddingHeader: boolean;
     observe: Observe;
     httpParamEncoder?: HttpParameterCodec;
+    responseType: ResponseType;
   }>;
 
   export const enum Observe {

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to access feature values in Angular using ConfigStateService for seamless integration with ABP Framework."
+}
+```
+
 # Features
 
 You can get the value of a feature on the client-side using the [config state service](./config-state.md) if it is allowed by the feature definition on the server-side.
@@ -10,12 +17,13 @@ To use the `ConfigStateService`, you must inject it in your class as a dependenc
 
 ```js
 import { ConfigStateService } from '@abp/ng.core';
+import { inject } from '@angular/core';
 
 @Component({
   /* class metadata here */
 })
 class DemoComponent {
-  constructor(private config: ConfigStateService) {}
+  private config = inject(ConfigStateService);
 }
 ```
 

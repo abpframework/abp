@@ -8,10 +8,11 @@ namespace Volo.CmsKit.Pages;
 
 public interface IPageRepository : IBasicRepository<Page, Guid>
 {
-    Task<int> GetCountAsync(string filter = null, CancellationToken cancellationToken = default);
+    Task<int> GetCountAsync(string filter = null, PageStatus? status = null, CancellationToken cancellationToken = default);
 
     Task<List<Page>> GetListAsync(
         string filter = null,
+        PageStatus? status = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
         string sorting = null,

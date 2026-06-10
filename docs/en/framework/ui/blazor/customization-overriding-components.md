@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to customize and override Razor components in Blazor applications using ABP Framework for a tailored UI experience."
+}
+```
+
 # Blazor UI: Customization / Overriding Components
 
 ````json

@@ -25,10 +25,10 @@ describe('Time Adapter', () => {
   describe('#toModel', () => {
     test.each`
       param                                   | expected
-      ${undefined}                            | ${''}
-      ${null}                                 | ${''}
-      ${{ hour: 13, minute: 30, second: 0 }}  | ${'13:30'}
-      ${{ hour: 13, minute: 30, second: 45 }} | ${'13:30'}
+      ${undefined}                            | ${null}
+      ${null}                                 | ${null}
+      ${{ hour: 13, minute: 30, second: 0 }}  | ${'13:30:00'}
+      ${{ hour: 13, minute: 30, second: 45 }} | ${'13:30:45'}
     `('should return $expected when $param is given', ({ param, expected }) => {
       expect(adapter.toModel(param)).toEqual(expected);
     });

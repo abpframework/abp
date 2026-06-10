@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to create the Author entity in your web application using ABP Suite, enhancing your project with one-to-many relationships effortlessly."
+}
+```
+
 # Web Application Development Tutorial (with ABP Suite) - Part 3: Creating the Authors
 
 ````json

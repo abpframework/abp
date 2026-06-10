@@ -1,7 +1,16 @@
 import { inject, provideAppInitializer } from '@angular/core';
-import { NgbInputDatepickerConfig, NgbTypeaheadConfig } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepickerI18n, NgbInputDatepickerConfig, NgbTypeaheadConfig, NgbTimepickerI18n } from '@ng-bootstrap/ng-bootstrap';
+import { DatepickerI18nAdapter, TimepickerI18nAdapter } from '../adapters';
 
 export const NG_BOOTSTRAP_CONFIG_PROVIDERS = [
+  {
+    provide: NgbDatepickerI18n,
+    useClass: DatepickerI18nAdapter,
+  },
+  {
+    provide: NgbTimepickerI18n,
+    useClass: TimepickerI18nAdapter,
+  },
   provideAppInitializer(() => {
     configureNgBootstrap();
   }),

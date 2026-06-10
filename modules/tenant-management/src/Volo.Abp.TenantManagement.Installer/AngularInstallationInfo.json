@@ -4,7 +4,7 @@
 			"name": "@abp/ng.tenant-management",
 			"appRoutingModuleConfiguration":{
 				"routes":[
-					"{ path: 'tenant-management', loadChildren: () => import('@abp/ng.tenant-management').then(m => m.TenantManagementModule.forLazy()),}"
+					"{ path: 'tenant-management', loadChildren: () => import('@abp/ng.tenant-management').then(c => c.createRoutes()),}"
 				]
 			},
 			"appModuleConfiguration":{
@@ -15,8 +15,6 @@
 						],
 						"namespace": "@abp/ng.tenant-management/config"
 					}
-				],
-				"ngModuleImports":[
 				],
 				"providerNames":[
 					"provideTenantManagementConfig()"

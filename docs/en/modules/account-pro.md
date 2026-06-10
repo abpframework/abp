@@ -1,6 +1,13 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the Account Module (Pro) for ABP Framework, featuring user authentication, two-factor setup, and tenant switching functionalities."
+}
+```
+
 # Account Module (Pro)
 
-> You must have an ABP Team or a higher license to use this module.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this module.
 
 This module implements the Login, Register, Forgot Password, Email Confirmation, Password Reset, sending and confirming Two-Factor Authentication, user lockout, switch between tenants functionalities of an application;
 
@@ -301,47 +308,41 @@ See the `AccountPermissions` class members for all permissions defined for this 
 
 #### Installation
 
-In order to configure the application to use the `AccountPublicModule` and the `AccountAdminModule`, you first need to import `AccountPublicConfigModule` from `@volo/abp.ng.account/public/config` and `AccountAdminConfigModule` from `@volo/abp.ng.account/admin/config` to root module. Config modules has a static `forRoot` method which you should call for a proper configuration.
+In order to configure the application to use the public account module and the admin account module, you first need to import `provideAccountPublicConfig` from `@volo/abp.ng.account/public/config` and `provideAccountAdminConfig` from `@volo/abp.ng.account/admin/config`. Then, you will need to append them to the `appConfig` array.
 
 ```js
-// app.module.ts
-import { AccountAdminConfigModule } from '@volo/abp.ng.account/admin/config';
-import { AccountPublicConfigModule } from '@volo/abp.ng.account/public/config';
+// app.config.ts
+import { provideAccountPublicConfig } from '@volo/abp.ng.account/public/config';
+import { provideAccountAdminConfig } from '@volo/abp.ng.account/admin/config';
 
-@NgModule({
-  imports: [
-    // other imports
-    AccountPublicConfigModule.forRoot(),
-    AccountAdminConfigModule.forRoot(),
-    // other imports
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    provideAccountAdminConfig(),
+    provideAccountPublicConfig(),
   ],
-  // ...
-})
-export class AppModule {}
+};
 ```
 
-The `AccountPublicModule` should be imported and lazy-loaded in your routing module. It has a static `forLazy` method for configuration. Available options are listed below. It is available for import from `@volo/abp.ng.account/public`.
+The account public package should be imported and lazy-loaded in your routing array. It has a static `createRoutes` method for configuration. Available options are listed below. It is available for import from `@volo/abp.ng.account/public`.
 
 ```js
-// app-routing.module.ts
-const routes: Routes = [
-  // other route definitions
+// app.routes.ts
+export const APP_ROUTES: Routes = [
+  // ...
   {
     path: 'account',
-    loadChildren: () =>
-      import('@volo/abp.ng.account/public').then(m => m.AccountPublicModule.forLazy(/* options here */)),
+    loadChildren: () => import('@volo/abp.ng.account/public').then(c => c.createRoutes(/* options here */)),
   },
 ];
 
-@NgModule(/* AppRoutingModule metadata */)
-export class AppRoutingModule {}
 ```
 
-> If you have generated your project via the startup template, you do not have to do anything, because it already has the modules.
+> If you have generated your project via the startup template, you do not have to do anything, because it already has the necessary configurations.
 
 <h4 id="h-account-module-options">Options</h4>
 
-You can modify the look and behavior of the module pages by passing the following options to `AccountModule.forLazy` static method:
+You can modify the look and behavior of the module pages by passing the following options to `createRoutes` static method:
 
 - **redirectUrl**: Default redirect URL after logging in.
 - **entityActionContributors:** Changes grid actions. Please check [Entity Action Extensions for Angular](../framework/ui/angular/entity-action-extensions.md) for details.
@@ -423,3 +424,6 @@ This module doesn't define any additional distributed event. See the [standard d
 * [Linked Accounts](./account/linkedaccounts.md)
 * [Session Management](./account/session-management.md)
 * [Idle Session Timeout](./account/idle-session-timeout.md)
+* [Web Authentication API (WebAuthn) passkeys](./account/passkey.md)
+* [Shared user accounts](./account/shared-user-accounts.md)
+```

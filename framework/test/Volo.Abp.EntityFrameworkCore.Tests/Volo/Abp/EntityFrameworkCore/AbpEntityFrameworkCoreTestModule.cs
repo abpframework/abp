@@ -30,6 +30,7 @@ public class AbpEntityFrameworkCoreTestModule : AbpModule
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         TestEntityExtensionConfigurator.Configure();
+        PreConfigure<AbpSqliteOptions>(x => x.BusyTimeout = null);
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -52,6 +53,16 @@ public class AbpEntityFrameworkCoreTestModule : AbpModule
             options.Entity<AppEntityWithNavigations>(opt =>
             {
                 opt.DefaultWithDetailsFunc = q => q.Include(p => p.OneToOne).ThenInclude(x => x.OneToOne).Include(p => p.OneToMany).ThenInclude(x => x.OneToMany).Include(p => p.ManyToMany);
+            });
+
+            options.Entity<Blog>(opt =>
+            {
+                opt.DefaultWithDetailsFunc = q => q.Include(p => p.BlogPosts);
+            });
+
+            options.Entity<AppEntityWithNavigationsForeign>(opt =>
+            {
+                opt.DefaultWithDetailsFunc = q => q.Include(p => p.OneToMany);
             });
         });
 

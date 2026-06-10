@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate Azure Service Bus as a distributed event bus provider in your ABP Framework project with this comprehensive guide."
+}
+```
+
 # Distributed Event Bus Azure Integration
 
 > This document explains **how to configure the [Azure Service Bus](https://azure.microsoft.com/en-us/services/service-bus/)** as the distributed event bus provider. See the [distributed event bus document](../distributed) to learn how to use the distributed event bus system
@@ -127,6 +134,16 @@ Configure<AbpAzureServiceBusOptions>(options =>
     options.Connections.Default.ConnectionString = "Endpoint=sb://sb-my-app.servicebus.windows.net/;SharedAccessKeyName={%{{{Policy Name}}}%};SharedAccessKey={}";
     options.Connections.Default.Admin.Retry.MaxRetries = 3;
     options.Connections.Default.Client.RetryOptions.MaxRetries = 1;
+});
+````
+
+Use `TokenCredential` instead of `ConnectionString` if you want to use custom credential.
+
+````csharp
+Configure<AbpAzureServiceBusOptions>(options =>
+{
+    options.Connections.Default.FullyQualifiedNamespace = "sb-my-app.servicebus.windows.net";
+    options.Connections.Default.TokenCredential = new DefaultAzureCredential();
 });
 ````
 

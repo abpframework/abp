@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
@@ -56,7 +55,7 @@ public class MongoPermissionGrantRepository :
         cancellationToken = GetCancellationToken(cancellationToken);
         return await (await GetQueryableAsync(cancellationToken))
             .Where(s =>
-                names.Contains(s.Name) &&
+                names.AsEnumerable().Contains(s.Name) &&
                 s.ProviderName == providerName &&
                 s.ProviderKey == providerKey
             ).ToListAsync(cancellationToken);

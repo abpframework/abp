@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enhance your ASP.NET Core UI by adding custom data table columns with our easy-to-follow guide on data table column extensions."
+}
+```
+
 # Data Table Column Extensions for ASP.NET Core UI
 
 ## Introduction

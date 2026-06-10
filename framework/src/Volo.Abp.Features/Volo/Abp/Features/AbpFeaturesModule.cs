@@ -31,6 +31,7 @@ public class AbpFeaturesModule : AbpModule
         context.Services.Configure<AbpFeatureOptions>(options =>
         {
             options.ValueProviders.Add<DefaultValueFeatureValueProvider>();
+            options.ValueProviders.Add<ConfigurationFeatureValueProvider>();
             options.ValueProviders.Add<EditionFeatureValueProvider>();
             options.ValueProviders.Add<TenantFeatureValueProvider>();
         });

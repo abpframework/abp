@@ -1,13 +1,13 @@
 import { AccountService } from '@abp/ng.account.core/proxy';
 import { ButtonComponent, getPasswordValidators } from '@abp/ng.theme.shared';
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector, OnInit, inject } from '@angular/core';
 import {
   ReactiveFormsModule,
   UntypedFormBuilder,
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { comparePasswords, NgxValidateCoreModule, Validation } from '@ngx-validate/core';
 import { finalize } from 'rxjs/operators';
 import { LocalizationPipe } from '@abp/ng.core';
@@ -19,13 +19,19 @@ const PASSWORD_FIELDS = ['password', 'confirmPassword'];
   templateUrl: './reset-password.component.html',
   imports: [
     ReactiveFormsModule,
-    RouterModule,
+    RouterLink,
     NgxValidateCoreModule,
     LocalizationPipe,
     ButtonComponent,
   ],
 })
 export class ResetPasswordComponent implements OnInit {
+  private fb = inject(UntypedFormBuilder);
+  private accountService = inject(AccountService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private injector = inject(Injector);
+
   form!: UntypedFormGroup;
 
   inProgress = false;
@@ -37,14 +43,6 @@ export class ResetPasswordComponent implements OnInit {
 
     return errors.concat(groupErrors.filter(({ key }) => key === 'passwordMismatch'));
   };
-
-  constructor(
-    private fb: UntypedFormBuilder,
-    private accountService: AccountService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private injector: Injector,
-  ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(({ userId, resetToken }) => {

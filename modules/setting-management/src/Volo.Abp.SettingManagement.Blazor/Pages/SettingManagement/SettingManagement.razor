@@ -4,27 +4,28 @@
 @using Volo.Abp.Features
 @attribute [Authorize]
 @attribute [RequiresFeature(SettingManagementFeatures.Enable)]
-
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.UI.Navigation.Localization.Resource
+@inject IStringLocalizer<AbpUiNavigationResource> LUiNavigation
 @* ************************* PAGE HEADER ************************* *@
 <PageHeader Title="@L["Settings"]" BreadcrumbItems="@BreadcrumbItems">
 
 </PageHeader>
 
 <Card>
-    <CardBody Class="pt-0">
-        <Tabs @bind-SelectedTab="@SelectedGroup" TabPosition="TabPosition.Start" Pills="true" RenderMode="TabsRenderMode.LazyReload" VerticalItemsColumnSize="ColumnSize.Is3.OnDesktop.Is6.OnTablet.Is12.OnMobile">
-            <Items>
-                <div class="pt-3">
+    <CardBody Class="pt-3">
+        @if (!string.IsNullOrEmpty(SelectedGroup))
+        {
+            <Tabs @bind-SelectedTab="@SelectedGroup" TabPosition="TabPosition.Start" Pills="true" RenderMode="TabsRenderMode.LazyReload" VerticalItemsColumnSize="ColumnSize.Is3.OnDesktop.Is6.OnTablet.Is12.OnMobile">
+                <Items>
                     @foreach (var group in SettingComponentCreationContext.Groups)
                     {
                         <Tab Name="@GetNormalizedString(group.Id)">
                             @group.DisplayName
                         </Tab>
                     }
-                </div>
-            </Items>
-            <Content>
-                <div class="pt-3">
+                </Items>
+                <Content>
                     @foreach (var group in SettingComponentCreationContext.Groups)
                     {
                         <TabPanel Name="@GetNormalizedString(group.Id)" class="abp-md-form">
@@ -39,8 +40,8 @@
                             @SettingItemRenders.Last()
                         </TabPanel>
                     }
-                </div>
-            </Content>
-        </Tabs>
+                </Content>
+            </Tabs>
+        }
     </CardBody>
 </Card>

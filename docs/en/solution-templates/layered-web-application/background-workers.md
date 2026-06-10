@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement background workers in your applications for efficient handling of long-running tasks and scheduled processes."
+}
+```
+
 # Layered Solution: Background Workers
 
 ```json

@@ -1,10 +1,13 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to install and use the new ABP CLI for streamlined operations in ABP-based solutions, enhancing your development experience!"
+}
+```
+
 # ABP CLI
 
-ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions or ABP Studio features.
-
-> With **v8.2+**, the old/legacy ABP CLI has been replaced with a new CLI system to align with the new templating system and [ABP Studio](../studio/index.md). The new ABP CLI commands are explained in this documentation. However, if you want to learn more about the differences between the old and new CLIs, want to learn the reason for the change, or need guidance to use the old ABP CLI, please refer to the [Old vs New CLI](differences-between-old-and-new-cli.md) documentation.
->
-> You may need to remove the Old CLI before installing the New CLI, by running the following command: `dotnet tool uninstall -g Volo.Abp.Cli`
+ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions or [ABP Studio](../studio/index.md) features.
 
 ## Installation
 
@@ -22,56 +25,58 @@ dotnet tool update -g Volo.Abp.Studio.Cli
 
 ## Global Options
 
-While each command may have a set of options, there are some global options that can be used with any command;
+While each command may have a set of options, there are some global options that can be used with any command:
 
-* `--skip-cli-version-check` or `-scvc`: Skips to check the latest version of the ABP CLI. If you don't specify, it will check the latest version and shows a warning message if there is a newer version of the ABP CLI.
-- `--skip-extension-version-check` or `-sevc`: Skips to check the latest version of the ABP CLI extensions. If you don't specify, it will check the latest version and download the latest version if there is a newer version of the ABP CLI extensions.
+* `--skip-cli-version-check` or `-scvc`: Skips checking the latest version of the ABP CLI. If you don't specify, it will check the latest version and shows a warning message if there is a newer version of the ABP CLI.
+- `--skip-extension-version-check` or `-sevc`: Skips checking the latest version of the ABP CLI extensions. If you don't specify, it will check the latest version and download the latest version if there is a newer version of the ABP CLI extensions.
 * `--old`: ABP CLI has two variations: `Volo.Abp.Studio.Cli` and `Volo.Abp.Cli`. New features/templates are added to the `Volo.Abp.Studio.Cli`. But if you want to use the old version, you can use this option **at the end of your commands**. For example, `abp new Acme.BookStore --old`.
 * `--help` or `-h`: Shows help for the specified command.
 
 ## Commands
 
-Here, is the list of all available commands before explaining their details:
+Here is the list of all available commands before explaining their details:
 
-* **`help`**: Shows help on the usage of the ABP CLI.
-* **`cli`**: Update or remove ABP CLI.
-* **`new`**: Generates a new solution based on the ABP [startup templates](../solution-templates/index.md).
-* **`new-module`**: Generates a new module based on the given template.
-* **`new-package`**: Generates a new package based on the given template.
-* **`update`**: Automatically updates all ABP related NuGet and NPM packages in a solution.
-* **`clean`**: Deletes all `BIN` and `OBJ` folders in the current folder.
-* **`clean-logs`**: Delete all `*logs.txt` files in the current folder and its subfolders.
-* **`add-package`**: Adds an ABP package to a project.
-* **`add-package-ref`**: Adds package to given project.
-* **`install-module`**: Adds a [multi-package application module](../modules/index.md) to a given module.
-* **`install-local-module`**: Installs a local module to given module.
-* **`list-modules`**: Lists names of application modules.
-* **`list-templates`**: Lists the names of available templates to create a solution.
-* **`get-source`**: Downloads the source code of a module.
-* **`add-source-code`**: Downloads the source code and replaces package references with project references.
-* **`init-solution`**: Creates ABP Studio configuration files for a given solution.
-* **`kube-connect`**: Connects to kubernetes environment. (*Available for* ***Business*** *or higher licenses*)
-* **`kube-intercept`**: Intercepts a service running in Kubernetes environment. (*Available for* ***Business*** *or higher licenses*)
-* **`list-module-sources`**: Lists the remote module sources.
-* **`add-module-source`**: Adds a remote module source.
-* **`delete-module-source`**: Deletes a remote module source.
-* **`generate-proxy`**: Generates client side proxies to use HTTP API endpoints.
-* **`remove-proxy`**: Removes previously generated client side proxies.
-* **`switch-to-preview`**: Switches to the latest preview version of the ABP.
-* **`switch-to-nightly`**: Switches to the latest [nightly builds](../release-info/nightly-builds.md) of the ABP related packages on a solution.
-* **`switch-to-stable`**: Switches to the latest stable versions of the ABP related packages on a solution.
-* **`switch-to-local`**: Changes NuGet package references on a solution to local project references.
-* **`upgrade`**: It converts the application to use pro modules.
-* **`translate`**: Simplifies to translate localization files when you have multiple JSON [localization](../framework/fundamentals/localization.md) files in a source control repository.
-* **`login`**: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
-* **`login-info`**: Shows the current user's login information.
-* **`logout`**: Logouts from your computer if you've authenticated before.
-* **`bundle`**: Generates script and style references for ABP Blazor and MAUI Blazor project. 
-* **`install-libs`**: Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.
-* **`clear-download-cache`**: Clears the templates download cache.
-* **`check-extensions`**: Checks the latest version of the ABP CLI extensions.
-* **`install-old-cli`**: Installs old ABP CLI.
-* **`generate-razor-page`**: Generates a page class that you can use it in the ASP NET Core pipeline to return an HTML page.
+* **[`help`](../cli#help)**: Shows help on the usage of the ABP CLI.
+* **[`cli`](../cli#cli)**: Update or remove ABP CLI.
+* **[`new`](../cli#new)**: Generates a new solution based on the ABP [startup templates](../solution-templates/index.md).
+* **[`new-module`](../cli#new-module)**: Generates a new module based on the given template.
+* **[`new-package`](../cli#new-package)**: Generates a new package based on the given template.
+* **[`update`](../cli#update)**: Automatically updates all ABP related NuGet and NPM packages in a solution.
+* **[`clean`](../cli#clean)**: Deletes all `BIN` and `OBJ` folders in the current folder.
+* **[`clean-logs`](../cli#clean-logs)**: Delete all `*logs.txt` files in the current folder and its subfolders.
+* **[`add-package`](../cli#add-package)**: Adds an ABP package to a project.
+* **[`add-package-ref`](../cli#add-package-ref)**: Adds package to given project.
+* **[`install-module`](../cli#install-module)**: Adds a [multi-package application module](../modules/index.md) to a given module.
+* **[`install-local-module`](../cli#install-local-module)**: Installs a local module to given module.
+* **[`list-modules`](../cli#list-modules)**: Lists names of application modules.
+* **[`list-templates`](../cli#list-templates)**: Lists the names of available templates to create a solution.
+* **[`get-source`](../cli#get-source)**: Downloads the source code of a module.
+* **[`add-source-code`](../cli#add-source-code)**: Downloads the source code and replaces package references with project references.
+* **[`init-solution`](../cli#init-solution)**: Creates ABP Studio configuration files for a given solution.
+* **[`kube-connect`](../cli#kube-connect)**: Connects to kubernetes environment. (*Available for* ***Business*** *or higher licenses*)
+* **[`kube-intercept`](../cli#kube-intercept)**: Intercepts a service running in Kubernetes environment. (*Available for* ***Business*** *or higher licenses*)
+* **[`list-module-sources`](../cli#list-module-sources)**: Lists the remote module sources.
+* **[`add-module-source`](../cli#add-module-source)**: Adds a remote module source.
+* **[`delete-module-source`](../cli#delete-module-source)**: Deletes a remote module source.
+* **[`generate-proxy`](../cli#generate-proxy)**: Generates client side proxies to use HTTP API endpoints.
+* **[`remove-proxy`](../cli#remove-proxy)**: Removes previously generated client side proxies.
+* **[`switch-to-preview`](../cli#switch-to-preview)**: Switches to the latest preview version of the ABP.
+* **[`switch-to-nightly`](../cli#switch-to-nightly)**: Switches to the latest [nightly builds](../release-info/nightly-builds.md) of the ABP related packages on a solution.
+* **[`switch-to-stable`](../cli#switch-to-stable)**: Switches to the latest stable versions of the ABP related packages on a solution.
+* **[`switch-to-local`](../cli#switch-to-local)**: Changes NuGet package references on a solution to local project references.
+* **[`upgrade`](../cli#upgrade)**: It converts the application to use pro modules.
+* **[`translate`](../cli#translate)**: Simplifies to translate localization files when you have multiple JSON [localization](../framework/fundamentals/localization.md) files in a source control repository.
+* **[`login`](../cli#login)**: Authenticates on your computer with your [abp.io](https://abp.io/) username and password.
+* **[`login-info`](../cli#login-info)**: Shows the current user's login information.
+* **[`logout`](../cli#logout)**: Logouts from your computer if you've authenticated before.
+* **[`bundle`](../cli#bundle)**: Generates script and style references for ABP Blazor and MAUI Blazor project. 
+* **[`install-libs`](../cli#install-libs)**: Install NPM Packages for MVC / Razor Pages and Blazor Server UI types.
+* **[`clear-download-cache`](../cli#clear-download-cache)**: Clears the templates download cache.
+* **[`check-extensions`](../cli#check-extensions)**: Checks the latest version of the ABP CLI extensions.
+* **[`install-old-cli`](../cli#install-old-cli)**: Installs old ABP CLI.
+* **[`mcp-studio`](../cli#mcp-studio)**: Starts ABP Studio MCP bridge for AI tools (requires ABP Studio running).
+* **[`generate-razor-page`](../cli#generate-razor-page)**: Generates a page class that you can use it in the ASP NET Core pipeline to return an HTML page.
+* **[`generate-jwks`](../cli#generate-jwks)**: Generates an RSA key pair (JWKS public key + PEM private key) for OpenIddict `private_key_jwt` client authentication.
 
 ### help
 
@@ -237,6 +242,8 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
   * `-no-text-template-management`: Skips the Text Template Management module.
   * `-file-management`: Includes the File Management module.
   * `-chat`: Includes the Chat module.
+  * `-ai-management`: Includes the [AI Management](./../modules/ai-management/index.md) module.
+  * `-ai-providers <providers>`: AI providers (comma-separated). Valid values: `Ollama`, `OpenAI`. (Requires `-ai-management`)
 * `--legacy`: Generates a legacy solution.
   * `trust-version`: Trusts the user's version and does not check if the version exists or not. If the template with the given version is found in the cache, it will be used, otherwise throws an exception.
 
@@ -289,30 +296,39 @@ abp new-package --name Acme.BookStore.Domain --template lib.domain
 * `--template` or `-t`: Specifies the template name. This parameter doesn't have a default value and must be set. Available templates and their sub-options:
 	* `lib.class-library`
 	* `lib.domain-shared`
+		* `--add-localization`: Includes default localization configuration & language files. 
 	* `lib.domain`
+		* `--add-settings`: Includes default settings configuration. 
+		* `--add-db-properties`:  Includes the default Database Properties class. 
+		* `--add-domain-shared`:  Includes an additional Domain Shared package. 
 	* `lib.application-contracts`
 	* `lib.application`
-		* `--with-automapper`:  Adds automapper configuration. 
+		* `--add-mapperly`:  Adds Mapperly configuration. 
+		* `--add-application-contracts`:  Includes an additional contracts package. 
 	* `lib.ef`
 		* `--include-migrations`: Allows migration operations on this package.
 		* `--connection-string-name`: Default value is the last part of the package's namespace (or package name simply).
-		* `--connection-string`: Connection string value. Defaut value is null. You can set it alter. **Note:** When specifying the connection string, make sure to enclose it in double quotes, for example: `--connection-string "Server=localhost;Database=MyProjectName;Trusted_Connection=True"`.
+		* `--connection-string`: Connection string value. The default value is null. You can set it later. **Note:** When specifying the connection string, make sure to enclose it in double quotes, for example: `--connection-string "Server=localhost;Database=MyProjectName;Trusted_Connection=True"`.
 	* `lib.mongodb`
 	* `lib.http-api`
 	* `lib.http-api-client`
 	* `lib.mvc`
+		* `--add-mapperly`:  Adds Mapperly configuration. 
 	* `lib.blazor`
+		* `--add-mapperly`:  Adds Mapperly configuration. 
+		* `--add-menu-contributors`: Includes default menu contributors.
 	* `lib.blazor-wasm`
 	* `lib.blazor-server`
 	* `host.http-api`
-		* `--with-serilog`: Includes Serilog configuration.
-		* `--with-swagger`: Includes Swagger configuration.
+		* `--add-serilog`: Includes Serilog configuration.
+		* `--add-swagger`: Includes Swagger configuration.
 	* `host.mvc`
-		* `--with-serilog`: Includes Serilog configuration.
-		* `--with-swagger`: Includes Swagger configuration.
+		* `--add-serilog`: Includes Serilog configuration.
+		* `--add-swagger`: Includes Swagger configuration.
 	* `host.blazor-wasm`
 		* `--backend`: Name of the backend project in the module (not path).
 	* `host.blazor-server`
+	* `abp.console`
 	* `csharp.console`
 	* `csharp.library`
 * `--module-file` or `-m`: If set, the new package will be added to the given module. Otherwise the new package will added to the closest module in the file system. If no module found, it will throw an error.
@@ -343,7 +359,7 @@ Note that this command can upgrade your solution from a previous version, and al
 * `--solution-name` or `-sn`: Specify the solution name. Search `*.sln` files in the directory by default.
 * `--check-all`: Check the new version of each package separately. Default is `false`.
 * `--version` or `-v`: Specifies the version to use for update. If not specified, latest version is used.
-* * `--leptonx-version` or `-lv`: Specifies the LeptonX version to use for update. If not specified, latest version or the version that is compatible with `--version` argument  is used.
+* `--leptonx-version` or `-lv`: Specifies the LeptonX version to use for update. If not specified, latest version or the version that is compatible with `--version` argument  is used.
 
 ### clean
 
@@ -979,6 +995,35 @@ Usage:
 abp install-old-cli [options]
 ```
 
+### mcp-studio
+
+Starts an MCP stdio bridge for AI tools (Cursor, Claude Desktop, VS Code, etc.) that connects to the local ABP Studio instance. ABP Studio must be running for this command to work.
+
+> You do not need to run this command manually. It is invoked automatically by your AI tool once you add the MCP configuration to your IDE. See the [Configuration](#configuration) examples below.
+
+> This command connects to the **local ABP Studio** instance. It is separate from the `abp mcp` command, which connects to the ABP.IO cloud MCP service and requires an active license.
+
+Usage:
+
+```bash
+abp mcp-studio [options]
+```
+
+Options:
+
+* `--endpoint` or `-e`: Overrides ABP Studio MCP endpoint. Default value is `http://localhost:38280/mcp/`.
+
+Example:
+
+```bash
+abp mcp-studio
+abp mcp-studio --endpoint http://localhost:38280/mcp/
+```
+
+For detailed configuration examples (Cursor, Claude Desktop, VS Code) and the full list of available MCP tools, see the [Model Context Protocol (MCP)](../studio/model-context-protocol.md) documentation.
+
+> You can also run `abp help mcp-studio` to see available options and example IDE configuration snippets directly in your terminal.
+
 ### generate-razor-page
 
 `generate-razor-page` command to generate a page class and then use it in the ASP NET Core pipeline to return an HTML page.
@@ -1094,6 +1139,99 @@ app.Use(async (httpContext, next) =>
 #### Options
 
 * ```--version``` or ```-v```: Specifies the version for ABP CLI to be installed.
+
+### generate-jwks
+
+Generates an RSA key pair for use with OpenIddict `private_key_jwt` client authentication.
+
+The command produces two files:
+
+| File | Description |
+|---|---|
+| `<prefix>.json` | JWKS (JSON Web Key Set) containing the **public key**. Paste this into the **JSON Web Key Set** field of your OpenIddict application in the ABP management UI. |
+| `<prefix>-private.pem` | PKCS#8 PEM **private key**. Store this securely in your client application and use it to sign JWT client assertions. |
+
+> **Security notice:** Never commit the private key file to source control. Add it to `.gitignore`. Only the JWKS (public key) needs to be shared with the authorization server.
+
+Usage:
+
+```bash
+abp generate-jwks [options]
+```
+
+#### Options
+
+* `--output` or `-o`: Output directory. Defaults to the current directory.
+* `--key-size` or `-s`: RSA key size in bits. Supported values: `2048` (default), `4096`.
+* `--alg`: Signing algorithm. Supported values: `RS256` (default), `RS384`, `RS512`, `PS256`, `PS384`, `PS512`.
+* `--kid`: Custom Key ID. Auto-generated if not specified.
+* `--file` or `-f`: Output file name prefix. Defaults to `jwks`. Generates `<prefix>.json` and `<prefix>-private.pem`.
+
+#### Examples
+
+```bash
+# Generate with defaults (2048-bit RS256, current directory)
+abp generate-jwks
+
+# Generate with RS512 and 4096-bit key
+abp generate-jwks --alg RS512 --key-size 4096
+
+# Output to a specific directory with a custom file prefix
+abp generate-jwks -o ./keys -f myapp
+```
+
+#### Workflow
+
+1. Run `abp generate-jwks` to generate the key pair.
+
+2. Open the ABP OpenIddict application management UI, select your **Confidential** application, choose **JWKS (private_key_jwt)** as the authentication method, and paste the contents of `jwks.json` into the **JSON Web Key Set** field.
+
+3. In your client application, load the private key from the PEM file and sign JWT client assertions:
+
+```csharp
+// Load private key from PEM file
+using var rsa = RSA.Create();
+rsa.ImportFromPem(await File.ReadAllTextAsync("jwks-private.pem"));
+
+// The kid must match the "kid" field in the JWKS registered on the server
+var signingKey = new RsaSecurityKey(rsa) { KeyId = "<kid-from-jwks.json>" };
+var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.RsaSha256);
+
+var now = DateTime.UtcNow;
+var jwtHandler = new JsonWebTokenHandler();
+var clientAssertion = jwtHandler.CreateToken(new SecurityTokenDescriptor
+{
+    // OpenIddict requires typ = "client-authentication+jwt"
+    TokenType = "client-authentication+jwt",
+    // iss and sub must both equal the client_id
+    Issuer = "<your-client-id>",
+    Audience = "<authorization-server-issuer-uri>",
+    Subject = new ClaimsIdentity(new[]
+    {
+        new Claim(JwtRegisteredClaimNames.Sub, "<your-client-id>"),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+    }),
+    IssuedAt = now,
+    NotBefore = now,
+    Expires = now.AddMinutes(5),
+    SigningCredentials = signingCredentials,
+});
+
+// Use the assertion in the token request
+var tokenResponse = await httpClient.RequestClientCredentialsTokenAsync(
+    new ClientCredentialsTokenRequest
+    {
+        Address = "<token-endpoint>",
+        ClientId = "<your-client-id>",
+        ClientCredentialStyle = ClientCredentialStyle.PostBody,
+        ClientAssertion = new ClientAssertion
+        {
+            Type = OidcConstants.ClientAssertionTypes.JwtBearer,
+            Value = clientAssertion,
+        },
+        Scope = "<requested-scopes>",
+    });
+```
 
 ## See Also
 

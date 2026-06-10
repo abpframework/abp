@@ -19,7 +19,8 @@ public class AbpMongoDbModule : AbpModule
 {
     static AbpMongoDbModule()
     {
-        BsonSerializer.TryRegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
+        AbpBsonSerializer.RemoveSerializer<Guid>();
+        BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
         BsonTypeMapper.RegisterCustomTypeMapper(typeof(Guid), new AbpGuidCustomBsonTypeMapper());
     }
 
@@ -35,15 +36,17 @@ public class AbpMongoDbModule : AbpModule
             typeof(UnitOfWorkMongoDbContextProvider<>)
         );
 
-        context.Services.TryAddTransient(
-            typeof(IMongoDbRepositoryFilterer<>),
-            typeof(MongoDbRepositoryFilterer<>)
-        );
+        context.Services.TryAddEnumerable(
+            ServiceDescriptor.Transient(
+                typeof(IMongoDbRepositoryFilterer<>),
+                typeof(MongoDbRepositoryFilterer<>)
+            ));
 
-        context.Services.TryAddTransient(
-            typeof(IMongoDbRepositoryFilterer<,>),
-            typeof(MongoDbRepositoryFilterer<,>)
-        );
+        context.Services.TryAddEnumerable(
+            ServiceDescriptor.Transient(
+                typeof(IMongoDbRepositoryFilterer<,>),
+                typeof(MongoDbRepositoryFilterer<,>)
+            ));
 
         context.Services.AddTransient(
             typeof(IMongoDbContextEventOutbox<>),

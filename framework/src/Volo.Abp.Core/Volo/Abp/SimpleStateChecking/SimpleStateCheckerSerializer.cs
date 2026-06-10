@@ -15,12 +15,27 @@ public class SimpleStateCheckerSerializer :
         _contributors = contributors;
     }
     
-    public string? Serialize<TState>(ISimpleStateChecker<TState> checker) 
+    public string? Serialize<TState>(ISimpleStateChecker<TState> checker)
         where TState : IHasSimpleStateCheckers<TState>
     {
         foreach (var contributor in _contributors)
         {
             var result = contributor.SerializeToJson(checker);
+            if (result != null)
+            {
+                return result;
+            }
+        }
+
+        return null;
+    }
+
+    public string? Serialize<TState>(ISimpleStateChecker<TState> checker, TState state)
+        where TState : IHasSimpleStateCheckers<TState>
+    {
+        foreach (var contributor in _contributors)
+        {
+            var result = contributor.SerializeToJson(checker, state);
             if (result != null)
             {
                 return result;

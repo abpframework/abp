@@ -1,0 +1,93 @@
+@if (visible()) {
+  <div class="form-array-container" role="region" [attr.aria-label]="arrayConfig().label | abpLocalization">
+    
+    <!-- Header with Add Button -->
+    <div class="array-header d-flex justify-content-between align-items-center mb-3">
+      <label class="form-array-label">
+        {{ arrayConfig().label | abpLocalization }}
+        @if (arrayConfig().required) {
+          <span class="text-danger" aria-label="required">*</span>
+        }
+      </label>
+      <button 
+        type="button" 
+        class="btn btn-sm btn-primary"
+        (click)="addItem()"
+        [disabled]="!canAddItem"
+        [attr.aria-label]="'Add ' + (arrayConfig().label | abpLocalization)">
+        <i class="fa fa-plus me-1"></i>
+        {{ '::Add' | abpLocalization }}
+      </button>
+    </div>
+
+    <!-- Array Items -->
+    <div class="array-items" role="list">
+      @for (item of formArray.controls; track trackByIndex($index)) {
+        <div class="array-item border rounded p-3 mb-3" role="listitem" [formGroup]="getItemFormGroup($index)">
+          
+          <!-- Item Header -->
+          <div class="item-header d-flex justify-content-between align-items-center mb-3">
+            <strong class="item-title">
+              {{ arrayConfig().label | abpLocalization }} #{{ $index + 1 }}
+            </strong>
+            <button 
+              type="button" 
+              class="btn btn-sm btn-danger"
+              (click)="removeItem($index)"
+              [disabled]="!canRemoveItem"
+              [attr.aria-label]="'Remove ' + (arrayConfig().label | abpLocalization) + ' #' + ($index + 1)">
+              <i class="fa fa-trash me-1"></i>
+              {{ '::Remove' | abpLocalization }}
+            </button>
+          </div>
+
+          <!-- Item Fields -->
+          <div class="row">
+            @for (field of sortedChildren; track field.key) {
+              <div [ngClass]="'col-md-' + (field.gridSize || 12)">
+                
+                <!-- Nested Group -->
+                @if (field.type === 'group') {
+                  <abp-dynamic-form-group
+                    [groupConfig]="field"
+                    [formGroup]="getNestedFormGroup($index, field.key)" />
+                }
+                
+                <!-- Nested Array (recursive) -->
+                @else if (field.type === 'array') {
+                  <abp-dynamic-form-array
+                    [arrayConfig]="field"
+                    [formGroup]="getItemFormGroup($index)" />
+                }
+                
+                <!-- Regular Field -->
+                @else {
+                  <abp-dynamic-form-field
+                    [field]="field"
+                    [formControlName]="field.key" />
+                }
+                
+              </div>
+            }
+          </div>
+        </div>
+      } @empty {
+        <div class="alert alert-info" role="status">
+          <i class="fa fa-info-circle me-2"></i>
+          {{ '::NoItemsAdded' | abpLocalization }}
+        </div>
+      }
+    </div>
+
+    <!-- Item Count -->
+    <div class="array-footer text-muted small" aria-live="polite" aria-atomic="true">
+      {{ formArray.length }} {{ '::Items' | abpLocalization }}
+      @if (arrayConfig().minItems) {
+        ({{ '::Min' | abpLocalization }}: {{ arrayConfig().minItems }})
+      }
+      @if (arrayConfig().maxItems) {
+        ({{ '::Max' | abpLocalization }}: {{ arrayConfig().maxItems }})
+      }
+    </div>
+  </div>
+}

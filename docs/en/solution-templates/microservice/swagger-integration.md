@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate Swagger for API documentation in ABP Framework microservices, enhancing usability and client SDK generation."
+}
+```
+
 # Microservice Solution: Swagger Integration
 
 ````json

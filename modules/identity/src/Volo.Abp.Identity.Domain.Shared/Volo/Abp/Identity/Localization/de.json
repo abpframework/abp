@@ -57,6 +57,7 @@
     "Volo.Abp.Identity:PasswordRequiresUpper": "Passwörter müssen mindestens einen Großbuchstaben ('A' - 'Z') enthalten.",
     "Volo.Abp.Identity:PasswordTooShort": "Passwörter müssen mindestens {0} Zeichen lang sein.",
     "Volo.Abp.Identity:PasswordRequiresUniqueChars": "Passwörter dürfen nicht mehr als {0} aufeinanderfolgende identische Zeichen enthalten.",
+    "Volo.Abp.Identity:PasswordInHistory": "Passwörter dürfen nicht mit Ihren letzten {0} Passwörtern übereinstimmen.",
     "Volo.Abp.Identity:RoleNotFound": "Rolle {0} existiert nicht.",
     "Volo.Abp.Identity:UserAlreadyHasPassword": "Der Benutzer hat bereits ein Passwort festgelegt.",
     "Volo.Abp.Identity:UserAlreadyInRole": "Benutzer bereits in Rolle '{0}'.",
@@ -76,6 +77,7 @@
     "Volo.Abp.Identity:010007": "Sie können Ihre Zwei-Faktor-Einstellung nicht ändern.",
     "Volo.Abp.Identity:010008": "Die Zwei-Faktor-Einstellung dürfen nicht geändert werden.",
     "Volo.Abp.Identity:010009": "Sie können sich nicht selbst delegieren.",
+    "Volo.Abp.Identity:010010": "Die übergeordnete Organisationseinheit ('{ParentId}') existiert nicht oder gehört zu einem anderen Mandanten.",
     "Volo.Abp.Identity:010021": "Der Name existiert bereits {0}",
     "Volo.Abp.Identity:010022": "Der Name kann nicht aktualisiert werden.",
     "Volo.Abp.Identity:010023": "Der Name kann nicht gelöscht werden.",
@@ -98,6 +100,8 @@
     "DisplayName:Abp.Identity.Password.RequireDigit": "Erforderliche Ziffer",
     "DisplayName:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "Benutzer müssen das Passwort regelmäßig ändern",
     "DisplayName:Abp.Identity.Password.PasswordChangePeriodDays": "Passwortänderungszeitraum (Tage)",
+    "DisplayName:Abp.Identity.Password.EnablePreventPasswordReuse": "Wiederverwendung von Passwörtern verhindern aktivieren",
+    "DisplayName:Abp.Identity.Password.PreventPasswordReuseCount": "Anzahl der zu verhindernden Passwortwiederverwendungen",
     "DisplayName:Abp.Identity.Lockout.AllowedForNewUsers": "Für neue Benutzer aktiviert",
     "DisplayName:Abp.Identity.Lockout.LockoutDuration": "Sperrdauer (Sekunden)",
     "DisplayName:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Max. Fehlgeschlagene Zugriffsversuche",
@@ -114,6 +118,8 @@
     "Description:Abp.Identity.Password.RequireDigit": "Wenn Passwörter eine Ziffer enthalten müssen.",
     "Description:Abp.Identity.Password.ForceUsersToPeriodicallyChangePassword": "Gibt an, ob Benutzer das Passwort regelmäßig ändern müssen.",
     "Description:Abp.Identity.Password.PasswordChangePeriodDays": "Die Anzahl der Tage, nach denen ein Benutzer das Passwort ändern muss.",
+    "Description:Abp.Identity.Password.EnablePreventPasswordReuse": "Ob verhindert werden soll, dass Benutzer ihre vorherigen Passwörter wiederverwenden.",
+    "Description:Abp.Identity.Password.PreventPasswordReuseCount": "Die Anzahl der vorherigen Passwörter, die nicht wiederverwendet werden können.",
     "Description:Abp.Identity.Lockout.AllowedForNewUsers": "Gibt an, ob ein neuer Benutzer gesperrt werden kann.",
     "Description:Abp.Identity.Lockout.LockoutDuration": "Die Dauer, für die ein Benutzer gesperrt ist, wenn eine Sperre auftritt.",
     "Description:Abp.Identity.Lockout.MaxFailedAccessAttempts": "Die Anzahl der fehlgeschlagenen Zugriffsversuche, die zulässig sind, bevor ein Benutzer gesperrt wird, sofern die Sperre aktiviert ist.",
@@ -130,6 +136,8 @@
     "LockoutEndTime": "Endzeit der Sperrung",
     "FailedAccessCount": "Anzahl der fehlgeschlagenen Zugriffe",
     "DisplayName:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "E-Mail-Verifizierung für die Registrierung erzwingen",
-    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Benutzerkonten werden nicht erstellt, es sei denn, sie verifizieren ihre E-Mail-Adressen."
+    "Description:Abp.Identity.SignIn.RequireEmailVerificationToRegister": "Benutzerkonten werden nicht erstellt, es sei denn, sie verifizieren ihre E-Mail-Adressen.",
+    "UserResourcePermissionProviderKeyLookupService": "Benutzer",
+    "RoleResourcePermissionProviderKeyLookupService": "Rolle"
   }
 }

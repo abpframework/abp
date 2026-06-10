@@ -333,12 +333,16 @@
                   "path": "studio/solution-explorer.md"
                 },
                 {
-                  "text": "Running Applications",
+                  "text": "Solution Runner",
                   "path": "studio/running-applications.md"
                 },
                 {
                   "text": "Monitoring Applications",
                   "path": "studio/monitoring-applications.md"
+                },
+                {
+                  "text": "Model Context Protocol (MCP)",
+                  "path": "studio/model-context-protocol.md"
                 },
                 {
                   "text": "Working with Kubernetes",
@@ -347,6 +351,10 @@
                 {
                   "text": "Working with ABP Suite",
                   "path": "studio/working-with-suite.md"
+                },
+                {
+                  "text": "Custom Commands",
+                  "path": "studio/custom-commands.md"
                 }
               ]
             },
@@ -458,12 +466,16 @@
               "items": [
                 {
                   "text": "Overview",
-                  "path": "framework/fundamentals/authorization.md",
+                  "path": "framework/fundamentals/authorization/index.md",
                   "isIndex": true
                 },
                 {
                   "text": "Dynamic Claims",
                   "path": "framework/fundamentals/dynamic-claims.md"
+                },
+                {
+                  "text": "Resource Based Authorization",
+                  "path": "framework/fundamentals/authorization/resource-based-authorization.md"
                 }
               ]
             },
@@ -553,6 +565,28 @@
               "path": "framework/infrastructure/audit-logging.md"
             },
             {
+              "text": "Artificial Intelligence",
+              "items":[
+                {
+                  "text": "Overview",
+                  "path": "framework/infrastructure/artificial-intelligence/index.md",
+                  "isIndex": true
+                },
+                {
+                  "text": "Microsoft.Extensions.AI",
+                  "path": "framework/infrastructure/artificial-intelligence/microsoft-extensions-ai.md"
+                },
+                {
+                  "text": "Agent Framework",
+                  "path": "framework/infrastructure/artificial-intelligence/microsoft-agent-framework.md"
+                },               
+                {
+                  "text": "Semantic Kernel",
+                  "path": "framework/infrastructure/artificial-intelligence/microsoft-semantic-kernel.md"
+                }
+              ]
+            },
+            {
               "text": "Background Jobs",
               "items": [
                 {
@@ -571,6 +605,10 @@
                 {
                   "text": "Quartz Integration",
                   "path": "framework/infrastructure/background-jobs/quartz.md"
+                },
+                {
+                  "text": "TickerQ Integration",
+                  "path": "framework/infrastructure/background-jobs/tickerq.md"
                 }
               ]
             },
@@ -589,6 +627,10 @@
                 {
                   "text": "Hangfire Integration",
                   "path": "framework/infrastructure/background-workers/hangfire.md"
+                },
+                {
+                  "text": "TickerQ Integration",
+                  "path": "framework/infrastructure/background-workers/tickerq.md"
                 }
               ]
             },
@@ -603,6 +645,10 @@
                 {
                   "text": "Storage Providers",
                   "items": [
+                    {
+                      "text": "Memory Provider",
+                      "path": "framework/infrastructure/blob-storing/memory.md"
+                    },
                     {
                       "text": "File System Provider",
                       "path": "framework/infrastructure/blob-storing/file-system.md"
@@ -654,6 +700,10 @@
             {
               "text": "Concurrency Check",
               "path": "framework/infrastructure/concurrency-check.md"
+            },
+            {
+              "text": "Correlation ID",
+              "path": "framework/infrastructure/correlation-id.md"
             },
             {
               "text": "Current User",
@@ -744,6 +794,10 @@
             {
               "text": "Image Manipulation",
               "path": "framework/infrastructure/image-manipulation.md"
+            },
+            {
+              "text": "Interceptors",
+              "path": "framework/infrastructure/interceptors.md"
             },
             {
               "text": "JSON",
@@ -1246,7 +1300,7 @@
                     },
                     {
                       "text": "LeptonX Lite",
-                      "path": "ui-themes/lepton-x-lite/mvc.md"
+                      "path": "ui-themes/lepton-x-lite/asp-net-core.md"
                     },
                     {
                       "text": "LeptonX",
@@ -1524,6 +1578,14 @@
                       "path": "framework/ui/angular/service-proxies.md"
                     },
                     {
+                      "text": "SSR Configuration",
+                      "path": "framework/ui/angular/ssr-configuration.md"
+                    },
+                    {
+                      "text": "AI Tools Configuration",
+                      "path": "framework/ui/angular/ai-config.md"
+                    },
+                    {
                       "text": "PWA Configuration",
                       "path": "framework/ui/angular/pwa-configuration.md"
                     },
@@ -1564,6 +1626,10 @@
                     {
                       "text": "Localization",
                       "path": "framework/ui/angular/localization.md"
+                    },
+                    {
+                      "text": "Hybrid Localization",
+                      "path": "framework/ui/angular/hybrid-localization.md"
                     },
                     {
                       "text": "Form Validation",
@@ -1607,7 +1673,7 @@
                       "path": "framework/ui/angular/list-service.md"
                     },
                     {
-                      "text": "Easy *ngFor trackBy",
+                      "text": "Easy @for() track",
                       "path": "framework/ui/angular/track-by-service.md"
                     },
                     {
@@ -1781,6 +1847,10 @@
                       "path": "framework/ui/angular/card-component.md"
                     },
                     {
+                      "text": "Dynamic Forms",
+                      "path": "framework/ui/angular/dynamic-form-module.md"
+                    },
+                    {
                       "text": "Password Complexity Indicator",
                       "path": "framework/ui/angular/password-complexity-indicator-component.md"
                     },
@@ -1822,6 +1892,10 @@
                 {
                   "text": "Overriding the User Interface",
                   "path": "framework/architecture/modularity/extending/overriding-user-interface.md"
+                },
+                {
+                  "text": "How to Override LeptonX CSS Variables",
+                  "path": "framework/ui/common/leptonx-css-variables.md"
                 },
                 {
                   "text": "Utilities",
@@ -2127,11 +2201,11 @@
         {
           "text": "Microservice Solution",
           "isLazyExpandable": true,
-          "path": "solution-templates/microservice",
+          "path": "solution-templates/microservice/index.md",
           "items":[
             {
               "text": "Overview",
-              "path": "solution-templates/microservice"
+              "path": "solution-templates/microservice/overview.md"
             },
             {
               "text": "Solution Structure",
@@ -2187,7 +2261,7 @@
                 },
                 {
                   "text": "Swagger integration",
-                  "path": "solution-templates/microservice/swagger.md"
+                  "path": "solution-templates/microservice/swagger-integration.md"
                 },
                 {
                   "text": "Permission management",
@@ -2257,6 +2331,10 @@
               "path": "solution-templates/microservice/helm-charts-and-kubernetes.md"
             },
             {
+              "text": ".NET Aspire Integration",
+              "path": "solution-templates/microservice/aspire-integration.md"
+            },
+            {
               "text": "Guides",
               "items": [
                 {
@@ -2318,14 +2396,22 @@
               "isIndex": true
             },
             {
+              "text": "Idle Session Timeout",
+              "path": "modules/account/idle-session-timeout.md"
+            },
+            {
               "text": "Tenant impersonation & User impersonation",
               "path": "modules/account/impersonation.md"
             },
             {
-              "text": "Idle Session Timeout",
-              "path": "modules/account/idle-session-timeout.md"
+              "text": "Web Authentication API (WebAuthn) passkeys",
+              "path": "modules/account/passkey.md"
             }
           ]
+        },
+        {
+          "text": "AI Management (Pro)",
+          "path": "modules/ai-management/index.md"
         },
         {
           "text": "Audit Logging",
@@ -2345,15 +2431,99 @@
         },
         {
           "text": "CMS Kit",
-          "path": "modules/cms-kit"
+          "isLazyExpandable": true,
+          "path": "modules/cms-kit",
+          "items": [
+            {
+              "text": "Overview",
+              "path": "modules/cms-kit.md",
+              "isIndex": true
+            },
+            {
+              "text": "Pages",
+              "path": "modules/cms-kit/pages.md"
+            },
+            {
+              "text": "Blogging",
+              "path": "modules/cms-kit/blogging.md"
+            },
+            {
+              "text": "Tag Management",
+              "path": "modules/cms-kit/tags.md"
+            },
+            {
+              "text": "Comments",
+              "path": "modules/cms-kit/comments.md"
+            },
+            {
+              "text": "Reaction System",
+              "path": "modules/cms-kit/reactions.md"
+            },
+            {
+              "text": "Rating System",
+              "path": "modules/cms-kit/ratings.md"
+            },
+            {
+              "text": "Menus",
+              "path": "modules/cms-kit/menus.md"
+            },
+            {
+              "text": "Global Resources",
+              "path": "modules/cms-kit/global-resources.md"
+            },
+            {
+              "text": "Dynamic Widget",
+              "path": "modules/cms-kit/dynamic-widget.md"
+            },
+            {
+              "text": "Marked Item System",
+              "path": "modules/cms-kit/marked-items.md"
+            }
+          ]
         },
         {
           "text": "CMS Kit (Pro)",
-          "path": "modules/cms-kit-pro"
+          "isLazyExpandable": true,
+          "path": "modules/cms-kit-pro",
+          "items": [
+            {
+              "text": "Overview",
+              "path": "modules/cms-kit-pro.md",
+              "isIndex": true
+            },
+            {
+              "text": "Newsletter System",
+              "path": "modules/cms-kit-pro/newsletter.md"
+            },
+            {
+              "text": "Contact Management",
+              "path": "modules/cms-kit-pro/contact-form.md"
+            },
+            {
+              "text": "URL Forwarding System",
+              "path": "modules/cms-kit-pro/URL-forwarding.md"
+            },
+            {
+              "text": "Poll System",
+              "path": "modules/cms-kit-pro/poll.md"
+            },
+            {
+              "text": "Page Feedback System",
+              "path": "modules/cms-kit-pro/page-feedback.md"
+            },
+            {
+              "text": "FAQ System",
+              "path": "modules/cms-kit-pro/faq.md"
+            }
+          ]
         },
         {
           "text": "Docs",
           "path": "modules/docs.md"
+        },
+        {
+          "text": "Elsa (Pro)",
+          "path": "modules/elsa-pro.md"
         },
         {
           "text": "Feature Management",
@@ -2402,6 +2572,10 @@
         {
           "text": "Language Management (Pro)",
           "path": "modules/language-management.md"
+        },
+        {
+          "text": "Operation Rate Limiting (Pro)",
+          "path": "modules/operation-rate-limiting.md"
         },
         {
           "text": "OpenIddict",
@@ -2541,6 +2715,10 @@
         {
           "text": "Optimizing for Production",
           "path": "deployment/optimizing-production.md"
+        },
+        {
+          "text": "Configuring Forwarded Headers for Reverse Proxies",
+          "path": "deployment/forwarded-headers.md"
         }
       ]
     },
@@ -2567,6 +2745,10 @@
         {
           "text": "Easy CRM",
           "path": "samples/easy-crm.md"
+        },
+        {
+          "text": "Elsa Workflows Demo",
+          "path": "samples/elsa-workflows-demo.md"
         }
       ]
     },

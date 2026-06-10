@@ -8,6 +8,22 @@
     "SelectAllInThisTab": "Выбрать все",
     "SaveWithoutAnyPermissionsWarningMessage": "Вы уверены, что хотите сохранить без каких-либо разрешений?",
     "PermissionGroup": "Группа разрешений",
-    "Filter": "Фильтр"
+    "Filter": "Фильтр",
+    "ResourcePermissions": "Разрешения",
+    "ResourcePermissionTarget": "Цель",
+    "ResourcePermissionPermissions": "Разрешения",
+    "AddResourcePermission": "Добавить разрешение",
+    "ResourcePermissionDeletionConfirmationMessage": "Вы уверены, что хотите удалить все разрешения?",
+    "UpdateResourcePermission": "Обновить разрешение",
+    "GrantAllResourcePermissions": "Предоставить все",
+    "NoResourceProviderKeyLookupServiceFound": "Служба поиска ключа поставщика не найдена",
+    "NoResourcePermissionFound": "Не определено ни одного разрешения.",
+    "UpdatePermission": "Обновить разрешение",
+    "NoPermissionsAssigned": "Нет назначенных разрешений",
+    "SelectProvider": "Выбрать провайдера",
+    "SearchProviderKey": "Поиск ключа провайдера",
+    "Provider": "Провайдер",
+    "ErrorLoadingPermissions": "Ошибка при загрузке разрешений",
+    "PleaseSelectProviderAndPermissions": "Пожалуйста, выберите провайдера и разрешения"
   }
 }

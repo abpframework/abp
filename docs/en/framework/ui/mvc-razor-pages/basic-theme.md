@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the Basic Theme for ASP.NET Core MVC/Razor Pages—minimalist, customizable, and RTL-supported, perfect for building your own designs."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages: The Basic Theme
 
 The Basic Theme is a theme implementation for the ASP.NET Core MVC / Razor Pages UI. It is a minimalist theme that doesn't add any styling on top of the plain [Bootstrap](https://getbootstrap.com/). You can take the Basic Theme as the **base theme** and build your own theme or styling on top of it. See the *Customization* section.

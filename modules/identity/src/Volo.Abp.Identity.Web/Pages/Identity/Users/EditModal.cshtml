@@ -47,13 +47,14 @@
                         {
                             if (!propertyInfo.Name.EndsWith("_Text"))
                             {
-                                if (propertyInfo.Type.IsEnum || !propertyInfo.Lookup.Url.IsNullOrEmpty())
+                                if (propertyInfo.IsEnum() || !propertyInfo.Lookup.Url.IsNullOrEmpty())
                                 {
-                                    if (propertyInfo.Type.IsEnum)
+                                    if (propertyInfo.IsEnum())
                                     {
                                         Model.UserInfo.ExtraProperties.ToEnum(propertyInfo.Name, propertyInfo.Type);
                                     }
                                     <abp-select asp-for="UserInfo.ExtraProperties[propertyInfo.Name]"
+                                                enum-type="@propertyInfo.IsEnum() ? propertyInfo.Type : null"
                                                 label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
                                                 autocomplete-api-url="@propertyInfo.Lookup.Url"
                                                 autocomplete-selected-item-name="@Model.UserInfo.GetProperty(propertyInfo.Name+"_Text")"
@@ -82,7 +83,14 @@
                             @for (var i = 0; i < Model.Roles.Length; i++)
                             {
                                 var role = Model.Roles[i];
-                                <abp-input abp-id-name="@Model.Roles[i].IsAssigned" asp-for="@role.IsAssigned" label="@role.Name" />
+                                @if (role.IsAssignable)
+                                {
+                                    <abp-input abp-id-name="@Model.Roles[i].IsAssigned" asp-for="@role.IsAssigned" label="@role.Name" />
+                                }
+                                else
+                                {
+                                    <abp-input abp-id-name="@Model.Roles[i].IsAssigned" asp-for="@role.IsAssigned" label="@role.Name" disabled="true" readonly="true" />
+                                }
                                 <input abp-id-name="@Model.Roles[i].Name" asp-for="@role.Name" />
                             }
                         </div>

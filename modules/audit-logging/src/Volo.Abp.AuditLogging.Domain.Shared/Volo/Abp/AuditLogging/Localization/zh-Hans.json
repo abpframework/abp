@@ -103,6 +103,7 @@
     "Exporting": "导出中",
     "ExportCompleted": "导出成功完成",
     "ExportFailed": "导出失败",
+    "ThereWereNoRecordsToExport": "没有可导出的记录。",
     "ExportJobQueued": "导出作业已为{0}条记录排队。导出完成后您将收到电子邮件。",
     "ExportReady": "{0}条记录的导出已完成，可以下载。",
     "FileName": "文件名",

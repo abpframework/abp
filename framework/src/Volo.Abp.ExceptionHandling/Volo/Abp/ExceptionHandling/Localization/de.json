@@ -13,6 +13,7 @@
     "DefaultErrorMessage404": "Ressource nicht gefunden!",
     "DefaultErrorMessage404Detail": "Die angeforderte Ressource konnte nicht auf dem Server gefunden werden!",
     "EntityNotFoundErrorMessage": "Es gibt keine Entität {0} mit id = {1}!",
+    "EntityNotFoundErrorMessageWithoutId": "Es gibt keine Entität {0}!",
     "AbpDbConcurrencyErrorMessage": "Die von Ihnen übermittelten Daten wurden bereits von einem anderen Benutzer/Kunden geändert. Bitte verwerfen Sie die vorgenommenen Änderungen und versuchen Sie es von vorne.",
     "Error": "Fehler",
     "UnhandledException": "Unbehandelte Ausnahme!",

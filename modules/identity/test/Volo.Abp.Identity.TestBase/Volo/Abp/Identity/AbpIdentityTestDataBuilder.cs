@@ -124,8 +124,11 @@ public class AbpIdentityTestDataBuilder : ITransientDependency
 
     private async Task AddUsers()
     {
-        var adminUser = new IdentityUser(_guidGenerator.Create(), "administrator", "admin@abp.io");
+        var adminUser = new IdentityUser(_testData.UserAdminId, "administrator", "administrator@abp.io");
         adminUser.AddRole(_adminRole.Id);
+        adminUser.AddRole(_moderatorRole.Id);
+        adminUser.AddRole(_supporterRole.Id);
+        adminUser.AddRole(_managerRole.Id);
         adminUser.AddClaim(_guidGenerator, new Claim("TestClaimType", "42"));
         await _userRepository.InsertAsync(adminUser);
 
@@ -140,6 +143,8 @@ public class AbpIdentityTestDataBuilder : ITransientDependency
         john.AddLogin(new UserLoginInfo("twitter", "johnx", "John Nash"));
         john.AddClaim(_guidGenerator, new Claim("TestClaimType", "42"));
         john.SetToken("test-provider", "test-name", "test-value");
+        john.AddPasskey(_testData.PasskeyCredentialId1, new IdentityPasskeyData());
+        john.AddPasskey(_testData.PasskeyCredentialId2, new IdentityPasskeyData());
         await _userRepository.InsertAsync(john);
 
         var david = new IdentityUser(_testData.UserDavidId, "david", "david@abp.io");
@@ -152,6 +157,7 @@ public class AbpIdentityTestDataBuilder : ITransientDependency
         neo.AddRole(_supporterRole.Id);
         neo.AddClaim(_guidGenerator, new Claim("TestClaimType", "43"));
         neo.AddOrganizationUnit(_ou111.Id);
+        neo.AddPasskey(_testData.PasskeyCredentialId3, new IdentityPasskeyData());
         await _userRepository.InsertAsync(neo);
 
         var bob = new IdentityUser(_testData.UserBobId, "bob", "bob@abp.io");

@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/jest';
+import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/vitest';
 import { RouterOutletComponent } from '../components/router-outlet.component';
 import { RoutesService } from '../services/routes.service';
 import { findRoute, getRoutePath } from '../utils/route-utils';
 
-@Component({ template: '' })
+@Component({ 
+  template: ''
+})
 class DummyComponent {}
 
 describe('Route Utils', () => {
@@ -21,7 +23,7 @@ describe('Route Utils', () => {
     `(
       'should find $expected in $count turns when path is $path',
       async ({ path, expected, count }) => {
-        const find = jest.fn(cb => (cb(node) ? node : null));
+        const find = vi.fn(cb => (cb(node) ? node : null));
         const routes = { find } as any as RoutesService;
         const route = findRoute(routes, path);
         expect(route).toBe(expected);
@@ -35,8 +37,7 @@ describe('Route Utils', () => {
     const createRouting = createRoutingFactory({
       component: RouterOutletComponent,
       stubsEnabled: false,
-      declarations: [DummyComponent],
-      imports: [RouterModule],
+      imports: [RouterModule, DummyComponent],
       routes: [
         {
           path: '',

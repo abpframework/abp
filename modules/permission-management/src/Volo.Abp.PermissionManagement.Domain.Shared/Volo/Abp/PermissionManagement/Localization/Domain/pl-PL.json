@@ -8,6 +8,22 @@
     "SelectAllInThisTab": "Zaznacz wszystkie",
     "SaveWithoutAnyPermissionsWarningMessage": "Czy na pewno chcesz zapisać bez żadnych uprawnień?",
     "PermissionGroup": "Grupa uprawnień",
-    "Filter": "Filtr"
+    "Filter": "Filtr",
+    "ResourcePermissions": "Uprawnienia",
+    "ResourcePermissionTarget": "Cel",
+    "ResourcePermissionPermissions": "Uprawnienia",
+    "AddResourcePermission": "Dodaj uprawnienie",
+    "ResourcePermissionDeletionConfirmationMessage": "Czy na pewno chcesz usunąć wszystkie uprawnienia?",
+    "UpdateResourcePermission": "Zaktualizuj uprawnienie",
+    "GrantAllResourcePermissions": "Przyznaj wszystko",
+    "NoResourceProviderKeyLookupServiceFound": "Nie znaleziono usługi wyszukiwania klucza dostawcy",
+    "NoResourcePermissionFound": "Nie zdefiniowano żadnych uprawnień.",
+    "UpdatePermission": "Aktualizuj uprawnienie",
+    "NoPermissionsAssigned": "Brak przypisanych uprawnień",
+    "SelectProvider": "Wybierz dostawcę",
+    "SearchProviderKey": "Szukaj klucza dostawcy",
+    "Provider": "Dostawca",
+    "ErrorLoadingPermissions": "Błąd podczas ładowania uprawnień",
+    "PleaseSelectProviderAndPermissions": "Wybierz dostawcę i uprawnienia"
   }
 }

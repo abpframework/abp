@@ -10,11 +10,11 @@
     "types": [],
     "lib": [
       "dom",
-      "es2018"
+      "es2020"
     ]
   },
   "exclude": [
-    "src/test.ts",
+    "src/test-setup.ts",
     "**/*.spec.ts"
   ]
 }

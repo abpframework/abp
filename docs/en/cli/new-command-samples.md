@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore sample commands to create ABP solutions using the ABP CLI, including Angular projects and database options for developers."
+}
+```
+
 # ABP CLI - New Solution Sample Commands 
 
 The `abp new` command creates an ABP solution or other artifacts based on an ABP template. [ABP CLI](../cli/index.md) has several parameters to create a new ABP solution. In this document we will show you some sample commands to create a new solution. All the project names are `Acme.BookStore`. Currently, the available mobile projects are `React Native` and `MAUI` mobile app (they are *available for* ***Team*** *or higher licenses*). Available database providers are `Entity Framework Core` and `MongoDB`. All the commands starts with `abp new`.
@@ -164,7 +171,7 @@ It's a template of a basic .NET console application with ABP module architecture
 * This project consists of the following files: `Acme.BookStore.csproj`, `appsettings.json`, `BookStoreHostedService.cs`, `BookStoreModule.cs`, `HelloWorldService.cs` and `Program.cs`.
 
   ```bash
-  abp new Acme.BookStore -t console -csf
+  abp new Acme.BookStore -t console -csf --old
   ```
 
 ## Module

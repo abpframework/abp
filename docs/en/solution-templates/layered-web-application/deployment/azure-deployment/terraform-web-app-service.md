@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to provision an Azure Web App using Terraform with this step-by-step guide, including prerequisites and setup for a seamless deployment."
+}
+```
+
 # Provisioning an Azure Web App using Terraform
 
 ````json

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
+using Azure.Identity;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 using Microsoft.Extensions.Logging;
@@ -35,7 +36,17 @@ public class ConnectionPool : IConnectionPool, ISingletonDependency
             connectionName, new Lazy<ServiceBusClient>(() =>
             {
                 var config = _options.Connections.GetOrDefault(connectionName);
-                return new ServiceBusClient(config.ConnectionString, config.Client);
+                if (!config.ConnectionString.IsNullOrWhiteSpace())
+                {
+                    return new ServiceBusClient(config.ConnectionString, config.Client);
+                }
+
+                if (!config.FullyQualifiedNamespace.IsNullOrWhiteSpace() && config.TokenCredential != null)
+                {
+                    return new ServiceBusClient(config.FullyQualifiedNamespace, config.TokenCredential, config.Client);
+                }
+
+                throw new InvalidOperationException($"{connectionName} does not have a valid Service Bus connection configuration.");
             })
         ).Value;
     }
@@ -47,7 +58,17 @@ public class ConnectionPool : IConnectionPool, ISingletonDependency
             connectionName, new Lazy<ServiceBusAdministrationClient>(() =>
             {
                 var config = _options.Connections.GetOrDefault(connectionName);
-                return new ServiceBusAdministrationClient(config.ConnectionString, config.Admin);
+                if (!config.ConnectionString.IsNullOrWhiteSpace())
+                {
+                    return new ServiceBusAdministrationClient(config.ConnectionString, config.Admin);
+                }
+
+                if (!config.FullyQualifiedNamespace.IsNullOrWhiteSpace() && config.TokenCredential != null)
+                {
+                    return new ServiceBusAdministrationClient(config.FullyQualifiedNamespace, config.TokenCredential, config.Admin);
+                }
+
+                throw new InvalidOperationException($"{connectionName} does not have a valid Service Bus connection configuration.");
             })
         ).Value;
     }

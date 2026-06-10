@@ -41,6 +41,7 @@ public partial class RoleManagement
 
     protected override ValueTask SetBreadcrumbItemsAsync()
     {
+        BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(LUiNavigation["Menu:Administration"].Value));
         BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Menu:IdentityManagement"].Value));
         BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Roles"].Value));
         return base.SetBreadcrumbItemsAsync();

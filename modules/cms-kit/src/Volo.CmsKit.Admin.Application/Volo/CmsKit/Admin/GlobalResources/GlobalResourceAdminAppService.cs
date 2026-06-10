@@ -7,13 +7,14 @@ using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.GlobalResources;
 using Volo.CmsKit.Permissions;
+using Volo.CmsKit.Admin;
 
 namespace Volo.CmsKit.Admin.GlobalResources;
 
 [RequiresFeature(CmsKitFeatures.GlobalResourceEnable)]
 [RequiresGlobalFeature(typeof(GlobalResourcesFeature))]
 [Authorize(CmsKitAdminPermissions.GlobalResources.Default)]
-public class GlobalResourceAdminAppService : ApplicationService, IGlobalResourceAdminAppService
+public class GlobalResourceAdminAppService : CmsKitAdminAppServiceBase, IGlobalResourceAdminAppService
 {
     public GlobalResourceManager GlobalResourceManager { get; }
 

@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, Injector, inject } from '@angular/core';
 import { NavigationStart } from '@angular/router';
 import { of, Subject, timer } from 'rxjs';
 import { map, mapTo, switchMap, takeUntil, tap } from 'rxjs/operators';
@@ -14,10 +14,14 @@ export interface RouterWaitState {
   providedIn: 'root',
 })
 export class RouterWaitService {
+  private routerEvents = inject(RouterEvents);
+
   private store = new InternalStore<RouterWaitState>({ loading: false });
   private destroy$ = new Subject<void>();
   private delay: number;
-  constructor(private routerEvents: RouterEvents, injector: Injector) {
+  constructor() {
+    const injector = inject(Injector);
+
     this.delay = injector.get(LOADER_DELAY, 500);
     this.updateLoadingStatusOnNavigationEvents();
   }

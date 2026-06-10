@@ -1,0 +1,16 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Volo.Abp.Account.Application.Contracts/Volo.Abp.Account.Application.Contracts.csproj" />
+    <Project Path="src/Volo.Abp.Account.Application/Volo.Abp.Account.Application.csproj" />
+    <Project Path="src/Volo.Abp.Account.Blazor/Volo.Abp.Account.Blazor.csproj" />
+    <Project Path="src/Volo.Abp.Account.HttpApi.Client/Volo.Abp.Account.HttpApi.Client.csproj" />
+    <Project Path="src/Volo.Abp.Account.HttpApi/Volo.Abp.Account.HttpApi.csproj" />
+    <Project Path="src/Volo.Abp.Account.Installer/Volo.Abp.Account.Installer.csproj" />
+    <Project Path="src/Volo.Abp.Account.Web.IdentityServer/Volo.Abp.Account.Web.IdentityServer.csproj" />
+    <Project Path="src/Volo.Abp.Account.Web.OpenIddict/Volo.Abp.Account.Web.OpenIddict.csproj" />
+    <Project Path="src/Volo.Abp.Account.Web/Volo.Abp.Account.Web.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Volo.Abp.Account.Application.Tests/Volo.Abp.Account.Application.Tests.csproj" />
+  </Folder>
+</Solution>

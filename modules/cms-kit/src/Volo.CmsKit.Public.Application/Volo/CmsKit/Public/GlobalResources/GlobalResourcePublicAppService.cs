@@ -5,12 +5,13 @@ using Volo.Abp.GlobalFeatures;
 using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.GlobalResources;
+using Volo.CmsKit.Public;
 
 namespace Volo.CmsKit.Public.GlobalResources;
 
 [RequiresFeature(CmsKitFeatures.GlobalResourceEnable)]
 [RequiresGlobalFeature(typeof(GlobalResourcesFeature))]
-public class GlobalResourcePublicAppService : ApplicationService, IGlobalResourcePublicAppService
+public class GlobalResourcePublicAppService : CmsKitPublicAppServiceBase, IGlobalResourcePublicAppService
 {
     public GlobalResourceManager GlobalResourceManager { get; }
 

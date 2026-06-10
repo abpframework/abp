@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to leverage ABP's testing infrastructure for ASP.NET Core MVC/Razor Pages, enhancing your integration testing capabilities."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages: Testing
 
 > You can follow the [ASP.NET Core Integration Tests documentation](https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests) to learn details of ASP.NET Core integration tests. This document explains the additional test infrastructure provided by the ABP.

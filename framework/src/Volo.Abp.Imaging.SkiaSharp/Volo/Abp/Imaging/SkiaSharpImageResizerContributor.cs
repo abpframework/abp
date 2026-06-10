@@ -50,7 +50,7 @@ public class SkiaSharpImageResizerContributor : IImageResizerContributor, ITrans
         var (memoryBitmapStream, memorySkCodecStream) = await CreateMemoryStream(stream);
 
         using var original = SKBitmap.Decode(memoryBitmapStream);
-        using var resized = original.Resize(new SKImageInfo(resizeArgs.Width, resizeArgs.Height), Options.SKFilterQuality);
+        using var resized = original.Resize(new SKImageInfo((int)resizeArgs.Width, (int)resizeArgs.Height), Options.SKSamplingOptions);
         using var image = SKImage.FromBitmap(resized);
         using var codec = SKCodec.Create(memorySkCodecStream);
         var memoryStream = new MemoryStream();

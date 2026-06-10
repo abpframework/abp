@@ -13,36 +13,36 @@ namespace Volo.Abp.Imaging;
 public class ImageResizer : IImageResizer, ITransientDependency
 {
     protected IEnumerable<IImageResizerContributor> ImageResizerContributors { get; }
-    
+
     protected ImageResizeOptions ImageResizeOptions { get; }
-    
+
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
-    
+
     public ImageResizer(
-        IEnumerable<IImageResizerContributor> imageResizerContributors, 
-        IOptions<ImageResizeOptions> imageResizeOptions, 
+        IEnumerable<IImageResizerContributor> imageResizerContributors,
+        IOptions<ImageResizeOptions> imageResizeOptions,
         ICancellationTokenProvider cancellationTokenProvider)
     {
         ImageResizerContributors = imageResizerContributors.Reverse();
         CancellationTokenProvider = cancellationTokenProvider;
         ImageResizeOptions = imageResizeOptions.Value;
     }
-    
+
     public virtual async Task<ImageResizeResult<Stream>> ResizeAsync(
-        [NotNull] Stream stream, 
-        ImageResizeArgs resizeArgs, 
-        string? mimeType = null, 
+        [NotNull] Stream stream,
+        ImageResizeArgs resizeArgs,
+        string? mimeType = null,
         CancellationToken cancellationToken = default)
     {
         Check.NotNull(stream, nameof(stream));
-        
+
         ChangeDefaultResizeMode(resizeArgs);
-        
+
         if(!stream.CanRead)
         {
             return new ImageResizeResult<Stream>(stream, ImageProcessState.Unsupported);
         }
-        
+
         if(!stream.CanSeek)
         {
             var memoryStream = new MemoryStream();
@@ -50,13 +50,13 @@ public class ImageResizer : IImageResizer, ITransientDependency
             SeekToBegin(memoryStream);
             stream = memoryStream;
         }
-        
-        foreach (var imageResizerContributor in ImageResizerContributors)
+
+        foreach (var imageResizerContributor in ImageResizerContributors.Reverse())
         {
             var result = await imageResizerContributor.TryResizeAsync(stream, resizeArgs, mimeType, CancellationTokenProvider.FallbackToProvider(cancellationToken));
 
             SeekToBegin(stream);
-            
+
             if (result.State == ImageProcessState.Unsupported)
             {
                 continue;
@@ -64,24 +64,24 @@ public class ImageResizer : IImageResizer, ITransientDependency
 
             return result;
         }
-        
+
         return new ImageResizeResult<Stream>(stream, ImageProcessState.Unsupported);
     }
 
     public virtual async Task<ImageResizeResult<byte[]>> ResizeAsync(
-        [NotNull] byte[] bytes, 
-        ImageResizeArgs resizeArgs, 
-        string? mimeType = null, 
+        [NotNull] byte[] bytes,
+        ImageResizeArgs resizeArgs,
+        string? mimeType = null,
         CancellationToken cancellationToken = default)
     {
         Check.NotNull(bytes, nameof(bytes));
-        
+
         ChangeDefaultResizeMode(resizeArgs);
-        
-        foreach (var imageResizerContributor in ImageResizerContributors)
+
+        foreach (var imageResizerContributor in ImageResizerContributors.Reverse())
         {
             var result = await imageResizerContributor.TryResizeAsync(bytes, resizeArgs, mimeType, CancellationTokenProvider.FallbackToProvider(cancellationToken));
-            
+
             if (result.State == ImageProcessState.Unsupported)
             {
                 continue;
@@ -89,10 +89,10 @@ public class ImageResizer : IImageResizer, ITransientDependency
 
             return result;
         }
-        
+
         return new ImageResizeResult<byte[]>(bytes, ImageProcessState.Unsupported);
     }
-    
+
     protected virtual void ChangeDefaultResizeMode(ImageResizeArgs resizeArgs)
     {
         if (resizeArgs.Mode == ImageResizeMode.Default)
@@ -100,7 +100,7 @@ public class ImageResizer : IImageResizer, ITransientDependency
             resizeArgs.Mode = ImageResizeOptions.DefaultResizeMode;
         }
     }
-    
+
     protected virtual void SeekToBegin(Stream stream)
     {
         if (stream.CanSeek)

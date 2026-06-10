@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Caching;
 using Volo.Abp.Domain;
@@ -27,7 +27,7 @@ namespace Volo.Docs
     [DependsOn(
         typeof(DocsDomainSharedModule),
         typeof(AbpDddDomainModule),
-        typeof(AbpAutoMapperModule),
+        typeof(AbpMapperlyModule),
         typeof(AbpBlobStoringModule),
         typeof(AbpCachingModule)
         )]
@@ -35,13 +35,8 @@ namespace Volo.Docs
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAutoMapperObjectMapper<DocsDomainModule>();
-
-            Configure<AbpAutoMapperOptions>(options =>
-            {
-                options.AddProfile<DocsDomainMappingProfile>(validate: true);
-            });
-
+            context.Services.AddMapperlyObjectMapper<DocsDomainModule>();
+            
             Configure<AbpDistributedEntityEventOptions>(options =>
             {
                 options.EtoMappings.Add<Document, DocumentEto>(typeof(DocsDomainModule));

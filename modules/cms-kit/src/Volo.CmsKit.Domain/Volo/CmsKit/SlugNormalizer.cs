@@ -7,7 +7,7 @@ public static class SlugNormalizer
 {
     static readonly SlugHelper SlugHelper = new(new SlugHelperConfiguration
     {
-        AllowedChars =
+        AllowedCharacters =
         {
             '/'
         }

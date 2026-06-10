@@ -6,13 +6,12 @@
   "prefix": "app",
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:browser",
+      "executor": "@angular/build:application",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/dev-app",
-        "index": "apps/dev-app/src/index.html",
-        "main": "apps/dev-app/src/main.ts",
-        "polyfills": "apps/dev-app/src/polyfills.ts",
+        "browser": "apps/dev-app/src/main.ts",
+        "polyfills": ["apps/dev-app/src/polyfills.ts", "zone.js"],
         "tsConfig": "apps/dev-app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "allowedCommonJsDependencies": ["chart.js", "js-sha256"],
@@ -115,7 +114,12 @@
           },
           "apps/dev-app/src/styles.scss"
         ],
-        "scripts": []
+        "scripts": [],
+        "server": "apps/dev-app/src/main.server.ts",
+        "ssr": {
+          "entry": "apps/dev-app/src/server.ts"
+        },
+        "outputMode": "server"
       },
       "configurations": {
         "production": {
@@ -141,18 +145,16 @@
           "outputHashing": "all"
         },
         "development": {
-          "buildOptimizer": false,
           "optimization": false,
-          "vendorChunk": true,
           "extractLicenses": false,
-          "sourceMap": true,
-          "namedChunks": true
+          "sourceMap": true
         }
       },
       "defaultConfiguration": "production"
     },
     "serve": {
-      "executor": "@angular-devkit/build-angular:dev-server",
+      "continuous": true,
+      "executor": "@angular/build:dev-server",
       "configurations": {
         "production": {
           "buildTarget": "dev-app:build:production"
@@ -173,10 +175,22 @@
       "executor": "@nx/eslint:lint"
     },
     "test": {
-      "executor": "@nx/jest:jest",
+      "executor": "@nx/vitest:test",
       "outputs": ["{workspaceRoot}/coverage/apps/dev-app"],
       "options": {
-        "jestConfig": "apps/dev-app/jest.config.ts"
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/apps/dev-app",
+        "silent": false
+      }
+    },
+    "serve-static": {
+      "continuous": true,
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "dev-app:build",
+        "port": 4200,
+        "staticFilePath": "dist/apps/dev-app/browser",
+        "spa": true
       }
     }
   }

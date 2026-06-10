@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore ABP's JavaScript APIs for seamless integration in ASP.NET Core MVC/Razor Pages, enhancing client-side functionality and server-side interaction."
+}
+```
+
 # JavaScript API
 
 ABP provides a set of JavaScript APIs for ASP.NET Core MVC / Razor Pages applications. They can be used to perform common application requirements easily in the client side and integrate to the server side.

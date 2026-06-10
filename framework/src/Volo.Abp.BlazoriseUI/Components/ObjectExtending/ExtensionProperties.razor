@@ -9,7 +9,7 @@
     {
         if (!propertyInfo.Name.EndsWith("_Text"))
         {
-            if (propertyInfo.Type.IsEnum)
+            if (propertyInfo.IsEnum())
             {
                 <SelectExtensionProperty PropertyInfo="@propertyInfo" Entity="@Entity" TEntity="TEntityType" TResourceType="TResourceType" LH="@LH" />
             }

@@ -5,7 +5,7 @@ import {
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { throwError } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import {
@@ -26,7 +26,7 @@ const { maxLength, required } = Validators;
   templateUrl: './login.component.html',
   imports: [
     ReactiveFormsModule,
-    RouterModule,
+    RouterLink,
     LocalizationPipe,
     ButtonComponent,
     NgxValidateCoreModule,

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to effectively use ABP's localization system, enhancing your applications with features from Microsoft.Extensions.Localization."
+}
+```
+
 # Localization
 
 ABP's localization system is seamlessly integrated to the `Microsoft.Extensions.Localization` package and compatible with the [Microsoft's localization documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization). It adds some useful features and enhancements to make it easier to use in real life application scenarios.
@@ -90,6 +97,34 @@ A JSON localization file content is shown below:
 * `texts` section just contains key-value collection of the localization strings (keys may have spaces too).
 
 > ABP will ignore (skip) the JSON file if the `culture` section is missing.
+
+You can also use nesting or array in localization files, like this:
+
+````json
+{
+  "culture": "en",
+  "texts": {
+    "HelloWorld": "Hello World!",
+    "Hello": {
+        "World": "Hello World!"
+    },
+    "Hi":[
+        "Bye": "Bye World!"
+        "Hello": "Hello World!"
+    ]
+  }
+}
+````
+
+Then you can use it like this:
+
+> The double underscore (`__`) is used to separate the parent key from the child key.
+
+````csharp
+var str = L["Hello__World"]; // Hello World!
+var str2 = L["Hi__0"]; // Bye World!
+var str3 = L["Hi__1"]; // Hello World!
+````
 
 ### Default Resource
 

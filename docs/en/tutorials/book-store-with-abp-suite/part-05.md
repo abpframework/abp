@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to customize generated code in ABP Suite, preserving your changes for future CRUD page generations. Enhance your web app effortlessly!"
+}
+```
+
 # Web Application Development Tutorial (with ABP Suite) - Part 5: Customizing the Generated Code
 
 ````json

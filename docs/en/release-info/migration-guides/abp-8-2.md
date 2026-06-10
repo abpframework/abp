@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Upgrade your ABP v8.x solutions to v8.2 with this migration guide, detailing essential changes and updated target frameworks for seamless integration."
+}
+```
+
 # ABP Version 8.2 Migration Guide
 
 This document is a guide for upgrading ABP v8.x solutions to ABP v8.2. There are some changes in this version that may affect your applications, please read it carefully and apply the necessary changes to your application.

@@ -48,7 +48,7 @@ public class MongoSettingRepository : MongoDbRepository<ISettingManagementMongoD
         CancellationToken cancellationToken = default)
     {
         return await (await GetQueryableAsync(cancellationToken))
-            .Where(s => names.Contains(s.Name) && s.ProviderName == providerName && s.ProviderKey == providerKey)
+            .Where(s => names.AsEnumerable().Contains(s.Name) && s.ProviderName == providerName && s.ProviderKey == providerKey)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 }

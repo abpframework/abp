@@ -1,4 +1,4 @@
-import { createHttpFactory, HttpMethod, SpectatorHttp, SpyObject } from '@ngneat/spectator/jest';
+import { createHttpFactory, HttpMethod, SpectatorHttp, SpyObject } from '@ngneat/spectator/vitest';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -74,17 +74,25 @@ describe('HttpClient testing', () => {
     spectator.expectOne('bar' + '/test', HttpMethod.GET);
   });
 
-  test('should complete upon successful request', done => {
-    const complete = jest.fn(done);
+  test('should complete upon successful request', async () => {
+    const request$ = spectator.service.request({ method: HttpMethod.GET, url: '/test' });
 
-    spectator.service.request({ method: HttpMethod.GET, url: '/test' }).subscribe({ complete });
+    // Create a promise that resolves when the observable completes
+    const completionPromise = new Promise<void>((resolve, reject) => {
+      request$.subscribe({
+        complete: () => resolve(),
+        error: err => reject(err),
+      });
+    });
 
     const req = spectator.expectOne(api + '/test', HttpMethod.GET);
     spectator.flushAll([req], [{}]);
+
+    await completionPromise;
   });
 
   test('should handle the error', () => {
-    const spy = jest.spyOn(httpErrorReporter, 'reportError');
+    const spy = vi.spyOn(httpErrorReporter, 'reportError');
 
     spectator.service
       .request({ method: HttpMethod.GET, url: '/test' }, { observe: Rest.Observe.Events })
@@ -102,7 +110,7 @@ describe('HttpClient testing', () => {
   });
 
   test('should not handle the error when skipHandleError is true', () => {
-    const spy = jest.spyOn(httpErrorReporter, 'reportError');
+    const spy = vi.spyOn(httpErrorReporter, 'reportError');
 
     spectator.service
       .request(

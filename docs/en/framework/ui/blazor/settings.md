@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to utilize the ISettingProvider in Blazor applications to efficiently manage and retrieve settings values."
+}
+```
+
 # Blazor UI: Settings
 
 Blazor applications can reuse the same `ISettingProvider` service that is explained in the [settings document](../../infrastructure/settings.md).

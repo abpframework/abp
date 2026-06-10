@@ -41,6 +41,7 @@ public partial class TenantManagement
 
     protected override ValueTask SetBreadcrumbItemsAsync()
     {
+        BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(LUiNavigation["Menu:Administration"]));
         BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Menu:TenantManagement"]));
         BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem(L["Tenants"]));
         return base.SetBreadcrumbItemsAsync();

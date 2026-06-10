@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement multi-tenant domain resolving in your microservice solution with ABP Framework, using helm charts for Kubernetes deployment."
+}
+```
+
 # Multi-tenant Domain Resolving in Microservice Solution
 
 > This documentation introduces guidance for adding multi-tenant domain resolver to your microservice solution. This guide will use **mystore** as the main project name and you can simply replace it with your own project name to adept your solution. This guide will be using existing helm charts for deploying this solution on local kubernetes cluster with mystore domain name.

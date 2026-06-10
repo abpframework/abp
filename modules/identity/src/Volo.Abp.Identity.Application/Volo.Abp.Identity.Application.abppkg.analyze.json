@@ -16,9 +16,9 @@
           "name": "AbpIdentityApplicationContractsModule"
         },
         {
-          "declaringAssemblyName": "Volo.Abp.AutoMapper",
-          "namespace": "Volo.Abp.AutoMapper",
-          "name": "AbpAutoMapperModule"
+          "declaringAssemblyName": "Volo.Abp.Mapperly",
+          "namespace": "Volo.Abp.Mapperly",
+          "name": "AbpMapperlyModule"
         },
         {
           "declaringAssemblyName": "Volo.Abp.PermissionManagement.Application",
@@ -845,6 +845,23 @@
           ]
         },
         {
+          "returnType": "ListResultDto<UserData>",
+          "namespace": "Volo.Abp.Identity.Integration",
+          "name": "SearchByIdsAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "Guid[]",
+              "name": "ids",
+              "isOptional": false
+            }
+          ]
+        },
+        {
           "returnType": "Int64",
           "namespace": "Volo.Abp.Identity.Integration",
           "name": "GetCountAsync",
@@ -856,6 +873,57 @@
           "parameters": [
             {
               "type": "UserLookupCountInputDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "ListResultDto<RoleData>",
+          "namespace": "Volo.Abp.Identity.Integration",
+          "name": "SearchRoleAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "RoleLookupSearchInputDto",
+              "name": "input",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "ListResultDto<RoleData>",
+          "namespace": "Volo.Abp.Identity.Integration",
+          "name": "SearchRoleByNamesAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String[]",
+              "name": "names",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Int64",
+          "namespace": "Volo.Abp.Identity.Integration",
+          "name": "GetRoleCountAsync",
+          "summary": null,
+          "isAsync": true,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "RoleLookupCountInputDto",
               "name": "input",
               "isOptional": false
             }

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to manage database configurations in ABP Framework's Single-Layer Solution, including connection string customization for various environments."
+}
+```
+
 # Single Layer Solution: Database configurations
 
 ```json

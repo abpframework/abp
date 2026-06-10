@@ -48,6 +48,7 @@ public class AbpEntityChangeOptions_DomainEvents_IgnoreEntityChangeSelectorList_
 public class AbpEfCoreDomainEvents_Tests : EntityFrameworkCoreTestBase
 {
     protected readonly IRepository<AppEntityWithNavigations, Guid> AppEntityWithNavigationsRepository;
+    protected readonly IRepository<AppEntityWithNavigationChildOneToMany,  Guid> AppEntityWithNavigationChildOneToManyRepository;
     protected readonly ILocalEventBus LocalEventBus;
     protected readonly IRepository<Person, Guid> PersonRepository;
     protected bool _loadEntityWithoutDetails = false;
@@ -55,6 +56,7 @@ public class AbpEfCoreDomainEvents_Tests : EntityFrameworkCoreTestBase
     public AbpEfCoreDomainEvents_Tests()
     {
         AppEntityWithNavigationsRepository = GetRequiredService<IRepository<AppEntityWithNavigations, Guid>>();
+        AppEntityWithNavigationChildOneToManyRepository = GetRequiredService<IRepository<AppEntityWithNavigationChildOneToMany, Guid>>();
         LocalEventBus = GetRequiredService<ILocalEventBus>();
         PersonRepository = GetRequiredService<IRepository<Person, Guid>>();
     }
@@ -360,6 +362,22 @@ public class AbpEfCoreDomainEvents_Tests : EntityFrameworkCoreTestBase
         {
             OneToMany = new List<AppEntityWithNavigationChildOneToMany>()
             {
+                new AppEntityWithNavigationChildOneToMany(Guid.NewGuid())
+                {
+                    ChildName = "ChildName1"
+                },
+                new AppEntityWithNavigationChildOneToMany(Guid.NewGuid())
+                {
+                    ChildName = "ChildName2"
+                }
+            }
+        });
+
+        var entityId2 = Guid.NewGuid();
+        await AppEntityWithNavigationsRepository.InsertAsync(new AppEntityWithNavigations(entityId2, "TestEntity")
+        {
+            OneToMany = new List<AppEntityWithNavigationChildOneToMany>()
+            {
                 new AppEntityWithNavigationChildOneToMany
                 {
                     ChildName = "ChildName1"
@@ -367,12 +385,44 @@ public class AbpEfCoreDomainEvents_Tests : EntityFrameworkCoreTestBase
             }
         });
 
+        var oneToManyEntity = Guid.NewGuid();
+        await AppEntityWithNavigationChildOneToManyRepository.InsertAsync(
+            new AppEntityWithNavigationChildOneToMany(oneToManyEntity)
+            {
+                AppEntityWithNavigationId = entityId,
+            });
+
+        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigationChildOneToMany>>(data =>
+        {
+            data.Entity.AppEntityWithNavigationId.ShouldBe(entityId2);
+            return Task.CompletedTask;
+        });
+
+        using (var scope = ServiceProvider.CreateScope())
+        {
+            var uowManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+            using (var uow = uowManager.Begin())
+            {
+                var entity = await AppEntityWithNavigationChildOneToManyRepository.GetAsync(oneToManyEntity);
+
+                entity.AppEntityWithNavigationId = entityId2;
+                await AppEntityWithNavigationChildOneToManyRepository.UpdateAsync(entity);
+
+                await uow.CompleteAsync();
+            }
+        }
+
         var entityUpdatedEventTriggered = false;
 
         LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigations>>(data =>
         {
             entityUpdatedEventTriggered = !entityUpdatedEventTriggered;
             return Task.CompletedTask;
+        });
+
+        LocalEventBus.Subscribe<EntityUpdatedEventData<AppEntityWithNavigationChildOneToMany>>(data =>
+        {
+            throw new Exception("Should not trigger this event");
         });
 
         using (var scope = ServiceProvider.CreateScope())

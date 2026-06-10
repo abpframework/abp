@@ -44,7 +44,7 @@ public class AuthorizeController : AbpOpenIdDictControllerBase
         var result = await HttpContext.AuthenticateAsync(IdentityConstants.ApplicationScheme);
         if (result is not { Succeeded: true } ||
             ((request.HasPromptValue(OpenIddictConstants.PromptValues.Login) || request.MaxAge is 0 ||
-              (request.MaxAge != null && result.Properties?.IssuedUtc != null &&
+              (request.MaxAge is not null && result.Properties?.IssuedUtc is not null &&
                TimeProvider.System.GetUtcNow() - result.Properties.IssuedUtc > TimeSpan.FromSeconds(request.MaxAge.Value))) &&
              TempData["IgnoreAuthenticationChallenge"] is null or false))
         {

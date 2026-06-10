@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore ABP tutorials to quickly build applications, apply DDD practices, and leverage ABP Suite for efficient development. Perfect for all developers!"
+}
+```
+
 # ABP Tutorials
 
 The following introductory tutorials explain how to build applications based on the ABP platform:
