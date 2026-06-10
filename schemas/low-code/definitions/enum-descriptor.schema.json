@@ -27,7 +27,7 @@
                     },
                     "value": {
                         "type": "integer",
-                        "description": "Stable integer value. Prefer explicit values starting at 0 so generated model JSON is deterministic."
+                        "description": "Stable integer value. Prefer explicit values starting at 0 so generated descriptor JSON is deterministic."
                     }
                 },
                 "required": [

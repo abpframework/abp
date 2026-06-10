@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "dashboard-aggregation-type.schema.json",
   "title": "DashboardAggregationType",
-  "description": "The type of aggregation to perform. Prefer lower-case values in model JSON; PascalCase aliases are accepted for compatibility.",
+  "description": "The type of aggregation to perform. Prefer lower-case values in descriptor JSON; PascalCase aliases are accepted for compatibility.",
   "markdownDescription": "`count` counts records and does not require a property. `sum`, `average`, `min`, and `max` require a property. `percentFilled` and `percentEmpty` calculate completeness for a nullable/string property.",
   "type": "string",
   "enum": [

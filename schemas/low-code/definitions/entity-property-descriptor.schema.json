@@ -38,7 +38,7 @@
     },
     "defaultValue": {
       "type": ["string", "null"],
-      "description": "Default value for new records. Stored as a string in model JSON and converted to the declared property type at runtime. Examples: '0' for int/enum, 'true' for boolean, '2026-05-18T09:00:00Z' for datetime."
+      "description": "Default value for new records. Stored as a string in descriptor JSON and converted to the declared property type at runtime. Examples: '0' for int/enum, 'true' for boolean, '2026-05-18T09:00:00Z' for datetime."
     },
     "isUnique": {
       "type": "boolean",

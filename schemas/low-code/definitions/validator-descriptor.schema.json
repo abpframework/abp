@@ -9,7 +9,7 @@
   "properties": {
     "type": {
       "type": "string",
-      "description": "Validator type. Prefer lower-case values in model JSON; PascalCase aliases are accepted for compatibility.",
+      "description": "Validator type. Prefer lower-case values in descriptor JSON; PascalCase aliases are accepted for compatibility.",
       "enum": [
         "required",
         "Required",
