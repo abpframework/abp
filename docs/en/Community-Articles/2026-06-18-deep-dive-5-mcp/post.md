@@ -87,5 +87,3 @@ Put simply: built-in tools handle everything inside the solution, MCP handles th
 MCP is the agent's connection to everything that is not in your solution.
 
 You will not need it for most ABP work, because the built-in tools already cover the solution itself. But when a task depends on a ticket, an external system, or knowledge that lives somewhere else, MCP lets the agent reach it through one standard, with you deciding which servers and which tools it is allowed to use.
-
-That is the balance worth remembering: **built-in tools for the solution, MCP for the world around it, and you in control of the door between them.**
