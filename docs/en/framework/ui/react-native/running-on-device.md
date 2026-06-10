@@ -53,7 +53,7 @@ For browser testing, see [Running on Web](./running-on-web.md).
 
 {{ if Architecture == "Monolith" }}
 
-4. Install [cloudflared](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/) for the built-in Cloudflare tunnel (`yarn tunnel:api`). Quick Tunnels are free and do not require a Cloudflare account.
+1. Install **cloudflared** before using the **MobileEmulator** profile or `yarn tunnel:api`. Follow Cloudflare's [Download and install cloudflared](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/downloads/) guide. The template uses free Quick Tunnels (`*.trycloudflare.com`) and does not require a Cloudflare account or the remaining locally-managed tunnel steps in that document.
 
 {{ end }}
 
@@ -71,8 +71,9 @@ For browser testing, see [Running on Web](./running-on-web.md).
 
 Before the first run:
 
-1. Switch to the **MobileEmulator** profile in the Solution Runner.
-2. Open `react-native/Environment.ts` and follow the inline comments: **uncomment the tunnel configuration block** and **comment out the localhost constants**.
+1. [Install cloudflared](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/downloads/) if you have not already (see [Prerequisites](#prerequisites)).
+2. Switch to the **MobileEmulator** profile in the Solution Runner.
+3. Open `react-native/Environment.ts` and follow the inline comments: **uncomment the tunnel configuration block** and **comment out the localhost constants**.
 
 Start an Android emulator (or connect a device), then start the **MobileEmulator** profile.
 
@@ -95,6 +96,8 @@ See [Cloudflare tunnel (manual CLI)](#cloudflare-tunnel-manual-cli) below for wh
 {{ if Architecture == "Monolith" }}
 
 Non-tiered React Native templates ship with a Cloudflare tunnel automation script. The tunnel gives your mobile app a temporary **HTTPS** URL (for example `https://example.trycloudflare.com`) that forwards to your local backend — without reconfiguring Kestrel or OpenIddict over HTTP.
+
+> **Prerequisite:** Install **cloudflared** on your machine using Cloudflare's [Download and install cloudflared](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/downloads/) guide before running `yarn tunnel:api` or the **MobileEmulator** profile.
 
 The template includes:
 

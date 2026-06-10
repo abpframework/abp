@@ -78,6 +78,8 @@ You can choose how you want to run the mobile app:
 | **Browser testing (fastest)**               | [Running on Web](./running-on-web.md) — ABP Studio **Default** profile or Expo Web + HTTPS proxy at `https://localhost:8443`                                                 |
 | **Emulator, simulator, or physical device** | [Running on Device](./running-on-device.md) — **Pro, non-tiered Monolith:** **MobileEmulator** profile or `yarn tunnel:api`; **Tiered / Microservice:** manual backend setup |
 
+> **Before device testing (Monolith):** Install **cloudflared** using Cloudflare's [Download and install cloudflared](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/downloads/) guide. The template's Quick Tunnel workflow does not require a Cloudflare account or the remaining steps in that document.
+
 Before running, you may need to install dependencies in the React Native project folder:
 
 - **Monolith / Tiered / app-nolayers:** `react-native/`
