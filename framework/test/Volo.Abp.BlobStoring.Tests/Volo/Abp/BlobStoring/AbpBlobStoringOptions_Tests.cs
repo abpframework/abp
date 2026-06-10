@@ -33,6 +33,7 @@ public class AbpBlobStoringOptions_Tests : AbpBlobStoringTestBase
     {
         var config = _configurationProvider.Get<TestContainer3>();
         config.ProviderType.ShouldBe(typeof(FakeBlobProvider1));
+        config.IsMultiTenant.ShouldBeFalse();
         config.GetConfigurationOrNull("TestConfigDefault").ShouldBe("TestValueDefault");
     }
 }

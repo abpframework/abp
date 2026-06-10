@@ -7,10 +7,16 @@ namespace Volo.Abp.BlobStoring;
 
 public class BlobContainerConfiguration
 {
+    private Type? _providerType;
+
     /// <summary>
     /// The provider to be used to store BLOBs of this container.
     /// </summary>
-    public Type? ProviderType { get; set; }
+    public Type? ProviderType
+    {
+        get => _providerType ?? _fallbackConfiguration?.ProviderType;
+        set => _providerType = value;
+    }
 
     /// <summary>
     /// Indicates whether this container is multi-tenant or not.
