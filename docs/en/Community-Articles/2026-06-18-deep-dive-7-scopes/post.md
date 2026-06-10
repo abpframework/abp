@@ -17,6 +17,7 @@ Most AI coding agents are very good at reading a folder and making changes. That
 An ABP solution can contain modules, packages, applications, gateways, background workers, database projects, shared contracts, UI projects, and infrastructure configuration. In a microservice solution, the repository may contain multiple independently meaningful services. In a modular monolith, a single solution may still have clear business boundaries.
 
 -> In those situations, the question is not only: **Can the agent understand the solution?** ❌
+
 -> The better question is: **Which part of the solution should the agent be allowed to work with for this task?** ✅
 
 AI Scopes answer that question directly.
