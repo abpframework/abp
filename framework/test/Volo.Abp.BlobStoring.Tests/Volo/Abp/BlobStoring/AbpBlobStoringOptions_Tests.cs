@@ -29,7 +29,7 @@ public class AbpBlobStoringOptions_Tests : AbpBlobStoringTestBase
     }
 
     [Fact]
-    public void Should_Fallback_To_Default_Configuration_If_Not_Specialized()
+    public void Should_Fallback_To_Default_ProviderType_When_Not_Explicitly_Configured()
     {
         var config = _configurationProvider.Get<TestContainer3>();
         config.ProviderType.ShouldBe(typeof(FakeBlobProvider1));
