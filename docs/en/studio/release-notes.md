@@ -9,7 +9,11 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 3.0.3 (2026-05-20) Latest
+## 3.0.4 (2026-06-11) Latest
+
+* Release 3.0.4
+
+## 3.0.3 (2026-05-20)
 
 * AI Agent Upgrades: Added browser automation tools and overall performance fixes
 * React Language Fix: Fixed language and localization settings being ignored in React templates
