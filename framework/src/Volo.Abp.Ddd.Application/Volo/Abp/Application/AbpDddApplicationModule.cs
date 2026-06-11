@@ -30,6 +30,11 @@ namespace Volo.Abp.Application;
     )]
 public class AbpDddApplicationModule : AbpModule
 {
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        AbpDynamicSortingGuard.Install();
+    }
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         Configure<AbpApiDescriptionModelOptions>(options =>
