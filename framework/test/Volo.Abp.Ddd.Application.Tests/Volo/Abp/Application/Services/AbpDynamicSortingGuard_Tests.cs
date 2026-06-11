@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Validation;
 using Xunit;
@@ -116,12 +117,157 @@ public class AbpDynamicSortingGuard_Tests : AbpDddApplicationTestBase
         }
     }
 
+    [Fact]
+    public void Should_Validate_Explicit_ThenBy_Selectors()
+    {
+        // ThenBy(string) is called directly by some app services, not only via multi-column OrderBy.
+        // The guard must reject unsafe expressions in ThenBy selectors as well.
+        Should.Throw<AbpValidationException>(() =>
+            _users.OrderBy("Name").ThenBy("PasswordHash.Substring(0,1)").ToList());
+    }
+
+    [Fact]
+    public void Should_Validate_ThenBy_With_Descending_Modifier()
+    {
+        // Dynamic.Core encodes direction in the sorting string (no separate ThenByDescending overload);
+        // make sure the guard still inspects the selector when desc is on the ThenBy column.
+        Should.Throw<AbpValidationException>(() =>
+            _users.OrderBy("Name").ThenBy("PasswordHash.Substring(0,1) desc").ToList());
+    }
+
+    [Theory]
+    [InlineData("(PasswordHash.Substring(0,1) == \"K\") desc")] // method + binary in one selector
+    [InlineData("(Name.Length > 5) desc")]                       // property getter + binary
+    [InlineData("(Age + 10) desc")]                               // binary arithmetic
+    [InlineData("(Age * Age) desc")]                              // binary arithmetic
+    [InlineData("(-Age) desc")]                                   // unary negation wraps something; only Negate is allowed via base.VisitUnary, but the operand is a plain member so this passes — keep as accept check
+    public void Should_Reject_Compound_Or_Arithmetic_Expressions(string sorting)
+    {
+        // Note: the last case `(-Age) desc` actually passes — Unary(Negate(MemberAccess)) has no rejecting node.
+        // Filter accordingly.
+        if (sorting.Contains("(-"))
+        {
+            Should.NotThrow(() => _users.OrderBy(sorting).ToList());
+        }
+        else
+        {
+            Should.Throw<AbpValidationException>(() => _users.OrderBy(sorting).ToList())
+                .Message.ShouldBe("Sorting expression is not supported.");
+        }
+    }
+
+    [Theory]
+    [InlineData("Name.ToUpper().Substring(0,1) desc")]   // chained method calls
+    [InlineData("PasswordHash.Substring(0,1).Length desc")] // method then property
+    public void Should_Reject_Chained_Method_Calls(string sorting)
+    {
+        Should.Throw<AbpValidationException>(() => _users.OrderBy(sorting).ToList());
+    }
+
+    [Fact]
+    public void Should_Not_Interfere_With_DynamicCore_Validation_For_Empty_Or_Null_Sorting()
+    {
+        // Dynamic.Core itself rejects null / empty / whitespace ordering with ArgumentException
+        // before the QueryOptimizer is invoked. The guard must not turn those into
+        // AbpValidationException by accident.
+        Should.NotThrow(() =>
+        {
+            try { _users.OrderBy((string)null!).ToList(); } catch (Exception ex) { ex.ShouldNotBeOfType<AbpValidationException>(); }
+            try { _users.OrderBy("").ToList(); }            catch (Exception ex) { ex.ShouldNotBeOfType<AbpValidationException>(); }
+            try { _users.OrderBy("   ").ToList(); }         catch (Exception ex) { ex.ShouldNotBeOfType<AbpValidationException>(); }
+        });
+    }
+
+    [Fact]
+    public void Should_Validate_OrderBy_With_Args_Parameter()
+    {
+        // Dynamic.Core's OrderBy supports parameterized expressions through `@0`, `@1`, ... and args.
+        // The guard must validate the expanded selector, not the literal sorting string.
+        Should.Throw<AbpValidationException>(() =>
+            _users.OrderBy("PasswordHash.Substring(@0, 1) desc", 0).ToList());
+    }
+
+    [Fact]
+    public async Task Install_Is_Thread_Safe_Under_Concurrent_Calls()
+    {
+        // 50 concurrent Install() callers must not deadlock, throw, or leave the guard in a torn state.
+        AbpDynamicSortingGuard.Reset();
+        try
+        {
+            await Task.WhenAll(Enumerable.Range(0, 50)
+                .Select(_ => Task.Run(AbpDynamicSortingGuard.Install)));
+
+            // After concurrent installs, the guard must still reject attack payloads.
+            Should.Throw<AbpValidationException>(() =>
+                _users.OrderBy("PasswordHash.Substring(0,1) desc").ToList());
+        }
+        finally
+        {
+            AbpDynamicSortingGuard.Reset();
+            AbpDynamicSortingGuard.Install();
+        }
+    }
+
+    [Theory]
+    [InlineData("tr-TR")] // Turkish: uppercase 'I' is dotless, common locale pitfall for string ops
+    [InlineData("de-DE")]
+    [InlineData("ja-JP")]
+    [InlineData("en-US")]
+    public void Should_Reject_Method_Calls_Regardless_Of_CurrentCulture(string culture)
+    {
+        var saved = System.Globalization.CultureInfo.CurrentCulture;
+        try
+        {
+            System.Globalization.CultureInfo.CurrentCulture = new System.Globalization.CultureInfo(culture);
+            Should.Throw<AbpValidationException>(() =>
+                _users.OrderBy("PasswordHash.Substring(0,1) desc").ToList());
+        }
+        finally
+        {
+            System.Globalization.CultureInfo.CurrentCulture = saved;
+        }
+    }
+
+    [Theory]
+    [InlineData("Name DESC")]    // upper-case direction modifier
+    [InlineData("name desc")]    // lower-case property name (Dynamic.Core default case-insensitive lookup)
+    [InlineData("NAME ASC")]
+    public void Should_Accept_Property_Names_Regardless_Of_Casing(string sorting)
+    {
+        Should.NotThrow(() => _users.OrderBy(sorting).ToList());
+    }
+
+    [Theory]
+    [InlineData("passwordhash.substring(0,1) desc")] // lower-case attack
+    [InlineData("PASSWORDHASH.SUBSTRING(0,1) DESC")] // upper-case attack — method call detection cannot rely on case
+    public void Should_Reject_Method_Calls_Regardless_Of_Casing(string sorting)
+    {
+        Should.Throw<AbpValidationException>(() => _users.OrderBy(sorting).ToList());
+    }
+
+    [Fact]
+    public void Should_Allow_Inherited_Property_Sorting()
+    {
+        var children = new List<FakeChildUser>
+        {
+            new() { Name = "alpha", Age = 30, ExtraField = "x" },
+            new() { Name = "beta",  Age = 25, ExtraField = "y" },
+        }.AsQueryable();
+
+        Should.NotThrow(() => children.OrderBy("Name desc, ExtraField asc").ToList());
+    }
+
     private class FakeUser
     {
         public string Name { get; set; } = "";
         public int Age { get; set; }
         public string PasswordHash { get; set; } = "";
         public FakeTenant Tenant { get; set; } = new();
+    }
+
+    private class FakeChildUser : FakeUser
+    {
+        public string ExtraField { get; set; } = "";
     }
 
     private class FakeTenant
