@@ -36,4 +36,15 @@ public class AbpBlobStoringOptions_Tests : AbpBlobStoringTestBase
         config.IsMultiTenant.ShouldBeFalse();
         config.GetConfigurationOrNull("TestConfigDefault").ShouldBe("TestValueDefault");
     }
+
+    [Fact]
+    public void Should_Resolve_Fallback_Chain_Through_Configuration_Provider()
+    {
+        var testContainer1Config = _configurationProvider.Get<TestContainer1>();
+        testContainer1Config.IsMultiTenant.ShouldBeTrue();
+
+        var testContainer3Config = _configurationProvider.Get<TestContainer3>();
+        testContainer3Config.IsMultiTenant.ShouldBeFalse();
+        testContainer3Config.ProviderType.ShouldBe(typeof(FakeBlobProvider1));
+    }
 }

@@ -43,6 +43,20 @@ public class BlobContainerConfiguration
         _properties = new Dictionary<string, object?>();
     }
 
+    /// <summary>
+    /// Returns the naming normalizers in effect for this container, inheriting from the fallback
+    /// configuration only when this container has none and does not override <see cref="ProviderType"/>.
+    /// </summary>
+    public IEnumerable<Type> GetEffectiveNamingNormalizers()
+    {
+        if (NamingNormalizers.Count == 0 && _providerType == null && _fallbackConfiguration != null)
+        {
+            return _fallbackConfiguration.GetEffectiveNamingNormalizers();
+        }
+
+        return NamingNormalizers;
+    }
+
     public T? GetConfigurationOrDefault<T>(string name, T? defaultValue = default)
     {
         return (T?)GetConfigurationOrNull(name, defaultValue);
