@@ -165,6 +165,24 @@ jobs:
           echo "BRANCH=$BRANCH" >> $GITHUB_ENV
 
       # -------------------------------------------------
+      # Restore helper scripts from the workflow commit.
+      # The docs target branch (e.g. rel-10.4) may not contain them yet.
+      # -------------------------------------------------
+      - name: Checkout workflow scripts
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.sha }}
+          sparse-checkout: .github/scripts
+          path: _workflow_scripts
+
+      - name: Install workflow scripts
+        run: |
+          mkdir -p .github/scripts
+          cp _workflow_scripts/.github/scripts/*.py .github/scripts/
+          ls -la .github/scripts/
+
+      # -------------------------------------------------
       # Analyze existing release notes format
       # -------------------------------------------------
       - name: Analyze existing format
