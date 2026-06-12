@@ -9,7 +9,18 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 3.0.3 (2026-05-20) Latest
+## 3.0.4 (2026-06-03) Latest
+
+* Blazor UI Selector: Added a built-in choice between MudBlazor and Blazorise for Blazor solution templates
+* React Native Updates: Upgraded Expo to the latest version, improved keyboard handling, and ensured UI consistency
+* Linux Support Enhancements: Improved system tool detection, terminal launching, and added full Linux publish/runtime support
+* React Admin Security: Secured the React Admin Console sidebar menu by enforcing permission-based access gating
+* Mobile Documentation: Added comprehensive setup guides and rules for React Native mobile templates
+* Angular Microservice Fix: Resolved missing audit logging configurations and imports in microservice templates
+* Modern Templates Licensing: Updated Modern architecture templates to be available exclusively for commercial/paid tiers
+* Code & UI Stability: Fixed TypeScript compilation errors in React templates and resolved various minor system bugs
+
+## 3.0.3 (2026-05-20)
 
 * AI Agent Upgrades: Added browser automation tools and overall performance fixes
 * React Language Fix: Fixed language and localization settings being ignored in React templates
