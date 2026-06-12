@@ -38,6 +38,7 @@
     "Feature:SettingManagementEnableDescription": "Omogućite sustav upravljanja postavkama u aplikaciji.",
     "Feature:AllowChangingEmailSettings": "Dopusti promjenu postavki e-pošte",
     "Feature:AllowChangingEmailSettingsDescription": "Dopusti promjenu postavki e-pošte.",
-    "SmtpPasswordPlaceholder": "Unesite vrijednost za ažuriranje lozinke"
+    "SmtpPasswordPlaceholder": "Unesite vrijednost za ažuriranje lozinke",
+    "NoSettingsAvailable": "Nema postavki za prikaz."
   }
 }

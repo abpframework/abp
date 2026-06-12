@@ -14,8 +14,6 @@ public class BasicThemeToolbarContributor : IToolbarContributor
     {
         if (context.Toolbar.Name == StandardToolbars.Main)
         {
-            context.Toolbar.Items.Add(new ToolbarItem(typeof(LanguageSwitch)));
-
             //TODO: Can we find a different way to understand if authentication was configured or not?
             var authenticationStateProvider = context.ServiceProvider
                 .GetService<AuthenticationStateProvider>();
@@ -24,6 +22,8 @@ public class BasicThemeToolbarContributor : IToolbarContributor
             {
                 context.Toolbar.Items.Add(new ToolbarItem(typeof(LoginDisplay)));
             }
+
+            context.Toolbar.Items.Add(new ToolbarItem(typeof(LanguageSwitch)));
         }
 
         return Task.CompletedTask;

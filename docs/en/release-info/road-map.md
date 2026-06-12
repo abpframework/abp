@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Explore the ABP Platform Road Map for insights on upcoming features, release schedules, and improvements in version 10.4, planned for May 2026."
+    "Description": "Explore the ABP Platform Road Map for insights on upcoming features, release schedules, and improvements in version 10.5, planned for June 2026."
 }
 ```
 
@@ -11,36 +11,46 @@ This document provides a road map, release schedule, and planned features for th
 
 ## Next Versions
 
-### v10.4
+### v10.5
 
-The next planned version will be 10.4, which is scheduled to be released as a stable version in May 2026. We will be mostly working on the following topics:
+The next planned version will be 10.5, which is scheduled to be released as a stable version in mid-June 2026. We will be mostly working on the following topics:
 
 * Framework
-  * Blazor UI: Moving from Blazorise to MudBlazor
-  * Token Verification Improvements (Refresh Token Support)
-  * Upgrading 3rd-party Dependencies
-  * Enhancements in the Core Points
+  * Token verification improvements with refresh token support and distributed locking
+  * Angular UI fixes and proxy generation improvements
+  * Better handling for extra properties, object mapping and auditing edge cases
+  * Hybrid UI / page embedding infrastructure
+  * Upgrading 3rd-party dependencies and evaluating replacements where needed
+  * General bug fixing and improvements in core framework packages
 
 * ABP Suite
-  * Improvements on the generated codes for nullability
-  * Improvements on Master-Detail Page Design (making it more compact)
+  * Improvements on generated codes for nullability
+  * Improvements on master-detail page design (making it more compact)
+  * Low-Code system integration
+  * Better support for additional property types like `DateTimeOffset`, `TimeSpan` and numeric enum scenarios
+  * Improvements for generated file upload, navigation property and display-name experiences
 
 * ABP Studio
-  * Allow to Directly Create New Solutions with ABP's RC (Release Candidate) Versions
-  * Automate More Details on New Service Creation for a Microservice Solution
-  * Allow to Download ABP Samples from ABP Studio
-  * Support Multiple Concurrent Kubernetes Deployment/Integration Scenarios
-  * Improve the Module Installation Experience / Installation Guides
+  * AI Coding Agent and MCP integration
+  * Modern solution wizard improvements and low-code support
+  * Theme Builder: live preview, project integration and import/export
+  * Linux support and packaging improvements
+  * Better React / React Native / Thin UI template experience
+  * Better startup, diagnostics, module installation and solution runner experiences
+  * More automation for microservice solution creation and service/module addition
+  * Terminal, browser and built-in developer productivity enhancements
 
 * Application Modules
-  * AI Management: Chat History & Multi-Tenancy Features
-  * New Module: Chat with your data
-  * CMS Kit: CodeMirror v6 Compatibility Update
-  * Payment Module: Email Notification Improvements
-  * UI/UX Improvements on Existing Application Modules
+  * AI Management: chat history, multi-tenancy and tenant-scoped workspace capabilities
+  * New module: Chat with your data
+  * Low-Code designer and low-code platform integrations
+  * CMS Kit and public website improvements
+  * Payment module e-mail notification improvements
+  * UI/UX improvements on existing application modules
 
-* Updating Existing Tutorials & Documents (with Other UI & DB Options)
-  * React Native template and implementation documents
+* Updating existing tutorials & documents (with other UI & DB options)
+  * Documentation updates for modern React, Studio workflows and new CLI capabilities
+  * General refresh for roadmap, tutorials and feature comparison documents
 
 ## Backlog Items
 
@@ -48,72 +58,78 @@ The *Next Versions* section above shows the main focus of the planned versions. 
 
 ### Framework
 
-The ABP framework is [open source](https://github.com/abpframework/abp) and free for everyone. You can see its [public backlog](https://github.com/abpframework/abp/milestone/2). Here, are some of the important features you can expect from next versions:
+The ABP framework is [open source](https://github.com/abpframework/abp) and free for everyone. You can see its [public backlog](https://github.com/abpframework/abp/milestone/2). Here are some of the selected backlog items and longer-term topics:
 
-* [#2882](https://github.com/abpframework/abp/issues/2882) / Providing a gRPC integration infrastructure (while it is [already possible](https://github.com/abpframework/abp-samples/tree/master/GrpcDemo) to create or consume gRPC endpoints for your application, we plan to create endpoints for the [standard application modules](../modules/index.md))
+* [#23102](https://github.com/abpframework/abp/issues/23102) / ABP Hybrid UI System: Re-using module UIs in different technologies
+* [#25123](https://github.com/abpframework/abp/issues/25123) / Upgrade jQuery to 4.x, or consider removing it as dependency
+* [#24742](https://github.com/abpframework/abp/issues/24742) / Add Support for LiteDB as a Database Provider
+* [#24442](https://github.com/abpframework/abp/issues/24442) / Add Couchbase EF Core Provider Integration
+* [#24310](https://github.com/abpframework/abp/issues/24310) / Migrate Volo.Abp.AI Semantic Kernel to Microsoft Agent Framework
+* [#23575](https://github.com/abpframework/abp/issues/23575) / Support list/enumerable of complex types for ABP dynamic/static C# proxies on GET requests
+* [#23546](https://github.com/abpframework/abp/issues/23546) / Better ExtraProperties mapping for EF Core
+* [#23935](https://github.com/abpframework/abp/issues/23935) / Hybrid Cache Support for EntityCache
+* [#22931](https://github.com/abpframework/abp/issues/22931) / Angular - Support dynamic URLs for breadcrumbs
+* [#25032](https://github.com/abpframework/abp/issues/25032) / Guidance and infrastructure considerations for gRPC-based scenarios
+* [#2882](https://github.com/abpframework/abp/issues/2882) / Providing a gRPC integration infrastructure
 * [#57](https://github.com/abpframework/abp/issues/57) / Built-in CQRS infrastructure
 * [#58](https://github.com/abpframework/abp/issues/58) / Content localization system (multilingual entities)
 * [#4223](https://github.com/abpframework/abp/issues/4223) / WebHook system
-* [#162](https://github.com/abpframework/abp/issues/162) / Azure ElasticDB Integration for multitenancy
+* [#162](https://github.com/abpframework/abp/issues/162) / Azure ElasticDB integration for multitenancy
 * [#2296](https://github.com/abpframework/abp/issues/2296) / Feature toggling infrastructure
 * [#15932](https://github.com/abpframework/abp/issues/15932) / Introduce ABP Diagnostics Module
 * [#16744](https://github.com/abpframework/abp/issues/16744) / State Management API
-* [#119](https://github.com/abpframework/abp/issues/119) / REST API Versioning Improvements
-* [#2087](https://github.com/abpframework/abp/issues/2087) / RavenDB Database Support
+* [#119](https://github.com/abpframework/abp/issues/119) / REST API versioning improvements
+* [#2087](https://github.com/abpframework/abp/issues/2087) / RavenDB database support
 
 ### Application Modules / UI Themes
 
-ABP Platform provides many (free and commercial) [pre-built application modules](../modules/index.md) and modern [UI themes](../ui-themes/index.md). In every release, many enhancements and bugfixes are already done on the existing modules. In addition, here some of the planned features for next versions:
+ABP Platform provides many (free and commercial) [pre-built application modules](../modules/index.md) and modern [UI themes](../ui-themes/index.md). In every release, many enhancements and bugfixes are delivered for these modules and themes. Important backlog topics currently include:
 
-* LeptonX theme: New layouts, styles and components
-* CMS Kit module: Meta information for SEO, media gallery, RSS feed, content versioning, social media streams
-* Payment module: Invoice system
-* New module: User notification
-* New module: Dynamic dashboard
-* New module: User guiding
-* New module: Keycloak integration
+* AI Management module: chat history, multi-tenancy, tenant workspaces and operational hardening
+* CMS Kit module: media gallery and richer public website capabilities
+* Payment module: richer notifications and invoice-oriented scenarios
+* Audit logging UI: filter redesign and UX improvements
+* Identity Pro: richer filtering and organization-unit UX improvements
+* LeptonX and existing UIs: new layouts, styles and usability refinements
+* New module ideas: Chat with your data, AI Search, user notification and dynamic dashboard
 
 ### ABP Studio
 
-[ABP Studio](../studio/index.md) is a cross-platform desktop application for ABP and .NET developers to simplify and automate daily tasks of developers. It has a community (free) edition as well as commercial editions. It is released and versioned independently from the ABP platform and frequently released.
+[ABP Studio](../studio/index.md) is a cross-platform desktop application for ABP and .NET developers to simplify and automate daily tasks of developers. It has a community (free) edition as well as commercial capabilities. Here are some of the important planned features and active backlog topics for the next ABP Studio versions:
 
-Here, are some of the important planned features for next ABP Studio versions:
-
-* Theme builder for the LeptonX theme
-* Analyze user solutions to explore entities, domain services, application services, pages and other fundamental objects.
-* Swagger authentication support for the built-in browser
-* Show related requests/events (traces) together in the solution runner panel
-* Built-in command terminal
-* Automate all steps of new service creation for microservice solutions
-* More options while creating new solutions
-* Built-in ABP documentation experience
-* Auto-execute terminal commands in markdown files
-* Compare changes on the startup templates when a new ABP version is published
-* Remove unused projects while downloading the source code of an existing module
-* Testing/hosting applications for module templates
-* Easily explore all module and package dependencies of a large solution
-* Built-in deployment options
-* Rapid application development features
-* ABP support integration
+* Theme builder for LeptonX, including live preview, management UI and project integration
+* Analyze user solutions to explore entities, domain services, application services, pages and other fundamental objects
+* AI agent/browser capabilities and developer-assistant experiences
+* Built-in command terminal and richer embedded development tools
+* Built-in or embedded VS Code experience
+* Better Linux and cross-platform support
+* Better startup templates, including React Native, Thin UI, Angular SSR and public website scenarios
+* More options while creating new solutions, modules and services
+* Better environment-variable, deployment and Kubernetes experiences
+* Compare changes on startup templates when a new ABP version is published
+* Rapid application development and low-code oriented features
+* ABP support integration and better diagnostics/error experiences
 
 ### ABP Suite
 
-[ABP Suite](../suite/index.md) is a GUI application that is mainly used to generate CRUD style pages in your application. You define your entity and it can generate all the code from the database layer to the UI layer. The generated code is clean and a perfect starting point to implement your custom requirements on top of it.
+[ABP Suite](../suite/index.md) is a GUI application that is mainly used to generate CRUD-style pages in your application. You define your entity and it can generate all the code from the database to the UI. Here are some of the important planned features for the next ABP Suite versions:
 
-Here, are some of the important planned features for the next ABP Suite versions:
-
-* Handle image properties for entities (in addition to file properties, which is already supported)
-* Allow to define extra properties for DTOs those are not a part of the entity
-* Allow to create pages instead of modals for CRUD page generation
+* Better nullability support in generated code
+* MudBlazor support
+* Replacing the current templating system with a text engine while preserving backward compatibility
+* Support for additional property types like `DateTimeOffset` and `TimeSpan`
+* Handle image properties for entities (in addition to file properties, which are already supported)
+* Allow to define display names and better ordering for properties and navigation properties
+* Filter on inherited properties and improve relationship management experiences
+* Allow to change generated file paths and support namespace-based foldering for generated UI code
 * View-only (detail view) modal/page for an entity
-* Export child/detail entity records as a part of export operation for a main (master) entity
-* Allow to add custom entity actions for an entity
-* Allow to inherit from an existing entity class
 * Custom form layouts on CRUD page generation
+* Allow to create pages instead of modals for CRUD page generation
+* Export child/detail entity records as a part of export operations for a main (master) entity
 
 ## Feature Requests
 
-Vote for your favorite feature on the related GitHub issues (and write your thoughts). You can create an issue on [the GitHub repository](https://github.com/abpframework/abp) for your feature requests, but please first search the existing issues. You can also contact [info@abp.io](mailto:info@abp.io) for your feature requests and other suggestions.
+Vote for your favorite feature on the related GitHub issues (and write your thoughts). You can create an issue on [the GitHub repository](https://github.com/abpframework/abp) for your feature requests and suggestions.
 
 ## See Also
 

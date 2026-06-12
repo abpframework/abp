@@ -1,0 +1,57 @@
+@using Microsoft.Extensions.Localization
+@using global::Localization.Resources.AbpUi
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.Extensions.Options
+@using Microsoft.JSInterop
+@using Volo.Abp.AspNetCore.Components.Web
+@using Volo.Abp.AspNetCore.Components.Web.Security
+@using Volo.Abp.UI.Navigation
+@implements IDisposable
+@inherits AbpComponentBase
+@inject IJSRuntime JsRuntime
+@inject NavigationManager Navigation
+@inject IStringLocalizer<AbpUiResource> UiLocalizer
+@inject IOptions<AuthenticationOptions> AuthenticationOptions
+@inject IOptions<AbpAspNetCoreComponentsWebOptions> AbpAspNetCoreComponentsWebOptions
+
+<AuthorizeView>
+    <Authorized>
+        <MudMenu>
+            <ActivatorContent Context="menuCtx">
+                <MudIconButton OnClick="@(async () => await menuCtx.ToggleAsync())" Icon="@Icons.Material.Outlined.AccountCircle" Color="Color.Inherit" />
+            </ActivatorContent>
+            <ChildContent>
+            <MudMenuItem>
+                @if (CurrentTenant.Name != null)
+                {
+                    <span><i>@CurrentTenant.Name</i>\@CurrentUser.UserName</span>
+                }
+                else
+                {
+                    <span>@CurrentUser.UserName</span>
+                }
+            </MudMenuItem>
+            @if (Menu != null)
+            {
+                @foreach (var menuItem in Menu.Items)
+                {
+                    var componentType = menuItem.GetComponentTypeOrDefault();
+                    if (componentType != null)
+                    {
+                        <DynamicComponent Type="@componentType" />
+                    }
+                    else
+                    {
+                        <MudMenuItem OnClick="@(() => NavigateToAsync(menuItem.Url, menuItem.Target))">@menuItem.DisplayName</MudMenuItem>
+                    }
+                }
+            }
+            <MudDivider />
+            <MudMenuItem OnClick="BeginSignOut">@UiLocalizer["Logout"]</MudMenuItem>
+            </ChildContent>
+        </MudMenu>
+    </Authorized>
+    <NotAuthorized>
+        <MudButton Variant="Variant.Text" Color="Color.Inherit" Href="@AuthenticationOptions.Value.LoginUrl">@UiLocalizer["Login"]</MudButton>
+    </NotAuthorized>
+</AuthorizeView>

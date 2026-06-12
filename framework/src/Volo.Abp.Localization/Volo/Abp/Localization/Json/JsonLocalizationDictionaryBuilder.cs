@@ -60,7 +60,6 @@ public static class JsonLocalizationDictionaryBuilder
         }
 
         var dictionary = new Dictionary<string, LocalizedString>();
-        var dublicateNames = new List<string>();
 
         foreach (var item in FlattenTexts(jsonFile.Texts))
         {
@@ -68,18 +67,8 @@ public static class JsonLocalizationDictionaryBuilder
             {
                 throw new AbpException("The key is empty in given json string.");
             }
-            if (dictionary.GetOrDefault(item.Key) != null)
-            {
-                dublicateNames.Add(item.Key);
-            }
+            
             dictionary[item.Key] = new LocalizedString(item.Key, item.Value.NormalizeLineEndings());
-        }
-
-        if (dublicateNames.Count > 0)
-        {
-            throw new AbpException(
-                "A dictionary can not contain same key twice. There are some duplicated names: " +
-                dublicateNames.JoinAsString(", "));
         }
 
         return new StaticLocalizationDictionary(cultureCode, dictionary);

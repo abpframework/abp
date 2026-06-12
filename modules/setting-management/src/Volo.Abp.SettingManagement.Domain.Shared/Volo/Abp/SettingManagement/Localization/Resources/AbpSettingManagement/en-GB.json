@@ -2,6 +2,7 @@
   "culture": "en-GB",
   "texts": {
     "Settings": "Settings",
-    "SavedSuccessfully": "Saved successfully"
+    "SavedSuccessfully": "Saved successfully",
+    "NoSettingsAvailable": "There are no settings to display."
   }
 }

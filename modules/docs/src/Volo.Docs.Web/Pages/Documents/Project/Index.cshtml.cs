@@ -90,6 +90,29 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public DocumentRenderParameters UserPreferences { get; set; } = new DocumentRenderParameters();
 
+        private HashSet<string>? _renderedParameterNamesCache;
+        private HashSet<string> RenderedParameterNames =>
+            _renderedParameterNamesCache ??= (DocumentPreferences?.Parameters?.Select(p => p.Name).ToHashSet() ?? new HashSet<string>());
+
+        public virtual bool IsParameterVisible(DocumentParameterDto parameter)
+        {
+            return IsParameterVisibleGiven(parameter, UserPreferences);
+        }
+
+        protected virtual bool IsParameterVisibleGiven(DocumentParameterDto parameter, IReadOnlyDictionary<string, string> selectedValues)
+        {
+            if (parameter.DependsOn == null || parameter.DependsOn.Count == 0)
+            {
+                return true;
+            }
+
+            return parameter.DependsOn.All(rule =>
+                rule.Value == null || !RenderedParameterNames.Contains(rule.Key)
+                || (rule.Value.Count > 0
+                    && selectedValues.TryGetValue(rule.Key, out var current)
+                    && rule.Value.Contains(current)));
+        }
+
         public List<string> AlternativeOptionLinkQueries { get; set; } = new List<string>();
 
         public bool FullSearchEnabled { get; set; }
@@ -827,7 +850,8 @@ namespace Volo.Docs.Pages.Documents.Project
                     {
                         Name = parameter.Name,
                         DisplayName = parameter.DisplayName,
-                        Values = new Dictionary<string, string>()
+                        Values = new Dictionary<string, string>(),
+                        DependsOn = parameter.DependsOn
                     };
 
                     foreach (var value in parameter.Values)
@@ -847,13 +871,13 @@ namespace Volo.Docs.Pages.Documents.Project
         {
             if (!DocumentPreferences?.Parameters?.Any() ?? true)
             {
-                return; 
+                return;
             }
 
-            AlternativeOptionLinkQueries = CollectAlternativeOptionLinksRecursively();
+            AlternativeOptionLinkQueries = CollectAlternativeOptionLinksRecursively(0, new Dictionary<string, string>());
         }
 
-        private List<string> CollectAlternativeOptionLinksRecursively(int index = 0)
+        private List<string> CollectAlternativeOptionLinksRecursively(int index, Dictionary<string, string> selected)
         {
             if (index >= DocumentPreferences.Parameters.Count)
             {
@@ -861,13 +885,20 @@ namespace Volo.Docs.Pages.Documents.Project
             }
 
             var option = DocumentPreferences.Parameters[index];
+
+            if (!IsParameterVisibleGiven(option, selected))
+            {
+                return CollectAlternativeOptionLinksRecursively(index + 1, selected);
+            }
+
             var queries = new List<string>();
 
             foreach (var key in option.Values.Keys)
             {
-                var linkQuery = new StringBuilder($"{option.Name}={key}");
+                var linkQuery = $"{option.Name}={key}";
 
-                var restOfQueries = CollectAlternativeOptionLinksRecursively(index + 1);
+                var nextSelected = new Dictionary<string, string>(selected) { [option.Name] = key };
+                var restOfQueries = CollectAlternativeOptionLinksRecursively(index + 1, nextSelected);
 
                 if (restOfQueries.Any())
                 {
@@ -878,7 +909,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 }
                 else
                 {
-                    queries.Add($"{linkQuery}");
+                    queries.Add(linkQuery);
                 }
             }
 

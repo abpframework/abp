@@ -45,4 +45,8 @@ The solution has an authentication server (auth-server) application to provide t
 
 ## Authentication Flows
 
-The applications use several flows to authenticate users based on the application type. The MVC UI web application uses the [hybrid flow](https://openid.net/specs/openid-connect-core-1_0.html#HybridFlowAuth) (OpenID Connect Authentication) to authenticate users, while the SPA and Swagger applications use the [authorization code flow](https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowAuth) to authenticate users. After the user logs into the system and receives the token from the authentication server, the applications (microservices) use [JWT Bearer Authentication](https://jwt.io/introduction/) to authorize users.
+The current modern microservice template generates React-based web clients and, optionally, a React Native mobile client. The generated authentication flows are:
+
+* `react`, `react-admin-console`, and `react-public-web` (when enabled) use the [authorization code flow](https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowAuth) against the `AuthServer`.
+* `react-native` (when enabled) is configured with its own client id and scopes, uses the password grant plus refresh tokens against the `AuthServer`, and sends bearer tokens to backend APIs through the `MobileGateway`.
+* Backend services, gateways, and other protected APIs use [JWT Bearer Authentication](https://jwt.io/introduction/) to validate the tokens issued by the authentication server.

@@ -51,7 +51,7 @@ public abstract class AbpSingleActiveTokenProvider : DataProtectorTokenProvider<
         var tokenHash = ComputeSha256Hash(token);
         user.SetToken(InternalLoginProvider, Options.Name + ":" + purpose, tokenHash);
 
-        await manager.UpdateAsync(user);
+        (await manager.UpdateAsync(user)).CheckErrors();
 
         return token;
     }

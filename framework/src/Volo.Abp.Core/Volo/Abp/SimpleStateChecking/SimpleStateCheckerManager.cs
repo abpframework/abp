@@ -46,7 +46,7 @@ public class SimpleStateCheckerManager<TState> : ISimpleStateCheckerManager<TSta
 
                 foreach (var x in await stateChecker.IsEnabledAsync(context))
                 {
-                    result[x.Key] = x.Value;
+                    result[x.Key] = result[x.Key] && x.Value;
                 }
 
                 if (result.Values.All(x => !x))

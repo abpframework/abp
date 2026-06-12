@@ -213,17 +213,18 @@ jobs:
             
             CRITICAL RULES:
             1. Extract ONLY essential, user-facing changes
-            2. Format as bullet points starting with "- "
-            3. Keep it concise and professional
+            2. Format as markdown bullet points starting with "* "
+            3. Keep it concise, friendly and easy to scan
             4. Match the style of existing release notes
             5. Skip internal/technical details unless critical
             6. Return ONLY the bullet points (no version header, no date)
             7. One change per line
+            8. Prefer short action-oriented summaries like "AI Agent Upgrades: Added browser automation tools"
             
             Output example:
-            - Fixed books sample for blazor-webapp tiered solution
-            - Enhanced Module Installation UI
-            - Added AI Management option to Startup Templates
+            * AI Agent Upgrades: Added browser automation tools
+            * Module Setup Improvements: Added guidance for modularity options
+            * UI Polish: Improved sidebar icons and visual consistency
             
             Return ONLY the formatted bullet points.
 
@@ -240,56 +241,85 @@ jobs:
             echo "✅ Using AI-formatted release notes"
             echo "$AI_RESPONSE" > .tmp/final-notes.txt
           else
-            echo "⚠️ AI unavailable - using aggressive cleaning on raw release notes"
-            
-            # Clean and format raw notes with aggressive filtering
-            echo "$RAW_NOTES" | while IFS= read -r line; do
-              # Skip empty lines
-              [ -z "$line" ] && continue
-              
-              # Skip section headers
-              [[ "$line" =~ ^#+.*What.*Changed ]] && continue
-              [[ "$line" =~ ^##[[:space:]] ]] && continue
-              
-              # Skip full changelog links
-              [[ "$line" =~ ^\*\*Full\ Changelog ]] && continue
-              [[ "$line" =~ ^Full\ Changelog ]] && continue
-              
-              # Remove leading bullet/asterisk
-              line=$(echo "$line" | sed 's/^[[:space:]]*[*-][[:space:]]*//')
-              
-              # Aggressive cleaning: remove entire " by @user in https://..." suffix
-              line=$(echo "$line" | sed 's/[[:space:]]*by @[a-zA-Z0-9_-]*[[:space:]]*in https:\/\/github\.com\/[^[:space:]]*//g')
-              
-              # Remove remaining "by @username" or "by username"
-              line=$(echo "$line" | sed 's/[[:space:]]*by @[a-zA-Z0-9_-]*[[:space:]]*$//g')
-              line=$(echo "$line" | sed 's/[[:space:]]*by [a-zA-Z0-9_-]*[[:space:]]*$//g')
-              
-              # Remove standalone @mentions
-              line=$(echo "$line" | sed 's/@[a-zA-Z0-9_-]*//g')
-              
-              # Clean trailing periods if orphaned
-              line=$(echo "$line" | sed 's/\.[[:space:]]*$//')
-              
-              # Trim all whitespace
-              line=$(echo "$line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-              
-              # Skip if line is empty or too short
-              [ -z "$line" ] && continue
-              [ ${#line} -lt 5 ] && continue
-              
-              # Capitalize first letter if lowercase
-              line="$(echo ${line:0:1} | tr '[:lower:]' '[:upper:]')${line:1}"
-              
-              # Add clean bullet and output
-              echo "- $line"
-            done > .tmp/final-notes.txt
+            echo "⚠️ AI unavailable - generating concise user-friendly summaries from raw notes"
+
+            python3 <<'PYTHON_EOF'
+            import os
+            import re
+
+            raw = os.environ.get("RAW_NOTES", "")
+            lines = raw.splitlines()
+
+            output = []
+            seen = set()
+
+            def clean_line(text: str) -> str:
+                text = text.strip()
+                if not text:
+                    return ""
+
+                # Drop markdown headers/changelog lines.
+                if re.match(r"^#+\s", text, flags=re.I):
+                    return ""
+                if re.match(r"^\*\*?\s*full\s+changelog", text, flags=re.I):
+                    return ""
+                if re.match(r"^full\s+changelog", text, flags=re.I):
+                    return ""
+
+                text = re.sub(r"^[\s\-*•]+", "", text)
+                text = re.sub(r"\s+by\s+@?[a-zA-Z0-9_-]+\s+in\s+https?://\S+", "", text)
+                text = re.sub(r"\s+by\s+@?[a-zA-Z0-9_-]+\s*$", "", text)
+                text = re.sub(r"@([a-zA-Z0-9_-]+)", "", text)
+                text = re.sub(r"\s*\([^)]*#\d+\)\s*$", "", text)
+                text = re.sub(r"\s+#\d+\s*$", "", text)
+                text = re.sub(r"\s+", " ", text).strip(" .:-")
+
+                if len(text) < 8:
+                    return ""
+
+                # Make user-friendly short title + summary when possible.
+                if ":" in text:
+                    left, right = [p.strip() for p in text.split(":", 1)]
+                    left = left[:40].rstrip(" .")
+                    right_words = right.split()
+                    right = " ".join(right_words[:14]).rstrip(" .")
+                    text = f"{left}: {right}" if right else left
+                else:
+                    words = text.split()
+                    if len(words) > 16:
+                        text = " ".join(words[:16]).rstrip(" .")
+
+                return text
+
+            for line in lines:
+                cleaned = clean_line(line)
+                if not cleaned:
+                    continue
+
+                # Normalize casing and deduplicate.
+                cleaned = cleaned[0].upper() + cleaned[1:] if cleaned else cleaned
+                key = cleaned.lower()
+                if key in seen:
+                    continue
+                seen.add(key)
+
+                output.append(f"* {cleaned}")
+                if len(output) >= 8:
+                    break
+
+            with open('.tmp/final-notes.txt', 'w', encoding='utf-8') as f:
+                f.write("\n".join(output))
+            PYTHON_EOF
           fi
+
+          # Normalize bullets to "* " even if AI returns "- ".
+          sed -E 's/^[[:space:]]*-[[:space:]]+/* /' .tmp/final-notes.txt > .tmp/final-notes.normalized.txt
+          mv .tmp/final-notes.normalized.txt .tmp/final-notes.txt
           
           # Safety check: verify we have content
           if [ ! -s .tmp/final-notes.txt ]; then
             echo "⚠️ No valid release notes extracted, using minimal fallback"
-            echo "- Release ${{ steps.payload.outputs.version }}" > .tmp/final-notes.txt
+            echo "* Release ${{ steps.payload.outputs.version }}" > .tmp/final-notes.txt
           fi
           
           echo "=== Final release notes ==="

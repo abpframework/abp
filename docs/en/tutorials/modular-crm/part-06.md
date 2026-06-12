@@ -10,7 +10,8 @@
 ````json
 //[doc-params]
 {
-    "UI": ["MVC", "BlazorWebApp", "NG"]
+    "UI": ["MVC", "BlazorWebApp", "NG"],
+    "BlazorUI": ["Blazorise", "MudBlazor"]
 }
 ````
 
@@ -296,6 +297,8 @@ As you can see, we can see the product names instead of product IDs.
 
 Open the `Index.razor` file, and change the `@order.ProductId` part to `@order.ProductName` to write the product name instead of the product ID. The final `Index.razor` content should be the following:
 
+{{if BlazorUI == "Blazorise"}}
+
 ````razor
 @page "/ordering"
 @using System.Collections.Generic
@@ -329,6 +332,46 @@ Open the `Index.razor` file, and change the `@order.ProductId` part to `@order.P
     }
 }
 ````
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+````razor
+@page "/ordering"
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using ModularCrm.Ordering
+@inject IOrderAppService OrderAppService
+
+<MudText Typo="Typo.h4">Orders</MudText>
+
+<MudCard>
+    <MudCardContent>
+        <MudList T="OrderDto">
+            @foreach (var order in Orders)
+            {
+                <MudListItem T="OrderDto" Value="@order">
+                    <strong>Customer:</strong> @order.CustomerName <br />
+                    <strong>Product:</strong> @order.ProductName <br />
+                    <strong>State:</strong> @order.State
+                </MudListItem>
+            }
+        </MudList>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    private List<OrderDto> Orders { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Orders = await OrderAppService.GetListAsync();
+    }
+}
+````
+
+{{end}}
 
 That's all. Now, you can graph build the main application and run it in ABP Studio to see the result:
 

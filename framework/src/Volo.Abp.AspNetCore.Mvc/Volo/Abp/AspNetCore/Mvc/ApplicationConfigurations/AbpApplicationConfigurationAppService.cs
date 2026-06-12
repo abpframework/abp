@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -27,6 +28,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApplicationConfigurationAppService
 {
     private readonly AbpLocalizationOptions _localizationOptions;
+    private readonly AbpRequestLocalizationOptions _requestLocalizationOptions;
     private readonly AbpMultiTenancyOptions _multiTenancyOptions;
     private readonly IServiceProvider _serviceProvider;
     private readonly IAbpAuthorizationPolicyProvider _abpAuthorizationPolicyProvider;
@@ -46,6 +48,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
 
     public AbpApplicationConfigurationAppService(
         IOptions<AbpLocalizationOptions> localizationOptions,
+        IOptions<AbpRequestLocalizationOptions> requestLocalizationOptions,
         IOptions<AbpMultiTenancyOptions> multiTenancyOptions,
         IServiceProvider serviceProvider,
         IAbpAuthorizationPolicyProvider abpAuthorizationPolicyProvider,
@@ -79,6 +82,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
         _cachedObjectExtensionsDtoService = cachedObjectExtensionsDtoService;
         _options = options.Value;
         _localizationOptions = localizationOptions.Value;
+        _requestLocalizationOptions = requestLocalizationOptions.Value;
         _multiTenancyOptions = multiTenancyOptions.Value;
     }
 
@@ -257,6 +261,7 @@ public class AbpApplicationConfigurationAppService : ApplicationService, IAbpApp
 
         localizationConfig.LanguagesMap = _localizationOptions.LanguagesMap;
         localizationConfig.LanguageFilesMap = _localizationOptions.LanguageFilesMap;
+        localizationConfig.UseRouteBasedCulture = _requestLocalizationOptions.UseRouteBasedCulture;
 
         return localizationConfig;
     }

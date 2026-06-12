@@ -1,0 +1,20 @@
+@page "/authentication/{action}"
+@page "/{culture}/authentication/{action}"
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using Volo.Abp.AspNetCore.Components.Web.Security
+<RemoteAuthenticatorView Action="@Action" OnLogInSucceeded="OnLogInSucceeded" OnLogOutSucceeded="OnLogOutSucceeded" />
+@inject WebAssemblyCachedApplicationConfigurationClient WebAssemblyCachedApplicationConfigurationClient
+@code{
+    [Parameter] public string? Culture { get; set; }
+    [Parameter] public string? Action { get; set; }
+
+    private async Task OnLogInSucceeded(RemoteAuthenticationState state)
+    {
+        await WebAssemblyCachedApplicationConfigurationClient.InitializeAsync();
+    }
+
+    private async Task OnLogOutSucceeded(RemoteAuthenticationState state)
+    {
+        await WebAssemblyCachedApplicationConfigurationClient.InitializeAsync();
+    }
+}

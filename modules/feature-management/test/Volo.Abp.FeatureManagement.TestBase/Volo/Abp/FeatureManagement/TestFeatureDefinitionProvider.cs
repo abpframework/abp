@@ -12,6 +12,10 @@ public class TestFeatureDefinitionProvider : FeatureDefinitionProvider
     public const string UserCount = "UserCount";
     public const string ProjectCount = "ProjectCount";
     public const string BackupCount = "BackupCount";
+    public const string TenantOnlyFeature = "TenantOnlyFeature";
+    public const string TenantOnlyParentFeature = "TenantOnlyParentFeature";
+    public const string OrphanChildOfTenantOnly = "OrphanChildOfTenantOnly";
+    public const string EditionOnlyFeature = "EditionOnlyFeature";
 
     public override void Define(IFeatureDefinitionContext context)
     {
@@ -21,6 +25,29 @@ public class TestFeatureDefinitionProvider : FeatureDefinitionProvider
             SocialLogins,
             valueType: new ToggleStringValueType()
         );
+
+        group.AddFeature(
+            TenantOnlyFeature,
+            defaultValue: false.ToString().ToLowerInvariant(),
+            valueType: new ToggleStringValueType()
+        ).WithProviders(TenantFeatureValueProvider.ProviderName);
+
+        var tenantOnlyParent = group.AddFeature(
+            TenantOnlyParentFeature,
+            defaultValue: false.ToString().ToLowerInvariant(),
+            valueType: new ToggleStringValueType()
+        ).WithProviders(TenantFeatureValueProvider.ProviderName);
+
+        tenantOnlyParent.CreateChild(
+            OrphanChildOfTenantOnly,
+            defaultValue: false.ToString().ToLowerInvariant(),
+            valueType: new ToggleStringValueType());
+
+        group.AddFeature(
+            EditionOnlyFeature,
+            defaultValue: false.ToString().ToLowerInvariant(),
+            valueType: new ToggleStringValueType()
+        ).WithProviders(EditionFeatureValueProvider.ProviderName);
 
         var emailSupport = group.AddFeature(
             EmailSupport,

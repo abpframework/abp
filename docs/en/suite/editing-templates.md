@@ -16,6 +16,8 @@ The are 2 template filters:
 1. **UI**:  You can switch between `Angular`, `MVC` and `Blazor` templates.
 2. **Database provider:** You can switch between `EF Core` and `MongoDb` templates.
 
+> **Note:** ABP Suite does not include React UI templates or generate React client-side code. React UI belongs to the modern template system and should be developed in the source-owned [React UI](../framework/ui/react/index.md) application. ABP license holders can use [ABP Studio AI Agent](https://abp.io/studio/ai-agent) with predefined AI credits to generate React pages more easily.
+
 These filters are automatically selected based on your ABP solution. The selected solution is shown on the top right of the page. In the current screenshot it is "Acme.BookStore". 
 
 ABP Suite templates are embedded resources which are stored in the `Volo.Abp.Commercial.SuiteTemplates` package. When you update your project, Suite templates are also being updated. To be able to generate the correct code for your project, the version of `Volo.Abp.Commercial.SuiteTemplates` must be the same as your Suite version.
@@ -29,7 +31,10 @@ There's a naming convention for the template files.
 * If the template name has `Server` prefix, it's used for backend code like repositories, application services, localizations, controllers, permissions, mappings, unit tests.
 * If the template name has `Frontend.Angular` prefix, it's used for Angular code generation. The Angular code is being generated via [Angular Schematics](https://angular.dev/tools/cli/schematics).
 * If the template name has `Frontend.Mvc`  prefix, it's used for razor pages, menus, JavaScript, CSS files.
-* If the template name has `Frontend.Blazor` prefix, it's used for razor components.
+* If the template name has `Frontend.Blazor` prefix (no `.MudBlazor` segment), it's used for Blazorise-based razor components.
+* If the template name has `Frontend.Blazor.MudBlazor` prefix, it's used for [MudBlazor](https://mudblazor.com)-based razor components.
+
+> The template list only shows the variant that matches your solution's [Blazor UI library](index.md#blazor-ui-library) (Blazorise or MudBlazor), so you never see both trees side-by-side and the "outdated" check only flags the active set.
 
 ## How do I edit the templates?
 

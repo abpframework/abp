@@ -341,10 +341,6 @@
                   "path": "studio/monitoring-applications.md"
                 },
                 {
-                  "text": "Model Context Protocol (MCP)",
-                  "path": "studio/model-context-protocol.md"
-                },
-                {
                   "text": "Working with Kubernetes",
                   "path": "studio/kubernetes.md"
                 },
@@ -355,6 +351,36 @@
                 {
                   "text": "Custom Commands",
                   "path": "studio/custom-commands.md"
+                }
+              ]
+            },
+            {
+              "text": "AI Agent",
+              "items": [
+                {
+                  "text": "Overview",
+                  "path": "studio/ai-agent.md",
+                  "isIndex": true
+                },
+                {
+                  "text": "Configuration",
+                  "path": "studio/ai-agent-configuration.md"
+                },
+                {
+                  "text": "Workflows",
+                  "path": "studio/ai-agent-workflows.md"
+                },
+                {
+                  "text": "Built-in Capabilities",
+                  "path": "studio/ai-agent-built-in-capabilities.md"
+                },
+                {
+                  "text": "Git Integration",
+                  "path": "studio/ai-agent-git-integration.md"
+                },
+                {
+                  "text": "Coding with AI Agent",
+                  "path": "studio/coding-with-ai-agent.md"
                 }
               ]
             },
@@ -585,6 +611,10 @@
                   "path": "framework/infrastructure/artificial-intelligence/microsoft-semantic-kernel.md"
                 }
               ]
+            },
+            {
+              "text": "Application URLs",
+              "path": "framework/infrastructure/app-urls.md"
             },
             {
               "text": "Background Jobs",
@@ -1040,7 +1070,7 @@
                   ]
                 }
               ]
-            },
+            }
           ]
         },
         {
@@ -1867,6 +1897,68 @@
               ]
             },
             {
+              "text": "React",
+              "items": [
+                {
+                  "text": "Overview",
+                  "path": "framework/ui/react/index.md",
+                  "isIndex": true
+                },
+                {
+                  "text": "Configuration and Development",
+                  "items": [
+                    {
+                      "text": "Environment Variables",
+                      "path": "framework/ui/react/environment-variables.md"
+                    },
+                    {
+                      "text": "Unit Testing",
+                      "path": "framework/ui/react/unit-testing.md"
+                    }
+                  ]
+                },
+                {
+                  "text": "Core Features",
+                  "items": [
+                    {
+                      "text": "Authorization",
+                      "path": "framework/ui/react/authorization.md"
+                    },
+                    {
+                      "text": "Localization",
+                      "path": "framework/ui/react/localization.md"
+                    },
+                    {
+                      "text": "Permission Management",
+                      "path": "framework/ui/react/permission-management.md"
+                    },
+                    {
+                      "text": "HTTP Requests",
+                      "path": "framework/ui/react/http-requests.md"
+                    }
+                  ]
+                },
+                {
+                  "text": "Customization and Components",
+                  "items": [
+                    {
+                      "text": "Customization",
+                      "path": "framework/ui/react/customization.md"
+                    },
+                    {
+                      "text": "Components",
+                      "path": "framework/ui/react/components/index.md",
+                      "isIndex": true
+                    }
+                  ]
+                },
+                {
+                  "text": "Admin Console",
+                  "path": "framework/ui/react/admin-console.md"
+                }
+              ]
+            },
+            {
               "text": "React Native",
               "items": [
                 {
@@ -2197,6 +2289,10 @@
               ]
             }
           ]
+        },
+        {
+          "text": "Modular Monolith",
+          "path": "solution-templates/modular-monolith"
         },
         {
           "text": "Microservice Solution",

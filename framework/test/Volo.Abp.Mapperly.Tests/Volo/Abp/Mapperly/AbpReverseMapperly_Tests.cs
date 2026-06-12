@@ -1,6 +1,9 @@
+using System;
 using Microsoft.Extensions.DependencyInjection;
 using Riok.Mapperly.Abstractions;
 using Shouldly;
+using Volo.Abp.Data;
+using Volo.Abp.Mapperly.SampleClasses;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Testing;
 using Xunit;
@@ -82,5 +85,18 @@ public class AbpReverseMapperly_Tests : AbpIntegratedTest<MapperlyTestModule>
 
         myClass.Id.ShouldBe("2");
         myClass.Name.ShouldBe("BeforeReverseMap Test2 AfterReverseMap");
+    }
+
+    [Fact]
+    public void MapExtraProperties_Should_Filter_With_Single_Parameter_ReverseMap()
+    {
+        var dto = new ExtensibleReverseDto { Id = Guid.NewGuid() }
+            .SetProperty("Tag", "ok")
+            .SetProperty("Secret", "leaked");
+
+        var entity = _objectMapper.Map<ExtensibleReverseDto, ExtensibleReverseEntity>(dto);
+
+        entity.GetProperty<string>("Tag").ShouldBe("ok");
+        entity.HasProperty("Secret").ShouldBeFalse();
     }
 }

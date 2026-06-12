@@ -38,6 +38,7 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
         {
             var groupDto = CreateFeatureGroupDto(group);
 
+            var includedFeatures = new HashSet<FeatureDefinition>();
             foreach (var featureDefinition in group.GetFeaturesWithChildren())
             {
                 if (providerName == TenantFeatureValueProvider.ProviderName &&
@@ -48,6 +49,18 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
                     continue;
                 }
 
+                if (featureDefinition.AllowedProviders.Any() &&
+                    !featureDefinition.AllowedProviders.Contains(providerName))
+                {
+                    continue;
+                }
+
+                if (featureDefinition.Parent != null && !includedFeatures.Contains(featureDefinition.Parent))
+                {
+                    continue;
+                }
+
+                includedFeatures.Add(featureDefinition);
                 var feature = await FeatureManager.GetOrNullWithProviderAsync(featureDefinition.Name, providerName, providerKey);
                 groupDto.Features.Add(CreateFeatureDto(feature, featureDefinition));
             }

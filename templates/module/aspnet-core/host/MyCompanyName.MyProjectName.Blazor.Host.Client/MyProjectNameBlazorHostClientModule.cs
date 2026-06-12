@@ -1,32 +1,30 @@
 ﻿using System;
 using System.Net.Http;
-using Blazorise.Bootstrap5;
-using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyCompanyName.MyProjectName.Blazor.WebAssembly;
 using Volo.Abp.Account;
-using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
-using Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme;
+using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Routing;
+using Volo.Abp.AspNetCore.Components.WebAssembly.MudBlazorBasicTheme;
 using Volo.Abp.Autofac.WebAssembly;
 using Volo.Abp.Mapperly;
-using Volo.Abp.Identity.Blazor.WebAssembly;
+using Volo.Abp.Identity.Blazor.MudBlazor.WebAssembly;
 using Volo.Abp.Modularity;
-using Volo.Abp.SettingManagement.Blazor.WebAssembly;
-using Volo.Abp.TenantManagement.Blazor.WebAssembly;
+using Volo.Abp.SettingManagement.Blazor.MudBlazor.WebAssembly;
+using Volo.Abp.TenantManagement.Blazor.MudBlazor.WebAssembly;
 using Volo.Abp.UI.Navigation;
 
 namespace MyCompanyName.MyProjectName.Blazor.Host.Client;
 
 [DependsOn(
     typeof(AbpAutofacWebAssemblyModule),
-    typeof(AbpAspNetCoreComponentsWebAssemblyBasicThemeModule),
+    typeof(AbpAspNetCoreComponentsWebAssemblyMudBlazorBasicThemeModule),
     typeof(AbpAccountApplicationContractsModule),
-    typeof(AbpIdentityBlazorWebAssemblyModule),
-    typeof(AbpTenantManagementBlazorWebAssemblyModule),
-    typeof(AbpSettingManagementBlazorWebAssemblyModule),
+    typeof(AbpIdentityBlazorMudBlazorWebAssemblyModule),
+    typeof(AbpTenantManagementBlazorMudBlazorWebAssemblyModule),
+    typeof(AbpSettingManagementBlazorMudBlazorWebAssemblyModule),
     typeof(MyProjectNameBlazorWebAssemblyModule)
 )]
 public class MyProjectNameBlazorHostClientModule : AbpModule
@@ -38,7 +36,6 @@ public class MyProjectNameBlazorHostClientModule : AbpModule
 
         ConfigureAuthentication(builder);
         ConfigureHttpClient(context, environment);
-        ConfigureBlazorise(context);
         ConfigureRouter(context);
         ConfigureMenu(context);
 
@@ -59,13 +56,6 @@ public class MyProjectNameBlazorHostClientModule : AbpModule
         {
             options.MenuContributors.Add(new MyProjectNameHostMenuContributor(context.Services.GetConfiguration()));
         });
-    }
-
-    private void ConfigureBlazorise(ServiceConfigurationContext context)
-    {
-        context.Services
-            .AddBootstrap5Providers()
-            .AddFontAwesomeIcons();
     }
 
     private static void ConfigureAuthentication(WebAssemblyHostBuilder builder)

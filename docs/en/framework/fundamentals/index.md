@@ -17,6 +17,7 @@ The following documents explains the fundamental building blocks to create ABP s
 * [Dependency Injection](./dependency-injection.md)
 * [Exception Handling](./exception-handling.md)
 * [Localization](./localization.md)
+* [URL-Based Localization](./url-based-localization.md)
 * [Logging](./logging.md)
 * [Object Extensions](./object-extensions.md)
 * [Options](./options.md)

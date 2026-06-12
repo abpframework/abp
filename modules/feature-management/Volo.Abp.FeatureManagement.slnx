@@ -2,6 +2,9 @@
   <Folder Name="/src/">
     <Project Path="src/Volo.Abp.FeatureManagement.Application.Contracts/Volo.Abp.FeatureManagement.Application.Contracts.csproj" />
     <Project Path="src/Volo.Abp.FeatureManagement.Application/Volo.Abp.FeatureManagement.Application.csproj" />
+    <Project Path="src/Volo.Abp.FeatureManagement.Blazor.MudBlazor.Server/Volo.Abp.FeatureManagement.Blazor.MudBlazor.Server.csproj" />
+    <Project Path="src/Volo.Abp.FeatureManagement.Blazor.MudBlazor.WebAssembly/Volo.Abp.FeatureManagement.Blazor.MudBlazor.WebAssembly.csproj" />
+    <Project Path="src/Volo.Abp.FeatureManagement.Blazor.MudBlazor/Volo.Abp.FeatureManagement.Blazor.MudBlazor.csproj" />
     <Project Path="src/Volo.Abp.FeatureManagement.Blazor.Server/Volo.Abp.FeatureManagement.Blazor.Server.csproj" />
     <Project Path="src/Volo.Abp.FeatureManagement.Blazor.WebAssembly/Volo.Abp.FeatureManagement.Blazor.WebAssembly.csproj" />
     <Project Path="src/Volo.Abp.FeatureManagement.Blazor/Volo.Abp.FeatureManagement.Blazor.csproj" />

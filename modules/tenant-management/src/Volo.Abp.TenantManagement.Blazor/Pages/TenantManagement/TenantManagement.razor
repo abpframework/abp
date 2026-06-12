@@ -1,4 +1,5 @@
 ﻿@page "/tenant-management/tenants"
+@page "/{culture}/tenant-management/tenants"
 @attribute [Authorize(TenantManagementPermissions.Tenants.Default)]
 @using Microsoft.AspNetCore.Authorization
 @using Volo.Abp.FeatureManagement.Blazor.Components

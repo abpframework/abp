@@ -108,7 +108,11 @@ To create a new entity, make sure the *-New entity-* is selected in the **Entity
 
   * **Update database:** When you add a new migration, ABP Suite can automatically execute update-database command so that the changes are being applied to the database.
 
-* **Create user interface:** Creates pages, modals, components, `JavaScript`, `CSS ` files and adds the new page to the main menu.  If you don't have a requirement to manage the entity via user interface, you can uncheck this option.
+* **Create user interface:** Creates pages, modals, components, `JavaScript`, `CSS` files and adds the new page to the main menu. If you don't have a requirement to manage the entity via user interface, you can uncheck this option.
+
+  > **Note:** This option does not generate React UI pages. ABP Suite's UI generation targets Suite-supported UI stacks such as MVC, Blazor and Angular. For React-based solutions, build the UI in the source-owned [React UI](../framework/ui/react/index.md) application. ABP license holders can use [ABP Studio AI Agent](https://abp.io/studio/ai-agent) with predefined AI credits to generate React pages more easily.
+
+  > **Blazor UI library:** For Blazor solutions, the generated UI matches the underlying Blazor component library. Solutions that reference `Volo.Abp.MudBlazorUI` produce pages built around `MudDataGrid`, `MudDialog`, `MudForm` and the rest of the [MudBlazor](https://mudblazor.com) controls; Blazorise-based solutions keep emitting the original `DataGrid` / `Modal` / `Validations` markup. ABP Suite picks the variant automatically by scanning the Blazor project `.csproj` and shows the resolved value in the solution info tooltip — no extra switch is required. See the [Blazor UI library](index.md#blazor-ui-library) section for details.
 
 * **Excel export**: Creates a button that exports a list of all the data that were added to the entity to an Excel file.
 
