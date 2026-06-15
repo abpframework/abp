@@ -11,7 +11,7 @@
 
   <ng-template #abpBody>
     @if (form) {
-      <form [formGroup]="form" (ngSubmit)="save()" validateOnSubmit>
+      <form [formGroup]="form" (ngSubmit)="save()" [validateOnSubmit]="true">
         <ul
           ngbNav
           #nav="ngbNav"

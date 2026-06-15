@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-body">
       @if (form && (!isEditMode || page)) {
-        <form [formGroup]="form" (ngSubmit)="save()" validateOnSubmit>
+        <form [formGroup]="form" (ngSubmit)="save()" [validateOnSubmit]="true">
           <!-- Basic fields outside tabs -->
           <abp-extensible-form [selectedRecord]="page || {}" />
 

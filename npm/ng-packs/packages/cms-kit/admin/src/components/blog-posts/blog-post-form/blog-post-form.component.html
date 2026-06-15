@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-body">
       @if (form && (!isEditMode || blogPost)) {
-        <form [formGroup]="form" (ngSubmit)="saveAsDraft()" validateOnSubmit>
+        <form [formGroup]="form" (ngSubmit)="saveAsDraft()" [validateOnSubmit]="true">
           <!-- Cover Image -->
           <div class="mb-3">
             @if (coverImagePreview) {

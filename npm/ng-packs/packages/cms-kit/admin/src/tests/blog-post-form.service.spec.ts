@@ -58,7 +58,7 @@ describe('BlogPostFormService', () => {
   it('should throw when creating with invalid form', () => {
     const form = createInvalidForm();
 
-    expect(() => service.create(form)).toThrowError('Form is invalid');
+    expect(() => service.create(form)).toThrow('Form is invalid');
   });
 
   it('should call BlogPostAdminService.create and navigate on create', done => {
@@ -114,12 +114,12 @@ describe('BlogPostFormService', () => {
   it('should throw when updating with invalid form or missing blog post', () => {
     const form = createInvalidForm();
 
-    expect(() => service.update('id', form, {} as any)).toThrowError(
+    expect(() => service.update('id', form, {} as any)).toThrow(
       'Form is invalid or blog post is missing',
     );
 
     const validForm = createValidForm();
-    expect(() => service.update('id', validForm, null as any)).toThrowError(
+    expect(() => service.update('id', validForm, null as any)).toThrow(
       'Form is invalid or blog post is missing',
     );
   });

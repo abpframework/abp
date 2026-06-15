@@ -7,7 +7,7 @@
 
   <ng-template #abpBody>
     @if (form) {
-      <form [formGroup]="form" (ngSubmit)="save()" validateOnSubmit>
+      <form [formGroup]="form" (ngSubmit)="save()" [validateOnSubmit]="true">
         <abp-extensible-form [selectedRecord]="selected()" />
       </form>
     } @else {

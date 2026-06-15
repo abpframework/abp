@@ -5,7 +5,7 @@
 
   <ng-template #abpBody>
     @if (form) {
-      <form [formGroup]="form" (ngSubmit)="save()" validateOnSubmit>
+      <form [formGroup]="form" (ngSubmit)="save()" [validateOnSubmit]="true">
         <div formArrayName="features">
           @for (featureControl of featuresFormArray.controls; track $index; let i = $index) {
             <div class="mb-3" [formGroupName]="i">
@@ -33,7 +33,7 @@
                       class="form-check-input"
                       id="feature-{{ i }}"
                       formControlName="isEnabled"
-                      disabled
+                      [disabled]="true"
                     />
                     <label class="form-check-label" for="feature-{{ i }}">
                       {{ 'CmsKit::' + features[i]?.featureName | abpLocalization }}

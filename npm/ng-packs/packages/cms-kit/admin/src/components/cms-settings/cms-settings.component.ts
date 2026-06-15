@@ -38,6 +38,8 @@ export class CmsSettingsComponent {
   readonly configState = inject(ConfigStateService);
   readonly toaster = inject(ToasterService);
 
+  loading = false;
+
   commentApprovalControl = new FormControl(false);
 
   ngOnInit() {
@@ -47,10 +49,12 @@ export class CmsSettingsComponent {
   }
 
   submit() {
+    this.loading = true;
     this.commentAdminService
       .updateSettings({ commentRequireApprovement: this.commentApprovalControl.value })
       .pipe(
         finalize(() => {
+          this.loading = false;
           this.configState.refreshAppState().subscribe();
         }),
       )
