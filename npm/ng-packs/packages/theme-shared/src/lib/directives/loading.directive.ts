@@ -47,37 +47,48 @@ export class LoadingDirective implements OnInit, OnDestroy {
 
   private handleLoadingChange(newValue: boolean) {
     setTimeout(() => {
-      if (!newValue && this.timerSubscription) {
-        this.timerSubscription.unsubscribe();
-        this.timerSubscription = null;
-
-        if (this.rootNode) {
-          this.renderer.removeChild(this.rootNode.parentElement, this.rootNode);
-          this.rootNode = null;
-        }
+      if (!newValue) {
+        this.clearLoading();
         return;
+      }
+
+      if (this.timerSubscription) {
+        this.timerSubscription.unsubscribe();
       }
 
       this.timerSubscription = timer(this.delay())
         .pipe(take(1))
         .subscribe(() => {
+          if (!this.loading()) {
+            return;
+          }
+
           if (!this.componentRef) {
             this.componentRef = this.viewContainerRef.createComponent(LoadingComponent, {
               injector: this.injector
             });
           }
 
-          if (newValue && !this.rootNode) {
+          if (!this.rootNode) {
             this.rootNode = (this.componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0];
             this.targetElement?.appendChild(this.rootNode as HTMLDivElement);
-          } else if (this.rootNode) {
-            this.renderer.removeChild(this.rootNode.parentElement, this.rootNode);
-            this.rootNode = null;
           }
 
           this.timerSubscription = null;
         });
     }, 0);
+  }
+
+  private clearLoading() {
+    if (this.timerSubscription) {
+      this.timerSubscription.unsubscribe();
+      this.timerSubscription = null;
+    }
+
+    if (this.rootNode?.parentElement) {
+      this.renderer.removeChild(this.rootNode.parentElement, this.rootNode);
+      this.rootNode = null;
+    }
   }
 
   ngOnInit() {
@@ -93,8 +104,6 @@ export class LoadingDirective implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.timerSubscription) {
-      this.timerSubscription.unsubscribe();
-    }
+    this.clearLoading();
   }
 }
