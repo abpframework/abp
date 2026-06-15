@@ -19,7 +19,7 @@
     },
     "visualizations": {
       "type": "array",
-      "description": "Flat, name-keyed list of dashboard visualizations. Each visualization positions itself on the grid via row, order, and width.",
+      "description": "Flat list of name-identified dashboard visualizations. Each visualization positions itself on the grid via row, order, and width.",
       "items": {
         "$ref": "dashboard-visualization-descriptor.schema.json"
       },

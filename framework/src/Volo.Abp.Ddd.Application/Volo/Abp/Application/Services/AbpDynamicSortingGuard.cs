@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using Volo.Abp.Validation;
 
@@ -114,9 +115,37 @@ internal static class AbpDynamicSortingGuard
 
         private static bool IsConstantStringIndexer(MethodCallExpression node)
         {
-            return node.Method.Name == "get_Item"
-                && node.Arguments.Count == 1
-                && node.Arguments[0] is ConstantExpression { Value: string };
+            // Must be an instance call with a single constant string argument.
+            if (node.Object == null
+                || node.Arguments.Count != 1
+                || node.Arguments[0] is not ConstantExpression { Value: string })
+            {
+                return false;
+            }
+
+            // And the resolved method must be the get accessor of a real string-keyed
+            // indexer (a special-name property getter), not an arbitrary method that
+            // merely shares the compiler-generated "get_Item" name. This keeps the
+            // guard's "no method calls" rule intact for everything except indexers.
+            var method = node.Method;
+            var parameters = method.GetParameters();
+            if (!method.IsSpecialName
+                || method.IsStatic
+                || parameters.Length != 1
+                || parameters[0].ParameterType != typeof(string))
+            {
+                return false;
+            }
+
+            return method.DeclaringType?
+                .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                .Any(property =>
+                {
+                    var indexParameters = property.GetIndexParameters();
+                    return indexParameters.Length == 1
+                        && indexParameters[0].ParameterType == typeof(string)
+                        && property.GetGetMethod(nonPublic: true) == method;
+                }) == true;
         }
     }
 }
