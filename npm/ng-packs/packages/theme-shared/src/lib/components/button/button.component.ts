@@ -40,23 +40,13 @@ export class ButtonComponent implements OnInit {
   readonly buttonType = input('button');
   readonly formName = input<string | undefined>(undefined);
   readonly iconClass = input<string | undefined>(undefined);
-  readonly loadingInput = input(false, { alias: 'loading' });
+  readonly loading = input(false);
   readonly disabled = input<boolean | undefined>(false);
   readonly attributes = input<ABP.Dictionary<string> | undefined>(undefined);
 
-  // Internal writable signal for loading state - can be set programmatically
-  private readonly _loading = signal(false);
+  private readonly modalLoading = signal<boolean | null>(null);
 
-  // Computed that combines input and internal state
-  readonly isLoading = computed(() => this.loadingInput() || this._loading());
-
-  // Getter/setter for backward compatibility (used by ModalComponent)
-  get loading(): boolean {
-    return this._loading();
-  }
-  set loading(value: boolean) {
-    this._loading.set(value);
-  }
+  readonly isLoading = computed(() => this.modalLoading() ?? this.loading());
 
   readonly click = output<MouseEvent>();
   readonly focus = output<FocusEvent>();
@@ -67,9 +57,13 @@ export class ButtonComponent implements OnInit {
 
   readonly buttonRef = viewChild.required<ElementRef<HTMLButtonElement>>('button');
 
-  protected readonly icon = computed(() => {
-    return this.isLoading() ? 'fa fa-spinner fa-spin' : this.iconClass() || 'd-none';
-  });
+  protected readonly icon = computed(() =>
+    this.isLoading() ? 'fa fa-spinner fa-spin' : this.iconClass() || 'd-none',
+  );
+
+  setLoading(value: boolean): void {
+    this.modalLoading.set(value);
+  }
 
   ngOnInit() {
     const attributes = this.attributes();

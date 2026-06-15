@@ -4,13 +4,9 @@
   [style.right]="right() || 'auto'"
   [style.bottom]="bottom() || 'auto'"
   [style.left]="left() || 'auto'"
-  [style.display]="toasts.length ? 'flex' : 'none'"
-  [@toastInOut]="toasts.length"
+  [style.display]="toasts().length ? 'flex' : 'none'"
 >
-  @for (toast of toasts; track toast.options?.id) {
-    <abp-toast
-      [toast]="toast"
-      (remove)="remove($event)"
-    ></abp-toast>
+  @for (toast of toasts(); track toast.options?.id) {
+    <abp-toast [toast]="toast" (remove)="remove($event)" />
   }
 </div>

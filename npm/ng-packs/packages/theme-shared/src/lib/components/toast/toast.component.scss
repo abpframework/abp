@@ -14,6 +14,33 @@
 
 $toastClass: abp-toast;
 
+:host {
+  display: block;
+  animation: abp-toast-in 350ms ease;
+}
+
+:host.abp-toast-leaving {
+  animation: abp-toast-out 450ms ease forwards;
+}
+
+@keyframes abp-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes abp-toast-out {
+  to {
+    opacity: 0;
+  }
+}
+
 .#{$toastClass} {
   display: grid;
   grid-template-columns: 35px 1fr;

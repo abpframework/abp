@@ -45,14 +45,7 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
 
   visible = model<boolean>(false);
 
-  busy = input(false, {
-    transform: (value: boolean) => {
-      if (this.abpSubmit() && this.abpSubmit() instanceof ButtonComponent) {
-        this.abpSubmit().loading = value;
-      }
-      return value;
-    },
-  });
+  busy = input(false);
 
   options = input<NgbModalOptions>({ keyboard: true });
 
@@ -92,6 +85,15 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
     effect(() => {
       this.toggle(this.visible());
     });
+
+    effect(() => {
+      const submit = this.abpSubmit();
+      if (!(submit instanceof ButtonComponent)) {
+        return;
+      }
+
+      submit.setLoading(this.visible() && this.busy());
+    });
   }
 
   ngOnInit(): void {
@@ -115,8 +117,17 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
     this.visible.set(value);
 
     if (!value) {
-      this.modalRef?.dismiss();
+      if (this.modalRef) {
+        const ref = this.modalRef;
+        this.modalRef = undefined!;
+        ref.dismiss();
+      }
+
       this.disappear.emit();
+      return;
+    }
+
+    if (this.modalWindowRef) {
       return;
     }
 
@@ -134,6 +145,10 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
       },
       ...this.options(),
       windowClass: `${this.options().windowClass || ''} ${this.modalIdentifier}`,
+    });
+
+    this.modalRef.result.finally(() => {
+      this.modalRef = undefined!;
     });
 
     this.appear.emit();
