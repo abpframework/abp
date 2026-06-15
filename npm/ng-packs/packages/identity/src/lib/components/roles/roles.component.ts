@@ -1,10 +1,15 @@
+import { Component, inject, Injector } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
+import { finalize } from 'rxjs/operators';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
 import {
   InitDirective,
   ListService,
   LocalizationPipe,
   PagedAndSortedResultRequestDto,
   PagedResultDto,
-  ReplaceableTemplateDirective
+  ReplaceableTemplateDirective,
 } from '@abp/ng.core';
 import { IdentityRoleDto, IdentityRoleService } from '@abp/ng.identity/proxy';
 import {
@@ -26,12 +31,8 @@ import {
   FormPropData,
   generateFormFromProps,
 } from '@abp/ng.components/extensible';
-import { Component, inject, Injector, OnInit } from '@angular/core';
-import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
-import { finalize } from 'rxjs/operators';
-import { eIdentityComponents } from '../../enums/components';
 import { PageComponent } from '@abp/ng.components/page';
-import { NgxValidateCoreModule } from '@ngx-validate/core';
+import { eIdentityComponents } from '../../enums/components';
 
 @Component({
   selector: 'abp-roles',
@@ -58,14 +59,17 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
     InitDirective,
   ],
 })
-export class RolesComponent implements OnInit {
+export class RolesComponent {
   protected readonly list = inject(ListService<PagedAndSortedResultRequestDto>);
   protected readonly confirmationService = inject(ConfirmationService);
   protected readonly toasterService = inject(ToasterService);
   private readonly injector = inject(Injector);
   protected readonly service = inject(IdentityRoleService);
 
-  data: PagedResultDto<IdentityRoleDto> = { items: [], totalCount: 0 };
+  readonly data = toSignal(
+    this.list.hookToQuery(query => this.service.getList(query)),
+    { initialValue: { items: [], totalCount: 0 } as PagedResultDto<IdentityRoleDto> },
+  );
   form!: UntypedFormGroup;
   selected?: IdentityRoleDto;
   isModalVisible!: boolean;
@@ -77,10 +81,6 @@ export class RolesComponent implements OnInit {
   onVisiblePermissionChange = (event: boolean) => {
     this.visiblePermissions = event;
   };
-
-  ngOnInit() {
-    this.hookToQuery();
-  }
 
   buildForm() {
     const data = new FormPropData(this.injector, this.selected);
@@ -128,17 +128,11 @@ export class RolesComponent implements OnInit {
       })
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.toasterService.success('AbpUi::DeletedSuccessfully');
-          this.service.delete(id).subscribe(() => this.list.get());
+          this.service.delete(id).subscribe(() => {
+            this.toasterService.success('AbpUi::DeletedSuccessfully');
+            this.list.get();
+          });
         }
-      });
-  }
-
-  private hookToQuery() {
-    this.list
-      .hookToQuery(query => this.service.getList(query))
-      .subscribe(res => {
-        this.data = res;
       });
   }
 

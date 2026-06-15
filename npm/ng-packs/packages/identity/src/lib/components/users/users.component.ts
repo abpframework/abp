@@ -36,11 +36,11 @@ import {
   Component,
   inject,
   Injector,
-  OnInit,
   TemplateRef,
   TrackByFunction,
-  viewChild
+  viewChild,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   AbstractControl,
   FormsModule,
@@ -84,7 +84,7 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
     InitDirective,
   ],
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent {
   protected readonly list = inject(ListService<GetIdentityUsersInput>);
   protected readonly confirmationService = inject(ConfirmationService);
   protected readonly service = inject(IdentityUserService);
@@ -92,7 +92,12 @@ export class UsersComponent implements OnInit {
   private readonly fb = inject(UntypedFormBuilder);
   private readonly injector = inject(Injector);
 
-  data: PagedResultDto<IdentityUserDto> = { items: [], totalCount: 0 };
+  readonly data = toSignal(
+    this.list.hookToQuery(query => this.service.getList(query)),
+    {
+      initialValue: { items: [], totalCount: 0 } as PagedResultDto<IdentityUserDto>,
+    },
+  );
 
   readonly modalContent = viewChild.required<TemplateRef<any>>('modalContent');
 
@@ -128,10 +133,6 @@ export class UsersComponent implements OnInit {
 
   get roleGroups(): UntypedFormGroup[] {
     return ((this.form.get('roleNames') as UntypedFormArray)?.controls as UntypedFormGroup[]) || [];
-  }
-
-  ngOnInit() {
-    this.hookToQuery();
   }
 
   buildForm() {
@@ -231,14 +232,6 @@ export class UsersComponent implements OnInit {
     const { prop, dir } = data.sorts[0];
     this.list.sortKey = prop;
     this.list.sortOrder = dir;
-  }
-
-  private hookToQuery() {
-    this.list
-      .hookToQuery(query => this.service.getList(query))
-      .subscribe(res => {
-        this.data = res;
-      });
   }
 
   openPermissionsModal(providerKey: string, entityDisplayName?: string) {
