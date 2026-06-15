@@ -1,32 +1,29 @@
-import {
-  Component,
-  inject,
-  input,
-  isDevMode,
-  Type,
-} from '@angular/core';
+import { Component, inject, input, isDevMode, Type } from '@angular/core';
+import { NgComponentOutlet } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { startWith } from 'rxjs/operators';
+
 import { eLayoutType } from '../enums/common';
 import { ABP } from '../models';
 import { ReplaceableComponents } from '../models/replaceable-components';
+
 import { LocalizationService } from '../services/localization.service';
 import { ReplaceableComponentsService } from '../services/replaceable-components.service';
 import { RouterEvents } from '../services/router-events.service';
 import { RoutesService } from '../services/routes.service';
 import { SubscriptionService } from '../services/subscription.service';
+
 import { RouteBasedCultureUrlService } from '../services/route-based-culture-url.service';
 import { findRoute } from '../utils/route-utils';
 import { TreeNode } from '../utils/tree-utils';
+
 import { DYNAMIC_LAYOUTS_TOKEN } from '../tokens/dynamic-layout.token';
-import { EnvironmentService } from '../services';
-import { NgComponentOutlet } from '@angular/common';
-import { filter, take } from 'rxjs';
 
 @Component({
   selector: 'abp-dynamic-layout',
   template: `
     @if (isLayoutVisible) {
-      <ng-container [ngComponentOutlet]="layout"></ng-container>
+      <ng-container [ngComponentOutlet]="layout" />
     }
   `,
   providers: [SubscriptionService],
@@ -46,24 +43,25 @@ export class DynamicLayoutComponent {
   protected readonly replaceableComponents = inject(ReplaceableComponentsService);
   protected readonly subscription = inject(SubscriptionService);
   protected readonly routerEvents = inject(RouterEvents);
-  protected readonly environment = inject(EnvironmentService);
   protected readonly routeCultureUrl = inject(RouteBasedCultureUrlService);
 
   constructor() {
-    const dynamicLayoutComponent = inject(DynamicLayoutComponent, { optional: true, skipSelf: true });
+    const dynamicLayoutComponent = inject(DynamicLayoutComponent, {
+      optional: true,
+      skipSelf: true,
+    });
 
     if (dynamicLayoutComponent) {
       if (isDevMode()) console.warn('DynamicLayoutComponent must be used only in AppComponent.');
       return;
     }
-    this.checkLayoutOnNavigationEnd();
+    this.listenToLayoutChanges();
     this.listenToLanguageChange();
-    this.listenToEnvironmentChange();
   }
 
-  private checkLayoutOnNavigationEnd() {
+  private listenToLayoutChanges() {
     const navigationEnd$ = this.routerEvents.getNavigationEvents('End');
-    this.subscription.addOne(navigationEnd$, () => this.getLayout());
+    this.subscription.addOne(navigationEnd$.pipe(startWith(null)), () => this.getLayout());
   }
 
   private getLayout() {
@@ -119,20 +117,5 @@ export class DynamicLayoutComponent {
 
   private getComponent(key: string): ReplaceableComponents.ReplaceableComponent | undefined {
     return this.replaceableComponents.get(key);
-  }
-
-  private listenToEnvironmentChange() {
-    this.environment
-      .createOnUpdateStream(x => x.oAuthConfig)
-      .pipe(
-        take(1),
-        filter(config => config.responseType === 'code'),
-      )
-      .subscribe(() => {
-        if (this.layout) {
-          return;
-        }
-        this.getLayout();
-      });
   }
 }

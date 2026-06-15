@@ -34,7 +34,10 @@ export class PermissionGuard implements IAbpGuard {
   protected readonly configStateService = inject(ConfigStateService);
   protected readonly routeCultureUrl = inject(RouteBasedCultureUrlService);
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> {
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot,
+  ): Observable<boolean | UrlTree> {
     let { requiredPolicy } = route.data || {};
 
     if (!requiredPolicy) {
@@ -86,7 +89,10 @@ export const permissionGuard: CanActivateFn = (
   let { requiredPolicy } = route.data || {};
 
   if (!requiredPolicy) {
-    const routeFound = findRoute(routesService, routeCultureUrl.getRoutePathForMatching(router, state.url));
+    const routeFound = findRoute(
+      routesService,
+      routeCultureUrl.getRoutePathForMatching(router, state.url),
+    );
     requiredPolicy = routeFound?.requiredPolicy;
   }
 
