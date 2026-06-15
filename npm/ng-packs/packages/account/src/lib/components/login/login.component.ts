@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit, inject } from '@angular/core';
+import { Component, Injector, OnInit, inject, signal } from '@angular/core';
 import {
   ReactiveFormsModule,
   UntypedFormBuilder,
@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
 
   form!: UntypedFormGroup;
 
-  inProgress?: boolean;
+  readonly inProgress = signal(false);
 
   isSelfRegistrationEnabled = true;
 
@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     if (this.form.invalid) return;
 
-    this.inProgress = true;
+    this.inProgress.set(true);
 
     const { username, password, rememberMe } = this.form.value;
 
@@ -88,9 +88,9 @@ export class LoginComponent implements OnInit {
             '',
             { life: 7000 },
           );
-          return throwError(err);
+          return throwError(() => err);
         }),
-        finalize(() => (this.inProgress = false)),
+        finalize(() => this.inProgress.set(false)),
       )
       .subscribe();
   }

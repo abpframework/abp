@@ -6,7 +6,7 @@ import {
   LocalizationPipe,
 } from '@abp/ng.core';
 import { ButtonComponent, getPasswordValidators, ToasterService } from '@abp/ng.theme.shared';
-import { Component, Injector, OnInit, inject } from '@angular/core';
+import { Component, Injector, OnInit, inject, signal } from '@angular/core';
 import {
   ReactiveFormsModule,
   UntypedFormBuilder,
@@ -44,7 +44,7 @@ export class RegisterComponent implements OnInit {
 
   form!: UntypedFormGroup;
 
-  inProgress?: boolean;
+  readonly inProgress = signal(false);
 
   isSelfRegistrationEnabled = true;
 
@@ -84,7 +84,7 @@ export class RegisterComponent implements OnInit {
   onSubmit() {
     if (this.form.invalid) return;
 
-    this.inProgress = true;
+    this.inProgress.set(true);
 
     const newUser = {
       userName: this.form.get('username')?.value,
@@ -114,7 +114,7 @@ export class RegisterComponent implements OnInit {
 
           return throwError(err);
         }),
-        finalize(() => (this.inProgress = false)),
+        finalize(() => this.inProgress.set(false)),
       )
       .subscribe();
   }

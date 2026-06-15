@@ -7,7 +7,7 @@
     }}</a>
   </strong>
 }
-<form [formGroup]="form" (ngSubmit)="onSubmit()" validateOnSubmit class="mt-4">
+<form [formGroup]="form" (ngSubmit)="onSubmit()" [validateOnSubmit]="true" class="mt-4">
   <div class="mb-3 form-group">
     <label for="login-input-user-name-or-email-address" class="form-label">{{
       'AbpAccount::UserNameOrEmailAddress' | abpLocalization
@@ -56,7 +56,7 @@
   </div>
 
   <abp-button
-    [loading]="inProgress"
+    [loading]="inProgress()"
     buttonType="submit"
     name="Action"
     buttonClass="btn-block btn-lg mt-3 btn btn-primary"

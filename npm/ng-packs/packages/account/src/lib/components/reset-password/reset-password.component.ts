@@ -1,6 +1,6 @@
 import { AccountService } from '@abp/ng.account.core/proxy';
 import { ButtonComponent, getPasswordValidators } from '@abp/ng.theme.shared';
-import { Component, Injector, OnInit, inject } from '@angular/core';
+import { Component, Injector, OnInit, inject, signal } from '@angular/core';
 import {
   ReactiveFormsModule,
   UntypedFormBuilder,
@@ -34,7 +34,7 @@ export class ResetPasswordComponent implements OnInit {
 
   form!: UntypedFormGroup;
 
-  inProgress = false;
+  readonly inProgress = signal(false);
 
   isPasswordReset = false;
 
@@ -63,9 +63,9 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.form.invalid || this.inProgress) return;
+    if (this.form.invalid || this.inProgress()) return;
 
-    this.inProgress = true;
+    this.inProgress.set(true);
 
     this.accountService
       .resetPassword({
@@ -73,7 +73,7 @@ export class ResetPasswordComponent implements OnInit {
         resetToken: this.form.get('resetToken')?.value,
         password: this.form.get('password')?.value,
       })
-      .pipe(finalize(() => (this.inProgress = false)))
+      .pipe(finalize(() => this.inProgress.set(false)))
       .subscribe(() => {
         this.isPasswordReset = true;
       });

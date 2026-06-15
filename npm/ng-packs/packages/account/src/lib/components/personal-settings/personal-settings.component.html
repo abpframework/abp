@@ -1,14 +1,14 @@
 @if (form) {
-  <form [formGroup]="form" (ngSubmit)="submit()" validateOnSubmit class="abp-md-form">
-    <abp-extensible-form [selectedRecord]="selected"></abp-extensible-form>
-  
+  <form [formGroup]="form" (ngSubmit)="submit()" [validateOnSubmit]="true" class="abp-md-form">
+    <abp-extensible-form [selectedRecord]="selected" />
+
     <abp-button
       buttonType="submit"
       iconClass="fa fa-check"
       buttonClass="btn btn-primary color-white"
-      [loading]="inProgress"
+      [loading]="inProgress()"
     >
-      {{ 'AbpIdentity::Save' | abpLocalization }}</abp-button
-    >
+      {{ 'AbpIdentity::Save' | abpLocalization }}
+    </abp-button>
   </form>
 }

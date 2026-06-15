@@ -1,5 +1,5 @@
 import { AccountService } from '@abp/ng.account.core/proxy';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import {
   ReactiveFormsModule,
   UntypedFormBuilder,
@@ -29,7 +29,7 @@ export class ForgotPasswordComponent {
 
   form: UntypedFormGroup;
 
-  inProgress?: boolean;
+  readonly inProgress = signal(false);
 
   isEmailSent = false;
 
@@ -42,14 +42,14 @@ export class ForgotPasswordComponent {
   onSubmit() {
     if (this.form.invalid) return;
 
-    this.inProgress = true;
+    this.inProgress.set(true);
 
     this.accountService
       .sendPasswordResetCode({
         email: this.form.get('email')?.value,
         appName: 'Angular',
       })
-      .pipe(finalize(() => (this.inProgress = false)))
+      .pipe(finalize(() => this.inProgress.set(false)))
       .subscribe(() => {
         this.isEmailSent = true;
       });
