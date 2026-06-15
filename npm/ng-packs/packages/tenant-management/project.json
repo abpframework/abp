@@ -31,7 +31,7 @@
       "executor": "@nx/vitest:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "reportsDirectory": "../../coverage/packages/tenant-management"
+        "reportsDirectory": "{projectRoot}/../../coverage/packages/tenant-management"
       }
     }
   }

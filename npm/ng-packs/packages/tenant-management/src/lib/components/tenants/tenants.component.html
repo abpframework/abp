@@ -1,4 +1,4 @@
-<abp-page [title]="'AbpTenantManagement::Tenants' | abpLocalization" [toolbar]="data.items">
+<abp-page [title]="'AbpTenantManagement::Tenants' | abpLocalization" [toolbar]="data().items">
   <div id="wrapper" class="card">
     <div class="card-body">
       <div id="data-tables-table-filter" class="data-tables-filter mb-3">
@@ -13,8 +13,8 @@
       </div>
 
       <abp-extensible-table
-        [data]="data.items || []"
-        [recordsTotal]="data.totalCount || 0"
+        [data]="data().items"
+        [recordsTotal]="data().totalCount"
         [list]="list"
       ></abp-extensible-table>
     </div>

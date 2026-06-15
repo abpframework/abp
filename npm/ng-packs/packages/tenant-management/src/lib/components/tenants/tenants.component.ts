@@ -24,7 +24,8 @@ import {
   FormPropData,
   generateFormFromProps,
 } from '@abp/ng.components/extensible';
-import { Component, DOCUMENT, inject, Injector, makeStateKey, OnInit } from '@angular/core';
+import { Component, DOCUMENT, inject, Injector, makeStateKey } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -61,7 +62,7 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
     NgxValidateCoreModule,
   ],
 })
-export class TenantsComponent implements OnInit {
+export class TenantsComponent {
   protected readonly list = inject(ListService<GetTenantsInput>);
   protected readonly confirmationService = inject(ConfirmationService);
   protected readonly service = inject(TenantService);
@@ -70,7 +71,9 @@ export class TenantsComponent implements OnInit {
   private readonly injector = inject(Injector);
   private document = inject(DOCUMENT);
 
-  data: PagedResultDto<TenantDto> = { items: [], totalCount: 0 };
+  readonly data = toSignal(this.list.hookToQuery(query => this.service.getList(query)), {
+    initialValue: { items: [], totalCount: 0 } as PagedResultDto<TenantDto>,
+  });
 
   selected!: TenantDto;
 
@@ -94,10 +97,6 @@ export class TenantsComponent implements OnInit {
   onVisibleFeaturesChange = (value: boolean) => {
     this.visibleFeatures = value;
   };
-
-  ngOnInit() {
-    this.hookToQuery();
-  }
 
   private createTenantForm() {
     const data = new FormPropData(this.injector, this.selected);
@@ -150,14 +149,6 @@ export class TenantsComponent implements OnInit {
           this.toasterService.success('AbpUi::DeletedSuccessfully');
           this.service.delete(id).subscribe(() => this.list.get());
         }
-      });
-  }
-
-  hookToQuery() {
-    this.list
-      .hookToQuery(query => this.service.getList(query))
-      .subscribe(res => {
-        this.data = res;
       });
   }
 
