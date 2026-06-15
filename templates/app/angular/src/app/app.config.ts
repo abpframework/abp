@@ -6,7 +6,6 @@ import {
 } from '@abp/ng.theme.shared';
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideAnimations } from '@angular/platform-browser/animations';
 
 import { appRoutes } from './app.routes';
 import { APP_ROUTE_PROVIDER } from './route.provider';
@@ -30,7 +29,7 @@ export const appConfig: ApplicationConfig = {
       withOptions({
         environment,
         registerLocaleFn: registerLocaleForEsBuild(),
-      })
+      }),
     ),
     provideThemeLeptonX(),
     provideSideMenuLayout(),
@@ -40,12 +39,11 @@ export const appConfig: ApplicationConfig = {
     provideIdentityConfig(),
     provideTenantManagementConfig(),
     provideFeatureManagementConfig(),
-    provideAnimations(),
     provideLogo(withEnvironmentOptions(environment)),
     provideAbpThemeShared(
       withValidationBluePrint({
         wrongPassword: 'Please choose 1q2w3E*',
-      })
+      }),
     ),
   ],
 };

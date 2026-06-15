@@ -1,13 +1,13 @@
 import { AuthService, LocalizationPipe } from '@abp/ng.core';
 import { Component, inject } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { DynamicFormComponent, FormFieldConfig } from '@abp/ng.components/dynamic-form';
+import { FormFieldConfig } from '@abp/ng.components/dynamic-form';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  imports: [NgTemplateOutlet, LocalizationPipe, DynamicFormComponent],
+  imports: [NgTemplateOutlet, LocalizationPipe],
 })
 export class HomeComponent {
   private authService = inject(AuthService);

@@ -2,7 +2,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
@@ -15,10 +14,10 @@
     "esModuleInterop": true,
     "paths": {
       "@proxy": [
-        "src/app/proxy/index.ts"
+        "./src/app/proxy/index.ts"
       ],
       "@proxy/*": [
-        "src/app/proxy/*"
+        "./src/app/proxy/*"
       ]
     },
     "useDefineForClassFields": false
