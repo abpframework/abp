@@ -29,6 +29,26 @@ enum ValueTypes {
 
 const DEFAULT_PROVIDER_NAME = 'D';
 
+/**
+ * FeatureDto.ValueType is typed as IStringValueType in Application.Contracts, but the API
+ * serializes concrete value types at runtime (e.g. SelectionStringValueType includes itemSource).
+ * generate-proxy only reflects the interface contract, so keep runtime-only shapes here — not in proxy/.
+ * See: modules/feature-management (FeatureDto, StringValueTypeJsonConverter) and Blazor/MVC cast pattern.
+ */
+type FeatureWithStyle = FeatureDto & {
+  style?: Record<string, number>;
+  initialValue: unknown;
+};
+
+type SelectionStringValueType = FeatureDto['valueType'] & {
+  itemSource?: {
+    items?: Array<{
+      value?: string;
+      displayText?: { resourceName?: string; name?: string };
+    }>;
+  };
+};
+
 @Component({
   selector: 'abp-feature-management',
   templateUrl: './feature-management.component.html',
@@ -73,7 +93,7 @@ export class FeatureManagementComponent {
   groups: Pick<FeatureGroupDto, 'name' | 'displayName'>[] = [];
 
   features: {
-    [group: string]: Array<FeatureDto & { style?: { [key: string]: number }; initialValue: any }>;
+    [group: string]: FeatureWithStyle[];
   };
 
   valueTypes = ValueTypes;
@@ -192,6 +212,14 @@ export class FeatureManagementComponent {
     } else {
       this.uncheckToggleDescendants(feature);
     }
+  }
+
+  getSelectionItems(feature: FeatureWithStyle) {
+    if (feature.valueType?.name !== ValueTypes.SelectionStringValueType) {
+      return [];
+    }
+
+    return (feature.valueType as SelectionStringValueType).itemSource?.items ?? [];
   }
 
   isParentDisabled(parentName: string, groupName: string, provider: string): boolean {
