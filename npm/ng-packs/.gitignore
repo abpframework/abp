@@ -60,3 +60,4 @@ Thumbs.db
 .nx/
 
 vitest.config.*.timestamp*
+.claude/worktrees
