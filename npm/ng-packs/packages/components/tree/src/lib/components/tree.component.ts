@@ -163,23 +163,25 @@ export class TreeComponent implements OnInit {
     }
   }
 
-  onCheckboxChange(event: { keys: any[] }) {
-    this._checkedKeys.set([...event.keys]);
-    this.checkedKeysChange.emit(event.keys);
+  onCheckboxChange(event: NzFormatEmitEvent) {
+    this._checkedKeys.set([...event.keys as any[]]);
+    this.checkedKeysChange.emit(event.keys as any[]);
   }
 
-  onExpandedKeysChange(event: { keys: string[] } & NzFormatEmitEvent) {
-    this._expandedKeys.set([...event.keys]);
-    this.expandedKeysChange.emit(event.keys);
+  onExpandedKeysChange(event: NzFormatEmitEvent) {
+    this._expandedKeys.set([...event.keys as string[]]);
+    this.expandedKeysChange.emit(event.keys as string[]);
     this.nzExpandChange.emit(event);
   }
 
-  onDrop(event: DropEvent) {
+  onDrop(event: NzFormatEmitEvent) {
     event.event?.stopPropagation();
     event.event?.preventDefault();
-    event.pos = this.dropPosition;
 
-    this.dropOver.emit(event);
+    this.dropOver.emit({
+      ...event,
+      pos: this.dropPosition,
+    });
   }
 
   initDropdown(key: string, dropdown: NgbDropdown) {

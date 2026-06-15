@@ -12,7 +12,7 @@
   },
   "exclude": [
     "src/test-setup.ts",
-    "src/**/*.spec.ts",
+    "**/*.spec.ts",
     "jest.config.ts",
     "vite.config.ts",
     "vite.config.mts",
@@ -27,5 +27,5 @@
     "src/**/*.spec.jsx",
     "src/test-setup.ts"
   ],
-  "include": ["src/**/*.ts"]
+  "include": ["**/*.ts"]
 }

@@ -51,7 +51,8 @@
   <div class="form-group form-check mb-3" role="group">
     <abp-checkbox 
       [label]="field().label | abpLocalization" 
-      formControlName="value" 
+      formControlName="value"
+      [checkboxId]="fieldId" 
       [id]="fieldId"
       [attr.aria-required]="field().required || null"
       [attr.aria-invalid]="isInvalid || null"
