@@ -14,6 +14,10 @@ namespace Volo.Abp.Application.Services;
 /// every OrderBy / ThenBy expression built from a user-supplied sorting string is
 /// constrained to plain property or field access. Methods, comparisons, ternaries
 /// and constants in the sort key are rejected with <see cref="AbpValidationException"/>.
+/// Property-bag / shadow-property access through a constant string indexer
+/// (e.g. <c>it["Prop"]</c>, <c>Data["Prop"]</c>) is treated as plain property access
+/// and allowed, since it carries no side effects and is the canonical way to sort
+/// dynamically-mapped entities.
 /// </summary>
 internal static class AbpDynamicSortingGuard
 {
@@ -81,7 +85,23 @@ internal static class AbpDynamicSortingGuard
         private const string Message = "Sorting expression is not supported.";
 
         protected override Expression VisitMethodCall(MethodCallExpression node)
-            => throw new AbpValidationException(Message);
+        {
+            // Allow property-bag / shadow-property access through a constant string
+            // indexer (it["Prop"], Data["Prop"], mainEntity["Prop"], ...). This is a
+            // pure read of a named member, not an arbitrary method invocation, so it
+            // does not open the injection surface the guard protects against.
+            if (IsConstantStringIndexer(node))
+            {
+                if (node.Object != null)
+                {
+                    Visit(node.Object);
+                }
+
+                return node;
+            }
+
+            throw new AbpValidationException(Message);
+        }
 
         protected override Expression VisitBinary(BinaryExpression node)
             => throw new AbpValidationException(Message);
@@ -91,5 +111,12 @@ internal static class AbpDynamicSortingGuard
 
         protected override Expression VisitConstant(ConstantExpression node)
             => throw new AbpValidationException(Message);
+
+        private static bool IsConstantStringIndexer(MethodCallExpression node)
+        {
+            return node.Method.Name == "get_Item"
+                && node.Arguments.Count == 1
+                && node.Arguments[0] is ConstantExpression { Value: string };
+        }
     }
 }
