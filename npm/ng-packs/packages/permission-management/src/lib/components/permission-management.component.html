@@ -1,4 +1,11 @@
-<abp-modal [(visible)]="visible" [busy]="modalBusy" [options]="{ size: 'lg', scrollable: false }">
+<abp-modal
+  [(visible)]="modalVisible"
+  (visibleChange)="onModalVisibleChange($event)"
+  (disappear)="onModalDisappear()"
+  [busy]="modalBusy"
+  [suppressUnsavedChangesWarning]="true"
+  [options]="{ size: 'lg', scrollable: false }"
+>
   @if (data.entityDisplayName || entityDisplayName()) {
     <ng-template #abpHeader>
       <h4>
@@ -17,7 +24,7 @@
               id="permission-search"
               placeholder="Filter"
               [ngModel]="filter()"
-              (ngModelChange)="filter.set($event)"
+              (ngModelChange)="onFilterChange($event)"
             />
           </div>
         </div>
@@ -29,8 +36,8 @@
               id="select-all-in-all-tabs"
               name="select-all-in-all-tabs"
               class="form-check-input"
-              [(ngModel)]="selectAllTab"
-              (click)="onClickSelectAll()"
+              [checked]="selectAllTab"
+              (change)="onSelectAllChange($event)"
               [disabled]="disabledSelectAllInAllTabs"
             />
             <label class="form-check-label" for="select-all-in-all-tabs">{{
@@ -92,9 +99,9 @@
                           id="select-all-in-this-tabs"
                           name="select-all-in-this-tabs"
                           class="form-check-input"
-                          [(ngModel)]="selectThisTab"
+                          [checked]="selectThisTab"
                           [disabled]="disableSelectAllTab"
-                          (click)="onClickSelectThisTab()"
+                          (change)="onSelectThisTabChange($event)"
                         />
                         <label class="form-check-label" for="select-all-in-this-tabs">{{
                           'AbpPermissionManagement::SelectAllInThisTab' | abpLocalization
@@ -111,7 +118,7 @@
                             [attr.id]="permission.name"
                             class="form-check-input"
                             [disabled]="isGrantedByOtherProviderName(permission.grantedProviders)"
-                            (click)="onClickCheckbox(permission, permissionCheckbox.value)"
+                            (click)="onClickCheckbox(permission)"
                           />
                           <label class="form-check-label" [attr.for]="permission.name"
                             >{{ permission.displayName }}
@@ -138,7 +145,7 @@
       <button type="button" class="btn btn-outline-primary" abpClose>
         {{ 'AbpIdentity::Cancel' | abpLocalization }}
       </button>
-      <abp-button iconClass="fa fa-check" (click)="submit()">{{
+      <abp-button iconClass="fa fa-check" buttonType="button" (click)="submit()">{{
         'AbpIdentity::Save' | abpLocalization
       }}</abp-button>
     </ng-template>
