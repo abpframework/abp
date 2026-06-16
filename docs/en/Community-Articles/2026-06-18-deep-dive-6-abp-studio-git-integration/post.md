@@ -122,12 +122,15 @@ ABP Studio supports that with AI review on selected Git changes.
 
 ![AI review suggestions on selected Git changes](git-ai-review-details.png)
 
+AI review is not the only way to leave notes on a diff. I can also write my own comments directly on changed lines while I am reviewing.
+
+![Manual comments on Git diff in ABP Studio](git-diff-comments.png)
 
 The useful part is that the review is attached to the diff. Suggestions and notes appear near the changed lines, and if there is something I want the agent to handle, I can send those review notes to ABP Agent.
 
 That changes the feel of the workflow.
 
-Instead of asking the agent to code and then manually re-explaining my review comments, I can turn the review result back into a task. The agent gets the file, line, and note context. I still review the result, but I spend less time copying context between places.
+Instead of asking the agent to code and then manually re-explaining my review comments, I can turn the review result back into a task. Whether a note comes from AI review or from something I wrote myself, the agent gets the file, line, and note context. I still review the result, but I spend less time copying context between places.
 
 Git also helps with recovery. In a Git repository, ABP Studio can offer **Back to this point** in the agent conversation. For me, that is a comfort feature: if an agent turn takes the work in the wrong direction, I can return to an earlier point instead of manually untangling every changed file.
 
