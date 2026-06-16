@@ -90,7 +90,7 @@ describe('createActionToBodyMapper — IRemoteStreamContent return value', () =>
     expect(body.isBlobMethod()).toBe(true);
   });
 
-  test('binary-only contentTypes also picks blob + octet-stream', () => {
+  test('binary-only contentTypes picks blob and echoes back the actual binary media type', () => {
     const body = mapBody(
       buildAction({
         returnValue: {
@@ -102,7 +102,7 @@ describe('createActionToBodyMapper — IRemoteStreamContent return value', () =>
     );
 
     expect(body.httpResponseType).toBe('blob');
-    expect(body.acceptHeader).toBe('application/octet-stream');
+    expect(body.acceptHeader).toBe('application/pdf');
   });
 });
 
@@ -172,6 +172,40 @@ describe('createActionToBodyMapper — IsRemoteStream backend flag', () => {
 
     expect(body.httpResponseType).toBe('blob');
     expect(body.acceptHeader).toBe('application/octet-stream');
+    expect(body.isBlobMethod()).toBe(true);
+  });
+
+  test('[Volo.Abp.Content.IRemoteStreamContent] (real ABP square-bracket form) must NOT pick blob and degrades responseType to any[]', () => {
+    // ABP serialises collections as `[T]` (not `T[]`) — pin the on-the-wire shape.
+    const body = mapBody(
+      buildAction({
+        returnValue: {
+          type: 'System.Collections.Generic.IList<Volo.Abp.Content.IRemoteStreamContent>',
+          typeSimple: '[Volo.Abp.Content.IRemoteStreamContent]',
+        },
+      } as Partial<Action>),
+    );
+
+    expect(body.httpResponseType).toBeUndefined();
+    expect(body.acceptHeader).toBeUndefined();
+    expect(body.isBlobMethod()).toBe(false);
+    expect(body.responseType).toBe('any[]');
+  });
+
+  test('IRemoteStreamContent[] array return must NOT pick blob (server falls back to JSON metadata)', () => {
+    const body = mapBody(
+      buildAction({
+        returnValue: {
+          type: 'Volo.Abp.Content.IRemoteStreamContent[]',
+          typeSimple: 'Volo.Abp.Content.IRemoteStreamContent[]',
+        },
+      } as Partial<Action>),
+    );
+
+    expect(body.httpResponseType).toBeUndefined();
+    expect(body.acceptHeader).toBeUndefined();
+    expect(body.isBlobMethod()).toBe(false);
+    expect(body.responseType).toBe('any[]');
   });
 
   test('isRemoteStream=false with stream-content type-name still detected by type name (legacy)', () => {
@@ -192,7 +226,7 @@ describe('createActionToBodyMapper — IsRemoteStream backend flag', () => {
 describe('createActionToBodyMapper — +json suffix detection', () => {
   const mapBody = createActionToBodyMapper();
 
-  test('application/problem+json picked as json', () => {
+  test('application/problem+json echoes back as Accept (decoder stays json)', () => {
     const body = mapBody(
       buildAction({
         returnValue: {
@@ -204,10 +238,10 @@ describe('createActionToBodyMapper — +json suffix detection', () => {
     );
 
     expect(body.httpResponseType).toBe('json');
-    expect(body.acceptHeader).toBe('application/json');
+    expect(body.acceptHeader).toBe('application/problem+json');
   });
 
-  test('text/json picked as json (informal but real-world)', () => {
+  test('text/json echoes back as text/json (decoder stays json)', () => {
     const body = mapBody(
       buildAction({
         returnValue: {
@@ -219,10 +253,10 @@ describe('createActionToBodyMapper — +json suffix detection', () => {
     );
 
     expect(body.httpResponseType).toBe('json');
-    expect(body.acceptHeader).toBe('application/json');
+    expect(body.acceptHeader).toBe('text/json');
   });
 
-  test('application/vnd.api+json picked as json', () => {
+  test('application/vnd.api+json echoes back as Accept (decoder stays json)', () => {
     const body = mapBody(
       buildAction({
         returnValue: {
@@ -234,6 +268,7 @@ describe('createActionToBodyMapper — +json suffix detection', () => {
     );
 
     expect(body.httpResponseType).toBe('json');
+    expect(body.acceptHeader).toBe('application/vnd.api+json');
   });
 });
 
@@ -287,7 +322,7 @@ describe('createActionToBodyMapper — contentTypes precedence and edge cases', 
     expect(body.acceptHeader).toBe('application/octet-stream');
   });
 
-  test('IRemoteStreamContent[] array also picked as blob', () => {
+  test('IRemoteStreamContent[] array falls through to defaults (server returns JSON metadata, not binary)', () => {
     const body = mapBody(
       buildAction({
         returnValue: {
@@ -297,8 +332,8 @@ describe('createActionToBodyMapper — contentTypes precedence and edge cases', 
       } as Partial<Action>),
     );
 
-    expect(body.httpResponseType).toBe('blob');
-    expect(body.acceptHeader).toBe('application/octet-stream');
+    expect(body.httpResponseType).toBeUndefined();
+    expect(body.acceptHeader).toBeUndefined();
   });
 
   test('case-insensitive json detection (APPLICATION/JSON)', () => {
@@ -316,7 +351,7 @@ describe('createActionToBodyMapper — contentTypes precedence and edge cases', 
     expect(body.acceptHeader).toBe('application/json');
   });
 
-  test('image/* contentTypes alone picks blob', () => {
+  test('image/* contentTypes alone picks blob and echoes back the first image type', () => {
     const body = mapBody(
       buildAction({
         returnValue: {
@@ -328,7 +363,7 @@ describe('createActionToBodyMapper — contentTypes precedence and edge cases', 
     );
 
     expect(body.httpResponseType).toBe('blob');
-    expect(body.acceptHeader).toBe('application/octet-stream');
+    expect(body.acceptHeader).toBe('image/png');
   });
 
   test('video/* and audio/* picked as blob', () => {
@@ -370,7 +405,7 @@ describe('createActionToBodyMapper — contentTypes precedence and edge cases', 
     expect(body.acceptHeader).toBeUndefined();
   });
 
-  test('mixed text/* and application/json picks json', () => {
+  test('mixed text/* and application/json picks json and echoes the first json-shaped media type', () => {
     const body = mapBody(
       buildAction({
         returnValue: {
@@ -382,7 +417,7 @@ describe('createActionToBodyMapper — contentTypes precedence and edge cases', 
     );
 
     expect(body.httpResponseType).toBe('json');
-    expect(body.acceptHeader).toBe('application/json');
+    expect(body.acceptHeader).toBe('text/json');
   });
 
   test('contentTypes with json-suffix variants still picks json', () => {
@@ -458,7 +493,7 @@ describe('createActionToBodyMapper — contentTypes precedence and edge cases', 
     expect(body.httpResponseType).toBe('json');
   });
 
-  test('text/csv only (custom text format) picks text', () => {
+  test('text/csv only (custom text format) picks text and echoes the content type back', () => {
     const body = mapBody(
       buildAction({
         returnValue: {
@@ -470,7 +505,7 @@ describe('createActionToBodyMapper — contentTypes precedence and edge cases', 
     );
 
     expect(body.httpResponseType).toBe('text');
-    expect(body.acceptHeader).toBe('text/plain');
+    expect(body.acceptHeader).toBe('text/csv');
   });
 });
 

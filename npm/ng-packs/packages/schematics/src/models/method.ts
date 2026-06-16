@@ -87,6 +87,9 @@ export class Body {
   }
 
   isBlobMethod() {
+    if (this.httpResponseType === 'blob') {
+      return true;
+    }
     return VOLO_REMOTE_STREAM_CONTENT.some(x => x === this.responseTypeWithNamespace);
   }
 

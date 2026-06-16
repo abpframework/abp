@@ -138,6 +138,20 @@ describe('proxy service template — rendered output', () => {
     expect(output).toContain("headers: { Accept: 'application/octet-stream' }");
   });
 
+  test('IRemoteStreamContent[] degradation renders any[] return type and does not reference IRemoteStreamContent', () => {
+    const output = render(buildContext({
+      responseType: 'any[]',
+      responseTypeWithNamespace: '[Volo.Abp.Content.IRemoteStreamContent]',
+      isBlobMethod: () => false,
+      httpResponseType: undefined,
+      acceptHeader: undefined,
+    }));
+
+    expect(output).toContain('any[]');
+    expect(output).not.toContain('IRemoteStreamContent');
+    expect(output).not.toContain("responseType: 'blob'");
+  });
+
   test('arraybuffer httpResponseType emits responseType', () => {
     const output = render(buildContext({
       responseType: 'ArrayBuffer',

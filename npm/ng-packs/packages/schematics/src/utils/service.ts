@@ -96,6 +96,9 @@ export function createActionToBodyMapper() {
         responseType = adaptType(normalizedType);
       }
     }
+    if (isRemoteStreamContentArray(returnValue.typeSimple)) {
+      responseType = 'any[]';
+    }
     const responseTypeWithNamespace = returnValue.typeSimple;
     const { httpResponseType, acceptHeader } = resolveHttpResponseAndAccept(
       responseType,
@@ -175,28 +178,24 @@ function resolveHttpResponseAndAccept(
   contentTypes: string[] | undefined,
   isRemoteStreamFlag: boolean | undefined,
 ): { httpResponseType?: 'json' | 'text' | 'blob' | 'arraybuffer'; acceptHeader?: string } {
-  if (
-    isRemoteStreamFlag ||
-    isRemoteStreamContent(responseTypeWithNamespace) ||
-    isRemoteStreamContentArray(responseTypeWithNamespace)
-  ) {
+  if (isRemoteStreamFlag || isRemoteStreamContent(responseTypeWithNamespace)) {
     return { httpResponseType: 'blob', acceptHeader: 'application/octet-stream' };
   }
 
   if (contentTypes && contentTypes.length > 0) {
     const normalized = contentTypes.map(normalizeMediaType);
 
-    if (normalized.some(isJsonMediaType)) {
-      return { httpResponseType: 'json', acceptHeader: 'application/json' };
+    const firstJsonShaped = normalized.find(isJsonMediaType);
+    if (firstJsonShaped) {
+      return { httpResponseType: 'json', acceptHeader: firstJsonShaped };
     }
-
     if (normalized.every(ct => ct.startsWith('text/'))) {
-      return { httpResponseType: 'text', acceptHeader: 'text/plain' };
+      return { httpResponseType: 'text', acceptHeader: normalized[0] };
     }
-
     if (normalized.every(isBinaryMediaType)) {
-      return { httpResponseType: 'blob', acceptHeader: 'application/octet-stream' };
+      return { httpResponseType: 'blob', acceptHeader: normalized[0] };
     }
+    return { acceptHeader: normalized[0] };
   }
 
   if (responseType === 'string') {
@@ -247,13 +246,18 @@ export function isRemoteStreamContent(type: string) {
 }
 
 export function isRemoteStreamContentArray(type: string) {
-  // Check for array types like Volo.Abp.Content.IRemoteStreamContent[]
   if (VOLO_REMOTE_STREAM_CONTENT.map(x => `${x}[]`).some(x => x === type)) {
     return true;
   }
 
-  // Check for collection types like List<T>, IEnumerable<T>, ICollection<T>, Collection<T>, IList<T>
-  // This matches any generic type from System.Collections.Generic that implements IEnumerable<T>
+  // ABP serialises collections as `[T]` (see ApiTypeNameHelper.GetSimpleTypeName).
+  if (type.startsWith('[') && type.endsWith(']')) {
+    const inner = type.slice(1, -1);
+    if (VOLO_REMOTE_STREAM_CONTENT.includes(inner)) {
+      return true;
+    }
+  }
+
   if (isCollectionType(type)) {
     const { generics } = extractGenerics(type);
     if (generics.length > 0 && VOLO_REMOTE_STREAM_CONTENT.includes(generics[0])) {
