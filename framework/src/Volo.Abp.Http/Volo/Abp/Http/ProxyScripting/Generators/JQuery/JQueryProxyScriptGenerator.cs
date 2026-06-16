@@ -146,10 +146,6 @@ public class JQueryProxyScriptGenerator : IProxyScriptGenerator, ITransientDepen
 
     private static string GetJQueryDataTypeAndAcceptOverride(ActionApiDescriptionModel action)
     {
-        // jQuery doesn't natively support binary downloads, so don't override
-        // dataType/Accept for remote stream returns — letting the server pick the
-        // formatter naturally avoids forcing JSON metadata in place of the binary
-        // payload (which would re-introduce the original IRemoteStreamContent bug).
         if (action.ReturnValue.IsRemoteStream)
         {
             return string.Empty;
@@ -162,15 +158,18 @@ public class JQueryProxyScriptGenerator : IProxyScriptGenerator, ITransientDepen
         {
             var normalized = contentTypes.Select(NormalizeMediaType).ToList();
 
-            if (normalized.Any(IsJsonMediaType))
+            var firstJsonShaped = normalized.FirstOrDefault(IsJsonMediaType);
+            if (firstJsonShaped != null)
             {
-                return "{ dataType: 'json', headers: { Accept: 'application/json' } }, ";
+                return "{ dataType: 'json', headers: { Accept: '" + firstJsonShaped + "' } }, ";
             }
 
             if (normalized.All(ct => ct.StartsWith("text/", StringComparison.OrdinalIgnoreCase)))
             {
-                return "{ dataType: 'text', headers: { Accept: 'text/plain' } }, ";
+                return "{ dataType: 'text', headers: { Accept: '" + normalized[0] + "' } }, ";
             }
+
+            return "{ headers: { Accept: '" + normalized[0] + "' } }, ";
         }
 
         return isStringReturn ? "{ dataType: 'text' }, " : string.Empty;
@@ -190,7 +189,7 @@ public class JQueryProxyScriptGenerator : IProxyScriptGenerator, ITransientDepen
             return string.Empty;
         }
         var semi = mediaType.IndexOf(';');
-        return (semi < 0 ? mediaType : mediaType.Substring(0, semi)).Trim();
+        return (semi < 0 ? mediaType : mediaType.Substring(0, semi)).Trim().ToLowerInvariant();
     }
 
     private static string FindBestApiVersion(ActionApiDescriptionModel action)
