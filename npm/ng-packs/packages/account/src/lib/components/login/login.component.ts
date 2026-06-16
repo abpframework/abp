@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit, inject, signal } from '@angular/core';
+import { Component, Injector, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
   ReactiveFormsModule,
   UntypedFormBuilder,
@@ -22,6 +22,7 @@ import { getRedirectUrl } from '../../utils';
 const { maxLength, required } = Validators;
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-login',
   templateUrl: './login.component.html',
   imports: [

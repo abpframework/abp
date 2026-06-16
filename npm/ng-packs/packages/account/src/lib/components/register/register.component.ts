@@ -6,7 +6,14 @@ import {
   LocalizationPipe,
 } from '@abp/ng.core';
 import { ButtonComponent, getPasswordValidators, ToasterService } from '@abp/ng.theme.shared';
-import { Component, Injector, OnInit, inject, signal } from '@angular/core';
+import {
+  Component,
+  Injector,
+  OnInit,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   ReactiveFormsModule,
   UntypedFormBuilder,
@@ -23,6 +30,7 @@ import { RouterLink } from '@angular/router';
 const { maxLength, required, email } = Validators;
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-register',
   templateUrl: './register.component.html',
   imports: [

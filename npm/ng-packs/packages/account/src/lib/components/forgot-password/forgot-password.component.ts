@@ -1,5 +1,5 @@
 import { AccountService } from '@abp/ng.account.core/proxy';
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
   ReactiveFormsModule,
   UntypedFormBuilder,
@@ -13,6 +13,7 @@ import { RouterLink } from '@angular/router';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-forgot-password',
   templateUrl: 'forgot-password.component.html',
   imports: [
@@ -30,8 +31,7 @@ export class ForgotPasswordComponent {
   form: UntypedFormGroup;
 
   readonly inProgress = signal(false);
-
-  isEmailSent = false;
+  readonly isEmailSent = signal(false);
 
   constructor() {
     this.form = this.fb.group({
@@ -51,7 +51,7 @@ export class ForgotPasswordComponent {
       })
       .pipe(finalize(() => this.inProgress.set(false)))
       .subscribe(() => {
-        this.isEmailSent = true;
+        this.isEmailSent.set(true);
       });
   }
 }
