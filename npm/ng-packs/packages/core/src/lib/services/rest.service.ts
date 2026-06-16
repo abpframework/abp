@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParameterCodec, HttpParams, HttpRequest } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable, from, of, throwError } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { ExternalHttpClient } from '../clients/http.client';
 import { ABP } from '../models/common';
 import { Rest } from '../models/rest';
@@ -57,10 +57,12 @@ export class RestService {
       } as any)
       .pipe(
         catchError(err => {
-          if (!skipHandleError) {
-            this.tryUnwrapJsonErrorBody(err, effectiveResponseType);
+          if (skipHandleError) {
+            return throwError(() => err);
           }
-          return skipHandleError ? throwError(() => err) : this.handleError(err);
+          return this.normalizeErrorBody(err, effectiveResponseType).pipe(
+            switchMap(normalizedErr => this.handleError(normalizedErr)),
+          );
         }),
       );
   }
@@ -97,12 +99,46 @@ export class RestService {
     }
   }
 
-  private tryUnwrapJsonErrorBody(err: any, responseType: Rest.ResponseType): void {
-    if (responseType === Rest.ResponseType.JSON || !err) return;
-    if (typeof err.error !== 'string' || err.error.length === 0) return;
+  private normalizeErrorBody(err: any, responseType: Rest.ResponseType): Observable<any> {
+    if (!err || responseType === Rest.ResponseType.JSON) {
+      return of(err);
+    }
+
+    if (typeof err.error === 'string') {
+      this.tryParseJsonErrorText(err, err.error);
+      return of(err);
+    }
+
+    if (typeof Blob !== 'undefined' && err.error instanceof Blob) {
+      return from(this.readBlobAsText(err.error)).pipe(
+        map((text: string) => {
+          this.tryParseJsonErrorText(err, text);
+          return err;
+        }),
+        catchError(() => of(err)),
+      );
+    }
+
+    return of(err);
+  }
+
+  private readBlobAsText(blob: Blob): Promise<string> {
+    if (typeof (blob as any).text === 'function') {
+      return (blob as any).text();
+    }
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : '');
+      reader.onerror = () => reject(reader.error);
+      reader.readAsText(blob);
+    });
+  }
+
+  private tryParseJsonErrorText(err: any, text: string): void {
+    if (!text || text.length === 0) return;
     let parsed: any;
     try {
-      parsed = JSON.parse(err.error);
+      parsed = JSON.parse(text);
     } catch {
       return;
     }
@@ -115,7 +151,11 @@ export class RestService {
     if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return false;
     const inner = parsed.error;
     if (!inner || typeof inner !== 'object') return false;
-    return typeof inner.code === 'string' || typeof inner.message === 'string';
+    return (
+      typeof inner.code === 'string' ||
+      typeof inner.message === 'string' ||
+      Array.isArray(inner.validationErrors)
+    );
   }
 
   private getParams(params: Rest.Params, encoder?: HttpParameterCodec): HttpParams {

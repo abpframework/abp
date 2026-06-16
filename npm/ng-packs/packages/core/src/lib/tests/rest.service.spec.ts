@@ -278,6 +278,34 @@ describe('HttpClient testing', () => {
     await completion;
   });
 
+  test('should unwrap ABP envelope that carries only validationErrors (no message / code)', async () => {
+    const completion = new Promise<void>((resolve, reject) => {
+      spectator.service
+        .request({ method: HttpMethod.GET, url: '/text' }, { responseType: Rest.ResponseType.Text })
+        .pipe(
+          catchError(err => {
+            try {
+              expect(typeof err.error).toBe('object');
+              expect(err.error.error.validationErrors).toHaveLength(1);
+              resolve();
+            } catch (e) {
+              reject(e);
+            }
+            return of(null);
+          }),
+        )
+        .subscribe();
+    });
+
+    const req = spectator.expectOne(api + '/text', HttpMethod.GET);
+    req.flush(
+      '{"error":{"validationErrors":[{"message":"Required","members":["Email"]}]}}',
+      { status: 400, statusText: 'Bad Request' },
+    );
+
+    await completion;
+  });
+
   test('should leave non-ABP-envelope JSON body alone in text mode', async () => {
     const completion = new Promise<void>((resolve, reject) => {
       spectator.service
@@ -285,7 +313,6 @@ describe('HttpClient testing', () => {
         .pipe(
           catchError(err => {
             try {
-              // JSON parses fine but no error.code/error.message → keep raw string
               expect(typeof err.error).toBe('string');
               expect(err.error).toBe('{"foo":"bar"}');
               resolve();
@@ -338,6 +365,51 @@ describe('HttpClient testing', () => {
     });
 
     await completion;
+  });
+
+  test('should unwrap ABP error envelope from a Blob body in blob mode', async () => {
+    // HttpTestingController doesn't deliver Blob in HttpErrorResponse; call the helper directly.
+    const err: any = {
+      error: new Blob(
+        ['{"error":{"code":"AbpAuthorization.002","message":"forbidden-blob"}}'],
+        { type: 'application/json' },
+      ),
+    };
+
+    const normalized: any = await (spectator.service as any)
+      .normalizeErrorBody(err, Rest.ResponseType.Blob)
+      .toPromise();
+
+    expect(normalized.error).toEqual({
+      error: { code: 'AbpAuthorization.002', message: 'forbidden-blob' },
+    });
+  });
+
+  test('should leave non-JSON Blob body alone in blob mode', async () => {
+    const blob = new Blob([new Uint8Array([0xff, 0xd8, 0xff])], { type: 'image/jpeg' });
+    const err: any = { error: blob };
+
+    const normalized: any = await (spectator.service as any)
+      .normalizeErrorBody(err, Rest.ResponseType.Blob)
+      .toPromise();
+
+    expect(normalized.error).toBe(blob);
+  });
+
+  test('should swallow Blob.text() rejection and keep the original error in blob mode', async () => {
+    const fakeBlob = {
+      text: () => Promise.reject(new Error('boom')),
+    } as unknown as Blob;
+    const err: any = { error: fakeBlob, message: 'original' };
+
+    Object.setPrototypeOf(fakeBlob, Blob.prototype);
+
+    const normalized: any = await (spectator.service as any)
+      .normalizeErrorBody(err, Rest.ResponseType.Blob)
+      .toPromise();
+
+    expect(normalized).toBe(err);
+    expect(normalized.error).toBe(fakeBlob);
   });
 
   test('should leave non-JSON error body alone in text mode', async () => {
@@ -400,7 +472,6 @@ describe('HttpClient testing', () => {
           catchError(() => {
             try {
               const errArg: any = spy.mock.calls[0][0];
-              // Angular HttpClient already parsed JSON in json mode → err.error is object
               expect(errArg.error).toEqual({ error: { code: 'X', message: 'y' } });
               resolve();
             } catch (e) {
