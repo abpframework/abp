@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Volo.Abp.Content;
 using Volo.Abp.Reflection;
@@ -40,26 +39,6 @@ public class ReturnValueApiDescriptionModel
 
     private static bool IsRemoteStreamType(Type type)
     {
-        if (typeof(IRemoteStreamContent).IsAssignableFrom(type))
-        {
-            return true;
-        }
-
-        if (type.IsArray && type.GetElementType() is { } elementType &&
-            typeof(IRemoteStreamContent).IsAssignableFrom(elementType))
-        {
-            return true;
-        }
-
-        if (typeof(IEnumerable).IsAssignableFrom(type) && type.IsGenericType)
-        {
-            var genericArg = type.GetGenericArguments()[0];
-            if (typeof(IRemoteStreamContent).IsAssignableFrom(genericArg))
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return type == typeof(IRemoteStreamContent) || type == typeof(RemoteStreamContent);
     }
 }

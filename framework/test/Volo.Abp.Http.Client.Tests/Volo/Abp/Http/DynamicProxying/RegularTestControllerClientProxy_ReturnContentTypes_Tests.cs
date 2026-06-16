@@ -57,8 +57,6 @@ public class RegularTestControllerClientProxy_ReturnContentTypes_Tests : AbpHttp
     [Fact]
     public async Task GetProducesJsonNullStringAsync_Should_Not_Return_Literal_Null()
     {
-        // Server returns JSON `null` body (4 chars). The unwrap MUST NOT pass through "null" literal —
-        // it should produce empty/null on the client side instead.
         var result = await _controller.GetProducesJsonNullStringAsync();
         result.ShouldNotBe("null");
         (result == null || result == string.Empty).ShouldBeTrue();
@@ -67,8 +65,6 @@ public class RegularTestControllerClientProxy_ReturnContentTypes_Tests : AbpHttp
     [Fact]
     public async Task GetEscapedStringAsync_Should_Decode_Escaped_Characters()
     {
-        // Server JSON-encodes the string with escapes: "a\"b\\c\nd"
-        // Without unwrap fix client would receive the raw JSON string including escapes.
         var result = await _controller.GetEscapedStringAsync();
         result.ShouldBe("a\"b\\c\nd");
     }
@@ -84,11 +80,16 @@ public class RegularTestControllerClientProxy_ReturnContentTypes_Tests : AbpHttp
     }
 
     [Fact]
+    public async Task GetReferenceTypeObjectAsync_Should_Not_Be_Wrapped_As_RemoteStreamContent()
+    {
+        var result = await _controller.GetReferenceTypeObjectAsync();
+        result.ShouldNotBeNull();
+        result.ShouldNotBeAssignableTo<Volo.Abp.Content.IRemoteStreamContent>();
+    }
+
+    [Fact]
     public async Task GetByteArrayAsync_Should_Round_Trip_Bytes()
     {
-        // byte[] is not IRemoteStreamContent; goes through default JSON path
-        // (server JSON-encodes as base64). Ensures our Accept logic didn't break
-        // the existing non-stream binary case.
         var bytes = await _controller.GetByteArrayAsync();
         bytes.ShouldBe(new byte[] { 1, 2, 3, 4 });
     }

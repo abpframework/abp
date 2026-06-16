@@ -49,10 +49,10 @@ public class ReturnValueApiDescriptionModel_IsRemoteStream_Tests
     }
 
     [Fact]
-    public void Custom_Subclass_Of_IRemoteStreamContent_Should_Be_True()
+    public void Custom_Subclass_Of_IRemoteStreamContent_Should_Be_False()
     {
         var model = ReturnValueApiDescriptionModel.Create(typeof(MyCustomStreamContent));
-        model.IsRemoteStream.ShouldBeTrue();
+        model.IsRemoteStream.ShouldBeFalse();
     }
 
     [Fact]
@@ -63,45 +63,45 @@ public class ReturnValueApiDescriptionModel_IsRemoteStream_Tests
     }
 
     [Fact]
-    public void Task_Of_Custom_Stream_Subclass_Should_Be_True_After_UnwrapTask()
+    public void Task_Of_Custom_Stream_Subclass_Should_Be_False_After_UnwrapTask()
     {
         var model = ReturnValueApiDescriptionModel.Create(typeof(Task<MyCustomStreamContent>));
-        model.IsRemoteStream.ShouldBeTrue();
+        model.IsRemoteStream.ShouldBeFalse();
     }
 
     [Fact]
-    public void IRemoteStreamContent_Array_Should_Be_True()
+    public void IRemoteStreamContent_Array_Should_Be_False()
     {
         var model = ReturnValueApiDescriptionModel.Create(typeof(IRemoteStreamContent[]));
-        model.IsRemoteStream.ShouldBeTrue();
+        model.IsRemoteStream.ShouldBeFalse();
     }
 
     [Fact]
-    public void Concrete_RemoteStreamContent_Array_Should_Be_True()
+    public void Concrete_RemoteStreamContent_Array_Should_Be_False()
     {
         var model = ReturnValueApiDescriptionModel.Create(typeof(RemoteStreamContent[]));
-        model.IsRemoteStream.ShouldBeTrue();
+        model.IsRemoteStream.ShouldBeFalse();
     }
 
     [Fact]
-    public void List_Of_IRemoteStreamContent_Should_Be_True()
+    public void List_Of_IRemoteStreamContent_Should_Be_False()
     {
         var model = ReturnValueApiDescriptionModel.Create(typeof(List<IRemoteStreamContent>));
-        model.IsRemoteStream.ShouldBeTrue();
+        model.IsRemoteStream.ShouldBeFalse();
     }
 
     [Fact]
-    public void IEnumerable_Of_IRemoteStreamContent_Should_Be_True()
+    public void IEnumerable_Of_IRemoteStreamContent_Should_Be_False()
     {
         var model = ReturnValueApiDescriptionModel.Create(typeof(IEnumerable<IRemoteStreamContent>));
-        model.IsRemoteStream.ShouldBeTrue();
+        model.IsRemoteStream.ShouldBeFalse();
     }
 
     [Fact]
-    public void IReadOnlyCollection_Of_IRemoteStreamContent_Should_Be_True()
+    public void IReadOnlyCollection_Of_IRemoteStreamContent_Should_Be_False()
     {
         var model = ReturnValueApiDescriptionModel.Create(typeof(IReadOnlyCollection<IRemoteStreamContent>));
-        model.IsRemoteStream.ShouldBeTrue();
+        model.IsRemoteStream.ShouldBeFalse();
     }
 
     [Fact]
@@ -128,9 +128,6 @@ public class ReturnValueApiDescriptionModel_IsRemoteStream_Tests
     [Fact]
     public void Dto_Containing_IRemoteStreamContent_Property_Should_Be_False()
     {
-        // ABP design constraint: IRemoteStreamContent only works as the DIRECT endpoint return type.
-        // When nested inside a DTO, the server JSON-serializes the DTO and the stream metadata only —
-        // the binary payload is lost. So the proxy should NOT use blob mode for this case.
         var model = ReturnValueApiDescriptionModel.Create(typeof(DtoWithStream));
         model.IsRemoteStream.ShouldBeFalse();
     }
@@ -145,7 +142,6 @@ public class ReturnValueApiDescriptionModel_IsRemoteStream_Tests
     [Fact]
     public void Byte_Array_Should_Be_False()
     {
-        // byte[] is serialized as base64 JSON by ABP, not as binary stream.
         var model = ReturnValueApiDescriptionModel.Create(typeof(byte[]));
         model.IsRemoteStream.ShouldBeFalse();
     }
@@ -189,7 +185,6 @@ public class ReturnValueApiDescriptionModel_BackwardsCompat_Tests
     [Fact]
     public void Deserializing_Json_Without_ContentTypes_Field_Should_Leave_It_Null()
     {
-        // Old backend JSON (no contentTypes field) read by new client.
         var json = """
         {
           "type": "System.String",
@@ -238,7 +233,6 @@ public class ReturnValueApiDescriptionModel_BackwardsCompat_Tests
         var model = ReturnValueApiDescriptionModel.Create(typeof(string));
         var json = System.Text.Json.JsonSerializer.Serialize(model);
 
-        // Either "contentTypes":null or omitted — both are acceptable for old clients.
         var deserialized = System.Text.Json.JsonSerializer.Deserialize<ReturnValueApiDescriptionModel>(
             json,
             new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });

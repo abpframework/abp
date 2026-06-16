@@ -25,6 +25,8 @@ public interface IRegularTestController
 
     Task<IRemoteStreamContent> DownloadIconAsync();
 
+    Task<object> GetReferenceTypeObjectAsync();
+
     Task<byte[]> GetByteArrayAsync();
 
     Task GetException1Async();

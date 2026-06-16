@@ -108,7 +108,7 @@ public class ClientProxyBase<TService> : ITransientDependency
     {
         var responseContent = await RequestAsync(requestContext);
 
-        if (typeof(T).IsAssignableFrom(typeof(RemoteStreamContent)))
+        if (typeof(T) == typeof(IRemoteStreamContent) || typeof(T) == typeof(RemoteStreamContent))
         {
             /* returning a class that holds a reference to response
              * content just to be sure that GC does not dispose of
@@ -153,7 +153,6 @@ public class ClientProxyBase<TService> : ITransientDependency
 
         try
         {
-            // JSON null literal deserializes to null — preserve that as empty string for callers expecting non-null.
             var parsed = JsonSerializer.Deserialize<string>(body);
             return parsed ?? string.Empty;
         }
@@ -170,7 +169,7 @@ public class ClientProxyBase<TService> : ITransientDependency
             return string.Empty;
         }
         var semi = mediaType.IndexOf(';');
-        return (semi < 0 ? mediaType : mediaType.Substring(0, semi)).Trim();
+        return (semi < 0 ? mediaType : mediaType.Substring(0, semi)).Trim().ToLowerInvariant();
     }
 
     protected virtual async Task<HttpContent> RequestAsync(ClientProxyRequestContext requestContext)
@@ -360,24 +359,7 @@ public class ClientProxyBase<TService> : ITransientDependency
         HttpRequestMessage requestMessage,
         ApiVersionInfo apiVersion)
     {
-        //API Version
-        if (!apiVersion.Version.IsNullOrEmpty())
-        {
-            //TODO: What about other media types?
-            requestMessage.Headers.Add("accept", $"{MimeTypes.Text.Plain}; v={apiVersion.Version}");
-            requestMessage.Headers.Add("accept", $"{MimeTypes.Application.Json}; v={apiVersion.Version}");
-            requestMessage.Headers.Add("api-version", apiVersion.Version);
-        }
-
-        //Return-type-aware Accept header (only when none already set)
-        if (!requestMessage.Headers.Contains("accept"))
-        {
-            var acceptForReturn = GetAcceptForActionReturn(action);
-            if (!acceptForReturn.IsNullOrEmpty())
-            {
-                requestMessage.Headers.Add("accept", acceptForReturn);
-            }
-        }
+        AddAcceptHeaders(action, requestMessage, apiVersion);
 
         //Header parameters
         var headers = action.Parameters.Where(p => p.BindingSourceId == ParameterBindingSources.Header).ToArray();
@@ -422,6 +404,30 @@ public class ClientProxyBase<TService> : ITransientDependency
         }
     }
 
+    protected virtual void AddAcceptHeaders(
+        ActionApiDescriptionModel action,
+        HttpRequestMessage requestMessage,
+        ApiVersionInfo apiVersion)
+    {
+        var acceptForReturn = GetAcceptForActionReturn(action);
+        var versionSuffix = apiVersion.Version.IsNullOrEmpty() ? string.Empty : $"; v={apiVersion.Version}";
+
+        if (!acceptForReturn.IsNullOrEmpty())
+        {
+            requestMessage.Headers.Add("accept", acceptForReturn + versionSuffix);
+        }
+        else
+        {
+            requestMessage.Headers.Add("accept", MimeTypes.Text.Plain + versionSuffix);
+            requestMessage.Headers.Add("accept", MimeTypes.Application.Json + versionSuffix);
+        }
+
+        if (!apiVersion.Version.IsNullOrEmpty())
+        {
+            requestMessage.Headers.Add("api-version", apiVersion.Version);
+        }
+    }
+
     protected virtual string? GetAcceptForActionReturn(ActionApiDescriptionModel action)
     {
         if (action.ReturnValue.IsRemoteStream ||
@@ -439,17 +445,7 @@ public class ClientProxyBase<TService> : ITransientDependency
 
         var normalized = contentTypes.Select(NormalizeMediaType).ToList();
 
-        if (normalized.Any(IsJsonMediaType))
-        {
-            return MimeTypes.Application.Json;
-        }
-
-        if (normalized.All(ct => ct.StartsWith("text/", StringComparison.OrdinalIgnoreCase)))
-        {
-            return MimeTypes.Text.Plain;
-        }
-
-        return null;
+        return normalized.FirstOrDefault(IsJsonMediaType) ?? normalized[0];
     }
 
     private static bool IsJsonMediaType(string normalizedMediaType)

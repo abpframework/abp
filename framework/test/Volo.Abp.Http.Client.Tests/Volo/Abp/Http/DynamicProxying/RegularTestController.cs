@@ -86,6 +86,13 @@ public class RegularTestController : AbpController, IRegularTestController
     }
 
     [HttpGet]
+    [Route("reference-type-object")]
+    public Task<object> GetReferenceTypeObjectAsync()
+    {
+        return Task.FromResult<object>(new Car { Year = 1999, Model = "BMW" });
+    }
+
+    [HttpGet]
     [Route("byte-array")]
     public Task<byte[]> GetByteArrayAsync()
     {
