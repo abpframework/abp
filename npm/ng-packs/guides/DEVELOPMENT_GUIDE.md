@@ -222,12 +222,52 @@ Example HTML template
 ### Component Best Practices
 
 1. **Single Responsibility**: Each component should have one clear purpose
-2. **Dependency Injection**: Use constructor injection for services
-3. **Lifecycle Management**: Implement `OnInit` and `OnDestroy` when needed
-4. **State Management**: Use reactive forms and observables
-5. **Error Handling**: Implement proper error boundaries
-6. **Accessibility**: Follow ARIA guidelines
-7. **Performance**: Use `OnPush` change detection when possible
+2. **Dependency Injection**: Use `inject()` for services
+3. **Change detection**: Set `changeDetection: ChangeDetectionStrategy.OnPush` explicitly on every component
+4. **Async state**: Use `signal()` / `computed()` / `toSignal()` — avoid mutating plain properties in `.subscribe()` without a CD trigger
+5. **List pages**: Use `toSignal(this.list.hookToQuery(...))` and bind `data().items` in templates
+6. **Component IO**: Prefer signal `input()` / `output()` / `model()` over `@Input` / `@Output`
+7. **Modal bindings**: `[visible]="isModalVisible()" (visibleChange)="isModalVisible.set($event)"` with `[busy]="modalBusy()"`
+8. **`markForCheck()`**: Discouraged — use only in directives, CVAs, or dynamic component hosts where signals cannot apply
+9. **Error Handling**: Implement proper error boundaries
+10. **Accessibility**: Follow ARIA guidelines
+
+See [upgrade-notes.md](../upgrade-notes.md) for Angular 22 customer migration guidance.
+
+### Angular 22 component pattern (recommended)
+
+```typescript
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ListService, PagedResultDto } from '@abp/ng.core';
+
+@Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'abp-my-list',
+  providers: [ListService],
+})
+export class MyListComponent {
+  protected readonly list = inject(ListService);
+  protected readonly service = inject(MyService);
+
+  readonly data = toSignal(this.list.hookToQuery(q => this.service.getList(q)), {
+    initialValue: { items: [], totalCount: 0 } as PagedResultDto<MyDto>,
+  });
+
+  readonly isModalVisible = signal(false);
+  readonly modalBusy = signal(false);
+}
+```
+
+```html
+<abp-extensible-table [data]="data().items" [recordsTotal]="data().totalCount" [list]="list" />
+
+<abp-modal
+  [visible]="isModalVisible()"
+  (visibleChange)="isModalVisible.set($event)"
+  [busy]="modalBusy()"
+/>
+```
 
 ## Service Layer
 

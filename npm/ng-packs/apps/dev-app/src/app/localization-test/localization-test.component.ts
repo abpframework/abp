@@ -1,13 +1,13 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { LocalizationPipe, UILocalizationService, SessionStateService } from '@abp/ng.core';
 import { CommonModule } from '@angular/common';
 import { CardComponent, CardBodyComponent } from '@abp/ng.theme.shared';
-import { AsyncPipe } from '@angular/common';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-localization-test',
-  standalone: true,
-  imports: [CommonModule, LocalizationPipe, CardComponent, CardBodyComponent, AsyncPipe],
+  imports: [CommonModule, LocalizationPipe, CardComponent, CardBodyComponent],
   template: `
     <div class="container mt-5">
       <h2>Hybrid Localization Test</h2>
@@ -22,7 +22,7 @@ import { AsyncPipe } from '@angular/common';
 
       <abp-card cardClass="mt-4">
         <abp-card-body>
-          <h5>UI Localization (from /assets/localization/{{ currentLanguage$ | async }}.json)</h5>
+          <h5>UI Localization (from /assets/localization/{{ currentLanguage() }}.json)</h5>
           <p><strong>MyProjectName::CustomKey:</strong> {{ 'MyProjectName::CustomKey' | abpLocalization }}</p>
           <p><strong>MyProjectName::TestMessage:</strong> {{ 'MyProjectName::TestMessage' | abpLocalization }}</p>
         </abp-card-body>
@@ -39,20 +39,19 @@ import { AsyncPipe } from '@angular/common';
       <abp-card cardClass="mt-4">
         <abp-card-body>
           <h5>Loaded UI Localizations</h5>
-          <pre>{{ loadedLocalizations | json }}</pre>
+          <pre>{{ loadedLocalizations() | json }}</pre>
         </abp-card-body>
       </abp-card>
     </div>
   `,
 })
-export class LocalizationTestComponent implements OnInit {
+export class LocalizationTestComponent {
   private uiLocalizationService = inject(UILocalizationService);
   private sessionState = inject(SessionStateService);
 
-  loadedLocalizations: any = {};
-  currentLanguage$ = this.sessionState.getLanguage$();
+  readonly loadedLocalizations = signal(this.uiLocalizationService.getLoadedLocalizations());
 
-  ngOnInit() {
-    this.loadedLocalizations = this.uiLocalizationService.getLoadedLocalizations();
-  }
+  readonly currentLanguage = toSignal(this.sessionState.getLanguage$(), {
+    initialValue: this.sessionState.getLanguage(),
+  });
 }

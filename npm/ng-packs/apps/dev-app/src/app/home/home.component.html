@@ -16,7 +16,7 @@
     <p class="lead px-lg-5 mx-lg-5">{{ '::LongWelcomeMessage' | abpLocalization }}</p>
 
     @if (!hasLoggedIn) {
-    <abp-button [loading]="loading" (click)="login()" [disabled]="loading" class="px-4 ml-1" role="button"
+    <abp-button [loading]="loading()" (click)="login()" [disabled]="loading()" class="px-4 ml-1" role="button"
       iconClass="fa fa-sign-in">
       {{ 'AbpAccount::Login' | abpLocalization }}
     </abp-button>
