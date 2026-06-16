@@ -12,7 +12,7 @@ Git is not just the final step after the agent finishes. For me, it is the confi
 
 ![ABP Studio Git Integration cover](cover-image.png)
 
-## Why Git Matters In An AI Workflow
+## Git In The AI Workflow
 
 Most development work is not a straight line from prompt to done.
 
@@ -30,7 +30,7 @@ Without a Git-aware workflow, AI changes can feel a little too loose. The agent 
 
 ABP Studio Git Integration brings that loop into the same place where I already work with the solution and the agent.
 
-## Starting From A Solution
+## Initializing Git For A Solution
 
 The Git panel starts with the active solution.
 
@@ -44,7 +44,7 @@ If I want to put the solution on GitHub, Studio can also help with that path. Af
 
 The small but important detail is that Git becomes part of the solution experience early. I do not need to move from ABP Studio to a separate Git tool just to create the repository before I start working with ABP Agent.
 
-## Reviewing Changes Where They Happen
+## Changed Files And Diff Review
 
 Once Git is active, the Git panel becomes the place I check after an agent session or a manual edit.
 
@@ -64,7 +64,7 @@ What did this task actually change?
 
 That is the question I want to answer before a commit, especially when AI helped produce the diff.
 
-## Committing With Intention
+## Selected Files And Commit Messages
 
 Committing is not only pressing a button.
 
@@ -82,7 +82,7 @@ The protected branch warning is another important part of the experience. If the
 
 That is the right kind of guardrail. It does not make Git complicated. It makes the normal team habit harder to miss.
 
-## Branches, Stashes, And Sync
+## Branching, Stashing, And Syncing
 
 AI-assisted development often starts with a branch decision.
 
@@ -104,7 +104,7 @@ If my branch is behind, I can update before I continue. If I have local commits,
 
 That keeps the Git workflow close to the coding workflow. I can move from change to review to sync without mentally switching tools.
 
-## AI Review Before The Commit
+## AI Review And Manual Diff Comments
 
 There is a moment before a commit where I often want a second look.
 
@@ -136,7 +136,7 @@ Git also helps with recovery. In a Git repository, ABP Studio can offer **Back t
 
 I still treat Git commits as the real checkpoints for team work. But during a live agent session, being able to go back to a previous point makes experimentation feel less risky.
 
-## Starting From A GitHub Issue
+## GitHub Issue Context
 
 Many tasks do not start as a prompt. They start as an issue.
 
@@ -160,7 +160,7 @@ The important detail is that the agent starts from the same context I would star
 
 That is much better than writing a vague prompt that tries to summarize the issue from memory.
 
-## Addressing Pull Request Feedback
+## Pull Request Feedback Context
 
 Pull request feedback is another place where Git integration helps the AI workflow.
 
@@ -180,7 +180,7 @@ The include and exclude controls matter here. Not every PR comment should become
 
 That keeps the agent from treating the entire PR timeline as one undifferentiated command. I can shape the task before sending it.
 
-## Where Git Integration Fits In The Series
+## Git Integration In The Deep Dive Series
 
 In the earlier articles, we looked at modes, tools, MCP, scopes, and workflows.
 
