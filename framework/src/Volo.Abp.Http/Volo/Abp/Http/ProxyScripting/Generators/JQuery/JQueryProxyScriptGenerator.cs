@@ -136,14 +136,52 @@ public class JQueryProxyScriptGenerator : IProxyScriptGenerator, ITransientDepen
         AddAjaxCallParameters(script, action);
 
         var ajaxParamsIsFromForm = action.Parameters.Any(x => x.BindingSourceId == ParameterBindingSources.Form);
-        var dataType = action.ReturnValue.Type == ReturnValueApiDescriptionModel.Create(typeof(string)).Type
-            ? "{ dataType: 'text' }, "
-            : string.Empty;
+        var dataType = GetJQueryDataTypeAndAcceptOverride(action);
         script.AppendLine(ajaxParamsIsFromForm
             ? "      }, $.extend(true, {}, " + dataType + "{ contentType: 'application/x-www-form-urlencoded; charset=UTF-8' }, ajaxParams)));"
             : "      }, " + dataType + "ajaxParams));");
 
         script.AppendLine("    };");
+    }
+
+    private static string GetJQueryDataTypeAndAcceptOverride(ActionApiDescriptionModel action)
+    {
+        var contentTypes = action.ReturnValue.ContentTypes;
+        var isStringReturn = action.ReturnValue.Type == ReturnValueApiDescriptionModel.Create(typeof(string)).Type;
+
+        if (contentTypes is { Count: > 0 })
+        {
+            var normalized = contentTypes.Select(NormalizeMediaType).ToList();
+
+            if (normalized.Any(IsJsonMediaType))
+            {
+                return "{ dataType: 'json', headers: { Accept: 'application/json' } }, ";
+            }
+
+            if (normalized.All(ct => ct.StartsWith("text/", StringComparison.OrdinalIgnoreCase)))
+            {
+                return "{ dataType: 'text', headers: { Accept: 'text/plain' } }, ";
+            }
+        }
+
+        return isStringReturn ? "{ dataType: 'text' }, " : string.Empty;
+    }
+
+    private static bool IsJsonMediaType(string normalizedMediaType)
+    {
+        return normalizedMediaType.Equals("application/json", StringComparison.OrdinalIgnoreCase) ||
+               normalizedMediaType.Equals("text/json", StringComparison.OrdinalIgnoreCase) ||
+               normalizedMediaType.EndsWith("+json", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string NormalizeMediaType(string mediaType)
+    {
+        if (string.IsNullOrWhiteSpace(mediaType))
+        {
+            return string.Empty;
+        }
+        var semi = mediaType.IndexOf(';');
+        return (semi < 0 ? mediaType : mediaType.Substring(0, semi)).Trim();
     }
 
     private static string FindBestApiVersion(ActionApiDescriptionModel action)
