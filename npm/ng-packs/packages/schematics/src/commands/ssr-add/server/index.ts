@@ -259,9 +259,13 @@ export default function (options: ServerOptions): Rule {
             'withEventReplay',
             '@angular/platform-browser',
           )}(), ${external(
-            'withIncrementalHydration',
+            'withNoIncrementalHydration',
             '@angular/platform-browser',
-          )}(), ${external('withHttpTransferCacheOptions', '@angular/platform-browser')}({}))`,
+          )}(), ${external('withHttpTransferCacheOptions', '@angular/platform-browser')}({
+            filter: req =>
+              !req.url.includes('application-configuration') &&
+              !req.url.includes('application-localization'),
+          }))`,
       ),
     ]);
   };

@@ -1,5 +1,9 @@
 import execa from 'execa';
 import fse from 'fs-extra';
+import { join } from 'path';
+
+const NG_PACKS_ROOT = join(__dirname, '..');
+const TSC_PATH = join(NG_PACKS_ROOT, 'node_modules/typescript/bin/tsc');
 
 class FileCopy {
   src: string;
@@ -76,16 +80,16 @@ async function* copyPackageFiles(packageName: string) {
     await execa('yarn', ['install'], { stdout: 'inherit', cwd: `../packages/${PACKAGE_TO_BUILD}` });
 
     await execa(
-      'tsc',
+      TSC_PATH,
       [
         '-p',
-        `packages/${PACKAGE_TO_BUILD}/tsconfig.json`,
+        `packages/${PACKAGE_TO_BUILD}/tsconfig.lib.json`,
         '--outDir',
         `dist/packages/${PACKAGE_TO_BUILD}`,
       ],
       {
         stdout: 'inherit',
-        cwd: '../',
+        cwd: NG_PACKS_ROOT,
       },
     );
 

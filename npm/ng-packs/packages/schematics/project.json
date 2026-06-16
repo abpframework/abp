@@ -14,7 +14,7 @@
       "executor": "@nx/vitest:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "reportsDirectory": "../../coverage/packages/schematics"
+        "reportsDirectory": "{projectRoot}/../../coverage/packages/schematics"
       }
     }
   }

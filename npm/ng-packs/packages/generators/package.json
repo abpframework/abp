@@ -8,6 +8,9 @@
     "type": "git",
     "url": "https://github.com/abpframework/abp.git"
   },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
   "publishConfig": {
     "access": "public"
   }

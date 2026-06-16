@@ -3,7 +3,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "skipLibCheck": true,
-    "moduleResolution": "node"
+    "moduleResolution": "bundler"
   },
   "files": [],
   "include": [],

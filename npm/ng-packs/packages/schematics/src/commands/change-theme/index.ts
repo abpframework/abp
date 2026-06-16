@@ -1,6 +1,5 @@
 import { JsonArray, JsonValue } from '@angular-devkit/core';
 import { Rule, SchematicsException, Tree, chain } from '@angular-devkit/schematics';
-import { ProjectDefinition } from '@angular-devkit/core/src/workspace';
 import * as ts from 'typescript';
 import { allStyles, importMap, styleMap } from './style-map';
 import { ChangeThemeOptions } from './model';
@@ -11,6 +10,7 @@ import {
   isLibrary,
   isStandaloneApp,
   updateWorkspace,
+  ProjectDefinition,
   WorkspaceDefinition,
   getAppConfigPath,
   cleanEmptyExprFromModule,
