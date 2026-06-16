@@ -72,7 +72,7 @@ I still want to choose which files belong together. I still want the commit mess
 
 ABP Studio keeps that flow visible. I can select the files I want, write a summary and description, and commit to the current branch. When AI is enabled, Studio can generate a commit message from the selected diffs.
 
-![Generating a commit message from selected changes](git-ai-commit-message.png)
+![Generating a commit message from selected changes](git-ai-commit-message.gif)
 
 I like this because it keeps the AI help close to the actual diff.
 
@@ -120,6 +120,9 @@ ABP Studio supports that with AI review on selected Git changes.
 
 ![AI review suggestions on selected Git changes](git-ai-review.png)
 
+![AI review suggestions on selected Git changes](git-ai-review-details.png)
+
+
 The useful part is that the review is attached to the diff. Suggestions and notes appear near the changed lines, and if there is something I want the agent to handle, I can send those review notes to ABP Agent.
 
 That changes the feel of the workflow.
@@ -140,7 +143,7 @@ ABP Studio can bring GitHub issues into the Git area.
 
 I can filter issues, open one, read the description and comments, create a branch for that issue, and send the issue context to ABP Agent.
 
-![Creating a branch from a GitHub issue and sending it to ABP Agent](github-issue-to-agent.png)
+
 
 That makes the workflow feel natural:
 
@@ -160,7 +163,6 @@ Pull request feedback is another place where Git integration helps the AI workfl
 
 When I open a pull request inside ABP Studio, I can see the PR title, branches, comments, reviews, and requested changes. If I am not on the PR branch, Studio can switch to it. Then I can choose which comments or requested changes should be included and send that context to ABP Agent.
 
-![Requested changes from a GitHub pull request sent to ABP Agent](github-pr-requested-changes.png)
 
 This is the workflow I want when a reviewer asks for changes:
 
