@@ -45,6 +45,8 @@ export class Body {
   responseTypeWithNamespace: string;
   requestType = 'any';
   responseType: string;
+  httpResponseType?: 'json' | 'text' | 'blob' | 'arraybuffer';
+  acceptHeader?: string;
   url: string;
 
   registerActionParameter = (param: ParameterInBody) => {

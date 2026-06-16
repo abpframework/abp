@@ -11,15 +11,17 @@ export class <%= name %>Service {
   <%
     const isBlob = body.isBlobMethod() ;
     const responseType =  isBlob ? "Blob":body.responseType;
+    const httpResponseType = body.httpResponseType;
+    const acceptHeader = body.acceptHeader;
   %>
 
   <%= camel(signature.name) %> = (<%= serializeParameters(signature.parameters) %>) =>
     this.restService.request<<%= body.requestType %>, <%= responseType %>>({
       method: '<%= body.method %>',<%
-      if (body.responseType === 'string') { %>
-      responseType: 'text',<% } %><%
-      if (isBlob) { %>
-      responseType: 'blob',<% } %>
+      if (httpResponseType && httpResponseType !== 'json') { %>
+      responseType: '<%= httpResponseType %>',<% } %><%
+      if (acceptHeader) { %>
+      headers: { Accept: '<%= acceptHeader %>' },<% } %>
       url: <%= body.url %>,<%
       if (body.dictParamVar && !body.params.length) { %>
       params: <%= body.dictParamVar %>,<% } %><%

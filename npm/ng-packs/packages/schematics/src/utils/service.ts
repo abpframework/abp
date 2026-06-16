@@ -97,12 +97,113 @@ export function createActionToBodyMapper() {
       }
     }
     const responseTypeWithNamespace = returnValue.typeSimple;
-    const body = new Body({ method: httpMethod, responseType, url, responseTypeWithNamespace });
+    const { httpResponseType, acceptHeader } = resolveHttpResponseAndAccept(
+      responseType,
+      responseTypeWithNamespace,
+      returnValue.contentTypes,
+      returnValue.isRemoteStream,
+    );
+    const body = new Body({
+      method: httpMethod,
+      responseType,
+      url,
+      responseTypeWithNamespace,
+      httpResponseType,
+      acceptHeader,
+    });
 
     parameters.forEach(body.registerActionParameter);
 
     return body;
   };
+}
+
+function normalizeMediaType(mediaType: string): string {
+  const semi = mediaType.indexOf(';');
+  return (semi < 0 ? mediaType : mediaType.slice(0, semi)).trim().toLowerCase();
+}
+
+function isJsonMediaType(normalized: string): boolean {
+  return normalized === 'application/json' || normalized === 'text/json' || normalized.endsWith('+json');
+}
+
+function isBinaryMediaType(mediaType: string): boolean {
+  const m = normalizeMediaType(mediaType);
+  if (
+    m === 'application/octet-stream' ||
+    m === 'application/pdf' ||
+    m === 'application/zip' ||
+    m === 'application/x-zip-compressed' ||
+    m === 'application/gzip' ||
+    m === 'application/x-tar' ||
+    m === 'application/x-7z-compressed' ||
+    m === 'application/wasm' ||
+    m === 'application/x-msdownload' ||
+    m === 'application/x-msdos-program' ||
+    m === 'application/rtf' ||
+    m === 'application/x-rar-compressed' ||
+    m === 'application/x-rar' ||
+    m === 'application/x-bzip2' ||
+    m === 'application/x-iso9660-image' ||
+    m === 'application/x-apple-diskimage' ||
+    m === 'application/java-archive' ||
+    m === 'application/epub+zip' ||
+    m === 'model/gltf-binary'
+  ) {
+    return true;
+  }
+  if (m.startsWith('image/') || m.startsWith('video/') || m.startsWith('audio/') || m.startsWith('font/')) {
+    return true;
+  }
+  // Office / OpenDocument / generic vnd.* (excluding +json / +xml which are structured text)
+  if (
+    m.startsWith('application/vnd.openxmlformats-') ||
+    m.startsWith('application/vnd.ms-') ||
+    m.startsWith('application/vnd.oasis.opendocument.')
+  ) {
+    return true;
+  }
+  if (m.startsWith('application/vnd.') && !m.endsWith('+json') && !m.endsWith('+xml')) {
+    return true;
+  }
+  return false;
+}
+
+function resolveHttpResponseAndAccept(
+  responseType: string,
+  responseTypeWithNamespace: string,
+  contentTypes: string[] | undefined,
+  isRemoteStreamFlag: boolean | undefined,
+): { httpResponseType?: 'json' | 'text' | 'blob' | 'arraybuffer'; acceptHeader?: string } {
+  if (
+    isRemoteStreamFlag ||
+    isRemoteStreamContent(responseTypeWithNamespace) ||
+    isRemoteStreamContentArray(responseTypeWithNamespace)
+  ) {
+    return { httpResponseType: 'blob', acceptHeader: 'application/octet-stream' };
+  }
+
+  if (contentTypes && contentTypes.length > 0) {
+    const normalized = contentTypes.map(normalizeMediaType);
+
+    if (normalized.some(isJsonMediaType)) {
+      return { httpResponseType: 'json', acceptHeader: 'application/json' };
+    }
+
+    if (normalized.every(ct => ct.startsWith('text/'))) {
+      return { httpResponseType: 'text', acceptHeader: 'text/plain' };
+    }
+
+    if (normalized.every(isBinaryMediaType)) {
+      return { httpResponseType: 'blob', acceptHeader: 'application/octet-stream' };
+    }
+  }
+
+  if (responseType === 'string') {
+    return { httpResponseType: 'text' };
+  }
+
+  return {};
 }
 
 export function createActionToSignatureMapper() {
