@@ -1967,6 +1967,22 @@
                   "isIndex": true
                 },
                 {
+                  "text": "Running on Web",
+                  "path": "framework/ui/react-native/running-on-web.md"
+                },
+                {
+                  "text": "Running on Device",
+                  "path": "framework/ui/react-native/running-on-device.md"
+                },
+                {
+                  "text": "Manual Backend Configuration",
+                  "path": "framework/ui/react-native/manual-backend-configuration.md"
+                },
+                {
+                  "text": "Android Emulator Setup",
+                  "path": "framework/ui/react-native/setting-up-android-emulator.md"
+                },
+                {
                   "text": "Styling with NativeWind",
                   "path": "framework/ui/react-native/styling-with-nativewind.md"
                 }
