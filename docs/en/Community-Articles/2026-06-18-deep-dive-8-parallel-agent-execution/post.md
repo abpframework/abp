@@ -6,7 +6,7 @@ While the agent is busy adding a feature, a question comes up about a different 
 
 ABP Studio does not make you wait. It can run several agent sessions at the same time, each on its own task.
 
-## More Than One Session At A Time
+## Parallel Agent Sessions
 
 A session is one conversation with the agent. It has its own history, its own mode, its own model, its own scope, and its own workflow. ABP Studio keeps multiple sessions per solution, and they can run in parallel.
 
@@ -14,7 +14,7 @@ There is a limit, and it is there on purpose. By default you can run up to **3 s
 
 So "parallel" here is not a trick of switching back and forth quickly. The sessions actually run at the same time, up to the limit you choose.
 
-## Why You Would Want This
+## Parallel Session Use Cases
 
 The point is to stop letting one task block another. A few ways it plays out:
 
@@ -31,13 +31,13 @@ Session 2 (Ask): Explain how permissions flow from the API to the UI.
 
 The first one edits files. The second one only reads and answers. They do not interfere, because they are different sessions with different settings.
 
-## Each Session Keeps Its Own Setup
+## Per-Session Settings Isolation
 
 This is the part that makes parallel work predictable instead of chaotic.
 
-When a session sends its first message, it locks the settings that shape how it works: its model, its mode, its scope, its workflow, and a snapshot of the tools it can use. After that, changing the settings in the foreground does not reach back and rewrite a session that is already running.
+When a session sends its first message, two things happen at different levels. The session permanently locks its **scope** and **workflow**—these stay fixed for the entire session lifetime and cannot be changed once the first message is sent. On the other hand, the **model**, **mode**, and **active tools** are snapshotted fresh at each run (each turn the agent takes), so they reflect whatever is configured at the moment the run starts but remain stable for its duration.
 
-That matters the moment you have more than one session open. Say one session is running in the background, scoped to the `Catalog` module. You switch the foreground to a different scope to start a second task. The background session does not notice. It keeps the scope, model, and workflow it started with, and finishes the job you actually gave it.
+That matters the moment you have more than one session open. Say one session is running in the background, scoped to the `Catalog` module. You switch the foreground to a different scope to start a second task. The background session does not notice. It keeps the scope and workflow it was locked to, and each of its runs uses whatever model and tools were configured at the moment that run began.
 
 Without this, parallel sessions would quietly corrupt each other every time you changed a setting. With it, each session is a sealed unit of work.
 
@@ -61,25 +61,25 @@ Still, the simplest rule is the best one: keep parallel Agent-mode sessions on s
 
 There is also a smaller, quieter form of parallel work that happens inside a single session.
 
-When the agent needs to look something up, it can spawn a **subagent**: a read-only helper that goes off and researches while the main agent keeps working. There are a few kinds, each with a narrow job:
+When the agent needs to look something up, it can fan out multiple **subagents** in a single turn: read-only helpers that research in parallel and return their results before the main agent continues. There are a few kinds, each with a narrow job:
 
 * one that researches your solution and code,
 * one that searches the web,
 * one that searches and reads the official ABP documentation.
 
-Subagents cannot change anything. They only read, gather, and hand back a short summary. That keeps the main session's context clean, because the digging happens elsewhere and only the answer comes back.
+These research-style subagents (code research, web search, documentation search) are read-only—they cannot modify files or solution state. They only read, gather, and hand back a short summary. That keeps the main session's context clean, because the digging happens elsewhere and only the answer comes back. (Note that the browser subagent is an exception: it is stateful and can mutate the shared browser session.)
 
-Subagents run on a separate model that you set apart from your main one, and a fast, cheap model is the right choice for this kind of research.
+ABP Studio can use a separate model for research subagents, configured apart from your main one. A fast, cheap model is the right choice for this kind of lookup work.
 
 ![Model Settings: the research model used by subagents is set separately from the main model](model-settings.png)
 
 So there are two scales of parallel here. Sessions run independent tasks side by side. Subagents run read-only research inside one task. Both keep the slow parts from blocking the useful parts.
 
-## Why This Is Different From Generic Coding Agents?
+## ABP Studio Parallel Execution Model
 
 Plenty of tools let you open more than one chat, and that is genuinely useful. So the idea of running agents in parallel is not, by itself, an ABP feature.
 
-The difference is that each session here carries the context of an ABP solution and stays inside it. A session locks its own scope, workflow, model, and tools when it starts, so background work does not drift when you change the foreground. Studio coordinates the operations that would otherwise collide, like builds and migrations, across all the running sessions. And scopes give each session a clear boundary, so parallel does not turn into a pile of agents editing the same files.
+The difference is that each session here carries the context of an ABP solution and stays inside it. A session locks its scope and workflow permanently, and snapshots its model and tools per run, so background work does not drift when you change the foreground. Studio coordinates the operations that would otherwise collide, like builds and migrations, across all the running sessions. And scopes give each session a clear boundary, so parallel does not turn into a pile of agents editing the same files.
 
 In short, the parallelism is not just several chat windows. It is several controlled, solution-aware sessions that know how to stay out of each other's way.
 
