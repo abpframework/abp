@@ -16,9 +16,11 @@ namespace Volo.Abp.Application.Services;
 /// constrained to plain property or field access. Methods, comparisons, ternaries
 /// and constants in the sort key are rejected with <see cref="AbpValidationException"/>.
 /// Property-bag / shadow-property access through a constant string indexer
-/// (e.g. <c>it["Prop"]</c>, <c>Data["Prop"]</c>) is treated as plain property access
-/// and allowed, since it carries no side effects and is the canonical way to sort
-/// dynamically-mapped entities.
+/// (e.g. <c>it["Prop"]</c>, <c>Data["Prop"]</c>) is treated like plain property
+/// access and allowed, because it is the canonical way to sort dynamically-mapped
+/// entities. The guard assumes the matching indexer getter behaves like a property
+/// getter; defining an indexer that performs IO or mutates state will expose those
+/// effects through sorting.
 /// </summary>
 internal static class AbpDynamicSortingGuard
 {
@@ -88,9 +90,10 @@ internal static class AbpDynamicSortingGuard
         protected override Expression VisitMethodCall(MethodCallExpression node)
         {
             // Allow property-bag / shadow-property access through a constant string
-            // indexer (it["Prop"], Data["Prop"], mainEntity["Prop"], ...). This is a
-            // pure read of a named member, not an arbitrary method invocation, so it
-            // does not open the injection surface the guard protects against.
+            // indexer (it["Prop"], Data["Prop"], mainEntity["Prop"], ...). The
+            // constant key cannot smuggle in an arbitrary method invocation, so this
+            // does not widen the injection surface the guard protects against; it
+            // treats the indexer access like ordinary property access.
             if (IsConstantStringIndexer(node))
             {
                 if (node.Object != null)

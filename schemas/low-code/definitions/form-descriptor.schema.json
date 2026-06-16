@@ -34,7 +34,7 @@
     },
     "layout": {
       "$ref": "form-layout-descriptor.schema.json",
-      "description": "Visual layout for the fields. Every layout cell fieldId must refer to a field in fields."
+      "description": "Visual layout for the fields. Every layout placement fieldId must refer to a field in fields."
     },
     "rules": {
       "type": "array",
