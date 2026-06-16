@@ -237,21 +237,20 @@
       "title": "Event Dashboard",
       "type": "dashboard",
       "dashboard": {
-        "rows": [
+        "visualizations": [
           {
-            "items": [
-              {
-                "name": "events-by-status",
-                "type": "chart",
-                "title": "Events by Status",
-                "entityName": "Acme.Events.Event",
-                "chart": {
-                  "chartType": "bar",
-                  "xAxis": { "property": "Status" },
-                  "yAxis": [{ "aggregation": "count", "label": "Events" }]
-                }
-              }
-            ]
+            "name": "events-by-status",
+            "type": "chart",
+            "title": "Events by Status",
+            "row": 0,
+            "order": 0,
+            "width": 2,
+            "entityName": "Acme.Events.Event",
+            "chart": {
+              "chartType": "bar",
+              "xAxis": { "property": "Status" },
+              "yAxis": [{ "aggregation": "count", "label": "Events" }]
+            }
           }
         ]
       }

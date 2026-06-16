@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "dashboard-visualization-descriptor.schema.json",
   "title": "DashboardVisualizationDescriptor",
-  "description": "A single visualization element in a dashboard row: chart, list, or number container.",
+  "description": "A single visualization element in a dashboard: chart, list, or number container. Positioned on the grid via row, order, and width.",
   "markdownDescription": "AI guidance: set `type` and then provide the matching payload: `chart` for type chart, `list` for type list, or `numberContainer` for type numberContainer. Do not populate unrelated payloads. Chart and list visualizations require `entityName`; number containers define entityName per KPI item.",
   "type": "object",
   "properties": {
@@ -22,6 +22,16 @@
     "description": {
       "type": ["string", "null"],
       "description": "Optional description text. Can be shown inline or as tooltip depending on showDescriptionAsTooltip."
+    },
+    "row": {
+      "type": "integer",
+      "description": "Zero-based visual row index inside the dashboard grid. Visualizations sharing the same row are rendered side-by-side.",
+      "minimum": 0,
+      "default": 0
+    },
+    "order": {
+      "type": ["integer", "null"],
+      "description": "Order of the visualization inside its row. When omitted, array order is used."
     },
     "width": {
       "type": "integer",
@@ -146,6 +156,9 @@
       "name": "events-by-status",
       "type": "chart",
       "title": "Events by Status",
+      "row": 0,
+      "order": 0,
+      "width": 1,
       "entityName": "Acme.Events.Event",
       "chart": {
         "chartType": "bar",
@@ -157,6 +170,9 @@
       "name": "recent-events",
       "type": "list",
       "title": "Recent Events",
+      "row": 0,
+      "order": 1,
+      "width": 1,
       "entityName": "Acme.Events.Event",
       "list": {
         "fields": ["Title", "StartDate", "Status"],

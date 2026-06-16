@@ -362,9 +362,10 @@ Forms are named definitions referenced by pages through `formName`, `createFormN
             "id": "details",
             "title": "Details",
             "isDefault": true,
-            "rows": [
-              { "cells": [{ "fieldId": "name", "colSpan": 4 }] },
-              { "cells": [{ "fieldId": "status", "colSpan": 2 }, { "fieldId": "ownerId", "colSpan": 2 }] }
+            "fields": [
+              { "fieldId": "name", "row": 0, "colSpan": 4 },
+              { "fieldId": "status", "row": 1, "colSpan": 2 },
+              { "fieldId": "ownerId", "row": 1, "colSpan": 2 }
             ]
           }
         ]
@@ -526,10 +527,12 @@ The complete example below shows the logical aggregate shape. Split projects sto
                 "id": "details",
                 "title": "Details",
                 "isDefault": true,
-                "rows": [
-                  { "cells": [{ "fieldId": "name", "colSpan": 4 }] },
-                  { "cells": [{ "fieldId": "status", "colSpan": 2 }, { "fieldId": "budget", "colSpan": 2 }] },
-                  { "cells": [{ "fieldId": "startDate", "colSpan": 2 }, { "fieldId": "coverImage", "colSpan": 2 }] }
+                "fields": [
+                  { "fieldId": "name", "row": 0, "colSpan": 4 },
+                  { "fieldId": "status", "row": 1, "colSpan": 2 },
+                  { "fieldId": "budget", "row": 1, "colSpan": 2 },
+                  { "fieldId": "startDate", "row": 2, "colSpan": 2 },
+                  { "fieldId": "coverImage", "row": 2, "colSpan": 2 }
                 ]
               }
             ]

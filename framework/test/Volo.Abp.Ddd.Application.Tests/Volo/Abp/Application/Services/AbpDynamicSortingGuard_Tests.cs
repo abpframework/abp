@@ -257,6 +257,37 @@ public class AbpDynamicSortingGuard_Tests : AbpDddApplicationTestBase
         Should.NotThrow(() => children.OrderBy("Name desc, ExtraField asc").ToList());
     }
 
+    [Theory]
+    [InlineData("Data[\"Score\"]")]                  // dictionary indexer with constant string key
+    [InlineData("Data[\"Score\"] desc")]
+    [InlineData("Name asc, Data[\"Score\"] desc")]   // multi-column mixing plain + indexer
+    [InlineData("it[\"Score\"] desc")]               // entity-level property-bag indexer (it["Prop"])
+    public void Should_Accept_Constant_String_Indexer_Sorting(string sorting)
+    {
+        // Dynamically-mapped entities sort their shadow / property-bag members through a
+        // constant-string indexer; the guard must treat this as plain property access.
+        Should.NotThrow(() => FakeBagUsers().OrderBy(sorting).ToList());
+    }
+
+    [Theory]
+    [InlineData("Data[Name] desc")]                          // non-constant key (member access)
+    [InlineData("Data[PasswordHash.Substring(0,1)] desc")]   // method call inside the key
+    public void Should_Reject_Non_Constant_Indexer_Sorting(string sorting)
+    {
+        Should.Throw<AbpValidationException>(() => FakeBagUsers().OrderBy(sorting).ToList())
+            .Message.ShouldBe("Sorting expression is not supported.");
+    }
+
+    private static IQueryable<FakeBagUser> FakeBagUsers()
+    {
+        return new List<FakeBagUser>
+        {
+            new() { Name = "alice", PasswordHash = "AQAA", Data = { ["Score"] = 30 } },
+            new() { Name = "bob",   PasswordHash = "BQAA", Data = { ["Score"] = 25 } },
+            new() { Name = "carl",  PasswordHash = "CQAA", Data = { ["Score"] = 40 } },
+        }.AsQueryable();
+    }
+
     private class FakeUser
     {
         public string Name { get; set; } = "";
@@ -273,5 +304,14 @@ public class AbpDynamicSortingGuard_Tests : AbpDddApplicationTestBase
     private class FakeTenant
     {
         public string Name { get; set; } = "";
+    }
+
+    private class FakeBagUser
+    {
+        public string Name { get; set; } = "";
+        public string PasswordHash { get; set; } = "";
+        public Dictionary<string, object> Data { get; set; } = new();
+
+        public object this[string key] => Data[key];
     }
 }

@@ -3,7 +3,7 @@
   "$id": "form-descriptor.schema.json",
   "title": "FormDescriptor",
   "description": "Describes a named create/edit form definition bound to one entity.",
-  "markdownDescription": "AI guidance: a form is referenced by page `formName`, `createFormName`, or `editFormName`. Keep `entityName` aligned with the page entityName. Define all fields in `fields`, then place every visible field in `layout.tabs[].groups[].rows[].cells[]` by field id. Use form `rules` for conditional visibility/enabled state; use entity validators for core data validation.",
+  "markdownDescription": "AI guidance: a form is referenced by page `formName`, `createFormName`, or `editFormName`. Keep `entityName` aligned with the page entityName. Define all fields in `fields`, then place every visible field in `layout.tabs[].groups[].fields[]` by field id (each placement carries `row`, `colSpan`, and `colStart`). Use form `rules` for conditional visibility/enabled state; use entity validators for core data validation.",
   "type": "object",
   "properties": {
     "$schema": {
@@ -34,7 +34,7 @@
     },
     "layout": {
       "$ref": "form-layout-descriptor.schema.json",
-      "description": "Visual layout for the fields. Every layout cell fieldId must refer to a field in fields."
+      "description": "Visual layout for the fields. Every layout placement fieldId must refer to a field in fields."
     },
     "rules": {
       "type": "array",
@@ -65,9 +65,9 @@
                 "id": "details",
                 "title": "Details",
                 "isDefault": true,
-                "rows": [
-                  { "cells": [{ "fieldId": "title", "colSpan": 4 }] },
-                  { "cells": [{ "fieldId": "status", "colSpan": 2 }] }
+                "fields": [
+                  { "fieldId": "title", "row": 0, "colSpan": 4 },
+                  { "fieldId": "status", "row": 1, "colSpan": 2 }
                 ]
               }
             ]

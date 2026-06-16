@@ -3,7 +3,7 @@
   "$id": "page-type.schema.json",
   "title": "PageType",
   "description": "The runtime page renderer to use. Prefer lower-case values in descriptor JSON; PascalCase aliases are accepted for compatibility.",
-  "markdownDescription": "`dataGrid` renders searchable/filterable tabular CRUD for an entity. `kanban` renders grouped cards and requires `groupByProperty`. `calendar` renders entity records on a calendar and requires `calendarStartProperty`. `gallery` renders visual cards and may use `galleryImageProperty`. `form` renders a standalone create/edit form page and requires `formName`. `dashboard` renders dashboard rows/visualizations and requires `dashboard`.",
+  "markdownDescription": "`dataGrid` renders searchable/filterable tabular CRUD for an entity. `kanban` renders grouped cards and requires `groupByProperty`. `calendar` renders entity records on a calendar and requires `calendarStartProperty`. `gallery` renders visual cards and may use `galleryImageProperty`. `form` renders a standalone create/edit form page and requires `formName`. `dashboard` renders a flat list of dashboard visualizations and requires `dashboard`.",
   "type": "string",
   "enum": [
     "dataGrid",
