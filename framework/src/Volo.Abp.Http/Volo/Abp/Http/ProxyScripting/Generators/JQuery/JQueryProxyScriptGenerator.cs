@@ -146,6 +146,15 @@ public class JQueryProxyScriptGenerator : IProxyScriptGenerator, ITransientDepen
 
     private static string GetJQueryDataTypeAndAcceptOverride(ActionApiDescriptionModel action)
     {
+        // jQuery doesn't natively support binary downloads, so don't override
+        // dataType/Accept for remote stream returns — letting the server pick the
+        // formatter naturally avoids forcing JSON metadata in place of the binary
+        // payload (which would re-introduce the original IRemoteStreamContent bug).
+        if (action.ReturnValue.IsRemoteStream)
+        {
+            return string.Empty;
+        }
+
         var contentTypes = action.ReturnValue.ContentTypes;
         var isStringReturn = action.ReturnValue.Type == ReturnValueApiDescriptionModel.Create(typeof(string)).Type;
 

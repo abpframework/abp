@@ -93,7 +93,27 @@ public class JQueryProxyScriptGenerator_ContentTypes_Tests
         script.ShouldContain("dataType: 'json'");
     }
 
-    private static ApplicationApiDescriptionModel BuildAppModel(string returnType, IList<string>? contentTypes)
+    [Fact]
+    public void IsRemoteStream_Should_Skip_DataType_Override_To_Avoid_JSON_Metadata_Regression()
+    {
+        // For IRemoteStreamContent returns the API definition still advertises
+        // application/json (server-side default formatter list). The generator
+        // MUST NOT force dataType:'json' + Accept:'application/json' for these —
+        // doing so makes the server JSON-serialise the IRemoteStreamContent object
+        // and re-introduces the original IRemoteStreamContent bug. jQuery doesn't
+        // natively support binary downloads, so we let the legacy behavior stand.
+        var model = BuildAppModel(
+            returnType: "Volo.Abp.Content.IRemoteStreamContent",
+            contentTypes: new[] { "text/plain", "application/json", "text/json" },
+            isRemoteStream: true);
+
+        var script = _generator.CreateScript(model);
+
+        script.ShouldNotContain("dataType: 'json'");
+        script.ShouldNotContain("Accept: 'application/json'");
+    }
+
+    private static ApplicationApiDescriptionModel BuildAppModel(string returnType, IList<string>? contentTypes, bool isRemoteStream = false)
     {
         var model = ApplicationApiDescriptionModel.Create();
         var module = model.GetOrAddModule("app", "Default");
@@ -119,6 +139,7 @@ public class JQueryProxyScriptGenerator_ContentTypes_Tests
                 Type = returnType,
                 TypeSimple = returnType,
                 ContentTypes = contentTypes,
+                IsRemoteStream = isRemoteStream,
             },
             AuthorizeDatas = new List<AuthorizeDataApiDescriptionModel>(),
         };
