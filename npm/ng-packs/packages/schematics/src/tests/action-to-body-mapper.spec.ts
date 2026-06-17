@@ -707,6 +707,20 @@ describe('createActionToBodyMapper — multipart upload params regression', () =
     expect(body.url).toContain('${id}');
     expect(body.params.join(',')).not.toContain('name');
   });
+
+  test('Multiple direct FormFile method args: body forwards only the first var (known limitation, mirrors jQuery)', () => {
+    const body = mapBody(
+      buildAction({
+        httpMethod: 'POST',
+        url: 'api/proxy-demo/media/upload-two-direct',
+        parameters: [
+          { nameOnMethod: 'file1', name: 'file1', type: 'Volo.Abp.Content.IRemoteStreamContent', typeSimple: 'Volo.Abp.Content.IRemoteStreamContent', bindingSourceId: eBindingSourceId.FormFile } as any,
+          { nameOnMethod: 'file2', name: 'file2', type: 'Volo.Abp.Content.IRemoteStreamContent', typeSimple: 'Volo.Abp.Content.IRemoteStreamContent', bindingSourceId: eBindingSourceId.FormFile } as any,
+        ],
+      } as Partial<Action>),
+    );
+    expect(body.body).toBe('file1');
+  });
 });
 
 describe('createActionToSignatureMapper — multipart upload signature collapse', () => {
