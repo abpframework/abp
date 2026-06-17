@@ -3,7 +3,11 @@ import { join } from 'path';
 import { describe, expect, test } from 'vitest';
 import { eBindingSourceId } from '../enums';
 import { Action } from '../models';
-import { createActionToBodyMapper } from '../utils/service';
+import {
+  createActionToBodyMapper,
+  createActionToMethodMapper,
+  createActionToSignatureMapper,
+} from '../utils/service';
 
 const TEMPLATE_PATH = join(
   __dirname,
@@ -702,5 +706,127 @@ describe('createActionToBodyMapper — multipart upload params regression', () =
     expect(body.body).toBe('input');
     expect(body.url).toContain('${id}');
     expect(body.params.join(',')).not.toContain('name');
+  });
+});
+
+describe('createActionToSignatureMapper — multipart upload signature collapse', () => {
+  const mapSignature = createActionToSignatureMapper();
+
+  test('FormFile DTO method arg collapses to FormData type', () => {
+    const sig = mapSignature(buildAction({
+      httpMethod: 'POST',
+      url: 'api/app/proxy-demo-test/upload-single',
+      parametersOnMethod: [
+        { name: 'input', type: 'AbpProxyDemo.UploadDto', typeAsString: 'AbpProxyDemo.UploadDto', typeSimple: 'AbpProxyDemo.UploadDto', isOptional: false, defaultValue: null } as any,
+      ],
+      parameters: [
+        { nameOnMethod: 'input', name: 'Name', type: 'System.String', typeSimple: 'string', bindingSourceId: eBindingSourceId.ModelBinding } as any,
+        { nameOnMethod: 'input', name: 'File', type: 'Volo.Abp.Content.IRemoteStreamContent', typeSimple: 'Volo.Abp.Content.IRemoteStreamContent', bindingSourceId: eBindingSourceId.FormFile } as any,
+      ],
+    } as Partial<Action>));
+    const types = sig.parameters.map((p: any) => `${p.name}:${p.type}`);
+    expect(types).toContain('input:FormData');
+    expect(types[types.length - 1]).toBe('config:Partial<Rest.Config>');
+  });
+
+  test('Path arg keeps its primitive type while upload arg becomes FormData', () => {
+    const sig = mapSignature(buildAction({
+      httpMethod: 'POST',
+      url: 'api/proxy-demo/media/upload-with-path/{id}',
+      parametersOnMethod: [
+        { name: 'id', type: 'System.Int32', typeAsString: 'System.Int32', typeSimple: 'number', isOptional: false, defaultValue: null } as any,
+        { name: 'input', type: 'AbpProxyDemo.UploadDto', typeAsString: 'AbpProxyDemo.UploadDto', typeSimple: 'AbpProxyDemo.UploadDto', isOptional: false, defaultValue: null } as any,
+      ],
+      parameters: [
+        { nameOnMethod: 'id', name: 'id', type: 'System.Int32', typeSimple: 'int', bindingSourceId: eBindingSourceId.Path } as any,
+        { nameOnMethod: 'input', name: 'Name', type: 'System.String', typeSimple: 'string', bindingSourceId: eBindingSourceId.ModelBinding } as any,
+        { nameOnMethod: 'input', name: 'File', type: 'Volo.Abp.Content.IRemoteStreamContent', typeSimple: 'Volo.Abp.Content.IRemoteStreamContent', bindingSourceId: eBindingSourceId.FormFile } as any,
+      ],
+    } as Partial<Action>));
+    const types = sig.parameters.map((p: any) => `${p.name}:${p.type}`);
+    expect(types).toEqual([
+      'id:number',
+      'input:FormData',
+      'config:Partial<Rest.Config>',
+    ]);
+  });
+
+  test('Multiple direct IRemoteStreamContent method args each become FormData independently', () => {
+    const sig = mapSignature(buildAction({
+      httpMethod: 'POST',
+      url: 'api/proxy-demo/media/upload-two-direct',
+      parametersOnMethod: [
+        { name: 'file1', type: 'Volo.Abp.Content.IRemoteStreamContent', typeAsString: 'Volo.Abp.Content.IRemoteStreamContent', typeSimple: 'Volo.Abp.Content.IRemoteStreamContent', isOptional: false, defaultValue: null } as any,
+        { name: 'file2', type: 'Volo.Abp.Content.IRemoteStreamContent', typeAsString: 'Volo.Abp.Content.IRemoteStreamContent', typeSimple: 'Volo.Abp.Content.IRemoteStreamContent', isOptional: false, defaultValue: null } as any,
+      ],
+      parameters: [
+        { nameOnMethod: 'file1', name: 'file1', type: 'Volo.Abp.Content.IRemoteStreamContent', typeSimple: 'Volo.Abp.Content.IRemoteStreamContent', bindingSourceId: eBindingSourceId.FormFile } as any,
+        { nameOnMethod: 'file2', name: 'file2', type: 'Volo.Abp.Content.IRemoteStreamContent', typeSimple: 'Volo.Abp.Content.IRemoteStreamContent', bindingSourceId: eBindingSourceId.FormFile } as any,
+      ],
+    } as Partial<Action>));
+    const types = sig.parameters.map((p: any) => `${p.name}:${p.type}`);
+    expect(types).toEqual([
+      'file1:FormData',
+      'file2:FormData',
+      'config:Partial<Rest.Config>',
+    ]);
+  });
+
+  test('Non-upload action signature stays untouched (regression guard)', () => {
+    const sig = mapSignature(buildAction({
+      httpMethod: 'GET',
+      url: 'api/app/proxy-demo-test/get-item-by-id',
+      parametersOnMethod: [
+        { name: 'id', type: 'System.Int32', typeAsString: 'System.Int32', typeSimple: 'number', isOptional: false, defaultValue: null } as any,
+      ],
+      parameters: [
+        { nameOnMethod: 'id', name: 'id', type: 'System.Int32', typeSimple: 'int', bindingSourceId: eBindingSourceId.Path } as any,
+      ],
+    } as Partial<Action>));
+    const types = sig.parameters.map((p: any) => `${p.name}:${p.type}`);
+    expect(types).toEqual(['id:number', 'config:Partial<Rest.Config>']);
+  });
+});
+
+describe('createActionToMethodMapper — signature + body wired together for upload actions', () => {
+  const mapMethod = createActionToMethodMapper();
+
+  test('Upload action produces both FormData signature and FormData body in one pass', () => {
+    const method = mapMethod(buildAction({
+      httpMethod: 'POST',
+      url: 'api/app/proxy-demo-test/upload-single',
+      parametersOnMethod: [
+        { name: 'input', type: 'AbpProxyDemo.UploadDto', typeAsString: 'AbpProxyDemo.UploadDto', typeSimple: 'AbpProxyDemo.UploadDto', isOptional: false, defaultValue: null } as any,
+      ],
+      parameters: [
+        { nameOnMethod: 'input', name: 'Name', type: 'System.String', typeSimple: 'string', bindingSourceId: eBindingSourceId.ModelBinding } as any,
+        { nameOnMethod: 'input', name: 'File', type: 'Volo.Abp.Content.IRemoteStreamContent', typeSimple: 'Volo.Abp.Content.IRemoteStreamContent', bindingSourceId: eBindingSourceId.FormFile } as any,
+      ],
+    } as Partial<Action>));
+    const sigTypes = method.signature.parameters.map((p: any) => `${p.name}:${p.type}`);
+    expect(sigTypes).toContain('input:FormData');
+    expect(method.body.body).toBe('input');
+    expect(method.body.params.join(',')).not.toContain('name');
+  });
+
+  test('Query + ModelBinding + FormFile mix preserves Query as URL param and drops upload-arg fields', () => {
+    const method = mapMethod(buildAction({
+      httpMethod: 'POST',
+      url: 'api/proxy-demo/media/upload-with-query',
+      parametersOnMethod: [
+        { name: 'tag', type: 'System.String', typeAsString: 'System.String', typeSimple: 'string', isOptional: false, defaultValue: null } as any,
+        { name: 'input', type: 'AbpProxyDemo.UploadDto', typeAsString: 'AbpProxyDemo.UploadDto', typeSimple: 'AbpProxyDemo.UploadDto', isOptional: false, defaultValue: null } as any,
+      ],
+      parameters: [
+        { nameOnMethod: 'tag', name: 'tag', type: 'System.String', typeSimple: 'string', bindingSourceId: eBindingSourceId.Query } as any,
+        { nameOnMethod: 'input', name: 'Name', type: 'System.String', typeSimple: 'string', bindingSourceId: eBindingSourceId.ModelBinding } as any,
+        { nameOnMethod: 'input', name: 'File', type: 'Volo.Abp.Content.IRemoteStreamContent', typeSimple: 'Volo.Abp.Content.IRemoteStreamContent', bindingSourceId: eBindingSourceId.FormFile } as any,
+      ],
+    } as Partial<Action>));
+    const sigTypes = method.signature.parameters.map((p: any) => `${p.name}:${p.type}`);
+    expect(sigTypes).toEqual(['tag:string', 'input:FormData', 'config:Partial<Rest.Config>']);
+    expect(method.body.body).toBe('input');
+    expect(method.body.params).toContain('tag');
+    expect(method.body.params.join(',')).not.toContain('name');
   });
 });

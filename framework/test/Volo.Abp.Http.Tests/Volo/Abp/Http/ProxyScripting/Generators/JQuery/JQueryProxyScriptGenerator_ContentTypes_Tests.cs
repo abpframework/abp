@@ -167,6 +167,21 @@ public class JQueryProxyScriptGenerator_ContentTypes_Tests
         script.ShouldNotContain("JSON.stringify");
     }
 
+    [Fact]
+    public void Multiple_Direct_FormFile_Params_Should_Forward_Only_First_Var_Known_Limitation()
+    {
+        var script = _generator.CreateScript(BuildUploadModel(
+            uploadParameters: new[]
+            {
+                ("file1", "file1", ParameterBindingSources.FormFile),
+                ("file2", "file2", ParameterBindingSources.FormFile),
+            }));
+
+        script.ShouldContain("data: file1");
+        script.ShouldNotContain("data: file2");
+        script.ShouldNotContain("$.merge(file1, file2)");
+    }
+
     private static ApplicationApiDescriptionModel BuildAppModel(string returnType, IList<string>? contentTypes, bool isRemoteStream = false)
     {
         var model = ApplicationApiDescriptionModel.Create();
