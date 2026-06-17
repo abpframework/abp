@@ -1,4 +1,12 @@
-import { Component, ViewEncapsulation, input, effect, signal, contentChild } from '@angular/core';
+import {
+  Component,
+  ViewEncapsulation,
+  input,
+  effect,
+  signal,
+  contentChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   PageTitleContainerComponent,
   PageBreadcrumbContainerComponent,
@@ -10,6 +18,7 @@ import { PageToolbarComponent } from '@abp/ng.components/extensible';
 import { PagePartDirective } from './page-part.directive';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-page',
   templateUrl: './page.component.html',
   encapsulation: ViewEncapsulation.None,

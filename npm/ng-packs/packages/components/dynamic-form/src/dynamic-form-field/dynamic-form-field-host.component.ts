@@ -1,5 +1,4 @@
-import {
-  Component,
+import {Component,
   ViewContainerRef,
   ChangeDetectionStrategy,
   forwardRef,
@@ -8,8 +7,7 @@ import {
   DestroyRef,
   inject,
   input,
-  viewChild
-} from '@angular/core';
+  viewChild,} from '@angular/core';
 import {
   ControlValueAccessor, NG_VALUE_ACCESSOR, FormControl, ReactiveFormsModule
 } from '@angular/forms';

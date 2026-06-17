@@ -1,7 +1,6 @@
 import { TrackByService } from '@abp/ng.core';
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   inject,
   Optional,
@@ -36,7 +35,6 @@ import { PropDataDirective } from '../../directives/prop-data.directive';
   ],
 })
 export class ExtensibleFormComponent<R = any> {
-  public readonly cdRef = inject(ChangeDetectorRef);
   public readonly track = inject(TrackByService);
   private readonly container = inject(ControlContainer);
   private readonly extensions = inject(ExtensionsService);

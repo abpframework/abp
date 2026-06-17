@@ -3,7 +3,7 @@ import {
   Component,
   input,
   inject,
-  ChangeDetectorRef,
+  signal,
   forwardRef,
 } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -35,7 +35,7 @@ export class DynamicFormArrayComponent {
 
   private fb = inject(FormBuilder);
   private dynamicFormService = inject(DynamicFormService);
-  private cdr = inject(ChangeDetectorRef);
+  readonly formArrayVersion = signal(0);
 
   get formArray(): FormArray {
     return this.formGroup().get(this.arrayConfig().key) as FormArray;
@@ -58,20 +58,20 @@ export class DynamicFormArrayComponent {
 
   addItem() {
     if (!this.canAddItem) return;
-    
+
     const itemGroup = this.dynamicFormService.createFormGroup(
       this.arrayConfig().children || []
     );
-    
+
     this.formArray.push(itemGroup);
-    this.cdr.markForCheck();
+    this.formArrayVersion.update(version => version + 1);
   }
 
   removeItem(index: number) {
     if (!this.canRemoveItem) return;
-    
+
     this.formArray.removeAt(index);
-    this.cdr.markForCheck();
+    this.formArrayVersion.update(version => version + 1);
   }
 
   getItemFormGroup(index: number): FormGroup {

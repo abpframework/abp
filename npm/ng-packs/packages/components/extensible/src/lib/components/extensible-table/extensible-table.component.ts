@@ -1,7 +1,6 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   computed,
   inject,
@@ -94,7 +93,6 @@ const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
 export class ExtensibleTableComponent<R = any> implements AfterViewInit, OnDestroy {
   readonly #injector = inject(Injector);
   readonly getInjected = this.#injector.get.bind(this.#injector);
-  protected readonly cdr = inject(ChangeDetectorRef);
   protected readonly locale = inject(LOCALE_ID);
   protected readonly config = inject(ConfigStateService);
   protected readonly timeZoneService = inject(TimezoneService);
@@ -368,7 +366,6 @@ export class ExtensibleTableComponent<R = any> implements AfterViewInit, OnDestr
         ?.requestStatus$?.pipe(filter(status => status === 'loading'))
         .subscribe(() => {
           this._data.set([]);
-          this.cdr.markForCheck();
         });
     }
   }

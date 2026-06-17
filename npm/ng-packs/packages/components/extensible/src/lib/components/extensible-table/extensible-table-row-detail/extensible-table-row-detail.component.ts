@@ -1,6 +1,7 @@
-import { Component, contentChild, input, TemplateRef } from '@angular/core';
+import {Component, contentChild, input, TemplateRef, ChangeDetectionStrategy,} from '@angular/core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
     selector: 'abp-extensible-table-row-detail',
     template: '',
 })

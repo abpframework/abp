@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 
 export enum PageParts {
   title = 'PageTitleContainerComponent',
@@ -7,6 +7,7 @@ export enum PageParts {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-page-title-container',
   template: ` <ng-content></ng-content> `,
   encapsulation: ViewEncapsulation.None,

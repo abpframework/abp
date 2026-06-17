@@ -1,7 +1,6 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   OnDestroy,
@@ -36,7 +35,6 @@ let Chart: any;
 })
 export class ChartComponent implements AfterViewInit, OnDestroy {
   el = inject(ElementRef);
-  private cdr = inject(ChangeDetectorRef);
 
   readonly type = input.required<string>();
   readonly data = input<any>({});
@@ -129,7 +127,6 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
   refresh = () => {
     if (this.chart) {
       this.chart.update();
-      this.cdr.detectChanges();
     }
   };
 
@@ -146,4 +143,3 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
     }
   }
 }
-

@@ -114,8 +114,8 @@
     @if (actionsTemplate() || (actionList.length && hasAtLeastOnePermittedAction)) {
       <ngx-datatable-column
         [name]="actionsText() | abpLocalization"
-        [maxWidth]="_actionsColumnWidth() ?? undefined"
-        [width]="_actionsColumnWidth() ?? 200"
+        [maxWidth]="_actionsColumnWidth()"
+        [width]="_actionsColumnWidth() || 200"
         [canAutoResize]="!_actionsColumnWidth()"
         [sortable]="false"
       >
@@ -134,7 +134,7 @@
     @for (prop of propList; track prop.name; let i = $index) {
       <ngx-datatable-column
         *abpVisible="prop.columnVisible(getInjected)"
-        [width]="columnWidths()[i] ?? 200"
+        [width]="columnWidths()[i] || 200"
         [canAutoResize]="!columnWidths()[i]"
         [name]="(prop.isExtra ? '::' + prop.displayName : prop.displayName) | abpLocalization"
         [prop]="prop.name"
