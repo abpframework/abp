@@ -1,8 +1,9 @@
-import { Component, input, OnInit, signal, effect } from '@angular/core';
+import {Component, input, OnInit, signal, effect, ChangeDetectionStrategy,} from '@angular/core';
 import { Toaster } from '../../models/toaster';
 import { ToastComponent } from '../toast/toast.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-toast-container',
   templateUrl: './toast-container.component.html',
   styleUrls: ['./toast-container.component.scss'],

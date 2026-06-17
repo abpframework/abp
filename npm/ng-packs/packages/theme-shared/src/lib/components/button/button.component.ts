@@ -10,10 +10,12 @@ import {
   output,
   signal,
   viewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ABP, StopPropagationDirective } from '@abp/ng.core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-button',
   template: `
     <button

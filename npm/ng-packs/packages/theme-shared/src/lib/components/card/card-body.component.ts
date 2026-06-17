@@ -1,6 +1,7 @@
-import { Component, HostBinding, input } from '@angular/core';
+import { Component, HostBinding, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-card-body',
   template: ` <div [class]="cardBodyClass()" [style]="cardBodyStyle()">
     <ng-content></ng-content>

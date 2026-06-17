@@ -1,8 +1,9 @@
-import { Component, forwardRef, input, output } from '@angular/core';
+import {Component, forwardRef, input, output, ChangeDetectionStrategy,} from '@angular/core';
 import { NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms';
 import { AbstractNgModelComponent, LocalizationPipe } from '@abp/ng.core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-checkbox',
   template: `
     <div class="mb-3">

@@ -1,5 +1,4 @@
-import {
-  Component,
+import {Component,
   DestroyRef,
   OnDestroy,
   OnInit,
@@ -10,8 +9,7 @@ import {
   input,
   model,
   output,
-  viewChild,
-} from '@angular/core';
+  viewChild, ChangeDetectionStrategy,} from '@angular/core';
 import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SubscriptionService, uuid } from '@abp/ng.core';
@@ -27,6 +25,7 @@ import { DismissableModal, ModalDismissMode, ModalRefService } from './modal-ref
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-modal',
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.scss'],

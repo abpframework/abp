@@ -1,6 +1,7 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import {Component, ViewEncapsulation, ChangeDetectionStrategy,} from '@angular/core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-loading',
   template: `
     <div class="abp-loading">

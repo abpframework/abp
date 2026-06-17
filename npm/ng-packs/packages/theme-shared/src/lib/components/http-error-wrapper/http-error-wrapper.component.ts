@@ -1,5 +1,4 @@
-import {
-  ApplicationRef,
+import {ApplicationRef,
   Component,
   inject,
   OnInit,
@@ -11,8 +10,7 @@ import {
   createComponent,
   EnvironmentInjector,
   DestroyRef,
-  viewChild
-} from '@angular/core';
+  viewChild, ChangeDetectionStrategy,} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DOCUMENT } from '@angular/common';
 import { Router } from '@angular/router';
@@ -22,6 +20,7 @@ import { LocalizationParam, LocalizationPipe } from '@abp/ng.core';
 import { ErrorScreenErrorCodes } from '../../models';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-http-error-wrapper',
   templateUrl: './http-error-wrapper.component.html',
   styleUrls: ['http-error-wrapper.component.scss'],

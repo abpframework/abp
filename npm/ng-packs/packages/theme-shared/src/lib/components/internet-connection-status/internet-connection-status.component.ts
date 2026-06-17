@@ -1,8 +1,9 @@
-import { Component, inject } from '@angular/core';
+import {Component, inject, ChangeDetectionStrategy,} from '@angular/core';
 import { InternetConnectionService, LocalizationPipe } from '@abp/ng.core';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-internet-status',
   imports: [LocalizationPipe, NgbTooltip],
   template: `

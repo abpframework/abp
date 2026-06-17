@@ -1,11 +1,12 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import {Component, inject, ChangeDetectionStrategy,} from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { Confirmation } from '../../models/confirmation';
 import { CONFIRMATION_ICONS, ConfirmationIcons } from '../../tokens/confirmation-icons.token';
 import { LocalizationPipe } from '@abp/ng.core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-confirmation',
   templateUrl: './confirmation.component.html',
   styleUrls: ['./confirmation.component.scss'],

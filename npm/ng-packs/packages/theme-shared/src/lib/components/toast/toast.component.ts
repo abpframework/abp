@@ -1,8 +1,9 @@
-import { Component, OnInit, input, output } from '@angular/core';
+import {Component, OnInit, input, output, ChangeDetectionStrategy,} from '@angular/core';
 import { Toaster } from '../../models/toaster';
 import { LocalizationPipe } from '@abp/ng.core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-toast',
   templateUrl: './toast.component.html',
   styleUrls: ['./toast.component.scss'],
