@@ -25,7 +25,7 @@ export class AbpTitleStrategy extends TitleStrategy {
     });
   }
 
-  override updateTitle(routerState: RouterStateSnapshot) {
+  override updateTitle(routerState: RouterStateSnapshot): void {
     this.routerState = routerState;
     if (!routerState?.root) {
       return;
@@ -41,7 +41,7 @@ export class AbpTitleStrategy extends TitleStrategy {
     if (!title) {
       return this.title.setTitle(projectName);
     }
-    
+
     let localizedText = this.localizationService.instant({ key: title, defaultValue: title });
     if (!this.disableProjectName) {
       localizedText += ` | ${projectName}`;

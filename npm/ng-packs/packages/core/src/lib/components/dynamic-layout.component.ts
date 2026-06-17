@@ -1,4 +1,4 @@
-import { Component, inject, input, isDevMode, Type } from '@angular/core';
+import {Component, inject, input, isDevMode, Type, ChangeDetectionStrategy, signal,} from '@angular/core';
 import { NgComponentOutlet } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { startWith } from 'rxjs/operators';
@@ -20,20 +20,21 @@ import { TreeNode } from '../utils/tree-utils';
 import { DYNAMIC_LAYOUTS_TOKEN } from '../tokens/dynamic-layout.token';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-dynamic-layout',
   template: `
-    @if (isLayoutVisible) {
-      <ng-container [ngComponentOutlet]="layout" />
+    @if (isLayoutVisible()) {
+      <ng-container [ngComponentOutlet]="layout()" />
     }
   `,
   providers: [SubscriptionService],
   imports: [NgComponentOutlet],
 })
 export class DynamicLayoutComponent {
-  layout?: Type<any>;
-  layoutKey?: eLayoutType;
+  readonly layout = signal<Type<any> | undefined>(undefined);
+  readonly layoutKey = signal<eLayoutType | undefined>(undefined);
   readonly layouts = inject(DYNAMIC_LAYOUTS_TOKEN);
-  isLayoutVisible = true;
+  readonly isLayoutVisible = signal(true);
   readonly defaultLayout = input<eLayoutType>(undefined);
 
   protected readonly router = inject(Router);
@@ -69,14 +70,14 @@ export class DynamicLayoutComponent {
 
     if (!expectedLayout) expectedLayout = eLayoutType.empty;
 
-    if (this.layoutKey === expectedLayout) return;
+    if (this.layoutKey() === expectedLayout) return;
 
     const key = this.layouts.get(expectedLayout);
     if (key) {
-      this.layout = this.getComponent(key)?.component;
-      this.layoutKey = expectedLayout;
+      this.layout.set(this.getComponent(key)?.component);
+      this.layoutKey.set(expectedLayout);
     }
-    if (!this.layout) {
+    if (!this.layout()) {
       this.showLayoutNotFoundError(expectedLayout);
     }
   }
@@ -110,8 +111,8 @@ export class DynamicLayoutComponent {
 
   private listenToLanguageChange() {
     this.subscription.addOne(this.localizationService.languageChange$, () => {
-      this.isLayoutVisible = false;
-      setTimeout(() => (this.isLayoutVisible = true), 0);
+      this.isLayoutVisible.set(false);
+      setTimeout(() => this.isLayoutVisible.set(true), 0);
     });
   }
 
