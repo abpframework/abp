@@ -8,8 +8,6 @@ If I am working on the public side of a modular application, I do not want the a
 
 That is where **AI Scopes** become one of the most important control features in **ABP Studio AI Coding Agent**.
 
-![ABP AI Coding Agent panel](scopes-openning.png)
-
 ## Why Scopes Matter?
 
 Most AI coding agents are very good at reading a folder and making changes. That is useful, but an ABP solution is rarely just a folder.
