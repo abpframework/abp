@@ -7,21 +7,20 @@ import {
   RoutesService,
   TreeNode,
 } from '@abp/ng.core';
-import {
-  Component,
+import {Component,
   ElementRef,
   inject,
   Renderer2,
   TrackByFunction,
   input,
-  viewChildren
-} from '@angular/core';
+  viewChildren, ChangeDetectionStrategy,} from '@angular/core';
 import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterLink } from '@angular/router';
 import { EllipsisDirective } from '@abp/ng.theme.shared';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-routes',
   templateUrl: 'routes.component.html',
   imports: [

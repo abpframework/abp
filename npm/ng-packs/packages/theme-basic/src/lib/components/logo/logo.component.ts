@@ -1,9 +1,10 @@
 import { EnvironmentService } from '@abp/ng.core';
 import { RouterLink } from '@angular/router';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { LOGO_APP_NAME_TOKEN, LOGO_URL_TOKEN } from '@abp/ng.theme.shared';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-logo',
   template: `
     <a class="navbar-brand" routerLink="/">
@@ -24,14 +25,10 @@ export class LogoComponent {
   private readonly providedAppName = inject(LOGO_APP_NAME_TOKEN, { optional: true });
 
   get logoUrl(): string {
-    return (
-      this.providedLogoUrl ?? this.environment.getEnvironment().application?.logoUrl
-    );
+    return this.providedLogoUrl ?? this.environment.getEnvironment().application?.logoUrl;
   }
 
   get appName(): string {
-    return (
-      this.providedAppName ?? this.environment.getEnvironment().application?.name
-    );
+    return this.providedAppName ?? this.environment.getEnvironment().application?.name;
   }
 }

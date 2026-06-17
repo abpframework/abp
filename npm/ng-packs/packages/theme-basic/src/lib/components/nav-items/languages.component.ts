@@ -1,11 +1,12 @@
 import { ConfigStateService, LanguageInfo, SessionStateService } from '@abp/ng.core';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { DOCUMENT, AsyncPipe } from '@angular/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-languages',
   template: `
     @if (((dropdownLanguages$ | async)?.length || 0) > 0) {
@@ -32,8 +33,8 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
               href="javascript:void(0)"
               class="dropdown-item"
               (click)="onChangeLang(lang.cultureName || '')"
-              >{{ lang?.displayName }}</a
-            >
+              >{{ lang?.displayName }}
+            </a>
           }
         </div>
       </div>

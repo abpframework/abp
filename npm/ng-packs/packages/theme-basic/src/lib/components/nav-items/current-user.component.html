@@ -1,10 +1,5 @@
-@if ((currentUser$ | async)?.isAuthenticated) {
-  <div
-    ngbDropdown
-    class="dropdown"
-    #currentUserDropdown="ngbDropdown"
-    display="static"
-  >
+@if (currentUser()?.isAuthenticated) {
+  <div ngbDropdown class="dropdown" #currentUserDropdown="ngbDropdown" display="static">
     <a
       ngbDropdownToggle
       class="nav-link"
@@ -15,27 +10,27 @@
       aria-haspopup="true"
       aria-expanded="false"
     >
-      @if ((selectedTenant$ | async)?.name; as tenantName) {
+      @if (selectedTenant()?.name; as tenantName) {
         <small
           ><i>{{ tenantName }}</i
           >\</small
         >
       }
-      <strong>{{ (currentUser$ | async)?.userName }}</strong>
+      <strong>{{ currentUser()?.userName }}</strong>
     </a>
     <div
       class="dropdown-menu dropdown-menu-end border-0 shadow-sm"
       aria-labelledby="dropdownMenuLink"
       [class.d-block]="smallScreen && currentUserDropdown.isOpen()"
     >
-      @for (item of userMenu.items$ | async; track $index) {
+      @for (item of userMenuItems(); track $index) {
         <ng-container *abpVisible="!item.visible || item.visible(item)">
           <li class="nav-item d-flex align-items-center" *abpPermission="item.requiredPolicy">
             @if (item.component) {
               <ng-container
                 [ngComponentOutlet]="item.component"
                 [ngComponentOutletInjector]="item | toInjector"
-              ></ng-container>
+              />
             } @else {
               @if (item.html) {
                 <div [innerHTML]="item.html" (click)="item.action ? item.action() : null"></div>
@@ -56,7 +51,7 @@
     </div>
   </div>
 } @else {
-    <a role="button" class="nav-link pointer" (click)="navigateToLogin()">
-      {{ 'AbpAccount::Login' | abpLocalization }}
-    </a>
+  <a role="button" class="nav-link pointer" (click)="navigateToLogin()">
+    {{ 'AbpAccount::Login' | abpLocalization }}
+  </a>
 }

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { AfterViewInit, Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { eLayoutType, ReplaceableTemplateDirective, SubscriptionService } from '@abp/ng.core';
 import { LayoutService } from '../../services/layout.service';
 import { NgTemplateOutlet } from '@angular/common';
@@ -9,6 +9,7 @@ import { AuthWrapperComponent } from './auth-wrapper/auth-wrapper.component';
 import { PageAlertContainerComponent } from '../page-alert-container/page-alert-container.component';
 import { RouterOutlet } from '@angular/router';
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-layout-account',
   templateUrl: './account-layout.component.html',
   providers: [LayoutService, SubscriptionService],

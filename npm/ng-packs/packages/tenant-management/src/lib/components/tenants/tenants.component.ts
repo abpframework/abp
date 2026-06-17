@@ -1,4 +1,23 @@
 import {
+  ChangeDetectionStrategy,
+  Component,
+  DOCUMENT,
+  inject,
+  Injector,
+  makeStateKey,
+  signal,
+} from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+} from '@angular/forms';
+import { finalize } from 'rxjs/operators';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
+
+import {
   ListService,
   LocalizationPipe,
   PagedResultDto,
@@ -24,20 +43,11 @@ import {
   FormPropData,
   generateFormFromProps,
 } from '@abp/ng.components/extensible';
-import { Component, DOCUMENT, inject, Injector, makeStateKey } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  UntypedFormBuilder,
-  UntypedFormGroup,
-} from '@angular/forms';
-import { finalize } from 'rxjs/operators';
-import { eTenantManagementComponents } from '../../enums/components';
 import { PageComponent } from '@abp/ng.components/page';
-import { NgxValidateCoreModule } from '@ngx-validate/core';
+import { eTenantManagementComponents } from '../../enums/components';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-tenants',
   templateUrl: './tenants.component.html',
   providers: [
@@ -71,21 +81,22 @@ export class TenantsComponent {
   private readonly injector = inject(Injector);
   private document = inject(DOCUMENT);
 
-  readonly data = toSignal(this.list.hookToQuery(query => this.service.getList(query)), {
-    initialValue: { items: [], totalCount: 0 } as PagedResultDto<TenantDto>,
-  });
+  readonly data = toSignal(
+    this.list.hookToQuery(query => this.service.getList(query)),
+    {
+      initialValue: { items: [], totalCount: 0 } as PagedResultDto<TenantDto>,
+    },
+  );
 
   selected!: TenantDto;
 
   tenantForm!: UntypedFormGroup;
 
-  isModalVisible!: boolean;
-
-  visibleFeatures = false;
+  readonly isModalVisible = signal(false);
+  readonly visibleFeatures = signal(false);
+  readonly modalBusy = signal(false);
 
   providerKey!: string;
-
-  modalBusy = false;
 
   featureManagementKey = eFeatureManagementComponents.FeatureManagement;
   TENANTS_KEY = makeStateKey<PagedResultDto<TenantDto>>('tenants');
@@ -95,7 +106,7 @@ export class TenantsComponent {
   }
 
   onVisibleFeaturesChange = (value: boolean) => {
-    this.visibleFeatures = value;
+    this.visibleFeatures.set(value);
   };
 
   private createTenantForm() {
@@ -106,20 +117,20 @@ export class TenantsComponent {
   addTenant() {
     this.selected = {} as TenantDto;
     this.createTenantForm();
-    this.isModalVisible = true;
+    this.isModalVisible.set(true);
   }
 
   editTenant(id: string) {
     this.service.get(id).subscribe(res => {
       this.selected = res;
       this.createTenantForm();
-      this.isModalVisible = true;
+      this.isModalVisible.set(true);
     });
   }
 
   save() {
-    if (!this.tenantForm.valid || this.modalBusy) return;
-    this.modalBusy = true;
+    if (!this.tenantForm.valid || this.modalBusy()) return;
+    this.modalBusy.set(true);
 
     const { id } = this.selected;
 
@@ -127,9 +138,9 @@ export class TenantsComponent {
       ? this.service.update(id, { ...this.selected, ...this.tenantForm.value })
       : this.service.create(this.tenantForm.value)
     )
-      .pipe(finalize(() => (this.modalBusy = false)))
+      .pipe(finalize(() => this.modalBusy.set(false)))
       .subscribe(() => {
-        this.isModalVisible = false;
+        this.isModalVisible.set(false);
         this.toasterService.success('AbpUi::SavedSuccessfully');
         this.list.get();
       });
@@ -168,7 +179,7 @@ export class TenantsComponent {
   openFeaturesModal(providerKey: string) {
     this.providerKey = providerKey;
     setTimeout(() => {
-      this.visibleFeatures = true;
+      this.visibleFeatures.set(true);
     }, 0);
   }
 
