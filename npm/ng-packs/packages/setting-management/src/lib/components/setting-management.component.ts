@@ -1,12 +1,13 @@
+import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
+import { Tab as NgTab, TabContent, TabList, TabPanel, Tabs } from '@angular/aria/tabs';
+import { NgComponentOutlet } from '@angular/common';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { ABP, ForDirective, LocalizationPipe, PermissionDirective } from '@abp/ng.core';
 import { SettingTabsService } from '@abp/ng.setting-management/config';
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { NgComponentOutlet } from '@angular/common';
 import { PageComponent } from '@abp/ng.components/page';
-import { Tab, TabContent, TabList, TabPanel, Tabs } from '@angular/aria/tabs';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-setting-management',
   templateUrl: './setting-management.component.html',
   imports: [
@@ -17,7 +18,7 @@ import { Tab, TabContent, TabList, TabPanel, Tabs } from '@angular/aria/tabs';
     ForDirective,
     Tabs,
     TabList,
-    Tab,
+    NgTab,
     TabPanel,
     TabContent,
   ],
@@ -29,25 +30,18 @@ import { Tab, TabContent, TabList, TabPanel, Tabs } from '@angular/aria/tabs';
     `,
   ],
 })
-export class SettingManagementComponent implements OnDestroy, OnInit {
+export class SettingManagementComponent {
   private settingTabsService = inject(SettingTabsService);
-  private subscription = new Subscription();
 
-  settings: ABP.Tab[] = [];
+  readonly settings = toSignal(this.settingTabsService.visible$, { initialValue: [] });
+  readonly selected = signal<ABP.Tab | undefined>(undefined);
 
-  selected!: ABP.Tab;
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
-
-  ngOnInit() {
-    this.subscription.add(
-      this.settingTabsService.visible$.subscribe(settings => {
-        this.settings = settings;
-
-        if (!this.selected) this.selected = this.settings[0];
-      }),
-    );
+  constructor() {
+    effect(() => {
+      const settings = this.settings();
+      if (!this.selected() && settings.length) {
+        this.selected.set(settings[0] as ABP.Tab);
+      }
+    });
   }
 }

@@ -2,7 +2,7 @@
   <div id="SettingManagementWrapper">
     <div class="card">
       <div class="card-body">
-        @if (settings.length) {
+        @if (settings().length) {
           <div class="row" ngTabs>
             <div class="col-12 col-md-3 mb-2 mb-md-0">
               <div
@@ -10,14 +10,14 @@
                 id="nav-tab"
                 ngTabList
                 orientation="vertical"
-                [selectedTab]="selected?.name"
+                [selectedTab]="selected()?.name"
               >
-                <ng-container *abpFor="let setting of settings">
+                <ng-container *abpFor="let setting of settings()">
                   <button
                     ngTab
                     #tab="ngTab"
                     [value]="setting.name"
-                    (click)="selected = setting"
+                    (click)="selected.set(setting)"
                     class="nav-link text-start"
                     [class.active]="tab.selected()"
                     *abpPermission="setting.requiredPolicy"
@@ -28,7 +28,7 @@
               </div>
             </div>
             <div class="col-12 col-md-9">
-              <ng-container *abpFor="let setting of settings">
+              <ng-container *abpFor="let setting of settings()">
                 <div
                   ngTabPanel
                   [value]="setting.name"

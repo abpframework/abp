@@ -98,7 +98,11 @@
   </form>
 }
 
-<abp-modal [(visible)]="isEmailTestModalOpen" [options]="modalSize">
+<abp-modal
+  [visible]="isEmailTestModalOpen()"
+  (visibleChange)="isEmailTestModalOpen.set($event)"
+  [options]="modalSize"
+>
   <ng-template #abpHeader>
     <h3>{{ 'AbpSettingManagement::SendTestEmail' | abpLocalization }}</h3>
   </ng-template>
