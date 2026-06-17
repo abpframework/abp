@@ -1,4 +1,4 @@
-import { Component, inject, DOCUMENT, input, output, signal, effect } from '@angular/core';
+import {Component, inject, DOCUMENT, input, output, signal, effect, ChangeDetectionStrategy,} from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ConfigStateService, LocalizationPipe, TrackByService } from '@abp/ng.core';
@@ -50,6 +50,7 @@ type SelectionStringValueType = FeatureDto['valueType'] & {
 };
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-feature-management',
   templateUrl: './feature-management.component.html',
   exportAs: 'abpFeatureManagement',
@@ -88,19 +89,19 @@ export class FeatureManagementComponent {
   // Internal state
   protected readonly _visible = signal(false);
 
-  selectedGroupDisplayName: string;
+  protected readonly selectedGroupDisplayName = signal<string | undefined>(undefined);
 
-  groups: Pick<FeatureGroupDto, 'name' | 'displayName'>[] = [];
+  protected readonly groups = signal<Pick<FeatureGroupDto, 'name' | 'displayName'>[]>([]);
 
-  features: {
+  protected readonly features = signal<{
     [group: string]: FeatureWithStyle[];
-  };
+  }>({});
 
   valueTypes = ValueTypes;
 
   defaultProviderName = DEFAULT_PROVIDER_NAME;
 
-  modalBusy = false;
+  protected readonly modalBusy = signal(false);
 
   // Getter/setter for backward compatibility
   get visible(): boolean {
@@ -144,25 +145,28 @@ export class FeatureManagementComponent {
   getFeatures() {
     this.service.get(this.providerName()!, this.providerKey()).subscribe(res => {
       if (!res.groups?.length) return;
-      this.groups = res.groups.map(({ name, displayName }) => ({ name, displayName }));
-      this.selectedGroupDisplayName = this.groups[0].displayName;
-      this.features = res.groups.reduce(
-        (acc, val) => ({
-          ...acc,
-          [val.name]: mapFeatures(val.features, this.document.body?.dir as LocaleDirection),
-        }),
-        {},
+      const groups = res.groups.map(({ name, displayName }) => ({ name, displayName }));
+      this.groups.set(groups);
+      this.selectedGroupDisplayName.set(groups[0].displayName);
+      this.features.set(
+        res.groups.reduce(
+          (acc, val) => ({
+            ...acc,
+            [val.name]: mapFeatures(val.features, this.document.body?.dir as LocaleDirection),
+          }),
+          {},
+        ),
       );
     });
   }
 
   save() {
-    if (this.modalBusy) return;
+    if (this.modalBusy()) return;
 
     const changedFeatures = [] as UpdateFeatureDto[];
 
-    Object.keys(this.features).forEach(key => {
-      this.features[key].forEach(feature => {
+    Object.keys(this.features()).forEach(key => {
+      this.features()[key].forEach(feature => {
         if (feature.value !== feature.initialValue)
           changedFeatures.push({ name: feature.name, value: `${feature.value}` });
       });
@@ -173,10 +177,10 @@ export class FeatureManagementComponent {
       return;
     }
 
-    this.modalBusy = true;
+    this.modalBusy.set(true);
     this.service
       .update(this.providerName()!, this.providerKey(), { features: changedFeatures })
-      .pipe(finalize(() => (this.modalBusy = false)))
+      .pipe(finalize(() => this.modalBusy.set(false)))
       .subscribe(() => {
         this.visible = false;
 
@@ -223,7 +227,7 @@ export class FeatureManagementComponent {
   }
 
   isParentDisabled(parentName: string, groupName: string, provider: string): boolean {
-    const children = this.features[groupName]?.filter(f => f.parentName === parentName);
+    const children = this.features()[groupName]?.filter(f => f.parentName === parentName);
     const providerNameValue = this.providerName();
 
     if (children?.length) {
@@ -288,7 +292,8 @@ export class FeatureManagementComponent {
   }
 
   private getCurrentGroup() {
-    return this.features[this.selectedGroupDisplayName] ?? [];
+    const selectedGroup = this.selectedGroupDisplayName();
+    return selectedGroup ? this.features()[selectedGroup] ?? [] : [];
   }
 
   private setFeatureValue(feature: FeatureDto, val: boolean) {
