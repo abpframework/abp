@@ -11,7 +11,17 @@ import {
   PermissionsService,
   ResourcePermissionGrantInfoDto,
 } from '@abp/ng.permission-management/proxy';
-import { Component, inject, input, model, OnInit, effect, untracked, signal } from '@angular/core';
+import {
+  Component,
+  effect,
+  inject,
+  input,
+  model,
+  signal,
+  untracked,
+  ChangeDetectionStrategy,
+} from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { finalize, switchMap, of } from 'rxjs';
 import { ResourcePermissionStateService } from '../../services/resource-permission-state.service';
 import { ResourcePermissionListComponent } from './resource-permission-list/resource-permission-list.component';
@@ -22,6 +32,7 @@ import { eResourcePermissionViewModes } from '../../enums/view-modes';
 const DEFAULT_MAX_RESULT_COUNT = 10;
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-resource-permission-management',
   templateUrl: './resource-permission-management.component.html',
   exportAs: 'abpResourcePermissionManagement',
@@ -35,14 +46,14 @@ const DEFAULT_MAX_RESULT_COUNT = 10;
     ResourcePermissionFormComponent,
   ],
 })
-export class ResourcePermissionManagementComponent implements OnInit {
+export class ResourcePermissionManagementComponent {
   readonly eResourcePermissionViewModes = eResourcePermissionViewModes;
 
   protected readonly service = inject(PermissionsService);
   protected readonly toasterService = inject(ToasterService);
   protected readonly confirmationService = inject(ConfirmationService);
   protected readonly state = inject(ResourcePermissionStateService);
-  private readonly list = inject(ListService);
+  protected readonly list = inject(ListService);
 
   readonly resourceName = input.required<string>();
   readonly resourceKey = input.required<string>();
@@ -52,7 +63,31 @@ export class ResourcePermissionManagementComponent implements OnInit {
 
   private readonly previousVisible = signal(false);
 
+  private readonly listData = toSignal(
+    this.list.hookToQuery(query => {
+      const allData = this.state.allResourcePermissions();
+      const skipCount = query.skipCount || 0;
+      const maxResultCount = query.maxResultCount || DEFAULT_MAX_RESULT_COUNT;
+
+      const paginatedData = allData.slice(skipCount, skipCount + maxResultCount);
+
+      return of({
+        items: paginatedData,
+        totalCount: allData.length,
+      });
+    }),
+    { initialValue: { items: [] as ResourcePermissionGrantInfoDto[], totalCount: 0 } },
+  );
+
   constructor() {
+    effect(() => {
+      const result = this.listData();
+      untracked(() => {
+        this.state.resourcePermissions.set(result.items);
+        this.state.totalCount.set(result.totalCount);
+      });
+    });
+
     effect(() => {
       const resourceName = this.resourceName();
       const resourceKey = this.resourceKey();
@@ -75,28 +110,6 @@ export class ResourcePermissionManagementComponent implements OnInit {
       }
       untracked(() => this.previousVisible.set(isVisible));
     });
-  }
-
-  ngOnInit() {
-    this.list.maxResultCount = DEFAULT_MAX_RESULT_COUNT;
-
-    this.list
-      .hookToQuery(query => {
-        const allData = this.state.allResourcePermissions();
-        const skipCount = query.skipCount || 0;
-        const maxResultCount = query.maxResultCount || DEFAULT_MAX_RESULT_COUNT;
-
-        const paginatedData = allData.slice(skipCount, skipCount + maxResultCount);
-
-        return of({
-          items: paginatedData,
-          totalCount: allData.length,
-        });
-      })
-      .subscribe(result => {
-        this.state.resourcePermissions.set(result.items);
-        this.state.totalCount.set(result.totalCount);
-      });
   }
 
   openModal() {

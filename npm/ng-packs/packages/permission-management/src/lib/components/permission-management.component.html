@@ -2,7 +2,7 @@
   [(visible)]="modalVisible"
   (visibleChange)="onModalVisibleChange($event)"
   (disappear)="onModalDisappear()"
-  [busy]="modalBusy"
+  [busy]="modalBusy()"
   [suppressUnsavedChangesWarning]="true"
   [options]="{ size: 'lg', scrollable: false }"
 >
@@ -36,9 +36,10 @@
               id="select-all-in-all-tabs"
               name="select-all-in-all-tabs"
               class="form-check-input"
-              [checked]="selectAllTab"
+              [checked]="selectAllTabState().checked"
+              [indeterminate]="selectAllTabState().indeterminate"
               (change)="onSelectAllChange($event)"
-              [disabled]="disabledSelectAllInAllTabs"
+              [disabled]="disabledSelectAllInAllTabs()"
             />
             <label class="form-check-label" for="select-all-in-all-tabs">{{
               'AbpPermissionManagement::SelectAllInAllTabs' | abpLocalization
@@ -91,7 +92,7 @@
               <div ngTabPanel [value]="group.name">
                 <ng-template ngTabContent>
                   <div class="ps-1">
-                    @if (selectedGroupPermissions.length) {
+                    @if (selectedGroup?.name === group.name && selectedGroupPermissions().length) {
                       <div class="form-check mb-2">
                         <input
                           #selectAllInThisTabsRef
@@ -99,8 +100,9 @@
                           id="select-all-in-this-tabs"
                           name="select-all-in-this-tabs"
                           class="form-check-input"
-                          [checked]="selectThisTab"
-                          [disabled]="disableSelectAllTab"
+                          [checked]="selectThisTabState().checked"
+                          [indeterminate]="selectThisTabState().indeterminate"
+                          [disabled]="disableSelectAllTab()"
                           (change)="onSelectThisTabChange($event)"
                         />
                         <label class="form-check-label" for="select-all-in-this-tabs">{{
@@ -108,7 +110,7 @@
                         }}</label>
                       </div>
                       <hr class="my-2" />
-                      @for (permission of selectedGroupPermissions; track $index; let i = $index) {
+                      @for (permission of selectedGroupPermissions(); track $index; let i = $index) {
                         <div [ngStyle]="permission.style" class="form-check mb-2">
                           <input
                             #permissionCheckbox
