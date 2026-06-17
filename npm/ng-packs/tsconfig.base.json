@@ -57,5 +57,9 @@
       "@abp/ng.cms-kit/public/config": ["./packages/cms-kit/public/config/src/public-api.ts"]
     }
   },
+  "angularCompilerOptions": {
+    "strictTemplates": true,
+    "strictInputAccessModifiers": true
+  },
   "exclude": ["node_modules", "tmp"]
 }
