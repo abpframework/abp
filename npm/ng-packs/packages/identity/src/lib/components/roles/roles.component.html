@@ -9,7 +9,11 @@
     </div>
   </div>
 
-  <abp-modal [(visible)]="isModalVisible" [busy]="modalBusy">
+  <abp-modal
+    [visible]="isModalVisible()"
+    (visibleChange)="isModalVisible.set($event)"
+    [busy]="modalBusy()"
+  >
     <ng-template #abpHeader>
       <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewRole') | abpLocalization }}</h3>
     </ng-template>
@@ -37,7 +41,7 @@
         inputs: {
           providerName: { value: 'R' },
           providerKey: { value: providerKey },
-          visible: { value: visiblePermissions, twoWay: true },
+          visible: { value: visiblePermissions(), twoWay: true },
           hideBadges: { value: true },
         },
         outputs: { visibleChange: onVisiblePermissionChange },

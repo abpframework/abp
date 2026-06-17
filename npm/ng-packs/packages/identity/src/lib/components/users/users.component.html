@@ -20,7 +20,11 @@
     </div>
   </div>
 
-  <abp-modal [(visible)]="isModalVisible" [busy]="modalBusy">
+  <abp-modal
+    [visible]="isModalVisible()"
+    (visibleChange)="isModalVisible.set($event)"
+    [busy]="modalBusy()"
+  >
     <ng-template #abpHeader>
       <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewUser') | abpLocalization }}</h3>
     </ng-template>
@@ -44,14 +48,14 @@
                       *abpReplaceableTemplate="{
                         inputs: {
                           checkboxId: { value: 'roles-' + i },
-                          label: { value: roles[i].name },
-                          formControl: { value: roleGroup.get(roles[i].name!), twoWay: true },
+                          label: { value: roles()[i].name },
+                          formControl: { value: roleGroup.get(roles()[i].name!), twoWay: true },
                         },
                         componentKey: inputKey,
                       }"
                       [checkboxId]="'roles-' + i"
-                      [formControlName]="roles[i].name!"
-                      [label]="roles[i].name"
+                      [formControlName]="roles()[i].name!"
+                      [label]="roles()[i].name"
                     />
                   </div>
                 }
@@ -83,7 +87,7 @@
         inputs: {
           providerName: { value: 'U' },
           providerKey: { value: providerKey },
-          visible: { value: visiblePermissions, twoWay: true },
+          visible: { value: visiblePermissions(), twoWay: true },
         },
         outputs: { visibleChange: onVisiblePermissionChange },
         componentKey: permissionManagementKey,

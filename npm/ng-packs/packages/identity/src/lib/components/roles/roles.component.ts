@@ -1,4 +1,4 @@
-import { Component, inject, Injector } from '@angular/core';
+import { Component, inject, Injector, signal, ChangeDetectionStrategy } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
@@ -35,6 +35,7 @@ import { PageComponent } from '@abp/ng.components/page';
 import { eIdentityComponents } from '../../enums/components';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-roles',
   templateUrl: './roles.component.html',
   providers: [
@@ -70,16 +71,20 @@ export class RolesComponent {
     this.list.hookToQuery(query => this.service.getList(query)),
     { initialValue: { items: [], totalCount: 0 } as PagedResultDto<IdentityRoleDto> },
   );
+
   form!: UntypedFormGroup;
   selected?: IdentityRoleDto;
-  isModalVisible!: boolean;
-  visiblePermissions = false;
+
+  readonly isModalVisible = signal(false);
+  readonly visiblePermissions = signal(false);
+
   providerKey?: string;
-  modalBusy = false;
+  readonly modalBusy = signal(false);
+
   permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
   onVisiblePermissionChange = (event: boolean) => {
-    this.visiblePermissions = event;
+    this.visiblePermissions.set(event);
   };
 
   buildForm() {
@@ -89,7 +94,7 @@ export class RolesComponent {
 
   openModal() {
     this.buildForm();
-    this.isModalVisible = true;
+    this.isModalVisible.set(true);
   }
 
   add() {
@@ -106,16 +111,16 @@ export class RolesComponent {
 
   save() {
     if (!this.form.valid) return;
-    this.modalBusy = true;
+    this.modalBusy.set(true);
 
     const { id } = this.selected || {};
     (id
       ? this.service.update(id, { ...this.selected, ...this.form.value })
       : this.service.create(this.form.value)
     )
-      .pipe(finalize(() => (this.modalBusy = false)))
+      .pipe(finalize(() => this.modalBusy.set(false)))
       .subscribe(() => {
-        this.isModalVisible = false;
+        this.isModalVisible.set(false);
         this.toasterService.success('AbpUi::SavedSuccessfully');
         this.list.get();
       });
@@ -139,7 +144,7 @@ export class RolesComponent {
   openPermissionsModal(providerKey: string) {
     this.providerKey = providerKey;
     setTimeout(() => {
-      this.visiblePermissions = true;
+      this.visiblePermissions.set(true);
     }, 0);
   }
 

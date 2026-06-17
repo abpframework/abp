@@ -36,9 +36,11 @@ import {
   Component,
   inject,
   Injector,
+  signal,
   TemplateRef,
   TrackByFunction,
   viewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -56,6 +58,7 @@ import { NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-users',
   templateUrl: './users.component.html',
   providers: [
@@ -109,15 +112,15 @@ export class UsersComponent {
 
   selectedUserRoles?: IdentityRoleDto[];
 
-  roles?: IdentityRoleDto[];
+  readonly roles = signal<IdentityRoleDto[]>([]);
 
-  visiblePermissions = false;
+  readonly visiblePermissions = signal(false);
 
   providerKey?: string;
 
-  isModalVisible?: boolean;
+  readonly isModalVisible = signal(false);
 
-  modalBusy = false;
+  readonly modalBusy = signal(false);
 
   permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
@@ -128,7 +131,7 @@ export class UsersComponent {
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 
   onVisiblePermissionChange = (event: boolean) => {
-    this.visiblePermissions = event;
+    this.visiblePermissions.set(event);
   };
 
   get roleGroups(): UntypedFormGroup[] {
@@ -140,12 +143,12 @@ export class UsersComponent {
     this.form = generateFormFromProps(data);
 
     this.service.getAssignableRoles().subscribe(({ items }) => {
-      this.roles = items;
-      if (this.roles) {
+      this.roles.set(items);
+      if (items?.length) {
         this.form.addControl(
           'roleNames',
           this.fb.array(
-            this.roles.map(role =>
+            items.map(role =>
               this.fb.group({
                 [role.name as string]: [
                   this.selected?.id
@@ -163,7 +166,7 @@ export class UsersComponent {
   openModal() {
     this.selectedTab = 'user-info';
     this.buildForm();
-    this.isModalVisible = true;
+    this.isModalVisible.set(true);
   }
 
   add() {
@@ -186,8 +189,8 @@ export class UsersComponent {
   }
 
   save() {
-    if (!this.form.valid || this.modalBusy) return;
-    this.modalBusy = true;
+    if (!this.form.valid || this.modalBusy()) return;
+    this.modalBusy.set(true);
 
     const { roleNames = [] } = this.form.value;
     const mappedRoleNames =
@@ -205,9 +208,9 @@ export class UsersComponent {
         })
       : this.service.create({ ...this.form.value, roleNames: mappedRoleNames })
     )
-      .pipe(finalize(() => (this.modalBusy = false)))
+      .pipe(finalize(() => this.modalBusy.set(false)))
       .subscribe(() => {
-        this.isModalVisible = false;
+        this.isModalVisible.set(false);
         this.toasterService.success('AbpUi::SavedSuccessfully');
         this.list.get();
       });
@@ -238,7 +241,7 @@ export class UsersComponent {
     this.providerKey = providerKey;
     this.entityDisplayName = entityDisplayName;
     setTimeout(() => {
-      this.visiblePermissions = true;
+      this.visiblePermissions.set(true);
     }, 0);
   }
 }
