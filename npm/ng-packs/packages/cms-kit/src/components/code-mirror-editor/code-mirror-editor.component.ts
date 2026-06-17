@@ -1,10 +1,18 @@
-import { Component, ElementRef, AfterViewInit, ViewChild, forwardRef } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  AfterViewInit,
+  ViewChild,
+  forwardRef,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { EditorState } from '@codemirror/state';
 import { EditorView, lineNumbers } from '@codemirror/view';
 import { basicSetup } from 'codemirror';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-codemirror-editor',
   template: `<div #cmHost class="codemirror-container"></div>`,
   providers: [

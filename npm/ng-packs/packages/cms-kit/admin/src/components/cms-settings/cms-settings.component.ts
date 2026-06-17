@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
   NgbNav,
@@ -33,12 +33,12 @@ import { CMS_KIT_COMMENTS_REQUIRE_APPROVEMENT } from '../comments';
     ReactiveFormsModule,
   ],
 })
-export class CmsSettingsComponent {
+export class CmsSettingsComponent implements OnInit {
   readonly commentAdminService = inject(CommentAdminService);
   readonly configState = inject(ConfigStateService);
   readonly toaster = inject(ToasterService);
 
-  loading = false;
+  readonly loading = signal(false);
 
   commentApprovalControl = new FormControl(false);
 
@@ -49,12 +49,12 @@ export class CmsSettingsComponent {
   }
 
   submit() {
-    this.loading = true;
+    this.loading.set(true);
     this.commentAdminService
       .updateSettings({ commentRequireApprovement: this.commentApprovalControl.value })
       .pipe(
         finalize(() => {
-          this.loading = false;
+          this.loading.set(false);
           this.configState.refreshAppState().subscribe();
         }),
       )

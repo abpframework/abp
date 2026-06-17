@@ -1,4 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,6 +19,7 @@ import { eCmsKitAdminComponents } from '../../../enums';
 import { CommentEntityService } from '../../../services';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-comment-details',
   templateUrl: './comment-details.component.html',
   providers: [
@@ -46,8 +48,8 @@ import { CommentEntityService } from '../../../services';
   ],
 })
 export class CommentDetailsComponent implements OnInit {
-  comment: CommentWithAuthorDto | null = null;
-  data: PagedResultDto<CommentWithAuthorDto> = { items: [], totalCount: 0 };
+  readonly comment = signal<CommentWithAuthorDto | null>(null);
+  readonly commentId = signal<string | null>(null);
 
   readonly list = inject(ListService<CommentGetListInput>);
   readonly commentEntityService = inject(CommentEntityService);
@@ -57,19 +59,33 @@ export class CommentDetailsComponent implements OnInit {
   private router = inject(Router);
   private fb = inject(FormBuilder);
 
+  readonly data = toSignal(
+    this.list.hookToQuery(query => {
+      const filters = (this.list.filter as Partial<CommentGetListInput>) || {};
+      const input: CommentGetListInput = {
+        repliedCommentId: this.commentId() ?? undefined,
+        ...query,
+        ...filters,
+      };
+      return this.commentService.getList(input);
+    }),
+    {
+      initialValue: { items: [], totalCount: 0 } as PagedResultDto<CommentWithAuthorDto>,
+    },
+  );
+
   filterForm!: FormGroup;
   commentApproveStateOptions = commentApproveStateOptions;
-  commentId!: string;
   requireApprovement: boolean;
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       const id = params['id'];
       if (id) {
-        this.commentId = id;
+        this.commentId.set(id);
         this.loadComment(id);
         this.createFilterForm();
-        this.hookToQuery();
+        this.list.get();
       }
     });
     this.requireApprovement = this.commentEntityService.requireApprovement;
@@ -86,7 +102,7 @@ export class CommentDetailsComponent implements OnInit {
 
   private loadComment(id: string) {
     this.commentService.get(id).subscribe(comment => {
-      this.comment = comment;
+      this.comment.set(comment);
     });
   }
 
@@ -95,27 +111,13 @@ export class CommentDetailsComponent implements OnInit {
     const filters: Partial<CommentGetListInput> = {
       author: formValue.author || undefined,
       commentApproveState: formValue.commentApproveState,
-      repliedCommentId: this.commentId,
+      repliedCommentId: this.commentId() ?? undefined,
       creationStartDate: formValue.creationStartDate || undefined,
       creationEndDate: formValue.creationEndDate || undefined,
     };
 
     this.list.filter = filters as any;
     this.list.get();
-  }
-
-  private hookToQuery() {
-    this.list
-      .hookToQuery(query => {
-        const filters = (this.list.filter as Partial<CommentGetListInput>) || {};
-        const input: CommentGetListInput = {
-          repliedCommentId: this.commentId,
-          ...query,
-          ...filters,
-        };
-        return this.commentService.getList(input);
-      })
-      .subscribe(res => (this.data = res));
   }
 
   navigateToReply(id: string) {

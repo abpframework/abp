@@ -1,4 +1,12 @@
-import { Component, OnInit, inject, Injector, input, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Injector,
+  input,
+  OnInit,
+  output,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
@@ -22,6 +30,7 @@ export interface TagModalVisibleChange {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-tag-modal',
   templateUrl: './tag-modal.component.html',
   imports: [

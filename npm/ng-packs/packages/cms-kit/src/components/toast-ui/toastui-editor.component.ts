@@ -2,14 +2,15 @@ import { isPlatformBrowser } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
-  Component,
   AfterViewInit,
-  ViewChild,
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
   ElementRef,
   forwardRef,
   inject,
   PLATFORM_ID,
-  DestroyRef,
+  ViewChild,
 } from '@angular/core';
 import Editor from '@toast-ui/editor';
 
@@ -17,6 +18,7 @@ import { AbpLocalStorageService } from '@abp/ng.core';
 import { THEME_CHANGE_TOKEN } from '@abp/ng.theme.shared';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-toastui-editor',
   template: `<div #editorContainer></div>`,
   providers: [

@@ -1,4 +1,4 @@
-<abp-page [title]="'CmsKit::BlogPosts' | abpLocalization" [toolbar]="data.items">
+<abp-page [title]="'CmsKit::BlogPosts' | abpLocalization" [toolbar]="data().items">
   <div class="card mb-4">
     <div class="card-body">
       <div class="row">
@@ -35,6 +35,10 @@
   </div>
 
   <div class="card">
-    <abp-extensible-table [data]="data.items" [recordsTotal]="data.totalCount" [list]="list" />
+    <abp-extensible-table
+      [data]="data().items"
+      [recordsTotal]="data().totalCount"
+      [list]="list"
+    />
   </div>
 </abp-page>

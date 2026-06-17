@@ -1,4 +1,11 @@
-import { Component, OnInit, inject, DestroyRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
@@ -15,6 +22,7 @@ import {
 } from '@abp/ng.cms-kit/proxy';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-global-resources',
   imports: [
     CommonModule,
@@ -34,7 +42,7 @@ export class GlobalResourcesComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   form: FormGroup;
-  activeTab: string = 'script';
+  readonly activeTab = signal('script');
 
   ngOnInit() {
     this.buildForm();
@@ -66,7 +74,7 @@ export class GlobalResourcesComponent implements OnInit {
   }
 
   onTabChange(activeId: string) {
-    this.activeTab = activeId;
+    this.activeTab.set(activeId);
   }
 
   save() {

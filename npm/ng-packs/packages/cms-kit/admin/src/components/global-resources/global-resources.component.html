@@ -6,7 +6,7 @@
           ngbNav
           #nav="ngbNav"
           class="nav-tabs"
-          [(activeId)]="activeTab"
+          [activeId]="activeTab()"
           (activeIdChange)="onTabChange($event)"
         >
           <li ngbNavItem="script">

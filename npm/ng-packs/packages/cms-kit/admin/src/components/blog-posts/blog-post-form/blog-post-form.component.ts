@@ -1,6 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { Component, OnInit, inject, Injector, DestroyRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  Injector,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { ReactiveFormsModule, FormsModule, FormGroup, FormControl } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
@@ -29,6 +37,7 @@ import { eCmsKitAdminComponents } from '../../../enums';
 import { BlogPostFormService } from '../../../services';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-blog-post-form',
   templateUrl: './blog-post-form.component.html',
   providers: [
@@ -60,33 +69,33 @@ export class BlogPostFormComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   form: FormGroup;
-  blogPost: BlogPostDto | null = null;
+  readonly blogPost = signal<BlogPostDto | null>(null);
   blogPostId: string | null = null;
-  isEditMode = false;
+  readonly isEditMode = signal(false);
   coverImageFile: File | null = null;
-  coverImagePreview: string | null = null;
-  tags: string = '';
-  isTagsEnabled = true;
+  readonly coverImagePreview = signal<string | null>(null);
+  readonly tags = signal('');
+  readonly isTagsEnabled = signal(true);
 
   readonly BLOG_POST_ENTITY_TYPE = 'BlogPost';
 
   ngOnInit() {
     const id = this.route.snapshot.params['id'];
     if (id) {
-      this.isEditMode = true;
+      this.isEditMode.set(true);
       this.blogPostId = id;
       this.loadBlogPost(id);
     } else {
-      this.isEditMode = false;
+      this.isEditMode.set(false);
       this.buildForm();
     }
   }
 
   private loadBlogPost(id: string) {
     this.blogPostService.get(id).subscribe(blogPost => {
-      this.blogPost = blogPost;
+      this.blogPost.set(blogPost);
       if (blogPost.coverImageMediaId) {
-        this.coverImagePreview = `/api/cms-kit/media/${blogPost.coverImageMediaId}`;
+        this.coverImagePreview.set(`/api/cms-kit/media/${blogPost.coverImageMediaId}`);
       }
       this.buildForm();
       this.loadTags(id);
@@ -94,7 +103,6 @@ export class BlogPostFormComponent implements OnInit {
   }
 
   private loadTags(blogPostId: string) {
-    // TODO: use the public service to load the tags
     this.restService
       .request<void, TagDto[]>({
         method: 'GET',
@@ -102,28 +110,27 @@ export class BlogPostFormComponent implements OnInit {
       })
       .subscribe(tags => {
         if (tags && tags.length > 0) {
-          this.tags = tags.map(t => t.name || '').join(', ');
+          this.tags.set(tags.map(t => t.name || '').join(', '));
         }
       });
   }
 
   private buildForm() {
-    const data = new FormPropData(this.injector, this.blogPost || {});
+    const currentBlogPost = this.blogPost();
+    const data = new FormPropData(this.injector, currentBlogPost || {});
     const baseForm = generateFormFromProps(data);
     this.form = new FormGroup({
       ...baseForm.controls,
-      content: new FormControl(this.blogPost?.content || ''),
-      coverImageMediaId: new FormControl(this.blogPost?.coverImageMediaId || null),
+      content: new FormControl(currentBlogPost?.content || ''),
+      coverImageMediaId: new FormControl(currentBlogPost?.coverImageMediaId || null),
     });
     prepareSlugFromControl(this.form, 'title', 'slug', this.destroyRef);
 
-    // Check if tags feature is enabled for the blog
-    const blogId = this.form.get('blogId')?.value || this.blogPost?.blogId;
+    const blogId = this.form.get('blogId')?.value || currentBlogPost?.blogId;
     if (blogId) {
       this.checkTagsFeature(blogId);
     }
 
-    // Listen for blog selection changes
     this.form
       .get('blogId')
       ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
@@ -142,7 +149,7 @@ export class BlogPostFormComponent implements OnInit {
       })
       .subscribe(feature => {
         const { isEnabled } = feature || {};
-        this.isTagsEnabled = isEnabled;
+        this.isTagsEnabled.set(isEnabled);
       });
   }
 
@@ -152,7 +159,7 @@ export class BlogPostFormComponent implements OnInit {
       this.coverImageFile = input.files[0];
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.coverImagePreview = e.target.result;
+        this.coverImagePreview.set(e.target.result);
       };
       reader.readAsDataURL(this.coverImageFile);
     }
@@ -160,7 +167,7 @@ export class BlogPostFormComponent implements OnInit {
 
   removeCoverImage() {
     this.coverImageFile = null;
-    this.coverImagePreview = null;
+    this.coverImagePreview.set(null);
     this.form.patchValue({ coverImageMediaId: null });
   }
 
@@ -183,11 +190,12 @@ export class BlogPostFormComponent implements OnInit {
   }
 
   private setTags(blogPostId: string) {
-    if (!this.tags || !this.tags.trim()) {
+    const tagsValue = this.tags();
+    if (!tagsValue || !tagsValue.trim()) {
       return of(null);
     }
 
-    const tagArray = this.tags
+    const tagArray = tagsValue
       .split(',')
       .map(t => t.trim())
       .filter(t => t.length > 0);
@@ -204,7 +212,6 @@ export class BlogPostFormComponent implements OnInit {
   }
 
   private executeSaveOperation(operation: 'save' | 'draft' | 'publish' | 'sendToReview') {
-    // First upload cover image if selected
     this.uploadCoverImage()
       .pipe(
         tap(coverImageMediaId => {
@@ -213,11 +220,12 @@ export class BlogPostFormComponent implements OnInit {
           }
         }),
         switchMap(() => {
-          if (this.isEditMode) {
-            if (!this.blogPost || !this.blogPostId) {
+          if (this.isEditMode()) {
+            const currentBlogPost = this.blogPost();
+            if (!currentBlogPost || !this.blogPostId) {
               return of(null);
             }
-            return this.blogPostFormService.update(this.blogPostId, this.form, this.blogPost);
+            return this.blogPostFormService.update(this.blogPostId, this.form, currentBlogPost);
           }
 
           switch (operation) {
@@ -236,7 +244,6 @@ export class BlogPostFormComponent implements OnInit {
           if (!result || !result.id) {
             return of(null);
           }
-          // Set tags after blog post is created/updated
           return forkJoin([of(result), this.setTags(result.id)]);
         }),
       )
