@@ -115,7 +115,27 @@ export function createActionToBodyMapper() {
       acceptHeader,
     });
 
-    parameters.forEach(body.registerActionParameter);
+    const uploadMethodArgNames = new Set(
+      parameters
+        .filter(p => p.bindingSourceId === eBindingSourceId.FormFile)
+        .map(p => p.nameOnMethod),
+    );
+    if (uploadMethodArgNames.size > 0) {
+      body.body = camelizeHyphen([...uploadMethodArgNames][0]);
+      parameters
+        .filter(p => {
+          if (uploadMethodArgNames.has(p.nameOnMethod)) {
+            return false;
+          }
+          return (
+            p.bindingSourceId !== eBindingSourceId.Form &&
+            p.bindingSourceId !== eBindingSourceId.FormFile
+          );
+        })
+        .forEach(body.registerActionParameter);
+    } else {
+      parameters.forEach(body.registerActionParameter);
+    }
 
     return body;
   };
@@ -218,7 +238,16 @@ export function createActionToSignatureMapper() {
       ...(versionParameter ? [versionParameter] : []),
     ];
 
+    const uploadMethodArgNames = new Set(
+      (action.parameters ?? [])
+        .filter(p => p.bindingSourceId === eBindingSourceId.FormFile)
+        .map(p => p.nameOnMethod),
+    );
+
     signature.parameters = parameters.map(p => {
+      if (uploadMethodArgNames.has(p.name)) {
+        return new Property({ name: p.name, type: 'FormData' });
+      }
       const isFormData = isRemoteStreamContent(p.type);
       const isFormArray = isRemoteStreamContentArray(p.type);
       if (isFormData || isFormArray) {

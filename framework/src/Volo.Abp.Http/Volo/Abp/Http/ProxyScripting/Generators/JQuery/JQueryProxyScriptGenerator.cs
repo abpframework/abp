@@ -135,7 +135,8 @@ public class JQueryProxyScriptGenerator : IProxyScriptGenerator, ITransientDepen
 
         AddAjaxCallParameters(script, action);
 
-        var ajaxParamsIsFromForm = action.Parameters.Any(x => x.BindingSourceId == ParameterBindingSources.Form);
+        var hasFormFile = action.Parameters.Any(x => x.BindingSourceId == ParameterBindingSources.FormFile);
+        var ajaxParamsIsFromForm = !hasFormFile && action.Parameters.Any(x => x.BindingSourceId == ParameterBindingSources.Form);
         var dataType = GetJQueryDataTypeAndAcceptOverride(action);
         script.AppendLine(ajaxParamsIsFromForm
             ? "      }, $.extend(true, {}, " + dataType + "{ contentType: 'application/x-www-form-urlencoded; charset=UTF-8' }, ajaxParams)));"
@@ -228,6 +229,20 @@ public class JQueryProxyScriptGenerator : IProxyScriptGenerator, ITransientDepen
         {
             script.AppendLine(",");
             script.Append("        headers: " + headers);
+        }
+
+        var firstFileParam = action.Parameters.FirstOrDefault(p => p.BindingSourceId == ParameterBindingSources.FormFile);
+        if (firstFileParam != null)
+        {
+            var fileVar = ProxyScriptingJsFuncHelper.NormalizeJsVariableName(firstFileParam.NameOnMethod.ToCamelCase());
+            script.AppendLine(",");
+            script.Append("        data: " + fileVar + ",");
+            script.AppendLine();
+            script.Append("        processData: false,");
+            script.AppendLine();
+            script.Append("        contentType: false");
+            script.AppendLine();
+            return;
         }
 
         var body = ProxyScriptingHelper.GenerateBody(action);

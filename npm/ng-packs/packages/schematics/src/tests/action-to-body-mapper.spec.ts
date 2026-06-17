@@ -576,3 +576,131 @@ describe('proxy service template emission', () => {
     expect(template).toMatch(/httpResponseType\s*&&\s*httpResponseType\s*!==\s*'json'/);
   });
 });
+
+describe('createActionToBodyMapper — multipart FormData uploads', () => {
+  const mapBody = createActionToBodyMapper();
+
+  test('DTO with one IRemoteStreamContent property collapses to FormData body using the method arg name', () => {
+    const body = mapBody(
+      buildAction({
+        httpMethod: 'POST',
+        parameters: [
+          { name: 'Name', nameOnMethod: 'input', type: 'System.String', typeSimple: 'string', bindingSourceId: eBindingSourceId.Form } as any,
+          { name: 'File', nameOnMethod: 'input', type: 'Volo.Abp.Content.IRemoteStreamContent', typeSimple: 'Volo.Abp.Content.IRemoteStreamContent', bindingSourceId: eBindingSourceId.FormFile } as any,
+        ],
+      } as Partial<Action>),
+    );
+
+    expect(body.body).toBe('input');
+    expect(body.params).toEqual([]);
+  });
+
+  test('DTO with IEnumerable<IRemoteStreamContent> collapses to FormData body using the method arg name', () => {
+    const body = mapBody(
+      buildAction({
+        httpMethod: 'POST',
+        parameters: [
+          { name: 'Label', nameOnMethod: 'input', type: 'System.String', typeSimple: 'string', bindingSourceId: eBindingSourceId.Form } as any,
+          { name: 'Files', nameOnMethod: 'input', type: 'System.Collections.Generic.IEnumerable<Volo.Abp.Content.IRemoteStreamContent>', typeSimple: '[Volo.Abp.Content.IRemoteStreamContent]', bindingSourceId: eBindingSourceId.FormFile } as any,
+        ],
+      } as Partial<Action>),
+    );
+
+    expect(body.body).toBe('input');
+    expect(body.params).toEqual([]);
+  });
+
+  test('nested DTO with IRemoteStreamContent collapses to FormData body using the method arg name', () => {
+    const body = mapBody(
+      buildAction({
+        httpMethod: 'POST',
+        parameters: [
+          { name: 'Outer', nameOnMethod: 'input', type: 'System.String', typeSimple: 'string', bindingSourceId: eBindingSourceId.Form } as any,
+          { name: 'Child.File', nameOnMethod: 'input', type: 'Volo.Abp.Content.IRemoteStreamContent', typeSimple: 'Volo.Abp.Content.IRemoteStreamContent', bindingSourceId: eBindingSourceId.FormFile } as any,
+        ],
+      } as Partial<Action>),
+    );
+
+    expect(body.body).toBe('input');
+    expect(body.params).toEqual([]);
+  });
+
+  test('direct IRemoteStreamContent parameter uses its own method arg name as the FormData body', () => {
+    const body = mapBody(
+      buildAction({
+        httpMethod: 'POST',
+        parameters: [
+          { name: 'file', nameOnMethod: 'file', type: 'Volo.Abp.Content.IRemoteStreamContent', typeSimple: 'Volo.Abp.Content.IRemoteStreamContent', bindingSourceId: eBindingSourceId.FormFile } as any,
+        ],
+      } as Partial<Action>),
+    );
+
+    expect(body.body).toBe('file');
+  });
+
+  test('Path + upload-DTO mix keeps the path parameter while binding the upload to FormData', () => {
+    const body = mapBody(
+      buildAction({
+        httpMethod: 'POST',
+        url: 'api/upload/{id}',
+        parameters: [
+          { name: 'id', nameOnMethod: 'id', type: 'System.Int32', typeSimple: 'number', bindingSourceId: eBindingSourceId.Path } as any,
+          { name: 'Name', nameOnMethod: 'input', type: 'System.String', typeSimple: 'string', bindingSourceId: eBindingSourceId.Form } as any,
+          { name: 'File', nameOnMethod: 'input', type: 'Volo.Abp.Content.IRemoteStreamContent', typeSimple: 'Volo.Abp.Content.IRemoteStreamContent', bindingSourceId: eBindingSourceId.FormFile } as any,
+        ],
+      } as Partial<Action>),
+    );
+
+    expect(body.body).toBe('input');
+    expect(body.url).toBe("`/api/upload/${id}`");
+  });
+
+  test('actions without FormFile parameters are not affected', () => {
+    const body = mapBody(
+      buildAction({
+        httpMethod: 'POST',
+        parameters: [
+          { name: 'Name', nameOnMethod: 'name', type: 'System.String', typeSimple: 'string', bindingSourceId: eBindingSourceId.Body } as any,
+        ],
+      } as Partial<Action>),
+    );
+
+    expect(body.body).toBe('name');
+  });
+});
+
+describe('createActionToBodyMapper — multipart upload params regression', () => {
+  const mapBody = createActionToBodyMapper();
+
+  test('AppService convention ModelBinding non-file field sharing the upload arg is dropped from query params', () => {
+    const body = mapBody(
+      buildAction({
+        httpMethod: 'POST',
+        url: 'api/app/proxy-demo-test/upload-single',
+        parameters: [
+          { nameOnMethod: 'input', name: 'Name', type: 'System.String', typeSimple: 'string', bindingSourceId: eBindingSourceId.ModelBinding } as any,
+          { nameOnMethod: 'input', name: 'File', type: 'Volo.Abp.Content.IRemoteStreamContent', typeSimple: 'Volo.Abp.Content.IRemoteStreamContent', bindingSourceId: eBindingSourceId.FormFile } as any,
+        ],
+      } as Partial<Action>),
+    );
+    expect(body.body).toBe('input');
+    expect(body.params.join(',')).not.toContain('name');
+  });
+
+  test('Path param on a separate method arg stays in URL even when sibling form fields share the upload arg', () => {
+    const body = mapBody(
+      buildAction({
+        httpMethod: 'POST',
+        url: 'api/proxy-demo/media/upload-with-path/{id}',
+        parameters: [
+          { nameOnMethod: 'id', name: 'id', type: 'System.Int32', typeSimple: 'int', bindingSourceId: eBindingSourceId.Path } as any,
+          { nameOnMethod: 'input', name: 'Name', type: 'System.String', typeSimple: 'string', bindingSourceId: eBindingSourceId.ModelBinding } as any,
+          { nameOnMethod: 'input', name: 'File', type: 'Volo.Abp.Content.IRemoteStreamContent', typeSimple: 'Volo.Abp.Content.IRemoteStreamContent', bindingSourceId: eBindingSourceId.FormFile } as any,
+        ],
+      } as Partial<Action>),
+    );
+    expect(body.body).toBe('input');
+    expect(body.url).toContain('${id}');
+    expect(body.params.join(',')).not.toContain('name');
+  });
+});

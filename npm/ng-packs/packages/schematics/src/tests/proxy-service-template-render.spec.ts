@@ -198,19 +198,8 @@ describe('proxy service template — rendered output', () => {
     { name: 'any[] degradation', body: { responseType: 'any[]', responseTypeWithNamespace: '[Volo.Abp.Content.IRemoteStreamContent]' } },
     { name: 'xml Accept only', body: { responseType: 'any', responseTypeWithNamespace: 'any', acceptHeader: 'application/xml' } },
   ])('rendered service compiles cleanly under real ts.Program ($name)', ({ body }) => {
-    // ts.transpileModule is a single-file transform; it can't resolve @abp/ng.core
-    // imports. Real ts.createProgram with a host that supplies a minimal .d.ts stub
-    // for @abp/ng.core exercises the actual semantic checker — closer to ng build
-    // without the cost of a full Angular workspace.
     const ts = require('typescript');
     const ctx = buildContext(body as Partial<MockBody>);
-    // Mirror what the real schematic emits: every action gets a trailing
-    // `config?: Partial<Rest.Config>` parameter — without it the rendered call
-    // site references a `config` identifier that's never declared.
-    // Use a permissive type so strict-mode spread doesn't trip on Partial<{...}>
-    // semantics; the real schematic uses `Partial<Rest.Config>` but the spread
-    // pattern is identical and we want to assert template *shape*, not the
-    // exact inference Angular's strict mode does for the upstream type.
     ctx.methods[0].signature.parameters = [{ name: 'config', type: 'Record<string, any>' } as any];
     const output = render(ctx);
 
@@ -235,7 +224,6 @@ describe('proxy service template — rendered output', () => {
     const angularCoreStub = `
       declare module '@angular/core' {
         export function Injectable(opts?: any): ClassDecorator;
-        // Mirror Angular's overload that accepts a class token and returns its instance.
         export function inject<T>(token: { new (...args: any[]): T }): T;
         export function inject<T>(token: any): T;
       }
@@ -246,8 +234,6 @@ describe('proxy service template — rendered output', () => {
       }
     `;
 
-    // Bundle the @abp/ng.core / @angular/core / rxjs ambient declarations into
-    // a single .d.ts root file so TS sees them as ambient module declarations.
     const ambient = abpStub + angularCoreStub + rxjsStub + domStub;
     const sources: Record<string, string> = {
       '/proxy/sample.service.ts': output,
@@ -285,7 +271,6 @@ describe('proxy service template — rendered output', () => {
       .getPreEmitDiagnostics(program)
       .filter((d: any) =>
         d.category === ts.DiagnosticCategory.Error &&
-        // Ignore TS6053 "File 'lib.x' not found" which is unrelated to our generated code.
         d.code !== 6053,
       );
 
@@ -305,5 +290,206 @@ describe('proxy service template — rendered output', () => {
       throw new Error(`Generated proxy did not compile:\n${output}\n=== diagnostics ===\n${messages}`);
     }
     expect(errors).toHaveLength(0);
+  });
+
+  test.each([
+    {
+      name: 'DTO upload — single FormData arg',
+      signatureParams: [
+        { name: 'input', type: 'FormData' },
+        { name: 'config', type: 'Record<string, any>' },
+      ],
+      bodyOverrides: { method: 'POST', url: "'/api/test/upload-single'", body: 'input' },
+      shouldContain: ['input: FormData', 'body: input'],
+    },
+    {
+      name: 'direct upload — FormData arg with custom name',
+      signatureParams: [
+        { name: 'file', type: 'FormData' },
+        { name: 'config', type: 'Record<string, any>' },
+      ],
+      bodyOverrides: { method: 'POST', url: "'/api/test/upload-direct'", body: 'file' },
+      shouldContain: ['file: FormData', 'body: file'],
+    },
+    {
+      name: 'path + upload mixed — id stays in URL, FormData becomes body',
+      signatureParams: [
+        { name: 'id', type: 'number' },
+        { name: 'input', type: 'FormData' },
+        { name: 'config', type: 'Record<string, any>' },
+      ],
+      bodyOverrides: { method: 'POST', url: '`/api/test/upload-with-path/${id}`', body: 'input' },
+      shouldContain: ['id: number', 'input: FormData', 'body: input'],
+    },
+    {
+      name: 'query + upload mixed — tag in params, FormData in body',
+      signatureParams: [
+        { name: 'tag', type: 'string' },
+        { name: 'input', type: 'FormData' },
+        { name: 'config', type: 'Record<string, any>' },
+      ],
+      bodyOverrides: {
+        method: 'POST',
+        url: "'/api/test/upload-with-query'",
+        params: ['tag'],
+        body: 'input',
+      },
+      shouldContain: ['tag: string', 'input: FormData', 'params: { tag }', 'body: input'],
+    },
+  ])('upload action signature collapses to FormData ($name)', ({ signatureParams, bodyOverrides, shouldContain }) => {
+    const ts = require('typescript');
+    const ctx = buildContext({
+      responseType: 'string',
+      responseTypeWithNamespace: 'string',
+      ...bodyOverrides,
+    } as Partial<MockBody>);
+    ctx.methods[0].signature.parameters = signatureParams as any;
+    const output = render(ctx);
+
+    for (const fragment of shouldContain) {
+      expect(output).toContain(fragment);
+    }
+    expect(output).not.toContain('JSON.stringify');
+
+    const abpStub = `
+      declare module '@abp/ng.core' {
+        export namespace Rest {
+          export interface Config {
+            apiName?: string;
+            observe?: any;
+            skipHandleError?: boolean;
+            responseType?: string;
+            [key: string]: any;
+          }
+          export type Observe = any;
+        }
+        export class RestService {
+          request<TBody, TResponse>(req: any, config?: any): import('rxjs').Observable<TResponse>;
+        }
+      }
+    `;
+    const angularCoreStub = `
+      declare module '@angular/core' {
+        export function Injectable(opts?: any): ClassDecorator;
+        export function inject<T>(token: { new (...args: any[]): T }): T;
+        export function inject<T>(token: any): T;
+      }
+    `;
+    const rxjsStub = `
+      declare module 'rxjs' {
+        export class Observable<T> { subscribe(...args: any[]): unknown; }
+      }
+    `;
+    const domStub = `
+      declare class Blob { constructor(parts?: any[], options?: any); }
+      declare class FormData {
+        constructor();
+        append(name: string, value: string | Blob, fileName?: string): void;
+        get(name: string): any;
+      }
+    `;
+    const ambient = abpStub + angularCoreStub + rxjsStub + domStub;
+    const sources: Record<string, string> = {
+      '/proxy/sample.service.ts': output,
+      '/proxy/ambient.d.ts': ambient,
+    };
+    const compilerOptions: any = {
+      target: ts.ScriptTarget.ES2020,
+      module: ts.ModuleKind.ES2020,
+      moduleResolution: ts.ModuleResolutionKind.NodeJs,
+      experimentalDecorators: true,
+      emitDecoratorMetadata: true,
+      strict: true,
+      noEmit: true,
+      skipLibCheck: true,
+    };
+    const baseHost = ts.createCompilerHost(compilerOptions, true);
+    const host: any = {
+      ...baseHost,
+      getSourceFile: (fileName: string, languageVersion: any, onError: any) =>
+        sources[fileName]
+          ? ts.createSourceFile(fileName, sources[fileName], languageVersion, true)
+          : baseHost.getSourceFile(fileName, languageVersion, onError),
+      fileExists: (fileName: string) =>
+        sources[fileName] != null || baseHost.fileExists(fileName),
+      readFile: (fileName: string) =>
+        sources[fileName] ?? baseHost.readFile(fileName),
+    };
+    const program = ts.createProgram(Object.keys(sources), compilerOptions, host);
+    const errors = ts
+      .getPreEmitDiagnostics(program)
+      .filter((d: any) => d.category === ts.DiagnosticCategory.Error && d.code !== 6053);
+    if (errors.length) {
+      const messages = errors
+        .map((d: any) => {
+          const where = d.file
+            ? (() => {
+                const p = d.file.getLineAndCharacterOfPosition(d.start ?? 0);
+                const lineText = d.file.text.split('\n')[p.line];
+                return `${d.file.fileName}:${p.line + 1}:${p.character + 1}\n>>> ${lineText}\n>>> ${' '.repeat(p.character)}^`;
+              })()
+            : '(no file)';
+          return `[${where}] TS${d.code}: ${ts.flattenDiagnosticMessageText(d.messageText, '\n')}`;
+        })
+        .join('\n---\n');
+      throw new Error(`Upload action proxy did not compile:\n${output}\n=== diagnostics ===\n${messages}`);
+    }
+    expect(errors).toHaveLength(0);
+  });
+
+  test('rendered upload service forwards FormData to restService.request at runtime', () => {
+    const ts = require('typescript');
+    const ctx = buildContext({
+      method: 'POST',
+      url: "'/api/upload-runtime'",
+      responseType: 'string',
+      responseTypeWithNamespace: 'string',
+      body: 'input',
+    });
+    ctx.methods[0].signature.parameters = [
+      { name: 'input', type: 'FormData' },
+      { name: 'config', type: 'Record<string, any>' },
+    ] as any;
+    const output = render(ctx);
+
+    const stripped = output
+      .replace(/^import .*?;\s*$/gm, '')
+      .replace(/@Injectable\(\{[\s\S]*?\}\)\s*\n/g, '')
+      .replace(/private restService = inject\(RestService\);/, 'restService;')
+      .replace(/this\.restService\.request<[^>]+,\s*[^>]+>/g, 'this.restService.request');
+
+    const transpiled = ts.transpileModule(stripped, {
+      compilerOptions: {
+        target: ts.ScriptTarget.ES2020,
+        module: ts.ModuleKind.CommonJS,
+        experimentalDecorators: true,
+      },
+    }).outputText;
+
+    const restMockCalls: Array<{ body: any; method: string; url: string; headers?: any }> = [];
+    const restMock = {
+      request: (req: any /* , _config: any */) => {
+        restMockCalls.push(req);
+        return { subscribe: () => undefined };
+      },
+    };
+
+    const vm = require('vm');
+    const sandbox: Record<string, any> = { exports: {} };
+    vm.createContext(sandbox);
+    vm.runInContext(transpiled + '\nexports.SampleService = SampleService;', sandbox);
+    const ServiceCls = sandbox.exports.SampleService;
+    const instance = new ServiceCls();
+    instance.restService = restMock;
+
+    const GlobalFormData = (globalThis as any).FormData;
+    const formData = typeof GlobalFormData === 'function'
+      ? new GlobalFormData()
+      : { __isFormData: true, append: () => undefined };
+    instance.getSampleAsync(formData, { apiName: 'Default' });
+
+    expect(restMockCalls).toHaveLength(1);
+    expect(restMockCalls[0].body).toBe(formData);
+    expect(restMockCalls[0].method).toBe('POST');
   });
 });

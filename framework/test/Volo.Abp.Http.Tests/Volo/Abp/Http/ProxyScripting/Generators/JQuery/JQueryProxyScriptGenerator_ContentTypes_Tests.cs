@@ -96,12 +96,8 @@ public class JQueryProxyScriptGenerator_ContentTypes_Tests
     [Fact]
     public void IsRemoteStream_Should_Skip_DataType_Override_To_Avoid_JSON_Metadata_Regression()
     {
-        // For IRemoteStreamContent returns the API definition still advertises
-        // application/json (server-side default formatter list). The generator
-        // MUST NOT force dataType:'json' + Accept:'application/json' for these —
-        // doing so makes the server JSON-serialise the IRemoteStreamContent object
-        // and re-introduces the original IRemoteStreamContent bug. jQuery doesn't
-        // natively support binary downloads, so we let the legacy behavior stand.
+        // IRemoteStreamContent: ABP advertises application/json in formatter list, but
+        // forcing dataType:'json' here would make the server JSON-serialise the stream.
         var model = BuildAppModel(
             returnType: "Volo.Abp.Content.IRemoteStreamContent",
             contentTypes: new[] { "text/plain", "application/json", "text/json" },
@@ -111,6 +107,64 @@ public class JQueryProxyScriptGenerator_ContentTypes_Tests
 
         script.ShouldNotContain("dataType: 'json'");
         script.ShouldNotContain("Accept: 'application/json'");
+    }
+
+    [Fact]
+    public void Multipart_Upload_Should_Emit_FormData_Body_With_ProcessData_And_ContentType_False()
+    {
+        var script = _generator.CreateScript(BuildUploadModel(
+            uploadParameters: new[]
+            {
+                ("Name", "input", ParameterBindingSources.Form),
+                ("File", "input", ParameterBindingSources.FormFile),
+            }));
+
+        script.ShouldContain("data: input");
+        script.ShouldContain("processData: false");
+        script.ShouldContain("contentType: false");
+        script.ShouldNotContain("contentType: 'application/x-www-form-urlencoded");
+    }
+
+    [Fact]
+    public void Multipart_Upload_Should_Use_NameOnMethod_As_Data_Variable()
+    {
+        var script = _generator.CreateScript(BuildUploadModel(
+            uploadParameters: new[]
+            {
+                ("file", "file", ParameterBindingSources.FormFile),
+            }));
+
+        script.ShouldContain("data: file");
+        script.ShouldContain("processData: false");
+        script.ShouldContain("contentType: false");
+    }
+
+    [Fact]
+    public void Plain_Form_Action_Without_FormFile_Should_Still_Emit_UrlEncoded_ContentType()
+    {
+        var script = _generator.CreateScript(BuildUploadModel(
+            uploadParameters: new[]
+            {
+                ("Name", "input", ParameterBindingSources.Form),
+            }));
+
+        script.ShouldContain("contentType: 'application/x-www-form-urlencoded; charset=UTF-8'");
+        script.ShouldNotContain("processData: false");
+        script.ShouldNotContain("contentType: false");
+    }
+
+    [Fact]
+    public void Multipart_Upload_Should_Skip_FormPostData_And_Body_Generation()
+    {
+        var script = _generator.CreateScript(BuildUploadModel(
+            uploadParameters: new[]
+            {
+                ("Name", "input", ParameterBindingSources.Form),
+                ("File", "input", ParameterBindingSources.FormFile),
+            }));
+
+        script.ShouldNotContain("'Name=' + ");
+        script.ShouldNotContain("JSON.stringify");
     }
 
     private static ApplicationApiDescriptionModel BuildAppModel(string returnType, IList<string>? contentTypes, bool isRemoteStream = false)
@@ -144,6 +198,53 @@ public class JQueryProxyScriptGenerator_ContentTypes_Tests
             AuthorizeDatas = new List<AuthorizeDataApiDescriptionModel>(),
         };
         controller.AddAction("DoSomethingAsync", action);
+
+        return model;
+    }
+
+    private static ApplicationApiDescriptionModel BuildUploadModel(
+        (string Name, string NameOnMethod, string BindingSourceId)[] uploadParameters)
+    {
+        var model = ApplicationApiDescriptionModel.Create();
+        var module = model.GetOrAddModule("app", "Default");
+        var controller = module.GetOrAddController(
+            name: "TestController",
+            groupName: null,
+            isRemoteService: true,
+            isIntegrationService: false,
+            apiVersion: null,
+            type: typeof(object));
+
+        var parameters = new List<ParameterApiDescriptionModel>();
+        foreach (var (name, nameOnMethod, binding) in uploadParameters)
+        {
+            parameters.Add(new ParameterApiDescriptionModel
+            {
+                Name = name,
+                NameOnMethod = nameOnMethod,
+                Type = "System.String",
+                TypeSimple = "string",
+                BindingSourceId = binding,
+            });
+        }
+
+        var action = new ActionApiDescriptionModel
+        {
+            UniqueName = "UploadAsync",
+            Name = "UploadAsync",
+            HttpMethod = "POST",
+            Url = "api/test/upload",
+            SupportedVersions = new List<string>(),
+            ParametersOnMethod = new List<MethodParameterApiDescriptionModel>(),
+            Parameters = parameters,
+            ReturnValue = new ReturnValueApiDescriptionModel
+            {
+                Type = "System.Void",
+                TypeSimple = "void",
+            },
+            AuthorizeDatas = new List<AuthorizeDataApiDescriptionModel>(),
+        };
+        controller.AddAction("UploadAsync", action);
 
         return model;
     }
