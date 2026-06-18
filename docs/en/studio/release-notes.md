@@ -9,7 +9,15 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 3.0.5 (2026-06-17) Latest
+## 3.0.6 (2026-06-18) Latest
+
+* Stabilize Domain.Tests across platforms and fix ReactNative test regression
+* [Linux-x64 Support] Align Linux publish with RID-based packaging
+* Fix GitHub integration problem on production caused
+* Use deferred UI scheduler and marshal CEF updates
+* Bump version to 3.0.6 across various configuration files and templates
+
+## 3.0.5 (2026-06-17)
 
 * Set `DOTNET_INSTALL_DIR` on self-hosted runners in template build workflow
 * Fix mudblazor template delete conditions for dashboard pages
