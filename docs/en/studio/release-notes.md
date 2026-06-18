@@ -15,7 +15,6 @@ This document contains **brief release notes** for each ABP Studio release. Rele
 * [Linux-x64 Support] Align Linux publish with RID-based packaging
 * Fix GitHub integration problem on production caused
 * Use deferred UI scheduler and marshal CEF updates
-* Bump version to 3.0.6 across various configuration files and templates
 
 ## 3.0.5 (2026-06-17)
 
