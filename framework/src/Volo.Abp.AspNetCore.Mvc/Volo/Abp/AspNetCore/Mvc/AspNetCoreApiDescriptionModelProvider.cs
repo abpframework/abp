@@ -175,7 +175,8 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
                 GetSupportedVersions(controllerType, method, setting),
                 allowAnonymous,
                 authorizeModels,
-                implementFrom
+                implementFrom,
+                GetReturnValueContentTypes(apiDescription)
             )
         );
 
@@ -197,6 +198,27 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
             await PopulateActionDescriptionsAsync(actionModel, method, interfaceMethod);
             await PopulateParameterDescriptionsAsync(actionModel, method, interfaceMethod);
         }
+    }
+
+    private static List<string>? GetReturnValueContentTypes(ApiDescription apiDescription)
+    {
+        var preferred = apiDescription.SupportedResponseTypes
+            .FirstOrDefault(x => x.StatusCode == 200 && x.ApiResponseFormats.Any())
+            ?? apiDescription.SupportedResponseTypes
+                .FirstOrDefault(x => x.StatusCode is >= 200 and < 300 && x.ApiResponseFormats.Any());
+
+        if (preferred == null)
+        {
+            return null;
+        }
+
+        var contentTypes = preferred.ApiResponseFormats
+            .Select(f => f.MediaType)
+            .Where(m => !string.IsNullOrWhiteSpace(m))
+            .Distinct()
+            .ToList();
+
+        return contentTypes.Count > 0 ? contentTypes : null;
     }
 
     private static List<string> GetSupportedVersions(Type controllerType, MethodInfo method,
