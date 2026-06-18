@@ -1,0 +1,259 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "page-descriptor.schema.json",
+  "title": "PageDescriptor",
+  "description": "Describes a runtime UI page. Pages create menu items and choose how an entity or dashboard is rendered.",
+  "markdownDescription": "AI guidance: `name` is the stable route/menu key and should be URL-safe kebab-case (for example `customers` or `event-calendar`). `title` is user-facing. For entity pages, set `entityName` to an existing entity. Configure list/gallery/card visibility with `columns`, filtering with `filters`, and create/edit UI with form names. For `dashboard` pages, provide `dashboard` and omit entity-only fields unless intentionally supported by the runtime. Do not put page-only settings on entity properties.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional schema reference used when this descriptor is stored as a model descriptor file."
+    },
+    "name": {
+      "type": "string",
+      "description": "Stable URL-safe page identifier. Prefer kebab-case, for example 'customers', 'event-calendar', or 'sales-dashboard'. This becomes part of the runtime route and is referenced by saveSuccessPageName.",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "description": "Display title for the menu item and page header.",
+      "minLength": 1
+    },
+    "icon": {
+      "type": "string",
+      "description": "FontAwesome icon class for the menu item, for example 'fa-solid fa-users'."
+    },
+    "type": {
+      "$ref": "page-type.schema.json"
+    },
+    "entityName": {
+      "type": "string",
+      "description": "Full name of the root entity this page displays. Required for dataGrid, kanban, calendar, gallery, and form pages. Usually omitted for dashboard pages.",
+      "minLength": 1
+    },
+    "groupByProperty": {
+      "type": "string",
+      "description": "Property name to group entities by. Required for kanban pages. Must reference a property on entityName, preferably an enum/status property with a small fixed set of values.",
+      "minLength": 1
+    },
+    "calendarStartProperty": {
+      "type": "string",
+      "description": "Date or DateTime property used as the start date for calendar pages. Required for calendar pages.",
+      "minLength": 1
+    },
+    "calendarEndProperty": {
+      "type": "string",
+      "description": "Optional Date or DateTime property used as the end date for calendar pages. Use when events can span a date range.",
+      "minLength": 1
+    },
+    "calendarTimeProperty": {
+      "type": "string",
+      "description": "Optional Time property used as the start time for calendar pages when the start date is date-only or time is stored separately.",
+      "minLength": 1
+    },
+    "calendarDurationProperty": {
+      "type": "string",
+      "description": "Optional numeric property used as duration in minutes for calendar pages. Use this instead of calendarEndProperty when records store duration.",
+      "minLength": 1
+    },
+    "galleryImageProperty": {
+      "type": "string",
+      "description": "Optional Image property used as the cover image for gallery pages. The property should have entity property type image.",
+      "minLength": 1
+    },
+    "defaultSortProperty": {
+      "type": "string",
+      "description": "Optional property used as the default sorting field when the client does not send explicit sorting. Must reference a property on entityName.",
+      "minLength": 1
+    },
+    "defaultSortDescending": {
+      "type": "boolean",
+      "description": "Whether the default sort property is sorted descending.",
+      "default": false
+    },
+    "defaultFileExportMode": {
+      "type": "integer",
+      "enum": [0, 1, 2],
+      "description": "Default file export mode for file/image columns. 0 exports file names, 1 exports metadata columns, and 2 exports download-link columns."
+    },
+    "allowFileBundleExport": {
+      "type": "boolean",
+      "description": "Whether file bundle export is available for this page.",
+      "default": true
+    },
+    "columns": {
+      "type": "array",
+      "description": "Page-owned column/card field configuration. Use for dataGrid, kanban card fields, calendar event fields, and gallery card fields. Each propertyName must reference a property on entityName.",
+      "items": {
+        "$ref": "page-column-descriptor.schema.json"
+      }
+    },
+    "filters": {
+      "type": "array",
+      "description": "Page-owned filter configuration for filterable page types. Each propertyName must reference a property on entityName. Use this instead of legacy property-level UI filter settings.",
+      "items": {
+        "$ref": "page-filter-descriptor.schema.json"
+      }
+    },
+    "order": {
+      "type": "integer",
+      "description": "Menu sort order (lower values appear first)",
+      "default": 0
+    },
+    "formName": {
+      "type": "string",
+      "description": "Name of the form to render. Required when type is 'form'. Must match a form descriptor whose entityName matches this page entityName.",
+      "minLength": 1
+    },
+    "createFormName": {
+      "type": "string",
+      "description": "Name of the form to use when creating records from dataGrid, kanban, calendar, or gallery pages. Must match a form descriptor for the same entity."
+    },
+    "editFormName": {
+      "type": "string",
+      "description": "Name of the form to use when editing records from dataGrid, kanban, calendar, or gallery pages. Must match a form descriptor for the same entity."
+    },
+    "createFormDisplay": {
+      "type": "string",
+      "enum": ["modal", "Modal", "page", "Page"],
+      "description": "How to display the create form. Use 'modal' for quick CRUD; use 'page' for longer forms or when deep links are desired.",
+      "default": "modal"
+    },
+    "editFormDisplay": {
+      "type": "string",
+      "enum": ["modal", "Modal", "page", "Page"],
+      "description": "How to display the edit form. Use 'modal' for quick CRUD; use 'page' for longer forms or when deep links are desired.",
+      "default": "modal"
+    },
+    "saveSuccessNavigation": {
+      "type": "string",
+      "enum": ["stay", "page", "url"],
+      "description": "Navigation behavior after a standalone form page saves successfully. 'stay' keeps the user on the form page; 'page' navigates to saveSuccessPageName; 'url' navigates to saveSuccessUrl.",
+      "default": "stay"
+    },
+    "saveSuccessPageName": {
+      "type": "string",
+      "description": "Existing page name to open after a form page saves successfully when saveSuccessNavigation is 'page'.",
+      "minLength": 1
+    },
+    "saveSuccessUrl": {
+      "type": "string",
+      "description": "URL or application path to open after a form page saves successfully when saveSuccessNavigation is 'url'.",
+      "minLength": 1
+    },
+    "dashboard": {
+      "$ref": "dashboard-descriptor.schema.json",
+      "description": "Dashboard layout and visualizations. Required only when type is dashboard."
+    },
+    "group": {
+      "type": "string",
+      "description": "Name of the page group this page belongs to. Must match pageGroups[].name. Omit for root-level pages.",
+      "minLength": 1
+    },
+    "permissionConfig": {
+      "$ref": "page-permission-config.schema.json",
+      "description": "Optional page operation permission overrides. Omit operations to use generated defaults."
+    }
+  },
+  "required": ["name", "title", "type"],
+  "allOf": [
+    {
+      "if": {
+        "properties": { "type": { "enum": ["dataGrid", "DataGrid"] } }
+      },
+      "then": {
+        "required": ["entityName"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "type": { "enum": ["kanban", "Kanban"] } }
+      },
+      "then": {
+        "required": ["entityName", "groupByProperty"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "type": { "enum": ["calendar", "Calendar"] } }
+      },
+      "then": {
+        "required": ["entityName", "calendarStartProperty"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "type": { "enum": ["gallery", "Gallery"] } }
+      },
+      "then": {
+        "required": ["entityName"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "type": { "enum": ["form", "Form"] } }
+      },
+      "then": {
+        "required": ["entityName", "formName"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "type": { "enum": ["dashboard", "Dashboard"] } }
+      },
+      "then": {
+        "required": ["dashboard"]
+      }
+    }
+  ],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "name": "events",
+      "title": "Events",
+      "type": "dataGrid",
+      "entityName": "Acme.Events.Event",
+      "columns": [
+        { "propertyName": "Title", "order": 0 },
+        { "propertyName": "Status", "order": 1 }
+      ],
+      "filters": [
+        { "propertyName": "Title", "control": "text", "defaultOperator": "contains" }
+      ],
+      "createFormName": "event-form",
+      "editFormName": "event-form"
+    },
+    {
+      "name": "event-calendar",
+      "title": "Event Calendar",
+      "type": "calendar",
+      "entityName": "Acme.Events.Event",
+      "calendarStartProperty": "StartDate",
+      "calendarEndProperty": "EndDate"
+    },
+    {
+      "name": "event-dashboard",
+      "title": "Event Dashboard",
+      "type": "dashboard",
+      "dashboard": {
+        "visualizations": [
+          {
+            "name": "events-by-status",
+            "type": "chart",
+            "title": "Events by Status",
+            "row": 0,
+            "order": 0,
+            "width": 2,
+            "entityName": "Acme.Events.Event",
+            "chart": {
+              "chartType": "bar",
+              "xAxis": { "property": "Status" },
+              "yAxis": [{ "aggregation": "count", "label": "Events" }]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

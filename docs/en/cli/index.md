@@ -45,6 +45,7 @@ Here is the list of all available commands before explaining their details:
 - [new-package](../cli#new-package): Generates a new package based on the given template.
 - [update](../cli#update): Automatically updates all ABP related NuGet and NPM packages in a solution.
 - [clean](../cli#clean): Deletes all `BIN` and `OBJ` folders in the current folder.
+- [clean-logs](../cli#clean-logs): Delete all `*logs.txt` files in the current folder and its subfolders.
 - [add-package](../cli#add-package): Adds an ABP package to a project.
 - [add-package-ref](../cli#add-package-ref): Adds package to given project.
 - [install-module](../cli#install-module): Adds a [multi-package application module](../modules/index.md) to a given module.
@@ -474,6 +475,16 @@ Usage:
 
 ```bash
 abp clean
+```
+
+### clean-logs
+
+Delete all `*logs.txt` files in the current folder and its subfolders.
+
+Usage:
+
+```bash
+abp clean-logs
 ```
 
 ### add-package

@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "script-background-worker-descriptor.schema.json",
+  "title": "Script Background Worker Descriptor",
+  "description": "Defines a scheduled JavaScript background worker.",
+  "markdownDescription": "AI guidance: use background workers for recurring scheduled work. Provide either `period` in milliseconds or `cronExpression`; do not provide both unless the host explicitly chooses one. Keep scripts idempotent and short. Use workers for polling, cleanup, synchronization, or recurring summary generation.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional schema reference used when this descriptor is stored as a model descriptor file."
+    },
+    "name": {
+      "type": "string",
+      "description": "Unique identifier for the background worker.",
+      "minLength": 1
+    },
+    "period": {
+      "type": "integer",
+      "description": "Execution period in milliseconds. Example: 300000 for every 5 minutes.",
+      "minimum": 1
+    },
+    "cronExpression": {
+      "type": ["string", "null"],
+      "description": "Cron expression for scheduler-backed providers. Omit it, set it to null, or leave it empty when the worker uses period-based scheduling."
+    },
+    "javascript": {
+      "type": "string",
+      "description": "JavaScript code to execute when the worker runs. Keep idempotent; workers may overlap or retry depending on scheduler configuration.",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional description for designer documentation and model health context."
+    }
+  },
+  "required": ["name", "javascript"],
+  "anyOf": [
+    {
+      "required": ["period"],
+      "not": {
+        "required": ["cronExpression"],
+        "properties": {
+          "cronExpression": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    {
+      "required": ["cronExpression"],
+      "not": { "required": ["period"] },
+      "properties": {
+        "cronExpression": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  ],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "name": "CleanupExpiredEvents",
+      "period": 3600000,
+      "javascript": "context.log('Running expired event cleanup.');"
+    }
+  ]
+}

@@ -3,363 +3,171 @@
 ```json
 //[doc-seo]
 {
-    "Description": "ABP Low-Code System: Build admin panels with auto-generated CRUD UI, APIs, and permissions using C# attributes and Fluent API. No boilerplate code needed."
+    "Description": "ABP Low-Code System: design dynamic entities, forms, pages, permissions, menus, filters, and React runtime pages with the Admin Console Low-Code Designer."
 }
 ```
 
 > You must have an ABP Team or a higher license to use this module.
 
-The ABP Low-Code System allows you to define entities using C# attributes or Fluent API and automatically generates:
+> **Preview:** The Low-Code System is currently in preview. APIs, designer behavior, generated metadata, and React runtime details may change before general availability. Use it for evaluation and controlled projects, and review release notes before upgrading.
 
-* **Database tables** (via EF Core migrations)
-* **CRUD REST APIs** (Get, GetList, Create, Update, Delete)
-* **Permissions** (View, Create, Update, Delete per entity)
-* **Menu items** (auto-added to the admin sidebar)
-* **Full Blazor UI** (data grid, create/edit modals, filters, foreign key lookups)
+The ABP Low-Code System lets you build data-driven admin screens from metadata. The primary workflow is the **Low-Code Designer** in ABP Admin Console, backed by the **React runtime** in your application.
 
-No need to write DTOs, application services, repositories, or UI pages manually.
+Use the designer to model entities, enums, properties, relations, pages, forms, filters, permissions, actions, and health checks. The runtime uses the same metadata to provide:
 
-![Auto-generated menu items in the sidebar](images/menu-items.png)
+* CRUD REST APIs
+* EF Core dynamic entity tables
+* Permission definitions
+* Dynamic menu items
+* React data grid, kanban, calendar, gallery, form, and dashboard pages
+* Create and edit forms
+* Advanced filters
+* Excel, CSV, and file bundle export
 
-## Why Low-Code?
+No DTO, repository, application service, controller, or React CRUD page is required for the standard flow.
 
-Traditionally, adding a new entity with full CRUD functionality to an ABP application requires:
+![Low-Code Designer overview](images/designer-overview.png)
 
-* Entity class in Domain
-* DbContext configuration in EF Core
-* DTOs in Application.Contracts
-* AppService in Application
-* Controller in HttpApi
-* Razor/Blazor pages in UI
-* Permissions, menu items, localization
+## Supported UI
 
-**With Low-Code, a single C# class replaces all of the above:**
+Low-Code runtime UI is currently documented for **React**. The backend model, APIs, permissions, scripting, and custom endpoint infrastructure are shared by the module, but the UI walkthroughs in this section focus on Admin Console plus React.
 
-````csharp
-[DynamicEntity(DefaultDisplayPropertyName = "Name")]
-[DynamicEntityUI(PageTitle = "Products")]
-public class Product : DynamicEntityBase
-{
-    [DynamicPropertyUnique]
-    public string Name { get; set; }
+## How to Enable
 
-    [DynamicPropertyUI(DisplayName = "Unit Price")]
-    public decimal Price { get; set; }
+The Low-Code System is an optional startup template feature. When creating a new application with [ABP Studio](../studio/index.md), choose a modern React application template and enable **Low-Code System** in the project creation wizard.
 
-    public int StockCount { get; set; }
+ABP Studio creates the required backend module references, dynamic model initializer, EF Core configuration, Admin Console integration, and React runtime wiring.
 
-    [DynamicForeignKey("MyApp.Categories.Category", "Name")]
-    public Guid? CategoryId { get; set; }
-}
-````
+The generated React project includes:
 
-Run `dotnet ef migrations add Added_Product` and start your application. You get a complete Product management page with search, filtering, sorting, pagination, create/edit forms, and foreign key dropdown — all auto-generated.
+* `@volo/abp-react-lowcode`
+* `configureLowCode`
+* `LowCodeLocalizationProvider`
+* `createDynamicRoutes`
+* `useMenuItems`
+* Page, form, dashboard, file, and attachment hooks
 
-![Auto-generated data grid with search, filters, and actions](images/data-grid.png)
+The host application wires the low-code modules, calls the generated `_Dynamic` initializer, configures EF Core dynamic entities, and seeds the required OpenIddict clients.
 
-![Auto-generated create/edit modal with form fields and foreign key lookups](images/create-modal.png)
+## Run the Application
 
-## Getting Started
+After ABP Studio creates the solution, use **Solution Runner** to run the backend host and the React application. Run the database migration task before opening the runtime pages.
 
-### 1. Create a Low-Code Initializer
+The generated solution README contains the exact command-line equivalents if you prefer to run the projects outside ABP Studio.
 
-Create a static initializer class in your Domain project's `_Dynamic` folder that registers your assembly and calls `DynamicModelManager.Instance.InitializeAsync()`:
+If you generate a solution inside another repository, make sure parent build files such as `Directory.Packages.props` are not inherited accidentally. Use an empty output folder outside another solution, or isolate the generated solution's MSBuild configuration before running `dotnet build`.
 
-````csharp
-using Volo.Abp.Identity;
-using Volo.Abp.LowCode.Configuration;
-using Volo.Abp.LowCode.Modeling;
-using Volo.Abp.Threading;
+Open Admin Console and navigate to **Low-Code Designer** after the backend is running:
 
-namespace MyApp._Dynamic;
-
-public static class MyAppLowCodeInitializer
-{
-    private static readonly AsyncOneTimeRunner Runner = new();
-    
-    public static async Task InitializeAsync()
-    {
-        await Runner.RunAsync(async () =>
-        {
-            // Register reference entities (optional — for linking to existing C# entities)
-            AbpDynamicEntityConfig.ReferencedEntityList.Add<IdentityUser>(
-                nameof(IdentityUser.UserName),
-                nameof(IdentityUser.Email)
-            );
-            
-            // Register assemblies containing [DynamicEntity] classes and model.json
-            var sourcePath = ResolveDomainSourcePath();
-            AbpDynamicEntityConfig.SourceAssemblies.Add(
-                new DynamicEntityAssemblyInfo(
-                    typeof(MyAppDomainModule).Assembly,
-                    rootNamespace: "MyApp",
-                    projectRootPath: sourcePath  // Required for model.json hot-reload in development
-                )
-            );
-            
-            // Fluent API configurations (optional — highest priority)
-            AbpDynamicEntityConfig.EntityConfigurations.Configure("MyApp.Products.Product", entity =>
-            {
-                entity.AddOrGetProperty("InternalNotes").AsServerOnly();
-            });
-            
-            // Initialize the dynamic model manager
-            await DynamicModelManager.Instance.InitializeAsync();
-        });
-    }
-    
-    private static string ResolveDomainSourcePath()
-    {
-        // Traverse up from bin folder to find the Domain project source
-        var baseDir = AppContext.BaseDirectory;
-        var current = new DirectoryInfo(baseDir);
-        
-        for (int i = 0; i < 10 && current != null; i++)
-        {
-            var candidate = Path.Combine(current.FullName, "src", "MyApp.Domain");
-            if (Directory.Exists(Path.Combine(candidate, "_Dynamic")))
-            {
-                return candidate;
-            }
-            current = current.Parent;
-        }
-        
-        // Fallback for production (embedded resource will be used instead)
-        return string.Empty;
-    }
-}
-````
-
-> The `projectRootPath` parameter enables hot-reload of `model.json` during development. When the path is empty or the file doesn't exist, the module falls back to reading `model.json` as an embedded resource.
-
-### 2. Call the Initializer in Program.cs
-
-The initializer must be called **before** the application starts. Add it to `Program.cs`:
-
-````csharp
-public static async Task<int> Main(string[] args)
-{
-    // Initialize Low-Code before building the application
-    await MyAppLowCodeInitializer.InitializeAsync();
-    
-    var builder = WebApplication.CreateBuilder(args);
-    // ... rest of your startup code
-}
-````
-
-> **Important:** The initializer must also be called in your `DbMigrator` project and any other entry points (AuthServer, HttpApi.Host, etc.) that use dynamic entities. This ensures EF Core migrations can discover the entity schema.
-
-### 3. Configure DbContext
-
-Call `ConfigureDynamicEntities()` in your `DbContext`:
-
-````csharp
-protected override void OnModelCreating(ModelBuilder builder)
-{
-    builder.ConfigureDynamicEntities();
-    base.OnModelCreating(builder);
-}
-````
-
-### 3. Define Your First Entity
-
-````csharp
-[DynamicEntity]
-[DynamicEntityUI(PageTitle = "Customers")]
-public class Customer : DynamicEntityBase
-{
-    public string Name { get; set; }
-
-    [DynamicPropertyUI(DisplayName = "Phone Number")]
-    public string Telephone { get; set; }
-
-    [DynamicForeignKey("Volo.Abp.Identity.IdentityUser", "UserName")]
-    public Guid? UserId { get; set; }
-}
-````
-
-### 4. Add Migration and Run
-
-```bash
-dotnet ef migrations add Added_Customer
-dotnet ef database update
+```text
+https://localhost:<host-port>/admin-console/lowcode-designer
 ```
 
-Start your application — the Customer page is ready.
+Open generated runtime pages after the React application is running:
 
-## Two Ways to Define Entities
-
-### C# Attributes (Recommended)
-
-Define entities as C# classes with attributes. You get compile-time checking, IntelliSense, and refactoring support:
-
-````csharp
-[DynamicEntity]
-[DynamicEntityUI(PageTitle = "Orders")]
-public class Order : DynamicEntityBase
-{
-    [DynamicForeignKey("MyApp.Customers.Customer", "Name", ForeignAccess.Edit)]
-    public Guid CustomerId { get; set; }
-
-    public decimal TotalAmount { get; set; }
-    public bool IsDelivered { get; set; }
-}
-
-[DynamicEntity(Parent = "MyApp.Orders.Order")]
-public class OrderLine : DynamicEntityBase
-{
-    [DynamicForeignKey("MyApp.Products.Product", "Name")]
-    public Guid ProductId { get; set; }
-
-    public int Quantity { get; set; }
-    public decimal Amount { get; set; }
-}
-````
-
-See [Attributes & Fluent API](fluent-api.md) for the full attribute reference.
-
-### model.json (Declarative)
-
-Alternatively, define entities in a JSON file without writing C# classes:
-
-```json
-{
-  "entities": [
-    {
-      "name": "MyApp.Customers.Customer",
-      "displayProperty": "Name",
-      "properties": [
-        { "name": "Name", "isRequired": true },
-        { "name": "Telephone", "ui": { "displayName": "Phone Number" } }
-      ],
-      "ui": { "pageTitle": "Customers" }
-    }
-  ]
-}
+```text
+http://localhost:<react-port>/dynamic/<page-name>
 ```
 
-See [model.json Structure](model-json.md) for the full specification.
+## Designer Workflow
 
-> Both approaches can be combined. The [three-layer configuration system](fluent-api.md#three-layer-configuration-system) merges Attributes, JSON, and Fluent API with clear priority rules.
+The designer is the day-to-day entry point.
 
-## Key Features
+1. Use **Data** to create entities, enums, properties, and relations.
+2. Use **Pages** to choose a page type, menu placement, fields, default sorting, filters, dashboards, and linked forms.
+3. Use **Forms** to arrange create and edit forms with tabs, groups, controls, validations, and actions.
+4. Use **Permissions** to review generated permissions and control access.
+5. Use **Actions** and **Interceptors** when the standard CRUD flow needs custom logic, endpoints, event handlers, jobs, or workers.
+6. Use **Health** to review model issues before publishing changes.
 
-| Feature | Description | Documentation |
-|---------|-------------|---------------|
-| **Attributes & Fluent API** | Define dynamic entities with C# attributes and configure programmatically | [Attributes & Fluent API](fluent-api.md) |
-| **model.json** | Declarative dynamic entity definitions in JSON | [model.json Structure](model-json.md) |
-| **Reference Entities** | Read-only access to existing C# entities (e.g., `IdentityUser`) for foreign key lookups | [Reference Entities](reference-entities.md) |
-| **Interceptors** | Pre/Post hooks for Create, Update, Delete with JavaScript | [Interceptors](interceptors.md) |
-| **Scripting API** | Server-side JavaScript for database queries and CRUD | [Scripting API](scripting-api.md) |
-| **Custom Endpoints** | REST APIs with JavaScript handlers | [Custom Endpoints](custom-endpoints.md) |
-| **Foreign Access** | View/Edit related dynamic entities from the target entity's UI | [Foreign Access](foreign-access.md) |
-| **Export** | Export dynamic entity data to Excel (XLSX) or CSV | See below |
+![Entity properties in the designer](images/designer-properties.png)
 
-## Export (Excel / CSV)
+![Form setup in the designer](images/designer-forms.png)
 
-The Low-Code System provides built-in export functionality for all dynamic entities. Users can export filtered data to **Excel (XLSX)** or **CSV** directly from the Blazor UI.
+## React Runtime
 
-### How It Works
+React runtime pages are generated from the same metadata. The page below was produced from a low-code page definition and includes the grid, menu item, permissions, display values, export, create form, and filters. The same runtime can render kanban, calendar, gallery, standalone form, and dashboard page definitions.
 
-1. The client calls `GET /api/low-code/entities/{entityName}/download-token` to obtain a single-use download token (valid for 30 seconds).
-2. The client calls `GET /api/low-code/entities/{entityName}/export-as-excel` or `GET /api/low-code/entities/{entityName}/export-as-csv` with the token and optional filters.
+![Generated React data grid](images/runtime-data-grid.png)
 
-### API Endpoints
+![Generated React advanced filters](images/runtime-filters.png)
+
+![Generated React create form](images/runtime-create-form.png)
+
+## Filters
+
+React low-code filters are type-aware. The runtime shows only operators that make sense for the field type. For example:
+
+* Text fields support contains, equals, starts with, ends with, and has value.
+* Numeric fields support equals, comparison, between, and has value.
+* Date fields use date-friendly labels such as on, after, before, and between.
+* Boolean fields use an `All / Yes / No` value selector.
+* File and image fields use `Has value` with an `All / Yes / No` value selector.
+
+`All` means no filter is applied. `Yes` maps to non-empty values. `No` maps to empty values.
+
+![Has value filter options](images/runtime-filters-has-value.png)
+
+## Export
+
+Every dynamic entity page can export data to Excel or CSV. Pages with file or image fields can also export a file bundle as a ZIP. Export requests use the current search, sorting, and filters from the runtime view, so a filtered page exports the matching subset instead of the whole entity.
+
+The React runtime exports visible exportable columns by default. These columns and their default order come from the page-level **Export Fields** settings in the Low-Code Designer. A field can be visible but not exportable, or hidden but still available in the **All exportable fields** option. Use this when a page should display operational data that should not leave the system through Excel or CSV. Server-only fields are always excluded, and foreign key values are displayed through their configured display property.
+
+File and image fields are exported as file names by default. Export options can expand those fields into metadata columns or temporary download-link columns. Download-link columns include file name, URL, expiry, content type, size, dimensions, and status. The links are short-lived and should be treated like signed download links, not permanent public URLs.
+
+Use **Files (.zip)** when users need the actual uploaded files. The action appears only when the Designer allows file bundle export and at least one selected file/image field is exportable. The ZIP contains `manifest.csv` and files under `files/{recordId}/{fieldName}/{safeFileName}`. The manifest records missing, malformed, unlinked, and limit-skipped files instead of failing the whole export.
+
+Spreadsheet and ZIP exports require a short-lived, single-use download token. The token is bound to the tenant, page, entity, child page, and foreign-access context. File download links use separate short-lived tokens bound to the exported file value. Spreadsheet formula-like text values are escaped before writing CSV or Excel headers and cells.
 
 | Endpoint | Description |
 |----------|-------------|
-| `GET /api/low-code/entities/{entityName}/download-token` | Get a single-use download token |
-| `GET /api/low-code/entities/{entityName}/export-as-excel` | Export as Excel (.xlsx) |
-| `GET /api/low-code/entities/{entityName}/export-as-csv` | Export as CSV (.csv) |
+| `GET /api/low-code/pages/{pageName}/download-token` | Gets a short-lived download token |
+| `GET /api/low-code/pages/{pageName}/export/excel` | Exports filtered data as Excel |
+| `GET /api/low-code/pages/{pageName}/export/csv` | Exports filtered data as CSV |
+| `GET /api/low-code/pages/{pageName}/export/files` | Exports selected file/image fields as a ZIP bundle |
+| `GET /api/low-code/pages/export/files/{token}` | Downloads one temporary file link created by spreadsheet export |
 
-Export requests accept the same filtering, sorting, and search parameters as the list endpoint. Server-only properties are automatically excluded, and foreign key columns display the referenced entity's display value instead of the raw ID.
+Useful export settings:
 
-## Custom Commands and Queries
+| Setting | Default | Purpose |
+|---------|---------|---------|
+| `LowCode:Export:MaxRows` | `100000` | Maximum rows in one all-filtered export |
+| `LowCode:Export:DownloadTokenLifetimeSeconds` | `30` | Download token lifetime |
+| `LowCode:Export:FileLinkTokenLifetimeSeconds` | `900` | Temporary file link lifetime |
+| `LowCode:Export:MaxFileBundleFiles` | `1000` | Maximum files in one ZIP export |
+| `LowCode:Export:MaxFileBundleBytes` | `268435456` | Maximum total file bytes in one ZIP export |
 
-The Low-Code System allows you to replace or extend the default CRUD operations by implementing custom command and query handlers in C#.
+## Advanced Configuration
 
-### Custom Commands
+The designer stores and reads the same descriptor metadata described in the reference pages below. Use these pages when you need source-controlled descriptor files, custom startup wiring, script handlers, or low-level integration details.
 
-Create a class that implements `ILcCommand<TResult>` and decorate it with `[CustomCommand]`:
+| Topic | Use it for |
+|-------|------------|
+| [Designer](designer.md) | Admin Console tabs, entity/page/form setup, permissions, and health |
+| [React Runtime](react-runtime.md) | React package wiring, routes, menu items, filters, forms, and export |
+| [Attributes & Fluent API](fluent-api.md) | Source-controlled C# metadata and runtime overrides |
+| [Model Descriptor Files](model-json.md) | JSON descriptor files and public descriptor schemas used by the designer and runtime |
+| [Reference Entities](reference-entities.md) | Lookups to existing entities such as Identity users |
+| [Foreign Access](foreign-access.md) | Access to related dynamic entities through relations |
+| [Interceptors](interceptors.md) | JavaScript lifecycle logic for CRUD operations |
+| [Custom Endpoints](custom-endpoints.md) | JavaScript-backed REST endpoints |
+| [Script Actions](script-actions.md) | Event handlers, background jobs, background workers, script editor, and dry-run testing |
+| [Scripting API](scripting-api.md) | Server-side script context and helpers |
 
-````csharp
-[CustomCommand("Create", "MyApp.Products.Product")]
-public class CustomProductCreateCommand : CreateCommand<Product>
-{
-    public override async Task<Guid> ExecuteWithResultAsync(DynamicCommandArgs commandArgs)
-    {
-        // Your custom create logic here
-        // ...
-    }
-}
-````
+## Runtime Internals
 
-| Parameter | Description |
-|-----------|-------------|
-| `commandName` | The command to replace: `"Create"`, `"Update"`, or `"Delete"` |
-| `entityName` | Full entity name (e.g., `"MyApp.Products.Product"`) |
+The generated pages are powered by these services:
 
-### Custom Queries
-
-Create a class that implements `ILcQuery<TResult>` and decorate it with `[CustomQuery]`:
-
-````csharp
-[CustomQuery("List", "MyApp.Products.Product")]
-public class CustomProductListQuery : ILcQuery<DynamicQueryResult>
-{
-    public async Task<DynamicQueryResult> ExecuteAsync(DynamicQueryArgs queryArgs)
-    {
-        // Your custom list query logic here
-        // ...
-    }
-}
-````
-
-````csharp
-[CustomQuery("Single", "MyApp.Products.Product")]
-public class CustomProductListQuery : ILcQuery<DynamicEntityDto>
-{
-    public async Task<DynamicEntityDto> ExecuteAsync(DynamicQueryArgs queryArgs)
-    {
-        // Your custom single query logic here
-        // ...
-    }
-}
-````
-
-| Parameter | Description |
-|-----------|-------------|
-| `queryName` | The query to replace: `"List"` or `"Single"` |
-| `entityName` | Full entity name (e.g., `"MyApp.Products.Product"`) |
-
-Custom commands and queries are automatically discovered and registered at startup. They completely replace the default handler for the specified entity and operation.
-
-## Internals
-
-### Domain Layer
-
-* `DynamicModelManager`: Singleton managing all entity metadata with a layered configuration architecture (Code > JSON > Fluent > Defaults).
-* `EntityDescriptor`: Entity definition with properties, foreign keys, interceptors, and UI configuration.
-* `EntityPropertyDescriptor`: Property definition with type, validation, UI settings, and foreign key info.
-* `IDynamicEntityRepository`: Repository for dynamic entity CRUD operations.
-
-### Application Layer
-
-* `DynamicEntityAppService`: CRUD operations for all dynamic entities (Get, GetList, Create, Update, Delete, Export).
-* `DynamicEntityUIAppService`: UI definitions, menu items, and page configurations. Provides:
-  * `GetUiDefinitionAsync(entityName)` — Full UI definition (filters, columns, forms, children, foreign access actions, permissions)
-  * `GetUiCreationFormDefinitionAsync(entityName)` — Creation form fields with validation rules
-  * `GetUiEditFormDefinitionAsync(entityName)` — Edit form fields with validation rules
-  * `GetMenuItemsAsync()` — Menu items for all entities that have a `pageTitle` configured (filtered by permissions)
-* `DynamicPermissionDefinitionProvider`: Auto-generates permissions per entity.
-* `CustomEndpointExecutor`: Executes JavaScript-based custom endpoints.
-
-### Database Providers
-
-**Entity Framework Core**: Dynamic entities are configured as EF Core [shared-type entities](https://learn.microsoft.com/en-us/ef/core/modeling/entity-types?tabs=fluent-api#shared-type-entity-types) via the `ConfigureDynamicEntities()` extension method.
+* `DynamicEntityAppService` handles CRUD, list queries, filtering, sorting, and export.
+* `DynamicPageAppService` exposes page-based CRUD, file, attachment, lookup, child, foreign-access, and export endpoints.
+* `DynamicEntityUIAppService` returns page, form, dashboard, field, filter, and menu metadata.
+* `DynamicPermissionDefinitionProvider` creates permissions for dynamic entities.
+* `CustomEndpointExecutor` runs JavaScript-backed custom endpoints.
+* EF Core maps dynamic entities as shared-type entities.
 
 ## See Also
 
-* [Attributes & Fluent API](fluent-api.md)
-* [model.json Structure](model-json.md)
-* [Scripting API](scripting-api.md)
+* [Low-Code Designer](designer.md)
+* [React Runtime](react-runtime.md)
+* [Model Descriptor Files](model-json.md)

@@ -28,12 +28,12 @@ The React UI template is built with:
 | [Vitest](https://vitest.dev/) | Unit testing |
 | [OpenID Connect / OIDC](https://openid.net/connect/) | Authentication against the ABP Auth Server |
 
-The template also includes ABP-specific NPM packages:
+The template also includes ABP-specific NPM packages. These packages are maintained by ABP and published on npm; use the following links to view their package details:
 
-- [`@volo/abp-app-config`](https://www.npmjs.com/package/@volo/abp-app-config)
-- [`@volo/abp-oidc-auth`](https://www.npmjs.com/package/@volo/abp-oidc-auth)
-- [`@volo/abp-react-app-config`](https://www.npmjs.com/package/@volo/abp-react-app-config)
-- [`@volo/abp-react-oidc-auth`](https://www.npmjs.com/package/@volo/abp-react-oidc-auth)
+- [View `@volo/abp-app-config` on npm](https://www.npmjs.com/package/@volo/abp-app-config)
+- [View `@volo/abp-oidc-auth` on npm](https://www.npmjs.com/package/@volo/abp-oidc-auth)
+- [View `@volo/abp-react-app-config` on npm](https://www.npmjs.com/package/@volo/abp-react-app-config)
+- [View `@volo/abp-react-oidc-auth` on npm](https://www.npmjs.com/package/@volo/abp-react-oidc-auth)
 
 ## React App and Admin Console
 

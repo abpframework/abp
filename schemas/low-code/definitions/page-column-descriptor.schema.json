@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "page-column-descriptor.schema.json",
+  "title": "PageColumnDescriptor",
+  "description": "Describes a property displayed by an entity page list, card, calendar event, or gallery item.",
+  "markdownDescription": "AI guidance: use page columns/card fields to control runtime page visibility. Each `propertyName` must match a property on the page entity. Keep this separate from entity property definitions so the same entity can have different views on different pages.",
+  "type": "object",
+  "properties": {
+    "propertyName": {
+      "type": "string",
+      "description": "Property displayed by this column/card field. Must match a property on the page entityName.",
+      "minLength": 1
+    },
+    "label": {
+      "type": "string",
+      "description": "Optional page-specific label override. Omit to use the property displayName/name.",
+      "minLength": 1
+    },
+    "order": {
+      "type": "integer",
+      "description": "Display order. Lower values appear first.",
+      "default": 0
+    },
+    "exportOrder": {
+      "type": "integer",
+      "description": "Optional export order. Lower values appear first in Excel, CSV, download-link columns, and file bundles. Omit to reuse display order."
+    },
+    "width": {
+      "type": "string",
+      "description": "Optional CSS width for tabular columns, for example '160px', '12rem', or '20%'.",
+      "minLength": 1
+    },
+    "visible": {
+      "type": "boolean",
+      "description": "Whether the field is visible by default on this page.",
+      "default": true
+    },
+    "exportable": {
+      "type": "boolean",
+      "description": "Whether the field can be exported from this page.",
+      "default": true
+    }
+  },
+  "required": ["propertyName"],
+  "additionalProperties": false,
+  "examples": [
+    { "propertyName": "Title", "label": "Title", "order": 0, "exportOrder": 0, "width": "240px", "visible": true },
+    { "propertyName": "InternalNotes", "visible": false, "exportable": false }
+  ]
+}
