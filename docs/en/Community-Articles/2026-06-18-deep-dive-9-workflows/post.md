@@ -30,7 +30,7 @@ If the team always builds a package after an application service change, that sh
 
 Workflows give ABP Studio a place to encode those repeatable steps.
 
-_**After selecting a workflow from the chat interface, you can manage and customize all available workflows from the Workflow Settings dialog:**_
+_**Choose a Workflow and Scope before sending your prompt:**_
 
 ![Opening the workflow settings panel in ABP Studio](workflows-openning.png)
 
