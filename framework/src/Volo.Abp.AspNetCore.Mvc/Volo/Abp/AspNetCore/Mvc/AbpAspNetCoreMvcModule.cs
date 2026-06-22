@@ -242,6 +242,10 @@ public class AbpAspNetCoreMvcModule : AbpModule
 
         context.Services
             .AddOptions<RazorPagesOptions>()
+            .PostConfigure(AbpRazorPagesAntiforgeryConfiguration.Configure);
+
+        context.Services
+            .AddOptions<RazorPagesOptions>()
             .PostConfigure<IOptions<AbpRequestLocalizationOptions>>((pagesOptions, abpLocOptions) =>
             {
                 if (abpLocOptions.Value.UseRouteBasedCulture &&
