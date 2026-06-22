@@ -76,6 +76,10 @@ public class TestDataBuilder : ITransientDependency
     private async Task AddPeople()
     {
         var douglas = new Person(UserDouglasId, "Douglas", 42, cityId: LondonCityId);
+        douglas.ContactInformation = new PersonContactInformation
+        {
+            Street = "Test Street"
+        };
         douglas.Phones.Add(new Phone(douglas.Id, "123456789"));
         douglas.Phones.Add(new Phone(douglas.Id, "123456780", PhoneType.Home));
 

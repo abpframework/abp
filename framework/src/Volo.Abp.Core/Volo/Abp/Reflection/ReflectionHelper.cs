@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Volo.Abp.Reflection;
@@ -228,5 +230,48 @@ public static class ReflectionHelper
         Recursively(publicConstants, type, 1);
 
         return publicConstants.ToArray();
+    }
+
+    /// <summary>
+    /// Checks whether the property is nullable, including nullable reference types (NRT).
+    /// </summary>
+    /// <param name="propertyInfo">Property info to check</param>
+    public static bool IsNullable(PropertyInfo propertyInfo)
+    {
+        if (TypeHelper.IsNullable(propertyInfo.PropertyType))
+        {
+            return true;
+        }
+
+#if NET6_0_OR_GREATER
+        var nullabilityInfoContext = new NullabilityInfoContext();
+        var nullabilityInfo = nullabilityInfoContext.Create(propertyInfo);
+        return nullabilityInfo.ReadState == NullabilityState.Nullable;
+#else
+        var attr = propertyInfo.GetCustomAttributes().FirstOrDefault(a => a.GetType().FullName == "System.Runtime.CompilerServices.NullableAttribute");
+        if (attr != null)
+        {
+            var getter = NullableGetterCache.GetOrAdd(attr.GetType(), CreateNullableAccessor);
+            return getter(attr)?[0] == 2;
+        }
+        return false;
+#endif
+    }
+
+    private static readonly ConcurrentDictionary<Type, Func<object, byte[]?>> NullableGetterCache = new ();
+
+    private static Func<object, byte[]?> CreateNullableAccessor(Type attrType)
+    {
+        var param = Expression.Parameter(typeof(object), "attr");
+        var casted = Expression.Convert(param, attrType);
+
+        var flagsField = attrType.GetField("NullableFlags");
+        if (flagsField == null)
+        {
+            return _ => null;
+        }
+
+        var access = Expression.Field(casted, flagsField);
+        return Expression.Lambda<Func<object, byte[]?>>(access, param).Compile();
     }
 }

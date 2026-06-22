@@ -18,6 +18,9 @@ namespace Volo.Abp.Identity.Blazor.Pages.Identity;
 
 public partial class UserManagement
 {
+    [Parameter]
+    public string? Culture { get; set; }
+
     protected const string PermissionProviderName = "U";
 
     protected const string DefaultSelectedTab = "UserInformations";
@@ -103,7 +106,8 @@ public partial class UserManagement
         NewUserRoles = Roles.Select(x => new AssignedRoleViewModel
         {
             Name = x.Name,
-            IsAssigned = x.IsDefault
+            IsAssigned = x.IsDefault,
+            IsAssignable = true
         }).ToArray();
 
         ChangePasswordTextRole(TextRole.Password);
@@ -130,12 +134,23 @@ public partial class UserManagement
 
             if (await PermissionChecker.IsGrantedAsync(IdentityPermissions.Users.ManageRoles))
             {
-                var userRoleIds = (await AppService.GetRolesAsync(entity.Id)).Items.Select(r => r.Id).ToList();
+                var assignableRoles = Roles ?? (await AppService.GetAssignableRolesAsync()).Items;
+                var currentRoles = (await AppService.GetRolesAsync(entity.Id)).Items;
 
-                EditUserRoles = Roles.Select(x => new AssignedRoleViewModel
+                var combinedRoles = assignableRoles
+                    .Concat(currentRoles)
+                    .GroupBy(role => role.Id)
+                    .Select(group => group.First())
+                    .ToList();
+
+                var currentRoleIds = currentRoles.Select(r => r.Id).ToHashSet();
+                var assignableRoleIds = assignableRoles.Select(r => r.Id).ToHashSet();
+
+                EditUserRoles = combinedRoles.Select(x => new AssignedRoleViewModel
                 {
                     Name = x.Name,
-                    IsAssigned = userRoleIds.Contains(x.Id)
+                    IsAssigned = currentRoleIds.Contains(x.Id),
+                    IsAssignable = assignableRoleIds.Contains(x.Id)
                 }).ToArray();
 
                 ChangePasswordTextRole(TextRole.Password);
@@ -262,4 +277,6 @@ public class AssignedRoleViewModel
     public string Name { get; set; }
 
     public bool IsAssigned { get; set; }
+
+    public bool IsAssignable { get; set; }
 }

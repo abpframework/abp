@@ -34,12 +34,16 @@ $(function () {
             $("#ViewModel_Style").val(styleEditor.getValue());
             $("#ViewModel_Script").val(scriptEditor.getValue());
 
-            $formUpdate.ajaxSubmit({
-                success: function (result) {
-                    abp.notify.success(l('SavedSuccessfully'));
-                    abp.ui.clearBusy();
-                    location.href = "../../Pages";
-                }
+            abp.ajax({
+                url: $formUpdate.attr("action"),
+                data: new FormData($formUpdate[0]),
+                processData: false,
+                contentType: false
+            }).done(function () {
+                abp.notify.success(l('SavedSuccessfully'));
+                location.href = "../../Pages";
+            }).always(function () {
+                abp.ui.clearBusy();
             });
         }
     });

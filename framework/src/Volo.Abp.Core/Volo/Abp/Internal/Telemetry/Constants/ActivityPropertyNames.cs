@@ -12,6 +12,7 @@ public static class ActivityPropertyNames
     public const string IpAddress = "IpAddress";
     public const string IsFirstSession = "IsFirstSession";
     public const string DeviceId = "DeviceId";
+    public const string UserDeviceId = "UserDeviceId";
     public const string DeviceLanguage = "DeviceLanguage";
     public const string OperatingSystem = "OperatingSystem";
     public const string CountryIsoCode = "CountryIsoCode";

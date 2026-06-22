@@ -3,9 +3,6 @@ import {
   inject,
   input,
   isDevMode,
-  OnInit,
-  Optional,
-  SkipSelf,
   Type,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,7 +14,8 @@ import { ReplaceableComponentsService } from '../services/replaceable-components
 import { RouterEvents } from '../services/router-events.service';
 import { RoutesService } from '../services/routes.service';
 import { SubscriptionService } from '../services/subscription.service';
-import { findRoute, getRoutePath } from '../utils/route-utils';
+import { RouteBasedCultureUrlService } from '../services/route-based-culture-url.service';
+import { findRoute } from '../utils/route-utils';
 import { TreeNode } from '../utils/tree-utils';
 import { DYNAMIC_LAYOUTS_TOKEN } from '../tokens/dynamic-layout.token';
 import { EnvironmentService } from '../services';
@@ -49,6 +47,7 @@ export class DynamicLayoutComponent {
   protected readonly subscription = inject(SubscriptionService);
   protected readonly routerEvents = inject(RouterEvents);
   protected readonly environment = inject(EnvironmentService);
+  protected readonly routeCultureUrl = inject(RouteBasedCultureUrlService);
 
   constructor() {
     const dynamicLayoutComponent = inject(DynamicLayoutComponent, { optional: true, skipSelf: true });
@@ -88,7 +87,7 @@ export class DynamicLayoutComponent {
     const routeData = this.route.snapshot.data || {};
     let expectedLayout = routeData['layout'] as eLayoutType;
 
-    let node = findRoute(this.routes, getRoutePath(this.router));
+    let node = findRoute(this.routes, this.routeCultureUrl.getRoutePathForMatching(this.router));
     node = { parent: node } as TreeNode<ABP.Route>;
 
     while (node.parent) {

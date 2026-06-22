@@ -424,3 +424,6 @@ This module doesn't define any additional distributed event. See the [standard d
 * [Linked Accounts](./account/linkedaccounts.md)
 * [Session Management](./account/session-management.md)
 * [Idle Session Timeout](./account/idle-session-timeout.md)
+* [Web Authentication API (WebAuthn) passkeys](./account/passkey.md)
+* [Shared user accounts](./account/shared-user-accounts.md)
+```

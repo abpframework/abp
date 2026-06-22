@@ -85,6 +85,12 @@
           "contentType": "databaseTable",
           "name": "PermissionGrants",
           "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.PermissionManagement.ResourcePermissionGrant",
+          "contentType": "databaseTable",
+          "name": "ResourcePermissionGrants",
+          "summary": null
         }
       ],
       "replacedDbContexts": [],

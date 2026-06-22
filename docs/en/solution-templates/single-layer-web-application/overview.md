@@ -39,7 +39,7 @@ The following **libraries and services** come **pre-installed** and **configured
 The solution comes with the following built-in and pre-configured features:  
 
 * **Authentication** is fully configured based on best practices.
-* **[Permission](../../framework/fundamentals/authorization.md)** (authorization), **[setting](../../framework/infrastructure/settings.md)**, **[feature](../../framework/infrastructure/features.md)** and the **[localization](../../framework/fundamentals/localization.md)** management systems are pre-configured and ready to use.
+* **[Permission](../../framework/fundamentals/authorization/index.md)** (authorization), **[setting](../../framework/infrastructure/settings.md)**, **[feature](../../framework/infrastructure/features.md)** and the **[localization](../../framework/fundamentals/localization.md)** management systems are pre-configured and ready to use.
 * **[Background job system](../../framework/infrastructure/background-jobs/index.md)**.
 * **[BLOB storge](../../framework/infrastructure/blob-storing/index.md)** system is installed with the [database provider](../../framework/infrastructure/blob-storing/database.md).
 * **On-the-fly database migration** system (services automatically migrated their database schema when you deploy a new version). **\***

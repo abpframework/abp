@@ -11,6 +11,7 @@
     "InvalidUsername": "用戶名或密碼錯誤!",
     "InvalidAuthenticatorCode": "驗證碼無效！",
     "InvalidRecoveryCode": "恢復碼無效！",
-    "TheTargetUserIsNotLinkedToYou": "目標用戶與您無關！"
+    "TheTargetUserIsNotLinkedToYou": "目標用戶與您無關！",
+    "ClientResourcePermissionProviderKeyLookupService": "用戶端"
   }
 }

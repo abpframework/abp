@@ -222,9 +222,19 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
         return null;
     }
 
-    public virtual void RemoveChangedEntityEntries()
+    public virtual void ResetChangedFlags()
     {
-        EntityEntries.RemoveAll(x => x.Value.IsModified);
+        foreach (var entry in EntityEntries.Values)
+        {
+            if (entry.IsModified)
+            {
+                entry.IsModified = false;
+                foreach (var navigation in entry.NavigationEntries)
+                {
+                    navigation.IsModified = false;
+                }
+            }
+        }
     }
 
     public virtual void Clear()

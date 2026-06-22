@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.AntiForgery;
@@ -40,14 +42,32 @@ public class AbpValidateAntiforgeryTokenAuthorizationFilter : IAsyncAuthorizatio
 
         if (ShouldValidate(context))
         {
+            var httpContext = context.HttpContext;
+            var normalizeUserIdClaimIssuer = httpContext.RequestServices
+                .GetRequiredService<IOptions<AbpAntiForgeryOptions>>().Value.NormalizeUserIdClaimIssuer;
+
+            var originalPrincipal = httpContext.User;
+            if (normalizeUserIdClaimIssuer)
+            {
+                var normalizer = httpContext.RequestServices.GetRequiredService<IAbpAntiForgeryClaimsPrincipalNormalizer>();
+                httpContext.User = await normalizer.NormalizeAsync(originalPrincipal);
+            }
+
             try
             {
-                await _antiforgery.ValidateRequestAsync(context.HttpContext);
+                await _antiforgery.ValidateRequestAsync(httpContext);
             }
             catch (AntiforgeryValidationException exception)
             {
                 _logger.LogWarning(exception.Message, exception);
                 context.Result = new AntiforgeryValidationFailedResult();
+            }
+            finally
+            {
+                if (normalizeUserIdClaimIssuer)
+                {
+                    httpContext.User = originalPrincipal;
+                }
             }
         }
     }

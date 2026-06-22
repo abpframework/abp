@@ -15,9 +15,9 @@ Payment module implements payment gateway integration of an application. It prov
 
 See [the module description page](https://abp.io/modules/Volo.Payment) for an overview of the module features.
 
-## How to install
+## How to Install
 
-Payment module is not installed in [the startup templates](../solution-templates/layered-web-application). So, it needs to be installed manually. There are two ways of installing a module into your application.
+The Payment module is not installed in [the startup templates](../solution-templates/layered-web-application). So, it needs to be installed manually. There are two ways of installing a module into your application.
 
 
 ### Using ABP CLI
@@ -30,7 +30,7 @@ abp add-module Volo.Payment
 
 ### Manual Installation
 
-If you modified your solution structure, adding module using ABP CLI might not work for you. In such cases,  payment module can be added to a solution manually.
+If you modified your solution structure, adding a module using ABP CLI might not work for you. In such cases, the Payment module can be added to a solution manually.
 
 In order to do that, add packages listed below to matching project on your solution. For example, ```Volo.Payment.Application``` package to your **{ProjectName}.Application.csproj** like below;
 
@@ -47,7 +47,9 @@ After adding the package reference, open the module class of the project (eg: `{
 )]
 ```
 
-> If you are using Blazor Web App, you need to add the `Volo.Payment.Admin.Blazor.WebAssembly` package to the **{ProjectName}.Blazor.Client.csproj** project and ad the `Volo.Payment.Admin.Blazor.Server` package to the **{ProjectName}.Blazor.csproj** project.
+> If you are using Blazor Web App, you need to add the `Volo.Payment.Admin.Blazor.WebAssembly` package to the **{ProjectName}.Blazor.Client.csproj** project and add the `Volo.Payment.Admin.Blazor.Server` package to the **{ProjectName}.Blazor.csproj** project.
+
+> For Blazor UI public pages (payment gateway selection, pre-payment, and post-payment pages), see the [Blazor UI](#blazor-ui) section below for detailed installation and configuration instructions.
 
 ### Supported Gateway Packages
 
@@ -55,7 +57,8 @@ In order to use a Payment Gateway, you need to add related NuGet packages to you
 
 After adding packages of a payment gateway to your application, you also need to configure global payment module options and options for the payment modules you have added. See the Options section below.
 
-### Creating a custom payment gateway
+### Creating Custom Payment Gateways
+
 If you require a different payment gateway than existing ones, you can create a custom payment gateway by your own. 2 steps are required to create a custom payment gateway. First is creating a payment gateway object that implements `IPaymentGateway`. This interface exposes core payment operations without any UI. Second step is creating UI for the payment gateway. This UI is used to redirect user to payment gateway and validate payment.
 
 Follow the [instructions here](payment-custom-gateway) to create a custom payment gateway.
@@ -66,27 +69,291 @@ This module follows the [module development best practices guide](../framework/a
 
 You can visit [Payment module package list page](https://abp.io/packages?moduleName=Volo.Payment) to see list of packages related with this module.
 
-## User interface
+## User Interface
 
-### Public Pages
+The Payment module provides both **public pages** (for payment processing) and **admin pages** (for managing payment plans and requests). The UI is available for **MVC/Razor Pages**, **Blazor**, and **Angular** applications. See the UI-specific sections below for installation and configuration details.
 
-#### Payment gateway selection
+### MVC / Razor Pages UI
 
-This page allows selecting a payment gateway. If there is one payment gateway configured for final application, this page will be skipped.
+For MVC/Razor Pages applications, the `abp add-module Volo.Payment` command automatically adds the required packages (`Volo.Payment.Web` and gateway-specific Web packages) and the necessary `DependsOn` statements to your module. The only thing you need to do is configure `PaymentWebOptions` as explained in the [PaymentWebOptions](#paymentweboptions) section.
 
-![payment-gateway-selection](../images/payment-gateway-selection.png)
+### Blazor UI
 
-#### PayU prepayment page
+For Blazor applications, the `abp add-module Volo.Payment` command automatically adds the required packages (`Volo.Payment.Blazor.Server` or `Volo.Payment.Blazor.WebAssembly` and gateway-specific Blazor packages) and the necessary `DependsOn` statements to your module. The only thing you need to do is configure `PaymentBlazorOptions` as explained below.
 
-This page is used to send Name, Surname and Email Address of user to PayU.
+#### Installation
 
-![payment-payu-prepayment-page](../images/payment-payu-prepayment-page.png)
+> **Note:** If you used the `abp add-module Volo.Payment` command to install the Payment module, the following packages and module dependencies are automatically added to your project. You can skip to the [Gateway-Specific Blazor Packages](#gateway-specific-blazor-packages) section. The information below is provided for reference or manual installation scenarios.
 
-### Admin Pages
+To use the Payment module's public pages in a Blazor application, you need to install the core Blazor packages and the gateway-specific Blazor packages for each payment gateway you want to support.
+
+##### Core Blazor Packages
+
+For **Blazor Server** applications, add the following package to your **{ProjectName}.Blazor.Server.csproj** (or **{ProjectName}.Blazor.csproj** for Blazor Web App):
+
+```json
+<PackageReference Include="Volo.Payment.Blazor.Server" Version="x.x.x" />
+```
+
+For **Blazor WebAssembly** applications, add the following package to your **{ProjectName}.Blazor.csproj** (or **{ProjectName}.Blazor.Client.csproj** for Blazor Web App):
+
+```json
+<PackageReference Include="Volo.Payment.Blazor.WebAssembly" Version="x.x.x" />
+```
+
+#### Gateway-Specific Blazor Packages
+
+Each payment gateway requires its own Blazor package. Add the packages for the gateways you want to support:
+
+**Stripe:**
+- Blazor Server: `Volo.Payment.Stripe.Blazor.Server`
+- Blazor WebAssembly: `Volo.Payment.Stripe.Blazor.WebAssembly`
+
+**PayPal:**
+- Blazor Server: `Volo.Payment.PayPal.Blazor.Server`
+- Blazor WebAssembly: `Volo.Payment.PayPal.Blazor.WebAssembly`
+
+**PayU:**
+- Blazor Server: `Volo.Payment.PayU.Blazor.Server`
+- Blazor WebAssembly: `Volo.Payment.PayU.Blazor.WebAssembly`
+
+**Iyzico:**
+- Blazor Server: `Volo.Payment.Iyzico.Blazor.Server`
+- Blazor WebAssembly: `Volo.Payment.Iyzico.Blazor.WebAssembly`
+- HttpApi (required for callbacks): `Volo.Payment.Iyzico.HttpApi`
+
+> **Important:** Iyzico requires the `Volo.Payment.Iyzico.HttpApi` package because Blazor cannot directly handle POST requests from external payment gateways. This package provides an API endpoint to receive the POST callback from Iyzico and redirect to the Blazor post-payment page.
+
+**Alipay:**
+- Blazor Server: `Volo.Payment.Alipay.Blazor.Server`
+- Blazor WebAssembly: `Volo.Payment.Alipay.Blazor.WebAssembly`
+
+**TwoCheckout:**
+- Blazor Server: `Volo.Payment.TwoCheckout.Blazor.Server`
+- Blazor WebAssembly: `Volo.Payment.TwoCheckout.Blazor.WebAssembly`
+
+##### Module Dependencies
+
+After adding the package references, add the module dependencies to your Blazor module class. For example, for a Blazor Server application with Stripe and PayPal:
+
+```csharp
+[DependsOn(
+    // ... other dependencies
+    typeof(AbpPaymentBlazorServerModule),
+    typeof(AbpPaymentStripeBlazorServerModule),
+    typeof(AbpPaymentPayPalBlazorServerModule)
+)]
+public class YourBlazorModule : AbpModule
+{
+    // ...
+}
+```
+
+For Blazor WebAssembly:
+
+```csharp
+[DependsOn(
+    // ... other dependencies
+    typeof(AbpPaymentBlazorWebAssemblyModule),
+    typeof(AbpPaymentStripeBlazorWebAssemblyModule),
+    typeof(AbpPaymentPayPalBlazorWebAssemblyModule)
+)]
+public class YourBlazorModule : AbpModule
+{
+    // ...
+}
+```
+
+#### Configuration
+
+Configure `PaymentBlazorOptions` in your Blazor module's `ConfigureServices` method:
+
+```csharp
+Configure<PaymentBlazorOptions>(options =>
+{
+    options.RootUrl = configuration["App:SelfUrl"];
+    options.CallbackUrl = configuration["App:SelfUrl"] + "/PaymentSucceed";
+    options.GatewaySelectionCheckoutButtonStyle = "btn btn-primary"; // Optional CSS class
+});
+```
+
+You can also configure these options in your `appsettings.json` file:
+
+```json
+{
+  "Payment": {
+    "Blazor": {
+      "RootUrl": "https://localhost:44300",
+      "CallbackUrl": "https://localhost:44300/PaymentSucceed",
+      "GatewaySelectionCheckoutButtonStyle": "btn btn-primary"
+    }
+  }
+}
+```
+
+##### Gateway-Specific Blazor Options
+
+Each payment gateway has its own Blazor options for customizing the UI. These options can be configured in `appsettings.json`:
+
+```json
+{
+  "Payment": {
+    "Blazor": {
+      "Payu": {
+        "PrePaymentCheckoutButtonStyle": "btn btn-success",
+        "Recommended": true,
+        "ExtraInfos": ["Fast checkout", "Secure payment"]
+      },
+      "TwoCheckout": {
+        "Recommended": false,
+        "ExtraInfos": ["International payments"]
+      },
+      "PayPal": {
+        "Recommended": true,
+        "ExtraInfos": ["Pay with PayPal balance", "Buyer protection"]
+      },
+      "Stripe": {
+        "Recommended": true,
+        "ExtraInfos": ["Credit/Debit cards", "Apple Pay", "Google Pay"]
+      },
+      "Iyzico": {
+        "PrePaymentCheckoutButtonStyle": "btn btn-primary",
+        "Recommended": false,
+        "ExtraInfos": ["Turkish payment gateway"]
+      },
+      "Alipay": {
+        "PrePaymentCheckoutButtonStyle": "btn btn-info",
+        "Recommended": false,
+        "ExtraInfos": ["Chinese payment gateway", "CNY only"]
+      }
+    }
+  }
+}
+```
+
+#### Creating Payments in Blazor
+
+To initiate a payment in a Blazor component, inject `IPaymentRequestAppService` and `NavigationManager`, create a payment request, and navigate to the gateway selection page:
+
+```csharp
+@page "/"
+@using Microsoft.AspNetCore.Components
+@using Volo.Payment
+@using Volo.Payment.Requests
+@inject IPaymentRequestAppService PaymentRequestAppService
+@inject NavigationManager NavigationManager
+
+<button class="btn btn-primary" @onclick="StartPaymentAsync">
+    Pay Now
+</button>
+
+@code {
+    private async Task StartPaymentAsync()
+    {
+        var paymentRequest = await PaymentRequestAppService.CreateAsync(
+            new PaymentRequestCreateDto
+            {
+                Currency = "USD",
+                Products = new List<PaymentRequestProductCreateDto>
+                {
+                    new PaymentRequestProductCreateDto
+                    {
+                        Code = "Product_01",
+                        Name = "LEGO Super Mario",
+                        Count = 2,
+                        UnitPrice = 60,
+                        TotalPrice = 120
+                    }
+                }
+            });
+
+        NavigationManager.NavigateTo($"/Payment/GatewaySelection?paymentRequestId={paymentRequest.Id}");
+    }
+}
+```
+
+##### Passing Extra Parameters
+
+Some payment gateways require additional parameters. You can pass these as extra properties when creating the payment request:
+
+```csharp
+var paymentRequest = await PaymentRequestAppService.CreateAsync(
+    new PaymentRequestCreateDto
+    {
+        Currency = "USD",
+        Products = new List<PaymentRequestProductCreateDto>
+        {
+            new PaymentRequestProductCreateDto
+            {
+                Code = "Product_01",
+                Name = "LEGO Super Mario",
+                Count = 1,
+                UnitPrice = 60,
+                TotalPrice = 60
+            }
+        },
+        ExtraProperties = new ExtraPropertyDictionary
+        {
+            // For Iyzico - Customer information
+            { "Name", "John" },
+            { "Surname", "Doe" },
+            { "Email", "john.doe@example.com" },
+            { "Address", "123 Main St" },
+            { "City", "Istanbul" },
+            { "Country", "Turkey" },
+            { "ZipCode", "34000" },
+            
+            // For PayU - Customer information
+            { "BuyerName", "John" },
+            { "BuyerSurname", "Doe" },
+            { "BuyerEmail", "john.doe@example.com" }
+        }
+    });
+```
+
+#### Handling the Callback (Optional)
+
+When a user completes a payment on the external payment gateway, the following flow occurs:
+
+1. The user is redirected to the **PostPayment page** (handled internally by the payment module)
+2. The PostPayment page validates the payment with the gateway and updates the payment request status to **Completed**
+3. If a `CallbackUrl` is configured in `PaymentBlazorOptions`, the user is then redirected to that URL with the `paymentRequestId` as a query parameter
+
+Create a page to handle this callback and perform any application-specific actions:
+
+```csharp
+@page "/PaymentSucceed"
+@using Microsoft.AspNetCore.WebUtilities
+
+<h3>Payment Successful!</h3>
+<p>Thank you for your purchase.</p>
+<p>Payment Request ID: @PaymentRequestId</p>
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public Guid? PaymentRequestId { get; set; }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        if (PaymentRequestId.HasValue)
+        {
+            // The payment is already completed at this point.
+            // Perform application-specific actions here:
+            // e.g., activate subscription, send confirmation email, 
+            // update order status, grant access to purchased content, etc.
+        }
+    }
+}
+```
+
+> **Note:** By the time the user reaches your callback page, the payment request status has already been set to **Completed** by the PostPayment page. Your callback page is for performing additional application-specific logic. It is also your responsibility to handle if a payment request is used more than once. If you have already delivered your product for a given `PaymentRequestId`, you should not deliver it again when the callback URL is visited a second time.
 
 ### Angular UI
 
-#### Installation
+For Angular applications, you need to read and apply the steps explained in the following sections:
+
+#### Configurations
 
 In order to configure the application to use the payment module, you first need to import `PaymentAdminConfigModule` from `@volo/abp.ng.payment/admin/config` to the root configuration. `PaymentAdminConfigModule` has a static `forRoot` method which you should call for a proper configuration:
 
@@ -120,15 +387,35 @@ const APP_ROUTES: Routes = [
 ];
 ```
 
-#### Payment plans page
+### Pages
+
+#### Public Pages
+
+##### Payment Gateway Selection
+
+This page allows selecting a payment gateway. If there is only one payment gateway configured for the application, this page will be skipped.
+
+![payment-gateway-selection](../images/payment-gateway-selection.png)
+
+##### PrePayment Page
+
+Some payment gateways require additional information before redirecting to the payment gateway. For example, PayU and Iyzico require customer information (Name, Surname, Email Address, etc.) before processing the payment.
+
+![payment-payu-prepayment-page](../images/payment-payu-prepayment-page.png)
+
+#### Admin Pages
+
+##### Payment Plans Page
+
 Payment plans for subscriptions can be managed on this page. You can connect external subscriptions for each gateway to a plan.
 
 ![payment plans](../images/payment-plans.png)
 
 ![payment plans gateway plans](../images/payment-plans-gateway-plans.png)
 
-#### Payment request list
-This page lists all the payment request operations in application.
+##### Payment Request List
+
+This page lists all the payment request operations in the application.
 
 ![payment request list](../images/payment-request-list.png)
 
@@ -171,7 +458,22 @@ Configure<PaymentOptions>(options =>
   * ```PrePaymentUrl```: URL of the page before redirecting user to payment gateway for payment.
   * ```PostPaymentUrl```: URL of the page when user redirected back from payment gateway to your website. This page is used to validate the payment mostly.
   * ```Order```: Order of payment gateway for gateway selection page.
-  * ```Recommended```: Is payment gateway is recommended or not. This information is displayed on payment gateway selection page.
+  * ```Recommended```: Is payment gateway recommended or not. This information is displayed on payment gateway selection page.
+  * ```ExtraInfos```: List of informative strings for payment gateway. These texts are displayed on payment gateway selection page.
+
+### PaymentBlazorOptions
+
+```PaymentBlazorOptions``` is used to configure Blazor application related configurations. This is the Blazor equivalent of `PaymentWebOptions`.
+
+* ```CallbackUrl```: Final callback URL for internal payment gateway modules to return. User will be redirected to this URL on your website after a successful payment.
+* ```RootUrl```: Root URL of your Blazor application.
+* ```GatewaySelectionCheckoutButtonStyle```: CSS style to add to the Checkout button on the gateway selection page. This class can be used for tracking user activity via 3rd party tools like Google Tag Manager.
+* ```PaymentGatewayBlazorConfigurationDictionary```: Used to store Blazor related payment gateway configuration.
+  * ```Name```: Name of payment gateway.
+  * ```PrePaymentUrl```: URL of the Blazor page before redirecting user to payment gateway for payment.
+  * ```PostPaymentUrl```: URL of the Blazor page when user is redirected back from payment gateway to your website.
+  * ```Order```: Order of payment gateway for gateway selection page.
+  * ```Recommended```: Is payment gateway recommended or not. This information is displayed on payment gateway selection page.
   * ```ExtraInfos```: List of informative strings for payment gateway. These texts are displayed on payment gateway selection page.
 
 ### PayuOptions
@@ -193,9 +495,17 @@ Configure<PaymentOptions>(options =>
 
 ```PayuWebOptions``` is used to configure PayU payment gateway web options.
 
-* ```Recommended```: Is payment gateway is recommended or not. This information is displayed on payment gateway selection page.
+* ```Recommended```: Is payment gateway recommended or not. This information is displayed on payment gateway selection page.
 * ```ExtraInfos```: List of informative strings for payment gateway. These texts are displayed on payment gateway selection page.
-* ```PrePaymentCheckoutButtonStyle```: Css style to add Checkout button on PayU prepayment page. This class can be used for tracking user activity via 3rd party tools like Google Tag Manager.
+* ```PrePaymentCheckoutButtonStyle```: CSS style to add to the Checkout button on the PayU prepayment page. This class can be used for tracking user activity via 3rd party tools like Google Tag Manager.
+
+### PayuBlazorOptions
+
+```PayuBlazorOptions``` is used to configure PayU payment gateway Blazor options.
+
+* ```Recommended```: Is payment gateway recommended or not. This information is displayed on payment gateway selection page.
+* ```ExtraInfos```: List of informative strings for payment gateway. These texts are displayed on payment gateway selection page.
+* ```PrePaymentCheckoutButtonStyle```: CSS style to add to the Checkout button on the PayU prepayment page.
 
 ### TwoCheckoutOptions
 
@@ -210,7 +520,14 @@ Configure<PaymentOptions>(options =>
 
 ```TwoCheckoutWebOptions``` is used to configure TwoCheckout payment gateway web options.
 
-* ```Recommended```: Is payment gateway is recommended or not. This information is displayed on payment gateway selection page.
+* ```Recommended```: Is payment gateway recommended or not. This information is displayed on payment gateway selection page.
+* ```ExtraInfos```: List of informative strings for payment gateway. These texts are displayed on payment gateway selection page.
+
+### TwoCheckoutBlazorOptions
+
+```TwoCheckoutBlazorOptions``` is used to configure TwoCheckout payment gateway Blazor options.
+
+* ```Recommended```: Is payment gateway recommended or not. This information is displayed on payment gateway selection page.
 * ```ExtraInfos```: List of informative strings for payment gateway. These texts are displayed on payment gateway selection page.
 
 ### StripeOptions
@@ -228,7 +545,14 @@ Configure<PaymentOptions>(options =>
 
 ```StripeWebOptions``` is used to configure Stripe payment gateway web options.
 
-* ```Recommended```: Is payment gateway is recommended or not. This information is displayed on payment gateway selection page.
+* ```Recommended```: Is payment gateway recommended or not. This information is displayed on payment gateway selection page.
+* ```ExtraInfos```: List of informative strings for payment gateway. These texts are displayed on payment gateway selection page.
+
+### StripeBlazorOptions
+
+```StripeBlazorOptions``` is used to configure Stripe payment gateway Blazor options.
+
+* ```Recommended```: Is payment gateway recommended or not. This information is displayed on payment gateway selection page.
 * ```ExtraInfos```: List of informative strings for payment gateway. These texts are displayed on payment gateway selection page.
 
 ### PayPalOptions
@@ -245,7 +569,14 @@ Configure<PaymentOptions>(options =>
 
 ```PayPalWebOptions``` is used to configure PayPal payment gateway web options.
 
-* ```Recommended```: Is payment gateway is recommended or not. This information is displayed on payment gateway selection page.
+* ```Recommended```: Is payment gateway recommended or not. This information is displayed on payment gateway selection page.
+* ```ExtraInfos```: List of informative strings for payment gateway. These texts are displayed on payment gateway selection page.
+
+### PayPalBlazorOptions
+
+```PayPalBlazorOptions``` is used to configure PayPal payment gateway Blazor options.
+
+* ```Recommended```: Is payment gateway recommended or not. This information is displayed on payment gateway selection page.
 * ```ExtraInfos```: List of informative strings for payment gateway. These texts are displayed on payment gateway selection page.
 
 ### IyzicoOptions
@@ -263,9 +594,17 @@ Configure<PaymentOptions>(options =>
 
 ```IyzicoWebOptions``` is used to configure Iyzico payment gateway web options.
 
-* ```Recommended```: Is payment gateway is recommended or not. This information is displayed on payment gateway selection page.
+* ```Recommended```: Is payment gateway recommended or not. This information is displayed on payment gateway selection page.
 * ```ExtraInfos```: List of informative strings for payment gateway. These texts are displayed on payment gateway selection page.
-* ```PrePaymentCheckoutButtonStyle```: CSS style to add Checkout button on Iyzico prepayment page. This class can be used for tracking user activity via 3rd party tools like Google Tag Manager.
+* ```PrePaymentCheckoutButtonStyle```: CSS style to add to the Checkout button on the Iyzico prepayment page. This class can be used for tracking user activity via 3rd party tools like Google Tag Manager.
+
+### IyzicoBlazorOptions
+
+```IyzicoBlazorOptions``` is used to configure Iyzico payment gateway Blazor options.
+
+* ```Recommended```: Is payment gateway recommended or not. This information is displayed on payment gateway selection page.
+* ```ExtraInfos```: List of informative strings for payment gateway. These texts are displayed on payment gateway selection page.
+* ```PrePaymentCheckoutButtonStyle```: CSS style to add to the Checkout button on the Iyzico prepayment page.
 
 ### AlipayOptions
 
@@ -285,9 +624,17 @@ Configure<PaymentOptions>(options =>
 
 #### AlipayWebOptions
 
-* ```Recommended```: Is payment gateway is recommended or not. This information is displayed on payment gateway selection page.
+* ```Recommended```: Is payment gateway recommended or not. This information is displayed on payment gateway selection page.
 * ```ExtraInfos```: List of informative strings for payment gateway. These texts are displayed on payment gateway selection page.
-* ```PrePaymentCheckoutButtonStyle```: CSS style to add Checkout button on Iyzico prepayment page. This class can be used for tracking user activity via 3rd party tools like Google Tag Manager.
+* ```PrePaymentCheckoutButtonStyle```: CSS style to add to the Checkout button on the Alipay prepayment page. This class can be used for tracking user activity via 3rd party tools like Google Tag Manager.
+
+#### AlipayBlazorOptions
+
+```AlipayBlazorOptions``` is used to configure Alipay payment gateway Blazor options.
+
+* ```Recommended```: Is payment gateway recommended or not. This information is displayed on payment gateway selection page.
+* ```ExtraInfos```: List of informative strings for payment gateway. These texts are displayed on payment gateway selection page.
+* ```PrePaymentCheckoutButtonStyle```: CSS style to add to the Checkout button on the Alipay prepayment page.
 
 > You can check the [Alipay document](https://opendocs.alipay.com/open/02np97) for more details.
 
@@ -541,7 +888,7 @@ PrePayment page asks users for extra information if requested by the external pa
 
 PostPayment page is responsible for validation of the response of the external payment gateway. When a user completes the payment, user is redirected to PostPayment page for that payment gateway and PostPayment page validates the status of the payment. If the payment is succeeded, status of the payment request is updated and user is redirected to main application.
 
-Note: It is main application's responsibility to handle if a payment request is used more than one time. For example if PostPayment page generates a URL like https://mywebsite.com/PaymentSucceed?PaymentRequestId={PaymentRequestId}, this URL can be visited more than onec manually by end users. If you already delivered your product for a given PaymentRequestId, you shouldn't deliver it when this URL is visited second time.
+Note: It is the main application's responsibility to handle if a payment request is used more than once. For example, if the PostPayment page generates a URL like https://mywebsite.com/PaymentSucceed?PaymentRequestId={PaymentRequestId}, this URL can be visited more than once manually by end users. If you have already delivered your product for a given PaymentRequestId, you shouldn't deliver it when this URL is visited a second time.
 
 ### Creating One-Time Payment
 
@@ -563,7 +910,7 @@ public class IndexModel: PageModel
     {
         var paymentRequest = await _paymentRequestAppService.CreateAsync(new PaymentRequestCreateDto()
         {
-            Currency= "USD",
+            Currency = "USD",
             Products = new List<PaymentRequestProductCreateDto>()
             {
                 new PaymentRequestProductCreateDto
@@ -582,7 +929,7 @@ public class IndexModel: PageModel
 }
 ```
 
-If the payment is successful, payment module will return to configured ```PaymentWebOptions.CallbackUrl```. The main application can take necessary actions for a successful payment (Activating a user account, triggering a shipment start process etc...).
+If the payment is successful, payment module will return to the configured ```PaymentWebOptions.CallbackUrl```. The main application can take necessary actions for a successful payment (activating a user account, triggering a shipment start process, etc.).
 
 ## Subscriptions
 

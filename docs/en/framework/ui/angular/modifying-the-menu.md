@@ -44,7 +44,29 @@ export const appConfig: ApplicationConfig = {
 
 Notes
 - This approach works across themes. If you are using LeptonX, the brand logo component reads these values automatically; you don't need any theme-specific code.
-- You can still override visuals with CSS variables if desired. See the LeptonX section for CSS overrides.
+- You can still override visuals with CSS variables if desired. See the alternative approach below.
+
+### Alternative: Using CSS Variables (LeptonX Theme)
+
+If you're using the LeptonX theme, you can also configure the logo using CSS variables in your `styles.scss` file. This approach is specific to LeptonX and provides direct control over the logo styling.
+
+Add the following to your `src/styles.scss`:
+
+```scss
+:root {
+  --lpx-logo: url('/assets/images/logo/logo-light.png');
+  --lpx-logo-icon: url('/assets/images/logo/logo-light-thumbnail.png');
+}
+```
+
+**When to use each approach:**
+
+| Approach | Use Case | Theme Support |
+|----------|----------|-------------|
+| **provideLogo** (recommended) | Cross-theme compatibility, environment-based configuration | All themes  |
+| **CSS Variables** | LeptonX-specific styling, fine-grained CSS control | LeptonX only |
+
+**Recommendation:** Use the `provideLogo` approach for most cases as it's theme-independent and follows ABP's standard configuration pattern. Use CSS variables only when you need LeptonX-specific styling control or have existing CSS-based theme customizations.
 
 ## How to Add a Navigation Element
 

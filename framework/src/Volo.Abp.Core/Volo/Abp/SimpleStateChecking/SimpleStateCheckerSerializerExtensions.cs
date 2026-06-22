@@ -8,8 +8,25 @@ namespace Volo.Abp.SimpleStateChecking;
 public static class SimpleStateCheckerSerializerExtensions
 {
     public static string? Serialize<TState>(
-        this ISimpleStateCheckerSerializer serializer, 
+        this ISimpleStateCheckerSerializer serializer,
         IList<ISimpleStateChecker<TState>> stateCheckers)
+        where TState : IHasSimpleStateCheckers<TState>
+    {
+        return SerializeCore(stateCheckers, serializer.Serialize);
+    }
+
+    public static string? Serialize<TState>(
+        this ISimpleStateCheckerSerializer serializer,
+        IList<ISimpleStateChecker<TState>> stateCheckers,
+        TState state)
+        where TState : IHasSimpleStateCheckers<TState>
+    {
+        return SerializeCore(stateCheckers, c => serializer.Serialize(c, state));
+    }
+
+    private static string? SerializeCore<TState>(
+        IList<ISimpleStateChecker<TState>> stateCheckers,
+        Func<ISimpleStateChecker<TState>, string?> serializeChecker)
         where TState : IHasSimpleStateCheckers<TState>
     {
         switch (stateCheckers.Count)
@@ -17,16 +34,16 @@ public static class SimpleStateCheckerSerializerExtensions
             case 0:
                 return null;
             case 1:
-                var serializedChecker = serializer.Serialize(stateCheckers.Single());
+                var serializedChecker = serializeChecker(stateCheckers.Single());
                 return serializedChecker != null
                     ? $"[{serializedChecker}]"
                     : null;
             default:
                 var serializedCheckers = new List<string>(stateCheckers.Count);
-                
+
                 foreach (var stateChecker in stateCheckers)
                 {
-                    var serialized = serializer.Serialize(stateChecker);
+                    var serialized = serializeChecker(stateChecker);
                     if (serialized != null)
                     {
                         serializedCheckers.Add(serialized);

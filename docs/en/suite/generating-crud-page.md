@@ -108,7 +108,11 @@ To create a new entity, make sure the *-New entity-* is selected in the **Entity
 
   * **Update database:** When you add a new migration, ABP Suite can automatically execute update-database command so that the changes are being applied to the database.
 
-* **Create user interface:** Creates pages, modals, components, `JavaScript`, `CSS ` files and adds the new page to the main menu.  If you don't have a requirement to manage the entity via user interface, you can uncheck this option.
+* **Create user interface:** Creates pages, modals, components, `JavaScript`, `CSS` files and adds the new page to the main menu. If you don't have a requirement to manage the entity via user interface, you can uncheck this option.
+
+  > **Note:** This option does not generate React UI pages. ABP Suite's UI generation targets Suite-supported UI stacks such as MVC, Blazor and Angular. For React-based solutions, build the UI in the source-owned [React UI](../framework/ui/react/index.md) application. ABP license holders can use [ABP Studio AI Agent](https://abp.io/studio/ai-agent) with predefined AI credits to generate React pages more easily.
+
+  > **Blazor UI library:** For Blazor solutions, the generated UI matches the underlying Blazor component library. Solutions that reference `Volo.Abp.MudBlazorUI` produce pages built around `MudDataGrid`, `MudDialog`, `MudForm` and the rest of the [MudBlazor](https://mudblazor.com) controls; Blazorise-based solutions keep emitting the original `DataGrid` / `Modal` / `Validations` markup. ABP Suite picks the variant automatically by scanning the Blazor project `.csproj` and shows the resolved value in the solution info tooltip — no extra switch is required. See the [Blazor UI library](index.md#blazor-ui-library) section for details.
 
 * **Excel export**: Creates a button that exports a list of all the data that were added to the entity to an Excel file.
 
@@ -270,6 +274,29 @@ In the example above, the `IdentityUser` entity is selected as the navigation pr
 
 > **Note:** Ensure that your solution is built properly before establishing relationship between your own entity and a module entity because ABP Suite scans assemblies and finds which ABP modules you are using and lists their entities in the navigation property model if you have checked the **Include entities from ABP modules** checkbox.
 
+#### Extending with Custom Module Entities
+
+If you want to extend ABP Suite's system to list entities from your own custom modules (not just ABP's built-in modules), you can configure the `module-entity-extension.json` file. This file is located in the `.suite` folder at the root of your solution (`/.suite/module-entity-extension.json`).
+
+Here is the default sample file content:
+
+```json
+{
+  "Modules": [
+    {
+      "DomainProjectDllFileName": "MySampleModule.MyProject.Domain.dll"
+    }
+  ]
+}
+```
+
+By defining the `DomainProjectDllFileName` property, ABP Suite will scan the specified module's **.dll** and list its entities in the navigation property model. This allows you to create navigation properties that reference entities from your custom modules.
+
+> **Important:** When extending with custom module entities, ensure that:
+> - Your current solution properly depends on the related module.
+> - All module references are correctly configured.
+> - The solution is built successfully before attempting to establish relationships.
+
 #### Adding An Existing Entity as a Navigation Property
 
 Alternatively, you can add `IdentityUser` entity (or any other entity) as a navigation property to an entity by manually entering the required information. See the screenshot below:
@@ -294,11 +321,22 @@ There are some adjustments you may need to make before generating CRUD pages for
 
 - Check if your environment variables have `rootNamespace` defined as explained [here](../framework/ui/angular/service-proxies.md#angular-project-configuration).
 
-- Check if your [workspace configuration](https://angular.io/guide/workspace-config) satisfies one of the following. Examples assume your solution namespace is `BookStore`, `Acme.BookStore`, or `Acme.Retail.BookStore`.
+- Check if your [workspace configuration](https://angular.dev/reference/configs/workspace-config) satisfies one of the following. Examples assume your solution namespace is `BookStore`, `Acme.BookStore`, or `Acme.Retail.BookStore`.
   - Project key is in pascal case. E.g. `BookStore`.
   - Project key is in camel case. E.g. `bookStore`.
   - Project key is in kebab case. E.g. `book-store`.
   - Project is defined as `defaultProject`.
+
+### What to Check If CRUD Generation Fails After Migrating to Mapperly
+
+If you migrated an existing solution from AutoMapper to Mapperly and ABP Suite starts appending mappings to the wrong file or generating duplicate/inconsistent mapper classes, check your mapper file layout.
+
+- Keep the main Suite-managed files, such as `*ApplicationMappers.cs`, `*BlazorMappers.cs` and `*WebMappers.cs`, reserved for ABP Suite updates.
+- Move manual or AI-generated Mapperly classes to separate files.
+- Avoid naming those manual files with the same conventional suffixes that ABP Suite scans, otherwise Suite may choose the wrong file while generating CRUD pages.
+- If you temporarily excluded a Suite-managed mapper file from the build, add it back after reorganizing your mappings.
+
+After reorganizing the files, clean the solution, rebuild it, and try generating the entity again.
 
 ## Generating CRUD Pages via Command Line
 

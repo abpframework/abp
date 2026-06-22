@@ -1,16 +1,14 @@
+@using Microsoft.AspNetCore.Components
 @implements IDisposable
 @inject IComponentBundleManager BundleManager
 @inject PersistentComponentState ApplicationState
+@inject NavigationManager NavigationManager
+@inject IComponentBundleUrlBuilder BundleUrlBuilder
 @if (StyleFiles != null)
 {
     foreach (var file in StyleFiles)
     {
-        var href = file;
-        if (!AppBasePath.IsNullOrWhiteSpace())
-        {
-            href = AppBasePath.EnsureEndsWith('/') + file.RemovePreFix("/");
-        }
-        <link rel="stylesheet" href="@href" />
+        <link rel="stylesheet" href="@file" />
     }
 }
 
@@ -39,7 +37,8 @@
             // We are in prerendering mode
             if (!BundleName.IsNullOrWhiteSpace())
             {
-                StyleFiles = (await BundleManager.GetStyleBundleFilesAsync(BundleName!)).ToList();
+                var rawFiles = await BundleManager.GetStyleBundleFilesAsync(BundleName!);
+                StyleFiles = await ResolveAsync(rawFiles);
             }
         }
         else
@@ -47,7 +46,7 @@
             StyleFiles = scriptFiles;
             if (OperatingSystem.IsBrowser() && StyleFiles != null && WebAssemblyStyleFiles != null)
             {
-                StyleFiles.AddIfNotContains(WebAssemblyStyleFiles);
+                StyleFiles.AddIfNotContains(await ResolveAsync(WebAssemblyStyleFiles));
             }
         }
     }
@@ -60,9 +59,19 @@
         {
             _hasRemoveServerStyle = true;
             await Task.Delay(3000);
-            StyleFiles = WebAssemblyStyleFiles;
+            StyleFiles = await ResolveAsync(WebAssemblyStyleFiles);
             StateHasChanged();
         }
+    }
+
+    private async Task<List<string>> ResolveAsync(IReadOnlyList<string> files)
+    {
+        var resolved = new List<string>(files.Count);
+        foreach (var file in files)
+        {
+            resolved.Add(await BundleUrlBuilder.BuildAsync(file, AppBasePath, NavigationManager.BaseUri));
+        }
+        return resolved;
     }
 
     private Task Callback()

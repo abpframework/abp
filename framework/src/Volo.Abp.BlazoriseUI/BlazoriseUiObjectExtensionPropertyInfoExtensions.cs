@@ -1,5 +1,6 @@
 ﻿using Blazorise;
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,7 +12,8 @@ namespace Volo.Abp.BlazoriseUI;
 
 public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
 {
-    private static readonly HashSet<Type> NumberTypes = new HashSet<Type> {
+    private static readonly FrozenSet<Type> NumberTypes = new HashSet<Type>
+        {
             typeof(int),
             typeof(long),
             typeof(byte),
@@ -36,13 +38,14 @@ public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
             typeof(float?),
             typeof(double?),
             typeof(decimal?)
-        };
+        }.ToFrozenSet();
 
-    private static readonly HashSet<Type> TextEditSupportedAttributeTypes = new HashSet<Type> {
+    private static readonly FrozenSet<Type> TextEditSupportedAttributeTypes = new HashSet<Type>
+        {
             typeof(EmailAddressAttribute),
             typeof(UrlAttribute),
             typeof(PhoneAttribute)
-        };
+        }.ToFrozenSet();
 
     public static string? GetDateEditInputFormatOrNull(this IBasicObjectExtensionPropertyInfo property)
     {
@@ -208,7 +211,7 @@ public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
     {
         foreach (var attribute in propertyInfo.Attributes)
         {
-            var inputTypeByAttribute = GetInputTypeFromAttributeOrNull(attribute);
+            var inputTypeByAttribute = GetInputTypeFromAttributeOrNull(attribute, propertyInfo.Type);
             if (inputTypeByAttribute != null)
             {
                 return inputTypeByAttribute;
@@ -218,7 +221,12 @@ public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
                ?? typeof(TextExtensionProperty<,>); //default
     }
 
-    private static Type? GetInputTypeFromAttributeOrNull(Attribute attribute)
+    public static bool IsEnum(this ObjectExtensionPropertyInfo propertyInfo)
+    {
+        return propertyInfo.Type.IsEnum || TypeHelper.IsNullableEnum(propertyInfo.Type);
+    }
+
+    private static Type? GetInputTypeFromAttributeOrNull(Attribute attribute, Type propertyType)
     {
         var hasTextEditSupport = TextEditSupportedAttributeTypes.Any(t => t == attribute.GetType());
 
@@ -226,7 +234,6 @@ public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
         {
             return typeof(TextExtensionProperty<,>);
         }
-
 
         if (attribute is DataTypeAttribute dataTypeAttribute)
         {
@@ -239,7 +246,9 @@ public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
                     return typeof(TextExtensionProperty<,>);
                 case DataType.Date:
                 case DataType.DateTime:
-                    return typeof(DateTimeExtensionProperty<,>);
+                    return propertyType == typeof(DateTimeOffset) || propertyType == typeof(DateTimeOffset?)
+                        ? typeof(DateTimeOffsetExtensionProperty<,>)
+                        : typeof(DateTimeExtensionProperty<,>);
                 case DataType.Time:
                     return typeof(TimeExtensionProperty<,>);
                 case DataType.MultilineText:
@@ -257,9 +266,14 @@ public static class BlazoriseUiObjectExtensionPropertyInfoExtensions
             return typeof(CheckExtensionProperty<,>);
         }
 
-        if (type == typeof(DateTime))
+        if (type == typeof(DateTime) || type == typeof(DateTime?))
         {
             return typeof(DateTimeExtensionProperty<,>);
+        }
+
+        if (type == typeof(DateTimeOffset) || type == typeof(DateTimeOffset?))
+        {
+            return typeof(DateTimeOffsetExtensionProperty<,>);
         }
 
         if (NumberTypes.Contains(type))

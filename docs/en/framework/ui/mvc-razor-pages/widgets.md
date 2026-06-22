@@ -12,7 +12,7 @@ ABP provides a model and infrastructure to create **reusable widgets**. Widget s
 * Have **scripts & styles** dependencies for your widget.
 * Create **dashboards** with widgets used inside.
 * Define widgets in reusable **[modules](../../architecture/modularity/basics.md)**.
-* Co-operate widgets with **[authorization](../../fundamentals/authorization.md)** and **[bundling](bundling-minification.md)** systems.
+* Co-operate widgets with **[authorization](../../fundamentals/authorization/index.md)** and **[bundling](bundling-minification.md)** systems.
 
 ## Basic Widget Definition
 
@@ -42,7 +42,7 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 
 Inheriting from `AbpViewComponent` is not required. You could inherit from ASP.NET Core's standard `ViewComponent`. `AbpViewComponent` only defines some base useful properties.
 
-You can inject a service and use in the `Invoke` method to get some data from the service. You may need to make Invoke method async, like `public async Task<IViewComponentResult> InvokeAsync()`. See [ASP.NET Core's ViewComponents](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-components) document fore all different usages. 
+You can inject a service and use in the `Invoke` method to get some data from the service. You may need to make Invoke method async, like `public async Task<IViewComponentResult> InvokeAsync()`. See [ASP.NET Core's ViewComponents](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-components) document for all different usages. 
 
 **Default.cshtml**:
 
@@ -482,7 +482,7 @@ Used to refresh the widget when needed. It has a filter argument that can be use
 Some widgets may need to be available only for authenticated or authorized users. In this case, use the following properties of the `Widget` attribute:
 
 * `RequiresAuthentication` (`bool`): Set to true to make this widget usable only for authentication users (user have logged in to the application).
-* `RequiredPolicies` (`List<string>`): A list of policy names to authorize the user. See [the authorization document](../../fundamentals/authorization.md) for more info about policies.
+* `RequiredPolicies` (`List<string>`): A list of policy names to authorize the user. See [the authorization document](../../fundamentals/authorization/index.md) for more info about policies.
 
 Example:
 

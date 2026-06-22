@@ -332,7 +332,7 @@
     "ConnectionResolver": "Verbindungslöser",
     "TenantBasedDataFilter": "Mandantenbasierter Datenfilter",
     "ApplicationCode": "Anwendungscode",
-    "TenantResolution": "Mieterbeschluss",
+    "TenantResolution": "Mandanten-Ermittlung",
     "TenantUser": "Mandant {0} Benutzer",
     "CardTitle": "Kartentitel",
     "View": "Sicht",

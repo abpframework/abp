@@ -1,0 +1,127 @@
+<abp-modal [visible]="visible()" (visibleChange)="onVisibleChange($event)">
+  <ng-template #abpHeader>
+    <h3>
+      @if (selected()?.id) {
+        {{ 'AbpUi::Edit' | abpLocalization }}
+      } @else {
+        {{ 'AbpUi::New' | abpLocalization }}
+      }
+    </h3>
+  </ng-template>
+
+  <ng-template #abpBody>
+    @if (form) {
+      <form [formGroup]="form" (ngSubmit)="save()" validateOnSubmit>
+        <ul
+          ngbNav
+          #nav="ngbNav"
+          class="nav-tabs"
+          [(activeId)]="activeTab"
+          (activeIdChange)="onTabChange($event)"
+        >
+          <li ngbNavItem="url">
+            <a ngbNavLink>{{ 'CmsKit::Url' | abpLocalization }}</a>
+            <ng-template ngbNavContent>
+              <div class="mt-3">
+                <label class="form-label">{{ 'CmsKit::Url' | abpLocalization }}</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="url"
+                  [disabled]="isPageSelected"
+                  (input)="onUrlInput()"
+                />
+              </div>
+            </ng-template>
+          </li>
+          <li ngbNavItem="page">
+            <a ngbNavLink>{{ 'CmsKit::Page' | abpLocalization }}</a>
+            <ng-template ngbNavContent>
+              <div class="mt-3">
+                <label class="form-label">{{ 'CmsKit::Page' | abpLocalization }}</label>
+                <div
+                  class="position-relative"
+                  ngbDropdown
+                  #pageDropdown="ngbDropdown"
+                  display="static"
+                  (openChange)="onDropdownOpen()"
+                >
+                  <button
+                    class="form-select form-control text-start d-flex align-items-center justify-content-between"
+                    type="button"
+                    id="pageSelectDropdown"
+                    ngbDropdownToggle
+                    [class.text-muted]="!selectedPage"
+                  >
+                    <span>{{ selectedPage?.title || ('CmsKit::Page' | abpLocalization) }}</span>
+                  </button>
+                  <div
+                    class="dropdown-menu w-100"
+                    ngbDropdownMenu
+                    aria-labelledby="pageSelectDropdown"
+                    style="max-height: 300px; overflow-y: auto"
+                  >
+                    <div class="p-2 border-bottom">
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        [(ngModel)]="pageSearchText"
+                        [ngModelOptions]="{ standalone: true }"
+                        (input)="onPageSearchChange($any($event.target).value)"
+                        (click)="$event.stopPropagation()"
+                        placeholder="{{ 'AbpUi::Search' | abpLocalization }}"
+                        autocomplete="off"
+                      />
+                    </div>
+                    @if (filteredPages.length > 0) {
+                      @for (page of filteredPages; track page.id) {
+                        <button
+                          type="button"
+                          class="dropdown-item"
+                          (click)="selectPage(page); pageDropdown.close()"
+                        >
+                          {{ page.title }}
+                        </button>
+                      }
+                    } @else if (pageSearchText && pageSearchText.length > 0) {
+                      <div class="dropdown-item text-muted">
+                        {{ 'No results found' }}
+                      </div>
+                    } @else if (pages.length === 0) {
+                      <div class="dropdown-item text-muted">
+                        {{ 'No pages found' }}
+                      </div>
+                    }
+                    @if (selectedPage) {
+                      <div class="dropdown-divider"></div>
+                      <button
+                        type="button"
+                        class="dropdown-item text-danger"
+                        (click)="clearPageSelection(); pageDropdown.close()"
+                      >
+                        {{ 'AbpUi::Clear' | abpLocalization }}
+                      </button>
+                    }
+                  </div>
+                  <input [formControlName]="'pageId'" type="hidden" />
+                </div>
+              </div>
+            </ng-template>
+          </li>
+        </ul>
+        <div class="mt-2 fade-in-top" [ngbNavOutlet]="nav"></div>
+        <hr />
+        <abp-extensible-form [selectedRecord]="selected() || {}" />
+      </form>
+    }
+  </ng-template>
+
+  <ng-template #abpFooter>
+    <button type="button" class="btn btn-outline-primary" abpClose>
+      {{ 'AbpUi::Cancel' | abpLocalization }}
+    </button>
+    <abp-button (click)="save()" [disabled]="form?.invalid">
+      {{ 'AbpUi::Save' | abpLocalization }}
+    </abp-button>
+  </ng-template>
+</abp-modal>

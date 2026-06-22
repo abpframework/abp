@@ -18,12 +18,16 @@
 
 In this quick start guide, you will learn how to create and run a layered (and potentially modular) web application using [ABP Studio](../studio/index.md).
 
+> This page documents the **classic** layered flow.
+>
+> If you want **React UI**, use the **modern** template flow instead. Modern layered solutions create your application in the `react/` folder and host the ABP Admin Console from the backend at `/admin-console/`. See [React UI](../framework/ui/react/index.md) and the [ABP CLI modern templates](../cli/index.md#modern-templates) section for the correct path.
+
 ## Setup your development environment
 
 First things first! Let's setup your development environment before creating the first project. The following tools should be installed on your development machine:
 
-* [Visual Studio 2022](https://visualstudio.microsoft.com/) or another IDE that supports [.NET 9.0+](https://dotnet.microsoft.com/download/dotnet) development.
-* [.NET 9.0+](https://dotnet.microsoft.com/en-us/download/dotnet){{ if UI != "Blazor" }}
+* [Visual Studio 2026](https://visualstudio.microsoft.com/) or another IDE that supports [.NET 10.0+](https://dotnet.microsoft.com/download/dotnet) development.
+* [.NET 10.0+](https://dotnet.microsoft.com/en-us/download/dotnet){{ if UI != "Blazor" }}
 * [Node v22.11+](https://nodejs.org/){{ end }}{{ if UI == "NG" }}
 * [Yarn v1.22+ (not v2+)](https://classic.yarnpkg.com/en/docs/install) or npm v10+ (already installed with Node){{ end }}
 * [Docker Desktop](https://www.docker.com/products/docker-desktop/)
@@ -142,15 +146,15 @@ In this step, you can choose which languages your application will support.
 
 * Click Add Custom Language if you want to add a language that is not listed.
 
-You can change these settings later if needed. Thenk click the *Next* button for the *Additional Options* page:
+You can change these settings later if needed. Then click the *Next* button for the *Additional Options* page:
 
 ![abp-studio-new-solution-dialog-additional-options](images/abp-studio-new-solution-dialog-additional-options_dark.png)
 
-If you uncheck the *Kubernetes Configuration* option, the solution will not include the Kubernetes configuration files, such as Helm charts and other Kubernetes-related files. You can also specify *Social Logins*; if you uncheck this option, the solution will not be configured for social login. Lastly, you can specify the *Include Tests* option to include or exclude the test projects from the solution.
+If you uncheck the *Kubernetes Configuration* option, the solution will not include the Kubernetes configuration files, which includes the Helm charts and other Kubernetes-related files. You can also specify *Social Logins*; if you uncheck this option, the solution will not be configured for social login. Lastly, you can specify the *Include Tests* option to include or exclude the test projects from the solution.
 
 On the next screen, you can configure the modularity options for your solution:
 
-> If you select the *Setup as a modular solution* option, the solution is created more ready for [modular monolith development](../tutorials/modular-crm/index.md) and allows you to add sub-modules during the solution creation phase.
+> If your goal is a new modular monolith, prefer the dedicated **Modular Monolith** architecture in ABP Studio. The modularity option on this screen is the classic-host path for keeping this layered solution modularity-ready and allowing sub-modules during solution creation.
 
 ![abp-studio-new-solution-modularity](images/abp-studio-new-solution-dialog-modularity_dark.png)
 
@@ -277,3 +281,8 @@ You can start the following application(s):
 > For example in non-tiered MVC with public website application: 
 
 ![solution-runner-public-website](images/solution-runner-public-website.png)
+
+## What's next?
+
+- [TODO Application Tutorial with Layered Solution](../tutorials/todo/layered/index.md)
+- [Web Application Development Tutorial](../tutorials/book-store/index.md)

@@ -31,6 +31,8 @@ public class PageLayout : IScopedDependency, INotifyPropertyChanged
         }
     }
 
+    public bool ShowToolbar { get; set; } = true;
+
     public virtual ObservableCollection<BreadcrumbItem> BreadcrumbItems { get; } = new();
 
     public virtual ObservableCollection<PageToolbarItem> ToolbarItems { get; } = new();

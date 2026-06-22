@@ -53,11 +53,11 @@ public class AbpTickerQBackgroundWorkerManager : BackgroundWorkerManager, ISingl
             var name = BackgroundWorkerNameAttribute.GetNameOrNull(worker.GetType()) ?? worker.GetType().FullName;
 
             var config = Options.GetConfigurationOrNull(ProxyHelper.GetUnProxiedType(worker));
-            AbpTickerQFunctionProvider.Functions.TryAdd(name!, (string.Empty, config?.Priority ?? TickerTaskPriority.LongRunning, async (tickerQCancellationToken, serviceProvider, tickerFunctionContext) =>
+            AbpTickerQFunctionProvider.AddFunction(name!, async (tickerQCancellationToken, serviceProvider, tickerFunctionContext) =>
             {
                 var workerInvoker = new AbpTickerQPeriodicBackgroundWorkerInvoker(worker, serviceProvider);
                 await workerInvoker.DoWorkAsync(tickerFunctionContext, tickerQCancellationToken);
-            }));
+            }, config?.Priority ?? TickerTaskPriority.LongRunning, config?.MaxConcurrency ?? 0);
 
             AbpTickerQBackgroundWorkersProvider.BackgroundWorkers.Add(name!, new AbpTickerQCronBackgroundWorker
             {

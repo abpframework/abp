@@ -175,12 +175,12 @@
       "executor": "@nx/eslint:lint"
     },
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/apps/dev-app"
-      ],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{workspaceRoot}/coverage/apps/dev-app"],
       "options": {
-        "jestConfig": "apps/dev-app/jest.config.ts"
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/apps/dev-app",
+        "silent": false
       }
     },
     "serve-static": {

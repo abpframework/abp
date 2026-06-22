@@ -15,7 +15,8 @@ public static class ApplicationPartSorter
     {
         var orderedModuleAssemblies = moduleContainer.Modules
             .Select((moduleDescriptor, index) => new { moduleDescriptor.Assembly, index })
-            .ToDictionary(x => x.Assembly, x => x.index);
+            .GroupBy(x => x.Assembly)
+            .ToDictionary(g => g.Key, g => g.First().index);
 
         var modulesAssemblies = moduleContainer.Modules.Select(x => x.Assembly).ToList();
         var sortedTypes = partManager.ApplicationParts

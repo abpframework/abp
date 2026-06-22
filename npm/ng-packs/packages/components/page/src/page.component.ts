@@ -1,4 +1,4 @@
-import { Component, Input, ViewEncapsulation, ContentChild } from '@angular/core';
+import { Component, ViewEncapsulation, input, effect, signal, contentChild } from '@angular/core';
 import {
   PageTitleContainerComponent,
   PageBreadcrumbContainerComponent,
@@ -16,20 +16,12 @@ import { PagePartDirective } from './page-part.directive';
   imports: [BreadcrumbComponent, PageToolbarComponent, PagePartDirective],
 })
 export class PageComponent {
-  @Input() title?: string;
+  readonly title = input<string | undefined>(undefined);
+  readonly toolbarInput = input<any>(undefined, { alias: 'toolbar' });
+  readonly breadcrumb = input(true);
 
-  toolbarVisible = false;
-  _toolbarData: any;
-  @Input() set toolbar(val: any) {
-    this._toolbarData = val;
-    this.toolbarVisible = true;
-  }
-
-  get toolbarData() {
-    return this._toolbarData;
-  }
-
-  @Input() breadcrumb = true;
+  protected readonly toolbarVisible = signal(false);
+  protected readonly toolbarData = signal<any>(undefined);
 
   pageParts = {
     title: PageParts.title,
@@ -37,19 +29,28 @@ export class PageComponent {
     toolbar: PageParts.toolbar,
   };
 
-  @ContentChild(PageTitleContainerComponent) customTitle?: PageTitleContainerComponent;
-  @ContentChild(PageBreadcrumbContainerComponent)
-  customBreadcrumb?: PageBreadcrumbContainerComponent;
-  @ContentChild(PageToolbarContainerComponent) customToolbar?: PageToolbarContainerComponent;
+  readonly customTitle = contentChild(PageTitleContainerComponent);
+  readonly customBreadcrumb = contentChild(PageBreadcrumbContainerComponent);
+  readonly customToolbar = contentChild(PageToolbarContainerComponent);
+
+  constructor() {
+    effect(() => {
+      const toolbar = this.toolbarInput();
+      if (toolbar !== undefined) {
+        this.toolbarData.set(toolbar);
+        this.toolbarVisible.set(true);
+      }
+    });
+  }
 
   get shouldRenderRow() {
     return !!(
-      this.title ||
-      this.toolbarVisible ||
-      this.breadcrumb ||
-      this.customTitle ||
-      this.customBreadcrumb ||
-      this.customToolbar ||
+      this.title() ||
+      this.toolbarVisible() ||
+      this.breadcrumb() ||
+      this.customTitle() ||
+      this.customBreadcrumb() ||
+      this.customToolbar() ||
       this.pageParts
     );
   }

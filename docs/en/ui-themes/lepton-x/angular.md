@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Learn how to integrate the LeptonX Angular UI into your project with step-by-step instructions and essential configuration tips."
+  "Description": "Learn how to integrate the LeptonX Angular UI into your project with step-by-step instructions and essential configuration tips."
 }
 ```
 
@@ -16,14 +16,12 @@ To add `LeptonX` into your existing projects, follow the steps below.
 
 Add theme-specific styles into the `styles` array of the file. Check the [Theme Configurations](../../framework/ui/angular/theme-configurations.md#lepton-x-commercial) documentation for more information.
 
-
 - At last, remove `provideThemeLepton` from `app.config.ts`, and add the following providers in `app.config.ts`
 
-
 ```ts
-import { provideThemeLeptonX } from '@volosoft/abp.ng.theme.lepton-x';
-import { provideSideMenuLayout } from '@volosoft/abp.ng.theme.lepton-x/layouts';
-// import { provideThemeLepton } from '@volo/abp.ng.theme.lepton'; 
+import { provideThemeLeptonX } from "@volosoft/abp.ng.theme.lepton-x";
+import { provideSideMenuLayout } from "@volosoft/abp.ng.theme.lepton-x/layouts";
+// import { provideThemeLepton } from '@volo/abp.ng.theme.lepton';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -37,14 +35,11 @@ export const appConfig: ApplicationConfig = {
 If you want to use the **`Top Menu`** instead of the **`Side Menu`**, add `provideTopMenuLayout` as below,and [this style imports](https://docs.abp.io/en/abp/7.4/UI/Angular/Theme-Configurations#lepton-x-commercial)
 
 ```ts
-import { provideThemeLeptonX } from '@volosoft/abp.ng.theme.lepton-x';
-import { provideTopMenuLayout } from '@volosoft/abp.ng.theme.lepton-x/layouts';
+import { provideThemeLeptonX } from "@volosoft/abp.ng.theme.lepton-x";
+import { provideTopMenuLayout } from "@volosoft/abp.ng.theme.lepton-x/layouts";
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideTopMenuLayout(),
-    provideThemeLeptonX(),
-  ],
+  providers: [provideTopMenuLayout(), provideThemeLeptonX()],
 };
 ```
 
@@ -73,6 +68,12 @@ export const appConfig: ApplicationConfig = {
 ```
 
 If everything is ok, you can remove the `@volo/abp.ng.theme.lepton` in package.json
+
+## Customizing the Footer Section
+
+You can follow the [component replacement](../../framework/ui/angular/component-replacement.md) documentation to customize the footer part. However, the ABP Studio templates serve this by default. You can reach the footer under `angular/src/app/footer` directory that has a component and a configuration file.
+
+![angular-footer-files](./images/angular-footer-files.png)
 
 ## Server Side
 

@@ -35,6 +35,11 @@
                 <td><a href="https://github.com/aspnetboilerplate/aspnetboilerplate" target="_blank">AspNet Boilerplate</a></td>
             </tr>
             <tr>
+                <td>.NET Version</td>
+                <td>.NET 10</td>
+                <td>.NET 10</td>
+            </tr>
+            <tr>
                 <td>Microservice compatible</td>
                 <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-minus text-secondary"></i></td>
@@ -83,9 +88,14 @@
                 <td><i class="fa fa-check text-success"></i></td>
             </tr>
             <tr>
-                <td>Blazor UI</td>
+                <td>Blazor UI (Blazorise, MudBlazor)</td>
                 <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-minus text-secondary"></i></td>
+            </tr>
+            <tr>
+                <td>React UI</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
             </tr>
             <tr>
                 <td colspan="3"><strong>User Interface (Account / Login)</strong></td>
@@ -188,7 +198,7 @@
             <tr>
                 <td>OpenIddict integration</td>
                 <td><i class="fa fa-check text-success"></i></td>
-                <td><i class="fa fa-minus text-false"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
             </tr>
             <tr>
                 <td>Identity Server Management UI</td>
@@ -199,6 +209,11 @@
                 <td>Password complexity settings</td>
                 <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-check text-success"></i></td>
+            </tr>
+            <tr>
+                <td>Passkeys</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
             </tr>
             <tr>
                 <td colspan="3"><strong>User Interface (Application)</strong></td>
@@ -347,6 +362,71 @@
                 <td>GDPR (downloading personal data & deleting accounts)</td>
                 <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-check text-success"></i></td>
+            </tr>
+            <tr>
+                <td>User Idle Session Timeout</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
+            </tr>
+            <tr>
+                <td>Comment section for pages</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
+            </tr>
+            <tr>
+                <td>Dynamic FAQ page</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
+            </tr>
+            <tr>
+                <td>Feedback system</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
+            </tr>
+            <tr>
+                <td>Desktop tool for monitoring and orchestrating projects</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
+            </tr>
+            <tr>
+                <td>AI Management UI</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
+            </tr>
+            <tr>
+                <td>AI Support Bot</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
+            </tr>
+            <tr>
+                <td>Bunny BLOB Storage Provider</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
+            </tr>
+            <tr>
+                <td>Google Cloud BLOB Storage Provider</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
+            </tr>
+            <tr>
+                <td>User Registration Email Verification</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
+            </tr>
+            <tr>
+                <td>Angular SSR</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
+            </tr>
+            <tr>
+                <td>Mapperly integration</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
+            </tr>
+            <tr>
+                <td>Elsa workflow integration</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
             </tr>                
             <tr>
                 <td>UI Theme</td>
@@ -365,11 +445,6 @@
                 <td colspan="3"><strong>Mobile Application</strong></td>
             </tr>
             <tr>
-                <td>Xamarin application</td>
-                <td><i class="fa fa-minus text-secondary"></i></td>
-                <td><i class="fa fa-check text-success"></i></td>
-            </tr>
-            <tr>
                 <td>React Native application</td>
                 <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-minus text-secondary"></i></td>
@@ -380,12 +455,32 @@
                 <td><i class="fa fa-check text-success"></i></td>
             </tr>
             <tr>
+                <td>.NET MAUI Code generation</td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
+            </tr>
+            <tr>
+                <td>.NET MAUI QR Login</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
+            </tr>
+            <tr>
+                <td>.NET MAUI Dark mode</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
+            </tr>
+            <tr>
                 <td colspan="3"><strong>Rapid Application Development</strong></td>
             </tr>
             <tr>
                 <td>Code generation extension</td>
                 <td><a href="https://abp.io/docs/latest/suite" target="_blank">ABP Suite</a></td>
                 <td><a href="https://docs.aspnetzero.com/en/common/latest/Rapid-Application-Development" target="_blank">Power Tools</a></td>
+            </tr>
+            <tr>
+                <td>AI Agent</td>
+                <td><a href="https://abp.io/studio/ai-agent" target="_blank">ABP Studio AI Agent</a></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
             </tr>
             <tr>
                 <td colspan="3"><strong>Support</strong></td>
@@ -399,6 +494,11 @@
                 <td>Private ticket & email support</td>
                 <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-check text-success"></i></td>
+            </tr>
+            <tr>
+                <td>AI Support alongside human support</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
             </tr>
             <tr>
                 <td>&nbsp;</td>

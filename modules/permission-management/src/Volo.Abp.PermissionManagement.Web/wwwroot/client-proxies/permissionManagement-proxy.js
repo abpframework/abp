@@ -34,6 +34,58 @@
       }, ajaxParams));
     };
 
+    volo.abp.permissionManagement.permissions.getResourceProviderKeyLookupServices = function(resourceName, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/permission-management/permissions/resource-provider-key-lookup-services' + abp.utils.buildQueryString([{ name: 'resourceName', value: resourceName }]) + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+    volo.abp.permissionManagement.permissions.searchResourceProviderKey = function(resourceName, serviceName, filter, page, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/permission-management/permissions/search-resource-provider-keys' + abp.utils.buildQueryString([{ name: 'resourceName', value: resourceName }, { name: 'serviceName', value: serviceName }, { name: 'filter', value: filter }, { name: 'page', value: page }]) + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+    volo.abp.permissionManagement.permissions.getResourceDefinitions = function(resourceName, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/permission-management/permissions/resource-definitions' + abp.utils.buildQueryString([{ name: 'resourceName', value: resourceName }]) + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+    volo.abp.permissionManagement.permissions.getResource = function(resourceName, resourceKey, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/permission-management/permissions/resource' + abp.utils.buildQueryString([{ name: 'resourceName', value: resourceName }, { name: 'resourceKey', value: resourceKey }]) + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+    volo.abp.permissionManagement.permissions.getResourceByProvider = function(resourceName, resourceKey, providerName, providerKey, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/permission-management/permissions/resource/by-provider' + abp.utils.buildQueryString([{ name: 'resourceName', value: resourceName }, { name: 'resourceKey', value: resourceKey }, { name: 'providerName', value: providerName }, { name: 'providerKey', value: providerKey }]) + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+    volo.abp.permissionManagement.permissions.updateResource = function(resourceName, resourceKey, input, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/permission-management/permissions/resource' + abp.utils.buildQueryString([{ name: 'resourceName', value: resourceName }, { name: 'resourceKey', value: resourceKey }]) + '',
+        type: 'PUT',
+        dataType: null,
+        data: JSON.stringify(input)
+      }, ajaxParams));
+    };
+
+    volo.abp.permissionManagement.permissions.deleteResource = function(resourceName, resourceKey, providerName, providerKey, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/permission-management/permissions/resource' + abp.utils.buildQueryString([{ name: 'resourceName', value: resourceName }, { name: 'resourceKey', value: resourceKey }, { name: 'providerName', value: providerName }, { name: 'providerKey', value: providerKey }]) + '',
+        type: 'DELETE',
+        dataType: null
+      }, ajaxParams));
+    };
+
   })();
 
 })();

@@ -21,6 +21,8 @@ Run this command in the terminal while you are in the root folder of your soluti
 
 > If your solution has the Angular UI, you probably have `aspnet-core` and `angular` folders in the solution. Run this command in the parent folder of these two folders.
 
+You can also specify a target version with `--version` parameter. See the [ABP CLI update command](../cli/index.md#update) for all available options.
+
 ### Database Migrations
 
 > Warning: Be careful if you are migrating your database since you may have data loss in some cases. Carefully check the generated migration code before executing it. It is suggested to take a backup of your current database.

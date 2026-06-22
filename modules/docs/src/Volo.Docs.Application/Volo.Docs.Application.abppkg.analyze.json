@@ -85,6 +85,134 @@
       "summary": null
     },
     {
+      "namespace": "Volo.Docs.TableOfContents",
+      "baseClass": {
+        "name": "Object",
+        "namespace": "System",
+        "declaringAssemblyName": "System.Private.CoreLib",
+        "fullName": "System.Object"
+      },
+      "implementingInterfaces": [
+        {
+          "name": "ITocGeneratorService",
+          "namespace": "Volo.Docs.TableOfContents",
+          "declaringAssemblyName": "Volo.Docs.Application.Contracts",
+          "fullName": "Volo.Docs.TableOfContents.ITocGeneratorService"
+        },
+        {
+          "name": "IApplicationService",
+          "namespace": "Volo.Abp.Application.Services",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Application.Contracts",
+          "fullName": "Volo.Abp.Application.Services.IApplicationService"
+        },
+        {
+          "name": "IRemoteService",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IRemoteService"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "methods": [
+        {
+          "returnType": "List<TocHeading>",
+          "namespace": "Volo.Docs.TableOfContents",
+          "name": "GenerateTocHeadings",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "markdownContent",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "List<TocItem>",
+          "namespace": "Volo.Docs.TableOfContents",
+          "name": "GenerateTocItems",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "List<TocHeading>",
+              "name": "tocHeadings",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "topLevel",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "levelCount",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "Int32",
+          "namespace": "Volo.Docs.TableOfContents",
+          "name": "GetTopLevel",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "List<TocHeading>",
+              "name": "headings",
+              "isOptional": false
+            }
+          ]
+        },
+        {
+          "returnType": "List<TocItem>",
+          "namespace": "Volo.Docs.TableOfContents",
+          "name": "GenerateTocItems",
+          "summary": null,
+          "isAsync": false,
+          "isPublic": true,
+          "isPrivate": false,
+          "isStatic": false,
+          "parameters": [
+            {
+              "type": "String",
+              "name": "markdownContent",
+              "isOptional": false
+            },
+            {
+              "type": "Int32",
+              "name": "levelCount",
+              "isOptional": false
+            },
+            {
+              "type": "Nullable<Int32>",
+              "name": "topLevel",
+              "isOptional": true
+            }
+          ]
+        }
+      ],
+      "contentType": "applicationService",
+      "name": "TocGeneratorService",
+      "summary": null
+    },
+    {
       "namespace": "Volo.Docs.Documents",
       "baseClass": {
         "name": "DocsAppServiceBase",

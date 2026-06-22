@@ -25,7 +25,7 @@ import {
   PermissionDirective
 } from '@abp/ng.core';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
-import { CommonModule } from '@angular/common';
+
 
 const { required, email } = Validators;
 
@@ -35,14 +35,13 @@ const { required, email } = Validators;
   animations: [collapse],
   imports: [
     ReactiveFormsModule,
-    CommonModule,
     LocalizationPipe,
     ButtonComponent,
     ModalComponent,
     ModalCloseDirective,
     NgxValidateCoreModule,
-    PermissionDirective,
-  ],
+    PermissionDirective
+],
 })
 export class EmailSettingGroupComponent implements OnInit {
   private emailSettingsService = inject(EmailSettingsService);

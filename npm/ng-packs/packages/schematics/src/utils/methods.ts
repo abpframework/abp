@@ -20,3 +20,8 @@ export function isDictionaryType(type?: string, typeSimple?: string): boolean {
   const haystacks = [type || '', typeSimple || ''];
   return haystacks.some(t => /(^|\b)(System\.Collections\.Generic\.)?(I)?Dictionary\s*</.test(t));
 }
+
+export function isCollectionType(type?: string, typeSimple?: string): boolean {
+  const haystacks = [type || '', typeSimple || ''];
+  return haystacks.some(t => /(^|\b)(System\.Collections\.Generic\.)?(I)?(List|Enumerable|Collection)\s*</.test(t));
+}

@@ -81,8 +81,8 @@ You can run the following command in **Angular** project directory to copy the s
 
 ### Global/Component Styles
 
-Angular can bundle global style files and component styles with components. 
-See the [component styles](https://angular.io/guide/component-styles) guide on Angular documentation for more information. 
+Angular can bundle global style files and component styles with components.
+See the [component styles](https://angular.dev/guide/components/styling) guide on Angular documentation for more information. 
 
 ### Layout Parts
 
@@ -229,17 +229,20 @@ All of the options are shown below. You can choose either of them.
 
 ````ts
 import { eUserMenuItems } from '@abp/ng.theme.basic';
-import { UserMenuService } from '@abp/ng.theme.shared';
+import { UserMenuService, UserMenu } from '@abp/ng.theme.shared';
+import { LocalizationPipe, INJECTOR_PIPE_DATA_TOKEN } from '@abp/ng.core';
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-// make sure that you import this component in a NgModule
 @Component({
   selector: 'abp-current-user-test',
+  imports: [LocalizationPipe],
   template: `
     <a class="dropdown-item pointer" (click)="data.action()">
-      <i *ngIf="data.textTemplate.icon" [class]="data.textTemplate.icon"></i>
+    @if (data.textTemplate.icon){
+      <i [class]="data.textTemplate.icon"></i>
       {%{{{ data.textTemplate.text | abpLocalization }}}%}
+    }
     </a>
   `,
 })

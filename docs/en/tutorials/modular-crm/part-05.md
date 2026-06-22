@@ -8,6 +8,14 @@
 # Building the Ordering Module
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC", "BlazorWebApp", "NG"],
+    "BlazorUI": ["Blazorise", "MudBlazor"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Previous": {
@@ -357,6 +365,35 @@ Configure<AbpAspNetCoreMvcOptions>(options =>
 
 This will tell the ABP framework to create API controllers for the application services in the `ModularCrm.Ordering` assembly.
 
+{{if UI == "BlazorWebApp"}}
+
+### Configuring Client Proxies for the Ordering Module
+
+In the `ModularCrm.Client` project, configure HTTP client proxies for the Ordering contracts in the `ModularCrmClientModule` class:
+
+````csharp
+using ModularCrm.Ordering;
+
+[DependsOn(
+    typeof(OrderingContractsModule)
+    // ...other dependencies
+)]
+public class ModularCrmClientModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        ...
+        context.Services.AddHttpClientProxies(typeof(ModularCrmContractsModule).Assembly);
+        context.Services.AddHttpClientProxies(typeof(CatalogContractsModule).Assembly);
+        context.Services.AddHttpClientProxies(typeof(OrderingContractsModule).Assembly); // NEW: ADD HttpClientProxies
+    }
+}
+````
+
+Also ensure the `ModularCrm.Ordering.Blazor` package is installed for both the `ModularCrm` and `ModularCrm.Client` projects.
+
+{{end}}
+
 ### Creating Example Orders
 
 This section will create a few example orders using the [Swagger UI](../../framework/api-development/swagger.md). Thus, you will have some sample orders to show on the UI.
@@ -379,11 +416,15 @@ If you check the database, you should see the entities created in the *Orders* t
 
 ## Creating the User Interface
 
-In this section, you will create a very simple user interface to demonstrate how to build UI in the catalog module and make it work in the main application.
+In this section, you will create a very simple user interface to demonstrate how to build UI in the ordering module and make it work in the main application.
 
 As a first step, you can stop the application on ABP Studio's Solution Runner if it is currently running.
 
+{{if UI == "MVC"}}
+
 ### Creating the Orders Page
+
+{{if UI == "MVC"}}
 
 Replace the `Index.cshtml.cs` content in the `Pages/Ordering` folder of the `ModularCrm.Ordering.UI` project with the following code block:
 
@@ -481,6 +522,132 @@ public class OrderingMenuContributor : IMenuContributor
 
 > You can check the [menu documentation](../../framework/ui/mvc-razor-pages/navigation-menu.md) to learn more about manipulating menu items.
 
+{{else if UI == "BlazorWebApp"}}
+
+Replace the `Index.razor` content in the `Pages/Ordering` folder of the `ModularCrm.Ordering.Blazor` project with the following code block:
+
+{{if BlazorUI == "Blazorise"}}
+
+````razor
+@page "/ordering"
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using ModularCrm.Ordering
+@inject IOrderAppService OrderAppService
+
+<h1>Orders</h1>
+
+<Card>
+    <CardBody>
+        <ListGroup>
+            @foreach (var order in Orders)
+            {
+                <ListGroupItem>
+                    <strong>Customer:</strong> @order.CustomerName <br />
+                    <strong>Product:</strong> @order.ProductId <br />
+                    <strong>State:</strong> @order.State
+                </ListGroupItem>
+            }
+        </ListGroup>
+    </CardBody>
+</Card>
+
+@code {
+    private List<OrderDto> Orders { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Orders = await OrderAppService.GetListAsync();
+    }
+}
+````
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+````razor
+@page "/ordering"
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using ModularCrm.Ordering
+@inject IOrderAppService OrderAppService
+
+<MudText Typo="Typo.h4">Orders</MudText>
+
+<MudCard>
+    <MudCardContent>
+        <MudList T="OrderDto">
+            @foreach (var order in Orders)
+            {
+                <MudListItem T="OrderDto" Value="@order">
+                    <strong>Customer:</strong> @order.CustomerName <br />
+                    <strong>Product:</strong> @order.ProductId <br />
+                    <strong>State:</strong> @order.State
+                </MudListItem>
+            }
+        </MudList>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    private List<OrderDto> Orders { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Orders = await OrderAppService.GetListAsync();
+    }
+}
+````
+
+{{end}}
+
+This page shows a list of orders on the UI. You haven't created a UI to create new orders, and we will not do it to keep this tutorial simple. If you want to learn how to create advanced UIs with ABP, please follow the [Book Store tutorial](../book-store/index.md).
+
+### Editing the Menu Item
+
+ABP provides a modular navigation [menu system](../../framework/ui/blazor/navigation-menu.md) where each module can contribute to the main menu dynamically.
+
+Edit the `OrderingMenuContributor` class in the `ModularCrm.Ordering.Blazor` project:
+
+````csharp
+using System.Threading.Tasks;
+using Volo.Abp.UI.Navigation;
+
+namespace ModularCrm.Ordering.Blazor.Menus;
+
+public class OrderingMenuContributor : IMenuContributor
+{
+    public async Task ConfigureMenuAsync(MenuConfigurationContext context)
+    {
+        if (context.Menu.Name == StandardMenus.Main)
+        {
+            await ConfigureMainMenuAsync(context);
+        }
+    }
+
+    private Task ConfigureMainMenuAsync(MenuConfigurationContext context)
+    {
+        context.Menu.AddItem(
+            new ApplicationMenuItem(
+                OrderingMenus.Prefix, // Unique menu id
+                "Orders", // Menu display text
+                "/ordering", // URL
+                "fa-solid fa-basket-shopping" // Icon CSS class
+            )
+        );
+
+        return Task.CompletedTask;
+    }
+}
+````
+
+`OrderingMenuContributor` implements the `IMenuContributor` interface, which forces us to implement the `ConfigureMenuAsync` method. In that method, you can manipulate the menu items (add new menu items, remove existing menu items or change the properties of existing menu items). The `ConfigureMenuAsync` method is executed whenever the menu is rendered on the UI, so you can dynamically decide how to manipulate the menu items.
+
+> You can check the [menu documentation](../../framework/ui/blazor/navigation-menu.md) to learn more about manipulating menu items.
+
+{{end}}
+
 ### Building the Application
 
 Now, you will run the application to see the result. Please stop the application if it is already running. Then open the *Solution Runner* panel, right-click the `ModularCrm` application, and select the *Build* -> *Graph Build* command:
@@ -493,6 +660,83 @@ You've performed a graph build since you've made a change on a module, and more 
 
 Great! We can see the list of orders. However, there is a problem: We see Product's GUID ID instead of its name. This is because the Ordering module has no integration with the Catalog module and doesn't have access to Product module's database to perform a JOIN query. We will solve this problem in the [next part](part-06.md).
 
+{{else if UI == "NG"}}
+
+### Creating the Orders Page
+
+First, run the `ModularCrm` application so the backend APIs are available.
+
+Then open a terminal in the `modules/modularcrm.ordering/angular` folder and generate (or refresh) the Angular client proxies:
+
+```bash
+abp generate-proxy -t ng
+```
+
+This command creates/updates the TypeScript client proxies under `projects/ordering/src/lib/proxy`. You will use the generated `OrderService` and DTO types to render the orders page.
+
+Now, open `projects/ordering/src/lib/components/ordering.component.ts` and update it to query and show the order list:
+
+```ts
+import { Component, OnInit, inject } from '@angular/core';
+import { OrderDto, OrderService } from '../proxy/orders';
+
+@Component({
+  selector: 'lib-ordering',
+  templateUrl: './ordering.component.html',
+})
+export class OrderingComponent implements OnInit {
+  orders: OrderDto[] = [];
+
+  protected readonly orderService = inject(OrderService);
+
+  ngOnInit(): void {
+    this.orderService.getList().subscribe(response => {
+      this.orders = response;
+    });
+  }
+}
+```
+
+Then open `projects/ordering/src/lib/components/ordering.component.html` and update it as follows:
+
+```html
+<h1>Orders</h1>
+
+<abp-card>
+  <abp-card-body>
+    <abp-list-group>
+      @for (order of orders; track order.id) {
+        <abp-list-group-item>
+          <strong>Customer:</strong> {%{{{ order.customerName }}}%} <br />
+          <strong>Product:</strong> {%{{{ order.productId }}}%} <br />
+          <strong>State:</strong> {%{{{ order.state }}}%}
+        </abp-list-group-item>
+      }
+    </abp-list-group>
+  </abp-card-body>
+</abp-card>
+```
+
+![visual-studio-ordering-contracts](images/visual-studio-ordering-contracts-v2.png)
+
+### Editing the Menu Item
+
+In a module-based Angular UI, menu and route registration are done in the config and app route files. Ensure `projects/ordering/config/src/providers/route.provider.ts` adds the `/ordering` menu route, and the main Angular app (`angular/src/app/app.routes.ts`) lazy-loads the Ordering module routes.
+
+### Building the Application
+
+Start the Angular app from the root `angular` folder:
+
+```bash
+yarn start
+```
+
+Navigate to the *Ordering* page and verify that the orders are listed. At this stage, showing `productId` is expected.
+
+![abp-studio-browser-orders-menu-item](images/abp-studio-browser-orders-menu-item-v2.png)
+
+{{end}}
+
 ## Summary
 
-In this part of the *Modular CRM* tutorial, you've built the functionality inside the Ordering module you created in the [previous part](part-04.md). In the [next part](part-06.md), you will work on establishing communication between the Orders module and the Catalog module.
+In this part of the *Modular CRM* tutorial, you've built the functionality inside the Ordering module you created in the [previous part](part-04.md) and created a basic {{if UI == "MVC"}}MVC{{else if UI == "BlazorWebApp"}}Blazor WebApp{{else if UI == "NG"}}Angular{{end}} UI to list orders. In the [next part](part-06.md), you will work on establishing communication between the Orders module and the Catalog module.

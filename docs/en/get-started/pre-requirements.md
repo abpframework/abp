@@ -36,7 +36,7 @@ Visual Studio Code is a **free and cross-platform** lightweight code editor that
 
 ## .NET SDK
 
-ABP is based on NET, so you need to install the .NET SDK. You can download the .NET SDK from the [.NET official website](https://dotnet.microsoft.com/en-us/download/dotnet/9.0).
+ABP is based on .NET, so you need to install the .NET SDK. You can download the .NET SDK from the [.NET official website](https://dotnet.microsoft.com/en-us/download/dotnet/9.0).
 
 > Installing Visual Studio or JetBrains Rider may automatically install the .NET SDK.
 
@@ -56,7 +56,7 @@ dotnet tool update --global dotnet-ef
 
 ## Node.js
 
-ABP projects include some frontend resource packages, so you need to install Node.js/NPM manage these resource packages. You can download Node.js from the [official Node.js website](https://nodejs.org/). We recommend installing version v20.11+.
+ABP projects include some frontend resource packages, so you need to install Node.js/NPM to manage these resource packages. You can download Node.js from the [official Node.js website](https://nodejs.org/). We recommend installing version v20.11+.
 
 ## Yarn (Required Only for Angular Projects)
 
@@ -89,7 +89,7 @@ ABP startup solution templates and tools use some PowerShell scripts (`*.ps1`) t
 * [Install PowerShell on macOS](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-macos)
 * [Install PowerShell on Linux](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-linux)
 
-## MicroService Solution
+## Microservice Solution
 
 The following tools are only required to develop ABP's [microservice solution](../solution-templates/microservice/index.md)
 

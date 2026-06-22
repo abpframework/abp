@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Discover how to install and use the LeptonX Lite Angular UI theme for ABP Framework, enhancing your project's professional look effortlessly."
+  "Description": "Discover how to install and use the LeptonX Lite Angular UI theme for ABP Framework, enhancing your project's professional look effortlessly."
 }
 ```
 
@@ -69,12 +69,12 @@ export const appConfig: ApplicationConfig = {
 
 To change the logos and brand color of `LeptonX`, you have two options:
 
-1) Provide logo and application name via the Theme Shared provider (recommended)
+1. Provide logo and application name via the Theme Shared provider (recommended)
 
 ```ts
 // app.config.ts
-import { provideLogo, withEnvironmentOptions } from '@abp/ng.theme.shared';
-import { environment } from './environments/environment';
+import { provideLogo, withEnvironmentOptions } from "@abp/ng.theme.shared";
+import { environment } from "./environments/environment";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -91,15 +91,15 @@ Ensure your environment contains the logo url and app name:
 export const environment = {
   // ...
   application: {
-    name: 'MyProjectName',
-    logoUrl: '/assets/images/logo.png',
+    name: "MyProjectName",
+    logoUrl: "/assets/images/logo.png",
   },
 };
 ```
 
 The LeptonX brand component reads these values automatically from `@abp/ng.theme.shared`.
 
-2) Or override via CSS variables in `styles.scss`
+2. Or override via CSS variables in `styles.scss`
 
 ```css
 :root {
@@ -296,10 +296,11 @@ The Mobile User-Profile component key is `eThemeLeptonXComponents.MobileUserProf
 
 ![Angular Footer Component](../../images/angular-footer.png)
 
-The Footer is the section of content at the very bottom of the site. This section of the content can be modified.
-Inject **FooterLinksService** and use the **setFooterInfo** method of **FooterLinksService**
+The Footer is the section of content at the very bottom of the site. This section of the content can be modified. The ABP Studio templates serve this option by default. You can reach the configurations under `angular/src/app/footer` directory that has a component and a configuration file.
+
+If you still prefer overriding it by yourself, remove the default configuration. Inject **FooterLinksService** and use the **setFooterInfo** method of **FooterLinksService**
 to assign path or link and description.
-**descUrl** and **footerLinks** are nullable. Constant **footerLinks** are on the right side of footer.
+The **descUrl** and **footerLinks** are nullable. Constant **footerLinks** are on the right side of footer.
 
 ```js
 ///...

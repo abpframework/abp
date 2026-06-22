@@ -1,30 +1,24 @@
 import {
   ABP,
-  CORE_OPTIONS,
   LocalizationPipe,
   RouterOutletComponent,
   RoutesService,
-  LocalizationService,
+  provideAbpCore,
+  withOptions,
+  RestService,
+  AbpApplicationConfigurationService,
+  ConfigStateService,
 } from '@abp/ng.core';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { RouterModule } from '@angular/router';
-import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/jest';
+import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/vitest';
+import { of } from 'rxjs';
 import { BreadcrumbComponent, BreadcrumbItemsComponent } from '../components';
-import { OTHERS_GROUP } from '@abp/ng.core';
-import { SORT_COMPARE_FUNC } from '@abp/ng.core';
+import { setupComponentResources } from './utils';
 
 const mockRoutes: ABP.Route[] = [
   { name: '_::Identity', path: '/identity' },
   { name: '_::Users', path: '/identity/users', parentName: '_::Identity' },
 ];
-
-// Simple compare function that doesn't use inject()
-const simpleCompareFunc = (a: any, b: any) => {
-  const aNumber = a.order || 0;
-  const bNumber = b.order || 0;
-  return aNumber - bNumber;
-};
 
 describe('BreadcrumbComponent', () => {
   let spectator: SpectatorRouting<RouterOutletComponent>;
@@ -34,38 +28,57 @@ describe('BreadcrumbComponent', () => {
     component: RouterOutletComponent,
     stubsEnabled: false,
     detectChanges: false,
+    imports: [
+      RouterModule,
+      LocalizationPipe,
+      BreadcrumbComponent,
+      BreadcrumbItemsComponent,
+    ],
     providers: [
-      provideHttpClient(),
-      provideHttpClientTesting(),
-      { 
-        provide: CORE_OPTIONS, 
-        useValue: {
+      provideAbpCore(
+        withOptions({
           environment: {
             apis: {
               default: {
                 url: 'http://localhost:4200',
               },
             },
+            application: {
+              name: 'TestApp',
+              baseUrl: 'http://localhost:4200',
+            },
           },
-        } 
-      },
-      RoutesService,
-      LocalizationService,
+          registerLocaleFn: () => Promise.resolve(),
+          skipGetAppConfiguration: true,
+        }),
+      ),
       {
-        provide: OTHERS_GROUP,
-        useValue: 'AbpUi::OthersGroup',
+        provide: RestService,
+        useValue: {
+          request: vi.fn(),
+          handleError: vi.fn(),
+        },
       },
       {
-        provide: SORT_COMPARE_FUNC,
-        useValue: simpleCompareFunc,
+        provide: AbpApplicationConfigurationService,
+        useValue: {
+          get: vi.fn(),
+        },
       },
-    ],
-    declarations: [],
-    imports: [
-      RouterModule,
-      LocalizationPipe,
-      BreadcrumbComponent,
-      BreadcrumbItemsComponent,
+      {
+        provide: ConfigStateService,
+        useValue: {
+          getOne: vi.fn(),
+          getAll: vi.fn(() => ({})),
+          getAll$: vi.fn(() => of({})),
+          getDeep: vi.fn(),
+          getDeep$: vi.fn(() => of(undefined)),
+          createOnUpdateStream: vi.fn(() => ({ 
+            subscribe: vi.fn(() => ({ unsubscribe: vi.fn() })) 
+          })),
+          refreshAppState: vi.fn(),
+        },
+      },
     ],
     routes: [
       {
@@ -84,6 +97,8 @@ describe('BreadcrumbComponent', () => {
       },
     ],
   });
+
+  beforeAll(() => setupComponentResources('../components/breadcrumb', import.meta.url));
 
   beforeEach(() => {
     spectator = createRouting();

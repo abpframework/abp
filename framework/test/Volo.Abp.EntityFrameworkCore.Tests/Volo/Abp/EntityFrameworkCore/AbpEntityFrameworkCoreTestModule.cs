@@ -30,6 +30,7 @@ public class AbpEntityFrameworkCoreTestModule : AbpModule
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         TestEntityExtensionConfigurator.Configure();
+        PreConfigure<AbpSqliteOptions>(x => x.BusyTimeout = null);
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)

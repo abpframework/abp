@@ -29,5 +29,13 @@ public class ChatClientAccessor<TWorkSpace> : IChatClientAccessor<TWorkSpace>
         ChatClient = serviceProvider.GetKeyedService<IChatClient>(
             AbpAIWorkspaceOptions.GetChatClientServiceKeyName(
                 WorkspaceNameAttribute.GetWorkspaceName<TWorkSpace>()));
+
+        // Fallback to default chat client if not configured for the workspace.
+        if (ChatClient is null)
+        {
+            ChatClient = serviceProvider.GetKeyedService<IChatClient>(
+                AbpAIWorkspaceOptions.GetChatClientServiceKeyName(
+                    AbpAIModule.DefaultWorkspaceName));
+        }
     }
 }

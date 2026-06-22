@@ -7,7 +7,7 @@ using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.Authorization.Permissions;
 
-public class PermissionDefinition : 
+public class PermissionDefinition :
     IHasSimpleStateCheckers<PermissionDefinition>,
     ICanAddChildPermission
 {
@@ -15,6 +15,16 @@ public class PermissionDefinition :
     /// Unique name of the permission.
     /// </summary>
     public string Name { get; }
+
+    /// <summary>
+    /// Resource name of the permission.
+    /// </summary>
+    public string? ResourceName { get; set; }
+
+    /// <summary>
+    ///  Management permission of the resource permission.
+    /// </summary>
+    public string? ManagementPermissionName { get; set; }
 
     /// <summary>
     /// Parent of this permission if one exists.
@@ -78,6 +88,19 @@ public class PermissionDefinition :
 
     protected internal PermissionDefinition(
         [NotNull] string name,
+        string resourceName,
+        string managementPermissionName,
+        ILocalizableString? displayName = null,
+        MultiTenancySides multiTenancySide = MultiTenancySides.Both,
+        bool isEnabled = true)
+        : this(name, displayName, multiTenancySide, isEnabled)
+    {
+        ResourceName = Check.NotNull(resourceName, nameof(resourceName));
+        ManagementPermissionName = Check.NotNull(managementPermissionName, nameof(managementPermissionName));
+    }
+
+    protected internal PermissionDefinition(
+        [NotNull] string name,
         ILocalizableString? displayName = null,
         MultiTenancySides multiTenancySide = MultiTenancySides.Both,
         bool isEnabled = true)
@@ -99,6 +122,11 @@ public class PermissionDefinition :
         MultiTenancySides multiTenancySide = MultiTenancySides.Both,
         bool isEnabled = true)
     {
+        if (ResourceName != null)
+        {
+            throw new AbpException($"Resource permission cannot have child permissions. Resource: {ResourceName}");
+        }
+
         var child = new PermissionDefinition(
             name,
             displayName,
@@ -109,12 +137,12 @@ public class PermissionDefinition :
         };
 
         child[PermissionDefinitionContext.KnownPropertyNames.CurrentProviderName] = this[PermissionDefinitionContext.KnownPropertyNames.CurrentProviderName];
-       
+
         _children.Add(child);
 
         return child;
     }
-    
+
     PermissionDefinition ICanAddChildPermission.AddPermission(
         string name,
         ILocalizableString? displayName = null,
@@ -123,7 +151,6 @@ public class PermissionDefinition :
     {
         return this.AddChild(name, displayName, multiTenancySide, isEnabled);
     }
-
 
     /// <summary>
     /// Sets a property in the <see cref="Properties"/> dictionary.

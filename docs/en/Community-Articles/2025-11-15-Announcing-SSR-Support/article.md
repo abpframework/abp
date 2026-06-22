@@ -29,14 +29,14 @@ Server-Side Rendering refers to an approach which renders your Angular applicati
 
 You can easily add SSR support to your existing ABP Angular application using the Angular CLI with ABP schematics:
 
+> Adds SSR configuration to your project
 ```bash
-# Generate SSR configuration for your project
 ng generate @abp/ng.schematics:ssr-add
-
-# Or using the short form
+```
+> Short form
+```bash
 ng g @abp/ng.schematics:ssr-add
 ```
-
 If you have multiple projects in your workspace, you can specify which project to add SSR to:
 
 ```bash

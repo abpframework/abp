@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -240,14 +241,14 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
             using (var response = await client.PostAsync(url, stringContent,
                 _cliHttpClientFactory.GetCancellationToken(TimeSpan.FromMinutes(10))))
             {
-                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
+                await EnsureAbpIoSuccessfulResponseAsync(response);
                 var result = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<GetVersionResultDto>(result).Version;
             }
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not CliUsageException)
         {
-            Console.WriteLine("Error occured while getting the latest version from {0} : {1}", url, ex.Message);
+            Console.WriteLine("Error occurred while getting the latest version from {0} : {1}", url, ex.Message);
             return null;
         }
     }
@@ -273,15 +274,37 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
             using (var response = await client.PostAsync(url, stringContent,
                 _cliHttpClientFactory.GetCancellationToken(TimeSpan.FromMinutes(10))))
             {
-                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
+                await EnsureAbpIoSuccessfulResponseAsync(response);
                 var result = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<GetVersionResultDto>(result).Version;
             }
         }
-        catch (Exception)
+        catch (Exception ex) when (ex is not CliUsageException)
         {
             return null;
         }
+    }
+
+    private async Task EnsureAbpIoSuccessfulResponseAsync(HttpResponseMessage responseMessage)
+    {
+        if (responseMessage is { StatusCode: HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden })
+        {
+            var message = $"Remote server returns '{(int)responseMessage.StatusCode}-{responseMessage.ReasonPhrase}'. ";
+
+            var serverError = await RemoteServiceExceptionHandler.GetAbpRemoteServiceErrorAsync(responseMessage);
+            if (!string.IsNullOrWhiteSpace(serverError))
+            {
+                message += serverError + " ";
+            }
+
+            message += $"Authentication or license check failed while accessing {CliUrls.WwwAbpIo}. " +
+                       "Please make sure you are logged in with `abp login <username>` and your ABP commercial license is active and covers the requested version. " +
+                       $"You can check your license at {CliUrls.WwwAbpIo}my-organizations";
+
+            throw new CliUsageException(message);
+        }
+
+        await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
     }
 
     private async Task<bool> IsVersionExists(string templateName, string version)
@@ -313,6 +336,8 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
     private async Task<byte[]> DownloadSourceCodeContentAsync(SourceCodeDownloadInputDto input)
     {
         var url = $"{CliUrls.WwwAbpIo}api/download/{input.Type}/";
+        var isAbpIoDownload = input.TemplateSource.IsNullOrWhiteSpace();
+        var downloadUrl = isAbpIoDownload ? url : input.TemplateSource;
 
         HttpResponseMessage responseMessage = null;
 
@@ -320,7 +345,7 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         {
             var client = _cliHttpClientFactory.CreateClient(timeout: TimeSpan.FromMinutes(5));
 
-            if (input.TemplateSource.IsNullOrWhiteSpace())
+            if (isAbpIoDownload)
             {
                 responseMessage = await client.PostAsync(
                     url,
@@ -334,29 +359,43 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
                     _cliHttpClientFactory.GetCancellationToken());
             }
 
-            await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
-            var resultAsBytes = await responseMessage.Content.ReadAsByteArrayAsync();
-            responseMessage.Dispose();
+            if (isAbpIoDownload)
+            {
+                await EnsureAbpIoSuccessfulResponseAsync(responseMessage);
+            }
+            else
+            {
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
+            }
 
-            return resultAsBytes;
+            return await responseMessage.Content.ReadAsByteArrayAsync();
         }
         catch (Exception ex)
         {
-            if(ex is UserFriendlyException)
+            if (ex is CliUsageException)
+            {
+                throw;
+            }
+
+            if (ex is UserFriendlyException)
             {
                 Logger.LogWarning(ex.Message);
                 throw;
             }
 
-            Console.WriteLine("Error occured while downloading source-code from {0} : {1}{2}{3}", url,
+            Console.WriteLine("Error occurred while downloading source-code from {0} : {1}{2}{3}", downloadUrl,
                 responseMessage?.ToString(), Environment.NewLine, ex.Message);
             throw;
+        }
+        finally
+        {
+            responseMessage?.Dispose();
         }
     }
 
     private static bool IsNetworkSource(string source)
     {
-        return source.ToLower().StartsWith("http");
+        return source.ToLowerInvariant().StartsWith("http");
     }
 
     private List<(string TemplateName, string Version)> GetLocalTemplates()

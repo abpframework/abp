@@ -39,7 +39,7 @@ import {
   OnInit,
   TemplateRef,
   TrackByFunction,
-  ViewChild,
+  viewChild
 } from '@angular/core';
 import {
   AbstractControl,
@@ -70,8 +70,8 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
     FormsModule,
     PermissionManagementComponent,
     PageComponent,
-    NgbNavModule,
     NgbDropdownModule,
+    NgbNavModule,
     NgxValidateCoreModule,
     LocalizationPipe,
     ExtensibleTableComponent,
@@ -94,12 +94,13 @@ export class UsersComponent implements OnInit {
 
   data: PagedResultDto<IdentityUserDto> = { items: [], totalCount: 0 };
 
-  @ViewChild('modalContent', { static: false })
-  modalContent!: TemplateRef<any>;
+  readonly modalContent = viewChild.required<TemplateRef<any>>('modalContent');
 
   form!: UntypedFormGroup;
 
   selected?: IdentityUserDto;
+
+  selectedTab = 'user-info';
 
   selectedUserRoles?: IdentityRoleDto[];
 
@@ -159,6 +160,7 @@ export class UsersComponent implements OnInit {
   }
 
   openModal() {
+    this.selectedTab = 'user-info';
     this.buildForm();
     this.isModalVisible = true;
   }

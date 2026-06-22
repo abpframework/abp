@@ -1,4 +1,11 @@
 ```json
+//[doc-params]
+{
+    "BlazorUI": ["Blazorise", "MudBlazor"]
+}
+```
+
+```json
 //[doc-seo]
 {
     "Description": "Learn how to define page-specific elements with PageLayout in ABP Framework, enhancing your application's navigation and title management."
@@ -36,6 +43,8 @@ Indicates current selected menu item name. Menu item name should match a unique 
 
 Menu item name can be set on runtime too.
 
+{{if BlazorUI == "Blazorise"}}
+
 ```html
 @inject PageLayout PageLayout
 
@@ -49,6 +58,25 @@ Menu item name can be set on runtime too.
 }
 ```
 
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+```razor
+@inject PageLayout PageLayout
+
+<MudButton OnClick="SetCategoriesMenuAsSelected" Variant="Variant.Filled" Color="Color.Primary">Change Menu</MudButton>
+
+@code{
+    protected void SetCategoriesMenuAsSelected()
+    {
+        PageLayout.MenuItemName = "MyProjectName.Categories";
+    }
+}
+```
+
+{{end}}
+
 
 ![leptonx selected menu item](../../../images/leptonx-selected-menu-item-example.gif)
 
@@ -57,6 +85,9 @@ Menu item name can be set on runtime too.
 
 ## BreadCrumbs
 BreadCrumbItems are used to render breadcrumbs in the PageHeader.
+
+{{if BlazorUI == "Blazorise"}}
+
 ```csharp
 @inject PageLayout PageLayout
 
@@ -64,6 +95,21 @@ BreadCrumbItems are used to render breadcrumbs in the PageHeader.
     PageLayout.BreadcrumbItems.Add(new BlazoriseUI.BreadcrumbItem("My Page", "/my-page")); 
 }
 ```
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+```razor
+@using MudBlazor
+@inject PageLayout PageLayout
+
+@{
+    PageLayout.BreadcrumbItems.Add(new BreadcrumbItem("My Page", "/my-page"));
+}
+```
+
+{{end}}
 
 ## Toolbar
 ToolbarItems are used to render action toolbar items in the PageHeader.

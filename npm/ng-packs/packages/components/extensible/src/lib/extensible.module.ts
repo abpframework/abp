@@ -13,6 +13,7 @@ import {
   ExtensibleFormComponent,
   ExtensibleFormPropComponent,
   ExtensibleTableComponent,
+  ExtensibleTableRowDetailComponent,
   GridActionsComponent,
   PageToolbarComponent,
   ExtensibleDateTimePickerComponent,
@@ -32,6 +33,7 @@ const importWithExport = [
   CreateInjectorPipe,
   ExtensibleFormComponent,
   ExtensibleTableComponent,
+  ExtensibleTableRowDetailComponent,
   ExtensibleFormMultiselectComponent,
 ];
 
@@ -50,4 +52,4 @@ const importWithExport = [
   ],
   exports: [...importWithExport],
 })
-export class ExtensibleModule {}
+export class ExtensibleModule { }

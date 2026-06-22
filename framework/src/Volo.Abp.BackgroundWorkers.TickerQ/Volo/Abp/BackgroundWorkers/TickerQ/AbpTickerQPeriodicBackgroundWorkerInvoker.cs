@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using TickerQ.Utilities.Models;
+using TickerQ.Utilities.Base;
 
 namespace Volo.Abp.BackgroundWorkers.TickerQ;
 

@@ -133,7 +133,7 @@ static internal class DeviceManager
     {
         try
         {
-            return GetProcessorIdForWindows();
+            return GetBaseBoardSerialNumberForWindows();
         }
         catch
         {
@@ -142,10 +142,10 @@ static internal class DeviceManager
         return GetWindowsMachineUniqueId();
     }
 
-    private static string GetProcessorIdForWindows()
+    private static string GetBaseBoardSerialNumberForWindows()
     {
         using (var managementObjectSearcher =
-               new System.Management.ManagementObjectSearcher("SELECT ProcessorId FROM Win32_Processor"))
+               new System.Management.ManagementObjectSearcher("SELECT SerialNumber FROM Win32_BaseBoard"))
         {
             using (var searcherObj = managementObjectSearcher.Get())
             {
@@ -156,7 +156,7 @@ static internal class DeviceManager
 
                 var managementObjectEnumerator = searcherObj.GetEnumerator();
                 managementObjectEnumerator.MoveNext();
-                return managementObjectEnumerator.Current.GetPropertyValue("ProcessorId").ToString()!;
+                return managementObjectEnumerator.Current.GetPropertyValue("SerialNumber").ToString()!;
             }
         }
     }

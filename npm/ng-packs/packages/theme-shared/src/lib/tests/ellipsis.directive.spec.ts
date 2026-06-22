@@ -1,4 +1,4 @@
-import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/jest';
+import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/vitest';
 import { EllipsisDirective } from '../directives/ellipsis.directive';
 
 describe('EllipsisDirective', () => {
@@ -39,17 +39,61 @@ describe('EllipsisDirective', () => {
     expect(directive.title).toBe('test title');
   });
 
-  test('should have element innerText as title if not specified', () => {
-    spectator.setHostInput({ title: undefined });
-    expect(directive.title).toBe(el.innerText);
-  });
-
   test('should add abp-ellipsis-inline class to element if width is given', () => {
     expect(el).toHaveClass('abp-ellipsis-inline');
   });
+});
 
-  test('should add abp-ellipsis class to element if width is not given', () => {
-    spectator.setHostInput({ width: undefined });
+describe('EllipsisDirective when title is not specified', () => {
+  let spectator: SpectatorDirective<EllipsisDirective>;
+  let directive: EllipsisDirective;
+  let el: HTMLDivElement;
+  const createDirective = createDirectiveFactory({
+    directive: EllipsisDirective,
+  });
+
+  beforeEach(() => {
+    spectator = createDirective(
+      '<div [abpEllipsis]="width" [abpEllipsisEnabled]="true" [title]="title">test content</div>',
+      {
+        hostProps: {
+          title: undefined,
+          width: '100px',
+        },
+      },
+    );
+    directive = spectator.directive;
+    el = spectator.query('div') as HTMLDivElement;
+  });
+
+  test('should have element innerText as title', () => {
+    expect(directive.title).toBe(el.innerText);
+  });
+});
+
+describe('EllipsisDirective when width is not given', () => {
+  let spectator: SpectatorDirective<EllipsisDirective>;
+  let directive: EllipsisDirective;
+  let el: HTMLDivElement;
+  const createDirective = createDirectiveFactory({
+    directive: EllipsisDirective,
+  });
+
+  beforeEach(() => {
+    spectator = createDirective(
+      '<div [abpEllipsis]="width" [abpEllipsisEnabled]="true" [title]="title">test content</div>',
+      {
+        hostProps: {
+          title: 'test title',
+          width: undefined,
+        },
+      },
+    );
+    directive = spectator.directive;
+    el = spectator.query('div') as HTMLDivElement;
+  });
+
+  test('should add abp-ellipsis class to element', () => {
     expect(el).toHaveClass('abp-ellipsis');
   });
 });

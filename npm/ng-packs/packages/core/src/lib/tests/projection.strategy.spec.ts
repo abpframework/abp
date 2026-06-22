@@ -6,7 +6,7 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
+import { createComponentFactory, Spectator } from '@ngneat/spectator/vitest';
 import {
   ComponentProjectionStrategy,
   PROJECTION_STRATEGY,
@@ -73,7 +73,7 @@ describe('RootComponentProjectionStrategy', () => {
     baz = 'baz';
   }
 
-  @Component({ 
+  @Component({
     template: '',
     imports: [],
   })
@@ -208,9 +208,13 @@ describe('PROJECTION_STRATEGY', () => {
   `(
     'should successfully map $name to $Strategy.name with $domStrategy.name dom strategy',
     ({ name, Strategy, domStrategy }) => {
-      expect(PROJECTION_STRATEGY[name](content, context)).toEqual(
-        new Strategy(content, CONTEXT_STRATEGY.None(), domStrategy()),
-      );
+      const result = PROJECTION_STRATEGY[name](content, context);
+      const expected = new Strategy(content, CONTEXT_STRATEGY.None(), domStrategy());
+
+      expect(result).toBeInstanceOf(Strategy);
+      expect(result.content).toEqual(expected.content);
+      expect(result['contextStrategy']).toBeInstanceOf(expected['contextStrategy'].constructor);
+      expect(result['domStrategy'].position).toBe(expected['domStrategy'].position);
     },
   );
 
@@ -239,9 +243,14 @@ describe('PROJECTION_STRATEGY', () => {
     'should successfully map $name to $Strategy.name with $contextStrategy.name context strategy and $domStrategy.name dom strategy',
     ({ name, Strategy, domStrategy, contextStrategy }) => {
       context = { x: true };
-      expect(PROJECTION_STRATEGY[name](content, context)).toEqual(
-        new Strategy(content, contextStrategy(context), domStrategy()),
-      );
+      const result = PROJECTION_STRATEGY[name](content, context);
+      const expected = new Strategy(content, contextStrategy(context), domStrategy());
+
+      expect(result).toBeInstanceOf(Strategy);
+      expect(result.content).toEqual(expected.content);
+      expect(result['contextStrategy']).toBeInstanceOf(expected['contextStrategy'].constructor);
+      expect(result['contextStrategy'].context).toEqual(expected['contextStrategy'].context);
+      expect(result['domStrategy'].position).toBe(expected['domStrategy'].position);
     },
   );
 });

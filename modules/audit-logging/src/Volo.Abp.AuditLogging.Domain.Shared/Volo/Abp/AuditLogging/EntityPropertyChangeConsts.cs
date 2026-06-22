@@ -18,7 +18,7 @@ public class EntityPropertyChangeConsts
     public static int MaxPropertyNameLength { get; set; } = 128;
 
     /// <summary>
-    /// Default value: 64
+    /// Default value: 512
     /// </summary>
-    public static int MaxPropertyTypeFullNameLength { get; set; } = 64;
+    public static int MaxPropertyTypeFullNameLength { get; set; } = 512;
 }

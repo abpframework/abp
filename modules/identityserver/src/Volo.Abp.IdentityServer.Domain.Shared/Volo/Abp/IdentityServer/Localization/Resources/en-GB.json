@@ -9,6 +9,7 @@
     "InvalidUserNameOrPassword": "Invalid username or password!",
     "LoginIsNotAllowed": "You are not allowed to login! Your account is inactive or needs to confirm your email/phone number.",
     "InvalidUsername": "Invalid username or password!",
-    "TheTargetUserIsNotLinkedToYou": "The target user is not linked to you!"
+    "TheTargetUserIsNotLinkedToYou": "The target user is not linked to you!",
+    "ClientResourcePermissionProviderKeyLookupService": "Client"
   }
 }

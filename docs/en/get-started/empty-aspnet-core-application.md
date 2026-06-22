@@ -11,7 +11,7 @@ This tutorial explains how to start ABP from scratch with minimal dependencies. 
 
 ## Create a New Project
 
-1. Create a new AspNet Core Web Application with Visual Studio 2022 (17.0.0+):
+1. Create a new AspNet Core Web Application with Visual Studio 2026 (18.0.0+):
 
 ![](../images/create-new-aspnet-core-application-v2.png)
 

@@ -88,6 +88,7 @@
     "Exporting": "Aktarılıyor",
     "ExportCompleted": "Aktarma başarıyla tamamlandı",
     "ExportFailed": "Aktarma başarısız",
+    "ThereWereNoRecordsToExport": "Dışa aktarılacak kayıt bulunamadı.",
     "ExportJobQueued": "{0} kayıt için dışa aktarma işi sıraya alındı. İşlem tamamlandığında e-posta ile bilgilendirileceksiniz.",
     "ExportReady": "{0} kayıt için dışa aktarma tamamlandı ve indirme için hazır.",
     "FileName": "Dosya adı",

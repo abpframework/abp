@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "page-type.schema.json",
+  "title": "PageType",
+  "description": "The runtime page renderer to use. Prefer lower-case values in descriptor JSON; PascalCase aliases are accepted for compatibility.",
+  "markdownDescription": "`dataGrid` renders searchable/filterable tabular CRUD for an entity. `kanban` renders grouped cards and requires `groupByProperty`. `calendar` renders entity records on a calendar and requires `calendarStartProperty`. `gallery` renders visual cards and may use `galleryImageProperty`. `form` renders a standalone create/edit form page and requires `formName`. `dashboard` renders a flat list of dashboard visualizations and requires `dashboard`.",
+  "type": "string",
+  "enum": [
+    "dataGrid",
+    "DataGrid",
+    "kanban",
+    "Kanban",
+    "calendar",
+    "Calendar",
+    "form",
+    "Form",
+    "dashboard",
+    "Dashboard",
+    "gallery",
+    "Gallery"
+  ],
+  "enumDescriptions": [
+    "Entity data grid/list page.",
+    "Entity data grid/list page.",
+    "Entity kanban board grouped by an enum/status property.",
+    "Entity kanban board grouped by an enum/status property.",
+    "Entity calendar page using date/time properties.",
+    "Entity calendar page using date/time properties.",
+    "Standalone form page bound to a form descriptor.",
+    "Standalone form page bound to a form descriptor.",
+    "Dashboard page with chart/list/number visualizations.",
+    "Dashboard page with chart/list/number visualizations.",
+    "Entity gallery/card page, optionally image-backed.",
+    "Entity gallery/card page, optionally image-backed."
+  ]
+}

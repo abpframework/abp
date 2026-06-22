@@ -1,0 +1,40 @@
+<abp-page [title]="'CmsKit::BlogPosts' | abpLocalization" [toolbar]="data.items">
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-2">
+          <select class="form-select" [(ngModel)]="statusFilter" (change)="onStatusChange()">
+            <option [ngValue]="null">{{ 'CmsKit::AllPosts' | abpLocalization }}</option>
+            <option [ngValue]="BlogPostStatus.Draft">
+              {{ 'CmsKit::' + 'CmsKit.BlogPost.Status.0' | abpLocalization }}
+            </option>
+            <option [ngValue]="BlogPostStatus.Published">
+              {{ 'CmsKit::' + 'CmsKit.BlogPost.Status.1' | abpLocalization }}
+            </option>
+            <option [ngValue]="BlogPostStatus.WaitingForReview">
+              {{ 'CmsKit::' + 'CmsKit.BlogPost.Status.2' | abpLocalization }}
+            </option>
+          </select>
+        </div>
+        <div class="col-10">
+          <div class="input-group">
+            <input
+              type="search"
+              class="form-control"
+              [placeholder]="'AbpUi::PagerSearch' | abpLocalization"
+              [(ngModel)]="filter"
+              (keyup.enter)="onSearch()"
+            />
+            <button class="btn btn-primary" type="button" (click)="onSearch()">
+              <i class="fa fa-search" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <abp-extensible-table [data]="data.items" [recordsTotal]="data.totalCount" [list]="list" />
+  </div>
+</abp-page>

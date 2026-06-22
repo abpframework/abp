@@ -1,4 +1,7 @@
 ﻿using System.Globalization;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.IdentityModel.Tokens;
 using OpenIddict.Abstractions;
 using OpenIddict.Demo.Server.ExtensionGrants;
 using Volo.Abp.Data;
@@ -13,6 +16,8 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
     private readonly IOpenIddictApplicationManager _applicationManager;
     private readonly IOpenIddictScopeManager _scopeManager;
 
+    public ILogger<ServerDataSeedContributor> Logger { get; set; }
+
     public ServerDataSeedContributor(
         ICurrentTenant currentTenant,
         IOpenIddictApplicationManager applicationManager,
@@ -21,6 +26,7 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
         _currentTenant = currentTenant;
         _applicationManager = applicationManager;
         _scopeManager = scopeManager;
+        Logger = NullLogger<ServerDataSeedContributor>.Instance;
     }
 
     public async Task SeedAsync(DataSeedContext context)
@@ -157,6 +163,43 @@ public class ServerDataSeedContributor : IDataSeedContributor, ITransientDepende
                     OpenIddictConstants.Permissions.Prefixes.Scope + "AbpAPI"
                 }
             });
+        }
+
+        if (await _applicationManager.FindByClientIdAsync("AbpConsoleAppWithJwks") == null)
+        {
+            // Load the pre-generated JWKS (public key) from the jwks.json file.
+            // The corresponding private key (jwks-private.pem) is stored in the parent app/ directory
+            // and used by OpenIddict.Demo.Client.Console to sign JWT client assertions.
+            // Both files are generated with: abp generate-jwks
+            var jwksPath = Path.Combine(AppContext.BaseDirectory, "jwks.json");
+            if (!File.Exists(jwksPath))
+            {
+                Logger.LogWarning(
+                    "JWKS file not found at '{JwksPath}'. " +
+                    "Skipping creation of the 'AbpConsoleAppWithJwks' client. " +
+                    "Run 'abp generate-jwks' in the app/ directory to generate the key pair.",
+                    jwksPath);
+            }
+            else
+            {
+                var jwks = new JsonWebKeySet(await File.ReadAllTextAsync(jwksPath));
+
+                await _applicationManager.CreateAsync(new OpenIddictApplicationDescriptor
+                {
+                    ApplicationType = OpenIddictConstants.ApplicationTypes.Web,
+                    ClientId = "AbpConsoleAppWithJwks",
+                    ClientType = OpenIddictConstants.ClientTypes.Confidential,
+                    DisplayName = "Abp Console App (private_key_jwt)",
+                    JsonWebKeySet = jwks,
+                    Permissions =
+                    {
+                        OpenIddictConstants.Permissions.Endpoints.Token,
+                        OpenIddictConstants.Permissions.Endpoints.Introspection,
+                        OpenIddictConstants.Permissions.GrantTypes.ClientCredentials,
+                        OpenIddictConstants.Permissions.Prefixes.Scope + "AbpAPI"
+                    }
+                });
+            }
         }
 
         if (await _applicationManager.FindByClientIdAsync("Swagger") == null)

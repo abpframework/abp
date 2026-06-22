@@ -11,7 +11,8 @@
 //[doc-params]
 {
     "UI": ["MVC", "Blazor", "BlazorServer", "NG"],
-    "DB": ["EF", "Mongo"]
+    "DB": ["EF", "Mongo"],
+    "BlazorUI": ["Blazorise", "MudBlazor"]
 }
 ````
 
@@ -55,7 +56,7 @@ This documentation has a video tutorial on **YouTube**!! You can watch it here:
 
 ## Pre-Requirements
 
-* An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 9.0+](https://dotnet.microsoft.com/download/dotnet) development.
+* An IDE (e.g. [Visual Studio](https://visualstudio.microsoft.com/vs/)) that supports [.NET 10.0+](https://dotnet.microsoft.com/download/dotnet) development.
 * [Node v20.11+](https://nodejs.org/)
 {{if DB=="EF"}}
 * [SQL Server Express LocalDB](https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb)
@@ -621,6 +622,8 @@ This class uses the {{if UI=="Blazor"}}`ITodoAppService`{{else}}`TodoAppService`
 
 Open the `Index.razor` file in the {{if UI=="BlazorServer"}}`Components/Pages`{{else}}`Pages`{{end}} folder and replace the content with the following code block:
 
+{{if BlazorUI == "Blazorise"}}
+
 ```xml
 @page "/"
 @inherits TodoAppComponentBase
@@ -659,6 +662,47 @@ Open the `Index.razor` file in the {{if UI=="BlazorServer"}}`Components/Pages`{{
     </Card>
 </div>
 ```
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+```razor
+@page "/"
+@inherits TodoAppComponentBase
+
+<MudContainer>
+    <MudCard>
+        <MudCardHeader>
+            <CardHeaderContent>
+                <MudText Typo="Typo.h5">TODO LIST</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent>
+            <!-- FORM FOR NEW TODO ITEMS -->
+            <MudStack Row="true" AlignItems="AlignItems.Center">
+                <MudTextField @bind-Value="@NewTodoText" Placeholder="enter text..." Variant="Variant.Outlined" />
+                <MudButton OnClick="Create" Variant="Variant.Filled" Color="Color.Primary">Submit</MudButton>
+            </MudStack>
+            <!-- TODO ITEMS LIST -->
+            <MudList T="TodoItemDto" id="TodoList">
+                @foreach (var todoItem in TodoItems)
+                {
+                    <MudListItem T="TodoItemDto" Value="@todoItem">
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                       Color="Color.Error"
+                                       Size="Size.Small"
+                                       OnClick="@(() => Delete(todoItem))" />
+                        @todoItem.Text
+                    </MudListItem>
+                }
+            </MudList>
+        </MudCardContent>
+    </MudCard>
+</MudContainer>
+```
+
+{{end}}
 
 ### Index.razor.css
 

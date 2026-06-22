@@ -1,10 +1,9 @@
 import { Component, ComponentRef } from '@angular/core';
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/vitest';
 import { ContentProjectionService } from '../services';
-import { PROJECTION_STRATEGY } from '../strategies';
 
 describe('ContentProjectionService', () => {
-  @Component({ 
+  @Component({
     template: '<div class="foo">bar</div>',
   })
   class TestComponent {}

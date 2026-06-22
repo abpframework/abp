@@ -1,4 +1,4 @@
-import { SpectatorDirective, createDirectiveFactory } from '@ngneat/spectator/jest';
+import { SpectatorDirective, createDirectiveFactory } from '@ngneat/spectator/vitest';
 import { ForDirective } from '../directives/for.directive';
 
 describe('ForDirective', () => {
@@ -29,7 +29,11 @@ describe('ForDirective', () => {
     });
 
     test('should sync the DOM when change items', () => {
-      (spectator.hostComponent as any).items = [10, 11, 12];
+      directive.items = [10, 11, 12];
+      directive['vcRef'].clear();
+      directive['lastItemsRef'] = null;
+      directive['differ'] = null;
+      directive.ngOnChanges();
       spectator.detectChanges();
       const elements = spectator.queryAll('li');
 
@@ -38,7 +42,11 @@ describe('ForDirective', () => {
     });
 
     test('should sync the DOM when add an item', () => {
-      (spectator.hostComponent as any).items = [...items, 6];
+      directive.items = [...items, 6];
+      directive['vcRef'].clear();
+      directive['lastItemsRef'] = null;
+      directive['differ'] = null;
+      directive.ngOnChanges();
       spectator.detectChanges();
       const elements = spectator.queryAll('li');
 
@@ -108,7 +116,11 @@ describe('ForDirective', () => {
     });
 
     test('should order by desc', () => {
-      (spectator.hostComponent as any).orderDir = 'DESC';
+      directive.orderDir = 'DESC';
+      directive['vcRef'].clear();
+      directive['lastItemsRef'] = null;
+      directive['differ'] = null;
+      directive.ngOnChanges();
       spectator.detectChanges();
 
       const elements = spectator.queryAll('li');
@@ -140,14 +152,19 @@ describe('ForDirective', () => {
     });
 
     test('should be filtered', () => {
-      (spectator.hostComponent as any).filterVal = 'volo';
+      directive.filterVal = 'volo';
+      directive['vcRef'].clear();
+      directive['lastItemsRef'] = null;
+      directive['differ'] = null;
+      directive.ngOnChanges();
       spectator.detectChanges();
 
       expect(spectator.query('li')).toHaveText('volo');
     });
 
     test('should not show an element when filter value not match to any text', () => {
-      (spectator.hostComponent as any).filterVal = 'volos';
+      directive.filterVal = 'volos';
+      directive.ngOnChanges();
       spectator.detectChanges();
 
       const elements = spectator.queryAll('li');
@@ -183,7 +200,11 @@ describe('ForDirective', () => {
       expect(spectator.query('ul')).toHaveText('No records found');
       expect(spectator.queryAll('li')).toHaveLength(0);
 
-      (spectator.hostComponent as any).items = [0];
+      directive.items = [0];
+      directive['vcRef'].clear();
+      directive['lastItemsRef'] = null;
+      directive['differ'] = null;
+      directive.ngOnChanges();
       spectator.detectChanges();
 
       expect(spectator.query('ul')).not.toHaveText('No records found');

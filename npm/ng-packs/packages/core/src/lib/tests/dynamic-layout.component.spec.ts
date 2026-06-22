@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, NgModule, inject as inject_1 } from '@angular/core';
+import { Component, inject as inject_1 } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/jest';
+import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/vitest';
 import { DynamicLayoutComponent, RouterOutletComponent } from '../components';
 import { eLayoutType } from '../enums/common';
 import { ABP } from '../models';
@@ -68,16 +68,23 @@ describe('DynamicLayoutComponent', () => {
   const createComponent = createRoutingFactory({
     component: RouterOutletComponent,
     stubsEnabled: false,
-    imports: [DummyComponent, RouterModule, DummyApplicationLayoutComponent, DummyAccountLayoutComponent, DummyEmptyLayoutComponent, DynamicLayoutComponent],
+    imports: [
+      DummyComponent,
+      RouterModule,
+      DummyApplicationLayoutComponent,
+      DummyAccountLayoutComponent,
+      DummyEmptyLayoutComponent,
+      DynamicLayoutComponent,
+    ],
     mocks: [AbpApplicationConfigurationService, HttpClient],
     providers: [
       {
         provide: RoutesService,
         useValue: {
-          add: jest.fn(),
-          flat$: { pipe: jest.fn() },
-          tree$: { pipe: jest.fn() },
-          visible$: { pipe: jest.fn() },
+          add: vi.fn(),
+          flat$: { pipe: vi.fn() },
+          tree$: { pipe: vi.fn() },
+          visible$: { pipe: vi.fn() },
         },
       },
       ReplaceableComponentsService,

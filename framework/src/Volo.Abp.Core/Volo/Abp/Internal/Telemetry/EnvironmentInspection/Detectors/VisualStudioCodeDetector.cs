@@ -77,7 +77,10 @@ internal sealed class VisualStudioCodeDetector : SoftwareDetector
         {
             try
             {
-                using var jsonDoc = JsonDocument.Parse(File.ReadAllText(productJson));
+                using var jsonDoc = JsonDocument.Parse(File.ReadAllText(productJson), new JsonDocumentOptions
+                {
+                    AllowTrailingCommas = true
+                });
                 var root = jsonDoc.RootElement;
                 if (root.TryGetProperty("version", out var versionProp))
                 {
@@ -105,7 +108,10 @@ internal sealed class VisualStudioCodeDetector : SoftwareDetector
         {
             try
             {
-                using var json = JsonDocument.Parse( File.ReadAllText(settingsPath));
+                using var json = JsonDocument.Parse( File.ReadAllText(settingsPath), new JsonDocumentOptions
+                {
+                    AllowTrailingCommas = true
+                });
                 var root = json.RootElement;
                 if (root.TryGetProperty("theme", out var themeProp))
                 {

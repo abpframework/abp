@@ -3,3 +3,4 @@ export * from './oauth-error-filter.service';
 export * from './remember-me.service';
 export * from './browser-token-storage.service';
 export * from './server-token-storage.service';
+export * from './memory-token-storage.service';

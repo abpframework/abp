@@ -11,6 +11,7 @@
     "InvalidUsername": "Неверное имя пользователя или пароль!",
     "InvalidAuthenticatorCode": "Неверный код аутентификатора!",
     "InvalidRecoveryCode": "Неверный код восстановления!",
-    "TheTargetUserIsNotLinkedToYou": "Целевой пользователь не связан с вами!"
+    "TheTargetUserIsNotLinkedToYou": "Целевой пользователь не связан с вами!",
+    "ClientResourcePermissionProviderKeyLookupService": "Клиент"
   }
 }

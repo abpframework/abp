@@ -2,6 +2,7 @@ export * from './lib/components/date-time-picker/extensible-date-time-picker.com
 export * from './lib/components/extensible-form/extensible-form-prop.component';
 export * from './lib/components/extensible-form/extensible-form.component';
 export * from './lib/components/extensible-table/extensible-table.component';
+export * from './lib/components/extensible-table/extensible-table-row-detail';
 export * from './lib/components/grid-actions/grid-actions.component';
 export * from './lib/components/page-toolbar/page-toolbar.component';
 export * from './lib/components/multi-select';
@@ -68,4 +69,5 @@ export * from './lib/utils/form-props.util';
 export * from './lib/utils/props.util';
 export * from './lib/utils/state.util';
 export * from './lib/utils/model.utils';
+export * from './lib/models/row-detail';
 export * from './lib/extensible.module';

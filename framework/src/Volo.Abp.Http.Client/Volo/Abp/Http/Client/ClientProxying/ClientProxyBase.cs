@@ -50,7 +50,9 @@ public class ClientProxyBase<TService> : ITransientDependency
 
     protected virtual async Task RequestAsync(string methodName, ClientProxyRequestTypeValue? arguments = null)
     {
-        await RequestAsync(BuildHttpProxyClientProxyContext(methodName, arguments));
+        using (await RequestAsync(BuildHttpProxyClientProxyContext(methodName, arguments)))
+        {
+        }
     }
 
     protected virtual async Task<T> RequestAsync<T>(string methodName, ClientProxyRequestTypeValue? arguments = null)
@@ -106,8 +108,7 @@ public class ClientProxyBase<TService> : ITransientDependency
     {
         var responseContent = await RequestAsync(requestContext);
 
-        if (typeof(T) == typeof(IRemoteStreamContent) ||
-            typeof(T) == typeof(RemoteStreamContent))
+        if (typeof(T) == typeof(IRemoteStreamContent) || typeof(T) == typeof(RemoteStreamContent))
         {
             /* returning a class that holds a reference to response
              * content just to be sure that GC does not dispose of
@@ -120,18 +121,55 @@ public class ClientProxyBase<TService> : ITransientDependency
                 responseContent.Headers?.ContentLength);
         }
 
-        var stringContent = await responseContent.ReadAsStringAsync();
-        if (typeof(T) == typeof(string))
+        using (responseContent)
         {
-            return (T)(object)stringContent;
+            var stringContent = await responseContent.ReadAsStringAsync();
+            if (typeof(T) == typeof(string))
+            {
+                var unwrapped = UnwrapStringResponse(stringContent, responseContent.Headers?.ContentType?.MediaType);
+                return (T)(object)unwrapped!;
+            }
+
+            if (stringContent.IsNullOrWhiteSpace())
+            {
+                return default!;
+            }
+
+            return JsonSerializer.Deserialize<T>(stringContent);
+        }
+    }
+
+    protected virtual string? UnwrapStringResponse(string body, string? contentType)
+    {
+        if (body.IsNullOrEmpty() || contentType.IsNullOrWhiteSpace())
+        {
+            return body;
         }
 
-        if (stringContent.IsNullOrWhiteSpace())
+        if (!IsJsonMediaType(NormalizeMediaType(contentType!)))
         {
-            return default!;
+            return body;
         }
 
-        return JsonSerializer.Deserialize<T>(stringContent);
+        try
+        {
+            var parsed = JsonSerializer.Deserialize<string>(body);
+            return parsed ?? string.Empty;
+        }
+        catch
+        {
+            return body;
+        }
+    }
+
+    protected static string NormalizeMediaType(string mediaType)
+    {
+        if (mediaType.IsNullOrWhiteSpace())
+        {
+            return string.Empty;
+        }
+        var semi = mediaType.IndexOf(';');
+        return (semi < 0 ? mediaType : mediaType.Substring(0, semi)).Trim().ToLowerInvariant();
     }
 
     protected virtual async Task<HttpContent> RequestAsync(ClientProxyRequestContext requestContext)
@@ -184,7 +222,15 @@ public class ClientProxyBase<TService> : ITransientDependency
 
         if (!response.IsSuccessStatusCode)
         {
-            await ThrowExceptionForResponseAsync(response);
+            try
+            {
+                await ThrowExceptionForResponseAsync(response);
+            }
+            catch
+            {
+                response.Dispose();
+                throw;
+            }
         }
 
         return response.Content;
@@ -313,14 +359,7 @@ public class ClientProxyBase<TService> : ITransientDependency
         HttpRequestMessage requestMessage,
         ApiVersionInfo apiVersion)
     {
-        //API Version
-        if (!apiVersion.Version.IsNullOrEmpty())
-        {
-            //TODO: What about other media types?
-            requestMessage.Headers.Add("accept", $"{MimeTypes.Text.Plain}; v={apiVersion.Version}");
-            requestMessage.Headers.Add("accept", $"{MimeTypes.Application.Json}; v={apiVersion.Version}");
-            requestMessage.Headers.Add("api-version", apiVersion.Version);
-        }
+        AddAcceptHeaders(action, requestMessage, apiVersion);
 
         //Header parameters
         var headers = action.Parameters.Where(p => p.BindingSourceId == ParameterBindingSources.Header).ToArray();
@@ -363,6 +402,57 @@ public class ClientProxyBase<TService> : ITransientDependency
         {
             requestMessage.Headers.Add(TimeZoneConsts.DefaultTimeZoneKey, CurrentTimezoneProvider.TimeZone);
         }
+    }
+
+    protected virtual void AddAcceptHeaders(
+        ActionApiDescriptionModel action,
+        HttpRequestMessage requestMessage,
+        ApiVersionInfo apiVersion)
+    {
+        var acceptForReturn = GetAcceptForActionReturn(action);
+        var versionSuffix = apiVersion.Version.IsNullOrEmpty() ? string.Empty : $"; v={apiVersion.Version}";
+
+        if (!acceptForReturn.IsNullOrEmpty())
+        {
+            requestMessage.Headers.Add("accept", acceptForReturn + versionSuffix);
+        }
+        else
+        {
+            requestMessage.Headers.Add("accept", MimeTypes.Text.Plain + versionSuffix);
+            requestMessage.Headers.Add("accept", MimeTypes.Application.Json + versionSuffix);
+        }
+
+        if (!apiVersion.Version.IsNullOrEmpty())
+        {
+            requestMessage.Headers.Add("api-version", apiVersion.Version);
+        }
+    }
+
+    protected virtual string? GetAcceptForActionReturn(ActionApiDescriptionModel action)
+    {
+        if (action.ReturnValue.IsRemoteStream ||
+            action.ReturnValue.Type == typeof(IRemoteStreamContent).FullName ||
+            action.ReturnValue.Type == typeof(RemoteStreamContent).FullName)
+        {
+            return MimeTypes.Application.OctetStream;
+        }
+
+        var contentTypes = action.ReturnValue.ContentTypes;
+        if (contentTypes == null || contentTypes.Count == 0)
+        {
+            return null;
+        }
+
+        var normalized = contentTypes.Select(NormalizeMediaType).ToList();
+
+        return normalized.FirstOrDefault(IsJsonMediaType) ?? normalized[0];
+    }
+
+    private static bool IsJsonMediaType(string normalizedMediaType)
+    {
+        return normalizedMediaType.Equals(MimeTypes.Application.Json, StringComparison.OrdinalIgnoreCase) ||
+               normalizedMediaType.Equals("text/json", StringComparison.OrdinalIgnoreCase) ||
+               normalizedMediaType.EndsWith("+json", StringComparison.OrdinalIgnoreCase);
     }
 
     protected virtual StringSegment RemoveQuotes(StringSegment input)

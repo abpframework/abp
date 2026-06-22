@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(yarn nx g:*)",
+      "Bash(npx vitest:*)",
+      "Bash(xargs:*)",
+      "Bash(dotnet build:*)",
+      "Bash(git show:*)"
+    ]
+  }
+}

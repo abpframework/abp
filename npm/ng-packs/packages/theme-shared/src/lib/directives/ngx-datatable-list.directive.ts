@@ -1,7 +1,6 @@
 import {
   ChangeDetectorRef,
   Directive,
-  Input,
   OnChanges,
   OnInit,
   DoCheck,
@@ -10,6 +9,7 @@ import {
   DestroyRef,
   ViewContainerRef,
   Renderer2,
+  input
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { distinctUntilChanged } from 'rxjs';
@@ -35,7 +35,7 @@ export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
   protected readonly viewContainerRef = inject(ViewContainerRef);
   protected readonly renderer = inject(Renderer2);
 
-  @Input() list!: ListService;
+  readonly list = input.required<ListService>();
 
   constructor() {
     this.setInitialValues();
@@ -62,7 +62,7 @@ export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
   }
 
   protected subscribeToRequestStatus() {
-    const requestStatus$ = this.list.requestStatus$.pipe(distinctUntilChanged());
+    const requestStatus$ = this.list().requestStatus$.pipe(distinctUntilChanged());
     const { emptyMessage, errorMessage } = this.ngxDatatableMessages || defaultNgxDatatableMessages;
 
     requestStatus$.subscribe(status => {
@@ -137,14 +137,15 @@ export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
     this.table.sort
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(({ sorts: [{ prop, dir }] }) => {
-        if (prop === this.list.sortKey && this.list.sortOrder === 'desc') {
-          this.list.sortKey = '';
-          this.list.sortOrder = '';
+        const list = this.list();
+        if (prop === list.sortKey && list.sortOrder === 'desc') {
+          list.sortKey = '';
+          list.sortOrder = '';
           this.table.sorts = [];
           this.cdRef.detectChanges();
         } else {
-          this.list.sortKey = prop;
-          this.list.sortOrder = dir;
+          list.sortKey = prop;
+          list.sortOrder = dir;
         }
       });
   }
@@ -156,32 +157,32 @@ export class NgxDatatableListDirective implements OnChanges, OnInit, DoCheck {
   }
 
   protected subscribeToQuery() {
-    this.list.query$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      const offset = this.list.page;
+    this.list().query$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      const offset = this.list().page;
       if (this.table.offset !== offset) this.table.offset = offset;
     });
   }
 
   protected setTablePage(pageNum: number) {
-    this.list.page = pageNum;
+    this.list().page = pageNum;
     this.table.offset = pageNum;
   }
 
   protected refreshPageIfDataExist() {
     if (this.table.rows?.length < 1 && this.table.count > 0) {
-      let maxPage = Math.floor(Number(this.table.count / this.list.maxResultCount));
+      let maxPage = Math.floor(Number(this.table.count / this.list().maxResultCount));
 
-      if (this.table.count < this.list.maxResultCount) {
+      if (this.table.count < this.list().maxResultCount) {
         this.setTablePage(0);
         return;
       }
 
-      if (this.table.count % this.list.maxResultCount === 0) {
+      if (this.table.count % this.list().maxResultCount === 0) {
         maxPage -= 1;
       }
 
-      if (this.list.page < maxPage) {
-        this.setTablePage(this.list.page);
+      if (this.list().page < maxPage) {
+        this.setTablePage(this.list().page);
         return;
       }
 

@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { RoutesHandler } from '../handlers/routes.handler';
 import { RoutesService } from '../services/routes.service';
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/vitest';
 
 describe('Routes Handler', () => {
   let spectator: SpectatorService<RoutesHandler>;
@@ -15,7 +15,7 @@ describe('Routes Handler', () => {
       {
         provide: RoutesService,
         useValue: {
-          add: jest.fn(),
+          add: vi.fn(),
         },
       },
       {

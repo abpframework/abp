@@ -103,6 +103,7 @@
     "Exporting": "Exportálás",
     "ExportCompleted": "Exportálás sikeresen befejezve",
     "ExportFailed": "Exportálás sikertelen",
+    "ThereWereNoRecordsToExport": "Nem voltak exportálható rekordok.",
     "ExportJobQueued": "Exportálási feladat sorba állítva {0} rekordhoz. E-mailt fog kapni, amikor az exportálás befejeződött.",
     "ExportReady": "Exportálás befejezve {0} rekordhoz és letöltésre kész.",
     "FileName": "Fájlnév",

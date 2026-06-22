@@ -20,6 +20,7 @@ export interface PropertyDef {
   type: string;
   typeSimple: string;
   isRequired: boolean;
+  isNullable: boolean;
 }
 
 export interface Module {
@@ -67,7 +68,7 @@ export interface Action {
   supportedVersions: string[];
   parametersOnMethod: ParameterInSignature[];
   parameters: ParameterInBody[];
-  returnValue: TypeDef;
+  returnValue: ReturnValueDef;
 }
 
 export interface ParameterInSignature {
@@ -97,6 +98,11 @@ export interface ParameterInBody {
 export interface TypeDef {
   type: string;
   typeSimple: string;
+}
+
+export interface ReturnValueDef extends TypeDef {
+  contentTypes?: string[];
+  isRemoteStream?: boolean;
 }
 
 export interface TypeWithEnum {

@@ -42,7 +42,7 @@ Automatically begins and commits/rolls back a database transaction when entering
 
 Input DTOs are automatically validated against data annotation attributes and custom validation rules before executing the service logic, providing consistent validation behavior across all services.
 
-### [Authorization](../fundamentals/authorization.md)
+### [Authorization](../fundamentals/authorization/index.md)
 
 Checks user permissions before allowing the execution of application service methods, ensuring security policies are enforced consistently.
 

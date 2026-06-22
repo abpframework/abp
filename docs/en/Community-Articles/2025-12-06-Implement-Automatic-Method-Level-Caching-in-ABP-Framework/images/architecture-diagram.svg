@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700">
+  <defs>
+    <style>
+      .box { fill: #f8f9fa; stroke: #1890ff; stroke-width: 2; }
+      .highlight-box { fill: #e6f7ff; stroke: #1890ff; stroke-width: 3; }
+      .service-box { fill: #fff7e6; stroke: #fa8c16; stroke-width: 2; }
+      .cache-box { fill: #f0f5ff; stroke: #597ef7; stroke-width: 2; }
+      .event-box { fill: #f6ffed; stroke: #52c41a; stroke-width: 2; }
+      .text { font-family: Arial, sans-serif; font-size: 14px; fill: #333; }
+      .title { font-family: Arial, sans-serif; font-size: 18px; fill: #1890ff; font-weight: bold; }
+      .section-title { font-family: Arial, sans-serif; font-size: 14px; fill: #1890ff; font-weight: bold; }
+      .small-text { font-family: Arial, sans-serif; font-size: 11px; fill: #666; }
+      .arrow { stroke: #666; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .dashed { stroke-dasharray: 5, 5; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#666" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text class="title" x="500" y="35" text-anchor="middle">AutoCache Architecture</text>
+
+  <!-- Application Layer -->
+  <rect class="service-box" x="50" y="80" width="250" height="140" rx="5" />
+  <text class="section-title" x="175" y="105" text-anchor="middle">Application Service</text>
+  
+  <rect class="box" x="70" y="120" width="210" height="40" rx="3" />
+  <text class="text" x="175" y="143" text-anchor="middle">BookAppService</text>
+  
+  <text class="small-text" x="85" y="180" fill="#fa8c16">[Cache(typeof(Book))]</text>
+  <text class="small-text" x="85" y="195" fill="#666">public Task&lt;BookDto&gt; GetAsync()</text>
+
+  <!-- Interceptor Layer -->
+  <rect class="highlight-box" x="400" y="80" width="250" height="140" rx="5" />
+  <text class="section-title" x="525" y="105" text-anchor="middle">Cache Interceptor</text>
+  
+  <rect class="box" x="420" y="120" width="210" height="40" rx="3" />
+  <text class="text" x="525" y="143" text-anchor="middle">AutoCacheInterceptor</text>
+  
+  <text class="small-text" x="430" y="180">• Detect [Cache] attribute</text>
+  <text class="small-text" x="430" y="195">• Intercept method calls</text>
+
+  <!-- Cache Manager -->
+  <rect class="cache-box" x="750" y="80" width="200" height="140" rx="5" />
+  <text class="section-title" x="850" y="105" text-anchor="middle">Cache Manager</text>
+  
+  <rect class="box" x="770" y="120" width="160" height="40" rx="3" />
+  <text class="text" x="850" y="143" text-anchor="middle">AutoCacheManager</text>
+  
+  <text class="small-text" x="775" y="180">• Generate cache keys</text>
+  <text class="small-text" x="775" y="195">• Store/Retrieve data</text>
+
+  <!-- Arrows between layers -->
+  <path class="arrow" d="M 300 150 L 400 150" />
+  <path class="arrow" d="M 650 150 L 750 150" />
+
+  <!-- Distributed Cache -->
+  <rect class="cache-box" x="750" y="270" width="200" height="100" rx="5" />
+  <text class="section-title" x="850" y="295" text-anchor="middle">Distributed Cache</text>
+  
+  <rect class="box" x="770" y="310" width="160" height="40" rx="3" />
+  <text class="text" x="850" y="333" text-anchor="middle">Redis / Memory</text>
+
+  <!-- Arrow to cache -->
+  <path class="arrow" d="M 850 220 L 850 270" />
+  <text class="small-text" x="860" y="250">Get/Set</text>
+
+  <!-- Entity Domain -->
+  <rect class="service-box" x="50" y="270" width="250" height="100" rx="5" />
+  <text class="section-title" x="175" y="295" text-anchor="middle">Domain Layer</text>
+  
+  <rect class="box" x="70" y="310" width="210" height="40" rx="3" />
+  <text class="text" x="175" y="333" text-anchor="middle">Book Entity</text>
+
+  <!-- Event Bus -->
+  <rect class="event-box" x="400" y="270" width="250" height="100" rx="5" />
+  <text class="section-title" x="525" y="295" text-anchor="middle">Event Bus</text>
+  
+  <rect class="box" x="420" y="310" width="210" height="40" rx="3" />
+  <text class="text" x="525" y="333" text-anchor="middle">EntityChangedEvent</text>
+
+  <!-- Invalidation Handler -->
+  <rect class="event-box" x="750" y="420" width="200" height="100" rx="5" />
+  <text class="section-title" x="850" y="445" text-anchor="middle">Invalidation Handler</text>
+  
+  <rect class="box" x="770" y="460" width="160" height="40" rx="3" />
+  <text class="text" x="850" y="483" text-anchor="middle">Clear Related Caches</text>
+
+  <!-- Key Manager -->
+  <rect class="cache-box" x="400" y="420" width="250" height="100" rx="5" />
+  <text class="section-title" x="525" y="445" text-anchor="middle">Cache Key Manager</text>
+  
+  <rect class="box" x="420" y="460" width="210" height="40" rx="3" />
+  <text class="text" x="525" y="483" text-anchor="middle">IAutoCacheKeyManager</text>
+
+  <!-- Event flow arrows -->
+  <path class="arrow" d="M 175 370 L 175 400 L 525 400 L 525 370" />
+  <text class="small-text" x="280" y="395">Publish</text>
+
+  <path class="arrow" d="M 525 370 L 525 420" />
+  <text class="small-text" x="535" y="400">Handle</text>
+
+  <path class="arrow" d="M 650 470 L 750 470" />
+  <text class="small-text" x="675" y="465">Invalidate</text>
+
+  <path class="arrow" d="M 850 420 L 850 370" />
+  <text class="small-text" x="860" y="400">Remove keys</text>
+
+  <!-- Scope information -->
+  <rect class="box" x="50" y="420" width="250" height="100" rx="5" />
+  <text class="section-title" x="175" y="445" text-anchor="middle">Cache Scopes</text>
+  
+  <text class="small-text" x="65" y="470">• Global - Shared by all users</text>
+  <text class="small-text" x="65" y="487">• CurrentUser - Per user ID</text>
+  <text class="small-text" x="65" y="504">• AuthenticatedUser - Auth status</text>
+
+  <!-- Flow labels -->
+  <text class="small-text" x="50" y="570" fill="#1890ff" font-weight="bold">① Method Call</text>
+  <text class="small-text" x="50" y="590" fill="#666">Application service method is called</text>
+
+  <text class="small-text" x="270" y="570" fill="#1890ff" font-weight="bold">② Intercept</text>
+  <text class="small-text" x="270" y="590" fill="#666">Interceptor detects [Cache] attribute</text>
+
+  <text class="small-text" x="490" y="570" fill="#1890ff" font-weight="bold">③ Check Cache</text>
+  <text class="small-text" x="490" y="590" fill="#666">Manager checks distributed cache</text>
+
+  <text class="small-text" x="710" y="570" fill="#1890ff" font-weight="bold">④ Invalidate</text>
+  <text class="small-text" x="710" y="590" fill="#666">Entity changes clear related caches</text>
+
+  <!-- Legend -->
+  <line x1="50" y1="640" x2="950" y2="640" stroke="#ddd" stroke-width="1" />
+  
+  <rect x="50" y="655" width="20" height="15" class="service-box" />
+  <text class="small-text" x="75" y="667">Application Layer</text>
+  
+  <rect x="250" y="655" width="20" height="15" class="highlight-box" />
+  <text class="small-text" x="275" y="667">Cache Components</text>
+  
+  <rect x="450" y="655" width="20" height="15" class="cache-box" />
+  <text class="small-text" x="475" y="667">Storage Layer</text>
+  
+  <rect x="650" y="655" width="20" height="15" class="event-box" />
+  <text class="small-text" x="675" y="667">Event Handling</text>
+</svg>

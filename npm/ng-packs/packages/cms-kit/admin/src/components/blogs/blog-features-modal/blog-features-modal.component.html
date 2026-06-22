@@ -1,0 +1,65 @@
+<abp-modal [visible]="true" (visibleChange)="onVisibleChange($event)">
+  <ng-template #abpHeader>
+    <h3>{{ 'CmsKit::Features' | abpLocalization }}</h3>
+  </ng-template>
+
+  <ng-template #abpBody>
+    @if (form) {
+      <form [formGroup]="form" (ngSubmit)="save()" validateOnSubmit>
+        <div formArrayName="features">
+          @for (featureControl of featuresFormArray.controls; track $index; let i = $index) {
+            <div class="mb-3" [formGroupName]="i">
+              @let isAvailable = featureControl.get('isAvailable')?.value;
+              @if (isAvailable) {
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="feature-{{ i }}"
+                    formControlName="isEnabled"
+                  />
+                  <label class="form-check-label" for="feature-{{ i }}">
+                    {{ 'CmsKit::' + features[i]?.featureName | abpLocalization }}
+                  </label>
+                </div>
+              } @else {
+                <div
+                  data-toggle="tooltip"
+                  [title]="'CmsKit::BlogFeatureNotAvailable' | abpLocalization"
+                >
+                  <div class="form-check">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="feature-{{ i }}"
+                      formControlName="isEnabled"
+                      disabled
+                    />
+                    <label class="form-check-label" for="feature-{{ i }}">
+                      {{ 'CmsKit::' + features[i]?.featureName | abpLocalization }}
+                    </label>
+                  </div>
+                </div>
+              }
+              <input type="hidden" formControlName="featureName" />
+              <input type="hidden" formControlName="isAvailable" />
+            </div>
+          }
+        </div>
+      </form>
+    } @else {
+      <div class="text-center">
+        <i class="fa fa-pulse fa-spinner" aria-hidden="true"></i>
+      </div>
+    }
+  </ng-template>
+
+  <ng-template #abpFooter>
+    <button type="button" class="btn btn-outline-primary" abpClose>
+      {{ 'AbpUi::Cancel' | abpLocalization }}
+    </button>
+    <abp-button iconClass="fa fa-check" [disabled]="form?.invalid" (click)="save()">
+      {{ 'AbpUi::Save' | abpLocalization }}
+    </abp-button>
+  </ng-template>
+</abp-modal>

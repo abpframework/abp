@@ -68,6 +68,8 @@ This configuration will allow subdomain tenant resolving. Ex, if you have a tena
 
 **For angular application**, you don't need to add anything since we will be overriding the angular environment via kubernetes values file.
 
+> The configuration above resolves the current tenant from the incoming request. To make outbound URLs generated through `IAppUrlProvider` (Account email links, redirects, etc.) also tenant-aware, configure `AppUrlOptions` with the same `{0}` template. See [Application URLs](../framework/infrastructure/app-urls.md#multi-tenant-aware-urls).
+
 ## Configuring AuthServer
 
 When the tenant try to login from an application (Ex `https://volosoft.angular.mystore.dev`) it will be redirected to AuthServer (`https://volosoft.authserver.mystore.dev`) and you will be seeing a **HTTP 400 error** related to `invalid redirect_uri`. If you check the authserver application logs (under Logs/logs.txt file or console logs), you will notice that the `https://volosoft.angular.mystore.dev` is not a valid redirect_uri since it is not been seeded by the OpenIddictDataSeeder. Only the **host** applications, gateways and microservice URLs are seeded (like `https://angular.mystore.dev`).

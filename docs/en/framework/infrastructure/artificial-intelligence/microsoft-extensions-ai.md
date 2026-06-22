@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore how to integrate AI services into your ABP Framework applications using the Microsoft.Extensions.AI library for seamless functionality."
+}
+```
+
 # Microsoft.Extensions.AI
 [Microsoft.Extensions.AI](https://learn.microsoft.com/en-us/dotnet/ai/microsoft-extensions-ai) is a library that provides a unified API for integrating AI services. It is a part of the Microsoft AI Extensions Library. It is used to integrate AI services into your application. This documentation is about the usage of this library with ABP Framework. Make sure you have read the [Artificial Intelligence](./index.md) documentation before reading this documentation.
 
@@ -64,7 +71,7 @@ public class CommentSummarization
 > [!NOTE]
 > If you don't specify the workspace name, the full name of the class will be used as the workspace name.
 
-You can resolve generic versions of `IChatClient` and `IChatClientAccessor` services for a specific workspace as generic arguments. If Chat Client is not configured for a workspace, you will get `null` from the accessor services. You should check the accessor before using it. This applies only for specified workspaces. Another workspace may have a configured Chat Client.
+You can resolve generic versions of `IChatClient` and `IChatClientAccessor` services for a specific workspace as generic arguments. If Chat Client is not configured for a workspace, the default workspace's chat client is returned. Only if both the workspace-specific and default chat clients are not configured will you get `null` from the accessor services. You should check the accessor before using it. This applies only for specified workspaces. Another workspace may have a configured Chat Client.
 
 `IChatClient<TWorkSpace>` or `IChatClientAccessor<TWorkSpace>` can be resolved to access a specific workspace's chat client. This is a typed chat client and can be configured separately from the default chat client.
 
@@ -92,7 +99,7 @@ Example of resolving a typed chat client accessor:
 public class MyService
 {
     private readonly IChatClientAccessor<CommentSummarization> _chatClientAccessor;
-}
+
     public async Task<string> GetResponseAsync(string prompt)
     {
         var chatClient = _chatClientAccessor.ChatClient;
@@ -172,5 +179,6 @@ public class MyProjectModule : AbpModule
 
 ## See Also
 
+- [Usage of Agent Framework](./microsoft-agent-framework.md)
 - [Usage of Semantic Kernel](./microsoft-semantic-kernel.md)
 - [AI Samples for .NET](https://learn.microsoft.com/en-us/samples/dotnet/ai-samples/ai-samples/)

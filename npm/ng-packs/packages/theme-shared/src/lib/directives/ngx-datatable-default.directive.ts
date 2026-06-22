@@ -3,12 +3,12 @@ import {
   AfterViewInit,
   Directive,
   HostBinding,
-  Input,
   OnDestroy,
   inject,
   PLATFORM_ID,
+  input
 } from '@angular/core';
-import { ColumnMode, DatatableComponent, ScrollerComponent } from '@swimlane/ngx-datatable';
+import { ColumnMode, DatatableComponent } from '@swimlane/ngx-datatable';
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -25,11 +25,11 @@ export class NgxDatatableDefaultDirective implements AfterViewInit, OnDestroy {
   private subscription = new Subscription();
   private resizeDiff = 0;
 
-  @Input() class = 'material bordered';
+  readonly class = input('material bordered');
 
   @HostBinding('class')
   get classes(): string {
-    return `ngx-datatable ${this.class}`;
+    return `ngx-datatable ${this.class()}`;
   }
 
   constructor() {
@@ -41,7 +41,7 @@ export class NgxDatatableDefaultDirective implements AfterViewInit, OnDestroy {
     this.table.virtualization = false;
   }
 
-  private fixHorizontalGap(scroller: ScrollerComponent) {
+  private fixHorizontalGap(scroller: any) {
     const { body, documentElement } = this.document;
     if (isPlatformBrowser(this.platformId)) {
       if (documentElement.scrollHeight !== documentElement.clientHeight) {

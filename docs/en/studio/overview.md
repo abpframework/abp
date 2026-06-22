@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Explore ABP Studio's key features like Solution Explorer and Kubernetes Integration to optimize your ABP application development and management."
+    "Description": "Explore ABP Studio's key features like Solution Explorer, Kubernetes Integration, AI Agent, and monitoring to optimize your ABP application development and management."
 }
 ```
 
@@ -19,7 +19,7 @@
 
 ## Introduction
 
-ABP Studio, a comprehensive desktop application, offers a wide range of features and functionalities tailored to streamline the development and management of ABP-based applications. This article provides an overview of the key components of ABP Studio, including the Solution Explorer, Solution Runner, Kubernetes Integration, Application Monitoring Area, Background Tasks, Notifications and Logs. Understanding these components is essential for efficiently utilizing ABP Studio to its full potential.
+ABP Studio, a comprehensive desktop application, offers a wide range of features and functionalities tailored to streamline the development and management of ABP-based applications. This article provides an overview of the key components of ABP Studio, including the Solution Explorer, Solution Runner, Kubernetes Integration, AI Agent, Application Monitoring Area, Background Tasks, Notifications and Logs. Understanding these components is essential for efficiently utilizing ABP Studio to its full potential.
 
 ![overview-intro](./images/overview/overview-intro.png)
 
@@ -69,7 +69,7 @@ The Welcome Screen is the initial user interface users encounter upon starting A
 
 ## Sidebar
 
-Located on the left side of the interface, the Left Area is a panel that provides quick access to various functionalities like [Solution Explorer](./solution-explorer.md), [Solution Runner](./running-applications.md), and Kubernetes Integration. Now let's examine each item.
+Located on the left side of the interface, the Left Area is a panel that provides quick access to various functionalities like [Solution Explorer](./solution-explorer.md), [Solution Runner](./running-applications.md), Kubernetes Integration, and AI Agent. Now let's examine each item.
 
 ### Solution Explorer
 
@@ -91,13 +91,30 @@ Kubernetes integration in ABP Studio enables users to deploy solutions directly 
 
 This pane is dedicated to managing [Helm](https://helm.sh/) charts, which are packages used in Kubernetes deployments. It simplifies the process of building images and installing charts.
 
-![kubernetes-integration-helm-pane](./images/overview/kubernetes-integration-helm.png)
+![kubernetes-integration-helm-panel](./images/overview/kubernetes-integration-helm.png)
 
 #### Kubernetes 
 
 This pane is dedicated to managing Kubernetes services. It simplifies the process of redeploying and intercepting application service.
 
-![kubernetes-integration-kubernetes-pane](./images/overview/kubernetes-integration-kubernetes.png)
+![kubernetes-integration-kubernetes-panel](./images/overview/kubernetes-integration-kubernetes.png)
+
+### AI Agent
+
+The AI Agent is an integrated coding agent in ABP Studio. It can answer ABP-related questions, create implementation plans, and work on the current solution with controlled access to files, Studio tools, workflows, Git context, and configured MCP tools.
+
+![ai-agent](./images/ai-agent/ai-agent-panel.png)
+
+Key features of the AI Agent include:
+
+- **Agent Modes**: Use Agent, Plan, or Ask mode depending on whether the session should modify files, create a plan, or answer questions.
+- **Solution Context**: Work with the active solution, selected AI scope, run profile, workflow, and model settings.
+- **Attachments**: Attach supported files or images to provide task-specific context.
+- **Studio Integration**: Use enabled Studio tools for build, monitoring, applications, containers, tasks, proxies, migrations, and Git-related workflows.
+
+> **Note**: Review the Privacy Notice available in the AI Agent panel to understand how your data is handled.
+
+For the technical AI Agent reference, see [ABP Studio: AI Agent](./ai-agent.md).
 
 ## Application Monitoring Area
 

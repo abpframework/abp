@@ -4,13 +4,20 @@ import {
   CanActivateFn,
   Router,
   RouterStateSnapshot,
+  UrlTree,
 } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { filter, take, tap } from 'rxjs/operators';
+import { filter, map, switchMap, take } from 'rxjs/operators';
 import { AuthService, IAbpGuard } from '../abstracts';
-import { findRoute, getRoutePath } from '../utils/route-utils';
-import { RoutesService, PermissionService, HttpErrorReporterService } from '../services';
+import { findRoute } from '../utils/route-utils';
+import {
+  RoutesService,
+  PermissionService,
+  HttpErrorReporterService,
+  ConfigStateService,
+  RouteBasedCultureUrlService,
+} from '../services';
 import { isPlatformServer } from '@angular/common';
 /**
  * @deprecated Use `permissionGuard` *function* instead.
@@ -24,12 +31,17 @@ export class PermissionGuard implements IAbpGuard {
   protected readonly authService = inject(AuthService);
   protected readonly permissionService = inject(PermissionService);
   protected readonly httpErrorReporter = inject(HttpErrorReporterService);
+  protected readonly configStateService = inject(ConfigStateService);
+  protected readonly routeCultureUrl = inject(RouteBasedCultureUrlService);
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> {
     let { requiredPolicy } = route.data || {};
 
     if (!requiredPolicy) {
-      const routeFound = findRoute(this.routesService, getRoutePath(this.router, state.url));
+      const routeFound = findRoute(
+        this.routesService,
+        this.routeCultureUrl.getRoutePathForMatching(this.router, state.url),
+      );
       requiredPolicy = routeFound?.requiredPolicy;
     }
 
@@ -37,13 +49,22 @@ export class PermissionGuard implements IAbpGuard {
       return of(true);
     }
 
-    return this.permissionService.getGrantedPolicy$(requiredPolicy).pipe(
-      filter(Boolean),
+    return this.configStateService.getAll$().pipe(
+      filter(config => !!config?.auth?.grantedPolicies),
       take(1),
-      tap(access => {
-        if (!access && this.authService.isAuthenticated) {
+      switchMap(() => this.permissionService.getGrantedPolicy$(requiredPolicy)),
+      take(1),
+      map(access => {
+        if (access) return true;
+
+        if (route.data?.['redirectUrl']) {
+          return this.router.parseUrl(route.data['redirectUrl']);
+        }
+
+        if (this.authService.isAuthenticated) {
           this.httpErrorReporter.reportError({ status: 403 } as HttpErrorResponse);
         }
+        return false;
       }),
     );
   }
@@ -58,12 +79,14 @@ export const permissionGuard: CanActivateFn = (
   const authService = inject(AuthService);
   const permissionService = inject(PermissionService);
   const httpErrorReporter = inject(HttpErrorReporterService);
+  const configStateService = inject(ConfigStateService);
+  const routeCultureUrl = inject(RouteBasedCultureUrlService);
   const platformId = inject(PLATFORM_ID);
 
   let { requiredPolicy } = route.data || {};
 
   if (!requiredPolicy) {
-    const routeFound = findRoute(routesService, getRoutePath(router, state.url));
+    const routeFound = findRoute(routesService, routeCultureUrl.getRoutePathForMatching(router, state.url));
     requiredPolicy = routeFound?.requiredPolicy;
   }
 
@@ -76,13 +99,23 @@ export const permissionGuard: CanActivateFn = (
     return of(true);
   }
 
-  return permissionService.getGrantedPolicy$(requiredPolicy).pipe(
-    filter(Boolean),
+  return configStateService.getAll$().pipe(
+    filter(config => !!config?.auth?.grantedPolicies),
     take(1),
-    tap(access => {
-      if (!access && authService.isAuthenticated) {
+    switchMap(() => permissionService.getGrantedPolicy$(requiredPolicy)),
+    take(1),
+    map(access => {
+      if (access) return true;
+
+      if (route.data?.['redirectUrl']) {
+        return router.parseUrl(route.data['redirectUrl']);
+      }
+
+      if (authService.isAuthenticated) {
         httpErrorReporter.reportError({ status: 403 } as HttpErrorResponse);
       }
+
+      return false;
     }),
   );
 };

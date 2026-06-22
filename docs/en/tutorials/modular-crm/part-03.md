@@ -8,6 +8,14 @@
 # Building the Catalog Module
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC", "BlazorWebApp", "NG"],
+    "BlazorUI": ["Blazorise", "MudBlazor"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Previous": {
@@ -35,7 +43,11 @@ Open the `ModularCrm.Catalog` module in your favorite IDE. You can right-click t
 
 The `ModularCrm.Catalog` .NET solution should look like the following figure:
 
+{{if UI == "MVC"}}
 ![catalog-module-vs-code](images/catalog-module-vs-code.png)
+{{else if UI == "BlazorWebApp"}}
+![catalog-module-vs-code](images/catalog-module-vs-code-blazor-webapp.png)
+{{end}}
 
 Add a new `Product` class under the `ModularCrm.Catalog` project:
 
@@ -344,12 +356,16 @@ public partial class ProductToProductDtoMapper : MapperBase<Product, ProductDto>
 
 ### Exposing Application Services as HTTP API Controllers
 
+{{if UI == "MVC"}}
+
 > This application doesn't need to expose any functionality as HTTP API, because all the module integration and communication will be done in the same process as a natural aspect of a monolith modular application. However, in this section, we will create HTTP APIs because;
 >
 > 1. We will use these HTTP API endpoints in development to create some example data.
 > 2. To know how to do it when you need it.
 >
 > So, follow the instructions in this section and expose the product application service as an HTTP API endpoint.
+
+{{end}}
 
 To create HTTP API endpoints for the catalog module, you have two options:
 
@@ -371,6 +387,34 @@ Configure<AbpAspNetCoreMvcOptions>(options =>
 This will tell the ABP framework to create API controllers for the application services in the `ModularCrm.Catalog` assembly.
 
 Now, ABP will automatically expose the application services defined in the `ModularCrm.Catalog` project as API controllers. The next section will use these API controllers to create some example products.
+
+{{if UI == "BlazorWebApp"}}
+
+### Configuring Client Proxies for the Catalog Module
+
+Since the Blazor WebApp template has a separate `ModularCrm.Client` project, configure HTTP client proxies for the Catalog contracts in the `ModularCrmClientModule` class:
+
+````csharp
+using ModularCrm.Catalog;
+
+[DependsOn(
+    typeof(CatalogContractsModule)
+    // ...other dependencies
+)]
+public class ModularCrmClientModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        ...
+        context.Services.AddHttpClientProxies(typeof(ModularCrmContractsModule).Assembly);
+        context.Services.AddHttpClientProxies(typeof(CatalogContractsModule).Assembly); // NEW: ADD HttpClientProxies
+    }
+}
+````
+
+Also ensure the `ModularCrm.Catalog.Blazor` package is installed for both the `ModularCrm` and `ModularCrm.Client` projects.
+
+{{end}}
 
 ### Creating Example Products
 
@@ -404,7 +448,11 @@ In this section, you will create a very simple user interface to demonstrate how
 
 As a first step, you can stop the application on ABP Studio's Solution Runner if it is currently running.
 
+{{if UI == "MVC"}}
+
 ### Creating the Products Page
+
+{{if UI == "MVC"}}
 
 Open the `ModularCrm.Catalog` .NET solution in your IDE, and find the `Pages/Catalog/Index.cshtml` file under the `ModularCrm.Catalog.UI` project:
 
@@ -461,7 +509,90 @@ Here, you simply use the `IProductAppService` to get a list of all products and 
 </abp-card>
 ````
 
-Right-click the `ModularCrm` application on ABP Studio's solution runner and select the *Start* command:
+{{else if UI == "BlazorWebApp"}}
+
+Open the `ModularCrm.Catalog` .NET solution in your IDE, and find the `Pages/Catalog/Index.razor` file under the `ModularCrm.Catalog.Blazor` project.
+![vscode-catalog-index-razor-blazor-webapp](images/vscode-catalog-index-razor-blazor-webapp.png)
+
+Replace the `Index.razor` file with the following content:
+
+{{if BlazorUI == "Blazorise"}}
+
+````razor
+@page "/catalog"
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using ModularCrm.Catalog
+@inject IProductAppService ProductAppService
+
+<h1>Products</h1>
+
+<Card>
+    <CardBody>
+        <ListGroup>
+            @foreach (var product in Products)
+            {
+                <ListGroupItem>
+                    @product.Name <span class="text-muted">(stock: @product.StockCount)</span>
+                </ListGroupItem>
+            }
+        </ListGroup>
+    </CardBody>
+</Card>
+
+@code {
+    private List<ProductDto> Products { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Products = await ProductAppService.GetListAsync();
+    }
+}
+````
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+````razor
+@page "/catalog"
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using ModularCrm.Catalog
+@inject IProductAppService ProductAppService
+
+<MudText Typo="Typo.h4">Products</MudText>
+
+<MudCard>
+    <MudCardContent>
+        <MudList T="ProductDto">
+            @foreach (var product in Products)
+            {
+                <MudListItem T="ProductDto" Value="@product">
+                    @product.Name <MudText Inline="true" Typo="Typo.caption">(stock: @product.StockCount)</MudText>
+                </MudListItem>
+            }
+        </MudList>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    private List<ProductDto> Products { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Products = await ProductAppService.GetListAsync();
+    }
+}
+````
+
+{{end}}
+
+Here, you inject `IProductAppService`, get all products in `OnInitializedAsync`, and then render the result in a simple list.
+
+{{end}}
+
+Right-click the `ModularCrm` application on ABP Studio's Solution Runner and select the *Start* command:
 
 ![abp-studio-build-and-restart-application](images/abp-studio-build-and-restart-application.png)
 
@@ -471,6 +602,75 @@ Now, you can browse the *Catalog* page to see the list of the products:
 
 As you can see, developing a UI page in a modular ABP application is pretty straightforward. We kept the UI very simple to focus on modularity. To learn how to build complex application UIs, please check the [Book Store Tutorial](../book-store/index.md).
 
+{{else if UI == "NG"}}
+
+### Updating the Catalog Angular Page
+
+First, run the `ModularCrm` application so the backend APIs are available.
+
+Then open a terminal in the `modules/modularcrm.catalog/angular` folder and run the proxy generation command:
+
+```bash
+abp generate-proxy -t ng
+```
+
+This command generates or updates TypeScript client proxies for the `catalog` APIs under `projects/catalog/src/lib/proxy`. You will use the generated `ProductService` and related DTOs in the Catalog UI project.
+
+Now, open the `projects/catalog/src/lib/components/catalog.component.ts` file and replace its content with the following code:
+
+```ts
+import { Component, OnInit, inject } from '@angular/core';
+import { ProductDto, ProductService } from '../proxy/products';
+
+@Component({
+  selector: 'lib-catalog',
+  templateUrl: './catalog.component.html',
+})
+export class CatalogComponent implements OnInit {
+  products: ProductDto[] = [];
+
+  protected readonly productService = inject(ProductService);
+
+  ngOnInit(): void {
+    this.productService.getList().subscribe(response => {
+      this.products = response;
+    });
+  }
+}
+```
+
+Now, open the `projects/catalog/src/lib/components/catalog.component.html` file and replace its content with the following code:
+
+```html
+<h1>Products</h1>
+
+<abp-card>
+  <abp-card-body>
+    <abp-list-group>
+      @for (product of products; track product.id) {
+        <abp-list-group-item>
+          {%{{{ product.name }}}%} <span class="text-muted">(stock: {%{{{ product.stockCount }}}%})</span>
+        </abp-list-group-item>
+      }
+    </abp-list-group>
+  </abp-card-body>
+</abp-card>
+```
+
+In a module-based Angular UI, the route and menu are configured in the module's config project. Ensure `projects/catalog/config/src/providers/route.provider.ts` includes the `/catalog` route, and `projects/catalog/src/lib/catalog.routes.ts` lazy-loads `CatalogComponent`.
+
+![vscode-catalog-cshtml](images/vscode-catalog-cshtml.png)
+
+Finally, start the Angular app from the root `angular` folder and navigate to the *Catalog* page to see the products list:
+
+```bash
+yarn start
+```
+
+![abp-studio-browser-list-of-products](images/abp-studio-browser-list-of-products.png)
+
+{{end}}
+
 ## Summary
 
-In this part of the tutorial, you've built the functionality inside the _Catalog_ module, which was created in the [previous part](part-02.md). In the next part, you will create a new _Ordering_ module and install it into the main application.
+In this part of the tutorial, you've built the functionality inside the _Catalog_ module, which was created in the [previous part](part-02.md), and created a basic {{if UI == "MVC"}}MVC{{else if UI == "BlazorWebApp"}}Blazor WebApp{{else if UI == "NG"}}Angular{{end}} UI to list products. In the next part, you will create a new _Ordering_ module and install it into the main application.

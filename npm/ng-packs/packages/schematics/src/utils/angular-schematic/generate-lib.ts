@@ -39,11 +39,11 @@ export function addLibToWorkspaceFile(projectRoot: string, projectName: string):
           },
         },
         test: {
-          builder: Builders.Karma,
+          builder: Builders.UnitTest,
           options: {
-            main: `${projectRoot}/src/test.ts`,
             tsConfig: `${projectRoot}/tsconfig.spec.json`,
-            karmaConfig: `${projectRoot}/karma.conf.js`,
+            buildTarget: `${projectName}:build`,
+            runner: 'vitest',
           },
         },
       },

@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, OnInit, Output, inject } from '@angular/core';
+import { Directive, ElementRef, OnInit, inject, output } from '@angular/core';
 import { fromEvent } from 'rxjs';
 import { SubscriptionService } from '../services/subscription.service';
 
@@ -10,7 +10,7 @@ export class StopPropagationDirective implements OnInit {
   private el = inject(ElementRef);
   private subscription = inject(SubscriptionService);
 
-  @Output('click.stop') readonly stopPropEvent = new EventEmitter<MouseEvent>();
+  readonly stopPropEvent = output<MouseEvent>({ alias: 'click.stop' });
 
   ngOnInit(): void {
     this.subscription.addOne(fromEvent<MouseEvent>(this.el.nativeElement, 'click'), event => {

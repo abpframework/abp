@@ -75,7 +75,7 @@ You can manage permissions of a role:
 
 * A permission is an **action of the application** granted to roles and users.
 * A user with a role will **inherit** all the permissions granted for the role.
-* Any module can **[define permissions](../framework/fundamentals/authorization.md#permission-system)**. Once you define a new permission, it will be available in this page.
+* Any module can **[define permissions](../framework/fundamentals/authorization/index.md#permission-system)**. Once you define a new permission, it will be available in this page.
 * Left side is the **list of modules**. Once you click to a module name, you can check/uncheck permissions related to that module.
 
 ##### Role claims
@@ -434,9 +434,11 @@ This module doesn't define any additional distributed event. See the [standard d
 ## See Also
 
 * [Import External Users](./identity/import-external-users.md)
-* [LDAP Login](./identity/idap.md)
+* [LDAP Login](./identity/ldap.md)
 * [OAuth Login](./identity/oauth-login.md)
 * [Periodic Password Change (Password Aging)](./identity/periodic-password-change.md)
 * [Two Factor Authentication](./identity/two-factor-authentication.md)
 * [Session Management](./identity/session-management.md)
 * [Password History](./identity/password-history.md)
+* [Identity Token Providers](./identity/token-providers.md)
+

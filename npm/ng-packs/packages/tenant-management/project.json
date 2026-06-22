@@ -4,6 +4,8 @@
   "projectType": "library",
   "sourceRoot": "packages/tenant-management/src",
   "prefix": "abp",
+  "tags": [],
+  "implicitDependencies": ["core", "theme-shared", "feature-management"],
   "targets": {
     "build": {
       "executor": "@nx/angular:package",
@@ -21,18 +23,16 @@
       },
       "defaultConfiguration": "production"
     },
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/packages/tenant-management"],
-      "options": {
-        "jestConfig": "packages/tenant-management/jest.config.ts"
-      }
-    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../coverage/packages/tenant-management"
+      }
     }
-  },
-  "tags": [],
-  "implicitDependencies": ["core", "theme-shared", "feature-management"]
+  }
 }

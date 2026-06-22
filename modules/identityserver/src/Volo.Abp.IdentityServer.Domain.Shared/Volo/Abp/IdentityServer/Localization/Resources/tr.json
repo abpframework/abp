@@ -11,6 +11,7 @@
     "InvalidUsername": "Kullanıcı adı ya da şifre geçersiz!",
     "InvalidAuthenticatorCode": "Geçersiz kimlik doğrulama kodu!",
     "InvalidRecoveryCode": "Geçersiz kurtarma kodu!",
-    "TheTargetUserIsNotLinkedToYou": "Hedef kullanıcı sizinle bağlantılı değil!"
+    "TheTargetUserIsNotLinkedToYou": "Hedef kullanıcı sizinle bağlantılı değil!",
+    "ClientResourcePermissionProviderKeyLookupService": "İstemci"
   }
 }

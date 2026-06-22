@@ -121,3 +121,61 @@ Configure<CookieAuthenticationOptions>(IdentityConstants.TwoFactorRememberMeSche
      options.Cookie.Name = "MyRememberMeCookieName"; //override the cookie name
 });
 ```
+
+## How the Verification Code Is Generated
+
+The codes delivered by the **Email** and **SMS** verification providers are produced by ABP's built-in single-use token providers, registered in `AbpIdentityAspNetCoreModule`:
+
+- `AbpEmailTwoFactorTokenProvider` is registered under `TokenOptions.DefaultEmailProvider` and replaces ASP.NET Core Identity's TOTP-based `EmailTokenProvider<TUser>`.
+- `AbpPhoneNumberTwoFactorTokenProvider` is registered under `TokenOptions.DefaultPhoneProvider` and replaces ASP.NET Core Identity's TOTP-based `PhoneNumberTokenProvider<TUser>`.
+
+Both derive from the abstract `AbpTwoFactorTokenProvider`. The `Authenticator` provider remains ASP.NET Core Identity's built-in `AuthenticatorTokenProvider<TUser>`, because authenticator apps require TOTP ([RFC 6238](https://datatracker.ietf.org/doc/html/rfc6238)).
+
+On generation, the provider produces a cryptographically-random numeric code (default 6 digits), encrypts the code with `IDataProtector`, appends the absolute expiration as a Unix-seconds value, and persists the combined string in the user tokens table. The plaintext code is sent to the user via email/SMS and is never stored. Validation reloads the persisted entry, verifies it has not expired, decrypts and compares constant-time against the submitted input, and — on success — removes the entry so it cannot be replayed.
+
+This persisted, single-use design has the following effects:
+
+1. **A generated code is single-use.** Successful verification removes the stored entry. Re-submitting the same code from a concurrent session fails.
+2. **Generating a new code invalidates the previous one.** `SetToken` overwrites the same `(provider, name)` row, so at most one code is valid at any time. Re-issuing a code (e.g. when the user requests a new one) replaces the stored entry and the previously delivered code stops working.
+3. **The validity window is exactly the configured lifespan (3 minutes by default).** Expiration is captured as an absolute Unix-seconds value at generation time and is not extended at validation — in contrast to TOTP-based providers, which accept the previous timestep as well and effectively give a 3–6 minute window.
+4. **Failed verification keeps the stored entry in place** so the user can retry until expiration. Rate-limiting incorrect attempts is delegated to ASP.NET Core Identity's lockout settings.
+5. **Concurrent successful verification returns `false` instead of throwing.** Two requests racing to consume the same code go through the user row's `ConcurrencyStamp`; the loser surfaces as a normal validation failure rather than a 500.
+6. **Expired or undecryptable entries are cleaned up on next access.** A stale entry encountered during validation is removed before returning `false`, so the next `GenerateAsync` starts from a clean slate.
+
+## Configuring the Default Providers
+
+Both built-in providers expose options classes (`AbpEmailTwoFactorTokenProviderOptions` and `AbpPhoneNumberTwoFactorTokenProviderOptions`) inheriting from `AbpTwoFactorTokenProviderOptions`:
+
+| Option | Default | Notes |
+| --- | --- | --- |
+| `TokenLifespan` | `TimeSpan.FromMinutes(3)` | Absolute lifetime of an issued code. |
+| `CodeLength` | `6` | Number of digits in the generated code. Valid range: `1`–`9`. |
+
+Configure them in your module's `ConfigureServices`:
+
+```csharp
+Configure<AbpEmailTwoFactorTokenProviderOptions>(options =>
+{
+    options.TokenLifespan = TimeSpan.FromMinutes(5);
+    options.CodeLength = 8;
+});
+
+Configure<AbpPhoneNumberTwoFactorTokenProviderOptions>(options =>
+{
+    options.TokenLifespan = TimeSpan.FromMinutes(2);
+});
+```
+
+## Replacing the Verification Code Provider
+
+If the built-in single-use behavior does not match your requirements (e.g. you need alphanumeric codes, a different storage backend or a custom delivery policy), you can replace either provider by registering your own `IUserTwoFactorTokenProvider<IdentityUser>` under the same key. `AddTokenProvider` with an existing key replaces the previous descriptor in `TokenOptions.ProviderMap`:
+
+```csharp
+PreConfigure<IdentityBuilder>(builder =>
+{
+    builder.AddTokenProvider<MyEmailTokenProvider>(TokenOptions.DefaultEmailProvider);
+    builder.AddTokenProvider<MyPhoneTokenProvider>(TokenOptions.DefaultPhoneProvider);
+});
+```
+
+The most ergonomic starting point is to subclass `AbpTwoFactorTokenProvider` and override only the parts you want to change (for example `GenerateNumericCode`, `CreateProtector`, or the storage helpers). `AccountAppService.SendTwoFactorCodeAsync` and `SignInManager.TwoFactorSignInAsync` call through `UserManager.GenerateTwoFactorTokenAsync` and `UserManager.VerifyTwoFactorTokenAsync` respectively, so a registered replacement is invoked without any further wiring.

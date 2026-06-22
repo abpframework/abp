@@ -73,7 +73,7 @@ namespace MyProject.Issues
 
 Notice that the `IsClosed` and `CloseDate` properties have private setters to force some business rules by using the `Open()` and `Close()` methods:
 
-* Whenever you close an issue, the `CloseDate` should be set to the [current time](../framework/infrastructure/virtual-file-system.md).
+* Whenever you close an issue, the `CloseDate` should be set to the current time.
 * An issue can not be re-opened if it is locked. And if it is re-opened, the `CloseDate` should be set to `null`.
 
 Since the `Issue` entity is a part of the Domain Layer, we should test it in the `Domain.Tests` project. Create an `Issue_Tests` class inside the `Domain.Tests` project:
@@ -160,7 +160,7 @@ public void Should_Not_Allow_To_ReOpen_A_Locked_Issue()
 
 `Assert.Throws` checks if the executed code throws a matching exception.
 
-> See the [xUnit](https://xunit.net/#documentation) & [Shoudly](https://docs.shouldly.org/) documentation to learn more about these libraries.
+> See the [xUnit](https://xunit.net/#documentation) & [Shouldly](https://docs.shouldly.org/) documentation to learn more about these libraries.
 
 ## Classes With Dependencies
 

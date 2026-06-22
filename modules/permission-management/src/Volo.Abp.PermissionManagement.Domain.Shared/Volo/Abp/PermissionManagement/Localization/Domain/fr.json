@@ -8,6 +8,22 @@
     "SelectAllInThisTab": "Sélectionner tous les",
     "SaveWithoutAnyPermissionsWarningMessage": "Êtes-vous sûr de vouloir enregistrer sans aucune autorisation ?",
     "PermissionGroup": "Groupe d'autorisations",
-    "Filter": "Filtrer"
+    "Filter": "Filtrer",
+    "ResourcePermissions": "Autorisations",
+    "ResourcePermissionTarget": "Cible",
+    "ResourcePermissionPermissions": "Autorisations",
+    "AddResourcePermission": "Ajouter une autorisation",
+    "ResourcePermissionDeletionConfirmationMessage": "Êtes-vous sûr de vouloir supprimer toutes les autorisations ?",
+    "UpdateResourcePermission": "Mettre à jour l'autorisation",
+    "GrantAllResourcePermissions": "Accorder tout",
+    "NoResourceProviderKeyLookupServiceFound": "Aucun service de recherche de clé de fournisseur n'a été trouvé",
+    "NoResourcePermissionFound": "Aucune autorisation n'est définie.",
+    "UpdatePermission": "Mettre à jour l'autorisation",
+    "NoPermissionsAssigned": "Aucune autorisation assignée",
+    "SelectProvider": "Sélectionner le fournisseur",
+    "SearchProviderKey": "Rechercher la clé du fournisseur",
+    "Provider": "Fournisseur",
+    "ErrorLoadingPermissions": "Erreur lors du chargement des autorisations",
+    "PleaseSelectProviderAndPermissions": "Veuillez sélectionner le fournisseur et les autorisations"
   }
 }

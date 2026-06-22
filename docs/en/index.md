@@ -27,9 +27,9 @@ After getting started, you can read the following documents:
 
 ### UI Framework Options
 
-ABP can work with any UI framework, while the following frameworks are supported and well-integrated out of the box:
+ABP can work with any UI framework, while the following frameworks are supported and well-integrated out of the box. React is available with the modern template system. See the [UI options](./framework/ui/index.md) page for details.
 
-<img width="340" src="images/ui-options.png" alt="ui options">
+<img width="420" src="images/ui-options.png" alt="ABP UI options including React">
 
 ### Database Provider Options
 
@@ -68,7 +68,7 @@ There are a lot of features provided by ABP to achieve real world scenarios easi
 
 #### Cross Cutting Concerns
 
-ABP also simplifies (and even automates wherever possible) cross cutting concerns and common non-functional requirements like [Exception Handling](./framework/fundamentals/exception-handling.md), [Validation](./framework/fundamentals/validation.md), [Authorization](./framework/fundamentals/authorization.md), [Localization](./framework/fundamentals/localization.md), [Caching](./framework/fundamentals/caching.md), [Dependency Injection](./framework/fundamentals/dependency-injection.md), [Setting Management](./framework/infrastructure/settings.md), etc. 
+ABP also simplifies (and even automates wherever possible) cross cutting concerns and common non-functional requirements like [Exception Handling](./framework/fundamentals/exception-handling.md), [Validation](./framework/fundamentals/validation.md), [Authorization](./framework/fundamentals/authorization/index.md), [Localization](./framework/fundamentals/localization.md), [Caching](./framework/fundamentals/caching.md), [Dependency Injection](./framework/fundamentals/dependency-injection.md), [Setting Management](./framework/infrastructure/settings.md), etc. 
 
 ### Tooling
 
@@ -84,7 +84,7 @@ ABP Platform provides tooling to help you in your daily development.
 
 #### ABP CLI
 
-[ABP CLI](cli.md) is a command-line tool to create new solutions and automate the things with your ABP based solutions.
+[ABP CLI](./cli/index.md) is a command-line tool to create new solutions and automate the things with your ABP based solutions.
 
 ### Startup Templates
 

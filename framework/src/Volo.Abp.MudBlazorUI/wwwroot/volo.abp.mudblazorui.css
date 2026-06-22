@@ -1,0 +1,112 @@
+/* ABP MudBlazor UI Custom Styles */
+
+/* Entity Actions Styling */
+.abp-entity-actions .mud-menu-activator {
+    min-width: auto;
+}
+
+/* Data Grid Customizations */
+.abp-mud-data-grid .mud-table-container {
+    overflow-x: auto;
+}
+
+/* Extension Property Form Spacing */
+.abp-extension-property {
+    margin-bottom: 16px;
+}
+
+/* Dialog Customizations */
+.abp-mud-dialog .mud-dialog-title {
+    padding: 16px 24px;
+}
+
+.abp-mud-dialog .mud-dialog-content {
+    padding: 0 24px 16px;
+}
+
+.abp-mud-dialog .mud-dialog-actions {
+    padding: 8px 24px 16px;
+}
+
+/* Message Alert Icon Sizing */
+.abp-message-alert-icon {
+    font-size: 3rem;
+}
+
+/* Page Progress Bar */
+.abp-page-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+}
+
+/* CRUD Page Layout */
+.abp-crud-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.abp-crud-page-header-title {
+    margin: 0;
+}
+
+.abp-crud-page-header-actions {
+    display: flex;
+    gap: 8px;
+}
+/* BlockUI spinner inside mud-dialog: shrink to fit short modal bodies (e.g. file upload modal).
+   abp.css defines a 150px x 150px spinner via .abp-block-area-busy:before, which gets clipped
+   by mud-dialog's overflow when the modal content is short. */
+.mud-dialog .abp-block-area.abp-block-area-busy:before {
+    width: 48px;
+    height: 48px;
+    top: calc(50% - 24px);
+    left: calc(50% - 24px);
+}
+
+.mud-dialog .abp-block-area.abp-block-area-busy:after {
+    font-size: 12px;
+}
+
+
+/* DataGrid header: prevent CJK characters from breaking one-per-line when column is narrow.
+   v9 column-header is a flex container with flex item width:100%; without nowrap, CJK
+   (no word boundary) collapses to min-content = single character width, stacking each
+   header character vertically. */
+.mud-data-grid .mud-table-cell .column-header .sortable-column-header,
+.mud-data-grid .mud-table-cell .column-header > span:not(.column-options),
+.mud-data-grid .mud-table-head .mud-table-cell {
+    white-space: nowrap;
+}
+
+
+/* Picker label (date / time / color picker): when label is long it overflows into the
+   toggle icon on the right and visually overlaps the calendar/clock icon.
+   Reserve ~40px on the right for the end-adornment toggle icon so the label truncates with ellipsis. */
+.mud-picker .mud-input-label.mud-input-label-inputcontrol {
+    max-width: calc(100% - 40px);
+}
+
+
+/* Input label: increase line-height slightly so descenders (g, p, q, y) in the floated
+   label text are not clipped by the input baseline immediately below. */
+.mud-input-control .mud-input-label-inputcontrol {
+    line-height: 1.4rem;
+}
+
+
+/* Vertical MudTabs (Position="Left"/"Right"): add horizontal gap between the tabbar
+   and the panels container so the active tab indicator does not visually touch the
+   panel content. v9 default puts them flush against each other. */
+.mud-tabs.mud-tabs-vertical > .mud-tabs-panels {
+    padding-inline-start: 16px;
+}
+
+.mud-tabs.mud-tabs-vertical-reverse > .mud-tabs-panels {
+    padding-inline-end: 16px;
+}
+

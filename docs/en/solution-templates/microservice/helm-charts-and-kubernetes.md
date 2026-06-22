@@ -11,8 +11,8 @@
 //[doc-nav]
 {
   "Next": {
-    "Name": "Miscellaneous guides in the Microservice solution",
-    "Path": "solution-templates/microservice/guides"
+    "Name": "Aspire Integration in the Microservice solution",
+    "Path": "solution-templates/microservice/aspire-integration"
   }
 }
 ````

@@ -43,7 +43,7 @@ ABP automatically discovers this class and registers the setting definitions.
 * **DefaultValue**: A setting may have a default value.
 * **DisplayName**: A localizable string that can be used to show the setting name on the UI.
 * **Description**: A localizable string that can be used to show the setting description on the UI.
-* **IsVisibleToClients**: A boolean value indicates that whether this setting value is available in the client side or not. Default value is false to prevent accidently publishing an internal critical setting value.
+* **IsVisibleToClients**: A boolean value indicates that whether this setting value is available in the client side or not. Default value is false to prevent accidentally publishing an internal critical setting value.
 * **IsInherited**: A boolean value indicates that whether this setting value is inherited from other providers or not. Default value is true and fallbacks to the next provider if the setting value was not set for the requested provider (see the setting value providers section for more).
 * **IsEncrypted**: A boolean value indicates that whether this setting value should be encrypted on save and decrypted on read. It makes possible to secure the setting value in the database.
 * **Providers**: Can be used to restrict providers available for a particular setting (see the setting value providers section for more).

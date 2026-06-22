@@ -1,0 +1,548 @@
+name: Update ABP Studio Docs
+
+on:
+  repository_dispatch:
+    types: [update_studio_docs]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Studio version (e.g., 2.1.10)'
+        required: true
+      name:
+        description: 'Release name'
+        required: true
+      notes:
+        description: 'Raw release notes'
+        required: true
+      url:
+        description: 'Release URL'
+        required: true
+      target_branch:
+        description: 'Target branch (leave empty to auto-detect from latest stable ABP release)'
+        required: false
+        default: ''
+
+jobs:
+  update-docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      models: read
+
+    steps:
+      # -------------------------------------------------
+      # Extract payload (repository_dispatch or workflow_dispatch)
+      # -------------------------------------------------
+      - name: Extract payload
+        id: payload
+        run: |
+          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            echo "version=${{ github.event.client_payload.version }}" >> $GITHUB_OUTPUT
+            echo "name=${{ github.event.client_payload.name }}" >> $GITHUB_OUTPUT
+            echo "url=${{ github.event.client_payload.url }}" >> $GITHUB_OUTPUT
+            echo "target_branch=${{ github.event.client_payload.target_branch }}" >> $GITHUB_OUTPUT
+            
+            # Save notes to environment variable (multiline)
+            {
+              echo "RAW_NOTES<<NOTES_DELIMITER_EOF"
+              jq -r '.client_payload.notes' "$GITHUB_EVENT_PATH"
+              echo "NOTES_DELIMITER_EOF"
+            } >> $GITHUB_ENV
+          else
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+            echo "name=${{ github.event.inputs.name }}" >> $GITHUB_OUTPUT
+            echo "url=${{ github.event.inputs.url }}" >> $GITHUB_OUTPUT
+            echo "target_branch=${{ github.event.inputs.target_branch }}" >> $GITHUB_OUTPUT
+            
+            # Save notes to environment variable (multiline)
+            {
+              echo "RAW_NOTES<<NOTES_DELIMITER_EOF"
+              echo "${{ github.event.inputs.notes }}"
+              echo "NOTES_DELIMITER_EOF"
+            } >> $GITHUB_ENV
+          fi
+
+      # -------------------------------------------------
+      # Resolve target branch (auto-detect from latest stable ABP if not provided)
+      # -------------------------------------------------
+      - name: Resolve target branch
+        id: resolve_branch
+        run: |
+          TARGET_BRANCH="${{ steps.payload.outputs.target_branch }}"
+          
+          if [ -z "$TARGET_BRANCH" ]; then
+            echo "🔍 No target_branch provided - fetching latest stable ABP release..."
+            
+            RELEASES=$(curl -fsS \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/repos/abpframework/abp/releases?per_page=20")
+            
+            ABP_VERSION=$(echo "$RELEASES" | jq -r '
+              [.[] | select(
+                (.prerelease == false) and
+                (.tag_name | test("preview|rc|beta|dev"; "i") | not)
+              )] | first | .tag_name
+            ')
+            
+            if [ -z "$ABP_VERSION" ] || [ "$ABP_VERSION" = "null" ]; then
+              echo "❌ Could not determine latest stable ABP version"
+              exit 1
+            fi
+            
+            # Derive rel-X.Y from X.Y.Z (e.g., 10.1.1 -> rel-10.1)
+            TARGET_BRANCH=$(echo "$ABP_VERSION" | grep -oE '^[0-9]+\.[0-9]+' | sed 's/^/rel-/')
+            
+            if [ -z "$TARGET_BRANCH" ]; then
+              echo "❌ Could not derive target branch from version: $ABP_VERSION"
+              exit 1
+            fi
+            
+            echo "✅ Auto-detected target branch: $TARGET_BRANCH (from ABP $ABP_VERSION)"
+          else
+            echo "✅ Using provided target branch: $TARGET_BRANCH"
+          fi
+          
+          echo "target_branch=$TARGET_BRANCH" >> $GITHUB_OUTPUT
+
+      - name: Validate payload
+        env:
+          VERSION: ${{ steps.payload.outputs.version }}
+          NAME: ${{ steps.payload.outputs.name }}
+          URL: ${{ steps.payload.outputs.url }}
+          TARGET_BRANCH: ${{ steps.resolve_branch.outputs.target_branch }}
+        run: |
+          if [ -z "$VERSION" ] || [ "$VERSION" = "null" ]; then
+            echo "❌ Missing: version"
+            exit 1
+          fi
+          if [ -z "$NAME" ] || [ "$NAME" = "null" ]; then
+            echo "❌ Missing: name"
+            exit 1
+          fi
+          if [ -z "$URL" ] || [ "$URL" = "null" ]; then
+            echo "❌ Missing: url"
+            exit 1
+          fi
+          if [ -z "$RAW_NOTES" ]; then
+            echo "❌ Missing: release notes"
+            exit 1
+          fi
+          
+          echo "✅ Payload validated"
+          echo "  Version: $VERSION"
+          echo "  Name: $NAME"
+          echo "  Target Branch: $TARGET_BRANCH"
+
+      # -------------------------------------------------
+      # Checkout target branch
+      # -------------------------------------------------
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.resolve_branch.outputs.target_branch }}
+          fetch-depth: 0
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      # -------------------------------------------------
+      # Create working branch
+      # -------------------------------------------------
+      - name: Create branch
+        env:
+          VERSION: ${{ steps.payload.outputs.version }}
+        run: |
+          BRANCH="docs/studio-${VERSION}"
+          
+          # Delete remote branch if exists (idempotent)
+          git push origin --delete "$BRANCH" 2>/dev/null || true
+          
+          git checkout -B "$BRANCH"
+          echo "BRANCH=$BRANCH" >> $GITHUB_ENV
+
+      # -------------------------------------------------
+      # Install helper scripts (embedded; target branch may not have them).
+      # Source of truth: .github/scripts/*.py in this repository.
+      # -------------------------------------------------
+      - name: Install workflow scripts
+        run: |
+          mkdir -p .github/scripts .tmp
+          echo "aW1wb3J0IG9zCmltcG9ydCByZQoKcmF3ID0gb3MuZW52aXJvbi5nZXQoIlJBV19OT1RFUyIsICIiKQpsaW5lcyA9IHJhdy5zcGxpdGxpbmVzKCkKCm91dHB1dCA9IFtdCnNlZW4gPSBzZXQoKQoKCmRlZiBjbGVhbl9saW5lKHRleHQ6IHN0cikgLT4gc3RyOgogICAgdGV4dCA9IHRleHQuc3RyaXAoKQogICAgaWYgbm90IHRleHQ6CiAgICAgICAgcmV0dXJuICIiCgogICAgIyBEcm9wIG1hcmtkb3duIGhlYWRlcnMvY2hhbmdlbG9nIGxpbmVzLgogICAgaWYgcmUubWF0Y2gociJeIytccyIsIHRleHQsIGZsYWdzPXJlLkkpOgogICAgICAgIHJldHVybiAiIgogICAgaWYgcmUubWF0Y2gociJeXCpcKj9ccypmdWxsXHMrY2hhbmdlbG9nIiwgdGV4dCwgZmxhZ3M9cmUuSSk6CiAgICAgICAgcmV0dXJuICIiCiAgICBpZiByZS5tYXRjaChyIl5mdWxsXHMrY2hhbmdlbG9nIiwgdGV4dCwgZmxhZ3M9cmUuSSk6CiAgICAgICAgcmV0dXJuICIiCgogICAgdGV4dCA9IHJlLnN1YihyIl5bXHNcLSrigKJdKyIsICIiLCB0ZXh0KQogICAgdGV4dCA9IHJlLnN1YihyIlxzK2J5XHMrQD9bYS16QS1aMC05Xy1dK1xzK2luXHMraHR0cHM/Oi8vXFMrIiwgIiIsIHRleHQpCiAgICB0ZXh0ID0gcmUuc3ViKHIiXHMrYnlccytAP1thLXpBLVowLTlfLV0rXHMqJCIsICIiLCB0ZXh0KQogICAgdGV4dCA9IHJlLnN1YihyIkAoW2EtekEtWjAtOV8tXSspIiwgIiIsIHRleHQpCiAgICB0ZXh0ID0gcmUuc3ViKHIiXHMqXChbXildKiNcZCtcKVxzKiQiLCAiIiwgdGV4dCkKICAgIHRleHQgPSByZS5zdWIociJccysjXGQrXHMqJCIsICIiLCB0ZXh0KQogICAgdGV4dCA9IHJlLnN1YihyIlxzKyIsICIgIiwgdGV4dCkuc3RyaXAoIiAuOi0iKQoKICAgIGlmIGxlbih0ZXh0KSA8IDg6CiAgICAgICAgcmV0dXJuICIiCgogICAgIyBNYWtlIHVzZXItZnJpZW5kbHkgc2hvcnQgdGl0bGUgKyBzdW1tYXJ5IHdoZW4gcG9zc2libGUuCiAgICBpZiAiOiIgaW4gdGV4dDoKICAgICAgICBsZWZ0LCByaWdodCA9IFtwLnN0cmlwKCkgZm9yIHAgaW4gdGV4dC5zcGxpdCgiOiIsIDEpXQogICAgICAgIGxlZnQgPSBsZWZ0Wzo0MF0ucnN0cmlwKCIgLiIpCiAgICAgICAgcmlnaHRfd29yZHMgPSByaWdodC5zcGxpdCgpCiAgICAgICAgcmlnaHQgPSAiICIuam9pbihyaWdodF93b3Jkc1s6MTRdKS5yc3RyaXAoIiAuIikKICAgICAgICB0ZXh0ID0gZiJ7bGVmdH06IHtyaWdodH0iIGlmIHJpZ2h0IGVsc2UgbGVmdAogICAgZWxzZToKICAgICAgICB3b3JkcyA9IHRleHQuc3BsaXQoKQogICAgICAgIGlmIGxlbih3b3JkcykgPiAxNjoKICAgICAgICAgICAgdGV4dCA9ICIgIi5qb2luKHdvcmRzWzoxNl0pLnJzdHJpcCgiIC4iKQoKICAgIHJldHVybiB0ZXh0CgoKZm9yIGxpbmUgaW4gbGluZXM6CiAgICBjbGVhbmVkID0gY2xlYW5fbGluZShsaW5lKQogICAgaWYgbm90IGNsZWFuZWQ6CiAgICAgICAgY29udGludWUKCiAgICAjIE5vcm1hbGl6ZSBjYXNpbmcgYW5kIGRlZHVwbGljYXRlLgogICAgY2xlYW5lZCA9IGNsZWFuZWRbMF0udXBwZXIoKSArIGNsZWFuZWRbMTpdIGlmIGNsZWFuZWQgZWxzZSBjbGVhbmVkCiAgICBrZXkgPSBjbGVhbmVkLmxvd2VyKCkKICAgIGlmIGtleSBpbiBzZWVuOgogICAgICAgIGNvbnRpbnVlCiAgICBzZWVuLmFkZChrZXkpCgogICAgb3V0cHV0LmFwcGVuZChmIioge2NsZWFuZWR9IikKICAgIGlmIGxlbihvdXRwdXQpID49IDg6CiAgICAgICAgYnJlYWsKCm9zLm1ha2VkaXJzKCIudG1wIiwgZXhpc3Rfb2s9VHJ1ZSkKd2l0aCBvcGVuKCIudG1wL2ZpbmFsLW5vdGVzLnR4dCIsICJ3IiwgZW5jb2Rpbmc9InV0Zi04IikgYXMgZjoKICAgIGYud3JpdGUoIlxuIi5qb2luKG91dHB1dCkpCg==" | base64 -d > .github/scripts/format-studio-release-notes.py
+          echo "aW1wb3J0IG9zCmltcG9ydCByZQpmcm9tIHBhY2thZ2luZy52ZXJzaW9uIGltcG9ydCBWZXJzaW9uLCBJbnZhbGlkVmVyc2lvbgoKc3R1ZGlvX3ZlciA9IG9zLmVudmlyb25bIlNUVURJT19WRVJTSU9OIl0KYWJwX3ZlciA9IG9zLmVudmlyb25bIkFCUF9WRVJTSU9OIl0KZmlsZV9wYXRoID0gImRvY3MvZW4vc3R1ZGlvL3ZlcnNpb24tbWFwcGluZy5tZCIKCnRyeToKICAgIHN0dWRpbyA9IFZlcnNpb24oc3R1ZGlvX3ZlcikKZXhjZXB0IEludmFsaWRWZXJzaW9uOgogICAgcHJpbnQoZiLinYwgSW52YWxpZCBTdHVkaW8gdmVyc2lvbjoge3N0dWRpb192ZXJ9IikKICAgIHJhaXNlIFN5c3RlbUV4aXQoMSkKCndpdGggb3BlbihmaWxlX3BhdGgsICJyIikgYXMgZjoKICAgIGxpbmVzID0gZi5yZWFkbGluZXMoKQoKIyBGaW5kIHRhYmxlIHN0YXJ0IChza2lwIFNFTyBhbmQgaGVhZGVycykKdGFibGVfc3RhcnQgPSAwCnRhYmxlX2VuZCA9IDAKZm9yIGksIGxpbmUgaW4gZW51bWVyYXRlKGxpbmVzKToKICAgIGlmIGxpbmUuc3RyaXAoKS5zdGFydHN3aXRoKCJ8IikgYW5kICIqKkFCUCBTdHVkaW8gVmVyc2lvbioqIiBpbiBsaW5lOgogICAgICAgIHRhYmxlX3N0YXJ0ID0gaQogICAgZWxpZiB0YWJsZV9zdGFydCA+IDAgYW5kIGxpbmUuc3RyaXAoKSBhbmQgbm90IGxpbmUuc3RyaXAoKS5zdGFydHN3aXRoKCJ8Iik6CiAgICAgICAgdGFibGVfZW5kID0gaQogICAgICAgIGJyZWFrCgppZiB0YWJsZV9zdGFydCA9PSAwOgogICAgcHJpbnQoIuKdjCBDb3VsZCBub3QgZmluZCB2ZXJzaW9uIG1hcHBpbmcgdGFibGUiKQogICAgcmFpc2UgU3lzdGVtRXhpdCgxKQoKIyBJZiBubyBlbmQgZm91bmQsIHRhYmxlIGdvZXMgdG8gZW5kIG9mIGZpbGUKaWYgdGFibGVfZW5kID09IDA6CiAgICB0YWJsZV9lbmQgPSBsZW4obGluZXMpCgojIEV4dHJhY3Qgc2VjdGlvbnMKYmVmb3JlX3RhYmxlID0gbGluZXNbOnRhYmxlX3N0YXJ0XQp0YWJsZV9oZWFkZXIgPSBsaW5lc1t0YWJsZV9zdGFydCA6IHRhYmxlX3N0YXJ0ICsgMl0KZGF0YV9yb3dzID0gW2wgZm9yIGwgaW4gbGluZXNbdGFibGVfc3RhcnQgKyAyIDogdGFibGVfZW5kXSBpZiBsLnN0cmlwKCkuc3RhcnRzd2l0aCgifCIpXQphZnRlcl90YWJsZSA9IGxpbmVzW3RhYmxlX2VuZDpdCgpuZXdfcm93cyA9IFtdCmhhbmRsZWQgPSBGYWxzZQoKCmRlZiBwYXJzZV92ZXJzaW9uX3JhbmdlKHZlcnNpb25fc3RyKToKICAgICIiIlBhcnNlICcyLjEuNSAtIDIuMS45JyBvciAnMi4xLjUnIGludG8gKHN0YXJ0LCBlbmQpIiIiCiAgICB2ZXJzaW9uX3N0ciA9IHZlcnNpb25fc3RyLnN0cmlwKCkKCiAgICBpZiAi4oCTIiBpbiB2ZXJzaW9uX3N0ciBvciAiLSIgaW4gdmVyc2lvbl9zdHI6CiAgICAgICAgcGFydHMgPSByZS5zcGxpdChyIlxzKlvigJMtXVxzKiIsIHZlcnNpb25fc3RyKQogICAgICAgIGlmIGxlbihwYXJ0cykgPT0gMjoKICAgICAgICAgICAgdHJ5OgogICAgICAgICAgICAgICAgcmV0dXJuIFZlcnNpb24ocGFydHNbMF0uc3RyaXAoKSksIFZlcnNpb24ocGFydHNbMV0uc3RyaXAoKSkKICAgICAgICAgICAgZXhjZXB0IEludmFsaWRWZXJzaW9uOgogICAgICAgICAgICAgICAgcmV0dXJuIE5vbmUsIE5vbmUKCiAgICB0cnk6CiAgICAgICAgdiA9IFZlcnNpb24odmVyc2lvbl9zdHIpCiAgICAgICAgcmV0dXJuIHYsIHYKICAgIGV4Y2VwdCBJbnZhbGlkVmVyc2lvbjoKICAgICAgICByZXR1cm4gTm9uZSwgTm9uZQoKCmRlZiBmb3JtYXRfcm93KHN0dWRpb19yYW5nZSwgYWJwX3ZlcnNpb24pOgogICAgIiIiRm9ybWF0IGEgdGFibGUgcm93IHdpdGggcHJvcGVyIHNwYWNpbmciIiIKICAgIHJldHVybiBmInwge3N0dWRpb19yYW5nZTo8MjJ9IHwge2FicF92ZXJzaW9uOjwyN30gfFxuIgoKCiMgUHJvY2VzcyBleGlzdGluZyByb3dzCmZvciByb3cgaW4gZGF0YV9yb3dzOgogICAgbWF0Y2ggPSByZS5tYXRjaChyIlx8XHMqKC4rPylccypcfFxzKiguKz8pXHMqXHwiLCByb3cpCiAgICBpZiBub3QgbWF0Y2g6CiAgICAgICAgY29udGludWUKCiAgICBleGlzdGluZ19zdHVkaW9fcmFuZ2UgPSBtYXRjaC5ncm91cCgxKS5zdHJpcCgpCiAgICBleGlzdGluZ19hYnAgPSBtYXRjaC5ncm91cCgyKS5zdHJpcCgpCgogICAgaWYgZXhpc3RpbmdfYWJwICE9IGFicF92ZXI6CiAgICAgICAgbmV3X3Jvd3MuYXBwZW5kKHJvdykKICAgICAgICBjb250aW51ZQoKICAgIHN0YXJ0X3ZlciwgZW5kX3ZlciA9IHBhcnNlX3ZlcnNpb25fcmFuZ2UoZXhpc3Rpbmdfc3R1ZGlvX3JhbmdlKQoKICAgIGlmIHN0YXJ0X3ZlciBpcyBOb25lIG9yIGVuZF92ZXIgaXMgTm9uZToKICAgICAgICBuZXdfcm93cy5hcHBlbmQocm93KQogICAgICAgIGNvbnRpbnVlCgogICAgaWYgc3RhcnRfdmVyIDw9IHN0dWRpbyA8PSBlbmRfdmVyOgogICAgICAgIHByaW50KGYi4pyFIFN0dWRpbyB2ZXJzaW9uIHtzdHVkaW9fdmVyfSBhbHJlYWR5IGNvdmVyZWQgaW4gcmFuZ2Uge2V4aXN0aW5nX3N0dWRpb19yYW5nZX0iKQogICAgICAgIGhhbmRsZWQgPSBUcnVlCiAgICAgICAgbmV3X3Jvd3MuYXBwZW5kKHJvdykKICAgIGVsaWYgZW5kX3ZlciA8IHN0dWRpbzoKICAgICAgICBpZiAoCiAgICAgICAgICAgIHN0YXJ0X3Zlci5tYWpvciA9PSBzdHVkaW8ubWFqb3IKICAgICAgICAgICAgYW5kIHN0YXJ0X3Zlci5taW5vciA9PSBzdHVkaW8ubWlub3IKICAgICAgICAgICAgYW5kIHN0dWRpby5taWNybyA8PSBlbmRfdmVyLm1pY3JvICsgNQogICAgICAgICk6CiAgICAgICAgICAgIG5ld19yYW5nZSA9IGYie3N0YXJ0X3Zlcn0gLSB7c3R1ZGlvfSIKICAgICAgICAgICAgbmV3X3Jvd3MuYXBwZW5kKGZvcm1hdF9yb3cobmV3X3JhbmdlLCBhYnBfdmVyKSkKICAgICAgICAgICAgcHJpbnQoZiLinIUgRXh0ZW5kZWQgcmFuZ2U6IHtuZXdfcmFuZ2V9IikKICAgICAgICAgICAgaGFuZGxlZCA9IFRydWUKICAgICAgICBlbHNlOgogICAgICAgICAgICBuZXdfcm93cy5hcHBlbmQocm93KQogICAgZWxzZToKICAgICAgICBuZXdfcm93cy5hcHBlbmQocm93KQoKaWYgbm90IGhhbmRsZWQ6CiAgICBuZXdfcm93ID0gZm9ybWF0X3JvdyhzdHIoc3R1ZGlvKSwgYWJwX3ZlcikKICAgIG5ld19yb3dzLmluc2VydCgwLCBuZXdfcm93KQogICAgcHJpbnQoZiLinIUgQWRkZWQgbmV3IG1hcHBpbmc6IHtzdHVkaW9fdmVyfSAtPiB7YWJwX3Zlcn0iKQoKd2l0aCBvcGVuKGZpbGVfcGF0aCwgInciKSBhcyBmOgogICAgZi53cml0ZWxpbmVzKGJlZm9yZV90YWJsZSkKICAgIGYud3JpdGVsaW5lcyh0YWJsZV9oZWFkZXIpCiAgICBmLndyaXRlbGluZXMobmV3X3Jvd3MpCiAgICBmLndyaXRlbGluZXMoYWZ0ZXJfdGFibGUpCg==" | base64 -d > .github/scripts/update-studio-version-mapping.py
+          ls -la .github/scripts/
+
+      # -------------------------------------------------
+      # Analyze existing release notes format
+      # -------------------------------------------------
+      - name: Analyze existing format
+        id: analyze
+        run: |
+          FILE="docs/en/studio/release-notes.md"
+          
+          if [ -f "$FILE" ] && [ -s "$FILE" ]; then
+            {
+              echo "EXISTING_FORMAT<<DELIMITER_EOF"
+              head -50 "$FILE" | sed 's/DELIMITER_EOF/DELIMITER_E0F/g'
+              echo "DELIMITER_EOF"
+            } >> $GITHUB_OUTPUT
+          else
+            {
+              echo "EXISTING_FORMAT<<DELIMITER_EOF"
+              echo "# ABP Studio Release Notes"
+              echo ""
+              echo "## 2.1.0 (2025-12-08) Latest"
+              echo "- Enhanced Module Installation UI"
+              echo "- Added AI Management option"
+              echo "DELIMITER_EOF"
+            } >> $GITHUB_OUTPUT
+          fi
+
+      # -------------------------------------------------
+      # Try AI formatting (OPTIONAL - never fails workflow)
+      # -------------------------------------------------
+      - name: Format release notes with AI
+        id: ai
+        continue-on-error: true
+        uses: actions/ai-inference@v1
+        with:
+          model: openai/gpt-4.1
+          prompt: |
+            You are a technical writer for ABP Studio release notes.
+            
+            Existing release notes format:
+            ${{ steps.analyze.outputs.EXISTING_FORMAT }}
+            
+            New release:
+            Version: ${{ steps.payload.outputs.version }}
+            Name: ${{ steps.payload.outputs.name }}
+            Raw notes:
+            ${{ env.RAW_NOTES }}
+            
+            CRITICAL RULES:
+            1. Extract ONLY essential, user-facing changes
+            2. Format as markdown bullet points starting with "* "
+            3. Keep it concise, friendly and easy to scan
+            4. Match the style of existing release notes
+            5. Skip internal/technical details unless critical
+            6. Return ONLY the bullet points (no version header, no date)
+            7. One change per line
+            8. Prefer short action-oriented summaries like "AI Agent Upgrades: Added browser automation tools"
+            
+            Output example:
+            * AI Agent Upgrades: Added browser automation tools
+            * Module Setup Improvements: Added guidance for modularity options
+            * UI Polish: Improved sidebar icons and visual consistency
+            
+            Return ONLY the formatted bullet points.
+
+      # -------------------------------------------------
+      # Fallback: Use raw notes if AI unavailable
+      # -------------------------------------------------
+      - name: Prepare final release notes
+        run: |
+          mkdir -p .tmp
+          
+          AI_RESPONSE="${{ steps.ai.outputs.response }}"
+          
+          if [ -n "$AI_RESPONSE" ] && [ "$AI_RESPONSE" != "null" ]; then
+            echo "✅ Using AI-formatted release notes"
+            echo "$AI_RESPONSE" > .tmp/final-notes.txt
+          else
+            echo "⚠️ AI unavailable - generating concise user-friendly summaries from raw notes"
+            python3 .github/scripts/format-studio-release-notes.py
+          fi
+
+          # Normalize bullets to "* " even if AI returns "- ".
+          sed -E 's/^[[:space:]]*-[[:space:]]+/* /' .tmp/final-notes.txt > .tmp/final-notes.normalized.txt
+          mv .tmp/final-notes.normalized.txt .tmp/final-notes.txt
+          
+          # Safety check: verify we have content
+          if [ ! -s .tmp/final-notes.txt ]; then
+            echo "⚠️ No valid release notes extracted, using minimal fallback"
+            echo "* Release ${{ steps.payload.outputs.version }}" > .tmp/final-notes.txt
+          fi
+          
+          echo "=== Final release notes ==="
+          cat .tmp/final-notes.txt
+          echo "==========================="
+
+      # -------------------------------------------------
+      # Update release-notes.md (move "Latest" tag correctly)
+      # -------------------------------------------------
+      - name: Update release-notes.md
+        env:
+          VERSION: ${{ steps.payload.outputs.version }}
+          NAME: ${{ steps.payload.outputs.name }}
+          URL: ${{ steps.payload.outputs.url }}
+        run: |
+          FILE="docs/en/studio/release-notes.md"
+          DATE="$(date +%Y-%m-%d)"
+          
+          mkdir -p docs/en/studio
+          
+          # Check if version already exists (idempotent)
+          if [ -f "$FILE" ] && grep -q "^## $VERSION " "$FILE"; then
+            echo "⚠️ Version $VERSION already exists in release notes - skipping update"
+            echo "VERSION_UPDATED=false" >> $GITHUB_ENV
+            exit 0
+          fi
+          
+          # Read final notes
+          NOTES_CONTENT="$(cat .tmp/final-notes.txt)"
+          
+          # Create new entry
+          NEW_ENTRY="## $VERSION ($DATE) Latest
+
+          $NOTES_CONTENT
+          "
+          
+          # Process file
+          if [ ! -f "$FILE" ]; then
+            # Create new file
+            cat > "$FILE" <<EOF
+          # ABP Studio Release Notes
+
+          $NEW_ENTRY
+          EOF
+          else
+            # Remove "Latest" tag from existing entries and insert new one
+            awk -v new_entry="$NEW_ENTRY" '
+            BEGIN { inserted = 0 }
+            
+            # Remove "Latest" from existing entries
+            /^## [0-9]/ {
+              gsub(/ Latest$/, "", $0)
+            }
+            
+            # Insert after first "## " (version heading) or after title
+            /^## / && !inserted {
+              print new_entry
+              inserted = 1
+            }
+            
+            # Print current line
+            { print }
+            
+            # If we reach end without inserting, add at end
+            END {
+              if (!inserted) {
+                print ""
+                print new_entry
+              }
+            }
+            ' "$FILE" > "$FILE.new"
+            
+            mv "$FILE.new" "$FILE"
+          fi
+          
+          echo "VERSION_UPDATED=true" >> $GITHUB_ENV
+          
+          echo "=== Updated release-notes.md preview ==="
+          head -30 "$FILE"
+          echo "========================================"
+
+      # -------------------------------------------------
+      # Fetch latest stable ABP version (no preview/rc/beta)
+      # -------------------------------------------------
+      - name: Fetch latest stable ABP version
+        id: abp
+        run: |
+          # Fetch all releases
+          RELEASES=$(curl -fsS \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/abpframework/abp/releases?per_page=20")
+          
+          # Filter stable releases (exclude preview, rc, beta, dev)
+          ABP_VERSION=$(echo "$RELEASES" | jq -r '
+            [.[] | select(
+              (.prerelease == false) and
+              (.tag_name | test("preview|rc|beta|dev"; "i") | not)
+            )] | first | .tag_name
+          ')
+          
+          if [ -z "$ABP_VERSION" ] || [ "$ABP_VERSION" = "null" ]; then
+            echo "❌ Could not determine latest stable ABP version"
+            exit 1
+          fi
+          
+          echo "✅ Latest stable ABP version: $ABP_VERSION"
+          echo "ABP_VERSION=$ABP_VERSION" >> $GITHUB_ENV
+
+      # -------------------------------------------------
+      # Update version-mapping.md (smart range expansion)
+      # -------------------------------------------------
+      - name: Update version-mapping.md
+        env:
+          STUDIO_VERSION: ${{ steps.payload.outputs.version }}
+        run: |
+          FILE="docs/en/studio/version-mapping.md"
+          ABP_VERSION="${{ env.ABP_VERSION }}"
+          
+          mkdir -p docs/en/studio
+          
+          # Create file if doesn't exist
+          if [ ! -f "$FILE" ]; then
+            cat > "$FILE" <<EOF
+          # ABP Studio and ABP Startup Template Version Mappings
+
+          | **ABP Studio Version** | **ABP Version of Startup Template** |
+          |------------------------|-------------------------------------|
+          | $STUDIO_VERSION        | $ABP_VERSION                        |
+          EOF
+            echo "MAPPING_UPDATED=true" >> $GITHUB_ENV
+            exit 0
+          fi
+          
+          python3 .github/scripts/update-studio-version-mapping.py
+
+          echo "MAPPING_UPDATED=true" >> $GITHUB_ENV
+          
+          echo "=== Updated version-mapping.md preview ==="
+          head -35 "$FILE"
+          echo "=========================================="
+
+      # -------------------------------------------------
+      # Check for changes
+      # -------------------------------------------------
+      - name: Check for changes
+        id: changes
+        run: |
+          git add docs/en/studio/
+          
+          if git diff --cached --quiet; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "⚠️ No changes detected"
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "✅ Changes detected:"
+            git diff --cached --stat
+          fi
+
+      # -------------------------------------------------
+      # Commit & push
+      # -------------------------------------------------
+      - name: Commit and push
+        if: steps.changes.outputs.has_changes == 'true'
+        env:
+          VERSION: ${{ steps.payload.outputs.version }}
+          NAME: ${{ steps.payload.outputs.name }}
+        run: |
+          git commit -m "docs(studio): update documentation for release $VERSION
+
+          - Updated release notes for $VERSION
+          - Updated version mapping with ABP ${{ env.ABP_VERSION }}
+          
+          Release: $NAME"
+          
+          git push -f origin "$BRANCH"
+
+      # -------------------------------------------------
+      # Create or update PR
+      # -------------------------------------------------
+      - name: Create or update PR
+        if: steps.changes.outputs.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.payload.outputs.version }}
+          NAME: ${{ steps.payload.outputs.name }}
+          URL: ${{ steps.payload.outputs.url }}
+          TARGET_BRANCH: ${{ steps.resolve_branch.outputs.target_branch }}
+        run: |
+          # Check for existing PR
+          EXISTING_PR=$(gh pr list \
+            --head "$BRANCH" \
+            --base "$TARGET_BRANCH" \
+            --json number \
+            --jq '.[0].number' 2>/dev/null || echo "")
+          
+          PR_BODY="Automated documentation update for ABP Studio release **$VERSION**.
+
+          ## Release Information
+          - **Version**: $VERSION
+          - **Name**: $NAME
+          - **Release**: [View on GitHub]($URL)
+          - **ABP Framework Version**: ${{ env.ABP_VERSION }}
+
+          ## Changes
+          - ✅ Updated [release-notes.md](docs/en/studio/release-notes.md)
+          - ✅ Updated [version-mapping.md](docs/en/studio/version-mapping.md)
+
+          ---
+          
+          *This PR was automatically generated by the [update-studio-docs workflow](.github/workflows/update-studio-docs.yml)*"
+          
+          if [ -n "$EXISTING_PR" ]; then
+            echo "🔄 Updating existing PR #$EXISTING_PR"
+            
+            gh pr edit "$EXISTING_PR" \
+              --title "docs(studio): release $VERSION - $NAME" \
+              --body "$PR_BODY" \
+              --add-reviewer skoc10
+            
+            echo "PR_NUMBER=$EXISTING_PR" >> $GITHUB_ENV
+          else
+            echo "📝 Creating new PR"
+            
+            sleep 2  # Wait for GitHub to sync
+            
+            PR_URL=$(gh pr create \
+              --title "docs(studio): release $VERSION - $NAME" \
+              --body "$PR_BODY" \
+              --base "$TARGET_BRANCH" \
+              --head "$BRANCH" \
+              --reviewer skoc10)
+            
+            PR_NUMBER=$(echo "$PR_URL" | grep -oE '[0-9]+$')
+            echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+            echo "✅ Created PR #$PR_NUMBER: $PR_URL"
+          fi
+
+      # -------------------------------------------------
+      # Enable auto-merge (safe with branch protection)
+      # -------------------------------------------------
+      - name: Enable auto-merge
+        if: steps.changes.outputs.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+        run: |
+          echo "🔄 Attempting to enable auto-merge for PR #$PR_NUMBER"
+          
+          gh pr merge "$PR_NUMBER" \
+            --auto \
+            --squash \
+            --delete-branch || {
+              echo "⚠️ Auto-merge not available (branch protection or permissions)"
+              echo "   PR #$PR_NUMBER is ready for manual review"
+            }
+
+      # -------------------------------------------------
+      # Summary
+      # -------------------------------------------------
+      - name: Workflow summary
+        if: always()
+        env:
+          VERSION: ${{ steps.payload.outputs.version }}
+        run: |
+          echo "## 📚 ABP Studio Docs Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Version**: $VERSION" >> $GITHUB_STEP_SUMMARY
+          echo "**Release**: ${{ steps.payload.outputs.name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Target Branch**: ${{ steps.resolve_branch.outputs.target_branch }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.changes.outputs.has_changes }}" = "true" ]; then
+            echo "### ✅ Changes Applied" >> $GITHUB_STEP_SUMMARY
+            echo "- Release notes updated: ${{ env.VERSION_UPDATED }}" >> $GITHUB_STEP_SUMMARY
+            echo "- Version mapping updated: ${{ env.MAPPING_UPDATED }}" >> $GITHUB_STEP_SUMMARY
+            echo "- ABP Framework version: ${{ env.ABP_VERSION }}" >> $GITHUB_STEP_SUMMARY
+            echo "- PR: #${{ env.PR_NUMBER }}" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### ⚠️ No Changes" >> $GITHUB_STEP_SUMMARY
+            echo "Version $VERSION already exists in documentation." >> $GITHUB_STEP_SUMMARY
+          fi

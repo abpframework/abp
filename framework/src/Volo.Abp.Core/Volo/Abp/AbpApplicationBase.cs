@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Configuration;
@@ -127,20 +128,24 @@ public abstract class AbpApplicationBase : IAbpApplication
 
     protected virtual void WriteInitLogs(IServiceProvider serviceProvider)
     {
-        var logger = serviceProvider.GetService<ILogger<AbpApplicationBase>>();
-        if (logger == null)
+        var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
+        if (loggerFactory == null)
         {
             return;
         }
 
-        var initLogger = serviceProvider.GetRequiredService<IInitLoggerFactory>().Create<AbpApplicationBase>();
+        var initLoggerFactory = serviceProvider.GetRequiredService<IInitLoggerFactory>();
 
-        foreach (var entry in initLogger.Entries)
+        foreach (var entry in initLoggerFactory.GetAllEntries())
         {
+            var categoryName = string.IsNullOrEmpty(entry.CategoryName)
+                ? nameof(AbpApplicationBase)
+                : entry.CategoryName;
+            var logger = loggerFactory.CreateLogger(categoryName);
             logger.Log(entry.LogLevel, entry.EventId, entry.State, entry.Exception, entry.Formatter);
         }
 
-        initLogger.Entries.Clear();
+        initLoggerFactory.ClearAllEntries();
     }
 
     protected virtual IReadOnlyList<IAbpModuleDescriptor> LoadModules(IServiceCollection services, AbpApplicationCreationOptions options)
@@ -200,7 +205,13 @@ public abstract class AbpApplicationBase : IAbpApplication
         using var scope = ServiceProvider.CreateScope();
         var abpHostEnvironment = scope.ServiceProvider.GetRequiredService<IAbpHostEnvironment>();
         var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-        return abpHostEnvironment.IsDevelopment() && configuration.GetValue<bool?>("Abp:Telemetry:IsEnabled") != false;
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            return abpHostEnvironment.IsDevelopment() && configuration.GetValue<bool?>("Abp:Telemetry:IsEnabled") != false;
+        }
+
+        return false;
     }
 
     //TODO: We can extract a new class for this

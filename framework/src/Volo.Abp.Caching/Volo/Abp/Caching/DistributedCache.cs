@@ -19,7 +19,7 @@ namespace Volo.Abp.Caching;
 /// Represents a distributed cache of <typeparamref name="TCacheItem" /> type.
 /// </summary>
 /// <typeparam name="TCacheItem">The type of cache item being cached.</typeparam>
-public class DistributedCache<TCacheItem> : 
+public class DistributedCache<TCacheItem> :
     IDistributedCache<TCacheItem>
     where TCacheItem : class
 {
@@ -683,35 +683,30 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
             result = cachedValues.Concat(ToCacheItems(cachedBytes, readKeys)).ToArray();
         }
 
-        if (result.All(x => x.Value != null))
+        var resultMap = result
+            .Where(x => x.Value != null)
+            .ToDictionary(x => x.Key, x => x.Value);
+
+        if (resultMap.Count == keyArray.Length)
         {
-            return result!;
+            return keyArray
+                .Select(key => new KeyValuePair<TCacheKey, TCacheItem?>(key, resultMap[key]))
+                .ToArray();
         }
 
-        var missingKeys = new List<TCacheKey>();
-        var missingValuesIndex = new List<int>();
-        for (var i = 0; i < keyArray.Length; i++)
-        {
-            if (result[i].Value != null)
-            {
-                continue;
-            }
-
-            missingKeys.Add(keyArray[i]);
-            missingValuesIndex.Add(i);
-        }
-
+        var missingKeys = keyArray.Where(key => !resultMap.ContainsKey(key)).ToList();
         var missingValues = factory.Invoke(missingKeys).ToArray();
-        var valueQueue = new Queue<KeyValuePair<TCacheKey, TCacheItem>>(missingValues);
 
         SetMany(missingValues, optionsFactory?.Invoke(), hideErrors, considerUow);
 
-        foreach (var index in missingValuesIndex)
+        foreach (var pair in missingValues)
         {
-            result[index] = valueQueue.Dequeue()!;
+            resultMap[pair.Key] = pair.Value;
         }
 
-        return result;
+        return keyArray
+            .Select(key => new KeyValuePair<TCacheKey, TCacheItem?>(key, resultMap.GetOrDefault(key)))
+            .ToArray();
     }
 
 
@@ -779,35 +774,30 @@ public class DistributedCache<TCacheItem, TCacheKey> : IDistributedCache<TCacheI
             result = cachedValues.Concat(ToCacheItems(cachedBytes, readKeys)).ToArray();
         }
 
-        if (result.All(x => x.Value != null))
+        var resultMap = result
+            .Where(x => x.Value != null)
+            .ToDictionary(x => x.Key, x => x.Value);
+
+        if (resultMap.Count == keyArray.Length)
         {
-            return result;
+            return keyArray
+                .Select(key => new KeyValuePair<TCacheKey, TCacheItem?>(key, resultMap[key]))
+                .ToArray();
         }
 
-        var missingKeys = new List<TCacheKey>();
-        var missingValuesIndex = new List<int>();
-        for (var i = 0; i < keyArray.Length; i++)
-        {
-            if (result[i].Value != null)
-            {
-                continue;
-            }
-
-            missingKeys.Add(keyArray[i]);
-            missingValuesIndex.Add(i);
-        }
-
+        var missingKeys = keyArray.Where(key => !resultMap.ContainsKey(key)).ToList();
         var missingValues = (await factory.Invoke(missingKeys)).ToArray();
-        var valueQueue = new Queue<KeyValuePair<TCacheKey, TCacheItem>>(missingValues);
 
         await SetManyAsync(missingValues, optionsFactory?.Invoke(), hideErrors, considerUow, token);
 
-        foreach (var index in missingValuesIndex)
+        foreach (var pair in missingValues)
         {
-            result[index] = valueQueue.Dequeue()!;
+            resultMap[pair.Key] = pair.Value;
         }
 
-        return result;
+        return keyArray
+            .Select(key => new KeyValuePair<TCacheKey, TCacheItem?>(key, resultMap.GetOrDefault(key)))
+            .ToArray();
     }
 
     /// <summary>

@@ -103,6 +103,7 @@
     "Exporting": "Exporterar",
     "ExportCompleted": "Export slutförd framgångsrikt",
     "ExportFailed": "Export misslyckades",
+    "ThereWereNoRecordsToExport": "Det fanns inga poster att exportera.",
     "ExportJobQueued": "Exportjobb har köats för {0} poster. Du kommer att få ett e-postmeddelande när exporten är klar.",
     "ExportReady": "Export slutförd för {0} poster och redo för nedladdning.",
     "FileName": "Filnamn",

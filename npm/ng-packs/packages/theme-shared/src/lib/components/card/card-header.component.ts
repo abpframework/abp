@@ -1,18 +1,17 @@
-import { Component, HostBinding, Input } from '@angular/core';
-import { NgClass, NgStyle } from '@angular/common';
+import { Component, HostBinding, input } from '@angular/core';
 
 @Component({
   selector: 'abp-card-header',
   template: `
-    <div [ngClass]="cardHeaderClass" [ngStyle]="cardHeaderStyle">
+    <div [class]="cardHeaderClass()" [style]="cardHeaderStyle()">
       <ng-content></ng-content>
     </div>
   `,
   styles: [],
-  imports: [NgClass, NgStyle],
+  imports: [],
 })
 export class CardHeaderComponent {
   @HostBinding('class') componentClass = 'card-header';
-  @Input() cardHeaderClass: string;
-  @Input() cardHeaderStyle: string;
+  readonly cardHeaderClass = input<string>(undefined);
+  readonly cardHeaderStyle = input<string>(undefined);
 }

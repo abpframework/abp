@@ -11,7 +11,7 @@
 //[doc-nav]
 {
   "Next": {
-    "Name": "Running Applications",
+    "Name": "Solution Runner",
     "Path": "studio/running-applications"
   }
 }
@@ -33,6 +33,9 @@ It is the main solution that you can open with ABP Studio, an ABP solution can c
   - `New Folder`: Creates a new folder within the ABP Solution, allowing you to organize your modules.
   - `New Module`: Allows you to create a new module.
   - `Existing Module`: You can add existing module to your solution.
+- `Analyze`: Analyzes all modules and packages in the solution to extract information like aggregate roots, application services, permissions, etc.
+  - `Analyze`: Analyzes all modules and packages using existing build outputs.
+  - `Build & Analyze`: Builds the solution first, then analyzes all modules and packages.
 - `Rename`: Renames the solution.
 - `Manage Secrets`: You can edit your solution secrets.
 - `Manage Metadata`: You can edit your solution metadata.
@@ -52,6 +55,9 @@ It is the main solution that you can open with ABP Studio, an ABP solution can c
   - `Clean`: Cleans the output of the previous build for modules.
   - `Restore`: Restores the dependencies for modules.
 - `Open With`
+  - `Visual Studio`: Opens the solution in Visual Studio. This option is only available if you have Visual Studio installed.
+  - `Visual Studio Code`: Opens the solution in Visual Studio Code. This option is only available if you have Visual Studio Code installed.
+  - `JetBrains Rider`: Opens the solution in JetBrains Rider. This option is only available if you have JetBrains Rider installed.
   - `Terminal`: Opens the terminal in the solution directory.
   - `Explorer`: Opens the file explorer in the solution directory.
 - `Solution Configuration`: You can see the project creation options in this menu. It opens the *Solution Configuration* window.
@@ -73,6 +79,9 @@ You can click the *OK* button to add the folder to the solution. When you right-
   - `New Folder`: Creates a new nested folder within the selected folder, allowing you to organize your modules.
   - `New Module`: Allows you to create a new module to selected folder.
   - `Existing Module`: You can add existing module to your selected folder.
+- `Analyze`: Analyzes all modules and packages in the selected folder.
+  - `Analyze`: Analyzes all modules and packages using existing build outputs.
+  - `Build & Analyze`: Builds first, then analyzes all modules and packages in the folder.
 - `Rename`: Renames the selected folder.
 - `Delete`: Deletes the selected folder and all child items from the solution.
 - `ABP CLI`
@@ -102,6 +111,9 @@ A [module](./concepts.md#module) is a sub-solution that can contains zero, one o
     - `New Package`: Creates a new package within the selected module.
     - `Existing Package`: You can add existing package to your selected module.
   - `Folder`: Creates a new folder within the selected module, allowing you to organize your packages.
+- `Analyze`: Analyzes all packages in the selected module.
+  - `Analyze`: Analyzes all packages using existing build outputs.
+  - `Build & Analyze`: Builds first, then analyzes all packages in the module.
 - `Import Module`: This option allows you to import an existing module from *Solution*, *Local*, or *NuGet* into your selected module.
 - `Rename`: Renames the selected module.
 - `Remove`: Removes the selected module and all child items from the solution.
@@ -126,6 +138,7 @@ A [module](./concepts.md#module) is a sub-solution that can contains zero, one o
   - `JetBrains Rider`: Opens the module in JetBrains Rider. This option is only available if you have JetBrains Rider installed.
   - `Terminal`: Opens the terminal in the module directory.
   - `Explorer`: Opens the file explorer in the module directory.
+- `Open Readme`: Opens the README file in the module if available. This option is only visible if the module has a README file.
 - `Upgrade to Pro`: This will be visible only when you purchased a license but still using the modules came with open-source (free) license. For more details, check out [Migrating from Open Source Templates](../guides/migrating-from-open-source.md) document. This is not shown in the screenshot above.
 
 ### Adding a New Empty Module
@@ -238,10 +251,18 @@ A [package](./concepts.md#package) is a project that can be added to a module, a
 
 ![package-context-menu](./images/solution-explorer/package-context-menu.png)
 
-- `Add Package Reference`: This option allows you to add a package reference to the selected package.
+- `Add`: This menu is only visible for Host projects (except Blazor WebAssembly).
+  - `NPM Package`: Adds an NPM package reference to the selected package.
+- `Add Package Reference`: This option allows you to add a package reference to the selected package. This option is only visible for non-Host projects.
+- `Analyze`: Analyzes the selected package to extract information like aggregate roots, application services, permissions, etc. This menu is only visible for analyzable package types.
+  - `Analyze`: Analyzes the package using existing build outputs.
+  - `Build & Analyze`: Builds first, then analyzes the package.
 - `Reload`: Reloads the selected package.
 - `Remove`: Removes the selected package from the module.
 - `ABP CLI`
+  - `Generate Proxy`: Generates client-side proxy code for the selected package.
+    - `Javascript`: Generates JavaScript proxy code.
+    - `C#`: Generates C# proxy code.
   - `Install Libs`: Install NPM Packages for UI projects in your selected package.
   - `Upgrade ABP Packages`: Update all the ABP related NuGet and NPM packages in your selected package.
   - `Switch to`: It switches your selected package to the specified version of the ABP.
@@ -264,6 +285,7 @@ A [package](./concepts.md#package) is a project that can be added to a module, a
   - `JetBrains Rider`: Opens the package in JetBrains Rider. This option is only available if you have JetBrains Rider installed.
   - `Terminal`: Opens the terminal in the package directory.
   - `Explorer`: Opens the file explorer in the package directory.
+- `Open Readme`: Opens the README file in the package if available. This option is only visible if the package has a README file.
 
 ### Adding a New Package
 

@@ -101,7 +101,7 @@ For a web application, it gets the `User` property of the current `HttpContext`.
 
 ### Basic Usage
 
-You can inject `ICurrentPrincipalAccessor` and use the `Principal` property to the the current principal:
+You can inject `ICurrentPrincipalAccessor` and use the `Principal` property to get the current principal:
 
 ````csharp
 public class MyService : ITransientDependency

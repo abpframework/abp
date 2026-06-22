@@ -4,6 +4,7 @@
   "projectType": "library",
   "sourceRoot": "packages/core/src",
   "prefix": "abp",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@nx/angular:package",
@@ -21,17 +22,16 @@
       },
       "defaultConfiguration": "production"
     },
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/packages/core"],
-      "options": {
-        "jestConfig": "packages/core/jest.config.ts"
-      }
-    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../coverage/packages/core"
+      }
     }
-  },
-  "tags": []
+  }
 }

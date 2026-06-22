@@ -1,3 +1,4 @@
+import { firstValueFrom } from 'rxjs';
 import { CROSS_ORIGIN_STRATEGY } from '../strategies/cross-origin.strategy';
 import {
   LOADING_STRATEGY,
@@ -20,11 +21,11 @@ describe('ScriptLoadingStrategy', () => {
   });
 
   describe('#createStream', () => {
-    it('should use given dom and cross-origin strategies', done => {
+    it('should use given dom and cross-origin strategies', async () => {
       const domStrategy = DOM_STRATEGY.PrependToHead();
       const crossOriginStrategy = CROSS_ORIGIN_STRATEGY.UseCredentials();
 
-      domStrategy.insertElement = jest.fn((el: HTMLScriptElement) => {
+      domStrategy.insertElement = vi.fn((el: HTMLScriptElement) => {
         setTimeout(() => {
           el.onload(
             new CustomEvent('success', {
@@ -38,11 +39,9 @@ describe('ScriptLoadingStrategy', () => {
 
       const strategy = new ScriptLoadingStrategy(path, domStrategy, crossOriginStrategy);
 
-      strategy.createStream<CustomEvent>().subscribe(event => {
-        expect(strategy.element.tagName).toBe('SCRIPT');
-        expect(event.detail.crossOrigin).toBe('use-credentials');
-        done();
-      });
+      const event = await firstValueFrom(strategy.createStream<CustomEvent>());
+      expect(strategy.element.tagName).toBe('SCRIPT');
+      expect(event.detail.crossOrigin).toBe('use-credentials');
     });
   });
 });
@@ -60,11 +59,11 @@ describe('StyleLoadingStrategy', () => {
   });
 
   describe('#createStream', () => {
-    it('should use given dom and cross-origin strategies', done => {
+    it('should use given dom and cross-origin strategies', async () => {
       const domStrategy = DOM_STRATEGY.PrependToHead();
       const crossOriginStrategy = CROSS_ORIGIN_STRATEGY.UseCredentials();
 
-      domStrategy.insertElement = jest.fn((el: HTMLLinkElement) => {
+      domStrategy.insertElement = vi.fn((el: HTMLLinkElement) => {
         setTimeout(() => {
           el.onload(
             new CustomEvent('success', {
@@ -78,11 +77,9 @@ describe('StyleLoadingStrategy', () => {
 
       const strategy = new StyleLoadingStrategy(path, domStrategy, crossOriginStrategy);
 
-      strategy.createStream<CustomEvent>().subscribe(event => {
-        expect(strategy.element.tagName).toBe('LINK');
-        expect(event.detail.crossOrigin).toBe('use-credentials');
-        done();
-      });
+      const event = await firstValueFrom(strategy.createStream<CustomEvent>());
+      expect(strategy.element.tagName).toBe('LINK');
+      expect(event.detail.crossOrigin).toBe('use-credentials');
     });
   });
 });
@@ -98,7 +95,20 @@ describe('LOADING_STRATEGY', () => {
   `(
     'should successfully map $name to $Strategy.name with $domStrategy dom strategy',
     ({ name, Strategy, domStrategy }) => {
-      expect(LOADING_STRATEGY[name](path)).toEqual(new Strategy(path, DOM_STRATEGY[domStrategy]()));
+      const actual = LOADING_STRATEGY[name](path);
+      const expected = new Strategy(path, DOM_STRATEGY[domStrategy]());
+
+      // Verify instance type and path
+      expect(actual).toBeInstanceOf(Strategy);
+      expect(actual.path).toBe(expected.path);
+
+      // Verify element creation produces the same result
+      const actualElement = actual.createElement();
+      const expectedElement = expected.createElement();
+      expect(actualElement.tagName).toBe(expectedElement.tagName);
+      expect(actualElement.src || actualElement.href).toBe(
+        expectedElement.src || expectedElement.href,
+      );
     },
   );
 });

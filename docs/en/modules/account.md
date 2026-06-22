@@ -43,6 +43,8 @@ Social/external login buttons becomes visible if you setup it. See the *Social/E
 
 ![account-module-forgot-password](../images/account-module-forgot-password.png)
 
+> The host part of the password reset link is built from `AppUrlOptions.Applications["MVC"].RootUrl`. Configure it if the default `App:SelfUrl` isn't what you want users to see in emails — for example, when you use subdomain-based multi-tenancy and want the link to point to the tenant's subdomain. See [Application URLs](../framework/infrastructure/app-urls.md).
+
 ### Account Management
 
 `/Account/Manage` page is used to change password and personal information of the user.

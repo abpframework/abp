@@ -15,6 +15,11 @@ namespace Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
     )]
 public class BlobStoringDatabaseEntityFrameworkCoreTestModule : AbpModule
 {
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        PreConfigure<AbpSqliteOptions>(x => x.BusyTimeout = null);
+    }
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var sqliteConnection = CreateDatabaseAndGetConnection();

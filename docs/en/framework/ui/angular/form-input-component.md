@@ -22,23 +22,21 @@ The ABP FormInput Component is a reusable form input component for the text type
 
 # Usage
 
-The ABP FormInput component is a part of the `ThemeSharedModule` module. If you've imported that module into your module, there's no need to import it again. If not, then first import it as shown below:
+The ABP FormInput component (`AbpFormInputComponent`) is a standalone component. You can import it directly in your component:
 
 ```ts
-import { ThemeSharedModule } from "@abp/ng.theme.shared";
-import { FormInputDemoComponent } from "./FomrInputDemoComponent.component";
+import { Component } from "@angular/core";
+import { AbpFormInputComponent } from "@abp/ng.theme.shared";
 
-@NgModule({
-  imports: [
-   ThemeSharedModule,
-   // ...
-  ],
-  declarations: [FormInputDemoComponent],
+@Component({
+  selector: 'app-form-input-demo',
+  imports: [AbpFormInputComponent],
+  templateUrl: './form-input-demo.component.html',
 })
-export class MyFeatureModule {}
+export class FormInputDemoComponent {}
 ```
 
-Then, the `abp-form-input` component can be used. See the example below:
+Then, the `abp-form-input` component can be used in your template. See the example below:
 
 ```html
 <div class="row">

@@ -27,7 +27,7 @@ Since [Permission Management](../../modules/permission-management.md) is a funda
 
 ## Permission Management
 
-The *Administration* microservice provides a set of APIs to manage permissions. Every microservice [defines](../../framework/fundamentals/authorization.md) its own permissions. When a microservice starts, it registers its permissions to the related permission definition tables if `SaveStaticPermissionsToDatabase` option is true for `PermissionManagementOptions`. Since the default value is true, this behavior is ensured. After that, you can see the permissions from the [Permission Management Dialog](../../modules/permission-management.md#permission-management-dialog) for related provider such as *User*, *Role* or *Client (OpenIddict Applications)*.
+The *Administration* microservice provides a set of APIs to manage permissions. Every microservice [defines](../../framework/fundamentals/authorization/index.md) its own permissions. When a microservice starts, it registers its permissions to the related permission definition tables if `SaveStaticPermissionsToDatabase` option is true for `PermissionManagementOptions`. Since the default value is true, this behavior is ensured. After that, you can see the permissions from the [Permission Management Dialog](../../modules/permission-management.md#permission-management-dialog) for related provider such as *User*, *Role* or *Client (OpenIddict Applications)*.
 
 ![user-permissions](images/user-permissions.png)
 

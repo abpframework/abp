@@ -40,6 +40,7 @@ Here are all the free and pro application modules developed and maintained as a 
 * **[OpenIddict (Pro)](openiddict-pro.md)**: Managing the openiddict objects like applications, scopes.
 * **[Payment (Pro)](payment.md)**: Payment gateway integrations.
 * [**Permission Management**](permission-management.md): Used to persist permissions.
+* [**Operation Rate Limiting**](operation-rate-limiting.md): Provides application/domain code level rate-limiting features.
 * **[SaaS (Pro)](saas.md)**: Manage tenants, editions and features to create your multi-tenant / SaaS application.
 * **[Setting Management](setting-management.md)**: Used to persist and manage the [settings](../framework/infrastructure/settings.md).
 * [**Tenant Management**](tenant-management.md): Manages tenants for a [multi-tenant](../framework/architecture/multi-tenancy) application.

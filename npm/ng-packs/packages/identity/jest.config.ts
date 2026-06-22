@@ -1,4 +1,8 @@
 /* eslint-disable */
+/**
+ * @deprecated use vitest instead of jest
+ * @see https://vitest.dev/guide/migration.html#jest
+ */
 export default {
   displayName: 'identity',
   preset: '../../jest.preset.js',

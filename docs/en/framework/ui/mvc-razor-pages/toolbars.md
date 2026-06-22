@@ -79,7 +79,7 @@ public class MyToolbarContributor : IToolbarContributor
 }
 ````
 
-You can use the [authorization](../../fundamentals/authorization.md) to decide whether to add a `ToolbarItem`.
+You can use the [authorization](../../fundamentals/authorization/index.md) to decide whether to add a `ToolbarItem`.
 
 ````csharp
 if (await context.IsGrantedAsync("MyPermissionName"))

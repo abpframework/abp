@@ -6,29 +6,35 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
 using OpenIddict.Core;
+using Volo.Abp.EventBus.Distributed;
 
 namespace Volo.Abp.OpenIddict.Applications;
 
 public class AbpApplicationManager : OpenIddictApplicationManager<OpenIddictApplicationModel>, IAbpApplicationManager
 {
     protected AbpOpenIddictIdentifierConverter IdentifierConverter { get; }
+    protected IDistributedEventBus DistributedEventBus { get; }
 
     public AbpApplicationManager(
         [NotNull] IOpenIddictApplicationCache<OpenIddictApplicationModel> cache,
         [NotNull] ILogger<AbpApplicationManager> logger,
         [NotNull] IOptionsMonitor<OpenIddictCoreOptions> options,
         [NotNull] IOpenIddictApplicationStore<OpenIddictApplicationModel> resolver,
-        AbpOpenIddictIdentifierConverter identifierConverter)
+        AbpOpenIddictIdentifierConverter identifierConverter,
+        IDistributedEventBus distributedEventBus)
         : base(cache, logger, options, resolver)
     {
         IdentifierConverter = identifierConverter;
+        DistributedEventBus = distributedEventBus;
     }
 
-    public async override ValueTask UpdateAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken = default)
+    public override async ValueTask UpdateAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken = default)
     {
+        var entity = await Store.FindByIdAsync(IdentifierConverter.ToString(application.Id), cancellationToken);
+        var oldClientId = entity?.ClientId;
+
         if (!Options.CurrentValue.DisableEntityCaching)
         {
-            var entity = await Store.FindByIdAsync(IdentifierConverter.ToString(application.Id), cancellationToken);
             if (entity != null)
             {
                 await Cache.RemoveAsync(entity, cancellationToken);
@@ -36,9 +42,21 @@ public class AbpApplicationManager : OpenIddictApplicationManager<OpenIddictAppl
         }
 
         await base.UpdateAsync(application, cancellationToken);
+
+        if (oldClientId != null &&
+            application.ClientId != null &&
+            oldClientId != application.ClientId)
+        {
+            await DistributedEventBus.PublishAsync(new OpenIddictApplicationClientIdChangedEto
+            {
+                Id = application.Id,
+                OldClientId = oldClientId,
+                ClientId = application.ClientId
+            });
+        }
     }
 
-    public async override ValueTask PopulateAsync(OpenIddictApplicationDescriptor descriptor, OpenIddictApplicationModel application, CancellationToken cancellationToken = default)
+    public override async ValueTask PopulateAsync(OpenIddictApplicationDescriptor descriptor, OpenIddictApplicationModel application, CancellationToken cancellationToken = default)
     {
         await base.PopulateAsync(descriptor, application, cancellationToken);
 
@@ -60,7 +78,7 @@ public class AbpApplicationManager : OpenIddictApplicationManager<OpenIddictAppl
         }
     }
 
-    public async override ValueTask PopulateAsync(OpenIddictApplicationModel application, OpenIddictApplicationDescriptor descriptor, CancellationToken cancellationToken = default)
+    public override async ValueTask PopulateAsync(OpenIddictApplicationModel application, OpenIddictApplicationDescriptor descriptor, CancellationToken cancellationToken = default)
     {
         await base.PopulateAsync(application, descriptor, cancellationToken);
 

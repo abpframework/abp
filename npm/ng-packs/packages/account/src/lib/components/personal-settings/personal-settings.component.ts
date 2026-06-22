@@ -87,7 +87,7 @@ export class PersonalSettingsComponent
       .subscribe(profile => {
         this.manageProfileState.setProfile(profile);
         this.configState.refreshAppState();
-        this.toasterService.success('AbpAccount::PersonalSettingsSaved', 'Success', { life: 5000 });
+        this.toasterService.success('AbpAccount::PersonalSettingsSaved', '', { life: 5000 });
 
         if (isRefreshTokenExists) {
           return this.authService.refreshToken();

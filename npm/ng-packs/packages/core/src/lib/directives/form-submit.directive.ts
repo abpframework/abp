@@ -1,12 +1,11 @@
-import { 
-  ChangeDetectorRef, 
-  Directive, 
-  ElementRef, 
-  EventEmitter, 
-  Input, 
-  OnInit, 
-  Output, 
-  inject 
+import {
+  ChangeDetectorRef,
+  Directive,
+  ElementRef,
+  OnInit,
+  inject,
+  input,
+  output
 } from '@angular/core';
 import { FormGroupDirective, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { fromEvent } from 'rxjs';
@@ -27,23 +26,20 @@ export class FormSubmitDirective implements OnInit {
   private cdRef = inject(ChangeDetectorRef);
   private subscription = inject(SubscriptionService);
 
-  @Input()
-  debounce = 200;
+  readonly debounce = input(200);
 
   // TODO: Remove unused input
-  @Input()
-  notValidateOnSubmit?: string | boolean;
+  readonly notValidateOnSubmit = input<string | boolean>(undefined);
 
-  @Input()
-  markAsDirtyWhenSubmit = true;
+  readonly markAsDirtyWhenSubmit = input(true);
 
-  @Output() readonly ngSubmit = new EventEmitter();
+  readonly ngSubmit = output();
 
   executedNgSubmit = false;
 
   ngOnInit() {
     this.subscription.addOne(this.formGroupDirective.ngSubmit, () => {
-      if (this.markAsDirtyWhenSubmit) {
+      if (this.markAsDirtyWhenSubmit()) {
         this.markAsDirty();
       }
 
@@ -51,7 +47,7 @@ export class FormSubmitDirective implements OnInit {
     });
 
     const keyup$ = fromEvent<KeyboardEvent>(this.host.nativeElement as HTMLElement, 'keyup').pipe(
-      debounceTime(this.debounce),
+      debounceTime(this.debounce()),
       filter(event => !(event.target instanceof HTMLTextAreaElement)),
       filter(event => event && event.key === 'Enter'),
     );

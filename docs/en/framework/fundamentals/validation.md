@@ -121,7 +121,7 @@ namespace Acme.BookStore
 
 #### Enabling/Disabling Validation
 
-You can use the `[DisableValidation]` to disable it for methods, classs and properties.
+You can use the `[DisableValidation]` to disable it for methods, classes and properties.
 
 ````csharp
 [DisableValidation]

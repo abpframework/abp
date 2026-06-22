@@ -10,7 +10,8 @@
 ````json
 //[doc-params]
 {
-    "UI": ["Blazor", "BlazorServer"]
+    "UI": ["Blazor", "BlazorServer"],
+    "BlazorUI": ["Blazorise", "MudBlazor"]
 }
 ````
 
@@ -41,6 +42,8 @@ The next step is to create a razor component, like `MyBranding.razor`, in your a
 The content of the `MyBranding.razor` is shown below:
 
 
+{{if BlazorUI == "Blazorise"}}
+
 ````html
 @using Volo.Abp.DependencyInjection
 {{if UI == "BlazorServer"}}
@@ -58,6 +61,33 @@ The content of the `MyBranding.razor` is shown below:
 </a>
 ````
 
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+The MudBlazor variant uses the LeptonX-based MudBlazor theme by default. The component to override is the `Branding` component shipped by the active MudBlazor theme:
+
+````html
+@using Volo.Abp.DependencyInjection
+{{if UI == "BlazorServer"}}
+@using Volo.Abp.AspNetCore.Components.Server.MudBlazorLeptonXTheme.Themes.MudBlazorLeptonX
+{{end}}
+{{if UI == "Blazor"}}
+@using Volo.Abp.AspNetCore.Components.WebAssembly.MudBlazorLeptonXTheme.Themes.MudBlazorLeptonX
+{{end}}
+
+@inherits Branding
+@attribute [ExposeServices(typeof(Branding))]
+@attribute [Dependency(ReplaceServices = true)]
+<MudLink Href="/" Underline="Underline.None">
+    <MudImage Src="bookstore-logo.png" Width="250" Height="60" />
+</MudLink>
+````
+
+> If you are using the MudBlazor BasicTheme or a different MudBlazor theme, replace the namespace with the namespace of that theme's `Themes/<ThemeName>` folder.
+
+{{end}}
+
 Let's explain the code:
 
 * `@inherits Branding` line inherits the Branding component defined by the [Basic Theme](basic-theme.md) (in the {{if UI == "BlazorServer"}}`Volo.Abp.AspNetCore.Components.Server.BasicTheme.Themes.Basic`{{end}} {{if UI == "Blazor"}}`Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Themes.Basic`{{end}} namespace).
@@ -74,6 +104,8 @@ Now, you can run the application to see the result:
 ### Example: Replacing with the Code Behind File
 
 If you prefer to use code-behind file for the C# code of your component, you can use the attributes in the C# side.
+
+{{if BlazorUI == "Blazorise"}}
 
 **MyBlazor.razor**
 
@@ -112,6 +144,50 @@ namespace MyProject.Blazor.Components
     }
 }
 ````
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+**MyBlazor.razor**
+
+````html
+{{if UI == "BlazorServer"}}
+@using Volo.Abp.AspNetCore.Components.Server.MudBlazorLeptonXTheme.Themes.MudBlazorLeptonX
+{{end}}
+{{if UI == "Blazor"}}
+@using Volo.Abp.AspNetCore.Components.WebAssembly.MudBlazorLeptonXTheme.Themes.MudBlazorLeptonX
+{{end}}
+@inherits Branding
+<MudLink Href="/" Underline="Underline.None">
+    <MudImage Src="bookstore-logo.png" Width="250" Height="60" />
+</MudLink>
+````
+
+**MyBlazor.razor.cs**
+
+````csharp
+{{if UI == "BlazorServer"}}
+using Volo.Abp.AspNetCore.Components.Server.MudBlazorLeptonXTheme.Themes.MudBlazorLeptonX;
+{{end}}
+{{if UI == "Blazor"}}
+using Volo.Abp.AspNetCore.Components.WebAssembly.MudBlazorLeptonXTheme.Themes.MudBlazorLeptonX;
+{{end}}
+
+using Volo.Abp.DependencyInjection;
+
+namespace MyProject.Blazor.Components
+{
+    [ExposeServices(typeof(Branding))]
+    [Dependency(ReplaceServices = true)]
+    public partial class MyBranding
+    {
+
+    }
+}
+````
+
+{{end}}
 
 ## Theming
 

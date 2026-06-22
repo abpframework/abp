@@ -2,6 +2,7 @@ import { Injectable, Injector, OnDestroy, inject } from '@angular/core';
 import {
   EMPTY,
   BehaviorSubject,
+  defer,
   MonoTypeOperatorFunction,
   Observable,
   ReplaySubject,
@@ -134,7 +135,7 @@ export class ListService<QueryParamsType = ABP.PageQueryParams | any> implements
       tap(() => this._isLoading$.next(true)),
       tap(() => this._requestStatus.next('loading')),
       switchMap(query =>
-        streamCreatorCallback(query).pipe(
+        defer(() => streamCreatorCallback(query)).pipe(
           catchError(() => {
             this._requestStatus.next('error');
             return EMPTY;

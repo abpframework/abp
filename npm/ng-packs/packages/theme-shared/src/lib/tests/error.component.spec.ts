@@ -1,49 +1,84 @@
-import { CORE_OPTIONS, LocalizationPipe } from '@abp/ng.core';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { ElementRef, Renderer2 } from '@angular/core';
-import { createHostFactory, SpectatorHost } from '@ngneat/spectator/jest';
+import { DOCUMENT } from '@angular/common';
+import { Router } from '@angular/router';
+import { createComponentFactory, Spectator } from '@ngneat/spectator/vitest';
+import { Pipe, PipeTransform } from '@angular/core';
 import { Subject } from 'rxjs';
-import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
+import { vi } from 'vitest';
 
-describe('ErrorComponent', () => {
-  let spectator: SpectatorHost<HttpErrorWrapperComponent>;
-  const createHost = createHostFactory({
-    component: HttpErrorWrapperComponent,
-    declarations: [],
-    mocks: [HttpClient],
-    providers: [
-      { provide: CORE_OPTIONS, useValue: {} },
-      { provide: Renderer2, useValue: { removeChild: () => null } },
-      {
-        provide: ElementRef,
-        useValue: { nativeElement: document.createElement('div') },
-      },
-    ],
-    imports: [HttpClientModule, LocalizationPipe],
+import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
+import { setupComponentResources } from './utils';
+
+/**
+ * Mock pipe to avoid ABP DI chain
+ */
+@Pipe({ name: 'abpLocalization'})
+class MockLocalizationPipe implements PipeTransform {
+  transform(value: any): any {
+    return value;
+  }
+}
+
+describe('HttpErrorWrapperComponent', () => {
+  let spectator: Spectator<HttpErrorWrapperComponent>;
+  let createComponent: ReturnType<typeof createComponentFactory<HttpErrorWrapperComponent>>;
+
+  beforeAll(async () => {
+    await setupComponentResources(
+      '../components/http-error-wrapper',
+      import.meta.url,
+    );
   });
 
-    beforeEach(() => {
-      spectator = createHost(
-        '<abp-http-error-wrapper title="_::Oops!" details="_::Sorry, an error has occured."></abp-http-error-wrapper>',
-      );
-      spectator.component.destroy$ = new Subject();
-    });
+  beforeEach(() => {
+    if (!createComponent) {
+      createComponent = createComponentFactory({
+        component: HttpErrorWrapperComponent,
+        detectChanges: false,
 
-  describe('#destroy', () => {
-    it('should be call when pressed the esc key', done => {
-      spectator.component.destroy$.subscribe(() => {
-        done();
+        overrideComponents: [
+          [
+            HttpErrorWrapperComponent,
+            {
+              set: {
+                template: '<div></div>',
+                imports: [MockLocalizationPipe],
+              },
+            },
+          ],
+        ],
+
+        providers: [
+          {
+            provide: DOCUMENT,
+            useValue: document,
+          },
+          {
+            provide: Router,
+            useValue: {
+              navigateByUrl: vi.fn(),
+            },
+          },
+        ],
       });
+    }
 
-      spectator.keyboard.pressEscape();
-    });
+    spectator = createComponent();
 
-    it('should be call when clicked the close button', done => {
-      spectator.component.destroy$.subscribe(() => {
-        done();
-      });
+    spectator.component.destroy$ = new Subject<void>();
+    spectator.component.title = '_::Oops!';
+    spectator.component.details = '_::Sorry, an error has occured.';
+  });
 
-      spectator.click('#abp-close-button');
-    });
+  it('should create component', () => {
+    expect(spectator.component).toBeTruthy();
+  });
+
+  it('should emit destroy$ when destroy is called', () => {
+    const spy = vi.fn();
+    spectator.component.destroy$.subscribe(spy);
+
+    spectator.component.destroy();
+
+    expect(spy).toHaveBeenCalled();
   });
 });

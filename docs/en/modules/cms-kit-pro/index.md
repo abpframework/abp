@@ -54,6 +54,11 @@ If you want to add the CMS kit to your existing solution, you can use the ABP CL
 ```bash
 abp add-module Volo.CmsKit.Pro
 ```
+
+> **Important**: CMS Kit Pro requires both the Pro packages **and** the base CMS Kit packages. The `add-module` command handles this automatically, but if you're adding packages manually, you need both:
+> - `Volo.CmsKit.*` packages (base CMS Kit)
+> - `Volo.CmsKit.Pro.*` packages (Pro features)
+
 Open the `GlobalFeatureConfigurator` class in the `Domain.Shared` project and place the following code to the `Configure` method to enable all open-source and commercial features in the CMS Kit module.
 
 ```csharp

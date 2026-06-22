@@ -73,6 +73,8 @@ You can export audit logs to Excel by clicking the "Export to Excel" button in t
 
 Entity changes tab is used to list, view and filter entity change logs. 
 
+> **Blazor Server note:** Entity change history can be missing or incomplete in some `Blazor Server` scenarios due to known SignalR/event-pipeline limitations. See [Audit Logging](../framework/infrastructure/audit-logging.md) and [#11682](https://github.com/abpframework/abp/issues/11682).
+
 ![audit-logging-module-entity-changes-list-page](../images/audit-logging-module-entity-changes-list-page.png)
 
 
@@ -143,7 +145,7 @@ Configure<ExpiredAuditLogDeleterOptions>(options =>
     // The Hangfire Cron expression is different from the Quartz Cron expression, Please refer to the following links:
     // https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontriggers.html#cron-expressions
     // https://docs.hangfire.io/en/latest/background-methods/performing-recurrent-tasks.html
-    options.ExcelFileCleanupOptions.CronExpression = "0 23 * * *"; // Quartz Cron expression is "0 23 * * * ?"
+    options.ExcelFileCleanupOptions.CronExpression = "0 23 * * *"; // Quartz Cron expression is "0 0 23 * * ?"
 });
 ```
 
@@ -164,7 +166,7 @@ Configure<AuditLogExcelFileOptions>(options =>
     // The Hangfire Cron expression is different from the Quartz Cron expression, Please refer to the following links:
     // https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontriggers.html#cron-expressions
     // https://docs.hangfire.io/en/latest/background-methods/performing-recurrent-tasks.html
-    options.ExcelFileCleanupOptions.CronExpression = "0 23 * * *"; // Quartz Cron expression is "0 23 * * * ?"
+    options.ExcelFileCleanupOptions.CronExpression = "0 23 * * *"; // Quartz Cron expression is "0 0 23 * * ?"
 });
 ```
 

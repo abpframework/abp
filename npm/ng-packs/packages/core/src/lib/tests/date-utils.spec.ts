@@ -1,6 +1,6 @@
 import { ConfigStateService } from '../services';
 import { getShortDateFormat, getShortDateShortTimeFormat, getShortTimeFormat } from '../utils';
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/vitest';
 import { CORE_OPTIONS } from '../tokens/options.token';
 import { HttpClient } from '@angular/common/http';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
@@ -41,40 +41,40 @@ describe('Date Utils', () => {
       {
         provide: HttpClient,
         useValue: {
-          get: jest.fn(),
-          post: jest.fn(),
-          put: jest.fn(),
-          delete: jest.fn(),
+          get: vi.fn(),
+          post: vi.fn(),
+          put: vi.fn(),
+          delete: vi.fn(),
         },
       },
       {
         provide: AbpApplicationConfigurationService,
         useValue: {
-          get: jest.fn(),
+          get: vi.fn(),
         },
       },
       {
         provide: RestService,
         useValue: {
-          request: jest.fn(),
+          request: vi.fn(),
         },
       },
       {
         provide: EnvironmentService,
         useValue: {
-          getEnvironment: jest.fn(),
+          getEnvironment: vi.fn(),
         },
       },
       {
         provide: HttpErrorReporterService,
         useValue: {
-          reportError: jest.fn(),
+          reportError: vi.fn(),
         },
       },
       {
         provide: ExternalHttpClient,
         useValue: {
-          request: jest.fn(),
+          request: vi.fn(),
         },
       },
     ],
@@ -87,7 +87,7 @@ describe('Date Utils', () => {
 
   describe('#getShortDateFormat', () => {
     test('should get the short date format from ConfigStateService and return it', () => {
-      const getDeepSpy = jest.spyOn(config, 'getDeep');
+      const getDeepSpy = vi.spyOn(config, 'getDeep');
       getDeepSpy.mockReturnValueOnce(dateTimeFormat);
 
       expect(getShortDateFormat(config)).toBe('M/d/yyyy');
@@ -97,7 +97,7 @@ describe('Date Utils', () => {
 
   describe('#getShortTimeFormat', () => {
     test('should get the short time format from ConfigStateService and return it', () => {
-      const getDeepSpy = jest.spyOn(config, 'getDeep');
+      const getDeepSpy = vi.spyOn(config, 'getDeep');
       getDeepSpy.mockReturnValueOnce(dateTimeFormat);
 
       expect(getShortTimeFormat(config)).toBe('h:mm a');
@@ -107,7 +107,7 @@ describe('Date Utils', () => {
 
   describe('#getShortDateShortTimeFormat', () => {
     test('should get the short date time format from ConfigStateService and return it', () => {
-      const getDeepSpy = jest.spyOn(config, 'getDeep');
+      const getDeepSpy = vi.spyOn(config, 'getDeep');
       getDeepSpy.mockReturnValueOnce(dateTimeFormat);
 
       expect(getShortDateShortTimeFormat(config)).toBe('M/d/yyyy h:mm a');

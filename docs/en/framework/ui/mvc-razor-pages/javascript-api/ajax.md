@@ -32,7 +32,7 @@ abp.ajax({
 });
 ````
 
-This command logs the list of users to the console, if you've **logged in** to the application and have [permission](../../../fundamentals/authorization.md) for the user management page of the [Identity Module](../../../../modules/identity.md).
+This command logs the list of users to the console, if you've **logged in** to the application and have [permission](../../../fundamentals/authorization/index.md) for the user management page of the [Identity Module](../../../../modules/identity.md).
 
 ## Error Handling
 

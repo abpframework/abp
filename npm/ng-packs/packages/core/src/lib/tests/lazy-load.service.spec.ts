@@ -1,9 +1,7 @@
-import { of, throwError } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 import { LazyLoadService } from '../services/lazy-load.service';
 import { ScriptLoadingStrategy } from '../strategies/loading.strategy';
 import { ResourceWaitService } from '../services/resource-wait.service';
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/vitest';
 
 describe('LazyLoadService', () => {
   let spectator: SpectatorService<LazyLoadService>;
@@ -16,8 +14,8 @@ describe('LazyLoadService', () => {
       {
         provide: ResourceWaitService,
         useValue: {
-          wait: jest.fn(),
-          addResource: jest.fn(),
+          wait: vi.fn(),
+          addResource: vi.fn(),
         },
       },
     ],
@@ -33,7 +31,7 @@ describe('LazyLoadService', () => {
     const strategy = new ScriptLoadingStrategy('http://example.com/');
 
     afterEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     it('should create service successfully', () => {

@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using Volo.Abp.Http.ProxyScripting.Configuration;
+using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Http.Modeling;
 
@@ -29,6 +30,14 @@ public class PropertyApiDescriptionModel
 
     public string? Regex { get; set; }
 
+    public bool IsNullable { get; set; }
+
+    public string? Summary { get; set; }
+
+    public string? Description { get; set; }
+
+    public string? DisplayName { get; set; }
+
     public static PropertyApiDescriptionModel Create(PropertyInfo propertyInfo)
     {
         var customAttributes = propertyInfo.GetCustomAttributes(true);
@@ -39,6 +48,7 @@ public class PropertyApiDescriptionModel
             Type = ApiTypeNameHelper.GetTypeName(propertyInfo.PropertyType),
             TypeSimple = ApiTypeNameHelper.GetSimpleTypeName(propertyInfo.PropertyType),
             IsRequired = customAttributes.OfType<RequiredAttribute>().Any() || propertyInfo.GetCustomAttributesData().Any(attr => attr.AttributeType.Name == "RequiredMemberAttribute"),
+            IsNullable = ReflectionHelper.IsNullable(propertyInfo),
             Minimum = customAttributes.OfType<RangeAttribute>().Select(x => x.Minimum).FirstOrDefault()?.ToString(),
             Maximum = customAttributes.OfType<RangeAttribute>().Select(x => x.Maximum).FirstOrDefault()?.ToString(),
             MinLength = customAttributes.OfType<MinLengthAttribute>().FirstOrDefault()?.Length ?? customAttributes.OfType<StringLengthAttribute>().FirstOrDefault()?.MinimumLength,

@@ -224,6 +224,8 @@ public class MyProfile : Profile
 }
 ````
 
+> AutoMapper 14.x contains a [known vulnerability (GHSA-rvv3-g6hj-g44x)](https://github.com/advisories/GHSA-rvv3-g6hj-g44x). ABP Framework has applied a code-level mitigation (`MaxDepth = 64`) to address this. If you hold a commercial AutoMapper license, you can use [Volo.Abp.LuckyPenny.AutoMapper](luckypenny-automapper.md) to upgrade to the officially patched version. Alternatively, you can migrate to [Mapperly](../../../release-info/migration-guides/AutoMapper-To-Mapperly.md).
+
 ## Mapperly Integration
 
 [Mapperly](https://github.com/riok/mapperly) is a .NET source generator for generating object mappings. [Volo.Abp.Mapperly](https://www.nuget.org/packages/Volo.Abp.Mapperly) package defines the Mapperly integration for the `IObjectMapper`.
@@ -312,6 +314,34 @@ It is suggested to use the `MapExtraPropertiesAttribute` attribute if both class
 ### Property Setter Method
 
 Mapperly requires that properties of both source and destination objects have `setter` methods. Otherwise, the property will be ignored. You can use `protected set` or `private set` to control the visibility of the `setter` method, but each property must have a `setter` method.
+
+### Nullable Reference Types
+
+Mapperly respects C# nullable reference types (NRT). If your project enables NRT via `<Nullable>enable</Nullable>` in the project file, Mapperly will treat reference type properties as **non-nullable by default**.
+
+That means:
+
+- If a property can be `null`, declare it as nullable so Mapperly (and the compiler) understands it can be missing.
+- If you declare a property as non-nullable, Mapperly assumes it is not `null`.
+
+Otherwise, the generated mapping code may throw runtime exceptions (e.g., `NullReferenceException`) if a value is actually `null` during the mapping process.
+
+Example:
+
+````xml
+<!-- .csproj -->
+<PropertyGroup>
+    <Nullable>enable</Nullable>
+</PropertyGroup>
+````
+
+````csharp
+public class PersonDto
+{
+    public Country? Country { get; set; } // Nullable (can be null)
+    public City City { get; set; } = default!; // Non-nullable (cannot be null)
+}
+````
 
 ### Deep Cloning
 
@@ -504,6 +534,7 @@ Each solution has its own advantages:
 - **Solution 3** maintains separation of concerns and reusability but requires manual mapping in the `AfterMap` method.
 
 Choose the approach that best aligns with your application's architecture and maintainability requirements.
+
 
 ### More Mapperly Features
 

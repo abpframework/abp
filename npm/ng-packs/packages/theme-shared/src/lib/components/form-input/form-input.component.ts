@@ -1,26 +1,25 @@
-import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
+import { Component, forwardRef, input, output } from '@angular/core';
 import { FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { NgClass, NgStyle } from '@angular/common';
 import { AbstractNgModelComponent, LocalizationPipe } from '@abp/ng.core';
 
 @Component({
   selector: 'abp-form-input',
   template: `
     <div class="mb-3">
-      @if (label) {
-        <label [ngClass]="labelClass" [for]="inputId">
-          {{ label | abpLocalization }}
+      @if (label()) {
+        <label [class]="labelClass()" [for]="inputId()">
+          {{ label() | abpLocalization }}
         </label>
       }
       <input
         type="text"
-        [id]="inputId"
-        [placeholder]="inputPlaceholder"
-        [readonly]="inputReadonly"
-        [ngClass]="inputClass"
-        [ngStyle]="inputStyle"
-        (blur)="formBlur.next()"
-        (focus)="formFocus.next()"
+        [id]="inputId()"
+        [placeholder]="inputPlaceholder()"
+        [readonly]="inputReadonly()"
+        [class]="inputClass()"
+        [style]="inputStyle()"
+        (blur)="formBlur.emit()"
+        (focus)="formFocus.emit()"
         [(ngModel)]="value"
       />
     </div>
@@ -32,21 +31,16 @@ import { AbstractNgModelComponent, LocalizationPipe } from '@abp/ng.core';
       multi: true,
     },
   ],
-  imports: [NgClass, NgStyle, LocalizationPipe, FormsModule],
+  imports: [LocalizationPipe, FormsModule],
 })
 export class FormInputComponent extends AbstractNgModelComponent {
-  @Input() inputId!: string;
-  @Input() inputReadonly = false;
-  @Input() label = '';
-  @Input() labelClass = 'form-label';
-  @Input() inputPlaceholder = '';
-  @Input() inputStyle:
-    | {
-        [klass: string]: any;
-      }
-    | null
-    | undefined;
-  @Input() inputClass = 'form-control';
-  @Output() formBlur = new EventEmitter<void>();
-  @Output() formFocus = new EventEmitter<void>();
+  readonly inputId = input<string>();
+  readonly inputReadonly = input(false);
+  readonly label = input('');
+  readonly labelClass = input('form-label');
+  readonly inputPlaceholder = input('');
+  readonly inputStyle = input<{ [klass: string]: any } | null | undefined>(undefined);
+  readonly inputClass = input('form-control');
+  readonly formBlur = output<void>();
+  readonly formFocus = output<void>();
 }
