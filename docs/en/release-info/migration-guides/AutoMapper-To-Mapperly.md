@@ -95,8 +95,8 @@ public partial class OrganizationUnitRoleToOrganizationUnitRoleDtoMapper : TwoWa
     public override partial OrganizationUnitRoleDto Map(OrganizationUnitRole source);
     public override partial void Map(OrganizationUnitRole source, OrganizationUnitRoleDto destination);
 
-    public override partial OrganizationUnitRole ReverseMap(OrganizationUnitRoleDto destination);
-    public override partial void ReverseMap(OrganizationUnitRoleDto destination, OrganizationUnitRole source);
+    public override partial OrganizationUnitRole ReverseMap(OrganizationUnitRoleDto source);
+    public override partial void ReverseMap(OrganizationUnitRoleDto source, OrganizationUnitRole destination);
 }
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
@@ -306,8 +306,8 @@ public partial class OrganizationUnitRoleToOrganizationUnitRoleDtoMapper : TwoWa
     public override partial OrganizationUnitRoleDto Map(OrganizationUnitRole source);
     public override partial void Map(OrganizationUnitRole source, OrganizationUnitRoleDto destination);
 
-    public override partial OrganizationUnitRole ReverseMap(OrganizationUnitRoleDto destination);
-    public override partial void ReverseMap(OrganizationUnitRoleDto destination, OrganizationUnitRole source);
+    public override partial OrganizationUnitRole ReverseMap(OrganizationUnitRoleDto source);
+    public override partial void ReverseMap(OrganizationUnitRoleDto source, OrganizationUnitRole destination);
 }
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
