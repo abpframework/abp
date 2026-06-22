@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.AspNetCore.Mvc.AntiForgery;
 
@@ -35,6 +37,23 @@ public class AspNetCoreAbpAntiForgeryManager : IAbpAntiForgeryManager, ITransien
 
     public virtual string GenerateToken()
     {
-        return _antiforgery.GetAndStoreTokens(_httpContextAccessor.HttpContext!).RequestToken!;
+        var httpContext = _httpContextAccessor.HttpContext!;
+
+        if (!Options.NormalizeUserIdClaimIssuer)
+        {
+            return _antiforgery.GetAndStoreTokens(httpContext).RequestToken!;
+        }
+
+        var normalizer = httpContext.RequestServices.GetRequiredService<IAbpAntiForgeryClaimsPrincipalNormalizer>();
+        var originalPrincipal = httpContext.User;
+        httpContext.User = AsyncHelper.RunSync(() => normalizer.NormalizeAsync(originalPrincipal));
+        try
+        {
+            return _antiforgery.GetAndStoreTokens(httpContext).RequestToken!;
+        }
+        finally
+        {
+            httpContext.User = originalPrincipal;
+        }
     }
 }

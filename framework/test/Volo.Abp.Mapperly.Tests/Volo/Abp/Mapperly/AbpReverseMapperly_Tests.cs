@@ -31,18 +31,18 @@ public partial class MyReverseClassMapper : TwoWayMapperBase<MyReverseClass, MyR
 
     public override partial void Map(MyReverseClass source, MyReverseClassDto destination);
 
-    public override partial MyReverseClass ReverseMap(MyReverseClassDto destination);
+    public override partial MyReverseClass ReverseMap(MyReverseClassDto source);
 
-    public override partial void ReverseMap(MyReverseClassDto destination, MyReverseClass source);
+    public override partial void ReverseMap(MyReverseClassDto source, MyReverseClass destination);
 
-    public override void BeforeReverseMap(MyReverseClassDto destination)
+    public override void BeforeReverseMap(MyReverseClassDto source)
     {
-        destination.Name = "BeforeReverseMap " + destination.Name;
+        source.Name = "BeforeReverseMap " + source.Name;
     }
 
-    public override void AfterReverseMap(MyReverseClassDto destination, MyReverseClass source)
+    public override void AfterReverseMap(MyReverseClassDto source, MyReverseClass destination)
     {
-        source.Name = destination.Name + " AfterReverseMap";
+        destination.Name = source.Name + " AfterReverseMap";
     }
 }
 

@@ -1,12 +1,33 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp.Content;
 
 namespace Volo.Abp.Http.DynamicProxying;
 
 public interface IRegularTestController
 {
     Task<int> IncrementValueAsync(int value);
+
+    Task<string> GetPlainStringAsync();
+
+    Task<string> GetProducesJsonStringAsync();
+
+    Task<string> GetProducesTextStringAsync();
+
+    Task<string> GetNullStringAsync();
+
+    Task<string> GetProducesJsonNullStringAsync();
+
+    Task<string> GetEmptyStringAsync();
+
+    Task<string> GetEscapedStringAsync();
+
+    Task<IRemoteStreamContent> DownloadIconAsync();
+
+    Task<object> GetReferenceTypeObjectAsync();
+
+    Task<byte[]> GetByteArrayAsync();
 
     Task GetException1Async();
 

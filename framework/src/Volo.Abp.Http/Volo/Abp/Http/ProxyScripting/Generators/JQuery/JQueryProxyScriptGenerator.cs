@@ -135,15 +135,62 @@ public class JQueryProxyScriptGenerator : IProxyScriptGenerator, ITransientDepen
 
         AddAjaxCallParameters(script, action);
 
-        var ajaxParamsIsFromForm = action.Parameters.Any(x => x.BindingSourceId == ParameterBindingSources.Form);
-        var dataType = action.ReturnValue.Type == ReturnValueApiDescriptionModel.Create(typeof(string)).Type
-            ? "{ dataType: 'text' }, "
-            : string.Empty;
+        var hasFormFile = action.Parameters.Any(x => x.BindingSourceId == ParameterBindingSources.FormFile);
+        var ajaxParamsIsFromForm = !hasFormFile && action.Parameters.Any(x => x.BindingSourceId == ParameterBindingSources.Form);
+        var dataType = GetJQueryDataTypeAndAcceptOverride(action);
         script.AppendLine(ajaxParamsIsFromForm
             ? "      }, $.extend(true, {}, " + dataType + "{ contentType: 'application/x-www-form-urlencoded; charset=UTF-8' }, ajaxParams)));"
             : "      }, " + dataType + "ajaxParams));");
 
         script.AppendLine("    };");
+    }
+
+    private static string GetJQueryDataTypeAndAcceptOverride(ActionApiDescriptionModel action)
+    {
+        if (action.ReturnValue.IsRemoteStream)
+        {
+            return string.Empty;
+        }
+
+        var contentTypes = action.ReturnValue.ContentTypes;
+        var isStringReturn = action.ReturnValue.Type == ReturnValueApiDescriptionModel.Create(typeof(string)).Type;
+
+        if (contentTypes is { Count: > 0 })
+        {
+            var normalized = contentTypes.Select(NormalizeMediaType).ToList();
+
+            var firstJsonShaped = normalized.FirstOrDefault(IsJsonMediaType);
+            if (firstJsonShaped != null)
+            {
+                return "{ dataType: 'json', headers: { Accept: '" + firstJsonShaped + "' } }, ";
+            }
+
+            if (normalized.All(ct => ct.StartsWith("text/", StringComparison.OrdinalIgnoreCase)))
+            {
+                return "{ dataType: 'text', headers: { Accept: '" + normalized[0] + "' } }, ";
+            }
+
+            return "{ headers: { Accept: '" + normalized[0] + "' } }, ";
+        }
+
+        return isStringReturn ? "{ dataType: 'text' }, " : string.Empty;
+    }
+
+    private static bool IsJsonMediaType(string normalizedMediaType)
+    {
+        return normalizedMediaType.Equals("application/json", StringComparison.OrdinalIgnoreCase) ||
+               normalizedMediaType.Equals("text/json", StringComparison.OrdinalIgnoreCase) ||
+               normalizedMediaType.EndsWith("+json", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string NormalizeMediaType(string mediaType)
+    {
+        if (string.IsNullOrWhiteSpace(mediaType))
+        {
+            return string.Empty;
+        }
+        var semi = mediaType.IndexOf(';');
+        return (semi < 0 ? mediaType : mediaType.Substring(0, semi)).Trim().ToLowerInvariant();
     }
 
     private static string FindBestApiVersion(ActionApiDescriptionModel action)
@@ -182,6 +229,20 @@ public class JQueryProxyScriptGenerator : IProxyScriptGenerator, ITransientDepen
         {
             script.AppendLine(",");
             script.Append("        headers: " + headers);
+        }
+
+        var firstFileParam = action.Parameters.FirstOrDefault(p => p.BindingSourceId == ParameterBindingSources.FormFile);
+        if (firstFileParam != null)
+        {
+            var fileVar = ProxyScriptingJsFuncHelper.NormalizeJsVariableName(firstFileParam.NameOnMethod.ToCamelCase());
+            script.AppendLine(",");
+            script.Append("        data: " + fileVar + ",");
+            script.AppendLine();
+            script.Append("        processData: false,");
+            script.AppendLine();
+            script.Append("        contentType: false");
+            script.AppendLine();
+            return;
         }
 
         var body = ProxyScriptingHelper.GenerateBody(action);
