@@ -169,7 +169,15 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         if (!string.IsNullOrWhiteSpace(templateSource) && !IsNetworkSource(templateSource))
         {
             Logger.LogInformation("Using local " + type + ": " + name + ", version: " + version);
-            return new TemplateFile(File.ReadAllBytes(Path.Combine(templateSource, name + "-" + version + ".zip")),
+
+            // A local template source can be a direct ".zip" file path or a folder that contains the "{name}-{version}.zip" file.
+            var localTemplateFilePath = templateSource.EndsWith(".zip", StringComparison.OrdinalIgnoreCase)
+                ? templateSource
+                : Path.Combine(templateSource, name.Replace("/", ".").EnsureEndsWith('-') + version + ".zip");
+
+            Logger.LogInformation("Using local template file: " + localTemplateFilePath);
+
+            return new TemplateFile(File.ReadAllBytes(localTemplateFilePath),
                 version, latestVersion, nugetVersion);
         }
 
@@ -186,16 +194,6 @@ public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
         {
             Logger.LogInformation("Using cached " + type + ": " + name + ", version: " + version);
             return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion, nugetVersion);
-        }
-
-        if (!skipCache && !templateSource.IsNullOrWhiteSpace() && type == SourceCodeTypes.Template)
-        {
-            var templateFilePath = templateSource.EndsWith(".zip")
-                ? templateSource
-                : Path.Combine(templateSource, name.Replace("/", ".").EnsureEndsWith('-') + version + ".zip");
-            
-            Logger.LogInformation("Using cached template: " + name + ", version: " + version + " from template source: " + templateFilePath);            
-            return new TemplateFile(File.ReadAllBytes(templateFilePath), version, latestVersion, nugetVersion);
         }
 
         Logger.LogInformation("Downloading " + type + ": " + name + ", version: " + version);
