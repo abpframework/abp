@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
 
@@ -13,20 +12,30 @@ public class AbpAntiForgeryClaimsPrincipalNormalizer : IAbpAntiForgeryClaimsPrin
 
     protected virtual string NormalizedIssuer => UserIdClaimIssuer;
 
-    public virtual Task<ClaimsPrincipal> NormalizeAsync(ClaimsPrincipal principal)
+    public virtual ClaimsPrincipal Normalize(ClaimsPrincipal principal)
     {
         var normalized = new ClaimsPrincipal();
 
         foreach (var identity in principal.Identities)
         {
-            normalized.AddIdentity(new ClaimsIdentity(
-                identity.Claims.Select(NormalizeClaim),
-                identity.AuthenticationType,
-                identity.NameClaimType,
-                identity.RoleClaimType));
+            normalized.AddIdentity(NormalizeIdentity(identity));
         }
 
-        return Task.FromResult(normalized);
+        return normalized;
+    }
+
+    protected virtual ClaimsIdentity NormalizeIdentity(ClaimsIdentity identity)
+    {
+        return new ClaimsIdentity(
+            identity.Claims.Select(NormalizeClaim),
+            identity.AuthenticationType,
+            identity.NameClaimType,
+            identity.RoleClaimType)
+        {
+            Actor = identity.Actor,
+            BootstrapContext = identity.BootstrapContext,
+            Label = identity.Label
+        };
     }
 
     protected virtual Claim NormalizeClaim(Claim claim)

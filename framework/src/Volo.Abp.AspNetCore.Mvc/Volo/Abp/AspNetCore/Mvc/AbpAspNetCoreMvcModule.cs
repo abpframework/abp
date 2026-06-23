@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -216,6 +217,27 @@ public class AbpAspNetCoreMvcModule : AbpModule
         });
 
         ConfigureRouteBasedCulture(context);
+        DecorateAntiforgery(context);
+    }
+
+    protected virtual void DecorateAntiforgery(ServiceConfigurationContext context)
+    {
+        // Wrap the registered IAntiforgery (DefaultAntiforgery from AddAntiforgery by default) with
+        // AbpAntiforgery so every antiforgery entry point goes through the claim normalization.
+        // Only an implementation-type registration is wrapped; a custom factory/instance registration of
+        // IAntiforgery is left as-is.
+        var descriptor = context.Services.LastOrDefault(d => d.ServiceType == typeof(IAntiforgery));
+        if (descriptor?.ImplementationType == null)
+        {
+            return;
+        }
+
+        context.Services.Replace(ServiceDescriptor.Describe(
+            typeof(IAntiforgery),
+            sp => new AbpAntiforgery(
+                (IAntiforgery)ActivatorUtilities.CreateInstance(sp, descriptor.ImplementationType),
+                sp.GetRequiredService<IOptions<AbpAntiForgeryOptions>>()),
+            descriptor.Lifetime));
     }
 
     protected virtual void ConfigureRouteBasedCulture(ServiceConfigurationContext context)
@@ -239,10 +261,6 @@ public class AbpAspNetCoreMvcModule : AbpModule
                     });
                 }
             });
-
-        context.Services
-            .AddOptions<RazorPagesOptions>()
-            .PostConfigure(AbpRazorPagesAntiforgeryConfiguration.Configure);
 
         context.Services
             .AddOptions<RazorPagesOptions>()
