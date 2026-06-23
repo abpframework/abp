@@ -69,6 +69,7 @@ public class TemplateProjectBuilder : IProjectBuilder, ITransientDependency
             args.Version,
             args.TemplateSource,
             args.ExtraProperties.ContainsKey(NewCommand.Options.Preview.Long),
+            skipCache: args.SkipCache,
             trustUserVersion: args.TrustUserVersion
         );
 
