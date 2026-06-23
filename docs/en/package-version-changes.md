@@ -16,6 +16,10 @@
 | Blazorise.Components | 2.0.4 | 2.1.3 | #25494 |
 | Blazorise.DataGrid | 2.0.4 | 2.1.3 | #25494 |
 | Blazorise.Snackbar | 2.0.4 | 2.1.3 | #25494 |
+| Blazorise | 2.1.3 | 2.2.1 | #25680 |
+| Blazorise.Components | 2.1.3 | 2.2.1 | #25680 |
+| Blazorise.DataGrid | 2.1.3 | 2.2.1 | #25680 |
+| Blazorise.Snackbar | 2.1.3 | 2.2.1 | #25680 |
 
 ## 10.4.1
 
