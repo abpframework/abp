@@ -1,15 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging.Abstractions;
 using Shouldly;
 using Volo.Abp.Security.Claims;
 using Xunit;
@@ -25,7 +19,7 @@ public class AbpAntiForgeryClaimsPrincipalNormalizer_Tests
     private const string AntiForgeryCookieName = "AF";
 
     [Fact]
-    public async Task Normalize_should_set_a_constant_issuer_on_user_identifier_claims_only()
+    public void Normalize_should_set_a_constant_issuer_on_user_identifier_claims_only()
     {
         var usernameClaim = new Claim("preferred_username", "admin", ClaimValueTypes.String, CookieIssuer);
         usernameClaim.Properties["test-property"] = "test-value";
@@ -39,7 +33,7 @@ public class AbpAntiForgeryClaimsPrincipalNormalizer_Tests
             },
             "Identity.Application"));
 
-        var normalized = await new AbpAntiForgeryClaimsPrincipalNormalizer().NormalizeAsync(principal);
+        var normalized = new AbpAntiForgeryClaimsPrincipalNormalizer().Normalize(principal);
 
         normalized.FindFirst("sub")!.Issuer.ShouldBe(AbpAntiForgeryClaimsPrincipalNormalizer.UserIdClaimIssuer);
         normalized.FindFirst(ClaimTypes.NameIdentifier)!.Issuer.ShouldBe(AbpAntiForgeryClaimsPrincipalNormalizer.UserIdClaimIssuer);
@@ -58,15 +52,54 @@ public class AbpAntiForgeryClaimsPrincipalNormalizer_Tests
     }
 
     [Fact]
-    public async Task Token_issued_under_one_scheme_should_validate_under_another_when_normalization_is_enabled()
+    public void Normalize_should_preserve_identity_metadata()
     {
-        var (antiforgery, serviceProvider) = CreateAntiforgery();
+        var actor = new ClaimsIdentity(new[] { new Claim(AbpClaimTypes.UserId, "actor-id") }, "Actor");
+        var principal = new ClaimsPrincipal(new ClaimsIdentity(
+            new[] { new Claim("sub", UserId, ClaimValueTypes.String, BearerIssuer) },
+            "Identity.Application")
+        {
+            Actor = actor,
+            BootstrapContext = "raw-token",
+            Label = "my-label"
+        });
+
+        var normalized = new AbpAntiForgeryClaimsPrincipalNormalizer().Normalize(principal);
+        var normalizedIdentity = (ClaimsIdentity)normalized.Identity!;
+
+        // identity metadata that the antiforgery claim uid does not use is still preserved on the copy
+        normalizedIdentity.Actor.ShouldBeSameAs(actor);
+        normalizedIdentity.BootstrapContext.ShouldBe("raw-token");
+        normalizedIdentity.Label.ShouldBe("my-label");
+        // and the user id claim issuer was still normalized
+        normalized.FindFirst("sub")!.Issuer.ShouldBe(AbpAntiForgeryClaimsPrincipalNormalizer.UserIdClaimIssuer);
+    }
+
+    [Fact]
+    public async Task Token_should_validate_for_the_same_cookie_principal_through_the_decorator()
+    {
+        // The common server-rendered case: a token generated and validated for the same cookie principal.
+        // Guards that wrapping IAntiforgery does not break the basic flow every page POST relies on.
+        var (antiforgery, serviceProvider) = CreateDecoratedAntiforgery(normalize: true);
 
         var cookiePrincipal = CreatePrincipal("Identity.Application", CookieIssuer);
-        var (cookieToken, requestToken) = GenerateToken(antiforgery, serviceProvider, cookiePrincipal, normalize: true);
+        var (cookieToken, requestToken) = GenerateToken(antiforgery, serviceProvider, cookiePrincipal);
+
+        var isValid = await ValidateAsync(antiforgery, serviceProvider, cookiePrincipal, cookieToken, requestToken);
+
+        isValid.ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task Token_issued_under_one_scheme_should_validate_under_another_when_normalization_is_enabled()
+    {
+        var (antiforgery, serviceProvider) = CreateDecoratedAntiforgery(normalize: true);
+
+        var cookiePrincipal = CreatePrincipal("Identity.Application", CookieIssuer);
+        var (cookieToken, requestToken) = GenerateToken(antiforgery, serviceProvider, cookiePrincipal);
 
         var bearerPrincipal = CreatePrincipal("AuthenticationTypes.Federation", BearerIssuer);
-        var isValid = await ValidateAsync(antiforgery, bearerPrincipal, cookieToken, requestToken, normalize: true);
+        var isValid = await ValidateAsync(antiforgery, serviceProvider, bearerPrincipal, cookieToken, requestToken);
 
         isValid.ShouldBeTrue();
     }
@@ -74,15 +107,31 @@ public class AbpAntiForgeryClaimsPrincipalNormalizer_Tests
     [Fact]
     public async Task Token_issued_under_one_scheme_should_fail_under_another_when_normalization_is_disabled()
     {
-        var (antiforgery, serviceProvider) = CreateAntiforgery();
+        var (antiforgery, serviceProvider) = CreateDecoratedAntiforgery(normalize: false);
 
         var cookiePrincipal = CreatePrincipal("Identity.Application", CookieIssuer);
-        var (cookieToken, requestToken) = GenerateToken(antiforgery, serviceProvider, cookiePrincipal, normalize: false);
+        var (cookieToken, requestToken) = GenerateToken(antiforgery, serviceProvider, cookiePrincipal);
 
         var bearerPrincipal = CreatePrincipal("AuthenticationTypes.Federation", BearerIssuer);
-        var isValid = await ValidateAsync(antiforgery, bearerPrincipal, cookieToken, requestToken, normalize: false);
+        var isValid = await ValidateAsync(antiforgery, serviceProvider, bearerPrincipal, cookieToken, requestToken);
 
         isValid.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task Token_should_validate_when_the_cookie_principal_user_id_issuer_is_not_local_authority()
+    {
+        // Tiered/OIDC templates back the cookie with an OIDC principal whose user id issuer is the token
+        // authority. Because the decorator normalizes both generation and validation (Razor Pages validate
+        // through the same decorated IAntiforgery), the per-user identifier still matches.
+        var (antiforgery, serviceProvider) = CreateDecoratedAntiforgery(normalize: true);
+
+        var oidcCookiePrincipal = CreatePrincipal("Identity.Application", BearerIssuer);
+        var (cookieToken, requestToken) = GenerateToken(antiforgery, serviceProvider, oidcCookiePrincipal);
+
+        var isValid = await ValidateAsync(antiforgery, serviceProvider, oidcCookiePrincipal, cookieToken, requestToken);
+
+        isValid.ShouldBeTrue();
     }
 
     [Fact]
@@ -90,88 +139,51 @@ public class AbpAntiForgeryClaimsPrincipalNormalizer_Tests
     {
         // The extractor picks "sub" before NameIdentifier and a principal can carry both, so the
         // normalization must cover the claim actually picked.
-        var (antiforgery, serviceProvider) = CreateAntiforgery();
+        var (antiforgery, serviceProvider) = CreateDecoratedAntiforgery(normalize: true);
 
         var cookiePrincipal = CreatePrincipalWithSubAndNameIdentifier("Identity.Application", CookieIssuer);
-        var (cookieToken, requestToken) = GenerateToken(antiforgery, serviceProvider, cookiePrincipal, normalize: true);
+        var (cookieToken, requestToken) = GenerateToken(antiforgery, serviceProvider, cookiePrincipal);
 
         var bearerPrincipal = CreatePrincipalWithSubAndNameIdentifier("AuthenticationTypes.Federation", BearerIssuer);
-        var isValid = await ValidateAsync(antiforgery, bearerPrincipal, cookieToken, requestToken, normalize: true);
+        var isValid = await ValidateAsync(antiforgery, serviceProvider, bearerPrincipal, cookieToken, requestToken);
 
         isValid.ShouldBeTrue();
     }
 
     [Fact]
-    public void Manager_should_not_require_the_normalizer_service_when_normalization_is_disabled()
+    public async Task Decorator_should_restore_the_original_principal_after_each_call()
     {
-        var services = new ServiceCollection();
-        services.AddLogging();
-        services.AddDataProtection();
-        services.AddAntiforgery(options =>
-        {
-            options.Cookie.Name = AntiForgeryCookieName;
-            options.HeaderName = AntiForgeryHeaderName;
-        });
-        // IAbpAntiForgeryClaimsPrincipalNormalizer is intentionally not registered.
-        var serviceProvider = services.BuildServiceProvider();
+        var (antiforgery, serviceProvider) = CreateDecoratedAntiforgery(normalize: true);
 
-        var httpContext = new DefaultHttpContext
-        {
-            User = CreatePrincipal("Identity.Application", CookieIssuer),
-            RequestServices = serviceProvider
-        };
-        var manager = new AspNetCoreAbpAntiForgeryManager(
-            serviceProvider.GetRequiredService<IAntiforgery>(),
-            new HttpContextAccessor { HttpContext = httpContext },
-            Microsoft.Extensions.Options.Options.Create(new AbpAntiForgeryOptions { NormalizeUserIdClaimIssuer = false }));
+        var originalPrincipal = CreatePrincipal("AuthenticationTypes.Federation", BearerIssuer);
+        var httpContext = new DefaultHttpContext { User = originalPrincipal, RequestServices = serviceProvider };
 
-        var token = manager.GenerateToken();
+        antiforgery.GetAndStoreTokens(httpContext);
 
-        token.ShouldNotBeNullOrEmpty();
+        httpContext.User.ShouldBeSameAs(originalPrincipal);
+        httpContext.User.FindFirst(AbpClaimTypes.UserId)!.Issuer.ShouldBe(BearerIssuer);
+
+        httpContext.Request.Headers["Cookie"] = $"{AntiForgeryCookieName}=invalid";
+        await antiforgery.IsRequestValidAsync(httpContext);
+
+        httpContext.User.ShouldBeSameAs(originalPrincipal);
+        httpContext.User.FindFirst(AbpClaimTypes.UserId)!.Issuer.ShouldBe(BearerIssuer);
     }
 
     [Fact]
-    public async Task Filter_should_restore_the_original_principal_after_validation()
+    public async Task Decorator_should_not_normalize_when_disabled()
     {
-        var services = new ServiceCollection();
-        services.AddLogging();
-        services.AddDataProtection();
-        services.AddAntiforgery(options =>
-        {
-            options.Cookie.Name = AntiForgeryCookieName;
-            options.HeaderName = AntiForgeryHeaderName;
-        });
-        services.AddTransient<IAbpAntiForgeryClaimsPrincipalNormalizer, AbpAntiForgeryClaimsPrincipalNormalizer>();
-        services.AddTransient<AbpAntiForgeryCookieNameProvider>();
-        services.Configure<AbpAntiForgeryOptions>(options =>
-        {
-            options.TokenCookie.Name = AntiForgeryCookieName;
-            options.AuthCookieSchemaName = null; // let ShouldValidate rely on the antiforgery cookie only
-            options.NormalizeUserIdClaimIssuer = true;
-        });
-        var serviceProvider = services.BuildServiceProvider();
+        var (antiforgery, serviceProvider) = CreateDecoratedAntiforgery(normalize: false);
 
-        var originalPrincipal = CreatePrincipal("AuthenticationTypes.Federation", BearerIssuer);
-        var httpContext = new DefaultHttpContext
-        {
-            User = originalPrincipal,
-            RequestServices = serviceProvider
-        };
+        var principal = CreatePrincipal("Identity.Application", CookieIssuer);
+        var httpContext = new DefaultHttpContext { User = principal, RequestServices = serviceProvider };
+
+        antiforgery.GetAndStoreTokens(httpContext);
+        httpContext.User.ShouldBeSameAs(principal);
+
         httpContext.Request.Headers["Cookie"] = $"{AntiForgeryCookieName}=invalid";
-
-        var filter = new AbpValidateAntiforgeryTokenAuthorizationFilter(
-            serviceProvider.GetRequiredService<IAntiforgery>(),
-            serviceProvider.GetRequiredService<AbpAntiForgeryCookieNameProvider>(),
-            NullLogger<AbpValidateAntiforgeryTokenAuthorizationFilter>.Instance);
-
-        var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
-        var filterContext = new AuthorizationFilterContext(actionContext, new List<IFilterMetadata> { filter });
-
-        await filter.OnAuthorizationAsync(filterContext);
-
-        // The validation ran (and failed for the invalid token), but the original principal must be restored.
-        httpContext.User.ShouldBeSameAs(originalPrincipal);
-        httpContext.User.FindFirst(AbpClaimTypes.UserId)!.Issuer.ShouldBe(BearerIssuer);
+        await antiforgery.IsRequestValidAsync(httpContext);
+        httpContext.User.ShouldBeSameAs(principal);
     }
 
     private static ClaimsPrincipal CreatePrincipal(string authenticationType, string userIdClaimIssuer)
@@ -201,7 +213,7 @@ public class AbpAntiForgeryClaimsPrincipalNormalizer_Tests
             AbpClaimTypes.Role));
     }
 
-    private static (IAntiforgery antiforgery, IServiceProvider serviceProvider) CreateAntiforgery()
+    private static (IAntiforgery antiforgery, IServiceProvider serviceProvider) CreateDecoratedAntiforgery(bool normalize)
     {
         var services = new ServiceCollection();
         services.AddLogging();
@@ -214,43 +226,30 @@ public class AbpAntiForgeryClaimsPrincipalNormalizer_Tests
         services.AddTransient<IAbpAntiForgeryClaimsPrincipalNormalizer, AbpAntiForgeryClaimsPrincipalNormalizer>();
 
         var serviceProvider = services.BuildServiceProvider();
-        return (serviceProvider.GetRequiredService<IAntiforgery>(), serviceProvider);
+
+        var antiforgery = new AbpAntiforgery(
+            serviceProvider.GetRequiredService<IAntiforgery>(),
+            Microsoft.Extensions.Options.Options.Create(new AbpAntiForgeryOptions { NormalizeUserIdClaimIssuer = normalize }));
+
+        return (antiforgery, serviceProvider);
     }
 
     private static (string cookieToken, string requestToken) GenerateToken(
-        IAntiforgery antiforgery, IServiceProvider serviceProvider, ClaimsPrincipal user, bool normalize)
+        IAntiforgery antiforgery, IServiceProvider serviceProvider, ClaimsPrincipal user)
     {
         var httpContext = new DefaultHttpContext { User = user, RequestServices = serviceProvider };
-        var manager = new AspNetCoreAbpAntiForgeryManager(
-            antiforgery,
-            new HttpContextAccessor { HttpContext = httpContext },
-            Microsoft.Extensions.Options.Options.Create(new AbpAntiForgeryOptions { NormalizeUserIdClaimIssuer = normalize }));
-
-        var requestToken = manager.GenerateToken();
-        return (ExtractCookieToken(httpContext), requestToken);
+        var tokenSet = antiforgery.GetAndStoreTokens(httpContext);
+        return (ExtractCookieToken(httpContext), tokenSet.RequestToken!);
     }
 
     private static async Task<bool> ValidateAsync(
-        IAntiforgery antiforgery, ClaimsPrincipal user, string cookieToken, string requestToken, bool normalize)
+        IAntiforgery antiforgery, IServiceProvider serviceProvider, ClaimsPrincipal user, string cookieToken, string requestToken)
     {
-        var httpContext = new DefaultHttpContext { User = user };
+        var httpContext = new DefaultHttpContext { User = user, RequestServices = serviceProvider };
         httpContext.Request.Headers["Cookie"] = $"{AntiForgeryCookieName}={cookieToken}";
         httpContext.Request.Headers[AntiForgeryHeaderName] = requestToken;
 
-        if (normalize)
-        {
-            httpContext.User = await new AbpAntiForgeryClaimsPrincipalNormalizer().NormalizeAsync(httpContext.User);
-        }
-
-        try
-        {
-            await antiforgery.ValidateRequestAsync(httpContext);
-            return true;
-        }
-        catch (AntiforgeryValidationException)
-        {
-            return false;
-        }
+        return await antiforgery.IsRequestValidAsync(httpContext);
     }
 
     private static string ExtractCookieToken(HttpContext httpContext)
