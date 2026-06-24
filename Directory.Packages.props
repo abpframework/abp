@@ -19,10 +19,10 @@
     <PackageVersion Include="Azure.Identity" Version="1.14.2" />
     <PackageVersion Include="Azure.Messaging.ServiceBus" Version="7.20.1" />
     <PackageVersion Include="Azure.Storage.Blobs" Version="12.25.0" />
-    <PackageVersion Include="Blazorise" Version="2.1.3" />
-    <PackageVersion Include="Blazorise.Components" Version="2.1.3" />
-    <PackageVersion Include="Blazorise.DataGrid" Version="2.1.3" />
-    <PackageVersion Include="Blazorise.Snackbar" Version="2.1.3" />
+    <PackageVersion Include="Blazorise" Version="2.2.1" />
+    <PackageVersion Include="Blazorise.Components" Version="2.2.1" />
+    <PackageVersion Include="Blazorise.DataGrid" Version="2.2.1" />
+    <PackageVersion Include="Blazorise.Snackbar" Version="2.2.1" />
     <PackageVersion Include="MudBlazor" Version="9.4.0" />
     <PackageVersion Include="Castle.Core" Version="5.2.1" />
     <PackageVersion Include="Castle.Core.AsyncInterceptor" Version="2.1.0" />
