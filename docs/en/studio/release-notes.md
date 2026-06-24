@@ -9,7 +9,25 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 3.0.4 (2026-06-03) Latest
+## 3.0.6 (2026-06-18) Latest
+
+* Stabilize Domain.Tests across platforms and fix ReactNative test regression
+* [Linux-x64 Support] Align Linux publish with RID-based packaging
+* Fix GitHub integration problem on production caused
+* Use deferred UI scheduler and marshal CEF updates
+
+## 3.0.5 (2026-06-17)
+
+* Set `DOTNET_INSTALL_DIR` on self-hosted runners in template build workflow
+* Fix mudblazor template delete conditions for dashboard pages
+* Replace modern template AppUser bulk seed backfill with admin bootstrap
+* Fix login button URL in app-nolayers Blazor.WebAssembly template
+* Improve `#blazor-error-ui` visibility on Blazor templates
+* Remove leftover `github-mud-test` source and npm rc patch from templates
+* Improve modern React template error handling
+* Remove sample CRUD from modern microservice template
+
+## 3.0.4 (2026-06-03)
 
 * Blazor UI Selector: Added a built-in choice between MudBlazor and Blazorise for Blazor solution templates
 * React Native Updates: Upgraded Expo to the latest version, improved keyboard handling, and ensured UI consistency

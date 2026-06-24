@@ -13,11 +13,11 @@ public interface IAbpMapperlyMapper<in TSource, TDestination>
 
 public interface IAbpReverseMapperlyMapper<TSource, TDestination> : IAbpMapperlyMapper<TSource, TDestination>
 {
-    TSource ReverseMap(TDestination destination);
+    TSource ReverseMap(TDestination source);
 
-    void ReverseMap(TDestination destination, TSource source);
+    void ReverseMap(TDestination source, TSource destination);
 
-    void BeforeReverseMap(TDestination destination);
+    void BeforeReverseMap(TDestination source);
 
-    void AfterReverseMap(TDestination destination, TSource source);
+    void AfterReverseMap(TDestination source, TSource destination);
 }

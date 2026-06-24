@@ -134,7 +134,7 @@ You can execute this command in your command prompt.
 
 ````bash
 cd Desktop # or another path
-mkcert -pkcs12 auth.sample api.sample web.sample # Replace with your domain names  
+mkcert -pkcs12 {{ if Tiered == "Yes" }}auth.sample api.sample web.sample{{ else if UI == "NG" || UI == "Blazor" }}www.sample app.sample{{ else }}www.sample{{ end }} # Replace with your domain names  
 ````
 
 Rename the created file extension to ".pfx"
@@ -147,18 +147,32 @@ Import the certificate to IIS
 
 Add domain names to hosts file(in Windows: `C:\Windows\System32\drivers\etc\hosts`, in Linux and macOS: `/etc/hosts`).
 
+{{ if Tiered == "Yes" }}
+
 > For example, in a tiered MVC project.
+
 ````json
 127.0.0.1 auth.sample
 127.0.0.1 api.sample
 127.0.0.1 web.sample
 ````
 
+{{ else }}
+
+````json
+127.0.0.1 www.sample{{ if UI == "NG" || UI == "Blazor" }}
+127.0.0.1 app.sample{{ end }}
+````
+
+{{ end }}
+
 ## Publish the Application(s) On IIS
 
 ### Update the appsettings
 
 Update the appsettings according to your project type and domain names.
+
+{{ if Tiered == "Yes" }}
 
 > For example, in a tiered MVC project.
 
@@ -236,6 +250,37 @@ Update the appsettings according to your project type and domain names.
   }
 }
 ````
+
+{{ else }}
+
+> In a non-tiered solution there is a single application that also acts as the authentication server, so `App:SelfUrl` and `AuthServer:Authority` point to the same URL.
+
+````json
+//{{ if UI == "NG" || UI == "Blazor" }}HttpApi.Host{{ else if UI == "BlazorServer" }}Blazor{{ else }}Web{{ end }}
+{
+  "App": {
+    "SelfUrl": "https://www.sample",{{ if UI == "NG" || UI == "Blazor" }}
+    "CorsOrigins": "https://app.sample",
+    "RedirectAllowedUrls": "https://app.sample",{{ else if UI == "BlazorServer" }}
+    "RedirectAllowedUrls": "https://www.sample",{{ end }}
+    "DisablePII": "false"{{ if UI == "NG" || UI == "Blazor" }},
+    "HealthCheckUrl": "/health-status"{{ end }}
+  },
+  "ConnectionStrings": {
+    "Default": "Server=volo.sample;Database=Sample;User Id=sa;Password=1q2w3E**;TrustServerCertificate=true"
+  },
+  "AuthServer": {
+    "Authority": "https://www.sample",
+    "RequireHttpsMetadata": "true"{{ if UI == "NG" || UI == "Blazor" }},
+    "SwaggerClientId": "Sample_Swagger"{{ end }}
+  },
+  "StringEncryption": {
+    "DefaultPassPhrase": "f9uRkTLdtAZLmlh3"
+  }
+}
+````
+
+{{ end }}
 
 ### Copy the .pfx file
 

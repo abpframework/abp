@@ -30,7 +30,11 @@ If the team always builds a package after an application service change, that sh
 
 Workflows give ABP Studio a place to encode those repeatable steps.
 
+_**Choose a Workflow and Scope before sending your prompt:**_
+
 ![Opening the workflow settings panel in ABP Studio](workflows-openning.png)
+
+_**The selected workflow can be configured through Workflow Settings, where you can create, edit, and manage reusable workflows for common development tasks:**_
 
 ![ABP AI Agent workflow settings](workflow-settings.png)
 
