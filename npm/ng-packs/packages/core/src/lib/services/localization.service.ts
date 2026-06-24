@@ -230,7 +230,8 @@ export class LocalizationService {
     };
 
     if (keys.length < 2) {
-      warn('The localization source separator (::) not found.');
+      // A plain string without the `::` separator is a valid passthrough value
+      // (e.g. text piped through `abpLocalization`), so it must not warn here.
       return defaultValue || (key as string);
     }
     if (!state.localization) return defaultValue || keys[1];
