@@ -7,6 +7,15 @@
 
 # Package Version Changes
 
+## 10.5.0-rc.4
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| Blazorise | 2.1.3 | 2.2.1 | #25683 |
+| Blazorise.Components | 2.1.3 | 2.2.1 | #25683 |
+| Blazorise.DataGrid | 2.1.3 | 2.2.1 | #25683 |
+| Blazorise.Snackbar | 2.1.3 | 2.2.1 | #25683 |
+
 ## 10.5.0-rc.1
 
 | Package | Old Version | New Version | PR |
