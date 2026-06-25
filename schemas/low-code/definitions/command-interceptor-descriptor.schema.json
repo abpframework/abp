@@ -3,7 +3,7 @@
   "$id": "command-interceptor-descriptor.schema.json",
   "title": "CommandInterceptorDescriptor",
   "description": "Describes a JavaScript interceptor for an entity Create, Update, or Delete command.",
-  "markdownDescription": "AI guidance: use `type: \"Pre\"` to validate or block before persistence and `type: \"Post\"` for side effects after persistence. Scripts can inspect `context.commandArgs` and may use services exposed on `context` such as `db`, `currentUser`, `currentTenant`, `emailSender`, `config`, `http`, and logging helpers depending on host configuration. To block the command with a user-facing error, assign `globalError = \"message\"` and return. Keep scripts idempotent where possible.",
+  "markdownDescription": "AI guidance: define at most one entity interceptor per command/type combination (`Create`/`Update`/`Delete` × `Pre`/`Post`/`Replace`). Use `type: \"Pre\"` to validate or block before persistence and `type: \"Post\"` for side effects after persistence. Scripts can inspect `context.commandArgs` and may use services exposed on `context` such as `db`, `currentUser`, `currentTenant`, `emailSender`, `config`, `http`, and logging helpers depending on host configuration. To block the command with a user-facing error, assign `globalError = \"message\"`. Keep scripts idempotent where possible.",
   "type": "object",
   "properties": {
     "commandName": {

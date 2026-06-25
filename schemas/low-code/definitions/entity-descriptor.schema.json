@@ -49,7 +49,7 @@
     },
     "interceptors": {
       "type": "array",
-      "description": "Create/Update/Delete command interceptors. Use Pre interceptors to validate, normalize, or block a command; use Post interceptors for side effects after persistence.",
+      "description": "Create/Update/Delete command interceptors. Use Pre interceptors to validate, normalize, or block a command; use Post interceptors for side effects after persistence. Define at most one interceptor per command/type combination.",
       "items": {
         "$ref": "command-interceptor-descriptor.schema.json"
       }

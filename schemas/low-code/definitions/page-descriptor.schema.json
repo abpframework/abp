@@ -3,7 +3,7 @@
   "$id": "page-descriptor.schema.json",
   "title": "PageDescriptor",
   "description": "Describes a runtime UI page. Pages create menu items and choose how an entity or dashboard is rendered.",
-  "markdownDescription": "AI guidance: `name` is the stable route/menu key and should be URL-safe kebab-case (for example `customers` or `event-calendar`). `title` is user-facing. For entity pages, set `entityName` to an existing entity. Configure list/gallery/card visibility with `columns`, filtering with `filters`, and create/edit UI with form names. For `dashboard` pages, provide `dashboard` and omit entity-only fields unless intentionally supported by the runtime. Do not put page-only settings on entity properties.",
+  "markdownDescription": "AI guidance: `name` is the stable route/menu key and should be URL-safe kebab-case (for example `customers` or `event-calendar`). `title` is user-facing. For entity pages, set `entityName` to an existing entity. Configure list/gallery/card visibility with `columns`, filtering with `filters`, and create/edit UI with form names. Use `interceptors` for page-scoped command scripts; define at most one page interceptor per command/type combination and control ordering with `entityExecutionOrder`. For `dashboard` pages, provide `dashboard` and omit entity-only fields unless intentionally supported by the runtime. Do not put page-only settings on entity properties.",
   "type": "object",
   "properties": {
     "$schema": {
@@ -154,6 +154,13 @@
     "permissionConfig": {
       "$ref": "page-permission-config.schema.json",
       "description": "Optional page operation permission overrides. Omit operations to use generated defaults."
+    },
+    "interceptors": {
+      "type": "array",
+      "description": "Page-scoped Create/Update/Delete command interceptors. Define at most one interceptor per command/type combination. Use entityExecutionOrder to run before/after the matching entity interceptor or skip the entity interceptor.",
+      "items": {
+        "$ref": "page-command-interceptor-descriptor.schema.json"
+      }
     }
   },
   "required": ["name", "title", "type"],
@@ -222,7 +229,15 @@
         { "propertyName": "Title", "control": "text", "defaultOperator": "contains" }
       ],
       "createFormName": "event-form",
-      "editFormName": "event-form"
+      "editFormName": "event-form",
+      "interceptors": [
+        {
+          "commandName": "Create",
+          "type": "Pre",
+          "javascript": "if (context.commandArgs.data['Name'] === 'BlockedOnPage') { globalError = 'This name is blocked by the page interceptor.'; }",
+          "entityExecutionOrder": "PageFirst"
+        }
+      ]
     },
     {
       "name": "event-calendar",

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "page-command-interceptor-descriptor.schema.json",
+  "title": "PageCommandInterceptorDescriptor",
+  "description": "Describes a JavaScript interceptor for a page-scoped Create, Update, or Delete command.",
+  "markdownDescription": "AI guidance: page interceptors run in the context of the page that triggered the command. Define at most one page interceptor per command/type combination (`Create`/`Update`/`Delete` × `Pre`/`Post`/`Replace`). Use `entityExecutionOrder` to control ordering against the matching entity interceptor. Page scripts receive the same scripting context as entity interceptors, including page metadata on `context.commandArgs.pageName` and `context.commandArgs.page`. To block the command, assign `globalError = \"message\"`.",
+  "type": "object",
+  "properties": {
+    "commandName": {
+      "type": "string",
+      "description": "Entity command to intercept: Create, Update, or Delete.",
+      "enum": ["Create", "Update", "Delete"]
+    },
+    "type": {
+      "$ref": "interceptor-type.schema.json",
+      "description": "Whether the script runs before, after, or instead of the command."
+    },
+    "javascript": {
+      "type": "string",
+      "description": "JavaScript code to execute. For Pre interceptors, set globalError to block the command."
+    },
+    "entityExecutionOrder": {
+      "$ref": "interceptor-execution-order.schema.json",
+      "description": "Optional ordering relative to the matching entity interceptor. Defaults to EntityFirst when omitted. Not used for Replace interceptors."
+    }
+  },
+  "required": ["commandName", "type", "javascript"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "commandName": "Create",
+      "type": "Pre",
+      "javascript": "if (context.commandArgs.data['Name'] === 'BlockedOnPage') { globalError = 'This name is blocked on the customers page.'; }",
+      "entityExecutionOrder": "PageFirst"
+    },
+    {
+      "commandName": "Create",
+      "type": "Pre",
+      "javascript": "if (context.commandArgs.data['Title'] === 'PageBlocked') { globalError = 'This title is blocked by the page interceptor.'; }",
+      "entityExecutionOrder": "SkipEntity"
+    }
+  ]
+}

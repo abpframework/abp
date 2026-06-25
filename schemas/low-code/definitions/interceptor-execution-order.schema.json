@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "interceptor-execution-order.schema.json",
+  "title": "InterceptorExecutionOrder",
+  "description": "Controls how a page interceptor runs relative to the matching entity interceptor for the same command and type.",
+  "markdownDescription": "Use on page interceptors only. `EntityFirst` (default when omitted) runs the entity interceptor before the page interceptor. `PageFirst` runs the page interceptor first. `SkipEntity` skips the entity interceptor for the same command/type slot. This setting applies to `Pre` and `Post` interceptors only; `Replace` interceptors use a separate pipeline and should omit `entityExecutionOrder`.",
+  "type": "string",
+  "enum": [
+    "EntityFirst",
+    "entityFirst",
+    "PageFirst",
+    "pageFirst",
+    "SkipEntity",
+    "skipEntity"
+  ],
+  "enumDescriptions": [
+    "Run the entity interceptor before the page interceptor.",
+    "Run the entity interceptor before the page interceptor.",
+    "Run the page interceptor before the entity interceptor.",
+    "Run the page interceptor before the entity interceptor.",
+    "Skip the entity interceptor for the same command/type slot.",
+    "Skip the entity interceptor for the same command/type slot."
+  ]
+}
