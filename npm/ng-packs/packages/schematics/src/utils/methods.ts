@@ -7,7 +7,9 @@ export const getParamName = (paramName: string) =>
 export const getParamValueName = (paramName: string, descriptorName: string) => {
   if (paramName.includes('.')) {
     const splitted = paramName.split('.');
-    const param = splitted.map(x => (shouldQuote(x) ? `[${x}]` : `.${camel(x)}`)).join('');
+    // Flattened nested query params: any intermediate object may be absent at runtime, and
+    // nested members are typed as `T | null`, so navigate them with optional chaining (`?.`).
+    const param = splitted.map(x => (shouldQuote(x) ? `?.['${x}']` : `?.${camel(x)}`)).join('');
     return `${descriptorName}${param}`;
   }
   if (shouldQuote(paramName)) {
