@@ -44,7 +44,7 @@ export class BreadcrumbComponent implements OnInit {
 
           while (node.parent) {
             node = node.parent;
-            const { parent, children, isLeaf, path, ...segment } = node;
+            const { parent, children, isLeaf, ...segment } = node;
             if (!isAdministration(segment)) this.segments.unshift(segment);
           }
 

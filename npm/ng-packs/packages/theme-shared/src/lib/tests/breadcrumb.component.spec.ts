@@ -10,6 +10,7 @@ import {
   ConfigStateService,
 } from '@abp/ng.core';
 import { RouterModule } from '@angular/router';
+import { By } from '@angular/platform-browser';
 import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/vitest';
 import { of } from 'rxjs';
 import { BreadcrumbComponent, BreadcrumbItemsComponent } from '../components';
@@ -117,5 +118,19 @@ describe('BreadcrumbComponent', () => {
     await spectator.router.navigateByUrl('/identity/users');
     spectator.detectChanges();
     expect(spectator.component).toBeTruthy();
+  });
+
+  it('should keep the path on segments so breadcrumbs render as links', async () => {
+    routes.add(mockRoutes);
+    await spectator.router.navigateByUrl('/identity/users');
+    spectator.detectChanges();
+
+    const breadcrumb = spectator.fixture.debugElement.query(By.directive(BreadcrumbComponent))
+      .componentInstance as BreadcrumbComponent;
+
+    expect(breadcrumb.segments.map(segment => segment.path)).toEqual([
+      '/identity',
+      '/identity/users',
+    ]);
   });
 });
