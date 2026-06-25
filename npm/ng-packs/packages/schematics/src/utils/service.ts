@@ -259,6 +259,12 @@ export function createActionToSignatureMapper() {
         type = adaptType(p.type);
       }
 
+      // Array params are only forwarded to the HTTP client and never mutated, so declare them
+      // `readonly` to also accept readonly arrays from callers without a type error.
+      if (type.endsWith('[]')) {
+        type = `readonly ${type}`;
+      }
+
       const parameter = new Property({ name: p.name, type });
       parameter.setDefault(p.defaultValue);
       parameter.setOptional(p.isOptional);
