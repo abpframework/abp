@@ -59,8 +59,6 @@ public partial class ResourcePermissionManagementModal
         Permissions = new List<ResourcePermissionModel>()
     };
 
-    protected bool _grantAllCreate;
-    protected bool _grantAllEdit;
 
     public ResourcePermissionManagementModal()
     {
@@ -124,7 +122,6 @@ public partial class ResourcePermissionManagementModal
             }).ToList()
         };
 
-        _grantAllCreate = false;
         _createDialogVisible = true;
         await InvokeAsync(StateHasChanged);
     }
@@ -140,8 +137,6 @@ public partial class ResourcePermissionManagementModal
             {
                 permission.IsGranted = permissionGrants.Permissions.Any(p => p.Name == permission.Name && p.Providers.Contains(CurrentLookupService) && p.IsGranted);
             }
-
-            _grantAllCreate = CreateEntity.Permissions.All(x => x.IsGranted);
         }
 
         await InvokeAsync(StateHasChanged);
@@ -162,7 +157,6 @@ public partial class ResourcePermissionManagementModal
 
     protected virtual async Task GrantAllCreateAsync(bool value)
     {
-        _grantAllCreate = value;
         foreach (var permission in CreateEntity.Permissions)
         {
             permission.IsGranted = value;
@@ -172,7 +166,6 @@ public partial class ResourcePermissionManagementModal
 
     protected virtual async Task GrantAllEditAsync(bool value)
     {
-        _grantAllEdit = value;
         foreach (var permission in EditEntity.Permissions)
         {
             permission.IsGranted = value;
@@ -195,7 +188,6 @@ public partial class ResourcePermissionManagementModal
             }).ToList()
         };
 
-        _grantAllEdit = EditEntity.Permissions.All(x => x.IsGranted);
         _editDialogVisible = true;
         await InvokeAsync(StateHasChanged);
     }
