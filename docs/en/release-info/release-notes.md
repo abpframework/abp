@@ -14,6 +14,16 @@ Also see the following notes about ABP releases:
 - [ABP Studio release notes](../studio/release-notes.md)
 - [Change logs for ABP pro packages](https://abp.io/pro-releases)
 
+## 10.6 ()
+
+See the detailed **[blog post / announcement]()** for the v10.6 release.
+
+- Angular has been upgraded to version 22.0.x.
+
+  For a complete list of changes, including breaking changes, migration steps, and package updates, see the **[Angular Release Notes for v10.6](./../framework/ui/angular/release-notes/angular-22-typescript-6.md)**.
+
+
+
 ## 10.5 (2026-06-02)
 
 See the detailed **[blog post / announcement](https://abp.io/community/articles/announcing-abp-10-5-release-candidate-k6oxdfle)** for the v10.5 release.

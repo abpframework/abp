@@ -1,19 +1,19 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Learn how to set up your development environment for ABP Angular 21.x with this quick start guide, ensuring a smooth development experience."
+    "Description": "Learn how to set up your development environment for ABP Angular 22.0.x with this quick start guide, ensuring a smooth development experience."
 }
 ```
 
 # ABP Angular Quick Start
 
-**In this version ABP uses Angular [21.2.x](https://github.com/angular/angular/tree/21.2.x) version. You don't have to install Angular CLI globally**
+**In this version ABP uses Angular [22.0.x](https://github.com/angular/angular/tree/22.0.x) version. You don't have to install Angular CLI globally**
 
 ## How to Prepare Development Environment
 
 Please follow the steps below to prepare your development environment for Angular.
 
-1. **Install Node.js:** Please visit [Node.js downloads page](https://nodejs.org/en/download/) and download proper Node.js `v20.19+` installer for your OS. An alternative is to install [NVM](https://github.com/nvm-sh/nvm) and use it to have multiple versions of Node.js in your operating system.
+1. **Install Node.js:** Please visit [Node.js downloads page](https://nodejs.org/en/download/) and download proper Node.js `^22.22.3 || ^24.15.0 || ^26.0.0` installer for your OS. An alternative is to install [NVM](https://github.com/nvm-sh/nvm) and use it to have multiple versions of Node.js in your operating system.
 2. **[Optional] Install Yarn:** You may install Yarn v1.22+ (not v2) following the instructions on [the installation page](https://classic.yarnpkg.com/en/docs/install). Yarn v1 delivers an arguably better developer experience compared to npm v10 and below. You may skip this step and work with npm, which is built-in in Node.js, instead.
 3. **[Optional] Install VS Code:** [VS Code](https://code.visualstudio.com/) is a free, open-source IDE which works seamlessly with TypeScript. Although you can use any IDE including Visual Studio or Rider, VS Code will most likely deliver the best developer experience when it comes to Angular projects. ABP project templates even contain plugin recommendations for VS Code users, which VS Code will ask you to install when you open the Angular project folder. Here is a list of recommended extensions:
    - [Angular Language Service](https://marketplace.visualstudio.com/items?itemName=angular.ng-template)
