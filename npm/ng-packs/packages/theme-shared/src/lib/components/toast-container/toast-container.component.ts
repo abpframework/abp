@@ -1,25 +1,22 @@
-import { Component, OnInit, input, signal, effect } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
-import { toastInOut } from '../../animations/toast.animations';
+import {Component, input, OnInit, signal, effect, ChangeDetectionStrategy,} from '@angular/core';
 import { Toaster } from '../../models/toaster';
 import { ToastComponent } from '../toast/toast.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-toast-container',
   templateUrl: './toast-container.component.html',
   styleUrls: ['./toast-container.component.scss'],
-  animations: [toastInOut],
   imports: [ToastComponent],
   host: {
-    '(window:resize)': 'onWindowResize()'
-  }
+    class: 'abp-toast-host',
+    '(window:resize)': 'onWindowResize()',
+  },
 })
 export class ToastContainerComponent implements OnInit {
-  toasts$!: ReplaySubject<Toaster.Toast[]>;
-
   remove!: (toastId: number) => void;
 
-  toasts = [] as Toaster.Toast[];
+  readonly toasts = signal<Toaster.Toast[]>([]);
 
   readonly top = input<string | undefined>(undefined);
   readonly rightInput = input('30px', { alias: 'right' });
@@ -39,13 +36,13 @@ export class ToastContainerComponent implements OnInit {
 
   ngOnInit() {
     this.setDefaultRight();
-    this.toasts$.subscribe(toasts => {
-      this.toasts = this.toastKey()
-        ? toasts.filter(t => {
-            return t.options && t.options.containerKey !== this.toastKey();
-          })
-        : toasts;
-    });
+  }
+
+  setToasts(toasts: Toaster.Toast[]) {
+    const key = this.toastKey();
+    this.toasts.set(
+      key ? toasts.filter(t => t.options && t.options.containerKey !== key) : [...toasts],
+    );
   }
 
   onWindowResize() {
@@ -57,10 +54,5 @@ export class ToastContainerComponent implements OnInit {
     if (screenWidth < 768 && this.right() === this.defaultRight) {
       this.right.set(this.defaultMobileRight);
     }
-  }
-
-  trackByFunc(index: number, toast: Toaster.Toast) {
-    if (!toast) return null;
-    return toast.options?.id;
   }
 }

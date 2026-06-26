@@ -42,13 +42,36 @@ describe('ButtonComponent', () => {
   });
 
   it('should display the spinner icon', () => {
-    spectator.component.loading = true;
+    spectator.component.setLoading(true);
     spectator.detectComponentChanges();
     expect(spectator.query('i')).toHaveClass('fa-spinner');
   });
 
+  it('should display the spinner icon when loading input is true', () => {
+    spectator = createHost(
+      '<abp-button iconClass="fa fa-check" [loading]="loading">Button</abp-button>',
+      { hostProps: { loading: true } },
+    );
+    spectator.detectComponentChanges();
+    expect(spectator.query('i')).toHaveClass('fa-spinner');
+  });
+
+  it('should clear the spinner icon when loading input becomes false', () => {
+    spectator = createHost(
+      '<abp-button iconClass="fa fa-check" [loading]="loading">Button</abp-button>',
+      { hostProps: { loading: true } },
+    );
+    spectator.detectComponentChanges();
+    expect(spectator.query('i')).toHaveClass('fa-spinner');
+
+    spectator.setHostInput({ loading: false });
+    spectator.detectComponentChanges();
+    expect(spectator.query('i')).toHaveClass('fa-check');
+    expect(spectator.query('i')).not.toHaveClass('fa-spinner');
+  });
+
   it('should disabled when the loading input is true', () => {
-    spectator.component.loading = true;
+    spectator.component.setLoading(true);
     spectator.detectComponentChanges();
     expect(spectator.query('[disabled]')).toBeTruthy();
   });

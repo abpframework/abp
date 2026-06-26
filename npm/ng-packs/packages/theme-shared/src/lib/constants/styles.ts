@@ -90,6 +90,31 @@ export default `
   animation: fadeOutTop 0.2s ease-in-out;
 }
 
+.abp-collapse-y {
+  display: grid;
+  grid-template-rows: 1fr;
+  overflow: hidden;
+  transition: grid-template-rows 200ms linear;
+}
+
+.abp-collapse-y.abp-collapse-y-collapsed {
+  grid-template-rows: 0fr;
+}
+
+.abp-collapse-y-inner {
+  overflow: hidden;
+}
+
+.abp-collapse-margin {
+  margin-top: 0;
+  overflow: hidden;
+  transition: margin-top 400ms linear;
+}
+
+.abp-collapse-margin.abp-collapse-margin-collapsed {
+  margin-top: -100%;
+}
+
 .abp-collapsed-height {
   -moz-transition: max-height linear 0.35s;
   -ms-transition: max-height linear 0.35s;

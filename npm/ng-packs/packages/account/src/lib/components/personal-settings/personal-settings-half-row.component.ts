@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import {
   EXTENSIONS_FORM_PROP,
   FormProp,
@@ -8,6 +8,7 @@ import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { LocalizationPipe } from '@abp/ng.core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-personal-settings-half-row',
   template: ` <div class="w-50 d-inline">
     <label [attr.for]="name" class="form-label">{{ displayName | abpLocalization }} </label>

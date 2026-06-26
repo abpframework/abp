@@ -1,8 +1,7 @@
 import { ProfileService } from '@abp/ng.account.core/proxy';
 import { LoadingDirective } from '@abp/ng.theme.shared';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { finalize } from 'rxjs/operators';
 import { eAccountComponents } from '../../enums/components';
 import { ManageProfileStateService } from '../../services/manage-profile.state.service';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -11,6 +10,7 @@ import { PersonalSettingsComponent } from '../personal-settings/personal-setting
 import { ChangePasswordComponent } from '../change-password/change-password.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-manage-profile',
   templateUrl: './manage-profile.component.html',
   styles: [
@@ -39,36 +39,29 @@ import { ChangePasswordComponent } from '../change-password/change-password.comp
     ChangePasswordComponent,
     LocalizationPipe,
     ReplaceableTemplateDirective,
-    LoadingDirective
+    LoadingDirective,
   ],
 })
 export class ManageProfileComponent implements OnInit {
   protected profileService = inject(ProfileService);
   protected manageProfileState = inject(ManageProfileStateService);
 
-  selectedTab = 0;
+  readonly selectedTab = signal(0);
+  readonly hideChangePasswordTab = signal(false);
+
+  readonly profile = toSignal(this.manageProfileState.getProfile$());
 
   changePasswordKey = eAccountComponents.ChangePassword;
 
   personalSettingsKey = eAccountComponents.PersonalSettings;
 
-  profile = toSignal(this.manageProfileState.getProfile$());
-
-  profileLoading = signal(false);
-
-  hideChangePasswordTab?: boolean;
-
   ngOnInit() {
-    this.profileLoading.set(true);
-    this.profileService
-      .get()
-      .pipe(finalize(() => this.profileLoading.set(false)))
-      .subscribe(profile => {
-        this.manageProfileState.setProfile(profile);
-        if (profile.isExternal) {
-          this.hideChangePasswordTab = true;
-          this.selectedTab = 1;
-        }
-      });
+    this.profileService.get().subscribe(profile => {
+      this.manageProfileState.setProfile(profile);
+      if (profile.isExternal) {
+        this.hideChangePasswordTab.set(true);
+        this.selectedTab.set(1);
+      }
+    });
   }
 }

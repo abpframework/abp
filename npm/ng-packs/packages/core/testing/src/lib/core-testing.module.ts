@@ -15,7 +15,7 @@ import {
 import { APP_BASE_HREF } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { provideRoutes } from '@angular/router';
+import { provideRouter } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockPermissionService } from './services/mock-permission.service';
 import { MockRestService } from './services/mock-rest.service';
@@ -77,7 +77,7 @@ export class CoreTestingModule {
           provide: SORT_COMPARE_FUNC,
           useFactory: compareFuncFactory,
         },
-        provideRoutes(routes),
+        provideRouter(routes),
       ],
     };
   }

@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "chart.js": "^3.5.1",
-    "ng-zorro-antd": "~21.0.0-next.1",
+    "ng-zorro-antd": "~21.3.1",
     "@ctrl/tinycolor": "^4.0.0",
     "tslib": "^2.0.0"
   },

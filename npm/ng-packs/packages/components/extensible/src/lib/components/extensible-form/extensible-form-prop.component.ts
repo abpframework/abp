@@ -9,8 +9,8 @@ import {
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
+  computed,
   ElementRef,
   inject,
   Injector,
@@ -19,6 +19,7 @@ import {
   viewChild,
   effect,
   input,
+  signal,
 } from '@angular/core';
 import {
   ControlContainer,
@@ -85,7 +86,6 @@ import { ExtensibleFormMultiselectComponent } from '../multi-select/extensible-f
 })
 export class ExtensibleFormPropComponent implements AfterViewInit {
   protected service = inject(ExtensibleFormPropService);
-  public readonly cdRef = inject(ChangeDetectorRef);
   public readonly track = inject(TrackByService);
   #groupDirective = inject(FormGroupDirective);
   private injector = inject(Injector);
@@ -97,26 +97,24 @@ export class ExtensibleFormPropComponent implements AfterViewInit {
   readonly isFirstGroup = input<boolean | undefined>(undefined);
   private readonly fieldRef = viewChild.required<ElementRef<HTMLElement>>('field');
 
-  injectorForCustomComponent?: Injector;
-  asterisk = '';
-  containerClassName = 'mb-2';
-  showPassword = false;
-  options$: Observable<ABP.Option<any>[]> = of([]);
-  validators: ValidatorFn[] = [];
-  readonly!: boolean;
-  typeaheadModel: any;
+  readonly injectorForCustomComponent = signal<Injector | undefined>(undefined);
+  readonly asterisk = signal('');
+  readonly containerClassName = signal('mb-2');
+  readonly showPassword = signal(false);
+  readonly options$ = signal<Observable<ABP.Option<any>[]>>(of([]));
+  readonly validators = signal<ValidatorFn[]>([]);
+  readonly isReadonly = signal(false);
+  readonly typeaheadModel = signal<any>(undefined);
   passwordKey = eExtensibleComponents.PasswordComponent;
+  readonly disabledFn = signal<(data: ReadonlyPropData) => boolean>(() => false);
 
-  disabledFn = (data: ReadonlyPropData) => false;
-
-  get disabled() {
+  readonly disabled = computed(() => {
     const data = this.data();
     if (!data) return false;
-    return this.disabledFn(data);
-  }
+    return this.disabledFn()(data);
+  });
 
   constructor() {
-    // Watch prop changes and update state
     effect(() => {
       const currentProp = this.prop();
       const data = this.data();
@@ -125,47 +123,60 @@ export class ExtensibleFormPropComponent implements AfterViewInit {
       const { options, readonly, disabled, validators, className, template } = currentProp;
 
       if (template) {
-        this.injectorForCustomComponent = Injector.create({
-          providers: [
-            {
-              provide: EXTENSIONS_FORM_PROP,
-              useValue: currentProp,
-            },
-            {
-              provide: EXTENSIONS_FORM_PROP_DATA,
-              useValue: data?.record,
-            },
-            { provide: ControlContainer, useExisting: FormGroupDirective },
-          ],
-          parent: this.injector,
-        });
+        this.injectorForCustomComponent.set(
+          Injector.create({
+            providers: [
+              {
+                provide: EXTENSIONS_FORM_PROP,
+                useValue: currentProp,
+              },
+              {
+                provide: EXTENSIONS_FORM_PROP_DATA,
+                useValue: data?.record,
+              },
+              { provide: ControlContainer, useExisting: FormGroupDirective },
+            ],
+            parent: this.injector,
+          }),
+        );
+      } else {
+        this.injectorForCustomComponent.set(undefined);
       }
 
-      if (options) this.options$ = options(data);
-      if (readonly) this.readonly = readonly(data);
+      if (options) this.options$.set(options(data));
+      if (readonly) this.isReadonly.set(readonly(data));
 
       if (disabled) {
-        this.disabledFn = disabled;
+        this.disabledFn.set(disabled);
+      } else {
+        this.disabledFn.set(() => false);
       }
+
       if (validators) {
-        this.validators = validators(data);
-        this.setAsterisk();
+        this.validators.set(validators(data));
+        this.asterisk.set(this.service.calcAsterisks(validators(data)));
+      } else {
+        this.validators.set([]);
+        this.asterisk.set('');
       }
+
       if (className !== undefined) {
-        this.containerClassName = className;
+        this.containerClassName.set(className);
+      } else {
+        this.containerClassName.set('mb-2');
       }
 
       const [keyControl, valueControl] = this.getTypeaheadControls();
-      if (keyControl && valueControl)
-        this.typeaheadModel = { key: keyControl.value, value: valueControl.value };
-
-      this.cdRef.markForCheck();
+      if (keyControl && valueControl) {
+        this.typeaheadModel.set({ key: keyControl.value, value: valueControl.value });
+      }
     });
   }
 
   setTypeaheadValue(selectedOption: ABP.Option<string>) {
-    this.typeaheadModel = selectedOption || { key: null, value: null };
-    const { key, value } = this.typeaheadModel;
+    const model = selectedOption || { key: null, value: null };
+    this.typeaheadModel.set(model);
+    const { key, value } = model;
     const [keyControl, valueControl] = this.getTypeaheadControls();
     if (valueControl?.value && !value) valueControl.markAsDirty();
     keyControl?.setValue(key);
@@ -198,10 +209,6 @@ export class ExtensibleFormPropComponent implements AfterViewInit {
       this.form.get(addTypeaheadTextSuffix(name));
     const valueControl = this.form.get(extraPropName) || this.form.get(name);
     return [keyControl, valueControl];
-  }
-
-  private setAsterisk() {
-    this.asterisk = this.service.calcAsterisks(this.validators);
   }
 
   ngAfterViewInit() {

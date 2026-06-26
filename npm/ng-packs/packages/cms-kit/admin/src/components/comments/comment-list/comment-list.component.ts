@@ -1,4 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgbDateAdapter, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
@@ -17,6 +18,7 @@ import { eCmsKitAdminComponents } from '../../../enums';
 import { CommentEntityService } from '../../../services';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-comment-list',
   templateUrl: './comment-list.component.html',
   providers: [
@@ -44,13 +46,25 @@ import { CommentEntityService } from '../../../services';
   ],
 })
 export class CommentListComponent implements OnInit {
-  data: PagedResultDto<CommentWithAuthorDto> = { items: [], totalCount: 0 };
-
   readonly list = inject(ListService<CommentGetListInput>);
   readonly commentEntityService = inject(CommentEntityService);
 
   private commentService = inject(CommentAdminService);
   private fb = inject(FormBuilder);
+
+  readonly data = toSignal(
+    this.list.hookToQuery(query => {
+      const filters = (this.list.filter as Partial<CommentGetListInput>) || {};
+      const input: CommentGetListInput = {
+        ...query,
+        ...filters,
+      };
+      return this.commentService.getList(input);
+    }),
+    {
+      initialValue: { items: [], totalCount: 0 } as PagedResultDto<CommentWithAuthorDto>,
+    },
+  );
 
   filterForm!: FormGroup;
   commentApproveStateOptions = commentApproveStateOptions;
@@ -58,7 +72,6 @@ export class CommentListComponent implements OnInit {
 
   ngOnInit() {
     this.createFilterForm();
-    this.hookToQuery();
     this.requireApprovement = this.commentEntityService.requireApprovement;
   }
 
@@ -84,18 +97,5 @@ export class CommentListComponent implements OnInit {
 
     this.list.filter = filters as any;
     this.list.get();
-  }
-
-  private hookToQuery() {
-    this.list
-      .hookToQuery(query => {
-        const filters = (this.list.filter as Partial<CommentGetListInput>) || {};
-        const input: CommentGetListInput = {
-          ...query,
-          ...filters,
-        };
-        return this.commentService.getList(input);
-      })
-      .subscribe(res => (this.data = res));
   }
 }

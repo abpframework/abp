@@ -22,7 +22,7 @@
 
     <!-- Array Items -->
     <div class="array-items" role="list">
-      @for (item of formArray.controls; track trackByIndex($index)) {
+      @for (item of formArray.controls; track $index + '-' + formArrayVersion()) {
         <div class="array-item border rounded p-3 mb-3" role="listitem" [formGroup]="getItemFormGroup($index)">
           
           <!-- Item Header -->

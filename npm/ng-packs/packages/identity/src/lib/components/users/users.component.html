@@ -1,4 +1,4 @@
-<abp-page [title]="'AbpIdentity::Users' | abpLocalization" [toolbar]="data.items">
+<abp-page [title]="'AbpIdentity::Users' | abpLocalization" [toolbar]="data().items">
   <div id="identity-roles-wrapper" class="card">
     <div class="card-body">
       <div id="data-tables-table-filter" class="data-tables-filter mb-3">
@@ -13,14 +13,18 @@
       </div>
 
       <abp-extensible-table
-        [data]="data.items"
-        [recordsTotal]="data.totalCount"
+        [data]="data().items"
+        [recordsTotal]="data().totalCount"
         [list]="list"
-      ></abp-extensible-table>
+      />
     </div>
   </div>
 
-  <abp-modal [(visible)]="isModalVisible" [busy]="modalBusy">
+  <abp-modal
+    [visible]="isModalVisible()"
+    (visibleChange)="isModalVisible.set($event)"
+    [busy]="modalBusy()"
+  >
     <ng-template #abpHeader>
       <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewUser') | abpLocalization }}</h3>
     </ng-template>
@@ -32,28 +36,27 @@
             <li ngbNavItem="user-info">
               <a ngbNavLink>{{ 'AbpIdentity::UserInformations' | abpLocalization }}</a>
               <ng-template ngbNavContent>
-                <abp-extensible-form [selectedRecord]="selected"></abp-extensible-form>
+                <abp-extensible-form [selectedRecord]="selected" />
               </ng-template>
             </li>
             <li ngbNavItem="roles">
               <a ngbNavLink>{{ 'AbpIdentity::Roles' | abpLocalization }}</a>
               <ng-template ngbNavContent>
                 @for (roleGroup of roleGroups; track $index; let i = $index) {
-                  <div class="form-check mb-2">
+                  <div class="form-check mb-2" [formGroup]="roleGroup">
                     <abp-checkbox
                       *abpReplaceableTemplate="{
                         inputs: {
-                          checkboxId: 'roles-' + i,
-                          label: roles[i].name,
-                          formControl: roleGroup.controls[roles[i].name]
+                          checkboxId: { value: 'roles-' + i },
+                          label: { value: roles()[i].name },
+                          formControl: { value: roleGroup.get(roles()[i].name!), twoWay: true },
                         },
-                        componentKey: inputKey
+                        componentKey: inputKey,
                       }"
                       [checkboxId]="'roles-' + i"
-                      [formControl]="roleGroup.controls[roles[i].name]"
-                      [label]="roles[i].name"
-                    >
-                    </abp-checkbox>
+                      [formControlName]="roles()[i].name!"
+                      [label]="roles()[i].name"
+                    />
                   </div>
                 }
               </ng-template>
@@ -84,15 +87,14 @@
         inputs: {
           providerName: { value: 'U' },
           providerKey: { value: providerKey },
-          visible: { value: visiblePermissions, twoWay: true }
+          visible: { value: visiblePermissions(), twoWay: true },
         },
         outputs: { visibleChange: onVisiblePermissionChange },
-        componentKey: permissionManagementKey
+        componentKey: permissionManagementKey,
       };
       let init = initTemplate
     "
     [entityDisplayName]="entityDisplayName"
     (abpInit)="init(abpPermissionManagement)"
-  >
-  </abp-permission-management>
+  />
 </abp-page>
