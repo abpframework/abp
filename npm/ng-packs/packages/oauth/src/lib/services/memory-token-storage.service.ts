@@ -193,15 +193,26 @@ export class MemoryTokenStorageService implements OAuthStorage {
   }
 
   private getSessionItem(key: string): string | null {
-    return this.getSessionStorage()?.getItem(key) ?? null;
+    const storage = this.getSessionStorage();
+    return storage ? storage.getItem(key) : this.localStorageService.getItem(key);
   }
 
   private setSessionItem(key: string, value: string): void {
-    this.getSessionStorage()?.setItem(key, value);
+    const storage = this.getSessionStorage();
+    if (storage) {
+      storage.setItem(key, value);
+    } else {
+      this.localStorageService.setItem(key, value);
+    }
   }
 
   private removeSessionItem(key: string): void {
-    this.getSessionStorage()?.removeItem(key);
+    const storage = this.getSessionStorage();
+    if (storage) {
+      storage.removeItem(key);
+    } else {
+      this.localStorageService.removeItem(key);
+    }
   }
 
   private createWorkerDataUrl(): string {
