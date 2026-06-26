@@ -22,6 +22,8 @@ export class MemoryTokenStorageService implements OAuthStorage {
     'granted_scopes',
   ];
 
+  private keysShouldStoreInSession = ['nonce', 'PKCE_verifier', 'session_state'];
+
   private worker?: any;
   private port?: MessagePort;
   private cache = new Map<string, string>();
@@ -89,38 +91,55 @@ export class MemoryTokenStorageService implements OAuthStorage {
   }
 
   getItem(key: string): string | null {
-    if (!this.keysShouldStoreInMemory.includes(key)) {
-      return this.localStorageService.getItem(key);
+    if (this.keysShouldStoreInMemory.includes(key)) {
+      return this.cache.get(key) || null;
     }
-    return this.cache.get(key) || null;
+
+    if (this.keysShouldStoreInSession.includes(key)) {
+      return this.getSessionItem(key);
+    }
+
+    return this.localStorageService.getItem(key);
   }
 
   setItem(key: string, value: string): void {
-    if (!this.keysShouldStoreInMemory.includes(key)) {
-      this.localStorageService.setItem(key, value);
+    if (this.keysShouldStoreInMemory.includes(key)) {
+      if (this.useSharedWorker && this.port) {
+        this.cache.set(key, value);
+        this.port.postMessage({ action: 'set', key, value });
+      } else {
+        this.cache.set(key, value);
+      }
+
       return;
     }
 
-    if (this.useSharedWorker && this.port) {
-      this.cache.set(key, value);
-      this.port.postMessage({ action: 'set', key, value });
-    } else {
-      this.cache.set(key, value);
+    if (this.keysShouldStoreInSession.includes(key)) {
+      this.setSessionItem(key, value);
+      return;
     }
+
+    this.localStorageService.setItem(key, value);
   }
 
   removeItem(key: string): void {
-    if (!this.keysShouldStoreInMemory.includes(key)) {
-      this.localStorageService.removeItem(key);
+    if (this.keysShouldStoreInMemory.includes(key)) {
+      if (this.useSharedWorker && this.port) {
+        this.cache.delete(key);
+        this.port.postMessage({ action: 'remove', key });
+      } else {
+        this.cache.delete(key);
+      }
+
       return;
     }
 
-    if (this.useSharedWorker && this.port) {
-      this.cache.delete(key);
-      this.port.postMessage({ action: 'remove', key });
-    } else {
-      this.cache.delete(key);
+    if (this.keysShouldStoreInSession.includes(key)) {
+      this.removeSessionItem(key);
+      return;
     }
+
+    this.localStorageService.removeItem(key);
   }
 
   clear(): void {
@@ -163,6 +182,26 @@ export class MemoryTokenStorageService implements OAuthStorage {
     setTimeout(() => {
       this._document.defaultView?.location.reload();
     }, 100);
+  }
+
+  private getSessionStorage(): Storage | null {
+    try {
+      return this._document.defaultView?.sessionStorage ?? null;
+    } catch {
+      return null;
+    }
+  }
+
+  private getSessionItem(key: string): string | null {
+    return this.getSessionStorage()?.getItem(key) ?? null;
+  }
+
+  private setSessionItem(key: string, value: string): void {
+    this.getSessionStorage()?.setItem(key, value);
+  }
+
+  private removeSessionItem(key: string): void {
+    this.getSessionStorage()?.removeItem(key);
   }
 
   private createWorkerDataUrl(): string {
