@@ -106,6 +106,15 @@ public abstract class AbpDateTimeConverterBase<T> : JsonConverter<T>
             var timezoneInfo = TimezoneProvider.GetTimeZoneInfo(CurrentTimezoneProvider.TimeZone);
             dateTime = new DateTimeOffset(dateTime, timezoneInfo.GetUtcOffset(dateTime)).UtcDateTime;
         }
+        catch (ArgumentOutOfRangeException)
+        {
+            // Applying the timezone offset moved the value outside the supported DateTime range.
+            // This happens for values within the offset distance of DateTime.MinValue/MaxValue,
+            // typically placeholder values (e.g. DateTime.MinValue) that don't represent a real
+            // instant. Keep the value unchanged and log at Debug level instead of Warning, so it
+            // stays traceable without flooding production logs on every serialization.
+            Logger.LogDebug("Skipped timezone conversion for DateTime '{DateTime}' (kind: Unspecified) using timezone '{TimeZone}': applying the offset would move it outside the supported DateTime range.", dateTime, CurrentTimezoneProvider.TimeZone);
+        }
         catch
         {
             Logger.LogWarning("Could not convert DateTime with unspecified Kind using timezone '{TimeZone}'.", CurrentTimezoneProvider.TimeZone);

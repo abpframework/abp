@@ -173,7 +173,7 @@ namespace Volo.Docs.GitHub.Documents
         {
             if (commits == null)
             {
-                return DateTime.MinValue;
+                return DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc);
             }
 
             var gitHubCommit = isFirstCommit ?
@@ -182,20 +182,20 @@ namespace Volo.Docs.GitHub.Documents
 
             if (gitHubCommit == null)
             {
-                return DateTime.MinValue;
+                return DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc);
             }
 
             if (gitHubCommit.Commit == null)
             {
-                return DateTime.MinValue;
+                return DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc);
             }
 
             if (gitHubCommit.Commit.Author == null)
             {
-                return DateTime.MinValue;
+                return DateTime.SpecifyKind(DateTime.MinValue, DateTimeKind.Utc);
             }
 
-            return gitHubCommit.Commit.Author.Date.DateTime;
+            return gitHubCommit.Commit.Author.Date.UtcDateTime;
         }
 
         private async Task<IReadOnlyList<GitHubCommit>> GetGitHubCommitsOrNull(Project project, string documentName, string languageCode, string version)
@@ -243,7 +243,7 @@ namespace Volo.Docs.GitHub.Documents
 
                 if (_githubPatchAnalyzer.HasPatchSignificantChanges(fullCommit.Files.First(f => f.Filename == fileName).Patch))
                 {
-                    return gitHubCommit.Commit.Author.Date.DateTime;
+                    return gitHubCommit.Commit.Author.Date.UtcDateTime;
                 }
             }
 
