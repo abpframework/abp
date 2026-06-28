@@ -4,12 +4,6 @@
 
 # My Speaker's View of CONVEX Summit 2026 Madrid
 
-## Where AI Hype Met Enterprise Reality
-
-
-
-**SEO slug:** `convex-2026-ai-enterprise-reality-speaker-experience`
-
 Hi, I'm here for another conference reviews. This time I attended [Convex Summit 2026 Developer](https://www.convexsummit.com/) conference, held in the capital city of Spain, Madrid. It was my first talk in Madrid. The organizer [Plain Concepts](https://www.plainconcepts.com/) arranged a 2 days conf with 3 parallel sessions. 2 of the sessions were in Spanish and one of them was English. The conf dates were 17, 18 June 2026. It was in a very big cinema. In Lithuania I also spoke in a cinema, I guess it's better to arrange a conf in a cinema because of asthenosphere, acoustic and state visibility for visitors.
 
 There is a small moment before every conference talk when the room becomes quiet, the slides are ready, and you suddenly remember why the topic matters. For me, that moment happened at Convex. My topic was “Turn any database into a conversational reporting engine.” I can admit it was a cool talk. But I was also there as a listener, a software architect, and someone trying to understand where enterprise AI is really going after the first wave of demos and experiments. CONVEX was interesting because it brought software development, architecture, and AI into the same conversation. These topics are often discussed separately, but in real companies they are tightly connected. AI features do not live in isolation. They live inside applications, databases, identity systems, permission models, workflows, dashboards, and business expectations.  That was the real theme I felt throughout the event.
