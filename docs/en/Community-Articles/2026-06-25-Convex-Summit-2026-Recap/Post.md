@@ -2,11 +2,11 @@
 
 
 
-# My Speaker's View of  CONVEX Summit 2026 Madrid
+# My Speaker's View of CONVEX Summit 2026 Madrid
 
 ## Where AI Hype Met Enterprise Reality
 
-**Meta description:** My personal speaker’s view of CONVEX Summit 2026 in Madrid, where AI, .NET, software architecture, and enterprise product thinking came together around real-world technology challenges.
+
 
 **SEO slug:** `convex-2026-ai-enterprise-reality-speaker-experience`
 
