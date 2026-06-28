@@ -16,7 +16,7 @@ There is a small moment before every conference talk when the room becomes quiet
 
 ## Speaking at CONVEX
 
-![My CONVEX 2026 speaker badge before the sessions started](images/\IMG_20927.jpg)
+![My CONVEX 2026 speaker badge before the sessions started](images/IMG_20927.jpg)
 
 My talk focused on a question that is becoming more important for enterprise software teams:
 
