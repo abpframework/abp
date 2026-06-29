@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.Razor;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.DependencyInjection;
 using OpenIddict.Abstractions;
 using OpenIddict.Server;
@@ -39,6 +41,62 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
         {
             options.ViewLocationFormats.Add("/Volo/Abp/OpenIddict/Views/{1}/{0}.cshtml");
         });
+
+        ConfigureSecurityStampValidator(context.Services);
+    }
+
+    /// <summary>
+    /// The <see cref="OpenIddictClaimsPrincipalContributor"/> adds the ambient authorization
+    /// request's <c>client_id</c> claim to every principal built by
+    /// <c>SignInManager.CreateUserPrincipalAsync</c>. That is correct for principals that OpenIddict
+    /// signs into tokens, but the same method is also used by the cookie security-stamp validator to
+    /// rebuild and re-issue the interactive authentication cookie. When the cookie happens to be
+    /// refreshed during a <c>/connect/authorize</c> request, the <c>client_id</c> of the OAuth client
+    /// being authorized leaks into the cookie and corrupts <c>ICurrentClient.Id</c> (and therefore
+    /// audit-log client attribution) for every later cookie-authenticated request in that browser.
+    ///
+    /// The contributor cannot tell whether the principal it contributes to is destined for a token or
+    /// for the cookie, so the claim is stripped here, at the only point where the cookie is actually
+    /// re-written: the security-stamp <c>OnRefreshingPrincipal</c> callback. This never runs for token
+    /// issuance (which signs into the OpenIddict scheme, not the cookie), so the token path is left
+    /// untouched. The removal is chained after any previously registered callback (e.g. ABP Identity's
+    /// <c>SecurityStampValidatorCallback.UpdatePrincipal</c>), so it also self-heals cookies that were
+    /// already corrupted before this fix.
+    /// </summary>
+    internal static void ConfigureSecurityStampValidator(IServiceCollection services)
+    {
+        services.Configure<SecurityStampValidatorOptions>(options =>
+        {
+            var previousOnRefreshingPrincipal = options.OnRefreshingPrincipal;
+            options.OnRefreshingPrincipal = async context =>
+            {
+                if (previousOnRefreshingPrincipal != null)
+                {
+                    await previousOnRefreshingPrincipal(context);
+                }
+
+                // Runs after any previously registered callback (e.g. ABP Identity's
+                // SecurityStampValidatorCallback.UpdatePrincipal), so an already-corrupted
+                // cookie that re-introduces client_id during the refresh still gets cleaned.
+                RemoveClientIdClaimsFromRefreshedPrincipal(context);
+            };
+        });
+    }
+
+    internal static void RemoveClientIdClaimsFromRefreshedPrincipal(SecurityStampRefreshingPrincipalContext context)
+    {
+        if (context.NewPrincipal == null)
+        {
+            return;
+        }
+
+        foreach (var identity in context.NewPrincipal.Identities)
+        {
+            foreach (var clientIdClaim in identity.FindAll(AbpClaimTypes.ClientId).ToArray())
+            {
+                identity.RemoveClaim(clientIdClaim);
+            }
+        }
     }
 
     private void AddOpenIddictServer(IServiceCollection services)
