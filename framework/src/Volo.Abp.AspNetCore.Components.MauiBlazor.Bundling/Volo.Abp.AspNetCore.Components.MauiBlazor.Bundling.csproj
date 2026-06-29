@@ -18,8 +18,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" />
-        <PackageReference Include="Microsoft.Maui.Controls"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" ExcludeAssets="build;buildTransitive" />
+        <PackageReference Include="Microsoft.Maui.Controls" ExcludeAssets="build;buildTransitive"/>
     </ItemGroup>
 
     <ItemGroup>
