@@ -18,20 +18,7 @@ You define a [**workflow**](https://docs.dapr.io/developing-applications/buildin
 
 > **This is orchestration rather than choreography:** one place drives the process, instead of services reacting to each other's events. The definitions live in your app, but the engine that executes them runs in the Dapr sidecar next to it.
 
-```mermaid
-flowchart LR
-    subgraph App["Your ABP App"]
-        WF["OrderProcessingWorkflow"]
-        ACT["Activities<br/>CheckInventory, ProcessPayment, NotifyCustomer"]
-    end
-    subgraph Sidecar["Dapr Sidecar"]
-        ENGINE["Workflow Engine<br/>(durable execution)"]
-    end
-    STORE[("State Store<br/>Redis")]
-
-    App -->|gRPC| Sidecar
-    Sidecar -->|reads / writes history| STORE
-```
+![mermaid1](./mermaid1.png)
 
 The key idea is **durable execution**. Dapr records every step to a state store, so the workflow can be replayed from history at any time. A crash, a deployment, or a scale-out event doesn't lose progress, and a workflow can run for seconds or for months.
 
@@ -78,7 +65,7 @@ Before we start, make sure you have these installed:
 
 That last step matters. When you run `dapr init` in self-hosted mode, Dapr pulls a few containers (including Redis) and writes a default `statestore.yaml` component. That default state store already has `actorStateStore: "true"` set, which is exactly what Dapr Workflow needs. So once `dapr init` finishes, you can run workflows locally with zero extra configuration.
 
-![dapr-init-run-result](dapr-init-run-result.png)
+![dapr-init-run-result](./dapr-init-run-result.png)
 
 > **Pro Tip:** If you ever swap the default Redis store for your own component, double-check that it sets `actorStateStore: "true"`. Without it, workflows silently fail to start, and it's the line people forget most often.
 
@@ -244,14 +231,7 @@ Each activity is isolated, so Dapr can retry a failed one without re-running the
 
 Here's the shape of the process we just wrote:
 
-```mermaid
-flowchart TD
-    A["Start workflow<br/>(OrderPayload)"] --> B["CheckInventoryActivity"]
-    B -->|In stock| C["ProcessPaymentActivity"]
-    B -->|Out of stock| R["Return: Rejected"]
-    C --> D["NotifyCustomerActivity"]
-    D --> E["Return: Completed"]
-```
+![mermaid2](./mermaid2.png)
 
 ## Register the Workflow
 
@@ -348,7 +328,7 @@ After the workflow finishes, you'll see a `COMPLETED` status along with the seri
 
 If you check the terminal, you'll also see the log lines from the workflow and each activity in order:
 
-![dapr-workflow-response](dapr-workflow-response.png)
+![dapr-workflow-response](./dapr-workflow-response.png)
 
 The same management API also lets you `terminate`, `pause`, `resume`, and `purge` instances, and `raiseEvent` to send external events into a waiting workflow. For example:
 
