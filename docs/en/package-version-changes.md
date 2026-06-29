@@ -7,6 +7,72 @@
 
 # Package Version Changes
 
+## 10.6.0-rc.1
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| Microsoft.AspNetCore.Authentication.JwtBearer | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.AspNetCore.Authentication.OpenIdConnect | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.AspNetCore.Authorization | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.AspNetCore.Components | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.AspNetCore.Components.Authorization | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.AspNetCore.Components.Web | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.AspNetCore.Components.WebAssembly | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.AspNetCore.Components.WebAssembly.Authentication | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.AspNetCore.Components.WebAssembly.DevServer | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.AspNetCore.Components.WebAssembly.Server | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.AspNetCore.DataProtection.StackExchangeRedis | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.AspNetCore.Mvc.NewtonsoftJson | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.AspNetCore.Mvc.Testing | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.AspNetCore.TestHost | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.AspNetCore.WebUtilities | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Bcl.AsyncInterfaces | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Data.SqlClient | 6.1.1 | 7.0.2 | #25706 |
+| Microsoft.Data.Sqlite | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.EntityFrameworkCore | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.EntityFrameworkCore.Design | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.EntityFrameworkCore.InMemory | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.EntityFrameworkCore.Proxies | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.EntityFrameworkCore.Relational | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.EntityFrameworkCore.SqlServer | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.EntityFrameworkCore.Sqlite | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.EntityFrameworkCore.Tools | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Extensions.Caching.Hybrid | 9.9.0 | 10.7.0 | #25706 |
+| Microsoft.Extensions.Caching.Memory | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Extensions.Caching.StackExchangeRedis | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Extensions.Configuration.Binder | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Extensions.Configuration.CommandLine | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Extensions.Configuration.EnvironmentVariables | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Extensions.Configuration.UserSecrets | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Extensions.DependencyInjection | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Extensions.DependencyInjection.Abstractions | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Extensions.FileProviders.Composite | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Extensions.FileProviders.Embedded | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Extensions.FileProviders.Physical | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Extensions.FileSystemGlobbing | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Extensions.Hosting | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Extensions.Hosting.Abstractions | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Extensions.Http | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Extensions.Identity.Core | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Extensions.Localization | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Extensions.Logging | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Extensions.Logging.Abstractions | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Extensions.Logging.Console | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Extensions.Options | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.Extensions.Options.ConfigurationExtensions | 10.0.7 | 10.0.9 | #25706 |
+| Microsoft.IdentityModel.JsonWebTokens | 8.16.0 | 8.19.1 | #25706 |
+| Microsoft.IdentityModel.Protocols.OpenIdConnect | 8.16.0 | 8.19.1 | #25706 |
+| Microsoft.IdentityModel.Tokens | 8.16.0 | 8.19.1 | #25706 |
+| System.Collections.Immutable | 10.0.7 | 10.0.9 | #25706 |
+| System.IdentityModel.Tokens.Jwt | 8.16.0 | 8.19.1 | #25706 |
+| System.Management | 10.0.7 | 10.0.9 | #25706 |
+| System.Security.Cryptography.Xml | 10.0.7 | 10.0.9 | #25706 |
+| System.Security.Permissions | 10.0.7 | 10.0.9 | #25706 |
+| System.Text.Encoding.CodePages | 10.0.7 | 10.0.9 | #25706 |
+| System.Text.Encodings.Web | 10.0.7 | 10.0.9 | #25706 |
+| System.Text.Json | 10.0.7 | 10.0.9 | #25706 |
+
 ## 10.5.0-rc.4
 
 | Package | Old Version | New Version | PR |
