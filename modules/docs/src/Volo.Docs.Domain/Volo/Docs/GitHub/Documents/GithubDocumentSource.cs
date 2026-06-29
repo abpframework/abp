@@ -230,8 +230,8 @@ namespace Volo.Docs.GitHub.Documents
             var fileCommitsAfterCreation = commits.Take(commits.Count - 1);
 
             var commitsToEvaluate = (lastKnownSignificantUpdateTime != null
-                ? fileCommitsAfterCreation.Where(c => c.Commit.Author.Date.DateTime > lastKnownSignificantUpdateTime)
-                : fileCommitsAfterCreation).Where(c => c.Commit.Author.Date.DateTime > DateTime.Now.AddDays(-14));
+                ? fileCommitsAfterCreation.Where(c => c.Commit.Author.Date.UtcDateTime > lastKnownSignificantUpdateTime)
+                : fileCommitsAfterCreation).Where(c => c.Commit.Author.Date.UtcDateTime > DateTime.UtcNow.AddDays(-14));
 
             foreach (var gitHubCommit in commitsToEvaluate)
             {

@@ -16,12 +16,11 @@ namespace Volo.Abp.Json;
 ///
 /// When <see cref="AbpClockOptions.Kind"/> is <see cref="DateTimeKind.Utc"/> the converter treats
 /// an <see cref="DateTimeKind.Unspecified"/> value as local time in the current user's timezone and
-/// converts it to UTC via <c>new DateTimeOffset(value, offset).UtcDateTime</c>. For a placeholder
-/// such as <see cref="DateTime.MinValue"/> a positive offset (e.g. Asia/Shanghai = +08:00) pushes
-/// the value before <see cref="DateTime.MinValue"/> and throws <see cref="ArgumentOutOfRangeException"/>,
-/// which used to be swallowed and logged as a warning on every serialization. The converter now
-/// skips the timezone conversion for the <see cref="DateTime.MinValue"/>/<see cref="DateTime.MaxValue"/>
-/// sentinel values, so no warning is emitted while the serialized output stays unchanged.
+/// converts it to UTC. For a value within the offset distance of <see cref="DateTime.MinValue"/>/
+/// <see cref="DateTime.MaxValue"/> (most commonly the <see cref="DateTime.MinValue"/> placeholder) a
+/// non-zero offset pushes the UTC equivalent outside the supported range, which used to be swallowed
+/// and logged as a warning on every serialization. The converter now detects this boundary case and
+/// keeps the value unchanged, so no warning is emitted while the serialized output stays the same.
 /// </summary>
 public class AbpDateTimeConverterTimezone_Tests : AbpJsonSystemTextJsonTestBase
 {
