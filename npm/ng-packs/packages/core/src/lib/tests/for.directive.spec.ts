@@ -1,5 +1,11 @@
+import { TemplateRef, ɵSIGNAL as SIGNAL } from '@angular/core';
 import { SpectatorDirective, createDirectiveFactory } from '@ngneat/spectator/vitest';
 import { ForDirective } from '../directives/for.directive';
+
+const setInputSignal = <T>(inputSignal: () => T, value: T) => {
+  const node = inputSignal[SIGNAL];
+  node.applyValueToInputSignal(node, value);
+};
 
 describe('ForDirective', () => {
   let spectator: SpectatorDirective<ForDirective>;
@@ -9,12 +15,44 @@ describe('ForDirective', () => {
     directive: ForDirective,
   });
 
+  const renderChanges = () => {
+    directive.ngOnChanges();
+    spectator.fixture.detectChanges(false);
+    spectator.fixture.detectChanges(false);
+  };
+
+  const resetProjection = () => {
+    directive['vcRef'].clear();
+    directive['lastItemsRef'] = null;
+    directive['differ'] = null;
+  };
+
+  const setDirectiveInputs = (inputs: Partial<Record<keyof ForDirective, unknown>>) => {
+    Object.entries(inputs).forEach(([key, value]) => {
+      setInputSignal(directive[key], value);
+    });
+    resetProjection();
+    renderChanges();
+  };
+
+  const getTexts = () => spectator.queryAll('li').map(el => el.textContent.trim());
+
+  const getTemplateRef = node => {
+    try {
+      return node.injector.get(TemplateRef);
+    } catch {
+      return null;
+    }
+  };
+
+  const getTemplateRefs = () =>
+    spectator.fixture.debugElement.queryAllNodes(getTemplateRef).map(getTemplateRef);
+
   describe('basic', () => {
     beforeEach(() => {
-      spectator = createDirective('<ul><li  *abpFor="let item of items">{{ item }}</li></ul>', {
-        hostProps: { items },
-      });
+      spectator = createDirective('<ul><ng-template abpFor let-item><li>{{ item }}</li></ng-template></ul>');
       directive = spectator.directive;
+      setDirectiveInputs({ items });
     });
 
     test('should be created', () => {
@@ -29,166 +67,116 @@ describe('ForDirective', () => {
     });
 
     test('should sync the DOM when change items', () => {
-      directive.items = [10, 11, 12];
-      directive['vcRef'].clear();
-      directive['lastItemsRef'] = null;
-      directive['differ'] = null;
-      directive.ngOnChanges();
-      spectator.detectChanges();
-      const elements = spectator.queryAll('li');
+      setDirectiveInputs({ items: [10, 11, 12] });
 
+      const elements = spectator.queryAll('li');
       expect(elements[1]).toHaveText('11');
       expect(elements).toHaveLength(3);
     });
 
     test('should sync the DOM when add an item', () => {
-      directive.items = [...items, 6];
-      directive['vcRef'].clear();
-      directive['lastItemsRef'] = null;
-      directive['differ'] = null;
-      directive.ngOnChanges();
-      spectator.detectChanges();
-      const elements = spectator.queryAll('li');
+      setDirectiveInputs({ items: [...items, 6] });
 
+      const elements = spectator.queryAll('li');
       expect(elements[6]).toHaveText('6');
       expect(elements).toHaveLength(7);
     });
   });
 
   describe('trackBy', () => {
-    const trackByFn = (_, item) => item;
+    const trackByFn = (_: number, item: number) => item;
+
     beforeEach(() => {
-      spectator = createDirective(
-        '<ul><li  *abpFor="let item of items; trackBy: trackByFn">{{ item }}</li></ul>',
-        {
-          hostProps: { items, trackByFn },
-        },
-      );
+      spectator = createDirective('<ul><ng-template abpFor let-item><li>{{ item }}</li></ng-template></ul>');
       directive = spectator.directive;
+      setDirectiveInputs({ items, trackBy: trackByFn });
     });
 
     test('should be setted the trackBy', () => {
-      expect(directive.trackBy).toEqual(trackByFn);
+      expect(directive.trackBy()).toEqual(trackByFn);
     });
   });
 
   describe('with basic order', () => {
     beforeEach(() => {
-      spectator = createDirective(
-        `<ul>
-          <li
-            *abpFor="let item of [3,6,2];
-            orderDir: 'ASC'">
-            {{ item }}
-          </li>
-        </ul>`,
-      );
+      spectator = createDirective('<ul><ng-template abpFor let-item><li>{{ item }}</li></ng-template></ul>');
       directive = spectator.directive;
+      setDirectiveInputs({ items: [3, 6, 2], orderDir: 'ASC' });
     });
 
     test('should order by asc', () => {
-      const elements = spectator.queryAll('li');
-      expect(elements.map(el => el.textContent.trim())).toEqual(['2', '3', '6']);
+      expect(getTexts()).toEqual(['2', '3', '6']);
     });
   });
 
   describe('with order', () => {
     beforeEach(() => {
       spectator = createDirective(
-        `<ul>
-          <li
-            *abpFor="let item of [{value: 3}, {value: 6}, {value: 2}];
-            orderBy: 'value';
-            orderDir: orderDir">
-            {{ item.value }}
-          </li>
-        </ul>`,
-        {
-          hostProps: { orderDir: 'ASC' },
-        },
+        '<ul><ng-template abpFor let-item><li>{{ item.value }}</li></ng-template></ul>',
       );
       directive = spectator.directive;
+      setDirectiveInputs({
+        items: [{ value: 3 }, { value: 6 }, { value: 2 }],
+        orderBy: 'value',
+        orderDir: 'ASC',
+      });
     });
 
     test('should order by asc', () => {
-      const elements = spectator.queryAll('li');
-      expect(elements.map(el => el.textContent.trim())).toEqual(['2', '3', '6']);
+      expect(getTexts()).toEqual(['2', '3', '6']);
     });
 
     test('should order by desc', () => {
-      directive.orderDir = 'DESC';
-      directive['vcRef'].clear();
-      directive['lastItemsRef'] = null;
-      directive['differ'] = null;
-      directive.ngOnChanges();
-      spectator.detectChanges();
+      setDirectiveInputs({ orderDir: 'DESC' });
 
-      const elements = spectator.queryAll('li');
-      expect(elements.map(el => el.textContent.trim())).toEqual(['6', '3', '2']);
+      expect(getTexts()).toEqual(['6', '3', '2']);
     });
   });
 
   describe('with filter', () => {
     beforeEach(() => {
       spectator = createDirective(
-        `<ul>
-          <li
-            *abpFor="let item of [{value: 'test'}, {value: 'abp'}, {value: 'volo'}];
-            filterBy: 'value';
-            filterVal: filterVal">
-            {{ item.value }}
-          </li>
-        </ul>`,
-        {
-          hostProps: { filterVal: '' },
-        },
+        '<ul><ng-template abpFor let-item><li>{{ item.value }}</li></ng-template></ul>',
       );
       directive = spectator.directive;
+      setDirectiveInputs({
+        items: [{ value: 'test' }, { value: 'abp' }, { value: 'volo' }],
+        filterBy: 'value',
+        filterVal: '',
+      });
     });
 
     test('should not filter when filterVal is empty,', () => {
-      const elements = spectator.queryAll('li');
-      expect(elements.map(el => el.textContent.trim())).toEqual(['test', 'abp', 'volo']);
+      expect(getTexts()).toEqual(['test', 'abp', 'volo']);
     });
 
     test('should be filtered', () => {
-      directive.filterVal = 'volo';
-      directive['vcRef'].clear();
-      directive['lastItemsRef'] = null;
-      directive['differ'] = null;
-      directive.ngOnChanges();
-      spectator.detectChanges();
+      setDirectiveInputs({ filterVal: 'volo' });
 
       expect(spectator.query('li')).toHaveText('volo');
     });
 
     test('should not show an element when filter value not match to any text', () => {
-      directive.filterVal = 'volos';
-      directive.ngOnChanges();
-      spectator.detectChanges();
+      setDirectiveInputs({ filterVal: 'volos' });
 
-      const elements = spectator.queryAll('li');
-      expect(elements).toHaveLength(0);
+      expect(spectator.queryAll('li')).toHaveLength(0);
     });
   });
 
   describe('with empty ref', () => {
     beforeEach(() => {
-      spectator = createDirective(
-        `<ul>
-          <li
-            *abpFor="let item of items;
-            emptyRef: empty">
-            {{ item.value }}
-          </li>
+      spectator = createDirective(`
+        <ul>
+          <ng-template abpFor let-item>
+            <li>{{ item.value }}</li>
+          </ng-template>
 
           <ng-template #empty>No records found</ng-template>
-        </ul>`,
-        {
-          hostProps: { items: [] },
-        },
-      );
+        </ul>
+      `);
       directive = spectator.directive;
+      const [, emptyRef] = getTemplateRefs();
+      setDirectiveInputs({ items: [], emptyRef });
     });
 
     test('should display the empty ref', () => {
@@ -200,12 +188,7 @@ describe('ForDirective', () => {
       expect(spectator.query('ul')).toHaveText('No records found');
       expect(spectator.queryAll('li')).toHaveLength(0);
 
-      directive.items = [0];
-      directive['vcRef'].clear();
-      directive['lastItemsRef'] = null;
-      directive['differ'] = null;
-      directive.ngOnChanges();
-      spectator.detectChanges();
+      setDirectiveInputs({ items: [{ value: 0 }] });
 
       expect(spectator.query('ul')).not.toHaveText('No records found');
       expect(spectator.queryAll('li')).toHaveLength(1);

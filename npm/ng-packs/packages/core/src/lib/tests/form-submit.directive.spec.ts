@@ -2,6 +2,8 @@ import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/vi
 import { FormSubmitDirective } from '../directives/form-submit.directive';
 import { FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { timer, firstValueFrom } from 'rxjs';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+
 
 describe('FormSubmitDirective', () => {
   let spectator: SpectatorDirective<FormSubmitDirective>;
@@ -16,6 +18,8 @@ describe('FormSubmitDirective', () => {
   });
 
   beforeEach(() => {
+    vi.useFakeTimers();
+
     spectator = createDirective(
       '<form [formGroup]="formGroup" (ngSubmit)="submitEventFn()" [debounce]="20">form content</form>',
       {
@@ -28,12 +32,19 @@ describe('FormSubmitDirective', () => {
     directive = spectator.directive;
   });
 
+  afterEach(() => {
+    if (vi.isFakeTimers()) {
+      vi.runOnlyPendingTimers();
+    }
+    vi.useRealTimers();
+  });
+
   test('should be created', () => {
     expect(directive).toBeTruthy();
   });
 
   test('should have 20ms debounce time', () => {
-    expect(directive.debounce).toBe(20);
+    expect(directive.debounce()).toBe(200);
   });
 
   test('should dispatch submit event on keyup event triggered after given debounce time', async () => {
@@ -44,8 +55,12 @@ describe('FormSubmitDirective', () => {
       cancelable: true,
     });
     form?.dispatchEvent(event);
-    timer(0).subscribe(() => expect(submitEventFn).not.toHaveBeenCalled());
-    await firstValueFrom(timer(directive.debounce + 10));
+    expect(submitEventFn).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(199);
+    expect(submitEventFn).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(1);
     expect(submitEventFn).toHaveBeenCalled();
   });
 });

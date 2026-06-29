@@ -1,9 +1,14 @@
-import { ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, ɵSIGNAL as SIGNAL  } from '@angular/core';
 import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/vitest';
 import { Subject } from 'rxjs';
 import { PermissionDirective } from '../directives/permission.directive';
 import { PermissionService } from '../services/permission.service';
 import { QUEUE_MANAGER } from '../tokens/queue.token';
+
+const setInputSignal = <T>(inputSignal: () => T, value: T) => {
+  const node = inputSignal[SIGNAL];
+  node.applyValueToInputSignal(node, value);
+};
 
 describe('PermissionDirective', () => {
   let spectator: SpectatorDirective<PermissionDirective>;
@@ -44,19 +49,19 @@ describe('PermissionDirective', () => {
 
   it('should handle permission input', () => {
     grantedPolicy$.next(false);
-    directive.condition = 'new-permission';
+    setInputSignal(directive.condition, 'new-permission');
     directive.ngOnChanges();
     grantedPolicy$.next(true);
     expect(directive).toBeTruthy();
-    expect(directive.condition).toBe('new-permission');
+    expect(directive.condition()).toBe('new-permission');
   });
 
   it('should handle runChangeDetection input', () => {
     grantedPolicy$.next(false);
-    directive.runChangeDetection = true;
+    setInputSignal(directive.runChangeDetection, true);
     directive.ngOnChanges();
     grantedPolicy$.next(true);
     expect(directive).toBeTruthy();
-    expect(directive.runChangeDetection).toBe(true);
+    expect(directive.runChangeDetection()).toBe(true);
   });
 });
