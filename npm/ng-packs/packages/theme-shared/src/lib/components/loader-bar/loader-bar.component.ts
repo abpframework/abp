@@ -40,8 +40,8 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
   readonly containerClass = input('abp-loader-bar');
   readonly color = input('#77b6ff');
 
-  protected readonly isLoading = signal(false);
-  protected readonly progressLevel = signal(0);
+  readonly isLoading = signal(false);
+  readonly progressLevel = signal(0);
 
   interval = new Subscription();
   timer = new Subscription();
