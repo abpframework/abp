@@ -73,15 +73,151 @@ body {
     &.scrolledMore {
         padding-top: 107px;
 
+        // Collapse the floating document-options bar into a round button (like the chat widget).
+        // The bar slides out of the way; hovering the button (or focusing a select) reveals the options.
+        // CSS-only so it applies on abp.io too (this stylesheet is bundled into that page).
         .alert-criteria {
-            position: fixed;
-            bottom: 0;
-            z-index: 10;
-            border: 0;
-            margin-left: -0;
+            position: fixed !important;
+            left: auto !important;
+            right: 20px !important;
+            bottom: 90px !important;
+            width: 360px !important;
+            max-width: calc(100vw - 40px) !important;
+            margin: 0 !important;
+            padding: 16px 18px 18px !important;
+            border-radius: 16px !important;
+            color: #2d2d2d !important;
+            z-index: 9999 !important;
+            visibility: hidden;
+            pointer-events: none;
+            background: transparent !important;
+            -webkit-backdrop-filter: none !important;
+            backdrop-filter: none !important;
+            border: 0 !important;
+            box-shadow: none !important;
+
+            // the round button
+            &::before {
+                content: "\f1de";
+                font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "FontAwesome";
+                font-weight: 900;
+                color: #6f42c1;
+                font-size: 24px;
+                position: fixed;
+                right: 20px;
+                bottom: 20px;
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #ffffff 0%, #f5f0ff 100%);
+                border: 1px solid #d9ccf2;
+                box-shadow: 0 8px 22px rgba(111, 66, 193, 0.16), 0 2px 6px rgba(31, 41, 55, 0.08);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                visibility: visible;
+                pointer-events: auto;
+                cursor: pointer;
+                z-index: 9999;
+                transition: transform 0.25s ease, box-shadow 0.25s ease;
+            }
+
+            &:hover::before,
+            &:focus-within::before {
+                transform: translateY(-2px);
+                box-shadow: 0 12px 28px rgba(111, 66, 193, 0.22);
+            }
+
+            // transparent bridge so hover survives the gap between button and popover
+            &::after {
+                content: "";
+                position: fixed;
+                right: 20px;
+                bottom: 20px;
+                width: 60px;
+                height: 74px;
+                background: transparent;
+                pointer-events: auto;
+                visibility: visible;
+                z-index: 9998;
+            }
+
+            &:hover,
+            &:focus-within {
+                visibility: visible;
+                pointer-events: auto;
+                background: #fff !important;
+                border: 1px solid #e6def7 !important;
+                box-shadow: 0 16px 40px rgba(40, 20, 80, 0.18) !important;
+            }
+
+            // abp.io renders an .options-header title, so its info line is redundant; module pages keep it
+            &:has(.options-header) p.alert-p {
+                display: none !important;
+            }
 
             p.alert-p {
-                display: none;
+                margin: 0 0 12px !important;
+                color: #6f42c1 !important;
+                font-weight: 600;
+            }
+
+            .options-header {
+                display: flex !important;
+                color: #6f42c1 !important;
+                font-weight: 700;
+                margin-bottom: 12px;
+
+                .toggle-btn {
+                    display: none !important;
+                }
+            }
+
+            .row > div {
+                width: 100% !important;
+                max-width: 100% !important;
+                flex: 0 0 100% !important;
+                margin-bottom: 1rem !important;
+
+                &:last-child {
+                    margin-bottom: 0 !important;
+                }
+            }
+
+            @media (max-width: 768px) {
+                right: 10px !important;
+                bottom: 75px !important;
+                width: calc(100vw - 20px) !important;
+
+                &::before {
+                    right: 10px;
+                    bottom: 10px;
+                    width: 55px;
+                    height: 55px;
+                    font-size: 22px;
+                }
+
+                &::after {
+                    right: 10px;
+                    bottom: 10px;
+                    width: 55px;
+                    height: 70px;
+                }
+            }
+        }
+
+        // when a chat widget is present (e.g. abp.io), shift the button to its left
+        &:has(#abp-chatbot-container) .alert-criteria {
+            &::before,
+            &::after {
+                right: 92px;
+            }
+
+            @media (max-width: 768px) {
+                &::before,
+                &::after {
+                    right: 75px;
+                }
             }
         }
     }
