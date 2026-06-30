@@ -1,4 +1,4 @@
-import { Component, inject, input, output, ɵSIGNAL as SIGNAL } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { Router } from '@angular/router';
 import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/vitest';
 import { BehaviorSubject } from 'rxjs';
@@ -86,18 +86,12 @@ describe('ReplaceableTemplateDirective', () => {
     it('should create directive successfully', () => {
       spectator = createDirective(
         `
-        <div *abpReplaceableTemplate="{inputs: {oneWay: {value: oneWay}, twoWay: {value: twoWay, twoWay: true}}, outputs: {twoWayChange: twoWayChange, someOutput: someOutput}, componentKey: 'TestModule.TestComponent'}; let initTemplate = initTemplate">
+        <ng-template abpReplaceableTemplate let-initTemplate="initTemplate">
           <abp-default-component #defaultComponent="abpDefaultComponent"></abp-default-component>
-        </div>
+        </ng-template>
         `,
         {
           detectChanges: false,
-          hostProps: {
-            oneWay: { label: 'Test' },
-            twoWay: false,
-            twoWayChange: vi.fn(),
-            someOutput: vi.fn(),
-          },
         },
       );
       setInputSignal(spectator.directive.data, {

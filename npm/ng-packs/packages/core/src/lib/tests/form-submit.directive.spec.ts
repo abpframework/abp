@@ -1,8 +1,8 @@
 import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/vitest';
 import { FormSubmitDirective } from '../directives/form-submit.directive';
 import { FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
-import { timer, firstValueFrom } from 'rxjs';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import { setInputSignal } from './utils';
 
 
 describe('FormSubmitDirective', () => {
@@ -21,7 +21,7 @@ describe('FormSubmitDirective', () => {
     vi.useFakeTimers();
 
     spectator = createDirective(
-      '<form [formGroup]="formGroup" (ngSubmit)="submitEventFn()" [debounce]="20">form content</form>',
+      '<form ngSubmit [formGroup]="formGroup" (ngSubmit)="submitEventFn()">form content</form>',
       {
         hostProps: {
           submitEventFn,
@@ -30,6 +30,7 @@ describe('FormSubmitDirective', () => {
       },
     );
     directive = spectator.directive;
+    setInputSignal(directive.debounce, 20);
   });
 
   afterEach(() => {
@@ -44,7 +45,7 @@ describe('FormSubmitDirective', () => {
   });
 
   test('should have 20ms debounce time', () => {
-    expect(directive.debounce()).toBe(200);
+    expect(directive.debounce()).toBe(20);
   });
 
   test('should dispatch submit event on keyup event triggered after given debounce time', async () => {

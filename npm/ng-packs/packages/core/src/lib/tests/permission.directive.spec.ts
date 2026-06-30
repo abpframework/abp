@@ -21,7 +21,7 @@ describe('PermissionDirective', () => {
 
   beforeEach(() => {
     spectator = createDirective(
-      '<div [abpPermission]="permission" [abpPermissionRunChangeDetection]="runCD"></div>',
+      '<div abpPermission>test</div>',
       {
         hostProps: { permission: 'test', runCD: false },
       },

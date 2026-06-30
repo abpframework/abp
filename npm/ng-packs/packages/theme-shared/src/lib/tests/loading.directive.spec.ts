@@ -21,7 +21,7 @@ describe('LoadingDirective', () => {
 
   describe('default', () => {
     beforeEach(() => {
-      spectator = createDirective('<div [abpLoading]="loading">Testing Loading Directive</div>', {
+      spectator = createDirective('<div abpLoading>Testing Loading Directive</div>', {
         hostProps: { loading: true },
       });
     });
@@ -78,7 +78,7 @@ describe('LoadingDirective', () => {
 
   describe('with a component selector', () => {
     beforeEach(() => {
-      spectator = createDirective('<abp-dummy [abpLoading]="loading"></abp-dummy>', {
+      spectator = createDirective('<abp-dummy abpLoading></abp-dummy>', {
         hostProps: { loading: true },
       });
     });

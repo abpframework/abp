@@ -11,12 +11,9 @@ describe('EllipsisDirective', () => {
   });
 
   beforeEach(() => {
-    spectator = createDirective(
-      '<div [abpEllipsis]="width" [abpEllipsisEnabled]="true" [title]="title">test content</div>',
-      {
-        detectChanges: false,
-      },
-    );
+    spectator = createDirective('<div abpEllipsis>test content</div>', {
+      detectChanges: false,
+    });
     setInputSignal(spectator.directive.width, '100px');
     setInputSignal(spectator.directive.enabled, true);
     setInputSignal(spectator.directive.title, 'title');
@@ -56,15 +53,9 @@ describe('EllipsisDirective when title is not specified', () => {
   });
 
   beforeEach(() => {
-    spectator = createDirective(
-      '<div [abpEllipsis]="width" [abpEllipsisEnabled]="true" [title]="title">test content</div>',
-      {
-        hostProps: {
-          title: undefined,
-          width: '100px',
-        },
-      },
-    );
+    spectator = createDirective('<div abpEllipsis>test content</div>', {
+      detectChanges: false,
+    });
     setInputSignal(spectator.directive.width, '100px');
     setInputSignal(spectator.directive.enabled, true);
     setInputSignal(spectator.directive.title, undefined);
@@ -87,15 +78,9 @@ describe('EllipsisDirective when width is not given', () => {
   });
 
   beforeEach(() => {
-    spectator = createDirective(
-      '<div [abpEllipsis]="width" [abpEllipsisEnabled]="true" [title]="title">test content</div>',
-      {
-        hostProps: {
-          title: 'test title',
-          width: undefined,
-        },
-      },
-    );
+    spectator = createDirective('<div abpEllipsis>test content</div>', {
+      detectChanges: false,
+    });
     setInputSignal(spectator.directive.width, undefined);
     setInputSignal(spectator.directive.enabled, true);
     setInputSignal(spectator.directive.title, 'test title');
