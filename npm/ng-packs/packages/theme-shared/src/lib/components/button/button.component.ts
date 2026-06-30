@@ -63,10 +63,6 @@ export class ButtonComponent implements OnInit {
     this.isLoading() ? 'fa fa-spinner fa-spin' : this.iconClass() || 'd-none',
   );
 
-  setLoading(value: boolean): void {
-    this.modalLoading.set(value);
-  }
-
   ngOnInit() {
     const attributes = this.attributes();
     if (attributes) {
@@ -76,5 +72,9 @@ export class ButtonComponent implements OnInit {
         }
       });
     }
+  }
+
+  setLoading(value: boolean): void {
+    this.modalLoading.set(value);
   }
 }

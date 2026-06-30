@@ -8,10 +8,13 @@ import { ToasterService } from '../services/toaster.service';
 describe('ToasterService', () => {
   let spectator: SpectatorService<ToasterService>;
   let service: ToasterService;
+  
   const mockComponentRef = {
     changeDetectorRef: { detectChanges: vi.fn() },
-    instance: {} as ToastContainerComponent,
-  } as unknown as ComponentRef<ToastContainerComponent>;
+    instance: {
+      setToasts: vi.fn(), remove: vi.fn(), toasts: [], top: 0, right: 0, bottom: 0, left: 0,
+    },
+  };
 
   const contentProjectionService = {
     projectContent: vi.fn().mockReturnValue(mockComponentRef),

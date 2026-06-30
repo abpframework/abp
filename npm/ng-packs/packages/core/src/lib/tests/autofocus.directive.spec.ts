@@ -1,6 +1,6 @@
 import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/vitest';
 import { AutofocusDirective } from '../directives/autofocus.directive';
-import { timer } from 'rxjs';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 describe('AutofocusDirective', () => {
   let spectator: SpectatorDirective<AutofocusDirective>;
@@ -11,26 +11,32 @@ describe('AutofocusDirective', () => {
   });
 
   beforeEach(() => {
-    spectator = createDirective('<input [autofocus]="10" />', {
-      hostProps: {},
-    });
+    vi.useFakeTimers();
+
+    spectator = createDirective('<input autofocus />');
     directive = spectator.directive;
     input = spectator.query('input');
+  });
+
+  afterEach(() => {
+    if (vi.isFakeTimers()) {
+      vi.runOnlyPendingTimers();
+    }
+    vi.useRealTimers();
   });
 
   test('should be created', () => {
     expect(directive).toBeTruthy();
   });
 
-  test('should have 10ms delay', () => {
-    expect(directive.delay).toBe(10);
+  test('should have 0ms delay', () => {
+    expect(directive.delay()).toBe(0);
   });
 
-  test('should focus element after given delay', () => {
-    timer(0).subscribe(() => expect('input').not.toBeFocused());
-    timer(11).subscribe(() => {
-      expect('input').toBeFocused();
-      expect.hasAssertions();
-    });
+  test('should focus element after default delay', () => {
+    expect(input).not.toBeFocused();
+
+    vi.runOnlyPendingTimers();
+    expect(input).toBeFocused();
   });
 });

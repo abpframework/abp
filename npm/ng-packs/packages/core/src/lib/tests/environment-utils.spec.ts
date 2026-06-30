@@ -97,11 +97,11 @@ describe('EnvironmentUtils', () => {
 
     it('should handle request error gracefully and use local environment', async () => {
       const injector = spectator.inject(Injector);
-      const injectorSpy = jest.spyOn(injector, 'get');
+      const injectorSpy = vi.spyOn(injector, 'get');
       const http = spectator.inject(HttpClient);
-      const requestSpy = jest.spyOn(http, 'request');
+      const requestSpy = vi.spyOn(http, 'request');
       const environmentService = spectator.inject(EnvironmentService);
-      const setStateSpy = jest.spyOn(environmentService, 'setState');
+      const setStateSpy = vi.spyOn(environmentService, 'setState');
 
       injectorSpy.mockReturnValueOnce(environmentService);
       injectorSpy.mockReturnValueOnce(http);
