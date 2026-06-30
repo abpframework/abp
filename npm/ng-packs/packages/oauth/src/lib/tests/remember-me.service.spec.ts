@@ -34,7 +34,7 @@ describe('RememberMeService', () => {
   it('should remove remember me', () => {
     rememberMeService.remove();
     expect(abpLocalStorageService.removeItem).toHaveBeenCalledWith(key);
-    expect(abpLocalStorageService.removeItem).toBeCalledTimes(1);
+    expect(abpLocalStorageService.removeItem).toHaveBeenCalledTimes(1);
   });
 
   it('if notting has ben setted, it should return false value', () => {

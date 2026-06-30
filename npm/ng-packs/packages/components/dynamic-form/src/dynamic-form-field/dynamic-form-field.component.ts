@@ -1,13 +1,15 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
+  computed,
   DestroyRef,
   forwardRef,
   inject,
-  InjectionToken, Injector,
+  InjectionToken,
+  Injector,
   input,
   OnInit,
+  signal,
 } from '@angular/core';
 import { FormFieldConfig } from '../dynamic-form.models';
 import {
@@ -21,6 +23,7 @@ import {
   FormGroup,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { merge } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgTemplateOutlet, AsyncPipe } from '@angular/common';
 import { LocalizationPipe } from '@abp/ng.core';
@@ -28,7 +31,9 @@ import { FormCheckboxComponent } from '@abp/ng.theme.shared';
 import { Observable, of } from 'rxjs';
 import { DynamicFormService } from '../dynamic-form.service';
 
-export const ABP_DYNAMIC_FORM_FIELD = new InjectionToken<DynamicFormFieldComponent>('AbpDynamicFormField');
+export const ABP_DYNAMIC_FORM_FIELD = new InjectionToken<DynamicFormFieldComponent>(
+  'AbpDynamicFormField',
+);
 
 const DYNAMIC_FORM_FIELD_CONTROL_VALUE_ACCESSOR = {
   provide: NG_VALUE_ACCESSOR,
@@ -47,18 +52,24 @@ const DYNAMIC_FORM_FIELD_CONTROL_VALUE_ACCESSOR = {
   host: { class: 'abp-dynamic-form-field' },
   exportAs: 'abpDynamicFormField',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgTemplateOutlet, LocalizationPipe, ReactiveFormsModule, FormCheckboxComponent, AsyncPipe],
+  imports: [
+    NgTemplateOutlet,
+    LocalizationPipe,
+    ReactiveFormsModule,
+    FormCheckboxComponent,
+    AsyncPipe,
+  ],
 })
 export class DynamicFormFieldComponent implements OnInit, ControlValueAccessor {
   field = input.required<FormFieldConfig>();
   visible = input<boolean>(true);
   control!: FormControl;
   fieldFormGroup: FormGroup;
-  readonly changeDetectorRef = inject(ChangeDetectorRef);
   readonly destroyRef = inject(DestroyRef);
   private injector = inject(Injector);
   private formBuilder = inject(FormBuilder);
   private dynamicFormService = inject(DynamicFormService);
+  private readonly controlStateTick = signal(0);
 
   options$: Observable<{ key: string; value: any }[]> = of([]);
 
@@ -75,6 +86,38 @@ export class DynamicFormFieldComponent implements OnInit, ControlValueAccessor {
     return `${this.fieldId}-help`;
   }
 
+  readonly isInvalid = computed(() => {
+    this.controlStateTick();
+    if (this.control) {
+      return this.control.invalid && (this.control.dirty || this.control.touched);
+    }
+    return false;
+  });
+
+  readonly errors = computed(() => {
+    this.controlStateTick();
+    if (!this.control?.errors) return [];
+    if (this.control && this.control.errors) {
+      const errorKeys = Object.keys(this.control.errors);
+      const validators = this.field().validators || [];
+      return errorKeys.map(key => {
+        const validator = validators.find(v => v.type.toLowerCase() === key.toLowerCase());
+        if (validator && validator.message) {
+          return validator.message;
+        }
+        // Fallback error messages
+        if (key === 'required') return `${this.field().label} is required`;
+        if (key === 'email') return 'Please enter a valid email address';
+        if (key === 'minlength')
+          return `Minimum length is ${this.control.errors[key].requiredLength}`;
+        if (key === 'maxlength')
+          return `Maximum length is ${this.control.errors[key].requiredLength}`;
+        return `${this.field().label} is invalid due to ${key} validation.`;
+      });
+    }
+    return [];
+  });
+
   constructor() {
     this.fieldFormGroup = this.formBuilder.group({
       value: [{ value: '' }],
@@ -85,6 +128,9 @@ export class DynamicFormFieldComponent implements OnInit, ControlValueAccessor {
     const ngControl = this.injector.get(NgControl, null);
     if (ngControl) {
       this.control = this.injector.get(FormGroupDirective).getControl(ngControl as FormControlName);
+      merge(this.control.statusChanges, this.control.valueChanges)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(() => this.controlStateTick.update(tick => tick + 1));
     }
     this.value.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
       this.onChange(value);
@@ -99,9 +145,9 @@ export class DynamicFormFieldComponent implements OnInit, ControlValueAccessor {
         options.defaultValues.map(item => {
           return {
             key: item[options.valueProp || 'key'] || item,
-            value: item[options.labelProp || 'value'] || item
+            value: item[options.labelProp || 'value'] || item,
           };
-        })
+        }),
       );
     } else {
       this.options$ = of([]);
@@ -110,7 +156,6 @@ export class DynamicFormFieldComponent implements OnInit, ControlValueAccessor {
 
   writeValue(value: any[]): void {
     this.value.setValue(value || '');
-    this.changeDetectorRef.markForCheck();
   }
 
   registerOnChange(fn: any): void {
@@ -127,40 +172,8 @@ export class DynamicFormFieldComponent implements OnInit, ControlValueAccessor {
     } else {
       this.value.enable();
     }
-    this.changeDetectorRef.markForCheck();
   }
 
-  get isInvalid(): boolean {
-    if (this.control) {
-      return this.control.invalid && (this.control.dirty || this.control.touched);
-    }
-    return false;
-  }
-
-  get errors(): string[] {
-    if (!this.control?.errors) return [];
-    if (this.control && this.control.errors) {
-      const errorKeys = Object.keys(this.control.errors);
-      const validators = this.field().validators || [];
-      return errorKeys.map(key => {
-        const validator = validators.find(
-          v => v.type.toLowerCase() === key.toLowerCase(),
-        );
-        if (validator && validator.message) {
-          return validator.message;
-        }
-        // Fallback error messages
-        if (key === 'required') return `${this.field().label} is required`;
-        if (key === 'email') return 'Please enter a valid email address';
-        if (key === 'minlength')
-          return `Minimum length is ${this.control.errors[key].requiredLength}`;
-        if (key === 'maxlength')
-          return `Maximum length is ${this.control.errors[key].requiredLength}`;
-        return `${this.field().label} is invalid due to ${key} validation.`;
-      });
-    }
-    return [];
-  }
   get value() {
     return this.fieldFormGroup.get('value');
   }
@@ -175,6 +188,6 @@ export class DynamicFormFieldComponent implements OnInit, ControlValueAccessor {
     }
   }
 
-  private onChange: (value: any) => void = () => { };
-  private onTouched: () => void = () => { };
+  private onChange: (value: any) => void = () => {};
+  private onTouched: () => void = () => {};
 }

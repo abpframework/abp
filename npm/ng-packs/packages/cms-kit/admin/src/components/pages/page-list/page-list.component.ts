@@ -1,4 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ListService, PagedResultDto, LocalizationPipe } from '@abp/ng.core';
@@ -9,6 +10,7 @@ import { PageAdminService, GetPagesInputDto, PageDto } from '@abp/ng.cms-kit/pro
 import { eCmsKitAdminComponents } from '../../../enums';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-page-list',
   templateUrl: './page-list.component.html',
   providers: [
@@ -20,41 +22,34 @@ import { eCmsKitAdminComponents } from '../../../enums';
   ],
   imports: [ExtensibleTableComponent, PageComponent, LocalizationPipe, FormsModule, CommonModule],
 })
-export class PageListComponent implements OnInit {
-  data: PagedResultDto<PageDto> = { items: [], totalCount: 0 };
-
+export class PageListComponent {
   public readonly list = inject(ListService<GetPagesInputDto>);
   private pageService = inject(PageAdminService);
   private confirmationService = inject(ConfirmationService);
   private toasterService = inject(ToasterService);
 
-  filter = '';
+  readonly data = toSignal(
+    this.list.hookToQuery(query => {
+      let filters: Partial<GetPagesInputDto> = {};
+      if (this.list.filter) {
+        filters.filter = this.list.filter;
+      }
+      const input: GetPagesInputDto = {
+        ...query,
+        ...filters,
+      };
+      return this.pageService.getList(input);
+    }),
+    {
+      initialValue: { items: [], totalCount: 0 } as PagedResultDto<PageDto>,
+    },
+  );
 
-  ngOnInit() {
-    this.hookToQuery();
-  }
+  filter = '';
 
   onSearch() {
     this.list.filter = this.filter;
     this.list.get();
-  }
-
-  private hookToQuery() {
-    this.list
-      .hookToQuery(query => {
-        let filters: Partial<GetPagesInputDto> = {};
-        if (this.list.filter) {
-          filters.filter = this.list.filter;
-        }
-        const input: GetPagesInputDto = {
-          ...query,
-          ...filters,
-        };
-        return this.pageService.getList(input);
-      })
-      .subscribe(res => {
-        this.data = res;
-      });
   }
 
   delete(id: string) {
@@ -65,9 +60,7 @@ export class PageListComponent implements OnInit {
       })
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.pageService.delete(id).subscribe(() => {
-            this.list.get();
-          });
+          this.pageService.delete(id).subscribe(() => this.list.get());
         }
       });
   }

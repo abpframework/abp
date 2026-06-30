@@ -45,6 +45,8 @@ export class Body {
   responseTypeWithNamespace: string;
   requestType = 'any';
   responseType: string;
+  httpResponseType?: 'json' | 'text' | 'blob' | 'arraybuffer';
+  acceptHeader?: string;
   url: string;
 
   registerActionParameter = (param: ParameterInBody) => {
@@ -85,6 +87,9 @@ export class Body {
   }
 
   isBlobMethod() {
+    if (this.httpResponseType === 'blob') {
+      return true;
+    }
     return VOLO_REMOTE_STREAM_CONTENT.some(x => x === this.responseTypeWithNamespace);
   }
 

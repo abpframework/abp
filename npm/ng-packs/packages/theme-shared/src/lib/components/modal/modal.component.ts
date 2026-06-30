@@ -1,5 +1,4 @@
-import {
-  Component,
+import {Component,
   DestroyRef,
   OnDestroy,
   OnInit,
@@ -10,8 +9,7 @@ import {
   input,
   model,
   output,
-  viewChild,
-} from '@angular/core';
+  viewChild, ChangeDetectionStrategy,} from '@angular/core';
 import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SubscriptionService, uuid } from '@abp/ng.core';
@@ -27,6 +25,7 @@ import { DismissableModal, ModalDismissMode, ModalRefService } from './modal-ref
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-modal',
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.scss'],
@@ -45,14 +44,7 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
 
   visible = model<boolean>(false);
 
-  busy = input(false, {
-    transform: (value: boolean) => {
-      if (this.abpSubmit() && this.abpSubmit() instanceof ButtonComponent) {
-        this.abpSubmit().loading = value;
-      }
-      return value;
-    },
-  });
+  busy = input(false);
 
   options = input<NgbModalOptions>({ keyboard: true });
 
@@ -92,6 +84,15 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
     effect(() => {
       this.toggle(this.visible());
     });
+
+    effect(() => {
+      const submit = this.abpSubmit();
+      if (!(submit instanceof ButtonComponent)) {
+        return;
+      }
+
+      submit.setLoading(this.visible() && this.busy());
+    });
   }
 
   ngOnInit(): void {
@@ -115,8 +116,17 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
     this.visible.set(value);
 
     if (!value) {
-      this.modalRef?.dismiss();
+      if (this.modalRef) {
+        const ref = this.modalRef;
+        this.modalRef = undefined!;
+        ref.dismiss();
+      }
+
       this.disappear.emit();
+      return;
+    }
+
+    if (this.modalWindowRef) {
       return;
     }
 
@@ -134,6 +144,10 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
       },
       ...this.options(),
       windowClass: `${this.options().windowClass || ''} ${this.modalIdentifier}`,
+    });
+
+    this.modalRef.result.finally(() => {
+      this.modalRef = undefined!;
     });
 
     this.appear.emit();

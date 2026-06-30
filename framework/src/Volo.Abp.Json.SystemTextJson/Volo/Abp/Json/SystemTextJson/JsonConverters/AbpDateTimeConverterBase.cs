@@ -101,14 +101,14 @@ public abstract class AbpDateTimeConverterBase<T> : JsonConverter<T>
             return IsSkipDateTimeNormalization ? dateTime : Clock.Normalize(dateTime);
         }
 
+        var timeZone = CurrentTimezoneProvider.TimeZone;
         try
         {
-            var timezoneInfo = TimezoneProvider.GetTimeZoneInfo(CurrentTimezoneProvider.TimeZone);
-            dateTime = new DateTimeOffset(dateTime, timezoneInfo.GetUtcOffset(dateTime)).UtcDateTime;
+            dateTime = TimezoneProvider.ConvertUnspecifiedToUtc(dateTime, timeZone);
         }
         catch
         {
-            Logger.LogWarning("Could not convert DateTime with unspecified Kind using timezone '{TimeZone}'.", CurrentTimezoneProvider.TimeZone);
+            Logger.LogWarning("Could not convert DateTime with unspecified Kind using timezone '{TimeZone}'.", timeZone);
         }
 
         return IsSkipDateTimeNormalization ? dateTime : Clock.Normalize(dateTime);

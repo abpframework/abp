@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, ChangeDetectionStrategy,} from '@angular/core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-spinner',
   template: `
     <div class="d-flex justify-content-center align-items-center border-top" style="height: 62px">
