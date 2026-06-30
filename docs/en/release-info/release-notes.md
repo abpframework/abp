@@ -14,7 +14,7 @@ Also see the following notes about ABP releases:
 - [ABP Studio release notes](../studio/release-notes.md)
 - [Change logs for ABP pro packages](https://abp.io/pro-releases)
 
-## 10.5 (2026-06-02)
+## 10.5 (2026-06-30)
 
 See the detailed **[blog post / announcement](https://abp.io/community/articles/announcing-abp-10-5-release-candidate-k6oxdfle)** for the v10.5 release.
 

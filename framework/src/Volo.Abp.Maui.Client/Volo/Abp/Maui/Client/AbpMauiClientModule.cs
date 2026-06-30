@@ -11,7 +11,7 @@ namespace Volo.Abp.Maui.Client;
 )]
 public class AbpMauiClientModule : AbpModule
 {
-    public async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
         await context.ServiceProvider.GetRequiredService<IClientScopeServiceProviderAccessor>().ServiceProvider.GetRequiredService<MauiCachedApplicationConfigurationClient>().InitializeAsync();
     }
