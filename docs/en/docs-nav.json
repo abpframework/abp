@@ -2094,6 +2094,10 @@
           "path": "solution-templates/guide.md"
         },
         {
+          "text": "Modern vs Classic Templates",
+          "path": "solution-templates/modern-vs-classic.md"
+        },
+        {
           "text": "Single-Layer Solution",
           "isLazyExpandable": true,
           "path": "solution-templates/single-layer-web-application",
