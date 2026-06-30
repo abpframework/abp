@@ -1,12 +1,12 @@
 <abp-page [title]="'CmsKit::GlobalResources' | abpLocalization">
-  <form [formGroup]="form" (ngSubmit)="save()" validateOnSubmit>
+  <form [formGroup]="form" (ngSubmit)="save()" [validateOnSubmit]="true">
     <div class="card">
       <div class="card-body">
         <ul
           ngbNav
           #nav="ngbNav"
           class="nav-tabs"
-          [(activeId)]="activeTab"
+          [activeId]="activeTab()"
           (activeIdChange)="onTabChange($event)"
         >
           <li ngbNavItem="script">

@@ -1,5 +1,10 @@
-@if (form) {
-  <form [formGroup]="form" class="py-2 abp-md-form" (ngSubmit)="submit()" [validateOnSubmit]="true">
+@if (form(); as emailForm) {
+  <form
+    [formGroup]="emailForm"
+    class="py-2 abp-md-form"
+    (ngSubmit)="submit()"
+    [validateOnSubmit]="true"
+  >
     <div class="mb-3 form-group">
       <label class="form-label"
         >{{ 'AbpSettingManagement::DefaultFromDisplayName' | abpLocalization
@@ -49,28 +54,30 @@
     </div>
 
     <div
-      [@collapse]="{
-        value: form.get('smtpUseDefaultCredentials')?.value ? 'collapsed' : 'expanded',
-        params: { time: '200ms', easing: 'linear' },
-      }"
+      class="abp-collapse-y"
+      [class.abp-collapse-y-collapsed]="emailForm.get('smtpUseDefaultCredentials')?.value"
     >
-      <div class="mb-3 form-group">
-        <label class="form-label">{{ 'AbpSettingManagement::SmtpDomain' | abpLocalization }}</label>
-        <input type="text" class="form-control" formControlName="smtpDomain" />
-      </div>
+      <div class="abp-collapse-y-inner">
+        <div class="mb-3 form-group">
+          <label class="form-label">{{
+            'AbpSettingManagement::SmtpDomain' | abpLocalization
+          }}</label>
+          <input type="text" class="form-control" formControlName="smtpDomain" />
+        </div>
 
-      <div class="mb-3 form-group">
-        <label class="form-label">{{
-          'AbpSettingManagement::SmtpUserName' | abpLocalization
-        }}</label>
-        <input type="text" class="form-control" formControlName="smtpUserName" />
-      </div>
+        <div class="mb-3 form-group">
+          <label class="form-label">{{
+            'AbpSettingManagement::SmtpUserName' | abpLocalization
+          }}</label>
+          <input type="text" class="form-control" formControlName="smtpUserName" />
+        </div>
 
-      <div class="form-group">
-        <label class="form-label">{{
-          'AbpSettingManagement::SmtpPassword' | abpLocalization
-        }}</label>
-        <input type="password" class="form-control" formControlName="smtpPassword" />
+        <div class="form-group">
+          <label class="form-label">{{
+            'AbpSettingManagement::SmtpPassword' | abpLocalization
+          }}</label>
+          <input type="password" class="form-control" formControlName="smtpPassword" />
+        </div>
       </div>
     </div>
 
@@ -91,7 +98,11 @@
   </form>
 }
 
-<abp-modal [(visible)]="isEmailTestModalOpen" [options]="modalSize">
+<abp-modal
+  [visible]="isEmailTestModalOpen()"
+  (visibleChange)="isEmailTestModalOpen.set($event)"
+  [options]="modalSize"
+>
   <ng-template #abpHeader>
     <h3>{{ 'AbpSettingManagement::SendTestEmail' | abpLocalization }}</h3>
   </ng-template>

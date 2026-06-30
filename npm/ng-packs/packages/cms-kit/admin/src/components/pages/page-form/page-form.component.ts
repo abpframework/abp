@@ -1,4 +1,12 @@
-import { Component, OnInit, inject, Injector, DestroyRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  Injector,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -23,6 +31,7 @@ import { eCmsKitAdminComponents } from '../../../enums';
 import { PageFormService } from '../../../services';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-page-form',
   templateUrl: './page-form.component.html',
   providers: [
@@ -52,56 +61,58 @@ export class PageFormComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   form: FormGroup;
-  page: PageDto | null = null;
+  readonly page = signal<PageDto | null>(null);
   pageId: string | null = null;
-  isEditMode = false;
+  readonly isEditMode = signal(false);
 
   ngOnInit() {
     const id = this.route.snapshot.params['id'];
     if (id) {
-      this.isEditMode = true;
+      this.isEditMode.set(true);
       this.pageId = id;
       this.loadPage(id);
     } else {
-      this.isEditMode = false;
+      this.isEditMode.set(false);
       this.buildForm();
     }
   }
 
   private loadPage(id: string) {
     this.pageService.get(id).subscribe(page => {
-      this.page = page;
+      this.page.set(page);
       this.buildForm();
     });
   }
 
   private buildForm() {
-    const data = new FormPropData(this.injector, this.page || {});
+    const currentPage = this.page();
+    const data = new FormPropData(this.injector, currentPage || {});
     const baseForm = generateFormFromProps(data);
     this.form = new FormGroup({
       ...baseForm.controls,
-      content: new FormControl(this.page?.content || ''),
-      script: new FormControl(this.page?.script || ''),
-      style: new FormControl(this.page?.style || ''),
+      content: new FormControl(currentPage?.content || ''),
+      script: new FormControl(currentPage?.script || ''),
+      style: new FormControl(currentPage?.style || ''),
     });
     prepareSlugFromControl(this.form, 'title', 'slug', this.destroyRef);
   }
 
   private executeSaveOperation(operation: 'save' | 'draft' | 'publish') {
-    if (this.isEditMode) {
-      if (!this.page || !this.pageId) {
+    if (this.isEditMode()) {
+      const currentPage = this.page();
+      if (!currentPage || !this.pageId) {
         return;
       }
 
       switch (operation) {
         case 'save':
-          this.pageFormService.update(this.pageId, this.form, this.page).subscribe();
+          this.pageFormService.update(this.pageId, this.form, currentPage).subscribe();
           break;
         case 'draft':
-          this.pageFormService.updateAsDraft(this.pageId, this.form, this.page).subscribe();
+          this.pageFormService.updateAsDraft(this.pageId, this.form, currentPage).subscribe();
           break;
         case 'publish':
-          this.pageFormService.updateAndPublish(this.pageId, this.form, this.page).subscribe();
+          this.pageFormService.updateAndPublish(this.pageId, this.form, currentPage).subscribe();
           break;
       }
       return;

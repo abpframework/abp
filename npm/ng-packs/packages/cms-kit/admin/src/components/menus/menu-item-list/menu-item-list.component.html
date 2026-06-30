@@ -1,12 +1,12 @@
-<abp-page [title]="'CmsKit::MenuItems' | abpLocalization" [toolbar]="nodes">
+<abp-page [title]="'CmsKit::MenuItems' | abpLocalization" [toolbar]="nodes()">
   <div class="card">
     <div class="card-body">
-      @if (nodes.length > 0) {
+      @if (nodes().length > 0) {
         <abp-tree
-          [nodes]="nodes"
-          [draggable]="draggable"
-          [expandedKeys]="expandedKeys"
-          [selectedNode]="selectedNode"
+          [nodes]="nodes()"
+          [draggable]="draggable()"
+          [expandedKeys]="expandedKeys()"
+          [selectedNode]="selectedNode()"
           (selectedNodeChange)="onSelectedNodeChange($event)"
           [beforeDrop]="beforeDrop"
           (dropOver)="onDrop($event)"
@@ -47,10 +47,10 @@
   </div>
 </abp-page>
 
-@if (isModalVisible) {
+@if (isModalVisible()) {
   <abp-menu-item-modal
-    [selected]="selectedMenuItem || undefined"
-    [parentId]="parentId"
+    [selected]="selectedMenuItem() || undefined"
+    [parentId]="parentId()"
     (visibleChange)="onVisibleModalChange($event)"
   />
 }

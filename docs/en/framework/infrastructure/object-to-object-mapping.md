@@ -254,8 +254,8 @@ public partial class UserToUserDtoMapper : TwoWayMapperBase<User, UserDto>
     public override partial UserDto Map(User source);
     public override partial void Map(User source, UserDto destination);
 
-    public override partial User ReverseMap(UserDto destination);
-    public override partial void ReverseMap(UserDto destination, User source);
+    public override partial User ReverseMap(UserDto source);
+    public override partial void ReverseMap(UserDto source, User destination);
 }
 ````
 
@@ -280,15 +280,15 @@ public partial class UserToUserDtoMapper : TwoWayMapperBase<User, UserDto>
         //TODO: Perform actions after the mapping
     }
 
-    public override partial User ReverseMap(UserDto destination);
-    public override partial void ReverseMap(UserDto destination, User source);
+    public override partial User ReverseMap(UserDto source);
+    public override partial void ReverseMap(UserDto source, User destination);
 
-    public override partial void BeforeReverseMap(UserDto destination)
+    public override partial void BeforeReverseMap(UserDto source)
     {
         //TODO: Perform actions before the reverse mapping
     }
 
-    public override partial void AfterReverseMap(UserDto destination, User source)
+    public override partial void AfterReverseMap(UserDto source, User destination)
     {
         //TODO: Perform actions after the reverse mapping
     }

@@ -1,4 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ListService, PagedResultDto, LocalizationPipe } from '@abp/ng.core';
@@ -10,6 +11,7 @@ import { eCmsKitAdminComponents } from '../../../enums';
 import { TagModalComponent, TagModalVisibleChange } from '../tag-modal/tag-modal.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-tag-list',
   templateUrl: './tag-list.component.html',
   providers: [
@@ -28,28 +30,35 @@ import { TagModalComponent, TagModalVisibleChange } from '../tag-modal/tag-modal
     TagModalComponent,
   ],
 })
-export class TagListComponent implements OnInit {
-  data: PagedResultDto<TagDto> = { items: [], totalCount: 0 };
-
+export class TagListComponent {
   public readonly list = inject(ListService<TagGetListInput>);
   private tagService = inject(TagAdminService);
   private confirmationService = inject(ConfirmationService);
 
+  readonly data = toSignal(
+    this.list.hookToQuery(query => {
+      let filters: Partial<TagGetListInput> = {};
+      if (this.list.filter) {
+        filters.filter = this.list.filter;
+      }
+      const input: TagGetListInput = {
+        ...query,
+        ...filters,
+      };
+      return this.tagService.getList(input);
+    }),
+    {
+      initialValue: { items: [], totalCount: 0 } as PagedResultDto<TagDto>,
+    },
+  );
+
+  readonly tagDefinitions = toSignal(this.tagService.getTagDefinitions(), {
+    initialValue: [] as TagDefinitionDto[],
+  });
+
   filter = '';
-  isModalVisible = false;
-  selected?: TagDto;
-  tagDefinitions: TagDefinitionDto[] = [];
-
-  ngOnInit() {
-    this.loadTagDefinitions();
-    this.hookToQuery();
-  }
-
-  private loadTagDefinitions() {
-    this.tagService.getTagDefinitions().subscribe(definitions => {
-      this.tagDefinitions = definitions;
-    });
-  }
+  readonly isModalVisible = signal(false);
+  readonly selected = signal<TagDto | undefined>(undefined);
 
   onSearch() {
     this.list.filter = this.filter;
@@ -57,33 +66,15 @@ export class TagListComponent implements OnInit {
   }
 
   add() {
-    this.selected = {} as TagDto;
-    this.isModalVisible = true;
+    this.selected.set({} as TagDto);
+    this.isModalVisible.set(true);
   }
 
   edit(id: string) {
     this.tagService.get(id).subscribe(tag => {
-      this.selected = tag;
-      this.isModalVisible = true;
+      this.selected.set(tag);
+      this.isModalVisible.set(true);
     });
-  }
-
-  private hookToQuery() {
-    this.list
-      .hookToQuery(query => {
-        let filters: Partial<TagGetListInput> = {};
-        if (this.list.filter) {
-          filters.filter = this.list.filter;
-        }
-        const input: TagGetListInput = {
-          ...query,
-          ...filters,
-        };
-        return this.tagService.getList(input);
-      })
-      .subscribe(res => {
-        this.data = res;
-      });
   }
 
   onVisibleModalChange(visibilityChange: TagModalVisibleChange) {
@@ -93,8 +84,8 @@ export class TagListComponent implements OnInit {
     if (visibilityChange.refresh) {
       this.list.get();
     }
-    this.selected = null;
-    this.isModalVisible = false;
+    this.selected.set(undefined);
+    this.isModalVisible.set(false);
   }
 
   delete(id: string, name: string) {
@@ -104,9 +95,7 @@ export class TagListComponent implements OnInit {
       })
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.tagService.delete(id).subscribe(() => {
-            this.list.get();
-          });
+          this.tagService.delete(id).subscribe(() => this.list.get());
         }
       });
   }

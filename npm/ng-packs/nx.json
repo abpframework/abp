@@ -111,7 +111,12 @@
       }
     },
     "@nx/eslint:lint": {
-      "inputs": ["default", "{workspaceRoot}/.eslintrc.json"],
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/.eslintrc.json",
+        "{workspaceRoot}/tools/eslint-rules/**/*"
+      ],
       "cache": true
     },
     "@angular/build:application": {
@@ -135,5 +140,6 @@
       "!{projectRoot}/.eslintrc.json"
     ]
   },
-  "parallel": 3
+  "parallel": 3,
+  "analytics": false
 }

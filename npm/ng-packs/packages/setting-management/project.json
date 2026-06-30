@@ -31,7 +31,7 @@
       "executor": "@nx/vitest:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "reportsDirectory": "../../coverage/packages/setting-management"
+        "reportsDirectory": "{projectRoot}/../../coverage/packages/setting-management"
       }
     }
   }

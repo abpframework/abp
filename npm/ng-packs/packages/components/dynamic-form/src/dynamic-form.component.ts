@@ -6,7 +6,7 @@ import {
   inject,
   OnInit,
   DestroyRef,
-  ChangeDetectorRef,
+  signal,
 } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -43,10 +43,9 @@ export class DynamicFormComponent implements OnInit {
   formCancel = output<void>();
   private dynamicFormService = inject(DynamicFormService);
   readonly destroyRef = inject(DestroyRef);
-  readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   dynamicForm!: FormGroup;
-  fieldVisibility: { [key: string]: boolean } = {};
+  readonly fieldVisibility = signal<Record<string, boolean>>({});
 
   ngOnInit() {
     this.setupFormAndLogic();
@@ -74,7 +73,7 @@ export class DynamicFormComponent implements OnInit {
   }
 
   isFieldVisible(field: FormFieldConfig): boolean {
-    return this.fieldVisibility[field.key] !== false;
+    return this.fieldVisibility()[field.key] !== false;
   }
 
   getChildFormGroup(key: string): FormGroup {
@@ -88,16 +87,14 @@ export class DynamicFormComponent implements OnInit {
     this.dynamicForm.reset({ ...initialValues });
     this.dynamicForm.markAsUntouched();
     this.dynamicForm.markAsPristine();
-    this.changeDetectorRef.markForCheck();
   }
 
   private initializeFieldVisibility() {
+    const visibility: Record<string, boolean> = {};
     this.fields().forEach(field => {
-      this.fieldVisibility = {
-        ...this.fieldVisibility,
-        [field.key]: !field.conditionalLogic?.length,
-      };
+      visibility[field.key] = !field.conditionalLogic?.length;
     });
+    this.fieldVisibility.set(visibility);
   }
 
   private setupConditionalLogic() {
@@ -152,10 +149,10 @@ export class DynamicFormComponent implements OnInit {
 
     switch (action) {
       case ConditionalAction.SHOW:
-        this.fieldVisibility = { ...this.fieldVisibility, [fieldKey]: shouldApply };
+        this.fieldVisibility.update(visibility => ({ ...visibility, [fieldKey]: shouldApply }));
         break;
       case ConditionalAction.HIDE:
-        this.fieldVisibility = { ...this.fieldVisibility, [fieldKey]: !shouldApply };
+        this.fieldVisibility.update(visibility => ({ ...visibility, [fieldKey]: !shouldApply }));
         break;
       case ConditionalAction.ENABLE:
         if (control) {
@@ -174,7 +171,6 @@ export class DynamicFormComponent implements OnInit {
     this.dynamicForm = this.dynamicFormService.createFormGroup(this.fields());
     this.initializeFieldVisibility();
     this.setupConditionalLogic();
-    this.changeDetectorRef.markForCheck();
   }
 
   private markAllFieldsAsTouched() {
