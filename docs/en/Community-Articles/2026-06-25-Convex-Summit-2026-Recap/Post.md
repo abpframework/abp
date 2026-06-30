@@ -28,7 +28,7 @@ And in one part of my talk, I need to ask questions like “Show me the top cust
 
 I asked the attendees how many of you have written SQL, created reporting screen, and %80 of people wrote SQL and created reporting UIs. And same amount of people also use .NET. 
 
-![Some photos from my talk 2](images/my-pictures-1.jpg)
+![Some photos from my talk 2](images/my-pictures-2.jpg)
 
 > **AI can make data more accessible, but architecture must define the boundaries.**
 
