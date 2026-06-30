@@ -1,5 +1,11 @@
+import { ɵSIGNAL as SIGNAL } from '@angular/core';
 import { createHostFactory, SpectatorHost } from '@ngneat/spectator/vitest';
 import { ButtonComponent } from '../components';
+
+const setInputSignal = <T>(inputSignal: () => T, value: T) => {
+  const node = inputSignal[SIGNAL];
+  node.applyValueToInputSignal(node, value);
+};
 
 describe('ButtonComponent', () => {
   let spectator: SpectatorHost<ButtonComponent>;
@@ -7,13 +13,13 @@ describe('ButtonComponent', () => {
   const createHost = createHostFactory(ButtonComponent);
 
   beforeEach(
-    () =>
-      (spectator = createHost(
-        '<abp-button iconClass="fa fa-check" [attributes]="attributes">Button</abp-button>',
-        {
-          hostProps: { attributes: { autofocus: '', name: 'abp-button' } },
-        },
-      )),
+    () => {
+      spectator = createHost('<abp-button>Button</abp-button>', {
+        detectChanges: false,
+      });
+      setInputSignal(spectator.component.iconClass, 'fa fa-check');
+      spectator.detectChanges();
+    },
   );
 
   it('should display the button', () => {
@@ -48,23 +54,17 @@ describe('ButtonComponent', () => {
   });
 
   it('should display the spinner icon when loading input is true', () => {
-    spectator = createHost(
-      '<abp-button iconClass="fa fa-check" [loading]="loading">Button</abp-button>',
-      { hostProps: { loading: true } },
-    );
+    setInputSignal(spectator.component.loading, true);
     spectator.detectComponentChanges();
     expect(spectator.query('i')).toHaveClass('fa-spinner');
   });
 
   it('should clear the spinner icon when loading input becomes false', () => {
-    spectator = createHost(
-      '<abp-button iconClass="fa fa-check" [loading]="loading">Button</abp-button>',
-      { hostProps: { loading: true } },
-    );
+    setInputSignal(spectator.component.loading, true);
     spectator.detectComponentChanges();
     expect(spectator.query('i')).toHaveClass('fa-spinner');
 
-    spectator.setHostInput({ loading: false });
+    setInputSignal(spectator.component.loading, false);
     spectator.detectComponentChanges();
     expect(spectator.query('i')).toHaveClass('fa-check');
     expect(spectator.query('i')).not.toHaveClass('fa-spinner');

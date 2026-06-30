@@ -4,7 +4,8 @@ import { NavigationStart, Router } from '@angular/router';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/vitest';
 import { combineLatest, firstValueFrom, Subject, timer } from 'rxjs';
 import { LoaderBarComponent } from '../components/loader-bar/loader-bar.component';
-import { setupComponentResources } from './utils';
+import { setupComponentResources, setInputSignal } from './utils';
+
 
 describe('LoaderBarComponent', () => {
   let spectator: Spectator<LoaderBarComponent>;
@@ -34,8 +35,8 @@ describe('LoaderBarComponent', () => {
   });
 
   it('should initial variable values are correct', () => {
-    expect(spectator.component.containerClass).toBe('abp-loader-bar');
-    expect(spectator.component.color).toBe('#77b6ff');
+    expect(spectator.component.containerClass()).toBe('abp-loader-bar');
+    expect(spectator.component.color()).toBe('#77b6ff');
   });
 
   it('should increase the progressLevel', async () => {
@@ -45,8 +46,7 @@ describe('LoaderBarComponent', () => {
     spectator.detectChanges();
 
     await new Promise(resolve => setTimeout(resolve, 10));
-
-    expect(spectator.component.progressLevel > 0).toBeTruthy();
+    expect(spectator.component.progressLevel()).toBeGreaterThan(0);
   });
 
 
@@ -100,15 +100,15 @@ describe('LoaderBarComponent', () => {
     spectator.detectChanges();
     
     attempts = 0;
-    while (spectator.component.progressLevel !== 100 && attempts < 50) {
+    while (spectator.component.progressLevel() !== 100 && attempts < 50) {
       await new Promise(resolve => setTimeout(resolve, 10));
       spectator.detectChanges();
       attempts++;
     }
-    expect(spectator.component.progressLevel).toBe(100);
+    expect(spectator.component.progressLevel()).toBe(100);
 
     await firstValueFrom(timer(spectator.component.stopDelay + 10));
-    expect(spectator.component.progressLevel).toBe(0);
+    expect(spectator.component.progressLevel()).toBe(0);
   });
 
   it('should stop the loading with navigation', async () => {
@@ -130,15 +130,15 @@ describe('LoaderBarComponent', () => {
     spectator.detectChanges();
     
     attempts = 0;
-    while (spectator.component.progressLevel !== 100 && attempts < 50) {
+    while (spectator.component.progressLevel() !== 100 && attempts < 50) {
       await new Promise(resolve => setTimeout(resolve, 10));
       spectator.detectChanges();
       attempts++;
     }
-    expect(spectator.component.progressLevel).toBe(100);
+    expect(spectator.component.progressLevel()).toBe(100);
 
     await firstValueFrom(timer(spectator.component.stopDelay + 10));
-    expect(spectator.component.progressLevel).toBe(0);
+    expect(spectator.component.progressLevel()).toBe(0);
   });
 
   describe('#startLoading', () => {
