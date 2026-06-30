@@ -9,7 +9,7 @@
 
 ABP provides pre-architected and production-ready templates to jump start a new solution.
 
-> **You can see the [Solution Template Selection Guide](guide.md) if you are not sure which solution template is suitable for you.**
+> **You can see the [Solution Template Selection Guide](guide.md) if you are not sure which solution template is suitable for you. See [Modern vs Classic Templates](modern-vs-classic.md) if you are choosing between ABP Studio's Modern and Classic template families.**
 
 The reference pages below cover both classic and modern ABP Studio template families. The Single-Layer and Layered pages document the classic templates. The Modular Monolith and Microservice pages call out the current modern structure where it differs.
 
