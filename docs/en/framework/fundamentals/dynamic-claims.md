@@ -70,7 +70,7 @@ There are three pre-built implementations of `IAbpDynamicClaimsPrincipalContribu
 
 * `IdentityDynamicClaimsPrincipalContributor`: Provided by the [Identity module](../../modules/identity.md) and generates and overrides the actual dynamic claims, and writes to the distributed cache. Typically works in the authentication server in a distributed system.
 * `RemoteDynamicClaimsPrincipalContributor`: For distributed scenarios, this implementation works in the UI application. It tries to get dynamic claim values in the distributed cache. If not found in the distributed cache, it makes an HTTP call to the authentication server and requests filling it by the authentication server. `AbpClaimsPrincipalFactoryOptions.RemoteRefreshUrl` should be properly configure to make it running.
-* `WebRemoteDynamicClaimsPrincipalContributor`: Similar to the `RemoteDynamicClaimsPrincipalContributor` but works in the microservice applications.
+* `WebRemoteDynamicClaimsPrincipalContributor`: Similar to the `RemoteDynamicClaimsPrincipalContributor` but works in the microservice applications. Both remote contributors run on the UI/API (resource-server) side that authenticates against a remote authentication server, not on the authentication server itself.
 
 ### IAbpDynamicClaimsPrincipalContributor
 
@@ -82,7 +82,8 @@ If you want to add your own dynamic claims contributor, you can create a class t
 
 * `IsDynamicClaimsEnabled`: Enable or disable the dynamic claims feature.
 * `RemoteRefreshUrl`: The `url ` of the Auth Server to refresh the cache. It will be used by the `RemoteDynamicClaimsPrincipalContributor`. The default value is `/api/account/dynamic-claims/refresh ` and you should provide the full URL in the authentication server, like `http://my-account-server/api/account/dynamic-claims/refresh `.
-* `DynamicClaims`: A list of dynamic claim types. Only the claims in that list will be overridden by the dynamic claims system.
+* `IsRemoteRefreshEnabled`: Controls whether the remote contributors (`RemoteDynamicClaimsPrincipalContributor` and `WebRemoteDynamicClaimsPrincipalContributor`) are registered. `true` by default, but the Identity module sets it to `false`. So an application that includes the Identity module builds the dynamic claims locally and does not register the remote contributors, even if `WebRemoteDynamicClaimsPrincipalContributorOptions.IsEnabled` is set to `true`.
+* `DynamicClaims`: A list of dynamic claim types. Only the claims in that list will be overridden by the dynamic claims system. Adding a claim type here makes the dynamic claims system authoritative for that type, so the source that fills the cache (the Identity-side claims principal factory in the local case) must actually produce it; otherwise the claim is cached with a null value and removed from the principal on each refresh.
 * `ClaimsMap`: A dictionary to map the claim types. This is used when the claim types are different between the Auth Server and the client. Already set up for common claim types by default.
 
 ## WebRemoteDynamicClaimsPrincipalContributorOptions
@@ -91,6 +92,8 @@ If you want to add your own dynamic claims contributor, you can create a class t
 
 * `IsEnabled`: Enable or disable the `WebRemoteDynamicClaimsPrincipalContributor`. `false` by default.
 * `AuthenticationScheme`: The authentication scheme to authenticate the HTTP call to the authentication server.
+
+> Setting `IsEnabled = true` registers the contributor only when `AbpClaimsPrincipalFactoryOptions.IsRemoteRefreshEnabled` is also `true`. Because the Identity module disables `IsRemoteRefreshEnabled`, this contributor is not registered in applications that include the Identity module; it is intended for the resource-server/microservice side of a tiered solution.
   
 ## See Also
 
