@@ -1,11 +1,7 @@
-import { TemplateRef, ɵSIGNAL as SIGNAL } from '@angular/core';
+import { TemplateRef } from '@angular/core';
 import { SpectatorDirective, createDirectiveFactory } from '@ngneat/spectator/vitest';
 import { ForDirective } from '../directives/for.directive';
-
-const setInputSignal = <T>(inputSignal: () => T, value: T) => {
-  const node = inputSignal[SIGNAL];
-  node.applyValueToInputSignal(node, value);
-};
+import { setInputSignal } from './utils';
 
 describe('ForDirective', () => {
   let spectator: SpectatorDirective<ForDirective>;

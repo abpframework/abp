@@ -1,8 +1,8 @@
-import { Component, DebugElement, ɵSIGNAL as SIGNAL } from '@angular/core';
+import { Component, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ShowPasswordDirective } from '../directives';
-
+import { setInputSignal } from './utils';
 @Component({
   template: ` <input abpShowPassword />
     <input abpShowPassword />
@@ -11,11 +11,6 @@ import { ShowPasswordDirective } from '../directives';
   imports: [ShowPasswordDirective],
 })
 class TestComponent {}
-
-const setInputSignal = <T>(inputSignal: () => T, value: T) => {
-  const node = inputSignal[SIGNAL];
-  node.applyValueToInputSignal(node, value);
-};
 
 describe('ShowPasswordDirective', () => {
   let fixture: ComponentFixture<TestComponent>;

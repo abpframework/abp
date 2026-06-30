@@ -1,11 +1,7 @@
-import { ɵSIGNAL as SIGNAL } from '@angular/core';
+
 import { createHostFactory, SpectatorHost } from '@ngneat/spectator/vitest';
 import { ButtonComponent } from '../components';
-
-const setInputSignal = <T>(inputSignal: () => T, value: T) => {
-  const node = inputSignal[SIGNAL];
-  node.applyValueToInputSignal(node, value);
-};
+import { setInputSignal } from './utils';
 
 describe('ButtonComponent', () => {
   let spectator: SpectatorHost<ButtonComponent>;

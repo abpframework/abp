@@ -5,12 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { ReplaceableTemplateDirective } from '../directives/replaceable-template.directive';
 import { ReplaceableComponents } from '../models/replaceable-components';
 import { ReplaceableComponentsService } from '../services/replaceable-components.service';
-
-const setInputSignal = <T>(inputSignal: () => T, value: T) => {
-  const node = inputSignal[SIGNAL];
-  node.applyValueToInputSignal(node, value);
-};
-
+import { setInputSignal } from './utils';
 @Component({
   selector: 'abp-default-component',
   template: ' <p>default</p> ',

@@ -1,14 +1,10 @@
-import { ChangeDetectorRef, ɵSIGNAL as SIGNAL  } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/vitest';
 import { Subject } from 'rxjs';
 import { PermissionDirective } from '../directives/permission.directive';
 import { PermissionService } from '../services/permission.service';
 import { QUEUE_MANAGER } from '../tokens/queue.token';
-
-const setInputSignal = <T>(inputSignal: () => T, value: T) => {
-  const node = inputSignal[SIGNAL];
-  node.applyValueToInputSignal(node, value);
-};
+import { setInputSignal } from './utils';
 
 describe('PermissionDirective', () => {
   let spectator: SpectatorDirective<PermissionDirective>;
