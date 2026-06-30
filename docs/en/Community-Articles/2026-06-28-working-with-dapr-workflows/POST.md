@@ -18,7 +18,7 @@ You define a [**workflow**](https://docs.dapr.io/developing-applications/buildin
 
 > **This is orchestration rather than choreography:** one place drives the process, instead of services reacting to each other's events. The definitions live in your app, but the engine that executes them runs in the Dapr sidecar next to it.
 
-![mermaid1](./mermaid1.png)
+![Dapr workflow execution architecture diagram](./mermaid1.png)
 
 The key idea is **durable execution**. Dapr records every step to a state store, so the workflow can be replayed from history at any time. A crash, a deployment, or a scale-out event doesn't lose progress, and a workflow can run for seconds or for months.
 
@@ -231,7 +231,7 @@ Each activity is isolated, so Dapr can retry a failed one without re-running the
 
 Here's the shape of the process we just wrote:
 
-![mermaid2](./mermaid2.png)
+![Order processing workflow flowchart](./mermaid2.png)
 
 ## Register the Workflow
 
