@@ -54,13 +54,15 @@ There are no explicitly marked breaking changes in this version. However, there 
 
 As always, exciting articles have been contributed by the ABP community. I will highlight some of them here:
 
-- [Fahri Gedik](https://abp.io/community/members/fahrigedik) has published 2 new articles:
-    - [New Look for ABP React Native: NativeWind, Modernization & Two Sample Apps](https://abp.io/community/articles/new-abp-modern-react-native-template-rxjiyrpb)
-    - [The Antidote to Vibe Architecting: ABP Studio AI Agent](https://abp.io/community/articles/the-antidote-to-vibe-architecting-abp-studio-ai-agent-mpdeh3gr)
-- [Template In, Product Out: Building Hanova with the ABP AI Agent](https://abp.io/community/articles/template-in-product-out-building-hanova-with-the-abp-ai-hcntpk3j) by [Sumeyye Kurtulus](https://abp.io/community/members/sumeyye.kurtulus)
-- [Empowering AI Agents with ABP Framework: A Comprehensive Skill Collection](https://abp.io/community/articles/abp-framework-ai-agent-skills-qccn87tu) by [Burak Demir](https://abp.io/community/members/burakdemir)
-- [Google Pomelli: How to Market Your App Without Being a Designer](https://abp.io/community/articles/google-pomelli-how-to-market-your-app-1hu48pda) by [Engincan Veske](https://abp.io/community/members/EngincanV)
-- [DevDays 2026 Conf From a Speaker's View](https://abp.io/community/articles/devdays-2026-conference-from-a-speakers-view-39d007hs) by [Alper Ebicoglu](https://abp.io/community/members/alper)
+- [Sumeyye Kurtulus](https://abp.io/community/members/sumeyye.kurtulus) has published 2 new articles:
+    - [Angular 22 State Management: Signals, SignalStore, or NgRx?](https://abp.io/community/articles/angular-22-state-management-signals-signalstore-or-ngrx-yq8zg0nw)
+    - [Customizing the ABP Framework: A Developer's Guide to LeptonX Theme Overrides in Angular and the Transition to React UI](https://abp.io/community/articles/customizing-the-abp-framework-a-developers-guide-to-nklweri3)
+- [Working with Dapr Workflows in the ABP Framework](https://abp.io/community/articles/working-with-dapr-workflows-in-the-abp-framework-6476or18) by [Engincan Veske](https://abp.io/community/members/EngincanV)
+- [Alper Ebicoglu](https://abp.io/community/members/alper) has published 2 new articles:
+    - [My Speaker's View of CONVEX Summit 2026](https://abp.io/community/articles/my-speakers-view-of-convex-summit-2026-ai-net-conference-3uk6ln1l)
+    - [AI Isn't Replacing Developers - It's Changing What Good Developers Spend Time On](https://abp.io/community/articles/ai-isnt-replacing-developers-its-changing-what-good-2016q6ng)
+- [Deep Dive on ABP AI Agent: The Complete Series](https://abp.io/community/articles/deep-dive-on-abp-ai-agent-the-complete-series-f7jute7n) by [Berkan Sasmaz](https://abp.io/community/members/berkansasmaz)
+    - We have created a deep-dive series for ABP Studio's AI Coding Agent. You can read this series to learn the main features of the AI Coding Agent and how it can help you while developing ABP-based solutions.
 
 Thanks to the ABP Community for all the content they have published. You can also [post your ABP related (text or video) content](https://abp.io/community/posts/create) to the ABP Community.
 
