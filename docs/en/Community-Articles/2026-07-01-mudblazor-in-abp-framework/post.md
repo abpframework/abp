@@ -1,10 +1,10 @@
-# ABP 10.4.2 Expands Blazor UI Options with MudBlazor Support
+# ABP 10.5.0 Expands Blazor UI Options with MudBlazor Support
 
-With ABP 10.4.2, new Blazor projects can now use **MudBlazor** (Material Design) as an alternative to the long-standing default, **Blazorise** (Bootstrap 5). Framework, themes (LeptonX / LeptonX Lite / Basic), modules, solution templates, ABP Studio, and ABP Suite all support both libraries side by side. The 10.4.2 packages are live on nuget.org.
+With ABP 10.5.0, new Blazor projects can now use **MudBlazor** (Material Design) as an alternative to the long-standing default, **Blazorise** (Bootstrap 5). Framework, themes (LeptonX / LeptonX Lite / Basic), modules, solution templates, ABP Studio, and ABP Suite all support both libraries side by side. The 10.5.0 packages are live on nuget.org.
 
 ## Why add another Blazor UI library?
 
-Blazorise has been ABP's default Blazor UI library for years and **remains the default and is fully supported** — existing Blazorise projects can keep moving at their own pace, and upgrading to 10.4 does not change anything for them.
+Blazorise has been ABP's default Blazor UI library for years and **remains the default and is fully supported** — existing Blazorise projects can keep moving at their own pace, and upgrading to 10.5.0 does not change anything for them.
 
 We added MudBlazor because one Blazor UI choice cannot fit every team:
 
@@ -190,7 +190,7 @@ Documentation:
 
 ## FAQ
 
-**I'm already using Blazorise — will upgrading to 10.4 / 10.4.2 break my project?**
+**I'm already using Blazorise — will upgrading to 10.5.0 break my project?**
 No. Blazorise stays the default, and package paths, type names, and namespaces are fully compatible. Follow the standard ABP upgrade flow.
 
 **Can I use Blazorise and MudBlazor in the same project?**
@@ -201,7 +201,7 @@ Your custom Razor pages are tied to the UI library they were built with, so swit
 
 ## Wrapping up
 
-MudBlazor is now a first-class Blazor UI library in ABP. With 10.4.2 released, every related package, theme, template, Studio integration, and Suite generator is in place — you can try it out with a single `abp new` command.
+MudBlazor is now a first-class Blazor UI library in ABP. With 10.5.0 released, every related package, theme, template, Studio integration, and Suite generator is in place — you can try it out with a single `abp new` command.
 
 If you hit a bug, have a suggestion, or want a particular module's MudBlazor UX prioritized, let us know via [GitHub Issues](https://github.com/abpframework/abp/issues) or [abp.io support](https://abp.io/support).
 
