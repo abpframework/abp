@@ -88,6 +88,20 @@ A microservice solution that shows how to start a new microservice solution, cre
   * [Tutorial](../tutorials/microservice/part-01.md?UI=MVC&DB=EF)
   * [Download source code](https://abp.io/api/download/samples/cloud-crm-mvc-ef)
 
+## Hanova & Habitly
+
+> This sample application is available exclusively to users with an [ABP Business license or higher](https://abp.io/pricing).
+
+Hanova and Habitly are production-ready sample applications generated from the ABP Studio templates using React and React Native. Their features were built using the [ABP Studio AI Agent](https://abp.io/docs/latest/studio/ai-agent), demonstrating how AI can accelerate the development of real-world applications.
+
+* **[Hanova Source Code](https://abp.io/api/download/samples/Hanove)**
+* **[Habitly Source Code](https://abp.io/api/download/samples/reactnative-efcore-psql-habitly/Habitly)**
+
+To learn more, see:
+
+- [How the ABP AI Agent helps build production-ready applications](https://abp.io/community/articles/template-in-product-out-building-hanova-with-the-abp-ai-hcntpk3j#gsc.tab=0)
+- [How we modernized React Native application development](https://abp.io/community/articles/new-abp-modern-react-native-template-rxjiyrpb#gsc.tab=0)
+
 ## Other Samples
 
 ABP Platform provides many sample applications demonstrating various use cases and integrations. You can:
