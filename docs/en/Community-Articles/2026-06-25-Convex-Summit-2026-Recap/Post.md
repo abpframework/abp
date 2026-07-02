@@ -4,7 +4,7 @@
 
 # My Speaker's View of CONVEX Summit 2026 Madrid
 
-Hi, I'm here for another conference reviews. This time I attended [Convex Summit 2026 Developer](https://www.convexsummit.com/) conference, held in the capital city of Spain, Madrid. It was my first talk in Madrid. The organizer [Plain Concepts](https://www.plainconcepts.com/) arranged a 2 days conf with 3 parallel sessions. 2 of the sessions were in Spanish and one of them was English. The conf dates were 17, 18 June 2026. It was in a very big cinema. In Lithuania I also spoke in a cinema, I guess it's better to arrange a conf in a cinema because of asthenosphere, acoustic and state visibility for visitors.
+Hi, I'm here for another conference review. This time I attended [Convex Summit 2026 Developer](https://www.convexsummit.com/) conference, held in the capital city of Spain, Madrid. It was my first talk in Madrid. The organizer [Plain Concepts](https://www.plainconcepts.com/) arranged a 2 days conf with 3 parallel sessions. 2 of the sessions were in Spanish and one of them was English. The conf dates were 17, 18 June 2026. It was in a very big cinema. In Lithuania I also spoke in a cinema, I guess it's better to arrange a conf in a cinema because of asthenosphere, acoustic and state visibility for visitors.
 
 There is a small moment before every conference talk when the room becomes quiet, the slides are ready, and you suddenly remember why the topic matters. For me, that moment happened at Convex. My topic was “Turn any database into a conversational reporting engine.” I can admit it was a cool talk. But I was also there as a listener, a software architect, and someone trying to understand where enterprise AI is really going after the first wave of demos and experiments. CONVEX was interesting because it brought software development, architecture, and AI into the same conversation. These topics are often discussed separately, but in real companies they are tightly connected. AI features do not live in isolation. They live inside applications, databases, identity systems, permission models, workflows, dashboards, and business expectations.  That was the real theme I felt throughout the event.
 
@@ -20,13 +20,13 @@ I started my slide with **Sobrino de Botin restaurant**. It's the oldest restaur
 
 ![image-20260624200005106](images/the-oldest-restaurant-world.png)
 
-And in one part of my talk, I need to ask questions like “Show me the top customers by revenue this quarter.” So the LLM answers in my language. And I learnt some Spanish sentences before the conf. Even for this I used AI. So I translated 10 different English sentences to Spanish. Later I asked ChatGPT: "*Can you score my pronunciation for these sentences.*". ChatGPT gave the most ratings to 3 of my sentences' prouncations. And I talked those during my interview with my reporting AI tool. And that was fantastic eye-catching moment of my talk.
+And in one part of my talk, I need to ask questions like “Show me the top customers by revenue this quarter.” So the LLM answers in my language. And I learnt some Spanish sentences before the conf. Even for this I used AI. So I translated 10 different English sentences to Spanish. Later I asked ChatGPT: "*Can you score my pronunciation for these sentences.*". ChatGPT gave the highest ratings to 3 of my sentences' pronunciations. And I talked those during my interview with my reporting AI tool. And that was fantastic eye-catching moment of my talk.
 
 ![Some photos from my talk 1](images/my-pictures-1.jpg)
 
 *My session focused on building conversational reporting experiences without giving up control, validation, or security.*
 
-I asked the attendees how many of you have written SQL, created reporting screen, and %80 of people wrote SQL and created reporting UIs. And same amount of people also use .NET. 
+I asked the attendees how many of you have written SQL and created reporting screens, and %80 of people wrote SQL and created reporting UIs. And the same number of people also use .NET. 
 
 ![Some photos from my talk 2](images/my-pictures-2.jpg)
 
@@ -46,7 +46,7 @@ And I can see, software development is rapidly evolving with AI agentic tools.
 
 > **We cannot say development is dead, but hand-made development is dead.** 
 
-From now on we'll use our time less on typing and more on thinking about features, user experiences and robust infrastructure. 
+From now on, we'll use our time less on typing and more on thinking about features, user experiences and robust infrastructure. 
 
 **In the age of AI, writing code by hand is the software equivalent of sending a fax to prove commitment.**
 
@@ -171,15 +171,15 @@ I met people from my country as well from Bosch and Aselsan companies...For me, 
 2. **Natural language is becoming a product interface.** Users increasingly want answers, not get lost in the UI and not navigation paths.
 3. **Architecture is becoming more important, not less.** AI can accelerate delivery, but it cannot remove product constraints, security requirements, or organizational complexity. 
 
-   > When calculator first invented they didn't think problem solving finished with this invention, people use more time to solve problems rather then calculating....
+   > When the calculator was first invented, they didn't think problem solving finished with this invention; people spent more time solving problems rather than calculating....
 4. **Decisions need memory.** Principles, ADRs, trade-offs and exceptions help teams preserve reasoning.
-5. **Conferences still matter.** A hallway discussion after a session can sometimes teach you more than a full article or video. It's **a way of motivation**, a way of socializing for developers. You see what other do, you discuss with them, you know your customers and you know where you're at development.
+5. **Conferences still matter.** A hallway discussion after a session can sometimes teach you more than a full article or video. It's **a way of motivation**, a way of socializing for developers. You see what others do, you discuss with them, you know your customers, and you know where you're at in development.
 
-
+🖼 All photos of Convex Summit 2026 are available 👉 https://www.flickr.com/photos/204742998@N04/albums/72177720334500733/with/55369833471
 
 ## My Cultural Visits
 
-I visited Toledo and Madrid's most important tourist attractions and museums. Now I know way much better then I knew before about Spanish culture and lifestyle. But this is the most impressive moment for me. As you may know I'm Turkish. My grand grandfathers were Ottomans coming from Mongolia to Anatolia. In 1571 the Ottomans were in a war with Spain, Genoa, Malta and Italy. The battle was in the sea near Greece. It's called Sea Battle of Lepanto. In the below pictures, you can see the Ottoman's highest level sea commander's personal items. Wwe call him **Kaptan-ı Derya** -the captain of seas-. He died in this war. For those who wants to see it; it's in Royal Palace of Madrid and the items are in Royal Armoury department.
+I visited Toledo and Madrid's most important tourist attractions and museums. Now I know way more than I knew before about Spanish culture and lifestyle. But this is the most impressive moment for me. As you may know I'm Turkish. My grand grandfathers were Ottomans coming from Mongolia to Anatolia. In 1571 the Ottomans were in a war with Spain, Genoa, Malta and Italy. The battle was in the sea near Greece. It's called Sea Battle of Lepanto. In the pictures below, you can see the Ottoman's highest-level sea commander's personal items. We call him **Kaptan-ı Derya** -the captain of the seas-. He died in this war. For those who want to see it, it's in the Royal Palace of Madrid, and the items are in the Royal Armory department.
 
 If you're interested in this war, you can also read this part:
 
