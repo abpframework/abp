@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.BackgroundJobs.DemoApp.Db;
 using Volo.Abp.EntityFrameworkCore;
@@ -12,9 +13,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Volo.Abp.BackgroundJobs.DemoApp.Migrations
 {
     [DbContext(typeof(DemoAppDbContext))]
-    partial class DemoAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260701082002_Added_CompletionTime_To_BackgroundJobs")]
+    partial class Added_CompletionTime_To_BackgroundJobs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
