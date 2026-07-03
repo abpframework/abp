@@ -78,6 +78,7 @@ public class InMemoryBackgroundJobStore : IBackgroundJobStore, ISingletonDepende
         var idsToDelete = _jobs.Values
             .Where(t => t.ApplicationName == applicationName)
             .Where(t => t.CompletionTime != null && t.CompletionTime < completedBefore)
+            .OrderBy(t => t.CompletionTime)
             .Take(maxResultCount)
             .Select(t => t.Id)
             .ToList();

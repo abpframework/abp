@@ -118,6 +118,22 @@ public class BackgroundJobCleanupWorker_Tests : AbpIntegratedTest<AbpBackgroundJ
     }
 
     [Fact]
+    public async Task Should_Delete_Oldest_Completed_Jobs_First_When_Limited_By_MaxResultCount()
+    {
+        var oldest = await InsertCompletedJobAsync(_clock.Now.Subtract(TimeSpan.FromDays(5)));
+        var middle = await InsertCompletedJobAsync(_clock.Now.Subtract(TimeSpan.FromDays(3)));
+        var newest = await InsertCompletedJobAsync(_clock.Now.Subtract(TimeSpan.FromDays(1)));
+
+        // All three are completed before now, but a single call may delete only two.
+        var deletedCount = await _store.DeleteAsync(null, _clock.Now, maxResultCount: 2);
+
+        deletedCount.ShouldBe(2);
+        (await _store.FindAsync(oldest)).ShouldBeNull();
+        (await _store.FindAsync(middle)).ShouldBeNull();
+        (await _store.FindAsync(newest)).ShouldNotBeNull(); // newest survives, proving oldest-first deletion
+    }
+
+    [Fact]
     public async Task Should_Not_Loop_Forever_When_MaxJobFetchCount_Is_Zero()
     {
         _workerOptions.MaxJobFetchCount = 0;
