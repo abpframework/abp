@@ -51,6 +51,14 @@ public class BackgroundJobInfo
     public virtual bool IsAbandoned { get; set; }
 
     /// <summary>
+    /// The time this job was completed successfully.
+    /// When set, the job is kept as history and excluded from the waiting jobs query.
+    /// It is only set when <see cref="AbpBackgroundJobWorkerOptions.StoreSuccessfulJobs"/> is enabled;
+    /// otherwise successfully completed jobs are deleted.
+    /// </summary>
+    public virtual DateTime? CompletionTime { get; set; }
+
+    /// <summary>
     /// Priority of this job.
     /// </summary>
     public virtual BackgroundJobPriority Priority { get; set; }
