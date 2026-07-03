@@ -48,9 +48,12 @@ public class AbpPermissionManagementDomainModule : AbpModule
 
     public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
-        var rootServiceProvider = context.ServiceProvider.GetRequiredService<IRootServiceProvider>();
-        var initializer = rootServiceProvider.GetRequiredService<PermissionDynamicInitializer>();
-        await initializer.InitializeAsync(true, _cancellationTokenSource.Token);
+        if (!context.ServiceProvider.IsDataMigrationEnvironment())
+        {
+            var rootServiceProvider = context.ServiceProvider.GetRequiredService<IRootServiceProvider>();
+            var initializer = rootServiceProvider.GetRequiredService<PermissionDynamicInitializer>();
+            await initializer.InitializeAsync(true, _cancellationTokenSource.Token);
+        }
     }
 
     public override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)
