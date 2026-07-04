@@ -13,7 +13,7 @@ export function createLocalizer(localization: ApplicationLocalizationConfigurati
   return (resourceName: string, key: string, defaultValue: string | null) => {
     if (resourceName === '_') return key;
 
-    const resource = localization?.values?.[resourceName];
+    const resource = localization?.resources?.[resourceName];
 
     if (!resource) return defaultValue;
 
