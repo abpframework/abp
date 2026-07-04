@@ -70,12 +70,19 @@ body {
         -ms-filter: 'alpha(opacity=1)';
     }
 
+    // the options-header only exists to host the floating button; hide it while the bar is inline
+    // (non-scrolled), so the inline bar keeps its original look. It reappears once .scrolledMore collapses.
+    .alert-criteria .options-header {
+        display: none;
+    }
+
     &.scrolledMore {
         padding-top: 107px;
 
         // Collapse the floating document-options bar into a round button (like the chat widget).
-        // The bar slides out of the way; hovering the button (or focusing a select) reveals the options.
-        // CSS-only so it applies on abp.io too (this stylesheet is bundled into that page).
+        // The bar slides out of the way; clicking/tapping the button (.toggle-btn) reveals the options
+        // by toggling .is-open (see vs.js). Click-based so it works on touch, unlike a hover-only reveal.
+        // The stylesheet is bundled into abp.io too.
         .alert-criteria {
             position: fixed !important;
             left: auto !important;
@@ -88,7 +95,10 @@ body {
             border-radius: 16px !important;
             color: #2d2d2d !important;
             z-index: 9999 !important;
-            visibility: hidden;
+            visibility: hidden !important;
+            // hide instantly: the base 0.3s transition otherwise fades the bar out on collapse,
+            // flashing a translucent half-open panel while scrolling on narrow viewports
+            transition: none !important;
             pointer-events: none;
             background: transparent !important;
             -webkit-backdrop-filter: none !important;
@@ -96,59 +106,72 @@ body {
             border: 0 !important;
             box-shadow: none !important;
 
-            // the round button
-            &::before {
-                content: "\f1de";
-                font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "FontAwesome";
-                font-weight: 900;
-                color: #6f42c1;
-                font-size: 24px;
-                position: fixed;
-                right: 20px;
-                bottom: 20px;
-                width: 60px;
-                height: 60px;
-                border-radius: 50%;
-                background: linear-gradient(135deg, #ffffff 0%, #f5f0ff 100%);
-                border: 1px solid #d9ccf2;
-                box-shadow: 0 8px 22px rgba(111, 66, 193, 0.16), 0 2px 6px rgba(31, 41, 55, 0.08);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                visibility: visible;
-                pointer-events: auto;
-                cursor: pointer;
-                z-index: 9999;
-                transition: transform 0.25s ease, box-shadow 0.25s ease;
+            // collapsed: only the round FAB (a real <button> for touch + keyboard/ARIA) stays visible
+            .options-header {
+                display: block !important;
+                color: #6f42c1 !important;
+                font-weight: 700;
+
+                .toggle-btn {
+                    position: fixed;
+                    right: 20px;
+                    bottom: 20px;
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 50%;
+                    padding: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #6f42c1;
+                    background: linear-gradient(135deg, #ffffff 0%, #f5f0ff 100%);
+                    border: 1px solid #d9ccf2;
+                    box-shadow: 0 8px 22px rgba(111, 66, 193, 0.16), 0 2px 6px rgba(31, 41, 55, 0.08);
+                    visibility: visible;
+                    pointer-events: auto;
+                    cursor: pointer;
+                    z-index: 9999;
+                    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+                    // show the sliders glyph instead of the collapse chevron while acting as the FAB
+                    > i {
+                        display: none;
+                    }
+
+                    &::before {
+                        content: "\f1de";
+                        font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "FontAwesome";
+                        font-weight: 900;
+                        font-size: 24px;
+                    }
+
+                    &:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 12px 28px rgba(111, 66, 193, 0.28);
+                    }
+                }
             }
 
-            &:hover::before,
-            &:focus-within::before {
-                transform: translateY(-2px);
-                box-shadow: 0 12px 28px rgba(111, 66, 193, 0.22);
-            }
-
-            // transparent bridge so hover survives the gap between button and popover
-            &::after {
-                content: "";
-                position: fixed;
-                right: 20px;
-                bottom: 20px;
-                width: 60px;
-                height: 74px;
-                background: transparent;
-                pointer-events: auto;
-                visibility: visible;
-                z-index: 9998;
-            }
-
-            &:hover,
-            &:focus-within {
-                visibility: visible;
+            // click/tap toggles .is-open (vs.js); hover no longer reveals, so open/close is predictable
+            &.is-open {
+                visibility: visible !important;
                 pointer-events: auto;
                 background: #fff !important;
                 border: 1px solid #e6def7 !important;
                 box-shadow: 0 16px 40px rgba(40, 20, 80, 0.18) !important;
+
+                .options-header {
+                    display: flex !important;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin-bottom: 12px;
+
+                    // keep the FAB in place, swap the glyph to a close (X) — tap again to close
+                    .toggle-btn::before {
+                        content: "\f00d";
+                        font-size: 22px;
+                    }
+                }
             }
 
             // abp.io renders an .options-header title, so its info line is redundant; module pages keep it
@@ -160,17 +183,6 @@ body {
                 margin: 0 0 12px !important;
                 color: #6f42c1 !important;
                 font-weight: 600;
-            }
-
-            .options-header {
-                display: flex !important;
-                color: #6f42c1 !important;
-                font-weight: 700;
-                margin-bottom: 12px;
-
-                .toggle-btn {
-                    display: none !important;
-                }
             }
 
             .row > div {
@@ -189,35 +201,25 @@ body {
                 bottom: 75px !important;
                 width: calc(100vw - 20px) !important;
 
-                &::before {
+                .options-header .toggle-btn {
                     right: 10px;
                     bottom: 10px;
                     width: 55px;
                     height: 55px;
-                    font-size: 22px;
-                }
 
-                &::after {
-                    right: 10px;
-                    bottom: 10px;
-                    width: 55px;
-                    height: 70px;
+                    &::before {
+                        font-size: 22px;
+                    }
                 }
             }
         }
 
-        // when a chat widget is present (e.g. abp.io), shift the button to its left
-        &:has(#abp-chatbot-container) .alert-criteria {
-            &::before,
-            &::after {
-                right: 92px;
-            }
+        // when a chat widget is present (e.g. abp.io), shift the FAB to its left
+        &:has(#abp-chatbot-container) .alert-criteria .options-header .toggle-btn {
+            right: 92px;
 
             @media (max-width: 768px) {
-                &::before,
-                &::after {
-                    right: 75px;
-                }
+                right: 75px;
             }
         }
     }

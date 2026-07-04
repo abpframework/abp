@@ -175,8 +175,48 @@
         var docsContentWidth = $('.docs-content').width() - 74;
         $('.alert-criteria').width(docsContentWidth);
     }
+
+    // Toggle the collapsed document-options popover by click/tap (works on touch, unlike a hover-only reveal).
+    function docsOptionsToggle() {
+        var $criteria = $('.alert-criteria');
+        var $btn = $criteria.find('.options-header .toggle-btn');
+        if (!$criteria.length || !$btn.length) {
+            return;
+        }
+        function setOpen(isOpen) {
+            $criteria.toggleClass('is-open', isOpen);
+            $btn.attr('aria-expanded', isOpen ? 'true' : 'false');
+            // on close, pull focus out of the now-hidden popover back to the button
+            if (!isOpen && $.contains($criteria[0], document.activeElement)) {
+                $btn.trigger('focus');
+            }
+        }
+        $btn.on('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            setOpen(!$criteria.hasClass('is-open'));
+        });
+        $criteria.on('click', function (e) {
+            e.stopPropagation();
+        });
+        $(document).on('click', function () {
+            setOpen(false);
+        });
+        $(document).on('keydown', function (e) {
+            if (e.key === 'Escape') {
+                setOpen(false);
+            }
+        });
+        $(window).on('scroll', function () {
+            if (!$('body').hasClass('scrolledMore')) {
+                setOpen(false);
+            }
+        });
+    }
+
     $(document).ready(function () {
         docsCriteria();
+        docsOptionsToggle();
     });
     $(window).resize(function () {
         docsCriteria();

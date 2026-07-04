@@ -52,6 +52,9 @@ body .mCS-autoHide > .mCustomScrollBox ~ .mCSB_scrollTools {
   filter: "alpha(opacity=1)";
   -ms-filter: "alpha(opacity=1)";
 }
+body .alert-criteria .options-header {
+  display: none;
+}
 body.scrolledMore {
   padding-top: 107px;
 }
@@ -67,7 +70,8 @@ body.scrolledMore .alert-criteria {
   border-radius: 16px !important;
   color: #2d2d2d !important;
   z-index: 9999 !important;
-  visibility: hidden;
+  visibility: hidden !important;
+  transition: none !important;
   pointer-events: none;
   background: transparent !important;
   -webkit-backdrop-filter: none !important;
@@ -75,52 +79,61 @@ body.scrolledMore .alert-criteria {
   border: 0 !important;
   box-shadow: none !important;
 }
-body.scrolledMore .alert-criteria::before {
-  content: "\f1de";
-  font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "FontAwesome";
-  font-weight: 900;
-  color: #6f42c1;
-  font-size: 24px;
+body.scrolledMore .alert-criteria .options-header {
+  display: block !important;
+  color: #6f42c1 !important;
+  font-weight: 700;
+}
+body.scrolledMore .alert-criteria .options-header .toggle-btn {
   position: fixed;
   right: 20px;
   bottom: 20px;
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #ffffff 0%, #f5f0ff 100%);
-  border: 1px solid #d9ccf2;
-  box-shadow: 0 8px 22px rgba(111, 66, 193, 0.16), 0 2px 6px rgba(31, 41, 55, 0.08);
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #6f42c1;
+  background: linear-gradient(135deg, #ffffff 0%, #f5f0ff 100%);
+  border: 1px solid #d9ccf2;
+  box-shadow: 0 8px 22px rgba(111, 66, 193, 0.16), 0 2px 6px rgba(31, 41, 55, 0.08);
   visibility: visible;
   pointer-events: auto;
   cursor: pointer;
   z-index: 9999;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-body.scrolledMore .alert-criteria:hover::before, body.scrolledMore .alert-criteria:focus-within::before {
+body.scrolledMore .alert-criteria .options-header .toggle-btn > i {
+  display: none;
+}
+body.scrolledMore .alert-criteria .options-header .toggle-btn::before {
+  content: "\f1de";
+  font-family: "Font Awesome 6 Free", "Font Awesome 6 Pro", "FontAwesome";
+  font-weight: 900;
+  font-size: 24px;
+}
+body.scrolledMore .alert-criteria .options-header .toggle-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(111, 66, 193, 0.22);
+  box-shadow: 0 12px 28px rgba(111, 66, 193, 0.28);
 }
-body.scrolledMore .alert-criteria::after {
-  content: "";
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  width: 60px;
-  height: 74px;
-  background: transparent;
-  pointer-events: auto;
-  visibility: visible;
-  z-index: 9998;
-}
-body.scrolledMore .alert-criteria:hover, body.scrolledMore .alert-criteria:focus-within {
-  visibility: visible;
+body.scrolledMore .alert-criteria.is-open {
+  visibility: visible !important;
   pointer-events: auto;
   background: #fff !important;
   border: 1px solid #e6def7 !important;
   box-shadow: 0 16px 40px rgba(40, 20, 80, 0.18) !important;
+}
+body.scrolledMore .alert-criteria.is-open .options-header {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+body.scrolledMore .alert-criteria.is-open .options-header .toggle-btn::before {
+  content: "\f00d";
+  font-size: 22px;
 }
 body.scrolledMore .alert-criteria:has(.options-header) p.alert-p {
   display: none !important;
@@ -129,15 +142,6 @@ body.scrolledMore .alert-criteria p.alert-p {
   margin: 0 0 12px !important;
   color: #6f42c1 !important;
   font-weight: 600;
-}
-body.scrolledMore .alert-criteria .options-header {
-  display: flex !important;
-  color: #6f42c1 !important;
-  font-weight: 700;
-  margin-bottom: 12px;
-}
-body.scrolledMore .alert-criteria .options-header .toggle-btn {
-  display: none !important;
 }
 body.scrolledMore .alert-criteria .row > div {
   width: 100% !important;
@@ -154,25 +158,21 @@ body.scrolledMore .alert-criteria .row > div:last-child {
     bottom: 75px !important;
     width: calc(100vw - 20px) !important;
   }
-  body.scrolledMore .alert-criteria::before {
+  body.scrolledMore .alert-criteria .options-header .toggle-btn {
     right: 10px;
     bottom: 10px;
     width: 55px;
     height: 55px;
+  }
+  body.scrolledMore .alert-criteria .options-header .toggle-btn::before {
     font-size: 22px;
   }
-  body.scrolledMore .alert-criteria::after {
-    right: 10px;
-    bottom: 10px;
-    width: 55px;
-    height: 70px;
-  }
 }
-body.scrolledMore:has(#abp-chatbot-container) .alert-criteria::before, body.scrolledMore:has(#abp-chatbot-container) .alert-criteria::after {
+body.scrolledMore:has(#abp-chatbot-container) .alert-criteria .options-header .toggle-btn {
   right: 92px;
 }
 @media (max-width: 768px) {
-  body.scrolledMore:has(#abp-chatbot-container) .alert-criteria::before, body.scrolledMore:has(#abp-chatbot-container) .alert-criteria::after {
+  body.scrolledMore:has(#abp-chatbot-container) .alert-criteria .options-header .toggle-btn {
     right: 75px;
   }
 }
