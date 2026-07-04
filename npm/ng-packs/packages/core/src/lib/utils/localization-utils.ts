@@ -17,7 +17,7 @@ export function createLocalizer(localization: ApplicationLocalizationConfigurati
 
     if (!resource) return defaultValue;
 
-    return resource[key] || defaultValue;
+    return resource.texts?.[key] || defaultValue;
   };
 }
 
