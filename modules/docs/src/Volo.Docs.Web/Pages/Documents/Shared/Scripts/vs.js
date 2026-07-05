@@ -191,23 +191,28 @@
                 $btn.trigger('focus');
             }
         }
-        $btn.on('click', function (e) {
+        // clear any previous bindings so a second init (e.g. partial reload) does not stack handlers
+        $btn.off('.docsOptions');
+        $criteria.off('.docsOptions');
+        $(document).off('.docsOptions');
+        $(window).off('.docsOptions');
+        $btn.on('click.docsOptions', function (e) {
             e.preventDefault();
             e.stopPropagation();
             setOpen(!$criteria.hasClass('is-open'));
         });
-        $criteria.on('click', function (e) {
+        $criteria.on('click.docsOptions', function (e) {
             e.stopPropagation();
         });
-        $(document).on('click', function () {
+        $(document).on('click.docsOptions', function () {
             setOpen(false);
         });
-        $(document).on('keydown', function (e) {
+        $(document).on('keydown.docsOptions', function (e) {
             if (e.key === 'Escape') {
                 setOpen(false);
             }
         });
-        $(window).on('scroll', function () {
+        $(window).on('scroll.docsOptions', function () {
             if (!$('body').hasClass('scrolledMore')) {
                 setOpen(false);
             }

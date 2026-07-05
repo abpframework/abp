@@ -118,6 +118,10 @@ body.scrolledMore .alert-criteria .options-header .toggle-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 28px rgba(111, 66, 193, 0.28);
 }
+body.scrolledMore .alert-criteria .options-header .toggle-btn:focus-visible {
+  outline: 2px solid #6f42c1;
+  outline-offset: 2px;
+}
 body.scrolledMore .alert-criteria.is-open {
   visibility: visible !important;
   pointer-events: auto;
@@ -134,9 +138,6 @@ body.scrolledMore .alert-criteria.is-open .options-header {
 body.scrolledMore .alert-criteria.is-open .options-header .toggle-btn::before {
   content: "\f00d";
   font-size: 22px;
-}
-body.scrolledMore .alert-criteria:has(.options-header) p.alert-p {
-  display: none !important;
 }
 body.scrolledMore .alert-criteria p.alert-p {
   margin: 0 0 12px !important;

@@ -149,6 +149,12 @@ body {
                         transform: translateY(-2px);
                         box-shadow: 0 12px 28px rgba(111, 66, 193, 0.28);
                     }
+
+                    // the custom box-shadow hides the default focus ring; restore a visible one for keyboard users
+                    &:focus-visible {
+                        outline: 2px solid #6f42c1;
+                        outline-offset: 2px;
+                    }
                 }
             }
 
@@ -172,11 +178,6 @@ body {
                         font-size: 22px;
                     }
                 }
-            }
-
-            // abp.io renders an .options-header title, so its info line is redundant; module pages keep it
-            &:has(.options-header) p.alert-p {
-                display: none !important;
             }
 
             p.alert-p {
