@@ -103,23 +103,27 @@ The designer is the day-to-day entry point.
 5. Use **Actions** and **Interceptors** when the standard CRUD flow needs custom logic, endpoints, event handlers, jobs, or workers.
 6. Use **Health** to review model issues before publishing changes.
 
+The screens below follow that common designer flow from data to page setup to forms:
+
 ![Entity properties in the designer](images/designer-properties.png)
+
+![Page setup in the designer](images/designer-page-filters.png)
 
 ![Form setup in the designer](images/designer-forms.png)
 
 ## React Runtime
 
-React runtime pages are generated from the same metadata. The page below was produced from a low-code page definition and includes the grid, menu item, permissions, display values, export, create form, and filters. The same runtime can render kanban, calendar, gallery, standalone form, and dashboard page definitions.
+React runtime pages are generated from the same metadata. The examples below show a generated data grid and its create form. The same runtime can render kanban, calendar, gallery, standalone form, and dashboard page definitions.
 
 ![Generated React data grid](images/runtime-data-grid.png)
-
-![Generated React advanced filters](images/runtime-filters.png)
 
 ![Generated React create form](images/runtime-create-form.png)
 
 ## Filters
 
 React low-code filters are type-aware. The runtime shows only operators that make sense for the field type. For example:
+
+![Generated React advanced filters](images/runtime-filters.png)
 
 * Text fields support contains, equals, starts with, ends with, and has value.
 * Numeric fields support equals, comparison, between, and has value.
