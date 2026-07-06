@@ -186,10 +186,6 @@
         function setOpen(isOpen) {
             $criteria.toggleClass('is-open', isOpen);
             $btn.attr('aria-expanded', isOpen ? 'true' : 'false');
-            // on close, pull focus out of the now-hidden popover back to the button
-            if (!isOpen && $.contains($criteria[0], document.activeElement)) {
-                $btn.trigger('focus');
-            }
         }
         // clear any previous bindings so a second init (e.g. partial reload) does not stack handlers
         $btn.off('.docsOptions');
@@ -208,8 +204,10 @@
             setOpen(false);
         });
         $(document).on('keydown.docsOptions', function (e) {
-            if (e.key === 'Escape') {
+            if (e.key === 'Escape' && $criteria.hasClass('is-open')) {
                 setOpen(false);
+                // keyboard close: return focus to the button (focus ring is appropriate here)
+                $btn.trigger('focus');
             }
         });
         $(window).on('scroll.docsOptions', function () {

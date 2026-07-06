@@ -139,6 +139,11 @@ body.scrolledMore .alert-criteria.is-open .options-header .toggle-btn::before {
   content: "\f00d";
   font-size: 22px;
 }
+body.scrolledMore .alert-criteria:not(.is-open), body.scrolledMore .alert-criteria:not(.is-open):hover, body.scrolledMore .alert-criteria:not(.is-open):focus-within {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
 body.scrolledMore .alert-criteria p.alert-p {
   margin: 0 0 12px !important;
   color: #6f42c1 !important;

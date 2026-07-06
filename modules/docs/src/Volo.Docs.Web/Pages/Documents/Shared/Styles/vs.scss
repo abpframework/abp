@@ -180,6 +180,16 @@ body {
                 }
             }
 
+            // defensive: the collapsed state must never pick up the opened panel's background/
+            // border/shadow (e.g. from a :hover / :focus-within rule leaking in) — only the FAB shows
+            &:not(.is-open),
+            &:not(.is-open):hover,
+            &:not(.is-open):focus-within {
+                background: transparent !important;
+                border: 0 !important;
+                box-shadow: none !important;
+            }
+
             p.alert-p {
                 margin: 0 0 12px !important;
                 color: #6f42c1 !important;
