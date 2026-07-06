@@ -31,8 +31,10 @@ public class CurrentPrincipalAccessor_Tests : AbpIntegratedTest<AbpSecurityTestM
             }));
 
 
-        _currentPrincipalAccessor.Principal.ShouldNotBeNull();
-        _currentPrincipalAccessor.Principal.Identity!.IsAuthenticated.ShouldBeFalse();
+        var anonymousPrincipal = _currentPrincipalAccessor.Principal;
+        anonymousPrincipal.ShouldNotBeNull();
+        anonymousPrincipal.Identity.ShouldNotBeNull();
+        anonymousPrincipal.Identity.IsAuthenticated.ShouldBeFalse();
 
         using (_currentPrincipalAccessor.Change(claimsPrincipal))
         {
@@ -45,7 +47,9 @@ public class CurrentPrincipalAccessor_Tests : AbpIntegratedTest<AbpSecurityTestM
 
             _currentPrincipalAccessor.Principal.ShouldBe(claimsPrincipal);
         }
-        _currentPrincipalAccessor.Principal.ShouldNotBeNull();
-        _currentPrincipalAccessor.Principal.Identity!.IsAuthenticated.ShouldBeFalse();
+        var currentPrincipal = _currentPrincipalAccessor.Principal;
+        currentPrincipal.ShouldNotBeNull();
+        currentPrincipal.Identity.ShouldNotBeNull();
+        currentPrincipal.Identity.IsAuthenticated.ShouldBeFalse();
     }
 }
