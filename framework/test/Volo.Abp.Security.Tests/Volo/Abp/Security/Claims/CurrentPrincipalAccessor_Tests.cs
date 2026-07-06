@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
+using System.Threading;
 using Shouldly;
 using Volo.Abp.Testing;
 using Xunit;
@@ -30,27 +31,36 @@ public class CurrentPrincipalAccessor_Tests : AbpIntegratedTest<AbpSecurityTestM
                 new Claim(ClaimTypes.NameIdentifier,"654321")
             }));
 
-
-        var anonymousPrincipal = _currentPrincipalAccessor.Principal;
-        anonymousPrincipal.ShouldNotBeNull();
-        anonymousPrincipal.Identity.ShouldNotBeNull();
-        anonymousPrincipal.Identity.IsAuthenticated.ShouldBeFalse();
-
-        using (_currentPrincipalAccessor.Change(claimsPrincipal))
+        var previousPrincipal = Thread.CurrentPrincipal;
+        Thread.CurrentPrincipal = null;
+        try
         {
-            _currentPrincipalAccessor.Principal.ShouldBe(claimsPrincipal);
+            var anonymousPrincipal = _currentPrincipalAccessor.Principal;
+            anonymousPrincipal.ShouldNotBeNull();
+            anonymousPrincipal.Identity.ShouldNotBeNull();
+            anonymousPrincipal.Identity.IsAuthenticated.ShouldBeFalse();
 
-            using (_currentPrincipalAccessor.Change(claimsPrincipal2))
+            using (_currentPrincipalAccessor.Change(claimsPrincipal))
             {
-                _currentPrincipalAccessor.Principal.ShouldBe(claimsPrincipal2);
+                _currentPrincipalAccessor.Principal.ShouldBe(claimsPrincipal);
+
+                using (_currentPrincipalAccessor.Change(claimsPrincipal2))
+                {
+                    _currentPrincipalAccessor.Principal.ShouldBe(claimsPrincipal2);
+                }
+
+                _currentPrincipalAccessor.Principal.ShouldBe(claimsPrincipal);
             }
 
-            _currentPrincipalAccessor.Principal.ShouldBe(claimsPrincipal);
+            var currentPrincipal = _currentPrincipalAccessor.Principal;
+            currentPrincipal.ShouldNotBeNull();
+            currentPrincipal.Identity.ShouldNotBeNull();
+            currentPrincipal.Identity.IsAuthenticated.ShouldBeFalse();
         }
-        var currentPrincipal = _currentPrincipalAccessor.Principal;
-        currentPrincipal.ShouldNotBeNull();
-        currentPrincipal.Identity.ShouldNotBeNull();
-        currentPrincipal.Identity.IsAuthenticated.ShouldBeFalse();
+        finally
+        {
+            Thread.CurrentPrincipal = previousPrincipal;
+        }
     }
 
     [Fact]
