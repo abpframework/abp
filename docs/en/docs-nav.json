@@ -2146,6 +2146,10 @@
           "path": "low-code/reference-entities.md"
         },
         {
+          "text": "Code Integration",
+          "path": "low-code/code-integration.md"
+        },
+        {
           "text": "Foreign Access",
           "path": "low-code/foreign-access.md"
         },

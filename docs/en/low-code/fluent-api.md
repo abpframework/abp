@@ -571,5 +571,6 @@ This gives you four auto-generated pages (Customers, Products, Orders with neste
 ## See Also
 
 * [Model Descriptor Files](model-json.md)
+* [Code Integration](code-integration.md)
 * [Reference Entities](reference-entities.md)
 * [Interceptors](interceptors.md)

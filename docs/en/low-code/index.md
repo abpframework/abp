@@ -129,11 +129,11 @@ React low-code filters are type-aware. The runtime shows only operators that mak
 * Numeric fields support equals, comparison, between, and has value.
 * Date fields use date-friendly labels such as on, after, before, and between.
 * Boolean fields use an `All / Yes / No` value selector.
-* File and image fields use `Has value` with an `All / Yes / No` value selector.
+* File and image fields use the same `All / Yes / No` selector behind a `Has value` filter.
 
-`All` means no filter is applied. `Yes` maps to non-empty values. `No` maps to empty values.
+In the current screenshot set, the dropdown below is shown on the `Active` boolean filter. The same three-value selector is also used by `Has value` filters on file and image fields.
 
-![Has value filter options](images/runtime-filters-has-value.png)
+![Yes/No filter options](images/runtime-filters-has-value.png)
 
 ## Export
 
@@ -180,6 +180,7 @@ The designer stores and reads the same descriptor metadata described in the refe
 | [Attributes & Fluent API](fluent-api.md) | Source-controlled C# metadata and runtime overrides |
 | [Model Descriptor Files](model-json.md) | JSON descriptor files and public descriptor schemas used by the designer and runtime |
 | [Reference Entities](reference-entities.md) | Lookups to existing entities such as Identity users |
+| [Code Integration](code-integration.md) | Moving between low-code models and regular C# code in both directions |
 | [Foreign Access](foreign-access.md) | Access to related dynamic entities through relations |
 | [Interceptors](interceptors.md) | JavaScript lifecycle logic for CRUD operations |
 | [Custom Endpoints](custom-endpoints.md) | JavaScript-backed REST endpoints |
@@ -205,4 +206,5 @@ The generated pages are powered by these services:
 * [Dashboards](dashboards.md)
 * [Page Groups](page-groups.md)
 * [MCP Integration](mcp.md)
+* [Code Integration](code-integration.md)
 * [Model Descriptor Files](model-json.md)

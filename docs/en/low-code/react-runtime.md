@@ -148,10 +148,12 @@ Filters are rendered as an ABP-style advanced filter area. The runtime shows all
 File and image filters use a single `Has value` concept. The value selector controls whether the filter is applied:
 
 * `All` does not add a filter.
-* `Yes` returns records with a value.
-* `No` returns records without a value.
+* `Yes` returns `true` for boolean filters, or records with a value for `Has value` filters.
+* `No` returns `false` for boolean filters, or records without a value for `Has value` filters.
 
-![Has value options](images/runtime-filters-has-value.png)
+The screenshot below shows the shared selector pattern on the `Active` boolean filter.
+
+![Yes/No filter options](images/runtime-filters-has-value.png)
 
 The URL keeps the existing `lcFilters` query parameter shape. The runtime maps user-friendly filter choices to the existing backend `FilterType` values.
 

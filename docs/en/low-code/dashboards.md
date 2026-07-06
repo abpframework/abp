@@ -7,7 +7,7 @@
 
 # Dashboards
 
-Dashboards are low-code pages that render charts, lists, and number widgets from low-code entity data. A dashboard is still a page, so it uses the normal page name, title, icon, order, group, and permission model, but its page type is `dashboard` and its page definition carries a nested `dashboard` payload.
+Dashboards are low-code pages that render charts, lists, and number widgets from low-code entity data. A dashboard is still a page, so it uses the normal page name, title, icon, order, group, and permission model, but its page type is `dashboard` and its page definition carries a nested `dashboard` payload. The screenshot below shows an inventory-style dashboard from the demo app, and the JSON that follows is a simplified descriptor that uses the same layout concepts.
 
 The runtime below was generated from a low-code dashboard page definition:
 
@@ -46,48 +46,45 @@ At runtime, the React UI groups those flat visualizations into rendered rows. Th
 
 ```json
 {
-  "name": "sales-dashboard",
-  "title": "Sales Dashboard",
+  "name": "inventory-overview",
+  "title": "Inventory Overview",
   "type": "dashboard",
-  "group": "analytics",
+  "group": "inventory",
   "dashboard": {
-    "description": "Operational sales view",
-    "globalFilters": [
-      { "type": "dateRange" }
-    ],
+    "description": "Operational inventory view",
     "visualizations": [
       {
-        "name": "sales-by-status",
-        "type": "chart",
-        "title": "Sales by Status",
+        "name": "product-count",
+        "type": "numberContainer",
+        "title": "Product Count",
         "row": 0,
         "order": 0,
-        "width": 2,
-        "entityName": "Acme.Sales.Order",
-        "chart": {
-          "chartType": "bar",
-          "xAxis": { "property": "Status" },
-          "yAxis": [
-            { "aggregation": "count", "label": "Orders" }
+        "width": 1,
+        "numberContainer": {
+          "items": [
+            {
+              "name": "total-products",
+              "title": "Total Products",
+              "entityName": "Acme.Catalog.Product",
+              "aggregation": "count",
+              "format": "number"
+            }
           ]
         }
       },
       {
-        "name": "totals",
-        "type": "numberContainer",
-        "title": "Totals",
-        "row": 1,
-        "order": 0,
-        "width": 2,
-        "numberContainer": {
-          "items": [
-            {
-              "name": "order-count",
-              "title": "Order Count",
-              "entityName": "Acme.Sales.Order",
-              "aggregation": "count",
-              "format": "number"
-            }
+        "name": "stock-by-product",
+        "type": "chart",
+        "title": "Stock by Product",
+        "row": 0,
+        "order": 1,
+        "width": 1,
+        "entityName": "Acme.Catalog.Product",
+        "chart": {
+          "chartType": "bar",
+          "xAxis": { "property": "Name" },
+          "yAxis": [
+            { "aggregation": "sum", "property": "StockCount", "label": "Stock" }
           ]
         }
       }
@@ -135,6 +132,8 @@ Number containers hold one or more number items. Each item can define:
 * `color`
 * entity-specific filters and global date filter linkage
 * click-through behavior
+
+The sample descriptor above combines a number container and a chart in the same `Inventory Overview` page.
 
 ## Filters and Interactivity
 

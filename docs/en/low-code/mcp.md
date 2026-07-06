@@ -21,6 +21,93 @@ The MCP surface is **runtime-only**:
 
 Use [Model Descriptor Files](model-json.md) when you need source-controlled descriptors. Use MCP when an agent or automation needs safe, structured changes to the runtime model that the Designer can immediately show.
 
+## Tool Reference
+
+All tools below work against the **runtime database-backed** model only.
+
+### Core Workflow Tools
+
+| Tool | Use it for |
+|------|------------|
+| `lowcode_designer_get_capabilities` | Read the server's runtime-only scope, write rules, recommended workflow, and example mutation targets |
+| `lowcode_designer_get_mutation_metadata` | Fetch the current `concurrencyStamp` and the valid semantic target tree before planning a write |
+| `lowcode_designer_validate_mutations` | Dry-run a mutation batch and get structured validation feedback without writing |
+| `lowcode_designer_apply_mutations` | Apply a validated mutation batch to the runtime model; this is the **only write tool** |
+| `lowcode_designer_get_health_snapshot` | Re-check the full runtime model after changes to catch broken references or invalid layouts |
+
+### Entity and Enum Tools
+
+| Tool | Use it for |
+|------|------------|
+| `lowcode_designer_get_entities` | List runtime entities; optionally include configured reference entities |
+| `lowcode_designer_get_entity` | Read one entity with properties, validators, interceptors, and child metadata |
+| `lowcode_designer_get_entity_delete_impact` | Review references that would break or change if an entity is removed |
+| `lowcode_designer_get_enum_types` | List available enum types |
+| `lowcode_designer_get_enum` | Read one enum and its values |
+| `lowcode_designer_get_enum_delete_impact` | Review what depends on an enum before removing it |
+
+### Page, Form, and Permission Tools
+
+| Tool | Use it for |
+|------|------------|
+| `lowcode_designer_get_page_groups` | List page groups used for runtime navigation folders |
+| `lowcode_designer_get_pages` | List pages across page types, including dashboard pages |
+| `lowcode_designer_get_page` | Read one page descriptor, including columns, filters, dashboard config, and form links |
+| `lowcode_designer_get_page_permission_config` | Read the page's permission bindings before changing access rules |
+| `lowcode_designer_get_forms` | List forms |
+| `lowcode_designer_get_form` | Read one form with fields, flat layout placements, validations, and rules |
+| `lowcode_designer_get_form_delete_impact` | Review what depends on a form before removing it |
+| `lowcode_designer_get_permissions` | List runtime low-code permission definitions |
+| `lowcode_designer_get_permission_delete_impact` | Review where a permission is referenced before removing it |
+
+### Script and Action Tools
+
+| Tool | Use it for |
+|------|------------|
+| `lowcode_designer_get_endpoints` | List scripted custom endpoints |
+| `lowcode_designer_get_endpoint` | Read one endpoint with route, method, JavaScript, and analyzed references |
+| `lowcode_designer_get_script_autocomplete_metadata` | Discover the script globals, helpers, entities, and metadata available for a script type |
+| `lowcode_designer_test_script` | Dry-run endpoint, interceptor, event handler, background job, or background worker JavaScript |
+| `lowcode_designer_get_script_event_handlers` | List script event handlers |
+| `lowcode_designer_get_script_event_handler` | Read one event handler |
+| `lowcode_designer_get_script_background_jobs` | List script background jobs |
+| `lowcode_designer_get_script_background_job` | Read one background job |
+| `lowcode_designer_get_script_background_worker_scheduler_capabilities` | Read whether the runtime supports dynamic worker registration and cron scheduling |
+| `lowcode_designer_get_script_background_workers` | List script background workers |
+| `lowcode_designer_get_script_background_worker` | Read one background worker with schedule and JavaScript |
+
+## Common Sequences
+
+### Change an Entity or Form
+
+1. Read the current item with `lowcode_designer_get_entity` or `lowcode_designer_get_form`.
+2. Fetch `lowcode_designer_get_mutation_metadata`.
+3. Build a small mutation batch against the returned target tree.
+4. Run `lowcode_designer_validate_mutations`.
+5. Apply with `lowcode_designer_apply_mutations`.
+6. Re-read the item and run `lowcode_designer_get_health_snapshot`.
+
+### Change a Dashboard or Page Group
+
+1. Read the page with `lowcode_designer_get_page` or list groups with `lowcode_designer_get_page_groups`.
+2. Fetch mutation metadata and validate the exact batch.
+3. Apply the change.
+4. Re-open the page via `lowcode_designer_get_page` and confirm health.
+
+### Remove a Shared Item Safely
+
+1. Call the matching delete-impact tool first, such as `lowcode_designer_get_entity_delete_impact`, `lowcode_designer_get_enum_delete_impact`, `lowcode_designer_get_form_delete_impact`, or `lowcode_designer_get_permission_delete_impact`.
+2. Fix or remove dependent references.
+3. Validate the removal batch.
+4. Apply and then re-check health.
+
+### Review or Debug a Script
+
+1. Read the action or endpoint with its `get_*` tool.
+2. Fetch `lowcode_designer_get_script_autocomplete_metadata` for the relevant script type.
+3. Run `lowcode_designer_test_script`.
+4. Persist the change through mutations only after the dry run looks correct.
+
 ## Mental Model
 
 MCP is not a raw JSON document editor. It is a semantic mutation layer over low-code concepts such as:

@@ -109,7 +109,7 @@ For example, this form defines three fields and places those same field IDs into
   "fields": [
     { "id": "name", "label": "Name", "type": "text", "binding": "Name" },
     { "id": "price", "label": "Price", "type": "money", "binding": "Price" },
-    { "id": "is-active", "label": "Active", "type": "checkbox", "binding": "IsActive" }
+    { "id": "stock-count", "label": "Stock Count", "type": "number", "binding": "StockCount" }
   ],
   "layout": {
     "tabs": [
@@ -119,7 +119,7 @@ For example, this form defines three fields and places those same field IDs into
             "fields": [
               { "fieldId": "name", "row": 0, "colSpan": 4 },
               { "fieldId": "price", "row": 1, "colSpan": 2 },
-              { "fieldId": "is-active", "row": 1, "colSpan": 2 }
+              { "fieldId": "stock-count", "row": 1, "colSpan": 2 }
             ]
           }
         ]

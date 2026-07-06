@@ -21,13 +21,13 @@ YourApp.Domain/
     |-- YourAppLowCodeInitializer.cs
     |-- model/
     |   |-- entities/
-    |   |   `-- Acme/Campaigns/Campaign.json
+    |   |   `-- Acme/Catalog/Product.json
     |   |-- pages/
-    |   |   `-- campaigns.json
+    |   |   `-- products.json
     |   |-- forms/
-    |   |   `-- campaign-form.json
+    |   |   `-- product-form.json
     |   `-- permissions/
-    |       `-- Acme.Campaigns.json
+    |       `-- Acme.Catalog.json
     `-- model-examples/
         |-- product.entity.json
         |-- product-form.form.json
@@ -40,7 +40,7 @@ Keep the whole `_Dynamic` folder and the generated initializer in source control
 
 Layout conventions:
 
-* `entities/` and `enums/` usually follow namespace-like folders such as `entities/Acme/Campaigns/Campaign.json`.
+* `entities/` and `enums/` usually follow namespace-like folders such as `entities/Acme/Catalog/Product.json`.
 * `pageGroups/` usually stays flat as `pageGroups/{groupName}.json`.
 * `pages/` stays flat as `pages/{pageName}.json`, even when the page belongs to a page group or is a dashboard.
 * Dashboard pages live in `pages/`; there is no separate dashboard descriptor folder.
@@ -110,8 +110,8 @@ Use the descriptor schema directly when a descriptor is stored as its own JSON f
 ```json
 {
   "$schema": "https://raw.githubusercontent.com/abpframework/abp/rel-10.5/schemas/low-code/definitions/entity-descriptor.schema.json",
-  "name": "Acme.Campaigns.Campaign",
-  "displayName": "Campaigns",
+  "name": "Acme.Catalog.Product",
+  "displayName": "Products",
   "properties": []
 }
 ```
@@ -160,7 +160,7 @@ Define enums before properties that reference them:
 {
   "enums": [
     {
-      "name": "Acme.Campaigns.CampaignStatus",
+      "name": "Acme.Catalog.ProductStatus",
       "values": [
         { "name": "Draft", "value": 0 },
         { "name": "Active", "value": 1 },
@@ -178,7 +178,7 @@ Use the enum from a property with `type: "enum"` and `enumType`:
 {
   "name": "Status",
   "type": "enum",
-  "enumType": "Acme.Campaigns.CampaignStatus",
+  "enumType": "Acme.Catalog.ProductStatus",
   "defaultValue": "0"
 }
 ```
@@ -189,8 +189,8 @@ Entities describe the persisted data model. UI is not configured with legacy pro
 
 ```json
 {
-  "name": "Acme.Campaigns.Campaign",
-  "displayName": "Campaigns",
+  "name": "Acme.Catalog.Product",
+  "displayName": "Products",
   "displayProperty": "Name",
   "properties": [],
   "crossFieldValidations": [],
@@ -200,7 +200,7 @@ Entities describe the persisted data model. UI is not configured with legacy pro
 
 | Field | Description |
 |-------|-------------|
-| `name` | Required stable full entity name, for example `Acme.Campaigns.Campaign` |
+| `name` | Required stable full entity name, for example `Acme.Catalog.Product` |
 | `displayName` | Default plural/screen label |
 | `displayProperty` | Property shown in lookups and foreign key display values |
 | `parent` | Parent entity name for child/detail entities |
@@ -213,7 +213,7 @@ Entities describe the persisted data model. UI is not configured with legacy pro
 
 ```json
 {
-  "name": "Budget",
+  "name": "Price",
   "type": "money",
   "isRequired": true,
   "isUnique": false,
@@ -274,7 +274,7 @@ Use entity `attachments` when each record can have multiple arbitrary files:
 
 ```json
 {
-  "name": "Acme.Campaigns.Campaign",
+  "name": "Acme.Catalog.Product",
   "attachments": {
     "isEnabled": true,
     "maxFileCount": 10,
@@ -322,25 +322,25 @@ Pages create runtime routes and menu entries. They also choose how entity data i
 
 ```json
 {
-  "name": "campaigns",
-  "title": "Campaigns",
-  "icon": "fa-solid fa-bullhorn",
+  "name": "products",
+  "title": "Products",
+  "icon": "fa-solid fa-box",
   "type": "dataGrid",
-  "entityName": "Acme.Campaigns.Campaign",
-  "group": "marketing",
+  "entityName": "Acme.Catalog.Product",
+  "group": "catalog",
   "defaultFileExportMode": 0,
   "allowFileBundleExport": true,
   "columns": [
     { "propertyName": "Name", "order": 0, "exportOrder": 0 },
     { "propertyName": "Status", "order": 1, "exportOrder": 1 },
-    { "propertyName": "Budget", "order": 2, "exportOrder": 2, "exportable": false }
+    { "propertyName": "Price", "order": 2, "exportOrder": 2, "exportable": false }
   ],
   "filters": [
     { "propertyName": "Name", "control": "text", "defaultOperator": "contains" },
     { "propertyName": "Status", "control": "select", "defaultOperator": "equal" }
   ],
-  "createFormName": "campaign-form",
-  "editFormName": "campaign-form"
+  "createFormName": "product-form",
+  "editFormName": "product-form"
 }
 ```
 
@@ -391,13 +391,13 @@ Use flat field placements inside each group. The current runtime and designer re
 
 ```json
 {
-  "name": "campaign-form",
-  "entityName": "Acme.Campaigns.Campaign",
+  "name": "product-form",
+  "entityName": "Acme.Catalog.Product",
   "enableSaveAndNew": true,
   "fields": [
     { "id": "name", "label": "Name", "type": "text", "binding": "Name" },
-    { "id": "status", "label": "Status", "type": "select", "binding": "Status", "enumType": "Acme.Campaigns.CampaignStatus" },
-    { "id": "ownerId", "label": "Owner", "type": "lookup", "binding": "OwnerId" }
+    { "id": "status", "label": "Status", "type": "select", "binding": "Status", "enumType": "Acme.Catalog.ProductStatus" },
+    { "id": "price", "label": "Price", "type": "money", "binding": "Price" }
   ],
   "layout": {
     "tabs": [
@@ -413,7 +413,7 @@ Use flat field placements inside each group. The current runtime and designer re
             "fields": [
               { "fieldId": "name", "row": 0, "colSpan": 4 },
               { "fieldId": "status", "row": 1, "colSpan": 2 },
-              { "fieldId": "ownerId", "row": 1, "colSpan": 2 }
+              { "fieldId": "price", "row": 1, "colSpan": 2 }
             ]
           }
         ]
@@ -448,9 +448,9 @@ Pages can use generated defaults or explicit permission configuration:
 {
   "permissionConfig": {
     "view": "authenticated",
-    "create": "Acme.Campaigns.Create",
-    "update": "Acme.Campaigns.Update",
-    "delete": "Acme.Campaigns.Delete"
+    "create": "Acme.Catalog.Create",
+    "update": "Acme.Catalog.Update",
+    "delete": "Acme.Catalog.Delete"
   }
 }
 ```
@@ -481,12 +481,12 @@ See [Interceptors](interceptors.md) and [Scripting API](scripting-api.md).
 {
   "endpoints": [
     {
-      "name": "GetCampaignStats",
-      "route": "/api/custom/campaigns/stats",
+      "name": "GetProductStats",
+      "route": "/api/custom/products/stats",
       "method": "GET",
       "requireAuthentication": true,
-      "requiredPermissions": ["Acme.Campaigns"],
-      "javascript": "var count = await db.count('Acme.Campaigns.Campaign'); return ok({ total: count });"
+      "requiredPermissions": ["Acme.Catalog"],
+      "javascript": "var count = await db.count('Acme.Catalog.Product'); return ok({ total: count });"
     }
   ]
 }
@@ -500,22 +500,22 @@ See [Custom Endpoints](custom-endpoints.md).
 {
   "eventHandlers": [
     {
-      "name": "NotifyCampaignCompleted",
-      "eventName": "Acme.Campaigns.CampaignCompleted",
-      "javascript": "log('Campaign completed: ' + eventData.id);"
+      "name": "NotifyProductPublished",
+      "eventName": "Acme.Catalog.ProductPublished",
+      "javascript": "context.log('Product published: ' + eventData.id);"
     }
   ],
   "backgroundJobs": [
     {
-      "name": "SendCampaignSummary",
-      "javascript": "log('Sending summary for ' + jobData.campaignId);"
+      "name": "SendProductSummary",
+      "javascript": "context.log('Sending summary for ' + jobData.productId);"
     }
   ],
   "backgroundWorkers": [
     {
-      "name": "CampaignCleanup",
+      "name": "ProductCleanup",
       "period": 3600000,
-      "javascript": "log('Cleaning campaign data.');"
+      "javascript": "context.log('Cleaning product data.');"
     }
   ]
 }
@@ -531,37 +531,37 @@ The complete example below shows the logical aggregate shape. Split projects sto
 {
   "enums": [
     {
-      "name": "Acme.Campaigns.CampaignStatus",
+      "name": "Acme.Catalog.ProductStatus",
       "values": [
         { "name": "Draft", "value": 0 },
         { "name": "Active", "value": 1 },
-        { "name": "Completed", "value": 2 }
+        { "name": "Archived", "value": 2 }
       ]
     }
   ],
   "entities": [
     {
-      "name": "Acme.Campaigns.Campaign",
-      "displayName": "Campaigns",
+      "name": "Acme.Catalog.Product",
+      "displayName": "Products",
       "displayProperty": "Name",
       "properties": [
         { "name": "Name", "type": "string", "isRequired": true, "validators": [{ "type": "maxLength", "length": 128 }] },
-        { "name": "Status", "type": "enum", "enumType": "Acme.Campaigns.CampaignStatus", "defaultValue": "0" },
-        { "name": "Budget", "type": "money" },
-        { "name": "StartDate", "type": "date" },
+        { "name": "Status", "type": "enum", "enumType": "Acme.Catalog.ProductStatus", "defaultValue": "0" },
+        { "name": "Price", "type": "money" },
+        { "name": "ReleaseDate", "type": "date" },
         { "name": "CoverImage", "type": "image", "fileAllowedContentTypes": ["image/*"] }
       ]
     }
   ],
   "forms": [
     {
-      "name": "campaign-form",
-      "entityName": "Acme.Campaigns.Campaign",
+      "name": "product-form",
+      "entityName": "Acme.Catalog.Product",
       "fields": [
         { "id": "name", "label": "Name", "type": "text", "binding": "Name" },
-        { "id": "status", "label": "Status", "type": "select", "binding": "Status", "enumType": "Acme.Campaigns.CampaignStatus" },
-        { "id": "budget", "label": "Budget", "type": "money", "binding": "Budget" },
-        { "id": "startDate", "label": "Start Date", "type": "date", "binding": "StartDate" },
+        { "id": "status", "label": "Status", "type": "select", "binding": "Status", "enumType": "Acme.Catalog.ProductStatus" },
+        { "id": "price", "label": "Price", "type": "money", "binding": "Price" },
+        { "id": "releaseDate", "label": "Release Date", "type": "date", "binding": "ReleaseDate" },
         { "id": "coverImage", "label": "Cover Image", "type": "image", "binding": "CoverImage" }
       ],
       "layout": {
@@ -578,8 +578,8 @@ The complete example below shows the logical aggregate shape. Split projects sto
                 "fields": [
                   { "fieldId": "name", "row": 0, "colSpan": 4 },
                   { "fieldId": "status", "row": 1, "colSpan": 2 },
-                  { "fieldId": "budget", "row": 1, "colSpan": 2 },
-                  { "fieldId": "startDate", "row": 2, "colSpan": 2 },
+                  { "fieldId": "price", "row": 1, "colSpan": 2 },
+                  { "fieldId": "releaseDate", "row": 2, "colSpan": 2 },
                   { "fieldId": "coverImage", "row": 2, "colSpan": 2 }
                 ]
               }
@@ -590,27 +590,27 @@ The complete example below shows the logical aggregate shape. Split projects sto
     }
   ],
   "pageGroups": [
-    { "name": "marketing", "title": "Marketing", "icon": "fa-solid fa-bullhorn", "order": 10 }
+    { "name": "catalog", "title": "Catalog", "icon": "fa-solid fa-boxes-stacked", "order": 10 }
   ],
   "pages": [
     {
-      "name": "campaigns",
-      "title": "Campaigns",
+      "name": "products",
+      "title": "Products",
       "type": "dataGrid",
-      "entityName": "Acme.Campaigns.Campaign",
-      "group": "marketing",
+      "entityName": "Acme.Catalog.Product",
+      "group": "catalog",
       "columns": [
         { "propertyName": "Name", "order": 0, "exportOrder": 0 },
         { "propertyName": "Status", "order": 1, "exportOrder": 1 },
-        { "propertyName": "Budget", "order": 2, "exportOrder": 2, "exportable": false }
+        { "propertyName": "Price", "order": 2, "exportOrder": 2, "exportable": false }
       ],
       "filters": [
         { "propertyName": "Name", "control": "text", "defaultOperator": "contains" },
         { "propertyName": "Status", "control": "select", "defaultOperator": "equal" },
         { "propertyName": "CoverImage", "control": "exists", "defaultOperator": "hasValue" }
       ],
-      "createFormName": "campaign-form",
-      "editFormName": "campaign-form"
+      "createFormName": "product-form",
+      "editFormName": "product-form"
     }
   ]
 }

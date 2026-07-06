@@ -29,11 +29,11 @@ Pages reference a group by name:
 
 ```json
 {
-  "name": "orders",
-  "title": "Orders",
+  "name": "products",
+  "title": "Products",
   "type": "dataGrid",
-  "entityName": "Acme.Sales.Order",
-  "group": "sales"
+  "entityName": "Acme.Catalog.Product",
+  "group": "inventory"
 }
 ```
 
@@ -71,15 +71,15 @@ In split descriptor projects, a page group file in `pageGroups/` stores **one de
 
 ```json
 {
-  "name": "sales-reports",
-  "title": "Reports",
+  "name": "inventory-insights",
+  "title": "Insights",
   "icon": "fa-solid fa-folder-tree",
   "order": 20,
-  "parent": "sales"
+  "parent": "inventory"
 }
 ```
 
-For example, `pageGroups/sales-reports.json` would use that shape directly.
+For example, `pageGroups/inventory-insights.json` would use that shape directly.
 
 If you are looking at the logical aggregate model instead of split files, the same data appears under the top-level `pageGroups` array:
 
@@ -87,17 +87,17 @@ If you are looking at the logical aggregate model instead of split files, the sa
 {
   "pageGroups": [
     {
-      "name": "sales",
-      "title": "Sales",
-      "icon": "fa-solid fa-chart-line",
+      "name": "inventory",
+      "title": "Inventory",
+      "icon": "fa-solid fa-boxes-stacked",
       "order": 10
     },
     {
-      "name": "sales-reports",
-      "title": "Reports",
+      "name": "inventory-insights",
+      "title": "Insights",
       "icon": "fa-solid fa-folder-tree",
       "order": 20,
-      "parent": "sales"
+      "parent": "inventory"
     }
   ]
 }
@@ -111,7 +111,7 @@ Use CSS class strings for icons, for example:
 
 * `fa-solid fa-folder`
 * `fa-solid fa-folder-tree`
-* `fa-solid fa-chart-line`
+* `fa-solid fa-boxes-stacked`
 
 Do not treat `icon` as an image URL or file path.
 
