@@ -175,8 +175,51 @@
         var docsContentWidth = $('.docs-content').width() - 74;
         $('.alert-criteria').width(docsContentWidth);
     }
+
+    // Toggle the collapsed document-options popover by click/tap (works on touch, unlike a hover-only reveal).
+    function docsOptionsToggle() {
+        var $criteria = $('.alert-criteria');
+        var $btn = $criteria.find('.options-header .toggle-btn');
+        if (!$criteria.length || !$btn.length) {
+            return;
+        }
+        function setOpen(isOpen) {
+            $criteria.toggleClass('is-open', isOpen);
+            $btn.attr('aria-expanded', isOpen ? 'true' : 'false');
+        }
+        // clear any previous bindings so a second init (e.g. partial reload) does not stack handlers
+        $btn.off('.docsOptions');
+        $criteria.off('.docsOptions');
+        $(document).off('.docsOptions');
+        $(window).off('.docsOptions');
+        $btn.on('click.docsOptions', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            setOpen(!$criteria.hasClass('is-open'));
+        });
+        $criteria.on('click.docsOptions', function (e) {
+            e.stopPropagation();
+        });
+        $(document).on('click.docsOptions', function () {
+            setOpen(false);
+        });
+        $(document).on('keydown.docsOptions', function (e) {
+            if (e.key === 'Escape' && $criteria.hasClass('is-open')) {
+                setOpen(false);
+                // keyboard close: return focus to the button (focus ring is appropriate here)
+                $btn.trigger('focus');
+            }
+        });
+        $(window).on('scroll.docsOptions', function () {
+            if (!$('body').hasClass('scrolledMore')) {
+                setOpen(false);
+            }
+        });
+    }
+
     $(document).ready(function () {
         docsCriteria();
+        docsOptionsToggle();
     });
     $(window).resize(function () {
         docsCriteria();

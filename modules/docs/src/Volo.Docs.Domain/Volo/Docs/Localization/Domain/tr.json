@@ -29,6 +29,7 @@
     "FullSearch": "Dokümanlarda Ara",
     "Volo.Docs.Domain:010001": "Elastic search etkin değil",
     "MultipleVersionDocumentInfo": "Bu dökümanın birden çok versiyonu bulunmaktadır. Sizin için en uygun olan seçenekleri seçiniz.",
+    "DocumentOptions": "Belge Seçenekleri",
     "New": "Yeni",
     "Upd": "Günc",
     "NewExplanation": "Son iki hafta içinde oluşturuldu.",

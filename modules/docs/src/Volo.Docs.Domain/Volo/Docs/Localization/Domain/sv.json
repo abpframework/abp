@@ -29,6 +29,7 @@
     "FullSearch": "Sök i dokument",
     "Volo.Docs.Domain:010001": "Elastisk sökning är inte aktiverad.",
     "MultipleVersionDocumentInfo": "Det finns flera versioner av detta dokument. Välj de alternativ som passar dig bäst.",
+    "DocumentOptions": "Dokumentalternativ",
     "New": "Nya",
     "Upd": "Uppdatering",
     "NewExplanation": "Skapad under de senaste två veckorna.",

@@ -29,6 +29,7 @@
     "FullSearch": "Traži u dokumentima",
     "Volo.Docs.Domain:010001": "Elastic search nije omogućen.",
     "MultipleVersionDocumentInfo": "Postoji više verzija ovog dokumenta. Odaberite opcije koje vam najbolje odgovaraju.",
+    "DocumentOptions": "Opcije dokumenta",
     "New": "Novi",
     "Upd": "Upd",
     "NewExplanation": "Stvoreno u posljednja dva tjedna.",
