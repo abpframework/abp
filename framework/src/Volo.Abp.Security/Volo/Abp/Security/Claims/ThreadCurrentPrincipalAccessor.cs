@@ -8,6 +8,12 @@ public class ThreadCurrentPrincipalAccessor : CurrentPrincipalAccessorBase, ISin
 {
     protected override ClaimsPrincipal GetClaimsPrincipal()
     {
-        return Thread.CurrentPrincipal as ClaimsPrincipal ?? new ClaimsPrincipal(new ClaimsIdentity());
+        var principal = Thread.CurrentPrincipal;
+        if (principal == null)
+        {
+            return new ClaimsPrincipal(new ClaimsIdentity());
+        }
+
+        return principal as ClaimsPrincipal ?? new ClaimsPrincipal(principal);
     }
 }
