@@ -67,5 +67,21 @@ public class BackgroundJobsTestDataBuilder : ITransientDependency
                 TryCount = 2
             }
         );
+
+        // App1 waiting job with a different job name, to verify job-name filtering.
+        await _backgroundJobRepository.InsertAsync(
+            new BackgroundJobRecord(_testData.JobId4)
+            {
+                ApplicationName = "App1",
+                JobName = "OtherJobName",
+                JobArgs = "{ value: 4 }",
+                NextTryTime = _clock.Now.Subtract(TimeSpan.FromMinutes(1)),
+                Priority = BackgroundJobPriority.Normal,
+                IsAbandoned = false,
+                LastTryTime = null,
+                CreationTime = _clock.Now.Subtract(TimeSpan.FromMinutes(3)),
+                TryCount = 0
+            }
+        );
     }
 }
