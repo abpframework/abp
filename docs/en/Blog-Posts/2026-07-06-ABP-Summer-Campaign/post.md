@@ -1,15 +1,16 @@
 Summer is here, and so is one of the best times to start building with ABP.
 
-From **July 6 to July 20**, we're offering an exclusive summer promotion for **new ABP licenses**. Get **20% off** your purchase and receive **up to $300 in AI credits** to power the ABP AI Agent inside ABP Studio.
+From **July 6 to July 20**, we're offering exclusive summer savings on **ABP licenses and renewals**. Save **20% on new licenses** or **10% on license renewals**, and receive **up to $300 in AI credits** to power the **ABP AI Agent** in **ABP Studio**. 
 
 Whether you're starting a new project or upgrading your development workflow, this campaign helps you save on your license while accelerating development with AI.
 
 ### **What's Included?**
 
-During the campaign period, every new ABP license purchase includes:
+**During the campaign period, you'll receive:**
 
-* **20% off** your new ABP license & **10% off license renewals**  
-* **Up to $300 in AI credits** for the ABP AI Agent
+* **20% off new ABP licenses**  
+* **10% off license renewals**  
+* **Up to $300 in AI credits** for the **ABP AI Agent**
 
 The AI credits can be used with the **ABP AI Agent** in **ABP Studio**, allowing you to automate repetitive development tasks and build applications faster.
 
@@ -47,7 +48,7 @@ Instead of spending weeks building common infrastructure, your team can focus on
 
 This campaign is available **only between July 6 and July 20**.
 
-If you've been considering ABP, there's never been a better time to get started. Save **20%** on your new license and receive **up to $300 in AI credits** to experience AI-assisted development with the ABP AI Agent.
+Whether you're purchasing your first ABP license or renewing your existing one, now is the perfect time to save. Get **20% off new licenses** or **10% off renewals**, plus receive **up to $300 in AI credits** to accelerate development with the **ABP AI Agent**. 
 
 **Claim your summer discount before July 20 and start building faster with ABP.**
 
