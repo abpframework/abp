@@ -469,6 +469,72 @@
               "path": "suite/how-to-uninstall.md"
             }
           ]
+        },
+        {
+          "text": "Low-Code System",
+          "items": [
+            {
+              "text": "Overview",
+              "path": "low-code",
+              "isIndex": true
+            },
+            {
+              "text": "Low-Code Designer",
+              "path": "low-code/designer.md"
+            },
+            {
+              "text": "React Runtime",
+              "path": "low-code/react-runtime.md"
+            },
+            {
+              "text": "Health",
+              "path": "low-code/health.md"
+            },
+            {
+              "text": "Dashboards",
+              "path": "low-code/dashboards.md"
+            },
+            {
+              "text": "Page Groups",
+              "path": "low-code/page-groups.md"
+            },
+            {
+              "text": "MCP Integration",
+              "path": "low-code/mcp.md"
+            },
+            {
+              "text": "Attributes & Fluent API",
+              "path": "low-code/fluent-api.md"
+            },
+            {
+              "text": "Model Descriptor Files",
+              "path": "low-code/model-json.md"
+            },
+            {
+              "text": "Reference Entities",
+              "path": "low-code/reference-entities.md"
+            },
+            {
+              "text": "Foreign Access",
+              "path": "low-code/foreign-access.md"
+            },
+            {
+              "text": "Interceptors",
+              "path": "low-code/interceptors.md"
+            },
+            {
+              "text": "Custom Endpoints",
+              "path": "low-code/custom-endpoints.md"
+            },
+            {
+              "text": "Script Actions",
+              "path": "low-code/script-actions.md"
+            },
+            {
+              "text": "Scripting API",
+              "path": "low-code/scripting-api.md"
+            }
+          ]
         }
       ]
     },
