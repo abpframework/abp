@@ -8,7 +8,7 @@ namespace Volo.Abp.AspNetCore.Components.Web.Security;
 
 public class AbpComponentsClaimsCache : IScopedDependency
 {
-    public ClaimsPrincipal Principal { get; private set; } = default!;
+    public ClaimsPrincipal Principal { get; private set; } = new ClaimsPrincipal(new ClaimsIdentity());
 
     private readonly AuthenticationStateProvider? _authenticationStateProvider;
 
