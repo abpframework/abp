@@ -11,6 +11,7 @@ import {
   createProxyWarningSaver,
   mergeAndAllowDelete,
   removeDefaultPlaceholders,
+  resolveProxyResourceApi,
   resolveProject,
 } from '../../utils';
 
@@ -24,17 +25,21 @@ export default function (schema: GenerateProxySchema) {
       const targetPath = buildTargetPath(target.definition, params.entryPoint);
       const readProxyConfig = createProxyConfigReader(targetPath);
       let generated: string[] = [];
+      let previousResourceApi = false;
 
       try {
-        generated = readProxyConfig(host).generated;
+        const previousConfig = readProxyConfig(host);
+        generated = previousConfig.generated;
+        previousResourceApi = resolveProxyResourceApi(params, previousConfig);
         const index = generated.findIndex(m => m === moduleName);
         if (index < 0) generated.push(moduleName);
       } catch (_) {
         generated.push(moduleName);
+        previousResourceApi = resolveProxyResourceApi(params);
       }
 
       const getApiDefinition = createApiDefinitionGetter(params);
-      const data = { generated, ...(await getApiDefinition(host)) };
+      const data = { generated, resourceApi: previousResourceApi, ...(await getApiDefinition(host)) };
       data.generated = [];
 
       const clearProxy = createProxyClearer(targetPath);
@@ -43,9 +48,11 @@ export default function (schema: GenerateProxySchema) {
 
       const saveProxyWarning = createProxyWarningSaver(targetPath);
 
-      const generateApis = createApisGenerator(schema, generated);
+      const generateApis = createApisGenerator({ ...schema, resourceApi: previousResourceApi }, generated);
 
       const generateIndex = createProxyIndexGenerator(targetPath);
+
+      console.log('HELLO');
 
       return chain([
         mergeAndAllowDelete(host, clearProxy),
