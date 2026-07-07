@@ -73,6 +73,12 @@
 | System.Text.Encodings.Web | 10.0.7 | 10.0.9 | #25706 |
 | System.Text.Json | 10.0.7 | 10.0.9 | #25706 |
 
+## 10.5.1
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| Swashbuckle.AspNetCore | 10.0.1 | 10.2.3 | #25759 |
+
 ## 10.5.0-rc.4
 
 | Package | Old Version | New Version | PR |
