@@ -1,11 +1,15 @@
-import { Component, OnInit, input, output } from '@angular/core';
+import {Component, OnInit, input, output, ChangeDetectionStrategy,} from '@angular/core';
 import { Toaster } from '../../models/toaster';
 import { LocalizationPipe } from '@abp/ng.core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-toast',
   templateUrl: './toast.component.html',
   styleUrls: ['./toast.component.scss'],
+  host: {
+    '[class.abp-toast-leaving]': 'isLeaving',
+  },
   imports: [LocalizationPipe],
 })
 export class ToastComponent implements OnInit {
@@ -50,8 +54,17 @@ export class ToastComponent implements OnInit {
     }, timeout);
   }
 
+  isLeaving = false;
+
   close() {
-    this.remove.emit(this.toast().options?.id);
+    if (this.isLeaving) {
+      return;
+    }
+
+    this.isLeaving = true;
+    setTimeout(() => {
+      this.remove.emit(this.toast().options?.id);
+    }, 450);
   }
 
   tap() {

@@ -1,5 +1,6 @@
 import { createHostFactory, SpectatorHost } from '@ngneat/spectator/vitest';
 import { FormInputComponent } from '../components/form-input/form-input.component';
+import { setInputSignal } from './utils';
 
 
 describe('FormInputComponent', () => {
@@ -8,13 +9,14 @@ describe('FormInputComponent', () => {
   const createHost = createHostFactory(FormInputComponent);
 
   beforeEach(
-    () =>
-      (spectator = createHost(
-        '<abp-form-input></abp-form-input>',
-        {
-          hostProps: { attributes: { autofocus: '', name: 'abp-form-input' } },
-        },
-      )),
+    () => {
+        spectator = createHost(
+          '<abp-form-input />',
+          {
+            hostProps: { attributes: { autofocus: '', name: 'abp-form-input' } },
+          },
+        );
+      },
   );
 
   it('should display the input', () => {
@@ -30,13 +32,13 @@ describe('FormInputComponent', () => {
   });
 
   it('should be readonly when inputReadonly is true', () => {
-    spectator.component.inputReadonly = true;
+    setInputSignal(spectator.component.inputReadonly, true);
     spectator.detectComponentChanges();
     expect(spectator.query('[readonly]')).toBeTruthy();
   });
 
   it('should not contain readonly when inputReadonly is false', () => {
-    spectator.component.inputReadonly = false;
+    setInputSignal(spectator.component.inputReadonly, false);
     spectator.detectComponentChanges();
     expect(spectator.query('[disabled]')).toBeFalsy();
   });

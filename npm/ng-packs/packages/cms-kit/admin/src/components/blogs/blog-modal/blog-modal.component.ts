@@ -1,4 +1,14 @@
-import { Component, OnInit, inject, Injector, input, output, DestroyRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  Injector,
+  input,
+  OnInit,
+  output,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
@@ -24,6 +34,7 @@ export interface BlogModalVisibleChange {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-blog-modal',
   templateUrl: './blog-modal.component.html',
   imports: [
@@ -46,7 +57,7 @@ export class BlogModalComponent implements OnInit {
   selected = input<BlogDto>();
   visibleChange = output<BlogModalVisibleChange>();
 
-  modalBusy = false;
+  readonly modalBusy = signal(false);
 
   form: FormGroup;
 
@@ -65,12 +76,13 @@ export class BlogModalComponent implements OnInit {
   }
 
   save() {
-    if (this.modalBusy) {
+    if (this.modalBusy()) {
       return;
     }
-    this.modalBusy = true;
+    this.modalBusy.set(true);
 
     if (!this.form.valid) {
+      this.modalBusy.set(false);
       return;
     }
 
@@ -86,7 +98,7 @@ export class BlogModalComponent implements OnInit {
       } as UpdateBlogDto);
     }
 
-    observable$.pipe(finalize(() => (this.modalBusy = false))).subscribe(() => {
+    observable$.pipe(finalize(() => this.modalBusy.set(false))).subscribe(() => {
       this.onVisibleChange(false, true);
       this.toasterService.success('AbpUi::SavedSuccessfully');
     });

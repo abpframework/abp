@@ -29,6 +29,7 @@
     "FullSearch": "In Dokumenten suchen",
     "Volo.Docs.Domain:010001": "Elastic search ist nicht aktiviert.",
     "MultipleVersionDocumentInfo": "Dieses Dokument hat mehrere Versionen. Wählen Sie die für Sie am besten geeigneten Optionen aus.",
+    "DocumentOptions": "Dokumentoptionen",
     "New": "Neu",
     "Upd": "Upd",
     "NewExplanation": "Erstellt in den letzten zwei Wochen.",

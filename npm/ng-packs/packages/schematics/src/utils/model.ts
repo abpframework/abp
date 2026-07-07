@@ -74,6 +74,14 @@ export function createImportRefsToModelReducer(params: ModelGeneratorParams) {
         if (baseType && parseNamespace(solution, baseType) !== model.namespace) {
           const baseTypeWithGenericParams = parseBaseTypeWithGenericTypes(baseType);
           baseTypeWithGenericParams.forEach(t => {
+            // A generic argument of the base type (e.g. T in PagedResultDto<T>) may live in the
+            // same namespace as this model, which means it is generated into the same models.ts
+            // file. Importing it would produce an invalid self-import (`from './models'`), so we
+            // skip same-namespace types here, mirroring the property handling below. See #25080.
+            if (parseNamespace(solution, t) === model.namespace) {
+              return;
+            }
+
             toBeImported.push({
               type: t,
               isEnum: false,

@@ -5,8 +5,16 @@ import {
   ConfirmationService,
   ToasterService,
 } from '@abp/ng.theme.shared';
-import { Component, inject, Injector, OnInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  Injector,
+  OnInit,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { finalize, filter } from 'rxjs/operators';
 import { Account } from '../../models/account';
 import { ManageProfileStateService } from '../../services/manage-profile.state.service';
@@ -19,9 +27,9 @@ import {
   generateFormFromProps,
 } from '@abp/ng.components/extensible';
 import { eAccountComponents } from '../../enums';
-import { NgxValidateCoreModule } from '@ngx-validate/core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-personal-settings-form',
   templateUrl: './personal-settings.component.html',
   exportAs: 'abpPersonalSettingsForm',
@@ -61,7 +69,7 @@ export class PersonalSettingsComponent
 
   form!: UntypedFormGroup;
 
-  inProgress?: boolean;
+  readonly inProgress = signal(false);
 
   buildForm() {
     this.selected = this.manageProfileState.getProfile();
@@ -80,10 +88,10 @@ export class PersonalSettingsComponent
     if (this.form.invalid) return;
     const isLogOutConfirmMessageVisible = this.isLogoutConfirmMessageActive();
     const isRefreshTokenExists = this.authService.getRefreshToken();
-    this.inProgress = true;
+    this.inProgress.set(true);
     this.profileService
       .update(this.form.value)
-      .pipe(finalize(() => (this.inProgress = false)))
+      .pipe(finalize(() => this.inProgress.set(false)))
       .subscribe(profile => {
         this.manageProfileState.setProfile(profile);
         this.configState.refreshAppState();

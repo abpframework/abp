@@ -785,6 +785,7 @@
     "Enum:UiFramework:5": "Blazor Server",
     "Enum:UiFramework:6": "Blazor WebApp",
     "Enum:UiFramework:7": "Blazor MAUI",
+    "Enum:UiFramework:8": "React",
     "Enum:DatabaseProvider:0": "Unknown",
     "Enum:DatabaseProvider:1": "None",
     "Enum:DatabaseProvider:2": "EfCore",

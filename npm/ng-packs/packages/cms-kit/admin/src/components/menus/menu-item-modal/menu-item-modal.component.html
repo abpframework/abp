@@ -11,12 +11,12 @@
 
   <ng-template #abpBody>
     @if (form) {
-      <form [formGroup]="form" (ngSubmit)="save()" validateOnSubmit>
+      <form [formGroup]="form" (ngSubmit)="save()" [validateOnSubmit]="true">
         <ul
           ngbNav
           #nav="ngbNav"
           class="nav-tabs"
-          [(activeId)]="activeTab"
+          [activeId]="activeTab()"
           (activeIdChange)="onTabChange($event)"
         >
           <li ngbNavItem="url">
@@ -51,9 +51,9 @@
                     type="button"
                     id="pageSelectDropdown"
                     ngbDropdownToggle
-                    [class.text-muted]="!selectedPage"
+                    [class.text-muted]="!selectedPage()"
                   >
-                    <span>{{ selectedPage?.title || ('CmsKit::Page' | abpLocalization) }}</span>
+                    <span>{{ selectedPage()?.title || ('CmsKit::Page' | abpLocalization) }}</span>
                   </button>
                   <div
                     class="dropdown-menu w-100"
@@ -65,16 +65,16 @@
                       <input
                         type="text"
                         class="form-control form-control-sm"
-                        [(ngModel)]="pageSearchText"
+                        [ngModel]="pageSearchText()"
+                        (ngModelChange)="onPageSearchChange($event)"
                         [ngModelOptions]="{ standalone: true }"
-                        (input)="onPageSearchChange($any($event.target).value)"
                         (click)="$event.stopPropagation()"
                         placeholder="{{ 'AbpUi::Search' | abpLocalization }}"
                         autocomplete="off"
                       />
                     </div>
-                    @if (filteredPages.length > 0) {
-                      @for (page of filteredPages; track page.id) {
+                    @if (filteredPages().length > 0) {
+                      @for (page of filteredPages(); track page.id) {
                         <button
                           type="button"
                           class="dropdown-item"
@@ -83,16 +83,16 @@
                           {{ page.title }}
                         </button>
                       }
-                    } @else if (pageSearchText && pageSearchText.length > 0) {
+                    } @else if (pageSearchText() && pageSearchText().length > 0) {
                       <div class="dropdown-item text-muted">
                         {{ 'No results found' }}
                       </div>
-                    } @else if (pages.length === 0) {
+                    } @else if (pages().length === 0) {
                       <div class="dropdown-item text-muted">
                         {{ 'No pages found' }}
                       </div>
                     }
-                    @if (selectedPage) {
+                    @if (selectedPage()) {
                       <div class="dropdown-divider"></div>
                       <button
                         type="button"

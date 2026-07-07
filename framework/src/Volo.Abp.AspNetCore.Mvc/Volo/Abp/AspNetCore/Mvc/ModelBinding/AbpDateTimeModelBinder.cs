@@ -42,14 +42,14 @@ public class AbpDateTimeModelBinder : IModelBinder
             _clock.SupportsMultipleTimezone &&
             !_currentTimezoneProvider.TimeZone.IsNullOrWhiteSpace())
         {
+            var timeZone = _currentTimezoneProvider.TimeZone;
             try
             {
-                var timezoneInfo = _timezoneProvider.GetTimeZoneInfo(_currentTimezoneProvider.TimeZone);
-                dateTime = new DateTimeOffset(dateTime, timezoneInfo.GetUtcOffset(dateTime)).UtcDateTime;
+                dateTime = _timezoneProvider.ConvertUnspecifiedToUtc(dateTime, timeZone);
             }
             catch
             {
-                _logger.LogWarning("Could not convert DateTime with unspecified Kind using timezone '{TimeZone}'.", _currentTimezoneProvider.TimeZone);
+                _logger.LogWarning("Could not convert DateTime with unspecified Kind using timezone '{TimeZone}'.", timeZone);
             }
         }
 

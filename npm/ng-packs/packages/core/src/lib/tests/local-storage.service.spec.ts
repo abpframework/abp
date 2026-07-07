@@ -4,10 +4,25 @@ import { AbpLocalStorageService } from '../services/local-storage.service';
 
 describe('LocalStorageService', () => {
   let service: AbpLocalStorageService;
+  let localStorageMock: Storage;
 
   beforeEach(() => {
+    localStorageMock = {
+      clear: vi.fn(),
+      getItem: vi.fn(),
+      key: vi.fn(),
+      removeItem: vi.fn(),
+      setItem: vi.fn(),
+      length: 0,
+    };
+
+    vi.stubGlobal('localStorage', localStorageMock);
     TestBed.configureTestingModule({});
     service = TestBed.inject(AbpLocalStorageService);
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
   it('should be created', () => {
@@ -15,38 +30,33 @@ describe('LocalStorageService', () => {
   });
 
   it('should be called getItem', () => {
-    const spy = vi.spyOn(service, 'getItem');
     service.getItem('test');
-    expect(spy).toHaveBeenCalled();
+    expect(localStorageMock.getItem).toHaveBeenCalledWith('test');
   });
 
   it('should be called setItem', () => {
-    const spy = vi.spyOn(service, 'setItem');
     service.setItem('test', 'value');
-    expect(spy).toHaveBeenCalled();
+    expect(localStorageMock.setItem).toHaveBeenCalledWith('test', 'value');
   });
 
   it('should be called removeItem', () => {
-    const spy = vi.spyOn(service, 'removeItem');
     service.removeItem('test');
-    expect(spy).toHaveBeenCalled();
+    expect(localStorageMock.removeItem).toHaveBeenCalledWith('test');
   });
 
   it('should be called clear', () => {
-    const spy = vi.spyOn(service, 'clear');
     service.clear();
-    expect(spy).toHaveBeenCalled();
+    expect(localStorageMock.clear).toHaveBeenCalled();
   });
 
   it('should be called key', () => {
-    const spy = vi.spyOn(service, 'key');
     service.key(0);
-    expect(spy).toHaveBeenCalled();
+    expect(localStorageMock.key).toHaveBeenCalledWith(0);
   });
 
   it('should be called length', () => {
-    const spy = vi.spyOn(service, 'length', 'get');
+    vi.stubGlobal('localStorage', { ...localStorageMock, length: 1 });
     service.length;
-    expect(spy).toHaveBeenCalled();
+    expect(service.length).toBe(1);
   });
 });

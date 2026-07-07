@@ -29,6 +29,7 @@
     "FullSearch": "Vyhľadať v dokumentoch",
     "Volo.Docs.Domain:010001": "Elastic vyhľadávanie nie je povolené.",
     "MultipleVersionDocumentInfo": "Tento dokument má viacero verzií. Vyberte si možnosť, ktorá vám vyhovuje najviac.",
+    "DocumentOptions": "Možnosti dokumentu",
     "New": "Nový",
     "Upd": "Upd",
     "NewExplanation": "Vytvorené za posledné dva týždne.",

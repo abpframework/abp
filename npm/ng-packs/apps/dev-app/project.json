@@ -166,7 +166,7 @@
       "defaultConfiguration": "development"
     },
     "extract-i18n": {
-      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "executor": "@angular/build:extract-i18n",
       "options": {
         "buildTarget": "dev-app:build"
       }
@@ -179,7 +179,7 @@
       "outputs": ["{workspaceRoot}/coverage/apps/dev-app"],
       "options": {
         "passWithNoTests": true,
-        "reportsDirectory": "../../coverage/apps/dev-app",
+        "reportsDirectory": "{projectRoot}/../../coverage/apps/dev-app",
         "silent": false
       }
     },

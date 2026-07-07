@@ -33,6 +33,8 @@ Following custom repositories are defined for this module:
 
 - `IBackgroundJobRepository`
 
+> `IBackgroundJobRepository` supports filtering the waiting jobs for dedicated workers and cleaning up retained completed jobs. See the *Dedicated Workers per Job Type* and *Storing Successful Jobs* sections of the [background jobs](../framework/infrastructure/background-jobs) document.
+
 ### Database providers
 
 #### Common

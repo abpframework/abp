@@ -1,5 +1,6 @@
 import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/vitest';
 import { StopPropagationDirective } from '../directives/stop-propagation.directive';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 describe('StopPropagationDirective', () => {
   let spectator: SpectatorDirective<StopPropagationDirective>;
@@ -13,12 +14,13 @@ describe('StopPropagationDirective', () => {
 
   beforeEach(() => {
     spectator = createDirective(
-      '<div (click)="parentClickEventFn()"><a (click.stop)="childClickEventFn()" >Link</a></div>',
+      '<div (click)="parentClickEventFn()"><a click.stop>Link</a></div>',
       {
-        hostProps: { parentClickEventFn, childClickEventFn },
+        hostProps: { parentClickEventFn },
       },
     );
     directive = spectator.directive;
+    directive.stopPropEvent.subscribe(childClickEventFn);
     link = spectator.query('a');
     childClickEventFn.mockClear();
     parentClickEventFn.mockClear();
@@ -29,8 +31,7 @@ describe('StopPropagationDirective', () => {
   });
 
   test('should not call click event of parent when child element is clicked', () => {
-    spectator.setHostInput({ parentClickEventFn, childClickEventFn });
-    spectator.click('a');
+    spectator.click(link);
     spectator.detectChanges();
     expect(childClickEventFn).toHaveBeenCalled();
     expect(parentClickEventFn).not.toHaveBeenCalled();

@@ -1,6 +1,6 @@
-import { timer , firstValueFrom } from 'rxjs';
 import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/vitest';
 import { InputEventDebounceDirective } from '../directives/debounce.directive';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 describe('InputEventDebounceDirective', () => {
   let spectator: SpectatorDirective<InputEventDebounceDirective>;
@@ -13,7 +13,9 @@ describe('InputEventDebounceDirective', () => {
   });
 
   beforeEach(() => {
-    spectator = createDirective('<input (input.debounce)="inputEventFn()" [debounce]="20"  />', {
+    vi.useFakeTimers();
+
+    spectator = createDirective('<input input.debounce (input.debounce)="inputEventFn()" />', {
       hostProps: { inputEventFn },
     });
     directive = spectator.directive;
@@ -21,18 +23,31 @@ describe('InputEventDebounceDirective', () => {
     inputEventFn.mockClear();
   });
 
+  afterEach(() => {
+    if (vi.isFakeTimers()) {
+      vi.runOnlyPendingTimers();
+    }
+    vi.useRealTimers();
+  });
+
   test('should be created', () => {
     expect(directive).toBeTruthy();
   });
 
-  test('should have 20ms debounce time', () => {
-    expect(directive.debounce).toBe(20);
+  test('should have 300ms debounce time', () => {
+    expect(directive.debounce()).toBe(300);
   });
 
-  test('should call fromEvent with target element and target event', async () => {
+  test('should call fromEvent with target element and target event', () => {
+    const emitSpy = vi.spyOn(directive.debounceEvent, 'emit');
+
     spectator.dispatchFakeEvent('input', 'input', true);
-    timer(0).subscribe(() => expect(inputEventFn).not.toHaveBeenCalled());
-    await firstValueFrom(timer(21));
-    expect(inputEventFn).toHaveBeenCalled();
+    expect(emitSpy).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(299);
+    expect(emitSpy).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(1);
+    expect(emitSpy).toHaveBeenCalled();
   });
 });

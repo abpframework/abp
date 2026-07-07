@@ -1,4 +1,14 @@
-import { Component, OnInit, inject, Injector, input, output, DestroyRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  Injector,
+  input,
+  OnInit,
+  output,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, FormsModule } from '@angular/forms';
@@ -43,6 +53,7 @@ const TABS = {
 } as const;
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-menu-item-modal',
   templateUrl: './menu-item-modal.component.html',
   imports: [
@@ -81,13 +92,13 @@ export class MenuItemModalComponent implements OnInit {
 
   // Form state
   form: FormGroup;
-  activeTab: string = TABS.URL;
+  readonly activeTab = signal<string>(TABS.URL);
 
-  // Page selection state
-  pages: PageLookupDto[] = [];
-  selectedPage: PageLookupDto | null = null;
-  pageSearchText: string = '';
-  filteredPages: PageLookupDto[] = [];
+  // Page search state
+  readonly pages = signal<PageLookupDto[]>([]);
+  readonly selectedPage = signal<PageLookupDto | null>(null);
+  readonly pageSearchText = signal('');
+  readonly filteredPages = signal<PageLookupDto[]>([]);
 
   // Search subject for debouncing
   private readonly pageSearchSubject = new Subject<string>();
@@ -123,10 +134,10 @@ export class MenuItemModalComponent implements OnInit {
       )
       .subscribe({
         next: result => {
-          this.filteredPages = result.items || [];
+          this.filteredPages.set(result.items || []);
         },
         error: () => {
-          this.filteredPages = [];
+          this.filteredPages.set([]);
         },
       });
   }
@@ -156,8 +167,8 @@ export class MenuItemModalComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: ({ menuItem, pages }) => {
-          this.pages = pages.items || [];
-          this.filteredPages = this.pages;
+          this.pages.set(pages.items || []);
+          this.filteredPages.set(pages.items || []);
           this.buildForm(menuItem);
           this.initializePageSelection(menuItem);
         },
@@ -176,8 +187,8 @@ export class MenuItemModalComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: result => {
-          this.pages = result.items || [];
-          this.filteredPages = this.pages;
+          this.pages.set(result.items || []);
+          this.filteredPages.set(result.items || []);
         },
         error: () => {
           this.toasterService.error('AbpUi::ErrorMessage');
@@ -190,16 +201,15 @@ export class MenuItemModalComponent implements OnInit {
    */
   private initializePageSelection(menuItem: MenuItemWithDetailsDto | MenuItemDto): void {
     if (menuItem.pageId) {
-      this.activeTab = TABS.PAGE;
-      this.selectedPage = this.pages.find(p => p.id === menuItem.pageId) || null;
+      this.activeTab.set(TABS.PAGE);
+      const page = this.pages().find(p => p.id === menuItem.pageId) || null;
+      this.selectedPage.set(page);
 
-      const url = this.selectedPage
-        ? this.generateUrlFromPage(this.selectedPage)
-        : menuItem.url || '';
+      const url = page ? this.generateUrlFromPage(page) : menuItem.url || '';
       this.form.patchValue({ pageId: menuItem.pageId, url }, { emitEvent: false });
-      this.pageSearchText = this.selectedPage?.title || '';
+      this.pageSearchText.set(page?.title || '');
     } else if (menuItem.url) {
-      this.activeTab = TABS.URL;
+      this.activeTab.set(TABS.URL);
       this.form.patchValue({ url: menuItem.url, pageId: null }, { emitEvent: false });
     }
   }
@@ -220,9 +230,9 @@ export class MenuItemModalComponent implements OnInit {
    * Handles page search input changes
    */
   onPageSearchChange(searchText: string): void {
-    this.pageSearchText = searchText;
+    this.pageSearchText.set(searchText);
     if (!searchText?.trim()) {
-      this.filteredPages = this.pages;
+      this.filteredPages.set(this.pages());
       return;
     }
     this.pageSearchSubject.next(searchText);
@@ -232,8 +242,8 @@ export class MenuItemModalComponent implements OnInit {
    * Handles dropdown open event
    */
   onDropdownOpen(): void {
-    if (!this.pageSearchText?.trim()) {
-      this.filteredPages = this.pages;
+    if (!this.pageSearchText()?.trim()) {
+      this.filteredPages.set(this.pages());
     }
   }
 
@@ -243,11 +253,11 @@ export class MenuItemModalComponent implements OnInit {
   selectPage(page: PageLookupDto): void {
     if (!page) return;
 
-    this.selectedPage = page;
+    this.selectedPage.set(page);
     const url = this.generateUrlFromPage(page);
 
     this.form.patchValue({ pageId: page.id, url }, { emitEvent: false });
-    this.pageSearchText = page.title || '';
+    this.pageSearchText.set(page.title || '');
   }
 
   /**
@@ -255,9 +265,9 @@ export class MenuItemModalComponent implements OnInit {
    */
   clearPageSelection(): void {
     this.form.patchValue({ pageId: null }, { emitEvent: false });
-    this.selectedPage = null;
-    this.pageSearchText = '';
-    this.filteredPages = this.pages;
+    this.selectedPage.set(null);
+    this.pageSearchText.set('');
+    this.filteredPages.set(this.pages());
   }
 
   /**
@@ -282,7 +292,7 @@ export class MenuItemModalComponent implements OnInit {
    * Loads the available menu order for new menu items
    */
   private loadAvailableOrder(parentId: string | null, menuItemId?: string): void {
-    if (menuItemId) return; // Only needed for new items
+    if (menuItemId) return;
 
     const order$ = parentId
       ? this.menuItemService.getAvailableMenuOrder(parentId)
@@ -306,7 +316,7 @@ export class MenuItemModalComponent implements OnInit {
    * Handles tab changes
    */
   onTabChange(activeId: string): void {
-    this.activeTab = activeId;
+    this.activeTab.set(activeId);
   }
 
   /**
@@ -316,8 +326,8 @@ export class MenuItemModalComponent implements OnInit {
     const urlValue = this.form.get('url')?.value;
     if (urlValue && this.form.get('pageId')?.value) {
       this.clearPageSelection();
-      if (this.activeTab === TABS.PAGE) {
-        this.activeTab = TABS.URL;
+      if (this.activeTab() === TABS.PAGE) {
+        this.activeTab.set(TABS.URL);
       }
     }
   }
@@ -356,17 +366,14 @@ export class MenuItemModalComponent implements OnInit {
     const formValue = { ...this.form.value };
 
     if (formValue.pageId) {
-      // If pageId is set, generate URL from the page
-      const selectedPage = this.pages.find(p => p.id === formValue.pageId);
-      if (selectedPage) {
-        formValue.url = this.generateUrlFromPage(selectedPage);
+      const page = this.pages().find(p => p.id === formValue.pageId);
+      if (page) {
+        formValue.url = this.generateUrlFromPage(page);
       }
     } else if (formValue.url) {
-      // If URL is manually entered, ensure pageId is cleared
       formValue.pageId = null;
     }
 
-    // Clean up undefined values
     return {
       ...formValue,
       url: formValue.url || undefined,
