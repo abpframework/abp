@@ -270,6 +270,15 @@ Use `file` or `image` properties for first-class upload fields:
 }
 ```
 
+`imageResizeMode` currently supports:
+
+* `fit`: preserve aspect ratio and scale down to fit within `imageMaxWidth` and `imageMaxHeight`
+* `fill`: crop from the center and scale to fill the target box
+
+When `imageResizeMode` is `fill`, set both `imageMaxWidth` and `imageMaxHeight`. If either dimension is missing, the current React runtime falls back to `fit`.
+
+Image resizing is currently performed client-side by the React low-code runtime before upload. Backend upload endpoints still validate size and content type, but they store the uploaded bytes as-is. Direct API uploads and scripting uploads do not get automatic server-side resizing.
+
 Use entity `attachments` when each record can have multiple arbitrary files:
 
 ```json
