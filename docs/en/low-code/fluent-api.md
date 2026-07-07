@@ -285,17 +285,17 @@ Enum localization follows the usual ABP pattern:
 
 | Attribute | Use it for | Key members |
 |-----------|------------|-------------|
-| `[DynamicPropertyUI]` | Sets the property display name | `DisplayName` |
-| `[Display(Name = ...)]` | Sets the property display name with standard .NET metadata | `Name` |
-| `[DynamicPropertyType]` | Overrides the inferred low-code type | `Type` |
-| `[DynamicPropertyDefaultValue]` | Sets the descriptor default value | `DefaultValue` |
-| `[DynamicPropertyNotMapped]` | Stores the property in the data dictionary instead of a dedicated DB field | No properties |
-| `[DynamicForeignKey]` | Configures a lookup relation | `EntityName`, `DisplayPropertyName`, `Access`, `DependsOnPropertyName`, `DependsOnFilterPropertyName` |
-| `[DynamicPropertySetByClients]` | Controls whether clients may write the field | `Allow` |
-| `[DynamicPropertyServerOnly]` | Hides the field from clients entirely | No properties |
-| `[DynamicPropertyUnique]` | Marks the field as unique | No properties |
-| `[DynamicPropertyFileOptions]` | Marks the field as a file and applies upload constraints | `MaxSizeBytes`, `AllowedContentTypes` |
-| `[DynamicPropertyImageOptions]` | Marks the field as an image and applies upload and resize constraints | `MaxSizeBytes`, `MaxWidth`, `MaxHeight`, `ResizeMode`, `AllowedContentTypes` |
+| <code class="text-nowrap">[DynamicPropertyUI]</code> | Sets the property display name | `DisplayName` |
+| <code class="text-nowrap">[Display(Name = ...)]</code> | Sets the property display name with standard .NET metadata | `Name` |
+| <code class="text-nowrap">[DynamicPropertyType]</code> | Overrides the inferred low-code type | `Type` |
+| <code class="text-nowrap">[DynamicPropertyDefaultValue]</code> | Sets the descriptor default value | `DefaultValue` |
+| <code class="text-nowrap">[DynamicPropertyNotMapped]</code> | Stores the property in the data dictionary instead of a dedicated DB field | No properties |
+| <code class="text-nowrap">[DynamicForeignKey]</code> | Configures a lookup relation | `EntityName`, `DisplayPropertyName`, `Access`, `DependsOnPropertyName`, `DependsOnFilterPropertyName` |
+| <code class="text-nowrap">[DynamicPropertySetByClients]</code> | Controls whether clients may write the field | `Allow` |
+| <code class="text-nowrap">[DynamicPropertyServerOnly]</code> | Hides the field from clients entirely | No properties |
+| <code class="text-nowrap">[DynamicPropertyUnique]</code> | Marks the field as unique | No properties |
+| <code class="text-nowrap">[DynamicPropertyFileOptions]</code> | Marks the field as a file and applies upload constraints | `MaxSizeBytes`, `AllowedContentTypes` |
+| <code class="text-nowrap">[DynamicPropertyImageOptions]</code> | Marks the field as an image and applies upload and resize constraints | `MaxSizeBytes`, `MaxWidth`, `MaxHeight`, `ResizeMode`, `AllowedContentTypes` |
 
 #### Display Names: `[DynamicPropertyUI]` and `[Display]`
 
@@ -609,15 +609,19 @@ AbpDynamicEntityConfig.EntityConfigurations.Configure(
 
 ## EF Core Setup
 
-Your DbContext should implement `IDbContextWithDynamicEntities` and call `ConfigureDynamicEntities()`:
+Your DbContext should implement `IDbContextWithDynamicEntities` and call both `ConfigureDynamicEntities()` and `ConfigureLowCode()`.
+Call `ConfigureDynamicEntities()` before `base.OnModelCreating(builder)` so dynamic entity mappings are available when ABP applies the base model conventions:
 
 ````csharp
 public class CatalogDbContext : AbpDbContext<CatalogDbContext>, IDbContextWithDynamicEntities
 {
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        base.OnModelCreating(builder);
         builder.ConfigureDynamicEntities();
+
+        base.OnModelCreating(builder);
+
+        builder.ConfigureLowCode();
     }
 }
 ````
