@@ -10,6 +10,7 @@ export interface ServiceGeneratorParams {
   apiName: string;
   controllers: Controller[];
   serviceImports: Record<string, string[]>;
+  resourceApi?: boolean;
 }
 
 export class Service {

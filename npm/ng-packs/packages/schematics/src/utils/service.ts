@@ -35,6 +35,7 @@ export function createControllerToServiceMapper({
   solution,
   types,
   apiName,
+  resourceApi,
 }: ServiceGeneratorParams) {
   const mapActionToMethod = createActionToMethodMapper();
 
@@ -49,11 +50,26 @@ export function createControllerToServiceMapper({
     );
     imports.push(new Import({ path: '@abp/ng.core', specifiers: ['RestService', 'Rest'] }));
     imports.push(new Import({ path: '@angular/core', specifiers: ['Injectable', 'inject'] }));
+    if (resourceApi) {
+      appendImportSpec(imports, '@angular/core', 'computed');
+      appendImportSpec(imports, '@angular/core', 'Signal');
+      appendImportSpec(imports, '@angular/core', 'ResourceRef');
+    }
     sortImports(imports);
     const methods = actions.map(mapActionToMethod);
     sortMethods(methods);
     return new Service({ apiName, imports, methods, name, namespace });
   };
+}
+
+function appendImportSpec(imports: Import[], path: string, specifier: string) {
+  const existing = imports.find(x => x.path === path);
+  if (!existing) {
+    imports.push(new Import({ path, specifiers: [specifier] }));
+    return;
+  }
+
+  existing.specifiers = [...new Set([...existing.specifiers, specifier])];
 }
 
 function getTypesWithoutIRemoteStreamContent(types: Record<string, Type>) {

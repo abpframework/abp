@@ -52,8 +52,6 @@ export default function (schema: GenerateProxySchema) {
 
       const generateIndex = createProxyIndexGenerator(targetPath);
 
-      console.log('HELLO');
-
       return chain([
         mergeAndAllowDelete(host, clearProxy),
         saveProxyConfig,
