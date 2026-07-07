@@ -20,28 +20,8 @@ export class <%= name %>Service {
     const resourceArgs = resourceParameters.map(p => `params.${p.name}`).join(', ');
   %>
 
-  <%= camel(signature.name) %> = (<%= serializeParameters(signature.parameters) %>) =>
-    this.restService.request<<%= body.requestType %>, <%= responseType %>>({
-      method: '<%= body.method %>',<%
-      if (httpResponseType && httpResponseType !== 'json') { %>
-      responseType: '<%= httpResponseType %>',<% } %><%
-      if (acceptHeader) { %>
-      headers: { Accept: '<%= acceptHeader %>' },<% } %>
-      url: <%= body.url %>,<%
-      if (body.dictParamVar && !body.params.length) { %>
-      params: <%= body.dictParamVar %>,<% } %><%
-      if (body.dictParamVar && body.params.length) { %>
-      params: { ...<%= body.dictParamVar %>, <%= body.params.join(', ') %> },<% } %><%
-      if (!body.dictParamVar && body.params.length) { %>
-      params: { <%= body.params.join(', ') %> },<% }
-      if (body.body) { %>
-      body: <%= body.body %>,<% } %>
-    },
-      { apiName: this.apiName,...config });<%
-
-    if (resourceApi && body.method === 'GET') { %>
-
-  <%= camel(signature.name) %>Resource = (<%
+  <% if (resourceApi && body.method === 'GET') { %>
+  <%= camel(signature.name) %> = (<%
     if (resourceParameters.length) { %>
     params: Signal<<%= resourceType %>>,<% } %>
     config?: Partial<Rest.Config>
@@ -67,6 +47,24 @@ export class <%= name %>Service {
       });
     }),
     { apiName: this.apiName, ...config },
-  );<% }
+  );<% } else { %>
+  <%= camel(signature.name) %> = (<%= serializeParameters(signature.parameters) %>) =>
+    this.restService.request<<%= body.requestType %>, <%= responseType %>>({
+      method: '<%= body.method %>',<%
+      if (httpResponseType && httpResponseType !== 'json') { %>
+      responseType: '<%= httpResponseType %>',<% } %><%
+      if (acceptHeader) { %>
+      headers: { Accept: '<%= acceptHeader %>' },<% } %>
+      url: <%= body.url %>,<%
+      if (body.dictParamVar && !body.params.length) { %>
+      params: <%= body.dictParamVar %>,<% } %><%
+      if (body.dictParamVar && body.params.length) { %>
+      params: { ...<%= body.dictParamVar %>, <%= body.params.join(', ') %> },<% } %><%
+      if (!body.dictParamVar && body.params.length) { %>
+      params: { <%= body.params.join(', ') %> },<% }
+      if (body.body) { %>
+      body: <%= body.body %>,<% } %>
+    },
+      { apiName: this.apiName,...config });<% } %><%
   } %>
 }

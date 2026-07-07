@@ -122,7 +122,9 @@ describe('proxy service template — rendered output', () => {
     expect(output).toContain('const { input } = params();');
     expect(output).toContain('this.restService.requestResource(');
     expect(output).toContain('{ apiName: this.apiName, ...config }');
-    expect(output).toContain('getSampleAsyncResource');
+    expect(output).toContain('getSampleAsync = (');
+    expect(output).not.toContain('getSampleAsyncResource');
+    expect(output).not.toContain('this.restService.request<any, MyDto>');
   });
 
   test('resource api mode does not emit helpers for non-GET methods', () => {
@@ -132,7 +134,8 @@ describe('proxy service template — rendered output', () => {
         responseTypeWithNamespace: 'My.Project.MyDto',
       }, true));
 
-    expect(output).not.toContain('getSampleAsyncResource');
+    expect(output).toContain('getSampleAsync = (');
+    expect(output).not.toContain('requestResource(');
   });
 
   test('json httpResponseType emits Accept but no responseType (default is json)', () => {
