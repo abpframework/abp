@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Upgrade your ABP solutions to Angular version 22.0.x"
+  "Description": "Upgrade your ABP solutions to Angular version 22.0.x"
 }
 ```
 
@@ -13,11 +13,11 @@ This guide explains how to upgrade ABP Angular applications to **Angular 22** an
 
 Update all frontend dependencies together to maintain compatibility:
 
-* `@angular/*` → `~22.0.0`
-* `typescript` → `~6.0.0`
-* `@abp/*` → corresponding ABP release version
-* `@volo/*`, `@volosoft/*` (if applicable) → corresponding commercial release version
-* `angular-oauth2-oidc` (if applicable) → `~22.0.0`
+- `@angular/*` → `~22.0.0`
+- `typescript` → `~6.0.0`
+- `@abp/*` → corresponding ABP version (10.6)
+- `@volo/*`, `@volosoft/*` (if applicable) → corresponding ABP version (10.6)
+- `angular-oauth2-oidc` (if applicable) → `~22.0.0`
 
 Avoid mixing Angular 21 and Angular 22 packages within the same workspace.
 
@@ -34,9 +34,9 @@ Before starting the upgrade:
 1. Update package versions in `package.json`.
 2. Run the Angular or Nx migration commands applicable to your project.
 3. Remove existing installation artifacts:
+   - Delete `node_modules`
+   - Delete the lock file (`package-lock.json`, `yarn.lock`, or `pnpm-lock.yaml`)
 
-   * Delete `node_modules`
-   * Delete the lock file (`package-lock.json`, `yarn.lock`, or `pnpm-lock.yaml`)
 4. Reinstall all dependencies.
 5. Build the application and resolve any compilation or template errors.
 
@@ -65,9 +65,9 @@ Angular 22 introduces updated change detection behavior for components that do n
 
 Common symptoms include:
 
-* Loading indicators not updating
-* Modal busy states not clearing
-* Lists or charts not refreshing after asynchronous operations
+- Loading indicators not updating
+- Modal busy states not clearing
+- Lists or charts not refreshing after asynchronous operations
 
 Recommended approaches:
 
@@ -89,8 +89,8 @@ readonly data = toSignal(
 
 Update template bindings accordingly:
 
-* `data.items` → `data().items`
-* `data.totalCount` → `data().totalCount`
+- `data.items` → `data().items`
+- `data.totalCount` → `data().totalCount`
 
 ### 4.4 Modals and Loading States
 
@@ -128,16 +128,16 @@ Resolve template typing issues where possible, or temporarily disable strict tem
 
 Common adjustments include:
 
-* Updating optional chaining (`?.`) and null coalescing (`??`) usage
-* Guarding optional form references before binding
-* Resolving duplicate input or output bindings
+- Updating optional chaining (`?.`) and null coalescing (`??`) usage
+- Guarding optional form references before binding
+- Resolving duplicate input or output bindings
 
 ### 4.6 Upload Progress Events
 
 Applications that rely on upload progress events should include the XHR backend in browser-side HTTP configuration:
 
 ```typescript
-provideHttpClient(withFetch(), withXhr())
+provideHttpClient(withFetch(), withXhr());
 ```
 
 Do not enable the XHR backend in server-side rendering (SSR) bootstrap code.
@@ -146,9 +146,9 @@ Do not enable the XHR backend in server-side rendering (SSR) bootstrap code.
 
 If charts do not update after asynchronous data loading:
 
-* Store chart data in a signal
-* Bind chart inputs using signal values (for example, `[data]="chartData()"`)
-* Call `reinit()` after assigning new data rather than relying solely on `refresh()`
+- Store chart data in a signal
+- Bind chart inputs using signal values (for example, `[data]="chartData()"`)
+- Call `reinit()` after assigning new data rather than relying solely on `refresh()`
 
 ## 5. Custom or Forked UI Modules
 
@@ -162,15 +162,15 @@ If your project contains customized copies of ABP modules such as Identity, Tena
 
 After completing the upgrade, verify that:
 
-* Dependencies are installed correctly without duplicate Angular versions
-* The application builds successfully
-* Unit tests pass (if applicable)
-* Login, registration, and password recovery workflows function correctly
-* CRUD list pages refresh as expected
-* Modal loading and busy states behave correctly
-* Permission and feature dialogs open and close correctly
-* Upload progress events work as expected (if applicable)
-* Dashboard charts render correctly after data is loaded
+- Dependencies are installed correctly without duplicate Angular versions
+- The application builds successfully
+- Unit tests pass (if applicable)
+- Login, registration, and password recovery workflows function correctly
+- CRUD list pages refresh as expected
+- Modal loading and busy states behave correctly
+- Permission and feature dialogs open and close correctly
+- Upload progress events work as expected (if applicable)
+- Dashboard charts render correctly after data is loaded
 
 ## 7. Troubleshooting
 

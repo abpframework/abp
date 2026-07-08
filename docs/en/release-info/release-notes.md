@@ -20,7 +20,7 @@ See the detailed **[blog post / announcement](https://abp.io/community/announcem
 
 - Background Jobs: Dedicated Workers, Parallel Execution, and Successful Job Retention
 - API Definition and Proxy Improvements for Content Types and Multipart Uploads
-- Angular UI: Upgrade to Angular 22
+- Angular UI: Angular has been upgraded to version 22. For a complete list of changes, including breaking changes, migration steps, and package updates, see the **[Angular Release Notes for v10.6](./../framework/ui/angular/release-notes/angular-22-typescript-6.md)**.
 - Antiforgery and OpenIddict Security Improvements
 - OpenIddict: Generate Access Token from the UI
 
