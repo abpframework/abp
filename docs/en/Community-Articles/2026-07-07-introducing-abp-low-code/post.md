@@ -168,11 +168,15 @@ public async Task<EventFlowLowCodeProofDto> GetHybridSummaryAsync()
             activation.Status == SponsorActivationStatus.Approved ||
             activation.Status == SponsorActivationStatus.Live);
 
+    var liveSessionCount = await AsyncExecuter.CountAsync(liveSessionQuery);
+    var publicSessionCount = await AsyncExecuter.CountAsync(publicSessionQuery);
+    var activeSponsorActivationCount = await AsyncExecuter.CountAsync(sponsorQuery);
+
     return new EventFlowLowCodeProofDto
     {
-        LiveSessionCount = liveSessionQuery.Count(),
-        PublicSessionCount = publicSessionQuery.Count(),
-        ActiveSponsorActivationCount = sponsorQuery.Count()
+        LiveSessionCount = liveSessionCount,
+        PublicSessionCount = publicSessionCount,
+        ActiveSponsorActivationCount = activeSponsorActivationCount
     };
 }
 ```
