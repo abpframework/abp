@@ -69,6 +69,8 @@ abp new MyCompanyName.MyProjectName -csf -u <angular or mvc> -m react-native
 
 This command creates a solution containing an **Angular** or **MVC** project (depending on your choice), a **.NET Core** project, and a **React Native** project.
 
+If you want to see the modern React Native template as a finished product, the [Habitly sample](../../../samples/index.md#hanova--habitly) is a good reference point.
+
 ## Run the Application
 
 You can choose how you want to run the mobile app:
