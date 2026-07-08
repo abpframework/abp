@@ -20,9 +20,9 @@
                     <small>All 16 field types + Nested Forms (Group & Array) with full accessibility support</small>
                 </div>
                 <div class="card-body p-4">
-                    @if (formFields.length) {
+                    @if (formFields().length) {
                     <abp-dynamic-form 
-                        [fields]="formFields" 
+                        [fields]="formFields()" 
                         [submitButtonText]="'Register'"
                         [showCancelButton]="true"
                         (onSubmit)="submit($event)"

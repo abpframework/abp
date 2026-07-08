@@ -1,6 +1,13 @@
 import { ProfileService } from '@abp/ng.account.core/proxy';
 import { ButtonComponent, getPasswordValidators, ToasterService } from '@abp/ng.theme.shared';
-import { Component, Injector, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  Injector,
+  OnInit,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import {
   ReactiveFormsModule,
   UntypedFormBuilder,
@@ -18,6 +25,7 @@ const { required } = Validators;
 const PASSWORD_FIELDS = ['newPassword', 'repeatNewPassword'];
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-change-password-form',
   templateUrl: './change-password.component.html',
   exportAs: 'abpChangePasswordForm',
@@ -40,9 +48,8 @@ export class ChangePasswordComponent
 
   form!: UntypedFormGroup;
 
-  inProgress?: boolean;
-
-  hideCurrentPassword?: boolean;
+  readonly inProgress = signal(false);
+  readonly hideCurrentPassword = signal(false);
 
   mapErrorsFn: Validation.MapErrorsFn = (errors, groupErrors, control) => {
     if (PASSWORD_FIELDS.indexOf(String(control?.name)) < 0) return errors;
@@ -51,7 +58,7 @@ export class ChangePasswordComponent
   };
 
   ngOnInit(): void {
-    this.hideCurrentPassword = !this.manageProfileState.getProfile()?.hasPassword;
+    this.hideCurrentPassword.set(!this.manageProfileState.getProfile()?.hasPassword);
 
     const passwordValidations = getPasswordValidators(this.injector);
 
@@ -76,18 +83,18 @@ export class ChangePasswordComponent
       },
     );
 
-    if (this.hideCurrentPassword) this.form.removeControl('password');
+    if (this.hideCurrentPassword()) this.form.removeControl('password');
   }
 
   onSubmit() {
     if (this.form.invalid) return;
-    this.inProgress = true;
+    this.inProgress.set(true);
     this.profileService
       .changePassword({
-        ...(!this.hideCurrentPassword && { currentPassword: this.form.get('password')?.value }),
+        ...(!this.hideCurrentPassword() && { currentPassword: this.form.get('password')?.value }),
         newPassword: this.form.get('newPassword')?.value,
       })
-      .pipe(finalize(() => (this.inProgress = false)))
+      .pipe(finalize(() => this.inProgress.set(false)))
       .subscribe({
         next: () => {
           this.form.reset();
@@ -95,8 +102,8 @@ export class ChangePasswordComponent
             life: 5000,
           });
 
-          if (this.hideCurrentPassword) {
-            this.hideCurrentPassword = false;
+          if (this.hideCurrentPassword()) {
+            this.hideCurrentPassword.set(false);
             this.form.addControl('password', new UntypedFormControl('', [required]));
           }
         },

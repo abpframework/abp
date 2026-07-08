@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.BackgroundWorkers;
@@ -23,9 +23,15 @@ public class AbpBackgroundJobsModule : AbpModule
 {
     public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
-        if (context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundJobOptions>>().Value.IsJobExecutionEnabled)
+        // The manager decides (based on options) whether and which workers to run.
+        await context.AddBackgroundWorkerAsync<BackgroundJobWorkerManager>();
+
+        // Only register the cleanup worker when it has something to do (retained successful jobs).
+        var jobOptions = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundJobOptions>>().Value;
+        var workerOptions = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundJobWorkerOptions>>().Value;
+        if (jobOptions.IsJobExecutionEnabled && workerOptions.StoreSuccessfulJobs && workerOptions.SuccessfulJobRetentionTime != null)
         {
-            await context.AddBackgroundWorkerAsync<IBackgroundJobWorker>();
+            await context.AddBackgroundWorkerAsync<BackgroundJobCleanupWorker>();
         }
     }
 

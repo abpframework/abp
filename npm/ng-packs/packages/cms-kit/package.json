@@ -1,15 +1,15 @@
 {
   "name": "@abp/ng.cms-kit",
-  "version": "10.5.0-rc.4",
+  "version": "10.6.0-rc.1",
   "homepage": "https://abp.io",
   "repository": {
     "type": "git",
     "url": "https://github.com/abpframework/abp.git"
   },
   "dependencies": {
-    "@abp/ng.components": "~10.5.0-rc.4",
-    "@abp/ng.setting-management": "~10.5.0-rc.4",
-    "@abp/ng.theme.shared": "~10.5.0-rc.4",
+    "@abp/ng.components": "~10.6.0-rc.1",
+    "@abp/ng.setting-management": "~10.6.0-rc.1",
+    "@abp/ng.theme.shared": "~10.6.0-rc.1",
     "@toast-ui/editor": "~3.0.0",
     "codemirror": "~6.0.0",
     "tslib": "^2.0.0"

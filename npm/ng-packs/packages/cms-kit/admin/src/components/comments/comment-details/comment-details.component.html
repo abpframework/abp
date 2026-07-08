@@ -1,5 +1,5 @@
 <abp-page [title]="'CmsKit::Comments' | abpLocalization">
-  @if (comment) {
+  @if (comment(); as comment) {
     <div class="card mb-4">
       <div class="card-body">
         <table class="table">
@@ -59,7 +59,7 @@
   <div class="card mb-4">
     <div class="card-body">
       <form [formGroup]="filterForm" (ngSubmit)="onFilter()">
-        <input type="hidden" [value]="commentId" />
+        <input type="hidden" [value]="commentId()" />
         <div class="row">
           <div class="col-lg-4 col-md-12">
             <div class="row">
@@ -142,6 +142,6 @@
   <h3>{{ 'CmsKit::RepliesToThisComment' | abpLocalization }}</h3>
 
   <div class="card">
-    <abp-extensible-table [data]="data.items" [recordsTotal]="data.totalCount" [list]="list" />
+    <abp-extensible-table [data]="data().items" [recordsTotal]="data().totalCount" [list]="list" />
   </div>
 </abp-page>

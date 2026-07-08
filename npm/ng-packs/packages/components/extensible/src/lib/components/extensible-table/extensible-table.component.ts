@@ -1,7 +1,6 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   computed,
   inject,
@@ -23,7 +22,12 @@ import { AsyncPipe, isPlatformBrowser, NgComponentOutlet, NgTemplateOutlet } fro
 import { Observable, filter, map, Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
-import { NgxDatatableModule, SelectionType, DatatableComponent } from '@swimlane/ngx-datatable';
+import {
+  NgxDatatableModule,
+  SelectionType,
+  DatatableComponent,
+  ScrollEvent,
+} from '@swimlane/ngx-datatable';
 
 import {
   ABP,
@@ -89,7 +93,6 @@ const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
 export class ExtensibleTableComponent<R = any> implements AfterViewInit, OnDestroy {
   readonly #injector = inject(Injector);
   readonly getInjected = this.#injector.get.bind(this.#injector);
-  protected readonly cdr = inject(ChangeDetectorRef);
   protected readonly locale = inject(LOCALE_ID);
   protected readonly config = inject(ConfigStateService);
   protected readonly timeZoneService = inject(TimezoneService);
@@ -130,7 +133,7 @@ export class ExtensibleTableComponent<R = any> implements AfterViewInit, OnDestr
 
   // Internal signals
   protected readonly _data = signal<R[]>([]);
-  private readonly _actionsColumnWidth = signal<number | undefined>(DEFAULT_ACTIONS_COLUMN_WIDTH);
+  protected readonly _actionsColumnWidth = signal<number | undefined>(DEFAULT_ACTIONS_COLUMN_WIDTH);
 
   readonly rowDetailComponent = contentChild(ExtensibleTableRowDetailComponent);
 
@@ -161,6 +164,27 @@ export class ExtensibleTableComponent<R = any> implements AfterViewInit, OnDestr
   protected get effectiveRowDetailHeight(): string | number {
     return this.rowDetailComponent()?.rowHeight() ?? this.rowDetailHeight();
   }
+
+  protected readonly effectiveRowDetailRowHeight = computed(
+    (): number | ((row?: R, index?: number) => number) | undefined => {
+      const height = this.effectiveRowDetailHeight;
+
+      if (typeof height === 'number') {
+        return height as number;
+      }
+
+      if (typeof height === 'function') {
+        return height as (row?: R, index?: number) => number;
+      }
+
+      if (typeof height === 'string' && !height.endsWith('%')) {
+        const parsed = Number.parseInt(height, 10);
+        return Number.isNaN(parsed) ? undefined : parsed;
+      }
+
+      return undefined;
+    },
+  );
 
   hasAtLeastOnePermittedAction: boolean;
 
@@ -299,28 +323,22 @@ export class ExtensibleTableComponent<R = any> implements AfterViewInit, OnDestr
     this.selectionChange.emit(selected);
   }
 
-  onScroll(scrollEvent: Event): void {
+  onScroll(scrollEvent: ScrollEvent): void {
     if (!this.shouldHandleScroll()) {
       return;
     }
 
-    const target = scrollEvent.target as HTMLElement;
-    if (!target) {
-      return;
-    }
+    const table = this.table();
+    const viewportHeight = table.bodyHeight;
+    const scrollHeight = table.bodyComponent.scrollHeight();
 
-    if (this.isNearScrollBottom(target)) {
+    if (scrollEvent.offsetY + viewportHeight >= scrollHeight - this.scrollThreshold()) {
       this.loadMoreSubject.next();
     }
   }
 
   private shouldHandleScroll(): boolean {
     return this.infiniteScroll() && !this.isLoading();
-  }
-
-  private isNearScrollBottom(element: HTMLElement): boolean {
-    const { offsetHeight, scrollTop, scrollHeight } = element;
-    return offsetHeight + scrollTop >= scrollHeight - this.scrollThreshold();
   }
 
   private triggerLoadMore(): void {
@@ -348,7 +366,6 @@ export class ExtensibleTableComponent<R = any> implements AfterViewInit, OnDestr
         ?.requestStatus$?.pipe(filter(status => status === 'loading'))
         .subscribe(() => {
           this._data.set([]);
-          this.cdr.markForCheck();
         });
     }
   }

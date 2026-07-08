@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { PermissionDirective } from '../directives/permission.directive';
 import { PermissionService } from '../services/permission.service';
 import { QUEUE_MANAGER } from '../tokens/queue.token';
+import { setInputSignal } from './utils';
 
 describe('PermissionDirective', () => {
   let spectator: SpectatorDirective<PermissionDirective>;
@@ -20,7 +21,7 @@ describe('PermissionDirective', () => {
 
   beforeEach(() => {
     spectator = createDirective(
-      '<div [abpPermission]="permission" [abpPermissionRunChangeDetection]="runCD"></div>',
+      '<div abpPermission>test</div>',
       {
         hostProps: { permission: 'test', runCD: false },
       },
@@ -44,19 +45,19 @@ describe('PermissionDirective', () => {
 
   it('should handle permission input', () => {
     grantedPolicy$.next(false);
-    directive.condition = 'new-permission';
+    setInputSignal(directive.condition, 'new-permission');
     directive.ngOnChanges();
     grantedPolicy$.next(true);
     expect(directive).toBeTruthy();
-    expect(directive.condition).toBe('new-permission');
+    expect(directive.condition()).toBe('new-permission');
   });
 
   it('should handle runChangeDetection input', () => {
     grantedPolicy$.next(false);
-    directive.runChangeDetection = true;
+    setInputSignal(directive.runChangeDetection, true);
     directive.ngOnChanges();
     grantedPolicy$.next(true);
     expect(directive).toBeTruthy();
-    expect(directive.runChangeDetection).toBe(true);
+    expect(directive.runChangeDetection()).toBe(true);
   });
 });

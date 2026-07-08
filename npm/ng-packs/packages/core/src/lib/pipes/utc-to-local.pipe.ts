@@ -27,7 +27,7 @@ export class UtcToLocalPipe implements PipeTransform {
     try {
       if (this.timezoneService.isUtcClockEnabled) {
         const timeZone = this.timezoneService.timezone;
-        return this.timeService.formatDateWithStandardOffset(date, format, timeZone);
+        return this.timeService.format(date, format, timeZone);
       } else {
         return this.timeService.formatWithoutTimeZone(date, format);
       }

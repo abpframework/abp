@@ -1,4 +1,4 @@
-<abp-page [title]="'AbpTenantManagement::Tenants' | abpLocalization" [toolbar]="data.items">
+<abp-page [title]="'AbpTenantManagement::Tenants' | abpLocalization" [toolbar]="data().items">
   <div id="wrapper" class="card">
     <div class="card-body">
       <div id="data-tables-table-filter" class="data-tables-filter mb-3">
@@ -13,14 +13,18 @@
       </div>
 
       <abp-extensible-table
-        [data]="data.items || []"
-        [recordsTotal]="data.totalCount || 0"
+        [data]="data().items"
+        [recordsTotal]="data().totalCount"
         [list]="list"
-      ></abp-extensible-table>
+      />
     </div>
   </div>
 
-  <abp-modal [(visible)]="isModalVisible" [busy]="modalBusy">
+  <abp-modal
+    [visible]="isModalVisible()"
+    (visibleChange)="isModalVisible.set($event)"
+    [busy]="modalBusy()"
+  >
     <ng-template #abpHeader>
       <h3>
         {{
@@ -32,7 +36,7 @@
 
     <ng-template #abpBody>
       <form [formGroup]="tenantForm" (ngSubmit)="save()" [validateOnSubmit]="true">
-        <abp-extensible-form [selectedRecord]="selected"></abp-extensible-form>
+        <abp-extensible-form [selectedRecord]="selected" />
       </form>
     </ng-template>
 
@@ -51,14 +55,14 @@
       inputs: {
         providerName: { value: 'T' },
         providerKey: { value: providerKey },
-        visible: { value: visibleFeatures, twoWay: true }
+        visible: { value: visibleFeatures(), twoWay: true },
       },
       outputs: { visibleChange: $any(onVisibleFeaturesChange) },
-      componentKey: featureManagementKey
+      componentKey: featureManagementKey,
     }"
-    [(visible)]="visibleFeatures"
+    [visible]="visibleFeatures()"
+    (visibleChange)="visibleFeatures.set($event)"
     providerName="T"
     [providerKey]="providerKey"
-  >
-  </abp-feature-management>
+  />
 </abp-page>

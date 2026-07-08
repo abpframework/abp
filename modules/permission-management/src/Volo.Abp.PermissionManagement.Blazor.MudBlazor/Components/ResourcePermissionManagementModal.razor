@@ -1,7 +1,7 @@
 @using global::MudBlazor
 @inherits Volo.Abp.AspNetCore.Components.AbpComponentBase
 
-<MudDialog DefaultFocus="DefaultFocus.FirstChild" @bind-Visible="@_isVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.ExtraLarge, FullWidth = true, CloseOnEscapeKey = true, BackdropClick = false })">
+<MudDialog DefaultFocus="DefaultFocus.FirstChild" @bind-Visible="@_isVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.Large, FullWidth = true, CloseOnEscapeKey = true, BackdropClick = false })">
     <TitleContent>
         <MudText Typo="Typo.h6">@L["ResourcePermissions"] - @ResourceDisplayName</MudText>
     </TitleContent>
@@ -80,75 +80,69 @@
 </MudDialog>
 
 @* Create Resource Permission Dialog *@
-@if (_createDialogVisible)
-{
-    <MudDialog DefaultFocus="DefaultFocus.FirstChild" @bind-Visible="@_createDialogVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseOnEscapeKey = true, BackdropClick = false })">
-        <TitleContent>
-            <MudText Typo="Typo.h6">@L["AddResourcePermission"]</MudText>
-        </TitleContent>
-        <DialogContent>
-            <MudForm @ref="@_createFormRef" Model="@CreateEntity">
-                <MudText Typo="Typo.subtitle1" Class="mb-2">@L["ResourcePermissionTarget"]</MudText>
-                <MudRadioGroup T="string" SelectedOption="@CurrentLookupService" SelectedOptionChanged="@OnLookupServiceCheckedValueChanged">
-                    @foreach (var keyLookupService in ResourceProviderKeyLookupServices)
-                    {
-                        <MudRadio Color="Color.Primary" T="string" Option="@keyLookupService.Name">@keyLookupService.DisplayName</MudRadio>
-                    }
-                </MudRadioGroup>
-                <MudAutocomplete Margin="Margin.Dense" T="SearchProviderKeyInfo"
-                               Value="@_selectedProviderKey"
-                               ValueChanged="@SelectedProviderKeyChanged"
-                               SearchFunc="@SearchProviderKeyAsync"
-                               ToStringFunc="@(item => item?.ProviderDisplayName ?? string.Empty)"
-                               Label="@L["ProviderKey"]"
-                               Required="true"
-                               RequiredError="@L["ThisFieldIsRequired."]"
-                               Class="mt-2" />
-                <MudText Typo="Typo.subtitle1" Class="mb-2 mt-4">@L["ResourcePermissionPermissions"]</MudText>
-                <MudSwitch Color="Color.Primary" T="bool" Value="@_grantAllCreate" 
-                          ValueChanged="@(async (bool b) => await GrantAllCreateAsync(b))"
-                          Label="@L["GrantAllResourcePermissions"]" />
-                <div class="mt-2">
-                    @foreach (var permission in CreateEntity.Permissions)
-                    {
-                        <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default" T="bool" @bind-Value="@permission.IsGranted" 
-                                    Label="@permission.DisplayName" />
-                    }
-                </div>
-            </MudForm>
-        </DialogContent>
-        <DialogActions>
-            <MudButton OnClick="@CloseCreateDialogAsync">@L["Cancel"]</MudButton>
-            <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="@CreateResourcePermissionAsync">@L["Save"]</MudButton>
-        </DialogActions>
-    </MudDialog>
-}
+<MudDialog DefaultFocus="DefaultFocus.FirstChild" @bind-Visible="@_createDialogVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseOnEscapeKey = true, BackdropClick = false })">
+    <TitleContent>
+        <MudText Typo="Typo.h6">@L["AddResourcePermission"]</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudForm @ref="@_createFormRef" Model="@CreateEntity">
+            <MudText Typo="Typo.subtitle1" Class="mb-2">@L["ResourcePermissionTarget"]</MudText>
+            <MudRadioGroup T="string" Value="@CurrentLookupService" ValueChanged="@OnLookupServiceCheckedValueChanged">
+                @foreach (var keyLookupService in ResourceProviderKeyLookupServices)
+                {
+                    <MudRadio Color="Color.Primary" T="string" Value="@keyLookupService.Name">@keyLookupService.DisplayName</MudRadio>
+                }
+            </MudRadioGroup>
+            <MudAutocomplete Margin="Margin.Dense" T="SearchProviderKeyInfo"
+                           Value="@_selectedProviderKey"
+                           ValueChanged="@SelectedProviderKeyChanged"
+                           SearchFunc="@SearchProviderKeyAsync"
+                           ToStringFunc="@(item => item?.ProviderDisplayName ?? string.Empty)"
+                           Label="@L["SearchProviderKey"]"
+                           Required="true"
+                           RequiredError="@L["ThisFieldIsRequired."]"
+                           Class="mt-2" />
+            <MudText Typo="Typo.subtitle1" Class="mb-2 mt-4">@L["ResourcePermissionPermissions"]</MudText>
+            <MudSwitch Color="Color.Primary" T="bool" Value="@CreateEntity.Permissions.All(x => x.IsGranted)"
+                      ValueChanged="@(async (bool b) => await GrantAllCreateAsync(b))"
+                      Label="@L["GrantAllResourcePermissions"]" />
+            <div class="mt-2">
+                @foreach (var permission in CreateEntity.Permissions)
+                {
+                    <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default" T="bool" @bind-Value="@permission.IsGranted"
+                                Label="@permission.DisplayName" />
+                }
+            </div>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@CloseCreateDialogAsync">@L["Cancel"]</MudButton>
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="@CreateResourcePermissionAsync">@L["Save"]</MudButton>
+    </DialogActions>
+</MudDialog>
 
 @* Edit Resource Permission Dialog *@
-@if (_editDialogVisible)
-{
-    <MudDialog DefaultFocus="DefaultFocus.FirstChild" @bind-Visible="@_editDialogVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseOnEscapeKey = true, BackdropClick = false })">
-        <TitleContent>
-            <MudText Typo="Typo.h6">@L["UpdateResourcePermission"]</MudText>
-        </TitleContent>
-        <DialogContent>
-            <MudForm @ref="@_editFormRef" Model="@EditEntity">
-                <MudText Typo="Typo.subtitle1" Class="mb-2">@L["ResourcePermissionPermissions"]</MudText>
-                <MudSwitch Color="Color.Primary" T="bool" Value="@_grantAllEdit" 
-                          ValueChanged="@(async (bool b) => await GrantAllEditAsync(b))"
-                          Label="@L["GrantAllResourcePermissions"]" />
-                <div class="mt-2">
-                    @foreach (var permission in EditEntity.Permissions)
-                    {
-                        <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default" T="bool" @bind-Value="@permission.IsGranted" 
-                                    Label="@permission.DisplayName" />
-                    }
-                </div>
-            </MudForm>
-        </DialogContent>
-        <DialogActions>
-            <MudButton OnClick="@CloseEditDialogAsync">@L["Cancel"]</MudButton>
-            <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="@UpdateResourcePermissionAsync">@L["Save"]</MudButton>
-        </DialogActions>
-    </MudDialog>
-}
+<MudDialog DefaultFocus="DefaultFocus.FirstChild" @bind-Visible="@_editDialogVisible" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true, CloseOnEscapeKey = true, BackdropClick = false })">
+    <TitleContent>
+        <MudText Typo="Typo.h6">@L["UpdateResourcePermission"]</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudForm @ref="@_editFormRef" Model="@EditEntity">
+            <MudText Typo="Typo.subtitle1" Class="mb-2">@L["ResourcePermissionPermissions"]</MudText>
+            <MudSwitch Color="Color.Primary" T="bool" Value="@EditEntity.Permissions.All(x => x.IsGranted)"
+                      ValueChanged="@(async (bool b) => await GrantAllEditAsync(b))"
+                      Label="@L["GrantAllResourcePermissions"]" />
+            <div class="mt-2">
+                @foreach (var permission in EditEntity.Permissions)
+                {
+                    <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default" T="bool" @bind-Value="@permission.IsGranted"
+                                Label="@permission.DisplayName" />
+                }
+            </div>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@CloseEditDialogAsync">@L["Cancel"]</MudButton>
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="@UpdateResourcePermissionAsync">@L["Save"]</MudButton>
+    </DialogActions>
+</MudDialog>

@@ -9,17 +9,17 @@ import {
   ToInjectorPipe,
 } from '@abp/ng.core';
 import { AbpVisibleDirective, UserMenu, UserMenuService } from '@abp/ng.theme.shared';
-import { Component, TrackByFunction, inject } from '@angular/core';
-import { Observable } from 'rxjs';
-import { NgComponentOutlet, AsyncPipe, DOCUMENT } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, TrackByFunction } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { DOCUMENT, NgComponentOutlet } from '@angular/common';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-current-user',
   templateUrl: './current-user.component.html',
   imports: [
     NgComponentOutlet,
-    AsyncPipe,
     NgbDropdownModule,
     AbpVisibleDirective,
     PermissionDirective,
@@ -35,8 +35,12 @@ export class CurrentUserComponent {
   private sessionState = inject(SessionStateService);
   private document = inject(DOCUMENT);
 
-  currentUser$: Observable<CurrentUserDto> = this.configState.getOne$('currentUser');
-  selectedTenant$ = this.sessionState.getTenant$();
+  readonly currentUser = toSignal(this.configState.getOne$('currentUser'), {
+    initialValue: {} as CurrentUserDto,
+  });
+  readonly selectedTenant = toSignal(this.sessionState.getTenant$());
+  readonly userMenuItems = toSignal(this.userMenu.items$, { initialValue: [] as UserMenu[] });
+
   trackByFn: TrackByFunction<UserMenu> = (_, element) => element.id;
 
   get smallScreen(): boolean {

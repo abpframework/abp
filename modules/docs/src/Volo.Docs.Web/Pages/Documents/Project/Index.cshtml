@@ -482,6 +482,13 @@
                         @if (visibleParameters.Count > 0)
                         {
                             <div class="alert alert-primary alert-criteria">
+                                <div class="options-header">
+                                    <span>@L["DocumentOptions"]</span>
+                                    <button type="button" class="btn toggle-btn" aria-expanded="false" aria-controls="DocumentOptionsBody" aria-label="@L["DocumentOptions"]">
+                                        <i class="fa-solid fa-chevron-up"></i>
+                                    </button>
+                                </div>
+                                <div class="options-body" id="DocumentOptionsBody">
                                 <abp-row>
                                     <abp-column>
                                         <p class="alert-p mb-2">
@@ -534,6 +541,7 @@
                                         }
                                     }
                                 </abp-row>
+                                </div>
                             </div>
                         }
                     </div>

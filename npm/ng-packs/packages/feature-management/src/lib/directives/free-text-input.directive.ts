@@ -1,13 +1,7 @@
 import { Directive, effect, inject, input, ElementRef, Renderer2 } from '@angular/core';
+import type { FeatureDto } from '@abp/ng.feature-management/proxy';
 
-// TODO: improve this type
-export interface FreeTextType {
-  valueType: {
-    validator: {
-      name: string;
-    };
-  };
-}
+export type FreeTextType = Pick<FeatureDto, 'valueType'>;
 
 export const INPUT_TYPES: Record<string, string> = {
   numeric: 'number',
