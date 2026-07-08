@@ -64,6 +64,7 @@
 | Microsoft.IdentityModel.JsonWebTokens | 8.16.0 | 8.19.1 | #25706 |
 | Microsoft.IdentityModel.Protocols.OpenIdConnect | 8.16.0 | 8.19.1 | #25706 |
 | Microsoft.IdentityModel.Tokens | 8.16.0 | 8.19.1 | #25706 |
+| MongoDB.Driver | 3.9.0 | 3.10.0 | #25773 |
 | System.Collections.Immutable | 10.0.7 | 10.0.9 | #25706 |
 | System.IdentityModel.Tokens.Jwt | 8.16.0 | 8.19.1 | #25706 |
 | System.Management | 10.0.7 | 10.0.9 | #25706 |
