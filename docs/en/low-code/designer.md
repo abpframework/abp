@@ -165,7 +165,7 @@ Use **Health** before shipping changes. It helps catch missing display propertie
 
 ## MCP Integration
 
-The Designer and the low-code MCP surface overlap when the selected layer is **Runtime JSON**, but they are not the same editing surface. The Designer can inspect source-controlled and runtime layers, while [MCP Integration](mcp.md) is intentionally runtime-only and targets the database-backed model. Use the Designer when you want interactive editing and visual feedback. Use MCP when an agent or script needs a structured read, validate, apply, and health-check workflow against the runtime model.
+The Designer and the low-code MCP surface overlap when the selected layer is **Runtime JSON**, but they are not the same editing surface. The Designer can inspect source-controlled and runtime layers, while [MCP Integration](mcp.md) is a remote HTTP MCP endpoint that is intentionally runtime-only and targets the database-backed model. Use the Designer when you want interactive editing and visual feedback. Use MCP when an authenticated agent or script needs repeatable runtime automation.
 
 After MCP-driven changes, reopen the relevant Designer section or review [Health](health.md) before reporting the model as ready.
 

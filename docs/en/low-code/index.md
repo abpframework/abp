@@ -176,7 +176,7 @@ The designer stores and reads the same descriptor metadata described in the refe
 | [Health](health.md) | Selected-layer readiness review across entities, pages, forms, page groups, permissions, and scripts |
 | [Dashboards](dashboards.md) | Dashboard page descriptors, visualization layout, filters, and runtime data flow |
 | [Page Groups](page-groups.md) | Dynamic menu folders, nesting, ordering, and page grouping |
-| [MCP Integration](mcp.md) | Runtime designer automation with structured reads, validation, apply, and health review |
+| [MCP Integration](mcp.md) | Remote MCP endpoint, OpenIddict token setup, and authenticated runtime automation |
 | [Attributes & Fluent API](fluent-api.md) | Source-controlled C# metadata and runtime overrides |
 | [Model Descriptor Files](model-json.md) | JSON descriptor files and public descriptor schemas used by the designer and runtime |
 | [Reference Entities](reference-entities.md) | Lookups to existing entities such as Identity users |

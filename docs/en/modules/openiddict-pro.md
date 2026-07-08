@@ -50,6 +50,44 @@ You can create new application or edit existing applications in this page:
 
 ![openiddict-edit-application-modal](../images/openiddict-edit-application-modal.png)
 
+##### Creating a Client Credentials Application
+
+Use a client credentials application when a machine-to-machine client, automation, or MCP client needs to call protected backend APIs without an interactive user login.
+
+1. Open **Administration** > **OpenIddict** > **Applications**.
+2. Click **New Application**.
+3. Enter a unique **Client Id**, for example `InternalAutomationClient`.
+4. Set **Client Type** to `Confidential client`.
+5. Enter a strong **Client Secret** and store it securely. The secret is required when the client requests a token.
+6. Open the **Authorization** tab and enable **Allow client credentials flow**.
+7. Open the **Scopes** tab and select the API scopes the client can request.
+8. Save the application.
+
+The application screen should show the `client_credentials` grant enabled. Use the **Scopes** tab to select the API scope that the client can request.
+
+![openiddict-client-credentials-application](../images/openiddict-client-credentials-application.png)
+
+If the client will call APIs protected by ABP permissions, grant permissions to the application after saving it. Open the application row's **Actions** menu, select **Permissions**, and grant the required permissions for the **Client (OpenIddict Applications)** provider.
+
+Request an access token from the OpenIddict token endpoint with the `client_credentials` grant:
+
+```bash
+curl -X POST "https://localhost:<auth-server-port>/connect/token" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=client_credentials" \
+  -d "client_id=InternalAutomationClient" \
+  -d "client_secret=<client-secret>" \
+  -d "scope=<api-scope>"
+```
+
+Use the returned `access_token` as a bearer token when calling protected APIs:
+
+```text
+Authorization: Bearer <access-token>
+```
+
+In non-tiered applications, the OpenIddict authority is typically the backend host. In tiered applications, use the Auth Server URL for `/connect/token`.
+
 #### API Scope Management
 
 OpenIddict module allows to manage API scope. To allow applications to request access tokens for APIs, you need to define API scopes.
