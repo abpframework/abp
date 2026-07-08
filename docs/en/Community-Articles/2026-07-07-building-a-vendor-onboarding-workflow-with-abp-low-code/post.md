@@ -59,13 +59,13 @@ public enum VendorReviewTemplateType
 }
 
 [DynamicEntity(DefaultDisplayPropertyName = nameof(Name))]
-[DynamicEntityUI("Vendor Review Templates")]
+[DynamicEntityUI(PageTitle = "Vendor Review Templates")]
 public class VendorReviewTemplate : DynamicEntityBase
 {
     [Required]
     [StringLength(128)]
     [DynamicPropertyUnique]
-    public string Name { get; private set; }
+    public string Name { get; set; }
 
     public VendorReviewTemplateType TemplateType { get; set; }
     public int MinimumComplianceScore { get; set; }
@@ -354,6 +354,7 @@ public async Task<VendorBacklogDto> GetBacklogAsync()
             query.Where(vendor =>
                 vendor.Data["ApprovalDeadline"] != null &&
                 (DateOnly?)vendor.Data["ApprovalDeadline"] < today &&
+                vendor.Data["Status"] != null &&
                 (int?)vendor.Data["Status"] != 2))),
         NextPriorityVendor = nextPriorityVendor?.GetData<string>("CompanyName")
     };
