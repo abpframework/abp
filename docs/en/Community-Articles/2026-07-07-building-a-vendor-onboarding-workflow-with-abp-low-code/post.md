@@ -59,7 +59,7 @@ public enum VendorReviewTemplateType
 }
 
 [DynamicEntity(DefaultDisplayPropertyName = nameof(Name))]
-[DynamicEntityUI(PageTitle = "Vendor Review Templates")]
+[DynamicEntityUI(DisplayName = "Vendor Review Templates")]
 public class VendorReviewTemplate : DynamicEntityBase
 {
     [Required]
