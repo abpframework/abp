@@ -14,9 +14,19 @@ Also see the following notes about ABP releases:
 - [ABP Studio release notes](../studio/release-notes.md)
 - [Change logs for ABP pro packages](https://abp.io/pro-releases)
 
+## 10.6 (2026-07-07)
+
+See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-6-release-candidate-reoq6kzw)** for the v10.6 release.
+
+- Background Jobs: Dedicated Workers, Parallel Execution, and Successful Job Retention
+- API Definition and Proxy Improvements for Content Types and Multipart Uploads
+- Angular UI: Upgrade to Angular 22
+- Antiforgery and OpenIddict Security Improvements
+- OpenIddict: Generate Access Token from the UI
+
 ## 10.5 (2026-06-30)
 
-See the detailed **[blog post / announcement](https://abp.io/community/articles/announcing-abp-10-5-release-candidate-k6oxdfle)** for the v10.5 release.
+See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-5-stable-release-2u589bsc)** for the v10.5 release.
 
 - S3-Compatible Blob Storage Support
 - OpenIddict: Default Scope Fallback Options
