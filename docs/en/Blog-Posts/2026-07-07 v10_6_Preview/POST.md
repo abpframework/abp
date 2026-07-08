@@ -4,7 +4,7 @@ We are happy to release [ABP](https://abp.io) version **10.6 RC** (Release Candi
 
 Try this version and provide feedback for a more stable version of ABP v10.6! Thanks to you in advance.
 
-## Get Started with the 10.6 RC?
+## Get Started with the 10.6 RC
 
 You can check the [Get Started page](https://abp.io/get-started) to see how to get started with ABP. You can either download [ABP Studio](https://abp.io/get-started#abp-studio-tab) (**recommended**, if you prefer a user-friendly GUI application - desktop application) or use the [ABP CLI](https://abp.io/docs/latest/cli).
 
@@ -52,8 +52,8 @@ Configure<AbpBackgroundJobWorkerOptions>(options =>
     options.StoreSuccessfulJobs = true;
     options.SuccessfulJobRetentionTime = TimeSpan.FromDays(30);
 
-    options.AddDedicatedWorker<EmailSendingArgs, SmsSendingArgs>("NotificationWorkerLock");
-    options.AddDedicatedWorker<ReportGenerationArgs>("ReportWorkerLock");
+    options.AddDedicatedWorker<EmailJobArgs, SmsJobArgs>("NotificationWorkerLock");
+    options.AddDedicatedWorker<ReportJobArgs>("ReportWorkerLock");
 
     options.MaxParallelJobExecutionCount = 4;
 });
