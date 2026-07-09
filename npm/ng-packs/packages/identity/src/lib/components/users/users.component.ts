@@ -36,11 +36,13 @@ import {
   Component,
   inject,
   Injector,
-  OnInit,
+  signal,
   TemplateRef,
   TrackByFunction,
-  viewChild
+  viewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   AbstractControl,
   FormsModule,
@@ -56,6 +58,7 @@ import { NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-users',
   templateUrl: './users.component.html',
   providers: [
@@ -84,7 +87,7 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
     InitDirective,
   ],
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent {
   protected readonly list = inject(ListService<GetIdentityUsersInput>);
   protected readonly confirmationService = inject(ConfirmationService);
   protected readonly service = inject(IdentityUserService);
@@ -92,7 +95,12 @@ export class UsersComponent implements OnInit {
   private readonly fb = inject(UntypedFormBuilder);
   private readonly injector = inject(Injector);
 
-  data: PagedResultDto<IdentityUserDto> = { items: [], totalCount: 0 };
+  readonly data = toSignal(
+    this.list.hookToQuery(query => this.service.getList(query)),
+    {
+      initialValue: { items: [], totalCount: 0 } as PagedResultDto<IdentityUserDto>,
+    },
+  );
 
   readonly modalContent = viewChild.required<TemplateRef<any>>('modalContent');
 
@@ -104,15 +112,15 @@ export class UsersComponent implements OnInit {
 
   selectedUserRoles?: IdentityRoleDto[];
 
-  roles?: IdentityRoleDto[];
+  readonly roles = signal<IdentityRoleDto[]>([]);
 
-  visiblePermissions = false;
+  readonly visiblePermissions = signal(false);
 
   providerKey?: string;
 
-  isModalVisible?: boolean;
+  readonly isModalVisible = signal(false);
 
-  modalBusy = false;
+  readonly modalBusy = signal(false);
 
   permissionManagementKey = ePermissionManagementComponents.PermissionManagement;
 
@@ -123,15 +131,11 @@ export class UsersComponent implements OnInit {
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 
   onVisiblePermissionChange = (event: boolean) => {
-    this.visiblePermissions = event;
+    this.visiblePermissions.set(event);
   };
 
   get roleGroups(): UntypedFormGroup[] {
     return ((this.form.get('roleNames') as UntypedFormArray)?.controls as UntypedFormGroup[]) || [];
-  }
-
-  ngOnInit() {
-    this.hookToQuery();
   }
 
   buildForm() {
@@ -139,12 +143,12 @@ export class UsersComponent implements OnInit {
     this.form = generateFormFromProps(data);
 
     this.service.getAssignableRoles().subscribe(({ items }) => {
-      this.roles = items;
-      if (this.roles) {
+      this.roles.set(items);
+      if (items?.length) {
         this.form.addControl(
           'roleNames',
           this.fb.array(
-            this.roles.map(role =>
+            items.map(role =>
               this.fb.group({
                 [role.name as string]: [
                   this.selected?.id
@@ -162,7 +166,7 @@ export class UsersComponent implements OnInit {
   openModal() {
     this.selectedTab = 'user-info';
     this.buildForm();
-    this.isModalVisible = true;
+    this.isModalVisible.set(true);
   }
 
   add() {
@@ -185,8 +189,8 @@ export class UsersComponent implements OnInit {
   }
 
   save() {
-    if (!this.form.valid || this.modalBusy) return;
-    this.modalBusy = true;
+    if (!this.form.valid || this.modalBusy()) return;
+    this.modalBusy.set(true);
 
     const { roleNames = [] } = this.form.value;
     const mappedRoleNames =
@@ -204,9 +208,9 @@ export class UsersComponent implements OnInit {
         })
       : this.service.create({ ...this.form.value, roleNames: mappedRoleNames })
     )
-      .pipe(finalize(() => (this.modalBusy = false)))
+      .pipe(finalize(() => this.modalBusy.set(false)))
       .subscribe(() => {
-        this.isModalVisible = false;
+        this.isModalVisible.set(false);
         this.toasterService.success('AbpUi::SavedSuccessfully');
         this.list.get();
       });
@@ -233,19 +237,11 @@ export class UsersComponent implements OnInit {
     this.list.sortOrder = dir;
   }
 
-  private hookToQuery() {
-    this.list
-      .hookToQuery(query => this.service.getList(query))
-      .subscribe(res => {
-        this.data = res;
-      });
-  }
-
   openPermissionsModal(providerKey: string, entityDisplayName?: string) {
     this.providerKey = providerKey;
     this.entityDisplayName = entityDisplayName;
     setTimeout(() => {
-      this.visiblePermissions = true;
+      this.visiblePermissions.set(true);
     }, 0);
   }
 }

@@ -29,9 +29,10 @@ public static class BackgroundJobsDbContextModelCreatingExtensions
             b.Property(x => x.NextTryTime);
             b.Property(x => x.LastTryTime);
             b.Property(x => x.IsAbandoned).HasDefaultValue(false);
+            b.Property(x => x.CompletionTime);
             b.Property(x => x.Priority).HasDefaultValue(BackgroundJobPriority.Normal).HasSentinel(BackgroundJobPriority.Normal);
 
-            b.HasIndex(x => new { x.IsAbandoned, x.NextTryTime });
+            b.HasIndex(x => new { x.ApplicationName, x.CompletionTime, x.IsAbandoned, x.NextTryTime });
 
             b.ApplyObjectExtensionMappings();
         });

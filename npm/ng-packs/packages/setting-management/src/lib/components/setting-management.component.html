@@ -2,31 +2,52 @@
   <div id="SettingManagementWrapper">
     <div class="card">
       <div class="card-body">
-        @if (settings.length) {
+        @if (settings().length) {
           <div class="row" ngTabs>
             <div class="col-12 col-md-3 mb-2 mb-md-0">
-              <div class="nav flex-column nav-pills" id="nav-tab" ngTabList orientation="vertical"
-                [selectedTab]="selected?.name">
-                <ng-container *abpFor="let setting of settings; trackBy: trackByFn">
-                  <button ngTab #tab="ngTab" [value]="setting.name" (click)="selected = setting"
-                    class="nav-link text-start" [class.active]="tab.selected()" *abpPermission="setting.requiredPolicy">
+              <div
+                class="nav flex-column nav-pills"
+                id="nav-tab"
+                ngTabList
+                orientation="vertical"
+                [selectedTab]="selected()?.name"
+              >
+                <ng-container *abpFor="let setting of settings()">
+                  <button
+                    ngTab
+                    #tab="ngTab"
+                    [value]="setting.name"
+                    (click)="selected.set(setting)"
+                    class="nav-link text-start"
+                    [class.active]="tab.selected()"
+                    *abpPermission="setting.requiredPolicy"
+                  >
                     {{ setting.name | abpLocalization }}
                   </button>
                 </ng-container>
               </div>
             </div>
             <div class="col-12 col-md-9">
-              <ng-container *abpFor="let setting of settings; trackBy: trackByFn">
-                <div ngTabPanel [value]="setting.name" class="tab-pane" *abpPermission="setting.requiredPolicy">
-                  <ng-container *ngComponentOutlet="setting.component" />
+              <ng-container *abpFor="let setting of settings()">
+                <div
+                  ngTabPanel
+                  [value]="setting.name"
+                  class="tab-pane"
+                  *abpPermission="setting.requiredPolicy"
+                >
+                  <ng-template ngTabContent>
+                    <ng-container *ngComponentOutlet="setting.component" />
+                  </ng-template>
                 </div>
               </ng-container>
             </div>
           </div>
         } @else {
           <div class="text-center text-muted py-5">
-            <i class="bi bi-gear-fill" style="font-size: 3rem; opacity: 0.4;" aria-hidden="true"></i>
-            <p class="mt-3 mb-0">{{ 'AbpSettingManagement::NoSettingsAvailable' | abpLocalization }}</p>
+            <i class="bi bi-gear-fill" style="font-size: 3rem; opacity: 0.4" aria-hidden="true"></i>
+            <p class="mt-3 mb-0">
+              {{ 'AbpSettingManagement::NoSettingsAvailable' | abpLocalization }}
+            </p>
           </div>
         }
       </div>

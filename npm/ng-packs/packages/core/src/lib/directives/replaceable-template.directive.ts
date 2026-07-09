@@ -9,7 +9,7 @@ import {
   Type,
   ViewContainerRef,
   inject,
-  input
+  input,
 } from '@angular/core';
 import compare from 'just-compare';
 import { Subscription } from 'rxjs';
@@ -30,7 +30,9 @@ export class ReplaceableTemplateDirective implements OnInit, OnChanges {
   private replaceableComponents = inject(ReplaceableComponentsService);
   private subscription = inject(SubscriptionService);
 
-  readonly data = input.required<ReplaceableComponents.ReplaceableTemplateDirectiveInput<any, any>>({ alias: "abpReplaceableTemplate" });
+  readonly data = input.required<ReplaceableComponents.ReplaceableTemplateDirectiveInput<any, any>>(
+    { alias: 'abpReplaceableTemplate' },
+  );
 
   providedData = {
     inputs: {},

@@ -1,10 +1,11 @@
 import { ConfirmationService } from '@abp/ng.theme.shared';
 import { CoreTestingModule } from '@abp/ng.core/testing';
-import { Component, EventEmitter, Input } from '@angular/core';
+import { Component, EventEmitter, input } from '@angular/core';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/vitest';
 import { Confirmation } from '@abp/ng.theme.shared';
 import { firstValueFrom, Subject, timer } from 'rxjs';
 import { ModalComponent } from '../components/modal/modal.component';
+import { setInputSignal } from './utils';
 import { setupComponentResources } from './utils';
 
 @Component({
@@ -22,8 +23,8 @@ import { setupComponentResources } from './utils';
   imports: [ModalComponent]
 })
 class TestHostComponent {
-  @Input() visible = false;
-  @Input() busy = false;
+  visible = input(false);
+  busy = input(false);
   visibleChange = new EventEmitter<boolean>();
 }
 
@@ -33,10 +34,13 @@ const disappearFn = vi.fn();
 describe('ModalComponent', () => {
   let spectator: Spectator<TestHostComponent>;
   let createComponent: ReturnType<typeof createComponentFactory<TestHostComponent>>;
+  let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 
   beforeAll(() => setupComponentResources('../components/modal', import.meta.url));
 
   beforeEach(() => {
+    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+  
     // Create component factory in beforeEach to ensure beforeAll has run
     if (!createComponent) {
       createComponent = createComponentFactory({
@@ -60,20 +64,24 @@ describe('ModalComponent', () => {
     disappearFn.mockClear();
   });
 
+  afterEach(() => {
+    consoleErrorSpy.mockRestore();
+  });
+
   it('should create component', () => {
     expect(spectator.component).toBeTruthy();
   });
 
   it('should handle visible input', () => {
-    spectator.setInput('visible', true);
+    setInputSignal(spectator.component.visible, true);
     spectator.detectChanges();
-    expect(spectator.component.visible).toBe(true);
+    expect(spectator.component.visible()).toBe(true);
   });
 
   it('should handle busy input', () => {
-    spectator.setInput('busy', true);
+    setInputSignal(spectator.component.busy, true);
     spectator.detectChanges();
-    expect(spectator.component.busy).toBe(true);
+    expect(spectator.component.busy()).toBe(true);
   });
 
   it('should have visibleChange emitter', () => {

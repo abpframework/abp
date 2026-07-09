@@ -1,4 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ListService, PagedResultDto, LocalizationPipe } from '@abp/ng.core';
@@ -14,6 +15,7 @@ import {
 import { eCmsKitAdminComponents } from '../../../enums';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-blog-post-list',
   templateUrl: './blog-post-list.component.html',
   providers: [
@@ -25,20 +27,34 @@ import { eCmsKitAdminComponents } from '../../../enums';
   ],
   imports: [ExtensibleTableComponent, PageComponent, LocalizationPipe, FormsModule, CommonModule],
 })
-export class BlogPostListComponent implements OnInit {
-  data: PagedResultDto<BlogPostListDto> = { items: [], totalCount: 0 };
-
+export class BlogPostListComponent {
   public readonly list = inject(ListService<BlogPostGetListInput>);
   private blogPostService = inject(BlogPostAdminService);
   private confirmationService = inject(ConfirmationService);
 
+  readonly data = toSignal(
+    this.list.hookToQuery(query => {
+      let filters: Partial<BlogPostGetListInput> = {};
+      if (this.list.filter) {
+        filters.filter = this.list.filter;
+      }
+      if (this.statusFilter !== null) {
+        filters.status = this.statusFilter;
+      }
+      const input: BlogPostGetListInput = {
+        ...query,
+        ...filters,
+      };
+      return this.blogPostService.getList(input);
+    }),
+    {
+      initialValue: { items: [], totalCount: 0 } as PagedResultDto<BlogPostListDto>,
+    },
+  );
+
   filter = '';
   statusFilter: BlogPostStatus | null = null;
   BlogPostStatus = BlogPostStatus;
-
-  ngOnInit() {
-    this.hookToQuery();
-  }
 
   onSearch() {
     this.list.filter = this.filter;
@@ -47,25 +63,6 @@ export class BlogPostListComponent implements OnInit {
 
   onStatusChange() {
     this.list.get();
-  }
-
-  private hookToQuery() {
-    this.list
-      .hookToQuery(query => {
-        let filters: Partial<BlogPostGetListInput> = {};
-        if (this.list.filter) {
-          filters.filter = this.list.filter;
-        }
-        if (this.statusFilter !== null) {
-          filters.status = this.statusFilter;
-        }
-        const input: BlogPostGetListInput = {
-          ...query,
-          ...filters,
-        };
-        return this.blogPostService.getList(input);
-      })
-      .subscribe(res => (this.data = res));
   }
 
   delete(id: string, title: string) {
@@ -77,9 +74,7 @@ export class BlogPostListComponent implements OnInit {
       })
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.blogPostService.delete(id).subscribe(() => {
-            this.list.get();
-          });
+          this.blogPostService.delete(id).subscribe(() => this.list.get());
         }
       });
   }

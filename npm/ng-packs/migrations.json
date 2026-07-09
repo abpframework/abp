@@ -1,118 +1,130 @@
 {
   "migrations": [
     {
-      "version": "22.0.0-beta.1",
-      "description": "Updates release version config based on the breaking changes in Nx v22",
-      "implementation": "./src/migrations/update-22-0-0/release-version-config-changes",
+      "cli": "nx",
+      "version": "22.6.0-beta.10",
+      "description": "Adds .claude/worktrees to .gitignore",
+      "implementation": "./dist/src/migrations/update-22-6-0/add-claude-worktrees-to-git-ignore",
       "package": "nx",
-      "name": "22-0-0-release-version-config-changes"
-    },
-    {
-      "version": "22.0.0-beta.2",
-      "description": "Consolidates releaseTag* options into nested releaseTag object structure",
-      "implementation": "./src/migrations/update-22-0-0/consolidate-release-tag-config",
-      "package": "nx",
-      "name": "22-0-0-consolidate-release-tag-config"
+      "name": "22-6-1-add-claude-worktrees-to-git-ignore"
     },
     {
       "cli": "nx",
-      "version": "22.1.0-beta.5",
-      "description": "Updates the nx wrapper.",
-      "implementation": "./src/migrations/update-22-1-0/update-nx-wrapper",
+      "version": "22.7.0-beta.0",
+      "description": "Adds .nx/polygraph to .gitignore",
+      "implementation": "./dist/src/migrations/update-22-7-0/add-polygraph-to-git-ignore",
       "package": "nx",
-      "name": "22-1-0-update-nx-wrapper"
+      "name": "22-7-0-add-polygraph-to-git-ignore"
     },
     {
-      "version": "21.5.0-beta.2",
-      "description": "Migrate the legacy 'development' custom condition to a workspace-unique custom condition name.",
-      "factory": "./src/migrations/update-21-5-0/migrate-development-custom-condition",
-      "package": "@nx/js",
-      "name": "migrate-development-custom-condition"
+      "cli": "nx",
+      "version": "22.6.0-rc.0",
+      "description": "Adds .claude/settings.local.json to .gitignore",
+      "implementation": "./dist/src/migrations/update-17-3-0/update-nxw",
+      "package": "nx",
+      "name": "22-6-0-add-claude-settings-local-to-git-ignore"
     },
     {
-      "version": "22.0.0-beta.0",
-      "description": "Remove the deprecated `external` and `externalBuildTargets` options from the `@nx/js:swc` and `@nx/js:tsc` executors.",
-      "factory": "./src/migrations/update-22-0-0/remove-external-options-from-js-executors",
-      "package": "@nx/js",
-      "name": "remove-external-options-from-js-executors"
+      "cli": "nx",
+      "version": "22.7.0-beta.0",
+      "description": "Adds .nx/self-healing to .gitignore",
+      "implementation": "./dist/src/migrations/update-22-2-0/add-self-healing-to-gitignore",
+      "package": "nx",
+      "name": "22-7-0-add-self-healing-to-gitignore"
     },
     {
-      "version": "22.1.0-rc.1",
-      "description": "Removes redundant TypeScript project references from project's tsconfig.json files when runtime tsconfig files (e.g., tsconfig.lib.json, tsconfig.app.json) exist.",
-      "factory": "./src/migrations/update-22-1-0/remove-redundant-ts-project-references",
-      "package": "@nx/js",
-      "name": "remove-redundant-ts-project-references"
+      "version": "22.3.2-beta.0",
+      "requires": {
+        "@angular/build": ">=21.0.0"
+      },
+      "description": "Create AI Instructions to help migrate users workspaces past breaking changes for Vitest 4.",
+      "implementation": "./src/migrations/update-22-1-0/create-ai-instructions-for-vitest-4",
+      "package": "@nx/vitest",
+      "name": "update-22-3-2"
     },
     {
-      "version": "21.3.0-beta.3",
-      "description": "Rename the CLI option `testPathPattern` to `testPathPatterns`.",
-      "implementation": "./src/migrations/update-21-3-0/rename-test-path-pattern",
+      "version": "22.6.0-beta.11",
+      "description": "Prefix reportsDirectory with {projectRoot} to maintain correct resolution after workspace-root-relative behavior change.",
+      "implementation": "./src/migrations/update-22-6-0/prefix-reports-directory-with-project-root",
+      "package": "@nx/vitest",
+      "name": "update-22-6-0-prefix-reports-directory"
+    },
+    {
+      "version": "22.7.0-beta.12",
+      "description": "Add missing inputs to @nx/eslint:lint executor target defaults",
+      "implementation": "./src/migrations/update-21-6-0/update-executor-lint-inputs",
+      "package": "@nx/eslint",
+      "name": "update-executor-lint-inputs"
+    },
+    {
+      "version": "22.3.2-beta.0",
+      "requires": {
+        "jest": ">=30.0.0"
+      },
+      "description": "Replace removed matcher aliases in Jest v30 with their corresponding matcher",
+      "implementation": "./src/migrations/update-21-3-0/replace-removed-matcher-aliases",
       "package": "@nx/jest",
-      "name": "rename-test-path-pattern"
+      "name": "replace-removed-matcher-aliases-v22-3"
     },
     {
-      "version": "22.2.0-beta.2",
-      "description": "Convert jest.config.ts files from ESM to CJS syntax (export default -> module.exports, import -> require) for projects using CommonJS resolution to ensure correct loading under Node.js type-stripping.",
-      "implementation": "./src/migrations/update-22-2-0/convert-jest-config-to-cjs",
-      "package": "@nx/jest",
-      "name": "convert-jest-config-to-cjs"
-    },
-    {
-      "cli": "nx",
-      "version": "21.3.0-beta.4",
-      "requires": { "@angular/core": ">=20.1.0" },
-      "description": "Update the @angular/cli package version to ~20.1.0.",
-      "factory": "./src/migrations/update-21-3-0/update-angular-cli",
+      "version": "22.3.0-beta.0",
+      "requires": {
+        "@angular/core": ">=21.0.0"
+      },
+      "description": "Updates webpack-based SSR configuration to use preserve module format and bundler module resolution.",
+      "factory": "./src/migrations/update-22-3-0/update-ssr-webpack-config",
       "package": "@nx/angular",
-      "name": "update-angular-cli-version-20-1-0"
+      "name": "update-ssr-webpack-config-22-2-0"
     },
     {
-      "version": "21.5.0-beta.0",
-      "description": "Set the 'tsConfig' option to build and test targets to help with Angular migration issues.",
-      "factory": "./src/migrations/update-21-5-0/set-tsconfig-option",
+      "version": "22.3.0-beta.0",
+      "requires": {
+        "@angular/core": ">=21.0.0-rc.3"
+      },
+      "description": "Update 'module' to 'preserve' and 'moduleResolution' to 'bundler' in TypeScript configurations for Angular projects.",
+      "factory": "./src/migrations/update-22-3-0/update-module-resolution",
       "package": "@nx/angular",
-      "name": "set-tsconfig-option"
+      "name": "update-module-resolution-22-2-0"
     },
     {
-      "cli": "nx",
-      "version": "21.5.0-beta.2",
-      "requires": { "@angular/core": ">=20.2.0" },
-      "description": "Update the @angular/cli package version to ~20.2.0.",
-      "factory": "./src/migrations/update-21-5-0/update-angular-cli",
+      "version": "22.3.0-beta.0",
+      "requires": {
+        "@angular/core": ">=21.0.0"
+      },
+      "description": "Updates the 'lib' property in tsconfig files to use 'es2022' or a more modern version.",
+      "factory": "./src/migrations/update-22-3-0/update-typescript-lib",
       "package": "@nx/angular",
-      "name": "update-angular-cli-version-20-2-0"
+      "name": "update-typescript-lib-22-2-0"
     },
     {
-      "version": "21.5.0-beta.2",
-      "requires": { "@angular/core": ">=20.2.0" },
-      "description": "Remove any Karma configuration files that only contain the default content. The default configuration is automatically available without a specific project configurationfile.",
-      "factory": "./src/migrations/update-21-5-0/remove-default-karma-configuration-files",
+      "version": "22.3.0-beta.0",
+      "requires": {
+        "@angular/core": ">=21.0.0"
+      },
+      "description": "Update 'vitest' unit test runner option to 'vitest-analog' in generator defaults.",
+      "factory": "./src/migrations/update-22-3-0/update-unit-test-runner-option",
       "package": "@nx/angular",
-      "name": "remove-default-karma-configuration-files"
+      "name": "update-unit-test-runner-option"
     },
     {
-      "cli": "nx",
-      "version": "21.6.1-beta.2",
-      "requires": { "@angular/core": ">=20.3.0" },
-      "description": "Update the @angular/cli package version to ~20.3.0.",
-      "factory": "./src/migrations/update-21-6-1/update-angular-cli",
+      "version": "22.3.0-beta.3",
+      "requires": {
+        "@angular/core": ">=21.0.0"
+      },
+      "description": "Set 'isolatedModules' to 'true' in TypeScript test configurations for Angular projects.",
+      "factory": "./src/migrations/update-22-3-0/set-isolated-modules",
       "package": "@nx/angular",
-      "name": "update-angular-cli-version-20-3-0"
+      "name": "set-isolated-modules-22-3-0"
     },
     {
-      "version": "20.2.0",
-      "description": "Replaces usages of the deprecated Router.getCurrentNavigation method with the Router.currentNavigation signal",
-      "factory": "./bundles/router-current-navigation.cjs#migrate",
-      "optional": true,
-      "package": "@angular/core",
-      "name": "router-current-navigation"
-    },
-    {
-      "version": "20.3.0",
-      "description": "Adds `BootstrapContext` to `bootstrapApplication` calls in `main.server.ts` to support server rendering.",
-      "factory": "./bundles/add-bootstrap-context-to-server-main.cjs#migrate",
-      "package": "@angular/core",
-      "name": "add-bootstrap-context-to-server-main"
+      "version": "22.3.0-beta.3",
+      "requires": {
+        "@angular/core": ">=21.0.0"
+      },
+      "description": "Replace 'jest-preset-angular/setup-jest' imports with the new 'setupZoneTestEnv' function.",
+      "factory": "./src/migrations/update-22-3-0/update-jest-preset-angular-setup",
+      "package": "@nx/angular",
+      "name": "update-jest-preset-angular-setup"
     }
   ]
 }

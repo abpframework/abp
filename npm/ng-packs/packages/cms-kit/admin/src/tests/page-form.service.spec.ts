@@ -59,7 +59,7 @@ describe('PageFormService', () => {
   it('should throw when creating with invalid form', () => {
     const form = createInvalidForm();
 
-    expect(() => service.create(form)).toThrowError('Form is invalid');
+    expect(() => service.create(form)).toThrow('Form is invalid');
   });
 
   it('should call PageAdminService.create and navigate on create', done => {
@@ -103,12 +103,12 @@ describe('PageFormService', () => {
   it('should throw when updating with invalid form or missing page', () => {
     const form = createInvalidForm();
 
-    expect(() => service.update('id', form, {} as any)).toThrowError(
+    expect(() => service.update('id', form, {} as any)).toThrow(
       'Form is invalid or page is missing',
     );
 
     const validForm = createValidForm();
-    expect(() => service.update('id', validForm, null as any)).toThrowError(
+    expect(() => service.update('id', validForm, null as any)).toThrow(
       'Form is invalid or page is missing',
     );
   });

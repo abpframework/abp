@@ -1,15 +1,25 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, inject, input, effect, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  input,
+  OnDestroy,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { combineLatest, Subscription, timer } from 'rxjs';
 import { HttpWaitService, RouterWaitService, SubscriptionService } from '@abp/ng.core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-loader-bar',
   template: `
     <div id="abp-loader-bar" [class]="containerClass()" [class.is-loading]="isLoading()">
       <div
         class="abp-progress"
-        [class.progressing]="progressLevel"
-        [style.width.vw]="progressLevel"
+        [class.progressing]="progressLevel() > 0"
+        [style.width.vw]="progressLevel()"
         [style]="{
           'background-color': color(),
           'box-shadow': boxShadow,
@@ -22,7 +32,6 @@ import { HttpWaitService, RouterWaitService, SubscriptionService } from '@abp/ng
   imports: [],
 })
 export class LoaderBarComponent implements OnDestroy, OnInit {
-  private cdRef = inject(ChangeDetectorRef);
   private subscription = inject(SubscriptionService);
   private httpWaitService = inject(HttpWaitService);
   private routerWaitService = inject(RouterWaitService);
@@ -31,9 +40,9 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
   readonly containerClass = input('abp-loader-bar');
   readonly color = input('#77b6ff');
 
-  protected readonly isLoading = signal(false);
+  readonly isLoading = signal(false);
+  readonly progressLevel = signal(0);
 
-  progressLevel = 0;
   interval = new Subscription();
   timer = new Subscription();
   intervalPeriod = 350;
@@ -41,28 +50,25 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
 
   constructor() {
     effect(() => {
-      const value = this.isLoadingInput();
-      this.isLoading.set(value);
-      this.cdRef.detectChanges();
+      this.isLoading.set(this.isLoadingInput());
     });
   }
 
   private readonly clearProgress = () => {
-    this.progressLevel = 0;
-    this.cdRef.detectChanges();
+    this.progressLevel.set(0);
   };
 
   private readonly reportProgress = () => {
-    if (this.progressLevel < 75) {
-      this.progressLevel += 1 + Math.random() * 9;
-    } else if (this.progressLevel < 90) {
-      this.progressLevel += 0.4;
-    } else if (this.progressLevel < 100) {
-      this.progressLevel += 0.1;
+    const current = this.progressLevel();
+    if (current < 75) {
+      this.progressLevel.set(current + 1 + Math.random() * 9);
+    } else if (current < 90) {
+      this.progressLevel.set(current + 0.4);
+    } else if (current < 100) {
+      this.progressLevel.set(current + 0.1);
     } else {
       this.interval.unsubscribe();
     }
-    this.cdRef.detectChanges();
   };
 
   get boxShadow(): string {
@@ -91,8 +97,7 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
     if (this.isLoading() || !this.interval.closed) return;
 
     this.isLoading.set(true);
-    this.progressLevel = 0;
-    this.cdRef.detectChanges();
+    this.progressLevel.set(0);
     this.interval = timer(0, this.intervalPeriod).subscribe(this.reportProgress);
     this.timer.unsubscribe();
   }
@@ -100,7 +105,7 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
   stopLoading() {
     this.interval.unsubscribe();
 
-    this.progressLevel = 100;
+    this.progressLevel.set(100);
     this.isLoading.set(false);
 
     if (!this.timer.closed) return;
