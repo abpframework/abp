@@ -33,6 +33,18 @@
     "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests": {
       "path": "test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Tests.abppkg",
       "folder": "test"
+    },
+    "Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme": {
+      "path": "src/Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme/Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Components.Web.MudBlazorBasicTheme": {
+      "path": "src/Volo.Abp.AspNetCore.Components.Web.MudBlazorBasicTheme/Volo.Abp.AspNetCore.Components.Web.MudBlazorBasicTheme.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.AspNetCore.Components.WebAssembly.MudBlazorBasicTheme": {
+      "path": "src/Volo.Abp.AspNetCore.Components.WebAssembly.MudBlazorBasicTheme/Volo.Abp.AspNetCore.Components.WebAssembly.MudBlazorBasicTheme.abppkg",
+      "folder": "src"
     }
   }
 }
