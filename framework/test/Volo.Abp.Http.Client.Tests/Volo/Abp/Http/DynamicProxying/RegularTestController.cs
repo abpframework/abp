@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Content;
 
 namespace Volo.Abp.Http.DynamicProxying;
 
@@ -18,6 +21,82 @@ public class RegularTestController : AbpController, IRegularTestController
     public Task<int> IncrementValueAsync(int value)
     {
         return Task.FromResult(value + 1);
+    }
+
+    [HttpGet]
+    [Route("plain-string")]
+    public Task<string> GetPlainStringAsync()
+    {
+        return Task.FromResult("Open");
+    }
+
+    [HttpGet]
+    [Route("produces-json-string")]
+    [Produces("application/json")]
+    public Task<string> GetProducesJsonStringAsync()
+    {
+        return Task.FromResult("Open");
+    }
+
+    [HttpGet]
+    [Route("produces-text-string")]
+    [Produces("text/plain")]
+    public Task<string> GetProducesTextStringAsync()
+    {
+        return Task.FromResult("Open");
+    }
+
+    [HttpGet]
+    [Route("null-string")]
+    public Task<string> GetNullStringAsync()
+    {
+        return Task.FromResult<string>(null!);
+    }
+
+    [HttpGet]
+    [Route("produces-json-null-string")]
+    [Produces("application/json")]
+    public Task<string> GetProducesJsonNullStringAsync()
+    {
+        return Task.FromResult<string>(null!);
+    }
+
+    [HttpGet]
+    [Route("empty-string")]
+    public Task<string> GetEmptyStringAsync()
+    {
+        return Task.FromResult(string.Empty);
+    }
+
+    [HttpGet]
+    [Route("escaped-string")]
+    [Produces("application/json")]
+    public Task<string> GetEscapedStringAsync()
+    {
+        return Task.FromResult("a\"b\\c\nd");
+    }
+
+    [HttpGet]
+    [Route("download-icon")]
+    public Task<IRemoteStreamContent> DownloadIconAsync()
+    {
+        var bytes = Encoding.UTF8.GetBytes("ICON-BYTES");
+        return Task.FromResult<IRemoteStreamContent>(
+            new RemoteStreamContent(new MemoryStream(bytes), "icon.bin", "application/octet-stream"));
+    }
+
+    [HttpGet]
+    [Route("reference-type-object")]
+    public Task<object> GetReferenceTypeObjectAsync()
+    {
+        return Task.FromResult<object>(new Car { Year = 1999, Model = "BMW" });
+    }
+
+    [HttpGet]
+    [Route("byte-array")]
+    public Task<byte[]> GetByteArrayAsync()
+    {
+        return Task.FromResult(new byte[] { 1, 2, 3, 4 });
     }
 
     [HttpGet]

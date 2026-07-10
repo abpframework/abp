@@ -1,5 +1,3 @@
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { provideRouter, Route, Router } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
@@ -9,8 +7,8 @@ import { of } from 'rxjs';
 import { permissionGuard } from '../guards/permission.guard';
 import { HttpErrorReporterService } from '../services/http-error-reporter.service';
 import { PermissionService } from '../services/permission.service';
-import { provideAbpCore, withOptions } from '../providers';
 import { AuthService } from '../abstracts';
+import { ConfigStateService, RouteBasedCultureUrlService, RoutesService } from '../services';
 
 @Component({ template: '' })
 class DummyComponent {}
@@ -20,8 +18,11 @@ class DummyComponent {}
 describe('authGuard', () => {
   let permissionService: SpyObject<PermissionService>;
   let httpErrorReporter: SpyObject<HttpErrorReporterService>;
+  let routesService: Pick<RoutesService, 'find'>;
+  let routeCultureUrl: Pick<RouteBasedCultureUrlService, 'getRoutePathForMatching'>;
+  let configStateService: Pick<ConfigStateService, 'getAll$'>;
 
-  const mockOAuthService = {
+  const authService = {
     isAuthenticated: true,
   };
 
@@ -53,44 +54,28 @@ describe('authGuard', () => {
   beforeEach(() => {
     httpErrorReporter = createSpyObject(HttpErrorReporterService);
     permissionService = createSpyObject(PermissionService);
+    permissionService.getGrantedPolicy$.andReturn(of(true));
+    routesService = {
+      find: vi.fn(),
+    };
+    routeCultureUrl = {
+      getRoutePathForMatching: vi.fn((_: Router, url: string) => url),
+    };
+    configStateService = {
+      getAll$: vi.fn(() => of({ auth: { grantedPolicies: {} } })),
+    };
 
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        { provide: AuthService, useValue: mockOAuthService },
+        { provide: AuthService, useValue: authService },
         { provide: PermissionService, useValue: permissionService },
         { provide: HttpErrorReporterService, useValue: httpErrorReporter },
+        { provide: RoutesService, useValue: routesService },
+        { provide: RouteBasedCultureUrlService, useValue: routeCultureUrl },
+        { provide: ConfigStateService, useValue: configStateService },
         provideRouter(routes),
-        provideAbpCore(
-          withOptions({
-            environment: {
-              apis: {
-                default: {
-                  url: 'http://localhost:4200',
-                },
-              },
-              application: {
-                baseUrl: 'http://localhost:4200',
-                name: 'TestApp',
-              },
-              remoteEnv: {
-                url: 'http://localhost:4200',
-                mergeStrategy: 'deepmerge',
-              },
-            },
-            registerLocaleFn: () => Promise.resolve(),
-            skipGetAppConfiguration: true,
-          }),
-        ),
       ],
     });
-  });
-
-  afterEach(async () => {
-    // Wait for any pending async operations to complete before teardown
-    await new Promise(resolve => setTimeout(resolve, 0));
-    TestBed.resetTestingModule();
   });
 
   it('should return true when the grantedPolicy is true', async () => {
@@ -103,17 +88,24 @@ describe('authGuard', () => {
 
   it('should return false and report an error when the grantedPolicy is false', () => {
     permissionService.getGrantedPolicy$.andReturn(of(false));
-    expect(permissionService.getGrantedPolicy$).toBeDefined();
-    expect(httpErrorReporter.reportError).toBeDefined();
+    return RouterTestingHarness.create('/dummy').then(() => {
+      expect(TestBed.inject(Router).url).toEqual('/');
+      expect(httpErrorReporter.reportError).toHaveBeenCalledWith({ status: 403 });
+    });
   });
 
   it('should check the requiredPolicy from RoutesService', async () => {
+    routesService.find = vi.fn(predicate => {
+      const route = { path: '/zibzib', requiredPolicy: 'TestPolicy' };
+      return predicate(route) ? route : null;
+    });
     permissionService.getGrantedPolicy$.mockImplementation(policy => {
       return of(policy === 'TestPolicy');
     });
-    await RouterTestingHarness.create('/dummy');
+    await RouterTestingHarness.create('/zibzib');
 
-    expect(TestBed.inject(Router).url).toEqual('/dummy');
+    expect(permissionService.getGrantedPolicy$).toHaveBeenCalledWith('TestPolicy');
+    expect(TestBed.inject(Router).url).toEqual('/zibzib');
     expect(httpErrorReporter.reportError).not.toHaveBeenCalled();
   });
 

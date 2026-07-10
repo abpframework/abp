@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Riok.Mapperly.Abstractions;
 using Volo.Abp.Mapperly;
 
-namespace  Volo.Abp.BackgroundJobs;
+namespace Volo.Abp.BackgroundJobs;
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
 public partial class BackgroundJobInfoToBackgroundJobRecordMapper
@@ -31,6 +31,6 @@ public partial class BackgroundJobRecordToBackgroundJobInfoMapper
     : MapperBase<BackgroundJobRecord, BackgroundJobInfo>
 {
     public override partial BackgroundJobInfo Map(BackgroundJobRecord source);
-    
+
     public override partial void Map(BackgroundJobRecord source, BackgroundJobInfo destination);
 }

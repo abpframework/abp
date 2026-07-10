@@ -134,14 +134,14 @@ public class AbpDateTimeConverter : DateTimeConverterBase, ITransientDependency
             return _skipDateTimeNormalization ? dateTime : _clock.Normalize(dateTime);
         }
 
+        var timeZone = _currentTimezoneProvider.TimeZone;
         try
         {
-            var timezoneInfo = _timezoneProvider.GetTimeZoneInfo(_currentTimezoneProvider.TimeZone);
-            dateTime = new DateTimeOffset(dateTime, timezoneInfo.GetUtcOffset(dateTime)).UtcDateTime;
+            dateTime = _timezoneProvider.ConvertUnspecifiedToUtc(dateTime, timeZone);
         }
         catch
         {
-            Logger.LogWarning("Could not convert DateTime with unspecified Kind using timezone '{TimeZone}'.", _currentTimezoneProvider.TimeZone);
+            Logger.LogWarning("Could not convert DateTime with unspecified Kind using timezone '{TimeZone}'.", timeZone);
         }
 
         return _skipDateTimeNormalization

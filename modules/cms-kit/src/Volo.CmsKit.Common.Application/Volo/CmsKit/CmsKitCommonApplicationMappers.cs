@@ -13,8 +13,8 @@ public partial class OrganizationUnitRoleToOrganizationUnitRoleDtoMapper : TwoWa
     public override partial BlogFeatureDto Map(BlogFeatureCacheItem source);
     public override partial void Map(BlogFeatureCacheItem source, BlogFeatureDto destination);
 
-    public override partial BlogFeatureCacheItem ReverseMap(BlogFeatureDto destination);
-    public override partial void ReverseMap(BlogFeatureDto destination, BlogFeatureCacheItem source);
+    public override partial BlogFeatureCacheItem ReverseMap(BlogFeatureDto source);
+    public override partial void ReverseMap(BlogFeatureDto source, BlogFeatureCacheItem destination);
 }
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]

@@ -16,14 +16,26 @@
     [footerHeight]="infiniteScroll() ? false : 50"
   >
     @if (effectiveRowDetailTemplate) {
-      <ngx-datatable-row-detail [rowHeight]="effectiveRowDetailHeight">
-        <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
-          <ng-container
-            [ngTemplateOutlet]="effectiveRowDetailTemplate"
-            [ngTemplateOutletContext]="{ row: row, expanded: expanded }"
-          ></ng-container>
-        </ng-template>
-      </ngx-datatable-row-detail>
+      @let detailRowHeight = effectiveRowDetailRowHeight();
+      @if (detailRowHeight !== undefined) {
+        <ngx-datatable-row-detail [rowHeight]="detailRowHeight">
+          <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+            <ng-container
+              [ngTemplateOutlet]="effectiveRowDetailTemplate"
+              [ngTemplateOutletContext]="{ row: row, expanded: expanded }"
+            />
+          </ng-template>
+        </ngx-datatable-row-detail>
+      } @else {
+        <ngx-datatable-row-detail>
+          <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+            <ng-container
+              [ngTemplateOutlet]="effectiveRowDetailTemplate"
+              [ngTemplateOutletContext]="{ row: row, expanded: expanded }"
+            />
+          </ng-template>
+        </ngx-datatable-row-detail>
+      }
 
       <ngx-datatable-column
         [width]="50"
@@ -54,7 +66,6 @@
       >
         <ng-template
           ngx-datatable-header-template
-          let-value="value"
           let-allRowsSelected="allRowsSelected"
           let-selectFn="selectFn"
         >
@@ -64,7 +75,7 @@
                 class="form-check-input table-check"
                 type="checkbox"
                 [checked]="allRowsSelected"
-                (change)="selectFn(!allRowsSelected)"
+                (change)="selectFn()"
               />
             </div>
           }
@@ -103,8 +114,8 @@
     @if (actionsTemplate() || (actionList.length && hasAtLeastOnePermittedAction)) {
       <ngx-datatable-column
         [name]="actionsText() | abpLocalization"
-        [maxWidth]="_actionsColumnWidth() ?? undefined"
-        [width]="_actionsColumnWidth() ?? 200"
+        [maxWidth]="_actionsColumnWidth()"
+        [width]="_actionsColumnWidth() || 200"
         [canAutoResize]="!_actionsColumnWidth()"
         [sortable]="false"
       >
@@ -123,7 +134,7 @@
     @for (prop of propList; track prop.name; let i = $index) {
       <ngx-datatable-column
         *abpVisible="prop.columnVisible(getInjected)"
-        [width]="columnWidths()[i] ?? 200"
+        [width]="columnWidths()[i] || 200"
         [canAutoResize]="!columnWidths()[i]"
         [name]="(prop.isExtra ? '::' + prop.displayName : prop.displayName) | abpLocalization"
         [prop]="prop.name"
@@ -136,17 +147,17 @@
               [placement]="prop.tooltip.placement || 'auto'"
               container="body"
               [class.pointer]="prop.sortable"
-              (click)="prop.sortable && sortFn(column)"
+              (click)="prop.sortable && sortFn()"
             >
               {{ column.name }} <i class="fa fa-info-circle" aria-hidden="true"></i>
             </span>
           } @else {
-            <span [class.pointer]="prop.sortable" (click)="prop.sortable && sortFn(column)">
+            <span [class.pointer]="prop.sortable" (click)="prop.sortable && sortFn()">
               {{ column.name }}
             </span>
           }
         </ng-template>
-        <ng-template let-row="row" let-i="index" ngx-datatable-cell-template>
+        <ng-template let-row="row" let-i="rowIndex" ngx-datatable-cell-template>
           <ng-container *abpPermission="prop.permission; runChangeDetection: false">
             <ng-container *abpVisible="row['_' + prop.name]?.visible">
               @if (!row['_' + prop.name].component) {
@@ -186,7 +197,7 @@
                     row['_' + prop.name].component;
                     injector: row['_' + prop.name].injector
                   "
-                ></ng-container>
+                />
               }
             </ng-container>
           </ng-container>

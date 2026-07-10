@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { of } from 'rxjs';
 import { PageComponent } from '@abp/ng.components/page';
@@ -19,6 +19,7 @@ import {
 } from '../menu-item-modal/menu-item-modal.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-menu-item-list',
   templateUrl: './menu-item-list.component.html',
   imports: [
@@ -41,13 +42,13 @@ export class MenuItemListComponent implements OnInit {
   private menuItemService = inject(MenuItemAdminService);
   private confirmationService = inject(ConfirmationService);
 
-  nodes: any[] = [];
-  selectedNode: MenuItemDto | null = null;
-  expandedKeys: string[] = [];
-  draggable = true;
-  isModalVisible = false;
-  selectedMenuItem: MenuItemDto | MenuItemWithDetailsDto | null = null;
-  parentId: string | null = null;
+  readonly nodes = signal<any[]>([]);
+  readonly selectedNode = signal<MenuItemDto | null>(null);
+  readonly expandedKeys = signal<string[]>([]);
+  readonly draggable = signal(true);
+  readonly isModalVisible = signal(false);
+  readonly selectedMenuItem = signal<MenuItemDto | MenuItemWithDetailsDto | null>(null);
+  readonly parentId = signal<string | null>(null);
 
   ngOnInit() {
     this.loadMenuItems();
@@ -56,11 +57,12 @@ export class MenuItemListComponent implements OnInit {
   private loadMenuItems() {
     this.menuItemService.getList().subscribe(result => {
       if (result.items && result.items.length > 0) {
-        this.nodes = this.buildTreeNodes(result.items);
-        // Expand all nodes by default
-        this.expandedKeys = this.nodes.map(n => n.key);
+        const treeNodes = this.buildTreeNodes(result.items);
+        this.nodes.set(treeNodes);
+        this.expandedKeys.set(treeNodes.map(n => n.key));
       } else {
-        this.nodes = [];
+        this.nodes.set([]);
+        this.expandedKeys.set([]);
       }
     });
   }
@@ -69,7 +71,6 @@ export class MenuItemListComponent implements OnInit {
     const nodeMap = new Map<string, any>();
     const rootNodes: any[] = [];
 
-    // First pass: create all nodes
     items.forEach(item => {
       const node: any = {
         key: item.id,
@@ -81,7 +82,6 @@ export class MenuItemListComponent implements OnInit {
       nodeMap.set(item.id!, node);
     });
 
-    // Second pass: build tree structure
     items.forEach(item => {
       const node = nodeMap.get(item.id!);
       if (item.parentId) {
@@ -97,7 +97,6 @@ export class MenuItemListComponent implements OnInit {
       }
     });
 
-    // Sort by order
     const sortByOrder = (nodes: any[]) => {
       nodes.sort((a, b) => (a.entity.order || 0) - (b.entity.order || 0));
       nodes.forEach(node => {
@@ -112,7 +111,7 @@ export class MenuItemListComponent implements OnInit {
   }
 
   onSelectedNodeChange(node: any) {
-    this.selectedNode = node?.entity || null;
+    this.selectedNode.set(node?.entity || null);
   }
 
   onDrop(event: any) {
@@ -143,16 +142,10 @@ export class MenuItemListComponent implements OnInit {
           };
 
           this.menuItemService.moveMenuItem(node.id!, input).subscribe({
-            next: () => {
-              this.loadMenuItems();
-            },
-            error: () => {
-              // Reload to rollback
-              this.loadMenuItems();
-            },
+            next: () => this.loadMenuItems(),
+            error: () => this.loadMenuItems(),
           });
         } else {
-          // Reload to rollback
           this.loadMenuItems();
         }
       });
@@ -163,22 +156,22 @@ export class MenuItemListComponent implements OnInit {
   };
 
   add() {
-    this.selectedMenuItem = null;
-    this.parentId = null;
-    this.isModalVisible = true;
+    this.selectedMenuItem.set(null);
+    this.parentId.set(null);
+    this.isModalVisible.set(true);
   }
 
   addSubMenuItem(parentId?: string) {
-    this.selectedMenuItem = null;
-    this.parentId = parentId || null;
-    this.isModalVisible = true;
+    this.selectedMenuItem.set(null);
+    this.parentId.set(parentId || null);
+    this.isModalVisible.set(true);
   }
 
   edit(id: string) {
     this.menuItemService.get(id).subscribe(menuItem => {
-      this.selectedMenuItem = menuItem;
-      this.parentId = null;
-      this.isModalVisible = true;
+      this.selectedMenuItem.set(menuItem);
+      this.parentId.set(null);
+      this.isModalVisible.set(true);
     });
   }
 
@@ -189,9 +182,9 @@ export class MenuItemListComponent implements OnInit {
     if (visibilityChange.refresh) {
       this.loadMenuItems();
     }
-    this.selectedMenuItem = null;
-    this.parentId = null;
-    this.isModalVisible = false;
+    this.selectedMenuItem.set(null);
+    this.parentId.set(null);
+    this.isModalVisible.set(false);
   }
 
   delete(id: string, displayName?: string) {
@@ -204,9 +197,7 @@ export class MenuItemListComponent implements OnInit {
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
           this.menuItemService.delete(id).subscribe({
-            next: () => {
-              this.loadMenuItems();
-            },
+            next: () => this.loadMenuItems(),
           });
         }
       });

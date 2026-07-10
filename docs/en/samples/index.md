@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Explore a variety of ABP Framework samples, complete with live demos, source code, and tutorials to enhance your development skills!"
+  "Description": "Explore a variety of ABP Framework samples, complete with live demos, source code, and tutorials to enhance your development skills!"
 }
 ```
 
@@ -13,8 +13,8 @@ This document provides a list of samples built with ABP. Each sample is briefly 
 
 A reference application built with ABP. It implements the Domain Driven Design with multiple application layers.
 
-* [Live demo](https://www.openeventhub.com/)
-* [Source code](https://github.com/abpframework/eventhub)
+- [Live demo](https://www.openeventhub.com/)
+- [Source code](https://github.com/abpframework/eventhub)
 
 ![samples-event-hub](../images/samples-eventhub.png)
 
@@ -25,7 +25,7 @@ A reference application built with ABP. It implements the Domain Driven Design w
 
 Reference microservice solution built with ABP and .NET.
 
-* [Source code](https://github.com/abpframework/eShopOnAbp)
+- [Source code](https://github.com/abpframework/eShopOnAbp)
 
 ![eshoponabp](../images/samples-eshoponabp.png)
 
@@ -33,8 +33,8 @@ Reference microservice solution built with ABP and .NET.
 
 A minimal example website built with the [CMS Kit module](../modules/cms-kit/index.md).
 
-* [Live demo](https://cms-kit-demo.abpdemo.com/)
-* [Source code](https://github.com/abpframework/cms-kit-demo)
+- [Live demo](https://cms-kit-demo.abpdemo.com/)
+- [Source code](https://github.com/abpframework/cms-kit-demo)
 
 ![samples-cms-kit](../images/samples-cms-kit.png)
 
@@ -42,8 +42,8 @@ A minimal example website built with the [CMS Kit module](../modules/cms-kit/ind
 
 A middle-size CRM application built with ABP.
 
-* [Live demo](http://easycrm.abp.io/)
-* [Click here](easy-crm.md) to see the details and download the source code.
+- [Live demo](http://easycrm.abp.io/)
+- [Click here](easy-crm.md) to see the details and download the source code.
 
 ![samples-easy-crm](../images/samples-easycrm.png)
 
@@ -51,20 +51,20 @@ A middle-size CRM application built with ABP.
 
 A simple CRUD application to show basic principles of developing an application with ABP. The same sample was implemented with different technologies and different modules:
 
-* **Book Store: Razor Pages UI & Entity Framework Core**
-  * [Tutorial](../tutorials/book-store/part-01.md?UI=MVC&DB=EF)
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
-  * [Download source code (with PRO modules) *](https://abp.io/Account/Login?returnUrl=/api/download/samples/bookstore-mvc-ef)
-* **Book Store: Blazor UI & Entity Framework Core**
-  * [Tutorial](../tutorials/book-store/part-01.md?UI=Blazor&DB=EF)
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
-  * [Download source code (with PRO modules) *](https://abp.io/Account/Login?returnUrl=/api/download/samples/bookstore-blazor-efcore)
-* **Book Store: Angular UI & MongoDB**
-  * [Tutorial](../tutorials/book-store/part-01.md?UI=NG&DB=Mongo)
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
-  * [Download source code (with PRO modules) *](https://abp.io/Account/Login?returnUrl=/api/download/samples/bookstore-angular-mongodb)
-* **Book Store: Modular application (Razor Pages UI & EF Core)**
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Modular)
+- **Book Store: Razor Pages UI & Entity Framework Core**
+  - [Tutorial](../tutorials/book-store/part-01.md?UI=MVC&DB=EF)
+  - [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
+  - [Download source code (with PRO modules) \*](https://abp.io/Account/Login?returnUrl=/api/download/samples/bookstore-mvc-ef)
+- **Book Store: Blazor UI & Entity Framework Core**
+  - [Tutorial](../tutorials/book-store/part-01.md?UI=Blazor&DB=EF)
+  - [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
+  - [Download source code (with PRO modules) \*](https://abp.io/Account/Login?returnUrl=/api/download/samples/bookstore-blazor-efcore)
+- **Book Store: Angular UI & MongoDB**
+  - [Tutorial](../tutorials/book-store/part-01.md?UI=NG&DB=Mongo)
+  - [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
+  - [Download source code (with PRO modules) \*](https://abp.io/Account/Login?returnUrl=/api/download/samples/bookstore-angular-mongodb)
+- **Book Store: Modular application (Razor Pages UI & EF Core)**
+  - [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Modular)
 
 If you want to create the BookStore application and generate CRUD pages automatically with ABP Suite, please refer to the [Book Store Application (with ABP Suite) tutorial](../tutorials/book-store-with-abp-suite/part-01.md). Also, you can follow the [Mobile Application Development Tutorials](../tutorials/mobile/index.md), if you want to implement the CRUD operations for [MAUI](../tutorials/mobile/maui/index.md) & [React Native](../tutorials/mobile/react-native/index.md) mobile applications.
 
@@ -74,9 +74,9 @@ If you want to create the BookStore application and generate CRUD pages automati
 
 A modular monolith application that demonstrates how to create, compose, and communicate between application modules to build a modular web application:
 
-* **ModularCRM: Razor Pages UI & Entity Framework Core**
-  * [Tutorial](../tutorials/modular-crm/part-01.md?UI=MVC&DB=EF)
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/ModularCRM)
+- **ModularCRM: Razor Pages UI & Entity Framework Core**
+  - [Tutorial](../tutorials/modular-crm/part-01.md?UI=MVC&DB=EF)
+  - [Source code](https://github.com/abpframework/abp-samples/tree/master/ModularCRM)
 
 ## CloudCrm
 
@@ -84,13 +84,27 @@ A modular monolith application that demonstrates how to create, compose, and com
 
 A microservice solution that shows how to start a new microservice solution, create services and communicate between these services. It's a reference tutorial to learn to use these services from a web application through an API gateway and automatically generate CRUD pages using the ABP Suite tool:
 
-* **CloudCRM: Razor Pages UI & Entity Framework Core**
-  * [Tutorial](../tutorials/microservice/part-01.md?UI=MVC&DB=EF)
-  * [Download source code](https://abp.io/api/download/samples/cloud-crm-mvc-ef)
+- **CloudCRM: Razor Pages UI & Entity Framework Core**
+  - [Tutorial](../tutorials/microservice/part-01.md?UI=MVC&DB=EF)
+  - [Download source code](https://abp.io/api/download/samples/cloud-crm-mvc-ef)
+
+## Hanova & Habitly
+
+> This sample application is available exclusively to users with an [ABP Business license or higher](https://abp.io/pricing).
+
+Hanova and Habitly are production-ready sample applications generated from the ABP Studio templates using React and React Native. Their features were built using the [ABP Studio AI Agent](https://abp.io/docs/latest/studio/ai-agent), demonstrating how AI can accelerate the development of real-world applications.
+
+- **[Hanova Source Code](https://abp.io/api/download/samples/Hanova)**
+- **[Habitly Source Code](https://abp.io/api/download/samples/reactnative-efcore-psql-habitly)**
+
+To learn more, see:
+
+- [How the ABP AI Agent helps build production-ready applications](https://abp.io/community/articles/template-in-product-out-building-hanova-with-the-abp-ai-hcntpk3j#gsc.tab=0)
+- [How we modernized React Native application development](https://abp.io/community/articles/new-abp-modern-react-native-template-rxjiyrpb#gsc.tab=0)
 
 ## Other Samples
 
 ABP Platform provides many sample applications demonstrating various use cases and integrations. You can:
 
-* Browse all sample applications in the [abp-samples repository](https://github.com/abpframework/abp-samples).
-* Read detailed articles and tutorials in the [ABP Community](https://abp.io/community), which are shared by ABP Community & Contributors.
+- Browse all sample applications in the [abp-samples repository](https://github.com/abpframework/abp-samples).
+- Read detailed articles and tutorials in the [ABP Community](https://abp.io/community), which are shared by ABP Community & Contributors.

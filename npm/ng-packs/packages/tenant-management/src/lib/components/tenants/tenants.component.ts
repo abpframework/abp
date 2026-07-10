@@ -1,4 +1,23 @@
 import {
+  ChangeDetectionStrategy,
+  Component,
+  DOCUMENT,
+  inject,
+  Injector,
+  makeStateKey,
+  signal,
+} from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+} from '@angular/forms';
+import { finalize } from 'rxjs/operators';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
+
+import {
   ListService,
   LocalizationPipe,
   PagedResultDto,
@@ -24,19 +43,11 @@ import {
   FormPropData,
   generateFormFromProps,
 } from '@abp/ng.components/extensible';
-import { Component, DOCUMENT, inject, Injector, makeStateKey, OnInit } from '@angular/core';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  UntypedFormBuilder,
-  UntypedFormGroup,
-} from '@angular/forms';
-import { finalize } from 'rxjs/operators';
-import { eTenantManagementComponents } from '../../enums/components';
 import { PageComponent } from '@abp/ng.components/page';
-import { NgxValidateCoreModule } from '@ngx-validate/core';
+import { eTenantManagementComponents } from '../../enums/components';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-tenants',
   templateUrl: './tenants.component.html',
   providers: [
@@ -61,7 +72,7 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
     NgxValidateCoreModule,
   ],
 })
-export class TenantsComponent implements OnInit {
+export class TenantsComponent {
   protected readonly list = inject(ListService<GetTenantsInput>);
   protected readonly confirmationService = inject(ConfirmationService);
   protected readonly service = inject(TenantService);
@@ -70,19 +81,22 @@ export class TenantsComponent implements OnInit {
   private readonly injector = inject(Injector);
   private document = inject(DOCUMENT);
 
-  data: PagedResultDto<TenantDto> = { items: [], totalCount: 0 };
+  readonly data = toSignal(
+    this.list.hookToQuery(query => this.service.getList(query)),
+    {
+      initialValue: { items: [], totalCount: 0 } as PagedResultDto<TenantDto>,
+    },
+  );
 
   selected!: TenantDto;
 
   tenantForm!: UntypedFormGroup;
 
-  isModalVisible!: boolean;
-
-  visibleFeatures = false;
+  readonly isModalVisible = signal(false);
+  readonly visibleFeatures = signal(false);
+  readonly modalBusy = signal(false);
 
   providerKey!: string;
-
-  modalBusy = false;
 
   featureManagementKey = eFeatureManagementComponents.FeatureManagement;
   TENANTS_KEY = makeStateKey<PagedResultDto<TenantDto>>('tenants');
@@ -92,12 +106,8 @@ export class TenantsComponent implements OnInit {
   }
 
   onVisibleFeaturesChange = (value: boolean) => {
-    this.visibleFeatures = value;
+    this.visibleFeatures.set(value);
   };
-
-  ngOnInit() {
-    this.hookToQuery();
-  }
 
   private createTenantForm() {
     const data = new FormPropData(this.injector, this.selected);
@@ -107,20 +117,20 @@ export class TenantsComponent implements OnInit {
   addTenant() {
     this.selected = {} as TenantDto;
     this.createTenantForm();
-    this.isModalVisible = true;
+    this.isModalVisible.set(true);
   }
 
   editTenant(id: string) {
     this.service.get(id).subscribe(res => {
       this.selected = res;
       this.createTenantForm();
-      this.isModalVisible = true;
+      this.isModalVisible.set(true);
     });
   }
 
   save() {
-    if (!this.tenantForm.valid || this.modalBusy) return;
-    this.modalBusy = true;
+    if (!this.tenantForm.valid || this.modalBusy()) return;
+    this.modalBusy.set(true);
 
     const { id } = this.selected;
 
@@ -128,9 +138,9 @@ export class TenantsComponent implements OnInit {
       ? this.service.update(id, { ...this.selected, ...this.tenantForm.value })
       : this.service.create(this.tenantForm.value)
     )
-      .pipe(finalize(() => (this.modalBusy = false)))
+      .pipe(finalize(() => this.modalBusy.set(false)))
       .subscribe(() => {
-        this.isModalVisible = false;
+        this.isModalVisible.set(false);
         this.toasterService.success('AbpUi::SavedSuccessfully');
         this.list.get();
       });
@@ -153,14 +163,6 @@ export class TenantsComponent implements OnInit {
       });
   }
 
-  hookToQuery() {
-    this.list
-      .hookToQuery(query => this.service.getList(query))
-      .subscribe(res => {
-        this.data = res;
-      });
-  }
-
   onSharedDatabaseChange(value: boolean) {
     if (!value) {
       setTimeout(() => {
@@ -177,7 +179,7 @@ export class TenantsComponent implements OnInit {
   openFeaturesModal(providerKey: string) {
     this.providerKey = providerKey;
     setTimeout(() => {
-      this.visibleFeatures = true;
+      this.visibleFeatures.set(true);
     }, 0);
   }
 

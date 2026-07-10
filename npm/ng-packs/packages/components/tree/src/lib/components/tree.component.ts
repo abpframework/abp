@@ -1,6 +1,5 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   contentChild,
   inject,
@@ -10,7 +9,7 @@ import {
   input,
   output,
   signal,
-  effect
+  effect,
 } from '@angular/core';
 import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -54,7 +53,6 @@ export type DropEvent = NzFormatEmitEvent & { pos: number };
 export class TreeComponent implements OnInit {
   private lazyLoadService = inject(LazyLoadService);
   private subscriptionService = inject(SubscriptionService);
-  private cdr = inject(ChangeDetectorRef);
   private disableTreeStyleLoading = inject(DISABLE_TREE_STYLE_LOADING_TOKEN, { optional: true });
 
   dropPosition!: number;
@@ -69,7 +67,7 @@ export class TreeComponent implements OnInit {
   readonly selectedNodeChange = output<any>();
   readonly dropOver = output<DropEvent>();
   readonly nzExpandChange = output<NzFormatEmitEvent>();
-  
+
   // Input signals
   readonly noAnimation = input(true);
   readonly draggable = input<boolean | undefined>(undefined);
@@ -81,15 +79,15 @@ export class TreeComponent implements OnInit {
   readonly selectedNodeInput = input<any>(undefined, { alias: 'selectedNode' });
   readonly changeCheckboxWithNode = input<boolean | undefined>(undefined);
   readonly isNodeSelectedFn = input<(node: any) => boolean>(
-    (node) => this._selectedNode()?.id === node.key,
-    { alias: 'isNodeSelected' }
+    node => this._selectedNode()?.id === node.key,
+    { alias: 'isNodeSelected' },
   );
   readonly beforeDropFn = input<(event: NzFormatBeforeDropEvent) => any>(
     (event: NzFormatBeforeDropEvent) => {
       this.dropPosition = event.pos;
       return of(false);
     },
-    { alias: 'beforeDrop' }
+    { alias: 'beforeDrop' },
   );
 
   // Internal signals for two-way binding
@@ -99,12 +97,24 @@ export class TreeComponent implements OnInit {
   protected readonly _nodes = signal<any[]>([]);
 
   // Getters for template access
-  get checkedKeys() { return this._checkedKeys(); }
-  get expandedKeys() { return this._expandedKeys(); }
-  get selectedNode() { return this._selectedNode(); }
-  get nodes() { return this._nodes(); }
-  get isNodeSelected() { return this.isNodeSelectedFn(); }
-  get beforeDrop() { return this.beforeDropFn(); }
+  get checkedKeys() {
+    return this._checkedKeys();
+  }
+  get expandedKeys() {
+    return this._expandedKeys();
+  }
+  get selectedNode() {
+    return this._selectedNode();
+  }
+  get nodes() {
+    return this._nodes();
+  }
+  get isNodeSelected() {
+    return this.isNodeSelectedFn();
+  }
+  get beforeDrop() {
+    return this.beforeDropFn();
+  }
 
   constructor() {
     // Sync input signals to internal signals
@@ -163,23 +173,25 @@ export class TreeComponent implements OnInit {
     }
   }
 
-  onCheckboxChange(event: { keys: any[] }) {
-    this._checkedKeys.set([...event.keys]);
-    this.checkedKeysChange.emit(event.keys);
+  onCheckboxChange(event: NzFormatEmitEvent) {
+    this._checkedKeys.set([...(event.keys as any[])]);
+    this.checkedKeysChange.emit(event.keys as any[]);
   }
 
-  onExpandedKeysChange(event: { keys: string[] } & NzFormatEmitEvent) {
-    this._expandedKeys.set([...event.keys]);
-    this.expandedKeysChange.emit(event.keys);
+  onExpandedKeysChange(event: NzFormatEmitEvent) {
+    this._expandedKeys.set([...(event.keys as string[])]);
+    this.expandedKeysChange.emit(event.keys as string[]);
     this.nzExpandChange.emit(event);
   }
 
-  onDrop(event: DropEvent) {
+  onDrop(event: NzFormatEmitEvent) {
     event.event?.stopPropagation();
     event.event?.preventDefault();
-    event.pos = this.dropPosition;
 
-    this.dropOver.emit(event);
+    this.dropOver.emit({
+      ...event,
+      pos: this.dropPosition,
+    });
   }
 
   initDropdown(key: string, dropdown: NgbDropdown) {
@@ -202,6 +214,5 @@ export class TreeComponent implements OnInit {
   setSelectedNode(node: any) {
     const newSelectedNode = this.findNode(node, this._nodes());
     this._selectedNode.set({ ...newSelectedNode });
-    this.cdr.markForCheck();
   }
 }

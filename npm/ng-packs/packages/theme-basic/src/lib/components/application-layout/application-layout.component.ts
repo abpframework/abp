@@ -1,6 +1,5 @@
 import { eLayoutType, ReplaceableTemplateDirective, SubscriptionService } from '@abp/ng.core';
-import { collapseWithMargin, slideFromBottom } from '@abp/ng.theme.shared';
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { AfterViewInit, Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { LayoutService } from '../../services/layout.service';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
@@ -10,9 +9,9 @@ import { RoutesComponent } from '../routes/routes.component';
 import { NavItemsComponent } from '../nav-items/nav-items.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-layout-application',
   templateUrl: './application-layout.component.html',
-  animations: [slideFromBottom, collapseWithMargin],
   providers: [LayoutService, SubscriptionService],
   imports: [
     NgTemplateOutlet,

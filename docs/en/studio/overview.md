@@ -112,6 +112,8 @@ Key features of the AI Agent include:
 - **Attachments**: Attach supported files or images to provide task-specific context.
 - **Studio Integration**: Use enabled Studio tools for build, monitoring, applications, containers, tasks, proxies, migrations, and Git-related workflows.
 
+For a production example of this workflow in action, see the [Hanova & Habitly samples](../samples/index.md#hanova--habitly).
+
 > **Note**: Review the Privacy Notice available in the AI Agent panel to understand how your data is handled.
 
 For the technical AI Agent reference, see [ABP Studio: AI Agent](./ai-agent.md).
