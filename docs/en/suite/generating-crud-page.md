@@ -110,7 +110,7 @@ To create a new entity, make sure the *-New entity-* is selected in the **Entity
 
 * **Create user interface:** Creates pages, modals, components, `JavaScript`, `CSS` files and adds the new page to the main menu. If you don't have a requirement to manage the entity via user interface, you can uncheck this option.
 
-  > **Note:** For modern React UI solutions (`app/react`), this option also generates and registers React CRUD pages, alongside the MVC, Blazor and Angular UI stacks. React generation is template-based and does not use AI.
+  > **Note:** For modern React UI solutions, this option also generates and registers React CRUD pages, alongside the MVC, Blazor and Angular UI stacks. React generation is template-based and does not use AI.
 
   > **Blazor UI library:** For Blazor solutions, the generated UI matches the underlying Blazor component library. Solutions that reference `Volo.Abp.MudBlazorUI` produce pages built around `MudDataGrid`, `MudDialog`, `MudForm` and the rest of the [MudBlazor](https://mudblazor.com) controls; Blazorise-based solutions keep emitting the original `DataGrid` / `Modal` / `Validations` markup. ABP Suite picks the variant automatically by scanning the Blazor project `.csproj` and shows the resolved value in the solution info tooltip — no extra switch is required. See the [Blazor UI library](index.md#blazor-ui-library) section for details.
 

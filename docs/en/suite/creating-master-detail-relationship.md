@@ -39,7 +39,7 @@ You need to specify the **Entity type** as _Master_ (default). Then, provide the
 
 Create a child entity, specify the **Entity type** as _Child_, and associate it with a master entity. In the figure above, you can see an example of, a child entity **OrderLine** with the associated master entity **Order**. When you specify the **Entity type** as _Child_, then the UI and tests will not be generated for the child entity and instead, all of the orchestration of the entity will be delegated to its master entity.
 
-> **Note:** For modern React UI solutions (`app/react`), ABP Suite generates the master-detail UI: once the master record exists, each child entity renders as a sub-grid on its own tab inside the master edit dialog, with its own add/edit/delete dialog. This is generated in addition to the MVC, Blazor and Angular UI stacks.
+> **Note:** For modern React UI solutions, ABP Suite generates the master-detail UI: once the master record exists, each child entity renders as a sub-grid on its own tab inside the master edit dialog, with its own add/edit/delete dialog. This is generated in addition to the MVC, Blazor and Angular UI stacks.
 
 Application services will be generated for the child entity, so it's possible for you to consume its endpoints and create-update-list or delete the child entity specifically. Suite also respects your multi-tenancy selection and sets the child entity as a multi-tenant entity, if the master entity has multi-tenancy enabled.
 
