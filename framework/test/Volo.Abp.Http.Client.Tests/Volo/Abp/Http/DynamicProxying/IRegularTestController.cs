@@ -22,6 +22,8 @@ public interface IRegularTestController
 
     Task<Car> PostObjectWithQueryAsync(Car bodyValue);
 
+    Task<Car> QueryObjectWithBodyAsync(Car bodyValue);
+
     Task<Car> GetObjectWithUrlAsync(Car bodyValue);
 
     Task<Car> GetObjectandIdAsync(int id, Car bodyValue);

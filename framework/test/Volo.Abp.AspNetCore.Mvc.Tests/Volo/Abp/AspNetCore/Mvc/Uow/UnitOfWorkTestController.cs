@@ -34,6 +34,16 @@ public class UnitOfWorkTestController : AbpController
         return Content("OK");
     }
 
+    [AcceptVerbs("QUERY")]
+    [Route("ActionRequiresUowQuery")]
+    public ActionResult ActionRequiresUowQuery()
+    {
+        CurrentUnitOfWork.ShouldNotBeNull();
+        CurrentUnitOfWork.Options.IsTransactional.ShouldBeFalse();
+
+        return Content("OK");
+    }
+
     [HttpGet]
     [Route("HandledException")]
     [UnitOfWork(isTransactional: true)]
