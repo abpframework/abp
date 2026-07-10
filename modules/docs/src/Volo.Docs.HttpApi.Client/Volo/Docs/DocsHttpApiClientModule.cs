@@ -5,7 +5,7 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Docs
 {
-    [DependsOn( 
+    [DependsOn(
         typeof(DocsCommonHttpApiClientModule),
         typeof(DocsApplicationContractsModule),
         typeof(AbpHttpClientModule)
