@@ -21,7 +21,7 @@
 
 ABP Suite is a complementary tool to the ABP Platform. ABP Suite allows you to build web pages in a matter of minutes. 
 
-> **React UI:** ABP Suite also generates React CRUD pages for modern React UI solutions (`app/react`), in addition to the MVC, Blazor and Angular UI stacks. The generator is template-based and does not use AI. It covers the standard CRUD scenarios — navigation-property lookups, many-to-many navigation collections, master-detail child grids, file upload, enums, filtering, Excel export and bulk delete — and registers the page in the React app's route configuration and menu.
+> **React UI:** ABP Suite also generates React CRUD pages for modern React UI solutions (`app/react`), in addition to the MVC, Blazor and Angular UI stacks. The generator is template-based and does not use AI. It covers the standard CRUD scenarios — navigation-property lookups, many-to-many navigation collections, master-detail child grids, file upload, enums, filtering, Excel export and bulk delete — and registers each page in the React app's route configuration and menu.
 
 It's a .NET Core Global tool that can be installed from the command line. If you are using [ABP Studio](../studio/index.md), you don't even need to install it because it should already be installed, when you first installed the [ABP Studio](../studio/index.md).
 
