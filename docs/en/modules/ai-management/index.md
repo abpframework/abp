@@ -140,11 +140,76 @@ You can create a new workspace or edit an existing workspace in this page. The w
 The AI Management module includes a built-in chat interface for testing workspaces. You can:
 
 * Select a workspace from available workspaces
+* Create, switch, rename, and delete conversations
 * Send messages and receive AI responses
 * Test streaming responses
+* Resume previous conversations from another browser or device
 * Verify workspace configuration before using in production
 
 > Access the chat interface at: `/AIManagement/Workspaces/{WorkspaceName}`
+
+Conversation history is stored on the server for the authenticated user. Each conversation belongs to one workspace and contains both the visible transcript and the serialized Microsoft Agent Framework session state. This allows the agent to continue with the same context after a page reload or from another device. Workspace permissions are checked on every conversation operation, and users can't access each other's conversations.
+
+#### Conversation Service
+
+Use `IChatConversationAppService` to manage persisted conversations programmatically:
+
+```csharp
+public class SupportChatService
+{
+    private readonly IChatConversationAppService _conversationAppService;
+
+    public SupportChatService(IChatConversationAppService conversationAppService)
+    {
+        _conversationAppService = conversationAppService;
+    }
+
+    public async Task<string?> SendAsync(string workspaceName, string message)
+    {
+        var conversation = await _conversationAppService.CreateAsync(
+            new CreateChatConversationInput
+            {
+                WorkspaceName = workspaceName,
+                Name = "Support Chat"
+            });
+
+        var response = await _conversationAppService.SendMessageAsync(
+            conversation.Id,
+            new SendChatConversationMessageInput
+            {
+                Message = message
+            });
+
+        return response.Text;
+    }
+}
+```
+
+The service provides the following operations:
+
+* `GetListAsync`: Lists the current user's conversations for a workspace.
+* `GetAsync`: Gets a conversation and its messages.
+* `CreateAsync`: Creates a conversation and returns its server-generated ID.
+* `RenameAsync`: Renames a conversation.
+* `DeleteAsync`: Deletes a conversation.
+* `SendMessageAsync`: Sends one new message and persists the updated session and transcript.
+* `StreamMessageAsync`: Streams a response and persists the updated session and transcript after successful completion.
+
+For a persisted conversation, send only the new user message. The server restores the previous Agent Framework session automatically.
+
+The same operations are exposed under `/api/chat-conversations`:
+
+| Endpoint                                       | Method | Description                         |
+| ---------------------------------------------- | ------ | ----------------------------------- |
+| `/api/chat-conversations?workspaceName={name}` | GET    | List conversations for a workspace  |
+| `/api/chat-conversations/{id}`                 | GET    | Get a conversation and its messages |
+| `/api/chat-conversations`                      | POST   | Create a conversation               |
+| `/api/chat-conversations/{id}`                 | PUT    | Rename a conversation               |
+| `/api/chat-conversations/{id}`                 | DELETE | Delete a conversation               |
+| `/api/chat-conversations/{id}/messages`        | POST   | Send and persist one message        |
+| `/api/chat-conversations/{id}/messages/stream` | POST   | Stream and persist one message      |
+
+All conversation endpoints require authentication and enforce user ownership and workspace permissions.
 
 #### MCP Servers
 
@@ -919,17 +984,18 @@ You can customize the chat widget with the following properties:
 
 - `WorkspaceName`: The name of the workspace to use.
 - `ComponentId`: Unique identifier for accessing the component via JavaScript API (stored in abp.chatComponents).
-- `ConversationId`: The unique identifier for persisting and retrieving chat history from client-side storage.
+- `ConversationId`: A server-generated conversation ID returned by `IChatConversationAppService` or the `/api/chat-conversations` endpoints.
 - `Title`: The title of the chat widget.
 - `ShowStreamCheckbox`: Whether to show the stream checkbox. Allows user to toggle streaming on and off. Default is `false`.
 - `UseStreaming`: Default streaming behavior. Can be overridden by user when `ShowStreamCheckbox` is true.
+- `DisableWhenNoConversation`: Disables the composer until a persisted conversation ID is assigned. Default is `false`, which allows an ephemeral chat without server-side history.
 
 ```csharp
 @await Component.InvokeAsync(typeof(ChatClientChatViewComponent), new ChatClientChatViewModel
 {
     WorkspaceName = "mylama",
     ComponentId = "mylama-chat",
-    ConversationId = "mylama-conversation-" + @CurrentUser.Id,
+    ConversationId = Model.ConversationId.ToString(),
     Title = "My Custom Title",
     ShowStreamCheckbox = true,
     UseStreaming = true
@@ -938,13 +1004,16 @@ You can customize the chat widget with the following properties:
 
 ##### Using the Conversation Id
 
-You can use the `ConversationId` property to specify the id of the conversation to use. When the Conversation Id is provided, the chat will be stored at the client side and will be retrieved when the user revisits the page that contains the chat widget. If it's not provided or provided as **null**, the chat will be temporary and will not be saved, it'll be lost when the component lifetime ends. 
+Use the `ConversationId` property to attach the widget to an existing server-side conversation. Create the conversation with `IChatConversationAppService.CreateAsync` or `POST /api/chat-conversations`, then pass the returned ID to the widget. The widget restores the transcript and Agent Framework session from the server. It doesn't create a persisted conversation from an arbitrary string ID.
+
+If `ConversationId` is `null` and `DisableWhenNoConversation` is `false`, the widget operates in ephemeral mode. Ephemeral messages are kept only for the current component lifetime and aren't added to server-side history.
 
 ```csharp
 @await Component.InvokeAsync(typeof(ChatClientChatViewComponent), new ChatClientChatViewModel
 {
     WorkspaceName = "mylama",
-    ConversationId = "my-support-conversation-" + @CurrentUser.Id
+    ConversationId = Model.ConversationId.ToString(),
+    DisableWhenNoConversation = true
 })
 ```
 
@@ -971,10 +1040,10 @@ Once you have the component, you can use the following functions to interact wit
 // Switch to a different conversation
 chatComponent.switchConversation(conversationId);
 
-// Create a new conversation with a specific model
-chatComponent.createConversation(conversationId, modelName);
+// Attach a newly created server conversation
+chatComponent.createConversation(conversationId);
 
-// Clear the current conversation history
+// Clear the currently rendered client copy (does not delete server history)
 chatComponent.clearConversation();
 
 // Get the current conversation ID (returns null for ephemeral conversations)
@@ -1102,13 +1171,17 @@ The `@volo/abp.ng.ai-management` package provides a `ChatInterfaceComponent` (`a
 ```html
 <abp-chat-interface
   [workspaceName]="'mylama'"
-  [conversationId]="'my-conversation-id'"
+  [conversationId]="conversationId"
+  [allowEphemeral]="false"
 />
 ```
 
 - `workspaceName` (required): The name of the workspace to use.
-- `conversationId`: The unique identifier for persisting and retrieving chat history from client-side storage. When provided, the chat history is stored in the browser and restored when the user revisits the page. If `null`, the chat is ephemeral and will be lost when the component is destroyed.
+- `conversationId`: A server-generated conversation ID returned by the `/api/chat-conversations` endpoints. When provided, the component loads and updates the server-side transcript and Agent Framework session.
+- `allowEphemeral`: Allows sending without a conversation ID. Ephemeral messages exist only for the component lifetime and aren't persisted. Default is `false`.
 - `providerName`: The name of the AI provider. Used for displaying contextual error messages.
+
+Create or select a server conversation before assigning `conversationId`. The AI Management chat playground manages this automatically; custom components can use the `/api/chat-conversations` endpoints directly.
 
 ### Blazor UI
 
@@ -1146,23 +1219,36 @@ The `Volo.AIManagement.Client.Blazor` package provides a `ChatClientChat` Blazor
 
 ```xml
 <ChatClientChat WorkspaceName="mylama"
-                ConversationId="@("my-conversation-" + CurrentUser.Id)"
+                ConversationId="@conversationId"
                 ShowStreamCheckbox="true"
                 OnFirstMessage="HandleFirstMessageAsync" />
 ```
 
 - `WorkspaceName` (required): The name of the workspace to use.
-- `ConversationId`: The unique identifier for persisting and retrieving chat history from client-side storage. When provided, the chat history is stored in the browser's local storage and restored when the user revisits the page. If not provided or `null`, the chat is ephemeral and will be lost when the component is disposed.
+- `ConversationId`: A server-generated conversation ID returned by `IChatConversationAppService`. The component loads and updates the server-side transcript and Agent Framework session. The composer remains disabled until a conversation is selected.
 - `Title`: The title displayed in the chat widget header.
 - `ShowStreamCheckbox`: Whether to show a checkbox that allows the user to toggle streaming on and off. Default is `false`.
 - `OnFirstMessage`: An `EventCallback<FirstMessageEventArgs>` that is triggered when the first message is sent in a conversation. It can be used to determine the chat title after the first prompt like applied in the chat playground. The event args contain `ConversationId` and `Message` properties. 
 
 ```xml
 <ChatClientChat WorkspaceName="mylama"
-                ConversationId="@("my-support-conversation-" + CurrentUser.Id)"
+                ConversationId="@conversationId"
                 Title="My Custom Title"
                 ShowStreamCheckbox="true"
                 OnFirstMessage="@HandleFirstMessage" />
+```
+
+Create the conversation before rendering or enabling the component:
+
+```csharp
+var conversation = await ChatConversationAppService.CreateAsync(
+    new CreateChatConversationInput
+    {
+        WorkspaceName = "mylama",
+        Name = "Support Chat"
+    });
+
+conversationId = conversation.Id.ToString();
 ```
 
 ## Using Dynamic Workspace Configurations for custom requirements
