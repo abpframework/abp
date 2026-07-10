@@ -18,6 +18,8 @@ The React Native mobile option is _available for_ **_Team_** _or higher licenses
 - The mobile template was modernized in 2026: it now uses **NativeWind v4** (Tailwind CSS for React Native) for styling, **Bottom Tab navigation** by default, and the **Redux Toolkit** store with hook-based access (`useSelector` / `useDispatch`). The `connectToRedux` HOC, the `DrawerNavigator`, and the legacy `DataList`/`AbpSelect` components from earlier versions no longer ship with the template — this tutorial walks through building the new equivalents.
 - Before starting, please make sure that the [React Native Development Environment](../../../framework/ui/react-native/index.md) is ready on your machine.
 
+If you'd like to inspect a complete implementation first, [Habitly](../../../samples/index.md#hanova--habitly) is the production-ready mobile sample that follows this modern template direction.
+
 ## Running the Application
 
 Before implementing UI changes, run the `Acme.BookStore` mobile application and verify that login works:

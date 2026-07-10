@@ -11,6 +11,8 @@
 
 Mobile application development tutorials are designed for developers who have completed [the web development part of the tutorial](../book-store/index.md) and wish to continue building the mobile version of the application. 
 
+The React Native track follows the modernized ABP mobile template, and the [Habitly sample](../../samples/index.md#hanova--habitly) shows that stack in a production-ready app.
+
 ## Tutorials
 
 You can choose between two mobile applications: [**.NET MAUI**](../../framework/ui/maui/index.md) or [**React Native**](../../framework/ui/react-native/index.md). Choose your framework and continue building your mobile application!

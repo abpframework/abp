@@ -3,11 +3,13 @@ import {
   Component,
   computed,
   DOCUMENT,
+  effect,
   inject,
   input,
   output,
   signal,
   TrackByFunction,
+  untracked,
 } from '@angular/core';
 import { NgStyle } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -224,6 +226,10 @@ export class PermissionManagementComponent {
   }
 
   set visible(value: boolean) {
+    this.setVisible(value);
+  }
+
+  private setVisible(value: boolean) {
     if (value && this.isClosingModal) {
       return;
     }
@@ -301,6 +307,19 @@ export class PermissionManagementComponent {
     this.setSelectedGroup(null);
     this.filter.set('');
     this.disabledSelectAllInAllTabsState.set(false);
+  }
+
+  // constructor() {
+  //   effect(() => {
+  //     this.setVisible(this.visibleInput());
+  //   });
+  // }
+
+  constructor() {
+    effect(() => {
+      const visible = this.visibleInput();
+      untracked(() => this.setVisible(visible));
+    });
   }
 
   getChecked(name: string) {
