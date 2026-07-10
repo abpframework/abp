@@ -16,7 +16,7 @@ The are 2 template filters:
 1. **UI**:  You can switch between `Angular`, `MVC` and `Blazor` templates.
 2. **Database provider:** You can switch between `EF Core` and `MongoDb` templates.
 
-> **Note:** ABP Suite does not include React UI templates or generate React client-side code. React UI belongs to the modern template system and should be developed in the source-owned [React UI](../framework/ui/react/index.md) application. ABP license holders can use [ABP Studio AI Agent](https://abp.io/studio/ai-agent) with predefined AI credits to generate React pages more easily.
+> **Note:** This template editor lists the `Angular`, `MVC` and `Blazor` templates. ABP Suite generates React CRUD pages for modern React UI solutions (`app/react`) from built-in templates, but those React templates are not editable through this template editor.
 
 These filters are automatically selected based on your ABP solution. The selected solution is shown on the top right of the page. In the current screenshot it is "Acme.BookStore". 
 

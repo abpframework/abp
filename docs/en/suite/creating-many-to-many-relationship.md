@@ -75,6 +75,6 @@ Click the **Navigations** tab. Then click the **Add navigation collection** butt
 
 The below image is the final page created by ABP Suite. The **new book** dialog has a **Categories** tab which lists all categories of the book and allows add/remove categories.
 
-> **Note:** ABP Suite does not generate React UI for this page. The generated UI applies to Suite-supported UI stacks such as MVC, Blazor and Angular. ABP license holders can use [ABP Studio AI Agent](https://abp.io/studio/ai-agent) with predefined AI credits to generate React pages more easily.
+> **Note:** ABP Suite does not generate this many-to-many (navigation collection) page for React yet — it applies to the MVC, Blazor and Angular UI stacks. React CRUD generation for modern React UI solutions (`app/react`) covers fields, navigation-property lookups and master-detail relationships; for many-to-many UI, ABP license holders can use the [ABP Studio AI Agent](https://abp.io/studio/ai-agent) with predefined AI credits.
 
 ![navigation-collection-books-page](../images/navigation-collection-books-page.8.1.png)
