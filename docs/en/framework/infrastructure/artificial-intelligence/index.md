@@ -10,6 +10,8 @@ ABP Framework provides integration for AI capabilities to your application by us
 
 ABP introduces a concept called **AI Workspace**. A workspace allows you to configure isolated AI configurations for a named scope. You can then resolve AI services for a specific workspace when you need to use them.
 
+If you want to see AI-assisted delivery used on a real application, take a look at [Hanova & Habitly](../../../samples/index.md#hanova--habitly), which were built with the ABP Studio AI Agent.
+
 > ABP Framework can work with any AI library or framework that supports .NET development. However, the AI integration features explained in the following documents provide a modular and standard way to work with AI, which allows ABP developers to create reusable modules and components with AI capabilities in a standard way.
 
 ## Installation
@@ -37,4 +39,3 @@ Check the following documentation to learn how to use these libraries with the A
 - [ABP Microsoft.Extensions.AI integration](./microsoft-extensions-ai.md)
 - [ABP Microsoft.Agents.AI (Agent Framework) integration](./microsoft-agent-framework.md)
 - [ABP Microsoft.SemanticKernel integration](./microsoft-semantic-kernel.md)
-

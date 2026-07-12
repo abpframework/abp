@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Timing;
@@ -37,9 +38,20 @@ public class InMemoryBackgroundJobStore : IBackgroundJobStore, ISingletonDepende
 
     public virtual Task<List<BackgroundJobInfo>> GetWaitingJobsAsync(string? applicationName, int maxResultCount)
     {
+        return GetWaitingJobsAsync(applicationName, maxResultCount, null);
+    }
+
+    public virtual Task<List<BackgroundJobInfo>> GetWaitingJobsAsync(
+        string? applicationName,
+        int maxResultCount,
+        BackgroundJobNameFilter? jobNameFilter)
+    {
+        var filter = jobNameFilter ?? BackgroundJobNameFilter.None;
+
         var waitingJobs = _jobs.Values
             .Where(t => t.ApplicationName == applicationName)
-            .Where(t => !t.IsAbandoned && t.NextTryTime <= Clock.Now)
+            .Where(t => !t.IsAbandoned && t.CompletionTime == null && t.NextTryTime <= Clock.Now)
+            .Where(t => filter.IsMatch(t.JobName))
             .OrderByDescending(t => t.Priority)
             .ThenBy(t => t.TryCount)
             .ThenBy(t => t.NextTryTime)
@@ -55,6 +67,28 @@ public class InMemoryBackgroundJobStore : IBackgroundJobStore, ISingletonDepende
         _jobs.TryRemove(jobId, out _);
 
         return Task.CompletedTask;
+    }
+
+    public virtual Task<int> DeleteAsync(
+        string? applicationName,
+        DateTime completedBefore,
+        int maxResultCount,
+        CancellationToken cancellationToken = default)
+    {
+        var idsToDelete = _jobs.Values
+            .Where(t => t.ApplicationName == applicationName)
+            .Where(t => t.CompletionTime != null && t.CompletionTime < completedBefore)
+            .OrderBy(t => t.CompletionTime)
+            .Take(maxResultCount)
+            .Select(t => t.Id)
+            .ToList();
+
+        foreach (var id in idsToDelete)
+        {
+            _jobs.TryRemove(id, out _);
+        }
+
+        return Task.FromResult(idsToDelete.Count);
     }
 
     public virtual Task UpdateAsync(BackgroundJobInfo jobInfo)

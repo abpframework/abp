@@ -123,7 +123,7 @@
     <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="8.19.1" />
     <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.19.1" />
     <PackageVersion Include="Minio" Version="6.0.5" />
-    <PackageVersion Include="MongoDB.Driver" Version="3.9.0" />
+    <PackageVersion Include="MongoDB.Driver" Version="3.10.0" />
     <PackageVersion Include="NEST" Version="7.17.5" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageVersion Include="Nito.AsyncEx.Context" Version="5.1.2" />
@@ -169,7 +169,7 @@
     <PackageVersion Include="Slugify.Core" Version="5.1.1" />
     <PackageVersion Include="Spectre.Console" Version="0.51.1" />
     <PackageVersion Include="StackExchange.Redis" Version="2.9.17" />
-    <PackageVersion Include="Swashbuckle.AspNetCore" Version="10.0.1" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="10.2.3" />
     <PackageVersion Include="System.Collections.Immutable" Version="10.0.9" />
     <PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageVersion Include="System.Linq.Dynamic.Core" Version="1.6.7" />

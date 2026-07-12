@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Explore the ABP Platform Road Map for insights on upcoming features, release schedules, and improvements in version 10.5, planned for June 2026."
+    "Description": "Explore the ABP Platform Road Map for insights on upcoming features, release schedules, and improvements in version 10.7, planned for August 2026."
 }
 ```
 
@@ -11,28 +11,29 @@ This document provides a road map, release schedule, and planned features for th
 
 ## Next Versions
 
-### v10.6
+### v10.7
 
-The next planned version will be 10.6, which is scheduled to be released as a stable version in July 2026. We will be mostly working on the following topics:
+The next planned version will be 10.7, which is scheduled to be released as a stable version in August 2026. Based on the currently open issues and pull requests across the ABP ecosystem, we will be mostly working on the following topics:
 
 * Framework
-  * Token verification improvements with refresh token support and distributed locking
-  * Angular UI fixes and proxy generation improvements
-  * Better handling for extra properties, object mapping and auditing edge cases
-  * Hybrid UI / page embedding infrastructure
-  * Upgrading 3rd-party dependencies and evaluating replacements where needed
-  * General bug fixing and improvements in core framework packages
+  * Cookie authentication: refresh token support and distributed locking ([#25011](https://github.com/abpframework/abp/issues/25011))
+  * jQuery 4.x upgrade, or removing jQuery as a dependency ([#25123](https://github.com/abpframework/abp/issues/25123))
+  * AI agent skills distributed as versioned plugins ([#25712](https://github.com/abpframework/abp/issues/25712))
+  * Hybrid UI / page embedding infrastructure ([#23102](https://github.com/abpframework/abp/issues/23102), [#23161](https://github.com/abpframework/abp/issues/23161))
+  * Microsoft Agent Framework migration and native agent skills support ([#24310](https://github.com/abpframework/abp/issues/24310), [#25194](https://github.com/abpframework/abp/issues/25194))
+  * Better ExtraProperties mapping for EF Core ([#23546](https://github.com/abpframework/abp/issues/23546))
+  * Upgrading 3rd-party dependencies and general bug fixing in core framework packages
 
 * ABP Suite
-  * Improvements on generated codes for nullability
-  * Improvements on master-detail page design (making it more compact)
+  * Replace the templating system with Scriban while preserving backward compatibility
+  * Support for additional property types like `DateTimeOffset`, `TimeSpan` and numeric enums
+  * Display names and ordering for properties and navigation properties
+  * Filter on inherited properties and namespace-based UI foldering
   * Low-Code system integration
-  * Better support for additional property types like `DateTimeOffset`, `TimeSpan` and numeric enum scenarios
-  * Improvements for generated file upload, navigation property and display-name experiences
+  * Improvements on generated code nullability, master-detail pages and file upload experiences
 
 * ABP Studio
-  * AI Coding Agent and MCP integration
-  * Modern solution wizard improvements and low-code support
+  * Low-Code platform integration
   * Theme Builder: live preview, project integration and import/export
   * Linux support and packaging improvements
   * Better React / React Native / Thin UI template experience
@@ -41,11 +42,12 @@ The next planned version will be 10.6, which is scheduled to be released as a st
   * Terminal, browser and built-in developer productivity enhancements
 
 * Application Modules
-  * AI Management: chat history, multi-tenancy and tenant-scoped workspace capabilities
+  * AI Management: chat history
+  * AI Management: multi-tenancy and tenant-scoped workspace capabilities
+  * RAG: Cloudflare `/crawl` endpoint as a data source
   * New module: Chat with your data
-  * Low-Code designer and low-code platform integrations
-  * CMS Kit and public website improvements
   * Payment module e-mail notification improvements
+  * CMS Kit and public website improvements
   * UI/UX improvements on existing application modules
 
 * Updating existing tutorials & documents (with other UI & DB options)
@@ -61,42 +63,46 @@ The *Next Versions* section above shows the main focus of the planned versions. 
 The ABP framework is [open source](https://github.com/abpframework/abp) and free for everyone. You can see its [public backlog](https://github.com/abpframework/abp/milestone/2). Here are some of the selected backlog items and longer-term topics:
 
 * [#23102](https://github.com/abpframework/abp/issues/23102) / ABP Hybrid UI System: Re-using module UIs in different technologies
+* [#23161](https://github.com/abpframework/abp/issues/23161) / Page Embedding Feature (aka Hybrid UI)
 * [#25123](https://github.com/abpframework/abp/issues/25123) / Upgrade jQuery to 4.x, or consider removing it as dependency
-* [#24742](https://github.com/abpframework/abp/issues/24742) / Add Support for LiteDB as a Database Provider
-* [#24442](https://github.com/abpframework/abp/issues/24442) / Add Couchbase EF Core Provider Integration
+* [#17093](https://github.com/abpframework/abp/issues/17093) / MVC UI: decouple jQuery
 * [#24310](https://github.com/abpframework/abp/issues/24310) / Migrate Volo.Abp.AI Semantic Kernel to Microsoft Agent Framework
+* [#25194](https://github.com/abpframework/abp/issues/25194) / Integrate Microsoft.Agents.AI for native Agent Skills support
 * [#23575](https://github.com/abpframework/abp/issues/23575) / Support list/enumerable of complex types for ABP dynamic/static C# proxies on GET requests
 * [#23546](https://github.com/abpframework/abp/issues/23546) / Better ExtraProperties mapping for EF Core
 * [#23935](https://github.com/abpframework/abp/issues/23935) / Hybrid Cache Support for EntityCache
 * [#22931](https://github.com/abpframework/abp/issues/22931) / Angular - Support dynamic URLs for breadcrumbs
-* [#25032](https://github.com/abpframework/abp/issues/25032) / Guidance and infrastructure considerations for gRPC-based scenarios
-* [#2882](https://github.com/abpframework/abp/issues/2882) / Providing a gRPC integration infrastructure
-* [#57](https://github.com/abpframework/abp/issues/57) / Built-in CQRS infrastructure
+* [#24742](https://github.com/abpframework/abp/issues/24742) / Add Support for LiteDB as a Database Provider
+* [#24442](https://github.com/abpframework/abp/issues/24442) / Add Couchbase EF Core Provider Integration
+* [#2882](https://github.com/abpframework/abp/issues/2882) / ABP gRPC Integration
+* [#57](https://github.com/abpframework/abp/issues/57) / CQRS infrastructure
 * [#58](https://github.com/abpframework/abp/issues/58) / Content localization system (multilingual entities)
-* [#4223](https://github.com/abpframework/abp/issues/4223) / WebHook system
-* [#162](https://github.com/abpframework/abp/issues/162) / Azure ElasticDB integration for multitenancy
-* [#2296](https://github.com/abpframework/abp/issues/2296) / Feature toggling infrastructure
+* [#4223](https://github.com/abpframework/abp/issues/4223) / WebHook System
+* [#162](https://github.com/abpframework/abp/issues/162) / Azure ElasticDB Integration for multitenancy
+* [#2296](https://github.com/abpframework/abp/issues/2296) / Implementing Feature Toggle
 * [#15932](https://github.com/abpframework/abp/issues/15932) / Introduce ABP Diagnostics Module
 * [#16744](https://github.com/abpframework/abp/issues/16744) / State Management API
-* [#119](https://github.com/abpframework/abp/issues/119) / REST API versioning improvements
-* [#2087](https://github.com/abpframework/abp/issues/2087) / RavenDB database support
+* [#119](https://github.com/abpframework/abp/issues/119) / REST API Versioning Improvements
+* [#2087](https://github.com/abpframework/abp/issues/2087) / Add RavenDB Database support
 
 ### Application Modules / UI Themes
 
 ABP Platform provides many (free and commercial) [pre-built application modules](../modules/index.md) and modern [UI themes](../ui-themes/index.md). In every release, many enhancements and bugfixes are delivered for these modules and themes. Important backlog topics currently include:
 
 * AI Management module: chat history, multi-tenancy, tenant workspaces and operational hardening
-* CMS Kit module: media gallery and richer public website capabilities
+* New module: Chat with your data
+* RAG with external data sources such as website crawling
 * Payment module: richer notifications and invoice-oriented scenarios
+* CMS Kit: Meta information for SEO
 * Audit logging UI: filter redesign and UX improvements
 * Identity Pro: richer filtering and organization-unit UX improvements
 * LeptonX and existing UIs: new layouts, styles and usability refinements
-* New module ideas: Chat with your data, AI Search, user notification and dynamic dashboard
 
 ### ABP Studio
 
 [ABP Studio](../studio/index.md) is a cross-platform desktop application for ABP and .NET developers to simplify and automate daily tasks of developers. It has a community (free) edition as well as commercial capabilities. Here are some of the important planned features and active backlog topics for the next ABP Studio versions:
 
+* Low-Code: ABP Studio Integration
 * Theme builder for LeptonX, including live preview, management UI and project integration
 * Analyze user solutions to explore entities, domain services, application services, pages and other fundamental objects
 * AI agent/browser capabilities and developer-assistant experiences
@@ -107,16 +113,14 @@ ABP Platform provides many (free and commercial) [pre-built application modules]
 * More options while creating new solutions, modules and services
 * Better environment-variable, deployment and Kubernetes experiences
 * Compare changes on startup templates when a new ABP version is published
-* Rapid application development and low-code oriented features
 * ABP support integration and better diagnostics/error experiences
 
 ### ABP Suite
 
 [ABP Suite](../suite/index.md) is a GUI application that is mainly used to generate CRUD-style pages in your application. You define your entity and it can generate all the code from the database to the UI. Here are some of the important planned features for the next ABP Suite versions:
 
+* Replace the current templating system with Scriban while preserving backward compatibility
 * Better nullability support in generated code
-* MudBlazor support
-* Replacing the current templating system with a text engine while preserving backward compatibility
 * Support for additional property types like `DateTimeOffset` and `TimeSpan`
 * Handle image properties for entities (in addition to file properties, which are already supported)
 * Allow to define display names and better ordering for properties and navigation properties
