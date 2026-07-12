@@ -15,7 +15,13 @@ export function createLocalizer(localization: ApplicationLocalizationConfigurati
 
     const resource = localization?.resources?.[resourceName];
 
-    if (!resource) return defaultValue;
+    if (!resource) {
+      const fallbackResource = localization?.values?.[resourceName];
+
+      if (!fallbackResource) return defaultValue;
+
+      return fallbackResource[key] || defaultValue;
+    }
 
     return resource.texts?.[key] || defaultValue;
   };
