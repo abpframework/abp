@@ -13,6 +13,8 @@ Use the [Low-Code Designer](designer.md) to select reference entities after they
 
 Reference Entities allow you to create foreign key relationships from **dynamic entities** to **existing C# entities** that live outside the Low-Code System.
 
+If you need the opposite direction, where regular C# code reads or writes low-code entities, see [Code Integration](code-integration.md).
+
 ## Dynamic Entities vs Reference Entities
 
 | | Dynamic Entities | Reference Entities |
@@ -147,5 +149,6 @@ if (user) {
 ## See Also
 
 * [Model Descriptor Files](model-json.md)
+* [Code Integration](code-integration.md)
 * [Foreign Access](foreign-access.md)
 * [Attributes & Fluent API](fluent-api.md)

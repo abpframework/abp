@@ -34,9 +34,13 @@ Low-Code runtime UI is currently documented for **React**. The backend model, AP
 
 ## How to Enable
 
-The Low-Code System is an optional startup template feature. When creating a new application with [ABP Studio](../studio/index.md), choose a modern React application template and enable **Low-Code System** in the project creation wizard.
+The Low-Code System is an optional [ABP Studio](../studio/index.md) feature for modern application templates. In the modern wizard, the **Low-Code System** step is available for layered, single-layer, and modular monolith solutions. The step is skipped for microservice architecture and disabled when MongoDB is selected because runtime-managed tables require EF Core.
 
-ABP Studio creates the required backend module references, dynamic model initializer, EF Core configuration, Admin Console integration, and React runtime wiring.
+![ABP Studio Low-Code step](images/studio-low-code-step.png)
+
+Enable **Include Low-Code runtime and designer** to add the low-code runtime, designer APIs, EF Core integration, and, when a React web UI is included, the generated React runtime wiring and dynamic routes.
+
+ABP Studio creates the required backend module references, dynamic model initializer, EF Core configuration, and Admin Console integration. When the solution also includes the React web application, Studio adds the `@volo/abp-react-lowcode` package, dynamic routes, and menu integration for `/dynamic/...` runtime pages.
 
 The generated React project includes:
 
@@ -48,6 +52,15 @@ The generated React project includes:
 * Page, form, dashboard, file, and attachment hooks
 
 The host application wires the low-code modules, calls the generated `_Dynamic` initializer, configures EF Core dynamic entities, and seeds the required OpenIddict clients.
+
+Generated solutions keep source-controlled low-code assets under `_Dynamic`:
+
+* Layered and modular monolith solutions: `src/<YourApp>.Domain/_Dynamic/`
+* Single-layer solutions: `<YourApp>.Host/_Dynamic/`
+
+The `_Dynamic` folder includes the generated initializer, a `model/` directory that the runtime scans, and a `model-examples/` directory with sample descriptors that stay inactive until copied into `model/`.
+
+Copying files from `model-examples/` into `model/` activates the descriptors, but persisted entity changes still follow the normal source-controlled migration flow. Run the generated database or low-code migration task before expecting `/dynamic/...` pages or `/api/low-code/pages/.../data` endpoints to read and write the backing table safely.
 
 ## Run the Application
 
@@ -69,6 +82,16 @@ Open generated runtime pages after the React application is running:
 http://localhost:<react-port>/dynamic/<page-name>
 ```
 
+If a copied sample page returns `403`, grant the generated low-code permissions to the role or user you are testing with through the standard ABP permission management UI.
+
+If you edit descriptor JSON files manually, validate them before running migrations or publishing changes:
+
+```bash
+dotnet run --project <startup-project> -- --check-lowcode-model-files
+```
+
+The generated startup project accepts `--model-directory <path-to-_Dynamic/model>` when you want to validate a specific folder instead of the configured source assemblies.
+
 ## Designer Workflow
 
 The designer is the day-to-day entry point.
@@ -80,17 +103,19 @@ The designer is the day-to-day entry point.
 5. Use **Actions** and **Interceptors** when the standard CRUD flow needs custom logic, endpoints, event handlers, jobs, or workers.
 6. Use **Health** to review model issues before publishing changes.
 
+The screens below follow that common designer flow from data to page setup to forms:
+
 ![Entity properties in the designer](images/designer-properties.png)
+
+![Page setup in the designer](images/designer-page-filters.png)
 
 ![Form setup in the designer](images/designer-forms.png)
 
 ## React Runtime
 
-React runtime pages are generated from the same metadata. The page below was produced from a low-code page definition and includes the grid, menu item, permissions, display values, export, create form, and filters. The same runtime can render kanban, calendar, gallery, standalone form, and dashboard page definitions.
+React runtime pages are generated from the same metadata. The examples below show a generated data grid and its create form. The same runtime can render kanban, calendar, gallery, standalone form, and dashboard page definitions.
 
 ![Generated React data grid](images/runtime-data-grid.png)
-
-![Generated React advanced filters](images/runtime-filters.png)
 
 ![Generated React create form](images/runtime-create-form.png)
 
@@ -98,15 +123,17 @@ React runtime pages are generated from the same metadata. The page below was pro
 
 React low-code filters are type-aware. The runtime shows only operators that make sense for the field type. For example:
 
+![Generated React advanced filters](images/runtime-filters.png)
+
 * Text fields support contains, equals, starts with, ends with, and has value.
 * Numeric fields support equals, comparison, between, and has value.
 * Date fields use date-friendly labels such as on, after, before, and between.
 * Boolean fields use an `All / Yes / No` value selector.
-* File and image fields use `Has value` with an `All / Yes / No` value selector.
+* File and image fields use the same `All / Yes / No` selector behind a `Has value` filter.
 
-`All` means no filter is applied. `Yes` maps to non-empty values. `No` maps to empty values.
+In the current screenshot set, the dropdown below is shown on the `Active` boolean filter. The same three-value selector is also used by `Has value` filters on file and image fields.
 
-![Has value filter options](images/runtime-filters-has-value.png)
+![Yes/No filter options](images/runtime-filters-has-value.png)
 
 ## Export
 
@@ -146,9 +173,14 @@ The designer stores and reads the same descriptor metadata described in the refe
 |-------|------------|
 | [Designer](designer.md) | Admin Console tabs, entity/page/form setup, permissions, and health |
 | [React Runtime](react-runtime.md) | React package wiring, routes, menu items, filters, forms, and export |
+| [Health](health.md) | Selected-layer readiness review across entities, pages, forms, page groups, permissions, and scripts |
+| [Dashboards](dashboards.md) | Dashboard page descriptors, visualization layout, filters, and runtime data flow |
+| [Page Groups](page-groups.md) | Dynamic menu folders, nesting, ordering, and page grouping |
+| [MCP Integration](mcp.md) | Remote MCP endpoint, OpenIddict token setup, and authenticated runtime automation |
 | [Attributes & Fluent API](fluent-api.md) | Source-controlled C# metadata and runtime overrides |
 | [Model Descriptor Files](model-json.md) | JSON descriptor files and public descriptor schemas used by the designer and runtime |
 | [Reference Entities](reference-entities.md) | Lookups to existing entities such as Identity users |
+| [Code Integration](code-integration.md) | Moving between low-code models and regular C# code in both directions |
 | [Foreign Access](foreign-access.md) | Access to related dynamic entities through relations |
 | [Interceptors](interceptors.md) | JavaScript lifecycle logic for CRUD operations |
 | [Custom Endpoints](custom-endpoints.md) | JavaScript-backed REST endpoints |
@@ -170,4 +202,9 @@ The generated pages are powered by these services:
 
 * [Low-Code Designer](designer.md)
 * [React Runtime](react-runtime.md)
+* [Health](health.md)
+* [Dashboards](dashboards.md)
+* [Page Groups](page-groups.md)
+* [MCP Integration](mcp.md)
+* [Code Integration](code-integration.md)
 * [Model Descriptor Files](model-json.md)
