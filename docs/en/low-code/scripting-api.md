@@ -177,12 +177,12 @@ orderLines.forEach(line => {
 ```javascript
 var orderQuery = await db.query('LowCodeDemo.Orders.Order');
 var orders = await orderQuery
-    .leftJoin('LowCodeDemo.Products.Product', 'p', (o, p) => o.CustomerId === p.Id)
+    .leftJoin('LowCodeDemo.Customers.Customer', 'c', (o, c) => o.CustomerId === c.Id)
     .toList();
 
 orders.forEach(order => {
-    if (order.p) {
-        context.log('Has match: ' + order.p.Name);
+    if (order.c) {
+        context.log('Has match: ' + order.c.Name);
     }
 });
 ```
@@ -190,21 +190,21 @@ orders.forEach(order => {
 ### LINQ-Style Join
 
 ```javascript
-var orderQuery = await db.query('Order');
-orderQuery
+var orderLineQuery = await db.query('LowCodeDemo.Orders.OrderLine');
+orderLineQuery
   .join('LowCodeDemo.Products.Product',
-        o => o.ProductId,
+        ol => ol.ProductId,
         p => p.Id)
 ```
 
 ### Join with Filtered Query
 
 ```javascript
-var productQuery = await db.query('Product');
+var productQuery = await db.query('LowCodeDemo.Products.Product');
 var expensiveProducts = productQuery.where(p => p.Price > 100);
 
-var orderLineQuery = await db.query('OrderLine');
-var orders = await orderLineQuery
+var orderLineQuery = await db.query('LowCodeDemo.Orders.OrderLine');
+var orderLines = await orderLineQuery
   .join(expensiveProducts,
         ol => ol.ProductId,
         p => p.Id)
@@ -223,12 +223,12 @@ Set operations execute at the database level using SQL:
 | `except(query)` | `EXCEPT` | Elements in first, not second |
 
 ```javascript
-var productQuery = await db.query('Product');
+var productQuery = await db.query('LowCodeDemo.Products.Product');
 var cheap = productQuery.where(x => x.Price <= 100);
-var popular = productQuery.where(x => x.Rating > 4);
+var inStock = productQuery.where(x => x.StockCount > 0);
 
-var bestDeals = await cheap.intersect(popular).toList();
-var underrated = await cheap.except(popular).toList();
+var affordableInStock = await cheap.intersect(inStock).toList();
+var soldOutBudgetItems = await cheap.except(inStock).toList();
 ```
 
 ## Aggregation Methods
@@ -245,26 +245,26 @@ All aggregations execute as SQL statements:
 | `groupBy(x => x.Property)` | `GROUP BY ...` | `QueryBuilder` |
 
 ```javascript
-var productQuery = await db.query('Product');
+var productQuery = await db.query('LowCodeDemo.Products.Product');
 
 var totalValue = await productQuery.sum(x => x.Price);
-var avgPrice = await productQuery.where(x => x.InStock).average(x => x.Price);
+var avgPrice = await productQuery.where(x => x.StockCount > 0).average(x => x.Price);
 var cheapest = await productQuery.min(x => x.Price);
 ```
 
 ### GroupBy with Select
 
 ```javascript
-var productQuery = await db.query('Product');
-var grouped = await productQuery
-    .groupBy(x => x.Category)
+var campaignQuery = await db.query('LowCodeDemo.ContentStudio.Campaign');
+var grouped = await campaignQuery
+    .groupBy(x => x.Status)
     .select(g => ({
-        Category: g.Key,
+        Status: g.Key,
         Count: g.count(),
-        TotalPrice: g.sum(x => x.Price),
-        AvgPrice: g.average(x => x.Price),
-        MinPrice: g.min(x => x.Price),
-        MaxPrice: g.max(x => x.Price)
+        TotalBudget: g.sum(x => x.Budget),
+        AvgBudget: g.average(x => x.Budget),
+        MinBudget: g.min(x => x.Budget),
+        MaxBudget: g.max(x => x.Budget)
     }))
     .toList();
 ```
@@ -285,11 +285,11 @@ var grouped = await productQuery
 ### GroupBy with Items
 
 ```javascript
-var productQuery = await db.query('Product');
-var grouped = await productQuery
-    .groupBy(x => x.Category)
+var campaignQuery = await db.query('LowCodeDemo.ContentStudio.Campaign');
+var grouped = await campaignQuery
+    .groupBy(x => x.Status)
     .select(g => ({
-        Category: g.Key,
+        Status: g.Key,
         Count: g.count(),
         Items: g.take(10).toList()
     }))
@@ -307,13 +307,13 @@ var grouped = await productQuery
 Math functions translate to SQL functions (ROUND, FLOOR, CEILING, ABS, etc.):
 
 ```javascript
-var productQuery = await db.query('Product');
+var productQuery = await db.query('LowCodeDemo.Products.Product');
 var products = await productQuery
     .where(x => Math.round(x.Price) > 100)
     .toList();
 
 var result = await productQuery
-    .where(x => Math.abs(x.Balance) < 10 && Math.floor(x.Rating) >= 4)
+    .where(x => Math.abs(x.StockCount) < 10 && Math.floor(x.Price) >= 4)
     .toList();
 ```
 
@@ -442,7 +442,7 @@ Event handlers, background jobs, and background workers are configured in the De
 Event handler example:
 
 ```javascript
-log('Received event ' + eventName);
+context.log('Received event ' + eventName);
 
 if (eventData && eventData.campaignId) {
     await jobs.enqueueAsync('SendCampaignSummary', {
@@ -470,7 +470,7 @@ var staleCount = await campaignQuery
     .where(campaign => campaign.Status === 0)
     .count();
 
-log('Stale draft campaigns: ' + staleCount);
+context.log('Stale draft campaigns: ' + staleCount);
 ```
 
 ## Service Helpers
@@ -762,21 +762,21 @@ if (product.StockCount < quantity) { throw new Error('Insufficient stock'); }
 context.commandArgs.setValue('TotalAmount', product.Price * quantity);
 ```
 
-### Sales Dashboard (Custom Endpoint)
+### Inventory Overview (Custom Endpoint)
 
 ```javascript
-var orderQuery = await db.query('LowCodeDemo.Orders.Order');
+var productQuery = await db.query('LowCodeDemo.Products.Product');
 
-var totalOrders = await orderQuery.count();
-var delivered = await orderQuery
-    .where(x => x.IsDelivered === true).count();
-var revenue = await orderQuery
-    .where(x => x.IsDelivered === true).sum(x => x.TotalAmount);
+var totalProducts = await productQuery.count();
+var productsWithStock = await productQuery
+    .where(x => x.StockCount > 0).count();
+var averagePrice = await productQuery
+    .where(x => x.Price > 0).average(x => x.Price);
 
 return ok({
-    orders: totalOrders,
-    delivered: delivered,
-    revenue: revenue
+    totalProducts: totalProducts,
+    productsWithStock: productsWithStock,
+    averagePrice: averagePrice
 });
 ```
 

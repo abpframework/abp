@@ -58,6 +58,8 @@ For reference entities such as `IdentityUser`, register the entity in the genera
 
 Use **Pages** to expose an entity in the React runtime.
 
+Use [Page Groups](page-groups.md) to organize runtime menu folders and [Dashboards](dashboards.md) when a page type needs dashboard-specific descriptor details.
+
 Pages can define data grid, kanban, calendar, gallery, standalone form, and dashboard experiences. A data grid page can define:
 
 * Title and icon
@@ -98,6 +100,37 @@ Forms can contain:
 * Conditional rules for hide/show, enable/disable, and set value behavior
 * Save actions such as "save and new"
 
+Source-controlled forms still need valid layout placements. If a form shows `No fields in this group`, check the matching descriptor file and make sure the group uses `layout.tabs[].groups[].fields[]` placements whose `fieldId` values match the form field definitions.
+
+For example, this form defines three fields and places those same field IDs into the group layout:
+
+```json
+{
+  "fields": [
+    { "id": "name", "label": "Name", "type": "text", "binding": "Name" },
+    { "id": "price", "label": "Price", "type": "money", "binding": "Price" },
+    { "id": "stock-count", "label": "Stock Count", "type": "number", "binding": "StockCount" }
+  ],
+  "layout": {
+    "tabs": [
+      {
+        "groups": [
+          {
+            "fields": [
+              { "fieldId": "name", "row": 0, "colSpan": 4 },
+              { "fieldId": "price", "row": 1, "colSpan": 2 },
+              { "fieldId": "stock-count", "row": 1, "colSpan": 2 }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+The designer and runtime read the flat `fields[]` placement list shown above. If placements are missing, or if a placement points to a different ID such as `isActive` instead of `is-active`, the form can load but the group may stay visually empty.
+
 ![Form setup](images/designer-forms.png)
 
 ## Filters
@@ -128,7 +161,13 @@ Endpoint and event handler editors include **Test JavaScript**. Dry-run executio
 
 ## Health
 
-Use **Health** before shipping changes. It helps catch missing display properties, invalid relation targets, form/page references, script problems, and other model issues that would otherwise surface at runtime.
+Use **Health** before shipping changes. It helps catch missing display properties, invalid relation targets, form/page references, script problems, and other model issues that would otherwise surface at runtime. See [Health](health.md) for the selected-layer snapshot scope and the typical problem classes it helps you review.
+
+## MCP Integration
+
+The Designer and the low-code MCP surface overlap when the selected layer is **Runtime JSON**, but they are not the same editing surface. The Designer can inspect source-controlled and runtime layers, while [MCP Integration](mcp.md) is a remote HTTP MCP endpoint that is intentionally runtime-only and targets the database-backed model. Use the Designer when you want interactive editing and visual feedback. Use MCP when an authenticated agent or script needs repeatable runtime automation.
+
+After MCP-driven changes, reopen the relevant Designer section or review [Health](health.md) before reporting the model as ready.
 
 ## Source Control
 
