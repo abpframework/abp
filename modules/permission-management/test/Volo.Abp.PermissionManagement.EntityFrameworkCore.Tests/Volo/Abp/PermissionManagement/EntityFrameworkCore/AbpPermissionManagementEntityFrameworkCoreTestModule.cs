@@ -1,14 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
-using Microsoft.Data.Sqlite;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.PermissionManagement.EntityFrameworkCore;
@@ -25,15 +23,25 @@ public class AbpPermissionManagementEntityFrameworkCoreTestModule : AbpModule
         PreConfigure<AbpSqliteOptions>(x => x.BusyTimeout = null);
     }
 
+    private AbpUnitTestSqliteDatabase _database;
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        var sqliteConnection = CreateDatabaseAndGetConnection();
+        _database = new AbpUnitTestSqliteDatabase();
+        _database.CreateTables(
+            new PermissionManagementDbContext(
+                new DbContextOptionsBuilder<PermissionManagementDbContext>().UseSqlite(_database.ConnectionString).Options));
+
+        Configure<AbpDbConnectionOptions>(options =>
+        {
+            options.ConnectionStrings.Default = _database.ConnectionString;
+        });
 
         Configure<AbpDbContextOptions>(options =>
         {
             options.Configure(abpDbContextConfigurationContext =>
             {
-                abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
+                abpDbContextConfigurationContext.UseSqlite();
             });
         });
 
@@ -45,16 +53,9 @@ public class AbpPermissionManagementEntityFrameworkCoreTestModule : AbpModule
         context.Services.AddAlwaysDisableUnitOfWorkTransaction();
     }
 
-    private static SqliteConnection CreateDatabaseAndGetConnection()
+    public override void OnApplicationShutdown(ApplicationShutdownContext context)
     {
-        var connection = new AbpUnitTestSqliteConnection("Data Source=:memory:");
-        connection.Open();
-
-        new PermissionManagementDbContext(
-            new DbContextOptionsBuilder<PermissionManagementDbContext>().UseSqlite(connection).Options
-        ).GetService<IRelationalDatabaseCreator>().CreateTables();
-
-        return connection;
+        _database?.Dispose();
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
