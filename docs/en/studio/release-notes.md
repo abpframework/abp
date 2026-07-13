@@ -9,7 +9,18 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 3.0.6 (2026-06-18) Latest
+## 3.0.7 (2026-07-13) Latest
+
+* Upgrade Blazorise packages to version 2.1.3
+* Skip extension check for install-libs and wait for restarted CLI
+* Enhance admin console with exports, themes, and locale entries for ms template
+* Add localization to React public website templates
+* Optimize AI agent search token usage
+* Fix Mermaid diagram contrast in dark the: //github.com/volosoft/abp-studio/pull/5083
+* Fix Angular installation modal overflow when project list is long
+* ABP Agent: Add auto-delete option for inactive sessions
+
+## 3.0.6 (2026-06-18)
 
 * Stabilize Domain.Tests across platforms and fix ReactNative test regression
 * [Linux-x64 Support] Align Linux publish with RID-based packaging

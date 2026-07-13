@@ -100,7 +100,7 @@ Event handlers run when a distributed event with the configured name is publishe
       "name": "NotifyCampaignCompleted",
       "eventName": "Acme.Campaigns.CampaignCompleted",
       "description": "Logs and notifies when a campaign is completed",
-      "javascript": "log('Campaign completed: ' + eventData.id);\nawait email.queueAsync('ops@example.com', 'Campaign completed', eventData.id);"
+      "javascript": "context.log('Campaign completed: ' + eventData.id);\nawait email.queueAsync('ops@example.com', 'Campaign completed', eventData.id);"
     }
   ]
 }
@@ -194,7 +194,7 @@ Configure either `period` or `cronExpression`.
       "name": "CampaignCleanup",
       "period": 3600000,
       "description": "Runs every hour",
-      "javascript": "var query = await db.query('Acme.Campaigns.Campaign');\nvar stale = await query.where(c => c.Status === 0).take(100).toList();\nlog('Stale draft count: ' + stale.length);"
+      "javascript": "var query = await db.query('Acme.Campaigns.Campaign');\nvar stale = await query.where(c => c.Status === 0).take(100).toList();\ncontext.log('Stale draft count: ' + stale.length);"
     }
   ]
 }

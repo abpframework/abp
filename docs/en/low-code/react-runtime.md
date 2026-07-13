@@ -97,6 +97,8 @@ const { data: dynamicMenuItems } = useMenuItems({
 
 Each menu item includes its page name, display name, icon, order, grouping information, and children.
 
+Menu grouping and nesting are defined by [Page Groups](page-groups.md).
+
 ## Page Types
 
 The runtime includes built-in renderers for these page types:
@@ -109,6 +111,8 @@ The runtime includes built-in renderers for these page types:
 | `gallery` | Card/gallery view, optionally image-backed |
 | `form` | Standalone form page |
 | `dashboard` | Dashboard rows with chart, list, and number visualizations |
+
+See [Dashboards](dashboards.md) for the stored descriptor shape, visualization types, and row grouping rules behind dashboard pages.
 
 The generated data grid page includes:
 
@@ -129,6 +133,8 @@ The generated data grid page includes:
 
 Create and edit forms are rendered from form metadata. Tabs, groups, labels, placeholders, controls, default values, validation rules, conditional form rules, and save actions come from the designer.
 
+Rendered groups come from the form layout placements under `layout.tabs[].groups[].fields[]`. A form can still load with an empty shell when fields exist but no placements reference them.
+
 ![Generated create form](images/runtime-create-form.png)
 
 The runtime can render forms in a modal or on full pages. Full-page forms use the dynamic create/edit routes and the `navigate` callback configured in `configureLowCode`.
@@ -142,10 +148,12 @@ Filters are rendered as an ABP-style advanced filter area. The runtime shows all
 File and image filters use a single `Has value` concept. The value selector controls whether the filter is applied:
 
 * `All` does not add a filter.
-* `Yes` returns records with a value.
-* `No` returns records without a value.
+* `Yes` returns `true` for boolean filters, or records with a value for `Has value` filters.
+* `No` returns `false` for boolean filters, or records without a value for `Has value` filters.
 
-![Has value options](images/runtime-filters-has-value.png)
+The screenshot below shows the shared selector pattern on the `Active` boolean filter.
+
+![Yes/No filter options](images/runtime-filters-has-value.png)
 
 The URL keeps the existing `lcFilters` query parameter shape. The runtime maps user-friendly filter choices to the existing backend `FilterType` values.
 
@@ -185,6 +193,9 @@ Troubleshooting:
 
 | Symptom | Likely cause |
 |---------|--------------|
+| `403` on a generated page or missing dynamic menu items | The signed-in role or user does not have the generated low-code permissions |
+| `Invalid object name ...` after copying source-controlled descriptors | The descriptors were loaded, but the backing table has not been created yet. Run the generated migration or database update task |
+| Form shell loads but no fields appear | The form layout is missing `layout.tabs[].groups[].fields[]` placements or the placement `fieldId` values do not match the form fields |
 | Invalid or expired download token | The token is single-use, expired, or was requested for a different page/context |
 | Export row limit exceeded | Narrow the filters, export the current page, or increase `LowCode:Export:MaxRows` |
 | File link expired | Re-run export; temporary file links are intentionally short-lived |
