@@ -30,11 +30,11 @@ ABP Low-Code takes a different path. It runs **inside the ABP Platform**, so run
 
 ## Edit at runtime. See it in the app.
 
-In the Low-Code Designer, you update a runtime-managed page. A few seconds later, the same application surface is visible in the live app. No rebuild loop. No parallel front-end implementation. No "we will wire it later" gap between authoring and runtime.
+In the Low-Code Designer inside the Admin Console, you update a runtime-managed page. A few seconds later, the same application surface is visible in the live app. No rebuild loop. No parallel front-end implementation. No "we will wire it later" gap between authoring and runtime.
 
 ABP Low-Code shortens the cycle from model change to running screen while keeping the output grounded in the same ABP application.
 
-The screenshot below shows that authoring step directly: a runtime page is being configured in the Admin Console, where low-code defines the grid, form, actions, and view composition that the live application will resolve.
+The screenshot below shows that authoring step directly: a runtime page is being configured in the Admin Console's Low-Code Designer, where low-code defines the grid, form, actions, and view composition that the live application will resolve.
 
 ![ABP Low-Code designer workspace for a runtime page](assets/screenshots/admin-console-lowcode.png)
 
@@ -88,7 +88,7 @@ ABP Low-Code exposes a server-side **Script API** inside the same application mo
 - **Background jobs** when work should continue asynchronously.
 - **Background workers** when operational logic should run on a schedule.
 
-In this article, the visible proof happens to be `GET /api/custom/eventflow/highlights`. The GIF shows an endpoint because it is the easiest proof surface to read. But the broader point is that endpoints are only one consumer of the same low-code scripting layer.
+In this article, the visible proof happens to be `GET /api/custom/eventflow/highlights`. The next GIF focuses on an endpoint because it is the easiest proof surface to read. But the broader point is that endpoints are only one consumer of the same low-code scripting layer.
 
 That hybrid model matters in both directions:
 
