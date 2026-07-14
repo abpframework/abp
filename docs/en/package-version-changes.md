@@ -11,6 +11,9 @@
 
 | Package | Old Version | New Version | PR |
 |---------|-------------|-------------|-----|
+| HtmlSanitizer | 9.0.886 | 9.0.892 | #25811 |
+| Magick.NET-Q16-AnyCPU | 14.13.0 | 14.15.0 | #25811 |
+| MailKit | 4.13.0 | 4.17.0 | #25811 |
 | Microsoft.AspNetCore.Authentication.JwtBearer | 10.0.7 | 10.0.9 | #25706 |
 | Microsoft.AspNetCore.Authentication.OpenIdConnect | 10.0.7 | 10.0.9 | #25706 |
 | Microsoft.AspNetCore.Authorization | 10.0.7 | 10.0.9 | #25706 |
@@ -65,6 +68,7 @@
 | Microsoft.IdentityModel.Protocols.OpenIdConnect | 8.16.0 | 8.19.1 | #25706 |
 | Microsoft.IdentityModel.Tokens | 8.16.0 | 8.19.1 | #25706 |
 | MongoDB.Driver | 3.9.0 | 3.10.0 | #25773 |
+| Scriban | 7.2.1 | 7.2.5 | #25811 |
 | System.Collections.Immutable | 10.0.7 | 10.0.9 | #25706 |
 | System.IdentityModel.Tokens.Jwt | 8.16.0 | 8.19.1 | #25706 |
 | System.Management | 10.0.7 | 10.0.9 | #25706 |
