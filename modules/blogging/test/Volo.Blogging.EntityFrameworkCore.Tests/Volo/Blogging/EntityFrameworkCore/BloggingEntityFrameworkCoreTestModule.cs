@@ -1,8 +1,6 @@
-﻿using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Modularity;
@@ -16,7 +14,7 @@ namespace Volo.Blogging.EntityFrameworkCore
     )]
     public class BloggingEntityFrameworkCoreTestModule : AbpModule
     {
-        private SqliteConnection _sqliteConnection;
+        private AbpUnitTestSqliteDatabase _database;
 
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
@@ -25,34 +23,27 @@ namespace Volo.Blogging.EntityFrameworkCore
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            _sqliteConnection = CreateDatabaseAndGetConnection();
+            _database = new AbpUnitTestSqliteDatabase();
+            _database.CreateTables(
+                new BloggingDbContext(new DbContextOptionsBuilder<BloggingDbContext>().UseSqlite(_database.ConnectionString).Options));
+
+            Configure<AbpDbConnectionOptions>(options =>
+            {
+                options.ConnectionStrings.Default = _database.ConnectionString;
+            });
 
             Configure<AbpDbContextOptions>(options =>
             {
                 options.Configure(abpDbContextConfigurationContext =>
                 {
-                    abpDbContextConfigurationContext.DbContextOptions.UseSqlite(_sqliteConnection);
+                    abpDbContextConfigurationContext.UseSqlite();
                 });
             });
         }
 
-        private static SqliteConnection CreateDatabaseAndGetConnection()
-        {
-            var connection = new AbpUnitTestSqliteConnection("Data Source=:memory:");
-            connection.Open();
-
-            var options = new DbContextOptionsBuilder<BloggingDbContext>().UseSqlite(connection).Options;
-            using (var context = new BloggingDbContext(options))
-            {
-                context.GetService<IRelationalDatabaseCreator>().CreateTables();
-            }
-
-            return connection;
-        }
-
         public override void OnApplicationShutdown(ApplicationShutdownContext context)
         {
-            _sqliteConnection.Dispose();
+            _database?.Dispose();
         }
     }
 }
