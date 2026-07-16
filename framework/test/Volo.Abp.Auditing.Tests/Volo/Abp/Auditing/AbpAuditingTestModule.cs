@@ -1,8 +1,7 @@
-﻿using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp;
+using Volo.Abp.Data;
 using Volo.Abp.Auditing.App.Entities;
 using Volo.Abp.Auditing.App.EntityFrameworkCore;
 using Volo.Abp.Autofac;
@@ -19,6 +18,8 @@ namespace Volo.Abp.Auditing;
 )]
 public class AbpAuditingTestModule : AbpModule
 {
+    private AbpUnitTestSqliteDatabase _database;
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddAbpDbContext<AbpAuditingTestDbContext>(options =>
@@ -30,13 +31,20 @@ public class AbpAuditingTestModule : AbpModule
             });
         });
 
-        var sqliteConnection = CreateDatabaseAndGetConnection();
+        _database = new AbpUnitTestSqliteDatabase();
+        _database.CreateTables(
+            new AbpAuditingTestDbContext(new DbContextOptionsBuilder<AbpAuditingTestDbContext>().UseSqlite(_database.ConnectionString).AddAbpDbContextOptionsExtension().Options));
+
+        Configure<AbpDbConnectionOptions>(options =>
+        {
+            options.ConnectionStrings.Default = _database.ConnectionString;
+        });
 
         Configure<AbpDbContextOptions>(options =>
         {
             options.Configure(abpDbContextConfigurationContext =>
             {
-                abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
+                abpDbContextConfigurationContext.UseSqlite();
             });
         });
 
@@ -67,17 +75,9 @@ public class AbpAuditingTestModule : AbpModule
         context.Services.AddType<Auditing_Tests.MyAuditedObject1>();
     }
 
-    private static SqliteConnection CreateDatabaseAndGetConnection()
+    public override void OnApplicationShutdown(ApplicationShutdownContext context)
     {
-        var connection = new AbpUnitTestSqliteConnection("Data Source=:memory:");
-        connection.Open();
-
-        using (var context = new AbpAuditingTestDbContext(new DbContextOptionsBuilder<AbpAuditingTestDbContext>()
-            .UseSqlite(connection).AddAbpDbContextOptionsExtension().Options))
-        {
-            context.GetService<IRelationalDatabaseCreator>().CreateTables();
-        }
-
-        return connection;
+        _database?.Dispose();
     }
+
 }
