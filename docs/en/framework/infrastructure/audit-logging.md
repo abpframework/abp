@@ -311,6 +311,8 @@ An **audit log object** is created for each **web request** by default. An audit
 * **Exception**: An audit log object may contain zero or more exception. In this way, you can get a report of the failed requests.
 * **Comment**: An arbitrary string value to add custom messages to the audit log entry. An audit log object may contain zero or more comments.
 
+> When the [Audit Logging Module](../../modules/audit-logging.md) persists exceptions, it uses `AbpExceptionHandlingOptions` to convert them. `SendExceptionsDetailsToClients`, `SendStackTraceToClients` and `SendExceptionDataToClientTypes` therefore also control the exception details stored in audit logs, not only the details sent to clients. Review these options when audit logs may contain sensitive information. See the [Exception Handling](../fundamentals/exception-handling.md#abpexceptionhandlingoptions) document for configuration details.
+
 In addition to the standard properties explained above, `AuditLogInfo`, `AuditLogActionInfo` and `EntityChangeInfo` objects implement the `IHasExtraProperties` interface, so you can add custom properties to these objects.
 
 ## Audit Log Contributors
