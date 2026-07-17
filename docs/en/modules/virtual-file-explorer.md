@@ -55,7 +55,7 @@ Or you can also manually install nuget package to `Acme.MyProject.Web` project:
 
 ##### 2.2- Adding NPM Package
 
- * Open `package.json` and add `@abp/virtual-file-explorer": "^2.9.0` as shown below:
+ * Open `package.json` and add `@abp/virtual-file-explorer` with the same version as the other `@abp` packages, as shown below:
 
   ```json
     {
@@ -63,8 +63,8 @@ Or you can also manually install nuget package to `Acme.MyProject.Web` project:
         "name": "my-app",
         "private": true,
         "dependencies": {
-            "@abp/aspnetcore.mvc.ui.theme.basic": "^2.9.0",
-            "@abp/virtual-file-explorer": "^2.9.0"
+            "@abp/aspnetcore.mvc.ui.theme.basic": "~10.6.0",
+            "@abp/virtual-file-explorer": "~10.6.0"
         }
     }
   ```

@@ -108,9 +108,9 @@ You can also use nesting or array in localization files, like this:
     "Hello": {
         "World": "Hello World!"
     },
-    "Hi":[
-        "Bye": "Bye World!"
-        "Hello": "Hello World!"
+    "Hi": [
+      "Bye World!",
+      "Hello World!"
     ]
   }
 }
@@ -189,6 +189,21 @@ public class TestResource
 
 See the Getting Localized Test / Client Side section below.
 
+### Non-Typed Resources
+
+Most localization resources are represented by a class, which allows you to inject `IStringLocalizer<TResource>`. You can also register a resource by name without creating a resource class. This is useful when a resource is identified only by its name. An external localization store can also return a non-typed resource for a resource name discovered at runtime.
+
+````csharp
+Configure<AbpLocalizationOptions>(options =>
+{
+    options.Resources
+        .Add("CountryNames", "en")
+        .AddVirtualJson("/Localization/Resources/CountryNames");
+});
+````
+
+Use `IStringLocalizerFactory` to access a non-typed resource, as described in the *Creating A Localizer By Resource Name* section below.
+
 ### Inherit From Other Resources
 
 A resource can inherit from other resources which makes possible to re-use existing localization strings without referring the existing resource. Example:
@@ -215,6 +230,18 @@ services.Configure<AbpLocalizationOptions>(options =>
 * A resource may inherit from multiple resources.
 * If the new resource defines the same localized string, it overrides the string.
 
+A resource can also inherit from a typed or non-typed resource by its resource name:
+
+````csharp
+Configure<AbpLocalizationOptions>(options =>
+{
+    options.Resources
+        .Add<TestResource>("en")
+        .AddVirtualJson("/Localization/Resources/Test")
+        .AddBaseResources("CountryNames");
+});
+````
+
 ### Extending Existing Resource
 
 Inheriting from a resource creates a new resource without modifying the existing one. In some cases, you may want to not create a new resource but directly extend an existing resource. Example:
@@ -229,6 +256,51 @@ services.Configure<AbpLocalizationOptions>(options =>
 ````
 
 * If an extension file defines the same localized string, it overrides the string.
+
+### Culture Fallback
+
+ABP searches for a localized string in the following order:
+
+1. The requested culture of the current resource, such as `en-US`.
+2. The base culture, such as `en`, when `TryToGetFromBaseCulture` is enabled.
+3. The default culture configured for the resource when `TryToGetFromDefaultCulture` is enabled.
+4. The inherited resources, in their configured order. Each inherited resource applies the same culture fallback rules.
+5. The localization key itself, returned with `ResourceNotFound` set to `true`.
+
+Both fallback options are enabled by default. You can disable them independently:
+
+````csharp
+Configure<AbpLocalizationOptions>(options =>
+{
+    options.TryToGetFromBaseCulture = false;
+    options.TryToGetFromDefaultCulture = false;
+});
+````
+
+### Global Resource Contributors
+
+`AbpLocalizationOptions.GlobalContributors` adds an `ILocalizationResourceContributor` implementation to every localization resource:
+
+````csharp
+Configure<AbpLocalizationOptions>(options =>
+{
+    options.GlobalContributors.Add<MyLocalizationResourceContributor>();
+});
+````
+
+The contributor type must have a parameterless constructor. Its `Initialize` method receives a `LocalizationResourceInitializationContext`, which provides the resource and the application service provider.
+
+Contributors are order-sensitive. A lookup starts with the last registered contributor, so a later contributor overrides an earlier contributor when both provide the same key. Global contributors are appended after contributors configured directly on a resource.
+
+### External Localization Stores
+
+Replace `IExternalLocalizationStore` when localization resources need to be discovered at runtime or loaded from an external system. The default `NullExternalLocalizationStore` does not provide any resources.
+
+The string localizer factory first searches the resources registered in `AbpLocalizationOptions.Resources`. If it cannot find the requested resource name, it queries `IExternalLocalizationStore`. The store exposes synchronous and asynchronous methods for retrieving a resource by name, enumerating resource names and enumerating resources.
+
+The factory caches the localizer after it resolves a resource name. Changing the resource object returned by the store does not make the factory resolve that name again. Use dynamic contributors when the localization values themselves need to change while the application is running.
+
+Use the standard [dependency injection service replacement](dependency-injection.md#replace-a-service) mechanism to replace the default implementation.
 
 ## Getting the Localized Texts
 
@@ -255,11 +327,69 @@ public class MyService : ITransientDependency
 }
 ````
 
+### Creating A Localizer By Resource Name
+
+Use `IStringLocalizerFactory` when the resource type is not available or the resource is registered by name:
+
+````csharp
+public class MyService : ITransientDependency
+{
+    private readonly IStringLocalizerFactory _localizerFactory;
+
+    public MyService(IStringLocalizerFactory localizerFactory)
+    {
+        _localizerFactory = localizerFactory;
+    }
+
+    public string GetCountryName()
+    {
+        var localizer = _localizerFactory.CreateByResourceName("CountryNames");
+        return localizer["USA"];
+    }
+}
+````
+
+`CreateByResourceName` throws an `AbpException` when the resource cannot be found. Use `CreateByResourceNameOrNull` when a missing resource is expected. `CreateByResourceNameAsync` and `CreateByResourceNameOrNullAsync` are available for external stores that load resources asynchronously.
+
+### Serializing Localizable Strings
+
+Use `ILocalizableStringSerializer` when an `ILocalizableString` needs to be stored as a string and reconstructed later:
+
+````csharp
+var serialized = localizableStringSerializer.Serialize(
+    LocalizableString.Create<TestResource>("HelloWorld")
+);
+
+var localizableString = localizableStringSerializer.Deserialize(serialized!);
+````
+
+The default serializer uses `L:<resource-name>,<key>` for `LocalizableString` and `F:<value>` for `FixedLocalizableString`. A value without a recognized prefix is deserialized as a `FixedLocalizableString`. An invalid `L:` value throws an `AbpException`. Serializing `null` returns `null`; serializing another `ILocalizableString` implementation throws an `AbpException`.
+
 ### Format Arguments
 
 Format arguments can be passed after the localization key. If your message is `Hello {0}, welcome!`, then you can pass the `{0}` argument to the localizer like `_localizer["HelloMessage", "John"]`.
 
 > Refer to the [Microsoft's localization documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization) for details about using the localization.
+
+### Getting All Localization Strings
+
+The standard `GetAllStrings(includeParentCultures)` method can include values from the resource's default and base cultures. ABP also provides an overload to control inherited resources and dynamic contributors independently:
+
+````csharp
+var strings = localizer.GetAllStrings(
+    includeParentCultures: true,
+    includeBaseLocalizers: true,
+    includeDynamicContributors: false
+);
+````
+
+* `includeParentCultures` includes values from the resource's default culture and the base culture of the current UI culture. Values from the current UI culture override them.
+* `includeBaseLocalizers` includes strings from inherited resources. Values from the current resource override inherited values.
+* `includeDynamicContributors` includes contributors whose `IsDynamic` property is `true`.
+
+`includeParentCultures` controls this bulk enumeration independently of `TryToGetFromBaseCulture` and `TryToGetFromDefaultCulture`, which control single-string lookups.
+
+Use `GetAllStringsAsync` with the same flags when a contributor retrieves strings asynchronously.
 
 ### Using In A Razor View/Page
 
@@ -330,6 +460,29 @@ Configure<AbpLocalizationOptions>(options =>
     options.Languages.Add(new LanguageInfo("uz", "uz", "Uzbek"));
 });
 ```
+
+### Mapping Culture Names For Client Packages
+
+Client libraries sometimes use a culture name or localization file name that differs from the application's culture name. Use `AddLanguagesMapOrUpdate` to map the culture passed to a package, and `AddLanguageFilesMapOrUpdate` to map the package's localization file name:
+
+```csharp
+Configure<AbpLocalizationOptions>(options =>
+{
+    options.AddLanguagesMapOrUpdate(
+        "MyClientPackage",
+        new NameValue("zh-Hans", "zh-CN")
+    );
+
+    options.AddLanguageFilesMapOrUpdate(
+        "MyClientPackage",
+        new NameValue("zh-Hans", "zh-CN")
+    );
+});
+```
+
+Mappings are scoped by package name. When a mapping is not defined, ABP uses the original culture name.
+
+The `NameValue` name is the application culture and its value is the culture or file name expected by the client package. Use the package's own package-name constant when it provides one.
 
 ## URL-Based Localization
 

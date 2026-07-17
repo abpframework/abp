@@ -203,6 +203,23 @@ ABP uses interceptors for features like UOW, auditing, and authorization, which 
 
 To avoid generating dynamic proxies for specific types, use the static class `DynamicProxyIgnoreTypes` and add the base classes of the types to the list. Subclasses of any listed base class are also ignored. ABP framework already adds some base classes to the list (`ComponentBase, ControllerBase, PageModel, ViewComponent`); you can add more base classes if needed.
 
+You can also disable ABP class interceptors for all registrations or for types selected by a predicate:
+
+````csharp
+// Disable all class interceptors.
+context.Services.DisableAbpClassInterceptors();
+
+// Or disable them only for selected implementation types.
+context.Services.DisableAbpClassInterceptors(
+    new NamedTypeSelector(
+        "MyHotPathServices",
+        type => type.Namespace == "MyProject.HotPath"
+    )
+);
+````
+
+These methods control class interception. Interface-based interception is configured separately.
+
 > Always use interface-based proxies instead of class-based proxies for better performance.
 
 ## See Also

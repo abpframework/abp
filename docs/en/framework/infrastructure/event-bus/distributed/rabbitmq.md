@@ -148,16 +148,19 @@ Configure<AbpRabbitMqOptions>(options =>
 });
 ````
 
-**Example: Configure the client, exchange names and prefetchCount**
+**Example: Configure the client, exchange name, exchange type and prefetch count**
 
 ````csharp
 Configure<AbpRabbitMqEventBusOptions>(options =>
 {
     options.ClientName = "TestApp1";
     options.ExchangeName = "TestMessages";
+    options.ExchangeType = "topic";
     options.PrefetchCount = 1;
 });
 ````
+
+`ExchangeType` uses RabbitMQ's `direct` exchange type when it is `null` or empty.
 
 **Example: Configure the queue and exchange optional arguments**
 

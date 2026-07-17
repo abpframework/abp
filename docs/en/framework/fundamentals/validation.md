@@ -117,7 +117,7 @@ namespace Acme.BookStore
 }
 ````
 
-> ABP uses the [dynamic proxying / interception](../../dynamic-proxying-interceptors.md) system to perform the validation. In order to make it working, your method should be **virtual** or your service should be injected and used over an **interface** (like `IMyService`).
+> ABP uses the [dynamic proxying / interception](../infrastructure/interceptors.md) system to perform the validation. In order to make it working, your method should be **virtual** or your service should be injected and used over an **interface** (like `IMyService`).
 
 #### Enabling/Disabling Validation
 
@@ -139,6 +139,20 @@ public class InputClass
 {
     [DisableValidation]
     public string MyProperty { get; set; }
+}
+````
+
+If a class has `[DisableValidation]`, add `[EnableValidation]` to a method to enable automatic method validation for that method:
+
+````csharp
+[DisableValidation]
+public class MyService
+{
+    [EnableValidation]
+    public virtual Task UpdateAsync(MyInput input)
+    {
+        //...
+    }
 }
 ````
 
@@ -179,6 +193,17 @@ public class MyObjectValidationContributor
 
 * Remember to register your class to the [DI](./dependency-injection.md) (implementing `ITransientDependency` does it just like in this example)
 * ABP will automatically discover your class and use on any type of object validation (including automatic method call validation).
+
+### Ignoring Types During Recursive Validation
+
+`AbpValidationOptions.IgnoredTypes` prevents matching values from being recursively validated by the default data annotation contributor. Derived and implementing types are also matched.
+
+````csharp
+Configure<AbpValidationOptions>(options =>
+{
+    options.IgnoredTypes.Add(typeof(MyInfrastructureValue));
+});
+````
 
 ### IMethodInvocationValidator
 

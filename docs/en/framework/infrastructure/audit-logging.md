@@ -44,10 +44,10 @@ Configure<AbpAuditingOptions>(options =>
 Here, a list of the options you can configure:
 
 * `IsEnabled` (default: `true`): A root switch to enable or disable the auditing system. Other options is not used if this value is `false`.
-* `HideErrors` (default: `true`): Audit log system hides and write regular [logs](../fundamentals/localization.md) if any error occurs while saving the audit log objects. If saving the audit logs is critical for your system, set this to `false` to throw exception in case of hiding the errors.
+* `HideErrors` (default: `true`): Audit log system hides and write regular [logs](../fundamentals/logging.md) if any error occurs while saving the audit log objects. If saving the audit logs is critical for your system, set this to `false` to throw exception in case of hiding the errors.
 * `IsEnabledForAnonymousUsers` (default: `true`): If you want to write audit logs only for the authenticated users, set this to `false`. If you save audit logs for anonymous users, you will see `null` for `UserId` values for these users.
 * `AlwaysLogOnException` (default: `true`): If you set to true, it always saves the audit log on an exception/error case without checking other options (except `IsEnabled`, which completely disables the audit logging).
-* `IsEnabledForIntegrationService` (default: `false`): Audit Logging is disabled for [integration services](../api-development/integration-services.md) by default. Set this property as `true` to enable it.
+* `IsEnabledForIntegrationServices` (default: `false`): Audit Logging is disabled for [integration services](../api-development/integration-services.md) by default. Set this property as `true` to enable it.
 * `IsEnabledForGetRequests` (default: `false`): HTTP GET requests should not make any change in the database normally and audit log system doesn't save audit log objects for GET request. Set this to `true` to enable it also for the GET requests.
 * `DisableLogActionInfo` (default: `false`):If you set to true, Will no longer log `AuditLogActionInfo`.
 * `ApplicationName`: If multiple applications are saving audit logs into a single database, set this property to your application name, so you can distinguish the logs of different applications. If you don't set, it will set from the `IApplicationInfoAccessor.ApplicationName` value, which is the entry assembly name by default.

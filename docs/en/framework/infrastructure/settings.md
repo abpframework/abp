@@ -257,6 +257,15 @@ While a setting value provider is free to use any source to get the setting valu
 
 You can replace this service in the dependency injection system to customize the encryption/decryption process. Default implementation uses the `StringEncryptionService` which is implemented with the AES algorithm by default (see string [encryption document](./string-encryption.md) for more).
 
+If an encrypted setting value cannot be decrypted, the default service logs a warning and returns the original value. This behavior helps when an existing setting is changed from unencrypted to encrypted. Set `AbpSettingOptions.ReturnOriginalValueIfDecryptFailed` to `false` to return an empty string instead:
+
+````csharp
+Configure<AbpSettingOptions>(options =>
+{
+    options.ReturnOriginalValueIfDecryptFailed = false;
+});
+````
+
 ## Setting Management Module
 
 The core setting system is pretty independent and doesn't make any assumption about how you manage (change) the setting values. Even the default `ISettingStore` implementation is the `NullSettingStore` which returns null for all setting values.

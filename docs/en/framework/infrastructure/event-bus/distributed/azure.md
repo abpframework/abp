@@ -42,7 +42,8 @@ This is the simplest way to configure the Azure Service Bus settings. It is also
     "EventBus": {
       "ConnectionName": "Default",
       "SubscriberName": "MySubscriberName",
-      "TopicName": "MyTopicName"
+      "TopicName": "MyTopicName",
+      "IsServiceBusDisabled": false
     }
   }
 }
@@ -123,6 +124,8 @@ You can use any of the [ServiceBusAdministrationClientOptions](https://docs.micr
 ### The Options Classes
 
 `AbpAzureServiceBusOptions` and `AbpAzureEventBusOptions` classes can be used to configure the connection strings and event bus options for Azure Service Bus.
+
+Set `AbpAzureEventBusOptions.IsServiceBusDisabled` to `true`, or set `Azure:EventBus:IsServiceBusDisabled` in the configuration, to skip Azure Service Bus initialization. The default value is `false`.
 
 You can configure this options inside the `ConfigureServices` of your [module](../../../architecture/modularity/basics.md).
 

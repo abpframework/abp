@@ -213,6 +213,11 @@ We've passed a lambda method to configure the `ApplicationName` option. Here's a
 
 * `ApplicationName`: A human-readable name for the application. It is a unique value for an application.
 * `Configuration`: Can be used to setup the [application configuration](./configuration.md) when it is not provided by the hosting system. It is not needed for ASP.NET Core and other .NET hosted applications. However, if you've used `AbpApplicationFactory` with an internal service provider, you can use this option to configure how the application configuration is built.
+  * `FileName` (default: `appsettings`), `Optional` (default: `true`) and `ReloadOnChange` (default: `true`) configure the JSON files.
+  * The builder loads `<FileName>.json` first and then the optional `<FileName>.secrets.json` file. When `EnvironmentName` is set, it loads `<FileName>.<EnvironmentName>.json` after both files.
+  * `EnvironmentName` adds the corresponding environment-specific JSON file. In the `Development` environment, `UserSecretsId` is used before `UserSecretsAssembly` when both are set.
+  * `BasePath` changes the configuration file base path. The current directory is used by default.
+  * `EnvironmentVariablesPrefix` filters environment variables, and `CommandLineArgs` adds command-line configuration after environment variables.
 * `Environment`: Environment name for the application.
 * `PlugInSources`: A list of plugin sources. See the [Plug-In Modules documentation](../architecture/modularity/plugin-modules.md) to learn how to work with plugins.
 * `Services`: The `IServiceCollection` object that can be used to register service dependencies. You generally don't need that, because you configure your services in your [module class](../architecture/modularity/basics.md). However, it can be used while writing extension methods for the `AbpApplicationCreationOptions` class.
