@@ -30,6 +30,7 @@ public class AbpOpenIddictEntityFrameworkCoreModule : AbpModule
         Configure<AbpEntityChangeOptions>(options =>
         {
             options.IgnoredNavigationEntitySelectors.Add("DisableOpenIddictApplication", type => type == typeof(OpenIddictApplication));
+            options.IgnoredNavigationEntitySelectors.Add("DisableOpenIddictAuthorization", type => type == typeof(OpenIddictAuthorization));
         });
     }
 }
