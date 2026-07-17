@@ -13,10 +13,10 @@ ABP Suite uses templates to generate the code files. You can see the template fi
 
 There are 2 template filters:
 
-1. **UI**:  You can switch between `Angular`, `MVC` and `Blazor` templates.
+1. **UI**:  You can switch between `Angular`, `MVC`, `Blazor` and `React` templates.
 2. **Database provider:** You can switch between `EF Core` and `MongoDb` templates.
 
-> **Note:** This template editor lists the `Angular`, `MVC` and `Blazor` templates. ABP Suite generates React CRUD pages for modern React UI solutions from built-in templates, but those React templates are not editable through this template editor.
+> **Note:** For modern React UI solutions, the React templates are listed here as well. Customizing one makes ABP Suite generate the React pages from your version instead of the built-in template, the same way as for the Angular, MVC and Blazor UI stacks.
 
 These filters are automatically selected based on your ABP solution. The selected solution is shown on the top right of the page. In the current screenshot it is "Acme.BookStore". 
 
@@ -33,6 +33,7 @@ There's a naming convention for the template files.
 * If the template name has `Frontend.Mvc`  prefix, it's used for razor pages, menus, JavaScript, CSS files.
 * If the template name has `Frontend.Blazor` prefix (no `.MudBlazor` segment), it's used for Blazorise-based razor components.
 * If the template name has `Frontend.Blazor.MudBlazor` prefix, it's used for [MudBlazor](https://mudblazor.com)-based razor components.
+* If the template name has `Frontend.React` prefix, it's used for the modern React UI code generation.
 
 > The template list only shows the variant that matches your solution's [Blazor UI library](index.md#blazor-ui-library) (Blazorise or MudBlazor), so you never see both trees side-by-side and the "outdated" check only flags the active set.
 
