@@ -716,6 +716,10 @@
                       "path": "framework/infrastructure/blob-storing/custom-provider.md"
                     }
                   ]
+                },
+                {
+                  "text": "Encryption & Pipeline",
+                  "path": "framework/infrastructure/blob-storing/encryption.md"
                 }
               ]
             },

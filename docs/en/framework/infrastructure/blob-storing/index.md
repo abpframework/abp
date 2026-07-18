@@ -313,6 +313,22 @@ Configure<AbpBlobStoringOptions>(options =>
 
 > If your application is not multi-tenant, no worry, it works as expected. You don't need to configure the `IsMultiTenant` option.
 
+## Encrypting BLOBs
+
+The BLOB Storing system has a **pipeline** that can transform the BLOB stream between the container and the storage provider. The built-in encryption contributor uses this pipeline to **encrypt BLOBs at rest**, transparently, with any storage provider:
+
+````csharp
+Configure<AbpBlobStoringOptions>(options =>
+{
+    options.Containers.Configure<ProfilePictureContainer>(container =>
+    {
+        container.UseEncryption();
+    });
+});
+````
+
+The encryption key can be container-specific, **tenant-specific** (each tenant gets its own key) or **global**. BLOBs stored before enabling the encryption stay readable. See the [BLOB Encryption & Pipeline document](./encryption.md) for details and for creating custom pipeline contributors (like compression).
+
 ## Extending the BLOB Storing System
 
 Most of the times, you won't need to customize the BLOB storage system except [creating a custom BLOB storage provider](./custom-provider.md). However, you can replace any service (injected via [dependency injection](../../fundamentals/dependency-injection.md)), if you need. Here, some other services not mentioned above, but you may want to know:
@@ -328,4 +344,5 @@ If you want to create folders and move files between folders, assign permissions
 
 ## See Also
 
+* [BLOB Encryption & Pipeline](./encryption.md)
 * [Creating a custom BLOB storage provider](./custom-provider.md)

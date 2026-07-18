@@ -59,4 +59,21 @@ public class BlobContainerConfiguration_Tests
         effective.ShouldContain(typeof(AnotherFakeNamingNormalizer));
         effective.ShouldNotContain(typeof(FakeNamingNormalizer));
     }
+
+    [Fact]
+    public void Should_Compose_Default_And_Local_Pipeline_Contributors_With_Provider_Override()
+    {
+        var defaultConfig = new BlobContainerConfiguration();
+        defaultConfig.UseEncryption();
+
+        var namedConfig = new BlobContainerConfiguration(defaultConfig);
+        namedConfig.ProviderType = typeof(FakeBlobProvider2);
+        namedConfig.PipelineContributors.Add<FakeReversingPipelineContributor>();
+
+        namedConfig.GetEffectivePipelineContributors().ShouldBe(new[]
+        {
+            typeof(BlobEncryptionContributor),
+            typeof(FakeReversingPipelineContributor)
+        });
+    }
 }

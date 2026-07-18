@@ -1,9 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Volo.Abp.Autofac;
 using Volo.Abp.BlobStoring.Fakes;
 using Volo.Abp.BlobStoring.TestObjects;
 using Volo.Abp.Modularity;
+using Volo.Abp.Settings;
 
 namespace Volo.Abp.BlobStoring;
 
@@ -18,6 +19,22 @@ public class AbpBlobStoringTestModule : AbpModule
     {
         context.Services.AddSingleton<IBlobProvider>(Substitute.For<FakeBlobProvider1>());
         context.Services.AddSingleton<IBlobProvider>(Substitute.For<FakeBlobProvider2>());
+
+        context.Services.AddSingleton<FakeInMemoryBlobProvider>();
+        context.Services.AddSingleton<IBlobProvider>(
+            serviceProvider => serviceProvider.GetRequiredService<FakeInMemoryBlobProvider>()
+        );
+
+        Configure<AbpSettingOptions>(options =>
+        {
+            var tenantProviderIndex = options.ValueProviders.IndexOf(typeof(TenantSettingValueProvider));
+            options.ValueProviders[tenantProviderIndex] = typeof(FakeTenantPassPhraseSettingValueProvider);
+        });
+
+        Configure<AbpBlobStoringEncryptionOptions>(options =>
+        {
+            options.DefaultPassPhrase = "default-global-passphrase";
+        });
 
         Configure<AbpBlobStoringOptions>(options =>
         {
@@ -40,6 +57,26 @@ public class AbpBlobStoringTestModule : AbpModule
                 .Configure<TestContainer3>(container =>
                 {
                     container.IsMultiTenant = false;
+                })
+                .Configure<TestContainer4>(container =>
+                {
+                    container.ProviderType = typeof(FakeInMemoryBlobProvider);
+                    container.UseEncryption("container4-passphrase");
+                })
+                .Configure<TestContainer5>(container =>
+                {
+                    container.ProviderType = typeof(FakeInMemoryBlobProvider);
+                    container.UseEncryption();
+                })
+                .Configure<TestContainer6>(container =>
+                {
+                    container.ProviderType = typeof(FakeInMemoryBlobProvider);
+                    container.PipelineContributors.Add(typeof(FakeReversingPipelineContributor));
+                })
+                .Configure<TestContainer7>(container =>
+                {
+                    container.ProviderType = typeof(FakeInMemoryBlobProvider);
+                    container.PipelineContributors.Add(typeof(FakeScopeBoundPipelineContributor));
                 });
         });
     }
