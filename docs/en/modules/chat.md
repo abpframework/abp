@@ -36,7 +36,7 @@ If you modified your solution structure, adding module using ABP Suite might not
 
 In order to do that, add packages listed below to matching project on your solution. For example, ```Volo.Chat.Application``` package to your **{ProjectName}.Application.csproj** like below;
 
-```json
+```xml
 <PackageReference Include="Volo.Chat.Application" Version="x.x.x" />
 ```
 
@@ -49,7 +49,7 @@ After adding the package reference, open the module class of the project (eg: `{
 )]
 ```
 
-> If you are using Blazor Web App, you need to add the `Volo.Chat.Blazor.WebAssembly` package to the **{ProjectName}.Blazor.Client.csproj** project and ad the `Volo.Chat.Blazor.Server` package to the **{ProjectName}.Blazor.csproj** project.
+> If you are using Blazor Web App, you need to add the `Volo.Chat.Blazor.WebAssembly` package to the **{ProjectName}.Blazor.Client.csproj** project and add the `Volo.Chat.Blazor.Server` package to the **{ProjectName}.Blazor.csproj** project.
 
 The `Volo.Chat.SignalR` package must be added according to your project structure:
 
@@ -107,17 +107,37 @@ You can visit [Chat module package list page](https://abp.io/packages?moduleName
 
 ## User interface
 
-### Manage chat feature
+### Chat feature and permissions
 
-Chat module defines the chat feature, you need to enable the chat feature to use chat.
+The `Chat.Enable` feature is disabled by default. Enable it for a tenant or edition before granting chat permissions.
 
 ![chat-feature](../images/chat-feature.png)
+
+The module defines the following permissions:
+
+* `Chat.Messaging`: Allows a user to open the chat page and exchange messages. A message can only be sent if the target user also has this permission.
+* `Chat.Searching`: A child permission of `Chat.Messaging`. It allows a user to start a conversation with a user who is not already in the conversation history. Without this permission, the user can continue existing conversations.
+* `Chat.SettingManagement`: Allows a user to manage the chat settings.
 
 ### Chat page
 
 This is the page that users send messages to each other.
 
 ![chat-page](../images/chat-page.png)
+
+Message text is required. By default, it must contain between 1 and 4,096 characters. The conversation API returns the newest messages first; the built-in user interfaces reverse that result to display messages in chronological order.
+
+### Deleting messages and conversations
+
+The following settings control deletion behavior:
+
+| Setting | Default | Description |
+| --- | --- | --- |
+| `Volo.Chat.Messaging.DeletingMessages` | `Enabled` | `Enabled` allows deletion at any time, `Disabled` prevents deletion, and `EnabledWithDeletionPeriod` allows deletion only during the configured period after the message is created. |
+| `Volo.Chat.Messaging.MessageDeletionPeriod` | `0` | Deletion period in seconds when message deletion is set to `EnabledWithDeletionPeriod`. |
+| `Volo.Chat.Messaging.DeletingConversations` | `Enabled` | Enables conversation deletion. It is effective only when message deletion is set to `Enabled`. |
+
+Deleting a message removes the shared message and both users' message records. Deleting a conversation removes both users' conversation records and all messages between them. These operations are shared deletions, not a "hide for me" operation. Deletion notifications are sent through the real-time channel.
 
 ### Chat icon on navigation bar
 
@@ -213,9 +233,9 @@ See the [connection strings](../framework/fundamentals/connection-strings.md) do
 
 #### Installation
 
-In order to configure the application to use the chat module, you first need to import `provideChatConfig` from `@volo/abp.ng.chat/config` to root application confiuration. Then, you will need to append it to the `appConfig` array.
+In order to configure the application to use the chat module, you first need to import `provideChatConfig` from `@volo/abp.ng.chat/config` to the root application configuration. Then, you will need to append it to the `providers` array.
 
-```js
+```ts
 // app.config.ts
 import { provideChatConfig } from '@volo/abp.ng.chat/config';
 
@@ -228,19 +248,23 @@ export const appConfig: ApplicationConfig = {
 
 ```
 
-The chat module should be imported and lazy-loaded in your routing array. It has a static `createRoutes` method for configuration. It is available for import from `@volo/abp.ng.chat`.
+The chat module should be imported and lazy-loaded in your routing array. It exports a `createRoutes` function from `@volo/abp.ng.chat`.
 
-```js
+```ts
 // app.routes.ts
 const APP_ROUTES: Routes = [
   // ...
   {
     path: 'chat',
     loadChildren: () =>
-      import('@volo/abp.ng.chat').then(c => c.createRoutes(/* options here */)),
+      import('@volo/abp.ng.chat').then(c => c.createRoutes()),
   },
 ];
 ```
+
+#### Component replacement
+
+The Angular chat route uses the `Chat.ChatComponent` replacement key and `ChatComponent` as its default component. See the [Angular component replacement documentation](../framework/ui/angular/component-replacement.md) if you need to replace the page.
 
 #### Services / Models
 
@@ -254,7 +278,7 @@ abp generate-proxy --module chat
 
 The Chat module remote endpoint URLs can be configured in the environment files.
 
-```js
+```ts
 export const environment = {
   // other configurations
   apis: {
@@ -274,12 +298,24 @@ The Chat module remote URL configurations shown above are optional.
 
 > If you don't set the `signalRUrl`, `Chat.url` will be used as fallback. If you don't set the `Chat` property, the `default.url` will be used as fallback.
 
-### Blazor WebAssembly UI
+### Blazor and MAUI UIs
 
 #### Remote Endpoint URL
 
+The SignalR base URL can be configured with the option type that matches the UI package:
 
-The Chat module remote endpoint URLs can be configured via the `ChatBlazorWebAssemblyOptions`.
+| UI package | Option type | Fallback when `SignalrUrl` is not set |
+| --- | --- | --- |
+| Blazor Server | `ChatBlazorServerOptions` | The current application URL. |
+| Blazor WebAssembly | `ChatBlazorWebAssemblyOptions` | `AbpRemoteServiceOptions.RemoteServices.Default.BaseUrl`. |
+| Blazor MAUI | `ChatBlazorMauiBlazorOptions` | `AbpRemoteServiceOptions.RemoteServices.Default.BaseUrl`. |
+| MudBlazor Server | `ChatBlazorMudBlazorServerOptions` | The current application URL. |
+| MudBlazor WebAssembly | `ChatBlazorMudBlazorWebAssemblyOptions` | `AbpRemoteServiceOptions.RemoteServices.Default.BaseUrl`. |
+| MudBlazor MAUI | `ChatBlazorMudBlazorMauiBlazorOptions` | `AbpRemoteServiceOptions.RemoteServices.Default.BaseUrl`. |
+
+The module appends the `/signalr-hubs/chat` path to the resolved base URL.
+
+For example, the Chat module remote endpoint URL can be configured for Blazor WebAssembly via the `ChatBlazorWebAssemblyOptions`:
 
 ```csharp
 Configure<ChatBlazorWebAssemblyOptions>(options =>
@@ -303,4 +339,12 @@ Configure<ChatBlazorWebAssemblyOptions>(options =>
 
 ## Distributed Events
 
-This module defines an event for messaging. It is published when a new message is sent from a user to another user, with an Event Transfer Object type of `ChatMessageEto`. See the [standard distributed events](../framework/infrastructure/event-bus/distributed) for more information about distributed events.
+The module defines the following Event Transfer Object types for real-time operations:
+
+| Event Transfer Object | Operation | SignalR client method |
+| --- | --- | --- |
+| `ChatMessageEto` | A message is sent. | `ReceiveMessage` |
+| `ChatDeletedMessageEto` | A message is deleted. | `DeleteMessage` |
+| `ChatDeletedConversationEto` | A conversation is deleted. | `DeleteConversation` |
+
+The default application-layer implementation of `IRealTimeChatMessageSender` publishes these events to the distributed event bus. The `Volo.Chat.SignalR` package replaces that implementation in the SignalR host, handles the distributed events and sends them to the target user through the corresponding SignalR client method. See the [standard distributed events](../framework/infrastructure/event-bus/distributed) for more information about distributed events.
