@@ -7,424 +7,132 @@
 
 # Docs Module
 
-## What is Docs Module?
+## What is the Docs Module?
 
-Docs module is an application module for ABP. It simplifies software documentation. This module is free and open-source.
+The Docs module is a free and open-source application module for publishing software documentation in an ABP application.
 
 ### Integration
 
-Currently docs module provides you to store your docs both on GitHub and file system. 
+The module can load documentation from GitHub or the local file system. You can also add a custom document source.
 
 ### Hosting
 
-Docs module is an application module and does not offer any hosting solution. You can host your docs on-premise or on cloud.
+The module renders documentation inside your application. It does not provide a separate hosting service, so the application can be hosted on-premises or in the cloud.
 
 ### Versioning
 
-When you use GitHub to store your docs, Docs Module supports versioning. If you have multiple versions for your docs, there will be a combo-box on the UI to switch between versions. If you choose file system to store your docs, it does not support multiple versions. 
+GitHub sources can expose releases or branches as document versions. The UI displays a version selector when multiple versions are available. File-system sources expose a single internal version.
 
-[The documents](../modules) for ABP is also using this module.
+The [ABP documentation](../) also uses this module.
 
 > Docs module follows the [module architecture best practices](../framework/architecture/best-practices/module-architecture.md) guide.
 
 ## Installation
 
-This document covers `Entity Framework Core` provider but you can also select `MongoDB` as your database provider.
-
-### 1- Creating an application
-
-If you do not have an existing ABP project, you can either [generate a CLI command from the get started page of the abp.io website](../get-started) and runs it or run the command below:
-
-```bash
-abp new Acme.MyProject
-```
-
-### 2- Running The Empty Application
-
-After you download the project, extract the ZIP file and open `Acme.MyProject.sln`. You will see that the solution consists of `Application`, `Application.Contracts`, `DbMigrator`, `Domain`, `Domain.Shared`, `EntityFrameworkCore`, `HttpApi`, `HttpApi.Client` and `Web` projects. Right click on `Acme.MyProject.Web` project and **Set as StartUp Project**.
-
-![Create a new project](../images/docs-module_solution-explorer.png)
-
-The database connection string is located in `appsettings.json` of your `Acme.MyProject.Web` project. If you have a different database configuration, change the connection string.
-
-```json
-{
-  "ConnectionStrings": {
-    "Default": "Server=(LocalDb)\\MSSQLLocalDB;Database=MyProject;Trusted_Connection=True"
-  }
-}
-```
-
-Run `Acme.MyProject.DbMigrator` project, it will be responsible for applying database migration and seed data. The database `MyProject` will be created in your database server.
-
-Now an empty ABP project has been created! You can now run your project and see the empty website.
-
-To login your website enter `admin` as the username and `1q2w3E*` as the password.
-
-### 3- Installation Module
-
-Docs module packages are hosted on NuGet. There are 4 packages that needs be to installed to your application. Each package has to be installed to the relevant project.  
-
-#### 3.1- Use ABP CLI
-
-It is recommended to use the ABP CLI to install the module, open the CMD window in the solution file (`.sln`) directory, and run the following command:
+The Docs module supports Entity Framework Core and MongoDB. From the solution directory, use the ABP CLI to add the module packages, module dependencies, client-side package and database integration that match your solution:
 
 ```bash
 abp add-module Volo.Docs
 ```
 
-#### 3.2- Manually install
+For an Entity Framework Core solution, the command adds `builder.ConfigureDocs()` to the migrations `DbContext`, creates a migration and runs the database migrator. Use `--skip-db-migrations` when you want to manage that step yourself. MongoDB does not require an EF Core migration.
 
-Or you can also manually install nuget package to each project:
+For a manual installation, add the Docs packages and module dependencies that correspond to each application layer. MVC/Razor Pages hosts also need the `@abp/docs` package. Keep every package on the same version as the rest of your ABP solution, then run `abp install-libs` in the web project.
 
-* Install [Volo.Docs.Domain](https://www.nuget.org/packages/Volo.Docs.Domain/) nuget package to `Acme.MyProject.Domain` project.
+### Database configuration
 
-  ```bash
-  dotnet add package Volo.Docs.Domain
-  ```
+The module uses the `Docs` connection string name and falls back to `Default` when a dedicated connection string is not configured. `AbpDocsDbProperties.DbTablePrefix` and `AbpDocsDbProperties.DbSchema` control the EF Core table names; the prefix also controls the MongoDB collection names. Set these static properties before the persistence model is configured.
 
-* Install [Volo.Docs.EntityFrameworkCore](https://www.nuget.org/packages/Volo.Docs.EntityFrameworkCore/) nuget package to `Acme.MyProject.EntityFrameworkCore` project.
+Both built-in persistence providers mark the Docs database context with `IgnoreMultiTenancy`. Projects, cached documents and generated PDF metadata are application-wide data and are not partitioned by the current tenant. Do not expose the administration permissions to tenant administrators unless this application-wide behavior is intended.
 
-  ```bash
-  dotnet add package Volo.Docs.EntityFrameworkCore
-  ```
+## Creating a Docs Project
 
-* Install [Volo.Docs.Application](https://www.nuget.org/packages/Volo.Docs.Application/) nuget package to `Acme.MyProject.Application` project.
+After installation, users with the `Docs.Admin.Projects` permission can open **Administration → Documents → Projects**. The built-in administration UI creates and edits GitHub projects. `Docs.Admin.Projects.Create`, `.Update` and `.Delete` control the corresponding actions. `Docs.Admin.Documents` provides the cached-document administration screen.
 
-  ```bash
-  dotnet add package Volo.Docs.Application
-  ```
+The main project fields are:
 
-* Install [Volo.Docs.Web](https://www.nuget.org/packages/Volo.Docs.Domain/) nuget package to `Acme.MyProject.Web` project.
+* **Name**: Display name of the project.
+* **ShortName**: URL-friendly identifier. It is normalized to lowercase when the project is created and cannot be changed later.
+* **Format**: The built-in web converter supports Markdown (`md`). Register a custom document converter before using another format.
+* **DefaultDocumentName**: Initial document name. The default is `Index`.
+* **NavigationDocumentName**: Navigation file name. The default is `docs-nav.json`.
+* **ParametersDocumentName**: Scriban parameter file name. The default is `docs-params.json`.
+* **MinimumVersion**: Oldest listed GitHub version.
+* **MainWebsiteUrl**: Target of the project logo.
+* **LatestVersionBranchName**: Branch used for the latest documentation.
 
-  ```bash
-  dotnet add package Volo.Docs.Web
-  ```
+Deleting a project removes only the project record. Before deleting it, remove its cached documents through document administration, verify and remove its Elasticsearch entries when search is enabled, and delete every generated PDF through **Manage PDF Files** so the BLOB objects are deleted. The project delete operation does not perform these cleanup steps automatically.
 
-##### 3.2.1- Adding Module Dependencies
+The public UI starts at `/documents`. You can change this route with `DocsUiOptions.RoutePrefix`, as shown in the [UI options](#ui-options) section.
 
-An ABP module must declare `[DependsOn]` attribute if it has a dependency upon another module. Each module has to be added in`[DependsOn]` attribute to the relevant project.
+### GitHub source
 
-* Open `MyProjectDomainModule.cs`and add `typeof(DocsDomainModule)` as shown below;
+Set **GitHub Root URL** to a tree URL that contains the `{version}` placeholder and points to the directory above the language folders. For example:
 
-  ```csharp
-   [DependsOn(
-          typeof(DocsDomainModule),
-          typeof(AbpIdentityDomainModule),
-          typeof(AbpAuditingModule),
-          typeof(BackgroundJobsDomainModule),
-          typeof(AbpAuditLoggingDomainModule)
-          )]
-      public class MyProjectDomainModule : AbpModule
-      {
-          //...
-      }
-  ```
-
-* Open `MyProjectEntityFrameworkCoreModule.cs`and add `typeof(DocsEntityFrameworkCoreModule)` as shown below;
-
-  ```csharp
-      [DependsOn(
-          typeof(DocsEntityFrameworkCoreModule),
-          typeof(MyProjectDomainModule),
-          typeof(AbpIdentityEntityFrameworkCoreModule),
-          typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-          typeof(AbpSettingManagementEntityFrameworkCoreModule),
-          typeof(AbpEntityFrameworkCoreSqlServerModule),
-          typeof(BackgroundJobsEntityFrameworkCoreModule),
-          typeof(AbpAuditLoggingEntityFrameworkCoreModule)
-          )]
-      public class MyProjectEntityFrameworkCoreModule : AbpModule
-      {
-          //...
-      }
-  ```
-
-* Open `MyProjectApplicationModule.cs`and add `typeof(DocsApplicationModule)` as shown below;
-
-  ```csharp
-     [DependsOn(
-          typeof(DocsApplicationModule),
-          typeof(MyProjectDomainModule),
-          typeof(AbpIdentityApplicationModule))]
-      public class MyProjectApplicationModule : AbpModule
-      {
-          public override void ConfigureServices(ServiceConfigurationContext context)
-          {
-              Configure<AbpPermissionOptions>(options =>
-              {
-                  options.DefinitionProviders.Add<MyProjectPermissionDefinitionProvider>();
-              });
-          }
-      }
-  ```
-
-* Open `MyProjectWebModule.cs`and add `typeof(DocsWebModule)` as shown below;
-
-  ```csharp
-     [DependsOn(
-          typeof(DocsWebModule),
-          typeof(MyProjectApplicationModule),
-          typeof(MyProjectEntityFrameworkCoreModule),
-          typeof(AbpAutofacModule),
-          typeof(AbpIdentityWebModule),
-          typeof(AbpAccountWebModule),
-          typeof(AbpAspNetCoreMvcUiBasicThemeModule)
-      )]
-      public class MyProjectWebModule : AbpModule
-      {
-          //...
-      }
-  ```
-
-##### 3.2.2- Adding NPM Package
-
-Open `package.json` and add `@abp/docs": "^5.0.0` as shown below:
-
-  ```json
-    {
-        "version": "1.0.0",
-        "name": "my-app",
-        "private": true,
-        "dependencies": {
-            "@abp/aspnetcore.mvc.ui.theme.basic": "^5.0.0",
-            "@abp/docs": "^5.0.0"
-        }
-    }
-  ```
-
-Then open the command line terminal in the `Acme.MyProject.Web` project folder and run the following command:
-
-````bash
-abp install-libs
-````
-
-### 4- Database Integration
-
-#### 4.1- Entity Framework Integration
-
-If you choose Entity Framework as your database provider, you need to configure the Docs Module. To do this;
-
-- Open `MyProjectMigrationsDbContext.cs` and add `builder.ConfigureDocs()` to the `OnModelCreating()`.
-
-  ```csharp
-  public class MyProjectMigrationsDbContext : AbpDbContext<MyProjectMigrationsDbContext>
-    {
-        public MyProjectMigrationsDbContext(DbContextOptions<MyProjectMigrationsDbContext> options)
-            : base(options)
-        {
-
-        }
-
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
-
-            /* Include modules to your migration db context */
-
-            builder.ConfigurePermissionManagement();
-            builder.ConfigureSettingManagement();
-            builder.ConfigureBackgroundJobs();
-            builder.ConfigureAuditLogging();
-            builder.ConfigureIdentity();
-            builder.ConfigureIdentityServer();
-            builder.ConfigureFeatureManagement();
-            builder.ConfigureTenantManagement();
-            builder.ConfigureDocs(); //Add this line to configure the Docs Module
-
-            /* Configure customizations for entities from the modules included  */
-
-            builder.Entity<IdentityUser>(b =>
-            {
-                b.ConfigureCustomUserProperties();
-            });
-
-            /* Configure your own tables/entities inside the ConfigureQaDoc method */
-
-            builder.ConfigureMyProject();
-        }
-    }
-  ```
-
-* Open `Package Manager Console` in `Visual Studio` and choose `Acme.MyProject.EntityFrameworkCore` as default project. Then write the below command to add the migration for Docs Module.
-
-  ```csharp
-  add-migration Added_Docs_Module
-  ```
-
-  When the command successfully executes , you will see a new migration file named as `20181221111621_Added_Docs_Module` in the folder `Acme.MyProject.EntityFrameworkCore\Migrations`.
-
-  Now, update the database for Docs module database changes. To do this run the below code on `Package Manager Console` in `Visual Studio`.  Be sure `Acme.MyProject.EntityFrameworkCore` is still default project.
-
-  ```csharp
-  update-database
-  ```
-
-  Finally, you can check your database to see the newly created tables. For example you can see `DocsProjects` table must be added to your database.
-
-### 5- Linking Docs Module
-
-The default route for Docs module is;
-
-```txt
-/Documents
+```text
+https://github.com/abpframework/abp/tree/{version}/docs
 ```
 
-To add Docs module link to your application menu;
+GitHub projects use releases as the version source by default. Select branches to list repository branches instead. In branch mode, **Version Branch Prefix** filters the branches and removes the prefix from displayed version names. **Latest Version Branch Name** must contain the real branch name, including the prefix when one is used.
 
-* Open `MyProjectMenuContributor.cs` and add the below line to the method `ConfigureMainMenuAsync()`.
+The module builds the edit link from the GitHub tree URL and loads relative images and other resources from the same repository and version. An access token is optional for public repositories and is needed for private repositories or higher API limits. The token is stored in the project's extra properties; public project APIs remove it from their responses, but administrators can retrieve it. Protect the database and use a token with only the repository permissions that the Docs host needs.
 
-  ```csharp
-  context.Menu.Items.Add(new ApplicationMenuItem("MyProject.Docs", l["Menu:Docs"], "/Documents"));
-  ```
+### File-system source
 
-  Final look of **MyProjectMenuContributor.cs**
+The `FileSystem` source loads documents from a local root directory stored in the project's `Path` extra property. Its directory layout is the same as the GitHub source:
 
-  ```csharp
-      private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
-      {
-          var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<MyProjectResource>>();
-  
-          context.Menu.Items.Insert(0, new ApplicationMenuItem("MyProject.Home", l["Menu:Home"], "/"));
-  
-          context.Menu.Items.Add(new ApplicationMenuItem("MyProject.Docs", l["Menu:Docs"], "/Documents"));
-      }
-  ```
-
-The `Menu:Docs` keyword is a localization key. To localize the menu text, open `Localization\MyProject\en.json` in the project `Acme.MyProject.Domain`. And add the below line
-
-```json
-"Menu:Docs": "Documents"
+```text
+<project-root>/docs-langs.json
+<project-root>/<language-code>/<document-name>
 ```
 
-Final look of **en.json**
+File-system projects always use the internal version `1.0.0` and do not provide a version list or an edit link. The source rejects document and resource paths outside the configured project root.
+
+The built-in project create/edit pages currently expose only GitHub fields. Create a file-system project through `IProjectAdminAppService`, a data seeder or another administration UI by setting `DocumentStoreType` to `FileSystem` and the `Path` extra property.
+
+### Language configuration
+
+Place `docs-langs.json` at the project root, outside the language directories:
 
 ```json
 {
-  "culture": "en",
-  "texts": {
-    "Menu:Home": "Home",
-    "Welcome": "Welcome",
-    "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP. For more information, visit abp.io.",
-    "Menu:Docs": "Documents"
-  }
+  "languages": [
+    {
+      "displayName": "English",
+      "code": "en",
+      "isDefault": true
+    },
+    {
+      "displayName": "Türkçe",
+      "code": "tr",
+      "isDefault": false
+    }
+  ]
 }
 ```
 
-The new menu item for Docs Module is added to the menu. Run your web application and browse to `http://localhost:YOUR_PORT_NUMBER/documents` URL.
+When a GitHub source cannot load this file, it falls back to the language configured by `DocsGithubLanguageOptions.DefaultLanguage`, which is English by default. The file-system source requires a valid `docs-langs.json` file.
 
-You will see a warning says;
+The language list is cached for 24 hours using the project short name, not the requested version. Keep `docs-langs.json` consistent across all versions. Clear the project cache after changing the manifest; the first version requested after a clear repopulates the project-wide language cache.
 
-```txt
-There are no projects yet!
+### Adding a custom document source
+
+Implement `IDocumentSource`, register the implementation in dependency injection and map a unique source name to it:
+
+```csharp
+context.Services.AddTransient<MyDocumentSource>();
+
+Configure<DocumentSourceOptions>(options =>
+{
+    options.Sources["MySource"] = typeof(MyDocumentSource);
+});
 ```
 
-As we have not added any projects yet, this warning is normal.
+Use the same source name as the project's `DocumentStoreType`. The factory resolves the mapped type from dependency injection when it loads documents, versions, resources and languages.
 
-### 6- Adding New Docs Project
+## Creating a New Document
 
-Open `DocsProjects` in your database, and insert a new record with the following field information;
-
-* **Name**: The display name of the document name which will be shown on the web page.
-* **ShortName**: A short and URL friendly name that will be used in your docs URL.
-* **Format**: The format of the document (for Markdown: `md`, for HTML: `html`)
-* **DefaultDocumentName**: The document for the initial page.
-* **NavigationDocumentName**: The document to be used for the navigation menu (Index).
-* **MinimumVersion**: The minimum version to show the docs. Below version will not be listed.
-* **DocumentStoreType**: The source of the documents (for GitHub:`GitHub`, for file system`FileSystem`)
-* **ExtraProperties**: A serialized `JSON` that stores special configuration for the selected `DocumentStoreType`. 
-* **MainWebsiteUrl**: The URL when user clicks to the logo of the Docs module page. You can simply set as `/` to link to your website root address.
-* **LatestVersionBranchName**: This is a config for GitHub. It's the branch name which to retrieve the docs. You can set it as `master`.
-
-#### Sample Project Record for "GitHub"
-
-You can use [ABP](https://github.com/abpframework/abp/) GitHub documents to configure your GitHub document store.
-
-- Name: `ABP (GitHub)`
-
-- ShortName: `abp`
-
-- Format: `md`
-
-- DefaultDocumentName: `Index`
-
-- NavigationDocumentName: `docs-nav.json`
-
-- MinimumVersion: `<NULL>` (no minimum version)
-
-- DocumentStoreType: `GitHub`
-
-- ExtraProperties: 
-
-  ```json
-  {"GitHubRootUrl":"https://github.com/abpframework/abp/tree/{version}/docs","GitHubAccessToken":"***","GitHubUserAgent":""}
-  ```
-
-  Note that `GitHubAccessToken` is masked with `***`. It's a private token that you must get it from GitHub. See https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/
-
-- MainWebsiteUrl: `/`
-
-- LatestVersionBranchName: `dev`
-
-For `SQL` databases, you can use the below `T-SQL` command to insert the specified sample into your `DocsProjects` table:
-
-```mssql
-INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName], [ConcurrencyStamp]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939659', N'ABP (GitHub)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'GitHub', N'{"GitHubRootUrl":"https://github.com/abpframework/abp/tree/{version}/docs","GitHubAccessToken":"","GitHubUserAgent":""}', N'/', N'dev', N'', N'12f21123e08e4f15bedbae0b2d939659')
-```
-
-Be aware that `GitHubAccessToken` is masked. It's a private token and you must get your own token and replace the `***` string.
-
-Now you can run the application and navigate to `/Documents`.
-
-#### Sample Project Record for "FileSystem"
-
-You can use [ABP](https://github.com/abpframework/abp/) GitHub documents to configure your GitHub document store.
-
-- Name: `ABP (FileSystem)`
-
-- ShortName: `abp`
-
-- Format: `md`
-
-- DefaultDocumentName: `Index`
-
-- NavigationDocumentName: `docs-nav.json`
-
-- MinimumVersion: `<NULL>` (no minimum version)
-
-- DocumentStoreType: `FileSystem`
-
-- ExtraProperties: 
-
-  ```json
-  {"Path":"C:\\Github\\abp\\docs"}
-  ```
-
-  Note that `Path` must be replaced with your local docs directory. You can fetch the ABP's documents from https://github.com/abpframework/abp/tree/master/docs and copy to the directory `C:\\Github\\abp\\docs` to get it work.
-
-- MainWebsiteUrl: `/`
-
-- LatestVersionBranchName: `<NULL>`
-
-For `SQL` databases, you can use the below `T-SQL` command to insert the specified sample into your `DocsProjects` table:
-
-```mssql
-INSERT [dbo].[DocsProjects] ([Id], [Name], [ShortName], [Format], [DefaultDocumentName], [NavigationDocumentName], [MinimumVersion], [DocumentStoreType], [ExtraProperties], [MainWebsiteUrl], [LatestVersionBranchName], [ParametersDocumentName], [ConcurrencyStamp]) VALUES (N'12f21123-e08e-4f15-bedb-ae0b2d939659', N'ABP (FileSystem)', N'abp', N'md', N'Index', N'docs-nav.json', NULL, N'FileSystem', N'{"Path":"C:\\Github\\abp\\docs"}', N'/', NULL, N'', N'12f21123e08e4f15bedbae0b2d939659')
-```
-
-Add one of the sample projects above and run the application. In the menu you will see `Documents` link, click the menu link to open the documents page. 
-
-So far, we have created a new application from abp.io website and made it up and ready for Docs module. 
-
-### 7- Creating a New Document
-
-In the sample Project records, you see that `Format` is specified as `md` which refers to [Mark Down](https://en.wikipedia.org/wiki/Markdown).  You can see the mark down cheat sheet following the below link;
-
-https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
-
-ABP Docs Module can render mark down to HTML. 
-
-Now let's have a look a sample document in markdown format. 
+The built-in converter renders [Markdown](https://en.wikipedia.org/wiki/Markdown) documents as HTML. The following example demonstrates headings, links, images and code blocks:
 
 ~~~markdown
 # This is a header
@@ -449,15 +157,13 @@ public class Person
 ```
 ~~~
 
-As an example you can see ABP documentation:
+You can also browse the [ABP documentation sources](https://github.com/abpframework/abp/tree/dev/docs/en) for complete examples.
 
-[https://github.com/abpframework/abp/blob/master/docs/en/](https://github.com/abpframework/abp/blob/master/docs/en/)
+### Conditional Sections with Scriban
 
-#### Conditional sections feature (Using Scriban)
+The Docs module uses [Scriban](https://scriban.github.io/docs/) to conditionally show or hide parts of a document. Create one parameter document for each language. It contains the available parameters, their values and their display names.
 
-Docs module uses [Scriban](https://github.com/lunet-io/scriban/tree/master/doc) for conditionally show or hide some parts of a document. In order to use that feature, you have to create a JSON file as **Parameter document** per every language. It will contain all the key-values, as well as their display names.
-
-For example, [en/docs-params.json](https://github.com/abpio/abp-commercial-docs/blob/master/en/docs-params.json):
+For example, `en/docs-params.json` can contain:
 
 ```json
 {
@@ -488,9 +194,9 @@ For example, [en/docs-params.json](https://github.com/abpio/abp-commercial-docs/
 }
 ```
 
-Since not every single document in your projects may not have sections or may not need all of those parameters, you have to declare which of those parameters will be used for sectioning the document, as a JSON block anywhere on the document. 
+Each document declares the parameters it uses in a JSON block anywhere in the document.
 
-For example [Getting-Started.md](https://github.com/abpio/abp-commercial-docs/blob/master/en/getting-started.md):
+For example:
 
 ​```json
 //[doc-params]
@@ -501,7 +207,7 @@ For example [Getting-Started.md](https://github.com/abpio/abp-commercial-docs/bl
 }
 ​```
 
-This section will be automatically deleted during render. And f course, those key values must match with the ones in **Parameter document**.
+This block is removed while the document is rendered. Its keys and values must match the parameter document.
 
 ![Interface](../images/docs-section-ui.png)
 
@@ -538,13 +244,13 @@ You can also use variables in a text, adding **_Value** postfix to its key:
 This document assumes that you prefer to use **{{ UI_Value }}** as the UI framework and **{{ DB_Value }}** as the database provider.
 ```
 
-Also, **Document_Language_Code** and **Document_Version** keys are pre-defined if you want to get the language code or the version of the current document (This may be useful for creating links that redirects to another documentation system in another domain).
+`Document_Language_Code` and `Document_Version` are predefined keys. They can be used, for example, to build links to another documentation system.
 
 ------
 
-**IMPORTANT NOTICE**: Scriban uses "{{" and "}}" for syntax. Therefore, you must use escape blocks if you are going to use those in your document (an Angular document, for example). See [Scriban docs](https://github.com/lunet-io/scriban/blob/master/doc/language.md#13-escape-block) for more information.
+> Scriban uses `{{` and `}}` as delimiters. Use the escape block described in the [Scriban language reference](https://scriban.github.io/docs/language/) when the document contains these delimiters as literal text, such as in an Angular example.
 
-### 8- Creating the Navigation Document
+## Creating the Navigation Document
 
 Navigation document is the main menu of the documents page. It is located on the left side of the page. It is a `JSON` file. Take a look at the below sample navigation document to understand the structure.
 
@@ -596,29 +302,16 @@ Navigation document is the main menu of the documents page. It is located on the
 }
 ```
 
-The upper sample `JSON` file renders the below navigation menu as `HTML`.
+The sample JSON file renders the navigation menu shown below.
 
 ![Navigation menu](../images/docs-module_download-sample-navigation-menu.png)
 
-Finally a new Docs Module is added to your project which is feeded with GitHub.
+Implement `INavigationTreePostProcessor` to modify the deserialized navigation tree before it is returned to the UI. The default implementation makes no changes, so a custom implementation can be registered by replacing that service.
 
 
-## Full-Text Search(Elastic Search)
+## Full-Text Search with Elasticsearch
 
-The Docs module supports full-text search using Elastic Search. It is not enabled by default. You can configure `DocsElasticSearchOptions` to enable it.
-
-```csharp
-Configure<DocsElasticSearchOptions>(options =>
-{
-    options.Enable = true;
-    options.IndexName = "your_index_name"; //default IndexName is abp_documents
-});
-```
-
-The `Index` is automatically created after the application starts if the `Index` does not exist.
-
-`DefaultElasticClientProvider` is responsible for creating `IElasticClient`. By default, it reads Elastic Search's `Url` from `IConfiguration`.
-If your `IElasticClient` needs additional configuration, please use override `IElasticClientProvider` service and replace it in the [dependency injection](../framework/fundamentals/dependency-injection.md) system.
+Elasticsearch integration is disabled by default. Configure the Elasticsearch URL and enable `DocsElasticSearchOptions`:
 
 ```json
 {
@@ -627,6 +320,41 @@ If your `IElasticClient` needs additional configuration, please use override `IE
   }
 }
 ```
+
+```csharp
+Configure<DocsElasticSearchOptions>(options =>
+{
+    options.Enable = true;
+    options.IndexName = "docs";
+    options.UseApiKeyAuthentication("key-id", "api-key");
+});
+```
+
+The default index name is `abp_documents`. Use `UseBasicAuthentication(username, password)` instead of `UseApiKeyAuthentication` when the Elasticsearch server uses basic authentication.
+
+The module creates the index during application initialization when it does not exist. Creating, updating or deleting a cached document updates the index. The administration UI can reindex one project or all projects from the documents already stored in the Docs database.
+
+`DefaultElasticClientProvider` creates the Elasticsearch client from these settings. Replace `IElasticClientProvider` in the [dependency injection](../framework/fundamentals/dependency-injection.md) system when the client needs additional configuration.
+
+## Document Caching
+
+The module stores downloaded documents in the Docs database, caches document update metadata and uses the distributed cache for document resources. These configuration values control when that data is refreshed:
+
+```json
+{
+  "Volo.Docs": {
+    "DocumentCacheTimeoutInterval": "06:00:00",
+    "DocumentResource.AbsoluteExpirationRelativeToNow": "06:00:00",
+    "DocumentResource.SlidingExpiration": "00:30:00"
+  }
+}
+```
+
+The values shown above are the defaults. `DocumentCacheTimeoutInterval` controls how often a stored document is checked against its source. The resource settings control the absolute and sliding expirations for images and other document resources. Resource caching is bypassed in the Development environment.
+
+Users with the `Docs.Admin.Documents` permission can clear a project's cache from the administration UI. This removes the cached language and version metadata, invalidates document update information and causes the stored documents to be refreshed on subsequent requests.
+
+Clearing the project cache does not remove document-resource cache entries. Cached images and other resources remain available until their absolute or sliding cache expiration is reached.
 
 
 ## Row Highlighting
@@ -688,33 +416,74 @@ After you specify the next & previous documents, they will appear at the end of 
 
 ![](../images/docs-referencing.png)
 
-## Single Project Mode
+## UI Options
 
-The **single project mode** allows you to use a single name as a project name in your application. If you are not considering supporting multiple projects with their multiple docs and instead if you have a single project and want to have documentation only for it, it's especially useful for you. 
-
-You just need to configure the `DocsUiOptions`, set the single project mode as **enabled** and also define a constant project name:
+Configure `DocsUiOptions` to customize routes and document-page behavior:
 
 ```csharp
-Configure<DocsUiOptions>(options => 
+Configure<DocsUiOptions>(options =>
 {
     options.RoutePrefix = "docs";
+    options.ShowProjectsCombobox = false;
+    options.ShowProjectsComboboxLabel = false;
+    options.SectionRendering = true;
+    options.MultiLanguageMode = true;
+    options.EnableEnlargeImage = true;
     options.SingleProjectMode.Enable = true;
     options.SingleProjectMode.ProjectName = "abp";
 });
 ```
 
-## Multi Language Mode
+The defaults are:
 
-The **multi language mode** allows you to show a combobox that lists and shows all documentation languages and configures the related languages in routes. 
+| Option | Default | Description |
+| --- | --- | --- |
+| `RoutePrefix` | `documents` | Route prefix for the public document pages. |
+| `ShowProjectsCombobox` | `true` | Shows the project selector when more than one project is available. |
+| `ShowProjectsComboboxLabel` | `true` | Shows the label for the project selector. |
+| `SectionRendering` | `true` | Enables Scriban-based conditional sections. |
+| `MultiLanguageMode` | `true` | Adds the language to routes and displays the language selector. |
+| `EnableEnlargeImage` | `true` | Allows document images to be enlarged in the UI. |
+| `SingleProjectMode.Enable` | `false` | Removes the project name from document routes. |
 
-It's enabled by default and supports multiple languages, but if you are considering only supporting a single language, and don't want to show the language combobox in the sidebar of your docs system, you can configure the `DocsUiOptions` and set the multi language mode support as **false** to disable it:
+When single-project mode is enabled, `SingleProjectMode.ProjectName` selects the project by short name. If it is empty, the module uses the project automatically only when exactly one project exists.
+
+`DocumentLinksNormalizer` transforms generated links to other documents. Its default removes a trailing `/Index`. `RedirectUrlResolver` applies the corresponding redirect when an incoming URL ends in `/Index`. Replace either delegate when the application needs a different canonical URL convention.
+
+## Google Translate and Programmable Search
+
+The MVC UI can add Google Translate and Google Programmable Search to document pages. Both integrations are disabled by default:
 
 ```csharp
-Configure<DocsUiOptions>(options => 
+Configure<DocsWebGoogleOptions>(options =>
 {
-    options.MultiLanguageMode = false;
+    options.EnableGoogleTranslate = true;
+    options.IncludedLanguages = ["en", "de", "fr"];
+    options.EnableGoogleProgrammableSearchEngine = true;
+    options.GoogleSearchEngineId = "search-engine-id";
 });
 ```
+
+`GetCultureLanguageCode` maps the current UI culture to the code passed to Google Translate. The default maps `zh-Hans` to `zh-CN`, `zh-Hant` to `zh-TW` and other cultures to their two-letter ISO language name.
+
+## Generating PDF Files
+
+The administration module can generate a PDF archive for a project, version and language. Generation runs as a background job and stores the archive through ABP's BLOB storing system. Configure a BLOB provider for the application, then configure the generator when its defaults do not match the host:
+
+```csharp
+Configure<DocsProjectPdfGeneratorOptions>(options =>
+{
+    options.BaseUrl = configuration["App:SelfUrl"];
+    options.IndexPagePath = "index.md";
+    options.CalculatePdfFileTitle = project => project.Name;
+});
+```
+
+`HtmlLayout` and `HtmlStyle` customize the generated content. `BaseUrl` is used to resolve relative images for local sources. `IndexPagePath` inserts an additional document at the beginning of the archive without adding it to the PDF outline. `CalculatePdfFileName`, `CalculatePdfFileTitle`, `HtmlContentNormalizer` and `DocumentContentNormalizer` provide additional extension points.
+
+`Docs.Admin.Projects.ManagePdfFiles` allows administrators to generate, list and delete archives. Generation creates a ZIP file that contains the rendered PDF documents. Users need `Docs.Common.PdfDownload` to download it, and the public UI displays the download action only when that permission is granted and an archive exists for the selected project, version and language.
+
+PDF generation failures are written to the application logs. The background job does not rethrow failures to the job system, including errors already handled by the generator. A failed run does not make a new archive available, and the background-job system does not automatically retry it as a failed job. Check the host logs and manually start generation again after fixing the error.
 
 ## See Also
 
