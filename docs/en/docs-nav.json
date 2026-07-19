@@ -2648,6 +2648,10 @@
           "path": "modules/background-jobs.md"
         },
         {
+          "text": "Blogging",
+          "path": "modules/blogging.md"
+        },
+        {
           "text": "Chat (Pro)",
           "path": "modules/chat.md"
         },
@@ -2765,7 +2769,19 @@
         },
         {
           "text": "Identity",
-          "path": "modules/identity.md"
+          "isLazyExpandable": true,
+          "path": "modules/identity.md",
+          "items": [
+            {
+              "text": "Overview",
+              "path": "modules/identity.md",
+              "isIndex": true
+            },
+            {
+              "text": "User Lookup and Synchronization",
+              "path": "modules/identity/user-synchronization.md"
+            }
+          ]
         },
         {
           "text": "Identity (Pro)",
