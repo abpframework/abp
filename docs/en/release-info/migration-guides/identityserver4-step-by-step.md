@@ -7,11 +7,13 @@
 
 # Migrating from OpenIddict to IdentityServer4 Step by Step Guide
 
-ABP startup templates use `OpenIddict` OpenID provider from v6.0.0 by default and `IdentityServer` projects are renamed to `AuthServer` in tiered/separated solutions. Since OpenIddict is the default OpenID provider library for ABP templates since v6.0, you may want to keep using [IdentityServer4](https://github.com/IdentityServer/IdentityServer4) library, even it is **archived and no longer maintained by the owners**. ABP doesn't provide support for newer versions of IdentityServer. This guide provides layer-by-layer guidance for migrating your existing [OpenIddict](https://github.com/openiddict/openiddict-core) application to IdentityServer4. 
+ABP startup templates use the `OpenIddict` OpenID provider from v6.0.0 by default, and `IdentityServer` projects were renamed to `AuthServer` in tiered/separated solutions. This guide provides the v6.0-era, layer-by-layer steps for migrating an existing [OpenIddict](https://github.com/openiddict/openiddict-core) application to IdentityServer4.
+
+> IdentityServer4 is archived and no longer maintained by its owners. ABP doesn't support newer IdentityServer or Duende IdentityServer versions through this module. Use this guide only when an existing system has a compatibility requirement that prevents migration to OpenIddict; new applications should remain on OpenIddict.
 
 ## IdentityServer4 Migration Steps
 
-Use the `abp update` command to update your existing application. See [Upgrading docs](../upgrading.md) for more info. Apply required migrations by following the [Migration Guides](../migration-guides) based on your application version.
+These steps target an application that is already on ABP 6.0.x. Keep every `Volo.Abp.*` package on the exact 6.0.x patch version used by the application. Complete any version update separately with the CLI and migration guides for that release line before applying these provider-replacement steps.
 
 ### Domain.Shared Layer
 
@@ -138,8 +140,6 @@ typeof(AbpIdentityServerEntityFrameworkCoreModule),
   ```csharp
   using Volo.Abp.IdentityServer.EntityFrameworkCore;
   ...
-  using Volo.Abp.OpenIddict.EntityFrameworkCore;
-  ...
   protected override void OnModelCreating(ModelBuilder builder)
   {
       base.OnModelCreating(builder);
@@ -150,7 +150,7 @@ typeof(AbpIdentityServerEntityFrameworkCoreModule),
       builder.ConfigureIdentityServer();
   ```
 
-> Not: You need to create new migration after updating the fluent api. Navigate to *EntityFrameworkCore* folder and add a new migration. Ex, `dotnet ef migrations add Updated_To_IdentityServer `
+> Note: Create a new migration after updating the fluent API. Navigate to the *EntityFrameworkCore* folder and run, for example, `dotnet ef migrations add Updated_To_IdentityServer`.
 
 ### MongoDB Layer
 
@@ -186,14 +186,14 @@ typeof(AbpIdentityServerMongoDbModule),
 
 ### DbMigrator Project
 
-- In `appsettings.json` **replace OpenIddict section with IdentityServer** since IdentityServerDataSeeder will be using these information for initial data seeding:
+- In `appsettings.json` **replace the OpenIddict section with IdentityServer** because IdentityServerDataSeeder uses this configuration for initial data seeding. Rename the `Applications` property to `Clients` and preserve its existing child entries. The minimal valid structure is:
 
   ```json
-  "IdentityServer": { // Rename OpenIddict to IdentityServer
-      "Clients ": {	// Rename Applications to Clients
-        ...
-      }
+  {
+    "IdentityServer": {
+      "Clients": {}
     }
+  }
   ```
   
 
@@ -223,7 +223,7 @@ typeof(AbpIdentityServerMongoDbModule),
 
 ### UI Layer
 
-You can follow the migrations guides from IdentityServer to OpenIddict in **reverse order** to update your UIs. You can also check the source-code for [Index.cshtml.cs](https://github.com/abpframework/abp-samples/blob/master/OpenId2Ids/src/OpenId2Ids.AuthServer/Pages/Index.cshtml) and  [Index.cshtml](https://github.com/abpframework/abp-samples/blob/master/OpenId2Ids/src/OpenId2Ids.AuthServer/Pages/Index.cshtml.cs) files for **AuthServer** project.
+You can follow the migration guides from IdentityServer to OpenIddict in reverse order to update your UIs. You can also check the sample source for [Index.cshtml.cs](https://github.com/abpframework/abp-samples/blob/master/OpenId2Ids/src/OpenId2Ids.AuthServer/Pages/Index.cshtml.cs) and [Index.cshtml](https://github.com/abpframework/abp-samples/blob/master/OpenId2Ids/src/OpenId2Ids.AuthServer/Pages/Index.cshtml) in the **AuthServer** project.
 
 - [Angular UI Migration](openiddict-angular.md)
 - [MVC/Razor UI Migration](openiddict-mvc.md)

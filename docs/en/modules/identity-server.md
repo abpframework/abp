@@ -7,13 +7,15 @@
 
 # IdentityServer Module
 
-IdentityServer module provides a full integration with the [IdentityServer4](https://github.com/IdentityServer/IdentityServer4) (IDS) framework, which provides advanced authentication features like single sign-on and API access control. This module persists clients, resources and other IDS-related objects to database. **This module is replaced by** [OpenIddict module](./openiddict.md) after ABP v6.0 in the startup templates.
+IdentityServer module provides a full integration with the [IdentityServer4](https://github.com/IdentityServer/IdentityServer4) (IDS) framework, which provides advanced authentication features like single sign-on and API access control. This module persists clients, resources and other IDS-related objects to a database.
 
-> Note: You can not use IdentityServer and OpenIddict modules together. They are separate OpenID provider libraries for the same job.
+> **Legacy module:** The ABP startup templates have used the [OpenIddict module](./openiddict.md) instead of IdentityServer since ABP v6.0. IdentityServer4 is archived and no longer maintained by its owners. ABP still ships the IdentityServer integration packages for applications that already depend on them, but new applications should use OpenIddict. See the [IdentityServer to OpenIddict migration guide](../release-info/migration-guides/identityserver-to-openiddict.md) when upgrading an existing application.
+
+> Note: You cannot use the IdentityServer and OpenIddict modules together. They are separate OpenID provider libraries for the same job.
 
 ## How to Install
 
-You don't need this module when you are using OpenIddict module. However, if you want to keep using IdentityServer4 for your applications, you can install this module and remove the OpenIddict module. You can continue to use it as package and get updates easily, or you can include its source code into your solution (see `get-source` [CLI](../cli) command) to develop your custom module.
+You don't need this module when you are using the OpenIddict module. If an existing application must keep using IdentityServer4, install the corresponding IdentityServer packages and remove the OpenIddict modules. You can use the released packages or include the module source code in your solution (see the `get-source` [CLI](../cli) command) to customize it.
 
 ### The Source Code
 
@@ -49,6 +51,7 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 * `UpdateAbpClaimTypes` (default: true): Updates `AbpClaimTypes` to be compatible with identity server claims.
 * `IntegrateToAspNetIdentity` (default: true): Integrate to ASP.NET Identity.
 * `AddDeveloperSigningCredential` (default: true): Set false to suppress AddDeveloperSigningCredential() call on the IIdentityServerBuilder.
+* `AddIdentityServerCookieAuthentication` (default: true): Adds IdentityServer's default cookie authentication handlers. Set it to `false` when the host registers and configures these handlers itself.
 
 `IIdentityServerBuilder` can be configured in `PreConfigureServices` method of your Identity Server [module](../framework/architecture/modularity/basics.md). Example:
 
@@ -62,6 +65,61 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 }
 ````
 
+### AbpClaimsServiceOptions
+
+`AbpClaimsServiceOptions.RequestedClaims` adds claim types to the set requested from the profile service while IdentityServer creates tokens. The module adds ABP's tenant and edition claim types by default. You can append application-specific claim types in `ConfigureServices`:
+
+````csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    Configure<AbpClaimsServiceOptions>(options =>
+    {
+        options.RequestedClaims.Add("department_id");
+    });
+}
+````
+
+The profile service must also issue the claim for the current user; adding its name to this list does not create the claim value.
+
+### TokenCleanupOptions
+
+The module registers a background worker that removes expired persisted grants and device-flow codes. Configure it in `ConfigureServices`:
+
+````csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    Configure<TokenCleanupOptions>(options =>
+    {
+        options.IsCleanupEnabled = true;
+        options.CleanupPeriod = 3_600_000;
+    });
+}
+````
+
+* `IsCleanupEnabled` (default: `true`) controls whether the worker is registered. The global [background worker](../framework/infrastructure/background-workers/index.md) switch must also be enabled for it to run.
+* `CleanupPeriod` (default: `3,600,000` milliseconds) sets the interval between cleanup passes.
+
+The worker uses the distributed lock named `TokenCleanupBackgroundWorker`, so only the instance that acquires the lock performs a cleanup pass. `CleanupBatchSize` and `CleanupLoopCount` are obsolete and are no longer used by the cleanup service.
+
+### Wildcard Subdomains for Client URLs
+
+IdentityServer normally requires exact redirect URI and CORS origin matches. For a multi-tenant application that uses subdomains, the module provides replacement validators for client values containing a `{0}` placeholder, such as `https://{0}.mydomain.com/signin-oidc`:
+
+````csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    context.Services.AddAbpStrictRedirectUriValidator();
+    context.Services.AddAbpClientConfigurationValidator();
+    context.Services.AddAbpWildcardSubdomainCorsPolicyService();
+}
+````
+
+Register all three services when both redirect URLs and CORS origins use the placeholder. Keep the scheme, host suffix and port as restrictive as possible; these validators expand the configured client URL boundary.
+
+`AbpStrictRedirectUriValidator` also accepts the placeholder-free form when the configured URL with `{0}.` removed contains the requested URI. For example, configuring `http://{0}.ng.abp.io/index.html` also accepts `http://ng.abp.io`. This fallback can accept a requested URI with a shorter path than the configured value. Do not register the wildcard validator for clients that require exact redirect-path matching; keep IdentityServer's default strict validator and enumerate their exact redirect URIs instead.
+
+`AbpWildcardSubdomainCorsPolicyService` has equivalent placeholder-free behavior for origins: configuring `https://{0}.abp.io` also accepts the base origin `https://abp.io`. CORS origins have no path component, so constrain the scheme, host suffix and port.
+
 ## Internals
 
 ### Domain Layer
@@ -73,9 +131,17 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 API Resources are needed for allowing clients to request access tokens.
 
 * `ApiResource` (aggregate root): Represents an API resource in the system.
-  * `ApiSecret` (collection): secrets of the API resource.
-  * `ApiScope` (collection): scopes of the API resource.
+  * `ApiResourceSecret` (collection): secrets of the API resource.
+  * `ApiResourceScope` (collection): scope names associated with the API resource.
   * `ApiResourceClaim` (collection): claims of the API resource.
+
+##### ApiScope
+
+API scopes model the scopes that clients can request independently from API resources.
+
+* `ApiScope` (aggregate root): Represents an API scope.
+  * `ApiScopeClaim` (collection): Claims included for the scope.
+  * `ApiScopeProperty` (collection): Custom properties of the scope.
 
 ##### Client
 
@@ -98,25 +164,31 @@ Persisted Grants stores AuthorizationCodes, RefreshTokens and UserConsent.
 
 * `PersistedGrant` (aggregate root): Represents PersistedGrant for identity server.
 
+##### DeviceFlowCodes
+
+* `DeviceFlowCodes` (aggregate root): Stores the user and device codes and serialized data used by the device authorization flow until they expire.
+
 ##### IdentityResource
 
 Identity resources are data like user ID, name, or email address of a user.
 
-* `IdentityResource` (aggregate root): Represents and Identity Server identity resource.
-  * `IdentityClaim` (collection): Claims of identity resource.
+* `IdentityResource` (aggregate root): Represents an Identity Server identity resource.
+  * `IdentityResourceClaim` (collection): Claims of the identity resource.
 
 #### Repositories
 
 Following custom repositories are defined for this module:
 
 * `IApiResourceRepository`
+* `IApiScopeRepository`
 * `IClientRepository`
+* `IDeviceFlowCodesRepository`
 * `IPersistentGrantRepository`
 * `IIdentityResourceRepository`
 
 #### Domain Services
 
-This module doesn't contain any domain service but overrides the services below;
+The module integrates the following IdentityServer services:
 
 * `AbpProfileService` (Used when `AbpIdentityServerBuilderOptions.IntegrateToAspNetIdentity` is true)
 * `AbpClaimsService`
@@ -128,12 +200,7 @@ This module doesn't define any settings.
 
 ### Application Layer
 
-#### Application Services
-
-* `ApiResourceAppService` (implements `IApiResourceAppService`): Implements the use cases of the API resource management UI.
-* `IdentityServerClaimTypeAppService` (implement `IIdentityServerClaimTypeAppService`): Used to get list of claims.
-* `ApiResourceAppService` (implements `IApiResourceAppService`): Implements the use cases of the API resource management UI.
-* `IdentityResourceAppService` (implements `IIdentityResourceAppService`): Implements the use cases of the Identity resource management UI.
+The open-source module doesn't provide application services or HTTP APIs for administration. The [Identity Server Pro module](identity-server-pro.md) provides the management application and user interfaces.
 
 ### Database Providers
 
@@ -149,15 +216,22 @@ This module uses `AbpIdentityServer` for the connection string name. If you don'
 
 See the [connection strings](../framework/fundamentals/connection-strings.md) documentation for details.
 
+IdentityServer configuration is host data. The built-in EF Core and MongoDB contexts ignore the current tenant, and `ConfigureIdentityServer()` skips the model when an EF Core database is configured as tenant-only. Keep the IdentityServer tables or collections in the host/shared database when tenants use separate databases.
+
+The EF Core and MongoDB provider modules replace IdentityServer's in-memory stores with database-backed stores. If no persistence provider registers a client store, resource store, persisted-grant store or device-flow store, the domain module falls back to values from the `IdentityServer:Clients`, `IdentityServer:ApiResources` and `IdentityServer:IdentityResources` configuration sections and to in-memory grant/device stores. Do not rely on these fallback stores for production persistence.
+
 #### Entity Framework Core
 
 ##### Tables
 
 * **IdentityServerApiResources**
-  * IdentityServerApiSecrets
-  * IdentityServerApiScopes
-    * IdentityServerApiScopeClaims
-  * IdentityServerApiClaims
+  * IdentityServerApiResourceSecrets
+  * IdentityServerApiResourceScopes
+  * IdentityServerApiResourceClaims
+  * IdentityServerApiResourceProperties
+* **IdentityServerApiScopes**
+  * IdentityServerApiScopeClaims
+  * IdentityServerApiScopeProperties
 * **IdentityServerClients**
   * IdentityServerClientScopes
   * IdentityServerClientSecrets
@@ -169,14 +243,26 @@ See the [connection strings](../framework/fundamentals/connection-strings.md) do
   * IdentityServerClientClaims
   * IdentityServerClientProperties
 * **IdentityServerPersistedGrants**
+* **IdentityServerDeviceFlowCodes**
 * **IdentityServerIdentityResources**
-  * IdentityServerIdentityClaims
+  * IdentityServerIdentityResourceClaims
+  * IdentityServerIdentityResourceProperties
 
 #### MongoDB
 
 ##### Collections
 
 * **IdentityServerApiResources**
+* **IdentityServerApiScopes**
 * **IdentityServerClients**
 * **IdentityServerPersistedGrants**
+* **IdentityServerDeviceFlowCodes**
 * **IdentityServerIdentityResources**
+
+## Relations to Permission Management
+
+The optional `Volo.Abp.PermissionManagement.Domain.IdentityServer` integration lets applications grant permissions to a client by using the `GetForClientAsync`, `GetAllForClientAsync` and `SetForClientAsync` extensions on `IPermissionManager` and `IResourcePermissionManager`. Client permission values are stored on the host side. When a client is deleted, the integration removes both its ordinary and resource permission grants through the client's distributed deletion event.
+
+## Entity Extensions
+
+The module's [module entity extension](../framework/architecture/modularity/extending/module-entity-extensions.md) API supports the `Client`, `ApiResource` and `IdentityResource` aggregate roots. Configure these extensions before application startup, and create an EF Core migration when an extra property is mapped to a database column.
