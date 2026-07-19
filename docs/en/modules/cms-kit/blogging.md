@@ -15,6 +15,8 @@ By default, CMS Kit features are disabled. Therefore, you need to enable the fea
 
 > Check the ["How to Install" section of the CMS Kit Module documentation](index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
 
+> The built-in MVC blog routes are registered by the Pages global feature. Enable both `Blogs` and `Pages` when you use the built-in public blog pages.
+
 ## User Interface
 
 ### Menu Items
@@ -38,7 +40,7 @@ A screenshot from the new blog creation modal:
 
 **Slug** is the URL part of the blog. For this example, the root URL of the blog becomes `your-domain.com/blogs/technical-blog/`.
 
-- You can change the default slug by using `CmsBlogsWebConsts.BlogRoutePrefix` constant. For example, if you set it to `foo`, the root URL of the blog becomes `your-domain.com/foo/technical-blog/`.
+- You can change the default route prefix by using the `CmsBlogsWebConsts.BlogsRoutePrefix` property. For example, if you set it to `foo`, the root URL of the blog becomes `your-domain.com/foo/technical-blog/`.
 
     ```csharp
     public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -49,7 +51,7 @@ A screenshot from the new blog creation modal:
 
 #### Blog Features
 
-Blog feature uses some of the other CMS Kit features. You can enable or disable the features by clicking the features action for a blog.
+The blogging feature uses other CMS Kit features. A newly created blog enables comments, reactions, ratings, tags, marked items, the quick navigation bar and XSS prevention by default when the related global features are available. You can enable or disable these features for each blog by clicking the features action.
 
 ![blogs-feature-action](../../images/cmskit-module-blogs-feature-action.png)
 
@@ -58,7 +60,7 @@ You can select/deselect the desired features for blog posts.
 ![features-dialog](../../images/cmskit-module-features-dialog-2.png)
 
 ##### Quick Navigation Bar In Blog Post
-If you enable "Quick navigation bar in blog posts", it will enabled scroll index as seen below.
+If you enable **Quick navigation bar in blog posts**, the public blog post page builds a scroll index from the post headings.
 
 ![scroll-index](../../images/cmskit-module-features-scroll-index.png)
 
@@ -71,6 +73,10 @@ When you create blogs, you can manage blog posts on this page.
 You can create and edit an existing blog post on this page. If you enable specific features such as tags, you can set tags for the blog post on this page.
 
 ![blog-post-edit](../../images/cmskit-module-blog-post-edit.png)
+
+Blog posts have three statuses: `Draft`, `WaitingForReview` and `Published`. Creating, updating, deleting and publishing posts use separate permissions. The public blog list requests only published posts and can filter them by author, tag or the current user's marked items.
+
+The built-in renderer allows HTML in blog post Markdown. The per-blog **Prevent XSS** feature controls whether the Markdown renderer sanitizes that HTML and is enabled for newly created blogs. Keep it enabled when post authors are not trusted to submit arbitrary HTML.
 
 ## Internals
 

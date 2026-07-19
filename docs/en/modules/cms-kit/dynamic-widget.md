@@ -122,7 +122,7 @@ Configure<CmsKitContentWidgetOptions>(options =>
 
 In this image, after choosing your widget (on the other case, it changes automatically up to your configuration, mine is `Today`. Its parameter name `parameterWidgetName` and its value is `Format`) you will see the next widget. Enter input values or choose them and click `Add`. You will see the underlined output in the editor. Right of the image, also you can see its previewed output.
 
-You can edit this output manually if do any wrong coding for that (wrong value or typo) you won't see the widget, even so, your page will be viewed successfully. 
+The stored widget markup is parsed when a page or blog post is rendered. When at least one widget has been registered, an unknown widget type is omitted from the rendered fragments. If no widgets have been registered, the stored markup remains in a Markdown fragment. If a registered view component throws while rendering, CMS Kit keeps the rest of the page visible, renders a localized error alert for that fragment and writes the exception to the application log.
 
 ## Options
 
@@ -147,3 +147,5 @@ The `CmsKitContentWidgetOptions` provides two methods for registering widgets:
 
 - **AddWidgetIfFeatureEnabled:** Registers a widget conditionally, only if a specified [global feature](../../framework/infrastructure/global-features.md) is enabled. It accepts the same parameters as `AddWidget`, plus an additional first parameter:
     - `featureType` (required): The type of the global feature that must be enabled for the widget to be available (e.g., `typeof(PagesFeature)`).
+
+The registration is shared by the administration editor and the public content parser. `AddWidgetIfFeatureEnabled` evaluates the global feature while the module configures its services; it does not use the runtime tenant feature system.

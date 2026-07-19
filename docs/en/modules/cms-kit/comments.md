@@ -25,16 +25,16 @@ The comment system provides a mechanism to group comment definitions by entity t
 Configure<CmsKitCommentOptions>(options =>
 {
     options.EntityTypes.Add(new CommentEntityTypeDefinition("Product"));
-    options.IsRecaptchaEnabled = true; //false by default
+    options.IsRecaptchaEnabled = true;
     options.AllowedExternalUrls = new Dictionary<string, List<string>>
     {
-      {
-        "Product",
-        new List<string>
         {
-          "https://abp.io/"
+            "Product",
+            new List<string>
+            {
+                "https://abp.io/"
+            }
         }
-      }
     };
 });
 ```
@@ -43,9 +43,9 @@ Configure<CmsKitCommentOptions>(options =>
 
 `CmsKitCommentOptions` properties:
 
-- `EntityTypes`: List of defined entity types(`CmsKitCommentOptions`) in the comment system.
+- `EntityTypes`: List of defined entity types (`CommentEntityTypeDefinition`) in the comment system.
 - `IsRecaptchaEnabled`: This flag enables or disables the reCaptcha for the comment system. You can set it as **true** if you want to use reCaptcha in your comment system.
-- `AllowedExternalUrls`: Indicates the allowed external URLs by entity types, which can be included in a comment. If it's specified for a certain entity type, then only the specified external URLs are allowed in the comments. 
+- `AllowedExternalUrls`: Registers the URL values used by the external-link validation for each entity type.
 
 `CommentEntityTypeDefinition` properties:
 
@@ -66,6 +66,17 @@ The comment system provides a commenting [widget](../../framework/ui/mvc-razor-p
 ```
 
 `entityType` was explained in the previous section. `entityId` should be the unique id of the product, in this example. If you have a Product entity, you can use its Id here. `referralLinks` is an optional parameter. You can use this parameter to add values (such as "nofollow", "noreferrer", or any other values) to the [rel attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel) of links. 
+
+Creating, updating and deleting a comment requires an authenticated user. Users can update only their own comments. They can delete their own comments, while the `CmsKitPublic.Comments.DeleteAll` permission allows deleting comments created by other users. Deleting a comment also deletes its direct replies.
+
+Reactions are enabled inside the MVC comments widget by default when the Reactions global feature is available. Disable them without disabling reactions for other entity types by configuring the UI options in the web project:
+
+```csharp
+Configure<CmsKitUiOptions>(options =>
+{
+    options.CommentsOptions.IsReactionsEnabled = false;
+});
+```
 
 ## User Interface
 
@@ -89,7 +100,7 @@ You can also view and manage replies on this page.
 
 ## Settings
 
-You can configure the approval status of comments using the "Comment" tab under the "Cms" section on the Settings page. When this feature is enabled, you can approve and reject comments. In this way, users can only see the comments that you approve. By default, this feature is set to "false."
+You can configure the approval status of comments using the **Comment** tab under the **Cms** section on the Settings page. When approval is required, new comments wait for an administrator and public queries return only approved comments. When approval is disabled, waiting comments are also visible. The setting is stored globally, not per tenant, and is `false` by default. Changing it requires the `CmsKit.Comments.SettingManagement` permission.
 
 ![comments-settings](../../images/cmskit-module-comments-settings.png)
 
@@ -136,7 +147,7 @@ This module follows the [Domain Services Best Practices & Conventions](../../fra
 
 ##### Table / collection prefix & schema
 
-All tables/collections use the `Cms` prefix by default. Set static properties on the `CmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
+All tables/collections use the `Cms` prefix by default. Set static properties on the `AbpCmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
 
 ##### Connection string
 
@@ -155,4 +166,3 @@ See the [connection strings](../../framework/fundamentals/connection-strings.md)
 ##### Collections
 
 - **CmsComments**
-
