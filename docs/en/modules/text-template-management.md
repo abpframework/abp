@@ -9,19 +9,21 @@
 
 > You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this module.
 
-This module is used to store and edit template contents for [the text templating system](../framework/infrastructure/text-templating/index.md) of the ABP. So, you may need to understand it to better understand the purpose of this module.
+This module stores and lets users edit content for ABP's [text templating system](../framework/infrastructure/text-templating/index.md). Read the text templating documentation to understand how applications define and render templates.
 
-There are different use cases of the text templating system. For example, [the Account Module](account.md) is using it to define templates for sending emails when it needs to send emails to users (like sending "password reset link" email). This module provides UI to easily edit these email templates.
+Applications use text templates for many purposes. For example, the [Account Module](account.md) defines templates for emails such as password reset messages. This module provides a UI for editing those templates.
 
 See [the module description page](https://abp.io/modules/Volo.TextTemplateManagement) for an overview of the module features.
 
+The `TextManagement.Enable` feature is enabled by default. The module's permissions, application services and menu items require this feature.
+
 ## How to Install
 
-Text Template Management module is pre-installed in [the startup templates](../solution-templates). So, no need to manually install it.
+The Text Template Management module is pre-installed in [the startup templates](../solution-templates), so you do not need to install it manually.
 
 ### Existing Solutions
 
-If you want to add the **Text Template Management** module to your existing solution, you can use the ABP CLI `add-module` command:
+To add the **Text Template Management** module to an existing solution, use the ABP CLI `add-module` command:
 
 ```bash
 abp add-module Volo.TextTemplateManagement
@@ -31,7 +33,7 @@ abp add-module Volo.TextTemplateManagement
 
 This module follows the [module development best practices guide](../framework/architecture/best-practices) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
 
-You can visit [Text Template Management module package list page](https://abp.io/packages?moduleName=Volo.TextTemplateManagement) to see list of packages related with this module.
+Visit the [Text Template Management module package list](https://abp.io/packages?moduleName=Volo.TextTemplateManagement) to see the packages related to this module.
 
 ## User Interface
 
@@ -47,11 +49,11 @@ Text Template Management module adds the following items to the "Main" menu, und
 
 #### Text Templates
 
-Text Templates page is used to view the list of templates defined in the application.
+The Text Templates page lists the templates defined in the application.
 
 ![text-template-management-text-templates-page](../images/text-template-management-text-templates-page.png)
 
-Click to the `Actions -> Edit Contents` to edit content for a template. There are two types of UI to edit a template content:
+Click `Actions > Edit Contents` to edit a template. The module provides two editors:
 
 ##### Editing Content for Inline Localized Templates
 
@@ -65,23 +67,45 @@ This kind of templates provides different content for each culture. In this way,
 
 ![text-template-management-multiple-culture-edit](../images/text-template-management-multiple-culture-edit.png)
 
+Saved content is an override for the current tenant context. The host and each tenant have separate overrides; a tenant doesn't inherit an override saved in the host context. If no database override exists, the text templating system continues with the configured content contributors, such as the template's virtual-file content.
+
+For a static template, the framework content provider first tries the requested regional culture and then its parent culture. An inline-localized template then falls back to its culture-independent content, while a culture-specific template falls back to its configured default culture.
+
+Dynamic definitions use a different lookup order. When `IsDynamicTemplateStoreEnabled` is enabled and a definition exists only in the database, `DatabaseTemplateContentContributor` tries the requested culture, the definition's default culture (or `en` when it has no default), and then culture-independent content. This lookup can return content before the framework tries the requested culture's parent. **Restore to default** deletes the current tenant context's override for the selected template and culture, after which the applicable fallback path is used again.
+
+### UI Extension Points
+
+The MVC UI uses `textTemplateManagement.textDefinition` for both [entity action extensions](../framework/ui/mvc-razor-pages/entity-action-extensions.md) and [data table column extensions](../framework/ui/mvc-razor-pages/data-table-column-extensions.md).
+
+The Blazorise UI exposes entity actions and table columns through the `TextTemplateManagement` page component type. See the Blazor [entity action](../framework/ui/blazor/entity-action-extensions.md) and [data table column](../framework/ui/blazor/data-table-column-extensions.md) extension documents.
+
 
 ## Configure `TextTemplateManagementOptions`
 
-`TextTemplateManagementOptions` can be used to configure the module. You can use the below code to configure it in the ConfigureServices method of your module (eg: BookStoreApplicationModule).
+`TextTemplateManagementOptions` can be used to configure the module. The following example shows the default values:
 
 ```csharp
 Configure<TextTemplateManagementOptions>(options =>
 {
-	options.MinimumCacheDuration = TimeSpan.FromHours(1);
+    options.MinimumCacheDuration = TimeSpan.FromHours(1);
+    options.SaveStaticTemplatesToDatabase = true;
+    options.IsDynamicTemplateStoreEnabled = false;
 });
 ```
 
+| Property | Description |
+| --- | --- |
+| `MinimumCacheDuration` | Sets the sliding expiration of cached template contents. The default is one hour. |
+| `SaveStaticTemplatesToDatabase` | Starts synchronizing static template definitions and their virtual-file contents to the database during application initialization. The default is `true`. |
+| `IsDynamicTemplateStoreEnabled` | Enables the database-backed dynamic template-definition store. The default is `false`. Static definitions take precedence when static and dynamic definitions share the same name. |
+
+Both `SaveStaticTemplatesToDatabase` and `IsDynamicTemplateStoreEnabled` are disabled automatically in a data-migration environment. Disabling static synchronization doesn't disable saved content overrides.
+
 ## Caching
 
-[`DatabaseTemplateContentContributor`](#DatabaseTemplateContentContributor) caches template contents to increase performance. 
+`DatabaseTemplateContentContributor` caches template contents to increase performance. Cache entries use the `MinimumCacheDuration` sliding expiration.
 
-You can get cache store by injecting `IDistributedCache<string, TemplateContentCacheKey>`.
+You can access the cache by injecting `IDistributedCache<string, TemplateContentCacheKey>`. `TemplateContentCacheKey` contains the template definition name and culture; ABP's distributed cache key normalization also isolates entries by the current tenant context. The application service removes the related cache entry when it persists a new override or deletes one through **Restore to default**, so an application restart isn't required.
 
 For more information, please check the [Caching](../framework/fundamentals/caching.md) guide.
 
@@ -93,35 +117,35 @@ It has `TemplateDefinitionName` and `Culture` properties.
 
 ## Data Seed
 
-This module doesn't seed any data.
+This module doesn't define an `IDataSeedContributor`. The optional startup synchronization controlled by `SaveStaticTemplatesToDatabase` is separate from the data seed system.
 
 ## Internals
 
 ### Domain Layer
 
-#### Aggregates
+#### Entities and Aggregate Roots
 
 This module follows the [Entity Best Practices & Conventions](../framework/architecture/best-practices/entities.md) guide.
 
-##### TextTemplateContent
+##### Domain Model Types
 
-* `TextTemplateContent` (aggregate root): Represents a content of text template.
+* `TextTemplateContent` (aggregate root): Represents a tenant-aware template content override.
+* `TextTemplateDefinitionRecord` (aggregate root): Stores synchronized template definition metadata.
+* `TextTemplateDefinitionContentRecord` (entity): Stores a synchronized definition's file content.
 
 #### Repositories
 
 This module follows the [Repository Best Practices & Conventions](../framework/architecture/best-practices/repositories.md) guide.
 
-Following custom repositories are defined for this module:
+The following custom repositories are defined for this module:
 
 * `ITextTemplateContentRepository`
+* `ITextTemplateDefinitionRecordRepository`
+* `ITextTemplateDefinitionContentRecordRepository`
 
-#### Domain Services
+#### Template Content Contributor
 
-This module follows the [Domain Services Best Practices & Conventions](../framework/architecture/best-practices/domain-services.md) guide.
-
-##### DatabaseTemplateContentContributor
-
-`DatabaseTemplateContentContributor` is used by `ITemplateContentProvider` to get template contents that stored in DB and Cache.
+`DatabaseTemplateContentContributor` is an `ITemplateContentContributor` used by `ITemplateContentProvider` to read tenant-aware content overrides and, when the dynamic definition store is enabled, synchronized definition content from the database and cache.
 
 ### Settings
 
@@ -144,7 +168,7 @@ All tables/collections use the `Abp` prefix by default. Set static properties on
 
 ##### Connection String
 
-This module uses `TextTemplateManagement` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
+This module uses `TextTemplateManagement` as the connection string name. If you don't define a connection string with this name, it falls back to the `Default` connection string.
 
 See the [connection strings](../framework/fundamentals/connection-strings.md) documentation for details.
 
@@ -153,25 +177,32 @@ See the [connection strings](../framework/fundamentals/connection-strings.md) do
 ##### Tables
 
 * **AbpTextTemplateContents**
+* **AbpTextTemplateDefinitionRecords**
+* **AbpTextTemplateDefinitionContentRecords**
 
 #### MongoDB
 
 ##### Collections
 
-* **AbpTextTemplateContents**
+* **AbpTextTemplates**
+* **AbpTextTemplateDefinitionRecords**
+* **AbpTextTemplateDefinitionContentRecords**
 
 ### Permissions
 
-See the `TextTemplateManagementPermissions` class members for all permissions defined for this module.
+All permissions require the `TextManagement.Enable` feature.
 
-The module exposes two edit-time permissions with different risk levels:
+The module defines the following permissions:
 
-| Permission | Required to edit | Default grant |
-|------------|------------------|---------------|
-| `TextTemplateManagement.TextTemplates.EditContents` | Templates rendered by a sandboxed engine (e.g. Scriban). Editing such templates is safe for content editors because the engine cannot execute arbitrary .NET code. | Granted to roles that need to edit template text. |
-| `TextTemplateManagement.TextTemplates.EditNonSandboxedContents` | Templates rendered by a **non-sandboxed** engine (e.g. Razor). Editing such templates is functionally equivalent to granting server-side code execution because the engine compiles the content into a .NET assembly that runs with the host process's privileges. | **Not granted to any role by default**, including `admin`. Must be granted explicitly. |
+| Permission | Purpose |
+| --- | --- |
+| `TextTemplateManagement.TextTemplates` | View and filter template definitions and read their contents. |
+| `TextTemplateManagement.TextTemplates.EditContents` | Edit and restore template content. |
+| `TextTemplateManagement.TextTemplates.EditNonSandboxedContents` | Additionally authorize editing templates rendered by a non-sandboxed engine, such as Razor. |
 
-Whether a template is sandboxed is determined by `ITemplateRenderingEngine.IsSandboxed` on the engine that renders it. Editing a non-sandboxed template requires **both** `EditContents` and `EditNonSandboxedContents`.
+Whether a template is sandboxed is determined by `ITemplateRenderingEngine.IsSandboxed` on the engine that renders it. An unknown, unregistered or unresolved default engine is treated as non-sandboxed. Editing a non-sandboxed template requires **both** `EditContents` and `EditNonSandboxedContents`.
+
+When the standard Permission Management data seeder runs, it grants all role-applicable permissions to the `admin` role. This includes `EditNonSandboxedContents`. If the administrators in your application shouldn't be allowed to edit executable template content, customize the seeding policy and remove any existing grant.
 
 The Text Template Management UI surfaces this distinction:
 
@@ -185,39 +216,39 @@ The Text Template Management UI surfaces this distinction:
 
 #### Installation
 
-In order to configure the application to use the text template management module, you first need to import `provideTextTemplateManagementConfig` from `@volo/abp.ng.text-template-management/config` to root configuration. Then, you will need to append it to the `appConfig` array.
+To configure the application to use the text template management module, import `provideTextTemplateManagementConfig` from `@volo/abp.ng.text-template-management/config` and add it to the root `providers` array.
 
-```js
+```ts
 // app.config.ts
 import { provideTextTemplateManagementConfig } from '@volo/abp.ng.text-template-management/config';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     // ...
-    provideTextTemplateManagementConfig()
+    provideTextTemplateManagementConfig(),
   ],
 };
 ```
 
-The text template management module should be imported and lazy-loaded in your routing array. It has a static `createRoutes` method for configuration. Available options are listed below. It is available for import from `@volo/abp.ng.text-template-management`.
+The text template management module should be imported and lazy-loaded in your routing array. It exports a `createRoutes` function from `@volo/abp.ng.text-template-management`. Available options are listed below.
 
-```js
+```ts
 // app.routes.ts
 const APP_ROUTES: Routes = [
   // ...
   {
     path: 'text-template-management',
     loadChildren: () =>
-      import('@volo/abp.ng.text-template-management').then(c => c.createRoutes(/* options here */)),
+      import('@volo/abp.ng.text-template-management').then(c => c.createRoutes()),
   },
 ];
 ```
 
-> If you have generated your project via the startup template, you do not have to do anything, because it already has both configurations implemented.
+> Startup templates already include both settings, so no additional configuration is needed.
 
 <h4 id="h-text-template-management-module-options">Options</h4>
 
-You can modify the look and behavior of the module pages by passing the following options to `createRoutes` static method:
+You can modify the look and behavior of the module pages by passing the following options to the `createRoutes` function:
 
 - **entityActionContributors:** Changes grid actions. Please check [Entity Action Extensions for Angular](../framework/ui/angular/entity-action-extensions.md) for details.
 - **toolbarActionContributors:** Changes page toolbar. Please check [Page Toolbar Extensions for Angular](../framework/ui/angular/page-toolbar-extensions.md) for details.
@@ -226,7 +257,7 @@ You can modify the look and behavior of the module pages by passing the followin
 
 #### Services / Models
 
-Text Template Management module services and models are generated via `generate-proxy` command of the [ABP CLI](../cli). If you need the module's proxies, you can run the following command in the Angular project directory:
+The Text Template Management module's services and models are generated by the [ABP CLI](../cli) `generate-proxy` command. To generate the module's proxies, run the following command in the Angular project directory:
 
 ```bash
 abp generate-proxy --module textTemplateManagement
@@ -238,6 +269,12 @@ abp generate-proxy --module textTemplateManagement
 
 `eTextTemplateManagementComponents` enum provides all replaceable component keys. It is available for import from `@volo/abp.ng.text-template-management`.
 
+The available keys are:
+
+* `eTextTemplateManagementComponents.TextTemplates`
+* `eTextTemplateManagementComponents.TemplateContents`
+* `eTextTemplateManagementComponents.InlineTemplateContent`
+
 Please check [Component Replacement document](../framework/ui/angular/component-replacement.md) for details.
 
 
@@ -245,7 +282,7 @@ Please check [Component Replacement document](../framework/ui/angular/component-
 
 The Text Template Management module remote endpoint URL can be configured in the environment files.
 
-```js
+```ts
 export const environment = {
   // other configurations
   apis: {
@@ -253,14 +290,14 @@ export const environment = {
       url: 'default url here',
     },
     TextTemplateManagement: {
-      url: 'Text Template Management remote url here'
-    }
+      url: 'Text Template Management remote url here',
+    },
     // other api configurations
   },
 };
 ```
 
-The Text Template Management module remote URL configuration shown above is optional. If you don't set a URL, the `default.url` will be used as fallback.
+The Text Template Management module's remote URL configuration is optional. If you don't set a URL, `default.url` is used as a fallback.
 
 
 ## Distributed Events
