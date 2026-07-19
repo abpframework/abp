@@ -11,7 +11,8 @@
 
 Payment module implements payment gateway integration of an application. It provides one time payment and recurring payment options. 
 
-* Supports [Stripe](https://stripe.com/), [PayPal](https://www.paypal.com/), [2Checkout](https://www.2checkout.com/), [PayU](https://corporate.payu.com/), [Iyzico](https://www.iyzico.com/en) and [Alipay](https://global.alipay.com/) payment gateways.
+* Supports [Stripe](https://stripe.com/), [PayPal](https://www.paypal.com/), [2Checkout](https://www.2checkout.com/), [PayU](https://corporate.payu.com/), [Iyzico](https://www.iyzico.com/en), and [Alipay](https://global.alipay.com/) payment gateways.
+* All listed gateways support one-time payments. Stripe also supports subscriptions.
 
 See [the module description page](https://abp.io/modules/Volo.Payment) for an overview of the module features.
 
@@ -34,7 +35,7 @@ If you modified your solution structure, adding a module using ABP CLI might not
 
 In order to do that, add packages listed below to matching project on your solution. For example, ```Volo.Payment.Application``` package to your **{ProjectName}.Application.csproj** like below;
 
-```json
+```xml
 <PackageReference Include="Volo.Payment.Application" Version="x.x.x" />
 ```
 
@@ -75,15 +76,13 @@ The Payment module provides both **public pages** (for payment processing) and *
 
 ### MVC / Razor Pages UI
 
-For MVC/Razor Pages applications, the `abp add-module Volo.Payment` command automatically adds the required packages (`Volo.Payment.Web` and gateway-specific Web packages) and the necessary `DependsOn` statements to your module. The only thing you need to do is configure `PaymentWebOptions` as explained in the [PaymentWebOptions](#paymentweboptions) section.
+For MVC/Razor Pages applications, add `Volo.Payment.Web` and the Web package for each gateway you want to use, then add the corresponding module dependencies. Configure `PaymentWebOptions` as explained in the [PaymentWebOptions](#paymentweboptions) section.
 
 ### Blazor UI
 
-For Blazor applications, the `abp add-module Volo.Payment` command automatically adds the required packages (`Volo.Payment.Blazor.Server` or `Volo.Payment.Blazor.WebAssembly` and gateway-specific Blazor packages) and the necessary `DependsOn` statements to your module. The only thing you need to do is configure `PaymentBlazorOptions` as explained below.
+For Blazor applications, add the core Blazor package and the packages for the gateways you want to use, then add the corresponding module dependencies. Configure `PaymentBlazorOptions` as explained below.
 
 #### Installation
-
-> **Note:** If you used the `abp add-module Volo.Payment` command to install the Payment module, the following packages and module dependencies are automatically added to your project. You can skip to the [Gateway-Specific Blazor Packages](#gateway-specific-blazor-packages) section. The information below is provided for reference or manual installation scenarios.
 
 To use the Payment module's public pages in a Blazor application, you need to install the core Blazor packages and the gateway-specific Blazor packages for each payment gateway you want to support.
 
@@ -91,19 +90,19 @@ To use the Payment module's public pages in a Blazor application, you need to in
 
 For **Blazor Server** applications, add the following package to your **{ProjectName}.Blazor.Server.csproj** (or **{ProjectName}.Blazor.csproj** for Blazor Web App):
 
-```json
+```xml
 <PackageReference Include="Volo.Payment.Blazor.Server" Version="x.x.x" />
 ```
 
 For **Blazor WebAssembly** applications, add the following package to your **{ProjectName}.Blazor.csproj** (or **{ProjectName}.Blazor.Client.csproj** for Blazor Web App):
 
-```json
+```xml
 <PackageReference Include="Volo.Payment.Blazor.WebAssembly" Version="x.x.x" />
 ```
 
-#### Gateway-Specific Blazor Packages
+##### Gateway-Specific Blazor Packages
 
-Each payment gateway requires its own Blazor package. Add the packages for the gateways you want to support:
+Each supported Blazor gateway integration requires its own package. Add the packages for the integrations you want to use:
 
 **Stripe:**
 - Blazor Server: `Volo.Payment.Stripe.Blazor.Server`
@@ -114,8 +113,8 @@ Each payment gateway requires its own Blazor package. Add the packages for the g
 - Blazor WebAssembly: `Volo.Payment.PayPal.Blazor.WebAssembly`
 
 **PayU:**
-- Blazor Server: `Volo.Payment.PayU.Blazor.Server`
-- Blazor WebAssembly: `Volo.Payment.PayU.Blazor.WebAssembly`
+- Blazor Server: `Volo.Payment.Payu.Blazor.Server`
+- Blazor WebAssembly: `Volo.Payment.Payu.Blazor.WebAssembly`
 
 **Iyzico:**
 - Blazor Server: `Volo.Payment.Iyzico.Blazor.Server`
@@ -177,55 +176,32 @@ Configure<PaymentBlazorOptions>(options =>
 });
 ```
 
-You can also configure these options in your `appsettings.json` file:
-
-```json
-{
-  "Payment": {
-    "Blazor": {
-      "RootUrl": "https://localhost:44300",
-      "CallbackUrl": "https://localhost:44300/PaymentSucceed",
-      "GatewaySelectionCheckoutButtonStyle": "btn btn-primary"
-    }
-  }
-}
-```
-
 ##### Gateway-Specific Blazor Options
 
-Each payment gateway has its own Blazor options for customizing the UI. These options can be configured in `appsettings.json`:
+Each supported Blazor gateway integration has its own options for customizing the UI. The gateway modules bind them from the following configuration sections:
+
+| Gateway | Blazor configuration section |
+| --- | --- |
+| PayU | `Payment:PayuBlazor` |
+| PayPal | `Payment:PayPalBlazor` |
+| Iyzico | `Payment:IyzicoBlazor` |
+| Alipay | `Payment:AlipayBlazor` |
+| Stripe | `Payment:Stripe` |
+| TwoCheckout | `Payment:TwoCheckout` |
+
+For example:
 
 ```json
 {
   "Payment": {
-    "Blazor": {
-      "Payu": {
-        "PrePaymentCheckoutButtonStyle": "btn btn-success",
-        "Recommended": true,
-        "ExtraInfos": ["Fast checkout", "Secure payment"]
-      },
-      "TwoCheckout": {
-        "Recommended": false,
-        "ExtraInfos": ["International payments"]
-      },
-      "PayPal": {
-        "Recommended": true,
-        "ExtraInfos": ["Pay with PayPal balance", "Buyer protection"]
-      },
-      "Stripe": {
-        "Recommended": true,
-        "ExtraInfos": ["Credit/Debit cards", "Apple Pay", "Google Pay"]
-      },
-      "Iyzico": {
-        "PrePaymentCheckoutButtonStyle": "btn btn-primary",
-        "Recommended": false,
-        "ExtraInfos": ["Turkish payment gateway"]
-      },
-      "Alipay": {
-        "PrePaymentCheckoutButtonStyle": "btn btn-info",
-        "Recommended": false,
-        "ExtraInfos": ["Chinese payment gateway", "CNY only"]
-      }
+    "PayuBlazor": {
+      "PrePaymentCheckoutButtonStyle": "btn btn-success",
+      "Recommended": true,
+      "ExtraInfos": ["Fast checkout", "Secure payment"]
+    },
+    "Stripe": {
+      "Recommended": true,
+      "ExtraInfos": ["Credit/Debit cards", "Apple Pay", "Google Pay"]
     }
   }
 }
@@ -292,7 +268,7 @@ var paymentRequest = await PaymentRequestAppService.CreateAsync(
                 TotalPrice = 60
             }
         },
-        ExtraProperties = new ExtraPropertyDictionary
+        ExtraProperties =
         {
             // For Iyzico - Customer information
             { "Name", "John" },
@@ -302,7 +278,7 @@ var paymentRequest = await PaymentRequestAppService.CreateAsync(
             { "City", "Istanbul" },
             { "Country", "Turkey" },
             { "ZipCode", "34000" },
-            
+
             // For PayU - Customer information
             { "BuyerName", "John" },
             { "BuyerSurname", "Doe" },
@@ -313,41 +289,51 @@ var paymentRequest = await PaymentRequestAppService.CreateAsync(
 
 #### Handling the Callback (Optional)
 
-When a user completes a payment on the external payment gateway, the following flow occurs:
+When a payment provider redirects the user back to the application, the following flow occurs:
 
 1. The user is redirected to the **PostPayment page** (handled internally by the payment module)
-2. The PostPayment page validates the payment with the gateway and updates the payment request status to **Completed**
+2. The PostPayment page validates the provider response and updates the payment request state
 3. If a `CallbackUrl` is configured in `PaymentBlazorOptions`, the user is then redirected to that URL with the `paymentRequestId` as a query parameter
 
-Create a page to handle this callback and perform any application-specific actions:
+The callback URL is a browser navigation target, not proof that the payment succeeded. Query the payment request and check its state before showing a result:
 
 ```csharp
 @page "/PaymentSucceed"
-@using Microsoft.AspNetCore.WebUtilities
+@using Microsoft.AspNetCore.Components
+@using Volo.Payment.Requests
+@inject IPaymentRequestAppService PaymentRequestAppService
 
-<h3>Payment Successful!</h3>
-<p>Thank you for your purchase.</p>
-<p>Payment Request ID: @PaymentRequestId</p>
+@if (PaymentRequest is null)
+{
+    <p>Payment request not found.</p>
+}
+else if (PaymentRequest.State == PaymentRequestState.Completed)
+{
+    <h3>Payment Successful!</h3>
+    <p>Thank you for your purchase.</p>
+}
+else
+{
+    <p>The payment was not completed.</p>
+}
 
 @code {
     [Parameter]
     [SupplyParameterFromQuery]
     public Guid? PaymentRequestId { get; set; }
-    
-    protected override async Task OnInitializedAsync()
+
+    private PaymentRequestWithDetailsDto PaymentRequest { get; set; }
+
+    protected override async Task OnParametersSetAsync()
     {
-        if (PaymentRequestId.HasValue)
-        {
-            // The payment is already completed at this point.
-            // Perform application-specific actions here:
-            // e.g., activate subscription, send confirmation email, 
-            // update order status, grant access to purchased content, etc.
-        }
+        PaymentRequest = PaymentRequestId.HasValue
+            ? await PaymentRequestAppService.GetAsync(PaymentRequestId.Value)
+            : null;
     }
 }
 ```
 
-> **Note:** By the time the user reaches your callback page, the payment request status has already been set to **Completed** by the PostPayment page. Your callback page is for performing additional application-specific logic. It is also your responsibility to handle if a payment request is used more than once. If you have already delivered your product for a given `PaymentRequestId`, you should not deliver it again when the callback URL is visited a second time.
+Keep the callback page limited to displaying the current result because users can revisit a callback URL. `PaymentRequestCompletedEto` is published when `IPaymentRequestAppService.CompleteAsync` completes a request, so an idempotent handler can fulfill orders for flows that finish through that application service. It isn't emitted for every direct request-state update; for example, the built-in Stripe webhook can complete a request without publishing this event. If your gateway can complete payments only through a webhook, add an application-owned, idempotent fulfillment or reconciliation path for that trusted webhook flow and verify the persisted payment-request state before granting access.
 
 ### Angular UI
 
@@ -355,37 +341,60 @@ For Angular applications, you need to read and apply the steps explained in the 
 
 #### Configurations
 
-In order to configure the application to use the payment module, you first need to import `PaymentAdminConfigModule` from `@volo/abp.ng.payment/admin/config` to the root configuration. `PaymentAdminConfigModule` has a static `forRoot` method which you should call for a proper configuration:
+Add `providePaymentAdminConfig` from `@volo/abp.ng.payment/admin/config` to the root application configuration. The same example shows the optional remote endpoint entries when the public and admin APIs are hosted separately:
 
-```js
+```typescript
 // app.config.ts
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
-import { PaymentAdminConfigModule } from '@volo/abp.ng.payment/admin/config';
+import { ApplicationConfig } from '@angular/core';
+import { providePaymentAdminConfig } from '@volo/abp.ng.payment/admin/config';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     // ...
-    importProvidersFrom([
-      PaymentAdminConfigModule.forRoot()
-    ]),
+    providePaymentAdminConfig(),
   ],
 };
 
+// environment.ts
+export const environment = {
+  apis: {
+    default: {
+      url: 'https://localhost:44300',
+    },
+    AbpPaymentCommon: {
+      url: 'https://localhost:44301',
+    },
+    AbpPaymentAdmin: {
+      url: 'https://localhost:44302',
+    },
+  },
+};
 ```
 
-The payment admin module should be imported and lazy-loaded in your routing array as below:
+`AbpPaymentCommon` is used by the payment-request proxies and is the server-side remote service name for the gateway endpoints. The currently published Angular gateway proxy, which is used by the public gateway-selection component, sends gateway requests through `AbpPaymentAdmin`; administration proxies also use `AbpPaymentAdmin`. When the APIs are hosted separately, configure both entries and expose `/api/payment/gateways` through the `AbpPaymentAdmin` URL until the client and server remote service names are aligned. Each missing entry independently falls back to `default.url`.
 
-```js
+Lazy-load both the admin and public payment routes under the `payment` path:
+
+```typescript
 // app.routes.ts
+import { Routes } from '@angular/router';
+
 const APP_ROUTES: Routes = [
   // ...
   {
-  path: 'payment',
-  loadChildren: () =>
-    import('@volo/abp.ng.payment/admin').then(c => c.createRoutes()),
+    path: 'payment',
+    loadChildren: () =>
+      Promise.all([
+        import('@volo/abp.ng.payment/admin').then(c => c.createRoutes()),
+        import('@volo/abp.ng.payment').then(c => c.createRoutes()),
+      ]).then(([adminRoutes, publicRoutes]) => [...adminRoutes, ...publicRoutes]),
   },
 ];
 ```
+
+The public route factory adds `gateway-selection`, `:gateway/prepayment`, and `:gateway/post-payment`. The admin route factory adds plans, gateway plans, requests, and payment request products.
+
+The public package exposes replaceable component keys through `ePaymentComponents`. Use `registerPrePaymentComponent` or `registerPostPaymentComponent` with `ReplaceableComponentsService` to replace a gateway-specific payment page. The admin `createRoutes` method accepts `PaymentConfigOptions` for entity action, toolbar action, entity property, create form, and edit form contributors on the plans and gateway plans pages.
 
 ### Pages
 
@@ -425,24 +434,28 @@ This page lists all the payment request operations in the application.
 
 `PaymentOptions` is used to store list of payment gateways. You don't have to configure this manually for existing payment gateways. You can, however, add a new gateway like below;
 
+Add `using Volo.Abp.Localization;` to the module class file for `FixedLocalizableString`.
+
 ````csharp
 Configure<PaymentOptions>(options =>
 {
-	options.Gateways.Add(
-		new PaymentGatewayConfiguration(
-			"MyPaymentGatewayName",
-			new FixedLocalizableString("MyPaymentGatewayName"),
-			typeof(MyPaymentGateway)
-		)
-	);
+    options.Gateways.Add(
+        new PaymentGatewayConfiguration(
+            "MyPaymentGatewayName",
+            new FixedLocalizableString("MyPaymentGatewayName"),
+            isSubscriptionSupported: false,
+            typeof(MyPaymentGateway)
+        )
+    );
 });
 ````
 
-`AbpIdentityAspNetCoreOptions` properties:
+`PaymentOptions` properties:
 
-* `PaymentGatewayConfigurationDictionary`: List of gateway configuration.
+* `Gateways`: Dictionary of gateway configurations keyed by gateway name.
   * ```Name```: Name of payment gateway.
   * ```DisplayName```: DisplayName of payment gateway.
+  * ```IsSubscriptionSupported```: Whether the gateway can process recurring payment products.
   * ```PaymentGatewayType```: type of payment gateway.
   * ```Order```: Order of payment gateway.
 
@@ -450,10 +463,10 @@ Configure<PaymentOptions>(options =>
 
 ```PaymentWebOptions``` is used to configure web application related configurations.
 
-* ```CallbackUrl```: Final callback URL for internal payment gateway modules to return. User will be redirected to this URL on your website.
+* ```CallbackUrl```: Final callback URL for internal payment gateway modules to return. A redirect to this URL is not proof of a successful payment. Query the payment request and check its state before displaying the result.
 * ```RootUrl```: Root URL of your website.
 * ```GatewaySelectionCheckoutButtonStyle```: CSS style to add Checkout button on gateway selection page. This class can be used for tracking user activity via 3rd party tools like Google Tag Manager.
-* ```PaymentGatewayWebConfigurationDictionary```:  Used to store web related payment gateway configuration.
+* ```Gateways```: Used to store web related payment gateway configurations.
   * ```Name```: Name of payment gateway.
   * ```PrePaymentUrl```: URL of the page before redirecting user to payment gateway for payment.
   * ```PostPaymentUrl```: URL of the page when user redirected back from payment gateway to your website. This page is used to validate the payment mostly.
@@ -465,10 +478,10 @@ Configure<PaymentOptions>(options =>
 
 ```PaymentBlazorOptions``` is used to configure Blazor application related configurations. This is the Blazor equivalent of `PaymentWebOptions`.
 
-* ```CallbackUrl```: Final callback URL for internal payment gateway modules to return. User will be redirected to this URL on your website after a successful payment.
+* ```CallbackUrl```: Final callback URL for internal payment gateway modules to return. A redirect to this URL is not proof of a successful payment. Query the payment request and check its state before displaying the result.
 * ```RootUrl```: Root URL of your Blazor application.
 * ```GatewaySelectionCheckoutButtonStyle```: CSS style to add to the Checkout button on the gateway selection page. This class can be used for tracking user activity via 3rd party tools like Google Tag Manager.
-* ```PaymentGatewayBlazorConfigurationDictionary```: Used to store Blazor related payment gateway configuration.
+* ```Gateways```: Used to store Blazor related payment gateway configurations.
   * ```Name```: Name of payment gateway.
   * ```PrePaymentUrl```: URL of the Blazor page before redirecting user to payment gateway for payment.
   * ```PostPaymentUrl```: URL of the Blazor page when user is redirected back from payment gateway to your website.
@@ -480,10 +493,10 @@ Configure<PaymentOptions>(options =>
 
 ```PayuOptions``` is used to configure PayU payment gateway options.
 
+* ```CheckoutLink```: PayU checkout URL. Its default value is `https://secure.payu.ro/order/lu.php`.
 * ```Merchant```: Merchant code for PayU account.
 * ```Signature```: Signature of Merchant.
 * ```LanguageCode```: Language of the order. This will be used for notification email that are sent to the client, if available.
-* ```CurrencyCode```: Currency code of order (USD, EUR, etc...).
 * ```VatRate```: Vat rate of order.
 * ```PriceType```: Price type of order (GROSS or NET).
 * ```Shipping```: A positive number indicating the price of shipping.
@@ -514,7 +527,6 @@ Configure<PaymentOptions>(options =>
 * ```Signature```: Signature of Merchant's 2Checkout account.
 * ```CheckoutUrl```: 2Checkout checkout URL (it must be set to https://secure.2checkout.com/order/checkout.php).
 * ```LanguageCode```: Language of the order. This will be used for notification email that are sent to the client, if available.
-* ```CurrencyCode```: Currency code of order (USD, EUR, etc...).
 
 ### TwoCheckoutWebOptions
 
@@ -560,8 +572,7 @@ Configure<PaymentOptions>(options =>
 ```PayPalOptions``` is used to configure PayPal payment gateway options.
 
 * ```ClientId```: Client Id for the PayPal account.
-* ```Secret``` Secret for the PayPal account.
-* ```CurrencyCode```: Currency code of order (USD, EUR, etc...).
+* ```Secret```: Secret for the PayPal account.
 * ```Environment```: Payment environment. ("Sandbox" or "Live", default value is "Sandbox")
 * ```Locale```: PayPal-supported language and locale to localize PayPal checkout pages. See https://developer.paypal.com/docs/api/reference/locale-codes/.
 
@@ -583,12 +594,11 @@ Configure<PaymentOptions>(options =>
 
 ```IyzicoOptions``` is used to configure Iyzico payment gateway options.
 
-* ```BaseUrl```: Base API URL for the Iyzico (ex: https://sandbox-api.iyzipay.com). 
-* ```ApiKey``` Api key for the Iyzico account.
-* ```SecretKey ``` Secret for the Iyzico account.
+* ```BaseUrl```: Base API URL for the Iyzico (ex: https://sandbox-api.iyzipay.com).
+* ```ApiKey```: API key for the Iyzico account.
+* ```SecretKey```: Secret for the Iyzico account.
 * ```Currency```: Currency code for the order (USD, EUR, GBP and TRY can be used).
 * ```Locale```: Language of the order.
-* ```InstallmentCount```: Installment count value. For single installment payments it should be 1 (valid values: 1, 2, 3, 6, 9, 12).
 
 ### IyzicoWebOptions
 
@@ -608,27 +618,27 @@ Configure<PaymentOptions>(options =>
 
 ### AlipayOptions
 
-```AlipayOptions``` is used to configure Alipay payment gateway options。 **Alipay gateway only supports CNY currency**.
+```AlipayOptions``` is used to configure Alipay payment gateway options. **Alipay gateway only supports CNY currency**.
 
-* ```Protocol```：Protocol for the Alipay (ex: https).
-* ```GatewayHost```: Gateway host for the Aliapy.
+* ```Protocol```: Protocol for Alipay (for example, https).
+* ```GatewayHost```: Gateway host for Alipay.
 * ```SignType```: Sign type for the Alipay.
 * ```AppId```: AppId for the Alipay account.
 * ```MerchantPrivateKey```: Merchant private key of the Alipay account.
-* ```MerchantCertPath```Merchant cert path of the Alipay account.
+* ```MerchantCertPath```: Merchant certificate path of the Alipay account.
 * ```AlipayCertPath```: Alipay cert path of the Alipay account.
 * ```AlipayRootCertPath```: Alipay root cert path of the Alipay account.
 * ```AlipayPublicKey```: Alipay public key of the Alipay account.
 * ```NotifyUrl```: Notify url of the Alipay.
 * ```EncryptKey```: Encrypt key of the Alipay.
 
-#### AlipayWebOptions
+### AlipayWebOptions
 
 * ```Recommended```: Is payment gateway recommended or not. This information is displayed on payment gateway selection page.
 * ```ExtraInfos```: List of informative strings for payment gateway. These texts are displayed on payment gateway selection page.
 * ```PrePaymentCheckoutButtonStyle```: CSS style to add to the Checkout button on the Alipay prepayment page. This class can be used for tracking user activity via 3rd party tools like Google Tag Manager.
 
-#### AlipayBlazorOptions
+### AlipayBlazorOptions
 
 ```AlipayBlazorOptions``` is used to configure Alipay payment gateway Blazor options.
 
@@ -638,18 +648,20 @@ Configure<PaymentOptions>(options =>
 
 > You can check the [Alipay document](https://opendocs.alipay.com/open/02np97) for more details.
 
+Set the currency for a one-time payment with `PaymentRequestCreateDto.Currency`. The legacy `CurrencyCode` settings on PayU, PayPal, and TwoCheckout options are obsolete fallbacks. In the current TwoCheckout integration, you must still configure `CurrencyCode` because it is also used when the product price parameters are generated.
+
 Instead of configuring options in your module class, you can configure it in your appsettings.json file like below;
 
 ```json
-"Payment": {
+{
+  "Payment": {
     "Payu": {
       "Merchant": "TEST",
       "Signature": "SECRET_KEY",
       "LanguageCode": "en",
-      "CurrencyCode": "USD",
-      "VatRate": "0",
+      "VatRate": 0,
       "PriceType": "GROSS",
-      "Shipping": "0",
+      "Shipping": 0,
       "Installment": "1",
       "TestOrder": "1",
       "Debug": "1"
@@ -659,12 +671,11 @@ Instead of configuring options in your module class, you can configure it in you
       "CheckoutUrl": "https://secure.2checkout.com/order/checkout.php",
       "LanguageCode": "en",
       "CurrencyCode": "USD",
-      "TestOrder": "1"
+      "TestOrder": true
     },
     "PayPal": {
       "ClientId": "CLIENT_ID",
       "Secret": "SECRET",
-      "CurrencyCode": "USD",
       "Environment": "Sandbox",
       "Locale": "en_US"
     },
@@ -687,7 +698,10 @@ Instead of configuring options in your module class, you can configure it in you
       "MerchantPrivateKey": "MERCHANT_PRIVATE_KEY"
     }
   }
+}
 ```
+
+The domain and MVC gateway modules share `Payment:Payu`, `Payment:PayPal`, `Payment:Iyzico`, `Payment:Stripe`, and `Payment:TwoCheckout`. Alipay MVC options use `Payment:AlipayWeb`.
 
 ## Internals
 
@@ -708,17 +722,19 @@ A payment request represents a request for a payment in the application.
   * `Gateway` : Name of payment gateway used for this payment request.
   * ```FailReason```: Reason for failed payment requests.
 
+`Complete()` moves a waiting or failed request to `Completed` and is idempotent for an already completed request. `Failed()` accepts waiting or failed requests, while `Refunded()` accepts only completed requests.
+
 ##### Plan
 
-A plan is used for subscription payments. Contains PlanGateway list to configure each gateway.
+A plan is used for subscription payments. It contains a `GatewayPlans` collection for gateway-specific configurations.
 
 - `Plan` (aggregate root): Represents a plan for recurring payments.
-  - `PlanGateways` (collection): List of gateway plans.
-  - `Name` : An optional name of plan.
+  - `GatewayPlans` (collection): List of gateway plans.
+  - `Name`: Required name of the plan.
 - `GatewayPlan` (entity): Represents a gateway configuration for a plan.
   - `PlanId`: Represents a plan belong to.
   - `Gateway`: Represents a gateway belong to. It has to be unique.
-  - `ExternalId`: Stores a unique configuration of gateway for subscrtiption, such as priceId, planId, subscriptionId or productId etc.
+  - `ExternalId`: Stores the gateway's external subscription configuration, such as a price ID, plan ID, subscription ID, or product ID.
 
 #### Repositories
 
@@ -747,7 +763,7 @@ All tables/collections use the `Pay` prefix by default. Set static properties on
 
 ##### Connection string
 
-This module uses `AbpPayment` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
+This module uses `Payment` for the connection string name. If you don't define a connection string with this name, it falls back to the `Default` connection string.
 
 See the [connection strings](../framework/fundamentals/connection-strings.md) documentation for details.
 
@@ -756,8 +772,7 @@ See the [connection strings](../framework/fundamentals/connection-strings.md) do
 ##### Tables
 
 * **PayPaymentRequests**
-  * **AbpRoleClaims**
-    * PayPaymentRequestProducts
+* **PayPaymentRequestProducts**
 * **PayPlans**
 * **PayGatewayPlans**
 
@@ -832,7 +847,7 @@ public static void ConfigureExtraProperties()
 
 ## Distributed Events
 
-- `Volo.Payment.PaymentRequestCompleted` (**PaymentRequestCompletedEto**): Published when a payment is completed. 
+- `Volo.Payment.PaymentRequestCompleted` (**PaymentRequestCompletedEto**): Published by `IPaymentRequestAppService.CompleteAsync` when the resolved gateway returns a completed payment request. It isn't a notification for every direct payment-request state update; for example, the built-in Stripe webhook can complete a request without publishing this event.
   
   - `Id`: Represents PaymentRequest entity Id.
   - `Gateway`: Represents the gateway which payment was done with.
@@ -874,7 +889,7 @@ public static void ConfigureExtraProperties()
 
 This module implements one-time payments;
 
-* Supports [Stripe](https://stripe.com/), [PayPal](https://www.paypal.com/), [2Checkout](https://www.2checkout.com/), [PayU](https://corporate.payu.com/) and [Iyzico](https://www.iyzico.com/en) payment gateways.
+* Supports [Stripe](https://stripe.com/), [PayPal](https://www.paypal.com/), [2Checkout](https://www.2checkout.com/), [PayU](https://corporate.payu.com/), [Iyzico](https://www.iyzico.com/en), and [Alipay](https://global.alipay.com/) payment gateways.
 
 You can get one-time payments from your customers using one or more payment gateways supported by the payment module. Payment module works in a very simple way for one-time payments. It creates a local payment request record and redirects customer to payment gateway (PayPal, Stripe etc...) for processing the payment. When the customer pays on the payment gateway, payment module handles the external payment gateway's response and validates the payment to see if it is really paid or not. If the payment is validated, payment module redirects customer to main application which initiated the payment process at the beginning.
 
@@ -886,18 +901,18 @@ Each payment gateway implementation contains PrePayment and PostPayment pages.
 
 PrePayment page asks users for extra information if requested by the external payment gateway. For example, 2Checkout doesn't require any extra information, so PrePayment page for 2Checkout redirects user to 2Checkout without asking any extra information. 
 
-PostPayment page is responsible for validation of the response of the external payment gateway. When a user completes the payment, user is redirected to PostPayment page for that payment gateway and PostPayment page validates the status of the payment. If the payment is succeeded, status of the payment request is updated and user is redirected to main application.
+PostPayment page is responsible for validating the response of the external payment gateway. When a user returns from the gateway, the PostPayment page validates the payment and updates the payment request state. A subsequent redirect to the main application is a browser navigation target, not proof that the payment succeeded.
 
-Note: It is the main application's responsibility to handle if a payment request is used more than once. For example, if the PostPayment page generates a URL like https://mywebsite.com/PaymentSucceed?PaymentRequestId={PaymentRequestId}, this URL can be visited more than once manually by end users. If you have already delivered your product for a given PaymentRequestId, you shouldn't deliver it when this URL is visited a second time.
+Query the payment request and check its state before displaying the result. Do not perform fulfillment from the callback page because users can revisit or forge callback URLs. For flows that finish through `IPaymentRequestAppService.CompleteAsync`, use an idempotent `PaymentRequestCompletedEto` handler. For webhook-only completion, use an application-owned, idempotent fulfillment or reconciliation path that runs after the trusted webhook is processed and verifies the persisted request state.
 
 ### Creating One-Time Payment
 
-In order to initiate a payment process, inject `IPaymentRequestAppService`, create a payment request using it's `CreateAsync` method and redirect user to gateway selection page with the created payment request's Id. Here is a sample Razor Page code which starts a payment process on it's OnPost method.
+In order to initiate a payment process, inject `IPaymentRequestAppService`, create a payment request using its `CreateAsync` method and redirect user to gateway selection page with the created payment request's Id. Here is a sample Razor Page code which starts a payment process on its OnPost method.
 
 > Redirection of the gateway selection page has to be a **POST** request. If you implement it as a **GET** request, you will get an error. You can use `LocalRedirectPreserveMethod` to keep the method as POST in the redirected request.
 
-```c#
-public class IndexModel: PageModel
+```csharp
+public class IndexModel : PageModel
 {
     private readonly IPaymentRequestAppService _paymentRequestAppService;
 
@@ -919,7 +934,7 @@ public class IndexModel: PageModel
                     Name = "LEGO Super Mario",
                     Count = 2,
                     UnitPrice = 60,
-                    TotalPrice = 200
+                    TotalPrice = 120
                 }
             }
         });
@@ -929,7 +944,9 @@ public class IndexModel: PageModel
 }
 ```
 
-If the payment is successful, payment module will return to the configured ```PaymentWebOptions.CallbackUrl```. The main application can take necessary actions for a successful payment (activating a user account, triggering a shipment start process, etc.).
+`TotalPrice` is optional. When it is omitted, the module calculates it as `UnitPrice * Count`.
+
+The Payment module can redirect the browser to the configured `PaymentWebOptions.CallbackUrl` after processing the gateway response. Treat this URL only as a result page: query the payment request and check its state before displaying the result. `PaymentRequestCompletedEto` can drive idempotent fulfillment for flows completed through `IPaymentRequestAppService.CompleteAsync`; cover webhook-only completion with a trusted, application-owned reconciliation or fulfillment path as described above.
 
 ## Subscriptions
 
@@ -1009,4 +1026,4 @@ public class SubscriptionModel : PageModel
 }
 ```
 
-> To track that subscription is continuing or canceled, you should keep the SubscriptionId, all events contain it. 
+> To track whether the subscription continues or is canceled, store its `ExternalSubscriptionId`. All subscription lifecycle events contain this value.
