@@ -94,7 +94,7 @@ public class IndexModel : PageModel
 
 Keep this operation behind an authenticated application endpoint and never bind an arbitrary tenant ID from public input. In a tiered solution, implement this orchestration in a trusted server-side application layer; the built-in SaaS subscription HTTP endpoint requires the host-side `Saas.Editions` permission.
 
-A subscription-created event assigns the edition and period end. A subscription-updated event refreshes the period end and applies a new edition assignment when the Payment event supplies one. A cancellation keeps the edition assignment and sets its end date to the subscription's period end date. After that date, `Tenant.GetActiveEditionId()` no longer returns the edition.
+Creating a payment request initializes a missing or expired `EditionEndDateUtc` to the current UTC time, but it doesn't assign the selected edition. A subscription-created event assigns the edition and period end. A subscription-updated event refreshes the period end and applies a new edition assignment when the Payment event supplies one. A cancellation keeps the edition assignment and sets its end date to the subscription's period end date. After that date, `Tenant.GetActiveEditionId()` no longer returns the edition.
 
 Payment confirmation is asynchronous. Configure the gateway webhooks and use the Payment module's [callback URL](payment.md#paymentweboptions) and payment-request status flow to show the final result.
 
