@@ -181,7 +181,7 @@ Two page types are supported by default: a pre-payment page and a post-payment p
   <h3>Pre Checkout</h3>
   <form method="post">
       <input type="hidden" asp-for="PaymentRequestId" />
-      <button type="submit" class="btn btn-success">
+      <button type="submit" class="btn btn-success" asp-page-handler="ContinueToCheckout">
           Continue to Checkout
           <i class="fa fa-long-arrow-right"></i>
       </button>
@@ -218,7 +218,12 @@ Two page types are supported by default: a pre-payment page and a post-payment p
           return BadRequest();
       }
 
-      public virtual async Task<IActionResult> OnPostAsync()
+      public virtual IActionResult OnPost()
+      {
+          return Page();
+      }
+
+      public virtual async Task<IActionResult> OnPostContinueToCheckoutAsync()
       {
           await _paymentWebOptions.SetAsync();
           var rootUrl = _paymentWebOptions.Value.RootUrl.TrimEnd('/');
@@ -236,6 +241,8 @@ Two page types are supported by default: a pre-payment page and a post-payment p
       }
   }
   ```
+
+  The gateway selection page preserves the POST method when it redirects to the pre-payment URL. `OnPost` handles that initial request and displays the page. The `ContinueToCheckout` handler starts the payment only after the user submits the pre-payment form.
 
 - Create **Pages/MyGateway/PostCheckout.cshtml** and **Pages/MyGateway/PostCheckout.cshtml.cs**.
 

@@ -17,7 +17,7 @@ The Elsa module is not installed in [the startup templates](../solution-template
 
 ### Using ABP CLI
 
-ABP CLI allows adding a module to a solution using the `add-module` command. See its [documentation](../cli#add-module) for more information. Add the Elsa module using the following command:
+Use the ABP CLI `add-module` command to add the Elsa module to an existing solution:
 
 ```bash
 abp add-module Volo.Elsa
