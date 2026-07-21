@@ -29,11 +29,36 @@ The source code of this module can be accessed [here](https://github.com/abpfram
   - `EntityChange` (collection): Changed entities of audit log.
   - `AuditLogAction` (collection): Executed actions of audit log.
 
+#### Extending the Entities
+
+The `AuditLog`, `AuditLogAction` and `EntityChange` entities support the [Module Entity Extensions](../framework/architecture/modularity/extending/module-entity-extensions.md) system. Configure them in the `Domain.Shared` project before the database model is created. The following example adds a property to `AuditLog`:
+
+````csharp
+ObjectExtensionManager.Instance.Modules()
+    .ConfigureAuditLogging(auditLogging =>
+    {
+        auditLogging.ConfigureAuditLog(auditLog =>
+        {
+            auditLog.AddOrUpdateProperty<string>("ExternalId");
+        });
+    });
+````
+
+Use `ConfigureAuditLogAction` or `ConfigureEntityChange` in the same way to extend the other supported entities.
+
 #### Repositories
 
 Following custom repositories are defined for this module:
 
 - `IAuditLogRepository`
+
+#### Audit Log Conversion
+
+The module uses `IAuditLogInfoToAuditLogConverter` to convert the `AuditLogInfo` collected by the auditing system into the persisted `AuditLog` aggregate. You can inject this service when you need the same conversion in a custom persistence flow, or replace its default implementation using the [dependency injection system](../framework/fundamentals/dependency-injection.md#replace-a-service) to customize the mapping.
+
+#### Persistence Limits
+
+Before saving an audit log, the module truncates fields that have maximum lengths defined by `AuditLogConsts`, `AuditLogActionConsts`, `EntityChangeConsts` and `EntityPropertyChangeConsts`. Action parameters are handled differently: if `AuditLogAction.Parameters` exceeds `AuditLogActionConsts.MaxParametersLength` (2,000 by default), it is persisted as an empty string instead of being truncated.
 
 ### Database providers
 
@@ -55,12 +80,14 @@ This module uses `AbpAuditLogging` for the connection string name. If you don't 
   - AbpAuditLogActions
   - AbpEntityChanges
     - AbpEntityPropertyChanges
+- **AbpAuditLogExcelFiles**
 
 #### MongoDB
 
 ##### Collections
 
 - **AbpAuditLogs**
+- **AbpAuditLogExcelFiles**
 
 ## See Also
 

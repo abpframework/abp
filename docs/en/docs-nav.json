@@ -551,6 +551,10 @@
               "path": "framework/fundamentals/localization.md"
             },
             {
+              "text": "Multi-Lingual Objects",
+              "path": "multi-lingual-entities.md"
+            },
+            {
               "text": "Logging",
               "path": "framework/fundamentals/logging.md"
             },
@@ -1112,6 +1116,10 @@
               "path": "framework/api-development/dynamic-csharp-clients.md"
             },
             {
+              "text": "IdentityModel Clients",
+              "path": "framework/api-development/identitymodel-clients.md"
+            },
+            {
               "text": "Integration Services",
               "path": "framework/api-development/integration-services.md"
             },
@@ -1353,6 +1361,10 @@
                     {
                       "text": "Auth",
                       "path": "framework/ui/mvc-razor-pages/javascript-api/auth.md"
+                    },
+                    {
+                      "text": "Clock",
+                      "path": "framework/ui/mvc-razor-pages/javascript-api/clock.md"
                     },
                     {
                       "text": "Current User",
@@ -1658,6 +1670,10 @@
                       "path": "framework/ui/angular/localization.md"
                     },
                     {
+                      "text": "Document Title Strategy",
+                      "path": "framework/ui/angular/title-strategy.md"
+                    },
+                    {
                       "text": "Hybrid Localization",
                       "path": "framework/ui/angular/hybrid-localization.md"
                     },
@@ -1877,12 +1893,24 @@
                       "path": "framework/ui/angular/card-component.md"
                     },
                     {
+                      "text": "Tree",
+                      "path": "framework/ui/angular/tree-component.md"
+                    },
+                    {
+                      "text": "Lookup Search",
+                      "path": "framework/ui/angular/lookup-search-component.md"
+                    },
+                    {
                       "text": "Dynamic Forms",
                       "path": "framework/ui/angular/dynamic-form-module.md"
                     },
                     {
                       "text": "Password Complexity Indicator",
                       "path": "framework/ui/angular/password-complexity-indicator-component.md"
+                    },
+                    {
+                      "text": "Commercial UI Components (Pro)",
+                      "path": "framework/ui/angular/commercial-ui.md"
                     },
                     {
                       "text": "Lookup Components(Pro)",
@@ -2079,6 +2107,10 @@
             {
               "text": "MongoDB",
               "path": "framework/data/mongodb"
+            },
+            {
+              "text": "In-Memory Database",
+              "path": "framework/data/memorydb"
             },
             {
               "text": "Dapper",
@@ -2616,6 +2648,10 @@
           "path": "modules/background-jobs.md"
         },
         {
+          "text": "Blogging",
+          "path": "modules/blogging.md"
+        },
+        {
           "text": "Chat (Pro)",
           "path": "modules/chat.md"
         },
@@ -2691,7 +2727,7 @@
             },
             {
               "text": "URL Forwarding System",
-              "path": "modules/cms-kit-pro/URL-forwarding.md"
+              "path": "modules/cms-kit-pro/url-forwarding.md"
             },
             {
               "text": "Poll System",
@@ -2733,7 +2769,19 @@
         },
         {
           "text": "Identity",
-          "path": "modules/identity.md"
+          "isLazyExpandable": true,
+          "path": "modules/identity.md",
+          "items": [
+            {
+              "text": "Overview",
+              "path": "modules/identity.md",
+              "isIndex": true
+            },
+            {
+              "text": "User Lookup and Synchronization",
+              "path": "modules/identity/user-synchronization.md"
+            }
+          ]
         },
         {
           "text": "Identity (Pro)",

@@ -49,7 +49,7 @@ Configure<CmsKitReactionOptions>(options =>
 
 `CmsKitReactionOptions` properties:
 
-- `EntityTypes`: List of defined entity types (`CmsKitReactionOptions`) in the reaction system.
+- `EntityTypes`: List of defined entity types (`ReactionEntityTypeDefinition`) in the reaction system.
 
 `ReactionEntityTypeDefinition` properties:
 
@@ -69,6 +69,20 @@ The reaction system provides a reaction widget to allow users to send reactions 
 ```
 
 `entityType` was explained in the previous section. `entityId` should be the unique id of the product, in this example. If you have a Product entity, you can use its Id here.
+
+The summary can be read anonymously. Creating or removing a reaction requires an authenticated user. A user can select each configured reaction at most once for the same entity; repeating the create operation doesn't create a duplicate record.
+
+### Customizing MVC Reaction Icons
+
+The MVC widget resolves each reaction name through `CmsKitUiOptions.ReactionIcons`. Replace an existing icon or register an icon for a custom reaction in the web project:
+
+```csharp
+Configure<CmsKitUiOptions>(options =>
+{
+    options.ReactionIcons[StandardReactions.Heart] =
+        new LocalizableIconDictionary("fa fa-heart text-danger");
+});
+```
 
 # Internals
 
@@ -112,7 +126,7 @@ This module follows the [Domain Services Best Practices & Conventions](../../fra
 
 ##### Table / collection prefix & schema
 
-All tables/collections use the `Cms` prefix by default. Set static properties on the `CmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
+All tables/collections use the `Cms` prefix by default. Set static properties on the `AbpCmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
 
 ##### Connection string
 

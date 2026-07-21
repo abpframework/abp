@@ -86,7 +86,11 @@ Configure<AbpAccountOptions>(options =>
 * `TenantAdminUserName` (default: admin): The tenant admin user name.
 * `ImpersonationTenantPermission`: The permission name for tenant impersonation.
 * `ImpersonationUserPermission`: The permission name for user impersonation.
-* `ExternalProviderIconMap`: A dictionary of external provider names and their corresponding font-awesome icon classes. You can add new mapping to this dictionary to change the icon of an external provider.(Popular external provider icons are already defined, such as `Facebook`, `Google`, `Microsoft`, `Twitter`, etc.)
+* `SwitchUserDuringImpersonate` (default: `false`): Signs the target user in with the application cookie while an impersonation flow is in progress.
+* `ExternalProviderIconMap`: A dictionary of external provider names and their icon asset paths or CSS classes. Common providers such as GitHub, Google, X, Apple, LinkedIn, Facebook and Microsoft are already mapped.
+* `IsTenantMultiDomain` (default: `false`): Enables tenant-domain redirects for linked-account and tenant-switching flows.
+* `GetTenantDomain`: Resolves the target tenant's origin for impersonation redirects and, when `IsTenantMultiDomain` is enabled, linked-account and tenant-switching redirects. By default, it returns the current request's scheme and host.
+* `ExternalProfilePictureDownloadTimeout` (default: 5 seconds): Limits how long external-login registration waits while downloading a profile picture.
 
 ### AbpProfilePictureOptions
 
@@ -101,7 +105,26 @@ Configure<AbpProfilePictureOptions>(options =>
 
 `AbpProfilePictureOptions` properties:
 
-* `EnableImageCompression` (default: false): Enables the image compression for the profile picture. When enabled, the selected compression library will compress the profile picture to decrease the image size. For more information see [image manipulation](../framework/infrastructure/image-manipulation.md)
+* `EnableImageCompression` (default: `false`): Enables image compression for the profile picture. When enabled, the selected compression library compresses the profile picture to decrease its size. For more information, see [image manipulation](../framework/infrastructure/image-manipulation.md).
+* `AllowedFileExtensions` (default: `.jpg`, `.jpeg` and `.png`): Defines the accepted file-name extensions. The extension check runs when the upload includes a file name.
+* `MaxFileSizeInBytes` (default: 5 MiB): Rejects larger uploads. Set it to `0` to disable the size limit.
+* `MagicBytesVerifiers`: Verifies the file content independently of the file name. The default verifiers accept JPEG and PNG signatures. If you add an allowed extension, add a matching content verifier as well; at least one verifier must accept every uploaded image.
+
+### Registration Email Confirmation Codes
+
+The registration email confirmation code is stored with a 10-minute absolute expiration by default. Configure a different duration with `Account:EmailConfirmation:CodeExpirationTime`:
+
+```json
+{
+  "Account": {
+    "EmailConfirmation": {
+      "CodeExpirationTime": "00:15:00"
+    }
+  }
+}
+```
+
+Sending and checking these codes use separate built-in operation rate-limit policies. Sending a new code resets the check rate-limit state for that email address.
 
 ## Local login
 
@@ -110,6 +133,20 @@ The user can't log in through the local account and use the local account-relate
 If you use `Social / External Logins`, It is automatically called for authentication when logging in.
 
 ![account-pro-module-local-login-setting](../images/account-pro-module-local-login-setting.png)
+
+## Email Login
+
+Email login lets users sign in with a one-time code, a magic link or both. It is disabled by default and also requires **Local login** to remain enabled. Configure it in `Settings > Account > Email Login`.
+
+The available login types are:
+
+* `OtpAndMagicLink` (default): The email contains both a six-digit code and a magic link.
+* `MagicLinkOnly`: The email contains only a magic link and the code-verification endpoint is disabled.
+* `OtpOnly`: The email contains only a code and direct magic-link verification is disabled.
+
+The token lifespan defaults to 90 seconds and accepts values from 30 to 86,400 seconds. Codes and link tokens are single-use. Completing either path invalidates the outstanding credential for the other path, and sending a new email invalidates the previous credentials.
+
+Email login uses built-in send and verification rate limits. When `AccountSettingNames.PreventEmailEnumeration` is enabled, requests for an unknown or locked-out account return the same expiry-shaped response as a valid request without sending an email. This prevents callers from using the send response to distinguish those accounts.
 
 ### Switching users during OAuth login
 
@@ -345,9 +382,11 @@ export const APP_ROUTES: Routes = [
 You can modify the look and behavior of the module pages by passing the following options to `createRoutes` static method:
 
 - **redirectUrl**: Default redirect URL after logging in.
-- **entityActionContributors:** Changes grid actions. Please check [Entity Action Extensions for Angular](../framework/ui/angular/entity-action-extensions.md) for details.
-- **toolbarActionContributors:** Changes page toolbar. Please check [Page Toolbar Extensions for Angular](../framework/ui/angular/page-toolbar-extensions.md) for details.
-- **entityPropContributors:** Changes table columns. Please check [Data Table Column Extensions for Angular](../framework/ui/angular/data-table-column-extensions.md) for details.
+- **entityActionContributors:** Changes actions on `eAccountComponents.MySecurityLogs`. See [Entity Action Extensions for Angular](../framework/ui/angular/entity-action-extensions.md).
+- **toolbarActionContributors:** Changes the toolbar on `eAccountComponents.MySecurityLogs`. See [Page Toolbar Extensions for Angular](../framework/ui/angular/page-toolbar-extensions.md).
+- **entityPropContributors:** Changes columns on `eAccountComponents.MySecurityLogs`. See [Data Table Column Extensions for Angular](../framework/ui/angular/data-table-column-extensions.md).
+- **personelInfoEntityPropContributors:** Changes the edit-form properties on `eAccountComponents.PersonalSettings`. The public API uses this spelling. See [Dynamic Form Extensions for Angular](../framework/ui/angular/dynamic-form-extensions.md).
+- **isPersonalSettingsChangedConfirmationActive:** Deprecated. Personal settings refresh the current user's state without requiring a new login.
 
 #### Services / Models
 
@@ -426,4 +465,3 @@ This module doesn't define any additional distributed event. See the [standard d
 * [Idle Session Timeout](./account/idle-session-timeout.md)
 * [Web Authentication API (WebAuthn) passkeys](./account/passkey.md)
 * [Shared user accounts](./account/shared-user-accounts.md)
-```

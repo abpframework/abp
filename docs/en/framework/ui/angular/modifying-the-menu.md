@@ -109,7 +109,7 @@ An alternative and probably cleaner way is to use a route provider. First create
 ```js
 // route.provider.ts
 import { RoutesService, eLayoutType } from '@abp/ng.core';
-import { provideAppInitializer } from '@angular/core';
+import { inject, provideAppInitializer } from '@angular/core';
 
 export const APP_ROUTE_PROVIDER = [
   provideAppInitializer(() => {
@@ -119,7 +119,7 @@ export const APP_ROUTE_PROVIDER = [
 
 function configureRoutes() {
   const routesService = inject(RoutesService);
-  routes.add([
+  routesService.add([
     {
       path: '/your-path',
       name: 'Your navigation',
@@ -145,10 +145,11 @@ We can also define a group for navigation elements. It's an optional property
 ```js
 // route.provider.ts
 import { RoutesService } from '@abp/ng.core';
+import { inject } from '@angular/core';
 
 function configureRoutes() {  
   const routesService = inject(RoutesService);
-  routes.add([
+  routesService.add([
     {
       //etc..
       group: 'ModuleName::GroupName'

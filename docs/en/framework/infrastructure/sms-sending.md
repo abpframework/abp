@@ -85,20 +85,19 @@ The given `SendAsync` method in the example is an extension method to send an SM
 
 - `PhoneNumber` (`string`): Target phone number
 - `Text` (`string`): Message text
-- `Properties` (`Dictionary<string, string>`): Key-value pairs to pass custom arguments
+- `Properties` (`IDictionary<string, object>`): Key-value pairs to pass custom arguments
 
 ## NullSmsSender
 
-`NullSmsSender` is a the default implementation of the `ISmsSender`. It writes SMS content to the [standard logger](../fundamentals/logging.md), rather than actually sending the SMS.
+`NullSmsSender` is the default implementation of `ISmsSender`. It writes SMS content to the [standard logger](../fundamentals/logging.md), rather than actually sending the SMS.
 
-This class can be useful especially in development time where you generally don't want to send real SMS. **However, if you want to actually send SMS, you should implement the `ISmsSender` in your application code.**
+This class can be useful especially in development time where you generally don't want to send real SMS. To send real SMS, install one of the pre-built providers below or implement `ISmsSender` in your application code.
 
 ## Implementing the ISmsSender
 
 You can easily create your SMS sending implementation by creating a class that implements the `ISmsSender` interface, as shown below:
 
 ```csharp
-using System.IO;
 using System.Threading.Tasks;
 using Volo.Abp.Sms;
 using Volo.Abp.DependencyInjection;
@@ -107,12 +106,93 @@ namespace AbpDemo
 {
     public class MyCustomSmsSender : ISmsSender, ITransientDependency
     {
-        public async Task SendAsync(SmsMessage smsMessage)
+        public Task SendAsync(SmsMessage smsMessage)
         {
             // Send sms
+            return Task.CompletedTask;
         }
     }
 }
+```
+
+## Pre-Built Providers
+
+Adding a provider module registers its sender as the `ISmsSender` implementation in place of the default `NullSmsSender`.
+
+### Aliyun
+
+Install the Aliyun provider package:
+
+```bash
+abp add-package Volo.Abp.Sms.Aliyun
+```
+
+For manual installation, add the `Volo.Abp.Sms.Aliyun` package and declare a dependency on `AbpSmsAliyunModule`.
+
+Configure the provider in the `AbpAliyunSms` section:
+
+```json
+{
+  "AbpAliyunSms": {
+    "AccessKeyId": "your-access-key-id",
+    "AccessKeySecret": "your-access-key-secret",
+    "EndPoint": "your-endpoint"
+  }
+}
+```
+
+Aliyun sends template-based messages. Set `SmsMessage.Text` to the template parameter JSON and use the `SignName` and `TemplateCode` properties:
+
+```csharp
+var message = new SmsMessage(
+    "+012345678901",
+    "{\"code\":\"123456\"}"
+);
+
+message.Properties["SignName"] = "MySign";
+message.Properties["TemplateCode"] = "SMS_123456789";
+
+await _smsSender.SendAsync(message);
+```
+
+### Tencent Cloud
+
+Install the Tencent Cloud provider package:
+
+```bash
+abp add-package Volo.Abp.Sms.TencentCloud
+```
+
+For manual installation, add the `Volo.Abp.Sms.TencentCloud` package and declare a dependency on `AbpSmsTencentCloudModule`.
+
+Configure the provider in the `AbpTencentCloudSms` section:
+
+```json
+{
+  "AbpTencentCloudSms": {
+    "SmsSdkAppId": "your-sdk-app-id",
+    "SecretId": "your-secret-id",
+    "SecretKey": "your-secret-key",
+    "Endpoint": "sms.tencentcloudapi.com",
+    "Region": "ap-guangzhou"
+  }
+}
+```
+
+`Endpoint` defaults to `sms.tencentcloudapi.com` and `Region` defaults to `ap-guangzhou`.
+
+Set the sign and template identifiers through `TencentCloudSmsProperties`. The provider splits `SmsMessage.Text` by commas and sends the resulting values as template parameters:
+
+```csharp
+var message = new SmsMessage(
+    "+012345678901",
+    "123456,5"
+);
+
+message.Properties[TencentCloudSmsProperties.SignName] = "MySign";
+message.Properties[TencentCloudSmsProperties.TemplateId] = "123456";
+
+await _smsSender.SendAsync(message);
 ```
 
 ## More

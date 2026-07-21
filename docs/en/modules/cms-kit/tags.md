@@ -149,7 +149,7 @@ This module follows the [Domain Services Best Practices & Conventions](../../fra
 
 ##### Table / Collection prefix & schema
 
-All tables/collections use the `Cms` prefix by default. Set static properties on the `CmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
+All tables/collections use the `Cms` prefix by default. Set static properties on the `AbpCmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
 
 ##### Connection string
 

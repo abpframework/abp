@@ -41,7 +41,7 @@ Following custom repositories are defined for this module:
 
 ##### Table / collection prefix & schema
 
-All tables/collections use the `Abp` prefix by default. Set static properties on the `BackgroundJobsDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
+All tables/collections use the `Abp` prefix by default. Set static properties on the `AbpBackgroundJobsDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
 
 ##### Connection string
 

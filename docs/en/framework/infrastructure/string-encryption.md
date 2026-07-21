@@ -112,8 +112,8 @@ Configure<AbpStringEncryptionOptions>(opts =>
 {
     opts.DefaultPassPhrase = "MyStrongPassPhrase";
     opts.DefaultSalt = Encoding.UTF8.GetBytes("MyStrongSalt");
-    opts.InitVectorBytes = Encoding.UTF8.GetBytes("YetAnotherStrongSalt");
-    opts.Keysize = 512;
+    opts.InitVectorBytes = Encoding.UTF8.GetBytes("My16ByteInitVect");
+    opts.Keysize = 256;
 });
 ```
 
@@ -123,10 +123,10 @@ Configure<AbpStringEncryptionOptions>(opts =>
 
   Default value: `Encoding.ASCII.GetBytes("hgt!16kl")`
 
-- **InitVectorBytes:** This constant string is used as a "salt" value for the PasswordDeriveBytes function calls. This size of the IV (in bytes) must = (keysize / 8). Default keysize is 256, so the IV must be 32 bytes long. Using a 16 character string here gives us 32 bytes when converted to a byte array. 
+- **InitVectorBytes:** The initialization vector used by AES. It must be exactly 16 bytes, regardless of the configured key size.
 
   Default value: `Encoding.ASCII.GetBytes("jkE49230Tf093b42")`
 
-- **Keysize:** This constant is used to determine the keysize of the encryption algorithm.
+- **Keysize:** The AES key size in bits. Use a key size supported by AES: `128`, `192`, or `256`.
 
   Default value: `256`

@@ -171,7 +171,7 @@ export const appConfig: ApplicationConfig = {
       withOptions({
         dynamicLayouts: myDynamicLayouts,
         environment,
-        registerLocaleFn: registerLocale(),
+        registerLocaleFn: registerLocaleForEsBuild(),
       }),
     ),
   ],
@@ -179,6 +179,8 @@ export const appConfig: ApplicationConfig = {
 ```
 
 In this code, `myDynamicLayouts` is the map of dynamic layouts you defined earlier. We pass this map to the `provideAbpCore` using the `withOptions` method.
+
+This example uses the Angular application builder. Use `registerLocale()` instead when the application uses the Webpack builder. See [Registering a New Locale](./localization.md#registering-a-new-locale) for the builder-specific setup.
 
 Now that you have defined the new layout, you can use it in the router definition. You do this by adding a new route that uses the new layout.
 

@@ -504,6 +504,21 @@ export class MyService {
 - `key(index: number): string | null`
 - `length: number`
 
+#### Session and Cookie Storage
+
+`AbpCookieStorageService` provides the cookie-backed `Storage` implementation used during SSR. On the server, it reads cookies from the incoming Angular `REQUEST`; write and remove operations do nothing. In the browser, it reads and writes `document.cookie`. Values written with `setItem` use `Path=/`, `SameSite=Lax`, and `Secure`. Use `setItemWithExpiry` when a cookie also needs a maximum age.
+
+`SessionStateService` selects its storage automatically:
+
+- When the application started with SSR, it persists the `abpSession` value in `AbpCookieStorageService` so the server request can read the session state.
+- Otherwise, it persists `abpSession` in `AbpLocalStorageService`.
+
+Application code normally uses `SessionStateService` for the current language and tenant instead of reading `abpSession` directly.
+
+#### Cross-Tab Authentication Changes
+
+`provideAbpCore` initializes `LocalStorageListenerService`. In the browser, this service listens for storage changes to the `access_token` key. When another browser context adds or removes that token, the current page navigates to `/` so its authentication state is refreshed.
+
 ### 9.3. Hydration Mismatch Errors
 
 If you see "NG0500" errors in the console:
@@ -515,7 +530,7 @@ If you see "NG0500" errors in the console:
 
 ### 9.4. Avoiding Duplicate API Calls
 
-ABP Core provides a `transferStateInterceptor` that automatically prevents duplicate HTTP GET requests during hydration. When you use `provideAbpCore()`, this interceptor is already active.
+ABP Core provides a `transferStateInterceptor` that automatically prevents duplicate HTTP GET requests during hydration. When you configure `provideAbpCore(withOptions(...))`, this interceptor is already active.
 
 **How it works:**
 - Server: Stores HTTP GET responses in `TransferState`
@@ -524,15 +539,25 @@ ABP Core provides a `transferStateInterceptor` that automatically prevents dupli
 
 ```typescript
 // app.config.ts
-import { provideAbpCore } from '@abp/ng.core';
+import { provideAbpCore, withOptions } from '@abp/ng.core';
+import { registerLocaleForEsBuild } from '@abp/ng.core/locale';
+import { ApplicationConfig } from '@angular/core';
+import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
     providers: [
-        provideAbpCore(),
+        provideAbpCore(
+            withOptions({
+                environment,
+                registerLocaleFn: registerLocaleForEsBuild(),
+            }),
+        ),
         // transferStateInterceptor is automatically included
     ]
 };
 ```
+
+The example uses the Angular application builder. If your SSR application uses the Webpack builder, use `registerLocale()` instead. See [Registering a New Locale](localization.md#registering-a-new-locale) for the builder-specific configuration.
 
 The interceptor works with all HTTP GET requests made through `HttpClient`:
 

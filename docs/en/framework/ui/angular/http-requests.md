@@ -30,7 +30,7 @@ An `HttpInterceptor` is able to catch `HttpErrorResponse` and can be used for a 
 
 ## RestService
 
-ABP core module has a utility service for HTTP requests: `RestService`. Unless explicitly configured otherwise, it catches HTTP errors and dispatches a `RestOccurError` action. This action is then captured by the `ErrorHandler` introduced by the `ThemeSharedModule`. Since you should already import this module in your app, when the `RestService` is used, all HTTP errors get automatically handled by default.
+ABP core module has a utility service for HTTP requests: `RestService`. Unless explicitly configured otherwise, it catches HTTP errors and reports them through `HttpErrorReporterService`. The error handler provided by the Theme Shared package subscribes to that service and displays the appropriate error UI. When the Theme Shared provider is configured in your application, HTTP errors from `RestService` are handled automatically by default.
 
 ### Getting Started with RestService
 
@@ -110,7 +110,7 @@ deleteFoo(id: number) {
 }
 ```
 
-`skipHandleError` config option, when set to `true`, disables the error handler and the returned observable starts throwing an error that you can catch in your subscription.
+The `skipHandleError` config option, when set to `true`, prevents `RestService` from reporting the error through `HttpErrorReporterService`. The returned observable still throws the error, so you can handle it in the caller.
 
 ```js
 removeFooFromList(id: number) {

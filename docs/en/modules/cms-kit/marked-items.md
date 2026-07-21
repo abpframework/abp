@@ -18,15 +18,15 @@ you can also customize the marking icons shown in the toggling components.
 
 ## Enabling the Marked Item Feature
 
-By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../Global-Features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](https://docs.abp.io/en/abp/latest/Features) to disable a CMS Kit feature on runtime.
+By default, CMS Kit features are disabled. Therefore, you need to enable the features you want before using them. You can use the [Global Feature](../../framework/infrastructure/global-features.md) system to enable or disable CMS Kit features at development time. Alternatively, you can use the ABP [Feature System](../../framework/infrastructure/features.md) to disable a CMS Kit feature at runtime.
 
-> Check the ["How to Install" section of the CMS Kit Module documentation](Index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
+> Check the ["How to Install" section of the CMS Kit Module documentation](index.md#how-to-install) to see how to enable or disable CMS Kit features at development time.
 
 ## Options
 
 Marking system provides a simple approach to define your entity type with mark types like favorite or starred. For example, if you want to use the marking system for products, you need to define an entity type named `product` with the icon name.
 
-`CmsKitMarkedItemOptions` can be configured in YourModule.cs, in the `ConfigureServices` method of your [module](https://docs.abp.io/en/abp/latest/Module-Development-Basics). Example:
+`CmsKitMarkedItemOptions` can be configured in `YourModule.cs`, in the `ConfigureServices` method of your [module](../../framework/architecture/modularity/basics.md). Example:
 
 ```csharp
 Configure<CmsKitMarkedItemOptions>(options =>
@@ -42,7 +42,7 @@ Configure<CmsKitMarkedItemOptions>(options =>
 
 `CmsKitMarkedItemOptions` properties:
 
-- `EntityTypes`: List of defined entity types (`CmsKitMarkedItemOptions`) in the marking system.
+- `EntityTypes`: List of defined entity types (`MarkedItemEntityTypeDefinition`) in the marking system.
 
 `MarkedItemEntityTypeDefinition` properties:
 
@@ -53,8 +53,8 @@ Configure<CmsKitMarkedItemOptions>(options =>
 
 The marking system provides a toggle widget to allow users to add/remove the marks from an item. You can place the widget with the item as shown below:
 
-``` csharp
-@await Component.InvokeAsync(typeof (MarkedItemToggleViewComponent), new
+```csharp
+@await Component.InvokeAsync(typeof(MarkedItemToggleViewComponent), new
 {
     entityId = "...",
     entityType = "product",
@@ -64,6 +64,20 @@ The marking system provides a toggle widget to allow users to add/remove the mar
 * `entityType` was explained in the previous section. 
 * `entityId` should be the unique id of the product, in this example. If you have a Product entity, you can use its Id here. 
 * `needsConfirmation` An optional parameter to let the user confirm when removing the mark.
+
+The widget can be rendered for anonymous visitors, but toggling a mark requires an authenticated user. The mark state is stored for the current user, entity type and entity ID.
+
+### Customizing MVC Marked Item Icons
+
+The MVC widget resolves the configured icon name through `CmsKitUiOptions.MarkedItemIcons`:
+
+```csharp
+Configure<CmsKitUiOptions>(options =>
+{
+    options.MarkedItemIcons[StandardMarkedItems.Favorite] =
+        new LocalizableIconDictionary("fa fa-heart text-danger");
+});
+```
 
 ### Filtering on Marked Items
 
@@ -97,7 +111,7 @@ var queryable = (await GetDbSetAsync())
 
 #### Aggregates
 
-This module follows the [Entity Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Entities) guide.
+This module follows the [Entity Best Practices & Conventions](../../framework/architecture/best-practices/entities.md) guide.
 
 ##### UserMarkedItem
 
@@ -107,7 +121,7 @@ A user markedItem represents a user has marking on the item.
 
 #### Repositories
 
-This module follows the [Repository Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Repositories) guide.
+This module follows the [Repository Best Practices & Conventions](../../framework/architecture/best-practices/repositories.md) guide.
 
 Following custom repositories are defined for this feature:
 
@@ -116,7 +130,7 @@ Following custom repositories are defined for this feature:
 
 #### Domain services
 
-This module follows the [Domain Services Best Practices & Conventions](https://docs.abp.io/en/abp/latest/Best-Practices/Domain-Services) guide.
+This module follows the [Domain Services Best Practices & Conventions](../../framework/architecture/best-practices/domain-services.md) guide.
 
 ##### Marked Item Manager
 
@@ -134,13 +148,13 @@ This module follows the [Domain Services Best Practices & Conventions](https://d
 
 ##### Table / collection prefix & schema
 
-All tables/collections use the `Cms` prefix by default. Set static properties on the `CmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
+All tables/collections use the `Cms` prefix by default. Set static properties on the `AbpCmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
 
 ##### Connection string
 
 This module uses `CmsKit` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
 
-See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-Strings) documentation for details.
+See the [connection strings](../../framework/fundamentals/connection-strings.md) documentation for details.
 
 #### Entity Framework Core
 
@@ -153,4 +167,3 @@ See the [connection strings](https://docs.abp.io/en/abp/latest/Connection-String
 ##### Collections
 
 - **CmsUserMarkedItems**
-
