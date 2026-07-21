@@ -214,6 +214,58 @@ public class BookService : ITransientDependency
 }
 ````
 
+## Hybrid Cache
+
+ABP registers Microsoft's `HybridCache` together with typed ABP wrappers when the `Volo.Abp.Caching` module is used. Hybrid caching keeps a local in-process cache and can use the configured `IDistributedCache` as a secondary cache.
+
+Use `IHybridCache<TCacheItem>` for string keys or `IHybridCache<TCacheItem, TCacheKey>` for another key type:
+
+````csharp
+using Volo.Abp.Caching.Hybrid;
+using Volo.Abp.DependencyInjection;
+
+public class BookCacheItem
+{
+    public string Name { get; set; } = string.Empty;
+}
+
+public class BookService : ITransientDependency
+{
+    private readonly IHybridCache<BookCacheItem, Guid> _cache;
+
+    public BookService(IHybridCache<BookCacheItem, Guid> cache)
+    {
+        _cache = cache;
+    }
+
+    public Task<BookCacheItem?> GetAsync(Guid bookId)
+    {
+        return _cache.GetOrCreateAsync(
+            bookId,
+            () => LoadBookAsync(bookId)
+        );
+    }
+
+    private Task<BookCacheItem> LoadBookAsync(Guid bookId)
+    {
+        // Load the item from its source.
+        throw new NotImplementedException();
+    }
+}
+````
+
+The typed wrapper uses the same cache-name and tenant-aware key normalization conventions as ABP's distributed cache. Use `CacheName` on the cache item type to set its cache name and `IgnoreMultiTenancy` to share entries between tenants. A custom key type is converted with its `ToString()` method.
+
+The main operations are `GetOrCreateAsync`, `SetAsync`, `RemoveAsync` and `RemoveManyAsync`. Each operation has a nullable `hideErrors` argument. When it is `null`, `AbpHybridCacheOptions.HideErrors` is used; its default is `true`. Hidden errors are logged and sent to the exception notification system. `GetOrCreateAsync` can return `null` when a cache error is hidden.
+
+### Hybrid Cache and Unit of Work
+
+The hybrid-cache methods have a `considerUow` argument that defaults to `false`. When it is `true` and a unit of work is active, cache changes are visible inside that unit of work and are applied to the real cache only after the unit of work completes successfully. A rolled-back unit of work does not apply those changes.
+
+### Hybrid Cache Entry Options
+
+Pass `HybridCacheEntryOptions` to an individual `SetAsync` call when it needs a custom expiration. `AbpHybridCacheOptions.GlobalHybridCacheEntryOptions` is used by `SetAsync` when no per-call options are supplied, and `ConfigureCache<TCacheItem>()` can set the corresponding default for a cache item type.
+
 ## Configuration
 
 ### AbpDistributedCacheOptions
@@ -233,7 +285,7 @@ Configure<AbpDistributedCacheOptions>(options =>
 
 
 * `HideErrors` (`bool`, default: `true`): Enables or disables hiding errors when reading from or writing to the cache server. In the **development** environment, this option is **disabled** to help developers detect and fix any cache server issues.
-* `KeyPrefix` (`string`, default: `null`): If your cache server is shared by multiple applications, you can set a prefix for the cache keys for your application. In this case, different applications can not overwrite each other's cache items.
+* `KeyPrefix` (`string`, default: an empty string): If your cache server is shared by multiple applications, you can set a prefix for the cache keys for your application. In this case, different applications can not overwrite each other's cache items.
 * `GlobalCacheEntryOptions` (`DistributedCacheEntryOptions`): Used to set default distributed cache options (like `AbsoluteExpiration` and `SlidingExpiration`) used when you don't specify the options while saving cache items. The default value uses the `SlidingExpiration` as 20 minutes.
 
 ## Error Handling

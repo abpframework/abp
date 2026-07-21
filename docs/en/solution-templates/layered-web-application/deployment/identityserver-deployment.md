@@ -7,19 +7,21 @@
 
 # IdentityServer Deployment
 
-IdentityServer configuration may be different based on deployment configurations. Basically, you need update identityserver client related data and update your hosting preferences based on your deployment environment.
+> This page applies only to applications that still use the legacy [IdentityServer module](../../../modules/identity-server.md). Current startup templates use OpenIddict; see [Configuring OpenIddict](../../../deployment/configuring-openIddict.md) for current applications.
 
-## Update Cors Origins
+IdentityServer configuration changes between deployment environments. Update the IdentityServer client data and the host settings for the deployed URLs before releasing the application.
 
-Cors origins configuration for **gateways**, **microservices** swagger authorization and **Angular/Blazor** (web assembly) must be updated for deployment. This can be found under **App** configuration in *appsettings.json* 
+## Update CORS Origins
+
+CORS origin configuration for **gateways**, **microservices** Swagger authorization and **Angular/Blazor WebAssembly** applications must be updated for deployment. It is under the **App** section in *appsettings.json*.
 
 ```json
 "CorsOrigins": "https://*.MyProjectName.com,http://localhost:4200,https://localhost:44307,https://localhost:44325,https://localhost:44353,https://localhost:44367,https://localhost:44388,https://localhost:44381,https://localhost:44361",
 ```
 
-## Update Redirect Allowed Urls
+## Update Redirect Allowed URLs
 
-This configuration must be done if **Angular** or **Blazor** (web assembly) is used as back-office web application. It is found under **App** configuration in appsettings.json
+Update this configuration when an **Angular** or **Blazor WebAssembly** application is used as the back-office application. It is under the **App** section in *appsettings.json*.
 
 ```json
 "RedirectAllowedUrls": "http://localhost:4200,https://localhost:44307"
@@ -29,90 +31,50 @@ This configuration must be done if **Angular** or **Blazor** (web assembly) is u
 
 `IdentityServerDataSeedContributor` uses **IdentityServer.Clients** section of `appsettings.json` for `ClientId`, `RedirectUri`, `PostLogoutRedirectUri`, `CorsOrigins`.
 
-Update DbMigrator project `appsettings.json` **IdentityServer.Clients.RootUrls** with production values:
+Update the DbMigrator project's `appsettings.json` **IdentityServer.Clients.RootUrls** values for production:
 
 ![db-migrator-appsettings](../../../images/db-migrator-appsettings.png)
 
 Or, manually add production values to `IdentityServerClientRedirectUris`, `IdentityServerClientPostLogoutRedirectUris`, `IdentityServerClientCorsOrigins` tables in your database.
 
-> If you are using microservice template on-the-fly migration and not using dbmigrator project, update **IdentityService** appsettings.
+> If you use the microservice template's on-the-fly migration instead of a DbMigrator project, update the **IdentityService** settings.
 
-Eventually, you shouldn't have `localhost` related data.
+Remove all `localhost` values from the production client data.
 
 ## Update IdentityServer
 
-You need to update token signing certificate and identityserver midware based on your hosting environment.
+Update the token-signing certificate and IdentityServer middleware for your hosting environment.
 
 ### Signing Certificate
 
-Default development environment uses [developer signing certificates option](https://github.com/abpframework/abp/blob/dev/modules/identityserver/src/Volo.Abp.IdentityServer.Domain/Volo/Abp/IdentityServer/AbpIdentityServerBuilderOptions.cs#L29). Using developer signing certificates may cause *IDX10501: Signature validation failed* error on production.
+The default `AbpIdentityServerBuilderOptions.AddDeveloperSigningCredential` value enables a developer signing credential. Don't use a developer signing credential in production; configure a real certificate through `IIdentityServerBuilder` pre-configuration. Otherwise, signing keys can change between deployments and cause errors such as *IDX10501: Signature validation failed*.
 
-Update **IdentityServerModule** with using real certificate on `IIdentityServerBuilder` pre-configuration.
+Update **IdentityServerModule** to use a real certificate in `IIdentityServerBuilder` pre-configuration.
 
 ![idsrv-certificate](../../../images/idsrv-certificate.png)
 
-You can also [create self-signed certificate](https://docs.abp.io/en/commercial/5.0/startup-templates/microservice/tye-integration#create-developer-certificates) and use it.
-
-> If you are using self signed certificate, do not forget to set the certificate (.pfx file) as `EmbeddedResource` and set `CopyToOutputDirectory`. File needs to exist physically.
+Load the production certificate from your deployment platform's certificate or secret store. Don't embed the production private key in the application assembly or commit it to the source repository.
 
 ### Use HTTPS
 
-Update **IdentityServerModule** to [enfcore https](https://docs.microsoft.com/en-us/aspnet/core/security/enforcing-ssl?view=aspnetcore-6.0&tabs=visual-studio). Add `UseHsts` to add hsts headers to clients, add `UseHttpsRedirection` to redirect http requests to https.
+Update **IdentityServerModule** to [enforce HTTPS](https://learn.microsoft.com/aspnet/core/security/enforcing-ssl). Add `UseHsts` to send HSTS headers and `UseHttpsRedirection` to redirect HTTP requests to HTTPS.
 
 ![use-https](../../../images/use-https.png)
 
 ### Behind Load Balancer
 
-To redirect http requests to https from load balancer, update `OnApplicationInitialization` method of the **IdentityServerModule** with the midware below:
+When TLS terminates at a reverse proxy or load balancer, use ASP.NET Core Forwarded Headers Middleware so IdentityServer receives the original scheme and host. Follow the [Forwarded Headers](../../../deployment/forwarded-headers.md) guide and the [ASP.NET Core proxy and load balancer guidance](https://learn.microsoft.com/aspnet/core/host-and-deploy/proxy-load-balancer).
 
-```csharp
-app.Use((httpContext, next) =>
-{
-    httpContext.Request.Scheme = "https";
-    return next();
-});
-```
+Configure the proxy addresses or networks in `ForwardedHeadersOptions.KnownProxies` or `KnownNetworks`, and call `UseForwardedHeaders` before authentication, IdentityServer, HTTPS redirection and HSTS middleware. If you enable `X-Forwarded-Host`, restrict `AllowedHosts` and configure the proxy to overwrite incoming forwarded headers.
+
+Don't set `HttpContext.Request.Scheme` unconditionally. Don't derive the IdentityServer origin from a custom request header unless the application first verifies that the request came through a trusted proxy; internet clients can forge ordinary request headers.
 
 ### Kubernetes
 
-A common scenario is running applications in kubernetes environment. While IdentityServer needs to face internet on https, internal requests can be done using http.
+A common scenario is running applications in Kubernetes. While IdentityServer must be exposed to the internet over HTTPS, internal requests can use HTTP.
 
 ![idsrv-k8s](../../../images/idsrv-k8s.png)
 
-**HttpApi.Host** and **Web** applications authority should be set to http since token validations will done using http request.
+Keep the externally advertised IdentityServer authority and origin on the public HTTPS URL. If services use cluster-local routing, configure internal DNS or the ingress so that the public authority resolves through the trusted internal route without changing the issuer or accepting a client-controlled origin.
 
-![api-resource-internal-idsrv](../../../images/api-resource-internal-idsrv.png)
-
-> You can use different appsettings files like *appsettings.production.json* to override these values or directly override environment values from kubernetes.
-
-To isolate internal identityserver requests from external network (internet), append extra header instead of overwriting. 
-For ingress, you can use `nginx.ingress.kubernetes.io/configuration-snippet`:
-
-```yaml
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: myidentityserver-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/proxy-buffer-size: "32k"
-    nginx.ingress.kubernetes.io/proxy-buffers-number: "8"
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      more_set_input_headers "from-ingress: true";
-spec:
-```
-
-You need to set the IdentityServer origin based on header. Update `OnApplicationInitialization` method of the **IdentityServerModule** with the midware below:
-
-```csharp
-app.Use(async (ctx, next) =>
-{
-    if (ctx.Request.Headers.ContainsKey("from-ingress"))
-    {
-        ctx.SetIdentityServerOrigin("https://myidentityserver.com");
-    }
-
-    await next();
-});
-```
+> You can use environment-specific files such as *appsettings.Production.json* or environment variables to override these values in Kubernetes.

@@ -9,15 +9,15 @@
 
 > You must have an [ABP Team or a higher license](https://abp.io/pricing) to use CMS Kit Pro module's features.
 
-CMS Kit provides a **newsletter** system to allow users to subscribe to newsletters. Here a screenshot of the newsletter subscription widget:
+CMS Kit provides a **newsletter** system that allows users to subscribe to newsletters. Here is a screenshot of the newsletter subscription widget:
 
 ![cmskit-module-newsletter-widget](../../images/cmskit-module-newsletter-widget.png)
 
 ## Enabling the Newsletter System
 
-By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../framework/infrastructure/global-features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP's [Feature System](../../framework/infrastructure/features.md) to disable a CMS Kit feature on runtime.
+By default, CMS Kit features are disabled. Therefore, you need to enable the features you want before starting to use them. You can use the [Global Feature](../../framework/infrastructure/global-features.md) system to enable or disable CMS Kit features at development time. Alternatively, you can use ABP's [Feature System](../../framework/infrastructure/features.md) to disable a CMS Kit feature at runtime.
 
-> Check the ["How to Install" section of the CMS Kit Module documentation](index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
+> Check the ["How to Install" section of the CMS Kit Module documentation](index.md#how-to-install) to see how to enable or disable CMS Kit features at development time.
 
 ## User Interface
 
@@ -29,20 +29,19 @@ By default, CMS Kit features are disabled. Therefore, you need to enable the fea
 
 #### Newsletters
 
-You can then view the subscribers and export the list as CSV file, in the admin side of your solution:
+You can view subscribers, edit their preferences, import subscriptions from a CSV file and export the filtered list as a CSV file on the admin side of your solution:
 
 ![newsletter-page](../../images/cmskit-module-newsletter-page.png)
 
 #### Email Preferences Management
 
-You (and users of your public web application) can manage your email preferences and unsubscribe from newsletters by visiting the **Email Preferences page** (*/cms/newsletter/email-preferences*), in the public side of your solution:
+Users can manage their email preferences and unsubscribe from newsletters on the public **Email Preferences** page at `/cms/newsletter/email-preferences`:
 
 ![manage-email-preferences](../../images/manage-email-preferences.png)
 
 ## The Newsletter Subscription Widget
 
-The newsletter subscription system provides a newsletter subscription [widget](../../framework/ui/mvc-razor-pages/widgets.md) to allow users to subscribe to a newsletter. 
-You can simply place the widget on a page like below: 
+The newsletter subscription system provides a newsletter subscription [widget](../../framework/ui/mvc-razor-pages/widgets.md) to allow users to subscribe to a newsletter. You can place the widget on a page as shown below:
 
 ```csharp
 @await Component.InvokeAsync(
@@ -52,10 +51,12 @@ You can simply place the widget on a page like below:
       preference = "TechNewsletter",
       source = "Footer",
       requestAdditionalPreferencesLater = false
-  })
+})
 ```
 
-When you're adding the newsletter component, you can the specify `source` parameter to see where users subscribe to newsletters. See the options to understand the preferences.
+The `preference` and `source` parameters are required. `preference` must match a registered preference. Use `source` to distinguish where subscriptions originate, such as `Footer` or `Blog`. If `requestAdditionalPreferencesLater` is `true`, the widget requests the additional subscriptions in the success dialog instead of the initial form. You can also pass `privacyPolicyConfirmation` to override the preference's configured privacy-policy text for that widget instance.
+
+New subscriptions require email confirmation. Once confirmed, users can manage all registered preferences from `/cms/newsletter/email-preferences`; disabling every preference removes the subscription record.
 
 ## Options
 
@@ -64,25 +65,67 @@ Before using the newsletter system, you need to define the preferences. You can 
 **Example:**
 
 ```csharp
-options.AddPreference("TechNewsletter",
-    new NewsletterPreferenceDefinition(
-        "Daily Technology Newsletter",
-        privacyPolicyConfirmation: "I accept the <a href='/privacy-policy'>Privacy Policy</a>.")
-    )
-);
+Configure<NewsletterOptions>(options =>
+{
+    options.AddPreference(
+        "ProductUpdates",
+        new NewsletterPreferenceDefinition(
+            new LocalizableString(
+                typeof(MyProjectResource),
+                "Newsletter:ProductUpdates")
+        )
+    );
+
+    options.AddPreference(
+        "TechNewsletter",
+        new NewsletterPreferenceDefinition(
+            new LocalizableString(
+                typeof(MyProjectResource),
+                "Newsletter:TechNewsletter"),
+            definition: new LocalizableString(
+                typeof(MyProjectResource),
+                "Newsletter:TechNewsletterDescription"),
+            privacyPolicyConfirmation: new LocalizableString(
+                typeof(MyProjectResource),
+                "Newsletter:PrivacyPolicyConfirmation"),
+            additionalPreferences: new List<string> { "ProductUpdates" }
+        )
+    );
+});
 ```
 
 `NewsletterOptions` properties:
 
-- `Preferences`: List of defined newsletter preferences (`NewsletterPreferenceDefinition`) in the newsletter system.
+- `Preferences`: Dictionary of registered preference names and their `NewsletterPreferenceDefinition` values.
 - `WidgetViewPath`: Default view path for all newsletter preferences.
 
 `NewsletterPreferenceDefinition` properties:
 
 - `Preference`: Name of the preference. We will use this field while displaying the newsletter component on the UI.
-- `PrivacyPolicyConfirmation`: Privacy policy confirmation text shown in the newsletter subscription widget.
-- `AdditionalPreferences`: Additional preference list that will show up after a user subscribes to the newsletter.
-- `WidgetPath`: If you want to use a different newsletter widget instead of the default widget, you can specify the newsletter widget path using this field.
+- `DisplayPreference`: Localizable display name of the preference.
+- `Definition`: Optional localizable description shown on the email preferences page.
+- `PrivacyPolicyConfirmation`: Privacy policy confirmation text for the newsletter subscription widget. The preference-level value currently reaches the widget only when the selected definition has a non-empty `AdditionalPreferences` list; otherwise the service returns before localizing this value. Pass `privacyPolicyConfirmation` when invoking the widget if you need an override that is independent of that list.
+- `AdditionalPreferences`: Names of other registered preferences that participate in the additional-preference flow.
+- `WidgetViewPath`: Optional Razor view path for this preference. It overrides the default `NewsletterOptions.WidgetViewPath`.
+
+The widget uses `~/Pages/Public/Shared/Components/Newsletter/Default.cshtml` when neither view-path option is set.
+
+The current implementation first checks whether the selected preference has a non-empty `AdditionalPreferences` list. If it does, the service collects registered preference names referenced by the `AdditionalPreferences` lists of all registered definitions, excludes the selected preference and removes duplicates. If the selected preference has no additional preferences, the widget does not offer any. Keep this global collection behavior in mind when multiple definitions reference different additional preferences.
+
+### Email Preferences Page Options
+
+Use `NewsletterPreferencesManagementOptions` to set the source recorded for changes made on the email preferences page and an optional privacy-policy confirmation message:
+
+```csharp
+Configure<NewsletterPreferencesManagementOptions>(options =>
+{
+    options.Source = "EmailPreferences";
+    options.PrivacyPolicyConfirmation = new LocalizableString(
+        typeof(MyProjectResource),
+        "Newsletter:PrivacyPolicyConfirmation"
+    );
+});
+```
 
 ## Internals
 
@@ -94,7 +137,7 @@ This module follows the [Entity Best Practices & Conventions](../../framework/ar
 
 ##### NewsletterRecord
 
-A newsletter record represents a newsletter subscription for a specific email address
+A newsletter record represents a newsletter subscription for a specific email address.
 
 - `NewsletterRecord` (aggregate root): Represents a newsletter subscription in the system.
 
@@ -127,11 +170,11 @@ This module follows the [Domain Services Best Practices & Conventions](../../fra
 
 ##### Table / collection prefix & schema
 
-All tables/collections use the `Cms` prefix by default. Set static properties on the `CmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
+All tables/collections use the `Cms` prefix by default. Set static properties on the `AbpCmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
 
 ##### Connection string
 
-This module uses `CmsKit` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
+This module uses `CmsKit` for the connection string name. If you don't define a connection string with this name, it falls back to the `Default` connection string.
 
 See the [connection strings](../../framework/fundamentals/connection-strings.md) documentation for details.
 

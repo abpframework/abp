@@ -42,7 +42,8 @@ const hasIdentityOrAccountPermission = this.permissionService.getGrantedPolicy(
 
 Please consider the following **rules** when creating your permission selectors:
 
-- Maximum 2 keys can be combined.
+- Two or more keys can be combined with the same operator.
+- Do not mix `&&` and `||` in the same selector.
 - `&&` operator looks for both keys.
 - `||` operator looks for either key.
 - Empty string `''` as key will return `true`
@@ -89,18 +90,14 @@ In some cases, a custom permission management may be needed. All you need to do 
 
 - First, create a service of your own. Let's call it `CustomPermissionService` and extend `PermissionService` from `@abp/ng.core` as follows:
 
-```js
-import { ConfigStateService, PermissionService } from '@abp/ng.core';
-import { Injectable, inject } from '@angular/core';
+```ts
+import { PermissionService } from '@abp/ng.core';
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CustomPermissionService extends PermissionService {
-  constructor() {
-    super(inject(ConfigStateService));
-  }
-
   // This is an example to show how to override the methods
   getGrantedPolicy$(key: string) {
     return super.getGrantedPolicy$(key);

@@ -165,3 +165,15 @@ ABP provides a lot of built-in solutions to common application requirements;
 ## Customization
 
 There are a lot of ways to customize the theme and the UIs of the pre-built modules. You can override components, pages, static resources, bundles and more. See the [User Interface Customization Guide](customization-user-interface.md).
+
+### Status-Specific Error Views
+
+The shared MVC theme uses `~/Views/Error/Default.cshtml` by default. Map an HTTP status code to another view with `AbpErrorPageOptions.ErrorViewUrls`:
+
+````csharp
+Configure<AbpErrorPageOptions>(options =>
+{
+    options.ErrorViewUrls["404"] = "~/Views/Error/NotFound.cshtml";
+    options.ErrorViewUrls["500"] = "~/Views/Error/InternalError.cshtml";
+});
+````

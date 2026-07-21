@@ -29,6 +29,42 @@ export const appConfig = createAbpReactAppConfig({
 })
 ```
 
+## Framework-Agnostic Application Configuration Client
+
+`@volo/abp-app-config` provides the application-configuration client without a React dependency. Use it directly in another JavaScript runtime or pass an existing client to the React adapter:
+
+```ts
+import { createAbpAppConfig } from '@volo/abp-app-config'
+import { createAbpReactAppConfig } from '@volo/abp-react-app-config'
+
+const client = createAbpAppConfig({
+  baseUrl: 'https://localhost:44300',
+})
+
+const appConfig = createAbpReactAppConfig({ client })
+```
+
+The lower-level client exposes:
+
+- `fetchConfig()` and `fetchLocalization()` to load server data.
+- `refetch()` to reload the application configuration.
+- `getSnapshot()` and `getSections()` to read the current state.
+- `subscribe(listener)` to observe state changes. It returns an unsubscribe function.
+- `t()` and `tWithFallback()` for localization.
+- `clear()` to reset the client state.
+
+```ts
+const unsubscribe = client.subscribe(snapshot => {
+  console.log(snapshot.initialized, snapshot.currentCulture)
+})
+
+await client.fetchConfig()
+await client.fetchLocalization('en')
+
+unsubscribe()
+client.clear()
+```
+
 ## Fetching Permissions
 
 After the user logs in, `AuthProvider` fetches application configuration with the current access token:

@@ -44,10 +44,10 @@ Configure<AbpAuditingOptions>(options =>
 Here, a list of the options you can configure:
 
 * `IsEnabled` (default: `true`): A root switch to enable or disable the auditing system. Other options is not used if this value is `false`.
-* `HideErrors` (default: `true`): Audit log system hides and write regular [logs](../fundamentals/localization.md) if any error occurs while saving the audit log objects. If saving the audit logs is critical for your system, set this to `false` to throw exception in case of hiding the errors.
+* `HideErrors` (default: `true`): Audit log system hides and write regular [logs](../fundamentals/logging.md) if any error occurs while saving the audit log objects. If saving the audit logs is critical for your system, set this to `false` to throw exception in case of hiding the errors.
 * `IsEnabledForAnonymousUsers` (default: `true`): If you want to write audit logs only for the authenticated users, set this to `false`. If you save audit logs for anonymous users, you will see `null` for `UserId` values for these users.
 * `AlwaysLogOnException` (default: `true`): If you set to true, it always saves the audit log on an exception/error case without checking other options (except `IsEnabled`, which completely disables the audit logging).
-* `IsEnabledForIntegrationService` (default: `false`): Audit Logging is disabled for [integration services](../api-development/integration-services.md) by default. Set this property as `true` to enable it.
+* `IsEnabledForIntegrationServices` (default: `false`): Audit Logging is disabled for [integration services](../api-development/integration-services.md) by default. Set this property as `true` to enable it.
 * `IsEnabledForGetRequests` (default: `false`): Safe HTTP methods (GET, HEAD and QUERY) should not make any change in the database normally and the audit log system doesn't save audit log objects for these requests. Set this to `true` to enable it also for the safe requests.
 * `DisableLogActionInfo` (default: `false`):If you set to true, Will no longer log `AuditLogActionInfo`.
 * `ApplicationName`: If multiple applications are saving audit logs into a single database, set this property to your application name, so you can distinguish the logs of different applications. If you don't set, it will set from the `IApplicationInfoAccessor.ApplicationName` value, which is the entry assembly name by default.
@@ -310,6 +310,8 @@ An **audit log object** is created for each **web request** by default. An audit
   * `PropertyTypeFullName`: Type (class) name of the property with full namespace.
 * **Exception**: An audit log object may contain zero or more exception. In this way, you can get a report of the failed requests.
 * **Comment**: An arbitrary string value to add custom messages to the audit log entry. An audit log object may contain zero or more comments.
+
+> When the [Audit Logging Module](../../modules/audit-logging.md) persists exceptions, it uses `AbpExceptionHandlingOptions` to convert them. `SendExceptionsDetailsToClients`, `SendStackTraceToClients` and `SendExceptionDataToClientTypes` therefore also control the exception details stored in audit logs, not only the details sent to clients. Review these options when audit logs may contain sensitive information. See the [Exception Handling](../fundamentals/exception-handling.md#abpexceptionhandlingoptions) document for configuration details.
 
 In addition to the standard properties explained above, `AuditLogInfo`, `AuditLogActionInfo` and `EntityChangeInfo` objects implement the `IHasExtraProperties` interface, so you can add custom properties to these objects.
 

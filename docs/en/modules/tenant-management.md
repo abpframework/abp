@@ -37,7 +37,7 @@ In this page, you see the all the tenants. You can create a new tenant as shown 
 
 In this modal;
 
-* **Name**: The unique name of the tenant. If you use subdomains for your tenants (like https://some-tenant.your-domain.com), this will be the subdomain name.
+* **Name**: The tenant name. Tenant names are normalized by the `ITenantNormalizer` service, so duplicate-name validation is case-insensitive by default. This validation is not a database uniqueness constraint. If you use subdomains for your tenants (like https://some-tenant.your-domain.com), this will be the subdomain name.
 * **Admin Email Address**: Email address of the admin user for this tenant.
 * **Admin Password**: The password of the admin user for this tenant.
 
@@ -55,13 +55,53 @@ The Features action opens a modal to enable/disable/set [features](../framework/
 
 *Manage Host features* button is used  to set features for the host side, if you use the features of your application also in the host side.
 
+### Extending the Angular UI
+
+For a standalone Angular application, register the Tenant Management menu configuration with `provideTenantManagementConfig` from the `@abp/ng.tenant-management/config` package:
+
+```ts
+import { ApplicationConfig } from '@angular/core';
+import { provideTenantManagementConfig } from '@abp/ng.tenant-management/config';
+
+export const appConfig: ApplicationConfig = {
+  providers: [provideTenantManagementConfig()],
+};
+```
+
+Lazy-load the module routes with `createRoutes` from `@abp/ng.tenant-management`:
+
+```ts
+import { Routes } from '@angular/router';
+
+export const APP_ROUTES: Routes = [
+  {
+    path: 'tenant-management',
+    loadChildren: () =>
+      import('@abp/ng.tenant-management').then(m => m.createRoutes()),
+  },
+];
+```
+
+`createRoutes` accepts `entityActionContributors`, `toolbarActionContributors`, `entityPropContributors`, `createFormPropContributors` and `editFormPropContributors`. See the Angular guides for [entity actions](../framework/ui/angular/entity-action-extensions.md), [page toolbars](../framework/ui/angular/page-toolbar-extensions.md), [table columns](../framework/ui/angular/data-table-column-extensions.md) and [dynamic forms](../framework/ui/angular/dynamic-form-extensions.md).
+
+The `eTenantManagementComponents.Tenants` key identifies the Tenants page for these contributors and for [component replacement](../framework/ui/angular/component-replacement.md).
+
 ## Distributed Events
 
-This module defines the following ETOs (Event Transfer Objects) to allow you to subscribe to changes on the entities of the module;
+`TenantAppService.CreateAsync` explicitly publishes a `TenantCreatedEto` after it persists a new tenant. Its `Properties` dictionary contains the `AdminEmail` and plain-text `AdminPassword` values supplied by the create request. Treat this event as sensitive: protect it in transit and at rest, and do not log or retain the complete payload. The Framework's EF Core migration/seeding and MongoDB seeding handlers can consume this event when they are configured by the application.
 
-- `TenantEto` is published on changes done on an `Tenant` entity.
+`TenantCreatedEto` and `EntityCreatedEto<TenantEto>` are separate distributed events. Enabling the automatic selector below publishes `EntityCreatedEto<TenantEto>` in addition to the explicitly published `TenantCreatedEto`. If you subscribe to both, ensure that non-idempotent handlers distinguish between them instead of treating them as the same notification.
 
-**Example: Get notified when a new tenant has been created**
+The module also defines a `TenantEto` and pre-configures the mapping from `Tenant`. However, ABP does not automatically publish distributed entity-change events by default. Enable them in the application that owns Tenant Management if you want to subscribe to `EntityCreatedEto<TenantEto>`, `EntityUpdatedEto<TenantEto>` or `EntityDeletedEto<TenantEto>`:
+
+```csharp
+Configure<AbpDistributedEntityEventOptions>(options =>
+{
+    options.AutoEventSelectors.Add<Tenant>();
+});
+```
+
+**Example: Subscribe to the opt-in entity-created event**
 
 ```cs
 public class MyHandler :
@@ -76,11 +116,9 @@ public class MyHandler :
 }
 ```
 
+See the [Distributed Event Bus](../framework/infrastructure/event-bus/distributed) documentation for details of pre-defined entity events and automatic event selectors.
 
-
-`TenantEto` is configured to automatically publish the events. You should configure yourself for the others. See the [Distributed Event Bus document](https://github.com/abpframework/abp/blob/rel-7.3/docs/en/Distributed-Event-Bus.md) to learn details of the pre-defined events.
-
-> Subscribing to the distributed events is especially useful for distributed scenarios (like microservice architecture). If you are building a monolithic application, or listening events in the same process that runs the Tenant Management Module, then subscribing to the [local events](https://github.com/abpframework/abp/blob/rel-7.3/docs/en/Local-Event-Bus.md) can be more efficient and easier.
+> Subscribing to distributed events is especially useful for distributed scenarios (like microservice architecture). If you are building a monolithic application, or listening for events in the same process that runs the Tenant Management module, subscribing to [local events](../framework/infrastructure/event-bus/local) can be more efficient and easier.
 
 ## Internals
 
@@ -100,11 +138,15 @@ This section can be used as a reference if you want to [customize](../framework/
 
 * `TenantManager`
 
+`TenantManager` normalizes names on create and rename, and uses `ITenantValidator` to reject duplicate normalized names during those operations.
+
 ### Application Layer
 
 #### Application Services
 
 * `TenantAppService`
+
+In addition to tenant CRUD operations, `ITenantAppService` provides `GetDefaultConnectionStringAsync`, `UpdateDefaultConnectionStringAsync` and `DeleteDefaultConnectionStringAsync`. The HTTP API exposes these operations as `GET`, `PUT` and `DELETE` on `/api/multi-tenancy/tenants/{id}/default-connection-string`; the `PUT` request receives `defaultConnectionString` as a query parameter.
 
 #### Permissions
 
@@ -113,6 +155,19 @@ This section can be used as a reference if you want to [customize](../framework/
 - `AbpTenantManagement.Tenants.Update`: Editing an existing tenant.
 - `AbpTenantManagement.Tenants.Delete`: Deleting an existing tenant.
 - `AbpTenantManagement.Tenants.ManageFeatures`: Manage features of the tenants.
+- `AbpTenantManagement.Tenants.ManageConnectionStrings`: Read, update or delete the default connection string of a tenant.
+
+All Tenant Management permissions are available only on the host side.
+
+### Database Configuration
+
+`AbpTenantManagementDbProperties` exposes the common persistence configuration:
+
+* `DbTablePrefix` is the prefix used for EF Core tables and MongoDB collections. It defaults to the common ABP database prefix.
+* `DbSchema` is the schema used by EF Core. MongoDB does not use this value.
+* `ConnectionStringName` is `AbpTenantManagement`. Define this named connection string to place the module in a separate database; otherwise, it falls back to the `Default` connection string.
+
+See the [Connection Strings](../framework/fundamentals/connection-strings.md) documentation for named connection-string configuration and fallback behavior.
 
 ### Entity Framework Core Integration
 
@@ -133,7 +188,9 @@ This section can be used as a reference if you want to [customize](../framework/
 
 ## Notices
 
-ABP allows to use *database per tenant* approach that allows a tenant can have a dedicated database. This module has the fundamental infrastructure to make that implementation possible (see its source code), however it doesn't implement the application layer and UI functionalities to provide it as an out of the box implementation. You can implement these features yourself, or consider to use the [ABP Saas Module](./saas.md) that fully implements it and provides much more business features.
+ABP supports the *database per tenant* approach. This module can store a tenant's default connection string through `ITenantAppService` and the corresponding HTTP API. Its built-in MVC, Blazor, MudBlazor and Angular UIs do not provide a connection-string management screen, and changing the stored value does not create or migrate the tenant database.
+
+You can build your own UI and migration workflow on top of the application/API contract, or use the [ABP SaaS Module](./saas.md), which provides connection-string management and additional business features.
 
 ## See Also
 
