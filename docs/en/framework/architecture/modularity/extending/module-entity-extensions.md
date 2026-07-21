@@ -273,6 +273,33 @@ property =>
 
 Use `property.UI.OnCreateForm` and `property.UI.OnEditForm` to control forms too. If a property is required, but not added to the create form, you definitely get a validation exception, so use this option carefully. But a required property may not be in the edit form if that's your requirement.
 
+### Conditional Availability
+
+An extension property can carry global-feature, tenant-feature and permission policies. Policy-aware object-extension consumers use this metadata to decide whether the property is available for the current application and user.
+
+The following example requires either of two permissions:
+
+````csharp
+property =>
+{
+    property.Policy.Permissions.PermissionNames =
+    [
+        "MyProject.Users.Manage",
+        "MyProject.Users.ManageExtendedProfile"
+    ];
+}
+````
+
+The available policy groups are:
+
+* `Policy.GlobalFeatures.Features` for application-wide global features.
+* `Policy.Features.Features` for the current tenant's features.
+* `Policy.Permissions.PermissionNames` for the current principal's permissions.
+
+`RequiresAll` is `false` by default for each group, so any configured name in that group is sufficient. Set the corresponding `RequiresAll` property to `true` to require every name. When more than one group is configured, every configured group must pass. An empty group imposes no restriction.
+
+These policies do not replace the `UI` and `Api` availability options. They add current feature and permission checks to consumers that evaluate extension-property policies.
+
 ### UI Order
 
 When you define a property, it appears on the data table, create and edit forms on the related UI page. However, you can control its order. Example:

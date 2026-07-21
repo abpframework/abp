@@ -34,9 +34,9 @@ Open the `appsettings.json` in the `MAUI` project:
 
 {{ end }}
 
-After ensuring the backend application is running and the `appsettings.json` is properly configured in the mobile application, you can proceed to run the mobile application. You can run the application either by using the `dotnet build` command (e.g. `dotnet build -t:Run -f net9.0-android` for Android or `dotnet build -t:Run -f net9.0-ios` for iOS) or by running it through Visual Studio or any other IDE that supports MAUI.
+After ensuring the backend application is running and the `appsettings.json` is properly configured in the mobile application, you can proceed to run the mobile application. You can run the application either by using the `dotnet build` command (e.g. `dotnet build -t:Run -f net10.0-android` for Android or `dotnet build -t:Run -f net10.0-ios` for iOS) or by running it through Visual Studio or any other IDE that supports MAUI.
 
-> For more information about running the mobile application, please refer to the [Microsoft's documentation](https://learn.microsoft.com/en-us/dotnet/maui/?view=net-maui-9.0).
+> For more information about running the mobile application, please refer to the [Microsoft's documentation](https://learn.microsoft.com/en-us/dotnet/maui/?view=net-maui-10.0).
 
 You can examine the [Users Page](#users-page) or any other pre-defined page to see how to use CSharp Client Proxy to request backend API and consume the backend API in the same way in your application. Also, if you encounter any errors on specific platforms, you can refer to the following sections for each platform to find common issues and their solutions.
 

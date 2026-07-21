@@ -116,6 +116,38 @@ public class MyService : ITransientDependency
 }
 ````
 
+### Dynamic Files
+
+`IDynamicFileProvider` can add, replace and delete virtual files at runtime. Inside `IVirtualFileProvider`, dynamic files take precedence over configured embedded and replacement physical file sets, so they can temporarily override a file with the same virtual path. ASP.NET Core's physical web-root provider is a separate, higher-precedence layer, as described in the *Physical Files* section below. Dynamic files also support exact file-path change notifications through the standard `Watch` method; directory and wildcard watches are not supported.
+
+````csharp
+public class DynamicFileService : ITransientDependency
+{
+    private readonly IDynamicFileProvider _dynamicFileProvider;
+
+    public DynamicFileService(IDynamicFileProvider dynamicFileProvider)
+    {
+        _dynamicFileProvider = dynamicFileProvider;
+    }
+
+    public void SetFile(string content)
+    {
+        _dynamicFileProvider.AddOrUpdate(
+            new InMemoryFileInfo(
+                "/my-files/runtime.txt",
+                Encoding.UTF8.GetBytes(content),
+                "runtime.txt"
+            )
+        );
+    }
+
+    public bool DeleteFile()
+    {
+        return _dynamicFileProvider.Delete("/my-files/runtime.txt");
+    }
+}
+````
+
 ## ASP.NET Core Integration
 
 The Virtual File System is well integrated to ASP.NET Core:

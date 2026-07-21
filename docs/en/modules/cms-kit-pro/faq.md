@@ -9,15 +9,15 @@
 
 > You must have an [ABP Team or a higher license](https://abp.io/pricing) to use CMS Kit Pro module's features.
 
-The CMS kit provides a **FAQ** system to allow users to create, edit and delete FAQ's. Here is a screenshot of the FAQ widget:
+CMS Kit Pro provides an **FAQ** system to organize questions into groups and sections and display them on public pages. Here is a screenshot of the FAQ widget:
 
 ![cmskit-module-faq-widget](../../images/cmskit-module-faq-widget.png)
 
 ## Enabling the FAQ System
 
-By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../framework/infrastructure/global-features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP Framework's [Feature System](../../framework/infrastructure/features.md) to disable a CMS Kit feature on runtime.
+By default, CMS Kit features are disabled. Therefore, you need to enable the features you want before starting to use them. You can use the [Global Feature](../../framework/infrastructure/global-features.md) system to enable or disable CMS Kit features at development time. Alternatively, you can use ABP's [Feature System](../../framework/infrastructure/features.md) to disable a CMS Kit feature at runtime.
 
-> Check the ["How to Install" section of the CMS Kit Module documentation](index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
+> Check the ["How to Install" section of the CMS Kit Module documentation](index.md#how-to-install) to see how to enable or disable CMS Kit features at development time.
 
 ## User Interface
 
@@ -25,21 +25,21 @@ By default, CMS Kit features are disabled. Therefore, you need to enable the fea
 
 CMS Kit module admin side adds the following items to the main menu, under the **CMS** menu item:
 
-**FAQ's**: FAQ management page.
+**FAQs**: FAQ group, section and question management page.
 
 `CmsKitProAdminMenus` class has the constants for the menu item names.
 
 ### Pages
 
-You can list, create, update and delete sections and their questions FAQ's on the admin side of your solution.
+You can list, create, update and delete FAQ groups, sections and questions on the admin side of your solution. A group contains sections, and a section contains questions.
 
 ![faq-page](../../images/cmskit-module-faq-page.png)
 ![faq-edit-page](../../images/cmskit-module-faq-edit-page.png)
 ![faq-edit-question-page](../../images/cmskit-module-faq-edit-question-page.png)
 
-## Faq Widget
+## FAQ Widget
 
-The FAQ system provides a FAQ [widget](../../framework/ui/mvc-razor-pages/widgets.md) for users to display FAQ's. You can place the widget on a page like below:
+The FAQ system provides an FAQ [widget](../../framework/ui/mvc-razor-pages/widgets.md) for displaying FAQs. You can place the widget on a page as shown below:
 
 ```csharp
 @await Component.InvokeAsync(
@@ -47,30 +47,20 @@ The FAQ system provides a FAQ [widget](../../framework/ui/mvc-razor-pages/widget
     new
     {
         groupName = "Community",
-        name = "Development"
+        sectionName = "Development"
     })
 ```
 
 `FaqViewComponent` parameters:
-- `groupName` (optional): It allows to specify which FAQ group to show. If not specified, all groups will be shown.
-- `sectionName` (optional): It is used to determine which section within the specified group will be shown. If not specified, all sections in the related group will be shown.
+
+- `groupName` (required): Specifies the FAQ group to show. Create this group on the FAQ administration page before rendering the widget.
+- `sectionName` (optional): Specifies a section within the selected group. If it is not set, all sections in the group are shown.
 
 The FAQ system can also be used in combination with the [dynamic widget](../cms-kit/dynamic-widget.md) feature.
 
-## Options
+## FAQ Groups
 
-The FAQ system provides a mechanism to group sections by group name. For example, if you want to use the FAQ system for  community and support page, you need to define two group names named Community and Support and add sections under these groups. So, before using the FAQ system, you need to define groups. For that, you can use `FaqOptions`. `FaqOptions` can be configured at the domain layer, in the `ConfigureServices` method of your [module]../../framework/architecture/modularity/basics.md).
-
-```csharp
-Configure<FaqOptions>(options =>
-{
-    options.SetGroups(new[] { "General", "Community", "Support" });
-});
-```
-
-`FaqOptions` properties:
-
-- `Groups`: Dictionary of defined groups in the FAQ system. The `options.SetGroups` method is a shortcut to add a new groups to this dictionary.
+FAQ groups are persisted data and are managed from the FAQ administration page. Create groups such as `Community` or `Support`, then assign each section to one of those groups. Group names must be unique.
 
 ## Internals
 
@@ -82,10 +72,11 @@ This module follows the [Entity Best Practices & Conventions](../../framework/ar
 
 ##### FAQ
 
-A FAQ represents a generated FAQ with its questions: 
+An FAQ represents a generated FAQ with its questions:
 
 - `FaqSection` (aggregate root): Represents the defined FAQ sections related to the FAQ in the system.
 - `FaqQuestion` (aggregate root): Represents the defined FAQ questions with section identifier related to the FAQ in the system.
+- `FaqGroup` (aggregate root): Represents a named group that contains FAQ sections.
 
 #### Repositories
 
@@ -95,6 +86,7 @@ The following special repositories are defined for these features:
 
 - `IFaqSectionRepository`
 - `IFaqQuestionRepository`
+- `IFaqGroupRepository`
 
 
 #### Domain services
@@ -108,7 +100,9 @@ This module follows the [Domain Services Best Practices & Conventions](../../fra
 
 - `FaqSectionAdminAppService` (implements `IFaqSectionAdminAppService`): Implements the use cases of FAQ section management for admin side.
 - `FaqQuestionAdminAppService` (implements `IFaqQuestionAdminAppService`): Implements the use cases of FAQ question management for admin side.
-- `FaqSectionPublicAppService` (implements `IFaqSectionPublicAppService`): Implements the use cases of FAQ's for public websites.
+- `FaqGroupAdminAppService` (implements `IFaqGroupAdminAppService`): Implements the use cases of FAQ group management for admin side.
+- `FaqSectionPublicAppService` (implements `IFaqSectionPublicAppService`): Implements the use cases of FAQs for public websites.
+- `FaqGroupPublicAppService` (implements `IFaqGroupPublicAppService`): Finds FAQ groups by name for public widgets.
 
 ### Database providers
 
@@ -116,11 +110,11 @@ This module follows the [Domain Services Best Practices & Conventions](../../fra
 
 ##### Table / collection prefix & schema
 
-All tables/collections use the `Cms` prefix by default. Set static properties on the `CmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
+All tables/collections use the `Cms` prefix by default. Set static properties on the `AbpCmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
 
 ##### Connection string
 
-This module uses `CmsKit` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
+This module uses `CmsKit` for the connection string name. If you don't define a connection string with this name, it falls back to the `Default` connection string.
 
 See the [connection strings](../../framework/fundamentals/connection-strings.md) documentation for details.
 
@@ -130,6 +124,7 @@ See the [connection strings](../../framework/fundamentals/connection-strings.md)
 
 - CmsFaqSections
 - CmsFaqQuestions
+- CmsFaqGroups
 
 #### MongoDB
 
@@ -137,7 +132,4 @@ See the [connection strings](../../framework/fundamentals/connection-strings.md)
 
 - CmsFaqSections
 - CmsFaqQuestions
-
-## Entity Extensions
-
-Check the ["Entity Extensions" section of the CMS Kit Module documentation](index.md#entity-extensions) to see how to extend entities of the FAQ Feature of the CMS Kit Pro module.
+- CmsFaqGroups

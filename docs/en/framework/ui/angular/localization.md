@@ -72,6 +72,27 @@ Then, we can use this key like this:
 <!-- Output: Showing 20 to 30 of 50 entries -->
 ```
 
+### Using the Async Localization Pipe
+
+Use `abpAsyncLocalization` when the template must wait for the application localization state before resolving a key. The pipe returns an observable, so combine it with Angular's `async` pipe:
+
+```ts
+import { AsyncPipe } from '@angular/common';
+import { Component } from '@angular/core';
+import { AsyncLocalizationPipe } from '@abp/ng.core';
+
+@Component({
+  selector: 'app-greeting',
+  imports: [AsyncPipe, AsyncLocalizationPipe],
+  template: `
+    <h1>{%{{{ 'MyProjectName::Greeting' | abpAsyncLocalization | async }}}%}</h1>
+  `,
+})
+export class GreetingComponent {}
+```
+
+The observable initially emits an empty string. After the localization configuration is available, it emits the localized value. It also emits an empty string when the key cannot be resolved. Interpolation parameters can be passed in the same way as with `abpLocalization`.
+
 ### Using the Localization Service
 
 First of all, you should import the `LocalizationService` from **@abp/ng.core**
@@ -212,7 +233,7 @@ The localizations above can be used like this:
 <div>{%{{{ 'MyProjectName::HomePage' | abpLocalization }}}%}</div>
 ```
 
-> **Note:** If you have specified the same localizations in the UI and backend, the backend localizations override the UI localizations.
+> **Note:** If the same localization key is specified in the UI and backend, the UI localization overrides the backend localization.
 
 ## RTL Support
 
@@ -279,9 +300,42 @@ export class AppComponent {}
 
 ## Registering a New Locale
 
-Since ABP has more than one language, Angular locale files load lazily using [Webpack's import function](https://webpack.js.org/api/module-methods/#import-1) to avoid increasing the bundle size and to register the Angular core using the [`registerLocaleData`](https://angular.dev/api/common/registerLocaleData) function. The chunks to be included in the bundle are specified by the [Webpack's magic comments](https://webpack.js.org/api/module-methods/#magic-comments) as hard-coded. Therefore a `registerLocale` function that returns Webpack `import` function must be passed to `provideAbpCore(withOptions({...}))`.
+ABP loads Angular locale data lazily and registers it with Angular's [`registerLocaleData`](https://angular.dev/api/common/registerLocaleData) function. The registration function depends on the Angular builder used by your application:
 
-### registerLocaleFn
+| Builder | Registration function |
+| --- | --- |
+| Angular application builder (`@angular/build:application`) | `registerLocaleForEsBuild()` |
+| Webpack builder | `registerLocale()` |
+
+Pass the selected function as `registerLocaleFn` to `provideAbpCore(withOptions({...}))`.
+
+### Application Builder (EsBuild)
+
+Current ABP Angular application templates use the Angular application builder. Configure them with `registerLocaleForEsBuild`:
+
+```ts
+import { provideAbpCore, withOptions } from '@abp/ng.core';
+import { registerLocaleForEsBuild } from '@abp/ng.core/locale';
+import { ApplicationConfig } from '@angular/core';
+import { environment } from '../environments/environment';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideAbpCore(
+      withOptions({
+        environment,
+        registerLocaleFn: registerLocaleForEsBuild({
+          cultureNameLocaleFileMap: { 'pt-BR': 'pt' },
+        }),
+      }),
+    ),
+  ],
+};
+```
+
+`registerLocaleForEsBuild` uses a fixed list of supported Angular locale imports so the application builder can include them in the bundle.
+
+### Webpack Builder
 
 The `registerLocale` function, exported from the `@abp/ng.core/locale` package, is a **higher-order function**.
 
@@ -290,7 +344,7 @@ It accepts the following parameters:
 - **`cultureNameLocaleFileMap`** – an object that maps culture names to their corresponding locale files.
 - **`errorHandlerFn`** – a function that handles any errors that occur during locale loading.
 
-It returns a **Webpack `import` function**.
+It returns a **Webpack `import` function**. Use it only when the application is built with Webpack.
 
 You should use `registerLocale` within the `withOptions` function of `provideAbpCore`, as shown in the example below:
 
@@ -326,14 +380,14 @@ Some of the culture names defined in .NET do not match Angular locales. In such 
 
 ![locale-error](./images/locale-error.png)
 
-If you see an error like this, you should pass the `cultureNameLocaleFileMap` property like below to the `registerLocale` function.
+If you see an error like this, pass the `cultureNameLocaleFileMap` property to the registration function selected for your builder. The following example uses the Angular application builder:
 
 ```ts
 // app.config.ts
 
-import { registerLocale } from "@abp/ng.core/locale";
-// if you have commercial license and the language management module, add the below import
-// import { registerLocale } from '@volo/abp.ng.language-management/locale';
+import { registerLocaleForEsBuild } from "@abp/ng.core/locale";
+// If you use the Language Management module, replace the import above with:
+// import { registerLocale as registerLocaleForEsBuild } from '@volo/abp.ng.language-management/locale';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -341,7 +395,7 @@ export const appConfig: ApplicationConfig = {
     provideAbpCore(
       withOptions({
         // ...,
-        registerLocaleFn: registerLocale({
+        registerLocaleFn: registerLocaleForEsBuild({
           cultureNameLocaleFileMap: {
             DotnetCultureName: "AngularLocaleFileName",
             "pt-BR": "pt", // example
@@ -352,6 +406,8 @@ export const appConfig: ApplicationConfig = {
   ],
 };
 ```
+
+For a Webpack project, pass the same option object to `registerLocale()` instead.
 
 See [all locale files in Angular](https://github.com/angular/angular/tree/master/packages/common/locales).
 
@@ -370,7 +426,7 @@ import(
 ).then((m) => storeLocaleData(m.default, "your-locale"));
 ```
 
-You can also configure a custom `registerLocale` function that can be passed to the abp core provider configuration options:
+In a Webpack project, you can also configure a custom `registerLocale` function and pass it to the ABP Core provider options:
 
 ```ts
 // register-locale.ts

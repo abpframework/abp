@@ -224,7 +224,18 @@ public class MyProfile : Profile
 }
 ````
 
-> AutoMapper 14.x contains a [known vulnerability (GHSA-rvv3-g6hj-g44x)](https://github.com/advisories/GHSA-rvv3-g6hj-g44x). ABP Framework has applied a code-level mitigation (`MaxDepth = 64`) to address this. If you hold a commercial AutoMapper license, you can use [Volo.Abp.LuckyPenny.AutoMapper](luckypenny-automapper.md) to upgrade to the officially patched version. Alternatively, you can migrate to [Mapperly](../../../release-info/migration-guides/AutoMapper-To-Mapperly.md).
+> AutoMapper 14.x contains a [known vulnerability (GHSA-rvv3-g6hj-g44x)](https://github.com/advisories/GHSA-rvv3-g6hj-g44x). ABP Framework has applied a code-level mitigation (`MaxDepth = 64`) to address this. If you hold a commercial AutoMapper license, you can use [Volo.Abp.LuckyPenny.AutoMapper](luckypenny-automapper.md) to upgrade to the officially patched version. Alternatively, you can migrate to [Mapperly](../../release-info/migration-guides/AutoMapper-To-Mapperly.md).
+
+The global maximum depth is configured by `AbpAutoMapperOptions.DefaultMaxDepth` and defaults to `64`. It is applied only when a map does not already configure `MaxDepth`. Set it to `null` to disable ABP's global default:
+
+````csharp
+Configure<AbpAutoMapperOptions>(options =>
+{
+    options.DefaultMaxDepth = null;
+});
+````
+
+> Disabling the global default also removes ABP's mitigation for unbounded mapping depth. Disable it only when every affected map has an explicit safe depth or the application uses an officially patched mapper.
 
 ## Mapperly Integration
 

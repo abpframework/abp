@@ -150,7 +150,7 @@ Configure<AbpBackgroundJobOptions>(options =>
 {
     options.GetBackgroundJobName = (jobType) =>
     {
-        if (jobTyep == typeof(EmailSendingArgs))
+        if (jobType == typeof(EmailSendingArgs))
         {
             return "emails";
         }

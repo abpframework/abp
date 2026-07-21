@@ -15,9 +15,9 @@ CMS Kit provides a **poll** system to allow users to create, edit and delete pol
 
 ## Enabling the Poll System
 
-By default, CMS Kit features are disabled. Therefore, you need to enable the features you want, before starting to use it. You can use the [Global Feature](../../framework/infrastructure/global-features.md) system to enable/disable CMS Kit features on development time. Alternatively, you can use the ABP's [Feature System](../../framework/infrastructure/features.md) to disable a CMS Kit feature on runtime.
+By default, CMS Kit features are disabled. Therefore, you need to enable the features you want before starting to use them. You can use the [Global Feature](../../framework/infrastructure/global-features.md) system to enable or disable CMS Kit features at development time. Alternatively, you can use ABP's [Feature System](../../framework/infrastructure/features.md) to disable a CMS Kit feature at runtime.
 
-> Check the ["How to Install" section of the CMS Kit Module documentation](index.md#how-to-install) to see how to enable/disable CMS Kit features on development time.
+> Check the ["How to Install" section of the CMS Kit Module documentation](index.md#how-to-install) to see how to enable or disable CMS Kit features at development time.
 
 ## User Interface
 
@@ -41,7 +41,7 @@ You can list, create, update and delete polls on the admin side of your solution
 
 ## Poll Widget
 
-The poll system provides a poll [widget](../../framework/ui/mvc-razor-pages/widgets.md) for users to vote and show the result. You can place the widget on a page like the below:
+The poll system provides a poll [widget](../../framework/ui/mvc-razor-pages/widgets.md) for users to vote and view the result. You can place the widget on a page as shown below:
 
 ```csharp
 @await Component.InvokeAsync(
@@ -49,8 +49,25 @@ The poll system provides a poll [widget](../../framework/ui/mvc-razor-pages/widg
     new
     {
         widgetName = "my-poll-1"
+})
+```
+
+`PollViewComponent` selects a poll assigned to `widgetName` through the available-widget lookup. The repository returns a poll when either its voting window is open (`StartDate` has passed and `EndDate` has not passed) or its `ResultShowingEndDate` has not passed. The component then prevents rendering before `StartDate` and after `ResultShowingEndDate`, when that value is set. Consequently, the named widget can remain visible after `EndDate` during the result-showing period. The widget name must first be registered with `CmsKitPollingOptions`, and polls are assigned to widget names from the administration page.
+
+To render one specific poll without registering a widget name, use its unique code:
+
+```csharp
+@await Component.InvokeAsync(
+    typeof(PollByCodeViewComponent),
+    new
+    {
+        code = "developer-survey"
     })
 ```
+
+`PollByCodeViewComponent` performs a direct lookup by code. It does not use the named widget's repository availability condition or component date checks, so it can render a poll before `StartDate` or after `ResultShowingEndDate`. Use it only when the hosting page applies the required availability rules.
+
+Submitting a vote requires an authenticated user. The public vote service currently does not enforce the poll's start date, end date or result-showing end date on the server, so the host must prevent submissions outside the intended voting period. A user can submit only once for a poll; the poll's **Allow multiple vote** option controls whether that single submission can contain multiple options.
 
 ## Options
 
@@ -60,14 +77,14 @@ Before using the poll system, you need to define the widgets. You can use the `C
 
 ```csharp
 Configure<CmsKitPollingOptions>(options =>
-    {
-        options.AddWidget("my-poll-1");
-    });
+{
+    options.AddWidget("my-poll-1");
+});
 ```
 
 `CmsKitPollingOptions` properties:
 
-- `WidgetNames`: List of defined widgets in the poll system. `options.AddWidget` method was a shortcut to add a new widget to this list.
+- `WidgetNames`: List of defined widget names in the poll system. Use `options.AddWidget` to add a unique name; adding the same name twice throws an exception.
 
 ## Internals
 
@@ -79,14 +96,14 @@ This module follows the [Entity Best Practices & Conventions](../../framework/ar
 
 ##### Poll
 
-A poll represents a created poll with its options: 
+A poll represents a created poll with its options:
 
 - `Poll` (aggregate root): Represents a poll by including the options in the system.
 - `PollOption` (entity): Represents the defined poll options related to the poll in the system.
 
 ##### PollUserVote
 
-A poll user vote represents voted poll from a user:
+A poll user vote represents a user's vote in a poll:
 
 - `PollUserVote` (aggregate root): Represents poll user votes in the system.
 
@@ -120,11 +137,11 @@ This module follows the [Domain Services Best Practices & Conventions](../../fra
 
 ##### Table / collection prefix & schema
 
-All tables/collections use the `Cms` prefix by default. Set static properties on the `CmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
+All tables/collections use the `Cms` prefix by default. Set static properties on the `AbpCmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
 
 ##### Connection string
 
-This module uses `CmsKit` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
+This module uses `CmsKit` for the connection string name. If you don't define a connection string with this name, it falls back to the `Default` connection string.
 
 See the [connection strings](../../framework/fundamentals/connection-strings.md) documentation for details.
 

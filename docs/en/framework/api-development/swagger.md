@@ -110,6 +110,21 @@ services.AddAbpSwaggerGen(
 )
 ```
 
+### Enum and Schema ID Helpers
+
+ABP provides two additional `SwaggerGenOptions` helpers:
+
+* `UserFriendlyEnums()` changes enum schemas from numeric values to string enum names, making generated contracts easier for clients to consume.
+* `CustomAbpSchemaIds()` uses full type names and includes generic argument names to avoid schema ID collisions.
+
+```csharp
+services.AddAbpSwaggerGen(options =>
+{
+    options.UserFriendlyEnums();
+    options.CustomAbpSchemaIds();
+});
+```
+
 ## Using Swagger with OAUTH
 
 For non MVC/Tiered applications, we need to configure Swagger with OAUTH to handle authorization.  

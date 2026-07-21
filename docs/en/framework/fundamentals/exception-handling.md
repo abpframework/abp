@@ -344,6 +344,20 @@ Here, a list of the options you can configure:
 
 * `SendExceptionsDetailsToClients` (default: `false`): You can enable or disable sending exception details to the client.
 * `SendStackTraceToClients` (default: `true`): You can enable or disable sending the stack trace of exception to the client. If you want to send the stack trace to the client, you must set both `SendStackTraceToClients` and `SendExceptionsDetailsToClients` options to `true` otherwise, the stack trace will not be sent to the client.
+* `SendExceptionDataToClientTypes`: Exception types whose `Data` dictionary is copied to the remote error response. The default list contains `IBusinessException`, so business exception data is sent to clients. Derived and implementing types are matched.
+* `ExcludeExceptionFromLoggerSelectors`: Predicates that suppress matching exceptions from the ABP exception log. Add a selector when an expected exception should still produce an error response but should not be logged by the exception pipeline.
+
+Example:
+
+````csharp
+Configure<AbpExceptionHandlingOptions>(options =>
+{
+    options.SendExceptionDataToClientTypes.Add(typeof(MyClientVisibleException));
+    options.ExcludeExceptionFromLoggerSelectors.Add(
+        exception => exception is MyExpectedException
+    );
+});
+````
 
 ## See Also
 

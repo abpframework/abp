@@ -651,7 +651,7 @@ In addition to the read-only repositories, ABP allows to manually control the ch
 
 ## Access to the EF Core API
 
-In most cases, you want to hide EF Core APIs behind a repository (this is the main purpose of the repository pattern). However, if you want to access the `DbContext` instance over the repository, you can use `GetDbContext()` or `GetDbSet()` extension methods. Example:
+In most cases, you want to hide EF Core APIs behind a repository (this is the main purpose of the repository pattern). However, if you want to access the `DbContext` instance over the repository, you can use `GetDbContextAsync()` or `GetDbSetAsync()` extension methods. Example:
 
 ````csharp
 public async Task TestAsync()

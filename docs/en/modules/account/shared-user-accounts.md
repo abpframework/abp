@@ -74,6 +74,17 @@ From the invitation modal, you can view and manage sent invitations, including r
 
 ![Manage Invitations](../../images/manage-invitations.png)
 
+Invitation links contain a protected, URL-safe token and expire after 7 days by default. Invalid, modified or expired tokens are rejected. Configure the lifespan with `UserInvitationTokenProviderOptions`:
+
+```csharp
+Configure<UserInvitationTokenProviderOptions>(options =>
+{
+    options.TokenLifespan = TimeSpan.FromDays(3);
+});
+```
+
+Inviting the same email address again while an invitation is still pending reuses that invitation, replaces its assigned roles and refreshes its invitation date. Resending is allowed only for a pending invitation; it refreshes the invitation date and sends a newly generated token.
+
 ## Accepting an Invitation
 
 If the invited person already has an account, clicking the email link shows a confirmation screen to join the tenant:
@@ -150,13 +161,13 @@ When the Shared strategy is enabled, a user is a **global resource** across host
 
 ### Host-only operations
 
-The following operations can only be performed by a host administrator when Shared is enabled. Both the Identity Pro UI (MVC + Blazor) and the `IdentityUserAppService` enforce this — a direct API call from a tenant context will be rejected with a `UserFriendlyException`:
+The following operations can only be performed by a host administrator when Shared is enabled. Both the Identity Pro UI (MVC + Blazor) and the `IdentityUserAppService` enforce these restrictions.
 
 - Delete a user
-- Activate / deactivate a user (`IsActive`)
 - Lock / unlock a user
 - Enable or disable two-factor authentication
-- Change `LockoutEnabled` or `ShouldChangePasswordOnNextLogin`
+
+Direct tenant API calls for these operations are rejected with a `UserFriendlyException`. When a tenant update request changes `IsActive`, `LockoutEnabled` or `ShouldChangePasswordOnNextLogin`, the application service restores the current host-managed values and continues processing the remaining editable fields.
 
 > `Delete` here means deleting the **global user account**, not removing a user from a single tenant. Removing a member from one tenant is a tenant-level soft operation and is available to tenant administrators — see **Remove from tenant** below.
 
@@ -176,6 +187,4 @@ Users can leave a tenant from their own account menu (`Switch Tenant` → `Leave
 If you plan to migrate an existing multi-tenant application from an isolated strategy to Shared User Accounts, keep the following in mind:
 
 1. **Uniqueness check**: Before enabling Shared, ensure all existing usernames and emails are unique globally. ABP performs this check when you switch the strategy and reports conflicts.
-2. **Tenants with separate databases**: If some tenants use separate databases, you must ensure the Host database contains matching user records in the `AbpUsers` table (and, if you use social login / passkeys, also sync `AbpUserLogins` and `AbpUserPasskeys`) so the Host-side records match the tenant-side data. After that, the framework can create/manage the user-to-tenant associations.
-   - **Important — each host-side shadow row must have a new primary key (`Id`) different from the tenant user's `Id`.** Generate a fresh `Guid` for every shadow row instead of reusing the tenant user's primary key. The framework relies on this to distinguish a separate-database tenant from a shared-database one; reusing the Id can mask "Leave Tenant" and external login / passkey synchronization on legacy data. The other identifying fields (`UserName`, `Email`, `PasswordHash`, `TenantId`, etc.) should still match the tenant-side row.
-
+2. **Tenants with separate databases**: The module detects a separate Identity database by comparing the resolved Identity connection string for the tenant with the host connection string. If some tenants use separate databases, ensure that the host database contains the corresponding shadow users in the `AbpUsers` table. Host-side shadow users are located by the tenant identifier and email address. If you use social login or passkeys, also synchronize `AbpUserLogins` and `AbpUserPasskeys`. Existing shadow rows that reuse the tenant user's primary key remain compatible with leaving a tenant.
