@@ -26,7 +26,7 @@ When these teams bring their knowledge together, they can make better product an
 
 ## What Empathy Means in a Software Company
 
-![Why empathy matters in software development](https://chatgpt.com/images/why-empathy.png)
+![Why empathy matters in software development](images/why-empathy.png)
 
 Empathy has two main parts.
 
@@ -75,7 +75,7 @@ I know you can all find negative sides of your development, but we just don't ca
 
 ## Empathy Is a Cross-Functional Responsibility
 
-![Empathy questions for developers, designers, sales, marketing and the wider team](https://chatgpt.com/images/roles.png)
+![Empathy questions for developers, designers, sales, marketing and the wider team](images/roles.png)
 
 Empathy should not belong only to the design or research team.
 
@@ -93,7 +93,7 @@ Each team member sees a different part of the customer reality.
 
 The goal is for each team to use the customer evidence available to them and bring it into product and business decisions.
 
-## Empathy Loop That's Stated in a ISO Standard
+## Empathy Loop  a ISO Standard
 
 And yes! Someone even created a standard for what I'm talking. It's called **ISO 9241-210 standard**. 
 Its full title is *Ergonomics of human-system interaction*. Basically it deals with any system that has interactivity. So our screens, APIs are all included in this standard. The main idea is simple: teams should design software around real users, their goals and their working environment. Not only around technical requirements. These 6 steps about how to design a better system, puts customers in the center.
@@ -145,63 +145,11 @@ Let me adjust these to a software developing team:
 
 ---
 
-## Empathy Maps
-
-An empathy map helps teams organize what users:
-
-- Say
-- Think
-- Do
-- Feel
-- Find difficult
-- Want to achieve
-
-It is useful after interviews, support reviews or customer observations.
-
-| Area          | Question                                                     |
-| ------------- | ------------------------------------------------------------ |
-| Says          | What has the user directly said in emails, calls or support questions? |
-| Thinks        | What concerns or beliefs may guide their behavior?           |
-| Does          | What actions, repeated steps or workarounds can we observe?  |
-| Feels         | What emotions appear during important moments?               |
-| Pains         | What creates confusion, risk, delay or extra effort?         |
-| Gains         | What result, speed, control or reassurance does the user want? |
-| Evidence gaps | What do we still need to learn?                              |
-
-Important points should be connected to real customer evidence whenever possible. Inferences should be clearly marked as assumptions.
-
-## Journey Maps
-
-A journey map shows the user’s experience across several stages.
-
-These may include:
-
-- Awareness
-- Evaluation
-- Trial
-- Purchase
-- Onboarding
-- First successful use
-- Regular use
-- Support
-- Renewal
-- Expansion
-
-Journey maps help teams see where users:
-
-- Become confused
-- Lose trust
-- Experience delays
-- Need help
-- Stop using the product
-- Create workarounds
-- Leave the process
-
-They are especially useful for cross-functional work because product, marketing, sales, support and engineering can all contribute
-
 
 
 ## Better Empathy, Better Software
+
+![quote](images/quote.png)
 
 Empathy is not simply about being nice. In a software company, it means building the right thing, for the right people, in the right way. It helps developers anticipate failure, designers reduce cognitive friction, sales teams understand buyer risk, marketers communicate in the customer’s language, and leaders create systems that reward learning rather than assumption.
 
