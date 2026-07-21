@@ -1013,8 +1013,9 @@ chatComponent.off('messageSent', callbackFunction);
 
 In order to configure the application to use the AI Management module, you first need to import `provideAIManagementConfig` from `@volo/abp.ng.ai-management/config` to root application configuration. Then, you will need to append it to the `appConfig` array:
 
-```js
+```ts
 // app.config.ts
+import { ApplicationConfig } from '@angular/core';
 import { provideAIManagementConfig } from '@volo/abp.ng.ai-management/config';
 
 export const appConfig: ApplicationConfig = {
@@ -1027,8 +1028,10 @@ export const appConfig: ApplicationConfig = {
 
 The AI Management module should be imported and lazy-loaded in your routing array. It has a `createRoutes` function for configuration and is available from `@volo/abp.ng.ai-management`.
 
-```js
+```ts
 // app.routes.ts
+import { Routes } from '@angular/router';
+
 const APP_ROUTES: Routes = [
   // ...
   {
@@ -1207,6 +1210,8 @@ dotnet add package OllamaSharp
 Create a factory class that implements `IChatClientFactory`:
 
 ```csharp
+using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.AI;
 using OllamaSharp;
 using Volo.AIManagement.Factory;
@@ -1272,9 +1277,11 @@ The `ChatClientCreationConfiguration` object provides the following properties f
 
 Here's an example of implementing a factory for Azure OpenAI:
 
-Install the `Azure.AI.OpenAI` NuGet package before adding this factory.
+Install the `Azure.AI.OpenAI` and `Microsoft.Extensions.AI.OpenAI` NuGet packages before adding this factory (the `AsIChatClient()` extension method comes from `Microsoft.Extensions.AI.OpenAI`).
 
 ```csharp
+using System;
+using System.Threading.Tasks;
 using Azure.AI.OpenAI;
 using Azure;
 using Microsoft.Extensions.AI;

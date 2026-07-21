@@ -35,7 +35,7 @@ The Docs module supports Entity Framework Core and MongoDB. From the solution di
 abp add-module Volo.Docs
 ```
 
-For an Entity Framework Core solution, the command adds `builder.ConfigureDocs()` to the migrations `DbContext`, creates a migration and runs the database migrator. Use `--skip-db-migrations` when you want to manage that step yourself. MongoDB does not require an EF Core migration.
+For an Entity Framework Core solution with a conventional layered structure, the command adds `builder.ConfigureDocs()` to the `DbContext` in the `.EntityFrameworkCore` (or `.DbMigrations`) project, creates a migration and runs the `DbMigrator` project. When the solution doesn't contain these projects (for example, a single-layer solution), configure the model and apply the migration yourself. Use `--skip-db-migrations` when you want to manage that step yourself. MongoDB does not require an EF Core migration.
 
 For a manual installation, add the Docs packages and module dependencies that correspond to each application layer. MVC/Razor Pages hosts also need the `@abp/docs` package. Keep every package on the same version as the rest of your ABP solution, then run `abp install-libs` in the web project.
 
@@ -61,7 +61,7 @@ The main project fields are:
 * **MainWebsiteUrl**: Target of the project logo.
 * **LatestVersionBranchName**: Branch used for the latest documentation.
 
-Deleting a project removes only the project record. Before deleting it, remove its cached documents through document administration, verify and remove its Elasticsearch entries when search is enabled, and delete every generated PDF through **Manage PDF Files** so the BLOB objects are deleted. The project delete operation does not perform these cleanup steps automatically.
+Deleting a project deletes the project record and its PDF file metadata, but nothing else. Before deleting it, remove its cached documents through document administration, verify and remove its Elasticsearch entries when search is enabled, and delete every generated PDF through **Manage PDF Files** so the BLOB objects are deleted. The project delete operation does not perform these cleanup steps automatically.
 
 The public UI starts at `/documents`. You can change this route with `DocsUiOptions.RoutePrefix`, as shown in the [UI options](#ui-options) section.
 

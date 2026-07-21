@@ -237,6 +237,7 @@ In order to configure the application to use the chat module, you first need to 
 
 ```ts
 // app.config.ts
+import { ApplicationConfig } from '@angular/core';
 import { provideChatConfig } from '@volo/abp.ng.chat/config';
 
 export const appConfig: ApplicationConfig = {
@@ -252,6 +253,8 @@ The chat module should be imported and lazy-loaded in your routing array. It exp
 
 ```ts
 // app.routes.ts
+import { Routes } from '@angular/router';
+
 const APP_ROUTES: Routes = [
   // ...
   {

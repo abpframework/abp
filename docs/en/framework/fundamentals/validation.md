@@ -142,16 +142,17 @@ public class InputClass
 }
 ````
 
-If a class has `[DisableValidation]`, add `[EnableValidation]` to a method to enable automatic method validation for that method:
+If a class that is subject to automatic validation (it implements `IValidationEnabled`, like application services do) has `[DisableValidation]`, add `[EnableValidation]` to a method to re-enable automatic validation for that method (`[EnableValidation]` does not activate validation for a class that isn't intercepted at all):
 
 ````csharp
 [DisableValidation]
-public class MyService
+public class MyService : IValidationEnabled, ITransientDependency
 {
     [EnableValidation]
     public virtual Task UpdateAsync(MyInput input)
     {
         //...
+        return Task.CompletedTask;
     }
 }
 ````

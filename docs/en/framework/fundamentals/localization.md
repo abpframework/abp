@@ -296,7 +296,7 @@ Contributors are order-sensitive. A lookup starts with the last registered contr
 
 Replace `IExternalLocalizationStore` when localization resources need to be discovered at runtime or loaded from an external system. The default `NullExternalLocalizationStore` does not provide any resources.
 
-The string localizer factory first searches the resources registered in `AbpLocalizationOptions.Resources`. If it cannot find the requested resource name, it queries `IExternalLocalizationStore`. The store exposes synchronous and asynchronous methods for retrieving a resource by name, enumerating resource names and enumerating resources.
+The string localizer factory first searches the resources registered in `AbpLocalizationOptions.Resources`. If it cannot find the requested resource name, it queries `IExternalLocalizationStore`. The store exposes synchronous and asynchronous methods for retrieving a resource by name, and asynchronous methods for enumerating resource names and resources.
 
 The factory caches the localizer after it resolves a resource name. Changing the resource object returned by the store does not make the factory resolve that name again. Use dynamic contributors when the localization values themselves need to change while the application is running.
 
@@ -363,7 +363,7 @@ var serialized = localizableStringSerializer.Serialize(
 var localizableString = localizableStringSerializer.Deserialize(serialized!);
 ````
 
-The default serializer uses `L:<resource-name>,<key>` for `LocalizableString` and `F:<value>` for `FixedLocalizableString`. A value without a recognized prefix is deserialized as a `FixedLocalizableString`. An invalid `L:` value throws an `AbpException`. Serializing `null` returns `null`; serializing another `ILocalizableString` implementation throws an `AbpException`.
+The default serializer uses `L:<resource-name>,<key>` for `LocalizableString` and `F:<value>` for `FixedLocalizableString`. A value without a recognized prefix is deserialized as a `FixedLocalizableString`; values too short to carry a prefix and a content (like the literal `L:`) are treated the same way. An `L:` value without a comma or with an empty key throws an `AbpException`. Serializing `null` returns `null`; serializing another `ILocalizableString` implementation throws an `AbpException`.
 
 ### Format Arguments
 

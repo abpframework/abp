@@ -16,10 +16,10 @@
 `ListService` is **not provided in root**. The reason is, this way, it will clear any subscriptions on component destroy. You may use the optional `LIST_QUERY_DEBOUNCE_TIME` token to adjust the debounce behavior.
 
 ```ts
-import { ListService } from '@abp/ng.core';
+import { LIST_QUERY_DEBOUNCE_TIME, ListService } from '@abp/ng.core';
 import { BookDto } from '../models';
 import { BookService } from '../services';
-import { inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 @Component({
   /* class metadata here */

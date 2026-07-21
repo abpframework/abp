@@ -235,6 +235,7 @@ The language management module should be imported and lazy-loaded in your routin
 
 ```ts
 // app.routes.ts
+import { Routes } from '@angular/router';
 
 const APP_ROUTES: Routes = [
   // ...

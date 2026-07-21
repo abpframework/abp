@@ -220,6 +220,7 @@ To configure the application to use the text template management module, import 
 
 ```ts
 // app.config.ts
+import { ApplicationConfig } from '@angular/core';
 import { provideTextTemplateManagementConfig } from '@volo/abp.ng.text-template-management/config';
 
 export const appConfig: ApplicationConfig = {
@@ -234,6 +235,8 @@ The text template management module should be imported and lazy-loaded in your r
 
 ```ts
 // app.routes.ts
+import { Routes } from '@angular/router';
+
 const APP_ROUTES: Routes = [
   // ...
   {

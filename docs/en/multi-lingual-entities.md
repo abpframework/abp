@@ -20,6 +20,9 @@ abp add-package Volo.Abp.MultiLingualObject
 Add `AbpMultiLingualObjectsModule` as a dependency of that module when the package is installed manually:
 
 ````csharp
+using Volo.Abp.Modularity;
+using Volo.Abp.MultiLingualObjects;
+
 [DependsOn(typeof(AbpMultiLingualObjectsModule))]
 public class MyApplicationModule : AbpModule
 {
@@ -31,6 +34,7 @@ public class MyApplicationModule : AbpModule
 Implement `IMultiLingualObject<TTranslation>` on the object and `IObjectTranslation` on its translation type:
 
 ```csharp
+using System.Collections.Generic;
 using Volo.Abp.MultiLingualObjects;
 
 public class Product : IMultiLingualObject<ProductTranslation>
@@ -54,6 +58,10 @@ public class ProductTranslation : IObjectTranslation
 Inject `IMultiLingualObjectManager` and call `GetTranslationAsync`:
 
 ```csharp
+using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.MultiLingualObjects;
+
 public class ProductService
     : ITransientDependency
 {

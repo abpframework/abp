@@ -209,7 +209,9 @@ You can also disable ABP class interceptors for all registrations or for types s
 // Disable all class interceptors.
 context.Services.DisableAbpClassInterceptors();
 
-// Or disable them only for selected implementation types.
+// Or disable them only for selected types. The predicate receives the
+// exposed service type, which differs from the implementation type when
+// a class is exposed through its interfaces or base classes.
 context.Services.DisableAbpClassInterceptors(
     new NamedTypeSelector(
         "MyHotPathServices",

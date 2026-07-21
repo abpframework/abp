@@ -93,7 +93,7 @@ Then the route for getting a book will be '**/api/volosoft/book-store/book/{id}*
   * Normalization can be customized by setting the `UrlActionNameNormalizer` option. It's an action delegate that is called for every method.
 * If there is another parameter with 'Id' postfix, then it's also added to the route as the final route segment (like '/phoneId').
 
-The final controller name also removes suffixes configured in `AbpConventionalControllerOptions.IgnoredUrlSuffixesInControllerNames`. The default list contains `Integration`, so `PaymentIntegrationService` uses `payment` as its controller route name. You can replace the list when another suffix convention is required:
+When the `UrlControllerNameNormalizer` option is not set, the final controller name also removes suffixes configured in `AbpConventionalControllerOptions.IgnoredUrlSuffixesInControllerNames` (a custom normalizer takes over the whole controller-name calculation and the ignored suffixes are not applied). The default list contains `Integration`, so `PaymentIntegrationService` uses `payment` as its controller route name. You can replace the list when another suffix convention is required:
 
 ```csharp
 Configure<AbpConventionalControllerOptions>(options =>
