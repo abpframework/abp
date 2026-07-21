@@ -37,6 +37,7 @@
     "Feature:SettingManagementEnableDescription": "Uygulamada ayar yönetim sistemini etkinleştirin.",
     "Feature:AllowChangingEmailSettings": "E-posta ayarlarını değiştirmeye izin verin",
     "Feature:AllowChangingEmailSettingsDescription": "E-posta ayarlarını değiştirmeye izin verin.",
-    "SmtpPasswordPlaceholder": "Şifreyi güncellemek için bir değer girin"
+    "SmtpPasswordPlaceholder": "Şifreyi güncellemek için bir değer girin",
+    "NoSettingsAvailable": "Görüntülenecek ayar yok."
   }
 }

@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using TickerQ.Utilities.Models;
+using TickerQ.Utilities.Base;
 
 namespace Volo.Abp.BackgroundJobs.DemoApp.TickerQ;
 

@@ -45,15 +45,20 @@ This page is used to see the list of users. You can create/edit and delete users
 
 A user can have zero or more roles. Users inherit permissions from their roles. In addition, you can assign permissions directly to the users (by clicking the *Actions* button, then selecting the *Permissions*).
 
+Role changes submitted through the general create or update input are applied only when the current user has the `AbpIdentity.Users.Update.ManageRoles` permission; otherwise, the submitted `RoleNames` value is ignored. Role changes performed by the administration workflow are filtered to prevent privilege escalation: except for an operator in the built-in `admin` role, an operator can only add or remove roles that they already have, and roles outside that set are kept unchanged. An operator in the `admin` role can assign any role.
+
+When users edit their own record through the Identity administration service, a submitted `IsActive` change is ignored, and the built-in MVC, Blazor and MudBlazor user interfaces hide that field. The current user also can't delete their own account from this service.
+
 #### Roles
 
 Roles are used to group permissions assign them to users.
 
 ![identity-module-roles](../images/identity-module-roles.png)
 
-Beside the role name, there are two properties of a role:
+Beside the role name, there are three properties of a role:
 
 * `Default`: If a role is marked as "default", then that role is assigned to new users by default when they register to the application themselves (using the [Account Module](account.md)).
+* `Static`: A static role can't be renamed or deleted. Seeded roles, such as the built-in `admin` role, can use this flag to protect their identity in the application.
 * `Public`: A public role of a user can be seen by other users in the application. This feature has no usage in the Identity module, but provided as a feature that you may want to use in your own application.
 
 ## Other Features
@@ -79,6 +84,7 @@ Since an OU can have a parent, all OUs of a tenant are in a **tree** structure. 
 
 - There can be more than one root (where the `ParentId` is `null`).
 - There is a limit for the first-level children count of an OU (because of the fixed OU Code unit length explained below).
+- A parent and all of its children must belong to the same tenant. Creating or moving an OU under an OU from another tenant is rejected.
 
 #### OU Code
 
@@ -103,6 +109,10 @@ The `OrganizationUnitManager` class can be [injected](../framework/fundamentals/
 - Move an OU in the OU tree.
 - Getting information about the OU tree and its items.
 
+Roles can be assigned to an OU. A user gets both directly assigned roles and the roles of every OU they belong to. Adding or removing an OU role or membership invalidates the affected users' dynamic claims cache, so the effective role claims are rebuilt on the next refresh.
+
+`IdentitySettingNames.OrganizationUnit.MaxUserMembershipCount` limits how many OUs a user can belong to. Its default value is `int.MaxValue`. `IdentityUserManager.AddToOrganizationUnitAsync` and `SetOrganizationUnitsAsync` reject changes that exceed the configured value.
+
 ### Identity Security Log
 
 The security log system records some important operations or changes about your account (like *login* and *change password*). You can also save the security log if needed.
@@ -125,6 +135,58 @@ Configure<AbpSecurityLogOptions>(options =>
 	options.ApplicationName = "AbpSecurityTest";
 });
 ```
+
+### External User Lookup Service
+
+`UserLookupService<TUser, TUserRepository>` first queries the local user store. If an `IExternalUserLookupServiceProvider` implementation is available, it can also query an external source, create the local copy of the user and keep the local data synchronized.
+
+The Identity module provides two common implementations:
+
+* `IdentityUserRepositoryExternalUserLookupServiceProvider`: Uses `IIdentityUserRepository` for in-process lookups.
+* `HttpClientExternalUserLookupServiceProvider`: Uses `IIdentityUserIntegrationService` to resolve users from a remote Identity application.
+
+This is especially useful for reusable modules, such as CMS Kit, that keep module-specific user records but still need to resolve users from the Identity module.
+
+If your application is monolithic, this typically works without any extra configuration.
+
+If the Identity module runs in another application or service (for example, in a tiered or distributed solution), then the calling application should:
+
+* Depend on `Volo.Abp.Identity.HttpApi.Client`.
+* Add `AbpIdentityHttpApiClientModule` and an IdentityModel module (`AbpHttpClientIdentityModelWebModule` for web applications or `AbpHttpClientIdentityModelModule` for non-web hosts).
+* Configure the `RemoteServices:AbpIdentity` endpoint.
+* Configure an `IdentityClients` entry for server-to-server authentication.
+* Expose integration services on the application that hosts the Identity module.
+
+Example configuration for the application that exposes the Identity integration endpoints:
+
+```csharp
+Configure<AbpAspNetCoreMvcOptions>(options =>
+{
+    options.ExposeIntegrationServices = true;
+});
+```
+
+Example configuration for the calling application:
+
+```json
+"RemoteServices": {
+  "AbpIdentity": {
+    "BaseUrl": "https://localhost:44388/",
+    "UseCurrentAccessToken": false
+  }
+},
+"IdentityClients": {
+  "Default": {
+    "GrantType": "client_credentials",
+    "ClientId": "MyProject_Web",
+    "ClientSecret": "your-client-secret",
+    "Authority": "https://localhost:44322/",
+    "Scope": "your-internal-api-scope"
+  }
+}
+```
+
+The exact `ClientId`, `ClientSecret` and `Scope` values depend on the application that hosts the Identity module. See the [Integration Services](../framework/api-development/integration-services.md) and [Synchronous Interservice Communication](../guides/synchronous-interservice-communication.md) documents for the full setup.
 
 ## Options
 
@@ -164,6 +226,38 @@ public class MyService : ITransientDependency
 ````
 
 `IdentitySettingNames` class (in the `Volo.Abp.Identity.Settings` namespace) defines constants for the setting names.
+
+### ASP.NET Core Authentication Registration
+
+`AbpIdentityAspNetCoreModule` registers the ASP.NET Core Identity application and external cookie schemes by default. If the host configures authentication and cookies itself, disable this registration in `PreConfigureServices` and add the required schemes in the host:
+
+```csharp
+PreConfigure<AbpIdentityAspNetCoreOptions>(options =>
+{
+    options.ConfigureAuthentication = false;
+});
+```
+
+Disabling this option only skips `AddAuthentication` and `AddIdentityCookies`; the Identity managers, stores, token providers and security-stamp validator remain registered.
+
+### Dynamic Claims Cache
+
+The Identity module caches the dynamic claims it builds for a user for one hour by default. Configure `IdentityDynamicClaimsPrincipalContributorCacheOptions.CacheAbsoluteExpiration` to change the absolute lifetime:
+
+```csharp
+Configure<IdentityDynamicClaimsPrincipalContributorCacheOptions>(options =>
+{
+    options.CacheAbsoluteExpiration = TimeSpan.FromMinutes(30);
+});
+```
+
+Identity operations that change a user's claims or effective roles clear the affected cache entries. The expiration remains the upper bound for entries that aren't explicitly invalidated. See the [Dynamic Claims](../framework/fundamentals/dynamic-claims.md) document for the end-to-end refresh pipeline.
+
+## Angular UI Extensibility
+
+The Angular `createRoutes` function accepts `entityActionContributors`, `toolbarActionContributors`, `entityPropContributors`, `createFormPropContributors` and `editFormPropContributors` for both `eIdentityComponents.Roles` and `eIdentityComponents.Users`.
+
+The [entity actions](../framework/ui/angular/entity-action-extensions.md), [page toolbars](../framework/ui/angular/page-toolbar-extensions.md), [table columns](../framework/ui/angular/data-table-column-extensions.md) and [dynamic forms](../framework/ui/angular/dynamic-form-extensions.md) guides use the Identity module to demonstrate these `createRoutes` contributors. To replace the complete roles or users component, register the corresponding key with `ReplaceableComponentsService` as described in the [component replacement](../framework/ui/angular/component-replacement.md) guide.
 
 ## Distributed Events
 
@@ -274,13 +368,11 @@ Following custom repositories are defined for this module:
 #### Application Services
 
 * `IdentityUserAppService` (implements `IIdentityUserAppService`): Implements the use cases of the user management UI.
-* `IdentityRoleAppService` (implement `IIdentityRoleAppService`): Implements the use cases of the role management UI.
-* `IdentityClaimTypeAppService` (implements `IIdentityClaimTypeAppService`): Implements the use cases of the claim type management UI.
-* `IdentitySettingsAppService` (implements `IIdentitySettingsAppService`): Used to get and update settings for the Identity module.
-* `IdentityUserLookupAppService` (implements `IIdentityUserLookupAppService`): Used to get information for a user by `id` or `userName`. It is aimed to be used internally by the ABP.
-* `ProfileAppService` (implements `IProfileAppService`): Used to change a user's profile and the password.
-* ```IdentitySecurityLogAppService``` (implements ```IIdentitySecurityLogAppService```): Implements the use cases of the security logs UI.
-* ```OrganizationUnitAppService``` (implements ```OrganizationUnitAppService```): Implements the use cases of the organization unit management UI.
+* `IdentityUserIntegrationService` (implements `IIdentityUserIntegrationService`): Used for module-to-module and service-to-service user and role lookup operations.
+* `IdentityRoleAppService` (implements `IIdentityRoleAppService`): Implements the use cases of the role management UI.
+* `IdentityUserLookupAppService` (implements `IIdentityUserLookupAppService`): Kept for backward compatibility and internally delegates to `IIdentityUserIntegrationService`.
+
+Profile editing and password changes are provided by the Account module's `ProfileAppService`. Claim type, Identity settings, security log and organization unit administration application services are not part of the open-source Identity module.
 
 ### Database Providers
 
@@ -326,4 +418,3 @@ You can set the following properties of the `AbpIdentityDbProperties` class to c
 * `ConnectionStringName` (`AbpIdentity` by default) is the [connection string](../framework/fundamentals/connection-strings.md) name for this module.
 
 These are static properties. If you want to set, do it in the beginning of your application (typically, in `Program.cs`).
-

@@ -9,7 +9,7 @@
             <Column>
                  <Field>
                      <FieldLabel>@L["DisplayName:Timezone"] *</FieldLabel>
-                     <Select TValue="string" SelectedValue="TimezoneSettings.Timezone" SelectedValueChanged="OnSelectedValueChangedAsync">
+                     <Select TValue="string" Value="TimezoneSettings.Timezone" ValueChanged="OnSelectedValueChangedAsync">
                          @foreach (var item in TimezoneSettings.TimeZoneItems)
                          {
                              <SelectItem Value="item.Value">@item.Name</SelectItem>

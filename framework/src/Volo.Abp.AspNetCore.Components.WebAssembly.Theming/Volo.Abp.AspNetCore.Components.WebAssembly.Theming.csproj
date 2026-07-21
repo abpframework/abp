@@ -10,6 +10,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Bundling\Volo.Abp.AspNetCore.Components.WebAssembly.Theming.Bundling.csproj" />
         <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.Web.Theming\Volo.Abp.AspNetCore.Components.Web.Theming.csproj" />
         <ProjectReference Include="..\Volo.Abp.AspNetCore.Components.WebAssembly\Volo.Abp.AspNetCore.Components.WebAssembly.csproj" />

@@ -159,6 +159,23 @@ public class IdentityServerSupportedLoginModel : LoginModel
 
         if (result.IsNotAllowed)
         {
+            var notAllowedUser = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress) ??
+                                 await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress);
+            if (notAllowedUser != null)
+            {
+                using (CurrentTenant.Change(notAllowedUser.TenantId))
+                {
+                    await IdentityOptions.SetAsync();
+                    if ((notAllowedUser.ShouldChangePasswordOnNextLogin ||
+                            await UserManager.ShouldPeriodicallyChangePasswordAsync(notAllowedUser)) &&
+                        !await UserManager.CheckPasswordAsync(notAllowedUser, LoginInput.Password))
+                    {
+                        Alerts.Danger(L["InvalidUserNameOrPassword"]);
+                        return Page();
+                    }
+                }
+            }
+
             Alerts.Warning(L["LoginIsNotAllowed"]);
             return Page();
         }

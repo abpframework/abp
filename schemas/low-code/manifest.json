@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "ABP Low-Code Model Descriptor Schemas",
+  "version": "10.5",
+  "publicBaseUrl": "https://raw.githubusercontent.com/abpframework/abp/rel-10.5/schemas/low-code",
+  "definitionsPath": "definitions",
+  "descriptorSchemas": {
+    "enums": "definitions/enum-descriptor.schema.json",
+    "entities": "definitions/entity-descriptor.schema.json",
+    "endpoints": "definitions/endpoint-descriptor.schema.json",
+    "eventHandlers": "definitions/script-event-handler-descriptor.schema.json",
+    "backgroundJobs": "definitions/script-background-job-descriptor.schema.json",
+    "backgroundWorkers": "definitions/script-background-worker-descriptor.schema.json",
+    "pageGroups": "definitions/page-group-descriptor.schema.json",
+    "pages": "definitions/page-descriptor.schema.json",
+    "forms": "definitions/form-descriptor.schema.json",
+    "permissions": "definitions/permission-descriptor.schema.json"
+  }
+}

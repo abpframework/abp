@@ -83,7 +83,7 @@
     {
       "valueType": "ToggleStringValueType",
       "defaultValue": "false",
-      "displayName": "Allow changing email settings.",
+      "displayName": "Allow changing email settings",
       "description": "",
       "isAvailableToHost": false,
       "isVisibleToClients": true,

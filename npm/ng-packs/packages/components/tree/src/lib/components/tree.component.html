@@ -1,8 +1,8 @@
 <nz-tree
   [nzBeforeDrop]="beforeDrop"
-  [nzDraggable]="draggable"
-  [nzCheckStrictly]="checkStrictly"
-  [nzCheckable]="checkable"
+  [nzDraggable]="draggable()"
+  [nzCheckStrictly]="checkStrictly()"
+  [nzCheckable]="checkable()"
   [nzCheckedKeys]="checkedKeys"
   [nzData]="nodes"
   [nzTreeTemplate]="treeTemplate"
@@ -11,7 +11,7 @@
   (nzExpandChange)="onExpandedKeysChange($event)"
   (nzCheckboxChange)="onCheckboxChange($event)"
   (nzOnDrop)="onDrop($event)"
-  [nzNoAnimation]="noAnimation"
+  [nzNoAnimation]="noAnimation()"
   (nzContextMenu)="onContextMenuChange($event)"
 />
 <ng-template #treeTemplate let-node>

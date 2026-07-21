@@ -45,6 +45,35 @@ public class ProductManager
 }
 ```
 
+## IObjectSerializer
+
+`IObjectSerializer` (defined in the `Volo.Abp.Serialization` package, independently of the JSON system) serializes objects to and from `byte[]`. The default implementation uses UTF-8 JSON bytes from `System.Text.Json`:
+
+```csharp
+public interface IObjectSerializer
+{
+    byte[]? Serialize<T>(T? obj);
+    T? Deserialize<T>(byte[] bytes);
+}
+```
+
+Inject `IObjectSerializer` when a storage or transport API works with bytes instead of strings. To customize serialization for a specific type, implement `IObjectSerializer<T>`. ABP automatically exposes conventionally registered implementations through the corresponding closed generic interface, and the default serializer uses that implementation for `T`:
+
+```csharp
+public class ProductSerializer : IObjectSerializer<Product>, ITransientDependency
+{
+    public byte[]? Serialize(Product? obj)
+    {
+        return obj is null ? null : JsonSerializer.SerializeToUtf8Bytes(obj);
+    }
+
+    public Product? Deserialize(byte[]? bytes)
+    {
+        return bytes is null ? null : JsonSerializer.Deserialize<Product>(bytes);
+    }
+}
+```
+
 ## Configuration
 
 ### AbpJsonOptions

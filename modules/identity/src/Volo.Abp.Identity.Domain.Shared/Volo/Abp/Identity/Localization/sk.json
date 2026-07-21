@@ -77,6 +77,7 @@
     "Volo.Abp.Identity:010007": "Dvojfaktorové nastavenie nie je možné zmeniť.",
     "Volo.Abp.Identity:010008": "Dvojfaktorové nastavenie nie je povolené zmeniť.",
     "Volo.Abp.Identity:010009": "Nemôžete delegovať svoje vlastné oprávnenia.",
+    "Volo.Abp.Identity:010010": "Nadradená organizačná jednotka ('{ParentId}') neexistuje alebo patrí inému nájomcovi.",
     "Volo.Abp.Identity:010021": "Názov '{0}' sa už používa.",
     "Volo.Abp.Identity:010022": "Nie je možné zmeniť typ statického oprávnenia.",
     "Volo.Abp.Identity:010023": "Nie je možné odstrániť typ statického oprávnenia.",

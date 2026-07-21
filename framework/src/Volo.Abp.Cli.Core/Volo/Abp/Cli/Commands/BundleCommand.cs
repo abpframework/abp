@@ -75,7 +75,7 @@ public class BundleCommand : IConsoleCommand, ITransientDependency
         var projectType = commandLineArgs.Options.GetOrNull(Options.ProjectType.Short, Options.ProjectType.Long);
         projectType ??= BundlingConsts.WebAssembly;
 
-        return projectType.ToLower() switch {
+        return projectType.ToLowerInvariant() switch {
             "webassembly" => BundlingConsts.WebAssembly,
             "maui-blazor" => BundlingConsts.MauiBlazor,
             _ => throw new CliUsageException(ExceptionMessageHelper.GetInvalidOptionExceptionMessage("Project Type"))

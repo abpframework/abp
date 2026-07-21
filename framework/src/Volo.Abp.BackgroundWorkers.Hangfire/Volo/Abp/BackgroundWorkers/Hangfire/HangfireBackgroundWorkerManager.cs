@@ -162,19 +162,23 @@ public class HangfireBackgroundWorkerManager : BackgroundWorkerManager, ISinglet
 
         if (time.TotalSeconds <= 59)
         {
-            cron = $"*/{time.TotalSeconds} * * * * *";
+            var seconds = Math.Max(1, (int)Math.Round(time.TotalSeconds));
+            cron = $"*/{seconds} * * * * *";
         }
         else if (time.TotalMinutes <= 59)
         {
-            cron = $"*/{time.TotalMinutes} * * * *";
+            var minutes = Math.Max(1, (int)Math.Round(time.TotalMinutes));
+            cron = $"*/{minutes} * * * *";
         }
         else if (time.TotalHours <= 23)
         {
-            cron = $"0 */{time.TotalHours} * * *";
+            var hours = Math.Max(1, (int)Math.Round(time.TotalHours));
+            cron = $"0 */{hours} * * *";
         }
         else if(time.TotalDays <= 31)
         {
-            cron = $"0 0 0 1/{time.TotalDays} * *";
+            var days = Math.Max(1, (int)Math.Round(time.TotalDays));
+            cron = $"0 0 0 1/{days} * *";
         }
         else
         {

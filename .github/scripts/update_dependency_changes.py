@@ -9,6 +9,71 @@ HEADER = "# Package Version Changes\n"
 DOC_PATH = os.environ.get("DOC_PATH", "docs/en/package-version-changes.md")
 
 
+def extract_preamble(content):
+    """Extract content before the '# Package Version Changes' heading."""
+    header_pattern = re.compile(r"^# Package Version Changes\s*$", re.MULTILINE)
+    match = header_pattern.search(content)
+    if match:
+        return content[: match.start()]
+    return ""
+
+
+def normalize_version(version):
+    """Normalize version string: replace -preview suffix with -rc.1."""
+    if version and version.endswith("-preview"):
+        return version[: -len("-preview")] + "-rc.1"
+    return version
+
+
+def check_tag_exists(tag):
+    """Check if a git tag exists on the remote."""
+    result = subprocess.run(
+        ["git", "ls-remote", "--exit-code", "--tags", "origin", f"refs/tags/{tag}"],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode == 0:
+        return True
+    if result.returncode == 2:
+        return False
+
+    stderr = (result.stderr or "").strip()
+    raise RuntimeError(
+        f"Failed to check whether git tag '{tag}' exists on remote 'origin' "
+        f"(exit code {result.returncode}): {stderr or 'No error output provided.'}"
+    )
+
+
+def bump_patch_if_released(version, tag_exists_fn=None):
+    """If the version tag already exists, bump the patch version.
+
+    Only applies to stable versions (no pre-release suffix like -rc.N).
+    """
+    if tag_exists_fn is None:
+        tag_exists_fn = check_tag_exists
+
+    # Only bump stable versions (no pre-release suffix)
+    if "-" in version:
+        return version
+
+    parts = version.split(".")
+    if len(parts) != 3:
+        return version
+
+    major, minor = parts[0], parts[1]
+    try:
+        patch = int(parts[2])
+    except ValueError:
+        return version
+
+    current = version
+    while tag_exists_fn(current):
+        patch += 1
+        current = f"{major}.{minor}.{patch}"
+
+    return current
+
+
 def get_version():
     """Read the current version from common.props."""
     try:
@@ -275,10 +340,13 @@ def main():
     
     pr_number = f"#{pr_arg}"
 
-    version = get_version()
+    version = normalize_version(get_version())
     if not version:
         print("Could not read version from common.props.")
         sys.exit(1)
+
+    version = bump_patch_if_released(version)
+    print(f"Resolved version: {version}")
 
     diff = get_diff(base_ref)
     if not diff:
@@ -297,6 +365,7 @@ def main():
 
     # Load existing document from the base branch
     existing_content = get_existing_doc_from_base(base_ref)
+    preamble = extract_preamble(existing_content) if existing_content else ""
     sections = parse_document(existing_content) if existing_content else []
 
     # Find existing section for this version
@@ -320,6 +389,8 @@ def main():
     if doc_dir:
         os.makedirs(doc_dir, exist_ok=True)
     with open(DOC_PATH, "w") as f:
+        if preamble:
+            f.write(preamble)
         f.write(HEADER + "\n")
         for _, text in sections:
             f.write(text.rstrip("\n") + "\n\n")

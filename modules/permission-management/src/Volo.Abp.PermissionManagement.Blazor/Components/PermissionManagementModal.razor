@@ -1,6 +1,6 @@
 ﻿@inherits Volo.Abp.AspNetCore.Components.AbpComponentBase
-<Modal @ref="_modal" Closing="@ClosingModal">
-    <ModalContent Size="ModalSize.Large" Centered="true">
+<Modal @ref="_modal" Closing="@ClosingModal" Size="ModalSize.Large" Centered="true">
+    <ModalContent>
         <ModalHeader>
             <ModalTitle>@L["Permissions"] - @_entityDisplayName</ModalTitle>
             <CloseButton Clicked="CloseModal" />
@@ -17,14 +17,14 @@
                                 </span>
                             </Addon>
                             <Addon AddonType="AddonType.Body">
-                                <TextEdit Text="@_permissionGroupSearchText" TextChanged="OnPermissionGroupSearchTextChangedAsync"/>
+                                <TextInput Value="@_permissionGroupSearchText" ValueChanged="OnPermissionGroupSearchTextChangedAsync"/>
                             </Addon>
                         </Addons>
                     </Field>
                 </Column>
                 <Column ColumnSize="ColumnSize.IsAuto">
                     <Field>
-                        <Check Disabled="_selectAllDisabled" Cursor="Cursor.Pointer" CheckedChanged="@GrantAllAsync" Checked="@GrantAll" TValue="bool" Indeterminate="@GrantAny">
+                        <Check Disabled="_selectAllDisabled" Cursor="Cursor.Pointer" ValueChanged="@GrantAllAsync" Value="@GrantAll" TValue="bool" Indeterminate="@GrantAny">
                             @L["SelectAllInAllTabs"]
                         </Check>
                     </Field>
@@ -68,9 +68,9 @@
                                                 <Field>
                                                     <Check
                                                         Disabled="@(IsPermissionGroupDisabled(group))"
-                                                        Checked="@(group.Permissions.All(x => x.IsGranted))"
+                                                        Value="@(group.Permissions.All(x => x.IsGranted))"
                                                         Cursor="Cursor.Pointer"
-                                                        CheckedChanged="@(b => GroupGrantAllChanged(b, group))"
+                                                        ValueChanged="@(b => GroupGrantAllChanged(b, group))"
                                                         TValue="bool">
                                                         @L["SelectAllInThisTab"]
                                                     </Check>
@@ -84,8 +84,8 @@
                                                         <Check
                                                             Disabled="@(IsDisabledPermission(permission))"
                                                             Cursor="Cursor.Pointer"
-                                                            Checked="@permission.IsGranted"
-                                                            CheckedChanged="@(async (b) => await PermissionChanged(b, group, permission))"
+                                                            Value="@permission.IsGranted"
+                                                            ValueChanged="@(async (b) => await PermissionChanged(b, group, permission))"
                                                             TValue="bool">
                                                             @GetShownName(permission)
                                                         </Check>

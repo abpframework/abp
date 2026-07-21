@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RequestLocalization;
 using Volo.Abp.Auditing;
 using Volo.Abp.Localization;
@@ -42,7 +43,12 @@ public class AbpLanguagesController : AbpController
 
         HttpContext.Items[AbpRequestLocalizationMiddleware.HttpContextItemName] = true;
 
-        var context = new QueryStringCultureReplacementContext(HttpContext, new RequestCulture(culture, uiCulture), returnUrl);
+        var context = new QueryStringCultureReplacementContext(
+            HttpContext,
+            new RequestCulture(culture, uiCulture),
+            returnUrl,
+            GetCurrentCultureFromRequestCookie());
+
         await QueryStringCultureReplacement.ReplaceAsync(context);
 
         if (!string.IsNullOrWhiteSpace(context.ReturnUrl))
@@ -51,6 +57,18 @@ public class AbpLanguagesController : AbpController
         }
 
         return Redirect("~/");
+    }
+
+    protected virtual string? GetCurrentCultureFromRequestCookie()
+    {
+        var cookieValue = HttpContext.Request.Cookies[CookieRequestCultureProvider.DefaultCookieName];
+        if (cookieValue == null)
+        {
+            return null;
+        }
+
+        var result = CookieRequestCultureProvider.ParseCookieValue(cookieValue);
+        return result?.Cultures.FirstOrDefault().Value;
     }
 
     protected virtual string GetRedirectUrl(string returnUrl)

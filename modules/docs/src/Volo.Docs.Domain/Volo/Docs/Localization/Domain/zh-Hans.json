@@ -29,6 +29,7 @@
     "FullSearch": "在文档中搜索",
     "Volo.Docs.Domain:010001": "未启用Elastic search。",
     "MultipleVersionDocumentInfo": "本文档有多个版本。请选择最适合您的选项。",
+    "DocumentOptions": "文档选项",
     "New": "新",
     "Upd": "更新文档",
     "NewExplanation": "最近两周创建。",

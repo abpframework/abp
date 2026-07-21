@@ -76,6 +76,7 @@
     "Volo.Abp.Identity:010007": "You can't change your two factor setting.",
     "Volo.Abp.Identity:010008": "Changing the two factor setting is not allowed.",
     "Volo.Abp.Identity:010009": "You cannot delegate yourself!",
+    "Volo.Abp.Identity:010010": "The parent organisation unit ('{ParentId}') does not exist, or it belongs to a different tenant.",
     "Volo.Abp.Identity:010021": "Name exist: '{0}'",
     "Volo.Abp.Identity:010022": "Can not update a static ClaimType.",
     "Volo.Abp.Identity:010023": "Can not delete a static ClaimType.",

@@ -7,6 +7,31 @@
 
 # Scriban Integration
 
+## Safe Runtime (Sandbox)
+
+Scriban's [safe runtime](https://github.com/scriban/scriban/blob/master/site/docs/runtime/safe-runtime.md) builds the practical sandbox out of four boundaries: which globals you expose through `ScriptObject`, which .NET members you allow through the member filter, whether you configure `TemplateContext.TemplateLoader` for `include`, and which `TemplateContext` execution limits you enable. ABP's `ScribanTemplateRenderingEngine` is configured to honor these boundaries by default:
+
+| Boundary | ABP default |
+|----------|-------------|
+| Globals exposed | Only the `globalContext` (`Dictionary<string, object>`) entries, the `model` you pass to `RenderAsync`, and the `L` localization helper. |
+| .NET member access | `TemplateContext.MemberFilter` is set to `IsMemberAllowed`, an allowlist that exposes public properties only. Methods, fields, events, and `object`-level members (`GetType`, `ToString`, ...) are not reachable, which closes reflection-based escape paths such as `{%{{{ model.GetType.Assembly.GetType "..." }}}%}`. |
+| `TemplateLoader` | Not configured. `include` directives have no template loader and cannot read templates from disk or other sources unless you explicitly wire one up. |
+| Execution limits | Scriban's defaults (`LoopLimit = 1000`, `RecursiveLimit = 100`, `LimitToString = 1 MB`, `RegexTimeOut = 10s`). Override `CreateScribanTemplateContext` to tighten these for your own scenarios. |
+
+The recommended way to expose data to a Scriban template is via `ScriptObject` or `IDictionary<string, object>` — the keys you put there are exactly what the template can see. When you pass a .NET object as `model`, the `MemberFilter` ensures only properties are exposed, but the safest pattern is to pre-build a dictionary or `ScriptObject` so the surface is fully under your control:
+
+````csharp
+await _templateRenderer.RenderAsync(
+    "MyTemplate",
+    model: new Dictionary<string, object>
+    {
+        { "name", user.Name },
+        { "email", user.Email }
+    });
+````
+
+If you must pass a .NET object whose methods/fields the template needs to read, override `ScribanTemplateRenderingEngine.IsMemberAllowed` to relax the filter. Only do so when the model objects are trusted and do not carry secrets, since methods and reflection entry points become reachable to whoever can edit the template content.
+
 ## Installation
 
 It is suggested to use the [ABP CLI](../../../cli) to install this package.

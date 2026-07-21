@@ -85,7 +85,7 @@ public class AngularServiceProxyGenerator : ServiceProxyGeneratorBase<AngularSer
         }
 
         var serviceType = GetServiceType(args) ?? Volo.Abp.Cli.ServiceProxying.ServiceType.Application;
-        commandBuilder.Append($" --service-type {serviceType.ToString().ToLower()}");
+        commandBuilder.Append($" --service-type {serviceType.ToString().ToLowerInvariant()}");
 
 
         _cmdhelper.RunCmd(commandBuilder.ToString());

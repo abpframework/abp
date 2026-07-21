@@ -28,12 +28,7 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular/build:karma",
-          "options": {
-            "main": "projects/my-project-name/src/test.ts",
-            "tsConfig": "projects/my-project-name/tsconfig.spec.json",
-            "karmaConfig": "projects/my-project-name/karma.conf.js"
-          }
+          "builder": "@angular/build:unit-test"
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
@@ -157,25 +152,7 @@
           }
         },
         "test": {
-          "builder": "@angular/build:karma",
-          "options": {
-            "browser": "projects/dev-app/src/test.ts",
-            "polyfills": ["projects/dev-app/src/polyfills.ts"],
-            "tsConfig": "projects/dev-app/tsconfig.spec.json",
-            "karmaConfig": "projects/dev-app/karma.conf.js",
-            "inlineStyleLanguage": "scss",
-            "assets": ["projects/dev-app/src/favicon.ico", "projects/dev-app/src/assets"],
-            "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-              "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
-              "node_modules/@swimlane/ngx-datatable/index.css",
-              "node_modules/@swimlane/ngx-datatable/assets/icons.css",
-              "node_modules/@swimlane/ngx-datatable/themes/material.css",
-              "projects/dev-app/src/styles.scss"
-            ],
-            "scripts": []
-          }
+          "builder": "@angular/build:unit-test"
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",

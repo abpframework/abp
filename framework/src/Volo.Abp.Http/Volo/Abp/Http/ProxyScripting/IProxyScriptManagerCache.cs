@@ -1,10 +1,9 @@
-﻿using System;
+using System;
+using System.Threading.Tasks;
 
 namespace Volo.Abp.Http.ProxyScripting;
 
 public interface IProxyScriptManagerCache
 {
-    string GetOrAdd(string key, Func<string> factory);
-
-    void Set(string key, string value);
+    Task<string> GetOrAddAsync(string key, Func<Task<string>> factory);
 }

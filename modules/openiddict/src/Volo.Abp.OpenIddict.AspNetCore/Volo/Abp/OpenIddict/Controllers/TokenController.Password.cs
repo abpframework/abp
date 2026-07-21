@@ -57,24 +57,30 @@ public partial class TokenController
 
                         if (await externalLoginProvider.TryAuthenticateAsync(request.Username, request.Password))
                         {
-                            user = await UserManager.FindByNameAsync(request.Username);
+                            user = await UserManager.FindSharedUserByNameAsync(request.Username);
                             if (user == null)
                             {
                                 user = await externalLoginProvider.CreateUserAsync(request.Username, externalLoginProviderInfo.Name);
                             }
                             else
                             {
-                                await externalLoginProvider.UpdateUserAsync(user, externalLoginProviderInfo.Name);
+                                using (CurrentTenant.Change(user.TenantId))
+                                {
+                                    await externalLoginProvider.UpdateUserAsync(user, externalLoginProviderInfo.Name);
+                                }
                             }
 
-                            return await SetSuccessResultAsync(request, user);
+                            using (CurrentTenant.Change(user.TenantId))
+                            {
+                                return await SetSuccessResultAsync(request, user);
+                            }
                         }
                     }
                 }
 
                 await IdentityOptions.SetAsync();
 
-                user = await UserManager.FindByNameAsync(request.Username);
+                user = await UserManager.FindSharedUserByNameAsync(request.Username);
                 if (user == null)
                 {
                     Logger.LogInformation("No user found matching username: {username}", request.Username);
@@ -96,77 +102,82 @@ public partial class TokenController
                     return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
                 }
 
-                var result = await SignInManager.CheckPasswordSignInAsync(user, request.Password, true);
-                if (!result.Succeeded)
+                using (CurrentTenant.Change(user.TenantId))
                 {
-                    await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
-                    {
-                        Identity = OpenIddictSecurityLogIdentityConsts.OpenIddict,
-                        Action = result.ToIdentitySecurityLogAction(),
-                        UserName = request.Username,
-                        ClientId = request.ClientId
-                    });
+                    await IdentityOptions.SetAsync();
 
-                    var errorCode = OpenIddictConstants.Errors.InvalidGrant;
-                    string errorDescription;
+                    var result = await SignInManager.CheckPasswordSignInAsync(user, request.Password, true);
+                    if (!result.Succeeded)
+                    {
+                        await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+                        {
+                            Identity = OpenIddictSecurityLogIdentityConsts.OpenIddict,
+                            Action = result.ToIdentitySecurityLogAction(),
+                            UserName = request.Username,
+                            ClientId = request.ClientId
+                        });
 
-                    if (result.IsLockedOut)
-                    {
-                        Logger.LogInformation("Authentication failed for username: {username}, reason: locked out", request.Username);
-                        errorCode = AbpOpenIddictErrors.AccountLocked;
-                        errorDescription = "The user account has been locked out due to invalid login attempts. Please wait a while and try again.";
-                    }
-                    else if (result.IsNotAllowed)
-                    {
-                        if (!await UserManager.CheckPasswordAsync(user, request.Password))
+                        var errorCode = OpenIddictConstants.Errors.InvalidGrant;
+                        string errorDescription;
+
+                        if (result.IsLockedOut)
+                        {
+                            Logger.LogInformation("Authentication failed for username: {username}, reason: locked out", request.Username);
+                            errorCode = AbpOpenIddictErrors.AccountLocked;
+                            errorDescription = "The user account has been locked out due to invalid login attempts. Please wait a while and try again.";
+                        }
+                        else if (result.IsNotAllowed)
+                        {
+                            if (!await UserManager.CheckPasswordAsync(user, request.Password))
+                            {
+                                Logger.LogInformation("Authentication failed for username: {username}, reason: invalid credentials", request.Username);
+                                errorDescription = "Invalid username or password!";
+                            }
+                            else
+                            {
+                                Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", request.Username);
+
+                                if (user.ShouldChangePasswordOnNextLogin)
+                                {
+                                    return await HandleShouldChangePasswordOnNextLoginAsync(request, user, request.Password);
+                                }
+
+                                if (await UserManager.ShouldPeriodicallyChangePasswordAsync(user))
+                                {
+                                    return await HandlePeriodicallyChangePasswordAsync(request, user, request.Password);
+                                }
+
+                                if (user.IsActive)
+                                {
+                                    return await HandleConfirmUserAsync(request, user);
+                                }
+
+                                errorCode = AbpOpenIddictErrors.AccountInactive;
+                                errorDescription = "You are not allowed to login! Your account is inactive or needs to confirm your email/phone number.";
+                            }
+                        }
+                        else
                         {
                             Logger.LogInformation("Authentication failed for username: {username}, reason: invalid credentials", request.Username);
                             errorDescription = "Invalid username or password!";
                         }
-                        else
+
+                        var properties = new AuthenticationProperties(new Dictionary<string, string>
                         {
-                            Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", request.Username);
+                            [OpenIddictServerAspNetCoreConstants.Properties.Error] = errorCode,
+                            [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = errorDescription
+                        });
 
-                            if (user.ShouldChangePasswordOnNextLogin)
-                            {
-                                return await HandleShouldChangePasswordOnNextLoginAsync(request, user, request.Password);
-                            }
-
-                            if (await UserManager.ShouldPeriodicallyChangePasswordAsync(user))
-                            {
-                                return await HandlePeriodicallyChangePasswordAsync(request, user, request.Password);
-                            }
-
-                            if (user.IsActive)
-                            {
-                                return await HandleConfirmUserAsync(request, user);
-                            }
-
-                            errorCode = AbpOpenIddictErrors.AccountInactive;
-                            errorDescription = "You are not allowed to login! Your account is inactive or needs to confirm your email/phone number.";
-                        }
-                    }
-                    else
-                    {
-                        Logger.LogInformation("Authentication failed for username: {username}, reason: invalid credentials", request.Username);
-                        errorDescription = "Invalid username or password!";
+                        return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
                     }
 
-                    var properties = new AuthenticationProperties(new Dictionary<string, string>
+                    if (await IsTfaEnabledAsync(user))
                     {
-                        [OpenIddictServerAspNetCoreConstants.Properties.Error] = errorCode,
-                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = errorDescription
-                    });
+                        return await HandleTwoFactorLoginAsync(request, user);
+                    }
 
-                    return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+                    return await SetSuccessResultAsync(request, user);
                 }
-
-                if (await IsTfaEnabledAsync(user))
-                {
-                    return await HandleTwoFactorLoginAsync(request, user);
-                }
-
-                return await SetSuccessResultAsync(request, user);
             }
         }
     }
@@ -178,13 +189,13 @@ public partial class TokenController
             return;
         }
 
-        var userByUsername = await UserManager.FindByNameAsync(request.Username);
+        var userByUsername = await UserManager.FindSharedUserByNameAsync(request.Username);
         if (userByUsername != null)
         {
             return;
         }
 
-        var userByEmail = await UserManager.FindByEmailAsync(request.Username);
+        var userByEmail = await UserManager.FindSharedUserByEmailAsync(request.Username);
         if (userByEmail == null)
         {
             return;

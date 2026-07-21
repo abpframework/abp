@@ -36,7 +36,7 @@ jobs:
       - run: gh pr edit "$PR_NUMBER" --add-label "dependency-change"
         env:
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          GH_TOKEN: ${{ secrets.BOT_SECRET }}
+          GH_TOKEN: ${{ secrets.MLM_Token }}
           GH_REPO: ${{ github.repository }}
 
       - uses: actions/checkout@v4

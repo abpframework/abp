@@ -29,6 +29,7 @@ export interface FormPropGroup {
 
 export interface FormPropTooltip {
   text: string;
+  params?: string[];
   placement?: 'top' | 'end' | 'bottom' | 'start';
 }
 

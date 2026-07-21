@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Localization;
@@ -13,6 +14,8 @@ public class ScribanTemplateRenderingEngine : TemplateRenderingEngineBase, ITran
 {
     public const string EngineName = "Scriban";
     public override string Name => EngineName;
+
+    public override bool IsSandboxed => true;
 
     public ScribanTemplateRenderingEngine(
         ITemplateDefinitionManager templateDefinitionManager,
@@ -118,7 +121,10 @@ public class ScribanTemplateRenderingEngine : TemplateRenderingEngineBase, ITran
         Dictionary<string, object> globalContext,
         object? model = null)
     {
-        var context = new TemplateContext();
+        var context = new TemplateContext
+        {
+            MemberFilter = IsMemberAllowed
+        };
 
         var scriptObject = new ScriptObject();
 
@@ -139,5 +145,13 @@ public class ScribanTemplateRenderingEngine : TemplateRenderingEngineBase, ITran
         context.PushCulture(System.Globalization.CultureInfo.CurrentCulture);
 
         return context;
+    }
+
+    /// <summary>
+    /// Scriban member filter: only public properties on imported objects are exposed.
+    /// </summary>
+    protected virtual bool IsMemberAllowed(MemberInfo member)
+    {
+        return member is PropertyInfo;
     }
 }

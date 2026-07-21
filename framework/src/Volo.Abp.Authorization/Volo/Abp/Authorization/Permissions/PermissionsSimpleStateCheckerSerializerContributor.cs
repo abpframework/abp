@@ -20,13 +20,31 @@ public class PermissionsSimpleStateCheckerSerializerContributor :
             return null;
         }
 
-        var jsonObject = new JsonObject {
+        return BuildJson(permissionsSimpleStateChecker.RequiresAll, permissionsSimpleStateChecker.PermissionNames);
+    }
+
+    public string? SerializeToJson<TState>(ISimpleStateChecker<TState> checker, TState state)
+        where TState : IHasSimpleStateCheckers<TState>
+    {
+        if (checker is RequirePermissionsSimpleBatchStateChecker<TState> batch)
+        {
+            var model = batch.GetModelOrNull(state);
+            return model == null ? null : BuildJson(model.RequiresAll, model.Permissions);
+        }
+
+        return SerializeToJson(checker);
+    }
+
+    private static string BuildJson(bool requiresAll, string[] permissionNames)
+    {
+        var jsonObject = new JsonObject
+        {
             ["T"] = CheckerShortName,
-            ["A"] = permissionsSimpleStateChecker.RequiresAll
+            ["A"] = requiresAll
         };
 
         var nameArray = new JsonArray();
-        foreach (var permissionName in permissionsSimpleStateChecker.PermissionNames)
+        foreach (var permissionName in permissionNames)
         {
             nameArray.Add(permissionName);
         }

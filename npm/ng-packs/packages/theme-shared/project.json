@@ -31,7 +31,7 @@
       "executor": "@nx/vitest:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "reportsDirectory": "../../coverage/packages/theme-shared"
+        "reportsDirectory": "{projectRoot}/../../coverage/packages/theme-shared"
       }
     }
   }

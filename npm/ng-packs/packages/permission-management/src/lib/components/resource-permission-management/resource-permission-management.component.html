@@ -41,10 +41,10 @@
           />
         }
         @case (eResourcePermissionViewModes.Add) {
-          <abp-resource-permission-form mode="add" [resourceName]="resourceName()" />
+          <abp-resource-permission-form [mode]="eResourcePermissionViewModes.Add" [resourceName]="resourceName()" />
         }
         @case (eResourcePermissionViewModes.Edit) {
-          <abp-resource-permission-form mode="edit" [resourceName]="resourceName()" />
+          <abp-resource-permission-form [mode]="eResourcePermissionViewModes.Edit" [resourceName]="resourceName()" />
         }
       }
     }

@@ -15,6 +15,7 @@ export * from './lib/proxy/volo/abp/asp-net-core/mvc/api-exploring';
 export * from './lib/proxy/volo/abp/asp-net-core/mvc/application-configurations';
 export * from './lib/proxy/volo/abp/asp-net-core/mvc/application-configurations/object-extending';
 export * from './lib/proxy/volo/abp/asp-net-core/mvc/multi-tenancy';
+export * from './lib/proxy/volo/abp/multi-tenancy';
 export * from './lib/proxy/volo/abp/http/modeling';
 export * from './lib/proxy/volo/abp/localization';
 export * from './lib/proxy/volo/abp/models';

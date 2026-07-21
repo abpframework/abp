@@ -75,4 +75,6 @@ Click the **Navigations** tab. Then click the **Add navigation collection** butt
 
 The below image is the final page created by ABP Suite. The **new book** dialog has a **Categories** tab which lists all categories of the book and allows add/remove categories.
 
+> **Note:** For modern React UI solutions, ABP Suite generates the navigation collection as an inline multi-select on the entity's create/edit dialog — add or remove connected records, pre-selected when editing an existing record, and available as a list filter — alongside the MVC, Blazor and Angular UI stacks.
+
 ![navigation-collection-books-page](../images/navigation-collection-books-page.8.1.png)

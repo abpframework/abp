@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -16,6 +17,8 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
@@ -212,6 +215,66 @@ public class AbpAspNetCoreMvcModule : AbpModule
         {
             preConfigureActions.Configure(options);
         });
+
+        ConfigureRouteBasedCulture(context);
+        DecorateAntiforgery(context);
+    }
+
+    protected virtual void DecorateAntiforgery(ServiceConfigurationContext context)
+    {
+        // Wrap the registered IAntiforgery (DefaultAntiforgery from AddAntiforgery by default) with
+        // AbpAntiforgery so every antiforgery entry point goes through the claim normalization.
+        // Only an implementation-type registration is wrapped; a custom factory/instance registration of
+        // IAntiforgery is left as-is.
+        var descriptor = context.Services.LastOrDefault(d => d.ServiceType == typeof(IAntiforgery));
+        if (descriptor?.ImplementationType == null)
+        {
+            return;
+        }
+
+        context.Services.Replace(ServiceDescriptor.Describe(
+            typeof(IAntiforgery),
+            sp => new AbpAntiforgery(
+                (IAntiforgery)ActivatorUtilities.CreateInstance(sp, descriptor.ImplementationType),
+                sp.GetRequiredService<IOptions<AbpAntiForgeryOptions>>()),
+            descriptor.Lifetime));
+    }
+
+    protected virtual void ConfigureRouteBasedCulture(ServiceConfigurationContext context)
+    {
+        context.Services.Configure<RouteOptions>(options =>
+        {
+            options.ConstraintMap["culture"] = typeof(AbpCultureRouteConstraint);
+        });
+
+        context.Services
+            .AddOptions<AbpEndpointRouterOptions>()
+            .PostConfigure<IOptions<AbpRequestLocalizationOptions>>((routerOptions, abpLocOptions) =>
+            {
+                if (abpLocOptions.Value.UseRouteBasedCulture)
+                {
+                    routerOptions.EndpointConfigureActions.Insert(0, endpointContext =>
+                    {
+                        endpointContext.Endpoints.MapControllerRoute(
+                            "AbpCultureRoute",
+                            AbpCultureRoutePagesConvention.CultureRouteTemplate + "/{controller=Home}/{action=Index}/{id?}");
+                    });
+                }
+            });
+
+        context.Services
+            .AddOptions<RazorPagesOptions>()
+            .PostConfigure<IOptions<AbpRequestLocalizationOptions>>((pagesOptions, abpLocOptions) =>
+            {
+                if (abpLocOptions.Value.UseRouteBasedCulture &&
+                    !pagesOptions.Conventions.OfType<AbpCultureRoutePagesConvention>().Any())
+                {
+                    pagesOptions.Conventions.Add(new AbpCultureRoutePagesConvention());
+                }
+            });
+
+        context.Services.TryAddSingleton<UrlHelperFactory>();
+        context.Services.Replace(ServiceDescriptor.Singleton<IUrlHelperFactory, AbpCultureRouteUrlHelperFactory>());
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "page-filter-descriptor.schema.json",
+  "title": "PageFilterDescriptor",
+  "description": "Describes a runtime filter control for an entity page.",
+  "markdownDescription": "AI guidance: each filter must point to a page entity property. Use `control: \"auto\"` unless a specific control is needed. Use text/contains for string search, range/between for numeric values, dateRange/timeRange for temporal values, select/multiSelect for enums, lookup for foreign keys, and exists for null checks. Do not use the legacy `operator` property; use `defaultOperator`.",
+  "type": "object",
+  "properties": {
+    "propertyName": {
+      "type": "string",
+      "description": "Property filtered by this control. Must match a property on the page entityName.",
+      "minLength": 1
+    },
+    "label": {
+      "type": "string",
+      "description": "Optional page-specific label override. Omit to use the property displayName/name.",
+      "minLength": 1
+    },
+    "order": {
+      "type": "integer",
+      "description": "Filter display order. Lower values appear first.",
+      "default": 0
+    },
+    "visible": {
+      "type": "boolean",
+      "description": "Whether the filter is shown at runtime",
+      "default": true
+    },
+    "control": {
+      "type": "string",
+      "description": "Runtime control used by the filter. 'auto' selects based on property type; choose explicit controls for predictable generated UI.",
+      "enum": ["auto", "text", "range", "dateRange", "timeRange", "select", "multiSelect", "lookup", "exists"],
+      "default": "auto"
+    },
+    "defaultOperator": {
+      "type": "string",
+      "description": "Default operator applied by this filter. Use 'contains' for text search, 'equal' for enum/FK exact matches, 'between' for ranges, and 'default' to let runtime choose.",
+      "enum": [
+        "default",
+        "equal",
+        "notEqual",
+        "contains",
+        "notContains",
+        "startsWith",
+        "endsWith",
+        "greaterThan",
+        "greaterThanOrEqual",
+        "lessThan",
+        "lessThanOrEqual",
+        "between",
+        "hasValue",
+        "isNull",
+        "isNotNull",
+        "in",
+        "notIn"
+      ]
+    },
+    "allowedOperators": {
+      "type": "array",
+      "description": "Operators the runtime filter UI allows users to choose. Omit to let the runtime choose based on property type/control.",
+      "items": {
+        "type": "string",
+        "enum": [
+          "default",
+          "equal",
+          "notEqual",
+          "contains",
+          "notContains",
+          "startsWith",
+          "endsWith",
+          "greaterThan",
+          "greaterThanOrEqual",
+          "lessThan",
+          "lessThanOrEqual",
+          "between",
+          "hasValue",
+          "isNull",
+          "isNotNull",
+          "in",
+          "notIn"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "defaultValue": {
+      "description": "Optional default filter value applied when the page first loads. Shape depends on control/operator."
+    },
+    "placeholder": {
+      "type": "string",
+      "description": "Optional runtime input placeholder"
+    },
+    "helpText": {
+      "type": "string",
+      "description": "Optional runtime help text"
+    },
+    "allowMultipleValues": {
+      "type": "boolean",
+      "description": "Whether the filter can submit multiple values. Useful with multiSelect/in/notIn.",
+      "default": false
+    },
+    "clearable": {
+      "type": "boolean",
+      "description": "Whether runtime users can clear the filter.",
+      "default": true
+    },
+    "initiallyExpanded": {
+      "type": "boolean",
+      "description": "Whether the runtime filter panel opens expanded.",
+      "default": false
+    }
+  },
+  "required": ["propertyName"],
+  "additionalProperties": false,
+  "examples": [
+    { "propertyName": "Title", "control": "text", "defaultOperator": "contains", "placeholder": "Search title" },
+    { "propertyName": "Status", "control": "select", "defaultOperator": "equal", "clearable": true },
+    { "propertyName": "StartDate", "control": "dateRange", "defaultOperator": "between" }
+  ]
+}

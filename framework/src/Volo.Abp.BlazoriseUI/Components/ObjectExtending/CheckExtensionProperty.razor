@@ -7,7 +7,7 @@
 {
     <Validation Validator="@Validate" MessageLocalizer="@LH.Localize">
         <Field>
-            <Check TValue="bool" @bind-Checked="@Value" Disabled="IsReadonlyField">
+            <Check TValue="bool" @bind-Value="@Value" Disabled="IsReadonlyField">
                 <ChildContent>
                     @PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)
                 </ChildContent>

@@ -5,6 +5,7 @@ using Volo.Abp.Authorization.TestServices.Resources;
 using Volo.Abp.Autofac;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.ExceptionHandling;
+using Volo.Abp.Features;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Authorization;
@@ -12,6 +13,7 @@ namespace Volo.Abp.Authorization;
 [DependsOn(typeof(AbpAutofacModule))]
 [DependsOn(typeof(AbpAuthorizationModule))]
 [DependsOn(typeof(AbpExceptionHandlingModule))]
+[DependsOn(typeof(AbpFeaturesModule))]
 public class AbpAuthorizationTestModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)

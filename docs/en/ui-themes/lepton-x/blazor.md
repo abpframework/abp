@@ -10,11 +10,25 @@
 ````json
 //[doc-params]
 {
-    "UI": ["Blazor", "BlazorServer"]
+    "UI": ["Blazor", "BlazorServer"],
+    "BlazorUI": ["Blazorise", "MudBlazor"]
 }
 ````
 
 LeptonX theme is implemented and ready to use with ABP. No custom implementation is needed for Blazor Server & WebAssembly.
+
+{{if BlazorUI == "MudBlazor"}}
+
+> **MudBlazor Variant** — When the `--blazor-ui-library mudblazor` option is used, the LeptonX theme ships as a MudBlazor variant. Replace `LeptonXTheme` with `MudBlazorLeptonXTheme` everywhere in this document (package names, module type names and namespaces). The installation steps, layout customization API and override mechanism are the same; only the package and namespace prefix change. Component implementations use MudBlazor primitives (`MudAppBar`, `MudDrawer`, `MudNavLink`, `MudMenu`, etc.) instead of Blazorise components.
+>
+> Concrete package names you will see when using the MudBlazor variant:
+>
+> * `Volo.Abp.AspNetCore.Components.{Server,WebAssembly}.MudBlazorLeptonXTheme`
+> * `Volo.Abp.AspNetCore.Components.{Server,WebAssembly}.MudBlazorLeptonXTheme.Bundling`
+> * Module types: `Abp{...}MudBlazorLeptonXThemeModule`, `Abp{...}MudBlazorLeptonXThemeBundlingModule`
+> * Layout components live under `Volo.Abp.AspNetCore.Components.{Web,Server,WebAssembly}.MudBlazorLeptonXTheme.Components.ApplicationLayout` (with `SideMenu`, `TopMenu`, and `PublicWebsiteLayout` sub-namespaces).
+
+{{end}}
 
 ## Installation
 

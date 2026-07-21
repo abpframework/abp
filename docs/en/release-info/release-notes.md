@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Explore the latest ABP Framework release notes, highlighting major features and enhancements for each version, including migration guidance."
+  "Description": "Explore the latest ABP Framework release notes, highlighting major features and enhancements for each version, including migration guidance."
 }
 ```
 
@@ -11,21 +11,87 @@ This document contains **brief release notes** for each release. Release notes o
 
 Also see the following notes about ABP releases:
 
-* [ABP Studio release notes](../studio/release-notes.md)
-* [Change logs for ABP pro packages](https://abp.io/pro-releases)
+- [ABP Studio release notes](../studio/release-notes.md)
+- [Change logs for ABP pro packages](https://abp.io/pro-releases)
+
+## 10.6 (2026-07-07)
+
+See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-6-release-candidate-reoq6kzw)** for the v10.6 release.
+
+- Background Jobs: Dedicated Workers, Parallel Execution, and Successful Job Retention
+- API Definition and Proxy Improvements for Content Types and Multipart Uploads
+- Angular UI: Angular has been upgraded to version 22. For a complete list of changes, including breaking changes, migration steps, and package updates, see the **[Angular Release Notes for v10.6](./../framework/ui/angular/release-notes/angular-22-typescript-6.md)**.
+- Antiforgery and OpenIddict Security Improvements
+- OpenIddict: Generate Access Token from the UI
+
+## 10.5 (2026-06-30)
+
+See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-5-stable-release-2u589bsc)** for the v10.5 release.
+
+- S3-Compatible Blob Storage Support
+- OpenIddict: Default Scope Fallback Options
+- Dynamic Background Worker Capability Markers
+- Account: Single-Active Token Provider Improvements
+- CMS Kit: CodeMirror 6 Update
+- Shared User Accounts: Remove Users from Tenants
+
+## 10.4 (2026-05-14)
+
+See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-4-stable-release-e0u81o2z)** for the v10.4 release.
+
+- URL-Based Localization
+- Localization File Splitting
+- Blazor UI: MudBlazor Support
+- Identity: Single-Use Email/SMS 2FA Token Providers
+- Account Pro: Passwordless Email Login
+- AI Management: MCP Server Enhancements
+- LeptonX: URL-Based Localization and Theme Improvements
+- OpenIddict 7.5.0, MongoDB.Driver 3.8.0, and security-focused dependency updates
+
+## 10.3 (2026-04-15)
+
+See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-3-stable-release-aryi10am)** for the v10.3 release.
+
+- OpenIddict: `private_key_jwt` Client Authentication + `abp generate-jwks`
+- Event Bus: String-Based Event Publishing with Dynamic Payload
+- Background Jobs/Workers: String-Based Publishing with Dynamic Payload
+- API Definition Endpoint: Descriptions and Documentation Support
+- Entity Cache: New Batch APIs (`FindMany`_ / `GetMany_`)
+- Angular: User/Tenant Sharing and Tenant Switch Experience
+- Angular: Upgrade to 21.2 + TypeScript 5.9
+- Introducing the `Volo.Abp.LuckyPenny.AutoMapper` Provider
+- Security Improvements (Account Pro Module)
+
+## 10.2 (2026-02-24)
+
+See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-2-stable-release-x47ytfww)** for the v10.2 release.
+
+- Multi-Tenant Account Usage: Shared User Accounts
+- Prevent Privilege Escalation: Assignment Restrictions for Roles and Permissions
+- `ClientResourcePermissionValueProvider` for OAuth/OpenIddict
+- Angular: Hybrid Localization Support
+- Angular: Extensible Table Row Detail
+- Angular: CMS Kit Module Features
+- Blazor: Upgrade to Blazorise 2.0
+- Identity: Single Active Token Providers
+- TickerQ Package Upgrade to 10.1.1
+- [AI Management Module](../modules/ai-management/index.md): MCP (Model Context Protocol) Support
+- [AI Management Module](../modules/ai-management/index.md): RAG with File Upload
+- [AI Management Module](../modules/ai-management/index.md): OpenAI-Compatible Chat Endpoint
+- [File Management Module](../modules/file-management.md): Resource-Based Authorization
 
 ## 10.1 (2026-01-06)
 
-> This is currently a RC (release-candidate) and you can see the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-1-release-candidate-cyqui19d)** for the v10.1 release.
+See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-1-stable-release-z4xfn1me)** for the v10.1 release.
 
-* Resource-Based Authorization
-* Introducing the [TickerQ Background Worker Provider](../framework/infrastructure/background-workers/tickerq.md)
-* Angular UI: Version Upgrade to **v21**
-* [File Management Module](../modules/file-management.md): Public File Sharing Support
-* [Payment Module](../modules/payment.md): Public Page Implementation for Blazor & Angular UIs
-* [AI Management Module](../modules/ai-management/index.md) for Blazor & Angular UIs
-* [Identity PRO Module](../modules/identity-pro.md): Password History Support
-* [Account PRO Module](../modules/account-pro.md): Introducing WebAuthn Passkeys
+- Resource-Based Authorization
+- Introducing the [TickerQ Background Worker Provider](../framework/infrastructure/background-workers/tickerq.md)
+- Angular UI: Version Upgrade to **v21**
+- [File Management Module](../modules/file-management.md): Public File Sharing Support
+- [Payment Module](../modules/payment.md): Public Page Implementation for Blazor & Angular UIs
+- [AI Management Module](../modules/ai-management/index.md) for Blazor & Angular UIs
+- [Identity PRO Module](../modules/identity-pro.md): Password History Support
+- [Account PRO Module](../modules/account-pro.md): Introducing WebAuthn Passkeys
 
 ## 10.0 (2025-11-18)
 
@@ -33,45 +99,45 @@ Also see the following notes about ABP releases:
 
 See the detailed **[blog post / announcement](https://abp.io/community/announcements/abp.io-platform-10.0-final-has-been-released-spknn925)** for the v10.0 release.
 
-* Upgraded to .NET 10.0
-* Upgraded to `Blazorise` **v1.8.6**
-* New PRO Module: [Elsa Workflows](../modules/elsa-pro.md)
-* New Object Mapper: **Mapperly**
-* Localization: Nested Object Support in JSON Files
-* EF Core Shared Entity Types on Repositories
-* Angular SSR Support
+- Upgraded to .NET 10.0
+- Upgraded to `Blazorise` **v1.8.6**
+- New PRO Module: [Elsa Workflows](../modules/elsa-pro.md)
+- New Object Mapper: **Mapperly**
+- Localization: Nested Object Support in JSON Files
+- EF Core Shared Entity Types on Repositories
+- Angular SSR Support
 
 ## 9.3 (2025-06-17)
 
 See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-9-3-stable-release-fw4n9sng)** for the v9.3 release.
 
-* Cron Expression Support for Background Workers
-* Docs Module: PDF Export
-* Angular UI: Standalone Package Structure
-* Upgraded to `Blazorise` **v1.7.7**
-* Audit Logging Module: Excel Export
-* Angular UI: Version Upgrade to **v20**
+- Cron Expression Support for Background Workers
+- Docs Module: PDF Export
+- Angular UI: Standalone Package Structure
+- Upgraded to `Blazorise` **v1.7.7**
+- Audit Logging Module: Excel Export
+- Angular UI: Version Upgrade to **v20**
 
 ## 9.2 (2025-06-02)
 
 See the detailed **[blog post / announcement](https://abp.io/community/articles/announcing-abp-9-2-stable-release-061qmtzb)** for the v9.2 release.
 
-* Added `ApplicationName` Property to Isolate Background Jobs & Background Workers
-* Docs Module: Added "Alternative Words" to Filter Items
-* Introducing the [Bunny BLOB Storage Provider](../framework/infrastructure/blob-storing/bunny.md)
-* Upgraded `MongoDB.Driver` to **v3.1.0**
-* Identity Pro Module: Require Email Verification to Register
-* Switching users during OAuth login
+- Added `ApplicationName` Property to Isolate Background Jobs & Background Workers
+- Docs Module: Added "Alternative Words" to Filter Items
+- Introducing the [Bunny BLOB Storage Provider](../framework/infrastructure/blob-storing/bunny.md)
+- Upgraded `MongoDB.Driver` to **v3.1.0**
+- Identity Pro Module: Require Email Verification to Register
+- Switching users during OAuth login
 
 ## 9.1 (2025-03-05)
 
 See the detailed **[blog post / announcement](https://abp.io/community/articles/abp.io-platform-9.1-final-has-been-released-h96a56qa)** for the v9.1 release.
 
-* Upgraded to Angular 19
-* Upgraded to OpenIddict 6.0
-* New Blazor WASM Bundling System
-* Idle Session Warning
-* Lazy Expandable Feature for Documentation System
+- Upgraded to Angular 19
+- Upgraded to OpenIddict 6.0
+- New Blazor WASM Bundling System
+- Idle Session Warning
+- Lazy Expandable Feature for Documentation System
 
 ## 9.0 (2024-11-19)
 
@@ -79,341 +145,341 @@ See the detailed **[blog post / announcement](https://abp.io/blog/abp-9-0-stable
 
 > **Note**: ABP has upgraded to .NET 9.0, so if you plan to use ABP 9.0, you’ll need to migrate your solutions to .NET 9.0. You can refer to the [Migrate from ASP.NET Core 8.0 to 9.0](https://learn.microsoft.com/en-us/aspnet/core/migration/80-90) documentation for guidance. However, ABP’s NuGet packages are compatible with both .NET 8 and .NET 9, allowing developers to continue using .NET 8 while still enjoying the latest features and improvements of the ABP Framework without upgrading their SDK.
 
-* Upgraded to .NET 9.0
-* Introducing the `Extension Property Policy`
-* Google Cloud Storage BLOB Provider
-* Removed React Native mobile option from free templates
-* ABP Suite: Better naming for multiple navigation properties to the same entity
-* CMS Kit Pro: Feedback feature improvements
+- Upgraded to .NET 9.0
+- Introducing the `Extension Property Policy`
+- Google Cloud Storage BLOB Provider
+- Removed React Native mobile option from free templates
+- ABP Suite: Better naming for multiple navigation properties to the same entity
+- CMS Kit Pro: Feedback feature improvements
 
 ## 8.3 (2024-09-05)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/announcing-abp-8-3-stable-release)** for the v8.3 release.
 
-* CMS Kit: Marked Items & Approvement System for Commenting Feature
-* Enhancements on the Docs Module (Google Translation support & new single project mode)
-* Using DbFunction for generating more precise SQL commands for Global Query Filters
-* CMS Kit (Pro): FAQ System
+- CMS Kit: Marked Items & Approvement System for Commenting Feature
+- Enhancements on the Docs Module (Google Translation support & new single project mode)
+- Using DbFunction for generating more precise SQL commands for Global Query Filters
+- CMS Kit (Pro): FAQ System
 
 ## 8.2 (2024-06-26)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/announcing-abp-8-2-stable-release)** for the v8.2 release.
 
-* Blazor Full-Stack Web App UI.
-* Introducing the `IBlockUiService` for Blazor UI (disables/blocks the page or a part of the page).
-* Session Management (prevent concurrent login, view & manage users' sessions).
-* ABP Suite: File/Image property.
-* ABP Suite: `DateOnly` & `TimeOnly` types.
-* Periodic Log Deletion for Audit Logs.
+- Blazor Full-Stack Web App UI.
+- Introducing the `IBlockUiService` for Blazor UI (disables/blocks the page or a part of the page).
+- Session Management (prevent concurrent login, view & manage users' sessions).
+- ABP Suite: File/Image property.
+- ABP Suite: `DateOnly` & `TimeOnly` types.
+- Periodic Log Deletion for Audit Logs.
 
 ## 8.1 (2024-04-04)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/announcing-abp-8-1-stable-release)** for the v8.1 release.
 
-* Introducing the `ExposeKeyedServiceAttribute` & `DisableAbpFeaturesAttribute`.
-* Custom menu component support for MVC UI.
-* ABP Suite: Bulk delete.
-* ABP Suite: Filterable properties.
-* ABP Suite: Customizable page titles.
-* ABP Suite: Establishing relationships with installed ABP modules' entities.
-* ABP Suite: Support `BasicAggregateRoot` base class.
-* ABP Studio v0.6.5.
+- Introducing the `ExposeKeyedServiceAttribute` & `DisableAbpFeaturesAttribute`.
+- Custom menu component support for MVC UI.
+- ABP Suite: Bulk delete.
+- ABP Suite: Filterable properties.
+- ABP Suite: Customizable page titles.
+- ABP Suite: Establishing relationships with installed ABP modules' entities.
+- ABP Suite: Support `BasicAggregateRoot` base class.
+- ABP Studio v0.6.5.
 
 ## 8.0 (2023-12-19)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/abp-8-0-stable-release-with-dotnet-8-0)** for the v8.0 release.
 
-* Upgraded to **.NET 8.0** & **Angular 17**.
-* Dynamic Claims (allows to get the latest user claims for the current user).
-* CDN support for Bundling & Minification System.
-* Read-only repositories
-* ABP Suite: Generating Master/Detail Relationship
-* Getting profile picture from social/external logins.
-* Switch Ocelot to YARP for the API Gateway for Microservice Solution Template.
-* Password complexity indicators for MVC & Blazor UIs.
-* Readonly view & export/import support for Identity/Users page.
+- Upgraded to **.NET 8.0** & **Angular 17**.
+- Dynamic Claims (allows to get the latest user claims for the current user).
+- CDN support for Bundling & Minification System.
+- Read-only repositories
+- ABP Suite: Generating Master/Detail Relationship
+- Getting profile picture from social/external logins.
+- Switch Ocelot to YARP for the API Gateway for Microservice Solution Template.
+- Password complexity indicators for MVC & Blazor UIs.
+- Readonly view & export/import support for Identity/Users page.
 
 ## 7.4 (2023-08-16)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/announcing-abp-7-4-stable-release)** for the v7.4 release.
 
-* Dynamic Setting Store (collects and gets all setting definitions from a single point).
-* Introducing the `AdditionalAssemblyAttribute`.
-* `CorrelationId` support on distributed events.
-* Database migration system for EF Core.
-* Preserving customizations on code re-generation with ABP Suite.
-* Support custom text-templates in distributed scenarios.
-* MAUI & React Native mobile applications are re-designed and revised for functionality.
-* A new CMS Kit feature to collect feedback from users about the site's contents.
+- Dynamic Setting Store (collects and gets all setting definitions from a single point).
+- Introducing the `AdditionalAssemblyAttribute`.
+- `CorrelationId` support on distributed events.
+- Database migration system for EF Core.
+- Preserving customizations on code re-generation with ABP Suite.
+- Support custom text-templates in distributed scenarios.
+- MAUI & React Native mobile applications are re-designed and revised for functionality.
+- A new CMS Kit feature to collect feedback from users about the site's contents.
 
 ## 7.3 (2023-06-12)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/ABP.IO-Platform-7-3-Final-Has-Been-Released)** for the v7.3 release.
 
-* Introducing the `Volo.Abp.Imaging` packages, which allows you to compress and resize images.
-* ABP CLI: `switch-to-local` command.
-* Monitoring distributed events.
-* Allow ordering of the local event handlers.
-* [Account Module](../modules/account.md): Using Authenticator App for Two-Factor Authentication.
-* Support for the [Module Entity Extensions](../framework/architecture/modularity/extending/module-entity-extensions.md) in the [CMS Kit Pro Module](../modules/cms-kit/index.md).
-* New Account Layout Design for [LeptonX Theme](../ui-themes/lepton-x/index.md).
-* Many enhancements and fixes for the 7.3 version.
+- Introducing the `Volo.Abp.Imaging` packages, which allows you to compress and resize images.
+- ABP CLI: `switch-to-local` command.
+- Monitoring distributed events.
+- Allow ordering of the local event handlers.
+- [Account Module](../modules/account.md): Using Authenticator App for Two-Factor Authentication.
+- Support for the [Module Entity Extensions](../framework/architecture/modularity/extending/module-entity-extensions.md) in the [CMS Kit Pro Module](../modules/cms-kit/index.md).
+- New Account Layout Design for [LeptonX Theme](../ui-themes/lepton-x/index.md).
+- Many enhancements and fixes for the 7.3 version.
 
 ## 7.2 (2023-05-03)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/ABP.IO-Platform-7-2-Final-Has-Been-Released)** for the v7.2 release.
 
-* Grouping of the navigation menu items.
-* New Components for Angular UI.
-* **[LeptonX Theme](../ui-themes/lepton-x)** - Navigation Menu Item Grouping.
-* Support for the **Authority Delegation** in the **[Account Module](../modules/account.md)**.
-* Forcing Password Change at Next Logon.
-* Periodic Password Changes / Password Aging.
-* ABP Suite: Show/Hide Properties on Create/Update/List Pages
-* **CMS Kit Comments**: Disallowing External URLs.
+- Grouping of the navigation menu items.
+- New Components for Angular UI.
+- **[LeptonX Theme](../ui-themes/lepton-x)** - Navigation Menu Item Grouping.
+- Support for the **Authority Delegation** in the **[Account Module](../modules/account.md)**.
+- Forcing Password Change at Next Logon.
+- Periodic Password Changes / Password Aging.
+- ABP Suite: Show/Hide Properties on Create/Update/List Pages
+- **CMS Kit Comments**: Disallowing External URLs.
 
 ## 7.1 (2023-03-22)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/ABP-IO-Platform-7-1-Final-Has-Been-Released)** for the v7.1 release.
 
-* New Blazor WASM option for Application Single Layer Startup template.
-* Introducing the `IHasEntityVersion` & `EntitySynchronizer` services.
-* Introducing the `DeleteDirectAsync` method for the `IRepository` interface.
-* **Blazor WebAssembly** option for the single-layer startup template.
-* **ABP Suite** code generation for **MAUI Blazor Hybrid** solutions.
-* Allow to **impersonate** an arbitrary **user** in the SaaS module.
-* Many enhancements and fixes for the 7.1 version.
+- New Blazor WASM option for Application Single Layer Startup template.
+- Introducing the `IHasEntityVersion` & `EntitySynchronizer` services.
+- Introducing the `DeleteDirectAsync` method for the `IRepository` interface.
+- **Blazor WebAssembly** option for the single-layer startup template.
+- **ABP Suite** code generation for **MAUI Blazor Hybrid** solutions.
+- Allow to **impersonate** an arbitrary **user** in the SaaS module.
+- Many enhancements and fixes for the 7.1 version.
 
 ## 7.0 (2023-01-05)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/ABP.IO-Platform-7.0-Final-Has-Been-Released)** for the v7.0 release.
 
-* Upgraded to **.NET 7.0**.
-* Upgraded to **OpenIddict 4.0**.
-* **Dapr** Integration.
-* Introducing the **Integration Services**.
-* New **MAUI Blazor Hybrid** UI.
-* Implemented **external localization**, **dynamic feature** and **dynamic permission** systems to allow more advanced microservice scenarios. All they are applied to the **microservice startup template**.
-* **WeChat** and **Alipay** integrations for the **Payment** module.
-* Allow host users to **change the password** of a user of a tenant.
-* Allow host users to **test connection string** of a tenant database on the UI.
-* Introduce **permission** for **searching other users** in the chat module.
+- Upgraded to **.NET 7.0**.
+- Upgraded to **OpenIddict 4.0**.
+- **Dapr** Integration.
+- Introducing the **Integration Services**.
+- New **MAUI Blazor Hybrid** UI.
+- Implemented **external localization**, **dynamic feature** and **dynamic permission** systems to allow more advanced microservice scenarios. All they are applied to the **microservice startup template**.
+- **WeChat** and **Alipay** integrations for the **Payment** module.
+- Allow host users to **change the password** of a user of a tenant.
+- Allow host users to **test connection string** of a tenant database on the UI.
+- Introduce **permission** for **searching other users** in the chat module.
 
 ## 6.0 (2022-10-05)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/ABP.IO-Platform-6.0-Final-Has-Been-Released)** for the v6.0 release.
 
-* New **OpenIddict** integration module (replacing the IdentityServer integration module).
-* The **[LeptonX theme](https://x.leptontheme.com/)** is the default theme now, allowing to use the [old Lepton](https://leptontheme.com/) theme too.
-* New **.NET MAUI mobile application**.
-* **Blazor UI** for the **Chat** module.
-* **Blazor admin UI** for the **CMS Kit** module.
-* Allow to add **poll widgets** in blog/page contents in the **CMS Kit** module.
-* **Cookie consent** feature for the **GDPR** module.
-* Optional **PWA** support.
-* Exporting to **excel** for **ABP Suite** code generation.
+- New **OpenIddict** integration module (replacing the IdentityServer integration module).
+- The **[LeptonX theme](https://x.leptontheme.com/)** is the default theme now, allowing to use the [old Lepton](https://leptontheme.com/) theme too.
+- New **.NET MAUI mobile application**.
+- **Blazor UI** for the **Chat** module.
+- **Blazor admin UI** for the **CMS Kit** module.
+- Allow to add **poll widgets** in blog/page contents in the **CMS Kit** module.
+- **Cookie consent** feature for the **GDPR** module.
+- Optional **PWA** support.
+- Exporting to **excel** for **ABP Suite** code generation.
 
 ## 5.3 (2022-06-14)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/ABP.IO-Platform-5.3-Final-Has-Been-Released)** for the v5.3 release.
 
-* New module: **GDPR** (currently, allows to download/delete user's personal data).
-* **Polling** feature for the [CMS Kit module](../modules/cms-kit/index.md).
-* OAuth as **external login provider** for the [Identity module](../modules/identity.md).
-* **ABP Suite**: Support for the no-layers startup template, concurrency stamp support on code generation, downloading Suite logs, using ABP CLI to trigger code generation.
-* **Docker-compose** configuration for the no-layers startup template.
-* **PWA** support for Blazor WASM and Angular UI.
+- New module: **GDPR** (currently, allows to download/delete user's personal data).
+- **Polling** feature for the [CMS Kit module](../modules/cms-kit/index.md).
+- OAuth as **external login provider** for the [Identity module](../modules/identity.md).
+- **ABP Suite**: Support for the no-layers startup template, concurrency stamp support on code generation, downloading Suite logs, using ABP CLI to trigger code generation.
+- **Docker-compose** configuration for the no-layers startup template.
+- **PWA** support for Blazor WASM and Angular UI.
 
 ## 5.2 (2022-04-05)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/ABP-IO-Platform-5-2-Final-Has-Been-Released)** for the v5.2 release.
 
-* Code generation with **many to many relation** support for the [ABP Suite](../suite/index.md).
-* The new **single-layer**, simpler startup solution template.
-* Migrated to **Blazorise 1.0** for the Blazor UI.
-* Improvements on the microservice startup solution, pre-built application modules and other existing features.
-* API Versioning.
-* Allowing to hide default ABP endpoints from the Swagger UI.
+- Code generation with **many to many relation** support for the [ABP Suite](../suite/index.md).
+- The new **single-layer**, simpler startup solution template.
+- Migrated to **Blazorise 1.0** for the Blazor UI.
+- Improvements on the microservice startup solution, pre-built application modules and other existing features.
+- API Versioning.
+- Allowing to hide default ABP endpoints from the Swagger UI.
 
 ## 5.1 (2022-01-12)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/ABP.IO-Platform-v5-1-Has-Been-Released)** for the v5.1 release.
 
-* Upgraded to **Angular 13**.
-* Changed the application startup solution to use the new ASP.NET Core **minimal hosting model**.
-* New **URL Forwarding** feature for the CKS Kit Pro module.
-* Improvements and fixes for the features shipped with the 5.0 release.
+- Upgraded to **Angular 13**.
+- Changed the application startup solution to use the new ASP.NET Core **minimal hosting model**.
+- New **URL Forwarding** feature for the CKS Kit Pro module.
+- Improvements and fixes for the features shipped with the 5.0 release.
 
 ## 5.0 (2021-12-14)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/ABP-IO-Platform-5.0-RC-1-Has-Been-Released)** for the v5.0.
 
-* Upgraded to **.NET 6.0**.
-* Upgraded to **Bootstrap 5.1**.
-* Transactional Outbox & Inbox for the distributed event bus.
-* **User impersonation** (passwordless login with another user's account).
-* **Tenant impersonation** (passwordless login as a tenant).
-* Added **Helm charts** to the microservice startup template to deploy to **Kubernetes**.
-* Added host and tenant **dashboards** to the microservice startup template.
-* **Generate entities** and CRUD pages from **database tables** with ABP Suite.
-* Pre-configured **social logins** for the microservice startup template.
-* Switched to **static C# and JavaScript proxies** for all the modules.
-* **Removed NGXS** and states from the Angular UI.
-* Many improvements on existing modules and ABP Suite.
+- Upgraded to **.NET 6.0**.
+- Upgraded to **Bootstrap 5.1**.
+- Transactional Outbox & Inbox for the distributed event bus.
+- **User impersonation** (passwordless login with another user's account).
+- **Tenant impersonation** (passwordless login as a tenant).
+- Added **Helm charts** to the microservice startup template to deploy to **Kubernetes**.
+- Added host and tenant **dashboards** to the microservice startup template.
+- **Generate entities** and CRUD pages from **database tables** with ABP Suite.
+- Pre-configured **social logins** for the microservice startup template.
+- Switched to **static C# and JavaScript proxies** for all the modules.
+- **Removed NGXS** and states from the Angular UI.
+- Many improvements on existing modules and ABP Suite.
 
 ## 4.4 (2021-08-02)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/ABP.IO-Platform-4.4-Final-Has-Been-Released!)** for the v4.4.
 
-* Removed the `EntityFrameworkCore.DbMigrations` project for simplicity.
-* Dynamic menu management for the [CMS Kit module](../modules/cms-kit/index.md).
-* New ABP CLI commands (`install-libs`, `prompt` and `batch`).
-* **Subscription** system & **payment** integration for the [SaaS module](../modules/saas.md).
-* SaaS module: Allow to make a **tenant active/passive** and **limit user count**.
-* [ABP Suite](../suite/index.md) **code generation** for the [microservice solution](../solution-templates/microservice/index.md).
-* Allow to set **multiple connection strings** for each tenant, to separate a tenant's database per module/microservice.
-* Angular UI: **Two-factor** authentication for resource owner password flow.
-* **New localizations**: Hindi, Italian, Arabic, Finnish, French.
-* A lot of small improvements and fixes for the current modules, themes and the tooling.
+- Removed the `EntityFrameworkCore.DbMigrations` project for simplicity.
+- Dynamic menu management for the [CMS Kit module](../modules/cms-kit/index.md).
+- New ABP CLI commands (`install-libs`, `prompt` and `batch`).
+- **Subscription** system & **payment** integration for the [SaaS module](../modules/saas.md).
+- SaaS module: Allow to make a **tenant active/passive** and **limit user count**.
+- [ABP Suite](../suite/index.md) **code generation** for the [microservice solution](../solution-templates/microservice/index.md).
+- Allow to set **multiple connection strings** for each tenant, to separate a tenant's database per module/microservice.
+- Angular UI: **Two-factor** authentication for resource owner password flow.
+- **New localizations**: Hindi, Italian, Arabic, Finnish, French.
+- A lot of small improvements and fixes for the current modules, themes and the tooling.
 
 ## 4.3 (2021-04-23)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/ABP.IO-Platform-v4-3-Has-Been-Released)** for the v4.3.
 
-* New module: **CMS Kit (pro)**
-* New module: **Forms**
-* **Blazor Server Side** support.
-* **Extensibility** system for the Blazor UI.
-* A lot of improvements done to ripen the **Microservice Startup Template**, including "new service" template, automatic database migrations, solution structure improvements, Tye, Prometheus, Grafana integrations, and more...
-* Allow to use a **separate database schema** for tenants to not include host-related empty tables in tenant databases.
-* Creating & **migrating tenant databases on the fly**.
-* **Enabling/disabling modules** per edition/tenant.
-* **Email settings** page.
-* **Required** navigation properties on Suite code generation.
+- New module: **CMS Kit (pro)**
+- New module: **Forms**
+- **Blazor Server Side** support.
+- **Extensibility** system for the Blazor UI.
+- A lot of improvements done to ripen the **Microservice Startup Template**, including "new service" template, automatic database migrations, solution structure improvements, Tye, Prometheus, Grafana integrations, and more...
+- Allow to use a **separate database schema** for tenants to not include host-related empty tables in tenant databases.
+- Creating & **migrating tenant databases on the fly**.
+- **Enabling/disabling modules** per edition/tenant.
+- **Email settings** page.
+- **Required** navigation properties on Suite code generation.
 
 ## 4.2 (2021-01-28)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/ABP.IO-Platform-4-2-Final-Has-Been-Released)** for the v4.2.
 
-* Introducing the `IRepository.GetQueryableAsync()` method.
-* Bulk operations for EF Core (`InsertManyAsync`, `UpdateManyAsync` and `DeleteManyAsync`).
-* **Microservice startup template** (initial) to create microservice solutions.
-* **Public website** application in the application startup template.
-* **Blazor UI** for the Easy CRM sample application.
-* Added login / **authorization** to the **Swagger UI** to test authorized APIs.
-* **DBMS selection** on new application creation.
-* Infrastructure for **Angular Unit Testing**.
-* Iyzico integration for the **Payment** module.
-* **Performance** optimization and other enhancements.
+- Introducing the `IRepository.GetQueryableAsync()` method.
+- Bulk operations for EF Core (`InsertManyAsync`, `UpdateManyAsync` and `DeleteManyAsync`).
+- **Microservice startup template** (initial) to create microservice solutions.
+- **Public website** application in the application startup template.
+- **Blazor UI** for the Easy CRM sample application.
+- Added login / **authorization** to the **Swagger UI** to test authorized APIs.
+- **DBMS selection** on new application creation.
+- Infrastructure for **Angular Unit Testing**.
+- Iyzico integration for the **Payment** module.
+- **Performance** optimization and other enhancements.
 
 ## 4.1 (2021-01-06)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/ABP-IO-Platform-v4-1-Final-Has-Been-Released)** for the v4.1.
 
-* Introducing the **module entity extensions** system.
-* Bundling & Minification System for Blazor UI.
-* **Organization Unit** Management for the Blazor UI.
-* **Identity Server** Management for the Blazor UI.
-* ABP Suite: **Navigation Property Selection** with Typeahead (supported by all UI types).
-* **Spanish** language translation.
+- Introducing the **module entity extensions** system.
+- Bundling & Minification System for Blazor UI.
+- **Organization Unit** Management for the Blazor UI.
+- **Identity Server** Management for the Blazor UI.
+- ABP Suite: **Navigation Property Selection** with Typeahead (supported by all UI types).
+- **Spanish** language translation.
 
 ## 4.0 (2020-12-03)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/ABP.IO-Platform-4.0-with-.NET-5.0-in-the-4th-Year)** for the v4.0.
 
-* Upgraded to **.NET 5.0**.
-* The **Blazor UI** option is now stable and officially supported.
-* Completed the Blazor UI for the **file management** module.
-* Upgraded to the **Identity Server 4.1.1** and revised the management UI.
-* ABP Suite: Blazor UI **code generation**.
-* ABP Suite: **Navigation property selection** supports dropdowns with auto-complete & lazy load.
-* ABP Suite: **Generate new modules** inside an application solution.
-* ABP Suite: Made the **backend code generation optional** to allow re-generate the UI with a different UI framework.
+- Upgraded to **.NET 5.0**.
+- The **Blazor UI** option is now stable and officially supported.
+- Completed the Blazor UI for the **file management** module.
+- Upgraded to the **Identity Server 4.1.1** and revised the management UI.
+- ABP Suite: Blazor UI **code generation**.
+- ABP Suite: **Navigation property selection** supports dropdowns with auto-complete & lazy load.
+- ABP Suite: **Generate new modules** inside an application solution.
+- ABP Suite: Made the **backend code generation optional** to allow re-generate the UI with a different UI framework.
 
 ## 3.3 (2020-10-27)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/ABP-Framework-ABP-Commercial-3.3-Final-Have-Been-Released)** for the v3.3.
 
-* Completed fundamental features, modules and the theme integration for the **Blazor UI**.
-* Automatic **AntiForgery Token Validation** for HTTP APIs.
-* New async LINQ extension methods for repositories.
-* Stream support for the [Application Service](../framework/architecture/domain-driven-design/application-services.md) methods.
-* Multi-Tenant **social/external logins** with options configurable on runtime.
-* **Linked Accounts** system to link multiple accounts and switch between them easily.
-* **Paypal** & **Stripe** integrations for the Payment Module.
-* **reCAPTCHA** option for login & register forms.
-* **ABP Suite** improvements.
+- Completed fundamental features, modules and the theme integration for the **Blazor UI**.
+- Automatic **AntiForgery Token Validation** for HTTP APIs.
+- New async LINQ extension methods for repositories.
+- Stream support for the [Application Service](../framework/architecture/domain-driven-design/application-services.md) methods.
+- Multi-Tenant **social/external logins** with options configurable on runtime.
+- **Linked Accounts** system to link multiple accounts and switch between them easily.
+- **Paypal** & **Stripe** integrations for the Payment Module.
+- **reCAPTCHA** option for login & register forms.
+- **ABP Suite** improvements.
 
 ## 3.2 (2020-10-01)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/ABP-Framework-ABP-Commercial-3.2-RC-With-The-New-Blazor-UI)** for the v3.2.
 
-* Released the preview (experimental) **Blazor UI** option.
-* **Angular** UI for the [file management](https://abp.io/modules/Volo.FileManagement) module.
-* Managing the **application features** for the **host** side.
-* User **profile picture** for the account module.
-* Options to enable, disable or force **two factor authentication** for tenants and users.
+- Released the preview (experimental) **Blazor UI** option.
+- **Angular** UI for the [file management](https://abp.io/modules/Volo.FileManagement) module.
+- Managing the **application features** for the **host** side.
+- User **profile picture** for the account module.
+- Options to enable, disable or force **two factor authentication** for tenants and users.
 
 ## 3.1 (2020-09-03)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/ABP-Framework-v3.1-Final-Has-Been-Released)** for the v3.1 release.
 
-* Completely re-written the ABP Suite **Angular UI code generation**, using the Angular Schematics system.
-* Implemented **Authorization Code Authentication Flow** for the Angular UI.
-* Revised and documented **social/external logins** for the account module and tested with major providers.
-* Introduced the new external login system supporting to login via **LDAP / Active Directory**. Also, added a setting page to configure the LDAP options.
-* Created a new **security log system** and the user interface to save and report all the authentication related operations (login, logout, change password...) for users.
-* Implemented **email & phone number verification**.
-* Implementing **locking a user** for a given period of time (locked users can not login to the application).
-* Added breadcrumb and file icons for the file management module.
+- Completely re-written the ABP Suite **Angular UI code generation**, using the Angular Schematics system.
+- Implemented **Authorization Code Authentication Flow** for the Angular UI.
+- Revised and documented **social/external logins** for the account module and tested with major providers.
+- Introduced the new external login system supporting to login via **LDAP / Active Directory**. Also, added a setting page to configure the LDAP options.
+- Created a new **security log system** and the user interface to save and report all the authentication related operations (login, logout, change password...) for users.
+- Implemented **email & phone number verification**.
+- Implementing **locking a user** for a given period of time (locked users can not login to the application).
+- Added breadcrumb and file icons for the file management module.
 
 ## 3.0 (2020-07-01)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/ABP-Framework-v3.0-Has-Been-Released)** for the v3.0 release.
 
-* Introducing the **Azure BLOB Storage Provider**.
-* Created the Oracle Integration Package for EF Core.
-* New **File Management Module** that is used to store and manage files in your application.
-* Migrated the Angular UI to the **Angular 10**.
-* Published an **[API documentation](https://docs.abp.io/api-docs/commercial/2.9/api/index.html)** web site to explore the classes of the ABP.
+- Introducing the **Azure BLOB Storage Provider**.
+- Created the Oracle Integration Package for EF Core.
+- New **File Management Module** that is used to store and manage files in your application.
+- Migrated the Angular UI to the **Angular 10**.
+- Published an **[API documentation](https://docs.abp.io/api-docs/commercial/2.9/api/index.html)** web site to explore the classes of the ABP.
 
 ## 2.9 (2020-06-04)
 
 See the detailed **[blog post / announcement](https://abp.io/blog/ABP-Framework-v2.9.0-Has-Been-Released)** for the v2.9 release.
 
-* Performance improvements (pre-compiling razor pages).
-* New **Organization Unit** Management UI for the [Identity Module](https://abp.io/modules/Volo.Identity.Pro) to create hierarchical organization units and manage their members and roles.
-* Created **Angular UI** for the [Chat Module](https://abp.io/modules/Volo.Chat).
-* Implemented **Angular UI** for the [Easy CRM](../samples/easy-crm.md) application.
-* [ABP Suite](https://abp.io/tools/suite) code generation support for **module development**.
-* New [leptontheme.com](http://leptontheme.com/) web site to show the **[Lepton Theme](https://abp.io/themes) components**.
+- Performance improvements (pre-compiling razor pages).
+- New **Organization Unit** Management UI for the [Identity Module](https://abp.io/modules/Volo.Identity.Pro) to create hierarchical organization units and manage their members and roles.
+- Created **Angular UI** for the [Chat Module](https://abp.io/modules/Volo.Chat).
+- Implemented **Angular UI** for the [Easy CRM](../samples/easy-crm.md) application.
+- [ABP Suite](https://abp.io/tools/suite) code generation support for **module development**.
+- New [leptontheme.com](http://leptontheme.com/) web site to show the **[Lepton Theme](https://abp.io/themes) components**.
 
 ## 2.8 (2020-05-21)
 
 See the detailed **blog post / announcement** for the v2.8 release: [https://abp.io/blog/ABP-v2.8.0-Releases-%26-Road-Map](https://abp.io/blog/ABP-v2.8.0-Releases-%26-Road-Map)
 
-* RTL support for the MVC UI & Arabic localization.
-* Completely renewed the **[Lepton Theme](https://abp.io/themes) styles** and add a new one.
-* New module: Created a **real time [Chat Module](https://abp.io/modules/Volo.Chat)** that is built on ASP.NET Core SignalR. It currently has only the MVC / Razor Pages UI. Angular UI is on the way.
-* Implemented **[module entity extension](../framework/architecture/modularity/extending/module-entity-extensions.md) system** for the **Angular UI**. Also improved the system to better handle float/double/decimal, date, datetime, enum and boolean properties.
-* **Gravatar** integration for the Angular UI.
-* Managing product groups on a **tree view** for the [EasyCRM sample application](../samples/easy-crm.md).
+- RTL support for the MVC UI & Arabic localization.
+- Completely renewed the **[Lepton Theme](https://abp.io/themes) styles** and add a new one.
+- New module: Created a **real time [Chat Module](https://abp.io/modules/Volo.Chat)** that is built on ASP.NET Core SignalR. It currently has only the MVC / Razor Pages UI. Angular UI is on the way.
+- Implemented **[module entity extension](../framework/architecture/modularity/extending/module-entity-extensions.md) system** for the **Angular UI**. Also improved the system to better handle float/double/decimal, date, datetime, enum and boolean properties.
+- **Gravatar** integration for the Angular UI.
+- Managing product groups on a **tree view** for the [EasyCRM sample application](../samples/easy-crm.md).
 
 ## 2.7 (2020-05-07)
 
-See the detailed **blog post / announcement** for the v2.7 release:  https://abp.io/blog/ABP-Framework-v2_7_0-Has-Been-Released 
+See the detailed **blog post / announcement** for the v2.7 release: [https://abp.io/blog/ABP-Framework-v2_7_0-Has-Been-Released](https://abp.io/blog/ABP-Framework-v2_7_0-Has-Been-Released)
 
-* New module: **Text template management** (with angular and mvc UI - document is [coming](../modules/text-template-management.md)).
-* **Dynamically add properties** to current entities of the depended modules (see [module entity extensions](../framework/architecture/modularity/extending/module-entity-extensions.md))
-* To be able to add **navigation properties** to entities with the ABP Suite (see [navigation properties](../suite/index.md) section).
-* Dynamically add **data table columns** on the user interface (see the documents: [angular](../framework/ui/angular/data-table-column-extensions.md), [mvc](../framework/ui/mvc-razor-pages/data-table-column-extensions.md)).
-* Created a rich **sample solution**, named "Easy CRM" (see the document).
-* Allow to dynamically **override the logo**.
-* **Optimize database migrations** & seed code for multi-tenant multi-database systems.
-* ABP Suite: Make **menu item active** on navigation menu when selected.
-* ABP Suite: Improve **enum usage** while creating new entities.
-* Bug fixes in the [Lepton Theme](https://abp.io/themes), [ABP Suite](https://abp.io/tools/suite) and  other modules.
+- New module: **Text template management** (with angular and mvc UI - document is [coming](../modules/text-template-management.md)).
+- **Dynamically add properties** to current entities of the depended modules (see [module entity extensions](../framework/architecture/modularity/extending/module-entity-extensions.md))
+- To be able to add **navigation properties** to entities with the ABP Suite (see [navigation properties](../suite/index.md) section).
+- Dynamically add **data table columns** on the user interface (see the documents: [angular](../framework/ui/angular/data-table-column-extensions.md), [mvc](../framework/ui/mvc-razor-pages/data-table-column-extensions.md)).
+- Created a rich **sample solution**, named "Easy CRM" (see the document).
+- Allow to dynamically **override the logo**.
+- **Optimize database migrations** & seed code for multi-tenant multi-database systems.
+- ABP Suite: Make **menu item active** on navigation menu when selected.
+- ABP Suite: Improve **enum usage** while creating new entities.
+- Bug fixes in the [Lepton Theme](https://abp.io/themes), [ABP Suite](https://abp.io/tools/suite) and other modules.
 
 ## See Also
 
-* [Road map](road-map.md)
+- [Road map](road-map.md)

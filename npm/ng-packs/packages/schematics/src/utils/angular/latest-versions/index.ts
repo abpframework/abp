@@ -21,7 +21,7 @@ export const latestVersions = {
     rxjs: '~7.8.0',
     tslib: '^2.3.0',
     'ts-node': '~10.9.0',
-    typescript: '~5.8.0',
+    typescript: '~5.9.0',
     'zone.js': '~0.15.0',
     'openid-client': '^6.6.4',
   },

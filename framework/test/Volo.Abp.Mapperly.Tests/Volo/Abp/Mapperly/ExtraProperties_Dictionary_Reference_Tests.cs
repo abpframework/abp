@@ -102,6 +102,28 @@ public class ExtraProperties_Dictionary_Reference_Tests : AbpIntegratedTest<Mapp
     }
 
     [Fact]
+    public void Should_Not_Share_ExtraProperties_Reference_With_Source_When_Using_Single_Parameter_Map()
+    {
+        var source = new TestEntityWithExtraProperties
+        {
+            Id = Guid.NewGuid(),
+            Name = "Source Entity"
+        };
+        source.SetProperty("TestProperty", "TestValue");
+        source.SetProperty("NumberProperty", 42);
+
+        var originalSourceReference = source.ExtraProperties;
+
+        var destination = _objectMapper.Map<TestEntityWithExtraProperties, TestEntityDtoWithExtraProperties>(source);
+
+        ReferenceEquals(source.ExtraProperties, originalSourceReference).ShouldBeTrue();
+        ReferenceEquals(source.ExtraProperties, destination.ExtraProperties).ShouldBeFalse();
+
+        destination.ExtraProperties["TestProperty"].ShouldBe("TestValue");
+        destination.ExtraProperties["NumberProperty"].ShouldBe(42);
+    }
+
+    [Fact]
     public void Should_Handle_Readonly_ExtraProperties_Gracefully()
     {
         // Arrange: Create entities with readonly ExtraProperties

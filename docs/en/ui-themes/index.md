@@ -33,6 +33,15 @@ See the following documents based on the UI type you are using:
 - [Basic Theme - Blazor UI](../framework/ui/blazor/basic-theme.md)
 - [Basic Theme - Angular UI](../framework/ui/angular/basic-theme.md)
 
+## Blazor UI Library
+
+When you create an ABP solution with a Blazor host (Blazor Server, Blazor WebAssembly or Blazor WebApp), you can additionally choose the underlying Blazor component library:
+
+* **Blazorise** — the original ABP default, based on Bootstrap.
+* **MudBlazor** — a Material-Design component library, available as an alternative variant. Each official theme has a MudBlazor version (e.g. `MudBlazorLeptonXTheme`, `MudBlazorLeptonXLiteTheme`, `MudBlazorBasicTheme`).
+
+The choice is made at solution creation time via the `--blazor-ui-library` option (`abp new ... -bul mudblazor`) or in the ABP Studio new-solution wizard.
+
 ## See Also
 
 * [Theming - MVC UI](../framework/ui/mvc-razor-pages/theming.md)

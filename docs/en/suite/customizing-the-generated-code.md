@@ -58,6 +58,8 @@ You can see the example below, which demonstrates defining a new method in the `
 
 For the UI side, ABP Suite provides convenient comment placeholders within pages for MVC, Blazor, and Angular UIs. These comment sections serve as hook points where you can add your custom code. By placing your custom logic with these hook points, you can enhance the UI to your needs without the fear of losing your changes during the next CRUD page generation.
 
+> **Note:** These comment-based hook points are available for the MVC, Blazor and Angular UIs. ABP Suite also generates React CRUD pages for modern React UI solutions, but the React pages do not provide the same in-page custom-code hook points yet, so re-generating an entity overwrites its React page. Keep customizations to the React UI in the source-owned [React UI](../framework/ui/react/index.md) application, outside the generated pages. ABP license holders can also use the [ABP Studio AI Agent](https://abp.io/studio/ai-agent) with predefined AI credits to evolve the React UI.
+
 ### Customizations on MVC UI
 
 If you have created your application with MVC UI, you can see the extended classes for _the code-behind classes of your pages_, under the `Pages` folder:
@@ -81,6 +83,8 @@ As can be seen in the figure above, you can search the related template file, cl
 > Note: Currently, up to 11 placeholders are allowed in the CRUD page generation and if you have more placeholders then the additional ones will be ignored. From ABP v8.0, up to 20 placeholders are allowed.
 
 ### Customizations on Blazor UI
+
+> **Blazorise vs MudBlazor templates:** Suite ships two parallel template trees for Blazor — `Frontend.Blazor.*` (Blazorise) and `Frontend.Blazor.MudBlazor.*` (MudBlazor) — and picks the right one based on the [Blazor UI library](index.md#blazor-ui-library) detected in your solution. Customized templates are stored under `.suite/customized-templates/` keyed by the full resource name, so a customization made in a MudBlazor solution is never read by a Blazorise solution (or vice versa). If you migrate an existing solution from Blazorise to MudBlazor, you need to re-apply your customizations to the new resource names.
 
 If you have created your application with Blazor UI, you can see the extended classes for _the code-behind classes of your pages_, under the `Pages` folder:
 

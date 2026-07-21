@@ -144,7 +144,7 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
         if (permission.Providers.Any() && !permission.Providers.Contains(providerName))
         {
             //TODO: BusinessException
-            throw new ApplicationException($"The permission named '{permission.Name}' has not compatible with the provider named '{providerName}'");
+            throw new ApplicationException($"The permission named '{permission.Name}' is not compatible with the provider named '{providerName}'");
         }
 
         if (!permission.MultiTenancySide.HasFlag(CurrentTenant.GetMultiTenancySide()))

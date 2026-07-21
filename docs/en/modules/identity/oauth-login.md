@@ -25,6 +25,25 @@ Then you can enter the user name and password on the login page for oauth extern
 
 ![oauth-login](../../images/ldap-login.png)
 
+## Mapping User Claims
+
+`AbpOAuthExternalLoginProviderOptions` maps claims returned by the user-info endpoint to the imported or updated Identity user. The defaults use ABP claim types for name, surname, email, email verification, phone number, phone verification and user id. Configure the mappings when the provider returns different claim names:
+
+```csharp
+Configure<AbpOAuthExternalLoginProviderOptions>(options =>
+{
+    options.NameClaimType = "given_name";
+    options.SurnameClaimType = "family_name";
+    options.EmailClaimType = "email";
+    options.EmailConfirmedClaimType = "email_verified";
+    options.PhoneNumberClaimType = "phone_number";
+    options.PhoneNumberConfirmedClaimType = "phone_number_verified";
+    options.ProviderKeyClaimType = "sub";
+});
+```
+
+The email claim is required. Other mapped claims are optional. `CanObtainUserInfoWithoutPassword` defaults to `false`.
+
 ## Resources
 
-https://oauth.net/2/grant-types/password/
+[OAuth 2.0 Resource Owner Password Credentials](https://oauth.net/2/grant-types/password/)

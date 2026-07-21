@@ -108,7 +108,11 @@ To create a new entity, make sure the *-New entity-* is selected in the **Entity
 
   * **Update database:** When you add a new migration, ABP Suite can automatically execute update-database command so that the changes are being applied to the database.
 
-* **Create user interface:** Creates pages, modals, components, `JavaScript`, `CSS ` files and adds the new page to the main menu.  If you don't have a requirement to manage the entity via user interface, you can uncheck this option.
+* **Create user interface:** Creates pages, modals, components, `JavaScript`, `CSS` files and adds the new page to the main menu. If you don't have a requirement to manage the entity via user interface, you can uncheck this option.
+
+  > **Note:** For modern React UI solutions, this option also generates and registers React CRUD pages, alongside the MVC, Blazor and Angular UI stacks. React generation is template-based and does not use AI.
+
+  > **Blazor UI library:** For Blazor solutions, the generated UI matches the underlying Blazor component library. Solutions that reference `Volo.Abp.MudBlazorUI` produce pages built around `MudDataGrid`, `MudDialog`, `MudForm` and the rest of the [MudBlazor](https://mudblazor.com) controls; Blazorise-based solutions keep emitting the original `DataGrid` / `Modal` / `Validations` markup. ABP Suite picks the variant automatically by scanning the Blazor project `.csproj` and shows the resolved value in the solution info tooltip — no extra switch is required. See the [Blazor UI library](index.md#blazor-ui-library) section for details.
 
 * **Excel export**: Creates a button that exports a list of all the data that were added to the entity to an Excel file.
 
@@ -322,6 +326,17 @@ There are some adjustments you may need to make before generating CRUD pages for
   - Project key is in camel case. E.g. `bookStore`.
   - Project key is in kebab case. E.g. `book-store`.
   - Project is defined as `defaultProject`.
+
+### What to Check If CRUD Generation Fails After Migrating to Mapperly
+
+If you migrated an existing solution from AutoMapper to Mapperly and ABP Suite starts appending mappings to the wrong file or generating duplicate/inconsistent mapper classes, check your mapper file layout.
+
+- Keep the main Suite-managed files, such as `*ApplicationMappers.cs`, `*BlazorMappers.cs` and `*WebMappers.cs`, reserved for ABP Suite updates.
+- Move manual or AI-generated Mapperly classes to separate files.
+- Avoid naming those manual files with the same conventional suffixes that ABP Suite scans, otherwise Suite may choose the wrong file while generating CRUD pages.
+- If you temporarily excluded a Suite-managed mapper file from the build, add it back after reorganizing your mappings.
+
+After reorganizing the files, clean the solution, rebuild it, and try generating the entity again.
 
 ## Generating CRUD Pages via Command Line
 

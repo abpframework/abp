@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "form-descriptor.schema.json",
+  "title": "FormDescriptor",
+  "description": "Describes a named create/edit form definition bound to one entity.",
+  "markdownDescription": "AI guidance: a form is referenced by page `formName`, `createFormName`, or `editFormName`. Keep `entityName` aligned with the page entityName. Define all fields in `fields`, then place every visible field in `layout.tabs[].groups[].fields[]` by field id (each placement carries `row`, `colSpan`, and `colStart`). Use form `rules` for conditional visibility/enabled state; use entity validators for core data validation.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional schema reference used when this descriptor is stored as a model descriptor file."
+    },
+    "name": {
+      "type": "string",
+      "description": "Stable unique form identifier. Prefer kebab-case, for example 'customer-form' or 'event-form'. Pages reference this value.",
+      "minLength": 1
+    },
+    "entityName": {
+      "type": "string",
+      "description": "Full name of the entity this form is bound to. Must match the page entityName that uses this form.",
+      "minLength": 1
+    },
+    "enableSaveAndNew": {
+      "type": "boolean",
+      "description": "Whether the form should expose a Save and New action in addition to the standard save action. Useful for rapid data entry.",
+      "default": false
+    },
+    "fields": {
+      "type": "array",
+      "description": "Flat list of all fields in this form. Field ids must be unique within the form; bound fields should point to properties on entityName.",
+      "items": {
+        "$ref": "form-field-descriptor.schema.json"
+      }
+    },
+    "layout": {
+      "$ref": "form-layout-descriptor.schema.json",
+      "description": "Visual layout for the fields. Every layout placement fieldId must refer to a field in fields."
+    },
+    "rules": {
+      "type": "array",
+      "description": "Conditional rules for field/group visibility, enabled state, and value setting. Use for simple client-side form behavior.",
+      "items": {
+        "$ref": "form-rule-descriptor.schema.json"
+      }
+    }
+  },
+  "required": ["name", "entityName", "fields", "layout"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "name": "event-form",
+      "entityName": "Acme.Events.Event",
+      "fields": [
+        { "id": "title", "label": "Title", "type": "text", "binding": "Title" },
+        { "id": "status", "label": "Status", "type": "select", "binding": "Status", "enumType": "Acme.Events.EventStatus" }
+      ],
+      "layout": {
+        "tabs": [
+          {
+            "id": "main",
+            "title": "Main",
+            "isDefault": true,
+            "groups": [
+              {
+                "id": "details",
+                "title": "Details",
+                "isDefault": true,
+                "fields": [
+                  { "fieldId": "title", "row": 0, "colSpan": 4 },
+                  { "fieldId": "status", "row": 1, "colSpan": 2 }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

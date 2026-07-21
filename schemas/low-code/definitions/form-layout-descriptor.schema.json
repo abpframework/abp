@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "form-layout-descriptor.schema.json",
+  "title": "FormLayoutDescriptor",
+  "description": "Describes the visual layout of a form as tabs and groups. Each group holds a flat list of field placements positioned on a 4-column grid.",
+  "markdownDescription": "AI guidance: the layout is a tree: tabs -> groups -> fields. The stored schema is flat (no row/cell wrappers): each placement carries `row`, `colSpan`, and `colStart`. Rows are derived at render time by grouping placements that share the same zero-based `row`. Each placement `fieldId` must reference a field from the form's `fields` array. Use `colSpan` 4 for full-width fields, 2+2 for two columns (colStart 1 and 3), or 1+1+1+1 for four compact controls. The sum of `colSpan` values within a row should not exceed 4.",
+  "type": "object",
+  "properties": {
+    "tabs": {
+      "type": "array",
+      "description": "Ordered list of tabs in the form. Use one default tab named 'main' for simple forms.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for this tab. Prefer camelCase/kebab-case such as 'main' or 'advanced'.",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "description": "Display title for the tab",
+            "minLength": 1
+          },
+          "isDefault": {
+            "type": "boolean",
+            "description": "Whether this is the default tab. The designer uses the default tab as the safe target for orphaned fields.",
+            "default": false
+          },
+          "order": {
+            "type": "integer",
+            "description": "Optional display order for this tab. When omitted, array order is used."
+          },
+          "groups": {
+            "type": "array",
+            "description": "Ordered list of groups within this tab. Use one default group for simple forms.",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Unique identifier for this group. Rules can target group ids.",
+                  "minLength": 1
+                },
+                "title": {
+                  "type": ["string", "null"],
+                  "description": "Optional display title for the group. Use null or omit for an untitled group."
+                },
+                "isDefault": {
+                  "type": "boolean",
+                  "description": "Whether this is the default group. The designer uses the default group as the safe target for orphaned fields.",
+                  "default": false
+                },
+                "order": {
+                  "type": "integer",
+                  "description": "Optional display order for this group. When omitted, array order is used."
+                },
+                "fields": {
+                  "type": "array",
+                  "description": "Flat list of field placements in this group. Each placement positions a single field on the 4-column grid via row, colSpan, and colStart.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "fieldId": {
+                        "type": "string",
+                        "description": "Reference to a field id in the form's fields array. Every field shown in the layout needs a matching field descriptor.",
+                        "minLength": 1
+                      },
+                      "row": {
+                        "type": "integer",
+                        "description": "Zero-based visual row index inside the group. Placements sharing the same row are rendered side-by-side.",
+                        "minimum": 0,
+                        "default": 0
+                      },
+                      "colSpan": {
+                        "type": "integer",
+                        "description": "Number of grid columns this field spans from 1 to 4. Use 4 for full-width fields.",
+                        "minimum": 1,
+                        "maximum": 4,
+                        "default": 4
+                      },
+                      "colStart": {
+                        "type": ["integer", "null"],
+                        "description": "Starting grid column from 1 to 4. Omit or null to auto-place after the previous placement in the same row.",
+                        "minimum": 1,
+                        "maximum": 4
+                      }
+                    },
+                    "required": ["fieldId"],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": ["id", "fields"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["id", "title", "groups"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["tabs"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "tabs": [
+        {
+          "id": "main",
+          "title": "Main",
+          "isDefault": true,
+          "groups": [
+            {
+              "id": "details",
+              "title": "Details",
+              "isDefault": true,
+              "fields": [
+                { "fieldId": "title", "row": 0, "colSpan": 4 },
+                { "fieldId": "startDate", "row": 1, "colSpan": 2, "colStart": 1 },
+                { "fieldId": "endDate", "row": 1, "colSpan": 2, "colStart": 3 }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

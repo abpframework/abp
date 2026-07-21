@@ -9,8 +9,15 @@
 
 This document provides a general overview of the relationship between various versions of ABP Studio and the ABP version of the [ABP Solution Templates](../solution-templates/index.md) used when generating a new solution. Each version of ABP Studio is configured to create solutions with a specific ABP version. However, once a solution is created, you can easily update it to the latest version of ABP via ABP Studio or [ABP CLI](../cli/index.md#update).
 
-| **ABP Studio Version** | **ABP Version of Startup Template**           |
+| **ABP Studio Version** | **ABP Version of Startup Template**        |
 |------------------------|---------------------------|
+| 3.0.7                  | 10.5.0                    |
+| 3.0.4 - 3.0.6          | 10.4.1                    |
+| 3.0.3                  | 10.4.0                    |
+| 2.2.7 - 3.0.2          | 10.3.0                    |
+| 2.2.5 - 2.2.6          | 10.2.0                    |
+| 2.2.2 - 2.2.4          | 10.1.1                    |
+| 2.2.1                  | 10.1.0                    |
 | 2.1.5 - 2.1.9          | 10.0.2                    |
 | 2.1.0 - 2.1.4          | 10.0.1                    |
 | 2.0.0 to 2.0.2         | 10.0.0                    |
@@ -41,7 +48,6 @@ This document provides a general overview of the relationship between various ve
 | 0.7.0 to 0.7.3         | 8.2.0                     |
 | 0.6.8 - 0.6.9          | 8.1.3                     |
 | 0.6.7                  | 8.1.1                     |
-
 # Working with ABP's Preview Versions
 
 By default, ABP Studio uses stable versions to create solutions. Therefore, if you want to create a solution with a preview version, first you need to create a solution and then switch your solution to the preview version from the ABP Studio UI:

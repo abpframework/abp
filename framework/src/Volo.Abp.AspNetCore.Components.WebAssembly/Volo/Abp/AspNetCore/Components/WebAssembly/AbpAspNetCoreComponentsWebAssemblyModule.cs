@@ -48,7 +48,8 @@ public class AbpAspNetCoreComponentsWebAssemblyModule : AbpModule
         context.Services.AddHttpClient();
         context.Services
             .GetHostBuilder().Logging
-            .AddProvider(new AbpExceptionHandlingLoggerProvider(context.Services));
+            .AddProvider(new AbpExceptionHandlingLoggerProvider(context.Services))
+            .AddFilter<AbpExceptionHandlingLoggerProvider>(typeof(UserExceptionInformer).FullName, LogLevel.None);
         
         if (!context.Services.ExecutePreConfiguredActions<AbpAspNetCoreComponentsWebOptions>().IsBlazorWebApp)
         {

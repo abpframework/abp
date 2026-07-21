@@ -18,9 +18,9 @@ on:
         description: 'Release URL'
         required: true
       target_branch:
-        description: 'Target branch (default: dev)'
+        description: 'Target branch (leave empty to auto-detect from latest stable ABP release)'
         required: false
-        default: 'dev'
+        default: ''
 
 jobs:
   update-docs:
@@ -41,7 +41,7 @@ jobs:
             echo "version=${{ github.event.client_payload.version }}" >> $GITHUB_OUTPUT
             echo "name=${{ github.event.client_payload.name }}" >> $GITHUB_OUTPUT
             echo "url=${{ github.event.client_payload.url }}" >> $GITHUB_OUTPUT
-            echo "target_branch=${{ github.event.client_payload.target_branch || 'dev' }}" >> $GITHUB_OUTPUT
+            echo "target_branch=${{ github.event.client_payload.target_branch }}" >> $GITHUB_OUTPUT
             
             # Save notes to environment variable (multiline)
             {
@@ -53,7 +53,7 @@ jobs:
             echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
             echo "name=${{ github.event.inputs.name }}" >> $GITHUB_OUTPUT
             echo "url=${{ github.event.inputs.url }}" >> $GITHUB_OUTPUT
-            echo "target_branch=${{ github.event.inputs.target_branch || 'dev' }}" >> $GITHUB_OUTPUT
+            echo "target_branch=${{ github.event.inputs.target_branch }}" >> $GITHUB_OUTPUT
             
             # Save notes to environment variable (multiline)
             {
@@ -63,12 +63,55 @@ jobs:
             } >> $GITHUB_ENV
           fi
 
+      # -------------------------------------------------
+      # Resolve target branch (auto-detect from latest stable ABP if not provided)
+      # -------------------------------------------------
+      - name: Resolve target branch
+        id: resolve_branch
+        run: |
+          TARGET_BRANCH="${{ steps.payload.outputs.target_branch }}"
+          
+          if [ -z "$TARGET_BRANCH" ]; then
+            echo "🔍 No target_branch provided - fetching latest stable ABP release..."
+            
+            RELEASES=$(curl -fsS \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/repos/abpframework/abp/releases?per_page=20")
+            
+            ABP_VERSION=$(echo "$RELEASES" | jq -r '
+              [.[] | select(
+                (.prerelease == false) and
+                (.tag_name | test("preview|rc|beta|dev"; "i") | not)
+              )] | first | .tag_name
+            ')
+            
+            if [ -z "$ABP_VERSION" ] || [ "$ABP_VERSION" = "null" ]; then
+              echo "❌ Could not determine latest stable ABP version"
+              exit 1
+            fi
+            
+            # Derive rel-X.Y from X.Y.Z (e.g., 10.1.1 -> rel-10.1)
+            TARGET_BRANCH=$(echo "$ABP_VERSION" | grep -oE '^[0-9]+\.[0-9]+' | sed 's/^/rel-/')
+            
+            if [ -z "$TARGET_BRANCH" ]; then
+              echo "❌ Could not derive target branch from version: $ABP_VERSION"
+              exit 1
+            fi
+            
+            echo "✅ Auto-detected target branch: $TARGET_BRANCH (from ABP $ABP_VERSION)"
+          else
+            echo "✅ Using provided target branch: $TARGET_BRANCH"
+          fi
+          
+          echo "target_branch=$TARGET_BRANCH" >> $GITHUB_OUTPUT
+
       - name: Validate payload
         env:
           VERSION: ${{ steps.payload.outputs.version }}
           NAME: ${{ steps.payload.outputs.name }}
           URL: ${{ steps.payload.outputs.url }}
-          TARGET_BRANCH: ${{ steps.payload.outputs.target_branch }}
+          TARGET_BRANCH: ${{ steps.resolve_branch.outputs.target_branch }}
         run: |
           if [ -z "$VERSION" ] || [ "$VERSION" = "null" ]; then
             echo "❌ Missing: version"
@@ -98,7 +141,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ steps.payload.outputs.target_branch }}
+          ref: ${{ steps.resolve_branch.outputs.target_branch }}
           fetch-depth: 0
 
       - name: Configure git
@@ -120,6 +163,17 @@ jobs:
           
           git checkout -B "$BRANCH"
           echo "BRANCH=$BRANCH" >> $GITHUB_ENV
+
+      # -------------------------------------------------
+      # Install helper scripts (embedded; target branch may not have them).
+      # Source of truth: .github/scripts/*.py in this repository.
+      # -------------------------------------------------
+      - name: Install workflow scripts
+        run: |
+          mkdir -p .github/scripts .tmp
+          echo "aW1wb3J0IG9zCmltcG9ydCByZQoKcmF3ID0gb3MuZW52aXJvbi5nZXQoIlJBV19OT1RFUyIsICIiKQpsaW5lcyA9IHJhdy5zcGxpdGxpbmVzKCkKCm91dHB1dCA9IFtdCnNlZW4gPSBzZXQoKQoKCmRlZiBjbGVhbl9saW5lKHRleHQ6IHN0cikgLT4gc3RyOgogICAgdGV4dCA9IHRleHQuc3RyaXAoKQogICAgaWYgbm90IHRleHQ6CiAgICAgICAgcmV0dXJuICIiCgogICAgIyBEcm9wIG1hcmtkb3duIGhlYWRlcnMvY2hhbmdlbG9nIGxpbmVzLgogICAgaWYgcmUubWF0Y2gociJeIytccyIsIHRleHQsIGZsYWdzPXJlLkkpOgogICAgICAgIHJldHVybiAiIgogICAgaWYgcmUubWF0Y2gociJeXCpcKj9ccypmdWxsXHMrY2hhbmdlbG9nIiwgdGV4dCwgZmxhZ3M9cmUuSSk6CiAgICAgICAgcmV0dXJuICIiCiAgICBpZiByZS5tYXRjaChyIl5mdWxsXHMrY2hhbmdlbG9nIiwgdGV4dCwgZmxhZ3M9cmUuSSk6CiAgICAgICAgcmV0dXJuICIiCgogICAgdGV4dCA9IHJlLnN1YihyIl5bXHNcLSrigKJdKyIsICIiLCB0ZXh0KQogICAgdGV4dCA9IHJlLnN1YihyIlxzK2J5XHMrQD9bYS16QS1aMC05Xy1dK1xzK2luXHMraHR0cHM/Oi8vXFMrIiwgIiIsIHRleHQpCiAgICB0ZXh0ID0gcmUuc3ViKHIiXHMrYnlccytAP1thLXpBLVowLTlfLV0rXHMqJCIsICIiLCB0ZXh0KQogICAgdGV4dCA9IHJlLnN1YihyIkAoW2EtekEtWjAtOV8tXSspIiwgIiIsIHRleHQpCiAgICB0ZXh0ID0gcmUuc3ViKHIiXHMqXChbXildKiNcZCtcKVxzKiQiLCAiIiwgdGV4dCkKICAgIHRleHQgPSByZS5zdWIociJccysjXGQrXHMqJCIsICIiLCB0ZXh0KQogICAgdGV4dCA9IHJlLnN1YihyIlxzKyIsICIgIiwgdGV4dCkuc3RyaXAoIiAuOi0iKQoKICAgIGlmIGxlbih0ZXh0KSA8IDg6CiAgICAgICAgcmV0dXJuICIiCgogICAgIyBNYWtlIHVzZXItZnJpZW5kbHkgc2hvcnQgdGl0bGUgKyBzdW1tYXJ5IHdoZW4gcG9zc2libGUuCiAgICBpZiAiOiIgaW4gdGV4dDoKICAgICAgICBsZWZ0LCByaWdodCA9IFtwLnN0cmlwKCkgZm9yIHAgaW4gdGV4dC5zcGxpdCgiOiIsIDEpXQogICAgICAgIGxlZnQgPSBsZWZ0Wzo0MF0ucnN0cmlwKCIgLiIpCiAgICAgICAgcmlnaHRfd29yZHMgPSByaWdodC5zcGxpdCgpCiAgICAgICAgcmlnaHQgPSAiICIuam9pbihyaWdodF93b3Jkc1s6MTRdKS5yc3RyaXAoIiAuIikKICAgICAgICB0ZXh0ID0gZiJ7bGVmdH06IHtyaWdodH0iIGlmIHJpZ2h0IGVsc2UgbGVmdAogICAgZWxzZToKICAgICAgICB3b3JkcyA9IHRleHQuc3BsaXQoKQogICAgICAgIGlmIGxlbih3b3JkcykgPiAxNjoKICAgICAgICAgICAgdGV4dCA9ICIgIi5qb2luKHdvcmRzWzoxNl0pLnJzdHJpcCgiIC4iKQoKICAgIHJldHVybiB0ZXh0CgoKZm9yIGxpbmUgaW4gbGluZXM6CiAgICBjbGVhbmVkID0gY2xlYW5fbGluZShsaW5lKQogICAgaWYgbm90IGNsZWFuZWQ6CiAgICAgICAgY29udGludWUKCiAgICAjIE5vcm1hbGl6ZSBjYXNpbmcgYW5kIGRlZHVwbGljYXRlLgogICAgY2xlYW5lZCA9IGNsZWFuZWRbMF0udXBwZXIoKSArIGNsZWFuZWRbMTpdIGlmIGNsZWFuZWQgZWxzZSBjbGVhbmVkCiAgICBrZXkgPSBjbGVhbmVkLmxvd2VyKCkKICAgIGlmIGtleSBpbiBzZWVuOgogICAgICAgIGNvbnRpbnVlCiAgICBzZWVuLmFkZChrZXkpCgogICAgb3V0cHV0LmFwcGVuZChmIioge2NsZWFuZWR9IikKICAgIGlmIGxlbihvdXRwdXQpID49IDg6CiAgICAgICAgYnJlYWsKCm9zLm1ha2VkaXJzKCIudG1wIiwgZXhpc3Rfb2s9VHJ1ZSkKd2l0aCBvcGVuKCIudG1wL2ZpbmFsLW5vdGVzLnR4dCIsICJ3IiwgZW5jb2Rpbmc9InV0Zi04IikgYXMgZjoKICAgIGYud3JpdGUoIlxuIi5qb2luKG91dHB1dCkpCg==" | base64 -d > .github/scripts/format-studio-release-notes.py
+          echo "aW1wb3J0IG9zCmltcG9ydCByZQpmcm9tIHBhY2thZ2luZy52ZXJzaW9uIGltcG9ydCBWZXJzaW9uLCBJbnZhbGlkVmVyc2lvbgoKc3R1ZGlvX3ZlciA9IG9zLmVudmlyb25bIlNUVURJT19WRVJTSU9OIl0KYWJwX3ZlciA9IG9zLmVudmlyb25bIkFCUF9WRVJTSU9OIl0KZmlsZV9wYXRoID0gImRvY3MvZW4vc3R1ZGlvL3ZlcnNpb24tbWFwcGluZy5tZCIKCnRyeToKICAgIHN0dWRpbyA9IFZlcnNpb24oc3R1ZGlvX3ZlcikKZXhjZXB0IEludmFsaWRWZXJzaW9uOgogICAgcHJpbnQoZiLinYwgSW52YWxpZCBTdHVkaW8gdmVyc2lvbjoge3N0dWRpb192ZXJ9IikKICAgIHJhaXNlIFN5c3RlbUV4aXQoMSkKCndpdGggb3BlbihmaWxlX3BhdGgsICJyIikgYXMgZjoKICAgIGxpbmVzID0gZi5yZWFkbGluZXMoKQoKIyBGaW5kIHRhYmxlIHN0YXJ0IChza2lwIFNFTyBhbmQgaGVhZGVycykKdGFibGVfc3RhcnQgPSAwCnRhYmxlX2VuZCA9IDAKZm9yIGksIGxpbmUgaW4gZW51bWVyYXRlKGxpbmVzKToKICAgIGlmIGxpbmUuc3RyaXAoKS5zdGFydHN3aXRoKCJ8IikgYW5kICIqKkFCUCBTdHVkaW8gVmVyc2lvbioqIiBpbiBsaW5lOgogICAgICAgIHRhYmxlX3N0YXJ0ID0gaQogICAgZWxpZiB0YWJsZV9zdGFydCA+IDAgYW5kIGxpbmUuc3RyaXAoKSBhbmQgbm90IGxpbmUuc3RyaXAoKS5zdGFydHN3aXRoKCJ8Iik6CiAgICAgICAgdGFibGVfZW5kID0gaQogICAgICAgIGJyZWFrCgppZiB0YWJsZV9zdGFydCA9PSAwOgogICAgcHJpbnQoIuKdjCBDb3VsZCBub3QgZmluZCB2ZXJzaW9uIG1hcHBpbmcgdGFibGUiKQogICAgcmFpc2UgU3lzdGVtRXhpdCgxKQoKIyBJZiBubyBlbmQgZm91bmQsIHRhYmxlIGdvZXMgdG8gZW5kIG9mIGZpbGUKaWYgdGFibGVfZW5kID09IDA6CiAgICB0YWJsZV9lbmQgPSBsZW4obGluZXMpCgojIEV4dHJhY3Qgc2VjdGlvbnMKYmVmb3JlX3RhYmxlID0gbGluZXNbOnRhYmxlX3N0YXJ0XQp0YWJsZV9oZWFkZXIgPSBsaW5lc1t0YWJsZV9zdGFydCA6IHRhYmxlX3N0YXJ0ICsgMl0KZGF0YV9yb3dzID0gW2wgZm9yIGwgaW4gbGluZXNbdGFibGVfc3RhcnQgKyAyIDogdGFibGVfZW5kXSBpZiBsLnN0cmlwKCkuc3RhcnRzd2l0aCgifCIpXQphZnRlcl90YWJsZSA9IGxpbmVzW3RhYmxlX2VuZDpdCgpuZXdfcm93cyA9IFtdCmhhbmRsZWQgPSBGYWxzZQoKCmRlZiBwYXJzZV92ZXJzaW9uX3JhbmdlKHZlcnNpb25fc3RyKToKICAgICIiIlBhcnNlICcyLjEuNSAtIDIuMS45JyBvciAnMi4xLjUnIGludG8gKHN0YXJ0LCBlbmQpIiIiCiAgICB2ZXJzaW9uX3N0ciA9IHZlcnNpb25fc3RyLnN0cmlwKCkKCiAgICBpZiAi4oCTIiBpbiB2ZXJzaW9uX3N0ciBvciAiLSIgaW4gdmVyc2lvbl9zdHI6CiAgICAgICAgcGFydHMgPSByZS5zcGxpdChyIlxzKlvigJMtXVxzKiIsIHZlcnNpb25fc3RyKQogICAgICAgIGlmIGxlbihwYXJ0cykgPT0gMjoKICAgICAgICAgICAgdHJ5OgogICAgICAgICAgICAgICAgcmV0dXJuIFZlcnNpb24ocGFydHNbMF0uc3RyaXAoKSksIFZlcnNpb24ocGFydHNbMV0uc3RyaXAoKSkKICAgICAgICAgICAgZXhjZXB0IEludmFsaWRWZXJzaW9uOgogICAgICAgICAgICAgICAgcmV0dXJuIE5vbmUsIE5vbmUKCiAgICB0cnk6CiAgICAgICAgdiA9IFZlcnNpb24odmVyc2lvbl9zdHIpCiAgICAgICAgcmV0dXJuIHYsIHYKICAgIGV4Y2VwdCBJbnZhbGlkVmVyc2lvbjoKICAgICAgICByZXR1cm4gTm9uZSwgTm9uZQoKCmRlZiBmb3JtYXRfcm93KHN0dWRpb19yYW5nZSwgYWJwX3ZlcnNpb24pOgogICAgIiIiRm9ybWF0IGEgdGFibGUgcm93IHdpdGggcHJvcGVyIHNwYWNpbmciIiIKICAgIHJldHVybiBmInwge3N0dWRpb19yYW5nZTo8MjJ9IHwge2FicF92ZXJzaW9uOjwyN30gfFxuIgoKCiMgUHJvY2VzcyBleGlzdGluZyByb3dzCmZvciByb3cgaW4gZGF0YV9yb3dzOgogICAgbWF0Y2ggPSByZS5tYXRjaChyIlx8XHMqKC4rPylccypcfFxzKiguKz8pXHMqXHwiLCByb3cpCiAgICBpZiBub3QgbWF0Y2g6CiAgICAgICAgY29udGludWUKCiAgICBleGlzdGluZ19zdHVkaW9fcmFuZ2UgPSBtYXRjaC5ncm91cCgxKS5zdHJpcCgpCiAgICBleGlzdGluZ19hYnAgPSBtYXRjaC5ncm91cCgyKS5zdHJpcCgpCgogICAgaWYgZXhpc3RpbmdfYWJwICE9IGFicF92ZXI6CiAgICAgICAgbmV3X3Jvd3MuYXBwZW5kKHJvdykKICAgICAgICBjb250aW51ZQoKICAgIHN0YXJ0X3ZlciwgZW5kX3ZlciA9IHBhcnNlX3ZlcnNpb25fcmFuZ2UoZXhpc3Rpbmdfc3R1ZGlvX3JhbmdlKQoKICAgIGlmIHN0YXJ0X3ZlciBpcyBOb25lIG9yIGVuZF92ZXIgaXMgTm9uZToKICAgICAgICBuZXdfcm93cy5hcHBlbmQocm93KQogICAgICAgIGNvbnRpbnVlCgogICAgaWYgc3RhcnRfdmVyIDw9IHN0dWRpbyA8PSBlbmRfdmVyOgogICAgICAgIHByaW50KGYi4pyFIFN0dWRpbyB2ZXJzaW9uIHtzdHVkaW9fdmVyfSBhbHJlYWR5IGNvdmVyZWQgaW4gcmFuZ2Uge2V4aXN0aW5nX3N0dWRpb19yYW5nZX0iKQogICAgICAgIGhhbmRsZWQgPSBUcnVlCiAgICAgICAgbmV3X3Jvd3MuYXBwZW5kKHJvdykKICAgIGVsaWYgZW5kX3ZlciA8IHN0dWRpbzoKICAgICAgICBpZiAoCiAgICAgICAgICAgIHN0YXJ0X3Zlci5tYWpvciA9PSBzdHVkaW8ubWFqb3IKICAgICAgICAgICAgYW5kIHN0YXJ0X3Zlci5taW5vciA9PSBzdHVkaW8ubWlub3IKICAgICAgICAgICAgYW5kIHN0dWRpby5taWNybyA8PSBlbmRfdmVyLm1pY3JvICsgNQogICAgICAgICk6CiAgICAgICAgICAgIG5ld19yYW5nZSA9IGYie3N0YXJ0X3Zlcn0gLSB7c3R1ZGlvfSIKICAgICAgICAgICAgbmV3X3Jvd3MuYXBwZW5kKGZvcm1hdF9yb3cobmV3X3JhbmdlLCBhYnBfdmVyKSkKICAgICAgICAgICAgcHJpbnQoZiLinIUgRXh0ZW5kZWQgcmFuZ2U6IHtuZXdfcmFuZ2V9IikKICAgICAgICAgICAgaGFuZGxlZCA9IFRydWUKICAgICAgICBlbHNlOgogICAgICAgICAgICBuZXdfcm93cy5hcHBlbmQocm93KQogICAgZWxzZToKICAgICAgICBuZXdfcm93cy5hcHBlbmQocm93KQoKaWYgbm90IGhhbmRsZWQ6CiAgICBuZXdfcm93ID0gZm9ybWF0X3JvdyhzdHIoc3R1ZGlvKSwgYWJwX3ZlcikKICAgIG5ld19yb3dzLmluc2VydCgwLCBuZXdfcm93KQogICAgcHJpbnQoZiLinIUgQWRkZWQgbmV3IG1hcHBpbmc6IHtzdHVkaW9fdmVyfSAtPiB7YWJwX3Zlcn0iKQoKd2l0aCBvcGVuKGZpbGVfcGF0aCwgInciKSBhcyBmOgogICAgZi53cml0ZWxpbmVzKGJlZm9yZV90YWJsZSkKICAgIGYud3JpdGVsaW5lcyh0YWJsZV9oZWFkZXIpCiAgICBmLndyaXRlbGluZXMobmV3X3Jvd3MpCiAgICBmLndyaXRlbGluZXMoYWZ0ZXJfdGFibGUpCg==" | base64 -d > .github/scripts/update-studio-version-mapping.py
+          ls -la .github/scripts/
 
       # -------------------------------------------------
       # Analyze existing release notes format
@@ -170,17 +224,18 @@ jobs:
             
             CRITICAL RULES:
             1. Extract ONLY essential, user-facing changes
-            2. Format as bullet points starting with "- "
-            3. Keep it concise and professional
+            2. Format as markdown bullet points starting with "* "
+            3. Keep it concise, friendly and easy to scan
             4. Match the style of existing release notes
             5. Skip internal/technical details unless critical
             6. Return ONLY the bullet points (no version header, no date)
             7. One change per line
+            8. Prefer short action-oriented summaries like "AI Agent Upgrades: Added browser automation tools"
             
             Output example:
-            - Fixed books sample for blazor-webapp tiered solution
-            - Enhanced Module Installation UI
-            - Added AI Management option to Startup Templates
+            * AI Agent Upgrades: Added browser automation tools
+            * Module Setup Improvements: Added guidance for modularity options
+            * UI Polish: Improved sidebar icons and visual consistency
             
             Return ONLY the formatted bullet points.
 
@@ -197,56 +252,18 @@ jobs:
             echo "✅ Using AI-formatted release notes"
             echo "$AI_RESPONSE" > .tmp/final-notes.txt
           else
-            echo "⚠️ AI unavailable - using aggressive cleaning on raw release notes"
-            
-            # Clean and format raw notes with aggressive filtering
-            echo "$RAW_NOTES" | while IFS= read -r line; do
-              # Skip empty lines
-              [ -z "$line" ] && continue
-              
-              # Skip section headers
-              [[ "$line" =~ ^#+.*What.*Changed ]] && continue
-              [[ "$line" =~ ^##[[:space:]] ]] && continue
-              
-              # Skip full changelog links
-              [[ "$line" =~ ^\*\*Full\ Changelog ]] && continue
-              [[ "$line" =~ ^Full\ Changelog ]] && continue
-              
-              # Remove leading bullet/asterisk
-              line=$(echo "$line" | sed 's/^[[:space:]]*[*-][[:space:]]*//')
-              
-              # Aggressive cleaning: remove entire " by @user in https://..." suffix
-              line=$(echo "$line" | sed 's/[[:space:]]*by @[a-zA-Z0-9_-]*[[:space:]]*in https:\/\/github\.com\/[^[:space:]]*//g')
-              
-              # Remove remaining "by @username" or "by username"
-              line=$(echo "$line" | sed 's/[[:space:]]*by @[a-zA-Z0-9_-]*[[:space:]]*$//g')
-              line=$(echo "$line" | sed 's/[[:space:]]*by [a-zA-Z0-9_-]*[[:space:]]*$//g')
-              
-              # Remove standalone @mentions
-              line=$(echo "$line" | sed 's/@[a-zA-Z0-9_-]*//g')
-              
-              # Clean trailing periods if orphaned
-              line=$(echo "$line" | sed 's/\.[[:space:]]*$//')
-              
-              # Trim all whitespace
-              line=$(echo "$line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-              
-              # Skip if line is empty or too short
-              [ -z "$line" ] && continue
-              [ ${#line} -lt 5 ] && continue
-              
-              # Capitalize first letter if lowercase
-              line="$(echo ${line:0:1} | tr '[:lower:]' '[:upper:]')${line:1}"
-              
-              # Add clean bullet and output
-              echo "- $line"
-            done > .tmp/final-notes.txt
+            echo "⚠️ AI unavailable - generating concise user-friendly summaries from raw notes"
+            python3 .github/scripts/format-studio-release-notes.py
           fi
+
+          # Normalize bullets to "* " even if AI returns "- ".
+          sed -E 's/^[[:space:]]*-[[:space:]]+/* /' .tmp/final-notes.txt > .tmp/final-notes.normalized.txt
+          mv .tmp/final-notes.normalized.txt .tmp/final-notes.txt
           
           # Safety check: verify we have content
           if [ ! -s .tmp/final-notes.txt ]; then
             echo "⚠️ No valid release notes extracted, using minimal fallback"
-            echo "- Release ${{ steps.payload.outputs.version }}" > .tmp/final-notes.txt
+            echo "* Release ${{ steps.payload.outputs.version }}" > .tmp/final-notes.txt
           fi
           
           echo "=== Final release notes ==="
@@ -381,137 +398,8 @@ jobs:
             exit 0
           fi
           
-          # Use Python for smart version range handling
-          python3 <<'PYTHON_EOF'
-          import os
-          import re
-          from packaging.version import Version, InvalidVersion
+          python3 .github/scripts/update-studio-version-mapping.py
 
-          studio_ver = os.environ["STUDIO_VERSION"]
-          abp_ver = os.environ["ABP_VERSION"]
-          file_path = "docs/en/studio/version-mapping.md"
-
-          try:
-              studio = Version(studio_ver)
-          except InvalidVersion:
-              print(f"❌ Invalid Studio version: {studio_ver}")
-              exit(1)
-
-          with open(file_path, 'r') as f:
-              lines = f.readlines()
-
-          # Find table start (skip SEO and headers)
-          table_start = 0
-          table_end = 0
-          for i, line in enumerate(lines):
-              if line.strip().startswith('|') and '**ABP Studio Version**' in line:
-                  table_start = i
-              elif table_start > 0 and line.strip() and not line.strip().startswith('|'):
-                  table_end = i
-                  break
-
-          if table_start == 0:
-              print("❌ Could not find version mapping table")
-              exit(1)
-
-          # If no end found, table goes to end of file
-          if table_end == 0:
-              table_end = len(lines)
-
-          # Extract sections
-          before_table = lines[:table_start]  # Everything before table
-          table_header = lines[table_start:table_start+2]  # Header + separator
-          data_rows = [l for l in lines[table_start+2:table_end] if l.strip().startswith('|')]  # Data rows
-          after_table = lines[table_end:]  # Everything after table
-
-          new_rows = []
-          handled = False
-
-          def parse_version_range(version_str):
-              """Parse '2.1.5 - 2.1.9' or '2.1.5' into (start, end)"""
-              version_str = version_str.strip()
-              
-              if '–' in version_str or '-' in version_str:
-                  # Handle both em-dash and hyphen
-                  parts = re.split(r'\s*[–-]\s*', version_str)
-                  if len(parts) == 2:
-                      try:
-                          return Version(parts[0].strip()), Version(parts[1].strip())
-                      except InvalidVersion:
-                          return None, None
-              
-              try:
-                  v = Version(version_str)
-                  return v, v
-              except InvalidVersion:
-                  return None, None
-
-          def format_row(studio_range, abp_version):
-              """Format a table row with proper spacing"""
-              return f"| {studio_range:<22} | {abp_version:<27} |\n"
-
-          # Process existing rows
-          for row in data_rows:
-              match = re.match(r'\|\s*(.+?)\s*\|\s*(.+?)\s*\|', row)
-              if not match:
-                  continue
-              
-              existing_studio_range = match.group(1).strip()
-              existing_abp = match.group(2).strip()
-              
-              # Only consider rows with matching ABP version
-              if existing_abp != abp_ver:
-                  new_rows.append(row)
-                  continue
-              
-              start_ver, end_ver = parse_version_range(existing_studio_range)
-              
-              if start_ver is None or end_ver is None:
-                  new_rows.append(row)
-                  continue
-              
-              # Check if current studio version is in this range
-              if start_ver <= studio <= end_ver:
-                  print(f"✅ Studio version {studio_ver} already covered in range {existing_studio_range}")
-                  handled = True
-                  new_rows.append(row)
-              
-              # Check if we should extend the range
-              elif end_ver < studio:
-                  # Calculate if studio is the next logical version
-                  # For patch versions: 2.1.9 -> 2.1.10
-                  # For minor versions: 2.1.9 -> 2.2.0
-                  
-                  # Simple heuristic: if major.minor match and patch increments, extend range
-                  if (start_ver.major == studio.major and 
-                      start_ver.minor == studio.minor and
-                      studio.micro <= end_ver.micro + 5):  # Allow small gaps
-                      
-                      new_range = f"{start_ver} - {studio}"
-                      new_rows.append(format_row(new_range, abp_ver))
-                      print(f"✅ Extended range: {new_range}")
-                      handled = True
-                  else:
-                      new_rows.append(row)
-              else:
-                  new_rows.append(row)
-
-          # If not handled, add new row at top of data
-          if not handled:
-              new_row = format_row(str(studio), abp_ver)
-              new_rows.insert(0, new_row)
-              print(f"✅ Added new mapping: {studio_ver} -> {abp_ver}")
-
-          # Write updated file - preserve ALL content
-          with open(file_path, 'w') as f:
-              f.writelines(before_table)  # SEO, title, intro text
-              f.writelines(table_header)  # Table header
-              f.writelines(new_rows)      # Updated data rows
-              f.writelines(after_table)   # Content after table (preview section, etc.)
-
-          print("MAPPING_UPDATED=true")
-          PYTHON_EOF
-          
           echo "MAPPING_UPDATED=true" >> $GITHUB_ENV
           
           echo "=== Updated version-mapping.md preview ==="
@@ -563,7 +451,7 @@ jobs:
           VERSION: ${{ steps.payload.outputs.version }}
           NAME: ${{ steps.payload.outputs.name }}
           URL: ${{ steps.payload.outputs.url }}
-          TARGET_BRANCH: ${{ steps.payload.outputs.target_branch }}
+          TARGET_BRANCH: ${{ steps.resolve_branch.outputs.target_branch }}
         run: |
           # Check for existing PR
           EXISTING_PR=$(gh pr list \
@@ -593,7 +481,8 @@ jobs:
             
             gh pr edit "$EXISTING_PR" \
               --title "docs(studio): release $VERSION - $NAME" \
-              --body "$PR_BODY"
+              --body "$PR_BODY" \
+              --add-reviewer skoc10
             
             echo "PR_NUMBER=$EXISTING_PR" >> $GITHUB_ENV
           else
@@ -605,7 +494,8 @@ jobs:
               --title "docs(studio): release $VERSION - $NAME" \
               --body "$PR_BODY" \
               --base "$TARGET_BRANCH" \
-              --head "$BRANCH")
+              --head "$BRANCH" \
+              --reviewer skoc10)
             
             PR_NUMBER=$(echo "$PR_URL" | grep -oE '[0-9]+$')
             echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
@@ -643,7 +533,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Version**: $VERSION" >> $GITHUB_STEP_SUMMARY
           echo "**Release**: ${{ steps.payload.outputs.name }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Target Branch**: ${{ steps.payload.outputs.target_branch }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Target Branch**: ${{ steps.resolve_branch.outputs.target_branch }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
           if [ "${{ steps.changes.outputs.has_changes }}" = "true" ]; then

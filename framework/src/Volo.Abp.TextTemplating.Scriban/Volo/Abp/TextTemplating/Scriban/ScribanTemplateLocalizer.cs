@@ -18,16 +18,16 @@ public class ScribanTemplateLocalizer : IScriptCustomFunction
         _localizer = localizer;
     }
 
-    public object Invoke(TemplateContext context, ScriptNode callerContext, ScriptArray arguments,
-        ScriptBlockStatement blockStatement)
+    public object? Invoke(TemplateContext context, ScriptNode? callerContext, ScriptArray arguments,
+        ScriptBlockStatement? blockStatement)
     {
         return GetString(arguments);
     }
 
-    public ValueTask<object> InvokeAsync(TemplateContext context, ScriptNode callerContext, ScriptArray arguments,
-        ScriptBlockStatement blockStatement)
+    public ValueTask<object?> InvokeAsync(TemplateContext context, ScriptNode? callerContext, ScriptArray arguments,
+        ScriptBlockStatement? blockStatement)
     {
-        return new ValueTask<object>(GetString(arguments));
+        return new ValueTask<object?>(GetString(arguments));
     }
 
     private string GetString(ScriptArray arguments)
@@ -43,7 +43,7 @@ public class ScribanTemplateLocalizer : IScriptCustomFunction
             return string.Empty;
         }
 
-        var args = arguments.Skip(1).Where(x => x != null && !x.ToString().IsNullOrWhiteSpace()).ToArray();
+        var args = arguments.Skip(1).Where(x => x != null && !x.ToString().IsNullOrWhiteSpace()).Cast<object>().ToArray();
         return args.Any() ? _localizer[name.ToString()!, args] : _localizer[name.ToString()!];
     }
 

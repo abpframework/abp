@@ -8,11 +8,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Caching;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Identity.Settings;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
 using Volo.Abp.Threading;
@@ -31,6 +33,9 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     protected IIdentityLinkUserRepository IdentityLinkUserRepository { get; }
     protected IDistributedCache<AbpDynamicClaimCacheItem> DynamicClaimCache { get; }
     protected override CancellationToken CancellationToken => CancellationTokenProvider.Token;
+    protected IOptions<AbpMultiTenancyOptions> MultiTenancyOptions { get; }
+    protected ICurrentTenant CurrentTenant { get; }
+    protected IDataFilter DataFilter { get; }
 
     public IdentityUserManager(
         IdentityUserStore store,
@@ -49,7 +54,10 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         ISettingProvider settingProvider,
         IDistributedEventBus distributedEventBus,
         IIdentityLinkUserRepository identityLinkUserRepository,
-        IDistributedCache<AbpDynamicClaimCacheItem> dynamicClaimCache)
+        IDistributedCache<AbpDynamicClaimCacheItem> dynamicClaimCache,
+        IOptions<AbpMultiTenancyOptions> multiTenancyOptions,
+        ICurrentTenant currentTenant,
+        IDataFilter dataFilter)
         : base(
             store,
             optionsAccessor,
@@ -68,6 +76,9 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         UserRepository = userRepository;
         IdentityLinkUserRepository = identityLinkUserRepository;
         DynamicClaimCache = dynamicClaimCache;
+        MultiTenancyOptions = multiTenancyOptions;
+        CurrentTenant = currentTenant;
+        DataFilter = dataFilter;
         CancellationTokenProvider = cancellationTokenProvider;
     }
 
@@ -116,7 +127,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     /// <returns>A <see cref="IdentityResult"/> representing whether validation was successful.</returns>
     public virtual async Task<IdentityResult> CallValidateUserAsync(IdentityUser user)
     {
-        return await base.ValidateUserAsync(user);
+        return await ValidateUserAsync(user);
     }
 
     /// <summary>
@@ -129,7 +140,20 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     /// <returns>A <see cref="IdentityResult"/> representing whether validation was successful.</returns>
     public virtual async Task<IdentityResult> CallValidatePasswordAsync(IdentityUser user, string password)
     {
-        return await base.ValidatePasswordAsync(user, password);
+        return await ValidatePasswordAsync(user, password);
+    }
+
+    /// <summary>
+    /// This is to call the protection method UpdatePasswordHash
+    /// Updates a user's password hash.
+    /// </summary>
+    /// <param name="user">The user.</param>
+    /// <param name="newPassword">The new password.</param>
+    /// <param name="validatePassword">Whether to validate the password.</param>
+    /// <returns>Whether the password has was successfully updated.</returns>
+    public virtual async Task<IdentityResult> CallUpdatePasswordHash(IdentityUser user, string newPassword, bool validatePassword)
+    {
+        return await UpdatePasswordHash(user, newPassword, validatePassword);
     }
 
     public virtual async Task<IdentityUser> GetByIdAsync(Guid id)
@@ -396,6 +420,22 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         return result;
     }
 
+    public override async Task<IdentityResult> ChangePasswordAsync(IdentityUser user, string currentPassword, string newPassword)
+    {
+        var result = await base.ChangePasswordAsync(user, currentPassword, newPassword);
+
+        result.CheckErrors();
+
+        await DistributedEventBus.PublishAsync(new IdentityUserPasswordChangedEto
+        {
+            Id = user.Id,
+            TenantId = user.TenantId,
+            Email =  user.Email,
+        });
+
+        return result;
+    }
+
     public virtual async Task UpdateRoleAsync(Guid sourceRoleId, Guid? targetRoleId)
     {
         var sourceRole = await RoleRepository.GetAsync(sourceRoleId, cancellationToken: CancellationToken);
@@ -515,22 +555,18 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         }
         else if (Options.User.AllowedUserNameCharacters.Where(char.IsDigit).Distinct().Count() >= 4)
         {
-            // The AllowedUserNameCharacters includes 4 numbers. So, we are generating 4 random numbers and appending to the username.
-            var numbers = Options.User.AllowedUserNameCharacters.Where(char.IsDigit).OrderBy(x => Guid.NewGuid()).Take(4).ToArray();
-            var minArray = numbers.OrderBy(x => x).ToArray();
-            if (minArray[0] == '0')
-            {
-                var secondItem = minArray[1];
-                minArray[0] = secondItem;
-                minArray[1] = '0';
-            }
-            var min = int.Parse(new string(minArray));
-            var max = int.Parse(new string(numbers.OrderByDescending(x => x).ToArray()));
+            // The AllowedUserNameCharacters includes at least 4 distinct digits. So, we are picking 4 random digits from them and appending to the username.
+            var allowedDigits = Options.User.AllowedUserNameCharacters.Where(char.IsDigit).Distinct().ToArray();
             tryCount = 0;
             do
             {
-                var randomUserName = userName + RandomHelper.GetRandom(min, max);
-                if ( await ValidateUserNameAsync(randomUserName))
+                var randomDigits = new char[4];
+                for (var i = 0; i < randomDigits.Length; i++)
+                {
+                    randomDigits[i] = allowedDigits[RandomHelper.GetRandom(0, allowedDigits.Length)];
+                }
+                var randomUserName = userName + new string(randomDigits);
+                if (await ValidateUserNameAsync(randomUserName))
                 {
                     return randomUserName;
                 }
@@ -554,5 +590,155 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
         Logger.LogError($"Could not get a valid user name for the given email address: {email}, allowed characters: {Options.User.AllowedUserNameCharacters}, tried {maxTryCount} times.");
         throw new AbpIdentityResultException(IdentityResult.Failed(ErrorDescriber.InvalidUserName(userName)));
+    }
+
+    public virtual async Task<IdentityUser> FindSharedUserByEmailAsync(string email)
+    {
+        if (MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Isolated)
+        {
+            return await base.FindByEmailAsync(email);
+        }
+
+        using (CurrentTenant.Change(null))
+        {
+            using (DataFilter.Disable<IMultiTenant>())
+            {
+                var normalizedEmail = NormalizeEmail(email);
+                var hostusers = await UserRepository.GetUsersByNormalizedEmailAsync(normalizedEmail, cancellationToken: CancellationToken);
+                //host user first
+                var hostUser = hostusers.FirstOrDefault(x => x.TenantId == null) ?? hostusers.FirstOrDefault(x => x.TenantId != Guid.Empty) ?? hostusers.FirstOrDefault();
+                if (hostUser == null)
+                {
+                    return null;
+                }
+
+                using (DataFilter.Enable<IMultiTenant>())
+                {
+                    using (CurrentTenant.Change(hostUser.TenantId))
+                    {
+                        return await base.FindByEmailAsync(email);
+                    }
+                }
+            }
+        }
+    }
+
+    public virtual async Task<IdentityUser> FindSharedUserByNameAsync(string userName)
+    {
+        if (MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Isolated)
+        {
+            return await base.FindByNameAsync(userName);
+        }
+
+        using (CurrentTenant.Change(null))
+        {
+            using (DataFilter.Disable<IMultiTenant>())
+            {
+                var normalizeduserName = NormalizeName(userName);
+                var hostusers = await UserRepository.GetUsersByNormalizedUserNameAsync(normalizeduserName, cancellationToken: CancellationToken);
+                //host user first
+                var hostUser = hostusers.FirstOrDefault(x => x.TenantId == null) ?? hostusers.FirstOrDefault(x => x.TenantId != Guid.Empty) ?? hostusers.FirstOrDefault();
+                if (hostUser == null)
+                {
+                    return null;
+                }
+
+                using (DataFilter.Enable<IMultiTenant>())
+                {
+                    using (CurrentTenant.Change(hostUser.TenantId))
+                    {
+                        return await base.FindByNameAsync(userName);
+                    }
+                }
+            }
+        }
+    }
+
+    public virtual async Task<IdentityUser> FindSharedUserByLoginAsync(string loginProvider, string providerKey)
+    {
+        if (MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Isolated)
+        {
+            return await base.FindByLoginAsync(loginProvider, providerKey);
+        }
+
+        using (CurrentTenant.Change(null))
+        {
+            using (DataFilter.Disable<IMultiTenant>())
+            {
+                var hostusers = await UserRepository.GetUsersByLoginAsync(loginProvider, providerKey, cancellationToken: CancellationToken);
+                //host user first
+                var hostUser = hostusers.FirstOrDefault(x => x.TenantId == null) ?? hostusers.FirstOrDefault(x => x.TenantId != Guid.Empty) ?? hostusers.FirstOrDefault();
+                if (hostUser == null)
+                {
+                    return null;
+                }
+
+                using (DataFilter.Enable<IMultiTenant>())
+                {
+                    using (CurrentTenant.Change(hostUser.TenantId))
+                    {
+                        return await base.FindByLoginAsync(loginProvider, providerKey);
+                    }
+                }
+            }
+        }
+    }
+
+    public virtual async Task<IdentityUser> FindSharedUserByPasskeyIdAsync(byte[] credentialId)
+    {
+        if (MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Isolated)
+        {
+            return await base.FindByPasskeyIdAsync(credentialId);
+        }
+
+        using (CurrentTenant.Change(null))
+        {
+            using (DataFilter.Disable<IMultiTenant>())
+            {
+                var hostusers = await UserRepository.GetUsersByPasskeyIdAsync(credentialId, cancellationToken: CancellationToken);
+                //host user first
+                var hostUser = hostusers.FirstOrDefault(x => x.TenantId == null) ?? hostusers.FirstOrDefault(x => x.TenantId != Guid.Empty) ?? hostusers.FirstOrDefault();
+                if (hostUser == null)
+                {
+                    return null;
+                }
+
+                using (DataFilter.Enable<IMultiTenant>())
+                {
+                    using (CurrentTenant.Change(hostUser.TenantId))
+                    {
+                        return await base.FindByPasskeyIdAsync(credentialId);
+                    }
+                }
+            }
+        }
+    }
+
+    public virtual async Task<IdentityUser> FindSharedUserByIdAsync(string userId)
+    {
+        if (MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Isolated)
+        {
+            return await base.FindByIdAsync(userId);
+        }
+
+        using (CurrentTenant.Change(null))
+        {
+            using (DataFilter.Disable<IMultiTenant>())
+            {
+                var user = await base.FindByIdAsync(userId);
+                if (user == null)
+                {
+                    return null;
+                }
+
+                using (DataFilter.Enable<IMultiTenant>())
+                {
+                    using (CurrentTenant.Change(user.TenantId))
+                    {
+                        return await base.FindByIdAsync(userId);
+                    }
+                }
+            }
+        }
     }
 }

@@ -281,7 +281,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
 
         if (changedRecords.Any())
         {
-            newOrChangedPermissions.AddRange(newRecords.Select(x => x.Name));
+            newOrChangedPermissions.AddRange(changedRecords.Select(x => x.Name));
             await PermissionRepository.UpdateManyAsync(changedRecords);
         }
 

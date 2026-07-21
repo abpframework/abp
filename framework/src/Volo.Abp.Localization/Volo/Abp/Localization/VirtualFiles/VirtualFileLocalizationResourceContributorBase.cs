@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -19,7 +20,6 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
     private Dictionary<string, ILocalizationDictionary>? _dictionaries;
     private bool _subscribedForChanges;
     private readonly object _syncObj = new object();
-    private LocalizationResourceBase _resource = default!;
 
     protected VirtualFileLocalizationResourceContributorBase(string virtualPath)
     {
@@ -28,7 +28,6 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
 
     public virtual void Initialize(LocalizationResourceInitializationContext context)
     {
-        _resource = context.Resource;
         _virtualFileProvider = context.ServiceProvider.GetRequiredService<IVirtualFileProvider>();
     }
 
@@ -88,15 +87,12 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
 
     private Dictionary<string, ILocalizationDictionary> CreateDictionaries()
     {
-        var dictionaries = new Dictionary<string, ILocalizationDictionary>();
+        var rawDictionaries = new Dictionary<string, Dictionary<string, LocalizedString>>();
 
-        foreach (var file in _virtualFileProvider.GetDirectoryContents(_virtualPath))
+        foreach (var file in _virtualFileProvider.GetDirectoryContents(_virtualPath)
+                     .Where(f => !f.IsDirectory && CanParseFile(f))
+                     .OrderBy(f => f.Name, StringComparer.Ordinal))
         {
-            if (file.IsDirectory || !CanParseFile(file))
-            {
-                continue;
-            }
-
             var dictionary = CreateDictionaryFromFile(file);
 
             if (dictionary == null)
@@ -104,15 +100,19 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
                 continue;
             }
 
-            if (dictionaries.ContainsKey(dictionary.CultureName))
+            if (!rawDictionaries.TryGetValue(dictionary.CultureName, out var raw))
             {
-                throw new AbpException($"{file.GetVirtualOrPhysicalPathOrNull()} dictionary has a culture name '{dictionary.CultureName}' which is already defined! Localization resource: {_resource.ResourceName}");
+                raw = new Dictionary<string, LocalizedString>();
+                rawDictionaries[dictionary.CultureName] = raw;
             }
 
-            dictionaries[dictionary.CultureName] = dictionary;
+            dictionary.Fill(raw);
         }
 
-        return dictionaries;
+        return rawDictionaries.ToDictionary(
+            kvp => kvp.Key,
+            kvp => (ILocalizationDictionary)new StaticLocalizationDictionary(kvp.Key, kvp.Value)
+        );
     }
 
     protected abstract bool CanParseFile(IFileInfo file);

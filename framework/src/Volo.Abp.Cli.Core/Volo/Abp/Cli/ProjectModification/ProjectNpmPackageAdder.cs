@@ -72,6 +72,9 @@ public class ProjectNpmPackageAdder : ITransientDependency
             return;
         }
 
+        NpmHelper.EnsureSafePackageName(npmPackage.Name);
+        NpmHelper.EnsureSafeVersion(version);
+
         Logger.LogInformation($"Installing '{npmPackage.Name}' package to the project '{packageJsonFilePath}'...");
 
         if (!File.ReadAllText(packageJsonFilePath).Contains($"\"{npmPackage.Name}\""))
@@ -81,7 +84,7 @@ public class ProjectNpmPackageAdder : ITransientDependency
             using (DirectoryHelper.ChangeCurrentDirectory(directory))
             {
                 Logger.LogInformation("yarn add " + npmPackage.Name + versionPostfix);
-                CmdHelper.RunCmd("npx yarn add " + npmPackage.Name + versionPostfix);
+                CmdHelper.RunCmd("npx yarn add " + npmPackage.Name + versionPostfix + " --ignore-scripts");
             }
         }
         else
@@ -130,6 +133,8 @@ public class ProjectNpmPackageAdder : ITransientDependency
     public async Task AddMvcPackageAsync(string directory, NpmPackageInfo npmPackage, string version = null,
         bool skipInstallingLibs = false)
     {
+        NpmHelper.EnsureSafePackageName(npmPackage.Name);
+
         var packageJsonFilePath = Path.Combine(directory, "package.json");
         if (!File.Exists(packageJsonFilePath) ||
             File.ReadAllText(packageJsonFilePath).Contains($"\"{npmPackage.Name}\""))
@@ -144,12 +149,14 @@ public class ProjectNpmPackageAdder : ITransientDependency
             version = DetectAbpVersionOrNull(Path.Combine(directory, "package.json"));
         }
 
+        NpmHelper.EnsureSafeVersion(version);
+
         var versionPostfix = version != null ? $"@{version}" : string.Empty;
 
         using (DirectoryHelper.ChangeCurrentDirectory(directory))
         {
             Logger.LogInformation("yarn add " + npmPackage.Name + versionPostfix);
-            CmdHelper.RunCmd("npx yarn add " + npmPackage.Name + versionPostfix);
+            CmdHelper.RunCmd("npx yarn add " + npmPackage.Name + versionPostfix + " --ignore-scripts");
 
             if (skipInstallingLibs)
             {

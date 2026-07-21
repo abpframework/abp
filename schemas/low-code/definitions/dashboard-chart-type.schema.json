@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dashboard-chart-type.schema.json",
+  "title": "DashboardChartType",
+  "description": "The type of chart. Prefer lower-case values in descriptor JSON; PascalCase aliases are accepted for compatibility.",
+  "markdownDescription": "Use `bar` for categorical comparisons, `line` for trends over time, `pie`/`donut` for part-of-whole views with a small number of categories.",
+  "type": "string",
+  "enum": ["bar", "Bar", "line", "Line", "pie", "Pie", "donut", "Donut"],
+  "enumDescriptions": [
+    "Bar chart.",
+    "Bar chart.",
+    "Line chart.",
+    "Line chart.",
+    "Pie chart.",
+    "Pie chart.",
+    "Donut chart.",
+    "Donut chart."
+  ]
+}

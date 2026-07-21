@@ -1,12 +1,12 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Learn how to efficiently compress and resize images in your applications using ABP Framework's extensible services powered by ImageSharp and Magick.NET."
+    "Description": "Learn how to efficiently compress and resize images in your applications using ABP Framework's extensible services powered by ImageSharp, Magick.NET and SkiaSharp."
 }
 ```
 
 # Image Manipulation
-ABP provides services to compress and resize images and implements these services with popular [ImageSharp](https://sixlabors.com/products/imagesharp/) and [Magick.NET](https://github.com/dlemstra/Magick.NET) libraries. You can use these services in your reusable modules, libraries and applications, so you don't depend on a specific imaging library.
+ABP provides services to compress and resize images and implements these services with popular [ImageSharp](https://sixlabors.com/products/imagesharp/), [Magick.NET](https://github.com/dlemstra/Magick.NET) and [SkiaSharp](https://github.com/mono/SkiaSharp) libraries. You can use these services in your reusable modules, libraries and applications, so you don't depend on a specific imaging library.
 
 > The image resizer/compressor system is designed to be extensible. You can implement your own image resizer/compressor contributor and use it in your application.
 
@@ -46,10 +46,11 @@ public class YourModule : AbpModule
 
 ## Providers
 
-ABP provides two image resizer/compressor implementations out of the box:
+ABP provides three image resizer/compressor implementations out of the box:
 
 * [Magick.NET](#magick-net-provider)
 * [ImageSharp](#imagesharp-provider)
+* [SkiaSharp](#skiasharp-provider)
 
 You should install one of these provides to make it actually working.
 
@@ -331,6 +332,67 @@ Configure<ImageSharpCompressOptions>(options =>
     {
         Quality = 65
     };
+});
+```
+
+## SkiaSharp Provider
+
+`Volo.Abp.Imaging.SkiaSharp` NuGet package implements the image operations using the [SkiaSharp](https://github.com/mono/SkiaSharp) library.
+
+## Installation
+
+You can add this package to your application by either using the [ABP CLI](../../cli) or manually installing it. Using the [ABP CLI](../../cli) is the recommended approach.
+
+### Using the ABP CLI
+
+Open a command line terminal in the folder of your project (.csproj file) and type the following command:
+
+```bash
+abp add-package Volo.Abp.Imaging.SkiaSharp
+```
+
+### Manual Installation
+
+If you want to manually install;
+
+1. Add the [Volo.Abp.Imaging.SkiaSharp](https://www.nuget.org/packages/Volo.Abp.Imaging.SkiaSharp) NuGet package to your project:
+
+```
+dotnet add package Volo.Abp.Imaging.SkiaSharp
+```
+
+2. Add `AbpImagingSkiaSharpModule` to your [module](../architecture/modularity/basics.md)'s dependency list:
+
+```csharp
+[DependsOn(typeof(AbpImagingSkiaSharpModule))]
+public class MyModule : AbpModule
+{
+    //...
+}
+```
+
+### Configuration
+
+`SkiaSharpResizerOptions` is an [options object](../fundamentals/options.md) that is used to configure the SkiaSharp image resize system. It has the following properties:
+
+* `SKSamplingOptions`: The sampling options used by SkiaSharp when resizing. (Default: `SKSamplingOptions.Default`)
+* `Quality`: The quality of the encoded image (0-100). (Default: `75`)
+
+`SkiaSharpCompressOptions` is an [options object](../fundamentals/options.md) that is used to configure the SkiaSharp image compression system. It has the following properties:
+
+* `Quality`: The quality of the encoded image (0-100). (Default: `75`)
+
+**Example usage:**
+
+```csharp
+Configure<SkiaSharpResizerOptions>(options =>
+{
+    options.Quality = 80;
+});
+
+Configure<SkiaSharpCompressOptions>(options =>
+{
+    options.Quality = 60;
 });
 ```
 

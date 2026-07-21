@@ -1,5 +1,6 @@
 import { createHostFactory, SpectatorHost } from '@ngneat/spectator/vitest';
 import { FormCheckboxComponent } from '../components/checkbox/checkbox.component';
+import { setInputSignal } from './utils';
 
 describe('FormCheckboxComponent', () => {
   let spectator: SpectatorHost<FormCheckboxComponent>;
@@ -7,13 +8,18 @@ describe('FormCheckboxComponent', () => {
   const createHost = createHostFactory(FormCheckboxComponent);
 
   beforeEach(
-    () =>
-      (spectator = createHost(
-        '<abp-checkbox></abp-checkbox>',
+    () => {
+      spectator = createHost(
+        '<abp-checkbox />',
         {
+          detectChanges: false,
           hostProps: { attributes: { autofocus: '', name: 'abp-checkbox' } },
         },
-      )),
+      );
+      setInputSignal(spectator.component.checkboxId, 'checkbox-id');
+      setInputSignal(spectator.component.checkboxReadonly, true);
+      spectator.detectChanges();
+    },
   );
 
   it('should display the input', () => {
@@ -29,13 +35,13 @@ describe('FormCheckboxComponent', () => {
   });
 
   it('should be readonly when checkboxReadonly is true', () => {
-    spectator.component.checkboxReadonly = true;
+    setInputSignal(spectator.component.checkboxReadonly, true);
     spectator.detectComponentChanges();
     expect(spectator.query('[readonly]')).toBeTruthy();
   });
 
   it('should not contain readonly when checboxReadonly is false', () => {
-    spectator.component.checkboxReadonly = false;
+    setInputSignal(spectator.component.checkboxReadonly, false);
     spectator.detectComponentChanges();
     expect(spectator.query('[disabled]')).toBeFalsy();
   });

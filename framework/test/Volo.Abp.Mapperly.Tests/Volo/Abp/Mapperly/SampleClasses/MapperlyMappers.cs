@@ -83,3 +83,26 @@ public partial class TestEntityWithReadonlyExtraPropertiesMapper : MapperBase<Te
 
     public override partial void Map(TestEntityWithReadonlyExtraProperties source, TestEntityWithReadonlyExtraProperties destination);
 }
+
+public class ExtensibleReverseEntity : ExtensibleObject
+{
+    public Guid Id { get; set; }
+}
+
+public class ExtensibleReverseDto : ExtensibleObject
+{
+    public Guid Id { get; set; }
+}
+
+[Mapper]
+[MapExtraProperties(IgnoredProperties = ["Secret"])]
+public partial class ExtensibleReverseMapper : TwoWayMapperBase<ExtensibleReverseEntity, ExtensibleReverseDto>
+{
+    public override partial ExtensibleReverseDto Map(ExtensibleReverseEntity source);
+
+    public override partial void Map(ExtensibleReverseEntity source, ExtensibleReverseDto destination);
+
+    public override partial ExtensibleReverseEntity ReverseMap(ExtensibleReverseDto source);
+
+    public override partial void ReverseMap(ExtensibleReverseDto source, ExtensibleReverseEntity destination);
+}

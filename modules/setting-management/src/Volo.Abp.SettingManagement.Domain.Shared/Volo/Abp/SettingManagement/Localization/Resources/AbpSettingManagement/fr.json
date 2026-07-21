@@ -37,6 +37,7 @@
     "Feature:SettingManagementEnableDescription": "Activer le système de gestion des paramètres dans l'application.",
     "Feature:AllowChangingEmailSettings": "Autoriser la modification des paramètres de messagerie",
     "Feature:AllowChangingEmailSettingsDescription": "Autoriser la modification des paramètres de messagerie.",
-    "SmtpPasswordPlaceholder": "Entrez une valeur pour mettre à jour le mot de passe"
+    "SmtpPasswordPlaceholder": "Entrez une valeur pour mettre à jour le mot de passe",
+    "NoSettingsAvailable": "Aucun paramètre à afficher."
   }
 }

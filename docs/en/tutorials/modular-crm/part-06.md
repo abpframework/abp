@@ -8,6 +8,14 @@
 # Integrating the Modules: Implementing Integration Services
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC", "BlazorWebApp", "NG"],
+    "BlazorUI": ["Blazorise", "MudBlazor"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Previous": {
@@ -138,7 +146,11 @@ Open the ABP Studio UI and stop the application if it is already running. Then o
 
 In the opening dialog, select the *This solution* tab, find and check the `ModularCrm.Catalog.Contracts` package and click the OK button:
 
+{{if UI == "MVC"}}
 ![abp-studio-add-package-reference-dialog-3](images/abp-studio-add-package-reference-dialog-3.png)
+{{else if UI == "BlazorWebApp"}}
+![abp-studio-add-package-reference-dialog-3](images/abp-studio-add-package-reference-dialog-3-blazor-webapp.png)
+{{end}}
 
 ABP Studio adds the package reference and arranges the [module](../../framework/architecture/modularity/basics.md) dependency.
 
@@ -249,7 +261,9 @@ Let's see what we've changed:
   * In the last line, we are converting the product list to a dictionary, where the key is `Guid Id` and the value is `string Name`. That way, we can easily find a product's name with its ID.
   * Finally, we are mapping the orders to `OrderDto` objects and setting the product name by looking up the product ID in the dictionary.
 
-Open the `Index.cshtml` file, and change the `@order.ProductId` part by `@Order.ProductName` to write the product name instead of the product ID. The final `Index.cshtml` content should be the following:
+{{if UI == "MVC"}}
+
+Open the `Index.cshtml` file, and change the `@order.ProductId` part to `@order.ProductName` to write the product name instead of the product ID. The final `Index.cshtml` content should be the following:
 
 ````html
 @page
@@ -279,10 +293,112 @@ That's all. Now, you can graph build the main application and run it in ABP Stud
 
 As you can see, we can see the product names instead of product IDs.
 
+{{else if UI == "BlazorWebApp"}}
+
+Open the `Index.razor` file, and change the `@order.ProductId` part to `@order.ProductName` to write the product name instead of the product ID. The final `Index.razor` content should be the following:
+
+{{if BlazorUI == "Blazorise"}}
+
+````razor
+@page "/ordering"
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using ModularCrm.Ordering
+@inject IOrderAppService OrderAppService
+
+<h1>Orders</h1>
+
+<Card>
+    <CardBody>
+        <ListGroup>
+            @foreach (var order in Orders)
+            {
+                <ListGroupItem>
+                    <strong>Customer:</strong> @order.CustomerName <br />
+                    <strong>Product:</strong> @order.ProductName <br />
+                    <strong>State:</strong> @order.State
+                </ListGroupItem>
+            }
+        </ListGroup>
+    </CardBody>
+</Card>
+
+@code {
+    private List<OrderDto> Orders { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Orders = await OrderAppService.GetListAsync();
+    }
+}
+````
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+````razor
+@page "/ordering"
+@using System.Collections.Generic
+@using System.Threading.Tasks
+@using ModularCrm.Ordering
+@inject IOrderAppService OrderAppService
+
+<MudText Typo="Typo.h4">Orders</MudText>
+
+<MudCard>
+    <MudCardContent>
+        <MudList T="OrderDto">
+            @foreach (var order in Orders)
+            {
+                <MudListItem T="OrderDto" Value="@order">
+                    <strong>Customer:</strong> @order.CustomerName <br />
+                    <strong>Product:</strong> @order.ProductName <br />
+                    <strong>State:</strong> @order.State
+                </MudListItem>
+            }
+        </MudList>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    private List<OrderDto> Orders { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Orders = await OrderAppService.GetListAsync();
+    }
+}
+````
+
+{{end}}
+
+That's all. Now, you can graph build the main application and run it in ABP Studio to see the result:
+
+![abp-studio-browser-list-of-orders-with-product-name](images/abp-studio-browser-list-of-orders-with-product-name.png)
+
+As you can see, we can see the product names instead of product IDs.
+
+{{else if UI == "NG"}}
+
+Open the `ordering.component.html` file in the `modules/modularcrm.ordering/angular/projects/ordering/src/lib/components` folder, and replace the `productId` display with `productName`:
+
+```html
+<strong>Product:</strong> {%{{{ order.productName }}}%} <br />
+```
+
+If your generated Angular proxy files are not up to date, run `abp generate-proxy -t ng` in the `modules/modularcrm.ordering/angular` folder.
+
+Then run the Angular app (`yarn start` in the `angular` folder), navigate to the *Ordering* page, and verify product names are shown instead of product IDs.
+
+![abp-studio-browser-list-of-orders-with-product-name](images/abp-studio-browser-list-of-orders-with-product-name.png)
+
+{{end}}
+
 > **Design Tip**
 >
 > It is suggested that you keep that type of communication to a minimum and not couple your modules with each other. It can make your solution complicated and may also decrease your system performance. When you need to do it, think about performance and try to make some optimizations. For example, if the Ordering module frequently needs product data, you can use a kind of [cache layer](../../framework/fundamentals/caching.md), so it doesn't make frequent requests to the Catalog module. Especially if you consider converting your system to a microservice solution in the future, too many direct integration API calls can be a performance bottleneck.
 
 ## Conclusion
 
-In the way explained in this part of this tutorial, you can easily create integration services for your modules and consume these integration services in any other module. In the [next part](part-07.md), we will explore event based messaging between the modules.
+In this part of the tutorial, you created and consumed an integration service between modules, then reflected the product name on the {{if UI == "MVC"}}MVC{{else if UI == "BlazorWebApp"}}Blazor WebApp{{else if UI == "NG"}}Angular{{end}} UI. In the [next part](part-07.md), we will explore event based messaging between the modules.

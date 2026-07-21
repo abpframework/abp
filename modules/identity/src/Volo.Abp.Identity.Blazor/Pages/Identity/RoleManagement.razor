@@ -1,4 +1,5 @@
 ﻿@page "/identity/roles"
+@page "/{culture}/identity/roles"
 @attribute [Authorize(IdentityPermissions.Roles.Default)]
 @using Volo.Abp.Identity
 @using Microsoft.AspNetCore.Authorization
@@ -39,8 +40,8 @@
 @* ************************* CREATE MODAL ************************* *@
 @if (HasCreatePermission)
 {
-    <Modal @ref="CreateModal" Closing="@ClosingCreateModal">
-        <ModalContent Centered="true">
+    <Modal @ref="CreateModal" Closing="@ClosingCreateModal" Centered="true">
+        <ModalContent>
             <Form id="CreateRoleForm">
                 <ModalHeader>
                     <ModalTitle>@L["NewRole"]</ModalTitle>
@@ -51,17 +52,17 @@
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>@L["DisplayName:RoleName"] *</FieldLabel>
-                                <TextEdit @bind-Text="@NewEntity.Name" Autofocus="true">
+                                <TextInput @bind-Value="@NewEntity.Name" Autofocus="true">
                                     <Feedback>
                                         <ValidationError/>
                                     </Feedback>
-                                </TextEdit>
+                                </TextInput>
                             </Field>
                             <ExtensionProperties TEntityType="IdentityRoleCreateDto" TResourceType="IdentityResource" Entity="@NewEntity" LH="@LH" ModalType="ExtensionPropertyModalType.CreateModal" />
                         </Validation>
                         <Field>
-                            <Check TValue="bool" @bind-Checked="@NewEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
-                            <Check TValue="bool" @bind-Checked="@NewEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
+                            <Check TValue="bool" @bind-Value="@NewEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
+                            <Check TValue="bool" @bind-Value="@NewEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
                         </Field>
                     </Validations>
                 </ModalBody>
@@ -76,8 +77,8 @@
 @* ************************* EDIT MODAL ************************* *@
 @if (HasUpdatePermission)
 {
-    <Modal @ref="EditModal" Closing="@ClosingEditModal">
-        <ModalContent Centered="true">
+    <Modal @ref="EditModal" Closing="@ClosingEditModal" Centered="true">
+        <ModalContent>
             <Form id="EditRoleForm">
                 <ModalHeader>
                     <ModalTitle>@L["Edit"]</ModalTitle>
@@ -89,17 +90,17 @@
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>@L["DisplayName:RoleName"] *</FieldLabel>
-                                <TextEdit @bind-Text="EditingEntity.Name" Autofocus="true">
+                                <TextInput @bind-Value="EditingEntity.Name" Autofocus="true">
                                     <Feedback>
                                         <ValidationError/>
                                     </Feedback>
-                                </TextEdit>
+                                </TextInput>
                             </Field>
                             <ExtensionProperties TEntityType="IdentityRoleUpdateDto" TResourceType="IdentityResource" Entity="@EditingEntity" LH="@LH"  ModalType="ExtensionPropertyModalType.EditModal" />
                         </Validation>
                         <Field>
-                            <Check TValue="bool" @bind-Checked="@EditingEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
-                            <Check TValue="bool" @bind-Checked="@EditingEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
+                            <Check TValue="bool" @bind-Value="@EditingEntity.IsDefault">@L["DisplayName:IsDefault"]</Check>
+                            <Check TValue="bool" @bind-Value="@EditingEntity.IsPublic">@L["DisplayName:IsPublic"]</Check>
                         </Field>
                     </Validations>
                 </ModalBody>

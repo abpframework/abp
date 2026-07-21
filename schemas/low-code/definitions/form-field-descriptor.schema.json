@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "form-field-descriptor.schema.json",
+  "title": "FormFieldDescriptor",
+  "description": "Describes a single field in a form. A field may be bound to an entity property or unbound for computed/display-only UI.",
+  "markdownDescription": "AI guidance: use a stable camelCase `id` for each field. For ordinary data entry, set `binding` to an entity property and choose a field `type` compatible with that property. For enum selects, set `type: \"select\"` and `enumType`. For FK lookups, use `type: \"lookup\"` and bind to the FK property. Place fields into the layout by adding a placement that references this id in a group's `fields`.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for this field within the form. Prefer camelCase, for example 'title' or 'customerId'. Layout placements and rules reference this id.",
+      "minLength": 1
+    },
+    "label": {
+      "type": "string",
+      "description": "Display label for the field.",
+      "minLength": 1
+    },
+    "type": {
+      "$ref": "form-field-type.schema.json",
+      "description": "Visual/input control type. Choose a type compatible with the bound entity property."
+    },
+    "binding": {
+      "type": ["string", "null"],
+      "description": "Entity property name to bind to, or null/omitted for unbound fields. Supports dotted paths like 'Parent.Name' for related entity display where supported."
+    },
+    "enumType": {
+      "type": "string",
+      "description": "Enum name for select fields bound to enum properties. Must match the entity property's enumType or a known code enum."
+    },
+    "defaultValue": {
+      "description": "Default field value used by the UI when creating a new record. Prefer entity property defaultValue for persisted defaults."
+    },
+    "placeholder": {
+      "type": "string",
+      "description": "Placeholder text for the input"
+    },
+    "helpText": {
+      "type": "string",
+      "description": "Help text displayed below the field"
+    },
+    "readOnly": {
+      "type": "boolean",
+      "description": "Whether the field is read-only in the form UI. This does not by itself protect backend writes; use allowSetByClients/serverOnly for security.",
+      "default": false
+    },
+    "modeVisibility": {
+      "type": "string",
+      "enum": ["both", "Both", "createOnly", "CreateOnly", "editOnly", "EditOnly"],
+      "description": "Controls in which form mode the field is visible: both, createOnly, or editOnly.",
+      "default": "both"
+    },
+    "validations": {
+      "type": "array",
+      "description": "Form-level validation rules that supplement entity-level validators. Use when validation is specific to this form.",
+      "items": {
+        "$ref": "validator-descriptor.schema.json"
+      }
+    }
+  },
+  "required": ["id", "label", "type"],
+  "additionalProperties": false,
+  "examples": [
+    { "id": "title", "label": "Title", "type": "text", "binding": "Title", "validations": [{ "type": "required" }] },
+    { "id": "status", "label": "Status", "type": "select", "binding": "Status", "enumType": "Acme.Events.EventStatus" },
+    { "id": "customerId", "label": "Customer", "type": "lookup", "binding": "CustomerId" }
+  ]
+}

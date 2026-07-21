@@ -1,10 +1,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.Authentication;
-using Volo.Abp.Users;
 
 namespace Volo.Abp.Http.Client.IdentityModel.Web;
 
@@ -26,7 +24,7 @@ public class HttpContextAbpAccessTokenProvider : IAbpAccessTokenProvider, ITrans
             return null;
         }
 
-        if (!httpContext.RequestServices.GetRequiredService<ICurrentUser>().IsAuthenticated)
+        if (httpContext.User.Identity?.IsAuthenticated != true)
         {
             return null;
         }

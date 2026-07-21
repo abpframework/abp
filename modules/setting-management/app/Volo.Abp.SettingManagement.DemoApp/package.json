@@ -1,8 +1,8 @@
 {
-  "version": "0.1.0",
-  "name": "demo-app",
-  "private": true,
-  "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.basic": "~10.1.0-rc.3"
-  }
+    "version": "0.1.0",
+    "name": "demo-app",
+    "private": true,
+    "dependencies": {
+        "@abp/aspnetcore.mvc.ui.theme.basic": "~10.6.0-rc.2"
+    }
 }

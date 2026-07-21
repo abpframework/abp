@@ -265,3 +265,4 @@ So, don't confuse if you don't receive emails on DEBUG mode. Emails will be sent
 ## See Also
 
 * [MailKit integration for sending emails](./mail-kit.md)
+* [Application URLs](./app-urls.md) — for building cross-application links inside email content (e.g. password reset links).

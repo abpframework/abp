@@ -357,6 +357,8 @@ context.Services
 
 ```
 
+The configuration above resolves the current tenant from the incoming request (inbound). To make the **outbound** URLs your application generates — such as the password reset link inside an Account email — point to the tenant's subdomain as well, configure `AppUrlOptions`. See [Application URLs](../../infrastructure/app-urls.md#multi-tenant-aware-urls).
+
 ##### Custom Tenant Resolvers
 
 You can add implement your custom tenant resolver and configure the `AbpTenantResolveOptions` in your module's `ConfigureServices` method as like below:

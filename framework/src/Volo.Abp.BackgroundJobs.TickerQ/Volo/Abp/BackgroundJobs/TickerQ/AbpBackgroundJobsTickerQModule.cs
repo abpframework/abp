@@ -23,26 +23,14 @@ public class AbpBackgroundJobsTickerQModule : AbpModule
     {
         var abpBackgroundJobOptions = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundJobOptions>>();
         var abpBackgroundJobsTickerQOptions = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundJobsTickerQOptions>>();
-        var tickerFunctionDelegates = new Dictionary<string, (string, TickerTaskPriority, TickerFunctionDelegate)>();
-        var requestTypes = new Dictionary<string, (string, Type)>();
+        var abpTickerQFunctionProvider = context.ServiceProvider.GetRequiredService<AbpTickerQFunctionProvider>();
         foreach (var jobConfiguration in abpBackgroundJobOptions.Value.GetJobs())
         {
             var genericMethod = GetTickerFunctionDelegateMethod.MakeGenericMethod(jobConfiguration.ArgsType);
             var tickerFunctionDelegate = (TickerFunctionDelegate)genericMethod.Invoke(null, [jobConfiguration.ArgsType])!;
             var config = abpBackgroundJobsTickerQOptions.Value.GetConfigurationOrNull(jobConfiguration.JobType);
-            tickerFunctionDelegates.TryAdd(jobConfiguration.JobName, (string.Empty, config?.Priority ?? TickerTaskPriority.Normal, tickerFunctionDelegate));
-            requestTypes.TryAdd(jobConfiguration.JobName, (jobConfiguration.ArgsType.FullName, jobConfiguration.ArgsType)!);
-        }
-
-        var abpTickerQFunctionProvider = context.ServiceProvider.GetRequiredService<AbpTickerQFunctionProvider>();
-        foreach (var functionDelegate in tickerFunctionDelegates)
-        {
-            abpTickerQFunctionProvider.Functions.TryAdd(functionDelegate.Key, functionDelegate.Value);
-        }
-
-        foreach (var requestType in requestTypes)
-        {
-            abpTickerQFunctionProvider.RequestTypes.TryAdd(requestType.Key, requestType.Value);
+            abpTickerQFunctionProvider.AddFunction(jobConfiguration.JobName, tickerFunctionDelegate, config?.Priority ?? TickerTaskPriority.Normal, config?.MaxConcurrency ?? 0);
+            abpTickerQFunctionProvider.RequestTypes.TryAdd(jobConfiguration.JobName, (jobConfiguration.ArgsType.FullName, jobConfiguration.ArgsType)!);
         }
     }
 
@@ -65,7 +53,7 @@ public class AbpBackgroundJobsTickerQModule : AbpModule
             using (var scope = serviceProvider.CreateScope())
             {
                 var jobExecuter = serviceProvider.GetRequiredService<IBackgroundJobExecuter>();
-                var args = await TickerRequestProvider.GetRequestAsync<TArgs>(serviceProvider, context.Id, context.Type);
+                var args = await TickerRequestProvider.GetRequestAsync<TArgs>(context, cancellationToken);
                 var jobType = options.GetJob(typeof(TArgs)).JobType;
                 var jobExecutionContext = new JobExecutionContext(scope.ServiceProvider, jobType, args!, cancellationToken: cancellationToken);
                 await jobExecuter.ExecuteAsync(jobExecutionContext);

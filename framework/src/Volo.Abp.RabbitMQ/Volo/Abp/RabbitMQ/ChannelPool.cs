@@ -61,28 +61,44 @@ public class ChannelPool : IChannelPool, ISingletonDependency
             }
         }
 
-        poolItem.Acquire();
-
         if (poolItem.Channel.IsClosed)
         {
-            await poolItem.DisposeAsync();
-            Channels.TryRemove(channelName, out _);
-
-            using (await Semaphore.LockAsync())
+            ChannelPoolItem? staleItem = null;
+            try
             {
-                if (Channels.TryGetValue(channelName, out var existingChannelPoolItem3))
+                using (await Semaphore.LockAsync())
                 {
-                    poolItem = existingChannelPoolItem3;
-                }
-                else
-                {
-                    poolItem = new ChannelPoolItem(await CreateChannelAsync(channelName, connectionName));
-                    Channels.TryAdd(channelName, poolItem);
+                    if (Channels.TryGetValue(channelName, out var currentChannelPoolItem) &&
+                        ReferenceEquals(currentChannelPoolItem, poolItem))
+                    {
+                        staleItem = poolItem;
+                        Channels.TryRemove(channelName, out _);
+
+                        poolItem = new ChannelPoolItem(await CreateChannelAsync(channelName, connectionName));
+                        Channels.TryAdd(channelName, poolItem);
+                    }
+                    else if (currentChannelPoolItem != null)
+                    {
+                        poolItem = currentChannelPoolItem;
+                    }
+                    else
+                    {
+                        poolItem = new ChannelPoolItem(await CreateChannelAsync(channelName, connectionName));
+                        Channels.TryAdd(channelName, poolItem);
+                    }
                 }
             }
-
-            poolItem.Acquire();
+            finally
+            {
+                if (staleItem != null)
+                {
+                    staleItem.WaitIfInUse(TotalDisposeWaitDuration);
+                    await staleItem.DisposeAsync();
+                }
+            }
         }
+
+        poolItem.Acquire();
 
         return new ChannelAccessor(
             poolItem.Channel,

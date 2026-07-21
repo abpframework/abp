@@ -7,23 +7,56 @@
 
 # ABP OAuth Package
 
-The authentication functionality has been moved from @abp/ng.core to @abp/ng.ouath since v7.0.
+The authentication implementation was moved from `@abp/ng.core` to `@abp/ng.oauth` in v7.0. The core package defines the authentication abstractions and tokens, while the OAuth package supplies their `angular-oauth2-oidc` implementations.
 
-If your app is version 8.3 or higher, you should include "provideAbpOAuth()" after "provideAbpCore()" in the `appConfig` array  of your `app.config.ts`.
+The package is included in the Angular application templates. Install it if the application does not already reference it:
 
-Those abstractions can be found in the @abp/ng-core packages.
+```bash
+npm install @abp/ng.oauth
+```
 
-- `AuthService` (the class that implements the IAuthService interface).
-- `NAVIGATE_TO_MANAGE_PROFILE` Inject token.
-- `ApiInterceptor` (the class that implements the IApiInterceptor interface).
+## Standalone Setup
 
-Those base classes are overridden by the "AbpOAuthModule" for oAuth. There are also three functions provided with AbpOAuthModule.
+Add `provideAbpOAuth()` after `provideAbpCore()` in the `providers` array of `app.config.ts`:
 
-- `PIPE_TO_LOGIN_FN_KEY` a provide that calls a function when the user is not authenticated. The function should be PipeToLoginFn type.
-- `SET_TOKEN_RESPONSE_TO_STORAGE_FN_KEY` a provide that calls a function when the user is authenticated. The function should be SetTokenResponseToStorageFn type.
-- `CHECK_AUTHENTICATION_STATE_FN_KEY` a provide that calls a function when the user is authenticated and stores the auth state. The function should be CheckAuthenticationStateFn type.
-  The tokens and interfaces are in the `@abp/ng.core` package but the implementation of these interfaces is in the `@abp/ng.oauth` package.
+```ts
+import { ApplicationConfig } from '@angular/core';
+import { provideAbpCore, withOptions } from '@abp/ng.core';
+import { registerLocaleForEsBuild } from '@abp/ng.core/locale';
+import { provideAbpOAuth } from '@abp/ng.oauth';
+import { environment } from '../environments/environment';
 
-If you want to make your own authentication system, you must also change these 'abstract' classes.
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideAbpCore(
+      withOptions({
+        environment,
+        registerLocaleFn: registerLocaleForEsBuild(),
+      }),
+    ),
+    provideAbpOAuth(),
+  ],
+};
+```
 
-ApiInterceptor is provided by `@abp/ng.core` but overridden with `@abp/ng.oauth`. The ApiInterceptor adds the token, accepted-language, and tenant id to the header of the HTTP request. It also calls the http-wait service.
+`AbpOAuthModule.forRoot()` is deprecated. Use the standalone provider for new applications.
+
+## Registered Authentication Services
+
+`provideAbpOAuth()` registers or replaces these public core abstractions:
+
+- `AuthService`, `AuthGuard`, `authGuard` and `asyncAuthGuard` with their OAuth implementations.
+- `ApiInterceptor` and its `HTTP_INTERCEPTORS` registration.
+- `PIPE_TO_LOGIN_FN_KEY` with the function used when authentication is required.
+- `CHECK_AUTHENTICATION_STATE_FN_KEY` with the function that checks and stores the current authentication state.
+- `NAVIGATE_TO_MANAGE_PROFILE` with navigation to the authority's account-management page.
+- `AuthErrorFilterService` with the OAuth error filter.
+- `OAuthStorage`, using `BrowserTokenStorageService` or `ServerTokenStorageService` for an SSR-started application and `MemoryTokenStorageService` otherwise.
+
+It also registers the OAuth configuration initializer and the providers from `angular-oauth2-oidc`.
+
+## API Interceptor
+
+For non-external requests, the OAuth API interceptor adds the `X-Requested-With` header and, when the corresponding values are available, an `Authorization` bearer token, `Accept-Language` and the configured tenant header. Existing authorization, language and tenant headers are preserved. Requests marked with the `IS_EXTERNAL_REQUEST` HTTP context token are sent without those ABP headers. The interceptor also integrates every request with the HTTP wait service.
+
+To implement another authentication system, provide replacements for the core services and tokens used by the application instead of depending on the OAuth implementations.

@@ -20,6 +20,14 @@ public class TypeApiDescriptionModel
 
     public PropertyApiDescriptionModel[]? Properties { get; set; }
 
+    public string? Summary { get; set; }
+
+    public string? Remarks { get; set; }
+
+    public string? Description { get; set; }
+
+    public string? DisplayName { get; set; }
+
     public TypeApiDescriptionModel()
     {
 

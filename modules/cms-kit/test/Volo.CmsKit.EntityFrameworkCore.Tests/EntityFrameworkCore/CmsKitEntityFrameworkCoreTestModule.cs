@@ -1,8 +1,6 @@
-﻿using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
+using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Modularity;
@@ -18,6 +16,8 @@ namespace Volo.CmsKit.EntityFrameworkCore;
     )]
 public class CmsKitEntityFrameworkCoreTestModule : AbpModule
 {
+    private AbpUnitTestSqliteDatabase _database;
+
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         PreConfigure<AbpSqliteOptions>(x => x.BusyTimeout = null);
@@ -26,30 +26,28 @@ public class CmsKitEntityFrameworkCoreTestModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        var sqliteConnection = CreateDatabaseAndGetConnection();
+        _database = new AbpUnitTestSqliteDatabase();
+        _database.CreateTables(
+            new CmsKitDbContext(new DbContextOptionsBuilder<CmsKitDbContext>().UseSqlite(_database.ConnectionString).Options),
+            new SettingManagementDbContext(new DbContextOptionsBuilder<SettingManagementDbContext>().UseSqlite(_database.ConnectionString).Options));
+
+        Configure<AbpDbConnectionOptions>(options =>
+        {
+            options.ConnectionStrings.Default = _database.ConnectionString;
+        });
 
         Configure<AbpDbContextOptions>(options =>
         {
             options.Configure(abpDbContextConfigurationContext =>
             {
-                abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
+                abpDbContextConfigurationContext.UseSqlite();
             });
         });
     }
 
-    private static SqliteConnection CreateDatabaseAndGetConnection()
+    public override void OnApplicationShutdown(ApplicationShutdownContext context)
     {
-        var connection = new AbpUnitTestSqliteConnection("Data Source=:memory:");
-        connection.Open();
-
-        new CmsKitDbContext(
-            new DbContextOptionsBuilder<CmsKitDbContext>().UseSqlite(connection).Options
-        ).GetService<IRelationalDatabaseCreator>().CreateTables();
-
-        new SettingManagementDbContext(
-            new DbContextOptionsBuilder<SettingManagementDbContext>().UseSqlite(connection).Options
-        ).GetService<IRelationalDatabaseCreator>().CreateTables();
-
-        return connection;
+        _database?.Dispose();
     }
+
 }

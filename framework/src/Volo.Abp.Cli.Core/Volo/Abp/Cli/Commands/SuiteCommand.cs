@@ -252,7 +252,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
         var dotnetToolList = CmdHelper.RunCmdAndGetOutput("dotnet tool list -g", out int exitCode);
 
         var suiteLine = dotnetToolList.Split(Environment.NewLine)
-            .FirstOrDefault(l => l.ToLower().StartsWith("volo.abp.suite "));
+            .FirstOrDefault(l => l.ToLowerInvariant().StartsWith("volo.abp.suite "));
 
         if (string.IsNullOrEmpty(suiteLine))
         {
@@ -542,7 +542,7 @@ public class SuiteCommand : IConsoleCommand, ITransientDependency
     private IEnumerable<Process> GetProcessesRelatedWithSuite()
     {
         return (from p in Process.GetProcesses()
-            where p.ProcessName.ToLower().Contains("abp-suite")
+            where p.ProcessName.ToLowerInvariant().Contains("abp-suite")
             select p);
     }
 

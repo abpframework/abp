@@ -197,29 +197,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
     protected virtual EfCoreDatabaseProvider? GetDatabaseProviderOrNull(ModelBuilder modelBuilder)
     {
-        switch (Database.ProviderName)
-        {
-            case "Microsoft.EntityFrameworkCore.SqlServer":
-                return EfCoreDatabaseProvider.SqlServer;
-            case "Npgsql.EntityFrameworkCore.PostgreSQL":
-                return EfCoreDatabaseProvider.PostgreSql;
-            case "Pomelo.EntityFrameworkCore.MySql":
-            case "MySql.Data.MySqlClient":
-                return EfCoreDatabaseProvider.MySql;
-            case "Oracle.EntityFrameworkCore":
-            case "Devart.Data.Oracle.Entity.EFCore":
-                return EfCoreDatabaseProvider.Oracle;
-            case "Microsoft.EntityFrameworkCore.Sqlite":
-                return EfCoreDatabaseProvider.Sqlite;
-            case "Microsoft.EntityFrameworkCore.InMemory":
-                return EfCoreDatabaseProvider.InMemory;
-            case "FirebirdSql.EntityFrameworkCore.Firebird":
-                return EfCoreDatabaseProvider.Firebird;
-            case "Microsoft.EntityFrameworkCore.Cosmos":
-                return EfCoreDatabaseProvider.Cosmos;
-            default:
-                return null;
-        }
+        return EfCoreDatabaseProviderHelper.GetDatabaseProviderOrNull(Database.ProviderName);
     }
 
     public async override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
@@ -277,7 +255,19 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         finally
         {
             ChangeTracker.AutoDetectChangesEnabled = true;
-            AbpEfCoreNavigationHelper.RemoveChangedEntityEntries();
+            AbpEfCoreNavigationHelper.ResetChangedFlags();
+            if (UnitOfWorkManager.Current != null)
+            {
+                UnitOfWorkManager.Current.OnCompleted(() =>
+                {
+                    AbpEfCoreNavigationHelper.Clear();
+                    return Task.CompletedTask;
+                });
+            }
+            else
+            {
+                AbpEfCoreNavigationHelper.Clear();
+            }
         }
     }
 
@@ -967,8 +957,8 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
         if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
         {
-            var softDeleteColumnName = entityTypeBuilder.Metadata.FindProperty(nameof(ISoftDelete.IsDeleted))?.GetColumnName() ?? "IsDeleted";
-            expression = e => !IsSoftDeleteFilterEnabled || !EF.Property<bool>(e, softDeleteColumnName);
+            var softDeletePropertyName = entityTypeBuilder.Metadata.FindProperty(nameof(ISoftDelete.IsDeleted))?.Name ?? nameof(ISoftDelete.IsDeleted);
+            expression = e => !IsSoftDeleteFilterEnabled || !EF.Property<bool>(e, softDeletePropertyName);
             if (UseDbFunction())
             {
                 expression = e => AbpEfCoreDataFilterDbFunctionMethods.SoftDeleteFilter(((ISoftDelete)e).IsDeleted, true);
@@ -981,8 +971,8 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
         if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
         {
-            var multiTenantColumnName = entityTypeBuilder.Metadata.FindProperty(nameof(IMultiTenant.TenantId))?.GetColumnName() ?? "TenantId";
-            Expression<Func<TEntity, bool>> multiTenantFilter = e => !IsMultiTenantFilterEnabled || EF.Property<Guid>(e, multiTenantColumnName) == CurrentTenantId;
+            var multiTenantPropertyName = entityTypeBuilder.Metadata.FindProperty(nameof(IMultiTenant.TenantId))?.Name ?? nameof(IMultiTenant.TenantId);
+            Expression<Func<TEntity, bool>> multiTenantFilter = e => !IsMultiTenantFilterEnabled || EF.Property<Guid>(e, multiTenantPropertyName) == CurrentTenantId;
             if (UseDbFunction())
             {
                 multiTenantFilter = e => AbpEfCoreDataFilterDbFunctionMethods.MultiTenantFilter(((IMultiTenant)e).TenantId, CurrentTenantId, true);
@@ -994,7 +984,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         return expression;
     }
 
-    protected virtual bool UseDbFunction()
+    public virtual bool UseDbFunction()
     {
         return LazyServiceProvider != null && GlobalFilterOptions.Value.UseDbFunction && DbContextOptions.FindExtension<AbpDbContextOptionsExtension>() != null;
     }

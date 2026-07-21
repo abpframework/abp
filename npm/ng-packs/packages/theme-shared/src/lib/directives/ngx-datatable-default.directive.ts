@@ -3,10 +3,10 @@ import {
   AfterViewInit,
   Directive,
   HostBinding,
-  Input,
   OnDestroy,
   inject,
   PLATFORM_ID,
+  input
 } from '@angular/core';
 import { ColumnMode, DatatableComponent } from '@swimlane/ngx-datatable';
 import { fromEvent, Subscription } from 'rxjs';
@@ -25,11 +25,11 @@ export class NgxDatatableDefaultDirective implements AfterViewInit, OnDestroy {
   private subscription = new Subscription();
   private resizeDiff = 0;
 
-  @Input() class = 'material bordered';
+  readonly class = input('material bordered');
 
   @HostBinding('class')
   get classes(): string {
-    return `ngx-datatable ${this.class}`;
+    return `ngx-datatable ${this.class()}`;
   }
 
   constructor() {

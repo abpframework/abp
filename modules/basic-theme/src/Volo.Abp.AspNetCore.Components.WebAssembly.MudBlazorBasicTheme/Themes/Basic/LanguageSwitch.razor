@@ -1,0 +1,90 @@
+@using Volo.Abp.Localization
+@using System.Globalization
+@using System.Collections.Immutable
+@using Microsoft.JSInterop
+@using Volo.Abp.AspNetCore.Components.Web
+@using MudBlazor
+@inject ILanguageProvider LanguageProvider
+@inject IJSRuntime JsRuntime
+@inject ICookieService CookieService
+
+@if (_otherLanguages != null && _otherLanguages.Any())
+{
+    <MudMenu>
+        <ActivatorContent Context="menuCtx">
+            <MudIconButton OnClick="@(async () => await menuCtx.ToggleAsync())" Icon="@Icons.Material.Outlined.Translate" Color="Color.Inherit" />
+        </ActivatorContent>
+        <ChildContent>
+        <MudMenuItem Disabled="true">@_currentLanguage.DisplayName</MudMenuItem>
+        <MudDivider />
+        @foreach (var language in _otherLanguages)
+        {
+            <MudMenuItem OnClick="@(() => ChangeLanguageAsync(language))">@language.DisplayName</MudMenuItem>
+        }
+        </ChildContent>
+    </MudMenu>
+}
+
+@code {
+    private IReadOnlyList<LanguageInfo>? _otherLanguages;
+    private LanguageInfo? _currentLanguage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var selectedLanguageName = await JsRuntime.InvokeAsync<string>(
+            "localStorage.getItem",
+            "Abp.SelectedLanguage"
+            );
+
+        var allLanguages = await LanguageProvider.GetLanguagesAsync();
+        _otherLanguages = allLanguages;
+
+        if (!_otherLanguages.Any())
+        {
+            return;
+        }
+
+        if (!selectedLanguageName.IsNullOrWhiteSpace())
+        {
+            _currentLanguage = _otherLanguages.FirstOrDefault(l => l.UiCultureName == selectedLanguageName);
+        }
+
+        if (_currentLanguage == null)
+        {
+            _currentLanguage = _otherLanguages.FirstOrDefault(l => l.UiCultureName == CultureInfo.CurrentUICulture.Name);
+        }
+
+        if (_currentLanguage == null)
+        {
+            _currentLanguage = _otherLanguages.FirstOrDefault();
+        }
+
+        _otherLanguages = _otherLanguages.Where(l => l != _currentLanguage).ToImmutableList();
+    }
+
+    private async Task ChangeLanguageAsync(LanguageInfo language)
+    {
+        await JsRuntime.InvokeVoidAsync(
+            "localStorage.setItem",
+            "Abp.SelectedLanguage",
+            language.UiCultureName
+        );
+
+        await JsRuntime.InvokeVoidAsync(
+            "localStorage.setItem",
+            "Abp.IsRtl",
+            CultureInfo.GetCultureInfo(language.UiCultureName).TextInfo.IsRightToLeft
+        );
+
+        await CookieService.SetAsync(
+            ".AspNetCore.Culture",
+            $"c={language.CultureName}|uic={language.UiCultureName}",
+            new CookieOptions
+            {
+                Path = "/"
+            }
+        );
+
+        await JsRuntime.InvokeVoidAsync("location.reload");
+    }
+}

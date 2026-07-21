@@ -9,7 +9,174 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 2.1.4 (2025-12-30) Latest
+## 3.0.7 (2026-07-13) Latest
+
+* Upgrade Blazorise packages to version 2.1.3
+* Skip extension check for install-libs and wait for restarted CLI
+* Enhance admin console with exports, themes, and locale entries for ms template
+* Add localization to React public website templates
+* Optimize AI agent search token usage
+* Fix Mermaid diagram contrast in dark the: //github.com/volosoft/abp-studio/pull/5083
+* Fix Angular installation modal overflow when project list is long
+* ABP Agent: Add auto-delete option for inactive sessions
+
+## 3.0.6 (2026-06-18)
+
+* Stabilize Domain.Tests across platforms and fix ReactNative test regression
+* [Linux-x64 Support] Align Linux publish with RID-based packaging
+* Fix GitHub integration problem on production caused
+* Use deferred UI scheduler and marshal CEF updates
+
+## 3.0.5 (2026-06-17)
+
+* Set `DOTNET_INSTALL_DIR` on self-hosted runners in template build workflow
+* Fix mudblazor template delete conditions for dashboard pages
+* Replace modern template AppUser bulk seed backfill with admin bootstrap
+* Fix login button URL in app-nolayers Blazor.WebAssembly template
+* Improve `#blazor-error-ui` visibility on Blazor templates
+* Remove leftover `github-mud-test` source and npm rc patch from templates
+* Improve modern React template error handling
+* Remove sample CRUD from modern microservice template
+
+## 3.0.4 (2026-06-03)
+
+* Blazor UI Selector: Added a built-in choice between MudBlazor and Blazorise for Blazor solution templates
+* React Native Updates: Upgraded Expo to the latest version, improved keyboard handling, and ensured UI consistency
+* Linux Support Enhancements: Improved system tool detection, terminal launching, and added full Linux publish/runtime support
+* React Admin Security: Secured the React Admin Console sidebar menu by enforcing permission-based access gating
+* Mobile Documentation: Added comprehensive setup guides and rules for React Native mobile templates
+* Angular Microservice Fix: Resolved missing audit logging configurations and imports in microservice templates
+* Modern Templates Licensing: Updated Modern architecture templates to be available exclusively for commercial/paid tiers
+* Code & UI Stability: Fixed TypeScript compilation errors in React templates and resolved various minor system bugs
+
+## 3.0.3 (2026-05-20)
+
+* AI Agent Upgrades: Added browser automation tools and overall performance fixes
+* React Language Fix: Fixed language and localization settings being ignored in React templates
+* Admin Console Polish: Added icon support and visual enhancements to the React sidebar
+* Admin Mode Drag & Drop: Fixed solution file drag-and-drop when running as Administrator on Windows
+* Project Wizard Improvements: Added helpful guidance texts for modularity and options steps
+* User & Security Fixes: Enhanced user management and fixed account-linking login permissions
+* UI & System Tweaks: Polished modal window styles and resolved minor background template issues
+
+## 3.0.2 (2026-05-12)
+
+* AI Agent Enhancements: Optimized the core system prompt and continued overall agent improvements
+* Elsa Workflow Integration: Added Volo.Abp.Elsa to the available module selection list
+* Enhanced Security: Added automatic reCAPTCHA registration for CMS Kit contact forms in API templates
+* macOS Template Fix: Resolved compatibility issues specifically affecting modern templates on macOS
+* Dark Theme Polish: Updated the dark mode with a lighter, more balanced background color contrast
+* Template Configuration Fixes: Automatically configured missing root URL settings and improved initial task warning handling
+
+## 3.0.1 (2026-05-06)
+
+* Enhanced Project Wizard: Fixed the optional module selection step for a smoother project setup experience
+* React Admin Console Improvements: Resolved identified issues in the React administration templates for better stability
+* MacOS Performance: Optimized the internal build pipeline for a more reliable experience on Apple devices
+* Stability Fixes: Improved core UI components to ensure parameter consistency across updates
+
+## 3.0.0 (2026-05-06)
+
+* Introducing ABP AI Agent: A next-generation smart assistant to accelerate your development
+* Enhanced ABP Coding Agent: Smarter code generation and guidance integrated directly into your workflow
+* Modern UI Redesign: New "Bento-style" dashboard and a streamlined single sidebar for better focus
+* Drag & Drop Support: Easily open your projects by dragging .sln, .slnx, or .abpsln files into the app
+* Improved React Templates: Optimized authentication, local debugging, and a new "Thin UI" layered template option
+* CMS Kit Newsletter Integration: Ready-to-use newsletter component for public websites
+* Faster CLI Experience: Simplified abp login process and improved help output for better usability
+* Enhanced Solution Runner: Smarter project management and more reliable configuration handling
+* Simplified Project Structure: Legacy systems renamed to "Classic" for a cleaner transition to modern architectures
+* System Stability: Significant reduction in background noise/errors and optimized performance
+* Global Platform Update: Fully updated to the latest underlying framework versions (v10.3.0)
+
+## 2.2.7 (2026-04-20)
+
+* Improved Blazor WebApp template setup for easier tiered application development
+* Added application version tracking in analytics events
+* Fixed issues in Basic Theme public website templates
+* Improved PostgreSQL vector database support in templates
+* Enhanced Blazor CRUD support with built-in Book management example
+* Modernized React Native template components
+* Updated to ABP 10.3 and Blazorise 2.0.4
+* Improved run profile and PowerShell execution reliability
+* Added AI Management and Rate Limiting modules to available module options  
+
+
+## 2.2.6 (2026-04-08)
+
+* Disable Scriban 7.0 cumulative output limit for template rendering
+
+## 2.2.5 (2026-04-08)
+
+* Upgraded GPT-5 → GPT-5.4 and improved AI management (providers, blob storage, CLI options)
+* Fixed critical build issues (MongoDB, MAUI) and improved overall stability
+* Enhanced monitoring (HTTP requests & exceptions)
+* Added DBMS auto-detection from connection string
+* Upgraded to ABP 10.2 and Scriban 7.0.0
+* Improved developer experience and telemetry (PostHog)
+* Minor UI fixes and workflow adjustments (manual build trigger)
+
+## 2.2.4 (2026-03-25)
+
+* Add `Template Create and Build` workflow
+* Disable NuGetAudit in template common.props to prevent CLI deadlock during initial migration
+
+## 2.2.3 (2026-03-24)
+
+* Fix PostHog environment detection
+
+## 2.2.1 (2026-02-20)
+
+* Fix tiered Blazor WebApp template HttpApi reference
+* Add LeptonX theme templates AuthServer and HttpApi projects
+* Enable razor runtime compilation on templates
+* Configure HttpClientFactoryOptions for CLI client
+* Bump ABP to 10.1.1 and LeptonX to 5.1.1
+* Blazor & Angular UIs: Add AI Management option to the Startup Templates (app-nolayers, app, ms templates)
+* Handle docker container start failures in solution runner
+* Fix import module version dropdown ordering
+* Add PostHog integration for Studio and CLI
+
+
+## 2.2.1 (2026-02-20)
+
+* Added `abp run` and `abp watch` commands to Studio CLI.
+* Added "Start and wait for ready" option in Solution Runner.
+* Added Angular support to standard solution and module templates, with Angular templates upgraded to v21.
+* Updated ABP Framework to `10.1.0` and LeptonX to `5.0.3`.
+* Fixed various Solution Runner issues, including tooltips, log rendering, and stability problems.
+
+## 2.1.9 (2026-01-30)
+
+* Fixed MCP server CLI output problem.
+
+## 2.1.8 (2026-01-29)
+
+* Added Studio MCP server support to allow AI monitoring of applications linked to ABP Studio.
+* Added `Open with > Cursor` option.
+* Improved task failure handling and related log visibility.
+* Fixed various Solution Runner issues, including memory/crash and log scrolling problems.
+
+## 2.1.7 (2026-01-23)
+
+* Added management UI for custom solution commands.
+* Showed logs of background jobs.
+* Updated Aspire to version `13.1`.
+
+## 2.1.6 (2026-01-13)
+
+* Enhanced runnable task logs window.
+* Fixed tooltip line-height problem.
+
+## 2.1.5 (2026-01-13)
+
+* Added `version` command to Studio CLI.
+* Updated ABP Framework to `10.0.2` and LeptonX to `5.0.2`.
+* Fixed microservice solution build errors for Blazor Server and Angular.
+* Improved Solution Runner behavior to avoid re-running applications after build errors.
+* Replaced "Clear Cookies" with "Clear site data" in the tools section.
+
+## 2.1.4 (2025-12-30)
 
 * Fixed books sample for blazor-webapp tiered solution.
 * Fixed K8s cluster deployment issues for microservices.

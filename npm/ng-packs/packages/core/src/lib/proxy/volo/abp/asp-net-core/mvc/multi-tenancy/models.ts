@@ -1,3 +1,4 @@
+import type { TenantUserSharingStrategy } from '../../../multi-tenancy/tenant-user-sharing-strategy.enum';
 
 export interface FindTenantResultDto {
   success: boolean;
@@ -15,4 +16,5 @@ export interface CurrentTenantDto {
 
 export interface MultiTenancyInfoDto {
   isEnabled: boolean;
+  userSharingStrategy?: TenantUserSharingStrategy;
 }

@@ -5,9 +5,9 @@ using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.Authorization.Permissions;
-using Volo.Abp.Identity.Blazor;
-using Volo.Abp.SettingManagement.Blazor.Menus;
-using Volo.Abp.TenantManagement.Blazor.Navigation;
+using Volo.Abp.Identity.Blazor.MudBlazor;
+using Volo.Abp.SettingManagement.Blazor.MudBlazor.Menus;
+using Volo.Abp.TenantManagement.Blazor.MudBlazor.Navigation;
 using Volo.Abp.UI.Navigation;
 
 namespace MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Client.Menus;
@@ -66,22 +66,26 @@ public class MyProjectNameMenuContributor : IMenuContributor
 
     private Task ConfigureUserMenuAsync(MenuConfigurationContext context)
     {
-        if (!OperatingSystem.IsBrowser())
-        {
-            return Task.CompletedTask;
-        }
-
-        var authServerUrl = _configuration["AuthServer:Authority"] ?? "";
         var accountStringLocalizer = context.GetLocalizer<AccountResource>();
 
-        context.Menu.AddItem(new ApplicationMenuItem(
-                "Account.Manage",
-                accountStringLocalizer["MyAccount"],
-                $"{authServerUrl.EnsureEndsWith('/')}Account/Manage",
-                icon: "fa fa-cog",
-                order: 1000,
-                target: "_blank")
-            .RequireAuthenticated());
+        if (OperatingSystem.IsBrowser())
+        {
+            var authServerUrl = _configuration["AuthServer:Authority"] ?? "";
+
+            context.Menu.AddItem(new ApplicationMenuItem(
+                    "Account.Manage",
+                    accountStringLocalizer["MyAccount"],
+                    $"{authServerUrl.EnsureEndsWith('/')}Account/Manage",
+                    icon: "fa fa-cog",
+                    order: 1000,
+                    target: "_blank")
+                .RequireAuthenticated());
+        }
+        else
+        {
+            context.Menu.AddItem(new ApplicationMenuItem("Account.Manage", accountStringLocalizer["MyAccount"], "/Account/Manage", icon: "fa fa-cog", order: 1000).RequireAuthenticated());
+            context.Menu.AddItem(new ApplicationMenuItem("Account.Logout", accountStringLocalizer["Logout"], url: "/Account/Logout", icon: "fa fa-power-off", order: int.MaxValue - 1000).RequireAuthenticated());
+        }
 
         return Task.CompletedTask;
     }

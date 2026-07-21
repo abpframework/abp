@@ -37,7 +37,7 @@ MailKit integration package uses the same settings defined by the email sending 
 
 In addition to the standard settings, this package defines `AbpMailKitOptions` as a simple [options](../fundamentals/options.md) class. This class defines only one options:
 
-* **SecureSocketOption**: Used to set one of the `SecureSocketOptions`. Default: `null` (uses the defaults).
+* **SecureSocketOption**: Used to set one of the `SecureSocketOptions`. The default is `null`. In that case, ABP uses `SslOnConnect` when the SMTP `EnableSsl` setting is `true`; otherwise, it uses `StartTlsWhenAvailable`.
 
 **Example: Use *SecureSocketOptions.SslOnConnect***
 

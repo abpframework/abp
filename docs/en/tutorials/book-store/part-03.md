@@ -10,7 +10,8 @@
 //[doc-params]
 {
     "UI": ["MVC","Blazor","BlazorServer","BlazorWebApp","NG", "MAUIBlazor"],
-    "DB": ["EF","Mongo"]
+    "DB": ["EF","Mongo"],
+    "BlazorUI": ["Blazorise", "MudBlazor"]
 }
 ````
 
@@ -1094,6 +1095,8 @@ In this section, you will learn how to create a new modal dialog form to create 
 
 ### Add a "New Button" Button
 
+{{if BlazorUI == "Blazorise"}}
+
 Open the `Books.razor` and replace the `<CardHeader>` section with the following code:
 
 ````xml
@@ -1110,6 +1113,27 @@ Open the `Books.razor` and replace the `<CardHeader>` section with the following
 </CardHeader>
 ````
 
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+Open the `Books.razor` and replace the `<MudCardHeader>` section with the following code:
+
+````razor
+<MudCardHeader>
+    <CardHeaderContent>
+        <MudText Typo="Typo.h4">@L["Books"]</MudText>
+    </CardHeaderContent>
+    <CardHeaderActions>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   OnClick="OpenCreateDialogAsync">@L["NewBook"]</MudButton>
+    </CardHeaderActions>
+</MudCardHeader>
+````
+
+{{end}}
+
 This will change the card header by adding a "New book" button to the right side:
 
 ![blazor-add-book-button](./images/blazor-add-book-button-2.png)
@@ -1117,6 +1141,8 @@ This will change the card header by adding a "New book" button to the right side
 Now, we can add a modal that will be opened when we click the button.
 
 ### Book Creation Modal
+
+{{if BlazorUI == "Blazorise"}}
 
 Open the `Books.razor` and add the following code to the end of the page:
 
@@ -1184,6 +1210,57 @@ This code requires a service; Inject the `AbpBlazorMessageLocalizerHelper<T>` at
 * The form implements validation and the `AbpBlazorMessageLocalizerHelper` is used to simply localize the validation messages.
 * The `CreateModal` object, `CloseCreateModalAsync` and `CreateEntityAsync` methods are defined by the base class. Check out the [Blazorise documentation](https://blazorise.com/docs/) if you want to understand the `Modal` and the other components.
 
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+Open the `Books.razor` and add the following code to the end of the page:
+
+````razor
+<MudDialog @ref="_createDialog" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })">
+    <TitleContent>
+        <MudText Typo="Typo.h6">@L["NewBook"]</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudForm @ref="@CreateFormRef" Model="@NewEntity">
+            <MudStack Spacing="3">
+                <MudTextField @bind-Value="@NewEntity.Name"
+                              Label="@L["Name"]"
+                              For="@(() => NewEntity.Name)"
+                              Required="true" />
+                <MudSelect T="BookType"
+                           @bind-Value="@NewEntity.Type"
+                           Label="@L["Type"]">
+                    @foreach (BookType bookTypeValue in Enum.GetValues(typeof(BookType)))
+                    {
+                        <MudSelectItem Value="@bookTypeValue">@L[$"Enum:BookType.{(int)bookTypeValue}"]</MudSelectItem>
+                    }
+                </MudSelect>
+                <MudDatePicker @bind-Date="@NewEntity.PublishDate"
+                               Label="@L["PublishDate"]" />
+                <MudNumericField T="float"
+                                 @bind-Value="@NewEntity.Price"
+                                 Label="@L["Price"]" />
+            </MudStack>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="CloseCreateDialogAsync">@L["Cancel"]</MudButton>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   OnClick="CreateEntityAsync">@L["Save"]</MudButton>
+    </DialogActions>
+</MudDialog>
+````
+
+* The form uses `[Required]`/DataAnnotations for validation; messages are localized via the same `AbpResource` localization system.
+* The `_createDialog` field, `CloseCreateDialogAsync`, `CreateFormRef` and `CreateEntityAsync` are all defined in `AbpMudCrudPageBase`. Check the [MudBlazor documentation](https://mudblazor.com/components/dialog) if you want to understand the `MudDialog` and other components.
+* `MudDialog.Options` widens the dialog (`MaxWidth.Medium` + `FullWidth`) so the form fields are not cramped.
+* `MudStack` with `Spacing="3"` keeps the inputs visually separated; without it MudBlazor inputs render flush against each other.
+* `MudDatePicker.@bind-Date` requires a nullable `DateTime?`. If your DTO uses non-nullable `DateTime`, change it to `DateTime?` (`public DateTime? PublishDate { get; set; }`) when using the MudBlazor variant.
+
+{{end}}
+
 That's all. Run the application and try to add a new book:
 
 ![blazor-new-book-modal](./images/blazor-new-book-modal-2.png)
@@ -1193,6 +1270,8 @@ That's all. Run the application and try to add a new book:
 Editing a book is similar to creating a new book.
 
 ### Actions Dropdown
+
+{{if BlazorUI == "Blazorise"}}
 
 Open the `Books.razor` and add the following `DataGridEntityActionsColumn` section inside the `DataGridColumns` as the first item:
 
@@ -1212,11 +1291,37 @@ Open the `Books.razor` and add the following `DataGridEntityActionsColumn` secti
 
 The `DataGridEntityActionsColumn` component is used to show an "Actions" dropdown for each row in the `DataGrid`.  The `DataGridEntityActionsColumn` shows a **single button** instead of a dropdown if there is only one available action inside it:
 
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+Open the `Books.razor` and add the following `TemplateColumn` as the first column inside the `<Columns>` section of the `MudDataGrid`:
+
+````razor
+<TemplateColumn T="BookDto" Title="@L["Actions"]" Sortable="false">
+    <CellTemplate>
+        <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true">
+            <MudMenuItem OnClick="@(() => OpenEditDialogAsync(context.Item))">
+                @L["Edit"]
+            </MudMenuItem>
+        </MudMenu>
+    </CellTemplate>
+</TemplateColumn>
+````
+
+* `OpenEditDialogAsync` is defined in the base class which takes the entity (book) to edit.
+
+This renders an "Actions" dropdown menu (`MudMenu`) for each row in the data grid. We will add the **Delete** menu item later in the *Deleting a Book* section.
+
+{{end}}
+
 ![blazor-edit-book-action](./images/blazor-edit-book-action-3.png)
 
 ### Edit Modal
 
 We can now define a modal to edit the book. Add the following code to the end of the `Books.razor` page:
+
+{{if BlazorUI == "Blazorise"}}
 
 ````xml
 <Modal @ref="@EditModal">
@@ -1273,6 +1378,49 @@ We can now define a modal to edit the book. Add the following code to the end of
 </Modal>
 ````
 
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+````razor
+<MudDialog @ref="_editDialog" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })">
+    <TitleContent>
+        <MudText Typo="Typo.h6">@EditingEntity.Name</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudForm @ref="@EditFormRef" Model="@EditingEntity">
+            <MudStack Spacing="3">
+                <MudTextField @bind-Value="@EditingEntity.Name"
+                              Label="@L["Name"]"
+                              For="@(() => EditingEntity.Name)"
+                              Required="true" />
+                <MudSelect T="BookType"
+                           @bind-Value="@EditingEntity.Type"
+                           Label="@L["Type"]">
+                    @foreach (BookType bookTypeValue in Enum.GetValues(typeof(BookType)))
+                    {
+                        <MudSelectItem Value="@bookTypeValue">@L[$"Enum:BookType.{(int)bookTypeValue}"]</MudSelectItem>
+                    }
+                </MudSelect>
+                <MudDatePicker @bind-Date="@EditingEntity.PublishDate"
+                               Label="@L["PublishDate"]" />
+                <MudNumericField T="float"
+                                 @bind-Value="@EditingEntity.Price"
+                                 Label="@L["Price"]" />
+            </MudStack>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="CloseEditDialogAsync">@L["Cancel"]</MudButton>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   OnClick="UpdateEntityAsync">@L["Save"]</MudButton>
+    </DialogActions>
+</MudDialog>
+````
+
+{{end}}
+
 ### Mapperly Configuration
 
 The base `AbpCrudPageBase` uses the [object to object mapping](../../framework/infrastructure/object-to-object-mapping.md) system to convert an incoming `BookDto` object to a `CreateUpdateBookDto` object. So, we need to define the mapping.
@@ -1304,7 +1452,11 @@ You can now run the application and try to edit a book.
 
 ## Deleting a Book
 
-Open the `Books.razor` page and add the following `EntityAction` code under the "Edit" action inside `EntityActions`:
+Open the `Books.razor` page and add the following entity action code under the "Edit" action.
+
+{{if BlazorUI == "Blazorise"}}
+
+Add the following `EntityAction` code under the "Edit" action inside `EntityActions`:
 
 ````xml
 <EntityAction TItem="BookDto"
@@ -1312,6 +1464,25 @@ Open the `Books.razor` page and add the following `EntityAction` code under the 
               Clicked="() => DeleteEntityAsync(context)"
               ConfirmationMessage="() => GetDeleteConfirmationMessage(context)" />
 ````
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+Add the following `MudMenuItem` after the "Edit" item inside the actions `MudMenu`:
+
+````razor
+<MudMenuItem OnClick="@(async () => {
+    if (await Message.Confirm(GetDeleteConfirmationMessage(context.Item)))
+    {
+        await DeleteEntityAsync(context.Item);
+    }
+})">
+    @L["Delete"]
+</MudMenuItem>
+````
+
+{{end}}
 
 * `DeleteEntityAsync` is defined in the base class that deletes the entity by performing a call to the server.
 * `ConfirmationMessage` is a callback to show a confirmation message before executing the action.
@@ -1326,6 +1497,8 @@ Run the application and try to delete a book.
 ## Full CRUD UI Code
 
 Here's the complete code to create the book management CRUD page, that has been developed in the last two parts:
+
+{{if BlazorUI == "Blazorise"}}
 
 ````xml
 @page "/books"
@@ -1518,6 +1691,145 @@ Here's the complete code to create the book management CRUD page, that has been 
     }
 }
 ````
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+````razor
+@page "/books"
+@using Volo.Abp.Application.Dtos
+@using Acme.BookStore.Books
+@using Acme.BookStore.Localization
+@using Microsoft.Extensions.Localization
+@inherits AbpMudCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>
+
+<MudCard>
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h4">@L["Books"]</MudText>
+        </CardHeaderContent>
+        <CardHeaderActions>
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       OnClick="OpenCreateDialogAsync">@L["NewBook"]</MudButton>
+        </CardHeaderActions>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudDataGrid T="BookDto"
+                     ServerData="OnDataGridReadAsync"
+                     RowsPerPage="@PageSize">
+            <Columns>
+                <TemplateColumn T="BookDto" Title="@L["Actions"]" Sortable="false">
+                    <CellTemplate>
+                        <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true">
+                            <MudMenuItem OnClick="@(() => OpenEditDialogAsync(context.Item))">@L["Edit"]</MudMenuItem>
+                            <MudMenuItem OnClick="@(async () => { if (await Message.Confirm(GetDeleteConfirmationMessage(context.Item))) { await DeleteEntityAsync(context.Item); } })">@L["Delete"]</MudMenuItem>
+                        </MudMenu>
+                    </CellTemplate>
+                </TemplateColumn>
+                <PropertyColumn Property="x => x.Name" Title="@L["Name"]" />
+                <PropertyColumn Property="x => x.Type" Title="@L["Type"]">
+                    <CellTemplate>
+                        @L[$"Enum:BookType.{(int)context.Item.Type}"]
+                    </CellTemplate>
+                </PropertyColumn>
+                <PropertyColumn Property="x => x.PublishDate" Title="@L["PublishDate"]">
+                    <CellTemplate>
+                        @context.Item.PublishDate.ToShortDateString()
+                    </CellTemplate>
+                </PropertyColumn>
+                <PropertyColumn Property="x => x.Price" Title="@L["Price"]" />
+                <PropertyColumn Property="x => x.CreationTime" Title="@L["CreationTime"]">
+                    <CellTemplate>
+                        @context.Item.CreationTime.ToLongDateString()
+                    </CellTemplate>
+                </PropertyColumn>
+            </Columns>
+        </MudDataGrid>
+    </MudCardContent>
+</MudCard>
+
+<MudDialog @ref="_createDialog" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })">
+    <TitleContent>
+        <MudText Typo="Typo.h6">@L["NewBook"]</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudForm @ref="@CreateFormRef" Model="@NewEntity">
+            <MudStack Spacing="3">
+                <MudTextField @bind-Value="@NewEntity.Name"
+                              Label="@L["Name"]"
+                              For="@(() => NewEntity.Name)"
+                              Required="true" />
+                <MudSelect T="BookType"
+                           @bind-Value="@NewEntity.Type"
+                           Label="@L["Type"]">
+                    @foreach (BookType bookTypeValue in Enum.GetValues(typeof(BookType)))
+                    {
+                        <MudSelectItem Value="@bookTypeValue">@L[$"Enum:BookType.{(int)bookTypeValue}"]</MudSelectItem>
+                    }
+                </MudSelect>
+                <MudDatePicker @bind-Date="@NewEntity.PublishDate"
+                               Label="@L["PublishDate"]" />
+                <MudNumericField T="float"
+                                 @bind-Value="@NewEntity.Price"
+                                 Label="@L["Price"]" />
+            </MudStack>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="CloseCreateDialogAsync">@L["Cancel"]</MudButton>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   OnClick="CreateEntityAsync">@L["Save"]</MudButton>
+    </DialogActions>
+</MudDialog>
+
+<MudDialog @ref="_editDialog" Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true })">
+    <TitleContent>
+        <MudText Typo="Typo.h6">@EditingEntity.Name</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudForm @ref="@EditFormRef" Model="@EditingEntity">
+            <MudStack Spacing="3">
+                <MudTextField @bind-Value="@EditingEntity.Name"
+                              Label="@L["Name"]"
+                              For="@(() => EditingEntity.Name)"
+                              Required="true" />
+                <MudSelect T="BookType"
+                           @bind-Value="@EditingEntity.Type"
+                           Label="@L["Type"]">
+                    @foreach (BookType bookTypeValue in Enum.GetValues(typeof(BookType)))
+                    {
+                        <MudSelectItem Value="@bookTypeValue">@L[$"Enum:BookType.{(int)bookTypeValue}"]</MudSelectItem>
+                    }
+                </MudSelect>
+                <MudDatePicker @bind-Date="@EditingEntity.PublishDate"
+                               Label="@L["PublishDate"]" />
+                <MudNumericField T="float"
+                                 @bind-Value="@EditingEntity.Price"
+                                 Label="@L["Price"]" />
+            </MudStack>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="CloseEditDialogAsync">@L["Cancel"]</MudButton>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   OnClick="UpdateEntityAsync">@L["Save"]</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code
+{
+    public Books() // Constructor
+    {
+        LocalizationResource = typeof(BookStoreResource);
+    }
+}
+````
+
+{{end}}
 
 {{end}}
 

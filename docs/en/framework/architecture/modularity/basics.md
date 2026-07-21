@@ -145,6 +145,43 @@ You can also perform startup logic if your module requires it
 
 > These methods have asynchronous versions too, and if you want to make asynchronous calls inside these methods, override the asynchronous versions instead of the synchronous ones.
 
+#### Custom Module Lifecycle Contributors
+
+`IModuleLifecycleContributor` is an advanced extension point for adding an application-wide initialization or shutdown phase. A contributor is invoked for every loaded module. Initialization follows module dependency order, while shutdown processes modules in reverse order.
+
+Derive from `ModuleLifecycleContributorBase` and override only the phases you need. Each phase has a synchronous and an asynchronous method; the application calls one of them depending on whether it is initialized synchronously or asynchronously, so override both to cover the two startup paths:
+
+````csharp
+public class MyModuleLifecycleContributor : ModuleLifecycleContributorBase
+{
+    public override Task InitializeAsync(
+        ApplicationInitializationContext context,
+        IAbpModule module)
+    {
+        // Run initialization logic for the current module.
+        return Task.CompletedTask;
+    }
+
+    public override void Initialize(
+        ApplicationInitializationContext context,
+        IAbpModule module)
+    {
+        AsyncHelper.RunSync(() => InitializeAsync(context, module));
+    }
+}
+````
+
+Add the contributor type to `AbpModuleLifecycleOptions.Contributors`:
+
+````csharp
+Configure<AbpModuleLifecycleOptions>(options =>
+{
+    options.Contributors.Add<MyModuleLifecycleContributor>();
+});
+````
+
+Contributor order is the order of the `Contributors` list. The four built-in contributors run the pre-initialization, initialization, post-initialization and shutdown callbacks.
+
 ### Application Shutdown
 
 Lastly, you can override ``OnApplicationShutdown`` method if you want to execute some code while application is being shutdown.

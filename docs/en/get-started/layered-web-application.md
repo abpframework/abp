@@ -18,6 +18,10 @@
 
 In this quick start guide, you will learn how to create and run a layered (and potentially modular) web application using [ABP Studio](../studio/index.md).
 
+> This page documents the **classic** layered flow.
+>
+> If you want **React UI**, use the **modern** template flow instead. Modern layered solutions create your application in the `react/` folder and host the ABP Admin Console from the backend at `/admin-console/`. See [React UI](../framework/ui/react/index.md) and the [ABP CLI modern templates](../cli/index.md#modern-templates) section for the correct path.
+
 ## Setup your development environment
 
 First things first! Let's setup your development environment before creating the first project. The following tools should be installed on your development machine:
@@ -150,7 +154,7 @@ If you uncheck the *Kubernetes Configuration* option, the solution will not incl
 
 On the next screen, you can configure the modularity options for your solution:
 
-> If you select the *Setup as a modular solution* option, the solution is created more ready for [modular monolith development](../tutorials/modular-crm/index.md) and allows you to add sub-modules during the solution creation phase.
+> If your goal is a new modular monolith, prefer the dedicated **Modular Monolith** architecture in ABP Studio. The modularity option on this screen is the classic-host path for keeping this layered solution modularity-ready and allowing sub-modules during solution creation.
 
 ![abp-studio-new-solution-modularity](images/abp-studio-new-solution-dialog-modularity_dark.png)
 

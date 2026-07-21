@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "page-permission-config.schema.json",
+  "title": "PagePermissionConfig",
+  "description": "Permission configuration for a page's operations. Only overridden values are stored; omitted values use auto-generated defaults based on the page.",
+  "markdownDescription": "AI guidance: each operation can be `default`, `public`, `authenticated`, or a permission name. Omit an operation to use runtime-generated defaults. Use `public` only for anonymous pages. Use `authenticated` for pages any logged-in user can view. Use explicit permission names for controlled business operations.",
+  "type": "object",
+  "properties": {
+    "view": {
+      "type": "string",
+      "description": "Permission for viewing the page. Can be a specific permission name, 'default', 'public', or 'authenticated'. Omit to use auto-generated default."
+    },
+    "create": {
+      "type": "string",
+      "description": "Permission for create operation on this page. Can be a specific permission name, 'default', 'public', or 'authenticated'. Omit to use auto-generated default."
+    },
+    "update": {
+      "type": "string",
+      "description": "Permission for update operation on this page. Can be a specific permission name, 'default', 'public', or 'authenticated'. Omit to use auto-generated default."
+    },
+    "delete": {
+      "type": "string",
+      "description": "Permission for delete operation on this page. Can be a specific permission name, 'default', 'public', or 'authenticated'. Omit to use auto-generated default."
+    }
+  },
+  "additionalProperties": false
+}

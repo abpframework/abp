@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Http.Modeling;
 
 namespace Volo.Abp.AspNetCore.Mvc.ApiExploring;
@@ -16,8 +17,8 @@ public class AbpApiDefinitionController : AbpController, IRemoteService
     }
 
     [HttpGet]
-    public virtual ApplicationApiDescriptionModel Get(ApplicationApiDescriptionModelRequestDto model)
+    public virtual async Task<ApplicationApiDescriptionModel> Get(ApplicationApiDescriptionModelRequestDto model)
     {
-        return ModelProvider.CreateApiModel(model);
+        return await ModelProvider.CreateApiModelAsync(model);
     }
 }

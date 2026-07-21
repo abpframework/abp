@@ -9,6 +9,7 @@ public class EntityCacheWithObjectMapperContext<TObjectMapperContext, TEntity, T
     EntityCacheWithObjectMapper<TEntity, TEntityCacheItem, TKey>
     where TEntity : Entity<TKey>
     where TEntityCacheItem : class
+    where TKey : notnull
 {
     public EntityCacheWithObjectMapperContext(
         IReadOnlyRepository<TEntity, TKey> repository,

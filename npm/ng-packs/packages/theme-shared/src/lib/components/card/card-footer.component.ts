@@ -1,9 +1,10 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import {Component, HostBinding, input, ChangeDetectionStrategy,} from '@angular/core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-card-footer',
   template: `
-    <div [style]="cardFooterStyle" [class]="cardFooterClass">
+    <div [style]="cardFooterStyle()" [class]="cardFooterClass()">
       <ng-content></ng-content>
     </div>
   `,
@@ -12,6 +13,6 @@ import { Component, HostBinding, Input } from '@angular/core';
 })
 export class CardFooterComponent {
   @HostBinding('class') componentClass = 'card-footer';
-  @Input() cardFooterStyle: string;
-  @Input() cardFooterClass: string;
+  readonly cardFooterStyle = input<string>(undefined);
+  readonly cardFooterClass = input<string>(undefined);
 }

@@ -1,34 +1,34 @@
 /* eslint-disable @angular-eslint/no-input-rename */
-import { 
-  Directive, 
-  Injector, 
-  Input, 
-  OnChanges, 
-  OnDestroy, 
-  TemplateRef, 
-  ViewContainerRef, 
-  inject 
+import {
+  Directive,
+  Injector,
+  OnDestroy,
+  TemplateRef,
+  ViewContainerRef,
+  effect,
+  inject,
+  input
 } from '@angular/core';
 import { PropData, PropList } from '../models/props';
+
+type InferredRecord<L> = L extends PropList<infer R> ? R : never;
 
 @Directive({
   exportAs: 'abpPropData',
   selector: '[abpPropData]',
 })
 export class PropDataDirective<L extends PropList<any>>
-  extends PropData<InferredData<L>>
-  implements OnChanges, OnDestroy
+  extends PropData<InferredRecord<L>>
+  implements OnDestroy
 {
   private tempRef = inject<TemplateRef<any>>(TemplateRef);
   private vcRef = inject(ViewContainerRef);
 
-  @Input('abpPropDataFromList') propList?: L;
+  readonly propList = input<L | undefined>(undefined, { alias: 'abpPropDataFromList' });
+  readonly record = input.required<InferredRecord<L>>({ alias: 'abpPropDataWithRecord' });
+  readonly index = input<number | undefined>(undefined, { alias: 'abpPropDataAtIndex' });
 
-  @Input('abpPropDataWithRecord') record!: InferredData<L>['record'];
-
-  @Input('abpPropDataAtIndex') index?: number;
-
-  readonly getInjected: InferredData<L>['getInjected'];
+  readonly getInjected: PropData<InferredRecord<L>>['getInjected'];
 
   constructor() {
     const injector = inject(Injector);
@@ -36,14 +36,19 @@ export class PropDataDirective<L extends PropList<any>>
     super();
 
     this.getInjected = injector.get.bind(injector);
-  }
 
-  ngOnChanges() {
-    this.vcRef.clear();
-
-    this.vcRef.createEmbeddedView(this.tempRef, {
-      $implicit: this.data,
-      index: 0,
+    // Watch for input changes and re-render
+    effect(() => {
+      // Read all inputs to track them
+      this.record();
+      this.index();
+      this.propList();
+      
+      this.vcRef.clear();
+      this.vcRef.createEmbeddedView(this.tempRef, {
+        $implicit: this.data,
+        index: 0,
+      });
     });
   }
 
@@ -51,6 +56,3 @@ export class PropDataDirective<L extends PropList<any>>
     this.vcRef.clear();
   }
 }
-
-type InferredData<L> = PropData<InferredRecord<L>>;
-type InferredRecord<L> = L extends PropList<infer R> ? R : never;

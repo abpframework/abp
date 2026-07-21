@@ -1,9 +1,10 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import {Component, HostBinding, input, ChangeDetectionStrategy,} from '@angular/core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-card-header',
   template: `
-    <div [class]="cardHeaderClass" [style]="cardHeaderStyle">
+    <div [class]="cardHeaderClass()" [style]="cardHeaderStyle()">
       <ng-content></ng-content>
     </div>
   `,
@@ -12,6 +13,6 @@ import { Component, HostBinding, Input } from '@angular/core';
 })
 export class CardHeaderComponent {
   @HostBinding('class') componentClass = 'card-header';
-  @Input() cardHeaderClass: string;
-  @Input() cardHeaderStyle: string;
+  readonly cardHeaderClass = input<string>(undefined);
+  readonly cardHeaderStyle = input<string>(undefined);
 }

@@ -7,6 +7,7 @@ namespace Volo.Abp.Domain.Entities.Caching;
 public class EntityCacheWithoutCacheItem<TEntity, TKey> :
     EntityCacheBase<TEntity, TEntity, TKey>
     where TEntity : Entity<TKey>
+    where TKey : notnull
 {
     public EntityCacheWithoutCacheItem(
         IReadOnlyRepository<TEntity, TKey> repository,

@@ -3,6 +3,9 @@
     <Project Path="src/Volo.Abp.Identity.Application.Contracts/Volo.Abp.Identity.Application.Contracts.csproj" />
     <Project Path="src/Volo.Abp.Identity.Application/Volo.Abp.Identity.Application.csproj" />
     <Project Path="src/Volo.Abp.Identity.AspNetCore/Volo.Abp.Identity.AspNetCore.csproj" />
+    <Project Path="src/Volo.Abp.Identity.Blazor.MudBlazor.Server/Volo.Abp.Identity.Blazor.MudBlazor.Server.csproj" />
+    <Project Path="src/Volo.Abp.Identity.Blazor.MudBlazor.WebAssembly/Volo.Abp.Identity.Blazor.MudBlazor.WebAssembly.csproj" />
+    <Project Path="src/Volo.Abp.Identity.Blazor.MudBlazor/Volo.Abp.Identity.Blazor.MudBlazor.csproj" />
     <Project Path="src/Volo.Abp.Identity.Blazor.Server/Volo.Abp.Identity.Blazor.Server.csproj" />
     <Project Path="src/Volo.Abp.Identity.Blazor.WebAssembly/Volo.Abp.Identity.Blazor.WebAssembly.csproj" />
     <Project Path="src/Volo.Abp.Identity.Blazor/Volo.Abp.Identity.Blazor.csproj" />

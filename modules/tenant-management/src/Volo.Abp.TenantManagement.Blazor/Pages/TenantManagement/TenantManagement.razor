@@ -1,4 +1,5 @@
 ﻿@page "/tenant-management/tenants"
+@page "/{culture}/tenant-management/tenants"
 @attribute [Authorize(TenantManagementPermissions.Tenants.Default)]
 @using Microsoft.AspNetCore.Authorization
 @using Volo.Abp.FeatureManagement.Blazor.Components
@@ -38,8 +39,8 @@
 @* ************************* CREATE MODAL ************************* *@
 @if ( HasCreatePermission )
 {
-    <Modal @ref="CreateModal" Closing="@ClosingCreateModal">
-        <ModalContent Centered="true">
+    <Modal @ref="CreateModal" Closing="@ClosingCreateModal" Centered="true">
+        <ModalContent>
             <Form id="CreateTenantForm">
                 <ModalHeader>
                     <ModalTitle>@L["NewTenant"]</ModalTitle>
@@ -50,21 +51,21 @@
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>@L["TenantName"] *</FieldLabel>
-                                <TextEdit @bind-Text="@NewEntity.Name" Autofocus="true">
+                                <TextInput @bind-Value="@NewEntity.Name" Autofocus="true">
                                     <Feedback>
                                         <ValidationError/>
                                     </Feedback>
-                                </TextEdit>
+                                </TextInput>
                             </Field>
                         </Validation>
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>@L["DisplayName:AdminEmailAddress"] *</FieldLabel>
-                                <TextEdit Role="@TextRole.Email" @bind-Text="@NewEntity.AdminEmailAddress">
+                                <TextInput Role="@TextRole.Email" @bind-Value="@NewEntity.AdminEmailAddress">
                                     <Feedback>
                                         <ValidationError/>
                                     </Feedback>
-                                </TextEdit>
+                                </TextInput>
                             </Field>
                         </Validation>
                         <Validation MessageLocalizer="@LH.Localize">
@@ -72,8 +73,8 @@
                              <FieldLabel>@L["DisplayName:AdminPassword"] *</FieldLabel>
                              <Addons>
                                 <Addon AddonType="AddonType.Body">
-                                    <TextEdit Role="ShowPassword ? TextRole.Text : TextRole.Password" @bind-Text="@NewEntity.AdminPassword">
-                                    </TextEdit>
+                                    <TextInput Role="ShowPassword ? TextRole.Text : TextRole.Password" @bind-Value="@NewEntity.AdminPassword">
+                                    </TextInput>
                                 </Addon>
                                 <Addon AddonType="AddonType.End">
                                     <Button Color="Color.Secondary" Clicked="@(() => TogglePasswordVisibility())">
@@ -99,8 +100,8 @@
 @* ************************* EDIT MODAL ************************* *@
 @if ( HasUpdatePermission )
 {
-    <Modal @ref="EditModal" Closing="@ClosingEditModal">
-        <ModalContent Centered="true">
+    <Modal @ref="EditModal" Closing="@ClosingEditModal" Centered="true">
+        <ModalContent>
             <Form id="EditTenantForm">
                 <ModalHeader>
                     <ModalTitle>@L["Edit"]</ModalTitle>
@@ -111,11 +112,11 @@
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>@L["TenantName"] *</FieldLabel>
-                                <TextEdit @bind-Text="@EditingEntity.Name" Autofocus="true">
+                                <TextInput @bind-Value="@EditingEntity.Name" Autofocus="true">
                                     <Feedback>
                                         <ValidationError/>
                                     </Feedback>
-                                </TextEdit>
+                                </TextInput>
                             </Field>
                         </Validation>
                     </Validations>

@@ -75,11 +75,13 @@ public class AbpCliCoreModule : AbpModule
             options.Commands[CreateMigrationAndRunMigratorCommand.Name] = typeof(CreateMigrationAndRunMigratorCommand);
             options.Commands[InstallLibsCommand.Name] = typeof(InstallLibsCommand);
             options.Commands[CleanCommand.Name] = typeof(CleanCommand);
+            options.Commands[CleanLogsCommand.Name] = typeof(CleanLogsCommand);
             options.Commands[CliCommand.Name] = typeof(CliCommand);
             options.Commands[ClearDownloadCacheCommand.Name] = typeof(ClearDownloadCacheCommand);
             options.Commands[RecreateInitialMigrationCommand.Name] = typeof(RecreateInitialMigrationCommand);
             options.Commands[GenerateRazorPage.Name] = typeof(GenerateRazorPage);
             options.Commands[McpCommand.Name] = typeof(McpCommand);
+            options.Commands[GenerateJwksCommand.Name] = typeof(GenerateJwksCommand);
 
             options.DisabledModulesToAddToSolution.Add("Volo.Abp.LeptonXTheme.Pro");
             options.DisabledModulesToAddToSolution.Add("Volo.Abp.LeptonXTheme.Lite");

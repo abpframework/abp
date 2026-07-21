@@ -20,6 +20,8 @@ Please select one of the following documents best fits for your application:
   - [WPF Application](wpf.md)
   - [Console Application](console.md)
 
+If you are choosing between the **Modern** and **Classic** ABP Studio template families, see [Modern vs Classic Templates](../solution-templates/modern-vs-classic.md). If you seek a React-based web UI, use the **modern template system** with ABP Studio or `abp new --modern`. See [UI options](../framework/ui/index.md) for the full list of officially supported UI frameworks.
+
 ## Which Startup Template is Suitable for Me?
 
 You can see the *[Solution Template Selection Guide](../solution-templates/guide.md)* if you are not sure which solution template is suitable for you.

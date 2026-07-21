@@ -17,6 +17,8 @@ public class RazorTemplateRenderingEngine : TemplateRenderingEngineBase, ITransi
     public const string EngineName = "Razor";
     public override string Name => EngineName;
 
+    public override bool IsSandboxed => false;
+
     protected readonly IServiceScopeFactory ServiceScopeFactory;
 
     public RazorTemplateRenderingEngine(

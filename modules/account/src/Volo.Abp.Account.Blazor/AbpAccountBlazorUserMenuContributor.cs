@@ -15,7 +15,7 @@ public class AbpAccountBlazorUserMenuContributor : IMenuContributor
 
         var accountResource = context.GetLocalizer<AccountResource>();
 
-        context.Menu.AddItem(new ApplicationMenuItem("Account.Manage", accountResource["MyAccount"], url: "account/manage-profile", icon: "fa fa-cog"));
+        context.Menu.AddItem(new ApplicationMenuItem("Account.Manage", accountResource["MyAccount"], url: "~/account/manage-profile", icon: "fa fa-cog"));
 
         return Task.CompletedTask;
     }

@@ -474,9 +474,21 @@
             <div class="docs-content-field">
                 <div class="docs-text-field">
                     <div class="position-relative">
-                        @if (Model.DocumentPreferences != null && Model.DocumentPreferences.Parameters != null && Model.DocumentPreferences.Parameters.Any())
+                        @{
+                            var visibleParameters = Model.DocumentPreferences?.Parameters?
+                                .Where(p => Model.IsParameterVisible(p))
+                                .ToList() ?? new List<DocumentParameterDto>();
+                        }
+                        @if (visibleParameters.Count > 0)
                         {
                             <div class="alert alert-primary alert-criteria">
+                                <div class="options-header">
+                                    <span>@L["DocumentOptions"]</span>
+                                    <button type="button" class="btn toggle-btn" aria-expanded="false" aria-controls="DocumentOptionsBody" aria-label="@L["DocumentOptions"]">
+                                        <i class="fa-solid fa-chevron-up"></i>
+                                    </button>
+                                </div>
+                                <div class="options-body" id="DocumentOptionsBody">
                                 <abp-row>
                                     <abp-column>
                                         <p class="alert-p mb-2">
@@ -488,10 +500,11 @@
                                 <abp-row class="gx-2">
                                     @{
                                         const int maxCellCount = 3;
-                                        var count = Model.DocumentPreferences.Parameters.Count;
+                                        var count = visibleParameters.Count;
                                         var rowCount = count / maxCellCount + (count % maxCellCount > 0 ? 1 : 0);
                                         var cellSize = 12 / (count > maxCellCount ? maxCellCount : count);
-                                        var latestCellSize = 12 / count - (rowCount - 1) * maxCellCount;
+                                        var lastRowCellCount = count - (rowCount - 1) * maxCellCount;
+                                        var latestCellSize = 12 / lastRowCellCount;
 
                                         string BuildParameterDivClass(int index)
                                         {
@@ -503,7 +516,7 @@
 
                                         for (var i = 0; i < count; ++i)
                                         {
-                                            var parameter = Model.DocumentPreferences.Parameters[i];
+                                            var parameter = visibleParameters[i];
 
                                             <div class="@BuildParameterDivClass(i)">
                                                 <div class="custom-input-group">
@@ -528,6 +541,7 @@
                                         }
                                     }
                                 </abp-row>
+                                </div>
                             </div>
                         }
                     </div>

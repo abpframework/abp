@@ -7,7 +7,7 @@
 
 # Settings
 
-You can get settings on the client-side using the [config state service](./config-state.md) if they are allowed by their setting definition on the server-side.
+You can get settings on the client-side using the [config state service](./config-state-service.md) if they are allowed by their setting definition on the server-side.
 
 > This document only explains how settings work in the Angular UI projects. See the [settings document](../../infrastructure/settings.md) to understand the ABP setting system.
 

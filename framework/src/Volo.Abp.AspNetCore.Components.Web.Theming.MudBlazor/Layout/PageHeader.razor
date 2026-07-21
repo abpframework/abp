@@ -1,0 +1,65 @@
+﻿@using global::MudBlazor
+@using Microsoft.Extensions.Options
+@using Microsoft.AspNetCore.Components.Web
+@using Volo.Abp.Ui.Branding
+
+@inject IOptions<PageHeaderOptions> Options
+@inject IBrandingProvider BrandingProvider
+
+<MudGrid Class="entry-row" Spacing="0">
+
+    @if (PageLayout.Title.IsNullOrEmpty())
+    {
+        <PageTitle>@BrandingProvider.AppName</PageTitle>
+    }
+    else
+    {
+        <PageTitle>@PageLayout.Title | @BrandingProvider.AppName</PageTitle>
+    }
+
+    @if(Options.Value.RenderPageTitle)
+    {
+        <MudItem xs="12" sm="12">
+            <MudText Typo="Typo.h4" Class="content-header-title">@PageLayout.Title</MudText>
+        </MudItem>
+    }
+
+    @if (Options.Value.RenderBreadcrumbs && PageLayout.BreadcrumbItems.Any())
+    {
+        <MudItem xs="12" lg="12" Class="pl-lg-0">
+            <MudBreadcrumbs Items="_breadcrumbItems" Class="pa-0">
+                <ItemTemplate Context="item">
+                    <MudLink Href="@item.Href">
+                        @if (!string.IsNullOrEmpty(item.Icon))
+                        {
+                            <MudIcon Icon="@item.Icon" Size="Size.Small" Class="mr-1" />
+                        }
+                        @item.Text
+                    </MudLink>
+                </ItemTemplate>
+                <SeparatorTemplate>
+                    <MudIcon Icon="@Icons.Material.Filled.ChevronRight" Size="Size.Small" />
+                </SeparatorTemplate>
+            </MudBreadcrumbs>
+        </MudItem>
+    }
+
+    @if(Options.Value.RenderToolbar)
+    {
+        <MudItem xs="12" Class="d-flex justify-end flex-grow-1">
+            <MudStack Row="true" Spacing="2" Class="align-center">
+                @if (Toolbar == null)
+                {
+                    @ChildContent
+                }
+            
+                @foreach (var toolbarItemRender in ToolbarItemRenders)
+                {
+                    <MudItem Class="px-1 py-2">
+                        @toolbarItemRender
+                    </MudItem>
+                }
+            </MudStack>
+        </MudItem>
+    }
+</MudGrid>

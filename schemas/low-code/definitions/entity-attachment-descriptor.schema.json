@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "entity-attachment-descriptor.schema.json",
+  "title": "EntityAttachmentDescriptor",
+  "description": "Configures record-level attachments for an entity.",
+  "markdownDescription": "AI guidance: use entity attachments when records need a collection of arbitrary files. Use File/Image entity properties instead when the file is a named business field such as `ContractPdf` or `CoverImage`.",
+  "type": "object",
+  "properties": {
+    "isEnabled": {
+      "type": "boolean",
+      "description": "When true, records of this entity can have attachments."
+    },
+    "maxFileCount": {
+      "type": "integer",
+      "description": "Maximum number of files allowed per entity record.",
+      "minimum": 1
+    },
+    "maxFileSizeBytes": {
+      "type": "integer",
+      "description": "Maximum allowed size in bytes for a single attachment.",
+      "minimum": 1
+    },
+    "maxTotalSizeBytes": {
+      "type": "integer",
+      "description": "Maximum total attachment size in bytes per entity record.",
+      "minimum": 1
+    },
+    "allowedContentTypes": {
+      "type": "array",
+      "description": "Allowed MIME content types, wildcard MIME patterns, or file extensions. Examples: 'image/*', 'application/pdf', '.docx'.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "required": ["isEnabled"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "isEnabled": true,
+      "maxFileCount": 5,
+      "maxFileSizeBytes": 5242880,
+      "allowedContentTypes": ["image/*", "application/pdf"]
+    }
+  ]
+}

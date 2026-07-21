@@ -15,6 +15,8 @@ Entity action extension system allows you to add a new action to the action menu
 
 You can take any action (open a modal, make an HTTP API call, redirect to another page... etc) by writing your custom code. You can also access the current entity in your code.
 
+> **Standalone-first:** Current ABP templates use standalone APIs. The `loadChildren` examples below lazy-load routes from `createRoutes({ ... })` — they do not require NgModules. Legacy NgModule projects can pass the same options to `IdentityModule.forLazy({ ... })` instead. See [ABP Now Supports Angular Standalone Applications](https://abp.io/community/articles/abp-now-supports-angular-standalone-applications-zzi2rr2z).
+
 ## How to Set Up
 
 In this example, we will add a "Click Me!" action and alert the current row's `userName` in the user management page of the [Identity Module](../../../modules/identity.md).
@@ -56,12 +58,12 @@ The list of actions, conveniently named as `actionList`, is a **doubly linked li
 
 ### Step 2. Import and Use Entity Action Contributors
 
-Import `identityEntityActionContributors` in your routing configuration and pass it to the static `configureRoutes` method for `identity` routes as seen below:
+Import `identityEntityActionContributors` in your routing configuration and pass it to the static `createRoutes` method for `identity` routes as seen below:
 
 ```js
 // src/app/app.routes.ts
 
-// other imports
+import { Routes } from '@angular/router';
 import { identityEntityActionContributors } from './entity-action-contributors';
 
 export const APP_ROUTES: Routes = [
@@ -79,6 +81,20 @@ export const APP_ROUTES: Routes = [
 
   // other routes
 ];
+```
+
+#### Legacy NgModule projects
+
+```js
+{
+  path: 'identity',
+  loadChildren: () =>
+    import('@abp/ng.identity').then(m =>
+      m.IdentityModule.forLazy({
+        entityActionContributors: identityEntityActionContributors,
+      }),
+    ),
+},
 ```
 
 That is it, `alertUserName` entity action will be added as the last action on the grid dropdown in the "Users" page (`UsersComponent`) of the `identity` package.

@@ -8,4 +8,5 @@ export * from './short-date-time.pipe';
 export * from './utc-to-local.pipe';
 export * from './async-localization.pipe';
 export * from './lazy-localization.pipe';
+export * from './route-culture-url.pipe';
 export * from './html-encode.pipe';

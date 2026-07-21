@@ -1,0 +1,83 @@
+@using global::MudBlazor
+@using JetBrains.Annotations
+@using Volo.Abp.Validation.StringValues
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.FeatureManagement.Localization
+@inherits AbpFeatureManagementComponentBase
+
+<MudDialog DefaultFocus="DefaultFocus.None" @bind-Visible="@_isVisible" Options="@(new DialogOptions { BackdropClick = false, MaxWidth = MaxWidth.Large, FullWidth = true, CloseOnEscapeKey = true })">
+    <TitleContent>
+        <MudText Typo="Typo.h6">@L["Features"]@ProviderKeyDisplayName</MudText>
+    </TitleContent>
+    <DialogContent>
+        @if (Groups == null || !Groups.Any())
+        {
+            <MudText Class="m-3">@L["NoFeatureFoundMessage"]</MudText>
+        }
+        else
+        {
+            <MudTabs KeepPanelsAlive="true" @bind-ActivePanelIndex="@_activeTabIndex" Variant="Variant.Pills" Position="Position.Left"
+                PanelClass="pa-4">
+                @foreach (var group in Groups)
+                {
+                    <MudTabPanel Text="@group.DisplayName">
+                        <MudStack Spacing="2">
+                            <MudText Typo="Typo.h6">@group.DisplayName</MudText>
+                            @foreach (var feature in group.Features)
+                            {
+                                var disabled = IsDisabled(feature);
+                                <div style="@GetFeatureStyles(feature)">
+                                    @if (feature.ValueType is FreeTextStringValueType)
+                                    {
+                                        <MudTextField Margin="Margin.Dense" Label="@GetShownName(feature)" Disabled="@disabled" Value="@feature.Value"
+                                            ValueChanged="@(async ([CanBeNull] string v) => await OnFeatureValueChangedAsync(v, feature))" />
+                                        @if (feature.Description != null)
+                                        {
+                                            <MudText Typo="Typo.caption" Class="mt-1">@feature.Description</MudText>
+                                        }
+                                    }
+
+                                    @if (feature.ValueType is SelectionStringValueType)
+                                    {
+                                        var items = ((SelectionStringValueType)feature.ValueType).ItemSource.Items;
+                                        var selectedValue = SelectionStringValues[feature.Name];
+                                        <MudSelect Margin="Margin.Dense" T="string" Label="@GetShownName(feature)" Disabled="@disabled"
+                                            Value="@selectedValue" ValueChanged="@(s => SelectionStringValues[feature.Name] = s)">
+                                            @foreach (var item in items)
+                                            {
+                                                <MudSelectItem Value="@item.Value">
+                                                    @CreateStringLocalizer(item.DisplayText.ResourceName).GetString(item.DisplayText.Name)
+                                                </MudSelectItem>
+                                            }
+                                        </MudSelect>
+                                        @if (feature.Description != null)
+                                        {
+                                            <MudText Typo="Typo.caption" Class="mt-1">@feature.Description</MudText>
+                                        }
+                                    }
+
+                                    @if (feature.ValueType is ToggleStringValueType)
+                                    {
+                                        <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default" Disabled="@disabled" Value="@ToggleValues[feature.Name]"
+                                            ValueChanged="@(async (bool v) => await OnSelectedValueChangedAsync(v, feature))"
+                                            Label="@GetShownName(feature)" />
+                                        @if (feature.Description != null)
+                                        {
+                                            <MudText Typo="Typo.caption" Class="mt-1">@feature.Description</MudText>
+                                        }
+                                    }
+                                </div>
+                            }
+                        </MudStack>
+                    </MudTabPanel>
+                }
+            </MudTabs>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@CloseModal">@L["Cancel"]</MudButton>
+        <MudButton Color="Color.Primary" Variant="Variant.Text"
+            OnClick="@(async () => await DeleteAsync(ProviderName, ProviderKey))">@L["ResetToDefault"]</MudButton>
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="@SaveAsync">@L["Save"]</MudButton>
+    </DialogActions>
+</MudDialog>

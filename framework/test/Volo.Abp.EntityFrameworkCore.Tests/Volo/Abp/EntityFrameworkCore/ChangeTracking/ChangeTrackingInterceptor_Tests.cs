@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Shouldly;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.ChangeTracking;
@@ -77,6 +78,96 @@ public class ChangeTrackingInterceptor_Tests : TestAppTestBase<AbpEntityFramewor
             using (entityChangeTrackingProvider.Change(false))
             {
                 var list = await service.GetPeoplesAsync();
+                list.Count.ShouldBeGreaterThan(0);
+                db.ChangeTracker.Entries().Count().ShouldBe(0);
+            }
+        });
+    }
+
+    [Fact]
+    public async Task Repository_Should_Override_Global_NoTracking_When_EntityChangeTracking_Is_Enabled()
+    {
+        await AddSomePeopleAsync();
+
+        var repository = GetRequiredService<IRepository<Person, Guid>>();
+
+        Guid personId = default;
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var p = await repository.FindAsync(x => x.Name == "people1");
+            p.ShouldNotBeNull();
+            personId = p.Id;
+        });
+
+        // Simulate global NoTracking configured on DbContext (e.g. optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking))
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var db = await repository.GetDbContextAsync();
+            db.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            db.ChangeTracker.Entries().Count().ShouldBe(0);
+
+            // FindAsync(id): ShouldTrackingEntityChange()=true, GetQueryableAsync() uses AsTracking() to override global NoTracking
+            var person = await repository.FindAsync(personId, includeDetails: false);
+            person.ShouldNotBeNull();
+            db.ChangeTracker.Entries<Person>().Count().ShouldBe(1);
+            db.Entry(person).State.ShouldBe(EntityState.Unchanged);
+        });
+
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var db = await repository.GetDbContextAsync();
+            db.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            db.ChangeTracker.Entries().Count().ShouldBe(0);
+
+            // FindAsync(predicate): same - AsTracking() overrides global NoTracking
+            var person = await repository.FindAsync(x => x.Name == "people1");
+            person.ShouldNotBeNull();
+            db.ChangeTracker.Entries<Person>().Count().ShouldBe(1);
+            db.Entry(person).State.ShouldBe(EntityState.Unchanged);
+        });
+
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var db = await repository.GetDbContextAsync();
+            db.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            db.ChangeTracker.Entries().Count().ShouldBe(0);
+
+            // GetListAsync: same - AsTracking() overrides global NoTracking
+            var list = await repository.GetListAsync();
+            list.Count.ShouldBeGreaterThan(0);
+            db.ChangeTracker.Entries<Person>().Count().ShouldBe(list.Count);
+        });
+    }
+
+    [Fact]
+    public async Task Repository_Should_Respect_NoTracking_When_EntityChangeTracking_Is_Disabled_With_Global_NoTracking()
+    {
+        await AddSomePeopleAsync();
+
+        var repository = GetRequiredService<IRepository<Person, Guid>>();
+
+        Guid personId = default;
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var p = await repository.FindAsync(x => x.Name == "people1");
+            p.ShouldNotBeNull();
+            personId = p.Id;
+        });
+
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var db = await repository.GetDbContextAsync();
+            db.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            db.ChangeTracker.Entries().Count().ShouldBe(0);
+
+            // When tracking is explicitly disabled, entity should NOT be tracked regardless of global setting
+            using (repository.DisableTracking())
+            {
+                var person = await repository.FindAsync(personId, includeDetails: false);
+                person.ShouldNotBeNull();
+                db.ChangeTracker.Entries().Count().ShouldBe(0);
+
+                var list = await repository.GetListAsync();
                 list.Count.ShouldBeGreaterThan(0);
                 db.ChangeTracker.Entries().Count().ShouldBe(0);
             }

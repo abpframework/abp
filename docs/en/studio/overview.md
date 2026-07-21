@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Explore ABP Studio's key features like Solution Explorer, Kubernetes Integration, and AI Assistant to optimize your ABP application development and management."
+    "Description": "Explore ABP Studio's key features like Solution Explorer, Kubernetes Integration, AI Agent, and monitoring to optimize your ABP application development and management."
 }
 ```
 
@@ -19,7 +19,7 @@
 
 ## Introduction
 
-ABP Studio, a comprehensive desktop application, offers a wide range of features and functionalities tailored to streamline the development and management of ABP-based applications. This article provides an overview of the key components of ABP Studio, including the Solution Explorer, Solution Runner, Kubernetes Integration, AI Assistant, Application Monitoring Area, Background Tasks, Notifications and Logs. Understanding these components is essential for efficiently utilizing ABP Studio to its full potential.
+ABP Studio, a comprehensive desktop application, offers a wide range of features and functionalities tailored to streamline the development and management of ABP-based applications. This article provides an overview of the key components of ABP Studio, including the Solution Explorer, Solution Runner, Kubernetes Integration, AI Agent, Application Monitoring Area, Background Tasks, Notifications and Logs. Understanding these components is essential for efficiently utilizing ABP Studio to its full potential.
 
 ![overview-intro](./images/overview/overview-intro.png)
 
@@ -69,7 +69,7 @@ The Welcome Screen is the initial user interface users encounter upon starting A
 
 ## Sidebar
 
-Located on the left side of the interface, the Left Area is a panel that provides quick access to various functionalities like [Solution Explorer](./solution-explorer.md), [Solution Runner](./running-applications.md), Kubernetes Integration, and AI Assistant. Now let's examine each item.
+Located on the left side of the interface, the Left Area is a panel that provides quick access to various functionalities like [Solution Explorer](./solution-explorer.md), [Solution Runner](./running-applications.md), Kubernetes Integration, and AI Agent. Now let's examine each item.
 
 ### Solution Explorer
 
@@ -99,20 +99,24 @@ This pane is dedicated to managing Kubernetes services. It simplifies the proces
 
 ![kubernetes-integration-kubernetes-panel](./images/overview/kubernetes-integration-kubernetes.png)
 
-### AI Assistant
+### AI Agent
 
-The AI Assistant is an integrated chat interface within ABP Studio that provides intelligent assistance for ABP-related questions. You can access it from the left sidebar by clicking the AI icon.
+The AI Agent is an integrated coding agent in ABP Studio. It can answer ABP-related questions, create implementation plans, and work on the current solution with controlled access to files, Studio tools, workflows, Git context, and configured MCP tools.
 
-![ai-assistant](./images/overview/ai-assistant.png)
+![ai-agent](./images/ai-agent/ai-agent-panel.png)
 
-Key features of the AI Assistant include:
+Key features of the AI Agent include:
 
-- **Chat Interface**: Ask anything about ABP Framework, and get instant, context-aware responses to help with your development workflow.
-- **File Attachments**: Attach files to your conversations to get more specific assistance with your code or configuration.
-- **Recent Chats**: Access your conversation history to continue previous discussions or reference past solutions.
-- **Credits System**: The AI Assistant uses a credits-based system, with usage tracked and displayed in the interface.
+- **Agent Modes**: Use Agent, Plan, or Ask mode depending on whether the session should modify files, create a plan, or answer questions.
+- **Solution Context**: Work with the active solution, selected AI scope, run profile, workflow, and model settings.
+- **Attachments**: Attach supported files or images to provide task-specific context.
+- **Studio Integration**: Use enabled Studio tools for build, monitoring, applications, containers, tasks, proxies, migrations, and Git-related workflows.
 
-> **Note**: Review the Privacy Notice available in the AI Assistant panel to understand how your data is handled.
+For a production example of this workflow in action, see the [Hanova & Habitly samples](../samples/index.md#hanova--habitly).
+
+> **Note**: Review the Privacy Notice available in the AI Agent panel to understand how your data is handled.
+
+For the technical AI Agent reference, see [ABP Studio: AI Agent](./ai-agent.md).
 
 ## Application Monitoring Area
 

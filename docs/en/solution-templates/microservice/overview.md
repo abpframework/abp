@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Explore the Microservice solution template for ABP Framework, featuring pre-installed libraries and services for seamless development and production."
+    "Description": "Explore the modern ABP microservice solution template, featuring React-based web apps, API gateways, and pre-installed libraries and services for development and production."
 }
 ```
 
@@ -20,6 +20,8 @@
 > You must have an ABP Business or a higher license to be able to create a microservice solution.
 
 In this document, you will learn what the Microservice solution template offers to you.
+
+This page describes the current modern microservice template. In this template family, the web layer supports `React` or `No UI`.
 
 ## The Big Picture
 
@@ -45,9 +47,8 @@ All the following **libraries and services** are **pre-installed** and **configu
 The following features are built and pre-configured for you in the solution.
 
 * **Authentication** is fully configured based on best practices;
-  * **JWT Bearer Authentication** for microservices and applications.
-  * **OpenId Connect Authentication**, if you have selected the MVC UI.
-  * **Authorization code flow** is implemented, if you have selected a SPA UI (Angular or Blazor WASM).
+  * **JWT Bearer Authentication** for microservices and gateways.
+  * **OpenId Connect / authorization code flow** for the React web applications (`react`, `react-admin-console`, and `react-public-web` when enabled).
   * Other flows (resource owner password, client credentials...) are easy to use when you need them.
 * **[Permission](../../framework/fundamentals/authorization/index.md)** (authorization), **[setting](../../framework/infrastructure/settings.md)**, **[feature](../../framework/infrastructure/features.md)** and the **[localization](../../framework/fundamentals/localization.md)** management systems are pre-configured and ready to use.
 * **[Background job system](../../framework/infrastructure/background-jobs/index.md)** with [RabbitMQ integrated](../../framework/infrastructure/background-jobs/rabbitmq.md).
@@ -98,21 +99,22 @@ There are two database provider options are provided on a new microservice solut
 
 ### UI Frameworks
 
-The solution comes with a main web application with the following UI Framework options:
+The current modern microservice template supports the following web options:
 
-* **None** (doesn't include a web application to the solution)
-* **Angular**
-* **MVC / Razor Pages UI**
-* **Blazor WebAssembly**
-* **Blazor Server**
-* **MAUI with Blazor (Hybrid)**
+* **None**: Doesn't include the React web applications.
+* **React**: Creates the web application set for the solution.
+
+When you select **React**, ABP Studio creates:
+
+* `apps/react` as the main SPA behind the `web` gateway.
+* `apps/react-admin-console` as the dedicated administration SPA.
+* `apps/react-public-web` as an additional public site when the *Public Website* option is enabled.
 
 ### The Mobile Application
 
-If you prefer, the solution includes a mobile application with its dedicated API Gateway. The mobile application is fully integrated to the system, implements authentication (login) and other ABP features, and includes a few screens that you can use and take as example. The following options are available:
+If you prefer, the solution includes a mobile application with its dedicated API Gateway. The mobile application is fully integrated to the system, implements authentication (login) and other ABP features, and includes a few screens that you can use and take as example. In the current modern template, the available options are:
 
 * **None** (doesn't include a mobile application to the solution)
-* **MAUI**
 * **React Native**
 
 ### Multi-Tenancy & SaaS Module

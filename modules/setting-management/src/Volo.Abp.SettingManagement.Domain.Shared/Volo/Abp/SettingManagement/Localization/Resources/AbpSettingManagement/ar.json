@@ -37,6 +37,7 @@
     "Feature:SettingManagementEnableDescription": "تفعيل إعداد نظام الإدارة في التطبيق.",
     "Feature:AllowChangingEmailSettings": "السماح لتغيير إعدادات البريد الإلكتروني",
     "Feature:AllowChangingEmailSettingsDescription": "السماح لتغيير إعدادات البريد الإلكتروني.",
-    "SmtpPasswordPlaceholder": "أدخل قيمة لتحديث كلمة المرور"
+    "SmtpPasswordPlaceholder": "أدخل قيمة لتحديث كلمة المرور",
+    "NoSettingsAvailable": "لا توجد إعدادات لعرضها."
   }
 }

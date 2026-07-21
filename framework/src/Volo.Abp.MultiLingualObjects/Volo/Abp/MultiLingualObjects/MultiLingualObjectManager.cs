@@ -152,26 +152,11 @@ public class MultiLingualObjectManager : IMultiLingualObjectManager, ITransientD
             var index = 0;
             foreach (var translations in translationsCombined)
             {
-                if (!translations.Any())
+                //if the src has no translations, don't try to find a translation
+                if (translations.Any() && res[index] == null)
                 {
-                    //don't try to find a translation
-                }
-                else
-                {
-                    var translation = res[index];
-                    if (translation != null)
-                    {
-                        continue;
-                    }
-                    translation = translations.FirstOrDefault(pt => pt.Language == defaultLanguage);
-                    if (translation != null)
-                    {
-                        res[index] = translation;
-                    }
-                    else
-                    {
-                        res[index] = translations.FirstOrDefault();
-                    }
+                    res[index] = translations.FirstOrDefault(pt => pt.Language == defaultLanguage) ??
+                                 translations.FirstOrDefault();
                 }
                 index++;
             }

@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "entity-property-descriptor.schema.json",
+  "title": "EntityPropertyDescriptor",
+  "description": "Describes one dynamic entity property. Properties define persisted data fields, enum fields, foreign keys, upload fields, server-only fields, defaults, uniqueness, and validators.",
+  "markdownDescription": "AI guidance: use PascalCase property names. Use `type` for primitive fields, `type: \"enum\"` with `enumType` for enum fields, and a `foreignKey` object for lookup fields. FK property names should normally end with `Id`. Keep sensitive values `serverOnly: true`. Do not add legacy UI configuration here; page columns/filters and form fields own UI behavior.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Stable PascalCase property name, unique within the entity. Examples: 'Name', 'EmailAddress', 'CustomerId', 'StartDate'.",
+      "minLength": 1
+    },
+    "type": {
+      "$ref": "entity-property-type.schema.json",
+      "description": "Primitive or special property type. If omitted, runtime treats the property as string. Use 'enum' only with enumType; use 'file'/'image' for first-class upload fields."
+    },
+    "displayName": {
+      "type": "string",
+      "description": "Default display label for this property. Page columns and form fields can override it. Omit when the label can be derived from the property name.",
+      "minLength": 1
+    },
+    "enumType": {
+      "type": "string",
+      "description": "Name of a JSON-defined enum from top-level enums or a full type name for code enums. Required when type is 'enum'."
+    },
+    "allowSetByClients": {
+      "type": "boolean",
+      "description": "Controls whether create/update clients may set the property. Use false for server-computed or protected fields that can still be returned to clients."
+    },
+    "serverOnly": {
+      "type": "boolean",
+      "description": "When true, this property is completely hidden from clients, API responses, and UI definitions. Use for secrets, internal notes, hashes, or backend-only workflow state."
+    },
+    "isMappedToDbField": {
+      "type": "boolean",
+      "description": "Whether this property is mapped to a database column. Keep true or omit for normal persisted fields. Use false for computed/transient fields supplied by scripts or backend logic."
+    },
+    "defaultValue": {
+      "type": ["string", "null"],
+      "description": "Default value for new records. Stored as a string in descriptor JSON and converted to the declared property type at runtime. Examples: '0' for int/enum, 'true' for boolean, '2026-05-18T09:00:00Z' for datetime."
+    },
+    "isUnique": {
+      "type": "boolean",
+      "description": "Whether this property value must be unique across records of this entity. Use for codes, slugs, natural keys, and names only when duplicates are not allowed."
+    },
+    "isRequired": {
+      "type": "boolean",
+      "description": "When true, the property is required/not nullable. This affects database schema, backend validation, and generated UI validation. Existing data may need defaults before turning this on."
+    },
+    "foreignKey": {
+      "$ref": "foreign-key-descriptor.schema.json",
+      "description": "Foreign key/lookup relation. The current property's value stores the referenced entity id. The property name should usually be '<ReferencedEntity>NameId', for example 'CustomerId'."
+    },
+    "fileMaxSizeBytes": {
+      "type": "integer",
+      "description": "Maximum allowed file size in bytes for File and Image properties. Example: 5242880 for 5 MiB.",
+      "minimum": 1
+    },
+    "fileAllowedContentTypes": {
+      "type": "array",
+      "description": "Allowed MIME content types or wildcard patterns for File and Image properties. Examples: 'image/*', 'application/pdf'.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "imageMaxWidth": {
+      "type": "integer",
+      "description": "Optional maximum image width in pixels.",
+      "minimum": 1
+    },
+    "imageMaxHeight": {
+      "type": "integer",
+      "description": "Optional maximum image height in pixels.",
+      "minimum": 1
+    },
+    "imageResizeMode": {
+      "type": "string",
+      "description": "How uploaded images should be resized when image dimensions are configured. 'fit' preserves the full image inside the bounds; 'fill' crops/fills the target bounds.",
+      "enum": ["fit", "fill"]
+    },
+    "validators": {
+      "type": "array",
+      "description": "Backend/UI validators for this property. Use required, length, range, pattern, email, phone, url, or creditCard as appropriate. Duplicate required can be omitted when isRequired is true unless a custom message is needed.",
+      "items": {
+        "$ref": "validator-descriptor.schema.json"
+      }
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "additionalProperties": false,
+  "examples": [
+    { "name": "Name", "type": "string", "isRequired": true, "validators": [{ "type": "maxLength", "length": 128 }] },
+    { "name": "Status", "type": "enum", "enumType": "Acme.Events.EventStatus", "defaultValue": "0" },
+    { "name": "CustomerId", "foreignKey": { "entityName": "Acme.Crm.Customer", "displayPropertyName": "Name" } },
+    { "name": "CoverImage", "type": "image", "fileAllowedContentTypes": ["image/*"], "fileMaxSizeBytes": 5242880, "imageResizeMode": "fit" }
+  ]
+}

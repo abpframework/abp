@@ -33,6 +33,87 @@ When you click *Actions* -> *Permissions* for a role, the permission management 
 
 In this dialog, you can grant permissions for the selected role. The tabs in the left side represents main permission groups and the right side contains the permissions defined in the selected group.
 
+#### Reusing the Permission Management Dialog
+
+The standard permission management dialog is reusable for any registered permission management provider. The provider name and key identify the object whose permissions are being managed.
+
+##### MVC / Razor Pages
+
+Use `abp.ModalManager` to open the built-in modal page:
+
+````javascript
+var permissionModal = new abp.ModalManager(
+    abp.appPath + 'AbpPermissionManagement/PermissionManagementModal'
+);
+
+permissionModal.open({
+    providerName: 'R',
+    providerKey: roleName,
+    providerKeyDisplayName: roleName
+});
+````
+
+##### Blazor
+
+Add the `PermissionManagementModal` component to the page and call its `OpenAsync` method:
+
+````razor
+@using Volo.Abp.PermissionManagement.Blazor.Components
+
+<PermissionManagementModal @ref="PermissionModal" />
+
+@code {
+    private PermissionManagementModal PermissionModal { get; set; }
+
+    private Task OpenPermissionsAsync(string roleName)
+    {
+        return PermissionModal.OpenAsync("R", roleName, roleName);
+    }
+}
+````
+
+The MudBlazor package provides the same component API in the `Volo.Abp.PermissionManagement.Blazor.MudBlazor.Components` namespace.
+
+##### Angular
+
+Import the standalone `PermissionManagementComponent` into your component:
+
+````typescript
+import { Component } from '@angular/core';
+import { PermissionManagementComponent } from '@abp/ng.permission-management';
+
+@Component({
+  selector: 'app-role-actions',
+  templateUrl: './role-actions.component.html',
+  imports: [PermissionManagementComponent],
+})
+export class RoleActionsComponent {
+  roleName = 'admin';
+  permissionsVisible = false;
+
+  openPermissions() {
+    this.permissionsVisible = true;
+  }
+}
+````
+
+Then add the component to the template. It owns the modal, so you only need to control its `visible` value:
+
+````html
+<button type="button" (click)="openPermissions()">Permissions</button>
+
+<abp-permission-management
+  providerName="R"
+  [providerKey]="roleName"
+  [entityDisplayName]="roleName"
+  [(visible)]="permissionsVisible"
+/>
+````
+
+The reusable dialog calls `IPermissionAppService`. The provider must be registered and mapped to an authorization policy as described in the [Permission Management Providers](#permission-management-providers) section. For non-admin users, only permissions that the current user already has are editable, and update requests are filtered by the same rule. Users with the built-in admin role are not subject to this editability filter.
+
+Use `entityDisplayName` to customize the modal title and `hideBadges` to hide the granted-provider badges. The component emits `visibleChange`, so the two-way `[(visible)]` binding keeps the caller's visibility state synchronized.
+
 ### Resource Permission Management Dialog
 
 In addition to standard permissions, this module provides a reusable dialog for managing **resource-based permissions** on specific resource instances. This allows administrators to grant or revoke permissions for users, roles and clients on individual resources (e.g., a specific document, project, or any entity).
@@ -45,12 +126,23 @@ You can integrate this dialog into your own application to manage permissions fo
 
 #### MVC / Razor Pages
 
-Use the `abp.ModalManager` to open the resource permission management dialog:
+First, add the `resource-permission-management-modal.js` script to your page. This script registers the `ResourcePermissionManagement` modal class used by `abp.ModalManager`:
+
+````html
+@section scripts
+{
+    <abp-script src="/Pages/MyBook/Index.js"/>
+    <abp-script src="/Pages/AbpPermissionManagement/resource-permission-management-modal.js" />
+}
+````
+
+Then use the `abp.ModalManager` to open the resource permission management dialog:
 
 ````javascript
-var _resourcePermissionsModal = new abp.ModalManager(
-    abp.appPath + 'AbpPermissionManagement/ResourcePermissionManagementModal'
-);
+var _resourcePermissionsModal = new abp.ModalManager({
+    viewUrl: abp.appPath + 'AbpPermissionManagement/ResourcePermissionManagementModal',
+    modalClass: 'ResourcePermissionManagement'
+});
 
 // Open the modal for a specific resource
 _resourcePermissionsModal.open({
@@ -83,30 +175,43 @@ Use the `ResourcePermissionManagementModal` component's `OpenAsync` method to op
 }
 ````
 
+The MudBlazor package provides the same component API in the `Volo.Abp.PermissionManagement.Blazor.MudBlazor.Components` namespace.
+
 #### Angular
 
-Use the `ResourcePermissionManagementComponent`:
+Import the standalone `ResourcePermissionManagementComponent` into your component:
 
 ````typescript
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Component } from '@angular/core';
 import { ResourcePermissionManagementComponent } from '@abp/ng.permission-management';
 
 @Component({
-  // ...
+  selector: 'app-document-actions',
+  templateUrl: './document-actions.component.html',
+  imports: [ResourcePermissionManagementComponent],
 })
-export class DocumentListComponent {
-  constructor(private modalService: NgbModal) {}
+export class DocumentActionsComponent {
+  documentId = '42';
+  documentTitle = 'Permission Management Guide';
+  resourcePermissionsVisible = false;
 
-  openPermissionsModal(document: DocumentDto) {
-    const modalRef = this.modalService.open(
-      ResourcePermissionManagementComponent, 
-      { size: 'lg' }
-    );
-    modalRef.componentInstance.resourceName = 'MyApp.Document';
-    modalRef.componentInstance.resourceKey = document.id;
-    modalRef.componentInstance.resourceDisplayName = document.title;
+  openPermissions() {
+    this.resourcePermissionsVisible = true;
   }
 }
+````
+
+Render the component directly. It owns the modal and requires `resourceName` and `resourceKey` inputs:
+
+````html
+<button type="button" (click)="openPermissions()">Permissions</button>
+
+<abp-resource-permission-management
+  resourceName="MyApp.Document"
+  [resourceKey]="documentId"
+  [resourceDisplayName]="documentTitle"
+  [(visible)]="resourcePermissionsVisible"
+/>
 ````
 
 ## IPermissionManager
@@ -135,13 +240,15 @@ public class MyService : ITransientDependency
     }
 
     public async Task GrantUserPermissionDemoAsync(
-        Guid userId, string roleName, string permission)
+        Guid userId, string permission)
     {
         await _permissionManager
             .SetForUserAsync(userId, permission, true);
     }
 }
 ````
+
+The OpenIddict integration also provides `SetForClientAsync` for client permissions.
 
 ## IResourcePermissionManager
 
@@ -232,32 +339,85 @@ public class MyService : ITransientDependency
 
 ## Cleaning Up Resource Permissions
 
-When a resource is deleted, you should clean up its associated permissions to avoid orphaned permission records in the database. You can do this directly in your delete logic or handle it asynchronously through event handlers:
+When a resource is deleted, you should clean up its associated permissions to avoid orphaned permission records in the database. Query all grants for the resource and delete the returned entities:
 
 ````csharp
-public async Task DeleteDocumentAsync(Guid id)
+public class DocumentService : ITransientDependency, IUnitOfWorkEnabled
 {
-    // Delete the document
-    await _documentRepository.DeleteAsync(id);
+    private readonly IDocumentRepository _documentRepository;
+    private readonly IResourcePermissionGrantRepository _resourcePermissionGrantRepository;
 
-    // Clean up all permissions for this resource
-    await _resourcePermissionManager.DeleteAsync(
-        resourceName: "MyApp.Document",
-        resourceKey: id.ToString(),
-        providerName: "U",
-        providerKey: null // Deletes for all users
-    );
+    public DocumentService(
+        IDocumentRepository documentRepository,
+        IResourcePermissionGrantRepository resourcePermissionGrantRepository)
+    {
+        _documentRepository = documentRepository;
+        _resourcePermissionGrantRepository = resourcePermissionGrantRepository;
+    }
 
-    await _resourcePermissionManager.DeleteAsync(
-        resourceName: "MyApp.Document",
-        resourceKey: id.ToString(),
-        providerName: "R",
-        providerKey: null // Deletes for all roles
-    );
+    public virtual async Task DeleteDocumentAsync(Guid id)
+    {
+        await _documentRepository.DeleteAsync(id);
+
+        var grants = await _resourcePermissionGrantRepository.GetPermissionsAsync(
+            "MyApp.Document",
+            id.ToString()
+        );
+
+        await _resourcePermissionGrantRepository.DeleteManyAsync(
+            grants,
+            autoSave: true
+        );
+    }
 }
 ````
 
-> ABP modules automatically handle permission cleanup for their own entities. For your custom entities, you are responsible for cleaning up resource permissions when resources are deleted.
+`IUnitOfWorkEnabled` keeps the resource deletion and grant cleanup in the same unit of work. `ResourcePermissionGrant` is a multi-tenant entity, so repository queries are scoped by the current tenant data filter. If cleanup runs from the host or a background process, switch `ICurrentTenant` to the resource owner's tenant before calling `GetPermissionsAsync` and `DeleteManyAsync`; otherwise the query will not return that tenant's grants.
+
+The `providerName` and `providerKey` arguments of `IResourcePermissionManager.DeleteAsync` identify one exact provider and key; a `null` provider key is not a wildcard. The Identity integration cleans up user and role grants, and the OpenIddict integration cleans up client grants when those entities are deleted. For your custom entities, you are responsible for removing all resource grants when the resource is deleted.
+
+## Application Service and HTTP API
+
+`IPermissionAppService` exposes the management operations under the `api/permission-management/permissions` route. Standard permission `GET` and `PUT` operations require the authorization policy mapped to the requested provider in `PermissionManagementOptions.ProviderPolicies`.
+
+Standard and resource update operations handle omitted permissions differently:
+
+* The standard permission `PUT` operation changes only the permission entries included in `UpdatePermissionsDto`. For non-admin users, entries the current user does not have are ignored.
+* The resource permission `PUT` operation treats `UpdateResourcePermissionsDto.Permissions` as the complete desired set for the selected resource, provider, and provider key. Manageable permissions omitted from the list are revoked. Each resource permission is filtered by its `ManagementPermissionName` before it can be returned or changed.
+
+## Seeding Permission Grants
+
+Use `IPermissionDataSeeder` in a data seed contributor to add initial permission grants for a provider and key:
+
+````csharp
+public class MyPermissionDataSeedContributor
+    : IDataSeedContributor, ITransientDependency
+{
+    private readonly IPermissionDataSeeder _permissionDataSeeder;
+
+    public MyPermissionDataSeedContributor(
+        IPermissionDataSeeder permissionDataSeeder)
+    {
+        _permissionDataSeeder = permissionDataSeeder;
+    }
+
+    public Task SeedAsync(DataSeedContext context)
+    {
+        return _permissionDataSeeder.SeedAsync(
+            RolePermissionValueProvider.ProviderName,
+            "admin",
+            new[]
+            {
+                "MyApp.Books",
+                "MyApp.Books.Create"
+            },
+            context.TenantId
+        );
+    }
+}
+````
+
+The seeder is additive and tenant-aware. It inserts grants that do not exist for the selected provider, key, and tenant; it does not revoke existing grants that are absent from the input.
 
 ## Permission Management Providers
 
@@ -268,6 +428,8 @@ Permission Management Module is extensible, just like the [permission system](..
 * `UserPermissionManagementProvider`: Manages user-based permissions.
 * `RolePermissionManagementProvider`: Manages role-based permissions.
 
+The OpenIddict integration also registers a provider for client permissions.
+
 `IPermissionManager` uses these providers when you get/set permissions. You can define your own provider by implementing the `IPermissionManagementProvider` or inheriting from the `PermissionManagementProvider` base class.
 
 **Example:**
@@ -275,7 +437,9 @@ Permission Management Module is extensible, just like the [permission system](..
 ````csharp
 public class CustomPermissionManagementProvider : PermissionManagementProvider
 {
-    public override string Name => "Custom";
+    public const string ProviderName = "Custom";
+
+    public override string Name => ProviderName;
 
     public CustomPermissionManagementProvider(
         IPermissionGrantRepository permissionGrantRepository,
@@ -298,10 +462,12 @@ Once you create your provider class, you should register it using the `Permissio
 Configure<PermissionManagementOptions>(options =>
 {
     options.ManagementProviders.Add<CustomPermissionManagementProvider>();
+    options.ProviderPolicies[CustomPermissionManagementProvider.ProviderName] =
+        "MyApp.ManageCustomPermissions";
 });
 ````
 
-The order of the providers are important. Providers are executed in the reverse order. That means the `CustomPermissionManagementProvider` is executed first for this example. You can insert your provider in any order in the `Providers` list.
+`IPermissionManager` enumerates `ManagementProviders` in registration order when it reads permission values. A write operation selects the registered provider whose `Name` matches the requested provider name. Every provider name must therefore be unique.
 
 ### Resource Permission Management Providers
 
@@ -335,6 +501,51 @@ Configure<PermissionManagementOptions>(options =>
 });
 ````
 
+#### Controlling Provider Availability
+
+You can control whether a provider is active in a given context by overriding `IsAvailableAsync()`. When a provider returns `false`, it is completely excluded from all read, write, and UI listing operations. This is useful for host-only providers that should not be visible or writable in a tenant context.
+
+````csharp
+public class CustomResourcePermissionManagementProvider 
+    : ResourcePermissionManagementProvider
+{
+    public override string Name => "Custom";
+
+    // ...constructor...
+
+    public override Task<bool> IsAvailableAsync()
+    {
+        // Only available for the host, not for tenants
+        return Task.FromResult(CurrentTenant.Id == null);
+    }
+}
+````
+
+The same `IsAvailableAsync()` method is available on `IResourcePermissionProviderKeyLookupService`, which controls whether the provider appears in the UI provider picker:
+
+````csharp
+public class CustomResourcePermissionProviderKeyLookupService
+    : IResourcePermissionProviderKeyLookupService, ITransientDependency
+{
+    public string Name => "Custom";
+    public ILocalizableString DisplayName { get; }
+
+    protected ICurrentTenant CurrentTenant { get; }
+
+    public CustomResourcePermissionProviderKeyLookupService(ICurrentTenant currentTenant)
+    {
+        CurrentTenant = currentTenant;
+    }
+
+    public Task<bool> IsAvailableAsync()
+    {
+        return Task.FromResult(CurrentTenant.Id == null);
+    }
+
+    // ...SearchAsync implementations...
+}
+````
+
 ## Permission Value Providers
 
 Permission value providers are used to determine if a permission is granted. They are different from management providers: **value providers** are used when *checking* permissions, while **management providers** are used when *setting* permissions.
@@ -343,15 +554,20 @@ Permission value providers are used to determine if a permission is granted. The
 
 ### Resource Permission Value Providers
 
-Similar to the standard permission system, you can create custom value providers for resource permissions. ABP comes with two built-in resource permission value providers:
+Similar to the standard permission system, you can create custom value providers for resource permissions. ABP comes with three built-in resource permission value providers:
 
 * `UserResourcePermissionValueProvider` (`U`): Checks permissions granted directly to users
 * `RoleResourcePermissionValueProvider` (`R`): Checks permissions granted to roles
+* `ClientResourcePermissionValueProvider` (`C`): Checks permissions granted directly to clients
 
 You can create your own custom value provider by implementing the `IResourcePermissionValueProvider` interface or inheriting from the `ResourcePermissionValueProvider` base class:
 
 ````csharp
+using System;
+using System.Linq;
+using System.Security.Principal;
 using System.Threading.Tasks;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Authorization.Permissions.Resources;
 
 public class OwnerResourcePermissionValueProvider : ResourcePermissionValueProvider
@@ -385,6 +601,33 @@ public class OwnerResourcePermissionValueProvider : ResourcePermissionValueProvi
             : PermissionGrantResult.Undefined;
     }
 
+    public override async Task<MultiplePermissionGrantResult> CheckAsync(
+        ResourcePermissionValuesCheckContext context)
+    {
+        var permissionNames = context.Permissions
+            .Select(permission => permission.Name)
+            .Distinct()
+            .ToArray();
+        var result = new MultiplePermissionGrantResult(permissionNames);
+
+        var currentUserId = context.Principal?.FindUserId();
+        if (currentUserId == null ||
+            !await CheckIfUserIsOwnerAsync(
+                currentUserId.Value,
+                context.ResourceName,
+                context.ResourceKey))
+        {
+            return result;
+        }
+
+        foreach (var permissionName in permissionNames)
+        {
+            result.Result[permissionName] = PermissionGrantResult.Granted;
+        }
+
+        return result;
+    }
+
     private Task<bool> CheckIfUserIsOwnerAsync(
         Guid userId, 
         string resourceName, 
@@ -404,6 +647,19 @@ Configure<AbpPermissionOptions>(options =>
     options.ResourceValueProviders.Add<OwnerResourcePermissionValueProvider>();
 });
 ````
+
+## Database Providers
+
+The module uses the `AbpPermissionManagement` connection string name. `AbpPermissionManagementDbProperties.DbTablePrefix` and `DbSchema` default to the common ABP database prefix and schema, and can be changed before configuring the database model.
+
+With the default `Abp` prefix, the EF Core provider maps the following tables and the MongoDB provider maps collections with the same names:
+
+* `AbpPermissionGrants`
+* `AbpResourcePermissionGrants`
+* `AbpPermissionGroups`
+* `AbpPermissions`
+
+In EF Core, the permission group and permission definition tables are mapped only when the model is configured as a host database.
 
 ## See Also
 

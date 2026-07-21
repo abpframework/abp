@@ -1,26 +1,22 @@
-﻿using Blazorise.Bootstrap5;
-using Blazorise.Icons.FontAwesome;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+﻿using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MyCompanyName.MyProjectName.Menus;
 using MyCompanyName.MyProjectName;
 using OpenIddict.Abstractions;
 using Volo.Abp.Account;
-using Volo.Abp.AspNetCore.Components.Web.LeptonXLiteTheme.Themes.LeptonXLite;
-using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
-using Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme;
+using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Routing;
+using Volo.Abp.AspNetCore.Components.WebAssembly.MudBlazorBasicTheme;
 using Volo.Abp.Autofac.WebAssembly;
 using Volo.Abp.Mapperly;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
-using Volo.Abp.Identity.Blazor.WebAssembly;
+using Volo.Abp.Identity.Blazor.MudBlazor.WebAssembly;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
-using Volo.Abp.SettingManagement.Blazor.WebAssembly;
+using Volo.Abp.SettingManagement.Blazor.MudBlazor.WebAssembly;
 using Volo.Abp.TenantManagement;
-using Volo.Abp.TenantManagement.Blazor.WebAssembly;
+using Volo.Abp.TenantManagement.Blazor.MudBlazor.WebAssembly;
 using Volo.Abp.UI.Navigation;
 
 namespace MyCompanyName.MyProjectName;
@@ -30,14 +26,14 @@ namespace MyCompanyName.MyProjectName;
 
     // ABP Framework packages
     typeof(AbpAutofacWebAssemblyModule),
-    typeof(AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeModule),
+    typeof(AbpAspNetCoreComponentsWebAssemblyMudBlazorBasicThemeModule),
 
     // Account module packages
     typeof(AbpAccountHttpApiClientModule),
 
     // Identity module packages
     typeof(AbpIdentityHttpApiClientModule),
-    typeof(AbpIdentityBlazorWebAssemblyModule),
+    typeof(AbpIdentityBlazorMudBlazorWebAssemblyModule),
     typeof(AbpOpenIddictDomainSharedModule),
 
     // Permission Management module packages
@@ -45,14 +41,14 @@ namespace MyCompanyName.MyProjectName;
 
     // Tenant Management module packages
     typeof(AbpTenantManagementHttpApiClientModule),
-    typeof(AbpTenantManagementBlazorWebAssemblyModule),
+    typeof(AbpTenantManagementBlazorMudBlazorWebAssemblyModule),
 
     // Feature Management module packages
     typeof(AbpFeatureManagementHttpApiClientModule),
 
     // Setting Management module packages
     typeof(AbpSettingManagementHttpApiClientModule),
-    typeof(AbpSettingManagementBlazorWebAssemblyModule)
+    typeof(AbpSettingManagementBlazorMudBlazorWebAssemblyModule)
 )]
 public class MyProjectNameBlazorModule : AbpModule
 {
@@ -65,7 +61,6 @@ public class MyProjectNameBlazorModule : AbpModule
 
         ConfigureAuthentication(builder);
         ConfigureHttpClient(context, environment);
-        ConfigureBlazorise(context);
         ConfigureRouter(context);
         ConfigureMenu(context);
         ConfigureHttpClientProxies(context);
@@ -89,13 +84,6 @@ public class MyProjectNameBlazorModule : AbpModule
         });
     }
 
-    private void ConfigureBlazorise(ServiceConfigurationContext context)
-    {
-        context.Services
-            .AddBootstrap5Providers()
-            .AddFontAwesomeIcons();
-    }
-
     private void ConfigureHttpClientProxies(ServiceConfigurationContext context)
     {
         context.Services.AddHttpClientProxies(
@@ -117,12 +105,6 @@ public class MyProjectNameBlazorModule : AbpModule
             options.ProviderOptions.DefaultScopes.Add("email");
             options.ProviderOptions.DefaultScopes.Add("phone");
         });
-    }
-
-    private static void ConfigureUI(WebAssemblyHostBuilder builder)
-    {
-        builder.RootComponents.Add<App>("#ApplicationContainer");
-        builder.RootComponents.Add<HeadOutlet>("head::after");
     }
 
     private static void ConfigureHttpClient(ServiceConfigurationContext context, IWebAssemblyHostEnvironment environment)

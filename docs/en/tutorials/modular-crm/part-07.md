@@ -8,6 +8,13 @@
 # Integrating the Modules: Communication via Messages (Events)
 
 ````json
+//[doc-params]
+{
+    "UI": ["MVC", "BlazorWebApp", "NG"]
+}
+````
+
+````json
 //[doc-nav]
 {
   "Previous": {
@@ -158,13 +165,21 @@ In the opening dialog, find and select the `ModularCrm.Ordering` module, check t
 
 Once you click the OK button, the Ordering module is imported to the Catalog module, and an installation dialog is open:
 
+{{if UI == "MVC"}}
 ![abp-studio-install-module-dialog-for-ordering](images/abp-studio-install-module-dialog-for-ordering-v2.png)
+{{else if UI == "BlazorWebApp"}}
+![abp-studio-install-module-dialog-for-ordering](images/abp-studio-install-module-dialog-for-ordering-v2-blazor-webapp.png)
+{{end}}
 
 Here, select the `ModularCrm.Ordering.Contracts` package on the left side (because we want to add that package reference) and `ModularCrm.Catalog` package on the middle area (because we want to add the package reference to that project). Also, select the `ModularCrm.Ordering` package on the right side, and unselect all packages on the middle area (we don't need the implementation or any other packages). Then, click the OK button to finish the installation operation.
 
 You can check the ABP Studio's *Solution Explorer* panel to see the module import and the project reference (dependency).
 
+{{if UI == "MVC"}}
 ![abp-studio-imports-and-dependencies](images/abp-studio-imports-and-dependencies-v2.png)
+{{else if UI == "BlazorWebApp"}}
+![abp-studio-imports-and-dependencies](images/abp-studio-imports-and-dependencies-v2-blazor-webapp.png)
+{{end}}
 
 ### Handling the `OrderPlacedEto` Event
 
@@ -240,11 +255,28 @@ Find the *Orders* API, click the *Try it out* button, enter a sample value the t
 
 > **IMPORTANT:** Here, you should type a valid product Id from the *CatalogProducts* table of your database!
 
-Once you press the *Execute* button, a new order is created. At that point, you can check the `/Orders` page to see if the new order is shown on the UI, and check the `/Products` page to see if the related product's stock count has decreased.
+Once you press the *Execute* button, a new order is created.
+
+{{if UI == "MVC"}}
+
+At that point, you can check the `/Orders` page to see if the new order is shown on the UI, and check the `/Products` page to see if the related product's stock count has decreased.
 
 Here are sample screenshots from the Products and Orders pages:
 
 ![products-orders-pages-crop](images/products-orders-pages-crop.png)
+
+{{else if UI == "NG"}}
+
+At that point, open the Angular UI and validate the result on the *Ordering* (`/ordering`) and *Catalog* (`/catalog`) pages. Verify that the new order is listed in Ordering and the related product's stock count is decreased in Catalog.
+
+If the Angular app is not already running, start it from the root `angular` folder:
+
+```bash
+yarn symlinks:setup
+yarn start
+```
+
+{{end}}
 
 We placed a new order for Product C. As a result, Product C's stock count has decreased from 55 to 54 and a new line is added to the Orders page.
 

@@ -17,8 +17,8 @@ ABP provides a convenient and comfortable way of creating web applications using
 
 ASP.NET Core provides two models for UI development:
 
-* **[MVC (Model-View-Controller)](https://docs.microsoft.com/en-us/aspnet/core/mvc/)** is the classic way that exists from the version 1.0. This model can be used to create UI pages/components and HTTP APIs.
-* **[Razor Pages](https://docs.microsoft.com/en-us/aspnet/core/razor-pages/)** was introduced with the ASP.NET Core 2.0 as a new way to create web pages.
+- **[MVC (Model-View-Controller)](https://docs.microsoft.com/en-us/aspnet/core/mvc/)** is the classic way that exists from the version 1.0. This model can be used to create UI pages/components and HTTP APIs.
+- **[Razor Pages](https://docs.microsoft.com/en-us/aspnet/core/razor-pages/)** was introduced with the ASP.NET Core 2.0 as a new way to create web pages.
 
 **ABP supports both** of the MVC and the Razor Pages models. However, it is suggested to create the **UI pages with Razor Pages** approach and use the **MVC model to build HTTP APIs**. So, all the pre-build modules, samples and the documentation is based on the Razor Pages for the UI development, while you can always apply the MVC pattern to create your own pages.
 
@@ -32,18 +32,18 @@ The [application startup template](../../../solution-templates/application-modul
 
 ABP provides a complete [Theming](theming.md) system with the following goals:
 
-* Reusable [application modules](../../../modules) are developed **theme-independent**, so they can work with any UI theme.
-* UI theme is **decided by the final application**.
-* The theme is distributed via NuGet/NPM packages, so it is **easily upgradable**.
-* The final application can **customize** the selected theme.
+- Reusable [application modules](../../../modules) are developed **theme-independent**, so they can work with any UI theme.
+- UI theme is **decided by the final application**.
+- The theme is distributed via NuGet/NPM packages, so it is **easily upgradable**.
+- The final application can **customize** the selected theme.
 
 ### Current Themes
 
 Currently, three themes are **officially provided**:
 
-* The [Basic Theme](Basic-Theme.md) is the minimalist theme with the plain Bootstrap style. It is **open source and free**.
-* The [Lepton Theme](https://abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP](https://abp.io/) license.
-* The [LeptonX Theme](https://x.leptontheme.com/) is a theme that has both [commercial](../../../ui-themes/lepton-x/mvc.md) and [lite](../../../ui-themes/lepton-x-lite/asp-net-core.md) choices.
+- The [Basic Theme](Basic-Theme.md) is the minimalist theme with the plain Bootstrap style. It is **open source and free**.
+- The [Lepton Theme](https://abp.io/themes) is a **commercial** theme developed by the core ABP team and is a part of the [ABP](https://abp.io/) license.
+- The [LeptonX Theme](https://x.leptontheme.com/) is a theme that has both [commercial](../../../ui-themes/lepton-x/mvc.md) and [lite](../../../ui-themes/lepton-x-lite/asp-net-core.md) choices.
 
 There are also some community-driven themes for the ABP (you can search on the web).
 
@@ -72,7 +72,7 @@ You can use these libraries directly in your applications, without needing to ma
 
 The themes provide the standard layouts. So, you have responsive layouts with the standard features already implemented. The screenshot below has taken from the Application Layout of the [Basic Theme](basic-theme.md):
 
-![basic-theme-application-layout](../../../images/basic-theme-account-layout.png)
+basic-theme-application-layout
 
 See the [Theming](theming.md) document for more layout options and other details.
 
@@ -90,13 +90,13 @@ Dynamic JavaScript API Client Proxy system allows you to consume your server sid
 
 **Example: Get a list of authors from the server**
 
-````js
+```js
 acme.bookStore.authors.author.getList({
   maxResultCount: 10
 }).then(function(result){
   console.log(result.items);
 });
-````
+```
 
 `acme.bookStore.authors.author.getList` is an auto-generated function that internally makes an AJAX call to the server.
 
@@ -108,7 +108,7 @@ ABP makes it easier & type safe to write Bootstrap HTML.
 
 **Example: Render a Bootstrap modal**
 
-````html
+```html
 <abp-modal>
     <abp-modal-header title="Modal title" />
     <abp-modal-body>
@@ -116,7 +116,7 @@ ABP makes it easier & type safe to write Bootstrap HTML.
     </abp-modal-body>
     <abp-modal-footer buttons="@(AbpModalButtons.Save|AbpModalButtons.Close)"></abp-modal-footer>
 </abp-modal>
-````
+```
 
 See the [Tag Helpers](tag-helpers) document for more.
 
@@ -126,9 +126,9 @@ ABP provides `abp-dynamic-form` and `abp-input` tag helpers to dramatically simp
 
 **Example: Use `abp-dynamic-form` to create a complete form based on a model**
 
-````html
+```html
 <abp-dynamic-form abp-model="Movie" submit-button="true" />
-````
+```
 
 See the [Forms & Validation](forms-validation.md) document for details.
 
@@ -136,14 +136,14 @@ See the [Forms & Validation](forms-validation.md) document for details.
 
 ABP provides a flexible and modular Bundling & Minification system to create bundles and minify style/script files on runtime.
 
-````html
+```html
 <abp-style-bundle>
     <abp-style src="/libs/bootstrap/css/bootstrap.css" />
     <abp-style src="/libs/font-awesome/css/font-awesome.css" />
     <abp-style src="/libs/toastr/toastr.css" />
     <abp-style src="/styles/my-global-style.css" />
 </abp-style-bundle>
-````
+```
 
 Also, Client Side Package Management system offers a modular and consistent way of managing 3rd-party library dependencies.
 
@@ -157,11 +157,23 @@ See the [Bundling & Minification](bundling-minification.md) and [Client Side Pac
 
 ABP provides a lot of built-in solutions to common application requirements;
 
-* [Widget System](widgets.md) can be used to create reusable widgets & create dashboards.
-* [Page Alerts](page-alerts.md) makes it easy to show alerts to the user.
-* [Modal Manager](modals.md) provides a simple way to build and use modals.
-* [Data Tables](data-tables.md) integration makes straightforward to create data grids.
+- [Widget System](widgets.md) can be used to create reusable widgets & create dashboards.
+- [Page Alerts](page-alerts.md) makes it easy to show alerts to the user.
+- [Modal Manager](modals.md) provides a simple way to build and use modals.
+- [Data Tables](data-tables.md) integration makes straightforward to create data grids.
 
 ## Customization
 
 There are a lot of ways to customize the theme and the UIs of the pre-built modules. You can override components, pages, static resources, bundles and more. See the [User Interface Customization Guide](customization-user-interface.md).
+
+### Status-Specific Error Views
+
+The shared MVC theme uses `~/Views/Error/Default.cshtml` by default. Map an HTTP status code to another view with `AbpErrorPageOptions.ErrorViewUrls`:
+
+````csharp
+Configure<AbpErrorPageOptions>(options =>
+{
+    options.ErrorViewUrls["404"] = "~/Views/Error/NotFound.cshtml";
+    options.ErrorViewUrls["500"] = "~/Views/Error/InternalError.cshtml";
+});
+````

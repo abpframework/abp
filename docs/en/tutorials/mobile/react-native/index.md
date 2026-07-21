@@ -1,21 +1,34 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Learn how to develop a mobile application using React Native with ABP Framework, focusing on UI for the Acme.BookStore app."
+  "Description": "Learn how to develop a mobile application using React Native with the ABP Framework. Build the Acme.BookStore mobile UI on top of the modernized ABP React Native template (NativeWind v4 + Bottom Tab navigation)."
 }
 ```
 
 # Mobile Application Development Tutorial - React Native
 
-React Native mobile option is *available for* ***Team*** *or higher licenses*. Therefore, if you don't have a commercial license, it's suggested to follow the article by downloading the source code of the sample application as described in the next chapter.
+The React Native mobile option is _available for_ **_Team_** _or higher licenses_. If you don't have a commercial license, follow this article by downloading the source code of the sample application linked below.
 
 ## About This Tutorial
 
 > You must have an [ABP Team or a higher license](https://abp.io/pricing) to be able to create a mobile application.
 
-- This tutorial assumes that you have completed the [Web Application Development tutorial](../../book-store/part-01.md) and built an ABP based application named `Acme.BookStore` with [React Native](../../../framework/ui/react-native) as the mobile option. Therefore, if you haven't completed the [Web Application Development tutorial](../../book-store/part-01.md), you either need to complete it or download the source code from down below and follow this tutorial.
-- In this tutorial, we will only focus on the UI side of the `Acme.BookStore` application and will implement the CRUD operations.
+- This tutorial assumes you have completed the [Web Application Development tutorial](../../book-store/part-01.md) and built an ABP based application named `Acme.BookStore` with [React Native](../../../framework/ui/react-native) as the mobile option. If you haven't completed it, you can either complete it first or download the source code below and follow this tutorial.
+- This tutorial only focuses on the **React Native UI side** of the `Acme.BookStore` application. It implements the CRUD operations for `Books` and `Authors`, plus the relation between them. The backend (entities, application services, permissions, seeder) is already in place in the downloadable sample.
+- The mobile template was modernized in 2026: it now uses **NativeWind v4** (Tailwind CSS for React Native) for styling, **Bottom Tab navigation** by default, and the **Redux Toolkit** store with hook-based access (`useSelector` / `useDispatch`). The `connectToRedux` HOC, the `DrawerNavigator`, and the legacy `DataList`/`AbpSelect` components from earlier versions no longer ship with the template — this tutorial walks through building the new equivalents.
 - Before starting, please make sure that the [React Native Development Environment](../../../framework/ui/react-native/index.md) is ready on your machine.
+
+If you'd like to inspect a complete implementation first, [Habitly](../../../samples/index.md#hanova--habitly) is the production-ready mobile sample that follows this modern template direction.
+
+## Running the Application
+
+Before implementing UI changes, run the `Acme.BookStore` mobile application and verify that login works:
+
+1. Open the solution in **ABP Studio** and run the **Initialize Solution** task once (creates SSL certificates and other one-time setup).
+2. For browser testing, follow [Running on Web](../../../framework/ui/react-native/running-on-web.md) — start the **Default** run profile; ABP Studio opens the app at **`https://localhost:8443`**.
+3. For an Android emulator or iOS simulator, follow [Running on Device](../../../framework/ui/react-native/running-on-device.md). The sample is a **Pro, non-tiered Monolith** solution — switch to the **MobileEmulator** run profile, update `react-native/Environment.ts`, and start the profile (or run `yarn tunnel:api` manually). For **Tiered** or **Microservice** solutions, use the manual backend steps in that guide instead.
+
+See the [React Native overview](../../../framework/ui/react-native/index.md) for environment setup and project creation.
 
 ## Download the Source Code
 
@@ -25,277 +38,383 @@ You can use the following link to download the source code of the application de
 
 > If you encounter the "filename too long" or "unzip" error on Windows, please see [this guide](../../../kb/windows-path-too-long-fix.md).
 
-## The Book List Page
+The downloaded sample contains:
 
-There is no dynamic proxy generation for the react native application, that is why we need to create the BookAPI proxy manually under the `./src/api` folder.
+- `src/` — ABP backend (`Acme.BookStore.*` projects). It already exposes `BookAppService` and `AuthorAppService` with the CRUD endpoints we will consume.
+- `react-native/` — the React Native client. The auth, profile and settings flows ship out of the box. Throughout this tutorial we will add the `BookStore` feature to it.
+
+## Backend Setup (Quick Reference)
+
+The backend ships ready-to-run. The relevant pieces consumed from React Native are:
+
+- **Endpoints**
+    - `GET    /api/app/book` — paged list (returns `items` with `id`, `name`, `type`, `publishDate`, `price`, `authorName`)
+    - `GET    /api/app/book/{id}` — single book
+    - `POST   /api/app/book` — create
+    - `PUT    /api/app/book/{id}` — update
+    - `DELETE /api/app/book/{id}` — delete
+    - `GET    /api/app/book/author-lookup` — `{ items: [{ id, name }] }` for the author dropdown
+    - `GET    /api/app/author` — paged list (`items: [{ id, name, birthDate, shortBio }]`)
+    - `GET    /api/app/author/{id}`, `POST /api/app/author`, `PUT /api/app/author/{id}`, `DELETE /api/app/author/{id}`
+- **Permissions** — defined in `BookStorePermissions.cs` and returned to the mobile app as `auth.grantedPolicies` from `/api/abp/application-configuration`:
+
+    | Policy | UI effect |
+    |--------|-----------|
+    | `BookStore.Books` | Books tab + list |
+    | `BookStore.Books.Create` | New book FAB |
+    | `BookStore.Books.Edit` | Edit in item menu |
+    | `BookStore.Books.Delete` | Delete in item menu |
+    | `BookStore.Authors` | Authors tab + list |
+    | `BookStore.Authors.Create` | New author FAB |
+    | `BookStore.Authors.Edit` | Edit in item menu |
+    | `BookStore.Authors.Delete` | Delete in item menu |
+
+To run the backend, start `Acme.BookStore.DbMigrator` once (it seeds three sample authors and six sample books), then run `Acme.BookStore.HttpApi.Host`. Grant the **Book Store** permissions to the `admin` role via **Identity → Roles → admin → Permissions** in the web UI before testing on mobile (at minimum **Books** and **Authors** so the Book Store tab appears). After changing role permissions, log in again on mobile so `fetchAppConfigAsync` reloads `grantedPolicies`.
+
+If you want to follow the backend implementation step by step instead, read the [Web Application Development tutorial](../../book-store/part-01.md). The mobile-side code below works against the API surface listed above regardless of how you produced it.
+
+## Adding the Book API Proxy
+
+There is no dynamic proxy generation for the React Native application, so we create the `BookAPI` proxy manually under `./src/api`.
 
 ```ts
-//./src/api/BookAPI.ts
+// ./src/api/BookAPI.ts
 import api from './API';
 
-export const getList = () => api.get('/api/app/book').then(({ data }) => data);
+export const getList = (params: { maxResultCount?: number; skipCount?: number; sorting?: string } = {}) =>
+  api.get('/api/app/book', { params }).then(({ data }) => data);
 
-export const get = id => api.get(`/api/app/book/${id}`).then(({ data }) => data);
+export const get = (id: string) =>
+  api.get(`/api/app/book/${id}`).then(({ data }) => data);
 
-export const create = input => api.post('/api/app/book', input).then(({ data }) => data);
+export const create = (input: any) =>
+  api.post('/api/app/book', input).then(({ data }) => data);
 
-export const update = (input, id) => api.put(`/api/app/book/${id}`, input).then(({ data }) => data);
+export const update = (input: any, id: string) =>
+  api.put(`/api/app/book/${id}`, input).then(({ data }) => data);
 
-export const remove = id => api.delete(`/api/app/book/${id}`).then(({ data }) => data);
+export const remove = (id: string) =>
+  api.delete(`/api/app/book/${id}`).then(({ data }) => data);
 
+export const getAuthorLookup = () =>
+  api.get('/api/app/book/author-lookup').then(({ data }) => data);
 ```
 
-### Add the `Book Store` menu item to the navigation
+We will create `./src/api/AuthorAPI.ts` later in the [Author Section](#author).
 
-For createing a menu item, navigate to `./src/navigators/DrawerNavigator.tsx` file and add `BookStoreStack` to `Drawer.Navigator` component.
+- `api` is the shared `axios` instance (`./src/api/API.ts`) that injects the access token via the request interceptor in `./src/interceptors/APIInterceptor.ts`.
+- `getList` accepts a paging payload (`maxResultCount`, `skipCount`, `sorting`) so it can be plugged into the `DataList` component we build next.
 
-```tsx
-//Other imports..
-import BookStoreStackNavigator from './BookStoreNavigator';
+## Building the DataList Component
 
-const Drawer = createDrawerNavigator();
-
-export default function DrawerNavigator() {
-  return (
-    <Drawer.Navigator
-      initialRouteName="Home"
-      drawerContent={DrawerContent}
-      defaultStatus="closed"
-    >
-      {/*Added Screen*/}
-      <Drawer.Screen
-        name="BookStoreStack"
-        component={BookStoreStackNavigator}
-        options={%{{{ header: () => null }}}%}
-      />
-      {/*Added Screen*/}
-    </Drawer.Navigator>
-  );
-}
-```
-
-Create the `BookStoreStackNavigator` inside `./src/navigators/BookStoreNavigator.tsx`, this navigator will be used for the BookStore menu item.
+The earlier React Native template shipped a `DataList` component on top of React Native Paper. The new template only ships the essentials (`FormButtons`, `Loading`, `ValidationMessage`), so we add a NativeWind-based equivalent under `./src/components/DataList`.
 
 ```tsx
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Button } from 'react-native-paper';
-import i18n from 'i18n-js';
-
-import { BookStoreScreen, CreateUpdateAuthorScreen, CreateUpdateBookScreen } from '../screens';
-
-import { HamburgerIcon } from '../components';
-import { useThemeColors } from '../hooks';
-
-const Stack = createNativeStackNavigator();
-
-export default function BookStoreStackNavigator() {
-  const { background, onBackground } = useThemeColors();
-
-  return (
-    <Stack.Navigator initialRouteName="BookStore">
-      <Stack.Screen
-        name="BookStore"
-        component={BookStoreScreen}
-        options={({ navigation }) => ({
-          title: i18n.t('BookStore::Menu:BookStore'),
-          headerLeft: () => <HamburgerIcon navigation={navigation} />,
-          headerStyle: { backgroundColor: background },
-          headerTintColor: onBackground,
-          headerShadowVisible: false,
-        })}
-      />
-      <Stack.Screen
-        name="CreateUpdateBook"
-        component={CreateUpdateBookScreen}
-        options={({ route, navigation }) => ({
-          title: i18n.t(route.params?.bookId ? 'BookStore::Edit' : 'BookStore::NewBook'),
-          headerRight: () => (
-            <Button mode="text" onPress={() => navigation.navigate('BookStore')}>
-              {i18n.t('AbpUi::Cancel')}
-            </Button>
-          ),
-          headerStyle: { backgroundColor: background },
-          headerTintColor: onBackground,
-          headerShadowVisible: false,
-        })}
-      />
-    </Stack.Navigator>
-  );
-}
-```
-
-- BookStoreScreen will be used to store the `books` and `authors` page
-
-Add the `BookStoreStack` to the screens object in the `./src/components/DrawerContent/DrawerContent.tsx` file. The DrawerContent component will be used to render the menu items.
-
-```tsx
-// Imports..
-const screens = {
-  HomeStack: { label: "::Menu:Home", iconName: "home" },
-  DashboardStack: {
-    label: "::Menu:Dashboard",
-    requiredPolicy: "BookStore.Dashboard",
-    iconName: "chart-areaspline",
-  },
-  UsersStack: {
-    label: "AbpIdentity::Users",
-    iconName: "account-supervisor",
-    requiredPolicy: "AbpIdentity.Users",
-  },
-  //Add this property
-  BookStoreStack: {
-    label: "BookStore::Menu:BookStore",
-    iconName: "book",
-  },
-  //Add this property
-  TenantsStack: {
-    label: "Saas::Tenants",
-    iconName: "book-outline",
-    requiredPolicy: "Saas.Tenants",
-  },
-  SettingsStack: {
-    label: "AbpSettingManagement::Settings",
-    iconName: "cog",
-    navigation: null,
-  },
-};
-// Other codes..
-```
-
-![Book Store Menu Item](../../../images/book-store-menu-item.png)
-
-### Create Book List page
-
-Before creating the book list page, we need to create the `BookStoreScreen.tsx` file under the `./src/screens/BookStore` folder. This file will be used to store the `books` and `authors` page.
-
-```tsx
-import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import i18n from 'i18n-js';
-import { BottomNavigation } from 'react-native-paper';
-
-import { BooksScreen } from '../../screens';
+// ./src/components/DataList/DataList.tsx
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { View, Text, FlatList, RefreshControl, ActivityIndicator } from 'react-native';
+import { LocalizationContext } from '../../contexts/LocalizationContext';
 import { useThemeColors } from '../../hooks';
 
-const BooksRoute = nav => <BooksScreen navigation={nav} />;
+interface DataListProps<T> {
+  fetchFn: (params: { maxResultCount: number; skipCount: number }) => Promise<{ items: T[]; totalCount: number }>;
+  render: (info: { item: T; index: number }) => React.ReactElement;
+  trigger?: any;
+  pageSize?: number;
+}
 
-function BookStoreScreen({ navigation }) {
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    {
-      key: "books",
-      title: i18n.t("BookStore::Menu:Books"),
-      focusedIcon: "book",
-      unfocusedIcon: "book-outline",
+function DataList<T extends { id: string }>({
+  fetchFn,
+  render,
+  trigger,
+  pageSize = 20,
+}: DataListProps<T>) {
+  const { t } = useContext(LocalizationContext);
+  const { accentColor } = useThemeColors();
+
+  const [items, setItems] = useState<T[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [skipCount, setSkipCount] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const loadPage = useCallback(
+    async (skip: number, append: boolean) => {
+      if (loading) return;
+      setLoading(true);
+      try {
+        const result = await fetchFn({ maxResultCount: pageSize, skipCount: skip });
+        const fetched = result?.items ?? [];
+        setTotalCount(result?.totalCount ?? 0);
+        setItems(prev => (append ? [...prev, ...fetched] : fetched));
+        setSkipCount(skip + fetched.length);
+      } catch (e) {
+        if (!append) setItems([]);
+      } finally {
+        setLoading(false);
+      }
     },
-  ]);
+    [fetchFn, pageSize, loading],
+  );
 
-  const renderScene = BottomNavigation.SceneMap({
-    books: BooksRoute,
-  });
+  useEffect(() => {
+    setSkipCount(0);
+    loadPage(0, false);
+  }, [trigger]);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await loadPage(0, false);
+    setRefreshing(false);
+  }, [loadPage]);
+
+  const onEndReached = useCallback(() => {
+    if (loading || refreshing) return;
+    if (items.length >= totalCount) return;
+    loadPage(skipCount, true);
+  }, [loading, refreshing, items.length, totalCount, skipCount, loadPage]);
 
   return (
-    <BottomNavigation
-      navigationState={%{{{ index, routes }}}%}
-      onIndexChange={setIndex}
-      renderScene={renderScene}
+    <FlatList
+      data={items}
+      keyExtractor={(item, index) => item?.id?.toString() ?? index.toString()}
+      renderItem={render}
+      contentContainerStyle={%{{{ flexGrow: 1, paddingBottom: 96 }}}%}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={accentColor} />}
+      onEndReached={onEndReached}
+      onEndReachedThreshold={0.4}
+      ItemSeparatorComponent={() => (
+        <View className="h-px bg-border dark:bg-border-dark mx-4" />
+      )}
+      ListEmptyComponent={
+        loading ? null : (
+          <View className="flex-1 items-center justify-center py-10">
+            <Text className="text-muted-foreground dark:text-muted-dark-foreground">
+              {t('AbpUi::NoData')}
+            </Text>
+          </View>
+        )
+      }
+      ListFooterComponent={
+        loading && items.length > 0 ? (
+          <View className="py-4 items-center">
+            <ActivityIndicator color={accentColor} />
+          </View>
+        ) : null
+      }
     />
   );
 }
-export default BookStoreScreen;
+
+export default DataList;
 ```
 
-Create the `BooksScreen.tsx` file under the `./src/screens/BookStore/Books` folder.
+- `fetchFn` is any function that accepts `{ maxResultCount, skipCount }` and returns `{ items, totalCount }` — the shape of every ABP `ICrudAppService.GetListAsync` response.
+- `trigger` is an arbitrary value: pass a counter that you increment (`setRefresh(r => r + 1)`) after a delete or save and the list re-fetches from page zero.
+- The pull-to-refresh and the lazy "load more on end reached" behavior are built in.
+
+## Building the AbpSelect Component
+
+For dropdowns (book type, author selection) we build a small modal-based picker, also under `./src/components`.
 
 ```tsx
-import { useSelector } from "react-redux";
-import { View } from "react-native";
-import { List } from "react-native-paper";
-import { getBooks } from "../../api/BookAPI";
-import i18n from "i18n-js";
-import DataList from "../../components/DataList/DataList";
-import { createAppConfigSelector } from "../../store/selectors/AppSelectors";
-import { useThemeColors } from '../../../hooks';
+// ./src/components/AbpSelect/AbpSelect.tsx
+import { useContext } from 'react';
+import { Modal, View, Text, Pressable, FlatList } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { LocalizationContext } from '../../contexts/LocalizationContext';
+import { useThemeColors } from '../../hooks';
 
-function BooksScreen({ navigation }) {
-  const { background, primary } = useThemeColors();
-  const currentUser = useSelector(createAppConfigSelector())?.currentUser;
+export interface AbpSelectItem {
+  id: string | number;
+  displayName: string;
+}
+
+interface AbpSelectProps {
+  visible: boolean;
+  title: string;
+  items: AbpSelectItem[];
+  selectedItem?: string | number;
+  hasDefaultItem?: boolean;
+  hideModalFn: () => void;
+  setSelectedItem: (id: any) => void;
+}
+
+function AbpSelect({
+  visible,
+  title,
+  items,
+  selectedItem,
+  hasDefaultItem = false,
+  hideModalFn,
+  setSelectedItem,
+}: AbpSelectProps) {
+  const { t } = useContext(LocalizationContext);
+  const { accentColor } = useThemeColors();
+
+  const data = hasDefaultItem
+    ? [{ id: '', displayName: `-- ${t('AbpUi::PagerInfo:NoDataText')} --` } as AbpSelectItem, ...items]
+    : items;
 
   return (
-    <View style={%{{{ flex: 1, backgroundColor: background }}}%}>
-      {currentUser?.isAuthenticated && (
-        <DataList
-          navigation={navigation}
-          fetchFn={getBooks}
-          render={({ item }) => (
-            <List.Item
-              key={item.id}
-              title={item.name}
-              description={i18n.t("BookStore::Enum:BookType." + item.type)}
-            />
-          )}
-        />
-      )}
-    </View>
+    <Modal visible={visible} transparent animationType="fade" onRequestClose={hideModalFn}>
+      <Pressable
+        onPress={hideModalFn}
+        className="flex-1 bg-black/50 items-center justify-center px-6">
+        <Pressable
+          onPress={() => {}}
+          className="w-full max-w-md bg-card dark:bg-card-dark rounded-2xl border border-card-border dark:border-card-border-dark shadow-lg overflow-hidden">
+          <View className="px-5 py-4 border-b border-card-border dark:border-card-border-dark flex-row items-center justify-between">
+            <Text className="text-base font-semibold text-foreground dark:text-foreground-dark">
+              {title}
+            </Text>
+            <Pressable onPress={hideModalFn} hitSlop={8}>
+              <Ionicons name="close" size={22} color={accentColor} />
+            </Pressable>
+          </View>
+
+          <FlatList
+            data={data}
+            keyExtractor={item => String(item.id)}
+            style={%{{{ maxHeight: 360 }}}%}
+            ItemSeparatorComponent={() => (
+              <View className="h-px bg-border dark:bg-border-dark mx-4" />
+            )}
+            renderItem={({ item }) => {
+              const isSelected = String(item.id) === String(selectedItem ?? '');
+              return (
+                <Pressable
+                  onPress={() => {
+                    setSelectedItem(item.id);
+                    hideModalFn();
+                  }}
+                  className={`px-5 py-3.5 flex-row items-center justify-between ${
+                    isSelected ? 'bg-secondary dark:bg-secondary-dark' : ''
+                  }`}>
+                  <Text
+                    className={`flex-1 text-[15px] ${
+                      isSelected
+                        ? 'text-foreground dark:text-foreground-dark font-semibold'
+                        : 'text-foreground dark:text-foreground-dark'
+                    }`}>
+                    {item.displayName}
+                  </Text>
+                  {isSelected ? <Ionicons name="checkmark" size={20} color={accentColor} /> : null}
+                </Pressable>
+              );
+            }}
+          />
+        </Pressable>
+      </Pressable>
+    </Modal>
   );
 }
-export default BooksScreen;
+
+export default AbpSelect;
 ```
 
-- `getBooks` function is used to fetch the books from the server.
-- `i18n` API to localize the given key. It uses the incoming resource from the `application-localization` endpoint.
-- `DataList` component takes the `fetchFn` property that we'll give to the API request function, it's used to fetch data and maintain the logic of lazy loading etc.
+Now expose the two new components from the barrel file so screens can import them with a single statement:
 
-![Book List Page](../../../images/book-list.png)
-
-## Creating a New Book
-
-### Add the `@react-native-community/datetimepicker` package for the date functionality.
-
-```bash
-yarn expo install @react-native-community/datetimepicker
-
-//or
-
-npx expo install @react-native-community/datetimepicker
+```ts
+// ./src/components/index.ts
+export { default as FormButtons } from './FormButtons/FormButtons';
+export { default as ValidationMessage } from './ValidationMessage/ValidationMessage';
+export { default as DataList } from './DataList/DataList';
+export { default as AbpSelect } from './AbpSelect/AbpSelect';
+export type { AbpSelectItem } from './AbpSelect/AbpSelect';
 ```
 
-### Add the `CreateUpdateBook` Screen to the BookStoreNavigator
+## Creating the BookStoreNavigator
 
-Like the `BookStoreScreen` we need to add the `CreateUpdateBookScreen` to the `./src/navigators/BookStoreNavigator.tsx` file.
+The `BookStore` feature has three screens that share a stack: the list root (`BookStore`), `CreateUpdateBook`, and `CreateUpdateAuthor`. Add the route names to the typed navigator definitions first.
+
+```ts
+// ./src/navigators/types.ts (additions)
+export type BookStoreStackParamList = {
+  BookStore: undefined;
+  CreateUpdateBook: { bookId?: string } | undefined;
+  CreateUpdateAuthor: { authorId?: string } | undefined;
+};
+
+export type BookStoreScreenProps = NativeStackScreenProps<BookStoreStackParamList, 'BookStore'>;
+export type CreateUpdateBookScreenProps = NativeStackScreenProps<BookStoreStackParamList, 'CreateUpdateBook'>;
+export type CreateUpdateAuthorScreenProps = NativeStackScreenProps<BookStoreStackParamList, 'CreateUpdateAuthor'>;
+```
+
+Also extend `BottomTabParamList`:
+
+```ts
+export type BottomTabParamList = {
+  HomeTab: undefined;
+  BookStoreTab: undefined;
+  SettingsTab: undefined;
+  AccountTab: undefined;
+};
+```
+
+Then create the stack navigator:
 
 ```tsx
-//Other codes
+// ./src/navigators/BookStoreNavigator.tsx
+import { useContext } from 'react';
+import { Pressable, Text } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { Button } from "react-native-paper"; //Added this line
+import { useThemeColors } from '../hooks';
+import { LocalizationContext } from '../contexts/LocalizationContext';
+import {
+  BookStoreScreen,
+  CreateUpdateBookScreen,
+  CreateUpdateAuthorScreen,
+} from '../screens';
+import type { BookStoreStackParamList } from './types';
 
-import { CreateUpdateBookScreen } from '../screens'; //Added this line
-
-//Other codes
+const Stack = createNativeStackNavigator<BookStoreStackParamList>();
 
 export default function BookStoreStackNavigator() {
+  const { headerBg, headerText, accentColor } = useThemeColors();
+  const { t } = useContext(LocalizationContext);
+
   return (
-    <Stack.Navigator initialRouteName="BookStore">
-      {/*Other screens*/}
-      {/* Added this screen */}
+    <Stack.Navigator id="BookStoreStack" initialRouteName="BookStore">
+      <Stack.Screen
+        name="BookStore"
+        component={BookStoreScreen}
+        options={%{{{
+          title: t('BookStore::Menu:BookStore'),
+          headerStyle: { backgroundColor: headerBg },
+          headerTintColor: headerText,
+          headerShadowVisible: false,
+        }}}%}
+      />
       <Stack.Screen
         name="CreateUpdateBook"
         component={CreateUpdateBookScreen}
         options={({ route, navigation }) => ({
-          title: i18n.t(
-            route.params?.bookId ? "BookStore::Edit" : "BookStore::NewBook"
-          ),
-          headerRight: () => (
-            <Button
-              mode="text"
-              onPress={() => navigation.navigate("BookStore")}
-            >
-              {i18n.t("AbpUi::Cancel")}
-            </Button>
-          ),
-          headerStyle: { backgroundColor: background },
-          headerTintColor: onBackground,
+          title: t(route.params?.bookId ? 'BookStore::Edit' : 'BookStore::NewBook'),
+          headerStyle: { backgroundColor: headerBg },
+          headerTintColor: headerText,
           headerShadowVisible: false,
+          headerRight: () => (
+            <Pressable onPress={() => navigation.goBack()} hitSlop={8}>
+              <Text style={%{{{ color: accentColor, fontWeight: '600' }}}%}>{t('AbpUi::Cancel')}</Text>
+            </Pressable>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="CreateUpdateAuthor"
+        component={CreateUpdateAuthorScreen}
+        options={({ route, navigation }) => ({
+          title: t(route.params?.authorId ? 'BookStore::Edit' : 'BookStore::NewAuthor'),
+          headerStyle: { backgroundColor: headerBg },
+          headerTintColor: headerText,
+          headerShadowVisible: false,
+          headerRight: () => (
+            <Pressable onPress={() => navigation.goBack()} hitSlop={8}>
+              <Text style={%{{{ color: accentColor, fontWeight: '600' }}}%}>{t('AbpUi::Cancel')}</Text>
+            </Pressable>
+          ),
         })}
       />
     </Stack.Navigator>
@@ -303,1633 +422,884 @@ export default function BookStoreStackNavigator() {
 }
 ```
 
-To navigate to the `CreateUpdateBookScreen`, we need to add the `CreateUpdateBook` button to the `BooksScreen.tsx` file.
+The screens referenced in the imports above will be created in the next sections.
+
+## Permission infrastructure
+
+The sample ships a small permission layer on top of `auth.grantedPolicies` from the application configuration. Policies are loaded on app startup and after login (`AppActions.fetchAppConfigAsync` in `AppContent.tsx` and `LoginScreen.tsx`).
+
+### Policy constants
+
+Create `./src/constants/BookStorePolicies.ts` so policy names stay aligned with `BookStorePermissions.cs`:
+
+```ts
+// ./src/constants/BookStorePolicies.ts
+export const BookStorePolicies = {
+  Books: 'BookStore.Books',
+  BooksCreate: 'BookStore.Books.Create',
+  BooksEdit: 'BookStore.Books.Edit',
+  BooksDelete: 'BookStore.Books.Delete',
+  Authors: 'BookStore.Authors',
+  AuthorsCreate: 'BookStore.Authors.Create',
+  AuthorsEdit: 'BookStore.Authors.Edit',
+  AuthorsDelete: 'BookStore.Authors.Delete',
+} as const;
+
+/** Show Book Store tab when the user can access books or authors. */
+export const BookStoreTabPolicy = `${BookStorePolicies.Books}||${BookStorePolicies.Authors}`;
+```
+
+### Selector
+
+Add `createGrantedPolicySelector` to `./src/store/selectors/AppSelectors.ts`. It supports a single policy, OR (`||`), and AND (`&&`):
+
+```ts
+export function createGrantedPolicySelector(condition: string) {
+  return createSelector([getApp], state => {
+    const grantedPolicies = state?.appConfig?.auth?.grantedPolicies;
+    if (!grantedPolicies) return false;
+
+    const hasPolicy = (policy: string) => grantedPolicies[policy.trim()] === true;
+
+    if (condition.includes('||')) {
+      return condition.split('||').some(policy => hasPolicy(policy));
+    }
+    if (condition.includes('&&')) {
+      return condition.split('&&').every(policy => hasPolicy(policy));
+    }
+    return hasPolicy(condition);
+  });
+}
+```
+
+### usePermission hook
+
+Create `./src/hooks/UsePermission.ts` and export it from `./src/hooks/index.ts`:
+
+```ts
+import { useSelector } from 'react-redux';
+import { createGrantedPolicySelector } from '../store/selectors/AppSelectors';
+
+export function usePermission(policyKey: string): boolean {
+  const selector = createGrantedPolicySelector(policyKey);
+  return useSelector(selector);
+}
+```
+
+### Permission HOC (optional)
+
+`./src/hocs/PermissionHOC.tsx` provides `withPermission(Component, policyKey)` for hiding arbitrary UI. The Book Store screens use `usePermission` directly; see `./docs/permission-guide.md` for more examples.
+
+Throughout the sections below, Book Store UI gating uses `usePermission` with `BookStorePolicies` / `BookStoreTabPolicy` instead of reading `grantedPolicies` manually.
+
+## Adding BookStore to the BottomTabNavigator
+
+Open `./src/navigators/BottomTabNavigator.tsx` and add a `BookStoreTab` between `HomeTab` and `SettingsTab`. The tab is shown only when the user has at least one of the BookStore permissions:
 
 ```tsx
-//Other imports..
+// ./src/navigators/BottomTabNavigator.tsx
+import { useContext } from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
 
-import {
-  // rest imports..,
-  StyleSheet,
-} from "react-native";
+import { BookStoreTabPolicy } from '../constants/BookStorePolicies';
+import { usePermission, useThemeColors } from '../hooks';
+import { LocalizationContext } from '../contexts/LocalizationContext';
 
-import {
-  // rest imports..,
-  AnimatedFAB,
-} from "react-native-paper";
+import HomeStackNavigator from './HomeNavigator';
+import SettingsStackNavigator from './SettingsNavigator';
+import AccountStackNavigator from './AccountNavigator';
+import BookStoreStackNavigator from './BookStoreNavigator';
 
-function BooksScreen({ navigation }) {
-  //Other codes..
+const Tab = createBottomTabNavigator();
+
+export default function BottomTabNavigator() {
+  const { headerBg, accentColor, iconColor } = useThemeColors();
+  const { t } = useContext(LocalizationContext);
+
+  const showBookStore = usePermission(BookStoreTabPolicy);
 
   return (
-    <View style={%{{{ flex: 1, backgroundColor: background }}}%}>
-      {/* Other codes..*/}
+    <Tab.Navigator
+      id="BottomTab"
+      initialRouteName="HomeTab"
+      screenOptions={%{{{ /* ... existing screen options ... */ }}}%}>
+      <Tab.Screen name="HomeTab" component={HomeStackNavigator} options={/* ... */} />
 
-      {/* Included Code */}
-      {currentUser?.isAuthenticated && (
-        <AnimatedFAB
-          icon={"plus"}
-          label={i18n.t("BookStore::NewBook")}
-          color="white"
-          extended={false}
-          onPress={() => navigation.navigate("CreateUpdateBook")}
-          visible={true}
-          animateFrom={"right"}
-          iconMode={"static"}
-          style={[styles.fabStyle, { backgroundColor: primary }]}
+      {showBookStore ? (
+        <Tab.Screen
+          name="BookStoreTab"
+          component={BookStoreStackNavigator}
+          options={%{{{
+            title: t('BookStore::Menu:BookStore'),
+            tabBarIcon: ({ focused, color, size }) => (
+              <Ionicons name={focused ? 'book' : 'book-outline'} size={size} color={color} />
+            ),
+          }}}%}
         />
-      )}
-      {/* Included Code */}
+      ) : null}
+
+      <Tab.Screen name="SettingsTab" component={SettingsStackNavigator} options={/* ... */} />
+      <Tab.Screen name="AccountTab" component={AccountStackNavigator} options={/* ... */} />
+    </Tab.Navigator>
+  );
+}
+```
+
+> Earlier versions of the template used a `DrawerNavigator`. The 2026 template defaults to `bottom-tab` instead. If your project still uses the drawer (the optional `navigation_type = "drawer"` configuration), add the same conditional `Drawer.Screen` to `DrawerNavigator.tsx` instead.
+
+![Book Store Tab](../../../images/book-store-menu-item-new.png)
+
+## Creating the BookStoreScreen
+
+`BookStoreScreen` is the root of the stack. It hosts a small NativeWind-based tab header that switches between the **Books** and **Authors** lists. Each tab is rendered only if the user has the corresponding permission.
+
+```tsx
+// ./src/screens/BookStore/BookStoreScreen.tsx
+import { useContext, useEffect, useMemo, useState } from 'react';
+import { View, Text, Pressable } from 'react-native';
+
+import { BookStorePolicies } from '../../constants/BookStorePolicies';
+import { LocalizationContext } from '../../contexts/LocalizationContext';
+import { usePermission } from '../../hooks';
+import type { BookStoreScreenProps } from '../../navigators/types';
+
+import BooksScreen from './Books/BooksScreen';
+import AuthorsScreen from './Authors/AuthorsScreen';
+
+type TabKey = 'books' | 'authors';
+interface TabDef { key: TabKey; label: string; }
+
+function BookStoreScreen({ navigation }: BookStoreScreenProps) {
+  const { t } = useContext(LocalizationContext);
+  const canViewBooks = usePermission(BookStorePolicies.Books);
+  const canViewAuthors = usePermission(BookStorePolicies.Authors);
+
+  const tabs = useMemo<TabDef[]>(() => {
+    const list: TabDef[] = [];
+    if (canViewBooks) list.push({ key: 'books', label: t('BookStore::Menu:Books') });
+    if (canViewAuthors) list.push({ key: 'authors', label: t('BookStore::Menu:Authors') });
+    return list;
+  }, [canViewBooks, canViewAuthors, t]);
+
+  const [activeKey, setActiveKey] = useState<TabKey | undefined>(tabs[0]?.key);
+
+  useEffect(() => {
+    if (!tabs.find(tab => tab.key === activeKey)) setActiveKey(tabs[0]?.key);
+  }, [tabs, activeKey]);
+
+  if (tabs.length === 0) {
+    return (
+      <View className="flex-1 bg-background dark:bg-background-dark items-center justify-center px-6">
+        <Text className="text-muted-foreground dark:text-muted-dark-foreground text-center">
+          {t('BookStore::NoAccess')}
+        </Text>
+      </View>
+    );
+  }
+
+  return (
+    <View className="flex-1 bg-background dark:bg-background-dark">
+      <View className="flex-row bg-background dark:bg-background-dark border-b border-card-border dark:border-card-border-dark">
+        {tabs.map(tab => {
+          const isActive = activeKey === tab.key;
+          return (
+            <Pressable
+              key={tab.key}
+              onPress={() => setActiveKey(tab.key)}
+              className={`flex-1 py-3 items-center border-b-2 ${
+                isActive ? 'border-accent dark:border-accent-dark' : 'border-transparent'
+              }`}>
+              <Text
+                className={`text-[14px] ${
+                  isActive
+                    ? 'text-foreground dark:text-foreground-dark font-semibold'
+                    : 'text-muted-foreground dark:text-muted-dark-foreground'
+                }`}>
+                {tab.label}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
+
+      <View className="flex-1">
+        {activeKey === 'books' ? <BooksScreen navigation={navigation} /> : null}
+        {activeKey === 'authors' ? <AuthorsScreen navigation={navigation} /> : null}
+      </View>
     </View>
   );
 }
 
-//Added lines
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-  },
-  fabStyle: {
-    bottom: 16,
-    right: 16,
-    position: "absolute",
-  },
-});
-//Added lines
+export default BookStoreScreen;
+```
+
+The previous template used `react-native-paper`'s `BottomNavigation` for this. Building the tab strip with two `Pressable`s and NativeWind classes keeps the rest of the screen consistent with the modernized look and avoids paying for an extra Paper component in the bundle.
+
+## The Book List Page
+
+Create `./src/screens/BookStore/Books/BooksScreen.tsx`. The list itself is a single `DataList<BookListItem>`. Each row is a `Pressable` that opens an action sheet with **Edit** and **Delete** entries — both gated by the corresponding permission. The floating "+" button at the bottom right is rendered only when the user has `BookStore.Books.Create`.
+
+```tsx
+// ./src/screens/BookStore/Books/BooksScreen.tsx
+import { useContext, useState } from 'react';
+import { Alert, View, Text, Pressable } from 'react-native';
+import { useActionSheet } from '@expo/react-native-action-sheet';
+import { Ionicons } from '@expo/vector-icons';
+
+import { BookStorePolicies } from '../../../constants/BookStorePolicies';
+import { LocalizationContext } from '../../../contexts/LocalizationContext';
+import { usePermission, useThemeColors } from '../../../hooks';
+import { DataList } from '../../../components';
+import { getList, remove } from '../../../api/BookAPI';
+import type { BookStoreScreenProps } from '../../../navigators/types';
+
+interface BookListItem {
+  id: string;
+  name: string;
+  authorName: string;
+  type: number;
+}
+
+interface BooksScreenInnerProps { navigation: BookStoreScreenProps['navigation']; }
+
+function BooksScreen({ navigation }: BooksScreenInnerProps) {
+  const { t } = useContext(LocalizationContext);
+  const { accentColor, iconColor } = useThemeColors();
+
+  const [refresh, setRefresh] = useState(0);
+  const { showActionSheetWithOptions } = useActionSheet();
+
+  const canCreate = usePermission(BookStorePolicies.BooksCreate);
+  const canEdit = usePermission(BookStorePolicies.BooksEdit);
+  const canDelete = usePermission(BookStorePolicies.BooksDelete);
+
+  const openContextMenu = (item: BookListItem) => {
+    const options: string[] = [];
+    if (canEdit) options.push(t('BookStore::Edit'));
+    if (canDelete) options.push(t('AbpUi::Delete'));
+    options.push(t('AbpUi::Cancel'));
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex: options.length - 1,
+        destructiveButtonIndex: canDelete ? options.indexOf(t('AbpUi::Delete')) : undefined,
+      },
+      (index?: number) => {
+        if (index === undefined) return;
+        const selected = options[index];
+        if (selected === t('BookStore::Edit')) navigation.navigate('CreateUpdateBook', { bookId: item.id });
+        else if (selected === t('AbpUi::Delete')) confirmDelete(item);
+      },
+    );
+  };
+
+  const confirmDelete = (item: BookListItem) => {
+    Alert.alert(t('AbpUi::AreYouSure'), t('BookStore::AreYouSureToDelete'), [
+      { text: t('AbpUi::Cancel'), style: 'cancel' },
+      {
+        text: t('AbpUi::Ok'),
+        style: 'destructive',
+        onPress: async () => {
+          await remove(item.id);
+          setRefresh(prev => prev + 1);
+        },
+      },
+    ]);
+  };
+
+  return (
+    <View className="flex-1 bg-background dark:bg-background-dark">
+      <DataList<BookListItem>
+        fetchFn={getList as any}
+        trigger={refresh}
+        render={({ item }) => (
+          <Pressable
+            onPress={() => (canEdit || canDelete) && openContextMenu(item)}
+            className="px-4 py-3.5 active:bg-secondary dark:active:bg-secondary-dark">
+            <View className="flex-row items-center">
+              <View className="flex-1">
+                <Text className="text-[15px] font-semibold text-foreground dark:text-foreground-dark">
+                  {item.name}
+                </Text>
+                <Text className="text-xs text-muted-foreground dark:text-muted-dark-foreground mt-1">
+                  {item.authorName} · {t(`BookStore::Enum:BookType:${item.type}`)}
+                </Text>
+              </View>
+              {(canEdit || canDelete) ? (
+                <Ionicons name="ellipsis-vertical" size={18} color={iconColor} />
+              ) : null}
+            </View>
+          </Pressable>
+        )}
+      />
+
+      {canCreate ? (
+        <Pressable
+          onPress={() => navigation.navigate('CreateUpdateBook')}
+          className="absolute right-5 bottom-5 rounded-full px-5 py-3.5 flex-row items-center shadow-lg bg-accent dark:bg-accent-dark active:opacity-90">
+          <Ionicons
+            name="add"
+            size={20}
+            color={accentColor === '#fafafa' ? '#18181b' : '#fafafa'}
+          />
+          <Text className="ml-1.5 font-semibold text-[14px] text-accent-foreground dark:text-accent-dark-foreground">
+            {t('BookStore::NewBook')}
+          </Text>
+        </Pressable>
+      ) : null}
+    </View>
+  );
+}
 
 export default BooksScreen;
 ```
 
-After adding the `CreateUpdateBook` button, we need to add the `CreateUpdateBookScreen.tsx` file under the `./src/screens/BookStore/Books/CreateUpdateBook` folder.
+- Permissions come from `auth.grantedPolicies` inside `appConfig`, loaded by `AppActions.fetchAppConfigAsync`. Use the `usePermission` hook with constants from `BookStorePolicies` instead of reading `grantedPolicies` manually (see [Permission infrastructure](#permission-infrastructure)).
+- `useActionSheet` is provided by `@expo/react-native-action-sheet`, already wrapped around the app in `./src/AppContent.tsx`, so we don't need to add a provider here.
 
-```tsx
-import PropTypes from "prop-types";
+![Book List Page](../../../images/book-list-new.png)
 
-import { create } from "../../../../api/BookAPI";
-import LoadingActions from "../../../../store/actions/LoadingActions";
-import { createLoadingSelector } from "../../../../store/selectors/LoadingSelectors";
-import { connectToRedux } from "../../../../utils/ReduxConnect";
-import CreateUpdateBookForm from "./CreateUpdateBookForm";
+## Creating a New Book
 
-function CreateUpdateBookScreen({ navigation, startLoading, clearLoading }) {
-  const submit = (data) => {
-    startLoading({ key: "save" });
+The book form needs `@react-native-community/datetimepicker` for the publish-date field. Install it:
 
-    create(data)
-      .then(() => navigation.goBack())
-      .finally(() => clearLoading());
-  };
-
-  return <CreateUpdateBookForm submit={submit} />;
-}
-
-CreateUpdateBookScreen.propTypes = {
-  startLoading: PropTypes.func.isRequired,
-  clearLoading: PropTypes.func.isRequired,
-};
-
-export default connectToRedux({
-  component: CreateUpdateBookScreen,
-  stateProps: (state) => ({ loading: createLoadingSelector()(state) }),
-  dispatchProps: {
-    startLoading: LoadingActions.start,
-    clearLoading: LoadingActions.clear,
-  },
-});
+```bash
+npx expo install @react-native-community/datetimepicker
 ```
 
-- In this page we will store logic, send post/put requests, get the selected book data and etc.
-- This page will wrap the `CreateUpdateBookFrom` component and pass the submit function with other properties.
+Then create the screen + form pair under `./src/screens/BookStore/Books/CreateUpdateBook/`.
 
-Create a `CreateUpdateBookForm.tsx` file under the `./src/screens/BookStore/Books/CreateUpdateBook` folder and add the following code to it.
+### CreateUpdateBookScreen
+
+This component wires Redux loading + API calls and forwards data to the form.
 
 ```tsx
+// ./src/screens/BookStore/Books/CreateUpdateBook/CreateUpdateBookScreen.tsx
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+
+import { get, create, update, getAuthorLookup } from '../../../../api/BookAPI';
+import LoadingActions from '../../../../store/actions/LoadingActions';
+import type { CreateUpdateBookScreenProps } from '../../../../navigators/types';
+import type { AbpSelectItem } from '../../../../components';
+import CreateUpdateBookForm, { type BookFormValues } from './CreateUpdateBookForm';
+
+function CreateUpdateBookScreen({ navigation, route }: CreateUpdateBookScreenProps) {
+  const { bookId } = route.params || {};
+  const dispatch = useDispatch();
+
+  const [book, setBook] = useState<any | null>(null);
+  const [authors, setAuthors] = useState<AbpSelectItem[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      dispatch(LoadingActions.start({ key: 'fetchAuthorLookup' }));
+      try {
+        const result = await getAuthorLookup();
+        if (cancelled) return;
+        setAuthors((result?.items ?? []).map((a: any) => ({ id: a.id, displayName: a.name })));
+      } finally {
+        dispatch(LoadingActions.clear());
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!bookId) return;
+    let cancelled = false;
+    (async () => {
+      dispatch(LoadingActions.start({ key: 'fetchBookDetail' }));
+      try {
+        const detail = await get(bookId);
+        if (!cancelled) setBook(detail);
+      } finally {
+        dispatch(LoadingActions.clear());
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [bookId, dispatch]);
+
+  const submit = async (data: BookFormValues) => {
+    dispatch(LoadingActions.start({ key: 'save' }));
+    try {
+      const payload = {
+        authorId: data.authorId,
+        name: data.name,
+        type: Number(data.type),
+        publishDate: data.publishDate ? new Date(data.publishDate).toISOString() : new Date().toISOString(),
+        price: Number(data.price),
+      };
+      if (bookId) await update(payload, bookId);
+      else await create(payload);
+      navigation.goBack();
+    } finally {
+      dispatch(LoadingActions.clear());
+    }
+  };
+
+  return <CreateUpdateBookForm submit={submit} book={book} authors={authors} />;
+}
+
+export default CreateUpdateBookScreen;
+```
+
+- `LoadingActions.start({ key })` and `LoadingActions.clear()` drive the global `<Loading />` overlay rendered in `AppContent.tsx` via the Redux loading reducer. No extra wiring is needed in this screen.
+- `getAuthorLookup` lives in `BookAPI.ts` (we added it earlier). It returns `{ items: [{ id, name }] }`, which the form turns into a dropdown.
+
+### CreateUpdateBookForm
+
+The form is a Formik form. We keep `react-native-paper`'s `TextInput` for the input fields (the only Paper component the template still uses) and rely on our new `AbpSelect` for the type and author pickers, plus `DateTimePicker` for the publish date.
+
+```tsx
+// ./src/screens/BookStore/Books/CreateUpdateBook/CreateUpdateBookForm.tsx
 import * as Yup from 'yup';
-import { useRef, useState } from 'react';
-import { Platform, KeyboardAvoidingView, StyleSheet, View, ScrollView } from 'react-native';
+import { useContext, useMemo, useState } from 'react';
+import { View, Text, ScrollView, KeyboardAvoidingView, Platform, Pressable, Modal } from 'react-native';
 import { useFormik } from 'formik';
-import i18n from 'i18n-js';
-import PropTypes from 'prop-types';
-import { TextInput, Portal, Modal, Text, Divider, Button } from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-import { FormButtons, ValidationMessage, AbpSelect } from '../../../../components';
 import { useThemeColors } from '../../../../hooks';
+import { LocalizationContext } from '../../../../contexts/LocalizationContext';
+import { AbpSelect, FormButtons, ValidationMessage } from '../../../../components';
+import type { AbpSelectItem } from '../../../../components';
 
+export interface BookFormValues {
+  authorId: string;
+  authorName: string;
+  name: string;
+  type: string;
+  typeDisplayName: string;
+  publishDate: Date | null;
+  price: string;
+}
 
-const validations = {
-  name: Yup.string().required("AbpValidation::ThisFieldIsRequired."),
-  price: Yup.number().required("AbpValidation::ThisFieldIsRequired."),
-  type: Yup.string().nullable().required("AbpValidation::ThisFieldIsRequired."),
-  publishDate: Yup.string()
-    .nullable()
-    .required("AbpValidation::ThisFieldIsRequired."),
-};
+interface CreateUpdateBookFormProps {
+  submit: (values: BookFormValues) => Promise<void> | void;
+  book?: any | null;
+  authors: AbpSelectItem[];
+}
 
-const props = {
-  underlineStyle: { backgroundColor: "transparent" },
-  underlineColor: "#333333bf",
-};
+const validationSchema = Yup.object().shape({
+  name: Yup.string().required('AbpValidation::ThisFieldIsRequired'),
+  price: Yup.number().typeError('AbpValidation::ThisFieldIsRequired').required('AbpValidation::ThisFieldIsRequired'),
+  type: Yup.string().required('AbpValidation::ThisFieldIsRequired'),
+  authorId: Yup.string().required('AbpValidation::ThisFieldIsRequired'),
+  publishDate: Yup.date().typeError('AbpValidation::ThisFieldIsRequired').required('AbpValidation::ThisFieldIsRequired').nullable(),
+});
 
-function CreateUpdateBookForm({ submit }) {
-  const { primaryContainer, background, onBackground } = useThemeColors();
+const formatDate = (value: Date | null) => (value ? new Date(value).toLocaleDateString() : '');
 
-  const [bookTypeVisible, setBookTypeVisible] = useState(false);
-  const [publishDateVisible, setPublishDateVisible] = useState(false);
+function CreateUpdateBookForm({ submit, book, authors }: CreateUpdateBookFormProps) {
+  const { t } = useContext(LocalizationContext);
+  const { primaryContainer, accentColor, headerBg } = useThemeColors();
 
-  const nameRef = useRef(null);
-  const priceRef = useRef(null);
-  const typeRef = useRef(null);
-  const publishDateRef = useRef(null);
+  const [typeModalVisible, setTypeModalVisible] = useState(false);
+  const [authorModalVisible, setAuthorModalVisible] = useState(false);
+  const [dateModalVisible, setDateModalVisible] = useState(false);
+  const [tempDate, setTempDate] = useState<Date>(new Date());
 
-  const inputStyle = {
-    ...styles.input,
-    backgroundColor: primaryContainer,
-  };
-  const bookTypes = new Array(8).fill(0).map((_, i) => ({
-    id: i + 1,
-    displayName: i18n.t(`BookStore::Enum:BookType.${i + 1}`),
-  }));
+  const bookTypes = useMemo<AbpSelectItem[]>(
+    () => Array.from({ length: 8 }, (_, i) => ({
+      id: String(i + 1),
+      displayName: t(`BookStore::Enum:BookType:${i + 1}`),
+    })),
+    [t],
+  );
 
-  const onSubmit = (values) => {
-    if (!bookForm.isValid) {
-      return;
-    }
+  const initialValues: BookFormValues = useMemo(() => {
+    const typeIdStr = book?.type ? String(book.type) : '';
+    return {
+      authorId: book?.authorId ?? '',
+      authorName: authors.find(a => String(a.id) === String(book?.authorId))?.displayName ?? '',
+      name: book?.name ?? '',
+      type: typeIdStr,
+      typeDisplayName: typeIdStr ? t(`BookStore::Enum:BookType:${typeIdStr}`) : '',
+      publishDate: book?.publishDate ? new Date(book.publishDate) : null,
+      price: book?.price !== undefined ? String(book.price) : '',
+    };
+  }, [book, authors, t]);
 
-    submit({ ...values });
-  };
-
-  const bookForm = useFormik({
+  const form = useFormik<BookFormValues>({
     enableReinitialize: true,
+    initialValues,
+    validateOnChange: false,
     validateOnBlur: true,
-    validationSchema: Yup.object().shape({
-      ...validations,
-    }),
-    initialValues: {
-      name: "",
-      price: "",
-      type: "",
-      publishDate: null,
-    },
-    onSubmit,
+    validationSchema,
+    onSubmit: values => submit(values),
   });
 
-  const isInvalidControl = (controlName = null) => {
-    if (!controlName) {
-      return;
-    }
+  const showError = (field: keyof BookFormValues) =>
+    (form.submitCount > 0 || !!form.touched[field]) && !!form.errors[field];
 
-    return (
-      ((!!bookForm.touched[controlName] && bookForm.submitCount > 0) ||
-        bookForm.submitCount > 0) &&
-      !!bookForm.errors[controlName]
-    );
-  };
-
-  const onChange = (event, selectedDate) => {
-    if (!selectedDate) {
-      return;
-    }
-
-    setPublishDateVisible(false);
-
-    if (event && event.type !== "dismissed") {
-      bookForm.setFieldValue("publishDate", selectedDate, true);
-    }
-  };
+  const renderError = (field: keyof BookFormValues) =>
+    showError(field) ? <ValidationMessage>{form.errors[field] as string}</ValidationMessage> : null;
 
   return (
-    <View style={%{{{ flex: 1, backgroundColor: background }}}%}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      className="flex-1 bg-background dark:bg-background-dark">
+      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={%{{{ padding: 16, paddingBottom: 32 }}}%}>
+        <View className="bg-card dark:bg-card-dark rounded-2xl border border-card-border dark:border-card-border-dark shadow-sm p-4">
+          {/* Name */}
+          <View className="mb-3">
+            <TextInput
+              mode="outlined"
+              label={t('BookStore::Name')}
+              value={form.values.name}
+              onChangeText={form.handleChange('name')}
+              onBlur={form.handleBlur('name')}
+              error={showError('name')}
+              autoCapitalize="sentences"
+              style={%{{{ backgroundColor: primaryContainer }}}%}
+            />
+            {renderError('name')}
+          </View>
+
+          {/* Author dropdown — populated in the "Adding Author Relation to Book" section */}
+          <View className="mb-3">
+            <Pressable onPress={() => setAuthorModalVisible(true)}>
+              <View pointerEvents="none">
+                <TextInput
+                  mode="outlined"
+                  label={t('BookStore::Author')}
+                  value={form.values.authorName}
+                  editable={false}
+                  error={showError('authorId')}
+                  right={<TextInput.Icon icon="menu-down" />}
+                  style={%{{{ backgroundColor: primaryContainer }}}%}
+                />
+              </View>
+            </Pressable>
+            {renderError('authorId')}
+          </View>
+
+          {/* Type dropdown */}
+          <View className="mb-3">
+            <Pressable onPress={() => setTypeModalVisible(true)}>
+              <View pointerEvents="none">
+                <TextInput
+                  mode="outlined"
+                  label={t('BookStore::Type')}
+                  value={form.values.typeDisplayName}
+                  editable={false}
+                  error={showError('type')}
+                  right={<TextInput.Icon icon="menu-down" />}
+                  style={%{{{ backgroundColor: primaryContainer }}}%}
+                />
+              </View>
+            </Pressable>
+            {renderError('type')}
+          </View>
+
+          {/* Publish date picker */}
+          <View className="mb-3">
+            <Pressable
+              onPress={() => {
+                setTempDate(form.values.publishDate ?? new Date());
+                setDateModalVisible(true);
+              }}>
+              <View pointerEvents="none">
+                <TextInput
+                  mode="outlined"
+                  label={t('BookStore::PublishDate')}
+                  value={formatDate(form.values.publishDate)}
+                  editable={false}
+                  error={showError('publishDate')}
+                  right={<TextInput.Icon icon="calendar" />}
+                  style={%{{{ backgroundColor: primaryContainer }}}%}
+                />
+              </View>
+            </Pressable>
+            {renderError('publishDate')}
+          </View>
+
+          {/* Price */}
+          <View className="mb-2">
+            <TextInput
+              mode="outlined"
+              label={t('BookStore::Price')}
+              value={form.values.price}
+              onChangeText={form.handleChange('price')}
+              onBlur={form.handleBlur('price')}
+              error={showError('price')}
+              keyboardType="decimal-pad"
+              style={%{{{ backgroundColor: primaryContainer }}}%}
+            />
+            {renderError('price')}
+          </View>
+        </View>
+
+        <View className="mt-4">
+          <FormButtons submit={() => form.handleSubmit()} isSubmitDisabled={form.isSubmitting} />
+        </View>
+      </ScrollView>
+
+      {/* Type modal */}
       <AbpSelect
-        key="typeSelect"
-        title={i18n.t("BookStore::Type")}
-        visible={bookTypeVisible}
+        visible={typeModalVisible}
+        title={t('BookStore::Type')}
         items={bookTypes}
-        hasDefualtItem={true}
-        hideModalFn={() => setBookTypeVisible(false)}
-        selectedItem={bookForm.values.type}
-        setSelectedItem={(id) => {
-          bookForm.setFieldValue("type", id, true);
-          bookForm.setFieldValue(
-            "typeDisplayName",
-            bookTypes.find((f) => f.id === id)?.displayName || null,
-            false
-          );
+        hasDefaultItem
+        selectedItem={form.values.type}
+        hideModalFn={() => setTypeModalVisible(false)}
+        setSelectedItem={(id: any) => {
+          const idStr = String(id ?? '');
+          form.setFieldValue('type', idStr, true);
+          form.setFieldValue('typeDisplayName',
+            bookTypes.find(item => item.id === idStr)?.displayName ?? '', false);
         }}
       />
 
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <ScrollView keyboardShouldPersistTaps="handled">
-          <View style={styles.inputContainer}>
-            <TextInput
-              mode="flat"
-              ref={nameRef}
-              error={isInvalidControl('name')}
-              onSubmitEditing={() => priceRef.current.focus()}
-              returnKeyType="next"
-              onChangeText={bookForm.handleChange('name')}
-              onBlur={bookForm.handleBlur('name')}
-              value={bookForm.values.name}
-              autoCapitalize="none"
-              label={i18n.t('BookStore::Name')}
-              style={inputStyle}
-              {...props}
-            />
-            {isInvalidControl('name') && (
-              <ValidationMessage>{bookForm.errors.name as string}</ValidationMessage>
-            )}
-          </View>
+      {/* Author modal */}
+      <AbpSelect
+        visible={authorModalVisible}
+        title={t('BookStore::Author')}
+        items={authors}
+        hasDefaultItem
+        selectedItem={form.values.authorId}
+        hideModalFn={() => setAuthorModalVisible(false)}
+        setSelectedItem={(id: any) => {
+          const idStr = String(id ?? '');
+          form.setFieldValue('authorId', idStr, true);
+          form.setFieldValue('authorName',
+            authors.find(item => String(item.id) === idStr)?.displayName ?? '', false);
+        }}
+      />
 
-          <View style={styles.inputContainer}>
-            <TextInput
-              mode="flat"
-              ref={priceRef}
-              error={isInvalidControl('price')}
-              onSubmitEditing={() => typeRef.current.focus()}
-              returnKeyType="next"
-              onChangeText={bookForm.handleChange('price')}
-              onBlur={bookForm.handleBlur('price')}
-              value={bookForm.values.price}
-              autoCapitalize="none"
-              label={i18n.t('BookStore::Price')}
-              style={inputStyle}
-              {...props}
-            />
-            {isInvalidControl('price') && (
-              <ValidationMessage>{bookForm.errors.price as string}</ValidationMessage>
-            )}
-          </View>
 
-          <View style={styles.inputContainer}>
-            <TextInput
-              ref={typeRef}
-              error={isInvalidControl('type')}
-              label={i18n.t('BookStore::Type')}
-              right={<TextInput.Icon onPress={() => setBookTypeVisible(true)} icon="menu-down" />}
-              style={inputStyle}
-              editable={false}
-              value={bookForm.values.typeDisplayName}
-              {...props}
-            />
-            {isInvalidControl('type') && (
-              <ValidationMessage>{bookForm.errors.type as string}</ValidationMessage>
-            )}
-          </View>
-
-          <View style={styles.inputContainer}>
-            <TextInput
-              ref={publishDateRef}
-              error={isInvalidControl('publishDate')}
-              label={i18n.t('BookStore::PublishDate')}
-              right={
-                <TextInput.Icon 
-                  onPress={() => setPublishDateVisible(true)} 
-                  icon="calendar" 
-                  iconColor={bookForm.values.publishDate ? '#4CAF50' : '#666'}
-                />
-              }
-              style={inputStyle}
-              editable={false}
-              value={formatDate(bookForm.values.publishDate)}
-              placeholder="Select publish date"
-              {...props}
-            />
-            {isInvalidControl('publishDate') && (
-              <ValidationMessage>{bookForm.errors.publishDate as string}</ValidationMessage>
-            )}
-          </View>
-
-          <Portal>
-            <Modal
-              visible={publishDateVisible}
-              onDismiss={handleDateCancel}
-              contentContainerStyle={[styles.dateModal, { backgroundColor: background }]}>
-              <Text variant="titleLarge" style={styles.modalTitle}>
-                {i18n.t('BookStore::PublishDate')}
+      {/* Publish date modal */}
+      <Modal visible={dateModalVisible} transparent animationType="fade" onRequestClose={() => setDateModalVisible(false)}>
+        <Pressable onPress={() => setDateModalVisible(false)} className="flex-1 bg-black/50 items-center justify-center px-6">
+          <Pressable onPress={() => {}} className="w-full max-w-md bg-card dark:bg-card-dark rounded-2xl border border-card-border dark:border-card-border-dark shadow-lg overflow-hidden">
+            <View className="px-5 py-4 border-b border-card-border dark:border-card-border-dark">
+              <Text className="text-base font-semibold text-foreground dark:text-foreground-dark">
+                {t('BookStore::PublishDate')}
               </Text>
-              <Divider style={styles.divider} />
+            </View>
+            <View style={%{{{ backgroundColor: headerBg }}}%}>
               <DateTimePicker
-                testID="publishDatePicker"
-                value={bookForm.values.publishDate || new Date()}
+                value={tempDate}
                 mode="date"
                 display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                onChange={onChange}
+                onChange={(event: any, selectedDate?: Date) => {
+                  if (Platform.OS !== 'ios') {
+                    setDateModalVisible(false);
+                    if (event?.type !== 'dismissed' && selectedDate) {
+                      form.setFieldValue('publishDate', selectedDate, true);
+                    }
+                  } else if (selectedDate) {
+                    setTempDate(selectedDate);
+                  }
+                }}
                 maximumDate={new Date()}
-                textColor={onBackground}
               />
-              <View style={styles.modalButtons}>
-                <Button onPress={handleDateCancel} mode="text">
-                  {i18n.t('AbpUi::Cancel')}
-                </Button>
-                <Button onPress={handleDateConfirm} mode="contained">
-                  {i18n.t('AbpUi::Ok')}
-                </Button>
+            </View>
+            {Platform.OS === 'ios' ? (
+              <View className="flex-row justify-end px-4 py-3 border-t border-card-border dark:border-card-border-dark gap-x-2">
+                <Pressable onPress={() => setDateModalVisible(false)} className="px-4 py-2 rounded-md">
+                  <Text style={%{{{ color: accentColor, fontWeight: '600' }}}%}>{t('AbpUi::Cancel')}</Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => {
+                    form.setFieldValue('publishDate', tempDate, true);
+                    setDateModalVisible(false);
+                  }}
+                  className="px-4 py-2 rounded-md bg-accent dark:bg-accent-dark">
+                  <Text className="text-accent-foreground dark:text-accent-dark-foreground font-semibold">
+                    {t('AbpUi::Ok')}
+                  </Text>
+                </Pressable>
               </View>
-            </Modal>
-          </Portal>
-
-          <FormButtons style={styles.button} submit={bookForm.handleSubmit} />
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </View>
+            ) : null}
+          </Pressable>
+        </Pressable>
+      </Modal>
+    </KeyboardAvoidingView>
   );
 }
-
-const styles = StyleSheet.create({
-  inputContainer: {
-    margin: 8,
-    marginLeft: 16,
-    marginRight: 16,
-  },
-  input: {
-    borderRadius: 8,
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
-  },
-  button: {
-    marginLeft: 16,
-    marginRight: 16,
-  },
-  dateModal: {
-    padding: 20,
-    margin: 20,
-    borderRadius: 12,
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-  },
-  modalTitle: {
-    textAlign: 'center',
-    marginBottom: 16,
-    fontWeight: '600',
-  },
-  divider: {
-    marginBottom: 16,
-  },
-  modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-    paddingHorizontal: 8,
-  },
-});
-
-CreateUpdateBookForm.propTypes = {
-  book: PropTypes.object,
-  authors: PropTypes.array.isRequired,
-  submit: PropTypes.func.isRequired,
-};
 
 export default CreateUpdateBookForm;
 ```
 
-- `formik` will manage the form state, validation and value changes.
-- `Yup` allows for the build validation schema.
-- `AbpSelect` component is used to select the book type.
-- `submit` method will pass the form values to the `CreateUpdateBookScreen` component.
+- The Android date picker is dismissed automatically once the user picks a date. On iOS we keep the date in `tempDate` and apply it only when the user taps **OK**, so the spinner feels natural.
+- `AbpSelect` is fed both for the **Type** dropdown (8 enum entries from the localization namespace) and for the **Author** dropdown (filled from the `authors` prop forwarded by the screen).
 
-![Create New Book Icon](../../../images/create-book-icon.png)
+![Create New Book](../../../images/create-book-new.png)
 
-![Create New Book](../../../images/create-book.png)
+## Updating a Book
 
-## Update a Book
+There is no separate "edit" form. `CreateUpdateBookScreen` already accepts a `bookId` route param: when it is set, the screen calls `BookAPI.get(bookId)` and forwards the result as the `book` prop. The form picks the existing values up via `enableReinitialize: true`. The corresponding navigation call in `BooksScreen` passes the id when the user taps **Edit** in the action sheet:
 
-We need the navigation parameter for getting the bookId and then navigate it again after the create & update operations. That is why we will pass the navigation parameter to the `BooksScreen` component.
-
-```tsx
-//Imports..
-
-//Add navigation parameter
-const BooksRoute = (nav) => <BooksScreen navigation={nav} />;
-
-function BookStoreScreen({ navigation }) {
-  //Other codes..
-
-  const renderScene = BottomNavigation.SceneMap({
-    books: () => BooksRoute(navigation), //Use this way
-  });
-
-  //Other codes..
-}
-
-export default BookStoreScreen;
+```ts
+navigation.navigate('CreateUpdateBook', { bookId: item.id });
 ```
 
-Replace the code below in the `BookScreen.tsx` file under the `./src/screens/BookStore/Books` folder.
+When the form submits, the screen branches between `update(payload, bookId)` and `create(payload)` based on whether `bookId` is set.
 
-```tsx
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Alert, View, StyleSheet } from 'react-native';
-import { List, IconButton, AnimatedFAB } from 'react-native-paper';
-import { useActionSheet } from '@expo/react-native-action-sheet';
-import i18n from 'i18n-js';
+![Update Book Page](../../../images/update-book-new.png)
 
-import { getList, remove } from '../../../api/BookAPI';
-import { DataList } from '../../../components';
-import { createAppConfigSelector } from '../../../store/selectors/AppSelectors';
-import { useThemeColors } from '../../../hooks';
+## Deleting a Book
 
-function BooksScreen({ navigation }) {
-  const { background, primary } = useThemeColors();
-  const currentUser = useSelector(createAppConfigSelector())?.currentUser;
-  const policies = useSelector(createAppConfigSelector())?.auth?.grantedPolicies;
+The action-sheet handler in `BooksScreen` already implements deletion:
 
-  const [refresh, setRefresh] = useState(null);
-  const { showActionSheetWithOptions } = useActionSheet();
-
-  const openContextMenu = (item: { id: string }) => {
-    const options = [];
-
-    if (policies['BookStore.Books.Delete']) {
-      options.push(i18n.t('AbpUi::Delete'));
-    }
-
-    if (policies['BookStore.Books.Edit']) {
-      options.push(i18n.t('AbpUi::Edit'));
-    }
-
-    options.push(i18n.t('AbpUi::Cancel'));
-
-    showActionSheetWithOptions(
-      {
-        options,
-        cancelButtonIndex: options.length - 1,
-        destructiveButtonIndex: options.indexOf(i18n.t('AbpUi::Delete')),
+```ts
+const confirmDelete = (item: BookListItem) => {
+  Alert.alert(t('AbpUi::AreYouSure'), t('BookStore::AreYouSureToDelete'), [
+    { text: t('AbpUi::Cancel'), style: 'cancel' },
+    {
+      text: t('AbpUi::Ok'),
+      style: 'destructive',
+      onPress: async () => {
+        await remove(item.id);
+        setRefresh(prev => prev + 1);
       },
-      index => {
-        switch (options[index]) {
-          case i18n.t('AbpUi::Edit'):
-            edit(item);
-            break;
-          case i18n.t('AbpUi::Delete'):
-            removeOnClick(item);
-            break;
-        }
-      },
-    );
-  };
-
-  const removeOnClick = (item: { id: string }) => {
-    Alert.alert('Warning', i18n.t('BookStore::AreYouSureToDelete'), [
-      {
-        text: i18n.t('AbpUi::Cancel'),
-        style: 'cancel',
-      },
-      {
-        style: 'default',
-        text: i18n.t('AbpUi::Ok'),
-        onPress: () => {
-          remove(item.id).then(() => {
-            setRefresh((refresh ?? 0) + 1);
-          });
-        },
-      },
-    ]);
-  };
-
-  const edit = (item: { id: string }) => {
-    navigation.navigate('CreateUpdateBook', { bookId: item.id });
-  };
-
-  return (
-    <View style={%{{{ flex: 1, backgroundColor: background }}}%}>
-      {currentUser?.isAuthenticated && (
-        <DataList
-          navigation={navigation}
-          fetchFn={getList}
-          trigger={refresh}
-          render={({ item }) => (
-            <List.Item
-              key={item.id}
-              title={item.name}
-              description={`${item.authorName} | ${i18n.t(
-                'BookStore::Enum:BookType.' + item.type,
-              )}`}
-              right={props => (
-                <IconButton
-                  {...props}
-                  icon="dots-vertical"
-                  rippleColor={'#ccc'}
-                  size={20}
-                  onPress={() => openContextMenu(item)}
-                />
-              )}
-            />
-          )}
-        />
-      )}
-
-      {currentUser?.isAuthenticated && !!policies['BookStore.Books.Create'] && (
-        <AnimatedFAB
-          icon={'plus'}
-          label={i18n.t('BookStore::NewBook')}
-          color="white"
-          extended={false}
-          onPress={() => navigation.navigate('CreateUpdateBook')}
-          visible={true}
-          animateFrom={'right'}
-          iconMode={'static'}
-          style={[styles.fabStyle, { backgroundColor: primary }]}
-        />
-      )}
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-  },
-  fabStyle: {
-    bottom: 16,
-    right: 16,
-    position: 'absolute',
-  },
-});
-
-export default BooksScreen;
-```
-
-Replace code below for `CreateUpdateBookScreen.tsx` file under the `./src/screens/BookStore/Books/CreateUpdateBook/`
-
-```tsx
-import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
-
-import { getAuthorLookup, get, create, update } from '../../../../api/BookAPI';
-import LoadingActions from '../../../../store/actions/LoadingActions';
-import { createLoadingSelector } from '../../../../store/selectors/LoadingSelectors';
-import { connectToRedux } from '../../../../utils/ReduxConnect';
-import CreateUpdateBookForm from './CreateUpdateBookForm';
-
-function CreateUpdateBookScreen({ navigation, route, startLoading, clearLoading }) {
-  const { bookId } = route.params || {};
-  const [book, setBook] = useState(null);
-
-  const submit = (data: any) => {
-    startLoading({ key: 'save' });
-
-    (data.id ? update(data, data.id) : create(data))
-      .then(() => navigation.goBack())
-      .finally(() => clearLoading());
-  };
-
-  useEffect(() => {
-    if (bookId) {
-      startLoading({ key: 'fetchBookDetail' });
-
-      get(bookId)
-        .then((response: any) => setBook(response))
-        .finally(() => clearLoading());
-    }
-  }, [bookId]);
-
-  return <CreateUpdateBookForm submit={submit} book={book} />;
-}
-
-CreateUpdateBookScreen.propTypes = {
-  startLoading: PropTypes.func.isRequired,
-  clearLoading: PropTypes.func.isRequired,
-};
-
-export default connectToRedux({
-  component: CreateUpdateBookScreen,
-  stateProps: state => ({ loading: createLoadingSelector()(state) }),
-  dispatchProps: {
-    startLoading: LoadingActions.start,
-    clearLoading: LoadingActions.clear,
-  },
-});
-```
-
-- `get` method is used to fetch the book details from the server.
-- `update` method is used to update the book on the server.
-- `route` parameter will be used to get the bookId from the navigation.
-
-Replace the `CreateUpdateBookForm.tsx` file with the code below. We will use this file for the create and update operations.
-
-```tsx
-//Imports..
-
-//validateSchema
-
-//props
-
-function CreateUpdateBookForm({
-  submit,
-  book = null, //Add book parameter with default value
-}) {
-  //Other codes..
-
-  const bookForm = useFormik({
-    enableReinitialize: true,
-    validateOnBlur: true,
-    validationSchema: Yup.object().shape({
-      ...validations,
-    }),
-    initialValues: {
-      //Update initialValues
-      ...book,
-      name: book?.name || "",
-      price: book?.price.toString() || "",
-      type: book?.type || "",
-      typeDisplayName:
-        book?.type && i18n.t("BookStore::Enum:BookType." + book.type),
-      publishDate: (book?.publishDate && new Date(book?.publishDate)) || null,
-      //Update initialValues
     },
-    onSubmit,
-  });
-
-  //Others codes..
-}
-
-//Other codes..
+  ]);
+};
 ```
 
-- `book` is a nullable property. It will store the selected book, if the book parameter is null then we will create a new book.
+Incrementing `refresh` causes `DataList` to re-fetch from page zero, so the deleted row disappears as soon as the API call returns.
 
-![Book List With Options](../../../images/book-list-with-options.png)
-
-![Update Book Page](../../../images/update-book.png)
-
-## Delete a Book
-
-Replace the code below in the `BooksScreen.tsx` file under the `./src/screens/BookStore/Books` folder.
-
-```tsx
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Alert, View, StyleSheet } from 'react-native';
-import { List, IconButton, AnimatedFAB } from 'react-native-paper';
-import { useActionSheet } from '@expo/react-native-action-sheet';
-import i18n from 'i18n-js';
-
-import { getList, remove } from '../../../api/BookAPI';
-import { DataList } from '../../../components';
-import { createAppConfigSelector } from '../../../store/selectors/AppSelectors';
-import { useThemeColors } from '../../../hooks';
-
-function BooksScreen({ navigation }) {
-  const { background, primary } = useThemeColors();
-  const currentUser = useSelector(createAppConfigSelector())?.currentUser;
-  const policies = useSelector(createAppConfigSelector())?.auth?.grantedPolicies;
-
-  const [refresh, setRefresh] = useState(null);
-  const { showActionSheetWithOptions } = useActionSheet();
-
-  const openContextMenu = (item: { id: string }) => {
-    const options = [];
-
-    if (policies['BookStore.Books.Delete']) {
-      options.push(i18n.t('AbpUi::Delete'));
-    }
-
-    if (policies['BookStore.Books.Edit']) {
-      options.push(i18n.t('AbpUi::Edit'));
-    }
-
-    options.push(i18n.t('AbpUi::Cancel'));
-
-    showActionSheetWithOptions(
-      {
-        options,
-        cancelButtonIndex: options.length - 1,
-        destructiveButtonIndex: options.indexOf(i18n.t('AbpUi::Delete')),
-      },
-      index => {
-        switch (options[index]) {
-          case i18n.t('AbpUi::Edit'):
-            edit(item);
-            break;
-          case i18n.t('AbpUi::Delete'):
-            removeOnClick(item);
-            break;
-        }
-      },
-    );
-  };
-
-  const removeOnClick = (item: { id: string }) => {
-    Alert.alert('Warning', i18n.t('BookStore::AreYouSureToDelete'), [
-      {
-        text: i18n.t('AbpUi::Cancel'),
-        style: 'cancel',
-      },
-      {
-        style: 'default',
-        text: i18n.t('AbpUi::Ok'),
-        onPress: () => {
-          remove(item.id).then(() => {
-            setRefresh((refresh ?? 0) + 1);
-          });
-        },
-      },
-    ]);
-  };
-
-  const edit = (item: { id: string }) => {
-    navigation.navigate('CreateUpdateBook', { bookId: item.id });
-  };
-
-  return (
-    <View style={%{{{ flex: 1, backgroundColor: background }}}%}>
-      {currentUser?.isAuthenticated && (
-        <DataList
-          navigation={navigation}
-          fetchFn={getList}
-          trigger={refresh}
-          render={({ item }) => (
-            <List.Item
-              key={item.id}
-              title={item.name}
-              description={`${item.authorName} | ${i18n.t(
-                'BookStore::Enum:BookType.' + item.type,
-              )}`}
-              right={props => (
-                <IconButton
-                  {...props}
-                  icon="dots-vertical"
-                  rippleColor={'#ccc'}
-                  size={20}
-                  onPress={() => openContextMenu(item)}
-                />
-              )}
-            />
-          )}
-        />
-      )}
-
-      {currentUser?.isAuthenticated && !!policies['BookStore.Books.Create'] && (
-        <AnimatedFAB
-          icon={'plus'}
-          label={i18n.t('BookStore::NewBook')}
-          color="white"
-          extended={false}
-          onPress={() => navigation.navigate('CreateUpdateBook')}
-          visible={true}
-          animateFrom={'right'}
-          iconMode={'static'}
-          style={[styles.fabStyle, { backgroundColor: primary }]}
-        />
-      )}
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-  },
-  fabStyle: {
-    bottom: 16,
-    right: 16,
-    position: 'absolute',
-  },
-});
-
-export default BooksScreen;
-```
-
-- `Delete` option is added to context menu list
-- `removeOnClick` method will handle the delete process. It'll show an alert before the delete operation.
-
-![Delete Book](../../../images/delete-book.png)
-
-![Delete Book Alert](../../../images/delete-book-alert.png)
+![Delete Book Alert](../../../images/delete-book-alert-new.png)
 
 ## Authorization
 
-### Hide Books item in tab
+UI gating uses `usePermission` with policy keys from `BookStorePolicies` (backed by `createGrantedPolicySelector` in `AppSelectors.ts`). The API still enforces authorization server-side; these checks only hide controls the user cannot use.
 
-Add `grantedPolicies` to the policies variable from the `appConfig` store
+| Location | Hook / constant | Effect |
+|----------|-----------------|--------|
+| `BottomTabNavigator.tsx` | `usePermission(BookStoreTabPolicy)` | Book Store bottom tab (`Books` **or** `Authors`) |
+| `BookStoreScreen.tsx` | `BookStorePolicies.Books`, `.Authors` | Books / Authors sub-tabs |
+| `BooksScreen.tsx` | `.BooksCreate`, `.BooksEdit`, `.BooksDelete` | FAB, action sheet entries |
+| `AuthorsScreen.tsx` | `.AuthorsCreate`, `.AuthorsEdit`, `.AuthorsDelete` | Same pattern for authors |
 
-```tsx
-//Other imports..
-import { useSelector } from "react-redux";
+If no Book Store permission is granted, `BookStoreScreen` shows `BookStore::NoAccess`. Grant permissions in the web UI (see [Backend Setup](#backend-setup-quick-reference)), then log in again on mobile to refresh `grantedPolicies`.
 
-function BookStoreScreen({ navigation }) {
-  const [index, setIndex] = React.useState(0);
-  const [routes, setRoutes] = React.useState([]);
+For OR/AND policy expressions, optional `withPermission` HOC usage, and troubleshooting, see `./docs/permission-guide.md`.
 
-  const currentUser = useSelector((state) => state.app.appConfig.currentUser);
-  const policies = useSelector(
-    (state) => state.app.appConfig.auth.grantedPolicies
-  );
+## Author Section <a name="author"></a>
 
-  const renderScene = BottomNavigation.SceneMap({
-    books: () => BooksRoute(navigation),
-  });
-
-  React.useEffect(() => {
-    if (!currentUser?.isAuthenticated || !policies) {
-      setRoutes([]);
-      return;
-    }
-
-    let _routes = [];
-
-    if (!!policies["BookStore.Books"]) {
-      _routes.push({
-        key: "books",
-        title: i18n.t("BookStore::Menu:Books"),
-        focusedIcon: "book",
-        unfocusedIcon: "book-outline",
-      });
-    }
-
-    setRoutes([..._routes]);
-  }, [Object.keys(policies)?.filter((f) => f.startsWith("BookStore")).length]);
-
-  return (
-    routes?.length > 0 && (
-      <BottomNavigation
-        navigationState={%{{{ index, routes }}}%}
-        onIndexChange={setIndex}
-        renderScene={renderScene}
-      />
-    )
-  );
-}
-
-export default BookStoreScreen;
-```
-
-- In the `useEffect` function we'll check the `currentUser` and `policies` variables.
-- useEffect's conditions will be the policies of the `BookStore` permission group.
-- `Books` tab will be shown if the user has the `BookStore.Books` permission
-
-![Books Menu Item](../../../images/books-menu-item.png)
-
-### Hide the New Book Button
-
-`New Book` button is placed in the BooksScreen as a `+` icon button. For the toggle visibility of the button, we need to add the `policies` variable to the `BooksScreen` component like the `BookStoreScreen` component. Open the `BooksScreen.tsx` file in the `./src/screens/BookStore/Books` folder and include the code below.
-
-```tsx
-//Imports..
-
-function BooksScreen({ navigation }) {
-  const policies = useSelector(createAppConfigSelector())?.auth?.grantedPolicies;
-
-  //Other codes..
-
-  return (
-    {/*Other codes..*/}
-
-    {currentUser?.isAuthenticated &&
-      !!policies['BookStore.Books.Create'] && //Add this line
-      (
-        <AnimatedFAB
-          icon={'plus'}
-          label={i18n.t('BookStore::NewBook')}
-          color="white"
-          extended={false}
-          onPress={() => navigation.navigate('CreateUpdateBook')}
-          visible={true}
-          animateFrom={'right'}
-          iconMode={'static'}
-          style={[styles.fabStyle, { backgroundColor: primary }]}
-        />
-      )
-    }
-  )
-}
-```
-
-- Now the `+` icon button will be shown if the user has the `BookStore.Books.Create` permission.
-
-![Create New Book Button Policy](../../../images/create-book-button-visibility.png)
-
-### Hide the Edit and Delete Actions
-
-Update your code as below in the `./src/screens/BookStore/Books/BooksScreen.tsx` file. We'll check the `policies` variables for the `Edit` and `Delete` actions.
-
-```tsx
-function BooksScreen() {
-  //...
-
-  const openContextMenu = (item) => {
-    const options = [];
-
-    if (policies["BookStore.Books.Delete"]) {
-      options.push(i18n.t("AbpUi::Delete"));
-    }
-
-    if (policies["BookStore.Books.Update"]) {
-      options.push(i18n.t("AbpUi::Edit"));
-    }
-
-    options.push(i18n.t("AbpUi::Cancel"));
-  };
-
-  //...
-}
-```
-
-![Create New Book Button Policy](../../../images/update-delete-book-button-visibility.png)
-
-## Author
-
-### Create API Proxy
+### Author API Proxy
 
 ```ts
-//./src/api/AuthorAPI.ts
-
+// ./src/api/AuthorAPI.ts
 import api from './API';
 
-export const getList = () => api.get('/api/app/author').then(({ data }) => data);
+export const getList = (params: { maxResultCount?: number; skipCount?: number; sorting?: string; filter?: string } = {}) =>
+  api.get('/api/app/author', { params }).then(({ data }) => data);
 
-export const get = id => api.get(`/api/app/author/${id}`).then(({ data }) => data);
+export const get = (id: string) =>
+  api.get(`/api/app/author/${id}`).then(({ data }) => data);
 
-export const create = input => api.post('/api/app/author', input).then(({ data }) => data);
+export const create = (input: any) =>
+  api.post('/api/app/author', input).then(({ data }) => data);
 
-export const update = (input, id) => api.put(`/api/app/author/${id}`, input).then(({ data }) => data);
+export const update = (input: any, id: string) =>
+  api.put(`/api/app/author/${id}`, input).then(({ data }) => data);
 
-export const remove = id => api.delete(`/api/app/author/${id}`).then(({ data }) => data);
+export const remove = (id: string) =>
+  api.delete(`/api/app/author/${id}`).then(({ data }) => data);
 ```
 
-## The Author List Page
+### AuthorsScreen
 
-### Add Authors Tab to BookStoreScreen
-
-Open the `./src/screens/BookStore/BookStoreScreen.tsx` file and update it with the code below.
+The list mirrors `BooksScreen` — same `DataList` + action sheet + FAB pattern, with `usePermission(BookStorePolicies.AuthorsCreate|AuthorsEdit|AuthorsDelete)` and `CreateUpdateAuthor` as the navigation target.
 
 ```tsx
-//Other imports
-import AuthorsScreen from "./Authors/AuthorsScreen";
-
-//Other Routes..
-const AuthorsRoute = (nav) => <AuthorsScreen navigation={nav} />;
-
-function BookStoreScreen({ navigation }) {
-  //Other codes..
-
-  const renderScene = BottomNavigation.SceneMap({
-    books: () => BooksRoute(navigation),
-    authors: () => AuthorsRoute(navigation), //Added this line
-  });
-
-  //Added this
-  if (!!policies["BookStore.Authors"]) {
-    _routes.push({
-      key: "authors",
-      title: i18n.t("BookStore::Menu:Authors"),
-      focusedIcon: "account-supervisor",
-      unfocusedIcon: "account-supervisor-outline",
-    });
-  }
-  //Added this
-}
-
-export default BookStoreScreen;
+// ./src/screens/BookStore/Authors/AuthorsScreen.tsx
+// (Same shape as BooksScreen — replace BookAPI with AuthorAPI, use BookStorePolicies.Authors*,
+//  and route navigation to 'CreateUpdateAuthor' with { authorId } instead of { bookId }.)
 ```
 
-Create a `AuthorsScreen.tsx` file under the `./src/screens/BookStore/Authors` folder and add the code below to it.
+The full source ships with the sample app under the path above.
+
+### CreateUpdateAuthor
+
+The screen pair is simpler than for books — there is no author lookup and no enum dropdown. Just a name field, a birth-date picker, and a multi-line short-bio field.
 
 ```tsx
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Alert, View, StyleSheet } from 'react-native';
-import { List, IconButton, AnimatedFAB } from 'react-native-paper';
-import { useActionSheet } from '@expo/react-native-action-sheet';
-import i18n from 'i18n-js';
-
-import { getList, remove } from '../../../api/AuthorAPI';
-import { DataList } from '../../../components';
-import { createAppConfigSelector } from '../../../store/selectors/AppSelectors';
-import { useThemeColors } from '../../../hooks';
-
-function AuthorsScreen({ navigation }) {
-  const { background, primary } = useThemeColors();
-  const currentUser = useSelector(createAppConfigSelector())?.currentUser;
-  const policies = useSelector(createAppConfigSelector())?.auth?.grantedPolicies;
-
-  const [refresh, setRefresh] = useState(null);
-  const { showActionSheetWithOptions } = useActionSheet();
-
-  const openContextMenu = (item: { id: string }) => {
-    const options = [];
-
-    if (policies['BookStore.Authors.Delete']) {
-      options.push(i18n.t('AbpUi::Delete'));
-    }
-
-    if (policies['BookStore.Authors.Edit']) {
-      options.push(i18n.t('AbpUi::Edit'));
-    }
-
-    options.push(i18n.t('AbpUi::Cancel'));
-
-    showActionSheetWithOptions(
-      {
-        options,
-        cancelButtonIndex: options.length - 1,
-        destructiveButtonIndex: options.indexOf(i18n.t('AbpUi::Delete')),
-      },
-      (index: number) => {
-        switch (options[index]) {
-          case i18n.t('AbpUi::Edit'):
-            edit(item);
-            break;
-          case i18n.t('AbpUi::Delete'):
-            removeOnClick(item);
-            break;
-        }
-      },
-    );
-  };
-
-  const removeOnClick = ({ id }: { id: string }) => {
-    Alert.alert('Warning', i18n.t('BookStore::AreYouSureToDelete'), [
-      {
-        text: i18n.t('AbpUi::Cancel'),
-        style: 'cancel',
-      },
-      {
-        style: 'default',
-        text: i18n.t('AbpUi::Ok'),
-        onPress: () => {
-          remove(id).then(() => {
-            setRefresh((refresh ?? 0) + 1);
-          });
-        },
-      },
-    ]);
-  };
-
-  const edit = ({ id }: { id: string }) => {
-    navigation.navigate('CreateUpdateAuthor', { authorId: id });
-  };
-
-  return (
-    <View style={%{{{ flex: 1, backgroundColor: background }}}%}>
-      {currentUser?.isAuthenticated && (
-        <DataList
-          navigation={navigation}
-          fetchFn={getList}
-          trigger={refresh}
-          render={({ item }) => (
-            <List.Item
-              key={item.id}
-              title={item.name}
-              description={item.shortBio || new Date(item.birthDate)?.toLocaleDateString()}
-              right={(props: any) => (
-                <IconButton
-                  {...props}
-                  icon="dots-vertical"
-                  rippleColor={'#ccc'}
-                  size={20}
-                  onPress={() => openContextMenu(item)}
-                />
-              )}
-            />
-          )}
-        />
-      )}
-
-      {currentUser?.isAuthenticated && policies['BookStore.Authors.Create'] && (
-        <AnimatedFAB
-          icon={'plus'}
-          label={i18n.t('BookStore::NewAuthor')}
-          color="white"
-          extended={false}
-          onPress={() => navigation.navigate('CreateUpdateAuthor')}
-          visible={true}
-          animateFrom={'right'}
-          iconMode={'static'}
-          style={[styles.fabStyle, { backgroundColor: primary }]}
-        />
-      )}
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-  },
-  fabStyle: {
-    bottom: 16,
-    right: 16,
-    position: 'absolute',
-  },
-});
-
-export default AuthorsScreen;
-```
-
-Create a `CreateUpdateAuthorScreen.tsx` file under the `./src/screens/BookStore/Authors/CreateUpdateAuthor` folder and add the code below to it.
-
-```tsx
-import PropTypes from 'prop-types';
+// ./src/screens/BookStore/Authors/CreateUpdateAuthor/CreateUpdateAuthorScreen.tsx
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { get, create, update } from '../../../../api/AuthorAPI';
 import LoadingActions from '../../../../store/actions/LoadingActions';
-import { createLoadingSelector } from '../../../../store/selectors/LoadingSelectors';
-import { connectToRedux } from '../../../../utils/ReduxConnect';
-import CreateUpdateAuthorForm from './CreateUpdateAuthorForm';  
+import type { CreateUpdateAuthorScreenProps } from '../../../../navigators/types';
+import CreateUpdateAuthorForm, { type AuthorFormValues } from './CreateUpdateAuthorForm';
 
-function CreateUpdateAuthorScreen({ navigation, route, startLoading, clearLoading }) {
+function CreateUpdateAuthorScreen({ navigation, route }: CreateUpdateAuthorScreenProps) {
   const { authorId } = route.params || {};
-  const [ author, setAuthor ] = useState(null);
+  const dispatch = useDispatch();
 
-  const submit = (data: any) => {
-    startLoading({ key: 'save' });
-
-    (data.id ? update(data, data.id) : create(data))
-      .then(() => navigation.goBack())
-      .finally(() => clearLoading());
-  };
+  const [author, setAuthor] = useState<any | null>(null);
 
   useEffect(() => {
-    if (authorId) {
-      startLoading({ key: 'fetchAuthorDetail' });
-
-      get(authorId)
-        .then((response: any) => setAuthor(response))
-        .finally(() => clearLoading());
+    if (!authorId) return;
+    let cancelled = false;
+    (async () => {
+      dispatch(LoadingActions.start({ key: 'fetchAuthorDetail' }));
+      try {
+        const detail = await get(authorId);
+        if (!cancelled) setAuthor(detail);
+      } finally {
+        dispatch(LoadingActions.clear());
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [authorId, dispatch]);
+  const submit = async (data: AuthorFormValues) => {
+    dispatch(LoadingActions.start({ key: 'save' }));
+    try {
+      const payload = {
+        name: data.name,
+        birthDate: data.birthDate ? new Date(data.birthDate).toISOString() : new Date().toISOString(),
+        shortBio: data.shortBio?.trim() ? data.shortBio : null,
+      };
+      if (authorId) await update(payload, authorId);
+      else await create(payload);
+      navigation.goBack();
+    } finally {
+      dispatch(LoadingActions.clear());
     }
-  }, [authorId]);
+  };
 
   return <CreateUpdateAuthorForm submit={submit} author={author} />;
 }
 
-CreateUpdateAuthorScreen.propTypes = {
-  startLoading: PropTypes.func.isRequired,
-  clearLoading: PropTypes.func.isRequired,
-};
-
-export default connectToRedux({
-  component: CreateUpdateAuthorScreen,
-  stateProps: (state: any) => ({ loading: createLoadingSelector()(state) }),
-  dispatchProps: {
-    startLoading: LoadingActions.start,
-    clearLoading: LoadingActions.clear,
-  },
-});
+export default CreateUpdateAuthorScreen;
 ```
 
-Create a `CreateUpdateAuthorForm.tsx` file under the `./src/screens/BookStore/Authors/CreateUpdateAuthor` folder and add the code below to it.
+The form (`CreateUpdateAuthorForm.tsx`) is a stripped-down version of the book form — only the name, birth-date and short-bio fields, no `AbpSelect`. Refer to the sample source for the full file; it follows the exact same NativeWind layout used in `CreateUpdateBookForm.tsx`.
 
-```tsx
-import { useRef, useState } from 'react';
-import { Platform, KeyboardAvoidingView, StyleSheet, View, ScrollView } from 'react-native';
+![Author Create Page](../../../images/create-author-new.png)
 
-import { useFormik } from 'formik';
-import i18n from 'i18n-js';
-import PropTypes from 'prop-types';
-import * as Yup from 'yup';
-import { Divider, Portal, TextInput, Text, Button, Modal } from 'react-native-paper';
-import DateTimePicker from '@react-native-community/datetimepicker';
+## Adding the Author Relation to Books
 
-import { useThemeColors } from '../../../../hooks';
-import { FormButtons, ValidationMessage } from '../../../../components';  
+This is the part that ties everything together: the book list shows the author name beside the book type, and the create/edit form lets the user choose the author from a dropdown filled by the `getAuthorLookup` endpoint.
 
-const validations = {
-  name: Yup.string().required('AbpValidation::ThisFieldIsRequired.'),
-  birthDate: Yup.string().nullable().required('AbpValidation::ThisFieldIsRequired.'),
-};
+Both pieces are already wired in the code we wrote earlier:
 
-const props = {
-  underlineStyle: { backgroundColor: 'transparent' },
-  underlineColor: '#333333bf',
-};
+- `BooksScreen.tsx` renders `${item.authorName} · ${t('BookStore::Enum:BookType:${item.type}')}` for each row. The backend's `BookAppService.GetListAsync` joins the `Authors` collection so `authorName` is part of every item.
+- `CreateUpdateBookScreen.tsx` calls `getAuthorLookup` on mount and passes the result to the form as the `authors` prop. The form's `Author` field is an `AbpSelect` that reads from that prop and writes the chosen id (and display name) back to Formik state.
 
-function CreateUpdateAuthorForm({ submit, author = null }) {
-  const { primaryContainer, background, onBackground } = useThemeColors();
+If you want to verify the relation visually:
 
-  const [birthDateVisible, setPublishDateVisible] = useState(false);
+1. Start the backend (`Acme.BookStore.HttpApi.Host`).
+2. Run the React Native app (`npm start` in `react-native/`).
+3. Log in as `admin` / `1q2w3E*`. The seeder created three sample authors and six sample books.
+4. Open the **Book Store** tab. The book list shows entries like `The Hobbit · J.R.R. Tolkien · Fantastic`.
+5. Tap **+ New Book** and confirm the **Author** dropdown lists the three seeded authors.
 
-  const nameRef = useRef(null);
-  const birthDateRef = useRef(null);
-  const shortBioRef = useRef(null);
+![Authors in Book Form](../../../images/authors-in-book-form-new.png)
 
-  const inputStyle = { ...styles.input, backgroundColor: primaryContainer };
+## Where to go next
 
-  const onSubmit = (values: any) => {
-    if (!authorForm.isValid) {
-      return;
-    }
-
-    submit({ ...values });
-  };
-
-  const authorForm = useFormik({
-    enableReinitialize: true,
-    validateOnBlur: true,
-    validationSchema: Yup.object().shape({
-      ...validations,
-    }),
-    initialValues: {
-      ...author,
-      name: author?.name || '',
-      birthDate: (author?.birthDate && new Date(author?.birthDate)) || null,
-      shortBio: author?.shortBio || '',
-    },
-    onSubmit,
-  });
-
-  const isInvalidControl = (controlName = null) => {
-    if (!controlName) {
-      return;
-    }
-
-    return (
-      ((!!authorForm.touched[controlName] && authorForm.submitCount > 0) ||
-        authorForm.submitCount > 0) &&
-      !!authorForm.errors[controlName]
-    );
-  };
-
-  const onChange = (event: any, selectedDate: any) => {
-    if (!selectedDate) {
-      return;
-    }
-
-    setPublishDateVisible(false);
-
-    if (event && event.type !== 'dismissed') {
-      authorForm.setFieldValue('birthDate', selectedDate, true);
-    }
-  };
-
-  return (
-    <View style={%{{{ flex: 1, backgroundColor: background }}}%}>
-      {birthDateVisible && (
-        <DateTimePicker
-          testID="birthDatePicker"
-          value={authorForm.values.birthDate || new Date()}
-          mode={'date'}
-          is24Hour={true}
-          onChange={onChange}
-        />
-      )}
-
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <ScrollView keyboardShouldPersistTaps="handled">
-          <View style={styles.inputContainer}>
-            <TextInput
-              mode="flat" 
-              ref={nameRef}
-              error={isInvalidControl('name')}
-              onSubmitEditing={() => birthDateRef.current.focus()}
-              returnKeyType="next"
-              onChangeText={authorForm.handleChange('name')}
-              onBlur={authorForm.handleBlur('name')}
-              value={authorForm.values.name}
-              autoCapitalize="none"
-              label={i18n.t('BookStore::Name')}
-              style={inputStyle}
-              {...props}
-            />
-            {isInvalidControl('name') && (
-              <ValidationMessage>{authorForm.errors.name as string}</ValidationMessage>
-            )}
-          </View>
-
-          <View style={styles.inputContainer}>
-            <TextInput
-              ref={birthDateRef}
-              label={i18n.t('BookStore::BirthDate')}
-              onSubmitEditing={() => shortBioRef.current.focus()}
-              right={
-                <TextInput.Icon onPress={() => setPublishDateVisible(true)} icon="calendar" />
-              }
-              style={inputStyle}
-              editable={false}
-              value={authorForm.values.birthDate?.toLocaleDateString()}
-              {...props}
-            />
-            {isInvalidControl('birthDate') && (
-              <ValidationMessage>{authorForm.errors.birthDate as string}</ValidationMessage>
-            )}
-          </View>
-
-          <Portal>
-            <Modal
-              visible={birthDateVisible}
-              contentContainerStyle={[styles.dateModal, { backgroundColor: background }]}>
-              <Text variant="titleLarge" style={styles.modalTitle}>
-                {i18n.t('BookStore::BirthDate')}
-              </Text>
-              <Divider style={styles.divider} />
-              <DateTimePicker
-                testID="birthDatePicker"
-                value={authorForm.values.birthDate || new Date()}
-                mode="date"
-                display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                onChange={onChange}
-                maximumDate={new Date()}
-                textColor={onBackground}
-              />
-              <View style={styles.modalButtons}>
-                <Button onPress={() => setPublishDateVisible(false)} mode="text">
-                  {i18n.t('AbpUi::Cancel')}
-                </Button>
-                <Button onPress={() => setPublishDateVisible(false)} mode="contained">
-                  {i18n.t('AbpUi::Ok')}
-                </Button>
-              </View>
-            </Modal>
-          </Portal>
-
-          <View style={styles.inputContainer}>
-            <TextInput
-              mode="flat"
-              ref={shortBioRef}
-              error={isInvalidControl('shortBio')}
-              onSubmitEditing={() => authorForm.handleSubmit()}
-              returnKeyType="next"
-              onChangeText={authorForm.handleChange('shortBio')}
-              onBlur={authorForm.handleBlur('shortBio')}
-              value={authorForm.values.shortBio}
-              autoCapitalize="none"
-              label={i18n.t('BookStore::ShortBio')}
-              style={inputStyle}
-              {...props}
-            />
-          </View>
-
-          <FormButtons style={styles.button} submit={authorForm.handleSubmit} />
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  inputContainer: {
-    margin: 8,
-      marginLeft: 16,
-      marginRight: 16,
-  },
-  input: {
-    borderRadius: 8,
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
-  },
-  button: {
-    marginLeft: 16,
-    marginRight: 16,
-  },
-  divider: {
-    marginBottom: 16,
-  },
-  modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-    paddingHorizontal: 8,
-  },
-  dateModal: {
-    padding: 20,
-    margin: 20,
-    borderRadius: 12,
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-  },
-  modalTitle: {
-    textAlign: 'center',
-    marginBottom: 16,
-    fontWeight: '600',
-  },
-});
-
-CreateUpdateAuthorForm.propTypes = {
-  author: PropTypes.object,
-  submit: PropTypes.func.isRequired,
-};
-
-export default CreateUpdateAuthorForm;
-```
-
-![Author List](../../../images/author-list.png)
-
-![Author Create Page](../../../images/create-author.png)
-
-![Author List With Options](../../../images/author-list-with-options.png)
-
-![Author Update Page](../../../images/update-author.png)
-
-![Author Delete Alert](../../../images/delete-author-alert.png)
-
-## Add `Author` Relation To Book
-
-Update BookAPI proxy file and include `getAuthorLookup` method
-
-```ts
-import api from "./API";
-
-export const getList = () => api.get("/api/app/book").then(({ data }) => data);
-
-//Add this
-export const getAuthorLookup = () =>
-  api.get("/api/app/book/author-lookup").then(({ data }) => data);
-//Add this
-
-export const get = (id) =>
-  api.get(`/api/app/book/${id}`).then(({ data }) => data);
-
-export const create = (input) =>
-  api.post("/api/app/book", input).then(({ data }) => data);
-
-export const update = (input, id) =>
-  api.put(`/api/app/book/${id}`, input).then(({ data }) => data);
-
-export const remove = (id) =>
-  api.delete(`/api/app/book/${id}`).then(({ data }) => data);
-```
-
-### Add `AuthorName` to the Book List
-
-Open `BooksScreen.tsx` file under the `./src/screens/BookStore/Books` and update code below.
-
-```tsx
-//Improts
-
-function BooksScreen({ navigation }) {
-  //Other codes..
-
-  return (
-    //Other codes
-    <DataList
-      navigation={navigation}
-      fetchFn={getList}
-      trigger={refresh}
-      render={({ item }) => (
-        <List.Item
-          key={item.id}
-          title={item.name}
-          //Update here
-          description={`${item.authorName} | ${i18n.t(
-            "BookStore::Enum:BookType." + item.type
-          )}`}
-          //Update here
-          right={(props) => (
-            <IconButton
-              {...props}
-              icon="dots-vertical"
-              rippleColor={"#ccc"}
-              size={20}
-              onPress={() => openContextMenu(item)}
-            />
-          )}
-        />
-      )}
-    />
-    //Other codes
-  );
-}
-```
-
-- `item.authorName` placed beside book type in the book list.
-
-### Pass authors to the `CreateUpdateBookForm`
-
-```tsx
-import {
-  getAuthorLookup, //Add this line
-  get,
-  create,
-  update,
-} from "../../../../api/BookAPI";
-import CreateUpdateBookForm from "./CreateUpdateBookForm";
-
-function CreateUpdateBookScreen({
-  navigation,
-  route,
-  startLoading,
-  clearLoading,
-}) {
-  //Add this variable
-  const [authors, setAuthors] = useState([]);
-
-  //Fetch authors from author-lookup endpoint
-  useEffect(() => {
-    getAuthorLookup().then(({ items } = {}) => setAuthors(items));
-  }, []);
-
-  //Pass author list to Form
-  return <CreateUpdateBookForm submit={submit} book={book} authors={authors} />;
-}
-//Other codes..
-```
-
-- We'll define `authors` prop in the `CreateUpdateBookForm` component and it will be used for Authors dropdown.
-- In the useEffect function we'll fetch authors from the server and set `authors` variable.
-
-### Add `authorId` field to Book Form
-
-```tsx
-const validations = {
-  authorId: Yup.string()
-    .nullable()
-    .required("AbpValidation::ThisFieldIsRequired."),
-  //Other validators
-};
-
-//Add `authors` parameter
-function CreateUpdateBookForm({ submit, book = null, authors = [] }) {
-  //Add this variable for authors list
-  const [authorSelectVisible, setAuthorSelectVisible] = useState(false);
-
-  const authorIdRef = useRef(); //Add this line
-
-  //Update form
-  const bookForm = useFormik({
-    enableReinitialize: true,
-    validateOnBlur: true,
-    validationSchema: Yup.object().shape({
-      ...validations,
-    }),
-    initialValues: {
-      //Add these
-      authorId: book?.authorId || "",
-      author: authors.find((f) => f.id === book?.authorId)?.name || "",
-      //Add these
-    },
-    onSubmit,
-  });
-
-  //Other codes..
-
-  //Add `AbpSelect` component and TextInput for authors
-  return (
-    <View style={%{{{ flex: 1, backgroundColor: background }}}%}>
-      <AbpSelect
-        key="authorSelect"
-        title={i18n.t("BookStore::Authors")}
-        visible={authorSelectVisible}
-        items={authors.map(({ id, name }) => ({ id, displayName: name }))}
-        hasDefualtItem={true}
-        hideModalFn={() => setAuthorSelectVisible(false)}
-        selectedItem={bookForm.values.authorId}
-        setSelectedItem={(id) => {
-          bookForm.setFieldValue("authorId", id, true);
-          bookForm.setFieldValue(
-            "author",
-            authors.find((f) => f.id === id)?.name || null,
-            false
-          );
-        }}
-      />
-
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
-        <ScrollView keyboardShouldPersistTaps="handled">
-          <View style={styles.input.container}>
-            <TextInput
-              ref={authorIdRef}
-              error={isInvalidControl("authorId")}
-              label={i18n.t("BookStore::Author")}
-              right={
-                <TextInput.Icon
-                  onPress={() => setAuthorSelectVisible(true)}
-                  icon="menu-down"
-                />
-              }
-              style={inputStyle}
-              editable={false}
-              value={bookForm.values.author}
-              {...props}
-            />
-            {isInvalidControl("authorId") && (
-              <ValidationMessage>{bookForm.errors.authorId}</ValidationMessage>
-            )}
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </View>
-  );
-}
-CreateUpdateBookForm.propTypes = {
-  authors: PropTypes.array.isRequired, //Include this
-};
-
-export default CreateUpdateBookForm;
-```
-
-- Create authors dropdown input with `AbpSelect` component.
-- Display selected author in the `TextInput`
-
-![Book List with Author](../../../images/book-list-with-author.png)
-
-![Author Input in Book Form](../../../images/author-input-in-book-form.png)
-
-![Authors in Book Form](../../../images/authors-in-book-form.png)
-
-That is all. Just run the application and try to create or edit an author.
+- The drawer-only template variant (`navigation_type = "drawer"`) follows the same flow — replace the `BottomTabNavigator` step with the equivalent `Drawer.Screen` in `DrawerNavigator.tsx`, still gated with `usePermission(BookStoreTabPolicy)`.
+- Book Store permissions: `react-native/docs/permission-guide.md` (policy table, backend setup, `withPermission` examples).
+- Localization for the `BookStore::*` namespace is in `react-native/src/locales/{en,tr}.json` and the matching backend resource in `src/Acme.BookStore.Domain.Shared/Localization/BookStore/`. Adding more languages is a matter of registering them in `LocalizationService.ts` and creating the corresponding JSON files.
+- The full sample is the source of truth: any time the snippets here look incomplete, open the same path inside the downloaded `bookstore-react-native-mongodb` solution.

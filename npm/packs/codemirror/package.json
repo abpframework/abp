@@ -1,12 +1,22 @@
 {
-  "version": "10.1.0-rc.3",
+  "version": "10.6.0-rc.2",
   "name": "@abp/codemirror",
   "publishConfig": {
     "access": "public"
   },
+  "scripts": {
+    "build": "node ./scripts/build.js"
+  },
   "dependencies": {
-    "@abp/core": "~10.1.0-rc.3",
-    "codemirror": "^5.65.1"
+    "@abp/core": "~10.6.0-rc.2",
+    "@codemirror/lang-css": "^6.0.0",
+    "@codemirror/lang-javascript": "^6.0.0",
+    "@codemirror/state": "^6.0.0",
+    "@codemirror/view": "^6.0.0",
+    "codemirror": "^6.0.2"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431",
   "homepage": "https://abp.io",

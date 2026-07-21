@@ -12,6 +12,11 @@ public class TestResourcePermissionProviderKeyLookupService : IResourcePermissio
 
     public ILocalizableString DisplayName => new LocalizableString("Test", "TestResource");
 
+    public Task<bool> IsAvailableAsync()
+    {
+        return Task.FromResult(true);
+    }
+
     public Task<List<ResourcePermissionProviderKeyInfo>> SearchAsync(string filter = null, int page = 1, CancellationToken cancellationToken = default)
     {
         throw new System.NotImplementedException();

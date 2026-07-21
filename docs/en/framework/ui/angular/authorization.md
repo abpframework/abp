@@ -105,7 +105,7 @@ function configureAuthFilter() {
 }
 ```
 
-- `AuthErrorFilter:` is a model for filter object and it have 3 properties
+- `AuthErrorFilter:` is a model for filter object and it has 3 properties
   - `id:` a unique key in the list for the filter object
   - `executable:` a status for the filter object. If it's false then it won't work, yet it'll stay in the list
   - `execute:` a function that stores the skip logic

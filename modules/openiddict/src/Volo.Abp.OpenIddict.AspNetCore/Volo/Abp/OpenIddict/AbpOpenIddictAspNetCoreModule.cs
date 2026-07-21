@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Razor;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.DependencyInjection;
 using OpenIddict.Abstractions;
 using OpenIddict.Server;
@@ -25,12 +26,24 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
 
         Configure<AbpOpenIddictClaimsPrincipalOptions>(options =>
         {
+            options.ClaimsPrincipalHandlers.Add<AbpDefaultScopesHandler>();
             options.ClaimsPrincipalHandlers.Add<AbpDefaultOpenIddictClaimsPrincipalHandler>();
+        });
+
+        var preActions = context.Services.GetPreConfigureActions<AbpOpenIddictAspNetCoreOptions>();
+        Configure<AbpOpenIddictAspNetCoreOptions>(options =>
+        {
+            preActions.Configure(options);
         });
 
         Configure<RazorViewEngineOptions>(options =>
         {
             options.ViewLocationFormats.Add("/Volo/Abp/OpenIddict/Views/{1}/{0}.cshtml");
+        });
+
+        Configure<SecurityStampValidatorOptions>(options =>
+        {
+            options.RemoveClientIdClaim();
         });
     }
 

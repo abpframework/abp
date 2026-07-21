@@ -37,17 +37,49 @@ Social/external login buttons becomes visible if you setup it. See the *Social/E
 
 ![account-module-register](../images/account-module-register.png)
 
+New users receive every Identity role marked as `Default`.
+
 ### Forgot Password & Reset Password
 
 `/Account/ForgotPassword` page provides a way of sending password reset link to user's email address. The user then clicks to the link and determines a new password.
 
 ![account-module-forgot-password](../images/account-module-forgot-password.png)
 
+> The host part of the password reset link is built from `AppUrlOptions.Applications["MVC"].RootUrl`. Configure it if the default `App:SelfUrl` isn't what you want users to see in emails — for example, when you use subdomain-based multi-tenancy and want the link to point to the tenant's subdomain. See [Application URLs](../framework/infrastructure/app-urls.md).
+
 ### Account Management
 
 `/Account/Manage` page is used to change password and personal information of the user.
 
 ![account-module-manage-account](../images/account-module-manage-account.png)
+
+`IdentitySettingNames.User.IsUserNameUpdateEnabled` and `IdentitySettingNames.User.IsEmailUpdateEnabled` control whether the profile application service accepts changes to those fields. Both settings are `true` by default. External users can't change a local password; the built-in MVC profile page omits the password group for them and the application service rejects a password change.
+
+### Login and Registration Settings
+
+The Account module defines two client-visible settings. Both are `true` by default:
+
+* `AccountSettingNames.IsSelfRegistrationEnabled` controls self-registration. It is enforced by `IAccountAppService.RegisterAsync` as well as the built-in registration pages.
+* `AccountSettingNames.EnableLocalLogin` controls the local username/password login UI and handlers in the MVC Account pages, the OpenIddict and IdentityServer integrations, and the Angular Account layout. In Angular, `AuthWrapperService` reads the setting; the Basic Theme's `AuthWrapperComponent` shows the account content when it is enabled and a no-login-schemes warning when it is disabled.
+
+These settings are independent. Disabling local login doesn't disable the registration application service. Set `IsSelfRegistrationEnabled` to `false` as well when users must not create local accounts. Change the values with `ISettingManager` like other [settings](../framework/infrastructure/settings.md). Global or tenant values are normally appropriate because the login and registration requests run before a user is authenticated.
+
+### Extending the MVC Profile Page
+
+The MVC `/Account/Manage` page is built from the contributors in `ProfileManagementPageOptions.Contributors`. Implement `IProfileManagementPageContributor` to add a group backed by a view component, then register it from your module:
+
+```csharp
+Configure<ProfileManagementPageOptions>(options =>
+{
+    options.Contributors.Add(new MyProfileManagementPageContributor());
+});
+```
+
+Each contributor receives a `ProfileManagementPageCreationContext` and appends `ProfileManagementPageGroup` instances to its `Groups` collection. Contributors run in registration order on both GET and POST requests, and can resolve services through `context.ServiceProvider` when visibility depends on the current user or another runtime condition.
+
+### Angular UI Extensibility
+
+The Angular `createRoutes` function accepts three module-specific options: `redirectUrl`, `isPersonalSettingsChangedConfirmationActive` and `editFormPropContributors`. The form contributor key is `eAccountComponents.PersonalSettings`. The login, register, forgot-password, reset-password and manage-profile routes are also registered with the corresponding `eAccountComponents` keys for [component replacement](../framework/ui/angular/component-replacement.md). See [Dynamic Form Extensions](../framework/ui/angular/dynamic-form-extensions.md) for the contributor pattern.
 
 ## OpenIddict Integration
 
@@ -60,6 +92,15 @@ Social/external login buttons becomes visible if you setup it. See the *Social/E
 ## Social/External Logins
 
 The Account Module has already configured to handle social or external logins out of the box. You can follow the ASP.NET Core documentation to add a social/external login provider to your application.
+
+The MVC login and registration pages also recognize a Windows authentication scheme. `AbpAccountOptions.WindowsAuthenticationSchemeName` identifies that scheme and defaults to `"Windows"`. Set it when the registered scheme uses another name:
+
+```csharp
+Configure<AbpAccountOptions>(options =>
+{
+    options.WindowsAuthenticationSchemeName = "Negotiate";
+});
+```
 
 ### Example: Facebook Authentication
 

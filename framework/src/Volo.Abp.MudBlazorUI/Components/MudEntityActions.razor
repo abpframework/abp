@@ -1,0 +1,24 @@
+@typeparam TItem
+@using MudBlazor
+@using Volo.Abp.MudBlazorUI.Components
+
+@if (Type == MudActionType.Dropdown || DisabledOrNoActions())
+{
+    <MudMenu Icon="@Icons.Material.Filled.MoreVert"
+             AnchorOrigin="Origin.BottomRight"
+             TransformOrigin="Origin.TopRight"
+             Dense="true"
+             Disabled="@DisabledOrNoActions()">
+        <CascadingValue TValue="IMudEntityActions" Value="@this" Name="ParentActions">
+            @ChildContent
+        </CascadingValue>
+    </MudMenu>
+}
+else
+{
+    <MudButtonGroup OverrideStyles="false">
+        <CascadingValue TValue="IMudEntityActions" Value="@this" Name="ParentActions">
+            @ChildContent
+        </CascadingValue>
+    </MudButtonGroup>
+}

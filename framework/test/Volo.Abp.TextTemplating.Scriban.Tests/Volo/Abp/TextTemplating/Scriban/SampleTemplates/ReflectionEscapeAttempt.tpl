@@ -1,0 +1,1 @@
+getType=[{{ model.GetType }}]

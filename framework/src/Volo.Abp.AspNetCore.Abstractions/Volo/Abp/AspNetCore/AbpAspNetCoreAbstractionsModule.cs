@@ -10,6 +10,6 @@ public class AbpAspNetCoreAbstractionsModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddSingleton<IWebContentFileProvider, NullWebContentFileProvider>();
-        context.Services.AddSingleton<IWebClientInfoProvider, NullWebClientInfoProvider>();;
+        context.Services.AddSingleton<IWebClientInfoProvider, NullWebClientInfoProvider>();
     }
 }

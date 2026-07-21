@@ -355,6 +355,36 @@
               ]
             },
             {
+              "text": "AI Agent",
+              "items": [
+                {
+                  "text": "Overview",
+                  "path": "studio/ai-agent.md",
+                  "isIndex": true
+                },
+                {
+                  "text": "Configuration",
+                  "path": "studio/ai-agent-configuration.md"
+                },
+                {
+                  "text": "Workflows",
+                  "path": "studio/ai-agent-workflows.md"
+                },
+                {
+                  "text": "Built-in Capabilities",
+                  "path": "studio/ai-agent-built-in-capabilities.md"
+                },
+                {
+                  "text": "Git Integration",
+                  "path": "studio/ai-agent-git-integration.md"
+                },
+                {
+                  "text": "Coding with AI Agent",
+                  "path": "studio/coding-with-ai-agent.md"
+                }
+              ]
+            },
+            {
               "text": "Concepts",
               "path": "studio/concepts.md"
             },
@@ -583,6 +613,10 @@
               ]
             },
             {
+              "text": "Application URLs",
+              "path": "framework/infrastructure/app-urls.md"
+            },
+            {
               "text": "Background Jobs",
               "items": [
                 {
@@ -696,6 +730,10 @@
             {
               "text": "Concurrency Check",
               "path": "framework/infrastructure/concurrency-check.md"
+            },
+            {
+              "text": "Correlation ID",
+              "path": "framework/infrastructure/correlation-id.md"
             },
             {
               "text": "Current User",
@@ -1032,7 +1070,7 @@
                   ]
                 }
               ]
-            },
+            }
           ]
         },
         {
@@ -1072,6 +1110,10 @@
             {
               "text": "Dynamic C# API Clients",
               "path": "framework/api-development/dynamic-csharp-clients.md"
+            },
+            {
+              "text": "IdentityModel Clients",
+              "path": "framework/api-development/identitymodel-clients.md"
             },
             {
               "text": "Integration Services",
@@ -1315,6 +1357,10 @@
                     {
                       "text": "Auth",
                       "path": "framework/ui/mvc-razor-pages/javascript-api/auth.md"
+                    },
+                    {
+                      "text": "Clock",
+                      "path": "framework/ui/mvc-razor-pages/javascript-api/clock.md"
                     },
                     {
                       "text": "Current User",
@@ -1620,6 +1666,14 @@
                       "path": "framework/ui/angular/localization.md"
                     },
                     {
+                      "text": "Document Title Strategy",
+                      "path": "framework/ui/angular/title-strategy.md"
+                    },
+                    {
+                      "text": "Hybrid Localization",
+                      "path": "framework/ui/angular/hybrid-localization.md"
+                    },
+                    {
                       "text": "Form Validation",
                       "path": "framework/ui/angular/form-validation.md"
                     },
@@ -1835,8 +1889,24 @@
                       "path": "framework/ui/angular/card-component.md"
                     },
                     {
+                      "text": "Tree",
+                      "path": "framework/ui/angular/tree-component.md"
+                    },
+                    {
+                      "text": "Lookup Search",
+                      "path": "framework/ui/angular/lookup-search-component.md"
+                    },
+                    {
+                      "text": "Dynamic Forms",
+                      "path": "framework/ui/angular/dynamic-form-module.md"
+                    },
+                    {
                       "text": "Password Complexity Indicator",
                       "path": "framework/ui/angular/password-complexity-indicator-component.md"
+                    },
+                    {
+                      "text": "Commercial UI Components (Pro)",
+                      "path": "framework/ui/angular/commercial-ui.md"
                     },
                     {
                       "text": "Lookup Components(Pro)",
@@ -1851,12 +1921,94 @@
               ]
             },
             {
+              "text": "React",
+              "items": [
+                {
+                  "text": "Overview",
+                  "path": "framework/ui/react/index.md",
+                  "isIndex": true
+                },
+                {
+                  "text": "Configuration and Development",
+                  "items": [
+                    {
+                      "text": "Environment Variables",
+                      "path": "framework/ui/react/environment-variables.md"
+                    },
+                    {
+                      "text": "Unit Testing",
+                      "path": "framework/ui/react/unit-testing.md"
+                    }
+                  ]
+                },
+                {
+                  "text": "Core Features",
+                  "items": [
+                    {
+                      "text": "Authorization",
+                      "path": "framework/ui/react/authorization.md"
+                    },
+                    {
+                      "text": "Localization",
+                      "path": "framework/ui/react/localization.md"
+                    },
+                    {
+                      "text": "Permission Management",
+                      "path": "framework/ui/react/permission-management.md"
+                    },
+                    {
+                      "text": "HTTP Requests",
+                      "path": "framework/ui/react/http-requests.md"
+                    }
+                  ]
+                },
+                {
+                  "text": "Customization and Components",
+                  "items": [
+                    {
+                      "text": "Customization",
+                      "path": "framework/ui/react/customization.md"
+                    },
+                    {
+                      "text": "Components",
+                      "path": "framework/ui/react/components/index.md",
+                      "isIndex": true
+                    }
+                  ]
+                },
+                {
+                  "text": "Admin Console",
+                  "path": "framework/ui/react/admin-console.md"
+                }
+              ]
+            },
+            {
               "text": "React Native",
               "items": [
                 {
                   "text": "Overview",
                   "path": "framework/ui/react-native",
                   "isIndex": true
+                },
+                {
+                  "text": "Running on Web",
+                  "path": "framework/ui/react-native/running-on-web.md"
+                },
+                {
+                  "text": "Running on Device",
+                  "path": "framework/ui/react-native/running-on-device.md"
+                },
+                {
+                  "text": "Manual Backend Configuration",
+                  "path": "framework/ui/react-native/manual-backend-configuration.md"
+                },
+                {
+                  "text": "Android Emulator Setup",
+                  "path": "framework/ui/react-native/setting-up-android-emulator.md"
+                },
+                {
+                  "text": "Styling with NativeWind",
+                  "path": "framework/ui/react-native/styling-with-nativewind.md"
                 }
               ]
             },
@@ -1953,6 +2105,10 @@
               "path": "framework/data/mongodb"
             },
             {
+              "text": "In-Memory Database",
+              "path": "framework/data/memorydb"
+            },
+            {
               "text": "Dapper",
               "path": "framework/data/dapper"
             }
@@ -1974,6 +2130,76 @@
       ]
     },
     {
+      "text": "Low-Code System",
+      "items": [
+        {
+          "text": "Overview",
+          "path": "low-code",
+          "isIndex": true
+        },
+        {
+          "text": "Low-Code Designer",
+          "path": "low-code/designer.md"
+        },
+        {
+          "text": "React Runtime",
+          "path": "low-code/react-runtime.md"
+        },
+        {
+          "text": "Health",
+          "path": "low-code/health.md"
+        },
+        {
+          "text": "Dashboards",
+          "path": "low-code/dashboards.md"
+        },
+        {
+          "text": "Page Groups",
+          "path": "low-code/page-groups.md"
+        },
+        {
+          "text": "MCP Integration",
+          "path": "low-code/mcp.md"
+        },
+        {
+          "text": "Attributes & Fluent API",
+          "path": "low-code/fluent-api.md"
+        },
+        {
+          "text": "Model Descriptor Files",
+          "path": "low-code/model-json.md"
+        },
+        {
+          "text": "Reference Entities",
+          "path": "low-code/reference-entities.md"
+        },
+        {
+          "text": "Code Integration",
+          "path": "low-code/code-integration.md"
+        },
+        {
+          "text": "Foreign Access",
+          "path": "low-code/foreign-access.md"
+        },
+        {
+          "text": "Interceptors",
+          "path": "low-code/interceptors.md"
+        },
+        {
+          "text": "Custom Endpoints",
+          "path": "low-code/custom-endpoints.md"
+        },
+        {
+          "text": "Script Actions",
+          "path": "low-code/script-actions.md"
+        },
+        {
+          "text": "Scripting API",
+          "path": "low-code/scripting-api.md"
+        }
+      ]
+    },
+    {
       "text": "Solution Templates",
       "items": [
         {
@@ -1984,6 +2210,10 @@
         {
           "text": "Template Guide",
           "path": "solution-templates/guide.md"
+        },
+        {
+          "text": "Modern vs Classic Templates",
+          "path": "solution-templates/modern-vs-classic.md"
         },
         {
           "text": "Single-Layer Solution",
@@ -2181,6 +2411,10 @@
               ]
             }
           ]
+        },
+        {
+          "text": "Modular Monolith",
+          "path": "solution-templates/modular-monolith"
         },
         {
           "text": "Microservice Solution",
@@ -2410,6 +2644,10 @@
           "path": "modules/background-jobs.md"
         },
         {
+          "text": "Blogging",
+          "path": "modules/blogging.md"
+        },
+        {
           "text": "Chat (Pro)",
           "path": "modules/chat.md"
         },
@@ -2485,7 +2723,7 @@
             },
             {
               "text": "URL Forwarding System",
-              "path": "modules/cms-kit-pro/URL-forwarding.md"
+              "path": "modules/cms-kit-pro/url-forwarding.md"
             },
             {
               "text": "Poll System",
@@ -2527,7 +2765,19 @@
         },
         {
           "text": "Identity",
-          "path": "modules/identity.md"
+          "isLazyExpandable": true,
+          "path": "modules/identity.md",
+          "items": [
+            {
+              "text": "Overview",
+              "path": "modules/identity.md",
+              "isIndex": true
+            },
+            {
+              "text": "User Lookup and Synchronization",
+              "path": "modules/identity/user-synchronization.md"
+            }
+          ]
         },
         {
           "text": "Identity (Pro)",
@@ -2556,6 +2806,10 @@
         {
           "text": "Language Management (Pro)",
           "path": "modules/language-management.md"
+        },
+        {
+          "text": "Operation Rate Limiting (Pro)",
+          "path": "modules/operation-rate-limiting.md"
         },
         {
           "text": "OpenIddict",

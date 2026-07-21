@@ -441,7 +441,7 @@ public class IdentityUserManager_Tests : AbpIdentityDomainTestBase
         username = await _identityUserManager.GetUserNameFromEmailAsync("admin@abp.io");
         username.Length.ShouldBe(9); //admin and random 4 numbers
         username.ShouldContain("admin");
-        Regex.IsMatch(username, @"[0-4]{3}$").ShouldBeTrue();
+        Regex.IsMatch(username, @"[0-4]{4}$").ShouldBeTrue();
 
         _identityUserManager.Options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
         username = await _identityUserManager.GetUserNameFromEmailAsync("admin@abp.io");
@@ -460,6 +460,51 @@ public class IdentityUserManager_Tests : AbpIdentityDomainTestBase
         username.Length.ShouldBe(9); //admin and random 4 numbers
         username.ShouldContain("admin");
         Regex.IsMatch(username, @"[0-9]{4}$").ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task GetUserNameFromEmailAsync_Should_Only_Use_Allowed_Digits_When_AllowedUserNameCharacters_Has_Partial_Digits()
+    {
+        _identityUserManager.Options.User.AllowedUserNameCharacters = "admin01234";
+        for (var i = 0; i < 200; i++)
+        {
+            var username = await _identityUserManager.GetUserNameFromEmailAsync("admin@abp.io");
+            username.Length.ShouldBe(9);
+            username.ShouldStartWith("admin");
+            username.All(c => "admin01234".Contains(c)).ShouldBeTrue($"username '{username}' contains chars outside AllowedUserNameCharacters");
+        }
+    }
+
+    [Fact]
+    public async Task GetUserNameFromEmailAsync_Should_Only_Use_Allowed_Digits_With_Exact_Four_Digits()
+    {
+        _identityUserManager.Options.User.AllowedUserNameCharacters = "admin1234";
+        for (var i = 0; i < 200; i++)
+        {
+            var username = await _identityUserManager.GetUserNameFromEmailAsync("admin@abp.io");
+            username.Length.ShouldBe(9);
+            username.ShouldStartWith("admin");
+            username.Substring(5).All(c => "1234".Contains(c)).ShouldBeTrue($"suffix of '{username}' contains chars outside the allowed digits");
+        }
+    }
+
+    [Fact]
+    public async Task GetUserNameFromEmailAsync_Should_Allow_Leading_Zero_In_Random_Digits()
+    {
+        _identityUserManager.Options.User.AllowedUserNameCharacters = "admin0123";
+        var sawLeadingZero = false;
+        for (var i = 0; i < 100; i++)
+        {
+            var username = await _identityUserManager.GetUserNameFromEmailAsync("admin@abp.io");
+            username.Length.ShouldBe(9);
+            username.ShouldStartWith("admin");
+            username.Substring(5).All(c => "0123".Contains(c)).ShouldBeTrue($"suffix of '{username}' contains chars outside the allowed digits");
+            if (username[5] == '0')
+            {
+                sawLeadingZero = true;
+            }
+        }
+        sawLeadingZero.ShouldBeTrue("expected at least one username with leading-zero random suffix across 100 runs");
     }
 
     private async Task CreateRandomDefaultRoleAsync()
@@ -490,3 +535,4 @@ public class IdentityUserManager_Tests : AbpIdentityDomainTestBase
         TestSettingValueProvider.AddSetting(IdentitySettingNames.Password.ForceUsersToPeriodicallyChangePassword, true.ToString());
     }
 }
+

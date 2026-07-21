@@ -648,12 +648,15 @@ Configure<AbpEventBusBoxesOptions>(options =>
 * `CleanOldEventTimeIntervalSpan`: The event inbox system periodically checks and deletes the old processed events from the inbox in the database. You can set this value to determine the check period. Default value is 6 hours (`TimeSpan.FromHours(6)`).
 * `WaitTimeToDeleteProcessedInboxEvents`: Inbox events are not deleted from the database for a while even if they are successfully processed. This is for a system to prevent multiple process of the same event (if the event broker sends it twice). This configuration value determines the time to keep the processed events. Default value is 2 hours (`TimeSpan.FromHours(2)`).
 * `InboxWaitingEventMaxCount`: The maximum number of events to query at once from the inbox in the database. Default value is 1000.
+* `InboxProcessorFilter`: An expression used to filter incoming event records fetched by the inbox processor. The default value is `null`, which includes all records.
 * `OutboxWaitingEventMaxCount`: The maximum number of events to query at once from the outbox in the database. Default value is 1000.
+* `OutboxProcessorFilter`: An expression used to filter outgoing event records fetched by the outbox processor. The default value is `null`, which includes all records.
 * `DistributedLockWaitDuration`: ABP uses [distributed locking](../../distributed-locking.md) to prevent concurrent access to the inbox and outbox messages in the database, when running multiple instance of the same application. If an instance of the application can not obtain the lock, it tries after a duration. This is the configuration of that duration. Default value is 15 seconds (`TimeSpan.FromSeconds(15)`).
 * `InboxProcessorFailurePolicy`: The policy to handle the failure of the inbox processor. Default value is `Retry`. Possible values are:
     * `Retry`: The current exception and subsequent events will continue to be processed in order in the next cycle.
     * `RetryLater`: Skip the event that caused the exception and continue with the following events. The failed event will be retried after a delay that doubles with each retry, starting from the configured `InboxProcessorRetryBackoffFactor` (e.g., 10, 20, 40, 80 seconds). The default maximum retry count is 10 (configurable). Discard the event if it still fails after reaching the maximum retry count.
     * `Discard`: The event that caused the exception will be discarded and will not be retried.
+* `InboxProcessorMaxRetryCount`: The maximum retry count used by the `RetryLater` failure policy before an event is discarded. Default value is `10`.
 * `InboxProcessorRetryBackoffFactor`: The initial retry delay factor (double) used when `InboxProcessorFailurePolicy` is `RetryLater`. The retry delay is calculated as: `delay = InboxProcessorRetryBackoffFactor × 2^retryCount`. Default value is `10`.
 
 ### Skipping Outbox
@@ -720,6 +723,111 @@ Configure<AbpDistributedEventBusOptions>(options =>
     });
 });
 ````
+
+## Dynamic (String-Based) Events
+
+In addition to the type-safe event system described above, ABP also supports **dynamic events** that are identified by a string name rather than a CLR type. This is useful for scenarios where event types are not known at compile time, such as integrating with external systems or building plugin architectures.
+
+> **Note:** Dynamic event subscriptions are supported by RabbitMQ, Kafka, Azure Service Bus, and Rebus providers. The **Dapr provider does not support dynamic events** because Dapr requires topic subscriptions to be declared at application startup and cannot add subscriptions at runtime. Attempting to call `Subscribe(string, ...)` on the Dapr provider will throw an `AbpException`.
+
+### Publishing Dynamic Events
+
+Use the `PublishAsync` overload that accepts a string event name:
+
+````csharp
+await distributedEventBus.PublishAsync(
+    "MyDynamicEvent",
+    new Dictionary<string, object>
+    {
+        ["UserId"] = 42,
+        ["Name"] = "John"
+    }
+);
+````
+
+If a typed event exists with the given name (via `EventNameAttribute` or convention), the data is automatically deserialized and routed to the typed handler. Otherwise, it is delivered as a `DynamicEventData` to dynamic handlers.
+
+You can also control `onUnitOfWorkComplete` and `useOutbox` parameters:
+
+````csharp
+await distributedEventBus.PublishAsync(
+    "MyDynamicEvent",
+    new { UserId = 42, Name = "John" },
+    onUnitOfWorkComplete: true,
+    useOutbox: true
+);
+````
+
+### Subscribing to Dynamic Events
+
+The recommended way to subscribe is to implement `IDistributedEventHandler<DynamicEventData>` and use `IocEventHandlerFactory`. This mirrors how ABP manages typed handlers — it creates a new DI scope per event, resolves a fresh handler instance, calls `HandleEventAsync`, then disposes the scope:
+
+````csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    context.Services.AddTransient<MyDynamicEventHandler>();
+}
+
+public override void OnApplicationInitialization(ApplicationInitializationContext context)
+{
+    var eventBus = context.ServiceProvider.GetRequiredService<IDistributedEventBus>();
+    var scopeFactory = context.ServiceProvider.GetRequiredService<IServiceScopeFactory>();
+    eventBus.Subscribe("MyDynamicEvent", new IocEventHandlerFactory(scopeFactory, typeof(MyDynamicEventHandler)));
+}
+````
+
+The handler uses normal constructor injection — no manual scope management needed:
+
+````csharp
+public class MyDynamicEventHandler : IDistributedEventHandler<DynamicEventData>
+{
+    private readonly IMyService _myService;
+
+    public MyDynamicEventHandler(IMyService myService)
+    {
+        _myService = myService;
+    }
+
+    public async Task HandleEventAsync(DynamicEventData eventData)
+    {
+        await _myService.ProcessAsync(eventData.EventName, eventData.Data);
+    }
+}
+````
+
+`Subscribe` returns an `IDisposable`. Call `Dispose()` to unsubscribe at runtime.
+
+For simple stateless handlers that do not need DI services, you can also use `SingleInstanceHandlerFactory` with an inline handler:
+
+````csharp
+var subscription = distributedEventBus.Subscribe(
+    "MyDynamicEvent",
+    new SingleInstanceHandlerFactory(
+        new ActionEventHandler<DynamicEventData>(eventData =>
+        {
+            var name = eventData.EventName;
+            var data = eventData.Data;
+            return Task.CompletedTask;
+        })));
+
+// Unsubscribe when done
+subscription.Dispose();
+````
+
+> Do not inject `IServiceProvider` directly into a `SingleInstanceHandlerFactory`-based handler. Since the same instance is reused for every event, resolving scoped services directly from the root container causes a captive dependency and may throw a scope validation exception in development. Use `IocEventHandlerFactory` instead.
+
+### Mixed Typed and Dynamic Handlers
+
+When both a typed handler and a dynamic handler are registered for the same event name, **both** handlers are triggered. The typed handler receives the converted typed data, while the dynamic handler receives a `DynamicEventData` wrapper.
+
+### DynamicEventData Class
+
+The `DynamicEventData` class is a simple data object that wraps the event payload:
+
+- **`EventName`**: The string name that identifies the event.
+- **`Data`**: The raw event data payload.
+
+> If a typed handler exists for the same event name, the framework automatically converts the data to the expected type using the event bus serialization pipeline. Dynamic handlers receive the raw `Data` as-is.
 
 ## See Also
 

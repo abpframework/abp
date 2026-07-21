@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "script-background-job-descriptor.schema.json",
+  "title": "Script Background Job Descriptor",
+  "description": "Defines a named JavaScript background job handler.",
+  "markdownDescription": "AI guidance: use background jobs for asynchronous work that is explicitly enqueued by code/scripts, such as notifications, imports, or long-running recalculations. `name` is the job identifier used by enqueue calls. Keep scripts retry-safe and idempotent because background jobs may run more than once after failures.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional schema reference used when this descriptor is stored as a model descriptor file."
+    },
+    "name": {
+      "type": "string",
+      "description": "Unique identifier for the background job. Scripts/enqueuers reference this name.",
+      "minLength": 1
+    },
+    "javascript": {
+      "type": "string",
+      "description": "JavaScript code to execute when the job is enqueued/run. Use context payload/job arguments where available and keep retry-safe.",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional description for designer documentation and model health context."
+    }
+  },
+  "required": ["name", "javascript"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "name": "SendEventReminder",
+      "javascript": "context.log('Sending event reminder job.');"
+    }
+  ]
+}

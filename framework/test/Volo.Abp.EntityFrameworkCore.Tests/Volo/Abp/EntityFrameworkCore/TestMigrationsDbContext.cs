@@ -27,6 +27,12 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
 
     public DbSet<Category> Categories { get; set; }
 
+    public DbSet<EntityWithCustomSoftDeleteColumn> EntityWithCustomSoftDeleteColumns { get; set; }
+
+    public DbSet<EntityWithCustomTenantIdColumn> EntityWithCustomTenantIdColumns { get; set; }
+
+    public DbSet<EntityWithIntSoftDelete> EntityWithIntSoftDeletes { get; set; }
+
     public DbSet<AppEntityWithNavigations> AppEntityWithNavigations { get; set; }
     public DbSet<AppEntityWithNavigationChildOneToMany> AppEntityWithNavigationChildOneToMany { get; set; }
 
@@ -67,6 +73,17 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
 
         base.OnModelCreating(modelBuilder);
 
+        // Mirror the column renames in TestAppDbContext so the generated SQLite schema matches.
+        modelBuilder.Entity<EntityWithCustomSoftDeleteColumn>(b =>
+        {
+            b.Property(x => x.IsDeleted).HasColumnName(EntityWithCustomSoftDeleteColumn.IsDeletedColumnName);
+        });
+
+        modelBuilder.Entity<EntityWithCustomTenantIdColumn>(b =>
+        {
+            b.Property(x => x.TenantId).HasColumnName(EntityWithCustomTenantIdColumn.TenantIdColumnName);
+        });
+
         modelBuilder.Entity<Phone>(b =>
         {
             b.HasKey(p => new { p.PersonId, p.Number });
@@ -102,6 +119,15 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
         modelBuilder.Entity<Category>(b =>
         {
             b.HasAbpQueryFilter(e => e.Name.StartsWith("abp"));
+        });
+
+        modelBuilder.Entity<EntityWithIntSoftDelete>(b =>
+        {
+            b.Property(x => x.IsDeleted)
+                .HasColumnName(EntityWithIntSoftDelete.IsDeletedColumnName)
+                .HasConversion(
+                    v => v ? EntityWithIntSoftDelete.DeletedProviderValue : EntityWithIntSoftDelete.NotDeletedProviderValue,
+                    i => i == EntityWithIntSoftDelete.DeletedProviderValue);
         });
 
         modelBuilder.Entity<AppEntityWithNavigations>(b =>

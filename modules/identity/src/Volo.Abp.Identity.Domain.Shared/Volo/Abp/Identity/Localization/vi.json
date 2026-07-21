@@ -77,6 +77,7 @@
     "Volo.Abp.Identity:010007": "Bạn không thể thay đổi cài đặt hai yếu tố của mình.",
     "Volo.Abp.Identity:010008": "Không được phép thay đổi cài đặt hai yếu tố.",
     "Volo.Abp.Identity:010009": "Bạn không thể ủy quyền cho chính mình.",
+    "Volo.Abp.Identity:010010": "Đơn vị tổ chức cha ('{ParentId}') không tồn tại hoặc thuộc về một thuê khác.",
     "Volo.Abp.Identity:010021": "Tên '{0}' đã tồn tại.",
     "Volo.Abp.Identity:010022": "Không thể thay đổi kiểu của phát biểu tĩnh.",
     "Volo.Abp.Identity:010023": "Không thể xóa phát biểu tĩnh.",

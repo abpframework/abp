@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MyCompanyName.MyProjectName.Blazor.Menus;
-using Volo.Abp.AspNetCore.Components.Web.Theming;
-using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
+using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor;
+using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Routing;
 using Volo.Abp.Mapperly;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
@@ -10,7 +10,7 @@ namespace MyCompanyName.MyProjectName.Blazor;
 
 [DependsOn(
     typeof(MyProjectNameApplicationContractsModule),
-    typeof(AbpAspNetCoreComponentsWebThemingModule),
+    typeof(AbpAspNetCoreComponentsWebThemingMudBlazorModule),
     typeof(AbpMapperlyModule)
     )]
 public class MyProjectNameBlazorModule : AbpModule

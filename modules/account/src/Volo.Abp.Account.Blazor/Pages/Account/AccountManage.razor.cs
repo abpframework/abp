@@ -8,6 +8,9 @@ namespace Volo.Abp.Account.Blazor.Pages.Account;
 
 public partial class AccountManage
 {
+    [Parameter]
+    public string? Culture { get; set; }
+
     [Inject] protected IProfileAppService ProfileAppService { get; set; }
 
     [Inject] protected IUiMessageService UiMessageService { get; set; }

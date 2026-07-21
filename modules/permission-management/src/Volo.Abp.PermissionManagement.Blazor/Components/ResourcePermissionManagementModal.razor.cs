@@ -129,6 +129,12 @@ public partial class ResourcePermissionManagementModal
         ProviderKey = value;
         ProviderDisplayName = ProviderKeys.FirstOrDefault(p => p.ProviderKey == value)?.ProviderDisplayName;
 
+        if (value.IsNullOrWhiteSpace())
+        {
+            await InvokeAsync(StateHasChanged);
+            return;
+        }
+
         var permissionGrants = await PermissionAppService.GetResourceByProviderAsync(ResourceName, ResourceKey, CurrentLookupService, ProviderKey);
         foreach (var permission in CreateEntity.Permissions)
         {
@@ -140,16 +146,23 @@ public partial class ResourcePermissionManagementModal
 
     private async Task SearchProviderKeyAsync(AutocompleteReadDataEventArgs autocompleteReadDataEventArgs)
     {
-        if ( !autocompleteReadDataEventArgs.CancellationToken.IsCancellationRequested )
+        if (autocompleteReadDataEventArgs.CancellationToken.IsCancellationRequested)
         {
-            if (autocompleteReadDataEventArgs.SearchValue.IsNullOrWhiteSpace())
-            {
-                ProviderKeys = new List<SearchProviderKeyInfo>();
-                return;
-            }
+            return;
+        }
 
-            ProviderKeys = (await PermissionAppService.SearchResourceProviderKeyAsync(ResourceName, CurrentLookupService, autocompleteReadDataEventArgs.SearchValue, 1)).Keys;
+        if (autocompleteReadDataEventArgs.SearchValue.IsNullOrWhiteSpace())
+        {
+            ProviderKeys = new List<SearchProviderKeyInfo>();
+            return;
+        }
 
+        var lookupService = CurrentLookupService;
+        var results = (await PermissionAppService.SearchResourceProviderKeyAsync(ResourceName, lookupService, autocompleteReadDataEventArgs.SearchValue, 1)).Keys;
+
+        if (!autocompleteReadDataEventArgs.CancellationToken.IsCancellationRequested)
+        {
+            ProviderKeys = results;
             await InvokeAsync(StateHasChanged);
         }
     }

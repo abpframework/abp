@@ -4,6 +4,7 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Roles;
 
 namespace Volo.Abp.PermissionManagement;
 
@@ -34,7 +35,7 @@ public class PermissionDataSeedContributor : IDataSeedContributor, ITransientDep
 
         await PermissionDataSeeder.SeedAsync(
             RolePermissionValueProvider.ProviderName,
-            "admin",
+            AbpRoleConsts.AdminRoleName,
             permissionNames,
             context?.TenantId
         );

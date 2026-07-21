@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "entity-cross-field-validation-descriptor.schema.json",
+  "title": "EntityCrossFieldValidationDescriptor",
+  "description": "Describes an entity-level validation rule that compares one property against another property on the same entity.",
+  "markdownDescription": "AI guidance: use cross-field validations for rules such as EndDate > StartDate, Min <= Max, PasswordRepeat == Password, or PublishedOn >= CreatedOn. `propertyName` receives the validation error; `otherPropertyName` is the comparison target. Both must exist on the entity.",
+  "type": "object",
+  "properties": {
+    "propertyName": {
+      "type": "string",
+      "description": "Property that receives the validation error when the rule fails. Must exist on the entity.",
+      "minLength": 1
+    },
+    "operator": {
+      "type": "string",
+      "description": "Comparison operator",
+      "enum": [
+        "equals",
+        "notEquals",
+        "greaterThan",
+        "greaterThanOrEqual",
+        "lessThan",
+        "lessThanOrEqual"
+      ]
+    },
+    "otherPropertyName": {
+      "type": "string",
+      "description": "Property to compare against. Must exist on the same entity.",
+      "minLength": 1
+    },
+    "message": {
+      "type": "string",
+      "description": "Optional custom validation message"
+    }
+  },
+  "required": ["propertyName", "operator", "otherPropertyName"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "propertyName": "EndDate",
+      "operator": "greaterThan",
+      "otherPropertyName": "StartDate",
+      "message": "End Date must be greater than Start Date."
+    },
+    {
+      "propertyName": "PasswordRepeat",
+      "operator": "equals",
+      "otherPropertyName": "Password",
+      "message": "Password repeat must match Password."
+    }
+  ]
+}

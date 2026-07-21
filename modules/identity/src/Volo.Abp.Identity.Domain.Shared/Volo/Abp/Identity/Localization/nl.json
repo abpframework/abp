@@ -77,6 +77,7 @@
     "Volo.Abp.Identity:010007": "U kunt uw instelling voor tweefactor authenticatie niet wijzigen.",
     "Volo.Abp.Identity:010008": "Het is niet toegestaan om de instelling van tweefactor authenticatie te wijzigen.",
     "Volo.Abp.Identity:010009": "U kunt uzelf niet delegeren.",
+    "Volo.Abp.Identity:010010": "De bovenliggende organisatie-eenheid ('{ParentId}') bestaat niet of behoort tot een andere tenant.",
     "Volo.Abp.Identity:010021": "Er bestaat al een met de naam '{0}'.",
     "Volo.Abp.Identity:010022": "Kan de naam van een statische claim niet wijzigen.",
     "Volo.Abp.Identity:010023": "Kan de naam van een statische claim niet verwijderen.",

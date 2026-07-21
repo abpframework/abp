@@ -11,79 +11,79 @@
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
                             <FieldLabel>@L["DefaultFromDisplayName"] *</FieldLabel>
-                            <TextEdit @bind-Text="@EmailSettings.DefaultFromDisplayName">
+                            <TextInput @bind-Value="@EmailSettings.DefaultFromDisplayName">
                                 <Feedback>
                                     <ValidationError/>
                                 </Feedback>
-                            </TextEdit>
+                            </TextInput>
                         </Field>
                     </Validation>
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
                             <FieldLabel>@L["DefaultFromAddress"] *</FieldLabel>
-                            <TextEdit @bind-Text="@EmailSettings.DefaultFromAddress">
+                            <TextInput @bind-Value="@EmailSettings.DefaultFromAddress">
                                 <Feedback>
                                     <ValidationError/>
                                 </Feedback>
-                            </TextEdit>
+                            </TextInput>
                         </Field>
                     </Validation>
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
                             <FieldLabel>@L["SmtpHost"]</FieldLabel>
-                            <TextEdit @bind-Text="@EmailSettings.SmtpHost">
+                            <TextInput @bind-Value="@EmailSettings.SmtpHost">
                                 <Feedback>
                                     <ValidationError/>
                                 </Feedback>
-                            </TextEdit>
+                            </TextInput>
                         </Field>
                     </Validation>
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
                             <FieldLabel>@L["SmtpPort"]</FieldLabel>
-                            <NumericEdit TValue="int" @bind-Value="@EmailSettings.SmtpPort">
+                            <NumericInput TValue="int" @bind-Value="@EmailSettings.SmtpPort">
                                 <Feedback>
                                     <ValidationError/>
                                 </Feedback>
-                            </NumericEdit>
+                            </NumericInput>
                         </Field>
                     </Validation>
                     <Field>
-                        <Check TValue="bool" @bind-Checked="@EmailSettings.SmtpEnableSsl">@L["SmtpEnableSsl"]</Check>
+                        <Check TValue="bool" @bind-Value="@EmailSettings.SmtpEnableSsl">@L["SmtpEnableSsl"]</Check>
                     </Field>
                     <Field>
-                        <Check TValue="bool" @bind-Checked="@EmailSettings.SmtpUseDefaultCredentials">@L["SmtpUseDefaultCredentials"]</Check>
+                        <Check TValue="bool" @bind-Value="@EmailSettings.SmtpUseDefaultCredentials">@L["SmtpUseDefaultCredentials"]</Check>
                     </Field>
                     @if (!EmailSettings.SmtpUseDefaultCredentials)
                     {
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>@L["SmtpDomain"]</FieldLabel>
-                                <TextEdit @bind-Text="@EmailSettings.SmtpDomain">
+                                <TextInput @bind-Value="@EmailSettings.SmtpDomain">
                                     <Feedback>
                                         <ValidationError/>
                                     </Feedback>
-                                </TextEdit>
+                                </TextInput>
                             </Field>
                         </Validation>
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>@L["SmtpUserName"]</FieldLabel>
-                                <TextEdit @bind-Text="@EmailSettings.SmtpUserName">
+                                <TextInput @bind-Value="@EmailSettings.SmtpUserName">
                                     <Feedback>
                                         <ValidationError/>
                                     </Feedback>
-                                </TextEdit>
+                                </TextInput>
                             </Field>
                         </Validation>
                         <Validation MessageLocalizer="@LH.Localize">
                             <Field>
                                 <FieldLabel>@L["SmtpPassword"]</FieldLabel>
-                                <TextEdit Role="TextRole.Password" @bind-Text="@EmailSettings.SmtpPassword" Placeholder="@L["SmtpPasswordPlaceholder"].Value">
+                                <TextInput Role="TextRole.Password" @bind-Value="@EmailSettings.SmtpPassword" Placeholder="@L["SmtpPasswordPlaceholder"].Value">
                                     <Feedback>
                                         <ValidationError/>
                                     </Feedback>
-                                </TextEdit>
+                                </TextInput>
                             </Field>
                         </Validation>
                     }
@@ -105,8 +105,8 @@
 
     @if (HasSendTestEmailPermission)
     {
-        <Modal @ref="SendTestEmailModal">
-            <ModalContent Centered="true">
+        <Modal @ref="SendTestEmailModal" Centered="true">
+            <ModalContent>
                 <Form id="SendTestEmailForm">
                     <ModalHeader>
                         <ModalTitle>@L["SendTestEmail"]</ModalTitle>
@@ -117,41 +117,41 @@
                             <Validation MessageLocalizer="@LH.Localize">
                                 <Field>
                                     <FieldLabel>@L["SenderEmailAddress"]</FieldLabel>
-                                    <TextEdit @bind-Text="@SendTestEmailInput.SenderEmailAddress" Autofocus="true">
+                                    <TextInput @bind-Value="@SendTestEmailInput.SenderEmailAddress" Autofocus="true">
                                         <Feedback>
                                             <ValidationError/>
                                         </Feedback>
-                                    </TextEdit>
+                                    </TextInput>
                                 </Field>
                             </Validation>
                             <Validation MessageLocalizer="@LH.Localize">
                                 <Field>
                                     <FieldLabel>@L["TargetEmailAddress"]</FieldLabel>
-                                    <TextEdit @bind-Text="@SendTestEmailInput.TargetEmailAddress">
+                                    <TextInput @bind-Value="@SendTestEmailInput.TargetEmailAddress">
                                         <Feedback>
                                             <ValidationError/>
                                         </Feedback>
-                                    </TextEdit>
+                                    </TextInput>
                                 </Field>
                             </Validation>
                             <Validation MessageLocalizer="@LH.Localize">
                                 <Field>
                                     <FieldLabel>@L["Subject"]</FieldLabel>
-                                    <TextEdit @bind-Text="@SendTestEmailInput.Subject">
+                                    <TextInput @bind-Value="@SendTestEmailInput.Subject">
                                         <Feedback>
                                             <ValidationError/>
                                         </Feedback>
-                                    </TextEdit>
+                                    </TextInput>
                                 </Field>
                             </Validation>
                             <Validation MessageLocalizer="@LH.Localize">
                                 <Field>
                                     <FieldLabel>@L["Body"]</FieldLabel>
-                                    <TextEdit @bind-Text="@SendTestEmailInput.Body">
+                                    <TextInput @bind-Value="@SendTestEmailInput.Body">
                                         <Feedback>
                                             <ValidationError/>
                                         </Feedback>
-                                    </TextEdit>
+                                    </TextInput>
                                 </Field>
                             </Validation>
                         </Validations>

@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Learn how the ABP Framework manages localization in microservice solutions, enhancing resource management across applications seamlessly."
+    "Description": "Learn how localization works in ABP Studio's modern microservice solution template across backend services, React apps, and the optional React Native client."
 }
 ```
 
@@ -25,7 +25,7 @@ Like the other fundamental feature modules ([Permission Management](permission-m
 
 ## Language Management
 
-> If the dynamic localization option is enabled, then the *Language Management Module** will be removed from the optional modules and a new microservice named `LanguageService` will be created. The `LanguageService` uses *Language Management Module* behind the scene.
+> If the dynamic localization option is enabled, then the *Language Management Module* is removed from the optional modules and a new microservice named `LanguageService` is created. `LanguageService` uses the *Language Management Module* behind the scenes.
 
 The *Administration* microservice provides a set of APIs to manage localization. The localization resources are defined in each microservice, and when a microservice starts, it registers its localization resources to the related localization tables automatically. After that, you can see the localization resources from the [language texts](../../modules/language-management.md#language-texts) and manage them.
 
@@ -39,106 +39,42 @@ When you create a new microservice solution, you can **enable dynamic localizati
 
 ![](./images/enable-dynamic-localization.png)
 
-When you enable this option, a new microservice named **LanguageService** will be added (with the language management module integrated) and you can use its `LanguageServiceResource` class to use the localization entries in your UI application. It's already configured in your final host application, so you don't need to make any configuration related to that. To define a new localization entry you can either use the language files in the `LanguageService` or update the already defined localization entries in the UI (on the *Language Texts* page). 
-
-After defining localization entries or updating them, you can inject the `IStringLocalizer<>` or `IHtmlLocalizer<>` services and use the localized values in your pages for MVC/Razor Pages UI, for instance:
-
-```html
-@page
-@using Microsoft.Extensions.Localization
-@inject IStringLocalizer<MyProjectNameWebResource> L
-
-<div>
-  <h1>@L["LongWelcomeMessage"]</h1>
-</div>  
-```
+When you enable this option, a new microservice named **LanguageService** is added with the language management module integrated. Define new shared localization entries in the `LanguageService` localization files, or update the registered texts from the *Language Texts* UI. The generated React applications can then consume those backend resources through the application configuration and `application-localization` endpoints.
 
 ## UI Localizations
 
-In the microservice architecture, localizations also can be defined in the final host application, if they only need to be defined in the UI. When you create a new microservice solution template, independent from the UI, all configurations are made and you can directly define localization entries and use them in your final UI application.
+In the current modern microservice template, UI-only localizations live in the generated React or React Native applications. The template does not generate MVC, Blazor, or Angular hosts for the modern microservice solution structure.
 
-> **Note:** When you define localization entries in the host application, then you can't make dynamic localization with the language management module! (Because the language management module, would be unaware of the defined localization entries on the UI side)
+> **Note:** UI-only strings that you keep in frontend locale files are not managed by the Language Management module. Put shared or domain-level texts in backend localization resources if they should participate in dynamic localization.
 
-### MVC/Razor Pages & Blazor UIs
+### `react`
 
-For MVC & Blazor UIs, you can see the **Localization** directory in your final application, like in the following figure:
+The main `react` application initializes `i18next` from `apps/react/src/locales/en.json`. It also:
 
-![](./images/ui-localization-mvc.png)
+* persists the selected culture in browser storage
+* sets the document language
+* loads available languages from the application configuration
+* fetches additional cultures from `/api/abp/application-localization` and merges them into `i18next`
 
-In this directory, you can see the language files, those are pre-defined for you to directly add localization entries. The related configurations are already made for you, in the module class (inside the `ConfigureLocalization` method) as below:
+Use the locale files under `apps/react/src/locales` for UI-only strings that belong only to this application.
 
-```csharp
-    private void ConfigureLocalization(IWebHostEnvironment hostingEnvironment)
-    {
-        //code abbreviated for brevity...
+### `react-admin-console`
 
-        Configure<AbpLocalizationOptions>(options =>
-        {
-            options.Resources
-                .Add<CloudCrmWebResource>("en")
-                .AddVirtualJson("/Localization/CloudCrmWeb");
+The `react-admin-console` application keeps its bundled translations under `apps/react-admin-console/src/locales/*.json` and initializes `i18next` from those files.
 
-            options.DefaultResourceType = typeof(CloudCrmWebResource);
-        });
-    }
-```
+Its supported language list is controlled by `AbpAdminConsoleOptions` using the `AdminConsole:LocalizationLanguages` configuration key, which is exposed to the SPA through `/admin-console/api/config`. If no languages are configured, the frontend falls back to `en`.
 
-You can define new localization entries in the language files under the **Localization** folder and directly use them in your application by using the `IStringLocalizer<>` or `IHtmlLocalizer<>` services:
+Use the admin console locale files for UI-only texts that are specific to the administration surface. Keep shared module texts in backend localization resources.
 
-```html
-@page
-@using Microsoft.Extensions.Localization
-@inject IStringLocalizer<CloudCrmWebResource> L
+### `react-native`
 
-<div>
-  <h1>@L["LongWelcomeMessage"]</h1>
-</div>  
-```
+When mobile is enabled, the generated React Native client stores its bundled translations under `apps/mobile/react-native/src/locales`. The `LocalizationService.ts` file:
 
-### Angular UI
+* registers the available locale files
+* exposes the language list used by the app
+* maps the default resource name from `Environment.ts`
 
-Angular UI gets the localization resources from the [`application-localization`](../../framework/api-development/standard-apis/localization.md) API's response and merges these resources in the `ConfigStateService` for the localization entries/resources coming from the backend side.
-
-In addition, you may need to define some localization entries and only use them on the UI side. ABP already provides the related configuration for you, so you don't need to make any configurations related to that and instead you can directly define localization entries in the `app.config.ts` file of your angular application as follows:
-
-```ts
-import { provideAbpCore, withOptions } from '@abp/ng.core';
-
-export const appConfig: ApplicationConfig = {
-  providers: [
-    // ...
-    provideAbpCore(
-      withOptions({
-        environment,
-        registerLocaleFn: registerLocale(),
-        localizations: [
-            {
-                culture: 'en',
-                resources: [
-                    {
-                        resourceName: 'MyProjectName',
-                        texts: {
-                            "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information visit"
-                        }
-                    }
-                ]
-            }
-        ]
-      }),
-    ),
-  ],
-};
-```
-
-After defining the localization entries, it can be used as below:
-
-{%{
-```html
-<div>{{ 'MyProjectName::LongWelcomePage' | abpLocalization }}</div>
-```
-}%}
-
-> For more information, please refer to [UI Localization section of the Angular Localization document](../../framework/ui/angular/localization.md).
+Use these locale files for mobile-specific UI strings.
 
 ## Creating a New Localization Resource
 

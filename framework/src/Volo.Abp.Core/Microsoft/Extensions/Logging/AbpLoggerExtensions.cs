@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Logging;
 
@@ -92,10 +93,35 @@ public static class AbpLoggerExtensions
         exceptionData.AppendLine("---------- Exception Data ----------");
         foreach (var key in exception.Data.Keys)
         {
-            exceptionData.AppendLine($"{key} = {exception.Data[key]}");
+            exceptionData.AppendLine($"{key} = {FormatDataValue(exception.Data[key])}");
         }
 
         logger.LogWithLevel(logLevel, exceptionData.ToString());
+    }
+
+    private const int MaxDataValueLength = 4096;
+
+    private static string FormatDataValue(object? value)
+    {
+        if (value == null)
+        {
+            return string.Empty;
+        }
+
+        var type = value.GetType();
+        if (value is string || type.IsPrimitive || value is decimal || value is DateTime || value is DateTimeOffset || value is Guid || type.IsEnum)
+        {
+            return value.ToString()!;
+        }
+
+        try
+        {
+            return JsonSerializer.Serialize(value).TruncateWithPostfix(MaxDataValueLength, "...(truncated)")!;
+        }
+        catch
+        {
+            return value.ToString()!;
+        }
     }
 
     private static void LogSelfLogging(ILogger logger, Exception exception)

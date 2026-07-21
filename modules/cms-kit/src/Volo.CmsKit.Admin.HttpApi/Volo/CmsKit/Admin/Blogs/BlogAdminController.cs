@@ -71,7 +71,7 @@ public class BlogAdminController : CmsKitAdminController, IBlogAdminAppService
     }
 
     [HttpPut]
-    [Route("{id}/move-all-blog-posts")]
+    [Route("{blogId}/move-all-blog-posts")]
     [Authorize(CmsKitAdminPermissions.Blogs.Delete)]
     public Task MoveAllBlogPostsAsync(Guid blogId, [FromQuery]Guid? assignToBlogId)
     {

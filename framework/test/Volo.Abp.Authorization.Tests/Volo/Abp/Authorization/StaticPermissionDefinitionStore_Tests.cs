@@ -1,7 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Authorization.TestServices.Resources;
+using Volo.Abp.StaticDefinitions;
 using Xunit;
 
 namespace Volo.Abp.Authorization;
@@ -69,5 +72,52 @@ public class StaticPermissionDefinitionStore_Tests : AuthorizationTestBase
         permissions.ShouldContain(x => x.Name == "MyResourcePermission5");
         permissions.ShouldContain(x => x.Name == "MyResourcePermission6");
         permissions.ShouldContain(x => x.Name == "MyResourcePermission7");
+    }
+
+    [Fact]
+    public async Task GetResourcePermissionsAsync_Same_Name_In_Different_Resources_Should_Both_Be_Returned()
+    {
+        // MyResourcePermission7 is defined for both TestEntityResource and TestEntityResource2.
+        // GetResourcePermissionsAsync must return both entries because resource permissions are
+        // unique by (ResourceName, Name), not by Name alone.
+        var permissions = await _store.GetResourcePermissionsAsync();
+
+        permissions.ShouldContain(x =>
+            x.Name == "MyResourcePermission7" && x.ResourceName == TestEntityResource.ResourceName);
+        permissions.ShouldContain(x =>
+            x.Name == "MyResourcePermission7" && x.ResourceName == TestEntityResource2.ResourceName);
+    }
+
+    [Fact]
+    public async Task Should_Rebuild_Definitions_In_Fresh_ExecutionContext_After_Cache_Clear()
+    {
+        var groupCache = GetRequiredService<IStaticDefinitionCache<PermissionGroupDefinition,
+            (Dictionary<string, PermissionGroupDefinition>, List<PermissionDefinition>)>>();
+        var definitionCache = GetRequiredService<IStaticDefinitionCache<PermissionDefinition,
+            Dictionary<string, PermissionDefinition>>>();
+
+        await groupCache.ClearAsync();
+        await definitionCache.ClearAsync();
+
+        // Touch the type initializer (if any) on the test ExecutionContext first, mirroring
+        // the production scenario where startup pre-warms it on a different ExecutionContext.
+        _ = await _store.GetOrNullAsync("FeatureGatedPermission");
+
+        await groupCache.ClearAsync();
+        await definitionCache.ClearAsync();
+
+        PermissionDefinition permission = null;
+        Task task;
+        using (ExecutionContext.SuppressFlow())
+        {
+            task = Task.Run(async () =>
+            {
+                permission = await _store.GetOrNullAsync("FeatureGatedPermission");
+            });
+        }
+        await task;
+
+        permission.ShouldNotBeNull();
+        permission.Name.ShouldBe("FeatureGatedPermission");
     }
 }

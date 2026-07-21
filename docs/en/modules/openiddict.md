@@ -19,11 +19,13 @@ The source code of this module can be accessed [here](https://github.com/abpfram
 
 ## User Interface
 
-This module implements the domain logic and database integrations but does not provide any UI. Management UI is useful if you need to add applications and scopes on the fly. In this case, you may build the management UI yourself or consider purchasing the [ABP](https://abp.io/) which provides the management UI for this module.
+This module implements the domain logic and database integrations but does not provide a management UI. Management UI is useful if you need to add applications and scopes on the fly. In this case, you may build the management UI yourself or consider purchasing the [ABP](https://abp.io/) which provides the management UI for this module. The ASP.NET Core integration includes the authorization consent view used by the protocol flow.
 
 ## Relations to Other Modules
 
 This module is based on the [Identity Module](./identity.md) and has an [integration package](https://www.nuget.org/packages/Volo.Abp.Account.Web.OpenIddict) with the [Account Module](account.md).
+
+The optional `Volo.Abp.PermissionManagement.Domain.OpenIddict` package integrates OpenIddict applications with the [Permission Management Module](./permission-management.md). It provides client permission managers and providers. Its distributed event handlers also move client permission grants when a client ID changes and delete them when the application is deleted.
 
 ## Options
 
@@ -136,20 +138,24 @@ These services contain:
 
 ##### OpenIddictApplication
 
-OpenIddictApplications represent the applications that can request tokens from your OpenIddict Server.
+OpenIddict applications represent the clients that can request tokens from your OpenIddict server.
 
-- `OpenIddictApplications` (aggregate root): Represents an OpenIddict application.
+- `OpenIddictApplication` (aggregate root): Represents an OpenIddict application.
+  - `ApplicationType` (string): The application type associated with the application.
   - `ClientId` (string): The client identifier associated with the current application.
   - `ClientSecret` (string): The client secret associated with the current application. Maybe hashed or encrypted for security reasons.
+  - `ClientType` (string): The client type associated with the current application.
   - `ConsentType` (string): The consent type associated with the current application.
   - `DisplayName` (string): The display name associated with the current application.
   - `DisplayNames` (string): The localized display names associated with the current application serialized as a JSON object.
+  - `JsonWebKeySet` (string): The JSON Web Key Set associated with the application, serialized as a JSON object.
   - `Permissions` (string): The permissions associated with the current application, serialized as a JSON array.
   - `PostLogoutRedirectUris` (string): The logout callback URLs associated with the current application, serialized as a JSON array.
   - `Properties` (string): The additional properties associated with the current application serialized as a JSON object or null.
   - `RedirectUris` (string): The callback URLs associated with the current application, serialized as a JSON array.
-  - `Requirements` (string): The requirements associated with the current application
-  - `Type` (string): The application type associated with the current application.
+  - `Requirements` (string): The requirements associated with the current application, serialized as a JSON array.
+  - `Settings` (string): The settings associated with the current application, serialized as a JSON object.
+  - `FrontChannelLogoutUri` (string): The front-channel logout URI associated with the application.
   - `ClientUri` (string): URI to further information about client.
   - `LogoUri` (string): URI to client logo.
 
@@ -160,6 +166,8 @@ OpenIddictAuthorizations are used to keep the allowed scopes, authorization flow
 - `OpenIddictAuthorization` (aggregate root): Represents an OpenIddict authorization.
 
   - `ApplicationId` (Guid?): The application associated with the current authorization.
+
+  - `CreationDate` (DateTime?): The UTC creation date of the current authorization.
 
   - `Properties` (string): The additional properties associated with the current authorization serialized as a JSON object or null.
 
@@ -196,14 +204,13 @@ OpenIddictTokens are used to persist the application tokens.
 - `OpenIddictToken` (aggregate root): Represents an OpenIddict token.
 
   - `ApplicationId` (Guid?): The application associated with the current token.
-  - `AuthorizationId` (Guid?): The application associated with the current token.
+  - `AuthorizationId` (Guid?): The authorization associated with the current token.
   - `CreationDate` (DateTime?): The UTC creation date of the current token.
   - `ExpirationDate` (DateTime?): The UTC expiration date of the current token.
   - `Payload` (string): The payload of the current token, if applicable. Only used for reference tokens and may be encrypted for security reasons.
 
   - `Properties` (string): The additional properties associated with the current token serialized as a JSON object or null.
   - `RedemptionDate` (DateTime?): The UTC redemption date of the current token.
-  - `Status` (string): The status of the current authorization.
 
   - `ReferenceId` (string): The reference identifier associated with the current token, if applicable. Only used for reference tokens and may be hashed or encrypted for security reasons.
 
@@ -224,7 +231,20 @@ This module implements OpenIddict stores:
 
 #### AbpOpenIddictStoreOptions
 
-You can configure the `PruneIsolationLevel/DeleteIsolationLevel` of `AbpOpenIddictStoreOptions` to set the isolation level for the store operations becasue different databases have different isolation levels.
+`AbpOpenIddictStoreOptions` controls the transaction isolation levels used by destructive store operations:
+
+- `PruneIsolationLevel` defaults to `IsolationLevel.RepeatableRead` and is used while pruning tokens and authorizations.
+- `DeleteIsolationLevel` defaults to `IsolationLevel.Serializable` and is used when deleting applications and authorizations together with their related records.
+
+You can change these values when your database requires a different isolation level:
+
+```csharp
+Configure<AbpOpenIddictStoreOptions>(options =>
+{
+    options.PruneIsolationLevel = System.Data.IsolationLevel.ReadCommitted;
+    options.DeleteIsolationLevel = System.Data.IsolationLevel.RepeatableRead;
+});
+```
 
 ##### Repositories
 
@@ -251,9 +271,11 @@ All tables/collections use the `OpenIddict` prefix by default. Set static proper
 
 ##### Connection String
 
-This module uses `AbpOpenIddict` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
+This module uses `AbpOpenIddict` for the connection string name. If you don't define a connection string with this name, it falls back to the `Default` connection string.
 
 See the [connection strings](../framework/fundamentals/connection-strings.md) documentation for details.
+
+The built-in EF Core and MongoDB contexts are marked with `IgnoreMultiTenancy`, so OpenIddict data belongs to the host/shared database rather than to tenant databases. In addition, the EF Core `ConfigureOpenIddict()` extension skips the OpenIddict model when the current database is configured as tenant-only.
 
 #### Entity Framework Core
 
@@ -275,16 +297,16 @@ See the [connection strings](../framework/fundamentals/connection-strings.md) do
 
 ## ASP.NET Core Module
 
-This module integrates ASP NET Core, with built-in MVC controllers for four protocols. It uses OpenIddict's [Pass-through mode](https://documentation.openiddict.com/guides/index.html#pass-through-mode).
+This module integrates with ASP.NET Core and provides pass-through MVC controllers for the authorization, token, end-session and userinfo endpoints. It uses OpenIddict's [pass-through mode](https://documentation.openiddict.com/guides/index.html#pass-through-mode).
 
-```cs
-AuthorizeController -> connect/authorize
-TokenController     -> connect/token
-LogoutController    -> connect/logout
-UserInfoController  -> connect/userinfo
-```
+| Controller | Route |
+| --- | --- |
+| `AuthorizeController` | `/connect/authorize` |
+| `TokenController` | `/connect/token` |
+| `LogoutController` | `/connect/endsession` |
+| `UserInfoController` | `/connect/userinfo` |
 
-> **Device flow** implementation will be done in the commercial module.
+The server enables authorization code, hybrid, implicit, password, client credentials, refresh token, device authorization, none and token exchange flows by default. A client application still needs the corresponding endpoint, grant type, scope and response type permissions. This module handles device-code token requests and registers the end-user verification endpoint, but it does not provide the end-user verification UI.
 
 ### AbpOpenIddictAspNetCoreOptions
 
@@ -301,14 +323,28 @@ PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
 
 `AbpOpenIddictAspNetCoreOptions` properties:
 
-- `UpdateAbpClaimTypes(default: true)`:  Updates `AbpClaimTypes` to be compatible with the Openiddict claims.
+- `UpdateAbpClaimTypes(default: true)`:  Updates `AbpClaimTypes` to be compatible with the OpenIddict claims.
 - `AddDevelopmentEncryptionAndSigningCertificate(default: true)`:  Registers (and generates if necessary) a user-specific development encryption/development signing certificate. This is a certificate used for signing and encrypting the tokens and for **development environment only**. You must set it to **false** for non-development environments.
+- `AttachCultureInfo` (default: true): Adds the current `culture` and `ui-culture` values to authorization responses when those parameters have not already been set.
+- `SelectAccountPage` (default: `~/Account/SelectAccount`): Sets the page used when an authorization request specifies `prompt=select_account`. The open-source module performs the redirect but doesn't provide a page at this path. If clients can send this prompt, implement the page in your host and set this option to its route.
+- `UseDefaultScopesForClientCredentials(default: false)`: When set to `true`, the access token issued for the `client_credentials` grant automatically grants the scopes configured on the client application (permissions prefixed with `oi_scp:`) when the client does not explicitly request any scope.
+- `UseDefaultScopesForPassword(default: false)`: When set to `true`, the token response for the `password` grant automatically grants the scopes configured on the client application when the client does not explicitly request any scope. If the configured scopes include `openid`/`profile`/`email`/`roles`, the corresponding `id_token` and claim destinations are affected as well.
+- `UseDefaultScopesForTokenExchange(default: false)`: When set to `true`, the token response for the `urn:ietf:params:oauth:grant-type:token-exchange` grant automatically grants the scopes configured on the client application when the client does not explicitly request any scope. If the configured scopes include `openid`/`profile`/`email`/`roles`, the corresponding `id_token` and claim destinations are affected as well.
+
+Example to enable the default-scope fallback for the `client_credentials` grant:
+
+```csharp
+PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+{
+    options.UseDefaultScopesForClientCredentials = true;
+});
+```
 
 > `AddDevelopmentEncryptionAndSigningCertificate` cannot be used in applications deployed on IIS or Azure App Service: trying to use them on IIS or Azure App Service will result in an exception being thrown at runtime (unless the application pool is configured to load a user profile). To avoid that, consider creating self-signed certificates and storing them in the X.509 certificates store of the host machine(s). Please refer to: https://documentation.openiddict.com/configuration/encryption-and-signing-credentials.html#registering-a-development-certificate
 
-#### Automatically Removing Orphaned Tokens/Authorizations
+#### Automatically Removing Invalid Tokens and Authorizations
 
-The background task that automatically removes orphaned tokens/authorizations. This can be configured by `TokenCleanupOptions` to manage it.
+The cleanup worker prunes old invalid or expired tokens first, and then prunes old invalid authorizations and ad-hoc authorizations that no longer have a token. It uses a distributed lock, so only one application instance performs a cleanup pass at a time.
 
 `TokenCleanupOptions` can be configured in the `ConfigureServices` method of your OpenIddict [module](../framework/architecture/modularity/basics.md). 
 
@@ -323,12 +359,14 @@ Configure<TokenCleanupOptions>(options =>
 
 `TokenCleanupOptions` properties:
 
-- `IsCleanupEnabled` (default: true): Enable/disable token clean up.
-- `CleanupPeriod` (default: 3,600,000 ms):  Setting clean up period.
-- `DisableAuthorizationPruning`: Setting a boolean indicating whether authorizations pruning should be disabled.
-- `DisableTokenPruning`: Setting a boolean indicating whether token pruning should be disabled.
-- `MinimumAuthorizationLifespan` (default: 14 days): Setting the minimum lifespan authorizations must have to be pruned. Cannot be less than 10 minutes.
-- `MinimumTokenLifespan` (default: 14 days): Setting the minimum lifespan tokens must have to be pruned. Cannot be less than 10 minutes.
+- `IsCleanupEnabled` (default: true): Controls whether the cleanup worker is registered.
+- `CleanupPeriod` (default: 3,600,000 ms): Sets the interval between cleanup passes.
+- `DisableAuthorizationPruning` (default: false): Disables authorization pruning when set to `true`.
+- `DisableTokenPruning` (default: false): Disables token pruning when set to `true`.
+- `MinimumAuthorizationLifespan` (default: 14 days): Sets the minimum age of authorizations that can be pruned.
+- `MinimumTokenLifespan` (default: 14 days): Sets the minimum age of tokens that can be pruned.
+
+The worker is registered during application initialization only when `IsCleanupEnabled` is `true`. The global [background worker](../framework/infrastructure/background-workers/index.md) switch must also be enabled for it to run.
 
 #### Updating Claims In Access_token and Id_token
 
@@ -421,7 +459,7 @@ This request will be processed by various handlers. They will confirm the endpoi
 
 If everything is ok, the request will go to our processing controller(eg `TokenController`), we can get an `OpenIddictRequest` from the HTTP request at this time. The rest will be based on this object.
 
-Check the `username` and `password` in the request. If it is correct create a `ClaimsPrincipal` object and return a `SignInResult`, which uses the `OpenIddict.Validation.AspNetCore` authentication scheme name, will calls `OpenIddictServerAspNetCoreHandler` for processing. 
+After validating the `username` and `password`, the controller creates a `ClaimsPrincipal` and returns a `SignInResult` that uses the `OpenIddict.Server.AspNetCore` authentication scheme. `OpenIddictServerAspNetCoreHandler` then processes the result.
 
 `OpenIddictServerAspNetCoreHandler` do some checks to generate json and replace the http response content.
 
@@ -431,6 +469,30 @@ If you need to customize OpenIddict, you need to replace/delete/add new handlers
 
 Please refer to:
 https://documentation.openiddict.com/guides/index.html#events-model
+
+### Custom Token Grant Types
+
+Implement `ITokenExtensionGrant` to handle a custom token grant. Register the grant type with OpenIddict and add the handler instance to `AbpOpenIddictExtensionGrantsOptions`:
+
+```csharp
+PreConfigure<OpenIddictServerBuilder>(builder =>
+{
+    builder.Configure(options =>
+    {
+        options.GrantTypes.Add(MyTokenExtensionGrant.GrantType);
+    });
+});
+
+Configure<AbpOpenIddictExtensionGrantsOptions>(options =>
+{
+    options.Grants.Add(
+        MyTokenExtensionGrant.GrantType,
+        new MyTokenExtensionGrant()
+    );
+});
+```
+
+When a request uses an otherwise unhandled grant type, `TokenController` resolves the registered `ITokenExtensionGrant` and calls its `HandleAsync` method with the current `HttpContext` and `OpenIddictRequest`. See [How to add a custom grant type in OpenIddict](../Community-Articles/2022-11-14-How-to-add-a-custom-grant-type-in-OpenIddict/POST.md) for a longer example.
 
 ### PKCE
 
@@ -472,7 +534,7 @@ await CreateApplicationAsync(
     ...
 ```
 
-> **Note:** You need to re-create this client if you have generated the database already.
+> **Note:** The current startup template updates the permissions and redirect URI values of an existing client when data seeding runs. Run the database migrator or the data seeder after changing the contributor. If a custom or older contributor only creates missing clients, add an existing-client update path or recreate the client.
 
 #### Configuring Application:
 

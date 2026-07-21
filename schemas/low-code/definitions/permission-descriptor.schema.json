@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "permission-descriptor.schema.json",
+  "title": "PermissionDescriptor",
+  "description": "Defines a custom permission created through the designer. Supports parent-child hierarchy.",
+  "markdownDescription": "AI guidance: use stable dot-separated permission names, for example `Acme.Events.Create`. Define a parent permission for the feature and child permissions for operations. Pages and endpoints can reference these names. Permission definitions only declare permissions; roles/users must still be granted permissions through permission management.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional schema reference used when this descriptor is stored as a model descriptor file."
+    },
+    "name": {
+      "type": "string",
+      "description": "Unique dot-separated permission name, for example 'Acme.Events.Create'.",
+      "minLength": 1
+    },
+    "displayName": {
+      "type": "string",
+      "description": "Human-readable display name shown in permission management UI.",
+      "minLength": 1
+    },
+    "children": {
+      "type": "array",
+      "description": "Child permissions forming a hierarchy. Use for feature -> operation grouping.",
+      "items": {
+        "$ref": "#"
+      }
+    }
+  },
+  "required": ["name", "displayName"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "name": "Acme.Events",
+      "displayName": "Events",
+      "children": [
+        { "name": "Acme.Events.Create", "displayName": "Create events" },
+        { "name": "Acme.Events.Update", "displayName": "Update events" },
+        { "name": "Acme.Events.Delete", "displayName": "Delete events" }
+      ]
+    }
+  ]
+}

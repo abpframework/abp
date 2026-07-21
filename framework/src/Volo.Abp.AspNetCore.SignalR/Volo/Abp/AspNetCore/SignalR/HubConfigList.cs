@@ -7,7 +7,7 @@ public class HubConfigList : List<HubConfig>
 {
     public void AddOrUpdate<THub>(Action<HubConfig>? configAction = null)
     {
-        AddOrUpdate(typeof(THub));
+        AddOrUpdate(typeof(THub), configAction);
     }
 
     public void AddOrUpdate(Type hubType, Action<HubConfig>? configAction = null)

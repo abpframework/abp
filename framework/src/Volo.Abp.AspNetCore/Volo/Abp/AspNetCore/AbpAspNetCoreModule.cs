@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.AspNetCore.RequestLocalization;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.FileProviders;
 using MyCSharp.HttpUserAgentParser.DependencyInjection;
 using Volo.Abp.AspNetCore.Auditing;
@@ -57,6 +59,9 @@ public class AbpAspNetCoreModule : AbpModule
 
         AddAspNetServices(context.Services);
         context.Services.AddObjectAccessor<IApplicationBuilder>();
+        context.Services.AddObjectAccessor<WebApplication>();
+        context.Services.AddObjectAccessor<IHost>();
+        context.Services.AddObjectAccessor<IEndpointRouteBuilder>();
         context.Services.AddAbpDynamicOptions<RequestLocalizationOptions, AbpRequestLocalizationOptionsManager>();
 
         StaticWebAssetsLoader.UseStaticWebAssets(context.Services.GetHostingEnvironment(), context.Services.GetConfiguration());

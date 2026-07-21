@@ -62,6 +62,8 @@ ABP uses a naming convention while determining the HTTP method for a service met
 
 If you need to customize HTTP method for a particular method, then you can use one of the standard ASP.NET Core attributes ([HttpPost], [HttpGet], [HttpPut]... etc.). This requires to add [Microsoft.AspNetCore.Mvc.Core](https://www.nuget.org/packages/Microsoft.AspNetCore.Mvc.Core) nuget package to your project that contains the service.
 
+The naming convention doesn't map the HTTP QUERY method (a safe method that carries its parameters in the request body, useful when a GET request would have too many query string parameters). If you want to expose an action as a QUERY endpoint, use the `[AcceptVerbs("QUERY")]` attribute explicitly. Such an action is treated as a safe method, so it is not audited and doesn't start a transactional unit of work by default, just like a GET request. However, unlike a GET request, a QUERY request still requires the anti-forgery token because it carries a request body. This is consistent with ASP.NET Core, which doesn't treat QUERY as an anti-forgery exempt method.
+
 ### Route
 
 Route is calculated based on some conventions:
@@ -70,7 +72,7 @@ Route is calculated based on some conventions:
 * Continues with a **route path**. Default value is '**/app**' and can be configured as like below:
 
 ````csharp
-Configure<AbpAspNetCoreMvcOptions>(options =>
+PreConfigure<AbpAspNetCoreMvcOptions>(options =>
 {
     options.ConventionalControllers
         .Create(typeof(BookStoreApplicationModule).Assembly, opts =>
@@ -92,6 +94,16 @@ Then the route for getting a book will be '**/api/volosoft/book-store/book/{id}*
   * If the resulting action name is **empty** then it's not added to the route. If it's not empty, it's added to the route (like '/phones'). For 'GetAllAsync' method name it will be empty, for 'GetPhonesAsync' method name it will be 'phones'.
   * Normalization can be customized by setting the `UrlActionNameNormalizer` option. It's an action delegate that is called for every method.
 * If there is another parameter with 'Id' postfix, then it's also added to the route as the final route segment (like '/phoneId').
+
+When the `UrlControllerNameNormalizer` option is not set, the final controller name also removes suffixes configured in `AbpConventionalControllerOptions.IgnoredUrlSuffixesInControllerNames` (a custom normalizer replaces this ignored-suffix step, so the ignored suffixes are not applied). The default list contains `Integration`, so `PaymentIntegrationService` uses `payment` as its controller route name. You can replace the list when another suffix convention is required:
+
+```csharp
+Configure<AbpConventionalControllerOptions>(options =>
+{
+    options.IgnoredUrlSuffixesInControllerNames =
+        ["Integration", "Endpoint"];
+});
+```
 
 #### Customizing the Route Calculation
 
@@ -149,7 +161,7 @@ public class PersonAppService : ApplicationService
 You can further filter classes to become an API controller by providing the `TypePredicate` option:
 
 ````csharp
-services.Configure<AbpAspNetCoreMvcOptions>(options =>
+PreConfigure<AbpAspNetCoreMvcOptions>(options =>
 {
     options.ConventionalControllers
         .Create(typeof(BookStoreApplicationModule).Assembly, opts =>

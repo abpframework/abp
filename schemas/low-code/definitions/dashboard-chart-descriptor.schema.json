@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dashboard-chart-descriptor.schema.json",
+  "title": "DashboardChartDescriptor",
+  "description": "Configuration for a chart visualization.",
+  "markdownDescription": "AI guidance: use chart visualizations for grouped aggregations. `xAxis.property` is the grouping property. `yAxis` contains one or more aggregations. Use `count` without a property; use `sum`, `average`, `min`, or `max` with a numeric/date property. Use `dateGrouping` when xAxis is date/datetime.",
+  "type": "object",
+  "properties": {
+    "chartType": {
+      "$ref": "dashboard-chart-type.schema.json",
+      "description": "Chart renderer type: bar, line, pie, or donut."
+    },
+    "xAxis": {
+      "type": "object",
+      "properties": {
+        "property": {
+          "type": "string",
+          "description": "Property name to group by on the X-axis. Must exist on the visualization entity."
+        },
+        "useForeignDisplay": {
+          "type": "boolean",
+          "description": "Show the FK display property instead of the raw id when xAxis.property is a foreign key.",
+          "default": false
+        },
+        "dateGrouping": {
+          "type": ["string", "null"],
+          "enum": ["", "day", "week", "month", "quarter", "year", null],
+          "description": "Grouping interval for date/datetime properties. Omit or use empty string for no date grouping."
+        }
+      },
+      "required": ["property"],
+      "additionalProperties": false
+    },
+    "yAxis": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "aggregation": {
+            "$ref": "dashboard-aggregation-type.schema.json"
+          },
+          "property": {
+            "type": ["string", "null"],
+          "description": "Property name for sum/average/min/max/percent aggregations. Omit for count."
+          },
+          "label": {
+            "type": ["string", "null"],
+          "description": "Display label for this series. Omit to derive from aggregation/property."
+          },
+          "color": {
+            "type": ["string", "null"]
+          }
+        },
+        "required": ["aggregation"],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "barOrientation": {
+      "type": "string",
+      "enum": ["vertical", "horizontal"],
+      "default": "vertical"
+    },
+    "showRecordCount": {
+      "type": "boolean",
+      "default": false
+    },
+    "maxItems": {
+      "type": "integer",
+      "description": "Maximum number of grouped items to display in the chart.",
+      "default": 10,
+      "minimum": 1,
+      "maximum": 50
+    }
+  },
+  "required": ["chartType", "xAxis", "yAxis"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "chartType": "bar",
+      "xAxis": { "property": "Status" },
+      "yAxis": [{ "aggregation": "count", "label": "Events" }],
+      "maxItems": 10
+    },
+    {
+      "chartType": "line",
+      "xAxis": { "property": "StartDate", "dateGrouping": "month" },
+      "yAxis": [{ "aggregation": "sum", "property": "Budget", "label": "Budget" }]
+    }
+  ]
+}

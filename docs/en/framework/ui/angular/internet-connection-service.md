@@ -17,7 +17,7 @@ When you inject the InternetConnectionService you can get the current internet s
 
 
 # How To Use
-İt's easy, just inject the service and get the network status.
+It's easy, just inject the service and get the network status.
 
 **You can get via signal**
 ```ts

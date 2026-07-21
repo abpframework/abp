@@ -4,11 +4,13 @@ import { DateTimeAdapter, DateAdapter, TimeAdapter } from '@abp/ng.theme.shared'
 import { EXTRA_PROPERTIES_KEY } from '../constants/extra-properties';
 import { ePropType } from '../enums/props.enum';
 import { FormPropList } from '../models/form-props';
-import { PropData } from '../models/props';
+import { PropData, ReadonlyPropData } from '../models/props';
 import { ExtensionsService } from '../services/extensions.service';
 import { EXTENSIONS_IDENTIFIER } from '../tokens/extensions.token';
 
-export function generateFormFromProps<R = any>(data: PropData<R>) {
+export function generateFormFromProps<R = any>(propData: PropData<R>) {
+  const data: ReadonlyPropData<R> = propData.data;
+
   const extensions = data.getInjected(ExtensionsService<R>);
   const identifier = data.getInjected(EXTENSIONS_IDENTIFIER);
 
@@ -16,7 +18,7 @@ export function generateFormFromProps<R = any>(data: PropData<R>) {
   const extraForm = new UntypedFormGroup({});
   form.addControl(EXTRA_PROPERTIES_KEY, extraForm);
 
-  const record = data.record || {};
+  const record: any = data.record || {};
   const type = JSON.stringify(record) === '{}' ? 'create' : 'edit';
   const props: FormPropList<R> = extensions[`${type}FormProps`].get(identifier).props;
   const extraProperties = record[EXTRA_PROPERTIES_KEY] || {};
@@ -33,7 +35,7 @@ export function generateFormFromProps<R = any>(data: PropData<R>) {
       value = record[name];
     }
 
-    if (typeof value === 'undefined') value = prop.defaultValue;
+    if (typeof value === 'undefined') value = prop.defaultValue as any;
 
     if (value) {
       let adapter: DateAdapter | TimeAdapter | DateTimeAdapter;

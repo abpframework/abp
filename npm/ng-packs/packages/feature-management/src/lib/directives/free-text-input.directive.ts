@@ -1,15 +1,9 @@
-import { Directive, HostBinding, Input } from '@angular/core';
+import { Directive, effect, inject, input, ElementRef, Renderer2 } from '@angular/core';
+import type { FeatureDto } from '@abp/ng.feature-management/proxy';
 
-// TODO: improve this type
-export interface FreeTextType {
-  valueType: {
-    validator: {
-      name: string;
-    };
-  };
-}
+export type FreeTextType = Pick<FeatureDto, 'valueType'>;
 
-export const INPUT_TYPES = {
+export const INPUT_TYPES: Record<string, string> = {
   numeric: 'number',
   default: 'text',
 };
@@ -19,21 +13,25 @@ export const INPUT_TYPES = {
   exportAs: 'inputAbpFeatureManagementFreeText',
 })
 export class FreeTextInputDirective {
-  _feature: FreeTextType;
-  // eslint-disable-next-line @angular-eslint/no-input-rename
-  @Input('abpFeatureManagementFreeText') set feature(val: FreeTextType) {
-    this._feature = val;
-    this.setInputType();
+  private readonly elRef = inject(ElementRef);
+  private readonly renderer = inject(Renderer2);
+
+  readonly feature = input<FreeTextType | undefined>(undefined, {
+    alias: 'abpFeatureManagementFreeText',
+  });
+
+  constructor() {
+    effect(() => {
+      const feature = this.feature();
+      if (feature) {
+        this.setInputType(feature);
+      }
+    });
   }
 
-  get feature() {
-    return this._feature;
-  }
-
-  @HostBinding('type') type: string;
-
-  private setInputType() {
-    const validatorType = this.feature?.valueType?.validator?.name.toLowerCase();
-    this.type = INPUT_TYPES[validatorType] ?? INPUT_TYPES.default;
+  private setInputType(feature: FreeTextType) {
+    const validatorType = feature?.valueType?.validator?.name?.toLowerCase();
+    const type = INPUT_TYPES[validatorType] ?? INPUT_TYPES['default'];
+    this.renderer.setAttribute(this.elRef.nativeElement, 'type', type);
   }
 }

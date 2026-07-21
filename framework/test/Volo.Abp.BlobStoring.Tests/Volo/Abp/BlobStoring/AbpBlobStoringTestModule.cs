@@ -36,6 +36,10 @@ public class AbpBlobStoringTestModule : AbpModule
                 {
                     container.SetConfiguration("TestConfig2", "TestValue2");
                     container.ProviderType = typeof(FakeBlobProvider2);
+                })
+                .Configure<TestContainer3>(container =>
+                {
+                    container.IsMultiTenant = false;
                 });
         });
     }

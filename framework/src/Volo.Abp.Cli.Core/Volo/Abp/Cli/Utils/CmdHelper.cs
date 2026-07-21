@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
@@ -137,14 +138,11 @@ public class CmdHelper : ICmdHelper, ITransientDependency
 
             process.Start();
 
-            using (var standardOutput = process.StandardOutput)
-            {
-                using (var standardError = process.StandardError)
-                {
-                    output = standardOutput.ReadToEnd();
-                    output += standardError.ReadToEnd();
-                }
-            }
+            var outputTask = process.StandardOutput.ReadToEndAsync();
+            var errorTask = process.StandardError.ReadToEndAsync();
+
+            var results = Task.WhenAll(outputTask, errorTask).GetAwaiter().GetResult();
+            output = results[0] + results[1];
 
             process.WaitForExit();
 

@@ -33,7 +33,8 @@ public static class IdentityDbContextModelBuilderExtensions
                 .HasColumnName(nameof(IdentityUser.TwoFactorEnabled));
             b.Property(u => u.LockoutEnabled).HasDefaultValue(false)
                 .HasColumnName(nameof(IdentityUser.LockoutEnabled));
-
+            b.Property(u => u.Leaved).HasDefaultValue(false)
+                .HasColumnName(nameof(IdentityUser.Leaved));
             b.Property(u => u.IsExternal).IsRequired().HasDefaultValue(false)
                 .HasColumnName(nameof(IdentityUser.IsExternal));
 

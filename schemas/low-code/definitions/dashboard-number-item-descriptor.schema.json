@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dashboard-number-item-descriptor.schema.json",
+  "title": "DashboardNumberItemDescriptor",
+  "description": "A single number/KPI tile within a number container.",
+  "markdownDescription": "AI guidance: `count` does not need aggregationProperty. `sum`, `average`, `min`, `max`, `percentFilled`, and `percentEmpty` should specify aggregationProperty. Use filter to scope the KPI, for example count only active records.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Unique identifier for this number item. Prefer kebab-case such as 'total-events'.",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "description": "Display title for this KPI."
+    },
+    "entityName": {
+      "type": "string",
+      "description": "Entity this number item sources data from. Must match an entity descriptor or known reference entity.",
+      "minLength": 1
+    },
+    "aggregation": {
+      "$ref": "dashboard-aggregation-type.schema.json",
+      "description": "Aggregation used to compute the KPI value."
+    },
+    "aggregationProperty": {
+      "type": "string",
+      "description": "Property name for sum/average/min/max/percent aggregations. Omit for count."
+    },
+    "format": {
+      "type": "string",
+      "enum": ["number", "currency", "percentage"],
+      "default": "number"
+    },
+    "color": {
+      "type": "string",
+      "description": "Display color name (blue, green, red, purple, orange, indigo, amber, teal)"
+    },
+    "globalDateFilterProperty": {
+      "type": "string",
+      "description": "Date/DateTime property used to apply dashboard global date filters. Defaults to CreationTime when omitted."
+    },
+    "filter": {
+      "oneOf": [
+        { "$ref": "dashboard-filter-descriptor.schema.json" },
+        { "type": "null" }
+      ]
+    },
+    "clickToSeeRecords": {
+      "type": "boolean",
+      "description": "Allow users to click to see underlying records when supported by the runtime.",
+      "default": false
+    }
+  },
+  "required": ["name", "title", "entityName", "aggregation"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "name": "total-events",
+      "title": "Total Events",
+      "entityName": "Acme.Events.Event",
+      "aggregation": "count",
+      "format": "number",
+      "color": "blue"
+    },
+    {
+      "name": "total-budget",
+      "title": "Total Budget",
+      "entityName": "Acme.Events.Event",
+      "aggregation": "sum",
+      "aggregationProperty": "Budget",
+      "format": "currency",
+      "color": "green"
+    }
+  ]
+}

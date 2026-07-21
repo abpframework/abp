@@ -6,6 +6,8 @@ The AutoMapper library is **no longer free for commercial use**. For more detail
 
 ABP Framework provides both AutoMapper and Mapperly integrations. If your project currently uses AutoMapper and you don't have a commercial license, you can switch to Mapperly by following the steps outlined below.
 
+> **Already have a commercial AutoMapper license?** Use the [Volo.Abp.LuckyPenny.AutoMapper](../../framework/infrastructure/luckypenny-automapper.md) package instead. It is a drop-in replacement for `Volo.Abp.AutoMapper` built on the patched commercial version of AutoMapper, requiring only two changes to your project.
+
 ## Migration Steps
 
 Please open your project in an IDE(`Visual Studio`, `VS Code` or `JetBrains Rider`), then perform the following global search and replace operations:
@@ -93,8 +95,8 @@ public partial class OrganizationUnitRoleToOrganizationUnitRoleDtoMapper : TwoWa
     public override partial OrganizationUnitRoleDto Map(OrganizationUnitRole source);
     public override partial void Map(OrganizationUnitRole source, OrganizationUnitRoleDto destination);
 
-    public override partial OrganizationUnitRole ReverseMap(OrganizationUnitRoleDto destination);
-    public override partial void ReverseMap(OrganizationUnitRoleDto destination, OrganizationUnitRole source);
+    public override partial OrganizationUnitRole ReverseMap(OrganizationUnitRoleDto source);
+    public override partial void ReverseMap(OrganizationUnitRoleDto source, OrganizationUnitRole destination);
 }
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
@@ -174,6 +176,16 @@ public partial class IdentityUserToIdentityUserDtoMapper : MapperBase<IdentityUs
 }
 ```
 
+## ABP Suite Compatibility Note
+
+If you still use [ABP Suite](../../suite/index.md) to generate CRUD pages after migrating to Mapperly, keep the main Suite-managed mapper files reserved for Suite updates.
+
+- Keep the conventional files such as `*ApplicationMappers.cs`, `*BlazorMappers.cs` and `*WebMappers.cs` as the files that ABP Suite updates.
+- Move manual or AI-generated Mapperly classes into separate files.
+- Avoid creating extra manual files with the same conventional suffixes that ABP Suite scans, because Suite may pick the wrong file when generating or updating mappings.
+
+For example, names like `IdentityUserMapperlyMappings.cs`, `CustomObjectMappings.cs` or `ManualOrderMappings.cs` are safer for your hand-written mappers.
+
 ## AI Prompt for Migrating AutoMapper to Mapperly
 
 If you have AI tools like Cursor, you can use the following prompt to migrate your AutoMapper mappings to Mapperly automatically:
@@ -187,6 +199,8 @@ Please help me migrate AutoMapper Profile classes to Mapperly. I have AutoMapper
 
 1. **Convert AutoMapper Profile to Mapperly Mappers**: Transform each `CreateMap` into a separate Mapperly mapper class
 2. **Rename the file**: Change from `XXXAutoMapperProfile.cs` to `XXXMappers.cs`
+
+   > If you still use **ABP Suite**, keep Suite-managed mapper files separate from your manual/AI-generated mapper files. See the **ABP Suite Compatibility Note** section above.
 3. **Use proper Mapperly attributes**: 
    - `[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]` for each mapper class
    - `[MapExtraProperties]` for classes that need extra properties mapping
@@ -292,8 +306,8 @@ public partial class OrganizationUnitRoleToOrganizationUnitRoleDtoMapper : TwoWa
     public override partial OrganizationUnitRoleDto Map(OrganizationUnitRole source);
     public override partial void Map(OrganizationUnitRole source, OrganizationUnitRoleDto destination);
 
-    public override partial OrganizationUnitRole ReverseMap(OrganizationUnitRoleDto destination);
-    public override partial void ReverseMap(OrganizationUnitRoleDto destination, OrganizationUnitRole source);
+    public override partial OrganizationUnitRole ReverseMap(OrganizationUnitRoleDto source);
+    public override partial void ReverseMap(OrganizationUnitRoleDto source, OrganizationUnitRole destination);
 }
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]

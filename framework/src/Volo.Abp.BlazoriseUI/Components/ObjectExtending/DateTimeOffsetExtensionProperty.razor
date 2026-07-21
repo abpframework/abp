@@ -1,0 +1,24 @@
+@typeparam TEntity
+@typeparam TResourceType
+@using Volo.Abp.BlazoriseUI
+@using Volo.Abp.Localization
+@using Volo.Abp.ObjectExtending
+@inherits ExtensionPropertyComponentBase<TEntity, TResourceType>
+
+@if (PropertyInfo != null && Entity != null)
+{
+    <Validation Validator="@Validate" MessageLocalizer="@LH.Localize">
+        <Field>
+            <FieldLabel>@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)</FieldLabel>
+            <DateInput TValue="DateTimeOffset?"
+                      InputMode="@(PropertyInfo.IsDate() ? DateInputMode.Date : DateInputMode.DateTime)"
+                      Pattern="@PropertyInfo.GetDateEditInputFormatOrNull()"
+                      Disabled="IsReadonlyField"
+                      @bind-Value="@Value">
+                <Feedback>
+                    <ValidationError/>
+                </Feedback>
+            </DateInput>
+        </Field>
+    </Validation>
+}

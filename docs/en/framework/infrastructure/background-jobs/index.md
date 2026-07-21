@@ -150,7 +150,7 @@ Configure<AbpBackgroundJobOptions>(options =>
 {
     options.GetBackgroundJobName = (jobType) =>
     {
-        if (jobTyep == typeof(EmailSendingArgs))
+        if (jobType == typeof(EmailSendingArgs))
         {
             return "emails";
         }
@@ -225,7 +225,7 @@ ABP includes a simple `IBackgroundJobManager` implementation that;
 - **Retries** job execution until the job **successfully runs** or **timeouts**. Default timeout is 2 days for a job. Logs all exceptions.
 - **Deletes** a job from the store (database) when it's successfully executed. If it's timed out, it sets it as **abandoned** and leaves it in the database.
 - **Increasingly waits between retries** for a job. It waits 1 minute for the first retry, 2 minutes for the second retry, 4 minutes for the third retry and so on.
-- **Polls** the store for jobs in fixed intervals. It queries jobs, ordering by priority (asc) and then by try count (asc).
+- **Polls** the store for jobs in fixed intervals. It queries jobs, ordering by priority (desc) and then by try count (asc).
 
 > `Volo.Abp.BackgroundJobs` nuget package contains the default background job manager and it is installed to the startup templates by default.
 
@@ -248,11 +248,76 @@ public class MyModule : AbpModule
 ````
 
 * `JobPollPeriod` is used to determine the interval between two job polling operations. Default is 5000 ms (5 seconds).
-* `MaxJobFetchCount` is used to determine the maximum job count to fetch in a single polling operation. Default is 1000.
+* `MaxJobFetchCount` is used to determine the maximum job count to fetch in a single polling operation. It is also used as the batch size for the retention cleanup deletions. Default is 1000.
 * `DefaultFirstWaitDuration` is used to determine the duration to wait before the first retry. Default is 60 seconds.
 * `DefaultTimeout` is used to determine the timeout duration for a job. Default is 172800 seconds (2 days).
 * `DefaultWaitFactor` is used to determine the factor to increase the wait duration between retries. Default is 2.0.
 * `DistributedLockName` is used to determine the distributed lock name to use. Default is `AbpBackgroundJobWorker`.
+* `StoreSuccessfulJobs` is used to determine whether to keep successfully completed jobs in the store instead of deleting them. Default is `false`. See the *Storing Successful Jobs* section.
+* `SuccessfulJobRetentionTime` is used to determine how long a kept job is retained before the cleanup deletes it. Default is 7 days. Set to `null` to keep completed jobs forever. Only relevant when `StoreSuccessfulJobs` is enabled.
+* `CleanSuccessfulJobsPeriod` is used to determine the interval between cleanup runs that delete expired completed jobs. Default is 3600000 ms (1 hour).
+* `CleanupDistributedLockName` is used to determine the distributed lock name for the cleanup worker. Default is `AbpBackgroundJobCleanup`.
+* `MaxParallelJobExecutionCount` is used to determine the maximum number of jobs a worker executes in parallel within one poll cycle. Default is 1. See the *Parallel Job Execution* section.
+* `PerJobDistributedLockPrefix` is used to determine the prefix of the per-job distributed lock name used when `MaxParallelJobExecutionCount` is greater than 1. Default is `AbpBackgroundJob:`.
+
+### Storing Successful Jobs
+
+By default, the background job manager deletes a job from the store as soon as it runs successfully. If you want to keep completed jobs (for auditing or history), enable `StoreSuccessfulJobs`:
+
+````csharp
+Configure<AbpBackgroundJobWorkerOptions>(options =>
+{
+    options.StoreSuccessfulJobs = true;
+    options.SuccessfulJobRetentionTime = TimeSpan.FromDays(30); //null to keep forever
+});
+````
+
+When enabled, a successful job is not deleted; instead its `CompletionTime` is set and it stays in the store. Completed jobs are excluded from the waiting jobs query, so they are not executed again. A cleanup worker periodically deletes completed jobs older than `SuccessfulJobRetentionTime`.
+
+> **Note:** The `IBackgroundJobStore` interface has new overloads (a `GetWaitingJobsAsync` overload that takes a job name filter and a `DeleteAsync` overload for cleanup). If you have a custom `IBackgroundJobStore` implementation, you must implement them for your code to compile. The built-in stores already implement them.
+
+### Dedicated Workers per Job Type
+
+By default, a single worker processes all job types. If you want to process certain job types separately (for example, slow or high-volume jobs), you can register dedicated workers, each handling only the specified job argument types with its own distributed lock:
+
+````csharp
+Configure<AbpBackgroundJobWorkerOptions>(options =>
+{
+    options.AddDedicatedWorker<EmailJobArgs, SmsJobArgs>("NotificationWorkerLock");
+    options.AddDedicatedWorker<ReportJobArgs>("ReportWorkerLock");
+});
+````
+
+Each dedicated worker processes only its configured job types. An additional default worker is automatically started to process all the remaining job types. In sequential mode, each worker (including the default one) runs independently under its own distributed lock (see *Parallel Job Execution* for how this changes when running jobs in parallel).
+
+If you don't want to specify a lock name, use the overloads without the `lockName` parameter; a stable, length-bounded lock name is then derived from the job argument types:
+
+````csharp
+Configure<AbpBackgroundJobWorkerOptions>(options =>
+{
+    options.AddDedicatedWorker<EmailJobArgs, SmsJobArgs>();
+    options.AddDedicatedWorker<ReportJobArgs>();
+});
+````
+
+> **Note:** Each job type can be handled by only one dedicated worker, and each worker must have a unique lock name; `AddDedicatedWorker` throws if this is violated. Dedicated workers require an `IBackgroundJobStore` that can filter jobs by name (the built-in stores can).
+
+### Parallel Job Execution
+
+By default, a worker executes waiting jobs one by one under a single worker-level distributed lock, so only one job runs at a time across all application instances. If you want to execute multiple jobs concurrently, set `MaxParallelJobExecutionCount` to a value greater than 1:
+
+````csharp
+Configure<AbpBackgroundJobWorkerOptions>(options =>
+{
+    options.MaxParallelJobExecutionCount = 4;
+});
+````
+
+When it is greater than 1, the worker-level lock is not used. Instead, each job is claimed with its own distributed lock, so multiple application instances can execute different jobs at the same time. With a properly configured distributed lock provider, a job is not executed by more than one instance at a time.
+
+`MaxParallelJobExecutionCount` is a per-worker, per-poll-cycle limit — it is not a cluster-wide limit. A worker first fetches up to `MaxJobFetchCount` waiting jobs, then executes up to `MaxParallelJobExecutionCount` of them in parallel, so a single worker runs up to `min(MaxJobFetchCount, MaxParallelJobExecutionCount)` jobs per cycle; keep `MaxJobFetchCount` at least as large as `MaxParallelJobExecutionCount` to avoid capping the parallelism. When you also configure dedicated workers, each worker runs its own timer and claims up to `MaxParallelJobExecutionCount` jobs, so the effective concurrency is up to (number of workers) × `MaxParallelJobExecutionCount` per application instance, and up to (number of application instances) × (number of workers) × `MaxParallelJobExecutionCount` across the whole cluster.
+
+> **Important:** Configure `MaxParallelJobExecutionCount` and `PerJobDistributedLockPrefix` consistently across all application instances. Mixing sequential (worker lock) and parallel (per-job lock) instances removes the common mutual exclusion, and a different prefix produces a different per-job lock name for the same job — either case may let the same job run on more than one instance. As with the sequential mode, configure a real [distributed lock](../distributed-locking.md) provider for clustered deployments.
 
 ### Data Store
 
@@ -271,9 +336,9 @@ If multiple applications share the same storage for background jobs and workers 
 Set `ApplicationName` property in `AbpBackgroundJobWorkerOptions` to your application's name:
 
 ````csharp
-public override void PreConfigureServices(ServiceConfigurationContext context)
+public override void ConfigureServices(ServiceConfigurationContext context)
 {
-    PreConfigure<AbpBackgroundJobWorkerOptions>(options =>
+    Configure<AbpBackgroundJobWorkerOptions>(options =>
     {
         options.ApplicationName = context.Services.GetApplicationName()!;
     });
@@ -345,6 +410,87 @@ If you don't want to use a distributed lock provider, you may go with the follow
 
 * Stop the background job manager (set `AbpBackgroundJobOptions.IsJobExecutionEnabled` to `false` as explained in the *Disable Job Execution* section) in all application instances except one of them, so only the single instance executes the jobs (while other application instances can still queue jobs).
 * Stop the background job manager (set `AbpBackgroundJobOptions.IsJobExecutionEnabled` to `false` as explained in the *Disable Job Execution* section)  in all application instances and create a dedicated application (maybe a console application running in its own container or a Windows Service running in the background) to execute all the background jobs. This can be a good option if your background jobs consume high system resources (CPU, RAM or Disk), so you can deploy that background application to a dedicated server and your background jobs don't affect your application's performance.
+
+## Dynamic Background Jobs
+
+ABP provides `IDynamicBackgroundJobManager` for scenarios where you need to enqueue jobs by name at runtime, without requiring a strongly-typed job args class at compile time. This is useful for plugin systems, dynamic workflows, or any case where job types are not known ahead of time.
+
+### Enqueue by Job Name (Typed Job)
+
+If a typed job is already registered (e.g., via `[BackgroundJobName("emails")]`), you can enqueue it by name:
+
+````csharp
+public class MyService : ApplicationService
+{
+    private readonly IDynamicBackgroundJobManager _dynamicJobManager;
+
+    public MyService(IDynamicBackgroundJobManager dynamicJobManager)
+    {
+        _dynamicJobManager = dynamicJobManager;
+    }
+
+    public async Task DoSomethingAsync()
+    {
+        await _dynamicJobManager.EnqueueAsync("emails", new
+        {
+            EmailAddress = "user@abp.io",
+            Subject = "Hello",
+            Body = "World"
+        });
+    }
+}
+````
+
+The `IDynamicBackgroundJobManager` will look up the typed job configuration, deserialize the args to the expected type, and enqueue through the standard typed pipeline.
+
+### Dynamic Job Handlers
+
+You can also register dynamic handlers at runtime for jobs that don't have a pre-defined typed job class:
+
+````csharp
+public override void OnApplicationInitialization(ApplicationInitializationContext context)
+{
+    var dynamicJobManager = context.ServiceProvider
+        .GetRequiredService<IDynamicBackgroundJobManager>();
+
+    dynamicJobManager.RegisterHandler("ProcessOrder", async (context, ct) =>
+    {
+        var json = context.JsonData;
+        var serviceProvider = context.ServiceProvider;
+        // Process the order using JsonData and resolved services...
+    });
+}
+````
+
+Then enqueue jobs using the registered name:
+
+````csharp
+await _dynamicJobManager.EnqueueAsync("ProcessOrder", new
+{
+    OrderId = "ORD-001",
+    Amount = 99.99
+});
+````
+
+### Handler Management
+
+````csharp
+// Check if a handler is registered
+bool exists = _dynamicJobManager.IsHandlerRegistered("ProcessOrder");
+
+// Unregister a handler
+bool removed = _dynamicJobManager.UnregisterHandler("ProcessOrder");
+````
+
+### How It Works
+
+- **Typed job path**: When the job name matches a registered typed job configuration, the args are serialized to JSON and deserialized to the expected args type, then enqueued through `IBackgroundJobManager.EnqueueAsync<TArgs>`.
+- **Dynamic handler path**: When the job name matches a registered dynamic handler, the args are wrapped as `DynamicBackgroundJobArgs` (a public transport type used internally by the framework) and enqueued through `IBackgroundJobManager.EnqueueAsync<DynamicBackgroundJobArgs>`. When the job executes, the framework looks up the handler by name and invokes it.
+- All dynamic jobs go through the **standard typed job pipeline**, which means they work with all providers (Default, Hangfire, Quartz, RabbitMQ, TickerQ) without any provider-specific changes.
+
+> **Note:** If the job name matches both a registered typed job configuration and a dynamic handler, **the typed job takes priority** and the dynamic handler is ignored. To avoid confusion, use distinct names for dynamic handlers that do not conflict with existing typed job names.
+
+> **Important:** Dynamic job handlers are stored **in memory only** and are not persisted across application restarts. When using a persistent provider (Hangfire, Quartz, RabbitMQ, TickerQ), enqueued jobs survive a restart but if no handler is re-registered, the job executor will throw an exception when the job is picked up. To ensure handlers are always available, register them in `OnApplicationInitialization` so they are re-registered on every startup.
 
 ## Integrations
 

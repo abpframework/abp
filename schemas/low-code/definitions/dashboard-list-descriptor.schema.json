@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dashboard-list-descriptor.schema.json",
+  "title": "DashboardListDescriptor",
+  "description": "Configuration for a dashboard list/table visualization.",
+  "markdownDescription": "AI guidance: use list visualizations for recent records, top records, or compact operational queues. `fields` must contain property names from the parent visualization entityName. Use `sortBy` to make results deterministic.",
+  "type": "object",
+  "properties": {
+    "fields": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Property names to display as columns. Each value must reference a property on the visualization entityName."
+    },
+    "sortBy": {
+      "type": "object",
+      "properties": {
+        "property": {
+          "type": "string",
+          "description": "Property name to sort by. Must exist on the visualization entityName."
+        },
+        "direction": {
+          "type": "string",
+          "enum": ["asc", "desc"],
+          "default": "asc"
+        }
+      },
+      "required": ["property"],
+      "additionalProperties": false
+    },
+    "maxRows": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 50,
+      "default": 10
+    },
+    "rowHeight": {
+      "type": "string",
+      "enum": ["compact", "normal", "tall"],
+      "default": "compact"
+    },
+    "colorBy": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["property", "conditions"]
+            },
+            "property": {
+              "type": "string",
+              "description": "Enum/status property name for automatic coloring."
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": ["fields"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "fields": ["Title", "StartDate", "Status"],
+      "sortBy": { "property": "StartDate", "direction": "desc" },
+      "maxRows": 10,
+      "rowHeight": "compact",
+      "colorBy": { "type": "property", "property": "Status" }
+    }
+  ]
+}

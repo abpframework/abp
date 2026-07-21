@@ -21,11 +21,11 @@ public static class AbpEfCoreModelBuilderExtensions
 
                 if (abpEfCoreCurrentDbContext.Context?.DataFilter.IsEnabled<ISoftDelete>() == true)
                 {
-                    // IsDeleted == false
+                    // IsDeleted == false. Use the column's TypeMapping so any ValueConverter is applied to the literal.
                     return new SqlBinaryExpression(
                         ExpressionType.Equal,
                         isDeleted,
-                        new SqlConstantExpression(false, typeof(bool), boolParam.TypeMapping),
+                        new SqlConstantExpression(false, typeof(bool), isDeleted.TypeMapping ?? boolParam.TypeMapping),
                         boolParam.Type,
                         boolParam.TypeMapping);
                 }

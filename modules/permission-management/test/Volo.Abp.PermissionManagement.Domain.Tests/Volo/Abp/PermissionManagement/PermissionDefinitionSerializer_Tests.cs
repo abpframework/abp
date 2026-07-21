@@ -57,7 +57,7 @@ public class PermissionDefinitionSerializer_Tests : PermissionTestBase
             .WithProperty("CustomProperty2", "CustomValue2")
             .RequireAuthenticated() //For for testing, not so meaningful
             .RequireGlobalFeatures("GlobalFeature1", "GlobalFeature2")
-            .RequireFeatures("Feature1", "Feature2")
+            .RequireFeatures(requiresAll: true, batchCheck: false, "Feature1", "Feature2")
             .RequirePermissions(requiresAll: false, batchCheck: false,"Permission2", "Permission3");
 
         // Act
@@ -80,6 +80,74 @@ public class PermissionDefinitionSerializer_Tests : PermissionTestBase
 
 
     [Fact]
+    public async Task Serialize_Permission_With_Default_Batch_RequireFeatures()
+    {
+        var context = new PermissionDefinitionContext(null);
+        var group = context.AddGroup("AbpAuditLogging");
+        var permission = group.AddPermission(
+                "AbpAuditLogging.Settings",
+                new LocalizableString(typeof(AbpPermissionManagementResource), "Permission1"))
+            .RequireFeatures("AbpAuditLogging.SettingManagement");
+
+        var record = await _serializer.SerializeAsync(permission, group);
+
+        record.StateCheckers.ShouldBe(
+            "[{\"T\":\"F\",\"A\":true,\"N\":[\"AbpAuditLogging.SettingManagement\"]}]");
+    }
+
+    [Fact]
+    public async Task Serialize_Permission_With_Default_Batch_RequireFeatures_Picks_Per_State_Model()
+    {
+        var context = new PermissionDefinitionContext(null);
+        var group = context.AddGroup("Group1");
+
+        var permA = group.AddPermission("PermA", new LocalizableString(typeof(AbpPermissionManagementResource), "Permission1"))
+            .RequireFeatures("FeatureForA");
+        var permB = group.AddPermission("PermB", new LocalizableString(typeof(AbpPermissionManagementResource), "Permission1"))
+            .RequireFeatures("FeatureForB1", "FeatureForB2");
+
+        var recordA = await _serializer.SerializeAsync(permA, group);
+        var recordB = await _serializer.SerializeAsync(permB, group);
+
+        recordA.StateCheckers.ShouldBe("[{\"T\":\"F\",\"A\":true,\"N\":[\"FeatureForA\"]}]");
+        recordB.StateCheckers.ShouldBe("[{\"T\":\"F\",\"A\":true,\"N\":[\"FeatureForB1\",\"FeatureForB2\"]}]");
+    }
+
+    [Fact]
+    public async Task Serialize_Permission_With_Default_Batch_RequirePermissions()
+    {
+        var context = new PermissionDefinitionContext(null);
+        var group = context.AddGroup("Group1");
+        var permission = group.AddPermission(
+                "Permission1",
+                new LocalizableString(typeof(AbpPermissionManagementResource), "Permission1"))
+            .RequirePermissions("OtherPermission1", "OtherPermission2");
+
+        var record = await _serializer.SerializeAsync(permission, group);
+
+        record.StateCheckers.ShouldBe(
+            "[{\"T\":\"P\",\"A\":true,\"N\":[\"OtherPermission1\",\"OtherPermission2\"]}]");
+    }
+
+    [Fact]
+    public async Task Serialize_Permission_With_Default_Batch_RequirePermissions_Picks_Per_State_Model()
+    {
+        var context = new PermissionDefinitionContext(null);
+        var group = context.AddGroup("Group1");
+
+        var permA = group.AddPermission("PermA", new LocalizableString(typeof(AbpPermissionManagementResource), "Permission1"))
+            .RequirePermissions("OtherForA");
+        var permB = group.AddPermission("PermB", new LocalizableString(typeof(AbpPermissionManagementResource), "Permission1"))
+            .RequirePermissions(requiresAll: false, "OtherForB1", "OtherForB2");
+
+        var recordA = await _serializer.SerializeAsync(permA, group);
+        var recordB = await _serializer.SerializeAsync(permB, group);
+
+        recordA.StateCheckers.ShouldBe("[{\"T\":\"P\",\"A\":true,\"N\":[\"OtherForA\"]}]");
+        recordB.StateCheckers.ShouldBe("[{\"T\":\"P\",\"A\":false,\"N\":[\"OtherForB1\",\"OtherForB2\"]}]");
+    }
+
+    [Fact]
     public async Task Serialize_Complex_Resource_Permission_Definition()
     {
         // Arrange
@@ -96,7 +164,7 @@ public class PermissionDefinitionSerializer_Tests : PermissionTestBase
             .WithProperty("CustomProperty2", "CustomValue2")
             .RequireAuthenticated() //For for testing, not so meaningful
             .RequireGlobalFeatures("GlobalFeature1", "GlobalFeature2")
-            .RequireFeatures("Feature1", "Feature2")
+            .RequireFeatures(requiresAll: true, batchCheck: false, "Feature1", "Feature2")
             .RequirePermissions(requiresAll: false, batchCheck: false,"Permission2", "Permission3");
 
         // Act

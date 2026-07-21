@@ -17,14 +17,14 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 [ApiExplorerSettings(IgnoreApi = true)]
 public class AbpApplicationConfigurationScriptController : AbpController
 {
-    protected readonly AbpApplicationConfigurationAppService ConfigurationAppService;
+    protected readonly IAbpApplicationConfigurationAppService ConfigurationAppService;
     protected readonly IJsonSerializer JsonSerializer;
     protected readonly AbpAspNetCoreMvcOptions Options;
     protected readonly IJavascriptMinifier JavascriptMinifier;
     protected readonly IAbpAntiForgeryManager AntiForgeryManager;
 
     public AbpApplicationConfigurationScriptController(
-        AbpApplicationConfigurationAppService configurationAppService,
+        IAbpApplicationConfigurationAppService configurationAppService,
         IJsonSerializer jsonSerializer,
         IOptions<AbpAspNetCoreMvcOptions> options,
         IJavascriptMinifier javascriptMinifier,

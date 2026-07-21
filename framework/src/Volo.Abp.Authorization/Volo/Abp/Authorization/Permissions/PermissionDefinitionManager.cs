@@ -75,15 +75,18 @@ public class PermissionDefinitionManager : IPermissionDefinitionManager, ITransi
     public virtual async Task<IReadOnlyList<PermissionDefinition>> GetResourcePermissionsAsync()
     {
         var staticResourcePermissions = await _staticStore.GetResourcePermissionsAsync();
-        var staticResourcePermissionNames = staticResourcePermissions
-            .Select(p => p.Name)
+        var staticResourcePermissionKeys = staticResourcePermissions
+            .Select(p => (p.ResourceName, p.Name))
             .ToImmutableHashSet();
 
         var dynamicResourcePermissions = await _dynamicStore.GetResourcePermissionsAsync();
 
-        /* We prefer static permissions over dynamics */
+        /* We prefer static permissions over dynamics.
+         * Resource permissions are unique by (ResourceName, Name), so we must deduplicate
+         * using both fields to avoid incorrectly excluding dynamic permissions whose name
+         * matches a static permission from a different resource. */
         return staticResourcePermissions.Concat(
-            dynamicResourcePermissions.Where(d => !staticResourcePermissionNames.Contains(d.Name))
+            dynamicResourcePermissions.Where(d => !staticResourcePermissionKeys.Contains((d.ResourceName, d.Name)))
         ).ToImmutableList();
     }
 

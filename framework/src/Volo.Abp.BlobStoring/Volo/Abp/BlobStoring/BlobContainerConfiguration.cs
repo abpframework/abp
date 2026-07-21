@@ -7,10 +7,16 @@ namespace Volo.Abp.BlobStoring;
 
 public class BlobContainerConfiguration
 {
+    private Type? _providerType;
+
     /// <summary>
     /// The provider to be used to store BLOBs of this container.
     /// </summary>
-    public Type? ProviderType { get; set; }
+    public Type? ProviderType
+    {
+        get => _providerType ?? _fallbackConfiguration?.ProviderType;
+        set => _providerType = value;
+    }
 
     /// <summary>
     /// Indicates whether this container is multi-tenant or not.
@@ -35,6 +41,20 @@ public class BlobContainerConfiguration
         NamingNormalizers = new TypeList<IBlobNamingNormalizer>();
         _fallbackConfiguration = fallbackConfiguration;
         _properties = new Dictionary<string, object?>();
+    }
+
+    /// <summary>
+    /// Returns the naming normalizers in effect for this container, inheriting from the fallback
+    /// configuration only when this container has none and does not override <see cref="ProviderType"/>.
+    /// </summary>
+    public IEnumerable<Type> GetEffectiveNamingNormalizers()
+    {
+        if (NamingNormalizers.Count == 0 && _providerType == null && _fallbackConfiguration != null)
+        {
+            return _fallbackConfiguration.GetEffectiveNamingNormalizers();
+        }
+
+        return NamingNormalizers;
     }
 
     public T? GetConfigurationOrDefault<T>(string name, T? defaultValue = default)

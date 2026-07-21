@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NuGet.Versioning;
@@ -53,26 +54,64 @@ public class NpmHelper : ITransientDependency
     public void RunNpmInstall(string directory, params string[] args)
     {
         Logger.LogInformation($"Running npm install on {directory}");
-        CmdHelper.RunCmd($"npm install {args.JoinAsString(" ")}", directory);
+        CmdHelper.RunCmd($"npm install --ignore-scripts {args.JoinAsString(" ")}", directory);
     }
 
     public void RunYarn(string directory)
     {
         Logger.LogInformation($"Running Yarn on {directory}");
-        CmdHelper.RunCmd($"npx yarn", directory);
+        CmdHelper.RunCmd($"npx yarn --ignore-scripts", directory);
     }
 
     [Obsolete("This method is deprecated. Use 'YarnAddPackage' instead (it uses 'npx', so there is no need for 'yarn' to be globally installed.")]
     public void NpmInstallPackage(string package, string version, string directory)
     {
+        EnsureSafePackageName(package);
+        EnsureSafeVersion(version);
         var packageVersion = !string.IsNullOrWhiteSpace(version) ? $"@{version}" : string.Empty;
-        CmdHelper.RunCmd("npm install " + package + packageVersion, workingDirectory: directory);
+        CmdHelper.RunCmd("npm install --ignore-scripts " + package + packageVersion, workingDirectory: directory);
     }
 
     public void YarnAddPackage(string package, string version, string directory)
     {
+        EnsureSafePackageName(package);
+        EnsureSafeVersion(version);
         var packageVersion = !string.IsNullOrWhiteSpace(version) ? $"@{version}" : string.Empty;
-        CmdHelper.RunCmd("npx yarn add " + package + packageVersion, workingDirectory: directory);
+        CmdHelper.RunCmd("npx yarn add " + package + packageVersion + " --ignore-scripts", workingDirectory: directory);
+    }
+
+    private static readonly Regex SafePackageNameRegex = new(
+        @"^(@[a-zA-Z0-9][a-zA-Z0-9._-]*/)?[a-zA-Z0-9][a-zA-Z0-9._-]*$",
+        RegexOptions.Compiled);
+
+    private static readonly Regex SafeVersionRegex = new(
+        @"^[a-zA-Z0-9._~^+\-]+$",
+        RegexOptions.Compiled);
+
+    public static void EnsureSafePackageName(string packageName)
+    {
+        if (string.IsNullOrWhiteSpace(packageName) || !SafePackageNameRegex.IsMatch(packageName))
+        {
+            throw new CliUsageException($"Invalid npm package name detected: {SanitizeForLog(packageName)}");
+        }
+    }
+
+    public static void EnsureSafeVersion(string version)
+    {
+        if (!string.IsNullOrWhiteSpace(version) && !SafeVersionRegex.IsMatch(version))
+        {
+            throw new CliUsageException($"Invalid npm package version detected: {SanitizeForLog(version)}");
+        }
+    }
+
+    public static string SanitizeForLog(string value)
+    {
+        if (value == null)
+        {
+            return "(null)";
+        }
+
+        return Regex.Replace(value, @"[\x00-\x1F\x7F]", "?");
     }
 
     public string GetInstalledNpmPackages()

@@ -11,7 +11,8 @@
 //[doc-params]
 {
     "UI": ["MVC","Blazor","BlazorServer", "BlazorWebApp","NG","MAUIBlazor"],
-    "DB": ["EF", "Mongo"]
+    "DB": ["EF", "Mongo"],
+    "BlazorUI": ["Blazorise", "MudBlazor"]
 }
 ````
 

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Xunit;
 
 namespace Volo.Abp.Identity;
@@ -19,6 +20,7 @@ public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentity
     protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
     protected OrganizationUnitManager OrganizationUnitManager { get; }
     protected IdentityTestData TestData { get; }
+    protected ICurrentTenant CurrentTenant { get; }
 
     protected IdentityUserRepository_Tests()
     {
@@ -28,6 +30,7 @@ public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentity
         OrganizationUnitRepository = GetRequiredService<IOrganizationUnitRepository>();
         OrganizationUnitManager = GetRequiredService<OrganizationUnitManager>();;
         TestData = ServiceProvider.GetRequiredService<IdentityTestData>();
+        CurrentTenant = GetRequiredService<ICurrentTenant>();
     }
 
     [Fact]
@@ -119,7 +122,8 @@ public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentity
     public async Task GetListByNormalizedRoleNameAsync()
     {
         var users = await UserRepository.GetListByNormalizedRoleNameAsync(LookupNormalizer.NormalizeName("supporter"));
-        users.Count.ShouldBe(2);
+        users.Count.ShouldBe(3);
+        users.ShouldContain(u => u.UserName == "administrator");
         users.ShouldContain(u => u.UserName == "john.nash");
         users.ShouldContain(u => u.UserName == "neo");
     }
@@ -127,14 +131,17 @@ public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentity
     [Fact]
     public async Task GetUserIdListByRoleIdAsync()
     {
+        var admin = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName("administrator"));
         var john = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName("john.nash"));
         var neo = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName("neo"));
+        admin.ShouldNotBeNull();
         john.ShouldNotBeNull();
         neo.ShouldNotBeNull();
 
         var roleId = (await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("supporter"))).Id;
         var users = await UserRepository.GetUserIdListByRoleIdAsync(roleId);
-        users.Count.ShouldBe(2);
+        users.Count.ShouldBe(3);
+        users.ShouldContain(id => id == admin.Id);
         users.ShouldContain(id => id == john.Id);
         users.ShouldContain(id => id == neo.Id);
     }
@@ -312,5 +319,141 @@ public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentity
         user.Id.ShouldBe(TestData.UserNeoId);
 
         (await UserRepository.FindByPasskeyIdAsync((byte[])[1, 2, 3])).ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task GetUsersByNormalizedUserNameAsync()
+    {
+        var users = await UserRepository.GetUsersByNormalizedUserNameAsync(
+            LookupNormalizer.NormalizeName("john.nash")
+        );
+
+        users.ShouldContain(u => u.Id == TestData.UserJohnId);
+
+        users = await UserRepository.GetUsersByNormalizedUserNameAsync(
+            LookupNormalizer.NormalizeName("undefined-user")
+        );
+        users.Count.ShouldBe(0);
+    }
+
+    [Fact]
+    public async Task GetUsersByNormalizedUserNamesAsync()
+    {
+        var users = await UserRepository.GetUsersByNormalizedUserNamesAsync(new[]
+        {
+            LookupNormalizer.NormalizeName("john.nash"),
+            LookupNormalizer.NormalizeName("neo"),
+            LookupNormalizer.NormalizeName("undefined-user")
+        });
+
+        users.Count.ShouldBe(2);
+        users.ShouldContain(u => u.Id == TestData.UserJohnId);
+        users.ShouldContain(u => u.Id == TestData.UserNeoId);
+    }
+
+    [Fact]
+    public async Task GetUsersByNormalizedEmailAsync()
+    {
+        var users = await UserRepository.GetUsersByNormalizedEmailAsync(
+            LookupNormalizer.NormalizeEmail("john.nash@abp.io")
+        );
+
+        users.ShouldContain(u => u.Id == TestData.UserJohnId);
+
+        users = await UserRepository.GetUsersByNormalizedEmailAsync(
+            LookupNormalizer.NormalizeEmail("undefined-user@abp.io")
+        );
+        users.Count.ShouldBe(0);
+    }
+
+    [Fact]
+    public async Task GetUsersByNormalizedEmailsAsync()
+    {
+        var users = await UserRepository.GetUsersByNormalizedEmailsAsync(new[]
+        {
+            LookupNormalizer.NormalizeEmail("john.nash@abp.io"),
+            LookupNormalizer.NormalizeEmail("neo@abp.io"),
+            LookupNormalizer.NormalizeEmail("undefined-user@abp.io")
+        });
+
+        users.Count.ShouldBe(2);
+        users.ShouldContain(u => u.Id == TestData.UserJohnId);
+        users.ShouldContain(u => u.Id == TestData.UserNeoId);
+    }
+
+    [Fact]
+    public async Task GetUsersByLoginAsync()
+    {
+        var users = await UserRepository.GetUsersByLoginAsync("github", "john");
+        users.Count.ShouldBe(1);
+        users.ShouldContain(u => u.Id == TestData.UserJohnId);
+
+        users = await UserRepository.GetUsersByLoginAsync("github", "undefined-user");
+        users.Count.ShouldBe(0);
+    }
+
+    [Fact]
+    public async Task GetUsersByPasskeyIdAsync()
+    {
+        var users = await UserRepository.GetUsersByPasskeyIdAsync(TestData.PasskeyCredentialId1);
+        users.Count.ShouldBe(1);
+        users.ShouldContain(u => u.Id == TestData.UserJohnId);
+
+        users = await UserRepository.GetUsersByPasskeyIdAsync(TestData.PasskeyCredentialId3);
+        users.Count.ShouldBe(1);
+        users.ShouldContain(u => u.Id == TestData.UserNeoId);
+
+        users = await UserRepository.GetUsersByPasskeyIdAsync((byte[])[1, 2, 3]);
+        users.Count.ShouldBe(0);
+    }
+
+    [Fact]
+    public async Task FindByNormalizedUserNameAsync_With_TenantId()
+    {
+        var tenantId = Guid.NewGuid();
+        var tenantUser = new IdentityUser(Guid.NewGuid(), "tenant.user", "tenant.user@abp.io", tenantId);
+
+        await UserRepository.InsertAsync(tenantUser, autoSave: true);
+
+        using (CurrentTenant.Change(tenantId))
+        {
+            var user = await UserRepository.FindByNormalizedUserNameAsync(
+                tenantId,
+                LookupNormalizer.NormalizeName("tenant.user")
+            );
+
+            user.ShouldNotBeNull();
+            user.Id.ShouldBe(tenantUser.Id);
+        }
+
+        (await UserRepository.FindByNormalizedUserNameAsync(
+            tenantId,
+            LookupNormalizer.NormalizeName("tenant.user")
+        )).ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task FindByNormalizedEmailAsync_With_TenantId()
+    {
+        var tenantId = Guid.NewGuid();
+        var tenantUser = new IdentityUser(Guid.NewGuid(), "tenant.email", "tenant.email@abp.io", tenantId);
+
+        await UserRepository.InsertAsync(tenantUser, autoSave: true);
+
+        using (CurrentTenant.Change(tenantId))
+        {
+            var user = await UserRepository.FindByNormalizedEmailAsync(
+                tenantId,
+                LookupNormalizer.NormalizeEmail("tenant.email@abp.io")
+            );
+
+            user.ShouldNotBeNull();
+            user.Id.ShouldBe(tenantUser.Id);
+        }
+
+        (await UserRepository.FindByNormalizedEmailAsync(
+            tenantId,
+            LookupNormalizer.NormalizeEmail("tenant.email@abp.io")
+        )).ShouldBeNull();
     }
 }

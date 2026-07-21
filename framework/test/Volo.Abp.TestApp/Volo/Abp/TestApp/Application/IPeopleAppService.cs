@@ -20,6 +20,10 @@ public interface IPeopleAppService : ICrudAppService<PersonDto, Guid>
 
     Task GetWithAuthorized();
 
+    Task GetWithAllowAnonymous();
+
+    Task GetWithAuthorizePolicy();
+
     Task<GetWithComplexTypeInput> GetWithComplexType(GetWithComplexTypeInput input);
 
     Task<IRemoteStreamContent> DownloadAsync();
@@ -35,4 +39,12 @@ public interface IPeopleAppService : ICrudAppService<PersonDto, Guid>
     Task<string> GetParamsFromQueryAsync(GetParamsInput input);
 
     Task<string> GetParamsFromFormAsync(GetParamsInput input);
+
+    Task<string> EchoStatusAsync();
+
+    Task<string> EchoStatusWithProducesJsonAsync();
+
+    Task<IRemoteStreamContent> GetBinaryImageAsync();
+
+    Task<string> ThrowFromStringAsync();
 }

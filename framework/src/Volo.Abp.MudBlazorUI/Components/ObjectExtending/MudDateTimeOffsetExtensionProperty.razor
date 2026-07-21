@@ -1,0 +1,32 @@
+@typeparam TEntity
+@typeparam TResourceType
+@using Volo.Abp.Localization
+@using Volo.Abp.ObjectExtending
+@inherits MudExtensionPropertyComponentBase<TEntity, TResourceType>
+
+@if (PropertyInfo != null && Entity != null)
+{
+    @if (PropertyInfo.IsDate())
+    {
+        <MudDatePicker T="DateTime?"
+                       Label="@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                       @bind-Date="@DateOnlyValue"
+                       Disabled="IsReadonlyField"
+                       Validation="@((Func<DateTime?, string?>)(v => Validate(v)))"
+                       DateFormat="@GetDateFormat()" />
+    }
+    else
+    {
+        <MudStack Row="true" Spacing="2">
+            <MudDatePicker T="DateTime?"
+                           Label="@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                           @bind-Date="@DateValue"
+                           Disabled="IsReadonlyField"
+                           DateFormat="@GetDateFormat()" />
+            <MudTimePicker T="TimeSpan?"
+                           Label="@GetTimeLabel()"
+                           @bind-Time="@TimeValue"
+                           Disabled="IsReadonlyField" />
+        </MudStack>
+    }
+}

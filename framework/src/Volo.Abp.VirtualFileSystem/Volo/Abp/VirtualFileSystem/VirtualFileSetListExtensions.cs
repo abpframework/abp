@@ -66,6 +66,14 @@ public static class VirtualFileSetListExtensions
         [NotNull] this VirtualFileSetList fileSets,
         [NotNull] string physicalPath)
     {
+        ReplaceEmbeddedByPhysical<T>(fileSets, physicalPath, ExclusionFilters.Sensitive);
+    }
+
+    public static void ReplaceEmbeddedByPhysical<T>(
+        [NotNull] this VirtualFileSetList fileSets,
+        [NotNull] string physicalPath,
+        ExclusionFilters exclusionFilters)
+    {
         Check.NotNull(fileSets, nameof(fileSets));
         Check.NotNullOrWhiteSpace(physicalPath, nameof(physicalPath));
 
@@ -83,7 +91,7 @@ public static class VirtualFileSetListExtensions
                     thisPath = Path.Combine(thisPath, embeddedVirtualFileSet.BaseFolder!);
                 }
 
-                fileSets[i] = new PhysicalVirtualFileSetInfo(new PhysicalFileProvider(thisPath), thisPath);
+                fileSets[i] = new PhysicalVirtualFileSetInfo(new PhysicalFileProvider(thisPath, exclusionFilters), thisPath);
             }
         }
     }

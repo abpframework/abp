@@ -1,0 +1,51 @@
+@page "/setting-management"
+@page "/{culture}/setting-management"
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Components
+@using Volo.Abp.Features
+@attribute [Authorize]
+@attribute [RequiresFeature(SettingManagementFeatures.Enable)]
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.UI.Navigation.Localization.Resource
+@inject IStringLocalizer<AbpUiNavigationResource> LUiNavigation
+@using global::MudBlazor
+
+@* ************************* PAGE HEADER ************************* *@
+<PageHeader Title="@L["Settings"]" BreadcrumbItems="@BreadcrumbItems" />
+
+<MudCard Style="min-height: 400px;">
+    <MudCardContent Class="pt-3">
+        @if (_loading)
+        {
+            <div class="d-flex justify-center align-center" style="min-height: 360px;">
+                <MudProgressCircular Indeterminate="true" Color="Color.Primary" />
+            </div>
+        }
+        else if (SettingComponentCreationContext != null && SettingComponentCreationContext.Groups.Any())
+        {
+            <MudTabs @bind-ActivePanelIndex="@_activeTabIndex"
+                    Variant="Variant.Pills"
+                    Position="Position.Left"
+                    PanelClass="pa-4 overflow-auto"
+                    Style="min-width: 0; overflow: hidden;">
+                @foreach (var group in SettingComponentCreationContext.Groups)
+                {
+                    <MudTabPanel Text="@group.DisplayName">
+                        <div style="width: 100%">
+                            @{
+                                SettingItemRenders.Add(builder =>
+                                {
+                                    builder.OpenComponent(0, group.ComponentType);
+                                    builder.CloseComponent();
+                                });
+                            }
+
+                            @SettingItemRenders.Last()
+                        </div>
+                    </MudTabPanel>
+                }
+            </MudTabs>
+        }
+    </MudCardContent>
+</MudCard>
+

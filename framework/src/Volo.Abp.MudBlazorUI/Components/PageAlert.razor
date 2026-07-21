@@ -1,0 +1,18 @@
+@using MudBlazor
+
+@foreach (var alert in Alerts)
+{
+    if (alert.IsVisible)
+    {
+        <MudAlert Severity="@GetAlertSeverity(alert.AlertMessage.Type)"
+                  ShowCloseIcon="@alert.AlertMessage.Dismissible"
+                  CloseIconClicked="() => alert.IsVisible = false"
+                  Class="mb-2">
+            @if (!string.IsNullOrEmpty(alert.AlertMessage.Title))
+            {
+                <MudText Typo="Typo.h6" Class="alert-heading">@alert.AlertMessage.Title</MudText>
+            }
+            <MudText>@alert.AlertMessage.Text</MudText>
+        </MudAlert>
+    }
+}

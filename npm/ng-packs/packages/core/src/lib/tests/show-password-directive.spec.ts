@@ -1,37 +1,46 @@
-import { Component, DebugElement, ChangeDetectorRef } from '@angular/core';
+import { Component, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ShowPasswordDirective } from '../directives';
-
+import { setInputSignal } from './utils';
 @Component({
-  template: ` <input [abpShowPassword]="true" />
-    <input [abpShowPassword]="false" />
+  template: ` <input abpShowPassword />
+    <input abpShowPassword />
     <input />
-    <input [abpShowPassword]="showPassword" />`,
+    <input abpShowPassword />`,
   imports: [ShowPasswordDirective],
 })
-class TestComponent {
-  showPassword = false;
-}
+class TestComponent {}
 
 describe('ShowPasswordDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
   let des: DebugElement[];
   let desAll: DebugElement[];
-  let bareInput;
+
+  const detectChanges = () => {
+    fixture.detectChanges();
+    TestBed.flushEffects();
+  };
+
+  const setShowPassword = (index: number, value: boolean) => {
+    setInputSignal(des[index].injector.get(ShowPasswordDirective).abpShowPassword, value);
+    detectChanges();
+  };
 
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
       imports: [TestComponent],
     }).createComponent(TestComponent);
 
-    fixture.detectChanges();
+    detectChanges();
 
     des = fixture.debugElement.queryAll(By.directive(ShowPasswordDirective));
 
     desAll = fixture.debugElement.queryAll(By.all());
 
-    bareInput = fixture.debugElement.query(By.css('input:not([abpShowPassword])'));
+    setShowPassword(0, true);
+    setShowPassword(1, false);
+    setShowPassword(2, false);
   });
 
   it('should have three input has ShowPasswordDirective elements', () => {
@@ -52,11 +61,7 @@ describe('ShowPasswordDirective', () => {
     const input = des[2].nativeElement;
     expect(input.type).toBe('password');
 
-    fixture.componentInstance.showPassword = true;
-
-    const cdr = fixture.componentRef.injector.get(ChangeDetectorRef);
-    cdr.markForCheck();
-    cdr.detectChanges();
+    setShowPassword(2, true);
 
     expect(input.type).toBe('text');
   });

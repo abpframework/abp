@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Roles;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.Identity;
@@ -83,7 +84,7 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
             result.CreatedAdminUser = true;
 
             //"admin" role
-            const string adminRoleName = "admin";
+            const string adminRoleName = AbpRoleConsts.AdminRoleName;
             var adminRole =
                 await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName(adminRoleName));
             if (adminRole == null)

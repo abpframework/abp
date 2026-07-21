@@ -687,7 +687,7 @@ public abstract class ProjectCreationCommandBase
 
     protected virtual Theme? GetThemeByTemplateOrNull(CommandLineArgs commandLineArgs, string template = "app")
     {
-        var theme = commandLineArgs.Options.GetOrNull(Options.Theme.Long)?.ToLower();
+        var theme = commandLineArgs.Options.GetOrNull(Options.Theme.Long)?.ToLowerInvariant();
 
         return template switch
         {
@@ -725,7 +725,7 @@ public abstract class ProjectCreationCommandBase
             return null;
         }
 
-        var themeStyle = commandLineArgs.Options.GetOrNull(Options.ThemeStyle.Long)?.ToLower();
+        var themeStyle = commandLineArgs.Options.GetOrNull(Options.ThemeStyle.Long)?.ToLowerInvariant();
 
         return themeStyle switch
         {
@@ -803,9 +803,9 @@ public abstract class ProjectCreationCommandBase
 
         var commandBuilder = new StringBuilder($"npx ng g @abp/ng.schematics:create-lib --package-name {libraryName}");
 
-        commandBuilder.Append($" --is-secondary-entrypoint {isSecondaryEndpoint.ToString().ToLower()}");
-        commandBuilder.Append($" --is-module-template {isModuleTemplate.ToString().ToLower()}");
-        commandBuilder.Append($" --override {isOverride.ToString().ToLower()}");
+        commandBuilder.Append($" --is-secondary-entrypoint {isSecondaryEndpoint.ToString().ToLowerInvariant()}");
+        commandBuilder.Append($" --is-module-template {isModuleTemplate.ToString().ToLowerInvariant()}");
+        commandBuilder.Append($" --override {isOverride.ToString().ToLowerInvariant()}");
 
         var result = CmdHelper.RunCmdAndGetOutput(commandBuilder.ToString(), workingDirectory);
         return await Task.FromResult(result);

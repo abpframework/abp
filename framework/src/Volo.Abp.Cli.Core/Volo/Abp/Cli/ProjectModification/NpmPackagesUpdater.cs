@@ -359,16 +359,36 @@ public class NpmPackagesUpdater : ITransientDependency
 
             var properties = dependencies.Properties().ToList();
 
-            abpPackages
-                .AddRange(
-                properties.Where(
-                      p => p.Name.StartsWith("@abp/")
-                        || p.Name.StartsWith("@volo/")
-                        || p.Name.StartsWith("@volosoft/")).ToList()
-                );
+            foreach (var p in properties.Where(
+                         p => p.Name.StartsWith("@abp/")
+                           || p.Name.StartsWith("@volo/")
+                           || p.Name.StartsWith("@volosoft/")))
+            {
+                if (IsValidNpmPackageName(p.Name))
+                {
+                    abpPackages.Add(p);
+                }
+                else
+                {
+                    Logger.LogWarning($"Skipping invalid npm package name: {NpmHelper.SanitizeForLog(p.Name)}");
+                }
+            }
         }
 
         return abpPackages;
+    }
+
+    public static bool IsValidNpmPackageName(string packageName)
+    {
+        try
+        {
+            NpmHelper.EnsureSafePackageName(packageName);
+            return true;
+        }
+        catch (CliUsageException)
+        {
+            return false;
+        }
     }
 
     protected virtual async Task RunInstallLibsAsync(string fileDirectory)
@@ -380,13 +400,13 @@ public class NpmPackagesUpdater : ITransientDependency
     protected virtual void RunYarn(string fileDirectory)
     {
         Logger.LogInformation($"Running Yarn on {fileDirectory}");
-        CmdHelper.RunCmd($"npx yarn", fileDirectory);
+        CmdHelper.RunCmd($"npx yarn --ignore-scripts", fileDirectory);
     }
 
     protected virtual void RunNpmInstall(string fileDirectory)
     {
         Logger.LogInformation($"Running npm install on {fileDirectory}");
-        CmdHelper.RunCmd($"npm install", fileDirectory);
+        CmdHelper.RunCmd($"npm install --ignore-scripts", fileDirectory);
     }
 
     protected virtual List<string> GetPackageVersionList(JProperty package, string workingDirectory = null)

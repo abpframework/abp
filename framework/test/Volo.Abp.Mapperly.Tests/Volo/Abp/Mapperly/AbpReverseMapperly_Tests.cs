@@ -1,6 +1,9 @@
+using System;
 using Microsoft.Extensions.DependencyInjection;
 using Riok.Mapperly.Abstractions;
 using Shouldly;
+using Volo.Abp.Data;
+using Volo.Abp.Mapperly.SampleClasses;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Testing;
 using Xunit;
@@ -28,18 +31,18 @@ public partial class MyReverseClassMapper : TwoWayMapperBase<MyReverseClass, MyR
 
     public override partial void Map(MyReverseClass source, MyReverseClassDto destination);
 
-    public override partial MyReverseClass ReverseMap(MyReverseClassDto destination);
+    public override partial MyReverseClass ReverseMap(MyReverseClassDto source);
 
-    public override partial void ReverseMap(MyReverseClassDto destination, MyReverseClass source);
+    public override partial void ReverseMap(MyReverseClassDto source, MyReverseClass destination);
 
-    public override void BeforeReverseMap(MyReverseClassDto destination)
+    public override void BeforeReverseMap(MyReverseClassDto source)
     {
-        destination.Name = "BeforeReverseMap " + destination.Name;
+        source.Name = "BeforeReverseMap " + source.Name;
     }
 
-    public override void AfterReverseMap(MyReverseClassDto destination, MyReverseClass source)
+    public override void AfterReverseMap(MyReverseClassDto source, MyReverseClass destination)
     {
-        source.Name = destination.Name + " AfterReverseMap";
+        destination.Name = source.Name + " AfterReverseMap";
     }
 }
 
@@ -82,5 +85,18 @@ public class AbpReverseMapperly_Tests : AbpIntegratedTest<MapperlyTestModule>
 
         myClass.Id.ShouldBe("2");
         myClass.Name.ShouldBe("BeforeReverseMap Test2 AfterReverseMap");
+    }
+
+    [Fact]
+    public void MapExtraProperties_Should_Filter_With_Single_Parameter_ReverseMap()
+    {
+        var dto = new ExtensibleReverseDto { Id = Guid.NewGuid() }
+            .SetProperty("Tag", "ok")
+            .SetProperty("Secret", "leaked");
+
+        var entity = _objectMapper.Map<ExtensibleReverseDto, ExtensibleReverseEntity>(dto);
+
+        entity.GetProperty<string>("Tag").ShouldBe("ok");
+        entity.HasProperty("Secret").ShouldBeFalse();
     }
 }

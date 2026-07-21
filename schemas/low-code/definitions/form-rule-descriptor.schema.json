@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "form-rule-descriptor.schema.json",
+  "title": "FormRuleDescriptor",
+  "description": "Describes a conditional form rule with one or more actions that execute when the condition is met.",
+  "markdownDescription": "AI guidance: use rules for simple client-side behavior such as hiding a group when a checkbox is false, disabling a field after a status is selected, or setting a default value. `condition.fieldId` and every action `targetId` must reference existing field/group ids. Rules are not security boundaries; enforce sensitive behavior with backend validation/interceptors too.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for this rule. Prefer kebab-case or camelCase such as 'show-archive-reason'.",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable name for this rule, used by designers/documentation."
+    },
+    "condition": {
+      "type": "object",
+      "description": "The condition that triggers this rule. For isEmpty/isNotEmpty, omit value.",
+      "properties": {
+        "fieldId": {
+          "type": "string",
+          "description": "The field whose value is evaluated. Must match a field id in the same form.",
+          "minLength": 1
+        },
+        "operator": {
+          "type": "string",
+          "enum": ["equals", "notEquals", "isEmpty", "isNotEmpty"],
+          "description": "Comparison operator. Use equals/notEquals with value; use isEmpty/isNotEmpty without value."
+        },
+        "value": {
+          "description": "The value to compare against (not used for isEmpty/isNotEmpty)"
+        }
+      },
+      "required": ["fieldId", "operator"],
+      "additionalProperties": false
+    },
+    "actions": {
+      "type": "array",
+      "description": "Actions to perform when the condition is met. Actions are executed in order.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["hide", "show", "disable", "enable", "setValue"],
+            "description": "The action type. hide/show/disable/enable target fields or groups; setValue targets fields."
+          },
+          "targetType": {
+            "type": "string",
+            "enum": ["field", "group"],
+            "description": "Whether the target is a field or a group."
+          },
+          "targetId": {
+            "type": "string",
+            "description": "The id of the target field or group. Must exist in this form's fields or layout groups.",
+            "minLength": 1
+          },
+          "value": {
+            "description": "The value to set. Used only for setValue actions."
+          }
+        },
+        "required": ["type", "targetType", "targetId"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["id", "condition", "actions"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "id": "show-archive-reason",
+      "name": "Show archive reason",
+      "condition": { "fieldId": "status", "operator": "equals", "value": 3 },
+      "actions": [
+        { "type": "show", "targetType": "field", "targetId": "archiveReason" }
+      ]
+    }
+  ]
+}

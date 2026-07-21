@@ -33,7 +33,7 @@ public abstract class ProxyCommandBase<T> : IConsoleCommand, ITransientDependenc
 
     public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
     {
-        var generateType = commandLineArgs.Options.GetOrNull(Options.GenerateType.Short, Options.GenerateType.Long)?.ToUpper();
+        var generateType = commandLineArgs.Options.GetOrNull(Options.GenerateType.Short, Options.GenerateType.Long)?.ToUpperInvariant();
 
         if (string.IsNullOrWhiteSpace(generateType))
         {
@@ -75,9 +75,9 @@ public abstract class ProxyCommandBase<T> : IConsoleCommand, ITransientDependenc
         ServiceType? serviceType = null;
         if (!serviceTypeArg.IsNullOrWhiteSpace())
         {
-            serviceType = serviceTypeArg.ToLower() == "application"
+            serviceType = serviceTypeArg.ToLowerInvariant() == "application"
                 ? ServiceType.Application
-                : serviceTypeArg.ToLower() == "integration"
+                : serviceTypeArg.ToLowerInvariant() == "integration"
                     ? ServiceType.Integration
                     : ServiceType.All;
         }

@@ -112,6 +112,72 @@ public class FeatureAppService_Tests : FeatureManagementApplicationTestBase
         Assert.Null(exception);
     }
 
+    [Fact]
+    public async Task GetAsync_Should_Not_Return_Features_With_Disallowed_Provider()
+    {
+        Login(_testData.User1Id);
+
+        var editionFeatures = await _featureAppService.GetAsync(
+            EditionFeatureValueProvider.ProviderName,
+            TestEditionIds.Regular.ToString());
+
+        editionFeatures.Groups.SelectMany(g => g.Features)
+            .ShouldNotContain(feature => feature.Name == TestFeatureDefinitionProvider.TenantOnlyFeature);
+
+        var tenantFeatures = await _featureAppService.GetAsync(
+            TenantFeatureValueProvider.ProviderName,
+            Guid.NewGuid().ToString());
+
+        tenantFeatures.Groups.SelectMany(g => g.Features)
+            .ShouldContain(feature => feature.Name == TestFeatureDefinitionProvider.TenantOnlyFeature);
+    }
+
+    [Fact]
+    public async Task GetAsync_Should_Not_Return_Orphan_Child_When_Parent_Is_Disallowed()
+    {
+        Login(_testData.User1Id);
+
+        var editionFeatures = await _featureAppService.GetAsync(
+            EditionFeatureValueProvider.ProviderName,
+            TestEditionIds.Regular.ToString());
+
+        var featureNames = editionFeatures.Groups.SelectMany(g => g.Features).Select(f => f.Name).ToList();
+        featureNames.ShouldNotContain(TestFeatureDefinitionProvider.TenantOnlyParentFeature);
+        featureNames.ShouldNotContain(TestFeatureDefinitionProvider.OrphanChildOfTenantOnly);
+
+        var tenantFeatures = await _featureAppService.GetAsync(
+            TenantFeatureValueProvider.ProviderName,
+            Guid.NewGuid().ToString());
+
+        var tenantNames = tenantFeatures.Groups.SelectMany(g => g.Features).Select(f => f.Name).ToList();
+        tenantNames.ShouldContain(TestFeatureDefinitionProvider.TenantOnlyParentFeature);
+        tenantNames.ShouldContain(TestFeatureDefinitionProvider.OrphanChildOfTenantOnly);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_Should_Throw_Exception_For_Disallowed_Provider()
+    {
+        Login(_testData.User1Id);
+
+        await Assert.ThrowsAsync<AbpException>(async () =>
+        {
+            await _featureAppService.UpdateAsync(
+                EditionFeatureValueProvider.ProviderName,
+                TestEditionIds.Regular.ToString(),
+                new UpdateFeaturesDto
+                {
+                    Features = new List<UpdateFeatureDto>
+                    {
+                        new UpdateFeatureDto
+                        {
+                            Name = TestFeatureDefinitionProvider.TenantOnlyFeature,
+                            Value = true.ToString().ToLowerInvariant()
+                        }
+                    }
+                });
+        });
+    }
+
     private void Login(Guid userId)
     {
         _currentUser.Id.Returns(userId);

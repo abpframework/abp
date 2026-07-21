@@ -48,17 +48,17 @@ public class VoloOpenLdapManager : OpenLdapManager
 
     }
 
-    protected override async Task<string> NormalizeUserNameAsync(string userName)
+    protected override Task<string> NormalizeUserNameAsync(string userName)
     {
-        // or "userName@domain 
+        // or "userName@domain"
         // await LdapSettingProvider.GetDomainAsync()
         return Task.FromResult($"Volo\\{userName}");
     }
 
     protected override Task<string> GetUserFilterAsync(string userName)
     {
-        // Default is $"cn={userName},{LdapOptions.BaseDc}"
-        return return Task.FromResult($"(&(objectClass=user)(sAMAccountName={userName}))");
+        // Default is $"(&(uid={userName}))"
+        return Task.FromResult($"(&(objectClass=user)(sAMAccountName={userName}))");
     }
 
     protected override Task<string> GetUserEmailAsync(LdapEntry ldapEntry)
@@ -96,10 +96,10 @@ public class VoloLdapExternalLoginProvider : LdapExternalLoginProvider
 
     }
 
-    protected override async Task<string> NormalizeUserNameAsync(string userName)
+    protected override Task<string> NormalizeUserNameAsync(string userName)
     {
         // Default is $"uid={userName}, {BaseDc}"
-        // or "userName@domain 
+        // or "userName@domain"
         // await LdapSettingProvider.GetDomainAsync()
         return Task.FromResult($"Volo\\{userName}");
     }
@@ -128,5 +128,3 @@ The following simple Dotnet Console App is for testing your LDAP configuration.
 Before configuring your LDAP settings, you can test the information via this app to see if it works.
 
 [ABP Ldap Test Application](https://github.com/abpframework/abp-samples/tree/master/AbpLdapSample)
-
-

@@ -36,15 +36,17 @@ public class AbpMongoDbModule : AbpModule
             typeof(UnitOfWorkMongoDbContextProvider<>)
         );
 
-        context.Services.TryAddTransient(
-            typeof(IMongoDbRepositoryFilterer<>),
-            typeof(MongoDbRepositoryFilterer<>)
-        );
+        context.Services.TryAddEnumerable(
+            ServiceDescriptor.Transient(
+                typeof(IMongoDbRepositoryFilterer<>),
+                typeof(MongoDbRepositoryFilterer<>)
+            ));
 
-        context.Services.TryAddTransient(
-            typeof(IMongoDbRepositoryFilterer<,>),
-            typeof(MongoDbRepositoryFilterer<,>)
-        );
+        context.Services.TryAddEnumerable(
+            ServiceDescriptor.Transient(
+                typeof(IMongoDbRepositoryFilterer<,>),
+                typeof(MongoDbRepositoryFilterer<,>)
+            ));
 
         context.Services.AddTransient(
             typeof(IMongoDbContextEventOutbox<>),

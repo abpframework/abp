@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -115,11 +116,16 @@ public class ResourcePermissionChecker : IResourcePermissionChecker, ITransientD
         var multiTenancySide = claimsPrincipal?.GetMultiTenancySide() ??
                                CurrentTenant.GetMultiTenancySide();
 
+        var allResourcePermissions = (await PermissionDefinitionManager.GetResourcePermissionsAsync())
+            .Where(p => p.ResourceName == resourceName)
+            .ToDictionary(p => p.Name, StringComparer.Ordinal);
+
+        var pendingStateCheck = new List<PermissionDefinition>();
         var permissionDefinitions = new List<PermissionDefinition>();
+
         foreach (var name in names)
         {
-            var permission = await PermissionDefinitionManager.GetResourcePermissionOrNullAsync(resourceName, name);
-            if (permission == null)
+            if (!allResourcePermissions.TryGetValue(name, out var permission))
             {
                 result.Result.Add(name, PermissionGrantResult.Prohibited);
                 continue;
@@ -127,11 +133,23 @@ public class ResourcePermissionChecker : IResourcePermissionChecker, ITransientD
 
             result.Result.Add(name, PermissionGrantResult.Undefined);
 
-            if (permission.IsEnabled &&
-                await StateCheckerManager.IsEnabledAsync(permission) &&
-                permission.MultiTenancySide.HasFlag(multiTenancySide))
+            if (!permission.IsEnabled || !permission.MultiTenancySide.HasFlag(multiTenancySide))
             {
-                permissionDefinitions.Add(permission);
+                continue;
+            }
+
+            pendingStateCheck.Add(permission);
+        }
+
+        if (pendingStateCheck.Count > 0)
+        {
+            var stateCheckResult = await StateCheckerManager.IsEnabledAsync(pendingStateCheck.ToArray());
+            foreach (var item in stateCheckResult)
+            {
+                if (item.Value)
+                {
+                    permissionDefinitions.Add(item.Key);
+                }
             }
         }
 

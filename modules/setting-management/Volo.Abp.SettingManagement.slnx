@@ -5,6 +5,9 @@
   <Folder Name="/src/">
     <Project Path="src/Volo.Abp.SettingManagement.Application.Contracts/Volo.Abp.SettingManagement.Application.Contracts.csproj" />
     <Project Path="src/Volo.Abp.SettingManagement.Application/Volo.Abp.SettingManagement.Application.csproj" />
+    <Project Path="src/Volo.Abp.SettingManagement.Blazor.MudBlazor.Server/Volo.Abp.SettingManagement.Blazor.MudBlazor.Server.csproj" />
+    <Project Path="src/Volo.Abp.SettingManagement.Blazor.MudBlazor.WebAssembly/Volo.Abp.SettingManagement.Blazor.MudBlazor.WebAssembly.csproj" />
+    <Project Path="src/Volo.Abp.SettingManagement.Blazor.MudBlazor/Volo.Abp.SettingManagement.Blazor.MudBlazor.csproj" />
     <Project Path="src/Volo.Abp.SettingManagement.Blazor.Server/Volo.Abp.SettingManagement.Blazor.Server.csproj" />
     <Project Path="src/Volo.Abp.SettingManagement.Blazor.WebAssembly/Volo.Abp.SettingManagement.Blazor.WebAssembly.csproj" />
     <Project Path="src/Volo.Abp.SettingManagement.Blazor/Volo.Abp.SettingManagement.Blazor.csproj" />

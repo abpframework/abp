@@ -3,11 +3,14 @@
 @using Volo.Abp.Account.Localization
 @using Volo.Abp.Account.Web.Pages.Account
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @inject IThemeManager ThemeManager
+@inject IPageLayout PageLayout
 @inject IHtmlLocalizer<AccountResource> L
 @model ManageModel
 @{
     Layout = ThemeManager.CurrentTheme.GetApplicationLayout();
+    PageLayout.Content.Title = L["MyAccount"].Value;
 }
 @section scripts {
     <abp-script-bundle name="@typeof(ManageModel).FullName"/>

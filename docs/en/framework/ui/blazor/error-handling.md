@@ -10,7 +10,8 @@
 ````json
 //[doc-params]
 {
-    "UI": ["Blazor", "BlazorServer"]
+    "UI": ["Blazor", "BlazorServer"],
+    "BlazorUI": ["Blazorise", "MudBlazor"]
 }
 ````
 
@@ -36,7 +37,9 @@ There are different type of `Exception` classes handled differently by the ABP.
 
 **Example**
 
-````csharp
+{{if BlazorUI == "Blazorise"}}
+
+````razor
 @page "/"
 @using Volo.Abp
 
@@ -60,11 +63,41 @@ There are different type of `Exception` classes handled differently by the ABP.
 
 {{end}}
 
+{{if BlazorUI == "MudBlazor"}}
+
+````razor
+@page "/"
+@using Volo.Abp
+
+<MudButton OnClick="TestException" Variant="Variant.Filled" Color="Color.Primary">Throw test exception</MudButton>
+
+@code
+{
+    private async Task TestException()
+    {
+        try
+        {
+            throw new UserFriendlyException("A user friendly error message!");
+        }
+        catch(UserFriendlyException ex)
+        {
+            await HandleErrorAsync(ex);
+        }
+    }
+}
+````
+
+{{end}}
+
+{{end}}
+
 {{if UI == "Blazor"}}
 
 **Example**
 
-````csharp
+{{if BlazorUI == "Blazorise"}}
+
+````razor
 @page "/"
 @using Volo.Abp
 
@@ -78,6 +111,28 @@ There are different type of `Exception` classes handled differently by the ABP.
     }
 }
 ````
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+````razor
+@page "/"
+@using Volo.Abp
+
+<MudButton OnClick="TestException" Variant="Variant.Filled" Color="Color.Primary">Throw test exception</MudButton>
+
+@code
+{
+    private void TestException()
+    {
+        throw new UserFriendlyException("A user friendly error message!");
+    }
+}
+````
+
+{{end}}
+
 {{end}}
 
 ABP automatically handle the exception and show an error message to the user:

@@ -1,0 +1,32 @@
+@typeparam TEntityType
+@typeparam TResourceType
+@using Volo.Abp.Data
+
+@{
+    Entity.SetDefaultsForExtraProperties();
+
+    foreach (var propertyInfo in Properties)
+    {
+        if (!propertyInfo.Name.EndsWith("_Text"))
+        {
+            if (propertyInfo.IsEnum())
+            {
+                <MudSelectExtensionProperty PropertyInfo="@propertyInfo" Entity="@Entity" TEntity="TEntityType" TResourceType="TResourceType" LH="@LH" ModalType="@ModalType" />
+            }
+            else if (!propertyInfo.Lookup.Url.IsNullOrEmpty())
+            {
+                <MudLookupExtensionProperty PropertyInfo="@propertyInfo" Entity="@Entity" TEntity="TEntityType" TResourceType="TResourceType" LH="@LH" ModalType="@ModalType" />
+            }
+            else
+            {
+                var inputType = propertyInfo.GetInputType();
+                __builder.OpenComponent(0, inputType.MakeGenericType(new[] { typeof(TEntityType), typeof(TResourceType) }));
+                __builder.AddAttribute(1, "PropertyInfo", propertyInfo);
+                __builder.AddAttribute(2, "Entity", Entity);
+                __builder.AddAttribute(3, "LH", LH);
+                __builder.AddAttribute(4, "ModalType", ModalType);
+                __builder.CloseComponent();
+            }
+        }
+    }
+}

@@ -36,6 +36,20 @@ More providers will be implemented by the time. You can [request](https://github
 
 Multiple providers **can be used together** by the help of the **container system**, where each container can uses a different provider.
 
+### S3 Compatibility
+
+The [AWS provider](./aws.md) supports not only Amazon S3 but also **S3-compatible APIs** from various cloud providers and self-hosted solutions. This means you can use the same AWS provider to connect to:
+
+* **Amazon S3** - The original AWS S3 service
+* **MinIO** - Self-hosted S3-compatible object storage
+* **Cloudflare R2** - Cloudflare's S3-compatible object storage
+* **DigitalOcean Spaces** - DigitalOcean's S3-compatible object storage
+* **Wasabi** - S3-compatible cloud storage
+* **Backblaze B2** - S3-compatible cloud storage
+* **Any other S3-compatible storage** - Including private cloud solutions
+
+To use S3-compatible services, configure the `ServiceURL` property in the AWS provider configuration to point to your S3-compatible endpoint. Some services (e.g., Cloudflare R2) also require `DisablePayloadSigning = true` because they do not implement the streaming chunked payload signing that AWS SDK v4 uses by default. See the [AWS provider document](aws.md) for full configuration examples.
+
 > BLOB storing system can not work unless you **configure a storage provider**. Refer to the linked documents for the storage provider configurations.
 
 ## Installation

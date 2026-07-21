@@ -124,8 +124,11 @@ public class AbpIdentityTestDataBuilder : ITransientDependency
 
     private async Task AddUsers()
     {
-        var adminUser = new IdentityUser(_guidGenerator.Create(), "administrator", "admin@abp.io");
+        var adminUser = new IdentityUser(_testData.UserAdminId, "administrator", "administrator@abp.io");
         adminUser.AddRole(_adminRole.Id);
+        adminUser.AddRole(_moderatorRole.Id);
+        adminUser.AddRole(_supporterRole.Id);
+        adminUser.AddRole(_managerRole.Id);
         adminUser.AddClaim(_guidGenerator, new Claim("TestClaimType", "42"));
         await _userRepository.InsertAsync(adminUser);
 

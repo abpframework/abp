@@ -165,7 +165,7 @@ public class CliService : ITransientDependency
 
             promptInput = GetPromptInput();
 
-        } while (promptInput?.ToLower() != "exit");
+        } while (promptInput?.ToLowerInvariant() != "exit");
     }
 
     private async Task RunBatchAsync(CommandLineArgs commandLineArgs)

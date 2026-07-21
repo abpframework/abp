@@ -1,0 +1,52 @@
+@namespace Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme.Themes.Basic
+@using Volo.Abp.Users
+@using Volo.Abp.MultiTenancy
+@using Microsoft.Extensions.Localization
+@using global::Localization.Resources.AbpUi
+@using Microsoft.AspNetCore.Components.Authorization
+@using Volo.Abp.UI.Navigation
+@implements IDisposable
+@inject ICurrentUser CurrentUser
+@inject ICurrentTenant CurrentTenant
+@inject NavigationManager Navigation
+@inject IStringLocalizer<AbpUiResource> L
+
+<AuthorizeView>
+    <Authorized>
+        <MudMenu>
+            <ActivatorContent Context="menuCtx">
+                <MudIconButton OnClick="@(async () => await menuCtx.ToggleAsync())" Icon="@Icons.Material.Outlined.AccountCircle" Color="Color.Inherit" />
+            </ActivatorContent>
+            <ChildContent>
+            <MudMenuItem>
+                @if (CurrentTenant.Name != null)
+                {
+                    <span><i>@CurrentTenant.Name</i>\@CurrentUser.UserName</span>
+                }
+                else
+                {
+                    <span>@CurrentUser.UserName</span>
+                }
+            </MudMenuItem>
+            @if (Menu != null)
+            {
+                @foreach (var menuItem in Menu.Items)
+                {
+                    var componentType = menuItem.GetComponentTypeOrDefault();
+                    if (componentType != null)
+                    {
+                        <DynamicComponent Type="@componentType" />
+                    }
+                    else
+                    {
+                        <MudMenuItem Href="@menuItem.Url?.TrimStart('/', '~')" Target="@menuItem.Target">@menuItem.DisplayName</MudMenuItem>
+                    }
+                }
+            }
+            </ChildContent>
+        </MudMenu>
+    </Authorized>
+    <NotAuthorized>
+        <MudButton Variant="Variant.Text" Color="Color.Inherit" Href="@GetLoginUrl()">@L["Login"]</MudButton>
+    </NotAuthorized>
+</AuthorizeView>

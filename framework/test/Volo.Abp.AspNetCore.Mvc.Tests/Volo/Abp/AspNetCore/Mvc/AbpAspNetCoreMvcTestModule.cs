@@ -11,6 +11,7 @@ using Volo.Abp.AspNetCore.Mvc.GlobalFeatures;
 using Volo.Abp.AspNetCore.Mvc.Libs;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.Localization.Resource;
+using Microsoft.AspNetCore.RequestLocalization;
 using Volo.Abp.AspNetCore.Security.Claims;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Authorization;
@@ -23,6 +24,7 @@ using Volo.Abp.TestApp;
 using Volo.Abp.TestApp.Application;
 using Volo.Abp.Threading;
 using Volo.Abp.Validation.Localization;
+using Volo.Abp.FluentValidation;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.AspNetCore.Mvc;
@@ -31,7 +33,8 @@ namespace Volo.Abp.AspNetCore.Mvc;
     typeof(AbpAspNetCoreTestBaseModule),
     typeof(AbpMemoryDbTestModule),
     typeof(AbpAspNetCoreMvcModule),
-    typeof(AbpAutofacModule)
+    typeof(AbpAutofacModule),
+    typeof(AbpFluentValidationModule)
     )]
 public class AbpAspNetCoreMvcTestModule : AbpModule
 {
@@ -117,6 +120,11 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
             options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
             options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
             options.Languages.Add(new LanguageInfo("el", "el", "Ελληνικά"));
+        });
+
+        Configure<AbpRequestLocalizationOptions>(options =>
+        {
+            options.UseRouteBasedCulture = true;
         });
 
         Configure<RazorPagesOptions>(options =>

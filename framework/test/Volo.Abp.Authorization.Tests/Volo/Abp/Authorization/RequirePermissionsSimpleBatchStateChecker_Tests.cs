@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Authorization.Permissions;
@@ -56,6 +57,21 @@ public class RequirePermissionsSimpleBatchStateChecker_Tests : AuthorizationTest
         result[myStateEntities[3]].ShouldBeTrue();
     }
 
+    [Fact]
+    public async Task Current_Should_Not_Be_Null_In_Fresh_ExecutionContext()
+    {
+        _ = RequirePermissionsSimpleBatchStateChecker<MyStateEntity3>.Current;
+
+        Task<RequirePermissionsSimpleBatchStateChecker<MyStateEntity3>> task;
+        using (ExecutionContext.SuppressFlow())
+        {
+            task = Task.Run(() => RequirePermissionsSimpleBatchStateChecker<MyStateEntity3>.Current);
+        }
+
+        var current = await task;
+        current.ShouldNotBeNull();
+    }
+
     class MyStateEntity : IHasSimpleStateCheckers<MyStateEntity>
     {
         public List<ISimpleStateChecker<MyStateEntity>> StateCheckers { get; }
@@ -73,6 +89,16 @@ public class RequirePermissionsSimpleBatchStateChecker_Tests : AuthorizationTest
         public MyStateEntity2()
         {
             StateCheckers = new List<ISimpleStateChecker<MyStateEntity2>>();
+        }
+    }
+
+    class MyStateEntity3 : IHasSimpleStateCheckers<MyStateEntity3>
+    {
+        public List<ISimpleStateChecker<MyStateEntity3>> StateCheckers { get; }
+
+        public MyStateEntity3()
+        {
+            StateCheckers = new List<ISimpleStateChecker<MyStateEntity3>>();
         }
     }
 }

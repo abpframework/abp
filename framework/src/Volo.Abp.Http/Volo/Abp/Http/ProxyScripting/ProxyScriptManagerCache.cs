@@ -1,26 +1,31 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Http.ProxyScripting;
 
 public class ProxyScriptManagerCache : IProxyScriptManagerCache, ISingletonDependency
 {
-    private readonly ConcurrentDictionary<string, string> _cache;
+    private readonly ConcurrentDictionary<string, string> _cache = new();
+    private readonly ConcurrentDictionary<string, Lazy<Task<string>>> _asyncCache = new();
 
-    public ProxyScriptManagerCache()
+    public async Task<string> GetOrAddAsync(string key, Func<Task<string>> factory)
     {
-        _cache = new ConcurrentDictionary<string, string>();
-    }
+        if (_cache.TryGetValue(key, out var cached))
+        {
+            return cached;
+        }
 
-    public string GetOrAdd(string key, Func<string> factory)
-    {
-        return _cache.GetOrAdd(key, factory);
-    }
+        var result = await _asyncCache.GetOrAdd(
+            key,
+            _ => new Lazy<Task<string>>(factory, LazyThreadSafetyMode.ExecutionAndPublication)
+        ).Value;
 
-    public void Set(string key, string value)
-    {
-        _cache[key] = value;
+        _cache[key] = result;
+        _asyncCache.TryRemove(key, out _);
+
+        return result;
     }
 }

@@ -15,6 +15,8 @@ export * from './multi-tenancy-utils';
 export * from './number-utils';
 export * from './object-utils';
 export * from './queue';
+export * from './route-based-culture.utils';
+export * from './route-culture-url-matcher';
 export * from './route-utils';
 export * from './string-utils';
 export * from './tree-utils';

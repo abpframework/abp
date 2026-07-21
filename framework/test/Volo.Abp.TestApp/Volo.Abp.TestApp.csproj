@@ -6,6 +6,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <RootNamespace />
     <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

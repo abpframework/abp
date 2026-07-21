@@ -5,6 +5,16 @@
 }
 ```
 
+````json
+//[doc-nav]
+{
+  "Previous": {
+    "Name": "Running on Device",
+    "Path": "framework/ui/react-native/running-on-device"
+  }
+}
+````
+
 # Setting Up Android Emulator Without Android Studio (Windows, macOS, Linux)
 
 This guide walks you through installing and running an Android emulator **without Android Studio**, using only the **Android Command Line Tools**.

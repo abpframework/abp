@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,6 +11,12 @@ public sealed class NullLocalEventBus : ILocalEventBus
     private NullLocalEventBus()
     {
 
+    }
+
+    /// <inheritdoc/>
+    public Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
+    {
+        return Task.CompletedTask;
     }
 
     public IDisposable Subscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class
@@ -28,12 +34,30 @@ public sealed class NullLocalEventBus : ILocalEventBus
         return new List<EventTypeWithEventHandlerFactories>();
     }
 
+    /// <inheritdoc/>
+    public List<EventTypeWithEventHandlerFactories> GetDynamicEventHandlerFactories(string eventName)
+    {
+        return new List<EventTypeWithEventHandlerFactories>();
+    }
+
     public IDisposable Subscribe<TEvent, THandler>() where TEvent : class where THandler : IEventHandler, new()
     {
         return NullDisposable.Instance;
     }
 
     public IDisposable Subscribe(Type eventType, IEventHandler handler)
+    {
+        return NullDisposable.Instance;
+    }
+
+    /// <inheritdoc/>
+    public IDisposable Subscribe(string eventName, IEventHandler handler)
+    {
+        return NullDisposable.Instance;
+    }
+
+    /// <inheritdoc/>
+    public IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
     {
         return NullDisposable.Instance;
     }
@@ -73,6 +97,16 @@ public sealed class NullLocalEventBus : ILocalEventBus
 
     }
 
+    /// <inheritdoc/>
+    public void Unsubscribe(string eventName, IEventHandlerFactory factory)
+    {
+    }
+
+    /// <inheritdoc/>
+    public void Unsubscribe(string eventName, IEventHandler handler)
+    {
+    }
+
     public void UnsubscribeAll<TEvent>() where TEvent : class
     {
 
@@ -80,7 +114,11 @@ public sealed class NullLocalEventBus : ILocalEventBus
 
     public void UnsubscribeAll(Type eventType)
     {
+    }
 
+    /// <inheritdoc/>
+    public void UnsubscribeAll(string eventName)
+    {
     }
 
     public Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true) where TEvent : class

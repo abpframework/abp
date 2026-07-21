@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Modularity;
 using Volo.Abp.TestApp.Domain;
+using Volo.Abp.Uow;
 using Xunit;
 
 namespace Volo.Abp.TestApp.Testing;
@@ -100,6 +102,116 @@ public abstract class EntityChange_Tests<TStartupModule> : TestAppTestBase<TStar
         });
         concurrencyStamp.ShouldNotBe(entity.ConcurrencyStamp);
         lastModificationTime.ShouldNotBe(entity.LastModificationTime);
+    }
 
+    [Fact]
+    public async Task Should_Detect_Navigation_Changes_On_Second_SaveChanges_After_Remove_And_Add_OneToMany()
+    {
+        var entityId = Guid.NewGuid();
+        var child1Id = Guid.NewGuid();
+
+        await AppEntityWithNavigationsRepository.InsertAsync(new AppEntityWithNavigations(entityId, "TestEntity")
+        {
+            OneToMany = new List<AppEntityWithNavigationChildOneToMany>()
+            {
+                new AppEntityWithNavigationChildOneToMany(child1Id)
+                {
+                    AppEntityWithNavigationId = entityId,
+                    ChildName = "Child1"
+                }
+            }
+        });
+
+        var unitOfWorkManager = ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+
+        string concurrencyStampAfterFirstSave = null;
+
+        // Within a single UoW, remove Child1 (first SaveChanges), then add Child2 (second SaveChanges).
+        // Before the fix, the second SaveChanges would not detect the navigation change
+        // because the entity entries were removed after the first SaveChanges.
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            var originalConcurrencyStamp = entity.ConcurrencyStamp;
+
+            // Remove Child1
+            entity.OneToMany.Clear();
+            await AppEntityWithNavigationsRepository.UpdateAsync(entity);
+            await unitOfWorkManager.Current!.SaveChangesAsync();
+
+            // ConcurrencyStamp should have been updated after the first navigation change
+            entity.ConcurrencyStamp.ShouldNotBe(originalConcurrencyStamp);
+            concurrencyStampAfterFirstSave = entity.ConcurrencyStamp;
+
+            // Add Child2
+            entity.OneToMany.Add(new AppEntityWithNavigationChildOneToMany(Guid.NewGuid())
+            {
+                AppEntityWithNavigationId = entityId,
+                ChildName = "Child2"
+            });
+            await AppEntityWithNavigationsRepository.UpdateAsync(entity);
+        });
+
+        // After UoW completes, verify ConcurrencyStamp was updated again by the second SaveChanges
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            entity.ConcurrencyStamp.ShouldNotBe(concurrencyStampAfterFirstSave);
+            entity.OneToMany.Count.ShouldBe(1);
+            entity.OneToMany[0].ChildName.ShouldBe("Child2");
+        });
+    }
+
+    [Fact]
+    public async Task Should_Detect_Navigation_Changes_On_Second_SaveChanges_After_Remove_And_Add_ManyToMany()
+    {
+        var entityId = Guid.NewGuid();
+
+        await AppEntityWithNavigationsRepository.InsertAsync(new AppEntityWithNavigations(entityId, "TestEntity")
+        {
+            ManyToMany = new List<AppEntityWithNavigationChildManyToMany>()
+            {
+                new AppEntityWithNavigationChildManyToMany
+                {
+                    ChildName = "ManyToManyChild1"
+                }
+            }
+        });
+
+        var unitOfWorkManager = ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+
+        string concurrencyStampAfterFirstSave = null;
+
+        // Within a single UoW, remove ManyToManyChild1 (first SaveChanges), then add ManyToManyChild2 (second SaveChanges).
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            var originalConcurrencyStamp = entity.ConcurrencyStamp;
+
+            // Remove ManyToManyChild1
+            entity.ManyToMany.Clear();
+            await AppEntityWithNavigationsRepository.UpdateAsync(entity);
+            await unitOfWorkManager.Current!.SaveChangesAsync();
+
+            // ConcurrencyStamp should have been updated after the first navigation change
+            entity.ConcurrencyStamp.ShouldNotBe(originalConcurrencyStamp);
+            concurrencyStampAfterFirstSave = entity.ConcurrencyStamp;
+
+            // Add ManyToManyChild2
+            entity.ManyToMany.Add(new AppEntityWithNavigationChildManyToMany
+            {
+                ChildName = "ManyToManyChild2"
+            });
+            await AppEntityWithNavigationsRepository.UpdateAsync(entity);
+        });
+
+        // After UoW completes, verify ConcurrencyStamp was updated again by the second SaveChanges
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var entity = await AppEntityWithNavigationsRepository.GetAsync(entityId);
+            entity.ConcurrencyStamp.ShouldNotBe(concurrencyStampAfterFirstSave);
+            entity.ManyToMany.Count.ShouldBe(1);
+            entity.ManyToMany[0].ChildName.ShouldBe("ManyToManyChild2");
+        });
     }
 }

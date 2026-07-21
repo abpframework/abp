@@ -69,7 +69,8 @@ public class Authorization_Tests : AuthorizationTestBase
     [Fact]
     public async Task Should_Permission_Definition_GetGroup()
     {
-        (await _permissionDefinitionManager.GetGroupsAsync()).Count.ShouldBe(1);
+        var groups = await _permissionDefinitionManager.GetGroupsAsync();
+        groups.ShouldContain(g => g.Name == "TestGroup");
     }
 
     [Fact]

@@ -37,6 +37,7 @@
     "Feature:SettingManagementEnableDescription": "Включите систему управления настройками в приложении.",
     "Feature:AllowChangingEmailSettings": "Разрешить изменение настроек электронной почты",
     "Feature:AllowChangingEmailSettingsDescription": "Разрешить изменение настроек электронной почты.",
-    "SmtpPasswordPlaceholder": "Введите значение для обновления пароля"
+    "SmtpPasswordPlaceholder": "Введите значение для обновления пароля",
+    "NoSettingsAvailable": "Нет настроек для отображения."
   }
 }

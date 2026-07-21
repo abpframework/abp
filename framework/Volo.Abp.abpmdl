@@ -478,6 +478,10 @@
       "path": "test/Volo.Abp.ObjectMapping.Tests/Volo.Abp.ObjectMapping.Tests.abppkg",
       "folder": "test"
     },
+    "Volo.Abp.RabbitMQ.Tests": {
+      "path": "test/Volo.Abp.RabbitMQ.Tests/Volo.Abp.RabbitMQ.Tests.abppkg",
+      "folder": "test"
+    },
     "Volo.Abp.Ddd.Application.Contracts": {
       "path": "src/Volo.Abp.Ddd.Application.Contracts/Volo.Abp.Ddd.Application.Contracts.abppkg",
       "folder": "src"

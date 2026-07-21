@@ -2,6 +2,9 @@
   <Folder Name="/src/">
     <Project Path="src/Volo.Abp.PermissionManagement.Application.Contracts/Volo.Abp.PermissionManagement.Application.Contracts.csproj" />
     <Project Path="src/Volo.Abp.PermissionManagement.Application/Volo.Abp.PermissionManagement.Application.csproj" />
+    <Project Path="src/Volo.Abp.PermissionManagement.Blazor.MudBlazor.Server/Volo.Abp.PermissionManagement.Blazor.MudBlazor.Server.csproj" />
+    <Project Path="src/Volo.Abp.PermissionManagement.Blazor.MudBlazor.WebAssembly/Volo.Abp.PermissionManagement.Blazor.MudBlazor.WebAssembly.csproj" />
+    <Project Path="src/Volo.Abp.PermissionManagement.Blazor.MudBlazor/Volo.Abp.PermissionManagement.Blazor.MudBlazor.csproj" />
     <Project Path="src/Volo.Abp.PermissionManagement.Blazor.Server/Volo.Abp.PermissionManagement.Blazor.Server.csproj" />
     <Project Path="src/Volo.Abp.PermissionManagement.Blazor.WebAssembly/Volo.Abp.PermissionManagement.Blazor.WebAssembly.csproj" />
     <Project Path="src/Volo.Abp.PermissionManagement.Blazor/Volo.Abp.PermissionManagement.Blazor.csproj" />

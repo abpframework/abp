@@ -13,6 +13,17 @@
       }
     },
     {
+      "name": "BlazorUI",
+      "displayName": "Blazor UI Library",
+      "values": {
+        "Blazorise": "Blazorise",
+        "MudBlazor": "MudBlazor"
+      },
+      "dependsOn": {
+        "UI": ["Blazor", "BlazorServer", "BlazorWebApp", "MAUIBlazor"]
+      }
+    },
+    {
       "name": "DB",
       "displayName": "Database",
       "values": {

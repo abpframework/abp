@@ -12,7 +12,7 @@
 
 Health Check is a feature that allows applications to monitor their health and diagnose potential issues. The Microservice solution template comes with pre-configured Health Check system.
 
-In the Microservice solution template, Health Check configuration is applied in all the services, gateways and UI applications (except Blazor Wasm & Blazor WebApp applications UI applications).
+In the current modern microservice template, Health Check configuration is applied to the .NET applications in the solution, such as backend services, gateways, and `auth-server`. The generated React frontend applications (`react`, `react-admin-console`, and `react-public-web` when enabled) do not expose these ASP.NET Core health check endpoints.
 
 ### Configuration in `HealthChecksBuilderExtensions.cs`
 

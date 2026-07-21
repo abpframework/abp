@@ -15,11 +15,11 @@
 
 `ListService` is **not provided in root**. The reason is, this way, it will clear any subscriptions on component destroy. You may use the optional `LIST_QUERY_DEBOUNCE_TIME` token to adjust the debounce behavior.
 
-```js
-import { ListService } from '@abp/ng.core';
+```ts
+import { LIST_QUERY_DEBOUNCE_TIME, ListService } from '@abp/ng.core';
 import { BookDto } from '../models';
 import { BookService } from '../services';
-import { inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 @Component({
   /* class metadata here */
@@ -29,7 +29,7 @@ import { inject } from '@angular/core';
 
     // [Optional]
     // Provide this token if you want a different debounce time.
-    // Default is 300. Cannot be 0. Any value below 100 is not recommended.
+    // Default is 300. Use 0 to disable debouncing.
     { provide: LIST_QUERY_DEBOUNCE_TIME, useValue: 500 },
   ],
   template: `
@@ -55,7 +55,7 @@ class BookComponent {
     this.list.hookToQuery(bookStreamCreator).subscribe(
       response => {
         this.items = response.items;
-        this.count = response.count;
+        this.count = response.totalCount;
         // If you use OnPush change detection strategy,
         // call detectChanges method of ChangeDetectorRef here.
       }

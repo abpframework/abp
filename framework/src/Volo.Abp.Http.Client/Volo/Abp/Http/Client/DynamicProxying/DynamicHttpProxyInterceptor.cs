@@ -59,7 +59,9 @@ public class DynamicHttpProxyInterceptor<TService> : AbpInterceptor, ITransientD
 
         if (invocation.Method.ReturnType.GenericTypeArguments.IsNullOrEmpty())
         {
-            await InterceptorClientProxy.CallRequestAsync(context);
+            using (await InterceptorClientProxy.CallRequestAsync(context))
+            {
+            }
         }
         else
         {

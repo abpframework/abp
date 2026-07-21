@@ -1,13 +1,14 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import { Component, HostBinding, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-card-body',
-  template: ` <div [class]="cardBodyClass" [style]="cardBodyStyle">
+  template: ` <div [class]="cardBodyClass()" [style]="cardBodyStyle()">
     <ng-content></ng-content>
   </div>`,
 })
 export class CardBodyComponent {
   @HostBinding('class') componentClass = 'card-body';
-  @Input() cardBodyClass: string;
-  @Input() cardBodyStyle: string;
+  readonly cardBodyClass = input<string>(undefined);
+  readonly cardBodyStyle = input<string>(undefined);
 }

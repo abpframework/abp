@@ -1,0 +1,56 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "enum-descriptor.schema.json",
+    "title": "EnumDescriptor",
+    "description": "Describes an integer-backed enum definition for use in entity properties and select/kanban UI.",
+    "markdownDescription": "AI guidance: define enums before entity properties that reference them. Use a stable namespace-style `name` such as `Acme.Events.EventStatus`. Each value name should be PascalCase and unique within the enum. Use explicit integer `value`s for stable persistence; do not reorder or renumber after data exists.",
+    "type": "object",
+    "properties": {
+        "$schema": {
+            "type": "string",
+            "description": "Optional schema reference used when this descriptor is stored as a model descriptor file."
+        },
+        "name": {
+            "type": "string",
+            "description": "Stable unique enum name. Use a namespace-style name if the enum belongs to a module/domain, for example 'Acme.Events.EventStatus'.",
+            "minLength": 1
+        },
+        "values": {
+            "type": "array",
+            "description": "Ordered list of integer-backed enum values. Values are stored as integers; names are used for display and model readability.",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "PascalCase enum value name, for example 'Draft', 'Scheduled', or 'Completed'."
+                    },
+                    "value": {
+                        "type": "integer",
+                        "description": "Stable integer value. Prefer explicit values starting at 0 so generated descriptor JSON is deterministic."
+                    }
+                },
+                "required": [
+                    "name"
+                ],
+                "additionalProperties": false
+            },
+            "minItems": 1
+        }
+    },
+    "required": [
+        "name",
+        "values"
+    ],
+    "additionalProperties": false,
+    "examples": [
+        {
+            "name": "Acme.Events.EventStatus",
+            "values": [
+                { "name": "Draft", "value": 0 },
+                { "name": "Scheduled", "value": 1 },
+                { "name": "Completed", "value": 2 }
+            ]
+        }
+    ]
+}

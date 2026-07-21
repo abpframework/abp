@@ -37,6 +37,7 @@
     "Feature:SettingManagementEnableDescription": "Enable setting management system in the application.",
     "Feature:AllowChangingEmailSettings": "Allow changing email settings",
     "Feature:AllowChangingEmailSettingsDescription": "Allow changing email settings.",
-    "SmtpPasswordPlaceholder": "Enter a value to update password"
+    "SmtpPasswordPlaceholder": "Enter a value to update password",
+    "NoSettingsAvailable": "There are no settings to display."
   }
 }

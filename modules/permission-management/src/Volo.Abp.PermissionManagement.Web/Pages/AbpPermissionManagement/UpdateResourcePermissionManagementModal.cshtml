@@ -23,7 +23,6 @@
         <input asp-for="@Model.ProviderKey" />
         <abp-modal-body>
             <div class="mb-3" id="permissionList">
-                <h4>@L["ResourcePermissionPermissions"]</h4>
                 <div class="form-check form-switch mb-2">
                     <input class="form-check-input" id="grantAllresourcePermissions" type="checkbox" checked="@Model.ResourcePermissions.Permissions.All(x => x.IsGranted)">
                     <label class="form-check-label" for="grantAllresourcePermissions">@L["GrantAllResourcePermissions"]</label>

@@ -10,7 +10,8 @@
 ````json
 //[doc-params]
 {
-    "UI": ["Blazor", "BlazorServer"]
+    "UI": ["Blazor", "BlazorServer"],
+    "BlazorUI": ["Blazorise", "MudBlazor"]
 }
 ````
 
@@ -52,6 +53,8 @@ All the themes must depend on the [Volo.Abp.AspNetCore.Components.Server.Theming
 
 {{end}}
 
+{{if BlazorUI == "Blazorise"}}
+
 * [Twitter Bootstrap](https://getbootstrap.com/) as the fundamental HTML/CSS framework.
 * [Blazorise](https://github.com/stsrki/Blazorise) as a component library that supports the Bootstrap and adds extra components like Data Grid and Tree.
 * [FontAwesome](https://fontawesome.com/) as the fundamental CSS font library.
@@ -60,6 +63,31 @@ All the themes must depend on the [Volo.Abp.AspNetCore.Components.Server.Theming
 These libraries are selected as the base libraries and available to the applications and modules.
 
 > Bootstrap's JavaScript part is not used since the Blazorise library already provides the necessary functionalities to the Bootstrap components in a native way.
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+* [MudBlazor](https://mudblazor.com/) as the component library, providing a Material Design component set built natively for Blazor (form controls, data grid, dialogs, snackbars, dates, etc.).
+* [FontAwesome](https://fontawesome.com/) as the fundamental CSS font library.
+* [Flag Icon](https://github.com/lipis/flag-icons) as a library to show flags of countries.
+
+These libraries are selected as the base libraries and available to the applications and modules.
+
+A theme using the MudBlazor variant must place the four MudBlazor providers in the layout root so dialogs, snackbars and popovers work everywhere:
+
+```razor
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+<MudPopoverProvider />
+
+@Body
+```
+
+The provided themes (`Volo.Abp.AspNetCore.Components.Server.MudBlazorLeptonXTheme`, `Volo.Abp.AspNetCore.Components.WebAssembly.MudBlazorLeptonXTheme`, etc.) ship these providers as part of their layout templates.
+
+{{end}}
 
 ### The Layout
 
@@ -90,6 +118,8 @@ A theme is simply a Razor Class Library.
 
 The easiest way of creating a new theme is adding [Basic Theme Source Code](https://github.com/abpframework/abp/tree/dev/modules/basic-theme) module with source codes and customizing it. 
 
+{{if BlazorUI == "Blazorise"}}
+
 {{if UI == "Blazor"}}
 ```bash
 abp add-package Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme --with-source-code --add-to-solution-file
@@ -100,6 +130,24 @@ abp add-package Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme --with-sou
 ```bash
 abp add-package Volo.Abp.AspNetCore.Components.Server.BasicTheme --with-source-code --add-to-solution-file
 ```
+{{end}}
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+{{if UI == "Blazor"}}
+```bash
+abp add-package Volo.Abp.AspNetCore.Components.WebAssembly.MudBlazorBasicTheme --with-source-code --add-to-solution-file
+```
+{{end}}
+
+{{if UI == "BlazorServer"}}
+```bash
+abp add-package Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme --with-source-code --add-to-solution-file
+```
+{{end}}
+
 {{end}}
 
 ### Global Styles / Scripts

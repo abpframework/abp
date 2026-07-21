@@ -102,6 +102,13 @@
       }, ajaxParams));
     };
 
+    volo.abp.identity.identityUser.findById = function(id, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/identity/users/by-id/' + id + '',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
     volo.abp.identity.identityUser.getRoles = function(id, ajaxParams) {
       return abp.ajax($.extend(true, {
         url: abp.appPath + 'api/identity/users/' + id + '/roles',

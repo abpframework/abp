@@ -14,7 +14,6 @@ The ABP Checkbox Component is a reusable form input component for the checkbox t
 -   `label`
 -   `labelClass (default form-check-label)`
 -   `checkboxId`
--   `checkboxReadonly`
 -   `checkboxReadonly (default form-check-input)`
 -   `checkboxStyle`
 

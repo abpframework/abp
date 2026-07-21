@@ -9,86 +9,179 @@
 
 > You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this module.
 
-This document explains creating custom a payment gateway that's different than the existing ones in the [Payment Module](payment#packages).
+This document explains how to create a custom payment gateway that is different from the built-in gateways in the [Payment Module](payment.md#packages).
 
 ## Creating Core Operations
 
-- Create **MyPaymentGateway.cs** in the **Domain** layer of your project and implement `IPaymentGateway`.
+- Create **MyPaymentGateway.cs** in the **Domain** layer of your project and implement `IPaymentGateway`. The gateway client in this example represents your provider-specific SDK adapter.
 
   ```csharp
+  using System;
+  using System.Collections.Generic;
+  using System.Linq;
+  using System.Threading.Tasks;
+  using Volo.Abp.DependencyInjection;
+  using Volo.Payment.Gateways;
+  using Volo.Payment.Requests;
+
+  public interface IMyGatewayClient
+  {
+      Task<string> CreateCheckoutAsync(
+          Guid paymentRequestId,
+          float totalPrice,
+          string currency,
+          string returnUrl,
+          string cancelUrl);
+
+      Task<MyGatewayPaymentResult> VerifyAsync(
+          IReadOnlyDictionary<string, string> parameters);
+
+      Task ValidateAndHandleWebhookAsync(
+          string payload,
+          IReadOnlyDictionary<string, string> headers);
+  }
+
+  public interface IMyGatewayTransactionRepository
+  {
+      Task<bool> TryBindAsync(
+          string providerTransactionId,
+          Guid paymentRequestId);
+  }
+
+  public record MyGatewayPaymentResult(
+      Guid PaymentRequestId,
+      bool IsPaid,
+      float Amount,
+      string Currency,
+      string ProviderTransactionId,
+      string FailureReason);
+
   public class MyPaymentGateway : IPaymentGateway, ITransientDependency
-    {
-        private readonly IPaymentRequestRepository paymentRequestRepository;
+  {
+      private readonly IPaymentRequestRepository _paymentRequestRepository;
+      private readonly IMyGatewayClient _gatewayClient;
+      private readonly IMyGatewayTransactionRepository _gatewayTransactionRepository;
 
-        public MyPaymentGateway(IPaymentRequestRepository paymentRequestRepository)
-        {
-            this.paymentRequestRepository = paymentRequestRepository;
-        }
+      public MyPaymentGateway(
+          IPaymentRequestRepository paymentRequestRepository,
+          IMyGatewayClient gatewayClient,
+          IMyGatewayTransactionRepository gatewayTransactionRepository)
+      {
+          _paymentRequestRepository = paymentRequestRepository;
+          _gatewayClient = gatewayClient;
+          _gatewayTransactionRepository = gatewayTransactionRepository;
+      }
 
-        public async Task<PaymentRequestStartResult> StartAsync(PaymentRequest paymentRequest, PaymentRequestStartInput input)
-        {
-            var totalPrice = paymentRequest.Products.Sum(x => x.TotalPrice);
+      public bool IsValid(
+          PaymentRequest paymentRequest,
+          Dictionary<string, string> properties)
+      {
+          return paymentRequest.Products.Count > 0;
+      }
 
-            var checkoutLink = // Some operations here
+      public async Task<PaymentRequestStartResult> StartAsync(
+          PaymentRequest paymentRequest,
+          PaymentRequestStartInput input)
+      {
+          var checkoutLink = await _gatewayClient.CreateCheckoutAsync(
+              paymentRequest.Id,
+              paymentRequest.Products.Sum(product => product.TotalPrice),
+              paymentRequest.Currency,
+              input.ReturnUrl,
+              input.CancelUrl);
 
-            return new PaymentRequestStartResult
-            {
-                CheckoutLink = checkoutLink + "returnUrl=" + input.ReturnUrl
-            };
-        }
+          return new PaymentRequestStartResult
+          {
+              CheckoutLink = checkoutLink
+          };
+      }
 
-        public async Task<PaymentRequest> CompleteAsync(Dictionary<string, string> parameters)
-        {
-            var token = parameters["token"]; // You can get any parameter from your gateway provides. Example: token, id, hash etc. 
+      public async Task<PaymentRequest> CompleteAsync(
+          Dictionary<string, string> parameters)
+      {
+          var result = await _gatewayClient.VerifyAsync(parameters);
+          var paymentRequest = await _paymentRequestRepository.GetAsync(
+              result.PaymentRequestId);
 
-            var result = ;// provider.Validate(token); Validate the payment here
+          if (result.IsPaid)
+          {
+              var expectedAmount = paymentRequest.Products.Sum(
+                  product => product.TotalPrice);
 
-            var paymentRequest = await paymentRequestRepository.FindAsync(result.Id);
+              if (result.PaymentRequestId != paymentRequest.Id ||
+                  result.Amount != expectedAmount ||
+                  !string.Equals(
+                      result.Currency,
+                      paymentRequest.Currency,
+                      StringComparison.OrdinalIgnoreCase) ||
+                  string.IsNullOrWhiteSpace(result.ProviderTransactionId))
+              {
+                  throw new InvalidOperationException(
+                      "The provider payment does not match the payment request.");
+              }
 
-            paymentRequest.SetState(PaymentRequestState.Completed); // completed or anything else according to your result.
+              if (!await _gatewayTransactionRepository.TryBindAsync(
+                      result.ProviderTransactionId,
+                      paymentRequest.Id))
+              {
+                  throw new InvalidOperationException(
+                      "The provider transaction is already bound to another payment request.");
+              }
 
-            return paymentRequest;
-        }
+              paymentRequest.Complete();
+          }
+          else
+          {
+              paymentRequest.Failed(result.FailureReason);
+          }
 
-        public Task HandleWebhookAsync(string payload, Dictionary<string, string> headers)
-        {
-            // You can leave unimplemented if you not configure webhooks.
-            throw new System.NotImplementedException();
-        }
+          return await _paymentRequestRepository.UpdateAsync(paymentRequest);
+      }
 
-        public bool IsValid(PaymentRequest paymentRequest, Dictionary<string, string> properties)
-        {
-            // You can check some custom logic here to make this gateway available or not.
-            return true;
-        }
-    }
+      public Task HandleWebhookAsync(
+          string payload,
+          Dictionary<string, string> headers)
+      {
+          return _gatewayClient.ValidateAndHandleWebhookAsync(payload, headers);
+      }
+  }
   ```
+
+  The Payment module does not call `IsValid` when offering or selecting gateways; the gateways offered to the user are determined by the `PaymentOptions.Gateways` and `PaymentWebOptions.Gateways` registrations (see [PaymentOptions](payment.md#paymentoptions)). Some built-in gateways call their own `IsValid` inside `CompleteAsync` to verify the provider response, and a custom gateway can do the same. `StartAsync` passes the request currency to the provider adapter together with the amount. `CompleteAsync` verifies the provider response and reconciles the request identifier, amount, currency, and provider transaction identifier before changing the request state. `HandleWebhookAsync` must validate the webhook signature or equivalent authenticity proof before processing its payload.
+
+  `IMyGatewayTransactionRepository` is application-owned; it isn't part of the Payment module. Implement `TryBindAsync` as an atomic insert-or-match operation. For this one-time gateway, add unique database constraints for both the provider transaction identifier and the payment request identifier, accept an existing row only when the same pair is retried, and execute the binding and payment-request update in the same unit of work. This persists the provider transaction identifier while rejecting cross-request replay and a different transaction for an already-bound request.
+
+  The Payment HTTP API forwards `POST /api/payment/{paymentMethod}/webhook` to `HandleWebhookAsync`. Configure the provider to use this URL with your gateway name as `paymentMethod`, for example `/api/payment/MyGateway/webhook`. Always validate the provider signature before processing the payload.
 
 - You should also configure `PaymentOptions` for your gateway in the **Domain** layer of your project as shown below.
 
+  Add `using Volo.Abp.Localization;` to the module class file for `FixedLocalizableString`.
+
   ```csharp
   Configure<PaymentOptions>(options =>
-    {
-        options.Gateways.Add(new PaymentGatewayConfiguration(
-            "MyGateway",
-            LocalizableString.Create<PaymentResource>("MyGateway"),
-            isSubscriptionSupported: false,
-            typeof(MyPaymentGateway)
-            ));
-    });
+  {
+      options.Gateways.Add(new PaymentGatewayConfiguration(
+          "MyGateway",
+          new FixedLocalizableString("MyGateway"),
+          isSubscriptionSupported: false,
+          typeof(MyPaymentGateway)
+      ));
+  });
   ```
 
 ## Creating the UI
-There are 2 types of pages that are supported by default. You can define a pre-payment page and post-payment page.
+Two page types are supported by default: a pre-payment page and a post-payment page.
 
-- Create **PreCheckout.cshtml** and **PreCheckout.cshtml.cs**
+- Create **Pages/MyGateway/PreCheckout.cshtml** and **Pages/MyGateway/PreCheckout.cshtml.cs**.
 
   ```html
+  @page "/MyGateway/PreCheckout"
   @model PreCheckoutModel
 
   <h3>Pre Checkout</h3>
   <form method="post">
-      <button class="btn btn-success" asp-page-handler="ContinueToCheckout">
+      <input type="hidden" asp-for="PaymentRequestId" />
+      <button type="submit" class="btn btn-success" asp-page-handler="ContinueToCheckout">
           Continue to Checkout
           <i class="fa fa-long-arrow-right"></i>
       </button>
@@ -96,35 +189,123 @@ There are 2 types of pages that are supported by default. You can define a pre-p
   ```
 
   ```csharp
+  using System;
+  using System.Threading.Tasks;
+  using Microsoft.AspNetCore.Mvc;
+  using Microsoft.Extensions.Options;
+  using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+  using Volo.Payment;
+  using Volo.Payment.Requests;
+
   public class PreCheckoutModel : AbpPageModel
   {
-      [BindProperty] public Guid PaymentRequestId { get; set; }
+      private readonly IOptions<PaymentWebOptions> _paymentWebOptions;
+      private readonly IPaymentRequestAppService _paymentRequestAppService;
+
+      [BindProperty]
+      public Guid PaymentRequestId { get; set; }
+
+      public PreCheckoutModel(
+          IOptions<PaymentWebOptions> paymentWebOptions,
+          IPaymentRequestAppService paymentRequestAppService)
+      {
+          _paymentWebOptions = paymentWebOptions;
+          _paymentRequestAppService = paymentRequestAppService;
+      }
 
       public virtual ActionResult OnGet()
       {
-          // GET operation is not supported here. All the selected gateway requests will be sent as POST.
           return BadRequest();
       }
 
-      public virtual async Task OnPostAsync()
+      public virtual IActionResult OnPost()
       {
-          // You can get the payment request from the database by using `PaymentRequestId` and render something on the UI side.
+          return Page();
       }
 
-      public virtual async Task<IActionResult> OnPostContinueToCheckout()
+      public virtual async Task<IActionResult> OnPostContinueToCheckoutAsync()
       {
-          return Redirect("the-actual-checkout-link-of-gateway");
+          await _paymentWebOptions.SetAsync();
+          var rootUrl = _paymentWebOptions.Value.RootUrl.TrimEnd('/');
+
+          var result = await _paymentRequestAppService.StartAsync(
+              "MyGateway",
+              new PaymentRequestStartDto
+              {
+                  PaymentRequestId = PaymentRequestId,
+                  ReturnUrl = rootUrl + "/MyGateway/PostCheckout",
+                  CancelUrl = rootUrl
+              });
+
+          return Redirect(result.CheckoutLink);
       }
   }
   ```
 
-- Create **PostCheckout.cshtml** and **PostCheckout.cshtml.cs**
+  The gateway selection page preserves the POST method when it redirects to the pre-payment URL. `OnPost` handles that initial request and displays the page. The `ContinueToCheckout` handler starts the payment only after the user submits the pre-payment form.
+
+- Create **Pages/MyGateway/PostCheckout.cshtml** and **Pages/MyGateway/PostCheckout.cshtml.cs**.
 
   ```html
+  @page "/MyGateway/PostCheckout"
   @model PostCheckoutModel
 
   <h3>Operation Done</h3>
   ```
+
+  ```csharp
+  using System.Collections.Generic;
+  using System.Linq;
+  using System.Threading.Tasks;
+  using Microsoft.AspNetCore.Mvc;
+  using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+  using Volo.Payment.Requests;
+
+  [IgnoreAntiforgeryToken]
+  public class PostCheckoutModel : AbpPageModel
+  {
+      private readonly IPaymentRequestAppService _paymentRequestAppService;
+
+      public PostCheckoutModel(
+          IPaymentRequestAppService paymentRequestAppService)
+      {
+          _paymentRequestAppService = paymentRequestAppService;
+      }
+
+      public virtual async Task<IActionResult> OnGetAsync()
+      {
+          var parameters = Request.Query.ToDictionary(
+              item => item.Key,
+              item => item.Value.ToString());
+
+          return await CompleteAsync(parameters);
+      }
+
+      public virtual async Task<IActionResult> OnPostAsync()
+      {
+          var form = await Request.ReadFormAsync();
+          var parameters = form.ToDictionary(
+              item => item.Key,
+              item => item.Value.ToString());
+
+          return await CompleteAsync(parameters);
+      }
+
+      private async Task<IActionResult> CompleteAsync(
+          Dictionary<string, string> parameters)
+      {
+          var paymentRequest = await _paymentRequestAppService.CompleteAsync(
+              "MyGateway",
+              parameters);
+
+          return paymentRequest.State == PaymentRequestState.Completed
+              ? Page()
+              : BadRequest("The payment was not completed.");
+      }
+  }
+  ```
+
+  Keep only the callback method used by your provider. If the provider sends an external POST request to the Razor Page, keep `[IgnoreAntiforgeryToken]` and rely on the gateway's provider-signature validation instead of an antiforgery token. Redirect to a success page only after `CompleteAsync` returns the `Completed` state.
 
 - Configure your pages using `PaymentWebOptions` in **Web** layer of your project.
 

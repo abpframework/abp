@@ -81,9 +81,9 @@ public abstract class IdentityRoleRepository_Tests<TStartupModule> : AbpIdentity
 
         roles.Count.ShouldBe(5);
         roles.ShouldContain(r => r.Role.Name == "admin" && r.UserCount == 2);
-        roles.ShouldContain(r => r.Role.Name == "moderator" && r.UserCount == 1);
-        roles.ShouldContain(r => r.Role.Name == "supporter" && r.UserCount == 2);
-        roles.ShouldContain(r => r.Role.Name == "manager" && r.UserCount == 1);
+        roles.ShouldContain(r => r.Role.Name == "moderator" && r.UserCount == 2);
+        roles.ShouldContain(r => r.Role.Name == "supporter" && r.UserCount == 3);
+        roles.ShouldContain(r => r.Role.Name == "manager" && r.UserCount == 2);
 
 
         using (var uow = UnitOfWorkManager.Begin())
@@ -96,7 +96,7 @@ public abstract class IdentityRoleRepository_Tests<TStartupModule> : AbpIdentity
         roles = await RoleRepository.GetListWithUserCountAsync();
 
         roles.Count.ShouldBe(5);
-        roles.ShouldContain(r => r.Role.Name == "manager" && r.UserCount == 0);
+        roles.ShouldContain(r => r.Role.Name == "manager" && r.UserCount == 1);
         roles.ShouldContain(r => r.Role.Name == "sale" && r.UserCount == 0);
     }
 }

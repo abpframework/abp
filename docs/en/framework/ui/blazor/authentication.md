@@ -32,3 +32,17 @@ This is a typical and recommended approach to implement authentication in Single
 See the [Blazor Security document](https://docs.microsoft.com/en-us/aspnet/core/blazor/security) to understand and customize the authentication process.
 
 {{end}}
+
+## Authentication URLs
+
+`AbpAuthenticationOptions` centralizes the login and logout routes used by ABP Blazor authentication services. The shared web defaults are `Account/Login` and `Account/Logout`. A standalone Blazor WebAssembly application changes them to `authentication/login` and `authentication/logout`; this override is not applied when the client is hosted as part of a Blazor Web App.
+
+Configure the options when the application uses custom routes:
+
+````csharp
+Configure<AbpAuthenticationOptions>(options =>
+{
+    options.LoginUrl = "authentication/sign-in";
+    options.LogoutUrl = "authentication/sign-out";
+});
+````

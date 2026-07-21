@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dashboard-number-container-descriptor.schema.json",
+  "title": "DashboardNumberContainerDescriptor",
+  "description": "A container that holds multiple number/KPI items, each with its own entity and aggregation.",
+  "markdownDescription": "AI guidance: use numberContainer for KPI tiles. Each item chooses its own entity, aggregation, optional filter, format, and color.",
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "description": "Number/KPI items within this container. Use 1-4 items for a readable dashboard row.",
+      "items": {
+        "$ref": "dashboard-number-item-descriptor.schema.json"
+      }
+    }
+  },
+  "required": ["items"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "items": [
+        { "name": "total-events", "title": "Total Events", "entityName": "Acme.Events.Event", "aggregation": "count", "format": "number" }
+      ]
+    }
+  ]
+}

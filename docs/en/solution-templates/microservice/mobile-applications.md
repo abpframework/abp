@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Explore how to integrate mobile applications with ABP's microservice solution, featuring options like MAUI and React Native for seamless development."
+    "Description": "Understand the optional React Native mobile application in ABP Studio's modern microservice solution template."
 }
 ```
 
@@ -19,162 +19,64 @@
 
 > You must have an ABP Business or a higher license to be able to create a microservice solution.
 
-The ABP Studio microservice solution template comes with an optional mobile application that is completely integrated to the solution. There are two options for the mobile application:
+The current ABP Studio modern microservice solution template can optionally generate a mobile application under `apps/mobile/react-native`.
 
-* MAUI
-* React Native
+The modern template does not generate a MAUI mobile application. Its mobile choices are **None** and **React Native**.
 
-You can select the mobile application type while [creating your solution](../../get-started/microservice.md).
+## The Mobile Gateway
 
-## Fundamental Structures
+If you enable the mobile application, an API gateway named `MobileGateway` is added under `gateways/mobile`. The React Native client calls backend APIs through this gateway.
 
-The following sections explain the common structure of the mobile applications (valid for both of MAUI and React Native applications).
+See *[API Gateways](api-gateways.md)* for the shared gateway structure.
 
-### The Mobile Gateway
+## Authentication
 
-If you've selected to include the mobile application into your solution, an API Gateway, named `MobileGateway` is also added to the solution. It is located under the `gateways/mobile` in the solution folder.
+The generated React Native app is configured in `Environment.ts` with:
 
-You can refer to the *[API Gateways](api-gateways.md)* document to understand the structure of the mobile gateway.
+* the `AuthServer` issuer URL
+* the `MobileGateway` base URL
+* the `ReactNative` client id and scopes
 
-### Authentication
+At runtime, the mobile client uses the password grant to exchange credentials for access and refresh tokens at the `AuthServer` `/connect/token` endpoint, then sends bearer tokens to backend APIs through the `MobileGateway`. Account-related operations such as registration, password reset, profile picture management, and logout use the generated API client under `src/api`.
 
-Both of the MAUI and React Native applications are installed as native applications to the devices. So, they are using the [OpenID Connect](../../modules/openiddict.md) protocol to authenticate the users. The authentication is done by the `AuthServer` application.
+## Built-in Capabilities
 
-They don't run on a browser, so they can't use the [Cookie Authentication](../../modules/account.md#cookie-authentication) method. They are using the [JWT Bearer Authentication](../../modules/account.md#jwt-bearer-authentication) method. 
+The generated mobile app already includes screens and flows for:
 
-Best way to communicate with the `AuthServer` application is using the browser. So, the mobile applications are opening a browser window to authenticate the user. Then browser redirects back to the mobile application with the authentication result.
+* sign in, registration, forgot password, and reset password
+* account and profile picture management
+* user-facing settings such as language, theme, and logout
 
-The following screenshot was taken from the *Login* page of the [Account](../../modules/account.md) module in the mobile application's UI:
+Localization is handled by the bundled locale files under `src/locales` and `src/services/LocalizationService.ts`. Theme handling lives under `src/theme`.
 
-![mobile-application-login-page](images/authserver-login-page-maui.png)
+The UI is built with [NativeWind v4](https://www.nativewind.dev/) (Tailwind CSS for React Native) with full light/dark mode support. The `useThemeColors` hook returns light/dark palette values for components that need explicit colors instead of NativeWind `className`. See [Styling with NativeWind](../../framework/ui/react-native/styling-with-nativewind.md) for the styling system reference.
 
+## Solution Structure
 
-### User Management
+The React Native application is based on [React Native](https://reactnative.dev/) and [Expo](https://expo.dev/). The main files and folders in `apps/mobile/react-native` are:
 
-User Management is implemented in the MAUI Application in the `Acme.CloudCrm.Maui` project with XAML and C# for MAUI and it is implemented in the React Native Application in the react-native project for React Native UI option.
+* `Environment.ts`: runtime URLs, client id, scopes, and default localization resource name.
+* `src/api`: HTTP clients for token, account, and application configuration calls.
+* `src/components`: reusable UI components.
+* `src/contexts`: shared React contexts, including localization context.
+* `src/hooks`: reusable React hooks.
+* `src/interceptors`: request and response interception for the API client.
+* `src/locales`: bundled UI translations.
+* `src/navigators`: drawer, stack, and tab navigation definitions.
+* `src/screens`: application pages such as login, home, settings, and account flows.
+* `src/services`: cross-cutting services such as localization helpers.
+* `src/store`: Redux actions, listeners, reducers, and selectors.
+* `src/theme`, `src/types`, `src/utils`: shared theming, typings, and helper utilities.
 
-<img width="360" src="images/identityusers-page-maui.png" alt="ABP MAUI IdentityUsersPage" />
+## Running the Application
 
+The React Native app is not started by the ABP Studio solution runner. Run `AuthServer`, `MobileGateway`, and the required backend services first, then start the mobile app with the standard React Native / Expo toolchain.
 
-### Profile Management
-
-Profile management allows users to view and update their personal profile picture and their passwords. It provides a seamless experience for users to manage their profiles within the mobile application without navigating to the authserver web application.
-
-The following screenshot was taken from the *Profile* page in the MAUI application:
-
-<img width="360" src="images/profile-page-maui.png" alt="ABP MAUI ProfilePage" />
-
-### Other Features
-
-#### Settings Page
-The settings page allows users to change the language and theme of the application, manage their profiles, change their passwords, and also to logout from the application.
-
-<img width="360" src="images/settings-page-maui.png" alt="ABP MAUI SettingsPage" />
-
-- **Language**: Applications implements ABP localization logic on the platforms. The language is automatically selected based on the device's language. Users can also change the language manually from the settings page. 
-
-- **Dark/Light Theme**: ABP MAUI and React Native applications support both dark and light themes. The theme is automatically selected based on the device's theme. Users can also change the theme manually from the settings page.
-
-## Applications
-
-Following sections explain the structure of MAUI and React Native Applications.
-
-### The MAUI Application
-
-This is the mobile application that is built based on Microsoft's [MAUI framework](https://learn.microsoft.com/en-us/dotnet/maui). It will be in the solution only if you've selected the MAUI as your mobile application option.
-
-#### Project Structure
-Entire MAUI application is built on the AppShell pattern of MAUI. You can find the AppShell class in the `Acme.CloudCrm.Maui` project. It is the entry point of the application. It is responsible for initializing the application and registering the services. You find all the pages and routing information in the `AppShell.xaml` file.
-
-- **Pages**: Pages are located in the `Pages` folder of the project. Each page has a XAML & C# file. XAML file is responsible for the UI and C# file is responsible for the initialization of the page.
-
-- **ViewModels**: ViewModels are located in the `ViewModels` folder of the project. Each ViewModel has a C# file. ViewModels are responsible for the business logic of the pages.
-
-- **Oidc**: Oidc folder contains the logic for the authentication of the application. It contains the `MauiAuthenticationBrowser` class which manages the authentication process of the application.
-
-- **Localization**: Localization folder contains the localization logic of the application. It contains regular ABP Localization logic and the `LocalizationResourceManager` class which is wrapper for the ABP localization logic on MAUI.
-
-- **Messages**: Messages folder contains the message data for the communication inside application. Messages are used to send data between pages and viewmodels. It's designed on the [MVVM Toolkit Messenger](https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/messenger) feature.
-
-- **Storage**: Storage folder contains the storage logic of the application. It contains the `IStorage` class which is wrapper for the [SecureStorage](https://learn.microsoft.com/en-us/dotnet/maui/platform-integration/storage/secure-storage) feature. It is used to store the authentication data of the user and preferences of the application.
-
-_Rest of the folders are MAUI default folders. You can check the [.NET MAUI single project documentatipon](https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/single-project?view=net-maui-8.0) for more information._
-
-#### Running the application
-Before running the MAUI Application, rest of the applications in the solution must be running. Such as AuthServer, MobileGateway and the microservices. 
-
-Make sure that you prepared devices for debugging. You can check the following documentation for each platform.
-
-- [Android](https://learn.microsoft.com/en-us/dotnet/maui/android/emulator/)
-- [iOS](https://learn.microsoft.com/en-us/dotnet/maui/ios/pair-to-mac)
-- [MacCatalyst](https://learn.microsoft.com/en-us/dotnet/maui/mac-catalyst/cli)
-- [Windows](https://learn.microsoft.com/en-us/dotnet/maui/windows/setup)
-
-##### Network
-
-All the platforms including iOS, MacCataylst and Windows, runs the applications in the same network of the host. So, you can use the `localhost` address to connect to the applications.
-
-But in the **Android Emulator**, you need to use the `adb reverse` command to connect to the applications. You can use the following command to connect to the AuthServer application:
+For Android emulators or devices, map the development ports before testing:
 
 ```bash
-adb reverse tcp:44300 tcp:44300
+adb reverse tcp:<mobile-gateway-port> tcp:<mobile-gateway-port>
+adb reverse tcp:<auth-server-port> tcp:<auth-server-port>
 ```
 
-> `44300` is an example port. You need to change it based on the port of the AuthServer & MobileGateway application.
-
-> You need to run the command for a running emulator. If you run the emulator after running the command, you need to run the command again.
-
-
-##### Target Framework
-
-Since MAUI Applications have multiple target frameworks, you need to select the target framework before running the application. You can select the target framework from the context menu of the Solution Runner.
-
-![ABP Studio MAUI Target Framework](images/solutionrunner-maui-targetframework.png)
-
-
-##### Running with ABP Studio
-You can start the MAUI application with the solution runner. You can click the start button of the MAUI application in the solution runner tree. It will start the application on the selected target framework. Since they're not running on a process and they're running on a device, you can't see them as running state in the solution runner. After the application is deployed, it'll be opened on the device and it'll be shown as stopped in the solution runner.
-
----
-
-#### Development on MAUI Application
-
-You can follow [Mobile Application Development Tutorial - MAUI](../../tutorials/mobile/maui) to learn how to develop on MAUI Application.
-
-### The React Native Application
-
-This is the mobile application that is built based on Facebook's [React Native framework](https://reactnative.dev/) and [Expo](https://expo.dev/). It will be in the solution only if you've selected React Native as your mobile application option.
-
-#### Project Structure
-- **Environment.ts**: file using for providing application level variables like `apiUrl`, `oAuthConfig` and etc.
-
-- **api**: The `api` folder contains HTTP request files that simplify API management in the React Native starter template
-  - `API.ts:` exports **axiosInstance**. It provides axios instance filled api url.
-
-- **components**: In the `components` folder, you can reach built in react native components that you can use in your app. These components **facilitates** your list, select and etc. operations.
-
-- **contexts**: `contexts` folder contains [react context](https://react.dev/reference/react/createContext). You can expots your contexts in this folder. `Localization context provided in here`
-
-- **hocs**: this folder is added to contain higher order components. The purpose is to wrap components with additional features or properties. It initially has a `PermissionHoc.tsx` that wraps a component to check the permission grant status.
-
-- **hooks**: covers the react native hooks where you can get a reference from [the official documentation](https://react.dev/reference/react/hooks).
-
-- **interceptors**: initializes a file called `APIInterceptor.ts` that has a function to manage the http operations in a better way.
-
-- **navigators**: folder contains [react-native stacks](https://reactnavigation.org/docs/stack-navigator/). After creating a new *FeatureName*Navigator we need to provide in `DrawerNavigator.ts` file as `Drawer.Screen`
-
-- **screens**: folder has the content of navigated page. We will pass as component property to [Stack.Screen](https://reactnavigation.org/docs/native-stack-navigator/)
-
-- **store**: folder manages state-management operations. We will define `actions`, `listeners`, `reducers`, and `selectors` here.
-
-- **styles**: folder contains app styles. `system-style.ts` comes built in template we can also add new styles.
-
-- **utils**: folder contains helper functions that we can use in application
-
-#### Running the Application
-
-React Native applications can't be run with the solution runner. You need to run them with the React Native CLI. You can check the [React Native documentation](https://reactnative.dev/docs/environment-setup) to learn how to setup the environment for React Native development.
-
-Before running the React Native application, the rest of the applications in the solution must be running. Such as AuthServer, MobileGateway and the microservices.
-
-Then you can run the React Native application by following this documentation: [Getting Started with the React Native](../../framework/ui/react-native/index.md).
+Use the ports assigned to `MobileGateway` and `AuthServer` in your generated solution.

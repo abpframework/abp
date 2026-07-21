@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dashboard-visualization-descriptor.schema.json",
+  "title": "DashboardVisualizationDescriptor",
+  "description": "A single visualization element in a dashboard: chart, list, or number container. Positioned on the grid via row, order, and width.",
+  "markdownDescription": "AI guidance: set `type` and then provide the matching payload: `chart` for type chart, `list` for type list, or `numberContainer` for type numberContainer. Do not populate unrelated payloads. Chart and list visualizations require `entityName`; number containers define entityName per KPI item.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Unique identifier within the dashboard. Prefer kebab-case such as 'events-by-status'.",
+      "minLength": 1
+    },
+    "type": {
+      "$ref": "dashboard-visualization-type.schema.json",
+      "description": "Visualization renderer type. Determines which payload property must be populated."
+    },
+    "title": {
+      "type": "string",
+      "description": "Display title for the visualization."
+    },
+    "description": {
+      "type": ["string", "null"],
+      "description": "Optional description text. Can be shown inline or as tooltip depending on showDescriptionAsTooltip."
+    },
+    "row": {
+      "type": "integer",
+      "description": "Zero-based visual row index inside the dashboard grid. Visualizations sharing the same row are rendered side-by-side.",
+      "minimum": 0,
+      "default": 0
+    },
+    "order": {
+      "type": ["integer", "null"],
+      "description": "Order of the visualization inside its row. When omitted, array order is used."
+    },
+    "width": {
+      "type": "integer",
+      "enum": [1, 2],
+      "default": 1,
+      "description": "Column width: 1 = half row, 2 = full row."
+    },
+    "entityName": {
+      "type": "string",
+      "description": "Entity this visualization sources data from. Required for chart and list visualizations; numberContainer items define their own entityName."
+    },
+    "globalDateFilterProperty": {
+      "type": "string",
+      "description": "Date/DateTime property used to apply dashboard global date filters to this visualization. Defaults to CreationTime when omitted."
+    },
+    "filter": {
+      "oneOf": [
+        { "$ref": "dashboard-filter-descriptor.schema.json" },
+        { "type": "null" }
+      ]
+    },
+    "userFilters": {
+      "type": "array",
+      "description": "Interactive filters exposed to end users on this visualization.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "property": {
+            "type": "string",
+            "description": "Property name to filter on. Must exist on entityName.",
+            "minLength": 1
+          }
+        },
+        "required": ["property"],
+        "additionalProperties": false
+      }
+    },
+    "showDescriptionAsTooltip": {
+      "type": "boolean",
+      "default": false
+    },
+    "clickToSeeRecords": {
+      "type": "boolean",
+      "description": "Allow users to click to see underlying records when supported by the runtime.",
+      "default": false
+    },
+    "chart": {
+      "oneOf": [
+        { "$ref": "dashboard-chart-descriptor.schema.json" },
+        { "type": "null" }
+      ]
+    },
+    "list": {
+      "oneOf": [
+        { "$ref": "dashboard-list-descriptor.schema.json" },
+        { "type": "null" }
+      ]
+    },
+    "numberContainer": {
+      "oneOf": [
+        { "$ref": "dashboard-number-container-descriptor.schema.json" },
+        { "type": "null" }
+      ]
+    }
+  },
+  "required": ["name", "type", "title"],
+  "allOf": [
+    {
+      "if": {
+        "required": ["type"],
+        "properties": {
+          "type": { "enum": ["chart", "Chart"] }
+        }
+      },
+      "then": {
+        "required": ["chart", "entityName"],
+        "properties": {
+          "chart": { "$ref": "dashboard-chart-descriptor.schema.json" },
+          "entityName": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["type"],
+        "properties": {
+          "type": { "enum": ["list", "List"] }
+        }
+      },
+      "then": {
+        "required": ["list", "entityName"],
+        "properties": {
+          "list": { "$ref": "dashboard-list-descriptor.schema.json" },
+          "entityName": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": ["type"],
+        "properties": {
+          "type": { "enum": ["numberContainer", "NumberContainer"] }
+        }
+      },
+      "then": {
+        "required": ["numberContainer"],
+        "properties": {
+          "numberContainer": { "$ref": "dashboard-number-container-descriptor.schema.json" }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "name": "events-by-status",
+      "type": "chart",
+      "title": "Events by Status",
+      "row": 0,
+      "order": 0,
+      "width": 1,
+      "entityName": "Acme.Events.Event",
+      "chart": {
+        "chartType": "bar",
+        "xAxis": { "property": "Status" },
+        "yAxis": [{ "aggregation": "count", "label": "Events" }]
+      }
+    },
+    {
+      "name": "recent-events",
+      "type": "list",
+      "title": "Recent Events",
+      "row": 0,
+      "order": 1,
+      "width": 1,
+      "entityName": "Acme.Events.Event",
+      "list": {
+        "fields": ["Title", "StartDate", "Status"],
+        "sortBy": { "property": "StartDate", "direction": "desc" },
+        "maxRows": 10
+      }
+    }
+  ]
+}

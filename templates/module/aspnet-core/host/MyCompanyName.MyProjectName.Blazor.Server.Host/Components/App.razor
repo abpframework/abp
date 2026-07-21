@@ -1,8 +1,8 @@
 ﻿@using Volo.Abp.Localization
 @using System.Globalization
 @using Microsoft.Extensions.Hosting
-@using Volo.Abp.AspNetCore.Components.Server.BasicTheme.Bundling
-@using Volo.Abp.AspNetCore.Components.Web.Theming.Bundling
+@using Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme.Bundling
+@using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Bundling
 @inject IHostEnvironment Env
 @{
     var rtl = CultureHelper.IsRtl ? "rtl" : string.Empty;
@@ -17,7 +17,8 @@
     <title>MyCompanyName.MyProjectName.Blazor.Server</title>
     <base href="/" />
 
-    <AbpStyles BundleName="@BlazorBasicThemeBundles.Styles.Global" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <AbpStyles BundleName="@BlazorMudBlazorBasicThemeBundles.Styles.Global" />
 
     <HeadOutlet @rendermode="InteractiveServer" />
 
@@ -26,7 +27,7 @@
 
     <Routes @rendermode="InteractiveServer" />
 
-    <AbpScripts BundleName="@BlazorBasicThemeBundles.Scripts.Global" />
+    <AbpScripts BundleName="@BlazorMudBlazorBasicThemeBundles.Scripts.Global" />
 
     <script src="_framework/blazor.web.js"></script>
 

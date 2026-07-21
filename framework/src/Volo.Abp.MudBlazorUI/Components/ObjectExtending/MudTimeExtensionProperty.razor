@@ -1,0 +1,13 @@
+@typeparam TEntity
+@typeparam TResourceType
+@using Volo.Abp.Localization
+@inherits MudExtensionPropertyComponentBase<TEntity, TResourceType>
+
+@if (PropertyInfo != null && Entity != null)
+{
+    <MudTimePicker T="TimeSpan?"
+                   Label="@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                   @bind-Time="@Value"
+                   Disabled="IsReadonlyField"
+                   Validation="@((Func<TimeSpan?, string?>)(v => Validate(v)))" />
+}
