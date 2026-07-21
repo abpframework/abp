@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Linq;
@@ -189,6 +190,68 @@ public class MultiLingualObjectManager_Tests : AbpIntegratedTest<AbpMultiLingual
     }
 
     [Fact]
+    public async Task GetTranslationAsync_Should_Enumerate_Translations_Once()
+    {
+        using (CultureHelper.Use("en-us"))
+        {
+            var translation = await _multiLingualObjectManager.GetTranslationAsync(
+                new OneTimeEnumerable<MultiLingualBookTranslation>(_book.Translations));
+
+            translation.ShouldNotBeNull();
+            translation.Name.ShouldBe(_testTranslations["en"]);
+        }
+    }
+
+    [Fact]
+    public async Task GetBulkTranslationsAsync_Should_Enumerate_Entities_Once()
+    {
+        using (CultureHelper.Use("fr-FR"))
+        {
+            var books = new List<MultiLingualBook>
+            {
+                //resolved by the fallback pass
+                GetTestBook("ar", "en"),
+                //has no translations
+                GetTestBook(),
+                //resolved by the first-translation fallback
+                GetTestBook("ar")
+            };
+
+            var translations = await _multiLingualObjectManager.GetBulkTranslationsAsync<MultiLingualBook, MultiLingualBookTranslation>(
+                new OneTimeEnumerable<MultiLingualBook>(books));
+
+            translations.Count.ShouldBe(3);
+            translations[0].entity.ShouldBe(books[0]);
+            translations[0].translation!.Name.ShouldBe(_testTranslations["en"]);
+            translations[1].entity.ShouldBe(books[1]);
+            translations[1].translation.ShouldBeNull();
+            translations[2].entity.ShouldBe(books[2]);
+            translations[2].translation!.Name.ShouldBe(_testTranslations["ar"]);
+        }
+    }
+
+    [Fact]
+    public async Task GetBulkTranslationsAsync_Should_Enumerate_Translation_Sequences_Once()
+    {
+        using (CultureHelper.Use("fr-FR"))
+        {
+            var translationsCombined = new OneTimeEnumerable<IEnumerable<MultiLingualBookTranslation>>(
+                _books
+                    .Select(x => (IEnumerable<MultiLingualBookTranslation>)new OneTimeEnumerable<MultiLingualBookTranslation>(x.Translations))
+                    .ToList());
+
+            var translations = await _multiLingualObjectManager.GetBulkTranslationsAsync(translationsCombined);
+
+            translations.Count.ShouldBe(_books.Count);
+            translations[0].ShouldBeNull();
+            translations[1]!.Name.ShouldBe(_testTranslations["en"]);
+            translations[2]!.Name.ShouldBe(_testTranslations["ar"]);
+            translations[3]!.Name.ShouldBe(_testTranslations["en"]);
+            translations[4]!.Name.ShouldBe(_testTranslations["en"]);
+        }
+    }
+
+    [Fact]
     public async Task TestBulkMapping()
     {
         using (CultureHelper.Use("en-us"))
@@ -208,6 +271,33 @@ public class MultiLingualObjectManager_Tests : AbpIntegratedTest<AbpMultiLingual
                                    og.Translations.FirstOrDefault()?.Name;
                 Assert.Equal(expectedName, m.Name);
             }
+        }
+    }
+
+    private class OneTimeEnumerable<T> : IEnumerable<T>
+    {
+        private readonly IEnumerable<T> _source;
+        private bool _enumerated;
+
+        public OneTimeEnumerable(IEnumerable<T> source)
+        {
+            _source = source;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            if (_enumerated)
+            {
+                throw new InvalidOperationException("The sequence was enumerated more than once");
+            }
+
+            _enumerated = true;
+            return _source.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }
