@@ -2,6 +2,8 @@
 
 My articles are mostly technical but this time I want to mention a soft-skill in workplaces. This is an emotional skill (EQ) which is important like IQ but without this skill people around you will think you are rude. That's empathy. Even though empathy comes with your character, if you realize you lack of it you can improve your empathy level. 
 
+![hero](images/hero.png)
+
 ## What's Empathy?
 
 It's as a discipline which puts behaviors to human-centered practices. Why we do it? For understanding users’ goals, constraints, emotions, mentality and tradeoffs. Then using that understanding to improve what teams build, sell, market and support. 
@@ -17,6 +19,8 @@ It is created when teams understand the people behind the requirements:
 - What confuses or slows them down?
 - What makes them trust the product?
 - What do they see as valuable?
+
+![roles](images/roles.png)
 
 For a software company, empathy should not be treated only as a soft skill or company value. It should be a practical way to replace internal assumptions with real evidence about users, buyers, administrators, developers and other people affected by the product.
 
@@ -98,7 +102,7 @@ The goal is for each team to use the customer evidence available to them and bri
 And yes! Someone even created a standard for what I'm talking. It's called **ISO 9241-210 standard**. 
 Its full title is *Ergonomics of human-system interaction*. Basically it deals with any system that has interactivity. So our screens, APIs are all included in this standard. The main idea is simple: teams should design software around real users, their goals and their working environment. Not only around technical requirements. These 6 steps about how to design a better system, puts customers in the center.
 
-![image-20260720210821166](D:\github\volosoft\abp\docs\en\Community-Articles\2026-07-17-Empathy-At-Work\image-20260720210821166.png)
+ ![iso-9241-210](images/iso-9241-210.png)
 
 Let me adjust these to a software developing team:
 
