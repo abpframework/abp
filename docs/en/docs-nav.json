@@ -551,10 +551,6 @@
               "path": "framework/fundamentals/localization.md"
             },
             {
-              "text": "Multi-Lingual Objects",
-              "path": "multi-lingual-entities.md"
-            },
-            {
               "text": "Logging",
               "path": "framework/fundamentals/logging.md"
             },
