@@ -20,8 +20,6 @@ It is created when teams understand the people behind the requirements:
 - What makes them trust the product?
 - What do they see as valuable?
 
-![roles](images/roles.png)
-
 For a software company, empathy should not be treated only as a soft skill or company value. It should be a practical way to replace internal assumptions with real evidence about users, buyers, administrators, developers and other people affected by the product.
 
 Empathy should also be a cross-functional responsibility. Developers, designers, product managers, sales, marketing, support and leadership all see different parts of the customer experience.
