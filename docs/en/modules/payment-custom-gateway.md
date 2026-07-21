@@ -9,7 +9,7 @@
 
 > You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this module.
 
-This document explains how to create a custom payment gateway that is different from the built-in gateways in the [Payment Module](payment#packages).
+This document explains how to create a custom payment gateway that is different from the built-in gateways in the [Payment Module](payment.md#packages).
 
 ## Creating Core Operations
 
@@ -147,7 +147,7 @@ This document explains how to create a custom payment gateway that is different 
   }
   ```
 
-  `IsValid` controls whether the gateway is offered for a specific payment request. `StartAsync` passes the request currency to the provider adapter together with the amount. `CompleteAsync` verifies the provider response and reconciles the request identifier, amount, currency, and provider transaction identifier before changing the request state. `HandleWebhookAsync` must validate the webhook signature or equivalent authenticity proof before processing its payload.
+  The Payment module does not call `IsValid` when offering or selecting gateways; the gateways offered to the user are determined by the `PaymentOptions.Gateways` and `PaymentWebOptions.Gateways` registrations (see [PaymentOptions](payment.md#paymentoptions)). Some built-in gateways call their own `IsValid` inside `CompleteAsync` to verify the provider response, and a custom gateway can do the same. `StartAsync` passes the request currency to the provider adapter together with the amount. `CompleteAsync` verifies the provider response and reconciles the request identifier, amount, currency, and provider transaction identifier before changing the request state. `HandleWebhookAsync` must validate the webhook signature or equivalent authenticity proof before processing its payload.
 
   `IMyGatewayTransactionRepository` is application-owned; it isn't part of the Payment module. Implement `TryBindAsync` as an atomic insert-or-match operation. For this one-time gateway, add unique database constraints for both the provider transaction identifier and the payment request identifier, accept an existing row only when the same pair is retried, and execute the binding and payment-request update in the same unit of work. This persists the provider transaction identifier while rejecting cross-request replay and a different transaction for an already-bound request.
 

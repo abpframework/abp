@@ -25,6 +25,7 @@ import {
   LookupSearchFn,
 } from '@abp/ng.components/lookup';
 import { map } from 'rxjs';
+import { BookService } from '../services/book.service';
 
 interface BookLookupItem extends LookupItem {
   authorName: string;

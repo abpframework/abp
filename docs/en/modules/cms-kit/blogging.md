@@ -51,7 +51,7 @@ A screenshot from the new blog creation modal:
 
 #### Blog Features
 
-The blogging feature uses other CMS Kit features. A newly created blog enables comments, reactions, ratings, tags, marked items, the quick navigation bar and XSS prevention by default when the related global features are available. You can enable or disable these features for each blog by clicking the features action.
+The blogging feature uses other CMS Kit features. A newly created blog enables comments, reactions, ratings, tags, marked items, the quick navigation bar and XSS prevention by default; where a corresponding global feature exists, it still controls whether the blog feature takes effect. You can enable or disable these features for each blog by clicking the features action.
 
 ![blogs-feature-action](../../images/cmskit-module-blogs-feature-action.png)
 

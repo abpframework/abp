@@ -19,12 +19,7 @@ Import it into a standalone component and provide nodes in the format expected b
 
 ```ts
 import { Component, signal } from '@angular/core';
-import {
-  DropEvent,
-  ExpandedIconTemplateDirective,
-  TreeComponent,
-  TreeNodeTemplateDirective,
-} from '@abp/ng.components/tree';
+import { DropEvent, TreeComponent } from '@abp/ng.components/tree';
 import { of } from 'rxjs';
 
 interface Category {
@@ -35,11 +30,7 @@ interface Category {
 @Component({
   selector: 'app-category-tree',
   templateUrl: './category-tree.component.html',
-  imports: [
-    TreeComponent,
-    TreeNodeTemplateDirective,
-    ExpandedIconTemplateDirective,
-  ],
+  imports: [TreeComponent],
 })
 export class CategoryTreeComponent {
   readonly nodes = signal([
@@ -96,7 +87,7 @@ The main inputs are:
 
 State changes are exposed through `checkedKeysChange`, `expandedKeysChange`, `selectedNodeChange`, `dropOver` and `nzExpandChange`.
 
-The default `beforeDrop` handler rejects drops. Supply a handler that returns an observable accepted by the underlying tree control when drag-and-drop is enabled.
+The default `beforeDrop` handler rejects drops. Supply a handler that returns an observable accepted by the underlying tree control when drag-and-drop is enabled. Note that the default handler is also what records the drop position, so when you replace it, the `pos` property of the `DropEvent` emitted by `dropOver` is not set.
 
 ## Templates
 
@@ -116,7 +107,7 @@ Use the `#menu` template, as in the previous example, to add a context menu for 
 ```
 }%}
 
-The component example imports `TreeNodeTemplateDirective` and `ExpandedIconTemplateDirective` because Angular must see each directive used by a standalone component template. If you use only one of these templates, import only its corresponding directive.
+Import `TreeNodeTemplateDirective` and `ExpandedIconTemplateDirective` from `@abp/ng.components/tree` into the standalone component that uses these templates, because Angular must see each directive used by a component template. If you use only one of these templates, import only its corresponding directive.
 
 ## Flat-List Adapter
 

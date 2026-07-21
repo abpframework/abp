@@ -47,7 +47,7 @@ public class ProductManager
 
 ## IObjectSerializer
 
-`IObjectSerializer` serializes objects to and from `byte[]`. The default implementation uses UTF-8 JSON bytes from `System.Text.Json`:
+`IObjectSerializer` (defined in the `Volo.Abp.Serialization` package, independently of the JSON system) serializes objects to and from `byte[]`. The default implementation uses UTF-8 JSON bytes from `System.Text.Json`:
 
 ```csharp
 public interface IObjectSerializer

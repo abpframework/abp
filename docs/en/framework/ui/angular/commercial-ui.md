@@ -46,11 +46,11 @@ export class ReportRangeComponent {
   [(ngModel)]="dateRange"
   startDateProp="startDate"
   endDateProp="endDate"
-  labelText="Reports::DateRange"
+  labelText="Date Range"
 />
 ```
 
-Use `abp-datetime-range-picker` with the same inputs when the model also needs start and end times.
+Use `abp-datetime-range-picker` with the same inputs when the model also needs start and end times. `labelText` is rendered as-is, so pass an already localized string (for example, a value resolved with the `LocalizationService`) instead of a localization key.
 
 ## Standalone Configuration
 

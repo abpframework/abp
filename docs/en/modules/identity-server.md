@@ -265,4 +265,4 @@ The optional `Volo.Abp.PermissionManagement.Domain.IdentityServer` integration l
 
 ## Entity Extensions
 
-The module's [module entity extension](../framework/architecture/modularity/extending/module-entity-extensions.md) API supports the `Client`, `ApiResource` and `IdentityResource` aggregate roots. Configure these extensions before application startup, and create an EF Core migration when an extra property is mapped to a database column.
+The module's [module entity extension](../framework/architecture/modularity/extending/module-entity-extensions.md) API supports the `Client`, `ApiResource` and `IdentityResource` aggregate roots. The configuration API also exposes a method for `ApiScope`, but the module does not apply that configuration to the entity. Configure these extensions before application startup, and create an EF Core migration when an extra property is mapped to a database column.

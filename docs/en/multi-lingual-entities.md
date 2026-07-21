@@ -80,7 +80,7 @@ With the default arguments, the manager uses `CultureInfo.CurrentUICulture.Name`
 3. A translation for the language configured by `LocalizationSettingNames.DefaultLanguage`.
 4. The first available translation.
 
-The method returns `null` when the collection is null or empty. To disable only the parent-culture fallback, pass `culture` and set `fallbackToParentCultures` to `false`. The default-language and first-available fallbacks still apply.
+The method returns `null` when the collection is null or empty. To disable only the parent-culture fallback, set `fallbackToParentCultures` to `false`. The default-language and first-available fallbacks still apply.
 
 ## Select Translations in Bulk
 

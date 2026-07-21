@@ -177,7 +177,7 @@ You can create a new edition or edit an existing edition in this page:
 
 ![saas-module-edition-edit-modal](../images/saas-module-edition-edit-modal.png)
 
-The application service validates edition display names for uniqueness. Before deleting an edition, you can move all of its tenants to another edition. Deleting an edition without choosing a replacement clears the edition assignment for its tenants.
+`EditionManager` validates edition display names for uniqueness. Before deleting an edition, you can move all of its tenants to another edition. Deleting an edition without choosing a replacement clears the edition assignment for its tenants.
 
 ##### Edition Features
 

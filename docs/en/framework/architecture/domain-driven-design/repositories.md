@@ -311,7 +311,7 @@ Methods:
 - `GetQueryableAsync()`
 - `WithDetailsAsync()` 1 overload
 
-The synchronous `WithDetails()` overload is obsolete. Use `WithDetailsAsync()` for new code.
+The synchronous `WithDetails()` overloads are obsolete. Use `WithDetailsAsync()` for new code.
 
 Whereas the `IReadOnlyBasicRepository<Tentity, TKey>` provides the following methods:
 

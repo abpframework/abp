@@ -57,6 +57,6 @@ It also registers the OAuth configuration initializer and the providers from `an
 
 ## API Interceptor
 
-For non-external requests, the OAuth API interceptor adds an `Authorization` bearer token, `Accept-Language`, the configured tenant header and `X-Requested-With` when the corresponding values are available. Existing authorization, language and tenant headers are preserved. Requests marked with the `IS_EXTERNAL_REQUEST` HTTP context token are sent without those ABP headers. The interceptor also integrates every request with the HTTP wait service.
+For non-external requests, the OAuth API interceptor adds the `X-Requested-With` header and, when the corresponding values are available, an `Authorization` bearer token, `Accept-Language` and the configured tenant header. Existing authorization, language and tenant headers are preserved. Requests marked with the `IS_EXTERNAL_REQUEST` HTTP context token are sent without those ABP headers. The interceptor also integrates every request with the HTTP wait service.
 
 To implement another authentication system, provide replacements for the core services and tokens used by the application instead of depending on the OAuth implementations.

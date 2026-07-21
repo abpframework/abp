@@ -45,7 +45,7 @@ Configure<CmsKitCommentOptions>(options =>
 
 - `EntityTypes`: List of defined entity types (`CommentEntityTypeDefinition`) in the comment system.
 - `IsRecaptchaEnabled`: This flag enables or disables the reCaptcha for the comment system. You can set it as **true** if you want to use reCaptcha in your comment system.
-- `AllowedExternalUrls`: Registers the URL values used by the external-link validation for each entity type.
+- `AllowedExternalUrls`: The allowed external URLs for each entity type. When it is specified for an entity type, every external URL detected in a comment text is checked against the configured values, and the comment is rejected when a URL doesn't match any of them.
 
 `CommentEntityTypeDefinition` properties:
 

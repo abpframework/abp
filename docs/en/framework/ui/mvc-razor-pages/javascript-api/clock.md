@@ -32,7 +32,7 @@ const displayValue = abp.clock.normalizeToLocaleString(requestValue);
 
 The standard shared MVC theme bundle loads Luxon and replaces the core implementations of `normalizeToString` and `normalizeToLocaleString`. When multiple time zones are supported, this Luxon implementation interprets the input in the configured IANA time zone, converts it to UTC and returns an ISO value ending in `Z`. The output can include milliseconds (for example, `2026-07-17T08:30:00.000Z`), so do not require an exact string length when consuming it.
 
-If an application uses the core scripts without the shared theme's Luxon contributor, the fallback implementation produces a `Z`-suffixed transport value by detecting a numeric browser offset. It is not a full IANA time-zone conversion and does not account for fractional-hour offsets or an offset change between the current date and the input date. Include the Luxon contributor when those cases must be handled.
+If an application uses the core scripts without the shared theme's Luxon contributor, the fallback implementation produces a `Z`-suffixed transport value by detecting the numeric offset of the configured time zone (the `abp.clock.timeZone()` value, which falls back to the browser time zone). It is not a full IANA time-zone conversion and does not account for fractional-hour offsets or an offset change between the current date and the input date. Include the Luxon contributor when those cases must be handled.
 
 `normalizeToLocaleString` accepts standard `Intl.DateTimeFormat` options. When no options are supplied, it uses `abp.clock.toLocaleStringOptions`. The default options include the numeric year, long month, numeric day, hour, minute and second. You can replace them to define application-wide display defaults:
 

@@ -485,7 +485,7 @@ Configure<AIManagementIndexingOptions>(options =>
 | `MaxConcurrentIndexingJobs` | `1` | Maximum indexing batches running concurrently across the application |
 | `DistributedLockTimeoutSeconds` | `0` | Time to wait for an indexing lock; `0` performs an immediate attempt |
 
-Increase concurrency only after checking the embedding provider's rate limits and vector-store capacity. The concurrency limiter is application-wide; the per-data-source lock still prevents two batches from mutating the same data source concurrently.
+Increase concurrency only after checking the embedding provider's rate limits and vector-store capacity. The concurrency limiter and the per-data-source lock both use the [distributed lock](../../framework/infrastructure/distributed-locking.md), so they apply across all application instances when a distributed lock provider is configured (with the default in-process implementation, they only cover a single process). The per-data-source lock prevents two batches from mutating the same data source concurrently.
 
 ### Configuring Data Source Upload Options
 

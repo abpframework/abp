@@ -149,7 +149,7 @@ You can also perform startup logic if your module requires it
 
 `IModuleLifecycleContributor` is an advanced extension point for adding an application-wide initialization or shutdown phase. A contributor is invoked for every loaded module. Initialization follows module dependency order, while shutdown processes modules in reverse order.
 
-Derive from `ModuleLifecycleContributorBase` and override only the phases you need:
+Derive from `ModuleLifecycleContributorBase` and override only the phases you need. Each phase has a synchronous and an asynchronous method; the application calls one of them depending on whether it is initialized synchronously or asynchronously, so override both to cover the two startup paths:
 
 ````csharp
 public class MyModuleLifecycleContributor : ModuleLifecycleContributorBase
@@ -160,6 +160,13 @@ public class MyModuleLifecycleContributor : ModuleLifecycleContributorBase
     {
         // Run initialization logic for the current module.
         return Task.CompletedTask;
+    }
+
+    public override void Initialize(
+        ApplicationInitializationContext context,
+        IAbpModule module)
+    {
+        AsyncHelper.RunSync(() => InitializeAsync(context, module));
     }
 }
 ````

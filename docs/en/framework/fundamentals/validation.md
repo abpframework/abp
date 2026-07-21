@@ -196,7 +196,7 @@ public class MyObjectValidationContributor
 
 ### Ignoring Types During Recursive Validation
 
-`AbpValidationOptions.IgnoredTypes` prevents matching values from being recursively validated by the default data annotation contributor. Derived and implementing types are also matched.
+`AbpValidationOptions.IgnoredTypes` prevents the default data annotation contributor from descending into the properties of matching values during recursive validation. The data annotations on the matching value itself are still validated. Derived and implementing types are also matched.
 
 ````csharp
 Configure<AbpValidationOptions>(options =>

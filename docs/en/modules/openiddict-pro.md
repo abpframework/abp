@@ -99,7 +99,7 @@ The **Token Lifetime** action configures per-application overrides for:
 - Request token
 - Issued token
 
-Enter positive values in seconds. Leave a field empty to remove the application override and use the server default. These values change only the selected application; configure server-wide defaults in the [OpenIddict module](./openiddict.md).
+Enter token lifetimes in seconds. Leave a field empty to remove the application override and use the server default. These values change only the selected application; configure server-wide defaults in the [OpenIddict module](./openiddict.md).
 
 #### Generate an Access Token
 
@@ -136,6 +136,8 @@ Use a client credentials application when a machine-to-machine client, automatio
 6. Enable **Allow client credentials flow**.
 7. Select the API scopes the client is allowed to request.
 8. Save the application.
+
+The screenshot below shows the authorization settings of an existing application (the layout varies by UI):
 
 ![Client Credentials application](../images/openiddict-client-credentials-application.png)
 
