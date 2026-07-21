@@ -145,6 +145,10 @@ public class InputClass
 If a class that is subject to automatic validation (it implements `IValidationEnabled`, like application services do) has `[DisableValidation]`, add `[EnableValidation]` to a method to re-enable automatic validation for that method (`[EnableValidation]` does not activate validation for a class that isn't intercepted at all):
 
 ````csharp
+using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Validation;
+
 [DisableValidation]
 public class MyService : IValidationEnabled, ITransientDependency
 {

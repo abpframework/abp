@@ -363,7 +363,7 @@ var serialized = localizableStringSerializer.Serialize(
 var localizableString = localizableStringSerializer.Deserialize(serialized!);
 ````
 
-The default serializer uses `L:<resource-name>,<key>` for `LocalizableString` and `F:<value>` for `FixedLocalizableString`. A value without a recognized prefix is deserialized as a `FixedLocalizableString`; values too short to carry a prefix and a content (like the literal `L:`) are treated the same way. An `L:` value without a comma or with an empty key throws an `AbpException`. Serializing `null` returns `null`; serializing another `ILocalizableString` implementation throws an `AbpException`.
+The default serializer uses `L:<resource-name>,<key>` for `LocalizableString` and `F:<value>` for `FixedLocalizableString`. A value without a recognized prefix is deserialized as a `FixedLocalizableString`; values too short to carry both a prefix and content (like the literal `L:`) are treated the same way. An `L:` value without a comma or with an empty or whitespace-only key throws an `AbpException`. Serializing `null` returns `null`; serializing another `ILocalizableString` implementation throws an `AbpException`.
 
 ### Format Arguments
 
