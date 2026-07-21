@@ -7,17 +7,15 @@
 
 # Multi-Lingual Objects
 
-The `Volo.Abp.MultiLingualObject` package provides a contract and a selection service for objects that store one translation per language. Persistence mapping is application-specific; the package does not create a database relationship for the translations.
+> The `Volo.Abp.MultiLingualObject` package is **not published on NuGet**. It was removed from the release pipeline in [#8271](https://github.com/abpframework/abp/pull/8271) and re-designing this feature is tracked in [#11698](https://github.com/abpframework/abp/issues/11698). The source code is still maintained in the framework repository, so you can copy the [Volo.Abp.MultiLingualObjects](https://github.com/abpframework/abp/tree/dev/framework/src/Volo.Abp.MultiLingualObjects) project into your solution if you want to use the pattern described below.
 
-## Installation
+The `Volo.Abp.MultiLingualObjects` project provides a contract and a selection service for objects that store one translation per language. Persistence mapping is application-specific; it does not create a database relationship for the translations.
 
-Install the package in the project that defines the consuming module:
+## Getting the Code
 
-```bash
-abp add-package Volo.Abp.MultiLingualObject
-```
+Copy the [Volo.Abp.MultiLingualObjects](https://github.com/abpframework/abp/tree/dev/framework/src/Volo.Abp.MultiLingualObjects) project into your solution and reference it from the project that defines the consuming module.
 
-Add `AbpMultiLingualObjectsModule` as a dependency of that module when the package is installed manually:
+Add `AbpMultiLingualObjectsModule` as a dependency of that module:
 
 ````csharp
 using Volo.Abp.Modularity;

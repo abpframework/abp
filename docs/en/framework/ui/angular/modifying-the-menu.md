@@ -16,7 +16,7 @@ The `logoUrl` property in the environment variables is the url of the logo.
 
 You can add your logo to `src/assets` folder and set the `logoUrl` as shown below:
 
-```js
+```ts
 export const environment = {
   // other configurations
   application: {
@@ -74,7 +74,7 @@ Add the following to your `src/styles.scss`:
 
 You can add routes to the menu by calling the `add` method of `RoutesService`. It is a singleton service, i.e. provided in root, so you can inject and use it immediately.
 
-```js
+```ts
 import { RoutesService, eLayoutType } from '@abp/ng.core';
 import { Component, inject } from '@angular/core';
 
@@ -106,7 +106,7 @@ export class AppComponent {
 
 An alternative and probably cleaner way is to use a route provider. First create a provider:
 
-```js
+```ts
 // route.provider.ts
 import { RoutesService, eLayoutType } from '@abp/ng.core';
 import { inject, provideAppInitializer } from '@angular/core';
@@ -142,7 +142,7 @@ function configureRoutes() {
 We can also define a group for navigation elements. It's an optional property
  - **Note:** It'll also include groups that were defined at the modules
 
-```js
+```ts
 // route.provider.ts
 import { RoutesService } from '@abp/ng.core';
 import { inject } from '@angular/core';
@@ -168,7 +168,7 @@ function configureRoutes() {
 To get the route items as grouped we can use the `groupedVisible` (or Observable one `groupedVisible$`)  getter methods
  - It returns `RouteGroup<T>[]` if there is any group in the route tree, otherwise it returns `undefined`
 
-```js
+```ts
 import { ABP, RoutesService, RouteGroup } from "@abp/ng.core";
 import { Component, inject } from "@angular/core";
 import { Observable } from "rxjs";
@@ -186,7 +186,7 @@ export class AppComponent {
 ...and then in app.config.ts...
  - The `groupedVisible` method will return the `Others` group for ungrouped items, the default key is `AbpUi::OthersGroup`, we can change this `key` via the `OTHERS_GROUP` injection token
 
-```js
+```ts
 import { OTHERS_GROUP } from '@abp/ng.core';
 import { APP_ROUTE_PROVIDER } from './route.provider';
 
@@ -240,7 +240,7 @@ You can define your routes by adding `routes` as a child property to `data` prop
 
 You can add the `routes` property like below:
 
-```js
+```ts
 {
   path: 'your-path',
   data: {
@@ -264,7 +264,7 @@ You can add the `routes` property like below:
 
 Alternatively, you can do this:
 
-```js
+```ts
 {
   path: 'your-path',
   data: {
@@ -298,7 +298,7 @@ After adding the `routes` property as described above, the navigation menu looks
 
 The `patch` method of `RoutesService` finds a route by its name and replaces its configuration with the new configuration passed as the second parameter. Similarly, `remove` method finds a route and removes it along with its children. Also you can use `removeByParam` method to delete the routes with given properties.
 
-```js
+```ts
 // this.routes is instance of RoutesService
 // eThemeSharedRouteNames enum can be imported from @abp/ng.theme.shared
 
@@ -344,7 +344,7 @@ After the operations above, the new menu looks like below:
 
 You can add elements to the right part of the menu by calling the `addItems` method of `NavItemsService`. It is a singleton service, i.e. provided in root, so you can inject and use it immediately.
 
-```js
+```ts
 import { NavItemsService } from '@abp/ng.theme.shared';
 import { Component, inject } from '@angular/core';
 
@@ -388,7 +388,7 @@ This inserts a search input and a sign out icon to the menu. The final UI looks 
 
 The `patchItem` method of `NavItemsService` finds an element by its `id` property and replaces its configuration with the new configuration passed as the second parameter. Similarly, `removeItem` method finds an element and removes it.
 
-```js
+```ts
 export class AppComponent {
   private navItems = inject(NavItemsService);
 
