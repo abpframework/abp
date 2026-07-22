@@ -27,17 +27,16 @@ It is created when teams understand the people behind the requirements:
 
 For a software company, empathy should not be treated only as a soft skill or company value. It should be a practical way to replace internal assumptions with real evidence about users, buyers, administrators, developers and other people affected by the product.
 
-Empathy must be a cross-functional responsibility. Developers, designers, product managers, sales, marketing, support and leadership all see different parts of the customer experience.
-
-When these teams bring their knowledge together, they can make better product and business decisions.
+Empathy needs to be a cross-functional responsibility. Developers, designers, product managers, sales, marketing, support and leaders all have visibility into different aspects of the customer experience.
+ 
 
 ## What Empathy Means in a Software Company
 
-Empathy has two main parts.
+There are two components of empathy:
 
-* **Affective empathy**: Means sharing another person’s emotions.
+* **Affective empathy**:  is experiencing the same emotions as another person.
 
-* **Cognitive empathy**: Means understanding another person’s point of view, goals, needs, concerns and limitations.
+* **Cognitive empathy**: is the ability to understand another person's perspective, intentions, needs, desires, concerns and constraints.
 
 Both are important. However, cognitive empathy is usually more useful when teams review a feature, workflow, message, onboarding process or pricing decision.
 
@@ -51,11 +50,18 @@ It encourages the team to ask what a specific person would understand and experi
 
 This difference is important because employees know much more about the product than customers do.
 
-> A workflow that seems obvious to the software developer who implemented it, **may be confusing to a first-time user**.
-> A message that sounds clear to an engineer may **sound like technical jargon to a buyer.** 
-> A feature that looks simple in a sales demo may still be **difficult to use in a real company**.
+> A workflow that is easy to the developer who implemented it, **may be confusing to a first time user**.
+> A msg that sounds clear to a software engineer **can be a technical jargon to a buyer**.
+> A feature that seems simple in a sales demo **can still be hard to use in a real company.**
 
-Affective empathy also matters because it helps people care about customers and make responsible decisions. However, emotion alone is not always a reliable evaluation method. A strong customer story may receive too much attention, even when it does not represent most users. Emotional pressure can also lead to stress or biased decisions.
+Affective empathy also matters because it encourages people to care about customers and take community-minded actions. But emotion is not always a good guide for assessment. 
+A great customer story can recieve too much attention, even when it does not represent most users.Emotional pressure may cause stress or wrong decisions. 
+
+
+
+---
+
+
 
 A better approach is to combine emotional concern with structured questions:
 
@@ -76,11 +82,11 @@ ALWAYS ASK YOURSELF:
 
 I know *we can easily criticize other people's work* but when it comes to criticize our own work we just can't do it. Because you know the difficulties of your work and you don't know about other people's difficulties. That's why you cannot truly criticize yourself. But the real success comes after you improve your own critizing skills. 
 
-**Sit on the other side of the desk for a minute please!**
+**Sit on the other side of the desk for a minute please**
 
 ---
 
-![Why empathy matters in software development](images/why-empathy.png)
+![Why empathy matters in software development?](images/why-empathy.png)
 
 ---
 
@@ -92,7 +98,7 @@ Each team member should see a different part of the customer reality.
 
 | Team             | Ask your self this question                                  | Inspect these things...                                      |
 | ---------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Developers       | Where would a first-time user fail, hesitate or misunderstand the system? If users wait on this screen so much, will they close the app? | Defaults, errors, performance, learnability, edge cases and technical friction |
+| Developers       | Where might a new user get lost, stuck or confused by the system? If users wait on this screen so much, will they close the app? | Defaults, errors, performance, learnability, edge cases and technical friction |
 | Designers        | Does the interface match the user’s language, expectations, abilities and situation? Is it understandable? | Navigation, accessibility, cognitive load, interaction flow and error recovery |
 | Product managers | Are we solving a real and important user problem?            | User goals, priorities, evidence, value and expected outcomes |
 | Sales            | What would make a buyer question the value, risk, effort or credibility? | Demo flow, objections, trust signals, implementation concerns and time to value |
@@ -104,8 +110,8 @@ Each team member should see a different part of the customer reality.
 
 ## ISO Standard of Empathy Loop
 
-And yes! Someone even created a standard for what I'm talking. It's called **ISO 9241-210** standard. 
-The full title is ***Ergonomics of human-system interaction***. Basically it deals with any system that has interactivity. 
+And yes! There is even a standard for what I'm talking about. That is 9241-210, the ISO standard.
+Its full name is ***Ergonomics of human-system interaction***. It covers all the works which has interactivity. 
 So our application screens, APIs are all included in this standard. 
 The main idea is simple: teams should design software around real users, their goals and their working environment. 
 Not only around technical requirements. 
@@ -127,7 +133,7 @@ Let me adjust these to a software developing team:
    - Contextual observation
    - Customer feedback
    - Win-loss analysis
-2. Learn who the users are, what they want to do, where they use the product and what problems they face. 
+2. Learn your  users, what they want to do, where they use the product and what problems they face. 
    In this section you really do empathy. Understand your user’s:
    - Goals
    - Concerns
@@ -162,8 +168,8 @@ Let me adjust these to a software developing team:
    - Product analytics
    - Write feedback forms
 6. If there're still problems, improve the design and test again. 
-   The process ends when the important user needs are met. 
-   Empathy should not be a one-time workshop.
+   The process is complete, once the critical user requirements are fulfilled.
+   Empathy isn’t a one-day workshop. 
 
 ---
 
@@ -173,8 +179,8 @@ Let me adjust these to a software developing team:
 
 ![quote](images/quote.png)
 
-It helps developers predict failure, designers reduce cognitive conflicts, sales teams understand buyer risk, marketers communicate in the customer's language, and leaders create systems that reward learning rather than assumptions.
+It is used by developers to predict failure, designers to decrease cognitive dissonance, sales teams to quantify buyer risk, marketers to speak in the language of the customer and leaders to desgn systems that encourage learning rather than assumptions.
 
-**When teams consistently ask how their work will be understood, used, trusted and valued by the people on the other side of the screen, they build products they can be proud to use, recommend, and stand behind.**
+**When teams regularly inquire about how their work will be understood, used, trusted and valued by the users on the other side of the screen, they create products they take pride in using, recommending and standing behind.** 
 
-Thanks for reading 🙏
+Thanks for reading ...
