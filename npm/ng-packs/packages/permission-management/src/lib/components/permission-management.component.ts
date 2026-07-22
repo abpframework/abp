@@ -187,11 +187,11 @@ export class PermissionManagementComponent {
   });
 
   protected readonly selectThisTabState = computed(() =>
-    getSelectAllCheckboxState(this.selectedGroupPermissions(), this.providerName),
+    getSelectAllCheckboxState(this.selectedGroupPermissions()),
   );
 
   protected readonly selectAllTabState = computed(() =>
-    getSelectAllCheckboxState(this.permissionsState(), this.providerName),
+    getSelectAllCheckboxState(this.permissionsState()),
   );
 
   // Disabled state is based on the API snapshot (not live edits) so select-all stays toggleable.
@@ -588,20 +588,18 @@ function isSelectAllDisabled(
   );
 }
 
-function getSelectAllCheckboxState(
-  permissions: PermissionGrantInfoDto[],
-  providerName: string,
-): SelectAllCheckboxState {
-  const selectablePermissions = permissions.filter(permission =>
-    (permission.grantedProviders ?? []).every(p => p.providerName === providerName),
-  );
-  const selectedPermissions = selectablePermissions.filter(permission => permission.isGranted);
-
-  if (!selectablePermissions.length || selectedPermissions.length === 0) {
+function getSelectAllCheckboxState(permissions: PermissionGrantInfoDto[]): SelectAllCheckboxState {
+  if (!permissions.length) {
     return { checked: false, indeterminate: false };
   }
 
-  if (selectedPermissions.length === selectablePermissions.length) {
+  const grantedCount = permissions.filter(permission => permission.isGranted).length;
+
+  if (grantedCount === 0) {
+    return { checked: false, indeterminate: false };
+  }
+
+  if (grantedCount === permissions.length) {
     return { checked: true, indeterminate: false };
   }
 
