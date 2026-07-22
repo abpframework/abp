@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -120,22 +118,15 @@ public class BlobContainer : IBlobContainer
             var blobNormalizeNaming = BlobNormalizeNamingService.NormalizeNaming(Configuration, ContainerName, name);
 
             var fallbackCancellationToken = CancellationTokenProvider.FallbackToProvider(cancellationToken);
-            var contributorTypes = Configuration.GetEffectivePipelineContributors().ToList();
-            IServiceScope? contributorScope = null;
+            Stream? encryptingStream = null;
+            if (BlobEncryptionConfiguration.IsEnabled(Configuration))
+            {
+                encryptingStream = await CreateEncryptingStreamAsync(blobNormalizeNaming, stream, fallbackCancellationToken);
+                stream = encryptingStream;
+            }
+
             try
             {
-                if (contributorTypes.Count > 0)
-                {
-                    contributorScope = ServiceProvider.CreateScope();
-                    stream = await ApplyPipelineOnSaveAsync(
-                        blobNormalizeNaming,
-                        stream,
-                        fallbackCancellationToken,
-                        contributorTypes,
-                        contributorScope.ServiceProvider
-                    );
-                }
-
                 await Provider.SaveAsync(
                     new BlobProviderSaveArgs(
                         blobNormalizeNaming.ContainerName!,
@@ -149,7 +140,8 @@ public class BlobContainer : IBlobContainer
             }
             finally
             {
-                contributorScope?.Dispose();
+                // Disposing the wrapper zeroes the derived key; the caller's stream is untouched
+                encryptingStream?.Dispose();
             }
         }
     }
@@ -235,88 +227,65 @@ public class BlobContainer : IBlobContainer
                 return null;
             }
 
-            var contributorTypes = Configuration.GetEffectivePipelineContributors().ToList();
-            if (contributorTypes.Count == 0)
+            if (!BlobEncryptionConfiguration.IsEnabled(Configuration))
             {
                 return stream;
             }
 
-            var contributorScope = ServiceProvider.CreateScope();
             try
             {
-                var transformedStream = await ApplyPipelineOnGetAsync(
-                    blobNormalizeNaming,
-                    stream,
-                    fallbackCancellationToken,
-                    contributorTypes,
-                    contributorScope.ServiceProvider
-                );
-
-                return new ScopeDisposingStream(transformedStream, contributorScope);
+                return await CreateDecryptingStreamAsync(blobNormalizeNaming, stream, fallbackCancellationToken);
             }
             catch
             {
-                contributorScope.Dispose();
                 stream.Dispose();
                 throw;
             }
         }
     }
 
-    protected virtual async Task<Stream> ApplyPipelineOnSaveAsync(
-        BlobNormalizeNaming blobNormalizeNaming,
-        Stream stream,
-        CancellationToken cancellationToken,
-        IReadOnlyList<Type> contributorTypes,
-        IServiceProvider contributorServiceProvider)
+    /// <summary>
+    /// Wraps the stream for encryption. The caller keeps the ownership of
+    /// <paramref name="stream"/>; the wrapper is disposed after the provider call.
+    /// </summary>
+    protected virtual async Task<Stream> CreateEncryptingStreamAsync(BlobNormalizeNaming blobNormalizeNaming, Stream stream, CancellationToken cancellationToken)
     {
-        foreach (var contributorType in contributorTypes)
+        // The key is fully resolved before returning, so the scope can be released here
+        await using (var scope = ServiceProvider.CreateAsyncScope())
         {
-            var contributor = contributorServiceProvider
-                .GetRequiredService(contributorType)
-                .As<IBlobPipelineContributor>();
-
-            stream = await contributor.OnSaveAsync(
-                new BlobPipelineSaveArgs(
-                    blobNormalizeNaming.ContainerName!,
+            return await scope.ServiceProvider
+                .GetRequiredService<BlobEncryptionCodec>()
+                .CreateEncryptingStreamAsync(
                     Configuration,
+                    blobNormalizeNaming.ContainerName!,
                     blobNormalizeNaming.BlobName!,
+                    GetTenantIdOrNull(),
                     stream,
                     cancellationToken
-                )
-            );
+                );
         }
-
-        return stream;
     }
 
-    protected virtual async Task<Stream> ApplyPipelineOnGetAsync(
-        BlobNormalizeNaming blobNormalizeNaming,
-        Stream stream,
-        CancellationToken cancellationToken,
-        IReadOnlyList<Type> contributorTypes,
-        IServiceProvider contributorServiceProvider)
+    /// <summary>
+    /// Wraps the provider stream for decryption; the returned stream owns it.
+    /// Opening throws <see cref="AbpException"/> for format violations; reading throws
+    /// <see cref="System.Security.Cryptography.CryptographicException"/> on failed authentication.
+    /// </summary>
+    protected virtual async Task<Stream> CreateDecryptingStreamAsync(BlobNormalizeNaming blobNormalizeNaming, Stream stream, CancellationToken cancellationToken)
     {
-        // Execute in reverse order, so the contributor that transformed the stream
-        // last on save is the first to transform it back on read.
-        foreach (var contributorType in contributorTypes.Reverse())
+        await using (var scope = ServiceProvider.CreateAsyncScope())
         {
-            var contributor = contributorServiceProvider
-                .GetRequiredService(contributorType)
-                .As<IBlobPipelineContributor>();
-
-            stream = await contributor.OnGetAsync(
-                new BlobPipelineGetArgs(
-                    blobNormalizeNaming.ContainerName!,
+            return await scope.ServiceProvider
+                .GetRequiredService<BlobEncryptionCodec>()
+                .CreateDecryptingStreamAsync(
                     Configuration,
+                    blobNormalizeNaming.ContainerName!,
                     blobNormalizeNaming.BlobName!,
+                    GetTenantIdOrNull(),
                     stream,
                     cancellationToken
-                )
-            );
+                );
         }
-
-        return stream;
     }
 
     protected virtual Guid? GetTenantIdOrNull()
@@ -327,72 +296,5 @@ public class BlobContainer : IBlobContainer
         }
 
         return CurrentTenant.Id;
-    }
-
-    private sealed class ScopeDisposingStream : Stream
-    {
-        private readonly Stream _stream;
-        private readonly IServiceScope _scope;
-        private bool _disposed;
-
-        public ScopeDisposingStream(Stream stream, IServiceScope scope)
-        {
-            _stream = stream;
-            _scope = scope;
-        }
-
-        public override bool CanRead => _stream.CanRead;
-        public override bool CanSeek => _stream.CanSeek;
-        public override bool CanWrite => _stream.CanWrite;
-        public override long Length => _stream.Length;
-
-        public override long Position
-        {
-            get => _stream.Position;
-            set => _stream.Position = value;
-        }
-
-        public override void Flush()
-        {
-            _stream.Flush();
-        }
-
-        public override int Read(byte[] buffer, int offset, int count)
-        {
-            return _stream.Read(buffer, offset, count);
-        }
-
-        public override long Seek(long offset, SeekOrigin origin)
-        {
-            return _stream.Seek(offset, origin);
-        }
-
-        public override void SetLength(long value)
-        {
-            _stream.SetLength(value);
-        }
-
-        public override void Write(byte[] buffer, int offset, int count)
-        {
-            _stream.Write(buffer, offset, count);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && !_disposed)
-            {
-                _disposed = true;
-                try
-                {
-                    _stream.Dispose();
-                }
-                finally
-                {
-                    _scope.Dispose();
-                }
-            }
-
-            base.Dispose(disposing);
-        }
     }
 }

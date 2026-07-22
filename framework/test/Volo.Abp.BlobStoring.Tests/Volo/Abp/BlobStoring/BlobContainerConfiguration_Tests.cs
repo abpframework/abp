@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Shouldly;
 using Volo.Abp.BlobStoring.Fakes;
@@ -61,19 +62,79 @@ public class BlobContainerConfiguration_Tests
     }
 
     [Fact]
-    public void Should_Compose_Default_And_Local_Pipeline_Contributors_With_Provider_Override()
+    public void Should_Inherit_Encryption_From_Default_Container()
     {
         var defaultConfig = new BlobContainerConfiguration();
         defaultConfig.UseEncryption();
 
         var namedConfig = new BlobContainerConfiguration(defaultConfig);
-        namedConfig.ProviderType = typeof(FakeBlobProvider2);
-        namedConfig.PipelineContributors.Add<FakeReversingPipelineContributor>();
 
-        namedConfig.GetEffectivePipelineContributors().ShouldBe(new[]
-        {
-            typeof(BlobEncryptionContributor),
-            typeof(FakeReversingPipelineContributor)
-        });
+        BlobEncryptionConfiguration.IsEnabled(namedConfig).ShouldBeTrue();
+        BlobEncryptionConfiguration.IsEnabled(defaultConfig).ShouldBeTrue();
+    }
+
+    [Fact]
+    public void Should_Disable_Inherited_Encryption_For_A_Single_Container()
+    {
+        var defaultConfig = new BlobContainerConfiguration();
+        defaultConfig.UseEncryption();
+
+        var namedConfig = new BlobContainerConfiguration(defaultConfig);
+        namedConfig.DisableEncryption();
+
+        BlobEncryptionConfiguration.IsEnabled(namedConfig).ShouldBeFalse();
+        BlobEncryptionConfiguration.IsEnabled(defaultConfig).ShouldBeTrue();
+    }
+
+    [Fact]
+    public void Should_Enable_Encryption_Again_After_Disabling()
+    {
+        var defaultConfig = new BlobContainerConfiguration();
+        defaultConfig.UseEncryption();
+
+        var namedConfig = new BlobContainerConfiguration(defaultConfig);
+        namedConfig.DisableEncryption();
+        namedConfig.UseEncryption("named-passphrase");
+
+        BlobEncryptionConfiguration.IsEnabled(namedConfig).ShouldBeTrue();
+        BlobEncryptionConfiguration.GetPassPhraseOrNull(namedConfig).ShouldBe("named-passphrase");
+    }
+
+    [Fact]
+    public void Should_Keep_The_Configured_PassPhrase_When_UseEncryption_Is_Called_Again()
+    {
+        var configuration = new BlobContainerConfiguration();
+        configuration.UseEncryption("first-passphrase", allowLegacyPlaintext: true);
+
+        // Another module just ensuring that encryption is enabled must not
+        // change the configured key or the legacy option.
+        configuration.UseEncryption();
+
+        BlobEncryptionConfiguration.GetPassPhraseOrNull(configuration).ShouldBe("first-passphrase");
+        BlobEncryptionConfiguration.IsLegacyPlaintextAllowed(configuration).ShouldBeTrue();
+    }
+
+    [Fact]
+    public void Should_Shadow_The_PassPhrase_Inherited_From_The_Default_Container()
+    {
+        var defaultConfig = new BlobContainerConfiguration();
+        defaultConfig.UseEncryption("default-passphrase");
+
+        var namedConfig = new BlobContainerConfiguration(defaultConfig);
+        namedConfig.UseEncryption();
+        namedConfig.ClearEncryptionPassPhrase();
+
+        // The named container explicitly opted out of the inherited passphrase
+        BlobEncryptionConfiguration.GetPassPhraseOrNull(namedConfig).ShouldBeNull();
+        BlobEncryptionConfiguration.GetPassPhraseOrNull(defaultConfig).ShouldBe("default-passphrase");
+    }
+
+    [Fact]
+    public void Should_Reject_Empty_PassPhrase()
+    {
+        var configuration = new BlobContainerConfiguration();
+
+        Assert.ThrowsAny<ArgumentException>(() => configuration.UseEncryption(""));
+        Assert.ThrowsAny<ArgumentException>(() => configuration.UseEncryption("   "));
     }
 }

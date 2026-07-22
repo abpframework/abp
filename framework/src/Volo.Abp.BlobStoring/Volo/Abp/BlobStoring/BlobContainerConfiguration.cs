@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using JetBrains.Annotations;
 using Volo.Abp.Collections;
 
@@ -33,12 +32,6 @@ public class BlobContainerConfiguration
 
     public ITypeList<IBlobNamingNormalizer> NamingNormalizers { get; }
 
-    /// <summary>
-    /// The pipeline contributors to be executed for this container,
-    /// before/after the provider calls.
-    /// </summary>
-    public ITypeList<IBlobPipelineContributor> PipelineContributors { get; }
-
     [NotNull] private readonly Dictionary<string, object?> _properties;
 
     private readonly BlobContainerConfiguration? _fallbackConfiguration;
@@ -46,7 +39,6 @@ public class BlobContainerConfiguration
     public BlobContainerConfiguration(BlobContainerConfiguration? fallbackConfiguration = null)
     {
         NamingNormalizers = new TypeList<IBlobNamingNormalizer>();
-        PipelineContributors = new TypeList<IBlobPipelineContributor>();
         _fallbackConfiguration = fallbackConfiguration;
         _properties = new Dictionary<string, object?>();
     }
@@ -63,23 +55,6 @@ public class BlobContainerConfiguration
         }
 
         return NamingNormalizers;
-    }
-
-    /// <summary>
-    /// Returns the pipeline contributors in effect for this container. Contributors from the fallback
-    /// configuration are composed before local contributors, independently from provider inheritance.
-    /// </summary>
-    public IEnumerable<Type> GetEffectivePipelineContributors()
-    {
-        if (_fallbackConfiguration == null)
-        {
-            return PipelineContributors;
-        }
-
-        return _fallbackConfiguration
-            .GetEffectivePipelineContributors()
-            .Concat(PipelineContributors)
-            .Distinct();
     }
 
     public T? GetConfigurationOrDefault<T>(string name, T? defaultValue = default)

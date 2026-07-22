@@ -1,54 +1,92 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.MultiTenancy;
-using Volo.Abp.Settings;
 
 namespace Volo.Abp.BlobStoring;
 
 /// <summary>
-/// Default implementation of <see cref="IBlobEncryptionKeyProvider"/>.
-/// Resolves a tenant-specific passphrase from the setting system
-/// (<see cref="BlobStoringEncryptionSettings.TenantPassPhrase"/>) when a tenant is available,
-/// otherwise falls back to the global passphrase
-/// (<see cref="AbpBlobStoringEncryptionOptions.DefaultPassPhrase"/>).
+/// Resolves the container passphrase first, then the global
+/// <see cref="AbpBlobStoringEncryptionOptions.DefaultPassPhrase"/>; decryption uses
+/// only the source recorded in the BLOB header. Replace this service for
+/// tenant-specific or externally stored passphrases.
 /// </summary>
 public class DefaultBlobEncryptionKeyProvider : IBlobEncryptionKeyProvider, ITransientDependency
 {
-    protected ICurrentTenant CurrentTenant { get; }
-
-    protected ISettingProvider SettingProvider { get; }
-
     protected AbpBlobStoringEncryptionOptions Options { get; }
 
-    public DefaultBlobEncryptionKeyProvider(
-        ICurrentTenant currentTenant,
-        ISettingProvider settingProvider,
-        IOptions<AbpBlobStoringEncryptionOptions> options)
+    public DefaultBlobEncryptionKeyProvider(IOptions<AbpBlobStoringEncryptionOptions> options)
     {
-        CurrentTenant = currentTenant;
-        SettingProvider = settingProvider;
         Options = options.Value;
     }
 
-    public virtual async Task<string?> GetPassPhraseOrNullAsync(
+    public virtual Task<BlobEncryptionKey> ResolveForEncryptionAsync(
         BlobContainerConfiguration configuration,
         CancellationToken cancellationToken = default)
     {
-        if (CurrentTenant.Id.HasValue)
-        {
-            var tenantPassPhrase = await SettingProvider.GetOrNullAsync(
-                BlobStoringEncryptionSettings.TenantPassPhrase
-            );
+        cancellationToken.ThrowIfCancellationRequested();
 
-            if (!tenantPassPhrase.IsNullOrEmpty())
-            {
-                return tenantPassPhrase;
-            }
+        var containerPassPhrase = GetContainerPassPhraseOrNull(configuration);
+        if (!string.IsNullOrWhiteSpace(containerPassPhrase))
+        {
+            return Task.FromResult(new BlobEncryptionKey(BlobEncryptionKeySource.Container, containerPassPhrase!));
         }
 
-        return Options.DefaultPassPhrase;
+        if (!string.IsNullOrWhiteSpace(Options.DefaultPassPhrase))
+        {
+            return Task.FromResult(new BlobEncryptionKey(BlobEncryptionKeySource.Global, Options.DefaultPassPhrase!));
+        }
+
+        throw new AbpException(
+            "BLOB encryption is enabled, but no passphrase could be resolved. " +
+            "Pass a passphrase to the UseEncryption extension method or configure " +
+            $"{nameof(AbpBlobStoringEncryptionOptions)}.{nameof(AbpBlobStoringEncryptionOptions.DefaultPassPhrase)}."
+        );
+    }
+
+    public virtual Task<string> ResolveForDecryptionAsync(
+        BlobEncryptionKeySource keySource,
+        BlobContainerConfiguration configuration,
+        CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        string? passPhrase;
+        switch (keySource)
+        {
+            case BlobEncryptionKeySource.Container:
+                passPhrase = GetContainerPassPhraseOrNull(configuration);
+                break;
+            case BlobEncryptionKeySource.Tenant:
+                throw new AbpException(
+                    "The BLOB was encrypted with a tenant-specific passphrase, but the default " +
+                    $"key provider does not supply tenant keys. Replace the {nameof(IBlobEncryptionKeyProvider)} " +
+                    "service with the implementation that was used to encrypt the BLOB."
+                );
+            case BlobEncryptionKeySource.Global:
+                passPhrase = Options.DefaultPassPhrase;
+                break;
+            default:
+                throw new AbpException($"Unknown BLOB encryption key source: {keySource}!");
+        }
+
+        if (string.IsNullOrWhiteSpace(passPhrase))
+        {
+            throw new AbpException(
+                $"The BLOB was encrypted with the '{keySource}' passphrase, " +
+                "but that passphrase is not available anymore, so the BLOB can not be decrypted."
+            );
+        }
+
+        return Task.FromResult(passPhrase!);
+    }
+
+    /// <summary>
+    /// Returns the container-specific passphrase, so derived providers can keep it
+    /// as the highest-priority source.
+    /// </summary>
+    protected virtual string? GetContainerPassPhraseOrNull(BlobContainerConfiguration configuration)
+    {
+        return BlobEncryptionConfiguration.GetPassPhraseOrNull(configuration);
     }
 }

@@ -31,10 +31,19 @@ public class FileSystemBlobProvider : BlobProviderBase, ITransientDependency
             ? FileMode.Create
             : FileMode.CreateNew;
 
-        await Policy.Handle<IOException>()
+        // Retry only replayable overwrites: a non-seekable source would continue from the
+        // middle (corrupted file), and a failed CreateNew leaves the file behind anyway
+        var sourcePosition = args.BlobStream.CanSeek && fileMode == FileMode.Create ? args.BlobStream.Position : -1;
+
+        await Policy.Handle<IOException>(_ => sourcePosition >= 0)
             .WaitAndRetryAsync(2, retryCount => TimeSpan.FromSeconds(retryCount))
             .ExecuteAsync(async () =>
             {
+                if (sourcePosition >= 0)
+                {
+                    args.BlobStream.Seek(sourcePosition, SeekOrigin.Begin);
+                }
+
                 using (var fileStream = File.Open(filePath, fileMode, FileAccess.Write))
                 {
                     await args.BlobStream.CopyToAsync(

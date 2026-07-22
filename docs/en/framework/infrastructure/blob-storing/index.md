@@ -315,7 +315,7 @@ Configure<AbpBlobStoringOptions>(options =>
 
 ## Encrypting BLOBs
 
-The BLOB Storing system has a **pipeline** that can transform the BLOB stream between the container and the storage provider. The built-in encryption contributor uses this pipeline to **encrypt BLOBs at rest**, transparently, with any storage provider:
+The BLOB Storing system can **encrypt BLOBs at rest**, transparently, on top of the configured storage provider:
 
 ````csharp
 Configure<AbpBlobStoringOptions>(options =>
@@ -327,7 +327,7 @@ Configure<AbpBlobStoringOptions>(options =>
 });
 ````
 
-The encryption key can be container-specific, **tenant-specific** (each tenant gets its own key) or **global**. BLOBs stored before enabling the encryption stay readable. See the [BLOB Encryption & Pipeline document](./encryption.md) for details and for creating custom pipeline contributors (like compression).
+The encryption key can be container-specific or **global**; per-tenant keys can be plugged in over the key provider. See the [BLOB Encryption document](./encryption.md) for details.
 
 ## Extending the BLOB Storing System
 
@@ -344,5 +344,5 @@ If you want to create folders and move files between folders, assign permissions
 
 ## See Also
 
-* [BLOB Encryption & Pipeline](./encryption.md)
+* [BLOB Encryption](./encryption.md)
 * [Creating a custom BLOB storage provider](./custom-provider.md)

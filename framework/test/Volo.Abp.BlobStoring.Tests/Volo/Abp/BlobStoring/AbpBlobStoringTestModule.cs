@@ -4,7 +4,6 @@ using Volo.Abp.Autofac;
 using Volo.Abp.BlobStoring.Fakes;
 using Volo.Abp.BlobStoring.TestObjects;
 using Volo.Abp.Modularity;
-using Volo.Abp.Settings;
 
 namespace Volo.Abp.BlobStoring;
 
@@ -25,11 +24,7 @@ public class AbpBlobStoringTestModule : AbpModule
             serviceProvider => serviceProvider.GetRequiredService<FakeInMemoryBlobProvider>()
         );
 
-        Configure<AbpSettingOptions>(options =>
-        {
-            var tenantProviderIndex = options.ValueProviders.IndexOf(typeof(TenantSettingValueProvider));
-            options.ValueProviders[tenantProviderIndex] = typeof(FakeTenantPassPhraseSettingValueProvider);
-        });
+        context.Services.AddTransient<IBlobEncryptionKeyProvider, FakeTenantBlobEncryptionKeyProvider>();
 
         Configure<AbpBlobStoringEncryptionOptions>(options =>
         {
@@ -71,12 +66,17 @@ public class AbpBlobStoringTestModule : AbpModule
                 .Configure<TestContainer6>(container =>
                 {
                     container.ProviderType = typeof(FakeInMemoryBlobProvider);
-                    container.PipelineContributors.Add(typeof(FakeReversingPipelineContributor));
+                    container.UseEncryption("container6-passphrase", allowLegacyPlaintext: true);
                 })
                 .Configure<TestContainer7>(container =>
                 {
                     container.ProviderType = typeof(FakeInMemoryBlobProvider);
-                    container.PipelineContributors.Add(typeof(FakeScopeBoundPipelineContributor));
+                    container.IsMultiTenant = false;
+                    container.UseEncryption("container7-shared-passphrase");
+                })
+                .Configure<TestContainer8>(container =>
+                {
+                    container.ProviderType = typeof(FakeInMemoryBlobProvider);
                 });
         });
     }

@@ -53,6 +53,11 @@ public class FakeInMemoryBlobProvider : BlobProviderBase
         return _blobs.TryGetValue(GetKey(containerName, blobName), out var bytes) ? bytes : null;
     }
 
+    public void SetRawBytes(string containerName, string blobName, byte[] bytes)
+    {
+        _blobs[GetKey(containerName, blobName)] = bytes;
+    }
+
     private static string GetKey(string containerName, string blobName)
     {
         return containerName + "/" + blobName;
