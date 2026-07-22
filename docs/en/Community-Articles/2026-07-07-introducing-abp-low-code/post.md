@@ -2,6 +2,8 @@
 
 **Create runtime-managed pages, generated React screens, code-first C# entities, and Script API extensions without leaving the ABP application model.**
 
+The opening loop below is the outcome this article is proving: one ABP application moving from runtime editing to generated operational screens and then into code-backed extension points.
+
 ![ABP Low-Code runtime loop — grids, forms, calendars, and pipelines inside one ABP app](assets/gifs/eventflow-hero-loop.gif)
 
 > **Want to try the same path?** Start from ABP Studio, enable the Low-Code runtime and designer, define pages in the Admin Console, and see them resolve inside the running ABP app.
@@ -28,9 +30,11 @@ ABP Low-Code takes a different path. It runs **inside the ABP Platform**, so run
 
 ## Edit at runtime. See it in the app.
 
-In the Low-Code Designer, you update a runtime-managed page. A few seconds later, the same application surface is visible in the live app. No rebuild loop. No parallel front-end implementation. No "we will wire it later" gap between authoring and runtime.
+In the Low-Code Designer inside the Admin Console, you update a runtime-managed page. A few seconds later, the same application surface is visible in the live app. No rebuild loop. No parallel front-end implementation. No "we will wire it later" gap between authoring and runtime.
 
 ABP Low-Code shortens the cycle from model change to running screen while keeping the output grounded in the same ABP application.
+
+The screenshot below shows that authoring step directly: a runtime page is being configured in the Admin Console's Low-Code Designer, where low-code defines the grid, form, actions, and view composition that the live application will resolve.
 
 ![ABP Low-Code designer workspace for a runtime page](assets/screenshots/admin-console-lowcode.png)
 
@@ -44,6 +48,8 @@ If low-code only saves you from drawing a table and a form, it is not enough. Bu
 
 In the generated app, the `Events` screen ships with search, actions, filters, and form-driven editing. The form structure already understands tabs, relations, validation, and business-shaped input instead of leaving you with a blank shell to finish by hand.
 
+The next GIF shows the actual runtime page produced from that model: first the generated `Events` grid with operational actions, then the generated form with structured inputs instead of a blank CRUD shell.
+
 ![Generated event grid and generated event form](assets/gifs/eventflow-grid-form-flow.gif)
 
 The point is not just generated CRUD. It is generated CRUD that already looks like the operational screens teams maintain in real applications.
@@ -56,7 +62,11 @@ Business users do not think in one view. Operators want a calendar for schedulin
 
 ABP Low-Code keeps those surfaces attached to the same underlying model. The same `Session` model can appear as a **calendar** for planning and a **kanban pipeline** for operational flow. The same generated app can also include a **speaker gallery** and an **overview dashboard** for metrics.
 
+The next GIF keeps the same `Session` model but changes how the team works with it: calendar for planning, then kanban for operational flow, without rebuilding a second screen by hand.
+
 ![The same runtime model shown as calendar and kanban views](assets/gifs/eventflow-calendar-kanban-flow.gif)
+
+The dashboard screenshot below continues that same application story. It is another surface generated around the same underlying data, this time optimized for KPIs, counts, and current operational status.
 
 ![Overview dashboard in the live runtime app](assets/screenshots/overview-dashboard.png)
 
@@ -78,7 +88,7 @@ ABP Low-Code exposes a server-side **Script API** inside the same application mo
 - **Background jobs** when work should continue asynchronously.
 - **Background workers** when operational logic should run on a schedule.
 
-In this article, the visible proof happens to be `GET /api/custom/eventflow/highlights`. The GIF shows an endpoint because it is the easiest proof surface to read. But the broader point is that endpoints are only one consumer of the same low-code scripting layer.
+In this article, the visible proof happens to be `GET /api/custom/eventflow/highlights`. The next GIF focuses on an endpoint because it is the easiest proof surface to read. But the broader point is that endpoints are only one consumer of the same low-code scripting layer.
 
 That hybrid model matters in both directions:
 
@@ -86,7 +96,9 @@ That hybrid model matters in both directions:
 - **Low-code-managed data and screens stay reachable from Script API actions, application services, repository queries, and custom endpoints.**
 - **Teams do not lose architectural control just because they gained a faster authoring layer.**
 
-![Endpoint result and runtime dashboard reading the same numbers](assets/gifs/eventflow-custom-endpoint-flow.gif)
+The next GIF steps into that Script API surface. In the same Admin Console, a script-backed low-code endpoint is opened, executed from the built-in test area, and its returned payload is shown immediately below so you can see runtime data flowing through an API-shaped contract.
+
+![Script API endpoint definition and executed dry-run result inside the Admin Console](assets/gifs/eventflow-custom-endpoint-flow.gif)
 
 The actual capability is the shared ABP application model behind it: script when runtime logic is enough, C# when typed application services and repository queries are the better fit.
 
@@ -138,7 +150,11 @@ That class lives as normal C# source, gets migrated like the rest of the applica
 
 Inside the designer, selecting the `SponsorActivation` entity auto-generates the page identity, binds the grid to the entity, and lands on a real runtime route at `/dynamic/sponsor-activation`. The generated surface includes sponsor, email, event lookup, owner lookup, budget, image, and file fields directly from the C# model.
 
+The next GIF shows that bridge in action: a new code-first `SponsorActivation` entity is selected inside low-code, a page is generated from its metadata, and the resulting runtime route opens with the modeled fields already wired in.
+
 ![ABP Low-Code selecting the SponsorActivation C# entity, generating the page, and opening the resulting runtime surface](assets/gifs/eventflow-page-builder.gif)
+
+The screenshot after that is the resulting page, not a placeholder. You are looking at the generated form that came from the C# entity definition, including lookups, budget handling, image upload, and file upload fields.
 
 ![Generated SponsorActivation form showing lookups, budget, image, and file fields coming directly from the C# entity](assets/screenshots/sponsor-activation-form.png)
 
@@ -202,6 +218,8 @@ That is the core ABP Low-Code promise: faster delivery, still inside the applica
 ## Try it yourself
 
 The public starting point for ABP Low-Code is **ABP Studio**.
+
+The screenshot below is the exact toggle in the ABP Studio solution wizard where low-code runtime and designer support are enabled for a new ABP solution.
 
 ![ABP Studio new solution wizard with the Low-Code runtime and designer option enabled](assets/screenshots/abp-studio-lowcode-system.png)
 
