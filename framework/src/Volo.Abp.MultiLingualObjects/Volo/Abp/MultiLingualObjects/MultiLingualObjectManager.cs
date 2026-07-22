@@ -28,12 +28,13 @@ public class MultiLingualObjectManager : IMultiLingualObjectManager, ITransientD
     {
         culture ??= CultureInfo.CurrentUICulture.Name;
 
-        if (translations == null || !translations.Any())
+        var translationList = translations?.ToList();
+        if (translationList == null || translationList.Count == 0)
         {
             return null;
         }
 
-        var translation = translations.FirstOrDefault(pt => pt.Language == culture);
+        var translation = translationList.FirstOrDefault(pt => pt.Language == culture);
         if (translation != null)
         {
             return translation;
@@ -43,7 +44,7 @@ public class MultiLingualObjectManager : IMultiLingualObjectManager, ITransientD
         {
             translation = GetTranslationBasedOnCulturalRecursive(
                 CultureInfo.CurrentUICulture.Parent,
-                translations,
+                translationList,
                 0
             );
 
@@ -55,13 +56,13 @@ public class MultiLingualObjectManager : IMultiLingualObjectManager, ITransientD
 
         var defaultLanguage = await SettingProvider.GetOrNullAsync(LocalizationSettingNames.DefaultLanguage);
 
-        translation = translations.FirstOrDefault(pt => pt.Language == defaultLanguage);
+        translation = translationList.FirstOrDefault(pt => pt.Language == defaultLanguage);
         if (translation != null)
         {
             return translation;
         }
 
-        translation = translations.FirstOrDefault();
+        translation = translationList.FirstOrDefault();
         return translation;
     }
 
@@ -96,16 +97,17 @@ public class MultiLingualObjectManager : IMultiLingualObjectManager, ITransientD
     {
         culture ??= CultureInfo.CurrentUICulture.Name;
 
-        if (translationsCombined == null || !translationsCombined.Any())
+        var translationsCombinedList = translationsCombined?.Select(translations => translations.ToList()).ToList();
+        if (translationsCombinedList == null || translationsCombinedList.Count == 0)
         {
             return new();
         }
 
         var someHaveNoTranslations = false;
         var res = new List<TTranslation?>();
-        foreach (var translations in translationsCombined)
+        foreach (var translations in translationsCombinedList)
         {
-            if (!translations.Any())
+            if (translations.Count == 0)
             {
                 //if the src has no translations, don't try to find a translation
                 res.Add(null);
@@ -150,10 +152,10 @@ public class MultiLingualObjectManager : IMultiLingualObjectManager, ITransientD
             var defaultLanguage = await SettingProvider.GetOrNullAsync(LocalizationSettingNames.DefaultLanguage);
 
             var index = 0;
-            foreach (var translations in translationsCombined)
+            foreach (var translations in translationsCombinedList)
             {
                 //if the src has no translations, don't try to find a translation
-                if (translations.Any() && res[index] == null)
+                if (translations.Count > 0 && res[index] == null)
                 {
                     res[index] = translations.FirstOrDefault(pt => pt.Language == defaultLanguage) ??
                                  translations.FirstOrDefault();
@@ -168,10 +170,11 @@ public class MultiLingualObjectManager : IMultiLingualObjectManager, ITransientD
        where TMultiLingual : IMultiLingualObject<TTranslation>
        where TTranslation : class, IObjectTranslation
     {
-        var resInitial = await GetBulkTranslationsAsync(multiLinguals.Select(x => x.Translations), culture, fallbackToParentCultures);
+        var multiLingualList = multiLinguals.ToList();
+        var resInitial = await GetBulkTranslationsAsync(multiLingualList.Select(x => x.Translations), culture, fallbackToParentCultures);
         var index = 0;
         var res = new List<(TMultiLingual entity, TTranslation? translation)>();
-        foreach (var item in multiLinguals)
+        foreach (var item in multiLingualList)
         {
             var t = resInitial[index++];
             res.Add((item, t));
