@@ -14,7 +14,7 @@ export function setLanguageToCookie() {
   const cookieLanguageKey = injector.get(COOKIE_LANGUAGE_KEY);
   sessionState.getLanguage$().subscribe(language => {
     const cookieValue = encodeURIComponent(`c=${language}|uic=${language}`);
-    document.cookie = `${cookieLanguageKey}=${cookieValue}`;
+    document.cookie = `${cookieLanguageKey}=${cookieValue}; path=/`;
   });
 }
 
