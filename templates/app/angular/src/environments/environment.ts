@@ -19,7 +19,7 @@ export const environment = {
   },
   apis: {
     default: {
-      url: 'https://localhost:44305',
+      url: 'http://localhost:4200', // was https://localhost:44305
       rootNamespace: 'MyCompanyName.MyProjectName',
     },
   },
