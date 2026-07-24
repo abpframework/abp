@@ -9,12 +9,45 @@ export class <%= name %>Service {
   apiName = '<%= apiName %>';<%
   for (let {body, signature} of methods) { %>
   <%
-    const isBlob = body.isBlobMethod() ;
-    const responseType =  isBlob ? "Blob":body.responseType;
+    const isBlob = body.isBlobMethod();
+    const responseType = isBlob ? 'Blob' : body.responseType;
     const httpResponseType = body.httpResponseType;
     const acceptHeader = body.acceptHeader;
+    const resourceParameters = signature.parameters.filter(p => p.name !== 'config');
+    const resourceType = resourceParameters.length
+      ? `{ ${resourceParameters.map(p => `${p.name}${p.optional}: ${p.type}`).join('; ')} }`
+      : '';
+    const resourceArgs = resourceParameters.map(p => `params.${p.name}`).join(', ');
   %>
 
+  <% if (resourceApi && body.method === 'GET') { %>
+  <%= camel(signature.name) %> = (<%
+    if (resourceParameters.length) { %>
+    params: Signal<<%= resourceType %>>,<% } %>
+    config?: Partial<Rest.Config>
+  ): ResourceRef<<%= responseType %> | undefined> => this.restService.requestResource(
+    computed(() => {<%
+      if (resourceParameters.length) { %>
+      const { <%= resourceParameters.map(p => p.name).join(', ') %> } = params();<% } %>
+      return ({
+        method: '<%= body.method %>',<%
+        if (httpResponseType && httpResponseType !== 'json') { %>
+        responseType: '<%= httpResponseType %>',<% } %><%
+        if (acceptHeader) { %>
+        headers: { Accept: '<%= acceptHeader %>' },<% } %>
+        url: <%= body.url %>,<%
+        if (body.dictParamVar && !body.params.length) { %>
+        params: <%= body.dictParamVar %>,<% } %><%
+        if (body.dictParamVar && body.params.length) { %>
+        params: { ...<%= body.dictParamVar %>, <%= body.params.join(', ') %> },<% } %><%
+        if (!body.dictParamVar && body.params.length) { %>
+        params: { <%= body.params.join(', ') %> },<% }
+        if (body.body) { %>
+        body: <%= body.body %>,<% } %>
+      });
+    }),
+    { apiName: this.apiName, ...config },
+  );<% } else { %>
   <%= camel(signature.name) %> = (<%= serializeParameters(signature.parameters) %>) =>
     this.restService.request<<%= body.requestType %>, <%= responseType %>>({
       method: '<%= body.method %>',<%
@@ -32,5 +65,6 @@ export class <%= name %>Service {
       if (body.body) { %>
       body: <%= body.body %>,<% } %>
     },
-    { apiName: this.apiName,...config });<% } %>
+      { apiName: this.apiName,...config });<% } %><%
+  } %>
 }

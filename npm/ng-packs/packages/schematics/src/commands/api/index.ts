@@ -56,6 +56,7 @@ export default function (schema: GenerateProxySchema) {
       const types = data.types;
       const modules = data.modules;
       const serviceType = schema.serviceType || defaultEServiceType;
+      const resourceApi = schema.resourceApi ?? false;
 
       if (!types || !modules) {
         throw new SchematicsException(Exception.InvalidApiDefinition);
@@ -82,6 +83,7 @@ export default function (schema: GenerateProxySchema) {
         apiName,
         controllers,
         serviceImports,
+        resourceApi,
       });
 
       const modelImports: Record<string, string[]> = {};
@@ -177,7 +179,7 @@ function createModelGenerator(params: ModelGeneratorParams) {
 }
 
 function createServiceGenerator(params: ServiceGeneratorParams) {
-  const { targetPath, controllers, serviceImports } = params;
+  const { targetPath, controllers, serviceImports, resourceApi } = params;
   const mapControllerToService = createControllerToServiceMapper(params);
 
   return chain(
@@ -195,6 +197,7 @@ function createServiceGenerator(params: ServiceGeneratorParams) {
         applyTemplates({
           ...cases,
           serializeParameters,
+          resourceApi,
           ...service,
         }),
         move(normalize(targetPath)),
