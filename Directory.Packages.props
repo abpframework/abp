@@ -151,7 +151,7 @@
     <PackageVersion Include="Rebus" Version="8.8.0" />
     <PackageVersion Include="Rebus.ServiceProvider" Version="10.5.0" />
     <PackageVersion Include="Riok.Mapperly" Version="4.3.1" />
-    <PackageVersion Include="Scriban" Version="7.2.1" />
+    <PackageVersion Include="Scriban" Version="7.2.5" />
     <PackageVersion Include="Serilog" Version="4.3.0" />
     <PackageVersion Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageVersion Include="Serilog.Extensions.Hosting" Version="9.0.0" />
@@ -175,7 +175,7 @@
     <PackageVersion Include="System.Linq.Dynamic.Core" Version="1.6.7" />
     <PackageVersion Include="System.Linq.Queryable" Version="4.3.0" />
     <PackageVersion Include="System.Runtime.Loader" Version="4.3.0" />
-    <PackageVersion Include="System.Security.Cryptography.Xml" Version="10.0.7" />
+    <PackageVersion Include="System.Security.Cryptography.Xml" Version="10.0.10" />
     <PackageVersion Include="System.Security.Permissions" Version="10.0.7" />
     <PackageVersion Include="System.Security.Principal.Windows" Version="5.0.0" />
     <PackageVersion Include="System.Text.Encoding.CodePages" Version="10.0.7" />
