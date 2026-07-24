@@ -325,9 +325,31 @@ Configure<AbpBlobStoringOptions>(options =>
         container.UseEncryption();
     });
 });
+
+// A passphrase must be configured; see the encryption document
+Configure<AbpBlobStoringEncryptionOptions>(options =>
+{
+    options.DefaultPassPhrase = context.Configuration["MyApp:BlobPassPhrase"];
+});
 ````
 
-The encryption key can be container-specific or **global**; per-tenant keys can be plugged in over the key provider. See the [BLOB Encryption document](./encryption.md) for details.
+The encryption passphrase can be container-specific or **global**, and per-tenant passphrases can be plugged in over the key provider; every BLOB derives its own encryption key from the passphrase. See the [BLOB Encryption document](./encryption.md) for details.
+
+## Transforming BLOB Content
+
+The BLOB content can be passed through a **pipeline of contributors** (compression, watermarking, content validation...) while it is saved and read, without changing the storage provider:
+
+````csharp
+Configure<AbpBlobStoringOptions>(options =>
+{
+    options.Containers.Configure<ProfilePictureContainer>(container =>
+    {
+        container.PipelineContributors.Add<GZipBlobPipelineContributor>();
+    });
+});
+````
+
+See the [BLOB Content Pipeline document](./pipeline.md) for details.
 
 ## Extending the BLOB Storing System
 
@@ -344,5 +366,6 @@ If you want to create folders and move files between folders, assign permissions
 
 ## See Also
 
+* [BLOB Content Pipeline](./pipeline.md)
 * [BLOB Encryption](./encryption.md)
 * [Creating a custom BLOB storage provider](./custom-provider.md)

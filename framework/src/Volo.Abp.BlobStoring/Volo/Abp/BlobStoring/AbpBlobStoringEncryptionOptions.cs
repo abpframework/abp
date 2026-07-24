@@ -1,5 +1,9 @@
 namespace Volo.Abp.BlobStoring;
 
+/// <summary>
+/// Global options of the BLOB encryption; enable it per container with the
+/// <see cref="BlobContainerConfigurationEncryptionExtensions.UseEncryption"/> extension method.
+/// </summary>
 public class AbpBlobStoringEncryptionOptions
 {
     /// <summary>

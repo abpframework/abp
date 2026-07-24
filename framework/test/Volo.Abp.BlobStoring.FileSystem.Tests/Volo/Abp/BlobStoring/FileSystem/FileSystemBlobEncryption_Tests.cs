@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.BlobStoring.TestObjects;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Xunit;
 
@@ -16,7 +18,7 @@ public class FileSystemBlobEncryption_Tests : AbpBlobStoringFileSystemTestBase
 {
     private readonly IBlobContainer<TestContainer4> _container4; // UseEncryption("container4-passphrase")
     private readonly IBlobContainer<TestContainer5> _container5; // UseEncryption() -> key provider (tenant setting / global options)
-    private readonly IBlobContainer<TestContainer6> _container6; // UseEncryption("container6-passphrase", allowLegacyPlaintext: true)
+    private readonly IBlobContainer<TestContainer6> _container6; // UseEncryption("container6-passphrase", allowLegacyPlainText: true)
     private readonly IBlobFilePathCalculator _filePathCalculator;
     private readonly IBlobContainerConfigurationProvider _configurationProvider;
     private readonly ICurrentTenant _currentTenant;
@@ -284,6 +286,156 @@ public class FileSystemBlobEncryption_Tests : AbpBlobStoringFileSystemTestBase
         source.FaultsInjected.ShouldBe(1); // No second attempt
     }
 
+    [Fact]
+    public async Task Should_Retry_A_Transient_Failure_Before_The_Target_Is_Opened()
+    {
+        // The encrypting wrapper is not seekable, but nothing is consumed while the
+        // target file can not even be opened, so such a failure is safe to retry
+        var blobName = "fs-retry-open-phase";
+        await _container4.SaveAsync(blobName, "first content".GetBytes(), overrideExisting: true);
+
+        using (var fileLock = File.Open(GetFilePath<TestContainer4>(blobName), FileMode.Open, FileAccess.Read, FileShare.None))
+        {
+            var saveTask = _container4.SaveAsync(blobName, "second content".GetBytes(), overrideExisting: true);
+            await Task.Delay(300); // The first attempt fails while the file is locked
+            fileLock.Dispose();
+            await saveTask;
+        }
+
+        (await _container4.GetAllBytesAsync(blobName)).ShouldBe("second content".GetBytes());
+    }
+
+    [Fact]
+    public async Task Should_Not_Retry_A_New_Save_After_The_Target_File_Was_Created()
+    {
+        // A failed CreateNew attempt leaves the file behind, so retrying would only
+        // hit the leftover; even a seekable source must fail after a mid-write fault
+        var container8 = GetRequiredService<IBlobContainer<TestContainer8>>();
+        var content = new byte[64 * 1024];
+        new Random(42).NextBytes(content);
+        var source = new FaultOnceSeekableStream(content);
+
+        await Assert.ThrowsAsync<IOException>(async () =>
+        {
+            await container8.SaveAsync("fs-retry-create-new", source);
+        });
+
+        source.FaultsInjected.ShouldBe(1); // No second attempt
+    }
+
+    [Fact]
+    public async Task Should_Retry_A_Failed_Open_For_A_New_Save()
+    {
+        var content = new byte[64 * 1024];
+        new Random(42).NextBytes(content);
+        var source = new MemoryStream(content);
+        var provider = new FaultingOpenFileSystemBlobProvider(_filePathCalculator, source);
+
+        await provider.SaveAsync(new BlobProviderSaveArgs(
+            BlobContainerNameAttribute.GetContainerName<TestContainer8>(),
+            _configurationProvider.Get<TestContainer8>(),
+            "fs-retry-open-create-new",
+            source
+        ));
+
+        provider.OpenAttempts.ShouldBe(2); // The first open failed, the retry succeeded
+        provider.SourcePositionAtFirstFault.ShouldBe(0); // Nothing was consumed before the failure
+        var fileBytes = await File.ReadAllBytesAsync(GetFilePath<TestContainer8>("fs-retry-open-create-new"));
+        fileBytes.SequenceEqual(content).ShouldBeTrue();
+    }
+
+    [DisableConventionalRegistration]
+    private sealed class FaultingOpenFileSystemBlobProvider : FileSystemBlobProvider
+    {
+        private readonly Stream _source;
+
+        public int OpenAttempts { get; private set; }
+
+        public long SourcePositionAtFirstFault { get; private set; } = -1;
+
+        public FaultingOpenFileSystemBlobProvider(IBlobFilePathCalculator filePathCalculator, Stream source)
+            : base(filePathCalculator)
+        {
+            _source = source;
+        }
+
+        protected override Stream OpenFileStream(string filePath, FileMode fileMode)
+        {
+            OpenAttempts++;
+            if (OpenAttempts == 1)
+            {
+                SourcePositionAtFirstFault = _source.Position;
+                throw new IOException("Injected open failure!");
+            }
+
+            return base.OpenFileStream(filePath, fileMode);
+        }
+    }
+
+    [Fact]
+    public async Task Should_Save_When_The_Position_Probe_Of_A_Seekable_Stream_Fails()
+    {
+        // A failing probe degrades to a single, non-replayable attempt instead of failing the save
+        var container8 = GetRequiredService<IBlobContainer<TestContainer8>>();
+        var content = "position probe failure content".GetBytes();
+        using var source = new PositionThrowingSeekableStream(content);
+
+        await container8.SaveAsync("fs-position-probe", source, overrideExisting: true);
+
+        (await container8.GetAllBytesAsync("fs-position-probe")).ShouldBe(content);
+    }
+
+    private sealed class PositionThrowingSeekableStream : Stream
+    {
+        private readonly MemoryStream _stream;
+        private bool _positionFaultInjected;
+
+        public PositionThrowingSeekableStream(byte[] bytes)
+        {
+            _stream = new MemoryStream(bytes);
+        }
+
+        public override bool CanRead => true;
+        public override bool CanSeek => true;
+        public override bool CanWrite => false;
+        public override long Length => _stream.Length;
+
+        public override long Position
+        {
+            get
+            {
+                // Fail once, transiently, on the first probe
+                if (!_positionFaultInjected)
+                {
+                    _positionFaultInjected = true;
+                    throw new IOException("The position is not available!");
+                }
+
+                return _stream.Position;
+            }
+            set => _stream.Position = value;
+        }
+
+        public override void Flush()
+        {
+        }
+
+        public override int Read(byte[] buffer, int offset, int count) => _stream.Read(buffer, offset, count);
+        public override long Seek(long offset, SeekOrigin origin) => _stream.Seek(offset, origin);
+        public override void SetLength(long value) => throw new NotSupportedException();
+        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _stream.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
+    }
+
     private sealed class FaultOnceSeekableStream : Stream
     {
         private readonly MemoryStream _stream;
@@ -318,7 +470,7 @@ public class FileSystemBlobEncryption_Tests : AbpBlobStoringFileSystemTestBase
             return ReadCore(() => _stream.Read(buffer, offset, count));
         }
 
-        public override Task<int> ReadAsync(byte[] buffer, int offset, int count, System.Threading.CancellationToken cancellationToken)
+        public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
             return Task.FromResult(ReadCore(() => _stream.Read(buffer, offset, count)));
         }
@@ -402,7 +554,7 @@ public class FileSystemBlobEncryption_Tests : AbpBlobStoringFileSystemTestBase
             throw new InvalidOperationException("Synchronous reads are not allowed on this stream!");
         }
 
-        public override Task<int> ReadAsync(byte[] buffer, int offset, int count, System.Threading.CancellationToken cancellationToken)
+        public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
             return _stream.ReadAsync(buffer, offset, count, cancellationToken);
         }

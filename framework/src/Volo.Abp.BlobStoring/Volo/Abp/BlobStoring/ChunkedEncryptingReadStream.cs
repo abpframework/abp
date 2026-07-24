@@ -1,4 +1,6 @@
+using System;
 using System.IO;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,9 +13,10 @@ internal class ChunkedEncryptingReadStream : ChunkedCryptoReadStream
 {
     private readonly Stream _plainStream;
     private readonly byte[] _prefix;
-    private readonly byte[] _associatedDataPrefix;
+    private readonly byte[] _associatedData;
     private readonly byte[] _keyBytes;
-    private readonly byte[] _baseNonce;
+    private readonly IDisposable _chunkCipher;
+    private readonly byte[] _nonce;
     private readonly int _chunkSize;
     private bool _prefixEmitted;
     private bool _terminalEmitted;
@@ -31,9 +34,11 @@ internal class ChunkedEncryptingReadStream : ChunkedCryptoReadStream
     {
         _plainStream = plainStream;
         _prefix = prefix;
-        _associatedDataPrefix = associatedDataPrefix;
+        // One reusable cipher and buffer each; only the trailing chunk index changes per chunk
+        _associatedData = BlobEncryptionCodec.CreateReusableAssociatedData(associatedDataPrefix);
         _keyBytes = keyBytes;
-        _baseNonce = baseNonce;
+        _chunkCipher = BlobEncryptionCodec.CreateChunkCipher(keyBytes);
+        _nonce = BlobEncryptionCodec.CreateReusableChunkNonce(baseNonce);
         _chunkSize = chunkSize;
     }
 
@@ -80,12 +85,20 @@ internal class ChunkedEncryptingReadStream : ChunkedCryptoReadStream
             }
 
             _terminalEmitted = true;
-            return BlobEncryptionCodec.CreateTerminalRecord(_keyBytes, _associatedDataPrefix, _baseNonce, _chunkIndex);
+            SetChunkIndex(_chunkIndex);
+            return BlobEncryptionCodec.CreateTerminalRecordCore(_chunkCipher, _associatedData, _nonce);
         }
 
-        var chunkBytes = BlobEncryptionCodec.EncryptChunk(_keyBytes, _associatedDataPrefix, _baseNonce, _chunkIndex, plainChunk, plainChunk.Length);
+        SetChunkIndex(_chunkIndex);
+        var chunkBytes = BlobEncryptionCodec.EncryptChunkCore(_chunkCipher, _associatedData, _nonce, plainChunk, plainChunk.Length);
         _chunkIndex++;
         return chunkBytes;
+    }
+
+    private void SetChunkIndex(int chunkIndex)
+    {
+        BlobEncryptionCodec.WriteChunkIndex(_nonce, chunkIndex);
+        BlobEncryptionCodec.WriteChunkIndex(_associatedData, chunkIndex);
     }
 
     protected override void Dispose(bool disposing)
@@ -93,6 +106,7 @@ internal class ChunkedEncryptingReadStream : ChunkedCryptoReadStream
         // Do not dispose the plain stream; it is owned by the caller.
         if (disposing)
         {
+            _chunkCipher.Dispose();
             ClearKeyBytes();
         }
 
@@ -102,9 +116,9 @@ internal class ChunkedEncryptingReadStream : ChunkedCryptoReadStream
     private void ClearKeyBytes()
     {
 #if NETSTANDARD2_0
-        System.Array.Clear(_keyBytes, 0, _keyBytes.Length);
+        Array.Clear(_keyBytes, 0, _keyBytes.Length);
 #else
-        System.Security.Cryptography.CryptographicOperations.ZeroMemory(_keyBytes);
+        CryptographicOperations.ZeroMemory(_keyBytes);
 #endif
     }
 }

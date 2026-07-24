@@ -14,7 +14,15 @@ internal abstract class SequentialReadStream : Stream
 
     protected bool IsDisposed { get; set; }
 
-    public override bool CanRead => true;
+    // Once faulted, no further read can succeed; a failed authenticated-end check
+    // uses it so the failure can not be swallowed by a read-retry layer
+    protected void MarkFaulted()
+    {
+        _faulted = true;
+    }
+
+    // False once disposed, so it stays consistent with Read throwing ObjectDisposedException
+    public override bool CanRead => !IsDisposed;
 
     public override bool CanSeek => false;
 
@@ -100,7 +108,7 @@ internal abstract class SequentialReadStream : Stream
         base.Dispose(disposing);
     }
 
-    private void EnsureCanServe()
+    protected void EnsureCanServe()
     {
         if (IsDisposed)
         {

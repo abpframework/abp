@@ -7,12 +7,21 @@ namespace Volo.Abp.BlobStoring;
 /// </summary>
 public enum BlobEncryptionKeySource : byte
 {
-    /// <summary>The container-specific passphrase (see the UseEncryption extension method).</summary>
+    /// <summary>
+    /// The container-specific passphrase, set with
+    /// <see cref="BlobContainerConfigurationEncryptionExtensions.UseEncryption"/>.
+    /// </summary>
     Container = 1,
 
-    /// <summary>A tenant-specific passphrase, provided by a custom <see cref="IBlobEncryptionKeyProvider"/>; unused by the default provider.</summary>
+    /// <summary>
+    /// A tenant-specific passphrase, provided by a custom
+    /// <see cref="IBlobEncryptionKeyProvider"/>; unused by the default provider.
+    /// </summary>
     Tenant = 2,
 
-    /// <summary>The global passphrase (see <see cref="AbpBlobStoringEncryptionOptions.DefaultPassPhrase"/>).</summary>
+    /// <summary>
+    /// The global passphrase, from
+    /// <see cref="AbpBlobStoringEncryptionOptions.DefaultPassPhrase"/>.
+    /// </summary>
     Global = 3
 }

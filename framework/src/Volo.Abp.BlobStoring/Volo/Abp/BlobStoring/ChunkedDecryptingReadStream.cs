@@ -1,19 +1,24 @@
 using System;
 using System.IO;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.BlobStoring;
 
 /// <summary>
-/// Decrypts the cipher stream chunk by chunk while being read.
+/// Decrypts the cipher stream chunk by chunk while being read. It is the only stream
+/// with an authenticated terminal record, so it is the one implementing
+/// <see cref="IBlobAuthenticatedEndStream"/>.
 /// </summary>
-internal class ChunkedDecryptingReadStream : ChunkedCryptoReadStream
+internal class ChunkedDecryptingReadStream : ChunkedCryptoReadStream, IBlobAuthenticatedEndStream
 {
     private readonly Stream _cipherStream;
-    private readonly byte[] _associatedDataPrefix;
+    private readonly byte[] _associatedData;
     private readonly byte[] _keyBytes;
-    private readonly byte[] _baseNonce;
+    private readonly IDisposable _chunkCipher;
+    private readonly byte[] _nonce;
     private readonly int _chunkSize;
     private int _chunkIndex;
     private bool _disposed;
@@ -26,10 +31,22 @@ internal class ChunkedDecryptingReadStream : ChunkedCryptoReadStream
         int chunkSize)
     {
         _cipherStream = cipherStream;
-        _associatedDataPrefix = associatedDataPrefix;
+        // One reusable cipher and buffer each; only the trailing chunk index changes per chunk
+        _associatedData = BlobEncryptionCodec.CreateReusableAssociatedData(associatedDataPrefix);
         _keyBytes = keyBytes;
-        _baseNonce = baseNonce;
+        _chunkCipher = BlobEncryptionCodec.CreateChunkCipher(keyBytes);
+        _nonce = BlobEncryptionCodec.CreateReusableChunkNonce(baseNonce);
         _chunkSize = chunkSize;
+    }
+
+    public void EnsureReadToAuthenticatedEnd()
+    {
+        EnsureReadToAuthenticatedEndCore();
+    }
+
+    public ValueTask EnsureReadToAuthenticatedEndAsync(CancellationToken cancellationToken = default)
+    {
+        return EnsureReadToAuthenticatedEndCoreAsync(cancellationToken);
     }
 
     protected override byte[]? ProduceNext()
@@ -46,7 +63,8 @@ internal class ChunkedDecryptingReadStream : ChunkedCryptoReadStream
                 throw new AbpException("The encrypted BLOB is corrupted or has an invalid format: invalid terminal record!");
             }
 
-            BlobEncryptionCodec.VerifyTerminalRecord(_keyBytes, _associatedDataPrefix, _baseNonce, _chunkIndex, terminalTag);
+            SetChunkIndex(_chunkIndex);
+            BlobEncryptionCodec.VerifyTerminalRecordCore(_chunkCipher, _associatedData, _nonce, terminalTag);
             return null;
         }
 
@@ -70,7 +88,8 @@ internal class ChunkedDecryptingReadStream : ChunkedCryptoReadStream
                 throw new AbpException("The encrypted BLOB is corrupted or has an invalid format: invalid terminal record!");
             }
 
-            BlobEncryptionCodec.VerifyTerminalRecord(_keyBytes, _associatedDataPrefix, _baseNonce, _chunkIndex, terminalTag);
+            SetChunkIndex(_chunkIndex);
+            BlobEncryptionCodec.VerifyTerminalRecordCore(_chunkCipher, _associatedData, _nonce, terminalTag);
             return null;
         }
 
@@ -87,9 +106,16 @@ internal class ChunkedDecryptingReadStream : ChunkedCryptoReadStream
             throw new AbpException("The encrypted BLOB is corrupted or has an invalid format: truncated chunk!");
         }
 
-        var plainChunk = BlobEncryptionCodec.DecryptChunk(_keyBytes, _associatedDataPrefix, _baseNonce, _chunkIndex, cipherChunk, tag);
+        SetChunkIndex(_chunkIndex);
+        var plainChunk = BlobEncryptionCodec.DecryptChunkCore(_chunkCipher, _associatedData, _nonce, cipherChunk, tag);
         _chunkIndex++;
         return plainChunk;
+    }
+
+    private void SetChunkIndex(int chunkIndex)
+    {
+        BlobEncryptionCodec.WriteChunkIndex(_nonce, chunkIndex);
+        BlobEncryptionCodec.WriteChunkIndex(_associatedData, chunkIndex);
     }
 
     protected override void Dispose(bool disposing)
@@ -97,10 +123,16 @@ internal class ChunkedDecryptingReadStream : ChunkedCryptoReadStream
         if (disposing && !_disposed)
         {
             _disposed = true;
+            _chunkCipher.Dispose();
             ClearKeyBytes();
             try
             {
+#if NETSTANDARD2_0
                 _cipherStream.Dispose();
+#else
+                // Also covers a provider stream that only implements DisposeAsync
+                AsyncHelper.RunSync(() => _cipherStream.DisposeAsync().AsTask());
+#endif
             }
             finally
             {
@@ -119,6 +151,7 @@ internal class ChunkedDecryptingReadStream : ChunkedCryptoReadStream
         if (!_disposed)
         {
             _disposed = true;
+            _chunkCipher.Dispose();
             ClearKeyBytes();
             try
             {
@@ -141,7 +174,7 @@ internal class ChunkedDecryptingReadStream : ChunkedCryptoReadStream
 #if NETSTANDARD2_0
         Array.Clear(_keyBytes, 0, _keyBytes.Length);
 #else
-        System.Security.Cryptography.CryptographicOperations.ZeroMemory(_keyBytes);
+        CryptographicOperations.ZeroMemory(_keyBytes);
 #endif
     }
 }

@@ -6,13 +6,24 @@ namespace Volo.Abp.BlobStoring;
 /// <summary>
 /// The passphrase resolved for encrypting a BLOB, together with its source.
 /// </summary>
-public sealed class BlobEncryptionKey
+public class BlobEncryptionKey
 {
+    /// <summary>
+    /// The source the passphrase was resolved from; it is recorded in the encrypted
+    /// BLOB and routes the BLOB back to the same source while decrypting.
+    /// </summary>
     public BlobEncryptionKeySource Source { get; }
 
+    /// <summary>
+    /// The passphrase the encryption key of the BLOB is derived from.
+    /// </summary>
     [NotNull]
     public string PassPhrase { get; }
 
+    /// <summary>
+    /// Creates the resolved key; <paramref name="source"/> must be a defined
+    /// <see cref="BlobEncryptionKeySource"/> value and the passphrase non-empty.
+    /// </summary>
     public BlobEncryptionKey(BlobEncryptionKeySource source, [NotNull] string passPhrase)
     {
         if (source < BlobEncryptionKeySource.Container || source > BlobEncryptionKeySource.Global)

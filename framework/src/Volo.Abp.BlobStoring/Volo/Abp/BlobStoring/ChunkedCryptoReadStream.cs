@@ -65,6 +65,84 @@ internal abstract class ChunkedCryptoReadStream : SequentialReadStream
 
     protected abstract Task<byte[]?> ProduceNextAsync(CancellationToken cancellationToken);
 
+    internal void EnsureReadToAuthenticatedEndCore()
+    {
+        // A previous read that faulted the stream (for example an authentication failure
+        // a contributor swallowed) must not be recovered by re-entering ProduceNext here
+        EnsureCanServe();
+        try
+        {
+            if (IsAtAuthenticatedEnd())
+            {
+                return;
+            }
+
+            // Producing the next record either verifies the terminal record (null) or
+            // returns another content chunk, which means the consumer stopped early
+            ThrowIfMoreContent(ProduceNext());
+        }
+        catch
+        {
+            // Fault the stream so the failure can not be swallowed by reading again
+            MarkFaulted();
+            throw;
+        }
+    }
+
+    internal async ValueTask EnsureReadToAuthenticatedEndCoreAsync(CancellationToken cancellationToken)
+    {
+        EnsureCanServe();
+        // A token cancelled before any I/O leaves the stream untouched, so it can stay
+        // healthy for a retry (the same rule the normal read path applies). Once a read has
+        // started, any failure must fault: a mid-read cancellation already consumed and
+        // discarded bytes of the non-seekable cipher stream, so a retry that resumed from the
+        // middle of the terminal record would misreport a valid BLOB as corrupt
+        cancellationToken.ThrowIfCancellationRequested();
+        try
+        {
+            if (IsAtAuthenticatedEnd())
+            {
+                return;
+            }
+
+            ThrowIfMoreContent(await ProduceNextAsync(cancellationToken));
+        }
+        catch
+        {
+            MarkFaulted();
+            throw;
+        }
+    }
+
+    private bool IsAtAuthenticatedEnd()
+    {
+        if (_finished)
+        {
+            return true;
+        }
+
+        if (_outputBuffer != null && _outputBufferPosition < _outputBuffer.Length)
+        {
+            throw new AbpException(
+                "The encrypted BLOB was not read to its authenticated end, so its completeness can not be verified " +
+                "(a content-pipeline contributor stopped reading the content before the end).");
+        }
+
+        return false;
+    }
+
+    private void ThrowIfMoreContent(byte[]? next)
+    {
+        if (next != null)
+        {
+            throw new AbpException(
+                "The encrypted BLOB was not read to its authenticated end, so its completeness can not be verified " +
+                "(a content-pipeline contributor stopped reading the content before the end).");
+        }
+
+        SetOutputBuffer(null);
+    }
+
     protected override void Dispose(bool disposing)
     {
         if (disposing && _outputBuffer != null)

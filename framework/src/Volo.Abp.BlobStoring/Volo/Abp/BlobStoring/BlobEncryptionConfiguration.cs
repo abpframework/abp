@@ -6,24 +6,20 @@ namespace Volo.Abp.BlobStoring;
 /// </summary>
 internal static class BlobEncryptionConfiguration
 {
-    public const string EnabledName = "Abp.BlobStoring.Encryption.Enabled";
-    public const string PassPhraseName = "Abp.BlobStoring.Encryption.PassPhrase";
-    public const string AllowLegacyPlaintextName = "Abp.BlobStoring.Encryption.AllowLegacyPlaintext";
-
     public static bool IsEnabled(BlobContainerConfiguration configuration)
     {
-        return configuration.GetConfigurationOrDefault(EnabledName, false);
+        return configuration.GetConfigurationOrDefault(BlobEncryptionConfigurationNames.Enabled, false);
     }
 
     public static string? GetPassPhraseOrNull(BlobContainerConfiguration configuration)
     {
         // An explicit empty value shadows an inherited passphrase (see UseEncryption).
-        var passPhrase = configuration.GetConfigurationOrDefault<string?>(PassPhraseName);
+        var passPhrase = configuration.GetConfigurationOrDefault<string?>(BlobEncryptionConfigurationNames.PassPhrase);
         return string.IsNullOrWhiteSpace(passPhrase) ? null : passPhrase;
     }
 
-    public static bool IsLegacyPlaintextAllowed(BlobContainerConfiguration configuration)
+    public static bool IsLegacyPlainTextAllowed(BlobContainerConfiguration configuration)
     {
-        return configuration.GetConfigurationOrDefault(AllowLegacyPlaintextName, false);
+        return configuration.GetConfigurationOrDefault(BlobEncryptionConfigurationNames.AllowLegacyPlainText, false);
     }
 }

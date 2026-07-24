@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Shouldly;
 using Volo.Abp.BlobStoring.Fakes;
 using Volo.Abp.BlobStoring.TestObjects;
@@ -17,7 +19,7 @@ public class BlobContainerEncryption_Tests : AbpBlobStoringTestBase
 {
     private readonly IBlobContainer<TestContainer4> _container4; // UseEncryption("container4-passphrase")
     private readonly IBlobContainer<TestContainer5> _container5; // UseEncryption() -> key provider (tenant setting / global options)
-    private readonly IBlobContainer<TestContainer6> _container6; // UseEncryption("container6-passphrase", allowLegacyPlaintext: true)
+    private readonly IBlobContainer<TestContainer6> _container6; // UseEncryption("container6-passphrase", allowLegacyPlainText: true)
     private readonly FakeInMemoryBlobProvider _provider;
     private readonly ICurrentTenant _currentTenant;
 
@@ -352,6 +354,63 @@ public class BlobContainerEncryption_Tests : AbpBlobStoringTestBase
     }
 
     [Fact]
+    public async Task Should_Expose_Exact_Encrypted_Length_For_A_Length_Aware_Forward_Only_Input()
+    {
+        // CanSeek is false, but Length/Position are readable; MinIO-like providers need the length
+        var codec = GetRequiredService<BlobEncryptionCodec>();
+        var configuration = new BlobContainerConfiguration().UseEncryption("length-passphrase");
+        var source = new LengthAwareForwardOnlyStream(new byte[64 * 1024 + 1]);
+
+        using var encryptedStream = await codec.CreateEncryptingStreamAsync(configuration, "test-container", "length-blob-fo", null, source);
+        var reportedLength = encryptedStream.Length;
+        using var output = new MemoryStream();
+
+        encryptedStream.CopyTo(output);
+
+        reportedLength.ShouldBe(output.Length);
+    }
+
+    private sealed class LengthAwareForwardOnlyStream : Stream
+    {
+        private readonly MemoryStream _stream;
+
+        public LengthAwareForwardOnlyStream(byte[] bytes)
+        {
+            _stream = new MemoryStream(bytes);
+        }
+
+        public override bool CanRead => true;
+        public override bool CanSeek => false;
+        public override bool CanWrite => false;
+        public override long Length => _stream.Length;
+
+        public override long Position
+        {
+            get => _stream.Position;
+            set => throw new NotSupportedException();
+        }
+
+        public override void Flush()
+        {
+        }
+
+        public override int Read(byte[] buffer, int offset, int count) => _stream.Read(buffer, offset, count);
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+        public override void SetLength(long value) => throw new NotSupportedException();
+        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _stream.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
+    }
+
+    [Fact]
     public async Task Should_Reject_A_Blob_Copied_To_Another_Name()
     {
         await _container4.SaveAsync("identity-a", "content of a".GetBytes());
@@ -409,7 +468,7 @@ public class BlobContainerEncryption_Tests : AbpBlobStoringTestBase
     [Fact]
     public async Task Should_Throw_When_Cancelled_Before_Saving()
     {
-        using var cts = new System.Threading.CancellationTokenSource();
+        using var cts = new CancellationTokenSource();
         cts.Cancel();
 
         await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
@@ -423,7 +482,7 @@ public class BlobContainerEncryption_Tests : AbpBlobStoringTestBase
     {
         await _container4.SaveAsync("cancelled-read", "content".GetBytes());
 
-        using var cts = new System.Threading.CancellationTokenSource();
+        using var cts = new CancellationTokenSource();
         cts.Cancel();
 
         await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
@@ -441,7 +500,9 @@ public class BlobContainerEncryption_Tests : AbpBlobStoringTestBase
 
         await Assert.ThrowsAsync<AbpException>(async () =>
         {
-            await defaultProvider.ResolveForDecryptionAsync(BlobEncryptionKeySource.Tenant, new BlobContainerConfiguration());
+            await defaultProvider.ResolveForDecryptionAsync(
+                BlobEncryptionKeySource.Tenant,
+                new BlobEncryptionKeyContext(new BlobContainerConfiguration(), "c", "b", null));
         });
     }
 
@@ -455,7 +516,8 @@ public class BlobContainerEncryption_Tests : AbpBlobStoringTestBase
 
         await Assert.ThrowsAsync<AbpException>(async () =>
         {
-            await defaultProvider.ResolveForEncryptionAsync(configuration);
+            await defaultProvider.ResolveForEncryptionAsync(
+                new BlobEncryptionKeyContext(configuration, "c", "b", null));
         });
     }
 
@@ -499,7 +561,7 @@ public class BlobContainerEncryption_Tests : AbpBlobStoringTestBase
     {
         var blobName = "tiny-legacy-blob";
         var tinyContent = new byte[] { 1, 2, 3 };
-        SetRawBytes<TestContainer6>(blobName, tinyContent); // allowLegacyPlaintext: true
+        SetRawBytes<TestContainer6>(blobName, tinyContent); // allowLegacyPlainText: true
 
         (await _container6.GetAllBytesAsync(blobName)).SequenceEqual(tinyContent).ShouldBeTrue();
     }
@@ -554,7 +616,9 @@ public class BlobContainerEncryption_Tests : AbpBlobStoringTestBase
     [Fact]
     public void Should_Reject_Wrapped_Chunk_Index()
     {
-        Should.Throw<AbpException>(() => BlobEncryptionCodec.CreateChunkNonce(new byte[8], -1));
+        // The production streams write the chunk index into a reusable nonce/AAD buffer with
+        // WriteChunkIndex, so a wrapped (negative) index must be rejected there
+        Should.Throw<AbpException>(() => BlobEncryptionCodec.WriteChunkIndex(new byte[BlobEncryptionCodec.GcmNonceSize], -1));
     }
 
     [Fact]
@@ -620,7 +684,7 @@ public class BlobContainerEncryption_Tests : AbpBlobStoringTestBase
     }
 
     [Fact]
-    public void Should_Keep_The_V1_Format_Stable()
+    public async Task Should_Keep_The_V1_Format_Stable()
     {
         // Golden vector: deterministic ciphertext built from fixed inputs.
         // If this test breaks, the on-disk format changed and existing
@@ -654,6 +718,721 @@ public class BlobContainerEncryption_Tests : AbpBlobStoringTestBase
         using var output = new MemoryStream();
         decryptingStream.CopyTo(output);
         output.ToArray().ShouldBe(plain);
+
+        // The full production reader must also keep reading historical v1 data:
+        // header parsing, key routing and the decrypting state machine included
+        var codec = GetRequiredService<BlobEncryptionCodec>();
+        var configuration = new BlobContainerConfiguration().UseEncryption("golden-passphrase");
+        using var historicalBlob = new MemoryStream(Convert.FromBase64String(expected));
+        using var readerStream = await codec.CreateDecryptingStreamAsync(configuration, "golden-container", "golden-blob", null, historicalBlob);
+        using var readerOutput = new MemoryStream();
+        await readerStream.CopyToAsync(readerOutput);
+        readerOutput.ToArray().ShouldBe(plain);
+    }
+
+    [Fact]
+    public async Task Should_Keep_The_V1_Format_Stable_For_Tenant_Blobs()
+    {
+        // Pins the AAD encoding of the tenant id: BLOBs of a tenant, stored with
+        // the v1 format, must stay readable by the current production reader
+        const string expected =
+            "QUJQRQEBAQABhqABAgMEBQYHCAkKCwwNDg8QAAEAAKChoqOkpaanAAAAHKa92MyQIqewxKJu99K+u4sDv5kVGZfI/vGgGbUD0JfeWzh4JbOYAQz5Axr1AAAAAIAHZhGwF81jmA7v8d0GZF0=";
+
+        var salt = new byte[16];
+        var baseNonce = new byte[8];
+        for (var i = 0; i < 16; i++) salt[i] = (byte)(i + 1);
+        for (var i = 0; i < 8; i++) baseNonce[i] = (byte)(0xA0 + i);
+        var tenantId = new Guid("11111111-2222-3333-4444-555555555555");
+
+        var keyBytes = BlobEncryptionCodec.DeriveKeyBytes("golden-passphrase", salt, 100_000);
+        var header = BlobEncryptionCodec.BuildHeader(BlobEncryptionKeySource.Container, 100_000, salt, 64 * 1024, baseNonce);
+        var prefix = BlobEncryptionCodec.CreateBlobPrefix(header);
+        var aad = BlobEncryptionCodec.BuildAssociatedDataPrefix(prefix, "golden-container", "golden-blob", tenantId);
+        var plain = "golden tenant vector content"u8.ToArray();
+
+        using var cipher = new MemoryStream();
+        cipher.Write(prefix, 0, prefix.Length);
+        var chunkRecord = BlobEncryptionCodec.EncryptChunk(keyBytes, aad, baseNonce, 0, plain, plain.Length);
+        cipher.Write(chunkRecord, 0, chunkRecord.Length);
+        var terminalRecord = BlobEncryptionCodec.CreateTerminalRecord(keyBytes, aad, baseNonce, 1);
+        cipher.Write(terminalRecord, 0, terminalRecord.Length);
+
+        Convert.ToBase64String(cipher.ToArray()).ShouldBe(expected);
+
+        var codec = GetRequiredService<BlobEncryptionCodec>();
+        var configuration = new BlobContainerConfiguration().UseEncryption("golden-passphrase");
+        using var historicalBlob = new MemoryStream(Convert.FromBase64String(expected));
+        using var readerStream = await codec.CreateDecryptingStreamAsync(configuration, "golden-container", "golden-blob", tenantId, historicalBlob);
+        using var output = new MemoryStream();
+        await readerStream.CopyToAsync(output);
+        output.ToArray().ShouldBe(plain);
+    }
+
+    [Fact]
+    public async Task Should_Encrypt_And_Decrypt_A_Modern_Async_Only_Source()
+    {
+        var content = new byte[100_000];
+        new Random(42).NextBytes(content);
+
+        using (var source = new FakeModernAsyncOnlyStream(new MemoryStream(content)))
+        {
+            await _container4.SaveAsync("modern-source", source, overrideExisting: true);
+        }
+
+        (await _container4.GetAllBytesAsync("modern-source")).SequenceEqual(content).ShouldBeTrue();
+
+        // A modern-async-only cipher stream (like a modern provider response) works too
+        var codec = GetRequiredService<BlobEncryptionCodec>();
+        var configuration = new BlobContainerConfiguration().UseEncryption("modern-passphrase");
+        byte[] cipherBytes;
+        using (var encryptingStream = await codec.CreateEncryptingStreamAsync(configuration, "modern-container", "modern-blob", null, new MemoryStream(content)))
+        using (var cipherBuffer = new MemoryStream())
+        {
+            await encryptingStream.CopyToAsync(cipherBuffer);
+            cipherBytes = cipherBuffer.ToArray();
+        }
+
+        using var decryptingStream = await codec.CreateDecryptingStreamAsync(
+            configuration, "modern-container", "modern-blob", null, new FakeModernAsyncOnlyStream(new MemoryStream(cipherBytes)));
+        using var output = new MemoryStream();
+        await decryptingStream.CopyToAsync(output);
+        output.ToArray().SequenceEqual(content).ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task Should_Reject_Content_Truncated_Right_After_The_Magic_Even_When_Legacy_Is_Allowed()
+    {
+        // A full "ABPE" magic already identifies the encrypted format: it must fail
+        // as corrupted instead of being returned as (unauthenticated) legacy plaintext
+        SetRawBytes<TestContainer6>("magic-only", "ABPE"u8.ToArray());
+
+        var exception = await Assert.ThrowsAsync<AbpException>(async () =>
+        {
+            await _container6.GetAsync("magic-only");
+        });
+
+        exception.Message.ShouldContain("missing format version");
+    }
+
+    [Fact]
+    public async Task Should_Reject_A_Header_With_Fewer_Iterations_Than_The_Writer_Minimum()
+    {
+        // Accepting fewer iterations than any legitimate writer ever used would let
+        // attacker-crafted content turn reads into a cheap passphrase-guessing oracle
+        var salt = new byte[16];
+        var baseNonce = new byte[8];
+        const int lowIterations = 50_000;
+
+        var keyBytes = BlobEncryptionCodec.DeriveKeyBytes("oracle-passphrase", salt, lowIterations);
+        var header = BlobEncryptionCodec.BuildHeader(BlobEncryptionKeySource.Container, lowIterations, salt, 64 * 1024, baseNonce);
+        var prefix = BlobEncryptionCodec.CreateBlobPrefix(header);
+        var aad = BlobEncryptionCodec.BuildAssociatedDataPrefix(prefix, "oracle-container", "oracle-blob", null);
+        var plain = "oracle content"u8.ToArray();
+
+        using var cipher = new MemoryStream();
+        cipher.Write(prefix, 0, prefix.Length);
+        var chunkRecord = BlobEncryptionCodec.EncryptChunk(keyBytes, aad, baseNonce, 0, plain, plain.Length);
+        cipher.Write(chunkRecord, 0, chunkRecord.Length);
+        cipher.Position = 0;
+
+        var codec = GetRequiredService<BlobEncryptionCodec>();
+        var configuration = new BlobContainerConfiguration().UseEncryption("oracle-passphrase");
+
+        var exception = await Assert.ThrowsAsync<AbpException>(async () =>
+        {
+            await codec.CreateDecryptingStreamAsync(configuration, "oracle-container", "oracle-blob", null, cipher);
+        });
+
+        exception.Message.ShouldContain("invalid KDF iteration count");
+    }
+
+    [Fact]
+    public async Task Should_Not_Expose_A_Length_When_The_Position_Is_Not_Readable()
+    {
+        // Length is known but Position throws: the remaining length is genuinely
+        // unknown (the stream may be partially consumed), so no length is exposed
+        // rather than a guessed (possibly too-long) one that would short-write
+        var codec = GetRequiredService<BlobEncryptionCodec>();
+        var configuration = new BlobContainerConfiguration().UseEncryption("length-passphrase");
+        var content = new byte[64 * 1024 + 1];
+        using var source = new LengthOnlyStream(content);
+
+        using var encryptedStream = await codec.CreateEncryptingStreamAsync(configuration, "length-container", "length-blob", null, source);
+
+        Should.Throw<NotSupportedException>(() => encryptedStream.Length);
+
+        // The content still round-trips correctly, only the length is unknown
+        using var output = new MemoryStream();
+        await encryptedStream.CopyToAsync(output);
+        output.Length.ShouldBeGreaterThan(content.Length);
+    }
+
+    private sealed class LengthOnlyStream : Stream
+    {
+        private readonly MemoryStream _inner;
+
+        public LengthOnlyStream(byte[] bytes)
+        {
+            _inner = new MemoryStream(bytes);
+        }
+
+        public override bool CanRead => true;
+        public override bool CanSeek => false;
+        public override bool CanWrite => false;
+        public override long Length => _inner.Length;
+
+        public override long Position
+        {
+            get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
+        }
+
+        public override void Flush()
+        {
+        }
+
+        public override int Read(byte[] buffer, int offset, int count) => _inner.Read(buffer, offset, count);
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+        public override void SetLength(long value) => throw new NotSupportedException();
+        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _inner.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
+    }
+
+    [Fact]
+    public async Task Should_Save_A_Source_Whose_Length_Probe_Fails()
+    {
+        var content = "length probe failure content".GetBytes();
+        using var source = new FakeIoFailingLengthStream(new MemoryStream(content));
+
+        await _container4.SaveAsync("length-probe-failure", source, overrideExisting: true);
+
+        (await _container4.GetAllBytesAsync("length-probe-failure")).ShouldBe(content);
+    }
+
+    [Fact]
+    public async Task Should_Keep_The_V1_Writer_Output_Stable_For_Multi_Chunk_Content()
+    {
+        // Pins the production writer state machine (prefix, chunk framing, terminal
+        // record) on multi-chunk content, and that the production reader reads it
+        const string expected =
+            "QUJQRQEBAQABhqABAgMEBQYHCAkKCwwNDg8QAAAAEKChoqOkpaanAAAAEKa92MyQIqep1KB78Ib9pZvT8su7m9hTNktwSiqr1SWvAAAAEEnATYRJsL9GiPFOI/UsQ+rri8bl03Het8U62zMtQuKGAAAACALRHX4ndOvYmGqf4ahSHre7Jn85GCHKZAAAAAATN3tj7GdkC3MxveC+K07f";
+
+        var salt = new byte[16];
+        var baseNonce = new byte[8];
+        for (var i = 0; i < 16; i++) salt[i] = (byte)(i + 1);
+        for (var i = 0; i < 8; i++) baseNonce[i] = (byte)(0xA0 + i);
+
+        var keyBytes = BlobEncryptionCodec.DeriveKeyBytes("golden-passphrase", salt, 100_000);
+        var header = BlobEncryptionCodec.BuildHeader(BlobEncryptionKeySource.Container, 100_000, salt, 16, baseNonce);
+        var prefix = BlobEncryptionCodec.CreateBlobPrefix(header);
+        var aad = BlobEncryptionCodec.BuildAssociatedDataPrefix(prefix, "golden-container", "golden-blob", null);
+        var plain = "golden multi chunk writer vector content"u8.ToArray(); // 40 bytes -> 3 chunks of 16
+
+        using var writerStream = new ChunkedEncryptingReadStream(new MemoryStream(plain), prefix, aad, (byte[])keyBytes.Clone(), baseNonce, 16, null);
+        using var cipher = new MemoryStream();
+        await writerStream.CopyToAsync(cipher);
+
+        Convert.ToBase64String(cipher.ToArray()).ShouldBe(expected);
+
+        var codec = GetRequiredService<BlobEncryptionCodec>();
+        var configuration = new BlobContainerConfiguration().UseEncryption("golden-passphrase");
+        using var historicalBlob = new MemoryStream(Convert.FromBase64String(expected));
+        using var readerStream = await codec.CreateDecryptingStreamAsync(configuration, "golden-container", "golden-blob", null, historicalBlob);
+        using var output = new MemoryStream();
+        await readerStream.CopyToAsync(output);
+        output.ToArray().ShouldBe(plain);
+    }
+
+    [Fact]
+    public async Task Should_Keep_The_Exact_Length_When_Re_Encrypting_A_Legacy_Stream()
+    {
+        var content = new byte[1000];
+        new Random(42).NextBytes(content);
+
+        // Simulate the legacy replay stream: the first bytes were consumed as the format probe
+        var underlying = new MemoryStream(content);
+        var probeBytes = new byte[5];
+        underlying.Read(probeBytes, 0, probeBytes.Length);
+        using var legacyStream = new PrefixingReadStream(probeBytes, underlying);
+
+        var codec = GetRequiredService<BlobEncryptionCodec>();
+        var configuration = new BlobContainerConfiguration().UseEncryption("legacy-reencrypt-passphrase");
+        using var encryptingStream = await codec.CreateEncryptingStreamAsync(configuration, "legacy-container", "legacy-blob", null, legacyStream);
+
+        var reportedLength = encryptingStream.Length; // Length - Position of the legacy stream is known
+        using var output = new MemoryStream();
+        await encryptingStream.CopyToAsync(output);
+
+        reportedLength.ShouldBe(output.Length);
+    }
+
+    [Fact]
+    public async Task Should_Reject_Content_Too_Large_For_The_Chunk_Index_Upfront()
+    {
+        var codec = GetRequiredService<BlobEncryptionCodec>();
+        var configuration = new BlobContainerConfiguration().UseEncryption("huge-passphrase");
+
+        var exception = await Assert.ThrowsAsync<AbpException>(async () =>
+        {
+            await codec.CreateEncryptingStreamAsync(configuration, "huge-container", "huge-blob", null, new HugeLengthStream());
+        });
+
+        exception.Message.ShouldContain("too large");
+    }
+
+    private sealed class HugeLengthStream : Stream
+    {
+        public override bool CanRead => true;
+        public override bool CanSeek => false;
+        public override bool CanWrite => false;
+        public override long Length => 200_000_000_000_000_000; // Far beyond int.MaxValue chunks
+
+        public override long Position
+        {
+            get => 0;
+            set => throw new NotSupportedException();
+        }
+
+        public override void Flush()
+        {
+        }
+
+        public override int Read(byte[] buffer, int offset, int count) => 0;
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+        public override void SetLength(long value) => throw new NotSupportedException();
+        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+    }
+
+    [Fact]
+    public async Task Should_Reject_A_Blob_Name_With_Invalid_Utf16()
+    {
+        // Different unpaired surrogates would fold into the same replacement bytes,
+        // giving two different names the same authenticated identity
+        var codec = GetRequiredService<BlobEncryptionCodec>();
+        var configuration = new BlobContainerConfiguration().UseEncryption("surrogate-passphrase");
+
+        var exception = await Assert.ThrowsAsync<AbpException>(async () =>
+        {
+            await codec.CreateEncryptingStreamAsync(configuration, "surrogate-container", "x\uD800", null, new MemoryStream());
+        });
+
+        exception.Message.ShouldContain("invalid characters");
+    }
+
+    [Fact]
+    public void Should_Report_The_Served_Length_Of_A_Legacy_Prefixing_Stream_When_The_Underlying_Is_Offset()
+    {
+        // The underlying provider stream is not at position 0: the prefixing wrapper
+        // must report prefix + remaining, not the underlying total length
+        var content = new byte[1000];
+        new Random(42).NextBytes(content);
+        var underlying = new MemoryStream(content);
+        underlying.Position = 2; // Simulate a provider stream that did not start at 0
+
+        var probe = new byte[5];
+        underlying.Read(probe, 0, probe.Length); // The magic probe consumed 5 more bytes
+
+        using var prefixing = new PrefixingReadStream(probe, underlying);
+
+        // Served = prefix (5) + remaining underlying (1000 - 7) = 998
+        prefixing.Length.ShouldBe(content.Length - 2);
+
+        using var output = new MemoryStream();
+        prefixing.CopyTo(output);
+        output.Length.ShouldBe(content.Length - 2);
+    }
+
+    [Fact]
+    public void Should_Report_The_Bytes_Served_As_The_Position_Of_A_Prefixing_Stream()
+    {
+        var underlying = new MemoryStream(new byte[100]);
+        using var prefixing = new PrefixingReadStream(new byte[5], underlying);
+
+        var buffer = new byte[105];
+        var read = prefixing.Read(buffer, 0, buffer.Length);
+
+        (prefixing.Length - prefixing.Position).ShouldBe(prefixing.Length - read);
+    }
+
+    [Fact]
+    public async Task Should_Pass_The_Blob_Identity_To_The_Key_Provider()
+    {
+        // The key context carries the normalized container/BLOB name and the tenant,
+        // so a custom provider can select the key by the BLOB identity
+        // The codec is a public, replaceable service; construct it with a recording key
+        // provider directly instead of reaching into its internals
+        var recordingProvider = new RecordingKeyProvider();
+        var codec = new BlobEncryptionCodec(
+            recordingProvider,
+            GetRequiredService<IOptions<AbpBlobStoringEncryptionOptions>>());
+
+        var tenantId = Guid.NewGuid();
+        var configuration = new BlobContainerConfiguration().UseEncryption("identity-passphrase");
+        using var stream = await codec.CreateEncryptingStreamAsync(configuration, "the-container", "the-blob", tenantId, new MemoryStream());
+        using var output = new MemoryStream();
+        await stream.CopyToAsync(output);
+
+        recordingProvider.LastContext.ShouldNotBeNull();
+        recordingProvider.LastContext!.ContainerName.ShouldBe("the-container");
+        recordingProvider.LastContext.BlobName.ShouldBe("the-blob");
+        recordingProvider.LastContext.TenantId.ShouldBe(tenantId);
+    }
+
+    private sealed class RecordingKeyProvider : IBlobEncryptionKeyProvider
+    {
+        public BlobEncryptionKeyContext? LastContext { get; private set; }
+
+        public Task<BlobEncryptionKey> ResolveForEncryptionAsync(BlobEncryptionKeyContext context, CancellationToken cancellationToken = default)
+        {
+            LastContext = context;
+            return Task.FromResult(new BlobEncryptionKey(BlobEncryptionKeySource.Container, "identity-passphrase"));
+        }
+
+        public Task<string> ResolveForDecryptionAsync(BlobEncryptionKeySource keySource, BlobEncryptionKeyContext context, CancellationToken cancellationToken = default)
+        {
+            LastContext = context;
+            return Task.FromResult("identity-passphrase");
+        }
+    }
+
+    [Fact]
+    public async Task Should_Not_Recover_A_Faulted_Decrypting_Stream_In_The_End_Check()
+    {
+        // Insert a forged chunk record (no key needed) before the terminal record. Reading
+        // it faults the stream without incrementing the chunk index, so the original
+        // terminal would still verify at the same index — the end check must keep the fault
+        var codec = GetRequiredService<BlobEncryptionCodec>();
+        var configuration = new BlobContainerConfiguration().UseEncryption("fault-passphrase");
+
+        byte[] cipher;
+        using (var encrypting = await codec.CreateEncryptingStreamAsync(configuration, "fault-container", "fault-blob", null, new MemoryStream()))
+        using (var buffer = new MemoryStream())
+        {
+            await encrypting.CopyToAsync(buffer);
+            cipher = buffer.ToArray();
+        }
+
+        // A forged content record: 4-byte length + 16 random cipher bytes + 16 random tag
+        var forged = new byte[4 + 16 + 16];
+        forged[0] = 0; forged[1] = 0; forged[2] = 0; forged[3] = 16;
+        new Random(7).NextBytes(forged.AsSpan(4));
+
+        // Splice it in right before the 20-byte terminal record
+        var tampered = new byte[cipher.Length + forged.Length];
+        Array.Copy(cipher, 0, tampered, 0, cipher.Length - 20);
+        Array.Copy(forged, 0, tampered, cipher.Length - 20, forged.Length);
+        Array.Copy(cipher, cipher.Length - 20, tampered, cipher.Length - 20 + forged.Length, 20);
+
+        using var decrypting = await codec.CreateDecryptingStreamAsync(configuration, "fault-container", "fault-blob", null, new MemoryStream(tampered));
+        var readBuffer = new byte[1024];
+
+        // Reading the forged record faults the stream
+        Assert.ThrowsAny<Exception>(() =>
+        {
+            while (decrypting.Read(readBuffer, 0, readBuffer.Length) > 0)
+            {
+            }
+        });
+
+        // The end check must not "recover" the faulted stream by verifying the terminal
+        Should.Throw<Exception>(() => ((IBlobAuthenticatedEndStream)decrypting).EnsureReadToAuthenticatedEnd());
+    }
+
+    [Fact]
+    public async Task Should_Reject_Data_Appended_After_The_Terminal_Record()
+    {
+        // The terminal record marks the authenticated end; any trailing bytes after it mean
+        // the stored ciphertext was extended, so reading to the end must fail
+        var codec = GetRequiredService<BlobEncryptionCodec>();
+        var configuration = new BlobContainerConfiguration().UseEncryption("append-passphrase");
+        var content = "content that ends cleanly".GetBytes();
+
+        byte[] cipher;
+        using (var encrypting = await codec.CreateEncryptingStreamAsync(configuration, "append-container", "append-blob", null, new MemoryStream(content)))
+        using (var buffer = new MemoryStream())
+        {
+            await encrypting.CopyToAsync(buffer);
+            cipher = buffer.ToArray();
+        }
+
+        // Append one byte after the valid terminal record
+        var appended = new byte[cipher.Length + 1];
+        Array.Copy(cipher, appended, cipher.Length);
+        appended[cipher.Length] = 0x42;
+
+        using var decrypting = await codec.CreateDecryptingStreamAsync(configuration, "append-container", "append-blob", null, new MemoryStream(appended));
+        var readBuffer = new byte[content.Length + 1024];
+
+        await Assert.ThrowsAsync<AbpException>(async () =>
+        {
+            while (await decrypting.ReadAsync(readBuffer, 0, readBuffer.Length) > 0)
+            {
+            }
+        });
+    }
+
+    [Fact]
+    public async Task Should_Not_Fault_A_Healthy_Stream_When_The_End_Check_Is_Cancelled()
+    {
+        var codec = GetRequiredService<BlobEncryptionCodec>();
+        var configuration = new BlobContainerConfiguration().UseEncryption("cancel-passphrase");
+        var content = "cancel end-check content".GetBytes();
+
+        byte[] cipher;
+        using (var encrypting = await codec.CreateEncryptingStreamAsync(configuration, "cancel-container", "cancel-blob", null, new MemoryStream(content)))
+        using (var buffer = new MemoryStream())
+        {
+            await encrypting.CopyToAsync(buffer);
+            cipher = buffer.ToArray();
+        }
+
+        var cancelSource = new CancellationHonoringStream(new MemoryStream(cipher));
+        using var decryptingStream = await codec.CreateDecryptingStreamAsync(configuration, "cancel-container", "cancel-blob", null, cancelSource);
+        var decrypting = (IBlobAuthenticatedEndStream)decryptingStream;
+
+        // Consume all content, but not the terminal record yet
+        var readBuffer = new byte[content.Length];
+        var total = 0;
+        while (total < readBuffer.Length)
+        {
+            var read = await decryptingStream.ReadAsync(readBuffer.AsMemory(total, readBuffer.Length - total));
+            total += read;
+        }
+        readBuffer.ShouldBe(content);
+
+        // The terminal read is cancelled: it must not permanently fault the healthy stream
+        cancelSource.HonorCancellation = true;
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
+        {
+            await decrypting.EnsureReadToAuthenticatedEndAsync(new CancellationToken(canceled: true));
+        });
+
+        // A retry with a live token still verifies the terminal record
+        cancelSource.HonorCancellation = false;
+        await decrypting.EnsureReadToAuthenticatedEndAsync(CancellationToken.None);
+    }
+
+    [Fact]
+    public async Task Should_Fault_When_The_End_Check_Is_Cancelled_After_Consuming_Part_Of_The_Terminal_Record()
+    {
+        // A cancellation before any I/O leaves the stream healthy (see the test above), but a
+        // cancellation after the terminal record was partially consumed can not: the consumed
+        // bytes are gone from the non-seekable cipher stream, so a retry would parse from the
+        // middle of the record and misreport a valid BLOB as corrupt. The stream must fault
+        var codec = GetRequiredService<BlobEncryptionCodec>();
+        var configuration = new BlobContainerConfiguration().UseEncryption("partial-cancel-passphrase");
+        var content = "partial cancel end-check content".GetBytes();
+
+        byte[] cipher;
+        using (var encrypting = await codec.CreateEncryptingStreamAsync(configuration, "partial-cancel-container", "partial-cancel-blob", null, new MemoryStream(content)))
+        using (var buffer = new MemoryStream())
+        {
+            await encrypting.CopyToAsync(buffer);
+            cipher = buffer.ToArray();
+        }
+
+        var cancelSource = new PartialReadThenCancelStream(new MemoryStream(cipher));
+        using var decryptingStream = await codec.CreateDecryptingStreamAsync(configuration, "partial-cancel-container", "partial-cancel-blob", null, cancelSource);
+        var decrypting = (IBlobAuthenticatedEndStream)decryptingStream;
+
+        // Consume all content, but not the terminal record yet
+        var readBuffer = new byte[content.Length];
+        var total = 0;
+        while (total < readBuffer.Length)
+        {
+            var read = await decryptingStream.ReadAsync(readBuffer.AsMemory(total, readBuffer.Length - total));
+            total += read;
+        }
+        readBuffer.ShouldBe(content);
+
+        // The terminal read consumes one byte and is then cancelled mid-record
+        cancelSource.TripOnNextReads = true;
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
+        {
+            await decrypting.EnsureReadToAuthenticatedEndAsync(CancellationToken.None);
+        });
+
+        // The stream must now be faulted: a retry must report the fault, not resume parsing
+        // from the middle of the terminal record and surface a false corruption error
+        cancelSource.TripOnNextReads = false;
+        var retry = await Assert.ThrowsAsync<AbpException>(async () =>
+        {
+            await decrypting.EnsureReadToAuthenticatedEndAsync(CancellationToken.None);
+        });
+        retry.Message.ShouldContain("a previous read operation has failed");
+    }
+
+    private sealed class PartialReadThenCancelStream : Stream
+    {
+        private readonly Stream _inner;
+        private int _tripStep;
+
+        // When set, the next read returns a single byte and the read after it throws
+        // OperationCanceledException, simulating a provider that consumes part of the
+        // terminal record and is then cancelled mid-read
+        public bool TripOnNextReads { get; set; }
+
+        public PartialReadThenCancelStream(Stream inner)
+        {
+            _inner = inner;
+        }
+
+        public override bool CanRead => true;
+        public override bool CanSeek => false;
+        public override bool CanWrite => false;
+        public override long Length => throw new NotSupportedException();
+
+        public override long Position
+        {
+            get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
+        }
+
+        public override void Flush()
+        {
+        }
+
+        public override int Read(byte[] buffer, int offset, int count) => _inner.Read(buffer, offset, count);
+
+        public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+        {
+            return ReadTrippedAsync(buffer.AsMemory(offset, count), cancellationToken).AsTask();
+        }
+
+        public override ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
+        {
+            return ReadTrippedAsync(buffer, cancellationToken);
+        }
+
+        private ValueTask<int> ReadTrippedAsync(Memory<byte> buffer, CancellationToken cancellationToken)
+        {
+            if (TripOnNextReads)
+            {
+                if (_tripStep == 0)
+                {
+                    _tripStep++;
+                    // Consume a single byte of the terminal record before the cancellation
+                    return _inner.ReadAsync(buffer.Slice(0, Math.Min(1, buffer.Length)), cancellationToken);
+                }
+
+                throw new OperationCanceledException();
+            }
+
+            return _inner.ReadAsync(buffer, cancellationToken);
+        }
+
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+        public override void SetLength(long value) => throw new NotSupportedException();
+        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _inner.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
+    }
+
+    private sealed class CancellationHonoringStream : Stream
+    {
+        private readonly Stream _inner;
+
+        public bool HonorCancellation { get; set; }
+
+        public CancellationHonoringStream(Stream inner)
+        {
+            _inner = inner;
+        }
+
+        public override bool CanRead => true;
+        public override bool CanSeek => false;
+        public override bool CanWrite => false;
+        public override long Length => throw new NotSupportedException();
+
+        public override long Position
+        {
+            get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
+        }
+
+        public override void Flush()
+        {
+        }
+
+        public override int Read(byte[] buffer, int offset, int count) => _inner.Read(buffer, offset, count);
+
+        public override ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
+        {
+            if (HonorCancellation && cancellationToken.IsCancellationRequested)
+            {
+                throw new OperationCanceledException(cancellationToken);
+            }
+
+            return _inner.ReadAsync(buffer, cancellationToken);
+        }
+
+        public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+        {
+            if (HonorCancellation && cancellationToken.IsCancellationRequested)
+            {
+                throw new OperationCanceledException(cancellationToken);
+            }
+
+            return _inner.ReadAsync(buffer, offset, count, cancellationToken);
+        }
+
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+        public override void SetLength(long value) => throw new NotSupportedException();
+        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _inner.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
+    }
+
+    [Fact]
+    public async Task Should_Not_Expose_A_Legacy_Plaintext_Stream_As_Authenticated_End()
+    {
+        // Legacy plaintext has no authenticated terminal, so its stream must not claim to
+        var codec = GetRequiredService<BlobEncryptionCodec>();
+        var configuration = new BlobContainerConfiguration().UseEncryption("legacy-passphrase", allowLegacyPlainText: true);
+
+        using var legacy = await codec.CreateDecryptingStreamAsync(configuration, "legacy-container", "legacy-blob", null, new MemoryStream("plain content".GetBytes()));
+
+        legacy.ShouldNotBeAssignableTo<IBlobAuthenticatedEndStream>();
+    }
+
+    [Fact]
+    public async Task Should_Reject_A_PassPhrase_With_Invalid_Utf16()
+    {
+        // Consistent across target frameworks: an unpaired surrogate passphrase is rejected
+        var codec = GetRequiredService<BlobEncryptionCodec>();
+        var configuration = new BlobContainerConfiguration().UseEncryption("x\uD800");
+
+        var exception = await Assert.ThrowsAsync<AbpException>(async () =>
+        {
+            await codec.CreateEncryptingStreamAsync(configuration, "surrogate-pass-container", "b", null, new MemoryStream());
+        });
+
+        exception.Message.ShouldContain("invalid characters");
     }
 
     private byte[]? GetRawBytes<TContainer>(string blobName)
@@ -749,7 +1528,7 @@ public class BlobContainerEncryption_Tests : AbpBlobStoringTestBase
             throw new InvalidOperationException("Synchronous reads are not allowed on this stream!");
         }
 
-        public override Task<int> ReadAsync(byte[] buffer, int offset, int count, System.Threading.CancellationToken cancellationToken)
+        public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
             return _stream.ReadAsync(buffer, offset, count, cancellationToken);
         }

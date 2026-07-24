@@ -39,11 +39,13 @@ public class FakeInMemoryBlobProvider : BlobProviderBase
         return Task.FromResult(_blobs.ContainsKey(GetKey(args.ContainerName, args.BlobName)));
     }
 
+    public TrackingMemoryStream? LastServedStream { get; private set; }
+
     public override Task<Stream?> GetOrNullAsync(BlobProviderGetArgs args)
     {
         return Task.FromResult<Stream?>(
             _blobs.TryGetValue(GetKey(args.ContainerName, args.BlobName), out var bytes)
-                ? new MemoryStream(bytes)
+                ? LastServedStream = new TrackingMemoryStream(bytes)
                 : null
         );
     }
@@ -61,5 +63,21 @@ public class FakeInMemoryBlobProvider : BlobProviderBase
     private static string GetKey(string containerName, string blobName)
     {
         return containerName + "/" + blobName;
+    }
+
+    public sealed class TrackingMemoryStream : MemoryStream
+    {
+        public bool Disposed { get; private set; }
+
+        public TrackingMemoryStream(byte[] bytes)
+            : base(bytes)
+        {
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            Disposed = true;
+            base.Dispose(disposing);
+        }
     }
 }

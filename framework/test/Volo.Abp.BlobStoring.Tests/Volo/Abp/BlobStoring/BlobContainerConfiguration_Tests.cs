@@ -104,14 +104,14 @@ public class BlobContainerConfiguration_Tests
     public void Should_Keep_The_Configured_PassPhrase_When_UseEncryption_Is_Called_Again()
     {
         var configuration = new BlobContainerConfiguration();
-        configuration.UseEncryption("first-passphrase", allowLegacyPlaintext: true);
+        configuration.UseEncryption("first-passphrase", allowLegacyPlainText: true);
 
         // Another module just ensuring that encryption is enabled must not
         // change the configured key or the legacy option.
         configuration.UseEncryption();
 
         BlobEncryptionConfiguration.GetPassPhraseOrNull(configuration).ShouldBe("first-passphrase");
-        BlobEncryptionConfiguration.IsLegacyPlaintextAllowed(configuration).ShouldBeTrue();
+        BlobEncryptionConfiguration.IsLegacyPlainTextAllowed(configuration).ShouldBeTrue();
     }
 
     [Fact]
@@ -130,11 +130,70 @@ public class BlobContainerConfiguration_Tests
     }
 
     [Fact]
+    public void Should_Compose_Default_And_Named_Container_PipelineContributors()
+    {
+        var defaultConfig = new BlobContainerConfiguration();
+        defaultConfig.PipelineContributors.Add<FakeAPipelineContributor>();
+
+        var namedConfig = new BlobContainerConfiguration(defaultConfig);
+        namedConfig.PipelineContributors.Add<FakeBPipelineContributor>();
+
+        namedConfig.GetEffectivePipelineContributors()
+            .ShouldBe([typeof(FakeAPipelineContributor), typeof(FakeBPipelineContributor)]);
+        defaultConfig.GetEffectivePipelineContributors().ShouldBe([typeof(FakeAPipelineContributor)]);
+    }
+
+    [Fact]
+    public void Should_Keep_Inherited_PipelineContributors_When_The_Provider_Is_Overridden()
+    {
+        var defaultConfig = new BlobContainerConfiguration();
+        defaultConfig.ProviderType = typeof(FakeBlobProvider1);
+        defaultConfig.PipelineContributors.Add<FakeAPipelineContributor>();
+
+        var namedConfig = new BlobContainerConfiguration(defaultConfig);
+        namedConfig.ProviderType = typeof(FakeBlobProvider2);
+
+        namedConfig.GetEffectivePipelineContributors().ShouldBe([typeof(FakeAPipelineContributor)]);
+    }
+
+    [Fact]
+    public void Should_Not_Duplicate_A_PipelineContributor_Configured_On_Both_Levels()
+    {
+        var defaultConfig = new BlobContainerConfiguration();
+        defaultConfig.PipelineContributors.Add<FakeAPipelineContributor>();
+        defaultConfig.PipelineContributors.Add<FakeAPipelineContributor>();
+
+        var namedConfig = new BlobContainerConfiguration(defaultConfig);
+        namedConfig.PipelineContributors.Add<FakeAPipelineContributor>();
+
+        // A contributor type runs once, on every configuration level
+        defaultConfig.GetEffectivePipelineContributors().ShouldBe([typeof(FakeAPipelineContributor)]);
+        namedConfig.GetEffectivePipelineContributors().ShouldBe([typeof(FakeAPipelineContributor)]);
+    }
+
+    [Fact]
+    public void Should_Opt_Out_Of_The_Inherited_PipelineContributors()
+    {
+        var defaultConfig = new BlobContainerConfiguration();
+        defaultConfig.PipelineContributors.Add<FakeAPipelineContributor>();
+
+        var namedConfig = new BlobContainerConfiguration(defaultConfig);
+        namedConfig.InheritPipelineContributors = false;
+        namedConfig.PipelineContributors.Add<FakeBPipelineContributor>();
+
+        namedConfig.GetEffectivePipelineContributors().ShouldBe([typeof(FakeBPipelineContributor)]);
+    }
+
+    [Fact]
     public void Should_Reject_Empty_PassPhrase()
     {
         var configuration = new BlobContainerConfiguration();
 
         Assert.ThrowsAny<ArgumentException>(() => configuration.UseEncryption(""));
-        Assert.ThrowsAny<ArgumentException>(() => configuration.UseEncryption("   "));
+        Assert.ThrowsAny<ArgumentException>(() => configuration.UseEncryption("   ", allowLegacyPlainText: true));
+
+        // A failed call must not leave the configuration partially modified
+        BlobEncryptionConfiguration.IsEnabled(configuration).ShouldBeFalse();
+        BlobEncryptionConfiguration.IsLegacyPlainTextAllowed(configuration).ShouldBeFalse();
     }
 }

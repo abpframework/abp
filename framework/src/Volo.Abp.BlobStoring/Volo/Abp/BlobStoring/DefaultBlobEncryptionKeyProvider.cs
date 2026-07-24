@@ -1,5 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
@@ -20,13 +21,15 @@ public class DefaultBlobEncryptionKeyProvider : IBlobEncryptionKeyProvider, ITra
         Options = options.Value;
     }
 
+    /// <inheritdoc />
     public virtual Task<BlobEncryptionKey> ResolveForEncryptionAsync(
-        BlobContainerConfiguration configuration,
+        [NotNull] BlobEncryptionKeyContext context,
         CancellationToken cancellationToken = default)
     {
+        Check.NotNull(context, nameof(context));
         cancellationToken.ThrowIfCancellationRequested();
 
-        var containerPassPhrase = GetContainerPassPhraseOrNull(configuration);
+        var containerPassPhrase = GetContainerPassPhraseOrNull(context.Configuration);
         if (!string.IsNullOrWhiteSpace(containerPassPhrase))
         {
             return Task.FromResult(new BlobEncryptionKey(BlobEncryptionKeySource.Container, containerPassPhrase!));
@@ -44,18 +47,20 @@ public class DefaultBlobEncryptionKeyProvider : IBlobEncryptionKeyProvider, ITra
         );
     }
 
+    /// <inheritdoc />
     public virtual Task<string> ResolveForDecryptionAsync(
         BlobEncryptionKeySource keySource,
-        BlobContainerConfiguration configuration,
+        [NotNull] BlobEncryptionKeyContext context,
         CancellationToken cancellationToken = default)
     {
+        Check.NotNull(context, nameof(context));
         cancellationToken.ThrowIfCancellationRequested();
 
         string? passPhrase;
         switch (keySource)
         {
             case BlobEncryptionKeySource.Container:
-                passPhrase = GetContainerPassPhraseOrNull(configuration);
+                passPhrase = GetContainerPassPhraseOrNull(context.Configuration);
                 break;
             case BlobEncryptionKeySource.Tenant:
                 throw new AbpException(

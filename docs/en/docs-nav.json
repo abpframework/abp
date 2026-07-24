@@ -718,6 +718,10 @@
                   ]
                 },
                 {
+                  "text": "Content Pipeline",
+                  "path": "framework/infrastructure/blob-storing/pipeline.md"
+                },
+                {
                   "text": "Encryption",
                   "path": "framework/infrastructure/blob-storing/encryption.md"
                 }

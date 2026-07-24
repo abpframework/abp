@@ -2,59 +2,55 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
-using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.BlobStoring.Fakes;
 
 /// <summary>
-/// A custom key provider giving each tenant its own passphrase.
+/// A custom key provider giving each tenant its own passphrase, selected from the
+/// tenant carried by the <see cref="BlobEncryptionKeyContext"/>.
 /// </summary>
 public class FakeTenantBlobEncryptionKeyProvider : DefaultBlobEncryptionKeyProvider
 {
     public const string PassPhrasePrefix = "tenant-passphrase-";
 
-    protected ICurrentTenant CurrentTenant { get; }
-
     public FakeTenantBlobEncryptionKeyProvider(
-        ICurrentTenant currentTenant,
         IOptions<AbpBlobStoringEncryptionOptions> options)
         : base(options)
     {
-        CurrentTenant = currentTenant;
     }
 
     public override Task<BlobEncryptionKey> ResolveForEncryptionAsync(
-        BlobContainerConfiguration configuration,
+        BlobEncryptionKeyContext context,
         CancellationToken cancellationToken = default)
     {
-        var containerPassPhrase = GetContainerPassPhraseOrNull(configuration);
-        if (string.IsNullOrWhiteSpace(containerPassPhrase) && CurrentTenant.Id.HasValue)
+        var containerPassPhrase = GetContainerPassPhraseOrNull(context.Configuration);
+        if (string.IsNullOrWhiteSpace(containerPassPhrase) && context.TenantId.HasValue)
         {
             return Task.FromResult(new BlobEncryptionKey(
                 BlobEncryptionKeySource.Tenant,
-                GetPassPhrase(CurrentTenant.Id.Value)
+                GetPassPhrase(context.TenantId.Value)
             ));
         }
 
-        return base.ResolveForEncryptionAsync(configuration, cancellationToken);
+        return base.ResolveForEncryptionAsync(context, cancellationToken);
     }
 
     public override Task<string> ResolveForDecryptionAsync(
         BlobEncryptionKeySource keySource,
-        BlobContainerConfiguration configuration,
+        BlobEncryptionKeyContext context,
         CancellationToken cancellationToken = default)
     {
         if (keySource == BlobEncryptionKeySource.Tenant)
         {
-            if (!CurrentTenant.Id.HasValue)
+            if (!context.TenantId.HasValue)
             {
                 throw new AbpException("The BLOB was encrypted with a tenant-specific passphrase, but there is no current tenant!");
             }
 
-            return Task.FromResult(GetPassPhrase(CurrentTenant.Id.Value));
+            return Task.FromResult(GetPassPhrase(context.TenantId.Value));
         }
 
-        return base.ResolveForDecryptionAsync(keySource, configuration, cancellationToken);
+        return base.ResolveForDecryptionAsync(keySource, context, cancellationToken);
     }
 
     public static string GetPassPhrase(Guid tenantId)
