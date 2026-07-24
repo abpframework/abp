@@ -1,19 +1,19 @@
 {
   "name": "@abp/ng.schematics",
-  "version": "10.5.0",
+  "version": "10.6.0-rc.3",
   "author": "",
   "schematics": "./collection.json",
   "dependencies": {
-    "@angular-devkit/core": "~21.2.0",
-    "@angular-devkit/schematics": "~21.2.0",
-    "@angular/cli": "~21.2.0",
+    "@angular-devkit/core": "~22.0.0",
+    "@angular-devkit/schematics": "~22.0.0",
+    "@angular/cli": "~22.0.0",
     "got": "^11.5.2",
     "jsonc-parser": "^2.3.0",
     "should-quote": "^1.0.0",
-    "typescript": "~5.9.0"
+    "typescript": "~6.0.3"
   },
   "devDependencies": {
-    "@schematics/angular": "~21.2.0",
+    "@schematics/angular": "~22.0.0",
     "@types/jest": "29.4.4",
     "@types/node": "20.2.5",
     "jest": "29.4.3",

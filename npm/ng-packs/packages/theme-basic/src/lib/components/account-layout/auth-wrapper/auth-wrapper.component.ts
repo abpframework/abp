@@ -1,10 +1,11 @@
 import { AuthWrapperService } from '@abp/ng.account.core';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { LocalizationPipe, ReplaceableTemplateDirective } from '@abp/ng.core';
 import { TenantBoxComponent } from '../tenant-box/tenant-box.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-auth-wrapper',
   templateUrl: './auth-wrapper.component.html',
   providers: [AuthWrapperService],

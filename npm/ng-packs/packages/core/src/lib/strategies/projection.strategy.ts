@@ -1,7 +1,7 @@
 import {
   ApplicationRef,
-  ComponentFactoryResolver,
   ComponentRef,
+  createComponent,
   EmbeddedViewRef,
   Injector,
   TemplateRef,
@@ -31,14 +31,10 @@ export class ComponentProjectionStrategy<T extends Type<any>> extends Projection
   injectContent(injector: Injector) {
     this.containerStrategy.prepare();
 
-    const resolver = injector.get(ComponentFactoryResolver) as ComponentFactoryResolver;
-    const factory = resolver.resolveComponentFactory<InferredInstanceOf<T>>(this.content);
-
-    const componentRef = this.containerStrategy.containerRef.createComponent(
-      factory,
-      this.containerStrategy.getIndex(),
+    const componentRef = this.containerStrategy.containerRef.createComponent(this.content, {
+      index: this.containerStrategy.getIndex(),
       injector,
-    );
+    });
     this.contextStrategy.setContext(componentRef);
 
     return componentRef as ComponentRefOrEmbeddedViewRef<T>;
@@ -56,10 +52,10 @@ export class RootComponentProjectionStrategy<T extends Type<any>> extends Projec
 
   injectContent(injector: Injector) {
     const appRef = injector.get(ApplicationRef);
-    const resolver = injector.get(ComponentFactoryResolver) as ComponentFactoryResolver;
-    const componentRef = resolver
-      .resolveComponentFactory<InferredInstanceOf<T>>(this.content)
-      .create(injector);
+    const componentRef = createComponent(this.content, {
+      environmentInjector: appRef.injector,
+      elementInjector: injector,
+    });
 
     this.contextStrategy.setContext(componentRef);
 
@@ -172,8 +168,9 @@ export const PROJECTION_STRATEGY = {
   },
 };
 
-type ComponentRefOrEmbeddedViewRef<T> = T extends Type<infer U>
-  ? ComponentRef<U>
-  : T extends TemplateRef<infer C>
-  ? EmbeddedViewRef<C>
-  : never;
+type ComponentRefOrEmbeddedViewRef<T> =
+  T extends Type<infer U>
+    ? ComponentRef<U>
+    : T extends TemplateRef<infer C>
+      ? EmbeddedViewRef<C>
+      : never;

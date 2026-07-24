@@ -7,12 +7,12 @@
 
 # Migration Identity Server to OpenIddict Guide
 
-This document explains how to migrate to [OpenIddict](https://github.com/openiddict/openiddict-core) from Identity Server. From now on the ABP startup templates uses `OpenIddict` as the auth server by default since version v6.0.0.
+This document explains how to migrate an application from IdentityServer4 to [OpenIddict](https://github.com/openiddict/openiddict-core). ABP startup templates have used OpenIddict as the authentication server by default since v6.0.0.
+
+> The checklist below describes the v6.0 transition. For a layer-by-layer migration, use the [IdentityServer to OpenIddict step-by-step guide](openiddict-step-by-step.md) and apply the package version that matches the ABP version of your application.
 
 ## History
-We are not removing Identity Server packages and we will continue to release new versions of Identity Server related NuGet/NPM packages. That means you won't have an issue while upgrading to v6.0 when the stable version releases. We will continue to fix bugs in our packages for a while. ABP 7.0 will be based on .NET 7. If Identity Server continues to work with .NET 7, we will also continue to ship NuGet packages for our IDS integration.
-
-On the other hand, Identity Server ends support for the open-source Identity Server in the end of 2022. The Identity Server team has decided to move to Duende IDS and ABP will not be migrated to the commercial Duende IDS. You can see the Duende Identity Server announcement from [this link](https://blog.duendesoftware.com/posts/20220111_fair_trade). 
+IdentityServer4 is archived and no longer maintained by its owners. ABP did not migrate its integration to the commercial Duende IdentityServer product. The ABP IdentityServer integration packages are still shipped for existing applications, while new applications use OpenIddict. See the [Duende IdentityServer announcement](https://blog.duendesoftware.com/posts/20220111_fair_trade) for the background.
 
 ## OpenIddict Migration Steps
 
@@ -21,7 +21,7 @@ On the other hand, Identity Server ends support for the open-source Identity Ser
 * Replace all `IdentityServer` modules with corresponding `OpenIddict` modules. eg `AbpIdentityServerDomainModule` to `AbpOpenIddictDomainModule`, `AbpAccountWebIdentityServerModule` to `AbpAccountWebOpenIddictModule`.
 * Rename the `ConfigureIdentityServer` to `ConfigureOpenIddict` in your `ProjectNameDbContext` class.
 * Remove the `UseIdentityServer` and add `UseAbpOpenIddictValidation` after `UseAuthentication`.
-* Add follow code to your startup module.
+* Add the following code to your startup module.
 
 ```cs
 public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -38,7 +38,7 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 }
 ```
 
-* If your project is not separate AuthServer please also add `ForwardIdentityAuthenticationForBearer`
+* If your project does not have a separate AuthServer, also add `ForwardIdentityAuthenticationForBearer`.
 
 ```cs
 private void ConfigureAuthentication(ServiceConfigurationContext context)
@@ -48,9 +48,9 @@ private void ConfigureAuthentication(ServiceConfigurationContext context)
 ```
 
 * Remove the `IdentityServerDataSeedContributor` from the `Domain` project.
-* Create a new version of the project, with the same name as your existing project.
-* Copy the `ProjectName.Domain\OpenIddict\OpenIddictDataSeedContributor.cs` of new project into your project and update `appsettings.json` base on `ProjectName.DbMigrator\appsettings.json`, Be careful to change the port number.
-* Copy the `Index.cshtml.cs` and `Index.cs` of new project to your project if you're using `IClientRepository` in `IndexModel`.
+* Generate a temporary project with the same name and architecture as the existing project so you can compare the current OpenIddict setup.
+* Copy the generated `ProjectName.Domain\OpenIddict\OpenIddictDataSeedContributor.cs` into your project and update `appsettings.json` based on `ProjectName.DbMigrator\appsettings.json`. Adjust the ports and client URLs for your application.
+* Copy the generated `Index.cshtml.cs` and `Index.cshtml` files into your project if your `IndexModel` still uses `IClientRepository`.
 * Update the scope name from `role` to `roles` in `AddAbpOpenIdConnect` method.
 * Remove `options.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);` from `HttpApi.Host` project. 
 * AuthServer no longer requires `JWT bearer authentication`. Please remove it. eg `AddJwtBearer` and `UseJwtTokenMiddleware`.

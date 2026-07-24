@@ -89,6 +89,28 @@ client = createAbpReactOidcAuth({
 
 The template stores the OIDC user in local storage and enables silent renewal with `public/silent-renew.html`.
 
+## Lower-Level OIDC Client
+
+`@volo/abp-oidc-auth` is the framework-agnostic client used by the React OIDC adapter. Use it directly in another JavaScript runtime or supply it to `createAbpReactOidcAuth`:
+
+```ts
+import { createAbpOidcAuth } from '@volo/abp-oidc-auth'
+import { createAbpReactOidcAuth } from '@volo/abp-react-oidc-auth'
+
+const client = createAbpOidcAuth({
+  authority: 'https://localhost:44301/',
+  clientId: 'MyProject_App',
+  redirectUri: window.location.origin,
+  postLogoutRedirectUri: window.location.origin,
+  scope: 'offline_access MyProject',
+})
+
+const auth = createAbpReactOidcAuth({ client })
+await client.init()
+```
+
+Use `subscribe()` for ABP authentication lifecycle events and `getSnapshot()` for the current user, profile, token and initialization state. `clearStaleState()` removes abandoned OIDC state entries. The client also exposes the underlying `UserManager`, its events and the configured authority for integrations that need lower-level OIDC control.
+
 ## Auth Provider and Hook
 
 `AuthProvider` wraps the app and handles the OIDC callback:

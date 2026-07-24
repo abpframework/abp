@@ -29,6 +29,7 @@
     "FullSearch": "Keresés a dokumentumokban",
     "Volo.Docs.Domain:010001": "A Elastic search nincs engedélyezve.",
     "MultipleVersionDocumentInfo": "Ennek a dokumentumnak több változata van. Válassza ki az Ön számára legmegfelelőbb lehetőségeket.",
+    "DocumentOptions": "Dokumentumbeállítások",
     "New": "Új",
     "Upd": "Mód",
     "NewExplanation": "Az elmúlt két hétben készült.",

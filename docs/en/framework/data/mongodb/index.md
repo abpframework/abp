@@ -352,6 +352,31 @@ services:
 
 ### Advanced Topics
 
+#### MongoDB DateTime Serialization
+
+ABP applies a clock-aware MongoDB serializer to writable `DateTime` and nullable `DateTime` properties in ABP entity mappings by default. It uses the configured [clock](../../infrastructure/timing.md) kind when serializing these properties. Disable this handling when the application configures its own serialization for the mapped properties:
+
+```csharp
+Configure<AbpMongoDbOptions>(options =>
+{
+    options.UseAbpClockHandleDateTime = false;
+});
+```
+
+#### Configuring MongoClientSettings
+
+`AbpMongoDbContextOptions.MongoClientSettingsConfigurer` runs before ABP creates a `MongoClient`. Use it for driver settings that are not part of the connection string, such as timeouts or TLS configuration:
+
+```csharp
+Configure<AbpMongoDbContextOptions>(options =>
+{
+    options.MongoClientSettingsConfigurer = settings =>
+    {
+        settings.ConnectTimeout = TimeSpan.FromSeconds(10);
+    };
+});
+```
+
 ### Controlling the Multi-Tenancy
 
 If your solution is [multi-tenant](../../architecture/multi-tenancy), tenants may have **separate databases**, you have **multiple** `DbContext` classes in your solution and some of your `DbContext` classes should be usable **only from the host side**, it is suggested to add `[IgnoreMultiTenancy]` attribute on your `DbContext` class. In this case, ABP guarantees that the related `DbContext` always uses the host [connection string](../../fundamentals/connection-strings.md), even if you are in a tenant context.

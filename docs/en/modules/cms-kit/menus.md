@@ -35,7 +35,15 @@ Menus page is used to manage dynamic public menus in the system.
 
 The created menu items will be visible on the public-web side, as shown below:
 
-![cms-kit-public-menus](../../images//cmskit-module-menus-public.png)
+![cms-kit-public-menus](../../images/cmskit-module-menus-public.png)
+
+### Menu Item Behavior
+
+Menu items form an ordered tree. Moving an item changes its parent and position, and CMS Kit normalizes the sibling order. Inactive root or child items are omitted from the public menu.
+
+A menu item can target either a URL or a CMS Kit page. When it targets a page, CMS Kit stores the page relationship and updates the menu URL after the page slug changes. It can also define an icon, link target, element ID, CSS class and a required permission. The public menu contributor omits permission-protected items for users who do not have the configured permission.
+
+The public contributor builds the named `CmsKit.Public` menu. CMS Kit registers that name as a main menu and caches the ordered menu-item DTOs in the distributed cache. Creating, updating, moving or deleting a menu item invalidates the cache.
 
 ## Internals
 
@@ -76,7 +84,7 @@ This module follows the [Domain Services Best Practices & Conventions](../../fra
 
 ##### Table / collection prefix & schema
 
-All tables/collections use the `Cms` prefix by default. Set static properties on the `CmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
+All tables/collections use the `Cms` prefix by default. Set static properties on the `AbpCmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
 
 ##### Connection string
 

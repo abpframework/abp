@@ -50,7 +50,7 @@ The `IdentitySessionCleanupBackgroundWorker` is a background worker that will re
 
 ## How it works
 
-This feature depends on the [Dynamic Claims](https://docs.abp.io/en/abp/latest/Dynamic-Claims) feature of the ABP framework. Here is how it works:
+This feature depends on the [Dynamic Claims](../../framework/fundamentals/dynamic-claims.md) feature of the ABP framework. Here is how it works:
 
 * The `IdentitySessionClaimsPrincipalContributor` will generate a random GUID as a `sessionid` to add the `ClaimsPrincipal`, This usually happens when logging in to get the user's claims.
 * The `OnSignedIn` event of `Identity` and `ProcessSignIn` event of `OpenIddict` will get this `sessionid` and store it in the database (`IdentitySession` table).
@@ -61,4 +61,4 @@ This feature depends on the [Dynamic Claims](https://docs.abp.io/en/abp/latest/D
 * The `IdentitySessionCleanupBackgroundWorker` will remove the inactive sessions.
 * Once a new session has been created, we will remove the other sessions based on the `PreventConcurrentLogin` setting.
 * The `IdentitySessionManager` is used to manage/maintain the sessions. Please use this class instead of directly using the repository.
-* The `UpdateSessionAfterCacheHit(10 times by default)` property of `IdentitySessionCheckerOptions` is used to configure the `IdentitySessionChecker` that will update session in the database when cache hits reach this value. This is to reduce the database update frequency and improve performance.
+* The `UpdateSessionAfterCacheHit` property of `IdentitySessionCheckerOptions` controls periodic database updates after cache hits and defaults to `10`. The checker writes on the first successful check, then writes again when the hit count becomes greater than the configured value and resets the counter. This reduces the database update frequency.

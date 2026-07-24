@@ -8,6 +8,8 @@ You can enable/disable the `Web Authentication API (WebAuthn) passkeys` feature 
 
 ![passkey-setting](../../images/passkey-setting.png)
 
+Passkeys are disabled by default. The default limit is 10 passkeys per user, and the configured limit must be greater than zero. Registration is rejected when passkeys are disabled or the user has reached the limit.
+
 ## Manage Passkeys
 
 You can add/rename/delete your passkeys in the `Account/Manage` page:

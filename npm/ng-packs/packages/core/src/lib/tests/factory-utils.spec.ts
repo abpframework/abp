@@ -28,11 +28,12 @@ describe('LazyModuleFactory', () => {
       const injector = TestBed.inject(Injector);
       const moduleRef = factory.create(injector);
 
-      expect('componentFactoryResolver' in moduleRef).toBe(true);
       expect('destroy' in moduleRef).toBe(true);
       expect('injector' in moduleRef).toBe(true);
       expect('instance' in moduleRef).toBe(true);
       expect('onDestroy' in moduleRef).toBe(true);
+      expect(moduleRef.instance).toBeInstanceOf(Module);
+      expect(moduleRef.injector.get('foo')).toBe('bar');
     });
   });
 });

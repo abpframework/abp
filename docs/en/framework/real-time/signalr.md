@@ -223,6 +223,17 @@ app.UseConfiguredEndpoints(endpoints =>
 });
 ```
 
+### Dynamic Claims
+
+When [dynamic claims](../fundamentals/dynamic-claims.md) are enabled, ABP refreshes the principal when a client connects and periodically during hub method invocations. `AbpSignalROptions.CheckDynamicClaimsInterval` controls the minimum interval between invocation-time checks for a connection. The default is five seconds; set it to `null` to check on every invocation:
+
+```csharp
+Configure<AbpSignalROptions>(options =>
+{
+    options.CheckDynamicClaimsInterval = TimeSpan.FromMinutes(1);
+});
+```
+
 ### UserIdProvider
 
 ABP implements SignalR's `IUserIdProvider` interface to provide the current user id from the `ICurrentUser` service of the ABP (see [the current user service](../infrastructure/current-user.md)), so it will be integrated to the authentication system of your application. The implementing class is the `AbpSignalRUserIdProvider`, if you want to change/override it.

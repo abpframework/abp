@@ -47,6 +47,16 @@ public class YourModule : AbpModule
 
 > Hangfire background worker integration provides an adapter `HangfirePeriodicBackgroundWorkerAdapter` to automatically load any `PeriodicBackgroundWorkerBase` and `AsyncPeriodicBackgroundWorkerBase` derived classes as `IHangfireBackgroundWorker` instances. This allows you to still to easily switch over to use Hangfire as the background manager even you have existing background workers that are based on the [default background workers implementation](../background-workers).
 
+The adapter uses UTC for recurring schedules by default and uses the default Hangfire queue when no queue is specified (a specified queue name is prefixed with `AbpHangfireOptions.DefaultQueuePrefix`, which is empty by default). You can configure both values globally for adapted periodic workers:
+
+````csharp
+Configure<AbpHangfirePeriodicBackgroundWorkerAdapterOptions>(options =>
+{
+    options.TimeZone = TimeZoneInfo.Local;
+    options.Queue = "periodic";
+});
+````
+
 ## Configuration
 
 You can install any storage for Hangfire. The most common one is SQL Server (see the [Hangfire.SqlServer](https://www.nuget.org/packages/Hangfire.SqlServer) NuGet package).

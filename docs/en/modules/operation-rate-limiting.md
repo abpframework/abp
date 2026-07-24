@@ -81,6 +81,8 @@ Instead of injecting `IOperationRateLimitingChecker` manually, you can use the `
 > **Application Services** are handled by the ABP interceptor (built into the Domain layer).
 > **MVC Controllers** are handled by `AbpOperationRateLimitingActionFilter`, which is automatically registered when you reference the `Volo.Abp.OperationRateLimiting.AspNetCore` package.
 
+For application and domain services, the decorated service must be resolved from dependency injection and the method must be eligible for [ABP interception](../framework/infrastructure/interceptors.md). In particular, keep the decorated method `virtual` when class-based dynamic proxies are used. MVC controller actions are enforced by the action filter and don't depend on service interception.
+
 ### Applying to an Application Service
 
 ````csharp
@@ -131,6 +133,8 @@ public virtual async Task SendCodeAsync([RateLimitingParameter] string phoneNumb
     // partition key = phoneNumber
 }
 ````
+
+Only one parameter can have `[RateLimitingParameter]`. If multiple parameters are marked, the module throws an `AbpException` when it resolves the method arguments.
 
 #### Using `IHasOperationRateLimitingParameter`
 
@@ -220,7 +224,7 @@ options.AddPolicy("Login", policy =>
 });
 ````
 
-> When multiple rules are present, the module uses a **two-phase check**: it first verifies all rules without incrementing counters, then increments only if all rules pass. This prevents wasted quota when one rule would block the request.
+> When multiple rules are present, the module first checks every rule without incrementing and starts incrementing only if that phase passes. This prevents quota consumption when a rule is already blocked. However, the policy isn't an atomic transaction across all rule counters: if a concurrent request exhausts a later rule during the increment phase, the current call is rejected, counters already incremented by earlier rules remain consumed, and the remaining rules are not incremented.
 
 ### Overriding an Existing Policy
 
@@ -447,6 +451,8 @@ When multi-tenancy is enabled, the cache key includes the tenant ID, so each ten
 * **Global key format:** `orl:{PolicyName}:{RuleKey}:{PartitionKey}`
 * **Tenant-isolated key format:** `orl:t:{TenantId}:{PolicyName}:{RuleKey}:{PartitionKey}`
 
+The resolved partition value is included in the distributed cache key without hashing. Email values are uppercased and phone numbers are normalized first, but they are still present in the key. Don't use secrets as partition values. If your cache backend exposes or logs keys, use a named custom resolver that returns a stable, non-reversible representation of sensitive identifiers.
+
 ## Checking the Limit
 
 Inject `IOperationRateLimitingChecker` to interact with rate limits. It provides four methods:
@@ -539,7 +545,10 @@ Configure<AbpOperationRateLimitingOptions>(options =>
 ````
 
 * **`IsEnabled`** (`bool`, default: `true`): Global switch to enable or disable rate limiting. When set to `false`, all `CheckAsync` calls pass through without checking. This is useful for disabling rate limiting in development (see [below](#disabling-in-development)).
-* **`LockTimeout`** (`TimeSpan`, default: `5 seconds`): Timeout for acquiring the distributed lock during counter increment operations.
+  * `CheckAsync` and `ResetAsync` become no-ops.
+  * `IsAllowedAsync` returns `true`.
+  * `GetStatusAsync` returns an allowed result with `MaxCount` and `RemainingCount` set to `int.MaxValue`, `CurrentCount` set to `0`, and no retry window.
+* **`LockTimeout`** (`TimeSpan`, default: `5 seconds`): Timeout for acquiring the distributed lock during counter increment operations. If the lock can't be acquired in this period, the default store throws an `AbpException` for an infrastructure failure; it doesn't convert the failure into a rate-limit violation or HTTP 429 response.
 
 ## Advanced Usage
 
@@ -589,6 +598,8 @@ await checker.CheckAsync("ApiCall", new OperationRateLimitingContext
     }
 });
 ````
+
+Don't put secrets or other values that shouldn't reach an error response in `ExtraProperties`. The checker copies every entry to the thrown exception's `Data` dictionary, which can be exposed by the application's exception handling configuration.
 
 ### Pre-checking Before Expensive Operations
 
@@ -672,28 +683,29 @@ A common pattern is to use ASP.NET Core middleware for broad API protection and 
 The default store uses ABP's `IDistributedCache`. You can replace it by implementing `IOperationRateLimitingStore`:
 
 ````csharp
+[Dependency(ReplaceServices = true)]
 public class MyCustomStore : IOperationRateLimitingStore, ITransientDependency
 {
     public Task<OperationRateLimitingStoreResult> IncrementAsync(
         string key, TimeSpan duration, int maxCount)
     {
-        // Your custom implementation (e.g., Redis Lua script for atomicity)
+        throw new NotImplementedException();
     }
 
     public Task<OperationRateLimitingStoreResult> GetAsync(
         string key, TimeSpan duration, int maxCount)
     {
-        // Read-only check
+        throw new NotImplementedException();
     }
 
     public Task ResetAsync(string key)
     {
-        // Reset the counter
+        throw new NotImplementedException();
     }
 }
 ````
 
-ABP's [dependency injection](../framework/fundamentals/dependency-injection.md) system will automatically use your implementation since it replaces the default one.
+`ITransientDependency` registers the implementation by convention, while `[Dependency(ReplaceServices = true)]` removes the default registration for the same service. See [Dependency Injection](../framework/fundamentals/dependency-injection.md) for other replacement approaches. A custom store is responsible for preserving the expected fixed-window and concurrency semantics; the default implementation coordinates increments with `IAbpDistributedLock`.
 
 ### Custom Rule
 
@@ -703,13 +715,15 @@ You can implement custom rate limiting algorithms (e.g., sliding window, token b
 policy.AddRule<MySlidingWindowRule>();
 ````
 
+The checker resolves every custom rule type from dependency injection for each check. Register the rule type as a service (for example, by implementing `ITransientDependency`) before adding it to a policy.
+
 ### Custom Formatter
 
-Replace `IOperationRateLimitingFormatter` to customize how time durations are displayed in error messages (e.g., "5 minutes", "2 hours 30 minutes").
+Replace `IOperationRateLimitingFormatter` to customize how time durations are displayed in error messages (e.g., "5 minutes", "2 hours 30 minutes"). Register the replacement explicitly, such as with `[Dependency(ReplaceServices = true)]` on a conventionally registered implementation.
 
 ### Custom Policy Provider
 
-Replace `IOperationRateLimitingPolicyProvider` to load policies from a database or external configuration source instead of the in-memory options.
+Replace `IOperationRateLimitingPolicyProvider` to load policies from a database or external configuration source instead of the in-memory options. The replacement must also be registered for `IOperationRateLimitingPolicyProvider`; the same ABP service replacement pattern can be used.
 
 When loading pre-built policies from an external source, use the `AddPolicy` overload that accepts an `OperationRateLimitingPolicy` object directly (bypassing the builder):
 
@@ -729,6 +743,8 @@ options.AddPolicy(new OperationRateLimitingPolicy
     ]
 });
 ````
+
+> The `AddPolicy(OperationRateLimitingPolicy)` overload stores the object as-is and doesn't run the builder validations. Before publishing a pre-built policy, validate that its name is not empty and that it contains at least one fixed-window or custom rule. For fixed-window definitions, validate positive durations, non-negative maximum counts, valid partition configuration and unique rule names. For non-custom partitions, also reject duplicate definitions with the same duration, maximum count, partition type and multi-tenancy flag. A custom policy provider has the same responsibility when it returns pre-built policies.
 
 To remove a policy (e.g., when it is deleted from the database), use `RemovePolicy`:
 

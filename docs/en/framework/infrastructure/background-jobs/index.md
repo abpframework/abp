@@ -150,7 +150,7 @@ Configure<AbpBackgroundJobOptions>(options =>
 {
     options.GetBackgroundJobName = (jobType) =>
     {
-        if (jobTyep == typeof(EmailSendingArgs))
+        if (jobType == typeof(EmailSendingArgs))
         {
             return "emails";
         }
@@ -225,7 +225,7 @@ ABP includes a simple `IBackgroundJobManager` implementation that;
 - **Retries** job execution until the job **successfully runs** or **timeouts**. Default timeout is 2 days for a job. Logs all exceptions.
 - **Deletes** a job from the store (database) when it's successfully executed. If it's timed out, it sets it as **abandoned** and leaves it in the database.
 - **Increasingly waits between retries** for a job. It waits 1 minute for the first retry, 2 minutes for the second retry, 4 minutes for the third retry and so on.
-- **Polls** the store for jobs in fixed intervals. It queries jobs, ordering by priority (asc) and then by try count (asc).
+- **Polls** the store for jobs in fixed intervals. It queries jobs, ordering by priority (desc) and then by try count (asc).
 
 > `Volo.Abp.BackgroundJobs` nuget package contains the default background job manager and it is installed to the startup templates by default.
 
@@ -248,11 +248,76 @@ public class MyModule : AbpModule
 ````
 
 * `JobPollPeriod` is used to determine the interval between two job polling operations. Default is 5000 ms (5 seconds).
-* `MaxJobFetchCount` is used to determine the maximum job count to fetch in a single polling operation. Default is 1000.
+* `MaxJobFetchCount` is used to determine the maximum job count to fetch in a single polling operation. It is also used as the batch size for the retention cleanup deletions. Default is 1000.
 * `DefaultFirstWaitDuration` is used to determine the duration to wait before the first retry. Default is 60 seconds.
 * `DefaultTimeout` is used to determine the timeout duration for a job. Default is 172800 seconds (2 days).
 * `DefaultWaitFactor` is used to determine the factor to increase the wait duration between retries. Default is 2.0.
 * `DistributedLockName` is used to determine the distributed lock name to use. Default is `AbpBackgroundJobWorker`.
+* `StoreSuccessfulJobs` is used to determine whether to keep successfully completed jobs in the store instead of deleting them. Default is `false`. See the *Storing Successful Jobs* section.
+* `SuccessfulJobRetentionTime` is used to determine how long a kept job is retained before the cleanup deletes it. Default is 7 days. Set to `null` to keep completed jobs forever. Only relevant when `StoreSuccessfulJobs` is enabled.
+* `CleanSuccessfulJobsPeriod` is used to determine the interval between cleanup runs that delete expired completed jobs. Default is 3600000 ms (1 hour).
+* `CleanupDistributedLockName` is used to determine the distributed lock name for the cleanup worker. Default is `AbpBackgroundJobCleanup`.
+* `MaxParallelJobExecutionCount` is used to determine the maximum number of jobs a worker executes in parallel within one poll cycle. Default is 1. See the *Parallel Job Execution* section.
+* `PerJobDistributedLockPrefix` is used to determine the prefix of the per-job distributed lock name used when `MaxParallelJobExecutionCount` is greater than 1. Default is `AbpBackgroundJob:`.
+
+### Storing Successful Jobs
+
+By default, the background job manager deletes a job from the store as soon as it runs successfully. If you want to keep completed jobs (for auditing or history), enable `StoreSuccessfulJobs`:
+
+````csharp
+Configure<AbpBackgroundJobWorkerOptions>(options =>
+{
+    options.StoreSuccessfulJobs = true;
+    options.SuccessfulJobRetentionTime = TimeSpan.FromDays(30); //null to keep forever
+});
+````
+
+When enabled, a successful job is not deleted; instead its `CompletionTime` is set and it stays in the store. Completed jobs are excluded from the waiting jobs query, so they are not executed again. A cleanup worker periodically deletes completed jobs older than `SuccessfulJobRetentionTime`.
+
+> **Note:** The `IBackgroundJobStore` interface has new overloads (a `GetWaitingJobsAsync` overload that takes a job name filter and a `DeleteAsync` overload for cleanup). If you have a custom `IBackgroundJobStore` implementation, you must implement them for your code to compile. The built-in stores already implement them.
+
+### Dedicated Workers per Job Type
+
+By default, a single worker processes all job types. If you want to process certain job types separately (for example, slow or high-volume jobs), you can register dedicated workers, each handling only the specified job argument types with its own distributed lock:
+
+````csharp
+Configure<AbpBackgroundJobWorkerOptions>(options =>
+{
+    options.AddDedicatedWorker<EmailJobArgs, SmsJobArgs>("NotificationWorkerLock");
+    options.AddDedicatedWorker<ReportJobArgs>("ReportWorkerLock");
+});
+````
+
+Each dedicated worker processes only its configured job types. An additional default worker is automatically started to process all the remaining job types. In sequential mode, each worker (including the default one) runs independently under its own distributed lock (see *Parallel Job Execution* for how this changes when running jobs in parallel).
+
+If you don't want to specify a lock name, use the overloads without the `lockName` parameter; a stable, length-bounded lock name is then derived from the job argument types:
+
+````csharp
+Configure<AbpBackgroundJobWorkerOptions>(options =>
+{
+    options.AddDedicatedWorker<EmailJobArgs, SmsJobArgs>();
+    options.AddDedicatedWorker<ReportJobArgs>();
+});
+````
+
+> **Note:** Each job type can be handled by only one dedicated worker, and each worker must have a unique lock name; `AddDedicatedWorker` throws if this is violated. Dedicated workers require an `IBackgroundJobStore` that can filter jobs by name (the built-in stores can).
+
+### Parallel Job Execution
+
+By default, a worker executes waiting jobs one by one under a single worker-level distributed lock, so only one job runs at a time across all application instances. If you want to execute multiple jobs concurrently, set `MaxParallelJobExecutionCount` to a value greater than 1:
+
+````csharp
+Configure<AbpBackgroundJobWorkerOptions>(options =>
+{
+    options.MaxParallelJobExecutionCount = 4;
+});
+````
+
+When it is greater than 1, the worker-level lock is not used. Instead, each job is claimed with its own distributed lock, so multiple application instances can execute different jobs at the same time. With a properly configured distributed lock provider, a job is not executed by more than one instance at a time.
+
+`MaxParallelJobExecutionCount` is a per-worker, per-poll-cycle limit — it is not a cluster-wide limit. A worker first fetches up to `MaxJobFetchCount` waiting jobs, then executes up to `MaxParallelJobExecutionCount` of them in parallel, so a single worker runs up to `min(MaxJobFetchCount, MaxParallelJobExecutionCount)` jobs per cycle; keep `MaxJobFetchCount` at least as large as `MaxParallelJobExecutionCount` to avoid capping the parallelism. When you also configure dedicated workers, each worker runs its own timer and claims up to `MaxParallelJobExecutionCount` jobs, so the effective concurrency is up to (number of workers) × `MaxParallelJobExecutionCount` per application instance, and up to (number of application instances) × (number of workers) × `MaxParallelJobExecutionCount` across the whole cluster.
+
+> **Important:** Configure `MaxParallelJobExecutionCount` and `PerJobDistributedLockPrefix` consistently across all application instances. Mixing sequential (worker lock) and parallel (per-job lock) instances removes the common mutual exclusion, and a different prefix produces a different per-job lock name for the same job — either case may let the same job run on more than one instance. As with the sequential mode, configure a real [distributed lock](../distributed-locking.md) provider for clustered deployments.
 
 ### Data Store
 

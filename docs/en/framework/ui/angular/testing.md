@@ -137,6 +137,35 @@ expect(deleteSpy).toHaveBeenCalledWith("some-id");
 
 The template's `home.component.spec.ts` is a good reference for mocking ABP services and asserting DOM behavior with `TestBed`.
 
+### Configuring Permission Results
+
+`CoreTestingModule.withConfig()` replaces `PermissionService` with `MockPermissionService`. The mock grants every policy by default, which keeps unrelated permission checks from hiding components in a test.
+
+Use `grantPolicies` when a spec needs a specific authorization state. Policies not included in the array are denied:
+
+```ts
+import { PermissionService } from '@abp/ng.core';
+import { MockPermissionService } from '@abp/ng.core/testing';
+import { TestBed } from '@angular/core/testing';
+
+let permissionService: MockPermissionService;
+
+beforeEach(() => {
+  permissionService = TestBed.inject(PermissionService) as MockPermissionService;
+});
+
+it('shows the create action only for the create policy', () => {
+  permissionService.grantPolicies(['BookStore.Books.Create']);
+
+  fixture.detectChanges();
+
+  expect(fixture.nativeElement.querySelector('[data-testid="create-book"]')).toBeTruthy();
+  expect(fixture.nativeElement.querySelector('[data-testid="delete-book"]')).toBeFalsy();
+});
+```
+
+Call `grantAllPolicies()` to restore the grant-all behavior in a test that previously selected individual policies.
+
 ## Tips
 
 ### Clearing DOM After Each Spec

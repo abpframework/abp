@@ -11,7 +11,7 @@ This module provides CMS (Content Management System) capabilities for your appli
 
 > You can see the live demo at [cms-kit-demo.abpdemo.com](https://cms-kit-demo.abpdemo.com/).
 
-> **This module currently available only for the MVC / Razor Pages UI**. While there is no official Blazor package, it can also work in a Blazor Server UI since a Blazor Server UI is actually a hybrid application that runs in an ASP.NET Core MVC / Razor Pages application.
+> CMS Kit provides MVC / Razor Pages packages for both the administration and public websites. The `@abp/ng.cms-kit` package provides an Angular administration UI. There is no official Blazor package; a Blazor Server application can host the MVC / Razor Pages UI because it runs on ASP.NET Core.
 
 The following features are currently available:
 
@@ -28,7 +28,12 @@ The following features are currently available:
 
 > You can click on the any feature links above to understand and learn how to use it.
 
-All features are individually usable. If you disable a feature, it completely disappears from your application, even from the database tables, with the help of the [Global Features](../../framework/infrastructure/global-features.md) system.
+CMS Kit uses two feature layers:
+
+* [Global Features](../../framework/infrastructure/global-features.md) select the CMS Kit subsystems included in the application model. When using Entity Framework Core, changing these features requires a new migration because disabled entities are excluded from the EF Core model.
+* The [Feature System](../../framework/infrastructure/features.md) can enable or disable the corresponding subsystem at runtime for a tenant or another feature value provider. Runtime feature changes do not change the database model.
+
+Most subsystems can be selected independently. The built-in MVC blog pages are currently registered together with the Pages global feature, so enable both `Blogs` and `Pages` when you use the built-in public blog UI.
 
 ## Pre Requirements
 
@@ -37,6 +42,23 @@ All features are individually usable. If you disable a feature, it completely di
 
 - CMS Kit uses [distributed cache](../../framework/fundamentals/caching.md) for responding faster. 
 > Using a distributed cache, such as [Redis](../../framework/fundamentals/redis-cache.md), is highly recommended for data consistency in distributed/clustered deployments.
+
+## Media Storage and Entity Types
+
+When the Media global feature is enabled, CMS Kit registers media definitions for blog posts and pages. To upload media for another entity type, register a `MediaDescriptorDefinition` and specify the permissions that can create and delete its media:
+
+```csharp
+Configure<CmsKitMediaOptions>(options =>
+{
+    options.EntityTypes.Add(
+        new MediaDescriptorDefinition(
+            "Product",
+            createPolicies: new[] { "Products.Update" },
+            deletePolicies: new[] { "Products.Update" }));
+});
+```
+
+The administration service grants an operation when the current user has any policy in the corresponding list. An empty list grants no access. Media files are downloaded from the anonymous `GET /api/cms-kit/media/{id}` endpoint, so this facility is for public media; use a separately authorized BLOB endpoint for private files.
 
 ## Identity Integration for User Lookup
 
@@ -129,6 +151,31 @@ CMS kit packages are designed for various usage scenarios. If you check the [CMS
  - `Volo.CmsKit.Public.*` packages contain the functionalities used in public websites where users read blog posts or leave comments.
  - `Volo.CmsKit.*` (without Admin/Public suffix) packages are called as unified packages. Unified packages are shortcuts for adding Admin & Public packages (of the related layer) separately. If you have a single application for administration and public web site, you can use these packages.
 
+### Angular Administration UI
+
+The `@abp/ng.cms-kit` package contains the Angular administration components, routes, configuration providers and generated proxies. Register the administration menu configuration in the application configuration and lazy-load the administration routes:
+
+```typescript
+import { ApplicationConfig } from '@angular/core';
+import { Routes } from '@angular/router';
+import { provideCmsKitAdminConfig } from '@abp/ng.cms-kit/admin/config';
+
+export const appConfig: ApplicationConfig = {
+  providers: [provideCmsKitAdminConfig()],
+};
+
+export const routes: Routes = [
+  {
+    path: 'cms',
+    loadChildren: () => import('@abp/ng.cms-kit/admin').then(m => m.createRoutes()),
+  },
+];
+```
+
+The Angular administration routes include comments, tags, pages, blogs, blog posts, menus and global resources. The built-in public page and blog UI documented in this guide uses the MVC / Razor Pages packages.
+
+`createRoutes` accepts a `CmsKitAdminConfigOptions` object for Angular UI extensions. It supports entity-action, entity-property, toolbar-action, create-form-property and edit-form-property contributors. Key the contributor dictionaries with `eCmsKitAdminComponents`; the supported screens cover comment lists/details, tags, pages and page forms, blogs, blog posts and blog post forms, and menus. Each contributor type exposes only the keys supported by that screen.
+
 ## Integrating Public and Admin Packages in a Unified Application
 
 If you are using a single application for both admin and public web site, it's important to configure the global layout settings appropriately. By default, the layout is set for a **Public Website**, which is suitable for public-facing pages. However, when your application serves both admin and public pages, you should explicitly set the global layout for all CMS Kit pages.
@@ -150,7 +197,7 @@ To do this, add a `_ViewStart.cshtml` file to your web project at `/Pages/Public
 
 ### Table / collection prefix & schema
 
-All tables/collections use the `Cms` prefix by default. Set static properties on the `CmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
+All tables/collections use the `Cms` prefix by default. Set static properties on the `AbpCmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
 
 ### Connection string
 
@@ -209,13 +256,10 @@ public static void ConfigureExtraProperties()
  
 * `ConfigureCmsKit(...)` method is used to configure the entities of the CMS Kit module.
 
-* `cmsKit.ConfigureBlog(...)` is used to configure the **Blog** entity of the CMS Kit module. You can add or update your extra properties on the **Blog** entity. 
+* CMS Kit provides configuration methods for `Blog`, `BlogPost`, `BlogFeature`, `MediaDescriptor`, `Page`, `Tag`, `Comment`, `MenuItem`, `CmsUser` and `GlobalResource`.
 
-* `cmsKit.ConfigureBlogPost(...)` is used to configure the **BlogPost** entity of the CMS Kit module. You can add or update your extra properties of the **BlogPost** entity.
+* The built-in MVC create and update forms consume extensions for blogs, blog posts, menu items, pages and tags. The Angular administration UI consumes object extensions and contributor callbacks for its comments, tags, pages, blogs, blog posts and menu screens.
 
 * You can also set some validation rules for the property that you defined. In the above sample, `RequiredAttribute` and `StringLengthAttribute` were added for the property named **"BlogPostDescription"**. 
 
-* When you define the new property, it will automatically add to **Entity**, **HTTP API**, and **UI** for you. 
-  * Once you define a property, it appears in the create and update forms of the related entity. 
-  * New properties also appear in the datatable of the related page.
-
+* Each helper exposes the module entity extension configuration for that type. Persistence and DTO propagation depend on the mappings registered by the installed CMS Kit packages. Automatic form and table rendering is available only on the MVC and Angular screens listed above. For other entities or custom screens, read the extra property from the DTO and render it explicitly.
