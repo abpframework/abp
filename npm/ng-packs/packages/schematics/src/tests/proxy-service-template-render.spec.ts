@@ -36,14 +36,20 @@ function render(context: Record<string, unknown>): string {
   return compiled(context);
 }
 
-function buildContext(body: Partial<MockBody>) {
+function buildContext(body: Partial<MockBody>, resourceApi = false) {
   return {
     apiName: 'Default',
     name: 'Sample',
     namespace: 'app',
+    resourceApi,
     imports: [
       { keyword: 'import', specifiers: ['RestService', 'Rest'], path: '@abp/ng.core' },
       { keyword: 'import', specifiers: ['Injectable', 'inject'], path: '@angular/core' },
+      ...(resourceApi
+        ? [
+            { keyword: 'import', specifiers: ['Signal', 'computed', 'ResourceRef'], path: '@angular/core' },
+          ]
+        : []),
     ],
     methods: [
       {
@@ -98,6 +104,38 @@ describe('proxy service template — rendered output', () => {
     expect(output).toContain("method: 'GET'");
     expect(output).not.toContain('responseType:');
     expect(output).not.toContain('headers:');
+  });
+
+  test('resource api mode emits requestResource helper for GET methods', () => {
+    const ctx = buildContext({
+      responseType: 'MyDto',
+      responseTypeWithNamespace: 'My.Project.MyDto',
+    }, true);
+    ctx.methods[0].signature.parameters = [
+      { name: 'input', type: 'GetSampleListInput' } as any,
+      { name: 'config', type: 'Partial<Rest.Config>' } as any,
+    ];
+    const output = render(ctx);
+
+    expect(output).toContain('Signal');
+    expect(output).toContain('computed(() => {');
+    expect(output).toContain('const { input } = params();');
+    expect(output).toContain('this.restService.requestResource(');
+    expect(output).toContain('{ apiName: this.apiName, ...config }');
+    expect(output).toContain('getSampleAsync = (');
+    expect(output).not.toContain('getSampleAsyncResource');
+    expect(output).not.toContain('this.restService.request<any, MyDto>');
+  });
+
+  test('resource api mode does not emit helpers for non-GET methods', () => {
+    const output = render(buildContext({
+        method: 'POST',
+        responseType: 'MyDto',
+        responseTypeWithNamespace: 'My.Project.MyDto',
+      }, true));
+
+    expect(output).toContain('getSampleAsync = (');
+    expect(output).not.toContain('requestResource(');
   });
 
   test('json httpResponseType emits Accept but no responseType (default is json)', () => {
@@ -191,6 +229,109 @@ describe('proxy service template — rendered output', () => {
     expect(output.match(/}/g)!.length).toBeGreaterThanOrEqual(3);
   });
 
+  test('resource api rendered service compiles cleanly', () => {
+    const ts = require('typescript');
+    const ctx = buildContext({
+        responseType: 'string',
+        responseTypeWithNamespace: 'string',
+        httpResponseType: 'json',
+        acceptHeader: 'application/json',
+      }, true);
+    ctx.methods[0].signature.parameters = [
+      { name: 'config', type: 'Partial<Rest.Config>' } as any,
+    ];
+    const output = render(ctx);
+
+    const abpStub = `
+      declare module '@abp/ng.core' {
+        export namespace Rest {
+          export interface Config {
+            apiName?: string;
+            observe?: any;
+            skipHandleError?: boolean;
+            responseType?: string;
+            [key: string]: any;
+          }
+          export type Observe = any;
+        }
+        export class RestService {
+          request<TBody, TResponse>(req: any, config?: any): import('rxjs').Observable<TResponse>;
+          requestResource<TBody, TResponse>(request: any, config?: any, api?: string): any;
+        }
+      }
+    `;
+    const angularCoreStub = `
+      declare module '@angular/core' {
+        export function Injectable(opts?: any): ClassDecorator;
+        export function inject<T>(token: { new (...args: any[]): T }): T;
+        export function inject<T>(token: any): T;
+        export interface Signal<T> { (): T; }
+        export function computed<T>(fn: () => T): Signal<T>;
+        export interface ResourceRef<T> { value?: T; }
+      }
+    `;
+    const rxjsStub = `
+      declare module 'rxjs' {
+        export class Observable<T> { subscribe(...args: any[]): unknown; }
+      }
+    `;
+
+    const ambient = abpStub + angularCoreStub + rxjsStub;
+    const sources: Record<string, string> = {
+      '/proxy/sample.service.ts': output,
+      '/proxy/ambient.d.ts': ambient,
+    };
+
+    const compilerOptions: any = {
+      target: ts.ScriptTarget.ES2020,
+      module: ts.ModuleKind.ES2020,
+      moduleResolution: ts.ModuleResolutionKind.NodeJs,
+      ignoreDeprecations: '6.0',
+      experimentalDecorators: true,
+      emitDecoratorMetadata: true,
+      strict: true,
+      noEmit: true,
+      skipLibCheck: true,
+    };
+
+    const baseHost = ts.createCompilerHost(compilerOptions, true);
+    const host: any = {
+      ...baseHost,
+      getSourceFile: (fileName: string, languageVersion: any, onError: any) => {
+        if (sources[fileName]) {
+          return ts.createSourceFile(fileName, sources[fileName], languageVersion, true);
+        }
+        return baseHost.getSourceFile(fileName, languageVersion, onError);
+      },
+      fileExists: (fileName: string) =>
+        sources[fileName] != null || baseHost.fileExists(fileName),
+      readFile: (fileName: string) =>
+        sources[fileName] ?? baseHost.readFile(fileName),
+    };
+
+    const program = ts.createProgram(Object.keys(sources), compilerOptions, host);
+    const errors = ts
+      .getPreEmitDiagnostics(program)
+      .filter((d: any) => d.category === ts.DiagnosticCategory.Error && d.code !== 6053);
+
+    if (errors.length) {
+      const messages = errors
+        .map((d: any) => {
+          const where = d.file
+            ? (() => {
+                const p = d.file.getLineAndCharacterOfPosition(d.start ?? 0);
+                const lineText = d.file.text.split('\n')[p.line];
+                return `${d.file.fileName}:${p.line + 1}:${p.character + 1}\n>>> ${lineText}\n>>> ${' '.repeat(p.character)}^`;
+              })()
+            : '(no file)';
+          return `[${where}] TS${d.code}: ${ts.flattenDiagnosticMessageText(d.messageText, '\n')}`;
+        })
+        .join('\n---\n');
+      throw new Error(`Resource proxy did not compile:\n${output}\n=== diagnostics ===\n${messages}`);
+    }
+    expect(errors).toHaveLength(0);
+  });
+
   test.each([
     { name: 'string + json Accept', body: { responseType: 'string', responseTypeWithNamespace: 'string', httpResponseType: 'json', acceptHeader: 'application/problem+json' } },
     { name: 'string + text Accept', body: { responseType: 'string', responseTypeWithNamespace: 'string', httpResponseType: 'text', acceptHeader: 'text/csv' } },
@@ -244,6 +385,7 @@ describe('proxy service template — rendered output', () => {
       target: ts.ScriptTarget.ES2020,
       module: ts.ModuleKind.ES2020,
       moduleResolution: ts.ModuleResolutionKind.NodeJs,
+      ignoreDeprecations: '6.0',
       experimentalDecorators: true,
       emitDecoratorMetadata: true,
       strict: true,
@@ -365,6 +507,7 @@ describe('proxy service template — rendered output', () => {
         }
         export class RestService {
           request<TBody, TResponse>(req: any, config?: any): import('rxjs').Observable<TResponse>;
+          requestResource<TBody, TResponse>(request: any, config?: any, api?: string): any;
         }
       }
     `;
@@ -373,6 +516,8 @@ describe('proxy service template — rendered output', () => {
         export function Injectable(opts?: any): ClassDecorator;
         export function inject<T>(token: { new (...args: any[]): T }): T;
         export function inject<T>(token: any): T;
+        export function computed<T>(fn: () => T): any;
+        export interface ResourceRef<T> { value?: T; }
       }
     `;
     const rxjsStub = `
@@ -397,6 +542,7 @@ describe('proxy service template — rendered output', () => {
       target: ts.ScriptTarget.ES2020,
       module: ts.ModuleKind.ES2020,
       moduleResolution: ts.ModuleResolutionKind.NodeJs,
+      ignoreDeprecations: '6.0',
       experimentalDecorators: true,
       emitDecoratorMetadata: true,
       strict: true,

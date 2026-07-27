@@ -79,6 +79,11 @@
           }
         ]
       }
+    },
+    "resourceApi": {
+      "description": "Generate Resource API helpers for read endpoints",
+      "type": "boolean",
+      "default": false
     }
 
   },

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using Volo.Abp.Collections;
 
@@ -32,6 +33,19 @@ public class BlobContainerConfiguration
 
     public ITypeList<IBlobNamingNormalizer> NamingNormalizers { get; }
 
+    /// <summary>
+    /// The <see cref="IBlobPipelineContributor"/> implementations transforming
+    /// the content of this container while it is saved and read.
+    /// </summary>
+    public ITypeList<IBlobPipelineContributor> PipelineContributors { get; }
+
+    /// <summary>
+    /// Set false to stop inheriting the pipeline contributors of the default
+    /// container configuration, so only the own <see cref="PipelineContributors"/>
+    /// of this container run. Default: true.
+    /// </summary>
+    public bool InheritPipelineContributors { get; set; } = true;
+
     [NotNull] private readonly Dictionary<string, object?> _properties;
 
     private readonly BlobContainerConfiguration? _fallbackConfiguration;
@@ -39,6 +53,7 @@ public class BlobContainerConfiguration
     public BlobContainerConfiguration(BlobContainerConfiguration? fallbackConfiguration = null)
     {
         NamingNormalizers = new TypeList<IBlobNamingNormalizer>();
+        PipelineContributors = new TypeList<IBlobPipelineContributor>();
         _fallbackConfiguration = fallbackConfiguration;
         _properties = new Dictionary<string, object?>();
     }
@@ -55,6 +70,26 @@ public class BlobContainerConfiguration
         }
 
         return NamingNormalizers;
+    }
+
+    /// <summary>
+    /// Returns the pipeline contributors in effect for this container: the contributors
+    /// of the fallback (default) configuration first, then the own ones (each contributor
+    /// type runs once). Contributors are provider-independent content transformations,
+    /// so overriding <see cref="ProviderType"/> does not reset the inherited ones; use
+    /// <see cref="InheritPipelineContributors"/> to opt out of the inherited ones.
+    /// </summary>
+    public IEnumerable<Type> GetEffectivePipelineContributors()
+    {
+        if (_fallbackConfiguration == null || !InheritPipelineContributors)
+        {
+            return PipelineContributors.Distinct();
+        }
+
+        return _fallbackConfiguration
+            .GetEffectivePipelineContributors()
+            .Concat(PipelineContributors)
+            .Distinct();
     }
 
     public T? GetConfigurationOrDefault<T>(string name, T? defaultValue = default)
