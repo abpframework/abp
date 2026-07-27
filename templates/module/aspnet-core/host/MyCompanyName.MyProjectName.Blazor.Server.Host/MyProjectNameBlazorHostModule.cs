@@ -259,8 +259,8 @@ public class MyProjectNameBlazorHostModule : AbpModule
         }
 
         app.UseUnitOfWork();
-        app.UseAntiforgery();
         app.UseAuthorization();
+        app.UseAntiforgery();
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>
         {
