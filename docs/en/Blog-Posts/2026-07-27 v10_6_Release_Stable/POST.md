@@ -68,11 +68,10 @@ If you use the Angular UI, also check the dedicated [Angular 22 and ABP 10.6 Upg
 
 As always, exciting articles have been contributed by the ABP community. I will highlight some of them here:
 
-- [Angular 22 State Management: Signals, SignalStore, or NgRx?](https://abp.io/community/articles/angular-22-state-management-signals-signalstore-or-ngrx-yq8zg0nw) by [Sumeyye Kurtulus](https://abp.io/community/members/sumeyye.kurtulus)
-- [Working with Dapr Workflows in the ABP Framework](https://abp.io/community/articles/working-with-dapr-workflows-in-the-abp-framework-6476or18) by [Engincan Veske](https://abp.io/community/members/EngincanV)
-- [Customizing the ABP Framework: A Developer's Guide to LeptonX Theme Overrides in Angular and the Transition to React UI](https://abp.io/community/articles/customizing-the-abp-framework-a-developers-guide-to-nklweri3) by [Sumeyye Kurtulus](https://abp.io/community/members/sumeyye.kurtulus)
-- [Deep Dive on ABP AI Agent: The Complete Series](https://abp.io/community/articles/deep-dive-on-abp-ai-agent-the-complete-series-f7jute7n) by [Berkan Sasmaz](https://abp.io/community/members/berkansasmaz)
-- [ABP 10.5.0 Expands Blazor UI Options with MudBlazor Support](https://abp.io/community/articles/abp-10.5.0-expands-blazor-ui-options-with-mudblazor-support-03rzmlpm) by [Liming Ma](https://abp.io/community/members/maliming)
+- [Introducing ABP Low-Code: Build Real ABP Apps in Minutes](https://abp.io/community/announcements/introducing-abp-lowcode-build-real-abp-apps-in-minutes-647ymozi) by [Salih Ozkara](https://abp.io/community/members/salih)
+- [Building a Vendor Onboarding Workflow with ABP Low-Code](https://abp.io/community/articles/building-a-vendor-onboarding-workflow-with-abp-lowcode-1wx0ckzc) by [Salih Ozkara](https://abp.io/community/members/salih)
+- [Event Recap - WeAreDevelopers World Congress 2026](https://abp.io/community/articles/event-recap-wearedevelopers-world-congress-2026-v59t8vfn) by [Irem Demirci](https://abp.io/community/members/iremdemirci)
+- [Empathy in the Workplace for Software Companies](https://abp.io/community/articles/empathy-in-the-workplace-for-software-companies-wsjjw9we) by [Alper Ebicoglu](https://abp.io/community/members/alper)
 
 Thanks to the ABP Community for all the content they have published. You can also [post your ABP related (text or video) content](https://abp.io/community/posts/create) to the ABP Community.
 
