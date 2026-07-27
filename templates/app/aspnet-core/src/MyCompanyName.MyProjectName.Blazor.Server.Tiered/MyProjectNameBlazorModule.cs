@@ -353,8 +353,8 @@ public class MyProjectNameBlazorModule : AbpModule
             app.UseMultiTenancy();
         }
         app.UseDynamicClaims();
-        app.UseAntiforgery();
         app.UseAuthorization();
+        app.UseAntiforgery();
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>
         {

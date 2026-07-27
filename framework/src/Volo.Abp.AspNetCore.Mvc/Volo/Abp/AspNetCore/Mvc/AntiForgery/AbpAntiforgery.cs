@@ -1,7 +1,10 @@
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -67,6 +70,8 @@ public class AbpAntiforgery : IAntiforgery
         }
 
         var normalizer = httpContext.RequestServices.GetRequiredService<IAbpAntiForgeryClaimsPrincipalNormalizer>();
+        var authenticateResultFeature = httpContext.Features.Get<IAuthenticateResultFeature>();
+        var originalResult = authenticateResultFeature?.AuthenticateResult;
         var originalPrincipal = httpContext.User;
         httpContext.User = normalizer.Normalize(originalPrincipal);
         try
@@ -75,7 +80,7 @@ public class AbpAntiforgery : IAntiforgery
         }
         finally
         {
-            httpContext.User = originalPrincipal;
+            RestoreAuthenticationState(httpContext, authenticateResultFeature, originalResult, originalPrincipal);
         }
     }
 
@@ -87,6 +92,8 @@ public class AbpAntiforgery : IAntiforgery
         }
 
         var normalizer = httpContext.RequestServices.GetRequiredService<IAbpAntiForgeryClaimsPrincipalNormalizer>();
+        var authenticateResultFeature = httpContext.Features.Get<IAuthenticateResultFeature>();
+        var originalResult = authenticateResultFeature?.AuthenticateResult;
         var originalPrincipal = httpContext.User;
         httpContext.User = normalizer.Normalize(originalPrincipal);
         try
@@ -95,7 +102,25 @@ public class AbpAntiforgery : IAntiforgery
         }
         finally
         {
-            httpContext.User = originalPrincipal;
+            RestoreAuthenticationState(httpContext, authenticateResultFeature, originalResult, originalPrincipal);
+        }
+    }
+
+    protected virtual void RestoreAuthenticationState(
+        HttpContext httpContext,
+        IAuthenticateResultFeature? authenticateResultFeature,
+        AuthenticateResult? originalResult,
+        ClaimsPrincipal originalPrincipal)
+    {
+        // Assigning HttpContext.User drops the AuthenticateResult on the built-in feature, so restoring the
+        // principal alone would leave downstream consumers (SignalR connection expiration, idle checks, ...)
+        // without the authentication properties. IAuthenticateResultFeature does not require an implementation
+        // to keep the two in sync, so restore both: the principal first, then the result.
+        httpContext.User = originalPrincipal;
+
+        if (originalResult != null && authenticateResultFeature != null)
+        {
+            authenticateResultFeature.AuthenticateResult = originalResult;
         }
     }
 }
