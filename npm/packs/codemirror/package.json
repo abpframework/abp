@@ -1,5 +1,5 @@
 {
-  "version": "10.6.0-rc.3",
+  "version": "10.6.0",
   "name": "@abp/codemirror",
   "publishConfig": {
     "access": "public"
@@ -8,7 +8,7 @@
     "build": "node ./scripts/build.js"
   },
   "dependencies": {
-    "@abp/core": "~10.6.0-rc.3",
+    "@abp/core": "~10.6.0",
     "@codemirror/lang-css": "^6.0.0",
     "@codemirror/lang-javascript": "^6.0.0",
     "@codemirror/state": "^6.0.0",
