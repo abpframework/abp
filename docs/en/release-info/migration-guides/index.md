@@ -10,7 +10,6 @@
 The following documents explain how to migrate your existing ABP applications. We write migration documents only if you need to take an action while upgrading your solution. Otherwise, you can easily upgrade your solution using the [abp update command](../upgrading.md).
 
 - [10.5 to 10.6](abp-10-6.md)
-- [Angular 22 and ABP 10.6 Upgrade Guide](abp-10-6-angular-22.md)
 - [10.4 to 10.5](abp-10-5.md)
 - [10.3 to 10.4](abp-10-4.md)
 - [10.x to 10.3](abp-10-3.md)
