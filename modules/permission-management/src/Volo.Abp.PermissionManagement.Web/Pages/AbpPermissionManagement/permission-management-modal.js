@@ -2,6 +2,26 @@ var abp = abp || {};
 (function ($) {
     abp.modals = abp.modals || {};
 
+    // The toolbars, menus and bundles are rendered on the server, so a full page load
+    // is the only way to reflect the new permissions on the current page. Changing the
+    // permissions of another user or role does not affect what this page renders.
+    function affectsCurrentUser(providerName, providerKey) {
+        var currentUser = abp.currentUser;
+        if (!currentUser || !currentUser.isAuthenticated) {
+            return false;
+        }
+
+        if (providerName === 'U') {
+            return currentUser.id === providerKey;
+        }
+
+        if (providerName === 'R') {
+            return (currentUser.roles || []).indexOf(providerKey) > -1;
+        }
+
+        return false;
+    }
+
     abp.modals.PermissionManagement = function () {
         var l = abp.localization.getResource("AbpPermissionManagement");
 
@@ -190,7 +210,27 @@ var abp = abp || {};
             }
         }
 
+        // "Select all" checkboxes are UI helpers, so only the granted states are compared.
+        function getGrantedStates($el) {
+            return $el.find('input[type="checkbox"]')
+                .not('[name="SelectAllInThisTab"], [name="SelectAllInAllTabs"]')
+                .map(function () {
+                    return this.name + '=' + this.checked;
+                })
+                .get()
+                .join('&');
+        }
+
         this.initDom = function ($el) {
+            var initialGrantedStates = getGrantedStates($el);
+
+            $el.on('abp-ajax-success', function () {
+                if (getGrantedStates($el) !== initialGrantedStates &&
+                    affectsCurrentUser($el.find('#ProviderName').val(), $el.find('#ProviderKey').val())) {
+                    window.location.reload();
+                }
+            });
+
             $el.find('.tab-pane').each(function () {
                 var $tab = $(this);
                 handleTabCheckedCheckboxCount($tab);
