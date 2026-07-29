@@ -11,6 +11,7 @@
 
 | Package | Old Version | New Version | PR |
 |---------|-------------|-------------|-----|
+| MySql.EntityFrameworkCore | 10.0.1 | 10.0.9 | #25896 |
 | Scriban | 7.2.1 | 7.2.5 | #25862 |
 | Swashbuckle.AspNetCore | 10.0.1 | 10.2.3 | #25759 |
 | System.Security.Cryptography.Xml | 10.0.7 | 10.0.10 | #25862 |
