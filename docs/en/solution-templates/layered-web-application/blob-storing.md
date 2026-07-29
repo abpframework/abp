@@ -27,6 +27,12 @@ This document explains how to store BLOBs (Binary Large Objects) in a layered so
 
 In the layered solution template, the [Database Provider](../../framework/infrastructure/blob-storing/database.md) is used to store BLOBs in the database. The `Volo.Abp.BlobStoring.Database.EntityFrameworkCore` or `Volo.Abp.BlobStoring.Database.MongoDB` package provides the necessary implementations to store and retrieve BLOBs in the database. This setup is integrated into the layered solution template and is used in all related projects. You can change the database configuration in the `appsettings.json` file of the related project.
 
+## Provider Selection
+
+The Database Provider is selected by default. In ABP Studio, use the BLOB Storing step to keep database storage, configure the [File System Provider](../../framework/infrastructure/blob-storing/file-system.md), or choose manual configuration for another provider. In the CLI, pass `--blob-storage database`, `--blob-storage file-system`, or `--blob-storage manual`. When using file-system storage, pass `--blob-storage-path <path>` to set the base path; otherwise, `./BlobStoring` is used.
+
+If you choose manual configuration, configure your preferred provider before using BLOB storage. See the [BLOB Storing provider documentation](../../framework/infrastructure/blob-storing/index.md) for the available providers and their setup requirements.
+
 You can use the `IBlobContainer` or `IBlobContainer<T>` service to store and retrieve BLOBs. Here is an example of storing a BLOB:
 
 ```csharp
