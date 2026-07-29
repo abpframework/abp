@@ -88,13 +88,16 @@ public partial class UiMessageAlert : ComponentBase, IDisposable
 
     private async void OnMessageReceived(object? sender, UiMessageEventArgs e)
     {
-        MessageType = e.MessageType;
-        Message = e.Message;
-        Title = e.Title;
-        Options = e.Options;
-        Callback = e.Callback;
+        await InvokeAsync(async () =>
+        {
+            MessageType = e.MessageType;
+            Message = e.Message;
+            Title = e.Title;
+            Options = e.Options;
+            Callback = e.Callback;
 
-        await ShowMessageAlert();
+            await ShowMessageAlert();
+        });
     }
 
     protected virtual async Task ShowMessageAlert()
