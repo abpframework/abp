@@ -27,7 +27,7 @@ public partial class NavMenu : IDisposable
         _ = InvokeAsync(async () =>
         {
             Menu = await MenuManager.GetMainMenuAsync();
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         });
     }
 

@@ -49,7 +49,7 @@
         _ = InvokeAsync(async () =>
         {
             await GetToolbarItemRendersAsync();
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         });
     }
 
