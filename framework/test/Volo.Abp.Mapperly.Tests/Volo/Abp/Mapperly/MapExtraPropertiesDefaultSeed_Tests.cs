@@ -32,6 +32,21 @@ public class MapExtraPropertiesDefaultSeed_Tests : AbpIntegratedTest<MapperlyTes
     }
 
     [Fact]
+    public void Single_Parameter_Map_Should_Not_Change_The_Source_Extra_Properties()
+    {
+        var entity = new ExtensibleSeededEntity { Id = Guid.NewGuid() }
+            .SetProperty("Tag", "ok")
+            .SetProperty("CreatedBy", "leaked");
+        var originalReference = entity.ExtraProperties;
+
+        _objectMapper.Map<ExtensibleSeededEntity, ExtensibleSeededDto>(entity);
+
+        ReferenceEquals(entity.ExtraProperties, originalReference).ShouldBeTrue();
+        entity.GetProperty<string>("Tag").ShouldBe("ok");
+        entity.GetProperty<string>("CreatedBy").ShouldBe("leaked");
+    }
+
+    [Fact]
     public void Single_Parameter_Map_Should_Not_Seed_Defaults_When_Destination_Disables_Them()
     {
         var entity = new ExtensibleSeededEntity { Id = Guid.NewGuid() }
@@ -53,8 +68,7 @@ public class MapExtraPropertiesDefaultSeed_Tests : AbpIntegratedTest<MapperlyTes
         var dto = _objectMapper.Map<ExtensibleSeededEntity, ExtensibleNonSeededDto>(entity);
 
         dto.GetProperty<string>("Tag").ShouldBe("ok"); //Defined in both classes
-        dto.HasProperty("DtoOnly").ShouldBeTrue(); //Reset to the registered default value
-        dto.GetProperty("DtoOnly").ShouldBeNull(); //The source value must not leak
+        dto.GetProperty("DtoOnly").ShouldBeNull(); //Not defined in the source, the source value must not leak
     }
 
     [Fact]
