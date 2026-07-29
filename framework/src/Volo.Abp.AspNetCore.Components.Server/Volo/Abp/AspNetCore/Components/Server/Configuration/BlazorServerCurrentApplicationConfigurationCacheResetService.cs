@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Volo.Abp.AspNetCore.Components.Web.Configuration;
+using Volo.Abp.AspNetCore.Components.Web.Security;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Local;
@@ -13,15 +14,20 @@ public class BlazorServerCurrentApplicationConfigurationCacheResetService :
     ITransientDependency
 {
     private readonly ILocalEventBus _localEventBus;
+    private readonly ApplicationConfigurationChangedService _applicationConfigurationChangedService;
 
     public BlazorServerCurrentApplicationConfigurationCacheResetService(
-        ILocalEventBus localEventBus)
+        ILocalEventBus localEventBus,
+        ApplicationConfigurationChangedService applicationConfigurationChangedService)
     {
         _localEventBus = localEventBus;
+        _applicationConfigurationChangedService = applicationConfigurationChangedService;
     }
 
     public async Task ResetAsync(Guid? userId = null)
     {
         await _localEventBus.PublishAsync(new CurrentApplicationConfigurationCacheResetEventData(userId));
+
+        _applicationConfigurationChangedService.NotifyChanged();
     }
 }
