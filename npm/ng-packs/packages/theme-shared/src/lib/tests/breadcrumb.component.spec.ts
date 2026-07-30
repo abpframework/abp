@@ -24,6 +24,7 @@ const mockRoutes: ABP.Route[] = [
 describe('BreadcrumbComponent', () => {
   let spectator: SpectatorRouting<RouterOutletComponent>;
   let routes: RoutesService;
+  let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 
   const createRouting = createRoutingFactory({
     component: RouterOutletComponent,
@@ -51,6 +52,7 @@ describe('BreadcrumbComponent', () => {
           },
           registerLocaleFn: () => Promise.resolve(),
           skipGetAppConfiguration: true,
+          skipInitAuthService: true,
         }),
       ),
       {
@@ -102,8 +104,13 @@ describe('BreadcrumbComponent', () => {
   beforeAll(() => setupComponentResources('../components/breadcrumb', import.meta.url));
 
   beforeEach(() => {
+    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
     spectator = createRouting();
     routes = spectator.inject(RoutesService);
+  });
+
+  afterEach(() => {
+    consoleErrorSpy.mockRestore();
   });
 
   it('should create component', async () => {

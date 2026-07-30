@@ -1,4 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ListService, PagedResultDto, LocalizationPipe } from '@abp/ng.core';
@@ -14,6 +15,7 @@ import {
 } from '../blog-features-modal/blog-features-modal.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-blog-list',
   templateUrl: './blog-list.component.html',
   providers: [
@@ -33,22 +35,33 @@ import {
     BlogFeaturesModalComponent,
   ],
 })
-export class BlogListComponent implements OnInit {
-  data: PagedResultDto<BlogDto> = { items: [], totalCount: 0 };
-
+export class BlogListComponent {
   public readonly list = inject(ListService<BlogGetListInput>);
   private blogService = inject(BlogAdminService);
   private confirmationService = inject(ConfirmationService);
 
-  filter = '';
-  isModalVisible = false;
-  selected?: BlogDto;
-  isFeaturesModalVisible = false;
-  selectedBlogId?: string;
+  readonly data = toSignal(
+    this.list.hookToQuery(query => {
+      let filters: Partial<BlogGetListInput> = {};
+      if (this.list.filter) {
+        filters.filter = this.list.filter;
+      }
+      const input: BlogGetListInput = {
+        ...query,
+        ...filters,
+      };
+      return this.blogService.getList(input);
+    }),
+    {
+      initialValue: { items: [], totalCount: 0 } as PagedResultDto<BlogDto>,
+    },
+  );
 
-  ngOnInit() {
-    this.hookToQuery();
-  }
+  filter = '';
+  readonly isModalVisible = signal(false);
+  readonly selected = signal<BlogDto | undefined>(undefined);
+  readonly isFeaturesModalVisible = signal(false);
+  readonly selectedBlogId = signal<string | undefined>(undefined);
 
   onSearch() {
     this.list.filter = this.filter;
@@ -56,14 +69,14 @@ export class BlogListComponent implements OnInit {
   }
 
   add() {
-    this.selected = {} as BlogDto;
-    this.isModalVisible = true;
+    this.selected.set({} as BlogDto);
+    this.isModalVisible.set(true);
   }
 
   edit(id: string) {
     this.blogService.get(id).subscribe(blog => {
-      this.selected = blog;
-      this.isModalVisible = true;
+      this.selected.set(blog);
+      this.isModalVisible.set(true);
     });
   }
 
@@ -74,34 +87,14 @@ export class BlogListComponent implements OnInit {
       })
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.blogService.delete(id).subscribe(() => {
-            this.list.get();
-          });
+          this.blogService.delete(id).subscribe(() => this.list.get());
         }
       });
   }
 
   openFeatures(id: string) {
-    this.selectedBlogId = id;
-    this.isFeaturesModalVisible = true;
-  }
-
-  private hookToQuery() {
-    this.list
-      .hookToQuery(query => {
-        let filters: Partial<BlogGetListInput> = {};
-        if (this.list.filter) {
-          filters.filter = this.list.filter;
-        }
-        const input: BlogGetListInput = {
-          ...query,
-          ...filters,
-        };
-        return this.blogService.getList(input);
-      })
-      .subscribe(res => {
-        this.data = res;
-      });
+    this.selectedBlogId.set(id);
+    this.isFeaturesModalVisible.set(true);
   }
 
   onVisibleModalChange(visibilityChange: BlogModalVisibleChange) {
@@ -111,8 +104,8 @@ export class BlogListComponent implements OnInit {
     if (visibilityChange.refresh) {
       this.list.get();
     }
-    this.selected = null;
-    this.isModalVisible = false;
+    this.selected.set(undefined);
+    this.isModalVisible.set(false);
   }
 
   onFeaturesModalChange(visibilityChange: BlogFeaturesModalVisibleChange) {
@@ -122,7 +115,7 @@ export class BlogListComponent implements OnInit {
     if (visibilityChange.refresh) {
       this.list.get();
     }
-    this.selectedBlogId = null;
-    this.isFeaturesModalVisible = false;
+    this.selectedBlogId.set(undefined);
+    this.isFeaturesModalVisible.set(false);
   }
 }

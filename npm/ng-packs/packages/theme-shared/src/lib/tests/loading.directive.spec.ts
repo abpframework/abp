@@ -1,7 +1,8 @@
+import { Component } from '@angular/core';
 import { SpectatorDirective, createDirectiveFactory } from '@ngneat/spectator/vitest';
 import { LoadingDirective } from '../directives';
 import { LoadingComponent } from '../components';
-import { Component } from '@angular/core';
+import { setInputSignal } from './utils';
 
 @Component({
   selector: 'abp-dummy',
@@ -20,7 +21,7 @@ describe('LoadingDirective', () => {
 
   describe('default', () => {
     beforeEach(() => {
-      spectator = createDirective('<div [abpLoading]="loading">Testing Loading Directive</div>', {
+      spectator = createDirective('<div abpLoading>Testing Loading Directive</div>', {
         hostProps: { loading: true },
       });
     });
@@ -30,10 +31,10 @@ describe('LoadingDirective', () => {
     });
 
     it('should handle loading input', async () => {
-      spectator.directive.loading = false;
+      setInputSignal(spectator.directive.loading, false);
       await new Promise(resolve => setTimeout(resolve, 10));
       expect(spectator.directive).toBeTruthy();
-      expect(spectator.directive.loading).toBe(false);
+      expect(spectator.directive.loading()).toBe(false);
     });
   });
 
@@ -42,11 +43,15 @@ describe('LoadingDirective', () => {
 
     beforeEach(() => {
       spectator = createDirective(
-        '<div [abpLoading]="loading" [abpLoadingDelay]="delay" [abpLoadingTargetElement]="target">Testing Loading Directive</div>',
+        '<div abpLoading>Testing Loading Directive</div>',
         {
-          hostProps: { loading: true, target: mockTarget, delay: 0 },
+          detectChanges: false,
         },
       );
+      setInputSignal(spectator.directive.loading, true);
+      setInputSignal(spectator.directive.delay, 0);
+      setInputSignal(spectator.directive.targetElementInput, mockTarget);
+      spectator.detectChanges();
     });
 
     it('should create directive with custom target', () => {
@@ -55,17 +60,17 @@ describe('LoadingDirective', () => {
     });
 
     it('should handle delay input', async () => {
-      spectator.directive.delay = 100;
+      setInputSignal(spectator.directive.delay, 100);
       await new Promise(resolve => setTimeout(resolve, 10));
       expect(spectator.directive).toBeTruthy();
     });
 
     it('should handle loading state changes', async() => {
-      spectator.directive.loading = false;
+      setInputSignal(spectator.directive.loading, false);
       await new Promise(resolve => setTimeout(resolve, 10));
       expect(spectator.directive).toBeTruthy();
       
-      spectator.directive.loading = true;
+      setInputSignal(spectator.directive.loading, true);
       await new Promise(resolve => setTimeout(resolve, 10));
       expect(spectator.directive).toBeTruthy();
     });
@@ -73,7 +78,7 @@ describe('LoadingDirective', () => {
 
   describe('with a component selector', () => {
     beforeEach(() => {
-      spectator = createDirective('<abp-dummy [abpLoading]="loading"></abp-dummy>', {
+      spectator = createDirective('<abp-dummy abpLoading></abp-dummy>', {
         hostProps: { loading: true },
       });
     });

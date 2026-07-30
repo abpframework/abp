@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Explore the latest ABP Framework release notes, highlighting major features and enhancements for each version, including migration guidance."
+  "Description": "Explore the latest ABP Framework release notes, highlighting major features and enhancements for each version, including migration guidance."
 }
 ```
 
@@ -14,9 +14,19 @@ Also see the following notes about ABP releases:
 - [ABP Studio release notes](../studio/release-notes.md)
 - [Change logs for ABP pro packages](https://abp.io/pro-releases)
 
-## 10.5 (2026-06-02)
+## 10.6 (2026-07-27)
 
-See the detailed **[blog post / announcement](https://abp.io/community/articles/announcing-abp-10-5-release-candidate-k6oxdfle)** for the v10.5 release.
+See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-6-release-candidate-reoq6kzw)** for the v10.6 release.
+
+- Background Jobs: Dedicated Workers, Parallel Execution, and Successful Job Retention
+- API Definition and Proxy Improvements for Content Types and Multipart Uploads
+- Angular UI: Angular has been upgraded to version 22. For a complete list of changes, including breaking changes, migration steps, and package updates, see the **[Angular Release Notes for v10.6](./../framework/ui/angular/release-notes/angular-22-typescript-6.md)**.
+- Antiforgery and OpenIddict Security Improvements
+- OpenIddict: Generate Access Token from the UI
+
+## 10.5 (2026-06-30)
+
+See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-5-stable-release-2u589bsc)** for the v10.5 release.
 
 - S3-Compatible Blob Storage Support
 - OpenIddict: Default Scope Fallback Options
@@ -46,7 +56,7 @@ See the detailed **[blog post / announcement](https://abp.io/community/announcem
 - Event Bus: String-Based Event Publishing with Dynamic Payload
 - Background Jobs/Workers: String-Based Publishing with Dynamic Payload
 - API Definition Endpoint: Descriptions and Documentation Support
-- Entity Cache: New Batch APIs (`FindMany`* / `GetMany*`)
+- Entity Cache: New Batch APIs (`FindMany`_ / `GetMany_`)
 - Angular: User/Tenant Sharing and Tenant Switch Experience
 - Angular: Upgrade to 21.2 + TypeScript 5.9
 - Introducing the `Volo.Abp.LuckyPenny.AutoMapper` Provider
@@ -457,7 +467,7 @@ See the detailed **blog post / announcement** for the v2.8 release: [https://abp
 
 ## 2.7 (2020-05-07)
 
-See the detailed **blog post / announcement** for the v2.7 release:  [https://abp.io/blog/ABP-Framework-v2_7_0-Has-Been-Released](https://abp.io/blog/ABP-Framework-v2_7_0-Has-Been-Released) 
+See the detailed **blog post / announcement** for the v2.7 release: [https://abp.io/blog/ABP-Framework-v2_7_0-Has-Been-Released](https://abp.io/blog/ABP-Framework-v2_7_0-Has-Been-Released)
 
 - New module: **Text template management** (with angular and mvc UI - document is [coming](../modules/text-template-management.md)).
 - **Dynamically add properties** to current entities of the depended modules (see [module entity extensions](../framework/architecture/modularity/extending/module-entity-extensions.md))
@@ -468,9 +478,8 @@ See the detailed **blog post / announcement** for the v2.7 release:  [https://ab
 - **Optimize database migrations** & seed code for multi-tenant multi-database systems.
 - ABP Suite: Make **menu item active** on navigation menu when selected.
 - ABP Suite: Improve **enum usage** while creating new entities.
-- Bug fixes in the [Lepton Theme](https://abp.io/themes), [ABP Suite](https://abp.io/tools/suite) and  other modules.
+- Bug fixes in the [Lepton Theme](https://abp.io/themes), [ABP Suite](https://abp.io/tools/suite) and other modules.
 
 ## See Also
 
 - [Road map](road-map.md)
-

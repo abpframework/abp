@@ -10,35 +10,36 @@ export class AbpLocalStorageService implements Storage {
   constructor() {
   }
   [name: string]: any;
+
+  private get storage(): Storage | null {
+    if (!isPlatformBrowser(this.platformId) || typeof window === 'undefined') {
+      return null;
+    }
+
+    try {
+      return window.localStorage;
+    } catch {
+      return null;
+    }
+  }
+
   get length(): number {
-    return isPlatformBrowser(this.platformId) ? localStorage.length : 0;
+    return this.storage?.length || 0;
   }
 
   clear(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.clear();
-    }
+    this.storage?.clear();
   }
   getItem(key: string): string | null {
-    if (!isPlatformBrowser(this.platformId)) {
-      return null;
-    }
-    return localStorage.getItem(key);
+    return this.storage?.getItem(key) || null;
   }
   key(index: number): string | null {
-    if (!isPlatformBrowser(this.platformId)) {
-      return null;
-    }
-    return localStorage.key(index);
+    return this.storage?.key(index) || null;
   }
   removeItem(key: string): void {
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem(key);
-    }
+    this.storage?.removeItem(key);
   }
   setItem(key: string, value: string): void {
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem(key, value);
-    }
+    this.storage?.setItem(key, value);
   }
 }

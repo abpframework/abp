@@ -25,6 +25,13 @@ public class AbpAntiForgeryOptions
     public bool AutoValidate { get; set; } = true;
 
     /// <summary>
+    /// Normalizes the user id claim issuer before generating/validating the antiforgery token, so the
+    /// same user produces the same token identifier under both cookie and bearer authentication.
+    /// Default value: true.
+    /// </summary>
+    public bool NormalizeUserIdClaimIssuer { get; set; } = true;
+
+    /// <summary>
     /// A predicate to filter types to auto-validate.
     /// Return true to select the type to validate.
     /// Default: returns true for all given types.

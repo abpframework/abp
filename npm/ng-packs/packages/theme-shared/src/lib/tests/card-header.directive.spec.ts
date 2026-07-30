@@ -7,15 +7,14 @@ describe('AbpCardHeaderDirective', () => {
   const createHost = createHostFactory(CardHeaderDirective);
 
   beforeEach(
-    () =>
-      (spectator = createHost(
-        `<div
-      abpCardHeader>
-    </div>`,
+    () => {
+      spectator = createHost(
+        `<div abpCardHeader></div>`,
         {
           hostProps: { attributes: { autofocus: '', name: 'abp-card-header' } },
         },
-      )),
+      );
+    },
   );
 
   it('should create an instance', () => {

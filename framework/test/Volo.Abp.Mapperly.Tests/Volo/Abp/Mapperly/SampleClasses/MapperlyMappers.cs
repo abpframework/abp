@@ -102,9 +102,9 @@ public partial class ExtensibleReverseMapper : TwoWayMapperBase<ExtensibleRevers
 
     public override partial void Map(ExtensibleReverseEntity source, ExtensibleReverseDto destination);
 
-    public override partial ExtensibleReverseEntity ReverseMap(ExtensibleReverseDto destination);
+    public override partial ExtensibleReverseEntity ReverseMap(ExtensibleReverseDto source);
 
-    public override partial void ReverseMap(ExtensibleReverseDto destination, ExtensibleReverseEntity source);
+    public override partial void ReverseMap(ExtensibleReverseDto source, ExtensibleReverseEntity destination);
 }
 
 public class ExtensibleSeededEntity : ExtensibleObject

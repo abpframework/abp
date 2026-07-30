@@ -1,39 +1,37 @@
-import { Component, Input, inject, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { Router } from '@angular/router';
 import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/vitest';
 import { BehaviorSubject } from 'rxjs';
 import { ReplaceableTemplateDirective } from '../directives/replaceable-template.directive';
 import { ReplaceableComponents } from '../models/replaceable-components';
 import { ReplaceableComponentsService } from '../services/replaceable-components.service';
-
+import { setInputSignal } from './utils';
 @Component({
   selector: 'abp-default-component',
   template: ' <p>default</p> ',
-  exportAs: 'abpDefaultComponent'
+  exportAs: 'abpDefaultComponent',
 })
 class DefaultComponent {
-  @Input()
-  oneWay;
+  onOneWay = input<any>();
 
-  @Input()
-  twoWay: boolean;
+  twoWay = input<boolean>();
 
   readonly twoWayChange = output<boolean>();
 
   readonly someOutput = output<string>();
 
   setTwoWay(value) {
-    this.twoWay = value;
+    setInputSignal(this.twoWay, value);
     this.twoWayChange.emit(value);
   }
 }
 
 @Component({
   selector: 'abp-external-component',
-  template: ' <p>external</p> '
+  template: ' <p>external</p> ',
 })
 class ExternalComponent {
-  data = inject<ReplaceableComponents.ReplaceableTemplateData<any, any>>('REPLACEABLE_DATA' as any, { optional: true })!;
+  data = inject<ReplaceableComponents.ReplaceableTemplateData<any, any>>('REPLACEABLE_DATA' as any)!;
 }
 
 describe('ReplaceableTemplateDirective', () => {
@@ -54,11 +52,12 @@ describe('ReplaceableTemplateDirective', () => {
     beforeEach(() => {
       spectator = createDirective(
         `
-        <div *abpReplaceableTemplate="{inputs: {oneWay: {value: oneWay}, twoWay: {value: twoWay, twoWay: true}}, outputs: {twoWayChange: twoWayChange, someOutput: someOutput}, componentKey: 'TestModule.TestComponent'}; let initTemplate = initTemplate">
+        <ng-template abpReplaceableTemplate let-initTemplate="initTemplate">
           <abp-default-component #defaultComponent="abpDefaultComponent"></abp-default-component>
-        </div>
+        </ng-template>
         `,
         {
+          detectChanges: false,
           hostProps: {
             oneWay: { label: 'Test' },
             twoWay: false,
@@ -67,6 +66,15 @@ describe('ReplaceableTemplateDirective', () => {
           },
         },
       );
+      setInputSignal(spectator.directive.data, {
+        inputs: {
+          oneWay: { value: { label: 'Test' } },
+          twoWay: { value: false, twoWay: true },
+        },
+        outputs: { twoWayChange, someOutput },
+        componentKey: 'TestModule.TestComponent',
+      });
+      spectator.detectChanges();
     });
 
     it('should create directive successfully', () => {
@@ -78,19 +86,22 @@ describe('ReplaceableTemplateDirective', () => {
     it('should create directive successfully', () => {
       spectator = createDirective(
         `
-        <div *abpReplaceableTemplate="{inputs: {oneWay: {value: oneWay}, twoWay: {value: twoWay, twoWay: true}}, outputs: {twoWayChange: twoWayChange, someOutput: someOutput}, componentKey: 'TestModule.TestComponent'}; let initTemplate = initTemplate">
+        <ng-template abpReplaceableTemplate let-initTemplate="initTemplate">
           <abp-default-component #defaultComponent="abpDefaultComponent"></abp-default-component>
-        </div>
+        </ng-template>
         `,
         {
-          hostProps: {
-            oneWay: { label: 'Test' },
-            twoWay: false,
-            twoWayChange: vi.fn(),
-            someOutput: vi.fn(),
-          },
+          detectChanges: false,
         },
       );
+      setInputSignal(spectator.directive.data, {
+        inputs: {
+          oneWay: { value: { label: 'Test' } },
+          twoWay: { value: false, twoWay: true },
+        },
+        outputs: { twoWayChange: vi.fn(), someOutput: vi.fn() },
+        componentKey: 'TestModule.TestComponent',
+      });
       expect(spectator.directive).toBeTruthy();
     });
   });

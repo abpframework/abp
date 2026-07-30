@@ -33,13 +33,15 @@ Following custom repositories are defined for this module:
 
 - `IBackgroundJobRepository`
 
+> `IBackgroundJobRepository` supports filtering the waiting jobs for dedicated workers and cleaning up retained completed jobs. See the *Dedicated Workers per Job Type* and *Storing Successful Jobs* sections of the [background jobs](../framework/infrastructure/background-jobs) document.
+
 ### Database providers
 
 #### Common
 
 ##### Table / collection prefix & schema
 
-All tables/collections use the `Abp` prefix by default. Set static properties on the `BackgroundJobsDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
+All tables/collections use the `Abp` prefix by default. Set static properties on the `AbpBackgroundJobsDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
 
 ##### Connection string
 

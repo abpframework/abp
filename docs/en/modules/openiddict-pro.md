@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Explore the OpenIddict Module (Pro) for ABP Framework to manage applications, API scopes, and client permissions seamlessly."
+    "Description": "Manage OpenIddict applications, scopes, client permissions, credentials, flows, and token lifetimes with the ABP OpenIddict Pro module."
 }
 ```
 
@@ -9,67 +9,141 @@
 
 > You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this module.
 
-This module provides integration and management functionality for the OpenIddict library;
+The OpenIddict Pro module adds application and scope administration to ABP's [open-source OpenIddict module](./openiddict.md). It provides management UI and APIs for MVC, Angular, Blazor and MudBlazor applications.
 
-* Built on the [OpenIddict-core](https://github.com/openiddict/openiddict-core) library.
-* Manage **Application** and **API scopes** in the system. 
-* Set **permissions** for clients.
+The two modules have different responsibilities:
 
-See [the module description page](https://abp.io/modules/Volo.OpenIddict) for an overview of the module features.
+- The **OpenIddict module** implements the OpenIddict server integration, token validation, stores, persistence, token cleanup and low-level configuration.
+- The **OpenIddict Pro module** manages the applications and scopes consumed by that server.
+
+See the [OpenIddict module](./openiddict.md) for server endpoints, flows, certificates, validation, token cleanup, aggregates, stores and database configuration.
 
 ## How to Install
 
-OpenIddict is pre-installed in [the startup templates](../solution-templates) from version 6.0.0-rc1. So, no need to manually install it. You can also migrate your existing application by following the [Migrating to OpenIddict Step by Step Guide](../release-info/migration-guides/openiddict-step-by-step.md).
+To add OpenIddict Pro to an existing solution, use ABP Suite or run the following command in the solution directory:
 
-## Packages
+```bash
+abp add-module Volo.OpenIddict.Pro
+```
 
-This module follows the [module development best practices guide](../framework/architecture/best-practices) and consists of several NuGet and NPM packages. See the guide if you want to understand the packages and relations between them.
+See the [module page](https://abp.io/modules/Volo.OpenIddict.Pro) for an overview and the [package list](https://abp.io/packages?moduleName=Volo.OpenIddict.Pro) for the current NuGet and NPM packages.
 
-You can visit [Identity module package list page](https://abp.io/packages?moduleName=Volo.Identity.Pro) to see list of packages related with this module.
+If you are replacing IdentityServer, follow the [IdentityServer to OpenIddict migration guide](../release-info/migration-guides/identityserver-to-openiddict.md).
 
 ## User Interface
 
-### Menu Items
+The module provides the same application and scope management workflows for:
 
-The OpenIddict module adds the following items to the "Main" menu, under the "Administration" menu item:
+- MVC / Razor Pages
+- Angular
+- Blazor with Blazorise
+- Blazor with MudBlazor
 
-* **Applications**: Application management page.
-* **Scopes**: Scope management page.
+Server and WebAssembly wrapper packages are available for both Blazor UI families.
 
-`OpenIddictProMenus` class has the constants for the menu item names.
+The module adds **OpenId** under the **Administration** menu, with **Applications** and **Scopes** child items. The menu entries and all module permissions are available on the host side only.
 
-### Pages
+### Application Management
 
-#### Application Management
+The Applications page manages clients that request tokens from the OpenIddict server.
 
-Applications page is used to manage OpenIddict applications. An `application` represent hosted applications that can request tokens from your authentication server.
+The list shows the application type, client ID, display name, client type, consent type and available actions.
 
-![openiddict-applications-page](../images/openiddict-application-page.png)
+You can create, filter, update and delete applications.
 
-You can create new application or edit existing applications in this page:
+The create and edit dialog groups general settings, URIs, authorization flows and scopes into tabs.
 
-![openiddict-edit-application-modal](../images/openiddict-edit-application-modal.png)
+The application form manages:
 
-##### Creating a Client Credentials Application
+- **Application type**: Web or Native.
+- **Client identity**: Client ID, display name, client URI and logo URI.
+- **Client type**: Public or Confidential.
+- **Consent type**: Explicit, External, Implicit or Systematic.
+- **Credentials**: A client secret or a JSON Web Key Set (JWKS) for `private_key_jwt` authentication.
+- **Flows**: Authorization Code, Implicit, Hybrid, Password, Client Credentials, Refresh Token, Token Exchange and Device Authorization.
+- **Endpoints and requirements**: End Session, Pushed Authorization, PKCE and enforced Pushed Authorization Requests (PAR).
+- **URIs**: Redirect, post-logout redirect and front-channel logout URIs.
+- **Permissions**: Allowed scopes and extension grant types.
 
-Use a client credentials application when a machine-to-machine client, automation, or MCP client needs to call protected backend APIs without an interactive user login.
+The management service derives the OpenIddict grant-type, endpoint and response-type permissions from these selections. For example, enabling Hybrid flow also enables Authorization Code and Implicit flows, and enforcing PAR enables the Pushed Authorization endpoint.
 
-1. Open **Administration** > **OpenIddict** > **Applications**.
+Redirect, post-logout redirect and front-channel logout values must be absolute URIs.
+
+#### Client Credentials
+
+Public clients cannot have a client secret or JWKS. Confidential clients must have at least one credential:
+
+- Use a strong client secret for `client_secret` authentication.
+- Use a JWKS containing the client's public signing keys for `private_key_jwt` authentication.
+
+Client secrets are write-only. The management API never returns the stored secret, and leaving the secret empty while editing keeps the existing value. Switching an application to Public removes its stored client secret and JWKS. An empty JWKS value explicitly removes the JWKS only when another confidential-client credential remains.
+
+Keep client secrets and private keys outside source control. The JWKS field is intended for public signing keys; never paste a private key into it.
+
+#### PKCE and Pushed Authorization Requests
+
+Use **Force PKCE** to require Proof Key for Code Exchange for a client.
+
+Use **Allow Pushed Authorization Endpoint** to permit PAR requests. Enabling **Force Pushed Authorization** both permits the endpoint and requires PAR for that client.
+
+#### Token Lifetime Overrides
+
+The **Token Lifetime** action configures per-application overrides for:
+
+- Access token
+- Authorization code
+- Device code
+- Identity token
+- Refresh token
+- User code
+- Request token
+- Issued token
+
+Enter token lifetimes in seconds. Leave a field empty to remove the application override and use the server default. These values change only the selected application; configure server-wide defaults in the [OpenIddict module](./openiddict.md).
+
+#### Generate an Access Token
+
+The **Generate Access Token** action sends a Client Credentials request to the configured OpenIddict server. The action is available only when all of the following conditions are met:
+
+- The current user has the `OpenIddictPro.Application.GenerateAccessToken` permission.
+- The application is Confidential.
+- Client Credentials flow is enabled.
+- Every requested scope is assigned to the application.
+
+The action asks for the client secret at request time because stored secrets cannot be read back. A JWKS-only client must request its token outside this UI by creating its own `private_key_jwt` client assertion.
+
+The application service reads the token server base URL from `AuthServer:Authority` and sends the request to its `/connect/token` endpoint:
+
+```json
+{
+  "AuthServer": {
+    "Authority": "https://auth.example.com"
+  }
+}
+```
+
+The result displays the access token, token type, expiration in seconds and granted scope. Treat both the entered secret and returned access token as sensitive data: do not log them or include them in screenshots, tickets or source files.
+
+### Creating a Client Credentials Application
+
+Use a client credentials application when a machine-to-machine client, automation process or MCP client needs to call protected APIs without an interactive user.
+
+1. Open **Administration** > **OpenId** > **Applications**.
 2. Click **New Application**.
-3. Enter a unique **Client Id**, for example `InternalAutomationClient`.
-4. Set **Client Type** to `Confidential client`.
-5. Enter a strong **Client Secret** and store it securely. The secret is required when the client requests a token.
-6. Open the **Authorization** tab and enable **Allow client credentials flow**.
-7. Open the **Scopes** tab and select the API scopes the client can request.
+3. Enter a unique **Client ID**, such as `InternalAutomationClient`.
+4. Select **Confidential client**.
+5. Enter a strong **Client Secret** and store it securely.
+6. Enable **Allow client credentials flow**.
+7. Select the API scopes the client is allowed to request.
 8. Save the application.
 
-The application screen should show the `client_credentials` grant enabled. Use the **Scopes** tab to select the API scope that the client can request.
+The screenshot below shows the authorization settings of an existing application (the layout varies by UI):
 
-![openiddict-client-credentials-application](../images/openiddict-client-credentials-application.png)
+![Client Credentials application](../images/openiddict-client-credentials-application.png)
 
-If the client will call APIs protected by ABP permissions, grant permissions to the application after saving it. Open the application row's **Actions** menu, select **Permissions**, and grant the required permissions for the **Client (OpenIddict Applications)** provider.
+If the protected API also uses ABP permissions, open the application's **Actions** menu, select **Permissions**, and grant permissions for the **Client (OpenIddict Applications)** provider. Scope assignment controls OAuth access; ABP permission assignment controls the operations that the client principal can perform.
 
-Request an access token from the OpenIddict token endpoint with the `client_credentials` grant:
+You can use the **Generate Access Token** action or call the token endpoint directly:
 
 ```bash
 curl -X POST "https://localhost:<auth-server-port>/connect/token" \
@@ -80,505 +154,94 @@ curl -X POST "https://localhost:<auth-server-port>/connect/token" \
   -d "scope=<api-scope>"
 ```
 
-Use the returned `access_token` as a bearer token when calling protected APIs:
+Use the returned `access_token` as a bearer token:
 
 ```text
 Authorization: Bearer <access-token>
 ```
 
-In non-tiered applications, the OpenIddict authority is typically the backend host. In tiered applications, use the Auth Server URL for `/connect/token`.
+In a non-tiered solution, the authority is normally the backend host. In a tiered or microservice solution, use the Auth Server URL.
 
-#### API Scope Management
+### Scope Management
 
-OpenIddict module allows to manage API scope. To allow applications to request access tokens for APIs, you need to define API scopes.
+Scopes define the API access that applications can request.
 
-![openiddict-api-resources-page](../images/openiddict-scopes-page.png)
+![OpenIddict scopes page](../images/openiddict-scopes-page.png)
 
-You can create a new API resource or edit an existing API resource in this page:
+You can create, filter, update and delete scopes.
 
-![openiddict-edit-api-scope-modal](../images/openiddict-edit-api-scope-modal.png)
+![Edit an OpenIddict scope](../images/openiddict-edit-api-scope-modal.png)
 
-## Data Seed
+A scope has a unique **Name** and optional **Display Name**, **Description** and **Resources**. Resources identify the API audiences associated with the scope.
 
-This module adds some initial data (see [the data seed system](../framework/infrastructure/data-seeding.md)) to the database when you run the `.DbMigrator` application:
+The application editor also offers the built-in `address`, `email`, `phone`, `profile` and `roles` scopes. These built-in choices are not seeded or managed as Pro scope records, and the scope service rejects attempts to create or rename a managed scope to one of those names.
 
-* Creates standard identity resources which are role, profile, phone, openid, email and address.
-* Creates applications.
-* Creates API scopes.
+## Permissions
 
-You can delete or edit created applications in the application management page. 
+All OpenIddict Pro permissions are host-only.
 
-## Options
+| Permission | Task |
+| --- | --- |
+| `OpenIddictPro.Application` | View applications and the Applications menu |
+| `OpenIddictPro.Application.Create` | Create applications |
+| `OpenIddictPro.Application.Update` | Update applications and token lifetime overrides |
+| `OpenIddictPro.Application.Delete` | Delete applications |
+| `OpenIddictPro.Application.ManagePermissions` | Manage ABP permissions for a client application |
+| `OpenIddictPro.Application.GenerateAccessToken` | Generate a Client Credentials access token |
+| `OpenIddictPro.Scope` | View scopes and the Scopes menu |
+| `OpenIddictPro.Scope.Create` | Create scopes |
+| `OpenIddictPro.Scope.Update` | Update scopes |
+| `OpenIddictPro.Scope.Delete` | Delete scopes |
 
-### OpenIddictBuilder
+When the Audit Logging UI module is installed, its typed **View Change History** permissions add a Change History action for applications and scopes.
 
-`OpenIddictBuilder` can be configured in the `PreConfigureServices` method of your OpenIddict [module](../framework/architecture/modularity/basics.md). 
+## HTTP APIs
 
-Example:
+The module exposes administration APIs under these route groups:
 
-```csharp
-public override void PreConfigureServices(ServiceConfigurationContext context)
+| Route group | Operations |
+| --- | --- |
+| `/api/openiddict/applications` | List, get, create, update and delete applications |
+| `/api/openiddict/applications/{id}/token-lifetime` | Get or set per-client token lifetime overrides |
+| `/api/openiddict/applications/{id}/generate-access-token` | Generate a Client Credentials access token |
+| `/api/openiddict/scopes` | List, get, create, update and delete scopes |
+| `/api/openiddict/scopes/all` | Get managed and built-in scopes for application assignment |
+
+The application services enforce the permissions and validation rules described above. The published .NET and Angular proxy packages provide typed clients for these APIs.
+
+## Angular
+
+The Angular package is `@volo/abp.ng.openiddictpro`. Current standalone applications register its configuration provider in `app.config.ts`:
+
+```typescript
+import { provideOpeniddictproConfig } from '@volo/abp.ng.openiddictpro/config';
+
+export const appConfig = {
+  providers: [provideOpeniddictproConfig()],
+};
+```
+
+Add its lazy routes in `app.routes.ts`:
+
+```typescript
 {
-	PreConfigure<OpenIddictBuilder>(builder =>
-	{
-    	//Set options here...		
-	});
+  path: 'openiddict',
+  loadChildren: () =>
+    import('@volo/abp.ng.openiddictpro').then(module => module.createRoutes()),
 }
 ```
 
-`OpenIddictBuilder` contains various extension methods to configure the OpenIddict services:
+`createRoutes` accepts `entityActionContributors`, `toolbarActionContributors`, `entityPropContributors`, `createFormPropContributors` and `editFormPropContributors`. The Applications component is declared for all five contributor types; the Scopes component is declared for entity action contributors.
 
-- `AddServer()` registers the OpenIddict token server services in the DI container. Contains `OpenIddictServerBuilder` configurations.
-- `AddCore()` registers the OpenIddict core services in the DI container. Contains `OpenIddictCoreBuilder` configurations.
-- `AddValidation()` registers the OpenIddict token validation services in the DI container. Contains `OpenIddictValidationBuilder` configurations.
+The replaceable component keys are:
 
-### OpenIddictCoreBuilder
+- `eOpenIddictProComponents.Applications`
+- `eOpenIddictProComponents.Scopes`
 
-`OpenIddictCoreBuilder` contains extension methods to configure the OpenIddict core services. 
+See the Angular guides for [extension points](../framework/ui/angular/extensions-overall.md), [dynamic form extensions](../framework/ui/angular/dynamic-form-extensions.md) and [component replacement](../framework/ui/angular/component-replacement.md).
 
-Example:
+## Persistence
 
-```csharp
-public override void PreConfigureServices(ServiceConfigurationContext context)
-{
-	PreConfigure<OpenIddictCoreBuilder>(builder =>
-	{
-    	//Set options here...		
-	});
-}
-```
+OpenIddict Pro does not add a separate application or scope schema. Its EF Core and MongoDB provider packages reuse the open-source OpenIddict entities, mappings, `AbpOpenIddict` connection-string name and host-only storage model.
 
-These services contain:
-
-- Adding `ApplicationStore`, `AuthorizationStore`, `ScopeStore`, `TokenStore`.
-- Replacing `ApplicationManager`, `AuthorizationManager`, `ScopeManager`, `TokenManager`.
-- Replacing `ApplicationStoreResolver`, `AuthorizationStoreResolver`, `ScopeStoreResolver`, `TokenStoreResolver`.
-- Setting `DefaultApplicationEntity`, `DefaultAuthorizationEntity`, `DefaultScopeEntity`, `DefaultTokenEntity`.
-
-### OpenIddictServerBuilder
-
-`OpenIddictServerBuilder` contains extension methods to configure OpenIddict server services.
-
-Example:
-
-```csharp
-public override void PreConfigureServices(ServiceConfigurationContext context)
-{
-	PreConfigure<OpenIddictServerBuilder>(builder =>
-	{
-    	//Set options here...		
-	});
-}
-```
-
-These services contain:
-
-- Registering claims, scopes.
-- Setting the `Issuer` URI that is used as the base address for the endpoint URIs returned from the discovery endpoint.
-- Adding development signing keys, encryption/signing keys, credentials, and certificates.
-- Adding/removing event handlers.
-- Enabling/disabling grant types.
-- Setting authentication server endpoint URIs.
-
-### OpenIddictValidationBuilder
-
-`OpenIddictValidationBuilder` contains extension methods to configure OpenIddict validation services.
-
-Example:
-
-```csharp
-public override void PreConfigureServices(ServiceConfigurationContext context)
-{
-	PreConfigure<OpenIddictValidationBuilder>(builder =>
-	{
-    	//Set options here...		
-	});
-}
-```
-
-These services contain:
-
-- `AddAudiances()` for resource servers.
-- `SetIssuer()` URI that is used to determine the actual location of the OAuth 2.0/OpenID Connect configuration document when using provider discovery.
-- `SetConfiguration()` to configure `OpenIdConnectConfiguration`.
-- `UseIntrospection()` to use introspection instead of local/direct validation.
-- Adding encryption key, credentials, and certificates.
-- Adding/removing event handlers.
-- `SetClientId() ` to set the client identifier `client_id ` when communicating with the remote authorization server (e.g for introspection).
-- `SetClientSecret()` to set the identifier `client_secret` when communicating with the remote authorization server (e.g for introspection).
-- `EnableAuthorizationEntryValidation()` to enable authorization validation to ensure the `access token` is still valid by making a database call for each API request. *Note:* This may have a negative impact on performance and can only be used with an OpenIddict-based authorization server.
-- `EnableTokenEntryValidation()` to enable authorization validation to ensure the `access token` is still valid by making a database call for each API request. *Note:* This may have a negative impact on performance and it is required when the OpenIddict server is configured to use reference tokens.
-- `UseLocalServer()` to register the OpenIddict validation/server integration services.
-- `UseAspNetCore()` to register the OpenIddict validation services for ASP.NET Core in the DI container.
-
-## Internals
-
-### Domain Layer
-
-#### Aggregates
-
-##### OpenIddictApplication
-
-OpenIddictApplications represent the applications that can request tokens from your OpenIddict Server.
-
-- `OpenIddictApplications` (aggregate root): Represents an OpenIddict application.
-  - `ClientId` (string): The client identifier associated with the current application.
-  - `ClientSecret` (string): The client secret associated with the current application. Maybe hashed or encrypted for security reasons.
-  - `ConsentType` (string): The consent type associated with the current application.
-  - `DisplayName` (string): The display name associated with the current application.
-  - `DisplayNames` (string): The localized display names associated with the current application serialized as a JSON object.
-  - `Permissions` (string): The permissions associated with the current application, serialized as a JSON array.
-  - `PostLogoutRedirectUris` (string): The logout callback URLs associated with the current application, serialized as a JSON array.
-  - `Properties` (string): The additional properties associated with the current application serialized as a JSON object or null.
-  - `RedirectUris` (string): The callback URLs associated with the current application, serialized as a JSON array.
-  - `Requirements` (string): The requirements associated with the current application
-  - `Type` (string): The application type associated with the current application.
-  - `ClientUri` (string): URI to further information about client.
-  - `LogoUri` (string): URI to client logo.
-
-##### OpenIddictAuthorization
-
-OpenIddictAuthorizations are used to keep the allowed scopes, authorization flow types.
-
-- `OpenIddictAuthorization` (aggregate root): Represents an OpenIddict authorization.
-
-  - `ApplicationId` (Guid?): The application associated with the current authorization.
-
-  - `Properties` (string): The additional properties associated with the current authorization serialized as a JSON object or null.
-
-  - `Scopes` (string): The scopes associated with the current authorization, serialized as a JSON array.
-
-  - `Status` (string): The status of the current authorization.
-
-  - `Subject` (string): The subject associated with the current authorization.
-
-  - `Type` (string): The type of the current authorization.
-
-##### OpenIddictScope
-
-OpenIddictScopes are used to keep the scopes of resources.
-
-- `OpenIddictScope` (aggregate root): Represents an OpenIddict scope.
-
-  - `Description` (string): The public description associated with the current scope.
-
-  - `Descriptions` (string): The localized public descriptions associated with the current scope, serialized as a JSON object.
-
-  - `DisplayName` (string): The display name associated with the current scope.
-
-  - `DisplayNames` (string): The localized display names associated with the current scope serialized as a JSON object.
-
-  - `Name` (string): The unique name associated with the current scope.
-  - `Properties` (string): The additional properties associated with the current scope serialized as a JSON object or null.
-  - `Resources` (string): The resources associated with the current scope, serialized as a JSON array.
-
-##### OpenIddictToken
-
-OpenIddictTokens are used to persist the application tokens.
-
-- `OpenIddictToken` (aggregate root): Represents an OpenIddict token.
-
-  - `ApplicationId` (Guid?): The application associated with the current token.
-  - `AuthorizationId` (Guid?): The application associated with the current token.
-  - `CreationDate` (DateTime?): The UTC creation date of the current token.
-  - `ExpirationDate` (DateTime?): The UTC expiration date of the current token.
-  - `Payload` (string): The payload of the current token, if applicable. Only used for reference tokens and may be encrypted for security reasons.
-
-  - `Properties` (string): The additional properties associated with the current token serialized as a JSON object or null.
-  - `RedemptionDate` (DateTime?): The UTC redemption date of the current token.
-  - `Status` (string): The status of the current authorization.
-
-  - `ReferenceId` (string): The reference identifier associated with the current token, if applicable. Only used for reference tokens and may be hashed or encrypted for security reasons.
-
-  - `Status` (string): The status of the current token.
-
-  - `Subject` (string): The subject associated with the current token.
-
-  - `Type` (string): The type of the current token.
-
-#### Stores
-
-This module implements OpenIddict stores:
-
-- `IAbpOpenIdApplicationStore`
-- `IOpenIddictAuthorizationStore`
-- `IOpenIddictScopeStore`
-- `IOpenIddictTokenStore`
-
-##### Repositories
-
-The following custom repositories are defined in this module:
-
-- `IOpenIddictApplicationRepository`
-- `IOpenIddictAuthorizationRepository`
-- `IOpenIddictScopeRepository`
-- `IOpenIddictTokenRepository`
-
-##### Domain Services
-
-This module doesn't contain any domain service but overrides the service below:
-
-- `AbpApplicationManager` used to populate/get `AbpApplicationDescriptor` information that contains `ClientUri` and `LogoUri`.
-
-###  Settings
-
-This module doesn't define any settings.
-
-### Application Layer
-
-####  Application Services
-
-- `ApplicationAppService` (implements `IApplicationAppService`): Implements the use cases of the application management UI.
-- `ScopeAppService` (implement `IScopeAppService`): Implements the use cases of the API scope management UI.
-
-### Database Providers
-
-#### Common
-
-##### Table/Collection Prefix & Schema
-
-All tables/collections use the `OpenIddict` prefix by default. Set static properties on the `AbpOpenIddictDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
-
-##### Connection String
-
-This module uses `AbpOpenIddict` for the connection string name. If you don't define a connection string with this name, it fallbacks to the `Default` connection string.
-
-See the [connection strings](../framework/fundamentals/connection-strings.md) documentation for details.
-
-#### Entity Framework Core
-
-##### Tables
-
-- **OpenIddictApplications**
-- **OpenIddictAuthorizations**
-- **OpenIddictScopes**
-- **OpenIddictTokens**
-
-#### MongoDB
-
-##### Collections
-
-- **OpenIddictApplications**
-- **OpenIddictAuthorizations**
-- **OpenIddictScopes**
-- **OpenIddictTokens**
-
-###  Permissions
-
-See the `AbpOpenIddictProPermissions` class members for all permissions defined for this module.
-
-## ASP.NET Core Module
-
-This module integrates ASP NET Core, with built-in MVC controllers for four protocols. It uses OpenIddict's [Pass-through mode](https://documentation.openiddict.com/guides/index.html#pass-through-mode).
-
-```cs
-AuthorizeController -> connect/authorize
-TokenController     -> connect/token
-LogoutController    -> connect/logout
-UserInfoController  -> connect/userinfo
-```
-
-### AbpOpenIddictAspNetCoreOptions
-
-`AbpOpenIddictAspNetCoreOptions` can be configured in the `PreConfigureServices` method of your OpenIddict [module](../framework/architecture/modularity/basics.md). 
-
-Example:
-
-```csharp
-PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
-{
-    //Set options here...
-});
-```
-
-`AbpOpenIddictAspNetCoreOptions` properties:
-
-- `UpdateAbpClaimTypes(default: true)`:  Updates `AbpClaimTypes` to be compatible with the Openiddict claims.
-- `AddDevelopmentEncryptionAndSigningCertificate(default: true)`:  Registers (and generates if necessary) a user-specific development encryption/development signing certificate.
-
-#### Automatically Removing Orphaned Tokens/Authorizations
-
-The background task that automatically removes orphaned tokens/authorizations. This can be configured by `TokenCleanupOptions` to manage it.
-
-`TokenCleanupOptions` can be configured in the `PreConfigureServices` method of your OpenIddict [module](../framework/architecture/modularity/basics.md). 
-
-Example:
-
-```csharp
-PreConfigure<TokenCleanupOptions>(options =>
-{
-    //Set options here...	
-});
-```
-
-`TokenCleanupOptions` properties:
-
-- `IsCleanupEnabled` (default: true): Enable/disable token clean up.
-- `CleanupPeriod` (default: 3,600,000 ms):  Setting clean up period.
-- `DisableAuthorizationPruning`: Setting a boolean indicating whether authorizations pruning should be disabled.
-- `DisableTokenPruning`: Setting a boolean indicating whether token pruning should be disabled.
-- `MinimumAuthorizationLifespan` (default: 14 days): Setting the minimum lifespan authorizations must have to be pruned. Cannot be less than 10 minutes.
-- `MinimumTokenLifespan` (default: 14 days): Setting the minimum lifespan tokens must have to be pruned. Cannot be less than 10 minutes.
-
-#### Updating Claims In Access_token and Id_token
-
-[Claims Principal Factory](../framework/fundamentals/authorization/index.md#claims-principal-factory) can be used to add/remove claims to the `ClaimsPrincipal`.
-
-The `AbpDefaultOpenIddictClaimDestinationsProvider` service will add `Name`, `Email,` and `Role` types of Claims to `access_token` and `id_token`, other claims are only added to `access_token` by default, and remove the `SecurityStampClaimType` secret claim of `Identity`.
-
-Create a service that inherits from `IAbpOpenIddictClaimDestinationsProvider` and add it to DI to fully control the destinations of claims.
-
-```cs
-public class MyClaimDestinationsProvider : IAbpOpenIddictClaimDestinationsProvider, ITransientDependency
-{
-    public virtual Task SetDestinationsAsync(AbpOpenIddictClaimDestinationsProviderContext context)
-    {
-		// ...
-        return Task.CompletedTask;
-    }
-}
-
-Configure<AbpOpenIddictClaimDestinationsOptions>(options =>
-{
-    options.ClaimDestinationsProvider.Add<MyClaimDestinationsProvider>();
-});
-```
-
-For detailed information, please refer to:  [OpenIddict claim destinations](https://documentation.openiddict.com/configuration/claim-destinations.html)
-
-#### Disable AccessToken Encryption
-
-ABP disables the `access token encryption` by default for compatibility, it can be enabled manually if needed.
-
-```cs
-public override void PreConfigureServices(ServiceConfigurationContext context)
-{
-    PreConfigure<OpenIddictServerBuilder>(builder =>
-    {
-        builder.Configure(options => options.DisableAccessTokenEncryption = false);
-    });
-}
-```
-
-### Disable Transport Security Requirement
-
-By default, OpenIddict requires the use of HTTPS for all endpoints. You can disable it if it's needed. You just need to configure the `OpenIddictServerAspNetCoreOptions` and set `DisableTransportSecurityRequirement` as **true**:
-
-```cs
-Configure<OpenIddictServerAspNetCoreOptions>(options =>
-{
-    options.DisableTransportSecurityRequirement = true;
-});
-```
-
-https://documentation.openiddict.com/configuration/token-formats.html#disabling-jwt-access-token-encryption
-
-### Request/Response Process
-
-The `OpenIddict.Server.AspNetCore` adds an authentication scheme(`Name: OpenIddict.Server.AspNetCore, handler: OpenIddictServerAspNetCoreHandler`) and implements the `IAuthenticationRequestHandler` interface.
-
-It will be executed first in `AuthenticationMiddleware` and can short-circuit the current request. Otherwise, `DefaultAuthenticateScheme` will be called and continue to execute the pipeline.
-
-`OpenIddictServerAspNetCoreHandler` will call various built-in handlers (handling requests and responses), And the handler will process according to the context or skip logic that has nothing to do with it.
-
-Example of a token request: 
-
-```
-POST /connect/token HTTP/1.1
-Content-Type: application/x-www-form-urlencoded
-
-    grant_type=password&
-    client_id=AbpApp&
-    client_secret=1q2w3e*&
-    username=admin&
-    password=1q2w3E*&
-    scope=AbpAPI offline_access
-```
-
-This request will be processed by various handlers. They will confirm the endpoint type of the request, check `HTTP/HTTPS`, verify that the request parameters (`client. scope, etc`) are valid and exist in the database, etc. Various protocol checks. And build a `OpenIddictRequest` object, If there are any errors, the response content may be set and directly short-circuit the current request.
-
-If everything is ok, the request will go to our processing controller(eg `TokenController`), we can get an `OpenIddictRequest` from the HTTP request at this time. The rest will be based on this object.
-
-Check the `username` and `password` in the request. If it is correct create a `ClaimsPrincipal` object and return a `SignInResult`, which uses the `OpenIddict.Validation.AspNetCore` authentication scheme name, will calls `OpenIddictServerAspNetCoreHandler` for processing. 
-
-`OpenIddictServerAspNetCoreHandler` do some checks to generate json and replace the http response content.
-
-The `ForbidResult` `ChallengeResult` are all the above types of processing.
-
-If you need to customize OpenIddict, you need to replace/delete/add new handlers and make it execute in the correct order.
-
-Please refer to:
-https://documentation.openiddict.com/guides/index.html#events-model
-
-### PKCE
-
-https://documentation.openiddict.com/configuration/proof-key-for-code-exchange.html
-
-### Setting Tokens Lifetime
-
-Update `PreConfigureServices` method of AuthServerModule (or HttpApiHostModule if you don't have tiered/separate-authserver) file:
-
-```csharp
-PreConfigure<OpenIddictServerBuilder>(builder =>
-{
-    builder.SetAuthorizationCodeLifetime(TimeSpan.FromMinutes(30));
-    builder.SetAccessTokenLifetime(TimeSpan.FromMinutes(30));
-    builder.SetIdentityTokenLifetime(TimeSpan.FromMinutes(30));
-    builder.SetRefreshTokenLifetime(TimeSpan.FromDays(14));
-});
-```
-
-### Refresh Token
-
-To use refresh token, it must be supported by OpenIddictServer and the `refresh_token` must be requested by the application.
-
-#### Configuring OpenIddictServer
-
-There are two ways to allow an application to use the `refresh_token`.  
-
-* **From OpenIddictDataSeedContributor**, add `OpenIddictConstants.GrantTypes.RefreshToken` to grant types in `CreateApplicationAsync` method:
-
-  ```csharp
-  await CreateApplicationAsync(
-      ...
-      grantTypes: new List<string> //Hybrid flow
-      {
-          OpenIddictConstants.GrantTypes.AuthorizationCode,
-          OpenIddictConstants.GrantTypes.Implicit,
-          OpenIddictConstants.GrantTypes.RefreshToken,
-      },
-      ...
-  ```
-
-  > **Note:** You need to re-create this client if you have generated the database already.
-
-* **Or from OpenIddict Management UI**, edit your application and `Allow Refresh Token Flow`:
-
-![openiddict-edit-refresh-token](../images/openid-edit-application.png)
-
-> **Note:** Angular application is already configured to use `refresh_token`.
-
-#### Configuring Application:
-
-You need to request the **offline_access scope** to be able to receive `refresh_token`. 
-
-In **Razor/MVC, Blazor-Server applications**, add `options.Scope.Add("offline_access");` to **OpenIdConnect** options. These application templates are using cookie authentication by default and has default cookie expire options set as:
-
-```csharp
-.AddCookie("Cookies", options =>
-{
-    options.ExpireTimeSpan = TimeSpan.FromDays(365);
-})
-```
-
-[Cookie ExpireTimeSpan will ignore access_token expiration](https://learn.microsoft.com/en-us/dotnet/api/Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationOptions.ExpireTimeSpan?view=aspnetcore-7.0&viewFallbackFrom=net-7.0) and expired access_token will still be valid if it is set to higher value than the `refresh_token lifetime`. It is recommended to keep **Cookie ExpireTimeSpan** and the **Refresh Token lifetime** same, hence the new token will be persisted in the cookie.
-
-In **Blazor wasm** applications, add `options.ProviderOptions.DefaultScopes.Add("offline_access");` to **AddOidcAuthentication** options.
-
-In **Angular** applications, add `offline_access` to **oAuthConfig**  scopes in *environment.ts* file. (Angular applications already have this configuration).
-
-
-
-## Migrating Guide
-
-[Migrating from IdentityServer to OpenIddict Step by Step Guide ](../release-info/migration-guides/openiddict-step-by-step.md)
+Configure the tables, collections, schema, connection string and database providers through the [OpenIddict module](./openiddict.md).

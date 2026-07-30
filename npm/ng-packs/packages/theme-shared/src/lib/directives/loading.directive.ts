@@ -32,7 +32,7 @@ export class LoadingDirective implements OnInit, OnDestroy {
   readonly targetElementInput = input<HTMLElement | undefined>(undefined, { alias: 'abpLoadingTargetElement' });
   readonly delay = input(0, { alias: 'abpLoadingDelay' });
 
-  private targetElement: HTMLElement | undefined;
+  targetElement: HTMLElement | undefined;
 
   componentRef: ComponentRef<LoadingComponent> | null = null;
   rootNode: HTMLDivElement | null = null;

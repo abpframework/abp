@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shouldly;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.TestApp.Domain;
 using Volo.Abp.Domain.Repositories;
@@ -92,6 +93,30 @@ public class PeopleAppService : CrudAppService<Person, PersonDto, Guid>, IPeople
         memoryStream.Position = 0;
 
         return new RemoteStreamContent(memoryStream, "download.rtf", "application/rtf");
+    }
+
+    public Task<string> EchoStatusAsync()
+    {
+        return Task.FromResult("Open");
+    }
+
+    [Produces("application/json")]
+    public Task<string> EchoStatusWithProducesJsonAsync()
+    {
+        return Task.FromResult("Open");
+    }
+
+    public Task<IRemoteStreamContent> GetBinaryImageAsync()
+    {
+        var bytes = Convert.FromBase64String(
+            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=");
+        return Task.FromResult<IRemoteStreamContent>(
+            new RemoteStreamContent(new MemoryStream(bytes), "tiny.png", "image/png"));
+    }
+
+    public Task<string> ThrowFromStringAsync()
+    {
+        throw new BusinessException("TestApp.StringEndpointBoom", "string endpoint failed");
     }
 
     public async Task<string> UploadAsync(IRemoteStreamContent streamContent)

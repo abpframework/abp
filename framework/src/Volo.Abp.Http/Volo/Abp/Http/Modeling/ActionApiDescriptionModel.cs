@@ -45,7 +45,7 @@ public class ActionApiDescriptionModel
 
     }
 
-    public static ActionApiDescriptionModel Create([NotNull] string uniqueName, [NotNull] MethodInfo method, [NotNull] string url, string? httpMethod, [NotNull] IList<string> supportedVersions, bool? allowAnonymous = null, IList<AuthorizeDataApiDescriptionModel>? authorizeDatas = null, string? implementFrom = null)
+    public static ActionApiDescriptionModel Create([NotNull] string uniqueName, [NotNull] MethodInfo method, [NotNull] string url, string? httpMethod, [NotNull] IList<string> supportedVersions, bool? allowAnonymous = null, IList<AuthorizeDataApiDescriptionModel>? authorizeDatas = null, string? implementFrom = null, IList<string>? returnValueContentTypes = null)
     {
         Check.NotNull(uniqueName, nameof(uniqueName));
         Check.NotNull(method, nameof(method));
@@ -58,7 +58,7 @@ public class ActionApiDescriptionModel
             Name = method.Name,
             Url = url,
             HttpMethod = httpMethod,
-            ReturnValue = ReturnValueApiDescriptionModel.Create(method.ReturnType),
+            ReturnValue = ReturnValueApiDescriptionModel.Create(method.ReturnType, returnValueContentTypes),
             Parameters = new List<ParameterApiDescriptionModel>(),
             ParametersOnMethod = method
                 .GetParameters()

@@ -86,8 +86,8 @@ public override void OnApplicationInitialization(ApplicationInitializationContex
     var app = context.GetApplicationBuilder();
     // ...
 
-    app.UseAntiforgery();
     app.UseAuthorization();
+    app.UseAntiforgery();
 
     app.UseConfiguredEndpoints(builder =>
     {

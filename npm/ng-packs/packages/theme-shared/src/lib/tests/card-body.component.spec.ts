@@ -1,5 +1,6 @@
 import { createHostFactory, SpectatorHost } from '@ngneat/spectator';
 import { CardBodyComponent } from '../components';
+import { setInputSignal } from './utils';
 
 describe('AbpCardBodyComponent', () => {
   let spectator: SpectatorHost<CardBodyComponent>;
@@ -8,16 +9,17 @@ describe('AbpCardBodyComponent', () => {
 
   beforeEach(
     () =>
-      (spectator = createHost(
-        ` <abp-card-body 
-        [cardBodyStyle]="{'background-color':'red'}" 
-      > 
-      <p>Body</p>
-    </abp-card-body>`,
-        {
-          hostProps: { attributes: { autofocus: '', name: 'abp-card-body' } },
-        },
-      )),
+      {
+        spectator = createHost(
+          `<abp-card-body> <p>Body</p> </abp-card-body>`,
+          {
+            detectChanges: false,
+            hostProps: { attributes: { autofocus: '', name: 'abp-card-body' } },
+          },
+        );
+        setInputSignal(spectator.component.cardBodyStyle, 'background-color: red;');
+        spectator.detectChanges();
+      },
   );
 
   it('should create an instance', () => {

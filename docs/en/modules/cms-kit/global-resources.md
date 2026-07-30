@@ -31,6 +31,10 @@ Global Resources page is used to manage global styles and scripts in the system.
 
 ![cms-kit-global-resources-page](../../images/cmskit-module-global-resources-page.png)
 
+The built-in public web module adds the style resource at `LayoutHooks.Head.Last` and the script resource at `LayoutHooks.Body.Last`. The resources are served from `/cms-kit/global-resources/style` and `/cms-kit/global-resources/script`. A cache miss stores the loaded resource in the distributed cache with a two-minute absolute expiration. Updating an existing resource refreshes its cached value through a local entity event and uses the configured default cache options.
+
+> Global resources are trusted administrator input. The style is returned as CSS and the script is returned as executable JavaScript on every public page that uses the layout hooks. Grant `CmsKit.GlobalResources` only to users who are allowed to execute code in visitors' browsers, and apply your Content Security Policy accordingly.
+
 # Internals
 
 ## Domain Layer

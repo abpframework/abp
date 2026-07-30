@@ -1,8 +1,9 @@
-import { ChangeDetectorRef, Component, inject, input } from '@angular/core';
+import {ChangeDetectorRef, Component, inject, input, ChangeDetectionStrategy,} from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
 // Not an abstract class on purpose. Do not change!
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: '',
 })
 export class AbstractNgModelComponent<T = any, U = T> implements ControlValueAccessor {

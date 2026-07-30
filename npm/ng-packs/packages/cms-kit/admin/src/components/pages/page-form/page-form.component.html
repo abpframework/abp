@@ -1,10 +1,10 @@
 <abp-page [title]="'CmsKit::Pages' | abpLocalization">
   <div class="card">
     <div class="card-body">
-      @if (form && (!isEditMode || page)) {
-        <form [formGroup]="form" (ngSubmit)="save()" validateOnSubmit>
+      @if (form && (!isEditMode() || page())) {
+        <form [formGroup]="form" (ngSubmit)="save()" [validateOnSubmit]="true">
           <!-- Basic fields outside tabs -->
-          <abp-extensible-form [selectedRecord]="page || {}" />
+          <abp-extensible-form [selectedRecord]="page() || {}" />
 
           <!-- Tabs for Content, Script, and Style -->
           <ul ngbNav #nav="ngbNav" class="nav-tabs mt-3">

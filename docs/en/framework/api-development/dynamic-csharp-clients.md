@@ -209,6 +209,46 @@ Using `asDefaultServices: false` may only be needed if your application has alre
 
 > If you disable `asDefaultServices`, you can only use `IHttpClientProxy<T>` interface to use the client proxies. See the *IHttpClientProxy Interface* section above.
 
+### Before Sending a Proxy Request
+
+`AbpHttpClientOptions.AddPreSendAction` registers an action for a named remote service. It receives the proxy configuration, the current request context and the `HttpClient`, and runs immediately before each proxy request is sent.
+
+````csharp
+Configure<AbpHttpClientOptions>(options =>
+{
+    options.AddPreSendAction(
+        "BookStore",
+        (_, requestContext, httpClient) =>
+        {
+            if (requestContext.Action.Name == "GetReportAsync")
+            {
+                httpClient.Timeout = TimeSpan.FromMinutes(2);
+            }
+        }
+    );
+});
+````
+
+### Custom Parameter Converters
+
+Dynamic proxies normally use the built-in conversion rules for query-string, form-data and path values. Implement `IObjectToQueryString<T>`, `IObjectToFormData<T>` or `IObjectToPath<T>` when a type requires custom serialization, register the implementation in dependency injection, and map the value type to the converter:
+
+````csharp
+context.Services.AddTransient<MyFilterToQueryString>();
+context.Services.AddTransient<MyUploadMetadataToFormData>();
+context.Services.AddTransient<MyStrongIdToPath>();
+
+Configure<AbpHttpClientProxyingOptions>(options =>
+{
+    options.QueryStringConverts[typeof(MyFilter)] =
+        typeof(MyFilterToQueryString);
+    options.FormDataConverts[typeof(MyUploadMetadata)] =
+        typeof(MyUploadMetadataToFormData);
+    options.PathConverts[typeof(MyStrongId)] =
+        typeof(MyStrongIdToPath);
+});
+````
+
 ### Retry/Failure Logic & Polly Integration
 
 If you want to add retry logic for the failing remote HTTP calls for the client proxies, you can configure the `AbpHttpClientBuilderOptions` in the `PreConfigureServices` method of your module class.

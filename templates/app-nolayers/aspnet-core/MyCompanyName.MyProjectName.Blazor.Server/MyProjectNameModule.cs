@@ -378,8 +378,8 @@ public class MyProjectNameModule : AbpModule
 
         app.UseUnitOfWork();
         app.UseDynamicClaims();
-        app.UseAntiforgery();
         app.UseAuthorization();
+        app.UseAntiforgery();
 
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>

@@ -59,7 +59,7 @@ Configure<AbpUnitOfWorkDefaultOptions>(options =>
 ### Option Properties
 
 * `TransactionBehavior` (`enum`: `UnitOfWorkTransactionBehavior`). A global point to configure the transaction behavior. Default value is `Auto` and work as explained in the "*Database Transaction Behavior*" section above. You can enable (even for HTTP GET requests) or disable transactions with this option.
-* `TimeOut` (`int?`): Used to set the timeout value for UOWs. **Default value is `null`** and uses to the default of the underlying database provider.
+* `Timeout` (`int?`): Used to set the timeout value for UOWs. **Default value is `null`** and uses to the default of the underlying database provider.
 * `IsolationLevel` (`IsolationLevel?`): Used to set the [isolation level](https://docs.microsoft.com/en-us/dotnet/api/system.data.isolationlevel) of the database transaction, if the UOW is transactional.
 
 ## Controlling the Unit Of Work
@@ -93,7 +93,7 @@ Then `MyService` (and any class derived from it) methods will be UOW.
 
 However, there are **some rules should be followed** in order to make it working;
 
-* If you are **not injecting** the service over an interface (like `IMyService`), then the methods of the service must be `virtual` (otherwise, [dynamic proxy / interception](../../../dynamic-proxying-interceptors.md) system can not work).
+* If you are **not injecting** the service over an interface (like `IMyService`), then the methods of the service must be `virtual` (otherwise, [dynamic proxy / interception](../../infrastructure/interceptors.md) system can not work).
 * Only `async` methods (methods returning a `Task` or `Task<T>`) are intercepted. So, sync methods can not start a UOW.
 
 > Notice that if `FooAsync` is called inside a UOW scope, then it already participates to the UOW without needing to the `IUnitOfWorkEnabled` or any other configuration.
@@ -156,13 +156,13 @@ namespace AbpDemo
 
 Again, the **same rules** are valid here:
 
-* If you are **not injecting** the service over an interface (like `IMyService`), then the methods of the service must be `virtual` (otherwise, [dynamic proxy / interception](../../../dynamic-proxying-interceptors.md) system can not work).
+* If you are **not injecting** the service over an interface (like `IMyService`), then the methods of the service must be `virtual` (otherwise, [dynamic proxy / interception](../../infrastructure/interceptors.md) system can not work).
 * Only `async` methods (methods returning a `Task` or `Task<T>`) are intercepted. So, sync methods can not start a UOW.
 
 #### UnitOfWorkAttribute Properties
 
 * `IsTransactional` (`bool?`): Used to set whether the UOW should be transactional or not. **Default value is `null`**. if you leave it `null`, it is determined automatically based on the conventions and the configuration.
-* `TimeOut` (`int?`): Used to set the timeout value for this UOW. **Default value is `null`** and fallbacks to the default configured value.
+* `Timeout` (`int?`): Used to set the timeout value for this UOW. **Default value is `null`** and fallbacks to the default configured value.
 * `IsolationLevel` (`IsolationLevel?`): Used to set the [isolation level](https://docs.microsoft.com/en-us/dotnet/api/system.data.isolationlevel) of the database transaction, if the UOW is transactional. If not set, uses the default configured value.
 * `IsDisabled` (`bool`): Used to disable the UOW for the current method/class.
 
@@ -234,7 +234,7 @@ namespace AbpDemo
 * `requiresNew` (`bool`): Set `true` to ignore the surrounding unit of work and start a new UOW with the provided options. **Default value is `false`. If it is `false` and there is a surrounding UOW, `Begin` method doesn't actually begin a new UOW, but silently participates to the existing UOW.**
 * `isTransactional` (`bool`). Default value is `false`.
 * `isolationLevel` (`IsolationLevel?`): Used to set the [isolation level](https://docs.microsoft.com/en-us/dotnet/api/system.data.isolationlevel) of the database transaction, if the UOW is transactional. If not set, uses the default configured value.
-* `TimeOut` (`int?`): Used to set the timeout value for this UOW. **Default value is `null`** and fallbacks to the default configured value.
+* `timeout` (`int?`): Used to set the timeout value for this UOW. **Default value is `null`** and fallbacks to the default configured value.
 
 ### The Current Unit Of Work
 

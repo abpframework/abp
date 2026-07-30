@@ -1,4 +1,12 @@
-import { Component, OnInit, inject, input, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+  OnInit,
+  output,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
@@ -22,6 +30,7 @@ export interface BlogFeaturesModalVisibleChange {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-blog-features-modal',
   templateUrl: './blog-features-modal.component.html',
   imports: [
@@ -42,8 +51,8 @@ export class BlogFeaturesModalComponent implements OnInit {
   blogId = input<string>();
   visibleChange = output<BlogFeaturesModalVisibleChange>();
 
-  form: FormGroup;
-  features: BlogFeatureDto[] = [];
+  readonly form = signal<FormGroup | undefined>(undefined);
+  readonly features = signal<BlogFeatureDto[]>([]);
   private initialFeatureStates: Map<string, boolean> = new Map();
 
   ngOnInit() {
@@ -54,19 +63,19 @@ export class BlogFeaturesModalComponent implements OnInit {
 
   private loadFeatures() {
     this.blogFeatureService.getList(this.blogId()!).subscribe(features => {
-      this.features = features.sort((a, b) =>
+      const sorted = features.sort((a, b) =>
         (a.featureName || '').localeCompare(b.featureName || ''),
       );
-      // Store initial states
+      this.features.set(sorted);
       this.initialFeatureStates = new Map(
-        this.features.map(f => [f.featureName || '', f.isEnabled || false]),
+        sorted.map(f => [f.featureName || '', f.isEnabled || false]),
       );
-      this.buildForm();
+      this.buildForm(sorted);
     });
   }
 
-  private buildForm() {
-    const featureControls = this.features.map(feature =>
+  private buildForm(features: BlogFeatureDto[]) {
+    const featureControls = features.map(feature =>
       this.fb.group({
         featureName: [feature.featureName],
         isEnabled: [feature.isEnabled],
@@ -74,13 +83,15 @@ export class BlogFeaturesModalComponent implements OnInit {
       }),
     );
 
-    this.form = this.fb.group({
-      features: this.fb.array(featureControls),
-    });
+    this.form.set(
+      this.fb.group({
+        features: this.fb.array(featureControls),
+      }),
+    );
   }
 
   get featuresFormArray(): FormArray {
-    return this.form.get('features') as FormArray;
+    return this.form()!.get('features') as FormArray;
   }
 
   onVisibleChange(visible: boolean, refresh = false) {
@@ -88,20 +99,19 @@ export class BlogFeaturesModalComponent implements OnInit {
   }
 
   save() {
-    if (!this.form.valid || !this.blogId()) {
+    const currentForm = this.form();
+    if (!currentForm?.valid || !this.blogId()) {
       return;
     }
 
-    const featuresArray = this.form.get('features') as FormArray;
+    const featuresArray = currentForm.get('features') as FormArray;
 
-    // Only save features that have changed
     const changedFeatures: BlogFeatureInputDto[] = featuresArray.controls
       .map(control => {
         const featureName = control.get('featureName')?.value;
         const isEnabled = control.get('isEnabled')?.value;
         const initialIsEnabled = this.initialFeatureStates.get(featureName);
 
-        // Only include if the value has changed
         if (featureName && initialIsEnabled !== isEnabled) {
           return {
             featureName,
@@ -112,23 +122,18 @@ export class BlogFeaturesModalComponent implements OnInit {
       })
       .filter((input): input is BlogFeatureInputDto => input !== null);
 
-    // If no features changed, just close the modal
     if (changedFeatures.length === 0) {
       this.onVisibleChange(false, false);
       return;
     }
 
-    // Save only changed features
     const saveObservables = changedFeatures.map(input =>
       this.blogFeatureService.set(this.blogId()!, input),
     );
 
-    // Use forkJoin to save all changed features at once
-    forkJoin(saveObservables).subscribe({
-      next: () => {
-        this.onVisibleChange(false, true);
-        this.toasterService.success('AbpUi::SavedSuccessfully');
-      },
+    forkJoin(saveObservables).subscribe(() => {
+      this.onVisibleChange(false, true);
+      this.toasterService.success('AbpUi::SavedSuccessfully');
     });
   }
 }

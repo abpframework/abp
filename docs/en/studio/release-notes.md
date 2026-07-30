@@ -9,7 +9,18 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 3.0.7 (2026-07-13) Latest
+## 3.0.8 (2026-07-28) Latest
+
+* Add BLOB storage provider options
+* Improve custom LLM provider connection UX
+* Upgrade vulnerable NuGet packages to patched versions
+* ABP Agent: Support Custom LLM/BYOK for Enterprise users
+* Fix oversized images and card layout on MudBlazor home page
+* ABP Agent: ABP Suite integration for crud page generation
+* Monitoring: Add option to send exception details to ABP Agent
+* Implement true same-run AI agent steering
+
+## 3.0.7 (2026-07-13)
 
 * Upgrade Blazorise packages to version 2.1.3
 * Skip extension check for install-libs and wait for restarted CLI

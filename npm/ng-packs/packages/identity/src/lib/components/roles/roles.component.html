@@ -1,22 +1,26 @@
-<abp-page [title]="'AbpIdentity::Roles' | abpLocalization" [toolbar]="data.items">
+<abp-page [title]="'AbpIdentity::Roles' | abpLocalization" [toolbar]="data().items">
   <div id="identity-roles-wrapper" class="card">
     <div class="card-body">
       <abp-extensible-table
-        [data]="data.items"
-        [recordsTotal]="data.totalCount"
+        [data]="data().items"
+        [recordsTotal]="data().totalCount"
         [list]="list"
-      ></abp-extensible-table>
+      />
     </div>
   </div>
 
-  <abp-modal [(visible)]="isModalVisible" [busy]="modalBusy">
+  <abp-modal
+    [visible]="isModalVisible()"
+    (visibleChange)="isModalVisible.set($event)"
+    [busy]="modalBusy()"
+  >
     <ng-template #abpHeader>
       <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewRole') | abpLocalization }}</h3>
     </ng-template>
 
     <ng-template #abpBody>
       <form [formGroup]="form" (ngSubmit)="save()" [validateOnSubmit]="true">
-        <abp-extensible-form [selectedRecord]="selected"></abp-extensible-form>
+        <abp-extensible-form [selectedRecord]="selected" />
       </form>
     </ng-template>
 
@@ -26,26 +30,25 @@
       </button>
       <abp-button iconClass="fa fa-check" [disabled]="form?.invalid" (click)="save()">{{
         'AbpIdentity::Save' | abpLocalization
-        }}</abp-button>
+      }}</abp-button>
     </ng-template>
   </abp-modal>
 
   <abp-permission-management
     #abpPermissionManagement="abpPermissionManagement"
     *abpReplaceableTemplate="
-    {
-      inputs: {
-        providerName: { value: 'R' },
-        providerKey: { value: providerKey },
-        visible: { value: visiblePermissions, twoWay: true },
-        hideBadges: { value: true }
-      },
-      outputs: { visibleChange: onVisiblePermissionChange },
-      componentKey: permissionManagementKey
-    };
-    let init = initTemplate
-  "
+      {
+        inputs: {
+          providerName: { value: 'R' },
+          providerKey: { value: providerKey },
+          visible: { value: visiblePermissions(), twoWay: true },
+          hideBadges: { value: true },
+        },
+        outputs: { visibleChange: onVisiblePermissionChange },
+        componentKey: permissionManagementKey,
+      };
+      let init = initTemplate
+    "
     (abpInit)="init(abpPermissionManagement)"
-  >
-  </abp-permission-management>
+  />
 </abp-page>
