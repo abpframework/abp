@@ -10,7 +10,7 @@
     "The field {0} must be a string or array type with a minimum length of '{1}'.": "{0} 필드는 최소 길이가 '{1}'인 문자열 또는 배열 형식이어야 합니다.",
     "The {0} field is not a valid phone number.": "{0} 필드는 유효한 전화번호가 아닙니다.",
     "The field {0} must be between {1} and {2}.": "{0} 필드는 {1}에서 {2} 사이여야 합니다.",
-    "The field {0} must match the regular expression '{1}'.": "{0} 필드가 요청된 형식과 일치하지 않습니다.",
+    "The field {0} must match the regular expression '{1}'.": "{0} 필드는 정규식 '{1}'과(와) 일치해야 합니다.",
     "The {0} field is required.": "{0} 필드는 필수입니다.",
     "The field {0} must be a string with a maximum length of {1}.": "{0} 필드는 최대 길이가 {1}인 문자열이어야 합니다.",
     "The field {0} must be a string with a minimum length of {2} and a maximum length of {1}.": "{0} 필드는 최소 길이가 {2}, 최대 길이가 {1}인 문자열이어야 합니다.",
