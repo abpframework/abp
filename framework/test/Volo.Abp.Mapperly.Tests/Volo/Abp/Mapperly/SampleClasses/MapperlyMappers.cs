@@ -106,3 +106,61 @@ public partial class ExtensibleReverseMapper : TwoWayMapperBase<ExtensibleRevers
 
     public override partial void ReverseMap(ExtensibleReverseDto source, ExtensibleReverseEntity destination);
 }
+
+public class ExtensibleSeededEntity : ExtensibleObject
+{
+    public Guid Id { get; set; }
+}
+
+public class ExtensibleSeededDto : ExtensibleObject
+{
+    public Guid Id { get; set; }
+
+    public ExtensibleSeededDto()
+    {
+        this.SetProperty("CreatedBy", "system");
+    }
+}
+
+public class ExtensibleNonSeededDto : ExtensibleObject
+{
+    public Guid Id { get; set; }
+
+    public ExtensibleNonSeededDto()
+        : base(false)
+    {
+    }
+}
+
+public class ExtensibleNoAttributeDto : ExtensibleObject
+{
+    public static int CountedDefaultValueFactoryCalls;
+
+    public Guid Id { get; set; }
+}
+
+[Mapper]
+[MapExtraProperties]
+public partial class ExtensibleSeededMapper : MapperBase<ExtensibleSeededEntity, ExtensibleSeededDto>
+{
+    public override partial ExtensibleSeededDto Map(ExtensibleSeededEntity source);
+
+    public override partial void Map(ExtensibleSeededEntity source, ExtensibleSeededDto destination);
+}
+
+[Mapper]
+[MapExtraProperties]
+public partial class ExtensibleNonSeededMapper : MapperBase<ExtensibleSeededEntity, ExtensibleNonSeededDto>
+{
+    public override partial ExtensibleNonSeededDto Map(ExtensibleSeededEntity source);
+
+    public override partial void Map(ExtensibleSeededEntity source, ExtensibleNonSeededDto destination);
+}
+
+[Mapper]
+public partial class ExtensibleNoAttributeMapper : MapperBase<ExtensibleSeededEntity, ExtensibleNoAttributeDto>
+{
+    public override partial ExtensibleNoAttributeDto Map(ExtensibleSeededEntity source);
+
+    public override partial void Map(ExtensibleSeededEntity source, ExtensibleNoAttributeDto destination);
+}

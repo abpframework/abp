@@ -97,6 +97,7 @@ public class AbpReverseMapperly_Tests : AbpIntegratedTest<MapperlyTestModule>
         var entity = _objectMapper.Map<ExtensibleReverseDto, ExtensibleReverseEntity>(dto);
 
         entity.GetProperty<string>("Tag").ShouldBe("ok");
-        entity.HasProperty("Secret").ShouldBeFalse();
+        entity.HasProperty("Secret").ShouldBeTrue(); //Ignored, but was set to the default value by the ExtensibleObject constructor
+        entity.GetProperty<string>("Secret").ShouldBeNull();
     }
 }

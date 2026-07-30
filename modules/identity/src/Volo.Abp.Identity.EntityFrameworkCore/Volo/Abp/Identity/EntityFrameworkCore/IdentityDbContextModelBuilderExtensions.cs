@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Text.Json;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.Users.EntityFrameworkCore;
 
@@ -187,7 +189,28 @@ public static class IdentityDbContextModelBuilderExtensions
             b.HasKey(p => p.CredentialId);
 
             b.Property(p => p.CredentialId).HasMaxLength(IdentityUserPasskeyConsts.MaxCredentialIdLength); // Defined in WebAuthn spec to be no longer than 1023 bytes
-            b.OwnsOne(p => p.Data).ToJson();
+
+            if (builder.IsUsingMySQL())
+            {
+                /* MySQL providers do not support EF Core JSON columns (ToJson),
+                 * so store Data as a serialized json column with the same column
+                 * name and content. The comparer detects in-place mutations
+                 * (e.g. sign count updates on login). */
+                b.Property(p => p.Data)
+                    .HasColumnName(nameof(IdentityUserPasskey.Data))
+                    .HasColumnType("json")
+                    .HasConversion(
+                        d => JsonSerializer.Serialize(d, (JsonSerializerOptions?)null),
+                        s => JsonSerializer.Deserialize<IdentityPasskeyData>(s, (JsonSerializerOptions?)null)!,
+                        new ValueComparer<IdentityPasskeyData>(
+                            (l, r) => JsonSerializer.Serialize(l, (JsonSerializerOptions?)null) == JsonSerializer.Serialize(r, (JsonSerializerOptions?)null),
+                            v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null).GetHashCode(),
+                            v => JsonSerializer.Deserialize<IdentityPasskeyData>(JsonSerializer.Serialize(v, (JsonSerializerOptions?)null), (JsonSerializerOptions?)null)!));
+            }
+            else
+            {
+                b.OwnsOne(p => p.Data).ToJson();
+            }
 
             b.ApplyObjectExtensionMappings();
         });
