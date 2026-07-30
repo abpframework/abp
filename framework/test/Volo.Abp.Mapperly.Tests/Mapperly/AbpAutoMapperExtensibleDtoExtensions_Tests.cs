@@ -53,8 +53,10 @@ public class AbpAutoMapperExtensibleDtoExtensions_Tests : AbpIntegratedTest<Mapp
         var personDto = _objectMapper.Map<ExtensibleTestPerson, ExtensibleTestPersonDto>(person);
 
         personDto.GetProperty<string>("Name").ShouldBe("John"); //Defined in both classes
-        personDto.GetProperty<int>("ChildCount").ShouldBe(0); //Not defined in the source, but was set to the default value by ExtensibleTestPersonDto constructor
-        personDto.GetProperty("CityName").ShouldBeNull(); //Ignored, but was set to the default value by ExtensibleTestPersonDto constructor
+        personDto.HasProperty("ChildCount").ShouldBeTrue(); //Not defined in the source, but was set to the default value by ExtensibleTestPersonDto constructor
+        personDto.GetProperty<int>("ChildCount").ShouldBe(0);
+        personDto.HasProperty("CityName").ShouldBeTrue(); //Ignored, but was set to the default value by ExtensibleTestPersonDto constructor
+        personDto.GetProperty("CityName").ShouldBeNull();
         personDto.HasProperty("Age").ShouldBeFalse(); //Not defined on the destination
         personDto.HasProperty("Sex").ShouldBeFalse(); //Not defined in both classes
     }

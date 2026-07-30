@@ -21,7 +21,20 @@ public class MapperlyTestModule : AbpModule
                 .AddOrUpdateProperty<ExtensibleReverseEntity, string>("Tag")
                 .AddOrUpdateProperty<ExtensibleReverseEntity, string>("Secret")
                 .AddOrUpdateProperty<ExtensibleReverseDto, string>("Tag")
-                .AddOrUpdateProperty<ExtensibleReverseDto, string>("Secret");
+                .AddOrUpdateProperty<ExtensibleReverseDto, string>("Secret")
+                .AddOrUpdateProperty<ExtensibleSeededEntity, string>("Tag")
+                .AddOrUpdateProperty<ExtensibleSeededDto, string>("Tag")
+                .AddOrUpdateProperty<ExtensibleSeededDto, string>("DtoOnly")
+                .AddOrUpdateProperty<ExtensibleNonSeededDto, string>("Tag")
+                .AddOrUpdateProperty<ExtensibleNonSeededDto, string>("DtoOnly")
+                .AddOrUpdateProperty<ExtensibleNoAttributeDto, string>("Counted", options =>
+                {
+                    options.DefaultValueFactory = () =>
+                    {
+                        ExtensibleNoAttributeDto.CountedDefaultValueFactoryCalls++;
+                        return null!;
+                    };
+                });
         });
     }
 }

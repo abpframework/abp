@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Data;
+using Volo.Abp.DynamicProxy;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectMapping;
 
@@ -44,9 +45,13 @@ public class MapperlyAutoObjectMappingProvider : IAutoObjectMappingProvider
         var mapper = ServiceProvider.GetService<IAbpMapperlyMapper<TSource, TDestination>>();
         if (mapper != null)
         {
+            var mapExtraPropertiesAttribute = mapper.GetType().GetSingleAttributeOrNull<MapExtraPropertiesAttribute>();
             mapper.BeforeMap((TSource)source);
             var destination = mapper.Map((TSource)source);
-            TryMapExtraProperties(mapper.GetType().GetSingleAttributeOrNull<MapExtraPropertiesAttribute>(), (TSource)source, destination, new ExtraPropertyDictionary());
+            var destinationExtraProperties = mapExtraPropertiesAttribute == null
+                ? new ExtraPropertyDictionary()
+                : GetDestinationExtraPropertiesSeed((TSource)source, destination);
+            TryMapExtraProperties(mapExtraPropertiesAttribute, (TSource)source, destination, destinationExtraProperties);
             mapper.AfterMap((TSource)source, destination);
             return destination;
         }
@@ -54,9 +59,13 @@ public class MapperlyAutoObjectMappingProvider : IAutoObjectMappingProvider
         var reverseMapper = ServiceProvider.GetService<IAbpReverseMapperlyMapper<TDestination, TSource>>();
         if (reverseMapper != null)
         {
+            var mapExtraPropertiesAttribute = reverseMapper.GetType().GetSingleAttributeOrNull<MapExtraPropertiesAttribute>();
             reverseMapper.BeforeReverseMap((TSource)source);
             var destination = reverseMapper.ReverseMap((TSource)source);
-            TryMapExtraProperties(reverseMapper.GetType().GetSingleAttributeOrNull<MapExtraPropertiesAttribute>(), (TSource)source, destination, new ExtraPropertyDictionary());
+            var destinationExtraProperties = mapExtraPropertiesAttribute == null
+                ? new ExtraPropertyDictionary()
+                : GetDestinationExtraPropertiesSeed((TSource)source, destination);
+            TryMapExtraProperties(mapExtraPropertiesAttribute, (TSource)source, destination, destinationExtraProperties);
             reverseMapper.AfterReverseMap((TSource)source, destination);
             return destination;
         }
@@ -217,6 +226,38 @@ public class MapperlyAutoObjectMappingProvider : IAutoObjectMappingProvider
         var callConvert = Expression.Convert(call, typeof(object));
 
         return Expression.Lambda<Func<object, object, object, object?>>(callConvert, instanceParam, sourceParam, destinationParam).Compile();
+    }
+
+    protected virtual ExtraPropertyDictionary GetDestinationExtraPropertiesSeed<TSource, TDestination>(TSource source, TDestination destination)
+    {
+        var extraProperties = new ExtraPropertyDictionary();
+        if (source is not IHasExtraProperties sourceHasExtraProperties ||
+            destination is not IHasExtraProperties destinationHasExtraProperties ||
+            destinationHasExtraProperties.ExtraProperties is null)
+        {
+            return extraProperties;
+        }
+
+        //Keys that don't exist in the source can only be set by the destination's constructor
+        foreach (var property in destinationHasExtraProperties.ExtraProperties)
+        {
+            if (sourceHasExtraProperties.ExtraProperties == null || !sourceHasExtraProperties.ExtraProperties.ContainsKey(property.Key))
+            {
+                extraProperties[property.Key] = property.Value;
+            }
+        }
+
+        //Source keys may be copied by the generated mapper, reset registered ones to their default value and let the filter map the source value
+        var destinationType = ProxyHelper.UnProxy(destinationHasExtraProperties).GetType();
+        foreach (var property in ObjectExtensionManager.Instance.GetProperties(destinationType))
+        {
+            if (!extraProperties.ContainsKey(property.Name) && destinationHasExtraProperties.ExtraProperties.ContainsKey(property.Name))
+            {
+                extraProperties[property.Name] = property.GetDefaultValue();
+            }
+        }
+
+        return extraProperties;
     }
 
     protected virtual ExtraPropertyDictionary GetExtraProperties<TDestination>(TDestination destination)
