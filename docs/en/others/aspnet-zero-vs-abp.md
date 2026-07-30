@@ -520,17 +520,17 @@ ABP is generally better suited to modular monolith and microservice architecture
     <tbody>
         <tr>
             <td>License model</td>
-            <td>Developer seats + feature tier. After the license period, you can keep developing and deploying existing projects; renewal mainly covers updates, support, Suite/Studio, and creating new projects.</td>
+            <td>Developer seats + feature tier. After the license period, you can keep developing and deploying existing projects; renewal mainly covers updates, support, ABP Suite and ABP Studio, and creating new projects.</td>
             <td>Per product/project capacity (a defined number of products and developers). The app can be used indefinitely; renewal mainly covers updates, support, repository access, and tools.</td>
         </tr>
         <tr>
             <td>Source code</td>
-            <td>Open-source framework; commercial modules/tooling as private NuGet/NPM packages. Module source download depends on the plan. Self-hosted—no Volosoft runtime dependency; ABP.io does not host your application source.</td>
-            <td>Full application source. Self-hosted—no Volosoft runtime dependency.</td>
+            <td>Open-source framework; commercial modules/tooling as private NuGet/NPM packages. Module source download depends on the plan. Self-hosted with no Volosoft runtime dependency; ABP.io does not host your application source.</td>
+            <td>Full application source. Self-hosted with no Volosoft runtime dependency.</td>
         </tr>
         <tr>
             <td>AI-assisted development</td>
-            <td>Works with Copilot and similar tools on normal source repositories. Also ABP Studio AI Agent, ABP-oriented workflows, and MCP via compatible clients/IDEs.</td>
+            <td>Works with Copilot and similar tools on normal source repositories. Also ABP Studio AI Agent, ABP-oriented workflows, and MCP tool connections (ABP Studio AI Agent can connect to MCP servers).</td>
             <td>Works with Copilot and similar tools on normal source repositories. Primarily IDE-based AI, with product rules, skills, and workflow instructions from the license.</td>
         </tr>
     </tbody>
