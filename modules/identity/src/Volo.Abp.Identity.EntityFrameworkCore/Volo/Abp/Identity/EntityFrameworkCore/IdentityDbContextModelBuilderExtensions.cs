@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Text.Json;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.Users.EntityFrameworkCore;
 
@@ -194,18 +192,11 @@ public static class IdentityDbContextModelBuilderExtensions
             {
                 /* MySQL providers do not support EF Core JSON columns (ToJson),
                  * so store Data as a serialized json column with the same column
-                 * name and content. The comparer detects in-place mutations
-                 * (e.g. sign count updates on login). */
+                 * name and content. */
                 b.Property(p => p.Data)
                     .HasColumnName(nameof(IdentityUserPasskey.Data))
                     .HasColumnType("json")
-                    .HasConversion(
-                        d => JsonSerializer.Serialize(d, (JsonSerializerOptions?)null),
-                        s => JsonSerializer.Deserialize<IdentityPasskeyData>(s, (JsonSerializerOptions?)null)!,
-                        new ValueComparer<IdentityPasskeyData>(
-                            (l, r) => JsonSerializer.Serialize(l, (JsonSerializerOptions?)null) == JsonSerializer.Serialize(r, (JsonSerializerOptions?)null),
-                            v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null).GetHashCode(),
-                            v => JsonSerializer.Deserialize<IdentityPasskeyData>(JsonSerializer.Serialize(v, (JsonSerializerOptions?)null), (JsonSerializerOptions?)null)!));
+                    .HasAbpJsonConversion();
             }
             else
             {
