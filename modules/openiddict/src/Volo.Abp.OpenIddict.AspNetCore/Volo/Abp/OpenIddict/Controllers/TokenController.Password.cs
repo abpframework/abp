@@ -416,10 +416,14 @@ public partial class TokenController
             }
         );
 
-        user.SetLastSignInTime(DateTimeOffset.UtcNow);
-        await UserManager.UpdateAsync(user);
+        await UpdateUserLastSignInTimeAsync(user);
 
         return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+    }
+
+    protected virtual async Task UpdateUserLastSignInTimeAsync(IdentityUser user)
+    {
+        await UserManager.UpdateLastSignInTimeAsync(user.Id);
     }
 
     protected virtual async Task<bool> IsTfaEnabledAsync(IdentityUser user)

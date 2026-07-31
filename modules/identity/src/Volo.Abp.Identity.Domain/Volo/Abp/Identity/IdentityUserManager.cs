@@ -36,6 +36,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     protected IOptions<AbpMultiTenancyOptions> MultiTenancyOptions { get; }
     protected ICurrentTenant CurrentTenant { get; }
     protected IDataFilter DataFilter { get; }
+    protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
     public IdentityUserManager(
         IdentityUserStore store,
@@ -57,7 +58,8 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         IDistributedCache<AbpDynamicClaimCacheItem> dynamicClaimCache,
         IOptions<AbpMultiTenancyOptions> multiTenancyOptions,
         ICurrentTenant currentTenant,
-        IDataFilter dataFilter)
+        IDataFilter dataFilter,
+        IUnitOfWorkManager unitOfWorkManager)
         : base(
             store,
             optionsAccessor,
@@ -79,6 +81,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         MultiTenancyOptions = multiTenancyOptions;
         CurrentTenant = currentTenant;
         DataFilter = dataFilter;
+        UnitOfWorkManager = unitOfWorkManager;
         CancellationTokenProvider = cancellationTokenProvider;
     }
 
@@ -165,6 +168,61 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         }
 
         return user;
+    }
+
+    public virtual async Task UpdateLastSignInTimeAsync(Guid id, DateTimeOffset? lastSignInTime = null)
+    {
+        var time = lastSignInTime ?? DateTimeOffset.UtcNow;
+
+        var currentUow = UnitOfWorkManager.Current;
+        if (currentUow != null)
+        {
+            // The current unit of work may hold uncommitted changes of the same user (e.g. a new
+            // registration or a lockout counter reset), so update the time after it completes.
+            var tenantId = CurrentTenant.Id;
+            currentUow.OnCompleted(async () =>
+            {
+                using (CurrentTenant.Change(tenantId))
+                {
+                    await TryUpdateLastSignInTimeAsync(id, time);
+                }
+            });
+
+            return;
+        }
+
+        await TryUpdateLastSignInTimeAsync(id, time);
+    }
+
+    protected virtual async Task TryUpdateLastSignInTimeAsync(Guid id, DateTimeOffset lastSignInTime)
+    {
+        try
+        {
+            // Update the last sign-in time in a separate unit of work with a freshly
+            // loaded user, so a concurrency conflict can't fail the current operation.
+            using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
+            {
+                var user = await Store.FindByIdAsync(id.ToString(), CancellationToken);
+                if (user == null || user.LastSignInTime >= lastSignInTime)
+                {
+                    return;
+                }
+
+                user.SetLastSignInTime(lastSignInTime);
+
+                var result = await UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    await uow.CompleteAsync();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            // This is a best-effort update. The user may be updated concurrently
+            // by another login or any other operation. Ignore the failure.
+            Logger.LogException(e);
+        }
     }
 
     public virtual async Task<IdentityResult> SetRolesAsync([NotNull] IdentityUser user,
