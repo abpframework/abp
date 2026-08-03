@@ -322,8 +322,7 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
             additionalClaims.ToArray()
         );
 
-        user.SetLastSignInTime(DateTimeOffset.UtcNow);
-        await UserManager.UpdateAsync(user);
+        await UserManager.UpdateLastSignInTimeAsync(user.Id);
 
         await IdentitySecurityLogManager.SaveAsync(
             new IdentitySecurityLogContext
