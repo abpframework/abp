@@ -23,7 +23,7 @@
     <PackageVersion Include="Blazorise.Components" Version="2.2.1" />
     <PackageVersion Include="Blazorise.DataGrid" Version="2.2.1" />
     <PackageVersion Include="Blazorise.Snackbar" Version="2.2.1" />
-    <PackageVersion Include="MudBlazor" Version="9.4.0" />
+    <PackageVersion Include="MudBlazor" Version="9.7.0" />
     <PackageVersion Include="Castle.Core" Version="5.2.1" />
     <PackageVersion Include="Castle.Core.AsyncInterceptor" Version="2.1.0" />
     <PackageVersion Include="CommonMark.NET" Version="0.15.1" />
