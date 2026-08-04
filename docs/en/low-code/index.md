@@ -111,7 +111,7 @@ The screens below follow that common designer flow from data to page setup to fo
 
 ![Form setup in the designer](images/designer-forms.png)
 
-For calculated fields that are materialized and remain queryable like normal properties, see [Formula Properties](formula-properties.md). For the shared syntax used by formulas, mappings, defaults, and backfills, see the [Low-Code Expression Language](expression-language.md) reference.
+For virtual fields calculated from the current record, related records, or related-record aggregates, see [Calculated and Rollup Properties](formula-properties.md). For the provider-safe scalar syntax used by calculated properties and formula backfills, see the [Low-Code Expression Language](expression-language.md) reference.
 
 ## React Runtime
 

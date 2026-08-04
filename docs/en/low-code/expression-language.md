@@ -1,59 +1,73 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Reference for the ABP Low-Code expression language used by calculated properties, mappings, defaults, and validations."
+    "Description": "Reference for the provider-safe ABP Low-Code expression language used by virtual calculated properties and formula backfills."
 }
 ```
 
 # Low-Code Expression Language
 
-The Low-Code expression language is a small, provider-safe language used in more than one designer workflow. It is used by formula properties and can also be used where the designer asks for an expression-backed value, such as mapped-property initial values or existing-data backfills.
+The Low-Code expression language is a provider-safe scalar profile used by virtual calculated properties and by the one-time **Formula** option for existing-data backfill. Its syntax is intentionally familiar to Power Fx users, but it is a smaller language designed for server validation and database-provider translation.
 
-The v1 syntax is intentionally familiar to Excel, Airtable, and Power Fx users while remaining translatable to a server-side expression tree. Expressions are evaluated by the server; they are not JavaScript and must not contain arbitrary code, SQL, network calls, or browser APIs.
+Expressions are not JavaScript. They cannot contain arbitrary code, SQL, network calls, browser APIs, side effects, or unsupported Power Fx table and record operations.
 
-> **Preview:** The language profile is preview functionality. The supported function set is deliberately smaller than the complete Excel or Power Fx languages.
+> **Preview:** The language profile is preview functionality. The supported syntax and function set may change before general availability.
 
 ## Values and field references
 
-Use numbers, quoted strings, Boolean values, and date constructors as literals. Reference a property by its name:
+Use invariant numeric literals, quoted strings, Boolean values, and date constructors. Reference a property by name:
 
 ```text
 UnitPrice * Quantity
 If(IsActive, "Enabled", "Disabled")
-Date(2026, 7, 28)
+Date(2026, 8, 4)
 ```
 
-Property names containing spaces can be enclosed in single quotes:
+Property and local names that are not simple identifiers can be enclosed in single quotes. Escape a single quote by doubling it:
 
 ```text
 'Unit Price' * Quantity
+'Manager''s Price' * Quantity
 ```
 
-Names and function names are case-insensitive. A field reference is resolved against the current entity, including fields backed by JSON and fields mapped to database columns.
+Names and function names are case-insensitive. Fields may be JSON-backed or mapped to database columns.
+
+### Related fields
+
+Use dot notation to traverse a configured foreign key and read a scalar field from the related record:
+
+```text
+CustomerId.CreditLimit
+If(CustomerId.IsPreferred, Amount * 90%, Amount)
+```
+
+Related paths may also contain quoted identifiers. The Designer loads the available fields for each relationship level and applies the backend's configured maximum traversal depth. Missing related values produce a blank result where the expression is nullable.
 
 ## Operators
 
 | Purpose | Operators and forms |
 | --- | --- |
-| Arithmetic | `+`, `-`, `*`, `/`, `%` |
-| Comparison | `=`, `<>`, `!=`, `<`, `<=`, `>`, `>=` |
-| Logical | `And(a, b)`, `Or(a, b)`, `Not(a)`, `&&`, `||`, `!` |
+| Arithmetic | `+`, `-`, `*`, `/` |
+| Comparison | `=`, `==`, `<>`, `!=`, `<`, `<=`, `>`, `>=` |
+| Logical | `And(a, b, ...)`, `Or(a, b, ...)`, `Not(a)`, `&&`, `||`, `!` |
 | Text concatenation | `&` |
 | Percentage | `10%` (equivalent to `10 / 100`) |
 
-`<>` and `!=` are equivalent not-equal operators. Use parentheses when combining arithmetic, comparison, and logical operators so the intended order is clear.
+`<>` and `!=` are equivalent not-equal operators. `=` and `==` are equivalent equality operators. `%` is the postfix percentage operator, not a modulo operator. Use parentheses when combining operations so the intended precedence is explicit.
+
+Division returns a nullable Decimal result because division by zero produces blank rather than forcing client-side evaluation.
 
 ## Functions
 
-The v1 profile supports the following functions:
+The current scalar profile supports these functions:
 
-```text
-If, Coalesce, IsBlank,
-Abs, Round, Floor, Ceiling, Min, Max,
-Concat, Lower, Upper, Trim, Len,
-Left, Right, Mid, Substring,
-Year, Month, Day, Date, DateTime
-```
+| Category | Functions |
+| --- | --- |
+| Conditional and blank values | `If(condition, trueValue, falseValue)`, `Coalesce(value, fallback)`, `IsBlank(value)` |
+| Logical | `And(condition1, condition2, ...)`, `Or(condition1, condition2, ...)`, `Not(condition)` |
+| Numeric | `Abs(number)`, `Round(number, places)`, `Min(left, right)`, `Max(left, right)` |
+| Text | `Lower(text)`, `Upper(text)`, `Trim(text)`, `Len(text)`, `Left(text, length)`, `Right(text, length)`, `Mid(text, start[, length])` |
+| Date and time | `Year(value)`, `Month(value)`, `Day(value)`, `Date(year, month, day)`, `DateTime(year, month, day, hour, minute, second[, millisecond])` |
 
 Examples:
 
@@ -61,14 +75,17 @@ Examples:
 If(Len(Name) > 5, "Long", "Short")
 Coalesce(Discount, 0)
 Round(UnitPrice * Quantity, 2)
-Concat(FirstName, " ", LastName)
+FirstName & " " & LastName
+Mid(ProductCode, 2, 3)
 ```
 
-`Round(value, places)` uses midpoint-away-from-zero semantics. Numeric and date literals use invariant syntax; the browser or database locale does not change their meaning.
+`Round` uses midpoint-away-from-zero semantics. `Mid` uses a one-based start position. `Date` and `DateTime` require literal numeric components in the provider-neutral profile. Numeric and date literals use invariant syntax; browser and database locale settings do not change their meaning.
+
+Functions from the full Power Fx language that are not listed here are rejected. For example, `Floor`, `Ceiling`, `Concat`, and `Substring` are not aliases for the supported scalar functions.
 
 ## Local values with `With`
 
-Use `With` to name intermediate values and avoid repeating calculations:
+Use `With` to define immutable local values and avoid repeating an expression:
 
 ```text
 With(
@@ -80,22 +97,29 @@ With(
 )
 ```
 
-Local variable names must not match properties on the current entity. This rule prevents an ambiguous reference during server-side translation.
+A `With` record supports up to 16 bindings, and `With` expressions can be nested up to 8 levels. A local name must not collide with a property on the current entity. Bindings in the same record do not see one another; nest another `With` when a later value must use an earlier local.
 
 ## Where expressions run
 
-The expression is compiled and validated on the server. For materialized values, writes are performed as provider-side operations so filtering, sorting, paging, and projections remain database operations. The server does not load the complete table into application memory to calculate a column.
+For a calculated property, the expression is expanded into the EF Core query. It can therefore participate in provider-side filtering, sorting, paging, count, projection, grouping, and supported aggregates without creating a physical column or loading the complete table into memory.
 
-The language does not support cross-row lookups, arbitrary SQL, JavaScript, network calls, or aggregate queries inside a row expression. Use a relation/query endpoint or a custom server endpoint for those scenarios.
+For an ordinary property mapping that uses **Formula** existing-data backfill, the same scalar profile is compiled into a provider-side update that initializes existing rows once. The mapped property then stores the result; this is separate from a virtual calculated property.
+
+Related-record aggregates are not written inside a formula expression. Create a [Rollup Property](formula-properties.md#create-a-rollup-property) for `Count`, `Sum`, `Average`, `Min`, or `Max` over related records.
 
 ## Validation errors
 
-The designer checks syntax, field references, function names, result type, dependencies, and provider translation before publishing an expression. Common errors are:
+The Designer validates syntax, field and related-field references, function arity and argument types, inferred result type, dependency cycles, server-only exposure, and translation by the active database provider. Validation covers transitive calculated dependencies, not only the expression currently being edited.
 
-* unknown property or function
-* incompatible result type
-* a `With` variable that collides with an entity property
+Common errors include:
+
+* unknown fields or functions
+* incompatible branch or result types
+* a local name that collides with an entity property
+* a circular formula or rollup dependency
+* a related path that exceeds backend query capabilities
 * an operation that the active provider cannot translate
-* a missing expression in a Formula backfill configuration
 
-See [Formula Properties](formula-properties.md) for the materialized-column workflow and storage behavior.
+Provider translation failure is a validation error. The runtime does not fall back to evaluating the entire entity set in application memory.
+
+See [Calculated and Rollup Properties](formula-properties.md) for the Designer workflows and query behavior.
