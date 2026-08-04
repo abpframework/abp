@@ -15,10 +15,12 @@ namespace Volo.Abp.Identity.MongoDB;
 
 public class MongoIdentitySessionRepository : MongoDbRepository<IAbpIdentityMongoDbContext, IdentitySession, Guid>, IIdentitySessionRepository
 {
-    public MongoIdentitySessionRepository(IMongoDbContextProvider<IAbpIdentityMongoDbContext> dbContextProvider)
+    protected IClock Clock { get; }
+
+    public MongoIdentitySessionRepository(IMongoDbContextProvider<IAbpIdentityMongoDbContext> dbContextProvider, IClock clock)
         : base(dbContextProvider)
     {
-
+        Clock = clock;
     }
 
     public virtual async Task<IdentitySession> FindAsync(string sessionId, CancellationToken cancellationToken = default)
@@ -93,7 +95,7 @@ public class MongoIdentitySessionRepository : MongoDbRepository<IAbpIdentityMong
 
     public virtual async Task DeleteAllAsync(TimeSpan inactiveTimeSpan, CancellationToken cancellationToken = default)
     {
-        var now = LazyServiceProvider.LazyGetRequiredService<IClock>().Now;
-        await DeleteDirectAsync(x => x.LastAccessed == null || x.LastAccessed < now.Subtract(inactiveTimeSpan), cancellationToken: cancellationToken);
+        var inactiveTime = Clock.Now.Subtract(inactiveTimeSpan);
+        await DeleteDirectAsync(x => (x.LastAccessed ?? x.SignedIn) < inactiveTime, cancellationToken: cancellationToken);
     }
 }
