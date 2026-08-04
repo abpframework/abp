@@ -49,6 +49,8 @@ Client applications cannot set a calculated property. Enable **Server only** whe
 
 A rollup evaluates a correlated aggregate over related records. For example, an `Order` can expose the sum of `OrderItem.LineTotal` values when `OrderItem.OrderId` is a foreign key to `Order`.
 
+`Sum` is a rollup operation, not a function that can be written inside a scalar formula. The relationship is evaluated in the reverse direction: the source entity contains the foreign key that points to the entity receiving the rollup.
+
 1. Open **Add Property** and select **Rollup Property**.
 2. Select the **Source Entity** that contains the related records.
 3. Select the **Relation Field** whose foreign key points to the current entity.
@@ -56,7 +58,14 @@ A rollup evaluates a correlated aggregate over related records. For example, an 
 5. For every operation except `Count`, select the **Value Field**.
 6. Review validation and select **Create Rollup Property**.
 
-`Count` returns a Long value and does not use a value field. `Sum` and `Average` require a numeric value field. `Min` and `Max` preserve a compatible scalar type. A rollup value may be a normal field or a formula property, but it cannot be another rollup.
+| Operation | Value field | Result |
+| --- | --- | --- |
+| `Count` | Not used | Long |
+| `Sum` | Int, Long, Decimal, or Money | Preserves a compatible numeric range |
+| `Average` | Int, Long, Decimal, or Money | Decimal, or Money for a Money value |
+| `Min` / `Max` | String, Int, Long, Decimal, Money, Boolean, Date, or DateTime | Preserves a compatible scalar type |
+
+A rollup value may be a normal field or a formula property, but it cannot be another rollup. Formulas can reference other calculated properties, including rollup results, and the complete dependency graph is validated for cycles and provider translation.
 
 ## Storage and query behavior
 

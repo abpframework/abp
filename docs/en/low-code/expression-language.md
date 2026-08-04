@@ -11,6 +11,8 @@ The Low-Code expression language is a provider-safe scalar profile used by virtu
 
 Expressions are not JavaScript. They cannot contain arbitrary code, SQL, network calls, browser APIs, side effects, or unsupported Power Fx table and record operations.
 
+An expression can contain up to 4096 characters.
+
 > **Preview:** The language profile is preview functionality. The supported syntax and function set may change before general availability.
 
 ## Values and field references
@@ -104,6 +106,13 @@ A `With` record supports up to 16 bindings, and `With` expressions can be nested
 For a calculated property, the expression is expanded into the EF Core query. It can therefore participate in provider-side filtering, sorting, paging, count, projection, grouping, and supported aggregates without creating a physical column or loading the complete table into memory.
 
 For an ordinary property mapping that uses **Formula** existing-data backfill, the same scalar profile is compiled into a provider-side update that initializes existing rows once. The mapped property then stores the result; this is separate from a virtual calculated property.
+
+During JSON-to-database mapping, use `Self` to read the property's current JSON value before it is moved to the database column:
+
+```text
+Coalesce(Self, "Unknown")
+Self & " migrated"
+```
 
 Related-record aggregates are not written inside a formula expression. Create a [Rollup Property](formula-properties.md#create-a-rollup-property) for `Count`, `Sum`, `Average`, `Min`, or `Max` over related records.
 
