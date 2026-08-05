@@ -1,13 +1,13 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Internal draft for adding the Low-Code designer and a companion React runtime to an existing MVC, Razor Pages, Blazor, or Angular ABP application."
+    "Description": "Add the Low-Code designer and a companion React runtime to an existing MVC, Razor Pages, Blazor, or Angular ABP application."
 }
 ```
 
 # Use Low-Code from a Non-React Application
 
-> **Internal draft and target release:** This page is intentionally not linked from the Low-Code index or the documentation navigation. It targets the ABP `10.6.x` release line and .NET `10`. Keep the existing solution, Admin Console, Low-Code backend, and companion React packages on the same `10.6.x` patch version.
+> **Target release:** This guide targets the ABP `10.6.x` release line and .NET `10`. Keep the existing solution, Admin Console, Low-Code backend, and companion React packages on the same `10.6.x` patch version.
 
 > **Verification history:** The workflow was first verified on July 22, 2026 with ABP `10.5.0`, .NET `10`, a layered MVC application, a layered Angular application, and a layered Blazor Web App application. Version-specific `10.5.0` observations below are historical regression checkpoints, not package-version instructions for a `10.6.x` solution.
 

@@ -2118,6 +2118,14 @@
           "path": "low-code/react-runtime.md"
         },
         {
+          "text": "Add to an Existing Solution",
+          "path": "low-code/add-to-existing-solution.md"
+        },
+        {
+          "text": "Non-React UI Integration",
+          "path": "low-code/non-react-ui-integration.md"
+        },
+        {
           "text": "Health",
           "path": "low-code/health.md"
         },
