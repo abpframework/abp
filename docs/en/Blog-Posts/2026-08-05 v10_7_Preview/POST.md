@@ -98,6 +98,17 @@ This release also includes important reliability improvements:
 
 > Check the [Package Version Changes](https://abp.io/docs/10.7/package-version-changes) document for all dependency updates.
 
+## Community News
+
+### New ABP Community Articles
+
+As always, exciting articles have been contributed by the ABP community. I will highlight some of them here:
+
+- [How I Use a Custom AI Skill to Upgrade a Large ABP Solution](https://abp.io/community/articles/how-i-use-a-custom-ai-skill-to-upgrade-a-large-abp-solution-h5fllft1) by [Kori Francis](https://github.com/kfrancis)
+- [Why Does My Tiered ABP App Show an Empty Menu While the User Is Still Signed In?](https://abp.io/community/articles/why-does-my-tiered-abp-app-show-an-empty-menu-while-the-user-7g46886w) by [Kori Francis](https://github.com/kfrancis)
+
+Thanks to the ABP Community for all the content they have published. You can also [post your ABP related (text or video) content](https://abp.io/community/posts/create) to the ABP Community.
+
 ## Conclusion
 
 ABP v10.7 RC introduces BLOB encryption and a content pipeline, HTTP QUERY support, Angular Resource API helpers, and new ABP Suite and ABP Studio capabilities. Please try the release and provide feedback to help us finalize ABP v10.7.
