@@ -7,7 +7,9 @@
 
 # Use Low-Code from a Non-React Application
 
-> **Internal draft:** This page is intentionally not linked from the Low-Code index or the documentation navigation. The workflow was verified on July 22, 2026 with ABP `10.5.0`, .NET `10`, a layered MVC application, a layered Angular application, and a layered Blazor Web App application.
+> **Internal draft and target release:** This page is intentionally not linked from the Low-Code index or the documentation navigation. It targets the ABP `10.6.x` release line and .NET `10`. Keep the existing solution, Admin Console, Low-Code backend, and companion React packages on the same `10.6.x` patch version.
+
+> **Verification history:** The workflow was first verified on July 22, 2026 with ABP `10.5.0`, .NET `10`, a layered MVC application, a layered Angular application, and a layered Blazor Web App application. Version-specific `10.5.0` observations below are historical regression checkpoints, not package-version instructions for a `10.6.x` solution.
 
 > **Verification boundary:** Anonymous and authorized menu rendering was verified for MVC, Angular, and Blazor. On July 22, 2026, the complete workflow was also reapplied to a fresh layered MVC solution: Studio import, migration and seed, Admin Console filtering, same-host React build, anonymous and authorized menus, OIDC-protected deep-link return, entity and Data Grid creation, runtime record creation, scoped fallback, and **Back to the application** navigation all passed. The standalone Blazor sample used a separate authority, so its authenticated remote-menu call was not used as proof for a production topology; keep the Blazor UI and Low-Code API on the same backend and authority as described below.
 
@@ -89,7 +91,7 @@ protected override void OnModelCreating(ModelBuilder builder)
 
 `ConfigureDynamicEntities()` must run before the base model conventions, while `ConfigureLowCode()` stays after the base call. Also run the Low-Code initializer before design-time DbContext creation. Otherwise, generated migrations can be incomplete or the runtime and design-time EF Core models can diverge.
 
-Studio may create `Added_DynamicEntities_LowCode` and insert both configuration calls. In the verified ABP `10.5.0` solution, Studio placed both calls after the base call, so the first call had to be moved manually. After completing all backend wiring, run `dotnet ef migrations has-pending-model-changes` against the EF Core project with DbMigrator as the startup project. Keep Studio's migration when no changes remain; do not add a duplicate migration.
+Studio may create `Added_DynamicEntities_LowCode` and insert both configuration calls. In the historically verified ABP `10.5.0` solution, Studio placed both calls after the base call, so the first call had to be moved manually. Inspect the generated `10.6.x` result instead of assuming the generator still behaves identically. After completing all backend wiring, run `dotnet ef migrations has-pending-model-changes` against the EF Core project with DbMigrator as the startup project. Keep Studio's migration when no changes remain; do not add a duplicate migration.
 
 ABP Studio is the supported path in this guide. The remaining steps assume Studio has already added the Low-Code runtime and designer packages to the appropriate layers.
 
@@ -102,7 +104,7 @@ Add the package to the runnable host:
 ```powershell
 abp add-package Volo.Abp.AdminConsole `
   --project "src\Acme.NonReactLowCode.Web\Acme.NonReactLowCode.Web.csproj" `
-  --version 10.5.0
+  --version 10.6.0
 ```
 
 Add the module dependency:
@@ -257,7 +259,7 @@ This is global UI composition, not authorization. The omitted modules, applicati
 
 Permissions are shared by the existing UI and Admin Console, and grants are additive. The controller allowlist avoids changing those shared grants merely to shape Admin Console. A user still needs the required Low-Code permission even when `lowCodeDesigner` is returned as `true`.
 
-The Admin Console home page and authenticated account pages are core routes and remain available. In ABP `10.5.0`, the home page's management cards and Quick Navigation links are static and do not consume the module discovery response. Hidden module links on that page therefore lead to `404`. Link users directly to `/admin-console/lowcode-designer`, keep `RedirectRootToAdminConsole` disabled, and treat the Admin Console root as a known limitation. Removing or redesigning that static home content requires a custom Admin Console frontend. Keep `CustomizationPermissionName` unset or `null` to avoid registering the customization route.
+The Admin Console home page and authenticated account pages are core routes and remain available. In the historically verified ABP `10.5.0` package, the home page's management cards and Quick Navigation links were static and did not consume the module discovery response. Verify that behavior with the installed `10.6.x` patch. If the current package still uses static cards, hidden module links on that page lead to `404`; link users directly to `/admin-console/lowcode-designer`, keep `RedirectRootToAdminConsole` disabled, and treat the Admin Console root as a known limitation. Removing or redesigning that static home content requires a custom Admin Console frontend. Keep `CustomizationPermissionName` unset or `null` to avoid registering the customization route.
 
 The module keys are an Admin Console frontend contract and can change when the package is upgraded. Compare `KnownModuleKeys` with the upgraded `AdminConsoleModuleDiscoveryController` and React route configuration during every ABP upgrade. The explicit validation above makes a missing or unknown allowlist fail the discovery request instead of silently exposing additional modules.
 
@@ -265,9 +267,41 @@ The module keys are an Admin Console frontend contract and can change when the p
 
 The safest source for the companion application is a temporary solution generated at exactly the same ABP version. In ABP Studio, create a modern React application with Low-Code enabled and use the same tenancy, authentication, theme, and database-provider choices as the existing solution.
 
+Before adapting or copying the frontend, establish whether that generated `10.6.x` seed is clean on its own:
+
+```powershell
+cd react
+yarn install --frozen-lockfile
+yarn lint
+yarn test:run
+yarn build
+```
+
+Use the scripts and package manager declared by the generated application when their names differ. If the untouched seed fails, record and resolve that template baseline separately; otherwise later failures can be misattributed to the `/lowcode` integration. Do not replace its lockfile or switch package managers merely to make the commands pass.
+
+Testing Library packages have peer dependencies. If the test runner or TypeScript cannot resolve `screen`, `waitFor`, or `fireEvent`, inspect `package.json` and the lockfile. Add a compatible `@testing-library/dom` version only when it is missing; the historical `10.5.0` seed required `@testing-library/dom@10.4.1`, while a generated `10.6.x` patch may already declare a compatible version.
+
 Copy the generated `react/` directory into the existing solution, for example as `lowcode-react/`. Keep the generated ABP authentication, Axios, localization, `configureLowCode`, `createDynamicRoutes`, and `useMenuItems` integration.
 
 Do not copy the temporary backend. The companion React application must use the existing application's backend and database.
+
+### Rename and Localize the Companion Application
+
+The copied frontend still contains the temporary solution's identity. Update it before building the application that will be deployed:
+
+* Change the package name in `package.json` without discarding the generated lockfile.
+* Replace the HTML `<title>` in `index.html`.
+* Update `application.name`, `apis.default.rootNamespace`, client IDs, scopes, and URLs in `dynamic-env.json` and the development environment source.
+* Replace the temporary application's `::AppName` and resource-qualified keys in `src/locales/*.json`.
+* Add `Menu:LowCodeDesigner` to the localization resource actually loaded by the companion runtime. Adding it only to the MVC, Angular, or Blazor resource does not update a copied React localization snapshot.
+
+Search the copied frontend for the temporary solution and client names. Review every match instead of doing a blind replacement because generated test fixtures can intentionally assert a client ID:
+
+```powershell
+rg "TemporaryProjectName|TemporaryProjectName_App" lowcode-react
+```
+
+After the build, verify the browser tab title, application name, and menu labels. A raw value such as `Menu:LowCodeDesigner` means the key is absent from the active React localization resource.
 
 ### Configure the `/lowcode` Base Path
 
@@ -377,6 +411,8 @@ Build the companion application with its existing package manager:
 ```powershell
 cd lowcode-react
 yarn install --frozen-lockfile
+yarn lint
+yarn test:run
 yarn build
 ```
 
@@ -482,6 +518,17 @@ async function bootstrap() {
 ```
 
 The session storage entry contains only a route URL, is scoped to the runtime origin and tab, and must be removed after success or failure. It is not an authorization token. The backend still authorizes the generated page and data endpoint.
+
+### Update Tests for the `/lowcode` Subpath
+
+The generated tests describe a root-hosted application. Update their expectations together with the implementation instead of accepting a production build while leaving the test suite red:
+
+* Route-guard tests should expect the preserved absolute browser URL, including `/lowcode`, rather than only a TanStack path such as `/dashboard`.
+* Forbidden and account-navigation tests should expect a base-aware destination such as `/lowcode/403`; avoid assertions that assign directly to JSDOM's unimplemented navigation API.
+* If you remove the generated Home or Identity Users UI, remove or rewrite the tests that still expect those screens and menu items.
+* Keep OIDC callback tests for a valid same-origin `/lowcode/` URL, rejection of an external or out-of-base URL, consume-once session storage, and restoration of query strings.
+
+Run `yarn lint`, `yarn test:run`, and `yarn build` after these changes. Do not weaken the deep-link, authorization, or antiforgery behavior only to preserve an obsolete root-hosted test expectation.
 
 ### Add Back to the Application
 
@@ -1012,6 +1059,9 @@ Build the companion React runtime for every UI choice:
 
 ```powershell
 cd lowcode-react
+yarn install --frozen-lockfile
+yarn lint
+yarn test:run
 yarn build
 ```
 
@@ -1071,7 +1121,9 @@ Verify these behaviors in a browser:
 | Angular `Dynamic` remains hidden after login | Verify the `Default` API URL, access token, menu-items request, and the `RoutesService.patch` name. The fail-closed example intentionally remains hidden on request failure. |
 | Blazor menu disappears after the page becomes interactive | In Blazor Web App interactive Auto or WebAssembly mode, add the same `LowCodeUi` section to the client `wwwroot/appsettings.json` as well as the server configuration. |
 | Blazor throws `No policy found` for Designer | Add the Designer application contracts package and `AbpLowCodeDesignerApplicationContractsModule` to the UI host/client that composes the menu. |
-| Generated React seed fails to type-check test imports | Ensure its Testing Library peer dependencies are installed at compatible versions. The verified seed required `@testing-library/dom@10.4.1`. |
+| Generated React seed fails to type-check test imports | Inspect its Testing Library peer dependencies. Add a compatible `@testing-library/dom` only when missing; the historical `10.5.0` seed required `10.4.1`, while the generated `10.6.x` application may already include it. |
+| Companion title or menu still shows the temporary project name or `Menu:LowCodeDesigner` | Rename `index.html`, package/application identity, and the copied `src/locales/*.json` resource. Confirm that the localization key exists in the resource loaded by React, not only in the existing UI's resource. |
+| Production build passes but companion tests fail after moving to `/lowcode` | Update root-hosted guard, redirect, OIDC-return, and removed-screen expectations for the subpath. Run lint and tests in addition to the build. |
 | DbMigrator exits with `ABP-LIC-0020` although a secrets file exists | Run it from the project directory containing `appsettings.secrets.json`, or use the deployment's supported secret provider. Never commit or print the license value. |
 
 ## See Also
