@@ -73,7 +73,13 @@ This option requires Angular 22 or later and is disabled by default, so existing
 
 ### ABP Suite React CRUD Page Generation
 
-ABP Suite now supports generating CRUD pages for React applications. The generated pages support common scenarios including master-detail and many-to-many relationships, and the templates can be customized for your application's conventions.
+ABP Suite now supports generating CRUD pages for React applications, bringing the same productive code-generation experience available for other ABP UI options to React projects.
+
+Generated React pages include list, search, sorting, paging, filtering, export, create, edit, single and bulk delete operations. They also support validation, permissions, localization, file upload, navigation properties, many-to-many relationships, and master-detail pages with child create, edit, delete, and paging operations.
+
+The generator respects the entity and field configuration you define in ABP Suite, including `ShowOn*`, `IsFilterable`, and `ReadonlyOnEdit` options. Navigation lookups use server-side search, and navigation and many-to-many filters are generated for EF Core solutions.
+
+![React CRUD page generation demo](react-crud-page.mp4)
 
 ### ABP Studio MCP Configuration
 
