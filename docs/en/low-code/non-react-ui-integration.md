@@ -104,7 +104,7 @@ Add the package to the runnable host:
 ```powershell
 abp add-package Volo.Abp.AdminConsole `
   --project "src\Acme.NonReactLowCode.Web\Acme.NonReactLowCode.Web.csproj" `
-  --version 10.6.0
+  --version <AbpVersion>
 ```
 
 Add the module dependency:
