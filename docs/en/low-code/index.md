@@ -51,6 +51,8 @@ The generated React project includes:
 * `useMenuItems`
 * Page, form, dashboard, file, and attachment hooks
 
+If you already have a compatible solution and want to retrofit Low-Code later, see [Add Low-Code to an Existing Solution](add-to-existing-solution.md). When the existing UI is MVC, Razor Pages, Angular, or Blazor, continue with [Use Low-Code from a Non-React Application](non-react-ui-integration.md) for the companion runtime and navigation integration.
+
 The host application wires the low-code modules, calls the generated `_Dynamic` initializer, configures EF Core dynamic entities, and seeds the required OpenIddict clients.
 
 Generated solutions keep source-controlled low-code assets under `_Dynamic`:
@@ -172,6 +174,8 @@ The designer stores and reads the same descriptor metadata described in the refe
 | Topic | Use it for |
 |-------|------------|
 | [Designer](designer.md) | Admin Console tabs, entity/page/form setup, permissions, and health |
+| [Add Low-Code to an Existing Solution](add-to-existing-solution.md) | Retrofitting an existing EF Core solution with Studio import plus manual backend and React wiring |
+| [Use Low-Code from a Non-React Application](non-react-ui-integration.md) | Keeping an MVC, Razor Pages, Angular, or Blazor UI while hosting the React Low-Code runtime and Designer alongside it |
 | [React Runtime](react-runtime.md) | React package wiring, routes, menu items, filters, forms, and export |
 | [Health](health.md) | Selected-layer readiness review across entities, pages, forms, page groups, permissions, and scripts |
 | [Dashboards](dashboards.md) | Dashboard page descriptors, visualization layout, filters, and runtime data flow |
@@ -201,6 +205,8 @@ The generated pages are powered by these services:
 ## See Also
 
 * [Low-Code Designer](designer.md)
+* [Add Low-Code to an Existing Solution](add-to-existing-solution.md)
+* [Use Low-Code from a Non-React Application](non-react-ui-integration.md)
 * [React Runtime](react-runtime.md)
 * [Health](health.md)
 * [Dashboards](dashboards.md)
