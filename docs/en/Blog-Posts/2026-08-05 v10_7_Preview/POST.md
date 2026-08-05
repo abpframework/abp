@@ -14,7 +14,7 @@ By default, ABP Studio uses stable versions to create solutions. To use a previe
 
 ## Migration Guide
 
-There are no explicitly marked breaking changes in ABP v10.7 RC. Most applications can upgrade their ABP packages normally. The BLOB encryption and content pipeline features are opt-in; if you enable either feature for a container that already has BLOBs, follow the migration steps in the [ABP Version 10.7 Migration Guide](https://abp.io/docs/10.7/release-info/migration-guides/abp-10-7).
+There are no explicitly marked breaking changes in ABP v10.7 RC. You can check the [ABP Version 10.7 Migration Guide](https://abp.io/docs/10.7/release-info/migration-guides/abp-10-7) if you are upgrading from v10.6 or earlier.
 
 ## What's New with ABP v10.7?
 
