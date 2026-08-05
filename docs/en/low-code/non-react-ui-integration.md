@@ -761,7 +761,7 @@ private static async Task ConfigureMainMenuAsync(
             order: 4,
             target: "_self"
         ).RequireAuthenticated()
-         .RequirePermissions(AbpLowCodeDesignerPermissions.Designer.Default)
+         .RequirePermissions("AbpLowCodeDesigner.Default")
     );
 }
 ```
