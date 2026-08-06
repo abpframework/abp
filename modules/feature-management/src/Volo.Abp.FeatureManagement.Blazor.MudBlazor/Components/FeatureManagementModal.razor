@@ -16,7 +16,7 @@
         }
         else
         {
-            <MudTabs KeepPanelsAlive="true" @bind-ActivePanelIndex="@_activeTabIndex" Variant="Variant.Pills" Position="Position.Left"
+            <MudTabs @bind-ActivePanelIndex="@_activeTabIndex" Variant="Variant.Pills" Position="Position.Left"
                 PanelClass="pa-4">
                 @foreach (var group in Groups)
                 {
