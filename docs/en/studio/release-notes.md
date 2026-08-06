@@ -9,7 +9,18 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 3.0.8 (2026-07-28) Latest
+## 3.0.9 (2026-08-06) Latest
+
+* Sync React admin console template with OpenIddict generate access token UI
+* Angular - Updating the version to 22 and fixing bugs on samples
+* Use a per-connection in-memory SQLite database in template tests
+* Fix MudBlazor MAUI Blazor template referencing Blazorise UI packages
+* Add disk cleanup step to Azure DevOps pipelines
+* Update version to 10.6.0
+* Fix author select showing `Guid.Empty` in MudBlazor Books sample
+* Sync Admin Console PathBase support to React modern template
+
+## 3.0.8 (2026-07-28)
 
 * Add BLOB storage provider options
 * Improve custom LLM provider connection UX
