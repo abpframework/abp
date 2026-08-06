@@ -404,7 +404,7 @@ ABP Studio import currently does not retrofit the React runtime automatically. Y
 Use the package manager already used by your `react/` folder. Replace `<AbpVersion>` with the version used by the existing ABP packages and `<FontAwesomeVersion>` with the compatible version declared by a Low-Code React template generated for that ABP version:
 
 ```bash
-npm install @volo/abp-react-lowcode@<AbpVersion> @fortawesome/fontawesome-free@<FontAwesomeVersion>
+npm install "@volo/abp-react-lowcode@<AbpVersion>" "@fortawesome/fontawesome-free@<FontAwesomeVersion>"
 ```
 
 The generated Low-Code React templates also include `@fortawesome/fontawesome-free` because dynamic page and page-group icons are stored as Font Awesome class names.
