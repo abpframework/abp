@@ -11,7 +11,7 @@ This document provides a general overview of the relationship between various ve
 
 | **ABP Studio Version** | **ABP Version of Startup Template**        |
 |------------------------|---------------------------|
-| 3.0.9                  | 10.6.0                      |
+| 3.0.9                  | 10.6.0                    |
 | 3.0.6 - 3.0.8          | 10.5.0                    |
 | 3.0.4 - 3.0.5          | 10.4.1                    |
 | 3.0.3                  | 10.4.0                    |
