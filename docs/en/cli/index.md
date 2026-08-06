@@ -816,7 +816,7 @@ abp generate-proxy -t csharp -url https://localhost:44302/
      - `--module`:  Backend module name. Default value: `app`.
      - `--entry-point`: Targets the Angular project to place the generated code.
      - `--url`: Specifies api definition url. Default value is API Name's url in environment file.
-     - `--resource-api`: Adds optional Resource API helpers for `GET` endpoints while keeping the generated Observable services. This parameter requires Angular v22 or later.
+     - `--resource-api`: Generates the `GET` endpoints against the Resource API: they return an `rxResource`-based `ResourceRef` and take their parameters as a single `Signal` (a parameterless endpoint has no signal parameter and the optional `config` argument is unchanged), instead of returning an `Observable`. Off by default. This parameter requires Angular v22 or later.
      - `--prompt` or `-p`: Asks the options from the command line prompt (for the unspecified options).
   - `js`: JavaScript. work in the `*.Web` project directory. There are some additional options for this client:
     - `--output` or `-o`: JavaScript file path or folder to place generated code in.
