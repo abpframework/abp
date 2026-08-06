@@ -11,9 +11,7 @@
 
 This guide explains how to add the ABP Low-Code System to an existing solution instead of generating a new solution with Low-Code enabled from the beginning.
 
-This guide targets the ABP `10.6.x` release line and .NET `10`. Keep every ABP and Low-Code package on the same `10.6.x` patch version as the existing solution; do not copy a `10.5.x` version from an older example into a `10.6.x` application.
-
-The workflow was first verified on July 21, 2026 on an existing layered `Acme.BookStore` solution and reverified end to end on July 22, 2026 with a fresh layered MVC solution created with ABP `10.5.0` and .NET `10`. Those version-specific observations are retained as verification history, not as package-version instructions for this `10.6.x` guide.
+Keep every ABP and Low-Code package aligned with the ABP version used by the existing solution. When an example contains a version placeholder, replace it with that version instead of copying a version from another solution.
 
 ## Supported Scenarios
 
@@ -32,7 +30,7 @@ This guide does **not** cover:
 
 When you import `Volo.Abp.LowCode` from ABP Studio, Studio can add the backend package references and the related ABP module dependencies for you.
 
-In the verified `Acme.BookStore` example, the import step added or updated:
+Depending on the solution structure, the import step can add or update:
 
 * `Volo.Abp.LowCode.*` package references in the backend projects
 * `[DependsOn]` entries in the ABP module classes
@@ -73,7 +71,7 @@ For **no-layers** and similar compatible templates, the flow is the same: accept
 
 ![Accept the suggested packages](images/existing-solution-package-selection.png)
 
-Studio can also create a migration and insert the two Low-Code model configuration calls. Inspect both results instead of adding a second migration immediately. In the historically verified ABP `10.5.0` solution, Studio appended both calls after `base.OnModelCreating(builder)`; `ConfigureDynamicEntities()` had to be moved before the base call as shown in Step 5. Inspect the generated `10.6.x` result as well instead of assuming that an earlier generator behavior is unchanged.
+Studio can also create a migration and insert the two Low-Code model configuration calls. Inspect both results instead of adding a second migration immediately. In particular, verify that `ConfigureDynamicEntities()` appears before `base.OnModelCreating(builder)` as shown in Step 5; move it when Studio inserts both calls after the base call.
 
 ## Step 2: Create the `_Dynamic` Folder
 
@@ -403,10 +401,10 @@ ABP Studio import currently does not retrofit the React runtime automatically. Y
 
 ### Install the Packages
 
-Use the package manager already used by your `react/` folder and keep the version aligned with the rest of your ABP packages:
+Use the package manager already used by your `react/` folder. Replace `<AbpVersion>` with the version used by the existing ABP packages and `<FontAwesomeVersion>` with the compatible version declared by a Low-Code React template generated for that ABP version:
 
 ```bash
-npm install @volo/abp-react-lowcode@~10.6.0 @fortawesome/fontawesome-free@6.5.1
+npm install "@volo/abp-react-lowcode@<AbpVersion>" "@fortawesome/fontawesome-free@<FontAwesomeVersion>"
 ```
 
 The generated Low-Code React templates also include `@fortawesome/fontawesome-free` because dynamic page and page-group icons are stored as Font Awesome class names.
@@ -439,7 +437,7 @@ configureLowCode({
 })
 ```
 
-The Low-Code React source template contains the Axios antiforgery configuration below, but do not assume every distributed template artifact contains it. The ABP `10.5.0` artifact used during the historical verification omitted both values even though the source template contained them. Always inspect the generated `10.6.x` shared Axios instance, keep the values when present, and add them when absent. Do not create a second client for Low-Code requests.
+The Low-Code React source template contains the Axios antiforgery configuration below, but do not assume every distributed template artifact contains it. Inspect the generated application's shared Axios instance, keep the values when present, and add them when absent. Do not create a second client for Low-Code requests.
 
 ```ts
 export const api = axios.create({
@@ -564,7 +562,7 @@ npm run build
 
 If the application uses Yarn, use the equivalent locked install and existing scripts, for example `yarn install --frozen-lockfile`, `yarn lint`, `yarn test:run`, and `yarn build`. Do not silently replace the lockfile or switch package managers while adding Low-Code.
 
-Testing Library packages have peer dependencies. If TypeScript or the test runner cannot resolve exports such as `screen`, `waitFor`, or `fireEvent`, inspect the generated package manifest before changing application code. Install a compatible `@testing-library/dom` version when it is missing; the earlier `10.5.0` seed required `@testing-library/dom@10.4.1`. A newly generated `10.6.x` seed may already contain a compatible dependency, so do not add a duplicate version without checking.
+Testing Library packages have peer dependencies. If TypeScript or the test runner cannot resolve exports such as `screen`, `waitFor`, or `fireEvent`, inspect the generated package manifest before changing application code. Install a compatible `@testing-library/dom` version only when it is missing; do not add a duplicate version without checking the manifest and lockfile.
 
 If you only want to test the runtime interactively, you can also run the React development server and open the host plus React app together.
 
@@ -602,8 +600,8 @@ http://localhost:<react-port>/dynamic/<page-name>
 | `/admin-console/lowcode-designer` returns `404` | The runnable host does not contain `Volo.Abp.AdminConsole`/`AbpAdminConsoleModule`, or Studio did not install the Designer HTTP API packages into the host. |
 | `/admin-console/lowcode-designer` returns `403` in an existing solution | The admin role does not have the `AbpLowCodeDesigner.Default` permission yet. This can happen when Low-Code is added after the database was already created. Re-run your migration/seed flow and verify the permission grant. |
 | Admin Console also shows other management interfaces | This is expected when other installed modules expose Admin Console UIs. Use an explicit discovery allowlist if the product requires Designer-only composition; authorization and backend APIs remain separate. |
-| Admin Console links to an omitted module from its home page | In the historically verified ABP `10.5.0` Admin Console, the built-in home cards and Quick Navigation links were static. Verify this behavior after each `10.6.x` upgrade. Link users directly to Designer or customize the Admin Console frontend when the current package still exposes static links; omitted routes return `404`. |
-| React tests cannot resolve `screen`, `waitFor`, or `fireEvent` | Inspect the Testing Library peer dependencies in the generated `10.6.x` application. If `@testing-library/dom` is missing, add a compatible version; the earlier verified seed used `10.4.1`. |
+| Admin Console links to an omitted module from its home page | Check whether the installed Admin Console uses static home cards and Quick Navigation links. Link users directly to Designer or customize the Admin Console frontend when it still exposes static links; omitted routes return `404`. |
+| React tests cannot resolve `screen`, `waitFor`, or `fireEvent` | Inspect the Testing Library peer dependencies in the generated application. If `@testing-library/dom` is missing, add a version compatible with the existing Testing Library packages. |
 | Designer opens but user lookups show raw IDs | The `IdentityUser` reference registration is missing from the initializer |
 | React app has no dynamic menu items | The user is anonymous, `useMenuItems` is not wired into your navigation, or the signed-in user does not have any generated page permission |
 | Dynamic routes do not resolve | `createDynamicRoutes` was not added to the router tree |
