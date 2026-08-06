@@ -7,15 +7,11 @@
 
 # Use Low-Code from a Non-React Application
 
-> **Target release:** This guide targets the ABP `10.6.x` release line and .NET `10`. Keep the existing solution, Admin Console, Low-Code backend, and companion React packages on the same `10.6.x` patch version.
-
-> **Verification history:** The workflow was first verified on July 22, 2026 with ABP `10.5.0`, .NET `10`, a layered MVC application, a layered Angular application, and a layered Blazor Web App application. Version-specific `10.5.0` observations below are historical regression checkpoints, not package-version instructions for a `10.6.x` solution.
-
-> **Verification boundary:** Anonymous and authorized menu rendering was verified for MVC, Angular, and Blazor. On July 22, 2026, the complete workflow was also reapplied to a fresh layered MVC solution: Studio import, migration and seed, Admin Console filtering, same-host React build, anonymous and authorized menus, OIDC-protected deep-link return, entity and Data Grid creation, runtime record creation, scoped fallback, and **Back to the application** navigation all passed. The standalone Blazor sample used a separate authority, so its authenticated remote-menu call was not used as proof for a production topology; keep the Blazor UI and Low-Code API on the same backend and authority as described below.
+> Keep the existing solution, Admin Console, Low-Code backend, and companion React packages aligned with the same ABP version. When an example contains a version placeholder, replace it with the version used by the existing solution.
 
 The Low-Code backend is independent of the application's main UI framework. The current Low-Code runtime renderer, however, is React. An existing MVC, Razor Pages, Blazor, or Angular application can therefore keep its current UI and open generated Low-Code pages in a companion React application.
 
-This is the verified topology:
+Use this topology:
 
 | URL | Owner | Purpose |
 |-----|-------|---------|
@@ -91,7 +87,7 @@ protected override void OnModelCreating(ModelBuilder builder)
 
 `ConfigureDynamicEntities()` must run before the base model conventions, while `ConfigureLowCode()` stays after the base call. Also run the Low-Code initializer before design-time DbContext creation. Otherwise, generated migrations can be incomplete or the runtime and design-time EF Core models can diverge.
 
-Studio may create `Added_DynamicEntities_LowCode` and insert both configuration calls. In the historically verified ABP `10.5.0` solution, Studio placed both calls after the base call, so the first call had to be moved manually. Inspect the generated `10.6.x` result instead of assuming the generator still behaves identically. After completing all backend wiring, run `dotnet ef migrations has-pending-model-changes` against the EF Core project with DbMigrator as the startup project. Keep Studio's migration when no changes remain; do not add a duplicate migration.
+Studio may create `Added_DynamicEntities_LowCode` and insert both configuration calls. Inspect the generated result and move `ConfigureDynamicEntities()` before the base call when Studio places both calls after it. After completing all backend wiring, run `dotnet ef migrations has-pending-model-changes` against the EF Core project with DbMigrator as the startup project. Keep Studio's migration when no changes remain; do not add a duplicate migration.
 
 ABP Studio is the supported path in this guide. The remaining steps assume Studio has already added the Low-Code runtime and designer packages to the appropriate layers.
 
@@ -259,7 +255,7 @@ This is global UI composition, not authorization. The omitted modules, applicati
 
 Permissions are shared by the existing UI and Admin Console, and grants are additive. The controller allowlist avoids changing those shared grants merely to shape Admin Console. A user still needs the required Low-Code permission even when `lowCodeDesigner` is returned as `true`.
 
-The Admin Console home page and authenticated account pages are core routes and remain available. In the historically verified ABP `10.5.0` package, the home page's management cards and Quick Navigation links were static and did not consume the module discovery response. Verify that behavior with the installed `10.6.x` patch. If the current package still uses static cards, hidden module links on that page lead to `404`; link users directly to `/admin-console/lowcode-designer`, keep `RedirectRootToAdminConsole` disabled, and treat the Admin Console root as a known limitation. Removing or redesigning that static home content requires a custom Admin Console frontend. Keep `CustomizationPermissionName` unset or `null` to avoid registering the customization route.
+The Admin Console home page and authenticated account pages are core routes and remain available. Check whether the installed Admin Console uses static management cards and Quick Navigation links that do not consume the module discovery response. If it does, hidden module links on that page lead to `404`; link users directly to `/admin-console/lowcode-designer`, keep `RedirectRootToAdminConsole` disabled, and treat the Admin Console root as a known limitation. Removing or redesigning that static home content requires a custom Admin Console frontend. Keep `CustomizationPermissionName` unset or `null` to avoid registering the customization route.
 
 The module keys are an Admin Console frontend contract and can change when the package is upgraded. Compare `KnownModuleKeys` with the upgraded `AdminConsoleModuleDiscoveryController` and React route configuration during every ABP upgrade. The explicit validation above makes a missing or unknown allowlist fail the discovery request instead of silently exposing additional modules.
 
@@ -267,7 +263,7 @@ The module keys are an Admin Console frontend contract and can change when the p
 
 The safest source for the companion application is a temporary solution generated at exactly the same ABP version. In ABP Studio, create a modern React application with Low-Code enabled and use the same tenancy, authentication, theme, and database-provider choices as the existing solution.
 
-Before adapting or copying the frontend, establish whether that generated `10.6.x` seed is clean on its own:
+Before adapting or copying the frontend, establish whether the generated seed is clean on its own:
 
 ```powershell
 cd react
@@ -279,7 +275,7 @@ yarn build
 
 Use the scripts and package manager declared by the generated application when their names differ. If the untouched seed fails, record and resolve that template baseline separately; otherwise later failures can be misattributed to the `/lowcode` integration. Do not replace its lockfile or switch package managers merely to make the commands pass.
 
-Testing Library packages have peer dependencies. If the test runner or TypeScript cannot resolve `screen`, `waitFor`, or `fireEvent`, inspect `package.json` and the lockfile. Add a compatible `@testing-library/dom` version only when it is missing; the historical `10.5.0` seed required `@testing-library/dom@10.4.1`, while a generated `10.6.x` patch may already declare a compatible version.
+Testing Library packages have peer dependencies. If the test runner or TypeScript cannot resolve `screen`, `waitFor`, or `fireEvent`, inspect `package.json` and the lockfile. Add a compatible `@testing-library/dom` version only when it is missing; do not add a duplicate version when the generated application already declares one.
 
 Copy the generated `react/` directory into the existing solution, for example as `lowcode-react/`. Keep the generated ABP authentication, Axios, localization, `configureLowCode`, `createDynamicRoutes`, and `useMenuItems` integration.
 
@@ -443,7 +439,7 @@ Do not use a global fallback. A global fallback can swallow MVC, Razor Pages, Ad
 
 ### Configure ABP Antiforgery for Mutations
 
-The Low-Code React source template configures ABP's antiforgery cookie and header names, but treat this as a mandatory verification checkpoint. A fresh distributed ABP `10.5.0` React Low-Code template generated during this verification omitted both values even though the source template contained them. Inspect the companion runtime's shared Axios instance, keep the values when present, and add them when absent. Do not create a second Axios instance just for this setting.
+The Low-Code React source template configures ABP's antiforgery cookie and header names, but treat this as a mandatory verification checkpoint because distributed template artifacts can differ. Inspect the companion runtime's shared Axios instance, keep the values when present, and add them when absent. Do not create a second Axios instance just for this setting.
 
 ```ts
 export const api = axios.create({
@@ -997,7 +993,7 @@ For a separate Blazor client project, configure the Low-Code remote service expl
 
 Use the same backend and authority for the Blazor UI and Low-Code service so the proxy sends the current user's access token and the returned menu is filtered for that user. A separate authority requires an explicit token-exchange or delegated-authentication design and is outside this guide.
 
-The verified Blazor Web App template registers the same contributor in its server and client modules. Keep that existing registration; do not register a second contributor only for Low-Code.
+The Blazor Web App template registers the same contributor in its server and client modules. Keep that existing registration; do not register a second contributor only for Low-Code.
 
 {{end}}
 
@@ -1121,7 +1117,7 @@ Verify these behaviors in a browser:
 | Angular `Dynamic` remains hidden after login | Verify the `Default` API URL, access token, menu-items request, and the `RoutesService.patch` name. The fail-closed example intentionally remains hidden on request failure. |
 | Blazor menu disappears after the page becomes interactive | In Blazor Web App interactive Auto or WebAssembly mode, add the same `LowCodeUi` section to the client `wwwroot/appsettings.json` as well as the server configuration. |
 | Blazor throws `No policy found` for Designer | Add the Designer application contracts package and `AbpLowCodeDesignerApplicationContractsModule` to the UI host/client that composes the menu. |
-| Generated React seed fails to type-check test imports | Inspect its Testing Library peer dependencies. Add a compatible `@testing-library/dom` only when missing; the historical `10.5.0` seed required `10.4.1`, while the generated `10.6.x` application may already include it. |
+| Generated React seed fails to type-check test imports | Inspect its Testing Library peer dependencies. Add a compatible `@testing-library/dom` only when it is missing from the generated application. |
 | Companion title or menu still shows the temporary project name or `Menu:LowCodeDesigner` | Rename `index.html`, package/application identity, and the copied `src/locales/*.json` resource. Confirm that the localization key exists in the resource loaded by React, not only in the existing UI's resource. |
 | Production build passes but companion tests fail after moving to `/lowcode` | Update root-hosted guard, redirect, OIDC-return, and removed-screen expectations for the subpath. Run lint and tests in addition to the build. |
 | DbMigrator exits with `ABP-LIC-0020` although a secrets file exists | Run it from the project directory containing `appsettings.secrets.json`, or use the deployment's supported secret provider. Never commit or print the license value. |
