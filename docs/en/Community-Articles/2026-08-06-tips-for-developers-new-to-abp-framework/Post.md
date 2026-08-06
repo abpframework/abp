@@ -53,7 +53,7 @@ That is the first ABP lesson worth learning👍
 
 
 
-![Generated illustration](inline-1.png)
+![Generated illustration](abp-layers.png)
 
 ## Why ABP Feels Heavy at First!
 
@@ -166,7 +166,7 @@ That path keeps the early win while exposing the real architecture.
 
 
 
-![Generated illustration](inline-2.png)
+![Generated illustration](crud-vs-manual.png)
 
 ## Generated CRUD vs manual CRUD: learn both
 
@@ -250,7 +250,7 @@ ABP supports rich DDD patterns, but it does not require ceremony for ceremony's 
 
 
 
-![Generated illustration](inline-3.png)
+![Generated illustration](abp-learning-path.png)
 
 ## A concrete “ASP.NET Core to ABP” learning path
 
