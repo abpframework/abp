@@ -82,7 +82,7 @@ Generated React pages include list, search, sorting, paging, filtering, export, 
 
 The generator respects the entity and field configuration you define in ABP Suite, including `ShowOn*`, `IsFilterable`, and `ReadonlyOnEditModal` options. Navigation lookups use server-side search.
 
-![React CRUD page generation demo](react-crud-page.mp4)
+![React CRUD page generation demo](react-crud-page.gif)
 
 ### ABP Suite Decimal Precision
 
