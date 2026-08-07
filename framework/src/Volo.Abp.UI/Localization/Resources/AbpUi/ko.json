@@ -62,6 +62,7 @@
     "Theme": "테마",
     "NotAssigned": "할당되지 않음",
     "EntityActionsDisabledTooltip": "작업을 수행할 권한이 없습니다.",
-    "ResourcePermissions": "권한"
+    "ResourcePermissions": "권한",
+    "ShowPassword": "비밀번호 표시"
   }
 }
