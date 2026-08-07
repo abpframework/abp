@@ -113,6 +113,8 @@ The screens below follow that common designer flow from data to page setup to fo
 
 ![Form setup in the designer](images/designer-forms.png)
 
+For virtual fields calculated from the current record, related records, or related-record aggregates, see [Calculated and Rollup Properties](formula-properties.md). For the provider-safe scalar syntax used by calculated properties and formula backfills, see the [Low-Code Expression Language](expression-language.md) reference.
+
 ## React Runtime
 
 React runtime pages are generated from the same metadata. The examples below show a generated data grid and its create form. The same runtime can render kanban, calendar, gallery, standalone form, and dashboard page definitions.
