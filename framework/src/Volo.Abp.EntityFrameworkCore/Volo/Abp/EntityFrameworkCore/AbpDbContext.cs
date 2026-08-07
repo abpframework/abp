@@ -284,7 +284,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                     continue;
                 }
 
-                if (EntityChangeOptions.Value.UpdateAggregateRootWhenNavigationChanges &&
+                if (IsUpdateAggregateRootWhenNavigationChangesEnabled() &&
                     EntityChangeOptions.Value.IgnoredUpdateAggregateRootSelectors.All(selector => !selector.Predicate(entityEntry.Entity.GetType())) &&
                     entityEntry.State == EntityState.Unchanged)
                 {
@@ -467,7 +467,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                          EntityChangeOptions.Value.IgnoredNavigationEntitySelectors.All(selector => !selector.Predicate(entry.Entity.GetType())) &&
                          AbpEfCoreNavigationHelper.IsNavigationEntryModified(entry))
                 {
-                    if (EntityChangeOptions.Value.UpdateAggregateRootWhenNavigationChanges &&
+                    if (IsUpdateAggregateRootWhenNavigationChangesEnabled() &&
                         EntityChangeOptions.Value.IgnoredUpdateAggregateRootSelectors.All(selector => !selector.Predicate(entry.Entity.GetType())))
                     {
                         ApplyAbpConceptsForModifiedEntity(entry, true);
@@ -524,6 +524,12 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                                          (x.CurrentValue == null || x.OriginalValue?.ToString() == x.CurrentValue?.ToString()));
     }
 
+    protected virtual bool IsUpdateAggregateRootWhenNavigationChangesEnabled()
+    {
+        return UnitOfWorkManager.Current?.GetUpdateAggregateRootWhenNavigationChangesOrNull() ??
+               EntityChangeOptions.Value.UpdateAggregateRootWhenNavigationChanges;
+    }
+
     protected virtual void HandlePropertiesBeforeSave()
     {
         var entries = ChangeTracker.Entries().ToList();
@@ -538,7 +544,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         }
 
         if (EntityChangeOptions.Value.PublishEntityUpdatedEventWhenNavigationChanges &&
-            EntityChangeOptions.Value.UpdateAggregateRootWhenNavigationChanges)
+            IsUpdateAggregateRootWhenNavigationChangesEnabled())
         {
             foreach (var entry in AbpEfCoreNavigationHelper.GetChangedEntityEntries()
                          .Where(x => x.State == EntityState.Unchanged)
