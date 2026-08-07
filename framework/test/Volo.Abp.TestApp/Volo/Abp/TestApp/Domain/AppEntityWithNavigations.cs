@@ -160,3 +160,47 @@ public class AppEntityWithForeignKeyOnlyChild : AggregateRoot<Guid>
 
     public string Name { get; set; }
 }
+
+public class AppEntityWithForeignKeyOnlyOwner : AggregateRoot<Guid>
+{
+    protected AppEntityWithForeignKeyOnlyOwner()
+    {
+
+    }
+
+    public AppEntityWithForeignKeyOnlyOwner(Guid id, string name)
+        : base(id)
+    {
+        Name = name;
+    }
+
+    public string Name { get; set; }
+
+    public virtual List<AppEntityWithForeignKeyOnlyEntityChild> Children { get; set; }
+}
+
+/// <summary>
+/// Belongs to the <see cref="AppEntityWithForeignKeyOnlyOwner"/> aggregate,
+/// but references the <see cref="AppEntityWithForeignKeyOnly"/> aggregate root with a foreign key only.
+/// </summary>
+public class AppEntityWithForeignKeyOnlyEntityChild : Entity<Guid>
+{
+    protected AppEntityWithForeignKeyOnlyEntityChild()
+    {
+
+    }
+
+    public AppEntityWithForeignKeyOnlyEntityChild(Guid id, Guid ownerId, Guid appEntityWithForeignKeyOnlyId, string name)
+        : base(id)
+    {
+        OwnerId = ownerId;
+        AppEntityWithForeignKeyOnlyId = appEntityWithForeignKeyOnlyId;
+        Name = name;
+    }
+
+    public Guid OwnerId { get; set; }
+
+    public Guid AppEntityWithForeignKeyOnlyId { get; set; }
+
+    public string Name { get; set; }
+}

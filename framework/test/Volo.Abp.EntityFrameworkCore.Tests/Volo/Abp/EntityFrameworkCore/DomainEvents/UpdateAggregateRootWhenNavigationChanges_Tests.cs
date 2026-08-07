@@ -15,6 +15,8 @@ public class UpdateAggregateRootWhenNavigationChanges_Tests : EntityFrameworkCor
 {
     private readonly IRepository<AppEntityWithForeignKeyOnly, Guid> _entityWithForeignKeyOnlyRepository;
     private readonly IRepository<AppEntityWithForeignKeyOnlyChild, Guid> _childRepository;
+    private readonly IRepository<AppEntityWithForeignKeyOnlyOwner, Guid> _ownerRepository;
+    private readonly IRepository<AppEntityWithForeignKeyOnlyEntityChild, Guid> _entityChildRepository;
     private readonly IRepository<AppEntityWithNavigations, Guid> _entityWithNavigationsRepository;
     private readonly IRepository<AppEntityWithNavigationsForeign, Guid> _entityWithNavigationsForeignRepository;
     private readonly IUnitOfWorkManager _unitOfWorkManager;
@@ -24,6 +26,8 @@ public class UpdateAggregateRootWhenNavigationChanges_Tests : EntityFrameworkCor
     {
         _entityWithForeignKeyOnlyRepository = GetRequiredService<IRepository<AppEntityWithForeignKeyOnly, Guid>>();
         _childRepository = GetRequiredService<IRepository<AppEntityWithForeignKeyOnlyChild, Guid>>();
+        _ownerRepository = GetRequiredService<IRepository<AppEntityWithForeignKeyOnlyOwner, Guid>>();
+        _entityChildRepository = GetRequiredService<IRepository<AppEntityWithForeignKeyOnlyEntityChild, Guid>>();
         _entityWithNavigationsRepository = GetRequiredService<IRepository<AppEntityWithNavigations, Guid>>();
         _entityWithNavigationsForeignRepository = GetRequiredService<IRepository<AppEntityWithNavigationsForeign, Guid>>();
         _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
@@ -61,6 +65,95 @@ public class UpdateAggregateRootWhenNavigationChanges_Tests : EntityFrameworkCor
 
         principalUpdatedEventTriggered.ShouldBeFalse();
         (await _entityWithForeignKeyOnlyRepository.GetAsync(principalId)).ConcurrencyStamp.ShouldBe(concurrencyStamp);
+    }
+
+    [Fact]
+    public async Task Should_Not_Update_Principal_Entity_Without_Navigation_Property_On_Update_And_Delete()
+    {
+        var principalId = Guid.NewGuid();
+        var childId = Guid.NewGuid();
+
+        await WithUnitOfWorkAsync(async () =>
+        {
+            await _entityWithForeignKeyOnlyRepository.InsertAsync(
+                new AppEntityWithForeignKeyOnly(principalId, "Principal"));
+            await _childRepository.InsertAsync(
+                new AppEntityWithForeignKeyOnlyChild(childId, principalId, "Child"));
+        });
+
+        var concurrencyStamp = (await _entityWithForeignKeyOnlyRepository.GetAsync(principalId)).ConcurrencyStamp;
+
+        await WithUnitOfWorkAsync(async () =>
+        {
+            await _entityWithForeignKeyOnlyRepository.GetAsync(principalId);
+
+            var child = await _childRepository.GetAsync(childId);
+            child.Name = "Child-Updated";
+            await _childRepository.UpdateAsync(child);
+        });
+
+        (await _entityWithForeignKeyOnlyRepository.GetAsync(principalId)).ConcurrencyStamp.ShouldBe(concurrencyStamp);
+
+        await WithUnitOfWorkAsync(async () =>
+        {
+            await _entityWithForeignKeyOnlyRepository.GetAsync(principalId);
+
+            await _childRepository.DeleteAsync(childId);
+        });
+
+        (await _entityWithForeignKeyOnlyRepository.GetAsync(principalId)).ConcurrencyStamp.ShouldBe(concurrencyStamp);
+    }
+
+    [Fact]
+    public async Task Should_Update_The_Owner_But_Not_The_Referenced_Aggregate_Root_Of_A_Child_Entity()
+    {
+        var ownerId = Guid.NewGuid();
+        var referencedId = Guid.NewGuid();
+
+        await WithUnitOfWorkAsync(async () =>
+        {
+            await _ownerRepository.InsertAsync(new AppEntityWithForeignKeyOnlyOwner(ownerId, "Owner"));
+            await _entityWithForeignKeyOnlyRepository.InsertAsync(
+                new AppEntityWithForeignKeyOnly(referencedId, "Referenced"));
+        });
+
+        var ownerStamp = (await _ownerRepository.GetAsync(ownerId)).ConcurrencyStamp;
+        var referencedStamp = (await _entityWithForeignKeyOnlyRepository.GetAsync(referencedId)).ConcurrencyStamp;
+
+        await WithUnitOfWorkAsync(async () =>
+        {
+            await _ownerRepository.GetAsync(ownerId);
+            await _entityWithForeignKeyOnlyRepository.GetAsync(referencedId);
+
+            await _entityChildRepository.InsertAsync(
+                new AppEntityWithForeignKeyOnlyEntityChild(Guid.NewGuid(), ownerId, referencedId, "Child"));
+        });
+
+        (await _ownerRepository.GetAsync(ownerId)).ConcurrencyStamp.ShouldNotBe(ownerStamp);
+        (await _entityWithForeignKeyOnlyRepository.GetAsync(referencedId)).ConcurrencyStamp.ShouldBe(referencedStamp);
+    }
+
+    [Fact]
+    public async Task Should_Update_Aggregate_Root_When_Owned_Entity_Changes()
+    {
+        var entityId = Guid.NewGuid();
+
+        await WithUnitOfWorkAsync(async () =>
+        {
+            await _entityWithNavigationsRepository.InsertAsync(
+                new AppEntityWithNavigations(entityId, "Entity"));
+        });
+
+        var concurrencyStamp = (await _entityWithNavigationsRepository.GetAsync(entityId)).ConcurrencyStamp;
+
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var entity = await _entityWithNavigationsRepository.GetAsync(entityId);
+            entity.AppEntityWithValueObjectAddress = new AppEntityWithValueObjectAddress("Turkey");
+            await _entityWithNavigationsRepository.UpdateAsync(entity);
+        });
+
+        (await _entityWithNavigationsRepository.GetAsync(entityId)).ConcurrencyStamp.ShouldNotBe(concurrencyStamp);
     }
 
     [Fact]
