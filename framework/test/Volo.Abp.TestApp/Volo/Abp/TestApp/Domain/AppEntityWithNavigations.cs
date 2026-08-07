@@ -121,3 +121,42 @@ public class AppEntityWithNavigationsForeign : AggregateRoot<Guid>
 
     public virtual List<AppEntityWithNavigations> OneToMany { get; set; }
 }
+
+/// <summary>
+/// Has no navigation property to <see cref="AppEntityWithForeignKeyOnlyChild"/>,
+/// the relation is only a foreign key on the child.
+/// </summary>
+public class AppEntityWithForeignKeyOnly : AggregateRoot<Guid>
+{
+    protected AppEntityWithForeignKeyOnly()
+    {
+
+    }
+
+    public AppEntityWithForeignKeyOnly(Guid id, string name)
+        : base(id)
+    {
+        Name = name;
+    }
+
+    public string Name { get; set; }
+}
+
+public class AppEntityWithForeignKeyOnlyChild : AggregateRoot<Guid>
+{
+    protected AppEntityWithForeignKeyOnlyChild()
+    {
+
+    }
+
+    public AppEntityWithForeignKeyOnlyChild(Guid id, Guid appEntityWithForeignKeyOnlyId, string name)
+        : base(id)
+    {
+        AppEntityWithForeignKeyOnlyId = appEntityWithForeignKeyOnlyId;
+        Name = name;
+    }
+
+    public Guid AppEntityWithForeignKeyOnlyId { get; set; }
+
+    public string Name { get; set; }
+}

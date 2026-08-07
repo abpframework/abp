@@ -46,6 +46,10 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
 
     public DbSet<AppEntityWithNavigationsForeign> AppEntityWithNavigationsForeign { get; set; }
 
+    public DbSet<AppEntityWithForeignKeyOnly> AppEntityWithForeignKeyOnly { get; set; }
+
+    public DbSet<AppEntityWithForeignKeyOnlyChild> AppEntityWithForeignKeyOnlyChild { get; set; }
+
     public DbSet<Blog> Blogs { get; set; }
     public DbSet<BlogPost> BlogPosts { get; set; }
 
@@ -159,6 +163,18 @@ public class TestAppDbContext : AbpDbContext<TestAppDbContext>, IThirdDbContext,
         {
             b.ConfigureByConvention();
             b.HasMany(x => x.OneToMany).WithOne().HasForeignKey(x => x.AppEntityWithNavigationForeignId);
+        });
+
+        modelBuilder.Entity<AppEntityWithForeignKeyOnly>(b =>
+        {
+            b.ConfigureByConvention();
+        });
+
+        modelBuilder.Entity<AppEntityWithForeignKeyOnlyChild>(b =>
+        {
+            b.ConfigureByConvention();
+            // No navigation property on both sides, only a foreign key.
+            b.HasOne<AppEntityWithForeignKeyOnly>().WithMany().HasForeignKey(x => x.AppEntityWithForeignKeyOnlyId);
         });
 
         modelBuilder.Entity<AppEntityWithNavigationChildOneToOne>(b =>

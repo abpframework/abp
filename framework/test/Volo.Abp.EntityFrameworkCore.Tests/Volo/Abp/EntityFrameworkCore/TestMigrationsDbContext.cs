@@ -38,6 +38,10 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
 
     public DbSet<AppEntityWithNavigationsForeign> AppEntityWithNavigationsForeign { get; set; }
 
+    public DbSet<AppEntityWithForeignKeyOnly> AppEntityWithForeignKeyOnly { get; set; }
+
+    public DbSet<AppEntityWithForeignKeyOnlyChild> AppEntityWithForeignKeyOnlyChild { get; set; }
+
     public DbSet<Blog> Blogs { get; set; }
     public DbSet<BlogPost> BlogPosts { get; set; }
 
@@ -160,6 +164,18 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
         modelBuilder.Entity<AppEntityWithNavigationsForeign>(b =>
         {
             b.ConfigureByConvention();
+        });
+
+        modelBuilder.Entity<AppEntityWithForeignKeyOnly>(b =>
+        {
+            b.ConfigureByConvention();
+        });
+
+        modelBuilder.Entity<AppEntityWithForeignKeyOnlyChild>(b =>
+        {
+            b.ConfigureByConvention();
+            // No navigation property on both sides, only a foreign key.
+            b.HasOne<AppEntityWithForeignKeyOnly>().WithMany().HasForeignKey(x => x.AppEntityWithForeignKeyOnlyId);
         });
 
         modelBuilder.Entity<Blog>(b =>
