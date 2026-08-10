@@ -9,7 +9,13 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 3.0.9 (2026-08-06) Latest
+## 3.0.10 (2026-08-10) Latest
+
+* Align dashboard refresh button with date picker in MudBlazor templates
+* ABP Agent: Fix context compression problem
+* Update version to release 3.0.10
+
+## 3.0.9 (2026-08-06)
 
 * Sync React admin console template with OpenIddict generate access token UI
 * Angular - Updating the version to 22 and fixing bugs on samples
