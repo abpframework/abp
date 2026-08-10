@@ -1,0 +1,15 @@
+@using MudBlazor
+
+<MudMenuItem AutoClose="@(ParentMenu == null)"
+             OnClick="@OnClickHandlerAsync"
+             Disabled="@Disabled"
+             Icon="@Icon"
+             IconColor="@IconColor"
+             Label="@Label"
+             Href="@Href"
+             Target="@Target"
+             ForceLoad="@ForceLoad"
+             Class="@Class"
+             UserAttributes="@UserAttributes">
+    @ChildContent
+</MudMenuItem>

@@ -1,0 +1,24 @@
+@using MudBlazor
+
+<MudMenu @ref="_menu"
+         Icon="@Icon"
+         IconColor="@IconColor"
+         StartIcon="@StartIcon"
+         Label="@Label"
+         AriaLabel="@AriaLabel"
+         Color="@Color"
+         Variant="@Variant"
+         Size="@Size"
+         Dense="@Dense"
+         AnchorOrigin="@AnchorOrigin"
+         TransformOrigin="@TransformOrigin"
+         Disabled="@Disabled"
+         Class="@Class"
+         Style="@Style"
+         ActivatorContent="@ActivatorContent">
+    <ChildContent>
+        <CascadingValue TValue="AbpMudActionMenu" Value="@this" IsFixed="true">
+            @ChildContent
+        </CascadingValue>
+    </ChildContent>
+</MudMenu>
