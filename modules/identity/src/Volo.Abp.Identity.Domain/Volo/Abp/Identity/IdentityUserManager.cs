@@ -115,14 +115,15 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         user.PasswordHistories.Clear();
         user.Passkeys.Clear();
 
+        //Soft deleting reloads the original values, the store saves the changes without validating the user.
+        //Nothing else is deleted before this succeeds, it is where the user is checked for concurrency.
+        (await Store.UpdateAsync(user, CancellationToken)).CheckErrors();
+
         //They are in the host database and deleting them here covers the current unit of work.
         using (CurrentTenant.Change(null))
         {
             await IdentityLinkUserRepository.DeleteAsync(new IdentityLinkUserInfo(user.Id, user.TenantId), CancellationToken);
         }
-
-        //Soft deleting reloads the original values, the store saves the changes without validating the user.
-        (await Store.UpdateAsync(user, CancellationToken)).CheckErrors();
 
         return await base.DeleteAsync(user);
     }

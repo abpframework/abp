@@ -50,37 +50,46 @@ public class OrganizationUnitManager : DomainService
 
     /// <summary>
     /// Creates the given organization units by querying the siblings of a parent once instead of once
-    /// per organization unit. The parents must already exist. Custom validation should be added by
-    /// overriding <see cref="ValidateOrganizationUnitAsync(OrganizationUnit, List{OrganizationUnit})"/>.
+    /// per organization unit. They all have to belong to the current tenant and their parents must
+    /// already exist. <see cref="GetNextChildCodeAsync"/> is used for the first organization unit of a
+    /// parent, the codes of the rest follow it. Custom validation should be added by overriding
+    /// <see cref="ValidateOrganizationUnitAsync(OrganizationUnit, List{OrganizationUnit})"/>.
     /// </summary>
     [UnitOfWork]
     public virtual async Task CreateManyAsync(List<OrganizationUnit> organizationUnits)
     {
         Check.NotNull(organizationUnits, nameof(organizationUnits));
 
-        foreach (var group in organizationUnits.GroupBy(x => new { x.TenantId, x.ParentId }))
+        if (organizationUnits.Any(x => x.TenantId != CurrentTenant.Id))
         {
-            //Siblings, codes and the database of a group belong to its own tenant.
-            using (CurrentTenant.Change(group.Key.TenantId))
+            throw new AbpException("Organization units of another tenant can not be created, change the current tenant instead!");
+        }
+
+        var groups = organizationUnits.GroupBy(x => x.ParentId).ToList();
+
+        foreach (var group in groups)
+        {
+            await ValidateParentTenantAsync(group.Key, CurrentTenant.Id);
+
+            var siblings = await FindChildrenAsync(group.Key);
+            string lastCode = null;
+
+            foreach (var organizationUnit in group)
             {
-                await ValidateParentTenantAsync(group.Key.ParentId, group.Key.TenantId);
+                organizationUnit.Code = lastCode = lastCode == null
+                    ? await GetNextChildCodeAsync(group.Key)
+                    : OrganizationUnit.CalculateNextCode(lastCode);
 
-                var siblings = await FindChildrenAsync(group.Key.ParentId);
-                var lastCode = siblings.OrderBy(x => x.Code).LastOrDefault()?.Code;
+                await ValidateOrganizationUnitAsync(organizationUnit, siblings);
 
-                foreach (var organizationUnit in group)
-                {
-                    await ValidateOrganizationUnitAsync(organizationUnit, siblings);
-
-                    organizationUnit.Code = lastCode = lastCode == null
-                        ? await GetNextChildCodeAsync(group.Key.ParentId)
-                        : OrganizationUnit.CalculateNextCode(lastCode);
-
-                    siblings.Add(organizationUnit);
-                }
-
-                await OrganizationUnitRepository.InsertManyAsync(group.ToList());
+                siblings.Add(organizationUnit);
             }
+        }
+
+        //Nothing is inserted before every group is validated.
+        foreach (var group in groups)
+        {
+            await OrganizationUnitRepository.InsertManyAsync(group.ToList());
         }
     }
 

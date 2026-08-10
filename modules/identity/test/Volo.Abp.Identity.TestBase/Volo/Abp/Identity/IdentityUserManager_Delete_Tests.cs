@@ -148,7 +148,18 @@ public abstract class IdentityUserManager_Delete_Tests<TStartupModule> : AbpIden
         using (var uow = UnitOfWorkManager.Begin())
         {
             var user = await IdentityUserManager.GetByIdAsync(userId);
-            await IdentityUserManager.AddToRoleAsync(user, "moderator");
+
+            (await IdentityUserManager.AddClaimAsync(user, new Claim("test", "test"))).CheckErrors();
+            (await IdentityUserManager.AddLoginAsync(user, new UserLoginInfo("test", "test", "test"))).CheckErrors();
+            (await IdentityUserManager.AddToRoleAsync(user, "moderator")).CheckErrors();
+            user.SetToken("test", "test", "test");
+            user.AddPasswordHistory("test");
+            user.AddPasskey([1, 2, 3], new IdentityPasskeyData());
+            await IdentityUserManager.AddToOrganizationUnitAsync(
+                user,
+                await OrganizationUnitRepository.GetAsync(LookupNormalizer.NormalizeName("OU11")));
+            await IdentityUserRepository.UpdateAsync(user);
+
             await uow.CompleteAsync();
         }
 
@@ -163,12 +174,20 @@ public abstract class IdentityUserManager_Delete_Tests<TStartupModule> : AbpIden
             await uow.CompleteAsync();
         }
 
+        //Every collection of the user has to be loaded before it is cleared.
         using (var uow = UnitOfWorkManager.Begin())
         using (DataFilter.Disable<ISoftDelete>())
         {
             var deletedUser = await IdentityUserRepository.FindAsync(userId);
             deletedUser.ShouldNotBeNull();
+
+            deletedUser.Claims.Count.ShouldBe(0);
+            deletedUser.Logins.Count.ShouldBe(0);
             deletedUser.Roles.Count.ShouldBe(0);
+            deletedUser.Tokens.Count.ShouldBe(0);
+            deletedUser.OrganizationUnits.Count.ShouldBe(0);
+            deletedUser.PasswordHistories.Count.ShouldBe(0);
+            deletedUser.Passkeys.Count.ShouldBe(0);
 
             await uow.CompleteAsync();
         }
@@ -356,6 +375,103 @@ public abstract class IdentityUserManager_Delete_Tests<TStartupModule> : AbpIden
         {
             await Should.ThrowAsync<AbpIdentityResultException>(
                 async () => await IdentityUserManager.DeleteAsync(staleUser));
+        }
+    }
+
+    [Fact]
+    public virtual async Task Deleting_A_User_Through_The_Repository_Should_Not_Clear_Its_Own_Collections()
+    {
+        var userId = Guid.NewGuid();
+
+        using (var uow = UnitOfWorkManager.Begin())
+        {
+            (await IdentityUserManager.CreateAsync(
+                new IdentityUser(userId, $"repo-collections-{userId:N}", $"repo-collections-{userId:N}@abp.io"))).CheckErrors();
+
+            await uow.CompleteAsync();
+        }
+
+        using (var uow = UnitOfWorkManager.Begin())
+        {
+            var user = await IdentityUserManager.GetByIdAsync(userId);
+            (await IdentityUserManager.AddToRoleAsync(user, "moderator")).CheckErrors();
+            user.AddPasswordHistory("test");
+            await IdentityUserRepository.UpdateAsync(user);
+
+            await uow.CompleteAsync();
+        }
+
+        using (var uow = UnitOfWorkManager.Begin())
+        {
+            await IdentityUserRepository.DeleteAsync(await IdentityUserRepository.GetAsync(userId));
+
+            await uow.CompleteAsync();
+        }
+
+        //UserDeletedEventHandler only covers the aggregates that have no navigation from the user,
+        //the collections of the user itself are cleared by IdentityUserManager.DeleteAsync.
+        using (var uow = UnitOfWorkManager.Begin())
+        using (DataFilter.Disable<ISoftDelete>())
+        {
+            var deletedUser = await IdentityUserRepository.FindAsync(userId);
+            deletedUser.Roles.Count.ShouldBe(1);
+            deletedUser.PasswordHistories.Count.ShouldBe(1);
+
+            await uow.CompleteAsync();
+        }
+    }
+
+    [Fact]
+    public virtual async Task Deleting_A_Stale_User_Should_Not_Delete_Its_Link_Users()
+    {
+        var userId = Guid.NewGuid();
+        var linkedUserId = Guid.NewGuid();
+        IdentityUser staleUser;
+
+        using (var uow = UnitOfWorkManager.Begin())
+        {
+            (await IdentityUserManager.CreateAsync(
+                new IdentityUser(userId, $"stale-link-{userId:N}", $"stale-link-{userId:N}@abp.io"))).CheckErrors();
+            (await IdentityUserManager.CreateAsync(
+                new IdentityUser(linkedUserId, $"stale-linked-{linkedUserId:N}", $"stale-linked-{linkedUserId:N}@abp.io"))).CheckErrors();
+
+            await uow.CompleteAsync();
+        }
+
+        using (var uow = UnitOfWorkManager.Begin())
+        {
+            await IdentityLinkUserManager.LinkAsync(
+                new IdentityLinkUserInfo(userId),
+                new IdentityLinkUserInfo(linkedUserId));
+
+            staleUser = await IdentityUserRepository.GetAsync(userId);
+
+            await uow.CompleteAsync();
+        }
+
+        using (var uow = UnitOfWorkManager.Begin())
+        {
+            var user = await IdentityUserRepository.GetAsync(userId);
+            user.Name = "Changed";
+            await IdentityUserRepository.UpdateAsync(user);
+
+            await uow.CompleteAsync();
+        }
+
+        using (var uow = UnitOfWorkManager.Begin())
+        {
+            await Should.ThrowAsync<AbpIdentityResultException>(
+                async () => await IdentityUserManager.DeleteAsync(staleUser));
+        }
+
+        //The user is still there, so its link users must be there as well.
+        using (var uow = UnitOfWorkManager.Begin())
+        {
+            (await IdentityLinkUserManager.IsLinkedAsync(
+                new IdentityLinkUserInfo(userId),
+                new IdentityLinkUserInfo(linkedUserId))).ShouldBeTrue();
+
+            await uow.CompleteAsync();
         }
     }
 }
