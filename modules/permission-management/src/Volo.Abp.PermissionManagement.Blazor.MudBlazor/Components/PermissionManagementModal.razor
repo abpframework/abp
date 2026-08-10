@@ -33,7 +33,7 @@
 
             @if (_groups != null && _groups.Any())
             {
-                <MudTabs KeepPanelsAlive="true" @bind-ActivePanelIndex="@_activeTabIndex"
+                <MudTabs @bind-ActivePanelIndex="@_activeTabIndex"
                         Variant="Variant.Pills"
                         Position="Position.Left"
                         PanelClass="pa-4">
