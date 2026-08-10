@@ -124,10 +124,10 @@
 .abp-password-field .abp-password-visibility-toggle {
     position: absolute;
     inset-inline-end: 0;
-    top: 30px;
+    top: 38px;
     transform: translateY(-50%);
 }
 
-.abp-password-field .mud-input-slot {
-    padding-inline-end: 40px;
+.abp-password-field .mud-input:not(.mud-select-input) .mud-input-slot.mud-input-root {
+    padding-inline-end: 40px !important;
 }
