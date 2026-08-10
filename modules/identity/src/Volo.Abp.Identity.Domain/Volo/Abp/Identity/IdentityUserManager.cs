@@ -115,15 +115,14 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         user.PasswordHistories.Clear();
         user.Passkeys.Clear();
 
-        //UserDeletedEventHandler deletes them after the changes are saved, this keeps
-        //them gone for the rest of the current unit of work. They are in the host database.
+        //They are in the host database and deleting them here covers the current unit of work.
         using (CurrentTenant.Change(null))
         {
             await IdentityLinkUserRepository.DeleteAsync(new IdentityLinkUserInfo(user.Id, user.TenantId), CancellationToken);
         }
 
-        //Soft deleting an entity reloads its original values.
-        (await UpdateAsync(user)).CheckErrors();
+        //Soft deleting reloads the original values, the store saves the changes without validating the user.
+        (await Store.UpdateAsync(user, CancellationToken)).CheckErrors();
 
         return await base.DeleteAsync(user);
     }

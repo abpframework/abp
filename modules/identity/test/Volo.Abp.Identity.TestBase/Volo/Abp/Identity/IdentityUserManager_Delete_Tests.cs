@@ -4,7 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Shouldly;
 using Volo.Abp.Data;
+using Volo.Abp.Domain.Entities;
+using Volo.Abp.Caching;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Uow;
 using Xunit;
 
@@ -22,9 +26,13 @@ public abstract class IdentityUserManager_Delete_Tests<TStartupModule> : AbpIden
     protected ILookupNormalizer LookupNormalizer { get; }
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
     protected IDataFilter DataFilter { get; }
+    protected ICurrentTenant CurrentTenant { get; }
+    protected IDistributedCache<AbpDynamicClaimCacheItem> DynamicClaimCache { get; }
 
     protected IdentityUserManager_Delete_Tests()
     {
+        CurrentTenant = GetRequiredService<ICurrentTenant>();
+        DynamicClaimCache = GetRequiredService<IDistributedCache<AbpDynamicClaimCacheItem>>();
         IdentityUserManager = GetRequiredService<IdentityUserManager>();
         IdentityUserRepository = GetRequiredService<IIdentityUserRepository>();
         OrganizationUnitRepository = GetRequiredService<IOrganizationUnitRepository>();
@@ -212,6 +220,142 @@ public abstract class IdentityUserManager_Delete_Tests<TStartupModule> : AbpIden
                 new IdentityLinkUserInfo(linkedUserId))).ShouldBeFalse();
 
             await uow.CompleteAsync();
+        }
+    }
+
+    [Fact]
+    public virtual async Task Should_Delete_A_User_That_Does_Not_Pass_The_User_Validators()
+    {
+        var userId = Guid.NewGuid();
+
+        //Insert with the repository, so the user name is not validated.
+        using (var uow = UnitOfWorkManager.Begin())
+        {
+            var user = new IdentityUser(userId, $"invalid user name {userId:N}", $"invalid-{userId:N}@abp.io");
+            user.AddPasswordHistory("test");
+            await IdentityUserRepository.InsertAsync(user);
+
+            await uow.CompleteAsync();
+        }
+
+        using (var uow = UnitOfWorkManager.Begin())
+        {
+            (await IdentityUserManager.DeleteAsync(await IdentityUserRepository.GetAsync(userId))).CheckErrors();
+
+            await uow.CompleteAsync();
+        }
+
+        using (var uow = UnitOfWorkManager.Begin())
+        using (DataFilter.Disable<ISoftDelete>())
+        {
+            var deletedUser = await IdentityUserRepository.FindAsync(userId);
+            deletedUser.IsDeleted.ShouldBeTrue();
+            deletedUser.PasswordHistories.Count.ShouldBe(0);
+
+            await uow.CompleteAsync();
+        }
+    }
+
+    [Fact]
+    public virtual async Task Should_Remove_The_Related_Data_Of_A_Tenant_User_When_The_Unit_Of_Work_Completes_In_The_Host()
+    {
+        var tenantId = Guid.NewGuid();
+        var userId = Guid.NewGuid();
+
+        using (var uow = UnitOfWorkManager.Begin())
+        using (CurrentTenant.Change(tenantId))
+        {
+            await IdentityUserRepository.InsertAsync(
+                new IdentityUser(userId, $"tenant-{userId:N}", $"tenant-{userId:N}@abp.io", tenantId));
+            await IdentitySessionRepository.InsertAsync(new IdentitySession(
+                Guid.NewGuid(), $"tenant-session-{userId:N}", "Web", "Chrome", userId, tenantId, "MyApp", "127.0.0.1", DateTime.UtcNow));
+            await IdentityUserDelegationRepository.InsertAsync(new IdentityUserDelegation(
+                Guid.NewGuid(), userId, Guid.NewGuid(), DateTime.UtcNow, DateTime.UtcNow.AddDays(1), tenantId));
+
+            await uow.CompleteAsync();
+        }
+
+        //The event is published while the unit of work completes, the current tenant is the host then.
+        using (var uow = UnitOfWorkManager.Begin())
+        {
+            using (CurrentTenant.Change(tenantId))
+            {
+                await IdentityUserRepository.DeleteAsync(await IdentityUserRepository.GetAsync(userId));
+            }
+
+            await uow.CompleteAsync();
+        }
+
+        using (var uow = UnitOfWorkManager.Begin())
+        using (CurrentTenant.Change(tenantId))
+        {
+            (await IdentitySessionRepository.GetCountAsync(userId: userId)).ShouldBe(0);
+            (await IdentityUserDelegationRepository.GetListAsync(sourceUserId: userId, targetUserId: null)).ShouldBeEmpty();
+
+            await uow.CompleteAsync();
+        }
+    }
+
+    [Fact]
+    public virtual async Task Should_Remove_The_Dynamic_Claims_Cache_Of_A_Deleted_User()
+    {
+        var userId = Guid.NewGuid();
+        var cacheKey = AbpDynamicClaimCacheItem.CalculateCacheKey(userId, null);
+
+        using (var uow = UnitOfWorkManager.Begin())
+        {
+            (await IdentityUserManager.CreateAsync(
+                new IdentityUser(userId, $"claims-cache-{userId:N}", $"claims-cache-{userId:N}@abp.io"))).CheckErrors();
+
+            await uow.CompleteAsync();
+        }
+
+        await DynamicClaimCache.SetAsync(cacheKey, new AbpDynamicClaimCacheItem());
+        (await DynamicClaimCache.GetAsync(cacheKey)).ShouldNotBeNull();
+
+        using (var uow = UnitOfWorkManager.Begin())
+        {
+            (await IdentityUserManager.DeleteAsync(await IdentityUserRepository.GetAsync(userId))).CheckErrors();
+
+            await uow.CompleteAsync();
+        }
+
+        (await DynamicClaimCache.GetAsync(cacheKey)).ShouldBeNull();
+    }
+
+    [Fact]
+    public virtual async Task Deleting_A_Stale_User_Should_Throw_A_Concurrency_Exception()
+    {
+        var userId = Guid.NewGuid();
+        IdentityUser staleUser;
+
+        using (var uow = UnitOfWorkManager.Begin())
+        {
+            (await IdentityUserManager.CreateAsync(
+                new IdentityUser(userId, $"stale-{userId:N}", $"stale-{userId:N}@abp.io"))).CheckErrors();
+
+            await uow.CompleteAsync();
+        }
+
+        using (var uow = UnitOfWorkManager.Begin())
+        {
+            staleUser = await IdentityUserRepository.GetAsync(userId);
+            await uow.CompleteAsync();
+        }
+
+        //Change the user, so the instance loaded above has an old concurrency stamp.
+        using (var uow = UnitOfWorkManager.Begin())
+        {
+            var user = await IdentityUserRepository.GetAsync(userId);
+            user.Name = "Changed";
+            await IdentityUserRepository.UpdateAsync(user);
+            await uow.CompleteAsync();
+        }
+
+        using (var uow = UnitOfWorkManager.Begin())
+        {
+            await Should.ThrowAsync<AbpIdentityResultException>(
+                async () => await IdentityUserManager.DeleteAsync(staleUser));
         }
     }
 }
