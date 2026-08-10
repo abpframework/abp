@@ -5,7 +5,7 @@
 @using Volo.Abp.FeatureManagement.Localization
 @inherits AbpFeatureManagementComponentBase
 
-<MudDialog DefaultFocus="DefaultFocus.FirstChild" @bind-Visible="@_isVisible" Options="@(new DialogOptions { BackdropClick = false, MaxWidth = MaxWidth.Large, FullWidth = true, CloseOnEscapeKey = true })">
+<MudDialog DefaultFocus="DefaultFocus.None" @bind-Visible="@_isVisible" Options="@(new DialogOptions { BackdropClick = false, MaxWidth = MaxWidth.Large, FullWidth = true, CloseOnEscapeKey = true })">
     <TitleContent>
         <MudText Typo="Typo.h6">@L["Features"]@ProviderKeyDisplayName</MudText>
     </TitleContent>
@@ -18,10 +18,11 @@
         {
             <MudTabs KeepPanelsAlive="true" @bind-ActivePanelIndex="@_activeTabIndex" Variant="Variant.Pills" Position="Position.Left"
                 PanelClass="pa-4">
-                @foreach (var group in Groups)
-                {
-                    <MudTabPanel Text="@group.DisplayName">
-                        <MudStack Spacing="2">
+                @{
+                    @* The features come from the definitions, so there is no known input to put
+                       AutoFocus on. The first panel gets a container that takes the focus instead. *@
+                    RenderFragment<FeatureGroupDto> renderGroup = group =>
+                    @<MudStack Spacing="2">
                             <MudText Typo="Typo.h6">@group.DisplayName</MudText>
                             @foreach (var feature in group.Features)
                             {
@@ -68,7 +69,25 @@
                                     }
                                 </div>
                             }
-                        </MudStack>
+                        </MudStack>;
+                }
+                @for (var groupIndex = 0; groupIndex < Groups.Count; groupIndex++)
+                {
+                    var group = Groups[groupIndex];
+                    @* MudTabs renders the panel content later, when the loop variable is already past
+                       the last index. *@
+                    var isFirstGroup = groupIndex == 0;
+                    <MudTabPanel Text="@group.DisplayName">
+                        @if (isFirstGroup)
+                        {
+                            <div @ref="_firstGroupContainer" tabindex="-1" class="mud-width-full">
+                                @renderGroup(group)
+                            </div>
+                        }
+                        else
+                        {
+                            @renderGroup(group)
+                        }
                     </MudTabPanel>
                 }
             </MudTabs>

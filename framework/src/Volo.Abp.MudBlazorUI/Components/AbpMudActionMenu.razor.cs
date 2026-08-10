@@ -1,5 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 using MudBlazor;
 
 namespace Volo.Abp.MudBlazorUI.Components;
@@ -12,6 +16,9 @@ public partial class AbpMudActionMenu : ComponentBase
 {
     protected MudMenu? _menu;
 
+    [Inject]
+    protected IStringLocalizer<AbpUiResource> UiLocalizer { get; set; } = default!;
+
     [Parameter]
     public string? Icon { get; set; }
 
@@ -22,8 +29,15 @@ public partial class AbpMudActionMenu : ComponentBase
     public string? StartIcon { get; set; }
 
     [Parameter]
+    public string? EndIcon { get; set; }
+
+    [Parameter]
     public string? Label { get; set; }
 
+    /// <summary>
+    /// The accessible name of the activator. An activator without a <see cref="Label"/> falls back
+    /// to the localized "Actions" text.
+    /// </summary>
     [Parameter]
     public string? AriaLabel { get; set; }
 
@@ -40,10 +54,37 @@ public partial class AbpMudActionMenu : ComponentBase
     public bool Dense { get; set; }
 
     [Parameter]
+    public bool FullWidth { get; set; }
+
+    [Parameter]
+    public int? MaxHeight { get; set; }
+
+    [Parameter]
     public Origin? AnchorOrigin { get; set; }
 
     [Parameter]
     public Origin TransformOrigin { get; set; } = Origin.TopLeft;
+
+    [Parameter]
+    public MouseEvent ActivationEvent { get; set; } = MouseEvent.LeftClick;
+
+    [Parameter]
+    public bool PositionAtCursor { get; set; }
+
+    [Parameter]
+    public bool PopoverFixed { get; set; }
+
+    [Parameter]
+    public DropdownWidth RelativeWidth { get; set; } = DropdownWidth.Ignore;
+
+    [Parameter]
+    public bool LockScroll { get; set; }
+
+    [Parameter]
+    public bool Ripple { get; set; } = true;
+
+    [Parameter]
+    public bool DropShadow { get; set; } = true;
 
     [Parameter]
     public bool Disabled { get; set; }
@@ -54,21 +95,39 @@ public partial class AbpMudActionMenu : ComponentBase
     [Parameter]
     public string? Style { get; set; }
 
+    [Parameter]
+    public string? ListClass { get; set; }
+
+    [Parameter]
+    public string? PopoverClass { get; set; }
+
     /// <summary>
-    /// Replaces the default activator button. The menu is opened through the given
-    /// <see cref="MenuContext"/>, same as <see cref="MudMenu.ActivatorContent"/>.
+    /// Never null, because MudBlazor reads it without a null check while rendering.
     /// </summary>
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object?> UserAttributes { get; set; } = new();
+
     [Parameter]
     public RenderFragment<MenuContext>? ActivatorContent { get; set; }
 
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
+    protected virtual string? GetAriaLabel()
+    {
+        if (!AriaLabel.IsNullOrEmpty())
+        {
+            return AriaLabel;
+        }
+
+        // A label is already the accessible name, so overriding it would hide the visible text.
+        return Label.IsNullOrEmpty() ? UiLocalizer["Actions"].Value : null;
+    }
+
     /// <summary>
-    /// Closes the menu and returns the focus to its activator.
-    /// <see cref="AbpMudActionMenuItem"/> calls this before running its handler: MudBlazor restores
-    /// the focus while closing the menu, and doing that after the handler opened a dialog would take
-    /// the focus back out of that dialog.
+    /// Closes the whole menu hierarchy. <see cref="AbpMudActionMenuItem"/> calls this before running
+    /// its handler, because MudBlazor restores the focus to the activator while closing and that
+    /// would take the focus out of a dialog the handler opened.
     /// </summary>
     public virtual async Task CloseAsync()
     {

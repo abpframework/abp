@@ -7,14 +7,22 @@ using MudBlazor;
 namespace Volo.Abp.MudBlazorUI.Components;
 
 /// <summary>
-/// An item of an <see cref="AbpMudActionMenu"/>. It closes the menu before running
-/// <see cref="OnClick"/>, so a dialog opened by the handler keeps the focus.
-/// Outside an <see cref="AbpMudActionMenu"/> it behaves like a plain <see cref="MudMenuItem"/>.
+/// A menu item that closes its menu before running <see cref="OnClick"/>, so a dialog opened by
+/// the handler keeps the focus. Works inside an <see cref="AbpMudActionMenu"/> and inside a plain
+/// <see cref="MudMenu"/>.
 /// </summary>
 public partial class AbpMudActionMenuItem : ComponentBase
 {
     [CascadingParameter]
     protected AbpMudActionMenu? ParentMenu { get; set; }
+
+    [CascadingParameter]
+    protected MudMenu? ParentMudMenu { get; set; }
+
+    /// <summary>
+    /// Whether this item can close the menu itself. When it cannot, MudBlazor keeps closing it.
+    /// </summary>
+    protected virtual bool ControlsMenu => ParentMenu != null || ParentMudMenu != null;
 
     [Parameter]
     public EventCallback<MouseEventArgs> OnClick { get; set; }
@@ -43,8 +51,11 @@ public partial class AbpMudActionMenuItem : ComponentBase
     [Parameter]
     public string? Class { get; set; }
 
+    /// <summary>
+    /// Never null, because MudBlazor reads it without a null check while rendering.
+    /// </summary>
     [Parameter(CaptureUnmatchedValues = true)]
-    public Dictionary<string, object>? UserAttributes { get; set; }
+    public Dictionary<string, object?> UserAttributes { get; set; } = new();
 
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
@@ -54,6 +65,10 @@ public partial class AbpMudActionMenuItem : ComponentBase
         if (ParentMenu != null)
         {
             await ParentMenu.CloseAsync();
+        }
+        else if (ParentMudMenu != null)
+        {
+            await ParentMudMenu.CloseAllMenusAsync();
         }
 
         await OnClick.InvokeAsync(args);
