@@ -98,13 +98,32 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
     public async override Task<IdentityResult> DeleteAsync(IdentityUser user)
     {
+        //The user may have been loaded without details.
+        await UserRepository.EnsureCollectionLoadedAsync(user, x => x.Claims, CancellationToken);
+        await UserRepository.EnsureCollectionLoadedAsync(user, x => x.Roles, CancellationToken);
+        await UserRepository.EnsureCollectionLoadedAsync(user, x => x.Tokens, CancellationToken);
+        await UserRepository.EnsureCollectionLoadedAsync(user, x => x.Logins, CancellationToken);
+        await UserRepository.EnsureCollectionLoadedAsync(user, x => x.OrganizationUnits, CancellationToken);
+        await UserRepository.EnsureCollectionLoadedAsync(user, x => x.PasswordHistories, CancellationToken);
+        await UserRepository.EnsureCollectionLoadedAsync(user, x => x.Passkeys, CancellationToken);
+
         user.Claims.Clear();
         user.Roles.Clear();
         user.Tokens.Clear();
         user.Logins.Clear();
         user.OrganizationUnits.Clear();
-        await IdentityLinkUserRepository.DeleteAsync(new IdentityLinkUserInfo(user.Id, user.TenantId), CancellationToken);
-        await UpdateAsync(user);
+        user.PasswordHistories.Clear();
+        user.Passkeys.Clear();
+
+        //UserDeletedEventHandler deletes them after the changes are saved, this keeps
+        //them gone for the rest of the current unit of work. They are in the host database.
+        using (CurrentTenant.Change(null))
+        {
+            await IdentityLinkUserRepository.DeleteAsync(new IdentityLinkUserInfo(user.Id, user.TenantId), CancellationToken);
+        }
+
+        //Soft deleting an entity reloads its original values.
+        (await UpdateAsync(user)).CheckErrors();
 
         return await base.DeleteAsync(user);
     }

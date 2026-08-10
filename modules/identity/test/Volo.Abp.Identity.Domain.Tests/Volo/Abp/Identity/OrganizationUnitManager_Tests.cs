@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Shouldly;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
@@ -177,6 +178,58 @@ public class OrganizationUnitManager_Tests : AbpIdentityDomainTestBase
 
                 ex.Code.ShouldBe(IdentityErrorCodes.OrganizationUnitParentTenantMismatch);
             }
+        }
+    }
+
+    [Fact]
+    public async Task CreateManyAsync()
+    {
+        List<OrganizationUnit> organizationUnits;
+
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            var lastRootCode = (await _organizationUnitRepository.GetChildrenAsync(null))
+                .OrderBy(x => x.Code).Last().Code;
+
+            organizationUnits = Enumerable.Range(0, 5)
+                .Select(_ => new OrganizationUnit(_guidGenerator.Create(), $"batch-{Guid.NewGuid():N}"))
+                .ToList();
+
+            await _organizationUnitManager.CreateManyAsync(organizationUnits);
+            await uow.CompleteAsync();
+
+            foreach (var organizationUnit in organizationUnits)
+            {
+                lastRootCode = OrganizationUnit.CalculateNextCode(lastRootCode);
+                organizationUnit.Code.ShouldBe(lastRootCode);
+            }
+        }
+
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            foreach (var organizationUnit in organizationUnits)
+            {
+                (await _organizationUnitRepository.GetAsync(organizationUnit.Id)).Code.ShouldBe(organizationUnit.Code);
+            }
+
+            await uow.CompleteAsync();
+        }
+    }
+
+    [Fact]
+    public async Task CreateManyAsync_Should_Not_Allow_Duplicate_Display_Name_In_The_Batch()
+    {
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            var displayName = $"batch-duplicate-{Guid.NewGuid():N}";
+
+            await Should.ThrowAsync<BusinessException>(async () =>
+                await _organizationUnitManager.CreateManyAsync([
+                    new OrganizationUnit(_guidGenerator.Create(), displayName),
+                    new OrganizationUnit(_guidGenerator.Create(), displayName)
+                ]));
+
+            await uow.CompleteAsync();
         }
     }
 }
