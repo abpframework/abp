@@ -78,7 +78,7 @@ Here is the list of all available commands before explaining their details:
 - [install-old-cli](../cli#install-old-cli): Installs old ABP CLI.
 - [generate-razor-page](../cli#generate-razor-page): Generates a page class that you can use it in the ASP NET Core pipeline to return an HTML page.
 - [generate-jwks](../cli#generate-jwks): Generates an RSA key pair (JWKS public key + PEM private key) for OpenIddict `private_key_jwt` client authentication.
-- [mcp](../cli#mcp): Runs the ABP MCP server, so AI coding assistants can search the ABP documentation, articles, support questions and source code.
+- [mcp](../cli#mcp): Runs a local MCP bridge to the ABP.IO MCP service, so AI coding assistants can search the ABP documentation, articles, support questions and source code.
 
 ### help
 
@@ -1313,7 +1313,7 @@ var tokenResponse = await httpClient.RequestClientCredentialsTokenAsync(
 
 ### mcp
 
-Runs the ABP [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) server on your computer, so MCP clients such as Claude Code, Codex, Cursor and Visual Studio Code can search the ABP documentation, community articles, answered support questions and the framework source code.
+Runs a local [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) bridge to the ABP.IO MCP service, so MCP clients such as Claude Code, Codex, Cursor and Visual Studio Code can search the ABP documentation, community articles, answered support questions and the framework source code.
 
 The command communicates with the MCP client over `stdio` and forwards the tool calls to `https://mcp.abp.io` by default. It uses the credentials of the [logged in](../cli#login) user, so you should run `abp login` before using it and your organization must have an active license. An internet connection is also required: the command checks the server before starting and fails when it cannot be reached.
 
@@ -1365,9 +1365,8 @@ args = ["mcp"]
 | `get_relevant_abp_documentation` | Searches the official ABP documentation. |
 | `get_relevant_abp_articles` | Searches the ABP community articles. |
 | `get_relevant_abp_support_questions` | Searches the previously answered support questions. |
-| `search_source_code` | Searches the ABP source code. Can be filtered by version and repository. |
-| `get_source_code_file` | Returns the full content of a file in an ABP repository. |
-| `list_abp_github_repositories` | Lists the official ABP GitHub repositories. |
+| `search_source_code` | Searches the indexed ABP source code. |
+| `list_abp_github_repositories` | Lists the ABP GitHub repositories available to the source code search. |
 
 ## See Also
 
