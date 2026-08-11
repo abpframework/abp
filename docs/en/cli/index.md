@@ -78,6 +78,7 @@ Here is the list of all available commands before explaining their details:
 - [install-old-cli](../cli#install-old-cli): Installs old ABP CLI.
 - [generate-razor-page](../cli#generate-razor-page): Generates a page class that you can use it in the ASP NET Core pipeline to return an HTML page.
 - [generate-jwks](../cli#generate-jwks): Generates an RSA key pair (JWKS public key + PEM private key) for OpenIddict `private_key_jwt` client authentication.
+- [mcp](../cli#mcp): Runs the ABP MCP server, so AI coding assistants can search the ABP documentation, articles, support questions and source code.
 
 ### help
 
@@ -1309,6 +1310,64 @@ var tokenResponse = await httpClient.RequestClientCredentialsTokenAsync(
         Scope = "<requested-scopes>",
     });
 ```
+
+### mcp
+
+Runs the ABP [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) server on your computer, so MCP clients such as Claude Code, Codex, Cursor and Visual Studio Code can search the ABP documentation, community articles, answered support questions and the framework source code.
+
+The command communicates with the MCP client over `stdio` and forwards the tool calls to `https://mcp.abp.io` by default. It uses the credentials of the [logged in](../cli#login) user, so you should run `abp login` before using it and your organization must have an active license. An internet connection is also required: the command checks the server before starting and fails when it can not be reached.
+
+Usage:
+
+```bash
+abp mcp [get-config]
+```
+
+Examples:
+
+```bash
+abp mcp               # Starts the MCP server. MCP clients run this command themselves.
+abp mcp get-config    # Prints the configuration to be added to your MCP client.
+```
+
+#### Configuring your MCP client
+
+`abp mcp get-config` prints the following configuration:
+
+```json
+{
+  "mcpServers": {
+    "abp": {
+      "command": "abp",
+      "args": [
+        "mcp"
+      ],
+      "env": {}
+    }
+  }
+}
+```
+
+Claude Code uses that JSON directly. Add it to the `.mcp.json` file in your solution folder to enable the server for a single solution, or to `~/.claude.json` (`%USERPROFILE%\.claude.json` on Windows) to enable it for all of them. Cursor uses the same format in its own `mcp.json` file. For the other clients, check their documentation for the configuration file and the format they expect; the command and the arguments are always the same.
+
+Codex uses the TOML format, so add the following section to `~/.codex/config.toml` (`%USERPROFILE%\.codex\config.toml` on Windows):
+
+```toml
+[mcp_servers.abp]
+command = "abp"
+args = ["mcp"]
+```
+
+#### Tools
+
+| Tool | Description |
+| --- | --- |
+| `get_relevant_abp_documentation` | Searches the official ABP documentation. |
+| `get_relevant_abp_articles` | Searches the ABP community articles. |
+| `get_relevant_abp_support_questions` | Searches the previously answered support questions. |
+| `search_source_code` | Searches the ABP source code. Can be filtered by version and repository. |
+| `get_source_code_file` | Returns the full content of a file in an ABP repository. |
+| `list_abp_github_repositories` | Lists the official ABP GitHub repositories. |
 
 ## See Also
 
