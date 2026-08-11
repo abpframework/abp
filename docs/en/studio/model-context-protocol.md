@@ -79,44 +79,53 @@ Claude Desktop config file locations:
 
 ### Quick Reference
 
-You can run `abp help mcp-studio` at any time to see the available options and example configuration snippets for each supported IDE directly in your terminal.
+You can run `abp help mcp-studio` at any time to see the available options and the Cursor and Claude Desktop configuration snippets directly in your terminal.
 
 ### Generating Config Files from ABP Studio
 
-When creating a new solution, ABP Studio can generate MCP configuration files for Cursor and VS Code automatically.
+The `app`, `app-nolayers` and `microservice` templates already contain a `.vscode/mcp.json` file, so a solution created from one of them works with VS Code without any extra configuration.
+
+> The endpoint is not authenticated. It only listens on `localhost`, but any local process can call it, and a connected client can read the monitoring data, build the solution, run the configured tasks and start or stop applications and containers. Only configure MCP clients you trust, and do not forward or expose the endpoint.
 
 ## Available Tools
 
-ABP Studio exposes the following tools to MCP clients. All tools operate on the currently open solution and selected run profile in ABP Studio.
+ABP Studio exposes the following tools to MCP clients. The monitoring tools work on their own. The build and solution tools need a solution to be open. The application, container and task tools also need a run profile to be selected.
 
 ### Monitoring
 
 | Tool | Description |
 |------|-------------|
-| `list_applications` | Lists all running ABP applications connected to ABP Studio. |
 | `get_exceptions` | Gets recent exceptions including stack traces and error messages. |
 | `get_logs` | Gets log entries. Can be filtered by log level. |
 | `get_requests` | Gets HTTP request information. Can be filtered by status code. |
 | `get_events` | Gets distributed events for debugging inter-service communication. |
-| `clear_monitor` | Clears collected monitor data. |
 
 ### Application Control
 
 | Tool | Description |
 |------|-------------|
-| `list_runnable_applications` | Lists all applications in the current run profile with their state. |
-| `start_application` | Starts a stopped application. |
-| `stop_application` | Stops a running application. |
-| `restart_application` | Restarts a running application. |
-| `build_application` | Builds a .NET application using `dotnet build`. |
+| `start_applications` | Starts applications of the selected run profile. A running application is stopped and started again. |
+| `stop_applications` | Stops running applications. |
 
 ### Container Control
 
 | Tool | Description |
 |------|-------------|
-| `list_containers` | Lists Docker containers in the current run profile with their state. |
-| `start_containers` | Starts Docker containers (docker-compose up). |
-| `stop_containers` | Stops Docker containers (docker-compose down). |
+| `start_containers` | Starts Docker containers of the selected run profile. |
+| `stop_containers` | Stops Docker containers of the selected run profile. |
+
+### Tasks
+
+| Tool | Description |
+|------|-------------|
+| `run_task` | Runs a task of the selected run profile. It waits for the task, and on timeout it returns while the task keeps running in the background. |
+
+### Build
+
+| Tool | Description |
+|------|-------------|
+| `dotnet_build` | Builds the solution, a module or a package using `dotnet build`. |
+| `install_libs` | Runs `abp install-libs` at the solution root. |
 
 ### Solution Structure
 
@@ -125,7 +134,6 @@ ABP Studio exposes the following tools to MCP clients. All tools operate on the 
 | `get_solution_info` | Gets solution name, path, template, and run profile information. |
 | `list_modules` | Lists all modules in the solution. |
 | `list_packages` | Lists packages (projects) in the solution. Can be filtered by module. |
-| `get_module_dependencies` | Gets module dependency/import information. |
 
 ## Notes
 
