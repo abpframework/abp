@@ -83,7 +83,7 @@ You can run `abp help mcp-studio` at any time to see the available options and t
 
 ### Generating Config Files from ABP Studio
 
-The `app`, `app-nolayers` and `microservice` templates already contain a `.vscode/mcp.json` file, so a solution created from one of them works with VS Code without any extra configuration.
+By default, the `app`, `app-nolayers` and `microservice` templates create a `.vscode/mcp.json` file, so a solution created from one of them works with VS Code without any extra configuration.
 
 > The endpoint is not authenticated. It only listens on `localhost`, but any local process can call it, and a connected client can read the monitoring data, build the solution, run the configured tasks and start or stop applications and containers. Only configure MCP clients you trust, and do not forward or expose the endpoint.
 
