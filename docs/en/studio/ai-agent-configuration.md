@@ -102,7 +102,7 @@ Permission choices include allow once, allow always, and skip. "Allow always" pe
 
 ## MCP Tool Connections
 
-ABP Studio can connect to user-configured Model Context Protocol (MCP) servers and expose their tools to Agent mode. This is an MCP client integration for the AI Agent. ABP Studio AI Agent does not expose itself as an MCP server for external AI clients.
+ABP Studio can connect to user-configured Model Context Protocol (MCP) servers and expose their tools to Agent mode. This section is about that MCP client integration. For the other direction, where external AI clients connect to ABP Studio and use its own tools, see the [Model Context Protocol (MCP)](model-context-protocol.md) documentation.
 
 ### Adding an Integration
 
