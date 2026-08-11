@@ -103,6 +103,8 @@ This pane is dedicated to managing Kubernetes services. It simplifies the proces
 
 The AI Agent is an integrated coding agent in ABP Studio. It can answer ABP-related questions, create implementation plans, and work on the current solution with controlled access to files, Studio tools, workflows, Git context, and configured MCP tools.
 
+For external AI tool integrations through MCP, see the [Model Context Protocol (MCP)](./model-context-protocol.md) documentation.
+
 ![ai-agent](./images/ai-agent/ai-agent-panel.png)
 
 Key features of the AI Agent include:
