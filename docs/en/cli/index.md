@@ -1315,7 +1315,7 @@ var tokenResponse = await httpClient.RequestClientCredentialsTokenAsync(
 
 Runs the ABP [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) server on your computer, so MCP clients such as Claude Code, Codex, Cursor and Visual Studio Code can search the ABP documentation, community articles, answered support questions and the framework source code.
 
-The command communicates with the MCP client over `stdio` and forwards the tool calls to `https://mcp.abp.io` by default. It uses the credentials of the [logged in](../cli#login) user, so you should run `abp login` before using it and your organization must have an active license. An internet connection is also required: the command checks the server before starting and fails when it can not be reached.
+The command communicates with the MCP client over `stdio` and forwards the tool calls to `https://mcp.abp.io` by default. It uses the credentials of the [logged in](../cli#login) user, so you should run `abp login` before using it and your organization must have an active license. An internet connection is also required: the command checks the server before starting and fails when it cannot be reached.
 
 Usage:
 
