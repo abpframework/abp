@@ -98,8 +98,7 @@ public partial class FeatureManagementModal
             }
 
             _isVisible = true;
-            // The previous reference points to an element that is gone, and it would be taken for a
-            // bound container on the next render.
+            // The previous reference points to an element that is gone by now.
             _firstGroupContainer = default;
             _shouldFocusFirstGroup = Groups.Any();
             _focusRenderCount = 0;
@@ -126,8 +125,8 @@ public partial class FeatureManagementModal
             return;
         }
 
-        // The dialog provider renders the content in a later batch, so the container is not bound yet
-        // on the render that makes the dialog visible. Rendering again brings this method back.
+        // The dialog provider renders the content in a later batch, so rendering again is what brings
+        // this method back once the container is bound.
         if (_firstGroupContainer.Id.IsNullOrEmpty())
         {
             if (_focusRenderCount++ < MaxFocusRenderCount)

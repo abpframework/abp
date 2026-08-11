@@ -9,8 +9,7 @@ using MudBlazor;
 namespace Volo.Abp.MudBlazorUI.Components;
 
 /// <summary>
-/// A <see cref="MudMenu"/> for entity/row actions that open a dialog.
-/// Use it together with <see cref="AbpMudActionMenuItem"/>.
+/// A <see cref="MudMenu"/> for actions that open a dialog. Use it with <see cref="AbpMudActionMenuItem"/>.
 /// </summary>
 public partial class AbpMudActionMenu : ComponentBase
 {
@@ -35,8 +34,7 @@ public partial class AbpMudActionMenu : ComponentBase
     public string? Label { get; set; }
 
     /// <summary>
-    /// The accessible name of the activator. An activator without a <see cref="Label"/> falls back
-    /// to the localized "Actions" text.
+    /// The accessible name of an activator that has no <see cref="Label"/>. Defaults to "Actions".
     /// </summary>
     [Parameter]
     public string? AriaLabel { get; set; }
@@ -125,9 +123,8 @@ public partial class AbpMudActionMenu : ComponentBase
     }
 
     /// <summary>
-    /// Closes the whole menu hierarchy. <see cref="AbpMudActionMenuItem"/> calls this before running
-    /// its handler, because MudBlazor restores the focus to the activator while closing and that
-    /// would take the focus out of a dialog the handler opened.
+    /// Closes the whole menu hierarchy. MudBlazor restores the focus to the activator while closing,
+    /// so <see cref="AbpMudActionMenuItem"/> calls this before its handler opens a dialog.
     /// </summary>
     public virtual async Task CloseAsync()
     {

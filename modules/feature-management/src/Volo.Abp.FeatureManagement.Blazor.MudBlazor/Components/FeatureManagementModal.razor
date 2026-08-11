@@ -20,7 +20,7 @@
                 PanelClass="pa-4">
                 @{
                     @* The features come from the definitions, so there is no known input to put
-                       AutoFocus on. The first panel gets a container that takes the focus instead. *@
+                       AutoFocus on. The first panel gets a container that takes the focus. *@
                     RenderFragment<FeatureGroupDto> renderGroup = group =>
                     @<MudStack Spacing="2">
                             <MudText Typo="Typo.h6">@group.DisplayName</MudText>
@@ -74,8 +74,7 @@
                 @for (var groupIndex = 0; groupIndex < Groups.Count; groupIndex++)
                 {
                     var group = Groups[groupIndex];
-                    @* MudTabs renders the panel content later, when the loop variable is already past
-                       the last index. *@
+                    @* MudTabs renders the panel content after the loop is over. *@
                     var isFirstGroup = groupIndex == 0;
                     <MudTabPanel Text="@group.DisplayName">
                         @if (isFirstGroup)

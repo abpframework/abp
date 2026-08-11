@@ -7,9 +7,8 @@ using MudBlazor;
 namespace Volo.Abp.MudBlazorUI.Components;
 
 /// <summary>
-/// A menu item that closes its menu before running <see cref="OnClick"/>, so a dialog opened by
-/// the handler keeps the focus. Works inside an <see cref="AbpMudActionMenu"/> and inside a plain
-/// <see cref="MudMenu"/>.
+/// A menu item that closes its menu before running <see cref="OnClick"/>, so a dialog opened by the
+/// handler keeps the focus. Works in an <see cref="AbpMudActionMenu"/> and in a plain <see cref="MudMenu"/>.
 /// </summary>
 public partial class AbpMudActionMenuItem : ComponentBase
 {
