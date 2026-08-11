@@ -48,6 +48,51 @@ public class OrganizationUnitManager : DomainService
         await OrganizationUnitRepository.InsertAsync(organizationUnit);
     }
 
+    /// <summary>
+    /// Creates the given organization units by querying the siblings of a parent once instead of once
+    /// per organization unit. They all have to belong to the current tenant and their parents must
+    /// already exist. <see cref="GetNextChildCodeAsync"/> is used for the first organization unit of a
+    /// parent, the codes of the rest follow it. Custom validation should be added by overriding
+    /// <see cref="ValidateOrganizationUnitAsync(OrganizationUnit, List{OrganizationUnit})"/>.
+    /// </summary>
+    [UnitOfWork]
+    public virtual async Task CreateManyAsync(List<OrganizationUnit> organizationUnits)
+    {
+        Check.NotNull(organizationUnits, nameof(organizationUnits));
+
+        if (organizationUnits.Any(x => x.TenantId != CurrentTenant.Id))
+        {
+            throw new AbpException("Organization units of another tenant can not be created, change the current tenant instead!");
+        }
+
+        var groups = organizationUnits.GroupBy(x => x.ParentId).ToList();
+
+        foreach (var group in groups)
+        {
+            await ValidateParentTenantAsync(group.Key, CurrentTenant.Id);
+
+            var siblings = await FindChildrenAsync(group.Key);
+            string lastCode = null;
+
+            foreach (var organizationUnit in group)
+            {
+                organizationUnit.Code = lastCode = lastCode == null
+                    ? await GetNextChildCodeAsync(group.Key)
+                    : OrganizationUnit.CalculateNextCode(lastCode);
+
+                await ValidateOrganizationUnitAsync(organizationUnit, siblings);
+
+                siblings.Add(organizationUnit);
+            }
+        }
+
+        //Nothing is inserted before every group is validated.
+        foreach (var group in groups)
+        {
+            await OrganizationUnitRepository.InsertManyAsync(group.ToList());
+        }
+    }
+
     public virtual async Task UpdateAsync(OrganizationUnit organizationUnit)
     {
         await ValidateOrganizationUnitAsync(organizationUnit);
@@ -141,15 +186,21 @@ public class OrganizationUnitManager : DomainService
 
     protected virtual async Task ValidateOrganizationUnitAsync(OrganizationUnit organizationUnit)
     {
-        var siblings = (await FindChildrenAsync(organizationUnit.ParentId))
-            .Where(ou => ou.Id != organizationUnit.Id)
-            .ToList();
+        await ValidateOrganizationUnitAsync(organizationUnit, await FindChildrenAsync(organizationUnit.ParentId));
+    }
 
-        if (siblings.Any(ou => ou.DisplayName == organizationUnit.DisplayName))
+    /// <summary>
+    /// Validates the organization unit against the given siblings, so they are not queried again.
+    /// </summary>
+    protected virtual Task ValidateOrganizationUnitAsync(OrganizationUnit organizationUnit, List<OrganizationUnit> siblings)
+    {
+        if (siblings.Any(ou => ou.Id != organizationUnit.Id && ou.DisplayName == organizationUnit.DisplayName))
         {
             throw new BusinessException(IdentityErrorCodes.DuplicateOrganizationUnitDisplayName)
                 .WithData("0", organizationUnit.DisplayName);
         }
+
+        return Task.CompletedTask;
     }
 
     protected virtual async Task ValidateParentTenantAsync(Guid? parentId, Guid? tenantId)
