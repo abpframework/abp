@@ -1107,7 +1107,7 @@ abp install-old-cli [options]
 
 Starts an MCP stdio bridge for AI tools (Cursor, Claude Desktop, VS Code, etc.) that connects to the local ABP Studio instance. ABP Studio must be running for this command to work.
 
-> You do not need to run this command manually. It is invoked automatically by your AI tool once you add the MCP configuration to your IDE. See the [Configuration](#configuration) examples below.
+> You do not need to run this command manually. It is invoked automatically by your AI tool once you add the MCP configuration to your IDE. See the [Configuration](../studio/model-context-protocol.md#configuration) examples.
 
 > This command connects to the **local ABP Studio** instance. It is separate from the `abp mcp` command, which connects to the ABP.IO cloud MCP service and requires an active license.
 
