@@ -41,15 +41,22 @@ public abstract class TemplateRenderingEngineBase : ITemplateRenderingEngine
         // The invariant culture has an empty name, which is not a valid value for a lang attribute.
         var cultureName = CultureInfo.CurrentUICulture.Name;
 
-        if (!globalContext.ContainsKey(CultureContextKey))
+        SetCultureContextValue(globalContext, CultureContextKey, cultureName.IsNullOrWhiteSpace() ? "en" : cultureName);
+        SetCultureContextValue(globalContext, TextDirectionContextKey, CultureHelper.IsRtl ? "rtl" : "ltr");
+    }
+
+    protected virtual void SetCultureContextValue(Dictionary<string, object> globalContext, string key, string value)
+    {
+        if (!globalContext.TryGetValue(key, out var callerValue))
         {
-            globalContext[CultureContextKey] = cultureName.IsNullOrWhiteSpace() ? "en" : cultureName;
+            globalContext.Add(key, value);
+            return;
         }
 
-        if (!globalContext.ContainsKey(TextDirectionContextKey))
-        {
-            globalContext[TextDirectionContextKey] = CultureHelper.IsRtl ? "rtl" : "ltr";
-        }
+        // A case insensitive context can hold the value under another casing, while templates look the key
+        // up as it is written here, so it is re-inserted with the canonical one.
+        globalContext.Remove(key);
+        globalContext.Add(key, callerValue);
     }
 
     protected virtual async Task<string?> GetContentOrNullAsync(TemplateDefinition templateDefinition)

@@ -80,9 +80,8 @@ public class ScribanTemplateRenderingEngine_CultureContext_Tests : AbpTextTempla
     [Fact]
     public async Task Should_Keep_The_Comparer_Of_The_Context_Of_The_Caller()
     {
-        // ABP_CULTURE already covers the key here, so nothing is added; losing the comparer on the copy
-        // would add a second, lowercase entry and render "ar". Scriban itself looks names up case
-        // sensitively, hence the empty culture in the output.
+        // Scriban looks the key up as the template writes it, so the value of a case insensitive context
+        // has to be re-inserted under the canonical casing to stay reachable.
         var globalContext = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase)
         {
             ["ABP_CULTURE"] = "custom"
@@ -92,7 +91,7 @@ public class ScribanTemplateRenderingEngine_CultureContext_Tests : AbpTextTempla
             ScribanTestTemplateDefinitionProvider.CultureContext,
             cultureName: "ar",
             globalContext: globalContext
-        )).ShouldBe("<html lang=\"\" dir=\"rtl\">");
+        )).ShouldBe("<html lang=\"custom\" dir=\"rtl\">");
     }
 
     [Fact]
