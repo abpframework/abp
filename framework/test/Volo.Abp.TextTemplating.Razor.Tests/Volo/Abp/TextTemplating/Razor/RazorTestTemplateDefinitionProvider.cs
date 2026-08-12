@@ -23,5 +23,9 @@ public class RazorTestTemplateDefinitionProvider : TemplateDefinitionProvider
             .WithRazorEngine();
 
         context.Add(new TemplateDefinition(RazorTestTemplates.TestTemplate).WithVirtualFilePath("/SampleTemplates/TestTemplate.cshtml", true));
+
+        context.Add(new TemplateDefinition(RazorTestTemplates.CultureContext)
+            .WithVirtualFilePath("/SampleTemplates/CultureContext.cshtml", true)
+            .WithRazorEngine());
     }
 }

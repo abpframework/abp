@@ -302,7 +302,7 @@ First, create a template file just like before:
 
 ````xml
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="{%{{{abp_culture}}}%}" dir="{%{{{abp_dir}}}%}" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
 </head>
@@ -375,6 +375,21 @@ The rendering result will be:
 A global object value: TEST VALUE
 ````
 
+### Built-In Global Context Values
+
+The Scriban and Razor engines add the following values to the global context, so a template can declare the language and the text direction of the document it renders:
+
+| Key | Value |
+|-----|-------|
+| `abp_culture` | Name of the culture the template is rendered with, `en` when it is the invariant culture. |
+| `abp_dir` | `rtl` for a right-to-left culture, `ltr` otherwise. |
+
+````html
+<html lang="{%{{{abp_culture}}}%}" dir="{%{{{abp_dir}}}%}">
+````
+
+A value you pass yourself under the same key is kept. The rendering works on a copy of the dictionary you pass, so you can reuse the same instance for several renderings.
+
 ## Replacing the Existing Templates
 
 It is possible to replace a template defined by a module that used in your application. In this way, you can customize the templates based on your requirements without changing the module code.
@@ -397,7 +412,7 @@ Do the following steps to replace the template file with your own;
 
 ````html
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="{%{{{abp_culture}}}%}" dir="{%{{{abp_dir}}}%}" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
 </head>

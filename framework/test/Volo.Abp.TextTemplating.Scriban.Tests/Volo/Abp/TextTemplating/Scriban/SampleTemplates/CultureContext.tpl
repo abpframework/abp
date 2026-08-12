@@ -1,0 +1,1 @@
+<html lang="{{abp_culture}}" dir="{{abp_dir}}">
