@@ -1,5 +1,5 @@
 {
-  "version": "10.7.0-rc.1",
+  "version": "10.7.0-rc.2",
   "name": "@abp/jquery",
   "repository": {
     "type": "git",
@@ -10,7 +10,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "~10.7.0-rc.1",
+    "@abp/core": "~10.7.0-rc.2",
     "jquery": "~4.0.0",
     "jquery-migrate": "~4.0.2"
   },

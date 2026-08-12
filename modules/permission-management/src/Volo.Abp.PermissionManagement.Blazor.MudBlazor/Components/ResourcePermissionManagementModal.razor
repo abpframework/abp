@@ -24,14 +24,14 @@
                 <Columns>
                     <TemplateColumn Title="@L["Actions"]" Sortable="false" Style="width: 150px;">
                         <CellTemplate>
-                            <MudMenu Icon="@Icons.Material.Filled.MoreVert">
-                                <MudMenuItem OnClick="@(() => OpenEditDialogAsync(context.Item))">
+                            <AbpMudActionMenu Icon="@Icons.Material.Filled.MoreVert">
+                                <AbpMudActionMenuItem OnClick="@(() => OpenEditDialogAsync(context.Item))">
                                     @L["Edit"]
-                                </MudMenuItem>
-                                <MudMenuItem OnClick="@(() => DeleteResourcePermissionAsync(context.Item))">
+                                </AbpMudActionMenuItem>
+                                <AbpMudActionMenuItem OnClick="@(() => DeleteResourcePermissionAsync(context.Item))">
                                     @L["Delete"]
-                                </MudMenuItem>
-                            </MudMenu>
+                                </AbpMudActionMenuItem>
+                            </AbpMudActionMenu>
                         </CellTemplate>
                     </TemplateColumn>
                     <PropertyColumn Property="x => x.ProviderName" Title="@L["ResourcePermissionTarget"]" Sortable="false">
