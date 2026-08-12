@@ -39,13 +39,16 @@ public class RazorTemplateRenderingEngine : TemplateRenderingEngineBase, ITransi
     {
         Check.NotNullOrWhiteSpace(templateName, nameof(templateName));
 
-        if (globalContext == null)
-        {
-            globalContext = new Dictionary<string, object>();
-        }
+        // The rendering writes the culture context into this dictionary, so it works on a copy: a caller
+        // reusing one instance would carry the values of a rendering into the next.
+        globalContext = globalContext == null
+            ? new Dictionary<string, object>()
+            : new Dictionary<string, object>(globalContext, globalContext.Comparer);
 
         if (cultureName == null)
         {
+            SetCultureContext(globalContext);
+
             return await RenderInternalAsync(
                 templateName,
                 null,
@@ -57,6 +60,8 @@ public class RazorTemplateRenderingEngine : TemplateRenderingEngineBase, ITransi
         {
             using (CultureHelper.Use(cultureName))
             {
+                SetCultureContext(globalContext);
+
                 return await RenderInternalAsync(
                     templateName,
                     null,

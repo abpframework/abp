@@ -1,11 +1,13 @@
 ﻿using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
+using Volo.Abp.TextTemplating.Scriban;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Emailing;
 
 [DependsOn(
     typeof(AbpEmailingModule),
+    typeof(AbpTextTemplatingScribanModule),
     typeof(AbpAutofacModule),
     typeof(AbpTestBaseModule))]
 public class AbpEmailingTestModule : AbpModule

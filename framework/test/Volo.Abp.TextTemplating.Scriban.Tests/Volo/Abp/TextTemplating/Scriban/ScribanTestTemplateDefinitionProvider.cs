@@ -6,6 +6,7 @@ public class ScribanTestTemplateDefinitionProvider : TemplateDefinitionProvider
     public const string ReflectionEscapeChain = "ReflectionEscapeChain";
     public const string MethodInvocationAttempt = "MethodInvocationAttempt";
     public const string NestedPropertyAccess = "NestedPropertyAccess";
+    public const string CultureContext = "CultureContext";
 
     public override void Define(ITemplateDefinitionContext context)
     {
@@ -39,6 +40,10 @@ public class ScribanTestTemplateDefinitionProvider : TemplateDefinitionProvider
 
         context.Add(new TemplateDefinition(NestedPropertyAccess)
             .WithVirtualFilePath("/SampleTemplates/NestedPropertyAccess.tpl", true)
+            .WithScribanEngine());
+
+        context.Add(new TemplateDefinition(CultureContext)
+            .WithVirtualFilePath("/SampleTemplates/CultureContext.tpl", true)
             .WithScribanEngine());
     }
 }
