@@ -1,0 +1,16 @@
+{
+  "culture": "ko",
+  "texts": {
+    "VirtualFileExplorer": "가상 파일 탐색기",
+    "VirtualFileType": "가상 파일 형식",
+    "Menu:VirtualFileExplorer": "가상 파일 탐색기",
+    "LastUpdateTime": "마지막 업데이트 시간",
+    "VirtualFileName": "가상 파일 이름",
+    "FileContent": "파일 내용",
+    "Size": "크기",
+    "BackToRoot": "루트로 돌아가기",
+    "EmptyFileInfoList": "가상 파일이 없습니다.",
+    "Permission:AbpVirtualFileExplorer": "가상 파일 탐색기",
+    "Permission:AbpVirtualFileExplorer:View": "보기"
+  }
+}
