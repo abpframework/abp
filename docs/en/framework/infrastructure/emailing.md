@@ -193,7 +193,7 @@ The resulting email body will be shown below:
 
 ````html
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
 </head>
@@ -217,7 +217,7 @@ This template uses the "Abp.StandardEmailTemplates.Layout" as its layout.
 
 ````html
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="{%{{{abp_culture}}}%}" dir="{%{{{abp_dir}}}%}" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
 </head>
@@ -226,6 +226,8 @@ This template uses the "Abp.StandardEmailTemplates.Layout" as its layout.
 </body>
 </html>
 ````
+
+`abp_culture` and `abp_dir` are provided by the rendering engine, so the document declares the language and the text direction of the culture it was rendered with. See [the text templating documentation](./text-templating/scriban.md) for the details.
 
 The final rendered message was shown above.
 
