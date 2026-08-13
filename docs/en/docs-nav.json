@@ -2154,6 +2154,14 @@
           "path": "low-code/designer.md"
         },
         {
+          "text": "Calculated and Rollup Properties",
+          "path": "low-code/formula-properties.md"
+        },
+        {
+          "text": "Low-Code Expression Language",
+          "path": "low-code/expression-language.md"
+        },
+        {
           "text": "React Runtime",
           "path": "low-code/react-runtime.md"
         },
