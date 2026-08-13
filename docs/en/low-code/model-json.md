@@ -241,6 +241,8 @@ Entities describe the persisted data model. UI is not configured with legacy pro
 | `foreignKey` | Lookup relation metadata |
 | `validators` | Backend/UI validation rules |
 
+For virtual calculated fields and related-record aggregates, see [Calculated and Rollup Properties](formula-properties.md). The [Low-Code Expression Language](expression-language.md) reference documents the scalar syntax used by calculated properties and formula backfills.
+
 ### Property Types
 
 | Type | Description |
