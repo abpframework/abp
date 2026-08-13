@@ -176,6 +176,8 @@ The designer stores and reads the same descriptor metadata described in the refe
 | Topic | Use it for |
 |-------|------------|
 | [Designer](designer.md) | Admin Console tabs, entity/page/form setup, permissions, and health |
+| [Calculated and Rollup Properties](formula-properties.md) | Virtual scalar formulas and related-record aggregates authored in the Designer |
+| [Low-Code Expression Language](expression-language.md) | Provider-safe scalar syntax used by calculated properties and formula backfills |
 | [Add Low-Code to an Existing Solution](add-to-existing-solution.md) | Retrofitting an existing EF Core solution with Studio import plus manual backend and React wiring |
 | [Use Low-Code from a Non-React Application](non-react-ui-integration.md) | Keeping an MVC, Razor Pages, Angular, or Blazor UI while hosting the React Low-Code runtime and Designer alongside it |
 | [React Runtime](react-runtime.md) | React package wiring, routes, menu items, filters, forms, and export |
@@ -207,6 +209,8 @@ The generated pages are powered by these services:
 ## See Also
 
 * [Low-Code Designer](designer.md)
+* [Calculated and Rollup Properties](formula-properties.md)
+* [Low-Code Expression Language](expression-language.md)
 * [Add Low-Code to an Existing Solution](add-to-existing-solution.md)
 * [Use Low-Code from a Non-React Application](non-react-ui-integration.md)
 * [React Runtime](react-runtime.md)

@@ -42,6 +42,8 @@ Use **Data** to define the domain model.
 
 Entities contain properties, display names, display property configuration, inherited audit fields, relations, and optional interceptors. Enums are created once and then used by enum properties.
 
+For virtual fields derived from the current record or related records, see [Calculated and Rollup Properties](formula-properties.md). For the supported scalar formula syntax, see the [Low-Code Expression Language](expression-language.md) reference.
+
 ![Entity summary in the designer](images/designer-entity.png)
 
 ![Entity property list](images/designer-properties.png)
