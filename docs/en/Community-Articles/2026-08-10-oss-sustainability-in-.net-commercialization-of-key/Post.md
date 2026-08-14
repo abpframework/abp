@@ -67,8 +67,6 @@ In other words, the move to commercial licensing is often less about greed than 
 
 
 
-![Generated illustration](inline-1.png)
-
 ## Why the community reaction is so mixed
 
 Even if the economics make sense, the backlash is real. And frankly, some of it is justified.
@@ -188,9 +186,7 @@ Now the questions are not just technical:
 
 That is architecture, budgeting, and compliance converging in one decision.
 
-
-
-![Generated illustration](inline-2.png)
+ 
 
 ## How teams should respond
 
