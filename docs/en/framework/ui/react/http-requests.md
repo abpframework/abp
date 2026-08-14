@@ -202,6 +202,14 @@ const productsQuery = useQuery({
 })
 ```
 
+## Keeping API Modules in Sync
+
+`abp generate-proxy` has no React target. Its `-t js` generator produces jQuery proxy scripts for MVC / Razor Pages applications, and it must run in a folder that contains a Web project file, so it does not apply to the React application. Update the modules under `src/lib/api/` yourself when a backend contract changes:
+
+1. Start the backend and check the new contract on its Swagger UI or `/api/abp/api-definition?includeTypes=true`.
+2. Update the DTO interfaces and function signatures in the matching module.
+3. Update the callers and run `npm run build` so TypeScript reports the mismatches.
+
 ## Development Proxy
 
 In development, Vite proxies `/api`, `/connect`, and `/getEnvConfig`. This lets the React app use same-origin paths while calls are forwarded to the backend, Auth Server, or gateway configured by `VITE_API_URL` and `VITE_AUTH_URL`.
