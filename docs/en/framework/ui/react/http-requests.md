@@ -57,7 +57,7 @@ Use this instance for application API modules instead of creating new Axios clie
 Before each request, the template:
 
 - Sets `baseURL` from runtime configuration.
-- Adds `Authorization: Bearer <token>` from the OIDC user.
+- Gets the OIDC access token through `ensureAccessToken`, silently renewing a missing or expired token when a refresh token is available, and adds any returned token as `Authorization: Bearer <token>`.
 - Adds `__tenant` when the user has selected a tenant.
 - Adds `Accept-Language` from i18next.
 - Keeps default AJAX headers such as `X-Requested-With`.
@@ -66,9 +66,9 @@ Before each request, the template:
 api.interceptors.request.use(async (config) => {
   config.baseURL = getApiBaseUrl()
 
-  const user = await userManager.getUser()
-  if (user?.access_token) {
-    config.headers.Authorization = `Bearer ${user.access_token}`
+  const accessToken = await ensureAccessToken()
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`
   }
 
   const tenantId = sessionStorage.getItem('abp_tenant_id')
@@ -89,8 +89,8 @@ api.interceptors.request.use(async (config) => {
 
 The response interceptor handles common authorization failures:
 
-- `401 Unauthorized`: redirects to login unless `skipAuthRedirect` is set.
-- `403 Forbidden`: redirects to `/403` unless `skip403Redirect` is set.
+- `401 Unauthorized`: unless `skipAuthRedirect` is set, tries to refresh the access token and retries the request once. If the token cannot be refreshed, it redirects to login. With `skipAuthRedirect`, the original error is rejected to the caller.
+- `403 Forbidden`: redirects non-mutating requests to `/403` unless `skip403Redirect` is set. Mutation errors are rejected so TanStack Query or the caller can handle them.
 - Other errors are rejected so the caller can handle them.
 
 ```ts
@@ -99,12 +99,17 @@ api.interceptors.response.use(
   async (error) => {
     const status = error.response?.status
 
-    if (status === 401 && !error.config?.skipAuthRedirect) {
-      await userManager.signinRedirect()
-      return Promise.reject(new Error('Unauthorized - redirecting to login'))
+    const config = error.config
+
+    if (status === 401 && !config?.skipAuthRedirect) {
+      return handleUnauthorizedResponse(error)
     }
 
-    if (status === 403 && !error.config?.skip403Redirect) {
+    if (
+      status === 403 &&
+      !config?.skip403Redirect &&
+      !isMutatingRequest(config?.method)
+    ) {
       window.location.href = '/403'
       return Promise.reject(new Error('Forbidden'))
     }
@@ -134,11 +139,20 @@ export interface BookDto {
   price: number
 }
 
-export async function getBooks(): Promise<PagedResultDto<BookDto>> {
+export interface PagedAndSortedResultRequestDto {
+  maxResultCount?: number
+  skipCount?: number
+  sorting?: string
+}
+
+export async function getBooks(
+  params: PagedAndSortedResultRequestDto = {}
+): Promise<PagedResultDto<BookDto>> {
   const { data } = await api.get<PagedResultDto<BookDto>>('/app/book', {
     params: {
-      maxResultCount: 10,
-      skipCount: 0,
+      maxResultCount: params.maxResultCount ?? 10,
+      skipCount: params.skipCount ?? 0,
+      sorting: params.sorting,
     },
   })
   return data
@@ -201,6 +215,20 @@ const productsQuery = useQuery({
   queryFn: getProducts,
 })
 ```
+
+## Keeping the Main React SPA's API Modules in Sync
+
+The main developer-owned React SPA lives under `react/` in layered and single-layer solutions, and under `apps/react/` in microservice solutions. Its application-specific typed API modules are maintained under `src/lib/api/`.
+
+These instructions apply to the main developer-owned React SPA. They do not describe the React Public Web app, the Admin Console, React Native clients, or API calls implemented inside Low-Code packages.
+
+`abp generate-proxy` has no React target. Its `-t js` generator produces jQuery proxy scripts for MVC / Razor Pages applications, must be run from a directory containing a top-level `.csproj` file, and writes scripts that use `abp.ajax` and `$` to `wwwroot/client-proxies/<module>-proxy.js` by default. It does not generate the TypeScript / Axios modules used by the React application.
+
+Update the modules under `src/lib/api/` yourself when a backend contract changes:
+
+1. Start the backend that owns the application service and check the new contract on its Swagger UI or `/api/abp/api-definition?includeTypes=true`. In a microservice solution, use the owning service's entry in the Web Gateway Swagger UI, or call that service's `/api/abp/api-definition?includeTypes=true` endpoint directly. By default, the generated Web Gateway routes `/api/abp/*` to the Administration service, so its gateway URL does not expose the API-definition models of the other services.
+2. Update the DTO interfaces and function signatures in the matching module.
+3. Update the callers and run `npm run build` so TypeScript reports the mismatches.
 
 ## Development Proxy
 
