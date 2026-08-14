@@ -37,7 +37,7 @@ The generated React Native app is configured in `Environment.ts` with:
 * the `MobileGateway` base URL
 * the `ReactNative` client id and scopes
 
-At runtime, the mobile client uses the password grant to exchange credentials for access and refresh tokens at the `AuthServer` `/connect/token` endpoint, then sends bearer tokens to backend APIs through the `MobileGateway`. Account-related operations such as registration, password reset, profile picture management, and logout use the generated API client under `src/api`.
+At runtime, the mobile client uses the password grant to exchange credentials for access and refresh tokens at the `AuthServer` `/connect/token` endpoint, then sends bearer tokens to backend APIs through the `MobileGateway`. Account-related operations such as registration, password reset, and profile picture management use the template-provided API client under `src/api`.
 
 ## Built-in Capabilities
 

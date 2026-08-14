@@ -62,7 +62,7 @@ The template loads `/dynamic-env.json` first and then tries `/getEnvConfig` for 
 | `oAuthConfig.clientId` | OpenIddict client ID. The main React app uses `<ProjectName>_App`. |
 | `oAuthConfig.scope` | OAuth scopes requested by the SPA. |
 | `apis.default.url` | Backend API base URL. In microservice solutions, this normally points to the Web Gateway. |
-| `apis.default.rootNamespace` | Root namespace used by generated API code and module-specific clients. |
+| `apis.default.rootNamespace` | Root namespace populated by the solution template. The current React applications do not read this value. |
 | `adminConsoleUrl` | Origin of the Admin Console app. The React template uses it to open `/admin-console`. |
 
 The `DynamicEnv` type also includes fields such as `production`, `oAuthConfig.requireHttps`, `oAuthConfig.responseType`, `oAuthConfig.strictDiscoveryDocumentValidation`, and `oAuthConfig.skipIssuerCheck`. The template's OIDC setup always uses the Authorization Code flow by setting `responseType` to `code`.
