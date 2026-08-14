@@ -1,6 +1,6 @@
 ABP has supported multiple UI approaches for a long time, but many teams building line-of-business apps have been waiting for a first-class React option that feels native to the framework instead of bolted on. That is exactly what the ABP React template brings.
 
-If you are already using ABP for application services, modules, authentication, multi-tenancy, and code generation, the React template gives you a modern frontend stack without forcing you to hand-wire the same infrastructure in every project. You get React + TypeScript, a sensible project structure, generated API clients, authentication, localization, permission-aware UI, and a prebuilt admin experience that matches how ABP applications are typically built.
+If you are already using ABP for application services, modules, authentication, multi-tenancy, and code generation, the React template gives you a modern frontend stack without forcing you to hand-wire the same infrastructure in every project. You get React + TypeScript, a sensible project structure, typed Axios API modules, authentication, localization, permission-aware UI, and a prebuilt admin experience that matches how ABP applications are typically built.
 
 This article explains what the ABP React template is, how it is structured, what you get out of the box, where it fits well, and what to watch for before adopting it.
 
@@ -158,33 +158,33 @@ In many projects, teams secure the backend correctly but forget to make the fron
 
 The ABP React template reduces that mismatch.
 
-## API integration without hand-written client boilerplate
+## API integration with typed Axios modules
 
-One of the most useful parts of the template is the generated API client approach.
+The main React application organizes its application-specific backend calls in typed modules under `src/lib/api/`. These modules define the DTO interfaces and call the backend through a shared Axios instance that centralizes authentication, tenant and language headers, and common 401/403 handling.
 
-ABP can generate frontend API clients from OpenAPI definitions, so your React app consumes backend endpoints using generated contracts instead of duplicated DTO definitions or hand-written fetch code.
+The Web React template does not generate these modules from OpenAPI. When a backend contract changes, update the matching DTOs and functions under `src/lib/api/`, update their callers, and run the TypeScript build to catch mismatches.
 
 ### Why this is a big deal
 
-Without generated clients, frontend/backend integration often drifts over time:
+Keeping the API calls in typed modules gives the application one place to maintain each backend integration:
 
-- DTOs change but frontend types do not
-- query strings are built inconsistently
-- error handling varies by developer
-- service layers become repetitive
+- components do not build request URLs themselves
+- DTOs and request functions stay together
+- authentication and tenant headers use the shared Axios client
+- TanStack Query remains focused on fetching, caching, and invalidation
 
-With the ABP React template, Axios is already set up and typically used together with TanStack Query. That gives you a cleaner pattern for data fetching, caching, invalidation, and loading states.
+With the ABP React template, Axios is already set up and typically used together with TanStack Query. That gives you a clean pattern for data fetching, caching, invalidation, and loading states.
 
 A simplified example looks like this:
 
 ```tsx
 import { useQuery } from '@tanstack/react-query';
-import { identityUserControllerGetList } from '@/client';
+import { getUsers } from '@/lib/api/identity';
 
 export function UsersPage() {
   const query = useQuery({
     queryKey: ['users'],
-    queryFn: () => identityUserControllerGetList({ maxResultCount: 10, skipCount: 0 }),
+    queryFn: () => getUsers({ maxResultCount: 10, skipCount: 0 }),
   });
 
   if (query.isLoading) return <div>Loading...</div>;
@@ -192,7 +192,7 @@ export function UsersPage() {
 
   return (
     <ul>
-      {query.data.items.map((user) => (
+      {query.data?.items.map((user) => (
         <li key={user.id}>{user.userName}</li>
       ))}
     </ul>
@@ -200,7 +200,7 @@ export function UsersPage() {
 }
 ```
 
-The exact generated function names may vary based on your solution, but the pattern is the point: use generated contracts, wrap them with TanStack Query, and keep components focused on UI.
+The available modules vary based on the features selected for the solution. Keep application-specific backend calls in `src/lib/api/`, wrap them with TanStack Query, and keep components focused on UI.
 
 ## UI system and customization model
 
@@ -406,7 +406,7 @@ Use it when:
 - you are starting a new ABP project with a modern template
 - you want React + TypeScript with ABP conventions already wired in
 - you need authentication, permissions, localization, and multi-tenancy from day one
-- you want generated API clients instead of duplicated DTOs
+- you want typed API modules with a shared Axios client
 - you prefer source-owned UI components
 - your app is admin-heavy, form-heavy, or module-heavy
 
@@ -470,7 +470,7 @@ A plain React starter gives you flexibility, but also leaves many critical conce
 Compared to a generic starter, ABP gives you tighter integration for:
 
 - auth and authorization
-- generated API clients
+- typed API modules
 - localization
 - tenant-aware applications
 - modular backend alignment
@@ -483,7 +483,7 @@ That makes it less minimal than a blank React scaffold, but much more useful for
 
 The ABP React template is not interesting because it says React on the label. It is interesting because it brings React into ABP's application model in a way that feels intentional.
 
-You get a modern frontend stack, source-owned customization, generated client integration, and the ABP features many teams actually need in production: permissions, localization, multi-tenancy, and admin tooling.
+You get a modern frontend stack, source-owned customization, typed API integration, and the ABP features many teams actually need in production: permissions, localization, multi-tenancy, and admin tooling.
 
 If your team already values ABP on the backend and wants React on the frontend, this template is one of the fastest ways to get to a serious foundation without spending the first sprint rebuilding plumbing.
 
@@ -491,6 +491,6 @@ If your team already values ABP on the backend and wants React on the frontend, 
 
 - The ABP React template is available in ABP's modern template system, not classic templates.
 - It uses a practical stack: React, TypeScript, Vite, TanStack Router/Query, shadcn/ui, Tailwind, Zod, and Axios.
-- Key strengths are generated API clients, OIDC auth, permission-aware UI, localization, and multi-tenancy.
+- Key strengths are typed API modules, OIDC auth, permission-aware UI, localization, and multi-tenancy.
 - The frontend is source-owned, which gives you flexibility but also requires discipline.
 - It is a strong choice for ABP-based business apps, especially admin-heavy and SaaS-style applications.
