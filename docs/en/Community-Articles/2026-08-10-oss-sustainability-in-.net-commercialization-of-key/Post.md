@@ -33,16 +33,15 @@ The easy reaction is to call commercialization a betrayal. The more honest react
 A project can be free for users and still very expensive for its authors.
 Maintaining a popular library often means:
 
-- triaging issues from thousands of downstream users
-- keeping up with new .NET releases
-- patching security problems
-- maintaining documentation and samples
-- answering support requests that are really consulting work in disguise
-- dealing with dependency, CI, hosting, and release overhead
+![image-20260816151702299](image-20260816151702299.png)
 
 Once a library becomes critical infrastructure, users expect reliability similar to commercial software. But expectations usually rise faster than funding.
 
 That imbalance creates a predictable outcome: maintainers either burn out, slow down, seek sponsorship, or commercialize.
+
+---
+
+
 
 ## Open-source popularity does not automatically create sustainability
 
@@ -60,13 +59,21 @@ From a maintainer’s perspective, commercialization can be a rational correctio
 
 ### In other words, the move to commercial licensing is often less about greed than about replacing an unrealistic business model.
 
+---
+
+
+
 ## Why the community reaction is so mixed
 
 Even if the economics make sense, the backlash is real. And frankly, some of it is justified.
 
 The friction usually comes from the gap between legal reality and social expectation.
 
-### Legally, maintainers can often change how future versions are licensed. Socially, users feel that a trusted community dependency has changed the rules after becoming embedded in thousands of systems.
+### Legally, maintainers can often change how future versions are licensed. Socially, users feel that a trusted community dependency has changed the rules after becoming embedded in thousands of systems
+
+---
+
+
 
 ## What bothers teams most
 
@@ -83,6 +90,10 @@ The common concerns are familiar:
 
 This is why the strongest reactions usually happen when the library is infrastructural rather than optional. Authentication, mapping, messaging, and mediator patterns sit close to the core of many architectures. **Replacing them is possible, but rarely cheap.**
 
+---
+
+
+
 ## Suddenness matters as much as pricing
 
 A reasonable commercial model can still create anger if the transition feels abrupt. Teams generally accept that maintainers need funding. What they do not accept as easily is:
@@ -94,6 +105,10 @@ A reasonable commercial model can still create anger if the transition feels abr
 - feature packaging that feels like a trap for existing users
 
 That trust dimension matters. In OSS, the license is not the whole relationship. Predictability is part of the product.
+
+---
+
+
 
 ## What this signals for the .NET ecosystem
 
@@ -131,6 +146,10 @@ Press enter or click to view image in full size
 
 In many cases, the fork inherits the same funding problem that triggered the original commercialization.
 
+---
+
+
+
 ## The practical risk for engineering teams
 
 The biggest mistake teams can make is treating this as community drama instead of delivery risk.
@@ -140,6 +159,10 @@ Press enter or click to view image in full size
 ![img](1EBeje4kIw0tQ4dGrI5i18A.png)
 
 This is especially relevant for organizations with long-lived internal platforms or multi-tenant SaaS products, where one dependency can affect dozens of services.
+
+---
+
+
 
 ## A realistic example
 
@@ -163,6 +186,8 @@ That is architecture, budgeting, and compliance converging in one decision.
 
 A better response is to become more deliberate about dependency management.
 
+---
+
 ## Build a dependency review habit
 
 For critical packages, review more than API quality.
@@ -172,6 +197,10 @@ Press enter or click to view image in full size
 ![img](1tKQUwPK70eQXvad1eiXoPA.png)
 
 If a package sits in authentication, authorization, persistence, messaging, or application architecture, the review should be stricter than for a small utility library.
+
+---
+
+
 
 ## Categorize dependencies by replacement cost
 
@@ -183,7 +212,11 @@ Not every package deserves the same scrutiny.
 - medium replacement cost: libraries used across one bounded context
 - high replacement cost: foundational cross-cutting libraries used everywhere
 
-Commercialization risk matters most in the third category. If replacing the library means touching every service, pipeline, or authentication flow, that risk belongs on the architecture radar early.
+Commercialization risk matters most in the third category. If replacing the library means touching every service, pipeline, or authentication flow, that risk belongs on the architecture radar early.,
+
+---
+
+
 
 ## Budget for critical OSS
 
@@ -200,11 +233,13 @@ Press enter or click to view image in full size
 > You will pay somehow!
 > The only real question is whether you pay proactively or reactively.
 
-## When to use commercially backed OSS and when not to
+---
+
+## When to use commercially backed OSS  and when not to ⛔
 
 Commercialization is not automatically a reason to avoid a project.
 
-## When to use it
+## ✔ WHEN  TO  USE  IT
 
 **Commercially backed OSS can be a good fit when:**
 
@@ -216,7 +251,7 @@ Identity infrastructure is the obvious example. A mature, well-supported identit
 
 
 
-## When NOT to use it
+## ⛔ WHEN  NOT  TO  USE  IT
 
 **Be cautious when:**
 
@@ -224,21 +259,29 @@ Identity infrastructure is the obvious example. A mature, well-supported identit
 
 This is where some teams may rethink packages like object mappers or mediator frameworks. If the dependency is mostly ergonomic and the long-term governance risk is rising, simpler code may be the better tradeoff.
 
+---
+
+
+
 ## What this means for maintainers, companies, and the community
 
 The ecosystem now needs more honest expectations on all sides.
 
-## For maintainers
+## * For maintainers
 
 If your library underpins production systems, sustainability needs to be part of the strategy early. Commercialization is easier to accept when it is transparent, gradual, and communicated as part of a long-term model rather than a sudden pivot.
 
-## For companies
+## * For companies
 
 If your business depends on OSS, treating maintainers as an infinite free resource is no longer credible. Critical dependencies should have owners, budgets, and risk reviews.
 
-## For the .NET community
+## * For the .NET community
 
 The community may need to become more selective about what it normalizes as default architecture. If a pattern depends heavily on a few centralized libraries, then a licensing change in one project can ripple widely. Simpler stacks are often more resilient.
+
+---
+
+
 
 ## A likely next phase for .NET OSS
 
@@ -252,7 +295,11 @@ That does not mean open source in .NET is weakening. It means the ecosystem is f
 
 The healthiest outcome is not pretending commercialization should never happen. It is making sure it happens with predictable governance, fair communication, and realistic expectations from users.
 
-## As a Summary
+---
+
+
+
+## SUMMARY
 
 - Commercialization of key .NET libraries is a sustainability signal, not an isolated incident.
 - Teams should evaluate dependencies by license, governance, support policy, and replacement cost.
