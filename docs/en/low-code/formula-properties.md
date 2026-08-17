@@ -34,7 +34,13 @@ In the Low-Code Designer:
 6. Configure any settings exposed for the inferred type, such as decimal places or currency symbol, then validate again.
 7. When the action changes to **Save**, select it to create the property.
 
-The result type is inferred from the expression. Supported property types are String, Int, Long, Decimal, Money, Boolean, Date, and DateTime. Decimal and Money results can also define display precision, and Money results can define a currency symbol.
+The result type is inferred from the expression. Supported property types are String, Int, Long, Decimal, Money, Boolean, Date, DateTime, and Enum. Decimal and Money results can also define display precision, and Money results can define a currency symbol.
+
+Use `EnumType.Value` constants to return an enum value. The referenced enum becomes the inferred result type, so no separate enum selection is required. For example, `InvoiceCount` can be a Count rollup property:
+
+```text
+If(InvoiceCount > 0, CustomerType.Customer, CustomerType.Prospect)
+```
 
 Formula properties may use both JSON-backed and database-mapped scalar fields. Use dot notation to read a scalar field through a foreign key:
 
@@ -43,7 +49,7 @@ CustomerId.CreditLimit
 Round(CustomerId.CreditLimit - CurrentBalance, 2)
 ```
 
-The formula editor offers fields, related fields, local values, and supported functions as suggestions. See the [Low-Code Expression Language](expression-language.md) reference for the complete scalar syntax.
+The formula editor offers fields, related fields, enum values, local values, and supported functions as suggestions. See the [Low-Code Expression Language](expression-language.md) reference for the complete scalar syntax.
 
 Client applications cannot set a calculated property. Enable **Server only** when the result must also be omitted from client-facing metadata and responses. A client-visible formula cannot expose a server-only dependency; a server-only formula may use server-only fields.
 

@@ -45,6 +45,16 @@ If(CustomerId.IsPreferred, Amount * 90%, Amount)
 
 Related paths may also contain quoted identifiers. The Designer loads the available fields for each relationship level and applies the backend's configured maximum traversal depth. Missing related values produce a blank result where the expression is nullable.
 
+### Enum values
+
+Use `EnumType.Value` to return an enum value from a formula. For example, if `InvoiceCount` is a rollup property:
+
+```text
+If(InvoiceCount > 0, CustomerType.Customer, CustomerType.Prospect)
+```
+
+The Designer suggests enum types and loads their values after you type the dot. The result is inferred as the referenced enum, so there is no separate enum-type setting. All result branches must use values from the same enum type.
+
 ## Operators
 
 | Purpose | Operators and forms |
@@ -83,6 +93,7 @@ Mid(ProductCode, 2, 3)
 Contains(Name, "pro")
 Value(UnitPriceText) * Quantity
 DateDiff(StartDate, EndDate)
+If(InvoiceCount > 0, CustomerType.Customer, CustomerType.Prospect)
 ```
 
 `Round` uses midpoint-away-from-zero semantics. `RoundDown` rounds toward zero and `RoundUp` rounds away from zero; their decimal-place argument must be a literal from -6 through 6. `Mid` and `Replace` use a one-based start position. `StartsWith`, `EndsWith`, and `Contains` ignore case.
