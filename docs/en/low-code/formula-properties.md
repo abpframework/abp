@@ -30,9 +30,17 @@ In the Low-Code Designer:
 2. Open **Add Property** and select **Calculated Property**.
 3. Enter the property name and an optional display name.
 4. Enter an expression such as `Round(UnitPrice * Quantity, 2)`.
-5. Review the inferred result type and validation result, then select **Create Calculated Property**.
+5. Select **Validate** to infer the result type and verify the formula with the active database provider.
+6. Configure any settings exposed for the inferred type, such as decimal places or currency symbol, then validate again.
+7. When the action changes to **Save**, select it to create the property.
 
-The result type is inferred from the expression. Supported property types are String, Int, Long, Decimal, Money, Boolean, Date, and DateTime. Decimal and Money results can also define display precision, and Money results can define a currency symbol.
+The result type is inferred from the expression. Supported property types are String, Int, Long, Decimal, Money, Boolean, Date, DateTime, and Enum. Decimal and Money results can also define display precision, and Money results can define a currency symbol.
+
+Use `EnumType.Value` constants to return an enum value. The referenced enum becomes the inferred result type, so no separate enum selection is required. For example, `InvoiceCount` can be a Count rollup property:
+
+```text
+If(InvoiceCount > 0, CustomerType.Customer, CustomerType.Prospect)
+```
 
 Formula properties may use both JSON-backed and database-mapped scalar fields. Use dot notation to read a scalar field through a foreign key:
 
@@ -41,7 +49,7 @@ CustomerId.CreditLimit
 Round(CustomerId.CreditLimit - CurrentBalance, 2)
 ```
 
-The formula editor offers fields, related fields, local values, and supported functions as suggestions. See the [Low-Code Expression Language](expression-language.md) reference for the complete scalar syntax.
+The formula editor offers fields, related fields, enum values, local values, and supported functions as suggestions. See the [Low-Code Expression Language](expression-language.md) reference for the complete scalar syntax.
 
 Client applications cannot set a calculated property. Enable **Server only** when the result must also be omitted from client-facing metadata and responses. A client-visible formula cannot expose a server-only dependency; a server-only formula may use server-only fields.
 
@@ -82,7 +90,7 @@ This is different from the one-time **Formula** option used to backfill an ordin
 
 ## Validation and dependency safety
 
-Before a calculated property is saved, the Designer validates:
+Before a calculated property is saved, select **Validate**. The Designer validates:
 
 * syntax, field paths, functions, and argument types
 * inferred result type and display metadata
@@ -91,12 +99,14 @@ Before a calculated property is saved, the Designer validates:
 * server-only dependency exposure
 * translation by the active database provider
 
+Successful validation changes the action to **Save**. Editing the name, display name, expression, server-only setting, or inferred-type settings such as decimal places and currency symbol invalidates the validation result and changes the action back to **Validate**.
+
 Saving publishes the calculated metadata only after the complete affected dependency closure passes provider validation. Renaming or deleting fields that are still referenced is guarded so an existing calculation is not silently broken.
 
 Provider-specific translation remains authoritative. An expression that is syntactically valid but cannot be translated by the active provider is rejected instead of falling back to full-table client-side evaluation.
 
 ## Current limitations
 
-Formula expressions are scalar. They do not contain arbitrary aggregate subqueries; use a Rollup Property for a supported related-record aggregate. Arbitrary SQL, JavaScript, network calls, browser APIs, side effects, and unsupported Power Fx table or record operations are not allowed.
+Formula expressions are scalar. They do not contain arbitrary aggregate subqueries; use a Rollup Property for a supported related-record aggregate. Arbitrary SQL, JavaScript, network calls, browser APIs, side effects, and table or record operations are not allowed.
 
 Related-field access must follow configured foreign keys and stay within the query capability exposed by the backend. Rollups require a source-side Guid foreign key that points to the entity receiving the rollup.
