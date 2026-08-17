@@ -147,8 +147,8 @@ public class CachedObjectExtensionsDtoService : ICachedObjectExtensionsDtoServic
             {
                 GlobalFeatures = new ExtensionPropertyGlobalFeaturePolicyDto
                 {
-                    Features = propertyConfig.Policy.Features.Features,
-                    RequiresAll = propertyConfig.Policy.Features.RequiresAll
+                    Features = propertyConfig.Policy.GlobalFeatures.Features,
+                    RequiresAll = propertyConfig.Policy.GlobalFeatures.RequiresAll
                 },
                 Features = new ExtensionPropertyFeaturePolicyDto
                 {
