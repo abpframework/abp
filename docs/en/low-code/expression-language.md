@@ -7,9 +7,9 @@
 
 # Low-Code Expression Language
 
-The Low-Code expression language is a provider-safe scalar profile used by virtual calculated properties and by the one-time **Formula** option for existing-data backfill. Its syntax is intentionally familiar to Power Fx users, but it is a smaller language designed for server validation and database-provider translation.
+The Low-Code expression language is a provider-safe scalar language used by virtual calculated properties and by the one-time **Formula** option for existing-data backfill. It is designed for server validation and database-provider translation.
 
-Expressions are not JavaScript. They cannot contain arbitrary code, SQL, network calls, browser APIs, side effects, or unsupported Power Fx table and record operations.
+Expressions are not JavaScript. They cannot contain arbitrary code, SQL, network calls, browser APIs, side effects, or table and record operations.
 
 An expression can contain up to 4096 characters.
 
@@ -65,11 +65,12 @@ The current scalar profile supports these functions:
 
 | Category | Functions |
 | --- | --- |
-| Conditional and blank values | `If(condition, trueValue, falseValue)`, `Coalesce(value, fallback)`, `IsBlank(value)` |
+| Conditional and blank values | `If(condition, trueValue, falseValue)`, `Coalesce(value, fallback)`, `IsBlank(value)`, `Blank()` |
 | Logical | `And(condition1, condition2, ...)`, `Or(condition1, condition2, ...)`, `Not(condition)` |
-| Numeric | `Abs(number)`, `Round(number, places)`, `Min(left, right)`, `Max(left, right)` |
-| Text | `Lower(text)`, `Upper(text)`, `Trim(text)`, `Len(text)`, `Left(text, length)`, `Right(text, length)`, `Mid(text, start[, length])` |
-| Date and time | `Year(value)`, `Month(value)`, `Day(value)`, `Date(year, month, day)`, `DateTime(year, month, day, hour, minute, second[, millisecond])` |
+| Numeric | `Abs(number)`, `Round(number, places)`, `Trunc(number)`, `RoundDown(number, places)`, `RoundUp(number, places)`, `Min(left, right)`, `Max(left, right)`, `Mod(number, divisor)` |
+| Text | `Lower(text)`, `Upper(text)`, `Trim(text)`, `Len(text)`, `Left(text, length)`, `Right(text, length)`, `Mid(text, start[, length])`, `StartsWith(text, prefix)`, `EndsWith(text, suffix)`, `Contains(text, value)`, `Replace(text, start, characterCount, newText)` |
+| Conversion | `Text(value)`, `Value(text)`, `Int(number)`, `Boolean(text)`, `DateValue(text)`, `DateTimeValue(text)` |
+| Date and time | `Year(value)`, `Month(value)`, `Day(value)`, `Hour(value)`, `Minute(value)`, `Second(value)`, `Date(year, month, day)`, `DateTime(year, month, day, hour, minute, second)`, `DateAdd(value, days[, "day"])`, `DateDiff(startValue, endValue[, "day"])` |
 
 Examples:
 
@@ -79,11 +80,18 @@ Coalesce(Discount, 0)
 Round(UnitPrice * Quantity, 2)
 FirstName & " " & LastName
 Mid(ProductCode, 2, 3)
+Contains(Name, "pro")
+Value(UnitPriceText) * Quantity
+DateDiff(StartDate, EndDate)
 ```
 
-`Round` uses midpoint-away-from-zero semantics. `Mid` uses a one-based start position. `Date` and `DateTime` require literal numeric components in the provider-neutral profile. Numeric and date literals use invariant syntax; browser and database locale settings do not change their meaning.
+`Round` uses midpoint-away-from-zero semantics. `RoundDown` rounds toward zero and `RoundUp` rounds away from zero; their decimal-place argument must be a literal from -6 through 6. `Mid` and `Replace` use a one-based start position. `StartsWith`, `EndsWith`, and `Contains` ignore case.
 
-Functions from the full Power Fx language that are not listed here are rejected. For example, `Floor`, `Ceiling`, `Concat`, and `Substring` are not aliases for the supported scalar functions.
+`Text` accepts numeric or text values. `Value`, `Boolean`, `DateValue`, and `DateTimeValue` parse invariant text; `DateValue` expects `yyyy-MM-dd`, while `DateTimeValue` accepts invariant ISO date-time text. `Int` rounds down to the nearest integer.
+
+`Date` and `DateTime` require literal numeric components in the provider-neutral profile. `DateAdd` and `DateDiff` currently support calendar days only; omit the unit or use the literal `"day"`. Calendar calculations follow the Gregorian calendar, including leap years. Numeric and date literals use invariant syntax; browser and database locale settings do not change their meaning.
+
+Functions that are not listed here are rejected. For example, `Floor`, `Ceiling`, `Concat`, and `Substring` are not aliases for the supported scalar functions.
 
 ## Local values with `With`
 
@@ -118,7 +126,9 @@ Related-record aggregates are not written inside a formula expression. Create a 
 
 ## Validation errors
 
-The Designer validates syntax, field and related-field references, function arity and argument types, inferred result type, dependency cycles, server-only exposure, and translation by the active database provider. Validation covers transitive calculated dependencies, not only the expression currently being edited.
+Select **Validate** before saving a calculated property. The Designer validates syntax, field and related-field references, function arity and argument types, inferred result type, dependency cycles, server-only exposure, and translation by the active database provider. Validation covers transitive calculated dependencies, not only the expression currently being edited.
+
+When validation succeeds, the action changes to **Save**. Changing the expression or any property setting returns the action to **Validate**, so the saved metadata always matches the validated values.
 
 Common errors include:
 
