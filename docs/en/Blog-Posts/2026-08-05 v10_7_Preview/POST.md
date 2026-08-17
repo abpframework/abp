@@ -10,7 +10,7 @@ You can check the [Get Started page](https://abp.io/get-started) to see how to g
 
 By default, ABP Studio uses stable versions to create solutions. Therefore, if you want to create a solution with a preview version, first you need to create a solution and then switch your solution to the preview version from the ABP Studio UI:
 
-![studio-switch-to-preview](studio-switch-to-preview.png)
+![studio-switch-to-preview](https://raw.githubusercontent.com/abpframework/abp/refs/heads/dev/docs/en/Blog-Posts/2026-08-05%20v10_7_Preview/studio-switch-to-preview.png)
 
 ## Migration Guide
 
@@ -82,7 +82,7 @@ Generated React pages include list, search, sorting, paging, filtering, export, 
 
 The generator respects the entity and field configuration you define in ABP Suite, including `ShowOn*`, `IsFilterable`, and `ReadonlyOnEditModal` options. Navigation lookups use server-side search.
 
-![React CRUD page generation demo](react-crud-page.mp4)
+![](https://raw.githubusercontent.com/abpframework/abp/refs/heads/dev/docs/en/Blog-Posts/2026-08-05%20v10_7_Preview/react-crud-page.gif)
 
 ### ABP Suite Decimal Precision
 
