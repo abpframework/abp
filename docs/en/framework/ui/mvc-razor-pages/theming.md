@@ -44,10 +44,8 @@ All the themes must depend on the [@abp/aspnetcore.mvc.ui.theme.shared](https://
 * [JQuery Validation](https://github.com/jquery-validation/jquery-validation) for client side & [unobtrusive](https://github.com/aspnet/jquery-validation-unobtrusive) validation
 * [FontAwesome](https://fontawesome.com/) as the fundamental CSS font library.
 * [SweetAlert](https://sweetalert.js.org/) to show fancy alert message and confirmation dialogs.
-* [Toastr](https://github.com/CodeSeven/toastr) to show toast notifications.
 * [Lodash](https://lodash.com/) as a utility library.
 * [Luxon](https://moment.github.io/luxon/) for date/time operations.
-* [JQuery Form](https://github.com/jquery-form/form) for AJAX forms.
 * [bootstrap-datepicker](https://github.com/uxsolutions/bootstrap-datepicker) to show date pickers.
 * [Select2](https://select2.org/) for better select/combo boxes.
 * [Timeago](http://timeago.yarp.com/) to show automatically updating fuzzy timestamps.
@@ -60,7 +58,7 @@ These libraries are selected as the base libraries and available to the applicat
 There are some abstractions in the ABP to make your code independent from some of these libraries too. Examples;
 
 * [Tag Helpers](tag-helpers) makes it easy to generate the Bootstrap UIs.
-* JavaScript [Message](javascript-api/message.md) and [Notification](javascript-api/notify.md) APIs provides abstractions to use the Sweetalert and Toastr.
+* JavaScript [Message](javascript-api/message.md) and [Notification](javascript-api/notify.md) APIs provides abstractions to use the Sweetalert and the built-in toast implementation.
 * [Forms & Validation](forms-validation.md) system automatically handles the validation, so you mostly don't directly type any validation code.
 
 ### The Standard Layouts

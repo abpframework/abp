@@ -57,10 +57,8 @@ There are a set of standard JavaScript/CSS libraries that comes pre-installed an
 - [JQuery Validation](https://jqueryvalidation.org/) for client side & [unobtrusive](https://github.com/aspnet/jquery-validation-unobtrusive) validation
 - [FontAwesome](https://fontawesome.com/) as the fundamental CSS font library.
 - [SweetAlert](https://sweetalert.js.org/) to show fancy alert message and confirmation dialogs.
-- [Toastr](https://github.com/CodeSeven/toastr) to show toast notifications.
 - [Lodash](https://lodash.com/) as a utility library.
 - [Luxon](https://moment.github.io/luxon/) for date/time operations.
-- [JQuery Form](https://github.com/jquery-form/form) for AJAX forms.
 - [bootstrap-datepicker](https://github.com/uxsolutions/bootstrap-datepicker) to show date pickers.
 - [Select2](https://select2.org/) for better select/combo boxes.
 - [Timeago](http://timeago.yarp.com/) to show automatically updating fuzzy timestamps.
@@ -140,7 +138,7 @@ ABP provides a flexible and modular Bundling & Minification system to create bun
 <abp-style-bundle>
     <abp-style src="/libs/bootstrap/css/bootstrap.css" />
     <abp-style src="/libs/font-awesome/css/font-awesome.css" />
-    <abp-style src="/libs/toastr/toastr.css" />
+    <abp-style src="/libs/datatables.net-bs5/css/dataTables.bootstrap5.css" />
     <abp-style src="/styles/my-global-style.css" />
 </abp-style-bundle>
 ```
