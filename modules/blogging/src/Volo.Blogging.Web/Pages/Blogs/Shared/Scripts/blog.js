@@ -18,36 +18,8 @@
         //}
     }
 
-    function handleOwlCarousel() {
-        $('.hero-section .owl-carousel').owlCarousel({
-            loop: true,
-            margin: 0,
-            nav: false,
-            dots: false,
-            //center: true,
-            autoplay: true,
-            autoHeight: true,
-            autoplaySpeed: 1000,
-            items: 1,
-        });
-        $('.card-article-container .owl-carousel').owlCarousel({
-            loop: true,
-            margin: 0,
-            nav: false,
-            dots: false,
-            autoplay: true,
-            autoplaySpeed: 1000,
-            responsive: {
-                0: {
-                    items: 1,
-                },
-            },
-        });
-    }
-
     $(function () {
         handleImages();
-        handleOwlCarousel();
 
         $('.nav-link').on('click', function () {
             $(this).parent().parent();
