@@ -1,4 +1,5 @@
 ﻿@page
+@using Localization.Resources.AbpUi
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Account.Localization
 @using Volo.Abp.Account.Settings
@@ -8,6 +9,7 @@
 @using Volo.Abp.Settings
 @model Volo.Abp.Account.Web.Pages.Account.LoginModel
 @inject IHtmlLocalizer<AccountResource> L
+@inject IHtmlLocalizer<AbpUiResource> UiL
 @inject IThemeManager ThemeManager
 @inject Volo.Abp.Settings.ISettingProvider SettingProvider
 
@@ -53,7 +55,7 @@
                     <label asp-for="LoginInput.Password" class="form-label"></label>
                     <div class="input-group">
                         <input type="password" class="form-control" autocomplete="new-password" maxlength="@IdentityUserConsts.MaxPasswordLength" asp-for="LoginInput.Password" />
-                        <button class="btn btn-secondary" type="button" id="PasswordVisibilityButton"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+                        <button class="btn btn-secondary" type="button" id="PasswordVisibilityButton" aria-label="@UiL["ShowPassword"]" aria-pressed="false"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
                     </div>
                     <span asp-validation-for="LoginInput.Password"></span>
                 </div>

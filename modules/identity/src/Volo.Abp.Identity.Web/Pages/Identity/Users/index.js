@@ -11,12 +11,9 @@
                 return;
             }
 
-            if(passwordInput.attr("type") === "password") {
-                passwordInput.attr("type", "text");
-            }
-            else {
-                passwordInput.attr("type", "password");
-            }
+            var isRevealing = passwordInput.attr("type") === "password";
+            passwordInput.attr("type", isRevealing ? "text" : "password");
+            button.attr("aria-pressed", isRevealing);
 
             var icon = button.find("i");
             if(icon) {
