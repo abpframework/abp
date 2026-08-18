@@ -50,7 +50,7 @@ All the themes must depend on the [@abp/aspnetcore.mvc.ui.theme.shared](https://
 * [JQuery Form](https://github.com/jquery-form/form) for AJAX forms.
 * [bootstrap-datepicker](https://github.com/uxsolutions/bootstrap-datepicker) to show date pickers.
 * [Select2](https://select2.org/) for better select/combo boxes.
-* [Timeago](http://timeago.yarp.com/) to show automatically updating fuzzy timestamps.
+* [timeago.js](https://timeago.org/) to show automatically updating fuzzy timestamps.
 * [malihu-custom-scrollbar-plugin](https://github.com/malihu/malihu-custom-scrollbar-plugin) for custom scrollbars.
 
 These libraries are selected as the base libraries and available to the applications and modules.

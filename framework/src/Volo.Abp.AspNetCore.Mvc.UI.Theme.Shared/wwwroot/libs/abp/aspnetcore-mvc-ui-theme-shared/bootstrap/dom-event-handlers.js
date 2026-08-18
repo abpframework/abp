@@ -72,7 +72,7 @@
     }
 
     abp.dom.initializers.initializeTimeAgos = function ($timeagos) {
-        $timeagos.timeago();
+        abp.timeago.render($timeagos.toArray());
     }
 
     abp.dom.initializers.initializeAutocompleteSelects = function ($autocompleteSelects) {
@@ -217,6 +217,7 @@
         args.$el.findWithSelf('[data-bs-toggle="tooltip"]').each(function () {
             $('#' + $(this).attr('aria-describedby')).remove();
         });
+        abp.timeago.cancel(args.$el.findWithSelf('[timeago-id]').toArray());
     });
 
     abp.event.on('abp.configurationInitialized', function () {

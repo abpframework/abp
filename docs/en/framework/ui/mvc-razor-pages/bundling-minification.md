@@ -386,7 +386,7 @@ Configure<AbpBundlingOptions>(options =>
 ````html
 <link rel="preload" href="/__bundles/Basic.Global.F4FA61F368098407A4C972D0A6914137.css?_v=637697363694828051" as="style" onload="this.rel='stylesheet'"/>
 
-<script defer src="/libs/timeago/locales/jquery.timeago.en.js?_v=637674729040000000"></script>
+<script defer src="/libs/timeago/timeago.full.min.js?_v=637674729040000000"></script>
 ````
 
 ### External/CDN file Support
