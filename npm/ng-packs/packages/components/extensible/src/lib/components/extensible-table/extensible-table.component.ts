@@ -1,4 +1,5 @@
 import {
+  afterNextRender,
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
@@ -186,6 +187,10 @@ export class ExtensibleTableComponent<R = any> implements AfterViewInit, OnDestr
     },
   );
 
+  private horizontalScrollOffset = 0;
+
+  private hasPendingHorizontalScrollOffset = false;
+
   hasAtLeastOnePermittedAction: boolean;
 
   readonly propList: EntityPropList<R>;
@@ -232,6 +237,7 @@ export class ExtensibleTableComponent<R = any> implements AfterViewInit, OnDestr
       }
 
       this._data.set(dataValue.map((record, index) => this.prepareRecord(record, index)));
+      this.restoreHorizontalScrollOffset();
     });
   }
 
@@ -365,9 +371,53 @@ export class ExtensibleTableComponent<R = any> implements AfterViewInit, OnDestr
       this.list()
         ?.requestStatus$?.pipe(filter(status => status === 'loading'))
         .subscribe(() => {
+          this.rememberHorizontalScrollOffset();
           this._data.set([]);
         });
     }
+  }
+
+  private getBodyElement(): HTMLElement | null {
+    if (!this.isBrowser) {
+      return null;
+    }
+
+    return this.table()?.element?.querySelector('datatable-body') ?? null;
+  }
+
+  // ngx-datatable drops its scrolling element while there are no rows, the header offset goes stale
+  private rememberHorizontalScrollOffset(): void {
+    const body = this.getBodyElement();
+    this.hasPendingHorizontalScrollOffset = true;
+
+    // Not scrollable while a previous request is still in flight, keep the offset taken back then
+    if (body && body.scrollWidth > body.clientWidth) {
+      this.horizontalScrollOffset = body.scrollLeft;
+    }
+  }
+
+  private restoreHorizontalScrollOffset(): void {
+    if (!this.hasPendingHorizontalScrollOffset) {
+      return;
+    }
+
+    this.hasPendingHorizontalScrollOffset = false;
+
+    afterNextRender(
+      () => {
+        const body = this.getBodyElement();
+
+        if (!body) {
+          return;
+        }
+
+        body.scrollLeft = this.horizontalScrollOffset;
+
+        // The header only follows a scroll event, scrolling to the same position does not raise one
+        body.dispatchEvent(new Event('scroll'));
+      },
+      { injector: this.#injector },
+    );
   }
 
   ngOnDestroy(): void {
