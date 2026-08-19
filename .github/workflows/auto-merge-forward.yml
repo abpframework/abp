@@ -1,0 +1,144 @@
+name: Auto-merge forward
+
+# Push to a rel-x.y branch opens a merge PR into the next newer rel-* line,
+# or into dev when this line is the newest. Merge of that PR retriggers the
+# next hop, so a bug-fix on rel-1.0 flows rel-1.0 -> rel-1.1 -> ... -> dev.
+on:
+  push:
+    branches:
+      - 'rel-*'
+  workflow_dispatch:
+
+concurrency:
+  group: auto-merge-forward-${{ github.ref_name }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  forward:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve forward target
+        id: target
+        run: |
+          set -euo pipefail
+          SOURCE="${GITHUB_REF_NAME}"
+          if [[ ! "$SOURCE" =~ ^rel-[0-9]+\.[0-9]+$ ]]; then
+            echo "Not a rel-x.y branch ($SOURCE); skipping."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git fetch origin --prune
+
+          mapfile -t RELS < <(
+            git ls-remote --heads origin 'rel-*' \
+              | awk '{print $2}' \
+              | sed 's|refs/heads/||' \
+              | grep -E '^rel-[0-9]+\.[0-9]+$' \
+              | sort -t. -k1.5,1n -k2,2n
+          )
+
+          TARGET="dev"
+          found=0
+          for branch in "${RELS[@]}"; do
+            if [[ "$found" -eq 1 ]]; then
+              TARGET="$branch"
+              break
+            fi
+            if [[ "$branch" == "$SOURCE" ]]; then
+              found=1
+            fi
+          done
+
+          if [[ "$found" -eq 0 ]]; then
+            echo "::error::Source branch $SOURCE was not listed among origin rel-* heads."
+            exit 1
+          fi
+
+          if ! git rev-parse --verify "origin/$TARGET" >/dev/null 2>&1; then
+            echo "::error::Target branch origin/$TARGET does not exist."
+            exit 1
+          fi
+
+          if git merge-base --is-ancestor "origin/$SOURCE" "origin/$TARGET"; then
+            echo "origin/$SOURCE is already an ancestor of origin/$TARGET; nothing to forward."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+          echo "source=$SOURCE" >> "$GITHUB_OUTPUT"
+          echo "target=$TARGET" >> "$GITHUB_OUTPUT"
+          echo "Auto-merge forward: $SOURCE -> $TARGET"
+
+      - name: Merge into forward branch
+        if: steps.target.outputs.skip != 'true'
+        id: merge
+        run: |
+          set -euo pipefail
+          SOURCE="${{ steps.target.outputs.source }}"
+          TARGET="${{ steps.target.outputs.target }}"
+          FORWARD_BRANCH="auto-merge-forward/${SOURCE}-to-${TARGET}-${{ github.run_number }}"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git checkout -B "$FORWARD_BRANCH" "origin/$TARGET"
+          if git merge --no-edit "origin/$SOURCE"; then
+            echo "conflict=false" >> "$GITHUB_OUTPUT"
+          else
+            git merge --abort
+            git checkout -B "$FORWARD_BRANCH" "origin/$SOURCE"
+            echo "conflict=true" >> "$GITHUB_OUTPUT"
+            echo "::warning::Merge conflict forwarding ${SOURCE} to ${TARGET}. PR left open for manual resolution."
+          fi
+
+          git push origin "$FORWARD_BRANCH"
+          echo "branch=$FORWARD_BRANCH" >> "$GITHUB_OUTPUT"
+
+      - name: Create pull request
+        if: steps.target.outputs.skip != 'true'
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          SOURCE="${{ steps.target.outputs.source }}"
+          TARGET="${{ steps.target.outputs.target }}"
+          FORWARD_BRANCH="${{ steps.merge.outputs.branch }}"
+          CONFLICT="${{ steps.merge.outputs.conflict }}"
+
+          BODY="Automated forward merge of \`${SOURCE}\` into \`${TARGET}\`."
+          if [[ "$CONFLICT" == "true" ]]; then
+            BODY+=$'\n\n**Merge conflict:** this branch is \`${SOURCE}\` as-is. Resolve against \`${TARGET}\` before merging.'
+          fi
+
+          URL="$(gh pr create \
+            --base "$TARGET" \
+            --head "$FORWARD_BRANCH" \
+            --title "Auto-merge forward ${SOURCE} → ${TARGET}" \
+            --body "$BODY")"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "Created $URL"
+
+      # BOT_SECRET, not github.token: a merge performed with the default token produces a push
+      # that triggers no workflow, which would stop the chain at the first hop.
+      - name: Approve and auto-merge
+        if: steps.target.outputs.skip != 'true' && steps.merge.outputs.conflict != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.BOT_SECRET }}
+        run: |
+          set -euo pipefail
+          FORWARD_BRANCH="${{ steps.merge.outputs.branch }}"
+          gh pr review "$FORWARD_BRANCH" --approve
+          gh pr merge "$FORWARD_BRANCH" --merge --auto --delete-branch
