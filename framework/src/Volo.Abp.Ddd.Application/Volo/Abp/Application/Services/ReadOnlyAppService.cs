@@ -37,7 +37,7 @@ public abstract class ReadOnlyAppService<TEntity, TGetOutputDto, TGetListOutputD
     protected IReadOnlyRepository<TEntity, TKey> Repository { get; }
 
     protected ReadOnlyAppService(IReadOnlyRepository<TEntity, TKey> repository)
-    : base(repository)
+        : base(repository)
     {
         Repository = repository;
     }
@@ -45,6 +45,13 @@ public abstract class ReadOnlyAppService<TEntity, TGetOutputDto, TGetListOutputD
     protected override async Task<TEntity> GetEntityByIdAsync(TKey id)
     {
         return await Repository.GetAsync(id);
+    }
+
+    protected override async Task<IQueryable<TEntity>> GetEntityByIdQueryAsync(TKey id)
+    {
+        var query = await Repository.GetQueryableAsync();
+
+        return query.Where(e => e.Id.Equals(id));
     }
 
     protected override IQueryable<TEntity> ApplyDefaultSorting(IQueryable<TEntity> query)

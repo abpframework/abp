@@ -44,6 +44,18 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
 
     protected virtual string? GetListPolicyName { get; set; }
 
+    protected virtual IQueryProjectionMapper<TEntity, TGetOutputDto>? ObjectProjectionMapper =>
+        LazyServiceProvider.LazyGetService<IQueryProjectionMapper<TEntity, TGetOutputDto>>();
+
+    protected virtual IQueryProjectionMapper<TEntity, TGetListOutputDto>? ListProjectionMapper =>
+        LazyServiceProvider.LazyGetService<IQueryProjectionMapper<TEntity, TGetListOutputDto>>();
+
+    protected virtual bool UseObjectProjectionMapper =>
+        ObjectProjectionMapper != null;
+
+    protected virtual bool UseListProjectionMapper =>
+        ListProjectionMapper != null;
+
     protected AbstractKeyReadOnlyAppService(IReadOnlyRepository<TEntity> repository)
     {
         ReadOnlyRepository = repository;
@@ -52,6 +64,19 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
     public virtual async Task<TGetOutputDto> GetAsync(TKey id)
     {
         await CheckGetPolicyAsync();
+
+        var projectionMapper = ObjectProjectionMapper;
+
+        if (UseObjectProjectionMapper && projectionMapper != null)
+        {
+            var query = await GetEntityByIdQueryAsync(id);
+
+            var dto = 
+                await AsyncExecuter.FirstOrDefaultAsync(projectionMapper.ProjectTo(query))
+                ?? throw new EntityNotFoundException(typeof(TEntity), id);
+
+            return dto;
+        }
 
         var entity = await GetEntityByIdAsync(id);
 
@@ -65,7 +90,6 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
         var query = await CreateFilteredQueryAsync(input);
         var totalCount = await AsyncExecuter.CountAsync(query);
 
-        var entities = new List<TEntity>();
         var entityDtos = new List<TGetListOutputDto>();
 
         if (totalCount > 0)
@@ -73,8 +97,19 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
             query = ApplySorting(query, input);
             query = ApplyPaging(query, input);
 
-            entities = await AsyncExecuter.ToListAsync(query);
-            entityDtos = await MapToGetListOutputDtosAsync(entities);
+            var projectionMapper = ListProjectionMapper;
+
+            if (UseListProjectionMapper && projectionMapper != null)
+            {
+                entityDtos = await AsyncExecuter.ToListAsync(
+                    projectionMapper.ProjectTo(query)
+                );
+            }
+            else
+            {
+                var entities = await AsyncExecuter.ToListAsync(query);
+                entityDtos = await MapToGetListOutputDtosAsync(entities);
+            }
         }
 
         return new PagedResultDto<TGetListOutputDto>(
@@ -84,6 +119,13 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
     }
 
     protected abstract Task<TEntity> GetEntityByIdAsync(TKey id);
+
+    protected virtual Task<IQueryable<TEntity>> GetEntityByIdQueryAsync(TKey id)
+    {
+        throw new NotImplementedException(
+            "Override this method to create the query used for getting an entity by id."
+            );
+    }
 
     protected virtual async Task CheckGetPolicyAsync()
     {
