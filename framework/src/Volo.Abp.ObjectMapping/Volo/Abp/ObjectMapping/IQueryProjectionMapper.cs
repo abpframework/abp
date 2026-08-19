@@ -7,3 +7,9 @@ public interface IQueryProjectionMapper<TSource, TDestination> : ITransientDepen
 {
     IQueryable<TDestination> ProjectTo(IQueryable<TSource> source);
 }
+
+//[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
+//public partial class GetSectorMapper : IQueryProjectionMapper<Sector, GetSectorsDto>
+//{
+//    public partial IQueryable<GetSectorsDto> ProjectTo(IQueryable<Sector> source);
+//}
