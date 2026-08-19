@@ -44,9 +44,11 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
 
     protected virtual string? GetListPolicyName { get; set; }
 
-    protected virtual IQueryProjectionMapper<TEntity, TGetOutputDto>? ObjectProjectionMapper { get; }
+    protected virtual IQueryProjectionMapper<TEntity, TGetOutputDto>? ObjectProjectionMapper =>
+        LazyServiceProvider.LazyGetService<IQueryProjectionMapper<TEntity, TGetOutputDto>>();
 
-    protected virtual IQueryProjectionMapper<TEntity, TGetListOutputDto>? ListProjectionMapper { get; }
+    protected virtual IQueryProjectionMapper<TEntity, TGetListOutputDto>? ListProjectionMapper =>
+        LazyServiceProvider.LazyGetService<IQueryProjectionMapper<TEntity, TGetListOutputDto>>();
 
     protected virtual bool UseObjectProjectionMapper =>
         ObjectProjectionMapper != null;
@@ -57,28 +59,20 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
     protected AbstractKeyReadOnlyAppService(IReadOnlyRepository<TEntity> repository)
     {
         ReadOnlyRepository = repository;
-
-        ObjectProjectionMapper =
-            LazyServiceProvider.LazyGetService<
-                IQueryProjectionMapper<TEntity, TGetOutputDto>>();
-
-        ListProjectionMapper =
-            LazyServiceProvider.LazyGetService<
-                IQueryProjectionMapper<TEntity, TGetListOutputDto>>();
     }
 
     public virtual async Task<TGetOutputDto> GetAsync(TKey id)
     {
         await CheckGetPolicyAsync();
 
-        if (UseObjectProjectionMapper && ObjectProjectionMapper != null)
+        var projectionMapper = ObjectProjectionMapper;
+
+        if (UseObjectProjectionMapper && projectionMapper != null)
         {
             var query = await GetEntityByIdQueryAsync(id);
 
-            var dto =
-                await AsyncExecuter.FirstOrDefaultAsync(
-                    ObjectProjectionMapper.ProjectTo(query)
-                )
+            var dto = 
+                await AsyncExecuter.FirstOrDefaultAsync(projectionMapper.ProjectTo(query))
                 ?? throw new EntityNotFoundException(typeof(TEntity), id);
 
             return dto;
@@ -103,10 +97,12 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
             query = ApplySorting(query, input);
             query = ApplyPaging(query, input);
 
-            if (UseListProjectionMapper && ListProjectionMapper != null)
+            var projectionMapper = ListProjectionMapper;
+
+            if (UseListProjectionMapper && projectionMapper != null)
             {
                 entityDtos = await AsyncExecuter.ToListAsync(
-                    ListProjectionMapper.ProjectTo(query)
+                    projectionMapper.ProjectTo(query)
                 );
             }
             else
@@ -128,7 +124,7 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
     {
         throw new NotImplementedException(
             "Override this method to create the query used for getting an entity by id."
-        );
+            );
     }
 
     protected virtual async Task CheckGetPolicyAsync()
