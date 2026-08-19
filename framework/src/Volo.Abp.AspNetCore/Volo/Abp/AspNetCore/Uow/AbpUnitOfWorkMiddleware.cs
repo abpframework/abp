@@ -37,8 +37,23 @@ public class AbpUnitOfWorkMiddleware : AbpMiddlewareBase, ITransientDependency
 
         using (var uow = _unitOfWorkManager.Reserve(UnitOfWork.UnitOfWorkReservationName))
         {
+            // Commit the ambient unit of work before the response starts, so data written
+            // during the request is committed before the response is flushed to the client.
+            context.Response.OnStarting(async () =>
+            {
+                var currentUow = _unitOfWorkManager.Current;
+                if (currentUow != null && !currentUow.IsCompleted)
+                {
+                    await currentUow.CompleteAsync(_cancellationTokenProvider.Token);
+                }
+            });
+
             await next(context);
-            await uow.CompleteAsync(_cancellationTokenProvider.Token);
+
+            if (!uow.IsCompleted)
+            {
+                await uow.CompleteAsync(_cancellationTokenProvider.Token);
+            }
         }
     }
 

@@ -1,5 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Shouldly;
+using Volo.Abp;
+using Volo.Abp.Domain.Repositories;
+using Volo.Abp.MemoryDb;
+using Volo.Abp.TestApp.MemoryDb;
+using Volo.Abp.TestApp.Domain;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.AspNetCore.Mvc.Uow;
@@ -63,5 +72,83 @@ public class UnitOfWorkTestController : AbpController
         CurrentUnitOfWork.Options.IsTransactional.ShouldBeFalse();
 
         _testUnitOfWorkConfig.ThrowExceptionOnComplete = true;
+    }
+
+    [HttpGet]
+    [Route("CommitBeforeResponseFlush")]
+    public async Task CommitBeforeResponseFlush()
+    {
+        var uow = CurrentUnitOfWork;
+        uow.ShouldNotBeNull();
+
+        // Start the response from inside the pipeline, before the middleware would commit.
+        await Response.WriteAsync("first");
+        await Response.Body.FlushAsync();
+
+        await Response.WriteAsync(uow.IsCompleted ? ":completed" : ":not-completed");
+    }
+
+    [HttpGet]
+    [Route("CommitThenThrowAfterResponseFlush")]
+    public async Task CommitThenThrowAfterResponseFlush()
+    {
+        var uow = CurrentUnitOfWork;
+
+        await Response.WriteAsync("first");
+        await Response.Body.FlushAsync();
+
+        // Record the commit state so the test can assert the throw below doesn't undo it.
+        _testUnitOfWorkConfig.UowCompletedAfterResponseFlush = uow.IsCompleted;
+
+        throw new UserFriendlyException("boom after the response was already flushed");
+    }
+
+    [HttpGet]
+    [Route("ReadRepositoryAfterResponseFlush")]
+    public async Task ReadRepositoryAfterResponseFlush()
+    {
+        var repository = LazyServiceProvider.LazyGetRequiredService<IRepository<Person, Guid>>();
+
+        var before = (await repository.GetListAsync()).Count;
+        await Response.WriteAsync($"before=ok({before})");
+        await Response.Body.FlushAsync();
+
+        string after;
+        try
+        {
+            var count = (await repository.GetListAsync()).Count;
+            after = $";after=ok({count},ambient={(UnitOfWorkManager.Current == null ? "null" : "present")})";
+        }
+        catch (Exception ex)
+        {
+            after = $";after=threw:{ex.GetType().Name}";
+        }
+
+        await Response.WriteAsync(after);
+    }
+
+    [HttpGet]
+    [Route("RawDatabaseProviderAfterResponseFlush")]
+    public async Task RawDatabaseProviderAfterResponseFlush()
+    {
+        var databaseProvider = LazyServiceProvider
+            .LazyGetRequiredService<IMemoryDatabaseProvider<TestAppMemoryDbContext>>();
+
+        await Response.WriteAsync("first");
+        await Response.Body.FlushAsync();
+
+        string outcome;
+        try
+        {
+            await databaseProvider.GetDatabaseAsync();
+            outcome = ":ok";
+        }
+        catch (AbpException)
+        {
+            // Raw provider access has no ambient uow once the response started, so it throws.
+            outcome = ":threw-AbpException";
+        }
+
+        await Response.WriteAsync(outcome);
     }
 }
