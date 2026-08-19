@@ -51,7 +51,7 @@ public abstract class ReadOnlyAppService<TEntity, TGetOutputDto, TGetListOutputD
     {
         var query = await Repository.GetQueryableAsync();
 
-        return query.Where(e => e.Id.Equals(id));
+        return query.Where(e =>e.Id != null && e.Id.Equals(id));
     }
 
     protected override IQueryable<TEntity> ApplyDefaultSorting(IQueryable<TEntity> query)
