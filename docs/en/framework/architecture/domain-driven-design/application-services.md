@@ -1,4 +1,4 @@
-﻿```json
+```json
 //[doc-seo]
 {
     "Description": "Learn how to implement application services in the ABP Framework to expose domain logic and streamline presentation layer interactions."
@@ -444,7 +444,7 @@ These methods are low level methods that can control how to query entities from 
 * `ApplyPaging` is used to make paging on the query. If your `TGetListInput` already implements `IPagedResultRequest`, you don't need to override this since the ABP automatically understands it and performs the paging.
 * `ApplySorting` is used to sort (order by...) the query. If your `TGetListInput` already implements the `ISortedResultRequest`, ABP automatically sorts the query. If not, it fallbacks to the `ApplyDefaultSorting` which tries to sort by creation time, if your entity implements the standard `IHasCreationTime` interface.
 * `GetEntityByIdAsync` is used to get an entity by id, which calls `Repository.GetAsync(id)` by default.
-* `CreateEntityQueryAsync` is used to create a query for a single entity by id, which is only needed for the *Query Projection* explained below. It returns `null` if the application service can not create such a query, then `GetEntityByIdAsync` is used.
+* `CreateEntityQueryOrNullAsync` is used to create a query for a single entity by id, which is only needed for the *Query Projection* explained below. It returns `null` if the application service can not create such a query, then `GetEntityByIdAsync` is used.
 * `DeleteByIdAsync` is used to delete an entity by id, which calls `Repository.DeleteAsync(id)` by default.
 
 #### Object to Object Mapping
@@ -461,7 +461,7 @@ These methods are used to convert Entities to DTOs and vice verse. They use the 
 
 `GetAsync` and `GetListAsync` get the entities from the database, then map them to DTOs in the memory. If your DTO uses only a few properties of a large entity, you can project the query to the DTO instead, so the database returns only the columns you need.
 
-Implement the `IQueryableMapper<TEntity, TDto>` interface to define a projection:
+Implement the `IQueryProjector<TEntity, TDto>` interface to define a projection:
 
 ````csharp
 using System.Linq;
@@ -469,7 +469,7 @@ using Volo.Abp.ObjectMapping;
 
 namespace MyProject.Books;
 
-public class BookProjector : IQueryableMapper<Book, BookDto>
+public class BookProjector : IQueryProjector<Book, BookDto>
 {
     public IQueryable<BookDto> ProjectTo(IQueryable<Book> source)
     {
@@ -484,14 +484,51 @@ public class BookProjector : IQueryableMapper<Book, BookDto>
 
 You don't have to write the `Select` by hand. Both [Mapperly](https://mapperly.riok.app/) and [AutoMapper](https://docs.automapper.org) can project an `IQueryable`, refer to their own documentation for it and to the [object to object mapping document](../../infrastructure/object-to-object-mapping.md) for their ABP integrations.
 
-ABP registers the projection mappers by convention, you don't need to configure anything else. Filters (like soft delete and multi-tenancy), sorting and paging are still applied to the query before the projection.
+ABP registers the projectors by convention, you don't need to configure anything else. Implement a projector once for an entity and DTO pair, the last registered one is used otherwise. Filters (like soft delete and multi-tenancy), sorting and paging are still applied to the query before the projection.
 
-> The projection replaces the entity based extension points. `GetAsync` doesn't use `GetEntityByIdAsync` and `MapToGetOutputDtoAsync`, `GetListAsync` doesn't use `MapToGetListOutputDtosAsync` anymore. If an application service needs to keep using them, override the `GetQueryableMapper` or `GetListQueryableMapper` property and return `null`:
+> A projection must return one row per entity. The total count and the paging are calculated on the entity query before the projection runs, so a projection that filters out rows (an inner join to an optional relation) or multiplies them (a join to a collection) returns a page that doesn't match the reported total count. Use a left join for optional relations.
+
+The projector is synchronous, so it can not obtain the query of another aggregate root, which is only
+available through the asynchronous `GetQueryableAsync`. Override `CreateGetOutputDtoQueryOrNullAsync` or
+`CreateGetListOutputDtoQueryOrNullAsync` for that. They replace the projector for that application service:
+
+````csharp
+public class BookAppService : ReadOnlyAppService<Book, BookDto, Guid>
+{
+    private readonly IReadOnlyRepository<Author, Guid> _authorRepository;
+
+    //...
+
+    protected override async Task<IQueryable<BookDto>?> CreateGetListOutputDtoQueryOrNullAsync(IQueryable<Book> query)
+    {
+        var authors = await _authorRepository.GetQueryableAsync();
+
+        return from book in query
+               join author in authors on book.AuthorId equals author.Id into bookAuthors
+               from bookAuthor in bookAuthors.DefaultIfEmpty()
+               select new BookDto
+               {
+                   Id = book.Id,
+                   Name = book.Name,
+                   AuthorName = bookAuthor != null ? bookAuthor.Name : null
+               };
+    }
+}
+````
+
+Both queries must come from the same database context, otherwise they can not be executed as a single query,
+and the provider has to be able to translate the join. The one row per entity rule above applies here too,
+that's why the example uses a left join. A joined column can not be used for the sorting and the paging,
+since they are already applied to the entity query before this method is called.
+
+> The projection replaces the entity based extension points. `GetAsync` doesn't use `GetEntityByIdAsync` and `MapToGetOutputDtoAsync`, `GetListAsync` doesn't use `MapToGetListOutputDtosAsync` anymore. Projectors are resolved by the `(entity, DTO)` type pair, so registering one enables the projection for every application service using that pair. If an application service needs to keep using the entity based extension points, override the `GetOutputDtoQueryProjector` or `GetListOutputDtoQueryProjector` property and return `null`:
 
 ````csharp
 public class BookAppService : CrudAppService<Book, BookDto, Guid>
 {
-    protected override IQueryableMapper<Book, BookDto>? GetQueryableMapper => null;
+    protected override IQueryProjector<Book, BookDto>? GetOutputDtoQueryProjector => null;
+
+    protected override IQueryProjector<Book, BookDto>? GetListOutputDtoQueryProjector => null;
 
     //...
 }
