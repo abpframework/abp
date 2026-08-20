@@ -484,7 +484,7 @@ public class BookProjector : IQueryProjector<Book, BookDto>
 
 You don't have to write the `Select` by hand. Both [Mapperly](https://mapperly.riok.app/) and [AutoMapper](https://docs.automapper.org) can project an `IQueryable`, refer to their own documentation for it and to the [object to object mapping document](../../infrastructure/object-to-object-mapping.md) for their ABP integrations.
 
-ABP registers the projectors by convention, you don't need to configure anything else. Implement a projector once for an entity and DTO pair, the last registered one is used otherwise. Filters (like soft delete and multi-tenancy), sorting and paging are still applied to the query before the projection.
+ABP registers the projectors by convention, you don't need to configure anything else. Implement a projector once for an entity and DTO pair, and use the `ReplaceServices` option of the `DependencyAttribute` to replace an existing one. Filters (like soft delete and multi-tenancy), sorting and paging are still applied to the query before the projection.
 
 > A projection must return one row per entity. The total count and the paging are calculated on the entity query before the projection runs, so a projection that filters out rows (an inner join to an optional relation) or multiplies them (a join to a collection) returns a page that doesn't match the reported total count. Use a left join for optional relations.
 
@@ -518,15 +518,15 @@ public class BookAppService : ReadOnlyAppService<Book, BookDto, Guid>
 
 Both queries must come from the same database context, otherwise they can not be executed as a single query,
 and the provider has to be able to translate the join. The one row per entity rule above applies here too,
-that's why the example uses a left join. A joined column can not be used for the sorting and the paging,
-since they are already applied to the entity query before this method is called.
+that's why the example uses a left join. A joined column can not be used for the sorting, and the paging is
+based on the entity query, since both are applied before this method is called.
 
-A projector is resolved by the `(entity, DTO)` type pair, just like an `IObjectMapper<TSource, TDestination>`, so registering one enables the projection for every application service using that pair. The projection only replaces the way the DTOs are created:
+A projector is resolved by the `(entity, DTO)` type pair, just like an `IObjectMapper<TSource, TDestination>`, so registering one enables the projection for every application service using that pair. It replaces the way the DTOs are read:
 
-* `GetAsync` doesn't use `GetEntityByIdAsync` and `MapToGetOutputDtoAsync` anymore.
 * `GetListAsync` doesn't use `MapToGetListOutputDtosAsync` anymore.
+* `GetAsync` doesn't use `GetEntityByIdAsync` and `MapToGetOutputDtoAsync` anymore, as long as the application service can create a query for a single entity. `ReadOnlyAppService` and `CrudAppService` already do that. A class deriving from `AbstractKeyReadOnlyAppService` has to override `CreateEntityQueryOrNullAsync`, otherwise `GetAsync` keeps loading the entity and mapping it.
 
-Everything else is untouched. The authorization policies are still checked, `CreateFilteredQueryAsync`, `ApplySorting` and `ApplyPaging` are still used, the data filters (like soft delete and multi-tenancy) are still applied, and the create, update and delete methods still use the [IObjectMapper](../../infrastructure/object-to-object-mapping.md).
+The rest of the pipeline is untouched. The authorization policies are still checked, `CreateFilteredQueryAsync`, `ApplySorting` and `ApplyPaging` are still used, the data filters (like soft delete and multi-tenancy) are still applied, and the create, update and delete methods still use the [IObjectMapper](../../infrastructure/object-to-object-mapping.md).
 
 > If an application service needs to keep using the entity based extension points, override the `GetOutputDtoQueryProjector` or `GetListOutputDtoQueryProjector` property and return `null`:
 
