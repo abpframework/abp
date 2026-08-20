@@ -482,17 +482,7 @@ public class BookProjector : IQueryProjectionMapper<Book, BookDto>
 }
 ````
 
-[Mapperly](https://mapperly.riok.app/) can generate that method for you:
-
-````csharp
-[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
-public partial class BookProjector : IQueryProjectionMapper<Book, BookDto>
-{
-    public partial IQueryable<BookDto> ProjectTo(IQueryable<Book> source);
-}
-````
-
-> `RequiredMappingStrategy.Target` tells Mapperly to only require the DTO members to be mapped. Without it, it reports a warning for every entity property that the DTO doesn't have.
+You don't have to write the `Select` by hand. Both [Mapperly](https://mapperly.riok.app/) and [AutoMapper](https://docs.automapper.org) can project an `IQueryable`, refer to their own documentation for it and to the [object to object mapping document](../../infrastructure/object-to-object-mapping.md) for their ABP integrations.
 
 ABP registers the projection mappers by convention, you don't need to configure anything else. Filters (like soft delete and multi-tenancy), sorting and paging are still applied to the query before the projection.
 
