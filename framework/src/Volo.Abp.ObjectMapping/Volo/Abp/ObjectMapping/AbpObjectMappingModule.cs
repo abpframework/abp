@@ -21,7 +21,6 @@ public class AbpObjectMappingModule : AbpModule
             );
 
             //Register types for IQueryProjector<TSource, TDestination> if implements
-            //The class name convention may have already exposed them, so they are not added twice
             foreach (var serviceType in ReflectionHelper.GetImplementedGenericTypes(
                          onServiceExposingContext.ImplementationType,
                          typeof(IQueryProjector<,>)))

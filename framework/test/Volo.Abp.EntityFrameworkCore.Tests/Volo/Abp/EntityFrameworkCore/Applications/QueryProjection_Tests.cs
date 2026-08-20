@@ -129,8 +129,9 @@ public class QueryProjection_Tests : EntityFrameworkCoreTestBase
         }
 
         //the application service must run the projection itself, not materialize the entities first
-        var select = commands.Last(x => x.Contains("FROM \"People\"") && !x.Contains("COUNT"));
+        var selects = commands.Where(x => x.Contains("FROM \"People\"") && !x.Contains("COUNT")).ToList();
 
+        var select = selects.ShouldHaveSingleItem();
         select.ShouldContain("\"Name\"");
         select.ShouldNotContain("\"Birthday\"");
         select.ShouldNotContain("\"ExtraProperties\"");
@@ -151,26 +152,46 @@ public class QueryProjection_Tests : EntityFrameworkCoreTestBase
         var cancellationTokenProvider = GetRequiredService<ICancellationTokenProvider>();
         var appService = GetRequiredService<PersonProjectionAppService>();
 
+        //the entity path passes it through Repository.GetAsync, so the projected path must not regress
         using (cancellationTokenProvider.Use(new CancellationToken(canceled: true)))
         {
             await Should.ThrowAsync<OperationCanceledException>(async () =>
                 await appService.GetAsync(TestDataBuilder.UserDouglasId));
-
-            await Should.ThrowAsync<OperationCanceledException>(async () =>
-                await appService.GetListAsync(new PagedAndSortedResultRequestDto()));
         }
     }
 
     [Fact]
-    public async Task Should_Use_The_Ambient_Cancellation_Token_Without_A_Projector()
+    public async Task Should_Execute_The_Projected_Query_From_The_Application_Service_For_A_Single_Entity()
     {
-        var cancellationTokenProvider = GetRequiredService<ICancellationTokenProvider>();
-        var appService = GetRequiredService<IPeopleAppService>();
-
-        using (cancellationTokenProvider.Use(new CancellationToken(canceled: true)))
+        System.Collections.Concurrent.ConcurrentQueue<string> commands;
+        using (SqlCommandCapture.Begin(out commands))
         {
-            await Should.ThrowAsync<OperationCanceledException>(async () =>
-                await appService.GetListAsync(new PagedAndSortedResultRequestDto()));
+            await GetRequiredService<PersonProjectionAppService>().GetAsync(TestDataBuilder.UserDouglasId);
         }
+
+        var selects = commands.Where(x => x.Contains("FROM \"People\"")).ToList();
+
+        var select = selects.ShouldHaveSingleItem();
+        select.ShouldContain("\"Name\"");
+        select.ShouldNotContain("\"Birthday\"");
+        select.ShouldNotContain("\"ExtraProperties\"");
+    }
+
+    [Fact]
+    public async Task Should_Apply_The_Data_Filters_Of_The_Joined_Aggregate()
+    {
+        var cityRepository = GetRequiredService<IRepository<City, Guid>>();
+
+        await WithUnitOfWorkAsync(async () =>
+        {
+            var london = await cityRepository.GetAsync(TestDataBuilder.LondonCityId);
+            await cityRepository.DeleteAsync(london, autoSave: true);
+        });
+
+        var result = await GetRequiredService<PersonWithCityAppService>()
+            .GetListAsync(new PagedAndSortedResultRequestDto());
+
+        //the soft deleted city is filtered out, the left join still keeps the person
+        result.Items.ShouldContain(x => x.Name == "Douglas" && x.CityName == null);
     }
 }

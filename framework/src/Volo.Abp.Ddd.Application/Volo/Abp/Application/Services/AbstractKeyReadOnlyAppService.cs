@@ -92,7 +92,7 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
         await CheckGetListPolicyAsync();
 
         var query = await CreateFilteredQueryAsync(input);
-        var totalCount = await AsyncExecuter.CountAsync(query, GetCancellationToken());
+        var totalCount = await AsyncExecuter.CountAsync(query);
 
         var entityDtos = new List<TGetListOutputDto>();
 
@@ -104,11 +104,11 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
             var dtoQuery = await CreateGetListOutputDtoQueryOrNullAsync(query);
             if (dtoQuery != null)
             {
-                entityDtos = await AsyncExecuter.ToListAsync(dtoQuery, GetCancellationToken());
+                entityDtos = await AsyncExecuter.ToListAsync(dtoQuery);
             }
             else
             {
-                var entities = await AsyncExecuter.ToListAsync(query, GetCancellationToken());
+                var entities = await AsyncExecuter.ToListAsync(query);
                 entityDtos = await MapToGetListOutputDtosAsync(entities);
             }
         }
@@ -121,9 +121,11 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
 
     protected abstract Task<TEntity> GetEntityByIdAsync(TKey id);
 
-    protected virtual CancellationToken GetCancellationToken(CancellationToken preferredValue = default)
+    private CancellationToken GetCancellationToken()
     {
-        return CancellationTokenProvider.FallbackToProvider(preferredValue);
+        return LazyServiceProvider
+            .LazyGetService<ICancellationTokenProvider>(NullCancellationTokenProvider.Instance)
+            .FallbackToProvider();
     }
 
     /// <summary>

@@ -7,7 +7,8 @@ namespace Volo.Abp.ObjectMapping;
 /// Maps a query to another.
 /// Implement this interface to project a query on the data store side, instead of loading the
 /// source objects into the memory and mapping them one by one.
-/// Implement it once for a source and destination pair, the last registered one is used otherwise.
+/// Implement it once for a source and destination pair. Use the ReplaceServices option of the
+/// DependencyAttribute to replace an existing implementation.
 /// </summary>
 /// <typeparam name="TSource">Type of the source objects</typeparam>
 /// <typeparam name="TDestination">Type of the destination objects</typeparam>

@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using Volo.Abp.Application.Dtos;
 
@@ -7,5 +8,5 @@ public class PersonWithCityDto : EntityDto<Guid>
 {
     public string Name { get; set; }
 
-    public string CityName { get; set; }
+    public string? CityName { get; set; }
 }

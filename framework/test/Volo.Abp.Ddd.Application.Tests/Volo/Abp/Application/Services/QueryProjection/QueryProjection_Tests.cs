@@ -66,13 +66,13 @@ public class QueryProjection_Tests : AbpDddApplicationTestBase
     }
 
     [Fact]
-    public async Task Should_Use_The_Object_Mapper_If_The_Projection_Was_Disabled()
+    public async Task Should_Use_The_Entity_Based_Overrides_If_The_Projection_Was_Disabled()
     {
         var appService = GetRequiredService<BookWithoutProjectionAppService>();
 
-        (await appService.GetAsync(_bookId)).Name.ShouldEndWith(BookObjectMapper.Marker);
+        (await appService.GetAsync(_bookId)).Name.ShouldEndWith(BookWithoutProjectionAppService.Marker);
         (await appService.GetListAsync(new PagedAndSortedResultRequestDto()))
-            .Items[0].Name.ShouldEndWith(BookObjectMapper.Marker);
+            .Items[0].Name.ShouldEndWith(BookWithoutProjectionAppService.Marker);
     }
 
     [Fact]
@@ -84,6 +84,11 @@ public class QueryProjection_Tests : AbpDddApplicationTestBase
 
         dto.Name.ShouldEndWith(BookProjector.Marker);
         dto.Name.ShouldNotContain(BookCustomizedAppService.Marker);
+
+        var items = (await appService.GetListAsync(new PagedAndSortedResultRequestDto())).Items;
+
+        items[0].Name.ShouldEndWith(BookProjector.Marker);
+        items[0].Name.ShouldNotContain(BookCustomizedAppService.Marker);
     }
 
     [Fact]
