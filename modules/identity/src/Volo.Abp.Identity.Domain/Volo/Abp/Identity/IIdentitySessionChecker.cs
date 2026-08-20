@@ -4,5 +4,5 @@ namespace Volo.Abp.Identity;
 
 public interface IIdentitySessionChecker
 {
-    Task<bool> IsValidateAsync(string sessionId);
+    Task<bool> IsValidAsync(string sessionId);
 }

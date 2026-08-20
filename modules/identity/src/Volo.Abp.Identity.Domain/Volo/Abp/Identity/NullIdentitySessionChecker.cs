@@ -5,7 +5,7 @@ namespace Volo.Abp.Identity;
 
 public class NullIdentitySessionChecker : IIdentitySessionChecker, ISingletonDependency
 {
-    public Task<bool> IsValidateAsync(string sessionId)
+    public Task<bool> IsValidAsync(string sessionId)
     {
         return Task.FromResult(true);
     }

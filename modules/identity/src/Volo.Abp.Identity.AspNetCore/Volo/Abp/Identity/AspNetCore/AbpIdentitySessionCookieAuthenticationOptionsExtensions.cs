@@ -60,7 +60,7 @@ public static class AbpIdentitySessionCookieAuthenticationOptionsExtensions
         var identitySessionChecker = httpContext.RequestServices.GetRequiredService<IIdentitySessionChecker>();
         using (currentTenant.Change(principal.FindTenantId()))
         {
-            return await identitySessionChecker.IsValidateAsync(sessionId);
+            return await identitySessionChecker.IsValidAsync(sessionId);
         }
     }
 }

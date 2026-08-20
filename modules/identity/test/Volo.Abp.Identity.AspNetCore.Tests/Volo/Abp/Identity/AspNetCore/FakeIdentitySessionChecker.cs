@@ -14,7 +14,7 @@ public class FakeIdentitySessionChecker : IIdentitySessionChecker, ISingletonDep
 {
     public HashSet<string> RevokedSessionIds { get; } = new();
 
-    public Task<bool> IsValidateAsync(string sessionId)
+    public Task<bool> IsValidAsync(string sessionId)
     {
         return Task.FromResult(!RevokedSessionIds.Contains(sessionId));
     }
