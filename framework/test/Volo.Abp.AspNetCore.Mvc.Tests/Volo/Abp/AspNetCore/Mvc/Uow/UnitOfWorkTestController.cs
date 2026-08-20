@@ -151,4 +151,28 @@ public class UnitOfWorkTestController : AbpController
 
         await Response.WriteAsync(outcome);
     }
+
+    [HttpGet]
+    [Route("NestedUowDuringResponseFlush")]
+    public async Task NestedUowDuringResponseFlush()
+    {
+        using (var nested = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: false))
+        {
+            await Response.WriteAsync("first");
+            await Response.Body.FlushAsync();
+
+            string outcome;
+            try
+            {
+                await nested.CompleteAsync();
+                outcome = ":nested-completed-by-owner";
+            }
+            catch (AbpException)
+            {
+                outcome = ":nested-already-completed";
+            }
+
+            await Response.WriteAsync(outcome);
+        }
+    }
 }

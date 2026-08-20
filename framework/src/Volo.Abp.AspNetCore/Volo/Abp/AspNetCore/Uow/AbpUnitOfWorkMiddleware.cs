@@ -39,12 +39,13 @@ public class AbpUnitOfWorkMiddleware : AbpMiddlewareBase, ITransientDependency
         {
             // Commit the ambient unit of work before the response starts, so data written
             // during the request is committed before the response is flushed to the client.
+            // Only when this reserved unit of work is the current one: if an explicit nested
+            // unit of work is in progress, it is the current one and must be left to its owner.
             context.Response.OnStarting(async () =>
             {
-                var currentUow = _unitOfWorkManager.Current;
-                if (currentUow != null && !currentUow.IsCompleted)
+                if (_unitOfWorkManager.Current == uow)
                 {
-                    await currentUow.CompleteAsync(_cancellationTokenProvider.Token);
+                    await uow.CompleteAsync(_cancellationTokenProvider.Token);
                 }
             });
 

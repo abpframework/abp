@@ -68,4 +68,11 @@ public class UnitOfWorkMiddleware_Tests : AspNetCoreMvcTestBase
         var body = await GetResponseAsStringAsync("/api/unitofwork-test/RawDatabaseProviderAfterResponseFlush");
         body.ShouldBe("first:threw-AbpException");
     }
+
+    [Fact]
+    public async Task Response_Flush_Inside_Nested_Uow_Should_Not_Complete_The_Nested_Uow()
+    {
+        var body = await GetResponseAsStringAsync("/api/unitofwork-test/NestedUowDuringResponseFlush");
+        body.ShouldBe("first:nested-completed-by-owner");
+    }
 }
