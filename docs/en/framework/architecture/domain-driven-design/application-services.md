@@ -485,12 +485,14 @@ public class BookProjector : IQueryProjectionMapper<Book, BookDto>
 [Mapperly](https://mapperly.riok.app/) can generate that method for you:
 
 ````csharp
-[Mapper]
+[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
 public partial class BookProjector : IQueryProjectionMapper<Book, BookDto>
 {
     public partial IQueryable<BookDto> ProjectTo(IQueryable<Book> source);
 }
 ````
+
+> `RequiredMappingStrategy.Target` tells Mapperly to only require the DTO members to be mapped. Without it, it reports a warning for every entity property that the DTO doesn't have.
 
 ABP registers the projection mappers by convention, you don't need to configure anything else. Filters (like soft delete and multi-tenancy), sorting and paging are still applied to the query before the projection.
 

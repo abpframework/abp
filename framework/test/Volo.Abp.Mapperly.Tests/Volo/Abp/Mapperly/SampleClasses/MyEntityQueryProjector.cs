@@ -4,7 +4,7 @@ using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.Mapperly.SampleClasses;
 
-[Mapper]
+[Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
 public partial class MyEntityQueryProjector : IQueryProjectionMapper<MyEntity, MyEntityDto>
 {
     public partial IQueryable<MyEntityDto> ProjectTo(IQueryable<MyEntity> source);
