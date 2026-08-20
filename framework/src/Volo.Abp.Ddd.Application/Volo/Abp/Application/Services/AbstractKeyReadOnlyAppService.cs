@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.ObjectMapping;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Application.Services;
 
@@ -45,20 +47,18 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
     protected virtual string? GetListPolicyName { get; set; }
 
     /// <summary>
-    /// Used by the <see cref="GetAsync"/> to project the query to the <typeparamref name="TGetOutputDto"/>.
-    /// It returns the registered mapper or null by default.
-    /// The <see cref="GetEntityByIdAsync"/> and the <see cref="MapToGetOutputDtoAsync"/> are not used when it returns a mapper.
+    /// Used by the <see cref="CreateGetOutputDtoQueryOrNullAsync"/> to project the query to the <typeparamref name="TGetOutputDto"/>.
+    /// The <see cref="GetEntityByIdAsync"/> and the <see cref="MapToGetOutputDtoAsync"/> are not used while the query is projected.
     /// </summary>
-    protected virtual IQueryableMapper<TEntity, TGetOutputDto>? GetQueryableMapper
-        => LazyServiceProvider.LazyGetService<IQueryableMapper<TEntity, TGetOutputDto>>();
+    protected virtual IQueryProjector<TEntity, TGetOutputDto>? GetOutputDtoQueryProjector
+        => LazyServiceProvider.LazyGetService<IQueryProjector<TEntity, TGetOutputDto>>();
 
     /// <summary>
-    /// Used by the <see cref="GetListAsync"/> to project the query to the <typeparamref name="TGetListOutputDto"/>.
-    /// It returns the registered mapper or null by default.
-    /// The <see cref="MapToGetListOutputDtosAsync"/> is not used when it returns a mapper.
+    /// Used by the <see cref="CreateGetListOutputDtoQueryOrNullAsync"/> to project the query to the <typeparamref name="TGetListOutputDto"/>.
+    /// The <see cref="MapToGetListOutputDtosAsync"/> is not used while the query is projected.
     /// </summary>
-    protected virtual IQueryableMapper<TEntity, TGetListOutputDto>? GetListQueryableMapper
-        => LazyServiceProvider.LazyGetService<IQueryableMapper<TEntity, TGetListOutputDto>>();
+    protected virtual IQueryProjector<TEntity, TGetListOutputDto>? GetListOutputDtoQueryProjector
+        => LazyServiceProvider.LazyGetService<IQueryProjector<TEntity, TGetListOutputDto>>();
 
     protected AbstractKeyReadOnlyAppService(IReadOnlyRepository<TEntity> repository)
     {
@@ -69,15 +69,17 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
     {
         await CheckGetPolicyAsync();
 
-        var projectionMapper = GetQueryableMapper;
-        if (projectionMapper != null)
+        var dtoQuery = await CreateGetOutputDtoQueryOrNullAsync(id);
+        if (dtoQuery != null)
         {
-            var query = await CreateEntityQueryAsync(id);
-            if (query != null)
+            //TGetOutputDto has no class constraint, so a default value can not be used to detect the missing entity
+            var dtos = await AsyncExecuter.ToListAsync(dtoQuery.Take(1), GetCancellationToken());
+            if (dtos.Count == 0)
             {
-                return await AsyncExecuter.FirstOrDefaultAsync(projectionMapper.ProjectTo(query))
-                       ?? throw new EntityNotFoundException<TEntity>(id);
+                throw new EntityNotFoundException<TEntity>(id);
             }
+
+            return dtos[0];
         }
 
         var entity = await GetEntityByIdAsync(id);
@@ -90,7 +92,7 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
         await CheckGetListPolicyAsync();
 
         var query = await CreateFilteredQueryAsync(input);
-        var totalCount = await AsyncExecuter.CountAsync(query);
+        var totalCount = await AsyncExecuter.CountAsync(query, GetCancellationToken());
 
         var entityDtos = new List<TGetListOutputDto>();
 
@@ -99,14 +101,14 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
             query = ApplySorting(query, input);
             query = ApplyPaging(query, input);
 
-            var projectionMapper = GetListQueryableMapper;
-            if (projectionMapper != null)
+            var dtoQuery = await CreateGetListOutputDtoQueryOrNullAsync(query);
+            if (dtoQuery != null)
             {
-                entityDtos = await AsyncExecuter.ToListAsync(projectionMapper.ProjectTo(query));
+                entityDtos = await AsyncExecuter.ToListAsync(dtoQuery, GetCancellationToken());
             }
             else
             {
-                var entities = await AsyncExecuter.ToListAsync(query);
+                var entities = await AsyncExecuter.ToListAsync(query, GetCancellationToken());
                 entityDtos = await MapToGetListOutputDtosAsync(entities);
             }
         }
@@ -119,14 +121,53 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
 
     protected abstract Task<TEntity> GetEntityByIdAsync(TKey id);
 
+    protected virtual CancellationToken GetCancellationToken(CancellationToken preferredValue = default)
+    {
+        return CancellationTokenProvider.FallbackToProvider(preferredValue);
+    }
+
     /// <summary>
     /// Should create a query that selects the entity with the given <paramref name="id"/>.
-    /// It returns null by default, then the <see cref="GetEntityByIdAsync"/> is used instead of the projection.
+    /// It returns null by default, then the entity is not projected.
     /// </summary>
     /// <param name="id">The id of the entity.</param>
-    protected virtual Task<IQueryable<TEntity>?> CreateEntityQueryAsync(TKey id)
+    protected virtual Task<IQueryable<TEntity>?> CreateEntityQueryOrNullAsync(TKey id)
     {
         return Task.FromResult<IQueryable<TEntity>?>(null);
+    }
+
+    /// <summary>
+    /// Projects the query of the entity with the given <paramref name="id"/> to the <typeparamref name="TGetOutputDto"/>.
+    /// It uses the <see cref="GetOutputDtoQueryProjector"/> and the <see cref="CreateEntityQueryOrNullAsync"/> by default,
+    /// and the <see cref="GetEntityByIdAsync"/> is used when it returns null.
+    /// Override it to await other queries, like the query of another aggregate root to join.
+    /// </summary>
+    /// <param name="id">The id of the entity.</param>
+    protected virtual async Task<IQueryable<TGetOutputDto>?> CreateGetOutputDtoQueryOrNullAsync(TKey id)
+    {
+        var queryProjector = GetOutputDtoQueryProjector;
+        if (queryProjector == null)
+        {
+            return null;
+        }
+
+        var query = await CreateEntityQueryOrNullAsync(id);
+
+        return query == null ? null : queryProjector.ProjectTo(query);
+    }
+
+    /// <summary>
+    /// Projects the given entity query to the <typeparamref name="TGetListOutputDto"/>.
+    /// It uses the <see cref="GetListOutputDtoQueryProjector"/> by default,
+    /// and the <see cref="MapToGetListOutputDtosAsync"/> is used when it returns null.
+    /// Override it to await other queries, like the query of another aggregate root to join.
+    /// The projection must return one row per entity: the total count is already calculated and the paging is
+    /// already applied, so adding or removing rows makes the page inconsistent with the total count.
+    /// </summary>
+    /// <param name="query">The sorted and paged entity query.</param>
+    protected virtual Task<IQueryable<TGetListOutputDto>?> CreateGetListOutputDtoQueryOrNullAsync(IQueryable<TEntity> query)
+    {
+        return Task.FromResult(GetListOutputDtoQueryProjector?.ProjectTo(query));
     }
 
     protected virtual async Task CheckGetPolicyAsync()
