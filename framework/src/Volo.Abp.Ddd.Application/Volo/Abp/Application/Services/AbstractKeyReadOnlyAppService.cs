@@ -44,17 +44,19 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
 
     protected virtual string? GetListPolicyName { get; set; }
 
-    protected virtual IQueryProjectionMapper<TEntity, TGetOutputDto>? ObjectProjectionMapper =>
-        LazyServiceProvider.LazyGetService<IQueryProjectionMapper<TEntity, TGetOutputDto>>();
+    /// <summary>
+    /// <see cref="GetEntityByIdAsync"/> and <see cref="MapToGetOutputDtoAsync"/> are not used
+    /// while a projection mapper is available. Override and return null to keep using them.
+    /// </summary>
+    protected virtual IQueryProjectionMapper<TEntity, TGetOutputDto>? GetProjectionMapper
+        => LazyServiceProvider.LazyGetService<IQueryProjectionMapper<TEntity, TGetOutputDto>>();
 
-    protected virtual IQueryProjectionMapper<TEntity, TGetListOutputDto>? ListProjectionMapper =>
-        LazyServiceProvider.LazyGetService<IQueryProjectionMapper<TEntity, TGetListOutputDto>>();
-
-    protected virtual bool UseObjectProjectionMapper =>
-        ObjectProjectionMapper != null;
-
-    protected virtual bool UseListProjectionMapper =>
-        ListProjectionMapper != null;
+    /// <summary>
+    /// <see cref="MapToGetListOutputDtosAsync"/> is not used while a projection mapper is
+    /// available. Override and return null to keep using it.
+    /// </summary>
+    protected virtual IQueryProjectionMapper<TEntity, TGetListOutputDto>? GetListProjectionMapper
+        => LazyServiceProvider.LazyGetService<IQueryProjectionMapper<TEntity, TGetListOutputDto>>();
 
     protected AbstractKeyReadOnlyAppService(IReadOnlyRepository<TEntity> repository)
     {
@@ -65,17 +67,15 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
     {
         await CheckGetPolicyAsync();
 
-        var projectionMapper = ObjectProjectionMapper;
-
-        if (UseObjectProjectionMapper && projectionMapper != null)
+        var projectionMapper = GetProjectionMapper;
+        if (projectionMapper != null)
         {
-            var query = await GetEntityByIdQueryAsync(id);
-
-            var dto = 
-                await AsyncExecuter.FirstOrDefaultAsync(projectionMapper.ProjectTo(query))
-                ?? throw new EntityNotFoundException(typeof(TEntity), id);
-
-            return dto;
+            var query = await GetEntityByIdQueryOrNullAsync(id);
+            if (query != null)
+            {
+                return await AsyncExecuter.FirstOrDefaultAsync(projectionMapper.ProjectTo(query))
+                       ?? throw new EntityNotFoundException<TEntity>(id);
+            }
         }
 
         var entity = await GetEntityByIdAsync(id);
@@ -97,13 +97,10 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
             query = ApplySorting(query, input);
             query = ApplyPaging(query, input);
 
-            var projectionMapper = ListProjectionMapper;
-
-            if (UseListProjectionMapper && projectionMapper != null)
+            var projectionMapper = GetListProjectionMapper;
+            if (projectionMapper != null)
             {
-                entityDtos = await AsyncExecuter.ToListAsync(
-                    projectionMapper.ProjectTo(query)
-                );
+                entityDtos = await AsyncExecuter.ToListAsync(projectionMapper.ProjectTo(query));
             }
             else
             {
@@ -120,11 +117,13 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
 
     protected abstract Task<TEntity> GetEntityByIdAsync(TKey id);
 
-    protected virtual Task<IQueryable<TEntity>> GetEntityByIdQueryAsync(TKey id)
+    /// <summary>
+    /// Returns null if this application service can not create a query for a single entity.
+    /// <see cref="GetEntityByIdAsync"/> is used in that case.
+    /// </summary>
+    protected virtual Task<IQueryable<TEntity>?> GetEntityByIdQueryOrNullAsync(TKey id)
     {
-        throw new NotImplementedException(
-            "Override this method to create the query used for getting an entity by id."
-            );
+        return Task.FromResult<IQueryable<TEntity>?>(null);
     }
 
     protected virtual async Task CheckGetPolicyAsync()

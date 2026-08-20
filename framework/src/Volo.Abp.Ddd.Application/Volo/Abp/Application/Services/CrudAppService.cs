@@ -84,6 +84,13 @@ public abstract class CrudAppService<TEntity, TGetOutputDto, TGetListOutputDto, 
         return await Repository.GetAsync(id);
     }
 
+    protected override async Task<IQueryable<TEntity>?> GetEntityByIdQueryOrNullAsync(TKey id)
+    {
+        var query = await Repository.GetQueryableAsync();
+
+        return query.Where(EntityHelper.CreateEqualityExpressionForId<TEntity, TKey>(id));
+    }
+
     protected override void MapToEntity(TUpdateInput updateInput, TEntity entity)
     {
         if (updateInput is IEntityDto<TKey> entityDto)

@@ -1,4 +1,4 @@
-```json
+﻿```json
 //[doc-seo]
 {
     "Description": "Learn how to implement application services in the ABP Framework to expose domain logic and streamline presentation layer interactions."
@@ -444,6 +444,7 @@ These methods are low level methods that can control how to query entities from 
 * `ApplyPaging` is used to make paging on the query. If your `TGetListInput` already implements `IPagedResultRequest`, you don't need to override this since the ABP automatically understands it and performs the paging.
 * `ApplySorting` is used to sort (order by...) the query. If your `TGetListInput` already implements the `ISortedResultRequest`, ABP automatically sorts the query. If not, it fallbacks to the `ApplyDefaultSorting` which tries to sort by creation time, if your entity implements the standard `IHasCreationTime` interface.
 * `GetEntityByIdAsync` is used to get an entity by id, which calls `Repository.GetAsync(id)` by default.
+* `GetEntityByIdQueryOrNullAsync` is used to create a query for a single entity by id, which is only needed for the *Query Projection* explained below. It returns `null` if the application service can not create such a query, then `GetEntityByIdAsync` is used.
 * `DeleteByIdAsync` is used to delete an entity by id, which calls `Repository.DeleteAsync(id)` by default.
 
 #### Object to Object Mapping
@@ -455,6 +456,54 @@ These methods are used to convert Entities to DTOs and vice verse. They use the 
 * `MapToEntityAsync` method has two overloads;
   * `MapToEntityAsync(TCreateInput)` is used to create an entity from `TCreateInput`.
   * `MapToEntityAsync(TUpdateInput, TEntity)` is used to update an existing entity from `TUpdateInput`.
+
+#### Query Projection
+
+`GetAsync` and `GetListAsync` get the entities from the database, then map them to DTOs in the memory. If your DTO uses only a few properties of a large entity, you can project the query to the DTO instead, so the database returns only the columns you need.
+
+Implement the `IQueryProjectionMapper<TEntity, TDto>` interface to define a projection:
+
+````csharp
+using System.Linq;
+using Volo.Abp.ObjectMapping;
+
+namespace MyProject.Books;
+
+public class BookProjector : IQueryProjectionMapper<Book, BookDto>
+{
+    public IQueryable<BookDto> ProjectTo(IQueryable<Book> source)
+    {
+        return source.Select(book => new BookDto
+        {
+            Id = book.Id,
+            Name = book.Name
+        });
+    }
+}
+````
+
+[Mapperly](https://mapperly.riok.app/) can generate that method for you:
+
+````csharp
+[Mapper]
+public partial class BookProjector : IQueryProjectionMapper<Book, BookDto>
+{
+    public partial IQueryable<BookDto> ProjectTo(IQueryable<Book> source);
+}
+````
+
+ABP registers the projection mappers by convention, you don't need to configure anything else. Filters (like soft delete and multi-tenancy), sorting and paging are still applied to the query before the projection.
+
+> The projection replaces the entity based extension points. `GetAsync` doesn't use `GetEntityByIdAsync` and `MapToGetOutputDtoAsync`, `GetListAsync` doesn't use `MapToGetListOutputDtosAsync` anymore. If an application service needs to keep using them, override the `GetProjectionMapper` or `GetListProjectionMapper` property and return `null`:
+
+````csharp
+public class BookAppService : CrudAppService<Book, BookDto, Guid>
+{
+    protected override IQueryProjectionMapper<Book, BookDto>? GetProjectionMapper => null;
+
+    //...
+}
+````
 
 ## Miscellaneous
 

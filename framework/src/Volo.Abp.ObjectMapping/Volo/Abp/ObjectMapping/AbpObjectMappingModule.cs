@@ -18,6 +18,14 @@ public class AbpObjectMappingModule : AbpModule
                     typeof(IObjectMapper<,>)
                 ).ConvertAll(t => new ServiceIdentifier(t))
             );
+
+            //Register types for IQueryProjectionMapper<TSource, TDestination> if implements
+            onServiceExposingContext.ExposedTypes.AddRange(
+                ReflectionHelper.GetImplementedGenericTypes(
+                    onServiceExposingContext.ImplementationType,
+                    typeof(IQueryProjectionMapper<,>)
+                ).ConvertAll(t => new ServiceIdentifier(t))
+            );
         });
     }
 
