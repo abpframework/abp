@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -46,20 +47,38 @@ public class RemoteDynamicClaimsPrincipalContributorCache : RemoteDynamicClaimsP
         return await Cache.GetAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId));
     }
 
-    protected async override Task RefreshAsync(Guid userId, Guid? tenantId = null)
+    public virtual Task<AbpDynamicClaimCacheItem> GetAsync(Guid userId, Guid? tenantId, string accessToken)
+    {
+        return GetAsync(userId, tenantId, () => RefreshAsync(userId, tenantId, accessToken));
+    }
+
+    protected override Task RefreshAsync(Guid userId, Guid? tenantId = null)
+    {
+        return RefreshAsync(userId, tenantId, null);
+    }
+
+    protected virtual async Task RefreshAsync(Guid userId, Guid? tenantId, string? accessToken)
     {
         try
         {
             var client = HttpClientFactory.CreateClient(HttpClientName);
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, AbpClaimsPrincipalFactoryOptions.Value.RemoteRefreshUrl);
-            await HttpClientAuthenticator.Authenticate(new RemoteServiceHttpClientAuthenticateContext(client, requestMessage, new RemoteServiceConfiguration("/"), string.Empty));
+            if (accessToken != null)
+            {
+                requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            }
+            else
+            {
+                await HttpClientAuthenticator.Authenticate(new RemoteServiceHttpClientAuthenticateContext(client, requestMessage, new RemoteServiceConfiguration("/"), string.Empty));
+            }
+
             var response = await client.SendAsync(requestMessage);
             response.EnsureSuccessStatusCode();
         }
         catch (Exception e)
         {
             Logger.LogWarning(e, $"Failed to refresh remote claims for user: {userId}");
-            await ApplicationConfigurationDtoCache.RemoveAsync(await CacheHelper.CreateCacheKeyAsync(CurrentUser.Id));
+            await ApplicationConfigurationDtoCache.RemoveAsync(await CacheHelper.CreateCacheKeyAsync(CurrentUser.Id ?? userId));
             throw;
         }
     }

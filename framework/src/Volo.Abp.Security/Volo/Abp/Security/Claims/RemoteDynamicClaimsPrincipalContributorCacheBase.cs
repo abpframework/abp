@@ -19,7 +19,12 @@ public abstract class RemoteDynamicClaimsPrincipalContributorCacheBase<TContribu
         Logger = NullLogger<TContributorCache>.Instance;
     }
 
-    public async Task<AbpDynamicClaimCacheItem> GetAsync(Guid userId, Guid? tenantId = null)
+    public Task<AbpDynamicClaimCacheItem> GetAsync(Guid userId, Guid? tenantId = null)
+    {
+        return GetAsync(userId, tenantId, () => RefreshAsync(userId, tenantId));
+    }
+
+    protected virtual async Task<AbpDynamicClaimCacheItem> GetAsync(Guid userId, Guid? tenantId, Func<Task> refresh)
     {
         Logger.LogDebug($"Get dynamic claims cache for user: {userId}");
         var dynamicClaims = await GetCacheAsync(userId, tenantId);
@@ -31,7 +36,7 @@ public abstract class RemoteDynamicClaimsPrincipalContributorCacheBase<TContribu
         Logger.LogDebug($"Refresh dynamic claims for user: {userId} from remote service.");
         try
         {
-            await RefreshAsync(userId, tenantId);
+            await refresh();
         }
         catch (Exception e)
         {
