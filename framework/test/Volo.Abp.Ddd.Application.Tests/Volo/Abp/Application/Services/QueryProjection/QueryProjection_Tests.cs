@@ -178,4 +178,14 @@ public class QueryProjection_Tests : AbpDddApplicationTestBase
 
         (await appService.GetAsync(_bookId)).Name.ShouldEndWith(BookProjector.Marker);
     }
+
+    [Fact]
+    public async Task Should_Check_The_Policies_While_Projecting()
+    {
+        var appService = GetRequiredService<BookPolicyCheckedAppService>();
+
+        await Should.ThrowAsync<BookPolicyCheckedException>(async () => await appService.GetAsync(_bookId));
+        await Should.ThrowAsync<BookPolicyCheckedException>(async () =>
+            await appService.GetListAsync(new PagedAndSortedResultRequestDto()));
+    }
 }

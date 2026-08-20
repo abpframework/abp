@@ -521,7 +521,14 @@ and the provider has to be able to translate the join. The one row per entity ru
 that's why the example uses a left join. A joined column can not be used for the sorting and the paging,
 since they are already applied to the entity query before this method is called.
 
-> The projection replaces the entity based extension points. `GetAsync` doesn't use `GetEntityByIdAsync` and `MapToGetOutputDtoAsync`, `GetListAsync` doesn't use `MapToGetListOutputDtosAsync` anymore. Projectors are resolved by the `(entity, DTO)` type pair, so registering one enables the projection for every application service using that pair. If an application service needs to keep using the entity based extension points, override the `GetOutputDtoQueryProjector` or `GetListOutputDtoQueryProjector` property and return `null`:
+A projector is resolved by the `(entity, DTO)` type pair, just like an `IObjectMapper<TSource, TDestination>`, so registering one enables the projection for every application service using that pair. The projection only replaces the way the DTOs are created:
+
+* `GetAsync` doesn't use `GetEntityByIdAsync` and `MapToGetOutputDtoAsync` anymore.
+* `GetListAsync` doesn't use `MapToGetListOutputDtosAsync` anymore.
+
+Everything else is untouched. The authorization policies are still checked, `CreateFilteredQueryAsync`, `ApplySorting` and `ApplyPaging` are still used, the data filters (like soft delete and multi-tenancy) are still applied, and the create, update and delete methods still use the [IObjectMapper](../../infrastructure/object-to-object-mapping.md).
+
+> If an application service needs to keep using the entity based extension points, override the `GetOutputDtoQueryProjector` or `GetListOutputDtoQueryProjector` property and return `null`:
 
 ````csharp
 public class BookAppService : CrudAppService<Book, BookDto, Guid>
