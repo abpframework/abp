@@ -3,7 +3,7 @@ using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.Application.Services.QueryProjection;
 
-public class BookProjector : IQueryProjectionMapper<Book, BookDto>
+public class BookProjector : IQueryableMapper<Book, BookDto>
 {
     public const string Marker = "-projected";
 

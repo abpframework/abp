@@ -84,7 +84,7 @@ public abstract class CrudAppService<TEntity, TGetOutputDto, TGetListOutputDto, 
         return await Repository.GetAsync(id);
     }
 
-    protected override async Task<IQueryable<TEntity>?> GetEntityByIdQueryOrNullAsync(TKey id)
+    protected override async Task<IQueryable<TEntity>?> CreateEntityQueryAsync(TKey id)
     {
         var query = await Repository.GetQueryableAsync();
 

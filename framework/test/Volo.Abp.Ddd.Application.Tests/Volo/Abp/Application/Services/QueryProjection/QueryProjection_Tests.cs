@@ -23,7 +23,7 @@ public class QueryProjection_Tests : AbpDddApplicationTestBase
     [Fact]
     public void Should_Resolve_Projection_Mapper_Independent_From_The_Class_Name()
     {
-        ServiceProvider.GetService<IQueryProjectionMapper<Book, BookDto>>()
+        ServiceProvider.GetService<IQueryableMapper<Book, BookDto>>()
             .ShouldBeOfType<BookProjector>();
     }
 
@@ -80,8 +80,6 @@ public class QueryProjection_Tests : AbpDddApplicationTestBase
     {
         var appService = GetRequiredService<BookCustomizedAppService>();
 
-        //A projection mapper is registered for <Book, BookDto>, so GetEntityByIdAsync and
-        //MapToGetOutputDtoAsync of this application service are skipped by design.
         var dto = await appService.GetAsync(_bookId);
 
         dto.Name.ShouldEndWith(BookProjector.Marker);

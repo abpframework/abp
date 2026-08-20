@@ -15,7 +15,7 @@ public class AbpMapperlyQueryProjection_Tests : AbpIntegratedTest<MapperlyTestMo
     [Fact]
     public void Should_Project_A_Queryable()
     {
-        var projectionMapper = ServiceProvider.GetRequiredService<IQueryProjectionMapper<MyEntity, MyEntityDto>>();
+        var projectionMapper = ServiceProvider.GetRequiredService<IQueryableMapper<MyEntity, MyEntityDto>>();
 
         var entities = new List<MyEntity>
         {

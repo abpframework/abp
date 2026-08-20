@@ -45,18 +45,20 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
     protected virtual string? GetListPolicyName { get; set; }
 
     /// <summary>
-    /// <see cref="GetEntityByIdAsync"/> and <see cref="MapToGetOutputDtoAsync"/> are not used
-    /// while a projection mapper is available. Override and return null to keep using them.
+    /// Used by the <see cref="GetAsync"/> to project the query to the <typeparamref name="TGetOutputDto"/>.
+    /// It returns the registered mapper or null by default.
+    /// The <see cref="GetEntityByIdAsync"/> and the <see cref="MapToGetOutputDtoAsync"/> are not used when it returns a mapper.
     /// </summary>
-    protected virtual IQueryProjectionMapper<TEntity, TGetOutputDto>? GetProjectionMapper
-        => LazyServiceProvider.LazyGetService<IQueryProjectionMapper<TEntity, TGetOutputDto>>();
+    protected virtual IQueryableMapper<TEntity, TGetOutputDto>? GetQueryableMapper
+        => LazyServiceProvider.LazyGetService<IQueryableMapper<TEntity, TGetOutputDto>>();
 
     /// <summary>
-    /// <see cref="MapToGetListOutputDtosAsync"/> is not used while a projection mapper is
-    /// available. Override and return null to keep using it.
+    /// Used by the <see cref="GetListAsync"/> to project the query to the <typeparamref name="TGetListOutputDto"/>.
+    /// It returns the registered mapper or null by default.
+    /// The <see cref="MapToGetListOutputDtosAsync"/> is not used when it returns a mapper.
     /// </summary>
-    protected virtual IQueryProjectionMapper<TEntity, TGetListOutputDto>? GetListProjectionMapper
-        => LazyServiceProvider.LazyGetService<IQueryProjectionMapper<TEntity, TGetListOutputDto>>();
+    protected virtual IQueryableMapper<TEntity, TGetListOutputDto>? GetListQueryableMapper
+        => LazyServiceProvider.LazyGetService<IQueryableMapper<TEntity, TGetListOutputDto>>();
 
     protected AbstractKeyReadOnlyAppService(IReadOnlyRepository<TEntity> repository)
     {
@@ -67,10 +69,10 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
     {
         await CheckGetPolicyAsync();
 
-        var projectionMapper = GetProjectionMapper;
+        var projectionMapper = GetQueryableMapper;
         if (projectionMapper != null)
         {
-            var query = await GetEntityByIdQueryOrNullAsync(id);
+            var query = await CreateEntityQueryAsync(id);
             if (query != null)
             {
                 return await AsyncExecuter.FirstOrDefaultAsync(projectionMapper.ProjectTo(query))
@@ -97,7 +99,7 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
             query = ApplySorting(query, input);
             query = ApplyPaging(query, input);
 
-            var projectionMapper = GetListProjectionMapper;
+            var projectionMapper = GetListQueryableMapper;
             if (projectionMapper != null)
             {
                 entityDtos = await AsyncExecuter.ToListAsync(projectionMapper.ProjectTo(query));
@@ -118,10 +120,11 @@ public abstract class AbstractKeyReadOnlyAppService<TEntity, TGetOutputDto, TGet
     protected abstract Task<TEntity> GetEntityByIdAsync(TKey id);
 
     /// <summary>
-    /// Returns null if this application service can not create a query for a single entity.
-    /// <see cref="GetEntityByIdAsync"/> is used in that case.
+    /// Should create a query that selects the entity with the given <paramref name="id"/>.
+    /// It returns null by default, then the <see cref="GetEntityByIdAsync"/> is used instead of the projection.
     /// </summary>
-    protected virtual Task<IQueryable<TEntity>?> GetEntityByIdQueryOrNullAsync(TKey id)
+    /// <param name="id">The id of the entity.</param>
+    protected virtual Task<IQueryable<TEntity>?> CreateEntityQueryAsync(TKey id)
     {
         return Task.FromResult<IQueryable<TEntity>?>(null);
     }

@@ -73,7 +73,7 @@ public class QueryProjection_Tests : EntityFrameworkCoreTestBase
         await WithUnitOfWorkAsync(async () =>
         {
             var repository = GetRequiredService<IReadOnlyRepository<Person, Guid>>();
-            var projector = GetRequiredService<IQueryProjectionMapper<Person, PersonProjectionDto>>();
+            var projector = GetRequiredService<IQueryableMapper<Person, PersonProjectionDto>>();
 
             var sql = projector.ProjectTo(await repository.GetQueryableAsync()).ToQueryString();
 
