@@ -57,7 +57,7 @@ These libraries are selected as the base libraries and available to the applicat
 There are some abstractions in the ABP to make your code independent from some of these libraries too. Examples;
 
 * [Tag Helpers](tag-helpers) makes it easy to generate the Bootstrap UIs.
-* JavaScript [Message](javascript-api/message.md) and [Notification](javascript-api/notify.md) APIs provides abstractions to use the Sweetalert and the built-in toast implementation.
+* JavaScript [Message](javascript-api/message.md) and [Notification](javascript-api/notify.md) APIs provide abstractions to use the SweetAlert and the built-in toast implementations.
 * [Forms & Validation](forms-validation.md) system automatically handles the validation, so you mostly don't directly type any validation code.
 
 ### The Standard Layouts

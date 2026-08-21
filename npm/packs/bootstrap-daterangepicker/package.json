@@ -10,6 +10,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@abp/jquery": "~10.7.0-rc.3",
     "@abp/moment": "~10.7.0-rc.3"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431",
