@@ -11,7 +11,6 @@ public class JQueryScriptContributor : BundleContributor
     public override void ConfigureBundle(BundleConfigurationContext context)
     {
         context.Files.AddIfNotContains("/libs/jquery/jquery.js");
-        context.Files.AddIfNotContains("/libs/jquery-migrate/jquery-migrate.js");
         context.Files.AddIfNotContains("/libs/abp/jquery/abp.jquery.js");
     }
 }
