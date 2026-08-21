@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
 using OpenIddict.Server;
 using Volo.Abp.AspNetCore.MultiTenancy;
@@ -51,40 +48,12 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
             options.RemoveClientIdClaim();
         });
 
-        // Complete data written while processing OpenIddict requests before the response starts.
-        // Derived from the configured OpenIddict server endpoint paths (including the device endpoint).
-        context.Services.AddOptions<AbpAspNetCoreUnitOfWorkOptions>()
-            .Configure<IOptions<OpenIddictServerOptions>>((uowOptions, serverOptions) =>
-            {
-                foreach (var path in GetServerEndpointPaths(serverOptions.Value))
-                {
-                    if (!uowOptions.CompleteUnitOfWorkOnResponseStartingUrls.Contains(path))
-                    {
-                        uowOptions.CompleteUnitOfWorkOnResponseStartingUrls.Add(path);
-                    }
-                }
-            });
-    }
-
-    private static IEnumerable<string> GetServerEndpointPaths(OpenIddictServerOptions serverOptions)
-    {
-        var endpoints = serverOptions.TokenEndpointUris
-            .Concat(serverOptions.AuthorizationEndpointUris)
-            .Concat(serverOptions.DeviceAuthorizationEndpointUris)
-            .Concat(serverOptions.PushedAuthorizationEndpointUris)
-            .Concat(serverOptions.EndSessionEndpointUris)
-            .Concat(serverOptions.RevocationEndpointUris)
-            .Concat(serverOptions.EndUserVerificationEndpointUris);
-
-        foreach (var uri in endpoints)
+        // Complete tokens/authorizations/sessions written while processing OpenIddict requests before the response starts.
+        Configure<AbpAspNetCoreUnitOfWorkOptions>(options =>
         {
-            // Normalize the (usually relative) endpoint URI to an absolute path, e.g. "connect/token" -> "/connect/token".
-            var path = uri.IsAbsoluteUri ? uri.AbsolutePath : "/" + uri.OriginalString.RemovePreFix("./").TrimStart('/');
-            if (path.Length > 1)
-            {
-                yield return path;
-            }
-        }
+            options.CompleteUnitOfWorkOnResponseStartingUrls.AddIfNotContains("/connect");
+            options.CompleteUnitOfWorkOnResponseStartingUrls.AddIfNotContains("/device");
+        });
     }
 
     private void AddOpenIddictServer(IServiceCollection services)

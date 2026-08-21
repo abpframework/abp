@@ -70,35 +70,9 @@ public class AbpUnitOfWorkMiddleware : AbpMiddlewareBase, ITransientDependency
 
     private bool ShouldCompleteOnResponseStarting(HttpContext context)
     {
-        if (_options.CompleteUnitOfWorkOnResponseStarting)
-        {
-            return true;
-        }
-
-        foreach (var url in _options.CompleteUnitOfWorkOnResponseStartingUrls)
-        {
-            if (string.IsNullOrWhiteSpace(url))
-            {
-                continue;
-            }
-
-            // Normalize a trailing slash ("/connect/" behaves like "/connect") and ignore non-absolute entries.
-            var prefix = url.TrimEnd('/');
-            if (!prefix.StartsWith("/", StringComparison.Ordinal))
-            {
-                continue;
-            }
-
-            // Match both the request path and the path base + path, so an absolute endpoint that includes
-            // the path base still matches when the path base is stripped from Request.Path.
-            if (context.Request.Path.StartsWithSegments(prefix, StringComparison.OrdinalIgnoreCase) ||
-                context.Request.PathBase.Add(context.Request.Path).StartsWithSegments(prefix, StringComparison.OrdinalIgnoreCase))
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return _options.CompleteUnitOfWorkOnResponseStarting ||
+               (context.Request.Path.Value != null &&
+                _options.CompleteUnitOfWorkOnResponseStartingUrls.Any(x => context.Request.Path.Value.StartsWith(x, StringComparison.OrdinalIgnoreCase)));
     }
 
     protected async override Task<bool> ShouldSkipAsync(HttpContext context, RequestDelegate next)

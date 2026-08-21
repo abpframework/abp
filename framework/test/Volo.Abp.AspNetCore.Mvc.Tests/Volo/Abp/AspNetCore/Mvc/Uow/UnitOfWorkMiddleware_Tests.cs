@@ -119,34 +119,4 @@ public class UnitOfWorkMiddleware_Tests : AspNetCoreMvcTestBase
         var result = await GetResponseAsStringAsync("/api/unitofwork-test/CommitBeforeResponseFlush");
         result.ShouldBe("first:completed");
     }
-
-    [Fact]
-    public async Task Opt_In_Url_With_A_Non_Segment_Prefix_Should_Not_Match()
-    {
-        Options.CompleteUnitOfWorkOnResponseStartingUrls.Add("/api/unitofwork-test/Commit");
-
-        var result = await GetResponseAsStringAsync("/api/unitofwork-test/CommitBeforeResponseFlush");
-        result.ShouldBe("first:not-completed");
-    }
-
-    [Fact]
-    public async Task Blank_Or_Malformed_Opt_In_Urls_Are_Ignored()
-    {
-        Options.CompleteUnitOfWorkOnResponseStartingUrls.Add("");
-        Options.CompleteUnitOfWorkOnResponseStartingUrls.Add("   ");
-        Options.CompleteUnitOfWorkOnResponseStartingUrls.Add("api/no-leading-slash");
-
-        var result = await GetResponseAsStringAsync("/api/unitofwork-test/CommitBeforeResponseFlush");
-        result.ShouldBe("first:not-completed");
-    }
-
-    [Fact]
-    public async Task Opt_In_Url_Including_The_Path_Base_Matches()
-    {
-        // The request path is "/api/..." (the path base is stripped), so this only matches via path base + path.
-        Options.CompleteUnitOfWorkOnResponseStartingUrls.Add("/pathbase-test/api/unitofwork-test/CommitBeforeResponseFlush");
-
-        var result = await GetResponseAsStringAsync("/pathbase-test/api/unitofwork-test/CommitBeforeResponseFlush");
-        result.ShouldBe("first:completed");
-    }
 }

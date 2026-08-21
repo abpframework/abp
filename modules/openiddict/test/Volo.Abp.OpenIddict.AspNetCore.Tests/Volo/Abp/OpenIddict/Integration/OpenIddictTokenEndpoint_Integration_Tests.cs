@@ -34,7 +34,7 @@ public class OpenIddictTokenEndpoint_Integration_Tests : AbpWebApplicationFactor
     [Fact]
     public async Task Token_Row_Is_Committed_Before_The_Connect_Token_Response_Is_Sent()
     {
-        // The OpenIddict module opts its endpoint paths (including "/connect/token") in by default.
+        // The OpenIddict module opts "/connect" in by default.
         var response = await RequestTokenAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);

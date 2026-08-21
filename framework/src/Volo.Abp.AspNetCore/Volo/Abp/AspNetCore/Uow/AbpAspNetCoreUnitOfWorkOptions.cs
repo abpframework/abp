@@ -29,13 +29,10 @@ public class AbpAspNetCoreUnitOfWorkOptions
     public bool CompleteUnitOfWorkOnResponseStarting { get; set; } = false;
 
     /// <summary>
-    /// Absolute request path prefixes (matched by segment) that opt-in to
-    /// <see cref="CompleteUnitOfWorkOnResponseStarting"/> even when it is globally disabled (for example
-    /// "/connect" matches "/connect/token" but not "/connections"). Each prefix is matched against both
-    /// the request path and the path base + request path, so an endpoint configured with the path base
-    /// still matches. A trailing slash is normalized; blank, non-absolute, and root ("/") entries are
-    /// ignored - use <see cref="CompleteUnitOfWorkOnResponseStarting"/> to enable it for every request
-    /// handled by the middleware.
+    /// Request path prefixes that opt-in to <see cref="CompleteUnitOfWorkOnResponseStarting"/> even when
+    /// it is globally disabled. A request whose path starts with one of these values (for example
+    /// "/connect") is included, matched like <see cref="IgnoredUrls"/>. Use
+    /// <see cref="CompleteUnitOfWorkOnResponseStarting"/> to enable it for every request handled by the middleware.
     /// </summary>
     public List<string> CompleteUnitOfWorkOnResponseStartingUrls { get; } = new List<string>();
 }

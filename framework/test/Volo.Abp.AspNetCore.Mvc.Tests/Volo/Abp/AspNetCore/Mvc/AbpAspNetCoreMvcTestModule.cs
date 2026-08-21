@@ -164,9 +164,6 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
         app.UseStaticFiles();
         app.UseAbpRequestLocalization();
         app.UseAbpSecurityHeaders();
-        // Moves the "/pathbase-test" prefix into Request.PathBase so a unit of work opt-in test can
-        // exercise path base matching; a no-op for every other request.
-        app.UsePathBase("/pathbase-test");
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
