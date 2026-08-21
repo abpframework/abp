@@ -63,7 +63,7 @@ There are a set of standard JavaScript/CSS libraries that comes pre-installed an
 - [JQuery Form](https://github.com/jquery-form/form) for AJAX forms.
 - [bootstrap-datepicker](https://github.com/uxsolutions/bootstrap-datepicker) to show date pickers.
 - [Select2](https://select2.org/) for better select/combo boxes.
-- [Timeago](http://timeago.yarp.com/) to show automatically updating fuzzy timestamps.
+- [timeago.js](https://timeago.org/) to show automatically updating fuzzy timestamps.
 
 You can use these libraries directly in your applications, without needing to manually import your page.
 
