@@ -66,8 +66,6 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
             });
     }
 
-    private static readonly Uri RootUri = new Uri("http://localhost/");
-
     private static IEnumerable<string> GetServerEndpointPaths(OpenIddictServerOptions serverOptions)
     {
         var endpoints = serverOptions.TokenEndpointUris
@@ -80,9 +78,9 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
 
         foreach (var uri in endpoints)
         {
-            // Resolve relative endpoint URIs (e.g. "connect/token" or "./connect/token") to an absolute path.
-            var path = (uri.IsAbsoluteUri ? uri : new Uri(RootUri, uri)).AbsolutePath;
-            if (!string.IsNullOrWhiteSpace(path) && path != "/")
+            // Normalize the (usually relative) endpoint URI to an absolute path, e.g. "connect/token" -> "/connect/token".
+            var path = uri.IsAbsoluteUri ? uri.AbsolutePath : "/" + uri.OriginalString.RemovePreFix("./").TrimStart('/');
+            if (path.Length > 1)
             {
                 yield return path;
             }
