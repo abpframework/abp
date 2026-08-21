@@ -104,4 +104,21 @@ public class UowVisibilityController : AbpController
         await Response.WriteAsync("inserted");
         await Response.Body.FlushAsync();
     }
+
+    // The action succeeds (so the action filter saves changes), then serializing the object result throws
+    // before the response starts. The upstream exception middleware writes the error response after the
+    // request unit of work is disposed, so response-start completion must not commit the failed request.
+    [HttpGet]
+    [Route("insert-then-throw-in-serialization")]
+    [UnitOfWork(isTransactional: true)]
+    public async Task<IActionResult> InsertThenThrowInSerialization(string name)
+    {
+        await _repository.InsertAsync(new UowVisibilityTestEntity(Guid.NewGuid(), name));
+        return Ok(new ThrowingOnSerializeDto());
+    }
+
+    public class ThrowingOnSerializeDto
+    {
+        public string Value => throw new AbpException("boom while serializing the object result");
+    }
 }

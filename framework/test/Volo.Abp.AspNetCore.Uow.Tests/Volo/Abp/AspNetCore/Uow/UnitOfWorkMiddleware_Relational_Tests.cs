@@ -117,4 +117,25 @@ public class UnitOfWorkMiddleware_Relational_Tests : AbpWebApplicationFactoryInt
         surfaced.ShouldNotBeNull();
         (await CountAsync(name)).ShouldBe(0);
     }
+
+    [Fact]
+    public async Task Result_Serialization_Failure_Rolls_Back_And_Does_Not_Commit_On_The_Error_Response()
+    {
+        EnableCompleteOnResponseStarting();
+        var name = Guid.NewGuid().ToString("N");
+
+        try
+        {
+            var response = await Client.GetAsync("/api/uow-visibility/insert-then-throw-in-serialization?name=" + name);
+            await response.Content.ReadAsStringAsync();
+        }
+        catch (Exception)
+        {
+        }
+
+        // The action saved the row, then serializing the result failed before the response started. The error
+        // response is written by the upstream exception middleware after the request unit of work is disposed,
+        // so response-start completion must not commit the failed request.
+        (await CountAsync(name)).ShouldBe(0);
+    }
 }
