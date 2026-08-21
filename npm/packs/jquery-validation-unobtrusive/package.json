@@ -10,7 +10,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@abp/jquery-validation": "~10.7.0-rc.3"
+    "@abp/jquery-validation": "~10.7.0-rc.3",
+    "jquery-validation": "^1.22.1"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431",
   "homepage": "https://abp.io",

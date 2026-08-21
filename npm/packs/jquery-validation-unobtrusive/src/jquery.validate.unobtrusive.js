@@ -2,7 +2,7 @@
  * @license
  * Unobtrusive validation support library for jQuery and jQuery Validate
  * Copyright (c) .NET Foundation. All rights reserved.
- * Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+ * Licensed under the MIT License. See License.txt in the package root for license information.
  * @version v4.0.0
  * Patched copy: uses JSON.parse, typeof and Function.prototype.bind instead of the jQuery APIs removed or deprecated in jQuery 4.
  */
