@@ -60,6 +60,13 @@ public class OpenIddictTokenIntegrationTestModule : AbpModule
     {
         context.Services.AddSingleton<TokenVisibilityRecorder>();
 
+        // A remapped token endpoint, so the tests can prove the opt-in list is derived from the configured
+        // server endpoints (custom endpoints are followed) rather than a hardcoded "/connect" prefix.
+        Configure<OpenIddictServerOptions>(options =>
+        {
+            options.TokenEndpointUris.Add(new Uri("my-custom/token", UriKind.Relative));
+        });
+
         // The OpenIddict controllers (including the token endpoint) live in a referenced assembly.
         context.Services.GetSingletonInstance<ApplicationPartManager>()
             .ApplicationParts.AddIfNotContains(typeof(AbpOpenIddictAspNetCoreModule).Assembly);

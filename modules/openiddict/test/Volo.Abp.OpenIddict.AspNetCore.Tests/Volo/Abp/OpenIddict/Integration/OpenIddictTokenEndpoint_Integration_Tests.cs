@@ -34,7 +34,7 @@ public class OpenIddictTokenEndpoint_Integration_Tests : AbpWebApplicationFactor
     [Fact]
     public async Task Token_Row_Is_Committed_Before_The_Connect_Token_Response_Is_Sent()
     {
-        // The OpenIddict module opts "/connect" in by default.
+        // The OpenIddict module opts its configured endpoint paths (including "/connect/token") in by default.
         var response = await RequestTokenAsync();
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
@@ -54,5 +54,16 @@ public class OpenIddictTokenEndpoint_Integration_Tests : AbpWebApplicationFactor
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         TokenCountAtResponseStart.ShouldBe(0);
+    }
+
+    [Fact]
+    public void The_Configured_OpenIddict_Endpoint_Paths_Are_Opted_In()
+    {
+        // The opt-in list is derived from the configured server endpoints, so a non-"/connect" endpoint
+        // like "/device" is covered, and the custom "/my-custom/token" endpoint the test host registered
+        // is followed too - a hardcoded "/connect" prefix would miss both.
+        Options.CompleteUnitOfWorkOnResponseStartingUrls.ShouldContain("/connect/token");
+        Options.CompleteUnitOfWorkOnResponseStartingUrls.ShouldContain("/device");
+        Options.CompleteUnitOfWorkOnResponseStartingUrls.ShouldContain("/my-custom/token");
     }
 }

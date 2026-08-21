@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
 using OpenIddict.Server;
 using Volo.Abp.AspNetCore.MultiTenancy;
@@ -48,12 +50,36 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
             options.RemoveClientIdClaim();
         });
 
-        // Complete tokens/authorizations/sessions written while processing OpenIddict requests before the response starts.
-        Configure<AbpAspNetCoreUnitOfWorkOptions>(options =>
+        // Complete data written while processing OpenIddict requests before the response starts.
+        // Derived from the configured server endpoint paths so remapped endpoints are covered too.
+        context.Services.AddOptions<AbpAspNetCoreUnitOfWorkOptions>()
+            .Configure<IOptions<OpenIddictServerOptions>>((uowOptions, serverOptions) =>
+            {
+                foreach (var path in GetServerEndpointPaths(serverOptions.Value))
+                {
+                    uowOptions.CompleteUnitOfWorkOnResponseStartingUrls.AddIfNotContains(path);
+                }
+            });
+    }
+
+    private static IEnumerable<string> GetServerEndpointPaths(OpenIddictServerOptions serverOptions)
+    {
+        var endpoints = serverOptions.TokenEndpointUris
+            .Concat(serverOptions.AuthorizationEndpointUris)
+            .Concat(serverOptions.DeviceAuthorizationEndpointUris)
+            .Concat(serverOptions.PushedAuthorizationEndpointUris)
+            .Concat(serverOptions.EndSessionEndpointUris)
+            .Concat(serverOptions.RevocationEndpointUris)
+            .Concat(serverOptions.EndUserVerificationEndpointUris);
+
+        foreach (var uri in endpoints)
         {
-            options.CompleteUnitOfWorkOnResponseStartingUrls.AddIfNotContains("/connect");
-            options.CompleteUnitOfWorkOnResponseStartingUrls.AddIfNotContains("/device");
-        });
+            var path = uri.IsAbsoluteUri ? uri.AbsolutePath : "/" + uri.OriginalString.TrimStart('/');
+            if (path.Length > 1)
+            {
+                yield return path;
+            }
+        }
     }
 
     private void AddOpenIddictServer(IServiceCollection services)
