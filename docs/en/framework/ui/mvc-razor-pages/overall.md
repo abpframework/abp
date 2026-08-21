@@ -64,7 +64,6 @@ There are a set of standard JavaScript/CSS libraries that comes pre-installed an
 - [bootstrap-datepicker](https://github.com/uxsolutions/bootstrap-datepicker) to show date pickers.
 - [Select2](https://select2.org/) for better select/combo boxes.
 - [timeago.js](https://timeago.org/) to show automatically updating fuzzy timestamps.
-- [malihu-custom-scrollbar-plugin](https://github.com/malihu/malihu-custom-scrollbar-plugin) for custom scrollbars.
 
 You can use these libraries directly in your applications, without needing to manually import your page.
 
