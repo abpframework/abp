@@ -35,7 +35,7 @@ The simplest way of creating a bundle is to use `abp-script-bundle` or `abp-styl
 <abp-style-bundle name="MyGlobalBundle">
     <abp-style src="/libs/bootstrap/css/bootstrap.css" />
     <abp-style src="/libs/font-awesome/css/font-awesome.css" />
-    <abp-style src="/libs/toastr/toastr.css" />
+    <abp-style src="/libs/datatables.net-bs5/css/dataTables.bootstrap5.css" />
     <abp-style src="/styles/my-global-style.css" />
 </abp-style-bundle>
 ````
@@ -65,7 +65,7 @@ The `name` is **optional** for the razor bundle tag helpers. If you don't define
 <abp-style-bundle>
     <abp-style src="/libs/bootstrap/css/bootstrap.css" />
     <abp-style src="/libs/font-awesome/css/font-awesome.css" />
-    <abp-style src="/libs/toastr/toastr.css" />
+    <abp-style src="/libs/datatables.net-bs5/css/dataTables.bootstrap5.css" />
     @if (ViewBag.IncludeCustomStyles != false)
     {
         <abp-style src="/styles/my-global-style.css" />
@@ -115,7 +115,7 @@ public class MyWebModule : AbpModule
                     bundle.AddFiles(
                         "/libs/jquery/jquery.js",
                         "/libs/bootstrap/js/bootstrap.js",
-                        "/libs/toastr/toastr.min.js",
+                        "/libs/lodash/lodash.min.js",
                         "/scripts/my-global-scripts.js"
                     );
                 });                
@@ -220,7 +220,7 @@ Contributors can also be used in the bundle tag helpers. Example:
 <abp-style-bundle>
     <abp-style type="@typeof(BootstrapStyleContributor)" />
     <abp-style src="/libs/font-awesome/css/font-awesome.css" />
-    <abp-style src="/libs/toastr/toastr.css" />
+    <abp-style src="/libs/datatables.net-bs5/css/dataTables.bootstrap5.css" />
 </abp-style-bundle>
 ````
 
@@ -386,7 +386,7 @@ Configure<AbpBundlingOptions>(options =>
 ````html
 <link rel="preload" href="/__bundles/Basic.Global.F4FA61F368098407A4C972D0A6914137.css?_v=637697363694828051" as="style" onload="this.rel='stylesheet'"/>
 
-<script defer src="/libs/timeago/locales/jquery.timeago.en.js?_v=637674729040000000"></script>
+<script defer src="/libs/timeago/timeago.full.min.js?_v=637674729040000000"></script>
 ````
 
 ### External/CDN file Support
