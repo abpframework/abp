@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -50,7 +51,7 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
             options.RemoveClientIdClaim();
         });
 
-        // Commit tokens/authorizations/sessions written during sign-in before the response is flushed.
+        // Complete data written while processing OpenIddict requests before the response starts.
         // Derived from the configured OpenIddict server endpoint paths (including the device endpoint).
         context.Services.AddOptions<AbpAspNetCoreUnitOfWorkOptions>()
             .Configure<IOptions<OpenIddictServerOptions>>((uowOptions, serverOptions) =>
@@ -65,6 +66,8 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
             });
     }
 
+    private static readonly Uri RootUri = new Uri("http://localhost/");
+
     private static IEnumerable<string> GetServerEndpointPaths(OpenIddictServerOptions serverOptions)
     {
         var endpoints = serverOptions.TokenEndpointUris
@@ -77,10 +80,11 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
 
         foreach (var uri in endpoints)
         {
-            var path = uri.IsAbsoluteUri ? uri.AbsolutePath : uri.OriginalString;
-            if (!string.IsNullOrWhiteSpace(path))
+            // Resolve relative endpoint URIs (e.g. "connect/token" or "./connect/token") to an absolute path.
+            var path = (uri.IsAbsoluteUri ? uri : new Uri(RootUri, uri)).AbsolutePath;
+            if (!string.IsNullOrWhiteSpace(path) && path != "/")
             {
-                yield return "/" + path.TrimStart('/');
+                yield return path;
             }
         }
     }

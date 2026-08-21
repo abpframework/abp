@@ -33,7 +33,7 @@ public class AbpAspNetCoreUnitOfWorkOptions
     /// <see cref="CompleteUnitOfWorkOnResponseStarting"/> even when it is globally disabled (for example
     /// "/connect" matches "/connect/token" but not "/connections"). A trailing slash is normalized; blank,
     /// non-absolute, and root ("/") entries are ignored - use <see cref="CompleteUnitOfWorkOnResponseStarting"/>
-    /// to enable it for every request.
+    /// to enable it for every request handled by the middleware.
     /// </summary>
     public List<string> CompleteUnitOfWorkOnResponseStartingUrls { get; } = new List<string>();
 }

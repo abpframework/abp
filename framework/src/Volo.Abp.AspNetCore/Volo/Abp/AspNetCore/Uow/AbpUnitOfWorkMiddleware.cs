@@ -37,7 +37,7 @@ public class AbpUnitOfWorkMiddleware : AbpMiddlewareBase, ITransientDependency
 
         using (var uow = _unitOfWorkManager.Reserve(UnitOfWork.UnitOfWorkReservationName))
         {
-            var completedOnResponseStarting = false;
+            var completionAttemptedOnResponseStarting = false;
 
             if (!context.Response.HasStarted && ShouldCompleteOnResponseStarting(context))
             {
@@ -47,7 +47,7 @@ public class AbpUnitOfWorkMiddleware : AbpMiddlewareBase, ITransientDependency
                     if (_unitOfWorkManager.Current == uow)
                     {
                         // Set before completing so a post-commit failure isn't masked by the completion below.
-                        completedOnResponseStarting = true;
+                        completionAttemptedOnResponseStarting = true;
                         await uow.CompleteAsync(_cancellationTokenProvider.Token);
                     }
                 });
@@ -55,7 +55,7 @@ public class AbpUnitOfWorkMiddleware : AbpMiddlewareBase, ITransientDependency
 
             await next(context);
 
-            if (!completedOnResponseStarting)
+            if (!completionAttemptedOnResponseStarting)
             {
                 await uow.CompleteAsync(_cancellationTokenProvider.Token);
             }
@@ -84,8 +84,15 @@ public class AbpUnitOfWorkMiddleware : AbpMiddlewareBase, ITransientDependency
 
             // Normalize a trailing slash ("/connect/" behaves like "/connect") and ignore non-absolute entries.
             var prefix = url.TrimEnd('/');
-            if (prefix.StartsWith("/", StringComparison.Ordinal) &&
-                context.Request.Path.StartsWithSegments(prefix, StringComparison.OrdinalIgnoreCase))
+            if (!prefix.StartsWith("/", StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            // Match both the request path and the path base + path, so an absolute endpoint that includes
+            // the path base still matches when the path base is stripped from Request.Path.
+            if (context.Request.Path.StartsWithSegments(prefix, StringComparison.OrdinalIgnoreCase) ||
+                context.Request.PathBase.Add(context.Request.Path).StartsWithSegments(prefix, StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
