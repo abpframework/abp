@@ -37,21 +37,25 @@ public class AbpUnitOfWorkMiddleware : AbpMiddlewareBase, ITransientDependency
 
         using (var uow = _unitOfWorkManager.Reserve(UnitOfWork.UnitOfWorkReservationName))
         {
-            // Commit the ambient unit of work before the response starts, so data written
-            // during the request is committed before the response is flushed to the client.
-            // Only when this reserved unit of work is the current one: if an explicit nested
-            // unit of work is in progress, it is the current one and must be left to its owner.
-            context.Response.OnStarting(async () =>
+            var completedOnResponseStarting = false;
+
+            if (!context.Response.HasStarted && ShouldCompleteOnResponseStarting(context))
             {
-                if (_unitOfWorkManager.Current == uow)
+                context.Response.OnStarting(async () =>
                 {
-                    await uow.CompleteAsync(_cancellationTokenProvider.Token);
-                }
-            });
+                    // A nested (requiresNew) unit of work that is current is left to its owner.
+                    if (_unitOfWorkManager.Current == uow)
+                    {
+                        // Set before completing so a post-commit failure isn't masked by the completion below.
+                        completedOnResponseStarting = true;
+                        await uow.CompleteAsync(_cancellationTokenProvider.Token);
+                    }
+                });
+            }
 
             await next(context);
 
-            if (!uow.IsCompleted)
+            if (!completedOnResponseStarting)
             {
                 await uow.CompleteAsync(_cancellationTokenProvider.Token);
             }
@@ -62,6 +66,32 @@ public class AbpUnitOfWorkMiddleware : AbpMiddlewareBase, ITransientDependency
     {
         return context.Request.Path.Value != null &&
                _options.IgnoredUrls.Any(x => context.Request.Path.Value.StartsWith(x, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private bool ShouldCompleteOnResponseStarting(HttpContext context)
+    {
+        if (_options.CompleteUnitOfWorkOnResponseStarting)
+        {
+            return true;
+        }
+
+        foreach (var url in _options.CompleteUnitOfWorkOnResponseStartingUrls)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                continue;
+            }
+
+            // Normalize a trailing slash ("/connect/" behaves like "/connect") and ignore non-absolute entries.
+            var prefix = url.TrimEnd('/');
+            if (prefix.StartsWith("/", StringComparison.Ordinal) &&
+                context.Request.Path.StartsWithSegments(prefix, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected async override Task<bool> ShouldSkipAsync(HttpContext context, RequestDelegate next)

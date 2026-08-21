@@ -97,7 +97,6 @@ public class UnitOfWorkTestController : AbpController
         await Response.WriteAsync("first");
         await Response.Body.FlushAsync();
 
-        // Record the commit state so the test can assert the throw below doesn't undo it.
         _testUnitOfWorkConfig.UowCompletedAfterResponseFlush = uow.IsCompleted;
 
         throw new UserFriendlyException("boom after the response was already flushed");
@@ -161,6 +160,10 @@ public class UnitOfWorkTestController : AbpController
             await Response.WriteAsync("first");
             await Response.Body.FlushAsync();
 
+            // The outer request unit of work (nested.Outer) must not have been completed on response
+            // start while a nested unit of work is current.
+            await Response.WriteAsync(nested.Outer!.IsCompleted ? ":outer-completed" : ":outer-not-completed");
+
             string outcome;
             try
             {
@@ -174,5 +177,14 @@ public class UnitOfWorkTestController : AbpController
 
             await Response.WriteAsync(outcome);
         }
+    }
+
+    [HttpGet]
+    [Route("CompleteCurrentUow")]
+    public async Task CompleteCurrentUow()
+    {
+        // Complete the request unit of work inside the action, without writing the response yet.
+        // The middleware must still try to complete it at the end of the pipeline (original behavior).
+        await CurrentUnitOfWork.CompleteAsync();
     }
 }

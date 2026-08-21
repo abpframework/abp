@@ -1,14 +1,19 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Shouldly;
+using Volo.Abp.AspNetCore.Uow;
 using Xunit;
 
 namespace Volo.Abp.AspNetCore.Mvc.Uow;
 
 public class UnitOfWorkMiddleware_Tests : AspNetCoreMvcTestBase
 {
+    private AbpAspNetCoreUnitOfWorkOptions Options =>
+        ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreUnitOfWorkOptions>>().Value;
+
     [Fact]
     public async Task Get_Actions_Should_Not_Be_Transactional()
     {
@@ -31,17 +36,28 @@ public class UnitOfWorkMiddleware_Tests : AspNetCoreMvcTestBase
     }
 
     [Fact]
-    public async Task Ambient_Uow_Should_Be_Completed_Before_Response_Is_Flushed()
+    public async Task Ambient_Uow_Should_Be_Completed_Before_Response_Is_Flushed_When_Enabled()
     {
+        Options.CompleteUnitOfWorkOnResponseStarting = true;
+
         var result = await GetResponseAsStringAsync("/api/unitofwork-test/CommitBeforeResponseFlush");
         result.ShouldBe("first:completed");
     }
 
     [Fact]
-    public async Task Exception_After_Response_Flush_Should_Not_Undo_Committed_Work()
+    public async Task Ambient_Uow_Is_Not_Completed_On_Response_Start_By_Default()
     {
-        // Once the response has started, an exception can't turn it into an error response
-        // (the connection is reset). What matters: the uow was committed before the throw.
+        var result = await GetResponseAsStringAsync("/api/unitofwork-test/CommitBeforeResponseFlush");
+        result.ShouldBe("first:not-completed");
+    }
+
+    [Fact]
+    public async Task Ambient_Uow_Is_Already_Completed_When_An_Exception_Is_Raised_After_The_Response_Started()
+    {
+        Options.CompleteUnitOfWorkOnResponseStarting = true;
+
+        // Once the response has started, an exception can't turn it into an error response (the
+        // connection is reset). Database-level rollback/commit is covered by the relational tests.
         await Should.ThrowAsync<HttpRequestException>(async () =>
         {
             var response = await Client.GetAsync("/api/unitofwork-test/CommitThenThrowAfterResponseFlush");
@@ -55,8 +71,8 @@ public class UnitOfWorkMiddleware_Tests : AspNetCoreMvcTestBase
     [Fact]
     public async Task Repository_Access_After_Response_Flush_Runs_Outside_The_Request_Uow()
     {
-        // After the response starts the request uow is gone; a repository still works via its
-        // own implicit uow (ambient=null), so it no longer joins the request transaction.
+        Options.CompleteUnitOfWorkOnResponseStarting = true;
+
         var body = await GetResponseAsStringAsync("/api/unitofwork-test/ReadRepositoryAfterResponseFlush");
         body.ShouldBe("before=ok(1);after=ok(1,ambient=null)");
     }
@@ -64,7 +80,8 @@ public class UnitOfWorkMiddleware_Tests : AspNetCoreMvcTestBase
     [Fact]
     public async Task Raw_Database_Provider_After_Response_Flush_Throws()
     {
-        // Unlike repositories, raw provider access after the response started has no uow and throws.
+        Options.CompleteUnitOfWorkOnResponseStarting = true;
+
         var body = await GetResponseAsStringAsync("/api/unitofwork-test/RawDatabaseProviderAfterResponseFlush");
         body.ShouldBe("first:threw-AbpException");
     }
@@ -72,7 +89,54 @@ public class UnitOfWorkMiddleware_Tests : AspNetCoreMvcTestBase
     [Fact]
     public async Task Response_Flush_Inside_Nested_Uow_Should_Not_Complete_The_Nested_Uow()
     {
+        Options.CompleteUnitOfWorkOnResponseStarting = true;
+
         var body = await GetResponseAsStringAsync("/api/unitofwork-test/NestedUowDuringResponseFlush");
-        body.ShouldBe("first:nested-completed-by-owner");
+        body.ShouldBe("first:outer-not-completed:nested-completed-by-owner");
+    }
+
+    [Fact]
+    public async Task Completing_The_Uow_In_The_Action_Still_Fails_At_End_Of_Pipeline_By_Default()
+    {
+        var response = await Client.GetAsync("/api/unitofwork-test/CompleteCurrentUow");
+        response.StatusCode.ShouldBe(HttpStatusCode.InternalServerError);
+    }
+
+    [Fact]
+    public async Task Opt_In_Url_Enables_The_Feature_For_A_Matching_Path()
+    {
+        Options.CompleteUnitOfWorkOnResponseStartingUrls.Add("/api/unitofwork-test/CommitBeforeResponseFlush");
+
+        var result = await GetResponseAsStringAsync("/api/unitofwork-test/CommitBeforeResponseFlush");
+        result.ShouldBe("first:completed");
+    }
+
+    [Fact]
+    public async Task Opt_In_Url_With_A_Trailing_Slash_Still_Matches()
+    {
+        Options.CompleteUnitOfWorkOnResponseStartingUrls.Add("/api/unitofwork-test/");
+
+        var result = await GetResponseAsStringAsync("/api/unitofwork-test/CommitBeforeResponseFlush");
+        result.ShouldBe("first:completed");
+    }
+
+    [Fact]
+    public async Task Opt_In_Url_With_A_Non_Segment_Prefix_Should_Not_Match()
+    {
+        Options.CompleteUnitOfWorkOnResponseStartingUrls.Add("/api/unitofwork-test/Commit");
+
+        var result = await GetResponseAsStringAsync("/api/unitofwork-test/CommitBeforeResponseFlush");
+        result.ShouldBe("first:not-completed");
+    }
+
+    [Fact]
+    public async Task Blank_Or_Malformed_Opt_In_Urls_Are_Ignored()
+    {
+        Options.CompleteUnitOfWorkOnResponseStartingUrls.Add("");
+        Options.CompleteUnitOfWorkOnResponseStartingUrls.Add("   ");
+        Options.CompleteUnitOfWorkOnResponseStartingUrls.Add("api/no-leading-slash");
+
+        var result = await GetResponseAsStringAsync("/api/unitofwork-test/CommitBeforeResponseFlush");
+        result.ShouldBe("first:not-completed");
     }
 }
