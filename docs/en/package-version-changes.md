@@ -11,6 +11,8 @@
 
 | Package | Old Version | New Version | PR |
 |---------|-------------|-------------|-----|
+| AWSSDK.S3 | 4.0.7.2 | 4.0.102.3 | #26040 |
+| AWSSDK.SecurityToken | 4.0.2.2 | 4.0.100.10 | #26040 |
 | MongoDB.Driver | 3.10.0 | 3.11.0 | #25979 |
 
 ## 10.7.0-rc.2
