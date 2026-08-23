@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Shouldly;
 using Volo.Abp;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.MemoryDb;
 using Volo.Abp.TestApp.MemoryDb;
 using Volo.Abp.TestApp.Domain;
@@ -185,5 +186,36 @@ public class UnitOfWorkTestController : AbpController
         // Complete the request unit of work inside the action, without writing the response yet.
         // The middleware must still try to complete it at the end of the pipeline (original behavior).
         await CurrentUnitOfWork.CompleteAsync();
+    }
+
+    [HttpGet]
+    [Route("ChildUowDuringResponseFlush")]
+    public async Task ChildUowDuringResponseFlush()
+    {
+        var requestUow = CurrentUnitOfWork!;
+
+        using (UnitOfWorkManager.Begin())
+        {
+            await Response.WriteAsync("first");
+            await Response.Body.FlushAsync();
+
+            // The request unit of work must not be completed on response start while a child
+            // unit of work scope (begun without requiresNew) is still active over it.
+            await Response.WriteAsync(requestUow.IsCompleted ? ":request-completed" : ":request-not-completed");
+        }
+    }
+
+    [HttpGet]
+    [Route("PublishEventThatWritesResponseOnCompletion")]
+    public async Task<ActionResult> PublishEventThatWritesResponseOnCompletion()
+    {
+        // Published inside the request unit of work, so the handler runs while the middleware is
+        // completing it at the end of the pipeline. The handler writes to the response, which starts
+        // it mid-completion; the middleware's OnStarting callback must not try to complete again.
+        await LazyServiceProvider.LazyGetRequiredService<ILocalEventBus>()
+            .PublishAsync(new ResponseWritingTestEvent());
+
+        // Ok() sets 200 without writing the body, so the response does not start inside the pipeline.
+        return Ok();
     }
 }

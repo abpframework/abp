@@ -119,4 +119,29 @@ public class UnitOfWorkMiddleware_Tests : AspNetCoreMvcTestBase
         var result = await GetResponseAsStringAsync("/api/unitofwork-test/CommitBeforeResponseFlush");
         result.ShouldBe("first:completed");
     }
+
+    [Fact]
+    public async Task Response_Flush_Inside_A_Child_Uow_Scope_Should_Not_Complete_The_Request_Uow()
+    {
+        Options.CompleteUnitOfWorkOnResponseStarting = true;
+
+        // A child scope (Begin without requiresNew) shares the request unit of work, so completing
+        // it on response start would commit under the still-active scope; it is left to the end of
+        // the pipeline instead, like a nested (requiresNew) unit of work.
+        var body = await GetResponseAsStringAsync("/api/unitofwork-test/ChildUowDuringResponseFlush");
+        body.ShouldBe("first:request-not-completed");
+    }
+
+    [Fact]
+    public async Task An_Event_Handler_Starting_The_Response_During_The_End_Of_Pipeline_Completion_Should_Not_Fail()
+    {
+        Options.CompleteUnitOfWorkOnResponseStarting = true;
+
+        // The response does not start during the pipeline here, so the middleware completes the
+        // unit of work at its end; the event handler then starts the response from inside that
+        // completion. The OnStarting callback must not attempt a second completion (which would
+        // throw "Completion has already been requested for this unit of work").
+        var body = await GetResponseAsStringAsync("/api/unitofwork-test/PublishEventThatWritesResponseOnCompletion");
+        body.ShouldBe("event-written");
+    }
 }

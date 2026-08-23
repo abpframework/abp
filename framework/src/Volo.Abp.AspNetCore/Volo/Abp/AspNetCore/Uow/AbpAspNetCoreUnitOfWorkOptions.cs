@@ -22,8 +22,9 @@ public class AbpAspNetCoreUnitOfWorkOptions
     /// committed data (commit and network response are not atomic); database access after the response
     /// starts is outside the request unit of work (unsuitable for streaming responses); unit of work
     /// events and completed handlers run before the first response byte (adding to its latency); a
-    /// nested (requiresNew) unit of work that is current when the response starts is left to its owner
-    /// and the request unit of work then completes at the end of the pipeline as usual.
+    /// nested (requiresNew) unit of work that is current when the response starts, and an active child
+    /// unit of work scope (begun without requiresNew), are left to their owners and the request unit of
+    /// work then completes at the end of the pipeline as usual.
     /// </para>
     /// </summary>
     public bool CompleteUnitOfWorkOnResponseStarting { get; set; } = false;

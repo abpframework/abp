@@ -37,17 +37,24 @@ public class AbpUnitOfWorkMiddleware : AbpMiddlewareBase, ITransientDependency
 
         using (var uow = _unitOfWorkManager.Reserve(UnitOfWork.UnitOfWorkReservationName))
         {
-            var completionAttemptedOnResponseStarting = false;
+            var completionStarted = false;
 
             if (!context.Response.HasStarted && ShouldCompleteOnResponseStarting(context))
             {
                 context.Response.OnStarting(async () =>
                 {
-                    // A nested (requiresNew) unit of work that is current is left to its owner.
-                    if (_unitOfWorkManager.Current == uow)
+                    // Skip if the completion has already been started at the end of the pipeline;
+                    // the response is then being started from inside that completion (e.g. by an
+                    // event handler writing to the response), so completing again would fail.
+                    // A nested (requiresNew) unit of work that is current and an active child
+                    // unit of work scope are left to their owners; the request unit of work then
+                    // completes at the end of the pipeline as usual.
+                    if (!completionStarted &&
+                        _unitOfWorkManager.Current == uow &&
+                        !uow.HasActiveChildUnitOfWorks())
                     {
                         // Set before completing so a post-commit failure isn't masked by the completion below.
-                        completionAttemptedOnResponseStarting = true;
+                        completionStarted = true;
                         await uow.CompleteAsync(_cancellationTokenProvider.Token);
                     }
                 });
@@ -55,8 +62,9 @@ public class AbpUnitOfWorkMiddleware : AbpMiddlewareBase, ITransientDependency
 
             await next(context);
 
-            if (!completionAttemptedOnResponseStarting)
+            if (!completionStarted)
             {
+                completionStarted = true;
                 await uow.CompleteAsync(_cancellationTokenProvider.Token);
             }
         }
