@@ -194,6 +194,7 @@
     <Project Path="test/Volo.Abp.AspNetCore.Serilog.Tests/Volo.Abp.AspNetCore.Serilog.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.SignalR.Tests/Volo.Abp.AspNetCore.SignalR.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.Tests/Volo.Abp.AspNetCore.Tests.csproj" />
+    <Project Path="test/Volo.Abp.AspNetCore.Uow.Tests/Volo.Abp.AspNetCore.Uow.Tests.csproj" />
     <Project Path="test/Volo.Abp.Auditing.Tests/Volo.Abp.Auditing.Tests.csproj" />
     <Project Path="test/Volo.Abp.Authorization.Tests/Volo.Abp.Authorization.Tests.csproj" />
     <Project Path="test/Volo.Abp.Autofac.Tests/Volo.Abp.Autofac.Tests.csproj" />
