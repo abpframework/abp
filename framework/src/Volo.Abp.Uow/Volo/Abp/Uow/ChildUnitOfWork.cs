@@ -30,12 +30,14 @@ internal class ChildUnitOfWork : IUnitOfWork
     public Dictionary<string, object> Items => _parent.Items;
 
     private readonly IUnitOfWork _parent;
+    private bool _isDisposed;
 
     public ChildUnitOfWork([NotNull] IUnitOfWork parent)
     {
         Check.NotNull(parent, nameof(parent));
 
         _parent = parent;
+        _parent.IncrementActiveChildUnitOfWorkCount();
 
         _parent.Failed += (sender, args) => { Failed.InvokeSafely(sender!, args); };
         _parent.Disposed += (sender, args) => { Disposed.InvokeSafely(sender!, args); };
@@ -122,7 +124,13 @@ internal class ChildUnitOfWork : IUnitOfWork
 
     public void Dispose()
     {
+        if (_isDisposed)
+        {
+            return;
+        }
 
+        _isDisposed = true;
+        _parent.DecrementActiveChildUnitOfWorkCount();
     }
 
     public override string ToString()
