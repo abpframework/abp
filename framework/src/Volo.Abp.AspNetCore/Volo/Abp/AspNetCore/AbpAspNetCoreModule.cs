@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.AspNetCore.RequestLocalization;
@@ -18,6 +18,7 @@ using Volo.Abp.Security;
 using Volo.Abp.Uow;
 using Volo.Abp.Validation;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.DistributedLocking;
 
 namespace Volo.Abp.AspNetCore;
 
@@ -30,7 +31,8 @@ namespace Volo.Abp.AspNetCore;
     typeof(AbpAuthorizationModule),
     typeof(AbpValidationModule),
     typeof(AbpExceptionHandlingModule),
-    typeof(AbpAspNetCoreAbstractionsModule)
+    typeof(AbpAspNetCoreAbstractionsModule),
+    typeof(AbpDistributedLockingAbstractionsModule)
     )]
 public class AbpAspNetCoreModule : AbpModule
 {
