@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Modularity;
+using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.Identity.AspNetCore;
 
@@ -28,6 +29,11 @@ public class AbpIdentityAspNetCoreTestModule : AbpModule
         Configure<AbpIdentityOptions>(options =>
         {
             options.ExternalLoginProviders.Add<FakeExternalLoginProvider>(FakeExternalLoginProvider.Name);
+        });
+
+        Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+        {
+            options.IsDynamicClaimsEnabled = true;
         });
     }
 
