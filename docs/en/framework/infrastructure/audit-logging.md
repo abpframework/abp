@@ -165,6 +165,22 @@ public class HomeController : AbpController
 }
 ````
 
+### Hiding Parameter Values
+
+An audited action writes its parameter values into the audit log. Use `[DisableAuditing]` on a parameter when its value is sensitive:
+
+````csharp
+public class HomeController : AbpController
+{
+    public async Task<ActionResult> SetConnectionString([DisableAuditing] string connectionString)
+    {
+        //...
+    }
+}
+````
+
+The action is still audit logged and the parameter name is still written, but its value is replaced with `null`.
+
 ### Enable/Disable for Application Services & Methods
 
 [Application service](../architecture/domain-driven-design/application-services.md) method calls also included into the audit log by default. You can use the `[DisableAuditing]` in service or method level.
