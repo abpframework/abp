@@ -212,6 +212,7 @@ public partial class TokenController
             var result = await UserManager.RedeemTwoFactorRecoveryCodeAsync(user, recoveryCode);
             if (result.Succeeded)
             {
+                await UserManager.ResetAccessFailedCountAsync(user);
                 return await SetSuccessResultAsync(request, user);
             }
 
@@ -231,6 +232,7 @@ public partial class TokenController
             var providers = await UserManager.GetValidTwoFactorProvidersAsync(user);
             if (providers.Contains(twoFactorProvider) && await UserManager.VerifyTwoFactorTokenAsync(user, twoFactorProvider, twoFactorCode))
             {
+                await UserManager.ResetAccessFailedCountAsync(user);
                 return await SetSuccessResultAsync(request, user);
             }
 
