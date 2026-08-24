@@ -146,7 +146,7 @@ This section can be used as a reference if you want to [customize](../framework/
 
 * `TenantAppService`
 
-In addition to tenant CRUD operations, `ITenantAppService` provides `GetDefaultConnectionStringAsync`, `UpdateDefaultConnectionStringAsync` and `DeleteDefaultConnectionStringAsync`. The HTTP API exposes these operations as `GET`, `PUT` and `DELETE` on `/api/multi-tenancy/tenants/{id}/default-connection-string`; the `PUT` request receives `defaultConnectionString` as a query parameter.
+In addition to tenant CRUD operations, `ITenantAppService` provides `GetDefaultConnectionStringAsync`, `UpdateDefaultConnectionStringAsync` and `DeleteDefaultConnectionStringAsync`. The HTTP API exposes these operations as `GET`, `PUT` and `DELETE` on `/api/multi-tenancy/tenants/{id}/default-connection-string`; the `PUT` request receives `defaultConnectionString` in the request body, as a JSON string with the `application/json` content type.
 
 #### Permissions
 
