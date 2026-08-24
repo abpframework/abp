@@ -63,7 +63,7 @@ public class TenantController : AbpControllerBase, ITenantAppService //TODO: Thr
 
     [HttpPut]
     [Route("{id}/default-connection-string")]
-    public virtual Task UpdateDefaultConnectionStringAsync(Guid id, [DisableAuditing] string defaultConnectionString)
+    public virtual Task UpdateDefaultConnectionStringAsync(Guid id, [FromBody] [DisableAuditing] string defaultConnectionString)
     {
         return TenantAppService.UpdateDefaultConnectionStringAsync(id, defaultConnectionString);
     }
