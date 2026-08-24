@@ -255,6 +255,30 @@ public class StringExtensions_Tests : IDisposable
         Encoding.ASCII.GetString(bytes).ShouldBe(str);
     }
 
+    [Theory]
+    [InlineData("", "D41D8CD98F00B204E9800998ECF8427E")]
+    [InlineData("abc", "900150983CD24FB0D6963F7D28E17F72")]
+    public void ToMd5_Test(string str, string expected)
+    {
+        str.ToMd5().ShouldBe(expected);
+    }
+
+    [Theory]
+    [InlineData("", "cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e")]
+    [InlineData("abc", "ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f")]
+    public void ToSha512_Test(string str, string expected)
+    {
+        str.ToSha512().ShouldBe(expected);
+    }
+
+    [Theory]
+    [InlineData("", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")]
+    [InlineData("abc", "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad")]
+    public void ToSha256_Test(string str, string expected)
+    {
+        str.ToSha256().ShouldBe(expected);
+    }
+
     private enum MyEnum
     {
         MyValue1,
