@@ -20,6 +20,18 @@ public static class CookieAuthenticationOptionsExtensions
     {
         advance ??= TimeSpan.FromMinutes(3);
         validationInterval ??= TimeSpan.FromMinutes(1);
+
+        var previousOnCheckSlidingExpiration = options.Events.OnCheckSlidingExpiration;
+        options.Events.OnCheckSlidingExpiration = async slidingExpirationContext =>
+        {
+            await previousOnCheckSlidingExpiration(slidingExpirationContext);
+
+            if (slidingExpirationContext.ShouldRenew && IsAccessTokenExpired(slidingExpirationContext.Properties, advance.Value))
+            {
+                slidingExpirationContext.ShouldRenew = false;
+            }
+        };
+
         var previousHandler = options.Events.OnValidatePrincipal;
         options.Events.OnValidatePrincipal = async principalContext =>
         {
@@ -31,12 +43,10 @@ public static class CookieAuthenticationOptionsExtensions
 
             var logger = principalContext.HttpContext.RequestServices.GetRequiredService<ILogger<CookieAuthenticationOptions>>();
 
-            var tokenExpiresAt = principalContext.Properties.GetString(".Token.expires_at");
-            if (!tokenExpiresAt.IsNullOrWhiteSpace() && DateTimeOffset.TryParseExact(tokenExpiresAt, "o", CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var expiresAt) &&
-                expiresAt <= DateTimeOffset.UtcNow.Add(advance.Value))
+            if (IsAccessTokenExpired(principalContext.Properties, advance.Value))
             {
-                logger.LogInformation("The access_token expires within {AdvanceSeconds}s; signing out.", advance.Value.TotalSeconds);
-                await SignOutAndInvokePreviousHandlerAsync(principalContext, previousHandler);
+                logger.LogInformation("The access_token expires within {AdvanceSeconds}s; rejecting the principal.", advance.Value.TotalSeconds);
+                await RejectPrincipalAndInvokePreviousHandlerAsync(principalContext, previousHandler);
                 return;
             }
 
@@ -74,14 +84,14 @@ public static class CookieAuthenticationOptionsExtensions
                     if (response.IsError)
                     {
                         logger.LogError("Token introspection error: {Error}", response.Error);
-                        await SignOutAndInvokePreviousHandlerAsync(principalContext, previousHandler);
+                        await RejectPrincipalAndInvokePreviousHandlerAsync(principalContext, previousHandler);
                         return;
                     }
 
                     if (!response.IsActive)
                     {
                         logger.LogError("The access_token is not active.");
-                        await SignOutAndInvokePreviousHandlerAsync(principalContext, previousHandler);
+                        await RejectPrincipalAndInvokePreviousHandlerAsync(principalContext, previousHandler);
                         return;
                     }
 
@@ -91,7 +101,7 @@ public static class CookieAuthenticationOptionsExtensions
                 else
                 {
                     logger.LogError("The access_token is not found in the cookie properties. Ensure SaveTokens of OpenIdConnectOptions is true.");
-                    await SignOutAsync(principalContext);
+                    await RejectPrincipalAsync(principalContext);
                 }
             }
 
@@ -113,10 +123,19 @@ public static class CookieAuthenticationOptionsExtensions
         return openIdConnectOptions;
     }
 
-    private static async Task SignOutAsync(CookieValidatePrincipalContext principalContext)
+    private static bool IsAccessTokenExpired(AuthenticationProperties properties, TimeSpan advance)
     {
+        var tokenExpiresAt = properties.GetString(".Token.expires_at");
+        return !tokenExpiresAt.IsNullOrWhiteSpace() &&
+               DateTimeOffset.TryParseExact(tokenExpiresAt, "o", CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var expiresAt) &&
+               expiresAt <= DateTimeOffset.UtcNow.Add(advance);
+    }
+
+    private static Task RejectPrincipalAsync(CookieValidatePrincipalContext principalContext)
+    {
+        principalContext.ShouldRenew = false;
         principalContext.RejectPrincipal();
-        await principalContext.HttpContext.SignOutAsync(principalContext.Scheme.Name);
+        return Task.CompletedTask;
     }
 
     private static Task InvokePreviousHandlerAsync(CookieValidatePrincipalContext principalContext, Func<CookieValidatePrincipalContext, Task>? previousHandler)
@@ -124,9 +143,9 @@ public static class CookieAuthenticationOptionsExtensions
         return previousHandler != null ? previousHandler(principalContext) : Task.CompletedTask;
     }
 
-    private static async Task SignOutAndInvokePreviousHandlerAsync(CookieValidatePrincipalContext principalContext, Func<CookieValidatePrincipalContext, Task>? previousHandler)
+    private static async Task RejectPrincipalAndInvokePreviousHandlerAsync(CookieValidatePrincipalContext principalContext, Func<CookieValidatePrincipalContext, Task>? previousHandler)
     {
-        await SignOutAsync(principalContext);
+        await RejectPrincipalAsync(principalContext);
         await InvokePreviousHandlerAsync(principalContext, previousHandler);
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -33,6 +34,8 @@ public class AbpIdentityAspNetCoreModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        context.Services.AddHttpContextAccessor();
+
         Configure<IdentityOptions>(options =>
         {
             options.Tokens.PasswordResetTokenProvider = AbpPasswordResetTokenProvider.ProviderName;
@@ -61,6 +64,9 @@ public class AbpIdentityAspNetCoreModule : AbpModule
 
     public override void PostConfigureServices(ServiceConfigurationContext context)
     {
+        context.Services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme,
+            cookieOptions => cookieOptions.ValidateIdentitySession());
+
         // Replace the default UserValidator with AbpIdentityUserValidator
         context.Services.RemoveAll(x => x.ServiceType == typeof(IUserValidator<IdentityUser>) && x.ImplementationType == typeof(UserValidator<IdentityUser>));
         context.Services.AddAbpOptions<SecurityStampValidatorOptions>()
