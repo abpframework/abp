@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.Auditing;
 
-[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method | AttributeTargets.Property)]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Parameter)]
 public class DisableAuditingAttribute : Attribute
 {
     /// <summary>

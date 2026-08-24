@@ -1,5 +1,6 @@
 using System;
 using JetBrains.Annotations;
+using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.TenantManagement;
@@ -10,6 +11,7 @@ public class TenantConnectionString : Entity
 
     public virtual string Name { get; protected set; }
 
+    [DisableAuditing]
     public virtual string Value { get; protected set; }
 
     protected TenantConnectionString()
