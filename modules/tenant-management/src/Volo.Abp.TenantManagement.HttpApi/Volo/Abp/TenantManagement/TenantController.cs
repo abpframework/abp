@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Auditing;
 
 namespace Volo.Abp.TenantManagement;
 
@@ -62,7 +63,7 @@ public class TenantController : AbpControllerBase, ITenantAppService //TODO: Thr
 
     [HttpPut]
     [Route("{id}/default-connection-string")]
-    public virtual Task UpdateDefaultConnectionStringAsync(Guid id, string defaultConnectionString)
+    public virtual Task UpdateDefaultConnectionStringAsync(Guid id, [DisableAuditing] string defaultConnectionString)
     {
         return TenantAppService.UpdateDefaultConnectionStringAsync(id, defaultConnectionString);
     }
