@@ -9,7 +9,18 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 3.0.10 (2026-08-10) Latest
+## 3.1.0 (2026-08-24) Latest
+
+* Clarify CLI tracked-process stop method: //github.com/volosoft/abp-studio/pull/4517
+* Action of studio template test is working with self hosted agent
+* Add missing using directive for System in ModernWizardOptionDescripti…
+* Chore(coverage): improve build and test steps in coverage workflow
+* Kill CLI process tree on stop
+* Update code coverage report by [bot] in: //github.com/volosoft/abp-studio/pull/5020
+* Fixed failing unit tests
+* Add license-info command and expiry checker
+
+## 3.0.10 (2026-08-10)
 
 * Align dashboard refresh button with date picker in MudBlazor templates
 * ABP Agent: Fix context compression problem
