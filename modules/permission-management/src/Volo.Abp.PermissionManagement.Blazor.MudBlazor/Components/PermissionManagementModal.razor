@@ -43,7 +43,6 @@
                             <div>
                                 <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default"
                                             T="bool?"
-                                            TriState="true"
                                             Disabled="@(IsPermissionGroupDisabled(group))"
                                             Value="@(group.Permissions.Any(x => x.IsGranted) && !group.Permissions.All(x => x.IsGranted)
                                                 ? (bool?)null
