@@ -56,7 +56,7 @@ Collection rules:
 * `maxCount` is optional, but must be greater than zero when supplied.
 * `uniqueItems` is required and controls duplicate-value validation.
 * The effective item limit is the lower of `maxCount` and `LowCode:PrimitiveCollections:MaximumItemsPerProperty`. The verified global default is `1000`.
-* `storageKey` is a stable internal identity used by the normalized collection table. Let the Designer generate it and do not change it after data exists.
+* `storageKey` is a stable internal identity stored in the model for the normalized collection table. When adding a collection through the Designer or MCP, omit it from the mutation payload; the server generates it. Do not change it after data exists.
 * A collection property cannot also be a foreign key, formula, or rollup.
 
 Collections are stored in normalized rows rather than inside the owner JSON payload. The React runtime returns them as ordered arrays and uses collection-aware controls for scalar, enum, file, and image values.
