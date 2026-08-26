@@ -19,6 +19,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Abp.OpenIddict.AspNetCore\Volo.Abp.OpenIddict.AspNetCore.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.OpenIddict.EntityFrameworkCore\Volo.Abp.OpenIddict.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\..\identity\src\Volo.Abp.Identity.AspNetCore\Volo.Abp.Identity.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\..\identity\src\Volo.Abp.Identity.EntityFrameworkCore\Volo.Abp.Identity.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.EntityFrameworkCore.Sqlite\Volo.Abp.EntityFrameworkCore.Sqlite.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.TestBase\Volo.Abp.AspNetCore.TestBase.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
