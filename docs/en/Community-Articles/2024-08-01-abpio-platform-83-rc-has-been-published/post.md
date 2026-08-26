@@ -162,7 +162,7 @@ There are exciting articles contributed by the ABP community as always. I will h
 
 * [Create a Generic HTTP Service to Consume a Web API](https://abp.io/community/articles/create-a-generic-http-service-to-consume-a-web-api-yidme2kq) by [Bart Van Hoey](https://github.com/bartvanhoey)
 * [Use User-Defined Function Mapping for Global Filter](https://abp.io/community/articles/use-userdefined-function-mapping-for-global-filter-pht26l07) by [Liming Ma](https://github.com/maliming)
-* [How to use .NET Aspire with ABP framework](https://abp.io/community/articles/how-to-use-.net-aspire-with-abp-framework-h29km4kk) by [Berkan Şaşmaz](https://twitter.com/berkansasmazz)
+* [How to use Aspire with ABP framework](https://abp.io/community/articles/how-to-use-.net-aspire-with-abp-framework-h29km4kk) by [Berkan Şaşmaz](https://twitter.com/berkansasmazz)
 * [Exciting New Feature in ABP.IO CMS Kit: Marked Item System](https://abp.io/community/articles/exciting-new-feature-in-abp.io-cms-kit-marked-item-system.-2hvpq0me) by [Suhaib Mousa](https://abp.io/community/members/suhaibmousa032@gmail.com)
 
 Thanks to the ABP Community for all the content they have published. You can also [post your ABP-related (text or video) content](https://abp.io/community/posts/create) to the ABP Community.
