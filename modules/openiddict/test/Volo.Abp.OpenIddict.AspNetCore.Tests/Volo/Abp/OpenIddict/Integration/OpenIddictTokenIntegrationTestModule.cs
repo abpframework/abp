@@ -2,33 +2,40 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using OpenIddict.Abstractions;
 using OpenIddict.Server;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.AspNetCore.Uow;
+using Volo.Abp.Autofac;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Sqlite;
+using Volo.Abp.Identity;
+using Volo.Abp.Identity.AspNetCore;
+using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.OpenIddict.Tokens;
+using Volo.Abp.SecurityLog;
+using Volo.Abp.Settings;
 using Volo.Abp.Uow;
-using Volo.Abp.Autofac;
+using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Volo.Abp.OpenIddict.Integration;
 
-public class TokenVisibilityRecorder
-{
-    public long? TokenCountAtResponseStart { get; set; }
-}
-
 [DependsOn(
     typeof(AbpAspNetCoreTestBaseModule),
+    typeof(AbpIdentityAspNetCoreModule),
+    typeof(AbpIdentityEntityFrameworkCoreModule),
     typeof(AbpOpenIddictAspNetCoreModule),
     typeof(AbpOpenIddictEntityFrameworkCoreModule),
     typeof(AbpEntityFrameworkCoreSqliteModule),
@@ -59,6 +66,15 @@ public class OpenIddictTokenIntegrationTestModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddSingleton<TokenVisibilityRecorder>();
+        context.Services.AddSingleton<IdentityUserStoreFailureSimulator>();
+        context.Services.AddSingleton<OpenIddictTestSettingValueProvider>();
+        context.Services.Replace(ServiceDescriptor.Scoped<IdentityUserStore, TestIdentityUserStore>());
+
+        Configure<AbpSecurityLogOptions>(options => options.IsEnabled = false);
+        Configure<AbpSettingOptions>(options =>
+        {
+            options.ValueProviders.Add<OpenIddictTestSettingValueProvider>();
+        });
 
         // A remapped token endpoint, so the tests can prove the opt-in list is derived from the configured
         // server endpoints (custom endpoints are followed) rather than a hardcoded "/connect" prefix.
@@ -77,6 +93,12 @@ public class OpenIddictTokenIntegrationTestModule : AbpModule
             dbContext.Database.EnsureCreated();
         }
 
+        using (var dbContext = new IdentityDbContext(
+                   new DbContextOptionsBuilder<IdentityDbContext>().UseSqlite(ConnectionString).Options))
+        {
+            dbContext.GetService<IRelationalDatabaseCreator>().CreateTables();
+        }
+
         Configure<AbpDbConnectionOptions>(options =>
         {
             options.ConnectionStrings.Default = ConnectionString;
@@ -90,7 +112,7 @@ public class OpenIddictTokenIntegrationTestModule : AbpModule
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
-        SeedClientAsync(context.ServiceProvider).GetAwaiter().GetResult();
+        SeedDataAsync(context.ServiceProvider).GetAwaiter().GetResult();
 
         var app = context.GetApplicationBuilder();
         app.UseRouting();
@@ -129,7 +151,7 @@ public class OpenIddictTokenIntegrationTestModule : AbpModule
         }
     }
 
-    private static async Task SeedClientAsync(IServiceProvider serviceProvider)
+    private static async Task SeedDataAsync(IServiceProvider serviceProvider)
     {
         using var scope = serviceProvider.CreateScope();
         var uowManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
@@ -147,9 +169,24 @@ public class OpenIddictTokenIntegrationTestModule : AbpModule
                 Permissions =
                 {
                     OpenIddictConstants.Permissions.Endpoints.Token,
-                    OpenIddictConstants.Permissions.GrantTypes.ClientCredentials
+                    OpenIddictConstants.Permissions.GrantTypes.ClientCredentials,
+                    OpenIddictConstants.Permissions.GrantTypes.Password
                 }
             });
+        }
+
+        var userManager = scope.ServiceProvider.GetRequiredService<IdentityUserManager>();
+        if (await userManager.FindByNameAsync(OpenIddictPasswordGrantTestData.UserName) == null)
+        {
+            var user = new IdentityUser(
+                Guid.NewGuid(),
+                OpenIddictPasswordGrantTestData.UserName,
+                OpenIddictPasswordGrantTestData.Email);
+            user.SetEmailConfirmed(true);
+
+            (await userManager.CreateAsync(user, OpenIddictPasswordGrantTestData.Password)).CheckErrors();
+            (await userManager.SetLockoutEnabledAsync(user, true)).CheckErrors();
+            (await userManager.SetTwoFactorEnabledAsync(user, true)).CheckErrors();
         }
 
         await uow.CompleteAsync();
