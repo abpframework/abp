@@ -2154,6 +2154,18 @@
           "path": "low-code/designer.md"
         },
         {
+          "text": "Data Modeling and Page Behavior",
+          "path": "low-code/data-modeling.md"
+        },
+        {
+          "text": "Data Import",
+          "path": "low-code/data-import.md"
+        },
+        {
+          "text": "Model History and Recovery",
+          "path": "low-code/model-history.md"
+        },
+        {
           "text": "Calculated and Rollup Properties",
           "path": "low-code/formula-properties.md"
         },

@@ -133,6 +133,8 @@ The generated data grid page includes:
 
 Create and edit forms are rendered from form metadata. Tabs, groups, labels, placeholders, controls, default values, validation rules, conditional form rules, and save actions come from the designer.
 
+Primitive collection properties render collection-aware controls and are sent as ordered arrays. Scalar and enum collections support add/remove/reorder behavior; file and image collections use the same upload validation as single-value file fields. Per-property and global collection limits are enforced by the backend. See [Data Modeling and Page Behavior](data-modeling.md#primitive-collections).
+
 Rendered groups come from the form layout placements under `layout.tabs[].groups[].fields[]`. A form can still load with an empty shell when fields exist but no placements reference them.
 
 ![Generated create form](images/runtime-create-form.png)
@@ -156,6 +158,14 @@ The screenshot below shows the shared selector pattern on the `Active` boolean f
 ![Yes/No filter options](images/runtime-filters-has-value.png)
 
 The URL keeps the existing `lcFilters` query parameter shape. The runtime maps user-friendly filter choices to the existing backend `FilterType` values.
+
+Columns and filters can request related fields through foreign-key paths such as `CustomerId.CountryId.Name`, including repeated self-relations within the configured query-depth limit. Enum and boolean columns render their configured text, badge, color, and icon presentation. Server-owned backend filters are applied in addition to the visible filters and cannot be removed by changing `lcFilters`.
+
+## Data Import
+
+Pages with import enabled expose a guided Excel/CSV import wizard. It previews the file, maps source columns to writable properties, supports append and merge modes, resolves foreign keys through allowed match properties, and reports row-scoped failures in a downloadable invalid-row file.
+
+File and image mappings can fetch approved remote HTTPS URLs through the backend's bounded network guard. See [Data Import](data-import.md) for the complete workflow, security defaults, and configuration limits.
 
 ## Export
 
@@ -267,6 +277,9 @@ The React runtime talks to these backend endpoints:
 | `PUT /api/low-code/pages/{pageName}/data/{id}` | Update record |
 | `DELETE /api/low-code/pages/{pageName}/data/{id}` | Delete record |
 | `GET /api/low-code/pages/{pageName}/lookup/{fieldName}` | Lookup options |
+| `GET /api/low-code/pages/{pageName}/import/sample-file` | Download an Excel or CSV import template |
+| `POST /api/low-code/pages/{pageName}/import` | Import a mapped Excel or CSV file |
+| `GET /api/low-code/pages/{pageName}/import/invalid-rows` | Download row-scoped import failures by token |
 | `POST /api/low-code/pages/{pageName}/files/{fieldName}` | Upload file/image field |
 | `GET /api/low-code/pages/{pageName}/data/{id}/files/{fieldName}/{blobName}` | Download file/image field |
 | `GET /api/low-code/pages/{pageName}/data/{id}/attachments` | List attachments |
