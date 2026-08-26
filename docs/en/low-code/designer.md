@@ -40,9 +40,9 @@ The selected layer controls whether the designer can save changes. Read-only lay
 
 Use **Data** to define the domain model.
 
-Entities contain properties, display names, display property configuration, inherited audit fields, relations, and optional interceptors. Enums are created once and then used by enum properties.
+Entities contain properties, display names, display property configuration, inherited audit fields, relations, primitive collections, and optional interceptors. Enums are created once and then used by enum properties. Enum and boolean values can also carry text, badge, color, and icon presentation metadata.
 
-For virtual fields derived from the current record or related records, see [Calculated and Rollup Properties](formula-properties.md). For the supported scalar formula syntax, see the [Low-Code Expression Language](expression-language.md) reference.
+For storage choices, primitive collections, related-field paths, presentations, and backend filters, see [Data Modeling and Page Behavior](data-modeling.md). For virtual fields derived from the current record or related records, see [Calculated and Rollup Properties](formula-properties.md). For the supported scalar formula syntax, see the [Low-Code Expression Language](expression-language.md) reference.
 
 ![Entity summary in the designer](images/designer-entity.png)
 
@@ -50,7 +50,7 @@ For virtual fields derived from the current record or related records, see [Calc
 
 ### Relations
 
-Relations are driven by foreign key properties. The designer shows direct N to 1 relations and many-to-many relations that are modeled through junction entities.
+Relations are driven by foreign key properties. The designer shows direct N to 1 relations, self-relations, and many-to-many relations that are modeled through junction entities. Page columns, filters, and exports can select related fields through foreign-key paths, and reverse page relationships can use generated or named pages/forms with view or edit access.
 
 ![Relation overview](images/designer-relations.png)
 
@@ -73,6 +73,8 @@ Pages can define data grid, kanban, calendar, gallery, standalone form, and dash
 * Field labels and column widths
 * Default sorting
 * Filter fields and defaults
+* Always-on backend filters with static, JavaScript, or registered-provider values
+* Guided Excel and CSV import, including append or merge behavior
 * File/image export defaults when the page has exportable file fields
 * Whether file bundle ZIP export is allowed
 
@@ -85,6 +87,8 @@ Pages are exposed in React under `/dynamic/<page-name>` and can also appear as d
 The **View Fields** section controls what users see in the runtime view. The separate **Export Fields** section controls what may leave the page through Excel, CSV, download-link columns, or file bundles. A visible field can be excluded from export, and an exportable field can be hidden from the page but still available through **Export options > All exportable fields**. Use the bulk actions to copy visible fields into the export policy, enable all fields, or disable all fields.
 
 Open **Export Fields > More settings** only when you need custom export details. If **Use default export settings** is enabled, export uses display labels, the view field order, file name output, and file bundle export enabled. Turn it off to customize export labels, assign a separate export order, choose **Default File/Image Output**, or disable **Allow file bundle export**. File/image output controls appear only when the page has file or image fields, and they stay inactive until at least one file/image field is exportable.
+
+Use [Data Import](data-import.md) for the runtime import wizard, column mapping, merge keys, foreign-key matching, remote file/image sources, and invalid-row downloads.
 
 ## Forms
 
@@ -147,11 +151,15 @@ Filters are configured per page and rendered by the React runtime. The runtime u
 
 The URL query parameter keeps the existing `lcFilters` format, so bookmarked filtered pages continue to work.
 
+Backend filters are different from the visible filters above: the server always combines them with the user's query. Use them for ownership, tenant, role, and workflow scopes that must not be removable from the client. See [Data Modeling and Page Behavior](data-modeling.md#backend-filters).
+
 ## Permissions
 
-Dynamic permissions are generated for entities and pages. Use the **Permissions** section to review names and grant access through the normal ABP permission management UI.
+Dynamic permissions are generated for entities, pages, custom endpoints, and optionally individual page relationships. Use the **Permissions** section to review names and grant access through the normal ABP permission management UI.
 
 Generated pages and menus are permission-aware. If a user cannot access a page, the runtime does not show the menu item and API calls remain protected by backend authorization.
+
+Pages use resource permissions by default and can override each operation with `default`, `public`, `authenticated`, or a named permission. Generated reverse relationships can enable separate view/create/update/delete authorization. See [Data Modeling and Page Behavior](data-modeling.md#page-and-relationship-permissions).
 
 ## Actions and Scripts
 
@@ -165,9 +173,15 @@ Endpoint and event handler editors include **Test JavaScript**. Dry-run executio
 
 Use **Health** before shipping changes. It helps catch missing display properties, invalid relation targets, form/page references, script problems, and other model issues that would otherwise surface at runtime. See [Health](health.md) for the selected-layer snapshot scope and the typical problem classes it helps you review.
 
+## History and Recovery
+
+When **Runtime JSON** is selected, the Designer exposes runtime model undo, redo, history details, comparisons, and save points. History actions are previewed against a concurrency stamp and require explicit confirmation before destructive physical schema changes.
+
+Entity deletion also uses a reviewed plan. You must resolve dependent relationships and choose whether Designer-managed physical data is kept or deleted. An entity deleted with retained physical data can be restored only from a fresh schema and concurrency preview. See [Model History and Recovery](model-history.md).
+
 ## MCP Integration
 
-The Designer and the low-code MCP surface overlap when the selected layer is **Runtime JSON**, but they are not the same editing surface. The Designer can inspect source-controlled and runtime layers, while [MCP Integration](mcp.md) is a remote HTTP MCP endpoint that is intentionally runtime-only and targets the database-backed model. Use the Designer when you want interactive editing and visual feedback. Use MCP when an authenticated agent or script needs repeatable runtime automation.
+The Designer and the low-code MCP surface overlap when the selected layer is **Runtime JSON**, but they are not the same editing surface. The Designer can inspect source-controlled and runtime layers, while [MCP Integration](mcp.md) is a remote HTTP MCP endpoint that is intentionally runtime-only and targets the database-backed model. MCP exposes the same model-management semantics documented in the general Low-Code feature pages; it is not a separate feature model. Use the Designer when you want interactive editing and visual feedback. Use MCP when an authenticated agent or script needs repeatable runtime automation.
 
 After MCP-driven changes, reopen the relevant Designer section or review [Health](health.md) before reporting the model as ready.
 
