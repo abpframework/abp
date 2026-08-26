@@ -67,9 +67,9 @@ public partial class AbpMudActionMenuItem : ComponentBase
         }
         else if (ParentMudMenu != null)
         {
-            await ParentMudMenu.CloseAllMenusAsync();
+            await InvokeAsync(() => ParentMudMenu.CloseAllMenusAsync());
         }
 
-        await OnClick.InvokeAsync(args);
+        await InvokeAsync(() => OnClick.InvokeAsync(args));
     }
 }
