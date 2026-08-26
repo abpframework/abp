@@ -237,9 +237,14 @@ Entities describe the persisted data model. UI is not configured with legacy pro
 | `isUnique` | Unique value validation |
 | `serverOnly` | Hidden from clients, API responses, and UI metadata |
 | `allowSetByClients` | Whether create/update clients may set this value |
-| `isMappedToDbField` | Whether the property is stored in the database |
+| `isMappedToDbField` | Whether a dynamic scalar property uses a dedicated physical column instead of dynamic data storage |
+| `decimalPlaces` | Decimal scale for `decimal` and `money` properties |
+| `currencySymbol` | Optional UI currency symbol for `money` properties |
+| `collection` | Primitive collection settings: `maxCount`, required `uniqueItems`, and stable `storageKey` |
 | `foreignKey` | Lookup relation metadata |
 | `validators` | Backend/UI validation rules |
+
+`isMappedToDbField: true` creates a dedicated scalar column. Other dynamic scalar properties use the configured dynamic data mapping, which is JSON storage by default and can be configured as individual columns. Primitive collections use normalized collection tables. See [Data Modeling and Page Behavior](data-modeling.md) for storage, collections, related fields, presentations, and backend filters.
 
 For virtual calculated fields and related-record aggregates, see [Calculated and Rollup Properties](formula-properties.md). The [Low-Code Expression Language](expression-language.md) reference documents the scalar syntax used by calculated properties and formula backfills.
 
@@ -255,6 +260,8 @@ For virtual calculated fields and related-record aggregates, see [Calculated and
 | `guid` | GUID value |
 | `enum` | Integer-backed enum; requires `enumType` |
 | `file`, `image` | Upload metadata handled by the low-code file pipeline |
+
+Add `collection` to any supported primitive type to store an ordered value list. Do not hand-edit a generated `storageKey` after data exists.
 
 ### File, Image, and Attachments
 
@@ -339,6 +346,7 @@ Pages create runtime routes and menu entries. They also choose how entity data i
   "type": "dataGrid",
   "entityName": "Acme.Catalog.Product",
   "group": "catalog",
+  "importEnabled": true,
   "defaultFileExportMode": 0,
   "allowFileBundleExport": true,
   "columns": [
@@ -371,6 +379,10 @@ Page export settings:
 |-------|---------|---------|
 | `defaultFileExportMode` | `0` | Default spreadsheet output for file/image fields. `0` = file name, `1` = metadata columns, `2` = temporary download-link columns |
 | `allowFileBundleExport` | `true` | Allows **Files (.zip)** export for exportable file/image columns on the page |
+
+`importEnabled` controls whether the React runtime exposes guided Excel/CSV import for the page. See [Data Import](data-import.md) for mapping and merge behavior.
+
+Page column and filter `propertyName` values may follow foreign keys, for example `CustomerId.CountryId.Name`. Related paths are limited by the configured query depth and return only the requested projection. Page columns can also define enum and boolean presentation metadata. See [Data Modeling and Page Behavior](data-modeling.md).
 
 ZIP file bundle export only includes selected page columns that are file or image fields and are exportable. The ZIP contains `manifest.csv` plus files under `files/{recordId}/{fieldName}/{safeFileName}`.
 
@@ -451,6 +463,8 @@ Filters are page-owned. Use `control: "auto"` unless you need a specific control
 
 `hasValue` is a UI alias. At runtime, `Yes` maps to `IsNotNull`, `No` maps to `IsNull`, and `All` does not add a filter.
 
+Use a page `backendFilter` when a condition must always be applied by the server. The recursive expression supports `and`/`or` groups and static, JavaScript, or registered-provider values. Backend filters are combined with the filters above and are not removable client state. See [Data Modeling and Page Behavior](data-modeling.md#backend-filters).
+
 ## Permissions
 
 Pages can use generated defaults or explicit permission configuration:
@@ -467,6 +481,8 @@ Pages can use generated defaults or explicit permission configuration:
 ```
 
 Custom permission definitions live in the top-level `permissions` section and can be granted through the normal ABP permission management UI.
+
+`default` uses the generated page resource permission; `authenticated` allows any authenticated caller; `public` allows anonymous access; any other value is treated as a named permission. Reverse page relationships can set `useSeparatePermission: true` and provide their own view/create/update/delete configuration. See [Data Modeling and Page Behavior](data-modeling.md#page-and-relationship-permissions).
 
 ## Scripts
 
@@ -496,6 +512,7 @@ See [Interceptors](interceptors.md) and [Scripting API](scripting-api.md).
       "route": "/api/custom/products/stats",
       "method": "GET",
       "requireAuthentication": true,
+      "useResourceAuthorization": false,
       "requiredPermissions": ["Acme.Catalog"],
       "javascript": "var count = await db.count('Acme.Catalog.Product'); return ok({ total: count });"
     }
