@@ -45,8 +45,7 @@ A primitive collection keeps an ordered list of values on one property. Supporte
   "type": "string",
   "collection": {
     "maxCount": 25,
-    "uniqueItems": true,
-    "storageKey": "b7db3ad2-3452-511b-b9b7-cc11d2db6dcb"
+    "uniqueItems": true
   }
 }
 ```
@@ -56,7 +55,7 @@ Collection rules:
 * `maxCount` is optional, but must be greater than zero when supplied.
 * `uniqueItems` is required and controls duplicate-value validation.
 * The effective item limit is the lower of `maxCount` and `LowCode:PrimitiveCollections:MaximumItemsPerProperty`. The verified global default is `1000`.
-* `storageKey` is a stable internal identity used by the normalized collection table. Let the Designer generate it and do not change it after data exists.
+* Collection table names are derived from the entity and property names. Developer JSON, Designer, MCP, and code-layer definitions do not require an internal collection identifier.
 * A collection property cannot also be a foreign key, formula, or rollup.
 
 Collections are stored in normalized rows rather than inside the owner JSON payload. The React runtime returns them as ordered arrays and uses collection-aware controls for scalar, enum, file, and image values.
