@@ -1,4 +1,4 @@
-version: 1
+version: 2
 name: abp-app-template
 description: >-
   ABP Framework "app" startup template (templates/app/aspnet-core) - MVC UI,
