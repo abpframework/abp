@@ -6,7 +6,7 @@
     <AbpProjectType>module</AbpProjectType>
   </PropertyGroup>
   
-  <ItemGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
     <PackageReference Include="ConfigureAwait.Fody" Version="3.3.1" PrivateAssets="All" />
     <PackageReference Include="Fody" Version="6.5.3">
       <PrivateAssets>All</PrivateAssets>
