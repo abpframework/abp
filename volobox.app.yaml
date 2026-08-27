@@ -1,0 +1,53 @@
+version: 1
+name: abp-app-template
+description: >-
+  ABP Framework "app" startup template (templates/app/aspnet-core) - MVC UI,
+  EF Core + SQL Server, previewed against the local framework/module source
+  in this repo.
+
+env:
+  - MSSQL_SA_PASSWORD
+
+preview:
+  startTimeoutMinutes: 20
+  idleTimeoutMinutes: 30
+
+services:
+  - name: db
+    kind: command
+    command: >-
+      docker rm -f abp-preview-mssql >/dev/null 2>&1;
+      exec docker run --rm --name abp-preview-mssql
+      -p 1433:1433
+      -e ACCEPT_EULA=Y
+      -e MSSQL_PID=Developer
+      -e MSSQL_SA_PASSWORD="$MSSQL_SA_PASSWORD"
+      mcr.microsoft.com/mssql/server:2022-latest
+    port: 1433
+    env:
+      MSSQL_SA_PASSWORD: ${env.MSSQL_SA_PASSWORD}
+
+  - name: redis
+    kind: command
+    command: >-
+      docker rm -f abp-preview-redis >/dev/null 2>&1;
+      exec docker run --rm --name abp-preview-redis
+      -p 6379:6379
+      redis:7-alpine
+    port: 6379
+
+  - name: web
+    kind: command
+    cwd: templates/app/aspnet-core
+    command: bash volobox-start.sh
+    port: 8080
+    primary: true
+    dependsOn: [db, redis]
+    restartPolicy: on-change
+    env:
+      MSSQL_SA_PASSWORD: ${env.MSSQL_SA_PASSWORD}
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://0.0.0.0:8080
+      App__SelfUrl: ${preview.origin(web)}
+      OpenIddict__Applications__MyProjectName_Web__RootUrl: ${preview.origin(web)}
+      Redis__Configuration: 127.0.0.1:6379
