@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -34,7 +35,7 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
     private readonly AbpAspNetCoreMvcOptions _abpAspNetCoreMvcOptions;
     private readonly AbpApiDescriptionModelOptions _modelOptions;
     private readonly IXmlDocumentationProvider _xmlDocProvider;
-
+    public IAbpLazyServiceProvider LazyServiceProvider { get; set; } = default!;
     public AspNetCoreApiDescriptionModelProvider(
         IOptions<AspNetCoreApiDescriptionModelProviderOptions> options,
         IApiDescriptionGroupCollectionProvider descriptionProvider,
@@ -314,7 +315,13 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
             return;
         }
 
-        applicationModel.Types[typeName] = TypeApiDescriptionModel.Create(type);
+        var contributors =
+            LazyServiceProvider
+            .GetServices<IPropertyApiDescriptionModelContributor>()
+            .ToHashSet();
+        var typeModel = TypeApiDescriptionModel.Create(type, contributors);
+        applicationModel.Types[typeName] = typeModel;
+
 
         if (includeDescriptions)
         {
