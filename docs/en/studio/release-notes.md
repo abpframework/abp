@@ -9,7 +9,18 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 3.1.0 (2026-08-24) Latest
+## 3.1.1 (2026-08-28) Latest
+
+* Refactor release version resolution logic to ensure proper tag handling
+* Fix chmod command syntax in set-executable-permissions scripts for Li…
+* Restore macOS signing env values used by the 3.0 pipelines
+* Show preparing-solution banner only after creation
+* Add top spacing above the browser address bar
+* Improve fullscreen flyout interaction and small-window clipping
+* Fix Admin Console command input export
+* Prefer Docker Compose v2 when starting containers
+
+## 3.1.0 (2026-08-24)
 
 * Clarify CLI tracked-process stop method: //github.com/volosoft/abp-studio/pull/4517
 * Action of studio template test is working with self hosted agent
