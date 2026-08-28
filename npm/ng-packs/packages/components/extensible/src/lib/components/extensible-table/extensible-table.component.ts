@@ -4,6 +4,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   inject,
   Injector,
   LOCALE_ID,
@@ -18,9 +19,10 @@ import {
   contentChild,
   viewChild,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AsyncPipe, isPlatformBrowser, NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
 
-import { Observable, filter, map, Subject, debounceTime, distinctUntilChanged } from 'rxjs';
+import { Observable, map, Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -93,6 +95,7 @@ const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
 })
 export class ExtensibleTableComponent<R = any> implements AfterViewInit, OnDestroy {
   readonly #injector = inject(Injector);
+  readonly #destroyRef = inject(DestroyRef);
   readonly getInjected = this.#injector.get.bind(this.#injector);
   protected readonly locale = inject(LOCALE_ID);
   protected readonly config = inject(ConfigStateService);
@@ -369,10 +372,18 @@ export class ExtensibleTableComponent<R = any> implements AfterViewInit, OnDestr
   ngAfterViewInit(): void {
     if (!this.infiniteScroll()) {
       this.list()
-        ?.requestStatus$?.pipe(filter(status => status === 'loading'))
-        .subscribe(() => {
-          this.rememberHorizontalScrollOffset();
-          this._data.set([]);
+        ?.requestStatus$?.pipe(takeUntilDestroyed(this.#destroyRef))
+        .subscribe(status => {
+          if (status === 'loading') {
+            this.rememberHorizontalScrollOffset();
+            this._data.set([]);
+            return;
+          }
+
+          // A failed request never reaches the data input, restore from here instead
+          if (status === 'error') {
+            this.restoreHorizontalScrollOffset();
+          }
         });
     }
   }
@@ -385,7 +396,8 @@ export class ExtensibleTableComponent<R = any> implements AfterViewInit, OnDestr
     return this.table()?.element?.querySelector('datatable-body') ?? null;
   }
 
-  // ngx-datatable drops its scrolling element while there are no rows, the header offset goes stale
+  // The element carrying the column width is gone while loading without rows, so the browser
+  // resets the horizontal scroll position and the header keeps the offset it had before
   private rememberHorizontalScrollOffset(): void {
     const body = this.getBodyElement();
     this.hasPendingHorizontalScrollOffset = true;
