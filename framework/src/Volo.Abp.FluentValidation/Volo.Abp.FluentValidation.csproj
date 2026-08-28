@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Validation\Volo.Abp.Validation.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Http\Volo.Abp.Http.csproj" />
   </ItemGroup>
 
 </Project>
