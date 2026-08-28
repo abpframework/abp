@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -66,13 +67,13 @@ public class PackagePreviewSwitcher : ITransientDependency
 
         if (solutionPaths.Any())
         {
-            await SwitchSolutionsToNightlyPreview(solutionPaths);
+            await SwitchSolutionsToNightlyPreview(solutionPaths, commandLineArgs);
         }
         else
         {
             var projectPaths = GetProjectPaths(commandLineArgs);
-            
-            await SwitchProjectsToNightlyPreview(projectPaths);
+
+            await SwitchProjectsToNightlyPreview(projectPaths, commandLineArgs);
         }
     }
 
@@ -185,13 +186,16 @@ public class PackagePreviewSwitcher : ITransientDependency
         }
     }
 
-    private async Task SwitchProjectsToNightlyPreview(List<string> projects)
+    private async Task SwitchProjectsToNightlyPreview(List<string> projects, CommandLineArgs commandLineArgs)
     {
+        var (includeFiles, excludedPackages, latestVersionFromMyGet) = await ResolveNightlyIncludeContextAsync(commandLineArgs);
+
         foreach (var project in projects)
         {
             var folder = Path.GetDirectoryName(project);
+            var projectFolder = FindSolutionFolder(project) ?? folder;
 
-            _packageSourceManager.Add(FindSolutionFolder(project) ?? folder, "ABP Nightly",
+            _packageSourceManager.Add(projectFolder, "ABP Nightly",
                 "https://www.myget.org/F/abp-nightly/api/v3/index.json", "Volo.*");
 
             await _nugetPackagesVersionUpdater.UpdateSolutionAsync(
@@ -201,11 +205,17 @@ public class PackagePreviewSwitcher : ITransientDependency
             await _npmPackagesUpdater.Update(
                 folder,
                 true);
+
+            // See SwitchSolutionsToNightlyPreview for the race-avoidance rationale: this
+            // sequential pass always runs after the per-project UpdateSolutionAsync above.
+            await UpdateIncludedCentralPackageFilesAsync(includeFiles, excludedPackages, latestVersionFromMyGet, projectFolder);
         }
     }
 
-    private async Task SwitchSolutionsToNightlyPreview(List<string> solutionPaths)
+    private async Task SwitchSolutionsToNightlyPreview(List<string> solutionPaths, CommandLineArgs commandLineArgs)
     {
+        var (includeFiles, excludedPackages, latestVersionFromMyGet) = await ResolveNightlyIncludeContextAsync(commandLineArgs);
+
         foreach (var solutionPath in solutionPaths)
         {
             var solutionFolder = Path.GetDirectoryName(solutionPath);
@@ -232,6 +242,59 @@ public class PackagePreviewSwitcher : ITransientDependency
                     solutionAngularFolder,
                     true);
             }
+
+            // Optional Central Package Management support: only runs when --include is
+            // explicitly passed, and only after UpdateSolutionAsync's internal parallel
+            // (Task.WaitAll) per-project update has fully completed, so no --include file
+            // is ever touched concurrently with anything else.
+            await UpdateIncludedCentralPackageFilesAsync(includeFiles, excludedPackages, latestVersionFromMyGet, solutionFolder);
+        }
+    }
+
+    private async Task<(List<string> IncludeFiles, List<string> ExcludedPackages, string LatestVersionFromMyGet)> ResolveNightlyIncludeContextAsync(
+        CommandLineArgs commandLineArgs)
+    {
+        var includeFiles = GetCommaSeparatedOption(commandLineArgs, Options.Include.Short, Options.Include.Long);
+        var excludedPackages = GetCommaSeparatedOption(commandLineArgs, Options.Exclude.Short, Options.Exclude.Long);
+
+        if (!includeFiles.Any())
+        {
+            return (includeFiles, excludedPackages, null);
+        }
+
+        string latestVersionFromMyGet;
+        try
+        {
+            latestVersionFromMyGet = await _nugetPackagesVersionUpdater.GetLatestVersionFromMyGet("Volo.Abp.Core");
+        }
+        catch (Exception ex)
+        {
+            // Don't let a transient MyGet failure abort the whole switch-to-nightly run
+            // (source registration / regular PackageReference updates below must still
+            // proceed for every solution/project) - just skip the --include pass.
+            Logger.LogWarning(ex, "Could not resolve the latest Volo.Abp.Core nightly version; --include files will be skipped for this run.");
+            latestVersionFromMyGet = null;
+        }
+
+        return (includeFiles, excludedPackages, latestVersionFromMyGet);
+    }
+
+    private async Task UpdateIncludedCentralPackageFilesAsync(
+        List<string> includeFiles,
+        List<string> excludedPackages,
+        string latestVersionFromMyGet,
+        string baseFolder)
+    {
+        foreach (var includeFile in includeFiles)
+        {
+            var resolvedPath = Path.IsPathRooted(includeFile)
+                ? includeFile
+                : Path.Combine(baseFolder, includeFile);
+
+            await _nugetPackagesVersionUpdater.UpdateCentralPackageVersionsAsync(
+                resolvedPath,
+                latestVersionFromMyGet,
+                excludedPackages);
         }
     }
     
@@ -283,6 +346,14 @@ public class PackagePreviewSwitcher : ITransientDependency
         return commandLineArgs.Options.GetOrNull(Options.SolutionDirectory.Short, Options.SolutionDirectory.Long)
                ?? commandLineArgs.Options.GetOrNull(Options.Directory.Short, Options.Directory.Long)
                ?? Directory.GetCurrentDirectory();
+    }
+
+    private List<string> GetCommaSeparatedOption(CommandLineArgs commandLineArgs, string shortName, string longName)
+    {
+        var raw = commandLineArgs.Options.GetOrNull(shortName, longName);
+        return raw.IsNullOrWhiteSpace()
+            ? new List<string>()
+            : raw.Split(',').Select(s => s.Trim()).Where(s => !s.IsNullOrWhiteSpace()).ToList();
     }
 
     private string GetSolutionAngularFolder(string solutionFolder)
@@ -339,6 +410,16 @@ public class PackagePreviewSwitcher : ITransientDependency
         {
             public const string Short = "d";
             public const string Long = "directory";
+        }
+        public static class Include
+        {
+            public const string Short = "i";
+            public const string Long = "include";
+        }
+        public static class Exclude
+        {
+            public const string Short = "ep";
+            public const string Long = "exclude-packages";
         }
     }
 }

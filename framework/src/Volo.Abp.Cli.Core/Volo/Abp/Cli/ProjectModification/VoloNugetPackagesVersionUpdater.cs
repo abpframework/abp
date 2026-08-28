@@ -217,8 +217,8 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
                     }
                     var currentVersion = versionAttribute.Value;
                     
-                    var isLeptonXPackage = packageId.Contains("LeptonX");
-                    var isStudioPackage = packageId.StartsWith("Volo.Abp.Studio.");
+                    var isLeptonXPackage = IsLeptonXPackage(packageId);
+                    var isStudioPackage = IsStudioPackage(packageId);
                     if(isLeptonXPackage)
                     {
                         //'SemanticVersion.TryParse' can not parse the version if the version contains floating version resolution, such as '*-*'
@@ -366,10 +366,107 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
         return await Task.FromResult(content);
     }
 
-    private async Task<string> GetLatestVersionFromMyGet(string packageId)
+    private static bool IsLeptonXPackage(string packageId) => packageId.Contains("LeptonX");
+
+    private static bool IsStudioPackage(string packageId) => packageId.StartsWith("Volo.Abp.Studio.");
+
+    internal async Task<string> GetLatestVersionFromMyGet(string packageId)
     {
         var myGetPack = await _myGetPackageListFinder.GetPackagesAsync();
 
         return myGetPack.Packages.FirstOrDefault(p => p.Id == packageId)?.Versions.LastOrDefault();
+    }
+
+    /// <summary>
+    /// Updates &lt;PackageVersion Include="Volo.*"&gt; entries in a Central Package Management
+    /// props file (e.g. Directory.Packages.props) to <paramref name="latestVersionFromMyGet"/>.
+    /// Regular PackageReference-based updates (UpdateSolutionAsync/UpdateProjectAsync) already
+    /// skip any PackageReference with no Version attribute (i.e. CPM-managed packages) - this
+    /// method is the explicit, opt-in counterpart for callers that also want those central
+    /// versions kept in sync. Not invoked unless a caller (e.g. the switch-to-nightly --include
+    /// option) explicitly requests it.
+    /// </summary>
+    public async Task UpdateCentralPackageVersionsAsync(
+        string filePath,
+        string latestVersionFromMyGet,
+        IEnumerable<string> excludedPackageIds = null)
+    {
+        if (!File.Exists(filePath))
+        {
+            Logger.LogWarning("--include file not found, skipped: {FilePath}", filePath);
+            return;
+        }
+
+        if (latestVersionFromMyGet == null)
+        {
+            return;
+        }
+
+        var excluded = new HashSet<string>(excludedPackageIds ?? Enumerable.Empty<string>(), StringComparer.OrdinalIgnoreCase);
+
+        try
+        {
+            using (var fs = File.Open(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+            {
+                using (var sr = new StreamReader(fs, Encoding.Default, true))
+                {
+                    var fileContent = await sr.ReadToEndAsync();
+
+                    var doc = new XmlDocument { PreserveWhitespace = true };
+                    doc.LoadXml(fileContent);
+
+                    var packageNodeList = doc.SelectNodes("//PackageVersion[starts-with(@Include, 'Volo.')]");
+                    if (packageNodeList != null)
+                    {
+                        foreach (XmlNode package in packageNodeList)
+                        {
+                            var packageId = package.Attributes?["Include"]?.Value;
+                            if (packageId == null || excluded.Contains(packageId))
+                            {
+                                continue;
+                            }
+
+                            // LeptonX and Studio packages follow their own, independent version
+                            // stream (see IsLeptonXPackage/IsStudioPackage, also used by
+                            // UpdateVoloPackagesAsync above) - never stamp them with the
+                            // Volo.Abp.Core anchor version, regardless of --exclude-packages.
+                            if (IsLeptonXPackage(packageId) || IsStudioPackage(packageId))
+                            {
+                                continue;
+                            }
+
+                            var versionAttribute = package.Attributes["Version"];
+                            if (versionAttribute == null)
+                            {
+                                continue;
+                            }
+
+                            if (versionAttribute.Value != latestVersionFromMyGet)
+                            {
+                                Logger.LogInformation("Updating central package \"{PackageId}\" from v{CurrentVersion} to v{LatestVersion}", packageId, versionAttribute.Value, latestVersionFromMyGet);
+                                versionAttribute.Value = latestVersionFromMyGet;
+                            }
+                        }
+                    }
+
+                    fs.Seek(0, SeekOrigin.Begin);
+                    fs.SetLength(0);
+
+                    using (var sw = new StreamWriter(fs, DefaultEncoding))
+                    {
+                        await sw.WriteAsync(doc.OuterXml);
+                        await sw.FlushAsync();
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // The file is truncated before the updated XML is written back, so a failure here
+            // (disk full, process killed, file locked mid-write) can leave it empty/partially
+            // written on disk. Logged as an error (not a warning) so this isn't missed - the
+            // rest of the switch-to-nightly run still continues for other solutions/files.
+            Logger.LogError(ex, "Failed to update central package versions in \"{FilePath}\". The file may now be empty or partially written - please check it manually.", filePath);
+        }
     }
 }
