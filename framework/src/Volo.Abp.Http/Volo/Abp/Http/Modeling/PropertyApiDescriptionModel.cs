@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Volo.Abp.Http.ProxyScripting.Configuration;
@@ -28,6 +29,10 @@ public class PropertyApiDescriptionModel
 
     public string? Maximum { get; set; }
 
+    public bool? MinimumIsExclusive { get; set; }
+
+    public bool? MaximumIsExclusive { get; set; }
+
     public string? Regex { get; set; }
 
     public bool IsNullable { get; set; }
@@ -41,6 +46,7 @@ public class PropertyApiDescriptionModel
     public static PropertyApiDescriptionModel Create(PropertyInfo propertyInfo)
     {
         var customAttributes = propertyInfo.GetCustomAttributes(true);
+        var rangeAttribute = customAttributes.OfType<RangeAttribute>().FirstOrDefault();
         return new PropertyApiDescriptionModel
         {
             Name = propertyInfo.Name,
@@ -49,11 +55,41 @@ public class PropertyApiDescriptionModel
             TypeSimple = ApiTypeNameHelper.GetSimpleTypeName(propertyInfo.PropertyType),
             IsRequired = customAttributes.OfType<RequiredAttribute>().Any() || propertyInfo.GetCustomAttributesData().Any(attr => attr.AttributeType.Name == "RequiredMemberAttribute"),
             IsNullable = ReflectionHelper.IsNullable(propertyInfo),
-            Minimum = customAttributes.OfType<RangeAttribute>().Select(x => x.Minimum).FirstOrDefault()?.ToString(),
-            Maximum = customAttributes.OfType<RangeAttribute>().Select(x => x.Maximum).FirstOrDefault()?.ToString(),
+            Minimum = rangeAttribute != null ? Convert.ToString(rangeAttribute.Minimum, CultureInfo.InvariantCulture) : null,
+            Maximum = rangeAttribute != null ? Convert.ToString(rangeAttribute.Maximum, CultureInfo.InvariantCulture) : null,
+            MinimumIsExclusive = GetMinimumIsExclusive(rangeAttribute),
+            MaximumIsExclusive = GetMaximumIsExclusive(rangeAttribute),
             MinLength = customAttributes.OfType<MinLengthAttribute>().FirstOrDefault()?.Length ?? customAttributes.OfType<StringLengthAttribute>().FirstOrDefault()?.MinimumLength,
             MaxLength = customAttributes.OfType<MaxLengthAttribute>().FirstOrDefault()?.Length ?? customAttributes.OfType<StringLengthAttribute>().FirstOrDefault()?.MaximumLength,
             Regex= customAttributes.OfType<RegularExpressionAttribute>().Select(x => x.Pattern).FirstOrDefault()
         };
+    }
+
+    private static bool? GetMinimumIsExclusive(RangeAttribute? rangeAttribute)
+    {
+        if (rangeAttribute == null)
+        {
+            return null;
+        }
+
+#if NET8_0_OR_GREATER
+        return rangeAttribute.MinimumIsExclusive;
+#else
+        return false;
+#endif
+    }
+
+    private static bool? GetMaximumIsExclusive(RangeAttribute? rangeAttribute)
+    {
+        if (rangeAttribute == null)
+        {
+            return null;
+        }
+
+#if NET8_0_OR_GREATER
+        return rangeAttribute.MaximumIsExclusive;
+#else
+        return false;
+#endif
     }
 }
