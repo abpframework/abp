@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -35,19 +34,22 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
     private readonly AbpAspNetCoreMvcOptions _abpAspNetCoreMvcOptions;
     private readonly AbpApiDescriptionModelOptions _modelOptions;
     private readonly IXmlDocumentationProvider _xmlDocProvider;
-    public IAbpLazyServiceProvider LazyServiceProvider { get; set; } = default!;
+    private readonly IPropertyApiDescriptionModelContributor[] _propertyContributors;
+
     public AspNetCoreApiDescriptionModelProvider(
         IOptions<AspNetCoreApiDescriptionModelProviderOptions> options,
         IApiDescriptionGroupCollectionProvider descriptionProvider,
         IOptions<AbpAspNetCoreMvcOptions> abpAspNetCoreMvcOptions,
         IOptions<AbpApiDescriptionModelOptions> modelOptions,
-        IXmlDocumentationProvider xmlDocProvider)
+        IXmlDocumentationProvider xmlDocProvider,
+        IEnumerable<IPropertyApiDescriptionModelContributor> propertyContributors)
     {
         _options = options.Value;
         _descriptionProvider = descriptionProvider;
         _abpAspNetCoreMvcOptions = abpAspNetCoreMvcOptions.Value;
         _modelOptions = modelOptions.Value;
         _xmlDocProvider = xmlDocProvider;
+        _propertyContributors = propertyContributors.ToArray();
 
         Logger = NullLogger<AspNetCoreApiDescriptionModelProvider>.Instance;
     }
@@ -315,24 +317,37 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
             return;
         }
 
-        var contributors =
-            LazyServiceProvider
-            .GetServices<IPropertyApiDescriptionModelContributor>()
-            .ToHashSet();
-        var typeModel = TypeApiDescriptionModel.Create(type, contributors);
-        applicationModel.Types[typeName] = typeModel;
-
+        applicationModel.Types[typeName] = TypeApiDescriptionModel.Create(type);
 
         if (includeDescriptions)
         {
             await PopulateTypeDescriptionsAsync(applicationModel.Types[typeName], type);
         }
 
+        await ContributeToPropertiesAsync(applicationModel.Types[typeName], type);
+
         await AddCustomTypesToModelAsync(applicationModel, type.BaseType, includeDescriptions);
 
         foreach (var propertyInfo in type.GetProperties().Where(p => p.DeclaringType == type))
         {
             await AddCustomTypesToModelAsync(applicationModel, propertyInfo.PropertyType, includeDescriptions);
+        }
+    }
+
+    protected virtual async Task ContributeToPropertiesAsync(TypeApiDescriptionModel typeModel, Type type)
+    {
+        if (_propertyContributors.IsNullOrEmpty() || typeModel.Properties.IsNullOrEmpty())
+        {
+            return;
+        }
+
+        foreach (var propertyModel in typeModel.Properties!)
+        {
+            var context = new PropertyApiDescriptionModelContributionContext(propertyModel, type);
+            foreach (var contributor in _propertyContributors)
+            {
+                await contributor.ContributeAsync(context);
+            }
         }
     }
 

@@ -1,8 +1,8 @@
-﻿using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Volo.Abp.Http.Modeling;
 
 public interface IPropertyApiDescriptionModelContributor
 {
-    void Contribute(PropertyApiDescriptionModel model, PropertyInfo propertyInfo);
+    Task ContributeAsync(PropertyApiDescriptionModelContributionContext context);
 }

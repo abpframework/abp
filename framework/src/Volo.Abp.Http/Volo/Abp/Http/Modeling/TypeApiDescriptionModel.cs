@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Volo.Abp.Reflection;
@@ -34,7 +33,7 @@ public class TypeApiDescriptionModel
 
     }
 
-    public static TypeApiDescriptionModel Create(Type type, IEnumerable<IPropertyApiDescriptionModelContributor>? contributors = default)
+    public static TypeApiDescriptionModel Create(Type type)
     {
         var baseType = type.BaseType;
         if (baseType == typeof(object))
@@ -58,18 +57,7 @@ public class TypeApiDescriptionModel
             typeModel.Properties = type
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .Where(p => p.DeclaringType == type)
-                .Select(p =>
-                {
-                    var model = PropertyApiDescriptionModel.Create(p);
-                    if (contributors != null && contributors.Any())
-                    {
-                        foreach (var contributor in contributors)
-                        {
-                            contributor.Contribute(model, p);
-                        }
-                    }
-                    return model;
-                })
+                .Select(PropertyApiDescriptionModel.Create)
                 .ToArray();
 
             if (type.IsGenericTypeDefinition)
