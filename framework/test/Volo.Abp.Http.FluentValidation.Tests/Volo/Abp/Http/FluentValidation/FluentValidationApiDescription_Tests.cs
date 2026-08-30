@@ -246,6 +246,10 @@ public class FluentValidationApiDescription_Tests : AbpHttpFluentValidationTestB
 
             property.Minimum.ShouldBe("2");
             property.Maximum.ShouldBe("9.5");
+
+            var typed = await GetPropertyAsync<CultureTestDto>(nameof(CultureTestDto.TypedDecimalRangeValue));
+            typed.Minimum.ShouldBe("2");
+            typed.Maximum.ShouldBe("9.5");
         }
     }
 

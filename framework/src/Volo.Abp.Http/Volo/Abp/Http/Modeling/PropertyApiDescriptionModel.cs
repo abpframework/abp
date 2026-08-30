@@ -55,14 +55,42 @@ public class PropertyApiDescriptionModel
             TypeSimple = ApiTypeNameHelper.GetSimpleTypeName(propertyInfo.PropertyType),
             IsRequired = customAttributes.OfType<RequiredAttribute>().Any() || propertyInfo.GetCustomAttributesData().Any(attr => attr.AttributeType.Name == "RequiredMemberAttribute"),
             IsNullable = ReflectionHelper.IsNullable(propertyInfo),
-            Minimum = rangeAttribute != null ? Convert.ToString(rangeAttribute.Minimum, CultureInfo.InvariantCulture) : null,
-            Maximum = rangeAttribute != null ? Convert.ToString(rangeAttribute.Maximum, CultureInfo.InvariantCulture) : null,
+            Minimum = GetRangeBound(rangeAttribute, rangeAttribute?.Minimum),
+            Maximum = GetRangeBound(rangeAttribute, rangeAttribute?.Maximum),
             MinimumIsExclusive = GetMinimumIsExclusive(rangeAttribute),
             MaximumIsExclusive = GetMaximumIsExclusive(rangeAttribute),
             MinLength = customAttributes.OfType<MinLengthAttribute>().FirstOrDefault()?.Length ?? customAttributes.OfType<StringLengthAttribute>().FirstOrDefault()?.MinimumLength,
             MaxLength = customAttributes.OfType<MaxLengthAttribute>().FirstOrDefault()?.Length ?? customAttributes.OfType<StringLengthAttribute>().FirstOrDefault()?.MaximumLength,
             Regex= customAttributes.OfType<RegularExpressionAttribute>().Select(x => x.Pattern).FirstOrDefault()
         };
+    }
+
+    private static string? GetRangeBound(RangeAttribute? rangeAttribute, object? bound)
+    {
+        if (rangeAttribute == null || bound == null)
+        {
+            return null;
+        }
+
+        // The Range(Type, string, string) constructor keeps its limits as strings until the
+        // first validation, so a numeric one is written in the culture of the declaring code.
+        if (bound is string text)
+        {
+            return decimal.TryParse(text, NumberStyles.Float, GetRangeLimitCulture(rangeAttribute), out var number)
+                ? number.ToString(CultureInfo.InvariantCulture)
+                : text;
+        }
+
+        return Convert.ToString(bound, CultureInfo.InvariantCulture);
+    }
+
+    private static CultureInfo GetRangeLimitCulture(RangeAttribute rangeAttribute)
+    {
+#if NET8_0_OR_GREATER
+        return rangeAttribute.ParseLimitsInInvariantCulture ? CultureInfo.InvariantCulture : CultureInfo.CurrentCulture;
+#else
+        return CultureInfo.CurrentCulture;
+#endif
     }
 
     private static bool? GetMinimumIsExclusive(RangeAttribute? rangeAttribute)
