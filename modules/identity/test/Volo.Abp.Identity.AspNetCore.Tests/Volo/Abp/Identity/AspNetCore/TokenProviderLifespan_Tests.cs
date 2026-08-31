@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Shouldly;
@@ -35,9 +36,13 @@ public class TokenProviderLifespan_Tests
     [Fact]
     public void The_Shared_Default_Should_Match_The_AspNetCore_One()
     {
-        // A provider that does not set its own lifespan has to land on the ASP.NET Core defaults.
-        new UnconfiguredTokenProviderOptions().Name.ShouldBe("DataProtectorTokenProvider");
-        new UnconfiguredTokenProviderOptions().TokenLifespan.ShouldBe(TimeSpan.FromDays(1));
+        // Compared against the live ASP.NET Core defaults, so that a change on their side shows up here
+        // instead of silently moving every provider that does not set its own lifespan.
+        var aspNetCore = new DataProtectionTokenProviderOptions();
+        var abp = new UnconfiguredTokenProviderOptions();
+
+        abp.Name.ShouldBe(aspNetCore.Name);
+        abp.TokenLifespan.ShouldBe(aspNetCore.TokenLifespan);
     }
 
     private static TimeSpan LifespanOf<TOptions>(IAbpApplication application)

@@ -110,7 +110,7 @@ await UserManager.RemoveLinkUserTokenAsync(user);
 await UserManager.RemoveLinkUserTokenAsync(user, customPurpose);
 ```
 
-Each method removes the stored hash under `"[AbpSingleActiveToken]"` for the corresponding purpose. Validation afterwards returns `false` even if the token blob itself is still within its DataProtector lifespan and the `SecurityStamp` is unchanged. They throw an `AbpException` when they cannot see an `AbpSingleActiveTokenProvider` on the key: with the ABP providers turned off there is no stored hash to remove, and a token that was never single-active cannot be revoked this way. A key that also carries a provider registered for a second user type reads as the same case, because the one `IdentityUserManager` picks out of it is not visible to these helpers.
+Each method removes the stored hash under `"[AbpSingleActiveToken]"` for the corresponding purpose. Validation afterwards returns `false` even if the token blob itself is still within its DataProtector lifespan and the `SecurityStamp` is unchanged. They throw an `AbpException` when the key is not served by an `AbpSingleActiveTokenProvider`: with the ABP providers turned off there is no stored hash to remove, and a token that was never single-active cannot be revoked this way.
 
 For tokens issued by `AbpDefaultTokenProvider` (e.g. `RequiresTwoFactor`, `ShouldChangePasswordOnNextLogin`, `PeriodicallyChangePassword`), call `UserManager.RemoveAuthenticationTokenAsync` directly. The name is built from the provider's options `Name`, which is `TokenOptions.DefaultProvider` unless you changed it:
 

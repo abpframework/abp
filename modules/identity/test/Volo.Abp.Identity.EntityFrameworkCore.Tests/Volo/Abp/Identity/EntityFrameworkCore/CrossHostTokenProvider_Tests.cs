@@ -148,6 +148,44 @@ public class CrossHostTokenProvider_Tests
     }
 
     [Fact]
+    public async Task A_Password_Reset_Should_Complete_Across_Two_Hosts_That_Both_Opted_Out()
+    {
+        // The escape hatch the documentation offers: turning the ABP providers off and registering the
+        // ASP.NET Core ones has to leave a working flow, as long as both ends do it.
+        var userId = await CreateUserAsync();
+
+        using var generator = await CreateHostAsync<StockProviderGeneratorHostModule>();
+        using var validator = await CreateHostAsync<OptedOutGeneratorHostModule>();
+        try
+        {
+            var token = await WithUowAsync(generator, async sp =>
+            {
+                var userManager = sp.GetRequiredService<IdentityUserManager>();
+                var identityOptions = sp.GetRequiredService<IOptions<IdentityOptions>>().Value;
+                identityOptions.Tokens.ProviderMap[identityOptions.Tokens.PasswordResetTokenProvider].ProviderType
+                    .ShouldBe(typeof(DataProtectorTokenProvider<IdentityUser>));
+                return await userManager.GeneratePasswordResetTokenAsync(await userManager.GetByIdAsync(userId));
+            });
+
+            var result = await WithUowAsync(validator, async sp =>
+            {
+                var userManager = sp.GetRequiredService<IdentityUserManager>();
+                var identityOptions = sp.GetRequiredService<IOptions<IdentityOptions>>().Value;
+                identityOptions.Tokens.ProviderMap[identityOptions.Tokens.PasswordResetTokenProvider].ProviderType
+                    .ShouldBe(typeof(DataProtectorTokenProvider<IdentityUser>));
+                return await userManager.ResetPasswordAsync(await userManager.GetByIdAsync(userId), token, "1q2w3E*OPTOUT");
+            });
+
+            result.Succeeded.ShouldBeTrue();
+        }
+        finally
+        {
+            await validator.ShutdownAsync();
+            await generator.ShutdownAsync();
+        }
+    }
+
+    [Fact]
     public async Task Removing_A_Stored_Token_Should_Follow_A_Customized_Provider_Name()
     {
         var userId = await CreateUserAsync();
@@ -211,6 +249,39 @@ public class CrossHostTokenProvider_Tests
         finally
         {
             await stockHost.ShutdownAsync();
+        }
+    }
+
+    [Fact]
+    public async Task Removing_A_Stored_Token_Should_Ignore_A_Provider_Registered_For_Another_User_Type()
+    {
+        // IdentityUserManager skips a provider that does not serve IdentityUser, so the helpers have to
+        // skip it too. The key's public ProviderType is the last type registered under it, which is the
+        // other user type's provider here.
+        var userId = await CreateUserAsync();
+
+        using var secondUserTypeHost = await CreateHostAsync<SecondUserTypeHostModule>();
+        try
+        {
+            await WithUowAsync(secondUserTypeHost, async sp =>
+            {
+                var identityOptions = sp.GetRequiredService<IOptions<IdentityOptions>>().Value;
+                identityOptions.Tokens.ProviderMap[AbpPasswordResetTokenProvider.ProviderName].ProviderType
+                    .ShouldBe(typeof(OtherUserTokenProvider));
+
+                var userManager = sp.GetRequiredService<IdentityUserManager>();
+                var user = await userManager.GetByIdAsync(userId);
+
+                await userManager.GeneratePasswordResetTokenAsync(user);
+                (await userManager.RemovePasswordResetTokenAsync(await userManager.GetByIdAsync(userId)))
+                    .Succeeded.ShouldBeTrue();
+
+                return true;
+            });
+        }
+        finally
+        {
+            await secondUserTypeHost.ShutdownAsync();
         }
     }
 
@@ -370,6 +441,34 @@ public class StockProviderGeneratorHostModule : EfCoreCrossHostTestModuleBase
         PreConfigure<AbpIdentityTokenProviderOptions>(options => options.UseAbpTokenProviders = false);
         PreConfigure<IdentityBuilder>(builder => builder.AddDefaultTokenProviders());
     }
+}
+
+/// A host where a second Identity user type registered a provider under an ABP key. The descriptor
+/// hands that one out, while the manager keeps using the ABP provider.
+[DependsOn(typeof(AbpAutofacModule), typeof(AbpIdentityEntityFrameworkCoreModule), typeof(AbpEntityFrameworkCoreSqliteModule))]
+public class SecondUserTypeHostModule : EfCoreCrossHostTestModuleBase
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        base.ConfigureServices(context);
+
+        // After the framework registration, so this one ends up on top of the key's provider stack.
+        new IdentityBuilder(typeof(OtherUser), context.Services)
+            .AddTokenProvider<OtherUserTokenProvider>(AbpPasswordResetTokenProvider.ProviderName);
+    }
+}
+
+public class OtherUser
+{
+}
+
+public class OtherUserTokenProvider : IUserTwoFactorTokenProvider<OtherUser>
+{
+    public Task<bool> CanGenerateTwoFactorTokenAsync(UserManager<OtherUser> manager, OtherUser user) => Task.FromResult(false);
+
+    public Task<string> GenerateAsync(string purpose, UserManager<OtherUser> manager, OtherUser user) => Task.FromResult(string.Empty);
+
+    public Task<bool> ValidateAsync(string purpose, string token, UserManager<OtherUser> manager, OtherUser user) => Task.FromResult(false);
 }
 
 /// A host that renamed the password-reset provider. The stored hash then lives under that name and

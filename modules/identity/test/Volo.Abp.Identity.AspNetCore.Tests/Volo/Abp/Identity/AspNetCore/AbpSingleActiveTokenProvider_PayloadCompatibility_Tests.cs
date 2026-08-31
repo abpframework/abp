@@ -17,7 +17,7 @@ namespace Volo.Abp.Identity.AspNetCore;
 /// <see cref="DataProtectorTokenProvider{TUser}"/>, which it re-implements rather than derives from:
 /// a token produced by one has to be accepted by the other under the same provider name.
 /// </summary>
-public class AbpSingleActiveTokenProvider_Compatibility_Tests : AbpIdentityAspNetCoreTestBase
+public class AbpSingleActiveTokenProvider_PayloadCompatibility_Tests : AbpIdentityAspNetCoreTestBase
 {
     private const string Purpose = "ResetPassword";
 
@@ -26,7 +26,7 @@ public class AbpSingleActiveTokenProvider_Compatibility_Tests : AbpIdentityAspNe
     private readonly IdentityTestData _testData;
     private readonly IUnitOfWorkManager _unitOfWorkManager;
 
-    public AbpSingleActiveTokenProvider_Compatibility_Tests()
+    public AbpSingleActiveTokenProvider_PayloadCompatibility_Tests()
     {
         _userRepository = GetRequiredService<IIdentityUserRepository>();
         _userManager = GetRequiredService<IdentityUserManager>();

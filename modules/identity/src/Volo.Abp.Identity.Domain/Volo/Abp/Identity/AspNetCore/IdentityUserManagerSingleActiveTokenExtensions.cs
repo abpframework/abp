@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
@@ -89,20 +88,14 @@ public static class IdentityUserManagerSingleActiveTokenExtensions
     /// </summary>
     private static string GetStoredTokenName(IdentityUserManager manager, string providerKey, string purpose)
     {
-        var descriptor = manager.Options.Tokens.ProviderMap.GetOrDefault(providerKey);
-        var provider = descriptor?.ProviderInstance ?? (descriptor != null
-            ? manager.ServiceProvider.GetService(descriptor.ProviderType)
-            : null);
-
-        if (provider is not AbpSingleActiveTokenProvider singleActiveTokenProvider)
+        if (manager.FindTokenProvider(providerKey) is not AbpSingleActiveTokenProvider singleActiveTokenProvider)
         {
             throw new AbpException(
                 $"The '{providerKey}' token provider is not an {nameof(AbpSingleActiveTokenProvider)}, so it does not " +
                 $"store a token hash that can be removed. This happens when the key has no provider at all, when " +
                 $"the ABP token providers are turned off " +
                 $"through {nameof(AbpIdentityTokenProviderOptions)}.{nameof(AbpIdentityTokenProviderOptions.UseAbpTokenProviders)} " +
-                $"or when the key was re-registered with another provider, including one registered for a " +
-                $"second user type.");
+                $"or when the key was re-registered with another provider.");
         }
 
         return singleActiveTokenProvider.Name + ":" + purpose;
