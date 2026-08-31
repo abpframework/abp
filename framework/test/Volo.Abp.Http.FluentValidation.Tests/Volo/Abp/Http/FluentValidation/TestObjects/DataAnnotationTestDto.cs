@@ -23,6 +23,9 @@ public class DataAnnotationTestDto
 
     [Range(1, 100, MinimumIsExclusive = true, MaximumIsExclusive = true)]
     public int ExclusiveAttributeValue { get; set; }
+
+    [Range(typeof(ulong), "9007199254740993", "18446744073709551615", ParseLimitsInInvariantCulture = true)]
+    public ulong HighPrecisionValue { get; set; }
 }
 
 public class DataAnnotationTestDtoValidator : AbstractValidator<DataAnnotationTestDto>
@@ -34,5 +37,6 @@ public class DataAnnotationTestDtoValidator : AbstractValidator<DataAnnotationTe
         RuleFor(x => x.MergedRangeValue).GreaterThanOrEqualTo(10).LessThanOrEqualTo(90);
         RuleFor(x => x.LooserFluentBoundValue).GreaterThan(-5).LessThan(500);
         RuleFor(x => x.SameBoundValue).GreaterThan(10).LessThan(90);
+        RuleFor(x => x.HighPrecisionValue).GreaterThanOrEqualTo(9_007_199_254_740_992UL);
     }
 }

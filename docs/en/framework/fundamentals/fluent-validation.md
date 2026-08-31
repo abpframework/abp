@@ -93,7 +93,7 @@ The following rules are mapped:
 | FluentValidation rule | API definition |
 |---|---|
 | `NotNull()`, `NotEmpty()` | `IsRequired` |
-| `Length(min, max)`, `MinimumLength(min)`, `MaximumLength(max)` | `MinLength`, `MaxLength` |
+| `Length(min, max)`, `MinimumLength(min)`, `MaximumLength(max)` | `MinLength`, `MaxLength` (a zero bound is left out, see below) |
 | `Matches(...)` | `Regex` |
 | `GreaterThanOrEqualTo(...)`, `GreaterThan(...)` | `Minimum` (+ `MinimumIsExclusive`) |
 | `LessThanOrEqualTo(...)`, `LessThan(...)` | `Maximum` (+ `MaximumIsExclusive`) |
@@ -110,7 +110,7 @@ The following rules are not mapped, because they don't apply to every instance o
 * Rules under `When(...)` / `Unless(...)` (both the chained and the block form) and their async variants, because the same property can be required for one instance and optional for another.
 * Rules that only belong to a non-default rule set, because ABP validates with FluentValidation's default selector, which does not run them.
 * `RuleForEach(...)` rules, because they constrain the items of a collection rather than the collection property.
-* Comparisons against another property, and any bound that is not a number.
+* Comparisons on a property that is not a number, and comparisons against another property. `Minimum` and `Maximum` are numeric bounds, so the ordinal comparison of two strings can not be published there.
 
 ### Rules That Are Not Fully Expressed
 

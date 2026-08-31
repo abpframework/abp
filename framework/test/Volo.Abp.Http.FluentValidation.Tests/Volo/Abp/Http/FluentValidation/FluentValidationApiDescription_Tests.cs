@@ -76,16 +76,25 @@ public class FluentValidationApiDescription_Tests : AbpHttpFluentValidationTestB
     {
         var property = await GetPropertyAsync<ConstraintTestDto>(nameof(ConstraintTestDto.SmallExponentValue));
 
-        property.Minimum.ShouldBe("0.00000000000000000001");
+        property.Minimum.ShouldBe("1E-20");
     }
 
     [Fact]
-    public async Task Should_Not_Map_A_Bound_Below_The_Decimal_Range()
+    public async Task Should_Map_A_Bound_Below_The_Decimal_Range()
     {
-        // It would parse to a zero, which the server does not accept.
         var property = await GetPropertyAsync<ConstraintTestDto>(nameof(ConstraintTestDto.UnderflowExponentValue));
 
+        property.Minimum.ShouldBe("1E-30");
+    }
+
+    [Fact]
+    public async Task Should_Not_Map_A_Comparison_On_A_Property_That_Is_Not_A_Number()
+    {
+        // The server compares two strings ordinally, so a numeric bound would say something else.
+        var property = await GetPropertyAsync<ConstraintTestDto>(nameof(ConstraintTestDto.StringComparisonValue));
+
         property.Minimum.ShouldBeNull();
+        property.MinimumIsExclusive.ShouldBeNull();
     }
 
     [Fact]
@@ -217,6 +226,17 @@ public class FluentValidationApiDescription_Tests : AbpHttpFluentValidationTestB
     }
 
     [Fact]
+    public async Task Should_Compare_Bounds_Beyond_The_Double_Precision_Exactly()
+    {
+        // Both bounds collapse to the same double, so only an exact comparison keeps the
+        // stricter attribute bound instead of replacing it with the looser rule.
+        var property = await GetPropertyAsync<DataAnnotationTestDto>(nameof(DataAnnotationTestDto.HighPrecisionValue));
+
+        property.Minimum.ShouldBe("9007199254740993");
+        property.Maximum.ShouldBe("18446744073709551615");
+    }
+
+    [Fact]
     public async Task Should_Keep_The_Attribute_Regular_Expression()
     {
         var property = await GetPropertyAsync<DataAnnotationTestDto>(nameof(DataAnnotationTestDto.AttributeRegexValue));
@@ -259,6 +279,11 @@ public class FluentValidationApiDescription_Tests : AbpHttpFluentValidationTestB
             var typed = await GetPropertyAsync<CultureTestDto>(nameof(CultureTestDto.TypedDecimalRangeValue));
             typed.Minimum.ShouldBe("2");
             typed.Maximum.ShouldBe("9.5");
+
+            // A bound outside the decimal range still loses to the stricter rule.
+            var exponent = await GetPropertyAsync<CultureTestDto>(nameof(CultureTestDto.ExponentRangeValue));
+            exponent.Minimum.ShouldBe("2");
+            exponent.Maximum.ShouldBe("1E+30");
         }
     }
 

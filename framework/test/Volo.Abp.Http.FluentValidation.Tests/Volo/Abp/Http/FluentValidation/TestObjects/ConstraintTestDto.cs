@@ -46,6 +46,8 @@ public class ConstraintTestDto
 
     public double UnderflowExponentValue { get; set; }
 
+    public string? StringComparisonValue { get; set; }
+
     public string? UnconstrainedValue { get; set; }
 }
 
@@ -73,5 +75,6 @@ public class ConstraintTestDtoValidator : AbstractValidator<ConstraintTestDto>
         RuleFor(x => x.DynamicLengthValue).Length(_ => 2, _ => 8);
         RuleFor(x => x.SmallExponentValue).GreaterThanOrEqualTo(1e-20);
         RuleFor(x => x.UnderflowExponentValue).GreaterThanOrEqualTo(1e-30);
+        RuleFor(x => x.StringComparisonValue).GreaterThan("10");
     }
 }

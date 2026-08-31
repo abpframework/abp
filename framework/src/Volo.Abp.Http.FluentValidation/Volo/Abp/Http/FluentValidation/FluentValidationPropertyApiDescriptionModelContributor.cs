@@ -1,20 +1,38 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.Internal;
 using FluentValidation.Validators;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Http.FluentValidation;
 
 [ExposeServices(typeof(IPropertyApiDescriptionModelContributor))]
 public class FluentValidationPropertyApiDescriptionModelContributor : IPropertyApiDescriptionModelContributor, ITransientDependency
 {
+    private static readonly FrozenSet<Type> NumericTypes = new HashSet<Type>
+    {
+        typeof(byte),
+        typeof(sbyte),
+        typeof(short),
+        typeof(ushort),
+        typeof(int),
+        typeof(uint),
+        typeof(long),
+        typeof(ulong),
+        typeof(float),
+        typeof(double),
+        typeof(decimal)
+    }.ToFrozenSet();
+
     protected IServiceProvider ServiceProvider { get; }
 
     protected ConcurrentDictionary<Type, ILookup<string, IPropertyValidator>?> RuleCache { get; }
@@ -37,7 +55,7 @@ public class FluentValidationPropertyApiDescriptionModelContributor : IPropertyA
 
         foreach (var validator in rules[context.Model.Name])
         {
-            ApplyValidator(context.Model, validator);
+            ApplyValidator(context.Model, context.PropertyInfo, validator);
         }
 
         return Task.CompletedTask;
@@ -103,7 +121,7 @@ public class FluentValidationPropertyApiDescriptionModelContributor : IPropertyA
             .Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(ICollectionRule<,>));
     }
 
-    protected virtual void ApplyValidator(PropertyApiDescriptionModel model, IPropertyValidator validator)
+    protected virtual void ApplyValidator(PropertyApiDescriptionModel model, PropertyInfo propertyInfo, IPropertyValidator validator)
     {
         switch (validator)
         {
@@ -118,10 +136,10 @@ public class FluentValidationPropertyApiDescriptionModelContributor : IPropertyA
                 ApplyRegularExpression(model, regularExpressionValidator);
                 break;
             case IBetweenValidator betweenValidator:
-                ApplyBetween(model, betweenValidator);
+                ApplyBetween(model, propertyInfo, betweenValidator);
                 break;
             case IComparisonValidator comparisonValidator:
-                ApplyComparison(model, comparisonValidator);
+                ApplyComparison(model, propertyInfo, comparisonValidator);
                 break;
         }
     }
@@ -156,106 +174,132 @@ public class FluentValidationPropertyApiDescriptionModelContributor : IPropertyA
         model.Regex = validator.Expression;
     }
 
-    protected virtual void ApplyComparison(PropertyApiDescriptionModel model, IComparisonValidator validator)
+    protected virtual void ApplyComparison(PropertyApiDescriptionModel model, PropertyInfo propertyInfo, IComparisonValidator validator)
     {
         switch (validator.Comparison)
         {
             case Comparison.GreaterThan:
-                ApplyMinimum(model, validator.ValueToCompare, isExclusive: true);
+                ApplyMinimum(model, propertyInfo, validator.ValueToCompare, isExclusive: true);
                 break;
             case Comparison.GreaterThanOrEqual:
-                ApplyMinimum(model, validator.ValueToCompare, isExclusive: false);
+                ApplyMinimum(model, propertyInfo, validator.ValueToCompare, isExclusive: false);
                 break;
             case Comparison.LessThan:
-                ApplyMaximum(model, validator.ValueToCompare, isExclusive: true);
+                ApplyMaximum(model, propertyInfo, validator.ValueToCompare, isExclusive: true);
                 break;
             case Comparison.LessThanOrEqual:
-                ApplyMaximum(model, validator.ValueToCompare, isExclusive: false);
+                ApplyMaximum(model, propertyInfo, validator.ValueToCompare, isExclusive: false);
                 break;
         }
     }
 
-    protected virtual void ApplyBetween(PropertyApiDescriptionModel model, IBetweenValidator validator)
+    protected virtual void ApplyBetween(PropertyApiDescriptionModel model, PropertyInfo propertyInfo, IBetweenValidator validator)
     {
         var isExclusive = validator is not IInclusiveBetweenValidator;
 
-        ApplyMinimum(model, validator.From, isExclusive);
-        ApplyMaximum(model, validator.To, isExclusive);
+        ApplyMinimum(model, propertyInfo, validator.From, isExclusive);
+        ApplyMaximum(model, propertyInfo, validator.To, isExclusive);
     }
 
-    protected virtual void ApplyMinimum(PropertyApiDescriptionModel model, object? value, bool isExclusive)
+    protected virtual void ApplyMinimum(PropertyApiDescriptionModel model, PropertyInfo propertyInfo, object? value, bool isExclusive)
     {
-        // Minimum and Maximum are ordered bounds, so a value that is not a number, such as a
-        // DateTime, has nothing meaningful to publish there.
-        if (!TryGetNumber(value, out var minimum))
+        var bound = GetNumericBound(propertyInfo, value);
+        if (bound == null)
         {
             return;
         }
 
         if (model.Minimum != null)
         {
-            if (!TryParseNumber(model.Minimum, out var existingMinimum))
+            if (!TryCompareBounds(model.Minimum, bound, out var comparison))
             {
                 return;
             }
 
-            // The flag follows the winning bound instead of being combined, otherwise ">= 10" merged with "> 5" would become "> 10".
-            var existingIsExclusive = model.MinimumIsExclusive == true;
-            if (existingMinimum > minimum || (existingMinimum == minimum && existingIsExclusive))
+            // The higher bound wins, and an exclusive one is the stricter when both sit on the
+            // same value. The winning bound is published the way it was written, so no value is
+            // lost on the way through a number type that can not hold it.
+            if (comparison > 0 || (comparison == 0 && model.MinimumIsExclusive == true))
             {
-                minimum = existingMinimum;
-                isExclusive = existingIsExclusive;
+                return;
             }
         }
 
-        model.Minimum = minimum.ToString(CultureInfo.InvariantCulture);
+        model.Minimum = bound;
         model.MinimumIsExclusive = isExclusive;
     }
 
-    protected virtual void ApplyMaximum(PropertyApiDescriptionModel model, object? value, bool isExclusive)
+    protected virtual void ApplyMaximum(PropertyApiDescriptionModel model, PropertyInfo propertyInfo, object? value, bool isExclusive)
     {
-        if (!TryGetNumber(value, out var maximum))
+        var bound = GetNumericBound(propertyInfo, value);
+        if (bound == null)
         {
             return;
         }
 
         if (model.Maximum != null)
         {
-            if (!TryParseNumber(model.Maximum, out var existingMaximum))
+            if (!TryCompareBounds(model.Maximum, bound, out var comparison))
             {
                 return;
             }
 
-            var existingIsExclusive = model.MaximumIsExclusive == true;
-            if (existingMaximum < maximum || (existingMaximum == maximum && existingIsExclusive))
+            if (comparison < 0 || (comparison == 0 && model.MaximumIsExclusive == true))
             {
-                maximum = existingMaximum;
-                isExclusive = existingIsExclusive;
+                return;
             }
         }
 
-        model.Maximum = maximum.ToString(CultureInfo.InvariantCulture);
+        model.Maximum = bound;
         model.MaximumIsExclusive = isExclusive;
     }
 
-    protected virtual bool TryGetNumber(object? value, out decimal number)
+    protected virtual string? GetNumericBound(PropertyInfo propertyInfo, object? value)
     {
-        // A comparison against another property has no value to read.
-        var bound = value != null ? Convert.ToString(value, CultureInfo.InvariantCulture) : null;
-        return TryParseNumber(bound, out number);
+        // Minimum and Maximum are numeric bounds. A comparison on another type, the ordinal
+        // comparison of two strings for example, means something else and can not go there.
+        // A comparison against another property has no value to publish either.
+        if (value == null || !NumericTypes.Contains(TypeHelper.StripNullable(propertyInfo.PropertyType)))
+        {
+            return null;
+        }
+
+        var bound = Convert.ToString(value, CultureInfo.InvariantCulture);
+        return bound.IsNullOrWhiteSpace() || !double.TryParse(bound, NumberStyles.Float, CultureInfo.InvariantCulture, out _)
+            ? null
+            : bound;
     }
 
-    protected virtual bool TryParseNumber(string? value, out decimal number)
+    protected virtual bool TryCompareBounds(string left, string right, out int comparison)
     {
-        // Float allows the exponent notation but not the group separators, which a Range bound
-        // rendered by a decimal-comma culture would otherwise smuggle in as "1,5" meaning 15.
+        // Decimal is exact for every integral type and for decimal itself, which double is not
+        // above its 53 bits of mantissa. Double only comes in for the magnitudes decimal can
+        // not hold, where its precision is the best there is anyway.
+        if (TryParseExactly(left, out var leftValue) && TryParseExactly(right, out var rightValue))
+        {
+            comparison = leftValue.CompareTo(rightValue);
+            return true;
+        }
+
+        if (double.TryParse(left, NumberStyles.Float, CultureInfo.InvariantCulture, out var leftDouble) &&
+            double.TryParse(right, NumberStyles.Float, CultureInfo.InvariantCulture, out var rightDouble))
+        {
+            comparison = leftDouble.CompareTo(rightDouble);
+            return true;
+        }
+
+        comparison = 0;
+        return false;
+    }
+
+    protected virtual bool TryParseExactly(string value, out decimal number)
+    {
         if (!decimal.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out number))
         {
             return false;
         }
 
-        // A magnitude below the decimal range parses to zero, which would publish a bound the
-        // server does not enforce.
-        return number != decimal.Zero || !value!.Any(c => c is > '0' and <= '9');
+        // A magnitude below the decimal range collapses to a zero, which would compare wrong.
+        return number != decimal.Zero || !value.Any(c => c is > '0' and <= '9');
     }
 }

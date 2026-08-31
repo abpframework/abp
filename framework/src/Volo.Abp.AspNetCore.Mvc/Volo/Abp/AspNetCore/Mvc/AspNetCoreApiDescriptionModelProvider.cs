@@ -341,9 +341,19 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
             return;
         }
 
+        var propertyInfos = type
+            .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+            .Where(p => p.DeclaringType == type)
+            .ToDictionary(p => p.Name, p => p);
+
         foreach (var propertyModel in typeModel.Properties!)
         {
-            var context = new PropertyApiDescriptionModelContributionContext(propertyModel, type);
+            if (!propertyInfos.TryGetValue(propertyModel.Name, out var propertyInfo))
+            {
+                continue;
+            }
+
+            var context = new PropertyApiDescriptionModelContributionContext(propertyModel, propertyInfo, type);
             foreach (var contributor in _propertyContributors)
             {
                 await contributor.ContributeAsync(context);

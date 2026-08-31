@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Http.Modeling;
@@ -22,9 +23,14 @@ public abstract class AbpHttpFluentValidationTestBase<TStartupModule> : AbpInteg
         var typeModel = TypeApiDescriptionModel.Create(type);
         var contributors = ServiceProvider.GetServices<IPropertyApiDescriptionModelContributor>().ToArray();
 
+        var propertyInfos = type
+            .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+            .Where(p => p.DeclaringType == type)
+            .ToDictionary(p => p.Name, p => p);
+
         foreach (var propertyModel in typeModel.Properties!)
         {
-            var context = new PropertyApiDescriptionModelContributionContext(propertyModel, type);
+            var context = new PropertyApiDescriptionModelContributionContext(propertyModel, propertyInfos[propertyModel.Name], type);
             foreach (var contributor in contributors)
             {
                 await contributor.ContributeAsync(context);
