@@ -15,7 +15,7 @@
 | AWSSDK.SecurityToken | 4.0.2.2 | 4.0.100.10 | #26040 |
 | MongoDB.Driver | 3.10.0 | 3.11.1 | #25979, #26103 |
 
-## 10.7.0-rc.3
+**Added:**
 
 | Package | Version | PR |
 |---------|---------|-----|
