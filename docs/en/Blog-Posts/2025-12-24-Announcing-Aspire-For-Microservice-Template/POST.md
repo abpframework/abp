@@ -1,8 +1,8 @@
-# Announcing .NET Aspire Integration for ABP Microservice Template
+# Announcing Aspire Integration for ABP Microservice Template
 
-We are excited to announce the integration of **.NET Aspire** into the ABP microservice solution, available starting with **ABP Studio v2.0.0**. This integration brings a unified development experience for building, running, debugging, and deploying distributed applications. With Aspire, you can now orchestrate your entire microservice ecosystem with a single command, eliminating complex configurations and making local development effortless.
+We are excited to announce the integration of **Aspire** into the ABP microservice solution, available starting with **ABP Studio v2.0.0**. This integration brings a unified development experience for building, running, debugging, and deploying distributed applications. With Aspire, you can now orchestrate your entire microservice ecosystem with a single command, eliminating complex configurations and making local development effortless.
 
-## What is .NET Aspire?
+## What is Aspire?
 
 [Aspire](https://aspire.dev/get-started/what-is-aspire/) is a cloud-ready stack designed to streamline the development of distributed applications. It provides:
 
@@ -14,7 +14,7 @@ We are excited to announce the integration of **.NET Aspire** into the ABP micro
 
 ## How Does It Work with ABP?
 
-When you enable .NET Aspire in an ABP microservice solution, you get a fully integrated development experience where:
+When you enable Aspire in an ABP microservice solution, you get a fully integrated development experience where:
 
 - All microservices, gateways, and applications are orchestrated through a single entry point (AppHost).
 - Infrastructure containers (databases, Redis, RabbitMQ, Elasticsearch, etc.) are managed as code.
@@ -24,8 +24,8 @@ When you enable .NET Aspire in an ABP microservice solution, you get a fully int
 
 When creating a new microservice solution via ABP Studio:
 
-1. In the solution creation wizard, look for the **".NET Aspire Integration"** step.
-2. Toggle the option to **enable .NET Aspire**.
+1. In the solution creation wizard, look for the **"Aspire Integration"** step.
+2. Toggle the option to **enable Aspire**.
 3. Complete the wizard—Aspire projects will be generated along with your solution.
 
 ![Enable Aspire in ABP Studio](aspire-configuration.png)
@@ -38,7 +38,7 @@ When Aspire is enabled, two additional projects are added to your solution:
 
 ### AppHost (Orchestrator)
 
-[`AppHost`](https://aspire.dev/get-started/app-host/) is the .NET Aspire orchestrator project that declares all resources (services, databases, containers, applications) and their dependencies in C# code. It provides:
+[`AppHost`](https://aspire.dev/get-started/app-host/) is the Aspire orchestrator project that declares all resources (services, databases, containers, applications) and their dependencies in C# code. It provides:
 
 - **Centralized orchestration**: Start your entire microservice ecosystem with a single command.
 - **Code-first infrastructure**: Databases, Redis, RabbitMQ, Elasticsearch, and observability tools are defined programmatically.
@@ -162,9 +162,9 @@ The database management admin tool varies by database type:
 
 ## Get Started Today
 
-Ready to experience the power of .NET Aspire with ABP? Create a new microservice solution in ABP Studio and enable the .NET Aspire integration option. For detailed documentation, visit our [.NET Aspire Integration documentation](https://abp.io/docs/latest/solution-templates/microservice/aspire-integration).
+Ready to experience the power of Aspire with ABP? Create a new microservice solution in ABP Studio and enable the Aspire integration option. For detailed documentation, visit our [Aspire Integration documentation](https://abp.io/docs/latest/solution-templates/microservice/aspire-integration).
 
-To learn more about .NET Aspire, visit: [https://aspire.dev](https://aspire.dev/get-started/what-is-aspire/)
+To learn more about Aspire, visit: [https://aspire.dev](https://aspire.dev/get-started/what-is-aspire/)
 
 We are excited to bring this integration to you and can't wait to hear your feedback. If you have any questions or suggestions, please drop a comment below.
 

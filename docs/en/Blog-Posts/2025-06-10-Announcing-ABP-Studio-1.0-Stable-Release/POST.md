@@ -87,7 +87,7 @@ We will keep releasing new versions with exciting features based on our roadmap 
 - **OpenTelemetry Integration:** We'll be integrating OpenTelemetry support directly into the startup templates, making distributed tracing and observability a seamless part of your application from day one.
 - **LeptonX Theme Builder**: Allowing users to determine styling, colour palette and easily override their project's theme styles.
 - **Monitor dashboards of the tools used in the solution (e.g. Kubernetes, Redis, Grafana, etc...)**
-- **Pre-configured .NET Aspire for the Microservice Startup Template**
+- **Pre-configured Aspire for the Microservice Startup Template**
 - **and more...**
 
 We are incredibly excited about the future of ABP Studio and can't wait to share the next set of features with you. Your comments and suggestions are invaluable to us. If you have any feedback, please drop a comment below.

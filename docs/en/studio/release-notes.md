@@ -9,7 +9,18 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 3.1.0 (2026-08-24) Latest
+## 3.1.1 (2026-08-28) Latest
+
+* Refactor release version resolution logic to ensure proper tag handling
+* Fix chmod command syntax in set-executable-permissions scripts for Li…
+* Restore macOS signing env values used by the 3.0 pipelines
+* Show preparing-solution banner only after creation
+* Add top spacing above the browser address bar
+* Improve fullscreen flyout interaction and small-window clipping
+* Fix Admin Console command input export
+* Prefer Docker Compose v2 when starting containers
+
+## 3.1.0 (2026-08-24)
 
 * Clarify CLI tracked-process stop method: //github.com/volosoft/abp-studio/pull/4517
 * Action of studio template test is working with self hosted agent
@@ -251,7 +262,7 @@ This document contains **brief release notes** for each ABP Studio release. Rele
 * Added `AI Management` option to Startup Templates (app-nolayers, app).
 * Added support for new `SLNX` solution file format.
 * Enhanced modularity step in solution creation process.
-* Fixed Swagger authorization issues when projects run via .NET Aspire.
+* Fixed Swagger authorization issues when projects run via Aspire.
 * Fixed browser notification overlay problems.
 * Added missing `Unit of Work` namespace in solution templates.
 * Fixed JSON file formatting issues.
@@ -344,7 +355,7 @@ This document contains **brief release notes** for each ABP Studio release. Rele
 ## 1.3.0 (2025-09-22)
 
 * Upgraded template dependencies for ABP Framework and LeptonX. (targeting ABP `9.3.4`)
-* **Added .NET Aspire Integration** to ABP Studio and Microservice Startup Template.
+* **Added Aspire Integration** to ABP Studio and Microservice Startup Template.
 * **Introduced AI Support Assistant** for enhanced development experience.
 * Added new package option: **C# Console Application (With ABP)**.
 * Enhanced Solution Runner with double-click browse functionality.
