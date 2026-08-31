@@ -11,7 +11,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.Identity.AspNetCore;
+namespace Volo.Abp.Identity;
 
 /// <summary>
 /// Base class for ABP token providers that enforce a "single active token" policy: generating a token

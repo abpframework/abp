@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Identity;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.Identity.AspNetCore;
+namespace Volo.Abp.Identity;
 
 /// <summary>
 /// Replaces ASP.NET Core Identity's default <c>DataProtectorTokenProvider&lt;IdentityUser&gt;</c>

@@ -1,6 +1,6 @@
 using System;
 
-namespace Volo.Abp.Identity.AspNetCore;
+namespace Volo.Abp.Identity;
 
 /// <summary>
 /// Stands in for ASP.NET Core's <c>DataProtectionTokenProviderOptions</c>, which is only available

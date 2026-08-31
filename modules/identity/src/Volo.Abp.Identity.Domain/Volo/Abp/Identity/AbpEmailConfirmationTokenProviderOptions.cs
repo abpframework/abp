@@ -1,6 +1,6 @@
 using System;
 
-namespace Volo.Abp.Identity.AspNetCore;
+namespace Volo.Abp.Identity;
 
 public class AbpEmailConfirmationTokenProviderOptions : AbpDataProtectionTokenProviderOptions
 {

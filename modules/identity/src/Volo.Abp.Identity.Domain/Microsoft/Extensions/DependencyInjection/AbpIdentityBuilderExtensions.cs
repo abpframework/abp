@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Identity;
-using Volo.Abp.Identity.AspNetCore;
 
 namespace Microsoft.Extensions.DependencyInjection;
 

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Identity;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.Identity.AspNetCore;
+namespace Volo.Abp.Identity;
 
 /// <summary>
 /// Change email token provider that enforces only the most recently issued
