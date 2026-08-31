@@ -123,7 +123,7 @@ await UserManager.RemoveAuthenticationTokenAsync(
 
 ## Replacing a Provider
 
-If the built-in behavior does not match your requirements (different storage backend, different lifespan policy, alphanumeric codes, etc.), register your own implementation under the same key. `IdentityBuilder.AddTokenProvider` writes to `IdentityOptions.Tokens.ProviderMap` and the last registration wins:
+If the built-in behavior does not match your requirements (different storage backend, different lifespan policy, alphanumeric codes, etc.), register your own implementation under the same key. `IdentityBuilder.AddTokenProvider` writes to `IdentityOptions.Tokens.ProviderMap` and the last registration for the same user type wins:
 
 ```csharp
 PreConfigure<IdentityBuilder>(builder =>
