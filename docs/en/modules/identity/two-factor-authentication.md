@@ -168,7 +168,7 @@ Configure<AbpPhoneNumberTwoFactorTokenProviderOptions>(options =>
 
 ## Replacing the Verification Code Provider
 
-If the built-in single-use behavior does not match your requirements (e.g. you need alphanumeric codes, a different storage backend or a custom delivery policy), you can replace either provider by registering your own `IUserTwoFactorTokenProvider<IdentityUser>` under the same key. `AddTokenProvider` with an existing key replaces the previous descriptor in `TokenOptions.ProviderMap`:
+If the built-in single-use behavior does not match your requirements (e.g. you need alphanumeric codes, a different storage backend or a custom delivery policy), you can replace either provider by registering your own `IUserTwoFactorTokenProvider<IdentityUser>` under the same key. `AddTokenProvider` adds to the descriptor already registered under that key in `TokenOptions.ProviderMap`, and the last registration for the same user type wins:
 
 ```csharp
 PreConfigure<IdentityBuilder>(builder =>
