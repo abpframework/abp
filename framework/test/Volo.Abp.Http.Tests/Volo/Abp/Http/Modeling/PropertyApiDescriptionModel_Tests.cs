@@ -34,6 +34,16 @@ public class PropertyApiDescriptionModel_Tests
     }
 
     [Fact]
+    public void Create_Should_Keep_A_Typed_Range_Bound_That_Is_Already_Invariant()
+    {
+        // A decimal round trip would turn a magnitude below its range into a zero.
+        var model = CreateModel(nameof(TestClass.ExponentRangeValue));
+
+        model.Minimum.ShouldBe("1e-30");
+        model.Maximum.ShouldBe("1e30");
+    }
+
+    [Fact]
     public void Create_Should_Keep_A_Typed_Range_Bound_That_Is_Not_A_Number()
     {
         var model = CreateModel(nameof(TestClass.DateRangeValue));
@@ -85,6 +95,9 @@ public class PropertyApiDescriptionModel_Tests
 
         [Range(typeof(decimal), "1,5", "9,5")]
         public decimal TypedDecimalRangeValue { get; set; }
+
+        [Range(typeof(double), "1e-30", "1e30", ParseLimitsInInvariantCulture = true)]
+        public double ExponentRangeValue { get; set; }
 
         [Range(typeof(DateTime), "2020-01-01", "2030-01-01")]
         public DateTime DateRangeValue { get; set; }

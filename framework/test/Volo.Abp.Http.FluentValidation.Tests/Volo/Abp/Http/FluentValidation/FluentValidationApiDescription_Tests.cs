@@ -80,6 +80,15 @@ public class FluentValidationApiDescription_Tests : AbpHttpFluentValidationTestB
     }
 
     [Fact]
+    public async Task Should_Not_Map_A_Bound_Below_The_Decimal_Range()
+    {
+        // It would parse to a zero, which the server does not accept.
+        var property = await GetPropertyAsync<ConstraintTestDto>(nameof(ConstraintTestDto.UnderflowExponentValue));
+
+        property.Minimum.ShouldBeNull();
+    }
+
+    [Fact]
     public async Task Should_Map_Regular_Expression_Rules()
     {
         var property = await GetPropertyAsync<ConstraintTestDto>(nameof(ConstraintTestDto.RegexValue));

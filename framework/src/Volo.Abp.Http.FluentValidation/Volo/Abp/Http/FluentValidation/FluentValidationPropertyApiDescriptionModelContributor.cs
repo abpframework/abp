@@ -249,6 +249,13 @@ public class FluentValidationPropertyApiDescriptionModelContributor : IPropertyA
     {
         // Float allows the exponent notation but not the group separators, which a Range bound
         // rendered by a decimal-comma culture would otherwise smuggle in as "1,5" meaning 15.
-        return decimal.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out number);
+        if (!decimal.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out number))
+        {
+            return false;
+        }
+
+        // A magnitude below the decimal range parses to zero, which would publish a bound the
+        // server does not enforce.
+        return number != decimal.Zero || !value!.Any(c => c is > '0' and <= '9');
     }
 }

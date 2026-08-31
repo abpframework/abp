@@ -74,8 +74,15 @@ public class PropertyApiDescriptionModel
 
         // The Range(Type, string, string) constructor keeps its limits as strings until the
         // first validation, so a numeric one is written in the culture of the declaring code.
+        // A limit that already reads as invariant is kept verbatim, because rewriting it can
+        // only lose precision: "1e-30" would come back as a zero from a decimal round trip.
         if (bound is string text)
         {
+            if (decimal.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out _))
+            {
+                return text;
+            }
+
             return decimal.TryParse(text, NumberStyles.Float, GetRangeLimitCulture(rangeAttribute), out var number)
                 ? number.ToString(CultureInfo.InvariantCulture)
                 : text;
