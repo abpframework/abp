@@ -1,9 +1,9 @@
 using System;
 using Microsoft.AspNetCore.Identity;
 
-namespace Volo.Abp.Identity.AspNetCore;
+namespace Volo.Abp.Identity;
 
-public class AbpDefaultTokenProviderOptions : DataProtectionTokenProviderOptions
+public class AbpDefaultTokenProviderOptions : AbpDataProtectionTokenProviderOptions
 {
     public AbpDefaultTokenProviderOptions()
     {

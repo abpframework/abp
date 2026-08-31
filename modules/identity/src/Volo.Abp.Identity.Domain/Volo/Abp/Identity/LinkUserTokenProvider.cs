@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Identity;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.Identity.AspNetCore;
+namespace Volo.Abp.Identity;
 
 /// <summary>
 /// Link-user token provider that enforces, per purpose, only the most recently issued
@@ -16,7 +16,7 @@ public class LinkUserTokenProvider : AbpSingleActiveTokenProvider
     public LinkUserTokenProvider(
         IDataProtectionProvider dataProtectionProvider,
         IOptions<AbpLinkUserTokenProviderOptions> options,
-        ILogger<DataProtectorTokenProvider<IdentityUser>> logger,
+        ILogger<AbpSingleActiveTokenProvider> logger,
         IIdentityUserRepository userRepository,
         ICancellationTokenProvider cancellationTokenProvider)
         : base(dataProtectionProvider, options, logger, userRepository, cancellationTokenProvider)

@@ -10,7 +10,7 @@ using Volo.Abp.Identity;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 
-namespace Volo.Abp.Identity.AspNetCore;
+namespace Volo.Abp.Identity;
 
 /// <summary>
 /// Base class for ABP two-factor verification code providers (e.g. Email, Phone).
@@ -25,6 +25,9 @@ public abstract class AbpTwoFactorTokenProvider : IUserTwoFactorTokenProvider<Id
 
     protected const char StoredValueSeparator = '|';
 
+    /// <summary>
+    /// A Data Protection purpose, not a type name. Changing it invalidates every outstanding code.
+    /// </summary>
     protected const string DataProtectionPurposeRoot = "Volo.Abp.Identity.AspNetCore.AbpTwoFactorTokenProvider";
 
     protected AbpTwoFactorTokenProviderOptions Options { get; }

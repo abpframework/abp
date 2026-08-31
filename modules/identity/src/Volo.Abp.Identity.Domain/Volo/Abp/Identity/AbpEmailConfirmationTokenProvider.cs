@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Identity;
 using Volo.Abp.Threading;
 
-namespace Volo.Abp.Identity.AspNetCore;
+namespace Volo.Abp.Identity;
 
 /// <summary>
 /// Email confirmation token provider that enforces only the most recently issued
@@ -31,7 +31,7 @@ public class AbpEmailConfirmationTokenProvider : AbpSingleActiveTokenProvider
     public AbpEmailConfirmationTokenProvider(
         IDataProtectionProvider dataProtectionProvider,
         IOptions<AbpEmailConfirmationTokenProviderOptions> options,
-        ILogger<DataProtectorTokenProvider<IdentityUser>> logger,
+        ILogger<AbpSingleActiveTokenProvider> logger,
         IIdentityUserRepository userRepository,
         ICancellationTokenProvider cancellationTokenProvider)
         : base(dataProtectionProvider, options, logger, userRepository, cancellationTokenProvider)
