@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Volo.Abp.Identity.AspNetCore;
 
-public class AbpDefaultTokenProviderOptions : DataProtectionTokenProviderOptions
+public class AbpDefaultTokenProviderOptions : AbpDataProtectionTokenProviderOptions
 {
     public AbpDefaultTokenProviderOptions()
     {

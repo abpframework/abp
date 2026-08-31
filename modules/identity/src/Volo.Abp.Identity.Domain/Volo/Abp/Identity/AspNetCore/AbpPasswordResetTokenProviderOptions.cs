@@ -1,9 +1,8 @@
 using System;
-using Microsoft.AspNetCore.Identity;
 
 namespace Volo.Abp.Identity.AspNetCore;
 
-public class AbpPasswordResetTokenProviderOptions : DataProtectionTokenProviderOptions
+public class AbpPasswordResetTokenProviderOptions : AbpDataProtectionTokenProviderOptions
 {
     public AbpPasswordResetTokenProviderOptions()
     {

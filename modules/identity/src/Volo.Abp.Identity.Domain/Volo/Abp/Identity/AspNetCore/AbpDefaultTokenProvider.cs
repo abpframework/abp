@@ -8,7 +8,7 @@ using Volo.Abp.Threading;
 namespace Volo.Abp.Identity.AspNetCore;
 
 /// <summary>
-/// Replaces ASP.NET Identity's default <see cref="DataProtectorTokenProvider{IdentityUser}"/>
+/// Replaces ASP.NET Core Identity's default <c>DataProtectorTokenProvider&lt;IdentityUser&gt;</c>
 /// registered under <see cref="TokenOptions.DefaultProvider"/> ("Default"). Used by callers such
 /// as the IdentityServer / OpenIddict token endpoints to issue short-lived challenge tokens
 /// (RequiresTwoFactor, ShouldChangePasswordOnNextLogin, PeriodicallyChangePassword)
@@ -20,7 +20,7 @@ public class AbpDefaultTokenProvider : AbpSingleActiveTokenProvider
     public AbpDefaultTokenProvider(
         IDataProtectionProvider dataProtectionProvider,
         IOptions<AbpDefaultTokenProviderOptions> options,
-        ILogger<DataProtectorTokenProvider<IdentityUser>> logger,
+        ILogger<AbpSingleActiveTokenProvider> logger,
         IIdentityUserRepository userRepository,
         ICancellationTokenProvider cancellationTokenProvider)
         : base(dataProtectionProvider, options, logger, userRepository, cancellationTokenProvider)

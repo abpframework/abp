@@ -16,7 +16,7 @@ public class LinkUserTokenProvider : AbpSingleActiveTokenProvider
     public LinkUserTokenProvider(
         IDataProtectionProvider dataProtectionProvider,
         IOptions<AbpLinkUserTokenProviderOptions> options,
-        ILogger<DataProtectorTokenProvider<IdentityUser>> logger,
+        ILogger<AbpSingleActiveTokenProvider> logger,
         IIdentityUserRepository userRepository,
         ICancellationTokenProvider cancellationTokenProvider)
         : base(dataProtectionProvider, options, logger, userRepository, cancellationTokenProvider)

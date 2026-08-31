@@ -8,17 +8,17 @@ using Volo.Abp.Threading;
 namespace Volo.Abp.Identity.AspNetCore;
 
 /// <summary>
-/// Change email token provider that enforces only the most recently issued
+/// Password reset token provider that enforces only the most recently issued
 /// token to be valid, with a configurable expiration period.
 /// </summary>
-public class AbpChangeEmailTokenProvider : AbpSingleActiveTokenProvider
+public class AbpPasswordResetTokenProvider : AbpSingleActiveTokenProvider
 {
-    public const string ProviderName = "AbpChangeEmail";
+    public const string ProviderName = "AbpPasswordReset";
 
-    public AbpChangeEmailTokenProvider(
+    public AbpPasswordResetTokenProvider(
         IDataProtectionProvider dataProtectionProvider,
-        IOptions<AbpChangeEmailTokenProviderOptions> options,
-        ILogger<DataProtectorTokenProvider<IdentityUser>> logger,
+        IOptions<AbpPasswordResetTokenProviderOptions> options,
+        ILogger<AbpSingleActiveTokenProvider> logger,
         IIdentityUserRepository userRepository,
         ICancellationTokenProvider cancellationTokenProvider)
         : base(dataProtectionProvider, options, logger, userRepository, cancellationTokenProvider)

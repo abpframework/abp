@@ -31,7 +31,7 @@ public class AbpEmailConfirmationTokenProvider : AbpSingleActiveTokenProvider
     public AbpEmailConfirmationTokenProvider(
         IDataProtectionProvider dataProtectionProvider,
         IOptions<AbpEmailConfirmationTokenProviderOptions> options,
-        ILogger<DataProtectorTokenProvider<IdentityUser>> logger,
+        ILogger<AbpSingleActiveTokenProvider> logger,
         IIdentityUserRepository userRepository,
         ICancellationTokenProvider cancellationTokenProvider)
         : base(dataProtectionProvider, options, logger, userRepository, cancellationTokenProvider)
