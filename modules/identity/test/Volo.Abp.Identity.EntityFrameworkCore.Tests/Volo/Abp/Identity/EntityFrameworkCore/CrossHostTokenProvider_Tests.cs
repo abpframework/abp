@@ -270,6 +270,11 @@ public class CrossHostTokenProvider_Tests
                     .ShouldBe(typeof(OtherUserTokenProvider));
 
                 var userManager = sp.GetRequiredService<IdentityUserManager>();
+
+                // What the map says and what the manager uses come apart here.
+                userManager.FindTokenProvider(AbpPasswordResetTokenProvider.ProviderName)
+                    .ShouldBeOfType<AbpPasswordResetTokenProvider>();
+
                 var user = await userManager.GetByIdAsync(userId);
 
                 await userManager.GeneratePasswordResetTokenAsync(user);

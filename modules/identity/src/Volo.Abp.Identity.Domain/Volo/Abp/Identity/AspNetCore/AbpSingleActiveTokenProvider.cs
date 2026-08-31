@@ -185,9 +185,11 @@ public abstract class AbpSingleActiveTokenProvider : IUserTwoFactorTokenProvider
                 return false;
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            Logger.LogDebug(ex, "Could not read the '{ProviderName}' token. It was protected under another provider name, key ring or application name, or the payload is not a token this provider produced.", Options.Name);
+            // Without the exception, the way ASP.NET Core's provider logs this: it carries the key id and
+            // the key ring location.
+            Logger.LogDebug("Could not read the '{ProviderName}' token. It was protected under another provider name, key ring or application name, or the payload is not a token this provider produced.", Options.Name);
             return false;
         }
     }
