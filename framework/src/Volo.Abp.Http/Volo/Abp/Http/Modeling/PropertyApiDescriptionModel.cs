@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
@@ -11,6 +13,21 @@ namespace Volo.Abp.Http.Modeling;
 [Serializable]
 public class PropertyApiDescriptionModel
 {
+    private static readonly HashSet<Type> NumericTypes = new HashSet<Type>
+    {
+        typeof(byte),
+        typeof(sbyte),
+        typeof(short),
+        typeof(ushort),
+        typeof(int),
+        typeof(uint),
+        typeof(long),
+        typeof(ulong),
+        typeof(float),
+        typeof(double),
+        typeof(decimal)
+    };
+
     public string Name { get; set; } = default!;
 
     public string? JsonName { get; set; }
@@ -73,22 +90,39 @@ public class PropertyApiDescriptionModel
         }
 
         // The Range(Type, string, string) constructor keeps its limits as strings until the
-        // first validation, so a numeric one is written in the culture of the declaring code.
-        // A limit that already reads as invariant is kept verbatim, because rewriting it can
-        // only lose precision: "1e-30" would come back as a zero from a decimal round trip.
+        // first validation, so a numeric one is still written in the culture that declared it.
+        // Converting it with the operand type of the attribute keeps the api definition
+        // independent of the culture, and reports the value the attribute itself validates
+        // against, which is not always the value that was written down.
         if (bound is string text)
         {
-            if (decimal.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out _))
+            if (!NumericTypes.Contains(rangeAttribute.OperandType))
             {
                 return text;
             }
 
-            return decimal.TryParse(text, NumberStyles.Float, GetRangeLimitCulture(rangeAttribute), out var number)
-                ? number.ToString(CultureInfo.InvariantCulture)
+            var converted = ConvertRangeLimitOrNull(text, rangeAttribute);
+            return converted != null
+                ? Convert.ToString(converted, CultureInfo.InvariantCulture)
                 : text;
         }
 
         return Convert.ToString(bound, CultureInfo.InvariantCulture);
+    }
+
+    private static object? ConvertRangeLimitOrNull(string text, RangeAttribute rangeAttribute)
+    {
+        try
+        {
+            return TypeDescriptor
+                .GetConverter(rangeAttribute.OperandType)
+                .ConvertFromString(null, GetRangeLimitCulture(rangeAttribute), text);
+        }
+        catch (Exception)
+        {
+            // A limit the attribute can not convert itself is reported the way it was written.
+            return null;
+        }
     }
 
     private static CultureInfo GetRangeLimitCulture(RangeAttribute rangeAttribute)

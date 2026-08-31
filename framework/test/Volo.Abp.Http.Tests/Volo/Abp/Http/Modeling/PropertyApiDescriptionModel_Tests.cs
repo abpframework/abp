@@ -34,13 +34,25 @@ public class PropertyApiDescriptionModel_Tests
     }
 
     [Fact]
-    public void Create_Should_Keep_A_Typed_Range_Bound_That_Is_Already_Invariant()
+    public void Create_Should_Convert_A_Typed_Range_Bound_With_Its_Operand_Type()
     {
-        // A decimal round trip would turn a magnitude below its range into a zero.
+        // A magnitude outside the decimal range is still a valid double bound.
         var model = CreateModel(nameof(TestClass.ExponentRangeValue));
 
-        model.Minimum.ShouldBe("1e-30");
-        model.Maximum.ShouldBe("1e30");
+        model.Minimum.ShouldBe("1E-30");
+        model.Maximum.ShouldBe("1E+30");
+    }
+
+    [Fact]
+    public void Create_Should_Convert_A_Typed_Double_Range_Bound_Written_In_Another_Culture()
+    {
+        using (CultureHelper.Use(CultureInfo.GetCultureInfo("de-DE")))
+        {
+            var model = CreateModel(nameof(TestClass.CultureExponentRangeValue));
+
+            model.Minimum.ShouldBe("1.5E+30");
+            model.Maximum.ShouldBe("9.5E+30");
+        }
     }
 
     [Fact]
@@ -98,6 +110,9 @@ public class PropertyApiDescriptionModel_Tests
 
         [Range(typeof(double), "1e-30", "1e30", ParseLimitsInInvariantCulture = true)]
         public double ExponentRangeValue { get; set; }
+
+        [Range(typeof(double), "1,5E+30", "9,5E+30")]
+        public double CultureExponentRangeValue { get; set; }
 
         [Range(typeof(DateTime), "2020-01-01", "2030-01-01")]
         public DateTime DateRangeValue { get; set; }
