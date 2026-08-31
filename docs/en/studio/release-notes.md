@@ -262,7 +262,7 @@ This document contains **brief release notes** for each ABP Studio release. Rele
 * Added `AI Management` option to Startup Templates (app-nolayers, app).
 * Added support for new `SLNX` solution file format.
 * Enhanced modularity step in solution creation process.
-* Fixed Swagger authorization issues when projects run via .NET Aspire.
+* Fixed Swagger authorization issues when projects run via Aspire.
 * Fixed browser notification overlay problems.
 * Added missing `Unit of Work` namespace in solution templates.
 * Fixed JSON file formatting issues.
@@ -355,7 +355,7 @@ This document contains **brief release notes** for each ABP Studio release. Rele
 ## 1.3.0 (2025-09-22)
 
 * Upgraded template dependencies for ABP Framework and LeptonX. (targeting ABP `9.3.4`)
-* **Added .NET Aspire Integration** to ABP Studio and Microservice Startup Template.
+* **Added Aspire Integration** to ABP Studio and Microservice Startup Template.
 * **Introduced AI Support Assistant** for enhanced development experience.
 * Added new package option: **C# Console Application (With ABP)**.
 * Enhanced Solution Runner with double-click browse functionality.

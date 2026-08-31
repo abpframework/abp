@@ -205,7 +205,7 @@ There are exciting articles contributed by the ABP community as always. I will h
 * [Mohammad AlMohammad AlMahmoud](https://abp.io/community/members/Mohammad97Dev) has created **two** new community articles:
     * [Implementing Multi-Language Functionality With ABP Framework](https://abp.io/community/articles/implementing-multilanguage-functionality-with-abp-framework-loq7kfx4)
     * [Configure Quartz.Net in Abp FrameWork](https://abp.io/community/articles/configure-quartz.net-in-abp-framework-3bveq4y1)
-* [.NET Aspire vs ABP Studio: Side by Side](https://abp.io/community/articles/.net-aspire-vs-abp-studio-side-by-side-t1c73d1l) by [Halil İbrahim Kalkan](https://twitter.com/hibrahimkalkan)
+* [Aspire vs ABP Studio: Side by Side](https://abp.io/community/articles/.net-aspire-vs-abp-studio-side-by-side-t1c73d1l) by [Halil İbrahim Kalkan](https://twitter.com/hibrahimkalkan)
 * [PoC of using GrapesJS for ABPs CMS Kit](https://abp.io/community/articles/poc-of-using-grapesjs-for-abps-cms-kit-1rmv4q41) by [Jack Fistelmann](https://abp.io/community/members/jfistelmann)
 * [ABP-Powered Web App with Inertia.js, React, and Vite](https://abp.io/community/articles/abppowered-web-app-with-inertia.js-react-and-vite-j7cccvad) by [Anto Subash](https://antosubash.com/)
 * [Multi-Tenancy Support in Angular Apps with ABP.IO](https://abp.io/community/articles/multitenancy-support-in-angular-apps-with-abp.io-lw9l36c5) by [HeadChannel Team](https://headchannel.co.uk/)
