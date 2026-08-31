@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -24,6 +24,12 @@ namespace Volo.Abp.Identity;
 
 public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 {
+    /// <summary>
+    /// The base class keeps its own map private, and the provider it picks for a token provider key is
+    /// only reachable through an internal API when the key carries providers for more than one user type.
+    /// </summary>
+    private readonly Dictionary<string, IUserTwoFactorTokenProvider<IdentityUser>> _registeredTokenProviders = new();
+
     protected IIdentityRoleRepository RoleRepository { get; }
     protected IIdentityUserRepository UserRepository { get; }
     protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
@@ -83,6 +89,20 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         DataFilter = dataFilter;
         UnitOfWorkManager = unitOfWorkManager;
         CancellationTokenProvider = cancellationTokenProvider;
+    }
+
+    public override void RegisterTokenProvider(string providerName, IUserTwoFactorTokenProvider<IdentityUser> provider)
+    {
+        base.RegisterTokenProvider(providerName, provider);
+        _registeredTokenProviders[providerName] = provider;
+    }
+
+    /// <summary>
+    /// The token provider this manager uses for <paramref name="providerName"/>, or null when the key has none.
+    /// </summary>
+    public virtual IUserTwoFactorTokenProvider<IdentityUser>? FindTokenProvider(string providerName)
+    {
+        return _registeredTokenProviders.GetOrDefault(providerName);
     }
 
     public virtual async Task<IdentityResult> CreateAsync(IdentityUser user, string password, bool validatePassword)

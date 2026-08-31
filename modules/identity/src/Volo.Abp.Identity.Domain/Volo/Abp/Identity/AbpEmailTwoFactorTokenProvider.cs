@@ -6,7 +6,7 @@ using Volo.Abp.Identity;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 
-namespace Volo.Abp.Identity.AspNetCore;
+namespace Volo.Abp.Identity;
 
 /// <summary>
 /// Single-use email 2FA code provider; replaces the ASP.NET Core Identity TOTP-based
