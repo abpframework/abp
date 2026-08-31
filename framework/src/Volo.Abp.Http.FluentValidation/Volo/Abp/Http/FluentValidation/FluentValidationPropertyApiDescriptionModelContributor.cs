@@ -30,7 +30,9 @@ public class FluentValidationPropertyApiDescriptionModelContributor : IPropertyA
         typeof(ulong),
         typeof(float),
         typeof(double),
-        typeof(decimal)
+        typeof(decimal),
+        typeof(IntPtr),
+        typeof(UIntPtr)
     }.ToFrozenSet();
 
     protected IServiceProvider ServiceProvider { get; }
@@ -195,6 +197,17 @@ public class FluentValidationPropertyApiDescriptionModelContributor : IPropertyA
 
     protected virtual void ApplyBetween(PropertyApiDescriptionModel model, PropertyInfo propertyInfo, IBetweenValidator validator)
     {
+        var from = GetNumericBound(propertyInfo, validator.From);
+        var to = GetNumericBound(propertyInfo, validator.To);
+
+        // A between rule can carry its own comparer, which the descriptor does not expose. An
+        // interval that reads as empty in the natural order is what one looks like from here,
+        // and publishing its bounds would say the opposite of what the rule accepts.
+        if (from == null || to == null || !TryCompareBounds(from, to, out var comparison) || comparison > 0)
+        {
+            return;
+        }
+
         var isExclusive = validator is not IInclusiveBetweenValidator;
 
         ApplyMinimum(model, propertyInfo, validator.From, isExclusive);

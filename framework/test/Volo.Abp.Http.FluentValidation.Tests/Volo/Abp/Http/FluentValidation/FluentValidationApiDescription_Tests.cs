@@ -88,6 +88,24 @@ public class FluentValidationApiDescription_Tests : AbpHttpFluentValidationTestB
     }
 
     [Fact]
+    public async Task Should_Map_A_Comparison_On_A_Native_Integer()
+    {
+        var property = await GetPropertyAsync<ConstraintTestDto>(nameof(ConstraintTestDto.NativeIntegerValue));
+
+        property.Minimum.ShouldBe("5");
+    }
+
+    [Fact]
+    public async Task Should_Not_Map_A_Between_Rule_That_Reads_As_An_Empty_Interval()
+    {
+        // The rule carries its own comparer, so its bounds mean the opposite of what they say.
+        var property = await GetPropertyAsync<ConstraintTestDto>(nameof(ConstraintTestDto.ReversedBetweenValue));
+
+        property.Minimum.ShouldBeNull();
+        property.Maximum.ShouldBeNull();
+    }
+
+    [Fact]
     public async Task Should_Not_Map_A_Comparison_On_A_Property_That_Is_Not_A_Number()
     {
         // The server compares two strings ordinally, so a numeric bound would say something else.

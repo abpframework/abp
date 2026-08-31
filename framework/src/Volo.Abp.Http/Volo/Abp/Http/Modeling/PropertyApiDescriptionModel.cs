@@ -25,7 +25,9 @@ public class PropertyApiDescriptionModel
         typeof(ulong),
         typeof(float),
         typeof(double),
-        typeof(decimal)
+        typeof(decimal),
+        typeof(IntPtr),
+        typeof(UIntPtr)
     };
 
     public string Name { get; set; } = default!;
@@ -90,10 +92,10 @@ public class PropertyApiDescriptionModel
         }
 
         // The Range(Type, string, string) constructor keeps its limits as strings until the
-        // first validation, so a numeric one is still written in the culture that declared it.
-        // Converting it with the operand type of the attribute keeps the api definition
-        // independent of the culture, and reports the value the attribute itself validates
-        // against, which is not always the value that was written down.
+        // first validation. Converting one the way the attribute converts it reports the value
+        // the attribute validates against, which is not always the value that was written down.
+        // The attribute reads its limits in the culture of the request unless it opts into the
+        // invariant one, so only that opt-in makes the reported limit stable across requests.
         if (bound is string text)
         {
             if (!NumericTypes.Contains(rangeAttribute.OperandType))
@@ -120,7 +122,9 @@ public class PropertyApiDescriptionModel
         }
         catch (Exception)
         {
-            // A limit the attribute can not convert itself is reported the way it was written.
+            // A limit that does not convert is reported the way it was written. The attribute
+            // throws on it during the first validation, and failing the whole api definition
+            // over one declaration would hide every other type.
             return null;
         }
     }

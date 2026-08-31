@@ -101,6 +101,8 @@ The following rules are mapped:
 
 `MinimumIsExclusive` and `MaximumIsExclusive` indicate whether the value can be equal to the bound. They are also filled from the `Range` attribute, so an exclusive bound is not lost when it is declared with an attribute.
 
+> A `Range` attribute that writes its limits as strings, like `[Range(typeof(decimal), "1.5", "9.5")]`, reads them in the culture of the request unless it sets `ParseLimitsInInvariantCulture`. Set it, so that the limit means the same thing to the server and to the api definition on every request.
+
 When a rule and an attribute constrain the same property, the stricter bound is used: the higher minimum and the lower maximum. When both bounds have the same value, the exclusive one is used. The exclusivity always comes from the bound that is used, so `[Range(0, 100)]` with `GreaterThan(-5)` results in an inclusive `Minimum = 0`. A non-numeric bound, like a `Range` attribute on a `DateTime` property, is kept as-is. An existing `Regex` is also kept, because a single value can not express two patterns that both have to match.
 
 ### Rules That Are Not Mapped
@@ -121,6 +123,7 @@ The following rules are not fully expressed in the API definition:
 * A validator of a derived DTO can not add rules to a property declared by its base class, because each type describes only its own properties.
 * A rule on a nested object, like `RuleFor(x => x.Address.City)`, is not published either. The nested type is described on its own, with its own validator, and its model is shared by every DTO that uses it.
 * A validator of a closed generic DTO is not used, because the API definition describes the generic type definition, which is shared by all of its instantiations.
+* `InclusiveBetween(...)` and `ExclusiveBetween(...)` with their own `IComparer<T>` are only published when their bounds still read as an interval in the natural order. FluentValidation does not expose the comparer, so a rule that orders its values differently can not be recognised.
 * `Matches(pattern, RegexOptions)` publishes the pattern without the options. This is the one case where a client can be stricter than the server, so avoid the overload if the client should not reject what the server accepts.
 
 > The API definition describes a type, while the server runs the validation per action. So, a DTO that is only used as a return value, or that is sent to an action which doesn't validate its parameters, still declares its constraints here. This is also how the data annotation attributes have always been reported.

@@ -48,7 +48,19 @@ public class ConstraintTestDto
 
     public string? StringComparisonValue { get; set; }
 
+    public nint NativeIntegerValue { get; set; }
+
+    public int ReversedBetweenValue { get; set; }
+
     public string? UnconstrainedValue { get; set; }
+}
+
+public class ReversedComparer : IComparer<int>
+{
+    public int Compare(int x, int y)
+    {
+        return y.CompareTo(x);
+    }
 }
 
 public class ConstraintTestDtoValidator : AbstractValidator<ConstraintTestDto>
@@ -76,5 +88,7 @@ public class ConstraintTestDtoValidator : AbstractValidator<ConstraintTestDto>
         RuleFor(x => x.SmallExponentValue).GreaterThanOrEqualTo(1e-20);
         RuleFor(x => x.UnderflowExponentValue).GreaterThanOrEqualTo(1e-30);
         RuleFor(x => x.StringComparisonValue).GreaterThan("10");
+        RuleFor(x => x.NativeIntegerValue).GreaterThanOrEqualTo((nint)5);
+        RuleFor(x => x.ReversedBetweenValue).InclusiveBetween(10, 1, new ReversedComparer());
     }
 }
