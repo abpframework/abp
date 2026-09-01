@@ -62,7 +62,6 @@
     "Theme": "Tema",
     "NotAssigned": "Ni dodeljena",
     "EntityActionsDisabledTooltip": "Nimate pravic za izvajanje kakršne koli dejanje.",
-    "ResourcePermissions": "Dovoljenja",
-    "ShowPassword": "Pokaži geslo"
+    "ResourcePermissions": "Dovoljenja"
   }
 }

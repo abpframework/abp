@@ -62,7 +62,6 @@
     "Theme": "Téma",
     "NotAssigned": "Nepridelené",
     "EntityActionsDisabledTooltip": "Nemáte oprávnenie vykonávať žiadnu akciu.",
-    "ResourcePermissions": "Oprávnenia",
-    "ShowPassword": "Zobraziť heslo"
+    "ResourcePermissions": "Oprávnenia"
   }
 }

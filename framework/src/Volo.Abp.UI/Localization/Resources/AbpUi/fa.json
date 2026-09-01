@@ -56,7 +56,6 @@
     "Today": "امروز",
     "Apply": "درخواست دادن",
     "EntityActionsDisabledTooltip": "شما دسترسی به انجام هر گونه عملیات ندارید.",
-    "ResourcePermissions": "مجوزها",
-    "ShowPassword": "نمایش رمز عبور"
+    "ResourcePermissions": "مجوزها"
   }
 }

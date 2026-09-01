@@ -6,7 +6,7 @@ import {
   SubscriptionService,
   TreeNode,
 } from '@abp/ng.core';
-import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { map, startWith } from 'rxjs/operators';
 import { eThemeSharedRouteNames } from '../../enums/route-names';
@@ -20,13 +20,14 @@ import { BreadcrumbItemsComponent } from '../breadcrumb-items/breadcrumb-items.c
   imports: [BreadcrumbItemsComponent],
 })
 export class BreadcrumbComponent implements OnInit {
+  readonly cdRef = inject(ChangeDetectorRef);
   private router = inject(Router);
   private routes = inject(RoutesService);
   private subscription = inject(SubscriptionService);
   private routerEvents = inject(RouterEvents);
   private routeCultureUrl = inject(RouteBasedCultureUrlService);
 
-  readonly segments = signal<Partial<ABP.Route>[]>([]);
+  segments: Partial<ABP.Route>[] = [];
 
   ngOnInit(): void {
     this.subscription.addOne(
@@ -37,18 +38,18 @@ export class BreadcrumbComponent implements OnInit {
         ),
       ),
       route => {
-        const next: Partial<ABP.Route>[] = [];
+        this.segments = [];
         if (route) {
           let node = { parent: route } as TreeNode<ABP.Route>;
 
           while (node.parent) {
             node = node.parent;
             const { parent, children, isLeaf, ...segment } = node;
-            if (!isAdministration(segment)) next.unshift(segment);
+            if (!isAdministration(segment)) this.segments.unshift(segment);
           }
-        }
 
-        this.segments.set(next);
+          this.cdRef.detectChanges();
+        }
       },
     );
   }

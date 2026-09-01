@@ -62,7 +62,6 @@
     "Theme": "Þema",
     "NotAssigned": "Ekki skráður",
     "EntityActionsDisabledTooltip": "Þú hefur ekki aðgang að þessum aðgerðum.",
-    "ResourcePermissions": "Aðgangsheimildir",
-    "ShowPassword": "Sýna lykilorð"
+    "ResourcePermissions": "Aðgangsheimildir"
   }
 }

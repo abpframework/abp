@@ -62,7 +62,6 @@
     "Theme": "Teema",
     "NotAssigned": "Ei määritetty",
     "EntityActionsDisabledTooltip": "Sinulla ei ole oikeutta suorittaa mitään toimintoa.",
-    "ResourcePermissions": "Käyttöoikeudet",
-    "ShowPassword": "Näytä salasana"
+    "ResourcePermissions": "Käyttöoikeudet"
   }
 }

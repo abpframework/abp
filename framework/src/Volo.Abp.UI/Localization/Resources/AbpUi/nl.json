@@ -62,7 +62,6 @@
     "Theme": "Thema",
     "NotAssigned": "Niet toegekend",
     "EntityActionsDisabledTooltip": "U hebt geen toegang tot deze acties.",
-    "ResourcePermissions": "Machtigingen",
-    "ShowPassword": "Wachtwoord tonen"
+    "ResourcePermissions": "Machtigingen"
   }
 }

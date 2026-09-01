@@ -77,9 +77,8 @@
                                     </TextInput>
                                 </Addon>
                                 <Addon AddonType="AddonType.End">
-                                    <Button Color="Color.Secondary" Clicked="@(() => TogglePasswordVisibility())"
-                                            aria-label="@UiLocalizer["ShowPassword"]" aria-pressed="@(ShowPassword ? "true" : "false")">
-                                        <Icon Name="ShowPassword ? IconName.Eye : IconName.EyeSlash" aria-hidden="true" />
+                                    <Button Color="Color.Secondary" Clicked="@(() => TogglePasswordVisibility())">
+                                        <Icon Name="ShowPassword ? IconName.Eye : IconName.EyeSlash" />
                                     </Button>
                                 </Addon>
                             </Addons>

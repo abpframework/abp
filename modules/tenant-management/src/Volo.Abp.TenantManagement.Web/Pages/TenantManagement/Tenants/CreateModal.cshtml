@@ -1,5 +1,4 @@
 ﻿@page
-@using Localization.Resources.AbpUi
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.Extensions.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
@@ -11,7 +10,6 @@
 @using Volo.Abp.TenantManagement;
 @model CreateModalModel
 @inject IHtmlLocalizer<AbpTenantManagementResource> L
-@inject IHtmlLocalizer<AbpUiResource> UiL
 @inject IStringLocalizerFactory StringLocalizerFactory
 @{
     Layout = null;
@@ -29,7 +27,7 @@
                 <span> * </span>
                 <div class="input-group">
                     <input type="password" class="form-control" maxlength="@TenantConsts.MaxPasswordLength" asp-for="Tenant.AdminPassword" />
-                    <button class="btn btn-secondary" type="button" id="PasswordVisibilityButton" aria-label="@UiL["ShowPassword"]" aria-pressed="false">
+                    <button class="btn btn-secondary" type="button" id="PasswordVisibilityButton">
                         <i class="fa fa-eye-slash" aria-hidden="true"></i>
                     </button>
                 </div>
