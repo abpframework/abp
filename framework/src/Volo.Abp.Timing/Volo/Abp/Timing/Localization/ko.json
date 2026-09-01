@@ -1,7 +1,0 @@
-{
-  "culture": "ko",
-  "texts": {
-    "DisplayName:Abp.Timing.Timezone": "시간대",
-    "Description:Abp.Timing.Timezone": "애플리케이션 시간대"
-  }
-}

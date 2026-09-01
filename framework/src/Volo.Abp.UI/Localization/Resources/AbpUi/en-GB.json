@@ -57,7 +57,6 @@
     "Today": "Today",
     "Apply": "Apply",
     "EntityActionsDisabledTooltip": "You do not have permission to perform any action.",
-    "ResourcePermissions": "Permissions",
-    "ShowPassword": "Show password"
+    "ResourcePermissions": "Permissions"
   }
 }

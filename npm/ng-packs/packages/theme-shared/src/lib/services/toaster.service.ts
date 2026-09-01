@@ -1,4 +1,4 @@
-import { ComponentRef, inject, Injectable } from '@angular/core';
+import { ApplicationRef, ComponentRef, inject, Injectable } from '@angular/core';
 import {
   ContentProjectionService,
   LocalizationParam,
@@ -12,6 +12,7 @@ import { Toaster } from '../models';
   providedIn: 'root',
 })
 export class ToasterService implements ToasterContract {
+  private readonly appRef = inject(ApplicationRef);
   private readonly contentProjectionService = inject(ContentProjectionService);
 
   private lastId = -1;
@@ -36,9 +37,8 @@ export class ToasterService implements ToasterContract {
     }
 
     this.containerComponentRef.instance.setToasts(this.toasts);
-    // Only refresh the projected toast host. Calling ApplicationRef.tick() here
-    // races with zone-driven CD and throws NG0101 (recursive tick).
     this.containerComponentRef.changeDetectorRef.detectChanges();
+    this.appRef.tick();
   }
 
   /**

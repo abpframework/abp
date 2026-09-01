@@ -1,8 +1,0 @@
-{
-  "culture": "ko",
-  "texts": {
-    "Volo.Feature:010001": "기능이 활성화되지 않았습니다: {FeatureName}",
-    "Volo.Feature:010002": "필수 기능이 활성화되지 않았습니다. 다음 기능을 모두 활성화해야 합니다: {FeatureNames}",
-    "Volo.Feature:010003": "필수 기능이 활성화되지 않았습니다. 다음 기능 중 하나 이상을 활성화해야 합니다: {FeatureNames}"
-  }
-}

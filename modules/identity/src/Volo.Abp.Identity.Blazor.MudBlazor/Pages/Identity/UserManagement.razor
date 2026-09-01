@@ -62,18 +62,14 @@
                                      Label="@L["DisplayName:Name"]" />
                         <MudTextField Margin="Margin.Dense" @bind-Value="@NewEntity.Surname"
                                      Label="@L["DisplayName:Surname"]" />
-                        <div class="abp-password-field">
-                            <MudTextField Margin="Margin.Dense" @bind-Value="@NewEntity.Password"
-                                         Label="@L["DisplayName:Password"]"
-                                         InputType="@(_showPassword ? InputType.Text : InputType.Password)"
-                                         Required="true"
-                                         RequiredError="@L["The {0} field is required.", L["DisplayName:Password"]]" />
-                            <MudIconButton Class="abp-password-visibility-toggle"
-                                           Icon="@(_showPassword ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff)"
-                                           aria-label="@UiLocalizer["ShowPassword"]"
-                                           aria-pressed="@(_showPassword ? "true" : "false")"
-                                           OnClick="@(() => _showPassword = !_showPassword)" />
-                        </div>
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@NewEntity.Password"
+                                     Label="@L["DisplayName:Password"]"
+                                     InputType="@(_showPassword ? InputType.Text : InputType.Password)"
+                                     Required="true"
+                                     RequiredError="@L["The {0} field is required.", L["DisplayName:Password"]]"
+                                     Adornment="Adornment.End"
+                                     AdornmentIcon="@(_showPassword ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff)"
+                                     OnAdornmentClick="@(() => _showPassword = !_showPassword)" />
                         <MudTextField Margin="Margin.Dense" @bind-Value="@NewEntity.Email"
                                      Label="@L["DisplayName:Email"]"
                                      Required="true"
@@ -132,16 +128,12 @@
                                      Label="@L["DisplayName:Name"]" />
                         <MudTextField Margin="Margin.Dense" @bind-Value="@EditingEntity.Surname"
                                      Label="@L["DisplayName:Surname"]" />
-                        <div class="abp-password-field">
-                            <MudTextField Margin="Margin.Dense" @bind-Value="@EditingEntity.Password"
-                                         Label="@L["DisplayName:Password"]"
-                                         InputType="@(_showPassword ? InputType.Text : InputType.Password)" />
-                            <MudIconButton Class="abp-password-visibility-toggle"
-                                           Icon="@(_showPassword ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff)"
-                                           aria-label="@UiLocalizer["ShowPassword"]"
-                                           aria-pressed="@(_showPassword ? "true" : "false")"
-                                           OnClick="@(() => _showPassword = !_showPassword)" />
-                        </div>
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@EditingEntity.Password"
+                                     Label="@L["DisplayName:Password"]"
+                                     InputType="@(_showPassword ? InputType.Text : InputType.Password)"
+                                     Adornment="Adornment.End"
+                                     AdornmentIcon="@(_showPassword ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff)"
+                                     OnAdornmentClick="@(() => _showPassword = !_showPassword)" />
                         <MudTextField Margin="Margin.Dense" @bind-Value="@EditingEntity.Email"
                                      Label="@L["DisplayName:Email"]"
                                      Required="true"

@@ -135,7 +135,7 @@ describe('BreadcrumbComponent', () => {
     const breadcrumb = spectator.fixture.debugElement.query(By.directive(BreadcrumbComponent))
       .componentInstance as BreadcrumbComponent;
 
-    expect(breadcrumb.segments().map(segment => segment.path)).toEqual([
+    expect(breadcrumb.segments.map(segment => segment.path)).toEqual([
       '/identity',
       '/identity/users',
     ]);

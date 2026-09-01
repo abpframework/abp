@@ -62,7 +62,6 @@
     "Theme": "Téma",
     "NotAssigned": "Nem kijelölt",
     "EntityActionsDisabledTooltip": "Nincs jogosultsága bármely művelethez.",
-    "ResourcePermissions": "Engedélyek",
-    "ShowPassword": "Jelszó megjelenítése"
+    "ResourcePermissions": "Engedélyek"
   }
 }

@@ -62,7 +62,6 @@
     "Theme": "विषय",
     "NotAssigned": "सौंपा नहीं गया है",
     "EntityActionsDisabledTooltip": "आपके पास कोई कार्रवाई नहीं है जो करने के लिए है।",
-    "ResourcePermissions": "अनुमतियाँ",
-    "ShowPassword": "पासवर्ड दिखाएं"
+    "ResourcePermissions": "अनुमतियाँ"
   }
 }

@@ -1,7 +1,0 @@
-{
-  "culture": "ko",
-  "texts": {
-    "Permission:DocumentManagement.Common": "문서 관리 공통",
-    "Permission:PdfDownload": "PDF 다운로드"
-  }
-}

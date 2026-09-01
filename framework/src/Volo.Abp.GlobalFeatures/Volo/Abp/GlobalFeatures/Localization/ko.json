@@ -1,6 +1,0 @@
-{
-  "culture": "ko",
-  "texts": {
-    "Volo.GlobalFeature:010001": "'{ServiceName}' 서비스에서 '{GlobalFeatureName}' 기능을 활성화해야 합니다."
-  }
-}

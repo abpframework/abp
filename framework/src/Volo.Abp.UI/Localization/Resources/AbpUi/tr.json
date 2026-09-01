@@ -62,7 +62,6 @@
     "Theme": "Tema",
     "NotAssigned": "Atanmadı",
     "EntityActionsDisabledTooltip": "Bu işlemi gerçekleştirmek için yeterli yetkiniz yok.",
-    "ResourcePermissions": "İzinler",
-    "ShowPassword": "Şifreyi göster"
+    "ResourcePermissions": "İzinler"
   }
 }
