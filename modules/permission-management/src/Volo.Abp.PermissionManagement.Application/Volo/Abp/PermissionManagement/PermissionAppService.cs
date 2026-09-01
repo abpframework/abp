@@ -205,10 +205,10 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
         await CheckProviderPolicy(providerName);
         await FilterInputPermissionsByCurrentUserAsync(input);
 
-        foreach (var permissionDto in input.Permissions)
-        {
-            await PermissionManager.SetAsync(permissionDto.Name, providerName, providerKey, permissionDto.IsGranted);
-        }
+        await PermissionManager.SetAsync(
+            input.Permissions.Select(x => new KeyValuePair<string, bool>(x.Name, x.IsGranted)),
+            providerName,
+            providerKey);
     }
 
     public virtual async Task<GetResourceProviderListResultDto> GetResourceProviderKeyLookupServicesAsync(string resourceName)
