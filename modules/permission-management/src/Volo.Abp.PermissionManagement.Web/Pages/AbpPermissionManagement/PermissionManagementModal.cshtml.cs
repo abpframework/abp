@@ -137,10 +137,20 @@ public class PermissionManagementModal : AbpPageModel
 
     protected virtual UpdatePermissionDto[] GetChangedPermissions()
     {
-        return SplitPermissionNames(GrantedPermissionNames)
-            .Select(name => new UpdatePermissionDto { Name = name, IsGranted = true })
-            .Concat(SplitPermissionNames(RevokedPermissionNames)
-                .Select(name => new UpdatePermissionDto { Name = name, IsGranted = false }))
+        var permissions = new Dictionary<string, bool>();
+
+        foreach (var name in SplitPermissionNames(GrantedPermissionNames))
+        {
+            permissions[name] = true;
+        }
+
+        foreach (var name in SplitPermissionNames(RevokedPermissionNames))
+        {
+            permissions[name] = false;
+        }
+
+        return permissions
+            .Select(permission => new UpdatePermissionDto { Name = permission.Key, IsGranted = permission.Value })
             .ToArray();
     }
 
@@ -148,7 +158,9 @@ public class PermissionManagementModal : AbpPageModel
     {
         return names.IsNullOrWhiteSpace()
             ? Array.Empty<string>()
-            : names.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            : names.Split(
+                new[] { '\r', '\n' },
+                StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
     }
 
     public class PermissionGroupViewModel
