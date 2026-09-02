@@ -1,4 +1,4 @@
-namespace Volo.Abp.Identity.AspNetCore;
+namespace Volo.Abp.Identity;
 
 public class AbpPhoneNumberTwoFactorTokenProviderOptions : AbpTwoFactorTokenProviderOptions
 {

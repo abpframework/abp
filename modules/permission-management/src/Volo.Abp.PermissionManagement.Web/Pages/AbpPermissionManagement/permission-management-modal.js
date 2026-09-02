@@ -299,6 +299,48 @@ var abp = abp || {};
             setSelectAllInAllTabs();
 
             var $form = $("#PermissionManagementForm");
+
+            // defaultChecked holds the state the server rendered.
+            function submitChangedPermissions() {
+                // A replaced view without these attributes posts the whole tree instead.
+                var $permissions = $form.find('[data-permission-name]');
+                if (!$permissions.length) {
+                    $form.submit();
+                    return;
+                }
+
+                var granted = [];
+                var revoked = [];
+
+                $permissions.each(function () {
+                    var $permission = $(this);
+                    var checkbox = $permission.find('input[type="checkbox"]')[0];
+                    if (!checkbox || checkbox.checked === checkbox.defaultChecked) {
+                        return;
+                    }
+
+                    (checkbox.checked ? granted : revoked)
+                        .push($permission.attr('data-permission-name'));
+                });
+
+                var $treeInputs = $form.find('fieldset').find('input').not(':disabled');
+                var $postedInputs = $()
+                    .add($('<input type="hidden" name="OnlyChangedPermissions" value="true" />'))
+                    .add($('<input type="hidden" name="GrantedPermissionNames" />').val(granted.join('\n')))
+                    .add($('<input type="hidden" name="RevokedPermissionNames" />').val(revoked.join('\n')));
+
+                $treeInputs.prop('disabled', true);
+                $form.append($postedInputs);
+
+                try {
+                    $form.submit();
+                } finally {
+                    // The form is serialized synchronously, so the inputs can be restored right away.
+                    $treeInputs.prop('disabled', false);
+                    $postedInputs.remove();
+                }
+            }
+
             var $submitButton = $form.find("button[type='submit']");
             if ($submitButton) {
                 $submitButton.click(function (e) {
@@ -308,12 +350,12 @@ var abp = abp || {};
                         abp.message.confirm(l("SaveWithoutAnyPermissionsWarningMessage"))
                             .then(function (confirmed) {
                                 if (confirmed) {
-                                    $form.submit();
+                                    submitChangedPermissions();
                                 }
                             });
                     }
                     else {
-                        $form.submit();
+                        submitChangedPermissions();
                     }
                 });
             }

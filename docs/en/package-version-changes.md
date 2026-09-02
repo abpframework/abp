@@ -7,13 +7,19 @@
 
 # Package Version Changes
 
-## 10.8.0-rc.1
+## 10.7.0-rc.3
 
 | Package | Old Version | New Version | PR |
 |---------|-------------|-------------|-----|
 | AWSSDK.S3 | 4.0.7.2 | 4.0.102.3 | #26040 |
 | AWSSDK.SecurityToken | 4.0.2.2 | 4.0.100.10 | #26040 |
-| MongoDB.Driver | 3.10.0 | 3.11.1 | #25979, #26103 |
+| MongoDB.Driver | 3.10.0 | 3.11.1 | #26103 |
+
+**Added:**
+
+| Package | Version | PR |
+|---------|---------|-----|
+| Microsoft.AspNetCore.DataProtection | 10.0.9 | #26113 |
 
 ## 10.7.0-rc.2
 
