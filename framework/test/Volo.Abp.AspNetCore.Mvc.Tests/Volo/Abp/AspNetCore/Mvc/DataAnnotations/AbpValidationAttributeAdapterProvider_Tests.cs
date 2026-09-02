@@ -17,7 +17,7 @@ public class AbpValidationAttributeAdapterProvider_Tests
     [Fact]
     public void Should_Return_An_Adapter_For_The_EnumDataTypeAttribute()
     {
-        //The default ASP.NET Core provider returns null for it, that's why we supply our own adapter.
+        //ABP supplies its own adapter for the EnumDataTypeAttribute.
         _provider.GetAttributeAdapter(new EnumDataTypeAttribute(typeof(MyEnum)), null)
             .ShouldBeOfType<EnumDataTypeAttributeAdapter>();
     }

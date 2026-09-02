@@ -67,6 +67,8 @@ public class UnitOfWork_Child_Events_Tests : AbpIntegratedTest<AbpUnitOfWorkModu
 
             using (var childUow = _unitOfWorkManager.Begin())
             {
+                childUow.Id.ShouldBe(parentUow.Id); //It's a child of the parent UOW.
+
                 childUow.Disposed += OnDisposed;
                 childUow.Disposed -= OnDisposed;
             }
