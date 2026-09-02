@@ -56,6 +56,32 @@ public class UnitOfWork_Child_Events_Tests : AbpIntegratedTest<AbpUnitOfWorkModu
         disposed.ShouldBeTrue();
     }
 
+    [Fact]
+    public void Should_Not_Trigger_Disposed_Event_Unsubscribed_Over_A_Child_UnitOfWork()
+    {
+        var disposed = false;
+
+        using (var parentUow = _unitOfWorkManager.Begin())
+        {
+            var handlerCount = GetEventHandlerCount(parentUow, nameof(IUnitOfWork.Disposed));
+
+            using (var childUow = _unitOfWorkManager.Begin())
+            {
+                childUow.Disposed += OnDisposed;
+                childUow.Disposed -= OnDisposed;
+            }
+
+            GetEventHandlerCount(parentUow, nameof(IUnitOfWork.Disposed)).ShouldBe(handlerCount);
+        }
+
+        disposed.ShouldBeFalse();
+
+        void OnDisposed(object? sender, UnitOfWorkEventArgs args)
+        {
+            disposed = true;
+        }
+    }
+
     private static int GetEventHandlerCount(IUnitOfWork unitOfWork, string eventName)
     {
         var field = unitOfWork.GetType().GetField(eventName, BindingFlags.Instance | BindingFlags.NonPublic);
