@@ -44,7 +44,7 @@ public class FeatureManagementStore : IFeatureManagementStore, ITransientDepende
             featureValue = new FeatureValue(GuidGenerator.Create(), name, value, providerName, providerKey);
             await FeatureValueRepository.InsertAsync(featureValue, true);
         }
-        else
+        else if (featureValue.Value != value)
         {
             featureValue.Value = value;
             await FeatureValueRepository.UpdateAsync(featureValue, true);

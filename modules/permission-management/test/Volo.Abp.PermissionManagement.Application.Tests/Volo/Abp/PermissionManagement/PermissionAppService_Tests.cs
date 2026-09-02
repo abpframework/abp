@@ -17,6 +17,7 @@ public class PermissionAppService_Tests : AbpPermissionManagementApplicationTest
     private readonly IPermissionGrantRepository _permissionGrantRepository;
     private readonly ICurrentPrincipalAccessor _currentPrincipalAccessor;
     private readonly FakePermissionChecker _fakePermissionChecker;
+    private readonly TestPermissionManagementProvider _testPermissionManagementProvider;
 
     public PermissionAppService_Tests()
     {
@@ -24,6 +25,7 @@ public class PermissionAppService_Tests : AbpPermissionManagementApplicationTest
         _permissionGrantRepository = GetRequiredService<IPermissionGrantRepository>();
         _currentPrincipalAccessor = GetRequiredService<ICurrentPrincipalAccessor>();
         _fakePermissionChecker = GetRequiredService<FakePermissionChecker>();
+        _testPermissionManagementProvider = GetRequiredService<TestPermissionManagementProvider>();
     }
 
     [Fact]
@@ -136,6 +138,47 @@ public class PermissionAppService_Tests : AbpPermissionManagementApplicationTest
 
         (await _permissionGrantRepository.FindAsync("MyPermission1", "Test",
             "Test")).ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task Update_Should_Apply_Grants_And_Revokes_Together()
+    {
+        await _permissionGrantRepository.InsertAsync(
+            new PermissionGrant(
+                Guid.NewGuid(),
+                "MyPermission1",
+                "Test",
+                "Test"
+            )
+        );
+        await _permissionGrantRepository.InsertAsync(
+            new PermissionGrant(
+                Guid.NewGuid(),
+                "MyPermission2",
+                "Test",
+                "Test"
+            )
+        );
+
+        await _permissionAppService.UpdateAsync("Test",
+            "Test", new UpdatePermissionsDto()
+            {
+                Permissions = new UpdatePermissionDto[]
+                {
+                        new UpdatePermissionDto() { IsGranted = true, Name = "MyPermission1" },
+                        new UpdatePermissionDto() { IsGranted = false, Name = "MyPermission2" },
+                        new UpdatePermissionDto() { IsGranted = true, Name = "MyPermission7" },
+                        new UpdatePermissionDto() { IsGranted = false, Name = "MyPermission8" }
+                }
+            });
+
+        _testPermissionManagementProvider.CheckCalls.ShouldNotBeEmpty();
+        _testPermissionManagementProvider.CheckCalls.ShouldAllBe(x => x.Length == 4);
+
+        (await _permissionGrantRepository.FindAsync("MyPermission1", "Test", "Test")).ShouldNotBeNull();
+        (await _permissionGrantRepository.FindAsync("MyPermission2", "Test", "Test")).ShouldBeNull();
+        (await _permissionGrantRepository.FindAsync("MyPermission7", "Test", "Test")).ShouldNotBeNull();
+        (await _permissionGrantRepository.FindAsync("MyPermission8", "Test", "Test")).ShouldBeNull();
     }
 
     [Fact]
