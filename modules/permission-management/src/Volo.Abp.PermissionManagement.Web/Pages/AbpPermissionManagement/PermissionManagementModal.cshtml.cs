@@ -32,6 +32,16 @@ public class PermissionManagementModal : AbpPageModel
     [BindProperty]
     public List<PermissionGroupViewModel> Groups { get; set; }
 
+    /* A replaced view that still posts the whole Groups tree does not set this, so it keeps working. */
+    [BindProperty]
+    public bool OnlyChangedPermissions { get; set; }
+
+    [BindProperty]
+    public string GrantedPermissionNames { get; set; }
+
+    [BindProperty]
+    public string RevokedPermissionNames { get; set; }
+
     public string EntityDisplayName { get; set; }
 
     public bool SelectAllInThisTab { get; set; }
@@ -89,14 +99,16 @@ public class PermissionManagementModal : AbpPageModel
     {
         ValidateModel();
 
-        var updatePermissionDtos = Groups
-            .SelectMany(g => g.Permissions)
-            .Select(p => new UpdatePermissionDto
-            {
-                Name = p.Name,
-                IsGranted = p.IsGranted
-            })
-            .ToArray();
+        var updatePermissionDtos = OnlyChangedPermissions
+            ? GetChangedPermissions()
+            : Groups
+                .SelectMany(g => g.Permissions)
+                .Select(p => new UpdatePermissionDto
+                {
+                    Name = p.Name,
+                    IsGranted = p.IsGranted
+                })
+                .ToArray();
 
         await PermissionAppService.UpdateAsync(
             ProviderName,
@@ -116,6 +128,22 @@ public class PermissionManagementModal : AbpPageModel
         await LocalEventBus.PublishAsync(new CurrentApplicationConfigurationCacheResetEventData(userId));
 
         return NoContent();
+    }
+
+    protected virtual UpdatePermissionDto[] GetChangedPermissions()
+    {
+        return SplitPermissionNames(GrantedPermissionNames)
+            .Select(name => new UpdatePermissionDto { Name = name, IsGranted = true })
+            .Concat(SplitPermissionNames(RevokedPermissionNames)
+                .Select(name => new UpdatePermissionDto { Name = name, IsGranted = false }))
+            .ToArray();
+    }
+
+    protected virtual string[] SplitPermissionNames(string names)
+    {
+        return names.IsNullOrWhiteSpace()
+            ? Array.Empty<string>()
+            : names.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
     }
 
     public class PermissionGroupViewModel

@@ -78,17 +78,24 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
                 .Where(x => !x.Providers.Any() || x.Providers.Contains(providerName))
                 .Where(x => x.MultiTenancySide.HasFlag(multiTenancySide));
 
+            var stateCheckPermissions = permissions.Distinct().ToArray();
+            var stateCheckResult = stateCheckPermissions.Any()
+                ? await SimpleStateCheckerManager.IsEnabledAsync(stateCheckPermissions)
+                : new SimpleStateCheckerResult<PermissionDefinition>();
+
             var neededCheckPermissions = new List<PermissionDefinition>();
-            foreach (var permission in permissions)
+            var neededCheckPermissionSet = new HashSet<PermissionDefinition>();
+            foreach (var permission in stateCheckPermissions)
             {
-                if (permission.Parent != null && !neededCheckPermissions.Contains(permission.Parent))
+                if (permission.Parent != null && !neededCheckPermissionSet.Contains(permission.Parent))
                 {
                     continue;
                 }
 
-                if (await SimpleStateCheckerManager.IsEnabledAsync(permission))
+                if (stateCheckResult[permission])
                 {
                     neededCheckPermissions.Add(permission);
+                    neededCheckPermissionSet.Add(permission);
                 }
             }
 
@@ -106,11 +113,20 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
             providerName,
             providerKey);
 
+        var grantInfoByName = new Dictionary<string, PermissionWithGrantedProviders>();
+        foreach (var grantInfo in multipleGrantInfo.Result)
+        {
+            if (!grantInfoByName.ContainsKey(grantInfo.Name))
+            {
+                grantInfoByName[grantInfo.Name] = grantInfo;
+            }
+        }
+
         foreach (var permissionGroup in permissionGroups)
         {
             foreach (var permission in permissionGroup.Permissions)
             {
-                var grantInfo = multipleGrantInfo.Result.FirstOrDefault(x => x.Name == permission.Name);
+                var grantInfo = grantInfoByName.GetOrDefault(permission.Name);
                 if (grantInfo == null)
                 {
                     continue;

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Security.Claims;
 using Xunit;
 
 namespace Volo.Abp.PermissionManagement;
@@ -13,11 +15,15 @@ public class PermissionManager_Tests : PermissionTestBase
 {
     private readonly IPermissionManager _permissionManager;
     private readonly IPermissionGrantRepository _permissionGrantRepository;
+    private readonly ICurrentPrincipalAccessor _currentPrincipalAccessor;
+    private readonly TestGlobalPermissionStateCheckerCounter _stateCheckerCounter;
 
     public PermissionManager_Tests()
     {
         _permissionManager = GetRequiredService<IPermissionManager>();
         _permissionGrantRepository = GetRequiredService<IPermissionGrantRepository>();
+        _currentPrincipalAccessor = GetRequiredService<ICurrentPrincipalAccessor>();
+        _stateCheckerCounter = GetRequiredService<TestGlobalPermissionStateCheckerCounter>();
     }
 
     [Fact]
@@ -69,6 +75,62 @@ public class PermissionManager_Tests : PermissionTestBase
         grantedProviders.Result.Last().IsGranted.ShouldBeTrue();
         grantedProviders.Result.Last().Name.ShouldBe("MyPermission2");
         grantedProviders.Result.Last().Providers.ShouldContain(x => x.Key == "Test");
+    }
+
+    [Fact]
+    public async Task Multiple_Get_Should_Apply_State_Checkers_Per_Permission()
+    {
+        await _permissionGrantRepository.InsertAsync(new PermissionGrant(
+            Guid.NewGuid(),
+            "MyPermission1",
+            "Test",
+            "Test")
+        );
+        await _permissionGrantRepository.InsertAsync(new PermissionGrant(
+            Guid.NewGuid(),
+            "MyPermission5",
+            "Test",
+            "Test")
+        );
+
+        var names = new[] { "MyPermission1", "MyPermission5" };
+
+        _stateCheckerCounter.Reset();
+        var grantedProviders = await _permissionManager.GetAsync(names, "Test", "Test");
+        _stateCheckerCounter.BatchCheckCount.ShouldBe(1);
+
+        grantedProviders.Result.Single(x => x.Name == "MyPermission1").IsGranted.ShouldBeTrue();
+        grantedProviders.Result.Single(x => x.Name == "MyPermission5").IsGranted.ShouldBeFalse();
+
+        using (_currentPrincipalAccessor.Change(new Claim(AbpClaimTypes.Role, "super-admin")))
+        {
+            grantedProviders = await _permissionManager.GetAsync(names, "Test", "Test");
+
+            grantedProviders.Result.Single(x => x.Name == "MyPermission1").IsGranted.ShouldBeTrue();
+            grantedProviders.Result.Single(x => x.Name == "MyPermission5").IsGranted.ShouldBeTrue();
+        }
+    }
+
+    [Fact]
+    public async Task Multiple_Get_Should_Return_Not_Granted_When_Every_Permission_Is_Filtered_Out()
+    {
+        await _permissionGrantRepository.InsertAsync(new PermissionGrant(
+            Guid.NewGuid(),
+            "MyDisabledPermission1",
+            "Test",
+            "Test")
+        );
+
+        _stateCheckerCounter.Reset();
+        var grantedProviders = await _permissionManager.GetAsync(
+            new[] { "MyDisabledPermission1", "MyPermission1NotExist" },
+            "Test",
+            "Test");
+
+        grantedProviders.Result.Count.ShouldBe(2);
+        grantedProviders.Result.ShouldAllBe(x => !x.IsGranted);
+        _stateCheckerCounter.BatchCheckCount.ShouldBe(0);
+        _stateCheckerCounter.SingleCheckCount.ShouldBe(0);
     }
 
     [Fact]
