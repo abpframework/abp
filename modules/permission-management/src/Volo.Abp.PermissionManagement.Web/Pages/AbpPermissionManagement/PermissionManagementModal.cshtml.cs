@@ -158,9 +158,7 @@ public class PermissionManagementModal : AbpPageModel
     {
         return names.IsNullOrWhiteSpace()
             ? Array.Empty<string>()
-            : names.Split(
-                new[] { '\r', '\n' },
-                StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            : names.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
     }
 
     public class PermissionGroupViewModel

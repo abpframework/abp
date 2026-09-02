@@ -5,9 +5,7 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Modularity;
-using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
-using Volo.Abp.SimpleStateChecking;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.PermissionManagement;
@@ -24,10 +22,6 @@ public class AbpPermissionManagementTestModule : AbpModule
     {
         context.Services.AddEntityFrameworkInMemoryDatabase();
 
-        Configure<AbpSimpleStateCheckerOptions<PermissionDefinition>>(options =>
-        {
-            options.GlobalStateCheckers.Add<TestGlobalPermissionStateChecker>();
-        });
 
         var databaseName = Guid.NewGuid().ToString();
 

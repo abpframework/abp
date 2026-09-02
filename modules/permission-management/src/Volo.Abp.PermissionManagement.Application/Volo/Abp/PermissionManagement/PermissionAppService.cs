@@ -78,26 +78,28 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
                 .Where(x => !x.Providers.Any() || x.Providers.Contains(providerName))
                 .Where(x => x.MultiTenancySide.HasFlag(multiTenancySide));
 
-            var stateCheckPermissions = permissions.Distinct().ToArray();
-            var stateCheckResult = stateCheckPermissions.Any()
-                ? await SimpleStateCheckerManager.IsEnabledAsync(stateCheckPermissions)
-                : new SimpleStateCheckerResult<PermissionDefinition>();
+            var candidatePermissions = permissions.Distinct().ToArray();
+            var childrenByParent = candidatePermissions
+                .Where(x => x.Parent != null)
+                .GroupBy(x => x.Parent!)
+                .ToDictionary(x => x.Key, x => x.ToArray());
 
-            var neededCheckPermissions = new List<PermissionDefinition>();
-            var neededCheckPermissionSet = new HashSet<PermissionDefinition>();
-            foreach (var permission in stateCheckPermissions)
+            /* The state checkers of a permission only run when its parent is enabled,
+               so each tree level is checked in its own batch. */
+            var enabledPermissions = new HashSet<PermissionDefinition>();
+            var currentLevel = candidatePermissions.Where(x => x.Parent == null).ToArray();
+            while (currentLevel.Any())
             {
-                if (permission.Parent != null && !neededCheckPermissionSet.Contains(permission.Parent))
-                {
-                    continue;
-                }
+                var levelResult = await SimpleStateCheckerManager.IsEnabledAsync(currentLevel);
+                var enabledLevelPermissions = currentLevel.Where(x => levelResult[x]).ToArray();
+                enabledPermissions.UnionWith(enabledLevelPermissions);
 
-                if (stateCheckResult[permission])
-                {
-                    neededCheckPermissions.Add(permission);
-                    neededCheckPermissionSet.Add(permission);
-                }
+                currentLevel = enabledLevelPermissions
+                    .SelectMany(x => childrenByParent.GetOrDefault(x) ?? Array.Empty<PermissionDefinition>())
+                    .ToArray();
             }
+
+            var neededCheckPermissions = candidatePermissions.Where(enabledPermissions.Contains).ToList();
 
             if (!neededCheckPermissions.Any())
             {
