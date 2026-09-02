@@ -110,6 +110,11 @@ public class PermissionManagementModal : AbpPageModel
                 })
                 .ToArray();
 
+        if (updatePermissionDtos.IsNullOrEmpty())
+        {
+            return NoContent();
+        }
+
         await PermissionAppService.UpdateAsync(
             ProviderName,
             ProviderKey,

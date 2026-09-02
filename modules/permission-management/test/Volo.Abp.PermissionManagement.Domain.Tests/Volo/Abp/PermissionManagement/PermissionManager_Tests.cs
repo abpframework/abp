@@ -98,6 +98,7 @@ public class PermissionManager_Tests : PermissionTestBase
         _stateCheckerCounter.Reset();
         var grantedProviders = await _permissionManager.GetAsync(names, "Test", "Test");
         _stateCheckerCounter.BatchCheckCount.ShouldBe(1);
+        _stateCheckerCounter.SingleCheckCount.ShouldBe(0);
 
         grantedProviders.Result.Single(x => x.Name == "MyPermission1").IsGranted.ShouldBeTrue();
         grantedProviders.Result.Single(x => x.Name == "MyPermission5").IsGranted.ShouldBeFalse();
