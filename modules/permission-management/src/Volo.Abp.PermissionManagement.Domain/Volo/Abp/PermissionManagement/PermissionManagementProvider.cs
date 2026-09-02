@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
@@ -44,10 +45,11 @@ public abstract class PermissionManagementProvider : IPermissionManagementProvid
             }
 
             var permissionGrants = await PermissionGrantRepository.GetListAsync(names, providerName, providerKey);
+            var grantedPermissionNames = new HashSet<string>(permissionGrants.Select(x => x.Name));
 
             foreach (var permissionName in names)
             {
-                var isGrant = permissionGrants.Any(x => x.Name == permissionName);
+                var isGrant = grantedPermissionNames.Contains(permissionName);
                 multiplePermissionValueProviderGrantInfo.Result[permissionName] = new PermissionValueProviderGrantInfo(isGrant, providerKey);
             }
 

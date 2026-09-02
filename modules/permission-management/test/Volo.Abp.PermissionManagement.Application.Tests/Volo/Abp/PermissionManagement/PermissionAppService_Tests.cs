@@ -17,6 +17,7 @@ public class PermissionAppService_Tests : AbpPermissionManagementApplicationTest
     private readonly IPermissionGrantRepository _permissionGrantRepository;
     private readonly ICurrentPrincipalAccessor _currentPrincipalAccessor;
     private readonly FakePermissionChecker _fakePermissionChecker;
+    private readonly TestGlobalPermissionStateCheckerCounter _stateCheckerCounter;
 
     public PermissionAppService_Tests()
     {
@@ -24,6 +25,29 @@ public class PermissionAppService_Tests : AbpPermissionManagementApplicationTest
         _permissionGrantRepository = GetRequiredService<IPermissionGrantRepository>();
         _currentPrincipalAccessor = GetRequiredService<ICurrentPrincipalAccessor>();
         _fakePermissionChecker = GetRequiredService<FakePermissionChecker>();
+        _stateCheckerCounter = GetRequiredService<TestGlobalPermissionStateCheckerCounter>();
+    }
+
+    [Fact]
+    public async Task Get_Should_Not_Check_The_State_Of_A_Permission_Whose_Parent_Is_Not_Enabled()
+    {
+        _stateCheckerCounter.Reset();
+
+        await _permissionAppService.GetAsync(UserPermissionValueProvider.ProviderName,
+            PermissionTestDataBuilder.User1Id.ToString());
+
+        _stateCheckerCounter.CheckedPermissionNames.ShouldContain("MyPermission5");
+        _stateCheckerCounter.CheckedPermissionNames.ShouldNotContain("MyPermission5.ChildPermission1");
+
+        using (_currentPrincipalAccessor.Change(new Claim(AbpClaimTypes.Role, "super-admin")))
+        {
+            _stateCheckerCounter.Reset();
+
+            await _permissionAppService.GetAsync(UserPermissionValueProvider.ProviderName,
+                PermissionTestDataBuilder.User1Id.ToString());
+
+            _stateCheckerCounter.CheckedPermissionNames.ShouldContain("MyPermission5.ChildPermission1");
+        }
     }
 
     [Fact]
