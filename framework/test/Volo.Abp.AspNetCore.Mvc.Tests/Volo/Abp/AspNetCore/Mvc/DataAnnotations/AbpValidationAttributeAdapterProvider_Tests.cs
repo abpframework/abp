@@ -17,11 +17,7 @@ public class AbpValidationAttributeAdapterProvider_Tests
     [Fact]
     public void Should_Return_An_Adapter_For_The_EnumDataTypeAttribute()
     {
-        //ASP.NET Core does not provide an adapter for the EnumDataTypeAttribute.
-        new ValidationAttributeAdapterProvider()
-            .GetAttributeAdapter(new EnumDataTypeAttribute(typeof(MyEnum)), null)
-            .ShouldBeNull();
-
+        //ABP supplies its own adapter for the EnumDataTypeAttribute.
         _provider.GetAttributeAdapter(new EnumDataTypeAttribute(typeof(MyEnum)), null)
             .ShouldBeOfType<EnumDataTypeAttributeAdapter>();
     }
