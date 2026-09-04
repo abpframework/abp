@@ -1,0 +1,22 @@
+{
+  "culture": "pt",
+  "texts": {
+    "Account": "Conta ABP - Iniciar sessão e registar | ABP.IO",
+    "Welcome": "Bem-vindo",
+    "UseOneOfTheFollowingLinksToContinue": "Utilize uma das seguintes ligações para continuar",
+    "FrameworkHomePage": "Página inicial da framework",
+    "FrameworkDocumentation": "Documentação da framework",
+    "OfficialBlog": "Blogue oficial",
+    "CommercialHomePage": "Página inicial comercial",
+    "CommercialSupportWebSite": "Site de apoio comercial",
+    "CommunityWebSite": "Site da comunidade ABP",
+    "ManageAccount": "A minha conta | ABP.IO",
+    "ManageYourProfile": "Gerir o seu perfil",
+    "ReturnToApplication": "Voltar à aplicação",
+    "IdentityUserNotAvailable:Deleted": "Este endereço de email não está disponível. Motivo: já foi eliminado.",
+    "SelectYourOrganization": "Selecione a sua organização",
+    "PleaseSelectOrganization": "Selecione uma organização para continuar",
+    "Continue": "Continuar",
+    "CaptchaExplanation": "Calcule a expressão matemática abaixo e introduza a resposta."
+  }
+}
