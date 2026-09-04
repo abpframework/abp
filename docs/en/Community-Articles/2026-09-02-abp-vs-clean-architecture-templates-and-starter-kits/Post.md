@@ -1,5 +1,3 @@
-# ABP vs Clean Architecture templates, starter kits, and DIY ASP.NET Core
-
 Every serious .NET team hits the same whiteboard sooner or later. Do we build the multi-tenant SaaS from scratch? Grab a starter kit? Adopt a platform?
 
 Search “ABP vs …” and you will land on pages written by kits and tenancy libraries. Fair. Those pages exist because the question is real. They are not comparing two products of the same kind.
