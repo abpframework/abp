@@ -1,5 +1,3 @@
-# ABP Studio vs .NET Aspire, AI IDEs, and CRUD generators
-
 You already have an IDE. You might already have Aspire. You might already have Cursor. The remaining question is how those tools handle ABP solution structure, modules, run profiles, and generated application code.
 
 Teams compare [ABP Studio](https://abp.io/studio) with three neighbors. This is not an “IDE replacement” debate.
