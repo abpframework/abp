@@ -92,7 +92,7 @@ Imagine you did everything 👏 very good until here... but you are talking very
 
 > COMMUNICATION IS NOT ONLY ABOUT WHAT YOU SAY but also HOW YOU SAY IT 🗣
 
-Watch the [ShadeZahrai -very short- tiktok video](https://www.tiktok.com/@shadezahrai/video/7177549216464571650)
+Watch the📹 [ShadeZahrai -very short- tiktok video](https://www.tiktok.com/@shadezahrai/video/7177549216464571650) 
 
 ![image-20260906210745253](image-20260906210745253.png)
 
