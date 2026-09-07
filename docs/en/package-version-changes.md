@@ -7,88 +7,77 @@
 
 # Package Version Changes
 
-## 10.7.0-rc.4
-
-| Package | Old Version | New Version | PR |
-|---------|-------------|-------------|-----|
-| Microsoft.AspNetCore.Authentication.JwtBearer | 10.0.9 | 10.0.11 |  |
-| Microsoft.AspNetCore.Authentication.OpenIdConnect | 10.0.9 | 10.0.11 |  |
-| Microsoft.AspNetCore.Authorization | 10.0.9 | 10.0.11 |  |
-| Microsoft.AspNetCore.Components | 10.0.9 | 10.0.11 |  |
-| Microsoft.AspNetCore.Components.Authorization | 10.0.9 | 10.0.11 |  |
-| Microsoft.AspNetCore.Components.Web | 10.0.9 | 10.0.11 |  |
-| Microsoft.AspNetCore.Components.WebAssembly | 10.0.9 | 10.0.11 |  |
-| Microsoft.AspNetCore.Components.WebAssembly.Authentication | 10.0.9 | 10.0.11 |  |
-| Microsoft.AspNetCore.Components.WebAssembly.DevServer | 10.0.9 | 10.0.11 |  |
-| Microsoft.AspNetCore.Components.WebAssembly.Server | 10.0.9 | 10.0.11 |  |
-| Microsoft.AspNetCore.DataProtection | 10.0.9 | 10.0.11 |  |
-| Microsoft.AspNetCore.DataProtection.StackExchangeRedis | 10.0.9 | 10.0.11 |  |
-| Microsoft.AspNetCore.Mvc.NewtonsoftJson | 10.0.9 | 10.0.11 |  |
-| Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation | 10.0.9 | 10.0.11 |  |
-| Microsoft.AspNetCore.Mvc.Testing | 10.0.9 | 10.0.11 |  |
-| Microsoft.AspNetCore.TestHost | 10.0.9 | 10.0.11 |  |
-| Microsoft.AspNetCore.WebUtilities | 10.0.9 | 10.0.11 |  |
-| Microsoft.Bcl.AsyncInterfaces | 10.0.9 | 10.0.11 |  |
-| Microsoft.Data.Sqlite | 10.0.9 | 10.0.11 |  |
-| Microsoft.EntityFrameworkCore | 10.0.9 | 10.0.11 |  |
-| Microsoft.EntityFrameworkCore.Design | 10.0.9 | 10.0.11 |  |
-| Microsoft.EntityFrameworkCore.InMemory | 10.0.9 | 10.0.11 |  |
-| Microsoft.EntityFrameworkCore.Proxies | 10.0.9 | 10.0.11 |  |
-| Microsoft.EntityFrameworkCore.Relational | 10.0.9 | 10.0.11 |  |
-| Microsoft.EntityFrameworkCore.SqlServer | 10.0.9 | 10.0.11 |  |
-| Microsoft.EntityFrameworkCore.Sqlite | 10.0.9 | 10.0.11 |  |
-| Microsoft.EntityFrameworkCore.Tools | 10.0.9 | 10.0.11 |  |
-| Microsoft.Extensions.Caching.Memory | 10.0.9 | 10.0.11 |  |
-| Microsoft.Extensions.Caching.StackExchangeRedis | 10.0.9 | 10.0.11 |  |
-| Microsoft.Extensions.Configuration.Binder | 10.0.9 | 10.0.11 |  |
-| Microsoft.Extensions.Configuration.CommandLine | 10.0.9 | 10.0.11 |  |
-| Microsoft.Extensions.Configuration.EnvironmentVariables | 10.0.9 | 10.0.11 |  |
-| Microsoft.Extensions.Configuration.UserSecrets | 10.0.9 | 10.0.11 |  |
-| Microsoft.Extensions.DependencyInjection | 10.0.9 | 10.0.11 |  |
-| Microsoft.Extensions.DependencyInjection.Abstractions | 10.0.9 | 10.0.11 |  |
-| Microsoft.Extensions.FileProviders.Composite | 10.0.9 | 10.0.11 |  |
-| Microsoft.Extensions.FileProviders.Embedded | 10.0.9 | 10.0.11 |  |
-| Microsoft.Extensions.FileProviders.Physical | 10.0.9 | 10.0.11 |  |
-| Microsoft.Extensions.FileSystemGlobbing | 10.0.9 | 10.0.11 |  |
-| Microsoft.Extensions.Hosting | 10.0.9 | 10.0.11 |  |
-| Microsoft.Extensions.Hosting.Abstractions | 10.0.9 | 10.0.11 |  |
-| Microsoft.Extensions.Http | 10.0.9 | 10.0.11 |  |
-| Microsoft.Extensions.Identity.Core | 10.0.9 | 10.0.11 |  |
-| Microsoft.Extensions.Localization | 10.0.9 | 10.0.11 |  |
-| Microsoft.Extensions.Logging | 10.0.9 | 10.0.11 |  |
-| Microsoft.Extensions.Logging.Abstractions | 10.0.9 | 10.0.11 |  |
-| Microsoft.Extensions.Logging.Console | 10.0.9 | 10.0.11 |  |
-| Microsoft.Extensions.Options | 10.0.9 | 10.0.11 |  |
-| Microsoft.Extensions.Options.ConfigurationExtensions | 10.0.9 | 10.0.11 |  |
-| Microsoft.IdentityModel.JsonWebTokens | 8.19.1 | 8.19.2 |  |
-| Microsoft.IdentityModel.Protocols.OpenIdConnect | 8.19.1 | 8.19.2 |  |
-| Microsoft.IdentityModel.Tokens | 8.19.1 | 8.19.2 |  |
-| OpenIddict.Abstractions | 7.5.0 | 7.7.0 |  |
-| OpenIddict.Core | 7.5.0 | 7.7.0 |  |
-| OpenIddict.Server.AspNetCore | 7.5.0 | 7.7.0 |  |
-| OpenIddict.Validation.AspNetCore | 7.5.0 | 7.7.0 |  |
-| OpenIddict.Validation.ServerIntegration | 7.5.0 | 7.7.0 |  |
-| System.Collections.Immutable | 10.0.9 | 10.0.11 |  |
-| System.IdentityModel.Tokens.Jwt | 8.19.1 | 8.19.2 |  |
-| System.Management | 10.0.9 | 10.0.11 |  |
-| System.Security.Permissions | 10.0.9 | 10.0.11 |  |
-| System.Text.Encoding.CodePages | 10.0.9 | 10.0.11 |  |
-| System.Text.Encodings.Web | 10.0.9 | 10.0.11 |  |
-| System.Text.Json | 10.0.9 | 10.0.11 |  |
-
 ## 10.7.0-rc.3
 
 | Package | Old Version | New Version | PR |
 |---------|-------------|-------------|-----|
 | AWSSDK.S3 | 4.0.7.2 | 4.0.102.3 | #26040 |
 | AWSSDK.SecurityToken | 4.0.2.2 | 4.0.100.10 | #26040 |
+| Microsoft.AspNetCore.Authentication.JwtBearer | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Authentication.OpenIdConnect | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Authorization | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Components | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Components.Authorization | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Components.Web | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Components.WebAssembly | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Components.WebAssembly.Authentication | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Components.WebAssembly.DevServer | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Components.WebAssembly.Server | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.DataProtection | 10.0.9 | 10.0.11 | #26113, #26135 |
+| Microsoft.AspNetCore.DataProtection.StackExchangeRedis | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Mvc.NewtonsoftJson | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Mvc.Testing | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.TestHost | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.WebUtilities | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Bcl.AsyncInterfaces | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Data.Sqlite | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.EntityFrameworkCore | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.EntityFrameworkCore.Design | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.EntityFrameworkCore.InMemory | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.EntityFrameworkCore.Proxies | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.EntityFrameworkCore.Relational | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.EntityFrameworkCore.SqlServer | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.EntityFrameworkCore.Sqlite | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.EntityFrameworkCore.Tools | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Caching.Memory | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Caching.StackExchangeRedis | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Configuration.Binder | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Configuration.CommandLine | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Configuration.EnvironmentVariables | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Configuration.UserSecrets | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.DependencyInjection | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.DependencyInjection.Abstractions | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.FileProviders.Composite | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.FileProviders.Embedded | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.FileProviders.Physical | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.FileSystemGlobbing | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Hosting | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Hosting.Abstractions | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Http | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Identity.Core | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Localization | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Logging | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Logging.Abstractions | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Logging.Console | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Options | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Options.ConfigurationExtensions | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.IdentityModel.JsonWebTokens | 8.19.1 | 8.19.2 | #26135 |
+| Microsoft.IdentityModel.Protocols.OpenIdConnect | 8.19.1 | 8.19.2 | #26135 |
+| Microsoft.IdentityModel.Tokens | 8.19.1 | 8.19.2 | #26135 |
 | MongoDB.Driver | 3.10.0 | 3.11.1 | #26103 |
-
-**Added:**
-
-| Package | Version | PR |
-|---------|---------|-----|
-| Microsoft.AspNetCore.DataProtection | 10.0.9 | #26113 |
+| OpenIddict.Abstractions | 7.5.0 | 7.7.0 | #26135 |
+| OpenIddict.Core | 7.5.0 | 7.7.0 | #26135 |
+| OpenIddict.Server.AspNetCore | 7.5.0 | 7.7.0 | #26135 |
+| OpenIddict.Validation.AspNetCore | 7.5.0 | 7.7.0 | #26135 |
+| OpenIddict.Validation.ServerIntegration | 7.5.0 | 7.7.0 | #26135 |
+| System.Collections.Immutable | 10.0.9 | 10.0.11 | #26135 |
+| System.IdentityModel.Tokens.Jwt | 8.19.1 | 8.19.2 | #26135 |
+| System.Management | 10.0.9 | 10.0.11 | #26135 |
+| System.Security.Permissions | 10.0.9 | 10.0.11 | #26135 |
+| System.Text.Encoding.CodePages | 10.0.9 | 10.0.11 | #26135 |
+| System.Text.Encodings.Web | 10.0.9 | 10.0.11 | #26135 |
+| System.Text.Json | 10.0.9 | 10.0.11 | #26135 |
 
 ## 10.7.0-rc.2
 
