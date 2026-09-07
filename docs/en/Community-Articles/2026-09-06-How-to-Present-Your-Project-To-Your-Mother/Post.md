@@ -173,5 +173,4 @@ Software architect since the early 2000s. Learning, inspiring, sharing, talking.
 | <a href="https://x.com/alperebicoglu"><img src="https://img.icons8.com/color/32/twitterx.png"/></a> | [x.com/alperebicoglu](https://x.com/alperebicoglu)           |
 | <a href="https://alperonline.medium.com"><img src="https://img.icons8.com/color/32/medium.png"/></a> | [alperonline.medium.com](https://alperonline.medium.com)    |
 | <a href="https://github.com/ebicoglu"><img src="https://img.icons8.com/color/32/github.png"/></a> | [github.com/ebicoglu](https://github.com/ebicoglu)           |
-| <a href="https://abp.io/community/members/alper"><img src="https://abp.io/assets/favicon.ico/32x32/light-favicon.png"/></a> | [abp.io/community/members/alper](https://abp.io/community/members/alper) |
 
