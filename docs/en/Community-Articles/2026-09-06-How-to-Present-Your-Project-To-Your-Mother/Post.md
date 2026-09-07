@@ -165,7 +165,8 @@ When we combine our technical strengths with strong soft skills, I believe we ca
 
 Alper Ebicoglu
 
-Software architect since the early 2000s. Learning, inspiring, sharing, talking...
+Software architect since the early 2000s.
+Learning, inspiring, sharing, talking...
 
 |||
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
