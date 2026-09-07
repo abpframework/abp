@@ -4,7 +4,7 @@
 
 ![image-20260906225734694](image-20260906225734694.png)
 
-I'm giving international conference talks and mostly I don't know the audience demography (knowledge level/position/tech stack etc...). And I need to be very careful how I present my talk. Recently I've been studying on this topic. My audience is mostly developers or IT guys. And when I explain a technical topic to those people, I'm very comfortable 🤠🤠 But, sometimes we need to explain what we do (our project) to our friends, mother or child. In other words; anyone who is not technical. Then things are getting a little bit different and harder 🤯
+Hey there! I'm Alper, giving international conference talks and mostly I don't know the audience demography (knowledge level/position/tech stack etc...). And I need to be very careful how I present my talk. Recently I've been studying on this topic. My audience is mostly developers or IT guys. And when I explain a technical topic to those people, I'm very comfortable 🤠🤠 But, sometimes we need to explain what we do (our project) to our friends, mother or child. In other words; anyone who is not technical. Then things are getting a little bit different and harder 🤯
 
 To have a strong technical knowledge does not automatically make someone a good communicator. 
 For scientists, engineers, developers and technical leaders, the real challenge is not knowing the subject 👉 **deciding what the audience needs to know and how to make it meaningful for them.**
