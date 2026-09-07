@@ -14,7 +14,7 @@ public class BootstrapDatepickerScriptContributor : BundleContributor
 
     public override void ConfigureBundle(BundleConfigurationContext context)
     {
-        context.Files.AddIfNotContains("/libs/bootstrap-datepicker/bootstrap-datepicker.min.js");
+        context.Files.AddIfNotContains("/libs/bootstrap-datepicker/bootstrap-datepicker.js");
     }
 
     public override void ConfigureDynamicResources(BundleConfigurationContext context)

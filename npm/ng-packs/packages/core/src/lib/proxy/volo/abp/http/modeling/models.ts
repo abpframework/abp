@@ -82,6 +82,8 @@ export interface PropertyApiDescriptionModel {
   maxLength?: number;
   minimum?: string;
   maximum?: string;
+  minimumIsExclusive?: boolean;
+  maximumIsExclusive?: boolean;
   regex?: string;
 }
 

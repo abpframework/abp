@@ -48,14 +48,18 @@
                              Required="true"
                              RequiredError="@L["ThisFieldIsRequired."]"
                              InputType="InputType.Email" />
-                <MudTextField Margin="Margin.Dense" @bind-Value="@NewEntity.AdminPassword"
-                             Label="@L["DisplayName:AdminPassword"]"
-                             Required="true"
-                             RequiredError="@L["ThisFieldIsRequired."]"
-                             InputType="@(ShowPassword ? InputType.Text : InputType.Password)"
-                             Adornment="Adornment.End"
-                             AdornmentIcon="@(ShowPassword ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff)"
-                             OnAdornmentClick="@TogglePasswordVisibility" />
+                <div class="abp-password-field">
+                    <MudTextField Margin="Margin.Dense" @bind-Value="@NewEntity.AdminPassword"
+                                 Label="@L["DisplayName:AdminPassword"]"
+                                 Required="true"
+                                 RequiredError="@L["ThisFieldIsRequired."]"
+                                 InputType="@(ShowPassword ? InputType.Text : InputType.Password)" />
+                    <MudIconButton Class="abp-password-visibility-toggle"
+                                   Icon="@(ShowPassword ? Icons.Material.Filled.Visibility : Icons.Material.Filled.VisibilityOff)"
+                                   aria-label="@UiLocalizer["ShowPassword"]"
+                                   aria-pressed="@(ShowPassword ? "true" : "false")"
+                                   OnClick="@TogglePasswordVisibility" />
+                </div>
                 <MudExtensionProperties TEntityType="TenantCreateDto" TResourceType="AbpTenantManagementResource" Entity="@NewEntity" LH="@_localizerHelper" ModalType="ExtensionPropertyModalType.CreateModal" />
             </MudForm>
         </DialogContent>
