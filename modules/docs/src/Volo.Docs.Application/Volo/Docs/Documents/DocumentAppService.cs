@@ -390,7 +390,9 @@ namespace Volo.Docs.Documents
                 Logger.LogWarning(
                     "Could not retrieve the document ({documentName}, {languageCode}, {version}) from the source. Using the cached version.",
                     documentName, languageCode, version);
-                return CreateDocumentWithDetailsDto(project, document);
+                var documentDto = CreateDocumentWithDetailsDto(project, document);
+                documentDto.IsStaleCacheFallback = true;
+                return documentDto;
             }
         }
 

@@ -301,6 +301,13 @@
     @if (Model.Document != null)
     {
         <div class="docs-content">
+            @if (Model.Document.IsStaleCacheFallback)
+            {
+                <abp-alert alert-type="Warning" dismissible="true" class="mb-3">
+                    @L["StaleCacheFallbackWarning"]
+                </abp-alert>
+            }
+
             <div class="top-container mb-3">
                 <div class="w-100">
                     <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">

@@ -34,6 +34,8 @@ namespace Volo.Docs.Documents
 
         public virtual DateTime LastCachedTime { get; set; }
 
+        public virtual bool IsStaleCacheFallback { get; set; }
+
         public ProjectDto Project { get; set; }
 
         public List<DocumentContributorDto> Contributors { get; set; }

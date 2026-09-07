@@ -1,4 +1,7 @@
-﻿using Volo.Abp.Modularity;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using NSubstitute;
+using Volo.Abp.Modularity;
 
 namespace Volo.Docs
 {
@@ -8,6 +11,11 @@ namespace Volo.Docs
         )]
     public class DocsApplicationTestModule : AbpModule
     {
-
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            var hostEnvironment = Substitute.For<IHostEnvironment>();
+            hostEnvironment.EnvironmentName.Returns(Environments.Production);
+            context.Services.AddSingleton(hostEnvironment);
+        }
     }
 }

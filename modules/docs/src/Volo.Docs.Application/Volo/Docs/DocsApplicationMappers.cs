@@ -43,9 +43,11 @@ public partial class DocumentToDocumentWithDetailsDtoMapper : MapperBase<Documen
 {
     [MapperIgnoreTarget(nameof(DocumentWithDetailsDto.Project))]
     [MapperIgnoreTarget(nameof(DocumentWithDetailsDto.Contributors))]
+    [MapperIgnoreTarget(nameof(DocumentWithDetailsDto.IsStaleCacheFallback))]
     public override partial DocumentWithDetailsDto Map(Document source);
 
     [MapperIgnoreTarget(nameof(DocumentWithDetailsDto.Project))]
     [MapperIgnoreTarget(nameof(DocumentWithDetailsDto.Contributors))]
+    [MapperIgnoreTarget(nameof(DocumentWithDetailsDto.IsStaleCacheFallback))]
     public override partial void Map(Document source, DocumentWithDetailsDto destination);
 }
