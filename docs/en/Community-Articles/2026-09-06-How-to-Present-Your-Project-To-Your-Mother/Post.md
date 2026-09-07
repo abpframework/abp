@@ -9,7 +9,7 @@ Hey there! I'm Alper, giving international conference talks and mostly I don't k
 To have a strong technical knowledge does not automatically make someone a good communicator. 
 For scientists, engineers, developers and technical leaders, the real challenge is not knowing the subject 👉 **deciding what the audience needs to know and how to make it meaningful for them.**
 
-Empathy is very important in all our life levels. I wrote an article about [empathy in workspace](https://abp.io/community/articles/empathy-in-the-workplace-for-software-companies-wsjjw9we), please read it when you have time because it's also important for this topic. Imagine you are explaining your .NET project to an investor or customer, concepts which you use in your project might be simple for you, but feel that empathy (please) for a moment, **does that guy understand what you mean**? Before starting your presentation collect information about him so that you can adjust your sentences according to him. 
+Empathy is very important in all our life steps. I wrote an article about [empathy in workspace](https://abp.io/community/articles/empathy-in-the-workplace-for-software-companies-wsjjw9we), please read it when you have time because it's also important for this topic. Imagine you are explaining your .NET project to an investor or customer, concepts which you use in your project might be simple for you, but feel that empathy (please) for a moment, **does that guy understand what you mean**? Before starting your presentation collect information about him so that you can adjust your sentences according to him. 
 
 > AND TELL HIM ONLY WHAT WORKS FOR HIM.
 
