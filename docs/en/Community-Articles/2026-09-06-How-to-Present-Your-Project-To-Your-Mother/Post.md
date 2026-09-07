@@ -21,18 +21,19 @@ No need to tell how the algorithm behind this project works! Tell him why it's g
 
 ## Don't Focus Too Much on the Details
 
-I know we are all good software engineers and we want to show the art behind that work 👏 That's absolutely natural feeling 👍
-We all want to show people the details how our project work. 
-But, too much detail will definitely hide your main message!!! You are consuming his energy, focus and time with those details. 
+We are all good software engineers and we want to show the art behind that work 👏 That's absolutely natural feeling 👍
+We all want to show people the details how our project work because we are proud of it and that's a bad practise!!
+Too much detail will definitely hide your main message!!! You are consuming his energy, focus and time with all those details. 
 So what happens, your main goal is not being transferred to him 🤔..💭...🥺
 
 ![image-20260906212829582](image-20260906212829582.png)
 
-How will you fix this this? SIIMMPLEE: Before mentioning a topic, ask yourself: 
+Ok we know the problem, now how will you fix this? SIIMMPLEE: Before mentioning a topic, ask yourself: 
 
 > Does he need this info to understand my idea or make his decision?
 
-If not, please don't mention about that. Maybe later, if he's very much interested in you can explain him (IF ONLY he asks 😄)
+If not, please save it for yourself and don't mention about that. 
+Maybe later, if he's very much interested in you can explain him (IF ONLY he asks 😄)
 
 
 
@@ -43,7 +44,8 @@ If not, please don't mention about that. Maybe later, if he's very much interest
 Well! Don't be angry 😡 at me. In the previous section I said *don't go in details* and now I'm telling **do not explain too simple** 🙃
 While we are trying to not make it too complicated or detailed, we shouldn't make it inaccurate or treating the listener as idiot🐑 
 
-Keep the science and technical meaning balanced and let's reduce unnecessary software jargons. Use clear language, examples and familiar concepts when you explain something complex. **My technique is using analogies**, especially for my projects I give a car example which is as simple as everybody can easily understand (*even my kid understands it*). 
+Keep the science and technical meaning balanced. Let's reduce unnecessary software jargons. Use clear language, examples and familiar concepts when you explain something complex. 
+**My technique is using analogies**, especially for my projects I often give a car example which is as simple as everybody can easily understand (*even my kid understands it*). 
 
 > MAKE IT SIMPLE, but NOT OVER-SIMPLE!
 
@@ -53,7 +55,7 @@ Keep the science and technical meaning balanced and let's reduce unnecessary sof
 
 ## Start With Why It Matters
 
-In Turkey, there are some street sellers... They stop you and say you "Can I tell you something?". Actually I know he's a seller and probably he'll redirect me to a barber, cosmetic store or some shops which are upper floors in a passage. And I mostly say "No!" and I'm walking... But imagine if he tells me first which benefit I'll get from what he sells, I might be going to his shop. (*this paragraph is also explaining my topic in a simple way which I explained in the previous section so I'm still using these techniques in this article* 🤫)
+In Turkey, there are some street sellers... They stop you and say "Can I tell you something?". Actually I know he's a seller and probably he'll redirect me to a barber, cosmetic store or some shops which are upper floors in a passage. And I mostly say "NO!" and I'm walking my way... But imagine if he tells me first which benefit I'll get from what he sells, maybe I'll go to his shop. (*this paragraph is also explaining my topic in a simple way which I explained in the previous section so I'm still using these techniques in this article* 🤫)
 
 ![image-20260906212109817](image-20260906212109817.png)
 
@@ -72,7 +74,7 @@ So far, so good 💯 You did a good job reading until here 🙏 ᵗʰᵃᶰᵏ�
 
 ---
 
-## Think About What You Want Him to  Remember
+## Think About What You Want Him to Remember
 
 Your audience will not remember many technical points after your presentation. 
 **They will remember 1-2 topics.** 
@@ -86,7 +88,7 @@ Everything else must support those core messages.
 
 ## Your Voice Tone Matters Too!
 
-Imagine you did everything very good until here... but you are talking very monotonous way. Or you are talking quickly. Sorry, that's also not a good talk!  **Your emphasis, eye contact, body language, tone of voice are all important.** You can make small jokes to give him a relaxing break to understand your complex technical work. 
+Imagine you did everything 👏 very good until here... but you are talking very monotonous way. Or you are talking quickly. Sorry, that's also not a good talk!  **Your emphasis, eye contact, body language, tone of voice are all important.** You can make small jokes to give him a relaxing break to understand your complex technical work. 
 
 > COMMUNICATION IS NOT ONLY ABOUT WHAT YOU SAY but also HOW YOU SAY IT 🗣
 
@@ -99,7 +101,9 @@ Watch the [ShadeZahrai -very short- tiktok video](https://www.tiktok.com/@shadez
 
 ## Use Images to Make Your Subject Clear
 
-Especially when you are presenting on slides, you should show some funny images related to your topic or you can show analogic images that explains the problem. For example to tell about a risky case which you covered in your project, you can use the below image. Yes, people will laugh at first and later they'll listen to more carefully because you took their attention. (*I created another paradox here, I’m explaining this topic using a funny related image and I know you’re now reading my article more carefully*🤝)
+Especially when you are presenting on slides, you should show some funny images related to your topic or you can show analogic images that explains the problem. 
+For example to tell about a risky case which you covered in your project, you can use the below image :)
+Yes, people will laugh at first but later they'll listen to you more carefully because you took their attention. (*I created another paradox here, I’m explaining this topic using a funny related image and I know you’re now reading my article more carefully*🤝)
 
 ![image-20260906201600152](image-20260906201600152.png)
 
@@ -113,7 +117,7 @@ Especially when you are presenting on slides, you should show some funny images 
 ![image-20260906202807792](image-20260906202807792.png)
 
 In technical presentations, people can ask aggressive or stupid questions or you may not like their questions 😡 
-Don't immediately try to defend yourself by giving more and more technical details. Or don't try to show them it's silly question.
+Don't immediately try to defend yourself by giving more and more technical details. Or don't try to show them it's a silly question.
 If you don't know, tell it honestly. If that feature doesn't exist, tell that you took note and you'll evaluate it later. 
 Even if it’s a stupid question, don’t shut him down. **Later, he will remember only that moment and all your efforts you’ve made will be lost.**
 
@@ -138,11 +142,11 @@ Okay, you know a lot and you want to show that. But try to be empathetic again. 
 
 ---
 
-## Explaining Something and Convincing Someone  Are Not the Same 🙄
+## Explaining Something and Convincing Someone Are Not the Same 🙄
 
 Providing accurate & correct information and persuading someone to take action are different. 
 But in business life, **technical presentations often need to do both**. 
-You  need to explain how something works and also helping management approve a project.
+You need to explain how something works and also helping management approve a project.
 
 YOU CAN USE THIS PATH WHEN PRESENTING YOUR PROJECT:
 
