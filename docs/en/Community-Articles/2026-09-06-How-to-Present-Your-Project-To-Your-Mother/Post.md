@@ -154,9 +154,10 @@ YOU CAN USE THIS PATH WHEN PRESENTING YOUR PROJECT:
 
 ---
 
-I appreciate you taking the time to read this article. I like to share what I learn which is the main reason I wrote this article.
-By applying these techniques, we can become better presenters and communicate our ideas more effectively. 
-When we combine our technical strengths with strong soft skills, I believe we can make a greater impact, inspire others and grow together.
+I appreciate you taking the time to read this article 🙏. 
+I like to share what I learn which is the main reason I wrote this article.
+By applying these techniques, we can become better presenters and communicate our ideas more effectively 👌. 
+When we combine our technical strengths with strong soft skills, I believe we can make a greater impact, inspire others and grow together 🙌💪.
 
 
 
