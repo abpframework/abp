@@ -1,9 +1,16 @@
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Branding
 @using Volo.Abp.Ui.Branding
 @inject IBrandingProvider BrandingProvider
+@inject NavigationManager NavigationManager
+
+@{
+    var logoUrl = NavigationManager.ResolveBrandingUrl(BrandingProvider.LogoUrl);
+}
+
 <a class="navbar-brand" href="">
-    @if (!BrandingProvider.LogoUrl.IsNullOrWhiteSpace())
+    @if (!logoUrl.IsNullOrWhiteSpace())
     {
-        <img src="@BrandingProvider.LogoUrl.TrimStart('/', '~')" alt="@BrandingProvider.AppName">
+        <img src="@logoUrl" alt="@BrandingProvider.AppName">
     }
     @BrandingProvider.AppName
 </a>
