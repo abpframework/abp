@@ -273,7 +273,15 @@ public class PackagePreviewSwitcher : ITransientDependency
             // (source registration / regular PackageReference updates below must still
             // proceed for every solution/project) - just skip the --include pass.
             Logger.LogWarning(ex, "Could not resolve the latest Volo.Abp.Core nightly version; --include files will be skipped for this run.");
-            latestVersionFromMyGet = null;
+            return (includeFiles, excludedPackages, null);
+        }
+
+        if (latestVersionFromMyGet.IsNullOrWhiteSpace())
+        {
+            // No exception was thrown, but MyGet simply has no version for this package yet
+            // (e.g. not indexed there) - warn so users aren't left wondering why --include did nothing.
+            Logger.LogWarning("Could not resolve the latest Volo.Abp.Core nightly version; --include files will be skipped for this run.");
+            return (includeFiles, excludedPackages, null);
         }
 
         return (includeFiles, excludedPackages, latestVersionFromMyGet);
