@@ -11,7 +11,7 @@ Join us dive into the magic of .NET 8 at the community live stream event, "Moder
 Topics that will be covered include:
 
 * *ASP.NET Core*: Crafting Maintainable Microservices
-* *Cloud Native development with .NET Aspire*
+* *Cloud Native development with Aspire*
 * *Developer Productivity with Visual Studio and .NET*
 * *GitHub Copilot configuration, extension, tips and tricks*
 * *User Experience and Front-End Development*: Delve into responsive design, accessibility, and performance optimization. Discuss modern front-end frameworks (Blazor, React, Angular, etc.) in the .NET ecosystem. Share strategies for creating delightful user interfaces.

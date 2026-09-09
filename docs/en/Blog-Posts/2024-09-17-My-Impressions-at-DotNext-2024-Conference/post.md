@@ -14,7 +14,7 @@ Last week, I had the chance of being a speaker at **DotNext 2024** in Moscow. [J
 
 One of the standout aspects of the conference was its strong technical focus, particularly on deep-dive .NET topics. Talks covered subjects like **low-level optimizations**, architecture, performance, and platform internals. 
 
-The conference started with Sergei Benzenko's talk "What's New in .NET 9". There are important topics like ".NET Aspire in Action", "AI-Driven Software Development", "DDD and Strategic Design" and "OAuth 2.0 User-Managed Access in ASP.NET Core with Keycloak". 
+The conference started with Sergei Benzenko's talk "What's New in .NET 9". There are important topics like "Aspire in Action", "AI-Driven Software Development", "DDD and Strategic Design" and "OAuth 2.0 User-Managed Access in ASP.NET Core with Keycloak".
 
 ![DotNext 2024 Speakers](speakers.png)
 
