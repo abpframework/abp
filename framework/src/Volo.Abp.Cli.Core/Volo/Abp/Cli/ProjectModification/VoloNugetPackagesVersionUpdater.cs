@@ -449,12 +449,14 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
                         }
                     }
 
+                    var updatedXml = doc.OuterXml;
+
                     fs.Seek(0, SeekOrigin.Begin);
                     fs.SetLength(0);
 
-                    using (var sw = new StreamWriter(fs, DefaultEncoding))
+                    using (var sw = new StreamWriter(fs, sr.CurrentEncoding))
                     {
-                        await sw.WriteAsync(doc.OuterXml);
+                        await sw.WriteAsync(updatedXml);
                         await sw.FlushAsync();
                     }
                 }
