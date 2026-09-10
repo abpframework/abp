@@ -408,7 +408,7 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
         {
             using (var fs = File.Open(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
             {
-                using (var sr = new StreamReader(fs, Encoding.Default, true))
+                using (var sr = new StreamReader(fs, DefaultEncoding, true))
                 {
                     var fileContent = await sr.ReadToEndAsync();
 
