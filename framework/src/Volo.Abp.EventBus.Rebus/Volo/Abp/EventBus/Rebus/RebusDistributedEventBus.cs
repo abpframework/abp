@@ -85,8 +85,16 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             eventName = EventNameAttribute.GetNameOrDefault(eventType);
         }
         var correlationId = MessageContext.Current.Headers.GetOrDefault(EventBusConsts.CorrelationIdHeaderName);
+        Guid? tenantId = null;
 
-        if (await AddToInboxAsync(messageId, eventName, eventType, eventData, correlationId))
+        if (eventData is DynamicEventData receivedDynamicEventData)
+        {
+            tenantId = EventBusTenantIdHelper.Parse(
+                MessageContext.Current.Headers.GetOrDefault(EventBusConsts.TenantIdHeaderName));
+            eventData = CreateDynamicEventData(receivedDynamicEventData.EventName, receivedDynamicEventData.Data, tenantId);
+        }
+
+        if (await AddToInboxAsync(messageId, eventName, eventType, eventData, correlationId, tenantId))
         {
             return;
         }
@@ -194,7 +202,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
     {
         var eventType = EventTypes.GetOrDefault(eventName);
-        var dynamicEventData = eventData as DynamicEventData ?? new DynamicEventData(eventName, eventData);
+        var dynamicEventData = CreateDynamicEventDataForPublishing(eventName, eventData);
 
         if (eventType != null)
         {
@@ -211,6 +219,9 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         {
             headers.Add(EventBusConsts.CorrelationIdHeaderName, CorrelationIdProvider.Get()!);
         }
+
+        AddTenantIdHeader(headers, GetTenantIdToPropagate(eventType, eventData));
+
         await PublishAsync(eventType, eventData, headersArguments: headers);
     }
 
@@ -232,7 +243,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         }
         else if (DynamicHandlerFactories.ContainsKey(outgoingEvent.EventName))
         {
-            eventData = new DynamicEventData(outgoingEvent.EventName, Serializer.Deserialize(outgoingEvent.EventData, typeof(object)));
+            eventData = CreateDynamicEventData(outgoingEvent, Serializer.Deserialize(outgoingEvent.EventData, typeof(object)));
             eventType = typeof(DynamicEventData);
         }
         else
@@ -245,6 +256,8 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         {
             headers.Add(EventBusConsts.CorrelationIdHeaderName, outgoingEvent.GetCorrelationId()!);
         }
+
+        AddTenantIdHeader(headers, outgoingEvent.GetTenantId());
 
         await PublishAsync(eventType, eventData, eventId: outgoingEvent.Id, headersArguments: headers);
 
@@ -296,7 +309,7 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         }
         else if (DynamicHandlerFactories.ContainsKey(incomingEvent.EventName))
         {
-            eventData = new DynamicEventData(incomingEvent.EventName, Serializer.Deserialize(incomingEvent.EventData, typeof(object)));
+            eventData = CreateDynamicEventData(incomingEvent, Serializer.Deserialize(incomingEvent.EventData, typeof(object)));
             eventType = typeof(DynamicEventData);
         }
         else
@@ -317,6 +330,16 @@ public class RebusDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     protected override byte[] Serialize(object eventData)
     {
         return Serializer.Serialize(eventData);
+    }
+
+    protected virtual void AddTenantIdHeader(Dictionary<string, string> headers, Guid? tenantId)
+    {
+        if (tenantId == null)
+        {
+            return;
+        }
+
+        headers[EventBusConsts.TenantIdHeaderName] = tenantId.Value.ToString();
     }
 
     protected virtual async Task PublishAsync(
