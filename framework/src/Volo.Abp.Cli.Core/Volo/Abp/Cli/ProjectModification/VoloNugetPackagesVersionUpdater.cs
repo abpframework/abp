@@ -406,67 +406,81 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
 
         try
         {
-            using (var fs = File.Open(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+            string fileContent;
+            Encoding detectedEncoding;
+            using (var fs = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (var sr = new StreamReader(fs, DefaultEncoding, true))
             {
-                using (var sr = new StreamReader(fs, DefaultEncoding, true))
+                fileContent = await sr.ReadToEndAsync();
+                detectedEncoding = sr.CurrentEncoding;
+            }
+
+            var doc = new XmlDocument { PreserveWhitespace = true };
+            doc.LoadXml(fileContent);
+
+            var packageNodeList = doc.SelectNodes("//PackageVersion[starts-with(@Include, 'Volo.')]");
+            if (packageNodeList != null)
+            {
+                foreach (XmlNode package in packageNodeList)
                 {
-                    var fileContent = await sr.ReadToEndAsync();
-
-                    var doc = new XmlDocument { PreserveWhitespace = true };
-                    doc.LoadXml(fileContent);
-
-                    var packageNodeList = doc.SelectNodes("//PackageVersion[starts-with(@Include, 'Volo.')]");
-                    if (packageNodeList != null)
+                    var packageId = package.Attributes?["Include"]?.Value;
+                    if (packageId == null || excluded.Contains(packageId))
                     {
-                        foreach (XmlNode package in packageNodeList)
-                        {
-                            var packageId = package.Attributes?["Include"]?.Value;
-                            if (packageId == null || excluded.Contains(packageId))
-                            {
-                                continue;
-                            }
-
-                            // LeptonX and Studio packages follow their own, independent version
-                            // stream (see IsLeptonXPackage/IsStudioPackage, also used by
-                            // UpdateVoloPackagesAsync above) - never stamp them with the
-                            // Volo.Abp.Core anchor version, regardless of --exclude-packages.
-                            if (IsLeptonXPackage(packageId) || IsStudioPackage(packageId))
-                            {
-                                continue;
-                            }
-
-                            var versionAttribute = package.Attributes["Version"];
-                            if (versionAttribute == null)
-                            {
-                                continue;
-                            }
-
-                            if (versionAttribute.Value != latestVersionFromMyGet)
-                            {
-                                Logger.LogInformation("Updating central package \"{PackageId}\" from v{CurrentVersion} to v{LatestVersion}", packageId, versionAttribute.Value, latestVersionFromMyGet);
-                                versionAttribute.Value = latestVersionFromMyGet;
-                            }
-                        }
+                        continue;
                     }
 
-                    fs.Seek(0, SeekOrigin.Begin);
-                    fs.SetLength(0);
-
-                    using (var sw = new StreamWriter(fs, DefaultEncoding))
+                    // LeptonX and Studio packages follow their own, independent version
+                    // stream (see IsLeptonXPackage/IsStudioPackage, also used by
+                    // UpdateVoloPackagesAsync above) - never stamp them with the
+                    // Volo.Abp.Core anchor version, regardless of --exclude-packages.
+                    if (IsLeptonXPackage(packageId) || IsStudioPackage(packageId))
                     {
-                        await sw.WriteAsync(doc.OuterXml);
-                        await sw.FlushAsync();
+                        continue;
                     }
+
+                    var versionAttribute = package.Attributes["Version"];
+                    if (versionAttribute == null)
+                    {
+                        continue;
+                    }
+
+                    if (versionAttribute.Value != latestVersionFromMyGet)
+                    {
+                        Logger.LogInformation("Updating central package \"{PackageId}\" from v{CurrentVersion} to v{LatestVersion}", packageId, versionAttribute.Value, latestVersionFromMyGet);
+                        versionAttribute.Value = latestVersionFromMyGet;
+                    }
+                }
+            }
+
+            var updatedXml = doc.OuterXml;
+
+            // Write to a temp file in the same directory and atomically swap it in with
+            // File.Replace, instead of truncating filePath in place - this way a failure
+            // mid-write (disk full, process killed) never leaves the original file empty
+            // or partially written; it either stays untouched or is fully replaced.
+            var tempFilePath = Path.Combine(Path.GetDirectoryName(filePath) ?? string.Empty, Path.GetRandomFileName());
+            try
+            {
+                using (var tempStream = new FileStream(tempFilePath, FileMode.CreateNew, FileAccess.Write, FileShare.None))
+                using (var sw = new StreamWriter(tempStream, detectedEncoding))
+                {
+                    await sw.WriteAsync(updatedXml);
+                    await sw.FlushAsync();
+                }
+
+                File.Replace(tempFilePath, filePath, null);
+            }
+            finally
+            {
+                if (File.Exists(tempFilePath))
+                {
+                    File.Delete(tempFilePath);
                 }
             }
         }
         catch (Exception ex)
         {
-            // The file is truncated before the updated XML is written back, so a failure here
-            // (disk full, process killed, file locked mid-write) can leave it empty/partially
-            // written on disk. Logged as an error (not a warning) so this isn't missed - the
-            // rest of the switch-to-nightly run still continues for other solutions/files.
-            Logger.LogError(ex, "Failed to update central package versions in \"{FilePath}\". The file may now be empty or partially written - please check it manually.", filePath);
+            Logger.LogError(ex, "Failed to update central package versions in \"{FilePath}\".", filePath);
         }
     }
 }
