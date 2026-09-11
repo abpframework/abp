@@ -63,13 +63,6 @@ body {
         }
     }
 
-    .mCS-autoHide > .mCustomScrollBox > .mCSB_scrollTools,
-    .mCS-autoHide > .mCustomScrollBox ~ .mCSB_scrollTools {
-        opacity: 1 !important;
-        filter: 'alpha(opacity=1)';
-        -ms-filter: 'alpha(opacity=1)';
-    }
-
     // the options-header only exists to host the floating button; hide it while the bar is inline
     // (non-scrolled), so the inline bar keeps its original look. It reappears once .scrolledMore collapses.
     .alert-criteria .options-header {
@@ -419,6 +412,8 @@ body {
                 display: block;
                 height: calc(100vh - 350px);
                 overflow-y: auto;
+                scrollbar-width: thin;
+                scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
                 margin-right: -4px !important;
                 margin-top: 20px !important;
             }
@@ -531,9 +526,6 @@ body {
                     }
                 }
             }
-                .mCSB_scrollTools{
-                    right: -20px;
-                }
         }
     }
 
@@ -563,6 +555,7 @@ body {
                     margin-bottom: 0;
                     flex-wrap: nowrap;
                     overflow-x: auto;
+                    scrollbar-width: thin;
                     white-space: nowrap;
                     padding-bottom: 10px;
 
@@ -915,6 +908,8 @@ body {
 
         #scroll-index {
             max-height: 38vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
         }
 
         .scroll-top-btn {

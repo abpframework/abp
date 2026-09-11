@@ -24,7 +24,7 @@ using Volo.Abp.TestApp;
 using Volo.Abp.TestApp.Application;
 using Volo.Abp.Threading;
 using Volo.Abp.Validation.Localization;
-using Volo.Abp.FluentValidation;
+using Volo.Abp.Http.FluentValidation;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.AspNetCore.Mvc;
@@ -34,7 +34,7 @@ namespace Volo.Abp.AspNetCore.Mvc;
     typeof(AbpMemoryDbTestModule),
     typeof(AbpAspNetCoreMvcModule),
     typeof(AbpAutofacModule),
-    typeof(AbpFluentValidationModule)
+    typeof(AbpHttpFluentValidationModule)
     )]
 public class AbpAspNetCoreMvcTestModule : AbpModule
 {

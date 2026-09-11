@@ -121,6 +121,7 @@
     <Project Path="src/Volo.Abp.Http.Client.IdentityModel/Volo.Abp.Http.Client.IdentityModel.csproj" />
     <Project Path="src/Volo.Abp.Http.Client.Web/Volo.Abp.Http.Client.Web.csproj" />
     <Project Path="src/Volo.Abp.Http.Client/Volo.Abp.Http.Client.csproj" />
+    <Project Path="src/Volo.Abp.Http.FluentValidation/Volo.Abp.Http.FluentValidation.csproj" />
     <Project Path="src/Volo.Abp.Http/Volo.Abp.Http.csproj" />
     <Project Path="src/Volo.Abp.IdentityModel/Volo.Abp.IdentityModel.csproj" />
     <Project Path="src/Volo.Abp.Imaging.Abstractions/Volo.Abp.Imaging.Abstractions.csproj" />
@@ -229,6 +230,7 @@
     <Project Path="test/Volo.Abp.GlobalFeatures.Tests/Volo.Abp.GlobalFeatures.Tests.csproj" />
     <Project Path="test/Volo.Abp.Http.Client.IdentityModel.Web.Tests/Volo.Abp.Http.Client.IdentityModel.Web.Tests.csproj" />
     <Project Path="test/Volo.Abp.Http.Client.Tests/Volo.Abp.Http.Client.Tests.csproj" />
+    <Project Path="test/Volo.Abp.Http.FluentValidation.Tests/Volo.Abp.Http.FluentValidation.Tests.csproj" />
     <Project Path="test/Volo.Abp.Http.Tests/Volo.Abp.Http.Tests.csproj" />
     <Project Path="test/Volo.Abp.IdentityModel.Tests/Volo.Abp.IdentityModel.Tests.csproj" />
     <Project Path="test/Volo.Abp.Imaging.Abstractions.Tests/Volo.Abp.Imaging.Abstractions.Tests.csproj" />

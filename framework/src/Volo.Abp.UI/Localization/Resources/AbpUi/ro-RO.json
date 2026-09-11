@@ -62,6 +62,7 @@
     "Theme": "Temă",
     "NotAssigned": "Nealocat",
     "EntityActionsDisabledTooltip": "Nu aveți permisiune să efectuați nicio acțiune.",
-    "ResourcePermissions": "Permisiuni"
+    "ResourcePermissions": "Permisiuni",
+    "ShowPassword": "Afișează parola"
   }
 }
