@@ -240,7 +240,7 @@ Entities describe the persisted data model. UI is not configured with legacy pro
 | `isMappedToDbField` | Whether a dynamic scalar property uses a dedicated physical column instead of dynamic data storage |
 | `decimalPlaces` | Decimal scale for `decimal` and `money` properties |
 | `currencySymbol` | Optional UI currency symbol for `money` properties |
-| `collection` | Primitive collection settings: `maxCount`, required `uniqueItems`, and stable `storageKey` |
+| `collection` | Primitive collection settings: optional `maxCount` and `uniqueItems` |
 | `foreignKey` | Lookup relation metadata |
 | `validators` | Backend/UI validation rules |
 
@@ -261,7 +261,7 @@ For virtual calculated fields and related-record aggregates, see [Calculated and
 | `enum` | Integer-backed enum; requires `enumType` |
 | `file`, `image` | Upload metadata handled by the low-code file pipeline |
 
-Add `collection` to any supported primitive type to store an ordered value list. Do not hand-edit a generated `storageKey` after data exists.
+Add `collection` to any supported primitive type to store an ordered value list.
 
 ### File, Image, and Attachments
 
