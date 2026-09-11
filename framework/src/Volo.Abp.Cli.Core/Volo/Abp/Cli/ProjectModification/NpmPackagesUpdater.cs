@@ -132,7 +132,7 @@ public class NpmPackagesUpdater : ITransientDependency
 
             if (!fileContent.Contains(volosoftRegistry))
             {
-                fileContent += volosoftRegistry;
+                fileContent += Environment.NewLine + volosoftRegistry;
             }
 
             File.WriteAllText(fileName, fileContent);
