@@ -2,7 +2,7 @@
 
 namespace System.Collections.Generic;
 
-/// <summary> 
+/// <summary>
 /// Extension methods for <see cref="IEnumerable{T}"/>.
 /// </summary>
 public static class AbpEnumerableExtensions
@@ -58,5 +58,25 @@ public static class AbpEnumerableExtensions
         return condition
             ? source.Where(predicate)
             : source;
+    }
+
+    /// <summary>
+    /// Shuffles the given <paramref name="source"/> using Fisher-Yates algorithm.
+    /// </summary>
+    /// <param name="source">The source to shuffle</param>
+    /// <param name="rng">Random number generator</param>
+    /// <returns>Shuffled enumerable</returns>
+    public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source, Random rng)
+    {
+        var elements = source.ToArray();
+        for (var i = elements.Length - 1; i >= 0; i--)
+        {
+            // Swap element "i" with a random earlier element it (or itself)
+            // ... except we don't really need to swap it fully, as we can
+            // return it immediately, and afterwards it's irrelevant.
+            var swapIndex = rng.Next(i + 1);
+            yield return elements[swapIndex];
+            elements[swapIndex] = elements[i];
+        }
     }
 }
