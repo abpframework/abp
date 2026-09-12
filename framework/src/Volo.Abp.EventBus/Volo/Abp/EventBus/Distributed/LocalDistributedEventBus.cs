@@ -173,7 +173,7 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true)
     {
         var eventType = EventTypes.GetOrDefault(eventName);
-        var dynamicEventData = eventData as DynamicEventData ?? new DynamicEventData(eventName, eventData);
+        var dynamicEventData = CreateDynamicEventDataForPublishing(eventName, eventData);
 
         if (eventType != null)
         {
@@ -185,7 +185,7 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
-        if (await AddToInboxAsync(Guid.NewGuid().ToString(), GetEventName(eventType, eventData), eventType, eventData, null))
+        if (await AddToInboxAsync(Guid.NewGuid().ToString(), GetEventName(eventType, eventData), eventType, eventData, null, GetTenantIdToPropagate(eventType, eventData)))
         {
             return;
         }
@@ -229,16 +229,14 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         object eventData;
         if (eventType == typeof(DynamicEventData))
         {
-            eventData = new DynamicEventData(
-                outgoingEvent.EventName,
-                System.Text.Json.JsonSerializer.Deserialize<object>(outgoingEvent.EventData)!);
+            eventData = CreateDynamicEventData(outgoingEvent, System.Text.Json.JsonSerializer.Deserialize<object>(outgoingEvent.EventData)!);
         }
         else
         {
             eventData = System.Text.Json.JsonSerializer.Deserialize(outgoingEvent.EventData, eventType)!;
         }
 
-        if (await AddToInboxAsync(Guid.NewGuid().ToString(), outgoingEvent.EventName, eventType, eventData, null))
+        if (await AddToInboxAsync(Guid.NewGuid().ToString(), outgoingEvent.EventName, eventType, eventData, null, outgoingEvent.GetTenantId()))
         {
             return;
         }
@@ -271,9 +269,7 @@ public class LocalDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         object eventData;
         if (eventType == typeof(DynamicEventData))
         {
-            eventData = new DynamicEventData(
-                incomingEvent.EventName,
-                System.Text.Json.JsonSerializer.Deserialize<object>(incomingEvent.EventData)!);
+            eventData = CreateDynamicEventData(incomingEvent, System.Text.Json.JsonSerializer.Deserialize<object>(incomingEvent.EventData)!);
         }
         else
         {
