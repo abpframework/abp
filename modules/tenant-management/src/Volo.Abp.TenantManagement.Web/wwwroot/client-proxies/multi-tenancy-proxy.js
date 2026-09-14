@@ -58,9 +58,10 @@
 
     volo.abp.tenantManagement.tenant.updateDefaultConnectionString = function(id, defaultConnectionString, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/multi-tenancy/tenants/' + id + '/default-connection-string' + abp.utils.buildQueryString([{ name: 'defaultConnectionString', value: defaultConnectionString }]) + '',
+        url: abp.appPath + 'api/multi-tenancy/tenants/' + id + '/default-connection-string',
         type: 'PUT',
-        dataType: null
+        dataType: null,
+        data: JSON.stringify(defaultConnectionString)
       }, ajaxParams));
     };
 

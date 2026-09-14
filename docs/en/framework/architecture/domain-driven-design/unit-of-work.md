@@ -38,10 +38,10 @@ All of these are automatically handled by the ABP.
 
 While the section above explains the UOW as it is database transaction, actually a UOW doesn't have to be transactional. By default;
 
-* **HTTP GET** requests don't start a transactional UOW. They still starts a UOW, but **doesn't create a database transaction**.
+* **HTTP GET** and **HTTP QUERY** requests don't start a transactional UOW. They still start a UOW, but **don't create a database transaction**.
 * All other HTTP request types start a UOW with a database transaction, if database level transactions are supported by the underlying database provider.
 
-This is because an HTTP GET request doesn't (and shouldn't) make any change in the database. You can change this behavior using the options explained below.
+This is because they are safe HTTP methods that don't (and shouldn't) make any change in the database. You can change this behavior using the options explained below.
 
 ## Default Options
 

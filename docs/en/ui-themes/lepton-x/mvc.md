@@ -261,6 +261,8 @@ General Settings can be replaced with following files.
 
 Application name and logo can be customized by using the `IBrandingProvider` service. See [Razor Pages: Branding](../../framework/ui/mvc-razor-pages/branding.md) for more information.
 
+When the branding provider also provides a `LogoIconUrl`, LeptonX switches to its compact branding: the branding areas show the logo icon instead of the full logo and render the application name next to it. Dark and dim styles use `LogoIconReverseUrl` and fall back to `LogoIconUrl`.
+
 If you need to replace the component, you can follow the steps below.
 
 * The **main header branding component page (.cshtml file)** is defined in the `Themes/LeptonX/Components/Common/MainHeaderBranding/Default.cshtml` file and you can **override it** by creating a file with the **same name** and **under** the **same folder**.

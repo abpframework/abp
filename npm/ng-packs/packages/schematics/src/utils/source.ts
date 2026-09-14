@@ -108,6 +108,13 @@ export function createProxyConfigReader(targetPath: string) {
   };
 }
 
+export function resolveProxyResourceApi(
+  params: GenerateProxySchema,
+  previousConfig?: ProxyConfig,
+) {
+  return params.resourceApi ?? previousConfig?.resourceApi ?? false;
+}
+
 export function createProxyClearer(targetPath: string) {
   targetPath += PROXY_PATH;
   const proxyIndexPath = `${targetPath}/index.ts`;

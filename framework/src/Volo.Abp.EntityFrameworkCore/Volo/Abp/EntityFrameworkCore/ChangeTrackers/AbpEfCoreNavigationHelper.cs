@@ -83,7 +83,8 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
                 abpEntityEntry.UpdateNavigation(entityEntry, navigationEntry);
             }
 
-            if (!abpEntityEntry.IsModified && (!checkEntityEntryState || IsEntityEntryChanged(entityEntry)))
+            // A principal without a navigation to the dependent has no navigation change to report.
+            if (navigationEntry != null && !abpEntityEntry.IsModified && (!checkEntityEntryState || IsEntityEntryChanged(entityEntry)))
             {
                 abpEntityEntry.IsModified = true;
                 DetectChanges(abpEntityEntry.EntityEntry, false);
@@ -128,7 +129,7 @@ public class AbpEfCoreNavigationHelper : ITransientDependency
                     abpEntityEntry.UpdateNavigation(entityEntry, navigationEntry);
                 }
 
-                if (!abpEntityEntry.IsModified  && (!checkEntityEntryState || IsEntityEntryChanged(entityEntry)))
+                if (navigationEntry != null && !abpEntityEntry.IsModified  && (!checkEntityEntryState || IsEntityEntryChanged(entityEntry)))
                 {
                     abpEntityEntry.IsModified = true;
                     DetectChanges(abpEntityEntry.EntityEntry, false);

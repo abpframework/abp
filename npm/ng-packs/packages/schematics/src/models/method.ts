@@ -47,6 +47,7 @@ export class Body {
   responseType: string;
   httpResponseType?: 'json' | 'text' | 'blob' | 'arraybuffer';
   acceptHeader?: string;
+  contentTypeHeader?: string;
   url: string;
 
   registerActionParameter = (param: ParameterInBody) => {
@@ -68,7 +69,15 @@ export class Body {
         this.params.push(paramName === value ? value : `${getParamName(paramName)}: ${value}`);
         break;
       case eBindingSourceId.FormFile:
+        this.body = value;
+        break;
       case eBindingSourceId.Body:
+        /* Angular sends a plain string body as text/plain, but the endpoint expects a JSON string. */
+        if (param.typeSimple === 'string') {
+          this.body = `JSON.stringify(${value})`;
+          this.contentTypeHeader = 'application/json';
+          break;
+        }
         this.body = value;
         break;
       case eBindingSourceId.Path:

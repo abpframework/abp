@@ -1,4 +1,5 @@
-﻿using Confluent.Kafka;
+﻿using System;
+using Confluent.Kafka;
 
 namespace Volo.Abp.EventBus.Kafka;
 
@@ -26,5 +27,15 @@ public static class MessageExtensions
         }
 
         return correlationId;
+    }
+
+    public static Guid? GetTenantId<TKey, TValue>(this Message<TKey, TValue> message)
+    {
+        if (message.Headers.TryGetLastBytes(EventBusConsts.TenantIdHeaderName, out var tenantIdBytes))
+        {
+            return EventBusTenantIdHelper.Parse(System.Text.Encoding.UTF8.GetString(tenantIdBytes));
+        }
+
+        return null;
     }
 }

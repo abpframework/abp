@@ -1,0 +1,32 @@
+using System.Threading;
+using System.Threading.Tasks;
+using JetBrains.Annotations;
+
+namespace Volo.Abp.BlobStoring;
+
+/// <summary>
+/// Resolves the passphrase used to encrypt/decrypt the BLOBs of a container.
+/// Replace this service to read the passphrases from another source, like a vault
+/// or another secret store (the provider must be able to return the passphrase
+/// itself; hardware-backed non-exportable keys are not supported). The
+/// <see cref="BlobEncryptionKeyContext"/> carries the container/BLOB name and the
+/// tenant, so the passphrase can be selected by the BLOB identity too.
+/// </summary>
+public interface IBlobEncryptionKeyProvider
+{
+    /// <summary>
+    /// Resolves the passphrase (and its source) to encrypt a new BLOB; throws if none is available.
+    /// </summary>
+    Task<BlobEncryptionKey> ResolveForEncryptionAsync(
+        [NotNull] BlobEncryptionKeyContext context,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Resolves the passphrase for the key source recorded in the BLOB header;
+    /// throws if it is not available anymore.
+    /// </summary>
+    Task<string> ResolveForDecryptionAsync(
+        BlobEncryptionKeySource keySource,
+        [NotNull] BlobEncryptionKeyContext context,
+        CancellationToken cancellationToken = default);
+}

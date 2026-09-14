@@ -83,7 +83,7 @@ var abp = abp || {};
             text: message
         };
 
-        if ($.isFunction(titleOrCallback)) {
+        if (typeof titleOrCallback === 'function') {
             closeOnEsc = callback;
             callback = titleOrCallback;
         } else if (titleOrCallback) {
@@ -111,7 +111,7 @@ var abp = abp || {};
             html: abp.utils.htmlEscape(message).replace(/\n/g, '<br>')
         };
 
-        if ($.isFunction(titleOrOptionsOrCallback)) {
+        if (typeof titleOrOptionsOrCallback === 'function') {
             callback = titleOrOptionsOrCallback;
         } else if (typeof titleOrOptionsOrCallback === 'string') {
             userOpts.title = titleOrOptionsOrCallback;

@@ -218,14 +218,22 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
         var permissionNames = permissions.Select(x => x.Name).ToArray();
         var multiplePermissionWithGrantedProviders = new MultiplePermissionWithGrantedProviders(permissionNames);
 
+        var stateCheckPermissions = permissions
+            .Where(x => x.IsEnabled)
+            .Where(x => x.MultiTenancySide.HasFlag(CurrentTenant.GetMultiTenancySide()))
+            .Where(x => !x.Providers.Any() || x.Providers.Contains(providerName))
+            .Distinct()
+            .ToArray();
+
+        var stateCheckResult = stateCheckPermissions.Any()
+            ? await SimpleStateCheckerManager.IsEnabledAsync(stateCheckPermissions)
+            : new SimpleStateCheckerResult<PermissionDefinition>();
+
         var neededCheckPermissions = new List<PermissionDefinition>();
 
-        foreach (var permission in permissions
-                                    .Where(x => x.IsEnabled)
-                                    .Where(x => x.MultiTenancySide.HasFlag(CurrentTenant.GetMultiTenancySide()))
-                                    .Where(x => !x.Providers.Any() || x.Providers.Contains(providerName)))
+        foreach (var permission in stateCheckPermissions)
         {
-            if (await SimpleStateCheckerManager.IsEnabledAsync(permission))
+            if (stateCheckResult[permission])
             {
                 neededCheckPermissions.Add(permission);
             }
@@ -234,6 +242,15 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
         if (!neededCheckPermissions.Any())
         {
             return multiplePermissionWithGrantedProviders;
+        }
+
+        var permissionsWithGrantedProvidersByName = new Dictionary<string, PermissionWithGrantedProviders>();
+        foreach (var permissionWithGrantedProviders in multiplePermissionWithGrantedProviders.Result)
+        {
+            if (!permissionsWithGrantedProvidersByName.ContainsKey(permissionWithGrantedProviders.Name))
+            {
+                permissionsWithGrantedProvidersByName[permissionWithGrantedProviders.Name] = permissionWithGrantedProviders;
+            }
         }
 
         foreach (var provider in ManagementProviders)
@@ -245,8 +262,7 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
             {
                 if (providerResultDict.Value.IsGranted)
                 {
-                    var permissionWithGrantedProvider = multiplePermissionWithGrantedProviders.Result
-                        .First(x => x.Name == providerResultDict.Key);
+                    var permissionWithGrantedProvider = permissionsWithGrantedProvidersByName[providerResultDict.Key];
 
                     permissionWithGrantedProvider.IsGranted = true;
                     permissionWithGrantedProvider.Providers.Add(new PermissionValueProviderInfo(provider.Name, providerResultDict.Value.ProviderKey));
