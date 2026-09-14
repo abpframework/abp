@@ -43,9 +43,11 @@ The result will be like shown below:
 * `LogoUrl`: A URL to show the application logo.
 * `LogoReverseUrl`: A URL to show the application logo on a reverse color theme (dark, for example).
 
-ABP's built-in MVC themes resolve the branding URLs for the current request. `/logo.png`, `logo.png` and `~/logo.png` are treated as application relative URLs and include the `PathBase` of the request, so they keep working when the application is deployed to a non-root path, like an IIS virtual directory. Absolute HTTP(S) URLs, like `https://cdn.example.com/logo.png`, and protocol relative URLs, like `//cdn.example.com/logo.png`, are returned unchanged. `null` and white space values are treated as not set.
+ABP's built-in MVC themes resolve these URLs for the current request. `logo.png`, `/logo.png` and `~/logo.png` all mean the same application relative URL and include the `PathBase` of the request, so they keep working when the application is deployed to a non-root path, like an IIS virtual directory. A URL that already contains the path gets it twice. External URLs are used as they are. `LogoReverseUrl` is used by the themes that have a dark style, like LeptonX, and falls back to `LogoUrl`.
 
-If you render a branding URL in a custom MVC theme or view, resolve it with `Url.ResolveBrandingUrl(...)`.
+A logo that the project defines in its own CSS is not resolved. The LeptonX Lite startup templates set the logo that way, so remove that declaration to deploy them to a non-root path.
+
+To resolve a branding URL in a custom theme or view, use `Url.ResolveBrandingUrl(...)` with `@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Branding`, or `Url.ResolveBrandingCssUrl(...)` when it is rendered into `url('...')` in CSS.
 
 > **Tip**: `IBrandingProvider` is used in every page refresh. For a multi-tenant application, you can return a tenant specific application name to customize it per tenant.
 
@@ -80,7 +82,7 @@ Both properties return `null` by default and follow the same URL rules as `LogoU
 
 The active theme decides whether and where to use the compact logo. The LeptonX MVC theme enables its compact branding when `LogoIconUrl` is not empty: it uses the compact logo instead of the full logo in its branding areas and shows `AppName` next to it where there is room for both. Dark and dim styles use `LogoIconReverseUrl` and fall back to `LogoIconUrl` when it is not set. Themes that don't support `IBrandingLogoProvider` ignore these properties.
 
-> This URL resolution and the compact logo apply to the ASP.NET Core MVC / Razor Pages themes. The Blazor themes handle branding on their own.
+> The compact logo applies to the ASP.NET Core MVC / Razor Pages themes. The Blazor themes resolve the branding URLs by the same rules, see [Blazor UI: Branding](../blazor/branding.md).
 
 ## Overriding the Branding Area
 
