@@ -5,7 +5,7 @@
         "@angular/common": "^9.1.11",
         "@angular/core": "^9.1.11",
         "@abp/ng.core": ">=10.6.0",
-        "@abp/ng.theme.shared": ">=10.6.0"
+        "@abp/ng.theme.shared": ">=10.6.1"
     },
     "dependencies": {
         "tslib": "^2.0.0"

@@ -53,12 +53,12 @@
     "@abp/popper.js" "~10.6.0"
     bootstrap "^5.3.8"
 
-"@abp/clipboard@~10.6.0":
-  version "10.6.0"
-  resolved "https://registry.yarnpkg.com/@abp/clipboard/-/clipboard-10.6.0.tgz#7e11f8bc0a91134c858455fd5b03e26aa03eed81"
-  integrity sha512-I5RhdEZQ3Kh64bbZLcYMPZbP9uUG4KMz4FwsYXJCvn/bv1wJo2lQGlAWkZfqBl/cXgkTTTHy4kfADjIkjmnpRA==
+"@abp/clipboard@~10.6.1":
+  version "10.6.1"
+  resolved "https://registry.yarnpkg.com/@abp/clipboard/-/clipboard-10.6.1.tgz#2fc070709d3bf650bd7a5a2e624574f3e00b346a"
+  integrity sha512-6+wXJlyHGw5EvovbH+CLqosES0hQtUpqWht9qgW7sqW/RNSXOfs/G5h/tpREEs7d0Q99YxQNVf9UkFAy7dDUVA==
   dependencies:
-    "@abp/core" "~10.6.0"
+    "@abp/core" "~10.6.1"
     clipboard "^2.0.11"
 
 "@abp/core@~10.6.0":
@@ -67,6 +67,13 @@
   integrity sha512-iF175HkoSmD6j6qhdhDA/m5kd80YrdW06T+xsl/xo9K4U5zbpu3hR7uq1hpt8+CqBh6IYDsuaU6EB/b1MuUItg==
   dependencies:
     "@abp/utils" "~10.6.0"
+
+"@abp/core@~10.6.1":
+  version "10.6.1"
+  resolved "https://registry.yarnpkg.com/@abp/core/-/core-10.6.1.tgz#f841ec81c9eab004a8f35d65928c73d7f9f0e212"
+  integrity sha512-ArDgtLhO6+lWHddNtllsL4c/Ta6traYLL4VwlV4U3Df+z7VlXZ3NvIBEUylhvNtto1EEia/qQ8N0nrSRmZWLjw==
+  dependencies:
+    "@abp/utils" "~10.6.1"
 
 "@abp/datatables.net-bs5@~10.6.0":
   version "10.6.0"
@@ -92,12 +99,12 @@
     "@abp/core" "~10.6.0"
     "@fortawesome/fontawesome-free" "^7.0.1"
 
-"@abp/highlight.js@~10.6.0":
-  version "10.6.0"
-  resolved "https://registry.yarnpkg.com/@abp/highlight.js/-/highlight.js-10.6.0.tgz#db52752d888de9af194c6925c77d44a4c1520b88"
-  integrity sha512-7fbG0TCb47PQG7ZDPvnsOFzyimo40zdzMb0uLvQu0Jx1V9SYWxGoSOZNMlzrYJsj6GN7QouQhMA6FKCh1fw2KA==
+"@abp/highlight.js@~10.6.1":
+  version "10.6.1"
+  resolved "https://registry.yarnpkg.com/@abp/highlight.js/-/highlight.js-10.6.1.tgz#62256c799bb3c5e01d40cd11d5333c98f3b6240f"
+  integrity sha512-DxpAD20BMoSkyrr3WDY3bD3m1+p/qlLDsPq7mvc+jHx87nTSCSWu3+D7Mz+nVHUUS0YvWXcidR2lBhOpa+T0hA==
   dependencies:
-    "@abp/core" "~10.6.0"
+    "@abp/core" "~10.6.1"
     "@highlightjs/cdn-assets" "~11.11.1"
 
 "@abp/jquery-validation-unobtrusive@~10.6.0":
@@ -163,13 +170,13 @@
     "@abp/core" "~10.6.0"
     "@popperjs/core" "^2.11.8"
 
-"@abp/prismjs@~10.6.0":
-  version "10.6.0"
-  resolved "https://registry.yarnpkg.com/@abp/prismjs/-/prismjs-10.6.0.tgz#e43a59b3d5a3b7e8d4ddea5f1837248270453717"
-  integrity sha512-5n9AvCMRek7AAmRTT6X30w9lONCafLGPvZupxh17dvdZyHHdxFO9NQvWwSYKdgQxPx8VKtUvfvTtYJ5yb+nfyw==
+"@abp/prismjs@~10.6.1":
+  version "10.6.1"
+  resolved "https://registry.yarnpkg.com/@abp/prismjs/-/prismjs-10.6.1.tgz#bcfb8d2bf9d38b6983458346e7c188d078bf1706"
+  integrity sha512-Cta3JQsFXhih7O37Nn4gBdFWaQONNJvHbmeqh6Wi03CGA+Q80nRw7+E+l0PCY3nZRKftVJobcpSJirYHMoaLrA==
   dependencies:
-    "@abp/clipboard" "~10.6.0"
-    "@abp/core" "~10.6.0"
+    "@abp/clipboard" "~10.6.1"
+    "@abp/core" "~10.6.1"
     prismjs "^1.30.0"
 
 "@abp/select2@~10.6.0":
@@ -200,6 +207,13 @@
   version "10.6.0"
   resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-10.6.0.tgz#6ff03d75b7b22a1e83b7a0149a3f6ff54bf30b69"
   integrity sha512-dQaHPKNKcsyeyCot28UOwOhU5ykS6tqVVNXqRvQrrQIvqj5tOAGtWMeXRP1eP47JRCmF4kOgOSZcMvVnuoUrUQ==
+  dependencies:
+    just-compare "^2.3.0"
+
+"@abp/utils@~10.6.1":
+  version "10.6.1"
+  resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-10.6.1.tgz#405a8c97ecd761bc112cd9ab795a4af9d8d74110"
+  integrity sha512-ncpDK0cHj3Qx5mV+Dt2Z9b+wn7WEGKO9aHfiS57gqePOTPJVvoSXGn6H20aAc+36aa3wiJKyJbNR8BoRBOZDYQ==
   dependencies:
     just-compare "^2.3.0"
 
