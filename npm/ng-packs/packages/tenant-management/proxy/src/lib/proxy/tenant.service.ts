@@ -67,8 +67,9 @@ export class TenantService {
   updateDefaultConnectionString = (id: string, defaultConnectionString: string) =>
     this.restService.request<any, void>({
       method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
       url: `/api/multi-tenancy/tenants/${id}/default-connection-string`,
-      params: { defaultConnectionString },
+      body: JSON.stringify(defaultConnectionString),
     },
     { apiName: this.apiName });
 }

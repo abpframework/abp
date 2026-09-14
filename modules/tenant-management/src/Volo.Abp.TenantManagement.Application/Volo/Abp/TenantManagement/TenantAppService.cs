@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.EventBus.Local;
@@ -133,7 +134,7 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
     }
 
     [Authorize(TenantManagementPermissions.Tenants.ManageConnectionStrings)]
-    public virtual async Task UpdateDefaultConnectionStringAsync(Guid id, string defaultConnectionString)
+    public virtual async Task UpdateDefaultConnectionStringAsync(Guid id, [DisableAuditing] string defaultConnectionString)
     {
         var tenant = await TenantRepository.GetAsync(id);
         if (tenant.FindDefaultConnectionString() != defaultConnectionString)

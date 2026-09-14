@@ -13,6 +13,8 @@ The Low-Code Designer exposes a **remote Model Context Protocol (MCP) server** f
 
 Use [Model Descriptor Files](model-json.md) when you need source-controlled `_Dynamic/model/**/*.json` files. Use MCP when an agent or automation needs authenticated, structured runtime access that the Designer can immediately show.
 
+MCP uses the same Low-Code feature model as the Designer. Use [Data Modeling and Page Behavior](data-modeling.md), [Data Import](data-import.md), [Calculated and Rollup Properties](formula-properties.md), and [Model History and Recovery](model-history.md) for feature semantics; this page only covers MCP connection and safe automation concerns.
+
 ## Remote Endpoint
 
 The low-code MCP endpoint is hosted by the backend application that includes the Low-Code Designer HTTP API module:

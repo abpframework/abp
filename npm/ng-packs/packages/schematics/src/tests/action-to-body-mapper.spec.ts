@@ -76,6 +76,50 @@ describe('createActionToBodyMapper — string return value', () => {
   });
 });
 
+describe('createActionToBodyMapper — body parameters', () => {
+  const mapBody = createActionToBodyMapper();
+
+  test('string body parameter is JSON encoded and gets an application/json content type', () => {
+    const body = mapBody(
+      buildAction({
+        httpMethod: 'POST',
+        parameters: [
+          {
+            nameOnMethod: 'connectionString',
+            name: 'connectionString',
+            type: 'System.String',
+            typeSimple: 'string',
+            bindingSourceId: eBindingSourceId.Body,
+          },
+        ],
+      } as Partial<Action>),
+    );
+
+    expect(body.body).toBe('JSON.stringify(connectionString)');
+    expect(body.contentTypeHeader).toBe('application/json');
+  });
+
+  test('object body parameter is passed as is', () => {
+    const body = mapBody(
+      buildAction({
+        httpMethod: 'POST',
+        parameters: [
+          {
+            nameOnMethod: 'input',
+            name: 'input',
+            type: 'My.Project.UserDto',
+            typeSimple: 'My.Project.UserDto',
+            bindingSourceId: eBindingSourceId.Body,
+          },
+        ],
+      } as Partial<Action>),
+    );
+
+    expect(body.body).toBe('input');
+    expect(body.contentTypeHeader).toBeUndefined();
+  });
+});
+
 describe('createActionToBodyMapper — IRemoteStreamContent return value', () => {
   const mapBody = createActionToBodyMapper();
 

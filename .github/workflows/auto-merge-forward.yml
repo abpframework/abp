@@ -131,6 +131,61 @@ jobs:
           echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "Created $URL"
 
+      # Conflict PRs stay open; assign/request review from human commit authors so they get
+      # GitHub notifications. Cascade pushes are often from a bot, so do not use github.actor.
+      - name: Notify humans on conflict
+        if: steps.target.outputs.skip != 'true' && steps.merge.outputs.conflict == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          SOURCE="${{ steps.target.outputs.source }}"
+          TARGET="${{ steps.target.outputs.target }}"
+          FORWARD_BRANCH="${{ steps.merge.outputs.branch }}"
+          REPO="${{ github.repository }}"
+
+          # Compare returns at most 250 commits; enough for a typical forward hop.
+          mapfile -t USERS < <(
+            gh api "repos/${REPO}/compare/${TARGET}...${SOURCE}" \
+              --jq '
+                [.commits[]?.author.login // empty]
+                | unique
+                | .[]
+                | select(
+                    . != ""
+                    and (endswith("[bot]") | not)
+                    and . != "github-actions"
+                  )
+              '
+          )
+
+          if ((${#USERS[@]} == 0)); then
+            echo "::warning::Merge conflict on ${SOURCE} → ${TARGET}, but no human GitHub authors were found on the forwarded commits."
+            exit 0
+          fi
+
+          MENTIONS=()
+          for user in "${USERS[@]}"; do
+            MENTIONS+=("@${user}")
+            if gh pr edit "$FORWARD_BRANCH" --add-assignee "$user"; then
+              echo "Assigned $user"
+            else
+              echo "::warning::Could not assign $user (may lack repo access)."
+            fi
+            if gh pr edit "$FORWARD_BRANCH" --add-reviewer "$user"; then
+              echo "Requested review from $user"
+            else
+              echo "::warning::Could not request review from $user."
+            fi
+          done
+
+          COMMENT="$(printf '%s\n' \
+            "**Merge conflict** forwarding \`${SOURCE}\` → \`${TARGET}\`." \
+            "" \
+            "Please resolve conflicts against \`${TARGET}\` and merge manually." \
+            "cc ${MENTIONS[*]}")"
+          gh pr comment "$FORWARD_BRANCH" --body "$COMMENT"
+
       # BOT_SECRET, not github.token: a merge performed with the default token produces a push
       # that triggers no workflow, which would stop the chain at the first hop.
       - name: Approve and auto-merge

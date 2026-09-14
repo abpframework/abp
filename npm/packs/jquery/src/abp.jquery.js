@@ -29,7 +29,7 @@ var abp = abp || {};
     };
 
     abp.utils.isFunction = function (obj) {
-        return $.isFunction(obj);
+        return typeof obj === 'function';
     };
 
     // JQUERY EXTENSIONS //////////////////////////////////////////////////////

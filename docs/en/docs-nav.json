@@ -341,6 +341,10 @@
                   "path": "studio/monitoring-applications.md"
                 },
                 {
+                  "text": "Model Context Protocol (MCP)",
+                  "path": "studio/model-context-protocol.md"
+                },
+                {
                   "text": "Working with Kubernetes",
                   "path": "studio/kubernetes.md"
                 },
@@ -716,6 +720,14 @@
                       "path": "framework/infrastructure/blob-storing/custom-provider.md"
                     }
                   ]
+                },
+                {
+                  "text": "Content Pipeline",
+                  "path": "framework/infrastructure/blob-storing/pipeline.md"
+                },
+                {
+                  "text": "Encryption",
+                  "path": "framework/infrastructure/blob-storing/encryption.md"
                 }
               ]
             },
@@ -2140,6 +2152,26 @@
         {
           "text": "Low-Code Designer",
           "path": "low-code/designer.md"
+        },
+        {
+          "text": "Data Modeling and Page Behavior",
+          "path": "low-code/data-modeling.md"
+        },
+        {
+          "text": "Data Import",
+          "path": "low-code/data-import.md"
+        },
+        {
+          "text": "Model History and Recovery",
+          "path": "low-code/model-history.md"
+        },
+        {
+          "text": "Calculated and Rollup Properties",
+          "path": "low-code/formula-properties.md"
+        },
+        {
+          "text": "Low-Code Expression Language",
+          "path": "low-code/expression-language.md"
         },
         {
           "text": "React Runtime",

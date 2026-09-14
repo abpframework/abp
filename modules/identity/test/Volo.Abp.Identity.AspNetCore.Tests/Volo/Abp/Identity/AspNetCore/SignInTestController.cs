@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity.AspNetCore;
 
@@ -28,6 +30,23 @@ public class SignInTestController : AbpController
         );
 
         return Content(result.ToString());
+    }
+
+    [Route("current-user")]
+    public ActionResult GetCurrentUser()
+    {
+        return Content(CurrentUser.IsAuthenticated ? CurrentUser.UserName + "|" + CurrentUser.FindSessionId() : "anonymous");
+    }
+
+    [Route("switch-account")]
+    public async Task<ActionResult> SwitchAccount(string userName)
+    {
+        // Account switch (LinkLogin / impersonation): sign out the current identity and sign in
+        // as another user within the same request.
+        await _signInManager.SignOutAsync();
+        var user = await _signInManager.UserManager.FindByNameAsync(userName);
+        await _signInManager.SignInAsync(user, isPersistent: false);
+        return Content("Succeeded");
     }
 
     [Route("write-two-factor-cookie")]

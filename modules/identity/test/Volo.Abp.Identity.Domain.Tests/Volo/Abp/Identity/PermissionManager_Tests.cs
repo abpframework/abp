@@ -87,6 +87,24 @@ public class PermissionManager_Tests : AbpIdentityDomainTestBase
         ShouldNotHavePermission(grantInfos, TestPermissionNames.MyPermission2_ChildPermission1);
     }
 
+    [Fact]
+    public async Task Should_Report_A_Single_Role_Provider_When_Several_Roles_Grant_The_Permission()
+    {
+        var user = GetUser("john.nash");
+
+        var grantInfos = await _permissionManager.GetAllForUserAsync(user.Id);
+
+        var grantInfo = grantInfos.Single(x => x.Name == TestPermissionNames.MyPermission1);
+        grantInfo.IsGranted.ShouldBeTrue();
+
+        var roleProviders = grantInfo.Providers
+            .Where(x => x.Name == RolePermissionValueProvider.ProviderName)
+            .ToList();
+
+        roleProviders.Count.ShouldBe(1);
+        roleProviders.Single().Key.ShouldBeOneOf("moderator", "supporter");
+    }
+
     private static void RoleShouldHavePermission(List<PermissionWithGrantedProviders> grantInfos, string roleName, string permissionName)
     {
         grantInfos.ShouldContain(

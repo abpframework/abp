@@ -150,6 +150,13 @@ public class RegularTestController : AbpController, IRegularTestController
         return Task.FromResult(bodyValue);
     }
 
+    [AcceptVerbs("QUERY")]
+    [Route("query-object-with-body")]
+    public Task<Car> QueryObjectWithBodyAsync([FromBody] Car bodyValue)
+    {
+        return Task.FromResult(bodyValue);
+    }
+
     [HttpGet]
     [Route("post-object-with-url/bodyValue")]
     public Task<Car> GetObjectWithUrlAsync(Car bodyValue)

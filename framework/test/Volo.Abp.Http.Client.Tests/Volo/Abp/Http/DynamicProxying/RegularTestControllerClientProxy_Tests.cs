@@ -98,6 +98,14 @@ public class RegularTestControllerClientProxy_Tests : AbpHttpClientTestBase
     }
 
     [Fact]
+    public async Task QueryObjectWithBodyAsync()
+    {
+        var result = await _controller.QueryObjectWithBodyAsync(new Car { Year = 1976, Model = "Ford", FirstReleaseDate = new DateTime(1976, 02, 22, 15, 0, 6, 22) });
+        result.Year.ShouldBe(1976);
+        result.Model.ShouldBe("Ford");
+    }
+
+    [Fact]
     public async Task PostObjectWithQueryAsync_With_Different_Culture()
     {
         using (CultureHelper.Use("tr"))

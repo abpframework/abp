@@ -80,6 +80,11 @@
         ]
       }
     },
+    "resourceApi": {
+      "description": "Generate Resource API helpers for read endpoints",
+      "type": "boolean",
+      "default": false
+    },
     "entryPoint": {
       "description": "Target Angular project to place the generated code",
       "type": "string",

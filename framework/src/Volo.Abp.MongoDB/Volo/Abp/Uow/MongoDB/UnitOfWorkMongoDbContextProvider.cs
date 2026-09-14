@@ -68,7 +68,7 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
 
         var targetDbContextType = DbContextTypeProvider.GetDbContextType(typeof(TMongoDbContext));
         var connectionString = ResolveConnectionString(targetDbContextType);
-        var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
+        var dbContextKey = GetDatabaseApiKey(targetDbContextType, connectionString);
 
         var mongoUrl = new MongoUrl(connectionString);
         var databaseName = mongoUrl.DatabaseName;
@@ -95,7 +95,7 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
 
         var targetDbContextType = DbContextTypeProvider.GetDbContextType(typeof(TMongoDbContext));
         var connectionString = await ResolveConnectionStringAsync(targetDbContextType);
-        var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
+        var dbContextKey = GetDatabaseApiKey(targetDbContextType, connectionString);
 
         var mongoUrl = new MongoUrl(connectionString);
         var databaseName = mongoUrl.DatabaseName;
@@ -173,7 +173,7 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
         MongoClient client,
         IMongoDatabase database)
     {
-        var transactionApiKey = $"MongoDb_{url}";
+        var transactionApiKey = GetTransactionApiKey(url);
         var activeTransaction = unitOfWork.FindTransactionApi(transactionApiKey) as MongoDbTransactionApi;
         var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TMongoDbContext>();
 
@@ -223,7 +223,7 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
         IMongoDatabase database,
         CancellationToken cancellationToken = default)
     {
-        var transactionApiKey = $"MongoDb_{url}";
+        var transactionApiKey = GetTransactionApiKey(url);
         var activeTransaction = unitOfWork.FindTransactionApi(transactionApiKey) as MongoDbTransactionApi;
         var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TMongoDbContext>();
 
@@ -264,6 +264,16 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
         }
 
         return dbContext;
+    }
+
+    protected virtual string GetDatabaseApiKey(Type dbContextType, string? connectionString)
+    {
+        return $"{dbContextType.FullName}_{(connectionString ?? string.Empty).ToSha256()}";
+    }
+
+    protected virtual string GetTransactionApiKey(MongoUrl url)
+    {
+        return $"MongoDb_{url.ToString().ToSha256()}";
     }
 
     protected virtual async Task<string> ResolveConnectionStringAsync(Type dbContextType)
