@@ -134,8 +134,10 @@ jobs:
           echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "Created $URL"
 
-      # BOT_SECRET, not github.token: a merge performed with the default token produces a push
-      # that triggers no workflow, which would stop the chain at the first hop.
+      # BOT_SECRET, not github.token, performs the merge: a merge with the default
+      # token produces a push that triggers no workflow, which would stop the chain
+      # at the first hop. The review uses github.token instead, because BOT_SECRET
+      # also opened this PR now, and GitHub refuses to let an actor approve its own PR.
       - name: Approve and auto-merge
         if: steps.target.outputs.skip != 'true' && steps.merge.outputs.conflict != 'true'
         env:
@@ -143,5 +145,5 @@ jobs:
         run: |
           set -euo pipefail
           FORWARD_BRANCH="${{ steps.merge.outputs.branch }}"
-          gh pr review "$FORWARD_BRANCH" --approve
+          GH_TOKEN="${{ github.token }}" gh pr review "$FORWARD_BRANCH" --approve
           gh pr merge "$FORWARD_BRANCH" --merge --auto --delete-branch
