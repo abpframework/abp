@@ -929,6 +929,56 @@ public class RetryHelper_Tests
     }
 
     [Fact]
+    public async Task ExecuteAsync_Of_TResult_Should_Dispose_The_Result_When_The_DelayFactory_Throws()
+    {
+        var disposed = new List<int>();
+
+        await Assert.ThrowsAsync<FormatException>(async () =>
+            await RetryHelper.ExecuteAsync(
+                _ => Task.FromResult(new DisposableResult(1, disposed)),
+                new RetryOptions<DisposableResult>
+                {
+                    MaxRetryCount = 2,
+                    DelayFactory = _ => throw new FormatException(),
+                    ShouldRetryOnResult = _ => true
+                }));
+
+        disposed.ShouldBe(new[] { 1 });
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_Of_TResult_Should_Dispose_The_Result_When_OnRetry_Throws()
+    {
+        var disposed = new List<int>();
+
+        await Assert.ThrowsAsync<FormatException>(async () =>
+            await RetryHelper.ExecuteAsync(
+                _ => Task.FromResult(new DisposableResult(1, disposed)),
+                NoDelay<DisposableResult>(
+                    maxRetryCount: 2,
+                    shouldRetryOnResult: _ => true,
+                    onRetry: _ => throw new FormatException())));
+
+        disposed.ShouldBe(new[] { 1 });
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_Of_TResult_Should_Dispose_The_Result_When_ShouldRetryOnException_Throws()
+    {
+        var disposed = new List<int>();
+
+        await Assert.ThrowsAsync<FormatException>(async () =>
+            await RetryHelper.ExecuteAsync(
+                _ => Task.FromResult(new DisposableResult(1, disposed)),
+                NoDelay<DisposableResult>(
+                    maxRetryCount: 2,
+                    shouldRetryOnResult: _ => throw new InvalidOperationException(),
+                    shouldRetryOnException: _ => throw new FormatException())));
+
+        disposed.ShouldBe(new[] { 1 });
+    }
+
+    [Fact]
     public async Task ExecuteAsync_Of_TResult_Should_Prefer_IAsyncDisposable_Over_IDisposable()
     {
         var log = new List<string>();

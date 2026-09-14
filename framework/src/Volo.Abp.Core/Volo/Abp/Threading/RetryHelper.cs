@@ -107,53 +107,58 @@ public static class RetryHelper
 
             Exception? exception = null;
             var result = default(TResult)!;
-            var hasResult = false;
+
+            // A result the caller never sees must not leak, whatever throws before it is disposed.
+            var discardResult = false;
+            TimeSpan delay;
 
             try
             {
-                result = await action(cancellationToken);
-                hasResult = true;
-
-                if (!shouldRetryOnResult(result))
+                try
                 {
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                exception = ex;
-            }
+                    result = await action(cancellationToken);
+                    discardResult = true;
 
-            // Asked on every attempt, including the last one, which is not retried.
-            var isUnhandledException = exception != null && !shouldRetryOnException(exception);
-
-            if (isUnhandledException || IsLastRetry(retryCount, maxRetryCount))
-            {
-                if (exception != null)
-                {
-                    // The caller never sees this result, so it must not leak.
-                    if (hasResult)
+                    if (!shouldRetryOnResult(result))
                     {
-                        await TryDisposeAsync(result);
+                        discardResult = false;
+                        return result;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    exception = ex;
+                }
+
+                // Asked on every attempt, including the last one, which is not retried.
+                var isUnhandledException = exception != null && !shouldRetryOnException(exception);
+
+                if (isUnhandledException || IsLastRetry(retryCount, maxRetryCount))
+                {
+                    if (exception != null)
+                    {
+                        ExceptionDispatchInfo.Capture(exception).Throw();
                     }
 
-                    ExceptionDispatchInfo.Capture(exception).Throw();
+                    discardResult = false;
+                    return result;
                 }
 
-                return result;
+                retryCount = NextRetryCount(retryCount);
+
+                delay = GetDelay(delayFactory, retryCount);
+                if (onRetry != null)
+                {
+                    await onRetry(new RetryAttempt<TResult>(retryCount, delay, exception, exception == null ? result : default));
+                }
             }
-
-            retryCount = NextRetryCount(retryCount);
-
-            var delay = GetDelay(delayFactory, retryCount);
-            if (onRetry != null)
+            finally
             {
-                await onRetry(new RetryAttempt<TResult>(retryCount, delay, exception, exception == null ? result : default));
-            }
-
-            if (hasResult)
-            {
-                await TryDisposeAsync(result);
+                // After OnRetry and before the wait, as the retried result is reported but not kept.
+                if (discardResult)
+                {
+                    await TryDisposeAsync(result);
+                }
             }
 
             await WaitAsync(delay, cancellationToken);
