@@ -106,11 +106,14 @@ jobs:
           git push origin "$FORWARD_BRANCH"
           echo "branch=$FORWARD_BRANCH" >> "$GITHUB_OUTPUT"
 
+      # BOT_SECRET, not github.token: a PR opened with the default token gets its
+      # pull_request checks stuck in "action_required", so they never pass and the
+      # PR stays permanently blocked from merging.
       - name: Create pull request
         if: steps.target.outputs.skip != 'true'
         id: pr
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.BOT_SECRET }}
         run: |
           set -euo pipefail
           SOURCE="${{ steps.target.outputs.source }}"
