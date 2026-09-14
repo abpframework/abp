@@ -1,0 +1,31 @@
+{
+  "culture": "pt",
+  "texts": {
+    "InternalServerErrorMessage": "Ocorreu um erro interno durante o seu pedido!",
+    "ValidationErrorMessage": "O seu pedido não é válido!",
+    "ValidationNarrativeErrorMessageTitle": "Foram detetados os seguintes erros durante a validação.",
+    "DefaultErrorMessage": "Ocorreu um erro!",
+    "DefaultErrorMessageDetail": "Detalhe do erro não enviado pelo servidor.",
+    "DefaultErrorMessage401": "Não está autenticado!",
+    "DefaultErrorMessage401Detail": "Deve iniciar sessão para realizar esta operação.",
+    "DefaultErrorMessage403": "Não está autorizado!",
+    "DefaultErrorMessage403Detail": "Não tem permissão para realizar esta operação!",
+    "DefaultErrorMessage404": "Recurso não encontrado!",
+    "DefaultErrorMessage404Detail": "O recurso pedido não foi encontrado no servidor!",
+    "EntityNotFoundErrorMessage": "Não existe nenhuma entidade {0} com id = {1}!",
+    "EntityNotFoundErrorMessageWithoutId": "Não existe nenhuma entidade {0}!",
+    "AbpDbConcurrencyErrorMessage": "Os dados que submeteu já foram alterados por outro utilizador. Descarte as suas alterações e tente novamente.",
+    "Error": "Erro",
+    "UnhandledException": "Exceção não tratada!",
+    "Authorizing": "A autorizar…",
+    "401Message": "Não autorizado",
+    "403Message": "Proibido",
+    "404Message": "Página não encontrada",
+    "500Message": "Erro interno do servidor",
+    "403MessageDetail": "Não está autorizado a realizar esta operação!",
+    "404MessageDetail": "Lamentamos, mas não existe nada neste endereço.",
+    "Unauthorized": "Não autorizado",
+    "invalid_token": "Token inválido",
+    "SessionExpired": "A sua sessão expirou. Inicie sessão novamente para continuar na aplicação."
+  }
+}
