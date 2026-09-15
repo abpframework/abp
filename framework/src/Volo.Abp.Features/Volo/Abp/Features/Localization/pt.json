@@ -1,0 +1,8 @@
+{
+  "culture": "pt",
+  "texts": {
+    "Volo.Feature:010001": "A funcionalidade não está ativada: {FeatureName}",
+    "Volo.Feature:010002": "As funcionalidades necessárias não estão ativadas. Todas estas funcionalidades têm de estar ativadas: {FeatureNames}",
+    "Volo.Feature:010003": "As funcionalidades necessárias não estão ativadas. Pelo menos uma destas funcionalidades tem de estar ativada: {FeatureNames}"
+  }
+}
