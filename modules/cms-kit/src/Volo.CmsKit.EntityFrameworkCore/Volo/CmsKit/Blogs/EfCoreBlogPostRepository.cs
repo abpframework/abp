@@ -134,10 +134,10 @@ public class EfCoreBlogPostRepository : EfCoreRepository<ICmsKitDbContext, BlogP
     public virtual async Task<List<CmsUser>> GetAuthorsHasBlogPostsAsync(int skipCount, int maxResultCount, string sorting, string filter, CancellationToken cancellationToken = default)
     {
         return await (await CreateAuthorsQueryableAsync())
-            .Skip(skipCount)
-            .Take(maxResultCount)
             .WhereIf(!filter.IsNullOrEmpty(), x => x.UserName.Contains(filter.ToLower()))
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(CmsUser.UserName) : sorting)
+            .Skip(skipCount)
+            .Take(maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -156,7 +156,10 @@ public class EfCoreBlogPostRepository : EfCoreRepository<ICmsKitDbContext, BlogP
 
     protected virtual async Task<IQueryable<CmsUser>> CreateAuthorsQueryableAsync()
     {
-        return (await GetDbContextAsync()).BlogPosts.Select(x => x.Author).Distinct();
+        return (await GetDbContextAsync()).BlogPosts
+            .Where(x => x.Status == BlogPostStatus.Published)
+            .Select(x => x.Author)
+            .Distinct();
     }
 
     public virtual async Task<bool> HasBlogPostWaitingForReviewAsync(CancellationToken cancellationToken = default)
