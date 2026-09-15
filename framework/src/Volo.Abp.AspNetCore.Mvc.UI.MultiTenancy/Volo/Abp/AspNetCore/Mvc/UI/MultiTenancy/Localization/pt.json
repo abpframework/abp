@@ -1,0 +1,13 @@
+{
+  "culture": "pt",
+  "texts": {
+    "GivenTenantIsNotExist": "O cliente indicado não existe: {0}",
+    "GivenTenantIsNotAvailable": "O cliente indicado não está disponível: {0}",
+    "Tenant": "Cliente",
+    "Switch": "mudar",
+    "Name": "Nome",
+    "SwitchTenantHint": "Deixe o campo do nome em branco para mudar para o lado do anfitrião.",
+    "SwitchTenant": "Mudar de cliente",
+    "NotSelected": "Não selecionado"
+  }
+}

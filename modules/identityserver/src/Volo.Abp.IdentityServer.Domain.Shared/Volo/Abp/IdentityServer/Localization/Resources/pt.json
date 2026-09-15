@@ -1,0 +1,17 @@
+{
+  "culture": "pt",
+  "texts": {
+    "Volo.IdentityServer:DuplicateIdentityResourceName": "Já existe um recurso de identidade com o nome: {Name}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "Já existe um recurso de API com o nome: {Name}",
+    "Volo.IdentityServer:DuplicateApiScopeName": "Já existe um âmbito de API com o nome: {Name}",
+    "Volo.IdentityServer:DuplicateClientId": "Já existe um ClientId: {ClientId}",
+    "UserLockedOut": "A conta do utilizador foi bloqueada devido a tentativas de início de sessão inválidas. Aguarde um pouco e tente novamente.",
+    "InvalidUserNameOrPassword": "Nome de utilizador ou palavra-passe inválidos!",
+    "LoginIsNotAllowed": "Não tem permissão para iniciar sessão! A sua conta está inativa ou necessita de confirmar o seu email/número de telefone.",
+    "InvalidUsername": "Nome de utilizador ou palavra-passe inválidos!",
+    "InvalidAuthenticatorCode": "Código de autenticação inválido!",
+    "InvalidRecoveryCode": "Código de recuperação inválido!",
+    "TheTargetUserIsNotLinkedToYou": "O utilizador de destino não está associado a si!",
+    "ClientResourcePermissionProviderKeyLookupService": "Cliente"
+  }
+}
