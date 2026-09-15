@@ -24,6 +24,7 @@ public class EfCoreAuditLogExcelFileRepository : EfCoreRepository<IAuditLoggingD
         return await queryable
             .Where(x => x.CreationTime < creationTimeBefore)
             .OrderBy(x => x.CreationTime)
+            .ThenBy(x => x.Id)
             .Take(maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }

@@ -83,7 +83,7 @@ namespace Volo.Docs
             await DocumentRepository.InsertAsync(new Document(Guid.NewGuid(), DocsTestData.ProjectId, name, "2.0.0", "en",
                 name.Substring(name.LastIndexOf('/') + 1), content, "md", null, "https://github.com/abpframework/abp/tree/2.0.0/docs/",
                 "https://raw.githubusercontent.com/abpframework/abp/2.0.0/docs/en/", "", lastCachedTime, lastCachedTime,
-                lastCachedTime));
+                lastCachedTime), autoSave: true);
         }
     }
 }
