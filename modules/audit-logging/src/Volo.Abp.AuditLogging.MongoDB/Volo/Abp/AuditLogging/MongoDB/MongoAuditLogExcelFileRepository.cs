@@ -15,9 +15,16 @@ public class MongoAuditLogExcelFileRepository : MongoDbRepository<IAuditLoggingM
     {
     }
 
-    public async Task<List<AuditLogExcelFile>> GetListCreationTimeBeforeAsync(DateTime creationTimeBefore, int maxResultCount = 50, CancellationToken cancellationToken = default)
+    public virtual async Task<List<AuditLogExcelFile>> GetListCreationTimeBeforeAsync(
+        DateTime creationTimeBefore,
+        int maxResultCount = 50,
+        CancellationToken cancellationToken = default)
     {
-        var queryable = await GetQueryableAsync();
-        return await queryable.Where(x => x.CreationTime < creationTimeBefore).Take(maxResultCount).ToListAsync(cancellationToken);
+        var queryable = await GetQueryableAsync(cancellationToken);
+        return await queryable
+            .Where(x => x.CreationTime < creationTimeBefore)
+            .OrderBy(x => x.CreationTime)
+            .Take(maxResultCount)
+            .ToListAsync(GetCancellationToken(cancellationToken));
     }
 }
