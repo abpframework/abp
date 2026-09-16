@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "app-descriptor.schema.json",
+  "title": "AppDescriptor",
+  "description": "Describes a low-code app. Apps partition the model into independently named scopes: other descriptors reference their owning app through the `app` field, and the default app is implicit.",
+  "markdownDescription": "AI guidance: create an app only when a group of entities, pages, forms, and scripts should be isolated under its own name. `name` is a lowercase kebab-case identifier such as `crm` or `field-service` and becomes part of runtime entity names (`<app>:<EntityName>`), app-scoped endpoint routes, and split descriptor file paths (`entities/<app>/...`). The reserved name `default` is the implicit app; descriptors without an `app` field belong to it. Set `isArchived` to hide an app without deleting its descriptors.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional schema reference used when this descriptor is stored as a model descriptor file."
+    },
+    "name": {
+      "type": "string",
+      "description": "Stable lowercase kebab-case app name, for example 'crm' or 'field-service'. Maximum 64 characters. 'default' is the implicit default app.",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "displayName": {
+      "type": "string",
+      "description": "User-facing app title shown by the designer and admin console. Maximum 128 characters.",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "description": {
+      "type": ["string", "null"],
+      "description": "Optional description for designer documentation."
+    },
+    "isArchived": {
+      "type": "boolean",
+      "description": "When true, the app is archived and hidden from active app lists. Descriptors that belong to the app are kept.",
+      "default": false
+    },
+    "metadata": {
+      "$ref": "descriptor-metadata.schema.json"
+    }
+  },
+  "required": ["name", "displayName"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "name": "crm",
+      "displayName": "CRM",
+      "description": "Customer relationship management app."
+    }
+  ]
+}

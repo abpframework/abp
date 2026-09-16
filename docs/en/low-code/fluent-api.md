@@ -64,7 +64,7 @@ public class Product : DynamicEntityBase
 
     public ProductStatus Status { get; set; }
 
-    [DynamicForeignKey("Catalog.Categories.Category", "Name", ForeignAccess.View)]
+    [DynamicForeignKey("Catalog.Categories.Category", "Name")]
     public Guid? CategoryId { get; set; }
 
     [DynamicPropertyFileOptions(
@@ -322,17 +322,12 @@ public class Product : DynamicEntityBase
     [DynamicPropertyDefaultValue("0")]
     public decimal Price { get; set; }
 
-    [DynamicForeignKey(
-        "Catalog.Categories.Category",
-        "Name",
-        ForeignAccess.View
-    )]
+    [DynamicForeignKey("Catalog.Categories.Category", "Name")]
     public Guid? CategoryId { get; set; }
 
     [DynamicForeignKey(
         "Catalog.Products.Product",
         "Name",
-        ForeignAccess.View,
         DependsOnPropertyName = nameof(CategoryId),
         DependsOnFilterPropertyName = "CategoryId"
     )]
@@ -528,7 +523,7 @@ The `Configure(...)` callback gives you an `EntityDescriptor`.
 | `AsImage(long? maxSizeBytes = null, int? maxWidth = null, int? maxHeight = null, string? resizeMode = null, params string[] allowedContentTypes)` | Sets `Type = Image` and image constraints |
 | `WithDefaultValue(string? defaultValue)` | Sets `DefaultValue` |
 | `WithEnumType(string enumType)` | Sets `Type = Enum` and `EnumType` |
-| `WithForeignKey(string entityName, string? displayPropertyName = null, ForeignAccess access = ForeignAccess.None, string? dependsOnPropertyName = null, string? dependsOnFilterPropertyName = null)` | Configures the relation in one call |
+| `WithForeignKey(string entityName, string? displayPropertyName = null, string? dependsOnPropertyName = null, string? dependsOnFilterPropertyName = null)` | Configures the relation in one call. Reverse access is configured on page `relationships`, see [Foreign Access](foreign-access.md) |
 | `AsServerOnly(bool serverOnly = true)` | Sets `ServerOnly` |
 | `AsRequired(bool isRequired = true)` | Sets `IsRequired` |
 
@@ -565,7 +560,7 @@ AbpDynamicEntityConfig.EntityConfigurations.Configure(
             .WithEnumType("Catalog.Products.ProductStatus");
 
         entity.AddOrGetProperty("CategoryId")
-            .WithForeignKey("Catalog.Categories.Category", "Name", ForeignAccess.View);
+            .WithForeignKey("Catalog.Categories.Category", "Name");
 
         entity.AddOrGetProperty("HeroImage")
             .AsImage(

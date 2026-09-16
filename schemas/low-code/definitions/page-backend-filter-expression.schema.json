@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "page-backend-filter-expression.schema.json",
+  "title": "PageBackendFilterExpression",
+  "description": "Server-enforced filter expression for an entity page. A single condition or a nested and/or group tree that is always applied by the backend and cannot be removed by the client.",
+  "markdownDescription": "AI guidance: use `backendFilter` for tenant, ownership, role, or workflow scoping that must not be user-editable. The root is either one condition or a group with `items`. Inside a group the first item has no `logic`; every following item must set `logic` to `and` or `or` to combine with the previous items. A condition names a `propertyName`, an explicit `operator` (never `default`), and exactly one value source: a static `value`, a `valueProvider` name registered in `AbpLowCodePageBackendFilterOptions` (for example `CurrentUserId`, `CurrentUserRoles`, `CurrentTenantId`), or a `javaScript` expression. `isNull`/`isNotNull` need no value; `hasValue` takes a boolean value; `between` takes two values; `in`/`notIn` take an array.",
+  "$defs": {
+    "logic": {
+      "type": "string",
+      "description": "How this item combines with the previous items of the same group.",
+      "enum": ["and", "And", "or", "Or"]
+    },
+    "operator": {
+      "type": "string",
+      "description": "Filter operator. Must be explicit; 'default' is not allowed for backend filters. 'equals' is accepted as an alias of 'equal'.",
+      "enum": [
+        "equal",
+        "equals",
+        "notEqual",
+        "contains",
+        "notContains",
+        "startsWith",
+        "endsWith",
+        "greaterThan",
+        "greaterThanOrEqual",
+        "lessThan",
+        "lessThanOrEqual",
+        "between",
+        "isNull",
+        "isNotNull",
+        "hasValue",
+        "in",
+        "notIn",
+        "thisWeek",
+        "lastWeek",
+        "thisMonth",
+        "lastMonth",
+        "thisYear",
+        "lastYear",
+        "today",
+        "beforeToday"
+      ]
+    },
+    "conditionFields": {
+      "type": "object",
+      "properties": {
+        "logic": { "$ref": "#/$defs/logic" },
+        "propertyName": {
+          "type": "string",
+          "description": "Property on the page entity to filter.",
+          "minLength": 1
+        },
+        "operator": { "$ref": "#/$defs/operator" },
+        "value": {
+          "description": "Static filter value. Use an array for in/notIn, two values for between, and true/false for hasValue."
+        },
+        "valueProvider": {
+          "type": "string",
+          "description": "Name of a registered backend filter value provider, for example 'CurrentUserId' or 'CurrentUserRoles'.",
+          "minLength": 1
+        },
+        "javaScript": {
+          "type": "string",
+          "description": "JavaScript expression evaluated on the server to produce the filter value.",
+          "minLength": 1
+        }
+      },
+      "required": ["propertyName"],
+      "additionalProperties": false,
+      "not": {
+        "anyOf": [
+          { "required": ["value", "valueProvider"] },
+          { "required": ["value", "javaScript"] },
+          { "required": ["valueProvider", "javaScript"] }
+        ]
+      }
+    },
+    "groupFields": {
+      "type": "object",
+      "properties": {
+        "logic": { "$ref": "#/$defs/logic" },
+        "items": {
+          "type": "array",
+          "description": "Ordered child conditions and groups. The first item has no logic; later items require logic.",
+          "minItems": 1,
+          "prefixItems": [
+            {
+              "allOf": [
+                { "$ref": "#/$defs/node" },
+                { "not": { "required": ["logic"] } }
+              ]
+            }
+          ],
+          "items": {
+            "allOf": [
+              { "$ref": "#/$defs/node" },
+              { "required": ["logic"] }
+            ]
+          }
+        }
+      },
+      "required": ["items"],
+      "additionalProperties": false
+    },
+    "node": {
+      "oneOf": [
+        { "$ref": "#/$defs/conditionFields" },
+        { "$ref": "#/$defs/groupFields" }
+      ]
+    }
+  },
+  "allOf": [
+    { "$ref": "#/$defs/node" },
+    { "not": { "required": ["logic"] } }
+  ],
+  "examples": [
+    {
+      "propertyName": "Status",
+      "operator": "equal",
+      "value": "Active"
+    },
+    {
+      "items": [
+        { "propertyName": "Status", "operator": "equal", "value": "Active" },
+        {
+          "logic": "and",
+          "items": [
+            { "propertyName": "CreatorId", "operator": "equal", "valueProvider": "CurrentUserId" },
+            { "logic": "or", "propertyName": "AllowedRole", "operator": "in", "valueProvider": "CurrentUserRoles" }
+          ]
+        }
+      ]
+    }
+  ]
+}
