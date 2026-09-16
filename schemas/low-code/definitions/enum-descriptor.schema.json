@@ -40,7 +40,7 @@
     },
     "values": {
       "type": "array",
-      "description": "Ordered list of integer-backed enum values. Values are stored as integers; names are used for display and model readability.",
+      "description": "Ordered list of integer-backed enum values. Values are stored as integers; names are used for display and model readability. The array is always required; it may be empty only when extendsLowerLayer is true and the descriptor changes just displayName/order/metadata.",
       "items": {
         "type": "object",
         "properties": {
@@ -80,14 +80,23 @@
           "name"
         ],
         "additionalProperties": false
-      },
-      "minItems": 1
+      }
     }
   },
   "required": [
     "name",
     "values"
   ],
+  "if": {
+    "properties": { "extendsLowerLayer": { "const": true } },
+    "required": ["extendsLowerLayer"]
+  },
+  "then": {},
+  "else": {
+    "properties": {
+      "values": { "minItems": 1 }
+    }
+  },
   "additionalProperties": false,
   "examples": [
     {

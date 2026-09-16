@@ -42,9 +42,9 @@ Layout conventions:
 
 * `entities/`, `enums/`, and `permissions/` usually follow namespace-like folders such as `entities/Acme/Catalog/Product.json`.
 * `pageGroups/` usually stays flat as `pageGroups/{groupName}.json`.
-* `pages/` stays flat as `pages/{pageName}.json`, even when the page belongs to a page group or is a dashboard.
+* `pages/` stays flat as `pages/{pageName}.json` for the default app, even when the page belongs to a page group or is a dashboard.
 * Dashboard pages live in `pages/`; there is no separate dashboard descriptor folder.
-* `apps/` holds one file per non-default [app](#apps), for example `apps/crm.json`. Descriptors that belong to an app are written under an app subfolder of their category, for example `entities/crm/Acme/Crm/Contact.json` or `pages/crm/contacts.json`.
+* `apps/` holds one file per [app](#apps), for example `apps/crm.json`. Descriptors that belong to a non-default app get one extra app-level folder directly under their category and then follow the same layout rules: `entities/crm/Acme/Crm/Contact.json`, `pages/crm/contacts.json`, `forms/crm/contact-form.json`.
 * The runtime scans the directory tree directly. Do not add a combined index file next to `model/`.
 
 ## Example Files and Validation
@@ -527,7 +527,7 @@ Filters are page-owned. Use `control: "auto"` unless you need a specific control
 
 `hasValue` is a UI alias. At runtime, `Yes` maps to `IsNotNull`, `No` maps to `IsNull`, and `All` does not add a filter. Relative-date operators need no value; the server resolves the range at query time.
 
-Use a page `backendFilter` when a condition must always be applied by the server. The root is a single condition or a group with `items`; inside a group the first item has no `logic` and every following item sets `logic` to `and` or `or`. Each condition names a `propertyName`, an explicit `operator`, and exactly one value source: a static `value`, a registered `valueProvider`, or a `javaScript` expression. Backend filters are combined with the filters above and are not removable client state. See [Data Modeling and Page Behavior](data-modeling.md#backend-filters).
+Use a page `backendFilter` when a condition must always be applied by the server. The root is a single condition or a group with `items`; inside a group the first item has no `logic` and every following item sets `logic` to `and` or `or`. Each condition names a `propertyName`, an explicit `operator`, and exactly one value source: a static `value`, a registered `valueProvider`, or a `javaScript` expression. `isNull`/`isNotNull` take no value source and `hasValue` takes a static boolean `value`; `default` and the relative-date operators are not available in backend filters. Backend filters are combined with the filters above and are not removable client state. See [Data Modeling and Page Behavior](data-modeling.md#backend-filters).
 
 ## Permissions
 

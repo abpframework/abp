@@ -3,7 +3,7 @@
   "$id": "endpoint-descriptor.schema.json",
   "title": "Custom Endpoint Descriptor",
   "description": "Defines a custom HTTP endpoint that executes server-side JavaScript code.",
-  "markdownDescription": "AI guidance: use custom endpoints for model-owned actions and lightweight APIs. `name` must be unique within its app. `route` should start with `/api/` and must not conflict with another route/method. Use `{id}` style path parameters when needed. With `routeScope: \"app\"` the route is published beneath `/api/low-code/apps/<app>/endpoints` instead of verbatim. Scripts can access request data through the endpoint context and return HTTP results with helpers such as `context.ok(value)`, `context.created(value)`, and `context.noContent()` where available. Require authentication by default; add `requiredPermissions` for protected operations or set `useResourceAuthorization: true` to authorize per endpoint name through ABP resource permissions.",
+  "markdownDescription": "AI guidance: use custom endpoints for model-owned actions and lightweight APIs. `name` must be unique within its app. `route` should start with `/api/` and must not conflict with another route/method. Use `{id}` style path parameters when needed. With `routeScope: \"app\"` the route is published beneath `/api/low-code/apps/<app>/endpoints` instead of verbatim. Scripts can access request data through the endpoint context and return HTTP results with helpers such as `context.ok(value)`, `context.created(value)`, and `context.noContent()` where available. Require authentication by default. Authorization is resolved in order: `requiredPermissions` when non-empty, otherwise `useResourceAuthorization: true` (per-endpoint resource permission), otherwise `requireAuthentication`.",
   "type": "object",
   "properties": {
     "$schema": {
@@ -51,7 +51,7 @@
     },
     "useResourceAuthorization": {
       "type": "boolean",
-      "description": "When true, access is granted per endpoint name through the generated ABP resource permission for this endpoint, in addition to requiredPermissions.",
+      "description": "When true and requiredPermissions is empty, access is granted per endpoint name through the generated ABP resource permission for this endpoint (with the global Low-Code endpoint permission as fallback). When requiredPermissions contains values, those permissions are checked instead.",
       "default": false
     },
     "requiredPermissions": {

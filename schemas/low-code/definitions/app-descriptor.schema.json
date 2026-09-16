@@ -3,7 +3,7 @@
   "$id": "app-descriptor.schema.json",
   "title": "AppDescriptor",
   "description": "Describes a low-code app. Apps partition the model into independently named scopes: other descriptors reference their owning app through the `app` field, and the default app is implicit.",
-  "markdownDescription": "AI guidance: create an app only when a group of entities, pages, forms, and scripts should be isolated under its own name. `name` is a lowercase kebab-case identifier such as `crm` or `field-service` and becomes part of runtime entity names (`<app>:<EntityName>`), app-scoped endpoint routes, and split descriptor file paths (`entities/<app>/...`). The reserved name `default` is the implicit app; descriptors without an `app` field belong to it. Set `isArchived` to hide an app without deleting its descriptors.",
+  "markdownDescription": "AI guidance: create an app only when a group of entities, pages, forms, and scripts should be isolated under its own name. `name` is a lowercase kebab-case identifier such as `crm` or `field-service` and becomes part of runtime entity names (`<app>:<EntityName>`), app-scoped endpoint routes, and split descriptor file paths (`entities/<app>/...`). The name `default` denotes the implicit default app that always exists; descriptors without an `app` field belong to it. A `default` app descriptor is optional and only customizes the default app's `displayName`, `description`, and `metadata`; it cannot be archived. Set `isArchived` on other apps to hide them without deleting their descriptors.",
   "type": "object",
   "properties": {
     "$schema": {
@@ -12,7 +12,7 @@
     },
     "name": {
       "type": "string",
-      "description": "Stable lowercase kebab-case app name, for example 'crm' or 'field-service'. Maximum 64 characters. 'default' is the implicit default app.",
+      "description": "Stable lowercase kebab-case app name, for example 'crm' or 'field-service'. Maximum 64 characters. 'default' addresses the implicit default app, whose descriptor is optional and cannot be archived.",
       "minLength": 1,
       "maxLength": 64,
       "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
@@ -37,6 +37,13 @@
     }
   },
   "required": ["name", "displayName"],
+  "if": {
+    "properties": { "name": { "const": "default" } },
+    "required": ["name"]
+  },
+  "then": {
+    "properties": { "isArchived": { "const": false } }
+  },
   "additionalProperties": false,
   "examples": [
     {

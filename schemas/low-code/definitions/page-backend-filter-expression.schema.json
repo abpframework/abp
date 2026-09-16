@@ -3,7 +3,7 @@
   "$id": "page-backend-filter-expression.schema.json",
   "title": "PageBackendFilterExpression",
   "description": "Server-enforced filter expression for an entity page. A single condition or a nested and/or group tree that is always applied by the backend and cannot be removed by the client.",
-  "markdownDescription": "AI guidance: use `backendFilter` for tenant, ownership, role, or workflow scoping that must not be user-editable. The root is either one condition or a group with `items`. Inside a group the first item has no `logic`; every following item must set `logic` to `and` or `or` to combine with the previous items. A condition names a `propertyName`, an explicit `operator` (never `default`), and exactly one value source: a static `value`, a `valueProvider` name registered in `AbpLowCodePageBackendFilterOptions` (for example `CurrentUserId`, `CurrentUserRoles`, `CurrentTenantId`), or a `javaScript` expression. `isNull`/`isNotNull` need no value; `hasValue` takes a boolean value; `between` takes two values; `in`/`notIn` take an array.",
+  "markdownDescription": "AI guidance: use `backendFilter` for tenant, ownership, role, or workflow scoping that must not be user-editable. The root is either one condition or a group with `items`. Inside a group the first item has no `logic`; every following item must set `logic` to `and` or `or` to combine with the previous items. A condition names a `propertyName`, an explicit `operator` (never `default`), and exactly one value source: a static `value`, a `valueProvider` name registered in `AbpLowCodePageBackendFilterOptions` (for example `CurrentUserId`, `CurrentUserRoles`, `CurrentTenantId`), or a `javaScript` expression. `isNull`/`isNotNull` take no value source; `hasValue` takes a static boolean `value` (true = isNotNull, false = isNull); `between` takes two values; `in`/`notIn` take an array. Relative-date operators (`thisMonth`, `today`, ...) and `default` are not supported by backend filters; they belong to visible page filters.",
   "$defs": {
     "logic": {
       "type": "string",
@@ -12,7 +12,7 @@
     },
     "operator": {
       "type": "string",
-      "description": "Filter operator. Must be explicit; 'default' is not allowed for backend filters. 'equals' is accepted as an alias of 'equal'.",
+      "description": "Filter operator. Must be explicit; 'default' and relative-date operators are not allowed for backend filters. 'equals' is accepted as an alias of 'equal'. String properties support contains/notContains/startsWith/endsWith/equal/notEqual/in/notIn; numeric, money, and date/time properties support between/equal/notEqual/greaterThan/greaterThanOrEqual/lessThan/lessThanOrEqual/in/notIn; boolean, guid, and enum properties support equal/notEqual/in/notIn; isNull/isNotNull/hasValue apply to any property.",
       "enum": [
         "equal",
         "equals",
@@ -30,15 +30,7 @@
         "isNotNull",
         "hasValue",
         "in",
-        "notIn",
-        "thisWeek",
-        "lastWeek",
-        "thisMonth",
-        "lastMonth",
-        "thisYear",
-        "lastYear",
-        "today",
-        "beforeToday"
+        "notIn"
       ]
     },
     "conditionFields": {
@@ -65,15 +57,56 @@
           "minLength": 1
         }
       },
-      "required": ["propertyName"],
+      "required": ["propertyName", "operator"],
       "additionalProperties": false,
-      "not": {
-        "anyOf": [
-          { "required": ["value", "valueProvider"] },
-          { "required": ["value", "javaScript"] },
-          { "required": ["valueProvider", "javaScript"] }
-        ]
-      }
+      "allOf": [
+        {
+          "not": {
+            "anyOf": [
+              { "required": ["value", "valueProvider"] },
+              { "required": ["value", "javaScript"] },
+              { "required": ["valueProvider", "javaScript"] }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": { "operator": { "enum": ["isNull", "isNotNull"] } }
+          },
+          "then": {
+            "not": {
+              "anyOf": [
+                { "required": ["value"] },
+                { "required": ["valueProvider"] },
+                { "required": ["javaScript"] }
+              ]
+            }
+          },
+          "else": {
+            "anyOf": [
+              { "required": ["value"] },
+              { "required": ["valueProvider"] },
+              { "required": ["javaScript"] }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": { "operator": { "const": "hasValue" } }
+          },
+          "then": {
+            "required": ["value"],
+            "properties": {
+              "value": {
+                "anyOf": [
+                  { "type": "boolean" },
+                  { "type": "string", "enum": ["true", "false", "True", "False"] }
+                ]
+              }
+            }
+          }
+        }
+      ]
     },
     "groupFields": {
       "type": "object",
