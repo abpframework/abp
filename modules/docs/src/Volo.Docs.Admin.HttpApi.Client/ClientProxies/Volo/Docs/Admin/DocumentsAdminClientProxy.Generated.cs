@@ -9,6 +9,7 @@ using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Abp.Http.Modeling;
 using Volo.Docs.Admin.Documents;
+using Volo.Docs.Admin.Projects;
 
 // ReSharper disable once CheckNamespace
 namespace Volo.Docs.Admin;
@@ -68,5 +69,10 @@ public partial class DocumentsAdminClientProxy : ClientProxyBase<IDocumentAdminA
     public virtual async Task<List<DocumentInfoDto>> GetFilterItemsAsync()
     {
         return await RequestAsync<List<DocumentInfoDto>>(nameof(GetFilterItemsAsync));
+    }
+
+    public virtual async Task<List<ProjectWithoutDetailsDto>> GetProjectsAsync()
+    {
+        return await RequestAsync<List<ProjectWithoutDetailsDto>>(nameof(GetProjectsAsync));
     }
 }

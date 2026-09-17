@@ -8,4 +8,5 @@ public static class MinioBlobProviderConfigurationNames
     public const string SecretKey = "Minio.SecretKey";
     public const string WithSSL = "Minio.WithSSL";
     public const string CreateBucketIfNotExists = "Minio.CreateBucketIfNotExists";
+    public const string PresignedGetExpirySeconds = "Minio.PresignedGetExpirySeconds";
 }

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the Blazor UI 3.3 to 4.0 Migration Guide, detailing essential updates for your project files and dependencies to ensure a smooth transition."
+}
+```
+
 # Blazor UI 3.3 to 4.0 Migration Guide
 
 ## Startup Template Changes

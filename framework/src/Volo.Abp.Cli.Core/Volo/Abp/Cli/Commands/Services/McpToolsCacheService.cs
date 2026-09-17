@@ -1,0 +1,183 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Volo.Abp.Cli.Commands.Models;
+using Volo.Abp.Cli.Memory;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.IO;
+
+namespace Volo.Abp.Cli.Commands.Services;
+
+public class McpToolsCacheService : ITransientDependency
+{
+    private const string LogSource = nameof(McpToolsCacheService);
+    private const int CacheValidityHours = 24;
+    
+    private readonly McpHttpClientService _mcpHttpClient;
+    private readonly MemoryService _memoryService;
+    private readonly ILogger<McpToolsCacheService> _logger;
+    private readonly IMcpLogger _mcpLogger;
+
+    public McpToolsCacheService(
+        McpHttpClientService mcpHttpClient,
+        MemoryService memoryService,
+        ILogger<McpToolsCacheService> logger,
+        IMcpLogger mcpLogger)
+    {
+        _mcpHttpClient = mcpHttpClient;
+        _memoryService = memoryService;
+        _logger = logger;
+        _mcpLogger = mcpLogger;
+    }
+
+    public async Task<List<McpToolDefinition>> GetToolDefinitionsAsync()
+    {
+        if (await IsCacheValidAsync())
+        {
+            var cachedTools = await LoadFromCacheAsync();
+            if (cachedTools != null)
+            {
+                _mcpLogger.Debug(LogSource, "Using cached tool definitions");
+                // Initialize the HTTP client's tool names list from cache
+                _mcpHttpClient.InitializeToolNames(cachedTools);
+                return cachedTools;
+            }
+        }
+
+        // Cache is invalid or missing, fetch from server
+        _mcpLogger.Info(LogSource, "Fetching tool definitions from server...");
+        var tools = await _mcpHttpClient.GetToolDefinitionsAsync();
+        
+        // Validate that we got tools
+        if (tools == null || tools.Count == 0)
+        {
+            throw new CliUsageException(
+                "Failed to fetch tool definitions from ABP.IO MCP Server. " +
+                "No tools available. The MCP server cannot start without tool definitions.");
+        }
+        
+        // Save tools to cache
+        await SaveToCacheAsync(tools);
+        await _memoryService.SetAsync(CliConsts.MemoryKeys.McpToolsLastFetchDate, DateTime.Now.ToString(CultureInfo.InvariantCulture));
+        
+        _mcpLogger.Info(LogSource, $"Successfully fetched and cached {tools.Count} tool definitions");
+        return tools;
+    }
+
+    private async Task<bool> IsCacheValidAsync()
+    {
+        try
+        {
+            // Check if cache file exists
+            if (!File.Exists(CliPaths.McpToolsCache))
+            {
+                return false;
+            }
+
+            // Check timestamp in memory
+            var lastFetchTimeString = await _memoryService.GetAsync(CliConsts.MemoryKeys.McpToolsLastFetchDate);
+            if (string.IsNullOrEmpty(lastFetchTimeString))
+            {
+                return false;
+            }
+
+            if (DateTime.TryParse(lastFetchTimeString, CultureInfo.InvariantCulture, DateTimeStyles.None, out var lastFetchTime))
+            {
+                // Check if less than configured hours old
+                if (DateTime.Now.Subtract(lastFetchTime).TotalHours < CacheValidityHours)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning($"Error checking cache validity: {ex.Message}");
+            return false;
+        }
+    }
+
+    private async Task<List<McpToolDefinition>> LoadFromCacheAsync()
+    {
+        try
+        {
+            if (!File.Exists(CliPaths.McpToolsCache))
+            {
+                return null;
+            }
+
+            var json = await FileHelper.ReadAllTextAsync(CliPaths.McpToolsCache);
+            var tools = JsonSerializer.Deserialize<List<McpToolDefinition>>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            return tools;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning($"Error loading cached tool definitions: {ex.Message}");
+            return null;
+        }
+    }
+
+    private Task SaveToCacheAsync(List<McpToolDefinition> tools)
+    {
+        try
+        {
+            // Ensure directory exists
+            var directory = Path.GetDirectoryName(CliPaths.McpToolsCache);
+            if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            var json = JsonSerializer.Serialize(tools, new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
+
+            // Using synchronous File.WriteAllText is acceptable here since cache writes are not on the critical path
+            // and we need to support multiple target frameworks
+            File.WriteAllText(CliPaths.McpToolsCache, json);
+            
+            // Set restrictive file permissions (user read/write only)
+            SetRestrictiveFilePermissions(CliPaths.McpToolsCache);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning($"Error saving tool definitions to cache: {ex.Message}");
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private void SetRestrictiveFilePermissions(string filePath)
+    {
+        try
+        {
+            // On Unix systems, set permissions to 600 (user read/write only)
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+#if NET6_0_OR_GREATER
+                File.SetUnixFileMode(filePath, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+#endif
+            }
+            // On Windows, the file inherits permissions from the user profile directory,
+            // which is already restrictive to the current user
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning($"Error setting file permissions: {ex.Message}");
+        }
+    }
+}
+

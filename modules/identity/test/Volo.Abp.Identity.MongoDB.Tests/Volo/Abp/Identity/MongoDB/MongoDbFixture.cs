@@ -1,5 +1,5 @@
 using System;
-using EphemeralMongo;
+using MongoSandbox;
 
 namespace Volo.Abp.Identity.MongoDB;
 

@@ -1,8 +1,21 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore best practices for implementing Application Services in ABP Framework, ensuring effective use of Domain-Driven Design principles."
+}
+```
+
 # Application Services Best Practices & Conventions
+
+> This document offers best practices for implementing Application Services classes in your modules and applications based on Domain-Driven-Design principles.
+>
+> **Ensure you've read the [*Application Services*](../domain-driven-design/application-services.md) document first.**
+
+## General
 
 * **Do** create an application service for each **aggregate root**.
 
-### Application Service Interface
+## Application Service Interface
 
 * **Do** define an `interface` for each application service in the **application contracts** package.
 * **Do** inherit from the `IApplicationService` interface.
@@ -11,11 +24,11 @@
 * **Do not** get/return entities for the service methods.
 * **Do** define DTOs based on the [DTO best practices](data-transfer-objects.md).
 
-#### Outputs
+### Outputs
 
 * **Avoid** to define too many output DTOs for same or related entities. Instead, define a **basic** and a **detailed** DTO for an entity.
 
-##### Basic DTO
+#### Basic DTO
 
 **Do** define a **basic** DTO for an aggregate root.
 
@@ -44,7 +57,7 @@ public class IssueLabelDto
 }
 ```
 
-##### Detailed DTO
+#### Detailed DTO
 
 **Do** define a **detailed** DTO for an entity if it has reference(s) to other aggregate roots.
 
@@ -81,20 +94,20 @@ public class LabelDto : ExtensibleEntityDto<Guid>
 }
 ````
 
-#### Inputs
+### Inputs
 
 * **Do not** define any property in an input DTO that is not used in the service class.
 * **Do not** share input DTOs between application service methods.
 * **Do not** inherit an input DTO class from another one.
   * **May** inherit from an abstract base DTO class and share some properties between different DTOs in that way. However, should be very careful in that case because manipulating the base DTO would effect all related DTOs and service methods. Avoid from that as a good practice.
 
-#### Methods
+### Methods
 
 * **Do** define service methods as asynchronous with **Async** postfix.
 * **Do not** repeat the entity name in the method names.
   * Example: Define `GetAsync(...)` instead of `GetProductAsync(...)` in the `IProductAppService`.
 
-##### Getting A Single Entity
+#### Getting A Single Entity
 
 * **Do** use the `GetAsync` **method name**.
 * **Do** get Id with a **primitive** method parameter.
@@ -104,7 +117,7 @@ public class LabelDto : ExtensibleEntityDto<Guid>
 Task<QuestionWithDetailsDto> GetAsync(Guid id);
 ````
 
-##### Getting A List Of Entities
+#### Getting A List Of Entities
 
 * **Do** use the `GetListAsync` **method name**.
 * **Do** get a single DTO argument for **filtering**, **sorting** and **paging** if necessary.
@@ -117,7 +130,7 @@ Task<QuestionWithDetailsDto> GetAsync(Guid id);
 Task<List<QuestionWithDetailsDto>> GetListAsync(QuestionListQueryDto queryDto);
 ````
 
-##### Creating A New Entity
+#### Creating A New Entity
 
 * **Do** use the `CreateAsync` **method name**.
 * **Do** get a **specialized input** DTO to create the entity.
@@ -151,7 +164,7 @@ public class CreateQuestionDto : ExtensibleObject
 }
 ````
 
-##### Updating An Existing Entity
+#### Updating An Existing Entity
 
 - **Do** use the `UpdateAsync` **method name**.
 - **Do** get a **specialized input** DTO to update the entity.
@@ -167,7 +180,7 @@ Example:
 Task<QuestionWithDetailsDto> UpdateAsync(Guid id, UpdateQuestionDto updateQuestionDto);
 ````
 
-##### Deleting An Existing Entity
+#### Deleting An Existing Entity
 
 - **Do** use the `DeleteAsync` **method name**.
 - **Do** get Id with a **primitive** method parameter. Example:
@@ -176,7 +189,7 @@ Task<QuestionWithDetailsDto> UpdateAsync(Guid id, UpdateQuestionDto updateQuesti
 Task DeleteAsync(Guid id);
 ````
 
-##### Other Methods
+#### Other Methods
 
 * **Can** define additional methods to perform operations on the entity. Example:
 
@@ -186,7 +199,7 @@ Task<int> VoteAsync(Guid id, VoteType type);
 
 This method votes a question and returns the current score of the question.
 
-### Application Service Implementation
+## Application Service Implementation
 
 * **Do** develop the application layer **completely independent from the web layer**.
 * **Do** implement application service interfaces in the **application layer**.
@@ -195,30 +208,30 @@ This method votes a question and returns the current score of the question.
 * **Do** make all public methods **virtual**, so developers may inherit and override them.
 * **Do not** make **private** methods. Instead make them **protected virtual**, so developers may inherit and override them.
 
-#### Using Repositories
+### Using Repositories
 
 * **Do** use the specifically designed repositories (like `IProductRepository`).
 * **Do not** use generic repositories (like `IRepository<Product>`).
 
-#### Querying Data
+### Querying Data
 
 * **Do not** use LINQ/SQL for querying data from database inside the application service methods. It's repository's responsibility to perform LINQ/SQL queries from the data source.
 
-#### Extra Properties
+### Extra Properties
 
 * **Do** use either `MapExtraPropertiesTo` extension method ([see](../../fundamentals/object-extensions.md)) or configure the object mapper (`MapExtraProperties`) to allow application developers to be able to extend the objects and services.
 
-#### Manipulating / Deleting Entities
+### Manipulating / Deleting Entities
 
 * **Do** always get all the related entities from repositories to perform the operations on them.
 * **Do** call repository's Update/UpdateAsync method after updating an entity. Because, not all database APIs support change tracking & auto update.
 
-#### Handle files
+### Handle files
 
 * **Do not** use any web components like `IFormFile` or `Stream` in the application services. If you want to serve a file you can use `byte[]`.
 * **Do** use a `Controller` to handle file uploading then pass the `byte[]` of the file to the application service method.
 
-#### Using Other Application Services
+### Using Other Application Services
 
 * **Do not** use other application services of the same module/application. Instead;
   * Use domain layer to perform the required task.

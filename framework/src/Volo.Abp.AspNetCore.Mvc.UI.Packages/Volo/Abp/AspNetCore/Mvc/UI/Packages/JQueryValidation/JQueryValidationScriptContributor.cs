@@ -15,6 +15,10 @@ public class JQueryValidationScriptContributor : BundleContributor
     public override void ConfigureBundle(BundleConfigurationContext context)
     {
         context.Files.AddIfNotContains("/libs/jquery-validation/jquery.validate.js");
+        if (context.FileProvider.GetFileInfo("/libs/jquery-validation/abp.jquery.validate.js").Exists)
+        {
+            context.Files.AddIfNotContains("/libs/jquery-validation/abp.jquery.validate.js");
+        }
     }
 
     public override void ConfigureDynamicResources(BundleConfigurationContext context)

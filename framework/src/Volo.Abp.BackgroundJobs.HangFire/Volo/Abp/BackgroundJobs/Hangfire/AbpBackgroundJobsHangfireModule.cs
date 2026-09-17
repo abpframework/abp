@@ -25,13 +25,8 @@ public class AbpBackgroundJobsHangfireModule : AbpModule
         if (!options.IsJobExecutionEnabled)
         {
             var hangfireOptions = context.ServiceProvider.GetRequiredService<IOptions<AbpHangfireOptions>>().Value;
-            hangfireOptions.BackgroundJobServerFactory = CreateOnlyEnqueueJobServer;
+            context.ServiceProvider.GetRequiredService<JobStorage>();
+            hangfireOptions.BackgroundJobServerFactory = _ => null;
         }
-    }
-
-    private BackgroundJobServer? CreateOnlyEnqueueJobServer(IServiceProvider serviceProvider)
-    {
-        serviceProvider.GetRequiredService<JobStorage>();
-        return null;
     }
 }

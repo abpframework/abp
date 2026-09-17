@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "This guide provides step-by-step instructions for migrating your MVC/Razor UI project to OpenIddict, enhancing security and authentication."
+}
+```
+
 # OpenIddict MVC/Razor UI Migration Guide
 
 ## Web Project (Non-Tiered Solution)

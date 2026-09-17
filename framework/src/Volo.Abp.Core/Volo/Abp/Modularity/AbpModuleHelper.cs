@@ -11,7 +11,7 @@ public static class AbpModuleHelper
     public static List<Type> FindAllModuleTypes(Type startupModuleType, ILogger? logger)
     {
         var moduleTypes = new List<Type>();
-        logger?.Log(LogLevel.Information, "Loaded ABP modules:");
+        logger?.Log(LogLevel.Debug, "Loaded ABP modules:");
         AddModuleAndDependenciesRecursively(moduleTypes, startupModuleType, logger);
         return moduleTypes;
     }
@@ -72,7 +72,7 @@ public static class AbpModuleHelper
         }
 
         moduleTypes.Add(moduleType);
-        logger?.Log(LogLevel.Information, $"{new string(' ', depth * 2)}- {moduleType.FullName}");
+        logger?.Log(LogLevel.Debug, $"{new string(' ', depth * 2)}- {moduleType.FullName}");
 
         foreach (var dependedModuleType in FindDependedModuleTypes(moduleType))
         {

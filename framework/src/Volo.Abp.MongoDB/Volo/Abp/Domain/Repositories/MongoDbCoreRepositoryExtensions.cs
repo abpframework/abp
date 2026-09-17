@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
-using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.MongoDB;
 
@@ -36,17 +36,24 @@ public static class MongoDbCoreRepositoryExtensions
         return repository.ToMongoDbRepository().GetCollectionAsync(cancellationToken);
     }
 
-    [Obsolete("Use GetMongoQueryableAsync method.")]
-    public static IMongoQueryable<TEntity> GetMongoQueryable<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
+    [Obsolete("Use GetQueryableAsync method.")]
+    public static IQueryable<TEntity> GetMongoQueryable<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
         where TEntity : class, IEntity
     {
         return repository.ToMongoDbRepository().GetMongoQueryable();
     }
 
-    public static Task<IMongoQueryable<TEntity>> GetMongoQueryableAsync<TEntity>(this IReadOnlyBasicRepository<TEntity> repository, CancellationToken cancellationToken = default, AggregateOptions? aggregateOptions = null)
+    [Obsolete("Use GetQueryableAsync method.")]
+    public static Task<IQueryable<TEntity>> GetMongoQueryableAsync<TEntity>(this IReadOnlyBasicRepository<TEntity> repository, CancellationToken cancellationToken = default, AggregateOptions? aggregateOptions = null)
         where TEntity : class, IEntity
     {
         return repository.ToMongoDbRepository().GetMongoQueryableAsync(cancellationToken, aggregateOptions);
+    }
+
+    public static Task<IQueryable<TEntity>> GetQueryableAsync<TEntity>(this IReadOnlyBasicRepository<TEntity> repository)
+        where TEntity : class, IEntity
+    {
+        return repository.ToMongoDbRepository().GetQueryableAsync();
     }
 
     public static Task<IAggregateFluent<TEntity>> GetAggregateAsync<TEntity>(this IReadOnlyBasicRepository<TEntity> repository, CancellationToken cancellationToken = default, AggregateOptions? aggregateOptions = null)

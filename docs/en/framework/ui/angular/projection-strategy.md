@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use `ProjectionStrategy` in ABP Framework to effectively project components with various strategies for enhanced content management."
+}
+```
+
 # ProjectionStrategy
 
 `ProjectionStrategy` is an abstract class exposed by @abp/ng.core package. There are three projection strategies extending it: `ComponentProjectionStrategy`, `RootComponentProjectionStrategy`, and `TemplateProjectionStrategy`. Implementing the same methods and properties, all of these strategies help you define how your content projection will work.

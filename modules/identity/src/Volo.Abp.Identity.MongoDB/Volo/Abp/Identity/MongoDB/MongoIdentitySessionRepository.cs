@@ -15,16 +15,17 @@ namespace Volo.Abp.Identity.MongoDB;
 
 public class MongoIdentitySessionRepository : MongoDbRepository<IAbpIdentityMongoDbContext, IdentitySession, Guid>, IIdentitySessionRepository
 {
-    public MongoIdentitySessionRepository(IMongoDbContextProvider<IAbpIdentityMongoDbContext> dbContextProvider)
+    protected IClock Clock { get; }
+
+    public MongoIdentitySessionRepository(IMongoDbContextProvider<IAbpIdentityMongoDbContext> dbContextProvider, IClock clock)
         : base(dbContextProvider)
     {
-
+        Clock = clock;
     }
 
     public virtual async Task<IdentitySession> FindAsync(string sessionId, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
-            .As<IMongoQueryable<IdentitySession>>()
+        return await (await GetQueryableAsync(GetCancellationToken(cancellationToken)))
             .FirstOrDefaultAsync(x => x.SessionId == sessionId, GetCancellationToken(cancellationToken));
     }
 
@@ -41,15 +42,13 @@ public class MongoIdentitySessionRepository : MongoDbRepository<IAbpIdentityMong
 
     public virtual async Task<bool> ExistAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
-            .As<IMongoQueryable<IdentitySession>>()
+        return await (await GetQueryableAsync(GetCancellationToken(cancellationToken)))
             .AnyAsync(x => x.Id == id, GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<bool> ExistAsync(string sessionId, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
-            .As<IMongoQueryable<IdentitySession>>()
+        return await (await GetQueryableAsync(GetCancellationToken(cancellationToken)))
             .AnyAsync(x => x.SessionId == sessionId, GetCancellationToken(cancellationToken));
     }
 
@@ -62,13 +61,12 @@ public class MongoIdentitySessionRepository : MongoDbRepository<IAbpIdentityMong
         string clientId = null,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+        return await (await GetQueryableAsync(GetCancellationToken(cancellationToken)))
             .WhereIf(userId.HasValue, x => x.UserId == userId)
             .WhereIf(!device.IsNullOrWhiteSpace(), x => x.Device == device)
             .WhereIf(!clientId.IsNullOrWhiteSpace(), x => x.ClientId == clientId)
             .OrderBy(sorting.IsNullOrWhiteSpace() ? $"{nameof(IdentitySession.LastAccessed)} desc" : sorting)
             .PageBy(skipCount, maxResultCount)
-            .As<IMongoQueryable<IdentitySession>>()
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -78,11 +76,10 @@ public class MongoIdentitySessionRepository : MongoDbRepository<IAbpIdentityMong
         string clientId = null,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(GetCancellationToken(cancellationToken)))
+        return await (await GetQueryableAsync(GetCancellationToken(cancellationToken)))
             .WhereIf(userId.HasValue, x => x.UserId == userId)
             .WhereIf(!device.IsNullOrWhiteSpace(), x => x.Device == device)
             .WhereIf(!clientId.IsNullOrWhiteSpace(), x => x.ClientId == clientId)
-            .As<IMongoQueryable<IdentitySession>>()
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -98,7 +95,7 @@ public class MongoIdentitySessionRepository : MongoDbRepository<IAbpIdentityMong
 
     public virtual async Task DeleteAllAsync(TimeSpan inactiveTimeSpan, CancellationToken cancellationToken = default)
     {
-        var now = LazyServiceProvider.LazyGetRequiredService<IClock>().Now;
-        await DeleteDirectAsync(x => x.LastAccessed == null || x.LastAccessed < now.Subtract(inactiveTimeSpan), cancellationToken: cancellationToken);
+        var inactiveTime = Clock.Now.Subtract(inactiveTimeSpan);
+        await DeleteDirectAsync(x => (x.LastAccessed ?? x.SignedIn) < inactiveTime, cancellationToken: cancellationToken);
     }
 }

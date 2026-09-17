@@ -27,7 +27,7 @@ public class EfCoreOpenIddictScopeRepository : EfCoreRepository<IOpenIddictDbCon
                 x.Name.Contains(filter) ||
                 x.DisplayName.Contains(filter) ||
                 x.Description.Contains(filter))
-            .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(OpenIddictScope.Name) : sorting)
+            .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(OpenIddictScope.CreationTime) + " desc" : sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }

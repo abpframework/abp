@@ -1,0 +1,31 @@
+{
+  "culture": "ko",
+  "texts": {
+    "InternalServerErrorMessage": "요청을 처리하는 동안 내부 오류가 발생했습니다!",
+    "ValidationErrorMessage": "요청이 유효하지 않습니다!",
+    "ValidationNarrativeErrorMessageTitle": "유효성 검사 중 다음 오류가 발견되었습니다.",
+    "DefaultErrorMessage": "오류가 발생했습니다!",
+    "DefaultErrorMessageDetail": "서버에서 오류 세부 정보를 보내지 않았습니다.",
+    "DefaultErrorMessage401": "인증되지 않았습니다!",
+    "DefaultErrorMessage401Detail": "이 작업을 수행하려면 로그인해야 합니다.",
+    "DefaultErrorMessage403": "권한이 없습니다!",
+    "DefaultErrorMessage403Detail": "이 작업을 수행할 권한이 없습니다!",
+    "DefaultErrorMessage404": "리소스를 찾을 수 없습니다!",
+    "DefaultErrorMessage404Detail": "서버에서 요청한 리소스를 찾을 수 없습니다!",
+    "EntityNotFoundErrorMessage": "{0} 엔터티 중 ID가 {1}인 항목이 없습니다!",
+    "EntityNotFoundErrorMessageWithoutId": "{0} 엔터티가 없습니다!",
+    "AbpDbConcurrencyErrorMessage": "제출한 데이터가 이미 다른 사용자에 의해 변경되었습니다. 변경 사항을 취소하고 다시 시도해 주세요.",
+    "Error": "오류",
+    "UnhandledException": "처리되지 않은 예외가 발생했습니다!",
+    "Authorizing": "권한을 확인하는 중…",
+    "401Message": "인증되지 않음",
+    "403Message": "접근 금지",
+    "404Message": "페이지를 찾을 수 없음",
+    "500Message": "내부 서버 오류",
+    "403MessageDetail": "이 작업을 수행할 권한이 없습니다!",
+    "404MessageDetail": "죄송합니다. 이 주소에 해당하는 페이지가 없습니다.",
+    "Unauthorized": "인증되지 않음",
+    "invalid_token": "유효하지 않은 토큰",
+    "SessionExpired": "세션이 만료되었습니다. 애플리케이션을 계속 사용하려면 다시 로그인해 주세요."
+  }
+}

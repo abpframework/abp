@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to customize the user interface in ASP.NET Core MVC/Razor Pages by overriding page models and Razor pages for enhanced functionality and design."
+}
+```
+
 # ASP.NET Core (MVC / Razor Pages) User Interface Customization Guide
 
 This document explains how to override the user interface of a depended [application module](../../../modules) or [theme](theming.md) for ASP.NET Core MVC / Razor Page applications.
@@ -89,7 +96,10 @@ This example overrides the **login page** defined by the [Account Module](../../
 
 Create a page model class deriving from the ` LoginModel ` (defined in the ` Volo.Abp.Account.Web.Pages.Account ` namespace):
 
+> If you are using the `AbpAccountWebOpenIddictModule` or `AbpAccountPublicWebOpenIddictModule`, the base class is `OpenIddictSupportedLoginModel` instead of `LoginModel`. And you should change the `ExposeServices` attribute to `[ExposeServices(typeof (MyLoginModel), typeof(OpenIddictSupportedLoginModel), typeof(LoginModel))]`
+
 ````csharp
+[ExposeServices(typeof (MyLoginModel), typeof(LoginModel))]
 public class MyLoginModel : LoginModel
 {
     public MyLoginModel(
@@ -113,8 +123,6 @@ public class MyLoginModel : LoginModel
 ````
 
 You can override any method or add new properties/methods if needed.
-
-> Notice that we didn't use `[Dependency(ReplaceServices = true)]` or `[ExposeServices(typeof(LoginModel))]` since we don't want to replace the existing class in the dependency injection, we define a new one.
 
 Copy `Login.cshtml` file into your solution as just described above. Change the **@model** directive to point to the `MyLoginModel`:
 

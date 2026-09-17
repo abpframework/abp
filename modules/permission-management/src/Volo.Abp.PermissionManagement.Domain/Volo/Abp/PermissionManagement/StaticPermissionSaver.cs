@@ -85,6 +85,12 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
             await StaticStore.GetGroupsAsync()
         );
 
+        var resourcePermissions = await PermissionSerializer.SerializeAsync(
+            await StaticStore.GetResourcePermissionsAsync()
+        );
+
+        permissionRecords = permissionRecords.Union(resourcePermissions).ToArray();
+
         var currentHash = CalculateHash(
             permissionGroupRecords,
             permissionRecords,
@@ -141,15 +147,15 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
                     throw;
                 }
 
-                await unitOfWork.CompleteAsync();
-            }
-
-            if (newOrChangedPermissions.Any())
-            {
-                await DistributedEventBus.PublishAsync(new DynamicPermissionDefinitionsChangedEto
+                if (newOrChangedPermissions.Any())
                 {
-                    Permissions = newOrChangedPermissions.Distinct().ToList()
-                });
+                    await DistributedEventBus.PublishAsync(new DynamicPermissionDefinitionsChangedEto
+                    {
+                        Permissions = newOrChangedPermissions.Distinct().ToList()
+                    });
+                }
+
+                await unitOfWork.CompleteAsync();
             }
         }
 
@@ -275,7 +281,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
 
         if (changedRecords.Any())
         {
-            newOrChangedPermissions.AddRange(newRecords.Select(x => x.Name));
+            newOrChangedPermissions.AddRange(changedRecords.Select(x => x.Name));
             await PermissionRepository.UpdateManyAsync(changedRecords);
         }
 

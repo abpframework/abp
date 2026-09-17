@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enhance your application's security with essential HTTP headers using ABP Framework's `UseAbpSecurityHeaders` middleware."
+}
+```
+
 # Security Headers
 
 ABP allows you to add frequently used security headers into your application. The following security headers will be added as response headers to your application if you use the `UseAbpSecurityHeaders` middleware:

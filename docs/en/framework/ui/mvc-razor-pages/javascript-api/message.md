@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to utilize the ABP Framework's Message API for displaying user-friendly alerts in ASP.NET Core MVC/Razor Pages with SweetAlert integration."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages UI: JavaScript Message API
 
 Message API is used to show nice looking messages to the user as a blocking dialog. Message API is an abstraction provided by the ABP and implemented using the [SweetAlert](https://sweetalert.js.org/) library by default.
@@ -88,6 +95,58 @@ abp.message.confirm(
   });
 ````
 
+## Prompt Message
+
+`abp.message.prompt(...)` can be used to get a text (or other input) from the user.
+
+Simple usage:
+```js
+abp.message.prompt('Please enter a name:', (value)=> console.log('Entered name:', value));
+```
+
+**Example (then):**
+
+````js
+let options = { title: "Name Change" ,icon: "info", inputValue: "John Doe"};
+abp.message.prompt('Enter a new name to change your name', options)
+  .then(function(value){
+    if (value) {
+      console.log('Entered name:', value);
+    }
+  });
+````
+
+**Example (await):**
+
+````js
+(async function(){
+  let options = { title: "Email Registration" ,icon: "info", input: "email"};
+  const email = await abp.message.prompt('Enter your email:', options);
+  if (email) {
+    console.log('Entered email:', email);
+  }
+})();
+````
+
+![js-message-prompt](../../../../images/js-message-prompt.png)
+
+### The Return Value
+
+The return value of the `abp.message.prompt(...)` function is a promise that resolves to the entered value (`string`) or `null` if the dialog is canceled/dismissed.
+
+### Parameters
+
+`abp.message.prompt(...)` function has the following parameters:
+
+* `message`: A message (`string`) to show to the user.
+* `titleOrOptionsOrCallback` (optional):
+  * a `string` title, or
+  * an `object` containing SweetAlert options (e.g., `input`, `inputAttributes`, `inputPlaceholder`), or
+  * a `function` callback that receives the resulting value (or `null`).
+* `callback` (optional): If you've passed a title as the second parameter, you can pass your callback function as the 3rd parameter.
+
+Passing a callback function is an alternative to using the returned promise.
+
 ## SweetAlert Configuration
 
 The Message API is implemented using the [SweetAlert](https://sweetalert.js.org/) library by default. If you want to change its configuration, you can set the options in the `abp.libs.sweetAlert.config` object. The default configuration object is shown below:
@@ -125,4 +184,3 @@ abp.libs.sweetAlert.config.warn.icon = 'error';
 ````
 
 See the [SweetAlert document](https://sweetalert.js.org/) for all the configuration options.
-

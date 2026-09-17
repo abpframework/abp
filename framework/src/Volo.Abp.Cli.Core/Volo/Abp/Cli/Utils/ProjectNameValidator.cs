@@ -18,8 +18,9 @@ public static class ProjectNameValidator
 
     private static readonly string[] IllegalKeywords = new[]
     {
+            "MauiBlazor",
             "Blazor"
-        };
+    };
 
     private static void ValidateParentDirectoryString(string projectName)
     {

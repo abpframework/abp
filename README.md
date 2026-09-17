@@ -1,11 +1,12 @@
-# ABP Framework
-
+ 
 ![build and test](https://img.shields.io/github/actions/workflow/status/abpframework/abp/build-and-test.yml?branch=dev&style=flat-square) 🔹 [![codecov](https://codecov.io/gh/abpframework/abp/branch/dev/graph/badge.svg?token=jUKLCxa6HF)](https://codecov.io/gh/abpframework/abp) 🔹 [![NuGet](https://img.shields.io/nuget/v/Volo.Abp.Core.svg?style=flat-square)](https://www.nuget.org/packages/Volo.Abp.Core) 🔹 [![NuGet (with prereleases)](https://img.shields.io/nuget/vpre/Volo.Abp.Core.svg?style=flat-square)](https://www.nuget.org/packages/Volo.Abp.Core) 🔹 [![MyGet (nightly builds)](https://img.shields.io/myget/abp-nightly/vpre/Volo.Abp.svg?style=flat-square)](https://abp.io/docs/latest/release-info/nightly-builds) 🔹 
-[![NuGet Download](https://img.shields.io/nuget/dt/Volo.Abp.Core.svg?style=flat-square)](https://www.nuget.org/packages/Volo.Abp.Core) 🔹 [![Code of Conduct](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/abpframework/abp/blob/dev/CODE_OF_CONDUCT.md) 🔹 [![CLA Signed](https://cla-assistant.io/readme/badge/abpframework/abp)](https://cla-assistant.io/abpframework/abp) 🔹 [![Discord Shield](https://discord.com/api/guilds/951497912645476422/widget.png?style=shield)](https://discord.gg/abp)
+[![NuGet Download](https://img.shields.io/nuget/dt/Volo.Abp.Core.svg?style=flat-square)](https://www.nuget.org/packages/Volo.Abp.Core) 🔹 [![Code of Conduct](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/abpframework/abp/blob/dev/CODE_OF_CONDUCT.md) 🔹 [![CLA Signed](https://cla-assistant.io/readme/badge/abpframework/abp)](https://cla-assistant.io/abpframework/abp) 🔹 [![Discord Shield](https://discord.com/api/guilds/951497912645476422/widget.png?style=shield)](https://abp.io/join-discord)
 
 [ABP](https://abp.io/) offers an **opinionated architecture** to build enterprise software solutions with **best practices** on top of the **.NET** and the **ASP.NET Core** platforms. It provides the fundamental infrastructure, production-ready startup templates, pre-built application modules, UI themes, tooling, guides and documentation to implement that architecture properly and **automate the details** and repetitive works as much as possible.
 
-[![ABP Platform](https://github.com/user-attachments/assets/200653c0-0e69-4b47-b76a-3a83460aaab6)](https://abp.io) 
+[![ABP Platform](https://github.com/user-attachments/assets/c4356ec7-4d0f-4e00-a1d2-fc74ad985fb8)](https://abp.io) 
+ 
+
 
 ## Getting Started
 
@@ -13,6 +14,7 @@
 - [Quick Start](https://abp.io/docs/latest/tutorials/todo) is a single-part, quick-start tutorial to build a simple application with the ABP Framework. Start with this tutorial if you want to understand how ABP works quickly.
 - [Web Application Development Tutorial](https://abp.io/docs/latest/tutorials/book-store) is a complete tutorial on developing a full-stack web application with all aspects of a real-life solution.
 - [Modular Monolith Application](https://abp.io/docs/latest/tutorials/modular-crm/index): A multi-part tutorial that demonstrates how to create application modules, compose and communicate them to build a monolith modular web application.
+- [Microservice Tutorial](https://abp.io/docs/latest/tutorials/microservice/index): A multi-part guide that walks you through building a microservice solution with ABP, from creating independent services and enabling inter-service communication to exposing them through an API Gateway and generating CRUD pages with ABP Suite.
 
 ## What ABP Provides?
 
@@ -26,7 +28,7 @@ The following diagram contains the core components of the **ABP Platform** and s
 
 ABP offers a complete architectural model to build modern enterprise software solutions. Here, the fundamental architectural structures offered and first-class supported by ABP:
 
-* [Domain Driven Design](https://abp.io/docs/latest/framework/architecture/domain-driven-design)
+* [Domain Driven Design (DDD)](https://abp.io/docs/latest/framework/architecture/domain-driven-design)
 * [Microservices](https://abp.io/docs/latest/framework/architecture/microservices)
 * [Modularity](https://abp.io/docs/latest/framework/architecture/modularity/basics)
 * [Multi-Tenancy](https://abp.io/docs/latest/framework/architecture/multi-tenancy)
@@ -121,4 +123,4 @@ GitHub repository stars are an important indicator of popularity and the size of
 
 ## Discord Server
 
-We have a Discord server where you can chat with other ABP users. Share your ideas, report technical issues, showcase your creations, share the tips that worked for you and catch up with the latest news and announcements about ABP Framework. Join 👉 https://discord.gg/abp.
+We have a Discord server where you can chat with other ABP users. Share your ideas, report technical issues, showcase your creations, share the tips that worked for you and catch up with the latest news and announcements about ABP Framework. Join 👉 https://abp.io/join-discord.

@@ -68,6 +68,8 @@
     "AccessDenied": "Brak dostępu!",
     "AccessDeniedMessage": "Nie masz dostępu do tego zasobu.",
     "OrRegisterWith": "Lub zarejestruj się za pomocą:",
-    "RegisterUsingYourProviderAccount": "Zarejestruj się za pomocą konta {0}"
+    "RegisterUsingYourProviderAccount": "Zarejestruj się za pomocą konta {0}",
+    "RequireMigrateSeedTitle": "Nie można znaleźć użytkownika administratora",
+    "RequireMigrateSeedMessage": "Upewnij się, że wykonano seed bazy danych. Zobacz <a target=\"_blank\" href=\"https://abp.io/kb/0003\">dokumentację</a>, aby poznać możliwe rozwiązania."
   }
 }

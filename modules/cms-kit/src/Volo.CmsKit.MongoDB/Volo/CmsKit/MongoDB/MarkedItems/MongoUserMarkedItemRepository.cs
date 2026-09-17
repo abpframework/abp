@@ -24,7 +24,7 @@ public class MongoUserMarkedItemRepository : MongoDbRepository<ICmsKitMongoDbCon
         Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
         Check.NotNull(entityId, nameof(entityId));
         
-        var entity = await (await GetMongoQueryableAsync(cancellationToken))
+        var entity = await (await GetQueryableAsync(cancellationToken))
             .Where(x =>
             x.CreatorId == userId &&
             x.EntityType == entityType &&
@@ -39,7 +39,7 @@ public class MongoUserMarkedItemRepository : MongoDbRepository<ICmsKitMongoDbCon
         Check.NotNull(userId, nameof(userId));
         Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
 
-        return await(await GetMongoQueryableAsync(cancellationToken))
+        return await(await GetQueryableAsync(cancellationToken))
             .Where(x =>
                 x.CreatorId == userId &&
                 x.EntityType == entityType)
@@ -49,7 +49,7 @@ public class MongoUserMarkedItemRepository : MongoDbRepository<ICmsKitMongoDbCon
     public virtual async Task<List<string>> GetEntityIdsFilteredByUserAsync([NotNull] Guid userId, [NotNull] string entityType, [CanBeNull] Guid? tenantId = null, CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
-        var userMarkedItemQueryable = await GetMongoQueryableAsync(GetCancellationToken(cancellationToken));
+        var userMarkedItemQueryable = await GetQueryableAsync(GetCancellationToken(cancellationToken));
 
         var resultQueryable = userMarkedItemQueryable
                                 .Where(x => x.CreatorId == userId

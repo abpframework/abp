@@ -2,7 +2,18 @@
   "role": "lib.mvc",
   "npmDependencies": {
     "@abp/docs": {
-        "version": ""
+      "version": ""
+    }
+  },
+  "proxies": {
+    "Javascript": {
+      "VoloDocs.Web-docs": {
+        "applicationName": "VoloDocs.Web",
+        "module": "docs",
+        "url": "https://localhost:5001",
+        "output": "wwwroot/client-proxies/",
+        "serviceType": "application"
+      }
     }
   }
 }

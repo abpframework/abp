@@ -295,6 +295,10 @@ public class RepositoryRegistration_Tests
     public class MyTestDefaultRepository<TEntity> : RepositoryBase<TEntity>
         where TEntity : class, IEntity
     {
+        public MyTestDefaultRepository() 
+            : base("MyTestDefault")
+        {
+        }
 
         [Obsolete("Use GetQueryableAsync method.")]
         protected override IQueryable<TEntity> GetQueryable()
@@ -408,6 +412,8 @@ public class RepositoryRegistration_Tests
     public class MyTestAggregateRootWithDefaultPkEmptyRepository : IMyTestAggregateRootWithDefaultPkEmptyRepository
     {
         public bool? IsChangeTrackingEnabled { get; set; }
+        public string EntityName { get; set; }
+        public string ProviderName { get; } = "MyFakeProvider";
     }
 
     public class TestDbContextRegistrationOptions : AbpCommonDbContextRegistrationOptions

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Bundling;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers;
 
@@ -18,9 +19,9 @@ public class AbpTagHelperScriptService : AbpTagHelperResourceService
         IBundleManager bundleManager,
         IOptions<AbpBundlingOptions> options,
         IWebHostEnvironment hostingEnvironment) : base(
-            bundleManager,
-            options,
-            hostingEnvironment)
+        bundleManager,
+        options,
+        hostingEnvironment)
     {
     }
 

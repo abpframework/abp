@@ -19,10 +19,10 @@ namespace Volo.CmsKit.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.SqlServer)
-                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("ProductVersion", "10.0.0-rc.2.25502.107")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Volo.Abp.BlobStoring.Database.DatabaseBlob", b =>
                 {
@@ -32,6 +32,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -44,6 +45,7 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
@@ -73,11 +75,13 @@ namespace Volo.CmsKit.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
@@ -105,6 +109,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -126,6 +131,7 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnName("DeletionTime");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
@@ -173,6 +179,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -194,6 +201,7 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnName("DeletionTime");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
@@ -238,6 +246,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -265,7 +274,11 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("DeletionTime");
 
+                    b.Property<int>("EntityVersion")
+                        .HasColumnType("int");
+
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
@@ -321,6 +334,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -344,8 +358,16 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("IdempotencyToken")
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<bool?>("IsApproved")
+                        .HasColumnType("bit");
 
                     b.Property<Guid?>("RepliedCommentId")
                         .HasColumnType("uniqueidentifier");
@@ -356,6 +378,10 @@ namespace Volo.CmsKit.Migrations
 
                     b.Property<string>("Text")
                         .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<string>("Url")
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
 
@@ -376,6 +402,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -389,6 +416,7 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnName("CreatorId");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
@@ -419,6 +447,41 @@ namespace Volo.CmsKit.Migrations
                     b.ToTable("CmsGlobalResources", (string)null);
                 });
 
+            modelBuilder.Entity("Volo.CmsKit.MarkedItems.UserMarkedItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid>("CreatorId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<string>("EntityId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("EntityType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId", "EntityType", "EntityId");
+
+                    b.HasIndex("TenantId", "CreatorId", "EntityType", "EntityId");
+
+                    b.ToTable("CmsUserMarkedItems", (string)null);
+                });
+
             modelBuilder.Entity("Volo.CmsKit.MediaDescriptors.MediaDescriptor", b =>
                 {
                     b.Property<Guid>("Id")
@@ -427,6 +490,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -453,6 +517,7 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
@@ -501,6 +566,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -525,6 +591,7 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
@@ -551,6 +618,10 @@ namespace Volo.CmsKit.Migrations
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("RequiredPermissionName")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
                     b.Property<string>("Target")
                         .HasColumnType("nvarchar(max)");
 
@@ -576,6 +647,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -600,7 +672,11 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("DeletionTime");
 
+                    b.Property<int>("EntityVersion")
+                        .HasColumnType("int");
+
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
@@ -610,6 +686,9 @@ namespace Volo.CmsKit.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("IsDeleted");
 
+                    b.Property<bool>("IsHomePage")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("LastModificationTime");
@@ -618,6 +697,9 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
+                    b.Property<string>("LayoutName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Script")
                         .HasColumnType("nvarchar(max)");
 
@@ -625,6 +707,9 @@ namespace Volo.CmsKit.Migrations
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("Style")
                         .HasColumnType("nvarchar(max)");
@@ -751,6 +836,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -777,6 +863,7 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 
@@ -818,6 +905,7 @@ namespace Volo.CmsKit.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
@@ -835,6 +923,7 @@ namespace Volo.CmsKit.Migrations
                         .HasColumnName("EmailConfirmed");
 
                     b.Property<string>("ExtraProperties")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
 

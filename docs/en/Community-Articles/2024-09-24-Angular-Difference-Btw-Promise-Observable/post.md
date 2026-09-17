@@ -2,10 +2,6 @@
 
 In this article, I will mention the differences between `Promise` and `Observable` . They are used in TypeScript (Angular) for handling async operations but have different use cases and behaviors. Let's see these six differences...
 
-![Cover](cover.png)
-
-
-
 ## 1. Eager or Lazy Evaluation
 
 - **Promise**: A `promise` is **eager**! This means that as soon as a  `promise` is created, it executes the operation, like initiating immediately an HTTP request. **You can't control the execution start time; it begins right away!**

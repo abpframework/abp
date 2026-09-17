@@ -2,17 +2,72 @@
 
 ## ITokenExtensionGrant
 
-Create a class that inherits `ITokenExtensionGrant`, and then register it with the framework. 
-
-In the `MyTokenExtensionGrant` class below we try to get the token details, The `ForbidResult` handles the failure case and `SignInResult` returns a new token response, You can pass more parameters to implement business checks.
+Create a `MyTokenExtensionGrant` class that inherits `ITokenExtensionGrant`, and then register it with the framework. 
 
 ```cs
+public override void PreConfigureServices(ServiceConfigurationContext context)
+{
+    //...
+    PreConfigure<OpenIddictServerBuilder>(builder =>
+    {
+        builder.Configure(openIddictServerOptions =>
+        {
+            openIddictServerOptions.GrantTypes.Add(MyTokenExtensionGrant.ExtensionGrantName);
+        });
+    });
+    //...
+}
+
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    //...
+    Configure<AbpOpenIddictExtensionGrantsOptions>(options =>
+    {
+        options.Grants.Add(MyTokenExtensionGrant.ExtensionGrantName, new MyTokenExtensionGrant());
+    });
+    //...
+}
+```
+
+## Generate a new token response
+
+In the `MyTokenExtensionGrant` class below we have two methods to get a new token using a user token or user API key. You can choose one of them based on your business.
+
+These methods are just examples. Please add more logic to validate input data.
+
+```cs
+using System.Collections.Immutable;
+using System.Security.Principal;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using OpenIddict.Abstractions;
+using OpenIddict.Server;
+using OpenIddict.Server.AspNetCore;
+using Volo.Abp.Identity;
+using Volo.Abp.OpenIddict;
+using Volo.Abp.OpenIddict.ExtensionGrantTypes;
+using IdentityUser = Volo.Abp.Identity.IdentityUser;
+using SignInResult = Microsoft.AspNetCore.Mvc.SignInResult;
+
+namespace OpenIddict.Demo.Server.ExtensionGrants;
+
 public class MyTokenExtensionGrant : ITokenExtensionGrant
 {
     public const string ExtensionGrantName = "MyTokenExtensionGrant";
 
     public string Name => ExtensionGrantName;
+
     public async Task<IActionResult>  HandleAsync(ExtensionGrantContext context)
+    {
+        // You can get a new token using any of the following methods based on your business.
+        // They are just examples. You can implement your own logic here.
+
+        return await HandleUserAccessTokenAsync(context);
+        return await HandleUserApiKeyAsync(context);
+    }
+
+    public async Task<IActionResult>  HandleUserAccessTokenAsync(ExtensionGrantContext context)
     {
         var userToken = context.Request.GetParameter("token").ToString();
 
@@ -25,6 +80,9 @@ public class MyTokenExtensionGrant : ITokenExtensionGrant
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidRequest
                 }!));
         }
+
+        // We will validate the user token
+        // The Token is issued by the OpenIddict server, So we can validate it using the introspection endpoint
 
         var transaction = await context.HttpContext.RequestServices.GetRequiredService<IOpenIddictServerFactory>().CreateTransactionAsync();
         transaction.EndpointType = OpenIddictServerEndpointType.Introspection;
@@ -64,21 +122,90 @@ public class MyTokenExtensionGrant : ITokenExtensionGrant
                 }));
         }
 
+        // We have validated the user token and got the user id
+
         var userId = principal.FindUserId();
         var userManager = context.HttpContext.RequestServices.GetRequiredService<IdentityUserManager>();
         var user = await userManager.GetByIdAsync(userId.Value);
         var userClaimsPrincipalFactory = context.HttpContext.RequestServices.GetRequiredService<IUserClaimsPrincipalFactory<IdentityUser>>();
         var claimsPrincipal = await userClaimsPrincipalFactory.CreateAsync(user);
-        claimsPrincipal.SetScopes(principal.GetScopes());
-        claimsPrincipal.SetResources(await GetResourcesAsync(context, principal.GetScopes()));
 
-        //abp version < 7.3
-        await context.HttpContext.RequestServices.GetRequiredService<AbpOpenIddictClaimDestinationsManager>().SetAsync(principal);
+        // Prepare the scopes
+        var scopes = GetScopes(context);
 
-        //For abp version >= 7.3
+        claimsPrincipal.SetScopes(scopes);
+        claimsPrincipal.SetResources(await GetResourcesAsync(context, scopes));
         await context.HttpContext.RequestServices.GetRequiredService<AbpOpenIddictClaimsPrincipalManager>().HandleAsync(context.Request, principal);
-
         return new SignInResult(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme, claimsPrincipal);
+    }
+
+
+    protected async Task<IActionResult> HandleUserApiKeyAsync(ExtensionGrantContext context)
+    {
+        var userApiKey = context.Request.GetParameter("user_api_key").ToString();
+
+        if (string.IsNullOrEmpty(userApiKey))
+        {
+            return new ForbidResult(
+                new[] {OpenIddictServerAspNetCoreDefaults.AuthenticationScheme},
+                properties: new AuthenticationProperties(new Dictionary<string, string>
+                {
+                    [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidRequest
+                }!));
+        }
+
+        // Here we can validate the user API key and get the user id
+        if (false) // Add your own logic here
+        {
+            // If the user API key is invalid
+            return new ForbidResult(
+                new[] {OpenIddictServerAspNetCoreDefaults.AuthenticationScheme},
+                properties: new AuthenticationProperties(new Dictionary<string, string>
+                {
+                    [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidRequest
+                }!));
+        }
+
+        // Add your own logic to get the user by API key
+        var userManager = context.HttpContext.RequestServices.GetRequiredService<IdentityUserManager>();
+        var user = await userManager.FindByNameAsync("admin");
+        if (user == null)
+        {
+            return new ForbidResult(
+                new[] {OpenIddictServerAspNetCoreDefaults.AuthenticationScheme},
+                properties: new AuthenticationProperties(new Dictionary<string, string>
+                {
+                    [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidRequest
+                }!));
+        }
+
+        // Create a principal for the user
+        var userClaimsPrincipalFactory = context.HttpContext.RequestServices.GetRequiredService<IUserClaimsPrincipalFactory<IdentityUser>>();
+        var claimsPrincipal = await userClaimsPrincipalFactory.CreateAsync(user);
+
+        // Prepare the scopes
+        var scopes = GetScopes(context);
+
+        claimsPrincipal.SetScopes(scopes);
+        claimsPrincipal.SetResources(await GetResourcesAsync(context, scopes));
+        await context.HttpContext.RequestServices.GetRequiredService<AbpOpenIddictClaimsPrincipalManager>().HandleAsync(context.Request, claimsPrincipal);
+        return new SignInResult(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme, claimsPrincipal);
+    }
+
+    private ImmutableArray<string> GetScopes(ExtensionGrantContext context)
+    {
+        // Prepare the scopes
+        // The scopes must be defined in the OpenIddict server
+
+        // If you want to get the scopes from the request, you have to add `scope` parameter in the request
+        // scope: AbpAPI profile roles email phone offline_access
+
+        //var scopes = context.Request.GetScopes();
+
+        // If you want to set the scopes here, you can use the following code
+        var scopes = new[] { "AbpAPI", "profile", "roles", "email", "phone", "offline_access" }.ToImmutableArray();
+
+        return scopes;
     }
 
     private async Task<IEnumerable<string>> GetResourcesAsync(ExtensionGrantContext context, ImmutableArray<string> scopes)
@@ -98,38 +225,24 @@ public class MyTokenExtensionGrant : ITokenExtensionGrant
 }
 ```
 
-```cs
-public override void PreConfigureServices(ServiceConfigurationContext context)
-{
-    //...
-    PreConfigure<OpenIddictServerBuilder>(builder =>
-    {
-        builder.Configure(openIddictServerOptions =>
-        {
-            openIddictServerOptions.GrantTypes.Add(MyTokenExtensionGrant.ExtensionGrantName);
-        });
-    });
-    //...
-}
+### Get a new token using user access token
 
-public override void ConfigureServices(ServiceConfigurationContext context)
-{
-    //...
-    Configure<AbpOpenIddictExtensionGrantsOptions>(options =>
-    {
-        options.Grants.Add(MyTokenExtensionGrant.ExtensionGrantName, new MyTokenExtensionGrant());
-    });
-    //...
-}
-```
+* Get a user token using the `password` grant type.
+
+![Http request 1](1.png)
+
+*  Use the user token to get a new token using the `HandleUserAccessTokenAsync` method.
+
+![Http request 2](2.png)
+
+### Get a new token using user API key
+
+*  Directly get a new token using the `HandleUserApiKeyAsync` method.
 
 
-![Http request 1](postman1.png)
-
-![Http request 2](postman2.png)
+![Http request 3](3.png)
 
 ## Source code
 
-https://github.com/abpframework/abp/commit/3210f138454697647689b4868c8d4b7b3da02d44
-
+https://github.com/abpframework/abp/blob/dev/modules/openiddict/app/OpenIddict.Demo.Server/ExtensionGrants/MyTokenExtensionGrant.cs
 

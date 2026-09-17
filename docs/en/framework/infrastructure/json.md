@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use ABP's JSON abstraction for flexible, library-independent serialization with predefined converters for seamless integration."
+}
+```
+
 # JSON
 The ABP provides an abstraction to work with JSON. Having such an abstraction has some benefits;
 
@@ -38,6 +45,35 @@ public class ProductManager
 }
 ```
 
+## IObjectSerializer
+
+`IObjectSerializer` (defined in the `Volo.Abp.Serialization` package, independently of the JSON system) serializes objects to and from `byte[]`. The default implementation uses UTF-8 JSON bytes from `System.Text.Json`:
+
+```csharp
+public interface IObjectSerializer
+{
+    byte[]? Serialize<T>(T? obj);
+    T? Deserialize<T>(byte[] bytes);
+}
+```
+
+Inject `IObjectSerializer` when a storage or transport API works with bytes instead of strings. To customize serialization for a specific type, implement `IObjectSerializer<T>`. ABP automatically exposes conventionally registered implementations through the corresponding closed generic interface, and the default serializer uses that implementation for `T`:
+
+```csharp
+public class ProductSerializer : IObjectSerializer<Product>, ITransientDependency
+{
+    public byte[]? Serialize(Product? obj)
+    {
+        return obj is null ? null : JsonSerializer.SerializeToUtf8Bytes(obj);
+    }
+
+    public Product? Deserialize(byte[]? bytes)
+    {
+        return bytes is null ? null : JsonSerializer.Deserialize<Product>(bytes);
+    }
+}
+```
+
 ## Configuration
 
 ### AbpJsonOptions
@@ -69,6 +105,19 @@ Add [Volo.Abp.Json.Newtonsoft](https://www.nuget.org/packages/Volo.Abp.Json.Newt
 
 ## Configuring JSON options in ASP.NET Core
 
-You can change the JSON behavior in ASP.NET Core by configuring [JsonOptions](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.jsonoptions) or
-[MvcNewtonsoftJsonOptions](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.mvcnewtonsoftjsonoptions)(if you use `Newtonsoft.Json`)
+Configuring JSON options in ABP does not affect ASP.NET Core's JSON settings. To modify ASP.NET Core JSON behavior, configure [JsonOptions](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.jsonoptions) or [MvcNewtonsoftJsonOptions](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.mvcnewtonsoftjsonoptions) (if you're using `Newtonsoft.Json`) separately.
 
+Example:
+
+```csharp
+Configure<JsonOptions>(options =>
+{
+    //options.SerializerOptions
+});
+
+// If you use Newtonsoft.Json
+Configure<MvcNewtonsoftJsonOptions>(options =>
+{
+    //options.SerializerSettings
+});
+```

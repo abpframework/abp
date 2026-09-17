@@ -1,4 +1,4 @@
-﻿using Volo.Abp.AspNetCore.Components.WebAssembly.Theming;
+﻿using Volo.Abp.AspNetCore.Components.WebAssembly.Theming.MudBlazor;
 using Volo.Abp.Modularity;
 
 namespace MyCompanyName.MyProjectName.Blazor.WebAssembly;
@@ -6,7 +6,7 @@ namespace MyCompanyName.MyProjectName.Blazor.WebAssembly;
 [DependsOn(
     typeof(MyProjectNameBlazorModule),
     typeof(MyProjectNameHttpApiClientModule),
-    typeof(AbpAspNetCoreComponentsWebAssemblyThemingModule)
+    typeof(AbpAspNetCoreComponentsWebAssemblyThemingMudBlazorModule)
     )]
 public class MyProjectNameBlazorWebAssemblyModule : AbpModule
 {

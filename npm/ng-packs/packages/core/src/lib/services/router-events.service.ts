@@ -7,7 +7,6 @@ import {
   Router,
   RouterEvent,
   Event,
-  RouterState,
 } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -35,7 +34,7 @@ export class RouterEvents {
 
   protected listenToNavigation(): void {
     const routerEvent$ = this.router.events.pipe(
-      filter(e => e instanceof NavigationEvent.End && !e.url.includes('error'))
+      filter(e => e instanceof NavigationEvent.End && e.url != null && !e.url.includes('error'))
     ) as Observable<NavigationEnd>;
     
     routerEvent$.subscribe(event => {

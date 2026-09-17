@@ -66,8 +66,7 @@ public class AzureBlobProvider : BlobProviderBase, ITransientDependency
         }
 
         var blobClient = GetBlobClient(args, blobName);
-        var download = await blobClient.DownloadAsync();
-        return await TryCopyToMemoryStreamAsync(download.Value.Content, args.CancellationToken);
+        return await blobClient.OpenReadAsync(cancellationToken: args.CancellationToken);
     }
 
     protected virtual BlobClient GetBlobClient(BlobProviderArgs args, string blobName)

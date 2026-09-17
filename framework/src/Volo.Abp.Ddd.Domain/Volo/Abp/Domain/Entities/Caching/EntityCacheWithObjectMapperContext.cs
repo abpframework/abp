@@ -9,10 +9,11 @@ public class EntityCacheWithObjectMapperContext<TObjectMapperContext, TEntity, T
     EntityCacheWithObjectMapper<TEntity, TEntityCacheItem, TKey>
     where TEntity : Entity<TKey>
     where TEntityCacheItem : class
+    where TKey : notnull
 {
     public EntityCacheWithObjectMapperContext(
         IReadOnlyRepository<TEntity, TKey> repository,
-        IDistributedCache<TEntityCacheItem, TKey> cache,
+        IDistributedCache<EntityCacheItemWrapper<TEntityCacheItem>, TKey> cache,
         IUnitOfWorkManager unitOfWorkManager,
         IObjectMapper objectMapper)// Intentionally injected with TContext
         : base(repository, cache, unitOfWorkManager, objectMapper)

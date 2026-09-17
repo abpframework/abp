@@ -20,7 +20,7 @@ public class MethodInvocationAuthorizationService : IMethodInvocationAuthorizati
         _abpAuthorizationService = abpAuthorizationService;
     }
 
-    public async Task CheckAsync(MethodInvocationAuthorizationContext context)
+    public virtual async Task CheckAsync(MethodInvocationAuthorizationContext context)
     {
         if (AllowAnonymous(context))
         {

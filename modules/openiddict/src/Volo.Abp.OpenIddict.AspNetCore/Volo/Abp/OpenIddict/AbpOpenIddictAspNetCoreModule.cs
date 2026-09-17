@@ -1,9 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc.Razor;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
 using OpenIddict.Server;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Uow;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.Globalization;
 using Volo.Abp.OpenIddict.Scopes;
@@ -25,13 +30,56 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
 
         Configure<AbpOpenIddictClaimsPrincipalOptions>(options =>
         {
+            options.ClaimsPrincipalHandlers.Add<AbpDefaultScopesHandler>();
             options.ClaimsPrincipalHandlers.Add<AbpDefaultOpenIddictClaimsPrincipalHandler>();
+        });
+
+        var preActions = context.Services.GetPreConfigureActions<AbpOpenIddictAspNetCoreOptions>();
+        Configure<AbpOpenIddictAspNetCoreOptions>(options =>
+        {
+            preActions.Configure(options);
         });
 
         Configure<RazorViewEngineOptions>(options =>
         {
             options.ViewLocationFormats.Add("/Volo/Abp/OpenIddict/Views/{1}/{0}.cshtml");
         });
+
+        Configure<SecurityStampValidatorOptions>(options =>
+        {
+            options.RemoveClientIdClaim();
+        });
+
+        // Complete data written while processing OpenIddict requests before the response starts.
+        // Derived from the configured server endpoint paths so remapped endpoints are covered too.
+        context.Services.AddOptions<AbpAspNetCoreUnitOfWorkOptions>()
+            .Configure<IOptions<OpenIddictServerOptions>>((uowOptions, serverOptions) =>
+            {
+                foreach (var path in GetServerEndpointPaths(serverOptions.Value))
+                {
+                    uowOptions.CompleteUnitOfWorkOnResponseStartingUrls.AddIfNotContains(path);
+                }
+            });
+    }
+
+    private static IEnumerable<string> GetServerEndpointPaths(OpenIddictServerOptions serverOptions)
+    {
+        var endpoints = serverOptions.TokenEndpointUris
+            .Concat(serverOptions.AuthorizationEndpointUris)
+            .Concat(serverOptions.DeviceAuthorizationEndpointUris)
+            .Concat(serverOptions.PushedAuthorizationEndpointUris)
+            .Concat(serverOptions.EndSessionEndpointUris)
+            .Concat(serverOptions.RevocationEndpointUris)
+            .Concat(serverOptions.EndUserVerificationEndpointUris);
+
+        foreach (var uri in endpoints)
+        {
+            var path = uri.IsAbsoluteUri ? uri.AbsolutePath : "/" + uri.OriginalString.TrimStart('/');
+            if (path.Length > 1)
+            {
+                yield return path;
+            }
+        }
     }
 
     private void AddOpenIddictServer(IServiceCollection services)
@@ -62,13 +110,14 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
                     //.SetConfigurationEndpointUris()
                     // .well-known/jwks
                     //.SetCryptographyEndpointUris()
-                    .SetDeviceEndpointUris("device")
+                    .SetDeviceAuthorizationEndpointUris("device")
                     .SetIntrospectionEndpointUris("connect/introspect")
-                    .SetLogoutEndpointUris("connect/logout")
+                    .SetEndSessionEndpointUris("connect/endsession")
+                    .SetPushedAuthorizationEndpointUris("connect/par")
                     .SetRevocationEndpointUris("connect/revocat")
                     .SetTokenEndpointUris("connect/token")
-                    .SetUserinfoEndpointUris("connect/userinfo")
-                    .SetVerificationEndpointUris("connect/verify");
+                    .SetUserInfoEndpointUris("connect/userinfo")
+                    .SetEndUserVerificationEndpointUris("connect/verify");
 
                 builder
                     .AllowAuthorizationCodeFlow()
@@ -77,8 +126,9 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
                     .AllowPasswordFlow()
                     .AllowClientCredentialsFlow()
                     .AllowRefreshTokenFlow()
-                    .AllowDeviceCodeFlow()
-                    .AllowNoneFlow();
+                    .AllowDeviceAuthorizationFlow()
+                    .AllowNoneFlow()
+                    .AllowTokenExchangeFlow();
 
                 builder.RegisterScopes(new[]
                 {
@@ -94,9 +144,9 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
                 builder.UseAspNetCore()
                     .EnableAuthorizationEndpointPassthrough()
                     .EnableTokenEndpointPassthrough()
-                    .EnableUserinfoEndpointPassthrough()
-                    .EnableLogoutEndpointPassthrough()
-                    .EnableVerificationEndpointPassthrough()
+                    .EnableUserInfoEndpointPassthrough()
+                    .EnableEndSessionEndpointPassthrough()
+                    .EnableEndUserVerificationEndpointPassthrough()
                     .EnableStatusCodePagesIntegration();
 
                 if (builderOptions.AddDevelopmentEncryptionAndSigningCertificate)
@@ -140,7 +190,5 @@ public class AbpOpenIddictAspNetCoreModule : AbpModule
 
                 services.ExecutePreConfiguredActions(builder);
             });
-
-        services.ExecutePreConfiguredActions(openIddictBuilder);
     }
 }

@@ -68,6 +68,8 @@
     "AccessDenied": "Acesso negado!",
     "AccessDeniedMessage": "Você não tem acesso a este recurso.",
     "OrRegisterWith": "Ou registre-se com:",
-    "RegisterUsingYourProviderAccount": "Registre-se utilizando sua conta {0}"
+    "RegisterUsingYourProviderAccount": "Registre-se utilizando sua conta {0}",
+    "RequireMigrateSeedTitle": "Não foi possível encontrar o usuário administrador",
+    "RequireMigrateSeedMessage": "Certifique-se de que a semeadura do banco de dados seja executada. Consulte a <a target=\"_blank\" href=\"https://abp.io/kb/0003\">documentação</a> para possíveis soluções."
   }
 }

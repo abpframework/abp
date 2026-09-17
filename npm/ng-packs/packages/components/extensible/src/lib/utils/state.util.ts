@@ -5,8 +5,8 @@ import {
   ExtensionEnumDto,
   ExtensionPropertyUiLookupDto,
   ObjectExtensionsDto,
-  PermissionService,
 } from '@abp/ng.core';
+import { Injector } from '@angular/core';
 import { Observable, pipe, zip } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
 import { ePropType } from '../enums/props.enum';
@@ -56,10 +56,8 @@ function selectEnums(
   );
 }
 
-export function getObjectExtensionEntitiesFromStore(
-  configState: ConfigStateService,
-  moduleKey: string,
-) {
+export function getObjectExtensionEntitiesFromStore(injector: Injector, moduleKey: string) {
+  const configState = injector.get(ConfigStateService);
   return selectObjectExtensions(configState).pipe(
     map(extensions => {
       if (!extensions) return null;
@@ -73,11 +71,8 @@ export function getObjectExtensionEntitiesFromStore(
   );
 }
 
-export function mapEntitiesToContributors<T = any>(
-  configState: ConfigStateService,
-  permissionService: PermissionService,
-  resource: string,
-) {
+export function mapEntitiesToContributors<T = any>(injector: Injector, resource: string) {
+  const configState = injector.get(ConfigStateService);
   return pipe(
     switchMap((entities: any) =>
       zip(selectLocalization(configState), selectEnums(configState)).pipe(
@@ -100,7 +95,7 @@ export function mapEntitiesToContributors<T = any>(
                 return acc;
               }
 
-              checkPolicies(properties, configState, permissionService);
+              checkPolicies(injector, properties);
 
               const mapPropertiesToContributors = createPropertiesToContributorsMapper<T>(
                 generateDisplayName,

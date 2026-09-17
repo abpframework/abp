@@ -3,29 +3,38 @@ fieldset legend {
     width: auto;
 }
 
-.lpx-scroll-pills-container ul {
+::deep .lpx-scroll-pills-container ul {
     display: block;
     max-height: 500px;
     overflow-y: auto;
 }
 
-.lpx-scroll-pills-container .tab-content {
+::deep .lpx-scroll-pills-container .tab-content {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
 }
 
-.lpx-scroll-pills-container ul li {
-    border: 1px solid #e8eef3;
+::deep .lpx-scroll-pills-container ul li {
+    border: 1px solid var(--lpx-border-color);
     margin-bottom: 10px;
     border-radius: 10px;
 }
 
-.lpx-scroll-pills-container ul li a.active {
+::deep .lpx-scroll-pills-container ul li a.active {
     color: #fff !important;
     border-color: #6c5dd3 !important;
     background-color: #6c5dd3 !important;
 }
 
-.lpx-theme-dark .lpx-scroll-pills-container ul li {
-    border: 1px solid #23262a;
+::deep .nav-pills .nav-link {
+    background: none;
+    border: 0;
+    border-radius: var(--bs-nav-pills-border-radius);
 }
+
+::deep .nav-pills .nav-link:disabled {
+    color: var(--bs-nav-link-disabled-color);
+    background-color: transparent;
+    border-color: transparent;
+}
+

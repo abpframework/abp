@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Autofac;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.EntityFrameworkCore.Applications;
 using Volo.Abp.EntityFrameworkCore.Domain;
 using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.EntityFrameworkCore.TestApp.FifthContext;
@@ -27,9 +28,12 @@ namespace Volo.Abp.EntityFrameworkCore;
 [DependsOn(typeof(AbpEfCoreTestSecondContextModule))]
 public class AbpEntityFrameworkCoreTestModule : AbpModule
 {
+    private AbpUnitTestSqliteDatabase _database;
+
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         TestEntityExtensionConfigurator.Configure();
+        PreConfigure<AbpSqliteOptions>(x => x.BusyTimeout = null);
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -53,6 +57,16 @@ public class AbpEntityFrameworkCoreTestModule : AbpModule
             {
                 opt.DefaultWithDetailsFunc = q => q.Include(p => p.OneToOne).ThenInclude(x => x.OneToOne).Include(p => p.OneToMany).ThenInclude(x => x.OneToMany).Include(p => p.ManyToMany);
             });
+
+            options.Entity<Blog>(opt =>
+            {
+                opt.DefaultWithDetailsFunc = q => q.Include(p => p.BlogPosts);
+            });
+
+            options.Entity<AppEntityWithNavigationsForeign>(opt =>
+            {
+                opt.DefaultWithDetailsFunc = q => q.Include(p => p.OneToMany);
+            });
         });
 
         context.Services.AddAbpDbContext<HostTestAppDbContext>(options =>
@@ -66,15 +80,27 @@ public class AbpEntityFrameworkCoreTestModule : AbpModule
             options.AddDefaultRepositories(true);
         });
 
-        var sqliteConnection = CreateDatabaseAndGetConnection();
+        _database = new AbpUnitTestSqliteDatabase();
+        CreateTables();
+
+        Configure<AbpDbConnectionOptions>(options =>
+        {
+            options.ConnectionStrings.Default = _database.ConnectionString;
+        });
 
         Configure<AbpDbContextOptions>(options =>
         {
             options.Configure(abpDbContextConfigurationContext =>
             {
-                abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection).AddAbpDbContextOptionsExtension();
+                abpDbContextConfigurationContext.UseSqlite().AddAbpDbContextOptionsExtension();
+                abpDbContextConfigurationContext.DbContextOptions.AddInterceptors(new SqlCommandCapture());
             });
         });
+    }
+
+    public override void OnApplicationShutdown(ApplicationShutdownContext context)
+    {
+        _database?.Dispose();
     }
 
     public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
@@ -95,19 +121,14 @@ public class AbpEntityFrameworkCoreTestModule : AbpModule
         }
     }
 
-    private static SqliteConnection CreateDatabaseAndGetConnection()
+    private void CreateTables()
     {
-        var connection = new AbpUnitTestSqliteConnection("Data Source=:memory:");
-        connection.Open();
-
-        using (var context = new TestMigrationsDbContext(new DbContextOptionsBuilder<TestMigrationsDbContext>().UseSqlite(connection).AddAbpDbContextOptionsExtension().Options))
+        using (var context = new TestMigrationsDbContext(new DbContextOptionsBuilder<TestMigrationsDbContext>().UseSqlite(_database.ConnectionString).AddAbpDbContextOptionsExtension().Options))
         {
             context.GetService<IRelationalDatabaseCreator>().CreateTables();
             context.Database.ExecuteSqlRaw(
-                @"CREATE VIEW View_PersonView AS 
+                @"CREATE VIEW View_PersonView AS
                       SELECT Name, CreationTime, Birthday, LastActive FROM People");
         }
-
-        return connection;
     }
 }

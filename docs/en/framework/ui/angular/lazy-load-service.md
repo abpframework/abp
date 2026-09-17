@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Easily lazy load scripts and styles in your Angular app with ABP's `LazyLoadService`, streamlining resource management and improving performance."
+}
+```
+
 # Lazy Loading Scripts & Styles
 
 You can use the `LazyLoadService` in @abp/ng.core package in order to lazy load scripts and styles in an easy and explicit way.
@@ -11,12 +18,13 @@ You do not have to provide the `LazyLoadService` at module or component level, b
 
 ```js
 import { LazyLoadService } from '@abp/ng.core';
+import { inject } from '@angular/core';
 
 @Component({
   /* class metadata here */
 })
 class DemoComponent {
-  constructor(private lazyLoadService: LazyLoadService) {}
+  private lazyLoadService = inject(LazyLoadService);
 }
 ```
 
@@ -35,22 +43,26 @@ The first parameter of `load` method expects a `LoadingStrategy`. If you pass a 
 
 ```js
 import { LazyLoadService, LOADING_STRATEGY } from '@abp/ng.core';
+import { inject } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   template: `
-    <some-component *ngIf="libraryLoaded$ | async"></some-component>
+  @if (libraryLoaded$ | async) {
+    <some-component/>
+  }
   `
 })
 class DemoComponent {
+  private lazyLoadService = inject(LazyLoadService);
+
   libraryLoaded$ = this.lazyLoadService.load(
     LOADING_STRATEGY.AppendAnonymousScriptToHead('/assets/some-library.js'),
   );
-
-  constructor(private lazyLoadService: LazyLoadService) {}
 }
 ```
 
-The `load` method returns an observable to which you can subscibe in your component or with an `async` pipe. In the example above, the `NgIf` directive will render `<some-component>` only **if the script gets successfully loaded or is already loaded before**.
+The `load` method returns an observable to which you can subscibe in your component or with an `async` pipe. In the example above, the `@if(...)` directive will render `<some-component>` only **if the script gets successfully loaded or is already loaded before**.
 
 > You can subscribe multiple times in your template with `async` pipe. The Scripts will only be loaded once.
 
@@ -64,22 +76,26 @@ If you pass a `StyleLoadingStrategy` instance as the first parameter of `load` m
 
 ```js
 import { LazyLoadService, LOADING_STRATEGY } from '@abp/ng.core';
+import { inject } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   template: `
-    <some-component *ngIf="stylesLoaded$ | async"></some-component>
+    @if (stylesLoaded$ | async) {
+      <some-component/>
+    }
   `
 })
 class DemoComponent {
+  private lazyLoadService = inject(LazyLoadService);
+
   stylesLoaded$ = this.lazyLoadService.load(
     LOADING_STRATEGY.AppendAnonymousStyleToHead('/assets/some-styles.css'),
   );
-
-  constructor(private lazyLoadService: LazyLoadService) {}
 }
 ```
 
-The `load` method returns an observable to which you can subscibe in your component or with an `AsyncPipe`. In the example above, the `NgIf` directive will render `<some-component>` only **if the style gets successfully loaded or is already loaded before**.
+The `load` method returns an observable to which you can subscibe in your component or with an `AsyncPipe`. In the example above, the `@if(...)` directive will render `<some-component>` only **if the style gets successfully loaded or is already loaded before**.
 
 > You can subscribe multiple times in your template with `async` pipe. The styles will only be loaded once.
 
@@ -114,14 +130,20 @@ A common usecase is **loading multiple scripts and/or styles before using a feat
 
 ```js
 import { LazyLoadService, LOADING_STRATEGY } from '@abp/ng.core';
-import { frokJoin } from 'rxjs';
+import { forkJoin } from 'rxjs';
+import { inject } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   template: `
-    <some-component *ngIf="scriptsAndStylesLoaded$ | async"></some-component>
+    @if (scriptsAndStylesLoaded$ | async) {
+      <some-component />
+    }
   `
 })
 class DemoComponent {
+  private lazyLoad = inject(LazyLoadService);
+
   private stylesLoaded$ = forkJoin(
     this.lazyLoad.load(
       LOADING_STRATEGY.PrependAnonymousStyleToHead('/assets/library-dark-theme.css'),
@@ -141,8 +163,6 @@ class DemoComponent {
   );
 
   scriptsAndStylesLoaded$ = forkJoin(this.scriptsLoaded$, this.stylesLoaded$);
-
-  constructor(private lazyLoadService: LazyLoadService) {}
 }
 ```
 
@@ -156,13 +176,19 @@ Another frequent usecase is **loading dependent scripts in order**:
 ```js
 import { LazyLoadService, LOADING_STRATEGY } from '@abp/ng.core';
 import { concat } from 'rxjs';
+import { inject } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   template: `
-    <some-component *ngIf="scriptsLoaded$ | async"></some-component>
+    @if (scriptsLoaded$ | async) {
+      <some-component />
+    }
   `
 })
 class DemoComponent {
+  private lazyLoad = inject(LazyLoadService);
+
   scriptsLoaded$ = concat(
     this.lazyLoad.load(
       LOADING_STRATEGY.PrependAnonymousScriptToHead('/assets/library.js'),
@@ -171,8 +197,6 @@ class DemoComponent {
       LOADING_STRATEGY.AppendAnonymousScriptToHead('/assets/script-that-requires-library.js'),
     ),
   );
-
-  constructor(private lazyLoadService: LazyLoadService) {}
 }
 ```
 

@@ -4,13 +4,13 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.BackgroundJobs.Domain.Shared\Volo.Abp.BackgroundJobs.Domain.Shared.csproj" />
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Mapperly\Volo.Abp.Mapperly.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Domain\Volo.Abp.Ddd.Domain.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.BackgroundJobs\Volo.Abp.BackgroundJobs.csproj" />
   </ItemGroup>

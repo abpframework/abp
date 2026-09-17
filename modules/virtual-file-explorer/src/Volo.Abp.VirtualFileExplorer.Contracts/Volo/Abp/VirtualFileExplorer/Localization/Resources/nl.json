@@ -1,0 +1,16 @@
+{
+  "culture": "nl",
+  "texts": {
+    "VirtualFileExplorer": "Virtuele bestandsverkenner",
+    "VirtualFileType": "Virtueel bestandstype",
+    "Menu:VirtualFileExplorer": "Virtuele bestandsverkenner",
+    "LastUpdateTime": "Tijdstip laatste update",
+    "VirtualFileName": "Virtuele bestandsnaam",
+    "FileContent": "Bestandsinhoud",
+    "Size": "Grootte",
+    "BackToRoot": "Terug naar hoofdmap",
+    "EmptyFileInfoList": "Er zijn geen virtuele bestanden",
+    "Permission:AbpVirtualFileExplorer": "Virtuele bestandsverkenner",
+    "Permission:AbpVirtualFileExplorer:View": "Bekijken"
+  }
+}

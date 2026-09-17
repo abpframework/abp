@@ -16,9 +16,9 @@
           "name": "AbpAspNetCoreMvcUiBootstrapModule"
         },
         {
-          "declaringAssemblyName": "Volo.Abp.AutoMapper",
-          "namespace": "Volo.Abp.AutoMapper",
-          "name": "AbpAutoMapperModule"
+          "declaringAssemblyName": "Volo.Abp.Mapperly",
+          "namespace": "Volo.Abp.Mapperly",
+          "name": "AbpMapperlyModule"
         }
       ],
       "implementingInterfaces": [
@@ -72,7 +72,25 @@
     {
       "namespace": "Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement",
       "contentType": "webPage",
+      "name": "AddResourcePermissionManagementModal",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement",
+      "contentType": "webPage",
       "name": "PermissionManagementModal",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement",
+      "contentType": "webPage",
+      "name": "ResourcePermissionManagementModal",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement",
+      "contentType": "webPage",
+      "name": "UpdateResourcePermissionManagementModal",
       "summary": null
     }
   ]

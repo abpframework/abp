@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp.Account.Localization;
-using Volo.Abp.Identity.Blazor;
 using Volo.Abp.Authorization.Permissions;
-using Volo.Abp.SettingManagement.Blazor.Menus;
-using Volo.Abp.TenantManagement.Blazor.Navigation;
+using Volo.Abp.Identity.Blazor.MudBlazor;
+using Volo.Abp.SettingManagement.Blazor.MudBlazor.Menus;
+using Volo.Abp.TenantManagement.Blazor.MudBlazor.Navigation;
 using Volo.Abp.UI.Navigation;
-using Volo.Abp.Users;
 
 namespace MyCompanyName.MyProjectName.Blazor.Server.Tiered.Menus;
 

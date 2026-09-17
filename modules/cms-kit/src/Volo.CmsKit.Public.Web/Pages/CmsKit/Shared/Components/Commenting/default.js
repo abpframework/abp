@@ -13,6 +13,79 @@
             };
         }
 
+        function isDoubleClicked(element) {
+            if (element.data("isclicked")) return true;
+
+            element.data("isclicked", true);
+            setTimeout(function () {
+                element.removeData("isclicked");
+            }, 2000);
+        }
+
+        function registerCommentTime($container) {
+            $container.find('[comment-time]').each(function () {
+                const $timeElement = $(this);
+
+                const creationTime = moment.utc($timeElement.attr('comment-time'));
+                var timeAgo = formatTime(creationTime);
+                var readableTime = formatReadableTimestamp(creationTime);
+
+                $timeElement.text(timeAgo);
+                $timeElement.on('click', function () {
+                    if (isDoubleClicked($timeElement)) return;
+
+                    $timeElement.text(readableTime);
+                    setTimeout(function () {
+                        $timeElement.trigger('focusout');
+                    }, 2000);
+
+                });
+
+                $timeElement.on('focusout', function () {
+                    $timeElement.text(timeAgo);
+                });
+            });
+        }
+
+        function formatTime(creationTime) {
+            let now = moment();
+            let duration = moment.duration(now.diff(creationTime));
+            if (duration.asMinutes() < 1) {
+                return l('JustNow');
+            } else if (duration.asMinutes() < 60) {
+                return `${Math.floor(duration.asMinutes())} ${l('Minute')}`;
+            } else if (duration.asHours() < 24) {
+                return `${Math.floor(duration.asHours())} ${l('Hour')}`;
+            } else if (duration.asDays() < 7) {
+                return `${Math.floor(duration.asDays())} ${l('Day')}`;
+            } else {
+                return `${Math.floor(duration.asWeeks())} ${l('Week')}`;
+            }
+        }
+
+        function formatReadableTimestamp(creationTime) {
+            const now = moment();
+            const diffInMinutes = now.diff(creationTime, 'minutes');
+            const diffInHours = now.diff(creationTime, 'hours');
+            const diffInDays = now.diff(creationTime, 'days');
+
+            if (diffInMinutes < 1) {
+                return l('JustNow');
+            } else if (diffInMinutes < 60) {
+                return l('MinutesAgo', diffInMinutes);
+            } else if (diffInHours < 24) {
+                return diffInHours === 1 ? l('HourAgo') : l('HoursAgo', diffInHours);
+            } else if (diffInDays === 1) {
+                return l('YesterdayAt', creationTime.local().format('h:mm a'));
+            } else if (diffInDays < 7) {
+                return l('DayAt', creationTime.local().format('dddd'), creationTime.local().format('h:mm a'));
+            } else if (now.isSame(creationTime, 'year')) {
+                return l('MonthDayAt', creationTime.local().format('D'), creationTime.local().format('MMMM'), creationTime.local().format('h:mm a') );
+            } else {
+                return l('FullDate', creationTime.local().format('D'), creationTime.local().format('MMMM'), creationTime.local().format('YYYY'));
+            }
+        }
+
         function registerEditLinks($container) {
             $container.find('.comment-edit-link').each(function () {
                 let $link = $(this);
@@ -215,6 +288,8 @@
 
             registerUpdateOfNewComment($widget);
             registerSubmissionOfNewComment($widget);
+
+            registerCommentTime($widget);
 
             focusOnHash($widget);
         }

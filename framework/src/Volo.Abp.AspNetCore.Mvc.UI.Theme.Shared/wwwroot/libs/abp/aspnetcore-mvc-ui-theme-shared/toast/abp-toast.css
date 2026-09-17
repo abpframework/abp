@@ -1,0 +1,142 @@
+.abp-toast-container {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    min-width: 350px;
+    min-height: 80px;
+    z-index: 1900;
+    right: 30px;
+    bottom: 30px;
+    pointer-events: none;
+}
+
+.abp-toast {
+    pointer-events: auto;
+    display: grid;
+    grid-template-columns: 35px 1fr;
+    gap: 5px;
+    margin: 5px 0;
+    padding: 10px;
+    width: 350px;
+    user-select: none;
+    z-index: 9999;
+    color: #fff;
+    border-radius: 8px;
+    font-size: 16px;
+    box-shadow: 0 0 20px 0 rgba(76, 87, 125, 0.02);
+    animation: toastIn 0.3s ease-in-out;
+}
+
+.abp-toast-success {
+    border: 2px solid #4fbf67;
+    background-color: #4fbf67;
+}
+
+.abp-toast-error {
+    border: 2px solid #c00d49;
+    background-color: #c00d49;
+}
+
+.abp-toast-info {
+    border: 2px solid #438aa7;
+    background-color: #438aa7;
+}
+
+.abp-toast-warning {
+    border: 2px solid #ff9f38;
+    background-color: #ff9f38;
+}
+
+.abp-toast-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.abp-toast-icon .icon {
+    font-size: 30px;
+}
+
+.abp-toast-content {
+    position: relative;
+    display: flex;
+    align-self: center;
+    flex-direction: column;
+    word-break: break-word;
+    padding-bottom: 2px;
+}
+
+.abp-toast-close-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0px 5px 0 0;
+    width: 25px;
+    height: 100%;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+}
+
+.abp-toast-close-button:focus {
+    outline: none;
+}
+
+.abp-toast-title {
+    margin: 0;
+    padding: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.abp-toast-message {
+    margin: 0;
+    padding: 0;
+    max-width: 240px;
+}
+
+@keyframes toastIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes toastOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.toast-removing {
+    animation: toastOut 0.3s ease-in-out forwards;
+}
+
+@media only screen and (max-width: 768px) {
+    .abp-toast-container {
+        min-width: 100%;
+        right: 0 !important;
+        left: 0 !important;
+    }
+    
+    .abp-toast {
+        width: 95%;
+    }
+}

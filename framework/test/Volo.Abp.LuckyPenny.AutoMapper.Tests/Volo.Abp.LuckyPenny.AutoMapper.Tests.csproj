@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\common.test.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>Volo.Abp.LuckyPenny.AutoMapper.Tests</AssemblyName>
+    <PackageId>Volo.Abp.LuckyPenny.AutoMapper.Tests</PackageId>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Volo.Abp.LuckyPenny.AutoMapper\Volo.Abp.LuckyPenny.AutoMapper.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Abp.MultiLingualObjects\Volo.Abp.MultiLingualObjects.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Abp.Settings\Volo.Abp.Settings.csproj" />
+    <ProjectReference Include="..\..\test\Volo.Abp.ObjectExtending.Tests\Volo.Abp.ObjectExtending.Tests.csproj" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+  </ItemGroup>
+
+</Project>

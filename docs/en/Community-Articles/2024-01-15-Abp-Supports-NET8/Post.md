@@ -1,5 +1,3 @@
-![cover](cover.png)
-
 # ABP Now Supports .NET 8
 
 Recently we have published ABP v8.0. With this version [the ABP Framework](https://github.com/abpframework/abp/blob/dev/templates/app/aspnet-core/src/MyCompanyName.MyProjectName.Web/MyCompanyName.MyProjectName.Web.csproj#L6) and ABP Commercial both supports for .NET 8, aligning itself with the latest enhancements and new features of the ASP.NET's new version 8. 
@@ -9,9 +7,9 @@ Here's the summary of .NET 8 features and enhancements:
 
 ## What's new in .NET 8
 
-### .NET Aspire
+### Aspire
 
-[.NET Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/) is a tool to observe and manage distributed web applications. It's still preview version. You can manage your containers, executables, logs, traces and metrics of your running web application. For more information see this article https://devblogs.microsoft.com/dotnet/introducing-dotnet-aspire-simplifying-cloud-native-development-with-dotnet-8/
+[Aspire](https://aspire.dev/) is a tool to observe and manage distributed web applications. It's still preview version. You can manage your containers, executables, logs, traces and metrics of your running web application. For more information see this article https://devblogs.microsoft.com/dotnet/introducing-dotnet-aspire-simplifying-cloud-native-development-with-dotnet-8/
 
 ### Serialization
 

@@ -19,6 +19,11 @@
           "declaringAssemblyName": "Volo.Abp.Authorization.Abstractions",
           "namespace": "Volo.Abp.Authorization",
           "name": "AbpAuthorizationAbstractionsModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Docs.Common.Application.Contracts",
+          "namespace": "Volo.Docs.Common",
+          "name": "DocsCommonApplicationContractsModule"
         }
       ],
       "implementingInterfaces": [
@@ -67,41 +72,6 @@
       ],
       "contentType": "abpModule",
       "name": "DocsAdminApplicationContractsModule",
-      "summary": null
-    },
-    {
-      "displayName": "Projects",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "Docs.Admin.Projects",
-      "summary": null
-    },
-    {
-      "displayName": "Edit",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "Docs.Admin.Projects.Update",
-      "summary": null
-    },
-    {
-      "displayName": "Delete",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "Docs.Admin.Projects.Delete",
-      "summary": null
-    },
-    {
-      "displayName": "Create",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "Docs.Admin.Projects.Create",
-      "summary": null
-    },
-    {
-      "displayName": "Documents",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "Docs.Admin.Documents",
       "summary": null
     }
   ]

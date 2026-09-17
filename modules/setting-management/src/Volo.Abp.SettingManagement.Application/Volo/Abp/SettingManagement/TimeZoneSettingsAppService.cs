@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +13,8 @@ public class TimeZoneSettingsAppService : SettingManagementAppServiceBase, ITime
     protected ISettingManager SettingManager { get; }
     protected ITimezoneProvider TimezoneProvider { get; }
 
+    private const string UnspecifiedTimeZone = "Unspecified";
+
     public TimeZoneSettingsAppService(ISettingManager settingManager, ITimezoneProvider timezoneProvider)
     {
         SettingManager = settingManager;
@@ -20,21 +23,36 @@ public class TimeZoneSettingsAppService : SettingManagementAppServiceBase, ITime
 
     public virtual async Task<string> GetAsync()
     {
-        if (CurrentTenant.GetMultiTenancySide() == MultiTenancySides.Host)
+        var timezone = CurrentTenant.GetMultiTenancySide() == MultiTenancySides.Host
+            ? await SettingManager.GetOrNullGlobalAsync(TimingSettingNames.TimeZone)
+            : await SettingManager.GetOrNullForCurrentTenantAsync(TimingSettingNames.TimeZone);
+
+        if (timezone.IsNullOrWhiteSpace())
         {
-            return await SettingManager.GetOrNullGlobalAsync(TimingSettingNames.TimeZone);
+            timezone = UnspecifiedTimeZone;
         }
 
-        return await SettingManager.GetOrNullForCurrentTenantAsync(TimingSettingNames.TimeZone);
+        return timezone;
     }
 
     public virtual Task<List<NameValue>> GetTimezonesAsync()
     {
-        return Task.FromResult(TimeZoneHelper.GetTimezones(TimezoneProvider.GetWindowsTimezones()));
+        var timezones = TimeZoneHelper.GetTimezones(TimezoneProvider.GetIanaTimezones());
+        timezones.Insert(0, new NameValue
+        {
+            Name = L["DefaultTimeZone"],
+            Value = UnspecifiedTimeZone
+        });
+        return Task.FromResult(timezones);
     }
 
     public virtual async Task UpdateAsync(string timezone)
     {
+        if (timezone.Equals(UnspecifiedTimeZone, StringComparison.OrdinalIgnoreCase))
+        {
+            timezone = null;
+        }
+
         if (CurrentTenant.GetMultiTenancySide() == MultiTenancySides.Host)
         {
             await SettingManager.SetGlobalAsync(TimingSettingNames.TimeZone, timezone);

@@ -63,20 +63,6 @@
       "contentType": "abpModule",
       "name": "CmsKitPublicApplicationContractsModule",
       "summary": null
-    },
-    {
-      "displayName": "Comment management",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKitPublic.Comments",
-      "summary": null
-    },
-    {
-      "displayName": "Delete all",
-      "isEnabled": true,
-      "contentType": "permission",
-      "name": "CmsKitPublic.Comments.DeleteAll",
-      "summary": null
     }
   ]
 }

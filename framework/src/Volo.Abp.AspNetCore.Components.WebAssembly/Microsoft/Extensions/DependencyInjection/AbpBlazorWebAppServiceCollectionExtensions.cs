@@ -1,3 +1,4 @@
+using System;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -19,9 +20,13 @@ public static class AbpBlazorWebAppServiceCollectionExtensions
         return services;
     }
 
+    [Obsolete("Use AddBlazorWebAppServices instead. See https://github.com/abpframework/abp/issues/22622")]
     public static IServiceCollection AddBlazorWebAppTieredServices([NotNull] this IServiceCollection services)
     {
         Check.NotNull(services, nameof(services));
+
+        // Compatibility with old template code
+        services.AddTransient<AddBlazorWebAppTieredServicesHasBeenCalled>();
 
         services.AddScoped<AuthenticationStateProvider, RemoteAuthenticationStateProvider>();
         services.Replace(ServiceDescriptor.Singleton<IAbpAccessTokenProvider, PersistentComponentStateAbpAccessTokenProvider>());

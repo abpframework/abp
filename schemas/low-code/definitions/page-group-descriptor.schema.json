@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "page-group-descriptor.schema.json",
+  "title": "PageGroupDescriptor",
+  "description": "Describes a menu group/folder that can contain pages and sub-groups.",
+  "markdownDescription": "AI guidance: create page groups when several pages belong to the same feature area. Pages reference groups by `group`. Nested groups reference parent groups by `parent`. Use stable kebab-case names and concise user-facing titles.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional schema reference used when this descriptor is stored as a model descriptor file."
+    },
+    "name": {
+      "type": "string",
+      "description": "Unique URL-safe identifier for the group. Prefer kebab-case, for example 'crm' or 'content-studio'.",
+      "minLength": 1
+    },
+    "app": {
+      "type": "string",
+      "description": "Name of the low-code app that owns this group. Omit for the default app. Must match an apps[].name.",
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "title": {
+      "type": "string",
+      "description": "Display title for the menu group.",
+      "minLength": 1
+    },
+    "icon": {
+      "type": ["string", "null"],
+      "description": "FontAwesome icon class, for example 'fa-solid fa-folder' or 'fa-solid fa-calendar-days'."
+    },
+    "order": {
+      "type": "integer",
+      "description": "Sort order within the parent level (lower values appear first)",
+      "default": 0
+    },
+    "parent": {
+      "type": ["string", "null"],
+      "description": "Name of the parent group for nesting. Must match another pageGroups[].name. Omit for root-level groups."
+    },
+    "extendsLowerLayer": {
+      "type": "boolean",
+      "description": "When true, this descriptor overrides selected fields of a page group with the same name defined in a lower model layer; title becomes optional.",
+      "default": false
+    },
+    "metadata": {
+      "$ref": "descriptor-metadata.schema.json"
+    }
+  },
+  "required": ["name"],
+  "if": {
+    "properties": { "extendsLowerLayer": { "const": true } },
+    "required": ["extendsLowerLayer"]
+  },
+  "then": {},
+  "else": {
+    "required": ["title"]
+  },
+  "additionalProperties": false,
+  "examples": [
+    { "name": "events", "title": "Events", "icon": "fa-solid fa-calendar-days", "order": 10 },
+    { "name": "event-admin", "title": "Admin", "parent": "events", "order": 20 }
+  ]
+}

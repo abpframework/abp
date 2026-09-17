@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enable Authority Delegation in ABP Framework, allowing users to perform actions on behalf of others securely and efficiently."
+}
+```
+
 # Authority Delegation
 
 Authority Delegation is a way of delegating the responsibility of the current user to a different user(s) for a limited time. Thus, the user can switch to the delegated user's account and perform actions on their behalf.

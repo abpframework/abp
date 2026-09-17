@@ -1,9 +1,5 @@
 # When to Use Cookies, When to Use Local Storage?
 
-![cover](cover.png)
-
-
-
 ## Cookies vs Local Storage
 
 When you want to save client-side data on browsers, you can use `Cookies` or `Local Storage` of the browser. While these methods look similar, they have different behaviors. You need to decide based on the specific use-case, security concerns and the data size being stored. I'll clarify the differences between these methods. 

@@ -22,4 +22,6 @@ public interface IIdentityUserAppService
     Task<IdentityUserDto> FindByUsernameAsync(string userName);
 
     Task<IdentityUserDto> FindByEmailAsync(string email);
+
+    Task<IdentityUserDto> FindByIdAsync(Guid id);
 }

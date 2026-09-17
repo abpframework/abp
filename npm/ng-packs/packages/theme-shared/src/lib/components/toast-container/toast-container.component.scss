@@ -1,3 +1,9 @@
+:host.abp-toast-host {
+  position: fixed;
+  z-index: 1900;
+  pointer-events: none;
+}
+
 .abp-toast-container {
   position: fixed;
   display: flex;
@@ -6,7 +12,7 @@
   justify-content: flex-end;
   min-width: 350px;
   min-height: 80px;
-  z-index: 1900;
+  pointer-events: auto;
   &.new-on-top {
     flex-direction: column-reverse;
   }

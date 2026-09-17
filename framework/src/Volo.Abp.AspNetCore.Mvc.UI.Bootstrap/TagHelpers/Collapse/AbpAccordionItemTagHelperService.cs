@@ -32,7 +32,7 @@ public class AbpAccordionItemTagHelperService : AbpTagHelperService<AbpAccordion
         button.Attributes.Add("data-bs-target", "#" + GetContentId());
         button.Attributes.Add("aria-expanded", "true");
         button.Attributes.Add("aria-controls", GetContentId());
-        button.InnerHtml.AppendHtml(TagHelper.Title);
+        button.InnerHtml.Append(TagHelper.Title);
 
         var h5 = new TagBuilder("h5");
         h5.AddCssClass("mb-0");

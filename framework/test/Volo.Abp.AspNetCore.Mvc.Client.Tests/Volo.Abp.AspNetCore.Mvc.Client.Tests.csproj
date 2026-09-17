@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\common.test.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Volo.Abp.AspNetCore.Mvc.Client\Volo.Abp.AspNetCore.Mvc.Client.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
+    <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+  </ItemGroup>
+
+</Project>

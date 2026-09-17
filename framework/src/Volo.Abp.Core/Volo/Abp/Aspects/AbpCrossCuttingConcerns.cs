@@ -42,7 +42,7 @@ public static class AbpCrossCuttingConcerns
         }
     }
 
-    public static bool IsApplied([NotNull] object obj, [NotNull] string concern)
+    public static bool IsApplied(object? obj, [NotNull] string concern)
     {
         if (obj == null)
         {

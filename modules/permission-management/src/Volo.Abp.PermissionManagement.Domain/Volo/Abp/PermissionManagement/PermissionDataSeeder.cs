@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 
@@ -33,20 +34,16 @@ public class PermissionDataSeeder : IPermissionDataSeeder, ITransientDependency
     {
         using (CurrentTenant.Change(tenantId))
         {
-            var names = grantedPermissions.ToArray();
-            var existsPermissionGrants = (await PermissionGrantRepository.GetListAsync(names, providerName, providerKey)).Select(x => x.Name).ToList();
-
-            foreach (var permissionName in names.Except(existsPermissionGrants))
+            using (PermissionGrantRepository.DisableTracking())
             {
-                await PermissionGrantRepository.InsertAsync(
-                    new PermissionGrant(
-                        GuidGenerator.Create(),
-                        permissionName,
-                        providerName,
-                        providerKey,
-                        tenantId
-                    )
-                );
+                var names = grantedPermissions.ToArray();
+                var existsPermissionGrants = (await PermissionGrantRepository.GetListAsync(names, providerName, providerKey)).Select(x => x.Name).ToList();
+                var permissions = names.Except(existsPermissionGrants).Select(permissionName => new PermissionGrant(GuidGenerator.Create(), permissionName, providerName, providerKey, tenantId)).ToList();
+                if (!permissions.Any())
+                {
+                    return;
+                }
+                await PermissionGrantRepository.InsertManyAsync(permissions);
             }
         }
     }

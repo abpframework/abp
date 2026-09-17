@@ -85,7 +85,7 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
         {
             auditLogAction = auditingHelper.CreateAuditLogAction(
                 auditLog,
-                invocation.TargetObject.GetType(),
+                invocation.TargetObject?.GetType(),
                 invocation.Method,
                 invocation.Arguments
             );
@@ -191,7 +191,10 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
         }
 
         if (!options.IsEnabledForGetRequests &&
-            invocation.Method.Name.StartsWith("Get", StringComparison.OrdinalIgnoreCase))
+            (string.Equals(auditLogInfo.HttpMethod, "Get", StringComparison.OrdinalIgnoreCase) ||
+             string.Equals(auditLogInfo.HttpMethod, "Head", StringComparison.OrdinalIgnoreCase) ||
+             string.Equals(auditLogInfo.HttpMethod, "Query", StringComparison.OrdinalIgnoreCase) ||
+             invocation.Method.Name.StartsWith("Get", StringComparison.OrdinalIgnoreCase)))
         {
             return false;
         }

@@ -7,3 +7,4 @@ export * from './lib/services';
 export * from './lib/tokens';
 export * from './lib/utils';
 export * from './lib/resolvers';
+export * from './lib/account.routes';

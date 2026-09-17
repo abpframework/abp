@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate DataTables.Net with ABP Framework for seamless tabular data display in your ASP.NET Core MVC/Razor Pages applications."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages: Data Tables
 
 A Data Table (aka Data Grid) is a UI component to show tabular data to the users. There are a lot of Data table components/libraries and **you can use any one you like** with the ABP. However, the startup templates come with the [DataTables.Net](https://datatables.net/) library as **pre-installed and configured**. ABP provides adapters for this library and make it easy to use with the API endpoints.

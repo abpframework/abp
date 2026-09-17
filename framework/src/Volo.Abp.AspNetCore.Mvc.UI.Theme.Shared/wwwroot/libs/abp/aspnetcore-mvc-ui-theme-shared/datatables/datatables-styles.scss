@@ -27,3 +27,10 @@
         }
     }
 }
+
+.abp-action-button {
+    ui.dropdown-menu[data-popper-reference-hidden] {
+      visibility: hidden;
+      pointer-events: none;
+    }
+}

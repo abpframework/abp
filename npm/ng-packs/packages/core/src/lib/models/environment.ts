@@ -7,7 +7,7 @@ export interface Environment {
   hmr?: boolean;
   test?: boolean;
   localization?: { defaultResourceName?: string };
-  oAuthConfig?: AuthConfig & { impersonation?: Impersonation };
+  oAuthConfig?: AuthConfig & { impersonation?: Impersonation, ssrAuthorizationUrl?: string };
   production: boolean;
   remoteEnv?: RemoteEnv;
   [key: string]: any; // eslint-disable-line @typescript-eslint/no-explicit-any

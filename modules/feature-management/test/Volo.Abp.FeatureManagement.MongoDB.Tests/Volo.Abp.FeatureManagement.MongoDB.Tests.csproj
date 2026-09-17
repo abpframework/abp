@@ -3,7 +3,7 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <RootNamespace />
   </PropertyGroup>
 
@@ -14,10 +14,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="EphemeralMongo.Core" />
-    <PackageReference Include="EphemeralMongo6.runtime.linux-x64" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
-    <PackageReference Include="EphemeralMongo6.runtime.osx-x64" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
-    <PackageReference Include="EphemeralMongo6.runtime.win-x64" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
+    <PackageReference Include="MongoSandbox.Core" />
+    <PackageReference Include="MongoSandbox8.runtime.linux-x64" Condition="$([MSBuild]::IsOSPlatform('Linux'))" />
+    <PackageReference Include="MongoSandbox8.runtime.osx-arm64" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
+    <PackageReference Include="MongoSandbox8.runtime.win-x64" Condition="$([MSBuild]::IsOSPlatform('Windows'))" />
   </ItemGroup>
 
 </Project>

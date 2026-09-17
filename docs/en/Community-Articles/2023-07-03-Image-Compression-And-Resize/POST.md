@@ -8,6 +8,12 @@ ABP Framework provides services to compress and resize images and implements the
 
 > Refer to the documentation for more info: [Image Manipulation](https://docs.abp.io/en/abp/7.3/Image-Manipulation)
 
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
+
 ### Source Code
 
 You can find the source code of the application at [https://github.com/abpframework/abp-samples/tree/master/ImageManipulation](https://github.com/abpframework/abp-samples/tree/master/ImageManipulation). Don't hesitate to check the source code, if you are stuck on any point.
@@ -280,6 +286,12 @@ The results are impressive for the example above:
 
 * The original image was 12 KB and now the compressed & resized image has been reduced to 8 KB. 
 * The original image was 225x225 and now resized as 200x200.
+
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
 
 ## Conclusion
 

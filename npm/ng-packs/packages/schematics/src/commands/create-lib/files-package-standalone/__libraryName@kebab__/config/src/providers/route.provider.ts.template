@@ -1,0 +1,30 @@
+import { eLayoutType, RoutesService } from '@abp/ng.core';
+import { e<%= pascal(libraryName) %>RouteNames } from '../enums/route-names';
+import { makeEnvironmentProviders, provideAppInitializer, inject, EnvironmentProviders } from '@angular/core';
+
+export const <%= macro(libraryName) %>_ROUTE_PROVIDERS = [
+  provideAppInitializer(() => {
+    configureRoutes();
+  }),
+];
+
+export function configureRoutes() {
+  const routes = inject(RoutesService);
+  routes.add([
+      {
+        path: undefined,
+        name: e<%= pascal(libraryName) %>RouteNames.<%= pascal(libraryName) %>,
+        iconClass: 'fas fa-book',
+        layout: eLayoutType.application,
+        order: 3,
+      },
+  ]);
+}
+
+export const <%= macro(libraryName) %>_PROVIDERS: EnvironmentProviders[] = [
+  ...<%= macro(libraryName) %>_ROUTE_PROVIDERS,
+];
+
+export function provide<%= pascal(libraryName) %>Config() {
+  return makeEnvironmentProviders(<%= macro(libraryName) %>_PROVIDERS);
+}

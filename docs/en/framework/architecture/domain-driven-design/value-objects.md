@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn about Value Objects in domain-driven design, how to implement them in your projects, and why they matter for clean architecture."
+}
+```
+
 # Value Objects
 
 > An object that represents a descriptive aspect of the domain with no conceptual identity is called a VALUE OBJECT.

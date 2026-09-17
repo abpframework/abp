@@ -16,9 +16,9 @@
           "name": "AbpDddDomainModule"
         },
         {
-          "declaringAssemblyName": "Volo.Abp.AutoMapper",
-          "namespace": "Volo.Abp.AutoMapper",
-          "name": "AbpAutoMapperModule"
+          "declaringAssemblyName": "Volo.Abp.Mapperly",
+          "namespace": "Volo.Abp.Mapperly",
+          "name": "AbpMapperlyModule"
         },
         {
           "declaringAssemblyName": "Volo.Abp.Caching",
@@ -106,6 +106,12 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
         },
         {
           "name": "IEntity<Guid>",
@@ -284,6 +290,12 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
         },
         {
           "name": "IEntity<Guid>",
@@ -495,6 +507,12 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
         },
         {
           "name": "IEntity<Guid>",
@@ -746,6 +764,12 @@
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
         },
         {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
+        },
+        {
           "name": "IEntity<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
@@ -899,6 +923,12 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
         },
         {
           "name": "IEntity<Guid>",
@@ -1716,6 +1746,83 @@
       ],
       "contentType": "repositoryInterface",
       "name": "IBlogRepository",
+      "summary": null
+    },
+    {
+      "eventHandlerType": "Distributed",
+      "namespace": "Volo.Blogging.Users",
+      "subscribedEvents": [
+        {
+          "underlyingType": {
+            "name": "UserEto",
+            "namespace": "Volo.Abp.Users",
+            "declaringAssemblyName": "Volo.Abp.Users.Abstractions",
+            "fullName": "Volo.Abp.Users.UserEto"
+          },
+          "name": "EntityUpdatedEto`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events.Distributed",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain.Shared",
+          "fullName": "Volo.Abp.Domain.Entities.Events.Distributed.EntityUpdatedEto`1"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IDistributedEventHandler<EntityUpdatedEto`1>",
+          "namespace": "Volo.Abp.EventBus.Distributed",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.Distributed.IDistributedEventHandler<EntityUpdatedEto`1>"
+        },
+        {
+          "name": "IEventHandler",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.IEventHandler"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "eventHandler",
+      "name": "BlogUserSynchronizer",
+      "summary": null
+    },
+    {
+      "eventHandlerType": "Local",
+      "namespace": "Volo.Blogging.Posts",
+      "subscribedEvents": [
+        {
+          "underlyingType": null,
+          "name": "PostChangedEvent",
+          "namespace": "Volo.Blogging.Posts",
+          "declaringAssemblyName": "Volo.Blogging.Domain",
+          "fullName": "Volo.Blogging.Posts.PostChangedEvent"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "ILocalEventHandler<PostChangedEvent>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<PostChangedEvent>"
+        },
+        {
+          "name": "IEventHandler",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.IEventHandler"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "eventHandler",
+      "name": "PostCacheInvalidator",
       "summary": null
     }
   ]

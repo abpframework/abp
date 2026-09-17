@@ -40,21 +40,10 @@ public class AbpSystemTextJsonSerializer : IJsonSerializer, ITransientDependency
             camelCase,
             indented,
             Options.JsonSerializerOptions
-        }, _ =>
+        }, _ => new JsonSerializerOptions(Options.JsonSerializerOptions)
         {
-            var settings = new JsonSerializerOptions(Options.JsonSerializerOptions);
-
-            if (camelCase)
-            {
-                settings.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-            }
-
-            if (indented)
-            {
-                settings.WriteIndented = true;
-            }
-
-            return settings;
+            PropertyNamingPolicy = camelCase ? JsonNamingPolicy.CamelCase : null,
+            WriteIndented = indented
         });
     }
 }

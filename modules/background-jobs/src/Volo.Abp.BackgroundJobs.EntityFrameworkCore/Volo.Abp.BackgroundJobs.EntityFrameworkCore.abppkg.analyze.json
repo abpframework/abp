@@ -67,7 +67,14 @@
     {
       "namespace": "Volo.Abp.BackgroundJobs.EntityFrameworkCore",
       "connectionStringName": "AbpBackgroundJobs",
-      "databaseTables": [],
+      "databaseTables": [
+        {
+          "entityFullName": "Volo.Abp.BackgroundJobs.BackgroundJobRecord",
+          "contentType": "databaseTable",
+          "name": "BackgroundJobs",
+          "summary": null
+        }
+      ],
       "replacedDbContexts": [],
       "modelBuilderExtensionMethods": [
         {

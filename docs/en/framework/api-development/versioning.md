@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement API versioning in ABP Framework, enabling seamless integration with ASP.NET while supporting static client proxies."
+}
+```
+
 # API Versioning System
 
 ABP integrates the [ASPNET-API-Versioning](https://github.com/dotnet/aspnet-api-versioning/wiki) feature and adapts to C# and JavaScript Static Client Proxies and [Auto API Controller](./auto-controllers.md).

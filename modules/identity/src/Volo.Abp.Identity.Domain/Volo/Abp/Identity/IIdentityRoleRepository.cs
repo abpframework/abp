@@ -31,8 +31,14 @@ public interface IIdentityRoleRepository : IBasicRepository<IdentityRole, Guid>
         bool includeDetails = false,
         CancellationToken cancellationToken = default
     );
+
     Task<List<IdentityRole>> GetListAsync(
         IEnumerable<Guid> ids,
+        CancellationToken cancellationToken = default
+    );
+
+    Task<List<IdentityRole>> GetListAsync(
+        IEnumerable<string> names,
         CancellationToken cancellationToken = default
     );
 

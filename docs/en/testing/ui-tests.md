@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to implement UI Tests with ABP Framework, covering Non Visual and Visual Tests for various UI technologies like MVC, Angular, and Blazor."
+}
+```
+
 # UI Tests
 
 ````json
@@ -27,6 +34,7 @@ See the following documents to learn Non Visual UI Testing:
 * [Testing in ASP.NET Core MVC / Razor Pages](../framework/ui/mvc-razor-pages/testing.md)
 * [Testing in Angular](../framework/ui/angular/testing.md)
 * [Testing in Blazor](../framework/ui/blazor/testing.md)
+* [Testing in React](../framework/ui/react/unit-testing.md)
 
 ## Visual Tests
 

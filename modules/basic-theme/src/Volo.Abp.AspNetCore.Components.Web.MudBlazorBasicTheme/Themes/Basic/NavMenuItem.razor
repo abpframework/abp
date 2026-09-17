@@ -1,0 +1,78 @@
+@implements IDisposable
+@using Volo.Abp.UI.Navigation
+@using MudBlazor
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Routing
+@using System
+@{
+    var customComponentType = MenuItem.GetComponentTypeOrDefault();
+}
+
+@if (customComponentType != null && typeof(ComponentBase).IsAssignableFrom(customComponentType))
+{
+    <DynamicComponent Type="@customComponentType" />
+}
+else
+{
+    <MudNavGroup Expanded="@MenuItem.Items.Any(IsExpanded)">
+        <TitleContent>
+            <MudIcon Icon="@MenuItem.Icon" Title="@MenuItem.DisplayName" Size="Size.Small" />
+            <MudText Class="ms-1" Inline="true">@MenuItem.DisplayName</MudText>
+        </TitleContent>
+        <ChildContent>
+        @foreach (var item in MenuItem.Items)
+        {
+            @if (item.Items.Any())
+            {
+                <NavMenuItem MenuItem="item"/>
+            }
+            else
+            {
+                <MudNavLink Href="@(item.Url?.TrimStart('/', '~') ?? "#")" Match="@(item.Url != null ? NavLinkMatch.All : NavLinkMatch.Prefix)">
+                    <MudIcon Icon="@item.Icon" Size="Size.Small"/>
+                    <MudText Class="ms-1" Inline="true">@item.DisplayName</MudText>
+                </MudNavLink>
+            }
+        }
+        </ChildContent>
+    </MudNavGroup>
+}
+
+@code {
+    [Parameter]
+    public ApplicationMenuItem MenuItem { get; set; } = default!;
+
+    [Inject]
+    private NavigationManager NavigationManager { get; set; } = default!;
+
+    protected override void OnInitialized()
+    {
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    protected virtual void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        // Menu will close automatically on navigation
+    }
+
+    protected virtual bool IsExpanded(ApplicationMenuItem item)
+    {
+        if (!item.Url.IsNullOrEmpty())
+        {
+            var menuItemPath = item.Url.Replace("~/", string.Empty).Trim('/');
+            var currentPagePath = new Uri(NavigationManager.Uri.TrimEnd('/')).AbsolutePath.Trim('/');
+
+            if (menuItemPath.TrimEnd('/').Equals(currentPagePath, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return item.Items.Any(IsExpanded);
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+}

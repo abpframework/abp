@@ -161,9 +161,17 @@
     $.fn.needConfirmationOnUnsavedClose = function ($modal) {
         var $form = $(this);
         var formSaved = false;
-        var unEditedForm = JSON.stringify($form.serializeFormToObject());
+        var unEditedForm;
+        
+        $modal.on("shown.bs.modal", function () {
+            unEditedForm = JSON.stringify($form.serializeFormToObject());
+        });
 
         $modal.on("hide.bs.modal", function (e) {
+            if(unEditedForm === undefined) {
+                return;
+            }
+            
             var currentForm = JSON.stringify($form.serializeFormToObject());
             var thereAreUnsavedChanges = currentForm !== unEditedForm;
 

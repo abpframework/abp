@@ -30,58 +30,8 @@ public class AbpOpenIddictTokenCache : AbpOpenIddictCacheBase<OpenIddictToken, O
         await Cache.SetAsync($"{nameof(FindByReferenceIdAsync)}_{await Store.GetReferenceIdAsync(token, cancellationToken)}", token, token: cancellationToken);
     }
 
-    public virtual async IAsyncEnumerable<OpenIddictTokenModel> FindAsync(string subject, string client, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        Check.NotNullOrEmpty(subject, nameof(subject));
-        Check.NotNullOrEmpty(client, nameof(client));
-
-        var tokens = await ArrayCache.GetOrAddAsync($"{nameof(FindAsync)}_{subject}_{client}", async () =>
-        {
-            var tokens = new List<OpenIddictTokenModel>();
-            await foreach (var token in Store.FindAsync(subject, client, cancellationToken))
-            {
-                tokens.Add(token);
-                await AddAsync(token, cancellationToken);
-            }
-            return tokens.ToArray();
-        }, token: cancellationToken);
-
-        foreach (var token in tokens)
-        {
-            yield return token;
-        }
-    }
-
-    public virtual async IAsyncEnumerable<OpenIddictTokenModel> FindAsync(string subject, string client, string status, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        Check.NotNullOrEmpty(subject, nameof(subject));
-        Check.NotNullOrEmpty(client, nameof(client));
-        Check.NotNullOrEmpty(status, nameof(status));
-
-        var tokens = await ArrayCache.GetOrAddAsync($"{nameof(FindAsync)}_{subject}_{client}_{status}", async () =>
-        {
-            var tokens = new List<OpenIddictTokenModel>();
-            await foreach (var token in Store.FindAsync(subject, client, status, cancellationToken))
-            {
-                tokens.Add(token);
-                await AddAsync(token, cancellationToken);
-            }
-            return tokens.ToArray();
-        }, token: cancellationToken);
-
-        foreach (var token in tokens)
-        {
-            yield return token;
-        }
-    }
-
     public virtual async IAsyncEnumerable<OpenIddictTokenModel> FindAsync(string subject, string client, string status, string type, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        Check.NotNullOrEmpty(subject, nameof(subject));
-        Check.NotNullOrEmpty(client, nameof(client));
-        Check.NotNullOrEmpty(status, nameof(status));
-        Check.NotNullOrEmpty(type, nameof(type));
-
         var tokens = await ArrayCache.GetOrAddAsync($"{nameof(FindAsync)}_{subject}_{client}_{status}_{type}", async () =>
         {
             var tokens = new List<OpenIddictTokenModel>();
@@ -196,8 +146,6 @@ public class AbpOpenIddictTokenCache : AbpOpenIddictCacheBase<OpenIddictToken, O
     {
         await ArrayCache.RemoveManyAsync(new[]
         {
-            $"{nameof(FindAsync)}_{await Store.GetSubjectAsync(token, cancellationToken)}_{await Store.GetApplicationIdAsync(token, cancellationToken)}",
-            $"{nameof(FindAsync)}_{await Store.GetSubjectAsync(token, cancellationToken)}_{await Store.GetApplicationIdAsync(token, cancellationToken)}_{Store.GetStatusAsync(token, cancellationToken)}",
             $"{nameof(FindAsync)}_{await Store.GetSubjectAsync(token, cancellationToken)}_{await Store.GetApplicationIdAsync(token, cancellationToken)}_{Store.GetStatusAsync(token, cancellationToken)}_{Store.GetTypeAsync(token, cancellationToken)}",
             $"{nameof(FindByApplicationIdAsync)}_{await Store.GetApplicationIdAsync(token, cancellationToken)}",
             $"{nameof(FindByAuthorizationIdAsync)}_{await Store.GetAuthorizationIdAsync(token, cancellationToken)}",

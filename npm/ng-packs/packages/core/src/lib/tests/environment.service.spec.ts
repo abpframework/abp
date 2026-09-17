@@ -1,5 +1,5 @@
-import { waitForAsync } from '@angular/core/testing';
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/vitest';
+import { firstValueFrom } from 'rxjs';
 import { Environment } from '../models/environment';
 import { EnvironmentService } from '../services/environment.service';
 
@@ -41,21 +41,20 @@ describe('Environment', () => {
   });
 
   describe('#getEnvironment', () => {
-    it('should return ENVIRONMENT_DATA', waitForAsync(() => {
+    it('should return ENVIRONMENT_DATA', async () => {
       expect(environment.getEnvironment()).toEqual(ENVIRONMENT_DATA);
-      environment.getEnvironment$().subscribe(data => expect(data).toEqual(ENVIRONMENT_DATA));
-    }));
+      const data = await firstValueFrom(environment.getEnvironment$());
+      expect(data).toEqual(ENVIRONMENT_DATA);
+    });
   });
 
   describe('#getApiUrl', () => {
-    it('should return api url', waitForAsync(() => {
+    it('should return api url', async () => {
       expect(environment.getApiUrl('default')).toEqual(ENVIRONMENT_DATA.apis.default.url);
-      environment
-        .getApiUrl$('other')
-        .subscribe(data => expect(data).toEqual(ENVIRONMENT_DATA.apis.other.url));
-      environment
-        .getApiUrl$('yetAnother')
-        .subscribe(data => expect(data).toEqual(ENVIRONMENT_DATA.apis.default.url));
-    }));
+      const otherData = await firstValueFrom(environment.getApiUrl$('other'));
+      expect(otherData).toEqual(ENVIRONMENT_DATA.apis.other.url);
+      const yetAnotherData = await firstValueFrom(environment.getApiUrl$('yetAnother'));
+      expect(yetAnotherData).toEqual(ENVIRONMENT_DATA.apis.default.url);
+    });
   });
 });

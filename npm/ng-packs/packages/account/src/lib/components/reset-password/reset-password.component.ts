@@ -1,23 +1,52 @@
 import { AccountService } from '@abp/ng.account.core/proxy';
-import { getPasswordValidators } from '@abp/ng.theme.shared';
-import { Component, Injector, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { comparePasswords, Validation } from '@ngx-validate/core';
+import { ButtonComponent, getPasswordValidators } from '@abp/ng.theme.shared';
+import {
+  Component,
+  effect,
+  Injector,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import {
+  ReactiveFormsModule,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { comparePasswords, NgxValidateCoreModule, Validation } from '@ngx-validate/core';
 import { finalize } from 'rxjs/operators';
+import { LocalizationPipe } from '@abp/ng.core';
 
 const PASSWORD_FIELDS = ['password', 'confirmPassword'];
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-reset-password',
   templateUrl: './reset-password.component.html',
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    NgxValidateCoreModule,
+    LocalizationPipe,
+    ButtonComponent,
+  ],
 })
-export class ResetPasswordComponent implements OnInit {
+export class ResetPasswordComponent {
+  private fb = inject(UntypedFormBuilder);
+  private accountService = inject(AccountService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private injector = inject(Injector);
+
+  private readonly queryParams = toSignal(this.route.queryParams);
+
   form!: UntypedFormGroup;
 
-  inProgress = false;
-
-  isPasswordReset = false;
+  readonly inProgress = signal(false);
+  readonly isPasswordReset = signal(false);
 
   mapErrorsFn: Validation.MapErrorsFn = (errors, groupErrors, control) => {
     if (PASSWORD_FIELDS.indexOf(String(control?.name)) < 0) return errors;
@@ -25,17 +54,16 @@ export class ResetPasswordComponent implements OnInit {
     return errors.concat(groupErrors.filter(({ key }) => key === 'passwordMismatch'));
   };
 
-  constructor(
-    private fb: UntypedFormBuilder,
-    private accountService: AccountService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private injector: Injector,
-  ) {}
+  constructor() {
+    effect(() => {
+      const params = this.queryParams();
+      if (!params) return;
 
-  ngOnInit(): void {
-    this.route.queryParams.subscribe(({ userId, resetToken }) => {
-      if (!userId || !resetToken) this.router.navigateByUrl('/account/login');
+      const { userId, resetToken } = params;
+      if (!userId || !resetToken) {
+        void this.router.navigateByUrl('/account/login');
+        return;
+      }
 
       this.form = this.fb.group(
         {
@@ -52,9 +80,9 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.form.invalid || this.inProgress) return;
+    if (this.form.invalid || this.inProgress()) return;
 
-    this.inProgress = true;
+    this.inProgress.set(true);
 
     this.accountService
       .resetPassword({
@@ -62,9 +90,9 @@ export class ResetPasswordComponent implements OnInit {
         resetToken: this.form.get('resetToken')?.value,
         password: this.form.get('password')?.value,
       })
-      .pipe(finalize(() => (this.inProgress = false)))
+      .pipe(finalize(() => this.inProgress.set(false)))
       .subscribe(() => {
-        this.isPasswordReset = true;
+        this.isPasswordReset.set(true);
       });
   }
 }

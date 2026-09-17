@@ -11,4 +11,6 @@ public class BlogDto : ExtensibleEntityDto<Guid>, IHasConcurrencyStamp
 
     public string Slug { get; set; }
     public string ConcurrencyStamp { get; set; }
+    
+    public int BlogPostCount { get; set; }
 }

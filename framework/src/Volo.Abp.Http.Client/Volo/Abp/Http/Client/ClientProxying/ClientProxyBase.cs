@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -17,9 +18,11 @@ using Volo.Abp.Http.Client.Proxying;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Json;
+using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
+using Volo.Abp.Timing;
 using Volo.Abp.Tracing;
 
 namespace Volo.Abp.Http.Client.ClientProxying;
@@ -33,6 +36,7 @@ public class ClientProxyBase<TService> : ITransientDependency
     protected ICorrelationIdProvider CorrelationIdProvider => LazyServiceProvider.LazyGetRequiredService<ICorrelationIdProvider>();
     protected ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
     protected IOptions<AbpCorrelationIdOptions> AbpCorrelationIdOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpCorrelationIdOptions>>();
+    protected ICurrentTimezoneProvider CurrentTimezoneProvider => LazyServiceProvider.LazyGetRequiredService<ICurrentTimezoneProvider>();
     protected IProxyHttpClientFactory HttpClientFactory => LazyServiceProvider.LazyGetRequiredService<IProxyHttpClientFactory>();
     protected IRemoteServiceConfigurationProvider RemoteServiceConfigurationProvider => LazyServiceProvider.LazyGetRequiredService<IRemoteServiceConfigurationProvider>();
     protected IOptions<AbpHttpClientOptions> ClientOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpHttpClientOptions>>();
@@ -42,15 +46,33 @@ public class ClientProxyBase<TService> : ITransientDependency
     protected ClientProxyUrlBuilder ClientProxyUrlBuilder => LazyServiceProvider.LazyGetRequiredService<ClientProxyUrlBuilder>();
     protected ICurrentApiVersionInfo CurrentApiVersionInfo => LazyServiceProvider.LazyGetRequiredService<ICurrentApiVersionInfo>();
     protected ILocalEventBus LocalEventBus => LazyServiceProvider.LazyGetRequiredService<ILocalEventBus>();
+    protected IOptions<AbpSystemTextJsonSerializerOptions>? SystemTextJsonSerializerOptions => LazyServiceProvider.LazyGetService<IOptions<AbpSystemTextJsonSerializerOptions>>();
 
     protected virtual async Task RequestAsync(string methodName, ClientProxyRequestTypeValue? arguments = null)
     {
-        await RequestAsync(BuildHttpProxyClientProxyContext(methodName, arguments));
+        using (await RequestAsync(BuildHttpProxyClientProxyContext(methodName, arguments)))
+        {
+        }
     }
 
     protected virtual async Task<T> RequestAsync<T>(string methodName, ClientProxyRequestTypeValue? arguments = null)
     {
         return await RequestAsync<T>(BuildHttpProxyClientProxyContext(methodName, arguments));
+    }
+
+    protected virtual async IAsyncEnumerable<T> RequestAsyncEnumerable<T>(string methodName, ClientProxyRequestTypeValue? arguments = null)
+    {
+        var requestContext = BuildHttpProxyClientProxyContext(methodName, arguments);
+        var responseContent = await RequestAsync(requestContext);
+        var options = SystemTextJsonSerializerOptions?.Value.JsonSerializerOptions;
+        var stream = await responseContent.ReadAsStreamAsync();
+        var items = options != null
+            ? System.Text.Json.JsonSerializer.DeserializeAsyncEnumerable<T>(stream, options)
+            : System.Text.Json.JsonSerializer.DeserializeAsyncEnumerable<T>(stream);
+        await foreach (var item in items)
+        {
+            yield return item!;
+        }
     }
 
     protected virtual ClientProxyRequestContext BuildHttpProxyClientProxyContext(string methodName, ClientProxyRequestTypeValue? arguments = null)
@@ -77,7 +99,7 @@ public class ClientProxyBase<TService> : ITransientDependency
         return new ClientProxyRequestContext(
             action,
                 actionArguments
-                .Select((x, i) => new KeyValuePair<string, object>(x.Key, arguments.Values[i].Value))
+                .Select((x, i) => new KeyValuePair<string, object?>(x.Key, arguments.Values[i].Value))
                 .ToDictionary(x => x.Key, x => x.Value),
             typeof(TService));
     }
@@ -86,8 +108,7 @@ public class ClientProxyBase<TService> : ITransientDependency
     {
         var responseContent = await RequestAsync(requestContext);
 
-        if (typeof(T) == typeof(IRemoteStreamContent) ||
-            typeof(T) == typeof(RemoteStreamContent))
+        if (typeof(T) == typeof(IRemoteStreamContent) || typeof(T) == typeof(RemoteStreamContent))
         {
             /* returning a class that holds a reference to response
              * content just to be sure that GC does not dispose of
@@ -100,18 +121,55 @@ public class ClientProxyBase<TService> : ITransientDependency
                 responseContent.Headers?.ContentLength);
         }
 
-        var stringContent = await responseContent.ReadAsStringAsync();
-        if (typeof(T) == typeof(string))
+        using (responseContent)
         {
-            return (T)(object)stringContent;
+            var stringContent = await responseContent.ReadAsStringAsync();
+            if (typeof(T) == typeof(string))
+            {
+                var unwrapped = UnwrapStringResponse(stringContent, responseContent.Headers?.ContentType?.MediaType);
+                return (T)(object)unwrapped!;
+            }
+
+            if (stringContent.IsNullOrWhiteSpace())
+            {
+                return default!;
+            }
+
+            return JsonSerializer.Deserialize<T>(stringContent);
+        }
+    }
+
+    protected virtual string? UnwrapStringResponse(string body, string? contentType)
+    {
+        if (body.IsNullOrEmpty() || contentType.IsNullOrWhiteSpace())
+        {
+            return body;
         }
 
-        if (stringContent.IsNullOrWhiteSpace())
+        if (!IsJsonMediaType(NormalizeMediaType(contentType!)))
         {
-            return default!;
+            return body;
         }
 
-        return JsonSerializer.Deserialize<T>(stringContent);
+        try
+        {
+            var parsed = JsonSerializer.Deserialize<string>(body);
+            return parsed ?? string.Empty;
+        }
+        catch
+        {
+            return body;
+        }
+    }
+
+    protected static string NormalizeMediaType(string mediaType)
+    {
+        if (mediaType.IsNullOrWhiteSpace())
+        {
+            return string.Empty;
+        }
+        var semi = mediaType.IndexOf(';');
+        return (semi < 0 ? mediaType : mediaType.Substring(0, semi)).Trim().ToLowerInvariant();
     }
 
     protected virtual async Task<HttpContent> RequestAsync(ClientProxyRequestContext requestContext)
@@ -146,6 +204,11 @@ public class ClientProxyBase<TService> : ITransientDependency
         HttpResponseMessage response;
         try
         {
+            foreach (var preSendAction in ClientOptions.Value.ProxyHttpClientPreSendActions.Where(x => x.Key  == clientConfig.RemoteServiceName).SelectMany(x => x.Value))
+            {
+                preSendAction(clientConfig, requestContext, client);
+            }
+
             response = await client.SendAsync(
                 requestMessage,
                 HttpCompletionOption.ResponseHeadersRead /*this will buffer only the headers, the content will be used as a stream*/,
@@ -159,7 +222,15 @@ public class ClientProxyBase<TService> : ITransientDependency
 
         if (!response.IsSuccessStatusCode)
         {
-            await ThrowExceptionForResponseAsync(response);
+            try
+            {
+                await ThrowExceptionForResponseAsync(response);
+            }
+            catch
+            {
+                response.Dispose();
+                throw;
+            }
         }
 
         return response.Content;
@@ -283,19 +354,12 @@ public class ClientProxyBase<TService> : ITransientDependency
     }
 
     protected virtual void AddHeaders(
-        IReadOnlyDictionary<string, object> argumentsDictionary,
+        IReadOnlyDictionary<string, object?> argumentsDictionary,
         ActionApiDescriptionModel action,
         HttpRequestMessage requestMessage,
         ApiVersionInfo apiVersion)
     {
-        //API Version
-        if (!apiVersion.Version.IsNullOrEmpty())
-        {
-            //TODO: What about other media types?
-            requestMessage.Headers.Add("accept", $"{MimeTypes.Text.Plain}; v={apiVersion.Version}");
-            requestMessage.Headers.Add("accept", $"{MimeTypes.Application.Json}; v={apiVersion.Version}");
-            requestMessage.Headers.Add("api-version", apiVersion.Version);
-        }
+        AddAcceptHeaders(action, requestMessage, apiVersion);
 
         //Header parameters
         var headers = action.Parameters.Where(p => p.BindingSourceId == ParameterBindingSources.Header).ToArray();
@@ -309,7 +373,11 @@ public class ClientProxyBase<TService> : ITransientDependency
         }
 
         //CorrelationId
-        requestMessage.Headers.Add(AbpCorrelationIdOptions.Value.HttpHeaderName, CorrelationIdProvider.Get());
+        var correlationId = CorrelationIdProvider.Get();
+        if (correlationId != null)
+        {
+            requestMessage.Headers.Add(AbpCorrelationIdOptions.Value.HttpHeaderName, correlationId);
+        }
 
         //TenantId
         if (CurrentTenant.Id.HasValue)
@@ -328,6 +396,63 @@ public class ClientProxyBase<TService> : ITransientDependency
 
         //X-Requested-With
         requestMessage.Headers.Add("X-Requested-With", "XMLHttpRequest");
+
+        //Timezone
+        if (!CurrentTimezoneProvider.TimeZone.IsNullOrWhiteSpace())
+        {
+            requestMessage.Headers.Add(TimeZoneConsts.DefaultTimeZoneKey, CurrentTimezoneProvider.TimeZone);
+        }
+    }
+
+    protected virtual void AddAcceptHeaders(
+        ActionApiDescriptionModel action,
+        HttpRequestMessage requestMessage,
+        ApiVersionInfo apiVersion)
+    {
+        var acceptForReturn = GetAcceptForActionReturn(action);
+        var versionSuffix = apiVersion.Version.IsNullOrEmpty() ? string.Empty : $"; v={apiVersion.Version}";
+
+        if (!acceptForReturn.IsNullOrEmpty())
+        {
+            requestMessage.Headers.Add("accept", acceptForReturn + versionSuffix);
+        }
+        else
+        {
+            requestMessage.Headers.Add("accept", MimeTypes.Text.Plain + versionSuffix);
+            requestMessage.Headers.Add("accept", MimeTypes.Application.Json + versionSuffix);
+        }
+
+        if (!apiVersion.Version.IsNullOrEmpty())
+        {
+            requestMessage.Headers.Add("api-version", apiVersion.Version);
+        }
+    }
+
+    protected virtual string? GetAcceptForActionReturn(ActionApiDescriptionModel action)
+    {
+        if (action.ReturnValue.IsRemoteStream ||
+            action.ReturnValue.Type == typeof(IRemoteStreamContent).FullName ||
+            action.ReturnValue.Type == typeof(RemoteStreamContent).FullName)
+        {
+            return MimeTypes.Application.OctetStream;
+        }
+
+        var contentTypes = action.ReturnValue.ContentTypes;
+        if (contentTypes == null || contentTypes.Count == 0)
+        {
+            return null;
+        }
+
+        var normalized = contentTypes.Select(NormalizeMediaType).ToList();
+
+        return normalized.FirstOrDefault(IsJsonMediaType) ?? normalized[0];
+    }
+
+    private static bool IsJsonMediaType(string normalizedMediaType)
+    {
+        return normalizedMediaType.Equals(MimeTypes.Application.Json, StringComparison.OrdinalIgnoreCase) ||
+               normalizedMediaType.Equals("text/json", StringComparison.OrdinalIgnoreCase) ||
+               normalizedMediaType.EndsWith("+json", StringComparison.OrdinalIgnoreCase);
     }
 
     protected virtual StringSegment RemoveQuotes(StringSegment input)
@@ -340,7 +465,7 @@ public class ClientProxyBase<TService> : ITransientDependency
         return input;
     }
 
-    protected virtual CancellationToken GetCancellationToken(IReadOnlyDictionary<string, object> arguments)
+    protected virtual CancellationToken GetCancellationToken(IReadOnlyDictionary<string, object?> arguments)
     {
         var cancellationTokenArg = arguments.LastOrDefault();
 

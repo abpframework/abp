@@ -66,6 +66,8 @@
     "AccessDenied": "Δεν επιτρέπεται η πρόσβαση!",
     "AccessDeniedMessage": "Δεν έχετε πρόσβαση σε αυτόν τον πόρο.",
     "OrRegisterWith": "Ή εγγραφείτε με:",
-    "RegisterUsingYourProviderAccount": "Εγγραφείτε χρησιμοποιώντας τον λογαριασμό σας {0}"
+    "RegisterUsingYourProviderAccount": "Εγγραφείτε χρησιμοποιώντας τον λογαριασμό σας {0}",
+    "RequireMigrateSeedTitle": "Δεν βρέθηκε ο χρήστης διαχειριστή",
+    "RequireMigrateSeedMessage": "Βεβαιωθείτε ότι εκτελείται το seed της βάσης δεδομένων. Δείτε την <a target=\"_blank\" href=\"https://abp.io/kb/0003\">τεκμηρίωση</a> για πιθανές λύσεις."
   }
 }

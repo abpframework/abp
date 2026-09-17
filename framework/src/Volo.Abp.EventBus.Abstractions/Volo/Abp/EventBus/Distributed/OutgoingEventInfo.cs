@@ -4,7 +4,7 @@ using Volo.Abp.Data;
 
 namespace Volo.Abp.EventBus.Distributed;
 
-public class OutgoingEventInfo : IHasExtraProperties
+public class OutgoingEventInfo : IOutgoingEventInfo
 {
     public static int MaxEventNameLength { get; set; } = 256;
 
@@ -46,5 +46,21 @@ public class OutgoingEventInfo : IHasExtraProperties
     public string? GetCorrelationId()
     {
         return ExtraProperties.GetOrDefault(EventBusConsts.CorrelationIdHeaderName)?.ToString();
+    }
+
+    public void SetTenantId(Guid? tenantId)
+    {
+        if (tenantId == null)
+        {
+            ExtraProperties.Remove(EventBusConsts.TenantIdHeaderName);
+            return;
+        }
+
+        ExtraProperties[EventBusConsts.TenantIdHeaderName] = tenantId.Value.ToString();
+    }
+
+    public Guid? GetTenantId()
+    {
+        return EventBusTenantIdHelper.Parse(ExtraProperties.GetOrDefault(EventBusConsts.TenantIdHeaderName)?.ToString());
     }
 }

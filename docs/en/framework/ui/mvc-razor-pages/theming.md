@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement flexible UI theming in ABP Framework, enabling theme-independent modules and easy customization for your applications."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages: UI Theming
 
 ## Introduction
@@ -37,14 +44,11 @@ All the themes must depend on the [@abp/aspnetcore.mvc.ui.theme.shared](https://
 * [JQuery Validation](https://github.com/jquery-validation/jquery-validation) for client side & [unobtrusive](https://github.com/aspnet/jquery-validation-unobtrusive) validation
 * [FontAwesome](https://fontawesome.com/) as the fundamental CSS font library.
 * [SweetAlert](https://sweetalert.js.org/) to show fancy alert message and confirmation dialogs.
-* [Toastr](https://github.com/CodeSeven/toastr) to show toast notifications.
 * [Lodash](https://lodash.com/) as a utility library.
 * [Luxon](https://moment.github.io/luxon/) for date/time operations.
-* [JQuery Form](https://github.com/jquery-form/form) for AJAX forms.
 * [bootstrap-datepicker](https://github.com/uxsolutions/bootstrap-datepicker) to show date pickers.
 * [Select2](https://select2.org/) for better select/combo boxes.
-* [Timeago](http://timeago.yarp.com/) to show automatically updating fuzzy timestamps.
-* [malihu-custom-scrollbar-plugin](https://github.com/malihu/malihu-custom-scrollbar-plugin) for custom scrollbars.
+* [timeago.js](https://timeago.org/) to show automatically updating fuzzy timestamps.
 
 These libraries are selected as the base libraries and available to the applications and modules.
 
@@ -53,7 +57,7 @@ These libraries are selected as the base libraries and available to the applicat
 There are some abstractions in the ABP to make your code independent from some of these libraries too. Examples;
 
 * [Tag Helpers](tag-helpers) makes it easy to generate the Bootstrap UIs.
-* JavaScript [Message](javascript-api/message.md) and [Notification](javascript-api/notify.md) APIs provides abstractions to use the Sweetalert and Toastr.
+* JavaScript [Message](javascript-api/message.md) and [Notification](javascript-api/notify.md) APIs provide abstractions to use the SweetAlert and the built-in toast implementations.
 * [Forms & Validation](forms-validation.md) system automatically handles the validation, so you mostly don't directly type any validation code.
 
 ### The Standard Layouts
@@ -430,7 +434,7 @@ In this way, applications or modules can have selectors based on the current lay
 
 ### RTL
 
-To support Right-To-Left languages, the Layout should check the current culture and add `dir="rtl"` to the `html` tag and `rtl` CSS class the the `body` tag.
+To support Right-To-Left languages, the Layout should check the current culture and add `dir="rtl"` to the `html` tag and `rtl` CSS class to the `body` tag.
 
 You can check `CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft` to understand if the current language is a RTL language.
 

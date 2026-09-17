@@ -65,6 +65,8 @@
     "AccessDenied": "Adgang nægtet!",
     "AccessDeniedMessage": "Du har ikke adgang til denne ressource.",
     "OrRegisterWith": "Eller registrér med:",
-    "RegisterUsingYourProviderAccount": "Registrér med din {0} konto"
+    "RegisterUsingYourProviderAccount": "Registrér med din {0} konto",
+    "RequireMigrateSeedTitle": "Kunne ikke finde administratorbrugeren",
+    "RequireMigrateSeedMessage": "Sørg for, at databasens seed bliver udført. Se <a target=\"_blank\" href=\"https://abp.io/kb/0003\">dokumentationen</a> for mulige løsninger."
   }
 }

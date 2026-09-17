@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the ABP Studio documentation for comprehensive guidance on installation, solution templates, and building modular applications with ease."
+}
+```
+
 # ABP Studio Documentation Content Planning
 
 * ~~[DONE] Installation~~

@@ -10,6 +10,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
@@ -53,23 +55,27 @@ public class LoginModel : AccountPageModel
     protected AbpAccountOptions AccountOptions { get; }
     protected IOptions<IdentityOptions> IdentityOptions { get; }
     protected IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache { get; }
+    protected IWebHostEnvironment WebHostEnvironment { get; }
     public bool ShowCancelButton { get; set; }
+    public bool ShowRequireMigrateSeedMessage { get; set; }
 
     public LoginModel(
         IAuthenticationSchemeProvider schemeProvider,
         IOptions<AbpAccountOptions> accountOptions,
         IOptions<IdentityOptions> identityOptions,
-        IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache)
+        IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
+        IWebHostEnvironment webHostEnvironment)
     {
         SchemeProvider = schemeProvider;
         IdentityOptions = identityOptions;
         AccountOptions = accountOptions.Value;
         IdentityDynamicClaimsPrincipalContributorCache = identityDynamicClaimsPrincipalContributorCache;
+        WebHostEnvironment = webHostEnvironment;
     }
 
     public virtual async Task<IActionResult> OnGetAsync()
     {
-        LoginInput = new LoginInputModel();
+        LoginInput ??= new LoginInputModel();
 
         ExternalProviders = await GetExternalProviders();
 
@@ -124,12 +130,40 @@ public class LoginModel : AccountPageModel
 
         if (result.IsNotAllowed)
         {
+            var notAllowedUser = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress) ??
+                                 await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress);
+            if (notAllowedUser != null)
+            {
+                using (CurrentTenant.Change(notAllowedUser.TenantId))
+                {
+                    await IdentityOptions.SetAsync();
+                    if ((notAllowedUser.ShouldChangePasswordOnNextLogin ||
+                            await UserManager.ShouldPeriodicallyChangePasswordAsync(notAllowedUser)) &&
+                        !await UserManager.CheckPasswordAsync(notAllowedUser, LoginInput.Password))
+                    {
+                        Alerts.Danger(L["InvalidUserNameOrPassword"]);
+                        return Page();
+                    }
+                }
+            }
+
             Alerts.Warning(L["LoginIsNotAllowed"]);
             return Page();
         }
 
         if (!result.Succeeded)
         {
+            if (LoginInput.UserNameOrEmailAddress == IdentityDataSeedContributor.AdminUserNameDefaultValue &&
+                WebHostEnvironment.IsDevelopment())
+            {
+                var adminUser = await UserManager.FindByNameAsync(IdentityDataSeedContributor.AdminUserNameDefaultValue);
+                if (adminUser == null)
+                {
+                    ShowRequireMigrateSeedMessage = true;
+                    return Page();
+                }
+            }
+
             Alerts.Danger(L["InvalidUserNameOrPassword"]);
             return Page();
         }

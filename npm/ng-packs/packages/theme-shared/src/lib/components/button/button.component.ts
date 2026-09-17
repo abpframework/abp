@@ -1,87 +1,80 @@
 /* eslint-disable @angular-eslint/no-output-native */
-import { ABP } from '@abp/ng.core';
 import {
   Component,
   ElementRef,
-  EventEmitter,
-  Input,
   OnInit,
-  Output,
   Renderer2,
-  ViewChild,
+  computed,
+  inject,
+  input,
+  output,
+  signal,
+  viewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
+import { ABP, StopPropagationDirective } from '@abp/ng.core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-button',
   template: `
     <button
       #button
-      [id]="buttonId"
-      [attr.type]="buttonType"
-      [attr.form]="formName"
-      [ngClass]="buttonClass"
-      [disabled]="loading || disabled"
-      (click.stop)="click.next($event); abpClick.next($event)"
-      (focus)="focus.next($event); abpFocus.next($event)"
-      (blur)="blur.next($event); abpBlur.next($event)"
+      [id]="buttonId()"
+      [attr.type]="buttonType()"
+      [attr.form]="formName()"
+      [class]="buttonClass()"
+      [disabled]="isLoading() || disabled()"
+      (click.stop)="click.emit($event); abpClick.emit($event)"
+      (focus)="focus.emit($event); abpFocus.emit($event)"
+      (blur)="blur.emit($event); abpBlur.emit($event)"
     >
-      <i [ngClass]="icon" class="me-1" aria-hidden="true"></i><ng-content></ng-content>
+      <i [class]="icon()" class="me-1" aria-hidden="true"></i><ng-content></ng-content>
     </button>
   `,
+  imports: [StopPropagationDirective],
 })
 export class ButtonComponent implements OnInit {
-  @Input()
-  buttonId = '';
+  private renderer = inject(Renderer2);
 
-  @Input()
-  buttonClass = 'btn btn-primary';
+  readonly buttonId = input('');
+  readonly buttonClass = input('btn btn-primary');
+  readonly buttonType = input('button');
+  readonly formName = input<string | undefined>(undefined);
+  readonly iconClass = input<string | undefined>(undefined);
+  readonly loading = input(false);
+  readonly disabled = input<boolean | undefined>(false);
+  readonly attributes = input<ABP.Dictionary<string> | undefined>(undefined);
 
-  @Input()
-  buttonType = 'button';
+  private readonly modalLoading = signal<boolean | null>(null);
 
-  @Input()
-  formName?: string = undefined;
+  readonly isLoading = computed(() => this.modalLoading() ?? this.loading());
 
-  @Input()
-  iconClass?: string;
+  readonly click = output<MouseEvent>();
+  readonly focus = output<FocusEvent>();
+  readonly blur = output<FocusEvent>();
+  readonly abpClick = output<MouseEvent>();
+  readonly abpFocus = output<FocusEvent>();
+  readonly abpBlur = output<FocusEvent>();
 
-  @Input()
-  loading = false;
+  readonly buttonRef = viewChild.required<ElementRef<HTMLButtonElement>>('button');
 
-  @Input()
-  disabled: boolean | undefined = false;
-
-  @Input()
-  attributes?: ABP.Dictionary<string>;
-
-  @Output() readonly click = new EventEmitter<MouseEvent>();
-
-  @Output() readonly focus = new EventEmitter<FocusEvent>();
-
-  @Output() readonly blur = new EventEmitter<FocusEvent>();
-
-  @Output() readonly abpClick = new EventEmitter<MouseEvent>();
-
-  @Output() readonly abpFocus = new EventEmitter<FocusEvent>();
-
-  @Output() readonly abpBlur = new EventEmitter<FocusEvent>();
-
-  @ViewChild('button', { static: true })
-  buttonRef!: ElementRef<HTMLButtonElement>;
-
-  get icon(): string {
-    return `${this.loading ? 'fa fa-spinner fa-spin' : this.iconClass || 'd-none'}`;
-  }
-
-  constructor(private renderer: Renderer2) {}
+  protected readonly icon = computed(() =>
+    this.isLoading() ? 'fa fa-spinner fa-spin' : this.iconClass() || 'd-none',
+  );
 
   ngOnInit() {
-    if (this.attributes) {
-      Object.keys(this.attributes).forEach(key => {
-        if (this.attributes?.[key]) {
-          this.renderer.setAttribute(this.buttonRef.nativeElement, key, this.attributes[key]);
+    const attributes = this.attributes();
+    if (attributes) {
+      Object.keys(attributes).forEach(key => {
+        if (attributes[key]) {
+          this.renderer.setAttribute(this.buttonRef().nativeElement, key, attributes[key]);
         }
       });
     }
+  }
+
+  setLoading(value: boolean): void {
+    this.modalLoading.set(value);
   }
 }

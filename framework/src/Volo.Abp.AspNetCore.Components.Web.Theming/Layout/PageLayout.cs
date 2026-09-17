@@ -31,6 +31,8 @@ public class PageLayout : IScopedDependency, INotifyPropertyChanged
         }
     }
 
+    public bool ShowToolbar { get; set; } = true;
+
     public virtual ObservableCollection<BreadcrumbItem> BreadcrumbItems { get; } = new();
 
     public virtual ObservableCollection<PageToolbarItem> ToolbarItems { get; } = new();
@@ -40,5 +42,13 @@ public class PageLayout : IScopedDependency, INotifyPropertyChanged
     protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+    
+    public void Reset()
+    {
+        Title = string.Empty;
+        MenuItemName = string.Empty;
+        BreadcrumbItems.Clear();
+        ToolbarItems.Clear();
     }
 }

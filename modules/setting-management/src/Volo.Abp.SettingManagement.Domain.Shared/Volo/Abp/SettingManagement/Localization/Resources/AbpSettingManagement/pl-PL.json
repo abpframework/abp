@@ -14,13 +14,15 @@
     "Body": "Ciało",
     "TestEmailSubject": "Testowy e-mail {0}",
     "TestEmailBody": "Tutaj przetestuj treść wiadomości e-mail",
-    "SuccessfullySent": "Pomyślnie wysłane",
+    "SentSuccessfully": "Wysłano pomyślnie",
     "MailSendingFailed": "Wysyłanie e-maila nie powiodło się. Sprawdź konfigurację e-maila i spróbuj ponownie.",
     "Send": "Wysłać",
+    "Menu:Settings": "Ustawienia",
     "Menu:Emailing": "Wysyłanie e-maili",
     "Menu:TimeZone": "Strefa Czasowa",
     "DisplayName:Timezone": "Strefa czasowa",
-    "TimezoneHelpText": "To ustawienie jest używane w przypadku całej aplikacji lub opartej na dzierżawie.",
+    "TimezoneHelpText": "Ta funkcja pozwala ustawić domyślną strefę czasową dla serwera, podczas gdy użytkownicy mogą wybrać własną. Jeśli strefa czasowa użytkownika różni się od strefy czasowej serwera, wszystkie czasy zostaną odpowiednio dostosowane. Na przykład, gdy serwer jest ustawiony na Europa/Londyn(00:00), a użytkownik jest w Europie/Paryżu(+01:00), czasy zostaną dostosowane o 1 godzinę dla tego użytkownika. Wybranie opcji 'Domyślna strefa czasowa' automatycznie wykorzysta strefę czasową serwera lub przeglądarki.",
+    "DefaultTimeZone": "Domyślna strefa czasowa",
     "SmtpHost": "Gospodarz",
     "SmtpPort": "Port",
     "SmtpUserName": "Nazwa użytkownika",
@@ -33,7 +35,9 @@
     "Feature:SettingManagementGroup": "Zarządzanie ustawieniami",
     "Feature:SettingManagementEnable": "Włącz zarządzanie ustawieniami",
     "Feature:SettingManagementEnableDescription": "Włącz system zarządzania ustawieniami w aplikacji.",
-    "Feature:AllowChangingEmailSettings": "Zezwól na zmianę ustawień poczty e-mail.",
-    "Feature:AllowChangingEmailSettingsDescription": "Zezwól na zmianę ustawień poczty e-mail."
+    "Feature:AllowChangingEmailSettings": "Zezwól na zmianę ustawień poczty e-mail",
+    "Feature:AllowChangingEmailSettingsDescription": "Zezwól na zmianę ustawień poczty e-mail.",
+    "SmtpPasswordPlaceholder": "Wprowadź wartość, aby zaktualizować hasło",
+    "NoSettingsAvailable": "Brak ustawień do wyświetlenia."
   }
 }

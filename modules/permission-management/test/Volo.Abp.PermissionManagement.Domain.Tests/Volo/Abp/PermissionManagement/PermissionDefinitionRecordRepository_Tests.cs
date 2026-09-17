@@ -26,4 +26,19 @@ public abstract class PermissionDefinitionRecordRepository_Tests<TStartupModule>
         permission.ShouldNotBeNull();
         permission.Name.ShouldBe("MyPermission2");
     }
+
+    [Fact]
+    public async Task FindByResourceNameAsync()
+    {
+        var qq = await PermissionDefinitionRecordRepository.GetListAsync();
+        var permission = await PermissionDefinitionRecordRepository.FindByNameAsync("MyResourcePermission1");
+        permission.ShouldNotBeNull();
+        permission.ResourceName.ShouldBe(TestEntityResource.ResourceName);
+        permission.Name.ShouldBe("MyResourcePermission1");
+
+        permission = await PermissionDefinitionRecordRepository.FindByNameAsync("MyResourcePermission2");
+        permission.ShouldNotBeNull();
+        permission.ResourceName.ShouldBe(TestEntityResource.ResourceName);
+        permission.Name.ShouldBe("MyResourcePermission2");
+    }
 }

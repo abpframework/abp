@@ -8,14 +8,22 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 using Volo.Abp.Json;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form.DatePicker;
 
 public class AbpDatePickerTagHelperService : AbpDatePickerBaseTagHelperService<AbpDatePickerTagHelper>
 {
-    public AbpDatePickerTagHelperService(IJsonSerializer jsonSerializer, IHtmlGenerator generator, HtmlEncoder encoder, IServiceProvider serviceProvider, IStringLocalizer<AbpUiResource> l, IAbpTagHelperLocalizer tagHelperLocalizer) : base(jsonSerializer, generator, encoder, serviceProvider, l, tagHelperLocalizer)
+    public AbpDatePickerTagHelperService(
+        IJsonSerializer jsonSerializer,
+        IHtmlGenerator generator,
+        HtmlEncoder encoder,
+        IServiceProvider serviceProvider,
+        IStringLocalizer<AbpUiResource> l,
+        IAbpTagHelperLocalizer tagHelperLocalizer,
+        IClock clock)
+        : base(jsonSerializer, generator, encoder, serviceProvider, l, tagHelperLocalizer, clock)
     {
-
     }
 
     protected override TagHelperOutput TagHelperOutput { get; set; } = default!;
@@ -42,10 +50,28 @@ public class AbpDatePickerTagHelperService : AbpDatePickerBaseTagHelperService<A
             {
                 InputTypeName = "hidden",
                 ViewContext = TagHelper.ViewContext,
-                For = TagHelper.AspFor,
+                For = TagHelper.AspFor
             };
 
-            var attributes = new TagHelperAttributeList { { "data-date", "true" }, { "type", "hidden" } };
+            var attributes = new TagHelperAttributeList { { "data-hidden-datepicker", "true" }, { "data-date", "true" }, { "type", "hidden" } };
+
+            if (Clock.SupportsMultipleTimezone)
+            {
+                if (TagHelper.AspFor.Model is DateTime dateTime)
+                {
+                    DateTagHelper.Format = "{0:O}";
+                    DateTagHelper.Value = Clock.ConvertToUserTime(dateTime).ToString("O");
+                    attributes.Add("value", DateTagHelper.Value);
+                }
+
+                if (TagHelper.AspFor.Model is DateTimeOffset dateTimeOffset)
+                {
+                    DateTagHelper.Format = "{0:O}";
+                    DateTagHelper.Value = Clock.ConvertToUserTime(dateTimeOffset).UtcDateTime.ToString("O");
+                    attributes.Add("value", DateTagHelper.Value);
+                }
+            }
+
             DateTagHelperOutput = await DateTagHelper.ProcessAndGetOutputAsync(attributes, context, "input");
         }
 

@@ -1,92 +1,101 @@
 import {
-  ComponentFactoryResolver,
   ComponentRef,
   Directive,
   ElementRef,
   EmbeddedViewRef,
-  HostBinding,
   Injector,
-  Input,
   OnDestroy,
   OnInit,
   Renderer2,
-  ViewContainerRef,
+  effect,
+  inject,
+  input,
+  ViewContainerRef
 } from '@angular/core';
 import { Subscription, timer } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { LoadingComponent } from '../components/loading/loading.component';
+import { LoadingComponent } from '../components';
 
-@Directive({ selector: '[abpLoading]' })
+@Directive({
+  selector: '[abpLoading]',
+  host: {
+    '[style.position]': '"relative"'
+  }
+})
 export class LoadingDirective implements OnInit, OnDestroy {
-  private _loading!: boolean;
+  private elRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private injector = inject(Injector);
+  private renderer = inject(Renderer2);
+  private viewContainerRef = inject(ViewContainerRef);
 
-  @HostBinding('style.position')
-  position = 'relative';
+  readonly loading = input(false, { alias: 'abpLoading' });
+  readonly targetElementInput = input<HTMLElement | undefined>(undefined, { alias: 'abpLoadingTargetElement' });
+  readonly delay = input(0, { alias: 'abpLoadingDelay' });
 
-  @Input('abpLoading')
-  get loading(): boolean {
-    return this._loading;
+  targetElement: HTMLElement | undefined;
+
+  componentRef: ComponentRef<LoadingComponent> | null = null;
+  rootNode: HTMLDivElement | null = null;
+  timerSubscription: Subscription | null = null;
+
+  constructor() {
+    effect(() => {
+      const newValue = this.loading();
+      this.handleLoadingChange(newValue);
+    });
   }
 
-  set loading(newValue: boolean) {
+  private handleLoadingChange(newValue: boolean) {
     setTimeout(() => {
-      if (!newValue && this.timerSubscription) {
-        this.timerSubscription.unsubscribe();
-        this.timerSubscription = null;
-        this._loading = newValue;
-
-        if (this.rootNode) {
-          this.renderer.removeChild(this.rootNode.parentElement, this.rootNode);
-          this.rootNode = null;
-        }
+      if (!newValue) {
+        this.clearLoading();
         return;
       }
 
-      this.timerSubscription = timer(this.delay)
+      if (this.timerSubscription) {
+        this.timerSubscription.unsubscribe();
+      }
+
+      this.timerSubscription = timer(this.delay())
         .pipe(take(1))
         .subscribe(() => {
-          if (!this.componentRef) {
-            this.componentRef = this.cdRes
-              .resolveComponentFactory(LoadingComponent)
-              .create(this.injector);
+          if (!this.loading()) {
+            return;
           }
 
-          if (newValue && !this.rootNode) {
+          if (!this.componentRef) {
+            this.componentRef = this.viewContainerRef.createComponent(LoadingComponent, {
+              injector: this.injector
+            });
+          }
+
+          if (!this.rootNode) {
             this.rootNode = (this.componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0];
             this.targetElement?.appendChild(this.rootNode as HTMLDivElement);
-          } else if (this.rootNode) {
-            this.renderer.removeChild(this.rootNode.parentElement, this.rootNode);
-            this.rootNode = null;
           }
 
-          this._loading = newValue;
           this.timerSubscription = null;
         });
     }, 0);
   }
 
-  @Input('abpLoadingTargetElement')
-  targetElement: HTMLElement | undefined;
+  private clearLoading() {
+    if (this.timerSubscription) {
+      this.timerSubscription.unsubscribe();
+      this.timerSubscription = null;
+    }
 
-  @Input('abpLoadingDelay')
-  delay = 0;
-
-  componentRef!: ComponentRef<LoadingComponent>;
-  rootNode: HTMLDivElement | null = null;
-  timerSubscription: Subscription | null = null;
-
-  constructor(
-    private elRef: ElementRef<HTMLElement>,
-    private vcRef: ViewContainerRef,
-    private cdRes: ComponentFactoryResolver,
-    private injector: Injector,
-    private renderer: Renderer2,
-  ) {}
+    if (this.rootNode?.parentElement) {
+      this.renderer.removeChild(this.rootNode.parentElement, this.rootNode);
+      this.rootNode = null;
+    }
+  }
 
   ngOnInit() {
+    this.targetElement = this.targetElementInput();
     if (!this.targetElement) {
       const { offsetHeight, offsetWidth } = this.elRef.nativeElement;
-      if (!offsetHeight && !offsetWidth && this.elRef.nativeElement.children.length) {
+      if (!offsetHeight && !offsetWidth && this.elRef.nativeElement.children?.length) {
         this.targetElement = this.elRef.nativeElement.children[0] as HTMLElement;
       } else {
         this.targetElement = this.elRef.nativeElement;
@@ -95,8 +104,6 @@ export class LoadingDirective implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.timerSubscription) {
-      this.timerSubscription.unsubscribe();
-    }
+    this.clearLoading();
   }
 }

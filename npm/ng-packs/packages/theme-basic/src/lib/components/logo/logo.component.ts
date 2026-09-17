@@ -1,27 +1,34 @@
-import { ApplicationInfo, EnvironmentService } from '@abp/ng.core';
-import { Component } from '@angular/core';
+import { EnvironmentService } from '@abp/ng.core';
+import { RouterLink } from '@angular/router';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { LOGO_APP_NAME_TOKEN, LOGO_URL_TOKEN } from '@abp/ng.theme.shared';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-logo',
   template: `
     <a class="navbar-brand" routerLink="/">
-      @if (appInfo.logoUrl) {
-        <img
-          [src]="appInfo.logoUrl"
-          [alt]="appInfo.name"
-          width="100%"
-          height="auto"
-        />
+      @if (logoUrl) {
+        <img [src]="logoUrl" [alt]="appName" width="100%" height="auto" />
       } @else {
-        {{ appInfo.name }}
+        {{ appName }}
       }
     </a>
   `,
+  standalone: true,
+  imports: [RouterLink],
 })
 export class LogoComponent {
-  get appInfo(): ApplicationInfo {
-    return this.environment.getEnvironment().application;
+  private environment = inject(EnvironmentService);
+
+  private readonly providedLogoUrl = inject(LOGO_URL_TOKEN, { optional: true });
+  private readonly providedAppName = inject(LOGO_APP_NAME_TOKEN, { optional: true });
+
+  get logoUrl(): string {
+    return this.providedLogoUrl ?? this.environment.getEnvironment().application?.logoUrl;
   }
 
-  constructor(private environment: EnvironmentService) {}
+  get appName(): string {
+    return this.providedAppName ?? this.environment.getEnvironment().application?.name;
+  }
 }

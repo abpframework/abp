@@ -3,20 +3,22 @@
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * found in the LICENSE file at https://angular.dev/license
  */
 
 import { tags } from '@angular-devkit/core';
 import * as ts from 'typescript';
 import { Change, InsertChange, NoopChange } from './change';
+import { getEOL } from './eol';
 
 /**
  * Add Import `import { symbolName } from fileName` if the import doesn't exit
  * already. Assumes fileToEdit can be resolved and accessed.
- * @param fileToEdit (file we want to add import to)
- * @param symbolName (item to import)
- * @param fileName (path to the file)
- * @param isDefault (if true, import follows style for importing default exports)
+ * @param fileToEdit File we want to add import to.
+ * @param symbolName Item to import.
+ * @param fileName Path to the file.
+ * @param isDefault If true, import follows style for importing default exports.
+ * @param alias Alias that the symbol should be inserted under.
  * @return Change
  */
 export function insertImport(
@@ -25,46 +27,40 @@ export function insertImport(
   symbolName: string,
   fileName: string,
   isDefault = false,
+  alias?: string,
 ): Change {
   const rootNode = source;
-  const allImports = findNodes(rootNode, ts.SyntaxKind.ImportDeclaration);
+  const allImports = findNodes(rootNode, ts.isImportDeclaration);
+  const importExpression = alias ? `${symbolName} as ${alias}` : symbolName;
 
   // get nodes that map to import statements from the file fileName
   const relevantImports = allImports.filter(node => {
-    // StringLiteral of the ImportDeclaration is the import file (fileName in this case).
-    const importFiles = node
-      .getChildren()
-      .filter(ts.isStringLiteral)
-      .map(n => n.text);
-
-    return importFiles.filter(file => file === fileName).length === 1;
+    return ts.isStringLiteralLike(node.moduleSpecifier) && node.moduleSpecifier.text === fileName;
   });
 
   if (relevantImports.length > 0) {
-    let importsAsterisk = false;
-    // imports from import file
-    const imports: ts.Node[] = [];
-    relevantImports.forEach(n => {
-      Array.prototype.push.apply(imports, findNodes(n, ts.SyntaxKind.Identifier));
-      if (findNodes(n, ts.SyntaxKind.AsteriskToken).length > 0) {
-        importsAsterisk = true;
-      }
+    const hasNamespaceImport = relevantImports.some(node => {
+      return node.importClause?.namedBindings?.kind === ts.SyntaxKind.NamespaceImport;
     });
 
     // if imports * from fileName, don't add symbolName
-    if (importsAsterisk) {
+    if (hasNamespaceImport) {
       return new NoopChange();
     }
 
-    const importTextNodes = imports.filter(n => (n as ts.Identifier).text === symbolName);
+    const imports = relevantImports.flatMap(node => {
+      return node.importClause?.namedBindings && ts.isNamedImports(node.importClause.namedBindings)
+        ? node.importClause.namedBindings.elements
+        : [];
+    });
 
     // insert import if it's not there
-    if (importTextNodes.length === 0) {
+    if (!imports.some(node => (node.propertyName || node.name).text === symbolName)) {
       const fallbackPos =
         findNodes(relevantImports[0], ts.SyntaxKind.CloseBraceToken)[0].getStart() ||
         findNodes(relevantImports[0], ts.SyntaxKind.FromKeyword)[0].getStart();
 
-      return insertAfterLastOccurrence(imports, `, ${symbolName}`, fileToEdit, fallbackPos);
+      return insertAfterLastOccurrence(imports, `, ${importExpression}`, fileToEdit, fallbackPos);
     }
 
     return new NoopChange();
@@ -78,12 +74,13 @@ export function insertImport(
   }
   const open = isDefault ? '' : '{ ';
   const close = isDefault ? '' : ' }';
+  const eol = getEOL(rootNode.getText());
   // if there are no imports or 'use strict' statement, insert import at beginning of file
   const insertAtBeginning = allImports.length === 0 && useStrict.length === 0;
-  const separator = insertAtBeginning ? '' : ';\n';
+  const separator = insertAtBeginning ? '' : `;${eol}`;
   const toInsert =
-    `${separator}import ${open}${symbolName}${close}` +
-    ` from '${fileName}'${insertAtBeginning ? ';\n' : ''}`;
+    `${separator}import ${open}${importExpression}${close}` +
+    ` from '${fileName}'${insertAtBeginning ? `;${eol}` : ''}`;
 
   return insertAfterLastOccurrence(
     allImports,
@@ -222,7 +219,7 @@ function nodesByPosition(first: ts.Node, second: ts.Node): number {
  * @throw Error if toInsert is first occurence but fall back is not set
  */
 export function insertAfterLastOccurrence(
-  nodes: ts.Node[],
+  nodes: ts.Node[] | ts.NodeArray<ts.Node>,
   toInsert: string,
   file: string,
   fallbackPos: number,
@@ -345,7 +342,7 @@ export function getDecoratorMetadata(
 export function getMetadataField(
   node: ts.ObjectLiteralExpression,
   metadataField: string,
-): ts.ObjectLiteralElement[] {
+): ts.PropertyAssignment[] {
   return (
     node.properties
       .filter(ts.isPropertyAssignment)
@@ -415,7 +412,7 @@ export function addSymbolToNgModuleMetadata(
     return [];
   }
 
-  let expresssion: ts.Expression | ts.ArrayLiteralExpression;
+  let expression: ts.Expression | ts.ArrayLiteralExpression;
   const assignmentInit = assignment.initializer;
   const elements = assignmentInit.elements;
 
@@ -425,20 +422,20 @@ export function addSymbolToNgModuleMetadata(
       return [];
     }
 
-    expresssion = elements[elements.length - 1];
+    expression = elements[elements.length - 1];
   } else {
-    expresssion = assignmentInit;
+    expression = assignmentInit;
   }
 
   let toInsert: string;
-  let position = expresssion.getEnd();
-  if (ts.isArrayLiteralExpression(expresssion)) {
+  let position = expression.getEnd();
+  if (ts.isArrayLiteralExpression(expression)) {
     // We found the field but it's empty. Insert it just before the `]`.
     position--;
     toInsert = `\n${tags.indentBy(4)`${symbolName}`}\n  `;
   } else {
     // Get the indentation of the last element, if any.
-    const text = expresssion.getFullText(source);
+    const text = expression.getFullText(source);
     const matches = text.match(/^(\r?\n)(\s*)/);
     if (matches) {
       toInsert = `,${matches[1]}${tags.indentBy(matches[2].length)`${symbolName}`}`;
@@ -446,6 +443,7 @@ export function addSymbolToNgModuleMetadata(
       toInsert = `, ${symbolName}`;
     }
   }
+
   if (importPath !== null) {
     return [
       new InsertChange(ngModulePath, position, toInsert),
@@ -562,13 +560,9 @@ export function getRouterModuleDeclaration(source: ts.SourceFile): ts.Expression
   }
 
   const matchingProperties = getMetadataField(node, 'imports');
-  if (!matchingProperties) {
-    return;
-  }
+  const assignment = matchingProperties[0];
 
-  const assignment = matchingProperties[0] as ts.PropertyAssignment;
-
-  if (assignment.initializer.kind !== ts.SyntaxKind.ArrayLiteralExpression) {
+  if (!assignment || assignment.initializer.kind !== ts.SyntaxKind.ArrayLiteralExpression) {
     return;
   }
 
@@ -667,4 +661,53 @@ export function addRouteDeclarationToModule(
   }
 
   return new InsertChange(fileToAdd, insertPos, route);
+}
+
+/** Asserts if the specified node is a named declaration (e.g. class, interface). */
+function isNamedNode(
+  node: ts.Node & { name?: ts.Node },
+): node is ts.Node & { name: ts.Identifier } {
+  return !!node.name && ts.isIdentifier(node.name);
+}
+
+/**
+ * Determines if a SourceFile has a top-level declaration whose name matches a specific symbol.
+ * Can be used to avoid conflicts when inserting new imports into a file.
+ * @param sourceFile File in which to search.
+ * @param symbolName Name of the symbol to search for.
+ * @param skipModule Path of the module that the symbol may have been imported from. Used to
+ * avoid false positives where the same symbol we're looking for may have been imported.
+ */
+export function hasTopLevelIdentifier(
+  sourceFile: ts.SourceFile,
+  symbolName: string,
+  skipModule: string | null = null,
+): boolean {
+  for (const node of sourceFile.statements) {
+    if (isNamedNode(node) && node.name.text === symbolName) {
+      return true;
+    }
+
+    if (
+      ts.isVariableStatement(node) &&
+      node.declarationList.declarations.some(decl => {
+        return isNamedNode(decl) && decl.name.text === symbolName;
+      })
+    ) {
+      return true;
+    }
+
+    if (
+      ts.isImportDeclaration(node) &&
+      ts.isStringLiteralLike(node.moduleSpecifier) &&
+      node.moduleSpecifier.text !== skipModule &&
+      node.importClause?.namedBindings &&
+      ts.isNamedImports(node.importClause.namedBindings) &&
+      node.importClause.namedBindings.elements.some(el => el.name.text === symbolName)
+    ) {
+      return true;
+    }
+  }
+
+  return false;
 }

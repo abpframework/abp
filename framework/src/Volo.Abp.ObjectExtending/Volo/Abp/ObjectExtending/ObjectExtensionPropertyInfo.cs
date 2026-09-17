@@ -90,16 +90,34 @@ public class ObjectExtensionPropertyInfo : IHasNameWithLocalizableDisplayName, I
     {
         public int Order { get; set; }
 
+        public ExtensionPropertyUICreateModal CreateModal { get; set; }
+
         public ExtensionPropertyUIEditModal EditModal { get; set; }
 
         public ExtensionPropertyUI()
         {
+            CreateModal = new ExtensionPropertyUICreateModal();
             EditModal = new ExtensionPropertyUIEditModal();
         }
     }
 
+    public class ExtensionPropertyUICreateModal
+    {
+        /// <summary>
+        /// Default: true.
+        /// </summary>
+        public bool IsVisible { get; set; } = true;
+
+        public bool IsReadOnly { get; set; }
+    }
+
     public class ExtensionPropertyUIEditModal
     {
+        /// <summary>
+        /// Default: true.
+        /// </summary>
+        public bool IsVisible { get; set; } = true;
+
         public bool IsReadOnly { get; set; }
     }
 }

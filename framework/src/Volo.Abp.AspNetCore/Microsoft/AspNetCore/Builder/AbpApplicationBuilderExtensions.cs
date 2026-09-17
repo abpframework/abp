@@ -1,20 +1,25 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.StaticAssets;
+using Microsoft.AspNetCore.Timing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
+using Volo.Abp.AspNetCore;
 using Volo.Abp.AspNetCore.Auditing;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.AspNetCore.Security;
 using Volo.Abp.AspNetCore.Security.Claims;
+using Volo.Abp.AspNetCore.StaticFiles;
 using Volo.Abp.AspNetCore.Tracing;
 using Volo.Abp.AspNetCore.Uow;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
@@ -33,6 +38,18 @@ public static class AbpApplicationBuilderExtensions
         Check.NotNull(app, nameof(app));
 
         app.ApplicationServices.GetRequiredService<ObjectAccessor<IApplicationBuilder>>().Value = app;
+        if (app is WebApplication webApplication)
+        {
+            app.ApplicationServices.GetRequiredService<ObjectAccessor<WebApplication>>().Value = webApplication;
+        }
+        if (app is IHost host)
+        {
+            app.ApplicationServices.GetRequiredService<ObjectAccessor<IHost>>().Value = host;
+        }
+        if (app is IEndpointRouteBuilder endpointRouteBuilder)
+        {
+            app.ApplicationServices.GetRequiredService<ObjectAccessor<IEndpointRouteBuilder>>().Value = endpointRouteBuilder;
+        }
         var application = app.ApplicationServices.GetRequiredService<IAbpApplicationWithExternalServiceProvider>();
         var applicationLifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
 
@@ -54,6 +71,18 @@ public static class AbpApplicationBuilderExtensions
         Check.NotNull(app, nameof(app));
 
         app.ApplicationServices.GetRequiredService<ObjectAccessor<IApplicationBuilder>>().Value = app;
+        if (app is WebApplication webApplication)
+        {
+            app.ApplicationServices.GetRequiredService<ObjectAccessor<WebApplication>>().Value = webApplication;
+        }
+        if (app is IHost host)
+        {
+            app.ApplicationServices.GetRequiredService<ObjectAccessor<IHost>>().Value = host;
+        }
+        if (app is IEndpointRouteBuilder endpointRouteBuilder)
+        {
+            app.ApplicationServices.GetRequiredService<ObjectAccessor<IEndpointRouteBuilder>>().Value = endpointRouteBuilder;
+        }
         var application = app.ApplicationServices.GetRequiredService<IAbpApplicationWithExternalServiceProvider>();
         var applicationLifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
 
@@ -110,7 +139,7 @@ public static class AbpApplicationBuilderExtensions
         return app.UseMiddleware<AbpExceptionHandlingMiddleware>();
     }
 
-    [Obsolete("Replace with AbpClaimsTransformation")]
+    [Obsolete("Use the TransformAbpClaims extension method from IServiceCollection instead.")]
     public static IApplicationBuilder UseAbpClaimsMap(this IApplicationBuilder app)
     {
         return app.UseMiddleware<AbpClaimsMapMiddleware>();
@@ -124,6 +153,38 @@ public static class AbpApplicationBuilderExtensions
     public static IApplicationBuilder UseDynamicClaims(this IApplicationBuilder app)
     {
         return app.UseMiddleware<AbpDynamicClaimsMiddleware>();
+    }
+
+    /// <summary>
+    /// Configures the application to serve static files that match the specified filename patterns with the WebRootFileProvider of the application.
+    /// </summary>
+    /// <param name="app">The <see cref="IApplicationBuilder"/> used to configure the application pipeline.</param>
+    /// <param name="includeFileNamePatterns">The file name patterns to include when serving static files (e.g., "appsettings*.json").
+    /// Supports glob patterns. See <see href="https://learn.microsoft.com/en-us/dotnet/core/extensions/file-globbing">Glob patterns documentation</see>.
+    /// </param>
+    /// <returns>The <see cref="IApplicationBuilder"/> instance.</returns>
+    public static IApplicationBuilder UseStaticFilesForPatterns(this IApplicationBuilder app, params string[] includeFileNamePatterns)
+    {
+        return UseStaticFilesForPatterns(app, includeFileNamePatterns, app.ApplicationServices.GetRequiredService<IWebHostEnvironment>().WebRootFileProvider);
+    }
+
+    /// <summary>
+    /// Configures the application to serve static files that match the specified filename patterns with the specified file provider.
+    /// </summary>
+    /// <param name="app">The <see cref="IApplicationBuilder"/> used to configure the application pipeline.</param>
+    /// <param name="includeFileNamePatterns">The file name patterns to include when serving static files (e.g., "appsettings*.json").
+    /// Supports glob patterns. See <see href="https://learn.microsoft.com/en-us/dotnet/core/extensions/file-globbing">Glob patterns documentation</see>.
+    /// </param>
+    /// <param name="fileProvider">The <see cref="IFileProvider"/> </param>
+    /// <returns>The <see cref="IApplicationBuilder"/> instance.</returns>
+    public static IApplicationBuilder UseStaticFilesForPatterns(this IApplicationBuilder app, string[] includeFileNamePatterns, IFileProvider fileProvider)
+    {
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new AbpStaticFileProvider(includeFileNamePatterns, fileProvider)
+        });
+
+        return app;
     }
 
     /// <summary>
@@ -144,13 +205,13 @@ public static class AbpApplicationBuilderExtensions
             throw new AbpException("The app(IApplicationBuilder) is not an IEndpointRouteBuilder.");
         }
 
-        app.UseVirtualStaticFiles();
-
         var options = app.ApplicationServices.GetRequiredService<IOptions<AbpAspNetCoreContentOptions>>().Value;
         foreach (var folder in options.AllowedExtraWebContentFolders)
         {
             app.UseVirtualStaticFiles(folder);
         }
+
+        app.UseVirtualStaticFiles();
 
         return endpoints.MapStaticAssets(staticAssetsManifestPath);
     }
@@ -195,5 +256,15 @@ public static class AbpApplicationBuilderExtensions
         });
 
         return app;
+    }
+
+    /// <summary>
+    /// Use this middleware after <see cref="UseMultiTenancy" /> middleware.
+    /// </summary>
+    /// <param name="app"></param>
+    /// <returns></returns>
+    public static IApplicationBuilder UseAbpTimeZone(this IApplicationBuilder app)
+    {
+        return app.UseMiddleware<AbpTimeZoneMiddleware>();
     }
 }

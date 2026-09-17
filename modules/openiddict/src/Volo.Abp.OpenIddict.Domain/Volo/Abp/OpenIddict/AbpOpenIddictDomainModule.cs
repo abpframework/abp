@@ -3,10 +3,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
+using OpenIddict.Core;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Caching;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.Domain;
+using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Guids;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
@@ -17,6 +19,7 @@ using Volo.Abp.OpenIddict.Authorizations;
 using Volo.Abp.OpenIddict.Scopes;
 using Volo.Abp.OpenIddict.Tokens;
 using Volo.Abp.Threading;
+using Volo.Abp.Users;
 
 namespace Volo.Abp.OpenIddict;
 
@@ -35,6 +38,15 @@ public class AbpOpenIddictDomainModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         AddOpenIddictCore(context.Services);
+
+        context.Services.AddMapperlyObjectMapper<AbpOpenIddictDomainModule>();
+
+        Configure<AbpDistributedEntityEventOptions>(options =>
+        {
+            options.EtoMappings.Add<OpenIddictApplication, OpenIddictApplicationEto>(typeof(AbpOpenIddictDomainModule));
+
+            options.AutoEventSelectors.Add<OpenIddictApplication>();
+        });
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -65,15 +77,15 @@ public class AbpOpenIddictDomainModule : AbpModule
                     .SetDefaultTokenEntity<OpenIddictTokenModel>();
 
                 builder
-                    .AddApplicationStore<AbpOpenIddictApplicationStore>()
-                    .AddAuthorizationStore<AbpOpenIddictAuthorizationStore>()
-                    .AddScopeStore<AbpOpenIddictScopeStore>()
-                    .AddTokenStore<AbpOpenIddictTokenStore>();
+                    .ReplaceApplicationStore<OpenIddictApplicationModel, AbpOpenIddictApplicationStore>()
+                    .ReplaceAuthorizationStore<OpenIddictAuthorizationModel, AbpOpenIddictAuthorizationStore>()
+                    .ReplaceScopeStore<OpenIddictScopeModel, AbpOpenIddictScopeStore>()
+                    .ReplaceTokenStore<OpenIddictTokenModel, AbpOpenIddictTokenStore>();
 
-                builder.ReplaceApplicationManager(typeof(AbpApplicationManager));
-                builder.ReplaceAuthorizationManager(typeof(AbpAuthorizationManager));
-                builder.ReplaceScopeManager(typeof(AbpScopeManager));
-                builder.ReplaceTokenManager(typeof(AbpTokenManager));
+                builder.ReplaceApplicationManager<OpenIddictApplicationModel, AbpApplicationManager>();
+                builder.ReplaceAuthorizationManager<OpenIddictAuthorizationModel, AbpAuthorizationManager>();
+                builder.ReplaceScopeManager<OpenIddictScopeModel, AbpScopeManager>();
+                builder.ReplaceTokenManager<OpenIddictTokenModel, AbpTokenManager>();
 
                 builder.Services.TryAddScoped(provider => (IAbpApplicationManager)provider.GetRequiredService<IOpenIddictApplicationManager>());
 

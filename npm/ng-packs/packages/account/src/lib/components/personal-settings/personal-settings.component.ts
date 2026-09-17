@@ -1,13 +1,27 @@
 import { ProfileDto, ProfileService } from '@abp/ng.account.core/proxy';
-import { Confirmation, ConfirmationService, ToasterService } from '@abp/ng.theme.shared';
-import { Component, inject, Injector, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import {
+  ButtonComponent,
+  Confirmation,
+  ConfirmationService,
+  ToasterService,
+} from '@abp/ng.theme.shared';
+import {
+  Component,
+  inject,
+  Injector,
+  OnInit,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { finalize, filter } from 'rxjs/operators';
 import { Account } from '../../models/account';
 import { ManageProfileStateService } from '../../services/manage-profile.state.service';
-import { AuthService, ConfigStateService } from '@abp/ng.core';
+import { AuthService, ConfigStateService, LocalizationPipe } from '@abp/ng.core';
 import { RE_LOGIN_CONFIRMATION_TOKEN } from '../../tokens';
 import {
+  ExtensibleFormComponent,
   EXTENSIONS_IDENTIFIER,
   FormPropData,
   generateFormFromProps,
@@ -15,6 +29,7 @@ import {
 import { eAccountComponents } from '../../enums';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-personal-settings-form',
   templateUrl: './personal-settings.component.html',
   exportAs: 'abpPersonalSettingsForm',
@@ -23,6 +38,13 @@ import { eAccountComponents } from '../../enums';
       provide: EXTENSIONS_IDENTIFIER,
       useValue: eAccountComponents.PersonalSettings,
     },
+  ],
+  imports: [
+    ReactiveFormsModule,
+    ExtensibleFormComponent,
+    NgxValidateCoreModule,
+    ButtonComponent,
+    LocalizationPipe,
   ],
 })
 export class PersonalSettingsComponent
@@ -47,7 +69,7 @@ export class PersonalSettingsComponent
 
   form!: UntypedFormGroup;
 
-  inProgress?: boolean;
+  readonly inProgress = signal(false);
 
   buildForm() {
     this.selected = this.manageProfileState.getProfile();
@@ -66,14 +88,14 @@ export class PersonalSettingsComponent
     if (this.form.invalid) return;
     const isLogOutConfirmMessageVisible = this.isLogoutConfirmMessageActive();
     const isRefreshTokenExists = this.authService.getRefreshToken();
-    this.inProgress = true;
+    this.inProgress.set(true);
     this.profileService
       .update(this.form.value)
-      .pipe(finalize(() => (this.inProgress = false)))
+      .pipe(finalize(() => this.inProgress.set(false)))
       .subscribe(profile => {
         this.manageProfileState.setProfile(profile);
         this.configState.refreshAppState();
-        this.toasterService.success('AbpAccount::PersonalSettingsSaved', 'Success', { life: 5000 });
+        this.toasterService.success('AbpAccount::PersonalSettingsSaved', '', { life: 5000 });
 
         if (isRefreshTokenExists) {
           return this.authService.refreshToken();

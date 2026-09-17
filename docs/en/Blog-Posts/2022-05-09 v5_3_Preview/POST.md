@@ -255,4 +255,4 @@ We've created an official ABP Discord server so the ABP Community can interact w
 
 Thanks to the ABP Community, **700+** people joined our Discord Server so far and it grows every day.
 
-You can join our Discord Server from [here](https://discord.gg/abp), if you haven't yet.
+You can join our Discord Server from [here](https://abp.io/join-discord), if you haven't yet.

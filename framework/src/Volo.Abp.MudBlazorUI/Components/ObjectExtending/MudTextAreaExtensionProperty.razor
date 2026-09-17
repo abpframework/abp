@@ -1,0 +1,16 @@
+@typeparam TEntity
+@typeparam TResourceType
+@using Volo.Abp.Localization
+@inherits MudExtensionPropertyComponentBase<TEntity, TResourceType>
+
+@if (PropertyInfo != null && Entity != null)
+{
+    <MudTextField T="string"
+                  Label="@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
+                  @bind-Value="@Value"
+                  Lines="3"
+                  Sizing="InputSizing.Auto"
+                  Disabled="IsReadonlyField"
+                  Validation="@((Func<string?, string?>)Validate)"
+                  Immediate="true" />
+}

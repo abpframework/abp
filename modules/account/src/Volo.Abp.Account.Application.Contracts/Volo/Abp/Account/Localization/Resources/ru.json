@@ -68,6 +68,8 @@
     "AccessDenied": "В доступе отказано!",
     "AccessDeniedMessage": "У вас нет доступа к этому ресурсу.",
     "OrRegisterWith": "Или зарегистрируйтесь с помощью:",
-    "RegisterUsingYourProviderAccount": "Зарегистрируйтесь, используя свой {0} аккаунт"
+    "RegisterUsingYourProviderAccount": "Зарегистрируйтесь, используя свой {0} аккаунт",
+    "RequireMigrateSeedTitle": "Не удалось найти пользователя-администратора",
+    "RequireMigrateSeedMessage": "Пожалуйста, убедитесь, что выполнено начальное заполнение базы данных. Смотрите <a target=\"_blank\" href=\"https://abp.io/kb/0003\">документацию</a> для возможных решений."
   }
 }

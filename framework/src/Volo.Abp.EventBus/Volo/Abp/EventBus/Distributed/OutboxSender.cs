@@ -22,7 +22,7 @@ public class OutboxSender : IOutboxSender, ITransientDependency
     protected IEventOutbox Outbox { get; private set; } = default!;
     protected OutboxConfig OutboxConfig { get; private set; } = default!;
     protected AbpEventBusBoxesOptions EventBusBoxesOptions { get; }
-    protected string DistributedLockName { get; private set; } = default!;
+    protected string DistributedLockName { get; set; } = default!;
     public ILogger<OutboxSender> Logger { get; set; }
 
     protected CancellationTokenSource StoppingTokenSource { get; }
@@ -77,14 +77,14 @@ public class OutboxSender : IOutboxSender, ITransientDependency
             {
                 while (true)
                 {
-                    var waitingEvents = await Outbox.GetWaitingEventsAsync(EventBusBoxesOptions.OutboxWaitingEventMaxCount, StoppingToken);
+                    var waitingEvents = await GetWaitingEventsAsync();
                     if (waitingEvents.Count <= 0)
                     {
                         break;
                     }
 
                     Logger.LogInformation($"Found {waitingEvents.Count} events in the outbox.");
-                    
+
                     if (EventBusBoxesOptions.BatchPublishOutboxEvents)
                     {
                         await PublishOutgoingMessagesInBatchAsync(waitingEvents);
@@ -107,6 +107,11 @@ public class OutboxSender : IOutboxSender, ITransientDependency
         }
     }
 
+    protected virtual async Task<List<OutgoingEventInfo>> GetWaitingEventsAsync()
+    {
+        return await Outbox.GetWaitingEventsAsync(EventBusBoxesOptions.OutboxWaitingEventMaxCount, EventBusBoxesOptions.OutboxProcessorFilter, StoppingToken);
+    }
+
     protected virtual async Task PublishOutgoingMessagesAsync(List<OutgoingEventInfo> waitingEvents)
     {
         foreach (var waitingEvent in waitingEvents)
@@ -119,7 +124,7 @@ public class OutboxSender : IOutboxSender, ITransientDependency
                 );
 
             await Outbox.DeleteAsync(waitingEvent.Id);
-            
+
             Logger.LogInformation($"Sent the event to the message broker with id = {waitingEvent.Id:N}");
         }
     }
@@ -129,9 +134,9 @@ public class OutboxSender : IOutboxSender, ITransientDependency
         await DistributedEventBus
             .AsSupportsEventBoxes()
             .PublishManyFromOutboxAsync(waitingEvents, OutboxConfig);
-                    
+
         await Outbox.DeleteManyAsync(waitingEvents.Select(x => x.Id).ToArray());
-        
+
         Logger.LogInformation($"Sent {waitingEvents.Count} events to message broker");
     }
 }

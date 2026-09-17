@@ -1,8 +1,9 @@
 ﻿@page
+@using Localization
 @using Localization.Resources.AbpUi
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
-@using Volo.Abp.VirtualFileExplorer.Web.Localization
+@using Volo.Abp.VirtualFileExplorer.Localization
 @using Volo.Abp.VirtualFileExplorer.Web.Navigation
 @using Volo.Abp.VirtualFileExplorer.Web.Pages.VirtualFileExplorer
 @model IndexModel
@@ -62,10 +63,10 @@
                                     <div class="dropdown action-button">
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <a onclick="showContent('@item.FilePath')">@L["FileContent"]</a>
+                                                <a class="dropdown-item" onclick="showContent('@item.FilePath')">@L["FileContent"]</a>
                                             </li>
                                         </ul>
-                                        <button class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        <button class="btn btn-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
                                             <i class="fa fa-cog me-1"></i>@UiLocalizer["Actions"]
                                         </button>
                                     </div>

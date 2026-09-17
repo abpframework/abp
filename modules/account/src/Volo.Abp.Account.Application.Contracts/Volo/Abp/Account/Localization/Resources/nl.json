@@ -68,6 +68,8 @@
     "AccessDenied": "Toegang geweigerd!",
     "AccessDeniedMessage": "U heeft geen toegang tot deze bron.",
     "OrRegisterWith": "Of registreer met:",
-    "RegisterUsingYourProviderAccount": "Registreer met uw {0} -account"
+    "RegisterUsingYourProviderAccount": "Registreer met uw {0} -account",
+    "RequireMigrateSeedTitle": "Kan de beheerder niet vinden",
+    "RequireMigrateSeedMessage": "Zorg ervoor dat het database seed wordt uitgevoerd. Zie <a target=\"_blank\" href=\"https://abp.io/kb/0003\">documentatie</a> voor mogelijke oplossingen."
   }
 }

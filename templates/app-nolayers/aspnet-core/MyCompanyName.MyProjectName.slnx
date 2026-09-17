@@ -1,0 +1,12 @@
+<Solution>
+  <Project Path="MyCompanyName.MyProjectName.Blazor.Server.Mongo/MyCompanyName.MyProjectName.Blazor.Server.Mongo.csproj" />
+  <Project Path="MyCompanyName.MyProjectName.Blazor.Server/MyCompanyName.MyProjectName.Blazor.Server.csproj" />
+  <Project Path="MyCompanyName.MyProjectName.Blazor.WebAssembly/Client/MyCompanyName.MyProjectName.Blazor.WebAssembly.Client.csproj" />
+  <Project Path="MyCompanyName.MyProjectName.Blazor.WebAssembly/Server.Mongo/MyCompanyName.MyProjectName.Blazor.WebAssembly.Server.Mongo.csproj" />
+  <Project Path="MyCompanyName.MyProjectName.Blazor.WebAssembly/Server/MyCompanyName.MyProjectName.Blazor.WebAssembly.Server.csproj" />
+  <Project Path="MyCompanyName.MyProjectName.Blazor.WebAssembly/Shared/MyCompanyName.MyProjectName.Blazor.WebAssembly.Shared.csproj" />
+  <Project Path="MyCompanyName.MyProjectName.Host.Mongo/MyCompanyName.MyProjectName.Host.Mongo.csproj" />
+  <Project Path="MyCompanyName.MyProjectName.Host/MyCompanyName.MyProjectName.Host.csproj" />
+  <Project Path="MyCompanyName.MyProjectName.Mvc.Mongo/MyCompanyName.MyProjectName.Mvc.Mongo.csproj" />
+  <Project Path="MyCompanyName.MyProjectName.Mvc/MyCompanyName.MyProjectName.Mvc.csproj" />
+</Solution>

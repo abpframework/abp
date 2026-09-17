@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
+using Volo.Abp.MongoDB.Clients;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
 
@@ -24,23 +24,23 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
     protected readonly IConnectionStringResolver ConnectionStringResolver;
     protected readonly ICancellationTokenProvider CancellationTokenProvider;
     protected readonly ICurrentTenant CurrentTenant;
-    protected readonly AbpMongoDbContextOptions Options;
     protected readonly IMongoDbContextTypeProvider DbContextTypeProvider;
+    protected readonly IAbpMongoClientFactory MongoClientFactory;
 
     public UnitOfWorkMongoDbContextProvider(
         IUnitOfWorkManager unitOfWorkManager,
         IConnectionStringResolver connectionStringResolver,
         ICancellationTokenProvider cancellationTokenProvider,
         ICurrentTenant currentTenant,
-        IOptions<AbpMongoDbContextOptions> options,
-        IMongoDbContextTypeProvider dbContextTypeProvider)
+        IMongoDbContextTypeProvider dbContextTypeProvider,
+        IAbpMongoClientFactory mongoClientFactory)
     {
         UnitOfWorkManager = unitOfWorkManager;
         ConnectionStringResolver = connectionStringResolver;
         CancellationTokenProvider = cancellationTokenProvider;
         CurrentTenant = currentTenant;
         DbContextTypeProvider = dbContextTypeProvider;
-        Options = options.Value;
+        MongoClientFactory = mongoClientFactory;
 
         Logger = NullLogger<UnitOfWorkMongoDbContextProvider<TMongoDbContext>>.Instance;
     }
@@ -68,7 +68,7 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
 
         var targetDbContextType = DbContextTypeProvider.GetDbContextType(typeof(TMongoDbContext));
         var connectionString = ResolveConnectionString(targetDbContextType);
-        var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
+        var dbContextKey = GetDatabaseApiKey(targetDbContextType, connectionString);
 
         var mongoUrl = new MongoUrl(connectionString);
         var databaseName = mongoUrl.DatabaseName;
@@ -77,12 +77,11 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
             databaseName = ConnectionStringNameAttribute.GetConnStringName(targetDbContextType);
         }
 
-        //TODO: Create only single MongoDbClient per connection string in an application (extract MongoClientCache for example).
         var databaseApi = unitOfWork.GetOrAddDatabaseApi(
             dbContextKey,
             () => new MongoDbDatabaseApi(CreateDbContext(unitOfWork, mongoUrl, databaseName)));
 
-        return (TMongoDbContext)((MongoDbDatabaseApi) databaseApi).DbContext;
+        return (TMongoDbContext)((MongoDbDatabaseApi)databaseApi).DbContext;
     }
 
     public virtual async Task<TMongoDbContext> GetDbContextAsync(CancellationToken cancellationToken = default)
@@ -96,7 +95,7 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
 
         var targetDbContextType = DbContextTypeProvider.GetDbContextType(typeof(TMongoDbContext));
         var connectionString = await ResolveConnectionStringAsync(targetDbContextType);
-        var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
+        var dbContextKey = GetDatabaseApiKey(targetDbContextType, connectionString);
 
         var mongoUrl = new MongoUrl(connectionString);
         var databaseName = mongoUrl.DatabaseName;
@@ -121,14 +120,13 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
             unitOfWork.AddDatabaseApi(dbContextKey, databaseApi);
         }
 
-        return (TMongoDbContext)((MongoDbDatabaseApi) databaseApi).DbContext;
+        return (TMongoDbContext)((MongoDbDatabaseApi)databaseApi).DbContext;
     }
 
     [Obsolete("Use CreateDbContextAsync")]
-
     private TMongoDbContext CreateDbContext(IUnitOfWork unitOfWork, MongoUrl mongoUrl, string databaseName)
     {
-        var client = CreateMongoClient(mongoUrl);
+        var client = MongoClientFactory.Get(mongoUrl);
         var database = client.GetDatabase(databaseName);
 
         if (unitOfWork.Options.IsTransactional)
@@ -148,7 +146,7 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
         string databaseName,
         CancellationToken cancellationToken = default)
     {
-        var client = CreateMongoClient(mongoUrl);
+        var client = await MongoClientFactory.GetAsync(mongoUrl);
         var database = client.GetDatabase(databaseName);
 
         if (unitOfWork.Options.IsTransactional)
@@ -175,7 +173,7 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
         MongoClient client,
         IMongoDatabase database)
     {
-        var transactionApiKey = $"MongoDb_{url}";
+        var transactionApiKey = GetTransactionApiKey(url);
         var activeTransaction = unitOfWork.FindTransactionApi(transactionApiKey) as MongoDbTransactionApi;
         var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TMongoDbContext>();
 
@@ -225,7 +223,7 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
         IMongoDatabase database,
         CancellationToken cancellationToken = default)
     {
-        var transactionApiKey = $"MongoDb_{url}";
+        var transactionApiKey = GetTransactionApiKey(url);
         var activeTransaction = unitOfWork.FindTransactionApi(transactionApiKey) as MongoDbTransactionApi;
         var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TMongoDbContext>();
 
@@ -268,6 +266,16 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
         return dbContext;
     }
 
+    protected virtual string GetDatabaseApiKey(Type dbContextType, string? connectionString)
+    {
+        return $"{dbContextType.FullName}_{(connectionString ?? string.Empty).ToSha256()}";
+    }
+
+    protected virtual string GetTransactionApiKey(MongoUrl url)
+    {
+        return $"MongoDb_{url.ToString().ToSha256()}";
+    }
+
     protected virtual async Task<string> ResolveConnectionStringAsync(Type dbContextType)
     {
         // Multi-tenancy unaware contexts should always use the host connection string
@@ -295,14 +303,6 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
         }
 
         return ConnectionStringResolver.Resolve(dbContextType);
-    }
-
-    protected virtual MongoClient CreateMongoClient(MongoUrl mongoUrl)
-    {
-        var mongoClientSettings = MongoClientSettings.FromUrl(mongoUrl);
-        Options.MongoClientSettingsConfigurer?.Invoke(mongoClientSettings);
-
-        return new MongoClient(mongoClientSettings);
     }
 
     protected virtual CancellationToken GetCancellationToken(CancellationToken preferredValue = default)

@@ -85,10 +85,10 @@ public abstract class AbpComponentBase : OwningComponentBase
 
             if (ObjectMapperContext == null)
             {
-                return LazyGetRequiredService(ref _objectMapper)!;
+                return LazyGetNonScopedRequiredService(ref _objectMapper)!;
             }
 
-            return LazyGetRequiredService(
+            return LazyGetNonScopedRequiredService(
                 typeof(IObjectMapper<>).MakeGenericType(ObjectMapperContext),
                 ref _objectMapper
             )!;
@@ -172,8 +172,7 @@ public abstract class AbpComponentBase : OwningComponentBase
         {
             return;
         }
-       
-        Logger.LogException(exception);
+
         await InvokeAsync(async () =>
         {
             await UserExceptionInformer.InformAsync(new UserExceptionInformerContext(exception));

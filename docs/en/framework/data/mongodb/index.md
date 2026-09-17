@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate MongoDB with ABP applications, including installation and configuration steps for seamless database management."
+}
+```
+
 # MongoDB Integration
 
 This document explains how to integrate MongoDB as a database provider to ABP based applications and how to configure it.
@@ -309,18 +316,66 @@ public class BookService
 
 ### Transactions
 
-MongoDB supports multi-document transactions starting from the version 4.0 and the ABP supports it. However, the [startup template](../../../solution-templates) **disables** transactions by default. If your MongoDB **server** supports transactions, you can enable the it in the *YourProjectMongoDbModule* class:
+MongoDB supports multi-document transactions starting from the version 4.0 and the ABP supports it. However, the [startup template](../../../solution-templates) **disables** transactions by default. If your MongoDB **server** supports transactions, you can enable them in the *YourProjectMongoDbModule* class:
+
+Remove the following code to enable transactions:
+
+```diff
+- context.Services.AddAlwaysDisableUnitOfWorkTransaction();
+- Configure<AbpUnitOfWorkDefaultOptions>(options =>
+- {
+- 	options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled;
+- });
+```
+
+#### Setting up a Transaction-Enabled MongoDB Replica Set in Docker
+
+Use the following `docker-compose.yml` to create a local MongoDB Replica Set that supports transactions. The connection string will be `mongodb://localhost:27017/YourProjectName?replicaSet=rs0`.
+
+```yaml
+version: "3.8"
+
+services:
+  mongo:
+    image: mongo:8.0
+    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017"]
+    ports:
+      - 27017:27017
+    healthcheck:
+      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'127.0.0.1:27017'}]}) }" | mongosh --port 27017 --quiet
+      interval: 5s
+      timeout: 30s
+      start_period: 0s
+      start_interval: 1s
+      retries: 30
+```
+
+### Advanced Topics
+
+#### MongoDB DateTime Serialization
+
+ABP applies a clock-aware MongoDB serializer to writable `DateTime` and nullable `DateTime` properties in ABP entity mappings by default. It uses the configured [clock](../../infrastructure/timing.md) kind when serializing these properties. Disable this handling when the application configures its own serialization for the mapped properties:
 
 ```csharp
-Configure<AbpUnitOfWorkDefaultOptions>(options =>
+Configure<AbpMongoDbOptions>(options =>
 {
-    options.TransactionBehavior = UnitOfWorkTransactionBehavior.Auto;
+    options.UseAbpClockHandleDateTime = false;
 });
 ```
 
-> Or you can delete this code since this is already the default behavior.
+#### Configuring MongoClientSettings
 
-### Advanced Topics
+`AbpMongoDbContextOptions.MongoClientSettingsConfigurer` runs before ABP creates a `MongoClient`. Use it for driver settings that are not part of the connection string, such as timeouts or TLS configuration:
+
+```csharp
+Configure<AbpMongoDbContextOptions>(options =>
+{
+    options.MongoClientSettingsConfigurer = settings =>
+    {
+        settings.ConnectTimeout = TimeSpan.FromSeconds(10);
+    };
+});
+```
 
 ### Controlling the Multi-Tenancy
 

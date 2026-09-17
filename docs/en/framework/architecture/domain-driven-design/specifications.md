@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement the Specification Pattern in your ABP projects for creating reusable and testable filters for your entities."
+}
+```
+
 # Specifications
 
 Specification Pattern is used to define **named, reusable, combinable and testable filters** for entities and other business objects.

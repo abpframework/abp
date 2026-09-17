@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -43,17 +43,26 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         CorrelationIdProvider = correlationIdProvider;
     }
 
-    public IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
+    /// <inheritdoc/>
+    public virtual IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class
     {
         return Subscribe(typeof(TEvent), handler);
     }
 
+    /// <inheritdoc/>
+    public virtual IDisposable Subscribe(string eventName, IDistributedEventHandler<DynamicEventData> handler)
+    {
+        return Subscribe(eventName, (IEventHandler)handler);
+    }
+
+    /// <inheritdoc/>
     public override Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true)
     {
         return PublishAsync(eventType, eventData, onUnitOfWorkComplete, useOutbox: true);
     }
 
-    public Task PublishAsync<TEvent>(
+    /// <inheritdoc/>
+    public virtual Task PublishAsync<TEvent>(
         TEvent eventData,
         bool onUnitOfWorkComplete = true,
         bool useOutbox = true)
@@ -62,7 +71,8 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         return PublishAsync(typeof(TEvent), eventData, onUnitOfWorkComplete, useOutbox);
     }
 
-    public async Task PublishAsync(
+    /// <inheritdoc/>
+    public virtual async Task PublishAsync(
         Type eventType,
         object eventData,
         bool onUnitOfWorkComplete = true,
@@ -85,14 +95,32 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
             }
         }
 
+        await PublishToEventBusAsync(eventType, eventData);
+
         await TriggerDistributedEventSentAsync(new DistributedEventSent()
         {
             Source = DistributedEventSource.Direct,
-            EventName = EventNameAttribute.GetNameOrDefault(eventType),
-            EventData = eventData
+            EventName = GetEventName(eventType, eventData),
+            EventData = GetEventData(eventData)
         });
+    }
 
-        await PublishToEventBusAsync(eventType, eventData);
+    /// <inheritdoc/>
+    public virtual Task PublishAsync(
+        string eventName,
+        object eventData,
+        bool onUnitOfWorkComplete = true,
+        bool useOutbox = true)
+    {
+        var eventType = GetEventTypeByEventName(eventName);
+        var dynamicEventData = CreateDynamicEventDataForPublishing(eventName, eventData);
+
+        if (eventType != null)
+        {
+            return PublishAsync(eventType, ConvertDynamicEventData(dynamicEventData.Data, eventType), onUnitOfWorkComplete, useOutbox);
+        }
+
+        return PublishAsync(typeof(DynamicEventData), dynamicEventData, onUnitOfWorkComplete, useOutbox);
     }
 
     public abstract Task PublishFromOutboxAsync(
@@ -117,12 +145,15 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
             return false;
         }
 
+        var addedToOutbox = false;
+        var tenantId = GetTenantIdToPropagate(eventType, eventData);
+
         foreach (var outboxConfig in AbpDistributedEventBusOptions.Outboxes.Values.OrderBy(x => x.Selector is null))
         {
             if (outboxConfig.Selector == null || outboxConfig.Selector(eventType))
             {
                 var eventOutbox = (IEventOutbox)unitOfWork.ServiceProvider.GetRequiredService(outboxConfig.ImplementationType);
-                var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+                (var eventName, eventData) = ResolveEventForPublishing(eventType, eventData);
 
                 await OnAddToOutboxAsync(eventName, eventType, eventData);
 
@@ -132,13 +163,21 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
                     Serialize(eventData),
                     Clock.Now
                 );
-                outgoingEventInfo.SetCorrelationId(CorrelationIdProvider.Get()!);
+
+                var correlationId = CorrelationIdProvider.Get();
+                if (correlationId != null)
+                {
+                    outgoingEventInfo.SetCorrelationId(correlationId);
+                }
+
+                outgoingEventInfo.SetTenantId(tenantId);
+
                 await eventOutbox.EnqueueAsync(outgoingEventInfo);
-                return true;
+                addedToOutbox = true;
             }
         }
 
-        return false;
+        return addedToOutbox;
     }
 
     protected virtual Task OnAddToOutboxAsync(string eventName, Type eventType, object eventData)
@@ -146,17 +185,20 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         return Task.CompletedTask;
     }
 
-    protected async Task<bool> AddToInboxAsync(
+    protected virtual async Task<bool> AddToInboxAsync(
         string? messageId,
         string eventName,
         Type eventType,
         object eventData,
-        string? correlationId)
+        string? correlationId,
+        Guid? tenantId = null)
     {
         if (AbpDistributedEventBusOptions.Inboxes.Count <= 0)
         {
             return false;
         }
+
+        var addToInbox = false;
 
         using (var scope = ServiceScopeFactory.CreateScope())
         {
@@ -171,9 +213,12 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
                     {
                         if (await eventInbox.ExistsByMessageIdAsync(messageId!))
                         {
+                            addToInbox = true;
                             continue;
                         }
                     }
+                    
+                    eventData = GetEventData(eventData);
 
                     var incomingEventInfo = new IncomingEventInfo(
                         GuidGenerator.Create(),
@@ -183,12 +228,14 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
                         Clock.Now
                     );
                     incomingEventInfo.SetCorrelationId(correlationId!);
+                    incomingEventInfo.SetTenantId(tenantId);
                     await eventInbox.EnqueueAsync(incomingEventInfo);
+                    addToInbox = true;
                 }
             }
         }
 
-        return true;
+        return addToInbox;
     }
 
     protected abstract byte[] Serialize(object eventData);
@@ -198,8 +245,8 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         await TriggerDistributedEventReceivedAsync(new DistributedEventReceived
         {
             Source = DistributedEventSource.Direct,
-            EventName = EventNameAttribute.GetNameOrDefault(eventType),
-            EventData = eventData
+            EventName = GetEventName(eventType, eventData),
+            EventData = GetEventData(eventData)
         });
 
         await TriggerHandlersAsync(eventType, eventData);
@@ -210,8 +257,8 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         await TriggerDistributedEventReceivedAsync(new DistributedEventReceived
         {
             Source = DistributedEventSource.Inbox,
-            EventName = EventNameAttribute.GetNameOrDefault(eventType),
-            EventData = eventData
+            EventName = GetEventName(eventType, eventData),
+            EventData = GetEventData(eventData)
         });
 
         await TriggerHandlersAsync(eventType, eventData, exceptions, inboxConfig);
@@ -221,7 +268,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
     {
         try
         {
-            await LocalEventBus.PublishAsync(distributedEvent);
+            await LocalEventBus.PublishAsync(distributedEvent, onUnitOfWorkComplete: false);
         }
         catch (Exception)
         {
@@ -233,11 +280,72 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
     {
         try
         {
-            await LocalEventBus.PublishAsync(distributedEvent);
+            await LocalEventBus.PublishAsync(distributedEvent, false);
         }
         catch (Exception)
         {
             // ignored
         }
+    }
+
+    protected virtual string GetEventName(Type eventType, object eventData)
+    {
+        if (eventData is DynamicEventData dynamicEventData)
+        {
+            return dynamicEventData.EventName;
+        }
+
+        return EventNameAttribute.GetNameOrDefault(eventType);
+    }
+
+    protected virtual DynamicEventData CreateDynamicEventDataForPublishing(string eventName, object eventData)
+    {
+        var dynamicEventData = eventData as DynamicEventData ?? new DynamicEventData(eventName, eventData);
+        return dynamicEventData.SetTenantId(CurrentTenant.Id);
+    }
+
+    protected virtual Guid? GetTenantIdToPropagate(Type eventType, object eventData)
+    {
+        if (eventType != typeof(DynamicEventData))
+        {
+            return null;
+        }
+
+        return eventData is DynamicEventData dynamicEventData && dynamicEventData.IsMultiTenant(out var tenantId)
+            ? tenantId
+            : CurrentTenant.Id;
+    }
+
+    protected virtual DynamicEventData CreateDynamicEventData(string eventName, object data, Guid? tenantId)
+    {
+        var dynamicEventData = new DynamicEventData(eventName, data);
+        return tenantId == null
+            ? dynamicEventData
+            : dynamicEventData.SetTenantId(tenantId);
+    }
+
+    protected virtual DynamicEventData CreateDynamicEventData(OutgoingEventInfo outgoingEvent, object data)
+    {
+        return CreateDynamicEventData(outgoingEvent.EventName, data, outgoingEvent.GetTenantId());
+    }
+
+    protected virtual DynamicEventData CreateDynamicEventData(IncomingEventInfo incomingEvent, object data)
+    {
+        return CreateDynamicEventData(incomingEvent.EventName, data, incomingEvent.GetTenantId());
+    }
+
+    protected virtual object GetEventData(object eventData)
+    {
+        if (eventData is DynamicEventData dynamicEventData)
+        {
+            return dynamicEventData.Data;
+        }
+
+        return eventData;
+    }
+
+    protected virtual (string EventName, object EventData) ResolveEventForPublishing(Type eventType, object eventData)
+    {
+        return (GetEventName(eventType, eventData), GetEventData(eventData));
     }
 }

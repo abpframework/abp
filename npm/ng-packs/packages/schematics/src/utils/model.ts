@@ -33,7 +33,6 @@ export function createImportRefsToModelReducer(params: ModelGeneratorParams) {
   const reduceImportRefsToInterfaces = createImportRefToInterfaceReducerCreator(params);
   const createRefToImportReducer = createRefToImportReducerCreator(params);
   const { solution, types } = params;
-
   return (models: Model[], importRefs: string[]) => {
     const enums: string[] = [];
     const interfaces = importRefs.reduce(reduceImportRefsToInterfaces, []);
@@ -75,6 +74,14 @@ export function createImportRefsToModelReducer(params: ModelGeneratorParams) {
         if (baseType && parseNamespace(solution, baseType) !== model.namespace) {
           const baseTypeWithGenericParams = parseBaseTypeWithGenericTypes(baseType);
           baseTypeWithGenericParams.forEach(t => {
+            // A generic argument of the base type (e.g. T in PagedResultDto<T>) may live in the
+            // same namespace as this model, which means it is generated into the same models.ts
+            // file. Importing it would produce an invalid self-import (`from './models'`), so we
+            // skip same-namespace types here, mirroring the property handling below. See #25080.
+            if (parseNamespace(solution, t) === model.namespace) {
+              return;
+            }
+
             toBeImported.push({
               type: t,
               isEnum: false,
@@ -148,7 +155,16 @@ export function createImportRefToInterfaceReducerCreator(params: ModelGeneratorP
     typeDef.properties?.forEach(prop => {
       let name = prop.jsonName || camel(prop.name);
       name = shouldQuote(name) ? `'${name}'` : name;
-      const type = simplifyType(prop.typeSimple);
+
+      let type = simplifyType(prop.typeSimple);
+      if (prop.typeSimple.includes('enum')) {
+        type = simplifyType(prop.type);
+      }
+
+      if (prop.isNullable) {
+        type = `${type} | null`;
+      }
+
       const refs = parseType(prop.type).reduce(
         (acc: string[], r) => acc.concat(parseGenerics(r).toGenerics()),
         [],
@@ -182,7 +198,7 @@ export function createRefToImportReducerCreator(params: ModelGeneratorParams) {
 }
 
 function isOptionalProperty(prop: PropertyDef) {
-  return prop.typeSimple.endsWith('?') || (prop.typeSimple === 'string' && !prop.isRequired);
+  return !prop.isRequired;
 }
 
 export function parseBaseTypeWithGenericTypes(type: string): string[] {
@@ -206,8 +222,6 @@ export function resolveAbpPackages(models: Model[]) {
     renamePropForTenant(model.interfaces);
 
     model.imports.forEach((imp, i) => {
-      fixImportNameForTenant(imp);
-
       for (const ref of imp.refs) {
         const path = VOLO_PACKAGE_PROXY_IMPORTS.get(ref);
         if (path) {
@@ -224,21 +238,11 @@ function renamePropForTenant(interfaces: Interface[]) {
       const isTenant = prop.name.toLocaleLowerCase().includes(TENANT_KEY);
       const isSaasDto = prop.refs.filter(f => f.startsWith(SAAS_NAMESPACE)).length > 0;
 
-      if (isTenant && isSaasDto) {
+      if (isTenant && isSaasDto && !prop.type.startsWith('Saas')) {
         prop.type = 'Saas' + prop.type;
       }
     }
   }
-}
-
-function fixImportNameForTenant(imp: Import) {
-  imp.specifiers.forEach((spe, index) => {
-    const isTenant = spe.toLocaleLowerCase().includes(TENANT_KEY);
-
-    if (isTenant) {
-      imp.specifiers[index] = 'Saas' + spe;
-    }
-  });
 }
 
 export function resolveSelfGenericProps(params: Partial<ModelGeneratorParams>) {

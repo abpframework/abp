@@ -35,12 +35,12 @@ public class IdentityClaimTypeManager : DomainService
     {
         if (await IdentityClaimTypeRepository.AnyAsync(claimType.Name, claimType.Id))
         {
-            throw new AbpException($"Name Exist: {claimType.Name}");
+            throw new BusinessException(IdentityErrorCodes.ClaimNameExist).WithData("0", claimType.Name);
         }
 
         if (claimType.IsStatic)
         {
-            throw new AbpException($"Can not update a static ClaimType.");
+            throw new BusinessException(IdentityErrorCodes.CanNotUpdateStaticClaimType);
         }
 
         return await IdentityClaimTypeRepository.UpdateAsync(claimType);
@@ -51,7 +51,7 @@ public class IdentityClaimTypeManager : DomainService
         var claimType = await IdentityClaimTypeRepository.GetAsync(id);
         if (claimType.IsStatic)
         {
-            throw new AbpException($"Can not delete a static ClaimType.");
+            throw new BusinessException(IdentityErrorCodes.CanNotDeleteStaticClaimType);
         }
 
         //Remove claim of this type from all users and roles

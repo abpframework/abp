@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn about the `ContainerStrategy` class in ABP Framework, including `ClearContainerStrategy` and `InsertIntoContainerStrategy` for effective content projection."
+}
+```
+
 # ContainerStrategy
 
 `ContainerStrategy` is an abstract class exposed by @abp/ng.core package. There are two container strategies extending it: `ClearContainerStrategy` and `InsertIntoContainerStrategy`. Implementing the same methods and properties, both of these strategies help you define how your containers will be prepared and where your content will be projected.

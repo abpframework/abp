@@ -1,0 +1,16 @@
+{
+  "culture": "en",
+  "texts": {
+    "VirtualFileExplorer": "Virtual file explorer",
+    "VirtualFileType": "Virtual file type",
+    "Menu:VirtualFileExplorer": "Virtual file explorer",
+    "LastUpdateTime": "Last update time",
+    "VirtualFileName": "Virtual file name",
+    "FileContent": "File content",
+    "Size": "Size",
+    "BackToRoot": "Back to root",
+    "EmptyFileInfoList": "There are no virtual files",
+    "Permission:AbpVirtualFileExplorer": "Virtual file explorer",
+    "Permission:AbpVirtualFileExplorer:View": "View"
+  }
+}

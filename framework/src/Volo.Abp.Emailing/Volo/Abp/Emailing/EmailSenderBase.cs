@@ -92,7 +92,7 @@ public abstract class EmailSenderBase : IEmailSender
 
     public virtual async Task QueueAsync(string to, string subject, string body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
     {
-        ValidateEmailAddress(to);
+        await ValidateEmailAddressAsync(to);
 
         if (!BackgroundJobManager.IsAvailable())
         {
@@ -115,7 +115,7 @@ public abstract class EmailSenderBase : IEmailSender
 
     public virtual async Task QueueAsync(string from, string to, string subject, string body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
     {
-        ValidateEmailAddress(to);
+        await ValidateEmailAddressAsync(to);
 
         if (!BackgroundJobManager.IsAvailable())
         {
@@ -176,13 +176,16 @@ public abstract class EmailSenderBase : IEmailSender
         }
     }
 
-    private static void ValidateEmailAddress(string emailAddress)
+    protected virtual Task ValidateEmailAddressAsync(string emailAddress)
     {
-        if(ValidationHelper.IsValidEmailAddress(emailAddress))
+        try
         {
-            return;
+            _ = new MailAddressCollection { emailAddress };
+            return Task.CompletedTask;
         }
-
-        throw new ArgumentException($"Email address '{emailAddress}' is not valid!");
+        catch (Exception e)
+        {
+            throw new ArgumentException($"Email address '{emailAddress}' is not valid!");
+        }
     }
 }

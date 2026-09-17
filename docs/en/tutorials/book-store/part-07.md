@@ -1,8 +1,15 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate the database for the Author entity in your web application using EF and various UI frameworks in this tutorial."
+}
+```
+
 # Web Application Development Tutorial - Part 7: Authors: Database Integration
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","BlazorServer","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","BlazorWebApp","NG", "MAUIBlazor"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -180,7 +187,7 @@ public class MongoDbAuthorRepository
 
     public async Task<Author> FindByNameAsync(string name)
     {
-        var queryable = await GetMongoQueryableAsync();
+        var queryable = await GetQueryableAsync();
         return await queryable.FirstOrDefaultAsync(author => author.Name == name);
     }
 
@@ -190,14 +197,13 @@ public class MongoDbAuthorRepository
         string sorting,
         string filter = null)
     {
-        var queryable = await GetMongoQueryableAsync();
+        var queryable = await GetQueryableAsync();
         return await queryable
-            .WhereIf<Author, IMongoQueryable<Author>>(
+            .WhereIf<Author, IQueryable<Author>>(
                 !filter.IsNullOrWhiteSpace(),
                 author => author.Name.Contains(filter)
             )
             .OrderBy(sorting)
-            .As<IMongoQueryable<Author>>()
             .Skip(skipCount)
             .Take(maxResultCount)
             .ToListAsync();

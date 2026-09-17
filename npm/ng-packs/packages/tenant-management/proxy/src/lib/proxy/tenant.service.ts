@@ -1,12 +1,14 @@
 import type { GetTenantsInput, TenantCreateDto, TenantDto, TenantUpdateDto } from './models';
 import { RestService } from '@abp/ng.core';
 import type { PagedResultDto } from '@abp/ng.core';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TenantService {
+  private restService = inject(RestService);
+
   apiName = 'AbpTenantManagement';
 
   create = (input: TenantCreateDto) =>
@@ -65,10 +67,9 @@ export class TenantService {
   updateDefaultConnectionString = (id: string, defaultConnectionString: string) =>
     this.restService.request<any, void>({
       method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
       url: `/api/multi-tenancy/tenants/${id}/default-connection-string`,
-      params: { defaultConnectionString },
+      body: JSON.stringify(defaultConnectionString),
     },
     { apiName: this.apiName });
-
-  constructor(private restService: RestService) {}
 }

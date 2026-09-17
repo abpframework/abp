@@ -45,8 +45,6 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
        Check.NotNull(scope, nameof(scope));
 
        await Repository.InsertAsync(scope.ToEntity(), autoSave: true, cancellationToken: cancellationToken);
-
-       scope = (await Repository.FindAsync(scope.Id, cancellationToken: cancellationToken)).ToModel();
    }
 
    public virtual async ValueTask DeleteAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
@@ -409,7 +407,5 @@ public class AbpOpenIddictScopeStore : AbpOpenIddictStoreBase<IOpenIddictScopeRe
             await ConcurrencyExceptionHandler.HandleAsync(e);
             throw new OpenIddictExceptions.ConcurrencyException(e.Message, e.InnerException);
         }
-
-        scope = (await Repository.FindAsync(entity.Id, cancellationToken: cancellationToken)).ToModel();
     }
 }

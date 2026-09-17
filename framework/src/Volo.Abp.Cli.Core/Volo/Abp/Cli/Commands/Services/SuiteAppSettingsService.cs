@@ -92,7 +92,7 @@ public class SuiteAppSettingsService : ITransientDependency
             "volo.abp.suite",
             version,
             "tools",
-            "net9.0",
+            "net10.0",
             "any",
             "appsettings.json"
             );
@@ -110,7 +110,7 @@ public class SuiteAppSettingsService : ITransientDependency
         var dotnetToolList = CmdHelper.RunCmdAndGetOutput("dotnet tool list -g", out int exitCode);
 
         var suiteLine = dotnetToolList.Split(Environment.NewLine)
-            .FirstOrDefault(l => l.ToLower().StartsWith("volo.abp.suite "));
+            .FirstOrDefault(l => l.ToLowerInvariant().StartsWith("volo.abp.suite "));
 
         if (string.IsNullOrEmpty(suiteLine))
         {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
-using Volo.Abp.AutoMapper;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Modularity;
 using Volo.Abp.SettingManagement.Localization;
 using Volo.Abp.SettingManagement.Web.Navigation;
@@ -15,7 +15,7 @@ namespace Volo.Abp.SettingManagement.Web;
 
 [DependsOn(
     typeof(AbpSettingManagementApplicationContractsModule),
-    typeof(AbpAutoMapperModule),
+    typeof(AbpMapperlyModule),
     typeof(AbpAspNetCoreMvcUiThemeSharedModule),
     typeof(AbpSettingManagementDomainSharedModule)
     )]
@@ -25,7 +25,11 @@ public class AbpSettingManagementWebModule : AbpModule
     {
         context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
         {
-            options.AddAssemblyResource(typeof(AbpSettingManagementResource), typeof(AbpSettingManagementWebModule).Assembly);
+            options.AddAssemblyResource(
+                typeof(AbpSettingManagementResource), 
+                typeof(AbpSettingManagementWebModule).Assembly, 
+                typeof(AbpSettingManagementApplicationContractsModule).Assembly
+            );
         });
 
         PreConfigure<IMvcBuilder>(mvcBuilder =>
@@ -58,10 +62,6 @@ public class AbpSettingManagementWebModule : AbpModule
             options.DisableModule(SettingManagementRemoteServiceConsts.ModuleName);
         });
 
-        context.Services.AddAutoMapperObjectMapper<AbpSettingManagementWebModule>();
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<SettingManagementWebAutoMapperProfile>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<AbpSettingManagementWebModule>();
     }
 }

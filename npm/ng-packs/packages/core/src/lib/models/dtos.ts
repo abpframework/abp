@@ -53,7 +53,7 @@ export class LimitedResultRequestDto {
   }
 }
 
-export class ExtensibleLimitedResultRequestDto extends ExtensibleEntityDto {
+export class ExtensibleLimitedResultRequestDto extends ExtensibleObject {
   maxResultCount = 10;
 
   constructor(initialValues: Partial<ExtensibleLimitedResultRequestDto> = {}) {

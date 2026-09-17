@@ -1,5 +1,6 @@
 ﻿@page
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
 @model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.CollapseModel
 @{
     ViewData["Title"] = "Collapse";
@@ -214,3 +215,28 @@
         </abp-tabs>
     </div>
 </div>
+
+<hr />
+
+
+<abp-card>
+    <abp-card-header>
+        <abp-card-title>
+            <h4>abp-accordion</h4>
+        </abp-card-title>
+    </abp-card-header>
+    <abp-card-body>
+        @await Component.InvokeAsync("TagHelperProperties", typeof(AbpAccordionTagHelper))
+    </abp-card-body>
+</abp-card>
+
+<abp-card>
+    <abp-card-header>
+        <abp-card-title>
+            <h4>abp-accordion-item</h4>
+        </abp-card-title>
+    </abp-card-header>
+    <abp-card-body>
+        @await Component.InvokeAsync("TagHelperProperties", typeof(AbpAccordionItemTagHelper))
+    </abp-card-body>
+</abp-card>

@@ -68,6 +68,8 @@
         "AccessDenied": "Pristup odbijen!",
         "AccessDeniedMessage": "Nemate pristup ovom resursu.",
         "OrRegisterWith": "Ili se registrirajte sa:",
-        "RegisterUsingYourProviderAccount": "Registrirajte se koristeći svoj {0} račun"
+        "RegisterUsingYourProviderAccount": "Registrirajte se koristeći svoj {0} račun",
+        "RequireMigrateSeedTitle": "Nije moguće pronaći administratorskog korisnika",
+        "RequireMigrateSeedMessage": "Molimo provjerite je li izvršeno početno punjenje baze podataka. Pogledajte <a target=\"_blank\" href=\"https://abp.io/kb/0003\">dokumentaciju</a> za moguća rješenja."
     }
 }

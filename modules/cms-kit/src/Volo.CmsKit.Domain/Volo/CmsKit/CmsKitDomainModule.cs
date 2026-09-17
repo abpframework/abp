@@ -12,6 +12,7 @@ using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Localization;
+using Volo.CmsKit.MarkedItems;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Menus;
 using Volo.CmsKit.Pages;
@@ -90,6 +91,24 @@ public class CmsKitDomainModule : AbpModule
         if (GlobalFeatureManager.Instance.IsEnabled<TagsFeature>())
         {
             // TODO: Configure TagEntityTypes here...
+        }
+
+        if (GlobalFeatureManager.Instance.IsEnabled<MarkedItemsFeature>())
+        {
+            Configure<CmsKitMarkedItemOptions>(options =>
+            {
+                if (GlobalFeatureManager.Instance.IsEnabled<BlogsFeature>())
+                {
+                    options.EntityTypes.Add(
+                        new MarkedItemEntityTypeDefinition(
+                            BlogPostConsts.EntityType,
+                            StandardMarkedItems.Favorite
+                            )
+                        );
+                }
+
+                // TODO: Add more entities that can be marked.
+            });
         }
     }
     

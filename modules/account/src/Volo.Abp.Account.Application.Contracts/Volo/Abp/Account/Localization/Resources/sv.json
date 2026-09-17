@@ -68,6 +68,8 @@
     "AccessDenied": "Åtkomst nekad!",
     "AccessDeniedMessage": "Du har inte tillgång till denna resurs.",
     "OrRegisterWith": "Eller registrera dig med",
-    "RegisterUsingYourProviderAccount": "Registrera dig med ditt {0} konto"
+    "RegisterUsingYourProviderAccount": "Registrera dig med ditt {0} konto",
+    "RequireMigrateSeedTitle": "Kunde inte hitta administratörsanvändaren",
+    "RequireMigrateSeedMessage": "Se till att databasens seed körs. Se <a target=\"_blank\" href=\"https://abp.io/kb/0003\">dokumentationen</a> för möjliga lösningar."
   }
 }

@@ -31,6 +31,14 @@ public class UnitOfWorkTestPage : AbpPageModel
         return Content("OK");
     }
 
+    public IActionResult OnQueryRequiresUow()
+    {
+        CurrentUnitOfWork.ShouldNotBeNull();
+        CurrentUnitOfWork.Options.IsTransactional.ShouldBeFalse();
+
+        return Content("OK");
+    }
+
     [UnitOfWork(isTransactional: true)]
     public ObjectResult OnGetHandledException()
     {

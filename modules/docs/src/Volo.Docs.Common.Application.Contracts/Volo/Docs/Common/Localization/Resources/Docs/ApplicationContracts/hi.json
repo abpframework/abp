@@ -1,0 +1,7 @@
+{
+  "culture": "hi",
+  "texts": {
+    "Permission:DocumentManagement.Common": "सामान्य दस्तावेज़ प्रबंधन",
+    "Permission:PdfDownload": "PDF डाउनलोड करना"
+  }
+}

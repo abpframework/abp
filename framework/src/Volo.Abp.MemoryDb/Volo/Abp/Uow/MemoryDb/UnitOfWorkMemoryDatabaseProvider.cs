@@ -46,7 +46,7 @@ public class UnitOfWorkMemoryDatabaseProvider<TMemoryDbContext> : IMemoryDatabas
         }
 
         var connectionString = _connectionStringResolver.Resolve<TMemoryDbContext>();
-        var dbContextKey = $"{typeof(TMemoryDbContext).FullName}_{connectionString}";
+        var dbContextKey = GetDatabaseApiKey(connectionString);
 
         var databaseApi = unitOfWork.GetOrAddDatabaseApi(
             dbContextKey,
@@ -66,7 +66,7 @@ public class UnitOfWorkMemoryDatabaseProvider<TMemoryDbContext> : IMemoryDatabas
         }
 
         var connectionString = await _connectionStringResolver.ResolveAsync<TMemoryDbContext>();
-        var dbContextKey = $"{typeof(TMemoryDbContext).FullName}_{connectionString}";
+        var dbContextKey = GetDatabaseApiKey(connectionString);
 
         var databaseApi = unitOfWork.GetOrAddDatabaseApi(
             dbContextKey,
@@ -75,6 +75,11 @@ public class UnitOfWorkMemoryDatabaseProvider<TMemoryDbContext> : IMemoryDatabas
             ));
 
         return ((MemoryDbDatabaseApi)databaseApi).Database;
+    }
+
+    protected virtual string GetDatabaseApiKey(string? connectionString)
+    {
+        return $"{typeof(TMemoryDbContext).FullName}_{(connectionString ?? string.Empty).ToSha256()}";
     }
 
     private async Task<string> ResolveConnectionStringAsync()

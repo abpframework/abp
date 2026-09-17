@@ -22,7 +22,7 @@
         @((string.IsNullOrWhiteSpace(author.Name)
     ? author.UserName
     : author.Name + " " + author.Surname).Trim())
-        <small class="text-muted float-end" style="opacity: .5; font-size: 14px">@creationTime.ToString()</small>
+        <small class="text-muted float-end" style="opacity: .5; font-size: 14px" comment-time="@creationTime.ToUniversalTime().ToString("o")"></small>
     </span>;
 }
 @{
@@ -87,32 +87,32 @@
     Func<dynamic, IHtmlContent> GetCommentActionArea(Guid id, Guid authorId, bool isReply) =>
     @<div class="inner-comment-buttons text-start">
         @if (!isReply)
-    {
-        @if (CurrentUser.IsAuthenticated)
-    {
-        <a href="#" class="comment-links comment-reply-link btn btn-sm  shadow-sm  btn-primary" data-reply-id="@id.ToString()" id="@($"cms-comment_{Model.Input.EntityType}_{Model.Input.EntityId}_{id}_link")">
-            <i class="fa fa-reply mr -1"></i> @L["Reply"]
-        </a>
-
-        <a href="#" class="comment-links comment-delete-link btn btn-sm shadow-sm btn-link text-muted bg-white " data-author-id="@authorId.ToString()" data-id="@id.ToString()">
-            <i class="fa fa-trash  mr -1"></i> @L["Delete"]
-        </a>
-    }
-    else
-    {
-        <a href="@(Model.Input.LoginUrl + "_" + id)" class="btn btn-sm btn-light shadow-sm">
-            @L["LoginToReply"]
-        </a>
-    }
-    }
+        {
+            @if (CurrentUser.IsAuthenticated)
+            {
+                <a href="#" class="comment-links comment-reply-link btn btn-sm  shadow-sm  btn-primary" data-reply-id="@id.ToString()" id="@($"cms-comment_{Model.Input.EntityType}_{Model.Input.EntityId}_{id}_link")">
+                    <i class="fa fa-reply mr -1"></i> @L["Reply"]
+                </a>
+            }
+            else
+            {
+                <a href="@(Model.Input.LoginUrl + "_" + id)" class="btn btn-sm btn-light shadow-sm">
+                    @L["LoginToReply"]
+                </a>
+            }
+        }
 
 
         @if (authorId == CurrentUser.Id)
-    {
-        <a href="#" class="comment-links comment-edit-link  btn btn-sm shadow-sm  btn-link text-muted bg-white" data-id="@id.ToString()">
-            <i class="fa fa-pencil  mr -1 "></i> @L["Edit"]
-        </a>
-    }
+        {
+            <a href="#" class="comment-links comment-edit-link  btn btn-sm shadow-sm  btn-link text-muted" data-id="@id.ToString()">
+                <i class="fa fa-pencil  mr -1 "></i> @L["Edit"]
+            </a>
+
+            <a href="#" class="comment-links comment-delete-link btn btn-sm shadow-sm btn-link text-muted" data-author-id="@authorId.ToString()" data-id="@id.ToString()">
+                <i class="fa fa-trash  mr -1"></i> @L["Delete"]
+            </a>
+        }
     </div>;
 }
 @{

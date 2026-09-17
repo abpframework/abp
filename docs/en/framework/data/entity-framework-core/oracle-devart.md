@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to switch to the Oracle Devart provider for your ABP application, ensuring compatibility with Oracle v12.2+ for seamless database integration."
+}
+```
+
 # Switch to EF Core Oracle Devart Provider
 
 This document explains how to switch to the **Oracle** database provider for **[the application startup template](../../../solution-templates/layered-web-application)** which comes with SQL Server provider pre-configured.

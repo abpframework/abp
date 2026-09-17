@@ -10,12 +10,12 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Anchor
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Clipboard
-@using Volo.Abp.AspNetCore.Mvc.UI.Packages.MalihuCustomScrollbar
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Popper
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
 @using Volo.Docs
 @using Volo.Docs.Areas.Documents.TagHelpers
+@using Volo.Docs.Documents
 @using Volo.Docs.Localization
 @using Volo.Docs.Pages.Documents.Project
 @using Volo.Docs.Pages.Documents.Shared.ErrorComponent
@@ -37,8 +37,6 @@
 @section styles {
     <abp-style-bundle name="@typeof(IndexModel).FullName">
         <abp-style type="@typeof(PrismjsStyleBundleContributor)"/>
-        <abp-style type="@typeof(MalihuCustomScrollbarPluginStyleBundleContributor)"/>
-        <abp-style src="/Pages/Documents/Project/bootstrap-toc.css"/>
         <abp-style src="/Pages/Documents/Shared/Styles/vs.css"/>
         <abp-style src="/Pages/Documents/Project/index.css"/>
         @if (DocsUiOptions.Value.EnableEnlargeImage)
@@ -52,14 +50,24 @@
 
     @if (Model.LoadSuccess)
     {
+        <script type="text/javascript">
+                var doc = doc || {};
+                doc.project = {
+                    id: '@Model.Project.Id',
+                    name: '@Model.Project.ShortName',
+                    languageCode: '@Model.LanguageCode',
+                    version: '@Model.Version',
+                    format: '@Model.Project.Format',
+                    routeVersion: '@(Model.LatestVersionInfo == null || Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version)'
+                }
+        </script>
         <abp-script-bundle name="@typeof(IndexModel).FullName">
-            <abp-script type="@typeof(MalihuCustomScrollbarPluginScriptBundleContributor)"/>
             <abp-script type="@typeof(ClipboardScriptBundleContributor)"/>
             <abp-script type="@typeof(AnchorJsScriptBundleContributor)"/>
             <abp-script type="@typeof(PrismjsScriptBundleContributor)"/>
             <abp-script type="@typeof(PopperJsScriptBundleContributor)"/>
             <abp-script src="/client-proxies/docs-proxy.js"/>
-            <abp-script src="/Pages/Documents/Project/bootstrap-toc.js"/>
+            <abp-script src="/client-proxies/docs-common-proxy.js"/>
             <abp-script src="/Pages/Documents/Shared/Scripts/vs.js"/>
             <abp-script src="/Pages/Documents/Project/index.js"/>
             @if (DocsUiOptions.Value.EnableEnlargeImage)
@@ -278,6 +286,14 @@
                     id="sidebar-scroll"
                     class="nav nav-list">
                 </ul>
+                @if (Model.HasDownloadPdf)
+                {
+                    <div class="docs-sidebar-footer">
+                        <button data-url="@Url.Content($"~/api/docs/documents/pdf/download?ProjectId={Model.Project.Id}&Version={(Model.LatestVersionInfo.IsSelected ? Model.LatestVersionInfo.Version : Model.Version)}&LanguageCode={Model.LanguageCode ?? Model.DefaultLanguageCode}")" class="download-pdf-btn" id="DownloadPdfBtn">
+                            <i class="fa fa-download"></i> @L["DownloadPDF"]
+                        </button>
+                    </div>
+                }
             }
         </div>
     </div>
@@ -287,11 +303,78 @@
         <div class="docs-content">
             <div class="top-container mb-3">
                 <div class="w-100">
-                    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" class="mCustomScrollbar-1">
+                    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                         <ol class="breadcrumb" id="document-node-wrapper">
                             <li class="breadcrumb-item">
                                 <a href="@Model.CreateVersionLink(Model.LatestVersionInfo, Model.GetSpecificVersionOrLatest())"><i class="fa fa-home"></i></a>
                             </li>
+                            @if (Model.Navigation != null && Model.Navigation.Items != null)
+                            {
+                                var currentNode = Model.Navigation.Items.FirstOrDefault(n => n.IsSelected(Model.DocumentNameWithExtension));
+                                var navigation = Model.Navigation.FindNavigation(Model.DocumentNameWithExtension);
+                                var documentExtension = System.IO.Path.GetExtension(Model.DocumentNameWithExtension);
+                                NavigationNode previousNode = null;
+                                if (currentNode != null)
+                                {
+                                    while (currentNode != null)
+                                    {
+                                        if (!string.IsNullOrWhiteSpace(currentNode.Path) && previousNode != currentNode)
+                                        {
+                                            previousNode = currentNode;
+                                            PrintNode(currentNode);
+                                        }
+                                        else
+                                        {
+                                            var indexDocument = FindIndexNode(currentNode);
+                                            if (indexDocument != null && indexDocument != previousNode)
+                                            {
+                                                PrintNode(indexDocument, currentNode.Text);
+                                            }
+                                            else if(currentNode != previousNode)
+                                            {
+                                                <li class="breadcrumb-item">
+                                                                <span>
+                                                                    @currentNode.Text
+                                                                </span>
+                                                </li>
+                                            }
+                            
+                                            previousNode = indexDocument;
+                                        }
+                            
+                                        currentNode = currentNode?.Items?.FirstOrDefault(n => n.IsSelected(Model.DocumentNameWithExtension));
+                                    }
+                                }
+                            
+                                void PrintNode(NavigationNode node, string text = null)
+                                {
+                                    var extension = System.IO.Path.GetExtension(node.Path);
+                                    var path = string.IsNullOrWhiteSpace(extension) ? node.Path : node.Path.Substring(0, node.Path.Length - extension.Length);
+                                    <li class="breadcrumb-item @(node == navigation ? "active" : "")">
+                                        <a href="@Model.BuildDocumentUrl(Model.ProjectName, Model.LanguageCode, Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version, path)">
+                                            @(text ?? node.Text)
+                                        </a>
+                                    </li>
+                                }
+                            
+                                NavigationNode FindIndexNode(NavigationNode node)
+                                {
+                                    var nextNode = node.Items?.FirstOrDefault(n => n.IsSelected(Model.DocumentNameWithExtension));
+                                    while (nextNode != null && string.IsNullOrEmpty(nextNode.Path))
+                                    {
+                                        nextNode = nextNode.Items.FirstOrDefault(n => n.IsSelected(Model.DocumentNameWithExtension));
+                                    }
+                            
+                                    if(nextNode == null)
+                                    {
+                                        return node.Items?.FirstOrDefault(n => n.IsIndex);
+                                    }
+                            
+                                    var lastSlashIndex = nextNode.Path.LastIndexOf('/');
+                                    var path = lastSlashIndex < 0 ? nextNode.Path : nextNode.Path.Substring(0, lastSlashIndex);
+                                    return node.Items.FirstOrDefault(n => n.Path != null && (n.IsSelected(path + documentExtension) || n.IsSelected(path + "/index" + documentExtension))) ?? node.Items.FirstOrDefault(n => n.IsIndex);
+                                }
+                            }
                         </ol>
                     </nav>
                     <div class="doc-social-btns">
@@ -388,9 +471,21 @@
             <div class="docs-content-field">
                 <div class="docs-text-field">
                     <div class="position-relative">
-                        @if (Model.DocumentPreferences != null && Model.DocumentPreferences.Parameters != null && Model.DocumentPreferences.Parameters.Any())
+                        @{
+                            var visibleParameters = Model.DocumentPreferences?.Parameters?
+                                .Where(p => Model.IsParameterVisible(p))
+                                .ToList() ?? new List<DocumentParameterDto>();
+                        }
+                        @if (visibleParameters.Count > 0)
                         {
                             <div class="alert alert-primary alert-criteria">
+                                <div class="options-header">
+                                    <span>@L["DocumentOptions"]</span>
+                                    <button type="button" class="btn toggle-btn" aria-expanded="false" aria-controls="DocumentOptionsBody" aria-label="@L["DocumentOptions"]">
+                                        <i class="fa-solid fa-chevron-up"></i>
+                                    </button>
+                                </div>
+                                <div class="options-body" id="DocumentOptionsBody">
                                 <abp-row>
                                     <abp-column>
                                         <p class="alert-p mb-2">
@@ -402,10 +497,11 @@
                                 <abp-row class="gx-2">
                                     @{
                                         const int maxCellCount = 3;
-                                        var count = Model.DocumentPreferences.Parameters.Count;
+                                        var count = visibleParameters.Count;
                                         var rowCount = count / maxCellCount + (count % maxCellCount > 0 ? 1 : 0);
                                         var cellSize = 12 / (count > maxCellCount ? maxCellCount : count);
-                                        var latestCellSize = 12 / count - (rowCount - 1) * maxCellCount;
+                                        var lastRowCellCount = count - (rowCount - 1) * maxCellCount;
+                                        var latestCellSize = 12 / lastRowCellCount;
 
                                         string BuildParameterDivClass(int index)
                                         {
@@ -417,7 +513,7 @@
 
                                         for (var i = 0; i < count; ++i)
                                         {
-                                            var parameter = Model.DocumentPreferences.Parameters[i];
+                                            var parameter = visibleParameters[i];
 
                                             <div class="@BuildParameterDivClass(i)">
                                                 <div class="custom-input-group">
@@ -442,6 +538,7 @@
                                         }
                                     }
                                 </abp-row>
+                                </div>
                             </div>
                         }
                     </div>
@@ -512,6 +609,7 @@
 
                         <div id="scroll-index" class="">
                             <nav id="docs-sticky-index" class="navbar index-scroll">
+                                    <partial name="/Pages/Documents/Project/TableOfContents.cshtml" model="Model.TocItems" />
                             </nav>
                             <div class="row">
                                 <div class="col p-0">

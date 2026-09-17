@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+  "Description": "Discover how to install and use the LeptonX Lite Angular UI theme for ABP Framework, enhancing your project's professional look effortlessly."
+}
+```
+
 # LeptonX Lite Angular UI
 
 LeptonX Lite has implementation for the ABP Angular Client. It's a simplified variation of the [LeptonX Theme](https://x.leptontheme.com/).
@@ -31,45 +38,68 @@ yarn add bootstrap-icons
 Note: You should remove the old theme styles from "angular.json" if you are switching from "ThemeBasic" or "Lepton."
 Look at the [Theme Configurations](../../framework/ui/angular/theme-configurations.md) list of styles. Depending on your theme, you can alter your styles in angular.json.
 
-- Finally, remove `ThemeBasicModule`, `provideThemeBasicConfig` from `app.module.ts`, and import the related modules in `app.module.ts`
+- Finally, remove `provideThemeBasicConfig` from `app.config.ts`, and import the related providers in `app.config.ts`
 
 ```js
-import { ThemeLeptonXModule } from "@abp/ng.theme.lepton-x";
+import { provideThemeLeptonX } from "@abp/ng.theme.lepton-x";
+import { provideSideMenuLayout } from "@abp/ng.theme.lepton-x/layouts";
 
-@NgModule({
-  imports: [
-    // ...
-    // do not forget to remove ThemeBasicModule or other old theme module
-    //  ThemeBasicModule
-    ThemeLeptonXModule.forRoot()
-  ],
+export const appConfig: ApplicationConfig = {
   providers: [
-    // do not forget to remove provideThemeBasicConfig or other old theme providers
-    // provideThemeBasicConfig
+    // ...
+    provideSideMenuLayout(),
+    provideThemeLeptonX(),
   ],
-  // ...
-})
-export class AppModule {}
+};
 ```
 
-Note: If you employ [Resource Owner Password Flow](../../framework/ui/angular/authorization.md#resource-owner-password-flow) for authorization, you should import the following module as well:
+Note: If you employ [Resource Owner Password Flow](../../framework/ui/angular/authorization.md#resource-owner-password-flow) for authorization, you should provide the following provider as well:
 
 ```js
-import { AccountLayoutModule } from "@abp/ng.theme.lepton-x/account";
+import { provideAccountLayout } from "@abp/ng.theme.lepton-x/account";
 
-@NgModule({
-  // ...
-  imports: [
+export const appConfig: ApplicationConfig = {
+  providers: [
     // ...
-    AccountLayoutModule.forRoot(),
-    // ...
+    provideAccountLayout()
   ],
-  // ...
-})
-export class AppModule {}
+};
+
 ```
 
-To change the logos and brand color of `LeptonX`, simply add the following CSS to the `styles.scss`
+To change the logos and brand color of `LeptonX`, you have two options:
+
+1. Provide logo and application name via the Theme Shared provider (recommended)
+
+```ts
+// app.config.ts
+import { provideLogo, withEnvironmentOptions } from "@abp/ng.theme.shared";
+import { environment } from "./environments/environment";
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    provideLogo(withEnvironmentOptions(environment)),
+  ],
+};
+```
+
+Ensure your environment contains the logo url and app name:
+
+```ts
+// environment.ts
+export const environment = {
+  // ...
+  application: {
+    name: "MyProjectName",
+    logoUrl: "/assets/images/logo.png",
+  },
+};
+```
+
+The LeptonX brand component reads these values automatically from `@abp/ng.theme.shared`.
+
+2. Or override via CSS variables in `styles.scss`
 
 ```css
 :root {
@@ -82,6 +112,8 @@ To change the logos and brand color of `LeptonX`, simply add the following CSS t
 - `--lpx-logo` is used to place the logo in the menu.
 - `--lpx-logo-icon` is a square icon used when the menu is collapsed.
 - `--lpx-brand` is a color used throughout the application, especially on active elements.
+
+Tip: You can combine both approaches. For example, provide the main logo via `provideLogo(...)` and still fine-tune visuals (sizes, colors) with CSS.
 
 ### Server Side
 
@@ -106,15 +138,16 @@ The **Layout components** and all the replacable components are predefined in `e
 ```js
 import { ReplaceableComponentsService } from '@abp/ng.core'; // imported ReplaceableComponentsService
 import { eIdentityComponents } from '@abp/ng.identity'; // imported eIdentityComponents enum
-import { eThemeLeptonXComponents } from '@abp/ng.theme.lepton-x';   // imported eThemeLeptonXComponents enum
+import { eThemeLeptonXComponents } from '@abp/ng.theme.lepton-x'; // imported eThemeLeptonXComponents enum
+import { Component, inject } from '@angular/core';
 
 //...
 
 @Component(/* component metadata */)
 export class AppComponent {
-  constructor(
-    private replaceableComponents: ReplaceableComponentsService, // injected the service
-  ) {
+  private replaceableComponents = inject(ReplaceableComponentsService);
+
+  constructor() {
     this.replaceableComponents.add({
       component: YourNewApplicationLayoutComponent,
       key: eThemeLeptonXComponents.ApplicationLayout,
@@ -263,10 +296,11 @@ The Mobile User-Profile component key is `eThemeLeptonXComponents.MobileUserProf
 
 ![Angular Footer Component](../../images/angular-footer.png)
 
-The Footer is the section of content at the very bottom of the site. This section of the content can be modified.
-Inject **FooterLinksService** and use the **setFooterInfo** method of **FooterLinksService**
+The Footer is the section of content at the very bottom of the site. This section of the content can be modified. The ABP Studio templates serve this option by default. You can reach the configurations under `angular/src/app/footer` directory that has a component and a configuration file.
+
+If you still prefer overriding it by yourself, remove the default configuration. Inject **FooterLinksService** and use the **setFooterInfo** method of **FooterLinksService**
 to assign path or link and description.
-**descUrl** and **footerLinks** are nullable. Constant **footerLinks** are on the right side of footer.
+The **descUrl** and **footerLinks** are nullable. Constant **footerLinks** are on the right side of footer.
 
 ```js
 ///...

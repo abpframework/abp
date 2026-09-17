@@ -1,11 +1,12 @@
 import { eBindingSourceId, eMethodModifier } from '../enums';
 import { camel, camelizeHyphen } from '../utils/text';
-import { getParamName, getParamValueName } from '../utils/methods';
+import { getParamName, getParamValueName, isDictionaryType } from '../utils/methods';
 import { ParameterInBody } from './api-definition';
 import { Property } from './model';
 import { Omissible } from './util';
 import { VOLO_REMOTE_STREAM_CONTENT } from '../constants';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
+
 const shouldQuote = require('should-quote');
 
 export class Method {
@@ -40,9 +41,13 @@ export class Body {
   body?: string;
   method: string;
   params: string[] = [];
+  dictParamVar?: string;
   responseTypeWithNamespace: string;
   requestType = 'any';
   responseType: string;
+  httpResponseType?: 'json' | 'text' | 'blob' | 'arraybuffer';
+  acceptHeader?: string;
+  contentTypeHeader?: string;
   url: string;
 
   registerActionParameter = (param: ParameterInBody) => {
@@ -57,10 +62,22 @@ export class Body {
     switch (bindingSourceId) {
       case eBindingSourceId.Model:
       case eBindingSourceId.Query:
+        if (isDictionaryType(param.type, param.typeSimple)) {
+          this.dictParamVar = value;
+          break;
+        }
         this.params.push(paramName === value ? value : `${getParamName(paramName)}: ${value}`);
         break;
       case eBindingSourceId.FormFile:
+        this.body = value;
+        break;
       case eBindingSourceId.Body:
+        /* Angular sends a plain string body as text/plain, but the endpoint expects a JSON string. */
+        if (param.typeSimple === 'string') {
+          this.body = `JSON.stringify(${value})`;
+          this.contentTypeHeader = 'application/json';
+          break;
+        }
         this.body = value;
         break;
       case eBindingSourceId.Path:
@@ -79,6 +96,9 @@ export class Body {
   }
 
   isBlobMethod() {
+    if (this.httpResponseType === 'blob') {
+      return true;
+    }
     return VOLO_REMOTE_STREAM_CONTENT.some(x => x === this.responseTypeWithNamespace);
   }
 

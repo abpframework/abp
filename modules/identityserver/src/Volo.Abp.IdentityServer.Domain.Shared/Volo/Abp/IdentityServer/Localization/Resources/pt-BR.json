@@ -11,6 +11,7 @@
     "InvalidUsername": "Nome de usuário ou senha inválidos!",
     "InvalidAuthenticatorCode": "Código de autenticador inválido!",
     "InvalidRecoveryCode": "Código de recuperação inválido!",
-    "TheTargetUserIsNotLinkedToYou": "O usuário-alvo não está vinculado a você!"
+    "TheTargetUserIsNotLinkedToYou": "O usuário-alvo não está vinculado a você!",
+    "ClientResourcePermissionProviderKeyLookupService": "Cliente"
   }
 }

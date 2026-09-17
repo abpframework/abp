@@ -1,0 +1,16 @@
+{
+  "culture": "vi",
+  "texts": {
+    "VirtualFileExplorer": "Trình khám phá tệp ảo",
+    "VirtualFileType": "Loại tệp ảo",
+    "Menu:VirtualFileExplorer": "Trình khám phá tệp ảo",
+    "LastUpdateTime": "Lần cập nhật cuối cùng",
+    "VirtualFileName": "Tên tệp ảo",
+    "FileContent": "Nội dung tệp",
+    "Size": "Kích thước",
+    "BackToRoot": "Quay lại thư mục gốc",
+    "EmptyFileInfoList": "Không có tệp ảo nào",
+    "Permission:AbpVirtualFileExplorer": "Trình khám phá tệp ảo",
+    "Permission:AbpVirtualFileExplorer:View": "Xem"
+  }
+}

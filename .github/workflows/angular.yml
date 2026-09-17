@@ -15,6 +15,11 @@ on:
       - synchronize
       - reopened
       - ready_for_review
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -22,17 +27,18 @@ jobs:
   build-test-lint:
     if: ${{ !github.event.pull_request.draft }}
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         with:
           path: 'npm/ng-packs/node_modules'
           key: ${{ runner.os }}-${{ hashFiles('npm/ng-packs/yarn.lock') }}
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         with:
           path: 'templates/app/angular/node_modules'
           key: ${{ runner.os }}-${{ hashFiles('templates/app/angular/yarn.lock') }}

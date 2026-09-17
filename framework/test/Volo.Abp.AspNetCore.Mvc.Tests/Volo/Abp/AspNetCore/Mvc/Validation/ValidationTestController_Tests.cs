@@ -1,4 +1,6 @@
 ﻿using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -111,6 +113,22 @@ public class ValidationTestController_Tests : AspNetCoreMvcTestBase
     {
         var result = await GetResponseAsStringAsync("/api/validation-test/object-result-action2");
         result.ShouldBe("ModelState.IsValid: false");
+    }
+
+    [Fact]
+    public async Task Should_Not_Trigger_FluentValidation_On_Regular_Controller()
+    {
+        // FluentValidationTestInput has a FluentValidator with MinimumLength(3) rule,
+        // but this is a regular AbpController (not IValidationEnabled),
+        // so FluentValidation should NOT be triggered.
+        using var request = new HttpRequestMessage(HttpMethod.Post, "/api/validation-test/fluent-validation-action")
+        {
+            Content = new StringContent("{\"name\": \"A\"}", Encoding.UTF8, "application/json")
+        };
+        var response = await Client.SendAsync(request);
+
+        // Should return OK because FluentValidation is not triggered for regular controllers
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 }
 

@@ -72,7 +72,92 @@
     {
       "namespace": "Volo.CmsKit.EntityFrameworkCore",
       "connectionStringName": "CmsKit",
-      "databaseTables": [],
+      "databaseTables": [
+        {
+          "entityFullName": "Volo.CmsKit.Comments.Comment",
+          "contentType": "databaseTable",
+          "name": "Comments",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Users.CmsUser",
+          "contentType": "databaseTable",
+          "name": "User",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Reactions.UserReaction",
+          "contentType": "databaseTable",
+          "name": "Reactions",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Ratings.Rating",
+          "contentType": "databaseTable",
+          "name": "Ratings",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Tags.Tag",
+          "contentType": "databaseTable",
+          "name": "Tags",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Tags.EntityTag",
+          "contentType": "databaseTable",
+          "name": "EntityTags",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Pages.Page",
+          "contentType": "databaseTable",
+          "name": "Pages",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Blogs.Blog",
+          "contentType": "databaseTable",
+          "name": "Blogs",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Blogs.BlogPost",
+          "contentType": "databaseTable",
+          "name": "BlogPosts",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Blogs.BlogFeature",
+          "contentType": "databaseTable",
+          "name": "BlogFeatures",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.MediaDescriptors.MediaDescriptor",
+          "contentType": "databaseTable",
+          "name": "MediaDescriptors",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.Menus.MenuItem",
+          "contentType": "databaseTable",
+          "name": "MenuItems",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.GlobalResources.GlobalResource",
+          "contentType": "databaseTable",
+          "name": "GlobalResources",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.CmsKit.MarkedItems.UserMarkedItem",
+          "contentType": "databaseTable",
+          "name": "UserMarkedItems",
+          "summary": null
+        }
+      ],
       "replacedDbContexts": [],
       "modelBuilderExtensionMethods": [
         {

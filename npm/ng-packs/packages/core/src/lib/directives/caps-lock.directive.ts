@@ -1,11 +1,10 @@
-import { Directive, EventEmitter, HostListener, Output } from '@angular/core';
+import { Directive, HostListener, output } from '@angular/core';
 
 @Directive({
-  standalone: true,
   selector: '[abpCapsLock]',
 })
 export class TrackCapsLockDirective {
-  @Output('abpCapsLock') capsLock = new EventEmitter<boolean>();
+  readonly capsLock = output<boolean>({ alias: 'abpCapsLock' });
 
   @HostListener('window:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent): void {

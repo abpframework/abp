@@ -1,5 +1,5 @@
 import { ABP, escapeHtmlChars } from '@abp/ng.core';
-import { InjectFlags, InjectOptions, InjectionToken, Type } from '@angular/core';
+import { InjectOptions, InjectionToken, Type } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ActionCallback } from './actions';
 import {
@@ -93,6 +93,6 @@ export type ColumnPredicate = (getInjected: GetInjected, auxData?: any) => boole
 export type GetInjected = <T>(
   token: Type<T> | InjectionToken<T>,
   notFoundValue?: T,
-  options?: InjectOptions | InjectFlags,
+  options?: InjectOptions,
 ) => T;
 type PropDataObject = { [key: string]: any };

@@ -3,7 +3,7 @@
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * found in the LICENSE file at https://angular.dev/license
  */
 
 import { NormalizedRoot, Path, dirname, join, normalize, relative } from '@angular-devkit/core';
@@ -54,12 +54,12 @@ export function findModuleFromOptions(host: Tree, options: ModuleOptions): Path 
 
     const candidatesDirs = [...candidateSet].sort((a, b) => b.length - a.length);
     for (const c of candidatesDirs) {
-      const candidateFiles = ['', `${moduleBaseName}.ts`, `${moduleBaseName}${moduleExt}`].map(
-        (x) => join(c, x),
+      const candidateFiles = ['', `${moduleBaseName}.ts`, `${moduleBaseName}${moduleExt}`].map(x =>
+        join(c, x),
       );
 
       for (const sc of candidateFiles) {
-        if (host.exists(sc)) {
+        if (host.exists(sc) && host.readText(sc).includes('@NgModule')) {
           return normalize(sc);
         }
       }
@@ -85,8 +85,8 @@ export function findModule(
   let foundRoutingModule = false;
 
   while (dir) {
-    const allMatches = dir.subfiles.filter((p) => p.endsWith(moduleExt));
-    const filteredMatches = allMatches.filter((p) => !p.endsWith(routingModuleExt));
+    const allMatches = dir.subfiles.filter(p => p.endsWith(moduleExt));
+    const filteredMatches = allMatches.filter(p => !p.endsWith(routingModuleExt));
 
     foundRoutingModule = foundRoutingModule || allMatches.length !== filteredMatches.length;
 

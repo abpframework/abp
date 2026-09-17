@@ -1,16 +1,45 @@
+@use 'sass:color';
+
 @mixin fillColor($background, $color) {
   border: 2px solid $background;
   background-color: $background;
   color: $color;
   box-shadow: 0 0 10px -5px rgba(#000, 0.4);
   &:hover {
-    border: 2px solid darken($background, 5);
-    background-color: darken($background, 5);
+    border: 2px solid color.scale($background, $lightness: -5%);
+    background-color: color.scale($background, $lightness: -5%);
     box-shadow: 0 0 15px -5px rgba(#000, 0.4);
   }
 }
 
 $toastClass: abp-toast;
+
+:host {
+  display: block;
+  animation: abp-toast-in 350ms ease;
+}
+
+:host.abp-toast-leaving {
+  animation: abp-toast-out 450ms ease forwards;
+}
+
+@keyframes abp-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes abp-toast-out {
+  to {
+    opacity: 0;
+  }
+}
 
 .#{$toastClass} {
   display: grid;

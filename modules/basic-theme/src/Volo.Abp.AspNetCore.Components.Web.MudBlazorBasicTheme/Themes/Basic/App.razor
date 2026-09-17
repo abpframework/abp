@@ -1,0 +1,28 @@
+@using Microsoft.Extensions.Options
+@using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Routing
+@using global::MudBlazor
+@inject IOptions<AbpRouterOptions> RouterOptions
+<CascadingAuthenticationState>
+    <Router AppAssembly="RouterOptions.Value.AppAssembly"
+            AdditionalAssemblies="RouterOptions.Value.AdditionalAssemblies">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    @if (!context.User.Identity.IsAuthenticated)
+                    {
+                        <RedirectToLogin />
+                    }
+                    else
+                    {
+                        <MudText>You are not authorized to access this resource.</MudText>
+                    }
+                </NotAuthorized>
+            </AuthorizeRouteView>
+        </Found>
+        <NotFound>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <MudText>Sorry, there's nothing at this address.</MudText>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore ABP Framework's preview releases, designed for developers to test upcoming features and provide feedback for enhanced stability."
+}
+```
+
 # Preview Releases
 
 The preview versions are released **~4 weeks before** releasing a major or minor (feature) version of ABP. They are released for developers to try and provide feedback to have more stable versions.

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the `DomStrategy` class in the @abp/ng.core package, which defines how elements attach to the DOM, enhancing your development workflow."
+}
+```
+
 # DomStrategy
 
 `DomStrategy` is a class exposed by @abp/ng.core package. Its instances define how an element will be attached to the DOM and are consumed by other classes such as `LoadingStrategy`.

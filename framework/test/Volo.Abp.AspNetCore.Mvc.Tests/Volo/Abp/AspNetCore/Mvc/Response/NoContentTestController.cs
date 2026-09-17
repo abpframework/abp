@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Volo.Abp.AspNetCore.Mvc.Response;
@@ -54,5 +56,12 @@ public class NoContentTestController : AbpController
     public async Task TestAsyncMethodWithResultFilter()
     {
         await Task.CompletedTask;
+    }
+
+    [HttpGet]
+    [Route("TestAsyncMethodChangeBody")]
+    public async Task TestAsyncMethodChangeBody()
+    {
+        await Response.Body.WriteAsync("TestBody"u8.ToArray());
     }
 }

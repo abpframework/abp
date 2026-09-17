@@ -1,12 +1,14 @@
 import type { GetIdentityUsersInput, IdentityRoleDto, IdentityUserCreateDto, IdentityUserDto, IdentityUserUpdateDto, IdentityUserUpdateRolesDto } from './models';
 import { RestService } from '@abp/ng.core';
 import type { ListResultDto, PagedResultDto } from '@abp/ng.core';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class IdentityUserService {
+  private restService = inject(RestService);
+
   apiName = 'AbpIdentity';
 
   create = (input: IdentityUserCreateDto) =>
@@ -84,6 +86,4 @@ export class IdentityUserService {
       body: input,
     },
     { apiName: this.apiName });
-
-  constructor(private restService: RestService) {}
 }

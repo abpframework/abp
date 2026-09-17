@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Shouldly;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Reflection;
@@ -23,6 +24,18 @@ public class ApiTypeNameHelper_Tests
         ApiTypeNameHelper.GetSimpleTypeName(typeof(CycleClass)).ShouldBe(TypeHelper.GetSimplifiedName(typeof(CycleClass)));
         ApiTypeNameHelper.GetSimpleTypeName(typeof(CycleClass2)).ShouldBe(TypeHelper.GetSimplifiedName(typeof(CycleClass2)));
         ApiTypeNameHelper.GetTypeName(typeof(CycleClass3)).ShouldBe($"[{TypeHelper.GetSimplifiedName(typeof(CycleClass4))}]");
+    }
+
+
+    [Fact]
+    public void IsDictionary_Test()
+    {
+        ApiTypeNameHelper.GetSimpleTypeName(typeof(IDictionary<string, decimal>)).ShouldBe("{string:number}");
+        ApiTypeNameHelper.GetSimpleTypeName(typeof(Dictionary<string, decimal>)).ShouldBe("{string:number}");
+        ApiTypeNameHelper.GetSimpleTypeName(typeof(IReadOnlyDictionary<string, int>)).ShouldBe("{string:number}");
+        ApiTypeNameHelper.GetSimpleTypeName(typeof(ReadOnlyDictionary<string, int>)).ShouldBe("{string:number}");
+        ApiTypeNameHelper.GetSimpleTypeName(typeof(OrderedDictionary<string, long>)).ShouldBe("{string:number}");
+        ApiTypeNameHelper.GetSimpleTypeName(typeof(SortedDictionary<string, long>)).ShouldBe("{string:number}");
     }
 
     class CycleClass : IEnumerable<CycleClass>

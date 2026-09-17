@@ -4,7 +4,9 @@ var abp = abp || {};
     /* Application paths *****************************************/
 
     //Current application root path (including virtual directory if exists).
-    abp.appPath = abp.appPath || '/';
+    var baseElement = document.querySelector('base');
+    var baseHref = baseElement ? baseElement.getAttribute('href') : null;
+    abp.appPath = baseHref || abp.appPath || '/';
 
     abp.pageLoadTime = new Date();
 
@@ -81,7 +83,7 @@ var abp = abp || {};
         if (resource) {
             return resource;
         }
-        
+
         var legacySource = abp.localization.values[resourceName];
         if (legacySource) {
             return {
@@ -89,11 +91,11 @@ var abp = abp || {};
                 baseResources: []
             };
         }
-        
-        abp.log.warn('Could not find localization source: ' + resourceName);        
+
+        abp.log.warn('Could not find localization source: ' + resourceName);
         return null;
     };
-    
+
     abp.localization.internal.localize = function (key, sourceName) {
         var resource = abp.localization.internal.getResource(sourceName);
         if (!resource){
@@ -104,7 +106,7 @@ var abp = abp || {};
         }
 
         var value = resource.texts[key];
-        if (value === undefined) {            
+        if (value === undefined) {
             for (var i = 0; i < resource.baseResources.length; i++){
                 var basedArguments = Array.prototype.slice.call(arguments, 0);
                 basedArguments[1] = resource.baseResources[i];
@@ -114,7 +116,7 @@ var abp = abp || {};
                     return result;
                 }
             }
-            
+
             return {
                 value: key,
                 found: false
@@ -135,7 +137,7 @@ var abp = abp || {};
         if (sourceName === '_') { //A convention to suppress the localization
             return key;
         }
-        
+
         if (sourceName) {
             return abp.localization.internal.localize.apply(this, arguments).value;
         }
@@ -335,6 +337,17 @@ var abp = abp || {};
         }
 
         var result = confirm(message);
+        callback && callback(result);
+    };
+
+    abp.message.prompt = function (message, titleOrOptionsOrCallback, callback) {
+        abp.log.warn('abp.message.prompt is not properly implemented!');
+
+        if (titleOrOptionsOrCallback && !(typeof titleOrOptionsOrCallback == 'string')) {
+            callback = titleOrOptionsOrCallback;
+        }
+
+        var result = prompt(message);
         callback && callback(result);
     };
 
@@ -750,54 +763,96 @@ var abp = abp || {};
 
     abp.clock.supportsMultipleTimezone = function () {
         return abp.clock.kind === 'Utc';
-    };
+    }
 
-    var toLocal = function (date) {
-        return new Date(
-            date.getFullYear(),
-            date.getMonth(),
-            date.getDate(),
-            date.getHours(),
-            date.getMinutes(),
-            date.getSeconds(),
-            date.getMilliseconds()
-        );
-    };
+    abp.clock.timeZone = function () {
+        return abp.setting.get('Abp.Timing.TimeZone') || abp.clock.browserTimeZone();
+    }
 
-    var toUtc = function (date) {
-        return Date.UTC(
-            date.getUTCFullYear(),
-            date.getUTCMonth(),
-            date.getUTCDate(),
-            date.getUTCHours(),
-            date.getUTCMinutes(),
-            date.getUTCSeconds(),
-            date.getUTCMilliseconds()
-        );
-    };
-
-    abp.clock.now = function () {
-        if (abp.clock.kind === 'Utc') {
-            return toUtc(new Date());
-        }
-        return new Date();
-    };
-
-    abp.clock.normalize = function (date) {
-        var kind = abp.clock.kind;
-
-        if (kind === 'Unspecified') {
+    // Normalize Date object or date string to standard string format that will be sent to server
+    abp.clock.normalizeToString = function (date) {
+        if (!date) {
             return date;
         }
 
-        if (kind === 'Local') {
-            return toLocal(date);
+        var dateObj = date instanceof Date ? date : new Date(date);
+        if (isNaN(dateObj)) {
+            return date;
         }
 
-        if (kind === 'Utc') {
-            return toUtc(date);
+        function padZero(num) {
+            return num < 10 ? '0' + num : num;
         }
+
+        var addZulu = false;
+        if (abp.clock.supportsMultipleTimezone()) {
+            var timeZone = abp.clock.timeZone();
+            var now = new Date();
+            var formattedDate = now.toLocaleString('en-US', { timeZone: timeZone, timeZoneName: 'longOffset' });
+            var match = formattedDate.match(/GMT([+-]\d+)/);
+            var targetOffsetHours = match ? parseInt(match[1], 10) : 0;
+            dateObj = new Date(dateObj.getTime() - (targetOffsetHours * 60 * 60 * 1000));
+            addZulu = true;
+        }
+
+        // yyyy-MM-DDTHH:mm:ss
+        return dateObj.getFullYear() + '-' +
+            padZero(dateObj.getMonth() + 1) + '-' +
+            padZero(dateObj.getDate()) + 'T' +
+            padZero(dateObj.getHours()) + ':' +
+            padZero(dateObj.getMinutes()) + ':' +
+            padZero(dateObj.getSeconds()) + (addZulu ? 'Z' : '');
     };
+
+    // Default options for toLocaleString
+    abp.clock.toLocaleStringOptions = abp.clock.toLocaleStringOptions || {
+        "year": "numeric",
+        "month": "long",
+        "day": "numeric",
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric"
+    };
+
+    // Normalize date string to locale date string that will be displayed to user
+    abp.clock.normalizeToLocaleString = function (dateString, options) {
+        if (!dateString) {
+            return dateString;
+        }
+
+        var date = new Date(dateString);
+        if (isNaN(date)) {
+            return dateString;
+        }
+
+        var culture = abp.localization.currentCulture.cultureName;
+        options = options || abp.clock.toLocaleStringOptions;
+        if (abp.clock.supportsMultipleTimezone()) {
+            var timezone = abp.clock.timeZone();
+            if (timezone) {
+                return date.toLocaleString(culture, Object.assign({}, options, { timeZone: timezone }));
+            }
+        }
+        return date.toLocaleString(culture, options);
+    }
+
+    abp.clock.browserTimeZone = function () {
+        return Intl.DateTimeFormat().resolvedOptions().timeZone;
+    }
+
+    abp.clock.trySetBrowserTimeZoneToCookie = true;
+
+    abp.clock.setBrowserTimeZoneToCookie = function () {
+        if (!abp.clock.trySetBrowserTimeZoneToCookie || !abp.clock.supportsMultipleTimezone()) {
+            return;
+        }
+
+        abp.utils.setCookieValue('__timezone', abp.clock.browserTimeZone(), new Date(new Date().setFullYear(new Date().getFullYear() + 1)), '/');
+    }
+
+    abp.event.on('abp.configurationInitialized', function () {
+        abp.clock.setBrowserTimeZoneToCookie();
+    });
 
     /* FEATURES *************************************************/
 

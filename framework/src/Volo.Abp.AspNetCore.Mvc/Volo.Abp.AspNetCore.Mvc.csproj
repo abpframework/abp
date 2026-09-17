@@ -4,7 +4,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <WarningsAsErrors>Nullable</WarningsAsErrors>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
@@ -30,7 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" />
     <PackageReference Include="Asp.Versioning.Mvc" />
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" />
   </ItemGroup>

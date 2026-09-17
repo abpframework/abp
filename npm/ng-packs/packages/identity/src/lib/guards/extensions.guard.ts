@@ -5,8 +5,8 @@ import {
   mergeWithDefaultActions,
   mergeWithDefaultProps,
 } from '@abp/ng.components/extensible';
-import { ConfigStateService, IAbpGuard, PermissionService } from '@abp/ng.core';
-import { Injectable, inject } from '@angular/core';
+import { IAbpGuard } from '@abp/ng.core';
+import { Injectable, Injector, inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -30,8 +30,7 @@ import {
  */
 @Injectable()
 export class IdentityExtensionsGuard implements IAbpGuard {
-  protected readonly configState = inject(ConfigStateService);
-  protected readonly permission = inject(PermissionService);
+  protected readonly injector = inject(Injector);
   protected readonly extensions = inject(ExtensionsService);
 
   canActivate(): Observable<boolean> {
@@ -43,12 +42,12 @@ export class IdentityExtensionsGuard implements IAbpGuard {
     const createFormContributors = inject(IDENTITY_CREATE_FORM_PROP_CONTRIBUTORS, config) || {};
     const editFormContributors = inject(IDENTITY_EDIT_FORM_PROP_CONTRIBUTORS, config) || {};
 
-    return getObjectExtensionEntitiesFromStore(this.configState, 'Identity').pipe(
+    return getObjectExtensionEntitiesFromStore(this.injector, 'Identity').pipe(
       map(entities => ({
         [eIdentityComponents.Roles]: entities.Role,
         [eIdentityComponents.Users]: entities.User,
       })),
-      mapEntitiesToContributors(this.configState, this.permission, 'AbpIdentity'),
+      mapEntitiesToContributors(this.injector, 'AbpIdentity'),
       tap(objectExtensionContributors => {
         mergeWithDefaultActions(
           this.extensions.entityActions,

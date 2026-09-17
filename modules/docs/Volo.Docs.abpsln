@@ -3,5 +3,11 @@
     "Volo.Docs": {
       "path": "Volo.Docs.abpmdl"
     }
+  },
+  "id": "c1d848e0-0b53-461b-824a-8533ba1fd82b",
+  "runProfiles": {
+    "Default": {
+      "path": "Default.abprun.json"
+    }
   }
 }

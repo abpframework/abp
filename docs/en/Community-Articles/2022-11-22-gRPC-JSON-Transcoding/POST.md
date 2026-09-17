@@ -4,6 +4,12 @@ In this article, I'll show you one of the new features that came with .NET 7: **
 
 > I've created a community article to highlight some interesting features (briefly) that are now available with the release of .NET 7. You can check it from [here](https://community.abp.io/posts/whats-new-with-.net-7-tlq2g43w).
 
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
+
 ## What is gRPC? What are the pros and cons?
 
 [gRPC](https://grpc.io/) is a high-performance RPC framework and uses HTTP/2 and Protobuf (protocol buffers).
@@ -188,6 +194,12 @@ We've created a gRPC service and now let's run our application (before running t
 In this article, I've briefly introduced the JSON Transcoding feature that was shipped with .NET 7 and showed it in an ABP Based application.
 
 > See the [gRPC JSON transcoding in ASP.NET Core gRPC apps](https://learn.microsoft.com/en-us/aspnet/core/grpc/json-transcoding?view=aspnetcore-7.0) documentation for more information.
+
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
 
 ## References
 

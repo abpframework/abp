@@ -84,8 +84,65 @@ public class ReflectionHelper_Tests
         constants.ShouldNotBeEmpty();
         constants.Except(IdentityPermissions.GetAll()).Count().ShouldBe(0);
     }
+
+    [Fact]
+    public void IsNullable_Test()
+    {
+        var prop1 = typeof(TestClass).GetProperty(nameof(TestClass.Prop1))!;
+        ReflectionHelper.IsNullable(prop1).ShouldBeFalse();
+
+        var prop2 = typeof(TestClass).GetProperty(nameof(TestClass.Prop2))!;
+        ReflectionHelper.IsNullable(prop2).ShouldBeTrue();
+
+        var prop3 = typeof(TestClass).GetProperty(nameof(TestClass.Prop3))!;
+        ReflectionHelper.IsNullable(prop3).ShouldBeFalse();
+
+        var prop4 = typeof(TestClass).GetProperty(nameof(TestClass.Prop4))!;
+        ReflectionHelper.IsNullable(prop4).ShouldBeTrue();
+
+        var prop5 = typeof(TestClass).GetProperty(nameof(TestClass.Prop5))!;
+        ReflectionHelper.IsNullable(prop5).ShouldBeFalse();
+
+        var prop6 = typeof(TestClass).GetProperty(nameof(TestClass.Prop6))!;
+        ReflectionHelper.IsNullable(prop6).ShouldBeTrue();
+
+        var prop7 = typeof(TestClass).GetProperty(nameof(TestClass.Prop7))!;
+        ReflectionHelper.IsNullable(prop7).ShouldBeFalse();
+
+        var prop8 = typeof(TestClass).GetProperty(nameof(TestClass.Prop8))!;
+        ReflectionHelper.IsNullable(prop8).ShouldBeTrue();
+
+        var prop9 = typeof(TestClass).GetProperty(nameof(TestClass.Prop9))!;
+        ReflectionHelper.IsNullable(prop9).ShouldBeFalse();
+
+        var prop10 = typeof(TestClass).GetProperty(nameof(TestClass.Prop10))!;
+        ReflectionHelper.IsNullable(prop10).ShouldBeTrue();
+
+        var prop11 = typeof(TestClass).GetProperty(nameof(TestClass.Prop11))!;
+        ReflectionHelper.IsNullable(prop11).ShouldBeFalse();
+
+        var prop12 = typeof(TestClass).GetProperty(nameof(TestClass.Prop12))!;
+        ReflectionHelper.IsNullable(prop12).ShouldBeTrue();
+    }
 }
 
+public class TestClass
+{
+    public string Prop1 { get; set; } = null!;
+    public string? Prop2 { get; set; } = null!;
+    public required string Prop3 { get; set; }
+    public required string? Prop4 { get; set; }
+
+    public int Prop5 { get; set; }
+    public int? Prop6 { get; set; }
+    public required int Prop7 { get; set; }
+    public required int? Prop8 { get; set; }
+
+    public int[] Prop9 { get; set; } = null!;
+    public int[]? Prop10 { get; set; }
+    public required int[] Prop11 { get; set; }
+    public required int[]? Prop12 { get; set; }
+}
 
 public class BaseRole
 {

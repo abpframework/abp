@@ -11,6 +11,7 @@
     "InvalidUsername": "نام کاربری یا رمز عبور نامعتبر!",
     "InvalidAuthenticatorCode": "کد احراز هویت نامعتبر!",
     "InvalidRecoveryCode": "کد بازیابی نامعتبر!",
-    "TheTargetUserIsNotLinkedToYou": "کاربر هدف به شما پیوند داده نشده است!"
+    "TheTargetUserIsNotLinkedToYou": "کاربر هدف به شما پیوند داده نشده است!",
+    "ClientResourcePermissionProviderKeyLookupService": "کلاینت"
   }
 }

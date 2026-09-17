@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "interceptor-type.schema.json",
+  "title": "InterceptorType",
+  "description": "When an entity command interceptor runs. Prefer PascalCase values shown here.",
+  "markdownDescription": "`Pre` runs before the command is persisted and can block with `globalError`. `Post` runs after the command succeeds and is best for logging, notifications, publishing events, or enqueueing jobs. `Replace` is reserved for replacing command behavior where supported and should be avoided unless the host explicitly supports it.",
+  "type": "string",
+  "enum": [
+    "Pre",
+    "pre",
+    "Post",
+    "post",
+    "Replace",
+    "replace"
+  ],
+  "enumDescriptions": [
+    "Before persistence; can block with globalError.",
+    "Before persistence; can block with globalError.",
+    "After successful persistence; use for side effects.",
+    "After successful persistence; use for side effects.",
+    "Replace command behavior where supported.",
+    "Replace command behavior where supported."
+  ]
+}

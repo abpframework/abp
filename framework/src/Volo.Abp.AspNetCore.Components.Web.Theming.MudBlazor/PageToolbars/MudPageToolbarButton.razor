@@ -1,0 +1,21 @@
+@using global::MudBlazor
+
+<MudButton Color="@Color"
+           Variant="@Variant.Filled"
+           StartIcon="@IconString"
+           Disabled="@Disabled"
+           OnClick="@OnClickHandler">
+    @Text
+</MudButton>
+
+@code {
+    private string? IconString => Icon?.ToString();
+
+    private async Task OnClickHandler()
+    {
+        if (OnClickAsync != null)
+        {
+            await OnClickAsync();
+        }
+    }
+}

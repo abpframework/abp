@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enhance your Angular UI data tables by adding or modifying columns with the Entity Prop Extension system in ABP Framework."
+}
+```
+
 # Data Table Column (or Entity Prop) Extensions for Angular UI
 
 ## Introduction
@@ -8,13 +15,15 @@ Entity prop extension system allows you to add a new column to the data table fo
 
 You will have access to the current entity in your code and display its value, make the column sortable, perform visibility checks, and more. You can also render custom HTML in table cells.
 
+> **Standalone-first:** Current ABP templates use standalone APIs. The `loadChildren` examples below lazy-load routes from `createRoutes({ ... })` — they do not require NgModules. Legacy NgModule projects can pass the same options to `IdentityModule.forLazy({ ... })` instead. See [ABP Now Supports Angular Standalone Applications](https://abp.io/community/articles/abp-now-supports-angular-standalone-applications-zzi2rr2z).
+
 ## How to Set Up
 
 In this example, we will add a "Name" column and display the value of the `name` field in the user management page of the [Identity Module](../../../modules/identity.md).
 
 ### Step 1. Create Entity Prop Contributors
 
-The following code prepares a constant named `identityEntityPropContributors`, ready to be imported and used in your root module:
+The following code prepares a constant named `identityEntityPropContributors`, ready to be imported and used in your root application configuration:
 
 ```js
 // src/app/entity-prop-contributors.ts
@@ -52,22 +61,22 @@ The list of props, conveniently named as `propList`, is a **doubly linked list**
 
 ### Step 2. Import and Use Entity Prop Contributors
 
-Import `identityEntityPropContributors` in your routing module and pass it to the static `forLazy` method of `IdentityModule` as seen below:
+Import `identityEntityPropContributors` in your routing configuration and pass it to the static `createRoutes` method for `identity` route as seen below:
 
 ```js
-// src/app/app-routing.module.ts
+// src/app/app.routes.ts
 
-// other imports
+import { Routes } from '@angular/router';
 import { identityEntityPropContributors } from './entity-prop-contributors';
 
-const routes: Routes = [
+export const APP_ROUTES: Routes = [
   // other routes
 
   {
     path: 'identity',
     loadChildren: () =>
-      import('@abp/ng.identity').then(m =>
-        m.IdentityModule.forLazy({
+      import('@abp/ng.identity').then(c =>
+        c.createRoutes({
           entityPropContributors: identityEntityPropContributors,
         })
       ),
@@ -77,7 +86,21 @@ const routes: Routes = [
 ];
 ```
 
-That is it, `nameProp` entity prop will be added, and you will see the "Name" column next to the usernames on the grid in the users page (`UsersComponent`) of the `IdentityModule`.
+#### Legacy NgModule projects
+
+```js
+{
+  path: 'identity',
+  loadChildren: () =>
+    import('@abp/ng.identity').then(m =>
+      m.IdentityModule.forLazy({
+        entityPropContributors: identityEntityPropContributors,
+      }),
+    ),
+},
+```
+
+That is it, `nameProp` entity prop will be added, and you will see the "Name" column next to the usernames on the grid in the users page (`UsersComponent`) of the `identity` package.
 
 ## How to Render Custom HTML in Cells
 
@@ -164,7 +187,7 @@ It has the following properties:
 
 - **index** is the table index where the record is at.
 
-- **getInjected** is the equivalent of [Injector.get](https://angular.io/api/core/Injector#get). You can use it to reach injected dependencies of `ExtensibleTableComponent`, including, but not limited to, its parent component.
+- **getInjected** is the equivalent of [Injector.get](https://angular.dev/api/core/Injector). You can use it to reach injected dependencies of `ExtensibleTableComponent`, including, but not limited to, its parent component.
 
   ```js
   {
@@ -318,7 +341,7 @@ export function reorderUserContributors(
 
 ### EntityPropContributorCallback\<R = any\>
 
-`EntityPropContributorCallback` is the type that you can pass as entity prop contributor callbacks to static `forLazy` methods of the modules.
+`EntityPropContributorCallback` is the type that you can pass as entity prop contributor callbacks to static `createRoutes` methods of the packages.
 
 ```js
 export function isLockedOutPropContributor(
@@ -335,4 +358,5 @@ export const identityEntityPropContributors = {
 
 ## See Also
 
+- [Extensible Table Row Detail](extensible-table-row-detail.md)
 - [Customizing Application Modules Guide](../../architecture/modularity/extending/customizing-application-modules-guide.md)

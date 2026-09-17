@@ -67,6 +67,9 @@
     "EntityHistory": "Saga eininga",
     "DaysAgoTitle": "{0} {1}.",
     "DaysAgoWithUserTitle": "{0} {1} eftir {2}.",
+    "MinutesAgo": "fyrir {0} mínútum",
+    "HoursAgo": "fyrir {0} klukkustundum",
+    "DaysAgo": "fyrir {0} dögum",
     "Created": "Búið til",
     "Updated": "Uppfært",
     "Deleted": "Eytt",
@@ -78,6 +81,10 @@
     "EndDate": "Loka dagsetning",
     "Feature:AuditLoggingGroup": "Endurskoðunarskráning",
     "Feature:AuditLoggingEnable": "Virkjað endurskoðunarskráningarsíða",
-    "Feature:AuditLoggingEnableDescription": "Virkjaðu endurskoðunarskráningarsíðu í forritinu."
+    "Feature:AuditLoggingEnableDescription": "Virkjaðu endurskoðunarskráningarsíðu í forritinu.",
+    "TenantId": "Leigutakaauðkenni",
+    "DownloadLinkExplanation": "Þú getur sótt skrána með tenglinum hér að neðan til {0} (UTC)",
+    "DownloadNow": "Sækja núna",
+    "TryAgainMessage": "Vinsamlegast reyndu aftur. Ef vandamálið er viðvarandi, hafðu samband við þjónustuaðila."
   }
 }

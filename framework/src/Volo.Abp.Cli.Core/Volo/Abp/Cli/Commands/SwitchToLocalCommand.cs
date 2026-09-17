@@ -70,7 +70,7 @@ public class SwitchToLocal : IConsoleCommand, ITransientDependency
             return null;
         }
 
-        if (path.EndsWith(".sln") || path.EndsWith(".csproj"))
+        if (path.EndsWith(".sln") || path.EndsWith(".slnx") || path.EndsWith(".csproj"))
         {
             return Path.GetDirectoryName(path);
         }

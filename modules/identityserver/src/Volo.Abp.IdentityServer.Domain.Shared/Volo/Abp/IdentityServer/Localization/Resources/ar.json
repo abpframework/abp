@@ -11,6 +11,7 @@
     "InvalidUsername": "اسم المستخدم أو كلمة المرور غير صالحة!",
     "InvalidAuthenticatorCode": "كود المصدق غير صالح!",
     "InvalidRecoveryCode": "رمز الاسترداد غير صالح!",
-    "TheTargetUserIsNotLinkedToYou": "المستخدم المستهدف غير مرتبط بك!"
+    "TheTargetUserIsNotLinkedToYou": "المستخدم المستهدف غير مرتبط بك!",
+    "ClientResourcePermissionProviderKeyLookupService": "العميل"
   }
 }

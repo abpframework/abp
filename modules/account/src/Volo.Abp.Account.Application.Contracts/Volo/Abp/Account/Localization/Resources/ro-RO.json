@@ -68,6 +68,8 @@
     "AccessDenied": "Acces interzis!",
     "AccessDeniedMessage": "Nu aveţi acces la această resursă.",
     "OrRegisterWith": "Sau înregistraţi-vă cu:",
-    "RegisterUsingYourProviderAccount": "Înregistraţi-vă folosindu-vă contul {0}"
+    "RegisterUsingYourProviderAccount": "Înregistraţi-vă folosindu-vă contul {0}",
+    "RequireMigrateSeedTitle": "Nu s-a putut găsi utilizatorul admin",
+    "RequireMigrateSeedMessage": "Vă rugăm să vă asiguraţi că seed-ul bazei de date este executat. Consultaţi <a target=\"_blank\" href=\"https://abp.io/kb/0003\">documentaţia</a> pentru soluţii posibile."
   }
 }

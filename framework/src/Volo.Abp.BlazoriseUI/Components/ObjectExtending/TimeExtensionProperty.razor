@@ -7,12 +7,12 @@
 {
     <Validation Validator="@Validate" MessageLocalizer="@LH.Localize">
         <Field>
-            <FieldLabel>@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)</FieldLabel>-->
-            <TimeEdit TValue="TimeSpan?" @bind-Time="@Value" Disabled="IsReadonlyField">
+            <FieldLabel>@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)</FieldLabel>
+            <TimeInput TValue="TimeSpan?" @bind-Value="@Value" Disabled="IsReadonlyField">
                  <Feedback>
                     <ValidationError/>
                 </Feedback>
-            </TimeEdit>
+            </TimeInput>
         </Field>
     </Validation>
 }

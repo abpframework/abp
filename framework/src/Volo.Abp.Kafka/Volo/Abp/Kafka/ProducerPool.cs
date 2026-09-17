@@ -17,7 +17,7 @@ public class ProducerPool : IProducerPool, ISingletonDependency
     protected ConcurrentDictionary<string, Lazy<IProducer<string, byte[]>>> Producers { get; }
 
     protected TimeSpan TotalDisposeWaitDuration { get; set; } = TimeSpan.FromSeconds(10);
-    
+
     protected TimeSpan DefaultTransactionsWaitDuration { get; set; } = TimeSpan.FromSeconds(30);
 
     public ILogger<ProducerPool> Logger { get; set; }
@@ -41,8 +41,10 @@ public class ProducerPool : IProducerPool, ISingletonDependency
             {
                 var producerConfig = new ProducerConfig(Options.Connections.GetOrDefault(connection).ToDictionary(k => k.Key, v => v.Value));
                 Options.ConfigureProducer?.Invoke(producerConfig);
+                producerConfig.Acks ??= Acks.All;
+                producerConfig.EnableIdempotence ??= true;
                 return new ProducerBuilder<string, byte[]>(producerConfig).Build();
-                
+
             })).Value;
     }
 
@@ -70,7 +72,7 @@ public class ProducerPool : IProducerPool, ISingletonDependency
         foreach (var producer in Producers.Values)
         {
             var poolItemDisposeStopwatch = Stopwatch.StartNew();
-        
+
             try
             {
                 producer.Value.Dispose();
@@ -78,19 +80,19 @@ public class ProducerPool : IProducerPool, ISingletonDependency
             catch
             {
             }
-        
+
             poolItemDisposeStopwatch.Stop();
-        
+
             remainingWaitDuration = remainingWaitDuration > poolItemDisposeStopwatch.Elapsed
                 ? remainingWaitDuration.Subtract(poolItemDisposeStopwatch.Elapsed)
                 : TimeSpan.Zero;
         }
-        
+
         poolDisposeStopwatch.Stop();
-        
+
         Logger.LogInformation(
             $"Disposed Kafka Producer Pool ({Producers.Count} producers in {poolDisposeStopwatch.Elapsed.TotalMilliseconds:0.00} ms).");
-        
+
         if (poolDisposeStopwatch.Elapsed.TotalSeconds > 5.0)
         {
             Logger.LogWarning(

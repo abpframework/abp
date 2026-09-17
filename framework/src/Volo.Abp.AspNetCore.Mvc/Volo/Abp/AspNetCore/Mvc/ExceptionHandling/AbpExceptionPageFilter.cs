@@ -90,10 +90,12 @@ public class AbpExceptionPageFilter : IAsyncPageFilter, IAbpFilter, ITransientDe
         remoteServiceErrorInfoBuilder.AppendLine($"---------- {nameof(RemoteServiceErrorInfo)} ----------");
         remoteServiceErrorInfoBuilder.AppendLine(context.GetRequiredService<IJsonSerializer>().Serialize(remoteServiceErrorInfo, indented: true));
 
-        var logger = context.GetService<ILogger<AbpExceptionPageFilter>>(NullLogger<AbpExceptionPageFilter>.Instance)!;
-        logger.LogWithLevel(logLevel, remoteServiceErrorInfoBuilder.ToString());
-
-        logger.LogException(context.Exception!, logLevel);
+        if (context.Exception != null && exceptionHandlingOptions.ShouldLogException(context.Exception))
+        {
+            var logger = context.GetService<ILogger<AbpExceptionPageFilter>>(NullLogger<AbpExceptionPageFilter>.Instance)!;
+            logger.LogWithLevel(logLevel, remoteServiceErrorInfoBuilder.ToString());
+            logger.LogException(context.Exception!, logLevel);
+        }
 
         await context.GetRequiredService<IExceptionNotifier>().NotifyAsync(new ExceptionNotificationContext(context.Exception!));
 
@@ -113,6 +115,7 @@ public class AbpExceptionPageFilter : IAsyncPageFilter, IAbpFilter, ITransientDe
             }
             else
             {
+                var logger = context.GetService<ILogger<AbpExceptionPageFilter>>(NullLogger<AbpExceptionPageFilter>.Instance)!;
                 logger.LogWarning("HTTP response has already started, cannot set headers and status code!");
             }
 

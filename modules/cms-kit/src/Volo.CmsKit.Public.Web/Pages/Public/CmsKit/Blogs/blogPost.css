@@ -43,3 +43,21 @@ span.area-title {
     text-decoration: none;
     padding-left: 18px;
 }
+
+.blockquote, blockquote{
+    display: block;
+    padding: 1em 1.5em;
+    border-radius: 8px;
+    background: rgba(58, 130, 246, 0.1);
+    font-size: 1.125rem;
+}
+
+code.hljs{
+    border-radius: 8px;
+    background: rgba(247, 37, 133, 0.1);
+}
+
+pre code.hljs{
+    background: rgba(0, 0, 0, 0.1);
+    padding: 1em 1.5em;
+}

@@ -1,3 +1,1 @@
-# ABP Studio Microservice Solution: Adding New Microservices
-
-This document is planned to be written later.
+> This document is [moved to here](../adding-new-microservices.md).

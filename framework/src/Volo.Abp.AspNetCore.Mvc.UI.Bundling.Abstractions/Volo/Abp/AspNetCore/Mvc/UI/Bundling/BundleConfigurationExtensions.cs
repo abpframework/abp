@@ -23,6 +23,18 @@ public static class BundleConfigurationExtensions
         return bundleConfiguration;
     }
 
+    public static BundleConfiguration RemoveFiles(this BundleConfiguration bundleConfiguration, params string[] files)
+    {
+        bundleConfiguration.Contributors.RemoveBundleFile(files.ToArray());
+        return bundleConfiguration;
+    }
+
+    public static BundleConfiguration RemoveFiles(this BundleConfiguration bundleConfiguration, Func<string, bool> predicate)
+    {
+        bundleConfiguration.Contributors.RemoveBundleFile(predicate);
+        return bundleConfiguration;
+    }
+
     public static BundleConfiguration AddContributors(this BundleConfiguration bundleConfiguration, params IBundleContributor[] contributors)
     {
         Check.NotNull(contributors, nameof(contributors));

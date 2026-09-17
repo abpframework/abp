@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Repositories.MongoDB;
@@ -23,7 +24,7 @@ public class MongoDeviceFlowCodesRepository :
         string userCode,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .Where(d => d.UserCode == userCode)
             .OrderBy(x => x.Id)
             .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
@@ -31,7 +32,7 @@ public class MongoDeviceFlowCodesRepository :
 
     public virtual async Task<DeviceFlowCodes> FindByDeviceCodeAsync(string deviceCode, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .Where(d => d.DeviceCode == deviceCode)
             .OrderBy(x => x.Id)
             .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
@@ -42,7 +43,7 @@ public class MongoDeviceFlowCodesRepository :
         int maxResultCount,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .Where(x => x.Expiration != null && x.Expiration < maxExpirationDate)
             .OrderBy(x => x.ClientId)
             .Take(maxResultCount)

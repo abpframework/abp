@@ -1,4 +1,21 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the main components of the ABP microservice solution, including applications, API gateways, and services for effective development."
+}
+```
+
 # Microservice Solution: Main Components
+
+```json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Microservices",
+    "Path": "solution-templates/microservice/microservices"
+  }
+}
+```
 
 > You must have an ABP Business or a higher license to be able to create a microservice solution.
 

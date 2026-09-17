@@ -1,28 +1,45 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AbpLocalStorageService implements Storage {
-  constructor() {}
+  private platformId = inject(PLATFORM_ID);
+
+  constructor() {
+  }
   [name: string]: any;
+
+  private get storage(): Storage | null {
+    if (!isPlatformBrowser(this.platformId) || typeof window === 'undefined') {
+      return null;
+    }
+
+    try {
+      return window.localStorage;
+    } catch {
+      return null;
+    }
+  }
+
   get length(): number {
-    return localStorage.length;
+    return this.storage?.length || 0;
   }
 
   clear(): void {
-    localStorage.clear();
+    this.storage?.clear();
   }
-  getItem(key: string): string {
-    return localStorage.getItem(key);
+  getItem(key: string): string | null {
+    return this.storage?.getItem(key) || null;
   }
-  key(index: number): string {
-    return localStorage.key(index);
+  key(index: number): string | null {
+    return this.storage?.key(index) || null;
   }
   removeItem(key: string): void {
-    localStorage.removeItem(key);
+    this.storage?.removeItem(key);
   }
   setItem(key: string, value: string): void {
-    localStorage.setItem(key, value);
+    this.storage?.setItem(key, value);
   }
 }

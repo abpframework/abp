@@ -60,6 +60,9 @@
     "AddNew": "Yeni ekle",
     "ProfilePicture": "Profil resmi",
     "Theme": "Tema",
-    "NotAssigned": "Atanmadı"
+    "NotAssigned": "Atanmadı",
+    "EntityActionsDisabledTooltip": "Bu işlemi gerçekleştirmek için yeterli yetkiniz yok.",
+    "ResourcePermissions": "İzinler",
+    "ShowPassword": "Şifreyi göster"
   }
 }

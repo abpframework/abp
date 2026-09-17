@@ -25,9 +25,9 @@ public class FeatureManagementModal : AbpPageModel
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
     public string ProviderKey { get; set; }
-    
+
     [HiddenInput]
-    [BindProperty(SupportsGet = true)] 
+    [BindProperty(SupportsGet = true)]
     public string ProviderKeyDisplayName { get; set; }
 
     [BindProperty]
@@ -69,7 +69,7 @@ public class FeatureManagementModal : AbpPageModel
     {
         var features = new UpdateFeaturesDto
         {
-            Features = FeatureGroups.SelectMany(g => g.Features).Select(f => new UpdateFeatureDto
+            Features = FeatureGroups.SelectMany(g => g.Features).Where(x => !x.IsDisabled).Select(f => new UpdateFeatureDto
             {
                 Name = f.Name,
                 Value = f.Type == nameof(ToggleStringValueType) ? f.BoolValue.ToString() : f.Value
@@ -85,6 +85,21 @@ public class FeatureManagementModal : AbpPageModel
         return NoContent();
     }
 
+    public virtual bool IsDisabled(FeatureDto feature)
+    {
+        return feature.Value != null &&
+               feature.Provider.Name != null &&
+               feature.Provider.Name != ProviderName &&
+               feature.Provider.Name != DefaultValueFeatureValueProvider.ProviderName;
+    }
+
+    public virtual string GetShownName(FeatureDto featureDto)
+    {
+        return !IsDisabled(featureDto)
+            ? featureDto.DisplayName
+            : $"{featureDto.DisplayName} ({featureDto.Provider.Name})";
+    }
+
     public class FeatureGroupViewModel
     {
         public List<FeatureViewModel> Features { get; set; }
@@ -92,6 +107,8 @@ public class FeatureManagementModal : AbpPageModel
 
     public class FeatureViewModel
     {
+        public bool IsDisabled { get; set; }
+
         public string Name { get; set; }
 
         public string Value { get; set; }

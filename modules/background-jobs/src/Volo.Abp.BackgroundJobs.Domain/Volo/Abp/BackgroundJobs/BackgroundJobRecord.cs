@@ -7,6 +7,11 @@ namespace Volo.Abp.BackgroundJobs;
 public class BackgroundJobRecord : AggregateRoot<Guid>, IHasCreationTime
 {
     /// <summary>
+    /// Application name that scheduled this job.
+    /// </summary>
+    public virtual string ApplicationName { get; set; }
+
+    /// <summary>
     /// Type of the job.
     /// It's AssemblyQualifiedName of job type.
     /// </summary>
@@ -42,6 +47,12 @@ public class BackgroundJobRecord : AggregateRoot<Guid>, IHasCreationTime
     /// This is true if this job is continuously failed and will not be executed again.
     /// </summary>
     public virtual bool IsAbandoned { get; set; }
+
+    /// <summary>
+    /// The time this job was completed successfully. When set, the job is kept as history and excluded
+    /// from the waiting jobs query (set only when successful job persistence is enabled).
+    /// </summary>
+    public virtual DateTime? CompletionTime { get; set; }
 
     /// <summary>
     /// Priority of this job.

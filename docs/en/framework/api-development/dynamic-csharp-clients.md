@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use ABP's dynamic C# API client proxies for seamless HTTP service calls, simplifying authentication, serialization, and error handling."
+}
+```
+
 # Dynamic C# API Client Proxies
 
 ABP can dynamically create C# API client proxies to call your remote HTTP services (REST APIs). In this way, you don't need to deal with `HttpClient` and other low level details to call remote services and get results.
@@ -163,6 +170,30 @@ context.Services.AddHttpClientProxies(
 
 `remoteServiceConfigurationName` parameter matches the service endpoint configured via `AbpRemoteServiceOptions`. If the `BookStore` endpoint is not defined then it fallbacks to the `Default` endpoint.
 
+#### Remote Service Configuration Provider
+
+You may need to get the remote service configuration for a specific remote service in some cases. For this, you can use the `IRemoteServiceConfigurationProvider` interface.
+
+**Example: Get the remote service configuration for the "BookStore" remote service**
+
+````csharp
+public class MyService : ITransientDependency
+{
+    private readonly IRemoteServiceConfigurationProvider _remoteServiceConfigurationProvider;
+
+    public MyService(IRemoteServiceConfigurationProvider remoteServiceConfigurationProvider)
+    {
+        _remoteServiceConfigurationProvider = remoteServiceConfigurationProvider;
+    }
+
+    public async Task GetRemoteServiceConfiguration()
+    {
+        var configuration = await _remoteServiceConfigurationProvider.GetConfigurationOrDefaultAsync("BookStore");
+        Console.WriteLine(configuration.BaseUrl);
+    }
+}
+````
+
 ### As Default Services
 
 When you create a service proxy for `IBookAppService`, you can directly inject the `IBookAppService` to use the proxy client (as shown in the usage section). You can pass `asDefaultServices: false` to the `AddHttpClientProxies` method to disable this feature.
@@ -177,6 +208,46 @@ context.Services.AddHttpClientProxies(
 Using `asDefaultServices: false` may only be needed if your application has already an implementation of the service and you do not want to override/replace the other implementation by your client proxy.
 
 > If you disable `asDefaultServices`, you can only use `IHttpClientProxy<T>` interface to use the client proxies. See the *IHttpClientProxy Interface* section above.
+
+### Before Sending a Proxy Request
+
+`AbpHttpClientOptions.AddPreSendAction` registers an action for a named remote service. It receives the proxy configuration, the current request context and the `HttpClient`, and runs immediately before each proxy request is sent.
+
+````csharp
+Configure<AbpHttpClientOptions>(options =>
+{
+    options.AddPreSendAction(
+        "BookStore",
+        (_, requestContext, httpClient) =>
+        {
+            if (requestContext.Action.Name == "GetReportAsync")
+            {
+                httpClient.Timeout = TimeSpan.FromMinutes(2);
+            }
+        }
+    );
+});
+````
+
+### Custom Parameter Converters
+
+Dynamic proxies normally use the built-in conversion rules for query-string, form-data and path values. Implement `IObjectToQueryString<T>`, `IObjectToFormData<T>` or `IObjectToPath<T>` when a type requires custom serialization, register the implementation in dependency injection, and map the value type to the converter:
+
+````csharp
+context.Services.AddTransient<MyFilterToQueryString>();
+context.Services.AddTransient<MyUploadMetadataToFormData>();
+context.Services.AddTransient<MyStrongIdToPath>();
+
+Configure<AbpHttpClientProxyingOptions>(options =>
+{
+    options.QueryStringConverts[typeof(MyFilter)] =
+        typeof(MyFilterToQueryString);
+    options.FormDataConverts[typeof(MyUploadMetadata)] =
+        typeof(MyUploadMetadataToFormData);
+    options.PathConverts[typeof(MyStrongId)] =
+        typeof(MyStrongIdToPath);
+});
+````
 
 ### Retry/Failure Logic & Polly Integration
 
@@ -203,6 +274,8 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 ````
 
 This example uses the [Microsoft.Extensions.Http.Polly](https://www.nuget.org/packages/Microsoft.Extensions.Http.Polly) package. You also need to import the `Polly` namespace (`using Polly;`) to be able to use the `WaitAndRetryAsync` method.
+
+
 
 ## See Also
 

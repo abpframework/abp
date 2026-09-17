@@ -1,6 +1,13 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to utilize the ConfigStateService in Angular projects to access server-defined settings effectively with ABP Framework."
+}
+```
+
 # Settings
 
-You can get settings on the client-side using the [config state service](./config-state.md) if they are allowed by their setting definition on the server-side.
+You can get settings on the client-side using the [config state service](./config-state-service.md) if they are allowed by their setting definition on the server-side.
 
 > This document only explains how settings work in the Angular UI projects. See the [settings document](../../infrastructure/settings.md) to understand the ABP setting system.
 
@@ -10,12 +17,13 @@ To use the `ConfigStateService`, you must inject it in your class as a dependenc
 
 ```js
 import { ConfigStateService } from '@abp/ng.core';
+import { inject } from '@angular/core';
 
 @Component({
   /* class metadata here */
 })
 class DemoComponent {
-  constructor(private config: ConfigStateService) {}
+  private config = inject(ConfigStateService);
 }
 ```
 

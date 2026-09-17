@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover ABP's opinionated yet flexible architecture for building enterprise software, featuring modularity and comprehensive tools for developers."
+}
+```
+
 # ABP Architecture
 
 ABP offers an **opinionated architecture** to build enterprise software solutions. In this way, the solution structure and development model is pretty well defined. All the solution templates, tooling, pre-built modules, guides and documentation are compatible to that development model.

@@ -7,18 +7,6 @@
     }
   },
   "packages": {
-    "VoloDocs.Web": {
-      "path": "app/VoloDocs.Web/VoloDocs.Web.abppkg",
-      "folder": "app"
-    },
-    "VoloDocs.EntityFrameworkCore": {
-      "path": "app/VoloDocs.EntityFrameworkCore/VoloDocs.EntityFrameworkCore.abppkg",
-      "folder": "app"
-    },
-    "VoloDocs.Migrator": {
-      "path": "app/VoloDocs.Migrator/VoloDocs.Migrator.abppkg",
-      "folder": "app"
-    },
     "Volo.Docs.Web": {
       "path": "src/Volo.Docs.Web/Volo.Docs.Web.abppkg",
       "folder": "src"
@@ -98,6 +86,22 @@
     "Volo.Docs.MongoDB.Tests": {
       "path": "test/Volo.Docs.MongoDB.Tests/Volo.Docs.MongoDB.Tests.abppkg",
       "folder": "test"
+    },
+    "Volo.Docs.Common.Application": {
+      "path": "src/Volo.Docs.Common.Application/Volo.Docs.Common.Application.abppkg",
+      "folder": "src"
+    },
+    "Volo.Docs.Common.Application.Contracts": {
+      "path": "src/Volo.Docs.Common.Application.Contracts/Volo.Docs.Common.Application.Contracts.abppkg",
+      "folder": "src"
+    },
+    "Volo.Docs.Common.HttpApi": {
+      "path": "src/Volo.Docs.Common.HttpApi/Volo.Docs.Common.HttpApi.abppkg",
+      "folder": "src"
+    },
+    "Volo.Docs.Common.HttpApi.Client": {
+      "path": "src/Volo.Docs.Common.HttpApi.Client/Volo.Docs.Common.HttpApi.Client.abppkg",
+      "folder": "src"
     }
   }
 }

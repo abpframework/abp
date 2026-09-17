@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate Dapr with ABP Framework for streamlined microservice communication and enhanced developer experience."
+}
+```
+
 # ABP Dapr Integration
 
 > This document assumes that you are already familiar with [Dapr](https://dapr.io/) and you want to use it in your ABP based applications.

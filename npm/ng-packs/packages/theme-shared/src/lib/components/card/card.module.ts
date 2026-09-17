@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { CardBodyComponent } from './card-body.component';
 import { CardComponent } from './card.component';
@@ -9,20 +8,23 @@ import { CardSubtitleDirective } from './card-subtitle.directive';
 import { CardImgTopDirective } from './card-img-top.directive';
 import { CardHeaderDirective } from './card-header.directive';
 
-const declarationsWithExports = [
-  CardComponent,
-  CardBodyComponent,
-  CardHeaderComponent,
-  CardFooterComponent,
+export const CARD_DIRECTIVES = [
   CardTitleDirective,
   CardSubtitleDirective,
   CardImgTopDirective,
   CardHeaderDirective,
 ];
 
+export const CARD_COMPONENTS = [
+  CardComponent,
+  CardBodyComponent,
+  CardHeaderComponent,
+  CardFooterComponent,
+];
+
 @NgModule({
-  declarations: [...declarationsWithExports],
-  imports: [CommonModule],
-  exports: [...declarationsWithExports],
+  declarations: [],
+  imports: [...CARD_COMPONENTS, ...CARD_DIRECTIVES],
+  exports: [...CARD_COMPONENTS, ...CARD_DIRECTIVES],
 })
 export class CardModule {}

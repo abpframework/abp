@@ -2,6 +2,7 @@
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.IdentityServer;
 
@@ -38,9 +39,17 @@ public class AbpIdentityServerTestBaseModule : AbpModule
     {
         using (var scope = context.ServiceProvider.CreateScope())
         {
-            AsyncHelper.RunSync(() => scope.ServiceProvider
-                .GetRequiredService<AbpIdentityServerTestDataBuilder>()
-                .BuildAsync());
+            AsyncHelper.RunSync(async () =>
+            {
+                var unitOfWorkManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+                using (var uow = unitOfWorkManager.Begin(requiresNew: true))
+                {
+                    await scope.ServiceProvider
+                        .GetRequiredService<AbpIdentityServerTestDataBuilder>()
+                        .BuildAsync();
+                    await uow.CompleteAsync();
+                }
+            });
         }
     }
 }

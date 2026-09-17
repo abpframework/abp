@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to customize the menu in ABP Framework, including adding logos and navigation elements for enhanced application layout."
+}
+```
+
 # Modifying the Menu
 
 The menu is inside the `ApplicationLayoutComponent` in the @abp/ng.theme.basic package. There are several methods for modifying the menu elements. This document covers these methods. If you would like to replace the menu completely, please refer to [Component Replacement documentation](./component-replacement.md) and learn how to replace a layout.
@@ -5,11 +12,11 @@ The menu is inside the `ApplicationLayoutComponent` in the @abp/ng.theme.basic p
 
 ## How to Add a Logo
 
-The `logoUrl` property in the environment variables is the url of the logo. 
+The `logoUrl` property in the environment variables is the url of the logo.
 
 You can add your logo to `src/assets` folder and set the `logoUrl` as shown below:
 
-```js
+```ts
 export const environment = {
   // other configurations
   application: {
@@ -20,20 +27,63 @@ export const environment = {
 };
 ```
 
+Then provide the logo at application startup using the Theme Shared provider. This makes the logo (and application name) available to all ABP/Theme components (including LeptonX brand component) via injection tokens.
+
+```ts
+// app.config.ts
+import { provideLogo, withEnvironmentOptions } from '@abp/ng.theme.shared';
+import { environment } from './environments/environment';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ... other providers
+    provideLogo(withEnvironmentOptions(environment)),
+  ],
+};
+```
+
+Notes
+- This approach works across themes. If you are using LeptonX, the brand logo component reads these values automatically; you don't need any theme-specific code.
+- You can still override visuals with CSS variables if desired. See the alternative approach below.
+
+### Alternative: Using CSS Variables (LeptonX Theme)
+
+If you're using the LeptonX theme, you can also configure the logo using CSS variables in your `styles.scss` file. This approach is specific to LeptonX and provides direct control over the logo styling.
+
+Add the following to your `src/styles.scss`:
+
+```scss
+:root {
+  --lpx-logo: url('/assets/images/logo/logo-light.png');
+  --lpx-logo-icon: url('/assets/images/logo/logo-light-thumbnail.png');
+}
+```
+
+**When to use each approach:**
+
+| Approach | Use Case | Theme Support |
+|----------|----------|-------------|
+| **provideLogo** (recommended) | Cross-theme compatibility, environment-based configuration | All themes  |
+| **CSS Variables** | LeptonX-specific styling, fine-grained CSS control | LeptonX only |
+
+**Recommendation:** Use the `provideLogo` approach for most cases as it's theme-independent and follows ABP's standard configuration pattern. Use CSS variables only when you need LeptonX-specific styling control or have existing CSS-based theme customizations.
+
 ## How to Add a Navigation Element
 
 ### Via `RoutesService`
 
 You can add routes to the menu by calling the `add` method of `RoutesService`. It is a singleton service, i.e. provided in root, so you can inject and use it immediately.
 
-```js
+```ts
 import { RoutesService, eLayoutType } from '@abp/ng.core';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 @Component(/* component metadata */)
 export class AppComponent {
-  constructor(routes: RoutesService) {
-    routes.add([
+  private routes = inject(RoutesService);
+
+  constructor() {
+    this.routes.add([
       {
         path: '/your-path',
         name: 'Your navigation',
@@ -56,100 +106,100 @@ export class AppComponent {
 
 An alternative and probably cleaner way is to use a route provider. First create a provider:
 
-```js
+```ts
 // route.provider.ts
 import { RoutesService, eLayoutType } from '@abp/ng.core';
-import { APP_INITIALIZER } from '@angular/core';
+import { inject, provideAppInitializer } from '@angular/core';
 
 export const APP_ROUTE_PROVIDER = [
-  { provide: APP_INITIALIZER, useFactory: configureRoutes, deps: [RoutesService], multi: true },
+  provideAppInitializer(() => {
+    configureRoutes();
+  }),
 ];
 
-function configureRoutes(routes: RoutesService) {
-  return () => {
-    routes.add([
-      {
-        path: '/your-path',
-        name: 'Your navigation',
-        requiredPolicy: 'permission key here',
-        order: 101,
-        iconClass: 'fas fa-question-circle',
-        layout: eLayoutType.application,
-      },
-      {
-        path: '/your-path/child',
-        name: 'Your child navigation',
-        parentName: 'Your navigation',
-        requiredPolicy: 'permission key here',
-        order: 1,
-      },
-    ]);
-  };
+function configureRoutes() {
+  const routesService = inject(RoutesService);
+  routesService.add([
+    {
+      path: '/your-path',
+      name: 'Your navigation',
+      requiredPolicy: 'permission key here',
+      order: 101,
+      iconClass: 'fas fa-question-circle',
+      layout: eLayoutType.application,
+    },
+    {
+      path: '/your-path/child',
+      name: 'Your child navigation',
+      parentName: 'Your navigation',
+      requiredPolicy: 'permission key here',
+      order: 1,
+    },
+  ]);
 }
 ```
 
 We can also define a group for navigation elements. It's an optional property
  - **Note:** It'll also include groups that were defined at the modules
 
-```js
+```ts
 // route.provider.ts
 import { RoutesService } from '@abp/ng.core';
+import { inject } from '@angular/core';
 
-function configureRoutes(routes: RoutesService) {  
-  return () => {
-    routes.add([
-      {
-        //etc..
-        group: 'ModuleName::GroupName'
-      },
-      {
-        path: '/your-path/child',
-        name: 'Your child navigation',
-        parentName: 'Your navigation',
-        requiredPolicy: 'permission key here',
-        order: 1,
-      },
-    ]);
-  };
+function configureRoutes() {  
+  const routesService = inject(RoutesService);
+  routesService.add([
+    {
+      //etc..
+      group: 'ModuleName::GroupName'
+    },
+    {
+      path: '/your-path/child',
+      name: 'Your child navigation',
+      parentName: 'Your navigation',
+      requiredPolicy: 'permission key here',
+      order: 1,
+    },
+  ]);
 }
 ```
 
 To get the route items as grouped we can use the `groupedVisible` (or Observable one `groupedVisible$`)  getter methods
  - It returns `RouteGroup<T>[]` if there is any group in the route tree, otherwise it returns `undefined`
 
-```js
+```ts
 import { ABP, RoutesService, RouteGroup } from "@abp/ng.core";
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
+import { Observable } from "rxjs";
 
 @Component(/* component metadata */)
 export class AppComponent {
+  private routes = inject(RoutesService);
+
   visible: RouteGroup<ABP.Route>[] | undefined = this.routes.groupedVisible;
-  //Or
-  visible$:Observable<RouteGroup<ABP.Route>[] | undefined> = this.routes.groupedVisible$;
-  
-  constructor(private routes: RoutesService) {}
+  // Or
+  visible$: Observable<RouteGroup<ABP.Route>[] | undefined> = this.routes.groupedVisible$;
 }
 ```
 
-...and then in app.module.ts...
+...and then in app.config.ts...
  - The `groupedVisible` method will return the `Others` group for ungrouped items, the default key is `AbpUi::OthersGroup`, we can change this `key` via the `OTHERS_GROUP` injection token
 
-```js
-import { NgModule } from '@angular/core';
+```ts
 import { OTHERS_GROUP } from '@abp/ng.core';
 import { APP_ROUTE_PROVIDER } from './route.provider';
 
-@NgModule({
+export const appConfig: ApplicationConfig = {
   providers: [
+    // ...
     APP_ROUTE_PROVIDER,
     {
       provide: OTHERS_GROUP,
       useValue: 'ModuleName::MyOthersGroupKey',
     },
   ],
-  // imports, declarations, and bootstrap
-})
-export class AppModule {}
+};
 ```
 
 ### Singularize Route Item
@@ -160,12 +210,14 @@ export class AppModule {}
 
 ```typescript
 import { RoutesService } from '@abp/ng.core';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 @Component(/* component metadata */)
 export class AppComponent {
-  constructor(private routes: RoutesService) {
-    routes.setSingularizeStatus(false);
+  private routes = inject(RoutesService);
+
+  constructor() {
+    this.routes.setSingularizeStatus(false);
   }
 }
 ```
@@ -182,13 +234,13 @@ Here is what every property works as:
 - `invisible` makes the item invisible in the menu. (default: `false`)
 - `group` is an optional property that is used to group together related routes in an application. (type: `string`, default: `AbpUi::OthersGroup`)
 
-### Via `routes` Property in `AppRoutingModule`
+### Via `routes` Property in `APP_ROUTES`
 
-You can define your routes by adding `routes` as a child property to `data` property of a route configuration in the `app-routing.module`. The `@abp/ng.core` package organizes your routes and stores them in the `RoutesService`.
+You can define your routes by adding `routes` as a child property to `data` property of a route configuration in the `app.routes.ts`. The `@abp/ng.core` package organizes your routes and stores them in the `RoutesService`.
 
 You can add the `routes` property like below:
 
-```js
+```ts
 {
   path: 'your-path',
   data: {
@@ -212,7 +264,7 @@ You can add the `routes` property like below:
 
 Alternatively, you can do this:
 
-```js
+```ts
 {
   path: 'your-path',
   data: {
@@ -246,7 +298,7 @@ After adding the `routes` property as described above, the navigation menu looks
 
 The `patch` method of `RoutesService` finds a route by its name and replaces its configuration with the new configuration passed as the second parameter. Similarly, `remove` method finds a route and removes it along with its children. Also you can use `removeByParam` method to delete the routes with given properties.
 
-```js
+```ts
 // this.routes is instance of RoutesService
 // eThemeSharedRouteNames enum can be imported from @abp/ng.theme.shared
 
@@ -271,7 +323,12 @@ this.routes.remove(['Your navigation']);
 // or
 this.routes.removeByParam({ name: 'Your navigation' });
 ```
+**Method Parameters:**
+- `remove(routeNames: string[])`: Takes an array of route names to remove.
+- `removeByParam(routeProperty: Partial<ABP.Route>)`: Takes any route property (name, path, parentName, etc.) to match and remove routes.
+<br>
 
+**Results of the operations above:**
 - Moved the _Home_ navigation under the _Administration_ dropdown based on given `parentName`.
 - Added an icon to _Home_.
 - Specified the order and made _Home_ the first item in list.
@@ -287,9 +344,9 @@ After the operations above, the new menu looks like below:
 
 You can add elements to the right part of the menu by calling the `addItems` method of `NavItemsService`. It is a singleton service, i.e. provided in root, so you can inject and use it immediately.
 
-```js
+```ts
 import { NavItemsService } from '@abp/ng.theme.shared';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 @Component({
   template: `
@@ -301,8 +358,10 @@ export class MySearchInputComponent {}
 
 @Component(/* component metadata */)
 export class AppComponent {
-  constructor(private navItems: NavItemsService) {
-    navItems.addItems([
+  private navItems = inject(NavItemsService);
+
+  constructor() {
+    this.navItems.addItems([
       {
         id: 'MySearchInput',
         order: 1,
@@ -329,15 +388,17 @@ This inserts a search input and a sign out icon to the menu. The final UI looks 
 
 The `patchItem` method of `NavItemsService` finds an element by its `id` property and replaces its configuration with the new configuration passed as the second parameter. Similarly, `removeItem` method finds an element and removes it.
 
-```js
+```ts
 export class AppComponent {
-  constructor(private navItems: NavItemsService) {
-    navItems.patchItem(eThemeBasicComponents.Languages, {
+  private navItems = inject(NavItemsService);
+
+  constructor() {
+    this.navItems.patchItem(eThemeBasicComponents.Languages, {
       requiredPolicy: 'new policy here',
       order: 1,
     });
 
-    navItems.removeItem(eThemeBasicComponents.CurrentUser);
+    this.navItems.removeItem(eThemeBasicComponents.CurrentUser);
   }
 }
 ```

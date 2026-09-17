@@ -53,8 +53,6 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
         Check.NotNull(authorization, nameof(authorization));
 
         await Repository.InsertAsync(authorization.ToEntity(), autoSave: true, cancellationToken: cancellationToken);
-
-        authorization = (await Repository.FindAsync(authorization.Id, cancellationToken: cancellationToken)).ToModel();
     }
 
     public virtual async ValueTask DeleteAsync(OpenIddictAuthorizationModel authorization, CancellationToken cancellationToken)
@@ -80,57 +78,19 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
         }
     }
 
-    public virtual async IAsyncEnumerable<OpenIddictAuthorizationModel> FindAsync(string subject, string client, [EnumeratorCancellation] CancellationToken cancellationToken)
+    public virtual async IAsyncEnumerable<OpenIddictAuthorizationModel> FindAsync(string subject, string client, string status, string type, ImmutableArray<string>? scopes, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        Check.NotNullOrEmpty(subject, nameof(subject));
-        Check.NotNullOrEmpty(client, nameof(client));
-
-        var authorizations = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), cancellationToken);
-        foreach (var authorization in authorizations)
+        Guid? identifier = null;
+        if (!string.IsNullOrEmpty(client))
         {
-            yield return authorization.ToModel();
+            identifier = ConvertIdentifierFromString(client);
         }
-    }
 
-    public virtual async IAsyncEnumerable<OpenIddictAuthorizationModel> FindAsync(string subject, string client, string status, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        Check.NotNullOrEmpty(subject, nameof(subject));
-        Check.NotNullOrEmpty(client, nameof(client));
-        Check.NotNullOrEmpty(status, nameof(status));
-
-        var authorizations = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), status, cancellationToken);
-        foreach (var authorization in authorizations)
-        {
-            yield return authorization.ToModel();
-        }
-    }
-
-    public virtual async IAsyncEnumerable<OpenIddictAuthorizationModel> FindAsync(string subject, string client, string status, string type, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        Check.NotNullOrEmpty(subject, nameof(subject));
-        Check.NotNullOrEmpty(client, nameof(client));
-        Check.NotNullOrEmpty(status, nameof(status));
-        Check.NotNullOrEmpty(type, nameof(type));
-
-        var authorizations = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), status, type, cancellationToken);
-        foreach (var authorization in authorizations)
-        {
-            yield return authorization.ToModel();
-        }
-    }
-
-    public virtual async IAsyncEnumerable<OpenIddictAuthorizationModel> FindAsync(string subject, string client, string status, string type, ImmutableArray<string> scopes, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        Check.NotNullOrEmpty(subject, nameof(subject));
-        Check.NotNullOrEmpty(client, nameof(client));
-        Check.NotNullOrEmpty(status, nameof(status));
-        Check.NotNullOrEmpty(type, nameof(type));
-
-        var authorizations = await Repository.FindAsync(subject, ConvertIdentifierFromString(client), status, type, cancellationToken);
+        var authorizations = await Repository.FindAsync(subject, identifier, status, type, cancellationToken);
 
         foreach (var authorization in authorizations)
         {
-            if (new HashSet<string>(await GetScopesAsync(authorization.ToModel(), cancellationToken), StringComparer.Ordinal).IsSupersetOf(scopes))
+            if (new HashSet<string>(await GetScopesAsync(authorization.ToModel(), cancellationToken), StringComparer.Ordinal).IsSupersetOf(scopes!))
             {
                 yield return authorization.ToModel();
             }
@@ -300,6 +260,33 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
         }
     }
 
+    public virtual async ValueTask<long> RevokeAsync(string subject, string client, string status, string type, CancellationToken cancellationToken)
+    {
+        Guid? identifier = null;
+        if (!string.IsNullOrEmpty(client))
+        {
+            identifier = ConvertIdentifierFromString(client);
+        }
+
+        return await Repository.RevokeAsync(subject, identifier, status, type, cancellationToken);
+    }
+
+    public virtual async ValueTask<long> RevokeByApplicationIdAsync(string identifier, CancellationToken cancellationToken)
+    {
+        Check.NotNullOrEmpty(identifier, nameof(identifier));
+
+        var key = ConvertIdentifierFromString(identifier);
+
+        return await Repository.RevokeByApplicationIdAsync(key, cancellationToken: cancellationToken);
+    }
+
+    public virtual async ValueTask<long> RevokeBySubjectAsync(string subject, CancellationToken cancellationToken)
+    {
+        Check.NotNullOrEmpty(subject, nameof(subject));
+
+        return await Repository.RevokeBySubjectAsync(subject, cancellationToken: cancellationToken);
+    }
+
     public virtual async ValueTask SetApplicationIdAsync(OpenIddictAuthorizationModel authorization, string identifier, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));
@@ -412,7 +399,5 @@ public class AbpOpenIddictAuthorizationStore : AbpOpenIddictStoreBase<IOpenIddic
             await ConcurrencyExceptionHandler.HandleAsync(e);
             throw new OpenIddictExceptions.ConcurrencyException(e.Message, e.InnerException);
         }
-
-        authorization = (await Repository.FindAsync(entity.Id, cancellationToken: cancellationToken)).ToModel();
     }
 }

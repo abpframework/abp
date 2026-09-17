@@ -18,7 +18,6 @@ public class ApplicationPermissionManagementProvider : PermissionManagementProvi
             guidGenerator,
             currentTenant)
     {
-
     }
 
     public override Task<PermissionValueProviderGrantInfo> CheckAsync(string name, string providerName, string providerKey)
@@ -26,6 +25,14 @@ public class ApplicationPermissionManagementProvider : PermissionManagementProvi
         using (CurrentTenant.Change(null))
         {
             return base.CheckAsync(name, providerName, providerKey);
+        }
+    }
+
+    public override Task<MultiplePermissionValueProviderGrantInfo> CheckAsync(string[] names, string providerName, string providerKey)
+    {
+        using (CurrentTenant.Change(null))
+        {
+            return base.CheckAsync(names, providerName, providerKey);
         }
     }
 

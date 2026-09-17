@@ -9,10 +9,10 @@ describe('GeneratorUtils', () => {
   });
 
   describe('#generatePassword', () => {
-    const lowers = 'abcdefghijklmnopqrstuvwxyz';
-    const uppers = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const numbers = '0123456789';
-    const specials = '!@#$%&*()_+{}<>?[]./';
+    const lowers = 'abcdefghjkmnpqrstuvwxyz';
+    const uppers = 'ABCDEFGHJKMNPQRSTUVWXYZ';
+    const numbers = '23456789';
+    const specials = '!*_#/+-.';
 
     test.each`
       name         | charSet     | passedPasswordLength | actualPasswordLength
@@ -27,9 +27,9 @@ describe('GeneratorUtils', () => {
       ${'special'} | ${specials} | ${0}                 | ${4}
       ${'special'} | ${specials} | ${undefined}         | ${8}
     `(
-      'should have a $name in the password that length is $passwordLength',
+      'should have a $name in the password that length is $actualPasswordLength',
       ({ _, charSet, passedPasswordLength, actualPasswordLength }) => {
-        const password = generatePassword(passedPasswordLength);
+        const password = generatePassword(undefined, passedPasswordLength);
         expect(password).toHaveLength(actualPasswordLength);
         expect(hasChar(charSet, password)).toBe(true);
       },

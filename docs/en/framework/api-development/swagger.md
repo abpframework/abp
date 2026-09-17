@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate Swagger with ABP Framework for seamless REST API documentation and service connectivity with minimal setup."
+}
+```
+
 # Swagger Integration
 
 [Swagger (OpenAPI)](https://swagger.io/) is a language-agnostic specification for describing REST APIs. It allows both computers and humans to understand the capabilities of a REST API without direct access to the source code. Its main goals are to:
@@ -29,7 +36,7 @@ If you want to manually install;
 
 1. Add the [Volo.Abp.Swashbuckle](https://www.nuget.org/packages/Volo.Abp.Swashbuckle) NuGet package to your `Web` or `HttpApi.Host` project:
 
-   `Install-Package Volo.Abp.Swashbuckle`
+   `dotnet add package Volo.Abp.Swashbuckle`
 
 2. Add the `AbpSwashbuckleModule` to the dependency list of your module:
 
@@ -101,6 +108,21 @@ services.AddAbpSwaggerGen(
         options.HideAbpEndpoints();
     }
 )
+```
+
+### Enum and Schema ID Helpers
+
+ABP provides two additional `SwaggerGenOptions` helpers:
+
+* `UserFriendlyEnums()` changes enum schemas from numeric values to string enum names, making generated contracts easier for clients to consume.
+* `CustomAbpSchemaIds()` uses full type names and includes generic argument names to avoid schema ID collisions.
+
+```csharp
+services.AddAbpSwaggerGen(options =>
+{
+    options.UserFriendlyEnums();
+    options.CustomAbpSchemaIds();
+});
 ```
 
 ## Using Swagger with OAUTH

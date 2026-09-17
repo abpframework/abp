@@ -19,7 +19,12 @@ public static class ImageFileHelper
     {
         return GetTestFileStream("abp.webp");
     }
-    
+
+    public static Stream GetGifTestFileStream()
+    {
+        return GetTestFileStream("abp.gif");
+    }
+
     private static Stream GetTestFileStream(string fileName)
     {
         var assembly = typeof(ImageFileHelper).Assembly;

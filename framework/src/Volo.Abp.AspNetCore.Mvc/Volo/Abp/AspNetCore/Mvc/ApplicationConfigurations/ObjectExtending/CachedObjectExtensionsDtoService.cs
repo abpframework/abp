@@ -147,8 +147,8 @@ public class CachedObjectExtensionsDtoService : ICachedObjectExtensionsDtoServic
             {
                 GlobalFeatures = new ExtensionPropertyGlobalFeaturePolicyDto
                 {
-                    Features = propertyConfig.Policy.Features.Features,
-                    RequiresAll = propertyConfig.Policy.Features.RequiresAll
+                    Features = propertyConfig.Policy.GlobalFeatures.Features,
+                    RequiresAll = propertyConfig.Policy.GlobalFeatures.RequiresAll
                 },
                 Features = new ExtensionPropertyFeaturePolicyDto
                 {
@@ -242,13 +242,19 @@ public class CachedObjectExtensionsDtoService : ICachedObjectExtensionsDtoServic
                     e => e.GetProperties()
                 )
             )
-            .Where(p => p.Type.IsEnum)
+            .Where(p => p.Type.IsEnum || TypeHelper.IsNullableEnum(p.Type))
             .ToList();
 
         foreach (var enumProperty in enumProperties)
         {
-            // ReSharper disable once AssignNullToNotNullAttribute (enumProperty.Type.FullName can not be null for this case)
-            objectExtensionsDto.Enums[enumProperty.Type.FullName!] = CreateExtensionEnumDto(enumProperty);
+            if (TypeHelper.IsNullableEnum(enumProperty.Type))
+            {
+                objectExtensionsDto.Enums[Nullable.GetUnderlyingType(enumProperty.Type)!.FullName + "?"] = CreateExtensionEnumDto(enumProperty);
+            }
+            else
+            {
+                objectExtensionsDto.Enums[enumProperty.Type.FullName!] = CreateExtensionEnumDto(enumProperty);
+            }
         }
     }
 
@@ -260,12 +266,23 @@ public class CachedObjectExtensionsDtoService : ICachedObjectExtensionsDtoServic
             LocalizationResource = enumProperty.GetLocalizationResourceNameOrNull()
         };
 
-        foreach (var enumValue in enumProperty.Type.GetEnumValues())
+        var enumType = enumProperty.Type.IsEnum
+            ? enumProperty.Type
+            : TypeHelper.IsNullableEnum(enumProperty.Type)
+                ? Nullable.GetUnderlyingType(enumProperty.Type)
+                : null;
+
+        if (enumType == null)
+        {
+            return extensionEnumDto;
+        }
+
+        foreach (var enumValue in enumType.GetEnumValues())
         {
             extensionEnumDto.Fields.Add(
                 new ExtensionEnumFieldDto
                 {
-                    Name = enumProperty.Type.GetEnumName(enumValue)!,
+                    Name = enumType.GetEnumName(enumValue)!,
                     Value = enumValue
                 }
             );

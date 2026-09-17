@@ -29,7 +29,7 @@
 
 <div id="DocumentsContainer">
     <abp-card>
-        <abp-card-header>
+        <abp-card-body>
             <form autocomplete="off" id="FilterForm">
 
                 <abp-row>
@@ -86,7 +86,7 @@
                         </div>
                     </abp-column>
                     <abp-column size="Auto">
-                        <abp-button button-type="Primary" icon="search" id="SearchButton" style="line-height: 25px;" text="@L["Search"].Value"></abp-button>
+                        <abp-button button-type="Primary" icon="search" id="SearchButton" text="@L["Search"].Value"></abp-button>
                     </abp-column>
                     <abp-row class="mt-3 mb-3">
                         <abp-column size-md="_12">
@@ -149,7 +149,7 @@
                             </div>
                         </abp-column>
                         
-                        <abp-column size="_2">
+                        <abp-column size="_3">
                             <div class="input-group mb-2">
                                 <div class="input-group-text">@L["Format"].Value</div>
 
@@ -161,9 +161,6 @@
                             </div>
                         </abp-column>
 
-                        <abp-column size="_2">
-                        </abp-column>
-                        
                           <abp-column size="Auto">
                             <div class="input-group mb-2">
                                 <div class="input-group-text">@L["LastSignificantUpdateTime"].Value</div>
@@ -185,7 +182,9 @@
                     </abp-row>
                 </abp-row>
             </form>
-        </abp-card-header>
+        </abp-card-body>
+        </abp-card>
+        <abp-card>
         <abp-card-body>
             <abp-table  id="DocumentsTable" class="nowrap">
                 <thead>

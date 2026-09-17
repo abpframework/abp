@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the ABP Framework's JavaScript DOM API to manage dynamic elements in your ASP.NET Core MVC/Razor Pages applications efficiently."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages UI: JavaScript DOM API
 
 `abp.dom` (Document Object Model) provides events that you can subscribe to get notified when elements dynamically added to and removed from the page (DOM).

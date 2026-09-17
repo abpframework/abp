@@ -17,7 +17,8 @@ public class MicroserviceServiceStringEncryptionStep : RandomizeStringEncryption
         var directoryInfo = new DirectoryInfo(context.BuildArgs.OutputFolder);
         do
         {
-            var msSolution = Directory.GetFiles(directoryInfo.FullName, "*.sln", SearchOption.TopDirectoryOnly).FirstOrDefault();
+            var msSolution = Directory.GetFiles(directoryInfo.FullName, "*.sln", SearchOption.TopDirectoryOnly)
+                .Concat(Directory.GetFiles(directoryInfo.FullName, "*.slnx", SearchOption.TopDirectoryOnly)).FirstOrDefault();
             if (msSolution != null)
             {
                 var appSettings = Directory.GetFiles(Path.Combine(directoryInfo.FullName, "apps", "auth-server"),

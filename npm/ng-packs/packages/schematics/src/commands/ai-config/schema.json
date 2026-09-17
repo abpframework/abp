@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "SchematicsABPAiConfig",
+  "title": "ABP AI Configuration Generator Schema",
+  "type": "object",
+  "properties": {
+    "tool": {
+      "description": "Comma-separated list of AI tools (e.g., claude,cursor,gemini)",
+      "type": "string",
+      "x-prompt": {
+        "message": "Which AI tools would you like to generate configuration files for? (comma-separated)",
+        "type": "input"
+      }
+    },
+    "targetProject": {
+      "description": "The target project name to generate AI configuration files for",
+      "type": "string",
+      "x-prompt": {
+        "message": "Which project would you like to generate AI config for?",
+        "type": "input"
+      }
+    },
+    "overwrite": {
+      "description": "Overwrite existing AI configuration files",
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": []
+}

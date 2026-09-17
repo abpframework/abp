@@ -1,0 +1,11 @@
+import { Component } from '@angular/core';
+import {CoreModule} from "@abp/ng.core";
+import {ThemeSharedModule} from "@abp/ng.theme.shared";
+
+@Component({
+  standalone: true,
+  selector: '<%= camel(libraryName) %>-home',
+  template: `<h1>Lazy Loaded Test Component</h1>`,
+  imports: [CoreModule, ThemeSharedModule],
+})
+export class <%= pascal(libraryName) %>Component {}

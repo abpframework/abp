@@ -1,5 +1,6 @@
 ﻿@page
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tooltip
 @model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.TooltipsModel
 @{
     ViewData["Title"] = "Tooltips";
@@ -84,3 +85,7 @@
         </abp-tabs>
     </div>
 </div>
+
+<hr />
+
+@await Component.InvokeAsync("TagHelperProperties", typeof(AbpTooltipTagHelper))

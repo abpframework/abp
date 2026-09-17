@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enhance your ASP.NET Core UI with custom page toolbar extensions, adding buttons and functionality to improve user experience."
+}
+```
+
 # Page Toolbar Extensions for ASP.NET Core UI
 
 Page toolbar system allows you to add components to the toolbar of any page. The page toolbar is the area right to the header of a page. A button ("Import users from excel") was added to the user management page below:
@@ -127,7 +134,7 @@ Configure<AbpPageToolbarOptions>(options =>
 
 #### Permissions
 
-If your button/component should be available based on a [permission/policy](../../fundamentals/authorization.md), you can pass the permission/policy name as the `requiredPolicyName` parameter to the `AddButton` and `AddComponent` methods.
+If your button/component should be available based on a [permission/policy](../../fundamentals/authorization/index.md), you can pass the permission/policy name as the `requiredPolicyName` parameter to the `AddButton` and `AddComponent` methods.
 
 ### Add a Page Toolbar Contributor
 

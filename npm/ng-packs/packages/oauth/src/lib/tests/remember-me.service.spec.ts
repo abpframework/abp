@@ -1,8 +1,6 @@
-import { SpectatorService, SpyObject, createServiceFactory } from "@ngneat/spectator/jest";
-import { RememberMeService } from "../services/remember-me.service";
-import { AbpLocalStorageService } from "@abp/ng.core";
-
-
+import { SpectatorService, SpyObject, createServiceFactory } from '@ngneat/spectator/vitest';
+import { AbpLocalStorageService } from '@abp/ng.core';
+import { RememberMeService } from '../services/remember-me.service';
 
 describe('RememberMeService', () => {
   const key = 'remember_me';
@@ -12,9 +10,8 @@ describe('RememberMeService', () => {
 
   const createService = createServiceFactory({
     service: RememberMeService,
-    mocks: [AbpLocalStorageService]
+    mocks: [AbpLocalStorageService],
   });
-
 
   beforeEach(() => {
     spectator = createService();
@@ -37,7 +34,7 @@ describe('RememberMeService', () => {
   it('should remove remember me', () => {
     rememberMeService.remove();
     expect(abpLocalStorageService.removeItem).toHaveBeenCalledWith(key);
-    expect(abpLocalStorageService.removeItem).toBeCalledTimes(1);
+    expect(abpLocalStorageService.removeItem).toHaveBeenCalledTimes(1);
   });
 
   it('if notting has ben setted, it should return false value', () => {
@@ -55,17 +52,16 @@ describe('RememberMeService', () => {
   });
 
   it('should return true when parsed token is setted to true', () => {
-    const data = { "remember_me": "True" };
+    const data = { remember_me: 'True' };
     const base64_encoded = btoa(JSON.stringify(data));
-    const tokenWithValueTrue = "random." + base64_encoded + ".random";
+    const tokenWithValueTrue = 'random.' + base64_encoded + '.random';
     expect(rememberMeService.getFromToken(tokenWithValueTrue)).toBe(true);
   });
 
   it('should return false when value is not setted(undefined)', () => {
     const data = {};
     const base64_encoded = btoa(JSON.stringify(data));
-    const tokenWithValueTrue = "random." + base64_encoded + ".random";
+    const tokenWithValueTrue = 'random.' + base64_encoded + '.random';
     expect(rememberMeService.getFromToken(tokenWithValueTrue)).toBe(false);
   });
-
 });

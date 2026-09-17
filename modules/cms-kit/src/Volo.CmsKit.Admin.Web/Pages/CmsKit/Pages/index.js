@@ -76,6 +76,14 @@ $(function () {
                 data: "slug"
             },
             {
+                title: l("Status"),
+                orderable: true,
+                data: "status",
+                render: function (data) {
+                    return l('Enum:PageStatus:' + data);
+                }
+            },
+            {
                 title: l("IsHomePage"),
                 orderable: true,
                 data: "isHomePage"

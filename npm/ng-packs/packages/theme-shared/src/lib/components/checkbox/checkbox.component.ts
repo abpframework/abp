@@ -1,24 +1,25 @@
-import { AbstractNgModelComponent } from '@abp/ng.core';
-import { Component, EventEmitter, forwardRef, Injector, Input, Output } from '@angular/core';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import {Component, forwardRef, input, output, ChangeDetectionStrategy,} from '@angular/core';
+import { NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms';
+import { AbstractNgModelComponent, LocalizationPipe } from '@abp/ng.core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-checkbox',
   template: `
     <div class="mb-3">
       <input
         type="checkbox"
         [(ngModel)]="value"
-        [id]="checkboxId"
-        [readonly]="checkboxReadonly"
-        [ngClass]="checkboxClass"
-        [ngStyle]="checkboxStyle"
-        (blur)="checkboxBlur.next()"
-        (focus)="checkboxFocus.next()"
+        [id]="checkboxId()"
+        [readonly]="checkboxReadonly()"
+        [class]="checkboxClass()"
+        [style]="checkboxStyle()"
+        (blur)="checkboxBlur.emit()"
+        (focus)="checkboxFocus.emit()"
       />
-      @if (label) {
-        <label [ngClass]="labelClass" [for]="checkboxId">
-          {{ label | abpLocalization }}
+      @if (label()) {
+        <label [class]="labelClass()" [for]="checkboxId()">
+          {{ label() | abpLocalization }}
         </label>
       }
     </div>
@@ -30,19 +31,15 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
       multi: true,
     },
   ],
+  imports: [FormsModule, LocalizationPipe],
 })
 export class FormCheckboxComponent extends AbstractNgModelComponent {
-  @Input() label?: string;
-  @Input() labelClass = 'form-check-label';
-  @Input() checkboxId!: string;
-  @Input() checkboxStyle:
-    | {
-        [klass: string]: any;
-      }
-    | null
-    | undefined;
-  @Input() checkboxClass = 'form-check-input';
-  @Input() checkboxReadonly = false;
-  @Output() checkboxBlur = new EventEmitter<void>();
-  @Output() checkboxFocus = new EventEmitter<void>();
+  readonly label = input<string | undefined>(undefined);
+  readonly labelClass = input('form-check-label');
+  readonly checkboxId = input.required<string>();
+  readonly checkboxStyle = input<{ [klass: string]: any } | null | undefined>(undefined);
+  readonly checkboxClass = input('form-check-input');
+  readonly checkboxReadonly = input(false);
+  readonly checkboxBlur = output<void>();
+  readonly checkboxFocus = output<void>();
 }

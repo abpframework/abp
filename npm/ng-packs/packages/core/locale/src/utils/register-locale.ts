@@ -1,5 +1,6 @@
 import { differentLocales } from '@abp/ng.core';
-import { isDevMode } from '@angular/core';
+import { inject, isDevMode, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 export interface LocaleErrorHandlerData {
   resolve: any;
@@ -10,76 +11,79 @@ export interface LocaleErrorHandlerData {
 
 let localeMap = {} as { [key: string]: string };
 
+const localeLoaders: Record<string, () => Promise<any>> = {
+  ar: () => import('@angular/common/locales/ar'),
+  cs: () => import('@angular/common/locales/cs'),
+  en: () => import('@angular/common/locales/en'),
+  'en-GB': () => import('@angular/common/locales/en-GB'),
+  es: () => import('@angular/common/locales/es'),
+  de: () => import('@angular/common/locales/de'),
+  fi: () => import('@angular/common/locales/fi'),
+  fr: () => import('@angular/common/locales/fr'),
+  hi: () => import('@angular/common/locales/hi'),
+  hu: () => import('@angular/common/locales/hu'),
+  is: () => import('@angular/common/locales/is'),
+  it: () => import('@angular/common/locales/it'),
+  ja: () => import('@angular/common/locales/ja'),
+  ko: () => import('@angular/common/locales/ko'),
+  pt: () => import('@angular/common/locales/pt'),
+  ro: () => import('@angular/common/locales/ro'),
+  ru: () => import('@angular/common/locales/ru'),
+  sk: () => import('@angular/common/locales/sk'),
+  sl: () => import('@angular/common/locales/sl'),
+  th: () => import('@angular/common/locales/th'),
+  tr: () => import('@angular/common/locales/tr'),
+  vi: () => import('@angular/common/locales/vi'),
+  'zh-Hans': () => import('@angular/common/locales/zh-Hans'),
+  'zh-Hant': () => import('@angular/common/locales/zh-Hant'),
+};
+
+const localeSupportList = Object.keys(localeLoaders);
+
 export interface RegisterLocaleData {
   cultureNameLocaleFileMap?: Record<string, string>;
   errorHandlerFn?: (data: LocaleErrorHandlerData) => any;
 }
 
-
 function loadLocale(locale: string) {
   // hard coded list works with esbuild. Source https://github.com/angular/angular-cli/issues/26904#issuecomment-1903596563
 
-  const list = {
-      'ar': () => import('@angular/common/locales/ar'),
-      'cs': () => import('@angular/common/locales/cs'),
-      'en': () => import('@angular/common/locales/en'),
-      'en-GB': () => import('@angular/common/locales/en-GB'),
-      'es': () => import('@angular/common/locales/es'),
-      'de': () => import('@angular/common/locales/de'),
-      'fi': () => import('@angular/common/locales/fi'),
-      'fr': () => import('@angular/common/locales/fr'),
-      'hi': () => import('@angular/common/locales/hi'),
-      'hu': () => import('@angular/common/locales/hu'),
-      'is': () => import('@angular/common/locales/is'),
-      'it': () => import('@angular/common/locales/it'),
-      'pt': () => import('@angular/common/locales/pt'),
-      'tr': () => import('@angular/common/locales/tr'),
-      'ru': () => import('@angular/common/locales/ru'),
-      'ro': () => import('@angular/common/locales/ro'),
-      'sk': () => import('@angular/common/locales/sk'),
-      'sl': () => import('@angular/common/locales/sl'),
-      'zh-Hans': () => import('@angular/common/locales/zh-Hans'),
-      'zh-Hant': () => import('@angular/common/locales/zh-Hant')
+  if (localeSupportList.indexOf(locale) === -1) {
+    return Promise.reject(new Error(`Cannot find the ${locale} locale file.`));
   }
-  return list[locale]();
+
+  return localeLoaders[locale]();
 }
 
 export function registerLocaleForEsBuild(
   {
-      cultureNameLocaleFileMap = {},
-      errorHandlerFn = defaultLocalErrorHandlerFn,
+    cultureNameLocaleFileMap = {},
+    errorHandlerFn = defaultLocalErrorHandlerFn,
   } = {} as RegisterLocaleData,
 ) {
   return (locale: string): Promise<any> => {
-      localeMap = { ...differentLocales, ...cultureNameLocaleFileMap };
-      const l = localeMap[locale] || locale;
-      const localeSupportList = "ar|cs|en|en-GB|es|de|fi|fr|hi|hu|is|it|pt|tr|ru|ro|sk|sl|zh-Hans|zh-Hant".split("|");
-
-      if (localeSupportList.indexOf(locale) == -1) {
-          return;
-      }
-      return new Promise((resolve, reject) => {
-          return loadLocale(l)
-              .then(val => {
-                  let module = val;
-                  while (module.default) {
-                      module = module.default;
-                  }
-                  resolve({ default: module });
-              })
-              .catch(error => {
-                  errorHandlerFn({
-                      resolve,
-                      reject,
-                      error,
-                      locale,
-                  });
-              });
-      });
+    localeMap = { ...differentLocales, ...cultureNameLocaleFileMap };
+    const l = localeMap[locale] || locale;
+    return new Promise((resolve, reject) => {
+      return loadLocale(l)
+        .then(val => {
+          let module = val;
+          while (module.default) {
+            module = module.default;
+          }
+          resolve({ default: module });
+        })
+        .catch(error => {
+          errorHandlerFn({
+            resolve,
+            reject,
+            error,
+            locale,
+          });
+        });
+    });
   };
 }
-
-
 
 export function registerLocale(
   {
@@ -94,8 +98,9 @@ export function registerLocale(
       return import(
         /* webpackMode: "lazy-once" */
         /* webpackChunkName: "locales"*/
-        /* webpackInclude: /[/\\](ar|cs|en|en-GB|es|de|fi|fr|hi|hu|is|it|pt|tr|ru|ro|sk|sl|zh-Hans|zh-Hant)\.(mjs|js)$/ */
+        /* webpackInclude: /[/\\](ar|cs|en|en-GB|es|de|fi|fr|hi|hu|is|it|ja|ko|pt|ro|ru|sk|sl|th|tr|vi|zh-Hans|zh-Hant)\.(mjs|js)$/ */
         /* webpackExclude: /[/\\]global|extra/ */
+        /* @vite-ignore */
         `@angular/common${localePath}`
       )
         .then(val => {
@@ -114,6 +119,18 @@ export function registerLocale(
           });
         });
     });
+  };
+}
+
+export function safeRegisterLocale(): (locale: string) => Promise<any> {
+  return (locale: string) => {
+    const platformId = inject(PLATFORM_ID);
+    if (!isPlatformBrowser(platformId)) {
+      return Promise.resolve({ default: null });
+    }
+
+    // sadece tarayıcıda gerçek locale yükle
+    return registerLocale()(locale);
   };
 }
 

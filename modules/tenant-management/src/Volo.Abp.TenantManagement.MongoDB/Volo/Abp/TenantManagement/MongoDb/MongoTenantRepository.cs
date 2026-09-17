@@ -24,21 +24,21 @@ public class MongoTenantRepository : MongoDbRepository<ITenantManagementMongoDbC
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .FirstOrDefaultAsync(t => t.NormalizedName == normalizedName, GetCancellationToken(cancellationToken));
     }
 
     [Obsolete("Use FindByNameAsync method.")]
     public virtual Tenant FindByName(string normalizedName, bool includeDetails = true)
     {
-        return GetMongoQueryable()
+        return GetQueryable()
             .FirstOrDefault(t => t.NormalizedName == normalizedName);
     }
 
     [Obsolete("Use FindAsync method.")]
     public virtual Tenant FindById(Guid id, bool includeDetails = true)
     {
-        return GetMongoQueryable()
+        return GetQueryable()
             .FirstOrDefault(t => t.Id == id);
     }
 
@@ -50,22 +50,21 @@ public class MongoTenantRepository : MongoDbRepository<ITenantManagementMongoDbC
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf<Tenant, IMongoQueryable<Tenant>>(
+        return await (await GetQueryableAsync(cancellationToken))
+            .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
                     u.Name.Contains(filter)
             )
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(Tenant.Name) : sorting)
-            .As<IMongoQueryable<Tenant>>()
-            .PageBy<Tenant, IMongoQueryable<Tenant>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf<Tenant, IMongoQueryable<Tenant>>(
+        return await (await GetQueryableAsync(cancellationToken))
+            .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
                     u.Name.Contains(filter)

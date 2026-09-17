@@ -14,13 +14,15 @@
     "Body": "Telo",
     "TestEmailSubject": "Testovací e-mail {0}",
     "TestEmailBody": "Tu otestujte telo e-mailu",
-    "SuccessfullySent": "Úspešne odoslané",
+    "SentSuccessfully": "Úspešne odoslané",
     "MailSendingFailed": "Odoslanie emailu zlyhalo. Skontrolujte konfiguráciu emailu a skúste to znova.",
     "Send": "Odoslať",
+    "Menu:Settings": "Nastavenia",
     "Menu:Emailing": "Posielanie emailov",
     "Menu:TimeZone": "Časové Pásmo",
     "DisplayName:Timezone": "Časové pásmo",
-    "TimezoneHelpText": "Toto nastavenie sa používa pre celú aplikáciu alebo pre nájomníkov.",
+    "TimezoneHelpText": "Táto funkcia vám umožňuje nastaviť predvolené časové pásmo pre váš server, zatiaľ čo používatelia si môžu vybrať svoje vlastné. Ak sa časové pásmo používateľa líši od časového pásma servera, všetky časy sa príslušne upravia. Napríklad, keď je server nastavený na Európa/Londýn(00:00) a používateľ je v Európa/Paríž(+01:00), časy sa pre tohto používateľa upravia o 1 hodinu. Výberom 'Predvolené časové pásmo' sa automaticky použije časové pásmo servera alebo prehliadača.",
+    "DefaultTimeZone": "Predvolené časové pásmo",
     "SmtpHost": "Host",
     "SmtpPort": "Port",
     "SmtpUserName": "Meno používateľa",
@@ -33,7 +35,9 @@
     "Feature:SettingManagementGroup": "Správa nastavení",
     "Feature:SettingManagementEnable": "Povoliť správu nastavení",
     "Feature:SettingManagementEnableDescription": "Povoliť systém správy nastavení v aplikácii.",
-    "Feature:AllowChangingEmailSettings": "Povoliť zmenu nastavení e-mailu.",
-    "Feature:AllowChangingEmailSettingsDescription": "Povoliť zmenu nastavení e-mailu."
+    "Feature:AllowChangingEmailSettings": "Povoliť zmenu nastavení e-mailu",
+    "Feature:AllowChangingEmailSettingsDescription": "Povoliť zmenu nastavení e-mailu.",
+    "SmtpPasswordPlaceholder": "Zadajte hodnotu pre aktualizáciu hesla",
+    "NoSettingsAvailable": "Nie sú k dispozícii žiadne nastavenia."
   }
 }

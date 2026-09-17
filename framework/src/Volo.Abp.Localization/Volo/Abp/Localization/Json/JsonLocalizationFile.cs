@@ -9,10 +9,5 @@ public class JsonLocalizationFile
     /// </summary>
     public string Culture { get; set; } = default!;
 
-    public Dictionary<string, string> Texts { get; set; }
-
-    public JsonLocalizationFile()
-    {
-        Texts = new Dictionary<string, string>();
-    }
+    public Dictionary<string, object> Texts { get; set; } = [];
 }

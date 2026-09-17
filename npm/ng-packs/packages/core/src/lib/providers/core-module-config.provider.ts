@@ -1,5 +1,12 @@
-import { makeEnvironmentProviders, APP_INITIALIZER, Injector, Provider } from '@angular/core';
+import { makeEnvironmentProviders, Provider, provideAppInitializer, inject } from '@angular/core';
 import { TitleStrategy } from '@angular/router';
+import {
+  provideHttpClient,
+  withFetch,
+  withInterceptors,
+  withInterceptorsFromDi,
+  withXsrfConfiguration,
+} from '@angular/common/http';
 import {
   CORE_OPTIONS,
   LOCALIZATIONS,
@@ -16,9 +23,15 @@ import { RoutesHandler } from '../handlers';
 import { ABP, SortableItem } from '../models';
 import { AuthErrorFilterService } from '../abstracts';
 import { DEFAULT_DYNAMIC_LAYOUTS } from '../constants';
-import { LocalizationService, LocalStorageListenerService, AbpTitleStrategy } from '../services';
-import { DefaultQueueManager, getInitialData, localeInitializer, noop } from '../utils';
+import {
+  LocalizationService,
+  LocalStorageListenerService,
+  AbpTitleStrategy,
+  UILocalizationService,
+} from '../services';
+import { DefaultQueueManager, getInitialData } from '../utils';
 import { CookieLanguageProvider, IncludeLocalizationResourcesProvider, LocaleProvider } from './';
+import { timezoneInterceptor, transferStateInterceptor } from '../interceptors';
 
 export enum CoreFeatureKind {
   Options,
@@ -92,38 +105,28 @@ export function withCompareFuncFactory(
 
 export function provideAbpCore(...features: CoreFeature<CoreFeatureKind>[]) {
   const providers = [
+    provideHttpClient(
+      withInterceptorsFromDi(),
+      withXsrfConfiguration({
+        cookieName: 'XSRF-TOKEN',
+        headerName: 'RequestVerificationToken',
+      }),
+      withFetch(),
+      withInterceptors([transferStateInterceptor, timezoneInterceptor]),
+    ),
+    provideAppInitializer(async () => {
+      inject(LocalizationService);
+      inject(LocalStorageListenerService);
+      inject(RoutesHandler);
+      // Initialize UILocalizationService if UI-only mode is enabled
+      const options = inject(CORE_OPTIONS);
+      if (options?.uiLocalization?.enabled) {
+        inject(UILocalizationService);
+      }
+      await getInitialData();
+    }),
     LocaleProvider,
     CookieLanguageProvider,
-    {
-      provide: APP_INITIALIZER,
-      multi: true,
-      deps: [Injector],
-      useFactory: getInitialData,
-    },
-    {
-      provide: APP_INITIALIZER,
-      multi: true,
-      deps: [Injector],
-      useFactory: localeInitializer,
-    },
-    {
-      provide: APP_INITIALIZER,
-      multi: true,
-      deps: [LocalizationService],
-      useFactory: noop,
-    },
-    {
-      provide: APP_INITIALIZER,
-      multi: true,
-      deps: [LocalStorageListenerService],
-      useFactory: noop,
-    },
-    {
-      provide: APP_INITIALIZER,
-      multi: true,
-      deps: [RoutesHandler],
-      useFactory: noop,
-    },
     {
       provide: SORT_COMPARE_FUNC,
       useFactory: compareFuncFactory,

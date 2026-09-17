@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Upgrade your ABP MVC/Razor Pages UI with this guide, featuring essential changes like Gulp removal and SweetAlert2 integration."
+}
+```
+
 # ABP MVC / Razor Pages UI v4.x to v5.0 Migration Guide
 
 > This document is for the ABP MVC / Razor Pages UI. See also [the main migration guide](abp-5-0.md).

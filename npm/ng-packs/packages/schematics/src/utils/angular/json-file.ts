@@ -3,7 +3,7 @@
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * found in the LICENSE file at https://angular.dev/license
  */
 
 import { JsonValue } from '@angular-devkit/core';
@@ -18,16 +18,22 @@ import {
   parseTree,
   printParseErrorCode,
 } from 'jsonc-parser';
+import { getEOL } from './eol';
 
 export type InsertionIndex = (properties: string[]) => number;
 export type JSONPath = (string | number)[];
 
-/** @internal */
+/** @private */
 export class JSONFile {
   content: string;
+  private eol: string;
 
-  constructor(private readonly host: Tree, private readonly path: string) {
+  constructor(
+    private readonly host: Tree,
+    private readonly path: string,
+  ) {
     this.content = this.host.readText(this.path);
+    this.eol = getEOL(this.content);
   }
 
   private _jsonAst: Node | undefined;
@@ -73,15 +79,17 @@ export class JSONFile {
     let getInsertionIndex: InsertionIndex | undefined;
     if (insertInOrder === undefined) {
       const property = jsonPath.slice(-1)[0];
-      getInsertionIndex = (properties) =>
-        [...properties, property].sort().findIndex((p) => p === property);
+      getInsertionIndex = properties =>
+        [...properties, property].sort().findIndex(p => p === property);
     } else if (insertInOrder !== false) {
       getInsertionIndex = insertInOrder;
     }
 
     const edits = modify(this.content, jsonPath, value, {
       getInsertionIndex,
+
       formattingOptions: {
+        eol: this.eol,
         insertSpaces: true,
         tabSize: 2,
       },

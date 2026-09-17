@@ -26,6 +26,7 @@ public class BackgroundJobsTestDataBuilder : ITransientDependency
         await _backgroundJobRepository.InsertAsync(
             new BackgroundJobRecord(_testData.JobId1)
             {
+                ApplicationName = "App1",
                 JobName = "TestJobName",
                 JobArgs = "{ value: 1 }",
                 NextTryTime = _clock.Now.Subtract(TimeSpan.FromMinutes(1)),
@@ -40,6 +41,7 @@ public class BackgroundJobsTestDataBuilder : ITransientDependency
         await _backgroundJobRepository.InsertAsync(
             new BackgroundJobRecord(_testData.JobId2)
             {
+                ApplicationName = "App2",
                 JobName = "TestJobName",
                 JobArgs = "{ value: 2 }",
                 NextTryTime = _clock.Now.AddMinutes(42),
@@ -54,6 +56,7 @@ public class BackgroundJobsTestDataBuilder : ITransientDependency
         await _backgroundJobRepository.InsertAsync(
             new BackgroundJobRecord(_testData.JobId3)
             {
+                ApplicationName = "App1",
                 JobName = "TestJobName",
                 JobArgs = "{ value: 3 }",
                 NextTryTime = _clock.Now,
@@ -62,6 +65,22 @@ public class BackgroundJobsTestDataBuilder : ITransientDependency
                 LastTryTime = _clock.Now.Subtract(TimeSpan.FromMinutes(60)),
                 CreationTime = _clock.Now.Subtract(TimeSpan.FromMinutes(90)),
                 TryCount = 2
+            }
+        );
+
+        // App1 waiting job with a different job name, to verify job-name filtering.
+        await _backgroundJobRepository.InsertAsync(
+            new BackgroundJobRecord(_testData.JobId4)
+            {
+                ApplicationName = "App1",
+                JobName = "OtherJobName",
+                JobArgs = "{ value: 4 }",
+                NextTryTime = _clock.Now.Subtract(TimeSpan.FromMinutes(1)),
+                Priority = BackgroundJobPriority.Normal,
+                IsAbandoned = false,
+                LastTryTime = null,
+                CreationTime = _clock.Now.Subtract(TimeSpan.FromMinutes(3)),
+                TryCount = 0
             }
         );
     }

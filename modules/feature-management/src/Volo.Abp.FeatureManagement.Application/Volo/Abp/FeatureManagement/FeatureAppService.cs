@@ -38,6 +38,7 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
         {
             var groupDto = CreateFeatureGroupDto(group);
 
+            var includedFeatures = new HashSet<FeatureDefinition>();
             foreach (var featureDefinition in group.GetFeaturesWithChildren())
             {
                 if (providerName == TenantFeatureValueProvider.ProviderName &&
@@ -48,6 +49,18 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
                     continue;
                 }
 
+                if (featureDefinition.AllowedProviders.Any() &&
+                    !featureDefinition.AllowedProviders.Contains(providerName))
+                {
+                    continue;
+                }
+
+                if (featureDefinition.Parent != null && !includedFeatures.Contains(featureDefinition.Parent))
+                {
+                    continue;
+                }
+
+                includedFeatures.Add(featureDefinition);
                 var feature = await FeatureManager.GetOrNullWithProviderAsync(featureDefinition.Name, providerName, providerKey);
                 groupDto.Features.Add(CreateFeatureDto(feature, featureDefinition));
             }
@@ -97,9 +110,48 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
     {
         await CheckProviderPolicy(providerName, providerKey);
 
+        var inputFeatureNames = input.Features.Select(f => f.Name).ToHashSet();
+        var featureMap = input.Features.ToDictionary(f => f.Name);
+        var features = new Dictionary<UpdateFeatureDto, List<UpdateFeatureDto>>();
+        var processed = new HashSet<string>();
+
         foreach (var feature in input.Features)
         {
-            await FeatureManager.SetAsync(feature.Name, feature.Value, providerName, providerKey);
+            if (!processed.Add(feature.Name))
+            {
+                continue;
+            }
+
+            var featureDefinition = await FeatureDefinitionManager.GetAsync(feature.Name);
+            var validChildren = new List<UpdateFeatureDto>();
+
+            foreach (var childFeature in featureDefinition.Children)
+            {
+                if (inputFeatureNames.Contains(childFeature.Name) &&
+                    featureMap.TryGetValue(childFeature.Name, out var childDto) &&
+                    processed.Add(childFeature.Name))
+                {
+                    validChildren.Add(childDto);
+                }
+            }
+
+            features[feature] = validChildren;
+        }
+
+        foreach (var feature in features)
+        {
+            var forceToSet = false;
+            foreach (var childFeature in feature.Value)
+            {
+                await FeatureManager.SetAsync(childFeature.Name, childFeature.Value, providerName, providerKey);
+                var value = await FeatureManager.GetOrNullWithProviderAsync(childFeature.Name, providerName, providerKey);
+                if (value.Provider.Name == providerName && value.Provider.Key == providerKey)
+                {
+                    forceToSet = true;
+                }
+            }
+
+            await FeatureManager.SetAsync(feature.Key.Name, feature.Key.Value, providerName, providerKey, forceToSet: forceToSet);
         }
     }
 
@@ -137,6 +189,7 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
 
     public virtual async Task DeleteAsync([NotNull] string providerName, string providerKey)
     {
+        await CheckProviderPolicy(providerName, providerKey);
         await FeatureManager.DeleteAsync(providerName, providerKey);
     }
 }

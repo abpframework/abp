@@ -57,6 +57,18 @@
     "LastCachedTime": "Čas vyrovnávacej pamäte",
     "Project": "Projekt",
     "AdvancedFilters": "Pokročilé filtre",
-    "RemoveCacheAndReIndexConfirmation": "Dokument \"{0}\" sa odstráni z vyrovnávacej pamäte a znovu sa zaindexuje. Potvrdzujete?"
+    "RemoveCacheAndReIndexConfirmation": "Dokument \"{0}\" sa odstráni z vyrovnávacej pamäte a znovu sa zaindexuje. Potvrdzujete?",
+    "GeneratePdf": "Generovať PDF",
+    "Generating": "Generovanie...",
+    "Language": "Jazyk",
+    "ForceToGenerateNewPdf": "Vynútiť generovanie nového PDF",
+    "PdfGeneratedSuccessfully": "PDF generovaný úspešne",
+    "GenerateAndDownloadPdf": "Generovať a stiahnuť PDF",
+    "PdfFileDeletionWarningMessage": "Ste si istý, že chcete odstrániť súbor PDF \"{0}\"?",
+    "ManagePdfFiles": "Správa PDF súborov",
+    "Permission:ManagePdfFiles": "Správa PDF súborov",
+    "PdfDeletedSuccessfully": "PDF súbor bol úspešne odstránený",
+    "PdfGenerationStarted": "Začala sa generácia PDF",
+    "PdfGenerationStartedInfoMessage": "Začala sa generácia PDF. Po dokončení môžete skontrolovať, či bol súbor pridaný v sekcii PDF súborov."
   }
 }

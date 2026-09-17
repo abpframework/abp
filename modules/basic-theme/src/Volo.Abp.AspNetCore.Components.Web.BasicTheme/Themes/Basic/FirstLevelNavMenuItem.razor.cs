@@ -1,4 +1,5 @@
 ﻿using System;
+using Blazorise;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using Volo.Abp.UI.Navigation;
@@ -7,31 +8,26 @@ namespace Volo.Abp.AspNetCore.Components.Web.BasicTheme.Themes.Basic;
 
 public partial class FirstLevelNavMenuItem : IDisposable
 {
-    [Inject] private NavigationManager NavigationManager { get; set; }
-
     [Parameter]
-    public ApplicationMenuItem MenuItem { get; set; }
+    public ApplicationMenuItem MenuItem { get; set; } = default!;
 
-    public bool IsSubMenuOpen { get; set; }
+    private Dropdown _dropdown;
+
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
 
     protected override void OnInitialized()
     {
         NavigationManager.LocationChanged += OnLocationChanged;
     }
 
-    private void ToggleSubMenu()
+    protected virtual void OnLocationChanged(object sender, LocationChangedEventArgs e)
     {
-        IsSubMenuOpen = !IsSubMenuOpen;
+        _dropdown?.Hide();
     }
 
-    public void Dispose()
+    public virtual void Dispose()
     {
         NavigationManager.LocationChanged -= OnLocationChanged;
-    }
-
-    private void OnLocationChanged(object sender, LocationChangedEventArgs e)
-    {
-        IsSubMenuOpen = false;
-        InvokeAsync(StateHasChanged);
     }
 }

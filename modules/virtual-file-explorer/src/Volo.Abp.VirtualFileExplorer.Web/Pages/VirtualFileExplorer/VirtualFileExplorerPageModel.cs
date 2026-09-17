@@ -1,5 +1,6 @@
-﻿using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
-using Volo.Abp.VirtualFileExplorer.Web.Localization;
+﻿using Localization;
+using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.VirtualFileExplorer.Localization;
 
 namespace Volo.Abp.VirtualFileExplorer.Web.Pages.VirtualFileExplorer;
 

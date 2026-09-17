@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the Global Features system in ABP Framework to enable or disable application features during development for reusable modules."
+}
+```
+
 # Global Features
 Global Feature system is used to enable/disable an application feature on development time. It is done on the development time, because some **services** (e.g. controllers) are removed from the application model and **database tables** are not created for the disabled features, which is not possible on runtime.
 

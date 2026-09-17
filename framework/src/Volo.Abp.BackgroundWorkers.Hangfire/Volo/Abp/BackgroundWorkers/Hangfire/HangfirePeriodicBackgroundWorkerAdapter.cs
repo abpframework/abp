@@ -1,7 +1,9 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Volo.Abp.BackgroundWorkers.Hangfire;
 
@@ -11,14 +13,17 @@ public class HangfirePeriodicBackgroundWorkerAdapter<TWorker> : HangfireBackgrou
     private readonly MethodInfo _doWorkAsyncMethod;
     private readonly MethodInfo _doWorkMethod;
 
-    public HangfirePeriodicBackgroundWorkerAdapter()
+    public HangfirePeriodicBackgroundWorkerAdapter(IOptions<AbpHangfirePeriodicBackgroundWorkerAdapterOptions> options)
     {
+        TimeZone = options.Value.TimeZone;
+        Queue = options.Value.Queue;
+        RecurringJobId = BackgroundWorkerNameAttribute.GetNameOrNull<TWorker>();
+
         _doWorkAsyncMethod = typeof(TWorker).GetMethod("DoWorkAsync", BindingFlags.Instance | BindingFlags.NonPublic)!;
         _doWorkMethod = typeof(TWorker).GetMethod("DoWork", BindingFlags.Instance | BindingFlags.NonPublic)!;
-        RecurringJobId = BackgroundWorkerNameAttribute.GetNameOrNull<TWorker>();
     }
 
-    public async override Task DoWorkAsync(CancellationToken cancellationToken = default)
+    public override async Task DoWorkAsync(CancellationToken cancellationToken = default)
     {
         var workerContext = new PeriodicBackgroundWorkerContext(ServiceProvider, cancellationToken);
         var worker = ServiceProvider.GetRequiredService<TWorker>();
@@ -26,13 +31,11 @@ public class HangfirePeriodicBackgroundWorkerAdapter<TWorker> : HangfireBackgrou
         switch (worker)
         {
             case AsyncPeriodicBackgroundWorkerBase asyncPeriodicBackgroundWorker:
-                await (Task)(_doWorkAsyncMethod.Invoke(asyncPeriodicBackgroundWorker, new object[] { workerContext })!);
+                await (Task)(_doWorkAsyncMethod.Invoke(asyncPeriodicBackgroundWorker, [workerContext])!);
                 break;
             case PeriodicBackgroundWorkerBase periodicBackgroundWorker:
-                _doWorkMethod.Invoke(periodicBackgroundWorker, new object[] { workerContext });
+                _doWorkMethod.Invoke(periodicBackgroundWorker, [workerContext]);
                 break;
         }
     }
-    
-    
 }

@@ -107,7 +107,7 @@ describe('Form Prop Utils', () => {
         extraProperties: {
           bool: true,
           date: '03/30/2002',
-          dateTime: '2002-03-30 13:30:59Z',
+          dateTime: '2002-03-30 13:30:59',
           time: '13:30:59',
         },
       });
@@ -117,8 +117,8 @@ describe('Form Prop Utils', () => {
       expect(extraPropertiesGroup.value).toEqual({
         bool: true,
         date: '2002-03-30',
-        dateTime: '2002-03-30T13:30:59.000Z',
-        time: '13:30',
+        dateTime: '2002-03-30T13:30:59.000',
+        time: '13:30:59',
       });
     });
   });

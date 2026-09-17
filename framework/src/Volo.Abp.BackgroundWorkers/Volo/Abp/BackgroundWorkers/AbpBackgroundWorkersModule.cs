@@ -1,35 +1,58 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Data;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers;
 
 [DependsOn(
-    typeof(AbpThreadingModule)
-    )]
+    typeof(AbpThreadingModule),
+    typeof(AbpDataModule)
+)]
 public class AbpBackgroundWorkersModule : AbpModule
 {
-    public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
+    public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundWorkerOptions>>().Value;
-        if (options.IsEnabled)
+        if (context.Services.IsDataMigrationEnvironment())
         {
-            await context.ServiceProvider
-                .GetRequiredService<IBackgroundWorkerManager>()
-                .StartAsync();
+            Configure<AbpBackgroundWorkerOptions>(options =>
+            {
+                options.IsEnabled = false;
+            });
         }
     }
 
-    public async override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)
+    public override async Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
         var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundWorkerOptions>>().Value;
         if (options.IsEnabled)
         {
+            var hostApplicationLifetime = context.ServiceProvider.GetService<IHostApplicationLifetime>();
+            var cancellationToken = hostApplicationLifetime?.ApplicationStopping ?? CancellationToken.None;
             await context.ServiceProvider
                 .GetRequiredService<IBackgroundWorkerManager>()
-                .StopAsync();
+                .StartAsync(cancellationToken);
+        }
+    }
+
+    public override async Task OnApplicationShutdownAsync(ApplicationShutdownContext context)
+    {
+        var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundWorkerOptions>>().Value;
+        if (options.IsEnabled)
+        {
+            var hostApplicationLifetime = context.ServiceProvider.GetService<IHostApplicationLifetime>();
+            var cancellationToken = hostApplicationLifetime?.ApplicationStopping ?? CancellationToken.None;
+            await context.ServiceProvider
+                .GetRequiredService<IBackgroundWorkerManager>()
+                .StopAsync(cancellationToken);
+
+            await context.ServiceProvider
+                .GetRequiredService<IDynamicBackgroundWorkerManager>()
+                .StopAllAsync(cancellationToken);
         }
     }
 

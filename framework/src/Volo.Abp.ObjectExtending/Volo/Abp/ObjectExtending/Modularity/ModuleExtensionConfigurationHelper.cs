@@ -175,6 +175,10 @@ public static class ModuleExtensionConfigurationHelper
                         property.DefaultValueFactory = propertyConfig.DefaultValueFactory;
                         property.Lookup = propertyConfig.UI.Lookup;
                         property.UI.Order = propertyConfig.UI.Order;
+                        property.UI.CreateModal.IsVisible = propertyConfig.UI.OnCreateForm.IsVisible;
+                        property.UI.CreateModal.IsReadOnly = propertyConfig.UI.OnCreateForm.IsReadOnly;
+                        property.UI.EditModal.IsVisible = propertyConfig.UI.OnEditForm.IsVisible;
+                        property.UI.EditModal.IsReadOnly = propertyConfig.UI.OnEditForm.IsReadOnly;
                         property.Policy = propertyConfig.Policy;
                         foreach (var configuration in propertyConfig.Configuration)
                         {

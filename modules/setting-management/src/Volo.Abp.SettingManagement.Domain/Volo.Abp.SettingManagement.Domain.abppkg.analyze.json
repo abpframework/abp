@@ -89,6 +89,12 @@
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
         },
         {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
+        },
+        {
           "name": "IEntity<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
@@ -163,6 +169,12 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
         },
         {
           "name": "IEntity<Guid>",
@@ -493,6 +505,83 @@
       ],
       "contentType": "repositoryInterface",
       "name": "ISettingRepository",
+      "summary": null
+    },
+    {
+      "eventHandlerType": "Local",
+      "namespace": "Volo.Abp.SettingManagement",
+      "subscribedEvents": [
+        {
+          "underlyingType": {
+            "name": "Setting",
+            "namespace": "Volo.Abp.SettingManagement",
+            "declaringAssemblyName": "Volo.Abp.SettingManagement.Domain",
+            "fullName": "Volo.Abp.SettingManagement.Setting"
+          },
+          "name": "EntityChangedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityChangedEventData`1"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "ILocalEventHandler<EntityChangedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityChangedEventData`1>"
+        },
+        {
+          "name": "IEventHandler",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.IEventHandler"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "eventHandler",
+      "name": "SettingCacheItemInvalidator",
+      "summary": null
+    },
+    {
+      "eventHandlerType": "Local",
+      "namespace": "Volo.Abp.SettingManagement",
+      "subscribedEvents": [
+        {
+          "underlyingType": null,
+          "name": "StaticSettingDefinitionChangedEvent",
+          "namespace": "Volo.Abp.Settings",
+          "declaringAssemblyName": "Volo.Abp.Settings",
+          "fullName": "Volo.Abp.Settings.StaticSettingDefinitionChangedEvent"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "ILocalEventHandler<StaticSettingDefinitionChangedEvent>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<StaticSettingDefinitionChangedEvent>"
+        },
+        {
+          "name": "IEventHandler",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.IEventHandler"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "eventHandler",
+      "name": "StaticSettingDefinitionChangedEventHandler",
       "summary": null
     }
   ]

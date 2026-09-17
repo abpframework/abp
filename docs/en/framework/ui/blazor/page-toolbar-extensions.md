@@ -1,3 +1,17 @@
+```json
+//[doc-params]
+{
+    "BlazorUI": ["Blazorise", "MudBlazor"]
+}
+```
+
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enhance your Blazor UI by adding custom components to the page toolbar, like an \"Import users from Excel\" button."
+}
+```
+
 # Page Toolbar Extensions for Blazor UI
 
 Page toolbar system allows you to add components to the toolbar of any page. The page toolbar is the area right to the header of a page. A button ("Import users from excel") was added to the user management page below:
@@ -20,6 +34,8 @@ We will use the [component override system](customization-overriding-components.
 
 Here, the content of the overridden `SetToolbarItemsAsync` method.
 
+{{if BlazorUI == "Blazorise"}}
+
 ```csharp
 protected override async ValueTask SetToolbarItemsAsync()
 {
@@ -31,9 +47,30 @@ protected override async ValueTask SetToolbarItemsAsync()
     }, "file-import", Blazorise.Color.Secondary);
 }
 ```
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+```csharp
+protected override async ValueTask SetToolbarItemsAsync()
+{
+    await base.SetToolbarItemsAsync();
+    Toolbar.AddButton("Import users from excel", () =>
+    {
+        //TODO: Write your custom code
+        return Task.CompletedTask;
+    }, MudBlazor.Icons.Material.Filled.Upload, MudBlazor.Color.Secondary);
+}
+```
+
+{{end}}
+
 > In order to use the `AddButton` extension method, you need to add a using statement for the `Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars` namespace.
 
 Here, the entire content of the file.
+
+{{if BlazorUI == "Blazorise"}}
 
 ```csharp
 using System.Threading.Tasks;
@@ -60,6 +97,37 @@ namespace MyCompanyName.MyProjectName.Blazor.Pages.Identity
 }
 ```
 
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+```csharp
+using System.Threading.Tasks;
+using Volo.Abp.AspNetCore.Components.Web.Theming.PageToolbars;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Identity.Blazor.Pages.Identity;
+
+namespace MyCompanyName.MyProjectName.Blazor.Pages.Identity
+{
+    [ExposeServices(typeof(UserManagement))]
+    [Dependency(ReplaceServices = true)]
+    public class CustomizedUserManagement : UserManagement
+    {
+        protected override async ValueTask SetToolbarItemsAsync()
+        {
+            await base.SetToolbarItemsAsync();
+            Toolbar.AddButton("Import users from excel", () =>
+            {
+                //TODO: Write your custom code
+                return Task.CompletedTask;
+            }, MudBlazor.Icons.Material.Filled.Upload, MudBlazor.Color.Secondary);
+        }
+    }
+}
+```
+
+{{end}}
+
 When you run the application, you will see the button added next to the current button list. There are some other parameters of the `AddButton` method (for example, use `Order` to set the order of the button component relative to the other components).
 
 ## Advanced Use Cases
@@ -76,9 +144,21 @@ For this example, we've created a `MyToolbarComponent` component under the `/Pag
 
 `MyToolbarComponent.razor` content:
 
-````csharp
+{{if BlazorUI == "Blazorise"}}
+
+````razor
 <Button Color="Color.Dark">CLICK ME</Button>
 ````
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+````razor
+<MudButton Variant="Variant.Filled" Color="Color.Dark">CLICK ME</MudButton>
+````
+
+{{end}}
 We will leave the `MyToolbarComponent.razor.cs` file empty.
 
 Then you can add the `MyToolbarComponent` to the user management page toolbar:
@@ -95,7 +175,7 @@ protected override async ValueTask SetToolbarItemsAsync()
 
 #### Permissions
 
-If your button/component should be available based on a [permission/policy](../../fundamentals/authorization.md), you can pass the permission/policy name as the `RequiredPolicyName` parameter to the `AddButton` and `AddComponent` methods.
+If your button/component should be available based on a [permission/policy](../../fundamentals/authorization/index.md), you can pass the permission/policy name as the `RequiredPolicyName` parameter to the `AddButton` and `AddComponent` methods.
 
 ### Add a Page Toolbar Contributor
 

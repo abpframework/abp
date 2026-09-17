@@ -6,8 +6,8 @@ This is a layered startup solution based on [Domain Driven Design (DDD)](https:/
 
 ### Pre-requirements
 
-* [.NET 8.0+ SDK](https://dotnet.microsoft.com/download/dotnet)
-* [Node v18 or 20](https://nodejs.org/en)
+* [.NET 10.0+ SDK](https://dotnet.microsoft.com/download/dotnet)
+* [Node v20.11+](https://nodejs.org/en)
 <TEMPLATE-REMOVE IF-NOT='TIERED'>
 * [Redis](https://redis.io/)
 </TEMPLATE-REMOVE>

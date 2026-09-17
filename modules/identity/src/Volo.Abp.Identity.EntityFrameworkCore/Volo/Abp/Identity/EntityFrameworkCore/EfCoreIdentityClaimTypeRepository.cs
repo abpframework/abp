@@ -40,7 +40,7 @@ public class EfCoreIdentityClaimTypeRepository : EfCoreRepository<IIdentityDbCon
                 u =>
                     u.Name.Contains(filter)
             )
-            .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityClaimType.Name) : sorting)
+            .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityClaimType.CreationTime) + " desc" : sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
 

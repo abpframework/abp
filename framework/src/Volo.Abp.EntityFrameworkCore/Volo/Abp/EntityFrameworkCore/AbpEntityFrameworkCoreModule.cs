@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Domain;
+using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.EntityFrameworkCore.DistributedEvents;
 using Volo.Abp.Modularity;
 using Volo.Abp.Uow.EntityFrameworkCore;
@@ -28,5 +29,11 @@ public class AbpEntityFrameworkCoreModule : AbpModule
         context.Services.TryAddTransient(typeof(IDbContextProvider<>), typeof(UnitOfWorkDbContextProvider<>));
         context.Services.AddTransient(typeof(IDbContextEventOutbox<>), typeof(DbContextEventOutbox<>));
         context.Services.AddTransient(typeof(IDbContextEventInbox<>), typeof(DbContextEventInbox<>));
+
+        Configure<AbpDistributedEntityEventOptions>(options =>
+        {
+            options.IgnoredEventSelectors.Add<OutgoingEventRecord>();
+            options.IgnoredEventSelectors.Add<IncomingEventRecord>();
+        });
     }
 }

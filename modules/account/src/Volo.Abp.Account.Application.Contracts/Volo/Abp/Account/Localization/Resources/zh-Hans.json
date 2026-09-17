@@ -68,6 +68,8 @@
     "AccessDenied": "拒绝访问！",
     "AccessDeniedMessage": "您无法访问此资源。",
     "OrRegisterWith": "或注册",
-    "RegisterUsingYourProviderAccount": "使用您的 {0} 账户注册"
+    "RegisterUsingYourProviderAccount": "使用您的 {0} 账户注册",
+    "RequireMigrateSeedTitle": "找不到管理员用户",
+    "RequireMigrateSeedMessage": "请确保已执行数据库种子数据。查看<a target=\"_blank\" href=\"https://abp.io/kb/0003\">文档</a>了解可能的解决方案。"
   }
 }

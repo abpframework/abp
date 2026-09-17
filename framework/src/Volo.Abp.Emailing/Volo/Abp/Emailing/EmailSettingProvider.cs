@@ -8,7 +8,7 @@ namespace Volo.Abp.Emailing;
 /// Defines settings to send emails.
 /// <see cref="EmailSettingNames"/> for all available configurations.
 /// </summary>
-internal class EmailSettingProvider : SettingDefinitionProvider
+public class EmailSettingProvider : SettingDefinitionProvider
 {
     public override void Define(ISettingDefinitionContext context)
     {

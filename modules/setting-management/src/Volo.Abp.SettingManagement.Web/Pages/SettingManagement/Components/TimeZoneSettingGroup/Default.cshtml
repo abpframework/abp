@@ -1,18 +1,18 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.SettingManagement.Localization
 @inject IHtmlLocalizer<AbpSettingManagementResource> L
-@model Volo.Abp.SettingManagement.Web.Pages.SettingManagement.Components.TimeZoneSettingGroup.TimeZoneSettingGroupViewComponent.UpdateTimezoneSettingsViewModel
-
 <abp-script src="/Pages/SettingManagement/Components/TimeZoneSettingGroup/Default.js" />
 
 <form id="TimeZoneSettingsForm" method="post">
     <abp-row>
         <abp-column size-md="_12">
             <div>
-                <abp-select asp-for="Timezone" asp-items="@Model.TimeZoneItems" info="@L["TimezoneHelpText"].Value" />
+                <label for="timezone-select" class="mb-1">@L["Timezone"].Value</label>
+                <select style="width: 100%" name="timezone" id="timezone-select"></select>
             </div>
+            <div class="mt-1 form-text">@L["TimezoneHelpText"].Value</div>
             <div>
-                <abp-button button-type="Primary" type="submit">
+                <abp-button class="mt-3" button-type="Primary" type="submit">
                     <i class="fa fa-save"></i> @L["Save"]
                 </abp-button>
             </div>

@@ -1,8 +1,5 @@
 # Blazor's History and Full-stack Web UI
 
-![Cover Image](cover-image.png)
-
-
 Blazor is a web framework that allows developers to build interactive web applications using .NET instead of JavaScript. The first version of Blazor was released on May 14, 2020.  Since its initial release, Blazor has evolved with the new versions. Until now, six different versions have been declared. Sometimes, it can be not very clear to see the differences between these approaches. First, let's try to understand these.
 
 * **Blazor-Server**: >> *Loads fast at first* >> In this version, heavy things are done in the server. Browsers are thin clients and download a small page for the first load. The page updates are done via SignalR connection. This was released with .NET Core 3.

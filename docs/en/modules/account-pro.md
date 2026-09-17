@@ -1,6 +1,13 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the Account Module (Pro) for ABP Framework, featuring user authentication, two-factor setup, and tenant switching functionalities."
+}
+```
+
 # Account Module (Pro)
 
-> You must have an ABP Team or a higher license to use this module.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this module.
 
 This module implements the Login, Register, Forgot Password, Email Confirmation, Password Reset, sending and confirming Two-Factor Authentication, user lockout, switch between tenants functionalities of an application;
 
@@ -62,7 +69,7 @@ This module doesn't seed any data.
 
 ## Options
 
-### AbpIdentityAspNetCoreOptions
+### AbpAccountOptions
 
 `AbpAccountOptions` can be configured in the UI layer in the `ConfigureServices` method of your [module](../framework/architecture/modularity/basics.md). Example:
 
@@ -76,6 +83,14 @@ Configure<AbpAccountOptions>(options =>
 `AbpAccountOptions` properties:
 
 * `WindowsAuthenticationSchemeName` (default: Windows): Name of the Windows authentication scheme.
+* `TenantAdminUserName` (default: admin): The tenant admin user name.
+* `ImpersonationTenantPermission`: The permission name for tenant impersonation.
+* `ImpersonationUserPermission`: The permission name for user impersonation.
+* `SwitchUserDuringImpersonate` (default: `false`): Signs the target user in with the application cookie while an impersonation flow is in progress.
+* `ExternalProviderIconMap`: A dictionary of external provider names and their icon asset paths or CSS classes. Common providers such as GitHub, Google, X, Apple, LinkedIn, Facebook and Microsoft are already mapped.
+* `IsTenantMultiDomain` (default: `false`): Enables tenant-domain redirects for linked-account and tenant-switching flows.
+* `GetTenantDomain`: Resolves the target tenant's origin for impersonation redirects and, when `IsTenantMultiDomain` is enabled, linked-account and tenant-switching redirects. By default, it returns the current request's scheme and host.
+* `ExternalProfilePictureDownloadTimeout` (default: 5 seconds): Limits how long external-login registration waits while downloading a profile picture.
 
 ### AbpProfilePictureOptions
 
@@ -90,7 +105,26 @@ Configure<AbpProfilePictureOptions>(options =>
 
 `AbpProfilePictureOptions` properties:
 
-* `EnableImageCompression` (default: false): Enables the image compression for the profile picture. When enabled, the selected compression library will compress the profile picture to decrease the image size. For more information see [image manipulation](../framework/infrastructure/image-manipulation.md)
+* `EnableImageCompression` (default: `false`): Enables image compression for the profile picture. When enabled, the selected compression library compresses the profile picture to decrease its size. For more information, see [image manipulation](../framework/infrastructure/image-manipulation.md).
+* `AllowedFileExtensions` (default: `.jpg`, `.jpeg` and `.png`): Defines the accepted file-name extensions. The extension check runs when the upload includes a file name.
+* `MaxFileSizeInBytes` (default: 5 MiB): Rejects larger uploads. Set it to `0` to disable the size limit.
+* `MagicBytesVerifiers`: Verifies the file content independently of the file name. The default verifiers accept JPEG and PNG signatures. If you add an allowed extension, add a matching content verifier as well; at least one verifier must accept every uploaded image.
+
+### Registration Email Confirmation Codes
+
+The registration email confirmation code is stored with a 10-minute absolute expiration by default. Configure a different duration with `Account:EmailConfirmation:CodeExpirationTime`:
+
+```json
+{
+  "Account": {
+    "EmailConfirmation": {
+      "CodeExpirationTime": "00:15:00"
+    }
+  }
+}
+```
+
+Sending and checking these codes use separate built-in operation rate-limit policies. Sending a new code resets the check rate-limit state for that email address.
 
 ## Local login
 
@@ -100,6 +134,62 @@ If you use `Social / External Logins`, It is automatically called for authentica
 
 ![account-pro-module-local-login-setting](../images/account-pro-module-local-login-setting.png)
 
+## Email Login
+
+Email login lets users sign in with a one-time code, a magic link or both. It is disabled by default and also requires **Local login** to remain enabled. Configure it in `Settings > Account > Email Login`.
+
+The available login types are:
+
+* `OtpAndMagicLink` (default): The email contains both a six-digit code and a magic link.
+* `MagicLinkOnly`: The email contains only a magic link and the code-verification endpoint is disabled.
+* `OtpOnly`: The email contains only a code and direct magic-link verification is disabled.
+
+The token lifespan defaults to 90 seconds and accepts values from 30 to 86,400 seconds. Codes and link tokens are single-use. Completing either path invalidates the outstanding credential for the other path, and sending a new email invalidates the previous credentials.
+
+Email login uses built-in send and verification rate limits. When `AccountSettingNames.PreventEmailEnumeration` is enabled, requests for an unknown or locked-out account return the same expiry-shaped response as a valid request without sending an email. This prevents callers from using the send response to distinguish those accounts.
+
+### Switching users during OAuth login
+
+If you have an OAuth/Auth Server application using the Account Pro module, you can pass the `prompt=select_account` parameter to force the user to select an account.
+
+Example to pass `prompt=select_account` parameter in OpenIdConnect:
+
+```csharp
+.AddAbpOpenIdConnect("oidc", options =>
+{
+    // ...
+    options.Events = new OpenIdConnectEvents
+    {
+        OnRedirectToIdentityProvider = redirectContext =>
+        {
+            redirectContext.ProtocolMessage.Prompt = "select_account";
+            return Task.CompletedTask;
+        }
+    };
+    // ...
+});
+```
+
+![account-pro-secect-account](../images/account-pro-select-account-parameter.png)
+
+You have three options:
+
+- Continue: The login process will continue with the current account.
+- Switch to another account: Will be redirected to the login page to log in with another account.
+- Create a new account: Will be redirected to the register page to create a new account.
+
+> The OAuth login process will continue after the user selects one of the options.
+
+![account-pro-secect-account](../images/account-pro-select-account.png)
+
+All available prompt parameters:
+
+| **Parameter**    | **Description**                                                                                             |
+|------------------|-------------------------------------------------------------------------------------------------------------|
+| `login`          | Forces the user to re-authenticate, even if they are already logged in.                                      |
+| `consent`        | Forces the user to re-consent to the requested permissions, even if they have consented before.             |
+| `select_account` | Forces the user to select an account, even if they are already logged in (especially relevant if multiple accounts are available). |
+| `none`           | Does not trigger any prompt. If the user is not logged in, or their consent is not granted, it will return an error or redirect accordingly. |
 
 ## Social / External Logins
 
@@ -109,7 +199,7 @@ The application startup template comes with **Twitter**, **Google** and **Micros
 
 ![account-pro-external-login-settings](../images/account-pro-external-login-settings.png)
 
-The social/External login system is compatible with the multi-tenancy. Each tenant can configure their own provider settings if your application is multi-tenant.
+The social/External login system is compatible with the multi-tenancy. Each tenant can enable or disable the external login provider and configure their own provider settings if your application is multi-tenant.
 
 ### Install a new External Login
 
@@ -133,7 +223,7 @@ context.Services.AddAuthentication()
         facebook.Scope.Add("public_profile");
     })
     .WithDynamicOptions<FacebookOptions>(
-        FacebookDefaults.AuthenticationScheme,
+        FacebookDefaults.AuthenticationScheme, // Facebook
         options =>
         {
             options.WithProperty(x => x.AppId);
@@ -144,6 +234,18 @@ context.Services.AddAuthentication()
 
 * `AddFacebook()` is the standard method that you can set hard-coded configuration.
 * `WithDynamicOptions<FacebookOptions>` is provided by the Account Module which makes possible to configure the provided properties on the UI.
+
+#### Localize Provider Properties
+
+You can add following translation to localize the properties of the external login providers:
+
+`en.json`:
+
+````json
+"ExternalProvider:Facebook": "Facebook",
+"ExternalProvider:Facebook:AppId": "App ID",
+"ExternalProvider:Facebook:AppSecret": "App Secret",
+````
 
 ### IPostConfigureAccountExternalProviderOptions
 
@@ -215,6 +317,12 @@ Users who register via both local registration and external/social login using t
 
 ![require-local-password-on-social-account-linking](../images/require-local-password-on-social-account-linking.png)
 
+### Time Zone Setting
+
+Users can to set their own time zone in the account settings page if application is [supports multiple timezones](../framework/infrastructure/timing.md#clock-options).
+
+![account-pro-time-zone-setting](../images/account-pro-time-zone-setting.png)
+
 ## Internals
 
 ### Settings
@@ -237,52 +345,48 @@ See the `AccountPermissions` class members for all permissions defined for this 
 
 #### Installation
 
-In order to configure the application to use the `AccountPublicModule` and the `AccountAdminModule`, you first need to import `AccountPublicConfigModule` from `@volo/abp.ng.account/public/config` and `AccountAdminConfigModule` from `@volo/abp.ng.account/admin/config` to root module. Config modules has a static `forRoot` method which you should call for a proper configuration.
+In order to configure the application to use the public account module and the admin account module, you first need to import `provideAccountPublicConfig` from `@volo/abp.ng.account/public/config` and `provideAccountAdminConfig` from `@volo/abp.ng.account/admin/config`. Then, you will need to append them to the `appConfig` array.
 
 ```js
-// app.module.ts
-import { AccountAdminConfigModule } from '@volo/abp.ng.account/admin/config';
-import { AccountPublicConfigModule } from '@volo/abp.ng.account/public/config';
+// app.config.ts
+import { provideAccountPublicConfig } from '@volo/abp.ng.account/public/config';
+import { provideAccountAdminConfig } from '@volo/abp.ng.account/admin/config';
 
-@NgModule({
-  imports: [
-    // other imports
-    AccountPublicConfigModule.forRoot(),
-    AccountAdminConfigModule.forRoot(),
-    // other imports
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    provideAccountAdminConfig(),
+    provideAccountPublicConfig(),
   ],
-  // ...
-})
-export class AppModule {}
+};
 ```
 
-The `AccountPublicModule` should be imported and lazy-loaded in your routing module. It has a static `forLazy` method for configuration. Available options are listed below. It is available for import from `@volo/abp.ng.account/public`.
+The account public package should be imported and lazy-loaded in your routing array. It has a static `createRoutes` method for configuration. Available options are listed below. It is available for import from `@volo/abp.ng.account/public`.
 
 ```js
-// app-routing.module.ts
-const routes: Routes = [
-  // other route definitions
+// app.routes.ts
+export const APP_ROUTES: Routes = [
+  // ...
   {
     path: 'account',
-    loadChildren: () =>
-      import('@volo/abp.ng.account/public').then(m => m.AccountPublicModule.forLazy(/* options here */)),
+    loadChildren: () => import('@volo/abp.ng.account/public').then(c => c.createRoutes(/* options here */)),
   },
 ];
 
-@NgModule(/* AppRoutingModule metadata */)
-export class AppRoutingModule {}
 ```
 
-> If you have generated your project via the startup template, you do not have to do anything, because it already has the modules.
+> If you have generated your project via the startup template, you do not have to do anything, because it already has the necessary configurations.
 
 <h4 id="h-account-module-options">Options</h4>
 
-You can modify the look and behavior of the module pages by passing the following options to `AccountModule.forLazy` static method:
+You can modify the look and behavior of the module pages by passing the following options to `createRoutes` static method:
 
 - **redirectUrl**: Default redirect URL after logging in.
-- **entityActionContributors:** Changes grid actions. Please check [Entity Action Extensions for Angular](../framework/ui/angular/entity-action-extensions.md) for details.
-- **toolbarActionContributors:** Changes page toolbar. Please check [Page Toolbar Extensions for Angular](../framework/ui/angular/page-toolbar-extensions.md) for details.
-- **entityPropContributors:** Changes table columns. Please check [Data Table Column Extensions for Angular](../framework/ui/angular/data-table-column-extensions.md) for details.
+- **entityActionContributors:** Changes actions on `eAccountComponents.MySecurityLogs`. See [Entity Action Extensions for Angular](../framework/ui/angular/entity-action-extensions.md).
+- **toolbarActionContributors:** Changes the toolbar on `eAccountComponents.MySecurityLogs`. See [Page Toolbar Extensions for Angular](../framework/ui/angular/page-toolbar-extensions.md).
+- **entityPropContributors:** Changes columns on `eAccountComponents.MySecurityLogs`. See [Data Table Column Extensions for Angular](../framework/ui/angular/data-table-column-extensions.md).
+- **personelInfoEntityPropContributors:** Changes the edit-form properties on `eAccountComponents.PersonalSettings`. The public API uses this spelling. See [Dynamic Form Extensions for Angular](../framework/ui/angular/dynamic-form-extensions.md).
+- **isPersonalSettingsChangedConfirmationActive:** Deprecated. Personal settings refresh the current user's state without requiring a new login.
 
 #### Services / Models
 
@@ -358,3 +462,6 @@ This module doesn't define any additional distributed event. See the [standard d
 * [Impersonation](./account/impersonation.md)
 * [Linked Accounts](./account/linkedaccounts.md)
 * [Session Management](./account/session-management.md)
+* [Idle Session Timeout](./account/idle-session-timeout.md)
+* [Web Authentication API (WebAuthn) passkeys](./account/passkey.md)
+* [Shared user accounts](./account/shared-user-accounts.md)

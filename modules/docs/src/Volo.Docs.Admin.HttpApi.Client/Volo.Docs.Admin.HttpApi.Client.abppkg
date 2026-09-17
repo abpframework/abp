@@ -1,3 +1,15 @@
 {
-  "role": "lib.http-api-client"
+  "role": "lib.http-api-client",
+  "proxies": {
+    "csharp": {
+      "VoloDocs.Web-docs-admin": {
+        "applicationName": "VoloDocs.Web",
+        "module": "docs-admin",
+        "url": "https://localhost:5001",
+        "folder": "ClientProxies\\Volo\\Docs\\Admin",
+        "serviceType": "application",
+        "withoutContracts": true
+      }
+    }
+  }
 }

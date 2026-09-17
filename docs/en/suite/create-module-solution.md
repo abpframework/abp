@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to create a new ABP module solution using ABP Suite with step-by-step guidance and helpful visuals for a seamless setup."
+}
+```
+
 # Creating a new ABP module solution
 
 ````json

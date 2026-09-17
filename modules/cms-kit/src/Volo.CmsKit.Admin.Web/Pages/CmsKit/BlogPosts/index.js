@@ -31,7 +31,7 @@ $(function () {
         scrollCollapse: true,
         scrollX: true,
         ordering: true,
-        order: [[2, "desc"]],
+        order: [[4, "desc"]],
         ajax: abp.libs.datatables.createAjax(blogsService.getList, getFilter),
         columnDefs: [
             {
@@ -152,6 +152,10 @@ $(function () {
 
     $('#CmsKitBlogPostsWrapper form.page-search-form').submit(function (e) {
         e.preventDefault();
+        dataTable.ajax.reloadEx();
+    });
+    
+    $statusFilter.on('change', function () {
         dataTable.ajax.reloadEx();
     });
     

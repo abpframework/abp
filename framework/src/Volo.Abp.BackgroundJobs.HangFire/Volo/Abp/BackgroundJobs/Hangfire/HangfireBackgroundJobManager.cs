@@ -5,17 +5,20 @@ using Hangfire;
 using Hangfire.States;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Hangfire;
 
 namespace Volo.Abp.BackgroundJobs.Hangfire;
 
 [Dependency(ReplaceServices = true)]
 public class HangfireBackgroundJobManager : IBackgroundJobManager, ITransientDependency
 {
-    protected AbpBackgroundJobOptions Options { get; }
+    protected IOptions<AbpBackgroundJobOptions> BackgroundJobOptions { get; }
+    protected IOptions<AbpHangfireOptions> HangfireOptions { get; }
 
-    public HangfireBackgroundJobManager(IOptions<AbpBackgroundJobOptions> options)
+    public HangfireBackgroundJobManager(IOptions<AbpBackgroundJobOptions> backgroundJobOptions, IOptions<AbpHangfireOptions> hangfireOptions)
     {
-        Options = options.Value;
+        BackgroundJobOptions = backgroundJobOptions;
+        HangfireOptions = hangfireOptions;
     }
 
     public virtual Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal,
@@ -33,13 +36,7 @@ public class HangfireBackgroundJobManager : IBackgroundJobManager, ITransientDep
 
     protected virtual string GetQueueName(Type argsType)
     {
-        var queueName = EnqueuedState.DefaultQueue;
-        var queueAttribute = Options.GetJob(argsType).JobType.GetCustomAttribute<QueueAttribute>();
-        if (queueAttribute != null)
-        {
-            queueName = queueAttribute.Queue;
-        }
-
-        return queueName;
+        var queueAttribute = BackgroundJobOptions.Value.GetJob(argsType).JobType.GetCustomAttribute<QueueAttribute>();
+        return queueAttribute != null ? HangfireOptions.Value.DefaultQueuePrefix + queueAttribute.Queue : HangfireOptions.Value.DefaultQueue;
     }
 }

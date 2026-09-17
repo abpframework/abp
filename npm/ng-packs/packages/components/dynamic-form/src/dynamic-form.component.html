@@ -1,0 +1,78 @@
+<div class="form-wrapper">
+<form 
+  [formGroup]="dynamicForm" 
+  (ngSubmit)="submit()" 
+  class="dynamic-form"
+  role="form"
+  [attr.aria-label]="'Dynamic Form'">
+  <div class="row" role="group">
+    @for (field of sortedFields; track field.key) {
+        <div [ngClass]="'col-md-' + (field.gridSize || 12)">
+          
+          <!-- Custom Component -->
+          @if (field.component) {
+            <abp-dynamic-form-field-host
+              [component]="field.component"
+              [inputs]="{ field: field, visible: isFieldVisible(field) }"
+              formControlName="{{ field.key }}">
+            </abp-dynamic-form-field-host>
+          }
+          
+          <!-- Nested Group -->
+          @else if (field.type === 'group') {
+            <abp-dynamic-form-group
+              [groupConfig]="field"
+              [formGroup]="getChildFormGroup(field.key)"
+              [visible]="isFieldVisible(field)">
+            </abp-dynamic-form-group>
+          }
+          
+          <!-- Nested Array -->
+          @else if (field.type === 'array') {
+            <abp-dynamic-form-array
+              [arrayConfig]="field"
+              [formGroup]="dynamicForm"
+              [visible]="isFieldVisible(field)">
+            </abp-dynamic-form-array>
+          }
+          
+          <!-- Regular Field -->
+          @else {
+            <abp-dynamic-form-field
+              [field]="field"
+              [formControlName]="field.key"
+              [visible]="isFieldVisible(field)">
+            </abp-dynamic-form-field>
+          }
+          
+        </div>
+    }
+  </div>
+  <ng-content select="[actions]">
+    <ng-container [ngTemplateOutlet]="defaultActions"></ng-container>
+  </ng-content>
+
+</form>
+
+<ng-template #defaultActions>
+  <div class="form-actions" role="group" aria-label="Form actions">
+    @if (showCancelButton()) {
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="onCancel()"
+        aria-label="Cancel form">
+        Cancel
+      </button>
+    }
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="!dynamicForm.valid || submitInProgress()"
+      [attr.aria-busy]="submitInProgress() || null"
+      [attr.aria-label]="submitInProgress() ? 'Submitting form...' : submitButtonText()">
+      {{ submitButtonText() }}
+    </button>
+  </div>
+</ng-template>
+</div>

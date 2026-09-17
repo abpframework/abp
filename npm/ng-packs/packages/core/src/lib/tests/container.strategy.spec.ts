@@ -7,7 +7,7 @@ import {
 
 describe('ClearContainerStrategy', () => {
   const containerRef = {
-    clear: jest.fn(),
+    clear: vi.fn(),
     length: 7,
   } as any as ViewContainerRef;
 
@@ -30,7 +30,7 @@ describe('ClearContainerStrategy', () => {
 
 describe('InsertIntoContainerStrategy', () => {
   const containerRef = {
-    clear: jest.fn(),
+    clear: vi.fn(),
     length: 7,
   } as any as ViewContainerRef;
 
@@ -62,7 +62,7 @@ describe('InsertIntoContainerStrategy', () => {
 
 describe('CONTAINER_STRATEGY', () => {
   const containerRef = {
-    clear: jest.fn(),
+    clear: vi.fn(),
     length: 7,
   } as any as ViewContainerRef;
 

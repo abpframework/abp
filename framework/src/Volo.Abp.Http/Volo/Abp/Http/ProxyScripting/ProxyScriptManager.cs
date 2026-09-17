@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
@@ -32,23 +33,21 @@ public class ProxyScriptManager : IProxyScriptManager, ITransientDependency
         _options = options.Value;
     }
 
-    public string GetScript(ProxyScriptingModel scriptingModel)
+    public async Task<string> GetScriptAsync(ProxyScriptingModel scriptingModel)
     {
         var cacheKey = CreateCacheKey(scriptingModel);
 
         if (scriptingModel.UseCache)
         {
-            return _cache.GetOrAdd(cacheKey, () => CreateScript(scriptingModel));
+            return await _cache.GetOrAddAsync(cacheKey, () => CreateScriptAsync(scriptingModel));
         }
 
-        var script = CreateScript(scriptingModel);
-        _cache.Set(cacheKey, script);
-        return script;
+        return await CreateScriptAsync(scriptingModel);
     }
 
-    private string CreateScript(ProxyScriptingModel scriptingModel)
+    private async Task<string> CreateScriptAsync(ProxyScriptingModel scriptingModel)
     {
-        var apiModel = _modelProvider.CreateApiModel(new ApplicationApiDescriptionModelRequestDto { IncludeTypes = false });
+        var apiModel = await _modelProvider.CreateApiModelAsync(new ApplicationApiDescriptionModelRequestDto { IncludeTypes = false });
 
         if (scriptingModel.IsPartialRequest())
         {

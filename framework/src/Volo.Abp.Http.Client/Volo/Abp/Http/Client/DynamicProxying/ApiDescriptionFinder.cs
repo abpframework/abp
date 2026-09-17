@@ -126,7 +126,11 @@ public class ApiDescriptionFinder : IApiDescriptionFinder, ITransientDependency
     protected virtual void AddHeaders(HttpRequestMessage requestMessage)
     {
         //CorrelationId
-        requestMessage.Headers.Add(AbpCorrelationIdOptions.HttpHeaderName, CorrelationIdProvider.Get());
+        var correlationId = CorrelationIdProvider.Get();
+        if (correlationId != null)
+        {
+            requestMessage.Headers.Add(AbpCorrelationIdOptions.HttpHeaderName, correlationId);
+        }
 
         //TenantId
         if (CurrentTenant.Id.HasValue)

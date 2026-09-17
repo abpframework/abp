@@ -72,4 +72,20 @@ public partial class MenuItemAdminClientProxy : ClientProxyBase<IMenuItemAdminAp
             { typeof(PageLookupInputDto), input }
         });
     }
+
+    public virtual async Task<ListResultDto<PermissionLookupDto>> GetPermissionLookupAsync(PermissionLookupInputDto inputDto)
+    {
+        return await RequestAsync<ListResultDto<PermissionLookupDto>>(nameof(GetPermissionLookupAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(PermissionLookupInputDto), inputDto }
+        });
+    }
+
+    public virtual async Task<int> GetAvailableMenuOrderAsync(Guid? parentId)
+    {
+        return await RequestAsync<int>(nameof(GetAvailableMenuOrderAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(Guid?), parentId }
+        });
+    }
 }

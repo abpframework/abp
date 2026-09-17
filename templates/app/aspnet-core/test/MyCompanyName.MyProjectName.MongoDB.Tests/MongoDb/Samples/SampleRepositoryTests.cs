@@ -32,7 +32,7 @@ public class SampleRepositoryTests : MyProjectNameMongoDbTestBase
         await WithUnitOfWorkAsync(async () =>
         {
                 //Act
-                var adminUser = await (await _appUserRepository.GetMongoQueryableAsync())
+                var adminUser = await (await _appUserRepository.GetQueryableAsync())
                 .FirstOrDefaultAsync(u => u.UserName == "admin");
 
                 //Assert

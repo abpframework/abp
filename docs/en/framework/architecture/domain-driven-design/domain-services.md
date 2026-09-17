@@ -1,6 +1,11 @@
-# Domain Services
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement Domain Services in ABP Framework for core business logic, enhancing your Domain Driven Design solutions effectively."
+}
+```
 
-## Introduction
+# Domain Services
 
 In a [Domain Driven Design](../domain-driven-design) (DDD) solution, the core business logic is generally implemented in aggregates ([entities](./entities.md)) and the Domain Services. Creating a Domain Service is especially needed when;
 

@@ -19,15 +19,15 @@ public class BlobNormalizeNamingService : IBlobNormalizeNamingService, ITransien
         string? containerName,
         string? blobName)
     {
-
-        if (!configuration.NamingNormalizers.Any())
+        var normalizerTypes = configuration.GetEffectiveNamingNormalizers();
+        if (!normalizerTypes.Any())
         {
             return new BlobNormalizeNaming(containerName, blobName);
         }
 
         using (var scope = ServiceProvider.CreateScope())
         {
-            foreach (var normalizerType in configuration.NamingNormalizers)
+            foreach (var normalizerType in normalizerTypes)
             {
                 var normalizer = scope.ServiceProvider
                     .GetRequiredService(normalizerType)
@@ -43,21 +43,11 @@ public class BlobNormalizeNamingService : IBlobNormalizeNamingService, ITransien
 
     public string NormalizeContainerName(BlobContainerConfiguration configuration, string containerName)
     {
-        if (!configuration.NamingNormalizers.Any())
-        {
-            return containerName;
-        }
-
         return NormalizeNaming(configuration, containerName, null).ContainerName!;
     }
 
     public string NormalizeBlobName(BlobContainerConfiguration configuration, string blobName)
     {
-        if (!configuration.NamingNormalizers.Any())
-        {
-            return blobName;
-        }
-
         return NormalizeNaming(configuration, null, blobName).BlobName!;
     }
 }

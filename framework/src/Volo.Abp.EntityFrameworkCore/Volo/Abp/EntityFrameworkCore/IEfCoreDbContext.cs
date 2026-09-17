@@ -31,6 +31,9 @@ public interface IEfCoreDbContext : IDisposable, IInfrastructure<IServiceProvide
 
     DbSet<T> Set<T>()
         where T : class;
+    
+    DbSet<T> Set<T>(string name)
+        where T : class;
 
     DatabaseFacade Database { get; }
 

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to access and integrate module source code into your ABP Framework solution using ABP Suite for enhanced customization and development."
+}
+```
+
 # Accessing Source Code Of Modules
 
 **If your [license plan](https://abp.io/pricing) allows you to access the source code of [modules](https://abp.io/modules)**, you can use ABP Suite to download the source code and add downloaded source code of modules to your solution structure.

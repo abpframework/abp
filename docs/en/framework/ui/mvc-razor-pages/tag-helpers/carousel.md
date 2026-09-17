@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement and customize the `abp-carousel` component in ABP Framework with easy-to-follow examples and attributes."
+}
+```
+
 # Carousel
 
 ## Introduction

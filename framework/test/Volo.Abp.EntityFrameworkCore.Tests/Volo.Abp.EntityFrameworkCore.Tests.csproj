@@ -3,12 +3,13 @@
   <Import Project="..\..\..\common.test.props" />
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Abp.EntityFrameworkCore.MySQL\Volo.Abp.EntityFrameworkCore.MySQL.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.EntityFrameworkCore.Sqlite\Volo.Abp.EntityFrameworkCore.Sqlite.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
     <ProjectReference Include="..\Volo.Abp.EntityFrameworkCore.Tests.SecondContext\Volo.Abp.EntityFrameworkCore.Tests.SecondContext.csproj" />
@@ -17,6 +18,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" />
+    <PackageReference Include="MySql.EntityFrameworkCore" />
+    <PackageReference Include="Oracle.EntityFrameworkCore" />
   </ItemGroup>
 
 </Project>

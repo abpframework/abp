@@ -32,6 +32,7 @@ public class MongoIdentitySecurityLogRepository :
         string userName = null,
         string clientId = null,
         string correlationId = null,
+        string clientIpAddress = null,
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
@@ -45,12 +46,12 @@ public class MongoIdentitySecurityLogRepository :
             userName,
             clientId,
             correlationId,
+            clientIpAddress,
             cancellationToken
         );
 
         return await query.OrderBy(sorting.IsNullOrWhiteSpace() ? $"{nameof(IdentitySecurityLog.CreationTime)} desc" : sorting)
-            .As<IMongoQueryable<IdentitySecurityLog>>()
-            .PageBy<IdentitySecurityLog, IMongoQueryable<IdentitySecurityLog>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -64,6 +65,7 @@ public class MongoIdentitySecurityLogRepository :
         string userName = null,
         string clientId = null,
         string correlationId = null,
+        string clientIpAddress = null,
         CancellationToken cancellationToken = default)
     {
         var query = await GetListQueryAsync(
@@ -76,18 +78,18 @@ public class MongoIdentitySecurityLogRepository :
             userName,
             clientId,
             correlationId,
+            clientIpAddress,
             cancellationToken
         );
 
-        return await query.As<IMongoQueryable<IdentitySecurityLog>>()
-            .LongCountAsync(GetCancellationToken(cancellationToken));
+        return await query.LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
 
     public virtual async Task<IdentitySecurityLog> GetByUserIdAsync(Guid id, Guid userId, bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken)).OrderBy(x => x.Id).FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId,
+        return await (await GetQueryableAsync(cancellationToken)).OrderBy(x => x.Id).FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId,
             GetCancellationToken(cancellationToken));
     }
 
@@ -101,19 +103,19 @@ public class MongoIdentitySecurityLogRepository :
         string userName = null,
         string clientId = null,
         string correlationId = null,
+        string clientIpAddress = null,
         CancellationToken cancellationToken = default)
     {
-        return (await GetMongoQueryableAsync(cancellationToken))
+        return (await GetQueryableAsync(cancellationToken))
             .WhereIf(startTime.HasValue, securityLog => securityLog.CreationTime >= startTime.Value)
             .WhereIf(endTime.HasValue, securityLog => securityLog.CreationTime < endTime.Value.AddDays(1).Date)
-            .WhereIf(!applicationName.IsNullOrWhiteSpace(),
-                securityLog => securityLog.ApplicationName == applicationName)
+            .WhereIf(!applicationName.IsNullOrWhiteSpace(), securityLog => securityLog.ApplicationName == applicationName)
             .WhereIf(!identity.IsNullOrWhiteSpace(), securityLog => securityLog.Identity == identity)
             .WhereIf(!action.IsNullOrWhiteSpace(), securityLog => securityLog.Action == action)
             .WhereIf(userId.HasValue, securityLog => securityLog.UserId == userId)
             .WhereIf(!userName.IsNullOrWhiteSpace(), securityLog => securityLog.UserName == userName)
             .WhereIf(!clientId.IsNullOrWhiteSpace(), securityLog => securityLog.ClientId == clientId)
-            .WhereIf(!correlationId.IsNullOrWhiteSpace(),
-                securityLog => securityLog.CorrelationId == correlationId);
+            .WhereIf(!correlationId.IsNullOrWhiteSpace(), securityLog => securityLog.CorrelationId == correlationId)
+            .WhereIf(!clientIpAddress.IsNullOrWhiteSpace(), securityLog => securityLog.ClientIpAddress == clientIpAddress);
     }
 }

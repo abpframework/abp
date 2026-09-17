@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to switch your ABP Framework application from SQL Server to PostgreSQL with step-by-step guidance for a smooth transition."
+}
+```
+
 # Switch to EF Core PostgreSQL Provider
 
 > [ABP CLI](../../../cli) and the [Get Started](https://abp.io/get-started) page already provides an option to create a new solution with PostgreSQL. See [that document](./other-dbms.md) to learn how to use. This document provides guidance for who wants to manually switch to PostgreSQL after creating the solution.
@@ -20,6 +27,15 @@ Find `UseSqlServer()` call in *YourProjectName*EntityFrameworkCoreModule.cs insi
 Find `UseSqlServer()` call in *YourProjectName*DbContextFactory.cs inside the `.EntityFrameworkCore` project and replace with `UseNpgsql()`.
 
 > Depending on your solution structure, you may find more `UseSqlServer()` calls that needs to be changed.
+
+
+## EnableLegacyTimestampBehavior
+
+Please enable the `Npgsql.EnableLegacyTimestampBehavior` in `PreConfigureServices` method of your EF Core module and `DbContextFactory(IDesignTimeDbContextFactory)` class.
+
+`AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);`
+
+See https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic
 
 ## Change the Connection Strings
 

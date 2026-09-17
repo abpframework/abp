@@ -1,12 +1,23 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover best practices for integrating Entity Framework Core in your applications, ensuring optimal performance and maintainability."
+}
+```
+
 # Entity Framework Core Integration Best Practices
 
-> See [Entity Framework Core Integration document](../../data/entity-framework-core) for the basics of the EF Core integration.
+> This document offers best practices for implementing Entity Framework Core integration in your modules and applications.
+>
+> **Ensure you've read the [*Entity Framework Core Integration*](../../data/entity-framework-core/index.md) document first.**
+
+## General
 
 - **Do** define a separated `DbContext` interface and class for each module.
 - **Do not** rely on lazy loading on the application development.
 - **Do not** enable lazy loading for the `DbContext`.
 
-### DbContext Interface
+## DbContext Interface
 
 - **Do** define an **interface** for the `DbContext` that inherits from `IEfCoreDbContext`.
 - **Do** add a `ConnectionStringName` **attribute** to the `DbContext` interface.
@@ -23,7 +34,7 @@ public interface IIdentityDbContext : IEfCoreDbContext
 
 * **Do not** define `set;` for the properties in this interface.
 
-### DbContext class
+## DbContext class
 
 * **Do** inherit the `DbContext` from the `AbpDbContext<TDbContext>` class.
 * **Do** add a `ConnectionStringName` attribute to the `DbContext` class.
@@ -46,7 +57,7 @@ public class IdentityDbContext : AbpDbContext<IdentityDbContext>, IIdentityDbCon
 }
 ````
 
-### Table Prefix and Schema
+## Table Prefix and Schema
 
 - **Do** add static `TablePrefix` and `Schema` **properties** to the `DbContext` class. Set default value from a constant. Example:
 
@@ -58,7 +69,7 @@ public static string Schema { get; set; } = AbpIdentityConsts.DefaultDbSchema;
   - **Do** always use a short `TablePrefix` value for a module to create **unique table names** in a shared database. `Abp` table prefix is reserved for ABP core modules.
   - **Do** set `Schema` to `null` as default.
 
-### Model Mapping
+## Model Mapping
 
 - **Do** explicitly **configure all entities** by overriding the `OnModelCreating` method of the `DbContext`. Example:
 
@@ -100,7 +111,7 @@ public static class IdentityDbContextModelBuilderExtensions
 
 * **Do** call `b.ConfigureByConvention();` for each entity mapping (as shown above).
 
-### Repository Implementation
+## Repository Implementation
 
 - **Do** **inherit** the repository from the `EfCoreRepository<TDbContext, TEntity, TKey>` class and implement the corresponding repository interface. Example:
 
@@ -168,7 +179,7 @@ public override async Task<IQueryable<IdentityUser>> WithDetailsAsync()
 }
 ````
 
-### Module Class
+## Module Class
 
 - **Do** define a module class for the Entity Framework Core integration package.
 - **Do** add `DbContext` to the `IServiceCollection` using the `AddAbpDbContext<TDbContext>` method.

@@ -18,6 +18,10 @@ public interface IIdentityLinkUserRepository : IBasicRepository<IdentityLinkUser
         List<IdentityLinkUserInfo> excludes = null,
         CancellationToken cancellationToken = default);
 
+    Task<List<IdentityLinkUser>> GetListAsync(
+        int batchSize,
+        CancellationToken cancellationToken = default);
+
     Task DeleteAsync(
         IdentityLinkUserInfo linkUserInfo,
         CancellationToken cancellationToken = default);

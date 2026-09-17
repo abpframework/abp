@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how Integration Services facilitate communication between microservices, enhancing your ABP Framework applications with seamless integration."
+}
+```
+
 # Integration Services
 
 The *Integration Service* concept was created to distinguish the [application services](../architecture/domain-driven-design/application-services.md) that are built for inter-module (or inter-microservice) communication from the application services that are intended to be consumed from a UI or a client application.

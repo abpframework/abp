@@ -89,7 +89,9 @@
     "Permission:BlogPostManagement.Publish": "Publier",
     "Permission:CmsKit": "CmsKit",
     "Permission:Comments": "Gestion des commentaires",
-    "Permission:Comments.Delete": "Effacer",
+    "Permission:Comments.Delete": "Supprimer",
+    "Permission:Comments.Update": "Mettre à jour",
+    "Permission:Comments.SettingManagement": "Gestion des paramètres",
     "Permission:Contents": "Gestion de contenu",
     "Permission:Contents.Create": "Créer du contenu",
     "Permission:Contents.Delete": "Supprimer le contenu",
@@ -227,6 +229,13 @@
     "CssClass": "Classe CSS",
     "TagsHelpText": "Les balises doivent être séparées par des virgules (par exemple : tag1, tag2, tag3)",
     "ThisPartOfContentCouldntBeLoaded": "Cette partie du contenu n'a pas pu être chargée.",
-    "DuplicateCommentAttemptMessage": "Tentative de publication de commentaire en double détectée. Votre commentaire a déjà été soumis."
+    "DuplicateCommentAttemptMessage": "Tentative de publication de commentaire en double détectée. Votre commentaire a déjà été soumis.",
+    "ChooseAnActionForBlog": "Choisissez une action pour le blog",
+    "AssignBlogPostsToOtherBlog": "Attribuer des articles de blog à un autre blog",
+    "SelectAnBlogToAssign": "Sélectionnez un blog à attribuer",
+    "DeleteAllBlogPostsOfThisBlog": "Supprimer tous les articles de blog de ce blog",
+    "RequiredPermissionName": "Nom de permission requis",
+    "AllPosts": "Tous les messages",
+    "IsReadOnly": "Lecture seule"
   }
 }

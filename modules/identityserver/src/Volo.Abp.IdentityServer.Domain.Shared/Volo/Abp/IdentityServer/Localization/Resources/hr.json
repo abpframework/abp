@@ -11,6 +11,7 @@
     "InvalidUsername": "Neispravno korisničko ime ili lozinka!",
     "InvalidAuthenticatorCode": "Nevažeći kod autentifikatora!",
     "InvalidRecoveryCode": "Nevažeći kod za oporavak!",
-    "TheTargetUserIsNotLinkedToYou": "Ciljani korisnik nije povezan s vama!"
+    "TheTargetUserIsNotLinkedToYou": "Ciljani korisnik nije povezan s vama!",
+    "ClientResourcePermissionProviderKeyLookupService": "Klijent"
   }
 }

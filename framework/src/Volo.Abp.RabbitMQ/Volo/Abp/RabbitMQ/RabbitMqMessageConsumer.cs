@@ -5,6 +5,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Concurrent;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ExceptionHandling;
@@ -28,13 +29,13 @@ public class RabbitMqMessageConsumer : IRabbitMqMessageConsumer, ITransientDepen
 
     protected string? ConnectionName { get; private set; }
 
-    protected ConcurrentBag<Func<IModel, BasicDeliverEventArgs, Task>> Callbacks { get; }
+    protected ConcurrentBag<Func<IChannel, BasicDeliverEventArgs, Task>> Callbacks { get; }
 
-    protected IModel? Channel { get; private set; }
+    protected IChannel? Channel { get; private set; }
 
     protected ConcurrentQueue<QueueBindCommand> QueueBindCommands { get; }
 
-    protected object ChannelSendSyncLock { get; } = new object();
+    protected SemaphoreSlim Semaphore = new SemaphoreSlim(1, 1);
 
     public RabbitMqMessageConsumer(
         IConnectionPool connectionPool,
@@ -47,7 +48,7 @@ public class RabbitMqMessageConsumer : IRabbitMqMessageConsumer, ITransientDepen
         Logger = NullLogger<RabbitMqMessageConsumer>.Instance;
 
         QueueBindCommands = new ConcurrentQueue<QueueBindCommand>();
-        Callbacks = new ConcurrentBag<Func<IModel, BasicDeliverEventArgs, Task>>();
+        Callbacks = new ConcurrentBag<Func<IChannel, BasicDeliverEventArgs, Task>>();
 
         Timer.Period = 5000; //5 sec.
         Timer.Elapsed = Timer_Elapsed;
@@ -88,21 +89,21 @@ public class RabbitMqMessageConsumer : IRabbitMqMessageConsumer, ITransientDepen
                     return;
                 }
 
-                lock (ChannelSendSyncLock)
+                using (await Semaphore.LockAsync())
                 {
                     if (QueueBindCommands.TryPeek(out var command))
                     {
                         switch (command.Type)
                         {
                             case QueueBindType.Bind:
-                                Channel.QueueBind(
+                                await Channel.QueueBindAsync(
                                     queue: Queue.QueueName,
                                     exchange: Exchange.ExchangeName,
                                     routingKey: command.RoutingKey
                                 );
                                 break;
                             case QueueBindType.Unbind:
-                                Channel.QueueUnbind(
+                                await Channel.QueueUnbindAsync(
                                     queue: Queue.QueueName,
                                     exchange: Exchange.ExchangeName,
                                     routingKey: command.RoutingKey
@@ -124,7 +125,7 @@ public class RabbitMqMessageConsumer : IRabbitMqMessageConsumer, ITransientDepen
         }
     }
 
-    public virtual void OnMessageReceived(Func<IModel, BasicDeliverEventArgs, Task> callback)
+    public virtual void OnMessageReceived(Func<IChannel, BasicDeliverEventArgs, Task> callback)
     {
         Callbacks.Add(callback);
     }
@@ -144,11 +145,11 @@ public class RabbitMqMessageConsumer : IRabbitMqMessageConsumer, ITransientDepen
 
         try
         {
-            Channel = ConnectionPool
-                .Get(ConnectionName)
-                .CreateModel();
+            Channel = await (await ConnectionPool
+                .GetAsync(ConnectionName))
+                .CreateChannelAsync();
 
-            Channel.ExchangeDeclare(
+            await Channel.ExchangeDeclareAsync(
                 exchange: Exchange.ExchangeName,
                 type: Exchange.Type,
                 durable: Exchange.Durable,
@@ -156,7 +157,7 @@ public class RabbitMqMessageConsumer : IRabbitMqMessageConsumer, ITransientDepen
                 arguments: Exchange.Arguments
             );
 
-            Channel.QueueDeclare(
+            await Channel.QueueDeclareAsync(
                 queue: Queue.QueueName,
                 durable: Queue.Durable,
                 exclusive: Queue.Exclusive,
@@ -166,13 +167,13 @@ public class RabbitMqMessageConsumer : IRabbitMqMessageConsumer, ITransientDepen
 
             if (Queue.PrefetchCount.HasValue)
             {
-                Channel.BasicQos(0, Queue.PrefetchCount.Value, false);
+                await Channel.BasicQosAsync(0, Queue.PrefetchCount.Value, false);
             }
-            
+
             var consumer = new AsyncEventingBasicConsumer(Channel);
-            consumer.Received += HandleIncomingMessageAsync;
-            
-            Channel.BasicConsume(
+            consumer.ReceivedAsync += HandleIncomingMessageAsync;
+
+            await Channel.BasicConsumeAsync(
                 queue: Queue.QueueName,
                 autoAck: false,
                 consumer: consumer
@@ -194,17 +195,23 @@ public class RabbitMqMessageConsumer : IRabbitMqMessageConsumer, ITransientDepen
                 await callback(Channel!, basicDeliverEventArgs);
             }
 
-            Channel?.BasicAck(basicDeliverEventArgs.DeliveryTag, multiple: false);
+            if (Channel != null)
+            {
+                await Channel.BasicAckAsync(basicDeliverEventArgs.DeliveryTag, multiple: false);
+            }
         }
         catch (Exception ex)
         {
             try
             {
-                Channel?.BasicNack(
-                    basicDeliverEventArgs.DeliveryTag,
-                    multiple: false,
-                    requeue: true
-                );
+                if (Channel != null)
+                {
+                    await Channel.BasicNackAsync(
+                        basicDeliverEventArgs.DeliveryTag,
+                        multiple: false,
+                        requeue: true
+                    );
+                }
             }
             // ReSharper disable once EmptyGeneralCatchClause
             catch { }

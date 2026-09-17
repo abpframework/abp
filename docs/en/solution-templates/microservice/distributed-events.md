@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement asynchronous communication in microservices using the ABP Framework's Distributed Event Bus with RabbitMQ."
+}
+```
+
 # Microservice Solution: Distributed Events
 
 ````json

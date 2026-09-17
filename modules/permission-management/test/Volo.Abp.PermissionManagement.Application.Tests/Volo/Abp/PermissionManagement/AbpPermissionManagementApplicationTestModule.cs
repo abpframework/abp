@@ -22,6 +22,7 @@ public class AbpPermissionManagementApplicationTestModule : AbpModule
             options.ProviderPolicies[UserPermissionValueProvider.ProviderName] = UserPermissionValueProvider.ProviderName;
             options.ProviderPolicies["Test"] = "Test";
             options.ManagementProviders.Add<TestPermissionManagementProvider>();
+            options.ResourceManagementProviders.Add<TestResourcePermissionManagementProvider>();
         });
     }
 }

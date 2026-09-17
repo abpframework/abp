@@ -12,6 +12,18 @@ namespace Volo.Abp.Hangfire;
 
 public class AbpHangfireOptions
 {
+    /// <summary>
+    /// This value is used to add prefix to all of the queues. Default is empty.
+    /// </summary>
+    public string DefaultQueuePrefix { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Hangfire queue name max length, default is 50.
+    /// </summary>
+    public int MaxQueueNameLength { get; set; } = 50;
+
+    public string DefaultQueue { get; set; } = EnqueuedState.DefaultQueue;
+
     public BackgroundJobServerOptions? ServerOptions { get; set; }
 
     public IEnumerable<IBackgroundProcess>? AdditionalProcesses { get; set; }

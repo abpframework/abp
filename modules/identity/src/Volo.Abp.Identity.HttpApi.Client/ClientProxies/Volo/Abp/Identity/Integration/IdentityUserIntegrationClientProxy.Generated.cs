@@ -52,11 +52,43 @@ public partial class IdentityUserIntegrationClientProxy : ClientProxyBase<IIdent
         });
     }
 
+    public virtual async Task<ListResultDto<UserData>> SearchByIdsAsync(Guid[] ids)
+    {
+        return await RequestAsync<ListResultDto<UserData>>(nameof(SearchByIdsAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(Guid[]), ids }
+        });
+    }
+
     public virtual async Task<long> GetCountAsync(UserLookupCountInputDto input)
     {
         return await RequestAsync<long>(nameof(GetCountAsync), new ClientProxyRequestTypeValue
         {
             { typeof(UserLookupCountInputDto), input }
+        });
+    }
+
+    public virtual async Task<ListResultDto<RoleData>> SearchRoleAsync(RoleLookupSearchInputDto input)
+    {
+        return await RequestAsync<ListResultDto<RoleData>>(nameof(SearchRoleAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(RoleLookupSearchInputDto), input }
+        });
+    }
+
+    public virtual async Task<ListResultDto<RoleData>> SearchRoleByNamesAsync(String[] names)
+    {
+        return await RequestAsync<ListResultDto<RoleData>>(nameof(SearchRoleByNamesAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(String[]), names }
+        });
+    }
+
+    public virtual async Task<long> GetRoleCountAsync(RoleLookupCountInputDto input)
+    {
+        return await RequestAsync<long>(nameof(GetRoleCountAsync), new ClientProxyRequestTypeValue
+        {
+            { typeof(RoleLookupCountInputDto), input }
         });
     }
 }

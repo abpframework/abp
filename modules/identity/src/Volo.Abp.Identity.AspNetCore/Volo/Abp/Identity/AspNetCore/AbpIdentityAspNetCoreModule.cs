@@ -1,4 +1,6 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -17,8 +19,6 @@ public class AbpIdentityAspNetCoreModule : AbpModule
         PreConfigure<IdentityBuilder>(builder =>
         {
             builder
-                .AddDefaultTokenProviders()
-                .AddTokenProvider<LinkUserTokenProvider>(LinkUserTokenProviderConsts.LinkUserTokenProviderName)
                 .AddSignInManager<AbpSignInManager>()
                 .AddUserValidator<AbpIdentityUserValidator>();
         });
@@ -26,6 +26,8 @@ public class AbpIdentityAspNetCoreModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        context.Services.AddHttpContextAccessor();
+
         //(TODO: Extract an extension method like IdentityBuilder.AddAbpSecurityStampValidator())
         context.Services.AddScoped<AbpSecurityStampValidator>();
         context.Services.AddScoped(typeof(SecurityStampValidator<IdentityUser>), provider => provider.GetService(typeof(AbpSecurityStampValidator)));
@@ -47,7 +49,12 @@ public class AbpIdentityAspNetCoreModule : AbpModule
 
     public override void PostConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddOptions<SecurityStampValidatorOptions>()
+        context.Services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme,
+            cookieOptions => cookieOptions.ValidateIdentitySession());
+
+        // Replace the default UserValidator with AbpIdentityUserValidator
+        context.Services.RemoveAll(x => x.ServiceType == typeof(IUserValidator<IdentityUser>) && x.ImplementationType == typeof(UserValidator<IdentityUser>));
+        context.Services.AddAbpOptions<SecurityStampValidatorOptions>()
             .Configure<IServiceProvider>((securityStampValidatorOptions, serviceProvider) =>
             {
                 var abpRefreshingPrincipalOptions = serviceProvider.GetRequiredService<IOptions<AbpRefreshingPrincipalOptions>>().Value;

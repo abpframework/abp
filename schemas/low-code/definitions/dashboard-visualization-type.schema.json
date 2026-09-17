@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dashboard-visualization-type.schema.json",
+  "title": "DashboardVisualizationType",
+  "description": "The type of dashboard visualization. Prefer lower-case values in descriptor JSON; PascalCase aliases are accepted for compatibility.",
+  "markdownDescription": "`chart` groups/aggregates entity data into a bar/line/pie/donut chart. `list` displays recent/top records from one entity. `numberContainer` displays one or more KPI number tiles, each with its own entity and aggregation.",
+  "type": "string",
+  "enum": ["chart", "Chart", "list", "List", "numberContainer", "NumberContainer"],
+  "enumDescriptions": [
+    "Chart visualization with x/y axis aggregation.",
+    "Chart visualization with x/y axis aggregation.",
+    "Record list visualization.",
+    "Record list visualization.",
+    "KPI number/tile container.",
+    "KPI number/tile container."
+  ]
+}

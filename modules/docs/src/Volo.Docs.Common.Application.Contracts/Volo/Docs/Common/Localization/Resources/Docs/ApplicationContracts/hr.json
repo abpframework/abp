@@ -1,0 +1,7 @@
+{
+    "culture": "hr",
+    "texts": {
+        "Permission:DocumentManagement.Common": "Upravljanje zajedničkih dokumenata",
+        "Permission:PdfDownload": "Preuzimanje PDF-a"
+    }
+}

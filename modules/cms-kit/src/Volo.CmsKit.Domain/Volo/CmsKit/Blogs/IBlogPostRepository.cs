@@ -14,6 +14,7 @@ public interface IBlogPostRepository : IBasicRepository<BlogPost, Guid>
         Guid? blogId = null,
         Guid? authorId = null,
         Guid? tagId = null,
+        Guid? favoriteUserId = null,
         BlogPostStatus? statusFilter = null,
         CancellationToken cancellationToken = default);
 
@@ -22,6 +23,7 @@ public interface IBlogPostRepository : IBasicRepository<BlogPost, Guid>
         Guid? blogId = null,
         Guid? authorId = null,
         Guid? tagId = null,
+        Guid? favoriteUserId = null,
         BlogPostStatus? statusFilter = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
@@ -44,4 +46,8 @@ public interface IBlogPostRepository : IBasicRepository<BlogPost, Guid>
     Task<CmsUser> GetAuthorHasBlogPostAsync(Guid id, CancellationToken cancellationToken = default);
 
     Task<bool> HasBlogPostWaitingForReviewAsync(CancellationToken cancellationToken = default);
+
+    Task UpdateBlogAsync(Guid sourceBlogId, Guid? targetBlogId = null, CancellationToken cancellationToken = default);
+
+    Task DeleteByBlogIdAsync(Guid blogId, CancellationToken cancellationToken = default);
 }

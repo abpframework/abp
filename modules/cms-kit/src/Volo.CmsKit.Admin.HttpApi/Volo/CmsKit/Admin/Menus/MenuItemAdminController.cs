@@ -78,4 +78,18 @@ public class MenuItemAdminController : CmsKitAdminController, IMenuItemAdminAppS
     {
         return MenuItemAdminAppService.GetPageLookupAsync(input);
     }
+
+    [HttpGet]
+    [Route("lookup/permissions")]
+    public virtual Task<ListResultDto<PermissionLookupDto>> GetPermissionLookupAsync(PermissionLookupInputDto inputDto)
+    {
+        return MenuItemAdminAppService.GetPermissionLookupAsync(inputDto);
+    }
+
+    [HttpGet]
+    [Route("available-order")]
+    public virtual Task<int> GetAvailableMenuOrderAsync(Guid? parentId = null)
+    {
+        return MenuItemAdminAppService.GetAvailableMenuOrderAsync(parentId);
+    }
 }

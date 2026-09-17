@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.FileProviders.Physical;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Json;
@@ -29,17 +28,17 @@ public class ClientProxyApiDescriptionFinder : IClientProxyApiDescriptionFinder,
         Initialize();
     }
 
-    public ActionApiDescriptionModel? FindAction(string methodName)
+    public virtual ActionApiDescriptionModel? FindAction(string methodName)
     {
-        return ActionApiDescriptionModels.ContainsKey(methodName) ? ActionApiDescriptionModels[methodName] : null;
+        return ActionApiDescriptionModels.TryGetValue(methodName, out var model) ? model : null;
     }
 
-    public ApplicationApiDescriptionModel GetApiDescription()
+    public virtual ApplicationApiDescriptionModel GetApiDescription()
     {
         return ApplicationApiDescriptionModel;
     }
 
-    private void Initialize()
+    protected virtual void Initialize()
     {
         ApplicationApiDescriptionModel = GetApplicationApiDescriptionModel();
         var controllers = ApplicationApiDescriptionModel.Modules.Select(x => x.Value).SelectMany(x => x.Controllers.Values).ToList();
@@ -51,7 +50,6 @@ public class ClientProxyApiDescriptionFinder : IClientProxyApiDescriptionFinder,
             foreach (var actionItem in controller.Actions.Values)
             {
                 var actionKey = $"{appServiceType}.{actionItem.Name}.{string.Join("-", actionItem.ParametersOnMethod.Select(x => x.Type))}";
-
                 if (!ActionApiDescriptionModels.ContainsKey(actionKey))
                 {
                     ActionApiDescriptionModels.Add(actionKey, actionItem);
@@ -60,7 +58,7 @@ public class ClientProxyApiDescriptionFinder : IClientProxyApiDescriptionFinder,
         }
     }
 
-    private ApplicationApiDescriptionModel GetApplicationApiDescriptionModel()
+    protected virtual ApplicationApiDescriptionModel GetApplicationApiDescriptionModel()
     {
         var applicationApiDescription = ApplicationApiDescriptionModel.Create();
         var fileInfoList = new List<IFileInfo>();
@@ -87,41 +85,21 @@ public class ClientProxyApiDescriptionFinder : IClientProxyApiDescriptionFinder,
         return applicationApiDescription;
     }
 
-    private void GetGenerateProxyFileInfos(List<IFileInfo> fileInfoList, string path = "")
+    protected virtual void GetGenerateProxyFileInfos(List<IFileInfo> fileInfoList, string path = "")
     {
-        foreach (var directoryContent in VirtualFileProvider.GetDirectoryContents(path))
+        foreach (var fileInfo in VirtualFileProvider.GetDirectoryContents(path))
         {
-            if (directoryContent.IsDirectory)
+            if (fileInfo.IsDirectory)
             {
-                GetGenerateProxyFileInfos(fileInfoList, GetDirectoryContentPath(path, directoryContent));
+                GetGenerateProxyFileInfos(fileInfoList, path + fileInfo.Name.EnsureStartsWith('/'));
             }
             else
             {
-                if (directoryContent.Name.EndsWith("generate-proxy.json"))
+                if (fileInfo.Name.EndsWith("generate-proxy.json", StringComparison.OrdinalIgnoreCase))
                 {
-                    fileInfoList.Add(VirtualFileProvider.GetFileInfo(GetProxyFileInfoPath(path, directoryContent)));
+                    fileInfoList.Add(fileInfo);
                 }
             }
         }
-    }
-    
-    private string GetDirectoryContentPath(string rootPath, IFileInfo fileInfo)
-    {
-        if (fileInfo is PhysicalDirectoryInfo physicalDirectoryInfo)
-        {
-            return rootPath + physicalDirectoryInfo.Name.EnsureStartsWith('/');
-        }
-
-        return fileInfo.PhysicalPath!;
-    }
-    
-    private string GetProxyFileInfoPath(string rootPath, IFileInfo fileInfo)
-    {
-        if (fileInfo is PhysicalFileInfo physicalFileInfo)
-        {
-            return rootPath + physicalFileInfo.Name.EnsureStartsWith('/');
-        }
-
-        return fileInfo.GetVirtualOrPhysicalPathOrNull()!;
     }
 }

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to configure Progressive Web Apps (PWAs) with Blazor WebAssembly in ABP Framework for enhanced offline and installable experiences."
+}
+```
+
 # PWA Configuration
 
 [PWAs (Progressive Web Apps)](https://web.dev/progressive-web-apps/) are developed using specific technologies to allow applications to take advantage of both web and native app features. 

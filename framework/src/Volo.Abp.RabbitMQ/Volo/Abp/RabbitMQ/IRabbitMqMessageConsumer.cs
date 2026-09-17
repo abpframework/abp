@@ -11,5 +11,5 @@ public interface IRabbitMqMessageConsumer
 
     Task UnbindAsync(string routingKey);
 
-    void OnMessageReceived(Func<IModel, BasicDeliverEventArgs, Task> callback);
+    void OnMessageReceived(Func<IChannel, BasicDeliverEventArgs, Task> callback);
 }

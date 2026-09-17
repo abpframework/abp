@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore comprehensive guidance on building HTTP APIs with ABP, covering endpoints, versioning, auto controllers, and more."
+}
+```
+
 # API Development
 
 The following documents explain the concepts, infrastructure and integrations to build HTTP APIs with ABP:

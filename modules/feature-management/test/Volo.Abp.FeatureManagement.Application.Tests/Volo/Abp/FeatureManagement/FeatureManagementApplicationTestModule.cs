@@ -8,5 +8,11 @@ namespace Volo.Abp.FeatureManagement;
     )]
 public class FeatureManagementApplicationTestModule : AbpModule
 {
-
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        Configure<FeatureManagementOptions>(options =>
+        {
+            options.ProviderPolicies["test"] = FeatureManagementPermissions.ManageHostFeatures;
+        });
+    }
 }

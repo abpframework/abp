@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -36,14 +37,23 @@ public class DbContextEventInbox<TDbContext> : IDbContextEventInbox<TDbContext>
     }
 
     [UnitOfWork]
-    public virtual async Task<List<IncomingEventInfo>> GetWaitingEventsAsync(int maxCount, CancellationToken cancellationToken = default)
+    public virtual async Task<List<IncomingEventInfo>> GetWaitingEventsAsync(int maxCount, Expression<Func<IIncomingEventInfo, bool>>? filter = null, CancellationToken cancellationToken = default)
     {
         var dbContext = await DbContextProvider.GetDbContextAsync();
 
+        Expression<Func<IncomingEventRecord, bool>>? transformedFilter = null;
+        if (filter != null)
+        {
+            transformedFilter = InboxOutboxFilterExpressionTransformer.Transform<IIncomingEventInfo, IncomingEventRecord>(filter)!;
+        }
+
+        var now = Clock.Now;
         var outgoingEventRecords = await dbContext
             .IncomingEvents
             .AsNoTracking()
-            .Where(x => !x.Processed)
+            .Where(x => x.Status == IncomingEventStatus.Pending)
+            .Where(x => x.NextRetryTime == null || x.NextRetryTime <= now)
+            .WhereIf(transformedFilter != null, transformedFilter!)
             .OrderBy(x => x.CreationTime)
             .Take(maxCount)
             .ToListAsync(cancellationToken: cancellationToken);
@@ -58,7 +68,25 @@ public class DbContextEventInbox<TDbContext> : IDbContextEventInbox<TDbContext>
     {
         var dbContext = await DbContextProvider.GetDbContextAsync();
         await dbContext.IncomingEvents.Where(x => x.Id == id).ExecuteUpdateAsync(x =>
-            x.SetProperty(p => p.Processed, _ => true).SetProperty(p => p.ProcessedTime, _ => Clock.Now));
+            x.SetProperty(p => p.Status, _ => IncomingEventStatus.Processed).SetProperty(p => p.HandledTime, _ => Clock.Now));
+    }
+
+    [UnitOfWork]
+    public virtual async Task RetryLaterAsync(Guid id, int retryCount, DateTime? nextRetryTime)
+    {
+        var dbContext = await DbContextProvider.GetDbContextAsync();
+        await dbContext.IncomingEvents.Where(x => x.Id == id).ExecuteUpdateAsync(x =>
+            x.SetProperty(p => p.RetryCount, _ => retryCount)
+                .SetProperty(p => p.NextRetryTime, _ => nextRetryTime)
+                .SetProperty(p => p.Status, _ => IncomingEventStatus.Pending));
+    }
+
+    [UnitOfWork]
+    public virtual async Task MarkAsDiscardAsync(Guid id)
+    {
+        var dbContext = await DbContextProvider.GetDbContextAsync();
+        await dbContext.IncomingEvents.Where(x => x.Id == id).ExecuteUpdateAsync(x =>
+            x.SetProperty(p => p.Status, _ => IncomingEventStatus.Discarded).SetProperty(p => p.HandledTime, _ => Clock.Now));
     }
 
     [UnitOfWork]
@@ -74,7 +102,7 @@ public class DbContextEventInbox<TDbContext> : IDbContextEventInbox<TDbContext>
         var dbContext = await DbContextProvider.GetDbContextAsync();
         var timeToKeepEvents = Clock.Now - EventBusBoxesOptions.WaitTimeToDeleteProcessedInboxEvents;
         await dbContext.IncomingEvents
-            .Where(x => x.Processed && x.CreationTime < timeToKeepEvents)
+            .Where(x => (x.Status == IncomingEventStatus.Processed || x.Status == IncomingEventStatus.Discarded) && x.CreationTime < timeToKeepEvents)
             .ExecuteDeleteAsync();
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;

@@ -73,11 +73,20 @@ public class SettingManager : ISettingManager, ISingletonDependency
 
         foreach (var setting in settingDefinitions)
         {
+            var settingProviderList = setting.Providers.Any()
+                ? providerList.Where(p => setting.Providers.Contains(p.Name)).ToList()
+                : providerList;
+
+            if (!settingProviderList.Any())
+            {
+                continue;
+            }
+
             string value = null;
 
             if (setting.IsInherited)
             {
-                foreach (var provider in providerList)
+                foreach (var provider in settingProviderList)
                 {
                     var providerValue = await provider.GetOrNullAsync(
                         setting,
@@ -91,7 +100,7 @@ public class SettingManager : ISettingManager, ISingletonDependency
             }
             else
             {
-                value = await providerList[0].GetOrNullAsync(
+                value = await settingProviderList[0].GetOrNullAsync(
                     setting,
                     providerKey
                 );
@@ -118,6 +127,11 @@ public class SettingManager : ISettingManager, ISingletonDependency
 
         var setting = await SettingDefinitionManager.GetAsync(name);
 
+        if (setting.Providers.Any() && !setting.Providers.Contains(providerName))
+        {
+            throw new AbpException($"The setting named '{name}' is not compatible with the provider named '{providerName}'");
+        }
+
         var providers = Enumerable
             .Reverse(Providers)
             .SkipWhile(p => p.Name != providerName)
@@ -136,7 +150,7 @@ public class SettingManager : ISettingManager, ISingletonDependency
         if (providers.Count > 1 && !forceToSet && setting.IsInherited && value != null)
         {
             var fallbackValue = await GetOrNullInternalAsync(name, providers[1].Name, null);
-            if (fallbackValue == value)
+            if (string.Equals(fallbackValue, value, StringComparison.OrdinalIgnoreCase))
             {
                 //Clear the value if it's same as it's fallback value
                 value = null;
@@ -186,6 +200,11 @@ public class SettingManager : ISettingManager, ISingletonDependency
         if (!fallback || !setting.IsInherited)
         {
             providers = providers.TakeWhile(c => c.Name == providerName);
+        }
+
+        if (setting.Providers.Any())
+        {
+            providers = providers.Where(p => setting.Providers.Contains(p.Name));
         }
 
         string value = null;

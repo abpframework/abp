@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to utilize the options pattern in ABP Framework to configure settings efficiently for your applications."
+}
+```
+
 # Options
 
 Microsoft has introduced [the options pattern](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options) that is used to configure a group of settings used by the framework services. This pattern is implemented by the [Microsoft.Extensions.Options](https://www.nuget.org/packages/Microsoft.Extensions.Options) NuGet package, so it is usable by any type of applications in addition to ASP.NET Core based applications.
@@ -116,3 +123,56 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 }
 ````
 
+## Dynamic Options
+
+Standard options are created synchronously. `AbpDynamicOptionsManager<TOptions>` can override named option values asynchronously from a runtime source, such as the setting system.
+
+Derive a manager and implement `OverrideOptionsAsync`:
+
+````csharp
+public class MyDynamicOptionsManager : AbpDynamicOptionsManager<MyOptions>
+{
+    private readonly ISettingProvider _settingProvider;
+
+    public MyDynamicOptionsManager(
+        IOptionsFactory<MyOptions> factory,
+        ISettingProvider settingProvider)
+        : base(factory)
+    {
+        _settingProvider = settingProvider;
+    }
+
+    protected override async Task OverrideOptionsAsync(
+        string name,
+        MyOptions options)
+    {
+        options.Value1 = await _settingProvider.GetAsync<int>("MyOptions.Value1");
+    }
+}
+````
+
+Register the manager for the option type:
+
+````csharp
+context.Services.AddAbpDynamicOptions<MyOptions, MyDynamicOptionsManager>();
+````
+
+This replaces `IOptions<MyOptions>` and `IOptionsSnapshot<MyOptions>` with the scoped dynamic manager. Call the `IOptions<T>.SetAsync` extension before reading the value when you need to apply the asynchronous override:
+
+````csharp
+public class MyService : ITransientDependency
+{
+    private readonly IOptions<MyOptions> _options;
+
+    public MyService(IOptions<MyOptions> options)
+    {
+        _options = options;
+    }
+
+    public async Task<int> GetValueAsync()
+    {
+        await _options.SetAsync();
+        return _options.Value.Value1;
+    }
+}
+````

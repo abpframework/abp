@@ -1,8 +1,15 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement a robust authorization system in your web applications using ABP Framework, including managing permissions for roles and users."
+}
+```
+
 # Web Application Development Tutorial - Part 5: Authorization
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","BlazorServer","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","BlazorWebApp","NG", "MAUIBlazor"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -23,7 +30,7 @@
 
 ## Permissions
 
-ABP provides an [authorization system](../../framework/fundamentals/authorization.md) based on the ASP.NET Core's [authorization infrastructure](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction). One major feature added on top of the standard authorization infrastructure is the **permission system** which allows to define permissions and enable/disable per role, user or client.
+ABP provides an [authorization system](../../framework/fundamentals/authorization/index.md) based on the ASP.NET Core's [authorization infrastructure](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction). One major feature added on top of the standard authorization infrastructure is the **permission system** which allows to define permissions and enable/disable per role, user or client.
 
 ### Permission Names
 
@@ -72,7 +79,12 @@ public class BookStorePermissionDefinitionProvider : PermissionDefinitionProvide
     public override void Define(IPermissionDefinitionContext context)
     {
         var bookStoreGroup = context.AddGroup(BookStorePermissions.GroupName, L("Permission:BookStore"));
+        
+        //Dashboard permissions
+        bookStoreGroup.AddPermission(BookStorePermissions.Dashboard.Host, L("Permission:Dashboard"), MultiTenancySides.Host);
+        bookStoreGroup.AddPermission(BookStorePermissions.Dashboard.Tenant, L("Permission:Dashboard"), MultiTenancySides.Tenant);
 
+        //Books permissions
         var booksPermission = bookStoreGroup.AddPermission(BookStorePermissions.Books.Default, L("Permission:Books"));
         booksPermission.AddChild(BookStorePermissions.Books.Create, L("Permission:Books.Create"));
         booksPermission.AddChild(BookStorePermissions.Books.Edit, L("Permission:Books.Edit"));
@@ -299,23 +311,19 @@ We've only added the `.RequirePermissions(BookStorePermissions.Books.Default)` e
 
 First step of the UI is to prevent unauthorized users to see the "Books" menu item and enter to the book management page.
 
-Open the `/src/app/book/book-routing.module.ts` and replace with the following content:
+Open the `/src/app/app.routes.ts` and replace with the following content:
 
 ````js
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
 import { authGuard, permissionGuard } from '@abp/ng.core';
 import { BookComponent } from './book.component';
 
 const routes: Routes = [
-  { path: '', component: BookComponent, canActivate: [authGuard, permissionGuard] },
+{ 
+    path: 'books', 
+    loadComponent: () => import('./book/book.component').then(c => BookComponent),
+    canActivate: [authGuard, permissionGuard],
+},
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class BookRoutingModule {}
 ````
 
 * Imported `authGuard` and `permissionGuard` from the `@abp/ng.core`.
@@ -389,11 +397,11 @@ Open the `/src/app/book/book.component.html` file and replace the edit and delet
 * Added `*abpPermission="'BookStore.Books.Edit'"` that hides the edit action if the current user has no editing permission.
 * Added `*abpPermission="'BookStore.Books.Delete'"` that hides the delete action if the current user has no delete permission.
 
-{{else if UI == "Blazor"}}
+{{else if UI == "Blazor" || UI == "BlazorServer" || UI == "BlazorWebApp" || UI == "MAUIBlazor"}}
 
 ### Authorize the Razor Component
 
-Open the `/Pages/Books.razor` file in the `Acme.BookStore.Blazor.Client` project and add an `Authorize` attribute just after the `@page` directive and the following namespace imports (`@using` lines), as shown below:
+Open the `/Pages/Books.razor` file in the {{ if UI == "BlazorServer" }}`Acme.BookStore.Blazor` {{ else if UI == "MAUIBlazor" }}`Acme.BookStore.MauiBlazor` {{ else }}`Acme.BookStore.Blazor.Client`{{ end }} project and add an `Authorize` attribute just after the `@page` directive and the following namespace imports (`@using` lines), as shown below:
 
 ````html
 @page "/books"
@@ -420,6 +428,8 @@ Add the following code block to the end of the `Books.razor` file:
 {
     public Books() // Constructor
     {
+        LocalizationResource = typeof(BookStoreResource);
+        
         CreatePolicyName = BookStorePermissions.Books.Create;
         UpdatePolicyName = BookStorePermissions.Books.Edit;
         DeletePolicyName = BookStorePermissions.Books.Delete;
@@ -479,7 +489,7 @@ You can run and test the permissions. Remove a book related permission from the 
 
 Even we have secured all the layers of the book management page, it is still visible on the main menu of the application. We should hide the menu item if the current user has no permission.
 
-Open the `BookStoreMenuContributor` class in the `Acme.BookStore.Blazor.Client` project, find the code block below:
+Open the `BookStoreMenuContributor` class in the {{ if UI == "BlazorServer" }}`Acme.BookStore.Blazor`{{ else if UI == "MAUIBlazor" }}`Acme.BookStore.MauiBlazor`{{ else }}`Acme.BookStore.Blazor.Client`{{ end }} project, find the code block below:
 
 ````csharp
 context.Menu.AddItem(
@@ -509,14 +519,11 @@ var bookStoreMenu = new ApplicationMenuItem(
 context.Menu.AddItem(bookStoreMenu);
 
 //CHECK the PERMISSION
-if (await context.IsGrantedAsync(BookStorePermissions.Books.Default))
-{
-    bookStoreMenu.AddItem(new ApplicationMenuItem(
-        "BooksStore.Books",
-        l["Menu:Books"],
-        url: "/books"
-    ));
-}
+bookStoreMenu.AddItem(new ApplicationMenuItem(
+    "BooksStore.Books",
+    l["Menu:Books"],
+    url: "/books"
+).RequirePermissions(BookStorePermissions.Books.Default));
 ````
 
 You also need to add `async` keyword to the `ConfigureMenuAsync` method and re-arrange the return value. The final `ConfigureMainMenuAsync` method should be the following:
@@ -545,14 +552,11 @@ private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
     context.Menu.AddItem(bookStoreMenu);
 
     //CHECK the PERMISSION
-    if (await context.IsGrantedAsync(BookStorePermissions.Books.Default))
-    {
-        bookStoreMenu.AddItem(new ApplicationMenuItem(
-            "BooksStore.Books",
-            l["Menu:Books"],
-            url: "/books"
-        ));
-    }
+    bookStoreMenu.AddItem(new ApplicationMenuItem(
+        "BooksStore.Books",
+        l["Menu:Books"],
+        url: "/books"
+    ).RequirePermissions(BookStorePermissions.Books.Default));
 }
 ````
 

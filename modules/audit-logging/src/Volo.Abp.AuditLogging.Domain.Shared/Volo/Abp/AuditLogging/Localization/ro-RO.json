@@ -67,6 +67,9 @@
     "EntityHistory": "Istoricul entității",
     "DaysAgoTitle": "{0} {1}.",
     "DaysAgoWithUserTitle": "{0} {1} de la {2}.",
+    "MinutesAgo": "acum {0} minute",
+    "HoursAgo": "acum {0} ore",
+    "DaysAgo": "acum {0} zile",
     "Created": "Creată",
     "Updated": "Actualizat",
     "Deleted": "Șters",
@@ -78,6 +81,10 @@
     "EndDate": "Data de încheiere",
     "Feature:AuditLoggingGroup": "Înregistrare de audit",
     "Feature:AuditLoggingEnable": "Pagina de înregistrare a auditului activată",
-    "Feature:AuditLoggingEnableDescription": "Activați pagina de înregistrare a auditului în aplicație."
+    "Feature:AuditLoggingEnableDescription": "Activați pagina de înregistrare a auditului în aplicație.",
+    "TenantId": "ID chiriaș",
+    "DownloadLinkExplanation": "Puteți descărca fișierul folosind link-ul de mai jos până la {0} (UTC)",
+    "DownloadNow": "Descărcați acum",
+    "TryAgainMessage": "Vă rugăm să încercați din nou. Dacă problema persistă, vă rugăm să contactați asistența."
   }
 }

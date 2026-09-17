@@ -17,7 +17,6 @@ public class RemoteStreamContent : IRemoteStreamContent
     public RemoteStreamContent(Stream stream, string? fileName = null, string? contentType = null, long? readOnlyLength = null, bool disposeStream = true)
     {
         _stream = stream;
-
         FileName = fileName;
         if (contentType != null)
         {
@@ -34,10 +33,16 @@ public class RemoteStreamContent : IRemoteStreamContent
 
     public virtual void Dispose()
     {
-        if (!_disposed && _disposeStream)
+        if (_disposed)
         {
-            _disposed = true;
-            _stream?.Dispose();
+            return;
         }
+
+        if (_disposeStream)
+        {
+            _stream.Dispose();
+        }
+
+        _disposed = true;
     }
 }

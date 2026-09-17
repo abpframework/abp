@@ -1,8 +1,15 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to create the server side of your web application with ABP Framework, including setting up your solution and installing client-side packages."
+}
+```
+
 # Web Application Development Tutorial - Part 1: Creating the Server Side
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","BlazorServer","NG"],
+    "UI": ["MVC","Blazor","BlazorServer", "BlazorWebApp","NG","MAUIBlazor"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -33,24 +40,6 @@ For such cases, run the `abp install-libs` command on the root directory of your
 ```bash
 abp install-libs
 ```
-
-> We suggest you install [Yarn](https://classic.yarnpkg.com/) to prevent possible package inconsistencies, if you haven't installed it yet.
-
-{{if UI=="Blazor" || UI=="BlazorServer"}}
-
-### Bundling and Minification
-
-`abp bundle` command offers bundling and minification support for client-side resources (JavaScript and CSS files) for Blazor projects. This command automatically run when you create a new solution with the [ABP CLI](../../cli).
-
-However, sometimes you might need to run this command manually. To update script & style references without worrying about dependencies, ordering, etc. in a project, you can run this command in the directory of your `*.Blazor.Client` project:
-
-```bash
-abp bundle
-```
-
-> For more details about managing style and script references in Blazor or MAUI Blazor apps, see [Managing Global Scripts & Styles](../../framework/ui/blazor/global-scripts-styles.md).
-
-{{end}}
 
 ## Create the Book Entity
 
@@ -119,6 +108,8 @@ The final folder/file structure should be as shown below:
 EF Core requires that you relate the entities with your `DbContext`. The easiest way to do so is adding a `DbSet` property to the `BookStoreDbContext` class in the `Acme.BookStore.EntityFrameworkCore` project, as shown below:
 
 ````csharp
+using Acme.BookStore.Books;
+
 public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
 {
     public DbSet<Book> Books { get; set; }
@@ -130,9 +121,11 @@ public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
 
 {{if DB == "Mongo"}}
 
-Add a `IMongoCollection<Book> Books` property to the `BookStoreMongoDbContext` inside the `Acme.BookStore.MongoDB` project:
+Add an `IMongoCollection<Book> Books` property to the `BookStoreMongoDbContext` inside the `Acme.BookStore.MongoDB` project:
 
 ```csharp
+using Acme.BookStore.Books;
+
 public class BookStoreMongoDbContext : AbpMongoDbContext
 {
     public IMongoCollection<Book> Books => Collection<Book>();
@@ -305,22 +298,17 @@ public class BookDto : AuditedEntityDto<Guid>
 * The `BookDto` is used to transfer the book data to the presentation layer in order to show the book information on the UI.
 * The `BookDto` is derived from the `AuditedEntityDto<Guid>` which has audit properties just like the `Book` entity defined above.
 
-It will be needed to map the `Book` entities to the `BookDto` objects while returning books to the presentation layer. [AutoMapper](https://automapper.org) library can automate this conversion when you define the proper mapping. The startup template comes with AutoMapper pre-configured. So, you can just define the mapping in the `BookStoreApplicationAutoMapperProfile` class in the `Acme.BookStore.Application` project:
+It will be needed to map the `Book` entities to the `BookDto` objects while returning books to the presentation layer. [Mapperly](https://mapperly.riok.app/) library can automate this conversion when you define the proper mapping. The startup template comes with Mapperly pre-configured. So, you can just define the mapping in the `BookStoreApplicationMappers` class in the `Acme.BookStore.Application` project:
 
-````csharp
-using Acme.BookStore.Books;
-using AutoMapper;
-
-namespace Acme.BookStore;
-
-public class BookStoreApplicationAutoMapperProfile : Profile
+```csharp
+[Mapper]
+public partial class BookToBookDtoMapper : MapperBase<Book, BookDto>
 {
-    public BookStoreApplicationAutoMapperProfile()
-    {
-        CreateMap<Book, BookDto>();
-    }
+    public override partial BookDto Map(Book source);
+
+    public override partial void Map(Book source, BookDto destination);
 }
-````
+```
 
 > See the [object to object mapping](../../framework/infrastructure/object-to-object-mapping.md) document for details.
 
@@ -357,21 +345,23 @@ public class CreateUpdateBookDto
 
 As done to the `BookDto` above, we should define the mapping from the `CreateUpdateBookDto` object to the `Book` entity. The final class will be as shown below:
 
-````csharp
-using Acme.BookStore.Books;
-using AutoMapper;
-
-namespace Acme.BookStore;
-
-public class BookStoreApplicationAutoMapperProfile : Profile
+```csharp
+[Mapper]
+public partial class BookToBookDtoMapper : MapperBase<Book, BookDto>
 {
-    public BookStoreApplicationAutoMapperProfile()
-    {
-        CreateMap<Book, BookDto>();
-        CreateMap<CreateUpdateBookDto, Book>();
-    }
+    public override partial BookDto Map(Book source);
+
+    public override partial void Map(Book source, BookDto destination);
 }
-````
+
+[Mapper]
+public partial class CreateUpdateBookDtoToBookMapper : MapperBase<CreateUpdateBookDto, Book>
+{
+    public override partial Book Map(CreateUpdateBookDto source);
+
+    public override partial void Map(CreateUpdateBookDto source, Book destination);
+}
+```
 
 ### IBookAppService
 
@@ -430,7 +420,7 @@ public class BookAppService :
 
 * `BookAppService` is derived from `CrudAppService<...>` which implements all the CRUD (create, read, update, delete) methods defined by the `ICrudAppService`.
 * `BookAppService` injects `IRepository<Book, Guid>` which is the default repository for the `Book` entity. ABP automatically creates default repositories for each aggregate root (or entity). See the [repository document](../../framework/architecture/domain-driven-design/repositories.md).
-* `BookAppService` uses `IObjectMapper` service ([see](../../framework/infrastructure/object-to-object-mapping.md)) to map the `Book` objects to the `BookDto` objects and `CreateUpdateBookDto` objects to the `Book` objects. The Startup template uses the [AutoMapper](http://automapper.org/) library as the object mapping provider. We have defined the mappings before, so it will work as expected.
+* `BookAppService` uses `IObjectMapper` service ([see](../../framework/infrastructure/object-to-object-mapping.md)) to map the `Book` objects to the `BookDto` objects and `CreateUpdateBookDto` objects to the `Book` objects. The Startup template uses the [Mapperly](https://mapperly.riok.app/) library as the object mapping provider. We have defined the mappings before, so it will work as expected.
 
 ## Auto API Controllers
 
@@ -440,7 +430,7 @@ ABP can [**automagically**](../../framework/api-development/auto-controllers.md)
 
 ### Swagger UI
 
-The startup template is configured to run the [Swagger UI](https://swagger.io/tools/swagger-ui/) using the [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) library. Run the application ({{if UI=="MVC"}}`Acme.BookStore.Web`{{else if UI=="BlazorServer"}}`Acme.BookStore.Blazor`{{else}}`Acme.BookStore.HttpApi.Host`{{end}}) by pressing `CTRL+F5` and navigate to `https://localhost:<port>/swagger/` on your browser. Replace `<port>` with your own port number.
+The startup template is configured to run the [Swagger UI](https://swagger.io/tools/swagger-ui/) using the [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) library. Run the application ({{if UI=="MVC"}}`Acme.BookStore.Web`{{else if UI=="BlazorServer" || UI=="BlazorWebApp"}}`Acme.BookStore.Blazor`{{else}}`Acme.BookStore.HttpApi.Host`{{end}}) by pressing `CTRL+F5` and navigate to `https://localhost:<port>/swagger/` on your browser. Replace `<port>` with your own port number.
 
 You will see some built-in service endpoints as well as the `Book` service and its REST-style endpoints:
 

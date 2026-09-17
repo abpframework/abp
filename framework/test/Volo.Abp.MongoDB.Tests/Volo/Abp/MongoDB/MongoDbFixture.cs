@@ -1,5 +1,5 @@
 using System;
-using EphemeralMongo;
+using MongoSandbox;
 
 namespace Volo.Abp.MongoDB;
 
@@ -11,7 +11,8 @@ public class MongoDbFixture : IDisposable
     {
         MongoDbRunner = MongoRunner.Run(new MongoRunnerOptions
         {
-            UseSingleNodeReplicaSet = true
+            UseSingleNodeReplicaSet = true,
+            ReplicaSetSetupTimeout = TimeSpan.FromSeconds(30)
         });
     }
 

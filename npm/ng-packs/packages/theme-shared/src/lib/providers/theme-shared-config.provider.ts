@@ -1,5 +1,4 @@
-import { APP_INITIALIZER, Provider, makeEnvironmentProviders } from '@angular/core';
-import { noop } from '@abp/ng.core';
+import { Provider, makeEnvironmentProviders, inject, provideAppInitializer } from '@angular/core';
 import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import {
   VALIDATION_BLUEPRINTS,
@@ -110,19 +109,12 @@ export function withConfirmationIcon(
 
 export function provideAbpThemeShared(...features: ThemeSharedFeature<ThemeSharedFeatureKind>[]) {
   const providers = [
-    {
-      provide: APP_INITIALIZER,
-      multi: true,
-      deps: [ErrorHandler],
-      useFactory: noop,
-    },
+    provideAppInitializer(() => {
+      inject(ErrorHandler);
+      inject(THEME_SHARED_APPEND_CONTENT);
+      inject(DocumentDirHandlerService);
+    }),
     THEME_SHARED_ROUTE_PROVIDERS,
-    {
-      provide: APP_INITIALIZER,
-      multi: true,
-      deps: [THEME_SHARED_APPEND_CONTENT],
-      useFactory: noop,
-    },
     { provide: HTTP_ERROR_CONFIG, useValue: undefined },
     { provide: NgbDateParserFormatter, useClass: DateParserFormatter },
     NG_BOOTSTRAP_CONFIG_PROVIDERS,
@@ -139,12 +131,6 @@ export function provideAbpThemeShared(...features: ThemeSharedFeature<ThemeShare
       useValue: undefined,
     },
     DocumentDirHandlerService,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: noop,
-      multi: true,
-      deps: [DocumentDirHandlerService],
-    },
     {
       provide: CONFIRMATION_ICONS,
       useValue: { ...DEFAULT_CONFIRMATION_ICONS },

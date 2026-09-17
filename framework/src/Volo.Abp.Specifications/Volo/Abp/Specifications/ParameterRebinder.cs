@@ -15,7 +15,7 @@ internal class ParameterRebinder : ExpressionVisitor
 
     internal ParameterRebinder(Dictionary<ParameterExpression, ParameterExpression> map)
     {
-        _map = map ?? new Dictionary<ParameterExpression, ParameterExpression>();
+        _map = map ?? [];
     }
 
     internal static Expression ReplaceParameters(Dictionary<ParameterExpression, ParameterExpression> map,

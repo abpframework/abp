@@ -137,7 +137,7 @@ public class RegisterModel : AccountPageModel
                 await RegisterLocalUserAsync();
             }
 
-            return Redirect(ReturnUrl ?? "~/"); //TODO: How to ensure safety? IdentityServer requires it however it should be checked somehow!
+            return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
         }
         catch (BusinessException e)
         {

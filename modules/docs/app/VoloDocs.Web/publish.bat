@@ -1,5 +1,7 @@
 @echo off
 
+abp install-libs
+
 dotnet clean
 dotnet restore
 dotnet build

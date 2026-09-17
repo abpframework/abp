@@ -1,11 +1,13 @@
 import type { AbpLoginResult, UserLoginInfo } from './models/models';
 import { RestService } from '@abp/ng.core';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AccountService {
+  private restService = inject(RestService);
+
   apiName = 'AbpAccount';
 
   checkPasswordByLogin = (login: UserLoginInfo) =>
@@ -30,6 +32,4 @@ export class AccountService {
       url: '/api/account/logout',
     },
     { apiName: this.apiName });
-
-  constructor(private restService: RestService) {}
 }

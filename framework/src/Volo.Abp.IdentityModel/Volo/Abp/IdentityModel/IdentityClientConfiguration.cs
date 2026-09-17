@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using IdentityModel;
+using Duende.IdentityModel;
 
 namespace Volo.Abp.IdentityModel;
 

@@ -1,10 +1,21 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to utilize the `ICancellationTokenProvider` in ABP Framework for efficient cooperative cancellation in your applications."
+}
+```
+
 # Cancellation Token Provider
 
-A `CancellationToken` enables cooperative cancellation between threads, thread pool work items, or `Task` objects. To handle the possible cancellation of the operation, ABP provides `ICancellationTokenProvider` to obtain the `CancellationToken` itself from the source.
+A [`CancellationToken`](https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken) enables cooperative cancellation between threads, thread pool work items, or `Task` objects. To handle the possible cancellation of the operation, ABP provides `ICancellationTokenProvider` to obtain the `CancellationToken` itself from the source.
 
-> To get more information about `CancellationToken`, see [Microsoft Documentation](https://docs.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken).
+## When To Use Manual Cancellation Tokens
 
-## ICancellationTokenProvider
+**ABP automates cancellation token usage wherever possible**. For example, in ASP.NET Core applications, ABP automatically obtains the `CancellationToken` from the `HttpContext.RequestAborted` and uses it in database queries and other cancellable places. So, most of the times, you don't need to deal with `CancellationToken` objects to pass them between methods.
+
+> You do not need to use the `ICancellationTokenProvider` unless you want to add cancellation support in your own logic or to pass a cancellation token to a method outside of the ABP framework.
+
+## ICancellationTokenProvider Service
 
 `ICancellationTokenProvider` is an abstraction to provide `CancellationToken` for different scenarios.
 
@@ -39,33 +50,27 @@ namespace MyProject
 }
 ```
 
-## Built-in providers
+## Built-in Providers
 
-- `NullCancellationTokenProvider`
+- `HttpContextCancellationTokenProvider`: The **default provider** for ASP.NET Core applications. It simply provides a `CancellationToken` that is source of the web request from the `HttpContext.RequestAborted`.
 
-  The `NullCancellationTokenProvider` is a built in provider and it supply always `CancellationToken.None`.
+- `NullCancellationTokenProvider`: A built in provider and it supply always `CancellationToken.None`. It is used if no other providers can be used.
 
-- `HttpContextCancellationTokenProvider`
 
-  The `HttpContextCancellationTokenProvider` is a built in default provider for ABP Web applications. It simply provides a `CancellationToken` that is source of the web request from the `HttpContext`.
+## Implementing a Custom Cancellation Token Provider
 
-## Implementing the ICancellationTokenProvider
-
-You can easily create your CancellationTokenProvider by creating a class that implements the `ICancellationTokenProvider` interface, as shown below:
+You can easily create your `ICancellationTokenProvider` implementation by creating a class that implements the `ICancellationTokenProvider` interface, as shown below:
 
 ```csharp
 using System.Threading;
 
 namespace AbpDemo
 {
-    public class MyCancellationTokenProvider : ICancellationTokenProvider
+    public class MyCancellationTokenProvider
+        : ICancellationTokenProvider, 
+          ITransientDependency // Can also be singleton or scoped
     {
-        public CancellationToken Token { get; }
-
-        private MyCancellationTokenProvider()
-        {
-
-        }
+        public CancellationToken Token { get; } // TODO: Return a cancellation token
     }
 }
 ```

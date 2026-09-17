@@ -1,8 +1,8 @@
-import { Directive, TemplateRef } from '@angular/core';
+import { Directive, TemplateRef, inject } from '@angular/core';
 
 @Directive({
   selector: '[abpTreeExpandedIconTemplate],[abp-tree-expanded-icon-template]',
 })
-export class ExpandedIconTemplateDirective {
-  constructor(public template: TemplateRef<any>) {}
+export class ExpandedIconTemplateDirective {  template = inject<TemplateRef<any>>(TemplateRef);
+
 }

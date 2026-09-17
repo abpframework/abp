@@ -1,12 +1,12 @@
 import { BehaviorSubject, Observable } from 'rxjs';
 import { NavItem } from '../models/nav-item';
 import { inject, Type } from '@angular/core';
-import { SORT_COMPARE_FUNC } from '@abp/ng.core';
+import { SORT_COMPARE_FUNC, SortableItem } from '@abp/ng.core';
 
 export abstract class AbstractMenuService<T extends NavItem> {
   protected abstract baseClass: Type<any>;
 
-  protected readonly sortFn = inject(SORT_COMPARE_FUNC);
+  protected readonly sortFn: (a: SortableItem, b: SortableItem) => number;
 
   protected _items$ = new BehaviorSubject<T[]>([]);
 
@@ -16,6 +16,10 @@ export abstract class AbstractMenuService<T extends NavItem> {
 
   get items$(): Observable<T[]> {
     return this._items$.asObservable();
+  }
+
+  constructor() {
+    this.sortFn = inject(SORT_COMPARE_FUNC);
   }
 
   addItems(newItems: T[]) {

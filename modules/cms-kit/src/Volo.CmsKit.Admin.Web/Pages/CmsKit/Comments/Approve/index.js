@@ -6,15 +6,8 @@
     moment()._locale.preparse = (string) => string;
     moment()._locale.postformat = (string) => string;
 
-    var getFormattedDate = function ($datePicker) {
-        if (!$datePicker.val()) {
-            return null;
-        }
-        var momentDate = moment($datePicker.val(), $datePicker.data('daterangepicker').locale.format);
-        return momentDate.isValid() ? momentDate.toISOString() : null;
-    };
-
-    $('.singledatepicker').daterangepicker({
+    var singleDatePicker = $('#CmsKitCommentsApproveWrapper .singledatepicker');
+    singleDatePicker.daterangepicker({
         "singleDatePicker": true,
         "showDropdowns": true,
         "autoUpdateInput": false,
@@ -23,22 +16,19 @@
         "drops": "auto"
     });
 
-    $('.singledatepicker').attr('autocomplete', 'off');
+    singleDatePicker.attr('autocomplete', 'off');
 
-    $('.singledatepicker').on('apply.daterangepicker', function (ev, picker) {
+    singleDatePicker.on('apply.daterangepicker', function (ev, picker) {
         $(this).val(picker.startDate.format('l'));
     });
 
     var filterForm = $('#CmsKitCommentsFilterForm');
 
     var getFilter = function () {
-        var filterObj = filterForm.serializeFormToObject();
-
-        filterObj.creationStartDate = getFormattedDate($('#CreationStartDate'));
-        filterObj.creationEndDate = getFormattedDate($('#CreationEndDate'));
-        filterObj.commentApproveState = "Waiting";
-
-        return filterObj;
+        filterForm.handleDatepicker('.singledatepicker');
+        var formObject = filterForm.serializeFormToObject();
+        formObject.commentApproveState = "Waiting";
+        return formObject;
     };
 
     var _dataTable = $('#CommentsTable').DataTable(abp.libs.datatables.normalizeConfiguration({

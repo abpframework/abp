@@ -13,15 +13,20 @@ public static class AbpPermissionManagementMongoDbContextExtensions
         {
             b.CollectionName = AbpPermissionManagementDbProperties.DbTablePrefix + "PermissionGroups";
         });
-        
+
         builder.Entity<PermissionDefinitionRecord>(b =>
         {
             b.CollectionName = AbpPermissionManagementDbProperties.DbTablePrefix + "Permissions";
         });
-        
+
         builder.Entity<PermissionGrant>(b =>
         {
             b.CollectionName = AbpPermissionManagementDbProperties.DbTablePrefix + "PermissionGrants";
+        });
+
+        builder.Entity<ResourcePermissionGrant>(b =>
+        {
+            b.CollectionName = AbpPermissionManagementDbProperties.DbTablePrefix + "ResourcePermissionGrants";
         });
     }
 }

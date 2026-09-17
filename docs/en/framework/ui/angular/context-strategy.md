@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the `ContextStrategy` class in ABP, detailing context management for projected components with various strategies for developers."
+}
+```
+
 # ContextStrategy
 
 `ContextStrategy` is an abstract class exposed by @abp/ng.core package. There are three context strategies extending it: `ComponentContextStrategy`, `TemplateContextStrategy`, and `NoContextStrategy`. Implementing the same methods and properties, all of these strategies help you define how projected content will get their context.

@@ -15,7 +15,7 @@ public class AbpJsonSystemTextJsonModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddOptions<AbpSystemTextJsonSerializerOptions>()
+        context.Services.AddAbpOptions<AbpSystemTextJsonSerializerOptions>()
             .Configure<IServiceProvider>((options, rootServiceProvider) =>
             {
                 // If the user hasn't explicitly configured the encoder, use the less strict encoder that does not encode all non-ASCII characters.
@@ -29,14 +29,13 @@ public class AbpJsonSystemTextJsonModule : AbpModule
 
                 options.JsonSerializerOptions.TypeInfoResolver = new AbpDefaultJsonTypeInfoResolver(rootServiceProvider
                     .GetRequiredService<IOptions<AbpSystemTextJsonSerializerModifiersOptions>>());
-            });
 
-        context.Services.AddOptions<AbpSystemTextJsonSerializerModifiersOptions>()
-            .Configure<IServiceProvider>((options, rootServiceProvider) =>
-            {
-                options.Modifiers.Add(new AbpDateTimeConverterModifier(
-                    rootServiceProvider.GetRequiredService<AbpDateTimeConverter>(),
-                    rootServiceProvider.GetRequiredService<AbpNullableDateTimeConverter>()).CreateModifyAction());
+                var dateTimeConverter = rootServiceProvider.GetRequiredService<AbpDateTimeConverter>().SkipDateTimeNormalization();
+                var nullableDateTimeConverter = rootServiceProvider.GetRequiredService<AbpNullableDateTimeConverter>().SkipDateTimeNormalization();
+
+                options.JsonSerializerOptions.TypeInfoResolver.As<AbpDefaultJsonTypeInfoResolver>().Modifiers.Add(
+                    new AbpDateTimeConverterModifier(dateTimeConverter, nullableDateTimeConverter)
+                        .CreateModifyAction());
             });
     }
 }

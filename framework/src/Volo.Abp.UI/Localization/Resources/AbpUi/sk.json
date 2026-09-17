@@ -60,6 +60,9 @@
     "AddNew": "Pridať nové",
     "ProfilePicture": "Profilový obrázok",
     "Theme": "Téma",
-    "NotAssigned": "Nepridelené"
+    "NotAssigned": "Nepridelené",
+    "EntityActionsDisabledTooltip": "Nemáte oprávnenie vykonávať žiadnu akciu.",
+    "ResourcePermissions": "Oprávnenia",
+    "ShowPassword": "Zobraziť heslo"
   }
 }

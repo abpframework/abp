@@ -10,6 +10,7 @@ public class PermissionManagementDbContext : AbpDbContext<PermissionManagementDb
     public DbSet<PermissionGroupDefinitionRecord> PermissionGroups { get; set; }
     public DbSet<PermissionDefinitionRecord> Permissions { get; set; }
     public DbSet<PermissionGrant> PermissionGrants { get; set; }
+    public DbSet<ResourcePermissionGrant> ResourcePermissionGrants { get; set; }
 
     public PermissionManagementDbContext(DbContextOptions<PermissionManagementDbContext> options)
         : base(options)

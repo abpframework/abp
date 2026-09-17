@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Data;
@@ -11,16 +13,23 @@ namespace Volo.Abp.Json;
 
 public abstract class AbpSystemTextJsonSerializerProviderTestBase : AbpJsonSystemTextJsonTestBase
 {
-    protected AbpSystemTextJsonSerializer JsonSerializer;
+    protected IJsonSerializer JsonSerializer;
 
     public AbpSystemTextJsonSerializerProviderTestBase()
     {
-        JsonSerializer = GetRequiredService<AbpSystemTextJsonSerializer>();
+        JsonSerializer = GetRequiredService<IJsonSerializer>();
     }
 
     public class TestExtensibleObjectClass : ExtensibleObject
     {
         public string Name { get; set; }
+    }
+
+    public class File
+    {
+        public string FileName { get; set; }
+
+        public Dictionary<string, int> ExtraProperties { get; set; }
     }
 
     public class FileWithBoolean
@@ -74,6 +83,34 @@ public abstract class AbpSystemTextJsonSerializerProviderTestBase : AbpJsonSyste
 
 public class AbpSystemTextJsonSerializerProviderTests : AbpSystemTextJsonSerializerProviderTestBase
 {
+    [Fact]
+    public void Serialize_Deserialize_Test()
+    {
+        var defaultIndent = "  "; // Default indent is 2 spaces
+        var newLine = Environment.NewLine;
+        var file = new File()
+        {
+            FileName = "abp",
+            ExtraProperties = new Dictionary<string, int>()
+            {
+                { "One", 1 },
+                { "Two", 2 }
+            }
+        };
+
+        var json = JsonSerializer.Serialize(file, camelCase: true);
+        json.ShouldBe("{\"fileName\":\"abp\",\"extraProperties\":{\"One\":1,\"Two\":2}}");
+
+        json = JsonSerializer.Serialize(file, camelCase: true, indented: true);
+        json.ShouldBe($"{{{newLine}{defaultIndent}\"fileName\": \"abp\",{newLine}{defaultIndent}\"extraProperties\": {{{newLine}{defaultIndent}{defaultIndent}\"One\": 1,{newLine}{defaultIndent}{defaultIndent}\"Two\": 2{newLine}{defaultIndent}}}{newLine}}}");
+
+        json = JsonSerializer.Serialize(file, camelCase: false);
+        json.ShouldBe("{\"FileName\":\"abp\",\"ExtraProperties\":{\"One\":1,\"Two\":2}}");
+
+        json = JsonSerializer.Serialize(file, camelCase: false, indented: true);
+        json.ShouldBe($"{{{newLine}{defaultIndent}\"FileName\": \"abp\",{newLine}{defaultIndent}\"ExtraProperties\": {{{newLine}{defaultIndent}{defaultIndent}\"One\": 1,{newLine}{defaultIndent}{defaultIndent}\"Two\": 2{newLine}{defaultIndent}}}{newLine}}}");
+    }
+
     [Fact]
     public void Serialize_Deserialize_With_Boolean()
     {
@@ -223,6 +260,8 @@ public class AbpSystemTextJsonSerializerProviderDateTimeFormatTests : AbpSystemT
             options.InputDateTimeFormats.Add("yyyy*MM*dd");
             options.OutputDateTimeFormat = "yyyy*MM*dd HH*mm*ss";
         });
+
+        base.AfterAddApplication(services);
     }
 
     [Fact]
@@ -289,6 +328,8 @@ public class AbpSystemTextJsonSerializerProviderDatetimeKindUtcTests : AbpSystem
     {
         Kind = DateTimeKind.Utc;
         services.Configure<AbpClockOptions>(x => x.Kind = Kind);
+
+        base.AfterAddApplication(services);
     }
 }
 
@@ -298,6 +339,8 @@ public class AbpSystemTextJsonSerializerProviderDatetimeKindLocalTests : AbpSyst
     {
         Kind = DateTimeKind.Local;
         services.Configure<AbpClockOptions>(x => x.Kind = Kind);
+
+        base.AfterAddApplication(services);
     }
 }
 

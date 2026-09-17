@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Markdig;
+using Markdig.Extensions.AutoIdentifiers;
 using Volo.Abp.DependencyInjection;
 using Volo.Docs.Markdown.Extensions;
 
@@ -12,11 +13,13 @@ namespace Volo.Docs.Markdown
         public MarkDigMarkdownConverter()
         {
             _markdownPipeline = new MarkdownPipelineBuilder()
+              .UseAutoIdentifiers(AutoIdentifierOptions.GitHub)
               .UseAutoLinks()
               .UseBootstrap()
               .UseGridTables()
               .UsePipeTables()
               .UseHighlightedCodeBlocks()
+              .UseAlertBlocks()
               .Build();
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Testing;
@@ -749,6 +750,74 @@ public class DistributedCache_Tests : AbpIntegratedTest<AbpCachingTestModule>
         cacheValue.Length.ShouldBe(2);
         cacheValue[0].Value.Name.ShouldBe("john");
         cacheValue[1].Value.Name.ShouldBe("jack");
+    }
+
+    [Fact]
+    public async Task GetOrAddManyAsync_Should_Return_Values_By_Key_With_Uow()
+    {
+        var key1 = "testkey";
+        var key2 = "testkey2";
+        var keys = new[] { key1, key2 };
+
+        using (GetRequiredService<IUnitOfWorkManager>().Begin())
+        {
+            var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+
+            await personCache.SetAsync(key2, new PersonCacheItem("cached"), considerUow: true);
+
+            var result = await personCache.GetOrAddManyAsync(keys, missingKeys =>
+            {
+                missingKeys.ToArray().ShouldBe(new[] { key1 });
+                return Task.FromResult(new List<KeyValuePair<string, PersonCacheItem>>
+                {
+                    new(key1, new PersonCacheItem("factory"))
+                });
+            }, considerUow: true);
+
+            result.Length.ShouldBe(2);
+            result[0].Key.ShouldBe(key1);
+            result[0].Value.ShouldNotBeNull();
+            result[0].Value.Name.ShouldBe("factory");
+            result[1].Key.ShouldBe(key2);
+            result[1].Value.ShouldNotBeNull();
+            result[1].Value.Name.ShouldBe("cached");
+        }
+    }
+
+    [Fact]
+    public async Task GetOrAddManyAsync_Should_Map_By_Key_Under_Concurrency()
+    {
+        var key1 = "testkey";
+        var key2 = "testkey2";
+        var keys = new[] { key1, key2 };
+
+        var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
+
+        async Task<List<KeyValuePair<string, PersonCacheItem>>> Factory(IEnumerable<string> missingKeys)
+        {
+            await Task.Yield();
+
+            return missingKeys
+                .Reverse()
+                .Select(x => new KeyValuePair<string, PersonCacheItem>(x, new PersonCacheItem(x == key1 ? "v1" : "v2")))
+                .ToList();
+        }
+
+        var task1 = personCache.GetOrAddManyAsync(keys, Factory);
+        var task2 = personCache.GetOrAddManyAsync(keys, Factory);
+
+        var results = await Task.WhenAll(task1, task2);
+
+        foreach (var result in results)
+        {
+            result.Length.ShouldBe(2);
+
+            result[0].Key.ShouldBe(key1);
+            result[0].Value!.Name.ShouldBe("v1");
+
+            result[1].Key.ShouldBe(key2);
+            result[1].Value!.Name.ShouldBe("v2");
+        }
     }
 
     [Fact]

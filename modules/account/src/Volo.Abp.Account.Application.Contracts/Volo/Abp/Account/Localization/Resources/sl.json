@@ -68,6 +68,8 @@
     "AccessDenied": "Dostop zavrnjen!",
     "AccessDeniedMessage": "Nimate dostopa do tega vira.",
     "OrRegisterWith": "Ali pa se registrirajte z:",
-    "RegisterUsingYourProviderAccount": "Registrirajte se z uporabo vašega {0} računa"
+    "RegisterUsingYourProviderAccount": "Registrirajte se z uporabo vašega {0} računa",
+    "RequireMigrateSeedTitle": "Skrbniškega uporabnika ni mogoče najti",
+    "RequireMigrateSeedMessage": "Prepričajte se, da je seed baze podatkov izveden. Za možne rešitve glejte <a target=\"_blank\" href=\"https://abp.io/kb/0003\">dokumentacijo</a>."
   }
 }

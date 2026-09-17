@@ -60,6 +60,9 @@
     "AddNew": "Dodaj nowe",
     "ProfilePicture": "Zdjęcie profilowe",
     "Theme": "Temat",
-    "NotAssigned": "Nie przypisano"
+    "NotAssigned": "Nie przypisano",
+    "EntityActionsDisabledTooltip": "Nie masz uprawnień do wykonania żadnej akcji.",
+    "ResourcePermissions": "Uprawnienia",
+    "ShowPassword": "Pokaż hasło"
   }
 }

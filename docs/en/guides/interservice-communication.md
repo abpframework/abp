@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn effective strategies for interservice communication in microservices, covering both synchronous and asynchronous messaging patterns."
+}
+```
+
 # Communications Between Microservices
 
 There are two basic messaging patterns for communication between two microservices:

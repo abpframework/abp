@@ -1,0 +1,7 @@
+{
+  "culture": "is",
+  "texts": {
+    "Permission:DocumentManagement.Common": "Almennir skjöl",
+    "Permission:PdfDownload": "Breyta í PDF"
+  }
+}

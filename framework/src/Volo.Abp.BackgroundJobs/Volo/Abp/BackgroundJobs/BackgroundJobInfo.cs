@@ -10,6 +10,11 @@ public class BackgroundJobInfo
     public Guid Id { get; set; }
 
     /// <summary>
+    /// Application name.
+    /// </summary>
+    public virtual string? ApplicationName { get; set; }
+
+    /// <summary>
     /// Name of the job.
     /// </summary>
     public virtual string JobName { get; set; } = default!;
@@ -44,6 +49,14 @@ public class BackgroundJobInfo
     /// This is true if this job is continuously failed and will not be executed again.
     /// </summary>
     public virtual bool IsAbandoned { get; set; }
+
+    /// <summary>
+    /// The time this job was completed successfully.
+    /// When set, the job is kept as history and excluded from the waiting jobs query.
+    /// It is only set when <see cref="AbpBackgroundJobWorkerOptions.StoreSuccessfulJobs"/> is enabled;
+    /// otherwise successfully completed jobs are deleted.
+    /// </summary>
+    public virtual DateTime? CompletionTime { get; set; }
 
     /// <summary>
     /// Priority of this job.

@@ -7,12 +7,13 @@ using Volo.Abp.AspNetCore.Mvc.UI.Packages.MarkdownIt;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
+using Volo.Abp.SettingManagement.Web;
 using Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation;
@@ -29,7 +30,8 @@ namespace Volo.CmsKit.Admin.Web;
 
 [DependsOn(
     typeof(CmsKitAdminApplicationContractsModule),
-    typeof(CmsKitCommonWebModule)
+    typeof(CmsKitCommonWebModule),
+    typeof(AbpSettingManagementWebModule)
     )]
 public class CmsKitAdminWebModule : AbpModule
 {
@@ -80,8 +82,7 @@ public class CmsKitAdminWebModule : AbpModule
             options.FileSets.AddEmbedded<CmsKitAdminWebModule>("Volo.CmsKit.Admin.Web");
         });
 
-        context.Services.AddAutoMapperObjectMapper<CmsKitAdminWebModule>();
-        Configure<AbpAutoMapperOptions>(options => { options.AddMaps<CmsKitAdminWebModule>(validate: true); });
+        context.Services.AddMapperlyObjectMapper<CmsKitAdminWebModule>();
 
         Configure<RazorPagesOptions>(options =>
         {

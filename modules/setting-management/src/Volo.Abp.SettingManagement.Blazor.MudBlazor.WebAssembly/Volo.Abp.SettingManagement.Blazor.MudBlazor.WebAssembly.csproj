@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\..\..\..\configureawait.props" />
+    <Import Project="..\..\..\..\common.props" />
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Volo.Abp.SettingManagement.Blazor.MudBlazor\Volo.Abp.SettingManagement.Blazor.MudBlazor.csproj" />
+        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Components.WebAssembly.Theming.MudBlazor\Volo.Abp.AspNetCore.Components.WebAssembly.Theming.MudBlazor.csproj" />
+        <ProjectReference Include="..\Volo.Abp.SettingManagement.HttpApi.Client\Volo.Abp.SettingManagement.HttpApi.Client.csproj" />
+    </ItemGroup>
+
+</Project>

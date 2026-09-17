@@ -58,3 +58,7 @@
         transform: rotate(0deg);
     }
 }
+
+.table-responsive .dropdown-menu-position-strategy-fixed {
+    position: fixed !important;
+}

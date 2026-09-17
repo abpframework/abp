@@ -1,0 +1,16 @@
+{
+  "culture": "sk",
+  "texts": {
+    "VirtualFileExplorer": "Virtuálny prieskumník súborov",
+    "VirtualFileType": "Typ virtuálneho súboru",
+    "Menu:VirtualFileExplorer": "Virtuálny prieskumník súborov",
+    "LastUpdateTime": "Čas poslednej aktualizácie",
+    "VirtualFileName": "Názov virtuálneho súboru",
+    "FileContent": "Obsah súboru",
+    "Size": "Veľkosť",
+    "BackToRoot": "Späť na koreňový priečinok",
+    "EmptyFileInfoList": "Neexistujú žiadne virtuálne súbory",
+    "Permission:AbpVirtualFileExplorer": "Virtuálny prieskumník súborov",
+    "Permission:AbpVirtualFileExplorer:View": "Zobraziť"
+  }
+}

@@ -67,6 +67,9 @@
     "EntityHistory": "Lịch sử thực thể",
     "DaysAgoTitle": "{0} {1}.",
     "DaysAgoWithUserTitle": "{0} {1} của {2}.",
+    "MinutesAgo": "{0} phút trước",
+    "HoursAgo": "{0} giờ trước",
+    "DaysAgo": "{0} ngày trước",
     "Created": "Tạo",
     "Updated": "Đã cập nhật",
     "Deleted": "Đã xóa",
@@ -78,6 +81,10 @@
     "EndDate": "Ngày cuối",
     "Feature:AuditLoggingGroup": "Ghi nhật ký kiểm tra",
     "Feature:AuditLoggingEnable": "Đã bật trang ghi nhật ký kiểm tra",
-    "Feature:AuditLoggingEnableDescription": "Kích hoạt trang ghi nhật ký kiểm tra trong ứng dụng."
+    "Feature:AuditLoggingEnableDescription": "Kích hoạt trang ghi nhật ký kiểm tra trong ứng dụng.",
+    "TenantId": "ID người thuê",
+    "DownloadLinkExplanation": "Bạn có thể tải xuống tệp bằng liên kết bên dưới cho đến {0} (UTC)",
+    "DownloadNow": "Tải xuống ngay",
+    "TryAgainMessage": "Vui lòng thử lại. Nếu sự cố vẫn tiếp diễn, vui lòng liên hệ bộ phận hỗ trợ."
   }
 }

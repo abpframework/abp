@@ -14,13 +14,15 @@
     "Body": "Corp",
     "TestEmailSubject": "E-mail de testare {0}",
     "TestEmailBody": "Testați corpul mesajului de e-mail aici",
-    "SuccessfullySent": "Trimis cu succes",
+    "SentSuccessfully": "Trimis cu succes",
     "MailSendingFailed": "Trimiterea e-mailului a eșuat. Verificați configurația e-mailului și încercați din nou.",
     "Send": "Trimite",
+    "Menu:Settings": "Setări",
     "Menu:Emailing": "Emailing",
     "Menu:TimeZone": "Fus Orar",
     "DisplayName:Timezone": "Fus orar",
-    "TimezoneHelpText": "Această setare este utilizată pentru aplicație sau pentru chiriași.",
+    "TimezoneHelpText": "Această funcționalitate vă permite să setați un fus orar implicit pentru serverul dvs., în timp ce utilizatorii pot selecta propriul lor. Dacă fusul orar al unui utilizator diferă de cel al serverului, toate orele vor fi ajustate în consecință. De exemplu, cu serverul setat la Europa/Londra(00:00) și un utilizator în Europa/Paris(+01:00), orele vor fi ajustate cu 1 oră pentru acel utilizator. Selectarea 'Fus orar implicit' va folosi automat fusul orar al serverului sau browserului.",
+    "DefaultTimeZone": "Fus orar implicit",
     "SmtpHost": "Host",
     "SmtpPort": "Port",
     "SmtpUserName": "Nume de utilizator",
@@ -33,7 +35,9 @@
     "Feature:SettingManagementGroup": "Administrarea setărilor",
     "Feature:SettingManagementEnable": "Activează administrarea setărilor",
     "Feature:SettingManagementEnableDescription": "Activează sistemul de administrare a setărilor în aplicaţie.",
-    "Feature:AllowChangingEmailSettings": "Permiteți modificarea setărilor de e-mail.",
-    "Feature:AllowChangingEmailSettingsDescription": "Permiteți modificarea setărilor de e-mail."
+    "Feature:AllowChangingEmailSettings": "Permiteți modificarea setărilor de e-mail",
+    "Feature:AllowChangingEmailSettingsDescription": "Permiteți modificarea setărilor de e-mail.",
+    "SmtpPasswordPlaceholder": "Introduceți o valoare pentru a actualiza parola",
+    "NoSettingsAvailable": "Nu există setări de afișat."
   }
 }

@@ -35,11 +35,18 @@ async function compare() {
   for (let i = 0; i < packageFolders.length; i++) {
     const folder = packageFolders[i];
     const pkgJsonPath = `${packagesPath}/${folder}/package.json`;
+
+    if (!(await fse.pathExists(pkgJsonPath))) {
+      continue;
+    }
+
     let pkgJson;
 
     try {
       pkgJson = await fse.readJSON(pkgJsonPath);
-    } catch (error) {}
+    } catch (error) {
+      continue;
+    }
 
     if (
       !excludedPackages.includes(pkgJson.name) &&

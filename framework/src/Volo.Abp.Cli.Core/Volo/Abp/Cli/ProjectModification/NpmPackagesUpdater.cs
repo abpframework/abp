@@ -3,14 +3,12 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NuGet.Versioning;
-using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.LIbs;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
@@ -28,14 +26,12 @@ public class NpmPackagesUpdater : ITransientDependency
 
     private readonly PackageJsonFileFinder _packageJsonFileFinder;
     private readonly NpmGlobalPackagesChecker _npmGlobalPackagesChecker;
-    private readonly Dictionary<string, string> _fileVersionStorage = new Dictionary<string, string>();
-    private readonly CliHttpClientFactory _cliHttpClientFactory;
+    private readonly Dictionary<string, string> _fileVersionStorage = [];
 
     public NpmPackagesUpdater(
         PackageJsonFileFinder packageJsonFileFinder,
         NpmGlobalPackagesChecker npmGlobalPackagesChecker,
         ICancellationTokenProvider cancellationTokenProvider,
-        CliHttpClientFactory cliHttpClientFactory,
         IInstallLibsService installLibsService,
         ICmdHelper cmdHelper)
     {
@@ -44,13 +40,12 @@ public class NpmPackagesUpdater : ITransientDependency
         CancellationTokenProvider = cancellationTokenProvider;
         InstallLibsService = installLibsService;
         CmdHelper = cmdHelper;
-        _cliHttpClientFactory = cliHttpClientFactory;
         Logger = NullLogger<NpmPackagesUpdater>.Instance;
     }
 
     public async Task Update(string rootDirectory, bool includePreviews = false,
         bool includeReleaseCandidates = false,
-        bool switchToStable = false, string version = null, bool includePreRc = false)
+        bool switchToStable = false, string version = null, string leptonXVersion = null, bool includePreRc = false)
     {
         var fileList = _packageJsonFileFinder.Find(rootDirectory);
 
@@ -80,6 +75,7 @@ public class NpmPackagesUpdater : ITransientDependency
             var updated = await UpdatePackagesInFile(file, includePreviews, includeReleaseCandidates,
                 switchToStable,
                 version,
+                leptonXVersion,
                 includePreRc);
 
             packagesUpdated.TryAdd(file, updated);
@@ -136,7 +132,7 @@ public class NpmPackagesUpdater : ITransientDependency
 
             if (!fileContent.Contains(volosoftRegistry))
             {
-                fileContent += volosoftRegistry;
+                fileContent += Environment.NewLine + volosoftRegistry;
             }
 
             File.WriteAllText(fileName, fileContent);
@@ -162,6 +158,7 @@ public class NpmPackagesUpdater : ITransientDependency
         bool includeReleaseCandidates = false,
         bool switchToStable = false,
         string specifiedVersion = null,
+        string specifiedLeptonXVersion = null,
         bool includePreRc = false)
     {
         var packagesUpdated = false;
@@ -177,7 +174,7 @@ public class NpmPackagesUpdater : ITransientDependency
         foreach (var abpPackage in abpPackages)
         {
             var updated = await TryUpdatingPackage(filePath, abpPackage, includePreviews, includeReleaseCandidates,
-                switchToStable, specifiedVersion, includePreRc);
+                switchToStable, specifiedVersion, specifiedLeptonXVersion, includePreRc);
 
             if (updated)
             {
@@ -188,7 +185,7 @@ public class NpmPackagesUpdater : ITransientDependency
         var updatedContent = packageJson.ToString(Formatting.Indented);
 
         File.WriteAllText(filePath, updatedContent);
-
+        
         return packagesUpdated;
     }
 
@@ -199,6 +196,7 @@ public class NpmPackagesUpdater : ITransientDependency
         bool includeReleaseCandidates = false,
         bool switchToStable = false,
         string specifiedVersion = null,
+        string specifiedLeptonXVersion = null,
         bool includePreRc = false)
     {
         var currentVersion = (string)package.Value;
@@ -207,18 +205,36 @@ public class NpmPackagesUpdater : ITransientDependency
 
         if (!specifiedVersion.IsNullOrWhiteSpace())
         {
-            if (!SpecifiedVersionExists(specifiedVersion, package))
+            if (IsLeptonXPackage(package) && !specifiedLeptonXVersion.IsNullOrWhiteSpace())
             {
-                return false;
-            }
+                if (!SpecifiedVersionExists(specifiedLeptonXVersion, package))
+                {
+                    return false;
+                }
 
-            if (SemanticVersion.Parse(specifiedVersion) <=
-                SemanticVersion.Parse(currentVersion.RemovePreFix("~", "^")))
+                if (SemanticVersion.Parse(specifiedLeptonXVersion) <=
+                    SemanticVersion.Parse(currentVersion.RemovePreFix("~", "^")))
+                {
+                    return false;
+                }
+
+                version = specifiedLeptonXVersion.EnsureStartsWith('^');
+            }
+            else
             {
-                return false;
-            }
+                if (!SpecifiedVersionExists(specifiedVersion, package))
+                {
+                    return false;
+                }
 
-            version = specifiedVersion.EnsureStartsWith('^');
+                if (SemanticVersion.Parse(specifiedVersion) <=
+                    SemanticVersion.Parse(currentVersion.RemovePreFix("~", "^")))
+                {
+                    return false;
+                }
+
+                version = specifiedVersion.EnsureStartsWith('^');
+            }
         }
         else
         {
@@ -266,6 +282,12 @@ public class NpmPackagesUpdater : ITransientDependency
         Logger.LogInformation(
             $"Updated {package.Name} to {version} in {filePath.Replace(Directory.GetCurrentDirectory(), "")}.");
         return true;
+    }
+
+    private static bool IsLeptonXPackage(JProperty package)
+    {
+        return package.Name.IndexOf("leptonx", StringComparison.InvariantCultureIgnoreCase) > 0
+            || package.Name.IndexOf("lepton-x", StringComparison.InvariantCultureIgnoreCase) > 0;
     }
 
     protected virtual bool IsPrerelease(string version)
@@ -337,16 +359,36 @@ public class NpmPackagesUpdater : ITransientDependency
 
             var properties = dependencies.Properties().ToList();
 
-            abpPackages
-                .AddRange(
-                properties.Where(
-                      p => p.Name.StartsWith("@abp/")
-                        || p.Name.StartsWith("@volo/")
-                        || p.Name.StartsWith("@volosoft/")).ToList()
-                );
+            foreach (var p in properties.Where(
+                         p => p.Name.StartsWith("@abp/")
+                           || p.Name.StartsWith("@volo/")
+                           || p.Name.StartsWith("@volosoft/")))
+            {
+                if (IsValidNpmPackageName(p.Name))
+                {
+                    abpPackages.Add(p);
+                }
+                else
+                {
+                    Logger.LogWarning($"Skipping invalid npm package name: {NpmHelper.SanitizeForLog(p.Name)}");
+                }
+            }
         }
 
         return abpPackages;
+    }
+
+    public static bool IsValidNpmPackageName(string packageName)
+    {
+        try
+        {
+            NpmHelper.EnsureSafePackageName(packageName);
+            return true;
+        }
+        catch (CliUsageException)
+        {
+            return false;
+        }
     }
 
     protected virtual async Task RunInstallLibsAsync(string fileDirectory)
@@ -358,13 +400,13 @@ public class NpmPackagesUpdater : ITransientDependency
     protected virtual void RunYarn(string fileDirectory)
     {
         Logger.LogInformation($"Running Yarn on {fileDirectory}");
-        CmdHelper.RunCmd($"yarn", fileDirectory);
+        CmdHelper.RunCmd($"npx yarn --ignore-scripts", fileDirectory);
     }
 
     protected virtual void RunNpmInstall(string fileDirectory)
     {
         Logger.LogInformation($"Running npm install on {fileDirectory}");
-        CmdHelper.RunCmd($"npm install", fileDirectory);
+        CmdHelper.RunCmd($"npm install --ignore-scripts", fileDirectory);
     }
 
     protected virtual List<string> GetPackageVersionList(JProperty package, string workingDirectory = null)

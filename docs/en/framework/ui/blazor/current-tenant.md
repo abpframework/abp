@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the `ICurrentTenant` service in ABP Framework to access tenant information in multi-tenant applications effectively."
+}
+```
+
 # Blazor UI: Current Tenant
 
 `ICurrentTenant` service can be used to get information about the current tenant in a [multi-tenant](../../architecture/multi-tenancy) application. `ICurrentTenant` defines the following properties;

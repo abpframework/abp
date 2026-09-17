@@ -1,0 +1,7 @@
+{
+  "culture": "ar",
+  "texts": {
+    "Permission:DocumentManagement.Common": "إدارة المستندات العامة",
+    "Permission:PdfDownload": "تحميل ملفات PDF"
+  }
+}

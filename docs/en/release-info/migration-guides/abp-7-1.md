@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Upgrade your ABP Framework from v7.0 to v7.1 with this migration guide, covering essential changes and improvements for seamless integration."
+}
+```
+
 # ABP Version 7.1 Migration Guide
 
 This document is a guide for upgrading ABP v7.0 solutions to ABP v7.1. There are a few changes in this version that may affect your applications, please read it carefully and apply the necessary changes to your application.

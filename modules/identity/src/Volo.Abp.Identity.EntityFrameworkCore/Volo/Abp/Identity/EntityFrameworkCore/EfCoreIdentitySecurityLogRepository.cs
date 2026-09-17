@@ -31,6 +31,7 @@ public class EfCoreIdentitySecurityLogRepository : EfCoreRepository<IIdentityDbC
         string userName = null,
         string clientId = null,
         string correlationId = null,
+        string clientIpAddress = null,
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
@@ -46,6 +47,7 @@ public class EfCoreIdentitySecurityLogRepository : EfCoreRepository<IIdentityDbC
             userName,
             clientId,
             correlationId,
+            clientIpAddress,
             cancellationToken
         );
 
@@ -64,6 +66,7 @@ public class EfCoreIdentitySecurityLogRepository : EfCoreRepository<IIdentityDbC
         string userName = null,
         string clientId = null,
         string correlationId = null,
+        string clientIpAddress = null,
         CancellationToken cancellationToken = default)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
@@ -78,6 +81,7 @@ public class EfCoreIdentitySecurityLogRepository : EfCoreRepository<IIdentityDbC
             userName,
             clientId,
             correlationId,
+            clientIpAddress,
             cancellationToken
         );
 
@@ -101,6 +105,7 @@ public class EfCoreIdentitySecurityLogRepository : EfCoreRepository<IIdentityDbC
           string userName = null,
           string clientId = null,
           string correlationId = null,
+          string clientIpAddress = null,
           CancellationToken cancellationToken = default)
     {
         return (await GetDbSetAsync()).AsNoTracking()
@@ -112,6 +117,7 @@ public class EfCoreIdentitySecurityLogRepository : EfCoreRepository<IIdentityDbC
             .WhereIf(userId.HasValue, securityLog => securityLog.UserId == userId)
             .WhereIf(!userName.IsNullOrWhiteSpace(), securityLog => securityLog.UserName == userName)
             .WhereIf(!clientId.IsNullOrWhiteSpace(), securityLog => securityLog.ClientId == clientId)
-            .WhereIf(!correlationId.IsNullOrWhiteSpace(), securityLog => securityLog.CorrelationId == correlationId);
+            .WhereIf(!correlationId.IsNullOrWhiteSpace(), securityLog => securityLog.CorrelationId == correlationId)
+            .WhereIf(!clientIpAddress.IsNullOrWhiteSpace(), securityLog => securityLog.ClientIpAddress == clientIpAddress);
     }
 }

@@ -4,7 +4,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;net9.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;net9.0;net10.0</TargetFrameworks>
     <Nullable>enable</Nullable>
     <WarningsAsErrors>Nullable</WarningsAsErrors>
     <AssemblyName>Volo.Abp.IdentityModel</AssemblyName>
@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="IdentityModel" />
+    <PackageReference Include="Duende.IdentityModel" />
     <PackageReference Include="Microsoft.Extensions.Http" />
     <ProjectReference Include="..\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
     <ProjectReference Include="..\Volo.Abp.MultiTenancy\Volo.Abp.MultiTenancy.csproj" />

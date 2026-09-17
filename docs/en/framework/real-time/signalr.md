@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to easily integrate SignalR into your ABP Framework application using the ABP CLI for seamless real-time communication."
+}
+```
+
 # SignalR Integration
 
 > It is already possible to follow [the standard Microsoft tutorial](https://docs.microsoft.com/en-us/aspnet/core/tutorials/signalr) to add [SignalR](https://docs.microsoft.com/en-us/aspnet/core/signalr/introduction) to your application. However, ABP provides SignalR integration packages those simplify the integration and usage.
@@ -27,7 +34,7 @@ If you want to manually install;
 1. Add the [Volo.Abp.AspNetCore.SignalR](https://www.nuget.org/packages/Volo.Abp.AspNetCore.SignalR) NuGet package to your project:
 
    ```
-   Install-Package Volo.Abp.AspNetCore.SignalR
+   dotnet add package Volo.Abp.AspNetCore.SignalR
    ```
 
    Or use the Visual Studio NuGet package management UI to install it.
@@ -55,10 +62,8 @@ Client side installation depends on your UI framework / client type.
 Run the following command in the root folder of your web project:
 
 ```bash
-yarn add @abp/signalr
+abp add-package @abp/signalr
 ```
-
-> This requires to [install yarn](https://yarnpkg.com/) if you haven't install before.
 
 This will add the `@abp/signalr` to the dependencies in the `package.json` of your project:
 
@@ -215,6 +220,17 @@ app.UseConfiguredEndpoints(endpoints =>
     {
         options.LongPolling.PollTimeout = TimeSpan.FromSeconds(30);
     });
+});
+```
+
+### Dynamic Claims
+
+When [dynamic claims](../fundamentals/dynamic-claims.md) are enabled, ABP refreshes the principal when a client connects and periodically during hub method invocations. `AbpSignalROptions.CheckDynamicClaimsInterval` controls the minimum interval between invocation-time checks for a connection. The default is five seconds; set it to `null` to check on every invocation:
+
+```csharp
+Configure<AbpSignalROptions>(options =>
+{
+    options.CheckDynamicClaimsInterval = TimeSpan.FromMinutes(1);
 });
 ```
 

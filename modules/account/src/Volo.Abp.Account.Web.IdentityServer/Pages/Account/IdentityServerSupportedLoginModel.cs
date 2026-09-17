@@ -1,4 +1,4 @@
-using IdentityModel;
+using Duende.IdentityModel;
 using IdentityServer4.Events;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.DependencyInjection;
@@ -35,8 +36,9 @@ public class IdentityServerSupportedLoginModel : LoginModel
         IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
         IIdentityServerInteractionService interaction,
         IClientStore clientStore,
-        IEventService identityServerEvents)
-        : base(schemeProvider, accountOptions, identityOptions, identityDynamicClaimsPrincipalContributorCache)
+        IEventService identityServerEvents,
+        IWebHostEnvironment webHostEnvironment)
+        : base(schemeProvider, accountOptions, identityOptions, identityDynamicClaimsPrincipalContributorCache, webHostEnvironment)
     {
         Interaction = interaction;
         ClientStore = clientStore;
@@ -157,6 +159,23 @@ public class IdentityServerSupportedLoginModel : LoginModel
 
         if (result.IsNotAllowed)
         {
+            var notAllowedUser = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress) ??
+                                 await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress);
+            if (notAllowedUser != null)
+            {
+                using (CurrentTenant.Change(notAllowedUser.TenantId))
+                {
+                    await IdentityOptions.SetAsync();
+                    if ((notAllowedUser.ShouldChangePasswordOnNextLogin ||
+                            await UserManager.ShouldPeriodicallyChangePasswordAsync(notAllowedUser)) &&
+                        !await UserManager.CheckPasswordAsync(notAllowedUser, LoginInput.Password))
+                    {
+                        Alerts.Danger(L["InvalidUserNameOrPassword"]);
+                        return Page();
+                    }
+                }
+            }
+
             Alerts.Warning(L["LoginIsNotAllowed"]);
             return Page();
         }

@@ -11,6 +11,7 @@
     "InvalidUsername": "Ógilt notendanafn eða lykilorð!",
     "InvalidAuthenticatorCode": "Ógildur auðkenningarkóði!",
     "InvalidRecoveryCode": "Ógildur endurheimtarkóði!",
-    "TheTargetUserIsNotLinkedToYou": "Marknotandinn er ekki tengdur þér!"
+    "TheTargetUserIsNotLinkedToYou": "Marknotandinn er ekki tengdur þér!",
+    "ClientResourcePermissionProviderKeyLookupService": "Biðlari"
   }
 }

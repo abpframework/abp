@@ -68,6 +68,8 @@
     "AccessDenied": "Aðgangi hafnað!",
     "AccessDeniedMessage": "Þú hefur ekki aðgang að þessari auðlind.",
     "OrRegisterWith": "Eða skráðu þig með:",
-    "RegisterUsingYourProviderAccount": "Skráðu þig með {0} aðganginum þínum"
+    "RegisterUsingYourProviderAccount": "Skráðu þig með {0} aðganginum þínum",
+    "RequireMigrateSeedTitle": "Ekki tókst að finna stjórnandann",
+    "RequireMigrateSeedMessage": "Vinsamlegast gakktu úr skugga um að gagnagrunnsfræið sé keyrt. Sjá <a target=\"_blank\" href=\"https://abp.io/kb/0003\">fylgiskjöl</a> fyrir mögulegar lausnir."
   }
 }

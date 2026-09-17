@@ -16,6 +16,13 @@ public interface IBlogRepository : IBasicRepository<Blog, Guid>
         CancellationToken cancellationToken = default
         );
 
+    Task<List<BlogWithBlogPostCount>> GetListWithBlogPostCountAsync(
+        string filter = null,
+        string sorting = null,
+        int maxResultCount = int.MaxValue,
+        int skipCount = 0,
+        CancellationToken cancellationToken = default);
+
     Task<long> GetCountAsync(
         string filter = null,
         CancellationToken cancellationToken = default

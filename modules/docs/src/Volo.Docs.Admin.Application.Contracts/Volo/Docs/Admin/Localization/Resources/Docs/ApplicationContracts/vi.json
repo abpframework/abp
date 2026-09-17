@@ -57,6 +57,18 @@
     "LastCachedTime": "Thời gian lưu vào bộ nhớ đệm",
     "Project": "Dự án",
     "AdvancedFilters": "Bộ lọc nâng cao",
-    "RemoveCacheAndReIndexConfirmation": "Tài liệu &quot;{0}&quot; sẽ bị xóa khỏi bộ đệm và được lập chỉ mục lại. Bạn có xác nhận không?"
+    "RemoveCacheAndReIndexConfirmation": "Tài liệu &quot;{0}&quot; sẽ bị xóa khỏi bộ đệm và được lập chỉ mục lại. Bạn có xác nhận không?",
+    "GeneratePdf": "Tạo PDF",
+    "Generating": "Đang tạo...",
+    "Language": "Ngôn ngữ",
+    "ForceToGenerateNewPdf": "Tạo PDF mới",
+    "PdfGeneratedSuccessfully": "PDF đã được tạo thành công",
+    "GenerateAndDownloadPdf": "Tạo và tải xuống PDF",
+    "PdfFileDeletionWarningMessage": "Bạn có chắc chắn muốn xóa tệp PDF \"{0}\" không?",
+    "ManagePdfFiles": "Quản lý tệp PDF",
+    "Permission:ManagePdfFiles": "Quản lý tệp PDF",
+    "PdfDeletedSuccessfully": "Tệp PDF đã được xóa thành công",
+    "PdfGenerationStarted": "Bắt đầu tạo PDF",
+    "PdfGenerationStartedInfoMessage": "Quá trình tạo PDF đã bắt đầu. Sau khi hoàn thành, bạn có thể kiểm tra xem tệp đã được thêm vào phần tệp PDF chưa."
   }
 }

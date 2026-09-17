@@ -1,6 +1,13 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enable user impersonation in ABP Framework to perform actions on behalf of users securely, enhancing tenant management."
+}
+```
+
 # Tenant impersonation & User impersonation
 
-User impersonation allows you to temporarily sign in as a different user in your tenant's users. This article introduces how to enable impersonation in ABP. Impersonation is enabled by defautl in ABP v5.0 and above.
+User impersonation allows you to temporarily sign in as a different user in your tenant's users. This article introduces how to enable impersonation in ABP. Impersonation is enabled by default in ABP v5.0 and above.
 
 ## Introduction
 
@@ -71,7 +78,7 @@ No need to do anything here.
 #### Web
 
 1. Depends `AbpAccountPublicWebImpersonationModule(Volo.Abp.Account.Pro.Public.Web.Impersonation)` on your `WebModule`
-2. Chnage the base class of `AccountController` to `AbpAccountImpersonationChallengeAccountController`
+2. Change the base class of `AccountController` to `AbpAccountImpersonationChallengeAccountController`
 
 ```cs
 public class AccountController : AbpAccountImpersonationChallengeAccountController
@@ -197,7 +204,7 @@ No need to do anything here.
 
 1. Depends `AbpAccountPublicWebImpersonationModule(Volo.Abp.Account.Pro.Public.Web.Impersonation)` and `AbpAccountPublicBlazorServerModule(Volo.Abp.Account.Pro.Public.Blazor.Server)` on your `BlazorModule`
 
-2. Chnage the base class of `AccountController` to `AbpAccountImpersonationChallengeAccountController`
+2. Change the base class of `AccountController` to `AbpAccountImpersonationChallengeAccountController`
 ```cs
 public class AccountController : AbpAccountImpersonationChallengeAccountController
 {
@@ -301,7 +308,7 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 #### Web
 
 1. Depends `AbpAccountPublicWebImpersonationModule(Volo.Abp.Account.Pro.Public.Web.Impersonation)` on your `WebModule`
-2. Chnage the base class of `AccountController` to `AbpAccountImpersonationChallengeAccountController`
+2. Change the base class of `AccountController` to `AbpAccountImpersonationChallengeAccountController`
 
 ```cs
 public class AccountController : AbpAccountImpersonationChallengeAccountController
@@ -367,7 +374,7 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 
 1. Depends `AbpAccountPublicWebImpersonationModule(Volo.Abp.Account.Pro.Public.Web.Impersonation)` and `AbpAccountPublicBlazorServerModule(Volo.Abp.Account.Pro.Public.Blazor.Server)` on your `BlazorModule`
 
-2. Chnage the base class of `AccountController` to `AbpAccountImpersonationChallengeAccountController`
+2. Change the base class of `AccountController` to `AbpAccountImpersonationChallengeAccountController`
 ```cs
 public class AccountController : AbpAccountImpersonationChallengeAccountController
 {

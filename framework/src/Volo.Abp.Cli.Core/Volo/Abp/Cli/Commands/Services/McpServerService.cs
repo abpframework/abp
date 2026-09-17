@@ -1,0 +1,181 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using ModelContextProtocol.Protocol;
+using ModelContextProtocol.Server;
+using Volo.Abp.Cli.Commands.Models;
+using Volo.Abp.DependencyInjection;
+
+namespace Volo.Abp.Cli.Commands.Services;
+
+public class McpServerService : ITransientDependency
+{
+    private const string LogSource = nameof(McpServerService);
+    private const int MaxLogResponseLength = 500;
+    
+    private static readonly JsonSerializerOptions JsonCamelCaseOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+    
+    private static class ToolErrorMessages
+    {
+        public const string InvalidResponseFormat = "The tool execution completed but returned an invalid response format. Please try again.";
+        public const string UnexpectedError = "The tool execution failed due to an unexpected error. Please try again later.";
+    }
+    
+    private readonly McpHttpClientService _mcpHttpClient;
+    private readonly McpToolsCacheService _toolsCacheService;
+    private readonly IMcpLogger _mcpLogger;
+
+    public McpServerService(
+        McpHttpClientService mcpHttpClient,
+        McpToolsCacheService toolsCacheService,
+        IMcpLogger mcpLogger)
+    {
+        _mcpHttpClient = mcpHttpClient;
+        _toolsCacheService = toolsCacheService;
+        _mcpLogger = mcpLogger;
+    }
+
+    public async Task RunAsync(CancellationToken cancellationToken = default)
+    {
+        _mcpLogger.Info(LogSource, "Starting ABP MCP Server (stdio)");
+
+        var options = new McpServerOptions();
+
+        await RegisterAllToolsAsync(options);
+
+        // Use NullLoggerFactory to prevent ModelContextProtocol library from logging to stdout
+        // All our logging goes to file and stderr via IMcpLogger
+        var server = McpServer.Create(
+            new StdioServerTransport("abp-mcp-server", NullLoggerFactory.Instance),
+            options
+        );
+
+        await server.RunAsync(cancellationToken);
+
+        _mcpLogger.Info(LogSource, "ABP MCP Server stopped");
+    }
+
+    private async Task RegisterAllToolsAsync(McpServerOptions options)
+    {
+        // Get tool definitions from cache (or fetch from server)
+        var toolDefinitions = await _toolsCacheService.GetToolDefinitionsAsync();
+
+        _mcpLogger.Info(LogSource, $"Registering {toolDefinitions.Count} tools");
+
+        // Register each tool dynamically
+        foreach (var toolDef in toolDefinitions)
+        {
+            RegisterToolFromDefinition(options, toolDef);
+        }
+    }
+
+    private void RegisterToolFromDefinition(McpServerOptions options, McpToolDefinition toolDef)
+    {
+        var inputSchema = toolDef.InputSchema ?? new McpToolInputSchema();
+        RegisterTool(options, toolDef.Name, toolDef.Description, inputSchema, toolDef.OutputSchema);
+    }
+
+    private static CallToolResult CreateErrorResult(string errorMessage)
+    {
+        return new CallToolResult
+        {
+            Content = new List<ContentBlock>
+            {
+                new TextContentBlock
+                {
+                    Text = errorMessage
+                }
+            },
+            IsError = true
+        };
+    }
+
+    private void RegisterTool(
+        McpServerOptions options,
+        string name,
+        string description,
+        object inputSchema,
+        JsonElement? outputSchema)
+    {
+        if (options.ToolCollection == null)
+        {
+            options.ToolCollection = new McpServerPrimitiveCollection<McpServerTool>();
+        }
+
+        var tool = new AbpMcpServerTool(
+            name,
+            description,
+            JsonSerializer.SerializeToElement(inputSchema, JsonCamelCaseOptions),
+            outputSchema,
+            (context, cancellationToken) => HandleToolInvocationAsync(name, context, cancellationToken)
+        );
+
+        options.ToolCollection.Add(tool);
+    }
+
+    private async ValueTask<CallToolResult> HandleToolInvocationAsync(
+        string toolName,
+        RequestContext<CallToolRequestParams> context,
+        CancellationToken cancellationToken)
+    {
+        _mcpLogger.Debug(LogSource, $"Tool '{toolName}' called with arguments: {context.Params.Arguments}");
+
+        try
+        {
+            var argumentsJson = JsonSerializer.SerializeToElement(context.Params.Arguments);
+            var resultJson = await _mcpHttpClient.CallToolAsync(toolName, argumentsJson);
+
+            var callToolResult = TryDeserializeResult(resultJson, toolName);
+            if (callToolResult != null)
+            {
+                LogToolResult(toolName, callToolResult);
+                return callToolResult;
+            }
+
+            return CreateErrorResult(ToolErrorMessages.InvalidResponseFormat);
+        }
+        catch (Exception ex)
+        {
+            _mcpLogger.Error(LogSource, $"Tool '{toolName}' execution failed '{ex.Message}'", ex);
+            return CreateErrorResult(ToolErrorMessages.UnexpectedError);
+        }
+    }
+
+    private CallToolResult TryDeserializeResult(string resultJson, string toolName)
+    {
+        try
+        {
+            return JsonSerializer.Deserialize<CallToolResult>(resultJson);
+        }
+        catch (Exception ex)
+        {
+            _mcpLogger.Error(LogSource, $"Failed to deserialize response as CallToolResult: {ex.Message}");
+            
+            var logResponse = resultJson.Length <= MaxLogResponseLength 
+                ? resultJson 
+                : resultJson.Substring(0, MaxLogResponseLength);
+            _mcpLogger.Debug(LogSource, $"Response was: {logResponse}");
+            
+            return null;
+        }
+    }
+
+    private void LogToolResult(string toolName, CallToolResult result)
+    {
+        if (result.IsError == true)
+        {
+            _mcpLogger.Warning(LogSource, $"Tool '{toolName}' returned an error");
+        }
+        else
+        {
+            _mcpLogger.Debug(LogSource, $"Tool '{toolName}' executed successfully");
+        }
+    }
+}

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Authorization.Permissions.Resources;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Identity;
@@ -12,13 +13,19 @@ public class RoleUpdateEventHandler :
 {
     protected IPermissionManager PermissionManager { get; }
     protected IPermissionGrantRepository PermissionGrantRepository { get; }
+    protected IResourcePermissionManager ResourcePermissionManager { get; }
+    protected IResourcePermissionGrantRepository ResourcePermissionGrantRepository { get; }
 
     public RoleUpdateEventHandler(
         IPermissionManager permissionManager,
-        IPermissionGrantRepository permissionGrantRepository)
+        IPermissionGrantRepository permissionGrantRepository,
+        IResourcePermissionManager resourcePermissionManager,
+        IResourcePermissionGrantRepository resourcePermissionGrantRepository)
     {
         PermissionManager = permissionManager;
         PermissionGrantRepository = permissionGrantRepository;
+        ResourcePermissionManager = resourcePermissionManager;
+        ResourcePermissionGrantRepository = resourcePermissionGrantRepository;
     }
 
     public async Task HandleEventAsync(IdentityRoleNameChangedEto eventData)
@@ -27,6 +34,12 @@ public class RoleUpdateEventHandler :
         foreach (var permissionGrant in permissionGrantsInRole)
         {
             await PermissionManager.UpdateProviderKeyAsync(permissionGrant, eventData.Name);
+        }
+
+        var resourcePermissionGrantsInRole = await ResourcePermissionGrantRepository.GetListAsync(RoleResourcePermissionValueProvider.ProviderName, eventData.OldName);
+        foreach (var resourcePermissionGrant in resourcePermissionGrantsInRole)
+        {
+            await ResourcePermissionManager.UpdateProviderKeyAsync(resourcePermissionGrant, eventData.Name);
         }
     }
 }

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Join the ABP community! This guide outlines how to contribute code and articles to enhance the ABP Framework."
+}
+```
+
 # Contribution Guide
 
 ABP is an [open source](https://github.com/abpframework) and community driven project. This guide is aims to help anyone wants to contribute to the project.
@@ -49,6 +56,12 @@ This is the recommended approach, since it automatically finds all missing texts
 ### Manual Translation
 
 If you want to make a change on a specific resource file, you can find the file yourself, make the necessary change (or create a new file for your language) and send a pull request on GitHub.
+
+### Commercial Modules
+
+The commercial modules are not open source, and their localization files are not available in the public repository. The open-source module, `Account`, and the commercial module, `Account.Pro`, may have different translations. 
+
+If you would like to translate a commercial module, please [create an issue](https://github.com/abpframework/abp/issues/new) on Github, and we will provide the necessary files (`abp-translation.json` for one or all modules).
 
 ## Bug Report
 

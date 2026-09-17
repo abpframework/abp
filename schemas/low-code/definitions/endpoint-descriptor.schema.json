@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "endpoint-descriptor.schema.json",
+  "title": "Custom Endpoint Descriptor",
+  "description": "Defines a custom HTTP endpoint that executes server-side JavaScript code.",
+  "markdownDescription": "AI guidance: use custom endpoints for model-owned actions and lightweight APIs. `name` must be unique within its app. `route` should start with `/api/` and must not conflict with another route/method. Use `{id}` style path parameters when needed. With `routeScope: \"app\"` the route is published beneath `/api/low-code/apps/<app>/endpoints` instead of verbatim. Scripts can access request data through the endpoint context and return HTTP results with helpers such as `context.ok(value)`, `context.created(value)`, and `context.noContent()` where available. Require authentication by default. Authorization is resolved in order: `requiredPermissions` when non-empty, otherwise `useResourceAuthorization: true` (per-endpoint resource permission), otherwise `requireAuthentication`.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional schema reference used when this descriptor is stored as a model descriptor file."
+    },
+    "name": {
+      "type": "string",
+      "description": "Unique endpoint identifier used by designer/model health. Prefer PascalCase or kebab-case, for example 'SearchCustomers'.",
+      "minLength": 1
+    },
+    "app": {
+      "type": "string",
+      "description": "Name of the low-code app that owns this endpoint. Omit for the default app. Must match an apps[].name.",
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "route": {
+      "type": "string",
+      "description": "URL route pattern. Must start with '/' and should use an application-specific prefix such as '/api/low-code/events/{id}'. Route parameters use ASP.NET style braces, for example '{id}'. With routeScope 'app', this is appended to the app endpoint prefix.",
+      "minLength": 1,
+      "pattern": "^/"
+    },
+    "routeScope": {
+      "type": "string",
+      "description": "'global' publishes route unchanged. 'app' publishes it beneath '/api/low-code/apps/<app>/endpoints'. Does not change ownership, authentication, or permissions.",
+      "enum": ["global", "app"],
+      "default": "global"
+    },
+    "method": {
+      "type": "string",
+      "description": "HTTP method. GET should be read-only; POST/PUT/PATCH/DELETE may mutate state. Values are normalized to upper-case.",
+      "enum": ["GET", "POST", "PUT", "DELETE", "PATCH"],
+      "default": "GET"
+    },
+    "javascript": {
+      "type": "string",
+      "description": "JavaScript code to execute. Use context request/response helpers and services exposed by the host, such as db, currentUser/currentTenant, authorization, emailSender, config, http, event bus, background jobs, and logging helpers.",
+      "minLength": 1
+    },
+    "requireAuthentication": {
+      "type": "boolean",
+      "description": "Whether authentication is required. Keep true unless this endpoint is intentionally public.",
+      "default": true
+    },
+    "useResourceAuthorization": {
+      "type": "boolean",
+      "description": "When true and requiredPermissions is empty, access is granted per endpoint name through the generated ABP resource permission for this endpoint (with the global Low-Code endpoint permission as fallback). When requiredPermissions contains values, those permissions are checked instead.",
+      "default": false
+    },
+    "requiredPermissions": {
+      "type": "array",
+      "description": "Permission names required to access the endpoint. Permission checks imply authorization even when requireAuthentication is false. Values should reference custom permissions or known static permissions.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional human-readable description for designer documentation and model health context."
+    },
+    "extendsLowerLayer": {
+      "type": "boolean",
+      "description": "When true, this descriptor overrides selected fields of an endpoint with the same name defined in a lower model layer; route and javascript become optional.",
+      "default": false
+    },
+    "metadata": {
+      "$ref": "descriptor-metadata.schema.json"
+    }
+  },
+  "required": ["name"],
+  "if": {
+    "properties": { "extendsLowerLayer": { "const": true } },
+    "required": ["extendsLowerLayer"]
+  },
+  "then": {},
+  "else": {
+    "required": ["route", "javascript"]
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "name": "SearchCustomers",
+      "route": "/api/low-code/customers/search",
+      "method": "GET",
+      "requireAuthentication": true,
+      "requiredPermissions": ["Acme.Customers.View"],
+      "javascript": "var q = context.request.query.q || ''; var table = await db.query('Acme.Crm.Customer'); var rows = await table.where(c => c.Name.toLowerCase().includes(q.toLowerCase())).take(10).toList(); return context.ok(rows);"
+    },
+    {
+      "name": "GetPipelineSummary",
+      "app": "crm",
+      "route": "/pipeline/summary",
+      "routeScope": "app",
+      "method": "GET",
+      "useResourceAuthorization": true,
+      "javascript": "return context.ok({ generatedAt: new Date().toISOString() });"
+    }
+  ]
+}

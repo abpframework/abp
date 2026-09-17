@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover the ABP 4.2 Migration Guide to enhance performance with new repository features and leverage LINQ for efficient data queries."
+}
+```
+
 # ABP version 4.2 Migration Guide
 
 This version has no breaking changes but there is an important change on the repositories that should be applied for your application for an important performance and scalability gain.

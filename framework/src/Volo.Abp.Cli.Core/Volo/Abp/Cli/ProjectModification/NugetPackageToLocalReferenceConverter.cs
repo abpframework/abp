@@ -141,6 +141,11 @@ public class NugetPackageToLocalReferenceConverter : ITransientDependency
 
     private static string[] GetProjectFilesUnder(string path)
     {
+        if (!Directory.Exists(path))
+        {
+            return [];
+        }
+        
         return Directory.GetFiles(path,
             "*.csproj",
             SearchOption.AllDirectories);

@@ -1,8 +1,7 @@
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Identity.EntityFrameworkCore;
@@ -23,38 +22,35 @@ namespace Volo.Abp.IdentityServer;
     )]
 public class AbpIdentityServerTestEntityFrameworkCoreModule : AbpModule
 {
+    private AbpUnitTestSqliteDatabase _database;
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        var sqliteConnection = CreateDatabaseAndGetConnection();
+        _database = new AbpUnitTestSqliteDatabase();
+        _database.CreateTables(
+            new IdentityDbContext(new DbContextOptionsBuilder<IdentityDbContext>().UseSqlite(_database.ConnectionString).Options),
+            new IdentityServerDbContext(new DbContextOptionsBuilder<IdentityServerDbContext>().UseSqlite(_database.ConnectionString).Options),
+            new PermissionManagementDbContext(new DbContextOptionsBuilder<PermissionManagementDbContext>().UseSqlite(_database.ConnectionString).Options));
+
+        Configure<AbpDbConnectionOptions>(options =>
+        {
+            options.ConnectionStrings.Default = _database.ConnectionString;
+        });
 
         Configure<AbpDbContextOptions>(options =>
         {
             options.Configure(abpDbContextConfigurationContext =>
             {
-                abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
+                abpDbContextConfigurationContext.UseSqlite();
             });
         });
 
         context.Services.AddAlwaysDisableUnitOfWorkTransaction();
     }
 
-    private static SqliteConnection CreateDatabaseAndGetConnection()
+    public override void OnApplicationShutdown(ApplicationShutdownContext context)
     {
-        var connection = new AbpUnitTestSqliteConnection("Data Source=:memory:");
-        connection.Open();
-
-        new IdentityDbContext(
-            new DbContextOptionsBuilder<IdentityDbContext>().UseSqlite(connection).Options
-        ).GetService<IRelationalDatabaseCreator>().CreateTables();
-
-        new IdentityServerDbContext(
-            new DbContextOptionsBuilder<IdentityServerDbContext>().UseSqlite(connection).Options
-        ).GetService<IRelationalDatabaseCreator>().CreateTables();
-
-        new PermissionManagementDbContext(
-            new DbContextOptionsBuilder<PermissionManagementDbContext>().UseSqlite(connection).Options
-        ).GetService<IRelationalDatabaseCreator>().CreateTables();
-
-        return connection;
+        _database?.Dispose();
     }
+
 }

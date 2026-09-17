@@ -67,7 +67,44 @@
     {
       "namespace": "Volo.Blogging.EntityFrameworkCore",
       "connectionStringName": "Blogging",
-      "databaseTables": [],
+      "databaseTables": [
+        {
+          "entityFullName": "Volo.Blogging.Users.BlogUser",
+          "contentType": "databaseTable",
+          "name": "Users",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Blogging.Blogs.Blog",
+          "contentType": "databaseTable",
+          "name": "Blogs",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Blogging.Posts.Post",
+          "contentType": "databaseTable",
+          "name": "Posts",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Blogging.Tagging.Tag",
+          "contentType": "databaseTable",
+          "name": "Tags",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Blogging.Posts.PostTag",
+          "contentType": "databaseTable",
+          "name": "PostTags",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Blogging.Comments.Comment",
+          "contentType": "databaseTable",
+          "name": "Comments",
+          "summary": null
+        }
+      ],
       "replacedDbContexts": [],
       "modelBuilderExtensionMethods": [
         {

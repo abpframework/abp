@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to extend existing entities in ABP Framework modules by adding new properties seamlessly across the entire system."
+}
+```
+
 # Module Entity Extensions
 
 Module entity extension system is a **high level** extension system that allows you to **define new properties** for existing entities of the depended modules. It automatically **adds properties to the entity, database, HTTP API and the user interface** in a single point.
@@ -151,6 +158,17 @@ property =>
 
 > Tip: Use `DefaultValueFactory` option only if the default value may change over the time (like `DateTime.Now` in this example). If it is a constant value, then use the `DefaultValue` option.
 
+### DataTypeAttribute
+
+`DataTypeAttribute` is used to specify the type of the property. It is used to determine how to render the property on the user interface:
+
+```csharp
+property =>
+{
+    property.Attributes.Add(new DataTypeAttribute(DataType.Date));
+}
+```
+
 ### Validation
 
 Entity extension system allows you to define validation for extension properties in a few ways.
@@ -254,6 +272,33 @@ property =>
 ````
 
 Use `property.UI.OnCreateForm` and `property.UI.OnEditForm` to control forms too. If a property is required, but not added to the create form, you definitely get a validation exception, so use this option carefully. But a required property may not be in the edit form if that's your requirement.
+
+### Conditional Availability
+
+An extension property can carry global-feature, tenant-feature and permission policies. Policy-aware object-extension consumers use this metadata to decide whether the property is available for the current application and user.
+
+The following example requires either of two permissions:
+
+````csharp
+property =>
+{
+    property.Policy.Permissions.PermissionNames =
+    [
+        "MyProject.Users.Manage",
+        "MyProject.Users.ManageExtendedProfile"
+    ];
+}
+````
+
+The available policy groups are:
+
+* `Policy.GlobalFeatures.Features` for application-wide global features.
+* `Policy.Features.Features` for the current tenant's features.
+* `Policy.Permissions.PermissionNames` for the current principal's permissions.
+
+`RequiresAll` is `false` by default for each group, so any configured name in that group is sufficient. Set the corresponding `RequiresAll` property to `true` to require every name. When more than one group is configured, every configured group must pass. An empty group imposes no restriction.
+
+These policies do not replace the `UI` and `Api` availability options. They add current feature and permission checks to consumers that evaluate extension-property policies.
 
 ### UI Order
 

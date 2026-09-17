@@ -1,0 +1,22 @@
+@using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Components
+@using Volo.Abp.Ui.LayoutHooks
+@using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Components.LayoutHooks
+@inherits LayoutComponentBase
+@using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Layout
+
+<MudThemeProvider />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudMainContent>
+        <LayoutHook Name="@LayoutHooks.Body.First" Layout="@StandardLayouts.Empty" />
+        @Body
+        <LayoutHook Name="@LayoutHooks.Body.Last" Layout="@StandardLayouts.Empty" />
+        <DynamicLayoutComponent />
+        <UiMessageAlert />
+        <UiNotificationAlert />
+        <UiPageProgress />
+    </MudMainContent>
+</MudLayout>

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the `abp.features` JavaScript API to access and manage feature values in your ASP.NET Core applications."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages UI: JavaScript Features API
 
 `abp.features` API allows you to check features or get the values of the features on the client side. You can read the current value of a feature in the client side only if it is allowed by the feature definition (on the server side).

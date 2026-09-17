@@ -27,4 +27,6 @@ public class MenuItemCreateInput : ExtensibleObject
     public string CssClass { get; set; }
 
     public Guid? PageId { get; set; }
+    
+    public string RequiredPermissionName { get; set; }
 }

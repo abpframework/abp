@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { concat, Observable, of, pipe, throwError } from 'rxjs';
 import { delay, retryWhen, shareReplay, take, tap } from 'rxjs/operators';
 import { LoadingStrategy } from '../strategies';
@@ -8,9 +8,9 @@ import { ResourceWaitService } from './resource-wait.service';
   providedIn: 'root',
 })
 export class LazyLoadService {
-  readonly loaded = new Map<string, HTMLScriptElement | HTMLLinkElement | null>();
+  private resourceWaitService = inject(ResourceWaitService);
 
-  constructor(private resourceWaitService: ResourceWaitService) {}
+  readonly loaded = new Map<string, HTMLScriptElement | HTMLLinkElement | null>();
 
   load(strategy: LoadingStrategy, retryTimes?: number, retryDelay?: number): Observable<Event> {
     if (this.loaded.has(strategy.path)) return of(new CustomEvent('load'));

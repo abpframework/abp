@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/demo/">
+    <Project Path="demo/Volo.ClientSimulation.Demo/Volo.ClientSimulation.Demo.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Volo.ClientSimulation.Web/Volo.ClientSimulation.Web.csproj" />
+    <Project Path="src/Volo.ClientSimulation/Volo.ClientSimulation.csproj" />
+  </Folder>
+</Solution>

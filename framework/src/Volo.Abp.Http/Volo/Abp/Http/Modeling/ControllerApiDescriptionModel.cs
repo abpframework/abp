@@ -19,6 +19,14 @@ public class ControllerApiDescriptionModel
 
     public string Type { get; set; } = default!;
 
+    public string? Summary { get; set; }
+
+    public string? Remarks { get; set; }
+
+    public string? Description { get; set; }
+
+    public string? DisplayName { get; set; }
+
     public List<ControllerInterfaceApiDescriptionModel> Interfaces { get; set; } = default!;
 
     public Dictionary<string, ActionApiDescriptionModel> Actions { get; set; } = default!;
@@ -66,6 +74,14 @@ public class ControllerApiDescriptionModel
             Type = Type,
             Interfaces = Interfaces,
             ControllerName = ControllerName,
+            ControllerGroupName = ControllerGroupName,
+            IsRemoteService = IsRemoteService,
+            IsIntegrationService = IsIntegrationService,
+            ApiVersion = ApiVersion,
+            Summary = Summary,
+            Remarks = Remarks,
+            Description = Description,
+            DisplayName = DisplayName,
             Actions = new Dictionary<string, ActionApiDescriptionModel>()
         };
 

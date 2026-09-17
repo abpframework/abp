@@ -1,5 +1,6 @@
 ﻿@page
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
 @model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.CarouselsModel
 @{
     ViewData["Title"] = "Carousels";
@@ -266,3 +267,6 @@
     </div>
 </div>
 
+<hr />
+
+@await Component.InvokeAsync("TagHelperProperties", typeof(AbpCarouselTagHelper))

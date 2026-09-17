@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the ABP Microservice solution, including core microservices like Administration and Identity, to kickstart your scalable applications."
+}
+```
+
 # Microservice Solution: The Microservices
 
 ````json
@@ -12,7 +19,7 @@
 
 > You must have an ABP Business or a higher license to be able to create a microservice solution.
 
-The ABP Studio Microservice solution consists of a few microservices at the beginning. It is expected that you [add more microservices](guides/add-new-microservice.md) as your solution grows. This document briefly explains the structure of pre-built microservices in the solution.
+The ABP Studio Microservice solution consists of a few microservices at the beginning. It is expected that you [add more microservices](adding-new-microservices.md) as your solution grows. This document briefly explains the structure of pre-built microservices in the solution.
 
 The microservice count varies based on the options you've selected during the solution creation. However, the following microservices are always included:
 
@@ -41,7 +48,7 @@ Let's explain the projects:
 * `Acme.CloudCrm.AdministrationService.Contracts` contains service interfaces and data transfer objects of your service. It is useful to separate contracts. In this way, you can share the *Contracts* package with the clients, so they can easily consume your services. See the [communication](communication.md) document to learn how to do it.
 * `Acme.CloudCrm.AdministrationService.Tests` contains the unit and integration tests for that microservice. While it is highly suggested to build tests for your services, you can delete that project if you don't want to write tests.
 
-> We haven't applied **layering** for the pre-built microservices, because they don't include much code and no need for such complexity. Microservices should be small (micro!) services, so you typically can manage your codebase in a single project/layer. However, if you want to implement layering for your microservices, you can create a layered microservice by following the *[Adding New Microservice](guides/add-new-microservice.md)* guide.
+> We haven't applied **layering** for the pre-built microservices, because they don't include much code and no need for such complexity. Microservices should be small (micro!) services, so you typically can manage your codebase in a single project/layer. However, if you want to implement layering for your microservices, you can create a layered microservice by following the *[Adding New Microservice](adding-new-microservices.md)* guide.
 
 Next sections introduces and explains the pre-build services of the solution.
 

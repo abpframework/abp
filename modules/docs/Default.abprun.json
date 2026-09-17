@@ -1,0 +1,11 @@
+{
+  "metadata": {},
+  "applications": {
+    "VoloDocs.Web": {
+      "type": "dotnet-project",
+      "path": "app/VoloDocs.Web/VoloDocs.Web.csproj",
+      "launchUrl": "https://localhost:5001",
+      "kubernetesService": null
+    }
+  }
+}

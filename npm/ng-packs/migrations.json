@@ -2,83 +2,129 @@
   "migrations": [
     {
       "cli": "nx",
-      "version": "19.2.0-beta.2",
-      "description": "Updates the default workspace data directory to .nx/workspace-data",
-      "implementation": "./src/migrations/update-19-2-0/move-workspace-data-directory",
+      "version": "22.6.0-beta.10",
+      "description": "Adds .claude/worktrees to .gitignore",
+      "implementation": "./dist/src/migrations/update-22-6-0/add-claude-worktrees-to-git-ignore",
       "package": "nx",
-      "name": "19-2-0-move-graph-cache-directory"
+      "name": "22-6-1-add-claude-worktrees-to-git-ignore"
     },
     {
       "cli": "nx",
-      "version": "19.2.2-beta.0",
-      "description": "Updates the nx wrapper.",
-      "implementation": "./src/migrations/update-17-3-0/update-nxw",
+      "version": "22.7.0-beta.0",
+      "description": "Adds .nx/polygraph to .gitignore",
+      "implementation": "./dist/src/migrations/update-22-7-0/add-polygraph-to-git-ignore",
       "package": "nx",
-      "name": "19-2-2-update-nx-wrapper"
+      "name": "22-7-0-add-polygraph-to-git-ignore"
     },
     {
-      "version": "19.2.4-beta.0",
-      "description": "Set project name in nx.json explicitly",
-      "implementation": "./src/migrations/update-19-2-4/set-project-name",
-      "x-repair-skip": true,
+      "cli": "nx",
+      "version": "22.6.0-rc.0",
+      "description": "Adds .claude/settings.local.json to .gitignore",
+      "implementation": "./dist/src/migrations/update-17-3-0/update-nxw",
       "package": "nx",
-      "name": "19-2-4-set-project-name"
+      "name": "22-6-0-add-claude-settings-local-to-git-ignore"
     },
     {
       "cli": "nx",
-      "version": "19.1.0-beta.6",
-      "description": "Migrate no-extra-semi rules into user config, out of nx extendable configs",
-      "implementation": "./src/migrations/update-19-1-0-migrate-no-extra-semi/migrate-no-extra-semi",
-      "package": "@nx/eslint-plugin",
-      "name": "update-19-1-0-rename-no-extra-semi"
+      "version": "22.7.0-beta.0",
+      "description": "Adds .nx/self-healing to .gitignore",
+      "implementation": "./dist/src/migrations/update-22-2-0/add-self-healing-to-gitignore",
+      "package": "nx",
+      "name": "22-7-0-add-self-healing-to-gitignore"
     },
     {
-      "cli": "nx",
-      "version": "19.1.0-beta.2",
-      "requires": { "@angular/core": ">=18.0.0" },
-      "description": "Update the @angular/cli package version to ~18.0.0.",
-      "factory": "./src/migrations/update-19-1-0/update-angular-cli",
+      "version": "22.3.2-beta.0",
+      "requires": {
+        "@angular/build": ">=21.0.0"
+      },
+      "description": "Create AI Instructions to help migrate users workspaces past breaking changes for Vitest 4.",
+      "implementation": "./src/migrations/update-22-1-0/create-ai-instructions-for-vitest-4",
+      "package": "@nx/vitest",
+      "name": "update-22-3-2"
+    },
+    {
+      "version": "22.6.0-beta.11",
+      "description": "Prefix reportsDirectory with {projectRoot} to maintain correct resolution after workspace-root-relative behavior change.",
+      "implementation": "./src/migrations/update-22-6-0/prefix-reports-directory-with-project-root",
+      "package": "@nx/vitest",
+      "name": "update-22-6-0-prefix-reports-directory"
+    },
+    {
+      "version": "22.7.0-beta.12",
+      "description": "Add missing inputs to @nx/eslint:lint executor target defaults",
+      "implementation": "./src/migrations/update-21-6-0/update-executor-lint-inputs",
+      "package": "@nx/eslint",
+      "name": "update-executor-lint-inputs"
+    },
+    {
+      "version": "22.3.2-beta.0",
+      "requires": {
+        "jest": ">=30.0.0"
+      },
+      "description": "Replace removed matcher aliases in Jest v30 with their corresponding matcher",
+      "implementation": "./src/migrations/update-21-3-0/replace-removed-matcher-aliases",
+      "package": "@nx/jest",
+      "name": "replace-removed-matcher-aliases-v22-3"
+    },
+    {
+      "version": "22.3.0-beta.0",
+      "requires": {
+        "@angular/core": ">=21.0.0"
+      },
+      "description": "Updates webpack-based SSR configuration to use preserve module format and bundler module resolution.",
+      "factory": "./src/migrations/update-22-3-0/update-ssr-webpack-config",
       "package": "@nx/angular",
-      "name": "update-angular-cli-version-18-0-0"
+      "name": "update-ssr-webpack-config-22-2-0"
     },
     {
-      "cli": "nx",
-      "version": "19.2.1-beta.0",
-      "requires": { "@angular-eslint/eslint-plugin": ">=18.0.0" },
-      "description": "Installs the '@typescript-eslint/utils' package when having installed '@angular-eslint/eslint-plugin' or '@angular-eslint/eslint-plugin-template' with version >=18.0.0.",
-      "factory": "./src/migrations/update-19-2-1/add-typescript-eslint-utils",
+      "version": "22.3.0-beta.0",
+      "requires": {
+        "@angular/core": ">=21.0.0-rc.3"
+      },
+      "description": "Update 'module' to 'preserve' and 'moduleResolution' to 'bundler' in TypeScript configurations for Angular projects.",
+      "factory": "./src/migrations/update-22-3-0/update-module-resolution",
       "package": "@nx/angular",
-      "name": "add-typescript-eslint-utils"
+      "name": "update-module-resolution-22-2-0"
     },
     {
-      "cli": "nx",
-      "version": "19.5.0-beta.1",
-      "requires": { "@angular/core": ">=18.1.0" },
-      "description": "Update the @angular/cli package version to ~18.1.0.",
-      "factory": "./src/migrations/update-19-5-0/update-angular-cli",
+      "version": "22.3.0-beta.0",
+      "requires": {
+        "@angular/core": ">=21.0.0"
+      },
+      "description": "Updates the 'lib' property in tsconfig files to use 'es2022' or a more modern version.",
+      "factory": "./src/migrations/update-22-3-0/update-typescript-lib",
       "package": "@nx/angular",
-      "name": "update-angular-cli-version-18-1-0"
+      "name": "update-typescript-lib-22-2-0"
     },
     {
-      "version": "18.0.0",
-      "description": "Updates two-way bindings that have an invalid expression to use the longform expression instead.",
-      "factory": "./migrations/invalid-two-way-bindings/bundle",
-      "package": "@angular/core",
-      "name": "invalid-two-way-bindings"
+      "version": "22.3.0-beta.0",
+      "requires": {
+        "@angular/core": ">=21.0.0"
+      },
+      "description": "Update 'vitest' unit test runner option to 'vitest-analog' in generator defaults.",
+      "factory": "./src/migrations/update-22-3-0/update-unit-test-runner-option",
+      "package": "@nx/angular",
+      "name": "update-unit-test-runner-option"
     },
     {
-      "version": "18.0.0",
-      "description": "Replace deprecated HTTP related modules with provider functions",
-      "factory": "./migrations/http-providers/bundle",
-      "package": "@angular/core",
-      "name": "migration-http-providers"
+      "version": "22.3.0-beta.3",
+      "requires": {
+        "@angular/core": ">=21.0.0"
+      },
+      "description": "Set 'isolatedModules' to 'true' in TypeScript test configurations for Angular projects.",
+      "factory": "./src/migrations/update-22-3-0/set-isolated-modules",
+      "package": "@nx/angular",
+      "name": "set-isolated-modules-22-3-0"
     },
     {
-      "version": "18.1.0",
-      "description": "Updates calls to afterRender with an explicit phase to the new API",
-      "factory": "./migrations/after-render-phase/bundle",
-      "package": "@angular/core",
-      "name": "migration-after-render-phase"
+      "version": "22.3.0-beta.3",
+      "requires": {
+        "@angular/core": ">=21.0.0"
+      },
+      "description": "Replace 'jest-preset-angular/setup-jest' imports with the new 'setupZoneTestEnv' function.",
+      "factory": "./src/migrations/update-22-3-0/update-jest-preset-angular-setup",
+      "package": "@nx/angular",
+      "name": "update-jest-preset-angular-setup"
     }
   ]
 }

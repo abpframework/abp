@@ -8,6 +8,7 @@ namespace Volo.Abp.EntityFrameworkCore.DistributedEvents;
 
 public class OutgoingEventRecord :
     BasicAggregateRoot<Guid>,
+    IOutgoingEventInfo,
     IHasExtraProperties,
     IHasCreationTime
 {

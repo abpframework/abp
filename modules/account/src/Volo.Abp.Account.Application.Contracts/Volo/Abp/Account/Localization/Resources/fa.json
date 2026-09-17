@@ -66,6 +66,8 @@
     "AccessDenied": "دسترسی ممنوع!",
     "AccessDeniedMessage": "شما به این منبع دسترسی ندارید.",
     "OrRegisterWith": "یا ثبت نام کنید با:",
-    "RegisterUsingYourProviderAccount": "با استفاده از حساب {0} خود ثبت نام کنید"
+    "RegisterUsingYourProviderAccount": "با استفاده از حساب {0} خود ثبت نام کنید",
+    "RequireMigrateSeedTitle": "کاربر مدیر پیدا نشد",
+    "RequireMigrateSeedMessage": "لطفاً اطمینان حاصل کنید که seed پایگاه داده اجرا شده است. برای راه‌حل‌های ممکن <a target=\"_blank\" href=\"https://abp.io/kb/0003\">مستندات</a> را ببینید."
   }
 }

@@ -1,3 +1,14 @@
 {
-  "role": "lib.mvc"
+  "role": "lib.mvc",
+  "proxies": {
+    "Javascript": {
+      "VoloDocs.Web-docs-admin": {
+        "applicationName": "VoloDocs.Web",
+        "module": "docs-admin",
+        "url": "https://localhost:5001",
+        "output": "wwwroot/client-proxies/",
+        "serviceType": "application"
+      }
+    }
+  }
 }

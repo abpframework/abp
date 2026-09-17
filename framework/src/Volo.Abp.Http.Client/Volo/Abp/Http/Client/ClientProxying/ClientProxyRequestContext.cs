@@ -11,14 +11,14 @@ public class ClientProxyRequestContext
     public ActionApiDescriptionModel Action { get; }
 
     [NotNull]
-    public IReadOnlyDictionary<string, object> Arguments { get; }
+    public IReadOnlyDictionary<string, object?> Arguments { get; }
 
     [NotNull]
     public Type ServiceType { get; }
 
     public ClientProxyRequestContext(
         [NotNull] ActionApiDescriptionModel action,
-        [NotNull] IReadOnlyDictionary<string, object> arguments,
+        [NotNull] IReadOnlyDictionary<string, object?> arguments,
         [NotNull] Type serviceType)
     {
         ServiceType = serviceType;

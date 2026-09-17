@@ -1,20 +1,22 @@
 using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Bundling;
+using Volo.Abp.AspNetCore.Bundling.Scripts;
 using Volo.Abp.Minify.Scripts;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.Scripts;
 
-public class ScriptBundler : BundlerBase, IScriptBundler
+public class ScriptBundler : MvcUiBundlerBase, IScriptBundler
 {
     public override string FileExtension => "js";
 
     public ScriptBundler(
-        IWebHostEnvironment hostEnvironment,
+        IWebHostEnvironment hostingEnvironment,
         IJavascriptMinifier minifier,
         IOptions<AbpBundlingOptions> bundlingOptions)
         : base(
-            hostEnvironment,
+            hostingEnvironment,
             minifier,
             bundlingOptions)
     {

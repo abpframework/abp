@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to switch your DBMS for Entity Framework Core in ABP Framework, allowing flexibility to choose your preferred database solution."
+}
+```
+
 # Switch to Another DBMS for Entity Framework Core
 
 [ABP CLI](../../../cli/index.md) provides a `-dbms` option to allow you to choose your Database Management System (DBMS) while creating a new solution. It accepts the following values:

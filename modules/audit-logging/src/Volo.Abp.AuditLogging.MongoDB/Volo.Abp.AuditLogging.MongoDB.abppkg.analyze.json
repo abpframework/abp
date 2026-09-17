@@ -73,6 +73,12 @@
           "contentType": "databaseCollection",
           "name": "AuditLogs",
           "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.AuditLogging.AuditLogExcelFile",
+          "contentType": "databaseCollection",
+          "name": "AuditLogExcelFiles",
+          "summary": null
         }
       ],
       "implementingInterfaces": [

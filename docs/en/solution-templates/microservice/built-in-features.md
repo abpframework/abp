@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the built-in features of the ABP Microservice Solution template to effectively build and manage distributed systems."
+}
+```
+
 # Microservice Solution: Built-In Features
 
 > You must have an ABP Business or a higher license to be able to create a microservice solution.

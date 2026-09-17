@@ -4,6 +4,12 @@ A new .NET version was released on November 14, 2023 and ABP 8.0 RC.1 shipped ba
 
 Despite all the related dependency upgrades and changes made on the ABP Framework and ABP Commercial sides, we still need to make some changes. Let's see the required actions that need to be taken in the following sections.
 
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
+
 ## Installing the .NET 8.0 SDK
 
 To get started with ASP.NET Core in .NET 8.0, you need to install the .NET 8 SDK. You can install it at [https://dotnet.microsoft.com/en-us/download/dotnet/8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0). 
@@ -99,3 +105,9 @@ After that, you need to check the migration guide documents, listed below:
 That's it! These were all the related steps that need to be taken to upgrade your application to .NET 8 and ABP 8.0. Now, you can enjoy the .NET 8 & ABP 8.0 and benefit from the performance improvements and new features.
 
 Happy Coding 🤗
+
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using MongoDB.Bson.Serialization;
-using MongoDB.Bson.Serialization.Serializers;
 using Shouldly;
 using Volo.Abp.TestApp.Domain;
 using Volo.Abp.TestApp.Testing;
@@ -12,41 +9,16 @@ using Xunit;
 
 namespace Volo.Abp.MongoDB.Serializer;
 
-[Collection(MongoTestCollection.Name)]
+
 public abstract class MongoDB_DateTimeKind_Tests : DateTimeKind_Tests<AbpMongoDbTestModule>
 {
-    protected override void AfterAddApplication(IServiceCollection services)
+    protected override void AfterInitialize()
     {
-        // MongoDB uses static properties to store the mapping information,
-        // We must reconfigure it in the new unit test.
-        foreach (var registeredClassMap in BsonClassMap.GetRegisteredClassMaps())
-        {
-            foreach (var declaredMemberMap in registeredClassMap.DeclaredMemberMaps)
-            {
-                var serializer = declaredMemberMap.GetSerializer();
-                switch (serializer)
-                {
-                    case AbpMongoDbDateTimeSerializer dateTimeSerializer:
-                        dateTimeSerializer.SetDateTimeKind(Kind);
-                        break;
-                    case NullableSerializer<DateTime> nullableSerializer:
-                        {
-                            var lazySerializer = nullableSerializer.GetType()
-                                ?.GetField("_lazySerializer", BindingFlags.NonPublic | BindingFlags.Instance)
-                                ?.GetValue(serializer)?.As<Lazy<IBsonSerializer<DateTime>>>();
-
-                            if (lazySerializer?.Value is AbpMongoDbDateTimeSerializer dateTimeSerializer)
-                            {
-                                dateTimeSerializer.SetDateTimeKind(Kind);
-                            }
-                            break;
-                        }
-                }
-            }
-        }
+        UnitTestSerializerHelper.FixSerializers(Kind);
     }
 }
 
+[Collection(MongoTestCollection.Name)]
 public class DateTimeKindTests_Unspecified : MongoDB_DateTimeKind_Tests
 {
     protected override void AfterAddApplication(IServiceCollection services)
@@ -87,6 +59,11 @@ public class DisableDateTimeKindTests : TestAppTestBase<AbpMongoDbTestModule>
     public DisableDateTimeKindTests()
     {
         PersonRepository = GetRequiredService<IPersonRepository>();
+    }
+
+    protected override void AfterInitialize()
+    {
+        UnitTestSerializerHelper.FixSerializers(null);
     }
 
     protected override void AfterAddApplication(IServiceCollection services)

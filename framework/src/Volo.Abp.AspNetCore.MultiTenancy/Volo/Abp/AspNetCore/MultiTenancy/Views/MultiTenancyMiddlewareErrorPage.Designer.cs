@@ -42,10 +42,10 @@ using Volo.Abp.AspNetCore.RazorViews;
 #nullable disable
             WriteLiteral("\n");
             WriteLiteral("\n<html");
-            BeginWriteAttribute("lang", " lang=\"", 453, "\"", 512, 1);
+            BeginWriteAttribute("lang", " lang=\"", 453, "\"", 492, 1);
 #nullable restore
 #line 19 "MultiTenancyMiddlewareErrorPage.cshtml"
-WriteAttributeValue("", 460, HtmlEncoder.Encode(CultureInfo.CurrentCulture.Name), 460, 52, false);
+WriteAttributeValue("", 460, CultureInfo.CurrentCulture.Name, 460, 32, false);
 
 #line default
 #line hidden
@@ -54,7 +54,7 @@ WriteAttributeValue("", 460, HtmlEncoder.Encode(CultureInfo.CurrentCulture.Name)
             WriteLiteral(">\n    <head>\n        <meta charset=\"utf-8\" />\n        <title>");
 #nullable restore
 #line 22 "MultiTenancyMiddlewareErrorPage.cshtml"
-          Write(HtmlEncoder.Encode(Model.Message));
+          Write(Model.Message);
 
 #line default
 #line hidden
@@ -62,7 +62,7 @@ WriteAttributeValue("", 460, HtmlEncoder.Encode(CultureInfo.CurrentCulture.Name)
             WriteLiteral("</title>\n    </head>\n    <body>\n        <h3>");
 #nullable restore
 #line 25 "MultiTenancyMiddlewareErrorPage.cshtml"
-       Write(HtmlEncoder.Encode(Model.Message));
+       Write(Model.Message);
 
 #line default
 #line hidden
@@ -70,7 +70,7 @@ WriteAttributeValue("", 460, HtmlEncoder.Encode(CultureInfo.CurrentCulture.Name)
             WriteLiteral("</h3>\n        <p>");
 #nullable restore
 #line 26 "MultiTenancyMiddlewareErrorPage.cshtml"
-      Write(HtmlEncoder.Encode(Model.Details));
+      Write(Model.Details);
 
 #line default
 #line hidden

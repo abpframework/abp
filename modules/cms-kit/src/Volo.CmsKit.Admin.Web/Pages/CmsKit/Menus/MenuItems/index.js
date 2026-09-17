@@ -263,11 +263,21 @@ $(function () {
                         },
 
                         sort: function (node1, node2) {
-                           if (this.get_node(node2).original.order < this.get_node(node1).original.order) {
-                               return 1;
-                           }
-
-                           return -1;
+                            const node1Data = this.get_node(node1).original;
+                            const node2Data = this.get_node(node2).original;
+                            if (node1Data.parentId === null && node2Data.parentId !== null) {
+                                return -1;
+                            }
+                            if (node1Data.parentId !== null && node2Data.parentId === null) {
+                                return 1;
+                            }
+                            if (node1Data.order < node2Data.order) {
+                                return -1;
+                            }
+                            if (node1Data.order > node2Data.order) {
+                                return 1;
+                            }
+                            return 0;
                         },
 
                         plugins: [

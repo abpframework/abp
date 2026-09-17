@@ -1,14 +1,15 @@
+```json
+//[doc-seo]
+{
+    "Description": "Compare ABP Framework and ASP.NET Zero features to make informed decisions for your next project with this insightful guide."
+}
+```
+
 # ABP vs ASP.NET Zero
 
 [ASP.NET Zero](https://aspnetzero.com/) is a startup project template which is also developed by [Volosoft](https://volosoft.com/). Here you can see the feature differences between ASP.NET Zero and ABP Platform (with commercial licenses).
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-
-<head>
-<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-</head>
-<body>
+ABP is generally better suited to modular monolith and microservice architectures. ASP.NET Zero is a more opinionated, ready-made application foundation.
 
 <table id="TemplateComparisonTable" class="table">
         <thead>
@@ -26,6 +27,11 @@
                 <td>Base Framework</td>
                 <td><a href="https://github.com/abpframework/abp/" target="_blank"> ABP</a></td>
                 <td><a href="https://github.com/aspnetboilerplate/aspnetboilerplate" target="_blank">AspNet Boilerplate</a></td>
+            </tr>
+            <tr>
+                <td>.NET Version</td>
+                <td>.NET 10</td>
+                <td>.NET 10</td>
             </tr>
             <tr>
                 <td>Microservice compatible</td>
@@ -76,9 +82,14 @@
                 <td><i class="fa fa-check text-success"></i></td>
             </tr>
             <tr>
-                <td>Blazor UI</td>
+                <td>Blazor UI (Blazorise, MudBlazor)</td>
                 <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-minus text-secondary"></i></td>
+            </tr>
+            <tr>
+                <td>React UI</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
             </tr>
             <tr>
                 <td colspan="3"><strong>User Interface (Account / Login)</strong></td>
@@ -181,7 +192,7 @@
             <tr>
                 <td>OpenIddict integration</td>
                 <td><i class="fa fa-check text-success"></i></td>
-                <td><i class="fa fa-minus text-false"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
             </tr>
             <tr>
                 <td>Identity Server Management UI</td>
@@ -192,6 +203,11 @@
                 <td>Password complexity settings</td>
                 <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-check text-success"></i></td>
+            </tr>
+            <tr>
+                <td>Passkeys</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
             </tr>
             <tr>
                 <td colspan="3"><strong>User Interface (Application)</strong></td>
@@ -340,6 +356,71 @@
                 <td>GDPR (downloading personal data & deleting accounts)</td>
                 <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-check text-success"></i></td>
+            </tr>
+            <tr>
+                <td>User Idle Session Timeout</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
+            </tr>
+            <tr>
+                <td>Comment section for pages</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
+            </tr>
+            <tr>
+                <td>Dynamic FAQ page</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
+            </tr>
+            <tr>
+                <td>Feedback system</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
+            </tr>
+            <tr>
+                <td>Desktop tool for monitoring and orchestrating projects</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
+            </tr>
+            <tr>
+                <td>AI Management UI</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
+            </tr>
+            <tr>
+                <td>AI Support Bot</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
+            </tr>
+            <tr>
+                <td>Bunny BLOB Storage Provider</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
+            </tr>
+            <tr>
+                <td>Google Cloud BLOB Storage Provider</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
+            </tr>
+            <tr>
+                <td>User Registration Email Verification</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
+            </tr>
+            <tr>
+                <td>Angular SSR</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
+            </tr>
+            <tr>
+                <td>Mapperly integration</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
+            </tr>
+            <tr>
+                <td>Elsa workflow integration</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
             </tr>                
             <tr>
                 <td>UI Theme</td>
@@ -358,11 +439,6 @@
                 <td colspan="3"><strong>Mobile Application</strong></td>
             </tr>
             <tr>
-                <td>Xamarin application</td>
-                <td><i class="fa fa-minus text-secondary"></i></td>
-                <td><i class="fa fa-check text-success"></i></td>
-            </tr>
-            <tr>
                 <td>React Native application</td>
                 <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-minus text-secondary"></i></td>
@@ -373,12 +449,32 @@
                 <td><i class="fa fa-check text-success"></i></td>
             </tr>
             <tr>
+                <td>.NET MAUI Code generation</td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
+            </tr>
+            <tr>
+                <td>.NET MAUI QR Login</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
+            </tr>
+            <tr>
+                <td>.NET MAUI Dark mode</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
+            </tr>
+            <tr>
                 <td colspan="3"><strong>Rapid Application Development</strong></td>
             </tr>
             <tr>
                 <td>Code generation extension</td>
                 <td><a href="https://abp.io/docs/latest/suite" target="_blank">ABP Suite</a></td>
                 <td><a href="https://docs.aspnetzero.com/en/common/latest/Rapid-Application-Development" target="_blank">Power Tools</a></td>
+            </tr>
+            <tr>
+                <td>AI Agent</td>
+                <td><a href="https://abp.io/studio/ai-agent" target="_blank">ABP Studio AI Agent</a></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
             </tr>
             <tr>
                 <td colspan="3"><strong>Support</strong></td>
@@ -394,6 +490,11 @@
                 <td><i class="fa fa-check text-success"></i></td>
             </tr>
             <tr>
+                <td>AI Support alongside human support</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-minus text-secondary"></i></td>
+            </tr>
+            <tr>
                 <td>&nbsp;</td>
                 <td><a href="https://abp.io/pricing" target="_blank" rel="noopener">Pricing</a></td>
                 <td><a href="https://aspnetzero.com/Pricing">Pricing</a></td>
@@ -401,7 +502,36 @@
         </tbody>
     </table>
 
+## Licensing, delivery, and AI
 
-</body>
-
-</html>
+<table class="table" style="table-layout: fixed; width: 100%;">
+    <colgroup>
+        <col style="width: 22%;" />
+        <col style="width: 39%;" />
+        <col style="width: 39%;" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>Topic</th>
+            <th>ABP</th>
+            <th>ASP.NET Zero</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>License model</td>
+            <td>Developer seats + feature tier. After the license period, you can keep developing and deploying existing projects; renewal mainly covers updates, support, ABP Suite and ABP Studio, and creating new projects.</td>
+            <td>Per product/project capacity (a defined number of products and developers). The app can be used indefinitely; renewal mainly covers updates, support, repository access, and tools.</td>
+        </tr>
+        <tr>
+            <td>Source code</td>
+            <td>Open-source framework; commercial modules/tooling as private NuGet/NPM packages. Module source download depends on the plan. Self-hosted with no Volosoft runtime dependency; ABP.io does not host your application source.</td>
+            <td>Full application source. Self-hosted with no Volosoft runtime dependency.</td>
+        </tr>
+        <tr>
+            <td>AI-assisted development</td>
+            <td>Works with Copilot and similar tools on normal source repositories. Also ABP Studio AI Agent, ABP-oriented workflows, and MCP tool connections (ABP Studio AI Agent can connect to MCP servers).</td>
+            <td>Works with Copilot and similar tools on normal source repositories. Primarily IDE-based AI, with product rules, skills, and workflow instructions from the license.</td>
+        </tr>
+    </tbody>
+</table>

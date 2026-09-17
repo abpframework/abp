@@ -15,6 +15,7 @@ using Volo.Abp.Http.Client.Proxying;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Json;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.Http.Client.ClientProxying;
 
@@ -33,13 +34,19 @@ public class ClientProxyRequestPayloadBuilder : ITransientDependency
 
     protected AbpHttpClientProxyingOptions HttpClientProxyingOptions { get; }
 
-    public ClientProxyRequestPayloadBuilder(IServiceScopeFactory serviceScopeFactory, IOptions<AbpHttpClientProxyingOptions> httpClientProxyingOptions)
+    protected IClock Clock { get; }
+
+    public ClientProxyRequestPayloadBuilder(
+        IServiceScopeFactory serviceScopeFactory,
+        IOptions<AbpHttpClientProxyingOptions> httpClientProxyingOptions,
+        IClock clock)
     {
         ServiceScopeFactory = serviceScopeFactory;
+        Clock = clock;
         HttpClientProxyingOptions = httpClientProxyingOptions.Value;
     }
 
-    public virtual async Task<HttpContent?> BuildContentAsync(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, IJsonSerializer jsonSerializer, ApiVersionInfo apiVersion)
+    public virtual async Task<HttpContent?> BuildContentAsync(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object?> methodArguments, IJsonSerializer jsonSerializer, ApiVersionInfo apiVersion)
     {
         var body = await GenerateBodyAsync(action, methodArguments, jsonSerializer);
         if (body != null)
@@ -52,7 +59,7 @@ public class ClientProxyRequestPayloadBuilder : ITransientDependency
         return body;
     }
 
-    protected virtual Task<HttpContent?> GenerateBodyAsync(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments, IJsonSerializer jsonSerializer)
+    protected virtual Task<HttpContent?> GenerateBodyAsync(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object?> methodArguments, IJsonSerializer jsonSerializer)
     {
         var parameters = action
             .Parameters
@@ -80,7 +87,7 @@ public class ClientProxyRequestPayloadBuilder : ITransientDependency
         return Task.FromResult<HttpContent?>(new StringContent(jsonSerializer.Serialize(value), Encoding.UTF8, MimeTypes.Application.Json));
     }
 
-    protected virtual async Task<HttpContent?> GenerateFormPostDataAsync(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object> methodArguments)
+    protected virtual async Task<HttpContent?> GenerateFormPostDataAsync(ActionApiDescriptionModel action, IReadOnlyDictionary<string, object?> methodArguments)
     {
         var parameters = action
             .Parameters
@@ -156,12 +163,12 @@ public class ClientProxyRequestPayloadBuilder : ITransientDependency
             {
                 foreach (var item in (IEnumerable) value)
                 {
-                    formData.Add(new StringContent(item.ToString()!, Encoding.UTF8), parameter.Name);
+                    formData.Add(new StringContent(await ConvertValueToStringAsync(item), Encoding.UTF8), parameter.Name);
                 }
             }
             else
             {
-                formData.Add(new StringContent(value.ToString()!, Encoding.UTF8), parameter.Name);
+                formData.Add(new StringContent(await ConvertValueToStringAsync(value), Encoding.UTF8), parameter.Name);
             }
         }
 
@@ -171,5 +178,20 @@ public class ClientProxyRequestPayloadBuilder : ITransientDependency
     protected virtual async Task<List<KeyValuePair<string, HttpContent>>> ObjectToFormDataAsync<T>(IObjectToFormData<T> converter, ActionApiDescriptionModel actionApiDescription, ParameterApiDescriptionModel parameterApiDescription, T value)
     {
         return await converter.ConvertAsync(actionApiDescription, parameterApiDescription, value);
+    }
+
+    protected virtual Task<string> ConvertValueToStringAsync(object value)
+    {
+        if (value is DateTime dateTimeValue)
+        {
+            if (Clock.SupportsMultipleTimezone || dateTimeValue.Kind == DateTimeKind.Utc)
+            {
+                return Task.FromResult(dateTimeValue.ToUniversalTime().ToString("O"));
+            }
+
+            return Task.FromResult(dateTimeValue.ToString("yyyy-MM-ddTHH:mm:ss.fffffff").TrimEnd('0').TrimEnd('.'));
+        }
+
+        return Task.FromResult(value.ToString()!);
     }
 }

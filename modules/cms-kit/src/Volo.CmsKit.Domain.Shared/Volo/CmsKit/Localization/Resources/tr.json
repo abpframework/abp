@@ -89,7 +89,9 @@
     "Permission:BlogPostManagement.Publish": "Yayınlama",
     "Permission:CmsKit": "CmsKit Admin",
     "Permission:Comments": "Yorum Yönetimi",
-    "Permission:Comments.Delete": "Silmek",
+    "Permission:Comments.Delete": "Sil",
+    "Permission:Comments.Update": "Güncelle",
+    "Permission:Comments.SettingManagement": "Ayar Yönetimi",
     "Permission:Contents": "İçerik Yönetimi",
     "Permission:Contents.Create": "İçerik Oluşturma",
     "Permission:Contents.Delete": "İçerik Silme",
@@ -218,6 +220,13 @@
     "CaptchaCode": "Captcha kodu",
     "CommentTextRequired": "Yorum zorunlu",
     "PopularTags": "Popüler Etiketler",
-    "ThisPartOfContentCouldntBeLoaded": "Bu içerik yüklenemedi"
+    "ThisPartOfContentCouldntBeLoaded": "Bu içerik yüklenemedi",
+    "ChooseAnActionForBlog": "Blog için bir eylem seçin",
+    "AssignBlogPostsToOtherBlog": "Diğer bloglara blog yazıları atayın",
+    "SelectAnBlogToAssign": "Atanacak bir blog seçin",
+    "DeleteAllBlogPostsOfThisBlog": "Bu blogun tüm blog yazılarını sil",
+    "RequiredPermissionName": "Gerekli izin adı",
+    "AllPosts": "Tüm gönderiler",
+    "IsReadOnly": "Salt okunur"
   }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.Timing;
@@ -16,22 +18,28 @@ public class DefaultBackgroundJobManager : IBackgroundJobManager, ITransientDepe
     protected IBackgroundJobSerializer Serializer { get; }
     protected IGuidGenerator GuidGenerator { get; }
     protected IBackgroundJobStore Store { get; }
+    protected IOptions<AbpBackgroundJobOptions> BackgroundJobOptions { get; }
+    protected IOptions<AbpBackgroundJobWorkerOptions> BackgroundJobWorkerOptions { get; }
 
     public DefaultBackgroundJobManager(
         IClock clock,
         IBackgroundJobSerializer serializer,
         IBackgroundJobStore store,
-        IGuidGenerator guidGenerator)
+        IGuidGenerator guidGenerator,
+        IOptions<AbpBackgroundJobOptions> backgroundJobOptions,
+        IOptions<AbpBackgroundJobWorkerOptions> backgroundJobWorkerOptions)
     {
         Clock = clock;
         Serializer = serializer;
         GuidGenerator = guidGenerator;
+        BackgroundJobOptions = backgroundJobOptions;
+        BackgroundJobWorkerOptions = backgroundJobWorkerOptions;
         Store = store;
     }
 
     public virtual async Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
     {
-        var jobName = BackgroundJobNameAttribute.GetName<TArgs>();
+        var jobName = BackgroundJobOptions.Value.GetBackgroundJobName(typeof(TArgs));
         var jobId = await EnqueueAsync(jobName, args!, priority, delay);
         return jobId.ToString();
     }
@@ -41,6 +49,7 @@ public class DefaultBackgroundJobManager : IBackgroundJobManager, ITransientDepe
         var jobInfo = new BackgroundJobInfo
         {
             Id = GuidGenerator.Create(),
+            ApplicationName = BackgroundJobWorkerOptions.Value.ApplicationName,
             JobName = jobName,
             JobArgs = Serializer.Serialize(args),
             Priority = priority,

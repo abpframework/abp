@@ -1,0 +1,7 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "Permission:DocumentManagement.Common": "通用文档管理",
+    "Permission:PdfDownload": "PDF下载"
+  }
+}

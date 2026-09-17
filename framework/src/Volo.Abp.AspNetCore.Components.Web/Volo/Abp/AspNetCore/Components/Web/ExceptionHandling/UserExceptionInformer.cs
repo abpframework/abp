@@ -8,6 +8,7 @@ using Volo.Abp.AspNetCore.Components.Messages;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
+using Volo.Abp.Http.Client;
 
 namespace Volo.Abp.AspNetCore.Components.Web.ExceptionHandling;
 
@@ -35,6 +36,8 @@ public class UserExceptionInformer : IUserExceptionInformer, IScopedDependency
     {
         //TODO: Create sync versions of the MessageService APIs.
 
+        LogException(context);
+
         var errorInfo = GetErrorInfo(context);
 
         if (errorInfo.Details.IsNullOrEmpty())
@@ -49,6 +52,8 @@ public class UserExceptionInformer : IUserExceptionInformer, IScopedDependency
 
     public async Task InformAsync(UserExceptionInformerContext context)
     {
+        LogException(context);
+
         var errorInfo = GetErrorInfo(context);
 
         if (errorInfo.Details.IsNullOrEmpty())
@@ -69,5 +74,15 @@ public class UserExceptionInformer : IUserExceptionInformer, IScopedDependency
             options.SendStackTraceToClients = Options.SendStackTraceToClients;
             options.SendExceptionDataToClientTypes = Options.SendExceptionDataToClientTypes;
         });
+    }
+
+    protected virtual void LogException(UserExceptionInformerContext context)
+    {
+        if (context.Exception is AbpRemoteCallException && OperatingSystem.IsBrowser())
+        {
+            return;
+        }
+
+        Logger.LogException(context.Exception);
     }
 }

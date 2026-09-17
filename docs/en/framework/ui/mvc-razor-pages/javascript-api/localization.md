@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to utilize the JavaScript Localization API in ABP Framework to access server-side localization resources on the client side."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages UI: JavaScript Localization API
 
 Localization API allows you to reuse the server side localization resources in the client side.

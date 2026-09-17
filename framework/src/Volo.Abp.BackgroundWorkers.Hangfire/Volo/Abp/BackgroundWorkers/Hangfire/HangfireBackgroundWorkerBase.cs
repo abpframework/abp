@@ -13,7 +13,7 @@ public abstract class HangfireBackgroundWorkerBase : BackgroundWorkerBase, IHang
 
     public TimeZoneInfo? TimeZone { get; set; } = TimeZoneInfo.Utc;
 
-    public string Queue { get; set; } = EnqueuedState.DefaultQueue;
+    public string Queue { get; set; } = default!;
 
     public abstract Task DoWorkAsync(CancellationToken cancellationToken = default);
 }

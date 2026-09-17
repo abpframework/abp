@@ -1,9 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
@@ -11,7 +10,6 @@ using Volo.Abp.ObjectExtending;
 using Volo.CmsKit.Admin.Menus;
 using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
-using Volo.CmsKit.Menus;
 
 namespace Volo.CmsKit.Admin.Web.Pages.CmsKit.Menus.MenuItems;
 
@@ -28,6 +26,8 @@ public class UpdateModalModel : CmsKitAdminPageModel
     public Guid Id { get; set; }
 
     public bool IsPageFeatureEnabled { get; set; }
+    
+    public IReadOnlyList<PermissionLookupDto> Permissions { get; set; }
 
     public UpdateModalModel(IMenuItemAdminAppService menuAdminAppService, IFeatureChecker featureChecker)
     {
@@ -39,7 +39,7 @@ public class UpdateModalModel : CmsKitAdminPageModel
     public async Task OnGetAsync()
     {
         var menuItemDto = await MenuAdminAppService.GetAsync(Id);
-
+        Permissions = (await MenuAdminAppService.GetPermissionLookupAsync(new PermissionLookupInputDto())).Items;
         IsPageFeatureEnabled = GlobalFeatureManager.Instance.IsEnabled<PagesFeature>()
             && await FeatureChecker.IsEnabledAsync(CmsKitFeatures.PageEnable);
 
@@ -76,6 +76,8 @@ public class UpdateModalModel : CmsKitAdminPageModel
         public Guid? PageId { get; set; }
 
         public string? PageTitle { get; set; }
+        
+        public string RequiredPermissionName { get; set; }
 
         [HiddenInput]
         public string ConcurrencyStamp { get; set; }

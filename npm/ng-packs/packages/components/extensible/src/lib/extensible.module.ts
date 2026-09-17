@@ -13,9 +13,11 @@ import {
   ExtensibleFormComponent,
   ExtensibleFormPropComponent,
   ExtensibleTableComponent,
+  ExtensibleTableRowDetailComponent,
   GridActionsComponent,
   PageToolbarComponent,
   ExtensibleDateTimePickerComponent,
+  ExtensibleFormMultiselectComponent,
 } from './components';
 import { PropDataDirective } from './directives/prop-data.directive';
 import { CreateInjectorPipe } from './pipes/create-injector.pipe';
@@ -31,7 +33,10 @@ const importWithExport = [
   CreateInjectorPipe,
   ExtensibleFormComponent,
   ExtensibleTableComponent,
+  ExtensibleTableRowDetailComponent,
+  ExtensibleFormMultiselectComponent,
 ];
+
 @NgModule({
   declarations: [],
   imports: [
@@ -47,4 +52,4 @@ const importWithExport = [
   ],
   exports: [...importWithExport],
 })
-export class ExtensibleModule {}
+export class ExtensibleModule { }

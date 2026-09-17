@@ -1,9 +1,12 @@
 import { ConfigStateService, LanguageInfo, SessionStateService } from '@abp/ng.core';
-import { Component } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { DOCUMENT, AsyncPipe } from '@angular/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-languages',
   template: `
     @if (((dropdownLanguages$ | async)?.length || 0) > 0) {
@@ -30,17 +33,22 @@ import { map } from 'rxjs/operators';
               href="javascript:void(0)"
               class="dropdown-item"
               (click)="onChangeLang(lang.cultureName || '')"
-              >{{ lang?.displayName }}</a
-            >
+              >{{ lang?.displayName }}
+            </a>
           }
         </div>
       </div>
     }
   `,
+  imports: [AsyncPipe, NgbDropdownModule],
 })
 export class LanguagesComponent {
+  private sessionState = inject(SessionStateService);
+  private configState = inject(ConfigStateService);
+  document = inject(DOCUMENT);
+
   get smallScreen(): boolean {
-    return window.innerWidth < 992;
+    return this.document.defaultView.innerWidth < 992;
   }
 
   languages$: Observable<LanguageInfo[]> = this.configState.getDeep$('localization.languages');
@@ -65,11 +73,6 @@ export class LanguagesComponent {
   get selectedLangCulture(): string {
     return this.sessionState.getLanguage();
   }
-
-  constructor(
-    private sessionState: SessionStateService,
-    private configState: ConfigStateService,
-  ) {}
 
   onChangeLang(cultureName: string) {
     this.sessionState.setLanguage(cultureName);

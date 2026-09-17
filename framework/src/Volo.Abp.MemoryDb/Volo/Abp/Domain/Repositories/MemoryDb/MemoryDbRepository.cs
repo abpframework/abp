@@ -50,6 +50,7 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity> : RepositoryBase<TEnt
     public IAuditPropertySetter AuditPropertySetter => LazyServiceProvider.LazyGetRequiredService<IAuditPropertySetter>();
 
     public MemoryDbRepository(IMemoryDatabaseProvider<TMemoryDbContext> databaseProvider)
+        : base(AbpMemoryDbConsts.ProviderName)
     {
         DatabaseProvider = databaseProvider;
     }
@@ -333,7 +334,7 @@ public class MemoryDbRepository<TMemoryDbContext, TEntity, TKey> : MemoryDbRepos
 
         if (entity == null)
         {
-            throw new EntityNotFoundException(typeof(TEntity), id);
+            throw new EntityNotFoundException<TEntity>(id);
         }
 
         return entity;

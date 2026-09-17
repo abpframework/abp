@@ -4,7 +4,7 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <WarningsAsErrors>Nullable</WarningsAsErrors>
         <AssemblyName>Volo.Abp.Swashbuckle</AssemblyName>
@@ -30,6 +30,8 @@
       <EmbeddedResource Include="wwwroot\swagger\ui\abp.swagger.js" />
       <None Remove="wwwroot\swagger\ui\abp.js" />
       <EmbeddedResource Include="wwwroot\swagger\ui\abp.js" />
+      <None Remove="wwwroot\swagger\oauth2-redirect.html" />
+      <EmbeddedResource Include="wwwroot\swagger\oauth2-redirect.html" />
     </ItemGroup>
 
 </Project>

@@ -90,6 +90,8 @@
     "Permission:CmsKit": "CmsKit",
     "Permission:Comments": "Управление комментариями",
     "Permission:Comments.Delete": "Удалить",
+    "Permission:Comments.Update": "Обновить",
+    "Permission:Comments.SettingManagement": "Управление настройками",
     "Permission:Contents": "Управление содержанием",
     "Permission:Contents.Create": "Создать контент",
     "Permission:Contents.Delete": "Удалить содержимое",
@@ -227,6 +229,13 @@
     "CssClass": "CSS-класс",
     "TagsHelpText": "Теги должны быть разделены запятыми (например: тег1, тег2, тег3).",
     "ThisPartOfContentCouldntBeLoaded": "Эта часть содержимого не может быть загружена.",
-    "DuplicateCommentAttemptMessage": "Обнаружена повторная попытка публикации комментария. Ваш комментарий уже отправлен."
+    "DuplicateCommentAttemptMessage": "Обнаружена повторная попытка публикации комментария. Ваш комментарий уже отправлен.",
+    "ChooseAnActionForBlog": "Выберите действие для блога",
+    "AssignBlogPostsToOtherBlog": "Назначить сообщения в блоге другому блогу",
+    "SelectAnBlogToAssign": "Выберите блог для назначения",
+    "DeleteAllBlogPostsOfThisBlog": "Удалить все сообщения в блоге этого блога",
+    "RequiredPermissionName": "Имя требуемого разрешения",
+    "AllPosts": "Все записи",
+    "IsReadOnly": "Только для чтения"
   }
 }

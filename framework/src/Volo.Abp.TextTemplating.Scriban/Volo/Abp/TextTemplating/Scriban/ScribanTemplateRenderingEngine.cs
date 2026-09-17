@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Localization;
@@ -13,6 +14,8 @@ public class ScribanTemplateRenderingEngine : TemplateRenderingEngineBase, ITran
 {
     public const string EngineName = "Scriban";
     public override string Name => EngineName;
+
+    public override bool IsSandboxed => true;
 
     public ScribanTemplateRenderingEngine(
         ITemplateDefinitionManager templateDefinitionManager,
@@ -30,13 +33,16 @@ public class ScribanTemplateRenderingEngine : TemplateRenderingEngineBase, ITran
     {
         Check.NotNullOrWhiteSpace(templateName, nameof(templateName));
 
-        if (globalContext == null)
-        {
-            globalContext = new Dictionary<string, object>();
-        }
+        // The rendering writes the culture context and the layout content into this dictionary, so it works
+        // on a copy: a caller reusing one instance would carry the values of a rendering into the next.
+        globalContext = globalContext == null
+            ? new Dictionary<string, object>()
+            : new Dictionary<string, object>(globalContext, globalContext.Comparer);
 
         if (cultureName == null)
         {
+            SetCultureContext(globalContext);
+
             return await RenderInternalAsync(
                 templateName,
                 globalContext,
@@ -47,6 +53,8 @@ public class ScribanTemplateRenderingEngine : TemplateRenderingEngineBase, ITran
         {
             using (CultureHelper.Use(cultureName))
             {
+                SetCultureContext(globalContext);
+
                 return await RenderInternalAsync(
                     templateName,
                     globalContext,
@@ -118,7 +126,10 @@ public class ScribanTemplateRenderingEngine : TemplateRenderingEngineBase, ITran
         Dictionary<string, object> globalContext,
         object? model = null)
     {
-        var context = new TemplateContext();
+        var context = new TemplateContext
+        {
+            MemberFilter = IsMemberAllowed
+        };
 
         var scriptObject = new ScriptObject();
 
@@ -139,5 +150,13 @@ public class ScribanTemplateRenderingEngine : TemplateRenderingEngineBase, ITran
         context.PushCulture(System.Globalization.CultureInfo.CurrentCulture);
 
         return context;
+    }
+
+    /// <summary>
+    /// Scriban member filter: only public properties on imported objects are exposed.
+    /// </summary>
+    protected virtual bool IsMemberAllowed(MemberInfo member)
+    {
+        return member is PropertyInfo;
     }
 }

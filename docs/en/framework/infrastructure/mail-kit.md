@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate MailKit with ABP Framework for efficient email sending and management in your .NET applications."
+}
+```
+
 # MailKit Integration
 
 [MailKit](http://www.mimekit.net/) is a cross-platform, popular open source mail client library for .net. ABP provides an integration package to use the MailKit as the [email sender](./emailing.md).
@@ -30,7 +37,7 @@ MailKit integration package uses the same settings defined by the email sending 
 
 In addition to the standard settings, this package defines `AbpMailKitOptions` as a simple [options](../fundamentals/options.md) class. This class defines only one options:
 
-* **SecureSocketOption**: Used to set one of the `SecureSocketOptions`. Default: `null` (uses the defaults).
+* **SecureSocketOption**: Used to set one of the `SecureSocketOptions`. The default is `null`. In that case, ABP uses `SslOnConnect` when the SMTP `EnableSsl` setting is `true`; otherwise, it uses `StartTlsWhenAvailable`.
 
 **Example: Use *SecureSocketOptions.SslOnConnect***
 

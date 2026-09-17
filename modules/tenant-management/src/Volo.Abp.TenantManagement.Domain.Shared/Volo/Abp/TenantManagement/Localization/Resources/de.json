@@ -16,7 +16,7 @@
     "Permission:Edit": "Bearbeiten",
     "Permission:Delete": "Löschen",
     "Permission:ManageConnectionStrings": "Connection Strings verwalten",
-    "Permission:ManageFeatures": "Features verwalten",
+    "Permission:ManageFeatures": "Funktionen",
     "DisplayName:AdminEmailAddress": "Admin-E-Mail-Adresse",
     "DisplayName:AdminPassword": "Admin-Passwort"
   }

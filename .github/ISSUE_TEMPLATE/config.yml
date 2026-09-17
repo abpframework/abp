@@ -1,4 +1,4 @@
-blank_issues_enabled: true
+blank_issues_enabled: false
 contact_links:
   - name: Issue with ABP Commercial
     url:  https://abp.io/support/questions

@@ -4,7 +4,7 @@ using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.Web.Menus;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
@@ -15,7 +15,7 @@ namespace MyCompanyName.MyProjectName.Web;
 [DependsOn(
     typeof(MyProjectNameApplicationContractsModule),
     typeof(AbpAspNetCoreMvcUiThemeSharedModule),
-    typeof(AbpAutoMapperModule)
+    typeof(AbpMapperlyModule)
     )]
 public class MyProjectNameWebModule : AbpModule
 {
@@ -44,11 +44,7 @@ public class MyProjectNameWebModule : AbpModule
             options.FileSets.AddEmbedded<MyProjectNameWebModule>();
         });
 
-        context.Services.AddAutoMapperObjectMapper<MyProjectNameWebModule>();
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddMaps<MyProjectNameWebModule>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<MyProjectNameWebModule>();
 
         Configure<RazorPagesOptions>(options =>
         {

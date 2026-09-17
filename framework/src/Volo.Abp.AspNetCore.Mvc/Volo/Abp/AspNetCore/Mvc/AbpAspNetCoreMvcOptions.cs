@@ -16,9 +16,9 @@ public class AbpAspNetCoreMvcOptions
 
     public bool ExposeIntegrationServices { get; set; } = false;
 
-    public bool AutoModelValidation { get; set; }
+    public bool ExposeClientProxyServices { get; set; } = false;
 
-    public bool EnableRazorRuntimeCompilationOnDevelopment { get; set; }
+    public bool AutoModelValidation { get; set; }
 
     public bool ChangeControllerModelApiExplorerGroupName { get; set; }
 
@@ -28,7 +28,6 @@ public class AbpAspNetCoreMvcOptions
         IgnoredControllersOnModelExclusion = new HashSet<Type>();
         ControllersToRemove = new HashSet<Type>();
         AutoModelValidation = true;
-        EnableRazorRuntimeCompilationOnDevelopment = true;
         ChangeControllerModelApiExplorerGroupName = true;
     }
 }

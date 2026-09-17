@@ -1,0 +1,11 @@
+@using Microsoft.Extensions.Localization
+@using Volo.CmsKit.Localization
+@using Volo.CmsKit.Web.Pages.CmsKit.Components.Comments
+@inject IStringLocalizer<CmsKitResource> L
+@model CmsKitCommentConfigurationViewModel
+
+<div>
+    <abp-input asp-for="EntityType" label="@L["EntityType"]" />
+    <abp-input asp-for="EntityId" label="@L["EntityId"]" />
+    <abp-input asp-for="IsReadOnly" label="@L["IsReadOnly"]" />
+</div>

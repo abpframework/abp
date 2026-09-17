@@ -17,6 +17,8 @@ public class TenantConfiguration
 
     public bool IsActive { get; set; }
 
+    public Guid? EditionId { get; set; }
+
     public TenantConfiguration()
     {
         IsActive = true;
@@ -33,11 +35,12 @@ public class TenantConfiguration
         ConnectionStrings = new ConnectionStrings();
     }
 
-    public TenantConfiguration(Guid id, [NotNull] string name, [NotNull] string normalizedName)
+    public TenantConfiguration(Guid id, [NotNull] string name, [NotNull] string normalizedName, Guid? editionId = null)
         : this(id, name)
     {
         Check.NotNull(normalizedName, nameof(normalizedName));
 
         NormalizedName = normalizedName;
+        EditionId = editionId;
     }
 }

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to implement toast notifications in Blazor UI with the `IUiNotificationService` for a better user experience."
+}
+```
+
 # Blazor UI: Notification Service
 
 `IUiNotificationService` is used to show toast style notifications on the user interface.

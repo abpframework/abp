@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using RabbitMQ.Client;
 using Volo.Abp.Json;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
@@ -17,21 +20,37 @@ public class AbpRabbitMqModule : AbpModule
         Configure<AbpRabbitMqOptions>(configuration.GetSection("RabbitMQ"));
         Configure<AbpRabbitMqOptions>(options =>
         {
-            foreach (var connectionFactory in options.Connections.Values)
+            var connectionsSection = configuration.GetSection("RabbitMQ:Connections");
+            foreach (var connection in options.Connections)
             {
-                connectionFactory.DispatchConsumersAsync = true;
+                var connectionSection = connectionsSection.GetSection(connection.Key);
+                connectionSection.GetSection(nameof(ConnectionFactory.Ssl)).Bind(connection.Value.Ssl);
+
+                var maxInboundMessageBodySize = connectionSection.GetValue<uint?>(
+                    nameof(ConnectionFactory.MaxInboundMessageBodySize));
+                if (maxInboundMessageBodySize.HasValue)
+                {
+                    connection.Value.MaxInboundMessageBodySize = maxInboundMessageBodySize.Value;
+                }
+
+                connection.Value.AutomaticRecoveryEnabled = false;
             }
         });
     }
 
     public override void OnApplicationShutdown(ApplicationShutdownContext context)
     {
-        context.ServiceProvider
-            .GetRequiredService<IChannelPool>()
-            .Dispose();
+        AsyncHelper.RunSync(() => OnApplicationShutdownAsync(context));
+    }
 
-        context.ServiceProvider
+    public async override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)
+    {
+        await context.ServiceProvider
+            .GetRequiredService<IChannelPool>()
+            .DisposeAsync();
+
+        await context.ServiceProvider
             .GetRequiredService<IConnectionPool>()
-            .Dispose();
+            .DisposeAsync();
     }
 }

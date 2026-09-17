@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore ABP Angular’s tools and utilities for seamless frontend development, enhancing your interactive web UIs with TypeScript and NodeJS."
+}
+```
+
 # Angular UI
 
 [Angular](https://angular.dev/) is a framework for building interactive, client-side web UIs using [TypeScript](https://www.typescriptlang.org) and [NodeJS](https://nodejs.org).

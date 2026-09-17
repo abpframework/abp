@@ -3,10 +3,12 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using RabbitMQ.Client;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.RabbitMQ;
 
@@ -15,6 +17,8 @@ public class ChannelPool : IChannelPool, ISingletonDependency
     protected IConnectionPool ConnectionPool { get; }
 
     protected ConcurrentDictionary<string, ChannelPoolItem> Channels { get; }
+
+    protected SemaphoreSlim Semaphore = new SemaphoreSlim(1, 1);
 
     protected bool IsDisposed { get; private set; }
 
@@ -29,16 +33,70 @@ public class ChannelPool : IChannelPool, ISingletonDependency
         Logger = NullLogger<ChannelPool>.Instance;
     }
 
-    public virtual IChannelAccessor Acquire(string? channelName = null, string? connectionName = null)
+    public virtual async Task<IChannelAccessor> AcquireAsync(string? channelName = null, string? connectionName = null)
     {
         CheckDisposed();
 
         channelName = channelName ?? "";
 
-        var poolItem = Channels.GetOrAdd(
-            channelName,
-            _ => new ChannelPoolItem(CreateChannel(channelName, connectionName))
-        );
+        ChannelPoolItem poolItem;
+
+        if (Channels.TryGetValue(channelName, out var existingChannelPoolItem))
+        {
+            poolItem = existingChannelPoolItem;
+        }
+        else
+        {
+            using (await Semaphore.LockAsync())
+            {
+                if (Channels.TryGetValue(channelName, out var existingChannelPoolItem2))
+                {
+                    poolItem = existingChannelPoolItem2;
+                }
+                else
+                {
+                    poolItem = new ChannelPoolItem(await CreateChannelAsync(channelName, connectionName));
+                    Channels.TryAdd(channelName, poolItem);
+                }
+            }
+        }
+
+        if (poolItem.Channel.IsClosed)
+        {
+            ChannelPoolItem? staleItem = null;
+            try
+            {
+                using (await Semaphore.LockAsync())
+                {
+                    if (Channels.TryGetValue(channelName, out var currentChannelPoolItem) &&
+                        ReferenceEquals(currentChannelPoolItem, poolItem))
+                    {
+                        staleItem = poolItem;
+                        Channels.TryRemove(channelName, out _);
+
+                        poolItem = new ChannelPoolItem(await CreateChannelAsync(channelName, connectionName));
+                        Channels.TryAdd(channelName, poolItem);
+                    }
+                    else if (currentChannelPoolItem != null)
+                    {
+                        poolItem = currentChannelPoolItem;
+                    }
+                    else
+                    {
+                        poolItem = new ChannelPoolItem(await CreateChannelAsync(channelName, connectionName));
+                        Channels.TryAdd(channelName, poolItem);
+                    }
+                }
+            }
+            finally
+            {
+                if (staleItem != null)
+                {
+                    staleItem.WaitIfInUse(TotalDisposeWaitDuration);
+                    await staleItem.DisposeAsync();
+                }
+            }
+        }
 
         poolItem.Acquire();
 
@@ -49,14 +107,14 @@ public class ChannelPool : IChannelPool, ISingletonDependency
         );
     }
 
-    protected virtual IModel CreateChannel(string channelName, string? connectionName)
+    protected virtual async Task<IChannel> CreateChannelAsync(string channelName, string? connectionName)
     {
-        return ConnectionPool
-            .Get(connectionName)
-            .CreateModel();
+        return await (await ConnectionPool
+            .GetAsync(connectionName))
+            .CreateChannelAsync();
     }
 
-    protected void CheckDisposed()
+    protected virtual void CheckDisposed()
     {
         if (IsDisposed)
         {
@@ -64,7 +122,7 @@ public class ChannelPool : IChannelPool, ISingletonDependency
         }
     }
 
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
         if (IsDisposed)
         {
@@ -92,10 +150,12 @@ public class ChannelPool : IChannelPool, ISingletonDependency
             try
             {
                 poolItem.WaitIfInUse(remainingWaitDuration);
-                poolItem.Dispose();
+                await poolItem.DisposeAsync();
             }
             catch
-            { }
+            {
+                // ignored
+            }
 
             poolItemDisposeStopwatch.Stop();
 
@@ -116,9 +176,9 @@ public class ChannelPool : IChannelPool, ISingletonDependency
         Channels.Clear();
     }
 
-    protected class ChannelPoolItem : IDisposable
+    protected class ChannelPoolItem : IAsyncDisposable
     {
-        public IModel Channel { get; }
+        public IChannel Channel { get; }
 
         public bool IsInUse {
             get => _isInUse;
@@ -126,7 +186,7 @@ public class ChannelPool : IChannelPool, ISingletonDependency
         }
         private volatile bool _isInUse;
 
-        public ChannelPoolItem(IModel channel)
+        public ChannelPoolItem(IChannel channel)
         {
             Channel = channel;
         }
@@ -166,21 +226,21 @@ public class ChannelPool : IChannelPool, ISingletonDependency
             }
         }
 
-        public void Dispose()
+        public async ValueTask DisposeAsync()
         {
-            Channel.Dispose();
+            await Channel.DisposeAsync();
         }
     }
 
     protected class ChannelAccessor : IChannelAccessor
     {
-        public IModel Channel { get; }
+        public IChannel Channel { get; }
 
         public string Name { get; }
 
         private readonly Action _disposeAction;
 
-        public ChannelAccessor(IModel channel, string name, Action disposeAction)
+        public ChannelAccessor(IChannel channel, string name, Action disposeAction)
         {
             _disposeAction = disposeAction;
             Name = name;

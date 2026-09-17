@@ -1,13 +1,9 @@
-import { CoreModule } from '@abp/ng.core';
-import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
-import { FeatureManagementComponent } from './components/feature-management/feature-management.component';
-import { FreeTextInputDirective } from './directives/free-text-input.directive';
+import { FreeTextInputDirective } from './directives';
 import { provideFeatureManagementConfig } from './providers';
-import { FeatureManagementTabComponent } from './components';
+import { FeatureManagementTabComponent, FeatureManagementComponent } from './components';
 
-const exported = [
+export const FEATURE_MANAGEMENT_EXPORTS = [
   FeatureManagementComponent,
   FreeTextInputDirective,
   FeatureManagementTabComponent,
@@ -19,8 +15,8 @@ const exported = [
  * You can import directives and pipes directly whichs were belongs to FeatureManagementModule are switched to standalone.
  */
 @NgModule({
-  imports: [CoreModule, ThemeSharedModule, NgbNavModule, ...exported],
-  exports: [...exported],
+  imports: [...FEATURE_MANAGEMENT_EXPORTS],
+  exports: [...FEATURE_MANAGEMENT_EXPORTS],
 })
 export class FeatureManagementModule {
   static forRoot(): ModuleWithProviders<FeatureManagementModule> {

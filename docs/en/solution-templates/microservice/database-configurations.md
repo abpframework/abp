@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore how to configure and manage databases in the ABP Microservice solution, focusing on Entity Framework and MongoDB integration."
+}
+```
+
 # Microservice Solution: Database Configurations
 
 ````json

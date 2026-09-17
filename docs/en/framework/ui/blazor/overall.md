@@ -1,14 +1,31 @@
+```json
+//[doc-params]
+{
+    "BlazorUI": ["Blazorise", "MudBlazor"]
+}
+```
+
+```json
+//[doc-seo]
+{
+    "Description": "Explore ABP's Blazor UI integration, simplifying your development with various hosting models for building interactive web applications."
+}
+```
+
 # Blazor UI: Overall
 
-## Introduction
+[Blazor](https://docs.microsoft.com/en-us/aspnet/core/blazor/) is a framework for building interactive client-side web UI with .NET. It enables .NET developers to create Single-Page Web Applications using C# and the Razor syntax.
 
-[Blazor](https://docs.microsoft.com/en-us/aspnet/core/blazor/) is a framework for building interactive client-side web UI with .NET. It is promising for a .NET developer that you can create Single-Page Web Applications using C# and the Razor syntax.
+ABP provides comprehensive infrastructure and integrations that make your Blazor development easier, comfortable and enjoyable. ABP supports multiple Blazor hosting models:
 
-ABP provides infrastructure and integrations that make your Blazor development even easier, comfortable and enjoyable.
+* **Blazor WebAssembly (WASM)**: Client-side hosting model where the entire application runs in the browser using WebAssembly
+* **Blazor Server**: Server-side hosting model with a real-time SignalR connection
+* **Blazor WebApp**: The new hybrid/united model introduced in .NET 8 combining the benefits of Server and WebAssembly approaches
+* **MAUI Blazor**: For building cross-platform native applications using Blazor & MAUI
 
-This document provides an overview for the ABP Blazor UI integration and highlights some major features.
+This document provides an overview of the ABP Blazor UI integration and highlights some major features.
 
-### Getting Started
+## Getting Started
 
 You can follow the documents below to start with the ABP and the Blazor UI now:
 
@@ -85,6 +102,8 @@ Currently, three themes are **officially provided**:
 
 There are a set of standard libraries that comes pre-installed and supported by all the themes:
 
+{{if BlazorUI == "Blazorise"}}
+
 * [Twitter Bootstrap](https://getbootstrap.com/) as the fundamental HTML/CSS framework.
 * [Blazorise](https://github.com/stsrki/Blazorise) as a component library that supports the Bootstrap and adds extra components like Data Grid and Tree.
 * [FontAwesome](https://fontawesome.com/) as the fundamental CSS font library.
@@ -94,7 +113,23 @@ These libraries are selected as the base libraries and available to the applicat
 
 > Bootstrap's JavaScript part is not used since the Blazorise library already provides the necessary functionalities to the Bootstrap components in a native way.
 
-> Beginning from June, 2021, the Blazorise library has dual licenses; open source & commercial. Based on your yearly revenue, you may need to buy a commercial license. See [this post](https://blazorise.com/news/announcing-2022-blazorise-plans-and-pricing-updates) to learn more. The Blazorise license is bundled with ABP and commercial customers doesn’t need to buy an extra Blazorise license.
+> Beginning from June, 2021, the Blazorise library has dual licenses; open source & commercial. Based on your yearly revenue, you may need to buy a commercial license. See [this post](https://blazorise.com/news/announcing-2022-blazorise-plans-and-pricing-updates) to learn more. The Blazorise license is bundled with ABP and commercial customers doesn't need to buy an extra Blazorise license.
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+* [MudBlazor](https://mudblazor.com/) as the component library, providing a complete set of Material Design components built natively for Blazor (form controls, data grid, dialogs, snackbars, dates, etc.).
+* [FontAwesome](https://fontawesome.com/) as the fundamental CSS font library.
+* [Flag Icon](https://github.com/lipis/flag-icons) as a library to show flags of countries.
+
+These libraries are selected as the base libraries and available to the applications and modules.
+
+The MudBlazor variant ships its own theming, dialog, snackbar and popover providers (see [Theming](theming.md)). The MudBlazor library is MIT-licensed and is bundled with ABP at no extra cost.
+
+> Bootstrap is **not** required when using MudBlazor; MudBlazor brings its own layout and component styles.
+
+{{end}}
 
 ### The Layout
 

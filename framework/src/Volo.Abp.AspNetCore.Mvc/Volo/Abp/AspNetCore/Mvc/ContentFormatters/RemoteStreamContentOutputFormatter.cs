@@ -34,9 +34,20 @@ public class RemoteStreamContentOutputFormatter : OutputFormatter
                 context.HttpContext.Response.Headers[HeaderNames.ContentDisposition] = contentDisposition.ToString();
             }
 
+            var cancellationToken = context.HttpContext.RequestAborted;
+
             using (remoteStream)
             {
-                await remoteStream.GetStream().CopyToAsync(context.HttpContext.Response.Body);
+                var stream = remoteStream.GetStream();
+
+                try
+                {
+                    await stream.CopyToAsync(context.HttpContext.Response.Body, cancellationToken);
+                }
+                catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+                {
+                    // The request was aborted, nothing can be written to the response anymore.
+                }
             }
         }
     }

@@ -2,7 +2,7 @@
 
 public class VirtualFileExplorerMenuNames
 {
-    public const string GroupName = "AbpVirualFileExplorer";
+    public const string GroupName = "AbpVirtualFileExplorer";
 
     public const string Index = GroupName + ".Index";
 }

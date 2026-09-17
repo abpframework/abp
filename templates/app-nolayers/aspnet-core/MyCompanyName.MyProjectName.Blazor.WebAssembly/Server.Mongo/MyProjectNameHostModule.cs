@@ -2,16 +2,16 @@
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using MyCompanyName.MyProjectName.Data;
 using MyCompanyName.MyProjectName.Localization;
-using MyCompanyName.MyProjectName;
 using MyCompanyName.MyProjectName.Components;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using OpenIddict.Validation.AspNetCore;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
+using Volo.Abp.AspNetCore.Components.WebAssembly.MudBlazorBasicTheme.Bundling;
 using Volo.Abp.AspNetCore.Components.WebAssembly.WebApp;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
@@ -23,7 +23,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.AuditLogging.MongoDB;
 using Volo.Abp.Autofac;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.Emailing;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.FeatureManagement.MongoDB;
@@ -58,8 +58,9 @@ namespace MyCompanyName.MyProjectName;
     typeof(AbpAspNetCoreMvcModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpAutofacModule),
-    typeof(AbpAutoMapperModule),
+    typeof(AbpMapperlyModule),
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
+    typeof(AbpAspNetCoreComponentsWebAssemblyMudBlazorBasicThemeBundlingModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAspNetCoreSerilogModule),
 
@@ -155,7 +156,7 @@ public class MyProjectNameHostModule : AbpModule
             ConfigureBundles();
             ConfigureMultiTenancy();
             ConfigureUrls(configuration);
-            ConfigureAutoMapper(context);
+            ConfigureMapperly(context);
             ConfigureSwagger(context.Services, configuration);
             ConfigureAutoApiControllers();
             ConfigureVirtualFiles(hostingEnvironment);
@@ -238,17 +239,9 @@ public class MyProjectNameHostModule : AbpModule
                 });
         }
 
-        private void ConfigureAutoMapper(ServiceConfigurationContext context)
+        private void ConfigureMapperly(ServiceConfigurationContext context)
         {
-            context.Services.AddAutoMapperObjectMapper<MyProjectNameHostModule>();
-            Configure<AbpAutoMapperOptions>(options =>
-            {
-                /* Uncomment `validate: true` if you want to enable the Configuration Validation feature.
-                 * See AutoMapper's documentation to learn what it is:
-                 * https://docs.automapper.org/en/stable/Configuration-validation.html
-                 */
-                options.AddMaps<MyProjectNameHostModule>(/* validate: true */);
-            });
+            context.Services.AddMapperlyObjectMapper<MyProjectNameHostModule>();
         }
 
         private void ConfigureCors(ServiceConfigurationContext context, IConfiguration configuration)
@@ -310,7 +303,6 @@ public class MyProjectNameHostModule : AbpModule
             }
 
             app.UseCorrelationId();
-            app.UseBlazorFrameworkFiles();
             app.MapAbpStaticAssets();
             app.UseRouting();
             app.UseCors();
@@ -324,8 +316,8 @@ public class MyProjectNameHostModule : AbpModule
 
             app.UseUnitOfWork();
             app.UseDynamicClaims();
-            app.UseAntiforgery();
             app.UseAuthorization();
+            app.UseAntiforgery();
 
             app.UseSwagger();
             app.UseAbpSwaggerUI(options =>

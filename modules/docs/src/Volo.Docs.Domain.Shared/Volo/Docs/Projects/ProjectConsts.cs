@@ -36,5 +36,7 @@
         /// Default value: 128
         /// </summary>
         public static int MaxVersionNameLength { get; set; } = 128;
+        
+        public static string Latest = "latest";
     }
 }

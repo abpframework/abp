@@ -260,7 +260,7 @@ There are exciting articles contributed by the ABP community as always. I will h
 * [Using FluentValidation with ABP Framework](https://community.abp.io/posts/using-fluentvalidation-with-abp-framework-2cxuwl70) by [Enes Döner](https://community.abp.io/members/Enes)
 * [Using Blob Storage with ABP](https://community.abp.io/posts/using-blob-storage-with-abp-framework-jygtmhn4) by [Emre Kendirli](https://community.abp.io/members/emrekenderli)
 
-Thanks to the ABP Community for all the content they have published. You can also [post your ABP-related (text or video) content](https://community.abp.io/posts/submit) to the ABP Community.
+Thanks to the ABP Community for all the content they have published. You can also [post your ABP-related (text or video) content](https://community.abp.io/posts/create) to the ABP Community.
 
 ## Conclusion
 

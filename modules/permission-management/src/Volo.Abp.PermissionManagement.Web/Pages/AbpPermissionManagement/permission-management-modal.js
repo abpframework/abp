@@ -2,9 +2,29 @@ var abp = abp || {};
 (function ($) {
     abp.modals = abp.modals || {};
 
+    // The toolbars, menus and bundles are rendered on the server, so a full page load
+    // is the only way to reflect the new permissions on the current page. Changing the
+    // permissions of another user or role does not affect what this page renders.
+    function affectsCurrentUser(providerName, providerKey) {
+        var currentUser = abp.currentUser;
+        if (!currentUser || !currentUser.isAuthenticated) {
+            return false;
+        }
+
+        if (providerName === 'U') {
+            return currentUser.id === providerKey;
+        }
+
+        if (providerName === 'R') {
+            return (currentUser.roles || []).indexOf(providerKey) > -1;
+        }
+
+        return false;
+    }
+
     abp.modals.PermissionManagement = function () {
         var l = abp.localization.getResource("AbpPermissionManagement");
-        
+
         function checkParents($tab, $checkBox) {
             var parentName = $checkBox
                 .closest('.custom-checkbox')
@@ -155,6 +175,7 @@ var abp = abp || {};
         }
 
         function setSelectAllInAllTabs() {
+
             var $checkBox = $('#SelectAllInAllTabs');
 
             var anyIndeterminate = false;
@@ -189,7 +210,27 @@ var abp = abp || {};
             }
         }
 
+        // "Select all" checkboxes are UI helpers, so only the granted states are compared.
+        function getGrantedStates($el) {
+            return $el.find('input[type="checkbox"]')
+                .not('[name="SelectAllInThisTab"], [name="SelectAllInAllTabs"]')
+                .map(function () {
+                    return this.name + '=' + this.checked;
+                })
+                .get()
+                .join('&');
+        }
+
         this.initDom = function ($el) {
+            var initialGrantedStates = getGrantedStates($el);
+
+            $el.on('abp-ajax-success', function () {
+                if (getGrantedStates($el) !== initialGrantedStates &&
+                    affectsCurrentUser($el.find('#ProviderName').val(), $el.find('#ProviderKey').val())) {
+                    window.location.reload();
+                }
+            });
+
             $el.find('.tab-pane').each(function () {
                 var $tab = $(this);
                 handleTabCheckedCheckboxCount($tab);
@@ -237,7 +278,7 @@ var abp = abp || {};
 
                     $('input[name="SelectAllInThisTab"]').each(function () {
                         var $this = $(this);
-                        if($this.is(':indeterminate') === true) {
+                        if ($this.is(':indeterminate') === true) {
                             $this.prop('indeterminate', false);
                             $this.prop('checked', true);
                         }
@@ -254,48 +295,88 @@ var abp = abp || {};
                 });
             });
 
-            $(function () {
-                $('.custom-scroll-content').mCustomScrollbar({
-                    theme: 'minimal-dark',
-                });
-                $('.custom-scroll-container > .col-4').mCustomScrollbar({
-                    theme: 'minimal-dark',
-                });
-            });
-
             initSelectAllInThisTab();
             setSelectAllInAllTabs();
 
             var $form = $("#PermissionManagementForm");
+
+            // defaultChecked holds the state the server rendered.
+            function submitChangedPermissions() {
+                // A replaced view without these attributes posts the whole tree instead.
+                var $permissions = $form.find('[data-permission-name]');
+                if (!$permissions.length) {
+                    $form.submit();
+                    return;
+                }
+
+                var granted = [];
+                var revoked = [];
+
+                $permissions.each(function () {
+                    var $permission = $(this);
+                    var checkbox = $permission.find('input[type="checkbox"]')[0];
+                    if (!checkbox || checkbox.checked === checkbox.defaultChecked) {
+                        return;
+                    }
+
+                    (checkbox.checked ? granted : revoked)
+                        .push($permission.attr('data-permission-name'));
+                });
+
+                var $treeInputs = $form.find('fieldset').find('input').not(':disabled');
+                var $postedInputs = $()
+                    .add($('<input type="hidden" name="OnlyChangedPermissions" value="true" />'))
+                    .add($('<input type="hidden" name="GrantedPermissionNames" />').val(granted.join('\n')))
+                    .add($('<input type="hidden" name="RevokedPermissionNames" />').val(revoked.join('\n')));
+
+                $treeInputs.prop('disabled', true);
+                $form.append($postedInputs);
+
+                try {
+                    $form.submit();
+                } finally {
+                    // The form is serialized synchronously, so the inputs can be restored right away.
+                    $treeInputs.prop('disabled', false);
+                    $postedInputs.remove();
+                }
+            }
+
             var $submitButton = $form.find("button[type='submit']");
-            if($submitButton) {
+            if ($submitButton) {
                 $submitButton.click(function (e) {
                     e.preventDefault();
-                    
-                    if(!$form.find("input:checked").length > 0) {
+
+                    if (!$form.find("input:checked").length > 0) {
                         abp.message.confirm(l("SaveWithoutAnyPermissionsWarningMessage"))
                             .then(function (confirmed) {
-                                if(confirmed) {
-                                    $form.submit();
+                                if (confirmed) {
+                                    submitChangedPermissions();
                                 }
                             });
                     }
                     else {
-                        $form.submit();
+                        submitChangedPermissions();
                     }
                 });
             }
-            
-            $permissionSearchInput = $('#permission-search');
 
-            $permissionSearchInput.keyup(throttle(function() {
+            var $permissionSearchInput = $('#permission-search');
+
+            $permissionSearchInput.keyup(throttle(function () {
                 var searchTerm = $permissionSearchInput.val().toLowerCase();
                 filterTabs(searchTerm);
+                setFirstVisibleTabActive();
             }, 300));
+
+            $('#SelectAllInAllTabs').change(function () {
+                // Reset search input
+                $permissionSearchInput.val('');
+                $permissionSearchInput.trigger('keyup');
+            });
 
             function filterTabs(searchTerm) {
                 var $tabs = $('#PermissionsTabs .nav-link');
-                $tabs.each(function(i) {
+                $tabs.each(function (i) {
                     var $tabItem = $(this);
                     var $tab = $tabItem.parent();
 
@@ -304,11 +385,11 @@ var abp = abp || {};
                         return;
                     }
 
-                    var tabName = $tabItem.find('small').text().toLowerCase();
+                    var tabName = $tabItem.text().toLowerCase();
 
                     var tabContentFilters = $($tabItem.attr('href')).find('[data-filter-text]');
                     let includedInTabContent = false;
-                    tabContentFilters.each(function(i) {
+                    tabContentFilters.each(function (i) {
                         var permissionName = $(this).attr('data-filter-text').toLowerCase();
                         includedInTabContent = permissionName.includes(searchTerm);
                         if (includedInTabContent === true) {
@@ -316,7 +397,7 @@ var abp = abp || {};
                         }
                     });
 
-                    if(includedInTabContent || tabName.includes(searchTerm)) {
+                    if (includedInTabContent || tabName.includes(searchTerm)) {
                         $tab.show();
                     } else {
                         $tab.hide();
@@ -324,19 +405,31 @@ var abp = abp || {};
                 });
             }
 
+            function setFirstVisibleTabActive() {
+                $('#PermissionsTabsContent .tab-pane').removeClass('active show');
+
+                var $tabs = $('#PermissionsTabs .nav-link');
+                var $firstVisibleTab = $tabs.filter(':visible').first();
+                $tabs.removeClass('active');
+                $firstVisibleTab.addClass('active');
+
+                var $firstVisibleTabContent = $($firstVisibleTab.attr('href'));
+                $firstVisibleTabContent.addClass('active show');
+            }
+
             function throttle(mainFunction, delay) {
                 let timerFlag = null; // Variable to keep track of the timer
-              
+
                 // Returning a throttled version 
                 return (...args) => {
-                  if (timerFlag === null) { // If there is no timer currently running
-                    mainFunction(...args); // Execute the main function 
-                    timerFlag = setTimeout(() => { // Set a timer to clear the timerFlag after the specified delay
-                      timerFlag = null; // Clear the timerFlag to allow the main function to be executed again
-                    }, delay);
-                  }
+                    if (timerFlag === null) { // If there is no timer currently running
+                        mainFunction(...args); // Execute the main function 
+                        timerFlag = setTimeout(() => { // Set a timer to clear the timerFlag after the specified delay
+                            timerFlag = null; // Clear the timerFlag to allow the main function to be executed again
+                        }, delay);
+                    }
                 };
-              }
+            }
 
         };
     };

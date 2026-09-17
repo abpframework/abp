@@ -5,16 +5,12 @@
         {
             <Heading Size="HeadingSize.Is4" Class="alert-heading">
                 @alert.AlertMessage.Title
-                @if (alert.AlertMessage.Dismissible)
-                {
-                    <CloseButton Clicked="() => alert.IsVisible = false" />
-                }
             </Heading>
         }
         <Paragraph>@alert.AlertMessage.Text</Paragraph>
         @if (alert.AlertMessage.Dismissible)
-        {
-            <CloseButton />
+        { 
+            <CloseButton Clicked="() => alert.IsVisible = false" />
         }
     </Alert>
 }

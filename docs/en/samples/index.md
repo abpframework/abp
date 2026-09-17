@@ -1,123 +1,110 @@
+```json
+//[doc-seo]
+{
+  "Description": "Explore a variety of ABP Framework samples, complete with live demos, source code, and tutorials to enhance your development skills!"
+}
+```
+
 # ABP Samples
 
-Here, a list of official samples built with ABP.
+This document provides a list of samples built with ABP. Each sample is briefly explained below, along with its live demo (if available), source code, and tutorial links (where applicable).
 
 ## Event Hub
 
 A reference application built with ABP. It implements the Domain Driven Design with multiple application layers.
 
-* [Live demo](https://www.openeventhub.com/)
-* [Source code](https://github.com/abpframework/eventhub)
+- [Live demo](https://www.openeventhub.com/)
+- [Source code](https://github.com/abpframework/eventhub)
+
+![samples-event-hub](../images/samples-eventhub.png)
 
 ## eShopOnAbp
 
+> ⚠️ **Important Notice**  
+> This project, "eShopOnAbp," is outdated. It served as a reference project for microservice architecture using the ABP Framework, but we now recommend using the [ABP Microservice Solution Template](https://abp.io/docs/latest/solution-templates/microservice) for new projects.
+
 Reference microservice solution built with ABP and .NET.
 
-* [Live demo](https://www.eshoponabp.com/)
-* [Source code](https://github.com/abpframework/eShopOnAbp)
+- [Source code](https://github.com/abpframework/eShopOnAbp)
+
+![eshoponabp](../images/samples-eshoponabp.png)
 
 ## CMS Kit Demo
 
 A minimal example website built with the [CMS Kit module](../modules/cms-kit/index.md).
 
-* [Live demo](https://cms-kit-demo.abpdemo.com/)
-* [Source code](https://github.com/abpframework/cms-kit-demo)
+- [Live demo](https://cms-kit-demo.abpdemo.com/)
+- [Source code](https://github.com/abpframework/cms-kit-demo)
+
+![samples-cms-kit](../images/samples-cms-kit.png)
 
 ## Easy CRM
 
 A middle-size CRM application built with ABP.
 
-* [Live demo](http://easycrm.abp.io/)
-* [Click here](easy-crm.md) to see the details and download the source code.
+- [Live demo](http://easycrm.abp.io/)
+- [Click here](easy-crm.md) to see the details and download the source code.
+
+![samples-easy-crm](../images/samples-easycrm.png)
 
 ## Book Store
 
-A simple CRUD application to show basic principles of developing an application with ABP. The same sample was implemented with different technologies and different modules.
+A simple CRUD application to show basic principles of developing an application with ABP. The same sample was implemented with different technologies and different modules:
 
-### With Open Source Modules
-
-The following samples uses only the open source (free) modules.
-
-* **Book Store: Razor Pages UI & Entity Framework Core**
-  * [Tutorial](../tutorials/book-store/part-01.md?UI=MVC&DB=EF)
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
-* **Book Store: Blazor UI & Entity Framework Core**
-  * [Tutorial](../tutorials/book-store/part-01.md?UI=Blazor&DB=EF)
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
-* **Book Store: Angular UI & MongoDB**
-  * [Tutorial](../tutorials/book-store/part-01.md?UI=NG&DB=Mongo)
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
-* **Book Store: Modular application (Razor Pages UI & EF Core)**
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Modular)
-
-### With Pro Modules
-
-The following samples uses the pro modules.
-
-- **Book Store: Razor Pages (MVC) UI & Entity Framework Core**
+- **Book Store: Razor Pages UI & Entity Framework Core**
   - [Tutorial](../tutorials/book-store/part-01.md?UI=MVC&DB=EF)
-  - [Download the source code](https://abp.io/Account/Login?returnUrl=/api/download/samples/bookstore-mvc-ef)
+  - [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Mvc-EfCore)
+  - [Download source code (with PRO modules) \*](https://abp.io/Account/Login?returnUrl=/api/download/samples/bookstore-mvc-ef)
 - **Book Store: Blazor UI & Entity Framework Core**
   - [Tutorial](../tutorials/book-store/part-01.md?UI=Blazor&DB=EF)
-  - [Download the source code](https://abp.io/Account/Login?returnUrl=/api/download/samples/bookstore-blazor-efcore)
+  - [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Blazor-EfCore)
+  - [Download source code (with PRO modules) \*](https://abp.io/Account/Login?returnUrl=/api/download/samples/bookstore-blazor-efcore)
 - **Book Store: Angular UI & MongoDB**
   - [Tutorial](../tutorials/book-store/part-01.md?UI=NG&DB=Mongo)
-  - [Download the source code](https://abp.io/Account/Login?returnUrl=/api/download/samples/bookstore-angular-mongodb)
+  - [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Angular-MongoDb)
+  - [Download source code (with PRO modules) \*](https://abp.io/Account/Login?returnUrl=/api/download/samples/bookstore-angular-mongodb)
+- **Book Store: Modular application (Razor Pages UI & EF Core)**
+  - [Source code](https://github.com/abpframework/abp-samples/tree/master/BookStore-Modular)
+
+If you want to create the BookStore application and generate CRUD pages automatically with ABP Suite, please refer to the [Book Store Application (with ABP Suite) tutorial](../tutorials/book-store-with-abp-suite/part-01.md). Also, you can follow the [Mobile Application Development Tutorials](../tutorials/mobile/index.md), if you want to implement the CRUD operations for [MAUI](../tutorials/mobile/maui/index.md) & [React Native](../tutorials/mobile/react-native/index.md) mobile applications.
+
+> **Note:** _Downloading source codes (with PRO modules) \*_ require an active [ABP License](https://abp.io/pricing).
+
+## ModularCRM
+
+A modular monolith application that demonstrates how to create, compose, and communicate between application modules to build a modular web application:
+
+- **ModularCRM: Razor Pages UI & Entity Framework Core**
+  - [Tutorial](../tutorials/modular-crm/part-01.md?UI=MVC&DB=EF)
+  - [Source code](https://github.com/abpframework/abp-samples/tree/master/ModularCRM)
+
+## CloudCrm
+
+> This tutorial & sample application is suitable for those who have an [ABP Business or a higher license](https://abp.io/pricing).
+
+A microservice solution that shows how to start a new microservice solution, create services and communicate between these services. It's a reference tutorial to learn to use these services from a web application through an API gateway and automatically generate CRUD pages using the ABP Suite tool:
+
+- **CloudCRM: Razor Pages UI & Entity Framework Core**
+  - [Tutorial](../tutorials/microservice/part-01.md?UI=MVC&DB=EF)
+  - [Download source code](https://abp.io/api/download/samples/cloud-crm-mvc-ef)
+
+## Hanova & Habitly
+
+> This sample application is available exclusively to users with an [ABP Business license or higher](https://abp.io/pricing).
+
+Hanova and Habitly are production-ready sample applications generated from the ABP Studio templates using React and React Native. Their features were built using the [ABP Studio AI Agent](https://abp.io/docs/latest/studio/ai-agent), demonstrating how AI can accelerate the development of real-world applications.
+
+- **[Hanova Source Code](https://abp.io/api/download/samples/Hanova)**
+- **[Habitly Source Code](https://abp.io/api/download/samples/reactnative-efcore-psql-habitly)**
+
+To learn more, see:
+
+- [How the ABP AI Agent helps build production-ready applications](https://abp.io/community/articles/template-in-product-out-building-hanova-with-the-abp-ai-hcntpk3j#gsc.tab=0)
+- [How we modernized React Native application development](https://abp.io/community/articles/new-abp-modern-react-native-template-rxjiyrpb#gsc.tab=0)
 
 ## Other Samples
 
-* **Event Organizer**: A sample application to create events (meetups) and allow others to register the events. Developed using EF Core and Blazor UI.
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/EventOrganizer)
-  * [Article](https://abp.io/community/articles/creating-an-event-organizer-application-with-the-blazor-ui-wbe0sf2z)
-* **Entity Framework Migrations**: A solution to demonstrate how to split your application into multiple databases each database contains different modules.
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/EfCoreMigrationDemo)
-  * [EF Core database migrations document](../framework/data/entity-framework-core/migrations.md)
-* **SignalR Demo**: A simple chat application that allows to send and receive messages among authenticated users.
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/SignalRDemo)
-  * [SignalR Integration document](../framework/real-time/signalr.md)
-* **Real Time Messaging In A Distributed Architecture** (using SingalR & RabbitMQ)
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/SignalRTieredDemo)
-  * [Article](https://abp.io/community/articles/real-time-messaging-in-a-distributed-architecture-using-abp-framework-singalr-rabbitmq-daf47e17)
-* **Dashboard Demo**: A simple application to show how to use the widget system for the ASP.NET Core MVC UI.
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/DashboardDemo)
-  * [Widget documentation](../framework/ui/mvc-razor-pages/widgets.md)
-* **RabbitMQ Event Bus Demo**: A solution consists of two applications communicating to each other via distributed events with RabbitMQ integration.
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/RabbitMqEventBus)
-  * [Distributed event bus document](../framework/infrastructure/event-bus/distributed)
-  * [RabbitMQ distributed event bus integration document](../framework/infrastructure/event-bus/distributed/rabbitmq.md)
-* **Text Templates Demo**: Shows different use cases of the text templating system.
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/TextTemplateDemo)
-  * [Text templating documentation](../framework/infrastructure/text-templating)
-* **Stored Procedure Demo**: Demonstrates how to use stored procedures, database views and functions with best practices.
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/StoredProcedureDemo)
-* **Passwordless Authentication**: Shows how to add a custom token provider to authenticate a user with a link, instead of entering a password.
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/PasswordlessAuthentication)
-  * [Article](https://abp.io/community/articles/implementing-passwordless-authentication-with-asp.net-core-identity-c25l8koj)
-* **Authentication Customization**: A solution to show how to customize the authentication for ASP.NET Core MVC / Razor Pages applications.
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/Authentication-Customization)
-  * Related articles:
-    * [Azure Active Directory Authentication](https://abp.io/community/articles/how-to-use-the-azure-active-directory-authentication-for-mvc-razor-page-applications-4603b9cf)
-    * [Customize the Login Page](https://abp.io/community/articles/how-to-customize-the-login-page-for-mvc-razor-page-applications-9a40f3cd)
-    * [Customize the SignIn Manager](https://abp.io/community/articles/how-to-customize-the-signin-manager-3e858753)
-* **GRPC Demo**: Shows how to add a gRPC service to an ABP based web application and consume it from a console application.
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/GrpcDemo)
-* **Telerik Blazor Integration**: Shows how to install and use Telerik Blazor components with ABP.
-  * [Article](https://abp.io/community/articles/how-to-integrate-the-telerik-blazor-components-to-the-abp-blazor-ui-q8g31abb)
-* **Angular Material Integration**: Implemented the web application tutorial using the Angular Material library.
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/AcmeBookStoreAngularMaterial)
-  * [Article](https://abp.io/community/articles/using-angular-material-components-with-the-abp-framework-af8ft6t9)
-* **DevExtreme Angular Component Integration**: How to install and use DevExtreme components in the ABP Angular UI.
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/DevExtreme-Angular)
-  * [Article](https://abp.io/community/articles/using-devextreme-angular-components-with-the-abp-framework-x5nyvj3i)
-* **DevExtreme MVC / Razor Pages Component Integration**: How to install and use DevExtreme components in the ABP MVC / Razor Pages UI.
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/DevExtreme-Mvc)
-  * [Article](https://abp.io/community/articles/using-devextreme-components-with-the-abp-framework-zb8z7yqv)
-* **Syncfusion Blazor Integration**: Shows how to install and integrate Syncfusion UI the ABP Blazor UI.
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/SyncfusionSample)
-  * [Article](https://abp.io/community/articles/using-syncfusion-components-with-the-abp-framework-5ccvi8kc)
-* **Empty ASP.NET Core Application**: The most basic ASP.NET Core application with ABP installed.
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/BasicAspNetCoreApplication)
-  * [Documentation](../get-started/empty-aspnet-core-application.md)
-* **Using Elsa Workflow with ABP**: Shows how to use the Elsa Core workflow library within an ABP-based application. 
-  * [Source code](https://github.com/abpframework/abp-samples/tree/master/ElsaDemo)
-  * [Article](https://abp.io/community/articles/using-elsa-workflow-with-the-abp-framework-773siqi9)
+ABP Platform provides many sample applications demonstrating various use cases and integrations. You can:
+
+- Browse all sample applications in the [abp-samples repository](https://github.com/abpframework/abp-samples).
+- Read detailed articles and tutorials in the [ABP Community](https://abp.io/community), which are shared by ABP Community & Contributors.

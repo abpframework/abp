@@ -7,6 +7,7 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Docs.Admin.Documents;
+using Volo.Docs.Admin.Projects;
 
 namespace Volo.Docs.Admin
 {
@@ -70,6 +71,13 @@ namespace Volo.Docs.Admin
         public virtual async Task<List<DocumentInfoDto>> GetFilterItemsAsync()
         {
             return await _documentAdminAppService.GetFilterItemsAsync();
+        }
+
+        [HttpGet]
+        [Route("GetProjects")]
+        public virtual Task<List<ProjectWithoutDetailsDto>> GetProjectsAsync()
+        {
+            return _documentAdminAppService.GetProjectsAsync();
         }
     }
 }

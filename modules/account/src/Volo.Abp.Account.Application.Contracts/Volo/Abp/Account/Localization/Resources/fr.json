@@ -68,6 +68,8 @@
     "AccessDenied": "Accès refusé!",
     "AccessDeniedMessage": "Vous n'avez pas accès à cette ressource.",
     "OrRegisterWith": "Or register with",
-    "RegisterUsingYourProviderAccount": "Register using your {0} account"
+    "RegisterUsingYourProviderAccount": "Register using your {0} account",
+    "RequireMigrateSeedTitle": "Impossible de trouver l'utilisateur administrateur",
+    "RequireMigrateSeedMessage": "Veuillez vous assurer que l'initialisation de la base de données est exécutée. Consultez la <a target=\"_blank\" href=\"https://abp.io/kb/0003\">documentation</a> pour les solutions possibles."
   }
 }

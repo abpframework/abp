@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -16,6 +17,8 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
@@ -139,19 +142,11 @@ public class AbpAspNetCoreMvcModule : AbpModule
             })
             .AddViewLocalization(); //TODO: How to configure from the application? Also, consider to move to a UI module since APIs does not care about it.
 
-        if (context.Services.GetHostingEnvironment().IsDevelopment() &&
-            context.Services.ExecutePreConfiguredActions<AbpAspNetCoreMvcOptions>().EnableRazorRuntimeCompilationOnDevelopment)
-        {
-            mvcCoreBuilder.AddAbpRazorRuntimeCompilation();
-        }
-
         mvcCoreBuilder.AddAbpJson();
 
         context.Services.ExecutePreConfiguredActions(mvcBuilder);
 
         //TODO: AddViewLocalization by default..?
-
-        context.Services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
         //Use DI to create controllers
         mvcBuilder.AddControllersAsServices();
@@ -173,7 +168,7 @@ public class AbpAspNetCoreMvcModule : AbpModule
         context.Services.AddSingleton<ValidationAttributeAdapterProvider>();
 
         context.Services.TryAddEnumerable(ServiceDescriptor.Transient<IActionDescriptorProvider, AbpMvcActionDescriptorProvider>());
-        context.Services.AddOptions<MvcOptions>()
+        context.Services.AddAbpOptions<MvcOptions>()
             .Configure<IServiceProvider>((mvcOptions, serviceProvider) =>
             {
                 mvcOptions.AddAbp(context.Services);
@@ -220,6 +215,66 @@ public class AbpAspNetCoreMvcModule : AbpModule
         {
             preConfigureActions.Configure(options);
         });
+
+        ConfigureRouteBasedCulture(context);
+        DecorateAntiforgery(context);
+    }
+
+    protected virtual void DecorateAntiforgery(ServiceConfigurationContext context)
+    {
+        // Wrap the registered IAntiforgery (DefaultAntiforgery from AddAntiforgery by default) with
+        // AbpAntiforgery so every antiforgery entry point goes through the claim normalization.
+        // Only an implementation-type registration is wrapped; a custom factory/instance registration of
+        // IAntiforgery is left as-is.
+        var descriptor = context.Services.LastOrDefault(d => d.ServiceType == typeof(IAntiforgery));
+        if (descriptor?.ImplementationType == null)
+        {
+            return;
+        }
+
+        context.Services.Replace(ServiceDescriptor.Describe(
+            typeof(IAntiforgery),
+            sp => new AbpAntiforgery(
+                (IAntiforgery)ActivatorUtilities.CreateInstance(sp, descriptor.ImplementationType),
+                sp.GetRequiredService<IOptions<AbpAntiForgeryOptions>>()),
+            descriptor.Lifetime));
+    }
+
+    protected virtual void ConfigureRouteBasedCulture(ServiceConfigurationContext context)
+    {
+        context.Services.Configure<RouteOptions>(options =>
+        {
+            options.ConstraintMap["culture"] = typeof(AbpCultureRouteConstraint);
+        });
+
+        context.Services
+            .AddOptions<AbpEndpointRouterOptions>()
+            .PostConfigure<IOptions<AbpRequestLocalizationOptions>>((routerOptions, abpLocOptions) =>
+            {
+                if (abpLocOptions.Value.UseRouteBasedCulture)
+                {
+                    routerOptions.EndpointConfigureActions.Insert(0, endpointContext =>
+                    {
+                        endpointContext.Endpoints.MapControllerRoute(
+                            "AbpCultureRoute",
+                            AbpCultureRoutePagesConvention.CultureRouteTemplate + "/{controller=Home}/{action=Index}/{id?}");
+                    });
+                }
+            });
+
+        context.Services
+            .AddOptions<RazorPagesOptions>()
+            .PostConfigure<IOptions<AbpRequestLocalizationOptions>>((pagesOptions, abpLocOptions) =>
+            {
+                if (abpLocOptions.Value.UseRouteBasedCulture &&
+                    !pagesOptions.Conventions.OfType<AbpCultureRoutePagesConvention>().Any())
+                {
+                    pagesOptions.Conventions.Add(new AbpCultureRoutePagesConvention());
+                }
+            });
+
+        context.Services.TryAddSingleton<UrlHelperFactory>();
+        context.Services.Replace(ServiceDescriptor.Singleton<IUrlHelperFactory, AbpCultureRouteUrlHelperFactory>());
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

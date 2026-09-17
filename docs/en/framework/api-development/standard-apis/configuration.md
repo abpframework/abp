@@ -1,8 +1,15 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use ABP's Application Configuration Endpoint to access user permissions, settings, and tenant info for your application."
+}
+```
+
 # Application Configuration Endpoint
 
 ABP provides a pre-built and standard endpoint that contains some useful information about the application/service. Here, is the list of some fundamental information at this endpoint:
 
-* Granted [policies](../../fundamentals/authorization.md) (permissions) for the current user.
+* Granted [policies](../../fundamentals/authorization/index.md) (permissions) for the current user.
 * [Setting](../../infrastructure/settings.md) values for the current user.
 * Info about the [current user](../../infrastructure/current-user.md) (like id and user name).
 * Info about the current [tenant](../../architecture/multi-tenancy) (like id and name).
@@ -55,7 +62,16 @@ namespace Acme.BookStore.Web
 }
 ```
 
-* `IApplicationConfigurationContributor` defines the `ContributeAsync` method to extend the **application-configuration** endpoint with the specified additional data.
-* You can inject services and perform any logic needed to extend the endpoint as you wish.
+Add your contributor instance to the `AbpApplicationConfigurationOptions`
 
-> Application configuration contributors are automatically discovered by the ABP and executed as a part of the application configuration initialization process.
+```csharp
+Configure<AbpApplicationConfigurationOptions>(options =>
+{
+    options.Contributors.AddIfNotContains(new MyApplicationConfigurationContributor());
+});
+```
+
+* `IApplicationConfigurationContributor` defines the `ContributeAsync` method to extend the **application-configuration** endpoint with the specified additional data.
+* You can get services from `context.ServiceProvider` and perform any logic needed to extend the endpoint as you wish.
+
+> Application configuration contributors are executed as a part of the application configuration initialization process.

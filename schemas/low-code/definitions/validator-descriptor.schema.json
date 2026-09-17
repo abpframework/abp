@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "validator-descriptor.schema.json",
+  "title": "ValidatorDescriptor",
+  "description": "A single backend/UI validator applied to an entity property or form field.",
+  "markdownDescription": "AI guidance: always set `type`. Use `required` for mandatory input, `minLength`/`maxLength`/`stringLength` for strings, `min`/`max`/`range` for numbers and comparable values, `pattern` or `regularExpression` for regex, and `email`, `phone`, `url`, or `creditCard` for common formats. Use lower-case validator names for new JSON. Add `message` only when a custom localized/user-facing message is needed.",
+  "type": "object",
+  "required": ["type"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "description": "Validator type. Prefer lower-case values in descriptor JSON; PascalCase aliases are accepted for compatibility.",
+      "enum": [
+        "required",
+        "Required",
+        "minLength",
+        "MinLength",
+        "maxLength",
+        "MaxLength",
+        "stringLength",
+        "StringLength",
+        "min",
+        "Min",
+        "minimum",
+        "Minimum",
+        "max",
+        "Max",
+        "maximum",
+        "Maximum",
+        "range",
+        "Range",
+        "pattern",
+        "Pattern",
+        "regularExpression",
+        "RegularExpression",
+        "email",
+        "Email",
+        "emailAddress",
+        "EmailAddress",
+        "phone",
+        "Phone",
+        "url",
+        "Url",
+        "creditCard",
+        "CreditCard"
+      ]
+    },
+    "message": {
+      "type": "string",
+      "description": "Optional custom error message shown when validation fails. Omit to use the default localized message."
+    },
+    "length": {
+      "type": "integer",
+      "description": "Length value for minLength or maxLength validators. Example: { \"type\": \"maxLength\", \"length\": 128 }.",
+      "minimum": 0
+    },
+    "minimumLength": {
+      "type": "integer",
+      "description": "Minimum length for stringLength validator.",
+      "minimum": 0
+    },
+    "maximumLength": {
+      "type": "integer",
+      "description": "Maximum length for stringLength validator.",
+      "minimum": 0
+    },
+    "value": {
+      "type": "number",
+      "description": "Generic numeric value alias for single-value validators such as min/minimum, max/maximum, minLength/maxLength, and stringLength maximumLength."
+    },
+    "minimum": {
+      "type": "number",
+      "description": "Minimum value for min/minimum or range validators."
+    },
+    "maximum": {
+      "type": "number",
+      "description": "Maximum value for max/maximum or range validators."
+    },
+    "pattern": {
+      "type": "string",
+      "description": "Regular expression pattern for pattern/regularExpression validators. Store the regex pattern string only; do not include leading/trailing slashes."
+    },
+    "allowEmptyStrings": {
+      "type": "boolean",
+      "description": "Whether required validation should allow empty strings. Usually false for user-entered text."
+    }
+  },
+  "additionalProperties": true,
+  "examples": [
+    { "type": "required" },
+    { "type": "maxLength", "length": 128 },
+    { "type": "range", "minimum": 0, "maximum": 100 },
+    { "type": "pattern", "pattern": "^[A-Z]{3}-[0-9]{4}$", "message": "Code must match ABC-1234." },
+    { "type": "email" }
+  ]
+}

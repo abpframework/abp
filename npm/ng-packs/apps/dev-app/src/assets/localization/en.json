@@ -1,0 +1,10 @@
+{
+  "MyProjectName": {
+    "Welcome": "Welcome from UI (en.json)",
+    "CustomKey": "This is a UI-only localization",
+    "TestMessage": "UI localization is working!"
+  },
+  "AbpAccount": {
+    "Login": "Sign In (UI Override)"
+  }
+}

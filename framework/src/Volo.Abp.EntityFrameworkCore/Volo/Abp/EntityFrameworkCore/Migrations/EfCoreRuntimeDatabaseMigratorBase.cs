@@ -135,7 +135,7 @@ public abstract class EfCoreRuntimeDatabaseMigratorBase<TDbContext> : ITransient
                 throw;
             }
 
-            Logger.LogWarning($"{ex.GetType().Name} has been thrown. The operation will be tried {maxTryCount} times more. Exception:\n{ex.Message}. Stack Trace:\n{ex.StackTrace}");
+            Logger.LogWarning(ex, $"{ex.GetType().Name} has been thrown. The operation will be tried {maxTryCount} times more.");
 
             await Task.Delay(RandomHelper.GetRandom(MinValueToWaitOnFailure, MaxValueToWaitOnFailure));
 

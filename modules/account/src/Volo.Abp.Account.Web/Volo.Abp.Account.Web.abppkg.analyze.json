@@ -16,9 +16,9 @@
           "name": "AbpIdentityAspNetCoreModule"
         },
         {
-          "declaringAssemblyName": "Volo.Abp.AutoMapper",
-          "namespace": "Volo.Abp.AutoMapper",
-          "name": "AbpAutoMapperModule"
+          "declaringAssemblyName": "Volo.Abp.Mapperly",
+          "namespace": "Volo.Abp.Mapperly",
+          "name": "AbpMapperlyModule"
         },
         {
           "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
@@ -77,47 +77,6 @@
       ],
       "contentType": "abpModule",
       "name": "AbpAccountWebModule",
-      "summary": null
-    },
-    {
-      "apis": [
-        {
-          "path": "api/account/login",
-          "method": "POST",
-          "groupName": "Account",
-          "responseType": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.AbpLoginResult",
-          "responseTypeAsJson": "",
-          "parameterDescriptions": [
-            {
-              "name": "login",
-              "type": "UserLoginInfo"
-            }
-          ]
-        },
-        {
-          "path": "api/account/logout",
-          "method": "GET",
-          "groupName": "Account",
-          "responseType": "System.Void",
-          "responseTypeAsJson": "",
-          "parameterDescriptions": []
-        },
-        {
-          "path": "api/account/check-password",
-          "method": "POST",
-          "groupName": "Account",
-          "responseType": "Volo.Abp.Account.Web.Areas.Account.Controllers.Models.AbpLoginResult",
-          "responseTypeAsJson": "",
-          "parameterDescriptions": [
-            {
-              "name": "login",
-              "type": "UserLoginInfo"
-            }
-          ]
-        }
-      ],
-      "contentType": "httpApi",
-      "name": "Defined Http Apis",
       "summary": null
     },
     {

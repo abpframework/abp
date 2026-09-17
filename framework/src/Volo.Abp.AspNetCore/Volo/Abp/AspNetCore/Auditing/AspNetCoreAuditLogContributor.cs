@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.AspNetCore.WebClientInfo;
 using Volo.Abp.Auditing;
@@ -40,7 +42,7 @@ public class AspNetCoreAuditLogContributor : AuditLogContributor, ITransientDepe
 
         if (context.AuditInfo.Url == null)
         {
-            context.AuditInfo.Url = BuildUrl(httpContext);
+            context.AuditInfo.Url = GetUrl(context, httpContext);
         }
 
         var clientInfoProvider = context.ServiceProvider.GetRequiredService<IWebClientInfoProvider>();
@@ -88,18 +90,29 @@ public class AspNetCoreAuditLogContributor : AuditLogContributor, ITransientDepe
         context.AuditInfo.HttpStatusCode = httpContext.Response.StatusCode;
     }
 
-    protected virtual string BuildUrl(HttpContext httpContext)
+    protected virtual string GetUrl(AuditLogContributionContext context, HttpContext httpContext)
     {
-        //TODO: Add options to include/exclude query, schema and host
+        var options = context.ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreAuditingUrlOptions>>();
+        var stringBuilder = new StringBuilder();
 
-        var uriBuilder = new UriBuilder
+        if (options.Value.IncludeSchema)
         {
-            Scheme = httpContext.Request.Scheme,
-            Host = httpContext.Request.Host.Host,
-            Path = httpContext.Request.Path.ToString(),
-            Query = httpContext.Request.QueryString.ToString()
-        };
-
-        return uriBuilder.Uri.AbsolutePath;
+            stringBuilder.Append(httpContext.Request.Scheme);
+            stringBuilder.Append("://");
+        }
+        
+        if (options.Value.IncludeHost)
+        {
+            stringBuilder.Append(httpContext.Request.Host.Host);
+        }
+        
+        stringBuilder.Append(httpContext.Request.Path.ToString());
+        
+        if (options.Value.IncludeQuery)
+        {
+            stringBuilder.Append(httpContext.Request.QueryString.ToString());
+        }
+        
+        return stringBuilder.ToString();
     }
 }

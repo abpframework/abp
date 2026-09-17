@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate Entity Framework Core with ABP applications, including installation and configuration for seamless database management."
+}
+```
+
 # Entity Framework Core Integration
 
 This document explains how to integrate EF Core as an ORM provider to ABP based applications and how to configure it.
@@ -139,27 +146,39 @@ Configure<AbpDbContextOptions>(options =>
 });
 ````
 
-Add actions for the `ConfigureConventions` and `OnModelCreating` methods of the `DbContext` as shown below:
+Add actions for the `ConfigureConventions`, `OnModelCreating` and `OnConfiguring` methods of the `DbContext` as shown below:
 
 ````csharp
-options.DefaultConventionAction = (dbContext, builder) =>
+Configure<AbpDbContextOptions>(options =>
 {
-    // This action is called for ConfigureConventions method of all DbContexts.
-};
+    options.ConfigureDefaultConvention((dbContext, builder) =>
+    {
+        // This action is called for ConfigureConventions method of all DbContexts.
+    });
 
-options.ConfigureConventions<YourDbContext>((dbContext, builder) =>
-{
-    // This action is called for ConfigureConventions method of specific DbContext.
-});
+    options.ConfigureConventions<YourDbContext>((dbContext, builder) =>
+    {
+        // This action is called for ConfigureConventions method of specific DbContext.
+    });
 
-options.DefaultOnModelCreatingAction = (dbContext, builder) =>
-{
-    // This action is called for OnModelCreating method of all DbContexts.
-};
+    options.ConfigureDefaultOnModelCreating((dbContext, builder) =>
+    {
+        // This action is called for OnModelCreating method of all DbContexts.
+    });
 
-options.ConfigureOnModelCreating<YourDbContext>((dbContext, builder) =>
-{
-    // This action is called for OnModelCreating method of specific DbContext.
+    options.ConfigureOnModelCreating<YourDbContext>((dbContext, builder) =>
+    {
+        // This action is called for OnModelCreating method of specific DbContext.
+    });
+
+    options.ConfigureDefaultOnConfiguring((dbContext, optionsBuilder) =>
+    {
+        // This action is called for OnConfiguring method of all DbContexts.
+    });
+    options.ConfigureOnConfiguring<YourDbContext>((dbContext, optionsBuilder) =>
+    {
+        // This action is called for OnConfiguring method of specific DbContext.
+    });
 });
 ````
 
@@ -632,7 +651,7 @@ In addition to the read-only repositories, ABP allows to manually control the ch
 
 ## Access to the EF Core API
 
-In most cases, you want to hide EF Core APIs behind a repository (this is the main purpose of the repository pattern). However, if you want to access the `DbContext` instance over the repository, you can use `GetDbContext()` or `GetDbSet()` extension methods. Example:
+In most cases, you want to hide EF Core APIs behind a repository (this is the main purpose of the repository pattern). However, if you want to access the `DbContext` instance over the repository, you can use `GetDbContextAsync()` or `GetDbSetAsync()` extension methods. Example:
 
 ````csharp
 public async Task TestAsync()
@@ -755,7 +774,17 @@ public static class QADbContextModelCreatingExtensions
 
 > The `Object Extension` feature need the `Change Tracking`, which means you can't use the read-only repositories for the entities that have `extension properties(MapEfCoreProperty)`, Please see the [Repositories documentation](../../architecture/domain-driven-design/repositories.md) to learn the change tracking behavior.
 
-See the "*ConfigureByConvention Method*" section above for more information.
+See the **ConfigureByConvention Method** section above for more information.
+
+### Accessing Extra Properties(Shadow Properties)
+
+Extra properties stored in separate fields in the database are known as **Shadow Properties**. These properties are not defined in the entity class, but are part of the EF Core model and can be referenced in LINQ queries using the EF.Property static method
+
+```csharp
+var query = (await GetQueryableAsync()).Where(x => EF.Property<string>(x, "Title") == "MyTitle");
+```
+
+See the [EF Core Shadow and Indexer Properties document](https://learn.microsoft.com/en-us/ef/core/modeling/shadow-properties) for more information.
 
 ## Advanced Topics
 

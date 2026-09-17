@@ -21,3 +21,9 @@ export const authGuard: CanActivateFn = () => {
   console.error('You should add @abp/ng-oauth packages or create your own auth packages.');
   return false;
 };
+
+
+export const asyncAuthGuard: CanActivateFn = () => {
+  console.error('You should add @abp/ng-oauth packages or create your own auth packages.');
+  return false;
+};

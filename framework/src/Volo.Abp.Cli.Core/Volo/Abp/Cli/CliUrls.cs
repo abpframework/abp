@@ -5,19 +5,33 @@ namespace Volo.Abp.Cli;
 
 public static class CliUrls
 {
-    public const string WwwAbpIo = WwwAbpIoProduction;
-    public const string AccountAbpIo = AccountAbpIoProduction;
-    public const string NuGetRootPath = NuGetRootPathProduction;
-    public const string LatestVersionCheckFullPath =
-        "https://raw.githubusercontent.com/abpframework/abp/dev/latest-versions.json";
+    public static string WwwAbpIo
+    {
+        get => WwwAbpIoProduction;
+        set => WwwAbpIoProduction = value;
+    }
 
-    public const string WwwAbpIoProduction = "https://abp.io/";
-    public const string AccountAbpIoProduction = "https://account.abp.io/";
-    public const string NuGetRootPathProduction = "https://nuget.abp.io/";
+    public static string AccountAbpIo
+    {
+        get => AccountAbpIoProduction;
+        set => AccountAbpIoProduction = value;
+    }
 
-    public const string WwwAbpIoDevelopment = "https://localhost:44328/";
-    public const string AccountAbpIoDevelopment = "https://localhost:44333/";
-    public const string NuGetRootPathDevelopment = "https://localhost:44373/";
+    public static string NuGetRootPath
+    {
+        get => NuGetRootPathProduction;
+        set => NuGetRootPathProduction = value;
+    }
+
+    public static string LatestVersionCheckFullPath = "https://raw.githubusercontent.com/abpframework/abp/dev/latest-versions.json";
+
+    public static string WwwAbpIoProduction = "https://abp.io/";
+    public static string AccountAbpIoProduction = "https://account.abp.io/";
+    public static string NuGetRootPathProduction = "https://nuget.abp.io/";
+
+    public static string WwwAbpIoDevelopment = "https://localhost:44328/";
+    public static string AccountAbpIoDevelopment = "https://localhost:44333/";
+    public static string NuGetRootPathDevelopment = "https://localhost:44373/";
 
     public static string GetNuGetServiceIndexUrl(string apiKey)
     {

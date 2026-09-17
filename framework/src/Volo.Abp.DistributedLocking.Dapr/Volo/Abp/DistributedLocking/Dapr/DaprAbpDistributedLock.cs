@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Dapr;
 using Volo.Abp.DependencyInjection;
+#pragma warning disable DAPR_DISTRIBUTEDLOCK
 
 namespace Volo.Abp.DistributedLocking.Dapr;
 

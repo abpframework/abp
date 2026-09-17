@@ -1,0 +1,7 @@
+import { Provider } from '@angular/core';
+
+export function provide<%= pascal(target) %><%= pascal(libraryName) %>(): Provider[] {
+  return [
+    // Add your providers here
+  ];
+}

@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.Commands.Internal;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands;
 
+[HideFromCommandList]
 public class CreateMigrationAndRunMigratorCommand : IConsoleCommand, ITransientDependency
 {
     private readonly InitialMigrationCreator _initialMigrationCreator;

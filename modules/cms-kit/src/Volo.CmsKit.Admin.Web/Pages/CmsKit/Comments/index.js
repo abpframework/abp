@@ -2,7 +2,6 @@ $(function () {
     var l = abp.localization.getResource("CmsKit");
 
     var commentsService = volo.cmsKit.admin.comments.commentAdmin;
-
     moment()._locale.preparse = (string) => string;
     moment()._locale.postformat = (string) => string;
 
@@ -13,15 +12,8 @@ $(function () {
         $('#IsApprovedSelectInput').show();
     }
 
-    var getFormattedDate = function ($datePicker) {
-        if (!$datePicker.val()) {
-            return null;
-        }
-        var momentDate = moment($datePicker.val(), $datePicker.data('daterangepicker').locale.format);
-        return momentDate.isValid() ? momentDate.toISOString() : null;
-    };
-
-    $('.singledatepicker').daterangepicker({
+    var singleDatePicker = $('#CmsKitCommentsWrapper .singledatepicker');
+    singleDatePicker.daterangepicker({
         "singleDatePicker": true,
         "showDropdowns": true,
         "autoUpdateInput": false,
@@ -30,21 +22,18 @@ $(function () {
         "drops": "auto"
     });
 
-    $('.singledatepicker').attr('autocomplete', 'off');
+    singleDatePicker.attr('autocomplete', 'off');
 
-    $('.singledatepicker').on('apply.daterangepicker', function (ev, picker) {
+    singleDatePicker.on('apply.daterangepicker', function (ev, picker) {
         $(this).val(picker.startDate.format('l'));
     });
 
     var filterForm = $('#CmsKitCommentsFilterForm');
 
     var getFilter = function () {
-        var filterObj = filterForm.serializeFormToObject();
-
-        filterObj.creationStartDate = getFormattedDate($('#CreationStartDate'));
-        filterObj.creationEndDate = getFormattedDate($('#CreationEndDate'));
-
-        return filterObj;
+        filterForm.handleDatepicker('.singledatepicker');
+        var formObject = filterForm.serializeFormToObject();
+        return formObject;
     };
 
     var _dataTable = $('#CommentsTable').DataTable(abp.libs.datatables.normalizeConfiguration({

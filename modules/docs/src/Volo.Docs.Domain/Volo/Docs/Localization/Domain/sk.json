@@ -29,6 +29,7 @@
     "FullSearch": "Vyhľadať v dokumentoch",
     "Volo.Docs.Domain:010001": "Elastic vyhľadávanie nie je povolené.",
     "MultipleVersionDocumentInfo": "Tento dokument má viacero verzií. Vyberte si možnosť, ktorá vám vyhovuje najviac.",
+    "DocumentOptions": "Možnosti dokumentu",
     "New": "Nový",
     "Upd": "Upd",
     "NewExplanation": "Vytvorené za posledné dva týždne.",
@@ -38,6 +39,7 @@
     "Search": "Vyhľadať",
     "SearchResults": "Výsledky vyhľadávania",
     "SearchInTheAllDocuments": "Vyhľadajte vo všetkých dokumentoch",
-    "GoogleTranslate": "Google preklad"
+    "GoogleTranslate": "Google preklad",
+    "DownloadPDF": "Stiahnuť PDF"
   }
 }

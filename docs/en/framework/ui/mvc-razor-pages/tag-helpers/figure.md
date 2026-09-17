@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the `abp-figure` component to create responsive images with captions in your Bootstrap projects effortlessly."
+}
+```
+
 # Figures
 
 `abp-figure` is the main container for bootstrap figure items. 

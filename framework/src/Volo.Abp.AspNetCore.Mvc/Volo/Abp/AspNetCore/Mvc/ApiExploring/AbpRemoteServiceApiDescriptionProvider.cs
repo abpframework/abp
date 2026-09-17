@@ -59,13 +59,20 @@ public class AbpRemoteServiceApiDescriptionProvider : IApiDescriptionProvider, I
 
     protected virtual IEnumerable<ApiResponseType> GetApiResponseTypes()
     {
-        foreach (var apiResponse in _options.SupportedResponseTypes)
+        foreach (var template in _options.SupportedResponseTypes)
         {
-            apiResponse.ModelMetadata = _modelMetadataProvider.GetMetadataForType(apiResponse.Type!);
+            var apiResponse = new ApiResponseType
+            {
+                Type = template.Type,
+                StatusCode = template.StatusCode,
+                Description = template.Description,
+                IsDefaultResponse = template.IsDefaultResponse,
+                ModelMetadata = _modelMetadataProvider.GetMetadataForType(template.Type!)
+            };
 
             foreach (var responseTypeMetadataProvider in _mvcOptions.OutputFormatters.OfType<IApiResponseTypeMetadataProvider>())
             {
-                var formatterSupportedContentTypes = responseTypeMetadataProvider.GetSupportedContentTypes(null!, apiResponse.Type!);
+                var formatterSupportedContentTypes = responseTypeMetadataProvider.GetSupportedContentTypes(null!, template.Type!);
                 if (formatterSupportedContentTypes == null)
                 {
                     continue;
@@ -80,8 +87,8 @@ public class AbpRemoteServiceApiDescriptionProvider : IApiDescriptionProvider, I
                     });
                 }
             }
-        }
 
-        return _options.SupportedResponseTypes;
+            yield return apiResponse;
+        }
     }
 }

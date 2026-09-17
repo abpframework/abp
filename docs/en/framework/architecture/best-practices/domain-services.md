@@ -1,6 +1,17 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn best practices for implementing Domain Services in your applications, guided by Domain-Driven Design principles."
+}
+```
+
 # Domain Services Best Practices & Conventions
 
-### Domain Service
+> This document offers best practices for implementing Domain Service classes in your modules and applications based on Domain-Driven-Design principles.
+>
+> **Ensure you've read the [*Domain Services*](../domain-driven-design/domain-services.md) document first.**
+
+## Domain Services
 
 - **Do** define domain services in the **domain layer**.
 - **Do not** create interfaces for the domain services **unless** you have a good reason to (like mock and test different implementations).
@@ -14,7 +25,7 @@ public class IssueManager : DomainService
 }
 ```
 
-### Domain Service Methods
+## Domain Service Methods
 
 - **Do not** define `GET` methods. `GET` methods do not change the state of an entity. Hence, use the repository directly in the Application Service instead of Domain Service method.
 
@@ -56,8 +67,6 @@ public async Task AssignToAsync(Issue issue, IdentityUser user)
 
 - **Do not** return `DTO`. Return only domain objects when you need.
 - **Do not** involve authenticated user logic. Instead, define extra parameter and send the related data of ` CurrentUser` from the Application Service layer.
-
-
 
 ## See Also
 

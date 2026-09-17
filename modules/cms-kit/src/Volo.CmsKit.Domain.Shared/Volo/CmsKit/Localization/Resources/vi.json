@@ -89,7 +89,9 @@
     "Permission:BlogPostManagement.Publish": "Công bố",
     "Permission:CmsKit": "CmsKit",
     "Permission:Comments": "Quản lý bình luận",
-    "Permission:Comments.Delete": "Xóa bỏ",
+    "Permission:Comments.Delete": "Xóa",
+    "Permission:Comments.Update": "Cập nhật",
+    "Permission:Comments.SettingManagement": "Quản lý cài đặt",
     "Permission:Contents": "Quản lý nội dung",
     "Permission:Contents.Create": "Tạo nội dung",
     "Permission:Contents.Delete": "Xóa nội dung",
@@ -227,6 +229,13 @@
     "CssClass": "Lớp CSS",
     "TagsHelpText": "Các thẻ phải được phân tách bằng dấu phẩy (ví dụ: tag1, tag2, tag3)",
     "ThisPartOfContentCouldntBeLoaded": "Phần này của nội dung không thể được tải.",
-    "DuplicateCommentAttemptMessage": "Đã phát hiện nỗ lực đăng bình luận trùng lặp. Bình luận của bạn đã được gửi."
+    "DuplicateCommentAttemptMessage": "Đã phát hiện nỗ lực đăng bình luận trùng lặp. Bình luận của bạn đã được gửi.",
+    "ChooseAnActionForBlog": "Chọn một hành động cho blog",
+    "AssignBlogPostsToOtherBlog": "Gán bài đăng trên blog cho blog khác",
+    "SelectAnBlogToAssign": "Chọn một blog để gán",
+    "DeleteAllBlogPostsOfThisBlog": "Xóa tất cả bài đăng trên blog của blog này",
+    "RequiredPermissionName": "Tên quyền cần thiết",
+    "AllPosts": "Tất cả bài viết",
+    "IsReadOnly": "Chỉ đọc"
   }
 }

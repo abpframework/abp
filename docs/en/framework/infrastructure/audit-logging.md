@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover ABP's extensible audit logging system, enabling automated, configurable tracking of web request activities and changes for enhanced security."
+}
+```
+
 # Audit Logging
 
 [Wikipedia](https://en.wikipedia.org/wiki/Audit_trail): "*An audit trail (also called **audit log**) is a security-relevant chronological record, set of records, and/or destination and source of records that provide documentary evidence of the sequence of activities that have affected at any time a specific operation, procedure, or event*".
@@ -37,11 +44,11 @@ Configure<AbpAuditingOptions>(options =>
 Here, a list of the options you can configure:
 
 * `IsEnabled` (default: `true`): A root switch to enable or disable the auditing system. Other options is not used if this value is `false`.
-* `HideErrors` (default: `true`): Audit log system hides and write regular [logs](../fundamentals/localization.md) if any error occurs while saving the audit log objects. If saving the audit logs is critical for your system, set this to `false` to throw exception in case of hiding the errors.
+* `HideErrors` (default: `true`): Audit log system hides and write regular [logs](../fundamentals/logging.md) if any error occurs while saving the audit log objects. If saving the audit logs is critical for your system, set this to `false` to throw exception in case of hiding the errors.
 * `IsEnabledForAnonymousUsers` (default: `true`): If you want to write audit logs only for the authenticated users, set this to `false`. If you save audit logs for anonymous users, you will see `null` for `UserId` values for these users.
 * `AlwaysLogOnException` (default: `true`): If you set to true, it always saves the audit log on an exception/error case without checking other options (except `IsEnabled`, which completely disables the audit logging).
-* `IsEnabledForIntegrationService` (default: `false`): Audit Logging is disabled for [integration services](../api-development/integration-services.md) by default. Set this property as `true` to enable it.
-* `IsEnabledForGetRequests` (default: `false`): HTTP GET requests should not make any change in the database normally and audit log system doesn't save audit log objects for GET request. Set this to `true` to enable it also for the GET requests.
+* `IsEnabledForIntegrationServices` (default: `false`): Audit Logging is disabled for [integration services](../api-development/integration-services.md) by default. Set this property as `true` to enable it.
+* `IsEnabledForGetRequests` (default: `false`): Safe HTTP methods (GET, HEAD and QUERY) should not make any change in the database normally and the audit log system doesn't save audit log objects for these requests. Set this to `true` to enable it also for the safe requests.
 * `DisableLogActionInfo` (default: `false`):If you set to true, Will no longer log `AuditLogActionInfo`.
 * `ApplicationName`: If multiple applications are saving audit logs into a single database, set this property to your application name, so you can distinguish the logs of different applications. If you don't set, it will set from the `IApplicationInfoAccessor.ApplicationName` value, which is the entry assembly name by default.
 * `IgnoredTypes`: A list of `Type`s to be ignored for audit logging. If this is an entity type, changes for this type of entities will not be saved. This list is also used while serializing the action parameters.
@@ -106,6 +113,24 @@ Configure<AbpAspNetCoreAuditingOptions>(options =>
 
 `IgnoredUrls` is the only option. It is a list of ignored URLs prefixes. In the preceding example, all URLs starting with `/products` will be ignored for audit logging.
 
+## AbpAspNetCoreAuditingUrlOptions
+
+`AbpAspNetCoreAuditingUrlOptions` is the [options object](../fundamentals/options.md) to configure audit logging in the ASP.NET Core layer. You can configure it in the `ConfigureServices` method of your [module](../architecture/modularity/basics.md):
+
+````csharp
+Configure<AbpAspNetCoreAuditingUrlOptions>(options =>
+{
+    options.IncludeQuery = true;
+});
+````
+
+Here, a list of the options you can configure:
+
+* `IncludeSchema` (default: `false`): If you set to true, it will include the schema in the URL.
+* `IncludeHost` (default: `false`): If you set to true, it will include the host in the URL.
+* `IncludeQuery` (default: `false`): If you set to true, it will include the query string in the URL.
+
+
 ## Enabling/Disabling Audit Logging for Services
 
 ### Enable/Disable for Controllers & Actions
@@ -140,9 +165,27 @@ public class HomeController : AbpController
 }
 ````
 
+### Hiding Parameter Values
+
+An audited action writes its parameter values into the audit log. Use `[DisableAuditing]` on a parameter when its value is sensitive:
+
+````csharp
+public class HomeController : AbpController
+{
+    public async Task<ActionResult> SetConnectionString([DisableAuditing] string connectionString)
+    {
+        //...
+    }
+}
+````
+
+The action is still audit logged and the parameter name is still written, but its value is replaced with `null`.
+
 ### Enable/Disable for Application Services & Methods
 
 [Application service](../architecture/domain-driven-design/application-services.md) method calls also included into the audit log by default. You can use the `[DisableAuditing]` in service or method level.
+
+> **Blazor Server limitation (Entity history):** In `Blazor Server` applications, entity change history is currently not guaranteed to be complete for every UI interaction. Blazor Server uses SignalR-based event handling, and under some flows the audit scope/action tracking may not align with `DbContext.SaveChanges`, which can cause missing or partial entity change records. This is a known platform-level limitation and not a regular configuration issue. See [#11682](https://github.com/abpframework/abp/issues/11682) for related discussions.
 
 #### Enable/Disable for Other Services
 
@@ -190,7 +233,7 @@ public class MyUser : Entity<Guid>
         
     public string Email { get; set; }
 
-    [DisableAuditing] //Ignore the Passoword on audit logging
+    [DisableAuditing] //Ignore the Password on audit logging
     public string Password { get; set; }
 }
 ````
@@ -211,6 +254,28 @@ public class MyUser : Entity<Guid>
     public string Password { get; set; }
 }
 ````
+
+#### Ignore Update Audit Properties And Publish Entity Updated Event
+
+The `[DisableAuditing]` attribute supports additional configuration options when applied to **entity properties**.
+
+* **UpdateModificationProps** (default: `true`): When set to `false`, changes to this entity property will not update audit properties (like `LastModificationTime`.
+* **PublishEntityEvent** (default: `true`): When set to `false`, changes to this entity property will not publish entity change events (`EntityUpdatedEvent`).
+
+
+````csharp
+public class MyUser : Entity<Guid>
+{
+    public string Name { get; set; }
+
+    [DisableAuditing(UpdateModificationProps = false, PublishEntityEvent = false)]
+    public string ReadCount { get; set; }
+}
+````
+
+This example will ignore update audit properties and publish entity updated event when the `ReadCount` property is updated.
+
+> The `UpdateModificationProps` and `PublishEntityEvent` only work for [Entity Framework Core](../data/entity-framework-core). It will not work for [MongoDB](../data/mongodb).
 
 ## IAuditingStore
 
@@ -261,6 +326,8 @@ An **audit log object** is created for each **web request** by default. An audit
   * `PropertyTypeFullName`: Type (class) name of the property with full namespace.
 * **Exception**: An audit log object may contain zero or more exception. In this way, you can get a report of the failed requests.
 * **Comment**: An arbitrary string value to add custom messages to the audit log entry. An audit log object may contain zero or more comments.
+
+> When the [Audit Logging Module](../../modules/audit-logging.md) persists exceptions, it uses `AbpExceptionHandlingOptions` to convert them. `SendExceptionsDetailsToClients`, `SendStackTraceToClients` and `SendExceptionDataToClientTypes` therefore also control the exception details stored in audit logs, not only the details sent to clients. Review these options when audit logs may contain sensitive information. See the [Exception Handling](../fundamentals/exception-handling.md#abpexceptionhandlingoptions) document for configuration details.
 
 In addition to the standard properties explained above, `AuditLogInfo`, `AuditLogActionInfo` and `EntityChangeInfo` objects implement the `IHasExtraProperties` interface, so you can add custom properties to these objects.
 

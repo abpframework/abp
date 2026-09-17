@@ -41,6 +41,8 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
 
     protected ISettingProvider SettingProvider { get; }
 
+    protected IUnitOfWorkManager UnitOfWorkManager { get; }
+
     public AbpResourceOwnerPasswordValidator(
         IdentityUserManager userManager,
         SignInManager<IdentityUser> signInManager,
@@ -50,7 +52,8 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
         IOptions<AbpIdentityOptions> abpIdentityOptions,
         IServiceScopeFactory serviceScopeFactory,
         IOptions<IdentityOptions> identityOptions,
-        ISettingProvider settingProvider)
+        ISettingProvider settingProvider,
+        IUnitOfWorkManager unitOfWorkManager)
     {
         UserManager = userManager;
         SignInManager = signInManager;
@@ -61,6 +64,7 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
         AbpIdentityOptions = abpIdentityOptions.Value;
         IdentityOptions = identityOptions;
         SettingProvider = settingProvider;
+        UnitOfWorkManager = unitOfWorkManager;
     }
 
     /// <summary>
@@ -128,21 +132,29 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
                 }
                 else if (result.IsNotAllowed)
                 {
-                    Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", context.UserName);
-
-                    if (user.ShouldChangePasswordOnNextLogin)
+                    if (!await UserManager.CheckPasswordAsync(user, context.Password))
                     {
-                        await HandleShouldChangePasswordOnNextLoginAsync(context, user, context.Password);
-                        return;
+                        Logger.LogInformation("Authentication failed for username: {username}, reason: invalid credentials", context.UserName);
+                        errorDescription = Localizer["InvalidUserNameOrPassword"];
                     }
-
-                    if (await UserManager.ShouldPeriodicallyChangePasswordAsync(user))
+                    else
                     {
-                        await HandlePeriodicallyChangePasswordAsync(context, user, context.Password);
-                        return;
-                    }
+                        Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", context.UserName);
 
-                    errorDescription = Localizer["LoginIsNotAllowed"];
+                        if (user.ShouldChangePasswordOnNextLogin)
+                        {
+                            await HandleShouldChangePasswordOnNextLoginAsync(context, user, context.Password);
+                            return;
+                        }
+
+                        if (await UserManager.ShouldPeriodicallyChangePasswordAsync(user))
+                        {
+                            await HandlePeriodicallyChangePasswordAsync(context, user, context.Password);
+                            return;
+                        }
+
+                        errorDescription = Localizer["LoginIsNotAllowed"];
+                    }
                 }
                 else
                 {
@@ -189,7 +201,8 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
             }
 
             Logger.LogInformation("Authentication failed for username: {username}, reason: InvalidRecoveryCode", context.UserName);
-            context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, Localizer["InvalidRecoveryCode"]);
+            await RollbackAndSetInvalidGrantResultAsync(context, Localizer["InvalidRecoveryCode"]);
+            return;
         }
 
         var twoFactorProvider = context.Request?.Raw?["TwoFactorProvider"];
@@ -203,7 +216,12 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
                 return;
             }
 
-            await UserManager.AccessFailedAsync(user);
+            var accessFailedResult = await UserManager.AccessFailedAsync(user);
+            if (!accessFailedResult.Succeeded)
+            {
+                await RollbackAndSetInvalidGrantResultAsync(context, Localizer["InvalidUserNameOrPassword"]);
+                return;
+            }
 
             Logger.LogInformation("Authentication failed for username: {username}, reason: InvalidAuthenticatorCode", context.UserName);
             context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, Localizer["InvalidAuthenticatorCode"]);
@@ -247,7 +265,16 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
         {
             if (await UserManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, changePasswordType.ToString(), changePasswordToken))
             {
-                var changePasswordResult = await UserManager.ChangePasswordAsync(user, currentPassword, newPassword);
+                IdentityResult changePasswordResult;
+                try
+                {
+                    changePasswordResult = await UserManager.ChangePasswordAsync(user, currentPassword, newPassword);
+                }
+                catch (AbpIdentityResultException exception)
+                {
+                    changePasswordResult = exception.IdentityResult;
+                }
+
                 if (changePasswordResult.Succeeded)
                 {
                     await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
@@ -263,13 +290,29 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
                         user.SetShouldChangePasswordOnNextLogin(false);
                     }
 
-                    await UserManager.UpdateAsync(user);
-                    await SetSuccessResultAsync(context, user);
+                    var updateUserResult = await UserManager.UpdateAsync(user);
+                    if (!updateUserResult.Succeeded)
+                    {
+                        await RollbackAndSetInvalidGrantResultAsync(context, Localizer["InvalidUserNameOrPassword"]);
+                        return;
+                    }
+
+                    if (await IsTfaEnabledAsync(user))
+                    {
+                        await HandleTwoFactorLoginAsync(context, user);
+                    }
+                    else
+                    {
+                        await SetSuccessResultAsync(context, user);
+                    }
                 }
                 else
                 {
                     Logger.LogInformation("ChangePassword failed for username: {username}, reason: {changePasswordResult}", context.UserName, changePasswordResult);
-                    context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, changePasswordResult.Errors.Select(x => x.Description).JoinAsString(", "));
+                    await RollbackAndSetInvalidGrantResultAsync(
+                        context,
+                        changePasswordResult.Errors.Select(x => x.Description).JoinAsString(", "));
+                    return;
                 }
             }
             else
@@ -281,7 +324,7 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
         else
         {
             Logger.LogInformation($"Authentication failed for username: {{{context.UserName}}}, reason: {{{changePasswordType.ToString()}}}");
-            context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, nameof(user.ShouldChangePasswordOnNextLogin),
+            context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, changePasswordType.ToString(),
                 new Dictionary<string, object>()
                 {
                         {"userId", user.Id},
@@ -300,6 +343,13 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
 
     protected virtual async Task SetSuccessResultAsync(ResourceOwnerPasswordValidationContext context, IdentityUser user)
     {
+        var resetAccessFailedCountResult = await UserManager.ResetAccessFailedCountAsync(user);
+        if (!resetAccessFailedCountResult.Succeeded)
+        {
+            await RollbackAndSetInvalidGrantResultAsync(context, Localizer["InvalidUserNameOrPassword"]);
+            return;
+        }
+
         var sub = await UserManager.GetUserIdAsync(user);
 
         Logger.LogInformation("Credentials validated for username: {username}", context.UserName);
@@ -314,6 +364,8 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
             additionalClaims.ToArray()
         );
 
+        await UserManager.UpdateLastSignInTimeAsync(user.Id);
+
         await IdentitySecurityLogManager.SaveAsync(
             new IdentitySecurityLogContext
             {
@@ -323,6 +375,17 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
                 ClientId = await FindClientIdAsync(context)
             }
         );
+    }
+
+    protected virtual async Task RollbackAndSetInvalidGrantResultAsync(ResourceOwnerPasswordValidationContext context, string errorDescription)
+    {
+        var currentUnitOfWork = UnitOfWorkManager.Current;
+        if (currentUnitOfWork != null)
+        {
+            await currentUnitOfWork.RollbackAsync();
+        }
+
+        context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, errorDescription);
     }
 
     protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds(ResourceOwnerPasswordValidationContext context)

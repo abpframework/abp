@@ -1,8 +1,15 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to make efficient HTTP requests in Angular using HttpClient and simplify error handling with HttpInterceptor in your ABP project."
+}
+```
+
 # How to Make HTTP Requests
 
 ## About HttpClient
 
-Angular has the amazing [HttpClient](https://angular.io/guide/http) for communication with backend services. It is a layer on top and a simplified representation of [XMLHttpRequest Web API](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest). It also is the recommended agent by Angular for any HTTP request. There is nothing wrong with using the `HttpClient` in your ABP project.
+Angular has the amazing [HttpClient](https://angular.dev/guide/http/making-requests) for communication with backend services. It is a layer on top and a simplified representation of [XMLHttpRequest Web API](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest). It also is the recommended agent by Angular for any HTTP request. There is nothing wrong with using the `HttpClient` in your ABP project.
 
 However, `HttpClient` leaves error handling to the caller (method). In other words, HTTP errors are handled manually and by hooking into the observer of the `Observable` returned.
 
@@ -23,7 +30,7 @@ An `HttpInterceptor` is able to catch `HttpErrorResponse` and can be used for a 
 
 ## RestService
 
-ABP core module has a utility service for HTTP requests: `RestService`. Unless explicitly configured otherwise, it catches HTTP errors and dispatches a `RestOccurError` action. This action is then captured by the `ErrorHandler` introduced by the `ThemeSharedModule`. Since you should already import this module in your app, when the `RestService` is used, all HTTP errors get automatically handled by default.
+ABP core module has a utility service for HTTP requests: `RestService`. Unless explicitly configured otherwise, it catches HTTP errors and reports them through `HttpErrorReporterService`. The error handler provided by the Theme Shared package subscribes to that service and displays the appropriate error UI. When the Theme Shared provider is configured in your application, HTTP errors from `RestService` are handled automatically by default.
 
 ### Getting Started with RestService
 
@@ -31,12 +38,13 @@ In order to use the `RestService`, you must inject it in your class as a depende
 
 ```js
 import { RestService } from '@abp/ng.core';
+import { inject } from '@angular/core';
 
 @Injectable({
   /* class metadata here */
 })
 class DemoService {
-  constructor(private rest: RestService) {}
+  private rest = inject(RestService);
 }
 ```
 
@@ -85,7 +93,7 @@ postFoo(body: Foo) {
 }
 ```
 
-You may [check here](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/models/rest.ts#L23) for complete `Rest.Request<T>` type, which has only a few changes compared to [HttpRequest](https://angular.io/api/common/http/HttpRequest) class in Angular.
+You may [check here](https://github.com/abpframework/abp/blob/dev/npm/ng-packs/packages/core/src/lib/models/rest.ts#L23) for complete `Rest.Request<T>` type, which has only a few changes compared to [HttpRequest](https://angular.dev/api/common/http/HttpRequest) class in Angular.
 
 ### How to Disable Default Error Handler of RestService
 
@@ -102,7 +110,7 @@ deleteFoo(id: number) {
 }
 ```
 
-`skipHandleError` config option, when set to `true`, disables the error handler and the returned observable starts throwing an error that you can catch in your subscription.
+The `skipHandleError` config option, when set to `true`, prevents `RestService` from reporting the error through `HttpErrorReporterService`. The returned observable still throws the error, so you can handle it in the caller.
 
 ```js
 removeFooFromList(id: number) {

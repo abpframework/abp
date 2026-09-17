@@ -1,4 +1,4 @@
-import { ConfigStateService, PermissionService } from '@abp/ng.core';
+import { ConfigStateService } from '@abp/ng.core';
 import { firstValueFrom, lastValueFrom, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { ePropType } from '../lib/enums/props.enum';
@@ -9,18 +9,92 @@ import {
   getObjectExtensionEntitiesFromStore,
   mapEntitiesToContributors,
 } from '../lib/utils/state.util';
-
-const fakeAppConfigService = { get: () => of(createMockState()) } as any;
-const fakeLocalizationService = { get: () => of(createMockState()) } as any;
-const configState = new ConfigStateService(fakeAppConfigService, fakeLocalizationService, false);
-configState.refreshAppState();
-const permissionService = new PermissionService(configState);
+import { TestBed } from '@angular/core/testing';
+import { Injector } from '@angular/core';
 
 describe('State Utils', () => {
+  let injector: Injector;
+  let configStateService: ConfigStateService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        {
+          provide: ConfigStateService,
+          useValue: {
+            refreshAppState: jest.fn(),
+            getAll: jest.fn(),
+            getOne: jest.fn(),
+            getOne$: jest.fn().mockReturnValue(of({
+              modules: {
+                Identity: {
+                  entities: createMockEntities(),
+                  configuration: null,
+                },
+              },
+              enums: {
+                'MyCompanyName.MyProjectName.MyEnum': {
+                  fields: [
+                    {
+                      name: 'MyEnumValue0',
+                      value: 0,
+                    },
+                    {
+                      name: 'MyEnumValue1',
+                      value: 1,
+                    },
+                    {
+                      name: 'MyEnumValue2',
+                      value: 2,
+                    },
+                  ],
+                  localizationResource: null,
+                },
+              },
+            })),
+            getDeep: jest.fn(),
+            getDeep$: jest.fn().mockReturnValue(of({
+              modules: {
+                Identity: {
+                  entities: createMockEntities(),
+                  configuration: null,
+                },
+              },
+              enums: {
+                'MyCompanyName.MyProjectName.MyEnum': {
+                  fields: [
+                    {
+                      name: 'MyEnumValue0',
+                      value: 0,
+                    },
+                    {
+                      name: 'MyEnumValue1',
+                      value: 1,
+                    },
+                    {
+                      name: 'MyEnumValue2',
+                      value: 2,
+                    },
+                  ],
+                  localizationResource: null,
+                },
+              },
+            })),
+          },
+        },
+      ],
+    });
+
+    configStateService = TestBed.inject(ConfigStateService);
+    injector = {
+      get: jest.fn().mockReturnValue(configStateService),
+    };
+  });
+
   describe('#getObjectExtensionEntitiesFromStore', () => {
     it('should return observable entities of an existing module', async () => {
       const objectExtensionEntitiesFromStore$ = getObjectExtensionEntitiesFromStore(
-        configState,
+        injector,
         'Identity',
       );
 
@@ -29,15 +103,26 @@ describe('State Utils', () => {
     });
 
     it('should return observable empty object if module does not exist', async () => {
-      const entities = await getObjectExtensionEntitiesFromStore(configState, 'Saas').toPromise();
+      const entities = await getObjectExtensionEntitiesFromStore(injector, 'Saas').toPromise();
       expect(entities).toEqual({});
     });
 
     it('should not emit when object extensions do not exist', done => {
-      const emptyConfigState = new ConfigStateService(null, null, false);
+      const emptyConfigState = {
+        refreshAppState: jest.fn(),
+        getAll: jest.fn(),
+        getOne: jest.fn(),
+        getOne$: jest.fn().mockReturnValue(of(undefined)),
+        getDeep: jest.fn(),
+        getDeep$: jest.fn().mockReturnValue(of(undefined)),
+      };
       const emit = jest.fn();
 
-      getObjectExtensionEntitiesFromStore(emptyConfigState, 'Identity').subscribe(emit);
+      injector = {
+        get: jest.fn().mockReturnValue(emptyConfigState),
+      };
+
+      getObjectExtensionEntitiesFromStore(injector, 'Identity').subscribe(emit);
 
       setTimeout(() => {
         expect(emit).not.toHaveBeenCalled();
@@ -49,10 +134,7 @@ describe('State Utils', () => {
   describe('#mapEntitiesToContributors', () => {
     it('should return contributors from given entities', async () => {
       const contributors = await lastValueFrom(
-        of(createMockEntities()).pipe(
-          mapEntitiesToContributors(configState, permissionService, 'AbpIdentity'),
-          take(1),
-        ),
+        of(createMockEntities()).pipe(mapEntitiesToContributors(injector, 'AbpIdentity'), take(1)),
       );
 
       const propList = new EntityPropList();

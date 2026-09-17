@@ -267,6 +267,10 @@ public abstract class OrganizationUnitRepository_Tests<TStartupModule> : AbpIden
         var usersCount = await _organizationUnitRepository.GetMembersCountAsync(ou);
 
         usersCount.ShouldBeGreaterThan(1);
+
+        usersCount = await _organizationUnitRepository.GetMembersCountAsync(ou, includeChildren: true);
+
+        usersCount.ShouldBeGreaterThanOrEqualTo(2);
     }
 
     [Fact]
@@ -300,6 +304,9 @@ public abstract class OrganizationUnitRepository_Tests<TStartupModule> : AbpIden
 
         await _organizationUnitRepository.RemoveAllMembersAsync(ou);
         var newCount = await _organizationUnitRepository.GetMembersCountAsync(ou);
+        newCount.ShouldBe(0);
+
+        newCount = await _organizationUnitRepository.GetMembersCountAsync(ou, includeChildren: true);
         newCount.ShouldBe(0);
     }
 

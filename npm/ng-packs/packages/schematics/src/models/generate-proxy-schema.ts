@@ -31,4 +31,9 @@ export interface GenerateProxySchema {
    */
   entryPoint?: string;
   serviceType?: eServiceType;
+
+  /**
+   * Generate Resource API helpers for read operations.
+   */
+  resourceApi?: boolean;
 }

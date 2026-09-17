@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Components.Progression;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.AspNetCore.Components.MauiBlazor;
 
@@ -13,12 +14,15 @@ public class AbpMauiBlazorClientHttpMessageHandler : DelegatingHandler, ITransie
 {
     private readonly IUiPageProgressService _uiPageProgressService;
     private readonly IMauiBlazorSelectedLanguageProvider _mauiBlazorSelectedLanguageProvider;
+    private readonly ICurrentTimezoneProvider _currentTimezoneProvider;
 
     public AbpMauiBlazorClientHttpMessageHandler(
         IClientScopeServiceProviderAccessor clientScopeServiceProviderAccessor,
-        IMauiBlazorSelectedLanguageProvider mauiBlazorSelectedLanguageProvider)
+        IMauiBlazorSelectedLanguageProvider mauiBlazorSelectedLanguageProvider,
+        ICurrentTimezoneProvider currentTimezoneProvider)
     {
         _mauiBlazorSelectedLanguageProvider = mauiBlazorSelectedLanguageProvider;
+        _currentTimezoneProvider = currentTimezoneProvider;
         _uiPageProgressService = clientScopeServiceProviderAccessor.ServiceProvider.GetRequiredService<IUiPageProgressService>();
     }
 
@@ -32,6 +36,7 @@ public class AbpMauiBlazorClientHttpMessageHandler : DelegatingHandler, ITransie
             });
 
             await SetLanguageAsync(request);
+            await SetTimeZoneAsync(request);
 
             return await base.SendAsync(request, cancellationToken);
         }
@@ -50,5 +55,16 @@ public class AbpMauiBlazorClientHttpMessageHandler : DelegatingHandler, ITransie
             request.Headers.AcceptLanguage.Clear();
             request.Headers.AcceptLanguage.Add(new StringWithQualityHeaderValue(selectedLanguage!));
         }
+    }
+
+    private Task SetTimeZoneAsync(HttpRequestMessage request)
+    {
+        if (!_currentTimezoneProvider.TimeZone.IsNullOrWhiteSpace())
+        {
+            request.Headers.Remove(TimeZoneConsts.DefaultTimeZoneKey);
+            request.Headers.Add(TimeZoneConsts.DefaultTimeZoneKey, _currentTimezoneProvider.TimeZone);
+        }
+
+        return Task.CompletedTask;
     }
 }

@@ -1,11 +1,18 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to configure CORS in ABP microservice solutions to enable secure cross-origin requests for your applications."
+}
+```
+
 # Microservice Solution: CORS Configuration
 
 ````json
 //[doc-nav]
 {
   "Next": {
-    "Name": "Communication in the Microservice solution",
-    "Path": "solution-templates/microservice/communication"
+    "Name": "Health Check Configuration",
+    "Path": "solution-templates/microservice/health-check-configuration"
   }
 }
 ````

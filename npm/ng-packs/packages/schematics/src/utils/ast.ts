@@ -35,3 +35,10 @@ export function isBooleanStringOrNumberLiteral(
     node.kind === ts.SyntaxKind.FalseKeyword
   );
 }
+
+export function removeEmptyElementsFromArrayLiteral(
+  array: ts.ArrayLiteralExpression,
+): ts.ArrayLiteralExpression {
+  const cleaned = array.elements.filter(el => el.kind !== ts.SyntaxKind.OmittedExpression);
+  return ts.factory.updateArrayLiteralExpression(array, ts.factory.createNodeArray(cleaned));
+}

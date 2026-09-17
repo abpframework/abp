@@ -29,6 +29,7 @@
     "FullSearch": "Išči v dokumentih",
     "Volo.Docs.Domain:010001": "Elastično iskanje ni omogočeno.",
     "MultipleVersionDocumentInfo": "Ta dokument ima več verzij. Izberite možnosti, ki so najprimernejše.",
+    "DocumentOptions": "Možnosti dokumenta",
     "New": "Nov",
     "Upd": "Posod.",
     "NewExplanation": "Ustvarjeno v zadnjih dveh tednih.",
@@ -38,6 +39,7 @@
     "Search": "Iskanje",
     "SearchResults": "Rezultati iskanja",
     "SearchInTheAllDocuments": "Poiščite v vseh dokumentih",
-    "GoogleTranslate": "Google prevajalnik"
+    "GoogleTranslate": "Google prevajalnik",
+    "DownloadPDF": "Prenesi PDF"
   }
 }

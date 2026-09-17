@@ -34,6 +34,8 @@ public class ApplicationLocalizationConfigurationDto
 
     public Dictionary<string, List<NameValue>> LanguageFilesMap { get; set; }
 
+    public bool UseRouteBasedCulture { get; set; }
+
     public ApplicationLocalizationConfigurationDto()
     {
         Values = new Dictionary<string, Dictionary<string, string>>();

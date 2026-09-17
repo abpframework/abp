@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using OpenIddict.Abstractions;
 using Shouldly;
@@ -61,12 +62,12 @@ public abstract class OpenIddictTokenRepository_Tests<TStartupModule> : OpenIddi
     [Fact]
     public async Task FindAsync()
     {
-        (await _tokenRepository.FindAsync("TestSubject1", new Guid())).Count.ShouldBe(0);
-        (await _tokenRepository.FindAsync("TestSubject1", _testData.App1Id)).Count.ShouldBe(1);
-        (await _tokenRepository.FindAsync("TestSubject1", _testData.App1Id, "NonExistsStatus")).Count.ShouldBe(0);
-        (await _tokenRepository.FindAsync("TestSubject1", _testData.App1Id, OpenIddictConstants.Statuses.Redeemed)).Count.ShouldBe(1);
-        (await _tokenRepository.FindAsync("TestSubject1", _testData.App1Id, OpenIddictConstants.Statuses.Redeemed, "NonExistsType")).Count.ShouldBe(0);
-        (await _tokenRepository.FindAsync("TestSubject1", _testData.App1Id, OpenIddictConstants.Statuses.Redeemed, "TestType1")).Count.ShouldBe(1);
+        (await _tokenRepository.FindAsync( _testData.Subject1, new Guid(), null, null)).Count.ShouldBe(0);
+        (await _tokenRepository.FindAsync( _testData.Subject1, _testData.App1Id, null, null)).Count.ShouldBe(1);
+        (await _tokenRepository.FindAsync( _testData.Subject1, _testData.App1Id, "NonExistsStatus", null)).Count.ShouldBe(0);
+        (await _tokenRepository.FindAsync( _testData.Subject1, _testData.App1Id, OpenIddictConstants.Statuses.Redeemed, null)).Count.ShouldBe(1);
+        (await _tokenRepository.FindAsync( _testData.Subject1, _testData.App1Id, OpenIddictConstants.Statuses.Redeemed, "NonExistsType")).Count.ShouldBe(0);
+        (await _tokenRepository.FindAsync( _testData.Subject1, _testData.App1Id, OpenIddictConstants.Statuses.Redeemed, "TestType1")).Count.ShouldBe(1);
     }
 
     [Fact]
@@ -103,7 +104,7 @@ public abstract class OpenIddictTokenRepository_Tests<TStartupModule> : OpenIddi
     [Fact]
     public async Task FindBySubjectAsync()
     {
-        (await _tokenRepository.FindBySubjectAsync("TestSubject1")).Count.ShouldBe(1);
+        (await _tokenRepository.FindBySubjectAsync( _testData.Subject1)).Count.ShouldBe(1);
     }
 
     [Fact]
@@ -121,5 +122,37 @@ public abstract class OpenIddictTokenRepository_Tests<TStartupModule> : OpenIddi
         await _tokenRepository.PruneAsync(DateTime.UtcNow - TimeSpan.FromDays(14));
 
         (await _tokenRepository.ListAsync(int.MaxValue, 0)).Count.ShouldBe(1);
+    }
+
+    [Fact]
+    public async Task RevokeByApplicationIdAsync()
+    {
+        var authorizations = await _tokenRepository.FindByApplicationIdAsync(_testData.App2Id);
+        authorizations.Count.ShouldBe(1);
+        authorizations.First().ApplicationId.ShouldBe(_testData.App2Id);
+        authorizations.First().Status.ShouldBe(OpenIddictConstants.Statuses.Valid);
+
+        (await _tokenRepository.RevokeByApplicationIdAsync(_testData.App2Id)).ShouldBe(1);
+
+        authorizations = await _tokenRepository.FindByApplicationIdAsync(_testData.App2Id);
+        authorizations.Count.ShouldBe(1);
+        authorizations.First().ApplicationId.ShouldBe(_testData.App2Id);
+        authorizations.First().Status.ShouldBe(OpenIddictConstants.Statuses.Revoked);
+    }
+
+    [Fact]
+    public async Task RevokeBySubjectAsync()
+    {
+        var authorizations = await _tokenRepository.FindBySubjectAsync(_testData.Subject2);
+        authorizations.Count.ShouldBe(1);
+        authorizations.First().Subject.ShouldBe(_testData.Subject2);
+        authorizations.First().Status.ShouldBe(OpenIddictConstants.Statuses.Valid);
+
+        (await _tokenRepository.RevokeBySubjectAsync(_testData.Subject2)).ShouldBe(1);
+
+        authorizations = await _tokenRepository.FindBySubjectAsync(_testData.Subject2);
+        authorizations.Count.ShouldBe(1);
+        authorizations.First().Subject.ShouldBe(_testData.Subject2);
+        authorizations.First().Status.ShouldBe(OpenIddictConstants.Statuses.Revoked);
     }
 }

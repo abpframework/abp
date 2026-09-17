@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to migrate your Blazor Wasm UI to OpenIddict for seamless authentication in your ABP Framework applications."
+}
+```
+
 # OpenIddict Blazor Wasm UI Migration Guide
 
 ## Blazor Project

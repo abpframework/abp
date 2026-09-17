@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -23,7 +24,7 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
 
         private const string LiItemTemplateWithLink = @"<li class='{0}'><span class='plus-icon'><i class='fa fa-{1}'></i></span>{2}{3}</li>";
 
-        private const string ListItemAnchor = @"<a href='{0}' class='{1}'>{2}</a>";
+        private const string ListItemAnchor = @"<a href='{0}' {1} class='{2}'>{3}</a>";
 
         private const string ListItemSpan = @"<span class='{0}'>{1}</span>";
 
@@ -72,11 +73,14 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
 
             var isAnyNodeOpenedInThisLevel = IsAnyNodeOpenedInThisLevel(node);
 
-            node.Items?.ForEach(innerNode =>
+            if (!node.IsLazyExpandable || isAnyNodeOpenedInThisLevel)
             {
-                content += GetParentNode(innerNode, isAnyNodeOpenedInThisLevel);
-            });
-
+                node.Items?.ForEach(innerNode =>
+                {
+                    content += GetParentNode(innerNode, isAnyNodeOpenedInThisLevel);
+                });
+            }
+            
             var result = node.IsEmpty ? content : GetLeafNode(node, content);
 
             return result;
@@ -121,6 +125,11 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
                 listItemCss += " selected-tree";
             }
 
+            if (node.IsLazyExpandable)
+            {
+                listItemCss += " lazy-expand";
+            }
+
             string listInnerItem;
             if (node.Path.IsNullOrEmpty() && node.IsLeaf)
             {
@@ -147,7 +156,8 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
 
                 sb.Clear();
 
-                listInnerItem = string.Format(ListItemAnchor, NormalizePath(node.Path), textCss,
+                var additionalAttributes = node.Keywords.IsNullOrEmpty() ? "" : "data-keywords=\"" + node.Keywords.JoinAsString(",") + "\"";
+                listInnerItem = string.Format(ListItemAnchor, NormalizePath(node.Path), additionalAttributes ,textCss,
                     node.Text.IsNullOrEmpty()
                         ? "?"
                         : sb.Append(node.Text).Append(badgeStringBuilder.ToString()).ToString());

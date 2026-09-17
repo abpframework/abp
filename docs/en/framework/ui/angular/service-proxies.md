@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to efficiently create service proxies for Angular applications using ABP Framework, avoiding manual transformations and improving code clarity."
+}
+```
+
 # Service Proxies
 
 Calling a REST endpoint from Angular applications is common. We usually create **services** matching server-side controllers and **interfaces** matching [DTOs](../../architecture/domain-driven-design/data-transfer-objects.md) to interact with the server. This often results in manually transforming C# code into TypeScript equivalents and that is unfortunate, if not intolerable.
@@ -81,22 +88,26 @@ export const environment: Config.Environment = {
 - **target:** Target for the Angular project to place the generated code. For example, if it's `permission-management`, it'll look like this (npm/ng-packs/packages/*permission-management*).
 - **entryPoint:** To create the generated proxy folder in the target. The directory is `permission-management/proxy/src/lib/proxy` and the `permission-management` is the value of target. If you want to create a folder for the generated proxy, there are two options, you should either set the value `proxy` as the entryPoint or go to project.json and change the `sourceRoot` from `packages/permission-management/src` to `packages/permission-management/proxy/src`. No need to change the sourceRoot of project with the property. if you keep it empty, the proxy will be generated into the folder defined in the sourceRoot property.
 - **serviceType:** The service type of the generated proxy. The options are `application`, `integration` and `all`. The default value is `application`. A developer can mark a service "integration service". If you want to skip proxy generation for the service, then this is the correct setting. More info about [Integration Services](../../api-development/integration-services.md) 
+- **resourceApi:** Generates the `GET` endpoints against the Resource API: they return an `rxResource`-based `ResourceRef` and take their parameters as a single `Signal`, instead of returning an `Observable`. This is off by default, so the generated services keep the Observable-based form unless you enable this option. This parameter requires Angular v22 or later.
 
 
 ### Services
 
 The `generate-proxy` command generates one service per back-end controller and a method (property with a function value actually) for each action in the controller. These methods call backend APIs via [RestService](./http-requests#restservice).
 
+If you pass `--resource-api`, the `GET` members return an `rxResource`-based `ResourceRef` instead of an `Observable`, and take their parameters as a single `Signal` (a parameterless endpoint has no signal parameter, and the optional `config` argument is unchanged). The other HTTP methods keep the form above.
+
 A variable named `apiName` (available as of v2.4) is defined in each service. `apiName` matches the module's `RemoteServiceName`. This variable passes to the `RestService` as a parameter at each request. If there is no microservice API defined in the environment, `RestService` uses the default. See [getting a specific API endpoint from application config](./http-requests#how-to-get-a-specific-api-endpoint-from-application-config)
 
-The `providedIn` property of the services is defined as `'root'`. Therefore there is no need to provide them in a module. You can use them directly by injecting them into the constructor as shown below:
+The `providedIn` property of the services is defined as `'root'`. Therefore there is no need to provide them in a module. You can use them directly by injecting as shown below:
 
 ```js
 import { BookService } from '@proxy/books';
+import { inject } from '@angular/core';
 
 @Component(/* component metadata here */)
 export class BookComponent implements OnInit {
-  constructor(private service: BookService) {}
+  private service = inject(BookService);
 
   ngOnInit() {
     this.service.get().subscribe(
@@ -106,7 +117,7 @@ export class BookComponent implements OnInit {
 }
 ```
 
-The Angular compiler removes the services that have not been injected anywhere from the final output. See the [tree-shakable providers documentation](https://angular.io/guide/dependency-injection-providers#tree-shakable-providers).
+The Angular compiler removes the services that have not been injected anywhere from the final output. See the [tree-shakable providers documentation](https://angular.dev/guide/di/defining-dependency-providers).
 
 ### Models
 
@@ -144,9 +155,11 @@ export class BookComponent implements OnInit {
 <!-- simplified for sake of clarity -->
 <select formControlName="genre">
   <option [ngValue]="null">Select a genre</option>
-  <option *ngFor="let genre of genres" [ngValue]="genre.value">
-    {%{{{ genre.key }}}%}
-  </option>
+  @for (genre of genres; track genre.value) {
+    <option [ngValue]="genre.value">
+      {%{{{ genre.key }}}%}
+    </option>
+  }
 </select>
 ```
 

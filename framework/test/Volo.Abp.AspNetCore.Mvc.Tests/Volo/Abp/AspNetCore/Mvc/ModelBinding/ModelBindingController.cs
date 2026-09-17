@@ -13,10 +13,22 @@ public class ModelBindingController : AbpController
         return input.Kind.ToString().ToLower();
     }
 
+    [HttpGet("DateTimeKind_WithResult")]
+    public string DateTimeKind_WithResult(DateTime input)
+    {
+        return input.Kind.ToString().ToLower() + "_" + input.ToString("O").ToLower();
+    }
+
     [HttpGet("NullableDateTimeKind")]
     public string NullableDateTimeKind(DateTime? input)
     {
         return input.Value.Kind.ToString().ToLower();
+    }
+
+    [HttpGet("NullableDateTimeKind_WithResult")]
+    public string NullableDateTimeKind_WithResult(DateTime? input)
+    {
+        return input.Value.Kind.ToString().ToLower() + "_" + input.Value.ToString("O").ToLower();
     }
 
     [HttpGet("DisableDateTimeNormalizationDateTimeKind")]
@@ -40,6 +52,19 @@ public class ModelBindingController : AbpController
                input.InnerModel.Time4.Kind.ToString().ToLower();
     }
 
+    [HttpGet("ComplexTypeDateTimeKind_WithResult")]
+    public string ComplexTypeDateTimeKind_WithResult(GetDateTimeKindModel input)
+    {
+        return input.Time1.Kind.ToString().ToLower() + "_" +
+               input.Time1.ToString("O").ToLower() + "_" +
+               input.Time2.Kind.ToString().ToLower() + "_" +
+               input.Time2.ToString("O").ToLower() + "_" +
+               input.Time3.Value.Kind.ToString().ToLower() + "_" +
+               input.Time3.Value.ToString("O").ToLower() + "_" +
+               input.InnerModel.Time4.Kind.ToString().ToLower() + "_" +
+               input.InnerModel.Time4.ToString("O").ToLower();
+    }
+
     //JSON input and output.
     [HttpPost("ComplexTypeDateTimeKind_JSON")]
     public string ComplexTypeDateTimeKind_JSON([FromBody] GetDateTimeKindModel input)
@@ -48,6 +73,20 @@ public class ModelBindingController : AbpController
                input.Time2.Kind.ToString().ToLower() + "_" +
                input.Time3.Value.Kind.ToString().ToLower() + "_" +
                input.InnerModel.Time4.Kind.ToString().ToLower();
+    }
+
+    //JSON input and output.
+    [HttpPost("ComplexTypeDateTimeKind_JSON_WithResult")]
+    public string ComplexTypeDateTimeKind_JSON_WithResult([FromBody] GetDateTimeKindModel input)
+    {
+        return input.Time1.Kind.ToString().ToLower() + "_" +
+               input.Time1.ToString("O").ToLower() + "_" +
+               input.Time2.Kind.ToString().ToLower() + "_" +
+               input.Time2.ToString("O").ToLower() + "_" +
+               input.Time3.Value.Kind.ToString().ToLower() + "_" +
+               input.Time3.Value.ToString("O").ToLower() + "_" +
+               input.InnerModel.Time4.Kind.ToString().ToLower() + "_" +
+               input.InnerModel.Time4.ToString("O").ToLower();
     }
 
     [HttpPost("Guid_Json_Test")]

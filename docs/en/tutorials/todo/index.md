@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to quickly build a simple application using ABP Framework with our easy-to-follow tutorial on single-layer and layered solutions."
+}
+```
+
 # TODO Application Tutorial
 
 **Welcome to the ABP**. This is a single-part, quick-start tutorial to build a simple application. Start with this tutorial if you want to quickly understand how ABP works.

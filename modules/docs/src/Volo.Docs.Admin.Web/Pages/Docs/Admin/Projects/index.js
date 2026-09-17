@@ -16,6 +16,11 @@ $(function () {
         modalClass: 'projectPull',
     });
 
+    var _managePdfFilesModal = new abp.ModalManager({
+        viewUrl: abp.appPath + 'Docs/Admin/Projects/ManagePdfFiles',
+        modalClass: 'projectManagePdfFiles',
+    });
+
     var _dataTable = $('#ProjectsTable').DataTable(
         abp.libs.datatables.normalizeConfiguration({
             processing: true,
@@ -117,6 +122,17 @@ $(function () {
                                         });
                                 },
                             },
+                            {
+                                text: l('ManagePdfFiles'),
+                                visible: abp.auth.isGranted(
+                                    'Docs.Admin.Projects.ManagePdfFiles'
+                                ),
+                                action: function (data) {
+                                    _managePdfFilesModal.open({
+                                        projectId: data.record.id,
+                                    });
+                                }
+                            }
                         ],
                     },
                 },

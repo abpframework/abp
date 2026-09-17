@@ -2,6 +2,7 @@ using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -24,8 +25,9 @@ public class OpenIddictSupportedLoginModel : LoginModel
         IOptions<AbpAccountOptions> accountOptions,
         IOptions<IdentityOptions> identityOptions,
         IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
-        AbpOpenIddictRequestHelper openIddictRequestHelper)
-        : base(schemeProvider, accountOptions, identityOptions, identityDynamicClaimsPrincipalContributorCache)
+        AbpOpenIddictRequestHelper openIddictRequestHelper,
+        IWebHostEnvironment webHostEnvironment)
+        : base(schemeProvider, accountOptions, identityOptions, identityDynamicClaimsPrincipalContributorCache, webHostEnvironment)
     {
         OpenIddictRequestHelper = openIddictRequestHelper;
     }

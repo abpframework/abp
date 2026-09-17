@@ -2,7 +2,9 @@ import { inject, Injectable, Pipe, PipeTransform, SecurityContext } from '@angul
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Injectable()
-@Pipe({ name: 'abpSafeHtml' })
+@Pipe({
+  name: 'abpSafeHtml',
+})
 export class SafeHtmlPipe implements PipeTransform {
   private readonly sanitizer = inject(DomSanitizer);
 

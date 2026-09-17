@@ -5,8 +5,8 @@ import {
   mergeWithDefaultActions,
   mergeWithDefaultProps,
 } from '@abp/ng.components/extensible';
-import { ConfigStateService, IAbpGuard, PermissionService } from '@abp/ng.core';
-import { Injectable, inject } from '@angular/core';
+import { IAbpGuard } from '@abp/ng.core';
+import { Injectable, Injector, inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -30,8 +30,7 @@ import {
  */
 @Injectable()
 export class TenantManagementExtensionsGuard implements IAbpGuard {
-  protected readonly configState = inject(ConfigStateService);
-  protected readonly permission = inject(PermissionService);
+  protected readonly injector = inject(Injector);
   protected readonly extensions = inject(ExtensionsService);
 
   canActivate(): Observable<boolean> {
@@ -45,11 +44,11 @@ export class TenantManagementExtensionsGuard implements IAbpGuard {
     const editFormContributors =
       inject(TENANT_MANAGEMENT_EDIT_FORM_PROP_CONTRIBUTORS, config) || {};
 
-    return getObjectExtensionEntitiesFromStore(this.configState, 'TenantManagement').pipe(
+    return getObjectExtensionEntitiesFromStore(this.injector, 'TenantManagement').pipe(
       map(entities => ({
         [eTenantManagementComponents.Tenants]: entities.Tenant,
       })),
-      mapEntitiesToContributors(this.configState, this.permission, 'TenantManagement'),
+      mapEntitiesToContributors(this.injector, 'TenantManagement'),
       tap(objectExtensionContributors => {
         mergeWithDefaultActions(
           this.extensions.entityActions,

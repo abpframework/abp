@@ -1,17 +1,38 @@
-import { AuthService, ConfigStateService } from '@abp/ng.core';
-import { ToasterService } from '@abp/ng.theme.shared';
-import { Component, Injector, OnInit, inject } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Component, Injector, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ReactiveFormsModule,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { throwError } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
-import { eAccountComponents } from '../../enums/components';
-import { getRedirectUrl } from '../../utils/auth-utils';
+import {
+  AuthService,
+  AutofocusDirective,
+  ConfigStateService,
+  LocalizationPipe,
+  NgxValidateCoreModule,
+} from '@abp/ng.core';
+import { ButtonComponent, ToasterService } from '@abp/ng.theme.shared';
+import { eAccountComponents } from '../../enums';
+import { getRedirectUrl } from '../../utils';
 
 const { maxLength, required } = Validators;
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-login',
   templateUrl: './login.component.html',
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    LocalizationPipe,
+    ButtonComponent,
+    NgxValidateCoreModule,
+    AutofocusDirective,
+  ],
 })
 export class LoginComponent implements OnInit {
   protected injector = inject(Injector);
@@ -22,7 +43,7 @@ export class LoginComponent implements OnInit {
 
   form!: UntypedFormGroup;
 
-  inProgress?: boolean;
+  readonly inProgress = signal(false);
 
   isSelfRegistrationEnabled = true;
 
@@ -51,7 +72,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     if (this.form.invalid) return;
 
-    this.inProgress = true;
+    this.inProgress.set(true);
 
     const { username, password, rememberMe } = this.form.value;
 
@@ -68,9 +89,9 @@ export class LoginComponent implements OnInit {
             '',
             { life: 7000 },
           );
-          return throwError(err);
+          return throwError(() => err);
         }),
-        finalize(() => (this.inProgress = false)),
+        finalize(() => this.inProgress.set(false)),
       )
       .subscribe();
   }

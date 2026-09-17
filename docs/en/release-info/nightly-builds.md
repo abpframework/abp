@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Access the latest ABP Framework nightly builds effortlessly with our guide on installing and switching to preview packages. Stay ahead of releases!"
+}
+```
+
 # Nightly Builds
 
 All framework & module packages (both open-source and pro packages) are deployed to MyGet every night on weekdays. So, you can install the latest dev-branch builds to try out functionality prior to release.

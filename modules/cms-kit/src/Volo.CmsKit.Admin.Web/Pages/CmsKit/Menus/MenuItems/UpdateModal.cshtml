@@ -64,6 +64,30 @@
             }
 
             <abp-input asp-for="ViewModel.DisplayName"/>
+            <div class="mb-3">
+                <label class="form-label" for="requiredPermissionName">@L["RequiredPermissionName"].Value</label>
+                <select asp-for="ViewModel.RequiredPermissionName" id="requiredPermissionName" class="form-control">
+                    @if(Model.ViewModel.RequiredPermissionName != null)
+                    {
+                        var selectedPermission = Model.Permissions.FirstOrDefault(p => p.Name == Model.ViewModel.RequiredPermissionName);
+                        if (selectedPermission != null)
+                        {
+                            <option 
+                                data-bs-toggle="tooltip" 
+                                data-bs-container="#tooltip_container" 
+                                data-bs-placement="top" 
+                                title="@selectedPermission.DisplayName" 
+                                selected 
+                                value="@Model.ViewModel.RequiredPermissionName">@selectedPermission.Name</option>
+                        }
+                        else
+                        {
+                            <option selected value="@Model.ViewModel.RequiredPermissionName">@Model.ViewModel.RequiredPermissionName</option>   
+                        }
+                    }
+                </select>
+                <div id="tooltip_container"></div>
+            </div>
             <abp-input asp-for="ViewModel.IsActive"/>
             <abp-input asp-for="ViewModel.Icon"/>
             <abp-input asp-for="ViewModel.Target"/>
@@ -74,13 +98,14 @@
             {
                 if (!propertyInfo.Name.EndsWith("_Text"))
                 {
-                    if (propertyInfo.Type.IsEnum || !propertyInfo.Lookup.Url.IsNullOrEmpty())
+                    if (propertyInfo.IsEnum() || !propertyInfo.Lookup.Url.IsNullOrEmpty())
                     {
-                        if (propertyInfo.Type.IsEnum)
+                        if (propertyInfo.IsEnum())
                         {
                             Model.ViewModel.ExtraProperties.ToEnum(propertyInfo.Name, propertyInfo.Type);
                         }
                         <abp-select asp-for="ViewModel.ExtraProperties[propertyInfo.Name]"
+                                    enum-type="@propertyInfo.IsEnum() ? propertyInfo.Type : null"
                                     label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
                                     autocomplete-api-url="@propertyInfo.Lookup.Url"
                                     autocomplete-selected-item-name="@Model.ViewModel.GetProperty(propertyInfo.Name+"_Text")"

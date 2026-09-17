@@ -1,11 +1,16 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Dapr;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Volo.Abp.DependencyInjection;
+using Volo.Abp.Dapr;
 using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Dapr;
 using Volo.Abp.EventBus.Distributed;
@@ -21,50 +26,106 @@ public class AbpAspNetCoreMvcDaprEventBusModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        var subscribeOptions = context.Services.ExecutePreConfiguredActions<AbpSubscribeOptions>();
-
-        Configure<AbpEndpointRouterOptions>(options =>
+        PostConfigure<AbpEndpointRouterOptions>(options =>
         {
             options.EndpointConfigureActions.Add(endpointContext =>
             {
-                var rootServiceProvider = endpointContext.ScopeServiceProvider.GetRequiredService<IRootServiceProvider>();
-                subscribeOptions.SubscriptionsCallback = subscriptions =>
-                {
-                    var daprEventBusOptions = rootServiceProvider.GetRequiredService<IOptions<AbpDaprEventBusOptions>>().Value;
-                    foreach (var handler in rootServiceProvider.GetRequiredService<IOptions<AbpDistributedEventBusOptions>>().Value.Handlers)
+                var topicMetadatas = endpointContext.Endpoints.DataSources.SelectMany(x => x.Endpoints).OfType<RouteEndpoint>()
+                    .Where(e => e.Metadata.GetOrderedMetadata<ITopicMetadata>().Any(t => t.Name != null))
+                    .SelectMany(e => e.Metadata.GetOrderedMetadata<ITopicMetadata>())
+                    .ToList();
+
+                var endpointConventionBuilder = endpointContext.Endpoints.MapPost(
+                    "/api/abp/dapr/event", async httpContext =>
                     {
-                        foreach (var @interface in handler.GetInterfaces().Where(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IDistributedEventHandler<>)))
-                        {
-                            var eventType = @interface.GetGenericArguments()[0];
-                            var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+                        await HandleEventAsync(httpContext);
+                    });
 
-                            if (subscriptions.Any(x => x.PubsubName == daprEventBusOptions.PubSubName && x.Topic == eventName))
-                            {
-                                // Controllers with a [Topic] attribute can replace built-in event handlers.
-                                continue;
-                            }
+                var abpEvents = GetAbpEvents(endpointContext);
+                foreach (var @event in abpEvents.Where(x => !topicMetadatas.Any(t => t.PubsubName == x.PubsubName && t.Name == x.Name)))
+                {
+                    endpointConventionBuilder.WithMetadata(new TopicAttribute(
+                        @event.PubsubName,
+                        @event.Name,
+                        true));
+                }
 
-                            var subscription = new AbpSubscription
-                            {
-                                PubsubName = daprEventBusOptions.PubSubName,
-                                Topic = eventName,
-                                Route = AbpAspNetCoreMvcDaprPubSubConsts.DaprEventCallbackUrl,
-                                Metadata = new AbpMetadata
-                                {
-                                    {
-                                        AbpMetadata.RawPayload, "true"
-                                    }
-                                }
-                            };
-                            subscriptions.Add(subscription);
-                        }
-                    }
-
-                    return Task.CompletedTask;
-                };
-
-                endpointContext.Endpoints.MapAbpSubscribeHandler(subscribeOptions);
+                endpointContext.Endpoints.MapSubscribeHandler();
             });
         });
+    }
+
+    private List<TopicAttribute> GetAbpEvents(EndpointRouteBuilderContext endpointContext)
+    {
+        var subscriptions = new List<TopicAttribute>();
+        var daprEventBusOptions = endpointContext.Endpoints.ServiceProvider.GetRequiredService<IOptions<AbpDaprEventBusOptions>>().Value;
+
+        foreach (var @interface in endpointContext.Endpoints.ServiceProvider.GetRequiredService<IOptions<AbpDistributedEventBusOptions>>().Value.Handlers
+                     .SelectMany(x => x.GetInterfaces().Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDistributedEventHandler<>))))
+        {
+            var eventType = @interface.GetGenericArguments()[0];
+            var eventName = EventNameAttribute.GetNameOrDefault(eventType);
+
+            var subscription = new TopicAttribute(daprEventBusOptions.PubSubName, eventName);
+            subscriptions.Add(subscription);
+        }
+
+        return subscriptions;
+    }
+
+    private async static Task HandleEventAsync(HttpContext httpContext)
+    {
+        var logger = httpContext.RequestServices.GetRequiredService<ILogger<AbpAspNetCoreMvcDaprEventBusModule>>();
+
+        httpContext.ValidateDaprAppApiToken();
+
+        var daprSerializer = httpContext.RequestServices.GetRequiredService<IDaprSerializer>();
+        var body = (await JsonDocument.ParseAsync(httpContext.Request.Body));
+
+        var pubSubName = body.RootElement.GetProperty("pubsubname").GetString();
+        var topic = body.RootElement.GetProperty("topic").GetString();
+        var data = body.RootElement.GetProperty("data").GetRawText();
+        if (pubSubName.IsNullOrWhiteSpace() || topic.IsNullOrWhiteSpace() || data.IsNullOrWhiteSpace())
+        {
+            logger.LogError("Invalid Dapr event request.");
+            httpContext.Response.StatusCode = 400;
+            return;
+        }
+
+        var distributedEventBus = httpContext.RequestServices.GetRequiredService<DaprDistributedEventBus>();
+
+        if (IsAbpDaprEventData(data))
+        {
+            var daprEventData = daprSerializer.Deserialize(data, typeof(AbpDaprEventData)).As<AbpDaprEventData>();
+            var eventType = distributedEventBus.GetEventType(daprEventData.Topic);
+            if (eventType != null)
+            {
+                var eventData = daprSerializer.Deserialize(daprEventData.JsonData, eventType);
+                await distributedEventBus.TriggerHandlersAsync(eventType, eventData, daprEventData.MessageId, daprEventData.CorrelationId);
+            }
+        }
+        else
+        {
+            var eventType = distributedEventBus.GetEventType(topic);
+            if (eventType != null)
+            {
+                var eventData = daprSerializer.Deserialize(data, eventType);
+                await distributedEventBus.TriggerHandlersAsync(eventType, eventData);
+            }
+        }
+
+        httpContext.Response.StatusCode = 200;
+    }
+
+    private static bool IsAbpDaprEventData(string data)
+    {
+        var document = JsonDocument.Parse(data);
+        var objects = document.RootElement.EnumerateObject().ToList();
+        return objects.Count == 5 &&
+               objects.Any(x => x.Name.Equals("PubSubName", StringComparison.CurrentCultureIgnoreCase)) &&
+               objects.Any(x => x.Name.Equals("Topic", StringComparison.CurrentCultureIgnoreCase)) &&
+               objects.Any(x => x.Name.Equals("MessageId", StringComparison.CurrentCultureIgnoreCase)) &&
+               objects.Any(x => x.Name.Equals("JsonData", StringComparison.CurrentCultureIgnoreCase)) &&
+               objects.Any(x => x.Name.Equals("CorrelationId", StringComparison.CurrentCultureIgnoreCase));
     }
 }

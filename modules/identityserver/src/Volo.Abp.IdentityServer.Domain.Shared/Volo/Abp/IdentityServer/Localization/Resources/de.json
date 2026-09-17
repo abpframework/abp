@@ -11,6 +11,7 @@
     "InvalidUsername": "Ungültiger Benutzername oder Passwort!",
     "InvalidAuthenticatorCode": "Ungültiger Authentifizierungscode!",
     "InvalidRecoveryCode": "Ungültiger Wiederherstellungscode!",
-    "TheTargetUserIsNotLinkedToYou": "Der Zielbenutzer ist nicht mit Ihnen verknüpft!"
+    "TheTargetUserIsNotLinkedToYou": "Der Zielbenutzer ist nicht mit Ihnen verknüpft!",
+    "ClientResourcePermissionProviderKeyLookupService": "Client"
   }
 }

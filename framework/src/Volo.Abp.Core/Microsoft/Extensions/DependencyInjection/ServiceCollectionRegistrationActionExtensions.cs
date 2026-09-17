@@ -1,4 +1,5 @@
 ﻿using System;
+using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -37,6 +38,11 @@ public static class ServiceCollectionRegistrationActionExtensions
     public static bool IsAbpClassInterceptorsDisabled(this IServiceCollection services)
     {
         return GetOrCreateRegistrationActionList(services).IsClassInterceptorsDisabled;
+    }
+
+    public static void DisableAbpClassInterceptors(this IServiceCollection services, NamedTypeSelector selector)
+    {
+        GetOrCreateRegistrationActionList(services).DisabledClassInterceptorsSelectors.Add(selector);
     }
 
     // OnExposing

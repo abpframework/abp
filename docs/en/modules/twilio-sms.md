@@ -1,6 +1,13 @@
+```json
+//[doc-seo]
+{
+    "Description": "Integrate Twilio SMS into your ABP application effortlessly with our Pro module. Learn installation and best practices for seamless messaging!"
+}
+```
+
 # Twilio SMS Module (Pro)
 
-> You must have an ABP Team or a higher license to use this module.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this module.
 
 [Twilio](https://www.twilio.com) is a cloud communication provider that makes it easy to send and receive SMS. ABP Twilio SMS module implements the SMS sending feature of `ISmsSender` interface with Twilio.
 

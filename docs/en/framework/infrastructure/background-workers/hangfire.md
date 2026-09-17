@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Integrate Hangfire with ABP Framework to efficiently manage background jobs and leverage advanced scheduling for recurring tasks."
+}
+```
+
 # Hangfire Background Worker Manager
 
 [Hangfire](https://www.hangfire.io/) is an advanced background jobs and worker manager. You can integrate Hangfire with the ABP to use it instead of the [default background worker manager](../background-workers).
@@ -23,7 +30,7 @@ If you want to manually install;
 1. Add the [Volo.Abp.BackgroundWorkers.Hangfire](https://www.nuget.org/packages/Volo.Abp.BackgroundWorkers.Hangfire) NuGet package to your project:
 
    ````
-   Install-Package Volo.Abp.BackgroundWorkers.Hangfire
+   dotnet add package Volo.Abp.BackgroundWorkers.Hangfire
    ````
 
 2. Add the `AbpBackgroundWorkersHangfireModule` to the dependency list of your module:
@@ -40,6 +47,16 @@ public class YourModule : AbpModule
 
 > Hangfire background worker integration provides an adapter `HangfirePeriodicBackgroundWorkerAdapter` to automatically load any `PeriodicBackgroundWorkerBase` and `AsyncPeriodicBackgroundWorkerBase` derived classes as `IHangfireBackgroundWorker` instances. This allows you to still to easily switch over to use Hangfire as the background manager even you have existing background workers that are based on the [default background workers implementation](../background-workers).
 
+The adapter uses UTC for recurring schedules by default and uses the default Hangfire queue when no queue is specified (a specified queue name is prefixed with `AbpHangfireOptions.DefaultQueuePrefix`, which is empty by default). You can configure both values globally for adapted periodic workers:
+
+````csharp
+Configure<AbpHangfirePeriodicBackgroundWorkerAdapterOptions>(options =>
+{
+    options.TimeZone = TimeZoneInfo.Local;
+    options.Queue = "periodic";
+});
+````
+
 ## Configuration
 
 You can install any storage for Hangfire. The most common one is SQL Server (see the [Hangfire.SqlServer](https://www.nuget.org/packages/Hangfire.SqlServer) NuGet package).
@@ -54,7 +71,7 @@ After you have installed these NuGet packages, you need to configure your projec
       var configuration = context.Services.GetConfiguration();
       var hostingEnvironment = context.Services.GetHostingEnvironment();
 
-      //... other configarations.
+      //... other configurations.
 
       ConfigureHangfire(context, configuration);
   }
@@ -83,6 +100,24 @@ After you have installed these NuGet packages, you need to configure your projec
     app.UseConfiguredEndpoints();
  }
 ````
+
+### AbpHangfireOptions
+
+You can configure the [BackgroundJobServerOptions](https://api.hangfire.io/html/T_Hangfire_BackgroundJobServerOptions.htm) of `AbpHangfireOptions` to customize the server.
+
+````csharp
+Configure<AbpHangfireOptions>(options =>
+{
+    // If no ServerOptions is set, ABP will use the default BackgroundJobServerOptions instance.
+    options.ServerOptions = new BackgroundJobServerOptions
+    {
+        Queues = ["default", "alpha"],
+        //... other properties
+    };
+});
+````
+
+> You don't need to call `AddHangfireServer` method, ABP will use AbpHangfireOptions's `ServerOptions` to create a server.
 
 ## Create a Background Worker
 

@@ -8,8 +8,10 @@ namespace Volo.Abp.PermissionManagement.MongoDB;
 public interface IPermissionManagementMongoDbContext : IAbpMongoDbContext
 {
     IMongoCollection<PermissionGroupDefinitionRecord> PermissionGroups { get; }
-    
+
     IMongoCollection<PermissionDefinitionRecord> Permissions { get; }
-    
+
     IMongoCollection<PermissionGrant> PermissionGrants { get; }
+
+    IMongoCollection<ResourcePermissionGrant> ResourcePermissionGrants { get; }
 }

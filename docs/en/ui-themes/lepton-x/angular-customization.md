@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to customize layouts in the Angular version of LeptonX, including pre-defined layouts and component replacement for your UI."
+}
+```
+
 # Customization
 
 ### Layouts
@@ -18,14 +25,18 @@ The **Layout components** and all the replacable components are predefined in `e
 ### How to replace a component
 
 ```js
-import { ReplaceableComponentsService } from '@abp/ng.core'; // imported ReplaceableComponentsService
-import {eThemeLeptonXComponents} from "@volosoft/abp.ng.theme.lepton-x"; // imported eThemeLeptonXComponents enum
-//...
-@Component(/* component metadata */)
+import { Component, inject } from '@angular/core';
+import { ReplaceableComponentsService } from '@abp/ng.core';
+import { eThemeLeptonXComponents } from '@volosoft/abp.ng.theme.lepton-x';
+import { YourNewApplicationLayoutComponent } from './your-new-application-layout.component'; // varsa
+
+@Component({
+  // component metadata
+})
 export class AppComponent {
-  constructor(
-    private replaceableComponents: ReplaceableComponentsService, // injected the service
-  ) {
+  private readonly replaceableComponents = inject(ReplaceableComponentsService);
+
+  constructor() {
     this.replaceableComponents.add({
       component: YourNewApplicationLayoutComponent,
       key: eThemeLeptonXComponents.ApplicationLayout,

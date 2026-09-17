@@ -1,6 +1,13 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover the LeptonX Theme for ABP: a professional, responsive theme built on Bootstrap 5, offering various styles and easy installation."
+}
+```
+
 # LeptonX Theme Module
 
-> You must have an ABP Team or a higher license to use this theme.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this theme.
 
 The LeptonX Theme is a professional theme for the ABP. 
 
@@ -87,6 +94,8 @@ You can use the following CLI command to download the source-code:
 ```bash
 abp get-source Volo.Abp.LeptonXTheme	
 ```
+
+> If you are using the old ABP CLI, you can use the command: `abp get-source Volo.Abp.LeptonXTheme.Pro`
 
 If you want to download the source code of the preview version, you can use the following command:
 

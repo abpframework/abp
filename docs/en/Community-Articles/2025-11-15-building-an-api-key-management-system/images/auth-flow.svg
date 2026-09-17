@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 500">
+  <rect width="700" height="500" fill="#f8f9fa"/>
+  
+  <text x="350" y="30" text-anchor="middle" font-family="Arial" font-size="20" font-weight="bold" fill="#2c3e50">
+    API Key Authentication Flow
+  </text>
+  
+  <!-- Step 1 -->
+  <rect x="50" y="70" width="180" height="60" rx="8" fill="#3498db" stroke="#2980b9" stroke-width="2"/>
+  <text x="140" y="95" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="white">1. Client Request</text>
+  <text x="140" y="115" text-anchor="middle" font-family="Arial" font-size="10" fill="white">X-Api-Key: prefix_key</text>
+  
+  <path d="M 230,100 L 260,100" stroke="#34495e" stroke-width="2" fill="none"/>
+  <path d="M 260,100 L 255,95 M 260,100 L 255,105" stroke="#34495e" stroke-width="2" fill="none"/>
+  
+  <!-- Step 2 -->
+  <rect x="260" y="70" width="180" height="60" rx="8" fill="#e74c3c" stroke="#c0392b" stroke-width="2"/>
+  <text x="350" y="95" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="white">2. Extract API Key</text>
+  <text x="350" y="115" text-anchor="middle" font-family="Arial" font-size="10" fill="white">From Header/Query</text>
+  
+  <path d="M 350,130 L 350,160" stroke="#34495e" stroke-width="2" fill="none"/>
+  <path d="M 350,160 L 345,155 M 350,160 L 355,155" stroke="#34495e" stroke-width="2" fill="none"/>
+  
+  <!-- Step 3 -->
+  <rect x="260" y="160" width="180" height="60" rx="8" fill="#9b59b6" stroke="#8e44ad" stroke-width="2"/>
+  <text x="350" y="185" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="white">3. Lookup by Prefix</text>
+  <text x="350" y="205" text-anchor="middle" font-family="Arial" font-size="10" fill="white">Cache → Database</text>
+  
+  <path d="M 350,220 L 350,250" stroke="#34495e" stroke-width="2" fill="none"/>
+  <path d="M 350,250 L 345,245 M 350,250 L 355,245" stroke="#34495e" stroke-width="2" fill="none"/>
+  
+  <!-- Step 4 -->
+  <rect x="260" y="250" width="180" height="60" rx="8" fill="#f39c12" stroke="#e67e22" stroke-width="2"/>
+  <text x="350" y="275" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="white">4. Verify Hash</text>
+  <text x="350" y="295" text-anchor="middle" font-family="Arial" font-size="10" fill="white">SHA256 + Expiration</text>
+  
+  <!-- Decision -->
+  <path d="M 350,310 L 350,330" stroke="#34495e" stroke-width="2" fill="none"/>
+  <path d="M 350,330 L 345,325 M 350,330 L 355,325" stroke="#34495e" stroke-width="2" fill="none"/>
+  
+  <path d="M 350,330 L 400,370 L 350,410 L 300,370 Z" fill="#16a085" stroke="#138f75" stroke-width="2"/>
+  <text x="350" y="378" text-anchor="middle" font-family="Arial" font-size="12" font-weight="bold" fill="white">Valid?</text>
+  
+  <!-- Success Path -->
+  <path d="M 400,370 L 500,370" stroke="#2ecc71" stroke-width="3" fill="none"/>
+  <path d="M 500,370 L 495,365 M 500,370 L 495,375" stroke="#2ecc71" stroke-width="3" fill="none"/>
+  <text x="450" y="365" text-anchor="middle" font-family="Arial" font-size="11" fill="#27ae60" font-weight="bold">Yes</text>
+  
+  <rect x="500" y="340" width="150" height="60" rx="8" fill="#2ecc71" stroke="#27ae60" stroke-width="2"/>
+  <text x="575" y="365" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="white">200 OK</text>
+  <text x="575" y="385" text-anchor="middle" font-family="Arial" font-size="10" fill="white">ClaimsPrincipal</text>
+  
+  <!-- Failure Path -->
+  <path d="M 300,370 L 200,370" stroke="#e74c3c" stroke-width="3" fill="none"/>
+  <path d="M 200,370 L 205,365 M 200,370 L 205,375" stroke="#e74c3c" stroke-width="3" fill="none"/>
+  <text x="250" y="365" text-anchor="middle" font-family="Arial" font-size="11" fill="#c0392b" font-weight="bold">No</text>
+  
+  <rect x="50" y="340" width="150" height="60" rx="8" fill="#e74c3c" stroke="#c0392b" stroke-width="2"/>
+  <text x="125" y="365" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="white">401 Unauthorized</text>
+  <text x="125" y="385" text-anchor="middle" font-family="Arial" font-size="10" fill="white">Invalid/Expired</text>
+  
+  <!-- Performance Note -->
+  <rect x="50" y="430" width="600" height="50" rx="8" fill="#ecf0f1" stroke="#bdc3c7" stroke-width="2"/>
+  <text x="350" y="452" text-anchor="middle" font-family="Arial" font-size="11" fill="#34495e">
+    ⚡ Cache-first strategy ensures ~95% requests skip database lookup
+  </text>
+  <text x="350" y="468" text-anchor="middle" font-family="Arial" font-size="10" fill="#7f8c8d">
+    Typical response time: &lt;5ms (cached) | &lt;50ms (database lookup)
+  </text>
+</svg>

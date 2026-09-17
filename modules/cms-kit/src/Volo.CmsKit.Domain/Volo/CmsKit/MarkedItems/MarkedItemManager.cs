@@ -2,6 +2,8 @@
 using JetBrains.Annotations;
 using System.Threading.Tasks;
 using Volo.Abp;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace Volo.CmsKit.MarkedItems;
 public class MarkedItemManager : CmsKitDomainServiceBase
@@ -20,7 +22,7 @@ public class MarkedItemManager : CmsKitDomainServiceBase
 
     public virtual async Task<bool> ToggleUserMarkedItemAsync(
         Guid creatorId,
-        [NotNull] string entityType, 
+        [NotNull] string entityType,
         [NotNull] string entityId)
     {
         Check.NotNullOrWhiteSpace(entityType, nameof(entityType));
@@ -48,5 +50,13 @@ public class MarkedItemManager : CmsKitDomainServiceBase
                 )
             );
         return true;
+    }
+    public async Task<List<string>> GetEntityIdsFilteredByUserAsync(
+       [NotNull] Guid userId,
+       [NotNull] string entityType,
+       [CanBeNull] Guid? tenantId = null,
+       CancellationToken cancellationToken = default)
+    {
+        return await UserMarkedItemRepository.GetEntityIdsFilteredByUserAsync(userId, entityType, tenantId, cancellationToken);
     }
 }

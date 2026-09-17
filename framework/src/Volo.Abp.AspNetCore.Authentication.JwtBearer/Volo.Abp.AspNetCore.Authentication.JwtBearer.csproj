@@ -4,7 +4,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <WarningsAsErrors>Nullable</WarningsAsErrors>
     <AssemblyName>Volo.Abp.AspNetCore.Authentication.JwtBearer</AssemblyName>
@@ -27,7 +27,7 @@
     <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" />
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" />
-    <PackageReference Include="IdentityModel" />
+    <PackageReference Include="Duende.IdentityModel" />
   </ItemGroup>
 
 </Project>

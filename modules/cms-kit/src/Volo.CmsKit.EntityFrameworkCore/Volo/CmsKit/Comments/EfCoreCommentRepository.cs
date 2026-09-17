@@ -186,4 +186,9 @@ public class EfCoreCommentRepository : EfCoreRepository<ICmsKitDbContext, Commen
             .WhereIf(CommentApproveState.Disapproved == commentApproveState, c => c.Comment.IsApproved == false)
             .WhereIf(CommentApproveState.Waiting == commentApproveState, c => c.Comment.IsApproved == null);
     }
+    
+    public async Task DeleteByEntityTypeAndIdAsync(string entityType, string entityId, CancellationToken cancellationToken = default)
+    {
+         await (await GetDbSetAsync()).Where(x => x.EntityType == entityType && x.EntityId == entityId).ExecuteDeleteAsync(GetCancellationToken(cancellationToken));
+    }
 }

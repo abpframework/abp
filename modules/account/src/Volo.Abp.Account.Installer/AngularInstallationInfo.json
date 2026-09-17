@@ -1,0 +1,39 @@
+{
+	"packages":[
+		{
+			"name": "@abp/ng.account",
+			"appRoutingModuleConfiguration":{
+				"routes":[
+					"{ path: 'account', loadChildren: () => import('@abp/ng.account').then(c => c.createRoutes()),}"
+				]
+			},
+			"appModuleConfiguration":{
+				"imports":[
+					{
+						"names":[
+							"provideAccountConfig"
+						],
+						"namespace": "@abp/ng.account/config"
+					}
+				],
+				"providerNames":[
+					"provideAccountConfig()"
+				]
+			},
+			"tsJsonPathRecordConfigurations":[
+				{
+					"name": "@abp/ng.account",
+					"paths": [
+						"angular/projects/account/src/public-api.ts"
+					]
+				},
+				{
+					"name": "@abp/ng.account/config",
+					"paths": [
+						"angular/projects/account/config/src/public-api.ts"
+					]
+				}
+			]
+		}
+	]
+}

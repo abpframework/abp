@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using IdentityModel.Client;
+using Duende.IdentityModel.Client;
 using Polly;
 using Polly.Extensions.Http;
 using Volo.Abp.Cli.Auth;

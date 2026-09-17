@@ -1,10 +1,11 @@
 ﻿using JetBrains.Annotations;
 using System;
+using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Identity;
 
-public class IdentityClaimType : AggregateRoot<Guid>
+public class IdentityClaimType : AggregateRoot<Guid>, IHasCreationTime
 {
     public virtual string Name { get; protected set; }
 
@@ -19,6 +20,8 @@ public class IdentityClaimType : AggregateRoot<Guid>
     public virtual string Description { get; set; }
 
     public virtual IdentityClaimValueType ValueType { get; set; }
+    
+    public virtual DateTime CreationTime { get; protected set; }
 
     protected IdentityClaimType()
     {

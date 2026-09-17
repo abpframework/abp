@@ -1,27 +1,29 @@
 ﻿@typeparam TItem
 <CascadingValue Value="this" IsFixed="true">
-    @if ( Type == ActionType.Dropdown )
+    @if ( Type == ActionType.Dropdown || (Type == ActionType.Button && DisabledOrNoActions()))
     {
         <Dropdown Disabled="@DisabledOrNoActions()">
-            @if ( HasPrimaryAction )
-            {
-                <Button Block="true"
-                        Color="@PrimaryAction!.Color"
-                        Clicked="async ()=> await PrimaryAction.ActionClickedAsync()"
-                        Disabled=@PrimaryAction.Disabled>
-                    @PrimaryAction.Text
-                </Button>
-                <DropdownToggle Color="@ToggleColor" Split="true" />
-            }
-            else
-            {
-                <DropdownToggle Class="btn-block" Color="@ToggleColor">
-                    @ToggleText
-                </DropdownToggle>
-            }
-            <DropdownMenu>
-                @ChildContent
-            </DropdownMenu>
+            <Tooltip Text="@(DisabledOrNoActions() ? UiLocalizer["EntityActionsDisabledTooltip"] : string.Empty)">
+                @if ( HasPrimaryAction )
+                {
+                    <Button Block="true"
+                            Color="@PrimaryAction!.Color"
+                            Clicked="async ()=> await PrimaryAction.ActionClickedAsync()"
+                            Disabled=@PrimaryAction.Disabled>
+                        @PrimaryAction.Text
+                    </Button>
+                    <DropdownToggle Color="@ToggleColor" Split="true" />
+                }
+                else
+                {
+                    <DropdownToggle Class="btn-block" Color="@ToggleColor">
+                        @ToggleText
+                    </DropdownToggle>
+                }
+                <DropdownMenu>
+                    @ChildContent
+                </DropdownMenu>
+                </Tooltip>
         </Dropdown>
     }
     else

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to configure HTTP error handling in ABP Framework, including custom error screens and handling specific error codes."
+}
+```
+
 # HTTP Error Handling
 
 ## Error Configurations
@@ -5,29 +12,33 @@
 ABP offers a configurations for errors handling like below
 
 ```ts
-import { ThemeSharedModule } from '@abp/ng.theme.shared';
-import { MyCustomRouteErrorComponent } from './my-custom-route.component';
+//app.config.ts
+import { ApplicationConfig } from '@angular/core';
+import {
+  provideAbpThemeShared,
+  withHttpErrorConfig,
+} from '@abp/ng.theme.shared';
+import { CustomErrorComponent } from './custom-error.component';
 
-@NgModule({
-  imports: [
-    ThemeSharedModule.forRoot({
-      httpErrorConfig: {
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideAbpThemeShared(
+      withHttpErrorConfig({
         skipHandledErrorCodes: [403],
         errorScreen: {
-          forWhichErrors: [404],
           component: CustomErrorComponent,
-          hideCloseIcon: false
-        }
-      }
-    }),
-    ...
+          forWhichErrors: [404],
+          hideCloseIcon: false,
+        },
+      }),
+    ),
   ],
-})
-export class AppModule {}
+};
+
 ```
 
 - `ErrorScreenErrorCodes` the error codes that you can pass to `skipHandledErrorCodes` and `forWhichErrors`.
-- `skipHandledErrorCodes` the error codes those you don't want to handle it.
+- `skipHandledErrorCodes` the error codes those you don't want to handle.
 - `errorScreen` the screen that you want to show when a route error occurs.
   - `component` component that you want to show.
   - `forWhichErrors` same as `ErrorScreenErrorCodes`
@@ -67,27 +78,22 @@ export function handleHttpErrors(injector: Injector, httpError: HttpErrorRespons
   return of(httpError);
 }
 
-// app.module.ts
-import { Error404Component } from './error404/error404.component';
-import { handleHttpErrors } from './http-error-handling';
-import { HTTP_ERROR_HANDLER, ... } from '@abp/ng.theme.shared';
+// app.config.ts
+import { ApplicationConfig } from '@angular/core';
+import { HTTP_ERROR_HANDLER } from '@abp/ng.theme.shared';
+import { handleHttpErrors } from './http-error-handler';
 
-@NgModule({
-  // ...
+export const appConfig: ApplicationConfig = {
   providers: [
-    // ...
-    { provide: HTTP_ERROR_HANDLER, useValue: handleHttpErrors }
+    { provide: HTTP_ERROR_HANDLER, useValue: handleHttpErrors },
   ],
-  declarations: [
-   //...
-   Error404Component],
-})
-export class AppModule {}
+};
+
 ```
 
 In the example above:
 
-- Created a function named `handleHttpErrors` and defined as value of the `HTTP_ERROR_HANDLER` provider in app.module. After this, the function executes when an HTTP error occurs.
+- Created a function named `handleHttpErrors` and defined as value of the `HTTP_ERROR_HANDLER` provider in `app.config.ts`. After this, the function executes when an HTTP error occurs.
 - 400 bad request errors is handled. When a 400 error occurs.
 
 - Since `of(httpError)` is returned at bottom of the `handleHttpErrors`, the `ErrorHandler` will handle the HTTP errors except 400 and 404 errors.
@@ -112,7 +118,9 @@ export function handleHttpErrors(
 - `httpError` is the second parameter of the error handler function which is registered to the `HTTP_ERROR_HANDLER` provider. Type of the `httpError` is `HttpErrorResponse`.
 
 ```ts
-import { of } from "rxjs";
+import { HttpErrorResponse } from '@angular/common/http';
+import { Injector } from '@angular/core';
+import { of } from 'rxjs';
 
 export function handleHttpErrors(
   injector: Injector,
@@ -159,11 +167,13 @@ See an example:
 
 ```ts
 // custom-error-handler.service.ts
-import { inject, Injectable } from "@angular/core";
-import { HttpErrorResponse } from "@angular/common/http";
-import { CustomHttpErrorHandlerService } from "@abp/ng.theme.shared";
-import { CUSTOM_HTTP_ERROR_HANDLER_PRIORITY } from "@abp/ng.theme.shared";
-import { ToasterService } from "@abp/ng.theme.shared";
+import { HttpErrorResponse } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import {
+  CUSTOM_HTTP_ERROR_HANDLER_PRIORITY,
+  CustomHttpErrorHandlerService,
+  ToasterService,
+} from '@abp/ng.theme.shared';
 
 @Injectable({ providedIn: "root" })
 export class MyCustomErrorHandlerService
@@ -186,8 +196,8 @@ export class MyCustomErrorHandlerService
   // If this service is picked from ErrorHandler, this execute method will be called.
   execute() {
     this.toaster.error(
-      this.error.error?.error?.message || "Bad request!",
-      "400"
+      this.error?.error?.error?.message || 'Bad request!',
+      '400',
     );
   }
 }
@@ -195,22 +205,20 @@ export class MyCustomErrorHandlerService
 
 ```ts
 
-// app.module.ts
-import { CUSTOM_ERROR_HANDLERS, ... } from '@abp/ng.theme.shared';
+// app.config.ts
+import { ApplicationConfig } from '@angular/core';
+import { CUSTOM_ERROR_HANDLERS } from '@abp/ng.theme.shared';
 import { MyCustomErrorHandlerService } from './custom-error-handler.service';
 
-@NgModule({
-  // ...
+export const appConfig: ApplicationConfig = {
   providers: [
-    // ...
     {
       provide: CUSTOM_ERROR_HANDLERS,
       useExisting: MyCustomErrorHandlerService,
       multi: true,
-    }
-  ]
-})
-export class AppModule {}
+    },
+  ],
+};
 ```
 
 In the example above:
@@ -225,5 +233,5 @@ In the example above:
 
 - If your service cannot handle the error. Then ABP will check the next Error Service.
 - If none of the service handle the error. Then basic confirmation message about the error will be shown to the user.
-- You can provide more than one service, with CUSTOM_ERROR_HANDLER injection token.
+- You can provide more than one service with the `CUSTOM_ERROR_HANDLERS` injection token.
 - If you want your custom service to be evaluated (checked) earlier, set the priority variable high.

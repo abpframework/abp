@@ -67,7 +67,20 @@
     {
       "namespace": "Volo.Abp.TenantManagement.EntityFrameworkCore",
       "connectionStringName": "AbpTenantManagement",
-      "databaseTables": [],
+      "databaseTables": [
+        {
+          "entityFullName": "Volo.Abp.TenantManagement.Tenant",
+          "contentType": "databaseTable",
+          "name": "Tenants",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.TenantManagement.TenantConnectionString",
+          "contentType": "databaseTable",
+          "name": "TenantConnectionStrings",
+          "summary": null
+        }
+      ],
       "replacedDbContexts": [],
       "modelBuilderExtensionMethods": [
         {

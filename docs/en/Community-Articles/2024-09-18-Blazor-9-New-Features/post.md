@@ -2,8 +2,6 @@
 
 In this article, I'll highlight .NET 9's Blazor updates and important features for ASP.NET Core 9.0. These features are based on the latest .NET 9 Preview 7. 
 
-![Cover](cover.png)
-
 ## .NET MAUI Blazor Hybrid App and Web App solution template
 
 There's a new solution template to create .**NET MAUI native** and **Blazor web client** apps. This new template allows to choose a Blazor interactive render mode, it uses a shared Razor class library to maintain the UI's Razor components.

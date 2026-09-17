@@ -68,17 +68,6 @@
       "contentType": "abpModule",
       "name": "CmsKitDomainSharedModule",
       "summary": null
-    },
-    {
-      "defaultValue": "false",
-      "displayName": "CmsKit.Comments.RequireApprovement",
-      "description": "",
-      "isVisibleToClient": true,
-      "isInherited": true,
-      "isEncrypted": false,
-      "contentType": "setting",
-      "name": "CmsKit.Comments.RequireApprovement",
-      "summary": null
     }
   ]
 }

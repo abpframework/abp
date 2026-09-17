@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to switch your ABP application to use the Oracle database provider, with guidance on both official and commercial drivers."
+}
+```
+
 # Switch to EF Core Oracle Provider
 
 > [ABP CLI](../../../cli/index.md) and the [Get Started](https://abp.io/get-started) page already provides an option to create a new solution with Oracle. See [that document](other-dbms.md) to learn how to use. This document provides guidance for who wants to manually switch to Oracle after creating the solution.

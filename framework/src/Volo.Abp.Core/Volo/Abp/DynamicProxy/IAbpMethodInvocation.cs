@@ -7,13 +7,13 @@ namespace Volo.Abp.DynamicProxy;
 
 public interface IAbpMethodInvocation
 {
-    object[] Arguments { get; }
+    object?[] Arguments { get; }
 
-    IReadOnlyDictionary<string, object> ArgumentsDictionary { get; }
+    IReadOnlyDictionary<string, object?> ArgumentsDictionary { get; }
 
-    Type[] GenericArguments { get; }
+    Type[]? GenericArguments { get; }
 
-    object TargetObject { get; }
+    object? TargetObject { get; }
 
     MethodInfo Method { get; }
 

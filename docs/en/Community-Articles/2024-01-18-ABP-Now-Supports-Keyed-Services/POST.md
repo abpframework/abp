@@ -2,6 +2,12 @@
 
 In this post, I describe the new **"keyed service"** support for the dependency injection container, which came with .NET 8.0. Then, I'll show you an example of usage within the ABP Framework.
 
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
+
 ## What Are Keyed Services?
 
 ASP.NET Core ships with a built-in dependency injection container, which is a pretty basic DI container that supports minimal features a dependency injection container is supposed to have. For that reason, most of the .NET users use third-party containers like [Autofac](https://autofac.org/), or Ninject.
@@ -187,11 +193,27 @@ On the other hand, resolving keyed services from `LazyServiceProvider` is not su
 
 ### Automatically Registering Keyed Services
 
-Currently, if you want to register a keyed service, you need to do it manually as we see in the previous sections by using one of the overloads (`.AddKeyedTransient`, `.AddKeyedScoped` and `.AddKeyedSingleton`). 
+ABP provides the `ExposeKeyedServiceAttribute` to control which keyed services are provided by the related class.
 
-It would be good if we could make this process automatically and not need to manually register services, and for that purpose, I have [created an issue](https://github.com/abpframework/abp/issues/18794) that aims to introduce an attribute, which allows us to automatically register multiple services as keyed services. 
+For example, if you want to register a keyed service as a transient dependency, you can do it as follows:
 
-You can [follow the issue](https://github.com/abpframework/abp/issues/18794) if you are considering using keyed services in your application and don't want to register them manually.
+```csharp
+[ExposeKeyedService<ITaxCalculator>("taxCalculator")]
+[ExposeKeyedService<ICalculator>("calculator")]
+public class TaxCalculator: ICalculator, ITaxCalculator, ICanCalculate, ITransientDependency
+{
+}
+```
+
+> Notice that the ExposeKeyedServiceAttribute only exposes the keyed services. So, you can not inject the ITaxCalculator or ICalculator interfaces in your application without using the FromKeyedServicesAttribute as shown in the example above. If you want to expose both keyed and non-keyed services, you can use the ExposeServicesAttribute and ExposeKeyedServiceAttribute attributes altogether.
+
+Please refer to the [Dependency Injection document](https://abp.io/docs/latest/framework/fundamentals/dependency-injection#exposekeyedservice-attribute) for further info.
+
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
 
 ## Summary
 

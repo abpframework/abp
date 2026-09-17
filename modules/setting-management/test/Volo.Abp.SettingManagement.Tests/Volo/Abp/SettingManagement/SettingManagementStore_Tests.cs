@@ -66,6 +66,14 @@ public class SettingManagementStore_Tests : SettingsTestBase
 
             var valueAfterSet = await _settingManagementStore.GetOrNullAsync("MySetting1", GlobalSettingValueProvider.ProviderName, null);
             valueAfterSet.ShouldBe("43");
+
+            await _settingManagementStore.DeleteAsync("MySetting1", GlobalSettingValueProvider.ProviderName, null);
+
+            var values = await _settingManagementStore.GetListAsync(["MySetting1"], GlobalSettingValueProvider.ProviderName, null);
+
+            var settingValue = values.FirstOrDefault(x => x.Name == "MySetting1");
+            settingValue.ShouldNotBeNull();
+            settingValue.Value.ShouldBeNull();
         }
     }
 

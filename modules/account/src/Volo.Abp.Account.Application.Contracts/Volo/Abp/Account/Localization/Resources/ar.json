@@ -68,6 +68,8 @@
     "AccessDenied": "تم الرفض!",
     "AccessDeniedMessage": "ليس لديك حق الوصول إلى هذا المورد.",
     "OrRegisterWith": "أو التسجيل بـ:",
-    "RegisterUsingYourProviderAccount": "قم بالتسجيل باستخدام حسابك في {0}"
+    "RegisterUsingYourProviderAccount": "قم بالتسجيل باستخدام حسابك في {0}",
+    "RequireMigrateSeedTitle": "تعذر العثور على المستخدم المسؤول",
+    "RequireMigrateSeedMessage": "يرجى التأكد من تنفيذ seed قاعدة البيانات. راجع <a target=\"_blank\" href=\"https://abp.io/kb/0003\">الوثائق</a> للحلول الممكنة."
   }
 }

@@ -1,6 +1,13 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore ABP Tag Helpers for ASP.NET Core to simplify UI development with type-safe Bootstrap components and enhance your coding efficiency."
+}
+```
+
 # ABP Tag Helpers
 
-ABP defines a set of **tag helper components** to simply the user interface development for ASP.NET Core (MVC / Razor Pages) applications.
+ABP defines a set of **tag helper components** to simplify the user interface development for ASP.NET Core (MVC / Razor Pages) applications.
 
 ## Bootstrap Component Wrappers
 
@@ -38,7 +45,7 @@ Here, the list of components those are wrapped by the ABP:
 
 ## Form Elements
 
-**Abp Tag Helpers** add new features to standard **Asp.Net Core MVC input & select Tag Helpers** and wrap them with **Bootstrap** form controls. See [Form Elements documentation](form-elements.md) .
+**Abp Tag Helpers** add new features to standard **ASP.NET Core MVC input & select Tag Helpers** and wrap them with **Bootstrap** form controls. See [Form Elements documentation](form-elements.md) .
 
 ## Dynamic Forms
 

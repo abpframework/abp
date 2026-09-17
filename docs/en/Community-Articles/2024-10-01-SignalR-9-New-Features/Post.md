@@ -1,10 +1,5 @@
 ### ASP.NET Core SignalR New Features — Summary
-
 In this article, I’ll highlight the latest .**NET 9 SignalR updates** for ASP.NET Core 9.0.
-
-![Cover](cover.png)
-
-
 
 ### SignalR Hub Accepts Base Classes
 
@@ -49,7 +44,7 @@ public class MyHub : Hub
 
 ### Better Diagnostics and Telemetry
 
-Microsoft focuses mainly on .NET Aspire nowadays. That’s why SignalR now integrates more deeply with the .NET Activity API, which is commonly used for distributed tracing. The enhancement is implemented for better monitoring in [.NET Aspire Dashboard](https://learn.microsoft.com/en-us/dotnet/aspire/fundamentals/dashboard/overview?tabs=bash#using-the-dashboard-with-net-aspire-projects). To support this feature:
+Microsoft focuses mainly on Aspire nowadays. That’s why SignalR now integrates more deeply with the .NET Activity API, which is commonly used for distributed tracing. The enhancement is implemented for better monitoring in [Aspire Dashboard](https://aspire.dev/dashboard/overview/). To support this feature:
 
 1- Add these packages to your`csproj`:
 
@@ -81,9 +76,9 @@ builder
 builder.Services.ConfigureOpenTelemetryTracerProvider(tracing => tracing.AddOtlpExporter());
 ```
 
-Finally, you’ll see the **SignalR Hub** events on the [Aspire Dashboard](https://learn.microsoft.com/en-us/dotnet/aspire/fundamentals/dashboard/overview):
+Finally, you’ll see the **SignalR Hub** events on the [Aspire Dashboard](https://aspire.dev/dashboard/overview/):
 
-![.NET Aspire Activity Dashboard](signalr-activity-dashboard.png)
+![Aspire Activity Dashboard](signalr-activity-dashboard.png)
 
 
 

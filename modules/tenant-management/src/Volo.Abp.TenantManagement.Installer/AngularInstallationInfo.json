@@ -1,0 +1,45 @@
+{
+	"packages":[
+		{
+			"name": "@abp/ng.tenant-management",
+			"appRoutingModuleConfiguration":{
+				"routes":[
+					"{ path: 'tenant-management', loadChildren: () => import('@abp/ng.tenant-management').then(c => c.createRoutes()),}"
+				]
+			},
+			"appModuleConfiguration":{
+				"imports":[
+					{
+						"names":[
+							"provideTenantManagementConfig"
+						],
+						"namespace": "@abp/ng.tenant-management/config"
+					}
+				],
+				"providerNames":[
+					"provideTenantManagementConfig()"
+				]
+			},
+			"tsJsonPathRecordConfigurations":[
+				{
+					"name": "@abp/ng.tenant-management",
+					"paths": [
+						"angular/projects/tenant-management/src/public-api.ts"
+					]
+				},
+				{
+					"name": "@abp/ng.tenant-management/config",
+					"paths": [
+						"angular/projects/tenant-management/config/src/public-api.ts"
+					]
+				},
+				{
+					"name": "@abp/ng.tenant-management/proxy",
+					"paths": [
+						"angular/projects/tenant-management/proxy/src/public-api.ts"
+					]
+				}
+			]
+		}
+	]
+}

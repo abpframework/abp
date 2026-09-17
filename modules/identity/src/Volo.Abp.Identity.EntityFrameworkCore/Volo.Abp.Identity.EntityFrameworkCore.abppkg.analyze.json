@@ -67,7 +67,56 @@
     {
       "namespace": "Volo.Abp.Identity.EntityFrameworkCore",
       "connectionStringName": "AbpIdentity",
-      "databaseTables": [],
+      "databaseTables": [
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityUser",
+          "contentType": "databaseTable",
+          "name": "Users",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityRole",
+          "contentType": "databaseTable",
+          "name": "Roles",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityClaimType",
+          "contentType": "databaseTable",
+          "name": "ClaimTypes",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.OrganizationUnit",
+          "contentType": "databaseTable",
+          "name": "OrganizationUnits",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentitySecurityLog",
+          "contentType": "databaseTable",
+          "name": "SecurityLogs",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityLinkUser",
+          "contentType": "databaseTable",
+          "name": "LinkUsers",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentityUserDelegation",
+          "contentType": "databaseTable",
+          "name": "UserDelegations",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.Identity.IdentitySession",
+          "contentType": "databaseTable",
+          "name": "Sessions",
+          "summary": null
+        }
+      ],
       "replacedDbContexts": [],
       "modelBuilderExtensionMethods": [
         {

@@ -4,7 +4,7 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <WarningsAsErrors>Nullable</WarningsAsErrors>
         <AssemblyName>Volo.Abp.AspNetCore.Components.WebAssembly</AssemblyName>
@@ -28,7 +28,7 @@
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" />
         <PackageReference Include="Microsoft.AspNetCore.WebUtilities" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
-        <PackageReference Include="IdentityModel" />
+        <PackageReference Include="Duende.IdentityModel" />
     </ItemGroup>
 
 </Project>

@@ -68,6 +68,8 @@
     "AccessDenied": "पहुंच अस्वीकृत!",
     "AccessDeniedMessage": "आपके पास इस संसाधन तक पहुँच नहीं है।",
     "OrRegisterWith": "या इसके साथ पंजीकरण करें:",
-    "RegisterUsingYourProviderAccount": "अपने {0} खाते का उपयोग करके पंजीकरण करें"
+    "RegisterUsingYourProviderAccount": "अपने {0} खाते का उपयोग करके पंजीकरण करें",
+    "RequireMigrateSeedTitle": "व्यवस्थापक उपयोगकर्ता नहीं मिला",
+    "RequireMigrateSeedMessage": "कृपया सुनिश्चित करें कि डेटाबेस सीड निष्पादित किया गया है। संभावित समाधानों के लिए <a target=\"_blank\" href=\"https://abp.io/kb/0003\">दस्तावेज़ीकरण</a> देखें।"
   }
 }

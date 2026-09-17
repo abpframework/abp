@@ -1,8 +1,15 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to implement server-side integration tests in your ABP Framework web applications, ensuring robust functionality across various UIs and databases."
+}
+```
+
 # Web Application Development Tutorial - Part 4: Integration Tests
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","BlazorServer","NG"],
+    "UI": ["MVC","Blazor","BlazorServer","BlazorWebApp","NG", "MAUIBlazor"],
     "DB": ["EF","Mongo"]
 }
 ````

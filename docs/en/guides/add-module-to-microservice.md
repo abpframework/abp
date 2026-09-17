@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to seamlessly add a module to your existing microservice with ABP Framework, enhancing your project's capabilities effortlessly."
+}
+```
+
 # Add Module to Existing Microservices
 
 > This documentation introduces guidance for adding a module to a microservice for your microservice template project. Eventually, every module has its own documentation and implementation steps. However, some steps can be different for the microservice template. This guide will demonstrate the steps to add a module to an existing microservice.

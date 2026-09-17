@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore comprehensive guides on building microservice solutions with ABP Framework, covering new services, applications, API gateways, and testing."
+}
+```
+
 # Microservice Solution: Guides
 
 > You must have an ABP Business or a higher license to be able to create a microservice solution.

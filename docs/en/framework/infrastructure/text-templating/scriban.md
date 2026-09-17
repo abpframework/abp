@@ -1,4 +1,36 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate Scriban into your ABP Framework project, including installation steps and defining templates for efficient text templating."
+}
+```
+
 # Scriban Integration
+
+## Safe Runtime (Sandbox)
+
+Scriban's [safe runtime](https://github.com/scriban/scriban/blob/master/site/docs/runtime/safe-runtime.md) builds the practical sandbox out of four boundaries: which globals you expose through `ScriptObject`, which .NET members you allow through the member filter, whether you configure `TemplateContext.TemplateLoader` for `include`, and which `TemplateContext` execution limits you enable. ABP's `ScribanTemplateRenderingEngine` is configured to honor these boundaries by default:
+
+| Boundary | ABP default |
+|----------|-------------|
+| Globals exposed | Only the `globalContext` (`Dictionary<string, object>`) entries, the `model` you pass to `RenderAsync`, and the `L` localization helper. |
+| .NET member access | `TemplateContext.MemberFilter` is set to `IsMemberAllowed`, an allowlist that exposes public properties only. Methods, fields, events, and `object`-level members (`GetType`, `ToString`, ...) are not reachable, which closes reflection-based escape paths such as `{%{{{ model.GetType.Assembly.GetType "..." }}}%}`. |
+| `TemplateLoader` | Not configured. `include` directives have no template loader and cannot read templates from disk or other sources unless you explicitly wire one up. |
+| Execution limits | Scriban's defaults (`LoopLimit = 1000`, `RecursiveLimit = 100`, `LimitToString = 1 MB`, `RegexTimeOut = 10s`). Override `CreateScribanTemplateContext` to tighten these for your own scenarios. |
+
+The recommended way to expose data to a Scriban template is via `ScriptObject` or `IDictionary<string, object>` — the keys you put there are exactly what the template can see. When you pass a .NET object as `model`, the `MemberFilter` ensures only properties are exposed, but the safest pattern is to pre-build a dictionary or `ScriptObject` so the surface is fully under your control:
+
+````csharp
+await _templateRenderer.RenderAsync(
+    "MyTemplate",
+    model: new Dictionary<string, object>
+    {
+        { "name", user.Name },
+        { "email", user.Email }
+    });
+````
+
+If you must pass a .NET object whose methods/fields the template needs to read, override `ScribanTemplateRenderingEngine.IsMemberAllowed` to relax the filter. Only do so when the model objects are trusted and do not carry secrets, since methods and reflection entry points become reachable to whoever can edit the template content.
 
 ## Installation
 
@@ -19,7 +51,7 @@ If you want to manually install;
 1. Add the [Volo.Abp.TextTemplating.Scriban](https://www.nuget.org/packages/Volo.Abp.TextTemplating.Scriban) NuGet package to your project:
 
 ````
-Install-Package Volo.Abp.TextTemplating.Scriban
+dotnet add package Volo.Abp.TextTemplating.Scriban
 ````
 
 2. Add the `AbpTextTemplatingScribanModule` to the dependency list of your module:
@@ -270,7 +302,7 @@ First, create a template file just like before:
 
 ````xml
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="{%{{{abp_culture}}}%}" dir="{%{{{abp_dir}}}%}" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
 </head>
@@ -343,6 +375,21 @@ The rendering result will be:
 A global object value: TEST VALUE
 ````
 
+### Built-In Global Context Values
+
+The Scriban and Razor engines add the following values to the global context, so a template can declare the language and the text direction of the document it renders:
+
+| Key | Value |
+|-----|-------|
+| `abp_culture` | Name of the culture the template is rendered with, `en` when it is the invariant culture. |
+| `abp_dir` | `rtl` for a right-to-left culture, `ltr` otherwise. |
+
+````html
+<html lang="{%{{{abp_culture}}}%}" dir="{%{{{abp_dir}}}%}">
+````
+
+A value you pass yourself under the same key is kept. The rendering works on a copy of the dictionary you pass, so you can reuse the same instance for several renderings.
+
 ## Replacing the Existing Templates
 
 It is possible to replace a template defined by a module that used in your application. In this way, you can customize the templates based on your requirements without changing the module code.
@@ -365,7 +412,7 @@ Do the following steps to replace the template file with your own;
 
 ````html
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="{%{{{abp_culture}}}%}" dir="{%{{{abp_dir}}}%}" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
 </head>

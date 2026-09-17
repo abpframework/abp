@@ -10,19 +10,20 @@ public class SettingManager_Basic_Tests : SettingsTestBase
 {
     private readonly ISettingManager _settingManager;
     private readonly ISettingProvider _settingProvider;
+    private readonly ISettingManagementStore _settingManagementStore;
 
     public SettingManager_Basic_Tests()
     {
         _settingManager = GetRequiredService<ISettingManager>();
         _settingProvider = GetRequiredService<ISettingProvider>();
+        _settingManagementStore = GetRequiredService<ISettingManagementStore>();
     }
 
     [Fact]
-    public async Task Should_Throw_Exception_When_Try_To_Get_An_Undefined_Setting()
+    public async Task Should_Return_Null_When_Try_To_Get_An_Undefined_Setting()
     {
-        await Assert.ThrowsAsync<AbpException>(
-            async () => await _settingProvider.GetOrNullAsync("UndefinedSetting")
-        );
+        var value = await _settingProvider.GetOrNullAsync("UndefinedSetting");
+        value.ShouldBeNull();
     }
 
     [Fact]
@@ -64,7 +65,7 @@ public class SettingManager_Basic_Tests : SettingsTestBase
         (await _settingManager.GetOrNullGlobalAsync("MySetting1")).ShouldBe("43");
         (await _settingProvider.GetOrNullAsync("MySetting1")).ShouldBe("43");
     }
-    
+
     [Fact]
     public async Task Set_Should_Throw_Exception_If_Provider_Not_Found()
     {
@@ -72,7 +73,104 @@ public class SettingManager_Basic_Tests : SettingsTestBase
         {
             await _settingManager.SetAsync("MySetting1", "43", "UndefinedProvider", "Test");
         });
-        
+
         exception.Message.ShouldBe("Unknown setting value provider: UndefinedProvider");
+    }
+
+    [Fact]
+    public async Task Set_Should_Throw_Exception_If_Provider_Not_In_Providers()
+    {
+        var exception = await Assert.ThrowsAsync<AbpException>(async () =>
+        {
+            await _settingManager.SetGlobalAsync(TestSettingDefinitionProvider.UserOnlySetting, "value");
+        });
+
+        exception.Message.ShouldContain(TestSettingDefinitionProvider.UserOnlySetting);
+        exception.Message.ShouldContain(GlobalSettingValueProvider.ProviderName);
+    }
+
+    [Fact]
+    public async Task Set_Should_Allow_Setting_For_Provider_In_Providers()
+    {
+        var userId = Guid.NewGuid();
+
+        await _settingManager.SetForUserAsync(userId, TestSettingDefinitionProvider.UserOnlySetting, "value");
+
+        (await _settingManager.GetOrNullForUserAsync(
+            TestSettingDefinitionProvider.UserOnlySetting,
+            userId)).ShouldBe("value");
+    }
+
+    [Fact]
+    public async Task GetAllAsync_Should_Not_Return_Settings_With_Disallowed_Provider()
+    {
+        var userId = Guid.NewGuid();
+        await _settingManager.SetForUserAsync(userId, TestSettingDefinitionProvider.UserOnlySetting, "user-value");
+
+        var globalSettings = await _settingManager.GetAllGlobalAsync();
+        globalSettings.ShouldNotContain(x => x.Name == TestSettingDefinitionProvider.UserOnlySetting);
+
+        var userSettings = await _settingManager.GetAllForUserAsync(userId);
+        userSettings.ShouldContain(x =>
+            x.Name == TestSettingDefinitionProvider.UserOnlySetting && x.Value == "user-value");
+    }
+
+    [Fact]
+    public async Task GetOrNullForGlobal_Should_Not_Read_From_Disallowed_Provider()
+    {
+        await _settingManagementStore.SetAsync(
+            TestSettingDefinitionProvider.UserOnlySetting,
+            "stale",
+            GlobalSettingValueProvider.ProviderName,
+            null);
+
+        (await _settingManager.GetOrNullGlobalAsync(
+            TestSettingDefinitionProvider.UserOnlySetting)).ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task GetAllForUser_Should_Inherit_Setting_From_Allowed_Upstream_Provider()
+    {
+        await _settingManager.SetGlobalAsync(
+            TestSettingDefinitionProvider.GlobalOnlySetting,
+            "global-value");
+
+        var userSettings = await _settingManager.GetAllForUserAsync(Guid.NewGuid());
+
+        userSettings.ShouldContain(x =>
+            x.Name == TestSettingDefinitionProvider.GlobalOnlySetting && x.Value == "global-value");
+    }
+
+    [Fact]
+    public async Task GetOrNullForUser_Should_Inherit_Value_From_Allowed_Upstream_Provider()
+    {
+        await _settingManager.SetGlobalAsync(
+            TestSettingDefinitionProvider.GlobalOnlySetting,
+            "global-value");
+
+        (await _settingManager.GetOrNullForUserAsync(
+            TestSettingDefinitionProvider.GlobalOnlySetting,
+            Guid.NewGuid())).ShouldBe("global-value");
+    }
+
+    [Fact]
+    public async Task SetForUser_Should_Not_Be_Cleared_By_Stale_Disallowed_Provider_Fallback()
+    {
+        var userId = Guid.NewGuid();
+
+        await _settingManagementStore.SetAsync(
+            TestSettingDefinitionProvider.UserOnlySetting,
+            "user-value",
+            GlobalSettingValueProvider.ProviderName,
+            null);
+
+        await _settingManager.SetForUserAsync(
+            userId,
+            TestSettingDefinitionProvider.UserOnlySetting,
+            "user-value");
+
+        (await _settingManager.GetOrNullForUserAsync(
+            TestSettingDefinitionProvider.UserOnlySetting,
+            userId)).ShouldBe("user-value");
     }
 }

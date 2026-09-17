@@ -245,4 +245,14 @@ var abp = abp || {};
             }
         }
     }
+
+    abp.clock = abp.clock || {};
+
+    abp.clock.setBrowserTimeZoneToCookie = function () {
+        abp.utils.setCookieValue('__timezone', Intl.DateTimeFormat().resolvedOptions().timeZone, new Date(new Date().setFullYear(new Date().getFullYear() + 1)), '/');
+    }
+
+    abp.clock.getBrowserTimeZone = function () {
+        return Intl.DateTimeFormat().resolvedOptions().timeZone
+    }
 })();

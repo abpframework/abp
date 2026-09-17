@@ -24,6 +24,11 @@ public class HttpContextAbpAccessTokenProvider : IAbpAccessTokenProvider, ITrans
             return null;
         }
 
+        if (httpContext.User.Identity?.IsAuthenticated != true)
+        {
+            return null;
+        }
+
         return await httpContext.GetTokenAsync("access_token");
     }
 }

@@ -1,14 +1,16 @@
-import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/jest';
+import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/vitest';
 import { FormSubmitDirective } from '../directives/form-submit.directive';
 import { FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
-import { timer } from 'rxjs';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import { setInputSignal } from './utils';
+
 
 describe('FormSubmitDirective', () => {
   let spectator: SpectatorDirective<FormSubmitDirective>;
   let directive: FormSubmitDirective;
 
   const formGroup = new FormGroup({});
-  const submitEventFn = jest.fn(() => {});
+  const submitEventFn = vi.fn(() => {});
 
   const createDirective = createDirectiveFactory({
     directive: FormSubmitDirective,
@@ -16,8 +18,10 @@ describe('FormSubmitDirective', () => {
   });
 
   beforeEach(() => {
+    vi.useFakeTimers();
+
     spectator = createDirective(
-      '<form [formGroup]="formGroup" (ngSubmit)="submitEventFn()" [debounce]="20">form content</form>',
+      '<form ngSubmit [formGroup]="formGroup" (ngSubmit)="submitEventFn()">form content</form>',
       {
         hostProps: {
           submitEventFn,
@@ -26,6 +30,14 @@ describe('FormSubmitDirective', () => {
       },
     );
     directive = spectator.directive;
+    setInputSignal(directive.debounce, 20);
+  });
+
+  afterEach(() => {
+    if (vi.isFakeTimers()) {
+      vi.runOnlyPendingTimers();
+    }
+    vi.useRealTimers();
   });
 
   test('should be created', () => {
@@ -33,14 +45,23 @@ describe('FormSubmitDirective', () => {
   });
 
   test('should have 20ms debounce time', () => {
-    expect(directive.debounce).toBe(20);
+    expect(directive.debounce()).toBe(20);
   });
 
-  test('should dispatch submit event on keyup event triggered after given debounce time', done => {
-    spectator.dispatchKeyboardEvent('form', 'keyup', 'Enter');
-    timer(directive.debounce + 10).subscribe(() => {
-      expect(submitEventFn).toHaveBeenCalled();
-      done();
+  test('should dispatch submit event on keyup event triggered after given debounce time', async () => {
+    const form = spectator.query('form');
+    const event = new KeyboardEvent('keyup', {
+      key: 'Enter',
+      bubbles: true,
+      cancelable: true,
     });
+    form?.dispatchEvent(event);
+    expect(submitEventFn).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(199);
+    expect(submitEventFn).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(1);
+    expect(submitEventFn).toHaveBeenCalled();
   });
 });

@@ -86,7 +86,8 @@ public class AbpNewtonsoftJsonSerializer : IJsonSerializer, ITransientDependency
             if (!camelCase)
             {
                 //Default contract resolver is AbpCamelCasePropertyNamesContractResolver}
-                settings.ContractResolver = new AbpDefaultContractResolver(RootServiceProvider.GetRequiredService<AbpDateTimeConverter>());
+                settings.ContractResolver = new AbpDefaultContractResolver(RootServiceProvider
+                    .GetRequiredService<AbpDateTimeConverter>().SkipDateTimeNormalization());
             }
 
             if (indented)

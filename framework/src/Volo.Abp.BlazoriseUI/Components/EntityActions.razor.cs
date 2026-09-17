@@ -42,10 +42,10 @@ public partial class EntityActions<TItem> : ComponentBase
     {
         Actions.Add(action);
     }
-    
-    private bool DisabledOrNoActions()
+
+    protected virtual bool DisabledOrNoActions()
     {
-        return Disabled || !Actions.Any(t => t is { Visible: true, HasPermission: true });
+        return Disabled || (Actions.Any() && Actions.All(t => !t.Visible || !t.HasPermission));
     }
 
     protected override void OnInitialized()

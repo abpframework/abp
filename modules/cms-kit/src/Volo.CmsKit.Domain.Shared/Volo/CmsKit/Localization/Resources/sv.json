@@ -97,7 +97,9 @@
     "Permission:BlogPostManagement.Publish": "Publicera",
     "Permission:CmsKit": "CmsKit administratör",
     "Permission:Comments": "Hur man hanterar",
-    "Permission:Comments.Delete": "Radera",
+    "Permission:Comments.Delete": "Ta bort",
+    "Permission:Comments.Update": "Uppdatera",
+    "Permission:Comments.SettingManagement": "Inställningshantering",
     "Permission:Contents": "Hantering av innehåll",
     "Permission:Contents.Create": "Skapa innehåll",
     "Permission:Contents.Delete": "Ta bort innehåll",
@@ -254,6 +256,13 @@
     "CommentAlertMessage": "Det finns {0} kommentarer som väntar på godkännande",
     "Settings:Menu:CmsKit": "CMS",
     "CommentsAwaitingApproval": "Kommentarer som väntar på godkännande",
-    "CommentSubmittedForApproval": "Din kommentar har skickats in för godkännande."
+    "CommentSubmittedForApproval": "Din kommentar har skickats in för godkännande.",
+    "ChooseAnActionForBlog": "Välj en åtgärd för bloggen",
+    "AssignBlogPostsToOtherBlog": "Tilldela blogginlägg till en annan blogg",
+    "SelectAnBlogToAssign": "Välj en blogg att tilldela",
+    "DeleteAllBlogPostsOfThisBlog": "Radera alla blogginlägg i denna blogg",
+    "RequiredPermissionName": "Nödvändigt behörighetsnamn",
+    "AllPosts": "Alla inlägg",
+    "IsReadOnly": "Skrivskyddad"
   }
 }

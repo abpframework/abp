@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to add new microservices to your ABP Framework solution, utilizing templates for customization and independent development."
+}
+```
+
 # Microservice Solution: Adding New Microservices
 
 ````json
@@ -23,6 +30,8 @@ Additionally, there is a folder named `_templates` in the root directory. This f
 To add a new microservice to the solution, you can use the `service_nolayers` template. This template creates a new ASP.NET Core application with the necessary configurations and dependencies. Follow the steps below to add a new microservice:
 
 In ABP Studio [Solution Explorer](../../studio/solution-explorer.md#adding-a-new-microservice-module), right-click on the `services` folder and select `Add` -> `New Module` -> `Microservice`.
+
+You can also add microservices during the project creation process by using the Additional Services screen. For more details, refer to the [Additional Services](../../get-started/microservice.md) section.
 
 ![new-microservice](images/new-microservice.png)
 

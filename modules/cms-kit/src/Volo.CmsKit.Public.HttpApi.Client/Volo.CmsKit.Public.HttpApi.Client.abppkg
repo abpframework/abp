@@ -1,3 +1,15 @@
 {
-  "role": "lib.http-api-client"
+  "role": "lib.http-api-client",
+  "proxies": {
+    "csharp": {
+      "Volo.CmsKit.Web.Unified-cms-kit": {
+        "applicationName": "Volo.CmsKit.Web.Unified",
+        "module": "cms-kit",
+        "url": "https://localhost:44349",
+        "folder": "ClientProxies",
+        "serviceType": "all",
+        "withoutContracts": true
+      }
+    }
+  }
 }

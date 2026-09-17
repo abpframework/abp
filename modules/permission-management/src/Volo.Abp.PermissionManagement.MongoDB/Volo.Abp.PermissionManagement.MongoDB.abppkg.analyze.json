@@ -85,6 +85,12 @@
           "contentType": "databaseCollection",
           "name": "PermissionGrants",
           "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.PermissionManagement.ResourcePermissionGrant",
+          "contentType": "databaseCollection",
+          "name": "ResourcePermissionGrants",
+          "summary": null
         }
       ],
       "implementingInterfaces": [

@@ -1,0 +1,23 @@
+import { NgModule, inject, PLATFORM_ID, TransferState } from '@angular/core';
+import { provideServerRendering, withRoutes } from '@angular/ssr';
+import { <%= appComponentName %> } from '<%= appComponentPath %>';
+import { <%= appModuleName %> } from '<%= appModulePath %>';
+import { serverRoutes } from './app.routes.server';
+import { SSR_FLAG } from '@abp/ng.core';
+
+@NgModule({
+  imports: [<%= appModuleName %>],
+  providers: [{
+                 provide: APP_INITIALIZER,
+                 useFactory: () => {
+                        const platformId = inject(PLATFORM_ID);
+                        const transferState = inject<TransferState>(TransferState);
+                        if (isPlatformServer(platformId)) {
+                          transferState.set(SSR_FLAG, true);
+                        }
+                 },
+                 multi: true
+                }, provideServerRendering(withRoutes(serverRoutes))],
+  bootstrap: [<%= appComponentName %>],
+})
+export class AppServerModule {}

@@ -1,0 +1,106 @@
+@using Volo.Abp.SettingManagement.Localization
+@using global::MudBlazor
+@inherits Volo.Abp.AspNetCore.Components.AbpComponentBase
+
+@if (EmailSettings != null)
+{
+        <MudForm @ref="@_emailFormRef" Model="@EmailSettings">
+            <MudGrid Spacing="2">
+                <MudItem xs="12">
+                    <MudTextField Margin="Margin.Dense" @bind-Value="@EmailSettings.DefaultFromDisplayName"
+                                 Label="@L["DefaultFromDisplayName"]"
+                                 Required="true"
+                                 RequiredError="@L["ThisFieldIsRequired."]" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField Margin="Margin.Dense" @bind-Value="@EmailSettings.DefaultFromAddress"
+                                 Label="@L["DefaultFromAddress"]"
+                                 Required="true"
+                                 RequiredError="@L["ThisFieldIsRequired."]" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField Margin="Margin.Dense" @bind-Value="@EmailSettings.SmtpHost"
+                                 Label="@L["SmtpHost"]" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudNumericField Margin="Margin.Dense" @bind-Value="@EmailSettings.SmtpPort"
+                                         Label="@L["SmtpPort"]" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudCheckBox Dense="true" Color="Color.Primary" UncheckedColor="Color.Default" T="bool" @bind-Value="@EmailSettings.SmtpEnableSsl"
+                                Label="@L["SmtpEnableSsl"]" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudCheckBox Dense="true" Color="Color.Primary" UncheckedColor="Color.Default" T="bool" @bind-Value="@EmailSettings.SmtpUseDefaultCredentials"
+                                Label="@L["SmtpUseDefaultCredentials"]" />
+                </MudItem>
+                @if (!EmailSettings.SmtpUseDefaultCredentials)
+                {
+                    <MudItem xs="12">
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@EmailSettings.SmtpDomain"
+                                     Label="@L["SmtpDomain"]" />
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@EmailSettings.SmtpUserName"
+                                     Label="@L["SmtpUserName"]" />
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudTextField Margin="Margin.Dense" @bind-Value="@EmailSettings.SmtpPassword"
+                                     Label="@L["SmtpPassword"]"
+                                     InputType="InputType.Password"
+                                     Placeholder="@L["SmtpPasswordPlaceholder"]" />
+                    </MudItem>
+                }
+            </MudGrid>
+        </MudForm>
+        <MudDivider Class="my-3" />
+        <div class="d-flex justify-end mt-3">
+            @if (HasSendTestEmailPermission)
+            {
+                <MudButton Color="Color.Primary"
+                         
+                          OnClick="@OpenSendTestEmailDialogAsync"
+                          Class="me-2">
+                    @L["SendTestEmail"]
+                </MudButton>
+            }
+            <MudButton Color="Color.Primary"
+                      Variant="Variant.Filled"
+                      OnClick="@UpdateSettingsAsync">
+                @L["Save"]
+            </MudButton>
+        </div>
+
+    @if (HasSendTestEmailPermission)
+    {
+        <MudDialog DefaultFocus="DefaultFocus.FirstChild" @bind-Visible="@_sendTestEmailDialogVisible" Options="@(new DialogOptions { BackdropClick = false, MaxWidth = MaxWidth.Medium, FullWidth = true, CloseOnEscapeKey = true })">
+            <TitleContent>
+                <MudText Typo="Typo.h6">@L["SendTestEmail"]</MudText>
+            </TitleContent>
+            <DialogContent>
+                <MudForm @ref="@_testEmailFormRef" Model="@SendTestEmailInput">
+                    <MudTextField Margin="Margin.Dense" @bind-Value="@SendTestEmailInput.SenderEmailAddress"
+                                 Label="@L["SenderEmailAddress"]"
+                                 Required="true"
+                                 RequiredError="@L["ThisFieldIsRequired."]"
+                                 AutoFocus="true" />
+                    <MudTextField Margin="Margin.Dense" @bind-Value="@SendTestEmailInput.TargetEmailAddress"
+                                 Label="@L["TargetEmailAddress"]"
+                                 Required="true"
+                                 RequiredError="@L["ThisFieldIsRequired."]" />
+                    <MudTextField Margin="Margin.Dense" @bind-Value="@SendTestEmailInput.Subject"
+                                 Label="@L["Subject"]"
+                                 Required="true"
+                                 RequiredError="@L["ThisFieldIsRequired."]" />
+                    <MudTextField Margin="Margin.Dense" @bind-Value="@SendTestEmailInput.Body"
+                                 Label="@L["Body"]"
+                                 Lines="5" />
+                </MudForm>
+            </DialogContent>
+            <DialogActions>
+                <MudButton OnClick="@CloseSendTestEmailDialogAsync">@L["Cancel"]</MudButton>
+                <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="@SendTestEmailAsync">@L["Send"]</MudButton>
+            </DialogActions>
+        </MudDialog>
+    }
+}

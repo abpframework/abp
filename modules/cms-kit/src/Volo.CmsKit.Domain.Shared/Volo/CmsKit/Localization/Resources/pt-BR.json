@@ -90,6 +90,8 @@
     "Permission:CmsKit": "CmsKit",
     "Permission:Comments": "Gerenciamento de comentários",
     "Permission:Comments.Delete": "Excluir",
+    "Permission:Comments.Update": "Atualizar",
+    "Permission:Comments.SettingManagement": "Gerenciamento de configurações",
     "Permission:Contents": "Gerenciamento de conteúdo",
     "Permission:Contents.Create": "Criar conteúdo",
     "Permission:Contents.Delete": "Excluir conteúdo",
@@ -227,6 +229,13 @@
     "CssClass": "Classe CSS",
     "TagsHelpText": "As tags devem ser separadas por vírgula (por exemplo: tag1, tag2, tag3)",
     "ThisPartOfContentCouldntBeLoaded": "Esta parte do conteúdo não pôde ser carregada.",
-    "DuplicateCommentAttemptMessage": "Tentativa duplicada de postagem de comentário detectada. Seu comentário já foi enviado."
+    "DuplicateCommentAttemptMessage": "Tentativa duplicada de postagem de comentário detectada. Seu comentário já foi enviado.",
+    "ChooseAnActionForBlog": "Escolha uma ação para o blog",
+    "AssignBlogPostsToOtherBlog": "Atribuir postagens de blog a outro blog",
+    "SelectAnBlogToAssign": "Selecione um blog para atribuir",
+    "DeleteAllBlogPostsOfThisBlog": "Excluir todas as postagens de blog deste blog",
+    "RequiredPermissionName": "Nome da permissão necessária",
+    "AllPosts": "Todas as postagens",
+    "IsReadOnly": "Somente leitura"
   }
 }

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the `abp.ResourceLoader` API in ASP.NET Core to efficiently load and execute JavaScript and CSS files on demand."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages UI: JavaScript Resource Loader API
 
 `abp.ResourceLoader` is a service that can load a JavaScript or CSS file on demand. It guarantees to load the file only once even if you request multiple times.

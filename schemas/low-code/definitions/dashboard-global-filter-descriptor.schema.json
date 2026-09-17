@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dashboard-global-filter-descriptor.schema.json",
+  "title": "DashboardGlobalFilterDescriptor",
+  "description": "Describes a dashboard-level filter control that can affect all visualizations on the dashboard.",
+  "markdownDescription": "AI guidance: use global filters for dashboard-wide controls, not for per-visualization conditions. The current supported type is `dateRange`; visualization filters can then reference date-like entity properties through their own `filter` or `userFilters` settings.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["dateRange"],
+      "default": "dateRange",
+      "description": "Global filter control type. Currently only 'dateRange' is supported."
+    }
+  },
+  "required": ["type"],
+  "additionalProperties": false,
+  "examples": [
+    { "type": "dateRange" }
+  ]
+}

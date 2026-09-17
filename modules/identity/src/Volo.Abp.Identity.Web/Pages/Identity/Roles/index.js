@@ -114,7 +114,7 @@
 
         _dataTable = _$table.DataTable(
             abp.libs.datatables.normalizeConfiguration({
-                order: [[1, 'asc']],
+                order: [],
                 searching: false,
                 processing: true,
                 serverSide: true,

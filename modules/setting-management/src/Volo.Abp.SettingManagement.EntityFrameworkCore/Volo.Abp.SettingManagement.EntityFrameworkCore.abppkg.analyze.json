@@ -67,7 +67,20 @@
     {
       "namespace": "Volo.Abp.SettingManagement.EntityFrameworkCore",
       "connectionStringName": "AbpSettingManagement",
-      "databaseTables": [],
+      "databaseTables": [
+        {
+          "entityFullName": "Volo.Abp.SettingManagement.Setting",
+          "contentType": "databaseTable",
+          "name": "Settings",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.SettingManagement.SettingDefinitionRecord",
+          "contentType": "databaseTable",
+          "name": "SettingDefinitionRecords",
+          "summary": null
+        }
+      ],
       "replacedDbContexts": [],
       "modelBuilderExtensionMethods": [
         {

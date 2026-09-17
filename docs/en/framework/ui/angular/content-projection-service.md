@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn to use the ContentProjectionService in @abp/ng.core for easy and dynamic content projection in Angular components."
+}
+```
+
 # Projecting Angular Content
 
 You can use the `ContentProjectionService` in @abp/ng.core package in order to project content in an easy and explicit way.
@@ -8,12 +15,13 @@ You do not have to provide the `ContentProjectionService` at module or component
 
 ```js
 import { ContentProjectionService } from '@abp/ng.core';
+import { inject } from '@angular/core';
 
 @Component({
   /* class metadata here */
 })
 class DemoComponent {
-  constructor(private contentProjectionService: ContentProjectionService) {}
+  private contentProjectionService = inject(ContentProjectionService);
 }
 ```
 

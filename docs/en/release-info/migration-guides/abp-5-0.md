@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Upgrade your ABP 4.x solutions to 5.0 with this comprehensive migration guide, covering essential breaking changes and updates."
+}
+```
+
 # ABP v4.x to v5.0 Migration Guide
 
 This document is a guide for upgrading ABP 4.x solutions to ABP 5.0. Please read them all since 5.0 has some important breaking changes.

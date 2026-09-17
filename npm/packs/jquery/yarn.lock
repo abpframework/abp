@@ -2,6 +2,31 @@
 # yarn lockfile v1
 
 
-jquery@^3.3.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
+"@abp/core@~10.7.0-rc.1":
+  version "10.7.0-rc.1"
+  resolved "https://registry.yarnpkg.com/@abp/core/-/core-10.7.0-rc.1.tgz#40017b504c37e9b4b8e5e85823ed59768e49d93c"
+  integrity sha512-aoAIRmrkHXdw06ZTxC2rF7Bj6zNSw+WHG39dC2vYQXc70MAZ78v2J4xEY/hk8+12UNdjKIVmwvqhMi2DJwSQjg==
+  dependencies:
+    "@abp/utils" "~10.7.0-rc.1"
+
+"@abp/utils@~10.7.0-rc.1":
+  version "10.7.0-rc.1"
+  resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-10.7.0-rc.1.tgz#e727045304bec1cdb65132e0c0fcfe18337fa767"
+  integrity sha512-kkqzS2Pd/+CKkxVEpYwyRs4yHye0xi4kc3Ip4TIEZXCJ+whjB9b4qKh+AuglKGwz3RvnFvB+QxQhluUHu0oyaA==
+  dependencies:
+    just-compare "^2.3.0"
+
+jquery-migrate@~4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/jquery-migrate/-/jquery-migrate-4.0.2.tgz#d296a64e05073017c54877462ac563f1927ee21f"
+  integrity sha512-J15ilpECoAsObLv2robklj0qf1qt9QCnZwwNcJAXkM7dIiOgcac2dqC3HgDtUF0fmRwKZa/ggTkxTj9S4Vk+HQ==
+
+jquery@~4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-4.0.0.tgz#95c33ac29005ff72ec444c5ba1cf457e61404fbb"
+  integrity sha512-TXCHVR3Lb6TZdtw1l3RTLf8RBWVGexdxL6AC8/e0xZKEpBflBsjh9/8LXw+dkNFuOyW9B7iB3O1sP7hS0Kiacg==
+
+just-compare@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/just-compare/-/just-compare-2.3.0.tgz#a2adcc1d1940536263275f5a1ef1298bcacfeda7"
+  integrity sha512-6shoR7HDT+fzfL3gBahx1jZG3hWLrhPAf+l7nCwahDdT9XDtosB9kIF0ZrzUp5QY8dJWfQVr5rnsPqsbvflDzg==

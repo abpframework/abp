@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to manage features in your ABP microservice solution, including application configuration and user tenant details."
+}
+```
+
 # Microservice Solution: Feature Management
 
 ````json

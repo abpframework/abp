@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to configure theme settings in Angular for ABP Framework, ensuring your UI styles load correctly with the latest updates."
+}
+```
+
 # Angular UI: Theme Configurations
 
 Theme packages no longer import styles as CSS modules as of ABP version 6.0. The following style settings need to be included to the angular.json file in order for theme packages to load styles.

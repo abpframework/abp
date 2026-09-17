@@ -1,0 +1,1 @@
+Global query filters in Entity Framework Core allow automatic data filtering at the entity level. This article covers ABP Framework's data filtering system, including built-in filters (ISoftDelete, IMultiTenant), custom filter implementation, and performance optimization using user-defined functions.

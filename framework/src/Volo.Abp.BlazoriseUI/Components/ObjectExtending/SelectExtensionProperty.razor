@@ -6,7 +6,7 @@
 <Validation Validator="@Validate" MessageLocalizer="@LH.Localize">
     <Field>
         <FieldLabel>@PropertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)</FieldLabel>
-        <Select @bind-SelectedValue="@SelectedValue">
+        <Select @bind-Value="@SelectedValue">
             <ChildContent>
                 @foreach (var item in SelectItems)
                 {

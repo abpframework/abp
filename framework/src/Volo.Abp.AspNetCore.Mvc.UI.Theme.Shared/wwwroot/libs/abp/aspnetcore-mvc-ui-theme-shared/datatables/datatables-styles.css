@@ -10,3 +10,8 @@
 
 .dataTable tbody tr td div.dropdown ul.dropdown-menu li {
   cursor: pointer; }
+
+.abp-action-button ui.dropdown-menu[data-popper-reference-hidden]{
+  visibility: hidden;
+  pointer-events: none;
+}

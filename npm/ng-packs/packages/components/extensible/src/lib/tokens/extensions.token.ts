@@ -18,6 +18,9 @@ export const PROP_DATA_STREAM = new InjectionToken<Observable<any>>('PROP_DATA_S
 type EntityPropTypeClassMap = {
   [key in ePropType]: string;
 };
+
+export const ROW_RECORD = new InjectionToken<any>('ROW_RECORD');
+
 export type EntityPropTypeClass = Partial<EntityPropTypeClassMap>;
 export const ENTITY_PROP_TYPE_CLASSES = new InjectionToken<EntityPropTypeClass>(
   'ENTITY_PROP_TYPE_CLASSES',

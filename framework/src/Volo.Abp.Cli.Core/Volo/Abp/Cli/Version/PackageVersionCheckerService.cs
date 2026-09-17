@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Http;
@@ -110,6 +111,11 @@ public class PackageVersionCheckerService : ITransientDependency
         return SemanticVersion.TryParse(latestStableVersionResult.Version, out var semanticVersion)
             ? new LatestVersionInfo(semanticVersion, latestStableVersionResult.Message)
             : null;
+    }
+    
+    public async Task<List<LatestStableVersionResult>> GetLatestStableVersionsAsync()
+    {
+        return await GetLatestStableVersionsInternalAsync();
     }
 
     private static ConcurrentDictionary<string, bool> CommercialPackagesCache { get; } = new ();
@@ -225,7 +231,7 @@ public class PackageVersionCheckerService : ITransientDependency
         _apiKeyResult ??= await _apiKeyService.GetApiKeyOrNullAsync();
     }
 
-    private async Task<LatestStableVersionResult> GetLatestStableVersionOrNullAsync()
+    private async Task<List<LatestStableVersionResult>> GetLatestStableVersionsInternalAsync()
     {
         try
         {
@@ -241,14 +247,22 @@ public class PackageVersionCheckerService : ITransientDependency
 
                 var content = await responseMessage.Content.ReadAsStringAsync();
                 var result = JsonSerializer.Deserialize<List<LatestStableVersionResult>>(content);
-
-                return result.FirstOrDefault(x => x.Type.ToLowerInvariant() == "stable");
+                return result.Where(q => q.Type.ToLowerInvariant() == "stable").OrderByDescending(q => SemanticVersion.Parse(q.Version)).ToList();
             }
         }
         catch
         {
-            return null;
+            return [];
         }
+    }
+
+    private async Task<LatestStableVersionResult> GetLatestStableVersionOrNullAsync()
+    {
+        var latestStableVersionsResult = await GetLatestStableVersionsInternalAsync();
+
+        return latestStableVersionsResult.Count <= 0 
+            ? null 
+            : latestStableVersionsResult.FirstOrDefault();
     }
 
     public class NuGetSearchResultDto
@@ -270,6 +284,11 @@ public class PackageVersionCheckerService : ITransientDependency
         public List<string> Versions { get; set; }
     }
 
+    public class LeptonXThemeInfo
+    {
+        public string Version { get; set; }
+    }
+
     public class LatestStableVersionResult
     {
         public string Version { get; set; }
@@ -279,5 +298,8 @@ public class PackageVersionCheckerService : ITransientDependency
         public string Type { get; set; }
 
         public string Message { get; set; }
+
+        [CanBeNull] 
+        public LeptonXThemeInfo LeptonX { get; set; }
     }
 }

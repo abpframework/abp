@@ -90,6 +90,8 @@
     "Permission:CmsKit": "CmsKit",
     "Permission:Comments": "टिप्पणी प्रबंधन",
     "Permission:Comments.Delete": "हटाएं",
+    "Permission:Comments.Update": "अपडेट करें",
+    "Permission:Comments.SettingManagement": "सेटिंग प्रबंधन",
     "Permission:Contents": "सामग्री प्रबंधन",
     "Permission:Contents.Create": "सामग्री बनाएँ",
     "Permission:Contents.Delete": "सामग्री हटाएं",
@@ -227,6 +229,13 @@
     "CssClass": "सीएसएस क्लास",
     "TagsHelpText": "टैग को अल्पविराम से अलग किया जाना चाहिए (जैसे: टैग1, टैग2, टैग3)",
     "ThisPartOfContentCouldntBeLoaded": "यह भाग लोड नहीं किया जा सका।",
-    "DuplicateCommentAttemptMessage": "डुप्लिकेट टिप्पणी पोस्ट प्रयास का पता चला। आपकी टिप्पणी पहले ही सबमिट की जा चुकी है."
+    "DuplicateCommentAttemptMessage": "डुप्लिकेट टिप्पणी पोस्ट प्रयास का पता चला। आपकी टिप्पणी पहले ही सबमिट की जा चुकी है.",
+    "ChooseAnActionForBlog": "ब्लॉग के लिए कोई कार्रवाई चुनें",
+    "AssignBlogPostsToOtherBlog": "अन्य ब्लॉग को ब्लॉग पोस्ट असाइन करें",
+    "SelectAnBlogToAssign": "असाइन करने के लिए एक ब्लॉग चुनें",
+    "DeleteAllBlogPostsOfThisBlog": "इस ब्लॉग के सभी ब्लॉग पोस्ट हटाएं",
+    "RequiredPermissionName": "आवश्यक अनुमति नाम",
+    "AllPosts": "सभी पोस्ट",
+    "IsReadOnly": "केवल पढ़ने के लिए"
   }
 }

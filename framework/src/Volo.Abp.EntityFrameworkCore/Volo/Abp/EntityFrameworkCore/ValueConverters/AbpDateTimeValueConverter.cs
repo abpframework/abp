@@ -6,26 +6,20 @@ namespace Volo.Abp.EntityFrameworkCore.ValueConverters;
 
 public class AbpDateTimeValueConverter : ValueConverter<DateTime, DateTime>
 {
-    public static IClock? Clock { get; set; }
-
-    public AbpDateTimeValueConverter(ConverterMappingHints? mappingHints = null)
+    public AbpDateTimeValueConverter(IClock clock, ConverterMappingHints? mappingHints = null)
         : base(
-            x => Clock!.Normalize(x),
-            x => Clock!.Normalize(x),
-            mappingHints)
+            x => clock.Normalize(x),
+            x => clock.Normalize(x), mappingHints)
     {
     }
 }
 
 public class AbpNullableDateTimeValueConverter : ValueConverter<DateTime?, DateTime?>
 {
-    public static IClock? Clock { get; set; }
-
-    public AbpNullableDateTimeValueConverter(ConverterMappingHints? mappingHints = null)
+    public AbpNullableDateTimeValueConverter(IClock clock, ConverterMappingHints? mappingHints = null)
         : base(
-            x => x.HasValue ? Clock!.Normalize(x.Value) : x,
-            x => x.HasValue ? Clock!.Normalize(x.Value) : x,
-            mappingHints)
+            x => x.HasValue ? clock.Normalize(x.Value) : x,
+            x => x.HasValue ? clock.Normalize(x.Value) : x, mappingHints)
     {
     }
 }

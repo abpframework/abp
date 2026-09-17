@@ -24,7 +24,7 @@
     "BrowserInfo": "Browser-Informationen",
     "Url": "URL",
     "UserName": "Benutzername",
-    "TenantImpersonator": "Mieter-Imitator",
+    "TenantImpersonator": "Mandanten-Imitator",
     "UserImpersonator": "Benutzer-Imitator",
     "UrlFilter": "URL-Filter",
     "Exceptions": "Ausnahmen",
@@ -66,6 +66,9 @@
     "EntityHistory": "Entitätsverlauf",
     "DaysAgoTitle": "{0} {1}.",
     "DaysAgoWithUserTitle": "{0} {1} durch {2}.",
+    "MinutesAgo": "Vor {0} Minuten",
+    "HoursAgo": "Vor {0} Stunden",
+    "DaysAgo": "Vor {0} Tagen",
     "Created": "Erstellt",
     "Updated": "Aktualisiert",
     "Deleted": "Gelöscht",
@@ -77,6 +80,10 @@
     "EndDate": "Endtermin",
     "Feature:AuditLoggingGroup": "Audit-Protokollierung",
     "Feature:AuditLoggingEnable": "Aktivieren Sie die Überwachungsprotokollseite",
-    "Feature:AuditLoggingEnableDescription": "Aktivieren Sie die Überwachungsprotokollseite in der App."
+    "Feature:AuditLoggingEnableDescription": "Aktivieren Sie die Überwachungsprotokollseite in der App.",
+    "TenantId": "Mandanten-ID",
+    "DownloadLinkExplanation": "Sie können die Datei über den Link unten bis {0} (UTC) herunterladen",
+    "DownloadNow": "Jetzt herunterladen",
+    "TryAgainMessage": "Bitte versuchen Sie es erneut. Wenn das Problem weiterhin besteht, wenden Sie sich bitte an den Support."
   }
 }

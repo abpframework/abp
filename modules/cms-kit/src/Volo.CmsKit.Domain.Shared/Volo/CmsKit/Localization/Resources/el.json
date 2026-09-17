@@ -90,7 +90,9 @@
     "Permission:BlogPostManagement.Publish": "Δημοσιεύω",
     "Permission:CmsKit": "CmsKit",
     "Permission:Comments": "Διαχείριση σχολίων",
-    "Permission:Comments.Delete": "Διαγράφω",
+    "Permission:Comments.Delete": "Διαγραφή",
+    "Permission:Comments.Update": "Ενημέρωση",
+    "Permission:Comments.SettingManagement": "Διαχείριση ρυθμίσεων",
     "Permission:Contents": "Διαχείριση περιεχομένου",
     "Permission:Contents.Create": "Δημιουργία Περιεχομένου",
     "Permission:Contents.Delete": "Διαγραφή Περιεχομένου",
@@ -184,6 +186,13 @@
     "SelectAStatus": "Επιλέξτε μια κατάσταση",
     "Status": "Κατάσταση",
     "CmsKit.BlogPost.ScrollIndex": "Γραμμή γρήγορης πλοήγησης σε αναρτήσεις ιστολογίου",
-    "ThisPartOfContentCouldntBeLoaded": "Αυτό το τμήμα του περιεχομένου δεν μπορούσε να φορτωθεί."
+    "ThisPartOfContentCouldntBeLoaded": "Αυτό το τμήμα του περιεχομένου δεν μπορούσε να φορτωθεί.",
+    "ChooseAnActionForBlog": "Επιλέξτε μια ενέργεια για το ιστολόγιο",
+    "AssignBlogPostsToOtherBlog": "Ανάθεση αναρτήσεων ιστολογίου σε άλλο ιστολόγιο",
+    "SelectAnBlogToAssign": "Επιλέξτε ένα ιστολόγιο για να αναθέσετε αναρτήσεις ιστολογίου",
+    "DeleteAllBlogPostsOfThisBlog": "Διαγραφή όλων των αναρτήσεων ιστολογίου αυτού του ιστολογίου",
+    "RequiredPermissionName": "Απαιτούμενο όνομα δικαιώματος",
+    "AllPosts": "Όλες οι δημοσιεύσεις",
+    "IsReadOnly": "Μόνο για ανάγνωση"
   }
 }

@@ -1,0 +1,71 @@
+# Automatically detects and documents NuGet package version changes in PRs.
+# Triggers on changes to Directory.Packages.props and:
+# - Adds 'dependency-change' label to the PR
+# - Updates docs/en/package-version-changes.md with version changes
+# - Commits the documentation back to the PR branch
+# Note: Only runs for PRs from the same repository (not forks) to ensure write permissions.
+name: Nuget Packages Version Change Detector
+
+on:
+  pull_request:
+    paths:
+      - 'Directory.Packages.props'
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dependency-changes-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  label:
+    if: ${{ !github.event.pull_request.draft && !startsWith(github.head_ref, 'auto-merge/') && github.event.pull_request.head.repo.full_name == github.repository && !contains(github.event.head_commit.message, '[skip ci]') }}
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    env:
+      DOC_PATH: docs/en/package-version-changes.md
+    steps:
+      - run: gh pr edit "$PR_NUMBER" --add-label "dependency-change"
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GH_TOKEN: ${{ secrets.MLM_Token }}
+          GH_REPO: ${{ github.repository }}
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 1
+
+      - name: Fetch base branch
+        run: git fetch origin ${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }} --depth=1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - run: python .github/scripts/update_dependency_changes.py ${{ github.event.pull_request.base.ref }} ${{ github.event.pull_request.number }}
+
+      - name: Commit changes
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "$DOC_PATH"
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "docs: update package version changes [skip ci]"
+            if ! git push; then
+              echo "Error: Failed to push changes. This may be due to conflicts or permission issues."
+              exit 1
+            fi
+            echo "Successfully committed and pushed documentation changes."
+          fi

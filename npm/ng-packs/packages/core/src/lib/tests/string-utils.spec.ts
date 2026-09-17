@@ -27,8 +27,8 @@ describe('String Utils', () => {
       ${'This is {1} and {0} example.'}            | ${['foo', 'bar']}               | ${'This is bar and foo example.'}
       ${'This is {0} and {0} example.'}            | ${['foo', 'bar']}               | ${'This is foo and foo example.'}
       ${'This is {1} and {1} example.'}            | ${['foo', 'bar']}               | ${'This is bar and bar example.'}
-      ${'This is "{0}" and "{1}" example.'}        | ${['foo', 'bar']}               | ${'This is foo and bar example.'}
-      ${"This is '{1}' and '{0}' example."}        | ${['foo', 'bar']}               | ${'This is bar and foo example.'}
+      ${'This is "{0}" and "{1}" example.'}        | ${['foo', 'bar']}               | ${'This is "foo" and "bar" example.'}
+      ${"This is '{1}' and '{0}' example."}        | ${['foo', 'bar']}               | ${"This is 'bar' and 'foo' example."}
       ${'This is { 0 } and {0} example.'}          | ${['foo', 'bar']}               | ${'This is foo and foo example.'}
       ${'This is {1} and {  1  } example.'}        | ${['foo', 'bar']}               | ${'This is bar and bar example.'}
       ${'This is {0}, {3}, {1}, and {2} example.'} | ${['foo', 'bar', 'baz', 'qux']} | ${'This is foo, qux, bar, and baz example.'}

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the microservice demo solution, now replaced by eShopOnAbp, and learn about benefits of microservices in software architecture."
+}
+```
+
 # Microservice Demo Solution
 
 > This solution is no longer maintained. See [the eShopOnAbp project](https://github.com/abpframework/eShopOnAbp) for the replacement solution.
@@ -53,7 +60,7 @@ To be able to run the solution from source code, following tools should be insta
 
 ### Open & Build the Visual Studio Solution
 
-* Open the `samples\MicroserviceDemo\MicroserviceDemo.sln` in Visual Studio 2017 (15.9.0+).
+* Open the `samples\MicroserviceDemo\MicroserviceDemo.sln` in Visual Studio 2026 (18.0.0+).
 * Run `dotnet restore` from the command line inside the `samples\MicroserviceDemo` folder.
 * Build the solution in Visual Studio.
 

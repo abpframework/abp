@@ -11,6 +11,9 @@ export type StyleDefinition =
 export type ImportDefinition = {
   path: string;
   importName: string;
+  provider?: string;
+  expression?: string;
+  doNotImport?: boolean;
 };
 
 export const styleMap = new Map<ThemeOptionsEnum, StyleDefinition[]>();
@@ -259,7 +262,7 @@ styleMap.set(ThemeOptionsEnum.LeptonXLite, [
     bundleName: 'bootstrap-icons',
   },
 ]);
-// the code written by Github co-pilot. thank go-pilot. You are the best sidekick.
+
 export const allStyles = Array.from(styleMap.values()).reduce((acc, val) => [...acc, ...val], []);
 
 export const importMap = new Map<ThemeOptionsEnum, ImportDefinition[]>();
@@ -267,39 +270,177 @@ export const importMap = new Map<ThemeOptionsEnum, ImportDefinition[]>();
 importMap.set(ThemeOptionsEnum.Basic, [
   {
     path: '@abp/ng.theme.basic',
-    importName: 'ThemeBasicModule.forRoot()',
+    importName: 'ThemeBasicModule',
+    expression: 'ThemeBasicModule',
+    doNotImport: true,
+  },
+  {
+    path: '@abp/ng.theme.shared',
+    importName: 'ThemeSharedModule',
+    expression: 'ThemeSharedModule',
+    doNotImport: true,
+  },
+  {
+    path: '@abp/ng.theme.shared',
+    importName: 'withValidationBluePrint',
+  },
+  {
+    path: '@abp/ng.theme.shared',
+    importName: 'provideAbpThemeShared',
+    provider: 'provideAbpThemeShared()',
+  },
+  {
+    path: '@abp/ng.theme.basic',
+    importName: 'provideThemeBasicConfig',
+    provider: 'provideThemeBasicConfig()',
   },
 ]);
 
 importMap.set(ThemeOptionsEnum.Lepton, [
   {
+    path: '@abp/ng.theme.shared',
+    importName: 'ThemeSharedModule',
+    expression: 'ThemeSharedModule',
+    doNotImport: true,
+  },
+  {
     path: '@volo/abp.ng.theme.lepton',
-    importName: 'ThemeLeptonModule.forRoot()',
+    importName: 'provideThemeLepton',
+    provider: 'provideThemeLepton()',
+  },
+  {
+    path: '@abp/ng.theme.shared',
+    importName: 'withHttpErrorConfig',
+  },
+  {
+    path: '@abp/ng.theme.shared',
+    importName: 'withValidationBluePrint',
+  },
+  {
+    path: '@abp/ng.theme.shared',
+    importName: 'provideAbpThemeShared',
+    provider: 'provideAbpThemeShared()',
   },
 ]);
 
 importMap.set(ThemeOptionsEnum.LeptonXLite, [
   {
     path: '@abp/ng.theme.lepton-x',
-    importName: 'ThemeLeptonXModule.forRoot()',
+    importName: 'ThemeLeptonXModule',
+    expression: 'ThemeLeptonXModule.forRoot()',
+    doNotImport: true,
   },
   {
     path: '@abp/ng.theme.lepton-x/layouts',
-    importName: 'SideMenuLayoutModule.forRoot()',
+    importName: 'SideMenuLayoutModule',
+    expression: 'SideMenuLayoutModule.forRoot()',
+    doNotImport: true,
+  },
+  {
+    path: '@abp/ng.theme.lepton-x/layouts',
+    importName: 'TopMenuLayoutModule',
+    expression: 'TopMenuLayoutModule.forRoot()',
+    doNotImport: true,
   },
   {
     path: '@abp/ng.theme.lepton-x/account',
-    importName: 'AccountLayoutModule.forRoot()',
+    importName: 'AccountLayoutModule',
+    expression: 'AccountLayoutModule.forRoot()',
+    doNotImport: true,
+  },
+  {
+    path: '@abp/ng.theme.shared',
+    importName: 'ThemeSharedModule',
+    expression: 'ThemeSharedModule',
+    doNotImport: true,
+  },
+  {
+    path: '@abp/ng.theme.shared',
+    importName: 'withHttpErrorConfig',
+  },
+  {
+    path: '@abp/ng.theme.shared',
+    importName: 'withValidationBluePrint',
+  },
+  {
+    path: '@abp/ng.theme.shared',
+    importName: 'provideAbpThemeShared',
+    provider: 'provideAbpThemeShared()',
+  },
+  {
+    path: '@abp/ng.theme.lepton-x',
+    importName: 'provideThemeLeptonX',
+    provider: 'provideThemeLeptonX()',
+  },
+  {
+    path: '@abp/ng.theme.lepton-x/layouts',
+    importName: 'provideSideMenuLayout',
+    provider: 'provideSideMenuLayout()',
+  },
+  {
+    path: '@abp/ng.theme.lepton-x/layouts',
+    importName: 'provideTopMenuLayout',
+    provider: 'provideTopMenuLayout()',
+    doNotImport: true,
   },
 ]);
 
 importMap.set(ThemeOptionsEnum.LeptonX, [
   {
     path: '@volosoft/abp.ng.theme.lepton-x',
-    importName: 'ThemeLeptonXModule.forRoot()',
+    importName: 'ThemeLeptonXModule',
+    expression: 'ThemeLeptonXModule.forRoot()',
+    doNotImport: true,
   },
   {
     path: '@volosoft/abp.ng.theme.lepton-x/layouts',
-    importName: 'SideMenuLayoutModule.forRoot()',
+    importName: 'SideMenuLayoutModule',
+    expression: 'SideMenuLayoutModule.forRoot()',
+    doNotImport: true,
+  },
+  {
+    path: '@volosoft/abp.ng.theme.lepton-x/layouts',
+    importName: 'TopMenuLayoutModule',
+    expression: 'TopMenuLayoutModule.forRoot()',
+    doNotImport: true,
+  },
+  {
+    path: '@abp/ng.theme.shared',
+    importName: 'ThemeSharedModule',
+    expression: 'ThemeSharedModule',
+    doNotImport: true,
+  },
+  {
+    path: '@volosoft/abp.ng.theme.lepton-x',
+    importName: 'HttpErrorComponent',
+  },
+  {
+    path: '@abp/ng.theme.shared',
+    importName: 'withHttpErrorConfig',
+  },
+  {
+    path: '@abp/ng.theme.shared',
+    importName: 'withValidationBluePrint',
+  },
+  {
+    path: '@volosoft/abp.ng.theme.lepton-x',
+    importName: 'provideThemeLeptonX',
+    provider: 'provideThemeLeptonX()',
+  },
+  {
+    path: '@volosoft/abp.ng.theme.lepton-x/layouts',
+    importName: 'provideSideMenuLayout',
+    provider: 'provideSideMenuLayout()',
+  },
+  {
+    path: '@volosoft/abp.ng.theme.lepton-x/layouts',
+    importName: 'provideTopMenuLayout',
+    provider: 'provideTopMenuLayout()',
+    doNotImport: true,
+  },
+  {
+    path: '@abp/ng.theme.shared',
+    importName: 'provideAbpThemeShared',
+    provider: 'provideAbpThemeShared()',
   },
 ]);

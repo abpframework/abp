@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to efficiently send emails using ABP's IEmailSender service, configure settings, and integrate with background jobs and MailKit."
+}
+```
+
 # Email Sending
 
 ABP provides various services, settings and integrations for sending emails;
@@ -186,7 +193,7 @@ The resulting email body will be shown below:
 
 ````html
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
 </head>
@@ -210,7 +217,7 @@ This template uses the "Abp.StandardEmailTemplates.Layout" as its layout.
 
 ````html
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="{%{{{abp_culture}}}%}" dir="{%{{{abp_dir}}}%}" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
 </head>
@@ -220,6 +227,8 @@ This template uses the "Abp.StandardEmailTemplates.Layout" as its layout.
 </html>
 ````
 
+`abp_culture` and `abp_dir` are provided by the rendering engine, so the document declares the language and the text direction of the culture it was rendered with. See [the text templating documentation](./text-templating/scriban.md) for the details.
+
 The final rendered message was shown above.
 
 > These template names are contants defined in the `Volo.Abp.Emailing.Templates.StandardEmailTemplates` class.
@@ -228,7 +237,7 @@ The final rendered message was shown above.
 
 You typically want to replace the standard templates with your own ones, so you can prepare a branded email messages. To do that, you can use the power of the [virtual file system](../infrastructure/virtual-file-system.md) (VFS) or replace them in your own template definition provider.
 
-Pathes of the templates in the virtual file system are shown below:
+Paths of the templates in the virtual file system are shown below:
 
 * `/Volo/Abp/Emailing/Templates/Layout.tpl`
 * `/Volo/Abp/Emailing/Templates/Message.tpl`
@@ -243,7 +252,7 @@ See the [text templating system](./text-templating) document for details.
 
 ## NullEmailSender
 
-`NullEmailSender` is a built-in class that implements the `IEmailSender`, but writes email contents to the [standard log system](../fundamentals/logging.md), rathen than actually sending the emails.
+`NullEmailSender` is a built-in class that implements the `IEmailSender`, but writes email contents to the [standard log system](../fundamentals/logging.md), rather than actually sending the emails.
 
 This class can be useful especially in development time where you generally don't want to send real emails. The [application startup template](../../solution-templates/layered-web-application) already uses this class in the **DEBUG mode** with the following configuration in the domain layer:
 
@@ -258,3 +267,4 @@ So, don't confuse if you don't receive emails on DEBUG mode. Emails will be sent
 ## See Also
 
 * [MailKit integration for sending emails](./mail-kit.md)
+* [Application URLs](./app-urls.md) — for building cross-application links inside email content (e.g. password reset links).

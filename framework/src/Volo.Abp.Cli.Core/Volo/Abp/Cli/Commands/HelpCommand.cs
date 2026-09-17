@@ -1,4 +1,6 @@
-﻿using System.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.Commands.Internal;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands;
@@ -65,7 +68,7 @@ public class HelpCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("Command List:");
         sb.AppendLine("");
 
-        foreach (var command in AbpCliOptions.Commands.ToArray())
+        foreach (var command in AbpCliOptions.Commands.ToArray().Where(NotHiddenFromCommandList).OrderBy(x => x.Key))
         {
             var method = command.Value.GetMethod("GetShortDescription", BindingFlags.Static | BindingFlags.Public);
             if (method == null)
@@ -90,6 +93,11 @@ public class HelpCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("See the documentation for more info: https://abp.io/docs/latest/cli");
 
         return sb.ToString();
+    }
+
+    private bool NotHiddenFromCommandList(KeyValuePair<string, Type> command)
+    {
+        return command.Value.GetCustomAttribute(typeof(HideFromCommandList)) == null;
     }
 
     public static string GetShortDescription()

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to upgrade your ABP 3.x solutions to 4.0 by addressing breaking changes and enhancing your development experience with .NET 5.0."
+}
+```
+
 # ABP 3.3 to 4.0 Migration Guide
 
 This document introduces the breaking changes done in the ABP 4.0 and explains how to fix your 3.x based solutions while upgrading to the ABP 4.0.

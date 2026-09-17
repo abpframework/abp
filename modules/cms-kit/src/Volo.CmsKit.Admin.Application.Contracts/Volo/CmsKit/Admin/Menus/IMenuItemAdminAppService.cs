@@ -21,4 +21,8 @@ public interface IMenuItemAdminAppService : IApplicationService
     Task MoveMenuItemAsync(Guid id, MenuItemMoveInput input);
 
     Task<PagedResultDto<PageLookupDto>> GetPageLookupAsync(PageLookupInputDto input);
+
+    Task<ListResultDto<PermissionLookupDto>> GetPermissionLookupAsync(PermissionLookupInputDto inputDto);
+
+    Task<int> GetAvailableMenuOrderAsync(Guid? parentId = null);
 }

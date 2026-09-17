@@ -24,7 +24,7 @@ public class EfCoreOpenIddictApplicationRepository : EfCoreRepository<IOpenIddic
     {
         return await (await GetDbSetAsync())
             .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter))
-            .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(OpenIddictApplication.ClientId) : sorting)
+            .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(OpenIddictApplication.CreationTime) + " desc" : sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }

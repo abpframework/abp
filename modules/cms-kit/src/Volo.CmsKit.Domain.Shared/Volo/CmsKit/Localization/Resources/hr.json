@@ -89,7 +89,9 @@
     "Permission:BlogPostManagement.Publish": "Objaviti",
     "Permission:CmsKit": "CmsKit Administrator",
     "Permission:Comments": "Upravljanje komentarima",
-    "Permission:Comments.Delete": "Izbrisati",
+    "Permission:Comments.Delete": "Izbriši",
+    "Permission:Comments.Update": "Ažuriraj",
+    "Permission:Comments.SettingManagement": "Upravljanje postavkama",
     "Permission:Contents": "Upravljanje sadržajem",
     "Permission:Contents.Create": "Stvorite sadržaj",
     "Permission:Contents.Delete": "Brisanje sadržaja",
@@ -227,6 +229,13 @@
     "CssClass": "CSS klasa",
     "TagsHelpText": "Oznake trebaju biti odvojene zarezom (npr. oznaka1, oznaka2, oznaka3)",
     "ThisPartOfContentCouldntBeLoaded": "Ovaj dio sadržaja nije bilo moguće učitati.",
-    "DuplicateCommentAttemptMessage": "Otkriven pokušaj postavljanja duplikata komentara. Vaš komentar je već poslan."
+    "DuplicateCommentAttemptMessage": "Otkriven pokušaj postavljanja duplikata komentara. Vaš komentar je već poslan.",
+    "ChooseAnActionForBlog": "Odaberite radnju za blog",
+    "AssignBlogPostsToOtherBlog": "Dodijelite postove na blogu drugom blogu",
+    "SelectAnBlogToAssign": "Odaberite blog za dodjelu",
+    "DeleteAllBlogPostsOfThisBlog": "Izbrišite sve postove na blogu",
+    "RequiredPermissionName": "Potrebno ime dozvole",
+    "AllPosts": "Sve objave",
+    "IsReadOnly": "Samo za čitanje"
   }
 }

@@ -47,6 +47,13 @@ public abstract class ReadOnlyAppService<TEntity, TGetOutputDto, TGetListOutputD
         return await Repository.GetAsync(id);
     }
 
+    protected override async Task<IQueryable<TEntity>?> CreateEntityQueryOrNullAsync(TKey id)
+    {
+        var query = await Repository.GetQueryableAsync();
+
+        return query.Where(e => e.Id!.Equals(id));
+    }
+
     protected override IQueryable<TEntity> ApplyDefaultSorting(IQueryable<TEntity> query)
     {
         if (typeof(TEntity).IsAssignableTo<ICreationAuditedObject>())

@@ -10,20 +10,24 @@ using System.Web;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.EventBus.Local;
+using Volo.Docs.Common;
+using Volo.Docs.Common.Documents;
+using Volo.Docs.Common.Projects;
 using Volo.Docs.Documents;
+using Volo.Docs.Documents.Rendering;
+using Volo.Docs.GitHub.Documents.Version;
 using Volo.Docs.HtmlConverting;
+using Volo.Docs.Localization;
 using Volo.Docs.Models;
 using Volo.Docs.Projects;
-using Volo.Docs.GitHub.Documents.Version;
-using Volo.Docs.Localization;
+using Volo.Docs.TableOfContents;
 using Volo.Docs.Utils;
 
 namespace Volo.Docs.Pages.Documents.Project
@@ -72,6 +76,8 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public string DocumentsUrlPrefix { get; set; }
 
+        public List<TocItem> TocItems { get; set; } = [];
+
         public bool ShowProjectsCombobox { get; set; }
 
         public bool ShowProjectsComboboxLabel { get; set; }
@@ -84,20 +90,51 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public DocumentRenderParameters UserPreferences { get; set; } = new DocumentRenderParameters();
 
+        private HashSet<string>? _renderedParameterNamesCache;
+        private HashSet<string> RenderedParameterNames =>
+            _renderedParameterNamesCache ??= (DocumentPreferences?.Parameters?.Select(p => p.Name).ToHashSet() ?? new HashSet<string>());
+
+        public virtual bool IsParameterVisible(DocumentParameterDto parameter)
+        {
+            return IsParameterVisibleGiven(parameter, UserPreferences);
+        }
+
+        protected virtual bool IsParameterVisibleGiven(DocumentParameterDto parameter, IReadOnlyDictionary<string, string> selectedValues)
+        {
+            if (parameter.DependsOn == null || parameter.DependsOn.Count == 0)
+            {
+                return true;
+            }
+
+            return parameter.DependsOn.All(rule =>
+                rule.Value == null || !RenderedParameterNames.Contains(rule.Key)
+                || (rule.Value.Count > 0
+                    && selectedValues.TryGetValue(rule.Key, out var current)
+                    && rule.Value.Contains(current)));
+        }
+
         public List<string> AlternativeOptionLinkQueries { get; set; } = new List<string>();
 
         public bool FullSearchEnabled { get; set; }
 
         public bool IsLatestVersion { get; private set; }
+        
+        public bool HasDownloadPdf { get; set; }
 
         public DocumentNavigationsDto DocumentNavigationsDto { get; private set; }
+        
+        public DocumentSeoDto DocumentSeoDto { get; private set; }
 
         private const int MaxDescriptionMetaTagLength = 200;
+        private const int TocLevelCount = 2;
         private readonly IDocumentAppService _documentAppService;
         private readonly IDocumentToHtmlConverterFactory _documentToHtmlConverterFactory;
         private readonly IProjectAppService _projectAppService;
-        private readonly IDocumentSectionRenderer _documentSectionRenderer;
+        private readonly IWebDocumentSectionRenderer _webDocumentSectionRenderer;
         private readonly DocsUiOptions _uiOptions;
+        private readonly IPermissionChecker _permissionChecker;
+        private readonly IDocumentPdfAppService _documentPdfAppService;
+        private readonly ITocGeneratorService _tocGeneratorService;
 
         protected IDocsLinkGenerator DocsLinkGenerator => LazyServiceProvider.LazyGetRequiredService<IDocsLinkGenerator>();
         
@@ -108,17 +145,22 @@ namespace Volo.Docs.Pages.Documents.Project
             IDocumentToHtmlConverterFactory documentToHtmlConverterFactory,
             IProjectAppService projectAppService,
             IOptions<DocsUiOptions> options,
-            IDocumentSectionRenderer documentSectionRenderer)
+            IWebDocumentSectionRenderer webDocumentSectionRenderer, 
+            IPermissionChecker permissionChecker, 
+            IDocumentPdfAppService documentPdfAppService,
+            ITocGeneratorService tocGeneratorService)
         {
             ObjectMapperContext = typeof(DocsWebModule);
 
             _documentAppService = documentAppService;
             _documentToHtmlConverterFactory = documentToHtmlConverterFactory;
             _projectAppService = projectAppService;
-            _documentSectionRenderer = documentSectionRenderer;
+            _webDocumentSectionRenderer = webDocumentSectionRenderer;
+            _permissionChecker = permissionChecker;
+            _documentPdfAppService = documentPdfAppService;
             _uiOptions = options.Value;
-
-
+            _tocGeneratorService = tocGeneratorService;
+            
             LocalizationResourceType = typeof(DocsResource);
         }
 
@@ -131,6 +173,12 @@ namespace Volo.Docs.Pages.Documents.Project
                 return Redirect(decodedUrl);
             }
 
+            var redirectUrl = _uiOptions.GetRedirectUrlIfNeeded(displayUrl);
+            if (redirectUrl != null)
+            {
+                return RedirectPermanent(redirectUrl);
+            }
+            
             return await SetPageAsync();
         }
 
@@ -140,7 +188,7 @@ namespace Volo.Docs.Pages.Documents.Project
             ShowProjectsCombobox = _uiOptions.ShowProjectsCombobox && !_uiOptions.SingleProjectMode.Enable;
             ShowProjectsComboboxLabel = ShowProjectsCombobox && _uiOptions.ShowProjectsComboboxLabel;
             FullSearchEnabled = await _documentAppService.FullSearchEnabledAsync();
-
+            
             try
             {
                 await SetProjectAsync();
@@ -197,6 +245,12 @@ namespace Volo.Docs.Pages.Documents.Project
 
             await SetNavigationAsync();
             SetLanguageSelectListItems();
+
+            HasDownloadPdf = await _permissionChecker.IsGrantedAsync(DocsCommonPermissions.Projects.PdfDownload)
+                             && await _documentPdfAppService.ExistsAsync(new()
+                             {
+                                 ProjectId = Project.Id, Version = LatestVersionInfo.IsSelected ? LatestVersionInfo.Version : Version, LanguageCode = DocumentLanguageCode
+                             });
 
             return Page();
         }
@@ -461,7 +515,6 @@ namespace Volo.Docs.Pages.Documents.Project
                         Version = Version
                     }
                 );
-                
             }
             catch (DocumentNotFoundException) //TODO: What if called on a remote service which may return 404
             {
@@ -513,7 +566,9 @@ namespace Volo.Docs.Pages.Documents.Project
                     DocumentLanguageCode = language;
                     DocumentNameWithExtension = Document.Name;
                     SetDocumentPageTitle();
+
                     await ConvertDocumentContentToHtmlAsync();
+
                     return true;
                 }
                 catch (DocumentNotFoundException e)
@@ -556,11 +611,12 @@ namespace Volo.Docs.Pages.Documents.Project
 
                 var partialTemplates = await GetDocumentPartialTemplatesAsync();
 
-                DocumentNavigationsDto = await _documentSectionRenderer.GetDocumentNavigationsAsync(Document.Content);
+                DocumentNavigationsDto = await _webDocumentSectionRenderer.GetDocumentNavigationsAsync(Document.Content);
+                DocumentSeoDto = await _webDocumentSectionRenderer.GetDocumentSeoAsync(Document.Content);
 
                 try
                 {
-                    Document.Content = await _documentSectionRenderer.RenderAsync(Document.Content, UserPreferences, partialTemplates);
+                    Document.Content = await _webDocumentSectionRenderer.RenderAsync(Document.Content, UserPreferences, partialTemplates);
                 }
                 catch (Exception e)
                 {
@@ -570,10 +626,16 @@ namespace Volo.Docs.Pages.Documents.Project
             else
             {
                 DocumentNavigationsDto = new DocumentNavigationsDto();
+                DocumentSeoDto = new DocumentSeoDto();
             }
 
-            var converter = _documentToHtmlConverterFactory.Create(Document.Format ?? Project.Format);
-            var content = converter.Convert(Project, Document, GetSpecificVersionOrLatest(), LanguageCode, ProjectName);
+            if (Document != null && !Document.Content.IsNullOrEmpty())
+            {
+                TocItems = _tocGeneratorService.GenerateTocItems(Document.Content, TocLevelCount);
+            }
+
+            var converter = _documentToHtmlConverterFactory.Create<DocumentToHtmlConverterContext>(Document.Format ?? Project.Format);
+            var content = converter.Convert(new DocumentToHtmlConverterContext(Project, Document, GetSpecificVersionOrLatest(), LanguageCode, ProjectName));
 
             content = HtmlNormalizer.ReplaceImageSources(
                 content,
@@ -614,7 +676,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private async Task<List<DocumentPartialTemplateContent>> GetDocumentPartialTemplatesAsync()
         {
-            var partialTemplatesInDocument = await _documentSectionRenderer.GetPartialTemplatesInDocumentAsync(Document.Content);
+            var partialTemplatesInDocument = await _webDocumentSectionRenderer.GetPartialTemplatesInDocumentAsync(Document.Content);
 
             if (!partialTemplatesInDocument?.Any(t => t.Parameters != null) ?? true)
             {
@@ -767,7 +829,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 return;
             }
 
-            var availableParameters = await _documentSectionRenderer.GetAvailableParametersAsync(Document.Content);
+            var availableParameters = await _webDocumentSectionRenderer.GetAvailableParametersAsync(Document.Content);
 
             DocumentPreferences = new DocumentParametersDto
             {
@@ -788,7 +850,8 @@ namespace Volo.Docs.Pages.Documents.Project
                     {
                         Name = parameter.Name,
                         DisplayName = parameter.DisplayName,
-                        Values = new Dictionary<string, string>()
+                        Values = new Dictionary<string, string>(),
+                        DependsOn = parameter.DependsOn
                     };
 
                     foreach (var value in parameter.Values)
@@ -811,10 +874,10 @@ namespace Volo.Docs.Pages.Documents.Project
                 return;
             }
 
-            AlternativeOptionLinkQueries = CollectAlternativeOptionLinksRecursively();
+            AlternativeOptionLinkQueries = CollectAlternativeOptionLinksRecursively(0, new Dictionary<string, string>());
         }
 
-        private List<string> CollectAlternativeOptionLinksRecursively(int index = 0)
+        private List<string> CollectAlternativeOptionLinksRecursively(int index, Dictionary<string, string> selected)
         {
             if (index >= DocumentPreferences.Parameters.Count)
             {
@@ -822,13 +885,20 @@ namespace Volo.Docs.Pages.Documents.Project
             }
 
             var option = DocumentPreferences.Parameters[index];
+
+            if (!IsParameterVisibleGiven(option, selected))
+            {
+                return CollectAlternativeOptionLinksRecursively(index + 1, selected);
+            }
+
             var queries = new List<string>();
 
             foreach (var key in option.Values.Keys)
             {
-                var linkQuery = new StringBuilder($"{option.Name}={key}");
+                var linkQuery = $"{option.Name}={key}";
 
-                var restOfQueries = CollectAlternativeOptionLinksRecursively(index + 1);
+                var nextSelected = new Dictionary<string, string>(selected) { [option.Name] = key };
+                var restOfQueries = CollectAlternativeOptionLinksRecursively(index + 1, nextSelected);
 
                 if (restOfQueries.Any())
                 {
@@ -839,7 +909,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 }
                 else
                 {
-                    queries.Add($"{linkQuery}");
+                    queries.Add(linkQuery);
                 }
             }
 
@@ -851,6 +921,11 @@ namespace Volo.Docs.Pages.Documents.Project
             if (Document == null || Document.Content.IsNullOrWhiteSpace())
             {
                 return null;
+            }
+
+            if (DocumentSeoDto?.Description.IsNullOrWhiteSpace() == false)
+            {
+                return DocumentSeoDto.Description;
             }
 
             var firstParagraph = new Regex(@"<p>(.*?)</p>", RegexOptions.IgnoreCase);

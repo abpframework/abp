@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement background workers in your microservice solution with ABP Framework for efficient task management and automation."
+}
+```
+
 # Microservice Solution: Background Workers
 
 ````json

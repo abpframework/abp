@@ -10,6 +10,13 @@ public interface ITemplateRenderingEngine
     string Name { get; }
 
     /// <summary>
+    /// True when this engine restricts templates to a DSL without direct .NET
+    /// interop (e.g. Scriban). False when templates compile to fully-trusted
+    /// .NET code (e.g. Razor).
+    /// </summary>
+    bool IsSandboxed { get; }
+
+    /// <summary>
     /// Renders a text template.
     /// </summary>
     /// <param name="templateName">The template name</param>

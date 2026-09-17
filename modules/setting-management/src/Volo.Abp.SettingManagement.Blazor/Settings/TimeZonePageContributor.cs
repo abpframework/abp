@@ -14,7 +14,7 @@ public class TimeZonePageContributor : ISettingComponentContributor
     public async Task ConfigureAsync(SettingComponentCreationContext context)
     {
         var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<AbpSettingManagementResource>>();
-        if (context.ServiceProvider.GetRequiredService<IClock>().SupportsMultipleTimezone)
+        if (await CheckPermissionsAsync(context))
         {
             context.Groups.Add(
                 new SettingComponentGroup(
@@ -30,6 +30,7 @@ public class TimeZonePageContributor : ISettingComponentContributor
     {
         var authorizationService = context.ServiceProvider.GetRequiredService<IAuthorizationService>();
 
-        return await authorizationService.IsGrantedAsync(SettingManagementPermissions.TimeZone);
+        return context.ServiceProvider.GetRequiredService<IClock>().SupportsMultipleTimezone
+            && await authorizationService.IsGrantedAsync(SettingManagementPermissions.TimeZone);
     }
 }

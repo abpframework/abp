@@ -66,7 +66,14 @@ public class BundlingService : IBundlingService, ITransientDependency
 
         var frameworkVersion = GetTargetFrameworkVersion(projectFilePath, projectType);
         var projectName = Path.GetFileNameWithoutExtension(projectFilePath);
-        var assemblyFilePath = projectType == BundlingConsts.WebAssembly? PathHelper.GetWebAssemblyFilePath(directory, frameworkVersion, projectName) : PathHelper.GetMauiBlazorAssemblyFilePath(directory, projectName);
+        var assemblyFilePath = projectType == BundlingConsts.WebAssembly
+            ? PathHelper.GetWebAssemblyFilePath(directory, frameworkVersion, projectName)
+            : PathHelper.GetMauiBlazorAssemblyFilePath(directory, projectName);
+        if (assemblyFilePath == null)
+        {
+            throw new BundlingException("No assembly file found. Please build the project first.");
+        }
+
         var startupModule = GetStartupModule(assemblyFilePath);
 
         var bundleDefinitions = new List<BundleTypeDefinition>();

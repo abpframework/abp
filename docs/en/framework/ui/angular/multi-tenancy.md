@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement multi-tenancy in ABP Angular UI, including tenant management and switching features for a seamless user experience."
+}
+```
+
 # Multi-Tenancy in Angular UI
 
 ABP Angular UI supports the multi-tenancy. The following features related to multi-tenancy are available in the startup templates.
@@ -133,12 +140,9 @@ Example:
 ```ts
 import { TENANT_NOT_FOUND_BY_NAME } from '@abp/ng.core';
 
-@NgModule({
-  imports: [
-  // removed for clarity
-  ],
+export const appConfig: ApplicationConfig = {
   providers: [
-    // removed for clarity
+     // removed for clarity
     {
       provide: TENANT_NOT_FOUND_BY_NAME,
       useFactory: function () {
@@ -148,11 +152,7 @@ import { TENANT_NOT_FOUND_BY_NAME } from '@abp/ng.core';
       },
     },
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule {}
-
+};
 ``` 
 
 ## See Also

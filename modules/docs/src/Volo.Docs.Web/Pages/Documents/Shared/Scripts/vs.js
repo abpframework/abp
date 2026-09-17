@@ -1,23 +1,5 @@
 (function ($) {
     $(function () {
-        $('li:not(.last-link) a.tree-toggle').click(function () {
-            $(this).parent().children('ul.tree').toggle(100);
-            $(this).closest('li').toggleClass('selected-tree');
-        });
-
-        $('li:not(.last-link) span.plus-icon i.fa-chevron-right').click(
-            function () {
-                var $element = $(this).parent();
-                var $filter = $('.docs-version #filter');
-
-                if ($filter && $filter.val() != ''){
-                    return;
-                }
-
-                $element.parent().children('ul.tree').toggle(100);
-                $element.closest('li').toggleClass('selected-tree');
-            }
-        );
 
         var scrollTopBtn = $('.scroll-top-btn');
         var enoughHeight = $('.docs-sidebar-wrapper > .docs-top').height();
@@ -52,15 +34,17 @@
         var scrollToHashLink = function () {
             var hash = window.location.hash;
 
-            if (!hash || hash === '#') {
+            if (!hash || hash === '#' || hash === '#gsc.tab=0') {
                 return;
             }
+
+            hash = hash.split('&')[0];
 
             var $targetElement = $(decodeURIComponent(hash));
 
             $targetElement = $targetElement.length
                 ? $targetElement
-                : $('[name=' + this.hash.slice(1) + ']');
+                : $('[name=' + hash.slice(1) + ']');
 
             if (!$targetElement.length) {
                 return;
@@ -77,13 +61,15 @@
         };
 
         $(document).ready(function () {
-            handleCustomScrolls();
-
             var $myNav = $('#docs-sticky-index');
-            Toc.init($myNav);
+
+            if ($myNav.length === 0) {
+                return;
+            }
 
             $('body').scrollspy({
                 target: $myNav,
+                offset:100
             });
 
             $('#docs-sticky-index a').on('click', function (event) {
@@ -102,6 +88,23 @@
                 }
             });
 
+            $("body").on('activate.bs.scrollspy', function (e) {
+                var $activeLink = $('.nav-link.active', $('#docs-sticky-index'));
+
+                var $activeLi = $activeLink.parent('li.nav-item');
+
+                $myNav.find('li.toc-item-has-children.open').each(function () {
+                    if ($(this).has($activeLi).length === 0) {
+                        $(this).removeClass('open');
+                    }
+                });
+
+                var $parentToOpen = $activeLi.closest('li.toc-item-has-children');
+                if ($parentToOpen.length > 0) {
+                    $parentToOpen.addClass('open');
+                }
+            });
+
             $('.btn-toggle').on('click', function () {
                 $('.toggle-row').slideToggle(400);
                 $(this).toggleClass('less');
@@ -115,57 +118,84 @@
                 $('.docs-tree-list').slideToggle();
             });
 
+            initMenuToggle();
             scrollToHashLink();
-        });
-
-        $(window).resize(function () {
-            handleCustomScrolls();
         });
     });
 
-    function handleCustomScrolls() {
-        $('#sidebar-scroll').mCustomScrollbar({
-            theme: 'minimal',
-            alwaysShowScrollbar: 0,
+     function initMenuToggle() {
+        $('li:not(.last-link) a.tree-toggle').off('click');
+        $('li:not(.last-link) span.plus-icon i.fa-chevron-right').off('click');
+        
+        $('li:not(.last-link) a.tree-toggle').click(function () {
+            $(this).parent().children('ul.tree').toggle(100);
+            $(this).closest('li').toggleClass('selected-tree');
         });
 
-        $('#scroll-index').mCustomScrollbar({
-            theme: 'minimal-dark',
-            alwaysShowScrollbar: 0,
-        });
+        $('li:not(.last-link) span.plus-icon i.fa-chevron-right').click(
+            function () {
+                var $element = $(this).parent();
+                var $filter = $('.docs-version #filter');
 
-        $('.mCustomScrollbar-1').mCustomScrollbar({
-            theme: 'minimal-dark',
-            alwaysShowScrollbar: 0,
-            horizontalScroll: true,
-        });
+                if ($filter && $filter.val() != ''){
+                    return;
+                }
+
+                $element.parent().children('ul.tree').toggle(100);
+                $element.closest('li').toggleClass('selected-tree');
+            }
+        );
     }
-
-    window.Toc.helpers.createNavList = function () {
-        return $('<ul class="nav nav-pills flex-column"></ul>');
-    };
-
-    window.Toc.helpers.createChildNavList = function ($parent) {
-        var $childList = this.createNavList();
-        $parent.append($childList);
-        return $childList;
-    };
-
-    window.Toc.helpers.generateNavEl = function (anchor, text) {
-        var $a = $('<a class="nav-link"></a>');
-        $a.attr('href', '#' + anchor);
-        $a.text(text);
-        var $li = $('<li class="nav-item"></li>');
-        $li.append($a);
-        return $li;
-    };
 
     function docsCriteria() {
         var docsContentWidth = $('.docs-content').width() - 74;
         $('.alert-criteria').width(docsContentWidth);
     }
+
+    // Toggle the collapsed document-options popover by click/tap (works on touch, unlike a hover-only reveal).
+    function docsOptionsToggle() {
+        var $criteria = $('.alert-criteria');
+        var $btn = $criteria.find('.options-header .toggle-btn');
+        if (!$criteria.length || !$btn.length) {
+            return;
+        }
+        function setOpen(isOpen) {
+            $criteria.toggleClass('is-open', isOpen);
+            $btn.attr('aria-expanded', isOpen ? 'true' : 'false');
+        }
+        // clear any previous bindings so a second init (e.g. partial reload) does not stack handlers
+        $btn.off('.docsOptions');
+        $criteria.off('.docsOptions');
+        $(document).off('.docsOptions');
+        $(window).off('.docsOptions');
+        $btn.on('click.docsOptions', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            setOpen(!$criteria.hasClass('is-open'));
+        });
+        $criteria.on('click.docsOptions', function (e) {
+            e.stopPropagation();
+        });
+        $(document).on('click.docsOptions', function () {
+            setOpen(false);
+        });
+        $(document).on('keydown.docsOptions', function (e) {
+            if (e.key === 'Escape' && $criteria.hasClass('is-open')) {
+                setOpen(false);
+                // keyboard close: return focus to the button (focus ring is appropriate here)
+                $btn.trigger('focus');
+            }
+        });
+        $(window).on('scroll.docsOptions', function () {
+            if (!$('body').hasClass('scrolledMore')) {
+                setOpen(false);
+            }
+        });
+    }
+
     $(document).ready(function () {
         docsCriteria();
+        docsOptionsToggle();
     });
     $(window).resize(function () {
         docsCriteria();

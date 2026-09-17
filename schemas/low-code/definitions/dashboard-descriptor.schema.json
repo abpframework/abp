@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dashboard-descriptor.schema.json",
+  "title": "DashboardDescriptor",
+  "description": "Describes a dashboard page configuration with global filters and a flat list of visualizations.",
+  "markdownDescription": "AI guidance: a dashboard belongs to a page with `type: \"dashboard\"`. It contains a flat `visualizations` list; each visualization carries its grid position via `row`, `order`, and `width`. Rows are derived at render time by grouping visualizations that share the same zero-based `row`. Use visualization `entityName` to select data for chart/list items. Use numberContainer for KPI tiles, charts for grouped aggregations, and lists for recent/top records.",
+  "type": "object",
+  "properties": {
+    "description": {
+      "type": ["string", "null"],
+      "description": "Optional description text shown below the dashboard title."
+    },
+    "globalFilters": {
+      "type": "array",
+      "description": "Global filters that affect visualizations, for example a date range. Visualizations can map the global date filter through globalDateFilterProperty.",
+      "items": {
+        "$ref": "dashboard-global-filter-descriptor.schema.json"
+      }
+    },
+    "visualizations": {
+      "type": "array",
+      "description": "Flat list of name-identified dashboard visualizations. Each visualization positions itself on the grid via row, order, and width.",
+      "items": {
+        "$ref": "dashboard-visualization-descriptor.schema.json"
+      },
+      "minItems": 1
+    }
+  },
+  "required": ["visualizations"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "description": "Operational overview",
+      "visualizations": [
+        {
+          "name": "events-by-status",
+          "type": "chart",
+          "title": "Events by Status",
+          "row": 0,
+          "order": 0,
+          "width": 2,
+          "entityName": "Acme.Events.Event",
+          "chart": {
+            "chartType": "bar",
+            "xAxis": { "property": "Status" },
+            "yAxis": [{ "aggregation": "count", "label": "Events" }]
+          }
+        }
+      ]
+    }
+  ]
+}

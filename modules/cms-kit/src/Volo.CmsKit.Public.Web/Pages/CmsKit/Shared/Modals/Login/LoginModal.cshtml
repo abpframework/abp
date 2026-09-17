@@ -5,7 +5,8 @@
 @model Volo.CmsKit.Public.Web.Pages.CmsKit.Shared.Modals.Login.LoginModalModel
 @{
     Layout = null;
-    var message = String.IsNullOrEmpty(Model.ViewModel.Message) ? L["CmsKit:Modals:LoginModalDefaultMessage"] : Model.ViewModel.Message;
+    var message = String.IsNullOrEmpty(Model.ViewModel.Message) ? L["CmsKit:Modals:LoginModalDefaultMessage"] :
+    Model.ViewModel.Message;
 }
 <abp-modal centered="true">
     <abp-modal-header title="@L["CmsKit:Modals:YouAreNotAuthenticated"]">
@@ -15,8 +16,9 @@
             <h4>
                 @message
             </h4>
-            <br />
-            <a href="@Model.ViewModel.LoginUrl" class="btn btn-secondary">@L["CmsKit:Modals:Login"]</a>
         </div>
     </abp-modal-body>
+    <abp-modal-footer class="d-flex justify-content-center">
+        <a href="@Model.ViewModel.LoginUrl" class="btn btn-secondary">@L["CmsKit:Modals:Login"]</a>
+    </abp-modal-footer>
 </abp-modal>

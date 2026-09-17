@@ -24,6 +24,8 @@ public class MenuItemUpdateInput : ExtensibleObject, IHasConcurrencyStamp
     public string CssClass { get; set; }
 
     public Guid? PageId { get; set; }
+    
+    public string RequiredPermissionName { get; set; }
 
     public string ConcurrencyStamp { get; set; }
 }

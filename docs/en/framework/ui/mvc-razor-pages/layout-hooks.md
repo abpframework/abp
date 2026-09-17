@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to customize your ABP Framework layout using Layout Hooks to enhance your ASP.NET Core MVC/Razor Pages applications."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages: Layout Hooks
 
 ABP theming system places the page layout into the [theme](theming.md) NuGet packages. That means the final application doesn't include a `Layout.cshtml`, so you can't directly change the layout code to customize it.

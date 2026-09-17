@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Step-by-step guide for migrating from IdentityServer to OpenIddict in ABP Framework, ensuring smooth updates and continued support."
+}
+```
+
 # Migrating from IdentityServer to OpenIddict Step by Step Guide
 
 This guide provides layer-by-layer guidance for migrating your existing application to [OpenIddict](https://github.com/openiddict/openiddict-core) from IdentityServer. ABP startup templates use `OpenIddict` OpenId provider from v6.0.0 by default and `IdentityServer` projects are renamed to `AuthServer` in tiered/separated solutions. Since OpenIddict is only available with ABP v6.0, you will need to update your existing application in order to apply OpenIddict changes.

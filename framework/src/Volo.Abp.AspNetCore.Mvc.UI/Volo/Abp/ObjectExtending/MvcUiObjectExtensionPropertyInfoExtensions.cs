@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,8 @@ namespace Volo.Abp.ObjectExtending;
 
 public static class MvcUiObjectExtensionPropertyInfoExtensions
 {
-    private static readonly HashSet<Type> NumberTypes = new HashSet<Type> {
+    private static readonly FrozenSet<Type> NumberTypes = new HashSet<Type>
+        {
             typeof(int),
             typeof(long),
             typeof(byte),
@@ -33,7 +35,7 @@ public static class MvcUiObjectExtensionPropertyInfoExtensions
             typeof(float?),
             typeof(double?),
             typeof(decimal?)
-        };
+        }.ToFrozenSet();
 
     public static string? GetInputFormatOrNull(this IBasicObjectExtensionPropertyInfo property)
     {
@@ -86,6 +88,16 @@ public static class MvcUiObjectExtensionPropertyInfoExtensions
 
         return GetInputTypeFromTypeOrNull(propertyInfo.Type)
                ?? "text"; //default
+    }
+
+    public static bool IsEnum(this ObjectExtensionPropertyInfo propertyInfo)
+    {
+        return propertyInfo.Type.IsEnum || TypeHelper.IsNullableEnum(propertyInfo.Type);
+    }
+
+    public static bool IsNullableEnum(this ObjectExtensionPropertyInfo propertyInfo)
+    {
+        return TypeHelper.IsNullableEnum(propertyInfo.Type);
     }
 
     private static string? GetInputTypeFromAttributeOrNull(Attribute attribute)

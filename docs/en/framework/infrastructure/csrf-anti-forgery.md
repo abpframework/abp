@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how ABP Framework automates CSRF protection effortlessly, ensuring secure web applications with minimal configuration needed."
+}
+```
+
 # CSRF/XSRF & Anti Forgery System
 
 "*Cross-Site Request Forgery (CSRF) is a type of attack that occurs when a malicious web site, email, blog, instant message, or program causes a user’s web browser to perform an unwanted action on a trusted site for which the user is currently authenticated*" ([OWASP](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)_Prevention_Cheat_Sheet)).
@@ -17,7 +24,7 @@ Once you enable it;
 
 Especially, the second point is a pain for your clients and unnecessarily consumes your server resources.
 
-> You can read more about the ASP.NET Core antiforgery system in its own [documentation](https://docs.microsoft.com/en-us/aspnet/core/security/anti-request-forgery). 
+> You can use any ASP.NET Core antiforgery features, like `ValidateAntiForgeryToken`, `AutoValidateAntiforgeryToken`, or `IgnoreAntiforgeryToken`, for more information, see the [official documentation](https://docs.microsoft.com/en-us/aspnet/core/security/anti-request-forgery).
 
 ## The Solution
 
@@ -40,6 +47,7 @@ That's all. The systems works smoothly.
 * `TokenCookie`:  Can be used to configure the cookie details. This cookie is used to store the antiforgery token value in the client side, so clients can read it and sends the value as the HTTP header. Default cookie name is `XSRF-TOKEN`, expiration time is 10 years (yes, ten years! It should be a value longer than the authentication cookie max life time, for the security).
 * `AuthCookieSchemaName`: The name of the authentication cookie used by your application. Default value is `Identity.Application` (which becomes `AspNetCore.Identity.Application` on runtime). The default value properly works with the ABP startup templates. **If you change the authentication cookie name, you also must change this.**
 * `AutoValidate`: The single point to enable/disable the ABP automatic antiforgery validation system. Default value is `true`.
+* `NormalizeUserIdClaimIssuer`: Normalizes the user ID claim issuer while generating and validating antiforgery tokens. This allows the same user to have the same token identifier under cookie and bearer authentication. Default value is `true`; disable it only when issuer-sensitive token identity is required for compatibility.
 * `AutoValidateFilter`: A predicate that gets a type and returns a boolean. ABP uses this predicate to check a controller type. If it returns false for a controller type, the controller is excluded from the automatic antiforgery token validation.
 * `AutoValidateIgnoredHttpMethods`: A list of HTTP Methods to ignore on automatic antiforgery validation. Default value: "GET", "HEAD", "TRACE", "OPTIONS". These HTTP Methods are safe to skip antiforgery validation since they don't change the application state.
 

@@ -11,6 +11,7 @@
     "InvalidUsername": "Érvénytelen felhasználónév vagy jelszó!",
     "InvalidAuthenticatorCode": "Érvénytelen hitelesítő kód!",
     "InvalidRecoveryCode": "Érvénytelen helyreállítási kód!",
-    "TheTargetUserIsNotLinkedToYou": "A célfelhasználó nincs hozzád kapcsolódva!"
+    "TheTargetUserIsNotLinkedToYou": "A célfelhasználó nincs hozzád kapcsolódva!",
+    "ClientResourcePermissionProviderKeyLookupService": "Kliens"
   }
 }

@@ -8,6 +8,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Caching;
 using Microsoft.Extensions.Caching.Distributed;
 using ImageMagick;
+using ImageMagick.Drawing;
 
 namespace Volo.CmsKit.Public.Web.Security.Captcha;
 
@@ -63,7 +64,7 @@ public class SimpleMathsCaptchaGenerator : ITransientDependency
             }
         };
 
-        await Cache.SetAsync(request.Output.Id.ToString("N"), request.Output, new DistributedCacheEntryOptions 
+        await Cache.SetAsync(request.Output.Id.ToString("N"), request.Output, new DistributedCacheEntryOptions
         {
             AbsoluteExpiration = DateTimeOffset.Now.Add(options.DurationOfValidity)
         });
@@ -79,8 +80,8 @@ public class SimpleMathsCaptchaGenerator : ITransientDependency
     public virtual async Task ValidateAsync(Guid requestId, int value)
     {
         var request = await Cache.GetAsync(requestId.ToString("N"));
-        
-        if(request == null || request.Result != value) 
+
+        if(request == null || request.Result != value)
         {
             throw new UserFriendlyException(Localizer["CaptchaCodeErrorMessage"]);
         }
@@ -103,11 +104,11 @@ public class SimpleMathsCaptchaGenerator : ITransientDependency
         try
         {
             var random = new Random();
-        
+
             var drawables = new Drawables()
                 .FontPointSize(options.FontSize)
                 .StrokeColor(MagickColors.Transparent);
-            
+
             var family = MagickNET.FontFamilies.FirstOrDefault();
             if (!family.IsNullOrWhiteSpace())
             {
@@ -115,7 +116,7 @@ public class SimpleMathsCaptchaGenerator : ITransientDependency
             }
 
             var size = (ushort)(drawables.FontTypeMetrics(stringText)?.TextWidth ?? 0);
-            using var image = new MagickImage(MagickColors.White, size + 15, options.Height);
+            using var image = new MagickImage(MagickColors.White, size + 15u, options.Height);
 
             double position = 0;
             var startWith = (byte)random.Next(5, 10);
@@ -139,34 +140,27 @@ public class SimpleMathsCaptchaGenerator : ITransientDependency
 
             Parallel.For(0, options.DrawLines, _ =>
             {
-                // ReSharper disable once AccessToDisposedClosure
-                if (image is { IsDisposed: false })
-                {
-                    var x0 = random.Next(0, random.Next(0, 30));
-                    var y0 = random.Next(10, image.Height);
+                var x0 = random.Next(0, random.Next(0, 30));
+                var y0 = random.Next(10, (int)image.Height);
 
-                    var x1 = random.Next(30, image.Width);
-                    var y1 = random.Next(0, image.Height);
+                var x1 = random.Next(30, (int)image.Width);
+                var y1 = random.Next(0, (int)image.Height);
 
-                    image.Draw(new Drawables()
-                        .StrokeColor(options.DrawLinesColor[random.Next(0, options.DrawLinesColor.Length)])
-                        .StrokeWidth(RandomTextGenerator.GenerateNextFloat(options.MinLineThickness,
-                            options.MaxLineThickness))
-                        .Line(x0, y0, x1, y1));
-                }
+                image.Draw(new Drawables()
+                    .StrokeColor(options.DrawLinesColor[random.Next(0, options.DrawLinesColor.Length)])
+                    .StrokeWidth(RandomTextGenerator.GenerateNextFloat(options.MinLineThickness,
+                        options.MaxLineThickness))
+                    .Line(x0, y0, x1, y1));
             });
 
             Parallel.For(0, options.NoiseRate, _ =>
             {
-                if (image is { IsDisposed: false })
-                {
-                    var x = random.Next(0, image.Width);
-                    var y = random.Next(0, image.Height);
-                    image.Draw(new Drawables()
-                        .FillColor(options.NoiseRateColor[random.Next(0, options.NoiseRateColor.Length)])
-                        .Point(x, y)
-                    );
-                }
+                var x = random.Next(0, (int)image.Width);
+                var y = random.Next(0, (int)image.Height);
+                image.Draw(new Drawables()
+                    .FillColor(options.NoiseRateColor[random.Next(0, options.NoiseRateColor.Length)])
+                    .Point(x, y)
+                );
             });
 
             image.Resize(new MagickGeometry(options.Width, options.Height) { IgnoreAspectRatio = true });

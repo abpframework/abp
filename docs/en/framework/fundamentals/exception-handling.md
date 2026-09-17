@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how ABP Framework simplifies exception handling with automatic formatting, localization, and HTTP status code mapping for seamless API responses."
+}
+```
+
 # Exception Handling
 
 ABP provides a built-in infrastructure and offers a standard model for handling exceptions.
@@ -81,7 +88,7 @@ Error **details** in an optional field of the JSON error message. Thrown `Except
 }
 ````
 
-`AbpValidationException` implements the `IHasValidationErrors` interface and it is automatically thrown by the framework when a request input is not valid. So, usually you don't need to deal with validation errors unless you have higly customised validation logic.
+`AbpValidationException` implements the `IHasValidationErrors` interface and it is automatically thrown by the framework when a request input is not valid. So, usually you don't need to deal with validation errors unless you have highly customized validation logic.
 
 ### Logging
 
@@ -282,7 +289,7 @@ The `IHttpExceptionStatusCodeFinder` is used to automatically determine the HTTP
 
 ### Custom Mappings
 
-Automatic HTTP status code determination can be overrided by custom mappings. For example:
+Automatic HTTP status code determination can be overridden by custom mappings. For example:
 
 ````C#
 services.Configure<AbpExceptionHttpStatusCodeOptions>(options =>
@@ -315,7 +322,7 @@ The `context` object contains necessary information about the exception occurred
 
 Some exception types are automatically thrown by the framework:
 
-- `AbpAuthorizationException` is thrown if the current user has no permission to perform the requested operation. See [authorization](./authorization.md) for more.
+- `AbpAuthorizationException` is thrown if the current user has no permission to perform the requested operation. See [authorization](./authorization/index.md) for more.
 - `AbpValidationException` is thrown if the input of the current request is not valid. See [validation](./validation.md) for more.
 - `EntityNotFoundException` is thrown if the requested entity is not available. This is mostly thrown by [repositories](../architecture/domain-driven-design/repositories.md).
 
@@ -337,6 +344,20 @@ Here, a list of the options you can configure:
 
 * `SendExceptionsDetailsToClients` (default: `false`): You can enable or disable sending exception details to the client.
 * `SendStackTraceToClients` (default: `true`): You can enable or disable sending the stack trace of exception to the client. If you want to send the stack trace to the client, you must set both `SendStackTraceToClients` and `SendExceptionsDetailsToClients` options to `true` otherwise, the stack trace will not be sent to the client.
+* `SendExceptionDataToClientTypes`: Exception types whose `Data` dictionary is copied to the remote error response. The default list contains `IBusinessException`, so business exception data is sent to clients. Derived and implementing types are matched.
+* `ExcludeExceptionFromLoggerSelectors`: Predicates that suppress matching exceptions from the ABP exception log. Add a selector when an expected exception should still produce an error response but should not be logged by the exception pipeline.
+
+Example:
+
+````csharp
+Configure<AbpExceptionHandlingOptions>(options =>
+{
+    options.SendExceptionDataToClientTypes.Add(typeof(MyClientVisibleException));
+    options.ExcludeExceptionFromLoggerSelectors.Add(
+        exception => exception is MyExpectedException
+    );
+});
+````
 
 ## See Also
 

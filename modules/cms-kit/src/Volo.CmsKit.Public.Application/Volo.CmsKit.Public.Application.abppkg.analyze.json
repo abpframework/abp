@@ -70,6 +70,47 @@
       "summary": null
     },
     {
+      "eventHandlerType": "Local",
+      "namespace": "Volo.CmsKit.Public.GlobalResources.Handlers",
+      "subscribedEvents": [
+        {
+          "underlyingType": {
+            "name": "GlobalResource",
+            "namespace": "Volo.CmsKit.GlobalResources",
+            "declaringAssemblyName": "Volo.CmsKit.Domain",
+            "fullName": "Volo.CmsKit.GlobalResources.GlobalResource"
+          },
+          "name": "EntityUpdatedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityUpdatedEventData`1"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "ILocalEventHandler<EntityUpdatedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityUpdatedEventData`1>"
+        },
+        {
+          "name": "IEventHandler",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.IEventHandler"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "eventHandler",
+      "name": "GlobalResourceEventHandler",
+      "summary": null
+    },
+    {
       "namespace": "Volo.CmsKit.Public.Reactions",
       "baseClass": {
         "name": "CmsKitPublicAppServiceBase",
@@ -669,10 +710,10 @@
     {
       "namespace": "Volo.CmsKit.Public.GlobalResources",
       "baseClass": {
-        "name": "ApplicationService",
-        "namespace": "Volo.Abp.Application.Services",
-        "declaringAssemblyName": "Volo.Abp.Ddd.Application",
-        "fullName": "Volo.Abp.Application.Services.ApplicationService"
+        "name": "CmsKitPublicAppServiceBase",
+        "namespace": "Volo.CmsKit.Public",
+        "declaringAssemblyName": "Volo.CmsKit.Public.Application",
+        "fullName": "Volo.CmsKit.Public.CmsKitPublicAppServiceBase"
       },
       "implementingInterfaces": [
         {

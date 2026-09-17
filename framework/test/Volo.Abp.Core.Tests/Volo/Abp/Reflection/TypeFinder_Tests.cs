@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
+using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Shouldly;
 using Xunit;
@@ -21,7 +22,7 @@ public class TypeFinder_Tests
 
         //Act
 
-        var typeFinder = new TypeFinder(fakeAssemblyFinder);
+        var typeFinder = new TypeFinder(NullLogger<TypeFinder>.Instance, fakeAssemblyFinder);
 
         //Assert
 

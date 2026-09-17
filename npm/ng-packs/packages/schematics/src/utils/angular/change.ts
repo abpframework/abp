@@ -3,7 +3,7 @@
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * found in the LICENSE file at https://angular.dev/license
  */
 
 import { UpdateRecorder } from '@angular-devkit/schematics';
@@ -47,7 +47,11 @@ export class InsertChange implements Change {
   order: number;
   description: string;
 
-  constructor(public path: string, public pos: number, public toAdd: string) {
+  constructor(
+    public path: string,
+    public pos: number,
+    public toAdd: string,
+  ) {
     if (pos < 0) {
       throw new Error('Negative positions are invalid');
     }
@@ -59,7 +63,7 @@ export class InsertChange implements Change {
    * This method does not insert spaces if there is none in the original string.
    */
   apply(host: Host) {
-    return host.read(this.path).then((content) => {
+    return host.read(this.path).then(content => {
       const prefix = content.substring(0, this.pos);
       const suffix = content.substring(this.pos);
 
@@ -75,7 +79,11 @@ export class RemoveChange implements Change {
   order: number;
   description: string;
 
-  constructor(public path: string, private pos: number, public toRemove: string) {
+  constructor(
+    public path: string,
+    private pos: number,
+    public toRemove: string,
+  ) {
     if (pos < 0) {
       throw new Error('Negative positions are invalid');
     }
@@ -84,7 +92,7 @@ export class RemoveChange implements Change {
   }
 
   apply(host: Host): Promise<void> {
-    return host.read(this.path).then((content) => {
+    return host.read(this.path).then(content => {
       const prefix = content.substring(0, this.pos);
       const suffix = content.substring(this.pos + this.toRemove.length);
 
@@ -115,7 +123,7 @@ export class ReplaceChange implements Change {
   }
 
   apply(host: Host): Promise<void> {
-    return host.read(this.path).then((content) => {
+    return host.read(this.path).then(content => {
       const prefix = content.substring(0, this.pos);
       const suffix = content.substring(this.pos + this.oldText.length);
       const text = content.substring(this.pos, this.pos + this.oldText.length);

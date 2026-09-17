@@ -64,6 +64,8 @@
 
             <abp-select id="Layout" asp-for="ViewModel.LayoutName" asp-items="@LayoutConstants.GetLayoutsSelectList()" label="@L["SelectLayout"]"></abp-select>
 
+            <abp-input asp-for="@Model.ViewModel.Status" />
+
             <abp-input asp-for="@Model.ViewModel.Content" />
 
             <abp-tabs tab-style="Tab">
@@ -90,13 +92,14 @@
             {
                 if (!propertyInfo.Name.EndsWith("_Text"))
                 {
-                    if (propertyInfo.Type.IsEnum || !propertyInfo.Lookup.Url.IsNullOrEmpty())
+                    if (propertyInfo.IsEnum() || !propertyInfo.Lookup.Url.IsNullOrEmpty())
                     {
-                        if (propertyInfo.Type.IsEnum)
+                        if (propertyInfo.IsEnum())
                         {
                             Model.ViewModel.ExtraProperties.ToEnum(propertyInfo.Name, propertyInfo.Type);
                         }
                         <abp-select asp-for="ViewModel.ExtraProperties[propertyInfo.Name]"
+                                    enum-type="@propertyInfo.IsEnum() ? propertyInfo.Type : null"
                                     label="@propertyInfo.GetLocalizedDisplayName(StringLocalizerFactory)"
                                     autocomplete-api-url="@propertyInfo.Lookup.Url"
                                     autocomplete-selected-item-name="@Model.ViewModel.GetProperty(propertyInfo.Name+"_Text")"
@@ -119,7 +122,8 @@
         </form>
     </abp-card-body>
     <abp-card-footer>
-        <abp-button button-type="Primary" type="submit" text="@L["Submit"].Value" id="button-page-create" />
+        <abp-button button-type="Secondary" type="button" text="@L["SaveAsDraft"].Value" id="button-page-save-draft" />
+        <abp-button button-type="Primary" type="button" text="@L["Publish"].Value" id="button-page-publish" />
     </abp-card-footer>
 </abp-card>
 <input hidden id="GeneratedWidgetText" />

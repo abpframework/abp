@@ -31,6 +31,8 @@ public class InputAndOutputDateTimeFormatSystemTextJsonTests : AbpJsonSystemText
         {
             options.Kind = DateTimeKind.Utc;
         });
+
+        base.AfterAddApplication(services);
     }
 
     [Fact]
@@ -59,6 +61,7 @@ public class InputAndOutputDateTimeFormatSystemTextJsonTests : AbpJsonSystemText
     }
 }
 
+[Collection("AbpJsonNewtonsoftJsonTest")]
 public class InputAndOutputDateTimeFormatNewtonsoftTests : AbpJsonNewtonsoftJsonTestBase
 {
     private readonly IJsonSerializer _jsonSerializer;
@@ -83,6 +86,8 @@ public class InputAndOutputDateTimeFormatNewtonsoftTests : AbpJsonNewtonsoftJson
         {
             options.Kind = DateTimeKind.Utc;
         });
+
+        base.AfterAddApplication(services);
     }
 
     [Fact]

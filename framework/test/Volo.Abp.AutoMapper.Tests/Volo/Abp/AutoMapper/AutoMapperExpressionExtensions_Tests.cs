@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoMapper;
+using Microsoft.Extensions.Logging.Abstractions;
 using Shouldly;
 using Volo.Abp.Auditing;
 using Xunit;

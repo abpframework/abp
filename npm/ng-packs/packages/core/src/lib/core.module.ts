@@ -3,35 +3,45 @@ import {
   provideHttpClient,
   withInterceptorsFromDi,
   withXsrfConfiguration,
+  withFetch,
 } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { AbstractNgModelComponent } from './abstracts/ng-model.component';
-import { DynamicLayoutComponent } from './components/dynamic-layout.component';
-import { ReplaceableRouteContainerComponent } from './components/replaceable-route-container.component';
-import { RouterOutletComponent } from './components/router-outlet.component';
-import { AutofocusDirective } from './directives/autofocus.directive';
-import { InputEventDebounceDirective } from './directives/debounce.directive';
-import { ForDirective } from './directives/for.directive';
-import { FormSubmitDirective } from './directives/form-submit.directive';
-import { InitDirective } from './directives/init.directive';
-import { PermissionDirective } from './directives/permission.directive';
-import { ReplaceableTemplateDirective } from './directives/replaceable-template.directive';
-import { StopPropagationDirective } from './directives/stop-propagation.directive';
-import { LocalizationModule } from './localization.module';
+import { AbstractNgModelComponent } from './abstracts';
+import {
+  DynamicLayoutComponent,
+  ReplaceableRouteContainerComponent,
+  RouterOutletComponent,
+} from './components';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
+import {
+  StopPropagationDirective,
+  ReplaceableTemplateDirective,
+  PermissionDirective,
+  InitDirective,
+  ForDirective,
+  InputEventDebounceDirective,
+  AutofocusDirective,
+  FormSubmitDirective,
+} from './directives';
 import { ABP } from './models/common';
-import { LocalizationPipe } from './pipes/localization.pipe';
-import { SortPipe } from './pipes/sort.pipe';
-import { ToInjectorPipe } from './pipes/to-injector.pipe';
 import './utils/date-extensions';
-import { ShortDateTimePipe } from './pipes/short-date-time.pipe';
-import { ShortTimePipe } from './pipes/short-time.pipe';
-import { ShortDatePipe } from './pipes/short-date.pipe';
-import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { provideAbpCoreChild, provideAbpCore, withOptions } from './providers';
+import {
+  AsyncLocalizationPipe,
+  LazyLocalizationPipe,
+  UtcToLocalPipe,
+  SafeHtmlPipe,
+  ShortDatePipe,
+  ShortTimePipe,
+  ShortDateTimePipe,
+  ToInjectorPipe,
+  SortPipe,
+  LocalizationPipe,
+} from './pipes';
 
-const standaloneDirectives = [
+const CORE_DIRECTIVES = [
   AutofocusDirective,
   InputEventDebounceDirective,
   ForDirective,
@@ -40,6 +50,26 @@ const standaloneDirectives = [
   PermissionDirective,
   ReplaceableTemplateDirective,
   StopPropagationDirective,
+];
+
+const CORE_PIPES = [
+  LocalizationPipe,
+  SortPipe,
+  SafeHtmlPipe,
+  ShortDateTimePipe,
+  ShortTimePipe,
+  ShortDatePipe,
+  ToInjectorPipe,
+  UtcToLocalPipe,
+  AsyncLocalizationPipe,
+  LazyLocalizationPipe,
+];
+
+const CORE_COMPONENTS = [
+  DynamicLayoutComponent,
+  ReplaceableRouteContainerComponent,
+  RouterOutletComponent,
+  AbstractNgModelComponent,
 ];
 /**
  * BaseCoreModule is the module that holds
@@ -53,40 +83,23 @@ const standaloneDirectives = [
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    LocalizationModule,
-    AbstractNgModelComponent,
-    DynamicLayoutComponent,
-    ReplaceableRouteContainerComponent,
-    RouterOutletComponent,
-    SortPipe,
-    SafeHtmlPipe,
-    ToInjectorPipe,
-    ShortDateTimePipe,
-    ShortTimePipe,
-    ShortDatePipe,
-    ...standaloneDirectives,
+    NgxValidateCoreModule,
+    ...CORE_DIRECTIVES,
+    ...CORE_PIPES,
+    ...CORE_COMPONENTS,
   ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    LocalizationModule,
-    ...standaloneDirectives,
+    NgxValidateCoreModule,
+    ...CORE_DIRECTIVES,
+    ...CORE_PIPES,
+    ...CORE_COMPONENTS,
   ],
-  declarations: [
-    AbstractNgModelComponent,
-    DynamicLayoutComponent,
-    ReplaceableRouteContainerComponent,
-    RouterOutletComponent,
-    SortPipe,
-    SafeHtmlPipe,
-    ToInjectorPipe,
-    ShortDateTimePipe,
-    ShortTimePipe,
-    ShortDatePipe,
-  ],
-  providers: [LocalizationPipe, provideHttpClient(withInterceptorsFromDi())],
+  declarations: [],
+  providers: [LocalizationPipe, provideHttpClient(withInterceptorsFromDi(), withFetch())],
 })
 export class BaseCoreModule {}
 
@@ -95,8 +108,8 @@ export class BaseCoreModule {}
  * and it introduces imports useful at root level (e.g. NGXS)
  */
 @NgModule({
-  exports: [BaseCoreModule, LocalizationModule],
-  imports: [BaseCoreModule, LocalizationModule],
+  exports: [BaseCoreModule],
+  imports: [BaseCoreModule],
   providers: [
     provideHttpClient(
       withXsrfConfiguration({

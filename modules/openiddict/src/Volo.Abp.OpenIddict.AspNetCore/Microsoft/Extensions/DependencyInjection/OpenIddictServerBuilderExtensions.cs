@@ -13,8 +13,8 @@ public static class OpenIddictServerBuilderExtensions
         }
 
         var certificate = flag != null
-            ? new X509Certificate2(fileName, passPhrase, flag.Value)
-            : new X509Certificate2(fileName, passPhrase);
+            ? X509CertificateLoader.LoadPkcs12FromFile(fileName, passPhrase, flag.Value)
+            : X509CertificateLoader.LoadPkcs12FromFile(fileName, passPhrase);
 
         builder.AddSigningCertificate(certificate);
         builder.AddEncryptionCertificate(certificate);

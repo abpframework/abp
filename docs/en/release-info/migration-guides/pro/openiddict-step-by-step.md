@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Step-by-step guide to migrate from IdentityServer to OpenIddict in ABP v6.0, ensuring a smooth transition for your applications."
+}
+```
+
 # Migrating from IdentityServer to OpenIddict Step by Step Guide
 
 This guide provides layer-by-layer guidance for migrating your existing application to OpenIddict. Since OpenIddict is only available with ABP v6.0, you will need to update your existing application in order to apply OpenIddict changes.

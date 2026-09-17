@@ -35,7 +35,12 @@ public class LocalizableStringSerializer : ILocalizableStringSerializer, ITransi
 
     public virtual ILocalizableString Deserialize(string value)
     {
-        if (value.IsNullOrEmpty() ||
+        if (value == null)
+        {
+            throw new AbpException($"{nameof(value)} can not be null!");
+        }
+
+        if (value.IsNullOrWhiteSpace() ||
             value.Length < 3 ||
             value[1] != ':')
         {

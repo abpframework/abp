@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -99,6 +100,7 @@ public class AbpRemoteStreamContentModelBinder<TRemoteStreamContent> : IModelBin
         {
             var form = await request.ReadFormAsync();
 
+            var useMemoryStream = form.Files.Count > 1;
             foreach (var file in form.Files)
             {
                 // If there is an <input type="file" ... /> in the form and is left blank.
@@ -109,13 +111,27 @@ public class AbpRemoteStreamContentModelBinder<TRemoteStreamContent> : IModelBin
 
                 if (file.Name.Equals(modelName, StringComparison.OrdinalIgnoreCase))
                 {
-                    postedFiles.Add(new RemoteStreamContent(file.OpenReadStream(), file.FileName, file.ContentType, file.Length).As<TRemoteStreamContent>());
+                    if (useMemoryStream)
+                    {
+                        var memoryStream = new MemoryStream();
+                        await file.OpenReadStream().CopyToAsync(memoryStream);
+                        memoryStream.Position = 0;
+                        postedFiles.Add(new RemoteStreamContent(memoryStream, file.FileName, file.ContentType, file.Length, disposeStream: false).As<TRemoteStreamContent>());
+                        bindingContext.HttpContext.Response.OnCompleted(async () =>
+                        {
+                            await memoryStream.DisposeAsync();
+                        });
+                    }
+                    else
+                    {
+                        postedFiles.Add(new RemoteStreamContent(file.OpenReadStream(), file.FileName, file.ContentType, file.Length, disposeStream: false).As<TRemoteStreamContent>());
+                    }
                 }
             }
         }
         else if (bindingContext.IsTopLevelObject)
         {
-            postedFiles.Add(new RemoteStreamContent(request.Body, null, request.ContentType, request.ContentLength).As<TRemoteStreamContent>());
+            postedFiles.Add(new RemoteStreamContent(request.Body, null, request.ContentType, request.ContentLength, disposeStream: false).As<TRemoteStreamContent>());
         }
     }
 

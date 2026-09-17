@@ -1,5 +1,5 @@
 import { Component, LOCALE_ID } from '@angular/core';
-import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/jest';
+import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/vitest';
 import { differentLocales } from '../constants/different-locales';
 import { LocaleId } from '../providers/locale.provider';
 import { LocalizationService } from '../services/localization.service';

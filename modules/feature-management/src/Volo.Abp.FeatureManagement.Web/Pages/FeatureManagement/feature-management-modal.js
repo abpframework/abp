@@ -3,7 +3,18 @@ var abp = abp || {};
     abp.modals = abp.modals || {};
 
     let l = abp.localization.getResource("AbpFeatureManagement");
+
+    // The toolbars, menus and bundles are rendered on the server, so a full page
+    // load is the only way to reflect the new features on the current page. An empty
+    // provider key means the features of the current host or tenant were changed.
+    function reloadPageIfCurrentFeaturesChanged(providerKey) {
+        if (!providerKey) {
+            window.location.reload();
+        }
+    }
+
     abp.modals.FeatureManagement = function () {
+
         abp.ResourceLoader.loadScript('/client-proxies/featureManagement-proxy.js');
         $('#ResetToDefaults').click(function (e) {
             abp.message.confirm(l('AreYouSureToResetToDefault'))
@@ -12,11 +23,11 @@ var abp = abp || {};
                         let providerName = $('#ProviderName').val();
                         let prodiverKey = $('#ProviderKey').val();
                         volo.abp.featureManagement.features.delete(providerName, prodiverKey).then(function () {
-                            abp.notify.success(l('ResetedToDefault'));
-                        });
-                        setTimeout(function () {
+                            $("#FeatureManagementForm").get(0).reset();
+                            abp.notify.success(l('SavedSuccessfully'));
                             $('#featureManagmentModal').modal('hide');
-                        }, 500);
+                            reloadPageIfCurrentFeaturesChanged(prodiverKey);
+                        });
                     }
                 });
         });
@@ -59,6 +70,14 @@ var abp = abp || {};
         }
 
         this.initDom = function ($el) {
+            let initialValues = $el.serialize();
+
+            $el.on('abp-ajax-success', function () {
+                if ($el.serialize() !== initialValues) {
+                    reloadPageIfCurrentFeaturesChanged($el.find('#ProviderKey').val());
+                }
+            });
+
             $el.find('.tab-pane').each(function () {
                 let $tab = $(this);
                 $tab.find('input[type="checkbox"]')
@@ -80,15 +99,6 @@ var abp = abp || {};
                             checkParents($tab, $element, '.form-group')
                         });
                     });
-            });
-
-            $(function () {
-                $('.custom-scroll-content').mCustomScrollbar({
-                    theme: 'minimal-dark',
-                });
-                $('.custom-scroll-container > .col-4').mCustomScrollbar({
-                    theme: 'minimal-dark',
-                });
             });
         };
     };

@@ -2,12 +2,16 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor
 @using Volo.Blogging.Posts
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Options
+@using Volo.Blogging
 @using Volo.Blogging.Localization
 @using Volo.Blogging.Pages.Blogs.Posts
 @inject IHtmlLocalizer<BloggingResource> L
 @model Volo.Blogging.Pages.Blogs.Posts.EditModel
+@inject IOptions<BloggingUrlOptions> BloggingUrlOptions
 @{
     ViewBag.PageTitle = "Edit Blog Post";
+    var blogShortNameRouteParam = BloggingUrlOptions.Value.SingleBlogMode.Enabled ? null : Model.BlogShortName;
 }
 @section styles {
     <abp-style-bundle name="@typeof(EditModel).FullName">
@@ -86,7 +90,7 @@
                                 <div class="mt-3 d-flex flex-row-reverse">
                                     <abp-button id="PostFormSubmitButton" button-type="Primary" type="submit" form="edit-post-form" text="@L["Submit"].Value" icon="check" />
 
-                                    <a asp-page="/Blog/Posts/Detail" asp-route-postUrl="@Model.Post.Url" asp-route-blogShortName="@Model.BlogShortName" class="btn btn-default me-2"><span>@L["Cancel"]</span></a>
+                                    <a asp-page="./Detail" asp-route-postUrl="@Model.Post.Url" asp-route-blogShortName="@blogShortNameRouteParam" class="btn btn-default me-2"><span>@L["Cancel"]</span></a>
                                 </div>
                             </div>
                         </form>

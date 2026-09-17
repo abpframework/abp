@@ -16,7 +16,6 @@ public static class AbpSwaggerUIBuilderExtensions
         return app.UseSwaggerUI(options =>
         {
             options.InjectJavascript("ui/abp.js");
-            options.InjectJavascript("ui/abp.swagger.js");
             options.IndexStream = () => resolver?.Resolver();
 
             setupAction?.Invoke(options);

@@ -1,6 +1,7 @@
 ﻿@page
-@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
-@model FormElementsModel
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
+@model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.FormElementsModel
 
 @{
     ViewData["Title"] = "Form Elements";
@@ -65,7 +66,7 @@
 &lt;input type=&quot;password&quot; data-val=&quot;true&quot; data-val-required=&quot;The Password field is required.&quot; id=&quot;MyModel_Password&quot; name=&quot;MyModel.Password&quot; class=&quot;form-control &quot;&gt;
 &lt;span class=&quot;text-danger field-validation-valid&quot; data-valmsg-for=&quot;MyModel.Password&quot; data-valmsg-replace=&quot;true&quot;&gt;&lt;/span&gt;
 &lt;/div&gt;
-&lt;div class=&quot;form-check&quot;&gt;
+&lt;div class=&quot;mb-2 form-check&quot;&gt;
 &lt;input type=&quot;checkbox&quot; data-val=&quot;true&quot; data-val-required=&quot;The CheckMeOut field is required.&quot; id=&quot;MyModel_CheckMeOut&quot; name=&quot;MyModel.CheckMeOut&quot; value=&quot;true&quot; class=&quot;form-check-input &quot;&gt;&lt;input name=&quot;MyModel.CheckMeOut&quot; type=&quot;hidden&quot; value=&quot;false&quot;&gt;
 &lt;label class=&quot;form-check-label&quot; for=&quot;MyModel_CheckMeOut&quot;&gt;Check Me Out&lt;/label&gt;
 &lt;/div&gt;
@@ -496,3 +497,29 @@
         </abp-tabs>
     </div>
 </div>
+
+<hr />
+
+<abp-card>
+    <abp-card-header>
+        <abp-card-title>
+            <h4>abp-input</h4>
+        </abp-card-title>
+    </abp-card-header>
+    <abp-card-body>
+        @await Component.InvokeAsync("TagHelperProperties", typeof(AbpInputTagHelper))
+    </abp-card-body>
+</abp-card>
+
+<abp-card>
+    <abp-card-header>
+        <abp-card-title>
+            <h4>abp-select</h4>
+        </abp-card-title>
+    </abp-card-header>
+    <abp-card-body>
+        @await Component.InvokeAsync("TagHelperProperties", typeof(AbpSelectTagHelper))
+    </abp-card-body>
+</abp-card>
+
+

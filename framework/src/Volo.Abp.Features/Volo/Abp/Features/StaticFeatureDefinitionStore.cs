@@ -5,37 +5,27 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.StaticDefinitions;
 
 namespace Volo.Abp.Features;
 
 public class StaticFeatureDefinitionStore: IStaticFeatureDefinitionStore, ISingletonDependency
 {
-    protected IDictionary<string, FeatureGroupDefinition> FeatureGroupDefinitions => _lazyFeatureGroupDefinitions.Value;
-    private readonly Lazy<Dictionary<string, FeatureGroupDefinition>> _lazyFeatureGroupDefinitions;
-
-    protected IDictionary<string, FeatureDefinition> FeatureDefinitions => _lazyFeatureDefinitions.Value;
-    private readonly Lazy<Dictionary<string, FeatureDefinition>> _lazyFeatureDefinitions;
-
+    protected IServiceProvider ServiceProvider { get; }
     protected AbpFeatureOptions Options { get; }
-
-    private readonly IServiceProvider _serviceProvider;
+    protected IStaticDefinitionCache<FeatureGroupDefinition, Dictionary<string, FeatureGroupDefinition>> GroupCache { get; }
+    protected IStaticDefinitionCache<FeatureDefinition, Dictionary<string, FeatureDefinition>> DefinitionCache { get; }
 
     public StaticFeatureDefinitionStore(
+        IServiceProvider serviceProvider,
         IOptions<AbpFeatureOptions> options,
-        IServiceProvider serviceProvider)
+        IStaticDefinitionCache<FeatureGroupDefinition, Dictionary<string, FeatureGroupDefinition>> groupCache,
+        IStaticDefinitionCache<FeatureDefinition, Dictionary<string, FeatureDefinition>> definitionCache)
     {
-        _serviceProvider = serviceProvider;
+        ServiceProvider = serviceProvider;
         Options = options.Value;
-
-        _lazyFeatureDefinitions = new Lazy<Dictionary<string, FeatureDefinition>>(
-            CreateFeatureDefinitions,
-            isThreadSafe: true
-        );
-
-        _lazyFeatureGroupDefinitions = new Lazy<Dictionary<string, FeatureGroupDefinition>>(
-            CreateFeatureGroupDefinitions,
-            isThreadSafe: true
-        );
+        GroupCache = groupCache;
+        DefinitionCache = definitionCache;
     }
 
     public virtual async Task<FeatureDefinition> GetAsync(string name)
@@ -52,11 +42,60 @@ public class StaticFeatureDefinitionStore: IStaticFeatureDefinitionStore, ISingl
         return feature;
     }
 
-    protected virtual Dictionary<string, FeatureDefinition> CreateFeatureDefinitions()
+    public virtual async Task<FeatureDefinition?> GetOrNullAsync(string name)
+    {
+        var defs = await GetFeatureDefinitionsAsync();
+        return defs.GetOrDefault(name);
+    }
+
+    public virtual async Task<IReadOnlyList<FeatureDefinition>> GetFeaturesAsync()
+    {
+        var defs = await GetFeatureDefinitionsAsync();
+        return defs.Values.ToList();
+    }
+
+    public virtual async Task<IReadOnlyList<FeatureGroupDefinition>> GetGroupsAsync()
+    {
+        var groups = await GetFeatureGroupDefinitionsAsync();
+        return groups.Values.ToList();
+    }
+
+    protected virtual async Task<Dictionary<string, FeatureGroupDefinition>> GetFeatureGroupDefinitionsAsync()
+    {
+        return await GroupCache.GetOrCreateAsync(CreateFeatureGroupDefinitionsAsync);
+    }
+
+    protected virtual async Task<Dictionary<string, FeatureDefinition>> GetFeatureDefinitionsAsync()
+    {
+        return await DefinitionCache.GetOrCreateAsync(CreateFeatureDefinitionsAsync);
+    }
+
+    protected virtual Task<Dictionary<string, FeatureGroupDefinition>> CreateFeatureGroupDefinitionsAsync()
+    {
+        var context = new FeatureDefinitionContext();
+
+        using (var scope = ServiceProvider.CreateScope())
+        {
+            var providers = Options
+                .DefinitionProviders
+                .Select(p => (scope.ServiceProvider.GetRequiredService(p) as IFeatureDefinitionProvider)!)
+                .ToList();
+
+            foreach (var provider in providers)
+            {
+                provider.Define(context);
+            }
+        }
+
+        return Task.FromResult(context.Groups);
+    }
+
+    protected virtual async Task<Dictionary<string, FeatureDefinition>> CreateFeatureDefinitionsAsync()
     {
         var features = new Dictionary<string, FeatureDefinition>();
 
-        foreach (var groupDefinition in FeatureGroupDefinitions.Values)
+        var groups = await GetFeatureGroupDefinitionsAsync();
+        foreach (var groupDefinition in groups.Values)
         {
             foreach (var feature in groupDefinition.Features)
             {
@@ -82,40 +121,5 @@ public class StaticFeatureDefinitionStore: IStaticFeatureDefinitionStore, ISingl
         {
             AddFeatureToDictionaryRecursively(features, child);
         }
-    }
-
-    protected virtual Dictionary<string, FeatureGroupDefinition> CreateFeatureGroupDefinitions()
-    {
-        var context = new FeatureDefinitionContext();
-
-        using (var scope = _serviceProvider.CreateScope())
-        {
-            var providers = Options
-                .DefinitionProviders
-                .Select(p => (scope.ServiceProvider.GetRequiredService(p) as IFeatureDefinitionProvider)!)
-                .ToList();
-
-            foreach (var provider in providers)
-            {
-                provider.Define(context);
-            }
-        }
-
-        return context.Groups;
-    }
-
-    public virtual Task<FeatureDefinition?> GetOrNullAsync(string name)
-    {
-        return Task.FromResult(FeatureDefinitions.GetOrDefault(name));
-    }
-
-    public virtual Task<IReadOnlyList<FeatureDefinition>> GetFeaturesAsync()
-    {
-        return Task.FromResult<IReadOnlyList<FeatureDefinition>>(FeatureDefinitions.Values.ToList());
-    }
-
-    public virtual Task<IReadOnlyList<FeatureGroupDefinition>> GetGroupsAsync()
-    {
-        return Task.FromResult<IReadOnlyList<FeatureGroupDefinition>>(FeatureGroupDefinitions.Values.ToList());
     }
 }

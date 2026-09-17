@@ -26,6 +26,8 @@ public class MenuItemDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStam
     public string CssClass { get; set; }
 
     public Guid? PageId { get; set; }
+    
+    public string RequiredPermissionName { get; set; }
 
     public string ConcurrencyStamp { get; set; }
 }

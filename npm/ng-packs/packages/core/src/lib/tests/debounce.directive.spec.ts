@@ -1,19 +1,21 @@
-import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/jest';
+import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/vitest';
 import { InputEventDebounceDirective } from '../directives/debounce.directive';
-import { timer } from 'rxjs';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 describe('InputEventDebounceDirective', () => {
   let spectator: SpectatorDirective<InputEventDebounceDirective>;
   let directive: InputEventDebounceDirective;
   let input: HTMLInputElement;
-  const inputEventFn = jest.fn(() => {});
+  const inputEventFn = vi.fn(() => {});
 
   const createDirective = createDirectiveFactory({
     directive: InputEventDebounceDirective,
   });
 
   beforeEach(() => {
-    spectator = createDirective('<input (input.debounce)="inputEventFn()" [debounce]="20"  />', {
+    vi.useFakeTimers();
+
+    spectator = createDirective('<input input.debounce (input.debounce)="inputEventFn()" />', {
       hostProps: { inputEventFn },
     });
     directive = spectator.directive;
@@ -21,20 +23,31 @@ describe('InputEventDebounceDirective', () => {
     inputEventFn.mockClear();
   });
 
+  afterEach(() => {
+    if (vi.isFakeTimers()) {
+      vi.runOnlyPendingTimers();
+    }
+    vi.useRealTimers();
+  });
+
   test('should be created', () => {
     expect(directive).toBeTruthy();
   });
 
-  test('should have 20ms debounce time', () => {
-    expect(directive.debounce).toBe(20);
+  test('should have 300ms debounce time', () => {
+    expect(directive.debounce()).toBe(300);
   });
 
-  test('should call fromEvent with target element and target event', done => {
+  test('should call fromEvent with target element and target event', () => {
+    const emitSpy = vi.spyOn(directive.debounceEvent, 'emit');
+
     spectator.dispatchFakeEvent('input', 'input', true);
-    timer(0).subscribe(() => expect(inputEventFn).not.toHaveBeenCalled());
-    timer(21).subscribe(() => {
-      expect(inputEventFn).toHaveBeenCalled();
-      done();
-    });
+    expect(emitSpy).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(299);
+    expect(emitSpy).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(1);
+    expect(emitSpy).toHaveBeenCalled();
   });
 });

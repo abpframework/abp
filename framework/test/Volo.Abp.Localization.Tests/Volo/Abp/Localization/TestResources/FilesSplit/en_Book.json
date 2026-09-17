@@ -1,0 +1,7 @@
+{
+  "culture": "en",
+  "texts": {
+    "Book.Id": "ISBN",
+    "Book.Name": "Title"
+  }
+}

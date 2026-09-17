@@ -28,6 +28,10 @@ public class AbpBundlingOptions
 
     public List<string> PreloadStyles { get; }
 
+    public AbpBundlingGlobalAssetsOptions GlobalAssets { get; set; }
+
+    public BundleParameterDictionary Parameters { get; set; }
+
     public AbpBundlingOptions()
     {
         StyleBundles = new BundleConfigurationCollection();
@@ -37,5 +41,7 @@ public class AbpBundlingOptions
         DeferScripts = new List<string>();
         PreloadStylesByDefault = false;
         PreloadStyles = new List<string>();
+        GlobalAssets = new AbpBundlingGlobalAssetsOptions();
+        Parameters = new BundleParameterDictionary();
     }
 }

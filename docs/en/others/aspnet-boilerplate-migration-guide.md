@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to seamlessly migrate your projects from ASP.NET Boilerplate to ABP Framework with our comprehensive guide for developers."
+}
+```
+
 # Migrating from ASP.NET Boilerplate to the ABP
 
 ABP is **the successor** of the open source [ASP.NET Boilerplate](https://aspnetboilerplate.com/) framework. This guide aims to help you to **migrate your existing solutions** (you developed with the ASP.NET Boilerplate framework) to the ABP.

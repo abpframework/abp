@@ -14,13 +14,15 @@
     "Body": "جسم",
     "TestEmailSubject": "اختبار البريد الإلكتروني {0}",
     "TestEmailBody": "اختبار نص رسالة البريد الإلكتروني هنا",
-    "SuccessfullySent": "أرسلت بنجاح",
+    "SentSuccessfully": "أرسلت بنجاح",
     "MailSendingFailed": "فشل إرسال البريد ، يرجى التحقق من تكوين البريد الإلكتروني الخاص بك والمحاولة مرة أخرى.",
     "Send": "يرسل",
+    "Menu:Settings": "الإعدادات",
     "Menu:Emailing": "إرسال بالبريد الإلكتروني",
     "Menu:TimeZone": "وحدة زمنية",
     "DisplayName:Timezone": "وحدة زمنية",
-    "TimezoneHelpText": "يُستخدم هذا الإعداد على مستوى التطبيق أو على أساس المستأجر.",
+    "TimezoneHelpText": "تتيح لك هذه الميزة تعيين منطقة زمنية افتراضية لخادمك، بينما يمكن للمستخدمين اختيار منطقتهم الزمنية الخاصة. إذا اختلفت المنطقة الزمنية للمستخدم عن المنطقة الزمنية للخادم، فسيتم تعديل جميع الأوقات وفقًا لذلك. على سبيل المثال، مع تعيين الخادم على أوروبا/لندن(00:00) ومستخدم في أوروبا/باريس(+01:00)، سيتم تعديل الأوقات بساعة واحدة لذلك المستخدم. سيؤدي اختيار 'المنطقة الزمنية الافتراضية' إلى استخدام المنطقة الزمنية للخادم أو المتصفح تلقائيًا.",
+    "DefaultTimeZone": "الوحدة الزمنية الافتراضية",
     "SmtpHost": "مضيف",
     "SmtpPort": "ميناء",
     "SmtpUserName": "اسم المستخدم",
@@ -33,7 +35,9 @@
     "Feature:SettingManagementGroup": "إدارة الإعداد",
     "Feature:SettingManagementEnable": "تمكين إدارة الإعداد",
     "Feature:SettingManagementEnableDescription": "تفعيل إعداد نظام الإدارة في التطبيق.",
-    "Feature:AllowChangingEmailSettings": "السماح لتغيير إعدادات البريد الإلكتروني.",
-    "Feature:AllowChangingEmailSettingsDescription": "السماح لتغيير إعدادات البريد الإلكتروني."
+    "Feature:AllowChangingEmailSettings": "السماح لتغيير إعدادات البريد الإلكتروني",
+    "Feature:AllowChangingEmailSettingsDescription": "السماح لتغيير إعدادات البريد الإلكتروني.",
+    "SmtpPasswordPlaceholder": "أدخل قيمة لتحديث كلمة المرور",
+    "NoSettingsAvailable": "لا توجد إعدادات لعرضها."
   }
 }

@@ -16,7 +16,7 @@
     "Permission:Edit": "Редактировать",
     "Permission:Delete": "Удалить",
     "Permission:ManageConnectionStrings": "Управление строками подключения",
-    "Permission:ManageFeatures": "Управление функциями",
+    "Permission:ManageFeatures": "Возможности",
     "DisplayName:AdminEmailAddress": "Адрес электронной почты администратора",
     "DisplayName:AdminPassword": "Пароль администратора"
   }

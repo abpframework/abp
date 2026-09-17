@@ -67,6 +67,9 @@
     "EntityHistory": "Povijest entiteta",
     "DaysAgoTitle": "{0} {1}.",
     "DaysAgoWithUserTitle": "{0} {1} od {2}.",
+    "MinutesAgo": "prije {0} minuta",
+    "HoursAgo": "prije {0} sati",
+    "DaysAgo": "prije {0} dana",
     "Created": "Stvoreno",
     "Updated": "Ažurirano",
     "Deleted": "Izbrisano",
@@ -78,6 +81,10 @@
     "EndDate": "Datum završetka",
     "Feature:AuditLoggingGroup": "Zapisivanje revizije",
     "Feature:AuditLoggingEnable": "Omogućena stranica za bilježenje revizije",
-    "Feature:AuditLoggingEnableDescription": "Omogućite stranicu za bilježenje revizije u aplikaciji."
+    "Feature:AuditLoggingEnableDescription": "Omogućite stranicu za bilježenje revizije u aplikaciji.",
+    "TenantId": "ID stanara",
+    "DownloadLinkExplanation": "Datoteku možete preuzeti pomoću veze u nastavku do {0} (UTC)",
+    "DownloadNow": "Preuzmi odmah",
+    "TryAgainMessage": "Molimo pokušajte ponovno. Ako se problem nastavi, obratite se podršci."
   }
 }

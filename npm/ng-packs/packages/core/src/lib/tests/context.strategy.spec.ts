@@ -20,7 +20,7 @@ describe('ComponentContextStrategy', () => {
             z: '',
           },
           changeDetectorRef: {
-            detectChanges: jest.fn(),
+            detectChanges: vi.fn(),
           },
         } as any),
     );

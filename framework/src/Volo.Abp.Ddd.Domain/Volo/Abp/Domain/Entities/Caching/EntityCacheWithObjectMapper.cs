@@ -10,12 +10,13 @@ public class EntityCacheWithObjectMapper<TEntity, TEntityCacheItem, TKey> :
     EntityCacheBase<TEntity, TEntityCacheItem, TKey>
     where TEntity : Entity<TKey>
     where TEntityCacheItem : class
+    where TKey : notnull
 {
     protected IObjectMapper ObjectMapper { get; }
 
     public EntityCacheWithObjectMapper(
         IReadOnlyRepository<TEntity, TKey> repository,
-        IDistributedCache<TEntityCacheItem, TKey> cache,
+        IDistributedCache<EntityCacheItemWrapper<TEntityCacheItem>, TKey> cache,
         IUnitOfWorkManager unitOfWorkManager,
         IObjectMapper objectMapper)
         : base(repository, cache, unitOfWorkManager)
@@ -23,13 +24,18 @@ public class EntityCacheWithObjectMapper<TEntity, TEntityCacheItem, TKey> :
         ObjectMapper = objectMapper;
     }
 
-    protected override TEntityCacheItem? MapToCacheItem(TEntity? entity)
+    protected override EntityCacheItemWrapper<TEntityCacheItem>? MapToCacheItem(TEntity? entity)
     {
         if (entity == null)
         {
             return null;
         }
 
+        return new EntityCacheItemWrapper<TEntityCacheItem>(MapToValue(entity));
+    }
+
+    protected virtual TEntityCacheItem MapToValue(TEntity entity)
+    {
         if (typeof(TEntity) == typeof(TEntityCacheItem))
         {
             return entity.As<TEntityCacheItem>();

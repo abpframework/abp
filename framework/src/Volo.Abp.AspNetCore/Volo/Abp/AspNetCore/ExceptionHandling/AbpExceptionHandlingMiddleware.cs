@@ -58,7 +58,12 @@ public class AbpExceptionHandlingMiddleware : AbpMiddlewareBase, ITransientDepen
 
     private async Task HandleAndWrapException(HttpContext httpContext, Exception exception)
     {
-        _logger.LogException(exception);
+        var exceptionHandlingOptions = httpContext.RequestServices.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
+
+        if (exceptionHandlingOptions.ShouldLogException(exception))
+        {
+            _logger.LogException(exception);
+        }
 
         await httpContext
             .RequestServices
@@ -77,7 +82,6 @@ public class AbpExceptionHandlingMiddleware : AbpMiddlewareBase, ITransientDepen
             var errorInfoConverter = httpContext.RequestServices.GetRequiredService<IExceptionToErrorInfoConverter>();
             var statusCodeFinder = httpContext.RequestServices.GetRequiredService<IHttpExceptionStatusCodeFinder>();
             var jsonSerializer = httpContext.RequestServices.GetRequiredService<IJsonSerializer>();
-            var exceptionHandlingOptions = httpContext.RequestServices.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
 
             httpContext.Response.Clear();
             httpContext.Response.StatusCode = (int)statusCodeFinder.GetStatusCode(httpContext, exception);

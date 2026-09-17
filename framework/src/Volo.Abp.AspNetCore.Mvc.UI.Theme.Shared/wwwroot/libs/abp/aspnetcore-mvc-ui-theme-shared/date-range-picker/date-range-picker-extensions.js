@@ -438,6 +438,13 @@
                 date = date.local();
             }
             if (options.isIso) {
+                if(abp.clock.supportsMultipleTimezone()){
+                    var timeZone = abp.clock.timeZone();
+                    if(timeZone){
+                        return abp.clock.normalizeToString(date.toDate());
+                    }
+                }
+                
                 return date.toISOString();
             }
             return date.locale('en').format(options.inputDateFormat)
@@ -752,4 +759,41 @@
     $(function () {
         abp.dom.initializers.initializeDateRangePickers($('body'));
     });
+
+    $.fn.handleDatepicker = function (datepickerSelector) {
+        var $this = $(this);
+        var datepickers = $this.find(datepickerSelector);
+        $this.find('input[class~="hidden-datepicker"]').remove();
+        datepickers.each(function () {
+            var $this = $(this);
+            var datepicker = $this.data('daterangepicker');
+            if (!datepicker) {
+                return;
+            }
+            if ($this.val() === '') {
+                return;
+            }
+            var name = $this.attr('name') || $this.data('name');
+            $this.data('name', name).removeAttr('name');
+            if (datepicker.singleDatePicker) {
+                var startDate = abp.clock.normalizeToString(datepicker.startDate.toDate());
+                var startDateInput = $('<input>').attr('type', 'hidden').attr('name', name).val(startDate).addClass('hidden-datepicker');
+                $this.after(startDateInput);
+            } else {
+                if ($this.data('start-date')) {
+                    var startDate = abp.clock.normalizeToString(datepicker.startDate.toDate());
+                    var startDateInput = $('<input>').attr('type', 'hidden').attr('name', name).val(startDate).addClass('hidden-datepicker');
+                    $this.after(startDateInput);
+                }
+                if ($this.data('end-date')) {
+                    var endDate = abp.clock.normalizeToString(datepicker.endDate.toDate());
+                    var endDateInput = $('<input>').attr('type', 'hidden').attr('name', name).val(endDate).addClass('hidden-datepicker');
+                    $this.after(endDateInput);
+                }
+            }
+        });
+
+        return this;
+    };
+    
 })(jQuery);

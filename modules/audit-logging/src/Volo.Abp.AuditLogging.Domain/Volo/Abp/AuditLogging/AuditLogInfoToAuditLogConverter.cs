@@ -19,12 +19,19 @@ public class AuditLogInfoToAuditLogConverter : IAuditLogInfoToAuditLogConverter,
     protected IExceptionToErrorInfoConverter ExceptionToErrorInfoConverter { get; }
     protected IJsonSerializer JsonSerializer { get; }
     protected AbpExceptionHandlingOptions ExceptionHandlingOptions { get; }
+    protected AuditLogEntityTypeFullNameConverter AuditLogEntityTypeFullNameConverter { get; }
 
-    public AuditLogInfoToAuditLogConverter(IGuidGenerator guidGenerator, IExceptionToErrorInfoConverter exceptionToErrorInfoConverter, IJsonSerializer jsonSerializer, IOptions<AbpExceptionHandlingOptions> exceptionHandlingOptions)
+    public AuditLogInfoToAuditLogConverter(
+        IGuidGenerator guidGenerator,
+        IExceptionToErrorInfoConverter exceptionToErrorInfoConverter,
+        IJsonSerializer jsonSerializer,
+        IOptions<AbpExceptionHandlingOptions> exceptionHandlingOptions,
+        AuditLogEntityTypeFullNameConverter auditLogEntityTypeFullNameConverter)
     {
         GuidGenerator = guidGenerator;
         ExceptionToErrorInfoConverter = exceptionToErrorInfoConverter;
         JsonSerializer = jsonSerializer;
+        AuditLogEntityTypeFullNameConverter = auditLogEntityTypeFullNameConverter;
         ExceptionHandlingOptions = exceptionHandlingOptions.Value;
     }
 
@@ -38,6 +45,15 @@ public class AuditLogInfoToAuditLogConverter : IAuditLogInfoToAuditLogConverter,
             foreach (var pair in auditLogInfo.ExtraProperties)
             {
                 extraProperties.Add(pair.Key, pair.Value);
+            }
+        }
+
+        foreach (var entityChange in auditLogInfo.EntityChanges ?? Enumerable.Empty<EntityChangeInfo>())
+        {
+            entityChange.EntityTypeFullName = AuditLogEntityTypeFullNameConverter.Convert(entityChange.EntityTypeFullName);
+            foreach (var propertyChange in entityChange.PropertyChanges ?? Enumerable.Empty<EntityPropertyChangeInfo>())
+            {
+                propertyChange.PropertyTypeFullName = AuditLogEntityTypeFullNameConverter.Convert(propertyChange.PropertyTypeFullName);
             }
         }
 

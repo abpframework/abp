@@ -89,7 +89,9 @@
     "Permission:BlogPostManagement.Publish": "Közzététel",
     "Permission:CmsKit": "CmsKit",
     "Permission:Comments": "Megjegyzéskezelés",
-    "Permission:Comments.Delete": "Töröl",
+    "Permission:Comments.Delete": "Törlés",
+    "Permission:Comments.Update": "Frissítés",
+    "Permission:Comments.SettingManagement": "Beállítások kezelése",
     "Permission:Contents": "Tartalomkezelés",
     "Permission:Contents.Create": "Tartalom létrehozása",
     "Permission:Contents.Delete": "Tartalom törlése",
@@ -227,6 +229,13 @@
     "CssClass": "CSS osztály",
     "TagsHelpText": "A címkéket vesszővel kell elválasztani (pl.: tag1, tag2, tag3)",
     "ThisPartOfContentCouldntBeLoaded": "A tartalom ezen része nem tölthető be.",
-    "DuplicateCommentAttemptMessage": "Ismétlődő megjegyzés közzétételi kísérlet észlelve. Megjegyzését már elküldtük."
+    "DuplicateCommentAttemptMessage": "Ismétlődő megjegyzés közzétételi kísérlet észlelve. Megjegyzését már elküldtük.",
+    "ChooseAnActionForBlog": "Válasszon egy műveletet a bloghoz",
+    "AssignBlogPostsToOtherBlog": "Blogbejegyzések hozzárendelése egy másik bloghoz",
+    "SelectAnBlogToAssign": "Válasszon egy blogot a hozzárendeléshez",
+    "DeleteAllBlogPostsOfThisBlog": "Ez a művelet törli az összes blogbejegyzést ebből a blogból. Biztos vagy benne?",
+    "RequiredPermissionName": "Szükséges engedély neve",
+    "AllPosts": "Minden bejegyzés",
+    "IsReadOnly": "Csak olvasható"
   }
 }

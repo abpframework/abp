@@ -29,6 +29,7 @@
     "FullSearch": "Search in documents",
     "Volo.Docs.Domain:010001": "Elastic search is not enabled.",
     "MultipleVersionDocumentInfo": "There are multiple versions of this document. Pick the options that suit you best.",
+    "DocumentOptions": "Document Options",
     "New": "New",
     "Upd": "Upd",
     "NewExplanation": "Created in the last two weeks.",
@@ -43,6 +44,8 @@
     "ProjectDeletionWarningMessage": "Project will be deleted.",
     "Docs_Page_Title": "ABP Documentation",
     "Docs_Page_Description": "Access comprehensive guides and API references in the ABP Documentation, aiding in development and troubleshooting.",
-    "GoogleTranslate": "Google Translate"
+    "GoogleTranslate": "Google Translate",
+    "DownloadPDF": "Download PDF",
+    "PdfFileGeneratedSuccessfully": "The PDF file is generated successfully."
   }
 }

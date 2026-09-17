@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
@@ -27,5 +28,17 @@ public abstract class FeatureCheckerBase : IFeatureChecker, ITransientDependency
                 ex
             );
         }
+    }
+
+    public virtual async Task<Dictionary<string, bool>> IsEnabledAsync(string[] names)
+    {
+        var result = new Dictionary<string, bool>();
+
+        foreach (var name in names)
+        {
+            result[name] = await IsEnabledAsync(name);
+        }
+
+        return result;
     }
 }

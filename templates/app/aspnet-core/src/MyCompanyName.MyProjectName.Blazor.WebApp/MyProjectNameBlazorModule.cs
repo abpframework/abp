@@ -1,7 +1,5 @@
 using System;
 using System.IO;
-using Blazorise.Bootstrap5;
-using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
@@ -9,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using MyCompanyName.MyProjectName.Blazor.WebApp.Client;
 using MyCompanyName.MyProjectName.Blazor.WebApp.Client.Menus;
 using MyCompanyName.MyProjectName.Blazor.WebApp.Components;
@@ -20,9 +18,10 @@ using OpenIddict.Validation.AspNetCore;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Components.Web;
-using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme;
-using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme.Bundling;
-using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
+using Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme;
+using Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme.Bundling;
+using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Routing;
+using Volo.Abp.AspNetCore.Components.WebAssembly.MudBlazorBasicTheme.Bundling;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI;
@@ -33,14 +32,14 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
-using Volo.Abp.AutoMapper;
-using Volo.Abp.Identity.Blazor.Server;
+using Volo.Abp.Mapperly;
+using Volo.Abp.Identity.Blazor.MudBlazor.Server;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.Security.Claims;
-using Volo.Abp.SettingManagement.Blazor.Server;
+using Volo.Abp.SettingManagement.Blazor.MudBlazor.Server;
 using Volo.Abp.Swashbuckle;
-using Volo.Abp.TenantManagement.Blazor.Server;
+using Volo.Abp.TenantManagement.Blazor.MudBlazor.Server;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.UI.Navigation.Urls;
@@ -56,11 +55,12 @@ namespace MyCompanyName.MyProjectName.Blazor.WebApp;
     typeof(AbpSwashbuckleModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAccountWebOpenIddictModule),
-    typeof(AbpAspNetCoreComponentsServerLeptonXLiteThemeModule),
+    typeof(AbpAspNetCoreComponentsServerMudBlazorBasicThemeModule),
+    typeof(AbpAspNetCoreComponentsWebAssemblyMudBlazorBasicThemeBundlingModule),
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
-    typeof(AbpIdentityBlazorServerModule),
-    typeof(AbpTenantManagementBlazorServerModule),
-    typeof(AbpSettingManagementBlazorServerModule)
+    typeof(AbpIdentityBlazorMudBlazorServerModule),
+    typeof(AbpTenantManagementBlazorMudBlazorServerModule),
+    typeof(AbpSettingManagementBlazorMudBlazorServerModule)
    )]
 public class MyProjectNameBlazorModule : AbpModule
 {
@@ -123,13 +123,13 @@ public class MyProjectNameBlazorModule : AbpModule
         ConfigureAuthentication(context);
         ConfigureUrls(configuration);
         ConfigureBundles();
-        ConfigureAutoMapper();
         ConfigureVirtualFileSystem(hostingEnvironment);
         ConfigureSwaggerServices(context.Services);
         ConfigureAutoApiControllers();
-        ConfigureBlazorise(context);
         ConfigureRouter(context);
         ConfigureMenu(context);
+
+        context.Services.AddMapperlyObjectMapper<MyProjectNameBlazorModule>();
     }
 
     private void ConfigureAuthentication(ServiceConfigurationContext context)
@@ -154,6 +154,9 @@ public class MyProjectNameBlazorModule : AbpModule
     {
         Configure<AbpBundlingOptions>(options =>
         {
+            // Blazor Web App
+            options.Parameters.InteractiveAuto = true;
+
             // MVC UI
             options.StyleBundles.Configure(
                 LeptonXLiteThemeBundles.Styles.Global,
@@ -165,7 +168,7 @@ public class MyProjectNameBlazorModule : AbpModule
 
             //BLAZOR UI
             options.StyleBundles.Configure(
-                BlazorLeptonXLiteThemeBundles.Styles.Global,
+                BlazorMudBlazorBasicThemeBundles.Styles.Global,
                 bundle =>
                 {
                     bundle.AddFiles("/blazor-global-styles.css");
@@ -215,12 +218,6 @@ public class MyProjectNameBlazorModule : AbpModule
         );
     }
 
-    private void ConfigureBlazorise(ServiceConfigurationContext context)
-    {
-        context.Services
-            .AddBootstrap5Providers()
-            .AddFontAwesomeIcons();
-    }
 
     private void ConfigureMenu(ServiceConfigurationContext context)
     {
@@ -244,14 +241,6 @@ public class MyProjectNameBlazorModule : AbpModule
         Configure<AbpAspNetCoreMvcOptions>(options =>
         {
             options.ConventionalControllers.Create(typeof(MyProjectNameApplicationModule).Assembly);
-        });
-    }
-
-    private void ConfigureAutoMapper()
-    {
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddMaps<MyProjectNameBlazorModule>();
         });
     }
 
@@ -285,8 +274,8 @@ public class MyProjectNameBlazorModule : AbpModule
         }
         app.UseUnitOfWork();
         app.UseDynamicClaims();
-        app.UseAntiforgery();
         app.UseAuthorization();
+        app.UseAntiforgery();
 
         app.UseSwagger();
         app.UseAbpSwaggerUI(options =>

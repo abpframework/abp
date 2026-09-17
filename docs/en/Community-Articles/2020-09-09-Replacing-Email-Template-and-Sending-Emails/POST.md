@@ -470,6 +470,12 @@ namespace TemplateReplace
 
 * I highly recommend you to [check it out](https://commercial.abp.io/modules/Volo.TextTemplateManagement).
 
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
+
 ## References
 
 * [Text Templating](https://docs.abp.io/en/abp/latest/Text-Templating)

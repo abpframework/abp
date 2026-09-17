@@ -43,18 +43,11 @@ public class ThemePackageAdder : ITransientDependency
             return;
         }
 
-        var yarnAvailable = NpmHelper.IsYarnAvailable();
         foreach (var packageJsonFilePath in packageJsonFilePaths)
         {
             var directory = Path.GetDirectoryName(packageJsonFilePath).EnsureEndsWith(Path.DirectorySeparatorChar);
-            if (yarnAvailable)
-            {
-                NpmHelper.YarnAddPackage(package, version, directory);
-            }
-            else
-            {
-                NpmHelper.NpmInstallPackage(package, version, directory);
-            }
+            
+            NpmHelper.YarnAddPackage(package, version, directory);
         }
     }
 }

@@ -60,6 +60,9 @@
     "AddNew": "اضف جديد",
     "ProfilePicture": "الصوره الشخصيه",
     "Theme": "سمة",
-    "NotAssigned": "غيرمعتمد"
+    "NotAssigned": "غيرمعتمد",
+    "EntityActionsDisabledTooltip": "ليس لديك إذن لتنفيذ أي إجراء.",
+    "ResourcePermissions": "أذونات",
+    "ShowPassword": "عرض كلمة المرور"
   }
 }

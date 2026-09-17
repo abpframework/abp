@@ -1,5 +1,5 @@
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
-import { of } from 'rxjs';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/vitest';
+import { of, firstValueFrom } from 'rxjs';
 import { bufferCount, take } from 'rxjs/operators';
 import { ABP } from '../models';
 import { ListService, QueryStreamCreatorCallback } from '../services/list.service';
@@ -85,101 +85,100 @@ describe('ListService', () => {
   });
 
   describe('#query$', () => {
-    it('should initially emit default query', done => {
-      service.query$.pipe(take(1)).subscribe(query => {
-        expect(query).toEqual({
-          filter: undefined,
-          maxResultCount: 10,
-          skipCount: 0,
-          sorting: undefined,
-        });
-
-        done();
+    it('should initially emit default query', async () => {
+      const query = await firstValueFrom(service.query$.pipe(take(1)));
+      expect(query).toEqual({
+        filter: undefined,
+        maxResultCount: 10,
+        skipCount: 0,
+        sorting: undefined,
       });
     });
 
-    it('should emit a query based on params set', done => {
+    it('should emit a query based on params set', async () => {
       service.filter = 'foo';
       service.sortKey = 'bar';
       service.sortOrder = 'baz';
       service.maxResultCount = 20;
       service.page = 9;
 
-      service.query$.pipe(take(1)).subscribe(query => {
-        expect(query).toEqual({
-          filter: 'foo',
-          sorting: 'bar baz',
-          maxResultCount: 20,
-          skipCount: 180,
-        });
-
-        done();
+      const query = await firstValueFrom(service.query$.pipe(take(1)));
+      expect(query).toEqual({
+        filter: 'foo',
+        sorting: 'bar baz',
+        maxResultCount: 20,
+        skipCount: 180,
       });
     });
   });
 
   describe('#hookToQuery', () => {
-    it('should call given callback with the query', done => {
+    it('should call given callback with the query', async () => {
       const callback: QueryStreamCreatorCallback<ABP.PageQueryParams> = query =>
         of({ items: [query], totalCount: 1 });
 
-      service.hookToQuery(callback).subscribe(({ items: [query] }) => {
-        expect(query).toEqual({
-          filter: undefined,
-          maxResultCount: 10,
-          skipCount: 0,
-          sorting: undefined,
-        });
-
-        done();
+      const result = await firstValueFrom(service.hookToQuery(callback));
+      expect(result.items[0]).toEqual({
+        filter: undefined,
+        maxResultCount: 10,
+        skipCount: 0,
+        sorting: undefined,
       });
     });
 
-    it('should emit isLoading as side effect', done => {
+    it('should emit isLoading as side effect', async () => {
       const callback: QueryStreamCreatorCallback<ABP.PageQueryParams> = query =>
         of({ items: [query], totalCount: 1 });
 
-      service.isLoading$.pipe(bufferCount(3)).subscribe(([idle, init, end]) => {
-        expect(idle).toBe(false);
-        expect(init).toBe(true);
-        expect(end).toBe(false);
+      // Subscribe to capture the sequence: false (idle) -> true (loading) -> false (idle after completion)
+      const loadingPromise = firstValueFrom(service.isLoading$.pipe(bufferCount(3)));
+      const hookSubscription = service.hookToQuery(callback).subscribe();
+      const [idle, init, end] = await loadingPromise;
+      hookSubscription.unsubscribe();
 
-        done();
-      });
-
-      service.hookToQuery(callback).subscribe();
+      expect(idle).toBe(false);
+      expect(init).toBe(true);
+      expect(end).toBe(false);
     });
 
-    it('should emit requestStatus as side effect', done => {
+    it('should emit requestStatus as side effect', async () => {
       const callback: QueryStreamCreatorCallback<ABP.PageQueryParams> = query =>
         of({ items: [query], totalCount: 1 });
 
-      service.requestStatus$.pipe(bufferCount(3)).subscribe(([idle, init, end]) => {
-        expect(idle).toBe('idle');
-        expect(init).toBe('loading');
-        expect(end).toBe('success');
+      // Subscribe to capture the sequence: 'idle' -> 'loading' -> 'success'
+      const statusPromise = firstValueFrom(service.requestStatus$.pipe(bufferCount(3)));
+      const hookSubscription = service.hookToQuery(callback).subscribe();
+      const [idle, init, end] = await statusPromise;
+      hookSubscription.unsubscribe();
 
-        done();
-      });
-
-      service.hookToQuery(callback).subscribe();
+      expect(idle).toBe('idle');
+      expect(init).toBe('loading');
+      expect(end).toBe('success');
     });
 
-    it('should emit error requestStatus as side effect and stop processing', done => {
+    it('should emit error requestStatus as side effect and stop processing', async () => {
       const errCallback: QueryStreamCreatorCallback<ABP.PageQueryParams> = query => {
         throw Error('A server error occurred');
       };
 
-      service.requestStatus$.pipe(bufferCount(3)).subscribe(([idle, loading, error]) => {
-        expect(idle).toBe('idle');
-        expect(loading).toBe('loading');
-        expect(error).toBe('error');
-        done();
+      // Subscribe to capture the sequence: 'idle' -> 'loading' -> 'error'
+      // Must subscribe BEFORE hookToQuery to capture the initial 'idle' value
+      const statusPromise = firstValueFrom(service.requestStatus$.pipe(bufferCount(3)));
+
+      // Subscribe to hookToQuery which will emit 'loading' and 'error'
+      // The error is caught by the service's catchError, which sets status to 'error'
+      const hookSubscription = service.hookToQuery(errCallback).subscribe({
+        error: () => {
+          // Error is expected - the service catches it and sets status to 'error'
+        },
       });
 
-      service.hookToQuery(errCallback).subscribe({
-        error: () => done(),
-      });
+      const [idle, loading, error] = await statusPromise;
+      hookSubscription.unsubscribe();
+
+      expect(idle).toBe('idle');
+      expect(loading).toBe('loading');
+      expect(error).toBe('error');
     });
   });
 });

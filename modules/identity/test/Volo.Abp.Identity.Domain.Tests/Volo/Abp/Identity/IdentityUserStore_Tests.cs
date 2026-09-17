@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Shouldly;
@@ -762,6 +764,105 @@ public class IdentityUserStore_Tests : AbpIdentityDomainTestBase
             await _identityUserStore.SetTokenAsync(user, "[AspNetUserStore]", "RecoveryCodes", "testKey;testKey2");
 
             (await _identityUserStore.RedeemCodeAsync(user, "testKey")).ShouldBeTrue();
+
+            await uow.CompleteAsync();
+        }
+    }
+
+    [Fact]
+    public async Task AddOrUpdatePasskeyAsync()
+    {
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            var credentialId = (byte[]) [1, 2];
+            var user = await _identityUserStore.FindByIdAsync(_testData.UserBobId.ToString());
+            user.Passkeys.ShouldBeEmpty();
+
+            var passkey = new UserPasskeyInfo(credentialId, null!, default, 0, null, false, false, false, null!, null!);
+            await _identityUserStore.AddOrUpdatePasskeyAsync(user, passkey, CancellationToken.None);
+
+            user = await _identityUserStore.FindByIdAsync(_testData.UserBobId.ToString());
+            user.Passkeys.ShouldNotBeEmpty();
+            user.FindPasskey(credentialId).ShouldNotBeNull();
+
+            await uow.CompleteAsync();
+        }
+    }
+
+    [Fact]
+    public async Task GetPasskeysAsync()
+    {
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            var user = await _identityUserStore.FindByIdAsync(_testData.UserJohnId.ToString());
+            var passkeys = await _identityUserStore.GetPasskeysAsync(user, CancellationToken.None);
+            passkeys.Count.ShouldBe(2);
+
+            user = await _identityUserStore.FindByIdAsync(_testData.UserBobId.ToString());
+            passkeys = await _identityUserStore.GetPasskeysAsync(user, CancellationToken.None);
+            passkeys.ShouldBeEmpty();
+
+            await uow.CompleteAsync();
+        }
+    }
+
+    [Fact]
+    public async Task FindByPasskeyIdAsync()
+    {
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            var user = await _identityUserStore.FindByPasskeyIdAsync(_testData.PasskeyCredentialId1, CancellationToken.None);
+            user.ShouldNotBeNull();
+            user.Id.ShouldBe(_testData.UserJohnId);
+
+            user = await _identityUserStore.FindByPasskeyIdAsync(_testData.PasskeyCredentialId2, CancellationToken.None);
+            user.ShouldNotBeNull();
+            user.Id.ShouldBe(_testData.UserJohnId);
+
+            user = await _identityUserStore.FindByPasskeyIdAsync(_testData.PasskeyCredentialId3, CancellationToken.None);
+            user.ShouldNotBeNull();
+            user.Id.ShouldBe(_testData.UserNeoId);
+
+            await uow.CompleteAsync();
+        }
+    }
+
+    [Fact]
+    public async Task FindPasskeyAsync()
+    {
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            var user = await _identityUserStore.FindByIdAsync(_testData.UserJohnId.ToString());
+            var passkey = await _identityUserStore.FindPasskeyAsync(user, _testData.PasskeyCredentialId1, CancellationToken.None);
+            passkey.ShouldNotBeNull();
+            passkey.CredentialId.ShouldBe(_testData.PasskeyCredentialId1);
+
+            passkey = await _identityUserStore.FindPasskeyAsync(user, _testData.PasskeyCredentialId2, CancellationToken.None);
+            passkey.ShouldNotBeNull();
+            passkey.CredentialId.ShouldBe(_testData.PasskeyCredentialId2);
+
+            passkey = await _identityUserStore.FindPasskeyAsync(user, _testData.PasskeyCredentialId3, CancellationToken.None);
+            passkey.ShouldBeNull();
+
+            await uow.CompleteAsync();
+        }
+    }
+
+    [Fact]
+    public async Task RemovePasskeyAsync()
+    {
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            var user = await _identityUserStore.FindByIdAsync(_testData.UserJohnId.ToString());
+            user.Passkeys.Count.ShouldBe(2);
+
+            var credentialId = user.Passkeys.First().CredentialId;
+
+            await _identityUserStore.RemovePasskeyAsync(user, credentialId, CancellationToken.None);
+
+            user = await _identityUserStore.FindByIdAsync(_testData.UserJohnId.ToString());
+            user.Passkeys.Count.ShouldBe(1);
+            user.FindPasskey(credentialId).ShouldBeNull();
 
             await uow.CompleteAsync();
         }

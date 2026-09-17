@@ -139,4 +139,26 @@ public abstract class SoftDelete_Tests<TStartupModule> : TestAppTestBase<TStartu
             douglas.Phones.ShouldNotBeEmpty();
         }
     }
+
+    [Fact]
+    public async Task Soft_Delete_Should_Check_Concurrency()
+    {
+        var douglas = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
+        douglas.ConcurrencyStamp.ShouldNotBeNull();
+        douglas.ConcurrencyStamp = Guid.NewGuid().ToString();
+
+        await Assert.ThrowsAsync<AbpDbConcurrencyException>(async () =>
+        {
+            await PersonRepository.DeleteAsync(douglas);
+        });
+
+        douglas = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
+        douglas.ConcurrencyStamp.ShouldNotBeNull();
+        // Modify the entity to verify that a changed entity with a correct ConcurrencyStamp
+        // can still be soft deleted without raising a concurrency exception.
+        douglas.ChangeName("Changed Name");
+
+        // Try again with the correct ConcurrencyStamp - this will not throw an exception
+        await PersonRepository.DeleteAsync(douglas);
+    }
 }

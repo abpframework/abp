@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Upgrade your ABP applications seamlessly with the 6.0 Migration Guide, detailing essential changes and updates for a smooth transition."
+}
+```
+
 # ABP Version 6.0 Migration Guide
 
 This document is a guide for upgrading ABP v5.3 solutions to ABP v6.0. There is a change in this version that may affect your applications, please read it carefully and apply the necessary changes to your application.

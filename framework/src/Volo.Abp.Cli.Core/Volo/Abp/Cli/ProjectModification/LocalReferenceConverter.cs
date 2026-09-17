@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -12,9 +13,9 @@ namespace Volo.Abp.Cli.ProjectModification;
 
 public class LocalReferenceConverter : ITransientDependency
 {
-    
+
     public ILogger<LocalReferenceConverter> Logger { get; set; }
-    
+
     public async Task ConvertAsync(
         [NotNull] string directory,
         [NotNull] List<string> localPaths)
@@ -26,14 +27,14 @@ public class LocalReferenceConverter : ITransientDependency
         var targetProjects = Directory.GetFiles(directory, "*.csproj", SearchOption.AllDirectories);
 
         Logger.LogInformation($"Converting projects to local reference.");
-        
+
         foreach (var targetProject in targetProjects)
         {
             Logger.LogInformation($"Converting to local reference: {targetProject}");
-            
+
             await ConvertProjectToLocalReferences(targetProject, localProjects);
         }
-        
+
         Logger.LogInformation($"Converted {targetProjects.Length} projects to local references.");
     }
 
@@ -41,14 +42,14 @@ public class LocalReferenceConverter : ITransientDependency
     {
         var xmlDocument = new XmlDocument() { PreserveWhitespace = true };
         xmlDocument.Load(GenerateStreamFromString(File.ReadAllText(targetProject)));
-        
+
         var matchedNodes = xmlDocument.SelectNodes($"/Project/ItemGroup/PackageReference[@Include]");
 
         if (matchedNodes == null || matchedNodes.Count == 0)
         {
             return;
         }
-        
+
         foreach (XmlNode matchedNode in matchedNodes)
         {
             var packageName = matchedNode!.Attributes!["Include"].Value;
@@ -62,7 +63,7 @@ public class LocalReferenceConverter : ITransientDependency
             {
                 continue;
             }
-            
+
             var parentNode = matchedNode.ParentNode;
             parentNode!.RemoveChild(matchedNode);
 
@@ -72,10 +73,10 @@ public class LocalReferenceConverter : ITransientDependency
             newNode.Attributes.Append(includeAttr);
             parentNode.AppendChild(newNode);
         }
-        
+
         File.WriteAllText(targetProject, XDocument.Parse(xmlDocument.OuterXml).ToString());
     }
-    
+
     private string CalculateRelativePath(string targetProject, string localProject)
     {
         return new Uri(targetProject).MakeRelativeUri(new Uri(localProject)).ToString();
@@ -91,8 +92,12 @@ public class LocalReferenceConverter : ITransientDependency
             {
                 continue;
             }
-            
-            list.AddRange(Directory.GetFiles(localPath, "*.csproj", SearchOption.AllDirectories));
+
+            var ignoreFolders = new[] { "bin", "obj", ".vs", ".idea", ".vscode", ".git" };
+            var csprojFiles = Directory.GetFiles(localPath, "*.csproj", SearchOption.AllDirectories)
+                .Where(x => !ignoreFolders.Any(x.Contains))
+                .ToList();
+            list.AddRange(csprojFiles);
         }
 
         return list;

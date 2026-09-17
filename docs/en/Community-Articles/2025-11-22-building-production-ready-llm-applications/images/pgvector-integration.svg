@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 400">
+  <!-- Background -->
+  <rect width="950" height="400" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="475" y="30" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle" fill="#0066cc">
+    PostgreSQL + pgvector: Integrated RAG with EF Core
+  </text>
+  
+  <!-- .NET App -->
+  <rect x="50" y="80" width="200" height="80" fill="#0078d4" stroke="#005a9e" stroke-width="2" rx="5"/>
+  <text x="150" y="115" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#fff">
+    .NET Application
+  </text>
+  <text x="150" y="135" font-family="Arial" font-size="12" text-anchor="middle" fill="#fff">
+    (EF Core DbContext)
+  </text>
+  
+  <!-- Arrow -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#333"/>
+    </marker>
+  </defs>
+  
+  <line x1="250" y1="120" x2="330" y2="120" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="290" y="110" font-family="Arial" font-size="11" text-anchor="middle" fill="#666">
+    LINQ Query
+  </text>
+  
+  <!-- Pgvector.EntityFrameworkCore -->
+  <rect x="330" y="80" width="240" height="80" fill="#00c853" stroke="#00a040" stroke-width="3" rx="5"/>
+  <text x="450" y="110" font-family="Arial" font-size="15" font-weight="bold" text-anchor="middle" fill="#fff">
+    Pgvector.EntityFrameworkCore
+  </text>
+  <text x="450" y="130" font-family="Arial" font-size="11" text-anchor="middle" fill="#fff">
+    CosineDistance(), L2Distance()
+  </text>
+  <text x="450" y="145" font-family="Arial" font-size="11" text-anchor="middle" fill="#fff">
+    EF Core Extensions
+  </text>
+  
+  <!-- Arrow -->
+  <line x1="570" y1="120" x2="650" y2="120" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="610" y="110" font-family="Arial" font-size="11" text-anchor="middle" fill="#666">
+    SQL Query
+  </text>
+  
+  <!-- PostgreSQL -->
+  <rect x="650" y="60" width="250" height="120" fill="#336791" stroke="#1a4a6d" stroke-width="2" rx="5"/>
+  <text x="775" y="95" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#fff">
+    PostgreSQL + pgvector
+  </text>
+  
+  <!-- Table visualization -->
+  <g id="table">
+    <rect x="670" y="110" width="210" height="60" fill="#4a7ba7" stroke="#fff" stroke-width="1" rx="3"/>
+    
+    <!-- Header -->
+    <text x="685" y="127" font-family="Arial" font-size="10" font-weight="bold" fill="#fff">id</text>
+    <text x="725" y="127" font-family="Arial" font-size="10" font-weight="bold" fill="#fff">content</text>
+    <text x="800" y="127" font-family="Arial" font-size="10" font-weight="bold" fill="#fff">embedding</text>
+    
+    <!-- Rows -->
+    <line x1="670" y1="130" x2="880" y2="130" stroke="#fff" stroke-width="1"/>
+    
+    <text x="685" y="145" font-family="Arial" font-size="9" fill="#fff">1</text>
+    <text x="725" y="145" font-family="Arial" font-size="9" fill="#fff">Contoso...</text>
+    <text x="800" y="145" font-family="Arial" font-size="9" fill="#fff">[0.2, -0.1,...]</text>
+    
+    <text x="685" y="160" font-family="Arial" font-size="9" fill="#fff">2</text>
+    <text x="725" y="160" font-family="Arial" font-size="9" fill="#fff">Revenue...</text>
+    <text x="800" y="160" font-family="Arial" font-size="9" fill="#fff">[0.5, 0.3,...]</text>
+  </g>
+  
+  <!-- Benefits Box -->
+  <rect x="50" y="220" width="850" height="150" fill="#e8f5e9" stroke="#388e3c" stroke-width="2" rx="5"/>
+  <text x="475" y="250" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#1b5e20">
+    ✅ Benefits
+  </text>
+  
+  <g id="benefit1">
+    <circle cx="80" cy="275" r="5" fill="#4caf50"/>
+    <text x="95" y="280" font-family="Arial" font-size="12" fill="#1b5e20">
+      <tspan font-weight="bold">Existing SQL Knowledge:</tspan> PostgreSQL is already a familiar database
+    </text>
+  </g>
+  
+  <g id="benefit2">
+    <circle cx="80" cy="300" r="5" fill="#4caf50"/>
+    <text x="95" y="305" font-family="Arial" font-size="12" fill="#1b5e20">
+      <tspan font-weight="bold">EF Core Integration:</tspan> Vector queries with LINQ (.OrderBy(), .Where())
+    </text>
+  </g>
+  
+  <g id="benefit3">
+    <circle cx="80" cy="325" r="5" fill="#4caf50"/>
+    <text x="95" y="330" font-family="Arial" font-size="12" fill="#1b5e20">
+      <tspan font-weight="bold">Metadata JOIN:</tspan> Vector + Relational data in same query (tenant_id, user_id...)
+    </text>
+  </g>
+  
+  <g id="benefit4">
+    <circle cx="80" cy="350" r="5" fill="#4caf50"/>
+    <text x="95" y="355" font-family="Arial" font-size="12" fill="#1b5e20">
+      <tspan font-weight="bold">ACID Compliant:</tspan> Transaction support (rollback, commit)
+    </text>
+  </g>
+  
+  <!-- Code Example Box -->
+  <rect x="50" y="390" width="850" height="10" fill="none" stroke="none"/>
+</svg>

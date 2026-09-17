@@ -1,12 +1,23 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore best practices for implementing Aggregate Root and Entity classes in your applications using Domain-Driven Design principles."
+}
+```
+
 # Entity Best Practices & Conventions
 
-### Entities
+> This document offers best practices for implementing Aggregate Root and Entity classes in your modules and applications based on Domain-Driven-Design principles.
+>
+> **Ensure you've read the [*Entities*](../domain-driven-design/entities.md) document first.**
+
+## Entities
 
 Every aggregate root is also an entity. So, these rules are valid for aggregate roots too unless aggregate root rules override them.
 
 - **Do** define entities in the **domain layer**.
 
-#### Primary Constructor
+### Primary Constructor
 
 * **Do** define a **primary constructor** that ensures the validity of the entity on creation. Primary constructors are used to create a new instance of the entity by the application code.
 
@@ -14,15 +25,15 @@ Every aggregate root is also an entity. So, these rules are valid for aggregate 
 - **Do** always initialize sub collections in the primary constructor.
 - **Do not** generate `Guid` keys inside the constructor. Get it as a parameter, so the calling code will use `IGuidGenerator` to generate a new `Guid` value.
 
-#### Parameterless Constructor
+### Parameterless Constructor
 
 - **Do** always define a `protected` parameterless constructor to be compatible with ORMs.
 
-#### References
+### References
 
 - **Do** always **reference** to other aggregate roots **by Id**. Never add navigation properties to other aggregate roots.
 
-#### Other Class Members
+### Other Class Members
 
 - **Do** always define properties and methods as `virtual` (except `private` methods, obviously). Because some ORMs and dynamic proxy tools require it.
 - **Do** keep the entity as always **valid** and **consistent** within its own boundary.
@@ -30,27 +41,27 @@ Every aggregate root is also an entity. So, these rules are valid for aggregate 
   - **Do** define `public `, `internal` or `protected internal` (virtual) **methods** to change the properties (with non-public setters) if necessary.
   - **Do** return the entity object (`this`) from the setter methods.
 
-### Aggregate Roots
+## Aggregate Roots
 
-#### Primary Keys
+### Primary Keys
 
 * **Do** always use a **Id** property for the aggregate root key.
 * **Do not** use **composite keys** for aggregate roots.
 * **Do** use **Guid** as the **primary key** of all aggregate roots.
 
-#### Base Class
+### Base Class
 
 * **Do** inherit from the `AggregateRoot<TKey>` or one of the audited classes  (`CreationAuditedAggregateRoot<TKey>`, `AuditedAggregateRoot<TKey>` or `FullAuditedAggregateRoot<TKey>`) based on requirements.
 
-#### Aggregate Boundary
+### Aggregate Boundary
 
 * **Do** keep aggregates **as small as possible**. Most of the aggregates will only have primitive properties and will not have sub collections. Consider these as design decisions:
   * **Performance** & **memory** cost of loading & saving aggregates (keep in mind that an aggregate is normally loaded & saved as a single unit). Larger aggregates will consume more CPU & memory.
   * **Consistency** & **validity** boundary.
 
-### Example
+## Example
 
-#### Aggregate Root
+### Aggregate Root
 
 ````C#
 public class Issue : FullAuditedAggregateRoot<Guid> //Using Guid as the key/identifier
@@ -130,7 +141,7 @@ public class Issue : FullAuditedAggregateRoot<Guid> //Using Guid as the key/iden
 }
 ````
 
-#### The Entity
+### Entity
 
 ````C#
 public class IssueLabel : Entity
@@ -151,11 +162,12 @@ public class IssueLabel : Entity
 }
 ````
 
-### References
+## References
 
 * Effective Aggregate Design by Vaughn Vernon
   http://dddcommunity.org/library/vernon_2011
 
-  ## See Also
+
+## See Also
 
 * [Video tutorial](https://abp.io/video-courses/essentials/entities)

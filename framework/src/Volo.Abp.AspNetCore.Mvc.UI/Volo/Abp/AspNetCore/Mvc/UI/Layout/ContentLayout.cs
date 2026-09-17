@@ -11,6 +11,8 @@ public class ContentLayout
 
     public string? MenuItemName { get; set; }
 
+    public bool ShowToolbar { get; set; } = true;
+
     public ContentLayout()
     {
         BreadCrumb = new BreadCrumb();
@@ -23,11 +25,6 @@ public class ContentLayout
             return true;
         }
 
-        if (BreadCrumb.ShowCurrent && !Title.IsNullOrEmpty())
-        {
-            return true;
-        }
-
-        return false;
+        return BreadCrumb.ShowCurrent || BreadCrumb.ShowHome;
     }
 }

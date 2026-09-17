@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn about Concurrency Check in ABP Framework, focusing on Optimistic and Pessimistic approaches for maintaining data consistency."
+}
+```
+
 # Concurrency Check
 
 ### Introduction

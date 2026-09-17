@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to efficiently build forms using ABP Framework's input tag helpers, enhancing your ASP.NET Core applications with ease."
+}
+```
+
 # Form Elements
 
 ## Introduction
@@ -10,7 +17,7 @@ See the [form elements demo page](https://bootstrap-taghelpers.abp.io/Components
 
 ## abp-input
 
-`abp-input` tag creates a Bootstrap form input for a given c# property. It uses [Asp.Net Core Input Tag Helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/working-with-forms?view=aspnetcore-7.0#the-input-tag-helper) in background, so every data annotation attribute of `input` tag helper of Asp.Net Core is also valid for `abp-input`.
+`abp-input` tag creates a Bootstrap form input for a given c# property. It uses [Asp.Net Core Input Tag Helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/working-with-forms?view=aspnetcore-9.0#the-input-tag-helper) in background, so every data annotation attribute of `input` tag helper of Asp.Net Core is also valid for `abp-input`.
 
 Usage:
 
@@ -89,7 +96,7 @@ You can set some of the attributes on your c# property, or directly on HTML tag.
 * `required-symbol`: Adds the required symbol `(*)` to the label when the input is required. The default value is `True`.
 * `floating-label`: Sets the label as floating label. The default value is `False`.
 
-`asp-format`, `name` and `value` attributes of [Asp.Net Core Input Tag Helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/working-with-forms?view=aspnetcore-7.0#the-input-tag-helper) are also valid for `abp-input` tag helper.
+`asp-format`, `name` and `value` attributes of [Asp.Net Core Input Tag Helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/working-with-forms?view=aspnetcore-9.0#the-input-tag-helper) are also valid for `abp-input` tag helper.
 
 ### Label & Localization
 
@@ -101,7 +108,7 @@ You can set the label of the input in several ways:
 
 ## abp-select
 
-`abp-select` tag creates a Bootstrap form select for a given c# property. It uses [ASP.NET Core Select Tag Helper](https://docs.microsoft.com/tr-tr/aspnet/core/mvc/views/working-with-forms?view=aspnetcore-3.1#the-select-tag-helper) in background, so every data annotation attribute of `select` tag helper of ASP.NET Core is also valid for `abp-select`.
+`abp-select` tag creates a Bootstrap form select for a given c# property. It uses [ASP.NET Core Select Tag Helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/working-with-forms?view=aspnetcore-9.0#the-select-tag-helper) in background, so every data annotation attribute of `select` tag helper of ASP.NET Core is also valid for `abp-select`.
 
 `abp-select` tag needs a list of `Microsoft.AspNetCore.Mvc.Rendering.SelectListItem ` to work. It can be provided by `asp-items` attriube on the tag or `[SelectItems()]` attribute on c# property. (if you are using [abp-dynamic-form](dynamic-forms.md), c# attribute is the only way.)
 

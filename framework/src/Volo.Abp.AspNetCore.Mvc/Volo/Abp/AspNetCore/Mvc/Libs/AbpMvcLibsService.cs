@@ -34,7 +34,7 @@ public class AbpMvcLibsService : IAbpMvcLibsService, ITransientDependency
 
             app.Use(async (httpContext, next) =>
             {
-                if (!await CheckLibsAsyncOnceAsync(httpContext))
+                if (!httpContext.Request.IsAjax() && !await CheckLibsAsyncOnceAsync(httpContext))
                 {
                     var errorPage = new AbpMvcLibsErrorPage();
                     await errorPage.ExecuteAsync(httpContext);
@@ -64,7 +64,7 @@ public class AbpMvcLibsService : IAbpMvcLibsService, ITransientDependency
             var webHostEnvironment = httpContext.RequestServices.GetRequiredService<IWebHostEnvironment>();
             if (webHostEnvironment.WebRootPath.IsNullOrWhiteSpace())
             {
-                logger.LogWarning("The 'WebRootPath' is not set! The 'CheckLibs' feature is disabled!");
+                logger.LogInformation("The 'WebRootPath' is not set, The 'CheckLibs' feature not needed.");
                 return Task.FromResult(true);
             }
 
@@ -72,7 +72,8 @@ public class AbpMvcLibsService : IAbpMvcLibsService, ITransientDependency
             var libsFolder = fileProvider.GetDirectoryContents("/libs");
             if (!libsFolder.Exists || !libsFolder.Any())
             {
-                logger.LogError("The 'wwwroot/libs' folder does not exist or empty!");
+                logger.LogError("The 'wwwroot/libs' folder does not exist or empty! " +
+                                "If your application does not use any client-side libraries, you can disable this check by setting 'AbpMvcLibsOptions.CheckLibs' to 'false'");
                 return Task.FromResult(false);
             }
         }

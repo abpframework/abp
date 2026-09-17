@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +31,9 @@ public class FeaturesModalModel : CmsKitAdminPageModel
     {
         var blogFeatureDtos = await BlogFeatureAdminAppService.GetListAsync(BlogId);
 
+        //Sort by localized feature name
+        blogFeatureDtos.Sort((x, y) => string.Compare(L[x.FeatureName].Value, L[y.FeatureName].Value, StringComparison.CurrentCultureIgnoreCase));
+
         Items = ObjectMapper.Map<List<BlogFeatureDto>, List<BlogFeatureViewModel>>(blogFeatureDtos);
     }
 
@@ -47,8 +49,6 @@ public class FeaturesModalModel : CmsKitAdminPageModel
         return NoContent();
     }
 
-    [AutoMap(typeof(BlogFeatureDto), ReverseMap = true)]
-    [AutoMap(typeof(BlogFeatureInputDto), ReverseMap = true)]
     public class BlogFeatureViewModel
     {
         private string featureName;

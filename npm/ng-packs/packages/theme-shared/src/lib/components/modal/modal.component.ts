@@ -1,6 +1,4 @@
-import { SubscriptionService, uuid } from '@abp/ng.core';
-import {
-  Component,
+import {Component,
   DestroyRef,
   OnDestroy,
   OnInit,
@@ -11,14 +9,15 @@ import {
   input,
   model,
   output,
-  viewChild,
-} from '@angular/core';
+  viewChild, ChangeDetectionStrategy,} from '@angular/core';
+import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { SubscriptionService, uuid } from '@abp/ng.core';
 import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { fromEvent } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
-import { Confirmation } from '../../models/confirmation';
-import { ConfirmationService } from '../../services/confirmation.service';
+import { Confirmation } from '../../models';
+import { ConfirmationService } from '../../services';
 import { SUPPRESS_UNSAVED_CHANGES_WARNING } from '../../tokens/suppress-unsaved-changes-warning.token';
 import { ButtonComponent } from '../button/button.component';
 import { DismissableModal, ModalDismissMode, ModalRefService } from './modal-ref.service';
@@ -26,10 +25,12 @@ import { DismissableModal, ModalDismissMode, ModalRefService } from './modal-ref
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-modal',
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.scss'],
   providers: [SubscriptionService],
+  imports: [NgTemplateOutlet],
 })
 export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
   protected readonly confirmationService = inject(ConfirmationService);
@@ -39,17 +40,11 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
     optional: true,
   });
   protected readonly destroyRef = inject(DestroyRef);
+  private document = inject(DOCUMENT);
 
   visible = model<boolean>(false);
 
-  busy = input(false, {
-    transform: (value: boolean) => {
-      if (this.abpSubmit() && this.abpSubmit() instanceof ButtonComponent) {
-        this.abpSubmit().loading = value;
-      }
-      return value;
-    },
-  });
+  busy = input(false);
 
   options = input<NgbModalOptions>({ keyboard: true });
 
@@ -78,7 +73,7 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
   modalIdentifier = `modal-${uuid()}`;
 
   get modalWindowRef() {
-    return document.querySelector(`ngb-modal-window.${this.modalIdentifier}`);
+    return this.document.querySelector(`ngb-modal-window.${this.modalIdentifier}`);
   }
 
   get isFormDirty(): boolean {
@@ -88,6 +83,15 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
   constructor() {
     effect(() => {
       this.toggle(this.visible());
+    });
+
+    effect(() => {
+      const submit = this.abpSubmit();
+      if (!(submit instanceof ButtonComponent)) {
+        return;
+      }
+
+      submit.setLoading(this.visible() && this.busy());
     });
   }
 
@@ -112,8 +116,17 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
     this.visible.set(value);
 
     if (!value) {
-      this.modalRef?.dismiss();
+      if (this.modalRef) {
+        const ref = this.modalRef;
+        this.modalRef = undefined!;
+        ref.dismiss();
+      }
+
       this.disappear.emit();
+      return;
+    }
+
+    if (this.modalWindowRef) {
       return;
     }
 
@@ -131,6 +144,10 @@ export class ModalComponent implements OnInit, OnDestroy, DismissableModal {
       },
       ...this.options(),
       windowClass: `${this.options().windowClass || ''} ${this.modalIdentifier}`,
+    });
+
+    this.modalRef.result.finally(() => {
+      this.modalRef = undefined!;
     });
 
     this.appear.emit();

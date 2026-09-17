@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Data;
@@ -11,6 +12,7 @@ using Volo.Docs.Documents;
 using Volo.Docs.Documents.FullSearch.Elastic;
 using Volo.Docs.Localization;
 using Volo.Docs.Projects;
+using Volo.Docs.Projects.Pdf;
 
 namespace Volo.Docs.Admin.Projects
 {
@@ -21,12 +23,14 @@ namespace Volo.Docs.Admin.Projects
         private readonly IDocumentRepository _documentRepository;
         private readonly IDocumentFullSearch _elasticSearchService;
         private readonly IGuidGenerator _guidGenerator;
+        private readonly IProjectPdfFileStore _projectPdfFileStore;
 
         public ProjectAdminAppService(
             IProjectRepository projectRepository,
             IDocumentRepository documentRepository,
             IDocumentFullSearch elasticSearchService,
-            IGuidGenerator guidGenerator)
+            IGuidGenerator guidGenerator,
+            IProjectPdfFileStore projectPdfFileStore)
         {
             ObjectMapperContext = typeof(DocsAdminApplicationModule);
             LocalizationResource = typeof(DocsResource);
@@ -35,6 +39,7 @@ namespace Volo.Docs.Admin.Projects
             _documentRepository = documentRepository;
             _elasticSearchService = elasticSearchService;
             _guidGenerator = guidGenerator;
+            _projectPdfFileStore = projectPdfFileStore;
         }
 
         public virtual async Task<PagedResultDto<ProjectDto>> GetListAsync(PagedAndSortedResultRequestDto input)

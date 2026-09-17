@@ -108,6 +108,11 @@ public static class AbpAuthorizationServiceExtensions
         return (await authorizationService.AuthorizeAsync(resource, policyName)).Succeeded;
     }
 
+    /// <summary>
+    /// Checks if CurrentPrincipal meets a specific authorization policy, throwing an <see cref="AbpAuthorizationException"/> if not.
+    /// </summary>
+    /// <param name="authorizationService">The <see cref="IAuthorizationService"/> providing authorization.</param>
+    /// <param name="policyName">The name of the policy to evaluate.</param>
     public static async Task CheckAsync(this IAuthorizationService authorizationService, string policyName)
     {
         if (!await authorizationService.IsGrantedAsync(policyName))
@@ -117,6 +122,12 @@ public static class AbpAuthorizationServiceExtensions
         }
     }
 
+    /// <summary>
+    /// Checks if CurrentPrincipal meets a specific requirement for the specified resource, throwing an <see cref="AbpAuthorizationException"/> if not.
+    /// </summary>
+    /// <param name="authorizationService">The <see cref="IAuthorizationService"/> providing authorization.</param>
+    /// <param name="resource">The resource to evaluate the policy against.</param>
+    /// <param name="requirement">The requirement to evaluate the policy against.</param>
     public static async Task CheckAsync(this IAuthorizationService authorizationService, object resource, IAuthorizationRequirement requirement)
     {
         if (!await authorizationService.IsGrantedAsync(resource, requirement))
@@ -126,6 +137,12 @@ public static class AbpAuthorizationServiceExtensions
         }
     }
 
+    /// <summary>
+    /// Checks if CurrentPrincipal meets a specific authorization policy against the specified resource, throwing an <see cref="AbpAuthorizationException"/> if not.
+    /// </summary>
+    /// <param name="authorizationService">The <see cref="IAuthorizationService"/> providing authorization.</param>
+    /// <param name="resource">The resource to evaluate the policy against.</param>
+    /// <param name="policy">The policy to evaluate.</param>
     public static async Task CheckAsync(this IAuthorizationService authorizationService, object resource, AuthorizationPolicy policy)
     {
         if (!await authorizationService.IsGrantedAsync(resource, policy))
@@ -135,6 +152,11 @@ public static class AbpAuthorizationServiceExtensions
         }
     }
 
+    /// <summary>
+    /// Checks if CurrentPrincipal meets a specific authorization policy, throwing an <see cref="AbpAuthorizationException"/> if not.
+    /// </summary>
+    /// <param name="authorizationService">The <see cref="IAuthorizationService"/> providing authorization.</param>
+    /// <param name="policy">The policy to evaluate.</param>
     public static async Task CheckAsync(this IAuthorizationService authorizationService, AuthorizationPolicy policy)
     {
         if (!await authorizationService.IsGrantedAsync(policy))
@@ -143,6 +165,12 @@ public static class AbpAuthorizationServiceExtensions
         }
     }
 
+    /// <summary>
+    /// Checks if CurrentPrincipal meets a specific authorization policy against the specified resource, throwing an <see cref="AbpAuthorizationException"/> if not.
+    /// </summary>
+    /// <param name="authorizationService">The <see cref="IAuthorizationService"/> providing authorization.</param>
+    /// <param name="resource">The resource to evaluate the policy against.</param>
+    /// <param name="requirements">The requirements to evaluate the policy against.</param>
     public static async Task CheckAsync(this IAuthorizationService authorizationService, object resource, IEnumerable<IAuthorizationRequirement> requirements)
     {
         if (!await authorizationService.IsGrantedAsync(resource, requirements))
@@ -152,6 +180,12 @@ public static class AbpAuthorizationServiceExtensions
         }
     }
 
+    /// <summary>
+    /// Checks if CurrentPrincipal meets a specific authorization policy against the specified resource, throwing an <see cref="AbpAuthorizationException"/> if not.
+    /// </summary>
+    /// <param name="authorizationService">The <see cref="IAuthorizationService"/> providing authorization.</param>
+    /// <param name="resource">The resource to evaluate the policy against.</param>
+    /// <param name="policyName">The name of the policy to evaluate.</param>
     public static async Task CheckAsync(this IAuthorizationService authorizationService, object resource, string policyName)
     {
         if (!await authorizationService.IsGrantedAsync(resource, policyName))

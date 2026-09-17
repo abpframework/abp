@@ -14,6 +14,11 @@
           "declaringAssemblyName": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
           "namespace": "Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared",
           "name": "AbpAspNetCoreMvcUiThemeSharedModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.VirtualFileExplorer.Contracts",
+          "namespace": "Volo.Abp.VirtualFileExplorer",
+          "name": "AbpVirtualFileExplorerContractsModule"
         }
       ],
       "implementingInterfaces": [

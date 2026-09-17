@@ -21,9 +21,9 @@
           "name": "AbpDddApplicationModule"
         },
         {
-          "declaringAssemblyName": "Volo.Abp.AutoMapper",
-          "namespace": "Volo.Abp.AutoMapper",
-          "name": "AbpAutoMapperModule"
+          "declaringAssemblyName": "Volo.Abp.Mapperly",
+          "namespace": "Volo.Abp.Mapperly",
+          "name": "AbpMapperlyModule"
         }
       ],
       "implementingInterfaces": [
@@ -72,6 +72,142 @@
       ],
       "contentType": "abpModule",
       "name": "CmsKitCommonApplicationModule",
+      "summary": null
+    },
+    {
+      "eventHandlerType": "Local",
+      "namespace": "Volo.CmsKit.Menus",
+      "subscribedEvents": [
+        {
+          "underlyingType": {
+            "name": "MenuItem",
+            "namespace": "Volo.CmsKit.Menus",
+            "declaringAssemblyName": "Volo.CmsKit.Domain",
+            "fullName": "Volo.CmsKit.Menus.MenuItem"
+          },
+          "name": "EntityUpdatedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityUpdatedEventData`1"
+        },
+        {
+          "underlyingType": {
+            "name": "MenuItem",
+            "namespace": "Volo.CmsKit.Menus",
+            "declaringAssemblyName": "Volo.CmsKit.Domain",
+            "fullName": "Volo.CmsKit.Menus.MenuItem"
+          },
+          "name": "EntityDeletedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityDeletedEventData`1"
+        },
+        {
+          "underlyingType": {
+            "name": "MenuItem",
+            "namespace": "Volo.CmsKit.Menus",
+            "declaringAssemblyName": "Volo.CmsKit.Domain",
+            "fullName": "Volo.CmsKit.Menus.MenuItem"
+          },
+          "name": "EntityCreatedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityCreatedEventData`1"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "ILocalEventHandler<EntityUpdatedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityUpdatedEventData`1>"
+        },
+        {
+          "name": "IEventHandler",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.IEventHandler"
+        },
+        {
+          "name": "ILocalEventHandler<EntityDeletedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityDeletedEventData`1>"
+        },
+        {
+          "name": "ILocalEventHandler<EntityCreatedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityCreatedEventData`1>"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "eventHandler",
+      "name": "MenuChangedHandler",
+      "summary": null
+    },
+    {
+      "eventHandlerType": "Local",
+      "namespace": "Volo.CmsKit.Blogs",
+      "subscribedEvents": [
+        {
+          "underlyingType": {
+            "name": "BlogFeature",
+            "namespace": "Volo.CmsKit.Blogs",
+            "declaringAssemblyName": "Volo.CmsKit.Domain",
+            "fullName": "Volo.CmsKit.Blogs.BlogFeature"
+          },
+          "name": "EntityCreatedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityCreatedEventData`1"
+        },
+        {
+          "underlyingType": {
+            "name": "BlogFeature",
+            "namespace": "Volo.CmsKit.Blogs",
+            "declaringAssemblyName": "Volo.CmsKit.Domain",
+            "fullName": "Volo.CmsKit.Blogs.BlogFeature"
+          },
+          "name": "EntityUpdatedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityUpdatedEventData`1"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "ILocalEventHandler<EntityCreatedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityCreatedEventData`1>"
+        },
+        {
+          "name": "IEventHandler",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.IEventHandler"
+        },
+        {
+          "name": "ILocalEventHandler<EntityUpdatedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityUpdatedEventData`1>"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "eventHandler",
+      "name": "BlogFeatureChangedHandler",
       "summary": null
     },
     {

@@ -38,6 +38,31 @@ namespace Volo.Docs
         public SingleProjectModeOptions SingleProjectMode { get; } = new ();
         
         public bool EnableEnlargeImage { get; set; } = true;
+        
+        public Func<string, string> DocumentLinksNormalizer { get; set; } = link =>
+        {
+            if (!link.EndsWith("/Index", StringComparison.OrdinalIgnoreCase))
+            {
+                return link;
+                
+            }
+            return link.Substring(0, link.LastIndexOf("/Index", StringComparison.OrdinalIgnoreCase));
+        };
+
+        public Func<string, string?> RedirectUrlResolver { get; set; } = url =>
+        {
+            if (!url.EndsWith("/Index", StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+                
+            }
+            return url.Substring(0, url.LastIndexOf("/Index", StringComparison.OrdinalIgnoreCase));
+        };
+
+        public string? GetRedirectUrlIfNeeded(string url)
+        {
+            return RedirectUrlResolver.Invoke(url);
+        }
 
         private string GetFormattedRoutePrefix()
         {

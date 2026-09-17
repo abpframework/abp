@@ -79,7 +79,19 @@
     {
       "namespace": "Volo.Docs.Admin.Pages.Docs.Admin.Projects",
       "contentType": "webPage",
+      "name": "GeneratePdfModal",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Docs.Admin.Pages.Docs.Admin.Projects",
+      "contentType": "webPage",
       "name": "IndexModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.Docs.Admin.Pages.Docs.Admin.Projects",
+      "contentType": "webPage",
+      "name": "ManagePdfFiles",
       "summary": null
     },
     {

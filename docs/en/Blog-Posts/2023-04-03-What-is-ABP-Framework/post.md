@@ -105,9 +105,12 @@ ASP.NET modularity, ASP.NET modular development, ASP.NET localization, ASP.NET m
 
 ## Microservice Example: eShopOnAbp
 
-[eShopOnAbp](https://www.eshoponabp.com/) is a microservice example built on top ABP. It is a sample net application, similar to the Microsoft's [eShopOnContainer](https://github.com/dotnet-architecture/eShopOnContainers) project. It is a reference microservice solution built with the ABP Framework and .NET,  runs on Kubernetes with Helm configuration, includes API Gateways,  Angular and ASP.NET Core MVC applications with PostgreSQL and MongoDB  databases. For more information, check out https://github.com/abpframework/eShopOnAbp.
+[eShopOnAbp](https://github.com/abpframework/eShopOnAbp) is a microservice example built on top ABP. It is a sample net application, similar to the Microsoft's [eShopOnContainer](https://github.com/dotnet-architecture/eShopOnContainers) project. It is a reference microservice solution built with the ABP Framework and .NET,  runs on Kubernetes with Helm configuration, includes API Gateways,  Angular and ASP.NET Core MVC applications with PostgreSQL and MongoDB  databases. For more information, check out https://github.com/abpframework/eShopOnAbp.
 
-
+> ⚠️ **Important Notice**  
+> This project, "eshoponabp," is outdated. It served as a reference project for microservice architecture using the ABP Framework, but we now recommend using the [ABP Microservice Solution Template](https://abp.io/docs/latest/solution-templates/microservice) for new projects.  
+>  
+> The new template offers a modernized and officially supported starting point for building microservices with ABP. Please consider transitioning to the new template for the latest features and improvements.
 
 ## Conclusion
 

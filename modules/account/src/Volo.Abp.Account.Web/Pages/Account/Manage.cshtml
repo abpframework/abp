@@ -3,14 +3,22 @@
 @using Volo.Abp.Account.Localization
 @using Volo.Abp.Account.Web.Pages.Account
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @inject IThemeManager ThemeManager
+@inject IPageLayout PageLayout
 @inject IHtmlLocalizer<AccountResource> L
 @model ManageModel
 @{
     Layout = ThemeManager.CurrentTheme.GetApplicationLayout();
+    PageLayout.Content.Title = L["MyAccount"].Value;
 }
 @section scripts {
     <abp-script-bundle name="@typeof(ManageModel).FullName"/>
+}
+
+
+@section styles {
+    <abp-style src="/Pages/Account/Manage.css" />
 }
 
 @if (!Model.ReturnUrl.IsNullOrWhiteSpace())
@@ -31,8 +39,6 @@
                 @foreach (var group in Model.ProfileManagementPageCreationContext.Groups)
                 {
                     <abp-tab title="@group.DisplayName">
-                        <h2>@group.DisplayName</h2>
-                        <hr class="my-4" />
                         @await Component.InvokeAsync(group.ComponentType, new
                         {
                             parameter = group.Parameter

@@ -23,7 +23,7 @@ public class ImageSharpImageResizerContributor : IImageResizerContributor, ITran
             return new ImageResizeResult<Stream>(stream, ImageProcessState.Unsupported);
         }
 
-        var image = await Image.LoadAsync(stream, cancellationToken);
+        using var image = await Image.LoadAsync(stream, cancellationToken);
 
         if (!CanResize(image.Metadata.DecodedImageFormat!.DefaultMimeType))
         {
@@ -49,13 +49,13 @@ public class ImageSharpImageResizerContributor : IImageResizerContributor, ITran
         }
         catch
         {
-            memoryStream.Dispose();
+            await memoryStream.DisposeAsync();
             throw;
         }
     }
 
     public virtual async Task<ImageResizeResult<byte[]>> TryResizeAsync(
-        byte[] bytes, 
+        byte[] bytes,
         ImageResizeArgs resizeArgs,
         string? mimeType = null,
         CancellationToken cancellationToken = default)
@@ -76,7 +76,7 @@ public class ImageSharpImageResizerContributor : IImageResizerContributor, ITran
 
         var newBytes = await result.Result.GetAllBytesAsync(cancellationToken);
 
-        result.Result.Dispose();
+        await result.Result.DisposeAsync();
 
         return new ImageResizeResult<byte[]>(newBytes, result.State);
     }
@@ -107,15 +107,15 @@ public class ImageSharpImageResizerContributor : IImageResizerContributor, ITran
     private static Size GetSize(ImageResizeArgs resizeArgs)
     {
         var size = new Size();
-        
+
         if (resizeArgs.Width > 0)
         {
-            size.Width = resizeArgs.Width;
+            size.Width = (int)resizeArgs.Width;
         }
 
         if (resizeArgs.Height > 0)
         {
-            size.Height = resizeArgs.Height;
+            size.Height = (int)resizeArgs.Height;
         }
 
         return size;

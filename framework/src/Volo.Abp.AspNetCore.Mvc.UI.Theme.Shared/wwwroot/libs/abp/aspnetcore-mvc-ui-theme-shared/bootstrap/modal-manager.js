@@ -55,7 +55,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
 
             function _createContainer() {
                 _removeContainer();
-                _$modalContainer = $('<div id="' + _modalId + 'Container' + '"></div>');
+                _$modalContainer = $('<div id="' + _modalId + '"></div>');
                 var existsModals = $('[id^="Abp_Modal_"]');
                 if (existsModals.length) {
                     existsModals.last().after(_$modalContainer)
@@ -104,13 +104,14 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                         }
                     }
 
+                    var focusElement = null;
                     if (!options.focusElement) {
                         //focuses first element if it's a typeable input.
                         var $firstVisibleInput = _$modal.find('input:not([type=hidden]):first');
 
                         _onOpenCallbacks.triggerAll(_publicApi);
 
-                        if ($firstVisibleInput.data("datepicker")) {
+                        if ($firstVisibleInput.data("datepicker") || $firstVisibleInput.data("daterangepicker")) {
                             return; //don't pop-up date pickers...
                         }
 
@@ -120,11 +121,18 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                         }
 
                         $firstVisibleInput.focus();
+                        focusElement = $firstVisibleInput;
                     } else if (typeof options.focusElement === 'function') {
-                        var focusElement = options.focusElement();
+                        focusElement = options.focusElement();
                         focusElement.focus();
                     } else if (typeof options.focusElement === 'string') {
-                        $(options.focusElement).focus();
+                        focusElement = $(options.focusElement);
+                        focusElement.focus();
+                    }
+
+                    if (focusElement && $(focusElement).is('input')) {
+                         var value = focusElement.val();
+                        focusElement[0].setSelectionRange(value.length, value.length);
                     }
                 });
 

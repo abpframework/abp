@@ -18,3 +18,8 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
 }
+
+.favorite-toggle {
+    width: 40px;
+    height: 40px;
+}

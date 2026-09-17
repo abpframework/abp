@@ -86,7 +86,7 @@ public class AliyunBlobProvider : BlobProviderBase, ITransientDependency
             return null;
         }
         var result = ossClient.GetObject(containerName, blobName);
-        return await TryCopyToMemoryStreamAsync(result.Content, args.CancellationToken);
+        return result.ResponseStream;
     }
 
     protected virtual string GetContainerName(BlobProviderArgs args)

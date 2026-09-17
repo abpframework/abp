@@ -1,54 +1,52 @@
 import { CoreTestingModule } from '@abp/ng.core/testing';
 import { ThemeSharedTestingModule } from '@abp/ng.theme.shared/testing';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { HomeComponent } from './home.component';
-import { OAuthService } from 'angular-oauth2-oidc';
 import { AuthService } from '@abp/ng.core';
+import { vi } from 'vitest';
 
 describe('HomeComponent', () => {
   let fixture: ComponentFixture<HomeComponent>;
-  const mockOAuthService = jasmine.createSpyObj('OAuthService', ['hasValidAccessToken']);
-  const mockAuthService = jasmine.createSpyObj('AuthService', ['navigateToLogin']);
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [HomeComponent],
+  let mockAuthService: { isAuthenticated: boolean; navigateToLogin: ReturnType<typeof vi.fn> };
+
+  beforeEach(async () => {
+    mockAuthService = {
+      isAuthenticated: false,
+      navigateToLogin: vi.fn(),
+    };
+
+    await TestBed.configureTestingModule({
       imports: [
         CoreTestingModule.withConfig(),
         ThemeSharedTestingModule.withConfig(),
         NgxValidateCoreModule,
+        HomeComponent,
       ],
       providers: [
-        /* mock providers here */
-        {
-          provide: OAuthService,
-          useValue: mockOAuthService,
-        },
         {
           provide: AuthService,
           useValue: mockAuthService,
         },
       ],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(HomeComponent);
-    fixture.detectChanges();
   });
 
   it('should be initiated', () => {
+    fixture = TestBed.createComponent(HomeComponent);
+    fixture.detectChanges();
     expect(fixture.componentInstance).toBeTruthy();
   });
 
   describe('when login state is true', () => {
-    beforeAll(() => {
-      mockOAuthService.hasValidAccessToken.and.returnValue(true);
+    beforeEach(() => {
+      mockAuthService.isAuthenticated = true;
+      fixture = TestBed.createComponent(HomeComponent);
+      fixture.detectChanges();
     });
 
     it('hasLoggedIn should be true', () => {
-      expect(fixture.componentInstance.hasLoggedIn).toBeTrue();
-      expect(mockOAuthService.hasValidAccessToken).toHaveBeenCalled();
+      expect(fixture.componentInstance.hasLoggedIn).toBe(true);
     });
 
     it('button should not be exists', () => {

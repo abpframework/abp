@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 
 namespace Volo.Abp.EventBus.Distributed;
@@ -10,6 +10,12 @@ public sealed class NullDistributedEventBus : IDistributedEventBus
     private NullDistributedEventBus()
     {
 
+    }
+
+    /// <inheritdoc/>
+    public Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
+    {
+        return Task.CompletedTask;
     }
 
     public IDisposable Subscribe<TEvent>(Func<TEvent, Task> action) where TEvent : class
@@ -28,6 +34,24 @@ public sealed class NullDistributedEventBus : IDistributedEventBus
     }
 
     public IDisposable Subscribe(Type eventType, IEventHandler handler)
+    {
+        return NullDisposable.Instance;
+    }
+
+    /// <inheritdoc/>
+    public IDisposable Subscribe(string eventName, IEventHandler handler)
+    {
+        return NullDisposable.Instance;
+    }
+
+    /// <inheritdoc/>
+    public IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
+    {
+        return NullDisposable.Instance;
+    }
+
+    /// <inheritdoc/>
+    public IDisposable Subscribe(string eventName, IDistributedEventHandler<DynamicEventData> handler)
     {
         return NullDisposable.Instance;
     }
@@ -67,6 +91,16 @@ public sealed class NullDistributedEventBus : IDistributedEventBus
 
     }
 
+    /// <inheritdoc/>
+    public void Unsubscribe(string eventName, IEventHandlerFactory factory)
+    {
+    }
+
+    /// <inheritdoc/>
+    public void Unsubscribe(string eventName, IEventHandler handler)
+    {
+    }
+
     public void UnsubscribeAll<TEvent>() where TEvent : class
     {
 
@@ -74,7 +108,11 @@ public sealed class NullDistributedEventBus : IDistributedEventBus
 
     public void UnsubscribeAll(Type eventType)
     {
+    }
 
+    /// <inheritdoc/>
+    public void UnsubscribeAll(string eventName)
+    {
     }
 
     public Task PublishAsync<TEvent>(TEvent eventData, bool onUnitOfWorkComplete = true) where TEvent : class
@@ -93,6 +131,12 @@ public sealed class NullDistributedEventBus : IDistributedEventBus
     }
 
     public Task PublishAsync(Type eventType, object eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true)
+    {
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc/>
+    public Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true, bool useOutbox = true)
     {
         return Task.CompletedTask;
     }

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to link multiple accounts for seamless navigation, enhancing user experience with ABP Framework's Linked Accounts feature."
+}
+```
+
 # Linked Accounts
 
 Linked accounts are used to link multiple accounts to each other. In this way, a user can easily navigate through his/her accounts using this feature.

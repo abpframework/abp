@@ -357,10 +357,10 @@ public abstract class AbpCrudPageBase<
         }
     }
 
-    protected virtual Task CloseCreateModalAsync()
+    protected virtual async Task CloseCreateModalAsync()
     {
+        await InvokeAsync(CreateModal!.Hide);
         NewEntity = new TCreateViewModel();
-        return InvokeAsync(CreateModal!.Hide);
     }
 
     protected virtual Task ClosingCreateModal(ModalClosingEventArgs eventArgs)
@@ -474,11 +474,11 @@ public abstract class AbpCrudPageBase<
 
     protected virtual async Task OnCreatedEntityAsync()
     {
-        NewEntity = new TCreateViewModel();
         await GetEntitiesAsync();
 
         await InvokeAsync(CreateModal!.Hide);
         await Notify.Success(GetCreateMessage());
+        NewEntity = new TCreateViewModel();
     }
 
     protected virtual string GetCreateMessage()
@@ -552,6 +552,11 @@ public abstract class AbpCrudPageBase<
 
     protected virtual async Task OnDeletedEntityAsync()
     {
+        if (Entities.Count == 1 && CurrentPage > 1)
+        {
+            CurrentPage -= 1;
+        }
+
         await GetEntitiesAsync();
         await InvokeAsync(StateHasChanged);
         await Notify.Success(GetDeleteMessage());

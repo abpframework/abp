@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to create a custom BLOB storage provider in ABP Framework with practical examples and implementation details."
+}
+```
+
 # BLOB Storing: Creating a Custom Provider
 
 This document explains how you can create a new storage provider for the BLOB storing system with an example.

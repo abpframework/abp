@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement data filtering in ABP Framework, including built-in soft delete functionality for managing your entities efficiently."
+}
+```
+
 # Data Filtering
 
 [Volo.Abp.Data](https://www.nuget.org/packages/Volo.Abp.Data) package defines services to automatically filter data on querying from a database.

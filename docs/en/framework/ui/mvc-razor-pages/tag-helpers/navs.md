@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the `abp-nav` tag helper for creating stylish navigation components in your ABP Framework applications."
+}
+```
+
 # Navs
 
 ## Introduction

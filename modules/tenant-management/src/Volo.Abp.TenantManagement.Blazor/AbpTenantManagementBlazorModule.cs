@@ -1,7 +1,7 @@
 ﻿using Localization.Resources.AbpUi;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Routing;
-using Volo.Abp.AutoMapper;
+using Volo.Abp.Mapperly;
 using Volo.Abp.FeatureManagement.Blazor;
 using Volo.Abp.FeatureManagement.Localization;
 using Volo.Abp.Localization;
@@ -16,7 +16,7 @@ using Volo.Abp.UI.Navigation;
 namespace Volo.Abp.TenantManagement.Blazor;
 
 [DependsOn(
-    typeof(AbpAutoMapperModule),
+    typeof(AbpMapperlyModule),
     typeof(AbpTenantManagementApplicationContractsModule),
     typeof(AbpFeatureManagementBlazorModule)
 )]
@@ -26,12 +26,7 @@ public class AbpTenantManagementBlazorModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.AddAutoMapperObjectMapper<AbpTenantManagementBlazorModule>();
-
-        Configure<AbpAutoMapperOptions>(options =>
-        {
-            options.AddProfile<AbpTenantManagementBlazorAutoMapperProfile>(validate: true);
-        });
+        context.Services.AddMapperlyObjectMapper<AbpTenantManagementBlazorModule>();
 
         Configure<AbpNavigationOptions>(options =>
         {

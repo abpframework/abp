@@ -10,6 +10,9 @@ public interface IPermissionDefinitionSerializer
     Task<(PermissionGroupDefinitionRecord[], PermissionDefinitionRecord[])>
         SerializeAsync(IEnumerable<PermissionGroupDefinition> permissionGroups);
 
+    Task<PermissionDefinitionRecord[]> SerializeAsync(
+        IEnumerable<PermissionDefinition> permissions);
+
     Task<PermissionGroupDefinitionRecord> SerializeAsync(
         PermissionGroupDefinition permissionGroup);
 

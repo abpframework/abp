@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\..\..\configureawait.props" />
+    <Import Project="..\..\..\common.props" />
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <WarningsAsErrors>Nullable</WarningsAsErrors>
+        <AssemblyName>Volo.Abp.EntityFrameworkCore.MySQL.Pomelo</AssemblyName>
+        <PackageId>Volo.Abp.EntityFrameworkCore.MySQL.Pomelo</PackageId>
+        <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+        <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+        <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+        <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+        <RootNamespace />
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Volo.Abp.EntityFrameworkCore\Volo.Abp.EntityFrameworkCore.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+    </ItemGroup>
+
+</Project>

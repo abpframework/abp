@@ -1,7 +1,9 @@
-﻿using Volo.Abp.Bundling;
+using System;
+using Volo.Abp.Bundling;
 
 namespace Volo.Abp.AspNetCore.Components.WebAssembly.Theming;
 
+[Obsolete("This class is obsolete and will be removed in the future versions. Use GlobalAssets instead.")]
 public class ComponentsComponentsBundleContributor : IBundleContributor
 {
     public void AddScripts(BundleContext context)
@@ -15,17 +17,14 @@ public class ComponentsComponentsBundleContributor : IBundleContributor
 
     public void AddStyles(BundleContext context)
     {
-        if (!context.InteractiveAuto)
+        context.BundleDefinitions.Insert(0, new BundleDefinition
         {
-            context.BundleDefinitions.Insert(0, new BundleDefinition
-            {
-                Source = "_content/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/libs/bootstrap/css/bootstrap.min.css"
-            });
-            context.BundleDefinitions.Insert(1, new BundleDefinition
-            {
-                Source = "_content/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/libs/fontawesome/css/all.css"
-            });
-        }
+            Source = "_content/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/libs/bootstrap/css/bootstrap.min.css"
+        });
+        context.BundleDefinitions.Insert(1, new BundleDefinition
+        {
+            Source = "_content/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/libs/fontawesome/css/all.css"
+        });
 
         context.Add("_content/Volo.Abp.AspNetCore.Components.Web/libs/abp/css/abp.css");
         context.Add("_content/Volo.Abp.AspNetCore.Components.WebAssembly.Theming/libs/flag-icon/css/flag-icon.css");

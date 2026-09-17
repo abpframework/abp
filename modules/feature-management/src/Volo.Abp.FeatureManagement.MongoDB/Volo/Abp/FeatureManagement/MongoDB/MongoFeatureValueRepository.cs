@@ -27,7 +27,7 @@ public class MongoFeatureValueRepository :
         string providerKey,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .OrderBy(x => x.Id)
             .FirstOrDefaultAsync(s => s.Name == name && s.ProviderName == providerName && s.ProviderKey == providerKey, GetCancellationToken(cancellationToken));
     }
@@ -38,7 +38,7 @@ public class MongoFeatureValueRepository :
         string providerKey,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .Where(s => s.Name == name && s.ProviderName == providerName && s.ProviderKey == providerKey).ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -47,7 +47,7 @@ public class MongoFeatureValueRepository :
         string providerKey,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .Where(s => s.ProviderName == providerName && s.ProviderKey == providerKey)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }

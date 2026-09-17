@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to easily create and customize modals using the `abp-modal` Tag Helper in ABP Framework, enhancing your web application's user experience."
+}
+```
+
 # Modals
 
 > This document explains the details of the `abp-modal` Tag Helper, which simplifies to build the HTML markup for a modal dialog. Read [that documentation](../modals.md) to learn how to work with modals.
@@ -9,7 +16,7 @@
 Basic usage:
 
 ````xml
-<abp-button button-type="Primary" data-toggle="modal" data-target="#myModal">Launch modal</abp-button>
+<abp-button button-type="Primary" data-bs-toggle="modal" data-bs-target="#myModal">Launch modal</abp-button>
 
 <abp-modal centered="true" scrollable="true" size="Large" id="myModal">
    <abp-modal-header title="Modal title"></abp-modal-header>

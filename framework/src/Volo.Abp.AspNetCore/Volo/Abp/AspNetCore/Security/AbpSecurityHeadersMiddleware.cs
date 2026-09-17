@@ -23,6 +23,16 @@ public class AbpSecurityHeadersMiddleware : AbpMiddlewareBase, ITransientDepende
 
     public async override Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
+        var endpoint = context.GetEndpoint();
+
+        if (endpoint?.Metadata.GetMetadata<IgnoreAbpSecurityHeaderAttribute>() != null ||
+            await AlwaysIgnoreContentTypes(context) ||
+            Options.Value.IgnoredScriptNoncePaths.Any(x => context.Request.Path.StartsWithSegments(x.EnsureStartsWith('/'), StringComparison.OrdinalIgnoreCase)))
+        {
+            await next.Invoke(context);
+            return;
+        }
+
         /*X-Content-Type-Options header tells the browser to not try and “guess” what a mimetype of a resource might be, and to just take what mimetype the server has returned as fact.*/
         AddHeader(context, "X-Content-Type-Options", "nosniff");
 
@@ -33,21 +43,13 @@ public class AbpSecurityHeadersMiddleware : AbpMiddlewareBase, ITransientDepende
         AddHeader(context, "X-Frame-Options", "SAMEORIGIN");
 
         var requestAcceptTypeHtml = context.Request.Headers["Accept"].Any(x =>
-            x!.Contains("text/html") || x.Contains("*/*") || x.Contains("application/xhtml+xml"));
-
-        var endpoint = context.GetEndpoint();
-
-        if (endpoint?.Metadata.GetMetadata<IgnoreAbpSecurityHeaderAttribute>() != null)
-        {
-            await next.Invoke(context);
-            return;
-        }
+            x!.Contains("text/html", StringComparison.OrdinalIgnoreCase) ||
+            x.Contains("*/*", StringComparison.OrdinalIgnoreCase) ||
+            x.Contains("application/xhtml+xml", StringComparison.OrdinalIgnoreCase));
 
         if (!requestAcceptTypeHtml
             || !Options.Value.UseContentSecurityPolicyHeader
-            || await AlwaysIgnoreContentTypes(context)
-            || endpoint == null
-            || Options.Value.IgnoredScriptNoncePaths.Any(x => context.Request.Path.StartsWithSegments(x.EnsureStartsWith('/'), StringComparison.OrdinalIgnoreCase)))
+            || endpoint == null)
         {
             AddOtherHeaders(context);
             await next.Invoke(context);
@@ -59,7 +61,6 @@ public class AbpSecurityHeadersMiddleware : AbpMiddlewareBase, ITransientDepende
             var randomValue = Guid.NewGuid().ToString("N");
             context.Items.Add(AbpAspNetCoreConsts.ScriptNonceKey, randomValue);
         }
-
 
         context.Response.OnStarting(() =>
         {

@@ -1,4 +1,17 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore best practices for implementing Data Transfer Objects in your applications, guided by Domain-Driven Design principles."
+}
+```
+
 # Data Transfer Objects Best Practices & Conventions
+
+> This document offers best practices for implementing Data Transfer Object classes in your modules and applications based on Domain-Driven-Design principles.
+>
+> **Ensure you've read the [*Data Transfer Objects*](../domain-driven-design/data-transfer-objects.md) document first.**
+
+## General
 
 * **Do** define DTOs in the **application contracts** package.
 * **Do** inherit from the pre-built **base DTO classes** where possible and necessary (like `EntityDto<TKey>`, `CreationAuditedEntityDto<TKey>`, `AuditedEntityDto<TKey>`, `FullAuditedEntityDto<TKey>` and so on).

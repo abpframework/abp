@@ -25,6 +25,7 @@ public class BootstrapDemoMenuContributor : IMenuContributor
             {
                 new ApplicationMenuItem(BootstrapDemoMenus.Components.Alerts, "Alerts", url: "/Components/Alerts"),
                 new ApplicationMenuItem(BootstrapDemoMenus.Components.Badges, "Badges", url: "/Components/Badges"),
+                new ApplicationMenuItem(BootstrapDemoMenus.Components.Blockquotes, "Blockquotes", url: "/Components/Blockquotes"),
                 new ApplicationMenuItem(BootstrapDemoMenus.Components.Borders, "Borders", url: "/Components/Borders"),
                 new ApplicationMenuItem(BootstrapDemoMenus.Components.Breadcrumbs, "Breadcrumbs", url: "/Components/Breadcrumbs"),
                 new ApplicationMenuItem(BootstrapDemoMenus.Components.Buttons, "Buttons", url: "/Components/Buttons"),

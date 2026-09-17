@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to efficiently store and manage BLOBs in your applications using ABP Framework's built-in storage solutions and abstractions."
+}
+```
+
 # BLOB Storing
 
 It is typical to **store file contents** in an application and read these file contents on need. Not only files, but you may also need to save various types of **large binary objects**, a.k.a. [BLOB](https://en.wikipedia.org/wiki/Binary_large_object)s, into a **storage**. For example, you may want to save user profile pictures.
@@ -23,10 +30,25 @@ The ABP has already the following storage provider implementations:
 * [Minio](./minio.md): Stores BLOBs on the [MinIO Object storage](https://min.io/).
 * [Aws](./aws.md): Stores BLOBs on the [Amazon Simple Storage Service](https://aws.amazon.com/s3/).
 * [Google](./google.md): Stores BLOBs on the [Google Cloud Storage](https://cloud.google.com/storage).
+* [Bunny](./bunny.md): Stores BLOBs on the [Bunny.net Storage](https://bunny.net/storage/).
 
 More providers will be implemented by the time. You can [request](https://github.com/abpframework/abp/issues/new) it for your favorite provider or [create it yourself](./custom-provider.md) and [contribute](../../../contribution) to the ABP.
 
 Multiple providers **can be used together** by the help of the **container system**, where each container can uses a different provider.
+
+### S3 Compatibility
+
+The [AWS provider](./aws.md) supports not only Amazon S3 but also **S3-compatible APIs** from various cloud providers and self-hosted solutions. This means you can use the same AWS provider to connect to:
+
+* **Amazon S3** - The original AWS S3 service
+* **MinIO** - Self-hosted S3-compatible object storage
+* **Cloudflare R2** - Cloudflare's S3-compatible object storage
+* **DigitalOcean Spaces** - DigitalOcean's S3-compatible object storage
+* **Wasabi** - S3-compatible cloud storage
+* **Backblaze B2** - S3-compatible cloud storage
+* **Any other S3-compatible storage** - Including private cloud solutions
+
+To use S3-compatible services, configure the `ServiceURL` property in the AWS provider configuration to point to your S3-compatible endpoint. Some services (e.g., Cloudflare R2) also require `DisablePayloadSigning = true` because they do not implement the streaming chunked payload signing that AWS SDK v4 uses by default. See the [AWS provider document](aws.md) for full configuration examples.
 
 > BLOB storing system can not work unless you **configure a storage provider**. Refer to the linked documents for the storage provider configurations.
 
@@ -291,6 +313,44 @@ Configure<AbpBlobStoringOptions>(options =>
 
 > If your application is not multi-tenant, no worry, it works as expected. You don't need to configure the `IsMultiTenant` option.
 
+## Encrypting BLOBs
+
+The BLOB Storing system can **encrypt BLOBs at rest**, transparently, on top of the configured storage provider:
+
+````csharp
+Configure<AbpBlobStoringOptions>(options =>
+{
+    options.Containers.Configure<ProfilePictureContainer>(container =>
+    {
+        container.UseEncryption();
+    });
+});
+
+// A passphrase must be configured; see the encryption document
+Configure<AbpBlobStoringEncryptionOptions>(options =>
+{
+    options.DefaultPassPhrase = context.Configuration["MyApp:BlobPassPhrase"];
+});
+````
+
+The encryption passphrase can be container-specific or **global**, and per-tenant passphrases can be plugged in over the key provider; every BLOB derives its own encryption key from the passphrase. See the [BLOB Encryption document](./encryption.md) for details.
+
+## Transforming BLOB Content
+
+The BLOB content can be passed through a **pipeline of contributors** (compression, watermarking, content validation...) while it is saved and read, without changing the storage provider:
+
+````csharp
+Configure<AbpBlobStoringOptions>(options =>
+{
+    options.Containers.Configure<ProfilePictureContainer>(container =>
+    {
+        container.PipelineContributors.Add<GZipBlobPipelineContributor>();
+    });
+});
+````
+
+See the [BLOB Content Pipeline document](./pipeline.md) for details.
+
 ## Extending the BLOB Storing System
 
 Most of the times, you won't need to customize the BLOB storage system except [creating a custom BLOB storage provider](./custom-provider.md). However, you can replace any service (injected via [dependency injection](../../fundamentals/dependency-injection.md)), if you need. Here, some other services not mentioned above, but you may want to know:
@@ -306,4 +366,6 @@ If you want to create folders and move files between folders, assign permissions
 
 ## See Also
 
+* [BLOB Content Pipeline](./pipeline.md)
+* [BLOB Encryption](./encryption.md)
 * [Creating a custom BLOB storage provider](./custom-provider.md)

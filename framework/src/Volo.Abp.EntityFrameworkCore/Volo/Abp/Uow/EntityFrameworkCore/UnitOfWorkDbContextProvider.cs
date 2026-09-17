@@ -66,7 +66,7 @@ public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbCon
         var targetDbContextType = EfCoreDbContextTypeProvider.GetDbContextType(typeof(TDbContext));
         var connectionStringName = ConnectionStringNameAttribute.GetConnStringName(targetDbContextType);
         var connectionString = ResolveConnectionString(connectionStringName);
-        var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
+        var dbContextKey = GetDatabaseApiKey(targetDbContextType, connectionString);
 
         var databaseApi = unitOfWork.GetOrAddDatabaseApi(
             dbContextKey,
@@ -89,7 +89,7 @@ public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbCon
         var connectionStringName = ConnectionStringNameAttribute.GetConnStringName(targetDbContextType);
         var connectionString = await ResolveConnectionStringAsync(connectionStringName);
 
-        var dbContextKey = $"{targetDbContextType.FullName}_{connectionString}";
+        var dbContextKey = GetDatabaseApiKey(targetDbContextType, connectionString);
 
         var databaseApi = unitOfWork.FindDatabaseApi(dbContextKey);
 
@@ -164,7 +164,7 @@ public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbCon
     [Obsolete("Use CreateDbContextWithTransactionAsync.")]
     protected virtual TDbContext CreateDbContextWithTransaction(IUnitOfWork unitOfWork)
     {
-        var transactionApiKey = $"EntityFrameworkCore_{DbContextCreationContext.Current.ConnectionString}";
+        var transactionApiKey = GetTransactionApiKey(DbContextCreationContext.Current.ConnectionString);
         var activeTransaction = unitOfWork.FindTransactionApi(transactionApiKey) as EfCoreTransactionApi;
 
         if (activeTransaction == null)
@@ -256,7 +256,7 @@ public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbCon
 
     protected virtual async Task<TDbContext> CreateDbContextWithTransactionAsync(IUnitOfWork unitOfWork)
     {
-        var transactionApiKey = $"EntityFrameworkCore_{DbContextCreationContext.Current.ConnectionString}";
+        var transactionApiKey = GetTransactionApiKey(DbContextCreationContext.Current.ConnectionString);
         var activeTransaction = unitOfWork.FindTransactionApi(transactionApiKey) as EfCoreTransactionApi;
 
         if (activeTransaction == null)
@@ -349,6 +349,16 @@ public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbCon
 
             return dbContext;
         }
+    }
+
+    protected virtual string GetDatabaseApiKey(Type dbContextType, string? connectionString)
+    {
+        return $"{dbContextType.FullName}_{(connectionString ?? string.Empty).ToSha256()}";
+    }
+
+    protected virtual string GetTransactionApiKey(string? connectionString)
+    {
+        return $"EntityFrameworkCore_{(connectionString ?? string.Empty).ToSha256()}";
     }
 
     protected virtual async Task<string> ResolveConnectionStringAsync(string connectionStringName)

@@ -1,16 +1,12 @@
-import { LocalizationModule, ReplaceableTemplateDirective } from '@abp/ng.core';
-import { Component } from '@angular/core';
+import { LocalizationPipe, ReplaceableTemplateDirective } from '@abp/ng.core';
+import {Component, ChangeDetectionStrategy,} from '@angular/core';
 import { FeatureManagementComponent } from '../feature-management/feature-management.component';
 
 @Component({
-  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-feature-management-tab',
   templateUrl: './feature-management-tab.component.html',
-  imports: [
-    ReplaceableTemplateDirective,
-    LocalizationModule,
-    FeatureManagementComponent,
-  ],
+  imports: [ReplaceableTemplateDirective, LocalizationPipe, FeatureManagementComponent],
 })
 export class FeatureManagementTabComponent {
   visibleFeatures = false;

@@ -1,5 +1,6 @@
 ﻿using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Authorization;
 using Volo.Abp.Modularity;
@@ -24,7 +25,10 @@ public class AbpHangfireModule : AbpModule
             var options = serviceProvider.GetRequiredService<IOptions<AbpHangfireOptions>>().Value;
             return new AbpHangfireBackgroundJobServer(options.BackgroundJobServerFactory.Invoke(serviceProvider));
         });
+
+        context.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IPostConfigureOptions<AbpHangfireOptions>, AbpHangfireOptionsConfiguration>());
     }
+
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         _backgroundJobServer = context.ServiceProvider.GetRequiredService<AbpHangfireBackgroundJobServer>();

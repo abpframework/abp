@@ -1,7 +1,5 @@
 # What is Angular Schematics?
 
-![Cover Image](cover.png)
-
 **Angular Schematics** is a powerful tool which is part of the Angular CLI that allows developers to automate various development tasks by **generating and modifying code**. Schematics provides a way to create **templates and boilerplate code** for Angular applications or libraries, enabling consistency and reducing the amount of repetitive work.
 
 ### Key Concepts of Angular Schematics:

@@ -14,11 +14,7 @@ public interface IOpenIddictTokenRepository : IBasicRepository<OpenIddictToken, 
 
     Task DeleteManyByAuthorizationIdsAsync(Guid[] authorizationIds, bool autoSave = false, CancellationToken cancellationToken = default);
 
-    Task<List<OpenIddictToken>> FindAsync(string subject, Guid client, CancellationToken cancellationToken = default);
-
-    Task<List<OpenIddictToken>> FindAsync(string subject, Guid client, string status, CancellationToken cancellationToken = default);
-
-    Task<List<OpenIddictToken>> FindAsync(string subject, Guid client, string status, string type, CancellationToken cancellationToken = default);
+    Task<List<OpenIddictToken>> FindAsync(string subject, Guid? client, string status, string type, CancellationToken cancellationToken = default);
 
     Task<List<OpenIddictToken>> FindByApplicationIdAsync(Guid applicationId, CancellationToken cancellationToken = default);
 
@@ -34,5 +30,11 @@ public interface IOpenIddictTokenRepository : IBasicRepository<OpenIddictToken, 
 
     Task<long> PruneAsync(DateTime date, CancellationToken cancellationToken = default);
 
-    ValueTask<long> RevokeByAuthorizationIdAsync(Guid id, CancellationToken cancellationToken);
+    ValueTask<long> RevokeAsync(string subject, Guid? applicationId, string status, string type, CancellationToken cancellationToken = default);
+
+    ValueTask<long> RevokeByAuthorizationIdAsync(Guid id, CancellationToken cancellationToken = default);
+
+    ValueTask<long> RevokeByApplicationIdAsync(Guid applicationId, CancellationToken cancellationToken = default);
+
+    ValueTask<long> RevokeBySubjectAsync(string subject, CancellationToken cancellationToken = default);
 }

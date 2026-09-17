@@ -49,6 +49,11 @@
       },
       "x-prompt": "Please enter URL for API definition (default: API Name's url in environment file)"
     },
+    "resourceApi": {
+      "description": "Generate Resource API helpers for read endpoints",
+      "type": "boolean",
+      "default": false
+    },
     "entryPoint": {
       "description": "Target Angular project to place the generated code",
       "type": "string",

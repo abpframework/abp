@@ -23,8 +23,7 @@
                 <div class="col">
                     <div class="input-group mb-2">
                         <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
-                        <input type="text" class="form-control" id="permission-search" placeholder="Filter" aria-label="Username"
-                            aria-describedby="basic-addon1" />
+                        <input type="text" class="form-control" id="permission-search" placeholder="@L["Filter"].Value" />
                     </div>
                 </div>
                 <div class="col-auto">
@@ -35,7 +34,7 @@
                 </div>
             </div>
             <fieldset class="border rounded-4 p-3">
-                <legend class="px-1 h5 mb-0">Permission Group</legend>
+                <legend class="px-1 h5 mb-0">@L["PermissionGroup"].Value</legend>
 
                 <abp-tabs name="PermissionsTabs" class="lpx-scroll-pills-container" tab-style="PillVertical"
                     vertical-header-size="_4">
@@ -80,5 +79,3 @@
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
     </abp-modal>
 </form>
-
- 

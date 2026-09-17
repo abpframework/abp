@@ -8,5 +8,6 @@ public abstract class CmsKitPublicControllerBase : AbpController
 	public CmsKitPublicControllerBase()
 	{
 		LocalizationResource = typeof(CmsKitResource);
+		ObjectMapperContext = typeof(CmsKitPublicWebModule);
 	}
 }

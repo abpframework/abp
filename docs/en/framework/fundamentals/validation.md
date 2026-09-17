@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how ABP Framework enhances ASP.NET Core validation with automatic checks, localization, and FluentValidation integration for better input handling."
+}
+```
+
 # Validation
 
 Validation system is used to validate the user input or client request for a particular controller action or service method.
@@ -110,11 +117,11 @@ namespace Acme.BookStore
 }
 ````
 
-> ABP uses the [dynamic proxying / interception](../../dynamic-proxying-interceptors.md) system to perform the validation. In order to make it working, your method should be **virtual** or your service should be injected and used over an **interface** (like `IMyService`).
+> ABP uses the [dynamic proxying / interception](../infrastructure/interceptors.md) system to perform the validation. In order to make it working, your method should be **virtual** or your service should be injected and used over an **interface** (like `IMyService`).
 
 #### Enabling/Disabling Validation
 
-You can use the `[DisableValidation]` to disable it for methods, classs and properties.
+You can use the `[DisableValidation]` to disable it for methods, classes and properties.
 
 ````csharp
 [DisableValidation]
@@ -132,6 +139,25 @@ public class InputClass
 {
     [DisableValidation]
     public string MyProperty { get; set; }
+}
+````
+
+If a class that is subject to automatic validation (it implements `IValidationEnabled`, like application services do) has `[DisableValidation]`, add `[EnableValidation]` to a method to re-enable automatic validation for that method (`[EnableValidation]` does not activate validation for a class that isn't intercepted at all):
+
+````csharp
+using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Validation;
+
+[DisableValidation]
+public class MyService : IValidationEnabled, ITransientDependency
+{
+    [EnableValidation]
+    public virtual Task UpdateAsync(MyInput input)
+    {
+        //...
+        return Task.CompletedTask;
+    }
 }
 ````
 
@@ -172,6 +198,17 @@ public class MyObjectValidationContributor
 
 * Remember to register your class to the [DI](./dependency-injection.md) (implementing `ITransientDependency` does it just like in this example)
 * ABP will automatically discover your class and use on any type of object validation (including automatic method call validation).
+
+### Ignoring Types During Recursive Validation
+
+`AbpValidationOptions.IgnoredTypes` prevents the default data annotation contributor from descending into the properties of matching values during recursive validation. The data annotations on the matching value itself are still validated. Derived and implementing types are also matched.
+
+````csharp
+Configure<AbpValidationOptions>(options =>
+{
+    options.IgnoredTypes.Add(typeof(MyInfrastructureValue));
+});
+````
 
 ### IMethodInvocationValidator
 

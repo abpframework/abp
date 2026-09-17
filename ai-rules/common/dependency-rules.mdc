@@ -1,0 +1,153 @@
+---
+description: "ABP layer dependency rules and project structure guardrails"
+globs:
+  - "**/*.csproj"
+  - "**/*Module*.cs"
+alwaysApply: false
+---
+
+# ABP Dependency Rules
+
+## Core Principles (All Templates)
+
+These principles apply regardless of solution structure:
+
+1. **Domain logic never depends on infrastructure** (no DbContext in domain/application)
+2. **Use abstractions** (interfaces) for dependencies
+3. **Higher layers depend on lower layers**, never the reverse
+4. **Data access through repositories**, not direct DbContext
+
+## Layered Template Structure
+
+> **Note**: This section applies to layered templates (app, module). Single-layer and microservice templates have different structures.
+
+```
+Domain.Shared    → Constants, enums, localization keys
+       ↑
+    Domain       → Entities, repository interfaces, domain services
+       ↑
+Application.Contracts → App service interfaces, DTOs
+       ↑
+  Application    → App service implementations
+       ↑
+   HttpApi       → REST controllers (optional)
+       ↑
+     Host        → Final application with DI and middleware
+```
+
+### Layered Dependency Direction
+
+| Project | Can Reference | Referenced By |
+|---------|---------------|---------------|
+| Domain.Shared | Nothing | All |
+| Domain | Domain.Shared | Application, Data layer |
+| Application.Contracts | Domain.Shared | Application, HttpApi, Clients |
+| Application | Domain, Contracts | Host |
+| EntityFrameworkCore/MongoDB | Domain | Host only |
+| HttpApi | Contracts only | Host |
+
+## Critical Rules
+
+### ❌ Never Do
+```csharp
+// Application layer accessing DbContext directly
+public class BookAppService : ApplicationService
+{
+    private readonly MyDbContext _dbContext; // ❌ WRONG
+}
+
+// Domain depending on application layer
+public class BookManager : DomainService
+{
+    private readonly IBookAppService _appService; // ❌ WRONG
+}
+
+// HttpApi depending on Application implementation
+public class BookController : AbpController
+{
+    private readonly BookAppService _bookAppService; // ❌ WRONG - Use interface
+}
+```
+
+### ✅ Always Do
+```csharp
+// Application layer using repository abstraction
+public class BookAppService : ApplicationService
+{
+    private readonly IBookRepository _bookRepository; // ✅ CORRECT
+}
+
+// Domain service using domain abstractions
+public class BookManager : DomainService
+{
+    private readonly IBookRepository _bookRepository; // ✅ CORRECT
+}
+
+// HttpApi depending on contracts only
+public class BookController : AbpController
+{
+    private readonly IBookAppService _bookAppService; // ✅ CORRECT
+}
+```
+
+## Repository Pattern Enforcement
+
+### Interface Location
+```csharp
+// In Domain project
+public interface IBookRepository : IRepository<Book, Guid>
+{
+    Task<Book> FindByNameAsync(string name);
+}
+```
+
+### Implementation Location
+```csharp
+// In EntityFrameworkCore project
+public class BookRepository : EfCoreRepository<MyDbContext, Book, Guid>, IBookRepository
+{
+    // Implementation
+}
+
+// In MongoDB project
+public class BookRepository : MongoDbRepository<MyDbContext, Book, Guid>, IBookRepository
+{
+    // Implementation
+}
+```
+
+## Multi-Application Scenarios
+
+When you have multiple applications (e.g., Admin + Public API):
+
+### Vertical Separation
+```
+MyProject.Admin.Application      - Admin-specific services
+MyProject.Public.Application     - Public-specific services
+MyProject.Domain                 - Shared domain (both reference this)
+```
+
+### Rules
+- Admin and Public application layers **MUST NOT** reference each other
+- Share domain logic, not application logic
+- Each vertical can have its own DTOs even if similar
+
+## Enforcement Checklist (Layered Templates)
+
+When adding a new feature:
+1. **Entity changes?** → Domain project
+2. **Constants/enums?** → Domain.Shared project
+3. **Repository interface?** → Domain project (only if custom queries needed)
+4. **Repository implementation?** → EntityFrameworkCore/MongoDB project
+5. **DTOs and service interface?** → Application.Contracts project
+6. **Service implementation?** → Application project
+7. **API endpoint?** → HttpApi project (if not using auto API controllers)
+
+## Common Violations to Watch
+
+| Violation | Impact | Fix |
+|-----------|--------|-----|
+| DbContext in Application | Breaks DB independence | Use repository |
+| Entity in DTO | Exposes internals | Map to DTO |
+| IQueryable in interface | Breaks abstraction | Return concrete types |
+| Cross-module app service call | Tight coupling | Use events or domain |

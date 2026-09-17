@@ -58,3 +58,6 @@ Thumbs.db
 .angular
 
 .nx/
+
+vitest.config.*.timestamp*
+.claude/worktrees

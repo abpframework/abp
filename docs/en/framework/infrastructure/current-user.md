@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to access information about the logged-in user in your ABP Framework app using the ICurrentUser service."
+}
+```
+
 # Current User
 
 It is very common to retrieve the information about the logged in user in a web application. The current user is the active user related to the current request in a web application.
@@ -57,6 +64,8 @@ Here are the fundamental properties of the `ICurrentUser` interface:
 * **IsAuthenticated** (bool): Returns `true` if the current user has logged in (authenticated). If the user has not logged in then `Id` and `UserName` returns `null`.
 * **Id** (Guid?): Id of the current user. Returns `null`, if the current user has not logged in.
 * **UserName** (string): User name of the current user. Returns `null`, if the current user has not logged in.
+* **Name** (string): Name of the current user. Returns `null` if the corresponding claim is not available.
+* **SurName** (string): Surname of the current user. Returns `null` if the corresponding claim is not available.
 * **TenantId** (Guid?): Tenant Id of the current user, which can be useful for a [multi-tenant](../architecture/multi-tenancy) application. Returns `null`, if the current user is not assigned to a tenant.
 * **Email** (string): Email address of the current user.Returns `null`, if the current user has not logged in or not set an email address.
 * **EmailVerified** (bool): Returns `true`, if the email address of the current user has been verified.
@@ -84,6 +93,10 @@ Beside these standard methods, there are some extension methods:
 
 `ICurrentUser` works independently of how the user is authenticated or authorized. It seamlessly works with any authentication system that works with the current principal (see the section below).
 
+## ICurrentClient
+
+`ICurrentClient` provides the current client identity for machine-to-machine requests. Its `Id` property reads the `AbpClaimTypes.ClientId` claim, and `IsAuthenticated` is `true` when that claim exists. Inject this service when client credentials are used without a current user. The authorization system uses the same client ID claim for client permission checks.
+
 ## ICurrentPrincipalAccessor
 
 `ICurrentPrincipalAccessor` is the service that should be used (by the ABP and your application code) whenever the current principal of the current user is needed.
@@ -94,7 +107,7 @@ For a web application, it gets the `User` property of the current `HttpContext`.
 
 ### Basic Usage
 
-You can inject `ICurrentPrincipalAccessor` and use the `Principal` property to the the current principal:
+You can inject `ICurrentPrincipalAccessor` and use the `Principal` property to get the current principal:
 
 ````csharp
 public class MyService : ITransientDependency
@@ -138,7 +151,7 @@ public class MyAppService : ApplicationService
                 {
                     new Claim(AbpClaimTypes.UserId, Guid.NewGuid().ToString()),
                     new Claim(AbpClaimTypes.UserName, "john"),
-                    new Claim("MyCustomCliam", "42")
+                    new Claim("Claim", "42")
                 }
             )
         );
@@ -165,3 +178,24 @@ This can be a way to simulate a user login for a scope of the application code, 
 
 It is suggested to use properties of this class instead of magic strings for claim names.
 
+## IAbpClaimsPrincipalContributor
+
+Implement `IAbpClaimsPrincipalContributor` to add claims while `IAbpClaimsPrincipalFactory.CreateAsync` creates a principal. Conventionally registered implementations are discovered automatically:
+
+````csharp
+public class DepartmentClaimsPrincipalContributor :
+    IAbpClaimsPrincipalContributor,
+    ITransientDependency
+{
+    public Task ContributeAsync(
+        AbpClaimsPrincipalContributorContext context)
+    {
+        var identity = context.ClaimsPrincipal.Identities.FirstOrDefault();
+        identity?.AddClaim(new Claim("department", "sales"));
+
+        return Task.CompletedTask;
+    }
+}
+````
+
+This contributor runs during regular principal creation. Use `IAbpDynamicClaimsPrincipalContributor` when claims need to be refreshed by the [dynamic claims](../fundamentals/dynamic-claims.md) pipeline.

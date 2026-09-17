@@ -60,6 +60,9 @@
     "AddNew": "Přidat nový",
     "ProfilePicture": "Profilový obrázek",
     "Theme": "Téma",
-    "NotAssigned": "Nepřiřazena"
+    "NotAssigned": "Nepřiřazena",
+    "EntityActionsDisabledTooltip": "Nemáte oprávnění provést žádnou akci.",
+    "ResourcePermissions": "Oprávnění",
+    "ShowPassword": "Zobrazit heslo"
   }
 }

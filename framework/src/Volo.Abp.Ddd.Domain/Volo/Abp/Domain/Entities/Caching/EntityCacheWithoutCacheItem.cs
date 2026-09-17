@@ -7,17 +7,18 @@ namespace Volo.Abp.Domain.Entities.Caching;
 public class EntityCacheWithoutCacheItem<TEntity, TKey> :
     EntityCacheBase<TEntity, TEntity, TKey>
     where TEntity : Entity<TKey>
+    where TKey : notnull
 {
     public EntityCacheWithoutCacheItem(
         IReadOnlyRepository<TEntity, TKey> repository,
-        IDistributedCache<TEntity, TKey> cache,
+        IDistributedCache<EntityCacheItemWrapper<TEntity>, TKey> cache,
         IUnitOfWorkManager unitOfWorkManager)
         : base(repository, cache, unitOfWorkManager)
     {
     }
 
-    protected override TEntity? MapToCacheItem(TEntity? entity)
+    protected override EntityCacheItemWrapper<TEntity>? MapToCacheItem(TEntity? entity)
     {
-        return entity;
+         return new EntityCacheItemWrapper<TEntity>(entity);
     }
 }

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to customize ABP application modules by overriding services using dependency injection for tailored business logic."
+}
+```
+
 # Customizing the Application Modules: Overriding Services
 
 You may need to **change behavior (business logic)** of a depended module for your application. In this case, you can use the power of the [dependency injection system](../../../fundamentals/dependency-injection.md) to replace a service, controller or even a page model of the depended module by your own implementation.

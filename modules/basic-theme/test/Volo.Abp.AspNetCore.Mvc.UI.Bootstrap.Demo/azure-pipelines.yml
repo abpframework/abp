@@ -13,7 +13,7 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: 'volosoft-reg'
+  dockerRegistryServiceConnection: 'volosoft-reg1'
   workDir: '$(Build.SourcesDirectory)'
   bootstrapTaghelpersDir: '$(workDir)/abp/modules/basic-theme/test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo'
   # tag: $[replace(variables['Build.SourceBranch'], 'refs/tags/', '')]

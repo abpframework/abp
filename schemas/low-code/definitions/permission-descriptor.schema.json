@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "permission-descriptor.schema.json",
+  "title": "PermissionDescriptor",
+  "description": "Defines a custom permission created through the designer. Supports parent-child hierarchy.",
+  "markdownDescription": "AI guidance: use stable dot-separated permission names, for example `Acme.Events.Create`. Define a parent permission for the feature and child permissions for operations. Pages and endpoints can reference these names. Permission definitions only declare permissions; roles/users must still be granted permissions through permission management. Children inherit the parent `app` unless they set their own.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional schema reference used when this descriptor is stored as a model descriptor file."
+    },
+    "name": {
+      "type": "string",
+      "description": "Unique dot-separated permission name, for example 'Acme.Events.Create'.",
+      "minLength": 1
+    },
+    "app": {
+      "type": "string",
+      "description": "Name of the low-code app that owns this permission. Omit for the default app. Must match an apps[].name. Child permissions inherit it when omitted.",
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "displayName": {
+      "type": "string",
+      "description": "Human-readable display name shown in permission management UI.",
+      "minLength": 1
+    },
+    "children": {
+      "type": "array",
+      "description": "Child permissions forming a hierarchy. Use for feature -> operation grouping.",
+      "items": {
+        "$ref": "#"
+      }
+    },
+    "extendsLowerLayer": {
+      "type": "boolean",
+      "description": "When true, this descriptor overrides selected fields of a permission with the same name defined in a lower model layer; displayName becomes optional.",
+      "default": false
+    },
+    "metadata": {
+      "$ref": "descriptor-metadata.schema.json"
+    }
+  },
+  "required": ["name"],
+  "if": {
+    "properties": { "extendsLowerLayer": { "const": true } },
+    "required": ["extendsLowerLayer"]
+  },
+  "then": {},
+  "else": {
+    "required": ["displayName"]
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "name": "Acme.Events",
+      "displayName": "Events",
+      "children": [
+        { "name": "Acme.Events.Create", "displayName": "Create events" },
+        { "name": "Acme.Events.Update", "displayName": "Update events" },
+        { "name": "Acme.Events.Delete", "displayName": "Delete events" }
+      ]
+    }
+  ]
+}

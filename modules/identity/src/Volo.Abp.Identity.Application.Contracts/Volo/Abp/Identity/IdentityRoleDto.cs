@@ -1,10 +1,11 @@
 ﻿using System;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Auditing;
 
 namespace Volo.Abp.Identity;
 
-public class IdentityRoleDto : ExtensibleEntityDto<Guid>, IHasConcurrencyStamp
+public class IdentityRoleDto : ExtensibleEntityDto<Guid>, IHasConcurrencyStamp , IHasCreationTime
 {
     public string Name { get; set; }
 
@@ -15,4 +16,6 @@ public class IdentityRoleDto : ExtensibleEntityDto<Guid>, IHasConcurrencyStamp
     public bool IsPublic { get; set; }
 
     public string ConcurrencyStamp { get; set; }
+
+    public DateTime CreationTime { get; set; }
 }

@@ -55,19 +55,20 @@ $(function () {
 
                         await submitCoverImage();
 
-                        $formCreate.ajaxSubmit({
-                            success: function (result) {
-                                if (isTagsEnabled) {
-                                    submitEntityTags(result.id);
-                                }
-                                else {
-                                    finishSaving();
-                                }
-                            },
-                            error: function (result) {
-                                abp.notify.error(result.responseJSON.error.message);
-                                abp.ui.clearBusy();
+                        abp.ajax({
+                            url: $formCreate.attr("action"),
+                            data: new FormData($formCreate[0]),
+                            processData: false,
+                            contentType: false
+                        }).done(function (result) {
+                            if (isTagsEnabled) {
+                                submitEntityTags(result.id);
                             }
+                            else {
+                                finishSaving();
+                            }
+                        }).fail(function () {
+                            abp.ui.clearBusy();
                         });
                     }
                 }

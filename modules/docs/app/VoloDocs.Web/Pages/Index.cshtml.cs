@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
 using Volo.Docs;
-using Volo.Docs.Projects;
+using Volo.Docs.Common.Projects;
 
 namespace VoloDocs.Web.Pages
 {

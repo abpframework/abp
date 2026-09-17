@@ -67,7 +67,32 @@
     {
       "namespace": "Volo.Abp.OpenIddict.EntityFrameworkCore",
       "connectionStringName": "AbpOpenIddict",
-      "databaseTables": [],
+      "databaseTables": [
+        {
+          "entityFullName": "Volo.Abp.OpenIddict.Applications.OpenIddictApplication",
+          "contentType": "databaseTable",
+          "name": "Applications",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.OpenIddict.Authorizations.OpenIddictAuthorization",
+          "contentType": "databaseTable",
+          "name": "Authorizations",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.OpenIddict.Scopes.OpenIddictScope",
+          "contentType": "databaseTable",
+          "name": "Scopes",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.OpenIddict.Tokens.OpenIddictToken",
+          "contentType": "databaseTable",
+          "name": "Tokens",
+          "summary": null
+        }
+      ],
       "replacedDbContexts": [],
       "modelBuilderExtensionMethods": [
         {

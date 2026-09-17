@@ -1,5 +1,5 @@
-﻿using IdentityModel;
-using IdentityModel.Client;
+﻿using Duende.IdentityModel;
+using Duende.IdentityModel.Client;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;

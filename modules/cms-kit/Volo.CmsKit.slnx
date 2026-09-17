@@ -1,0 +1,51 @@
+<Solution>
+  <Folder Name="/host/">
+    <Project Path="host/Volo.CmsKit.Host.Shared/Volo.CmsKit.Host.Shared.csproj" />
+    <Project Path="host/Volo.CmsKit.HttpApi.Host/Volo.CmsKit.HttpApi.Host.csproj" />
+    <Project Path="host/Volo.CmsKit.IdentityServer/Volo.CmsKit.IdentityServer.csproj" />
+    <Project Path="host/Volo.CmsKit.Web.Host/Volo.CmsKit.Web.Host.csproj" />
+    <Project Path="host/Volo.CmsKit.Web.Unified/Volo.CmsKit.Web.Unified.csproj" />
+  </Folder>
+  <Folder Name="/src/" />
+  <Folder Name="/src/admin/">
+    <Project Path="src/Volo.CmsKit.Admin.Application.Contracts/Volo.CmsKit.Admin.Application.Contracts.csproj" />
+    <Project Path="src/Volo.CmsKit.Admin.Application/Volo.CmsKit.Admin.Application.csproj" />
+    <Project Path="src/Volo.CmsKit.Admin.HttpApi.Client/Volo.CmsKit.Admin.HttpApi.Client.csproj" />
+    <Project Path="src/Volo.CmsKit.Admin.HttpApi/Volo.CmsKit.Admin.HttpApi.csproj" />
+    <Project Path="src/Volo.CmsKit.Admin.Web/Volo.CmsKit.Admin.Web.csproj" />
+  </Folder>
+  <Folder Name="/src/core/">
+    <Project Path="src/Volo.CmsKit.Common.Application.Contracts/Volo.CmsKit.Common.Application.Contracts.csproj" />
+    <Project Path="src/Volo.CmsKit.Common.Application/Volo.CmsKit.Common.Application.csproj" />
+    <Project Path="src/Volo.CmsKit.Common.HttpApi.Client/Volo.CmsKit.Common.HttpApi.Client.csproj" />
+    <Project Path="src/Volo.CmsKit.Common.HttpApi/Volo.CmsKit.Common.HttpApi.csproj" />
+    <Project Path="src/Volo.CmsKit.Common.Web/Volo.CmsKit.Common.Web.csproj" />
+    <Project Path="src/Volo.CmsKit.Domain.Shared/Volo.CmsKit.Domain.Shared.csproj" />
+    <Project Path="src/Volo.CmsKit.Domain/Volo.CmsKit.Domain.csproj" />
+    <Project Path="src/Volo.CmsKit.EntityFrameworkCore/Volo.CmsKit.EntityFrameworkCore.csproj" />
+    <Project Path="src/Volo.CmsKit.Installer/Volo.CmsKit.Installer.csproj" />
+    <Project Path="src/Volo.CmsKit.MongoDB/Volo.CmsKit.MongoDB.csproj" />
+  </Folder>
+  <Folder Name="/src/public/">
+    <Project Path="src/Volo.CmsKit.Public.Application.Contracts/Volo.CmsKit.Public.Application.Contracts.csproj" />
+    <Project Path="src/Volo.CmsKit.Public.Application/Volo.CmsKit.Public.Application.csproj" />
+    <Project Path="src/Volo.CmsKit.Public.HttpApi.Client/Volo.CmsKit.Public.HttpApi.Client.csproj" />
+    <Project Path="src/Volo.CmsKit.Public.HttpApi/Volo.CmsKit.Public.HttpApi.csproj" />
+    <Project Path="src/Volo.CmsKit.Public.Web/Volo.CmsKit.Public.Web.csproj" />
+  </Folder>
+  <Folder Name="/src/unified/">
+    <Project Path="src/Volo.CmsKit.Application.Contracts/Volo.CmsKit.Application.Contracts.csproj" />
+    <Project Path="src/Volo.CmsKit.Application/Volo.CmsKit.Application.csproj" />
+    <Project Path="src/Volo.CmsKit.HttpApi.Client/Volo.CmsKit.HttpApi.Client.csproj" />
+    <Project Path="src/Volo.CmsKit.HttpApi/Volo.CmsKit.HttpApi.csproj" />
+    <Project Path="src/Volo.CmsKit.Web/Volo.CmsKit.Web.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Volo.CmsKit.Application.Tests/Volo.CmsKit.Application.Tests.csproj" />
+    <Project Path="test/Volo.CmsKit.Domain.Tests/Volo.CmsKit.Domain.Tests.csproj" />
+    <Project Path="test/Volo.CmsKit.EntityFrameworkCore.Tests/Volo.CmsKit.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="test/Volo.CmsKit.HttpApi.Client.ConsoleTestApp/Volo.CmsKit.HttpApi.Client.ConsoleTestApp.csproj" />
+    <Project Path="test/Volo.CmsKit.MongoDB.Tests/Volo.CmsKit.MongoDB.Tests.csproj" />
+    <Project Path="test/Volo.CmsKit.TestBase/Volo.CmsKit.TestBase.csproj" />
+  </Folder>
+</Solution>

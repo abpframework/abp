@@ -270,6 +270,7 @@ modules/blogging/app/Volo.BloggingTestApp/Logs/*.*
 modules/blogging/app/Volo.BloggingTestApp/wwwroot/files/*.*
 modules/docs/app/VoloDocs.Web/Logs/*.*
 modules/setting-management/app/Volo.Abp.SettingManagement.DemoApp/Logs/*.*
+modules/openiddict/app/OpenIddict.Demo.Server/wwwroot/libs/**
 templates/module/app/MyCompanyName.MyProjectName.DemoApp/Logs/*.*
 templates/module/aspnet-core/host/MyCompanyName.MyProjectName.Blazor.Server.Host/Logs/logs.txt
 templates/mvc/src/MyCompanyName.MyProjectName.Web/Logs/*.*
@@ -329,3 +330,4 @@ deploy/_run_all_log.txt
 templates/**/yarn.lock
 templates/app-nolayers/aspnet-core/MyCompanyName.MyProjectName.Mvc/Logs/logs.txt
 templates/module/aspnet-core/src/MyCompanyName.MyProjectName.Web/Properties/launchSettings.json
+**/.abpstudio/**

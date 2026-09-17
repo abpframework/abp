@@ -3,5 +3,6 @@ export enum eBindingSourceId {
   Model = 'ModelBinding',
   Path = 'Path',
   Query = 'Query',
+  Form = 'Form',
   FormFile = 'FormFile',
 }

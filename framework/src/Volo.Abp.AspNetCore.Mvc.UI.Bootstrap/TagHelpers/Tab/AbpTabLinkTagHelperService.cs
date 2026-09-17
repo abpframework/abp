@@ -35,7 +35,7 @@ public class AbpTabLinkTagHelperService : AbpTagHelperService<AbpTabLinkTagHelpe
             anchor.AddCssClass("dropdown-item");
             anchor.Attributes.Add("id", id);
             anchor.Attributes.Add("href", href);
-            anchor.InnerHtml.AppendHtml(title);
+            anchor.InnerHtml.Append(title);
 
             return anchor.ToHtmlString();
         }
@@ -45,7 +45,7 @@ public class AbpTabLinkTagHelperService : AbpTagHelperService<AbpTabLinkTagHelpe
             anchor.AddCssClass("nav-link " + AbpTabItemActivePlaceholder);
             anchor.Attributes.Add("id", id);
             anchor.Attributes.Add("href", href);
-            anchor.InnerHtml.AppendHtml(title);
+            anchor.InnerHtml.Append(title);
 
             var listItem = new TagBuilder("li");
             listItem.AddCssClass("nav-item");

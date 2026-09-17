@@ -33,6 +33,8 @@ public class PackageJsonFileFinder : ITransientDependency
 
         return
             Directory.GetFiles(directory, "*.csproj", searchOption: SearchOption.TopDirectoryOnly).Any() ||
-            File.Exists(Path.Combine(directory, "angular.json"));
+            File.Exists(Path.Combine(directory, "angular.json")) ||
+            File.Exists(Path.Combine(directory, "vite.config.ts")) ||
+            File.Exists(Path.Combine(directory, "next.config.ts"));
     }
 }

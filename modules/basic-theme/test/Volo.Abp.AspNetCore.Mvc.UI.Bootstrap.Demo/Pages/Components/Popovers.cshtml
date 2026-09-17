@@ -1,5 +1,6 @@
 ﻿@page
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Popover
 @model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.PopoversModel
 @{
     ViewData["Title"] = "Popovers";
@@ -69,3 +70,7 @@
         </abp-tabs>
     </div>
 </div>
+
+<hr />
+
+@await Component.InvokeAsync("TagHelperProperties", typeof(AbpPopoverTagHelper))

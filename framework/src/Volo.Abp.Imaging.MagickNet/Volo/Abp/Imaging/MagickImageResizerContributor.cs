@@ -29,7 +29,7 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
         {
             using var image = new MagickImage(memoryStream);
 
-            if (mimeType.IsNullOrWhiteSpace() && !CanResize(image.FormatInfo?.MimeType))
+            if (mimeType.IsNullOrWhiteSpace() && !CanResize(image.Format))
             {
                 return new ImageResizeResult<Stream>(stream, ImageProcessState.Unsupported);
             }
@@ -63,7 +63,7 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
 
         using var image = new MagickImage(bytes);
 
-        if (mimeType.IsNullOrWhiteSpace() && !CanResize(image.FormatInfo?.MimeType))
+        if (mimeType.IsNullOrWhiteSpace() && !CanResize(image.Format))
         {
             return Task.FromResult(new ImageResizeResult<byte[]>(bytes, ImageProcessState.Unsupported));
         }
@@ -73,15 +73,28 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
         return Task.FromResult(new ImageResizeResult<byte[]>(image.ToByteArray(), ImageProcessState.Done));
     }
 
-    protected virtual bool CanResize(string? mimeType)
+    protected virtual bool CanResize(string mimeType)
     {
-        return mimeType switch {
+        return mimeType.ToLowerInvariant() switch {
             MimeTypes.Image.Jpeg => true,
             MimeTypes.Image.Png => true,
             MimeTypes.Image.Gif => true,
             MimeTypes.Image.Bmp => true,
             MimeTypes.Image.Tiff => true,
             MimeTypes.Image.Webp => true,
+            _ => false
+        };
+    }
+
+    protected virtual bool CanResize(MagickFormat format)
+    {
+        return format switch {
+            MagickFormat.Jpeg => true,
+            MagickFormat.Png => true,
+            MagickFormat.Gif => true,
+            MagickFormat.Bmp => true,
+            MagickFormat.Tiff => true,
+            MagickFormat.WebP => true,
             _ => false
         };
     }
@@ -122,21 +135,21 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
     }
 
 
-    protected virtual int GetTargetHeight(ImageResizeArgs resizeArgs, int min, int sourceWidth, int sourceHeight)
+    protected virtual uint GetTargetHeight(ImageResizeArgs resizeArgs, uint min, uint sourceWidth, uint sourceHeight)
     {
         if (resizeArgs.Height == 0 && resizeArgs.Width > 0)
         {
-            return Math.Max(min, (int)Math.Round(sourceHeight * resizeArgs.Width / (float)sourceWidth));
+            return (uint) Math.Max(min, Math.Round(sourceHeight * resizeArgs.Width / (float)sourceWidth));
         }
 
         return resizeArgs.Height;
     }
 
-    protected virtual int GetTargetWidth(ImageResizeArgs resizeArgs, int min, int sourceWidth, int sourceHeight)
+    protected virtual uint GetTargetWidth(ImageResizeArgs resizeArgs, uint min, uint sourceWidth, uint sourceHeight)
     {
         if (resizeArgs.Width == 0 && resizeArgs.Height > 0)
         {
-            return Math.Max(min, (int)Math.Round(sourceWidth * resizeArgs.Height / (float)sourceHeight));
+            return (uint) Math.Max(min, Math.Round(sourceWidth * resizeArgs.Height / (float)sourceHeight));
         }
 
         return resizeArgs.Width;
@@ -180,11 +193,11 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
 
         if (percentHeight < percentWidth)
         {
-            newWidth = (int)Math.Round(sourceWidth * percentHeight);
+            newWidth = (uint)Math.Round(sourceWidth * percentHeight);
         }
         else
         {
-            newHeight = (int)Math.Round(sourceHeight * percentWidth);
+            newHeight = (uint)Math.Round(sourceHeight * percentWidth);
         }
 
         image.Resize(newWidth, newHeight);
@@ -205,8 +218,8 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
         var newWidth = targetWidth;
         var newHeight = targetHeight;
 
-        var boxPadWidth = targetWidth > 0 ? targetWidth : (int)Math.Round(sourceWidth * percentHeight);
-        var boxPadHeight = targetHeight > 0 ? targetHeight : (int)Math.Round(sourceHeight * percentWidth);
+        var boxPadWidth = targetWidth > 0 ? targetWidth : (uint)Math.Round(sourceWidth * percentHeight);
+        var boxPadHeight = targetHeight > 0 ? targetHeight : (uint)Math.Round(sourceHeight * percentWidth);
 
         if (sourceWidth < boxPadWidth && sourceHeight < boxPadHeight)
         {
@@ -235,11 +248,11 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
 
         if (imageRatio < ratio)
         {
-            targetHeight = (int)(sourceHeight * percentWidth);
+            targetHeight = (uint)(sourceHeight * percentWidth);
         }
         else
         {
-            targetWidth = (int)(sourceWidth * percentHeight);
+            targetWidth = (uint)(sourceWidth * percentHeight);
         }
 
         image.Resize(targetWidth, targetHeight);
@@ -269,21 +282,21 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
 
             if (widthDiff > heightDiff)
             {
-                targetWidth = (int)Math.Round(targetHeight / imageRatio);
+                targetWidth = (uint)Math.Round(targetHeight / imageRatio);
             }
             else if (widthDiff < heightDiff)
             {
-                targetHeight = (int)Math.Round(targetWidth * imageRatio);
+                targetHeight = (uint)Math.Round(targetWidth * imageRatio);
             }
             else
             {
                 if (targetHeight > targetWidth)
                 {
-                    targetWidth = (int)Math.Round(sourceHeight * percentWidth);
+                    targetWidth = (uint)Math.Round(sourceHeight * percentWidth);
                 }
                 else
                 {
-                    targetHeight = (int)Math.Round(sourceHeight * percentWidth);
+                    targetHeight = (uint)Math.Round(sourceHeight * percentWidth);
                 }
             }
         }
@@ -312,12 +325,12 @@ public class MagickImageResizerContributor : IImageResizerContributor, ITransien
             Gravity.Center);
     }
 
-    protected virtual float CalculatePercent(int imageHeightOrWidth, int heightOrWidth)
+    protected virtual float CalculatePercent(uint imageHeightOrWidth, uint heightOrWidth)
     {
         return heightOrWidth / (float)imageHeightOrWidth;
     }
 
-    protected virtual float CalculateRatio(int width, int height)
+    protected virtual float CalculateRatio(uint width, uint height)
     {
         return height / (float)width;
     }

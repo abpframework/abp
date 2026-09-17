@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp.AspNetCore.Bundling;
 using Volo.Abp.AspNetCore.Components.Web.Theming.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Components.Server.Theming.Bundling;

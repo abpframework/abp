@@ -120,6 +120,12 @@ After these configurations, you should create a migration and apply it to your d
 
 However, this solution comes with some problems, for example, by using non-deterministic collations, it's not yet possible to use pattern-matching operators such as `LIKE` on columns. This is a huge problem because it makes it hard to use LINQ. For example, you can't use the `.EndsWith` or `.StartsWith` methods, because they are [translated to `LIKE` command on the SQL level](https://www.npgsql.org/efcore/mapping/translations.html).
 
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
+
 ## Conclusion
 
 In PostgreSQL, you can perform case-insensitive searches by using the `citext` data type or by utilizing collation settings. Nevertheless, if you have an ABP-based PostgreSQL application or a plain .NET application with PostgreSQL as the database option, to make a decision to pick one of these options, you can follow the following points:

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination;
@@ -11,6 +12,7 @@ using Volo.Abp.VirtualFileSystem.Embedded;
 
 namespace Volo.Abp.VirtualFileExplorer.Web.Pages.VirtualFileExplorer;
 
+[Authorize(VirtualFileExplorerPermissions.View)]
 public class IndexModel : VirtualFileExplorerPageModel
 {
     [BindProperty(SupportsGet = true)]

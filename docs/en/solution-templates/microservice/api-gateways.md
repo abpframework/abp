@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement API Gateways in your ABP microservice solution, providing a single entry point for diverse client applications."
+}
+```
+
 # Microservice Solution: API Gateways
 
 ````json

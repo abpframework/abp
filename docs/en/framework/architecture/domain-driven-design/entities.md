@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn about entities in DDD, their structure, and best practices for using GUID keys in the ABP Framework for effective data modeling."
+}
+```
+
 # Entities
 
 Entities are one of the core concepts of DDD (Domain Driven Design). Eric Evans describes  it as "*An object that is not fundamentally defined by its attributes, but rather by a thread of continuity and identity*".
@@ -127,6 +134,29 @@ if (book1.EntityEquals(book2)) //Check equality
     ...
 }
 ```
+
+### `IKeyedObject` Interface
+
+ABP entities implement the `IKeyedObject` interface, which provides a way to get the entity's primary key as a string:
+
+```csharp
+public interface IKeyedObject
+{
+    string? GetObjectKey();
+}
+```
+
+The `GetObjectKey()` method returns a string representation of the entity's primary key. For entities with a single key (like `Entity<Guid>` or `Entity<int>`), it returns the `Id` property converted to a string. For entities with composite keys, it returns the keys combined with a comma separator.
+
+This interface is particularly useful for scenarios where you need to identify an entity by its key in a type-agnostic way, such as:
+
+* **Resource-based authorization**: When checking or granting permissions for specific entity instances
+* **Caching**: When creating cache keys based on entity identifiers
+* **Logging and auditing**: When recording entity identifiers in a consistent format
+
+Since all ABP entities implement this interface through the `IEntity` interface, you can use `GetObjectKey()` on any entity without additional implementation.
+
+> See the [Resource-Based Authorization](../../fundamentals/authorization/resource-based-authorization.md) documentation for a practical example of using `IKeyedObject` with the permission system.
 
 ## AggregateRoot Class
 

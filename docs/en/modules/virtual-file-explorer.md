@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to install and use the Virtual File Explorer Module in your ABP Framework application to easily manage files in a virtual file system."
+}
+```
+
 # Virtual File Explorer Module
 
 ## What is Virtual File Explorer Module?
@@ -24,7 +31,7 @@ Or you can also manually install nuget package to `Acme.MyProject.Web` project:
 
 * Install [Volo.Abp.VirtualFileExplorer.Web](https://www.nuget.org/packages/Volo.Abp.VirtualFileExplorer.Web/) nuget package to `Acme.MyProject.Web` project.
 
-  `Install-Package Volo.Abp.VirtualFileExplorer.Web`
+  `dotnet add package Volo.Abp.VirtualFileExplorer.Web`
 
 ##### 2.1- Adding Module Dependencies
 
@@ -48,7 +55,7 @@ Or you can also manually install nuget package to `Acme.MyProject.Web` project:
 
 ##### 2.2- Adding NPM Package
 
- * Open `package.json` and add `@abp/virtual-file-explorer": "^2.9.0` as shown below:
+ * Open `package.json` and add `@abp/virtual-file-explorer` with the same version as the other `@abp` packages, as shown below:
 
   ```json
     {
@@ -56,8 +63,8 @@ Or you can also manually install nuget package to `Acme.MyProject.Web` project:
         "name": "my-app",
         "private": true,
         "dependencies": {
-            "@abp/aspnetcore.mvc.ui.theme.basic": "^2.9.0",
-            "@abp/virtual-file-explorer": "^2.9.0"
+            "@abp/aspnetcore.mvc.ui.theme.basic": "~10.6.0",
+            "@abp/virtual-file-explorer": "~10.6.0"
         }
     }
   ```

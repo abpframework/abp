@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to configure Aliyun Blob storage with the ABP Framework for efficient BLOB storage in your applications."
+}
+```
+
 # BLOB Storing Aliyun Provider
 
 BLOB Storing Aliyun Provider can store BLOBs in [Aliyun Blob storage](https://help.aliyun.com/product/31815.html).

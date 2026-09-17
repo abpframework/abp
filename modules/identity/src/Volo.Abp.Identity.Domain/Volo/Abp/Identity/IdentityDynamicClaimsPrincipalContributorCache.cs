@@ -58,9 +58,9 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
             return emptyCacheItem;
         }
 
-        return await DynamicClaimCache.GetOrAddAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId), async () =>
+        using (CurrentTenant.Change(tenantId))
         {
-            using (CurrentTenant.Change(tenantId))
+            return await DynamicClaimCache.GetOrAddAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId), async () =>
             {
                 Logger.LogDebug($"Filling dynamic claims cache for user: {userId}");
 
@@ -82,11 +82,11 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
                 }
 
                 return dynamicClaims;
-            }
-        }, () => new DistributedCacheEntryOptions
-        {
-            AbsoluteExpirationRelativeToNow = CacheOptions.Value.CacheAbsoluteExpiration
-        });
+            }, () => new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = CacheOptions.Value.CacheAbsoluteExpiration
+            });
+        }
     }
 
     public virtual async Task ClearAsync(Guid userId, Guid? tenantId = null)

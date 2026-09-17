@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate Azure Service Bus as a distributed event bus provider in your ABP Framework project with this comprehensive guide."
+}
+```
+
 # Distributed Event Bus Azure Integration
 
 > This document explains **how to configure the [Azure Service Bus](https://azure.microsoft.com/en-us/services/service-bus/)** as the distributed event bus provider. See the [distributed event bus document](../distributed) to learn how to use the distributed event bus system
@@ -35,7 +42,8 @@ This is the simplest way to configure the Azure Service Bus settings. It is also
     "EventBus": {
       "ConnectionName": "Default",
       "SubscriberName": "MySubscriberName",
-      "TopicName": "MyTopicName"
+      "TopicName": "MyTopicName",
+      "IsServiceBusDisabled": false
     }
   }
 }
@@ -117,6 +125,8 @@ You can use any of the [ServiceBusAdministrationClientOptions](https://docs.micr
 
 `AbpAzureServiceBusOptions` and `AbpAzureEventBusOptions` classes can be used to configure the connection strings and event bus options for Azure Service Bus.
 
+Set `AbpAzureEventBusOptions.IsServiceBusDisabled` to `true`, or set `Azure:EventBus:IsServiceBusDisabled` in the configuration, to skip Azure Service Bus initialization. The default value is `false`.
+
 You can configure this options inside the `ConfigureServices` of your [module](../../../architecture/modularity/basics.md).
 
 **Example: Configure the connection**
@@ -127,6 +137,16 @@ Configure<AbpAzureServiceBusOptions>(options =>
     options.Connections.Default.ConnectionString = "Endpoint=sb://sb-my-app.servicebus.windows.net/;SharedAccessKeyName={%{{{Policy Name}}}%};SharedAccessKey={}";
     options.Connections.Default.Admin.Retry.MaxRetries = 3;
     options.Connections.Default.Client.RetryOptions.MaxRetries = 1;
+});
+````
+
+Use `TokenCredential` instead of `ConnectionString` if you want to use custom credential.
+
+````csharp
+Configure<AbpAzureServiceBusOptions>(options =>
+{
+    options.Connections.Default.FullyQualifiedNamespace = "sb-my-app.servicebus.windows.net";
+    options.Connections.Default.TokenCredential = new DefaultAzureCredential();
 });
 ````
 

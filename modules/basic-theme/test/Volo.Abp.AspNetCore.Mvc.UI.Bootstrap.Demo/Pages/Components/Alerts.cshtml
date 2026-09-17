@@ -1,5 +1,6 @@
 ﻿@page
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Alert
 @model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.AlertsModel
 @{
     ViewData["Title"] = "Alerts";
@@ -259,3 +260,7 @@
         </abp-tabs>
     </div>
 </div>
+
+<hr />
+
+@await Component.InvokeAsync("TagHelperProperties", typeof(AbpAlertTagHelper))

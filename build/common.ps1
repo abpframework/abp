@@ -34,11 +34,13 @@ if ($full -eq "-f")
 		"../templates/module/aspnet-core",
 		"../templates/app/aspnet-core",
 		"../templates/console",
-		"../templates/wpf",
 		"../templates/app-nolayers/aspnet-core",
 		"../abp_io/AbpIoLocalization",
 		"../source-code"
-	) 
+	)
+	if ($env:OS -eq "Windows_NT") {
+		$solutionPaths += "../templates/wpf"
+	}
 }else{ 
 	Write-host ""
 	Write-host ":::::::::::::: !!! You are in development mode !!! ::::::::::::::" -ForegroundColor red -BackgroundColor  yellow

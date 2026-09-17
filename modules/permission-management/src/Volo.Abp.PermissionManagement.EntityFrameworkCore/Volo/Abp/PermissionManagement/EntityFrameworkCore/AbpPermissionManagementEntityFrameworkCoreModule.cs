@@ -17,6 +17,7 @@ public class AbpPermissionManagementEntityFrameworkCoreModule : AbpModule
             options.AddRepository<PermissionGroupDefinitionRecord, EfCorePermissionGroupDefinitionRecordRepository>();
             options.AddRepository<PermissionDefinitionRecord, EfCorePermissionDefinitionRecordRepository>();
             options.AddRepository<PermissionGrant, EfCorePermissionGrantRepository>();
+            options.AddRepository<ResourcePermissionGrant, EfCoreResourcePermissionGrantRepository>();
         });
     }
 }

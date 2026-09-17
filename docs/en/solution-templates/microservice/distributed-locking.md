@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement distributed locking in ABP Framework microservices using Redis to ensure safe operation execution across instances."
+}
+```
+
 # Microservice Solution: Distributed Locking
 
 ````json

@@ -75,7 +75,7 @@ public class AbpHybridCache<TCacheItem, TCacheKey> : IHybridCache<TCacheItem, TC
 
     protected HybridCache HybridCache { get; }
 
-    protected IDistributedCache DistributedCacheCache { get; }
+    protected IDistributedCache DistributedCache { get; }
 
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
@@ -105,7 +105,7 @@ public class AbpHybridCache<TCacheItem, TCacheKey> : IHybridCache<TCacheItem, TC
         ServiceProvider = serviceProvider;
         DistributedCacheOption = distributedCacheOption.Value;
         HybridCache = hybridCache;
-        DistributedCacheCache = distributedCache;
+        DistributedCache = distributedCache;
         CancellationTokenProvider = cancellationTokenProvider;
         Logger = NullLogger<AbpHybridCache<TCacheItem, TCacheKey>>.Instance;
         KeyNormalizer = keyNormalizer;
@@ -215,10 +215,15 @@ public class AbpHybridCache<TCacheItem, TCacheKey> : IHybridCache<TCacheItem, TC
                     }
                 }
 
-                var bytes = await DistributedCacheCache.GetAsync(NormalizeKey(key), token);
-                if (bytes != null)
+                if (await DistributedCache.GetAsync(NormalizeKey(key), token) != null)
                 {
-                    return ResolveSerializer().Deserialize(new ReadOnlySequence<byte>(bytes, 0, bytes.Length));;
+                    // Because HybridCache wraps the cache in L2(distributed cache), we can’t unwrap it directly and can only retrieve the value through its API
+                    return await HybridCache.GetOrCreateAsync(
+                        key: NormalizeKey(key),
+                        factory: async cancel => await factory(),
+                        options: optionsFactory?.Invoke(),
+                        tags: null,
+                        cancellationToken: token);
                 }
 
                 value = await factory();

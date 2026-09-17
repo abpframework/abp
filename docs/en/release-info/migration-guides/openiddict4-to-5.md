@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover the essential changes for migrating from OpenIddict 4.x to 5.x, including new features and critical updates for a smooth transition."
+}
+```
+
 # OpenIddict 4.x to 5.x Migration Guide
 
 The 5.0 release of OpenIddict is a major release that introduces breaking changes.

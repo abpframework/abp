@@ -1,8 +1,9 @@
-@using Volo.Abp
+@using Microsoft.AspNetCore.Components
 @implements IDisposable
 @inject IComponentBundleManager BundleManager
-@inject PersistentComponentState PersistentComponentState
-
+@inject PersistentComponentState ApplicationState
+@inject NavigationManager NavigationManager
+@inject IComponentBundleUrlBuilder BundleUrlBuilder
 @if (ScriptFiles != null)
 {
     foreach (var file in ScriptFiles)
@@ -12,45 +13,58 @@
 }
 
 @code {
+
+    private const string PrerenderedKey = "abp_script_prerendered";
+
     [Parameter]
     public List<string>? WebAssemblyScriptFiles { get; set; }
 
     [Parameter]
     public string? BundleName { get; set; }
 
+    [Parameter]
+    public string? AppBasePath { get; set; }
+
     private List<string>? ScriptFiles { get; set; }
 
-    private PersistingComponentStateSubscription persistingSubscription;
+    private PersistingComponentStateSubscription _persistingSubscription;
 
     protected override async Task OnInitializedAsync()
     {
-        if (BundleName == null)
+        _persistingSubscription = ApplicationState.RegisterOnPersisting(Callback);
+        if (!ApplicationState.TryTakeFromJson<string>(PrerenderedKey, out _))
         {
-            throw new AbpException("The BundleName parameter of the AbpScripts component can not be null!");
-        }
-
-        persistingSubscription = PersistentComponentState.RegisterOnPersisting(PersistScriptFiles);
-
-        if (PersistentComponentState.TryTakeFromJson<List<string>>(nameof(ScriptFiles), out var restoredStyleFiles))
-        {
-            ScriptFiles = restoredStyleFiles;
+            // We are in prerendering mode
+            if (!BundleName.IsNullOrWhiteSpace())
+            {
+                var rawFiles = await BundleManager.GetScriptBundleFilesAsync(BundleName!);
+                ScriptFiles = await ResolveAsync(rawFiles);
+            }
         }
         else
         {
-            ScriptFiles = (await BundleManager.GetScriptBundleFilesAsync(BundleName!)).ToList();
-        }
-
-        if (WebAssemblyScriptFiles != null)
-        {
-            ScriptFiles?.AddRange(WebAssemblyScriptFiles);
+            if (OperatingSystem.IsBrowser() && WebAssemblyScriptFiles != null)
+            {
+                ScriptFiles = await ResolveAsync(WebAssemblyScriptFiles);
+            }
         }
     }
 
-    private Task PersistScriptFiles()
+    private async Task<List<string>> ResolveAsync(IReadOnlyList<string> files)
     {
-        PersistentComponentState.PersistAsJson(nameof(ScriptFiles), ScriptFiles);
+        var resolved = new List<string>(files.Count);
+        foreach (var file in files)
+        {
+            resolved.Add(await BundleUrlBuilder.BuildAsync(file, AppBasePath, NavigationManager.BaseUri));
+        }
+        return resolved;
+    }
+
+    private Task Callback()
+    {
+        ApplicationState.PersistAsJson(PrerenderedKey, PrerenderedKey);
         return Task.CompletedTask;
     }
 
-    public void Dispose() => persistingSubscription.Dispose();
+    public void Dispose() => _persistingSubscription.Dispose();
 }

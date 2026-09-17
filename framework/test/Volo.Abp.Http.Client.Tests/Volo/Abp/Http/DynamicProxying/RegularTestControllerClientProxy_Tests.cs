@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -97,6 +98,14 @@ public class RegularTestControllerClientProxy_Tests : AbpHttpClientTestBase
     }
 
     [Fact]
+    public async Task QueryObjectWithBodyAsync()
+    {
+        var result = await _controller.QueryObjectWithBodyAsync(new Car { Year = 1976, Model = "Ford", FirstReleaseDate = new DateTime(1976, 02, 22, 15, 0, 6, 22) });
+        result.Year.ShouldBe(1976);
+        result.Model.ShouldBe("Ford");
+    }
+
+    [Fact]
     public async Task PostObjectWithQueryAsync_With_Different_Culture()
     {
         using (CultureHelper.Use("tr"))
@@ -186,5 +195,12 @@ public class RegularTestControllerClientProxy_Tests : AbpHttpClientTestBase
 
         var exception = await Assert.ThrowsAsync<AbpRemoteCallException>(async () => await _controller.AbortRequestAsync(cts.Token));
         exception.InnerException.InnerException.InnerException.Message.ShouldBe("The client aborted the request.");
+    }
+
+    [Fact]
+    public async Task TimeOutRequestAsync()
+    {
+        var exception = await Assert.ThrowsAsync<HttpRequestException>(async () => await _controller.TimeOutRequestAsync());
+        exception.InnerException.InnerException.Message.ShouldBe("The client aborted the request.");
     }
 }

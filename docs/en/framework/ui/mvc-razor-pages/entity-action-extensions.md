@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enhance your ASP.NET Core UI with custom entity action extensions, enabling tailored user interactions for improved functionality."
+}
+```
+
 # Entity Action Extensions for ASP.NET Core UI
 
 ## Introduction

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -13,6 +14,8 @@ public class AbpSelectTagHelper : AbpTagHelper<AbpSelectTagHelper, AbpSelectTagH
     public string? Label { get; set; }
 
     public bool SuppressLabel { get; set; }
+
+    public Type? EnumType { get; set; }
 
     public IEnumerable<SelectListItem>? AspItems { get; set; }
 

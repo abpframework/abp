@@ -1,0 +1,68 @@
+@using MudBlazor
+
+<MudDialog @bind-Visible="@_visible" Options="@_dialogOptions">
+    <TitleContent>
+        @if (!string.IsNullOrEmpty(Title))
+        {
+            <MudText Typo="Typo.h6">@Title</MudText>
+        }
+    </TitleContent>
+    <DialogContent>
+        <div class="d-flex flex-column align-center">
+            @if (ShowMessageIcon)
+            {
+                <MudIcon Icon="@MessageIcon"
+                         Color="@MessageIconColor"
+                         Size="Size.Large"
+                         Class="mb-4" />
+            }
+            <MudText Typo="Typo.body1" Align="Align.Center" Style="white-space: break-spaces;">
+                @if (!IsMessageHtmlMarkup)
+                {
+                    @Message
+                }
+                else
+                {
+                    @((MarkupString)Message)
+                }
+            </MudText>
+        </div>
+    </DialogContent>
+    <DialogActions>
+        <div class="d-flex justify-center gap-2 w-100">
+            @if (IsConfirmation)
+            {
+                <MudButton Variant="Variant.Outlined"
+                           Color="Color.Primary"
+                           OnClick="@OnCancelClicked">
+                    @if (Options?.CancelButtonIcon != null)
+                    {
+                        <MudIcon Icon="@Options.CancelButtonIcon.ToString()" Class="me-2" />
+                    }
+                    @CancelButtonText
+                </MudButton>
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           OnClick="@OnConfirmClicked">
+                    @if (Options?.ConfirmButtonIcon != null)
+                    {
+                        <MudIcon Icon="@Options.ConfirmButtonIcon.ToString()" Class="me-2" />
+                    }
+                    @ConfirmButtonText
+                </MudButton>
+            }
+            else
+            {
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           OnClick="@OnOkClicked">
+                    @if (Options?.OkButtonIcon != null)
+                    {
+                        <MudIcon Icon="@Options.OkButtonIcon.ToString()" Class="me-2" />
+                    }
+                    @OkButtonText
+                </MudButton>
+            }
+        </div>
+    </DialogActions>
+</MudDialog>

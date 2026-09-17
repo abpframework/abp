@@ -42,6 +42,7 @@ export interface ApplicationLocalizationConfigurationDto {
   defaultResourceName?: string;
   languagesMap: Record<string, NameValue[]>;
   languageFilesMap: Record<string, NameValue[]>;
+  useRouteBasedCulture: boolean;
 }
 
 export interface ApplicationLocalizationDto {

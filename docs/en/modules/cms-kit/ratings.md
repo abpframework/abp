@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to implement and manage a flexible rating system in CMS Kit, perfect for enhancing user engagement on your resources."
+}
+```
+
 # CMS Kit: Rating System
 
 CMS Kit provides a **rating** system to to add ratings feature to any kind of resource like blog posts, comments, etc. Here how the rating component looks like on a sample page:
@@ -48,6 +55,8 @@ The ratings system provides a rating widget to allow users send ratings to resou
 
 `entityType` was explained in the previous section. `entityId` should be the unique id of the product, in this example. If you have a Product entity, you can use its Id here.
 
+Reading grouped rating counts is anonymous. Creating, changing or deleting a rating requires an authenticated user. A user has at most one rating for an entity; submitting another value updates that rating. The built-in range is one through five stars.
+
 # Internals
 
 ## Domain Layer
@@ -74,7 +83,7 @@ Following custom repositories are defined for this feature:
 
 This module follows the [Domain Services Best Practices & Conventions](../../framework/architecture/best-practices/domain-services.md) guide.
 
-##### Reaction Manager
+##### Rating Manager
 
 `RatingManager` is used to perform some operations for the `Rating` aggregate root.
 
@@ -90,7 +99,7 @@ This module follows the [Domain Services Best Practices & Conventions](../../fra
 
 ##### Table / collection prefix & schema
 
-All tables/collections use the `Cms` prefix by default. Set static properties on the `CmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
+All tables/collections use the `Cms` prefix by default. Set static properties on the `AbpCmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
 
 ##### Connection string
 

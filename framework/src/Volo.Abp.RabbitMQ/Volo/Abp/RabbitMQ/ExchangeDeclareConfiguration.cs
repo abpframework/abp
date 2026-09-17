@@ -12,19 +12,19 @@ public class ExchangeDeclareConfiguration
 
     public bool AutoDelete { get; set; }
 
-    public IDictionary<string, object> Arguments { get; }
+    public IDictionary<string, object?> Arguments { get; }
 
     public ExchangeDeclareConfiguration(
         string exchangeName,
         string type,
         bool durable = false,
         bool autoDelete = false,
-        IDictionary<string, object>? arguments = null)
+        IDictionary<string, object?>? arguments = null)
     {
         ExchangeName = exchangeName;
         Type = type;
         Durable = durable;
         AutoDelete = autoDelete;
-        Arguments = arguments?? new Dictionary<string, object>();
+        Arguments = arguments?? new Dictionary<string, object?>();
     }
 }

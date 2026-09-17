@@ -27,7 +27,7 @@ public class MongoPersistentGrantRepository : MongoDbRepository<IAbpIdentityServ
 
     public virtual async Task<PersistedGrant> FindByKeyAsync(string key, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .Where(x => x.Key == key)
             .OrderBy(x => x.Id)
             .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
@@ -35,7 +35,7 @@ public class MongoPersistentGrantRepository : MongoDbRepository<IAbpIdentityServ
 
     public virtual async Task<List<PersistedGrant>> GetListBySubjectIdAsync(string subjectId, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .Where(x => x.SubjectId == subjectId)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
@@ -43,7 +43,7 @@ public class MongoPersistentGrantRepository : MongoDbRepository<IAbpIdentityServ
     public virtual async Task<List<PersistedGrant>> GetListByExpirationAsync(DateTime maxExpirationDate, int maxResultCount,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .Where(x => x.Expiration != null && x.Expiration < maxExpirationDate)
             .OrderBy(x => x.ClientId)
             .Take(maxResultCount)
@@ -87,18 +87,17 @@ public class MongoPersistentGrantRepository : MongoDbRepository<IAbpIdentityServ
         );
     }
 
-    private async Task<IMongoQueryable<PersistedGrant>> FilterAsync(
+    private async Task<IQueryable<PersistedGrant>> FilterAsync(
         string subjectId,
         string sessionId,
         string clientId,
         string type,
         CancellationToken cancellationToken = default)
     {
-        return (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf<PersistedGrant, IMongoQueryable<PersistedGrant>>(!subjectId.IsNullOrWhiteSpace(), x => x.SubjectId == subjectId)
-            .WhereIf<PersistedGrant, IMongoQueryable<PersistedGrant>>(!sessionId.IsNullOrWhiteSpace(), x => x.SessionId == sessionId)
-            .WhereIf<PersistedGrant, IMongoQueryable<PersistedGrant>>(!clientId.IsNullOrWhiteSpace(), x => x.ClientId == clientId)
-            .WhereIf<PersistedGrant, IMongoQueryable<PersistedGrant>>(!type.IsNullOrWhiteSpace(), x => x.Type == type)
-            .As<IMongoQueryable<PersistedGrant>>();
+        return (await GetQueryableAsync(cancellationToken))
+            .WhereIf(!subjectId.IsNullOrWhiteSpace(), x => x.SubjectId == subjectId)
+            .WhereIf(!sessionId.IsNullOrWhiteSpace(), x => x.SessionId == sessionId)
+            .WhereIf(!clientId.IsNullOrWhiteSpace(), x => x.ClientId == clientId)
+            .WhereIf(!type.IsNullOrWhiteSpace(), x => x.Type == type);
     }
 }

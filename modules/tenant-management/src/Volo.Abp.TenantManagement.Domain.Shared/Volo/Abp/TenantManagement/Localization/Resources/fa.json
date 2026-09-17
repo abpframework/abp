@@ -15,7 +15,7 @@
     "Permission:Edit": "ویرایش",
     "Permission:Delete": "حذف",
     "Permission:ManageConnectionStrings": "مدیریت کانکشن استرینگها",
-    "Permission:ManageFeatures": "مدیریت ویژگی ها",
+    "Permission:ManageFeatures": "ویژگی‌ها",
     "DisplayName:AdminEmailAddress": "آدرس ایمیل مدیر",
     "DisplayName:AdminPassword": "گذرواژه مدیریت"
   }

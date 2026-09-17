@@ -1,0 +1,51 @@
+{
+	"packages":[
+		{
+			"name": "@abp/ng.setting-management",
+			"keepPackageInPackageJson": true,
+			"appRoutingModuleConfiguration":{
+				"routes":[
+					"{ path: 'setting-management', loadChildren: () => import('@abp/ng.setting-management').then(c => c.createRoutes()),}"
+				]
+			},
+			"appModuleConfiguration":{
+				"imports":[
+					{
+						"names":[
+							"provideSettingManagementConfig"
+						],
+						"namespace": "@abp/ng.setting-management/config"
+					}
+				],
+				"providerNames":[
+					"provideSettingManagementConfig()"
+				]
+			},
+			"tsJsonPathRecordConfigurations":[
+				{
+					"name": "@abp/ng.setting-management",
+					"paths": [
+						"angular/projects/setting-management/src/public-api.ts"
+					]
+				},
+				{
+					"name": "@abp/ng.setting-management/config",
+					"paths": [
+						"angular/projects/setting-management/config/src/public-api.ts"
+					]
+				},
+				{
+					"name": "@abp/ng.setting-management/proxy",
+					"paths": [
+						"angular/projects/setting-management/proxy/src/public-api.ts"
+					]
+				}
+			],
+			"replacementPackages":[
+				{
+					"name": "@abp/ng.permission-management"
+				}
+			]
+		}
+	]
+}

@@ -8,15 +8,12 @@ $(function (){
     if (commentRequireApprovement) {
         $('#IsApprovedSelectInput').show();
     }
-    
-    var getFormattedDate = function ($datePicker) {
-        return $datePicker.data('date');
-    };
-
+	
 	moment.localeData().preparse = (s)=>s;
     moment.localeData().postformat = (s)=>s;
-	
-    $('.singledatepicker').daterangepicker({
+
+    var singleDatePicker = $('#CmsKitCommentsDetailsWrapper .singledatepicker');
+    singleDatePicker.daterangepicker({
         "singleDatePicker": true,
         "showDropdowns": true,
         "autoUpdateInput": false,
@@ -27,9 +24,9 @@ $(function (){
         "maxYear": 2199,
     });
 
-    $('.singledatepicker').attr('autocomplete', 'off');
+    singleDatePicker.attr('autocomplete', 'off');
 
-    $('.singledatepicker').on('apply.daterangepicker', function (ev, picker) {
+    singleDatePicker.on('apply.daterangepicker', function (ev, picker) {
         $(this).val(picker.startDate.format('l'));
         $(this).data('date', picker.startDate.locale('en').format('YYYY-MM-DD'));
     });
@@ -37,12 +34,9 @@ $(function (){
     var filterForm = $('#CmsKitCommentsFilterForm');
 
     var getFilter = function () {
-        var filterObj = filterForm.serializeFormToObject();
-
-        filterObj.creationStartDate = getFormattedDate($('#creationStartDate'));
-        filterObj.creationEndDate = getFormattedDate($('#creationEndDate'));
-        
-        return filterObj;
+        filterForm.handleDatepicker('.singledatepicker');
+        var formObject = filterForm.serializeFormToObject();
+        return formObject;
     };
     
     var _dataTable = $('#CommentsTable').DataTable(abp.libs.datatables.normalizeConfiguration({

@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Features;
 using Volo.Abp.SimpleStateChecking;
 
 namespace Volo.Abp.UI.Navigation;
@@ -82,6 +83,7 @@ public class MenuManager : IMenuManager, ITransientDependency
         using (var scope = ServiceScopeFactory.CreateScope())
         {
             using (RequirePermissionsSimpleBatchStateChecker<ApplicationMenuItem>.Use(new RequirePermissionsSimpleBatchStateChecker<ApplicationMenuItem>()))
+            using (RequireFeaturesSimpleBatchStateChecker<ApplicationMenuItem>.Use(new RequireFeaturesSimpleBatchStateChecker<ApplicationMenuItem>()))
             {
                 var context = new MenuConfigurationContext(menu, scope.ServiceProvider);
 
@@ -91,6 +93,12 @@ public class MenuManager : IMenuManager, ITransientDependency
                 }
 
                 await CheckPermissionsAsync(scope.ServiceProvider, menu);
+            }
+
+            var urlProviderContext = new MenuItemUrlProviderContext(menu);
+            foreach (var urlProvider in scope.ServiceProvider.GetServices<IMenuItemUrlProvider>())
+            {
+                await urlProvider.HandleAsync(urlProviderContext);
             }
         }
 

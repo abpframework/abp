@@ -2,25 +2,28 @@ using System;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Bundling;
+using Volo.Abp.AspNetCore.Bundling.Styles;
+using Volo.Abp.Bundling.Styles;
 using Volo.Abp.Minify.Styles;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.Styles;
 
-public class StyleBundler : BundlerBase, IStyleBundler
+public class StyleBundler : MvcUiBundlerBase, IStyleBundler
 {
     private readonly IWebHostEnvironment _hostingEnvironment;
     public override string FileExtension => "css";
 
     public StyleBundler(
-        IWebHostEnvironment hostEnvironment,
+        IWebHostEnvironment hostingEnvironment,
         ICssMinifier minifier,
         IOptions<AbpBundlingOptions> bundlingOptions)
         : base(
-            hostEnvironment,
+            hostingEnvironment,
             minifier,
             bundlingOptions)
     {
-        _hostingEnvironment = hostEnvironment;
+        _hostingEnvironment = hostingEnvironment;
     }
 
     public string GetAbsolutePath(string relativePath)

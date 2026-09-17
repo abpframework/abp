@@ -1,57 +1,65 @@
-import { Component, DebugElement } from '@angular/core'
-import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { TrackCapsLockDirective } from '../directives';
 import { By } from '@angular/platform-browser';
+import { Component, DebugElement } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TrackCapsLockDirective } from '../directives';
 
 @Component({
-  standalone:true,
-  template: `
-    <input (abpCapsLock)="capsLock = $event" />
-  `,
-  imports:[TrackCapsLockDirective]
+  template: ` <input abpCapsLock /> `,
+  imports: [TrackCapsLockDirective],
 })
 class TestComponent {
-  capsLock = false
+  capsLock = false;
 }
 
-describe('TrackCapsLockDirective',()=>{
-  let fixture: ComponentFixture<TestComponent>;;
-  let des : DebugElement[];
+describe('TrackCapsLockDirective', () => {
+  let fixture: ComponentFixture<TestComponent>;
+  let des: DebugElement[];
+  let directive: TrackCapsLockDirective;
+  let emitSpy: ReturnType<typeof vi.spyOn>;
 
-  beforeEach(()=>{
+  const createCapsLockEvent = (eventName: string, capsLock: boolean) => {
+    const event = new KeyboardEvent(eventName, {
+      key: 'CapsLock',
+    });
+
+    Object.defineProperty(event, 'getModifierState', {
+      value: (key: string) => key === 'CapsLock' && capsLock,
+    });
+
+    return event;
+  };
+
+  beforeEach(() => {
     fixture = TestBed.configureTestingModule({
-      imports: [ TestComponent ]
+      imports: [TestComponent],
     }).createComponent(TestComponent);
 
     fixture.detectChanges();
 
     des = fixture.debugElement.queryAll(By.directive(TrackCapsLockDirective));
+    directive = des[0].injector.get(TrackCapsLockDirective);
+    emitSpy = vi.spyOn(directive.capsLock, 'emit');
   });
 
-    test.each(['keydown','keyup'])('is %p works when press capslock and is emit status', (eventName) => {
-      const event = new KeyboardEvent(eventName, {
-        key: 'CapsLock',
-        modifierCapsLock: true
-      });
-      window.dispatchEvent(event);
-      fixture.detectChanges();
-      expect(fixture.componentInstance.capsLock).toBe(true)
-    });
-
-    test.each(['keydown','keyup'])('is %p detect the change capslock is emit status', (eventName) => {
-      const trueEvent = new KeyboardEvent(eventName, {
-        key: 'CapsLock',
-        modifierCapsLock: true
-      });
-      window.dispatchEvent(trueEvent);
-      fixture.detectChanges();
-      expect(fixture.componentInstance.capsLock).toBe(true)
-      const falseEvent = new KeyboardEvent(eventName, {
-        key: 'CapsLock',
-        modifierCapsLock: false
-      });
-      window.dispatchEvent(falseEvent);
-      fixture.detectChanges();
-      expect(fixture.componentInstance.capsLock).toBe(false)
-    });
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
+
+  test.each(['keydown', 'keyup'])(
+    'is %p works when press capslock and is emit status',
+    eventName => {
+      const event = createCapsLockEvent(eventName, true);
+      eventName === 'keydown' ? directive.onKeyDown(event) : directive.onKeyUp(event);
+      expect(emitSpy).toHaveBeenCalledWith(true);
+    },
+  );
+
+  test.each(['keydown', 'keyup'])('is %p detect the change capslock is emit status', eventName => {
+    const trueEvent = createCapsLockEvent(eventName, true);
+    eventName === 'keydown' ? directive.onKeyDown(trueEvent) : directive.onKeyUp(trueEvent);
+    expect(emitSpy).toHaveBeenCalledWith(true);
+    const falseEvent = createCapsLockEvent(eventName, false);
+    eventName === 'keydown' ? directive.onKeyDown(falseEvent) : directive.onKeyUp(falseEvent);
+    expect(emitSpy).toHaveBeenLastCalledWith(false);
+  });
+});

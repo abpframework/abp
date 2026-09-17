@@ -1,0 +1,59 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
+@using Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs
+@using Volo.CmsKit.Localization
+@model DeleteBlogModal
+@inject IHtmlLocalizer<CmsKitResource> L
+@{
+    Layout = null;
+}
+
+<form method="post" asp-page="/CmsKit/Blogs/DeleteBlogModal" autocomplete="off">
+    @{
+        var deleteAllClicked = "checked";
+        var deleteButtonDisabled = "";
+         <abp-modal>
+        <abp-modal-header title="@L["AreYouSure"].Value"></abp-modal-header>
+        <abp-modal-body>
+
+            <abp-input asp-for="Blog.Id" type="hidden"></abp-input>
+
+            <p class="fw-bold">@L.GetString("BlogDeletionConfirmationMessage", Model.Blog.Name).Value</p>
+            
+            @if (Model.Blog.BlogPostCount > 0)
+            {
+                <p class="mt-2">@L.GetString("ChooseAnActionForBlog", Model.Blog.BlogPostCount).Value</p>
+
+
+                if (Model.Blog.OtherBlogs.Any())
+                {
+                    deleteAllClicked = "";
+                    deleteButtonDisabled = "disabled";
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" checked name="assign" id="assign">
+                        <label class="form-check-label" for="assign">@L["AssignBlogPostsToOtherBlog"].Value</label>
+                    </div>
+                    <select name="Blog.AssignToBlogId" id="Blog_AssignToBlogId" class="form-select mt-2">
+                        <option value="" selected>@L["SelectAnBlogToAssign"].Value</option>
+                        @foreach (var blog in Model.Blog.OtherBlogs)
+                        {
+                            <option value="@blog.Key">@blog.Value</option>
+                        }
+                    </select>
+                }
+
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="radio" @deleteAllClicked name="assign" id="deleteAll">
+                    <label class="form-check-label" for="deleteAll">@L["DeleteAllBlogPostsOfThisBlog"].Value</label>
+                </div>
+            }
+        </abp-modal-body>
+        <abp-modal-footer>
+            <button class="btn btn-outline-danger" data-bs-dismiss="modal" type="button">@L["Cancel"]</button>
+            <button class="btn btn-danger" @deleteButtonDisabled type="submit"><i class="fa fa-trash"></i> <span>@L["Delete"]</span></button>
+        </abp-modal-footer>
+    </abp-modal>
+    }
+   
+</form>

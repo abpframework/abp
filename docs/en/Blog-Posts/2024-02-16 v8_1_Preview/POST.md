@@ -230,7 +230,7 @@ There are exciting articles contributed by the ABP community as always. I will h
    * [A Best Practice for Designing Interfaces in .NET C#](https://community.abp.io/posts/a-best-practice-for-designing-interfaces-in-.net-c-9xqc4h8d)
    * [Invariance, Covariance, and Contravariance in .NET C#](https://community.abp.io/posts/invariance-covariance-and-contravariance-in-.net-c-9blmuhme)
 
-Thanks to the ABP Community for all the content they have published. You can also [post your ABP-related (text or video) content](https://community.abp.io/posts/submit) to the ABP Community.
+Thanks to the ABP Community for all the content they have published. You can also [post your ABP-related (text or video) content](https://community.abp.io/posts/create) to the ABP Community.
 
 ## Conclusion
 

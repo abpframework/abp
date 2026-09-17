@@ -90,6 +90,8 @@
     "Permission:CmsKit": "CMS-Kit",
     "Permission:Comments": "Reactiebeheer",
     "Permission:Comments.Delete": "Verwijderen",
+    "Permission:Comments.Update": "Bijwerken",
+    "Permission:Comments.SettingManagement": "Instellingenbeheer",
     "Permission:Contents": "Inhoud beheer",
     "Permission:Contents.Create": "Inhoud toevoegen",
     "Permission:Contents.Delete": "Inhoud verwijderen",
@@ -227,6 +229,13 @@
     "CssClass": "CSS-klasse",
     "TagsHelpText": "Tags moeten door komma&#39;s worden gescheiden (bijvoorbeeld: tag1, tag2, tag3)",
     "ThisPartOfContentCouldntBeLoaded": "Dit deel van de inhoud kon niet worden geladen.",
-    "DuplicateCommentAttemptMessage": "Dubbele poging tot posten van commentaar gedetecteerd. Uw reactie is al verzonden."
+    "DuplicateCommentAttemptMessage": "Dubbele poging tot posten van commentaar gedetecteerd. Uw reactie is al verzonden.",
+    "ChooseAnActionForBlog": "Kies een actie voor de blog",
+    "AssignBlogPostsToOtherBlog": "Wijs blogberichten toe aan een andere blog",
+    "SelectAnBlogToAssign": "Selecteer een blog om toe te wijzen",
+    "DeleteAllBlogPostsOfThisBlog": "Verwijder alle blogberichten van deze blog",
+    "RequiredPermissionName": "Vereiste toestemming",
+    "AllPosts": "Alle berichten",
+    "IsReadOnly": "Alleen-lezen"
   }
 }

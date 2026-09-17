@@ -4,6 +4,12 @@ In this article, first I will briefly explain what sentiment analysis is and the
 
 We will use ML.NET Framework, which is an open-source machine learning framework created by the dotnet team and also we will create a layered ABP Solution by using the application template and finally we will use CMS Kit's Comment Feature and extend its behavior by adding spam detection while creating or updating a comment, at that point we will make sentiment analysis.
 
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
+
 ## Sentiment Analysis
 
 [Sentiment Analysis (or opinion mining)](https://en.wikipedia.org/wiki/Sentiment_analysis) refers to determining the emotion from the given input. The primary goal of sentiment analysis is to identify, extract, and categorize (positive, negative, or neutral) the sentiments expressed in textual data.
@@ -332,6 +338,12 @@ Then, finally, we can run the application to see the final results:
 ## Advanced: Reusing And Optimizing Machine Learning Models
 
 Once the model is trained and evaluated, we can save the trained model and use it directly for further use. In this way, you don’t have to retrain the model every time when you want to make predictions. It’s essential to save the trained model for future use and a must for the production-ready code. I created a separate article dedicated to that topic, and if you are interested, you can read it from [here](https://engincanv.github.io/machine-learning/sentiment-analysis/best-practises/2024/05/16/reusing-and-optimizing-machine-learning-models-in-dotnet.html).
+
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
 
 ## Conclusion
 

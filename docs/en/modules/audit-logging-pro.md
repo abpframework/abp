@@ -1,6 +1,13 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover the ABP Framework's Audit Logging Module (Pro) to track changes, filter logs, and enhance application monitoring efficiently."
+}
+```
+
 # Audit Logging Module (Pro)
 
-> You must have an ABP Team or a higher license to use this module.
+> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this module.
 
 This module implements the Audit Logging system of an application;
 
@@ -9,6 +16,8 @@ This module implements the Audit Logging system of an application;
 * See all changes of entities and filter entity change logs.
 * View details of an entity change. 
 * View all changes of an entity. 
+* Export audit logs and entity changes to Excel.
+* Receive email notifications for completed or failed exports.
 * This module also defines reusable "Average Execution Duration Per Day" and "Error Rate" widgets.
 * Periodic clean up of audit logs.
 
@@ -16,7 +25,7 @@ See [the module description page](https://abp.io/modules/Volo.AuditLogging.Ui) f
 
 ## How to install
 
-Identity is pre-installed in [the startup templates](../solution-templates). So, no need to manually install it.
+Audit Logging is pre-installed in [the startup templates](../solution-templates). So, no need to manually install it.
 
 ### Packages
 
@@ -32,7 +41,7 @@ Audit logs module adds the following items to the "Main" menu, under the "Admini
 
 * **Audit Logs**: List, view and filter audit logs and entity changes.
 
-`IAbpAuditLoggingMainMenuNames` class has the constants for the menu item names.
+`AbpAuditLoggingMainMenuNames` class has the constants for the menu item names.
 
 ### Pages
 
@@ -56,9 +65,15 @@ You can view details of an audit log by clicking the magnifier icon on each audi
 * **Actions:** This tab shows list of actions (controller actions and application service method calls with their parameters) executed during a web request.
 * **Changes:** This tab shows changed entities during the web request.
 
+##### Export to Excel
+
+You can export audit logs to Excel by clicking the "Export to Excel" button in the toolbar. The file is generated and downloaded immediately when the result set contains 1,000 records or fewer. If the result set contains more than 1,000 records, the export is processed as a background job and you'll receive an email with a download link once the export is completed.
+
 #### Entity Changes
 
 Entity changes tab is used to list, view and filter entity change logs. 
+
+> **Blazor Server note:** Entity change history can be missing or incomplete in some `Blazor Server` scenarios due to known SignalR/event-pipeline limitations. See [Audit Logging](../framework/infrastructure/audit-logging.md) and [#11682](https://github.com/abpframework/abp/issues/11682).
 
 ![audit-logging-module-entity-changes-list-page](../images/audit-logging-module-entity-changes-list-page.png)
 
@@ -80,6 +95,10 @@ You can view details of all changes of an entity by clicking the "Full Change Hi
 
 ![audit-logging-module-full-entity-change-details-modal](../images/audit-logging-module-full-entity-change-details-modal.png)
 
+##### Export to Excel
+
+You can export entity changes to Excel by clicking the "Export to Excel" button in the toolbar. As with audit log exports, result sets with 1,000 records or fewer are downloaded immediately. Result sets with more than 1,000 records are processed as a background job, and you'll receive an email notification once the export is completed.
+
 #### Audit Log Settings
 
 The *Audit Log* settings tab is used to configure audit log settings. You can enable or disable the clean up service system wide. This way, you can shut down the clean up service for all tenants and host. If the system wide clean up service is enabled, you can configure the global *Expired Item Deletion Period* for all tenants and host.
@@ -93,6 +112,111 @@ When configuring the global settings for the audit log module from the host side
 To view the audit log settings, you need to enable the feature. For the host side, navigate to *Settings* -> *Feature Management* -> *Manage Host Features* -> *Audit Logging* -> *Enable audit log setting management*. For the tenant side, you can use either [Tenant Features](./saas.md#tenant-features) or [Edition Features](./saas.md#edition-features).
 
 > If you don't enable the *Cleanup Service System Wide* from the host side under *Settings* -> *Audit logs* -> *Global*, it won't remove the expired audit logs, even if there are tenant specific settings.
+
+## Reusable widgets
+
+The module provides **Error Rate** and **Average Execution Duration Per Day** widgets. The current user needs the `AuditLogging.AuditLogs` permission to load their data.
+
+### Angular
+
+Import the widget components from `@volo/abp.ng.audit-logging`, add them to your component imports and keep references when you need to refresh their date range:
+
+```ts
+import { Component, ViewChild } from '@angular/core';
+import {
+  AverageExecutionDurationWidgetComponent,
+  ErrorRateWidgetComponent,
+} from '@volo/abp.ng.audit-logging';
+
+@Component({
+  selector: 'app-audit-statistics',
+  templateUrl: './audit-statistics.component.html',
+  imports: [
+    AverageExecutionDurationWidgetComponent,
+    ErrorRateWidgetComponent,
+  ],
+})
+export class AuditStatisticsComponent {
+  @ViewChild('averageExecutionDurationWidget')
+  averageExecutionDurationWidget!: AverageExecutionDurationWidgetComponent;
+
+  @ViewChild('errorRateWidget')
+  errorRateWidget!: ErrorRateWidgetComponent;
+
+  refresh(startDate: string, endDate: string) {
+    this.averageExecutionDurationWidget.draw({ startDate, endDate });
+    this.errorRateWidget.draw({ startDate, endDate });
+  }
+}
+```
+
+The `width` and `height` inputs are optional. Both default to `273` and `136`, respectively.
+
+```html
+<abp-average-execution-duration-widget
+  #averageExecutionDurationWidget
+  [height]="250"
+></abp-average-execution-duration-widget>
+
+<abp-error-rate-widget
+  #errorRateWidget
+  [height]="250"
+></abp-error-rate-widget>
+```
+
+### Blazor
+
+The Bootstrap and MudBlazor packages expose components with the same parameters and `RefreshAsync` method. The following example uses the Bootstrap Blazor package. For MudBlazor, use the corresponding `Volo.Abp.AuditLogging.Blazor.MudBlazor` namespaces.
+
+```razor
+@using Volo.Abp.AuditLogging.Blazor.Pages.Shared.AverageExecutionDurationPerDayWidget
+@using Volo.Abp.AuditLogging.Blazor.Pages.Shared.ErrorRateWidget
+
+<AuditLoggingAverageExecutionDurationPerDayWidgetComponent
+    @bind-StartDate="@StartDate"
+    @bind-EndDate="@EndDate"
+    @ref="AverageExecutionDurationWidget" />
+
+<AuditLoggingErrorRateWidgetComponent
+    @bind-StartDate="@StartDate"
+    @bind-EndDate="@EndDate"
+    @ref="ErrorRateWidget" />
+
+@code {
+    private DateTime StartDate { get; set; } = DateTime.Today.AddMonths(-1);
+    private DateTime EndDate { get; set; } = DateTime.Today;
+
+    private AuditLoggingAverageExecutionDurationPerDayWidgetComponent AverageExecutionDurationWidget { get; set; } = default!;
+    private AuditLoggingErrorRateWidgetComponent ErrorRateWidget { get; set; } = default!;
+
+    private async Task RefreshAsync()
+    {
+        await AverageExecutionDurationWidget.RefreshAsync();
+        await ErrorRateWidget.RefreshAsync();
+    }
+}
+```
+
+### MVC / Razor Pages
+
+Use `IWidgetManager` to check the widget permission before invoking its view component:
+
+```cshtml
+@using Volo.Abp.AspNetCore.Mvc.UI.Widgets
+@using Volo.Abp.AuditLogging.Web.Pages.Shared.Components.AverageExecutionDurationPerDayWidget
+@using Volo.Abp.AuditLogging.Web.Pages.Shared.Components.ErrorRateWidget
+@inject IWidgetManager WidgetManager
+
+@if (await WidgetManager.IsGrantedAsync(typeof(AuditLoggingErrorRateWidgetViewComponent)))
+{
+    @await Component.InvokeAsync(typeof(AuditLoggingErrorRateWidgetViewComponent))
+}
+
+@if (await WidgetManager.IsGrantedAsync(typeof(AuditLoggingAverageExecutionDurationPerDayWidgetViewComponent)))
+{
+    @await Component.InvokeAsync(typeof(AuditLoggingAverageExecutionDurationPerDayWidgetViewComponent))
+}
+```
 
 ## Data seed
 
@@ -121,10 +245,41 @@ To see `AbpAuditingOptions` properties, please see its [documentation](../framew
 Configure<ExpiredAuditLogDeleterOptions>(options =>
 {
     options.Period = (int)TimeSpan.FromSeconds(30).TotalMilliseconds;
+
+    // This Cron expression only works if Hangfire or Quartz is used for background workers.
+    // The Hangfire Cron expression is different from the Quartz Cron expression, Please refer to the following links:
+    // https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontriggers.html#cron-expressions
+    // https://docs.hangfire.io/en/latest/background-methods/performing-recurrent-tasks.html
+    options.CronExpression = "0 23 * * *"; // Quartz Cron expression is "0 0 23 * * ?"
 });
 ```
 
 The *Period* doesn't mean the *Expired Item Deletion Period*. It's the period of the worker to run clean up service system wide. The default value is 1 day.
+
+### AuditLogExcelFileOptions
+
+`AuditLogExcelFileOptions` can be configured in the UI layer, within the `ConfigureServices` method of your [module](../framework/architecture/modularity/basics.md). Example:
+
+```csharp
+Configure<AuditLogExcelFileOptions>(options =>
+{
+    options.FileRetentionHours = 24; // How long to keep files before cleanup (default: 24 hours)
+    options.DownloadBaseUrl = "https://yourdomain.com"; // Base URL for download links in emails
+    options.ExcelFileCleanupOptions.Period = (int)TimeSpan.FromHours(24).TotalMilliseconds; // Interval of the cleanup worker (default: 24 hours)
+
+    // This Cron expression only works if Hangfire or Quartz is used for background workers.
+    // The Hangfire Cron expression is different from the Quartz Cron expression, Please refer to the following links:
+    // https://www.quartz-scheduler.net/documentation/quartz-3.x/tutorial/crontriggers.html#cron-expressions
+    // https://docs.hangfire.io/en/latest/background-methods/performing-recurrent-tasks.html
+    options.ExcelFileCleanupOptions.CronExpression = "0 23 * * *"; // Quartz Cron expression is "0 0 23 * * ?"
+});
+```
+
+> Note: The `FileRetentionHours` value determines when files become eligible for deletion, but actual deletion depends on when the cleanup worker runs. If the worker hasn't run after the retention period expires, files will remain accessible. Therefore, `FileRetentionHours` represents the minimum intended retention time, but the actual retention time might be longer depending on the worker's execution schedule.
+
+These settings control where Excel export files are stored, how long they are kept before automatic cleanup, and what base URL is used in email download links.
+
+> You must use a valid [BLOB Storage Provider](https://abp.io/docs/latest/framework/infrastructure/blob-storing#blob-storage-providers) to use this feature.
 
 ## Internals
 
@@ -156,6 +311,15 @@ Following custom repositories are defined for this module:
 
 * `AuditLogsAppService` (implements `IAuditLogsAppService`): Implements the use cases of the audit logs management UI.
 
+#### Email Templates
+
+The module provides email templates for notifications:
+
+* `AuditLogExportCompleted`: Sent when an audit log export is successfully completed, including a download link.
+* `AuditLogExportFailed`: Sent when an audit log export fails, including error details.
+* `EntityChangeExportCompleted`: Sent when an entity change export is successfully completed, including a download link.
+* `EntityChangeExportFailed`: Sent when an entity change export fails, including error details.
+
 ### Database providers
 
 #### Common
@@ -178,61 +342,69 @@ See the [connection strings](../framework/fundamentals/connection-strings.md) do
   * AbpAuditLogActions
   * AbpEntityChanges
     * AbpEntityPropertyChanges
+* **AbpAuditLogExcelFiles**
 
 #### MongoDB
 
 ##### Collections
 
 * **AbpAuditLogs**
+* **AbpAuditLogExcelFiles**
 
 ### Permissions
 
-See the `AbpAuditLoggingPermissions` class members for all permissions defined for this module.
+The module defines the following feature and permission relationships:
+
+* `AuditLogging.Enable` is enabled by default. The `AuditLogging.AuditLogs` permission requires this feature, and the audit log application service also checks it.
+* `AuditLogging.SettingManagement` is a child feature of `AuditLogging.Enable` and is disabled by default. The `AuditLogging.AuditLogs.SettingManagement` permission requires this feature.
+* `AuditLogging.AuditLogs.Export` is a child permission of `AuditLogging.AuditLogs`. Audit log and entity change export operations require this permission.
+
+See the `AbpAuditLoggingPermissions` and `AbpAuditLoggingFeatures` class members for the complete definitions.
+
+#### Entity-specific change history permissions
+
+You can define a permission for the change history of a specific entity by using the `AuditLogging.ViewChangeHistory:{EntityTypeFullName}` naming convention. For example, the permission name for `Acme.BookStore.Books.Book` is `AuditLogging.ViewChangeHistory:Acme.BookStore.Books.Book`.
+
+When a matching permission is defined and granted, the user can view that entity's change history. If the entity-specific permission is not defined or is not granted, authorization falls back to `AuditLogging.AuditLogs`. Users who have the general audit log permission can therefore still view the entity history.
 
 
 ### Angular UI
 
 #### Installation
 
-In order to configure the application to use the `AuditLoggingModule`, you first need to import `AuditLoggingConfigModule` from `@volo/abp.ng.audit-logging/config` to root module. `AuditLoggingConfigModule` has a static `forRoot` method which you should call for a proper configuration.
+In order to configure the application to use the audit logging module, you first need to import `provideAuditLoggingConfig` from `@volo/abp.ng.audit-logging/config` to root configuration. Then, you will need to append it to the `appConfig` array.
 
 ```js
-// app.module.ts
-import { AuditLoggingConfigModule } from '@volo/abp.ng.audit-logging/config';
+// app.config.ts
+import { provideAuditLoggingConfig } from '@volo/abp.ng.audit-logging/config';
 
-@NgModule({
-  imports: [
-    // other imports
-    AuditLoggingConfigModule.forRoot(),
-    // other imports
+export const appConfig: ApplicationConfig = {
+  providers: [
+    // ...
+    provideAuditLoggingConfig(),
   ],
-  // ...
-})
-export class AppModule {}
+};
 ```
 
-The `AuditLoggingModule` should be imported and lazy-loaded in your routing module. It has a static `forLazy` method for configuration. Available options are listed below. It is available for import from `@volo/abp.ng.audit-logging`.
+The audit logging module should be imported and lazy-loaded in your routing array. It has a static `createRoutes` method for configuration. Available options are listed below. It is available for import from `@volo/abp.ng.audit-logging`.
 
 ```js
-// app-routing.module.ts
-const routes: Routes = [
-  // other route definitions
+// app.routes.ts
+export const APP_ROUTES: Routes = [
+  // ...
   {
     path: 'audit-logs',
-    loadChildren: () =>
-      import('@volo/abp.ng.audit-logging').then(m => m.AuditLoggingModule.forLazy(/* options here */)),
+    loadChildren: () => import('@volo/abp.ng.audit-logging').then(c => c.createRoutes(/* options here */)),
   },
 ];
 
-@NgModule(/* AppRoutingModule metadata */)
-export class AppRoutingModule {}
 ```
 
-> If you have generated your project via the startup template, you do not have to do anything, because it already has both `AuditLoggingConfigModule` and `AuditLoggingModule`.
+> If you have generated your project via the startup template, you do not have to do anything, because it already has both files configured.
 
 <h4 id="h-audit-logging-module-options">Options</h4>
 
-You can modify the look and behavior of the module pages by passing the following options to `AuditLoggingModule.forLazy` static method:
+You can modify the look and behavior of the module pages by passing the following options to `createRoutes` static method:
 
 - **entityActionContributors:** Changes grid actions. Please check [Entity Action Extensions for Angular](../framework/ui/angular/entity-action-extensions.md) for details.
 - **toolbarActionContributors:** Changes page toolbar. Please check [Page Toolbar Extensions for Angular](../framework/ui/angular/page-toolbar-extensions.md) for details.

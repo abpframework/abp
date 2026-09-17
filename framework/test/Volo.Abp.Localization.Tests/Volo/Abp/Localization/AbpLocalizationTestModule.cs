@@ -30,6 +30,10 @@ public class AbpLocalizationTestModule : AbpModule
                 .AddVirtualJson("/Volo/Abp/Localization/TestResources/Base/CountryNames");
 
             options.Resources
+                .Add("LocalizationTestFilesSplit")
+                .AddVirtualJson("/Volo/Abp/Localization/TestResources/FilesSplit");
+
+            options.Resources
                 .Add<LocalizationTestResource>("en")
                 .AddVirtualJson("/Volo/Abp/Localization/TestResources/Source")
                 .AddBaseResources("LocalizationTestCountryNames");

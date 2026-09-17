@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use repositories in ABP Framework for effective data access and CRUD operations on domain objects."
+}
+```
+
 # Repositories
 
 "*Mediates between the domain and data mapping layers using a collection-like interface for accessing domain objects*" (Martin Fowler).
@@ -242,10 +249,39 @@ public virtual async Task<List<PersonDto>> GetListAsync()
 
 ABP uses dynamic proxying to make these attributes work. There are some rules here:
 
-* If you are **not injecting** the service over an interface (like `IPersonAppService`), then the methods of the service must be `virtual`. Otherwise, [dynamic proxy / interception](../../../dynamic-proxying-interceptors.md) system can not work.
+* If you are **not injecting** the service over an interface (like `IPersonAppService`), then the methods of the service must be `virtual`. Otherwise, [dynamic proxy / interception](../../infrastructure/interceptors.md) system can not work.
 * Only `async` methods (methods returning a `Task` or `Task<T>`) are intercepted.
 
 > Change tracking behavior doesn't affect tracking entity objects returned from `InsertAsync` and `UpdateAsync` methods. The objects returned from these methods are always tracked (if the underlying provider has the change tracking feature) and any change you make to these objects are saved into the database.
+
+#### Check If Change Tracking Is Enabled
+
+In case of you need to check if change tracking is enabled or disabled on a repository object, you can simply read the `IsChangeTrackingEnabled` property. It is `false` by default for read only repositories (see the *Read Only Repositories* section below). It is `null` by default for other repository objects. If it is `null`, change tracking is enabled unless you've explicitly used the change tracking attributes (see the *Attributes for Change Tracking* section).
+
+### The `EntityName` Property
+
+The `EntityName` property is to set the related entity's name on the repository object in some advanced  scenarios. For example, you can use this property to use the [Shared-type entity types](https://learn.microsoft.com/en-us/ef/core/modeling/entity-types?tabs=data-annotations#shared-type-entity-types) feature of Entity Framework Core (it allows you to use a single entity class to work on multiple tables in the database). In other cases, you can just ignore it.
+
+Default value is `null` unless you explicitly set it.
+
+**Example usage:**
+
+````csharp
+IRepository<YourSharedType, Guid> _repository; // You can inject it into your class
+...
+_repository.SetEntityName("Product"); //Set the entity name before using the repository
+//use the _repository object as always
+````
+
+### The `ProviderName` Property
+
+The `ProviderName` property of a repository object returns the underlying database provider name. It may return one of the following string values for the built-in providers:
+
+* `Volo.Abp.EntityFrameworkCore` (from the constant `AbpEfCoreConsts.ProviderName` value)
+* `Volo.Abp.MongoDB` (from the constant `AbpMongoDbConsts.ProviderName` value)
+* `Volo.Abp.MemoryDb` (from the constant `AbpMemoryDbConsts.ProviderName` value)
+
+This property is not used in most cases. It is mainly available for internal usage of the ABP framework.
 
 ## Other Generic Repository Types
 
@@ -273,8 +309,9 @@ Methods:
 
 - `GetListAsync()`
 - `GetQueryableAsync()`
-- `WithDetails()` 1 overload
 - `WithDetailsAsync()` 1 overload
+
+The synchronous `WithDetails()` overloads are obsolete. Use `WithDetailsAsync()` for new code.
 
 Whereas the `IReadOnlyBasicRepository<Tentity, TKey>` provides the following methods:
 
@@ -392,19 +429,6 @@ var people = queryable
 This method is suggested;
 
 * If you are developing an application and you **don't plan to change** EF Core in the future, or you can **tolerate** it if you need to change it later. We believe that's reasonable if you are developing a final application.
-
-#### MongoDB Case
-
-If you are using [MongoDB](../../data/mongodb), you need to add the [Volo.Abp.MongoDB](https://www.nuget.org/packages/Volo.Abp.MongoDB) NuGet package to your project. Even in this case, you can't directly use async LINQ extensions (like `ToListAsync`) because MongoDB doesn't provide async extension methods for `IQueryable<T>`, but provides for `IMongoQueryable<T>`. You need to cast the query to `IMongoQueryable<T>` first to be able to use the async extension methods.
-
-**Example: Cast `IQueryable<T>` to `IMongoQueryable<T>` and use `ToListAsync()`**
-
-````csharp
-var queryable = await _personRepository.GetQueryableAsync();
-var people = ((IMongoQueryable<Person>) queryable
-    .Where(p => p.Name.Contains(nameFilter)))
-    .ToListAsync();
-````
 
 ### Option-2: Use the IRepository Async Extension Methods
 

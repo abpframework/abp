@@ -60,6 +60,9 @@
     "AddNew": "Adăuga nou",
     "ProfilePicture": "Poză de profil",
     "Theme": "Temă",
-    "NotAssigned": "Nealocat"
+    "NotAssigned": "Nealocat",
+    "EntityActionsDisabledTooltip": "Nu aveți permisiune să efectuați nicio acțiune.",
+    "ResourcePermissions": "Permisiuni",
+    "ShowPassword": "Afișează parola"
   }
 }

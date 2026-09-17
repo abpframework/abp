@@ -1,13 +1,19 @@
-# Modularity
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to build modular applications with ABP Framework, including best practices, templates, and CLI support for seamless development."
+}
+```
 
-## Introduction
+# Modularity
 
 ABP was designed to support to build fully modular applications and systems where every module may have entities, services, database integration, APIs, UI components and so on;
 
-* This document introduces the basics of the module system.
-* [Module development best practice guide](../best-practices) explains some **best practices** to develop **re-usable application modules** based on **DDD** principles and layers. A module designed based on this guide will be **database independent** and can be deployed as a **microservice** if needed.
-* [Pre-built application modules](../../../modules) are **ready to use** in any kind of application.
-* [Module startup template](../../../solution-templates/application-module) is a jump start way to **create a new module**.
+* This document introduces the **basics** of the module system.
+* The [modular monolith application development tutorial](../../../tutorials/modular-crm/index.md) explains and demonstrates how to build **modular monolith applications** with ABP.
+* [Pre-built application modules](../../../modules/index.md) are **ready to use** in any kind of application.
+* [Module startup template](../../../solution-templates/application-module/index.md) is a jump start way to **create a new reusable application module**.
+* [Module development best practice guide](../best-practices/index.md) explains some **best practices** to develop **re-usable application modules** based on **DDD** principles and layers. A module designed based on this guide will be **database independent** and can be deployed as a **microservice** if needed.
 * [ABP CLI](../../../cli/index.md) has commands to support modular development.
 * All other framework features are compatible to the modularity system.
 
@@ -139,6 +145,43 @@ You can also perform startup logic if your module requires it
 
 > These methods have asynchronous versions too, and if you want to make asynchronous calls inside these methods, override the asynchronous versions instead of the synchronous ones.
 
+#### Custom Module Lifecycle Contributors
+
+`IModuleLifecycleContributor` is an advanced extension point for adding an application-wide initialization or shutdown phase. A contributor is invoked for every loaded module. Initialization follows module dependency order, while shutdown processes modules in reverse order.
+
+Derive from `ModuleLifecycleContributorBase` and override only the phases you need. Each phase has a synchronous and an asynchronous method; the application calls one of them depending on whether it is initialized synchronously or asynchronously, so override both to cover the two startup paths:
+
+````csharp
+public class MyModuleLifecycleContributor : ModuleLifecycleContributorBase
+{
+    public override Task InitializeAsync(
+        ApplicationInitializationContext context,
+        IAbpModule module)
+    {
+        // Run initialization logic for the current module.
+        return Task.CompletedTask;
+    }
+
+    public override void Initialize(
+        ApplicationInitializationContext context,
+        IAbpModule module)
+    {
+        AsyncHelper.RunSync(() => InitializeAsync(context, module));
+    }
+}
+````
+
+Add the contributor type to `AbpModuleLifecycleOptions.Contributors`:
+
+````csharp
+Configure<AbpModuleLifecycleOptions>(options =>
+{
+    options.Contributors.Add<MyModuleLifecycleContributor>();
+});
+````
+
+Contributor order is the order of the `Contributors` list. The four built-in contributors run the pre-initialization, initialization, post-initialization and shutdown callbacks.
+
 ### Application Shutdown
 
 Lastly, you can override ``OnApplicationShutdown`` method if you want to execute some code while application is being shutdown.
@@ -191,4 +234,5 @@ There are **two types of modules.** They don't have any structural difference bu
 - **Application modules**: These modules implement **specific application/business functionalities** like blogging, document management, identity management, tenant management... etc. They generally have their own entities, services, APIs and UI components. See [pre-built application modules](../../../modules).
 
 ## See Also
-* [Video tutorial](https://abp.io/video-courses/essentials/modularity)
+* [Modular monolith application development tutorial](../../../tutorials/modular-crm/index.md)
+* [Video tutorial for basic modularity](https://abp.io/video-courses/essentials/modularity)

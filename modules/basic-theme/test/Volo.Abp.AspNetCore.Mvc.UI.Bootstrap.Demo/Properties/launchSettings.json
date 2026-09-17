@@ -1,24 +1,9 @@
 {
-  "iisSettings": {
-    "windowsAuthentication": false, 
-    "anonymousAuthentication": true, 
-    "iisExpress": {
-      "applicationUrl": "http://localhost:51339",
-      "sslPort": 0
-    }
-  },
   "profiles": {
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
-    "Volo.AbpIo.Commercial.Web": {
+    "Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "http://localhost:5000",
+      "applicationUrl": "https://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

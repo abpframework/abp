@@ -11,6 +11,7 @@
     "InvalidUsername": "Nombre de usuario icorrecto",
     "InvalidAuthenticatorCode": "¡Código de autenticador no válido!",
     "InvalidRecoveryCode": "¡Código de recuperación no válido!",
-    "TheTargetUserIsNotLinkedToYou": "El usuario de destino no está asociado a usted."
+    "TheTargetUserIsNotLinkedToYou": "El usuario de destino no está asociado a usted.",
+    "ClientResourcePermissionProviderKeyLookupService": "Cliente"
   }
 }

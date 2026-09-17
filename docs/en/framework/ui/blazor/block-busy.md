@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the Block/Busy Service in Blazor UI to disable page elements and enhance user experience with progress indicators."
+}
+```
+
 # Blazor UI: Block/Busy Service
 
 UI Block disables (blocks) the page or a part of the page.

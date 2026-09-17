@@ -90,6 +90,8 @@
     "Permission:CmsKit": "Cms工具包",
     "Permission:Comments": "評論管理",
     "Permission:Comments.Delete": "刪除",
+    "Permission:Comments.Update": "更新",
+    "Permission:Comments.SettingManagement": "設置管理",
     "Permission:Contents": "內容管理",
     "Permission:Contents.Create": "創建內容",
     "Permission:Contents.Delete": "刪除內容",
@@ -227,6 +229,13 @@
     "CssClass": "CSS類",
     "TagsHelpText": "標籤應以逗號分隔（例如：tag1、tag2、tag3）",
     "ThisPartOfContentCouldntBeLoaded": "這部分內容無法加載",
-    "DuplicateCommentAttemptMessage": "偵測到重複的評論貼文嘗試。您的評論已經提交。"
+    "DuplicateCommentAttemptMessage": "偵測到重複的評論貼文嘗試。您的評論已經提交。",
+    "ChooseAnActionForBlog": "選擇部落格的操作",
+    "AssignBlogPostsToOtherBlog": "將部落格文章分配給其他部落格",
+    "SelectAnBlogToAssign": "選擇要分配的部落格",
+    "DeleteAllBlogPostsOfThisBlog": "刪除此部落格的所有部落格文章",
+    "RequiredPermissionName": "所需權限名稱",
+    "AllPosts": "所有文章",
+    "IsReadOnly": "唯讀"
   }
 }

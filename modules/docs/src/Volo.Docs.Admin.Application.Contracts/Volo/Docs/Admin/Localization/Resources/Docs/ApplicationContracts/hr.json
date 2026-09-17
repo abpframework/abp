@@ -57,6 +57,18 @@
         "LastCachedTime": "Vrijeme predmemorije",
         "Project": "Projekt",
         "AdvancedFilters": "Napredni filtri",
-        "RemoveCacheAndReIndexConfirmation": "Dokument \"{0}\" bit će uklonjen iz predmemorije i ponovno indeksiran. Potvrđujete li?"
+        "RemoveCacheAndReIndexConfirmation": "Dokument \"{0}\" bit će uklonjen iz predmemorije i ponovno indeksiran. Potvrđujete li?",
+        "GeneratePdf": "Generiraj PDF",
+        "Generating": "Generiranje...",
+        "Language": "Jezik",
+        "ForceToGenerateNewPdf": "Prisili generiranje novog PDF-a",
+        "PdfGeneratedSuccessfully": "PDF generiran uspješno",
+        "GenerateAndDownloadPdf": "Generiraj i preuzmi PDF",
+        "PdfFileDeletionWarningMessage": "Jeste li sigurni da želite izbrisati PDF datoteku \"{0}\"?",
+        "ManagePdfFiles": "Upravljanje PDF datotekama",
+        "Permission:ManagePdfFiles": "Upravljanje PDF datotekama",
+        "PdfDeletedSuccessfully": "PDF datoteka je uspješno izbrisana",
+        "PdfGenerationStarted": "Započelo je generiranje PDF-a",
+        "PdfGenerationStartedInfoMessage": "Započelo je generiranje PDF-a. Nakon završetka možete provjeriti je li datoteka dodana u odjeljak PDF datoteka."
     }
 }

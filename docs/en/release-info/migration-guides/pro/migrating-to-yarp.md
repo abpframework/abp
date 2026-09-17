@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to seamlessly migrate your API Gateway from Ocelot to YARP in ABP Framework, ensuring better performance and ongoing support."
+}
+```
+
 # Migrating API Gateway from Ocelot to YARP
 
 This guide provides guidance for migrating your existing microservice application's API Gateway from [Ocelot](https://github.com/ThreeMammals/Ocelot) to [YARP](https://github.com/microsoft/reverse-proxy). Since YARP is available with ABP v8.0+, you will need to update your existing application in order to apply YARP changes.

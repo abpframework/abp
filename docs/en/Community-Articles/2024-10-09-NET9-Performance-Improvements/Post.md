@@ -2,8 +2,6 @@
 
 With every release, .NET becomes faster & faster! You get these improvements for free by just updating your project to the latest .NET!
 
-![Cover Image](cover.png)
-
 It’s very interesting that **20% of these improvements** are implemented by **open-source volunteers** rather than Microsoft employees. These improvements mostly focus on cloud-native and high-throughput applications. I’ll briefly list them below.
 
 ![From Microsoft Blog Post](cited-from-microsoft-blog-post.png)

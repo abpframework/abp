@@ -55,6 +55,11 @@ public class EntityHelper_Tests
         {
             return new object[] { Id };
         }
+
+        public string GetObjectKey()
+        {
+            return Id.ToString();
+        }
     }
 
     private class MyEntityDisablesIdGeneration : Entity<Guid>

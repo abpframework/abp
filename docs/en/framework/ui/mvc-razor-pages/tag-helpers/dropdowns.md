@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement and customize dropdowns in the ABP Framework with easy-to-follow examples and attributes for enhanced user interaction."
+}
+```
+
 # Dropdowns
 
 ## Introduction

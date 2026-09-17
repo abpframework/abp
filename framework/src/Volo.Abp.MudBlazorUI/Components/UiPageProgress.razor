@@ -1,0 +1,10 @@
+@using MudBlazor
+
+@if (Visible)
+{
+    <MudProgressLinear Color="@Color"
+                       Value="@(Percentage ?? 0)"
+                       Indeterminate="@(Percentage == null)"
+                       Class="mud-page-progress"
+                       Style="position: fixed; top: 0; left: 0; right: 0; z-index: 9999;" />
+}

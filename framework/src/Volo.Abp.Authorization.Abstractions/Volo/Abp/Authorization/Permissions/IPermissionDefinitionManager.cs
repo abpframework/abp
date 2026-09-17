@@ -11,7 +11,14 @@ public interface IPermissionDefinitionManager
 
     Task<PermissionDefinition?> GetOrNullAsync([NotNull] string name);
 
+    [ItemNotNull]
+    Task<PermissionDefinition> GetResourcePermissionAsync([NotNull]string resourceName, [NotNull] string name);
+
+    Task<PermissionDefinition?> GetResourcePermissionOrNullAsync([NotNull]string resourceName, [NotNull] string name);
+
     Task<IReadOnlyList<PermissionDefinition>> GetPermissionsAsync();
+
+    Task<IReadOnlyList<PermissionDefinition>> GetResourcePermissionsAsync();
 
     Task<IReadOnlyList<PermissionGroupDefinition>> GetGroupsAsync();
 }

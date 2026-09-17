@@ -30,82 +30,8 @@ public class AbpOpenIddictAuthorizationCache : AbpOpenIddictCacheBase<OpenIddict
         await Cache.SetAsync($"{nameof(FindByIdAsync)}_{await Store.GetIdAsync(authorization, cancellationToken)}", authorization, token: cancellationToken);
     }
 
-    public virtual async IAsyncEnumerable<OpenIddictAuthorizationModel> FindAsync(string subject, string client, [EnumeratorCancellation] CancellationToken cancellationToken)
+    public virtual async IAsyncEnumerable<OpenIddictAuthorizationModel> FindAsync(string subject, string client, string status, string type, ImmutableArray<string>? scopes, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        Check.NotNullOrEmpty(subject, nameof(subject));
-        Check.NotNullOrEmpty(client, nameof(client));
-
-        var authorizations = await ArrayCache.GetOrAddAsync($"{nameof(FindAsync)}_{subject}_{client}", async () =>
-        {
-            var applications = new List<OpenIddictAuthorizationModel>();
-            await foreach (var authorization in Store.FindAsync(subject, client, cancellationToken))
-            {
-                applications.Add(authorization);
-                await AddAsync(authorization, cancellationToken);
-            }
-            return applications.ToArray();
-        }, token: cancellationToken);
-
-        foreach (var authorization in authorizations)
-        {
-            yield return authorization;
-        }
-    }
-
-    public virtual async IAsyncEnumerable<OpenIddictAuthorizationModel> FindAsync(string subject, string client, string status, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        Check.NotNullOrEmpty(subject, nameof(subject));
-        Check.NotNullOrEmpty(client, nameof(client));
-        Check.NotNullOrEmpty(status, nameof(status));
-
-        var authorizations = await ArrayCache.GetOrAddAsync($"{nameof(FindAsync)}_{subject}_{client}_{status}", async () =>
-        {
-            var applications = new List<OpenIddictAuthorizationModel>();
-            await foreach (var authorization in Store.FindAsync(subject, client, status, cancellationToken))
-            {
-                applications.Add(authorization);
-                await AddAsync(authorization, cancellationToken);
-            }
-            return applications.ToArray();
-        }, token: cancellationToken);
-
-        foreach (var authorization in authorizations)
-        {
-            yield return authorization;
-        }
-    }
-
-    public virtual async IAsyncEnumerable<OpenIddictAuthorizationModel> FindAsync(string subject, string client, string status, string type, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        Check.NotNullOrEmpty(subject, nameof(subject));
-        Check.NotNullOrEmpty(client, nameof(client));
-        Check.NotNullOrEmpty(status, nameof(status));
-        Check.NotNullOrEmpty(type, nameof(type));
-
-        var authorizations = await ArrayCache.GetOrAddAsync($"{nameof(FindAsync)}_{subject}_{client}_{status}_{type}", async () =>
-        {
-            var applications = new List<OpenIddictAuthorizationModel>();
-            await foreach (var authorization in Store.FindAsync(subject, client, status, type, cancellationToken))
-            {
-                applications.Add(authorization);
-                await AddAsync(authorization, cancellationToken);
-            }
-            return applications.ToArray();
-        }, token: cancellationToken);
-
-        foreach (var authorization in authorizations)
-        {
-            yield return authorization;
-        }
-    }
-
-    public virtual async IAsyncEnumerable<OpenIddictAuthorizationModel> FindAsync(string subject, string client, string status, string type, ImmutableArray<string> scopes, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        Check.NotNullOrEmpty(subject, nameof(subject));
-        Check.NotNullOrEmpty(client, nameof(client));
-        Check.NotNullOrEmpty(status, nameof(status));
-        Check.NotNullOrEmpty(type, nameof(type));
-
         // Note: this method is only partially cached.
         await foreach (var authorization in Store.FindAsync(subject, client, status, type, scopes, cancellationToken))
         {
@@ -170,8 +96,6 @@ public class AbpOpenIddictAuthorizationCache : AbpOpenIddictCacheBase<OpenIddict
 
         await ArrayCache.RemoveManyAsync(new[]
         {
-            $"{nameof(FindAsync)}_{await Store.GetSubjectAsync(authorization, cancellationToken)}_{await Store.GetApplicationIdAsync(authorization, cancellationToken)}",
-            $"{nameof(FindAsync)}_{await Store.GetSubjectAsync(authorization, cancellationToken)}_{await Store.GetApplicationIdAsync(authorization, cancellationToken)}_{await Store.GetStatusAsync(authorization, cancellationToken)}",
             $"{nameof(FindAsync)}_{await Store.GetSubjectAsync(authorization, cancellationToken)}_{await Store.GetApplicationIdAsync(authorization, cancellationToken)}_{await Store.GetStatusAsync(authorization, cancellationToken)}_{await Store.GetTypeAsync(authorization, cancellationToken)}",
             $"{nameof(FindByApplicationIdAsync)}_{await Store.GetApplicationIdAsync(authorization, cancellationToken)}",
             $"{nameof(FindBySubjectAsync)}_{await Store.GetSubjectAsync(authorization, cancellationToken)}"

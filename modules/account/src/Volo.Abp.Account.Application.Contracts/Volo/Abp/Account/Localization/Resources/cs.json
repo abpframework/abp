@@ -68,6 +68,8 @@
     "AccessDenied": "Přístup odepřen!",
     "AccessDeniedMessage": "K tomuto zdroji nemáte přístup.",
     "OrRegisterWith": "Nebo se registrujte pomocí:",
-    "RegisterUsingYourProviderAccount": "Registrovat pomocí vašeho účtu {0}"
+    "RegisterUsingYourProviderAccount": "Registrovat pomocí vašeho účtu {0}",
+    "RequireMigrateSeedTitle": "Nelze najít uživatele správce",
+    "RequireMigrateSeedMessage": "Ujistěte se, že je spuštěn seed databáze. Podívejte se na <a target=\"_blank\" href=\"https://abp.io/kb/0003\">dokumentaci</a> pro možná řešení."
   }
 }

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore the advantages of mono-repo vs. multiple repository approaches for microservices in ABP Framework, enhancing your development strategy."
+}
+```
+
 # Microservice Solution: Mono-repo vs Multiple Repository Approaches
 
 ````json

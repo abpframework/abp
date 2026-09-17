@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement and customize breadcrumbs in your ABP Framework applications with the `abp-breadcrumb` component for improved navigation."
+}
+```
+
 # Breadcrumbs
 
 ## Introduction

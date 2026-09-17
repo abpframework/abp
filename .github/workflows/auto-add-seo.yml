@@ -1,0 +1,210 @@
+name: Auto Add SEO Descriptions
+
+on:
+  pull_request:
+    paths:
+      - 'docs/en/**/*.md'
+    branches:
+      - 'rel-*'
+      - 'dev'
+    types: [closed]
+
+jobs:
+  add-seo-descriptions:
+    if: |
+      github.event.pull_request.merged == true &&
+      !startsWith(github.event.pull_request.head.ref, 'auto-docs-seo/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install openai
+
+      - name: Get changed markdown files from merged PR using GitHub API
+        id: changed-files
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = ${{ github.event.pull_request.number }};
+            
+            // Get all files changed in the PR with pagination
+            const allFiles = [];
+            let page = 1;
+            let hasMore = true;
+            
+            while (hasMore) {
+              const { data: files } = await github.rest.pulls.listFiles({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: prNumber,
+                per_page: 100,
+                page: page
+              });
+              
+              allFiles.push(...files);
+              hasMore = files.length === 100;
+              page++;
+            }
+            
+            console.log(`Total files changed in PR: ${allFiles.length}`);
+            
+            // Filter for only added/modified markdown files in docs/en/
+            const changedMdFiles = allFiles
+              .filter(file => 
+                (file.status === 'added' || file.status === 'modified') &&
+                file.filename.startsWith('docs/en/') &&
+                file.filename.endsWith('.md')
+              )
+              .map(file => file.filename);
+            
+            console.log(`\nFound ${changedMdFiles.length} added/modified markdown files in docs/en/:`);
+            changedMdFiles.forEach(file => console.log(`  - ${file}`));
+            
+            // Write to environment file for next steps
+            const fs = require('fs');
+            fs.writeFileSync(process.env.GITHUB_OUTPUT, 
+              `any_changed=${changedMdFiles.length > 0 ? 'true' : 'false'}\n` +
+              `all_changed_files=${changedMdFiles.join(' ')}\n`,
+              { flag: 'a' }
+            );
+            
+            return changedMdFiles;
+
+      - name: Create new branch for SEO updates
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # Create new branch from current base branch (which already has merged files)
+          BRANCH_NAME="auto-docs-seo/${{ github.event.pull_request.number }}"
+          git checkout -b $BRANCH_NAME
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+          
+          echo "✅ Created branch: $BRANCH_NAME"
+          echo ""
+          echo "📝 Files to process for SEO descriptions:"
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            if [ -f "$file" ]; then
+              echo "  ✓ $file"
+            else
+              echo "  ✗ $file (not found)"
+            fi
+          done
+
+      - name: Process changed files and add SEO descriptions
+        if: steps.changed-files.outputs.any_changed == 'true'
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          IGNORED_FOLDERS: ${{ vars.DOCS_SEO_IGNORED_FOLDERS }}
+          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        run: |
+          python3 .github/scripts/add_seo_descriptions.py
+
+
+      - name: Commit and push changes
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: |
+          git add -A docs/en/
+          
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+            echo "has_commits=false" >> $GITHUB_ENV
+          else
+            BRANCH_NAME="auto-docs-seo/${{ github.event.pull_request.number }}"
+            git commit -m "docs: Add SEO descriptions to modified documentation files" -m "Related to PR #${{ github.event.pull_request.number }}"
+            git push origin $BRANCH_NAME
+            echo "has_commits=true" >> $GITHUB_ENV
+            echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+          fi
+
+      - name: Create Pull Request
+        if: env.has_commits == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const stats = fs.readFileSync('/tmp/seo_stats.txt', 'utf8').split('\n');
+            const processedCount = parseInt(stats[0]) || 0;
+            const skippedCount = parseInt(stats[1]) || 0;
+            const skippedTooShort = parseInt(stats[2]) || 0;
+            const skippedIgnored = parseInt(stats[3]) || 0;
+            const prNumber = ${{ github.event.pull_request.number }};
+            const baseRef = '${{ github.event.pull_request.base.ref }}';
+            const branchName = `auto-docs-seo/${prNumber}`;
+            
+            if (processedCount > 0) {
+              // Read the actually updated files list (not all changed files)
+              const updatedFilesStr = fs.readFileSync('/tmp/seo_updated_files.txt', 'utf8');
+              const updatedFiles = updatedFilesStr.trim().split('\n').filter(f => f.trim());
+              
+              let prBody = '🤖 **Automated SEO Descriptions**\n\n';
+              prBody += `This PR automatically adds SEO descriptions to documentation files that were modified in PR #${prNumber}.\n\n`;
+              prBody += '## 📊 Summary\n';
+              prBody += `- ✅ **Updated:** ${processedCount} file(s)\n`;
+              prBody += `- ⏭️ **Skipped (total):** ${skippedCount} file(s)\n`;
+              if (skippedTooShort > 0) {
+                prBody += `  - ⏭️ Content < 200 chars: ${skippedTooShort} file(s)\n`;
+              }
+              if (skippedIgnored > 0) {
+                prBody += `  - 🚫 Ignored folders: ${skippedIgnored} file(s)\n`;
+              }
+              prBody += '\n## 📝 Modified Files\n';
+              prBody += updatedFiles.slice(0, 20).map(f => `- \`${f}\``).join('\n');
+              if (updatedFiles.length > 20) {
+                prBody += `\n- ... and ${updatedFiles.length - 20} more`;
+              }
+              prBody += '\n\n## 🔧 Details\n';
+              prBody += `- **Related PR:** #${prNumber}\n\n`;
+              prBody += 'These descriptions were automatically generated to improve SEO and search engine visibility. 🚀';
+
+              const { data: pr } = await github.rest.pulls.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `docs: Add SEO descriptions (from PR ${prNumber})`,
+                head: branchName,
+                base: baseRef,
+                body: prBody
+              });
+              
+              console.log(`✅ Created PR: ${pr.html_url}`);
+              
+              // Add reviewers to the PR (from GitHub variable)
+              const reviewersStr = '${{ vars.DOCS_SEO_REVIEWERS || '' }}';
+              const reviewers = reviewersStr.split(',').map(r => r.trim()).filter(r => r);
+              
+              if (reviewers.length === 0) {
+                console.log('⚠️ No reviewers specified in DOCS_SEO_REVIEWERS variable.');
+                return;
+              }
+              
+              try {
+                await github.rest.pulls.requestReviewers({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: pr.number,
+                  reviewers: reviewers,
+                  team_reviewers: []
+                });
+                console.log(`✅ Added reviewers (${reviewers.join(', ')}) to PR ${pr.number}`);
+              } catch (error) {
+                console.log(`⚠️ Could not add reviewers: ${error.message}`);
+              }
+            }
+

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
 using Shouldly;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Json.SystemTextJson.Modifiers;
 using Xunit;
 
@@ -34,7 +35,7 @@ public class CalculateHash_Tests: PermissionTestBase
         json.ShouldNotContain(id.ToString("D"));
         json = JsonSerializer.Serialize(new List<PermissionDefinitionRecord>()
             {
-                new PermissionDefinitionRecord(id, "Test", "Test", "Test", "Test")
+                new PermissionDefinitionRecord(id, "Test", "Test", "Test", "Test", "Test", "Test")
             },
             jsonSerializerOptions);
         json.ShouldNotContain("\"Id\"");

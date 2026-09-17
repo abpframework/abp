@@ -1,4 +1,5 @@
 import { ConfigStateService, PermissionService } from '@abp/ng.core';
+import { Injector } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { EXTRA_PROPERTIES_KEY } from '../constants/extra-properties';
 import {
@@ -52,20 +53,21 @@ export function mergeWithDefaultProps<F extends PropsFactory<any>>(
 }
 
 export function checkPolicies(
+  injector: Injector,
   properties: ObjectExtensions.EntityExtensionProperties,
-  configState: ConfigStateService,
-  permissionService: PermissionService,
 ) {
+  const configState = injector.get(ConfigStateService);
+  const permission = injector.get(PermissionService);
   const props = Object.entries(properties);
 
   const checkPolicy = (policy: Policy): boolean => {
-    const { permissions, globalFeatures, features } = policy;
+    const { permissions, globalFeatures, features } = policy || {};
 
     const checks = [
       {
         items: permissions?.permissionNames,
         requiresAll: permissions?.requiresAll,
-        check: (item: string) => permissionService.getGrantedPolicy(item),
+        check: (item: string) => permission.getGrantedPolicy(item),
       },
       {
         items: globalFeatures?.features,

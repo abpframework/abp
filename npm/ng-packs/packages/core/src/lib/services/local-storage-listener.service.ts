@@ -1,6 +1,5 @@
 import { DOCUMENT } from '@angular/common';
 import { Injectable, inject } from '@angular/core';
-
 @Injectable({
   providedIn: 'root',
 })
@@ -9,8 +8,13 @@ export class LocalStorageListenerService {
 
   constructor() {
     this.window.addEventListener('storage', event => {
-      if (event.key === 'access_token' && event.newValue === null) {
-        this.window.location.reload();
+      if (event.key === 'access_token') {
+        const tokenRemoved = event.newValue === null;
+        const tokenAdded = event.oldValue === null && event.newValue !== null;
+
+        if (tokenRemoved || tokenAdded) {
+          this.window.location.assign('/');
+        }
       }
     });
   }

@@ -64,8 +64,7 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
 
         return await query
             .OrderBy(sorting.IsNullOrWhiteSpace() ? (nameof(AuditLog.ExecutionTime) + " DESC") : sorting)
-            .As<IMongoQueryable<AuditLog>>()
-            .PageBy<AuditLog, IMongoQueryable<AuditLog>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -104,8 +103,7 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
             cancellationToken: cancellationToken
         );
 
-        var count = await query.As<IMongoQueryable<AuditLog>>()
-            .LongCountAsync(GetCancellationToken(cancellationToken));
+        var count = await query.LongCountAsync(GetCancellationToken(cancellationToken));
 
         return count;
     }
@@ -128,7 +126,7 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        return (await GetMongoQueryableAsync(cancellationToken))
+        return (await GetQueryableAsync(cancellationToken))
             .WhereIf(startTime.HasValue, auditLog => auditLog.ExecutionTime >= startTime)
             .WhereIf(endTime.HasValue, auditLog => auditLog.ExecutionTime <= endTime)
             .WhereIf(hasException.HasValue && hasException.Value, auditLog => auditLog.Exceptions != null && auditLog.Exceptions != "")
@@ -151,7 +149,7 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
         DateTime endDate,
         CancellationToken cancellationToken = default)
     {
-        var result = await (await GetMongoQueryableAsync(cancellationToken))
+        var result = await (await GetQueryableAsync(cancellationToken))
             .Where(a => a.ExecutionTime < endDate.AddDays(1) && a.ExecutionTime > startDate)
             .OrderBy(t => t.ExecutionTime)
             .GroupBy(t => new {
@@ -169,7 +167,7 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
         Guid entityChangeId,
         CancellationToken cancellationToken = default)
     {
-        var entityChange = (await (await GetMongoQueryableAsync(cancellationToken))
+        var entityChange = (await (await GetQueryableAsync(cancellationToken))
             .Where(x => x.EntityChanges.Any(y => y.Id == entityChangeId))
             .OrderBy(x => x.Id)
             .FirstAsync(GetCancellationToken(cancellationToken))).EntityChanges.FirstOrDefault(x => x.Id == entityChangeId);
@@ -199,8 +197,7 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
 
         return await query
             .OrderBy(sorting.IsNullOrWhiteSpace() ? (nameof(EntityChange.ChangeTime) + " DESC") : sorting)
-            .As<IMongoQueryable<EntityChange>>()
-            .PageBy<EntityChange, IMongoQueryable<EntityChange>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -215,7 +212,7 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
     {
         var query = await GetEntityChangeListQueryAsync(auditLogId, startTime, endTime, changeType, entityId, entityTypeFullName, cancellationToken);
 
-        var count = await query.As<IMongoQueryable<EntityChange>>().LongCountAsync(GetCancellationToken(cancellationToken));
+        var count = await query.LongCountAsync(GetCancellationToken(cancellationToken));
 
         return count;
     }
@@ -224,7 +221,7 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
         Guid entityChangeId,
         CancellationToken cancellationToken = default)
     {
-        var auditLog = await (await GetMongoQueryableAsync(cancellationToken))
+        var auditLog = await (await GetQueryableAsync(cancellationToken))
                         .Where(x => x.EntityChanges.Any(y => y.Id == entityChangeId))
                         .FirstAsync(GetCancellationToken(cancellationToken));
 
@@ -240,9 +237,8 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
         string entityTypeFullName,
         CancellationToken cancellationToken = default)
     {
-        var auditLogs = await (await GetMongoQueryableAsync(cancellationToken))
+        var auditLogs = await (await GetQueryableAsync(cancellationToken))
                         .Where(x => x.EntityChanges.Any(y => y.EntityId == entityId && y.EntityTypeFullName == entityTypeFullName))
-                        .As<IMongoQueryable<AuditLog>>()
                         .OrderByDescending(x => x.ExecutionTime)
                         .ToListAsync(GetCancellationToken(cancellationToken));
 
@@ -263,7 +259,7 @@ public class MongoAuditLogRepository : MongoDbRepository<IAuditLoggingMongoDbCon
         string entityTypeFullName = null,
         CancellationToken cancellationToken = default)
     {
-        return (await GetMongoQueryableAsync(cancellationToken))
+        return (await GetQueryableAsync(cancellationToken))
                 .SelectMany(x => x.EntityChanges)
                 .WhereIf(auditLogId.HasValue, e => e.Id == auditLogId)
                 .WhereIf(startTime.HasValue, e => e.ChangeTime >= startTime)

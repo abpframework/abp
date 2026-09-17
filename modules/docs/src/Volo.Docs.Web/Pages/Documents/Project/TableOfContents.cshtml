@@ -1,0 +1,41 @@
+﻿@using Volo.Docs.TableOfContents
+@model List<TocItem>
+@{
+    if (Model == null || Model.Count == 0)
+    {
+        return;
+    }
+}
+
+<ul class="nav nav-pills flex-column">
+    @foreach (var item in Model)
+    {
+        <li class="nav-item @(item.Children.Any() ? "toc-item-has-children" : "")">
+            <a class="nav-link" href="#@item.Heading.Id">@item.Heading.Text</a>
+            
+            @if (item.Children.Any())
+            {
+                RenderChildrenRecursive(item.Children, 1);
+            }
+        </li>
+    }
+</ul>
+
+@{
+    void RenderChildrenRecursive(List<TocItem> children, int depth)
+    {
+        <ul class="nav nav-pills flex-column toc-depth-@depth">
+            @foreach (var child in children)
+            {
+                <li class="nav-item @(child.Children.Any() ? "toc-item-has-children" : "")">
+                    <a class="nav-link" href="#@child.Heading.Id">@child.Heading.Text</a>
+                
+                    @if (child.Children.Any())
+                    {
+                        RenderChildrenRecursive(child.Children, depth + 1);
+                    }
+                </li>
+            }
+        </ul>
+    }
+}

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover ABP's powerful text templating system for dynamic content rendering, supporting conditionals, loops, and localization for enhanced applications."
+}
+```
+
 # Text Templating
 
 ## Introduction
@@ -25,6 +32,21 @@ ABP provides two templating engines;
 * **[Scriban](./scriban.md)**
 
 You can use different template engines in the same application, or even create a new custom template engine.
+
+## Default Rendering Engine
+
+A template can select its rendering engine explicitly with `WithScribanEngine`, `WithRazorEngine` or `WithRenderEngine`. If it does not, the renderer uses `AbpTextTemplatingOptions.DefaultRenderingEngine`.
+
+The Scriban module selects Scriban as the default engine. The Razor module selects Razor only if no default has already been configured. You can explicitly select the application-wide default:
+
+````csharp
+Configure<AbpTextTemplatingOptions>(options =>
+{
+    options.DefaultRenderingEngine = ScribanTemplateRenderingEngine.EngineName;
+});
+````
+
+An engine selected on a template definition takes precedence over this global default.
 
 ## Source Code
 

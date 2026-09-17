@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how ABP simplifies forms and validation in ASP.NET Core MVC/Razor Pages, with automated localization and client-side validation."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages: Forms & Validation
 
 ABP provides infrastructure and conventions to make easier to create forms, localize display names for the form elements and handle server & client side validation;

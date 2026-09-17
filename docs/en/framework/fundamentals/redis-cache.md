@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to enhance your ABP application with Redis Cache integration for improved performance and advanced caching capabilities."
+}
+```
+
 # Redis Cache
 
 ABP [Caching System](./caching.md) extends the [ASP.NET Core distributed cache](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed). So, **any provider** supported by the standard ASP.NET Core distributed cache can be usable in your application and can be configured just like **documented by Microsoft**.

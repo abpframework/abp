@@ -1,0 +1,14 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/packages/cms-kit",
+  "lib": {
+    "entryFile": "src/public-api.ts"
+  },
+  "allowedNonPeerDependencies": [
+    "@abp/ng.theme.shared",
+    "@abp/ng.components",
+    "@abp/ng.setting-management",
+    "@toast-ui/editor",
+    "codemirror"
+  ]
+}

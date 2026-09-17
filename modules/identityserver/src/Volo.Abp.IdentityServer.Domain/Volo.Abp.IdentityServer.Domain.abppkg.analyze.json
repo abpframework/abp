@@ -11,9 +11,9 @@
           "name": "AbpIdentityServerDomainSharedModule"
         },
         {
-          "declaringAssemblyName": "Volo.Abp.AutoMapper",
-          "namespace": "Volo.Abp.AutoMapper",
-          "name": "AbpAutoMapperModule"
+          "declaringAssemblyName": "Volo.Abp.Mapperly",
+          "namespace": "Volo.Abp.Mapperly",
+          "name": "AbpMapperlyModule"
         },
         {
           "declaringAssemblyName": "Volo.Abp.Identity.Domain",
@@ -427,6 +427,12 @@
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
         },
         {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
+        },
+        {
           "name": "IEntity<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
@@ -737,6 +743,12 @@
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
         },
         {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
+        },
+        {
           "name": "IEntity<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
@@ -847,6 +859,12 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
         },
         {
           "name": "IEntity<Guid>",
@@ -967,6 +985,12 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
         },
         {
           "name": "IEntity<Guid>",
@@ -2013,6 +2037,12 @@
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
         },
         {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
+        },
+        {
           "name": "IEntity<Guid>",
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
@@ -2321,6 +2351,12 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
         },
         {
           "name": "IEntity<Guid>",
@@ -3932,6 +3968,178 @@
       ],
       "contentType": "repositoryInterface",
       "name": "IApiResourceRepository",
+      "summary": null
+    },
+    {
+      "eventHandlerType": "Local",
+      "namespace": "Volo.Abp.IdentityServer",
+      "subscribedEvents": [
+        {
+          "underlyingType": {
+            "name": "Client",
+            "namespace": "Volo.Abp.IdentityServer.Clients",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+            "fullName": "Volo.Abp.IdentityServer.Clients.Client"
+          },
+          "name": "EntityChangedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityChangedEventData`1"
+        },
+        {
+          "underlyingType": {
+            "name": "ClientCorsOrigin",
+            "namespace": "Volo.Abp.IdentityServer.Clients",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+            "fullName": "Volo.Abp.IdentityServer.Clients.ClientCorsOrigin"
+          },
+          "name": "EntityChangedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityChangedEventData`1"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "ILocalEventHandler<EntityChangedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityChangedEventData`1>"
+        },
+        {
+          "name": "IEventHandler",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.IEventHandler"
+        },
+        {
+          "name": "ILocalEventHandler<EntityChangedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityChangedEventData`1>"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "eventHandler",
+      "name": "AllowedCorsOriginsCacheItemInvalidator",
+      "summary": null
+    },
+    {
+      "eventHandlerType": "Local",
+      "namespace": "Volo.Abp.IdentityServer",
+      "subscribedEvents": [
+        {
+          "underlyingType": {
+            "name": "Client",
+            "namespace": "Volo.Abp.IdentityServer.Clients",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+            "fullName": "Volo.Abp.IdentityServer.Clients.Client"
+          },
+          "name": "EntityChangedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityChangedEventData`1"
+        },
+        {
+          "underlyingType": {
+            "name": "ClientCorsOrigin",
+            "namespace": "Volo.Abp.IdentityServer.Clients",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+            "fullName": "Volo.Abp.IdentityServer.Clients.ClientCorsOrigin"
+          },
+          "name": "EntityChangedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityChangedEventData`1"
+        },
+        {
+          "underlyingType": {
+            "name": "IdentityResource",
+            "namespace": "Volo.Abp.IdentityServer.IdentityResources",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+            "fullName": "Volo.Abp.IdentityServer.IdentityResources.IdentityResource"
+          },
+          "name": "EntityChangedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityChangedEventData`1"
+        },
+        {
+          "underlyingType": {
+            "name": "ApiResource",
+            "namespace": "Volo.Abp.IdentityServer.ApiResources",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+            "fullName": "Volo.Abp.IdentityServer.ApiResources.ApiResource"
+          },
+          "name": "EntityChangedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityChangedEventData`1"
+        },
+        {
+          "underlyingType": {
+            "name": "ApiScope",
+            "namespace": "Volo.Abp.IdentityServer.ApiScopes",
+            "declaringAssemblyName": "Volo.Abp.IdentityServer.Domain",
+            "fullName": "Volo.Abp.IdentityServer.ApiScopes.ApiScope"
+          },
+          "name": "EntityChangedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityChangedEventData`1"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "ILocalEventHandler<EntityChangedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityChangedEventData`1>"
+        },
+        {
+          "name": "IEventHandler",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.IEventHandler"
+        },
+        {
+          "name": "ILocalEventHandler<EntityChangedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityChangedEventData`1>"
+        },
+        {
+          "name": "ILocalEventHandler<EntityChangedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityChangedEventData`1>"
+        },
+        {
+          "name": "ILocalEventHandler<EntityChangedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityChangedEventData`1>"
+        },
+        {
+          "name": "ILocalEventHandler<EntityChangedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityChangedEventData`1>"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "eventHandler",
+      "name": "IdentityServerCacheItemInvalidator",
       "summary": null
     }
   ]

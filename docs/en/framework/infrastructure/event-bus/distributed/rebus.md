@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to set up Rebus as your distributed event bus provider with ABP Framework for seamless event handling in your applications."
+}
+```
+
 # Distributed Event Bus Rebus Integration
 
 > This document explains **how to configure the [Rebus](http://mookid.dk/category/rebus/)** as the distributed event bus provider. See the [distributed event bus document](../distributed) to learn how to use the distributed event bus system

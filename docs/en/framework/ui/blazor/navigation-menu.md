@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to effectively add and manage navigation menus in your ABP Framework application using the modular menu infrastructure."
+}
+```
+
 # Blazor UI: Navigation / Menu
 
 Every application has a main menu to allow users to navigate to pages/screens of the application. Some applications may contain more than one menu in different sections of the UI.
@@ -122,6 +129,25 @@ if (await context.IsGrantedAsync("MyPermissionName"))
 ````
 
 > You can use `context.AuthorizationService` to directly access to the `IAuthorizationService`.
+
+
+### Custom Components
+
+Custom components can be used to render the menu items instead of the default components of the theme. The extension method named `UseComponent` from `Volo.Abp.UI.Navigation` namespace can be used to set a custom component for a menu item.
+
+**Example: Set a custom component for a menu item**
+
+```csharp
+context.Menu.Items.Add(
+    new ApplicationMenuItem("MyProject.Crm.About", "About", "/about")
+        .UseComponent<AboutMenuItemComponent>()
+        );
+```
+
+_AboutMenuItemComponent.razor component will be renderd for the menu item._
+
+
+
 
 ### Resolving Dependencies
 

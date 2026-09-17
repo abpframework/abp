@@ -14,10 +14,12 @@ namespace Volo.Abp.Identity.EntityFrameworkCore;
 
 public class EfCoreIdentitySessionRepository : EfCoreRepository<IIdentityDbContext, IdentitySession, Guid>, IIdentitySessionRepository
 {
-    public EfCoreIdentitySessionRepository(IDbContextProvider<IIdentityDbContext> dbContextProvider)
+    protected IClock Clock { get; }
+
+    public EfCoreIdentitySessionRepository(IDbContextProvider<IIdentityDbContext> dbContextProvider, IClock clock)
         : base(dbContextProvider)
     {
-
+        Clock = clock;
     }
 
     public virtual async Task<IdentitySession> FindAsync(string sessionId, CancellationToken cancellationToken = default)
@@ -89,7 +91,7 @@ public class EfCoreIdentitySessionRepository : EfCoreRepository<IIdentityDbConte
 
     public virtual async Task DeleteAllAsync(TimeSpan inactiveTimeSpan, CancellationToken cancellationToken = default)
     {
-        var now = LazyServiceProvider.LazyGetRequiredService<IClock>().Now;
-        await DeleteDirectAsync(x => x.LastAccessed == null || x.LastAccessed < now.Subtract(inactiveTimeSpan), cancellationToken: cancellationToken);
+        var inactiveTime = Clock.Now.Subtract(inactiveTimeSpan);
+        await DeleteDirectAsync(x => (x.LastAccessed ?? x.SignedIn) < inactiveTime, cancellationToken: cancellationToken);
     }
 }

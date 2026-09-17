@@ -53,7 +53,7 @@ public class IdentityClaimTypeManager_Tests : AbpIdentityDomainTestBase
     [Fact]
     public async Task Update_Name_Exist_Should_Exception()
     {
-        await Assert.ThrowsAnyAsync<AbpException>(async () => await _claimTypeManager.UpdateAsync(
+        await Assert.ThrowsAnyAsync<BusinessException>(async () => await _claimTypeManager.UpdateAsync(
             new IdentityClaimType(
                 Guid.NewGuid(), "Age")));
     }
@@ -65,6 +65,6 @@ public class IdentityClaimTypeManager_Tests : AbpIdentityDomainTestBase
         var phoneClaim = new IdentityClaimType(Guid.NewGuid(), "Phone", true, true);
         await _identityClaimTypeRepository.InsertAsync(phoneClaim);
 
-        await Assert.ThrowsAnyAsync<AbpException>(async () => await _claimTypeManager.UpdateAsync(phoneClaim));
+        await Assert.ThrowsAnyAsync<BusinessException>(async () => await _claimTypeManager.UpdateAsync(phoneClaim));
     }
 }

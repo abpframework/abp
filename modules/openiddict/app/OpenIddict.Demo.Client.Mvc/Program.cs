@@ -1,4 +1,4 @@
-using IdentityModel;
+using Duende.IdentityModel;
 using OpenIddict.Demo.Client.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);

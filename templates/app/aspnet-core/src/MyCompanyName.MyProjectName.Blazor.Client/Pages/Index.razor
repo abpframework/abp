@@ -1,87 +1,127 @@
 @page "/"
-@using Volo.Abp.MultiTenancy
 @inherits MyProjectNameComponentBase
-@inject AuthenticationStateProvider AuthenticationStateProvider
 
-<div class="row mb-3">
-    <div class="col-xl-6 col-12 d-flex">
-        <div class="card h-lg-100 w-100 overflow-hidden">
-            <div class="card-body">
-                <div class="starting-content">
-                    <h3>Getting Started</h3>
-                    <p class="lead text-muted mb-2">Learn how to create and run
-                        a new web application using the application startup template.</p>
-                    <a href="https://docs.abp.io/en/commercial/latest/getting-started" class="btn btn-brand mb-4" target="_blank">Getting Started</a>
+<MudGrid Class="mb-3">
+    <MudItem xs="12" md="6">
+        <MudCard Style="height: 100%;">
+            <MudCardContent>
+                @if (!CurrentUser.IsAuthenticated)
+                {
+                    <MudText Typo="Typo.h5" Class="mb-2">@L["Welcome"]</MudText>
+                    <MudText Typo="Typo.body1" Class="mud-text-secondary mb-2">@L["LongWelcomeMessage"]</MudText>
+                    <MudButton Href="authentication/login" Variant="Variant.Filled" Color="Color.Primary" Class="mb-4"
+                               StartIcon="@Icons.Material.Filled.Login">@L["Login"]</MudButton>
+                }
 
-                    <h4>Web Application Development Tutorial</h4>
-                    <p class="text-muted mb-2">Learn how to build an ABP based web application named Acme.BookStore.</p>
-                    <a href="https://docs.abp.io/en/commercial/latest/tutorials/book-store/part-1?UI=MVC&DB=EF" class="btn btn-primary soft mb-4" target="_blank">Explore Tutorial</a>
+                <MudText Typo="Typo.h6">Getting Started</MudText>
+                <MudText Typo="Typo.body2" Class="mud-text-secondary mb-2">Learn how to create and run a new web application using the application startup template.</MudText>
+                <MudButton Href="https://docs.abp.io/en/abp/latest/getting-started" Target="_blank"
+                           Variant="Variant.Filled" Color="Color.Primary" Class="mb-3">Getting Started</MudButton>
 
-                    <h4>Customize Lepton Theme</h4>
-                    <p class="text-muted mb-2">Learn how to customize LeptonX Theme as you wish.</p>
-                    <a href="https://docs.abp.io/en/commercial/latest/themes/lepton/customizing-lepton-theme" class="btn btn-primary soft mb-5 mb-xl-0" target="_blank">Customize Lepton</a>
-                </div>
-                <img class="card-bg-image" src="/images/getting-started/bg-01.png">
-            </div>
-        </div>
-    </div>
+                <MudText Typo="Typo.h6">Web Application Development Tutorial</MudText>
+                <MudText Typo="Typo.body2" Class="mud-text-secondary mb-2">Learn how to build an ABP based web application named Acme.BookStore.</MudText>
+                <MudButton Href="https://docs.abp.io/en/abp/latest/tutorials/book-store/part-1?UI=Blazor&DB=EF" Target="_blank"
+                           Variant="Variant.Outlined" Color="Color.Primary">Explore Tutorial</MudButton>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" md="6">
+        <MudCard Style="height: 100%;">
+            <MudCardContent>
+                <MudText Typo="Typo.h6" Color="Color.Primary" Class="mb-2">
+                    <MudIcon Icon="@Icons.Material.Filled.Groups" Class="me-1" /> Community
+                </MudText>
+                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary">A unique community platform for <strong>ABP Lovers!</strong></MudText>
+                <MudText Typo="Typo.body2" Class="mud-text-secondary mb-3">Explore all ABP users' experiences with the ABP Framework, discover articles and videos on how to use ABP, and join raffles for a chance to win surprise gifts!</MudText>
+                <MudButton Href="https://community.abp.io/" Target="_blank"
+                           Variant="Variant.Outlined" Color="Color.Primary" Class="mb-3">Join ABP Community</MudButton>
 
-    <div class="col-xl-3 col-md-6 d-flex">
-        <div class="row">
-            <div class="col-12 d-flex">
-                <div class="card overflow-hidden">
-                    <div class="card-body pb-0">
-                        <div class="abp-support abp-logo mb-2"></div>
-                        <p class="text-muted mb-2">You can check for similar problems and solutions, or open a new topic to discuss your specific issue.</p>
-                        <a href="https://support.abp.io/QA/Questions" class="btn btn-brand soft" target="_blank">Visit Support</a>
-                        <img class="" src="/images/getting-started/img-support.png">
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 d-flex">
-                <div class="card h-md-100 overflow-hidden">
-                    <div class="card-body pb-0">
-                        <div class="abp-blog abp-logo mb-2"></div>
-                        <p class="text-muted mb-2">You can find content on .NET development, cross-platform, ASP.NET application templates, ABP-related news, and more.</p>
-                        <a href="https://blog.abp.io/abp" class="btn btn-brand soft" target="_blank">Visit Blog</a>
-                        <img style="margin-bottom: -24px;" src="/images/getting-started/img-blog.png">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                <MudDivider Class="my-3" />
 
-    <div class="my-3 text-center">
-        <h3>Let's improve your application!</h3>
-        <p>Here are some links to help you get started:</p>
-    </div>
+                <MudText Typo="Typo.h6" Color="Color.Primary" Class="mb-2">
+                    <MudIcon Icon="@Icons.Material.Filled.RssFeed" Class="me-1" /> Blog
+                </MudText>
+                <MudText Typo="Typo.body2" Class="mud-text-secondary mb-2">Find content on .NET development, cross-platform, ASP.NET application templates, ABP-related news, and more.</MudText>
+                <MudButton Href="https://blog.abp.io/abp" Target="_blank"
+                           Variant="Variant.Outlined" Color="Color.Primary">Visit Blog</MudButton>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
 
-    <div class="card mt-4 mb-5">
-        <div class="card-body">
-            <div class="row text-center justify-content-md-center">
-                <div class="col-lg-4">
-                    <div class="p-4">
-                        <h5 class="mb-3"><i class="fas fa-book text-secondary d-block my-3 fa-2x"></i> Learn the ABP Framework</h5>
-                        <p>Explore the comprehensive documentation to learn how to build a modern web application.</p>
-                        <a href="https://abp.io/docs/latest?ref=tmpl" target="_blank" class="btn btn-link px-1">See Documents <i class="fas fa-chevron-right"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-4 border-start">
-                    <div class="p-4">
-                        <h5 class="mb-3"><i class="fas fa-cubes text-secondary d-block my-3 fa-2x"></i> Samples</h5>
-                        <p>See the example projects built with the ABP Framework.</p>
-                        <a href="https://abp.io/docs/latest/samples?ref=tmpl" target="_blank" class="btn btn-link px-1">All samples <i class="fas fa-chevron-right"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-4 border-start">
-                    <div class="p-4">
-                        <h5 class="mb-3"><i class="fas fa-users text-secondary d-block my-3 fa-2x"></i> ABP Community</h5>
-                        <p>Get involved with a vibrant community and become a contributor.</p>
-                        <a href="https://abp.io/community/" target="_blank" class="btn btn-link px-1">Community <i class="fas fa-chevron-right"></i></a>
-                        <a href="https://abp.io/docs/latest/contribution?ref=tmpl" target="_blank" class="btn btn-link px-1">Contribute <i class="fas fa-chevron-right"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<MudGrid>
+    <MudItem xs="12" lg="4">
+        <MudCard Style="height: 100%;">
+            <MudCardHeader>
+                <MudText Typo="Typo.h6">More from ABP.IO</MudText>
+            </MudCardHeader>
+            <MudCardContent Class="pt-0">
+                <MudList T="string" Dense="true">
+                    <MudListItem Icon="@Icons.Material.Filled.Check" IconColor="Color.Primary"
+                                 Href="https://github.com/abpframework/abp/releases" Target="_blank">
+                        Latest Release Logs
+                    </MudListItem>
+                    <MudListItem Icon="@Icons.Material.Filled.Check" IconColor="Color.Primary"
+                                 Href="https://abp.io/video-courses/essentials" Target="_blank">
+                        Video Courses
+                    </MudListItem>
+                    <MudListItem Icon="@Icons.Material.Filled.Check" IconColor="Color.Primary"
+                                 Href="https://docs.abp.io/en/abp/latest/Samples/Index" Target="_blank">
+                        Samples
+                    </MudListItem>
+                    <MudListItem Icon="@Icons.Material.Filled.Check" IconColor="Color.Primary"
+                                 Href="https://abp.io/books" Target="_blank">
+                        Books
+                    </MudListItem>
+                    <MudListItem Icon="@Icons.Material.Filled.Check" IconColor="Color.Primary"
+                                 Href="https://abp.io/faq" Target="_blank">
+                        FAQ
+                    </MudListItem>
+                </MudList>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" lg="8">
+        <MudCard Style="height: 100%;">
+            <MudCardHeader>
+                <MudText Typo="Typo.h6">Follow us on Social Media</MudText>
+            </MudCardHeader>
+            <MudCardContent Class="pt-0">
+                <MudGrid Spacing="0">
+                    <MudItem xs="12" sm="6">
+                        <MudList T="string" Dense="true">
+                            <MudListItem Href="https://twitter.com/abpframework" Target="_blank"
+                                         Icon="@Icons.Custom.Brands.Twitter" IconColor="Color.Primary">
+                                X.com (Twitter)
+                            </MudListItem>
+                            <MudListItem Href="https://community.abp.io/discord" Target="_blank"
+                                         Icon="@Icons.Custom.Brands.Discord" IconColor="Color.Primary">
+                                Discord
+                            </MudListItem>
+                            <MudListItem Href="https://stackoverflow.com/questions/tagged/abp" Target="_blank"
+                                         Icon="@Icons.Custom.Brands.StackOverflow" IconColor="Color.Primary">
+                                Stack Overflow
+                            </MudListItem>
+                        </MudList>
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudList T="string" Dense="true">
+                            <MudListItem Href="@("https://www.youtube.com/@Volosoft")" Target="_blank"
+                                         Icon="@Icons.Custom.Brands.YouTube" IconColor="Color.Error">
+                                YouTube
+                            </MudListItem>
+                            <MudListItem Href="https://www.instagram.com/abpframework/" Target="_blank"
+                                         Icon="@Icons.Custom.Brands.Instagram" IconColor="Color.Secondary">
+                                Instagram
+                            </MudListItem>
+                            <MudListItem Href="https://github.com/abpframework/abp" Target="_blank"
+                                         Icon="@Icons.Custom.Brands.GitHub" IconColor="Color.Dark">
+                                GitHub
+                            </MudListItem>
+                        </MudList>
+                    </MudItem>
+                </MudGrid>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>

@@ -60,6 +60,9 @@
     "AddNew": "Lisää uusi",
     "ProfilePicture": "Profiilikuva",
     "Theme": "Teema",
-    "NotAssigned": "Ei määritetty"
+    "NotAssigned": "Ei määritetty",
+    "EntityActionsDisabledTooltip": "Sinulla ei ole oikeutta suorittaa mitään toimintoa.",
+    "ResourcePermissions": "Käyttöoikeudet",
+    "ShowPassword": "Näytä salasana"
   }
 }

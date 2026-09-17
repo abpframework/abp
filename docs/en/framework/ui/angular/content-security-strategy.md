@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to safely implement Content Security Policy with the `ContentSecurityStrategy` class in ABP Framework for enhanced web security."
+}
+```
+
 # ContentSecurityStrategy
 
 `ContentSecurityStrategy` is an abstract class exposed by @abp/ng.core package. It helps you mark inline scripts or styles as safe in terms of [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy).

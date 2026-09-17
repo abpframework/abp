@@ -24,13 +24,13 @@ public class MongoIdentityClaimTypeRepository : MongoDbRepository<IAbpIdentityMo
     {
         if (ignoredId == null)
         {
-            return await (await GetMongoQueryableAsync(cancellationToken))
+            return await (await GetQueryableAsync(cancellationToken))
                 .Where(ct => ct.Name == name)
                 .AnyAsync(GetCancellationToken(cancellationToken));
         }
         else
         {
-            return await (await GetMongoQueryableAsync(cancellationToken))
+            return await (await GetQueryableAsync(cancellationToken))
                 .Where(ct => ct.Id != ignoredId && ct.Name == name)
                 .AnyAsync(GetCancellationToken(cancellationToken));
         }
@@ -43,15 +43,14 @@ public class MongoIdentityClaimTypeRepository : MongoDbRepository<IAbpIdentityMo
         string filter,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf<IdentityClaimType, IMongoQueryable<IdentityClaimType>>(
+        return await (await GetQueryableAsync(cancellationToken))
+            .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
                     u.Name.Contains(filter)
             )
-            .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityClaimType.Name) : sorting)
-            .As<IMongoQueryable<IdentityClaimType>>()
-            .PageBy<IdentityClaimType, IMongoQueryable<IdentityClaimType>>(skipCount, maxResultCount)
+            .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityClaimType.CreationTime) + " desc" : sorting)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -59,19 +58,18 @@ public class MongoIdentityClaimTypeRepository : MongoDbRepository<IAbpIdentityMo
         string filter = null,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf<IdentityClaimType, IMongoQueryable<IdentityClaimType>>(
+        return await (await GetQueryableAsync(cancellationToken))
+            .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
                     u.Name.Contains(filter)
             )
-            .As<IMongoQueryable<IdentityClaimType>>()
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<IdentityClaimType>> GetListByNamesAsync(IEnumerable<string> names, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .Where(x => names.Contains(x.Name))
             .ToListAsync(GetCancellationToken(cancellationToken));
     }

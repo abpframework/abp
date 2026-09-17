@@ -1,52 +1,54 @@
 import {
   ABP,
-  getRoutePath,
+  RouteBasedCultureUrlService,
   RouterEvents,
   RoutesService,
   SubscriptionService,
   TreeNode,
 } from '@abp/ng.core';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { map, startWith } from 'rxjs/operators';
 import { eThemeSharedRouteNames } from '../../enums/route-names';
+import { BreadcrumbItemsComponent } from '../breadcrumb-items/breadcrumb-items.component';
 
 @Component({
   selector: 'abp-breadcrumb',
   templateUrl: './breadcrumb.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [SubscriptionService],
+  imports: [BreadcrumbItemsComponent],
 })
 export class BreadcrumbComponent implements OnInit {
-  segments: Partial<ABP.Route>[] = [];
+  private router = inject(Router);
+  private routes = inject(RoutesService);
+  private subscription = inject(SubscriptionService);
+  private routerEvents = inject(RouterEvents);
+  private routeCultureUrl = inject(RouteBasedCultureUrlService);
 
-  constructor(
-    public readonly cdRef: ChangeDetectorRef,
-    private router: Router,
-    private routes: RoutesService,
-    private subscription: SubscriptionService,
-    private routerEvents: RouterEvents,
-  ) {}
+  readonly segments = signal<Partial<ABP.Route>[]>([]);
 
   ngOnInit(): void {
     this.subscription.addOne(
       this.routerEvents.getNavigationEvents('End').pipe(
         startWith(null),
-        map(() => this.routes.search({ path: getRoutePath(this.router) })),
+        map(() =>
+          this.routes.search({ path: this.routeCultureUrl.getRoutePathForMatching(this.router) }),
+        ),
       ),
       route => {
-        this.segments = [];
+        const next: Partial<ABP.Route>[] = [];
         if (route) {
           let node = { parent: route } as TreeNode<ABP.Route>;
 
           while (node.parent) {
             node = node.parent;
-            const { parent, children, isLeaf, path, ...segment } = node;
-            if (!isAdministration(segment)) this.segments.unshift(segment);
+            const { parent, children, isLeaf, ...segment } = node;
+            if (!isAdministration(segment)) next.unshift(segment);
           }
-
-          this.cdRef.detectChanges();
         }
+
+        this.segments.set(next);
       },
     );
   }

@@ -11,7 +11,7 @@ using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.AspNetCore.Security.Claims;
 
-[Obsolete("Replace with AbpClaimsTransformation")]
+[Obsolete("Use the TransformAbpClaims extension method from IServiceCollection instead.")]
 public class AbpClaimsMapMiddleware : AbpMiddlewareBase, ITransientDependency
 {
     public async override Task InvokeAsync(HttpContext context, RequestDelegate next)

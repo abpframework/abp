@@ -9,6 +9,7 @@
     "angular-oauth2-oidc",
     "just-compare",
     "just-clone",
-    "ts-toolbelt"
+    "ts-toolbelt",
+    "luxon"
   ]
 }

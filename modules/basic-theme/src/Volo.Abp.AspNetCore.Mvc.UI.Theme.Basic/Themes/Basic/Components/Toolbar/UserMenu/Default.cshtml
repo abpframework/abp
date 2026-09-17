@@ -21,7 +21,7 @@
 
     @if (Model.Items.Any())
     {
-        <div class="dropdown-menu dropdown-menu-end border-0 shadow-sm" aria-labelledby="dropdownMenuLink">
+        <div class="dropdown-menu border-0 shadow-sm" aria-labelledby="dropdownMenuLink">
             @foreach (var menuItem in Model.Items)
             {
                 var elementId = string.IsNullOrEmpty(menuItem.ElementId) ? string.Empty : $"id=\"{menuItem.ElementId}\"";

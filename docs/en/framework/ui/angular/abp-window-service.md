@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use AbpWindowService in Angular to efficiently download blobs as files with easy-to-follow steps and code examples."
+}
+```
+
 # Abp Window Service
 
 
@@ -13,10 +20,9 @@ Firstly, ensure that the service is injected into the component or any other Ang
 
 ```js
 import { AbpWindowService } from '@abp/ng.core';
+import { inject } from '@angular/core';  
 
-constructor(private abpWindowService: AbpWindowService) { }
-// or
-// private abpWindowService   = inject(AbpWindowService)
+private abpWindowService = inject(AbpWindowService) 
 ```
 
 ### Downloading a Blob

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Localization;
 using Volo.Abp.PermissionManagement.Web.Utils;
@@ -29,6 +31,16 @@ public class PermissionManagementModal : AbpPageModel
 
     [BindProperty]
     public List<PermissionGroupViewModel> Groups { get; set; }
+
+    /* A replaced view that still posts the whole Groups tree does not set this, so it keeps working. */
+    [BindProperty]
+    public bool OnlyChangedPermissions { get; set; }
+
+    [BindProperty]
+    public string GrantedPermissionNames { get; set; }
+
+    [BindProperty]
+    public string RevokedPermissionNames { get; set; }
 
     public string EntityDisplayName { get; set; }
 
@@ -87,14 +99,21 @@ public class PermissionManagementModal : AbpPageModel
     {
         ValidateModel();
 
-        var updatePermissionDtos = Groups
-            .SelectMany(g => g.Permissions)
-            .Select(p => new UpdatePermissionDto
-            {
-                Name = p.Name,
-                IsGranted = p.IsGranted
-            })
-            .ToArray();
+        var updatePermissionDtos = OnlyChangedPermissions
+            ? GetChangedPermissions()
+            : Groups
+                .SelectMany(g => g.Permissions)
+                .Select(p => new UpdatePermissionDto
+                {
+                    Name = p.Name,
+                    IsGranted = p.IsGranted
+                })
+                .ToArray();
+
+        if (updatePermissionDtos.IsNullOrEmpty())
+        {
+            return NoContent();
+        }
 
         await PermissionAppService.UpdateAsync(
             ProviderName,
@@ -105,11 +124,41 @@ public class PermissionManagementModal : AbpPageModel
             }
         );
 
-        await LocalEventBus.PublishAsync(
-            new CurrentApplicationConfigurationCacheResetEventData()
-        );
+        Guid? userId = null;
+        if (ProviderName == UserPermissionValueProvider.ProviderName && Guid.TryParse(ProviderKey, out var parsedUserId))
+        {
+            userId = parsedUserId;
+        }
+
+        await LocalEventBus.PublishAsync(new CurrentApplicationConfigurationCacheResetEventData(userId));
 
         return NoContent();
+    }
+
+    protected virtual UpdatePermissionDto[] GetChangedPermissions()
+    {
+        var permissions = new Dictionary<string, bool>();
+
+        foreach (var name in SplitPermissionNames(GrantedPermissionNames))
+        {
+            permissions[name] = true;
+        }
+
+        foreach (var name in SplitPermissionNames(RevokedPermissionNames))
+        {
+            permissions[name] = false;
+        }
+
+        return permissions
+            .Select(permission => new UpdatePermissionDto { Name = permission.Key, IsGranted = permission.Value })
+            .ToArray();
+    }
+
+    protected virtual string[] SplitPermissionNames(string names)
+    {
+        return names.IsNullOrWhiteSpace()
+            ? Array.Empty<string>()
+            : names.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
     }
 
     public class PermissionGroupViewModel
@@ -129,9 +178,7 @@ public class PermissionManagementModal : AbpPageModel
 
         public bool IsDisabled(string currentProviderName)
         {
-            var grantedProviders = Permissions.SelectMany(x => x.GrantedProviders);
-         
-            return Permissions.All(x => x.IsGranted) && grantedProviders.All(p => p.ProviderName != currentProviderName);
+            return Permissions.All(p => p.IsDisabled(currentProviderName));
         }
     }
 
@@ -153,9 +200,11 @@ public class PermissionManagementModal : AbpPageModel
 
         public List<ProviderInfoViewModel> GrantedProviders { get; set; }
 
+        public bool IsEditable { get; set; }
+
         public bool IsDisabled(string currentProviderName)
         {
-            return IsGranted && GrantedProviders.All(p => p.ProviderName != currentProviderName);
+            return !IsEditable || (IsGranted && GrantedProviders.All(p => p.ProviderName != currentProviderName));
         }
 
         public string GetShownName(string currentProviderName)
@@ -165,13 +214,20 @@ public class PermissionManagementModal : AbpPageModel
                 return DisplayName;
             }
 
+            var grantedByOtherProviders = GrantedProviders
+                .Where(p => p.ProviderName != currentProviderName)
+                .Select(p => p.ProviderName)
+                .ToList();
+
+            if (!grantedByOtherProviders.Any())
+            {
+                return DisplayName;
+            }
+
             return string.Format(
                 "{0} ({1})",
                 DisplayName,
-                GrantedProviders
-                    .Where(p => p.ProviderName != currentProviderName)
-                    .Select(p => p.ProviderName)
-                    .JoinAsString(", ")
+                grantedByOtherProviders.JoinAsString(", ")
             );
         }
     }

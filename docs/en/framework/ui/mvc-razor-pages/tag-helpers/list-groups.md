@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use `abp-list-group` to create structured lists in your ABP Framework applications, complete with examples and attributes."
+}
+```
+
 # List Groups
 
 ## Introduction

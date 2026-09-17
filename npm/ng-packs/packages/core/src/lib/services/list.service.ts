@@ -1,7 +1,8 @@
-import { Injectable, Injector, OnDestroy } from '@angular/core';
+import { Injectable, Injector, OnDestroy, inject } from '@angular/core';
 import {
   EMPTY,
   BehaviorSubject,
+  defer,
   MonoTypeOperatorFunction,
   Observable,
   ReplaySubject,
@@ -65,12 +66,12 @@ export class ListService<QueryParamsType = ABP.PageQueryParams | any> implements
     return this._totalCount;
   }
 
-  private _sortKey = '';
-  set sortKey(value: string) {
+  private _sortKey: string | number = '';
+  set sortKey(value: string | number) {
     this._sortKey = value;
     this.get();
   }
-  get sortKey(): string {
+  get sortKey(): string | number {
     return this._sortKey;
   }
 
@@ -119,7 +120,9 @@ export class ListService<QueryParamsType = ABP.PageQueryParams | any> implements
     this.next();
   };
 
-  constructor(injector: Injector) {
+  constructor() {
+    const injector = inject(Injector);
+
     const delay = injector.get(LIST_QUERY_DEBOUNCE_TIME, 300);
     this.delay = delay ? debounceTime(delay) : tap();
     this.get();
@@ -132,7 +135,7 @@ export class ListService<QueryParamsType = ABP.PageQueryParams | any> implements
       tap(() => this._isLoading$.next(true)),
       tap(() => this._requestStatus.next('loading')),
       switchMap(query =>
-        streamCreatorCallback(query).pipe(
+        defer(() => streamCreatorCallback(query)).pipe(
           catchError(() => {
             this._requestStatus.next('error');
             return EMPTY;

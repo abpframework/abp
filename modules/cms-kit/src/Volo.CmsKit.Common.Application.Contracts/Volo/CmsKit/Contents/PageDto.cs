@@ -1,5 +1,6 @@
 ﻿using System;
 using Volo.Abp.Application.Dtos;
+using Volo.CmsKit.Pages;
 
 namespace Volo.CmsKit.Contents;
 
@@ -16,4 +17,6 @@ public class PageDto : ExtensibleEntityDto<Guid>
     public string Script { get; set; }
 
     public string Style { get; set; }
+
+    public PageStatus Status { get; set; }
 }

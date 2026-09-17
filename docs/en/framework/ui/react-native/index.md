@@ -1,131 +1,169 @@
-````json
-//[doc-params]
+```json
+//[doc-seo]
 {
-  "Tiered": ["No", "Yes"]
+  "Description": "Learn how to set up your development environment for React Native with ABP Framework, enabling seamless mobile app integration!"
 }
-````
+```
 
-# Getting Started with the React Native
+```json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Running on Web",
+    "Path": "framework/ui/react-native/running-on-web"
+  }
+}
+```
 
-> React Native mobile option is *available for* ***Team*** *or higher licenses*
+# Getting Started with React Native
 
-ABP platform provide basic [React Native](https://reactnative.dev/) startup template to develop mobile applications **integrated to your ABP based backends**.
+> The React Native mobile option is _available for_ **_Team_** _or higher licenses_
 
-![React Native gif](../../../images/react-native-introduction.gif)
+The ABP platform provides a basic [React Native](https://reactnative.dev/) startup template to develop mobile applications **integrated with your ABP-based backends**.
+
+> The startup template UI is built with **[NativeWind v4](https://www.nativewind.dev/)** (Tailwind CSS for React Native) on top of a shadcn-inspired neutral palette, with full **light/dark mode** support. See [Styling with NativeWind](styling-with-nativewind.md) for the styling system reference.
+
+<img src="../../../images/react-native-app.gif" alt="React Native startup template running on a mobile emulator" width="420" style="max-width:100%">
 
 ## How to Prepare Development Environment
 
 Please follow the steps below to prepare your development environment for React Native.
 
-1. **Install Node.js:** Please visit [Node.js downloads page](https://nodejs.org/en/download/) and download proper Node.js v16 or v18 installer for your OS. An alternative is to install [NVM](https://github.com/nvm-sh/nvm) and use it to have multiple versions of Node.js in your operating system.
-2. **[Optional] Install Yarn:** You may install Yarn v1 (not v2) following the instructions on [the installation page](https://classic.yarnpkg.com/en/docs/install). Yarn v1 delivers an arguably better developer experience compared to npm v6 and below. You may skip this step and work with npm, which is built-in in Node.js, instead.
-3. **[Optional] Install VS Code:** [VS Code](https://code.visualstudio.com/) is a free, open-source IDE which works seamlessly with TypeScript. Although you can use any IDE including Visual Studio or Rider, VS Code will most likely deliver the best developer experience when it comes to React Native projects.
-4. **Install an Emulator:** React Native applications need an Android emulator or an iOS simulator to run on your OS. See the [Android Studio Emulator](https://docs.expo.io/workflow/android-simulator/) or [iOS Simulator](https://docs.expo.io/workflow/ios-simulator/) on expo.io documentation to learn how to set up an emulator.
+1. **Install Node.js:** Visit the [Node.js downloads page](https://nodejs.org/en/download/) and download the appropriate Node.js v20.11+ installer for your operating system. Alternatively, you can install [NVM](https://github.com/nvm-sh/nvm) to manage multiple versions of Node.js on your system.
+2. **[Optional] Install Yarn:** You can install Yarn v1 (not v2) by following the instructions on [the installation page](https://classic.yarnpkg.com/en/docs/install). Yarn v1 provides a better developer experience compared to npm v6 and below. You can skip this step and use npm, which is built into Node.js.
+3. **[Optional] Install VS Code:** [VS Code](https://code.visualstudio.com/) is a free, open-source IDE that works seamlessly with TypeScript. While you can use any IDE, including Visual Studio or Rider, VS Code typically provides the best developer experience for React Native projects.
+
+Additional tools depend on how you plan to run the app — see the [Run the application](#run-the-application) section below.
 
 ## How to Start a New React Native Project
 
 You have multiple options to initiate a new React Native project that works with ABP:
 
-### 1. Using ABP CLI
+### 1. Using ABP Studio
 
-ABP CLI is probably the most convenient and flexible way to initiate an ABP solution with a React Native application. Simply [install the ABP CLI](../../../cli) and run the following command in your terminal:
+ABP Studio is the most convenient and flexible way to create a React Native application based on the ABP framework. Follow the [tool documentation](../../../studio) and select the mobile option in the solution wizard:
+
+<div style="display:flex; flex-wrap:wrap; gap:1rem; margin:1rem 0; align-items:flex-start;">
+
+<div style="flex:1 1 0; min-width:min(100%, 300px);">
+<img src="../../../images/rn-select-modern.png" alt="ABP Studio modern template — Mobile Application on Application Type step" style="width:100%; height:auto; display:block;">
+<p style="margin:0.5rem 0 0;"><strong>Modern</strong> template — on the <em>Application Type</em> step, enable <strong>Mobile Application</strong> (React Native with Expo).</p>
+</div>
+
+<div style="flex:1 1 0; min-width:min(100%, 300px);">
+<img src="../../../images/rn-select-legacy.png" alt="ABP Studio classic template — React Native on Mobile Framework step" style="width:100%; height:auto; display:block;">
+<p style="margin:0.5rem 0 0;"><strong>Classic</strong> template — on the <em>Mobile Framework</em> step, select <strong>React Native</strong>.</p>
+</div>
+
+</div>
+
+### 2. Using ABP CLI
+
+The ABP CLI is another way to create an ABP solution with a React Native application. [Install the ABP CLI](../../../cli) and run the following command in your terminal:
 
 ```shell
 abp new MyCompanyName.MyProjectName -csf -u <angular or mvc> -m react-native
 ```
 
-> To see further options in the CLI, please visit the [CLI manual](../../../cli).
+> For more options, visit the [CLI manual](../../../cli).
 
-This command will prepare a solution with an **Angular** or an **MVC** (depends on your choice), a **.NET Core**, and a **React Native** project in it.
+This command creates a solution containing an **Angular** or **MVC** project (depending on your choice), a **.NET Core** project, and a **React Native** project.
 
-### 2. Generating a CLI Command from Get Started Page
+If you want to see the modern React Native template as a finished product, the [Habitly sample](../../../samples/index.md#hanova--habitly) is a good reference point.
 
-You can generate a CLI command on the [get started page of the abp.io website](https://abp.io/get-started). Then, use the command on your terminal to create a new [Startup Template](../../../solution-templates).
+## Run the Application
 
-## How to Configure & Run the Backend
+You can choose how you want to run the mobile app:
 
-> React Native application does not trust the auto-generated .NET HTTPS certificate. You should use **HTTP** during the development.
+| Goal                                        | Documentation                                                                                                                                                                |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Browser testing (fastest)**               | [Running on Web](./running-on-web.md) — ABP Studio **Default** profile or Expo Web + HTTPS proxy at `https://localhost:8443`                                                 |
+| **Emulator, simulator, or physical device** | [Running on Device](./running-on-device.md) — **Pro, non-tiered Monolith:** **MobileEmulator** profile or `yarn tunnel:api`; **Tiered / Microservice:** manual backend setup |
 
-> When you are using OpenIddict, You should remove 'clientSecret' on Environment.js (if exists) and disable "HTTPS-only" settings. (Openiddict has default since Version 6.0)
+> **Before device testing (Monolith):** Install **cloudflared** using Cloudflare's [Download and install cloudflared](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/downloads/) guide. The template's Quick Tunnel workflow does not require a Cloudflare account or the remaining steps in that document.
 
-A React Native application running on an Android emulator or a physical phone **can not connect to the backend** on `localhost`. To fix this problem, it is necessary to run the backend application on your **local IP address**.
+Before running, you may need to install dependencies in the React Native project folder:
 
-{{ if Tiered == "No"}}
-![React Native host project local IP entry](../../../images/rn-host-local-ip.png)
+- **Monolith / Tiered / app-nolayers:** `react-native/`
+- **Microservice:** `apps/mobile/react-native/`
 
-- Open the `appsettings.json` file in the `.HttpApi.Host` folder. Replace the `localhost` address on the `SelfUrl` and `Authority` properties with your local IP address.
-- Open the `launchSettings.json` file in the `.HttpApi.Host/Properties` folder. Replace the `localhost` address on the `applicationUrl` properties with your local IP address.
+Run `yarn install` or `npm install` in that folder.
 
-{{ else if Tiered == "Yes" }}
+> **Recommended:** We suggest starting with [Running on Web](./running-on-web.md). Because it requires the fewest setup steps and provides faster development and hot-reload options compared to the physical device tests.
 
-![React Native tiered project local IP entry](../../../images/rn-tiered-local-ip.png)
+### Related guides
 
-- Open the `appsettings.json` file in the `.AuthServer` folder. Replace the `localhost` address on the `SelfUrl` property with your local IP address.
-- Open the `launchSettings.json` file in the `.AuthServer/Properties` folder. Replace the `localhost` address on the `applicationUrl` properties with your local IP address.
-- Open the `appsettings.json` file in the `.HttpApi.Host` folder. Replace the `localhost` address on the `Authority` property with your local IP address.
-- Open the `launchSettings.json` file in the `.HttpApi.Host/Properties` folder. Replace the `localhost` address on the `applicationUrl` properties with your local IP address.
+- [Manual Backend Configuration](./manual-backend-configuration.md): This includes a fallback HTTP/local IP setup for Tiered or Microservice architectures (or when Cloudflare tunnels are unavailable).
+- [Setting Up Android Emulator Without Android Studio](./setting-up-android-emulator.md): This covers the CLI-based Android emulator setup based on your preference.
 
-{{ end }}
+The default login credentials, if not changed, are:
 
-Run the backend application as described in the [getting started document](../../../get-started).
+- User name: **admin**
+- Password: **1q2w3E\***
 
-> You should turn off the "Https Restriction" if you're using OpenIddict as a central identity management solution. Because the IOS Simulator doesn't support self-signed certificates and OpenIddict is set to only work with HTTPS by default.
+## Navigation
 
-## How to disable the Https-only settings of OpenIddict
+The startup template ships with **two navigation styles**, switchable when the project is created:
 
-Open the {{ if Tiered == "No" }}`MyProjectNameHttpApiHostModule`{{ else if Tiered == "Yes" }}`MyProjectNameAuthServerModule`{{ end }} project and copy-paste the below code-block to the `PreConfigureServices` method:
+- **Bottom Tab** — _the default_ — three tabs at the bottom of the screen: **Home**, **Settings** and **Account**.
+- **Drawer** — a side menu (hamburger) with two items: **Home** and **Settings**.
 
-```csharp
-#if DEBUG
-    PreConfigure<OpenIddictServerBuilder>(options =>
-    {
-        options.UseAspNetCore()
-            .DisableTransportSecurityRequirement();
-    });
-#endif
-```
+<img width="600" src="../../../images/rn-nav-comparison.png" alt="Bottom Tab vs Drawer navigation comparison" />
 
-## How to Configure & Run the React Native Application
+Every main tab or drawer item is wired to **its own** native stack (`@react-navigation/native-stack`). Pushing more screens stays on that branch: the Back stack belongs to that tab or drawer route and does not mix with others. Bottom Tab and Drawer use the **same screen components**; they differ in how those screens are grouped and opened from the outer shell (and where the sign‑in/sign‑up flow lives in Bottom Tab versus Drawer).
 
-1. Make sure the [database migration is complete](../../../get-started?UI=NG&DB=EF&Tiered=No#create-the-database) and the [API is up and running](../../../get-started?UI=NG&DB=EF&Tiered=No#run-the-application).
-2. Open `react-native` folder and run `yarn` or `npm install` if you have not already.
-3. Open the `Environment.js` in the `react-native` folder and replace the `localhost` address on the `apiUrl` and `issuer` properties with your local IP address as shown below:
+> **How to choose:** The mode is selected in **ABP Studio** during the _Mobile Framework_ step. Switching modes after the project is generated is not a one-line change — you would need to add the missing navigator (and its `@react-navigation/drawer` or `@react-navigation/bottom-tabs` dependency) manually, then update `src/AppContainer.tsx` and `src/navigators/types.ts` to match. Pick the mode upfront when possible.
 
-![react native environment local IP](../../../images/rn-environment-local-ip.png)
+### Bottom Tab Navigation (default)
 
-{{ if Tiered == "Yes" }}
+The root navigator is `BottomTabNavigator` (`src/navigators/BottomTabNavigator.tsx`) with three stacks:
 
-> Make sure that `issuer` matches the running address of the `.AuthServer` project, `apiUrl` matches the running address of the `.HttpApi.Host` or `.Web` project.
+- **HomeTab** → `HomeNavigator` → `HomeScreen` (hero greeting + feature cards).
+- **SettingsTab** → `SettingsNavigator` → `SettingsScreen` (language, theme, profile/password shortcuts).
+- **AccountTab** → `AccountNavigator` — _conditional stack_ based on the authentication state read from Redux:
+  - **Authenticated:** `AccountScreen` → `ChangePasswordScreen`, `ProfilePictureScreen`.
+  - **Guest:** `LoginScreen` → `RegisterScreen`, `ForgotPasswordScreen`, `ResetPasswordScreen`.
 
-{{else}}
+Tab bar colors (active/inactive tint, background, border) are sourced from the `useThemeColors` hook so the bar follows the active light/dark theme.
 
-> Make sure that `issuer` and `apiUrl` matches the running address of the `.HttpApi.Host` or `.Web` project.
+#### The Account Screen
 
-{{ end }}
+`AccountScreen` (`src/screens/Account/AccountScreen.tsx`) is the home of the AccountTab when the user is signed in. Its layout follows an iOS-style grouped pattern:
 
-4. Run `yarn start` or `npm start`. Wait for the Expo CLI to print the opitons.
+1. **Profile header** — circular avatar (profile picture or first-letter fallback), full name and email, centered at the top.
+2. **Account actions card** — a single rounded card containing two rows with leading icon chips:
+   - **Profile Picture** → navigates to `ProfilePictureScreen`.
+   - **Change Password** → navigates to `ChangePasswordScreen`.
+3. **Destructive logout button** — an outlined `destructive`-colored button that calls the `useLogout` hook.
 
-> The React Native application was generated with [Expo](https://expo.io/). Expo is a set of tools built around React Native to help you quickly start an app and, while it has many features.
+### Drawer Navigation (alternative)
 
-![expo-cli-options](../../../images/rn-options.png)
+When the drawer mode is selected, `DrawerNavigator` (`src/navigators/DrawerNavigator.tsx`) replaces the bottom tabs. It exposes two drawer items:
 
-In the above image, you can start the application with an Android emulator, an iOS simulator or a physical phone by scanning the QR code with the [Expo Client](https://expo.io/tools#client) or choosing the option.
+- **HomeStack** → `HomeNavigator` → `HomeScreen`, plus the auth flow (`LoginScreen`, `RegisterScreen`, `ForgotPasswordScreen`, `ResetPasswordScreen`).
+- **SettingsStack** → `SettingsNavigator` → `SettingsScreen`, `ChangePasswordScreen`, `ProfilePictureScreen`.
 
-### Expo
+Note that there is **no `AccountTab` / `AccountScreen` in drawer mode** — auth lives in the Home stack and profile/password actions live in the Settings stack. The drawer side panel itself is fully custom.
 
-![React Native login screen on iPhone 11](../../../images/rn-login-iphone.png)
+#### The Drawer Content
 
-### Android Studio
+`DrawerContent` (`src/components/DrawerContent/DrawerContent.tsx`) is the custom side panel rendered by `DrawerNavigator` via the `drawerContent` prop. From top to bottom:
 
-1. Start the emulator in **Android Studio** before running the `yarn start` or `npm start` command.
-2. Press **a** to open in Android Studio.
+1. **User header** — circular avatar (image or first-letter fallback) + full name + email when authenticated.
+2. **Divider**.
+3. **Navigation items** — Home and Settings rows with leading Ionicons; tapping navigates and closes the drawer.
+4. **Auth row** — when authenticated, a **Logout** row that calls `useLogout`; when guest, a **Login** row that navigates to the Login screen inside `HomeStack`.
 
-![React Native login screen on iPhone 11](../../../images/rn-login-android-studio.png)
+The whole panel uses NativeWind classes with `dark:` variants, so it follows the active theme automatically.
 
-Enter **admin** as the username and **1q2w3E\*** as the password to login to the application.
+### Adding a New Screen
 
-The application is up and running. You can continue to develop your application based on this startup template.
+To add a screen to either navigation mode:
 
-## See Also
+1. Create the screen component under `src/screens/<FeatureName>/<FeatureName>Screen.tsx` and export it from `src/screens/index.ts`.
+2. Register it as a `Stack.Screen` inside the appropriate navigator (e.g. `HomeNavigator`, `SettingsNavigator`, or `AccountNavigator`).
+3. Add the route to the matching `*ParamList` in `src/navigators/types.ts` so the screen props stay typed.
 
-- [React Native project structure](../../../solution-templates/application-module#react-native)
+If the new screen needs to appear at the _root_ level (a new tab or drawer item rather than a child of an existing stack), edit `BottomTabNavigator.tsx` or `DrawerNavigator.tsx` and update the corresponding `BottomTabParamList` / `RootDrawerParamList` type.
+
+The application is up and running. You can continue to develop your application based on this startup template, or follow the [Book Store mobile tutorial](../../../tutorials/mobile/react-native/index.md).

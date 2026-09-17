@@ -84,7 +84,7 @@ public class AbpTabsTagHelperService : AbpTagHelperService<AbpTabsTagHelper>
         var id = TagHelper.Name + "Content";
 
         var wrapper = new TagBuilder("div");
-        wrapper.AddCssClass("tab-content pt-3");
+        wrapper.AddCssClass("tab-content");
         wrapper.Attributes.Add("id", id);
         wrapper.InnerHtml.AppendHtml(contents);
 
@@ -225,6 +225,6 @@ public class AbpTabsTagHelperService : AbpTagHelperService<AbpTabsTagHelper>
 
     protected virtual string SetTabItemNameIfNotProvided(string content, int index)
     {
-        return content.Replace(TabItemNamePlaceHolder, HtmlGenerator.Encode(TagHelper.Name) + "_" + index);
+        return content.Replace(TabItemNamePlaceHolder, HtmlGenerator.Encode(TagHelper.Name ?? string.Empty) + "_" + index);
     }
 }

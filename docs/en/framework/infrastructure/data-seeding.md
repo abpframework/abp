@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to effectively seed initial data in your ABP applications for smooth startup and reliable testing across various databases."
+}
+```
+
 # Data Seeding
 
 ## Introduction

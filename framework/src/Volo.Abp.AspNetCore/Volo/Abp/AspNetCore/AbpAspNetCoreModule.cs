@@ -1,8 +1,13 @@
 ﻿using System;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.AspNetCore.RequestLocalization;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Logging;
+using MyCSharp.HttpUserAgentParser.DependencyInjection;
 using Volo.Abp.AspNetCore.Auditing;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.Auditing;
@@ -55,7 +60,21 @@ public class AbpAspNetCoreModule : AbpModule
 
         AddAspNetServices(context.Services);
         context.Services.AddObjectAccessor<IApplicationBuilder>();
+        context.Services.AddObjectAccessor<WebApplication>();
+        context.Services.AddObjectAccessor<IHost>();
+        context.Services.AddObjectAccessor<IEndpointRouteBuilder>();
         context.Services.AddAbpDynamicOptions<RequestLocalizationOptions, AbpRequestLocalizationOptionsManager>();
+
+        try
+        {
+            StaticWebAssetsLoader.UseStaticWebAssets(context.Services.GetHostingEnvironment(), context.Services.GetConfiguration());
+        }
+        catch (Exception ex)
+        {
+            context.Services.GetInitLogger<AbpAspNetCoreModule>().LogWarning(ex, "Could not load the static web assets manifest, static web assets will not be available. This usually happens when the application runs with build output instead of publish output.");
+        }
+
+        context.Services.AddHttpUserAgentCachedParser();
     }
 
     private static void AddAspNetServices(IServiceCollection services)

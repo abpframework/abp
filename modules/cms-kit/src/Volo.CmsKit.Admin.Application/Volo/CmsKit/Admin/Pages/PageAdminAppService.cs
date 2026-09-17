@@ -8,6 +8,7 @@ using Volo.Abp.Data;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.ObjectExtending;
+using Volo.CmsKit.Comments;
 using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Pages;
@@ -21,6 +22,8 @@ namespace Volo.CmsKit.Admin.Pages;
 public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppService
 {
     protected IPageRepository PageRepository { get; }
+    
+    protected ICommentRepository CommentRepository { get; }
 
     protected PageManager PageManager { get; }
     
@@ -29,11 +32,13 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
     public PageAdminAppService(
         IPageRepository pageRepository,
         PageManager pageManager, 
-        IDistributedCache<PageCacheItem> pageCache)
+        IDistributedCache<PageCacheItem> pageCache, 
+        ICommentRepository commentRepository)
     {
         PageRepository = pageRepository;
         PageManager = pageManager;
         PageCache = pageCache;
+        CommentRepository = commentRepository;
     }
 
     public virtual async Task<PageDto> GetAsync(Guid id)
@@ -44,10 +49,11 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
 
     public virtual async Task<PagedResultDto<PageDto>> GetListAsync(GetPagesInputDto input)
     {
-        var count = await PageRepository.GetCountAsync(input.Filter);
+        var count = await PageRepository.GetCountAsync(input.Filter, input.Status);
 
         var pages = await PageRepository.GetListAsync(
             input.Filter,
+            input.Status,
             input.MaxResultCount,
             input.SkipCount,
             input.Sorting
@@ -62,7 +68,7 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
     [Authorize(CmsKitAdminPermissions.Pages.Create)]
     public virtual async Task<PageDto> CreateAsync(CreatePageInputDto input)
     {
-        var page = await PageManager.CreateAsync(input.Title, input.Slug, input.Content, input.Script, input.Style, input.LayoutName);
+        var page = await PageManager.CreateAsync(input.Title, input.Slug, input.Content, input.Script, input.Style, input.LayoutName, input.Status);
         input.MapExtraPropertiesTo(page);
         await PageRepository.InsertAsync(page);
 
@@ -89,6 +95,7 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
         page.SetScript(input.Script);
         page.SetStyle(input.Style);
         page.SetLayoutName(input.LayoutName);
+        await PageManager.SetStatusAsync(page, input.Status);
         page.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
         input.MapExtraPropertiesTo(page);
 
@@ -108,6 +115,7 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
         
         await PageRepository.DeleteAsync(page);
         await PageCache.RemoveAsync(PageCacheItem.GetKey(page.Slug));
+        await CommentRepository.DeleteByEntityTypeAndIdAsync(PageConsts.EntityType, id.ToString());
     }
 
     [Authorize(CmsKitAdminPermissions.Pages.SetAsHomePage)]

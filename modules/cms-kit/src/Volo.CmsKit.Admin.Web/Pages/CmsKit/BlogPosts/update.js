@@ -42,19 +42,20 @@ $(function () {
 
             await submitCoverImage();
 
-            $formUpdate.ajaxSubmit({
-                success: function (result) {
-                    if (isTagsEnabled) {
-                        submitEntityTags($blogPostIdInput.val());
-                    }
-                    else {
-                        finishSaving(result);
-                    }
-                },
-                error: function (result) {
-                    abp.ui.clearBusy();
-                    abp.notify.error(result.responseJSON.error.message);
+            abp.ajax({
+                url: $formUpdate.attr("action"),
+                data: new FormData($formUpdate[0]),
+                processData: false,
+                contentType: false
+            }).done(function (result) {
+                if (isTagsEnabled) {
+                    submitEntityTags($blogPostIdInput.val());
                 }
+                else {
+                    finishSaving(result);
+                }
+            }).fail(function () {
+                abp.ui.clearBusy();
             });
         }
         else {

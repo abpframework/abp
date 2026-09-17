@@ -1,5 +1,5 @@
 export interface ChangeThemeGeneratorSchema {
   name: number;
-  targetOption: string;
+  targetProject: string;
   localPath?: string;
 }

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
-using Volo.Docs.Projects;
+using Volo.Docs.Common.Projects;
 
 namespace Volo.Docs.Pages.Documents
 {
@@ -29,19 +29,38 @@ namespace Volo.Docs.Pages.Documents
         {
             if (_uiOptions.SingleProjectMode.Enable)
             {
-                return RedirectToPage("/Documents/Project/Index", new {version = DocsAppConsts.Latest });
+                return Redirect($"/Documents/Project/Index?version={DocsAppConsts.Latest}");
             }
 
             var listResult = await _projectAppService.GetListAsync();
 
             if (listResult.Items.Count == 1)
             {
-                return RedirectToPage("/Documents/Project/Index", new { shortName = listResult.Items[0].ShortName });
+                return Redirect($"/Documents/{listResult.Items[0].ShortName}");
             }
 
             Projects = listResult.Items;
 
             return Page();
+        }
+        
+        public string GetUrlForProject(ProjectDto project = null, string language = "en", string version = null)
+        {
+            var routeValues = new Dictionary<string, object> {
+                { nameof(Project.IndexModel.Version), version ?? DocsAppConsts.Latest }
+            };
+
+            if (!_uiOptions.SingleProjectMode.Enable)
+            {
+                routeValues.Add(nameof(Project.IndexModel.ProjectName), project?.ShortName);
+            }
+            
+            if (_uiOptions.MultiLanguageMode)
+            {
+                routeValues.Add(nameof(Project.IndexModel.LanguageCode), language);
+            }
+            
+            return Url.Page("/Documents/Project/Index", routeValues);
         }
     }
 }

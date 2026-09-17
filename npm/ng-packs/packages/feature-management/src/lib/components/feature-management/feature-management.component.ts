@@ -1,4 +1,7 @@
-import { ConfigStateService, LocalizationModule, TrackByService } from '@abp/ng.core';
+import {Component, inject, DOCUMENT, input, output, signal, effect, ChangeDetectionStrategy,} from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ConfigStateService, LocalizationPipe, TrackByService } from '@abp/ng.core';
 import {
   FeatureDto,
   FeatureGroupDto,
@@ -6,19 +9,17 @@ import {
   UpdateFeatureDto,
 } from '@abp/ng.feature-management/proxy';
 import {
+  ButtonComponent,
   Confirmation,
   ConfirmationService,
   LocaleDirection,
-  ThemeSharedModule,
+  ModalCloseDirective,
+  ModalComponent,
   ToasterService,
 } from '@abp/ng.theme.shared';
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
-import { NgTemplateOutlet } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { Tabs, TabList, Tab, TabPanel, TabContent } from '@angular/aria/tabs';
 import { finalize } from 'rxjs/operators';
 import { FreeTextInputDirective } from '../../directives';
-import { FeatureManagement } from '../../models/feature-management';
 
 enum ValueTypes {
   ToggleStringValueType = 'ToggleStringValueType',
@@ -26,77 +27,115 @@ enum ValueTypes {
   SelectionStringValueType = 'SelectionStringValueType',
 }
 
+const DEFAULT_PROVIDER_NAME = 'D';
+
+/**
+ * FeatureDto.ValueType is typed as IStringValueType in Application.Contracts, but the API
+ * serializes concrete value types at runtime (e.g. SelectionStringValueType includes itemSource).
+ * generate-proxy only reflects the interface contract, so keep runtime-only shapes here — not in proxy/.
+ * See: modules/feature-management (FeatureDto, StringValueTypeJsonConverter) and Blazor/MVC cast pattern.
+ */
+type FeatureWithStyle = FeatureDto & {
+  style?: Record<string, number>;
+  initialValue: unknown;
+};
+
+type SelectionStringValueType = FeatureDto['valueType'] & {
+  itemSource?: {
+    items?: Array<{
+      value?: string;
+      displayText?: { resourceName?: string; name?: string };
+    }>;
+  };
+};
+
 @Component({
-  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-feature-management',
   templateUrl: './feature-management.component.html',
   exportAs: 'abpFeatureManagement',
   imports: [
-    ThemeSharedModule,
-    LocalizationModule,
-    FormsModule,
-    NgbNavModule,
-    FreeTextInputDirective,
     NgTemplateOutlet,
+    ButtonComponent,
+    ModalComponent,
+    LocalizationPipe,
+    FormsModule,
+    Tabs,
+    TabList,
+    Tab,
+    TabPanel,
+    TabContent,
+    FreeTextInputDirective,
+    ModalCloseDirective,
   ],
 })
-export class FeatureManagementComponent
-  implements
-    FeatureManagement.FeatureManagementComponentInputs,
-    FeatureManagement.FeatureManagementComponentOutputs
-{
+export class FeatureManagementComponent {
   protected readonly track = inject(TrackByService);
   protected readonly toasterService = inject(ToasterService);
   protected readonly service = inject(FeaturesService);
   protected readonly configState = inject(ConfigStateService);
   protected readonly confirmationService = inject(ConfirmationService);
+  private document = inject(DOCUMENT);
 
-  @Input()
-  providerKey: string;
+  // Signal inputs
+  readonly providerKey = input<string | undefined>(undefined);
+  readonly providerName = input<string | undefined>(undefined);
+  readonly providerTitle = input<string | undefined>(undefined);
+  readonly visibleInput = input(false, { alias: 'visible' });
 
-  @Input()
-  providerName: string;
+  // Output signals
+  readonly visibleChange = output<boolean>();
 
-  @Input({ required: false })
-  providerTitle: string;
+  // Internal state
+  protected readonly _visible = signal(false);
 
-  selectedGroupDisplayName: string;
+  protected readonly selectedGroupDisplayName = signal<string | undefined>(undefined);
 
-  groups: Pick<FeatureGroupDto, 'name' | 'displayName'>[] = [];
+  protected readonly groups = signal<Pick<FeatureGroupDto, 'name' | 'displayName'>[]>([]);
 
-  features: {
-    [group: string]: Array<FeatureDto & { style?: { [key: string]: number }; initialValue: any }>;
-  };
+  protected readonly features = signal<{
+    [group: string]: FeatureWithStyle[];
+  }>({});
 
   valueTypes = ValueTypes;
 
-  protected _visible;
+  defaultProviderName = DEFAULT_PROVIDER_NAME;
 
-  @Input()
+  protected readonly modalBusy = signal(false);
+
+  // Getter/setter for backward compatibility
   get visible(): boolean {
-    return this._visible;
+    return this._visible();
   }
 
   set visible(value: boolean) {
-    if (this._visible === value) {
+    if (this._visible() === value) {
       return;
     }
 
-    this._visible = value;
+    this._visible.set(value);
     this.visibleChange.emit(value);
 
     if (value) {
       this.openModal();
-      return;
     }
   }
 
-  @Output() readonly visibleChange = new EventEmitter<boolean>();
-
-  modalBusy = false;
+  constructor() {
+    // Sync visible input to internal signal
+    effect(() => {
+      const inputValue = this.visibleInput();
+      if (this._visible() !== inputValue) {
+        this._visible.set(inputValue);
+        if (inputValue) {
+          this.openModal();
+        }
+      }
+    });
+  }
 
   openModal() {
-    if (!this.providerName) {
+    if (!this.providerName()) {
       throw new Error('providerName is required.');
     }
 
@@ -104,27 +143,30 @@ export class FeatureManagementComponent
   }
 
   getFeatures() {
-    this.service.get(this.providerName, this.providerKey).subscribe(res => {
+    this.service.get(this.providerName()!, this.providerKey()).subscribe(res => {
       if (!res.groups?.length) return;
-      this.groups = res.groups.map(({ name, displayName }) => ({ name, displayName }));
-      this.selectedGroupDisplayName = this.groups[0].displayName;
-      this.features = res.groups.reduce(
-        (acc, val) => ({
-          ...acc,
-          [val.name]: mapFeatures(val.features, document.body.dir as LocaleDirection),
-        }),
-        {},
+      const groups = res.groups.map(({ name, displayName }) => ({ name, displayName }));
+      this.groups.set(groups);
+      this.selectedGroupDisplayName.set(groups[0].displayName);
+      this.features.set(
+        res.groups.reduce(
+          (acc, val) => ({
+            ...acc,
+            [val.name]: mapFeatures(val.features, this.document.body?.dir as LocaleDirection),
+          }),
+          {},
+        ),
       );
     });
   }
 
   save() {
-    if (this.modalBusy) return;
+    if (this.modalBusy()) return;
 
     const changedFeatures = [] as UpdateFeatureDto[];
 
-    Object.keys(this.features).forEach(key => {
-      this.features[key].forEach(feature => {
+    Object.keys(this.features()).forEach(key => {
+      this.features()[key].forEach(feature => {
         if (feature.value !== feature.initialValue)
           changedFeatures.push({ name: feature.name, value: `${feature.value}` });
       });
@@ -135,15 +177,15 @@ export class FeatureManagementComponent
       return;
     }
 
-    this.modalBusy = true;
+    this.modalBusy.set(true);
     this.service
-      .update(this.providerName, this.providerKey, { features: changedFeatures })
-      .pipe(finalize(() => (this.modalBusy = false)))
+      .update(this.providerName()!, this.providerKey(), { features: changedFeatures })
+      .pipe(finalize(() => this.modalBusy.set(false)))
       .subscribe(() => {
         this.visible = false;
 
         this.toasterService.success('AbpUi::SavedSuccessfully');
-        if (!this.providerKey) {
+        if (!this.providerKey()) {
           // to refresh host's features
           this.configState.refreshAppState().subscribe();
         }
@@ -155,11 +197,11 @@ export class FeatureManagementComponent
       .warn('AbpFeatureManagement::AreYouSureToResetToDefault', 'AbpFeatureManagement::AreYouSure')
       .subscribe((status: Confirmation.Status) => {
         if (status === Confirmation.Status.confirm) {
-          this.service.delete(this.providerName, this.providerKey).subscribe(() => {
+          this.service.delete(this.providerName()!, this.providerKey()).subscribe(() => {
             this.toasterService.success('AbpFeatureManagement::ResetedToDefault');
             this.visible = false;
 
-            if (!this.providerKey) {
+            if (!this.providerKey()) {
               // to refresh host's features
               this.configState.refreshAppState().subscribe();
             }
@@ -173,6 +215,31 @@ export class FeatureManagementComponent
       this.checkToggleAncestors(feature);
     } else {
       this.uncheckToggleDescendants(feature);
+    }
+  }
+
+  getSelectionItems(feature: FeatureWithStyle) {
+    if (feature.valueType?.name !== ValueTypes.SelectionStringValueType) {
+      return [];
+    }
+
+    return (feature.valueType as SelectionStringValueType).itemSource?.items ?? [];
+  }
+
+  isParentDisabled(parentName: string, groupName: string, provider: string): boolean {
+    const children = this.features()[groupName]?.filter(f => f.parentName === parentName);
+    const providerNameValue = this.providerName();
+
+    if (children?.length) {
+      return children.some(child => {
+        const childProvider = child.provider?.name;
+        return (
+          (childProvider !== providerNameValue && childProvider !== this.defaultProviderName) ||
+          (provider !== providerNameValue && provider !== this.defaultProviderName)
+        );
+      });
+    } else {
+      return provider !== providerNameValue && provider !== this.defaultProviderName;
     }
   }
 
@@ -225,7 +292,8 @@ export class FeatureManagementComponent
   }
 
   private getCurrentGroup() {
-    return this.features[this.selectedGroupDisplayName] ?? [];
+    const selectedGroup = this.selectedGroupDisplayName();
+    return selectedGroup ? this.features()[selectedGroup] ?? [] : [];
   }
 
   private setFeatureValue(feature: FeatureDto, val: boolean) {

@@ -1,14 +1,21 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement distributed caching in ABP Framework for efficient memory management and improved application performance."
+}
+```
+
 # Distributed Caching
 
-ABP extends the [ASP.NET Core distributed cache](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed).
+ABP extends the [ASP.NET Core distributed cache](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed) to provide a more comfortable and easy-to-use cache service.
 
-> **Default implementation of the `IDistributedCache` interface is` MemoryDistributedCache` which works in-memory.** See [ASP.NET Core's documentation](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed) to see how to switch to Redis or another cache provider. Also, see the [Redis Cache](./redis-cache.md) document if you want to use Redis as the distributed cache server.
+> **Default implementation of the `IDistributedCache` interface is` MemoryDistributedCache` which works in-memory.** Memory cache is only useful if you are building a monolith application and you run a single instance of your application. For other cases, consider using a distributed cache server. See the ***[When to Use a Distributed Cache Server](../../kb/when-to-use-a-distributed-cache-server.md)*** document for more details.
 
 ## Installation
 
-> This package is already installed by default with the [application startup template](../../solution-templates/layered-web-application). So, most of the time, you don't need to install it manually.
+> This package is already installed by default in [startup templates](../../solution-templates/index.md). So, most of the time, you don't need to install it manually.
 
-[Volo.Abp.Caching](https://www.nuget.org/packages/Volo.Abp.Caching) is the main package of the caching system. You can install it a project using the add-package command of the [ABP CLI](../../cli):
+[Volo.Abp.Caching](https://www.nuget.org/packages/Volo.Abp.Caching) is the main package of the caching system. You can install it as a project using the add-package command of the [ABP CLI](../../cli):
 
 ```bash
 abp add-package Volo.Abp.Caching
@@ -24,10 +31,10 @@ ASP.NET Core defines the `IDistributedCache` interface to get/set the cache valu
 
 * It works with **byte arrays** rather than .NET objects. So, you need to **serialize/deserialize** the objects you need to cache.
 * It provides a **single key pool** for all cache items, so;
-  * You need to care about the keys to distinguish **different type of objects**.
+  * You need to care about the keys to distinguish **different types of objects**.
   * You need to care about the cache items of **different tenants** in a [multi-tenant](../architecture/multi-tenancy) system.
 
-> `IDistributedCache` is defined in the `Microsoft.Extensions.Caching.Abstractions` package. That means it is not only usable for ASP.NET Core applications, but also available to **any type of applications**.
+> `IDistributedCache` is defined in the `Microsoft.Extensions.Caching.Abstractions` package. That means it is not only usable for ASP.NET Core applications but also available to **any type of applications**.
 
 See [ASP.NET Core's distributed caching document](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed) for more information.
 
@@ -37,12 +44,12 @@ ABP defines the generic `IDistributedCache<TCacheItem>` interface in the [Volo.A
 
 `IDistributedCache<TCacheItem>` solves the difficulties explained above;
 
-* It internally **serializes/deserializes** the cached objects. Uses **JSON** serialization by default, but can be overridden by replacing the `IDistributedCacheSerializer` service in the [dependency injection](./dependency-injection.md) system.
-* It automatically adds a **cache name** prefix to the cache keys based on the object type stored in the cache. Default cache name is the full name of the cache item class (`CacheItem` postfix is removed if your cache item class ends with it). You can use the **`CacheName` attribute** on the cache item class to set the cache name.
+* It internally **serializes/deserializes** the cached objects. It uses **JSON** serialization by default but can be overridden by replacing the `IDistributedCacheSerializer` service in the [dependency injection](./dependency-injection.md) system.
+* It automatically adds a **cache name** prefix to the cache keys based on the object type stored in the cache. The default cache name is the full name of the cache item class (`CacheItem` postfix is removed if your cache item class ends with it). You can use the **`CacheName` attribute** on the cache item class to set the cache name.
 * It automatically adds the **current tenant id** to the cache key to distinguish cache items for different tenants (if your application is [multi-tenant](../architecture/multi-tenancy)). Define `IgnoreMultiTenancy` attribute on the cache item class to disable this if you want to share the cached objects among all tenants in a multi-tenant application.
-* Allows to define a **global cache key prefix** per application, so different applications can use their isolated key pools in a shared distributed cache server.
+* Allows defining a **global cache key prefix** per application so different applications can use their isolated key pools in a shared distributed cache server.
 * It **can tolerate errors** wherever possible and bypasses the cache. This is useful when you have temporary problems on the cache server.
-* It has methods like `GetManyAsync` and `SetManyAsync` which significantly improve the performance on **batch operations**.
+* It has methods like `GetManyAsync` and `SetManyAsync` which significantly improve the performance of **batch operations**.
 
 **Example: Store Book names and prices in the cache**
 
@@ -167,7 +174,7 @@ namespace MyProject
 ````
 
 * This sample service uses the `GetOrAddAsync()` method to get a book item from the cache.
-* Since cache explicitly implemented as using  `Guid` as cache key, `Guid` value passed to  `_cache_GetOrAddAsync()` method.
+* Since the cache is explicitly implemented as using  `Guid` as the cache key, the `Guid` value is passed to the `_cache_GetOrAddAsync()` method.
 
 #### Complex Types as the Cache Key
 
@@ -207,6 +214,58 @@ public class BookService : ITransientDependency
 }
 ````
 
+## Hybrid Cache
+
+ABP registers Microsoft's `HybridCache` together with typed ABP wrappers when the `Volo.Abp.Caching` module is used. Hybrid caching keeps a local in-process cache and can use the configured `IDistributedCache` as a secondary cache.
+
+Use `IHybridCache<TCacheItem>` for string keys or `IHybridCache<TCacheItem, TCacheKey>` for another key type:
+
+````csharp
+using Volo.Abp.Caching.Hybrid;
+using Volo.Abp.DependencyInjection;
+
+public class BookCacheItem
+{
+    public string Name { get; set; } = string.Empty;
+}
+
+public class BookService : ITransientDependency
+{
+    private readonly IHybridCache<BookCacheItem, Guid> _cache;
+
+    public BookService(IHybridCache<BookCacheItem, Guid> cache)
+    {
+        _cache = cache;
+    }
+
+    public Task<BookCacheItem?> GetAsync(Guid bookId)
+    {
+        return _cache.GetOrCreateAsync(
+            bookId,
+            () => LoadBookAsync(bookId)
+        );
+    }
+
+    private Task<BookCacheItem> LoadBookAsync(Guid bookId)
+    {
+        // Load the item from its source.
+        throw new NotImplementedException();
+    }
+}
+````
+
+The typed wrapper uses the same cache-name and tenant-aware key normalization conventions as ABP's distributed cache. Use `CacheName` on the cache item type to set its cache name and `IgnoreMultiTenancy` to share entries between tenants. A custom key type is converted with its `ToString()` method.
+
+The main operations are `GetOrCreateAsync`, `SetAsync`, `RemoveAsync` and `RemoveManyAsync`. Each operation has a nullable `hideErrors` argument. When it is `null`, `AbpHybridCacheOptions.HideErrors` is used; its default is `true`. Hidden errors are logged and sent to the exception notification system. `GetOrCreateAsync` can return `null` when a cache error is hidden.
+
+### Hybrid Cache and Unit of Work
+
+The hybrid-cache methods have a `considerUow` argument that defaults to `false`. When it is `true` and a unit of work is active, cache changes are visible inside that unit of work and are applied to the real cache only after the unit of work completes successfully. A rolled-back unit of work does not apply those changes.
+
+### Hybrid Cache Entry Options
+
+Pass `HybridCacheEntryOptions` to an individual `SetAsync` call when it needs a custom expiration. `AbpHybridCacheOptions.GlobalHybridCacheEntryOptions` is used by `SetAsync` when no per-call options are supplied, and `ConfigureCache<TCacheItem>()` can set the corresponding default for a cache item type.
+
 ## Configuration
 
 ### AbpDistributedCacheOptions
@@ -224,33 +283,32 @@ Configure<AbpDistributedCacheOptions>(options =>
 
 > Write that code inside the `ConfigureServices` method of your [module class](../architecture/modularity/basics.md).
 
-#### Available Options
 
-* `HideErrors` (`bool`, default: `true`): Enables/disables hiding the errors on writing/reading values from the cache server.
-* `KeyPrefix` (`string`, default: `null`): If your cache server is shared by multiple applications, you can set a prefix for the cache keys for your application. In this case, different applications can not overwrite each other's cache items.
-* `GlobalCacheEntryOptions` (`DistributedCacheEntryOptions`): Used to set default distributed cache options (like `AbsoluteExpiration` and `SlidingExpiration`) used when you don't specify the options while saving cache items. Default value uses the `SlidingExpiration` as 20 minutes.
+* `HideErrors` (`bool`, default: `true`): Enables or disables hiding errors when reading from or writing to the cache server. In the **development** environment, this option is **disabled** to help developers detect and fix any cache server issues.
+* `KeyPrefix` (`string`, default: an empty string): If your cache server is shared by multiple applications, you can set a prefix for the cache keys for your application. In this case, different applications can not overwrite each other's cache items.
+* `GlobalCacheEntryOptions` (`DistributedCacheEntryOptions`): Used to set default distributed cache options (like `AbsoluteExpiration` and `SlidingExpiration`) used when you don't specify the options while saving cache items. The default value uses the `SlidingExpiration` as 20 minutes.
 
 ## Error Handling
 
-When you design a cache for your objects, you typically try to get the value from cache first. If not found in the cache, you query the object from the **original source**. It may be located in a **database** or may require to perform an HTTP call to a remote server.
+When you design a cache for your objects, you typically try to get the value from the cache first. If not found in the cache, you query the object from the **original source**. It may be located in a **database** or may require an HTTP call to a remote server to be performed.
 
-In most cases, you want to **tolerate the cache errors**; If you get error from the cache server you don't want to cancel the operation. Instead, you silently hide (and log) the error and **query from the original source**. This is what the ABP does by default.
+In most cases, you want to **tolerate the cache errors**; If you get an error from the cache server, you don't want to cancel the operation. Instead, you silently hide (and log) the error and **query from the original source**. This is what the ABP does by default.
 
 ABP's Distributed Cache [handle](./exception-handling.md), log and hide errors by default. There is an option to change this globally (see the options below).
 
-In addition, all of the `IDistributedCache<TCacheItem>` (and `IDistributedCache<TCacheItem, TCacheKey>`) methods have an optional `hideErrors` parameter, which is `null` by default. The global value is used if this parameter left as `null`, otherwise you can decide to hide or throw the exceptions for individual method calls.
+In addition, all of the `IDistributedCache<TCacheItem>` (and `IDistributedCache<TCacheItem, TCacheKey>`) methods have an optional `hideErrors` parameter, which is `null` by default. The global value is used if this parameter is left as `null`; otherwise, you can decide to hide or throw the exceptions for individual method calls.
 
 ## Batch Operations
 
-ABP's distributed cache interfaces provide methods to perform batch methods those improves the performance when you want to batch operation multiple cache items in a single method call.
+ABP's distributed cache interfaces provide methods to perform batch operations that improve performance when you want to batch operation multiple cache items in a single method call.
 
 * `SetManyAsync` and `SetMany` methods can be used to set multiple values to the cache.
 * `GetManyAsync` and `GetMany` methods can be used to retrieve multiple values from the cache.
 * `GetOrAddManyAsync` and `GetOrAddMany` methods can be used to retrieve multiple values and set missing values from the cache
-* `RefreshManyAsync` and `RefreshMany` methods can be used to resets the sliding expiration timeout of multiple values from the cache
+* `RefreshManyAsync` and `RefreshMany` methods can be used to reset the sliding expiration timeout of multiple values from the cache
 * `RemoveManyAsync` and `RemoveMany` methods can be used to remove multiple values from the cache
 
-> These are not standard methods of the ASP.NET Core caching. So, some providers may not support them. They are supported by the [ABP Redis Cache integration package](./redis-cache.md). If the provider doesn't support, it fallbacks to `SetAsync` and `GetAsync` ... methods (called once for each item).
+> These are not standard methods of the ASP.NET Core caching. So, some providers may not support them. They are supported by the [ABP Redis Cache integration package](./redis-cache.md). If the provider doesn't support it, it falls back to `SetAsync` and `GetAsync` ... methods (called once for each item).
 
 ## Caching Entities
 
@@ -266,17 +324,17 @@ It's designed as read-only and automatically invalidates a cached entity if the 
 
 Distributed cache service provides an interesting feature. Assume that you've updated the price of a book in the database, then set the new price to the cache, so you can use the cached value later. What if you have an exception after setting the cache and you **rollback the transaction** that updates the price of the book? In this case, cache value will be incorrect.
 
-`IDistributedCache<..>` methods gets an optional parameter, named `considerUow`, which is `false` by default. If you set it to `true`, then the changes you made for the cache are not actually applied to the real cache store, but associated with the current [unit of work](../architecture/domain-driven-design/unit-of-work.md). You get the value you set in the same unit of work, but the changes are applied **only if the current unit of work succeed**.
+`IDistributedCache<..>` methods gets an optional parameter, named `considerUow`, which is `false` by default. If you set it to `true`, then the changes you made for the cache are not actually applied to the real cache store, but associated with the current [unit of work](../architecture/domain-driven-design/unit-of-work.md). You get the value you set in the same unit of work, but the changes are applied **only if the current unit of work succeeds**.
 
 ### IDistributedCacheSerializer
 
-`IDistributedCacheSerializer` service is used to serialize and deserialize the cache items. Default implementation is the `Utf8JsonDistributedCacheSerializer` class that uses `IJsonSerializer` service to convert objects to [JSON](../../json-serialization.md) and vice verse. Then it uses UTC8 encoding to convert the JSON string to a byte array which is accepted by the distributed cache.
+`IDistributedCacheSerializer` service is used to serialize and deserialize the cache items. The default implementation is the `Utf8JsonDistributedCacheSerializer` class that uses `IJsonSerializer` service to convert objects to [JSON](../../json-serialization.md) and vice verse. Then it uses UTF8 encoding to convert the JSON string to a byte array which is accepted by the distributed cache.
 
-You can [replace](./dependency-injection.md) this service by your own implementation if you want to implement your own serialization logic.
+You can [replace](./dependency-injection.md) this service with your own implementation if you want to implement your own serialization logic.
 
 ### IDistributedCacheKeyNormalizer
 
-`IDistributedCacheKeyNormalizer` is implemented by the `DistributedCacheKeyNormalizer` class by default. It adds cache name, application cache prefix and current tenant id to the cache key. If you need a more advanced key normalization, you can [replace](./dependency-injection.md) this service by your own implementation.
+`IDistributedCacheKeyNormalizer` is implemented by the `DistributedCacheKeyNormalizer` class by default. It adds the cache name, application cache prefix and current tenant ID to the cache key. If you need a more advanced key normalization, you can [replace](./dependency-injection.md) this service with your own implementation.
 
 ## See Also
 

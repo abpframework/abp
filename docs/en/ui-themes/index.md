@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore ABP's official theming system, featuring the LeptonX and Basic themes, to enhance your application's UI effortlessly."
+}
+```
+
 # The Official Themes
 ABP provides a complete UI theming system. While you can build your own themes, you can directly use the following pre-built themes in your applications.
 
@@ -25,6 +32,15 @@ See the following documents based on the UI type you are using:
 - [Basic Theme - MVC UI](../framework/ui/mvc-razor-pages/basic-theme.md)
 - [Basic Theme - Blazor UI](../framework/ui/blazor/basic-theme.md)
 - [Basic Theme - Angular UI](../framework/ui/angular/basic-theme.md)
+
+## Blazor UI Library
+
+When you create an ABP solution with a Blazor host (Blazor Server, Blazor WebAssembly or Blazor WebApp), you can additionally choose the underlying Blazor component library:
+
+* **Blazorise** — the original ABP default, based on Bootstrap.
+* **MudBlazor** — a Material-Design component library, available as an alternative variant. Each official theme has a MudBlazor version (e.g. `MudBlazorLeptonXTheme`, `MudBlazorLeptonXLiteTheme`, `MudBlazorBasicTheme`).
+
+The choice is made at solution creation time via the `--blazor-ui-library` option (`abp new ... -bul mudblazor`) or in the ABP Studio new-solution wizard.
 
 ## See Also
 

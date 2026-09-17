@@ -1,9 +1,9 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Data;
@@ -44,9 +44,13 @@ public abstract class BasicRepositoryBase<TEntity> :
 
     public bool? IsChangeTrackingEnabled { get; protected set; }
 
-    protected BasicRepositoryBase()
-    {
+    public string? EntityName { get; set; }
 
+    public string ProviderName { get; }
+
+    protected BasicRepositoryBase(string providerName)
+    {
+        ProviderName = Check.NotNullOrWhiteSpace(providerName, nameof(providerName));
     }
 
     public abstract Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default);
@@ -139,13 +143,19 @@ public abstract class BasicRepositoryBase<TEntity> :
 public abstract class BasicRepositoryBase<TEntity, TKey> : BasicRepositoryBase<TEntity>, IBasicRepository<TEntity, TKey>
     where TEntity : class, IEntity<TKey>
 {
+    protected BasicRepositoryBase(string providerName)
+        : base(providerName)
+    {
+
+    }
+
     public virtual async Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
         var entity = await FindAsync(id, includeDetails, cancellationToken);
 
         if (entity == null)
         {
-            throw new EntityNotFoundException(typeof(TEntity), id);
+            throw new EntityNotFoundException<TEntity>(id);
         }
 
         return entity;

@@ -89,7 +89,9 @@
     "Permission:BlogPostManagement.Publish": "Publikovať",
     "Permission:CmsKit": "CmsKit",
     "Permission:Comments": "Správa komentárov",
-    "Permission:Comments.Delete": "Zmazať",
+    "Permission:Comments.Delete": "Vymazať",
+    "Permission:Comments.Update": "Aktualizovať",
+    "Permission:Comments.SettingManagement": "Správa nastavení",
     "Permission:Contents": "Správa obsahu",
     "Permission:Contents.Create": "Vytvoriť obsah",
     "Permission:Contents.Delete": "Zmazať obsah",
@@ -227,6 +229,13 @@
     "CssClass": "CSS trieda",
     "TagsHelpText": "Značky by mali byť oddelené čiarkou (napr.: tag1, tag2, tag3)",
     "ThisPartOfContentCouldntBeLoaded": "Táto časť obsahu sa nedá načítať.",
-    "DuplicateCommentAttemptMessage": "Zistil sa duplicitný pokus o uverejnenie komentára. Váš komentár už bol odoslaný."
+    "DuplicateCommentAttemptMessage": "Zistil sa duplicitný pokus o uverejnenie komentára. Váš komentár už bol odoslaný.",
+    "ChooseAnActionForBlog": "Vyberte akciu pre blog",
+    "AssignBlogPostsToOtherBlog": "Priradiť blogové príspevky k inému blogu",
+    "SelectAnBlogToAssign": "Vyberte blog, na ktorý chcete priradiť blogové príspevky",
+    "DeleteAllBlogPostsOfThisBlog": "Zmazať všetky blogové príspevky tohto blogu",
+    "RequiredPermissionName": "Požadovaný názov oprávnenia",
+    "AllPosts": "Všetky príspevky",
+    "IsReadOnly": "Iba na čítanie"
   }
 }

@@ -1,27 +1,32 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
+using Volo.Abp.MultiTenancy;
 using Volo.CmsKit.Features;
 using Volo.CmsKit.Public.Pages;
+using Volo.CmsKit.Public.Web.Pages.Public;
 
 namespace Volo.CmsKit.Public.Web.Pages;
 
-public class CmsKitHomePageRouteValueTransformer : DynamicRouteValueTransformer, ITransientDependency
+public class CmsKitHomePageRouteValueTransformer : CmsKitDynamicRouteValueTransformerBase
 {
     protected IFeatureChecker FeatureChecker { get; }
 
     protected IPagePublicAppService PagePublicAppService { get; }
 
-    public CmsKitHomePageRouteValueTransformer(IFeatureChecker featureChecker, IPagePublicAppService pagePublicAppService)
+    public CmsKitHomePageRouteValueTransformer(
+        ICurrentTenant currentTenant,
+        ITenantConfigurationProvider tenantConfigurationProvider,
+        IFeatureChecker featureChecker,
+        IPagePublicAppService pagePublicAppService)
+        : base(currentTenant, tenantConfigurationProvider)
     {
         FeatureChecker = featureChecker;
         PagePublicAppService = pagePublicAppService;
     }
 
-    public override async ValueTask<RouteValueDictionary> TransformAsync(HttpContext httpContext, RouteValueDictionary values)
+    protected async override ValueTask<RouteValueDictionary> DoTransformAsync(HttpContext httpContext, RouteValueDictionary values)
     {
         if (await FeatureChecker.IsEnabledAsync(CmsKitFeatures.PageEnable))
         {

@@ -2,6 +2,12 @@
 
 In this article, I'll show you the new built-in metrics of .NET 8, which are basically numerical measurements reported over time in your application and can be used to monitor the health of your application and generate reports according to those numerical values. We will see what the metrics are, why to use them, and how to use them in detail. So, let's dive in.
 
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
+
 ## What are Metrics?
 
 Metrics are numerical measurements reported over time. These measurements are crucial for monitoring the health of an application and generating alerts when necessary. In the context of a web service, various metrics can be tracked, such as:
@@ -184,6 +190,12 @@ It's a common requirement to build a dashboard and monitor the metrics and check
 If you want to build a dashboard, you can see [this documentation from Microsoft](https://learn.microsoft.com/en-us/aspnet/core/log-mon/metrics/metrics?view=aspnetcore-8.0#view-metrics-in-grafana-with-opentelemetry-and-prometheus), which shows how to set up the **Prometheus server** and show metrics on a **Grafana** dashboard.
 
 Also, you can check [this video](https://www.youtube.com/watch?v=A2pKhNQoQUU) if you want to see it in action.
+
+---
+> 🛠 Liked this post? I now share all my content on Substack — real-world .NET, AI, and scalable software design.
+> 👉 Subscribe here → engincanveske.substack.com
+> 🎥 Also, check out my YouTube channel for hands-on demos and deep dives: https://www.youtube.com/@engincanv
+---
 
 ## Conclusion 
 

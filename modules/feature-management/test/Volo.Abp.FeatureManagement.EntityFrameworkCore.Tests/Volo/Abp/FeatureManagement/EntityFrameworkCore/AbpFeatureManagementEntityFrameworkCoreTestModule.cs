@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Modularity;
@@ -19,44 +18,45 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore;
     )]
 public class AbpFeatureManagementEntityFrameworkCoreTestModule : AbpModule
 {
+    private AbpUnitTestSqliteDatabase _database;
+
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        PreConfigure<AbpSqliteOptions>(x => x.BusyTimeout = null);
+    }
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        var sqliteConnection = CreateDatabaseAndGetConnection();
+        _database = new AbpUnitTestSqliteDatabase();
+        _database.CreateTables(
+            new FeatureManagementDbContext(new DbContextOptionsBuilder<FeatureManagementDbContext>().UseSqlite(_database.ConnectionString).Options));
+
+        Configure<AbpDbConnectionOptions>(options =>
+        {
+            options.ConnectionStrings.Default = _database.ConnectionString;
+        });
 
         Configure<AbpDbContextOptions>(options =>
         {
             options.Configure(abpDbContextConfigurationContext =>
             {
-                abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
+                abpDbContextConfigurationContext.UseSqlite();
             });
         });
 
         context.Services.AddAlwaysDisableUnitOfWorkTransaction();
     }
 
-    private static SqliteConnection CreateDatabaseAndGetConnection()
+    public override void OnApplicationShutdown(ApplicationShutdownContext context)
     {
-        var connection = new AbpUnitTestSqliteConnection("Data Source=:memory:");
-        connection.Open();
-
-        new FeatureManagementDbContext(
-            new DbContextOptionsBuilder<FeatureManagementDbContext>().UseSqlite(connection).Options
-        ).GetService<IRelationalDatabaseCreator>().CreateTables();
-
-        return connection;
+        _database?.Dispose();
     }
+
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
-        var task = context.ServiceProvider.GetRequiredService<AbpFeatureManagementDomainModule>().GetInitializeDynamicFeaturesTask();
-        if (!task.IsCompleted)
-        {
-            AsyncHelper.RunSync(() => Awaited(task));
-        }
-    }
-
-    private async static Task Awaited(Task task)
-    {
-        await task;
+        var rootServiceProvider = context.ServiceProvider.GetRequiredService<IRootServiceProvider>();
+        var initializer = rootServiceProvider.GetRequiredService<FeatureDynamicInitializer>();
+        AsyncHelper.RunSync(() => initializer.InitializeAsync(false));
     }
 }

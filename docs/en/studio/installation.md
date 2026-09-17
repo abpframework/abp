@@ -1,29 +1,37 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to install ABP Studio, including system requirements and optional tools, to kickstart your development with ABP Framework."
+}
+```
+
 # Installing ABP Studio
 
-> **Warning: Beta Version Information**\
-> Currently, ABP Studio is in its beta phase and available for everyone. To access the beta version, kindly visit [this web page](https://abp.io/studio).
+This document explains how to install the ABP Studio tool.
 
 ## Pre-requirements
 
-Before you begin the installation process for ABP Studio, ensure that your system meets the following pre-requirements:
+ABP Studio automatically installs most of the required dependencies. When you first launch the application, it will check for and install the following components if missed:
 
-### Node
-Make sure [Node.js](https://nodejs.org/en) is installed on your system. If you have not installed Node.js, you can download the `v18.19+` version from the official [Node.js website](https://nodejs.org/en/download/prebuilt-installer).
+* .NET SDK
+* Node.js
+* ABP CLI
+* mkcert (for HTTPS development)
+* WireGuard (for Kubernetes operations)
 
-### WireGuard (Optional) 
-ABP Studio needs [WireGuard](https://www.wireguard.com/) for Kubernetes operations. You can find the installation instructions for your specific operating system below:
+However, the following should be manually installed:
 
-**For Windows:** 
-Installation instructions for your Windows operating system are on the official [WireGuard website](https://www.wireguard.com/install/#windows-7-81-10-11-2008r2-2012r2-2016-2019-2022).
+### Docker (Required for Kubernetes Operations)
 
-**For macOS:**
-Installation instructions for your macOS operating system are on the official [WireGuard website](https://www.wireguard.com/install/#macos-homebrew-and-macports-basic-cli-homebrew-userspace-go-homebrew-tools-macports-userspace-go-macports-tools).
+ABP Studio needs [Docker](https://www.docker.com/) for Docker and [Kubernetes](https://kubernetes.io/) operations. Install Docker by following the guidelines on the official [Docker website](https://docs.docker.com/get-docker/).
 
-### Docker (Optional) 
-ABP Studio needs [Docker](https://www.docker.com/) for [Kubernetes](https://kubernetes.io/) operations. Install Docker by following the guidelines on the official [Docker website](https://docs.docker.com/get-docker/).
+### Package Manager Prerequisites
+
+* **Windows:** The automatic installation process uses `winget`. If not already installed, ABP Studio will attempt to install it.
+* **macOS:** The automatic installation process uses `brew`. If not already installed, you'll need to install it manually from [brew.sh](https://brew.sh/).
 
 ## Installation
-Now you have met the pre-requirements, follow the steps below to install ABP Studio:
+Follow these steps to install ABP Studio:
 
 1. **Download ABP Studio:** Visit [abp.io](https://abp.io/studio) to download the latest version of ABP Studio.
 
@@ -31,8 +39,10 @@ Now you have met the pre-requirements, follow the steps below to install ABP Stu
 
 2. **Run the Installer:** Execute the installer and follow the on-screen instructions to install ABP Studio on your computer.
 
+3. **First Launch:** When you first launch ABP Studio, it will automatically check for and install required dependencies. This process may take several minutes, and you'll see progress indicators for each component being installed.
+
 ## Login
-After you install ABP Studio, you can log in to access all the features. To log in, follow the below steps:
+After installation is complete, you can log in to access all features:
 
 1. **Launch ABP Studio:** Open ABP Studio on your desktop.
 
@@ -45,7 +55,7 @@ ABP Studio allows you to customize the user interface theme according to your pr
 
 ## Upgrading
 ABP Studio periodically checks for updates in the background, and when a new version of ABP Studio is available, you will be notified through a modal. 
-The modal will prompt you to update to the latest version as below:
+The modal will prompt you to update to the latest version as follows:
 
 ![new-version-available-window](./images/new-version-available-window.png)
 
@@ -55,3 +65,29 @@ When you see the "New Version Available" window, follow these steps to upgrade A
 2. A progress indicator will display the download status.
 3. Once the download is complete, a new modal will appear with the "Install and Relaunch" buttons.
 4. Click on the "Install and Relaunch" button to complete the installation process.
+
+## Installing a Specific Version
+
+There is no official support for installing an older version of ABP Studio yet. But, if you want to install an older version of ABP Studio, you can use approach explained here [https://github.com/enisn/AbpDevTools?tab=readme-ov-file#switch-abp-studio-version](https://github.com/enisn/AbpDevTools?tab=readme-ov-file#switch-abp-studio-version)
+
+## Troubleshooting
+
+### Shell Environment Detection (macOS and Linux)
+
+ABP Studio normally detects the shell environment automatically, so you do not need to configure the following variables. Use them only if Studio cannot find a tool that is available in your terminal, such as a user-managed .NET or Node.js installation.
+
+On macOS and Linux, ABP Studio starts a shell during application startup and imports the environment variables printed by it. By default, Studio starts the shell as an interactive login shell and runs `env`.
+
+| Variable | Description | Fallback |
+|---|---|---|
+| `ABP_STUDIO_SHELL` | Overrides the shell executable used to load the environment. Set it to a valid, non-empty executable path. | When unset, `SHELL`, then `/bin/zsh` on macOS or `/bin/bash` on Linux |
+| `ABP_STUDIO_SHELL_ARGS` | Replaces the complete argument string passed to the selected shell. | When unset or empty, `-i -l -c 'env'` |
+
+Set these variables in the environment that launches ABP Studio, then restart the application. Usually, you only need to override the shell executable. For example:
+
+```bash
+export ABP_STUDIO_SHELL=/bin/bash
+export ABP_STUDIO_SHELL_ARGS="-i -l -c 'env'"
+```
+
+> **Note:** Custom `ABP_STUDIO_SHELL_ARGS` must make the shell exit successfully and print the environment to standard output as newline-separated `NAME=value` entries. These settings have no effect on Windows.

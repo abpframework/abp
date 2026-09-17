@@ -29,6 +29,7 @@
     "FullSearch": "Zoek in documenten",
     "Volo.Docs.Domain:010001": "Elastisch zoeken is niet ingeschakeld.",
     "MultipleVersionDocumentInfo": "Dit document heeft meerdere versies. Selecteer de opties die het beste bij u passen.",
+    "DocumentOptions": "Documentopties",
     "New": "Nieuw",
     "Upd": "Bew",
     "NewExplanation": "Gemaakt in de afgelopen twee weken.",
@@ -38,6 +39,7 @@
     "Search": "Zoeken",
     "SearchResults": "Zoekresultaten",
     "SearchInTheAllDocuments": "Zoek in alle documenten",
-    "GoogleTranslate": "Google Vertalen"
+    "GoogleTranslate": "Google Vertalen",
+    "DownloadPDF": "PDF downloaden"
   }
 }

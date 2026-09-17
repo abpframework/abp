@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.ClientProxying;
+using Volo.Abp.Http.Client.Proxying;
 using Volo.Abp.Http.DynamicProxying;
 using Volo.Abp.Http.Localization;
 using Volo.Abp.Localization;
@@ -59,6 +62,17 @@ public class AbpHttpClientTestModule : AbpModule
             options.QueryStringConverts.Add(typeof(List<GetParamsNameValue>), typeof(TestObjectToQueryString));
             options.FormDataConverts.Add(typeof(List<GetParamsNameValue>), typeof(TestObjectToFormData));
             options.PathConverts.Add(typeof(int), typeof(TestObjectToPath));
+        });
+
+        Configure<AbpHttpClientOptions>(options =>
+        {
+            options.AddPreSendAction("Default", (_, requestContext, httpclient) =>
+            {
+                if (requestContext.Action.Name.Equals("TimeOutRequestAsync"))
+                {
+                    httpclient.Timeout = TimeSpan.FromMilliseconds(1);
+                }
+            });
         });
     }
 }

@@ -68,6 +68,8 @@
     "AccessDenied": "Hozzáférés megtagadva!",
     "AccessDeniedMessage": "Nincs hozzáférése ehhez az erőforráshoz.",
     "OrRegisterWith": "Vagy regisztráljon:",
-    "RegisterUsingYourProviderAccount": "Regisztráljon a(z) {0} fiókjával"
+    "RegisterUsingYourProviderAccount": "Regisztráljon a(z) {0} fiókjával",
+    "RequireMigrateSeedTitle": "Nem található az adminisztrátor felhasználó",
+    "RequireMigrateSeedMessage": "Kérjük, győződjön meg arról, hogy az adatbázis seed végrehajtásra került. Tekintse meg a <a target=\"_blank\" href=\"https://abp.io/kb/0003\">dokumentációt</a> a lehetséges megoldásokért."
   }
 }

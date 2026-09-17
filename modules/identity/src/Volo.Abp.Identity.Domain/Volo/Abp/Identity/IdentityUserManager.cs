@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -8,11 +8,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Caching;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Identity.Settings;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
 using Volo.Abp.Threading;
@@ -22,6 +24,12 @@ namespace Volo.Abp.Identity;
 
 public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 {
+    /// <summary>
+    /// The base class keeps its own map private, and the provider it picks for a token provider key is
+    /// only reachable through an internal API when the key carries providers for more than one user type.
+    /// </summary>
+    private readonly Dictionary<string, IUserTwoFactorTokenProvider<IdentityUser>> _registeredTokenProviders = new();
+
     protected IIdentityRoleRepository RoleRepository { get; }
     protected IIdentityUserRepository UserRepository { get; }
     protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
@@ -31,6 +39,10 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     protected IIdentityLinkUserRepository IdentityLinkUserRepository { get; }
     protected IDistributedCache<AbpDynamicClaimCacheItem> DynamicClaimCache { get; }
     protected override CancellationToken CancellationToken => CancellationTokenProvider.Token;
+    protected IOptions<AbpMultiTenancyOptions> MultiTenancyOptions { get; }
+    protected ICurrentTenant CurrentTenant { get; }
+    protected IDataFilter DataFilter { get; }
+    protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
     public IdentityUserManager(
         IdentityUserStore store,
@@ -49,7 +61,11 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         ISettingProvider settingProvider,
         IDistributedEventBus distributedEventBus,
         IIdentityLinkUserRepository identityLinkUserRepository,
-        IDistributedCache<AbpDynamicClaimCacheItem> dynamicClaimCache)
+        IDistributedCache<AbpDynamicClaimCacheItem> dynamicClaimCache,
+        IOptions<AbpMultiTenancyOptions> multiTenancyOptions,
+        ICurrentTenant currentTenant,
+        IDataFilter dataFilter,
+        IUnitOfWorkManager unitOfWorkManager)
         : base(
             store,
             optionsAccessor,
@@ -68,7 +84,25 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         UserRepository = userRepository;
         IdentityLinkUserRepository = identityLinkUserRepository;
         DynamicClaimCache = dynamicClaimCache;
+        MultiTenancyOptions = multiTenancyOptions;
+        CurrentTenant = currentTenant;
+        DataFilter = dataFilter;
+        UnitOfWorkManager = unitOfWorkManager;
         CancellationTokenProvider = cancellationTokenProvider;
+    }
+
+    public override void RegisterTokenProvider(string providerName, IUserTwoFactorTokenProvider<IdentityUser> provider)
+    {
+        base.RegisterTokenProvider(providerName, provider);
+        _registeredTokenProviders[providerName] = provider;
+    }
+
+    /// <summary>
+    /// The token provider this manager uses for <paramref name="providerName"/>, or null when the key has none.
+    /// </summary>
+    public virtual IUserTwoFactorTokenProvider<IdentityUser>? FindTokenProvider(string providerName)
+    {
+        return _registeredTokenProviders.GetOrDefault(providerName);
     }
 
     public virtual async Task<IdentityResult> CreateAsync(IdentityUser user, string password, bool validatePassword)
@@ -84,13 +118,32 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
     public async override Task<IdentityResult> DeleteAsync(IdentityUser user)
     {
+        //The user may have been loaded without details.
+        await UserRepository.EnsureCollectionLoadedAsync(user, x => x.Claims, CancellationToken);
+        await UserRepository.EnsureCollectionLoadedAsync(user, x => x.Roles, CancellationToken);
+        await UserRepository.EnsureCollectionLoadedAsync(user, x => x.Tokens, CancellationToken);
+        await UserRepository.EnsureCollectionLoadedAsync(user, x => x.Logins, CancellationToken);
+        await UserRepository.EnsureCollectionLoadedAsync(user, x => x.OrganizationUnits, CancellationToken);
+        await UserRepository.EnsureCollectionLoadedAsync(user, x => x.PasswordHistories, CancellationToken);
+        await UserRepository.EnsureCollectionLoadedAsync(user, x => x.Passkeys, CancellationToken);
+
         user.Claims.Clear();
         user.Roles.Clear();
         user.Tokens.Clear();
         user.Logins.Clear();
         user.OrganizationUnits.Clear();
-        await IdentityLinkUserRepository.DeleteAsync(new IdentityLinkUserInfo(user.Id, user.TenantId), CancellationToken);
-        await UpdateAsync(user);
+        user.PasswordHistories.Clear();
+        user.Passkeys.Clear();
+
+        //Soft deleting reloads the original values, the store saves the changes without validating the user.
+        //Nothing else is deleted before this succeeds, it is where the user is checked for concurrency.
+        (await Store.UpdateAsync(user, CancellationToken)).CheckErrors();
+
+        //They are in the host database and deleting them here covers the current unit of work.
+        using (CurrentTenant.Change(null))
+        {
+            await IdentityLinkUserRepository.DeleteAsync(new IdentityLinkUserInfo(user.Id, user.TenantId), CancellationToken);
+        }
 
         return await base.DeleteAsync(user);
     }
@@ -107,6 +160,44 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         return result;
     }
 
+    /// <summary>
+    /// This is to call the protection method ValidateUserAsync
+    /// Should return <see cref="IdentityResult.Success"/> if validation is successful. This is
+    /// called before saving the user via Create or Update.
+    /// </summary>
+    /// <param name="user">The user</param>
+    /// <returns>A <see cref="IdentityResult"/> representing whether validation was successful.</returns>
+    public virtual async Task<IdentityResult> CallValidateUserAsync(IdentityUser user)
+    {
+        return await ValidateUserAsync(user);
+    }
+
+    /// <summary>
+    /// This is to call the protection method ValidatePasswordAsync
+    /// Should return <see cref="IdentityResult.Success"/> if validation is successful. This is
+    /// called before updating the password hash.
+    /// </summary>
+    /// <param name="user">The user.</param>
+    /// <param name="password">The password.</param>
+    /// <returns>A <see cref="IdentityResult"/> representing whether validation was successful.</returns>
+    public virtual async Task<IdentityResult> CallValidatePasswordAsync(IdentityUser user, string password)
+    {
+        return await ValidatePasswordAsync(user, password);
+    }
+
+    /// <summary>
+    /// This is to call the protection method UpdatePasswordHash
+    /// Updates a user's password hash.
+    /// </summary>
+    /// <param name="user">The user.</param>
+    /// <param name="newPassword">The new password.</param>
+    /// <param name="validatePassword">Whether to validate the password.</param>
+    /// <returns>Whether the password has was successfully updated.</returns>
+    public virtual async Task<IdentityResult> CallUpdatePasswordHash(IdentityUser user, string newPassword, bool validatePassword)
+    {
+        return await UpdatePasswordHash(user, newPassword, validatePassword);
+    }
+
     public virtual async Task<IdentityUser> GetByIdAsync(Guid id)
     {
         var user = await Store.FindByIdAsync(id.ToString(), CancellationToken);
@@ -116,6 +207,61 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         }
 
         return user;
+    }
+
+    public virtual async Task UpdateLastSignInTimeAsync(Guid id, DateTimeOffset? lastSignInTime = null)
+    {
+        var time = lastSignInTime ?? DateTimeOffset.UtcNow;
+
+        var currentUow = UnitOfWorkManager.Current;
+        if (currentUow != null)
+        {
+            // The current unit of work may hold uncommitted changes of the same user (e.g. a new
+            // registration or a lockout counter reset), so update the time after it completes.
+            var tenantId = CurrentTenant.Id;
+            currentUow.OnCompleted(async () =>
+            {
+                using (CurrentTenant.Change(tenantId))
+                {
+                    await TryUpdateLastSignInTimeAsync(id, time);
+                }
+            });
+
+            return;
+        }
+
+        await TryUpdateLastSignInTimeAsync(id, time);
+    }
+
+    protected virtual async Task TryUpdateLastSignInTimeAsync(Guid id, DateTimeOffset lastSignInTime)
+    {
+        try
+        {
+            // Update the last sign-in time in a separate unit of work with a freshly
+            // loaded user, so a concurrency conflict can't fail the current operation.
+            using (var uow = UnitOfWorkManager.Begin(requiresNew: true))
+            {
+                var user = await Store.FindByIdAsync(id.ToString(), CancellationToken);
+                if (user == null || user.LastSignInTime >= lastSignInTime)
+                {
+                    return;
+                }
+
+                user.SetLastSignInTime(lastSignInTime);
+
+                var result = await UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    await uow.CompleteAsync();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            // This is a best-effort update. The user may be updated concurrently
+            // by another login or any other operation. Ignore the failure.
+            Logger.LogException(e);
+        }
     }
 
     public virtual async Task<IdentityResult> SetRolesAsync([NotNull] IdentityUser user,
@@ -371,6 +517,22 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         return result;
     }
 
+    public override async Task<IdentityResult> ChangePasswordAsync(IdentityUser user, string currentPassword, string newPassword)
+    {
+        var result = await base.ChangePasswordAsync(user, currentPassword, newPassword);
+
+        result.CheckErrors();
+
+        await DistributedEventBus.PublishAsync(new IdentityUserPasswordChangedEto
+        {
+            Id = user.Id,
+            TenantId = user.TenantId,
+            Email =  user.Email,
+        });
+
+        return result;
+    }
+
     public virtual async Task UpdateRoleAsync(Guid sourceRoleId, Guid? targetRoleId)
     {
         var sourceRole = await RoleRepository.GetAsync(sourceRoleId, cancellationToken: CancellationToken);
@@ -395,14 +557,14 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         var sourceOrganization = await OrganizationUnitRepository.GetAsync(sourceOrganizationId, cancellationToken: CancellationToken);
 
         Logger.LogDebug($"Remove dynamic claims cache for users of organization: {sourceOrganizationId}");
-        var userIdList = await OrganizationUnitRepository.GetMemberIdsAsync(sourceOrganizationId, cancellationToken: CancellationToken);
+        var userIdList = await OrganizationUnitRepository.GetMemberIdsAsync(sourceOrganizationId, includeChildren: true, cancellationToken: CancellationToken);
         await DynamicClaimCache.RemoveManyAsync(userIdList.Select(userId => AbpDynamicClaimCacheItem.CalculateCacheKey(userId, sourceOrganization.TenantId)), token: CancellationToken);
 
         var targetOrganization = targetOrganizationId.HasValue ? await OrganizationUnitRepository.GetAsync(targetOrganizationId.Value, cancellationToken: CancellationToken) : null;
         if (targetOrganization != null)
         {
             Logger.LogDebug($"Remove dynamic claims cache for users of organization: {targetOrganizationId}");
-            userIdList = await OrganizationUnitRepository.GetMemberIdsAsync(targetOrganizationId.Value, cancellationToken: CancellationToken);
+            userIdList = await OrganizationUnitRepository.GetMemberIdsAsync(targetOrganizationId.Value, includeChildren: true, cancellationToken: CancellationToken);
             await DynamicClaimCache.RemoveManyAsync(userIdList.Select(userId => AbpDynamicClaimCacheItem.CalculateCacheKey(userId, targetOrganization.TenantId)), token: CancellationToken);
         }
 
@@ -490,22 +652,18 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         }
         else if (Options.User.AllowedUserNameCharacters.Where(char.IsDigit).Distinct().Count() >= 4)
         {
-            // The AllowedUserNameCharacters includes 4 numbers. So, we are generating 4 random numbers and appending to the username.
-            var numbers = Options.User.AllowedUserNameCharacters.Where(char.IsDigit).OrderBy(x => Guid.NewGuid()).Take(4).ToArray();
-            var minArray = numbers.OrderBy(x => x).ToArray();
-            if (minArray[0] == '0')
-            {
-                var secondItem = minArray[1];
-                minArray[0] = secondItem;
-                minArray[1] = '0';
-            }
-            var min = int.Parse(new string(minArray));
-            var max = int.Parse(new string(numbers.OrderByDescending(x => x).ToArray()));
+            // The AllowedUserNameCharacters includes at least 4 distinct digits. So, we are picking 4 random digits from them and appending to the username.
+            var allowedDigits = Options.User.AllowedUserNameCharacters.Where(char.IsDigit).Distinct().ToArray();
             tryCount = 0;
             do
             {
-                var randomUserName = userName + RandomHelper.GetRandom(min, max);
-                if ( await ValidateUserNameAsync(randomUserName))
+                var randomDigits = new char[4];
+                for (var i = 0; i < randomDigits.Length; i++)
+                {
+                    randomDigits[i] = allowedDigits[RandomHelper.GetRandom(0, allowedDigits.Length)];
+                }
+                var randomUserName = userName + new string(randomDigits);
+                if (await ValidateUserNameAsync(randomUserName))
                 {
                     return randomUserName;
                 }
@@ -528,6 +686,156 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         }
 
         Logger.LogError($"Could not get a valid user name for the given email address: {email}, allowed characters: {Options.User.AllowedUserNameCharacters}, tried {maxTryCount} times.");
-        throw new AbpIdentityResultException(IdentityResult.Failed(new IdentityErrorDescriber().InvalidUserName(userName)));
+        throw new AbpIdentityResultException(IdentityResult.Failed(ErrorDescriber.InvalidUserName(userName)));
+    }
+
+    public virtual async Task<IdentityUser> FindSharedUserByEmailAsync(string email)
+    {
+        if (MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Isolated)
+        {
+            return await base.FindByEmailAsync(email);
+        }
+
+        using (CurrentTenant.Change(null))
+        {
+            using (DataFilter.Disable<IMultiTenant>())
+            {
+                var normalizedEmail = NormalizeEmail(email);
+                var hostusers = await UserRepository.GetUsersByNormalizedEmailAsync(normalizedEmail, cancellationToken: CancellationToken);
+                //host user first
+                var hostUser = hostusers.FirstOrDefault(x => x.TenantId == null) ?? hostusers.FirstOrDefault(x => x.TenantId != Guid.Empty) ?? hostusers.FirstOrDefault();
+                if (hostUser == null)
+                {
+                    return null;
+                }
+
+                using (DataFilter.Enable<IMultiTenant>())
+                {
+                    using (CurrentTenant.Change(hostUser.TenantId))
+                    {
+                        return await base.FindByEmailAsync(email);
+                    }
+                }
+            }
+        }
+    }
+
+    public virtual async Task<IdentityUser> FindSharedUserByNameAsync(string userName)
+    {
+        if (MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Isolated)
+        {
+            return await base.FindByNameAsync(userName);
+        }
+
+        using (CurrentTenant.Change(null))
+        {
+            using (DataFilter.Disable<IMultiTenant>())
+            {
+                var normalizeduserName = NormalizeName(userName);
+                var hostusers = await UserRepository.GetUsersByNormalizedUserNameAsync(normalizeduserName, cancellationToken: CancellationToken);
+                //host user first
+                var hostUser = hostusers.FirstOrDefault(x => x.TenantId == null) ?? hostusers.FirstOrDefault(x => x.TenantId != Guid.Empty) ?? hostusers.FirstOrDefault();
+                if (hostUser == null)
+                {
+                    return null;
+                }
+
+                using (DataFilter.Enable<IMultiTenant>())
+                {
+                    using (CurrentTenant.Change(hostUser.TenantId))
+                    {
+                        return await base.FindByNameAsync(userName);
+                    }
+                }
+            }
+        }
+    }
+
+    public virtual async Task<IdentityUser> FindSharedUserByLoginAsync(string loginProvider, string providerKey)
+    {
+        if (MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Isolated)
+        {
+            return await base.FindByLoginAsync(loginProvider, providerKey);
+        }
+
+        using (CurrentTenant.Change(null))
+        {
+            using (DataFilter.Disable<IMultiTenant>())
+            {
+                var hostusers = await UserRepository.GetUsersByLoginAsync(loginProvider, providerKey, cancellationToken: CancellationToken);
+                //host user first
+                var hostUser = hostusers.FirstOrDefault(x => x.TenantId == null) ?? hostusers.FirstOrDefault(x => x.TenantId != Guid.Empty) ?? hostusers.FirstOrDefault();
+                if (hostUser == null)
+                {
+                    return null;
+                }
+
+                using (DataFilter.Enable<IMultiTenant>())
+                {
+                    using (CurrentTenant.Change(hostUser.TenantId))
+                    {
+                        return await base.FindByLoginAsync(loginProvider, providerKey);
+                    }
+                }
+            }
+        }
+    }
+
+    public virtual async Task<IdentityUser> FindSharedUserByPasskeyIdAsync(byte[] credentialId)
+    {
+        if (MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Isolated)
+        {
+            return await base.FindByPasskeyIdAsync(credentialId);
+        }
+
+        using (CurrentTenant.Change(null))
+        {
+            using (DataFilter.Disable<IMultiTenant>())
+            {
+                var hostusers = await UserRepository.GetUsersByPasskeyIdAsync(credentialId, cancellationToken: CancellationToken);
+                //host user first
+                var hostUser = hostusers.FirstOrDefault(x => x.TenantId == null) ?? hostusers.FirstOrDefault(x => x.TenantId != Guid.Empty) ?? hostusers.FirstOrDefault();
+                if (hostUser == null)
+                {
+                    return null;
+                }
+
+                using (DataFilter.Enable<IMultiTenant>())
+                {
+                    using (CurrentTenant.Change(hostUser.TenantId))
+                    {
+                        return await base.FindByPasskeyIdAsync(credentialId);
+                    }
+                }
+            }
+        }
+    }
+
+    public virtual async Task<IdentityUser> FindSharedUserByIdAsync(string userId)
+    {
+        if (MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Isolated)
+        {
+            return await base.FindByIdAsync(userId);
+        }
+
+        using (CurrentTenant.Change(null))
+        {
+            using (DataFilter.Disable<IMultiTenant>())
+            {
+                var user = await base.FindByIdAsync(userId);
+                if (user == null)
+                {
+                    return null;
+                }
+
+                using (DataFilter.Enable<IMultiTenant>())
+                {
+                    using (CurrentTenant.Change(user.TenantId))
+                    {
+                        return await base.FindByIdAsync(userId);
+                    }
+                }
+            }
+        }
     }
 }

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to add new web applications to your ABP microservice solution, utilizing templates for customization and organization."
+}
+```
+
 # Microservice Solution: Adding New Applications
 
 ````json

@@ -26,7 +26,7 @@ public class MongoClientRepository : MongoDbRepository<IAbpIdentityServerMongoDb
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .OrderBy(x => x.Id)
             .FirstOrDefaultAsync(x => x.ClientId == clientId, GetCancellationToken(cancellationToken));
     }
@@ -39,18 +39,17 @@ public class MongoClientRepository : MongoDbRepository<IAbpIdentityServerMongoDb
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter))
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(Client.ClientName) : sorting)
-            .As<IMongoQueryable<Client>>()
-            .PageBy<Client, IMongoQueryable<Client>>(skipCount, maxResultCount)
+            .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
-            .WhereIf<Client, IMongoQueryable<Client>>(!filter.IsNullOrWhiteSpace(),
+        return await (await GetQueryableAsync(cancellationToken))
+            .WhereIf(!filter.IsNullOrWhiteSpace(),
                 x => x.ClientId.Contains(filter))
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
@@ -58,7 +57,7 @@ public class MongoClientRepository : MongoDbRepository<IAbpIdentityServerMongoDb
     public virtual async Task<List<string>> GetAllDistinctAllowedCorsOriginsAsync(
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .SelectMany(x => x.AllowedCorsOrigins)
             .Select(y => y.Origin)
             .Distinct()
@@ -67,7 +66,7 @@ public class MongoClientRepository : MongoDbRepository<IAbpIdentityServerMongoDb
 
     public virtual async Task<bool> CheckClientIdExistAsync(string clientId, Guid? expectedId = null, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .AnyAsync(c => c.Id != expectedId && c.ClientId == clientId, GetCancellationToken(cancellationToken));
     }
 }

@@ -1,83 +1,79 @@
-import { HttpWaitService, RouterWaitService, SubscriptionService } from '@abp/ng.core';
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  input,
+  OnDestroy,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { combineLatest, Subscription, timer } from 'rxjs';
+import { HttpWaitService, RouterWaitService, SubscriptionService } from '@abp/ng.core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-loader-bar',
   template: `
-    <div id="abp-loader-bar" [ngClass]="containerClass" [class.is-loading]="isLoading">
+    <div id="abp-loader-bar" [class]="containerClass()" [class.is-loading]="isLoading()">
       <div
         class="abp-progress"
-        [class.progressing]="progressLevel"
-        [style.width.vw]="progressLevel"
-        [ngStyle]="{
-          'background-color': color,
-          'box-shadow': boxShadow
+        [class.progressing]="progressLevel() > 0"
+        [style.width.vw]="progressLevel()"
+        [style]="{
+          'background-color': color(),
+          'box-shadow': boxShadow,
         }"
       ></div>
     </div>
   `,
   styleUrls: ['./loader-bar.component.scss'],
   providers: [SubscriptionService],
+  imports: [],
 })
 export class LoaderBarComponent implements OnDestroy, OnInit {
-  protected _isLoading!: boolean;
+  private subscription = inject(SubscriptionService);
+  private httpWaitService = inject(HttpWaitService);
+  private routerWaitService = inject(RouterWaitService);
 
-  @Input()
-  set isLoading(value: boolean) {
-    this._isLoading = value;
-    this.cdRef.detectChanges();
-  }
-  get isLoading(): boolean {
-    return this._isLoading;
-  }
+  readonly isLoadingInput = input(false, { alias: 'isLoading' });
+  readonly containerClass = input('abp-loader-bar');
+  readonly color = input('#77b6ff');
 
-  @Input()
-  containerClass = 'abp-loader-bar';
-
-  @Input()
-  color = '#77b6ff';
-
-  progressLevel = 0;
+  readonly isLoading = signal(false);
+  readonly progressLevel = signal(0);
 
   interval = new Subscription();
-
   timer = new Subscription();
-
   intervalPeriod = 350;
-
   stopDelay = 800;
 
+  constructor() {
+    effect(() => {
+      this.isLoading.set(this.isLoadingInput());
+    });
+  }
+
   private readonly clearProgress = () => {
-    this.progressLevel = 0;
-    this.cdRef.detectChanges();
+    this.progressLevel.set(0);
   };
 
   private readonly reportProgress = () => {
-    if (this.progressLevel < 75) {
-      this.progressLevel += 1 + Math.random() * 9;
-    } else if (this.progressLevel < 90) {
-      this.progressLevel += 0.4;
-    } else if (this.progressLevel < 100) {
-      this.progressLevel += 0.1;
+    const current = this.progressLevel();
+    if (current < 75) {
+      this.progressLevel.set(current + 1 + Math.random() * 9);
+    } else if (current < 90) {
+      this.progressLevel.set(current + 0.4);
+    } else if (current < 100) {
+      this.progressLevel.set(current + 0.1);
     } else {
       this.interval.unsubscribe();
     }
-    this.cdRef.detectChanges();
   };
 
   get boxShadow(): string {
-    return `0 0 10px rgba(${this.color}, 0.5)`;
+    return `0 0 10px rgba(${this.color()}, 0.5)`;
   }
-
-  constructor(
-    private router: Router,
-    private cdRef: ChangeDetectorRef,
-    private subscription: SubscriptionService,
-    private httpWaitService: HttpWaitService,
-    private routerWaitService: RouterWaitService,
-  ) {}
 
   ngOnInit() {
     this.subscribeLoading();
@@ -98,11 +94,10 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
   }
 
   startLoading() {
-    if (this.isLoading || !this.interval.closed) return;
+    if (this.isLoading() || !this.interval.closed) return;
 
-    this.isLoading = true;
-    this.progressLevel = 0;
-    this.cdRef.detectChanges();
+    this.isLoading.set(true);
+    this.progressLevel.set(0);
     this.interval = timer(0, this.intervalPeriod).subscribe(this.reportProgress);
     this.timer.unsubscribe();
   }
@@ -110,8 +105,8 @@ export class LoaderBarComponent implements OnDestroy, OnInit {
   stopLoading() {
     this.interval.unsubscribe();
 
-    this.progressLevel = 100;
-    this.isLoading = false;
+    this.progressLevel.set(100);
+    this.isLoading.set(false);
 
     if (!this.timer.closed) return;
 

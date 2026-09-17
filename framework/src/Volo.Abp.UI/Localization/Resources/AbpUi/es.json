@@ -21,7 +21,7 @@
     "Language": "Idioma",
     "LoadMore": "Cargar más",
     "ProcessingWithThreeDot": "Procesando...",
-    "LoadingWithThreeDot": "Cargardo...",
+    "LoadingWithThreeDot": "Cargando...",
     "Welcome": "Bienvenido",
     "Login": "Iniciar sesión",
     "Register": "Registrarse",
@@ -60,6 +60,9 @@
     "AddNew": "Agregar nuevo",
     "ProfilePicture": "Foto de perfil",
     "Theme": "Tema",
-    "NotAssigned": "No asignado"
+    "NotAssigned": "No asignado",
+    "EntityActionsDisabledTooltip": "No tienes permisos para realizar ninguna acción.",
+    "ResourcePermissions": "Permisos",
+    "ShowPassword": "Mostrar contraseña"
   }
 }

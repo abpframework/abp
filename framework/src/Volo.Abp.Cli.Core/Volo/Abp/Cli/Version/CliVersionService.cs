@@ -34,6 +34,11 @@ public class CliVersionService : ITransientDependency
 
                 break;
             }
+            if (line.StartsWith("volo.abp.studio.cli", StringComparison.InvariantCultureIgnoreCase))
+            {
+                var assemblyVersion = string.Join(".", Assembly.GetExecutingAssembly().GetFileVersion().Split('.').Take(3));
+                return SemanticVersion.Parse(assemblyVersion + "-studio");
+            }
         }
 
         if (currentCliVersion == null)

@@ -58,6 +58,10 @@ export function removeTypeModifiers(type: string) {
   return type.replace(/\[\]/g, '');
 }
 
+export function getTypeForEnumList(type: string) {
+  return type.replace(/^.*<([^>]+)>.*$/, '[$1]');
+}
+
 export function createTypesToImportsReducer(solution: string, namespace: string) {
   const mapTypeToImport = createTypeToImportMapper(solution, namespace);
 
@@ -68,7 +72,7 @@ export function createTypesToImportsReducer(solution: string, namespace: string)
         return;
       }
 
-      if(newImport.specifiers.some(f => f.toLocaleLowerCase() === type.toLocaleLowerCase())){
+      if (newImport.specifiers.some(f => f.toLocaleLowerCase() === type.toLocaleLowerCase())) {
         return;
       }
 
@@ -76,7 +80,7 @@ export function createTypesToImportsReducer(solution: string, namespace: string)
         ({ keyword, path }) => keyword === newImport.keyword && path === newImport.path,
       );
 
-      if (!existingImport){
+      if (!existingImport) {
         return imports.push(newImport);
       }
 
@@ -101,7 +105,7 @@ export function createTypeToImportMapper(solution: string, namespace: string) {
     const refs = [removeTypeModifiers(type)];
     const specifiers = [adaptType(simplifyType(refs[0]).split('<')[0])];
     let path = relativePathToModel(namespace, modelNamespace);
-    
+
     if (VOLO_REGEX.test(type)) {
       path = '@abp/ng.core';
     }

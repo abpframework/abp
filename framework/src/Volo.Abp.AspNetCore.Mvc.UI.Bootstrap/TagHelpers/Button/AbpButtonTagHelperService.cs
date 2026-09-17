@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Localization;
 using System;
+using System.Text.Encodings.Web;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
 

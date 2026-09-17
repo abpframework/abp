@@ -9,6 +9,8 @@ public class AbpAuditLoggingDbContext : AbpDbContext<AbpAuditLoggingDbContext>, 
 {
     public DbSet<AuditLog> AuditLogs { get; set; }
 
+    public DbSet<AuditLogExcelFile> AuditLogExcelFiles { get; set; }
+
     public AbpAuditLoggingDbContext(DbContextOptions<AbpAuditLoggingDbContext> options)
         : base(options)
     {

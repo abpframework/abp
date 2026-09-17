@@ -1,14 +1,13 @@
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
-import { OAuthErrorFilterService } from '../services';
-import { AuthErrorEvent, AuthErrorFilter } from '@abp/ng.core';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/vitest';
 import { OAuthErrorEvent } from 'angular-oauth2-oidc';
+import { AuthErrorEvent, AuthErrorFilter } from '@abp/ng.core';
+import { OAuthErrorFilterService } from '../services';
 
 const ids = {
   firstFilter: 'firstFilter',
   secondFilter: 'secondFilter',
 };
-type Reason = object & { error: { grant_type: string | undefined; }; };
-
+type Reason = object & { error: { grant_type: string | undefined } };
 
 describe('AuthService', () => {
   let spectator: SpectatorService<OAuthErrorFilterService>;
@@ -37,11 +36,11 @@ describe('AuthService', () => {
         const {
           error: { grant_type },
         } = <Reason>(reason || {});
-  
+
         return !!grant_type && grant_type === ids.firstFilter;
       },
     };
-  
+
     secondFilter = {
       id: ids.secondFilter,
       executable: true,
@@ -50,7 +49,7 @@ describe('AuthService', () => {
         const {
           error: { grant_type },
         } = <Reason>(reason || {});
-  
+
         return !!grant_type && grant_type === ids.secondFilter;
       },
     };

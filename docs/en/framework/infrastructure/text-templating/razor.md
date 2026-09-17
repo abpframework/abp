@@ -1,7 +1,16 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to integrate Razor templates in your ABP Framework project, including installation via ABP CLI or manual methods."
+}
+```
+
 # Razor Integration
 
 
 The Razor template is a standard C# class, so you can freely use the functions of C#, such as `dependency injection`, using `LINQ`, custom methods, and even using `Repository`.
+
+> The Razor engine compiles template content into a fully-trusted .NET assembly via Roslyn and executes it in the host process, so editing a Razor template at runtime is functionally equivalent to executing arbitrary server-side code. `RazorTemplateRenderingEngine.IsSandboxed` is therefore `false`, and the [Text Template Management](../../../modules/text-template-management.md) module requires the `TextTemplateManagement.TextTemplates.EditNonSandboxedContents` permission (in addition to `EditContents`) before allowing such templates to be edited via its UI. Grant the related permission only to fully trusted developers/operators. If you need a sandboxed engine for content editors, consider [Scriban](scriban.md), which is configured to honor Scriban's [safe runtime boundaries](https://github.com/scriban/scriban/blob/master/site/docs/runtime/safe-runtime.md) by default.
 
 
 ## Installation
@@ -25,7 +34,7 @@ If you want to manually install;
 1. Add the [Volo.Abp.TextTemplating.Razor](https://www.nuget.org/packages/Volo.Abp.TextTemplating.Razor) NuGet package to your project:
 
 ````
-Install-Package Volo.Abp.TextTemplating.Razor
+dotnet add package Volo.Abp.TextTemplating.Razor
 ````
 
 2. Add the `AbpTextTemplatingRazorModule` to the dependency list of your module:
@@ -321,7 +330,7 @@ First, create a template file just like before:
 ````html
 @inherits Volo.Abp.TextTemplating.Razor.RazorTemplatePageBase
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="@GlobalContext["abp_culture"]" dir="@GlobalContext["abp_dir"]" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
 </head>
@@ -395,6 +404,21 @@ The rendering result will be:
 A global object value: TEST VALUE
 ````
 
+### Built-In Global Context Values
+
+The Razor and Scriban engines add the following values to the global context, so a template can declare the language and the text direction of the document it renders:
+
+| Key | Value |
+|-----|-------|
+| `abp_culture` | Name of the culture the template is rendered with, `en` when it is the invariant culture. |
+| `abp_dir` | `rtl` for a right-to-left culture, `ltr` otherwise. |
+
+````html
+<html lang="@GlobalContext["abp_culture"]" dir="@GlobalContext["abp_dir"]">
+````
+
+A value you pass yourself under the same key is kept. The rendering works on a copy of the dictionary you pass, so you can reuse the same instance for several renderings.
+
 ## Replacing the Existing Templates
 
 It is possible to replace a template defined by a module that used in your application. In this way, you can customize the templates based on your requirements without changing the module code.
@@ -418,7 +442,7 @@ Do the following steps to replace the template file with your own;
 ````html
 @inherits Volo.Abp.TextTemplating.Razor.RazorTemplatePageBase
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="@GlobalContext["abp_culture"]" dir="@GlobalContext["abp_dir"]" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
 </head>

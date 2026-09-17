@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -44,8 +43,6 @@ public class EditModalModel : CmsKitAdminPageModel
         return NoContent();
     }
 
-    [AutoMap(typeof(TagDto))]
-    [AutoMap(typeof(TagUpdateDto), ReverseMap = true)]
     public class TagEditViewModel : ExtensibleObject, IHasConcurrencyStamp
     {
         [Required]

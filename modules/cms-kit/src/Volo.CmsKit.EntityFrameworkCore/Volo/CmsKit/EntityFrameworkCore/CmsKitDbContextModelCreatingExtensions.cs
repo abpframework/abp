@@ -168,6 +168,7 @@ public static class CmsKitDbContextModelCreatingExtensions
                 b.Property(x => x.Title).IsRequired().HasMaxLength(PageConsts.MaxTitleLength);
                 b.Property(x => x.Slug).IsRequired().HasMaxLength(PageConsts.MaxSlugLength);
                 b.Property(x => x.Content).HasMaxLength(PageConsts.MaxContentLength);
+                b.Property(x => x.Status).IsRequired();
 
                 b.HasIndex(x => new { x.TenantId, Url = x.Slug });
 
@@ -261,6 +262,8 @@ public static class CmsKitDbContextModelCreatingExtensions
                 b.Property(x => x.DisplayName).IsRequired().HasMaxLength(MenuItemConsts.MaxDisplayNameLength);
 
                 b.Property(x => x.Url).IsRequired().HasMaxLength(MenuItemConsts.MaxUrlLength);
+                
+                b.Property(x => x.RequiredPermissionName).HasMaxLength(MenuItemConsts.MaxRequiredPermissionNameLength);
             });
         }
         else

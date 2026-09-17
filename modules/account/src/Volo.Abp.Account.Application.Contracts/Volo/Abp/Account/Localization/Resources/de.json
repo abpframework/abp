@@ -68,6 +68,8 @@
     "AccessDenied": "Zugriff abgelehnt!",
     "AccessDeniedMessage": "Sie haben keinen Zugriff auf diese Ressource.",
     "OrRegisterWith": "Oder registrieren Sie sich mit:",
-    "RegisterUsingYourProviderAccount": "Registrieren Sie sich mit Ihrem {0} Benutzerkonto"
+    "RegisterUsingYourProviderAccount": "Registrieren Sie sich mit Ihrem {0} Benutzerkonto",
+    "RequireMigrateSeedTitle": "Der Administrator-Benutzer konnte nicht gefunden werden",
+    "RequireMigrateSeedMessage": "Bitte stellen Sie sicher, dass die Datenbank-Seed ausgeführt wird. Siehe <a target=\"_blank\" href=\"https://abp.io/kb/0003\">Dokumentation</a> für mögliche Lösungen."
   }
 }

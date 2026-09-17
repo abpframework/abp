@@ -10,4 +10,3 @@ Get-ChildItem -Path . -Include bin,obj -Recurse -Directory | ForEach-Object {
 }
 
 Write-Host "BIN and OBJ folders have been successfully deleted." -ForegroundColor Green
-

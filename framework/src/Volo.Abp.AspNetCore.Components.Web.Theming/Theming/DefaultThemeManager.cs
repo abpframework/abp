@@ -29,6 +29,6 @@ public class DefaultThemeManager : IThemeManager, IScopedDependency, IServicePro
         }
         
         _currentTheme = (ITheme)ServiceProvider.GetRequiredService(ThemeSelector.GetCurrentThemeInfo().ThemeType);
-        return CurrentTheme;
+        return _currentTheme;
     }
 }

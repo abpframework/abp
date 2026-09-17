@@ -67,7 +67,26 @@
     {
       "namespace": "Volo.Abp.FeatureManagement.EntityFrameworkCore",
       "connectionStringName": "AbpFeatureManagement",
-      "databaseTables": [],
+      "databaseTables": [
+        {
+          "entityFullName": "Volo.Abp.FeatureManagement.FeatureGroupDefinitionRecord",
+          "contentType": "databaseTable",
+          "name": "FeatureGroups",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.FeatureManagement.FeatureDefinitionRecord",
+          "contentType": "databaseTable",
+          "name": "Features",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.FeatureManagement.FeatureValue",
+          "contentType": "databaseTable",
+          "name": "FeatureValues",
+          "summary": null
+        }
+      ],
       "replacedDbContexts": [],
       "modelBuilderExtensionMethods": [
         {

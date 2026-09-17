@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +18,7 @@ using Volo.Abp.AspNetCore.Mvc.Response;
 using Volo.Abp.AspNetCore.Mvc.Uow;
 using Volo.Abp.AspNetCore.Mvc.Validation;
 using Volo.Abp.Content;
+using Volo.Abp.Json.SystemTextJson.JsonConverters;
 
 namespace Volo.Abp.AspNetCore.Mvc;
 
@@ -32,6 +37,17 @@ internal static class AbpMvcOptionsExtensions
     private static void AddFormatters(MvcOptions options)
     {
         options.OutputFormatters.Insert(0, new RemoteStreamContentOutputFormatter());
+        var systemTextJsonOutputFormatter = options.OutputFormatters
+            .Where(f => f is SystemTextJsonOutputFormatter)
+            .Cast<SystemTextJsonOutputFormatter>().FirstOrDefault();
+
+        if (systemTextJsonOutputFormatter != null)
+        {
+            options.OutputFormatters.Remove(systemTextJsonOutputFormatter);
+            var jsonOptions = new JsonSerializerOptions(systemTextJsonOutputFormatter.SerializerOptions);
+            jsonOptions.Converters.RemoveAll(x => x is ObjectToInferredTypesConverter);
+            options.OutputFormatters.Add(new SystemTextJsonOutputFormatter(jsonOptions));
+        }
     }
 
     private static void AddConventions(MvcOptions options, IServiceCollection services)

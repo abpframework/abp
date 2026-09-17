@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn about GUID generation in ABP Framework, its advantages, and why it's preferred for primary keys in database management systems."
+}
+```
+
 # GUID Generation
 
 GUID is a common **primary key type** that is used in database management systems. ABP prefers GUID as the primary for pre-built [application modules](../../modules). Also, `ICurrentUser.Id` property ([see](./current-user.md)) is type of GUID, that means the ABP assumes that the User Id is always GUID.

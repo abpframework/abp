@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement and customize progress bars using the `abp-progress-bar` tag in your ABP Framework applications with practical examples and demos."
+}
+```
+
 # Progress Bars
 
 ## Introduction

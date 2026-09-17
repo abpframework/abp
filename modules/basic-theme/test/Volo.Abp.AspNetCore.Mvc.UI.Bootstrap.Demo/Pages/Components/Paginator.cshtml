@@ -1,4 +1,6 @@
 ﻿@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 @model Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components.PaginatorModel
 @{
     ViewData["Title"] = "Paginator";
@@ -89,3 +91,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
         </abp-tabs>
     </div>
 </div>
+
+<hr />
+
+@await Component.InvokeAsync("TagHelperProperties", typeof(AbpPaginationTagHelper))

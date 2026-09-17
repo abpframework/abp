@@ -32,14 +32,17 @@ public partial class LookupExtensionProperty<TEntity, TResourceType>
         var text = Entity.GetProperty(TextPropertyName);
         if (value != null && text != null)
         {
-            lookupItems.Add(new SelectItem<object>
-            {
-                Text = Entity.GetProperty(TextPropertyName)!.ToString()!,
-                Value = value
-            });
+            lookupItems =
+            [
+                new SelectItem<object>()
+                {
+                    Text = Entity.GetProperty(TextPropertyName)!.ToString()!,
+                    Value = value
+                }
+            ];
         }
     }
-    
+
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);

@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to configure environment variables in ABP Framework applications, including API settings and production configurations."
+}
+```
+
 # Environment
 
 Every application needs some **environment** variables. In Angular world, this is usually managed by `environment.ts`, `environment.prod.ts` and so on. It is the same for ABP as well.
@@ -101,22 +108,102 @@ export interface RemoteEnv {
 - `method`: HTTP method to be used when retrieving environment config. Default: `GET`
 - `headers`: If extra headers are needed for the request, it can be set through this field.
 
-## Provide Environment Variable to Core Module
+### Example RemoteEnv Configuration
+
+To enable dynamic environment configuration at runtime, add the `remoteEnv` property to your environment file:
+
+```ts
+export const environment = {
+  // ... other configurations
+  remoteEnv: {
+    url: '/getEnvConfig',
+    mergeStrategy: 'deepmerge'
+  }
+} as Environment;
+```
+
+### Web Server Configuration
+
+When using `remoteEnv` with a URL like `/getEnvConfig`, you need to configure your web server to serve the `dynamic-env.json` file with the correct content type (`application/json`). Otherwise, the application may receive HTML (e.g., your `index.html`) instead of JSON, causing configuration to fail silently.
+
+#### IIS Configuration (web.config)
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <system.webServer>
+    <rewrite>
+      <rules>
+        <rule name="Redirect" stopProcessing="true">
+          <match url="getEnvConfig" />
+          <action type="Redirect" url="dynamic-env.json" />
+        </rule>
+        <rule name="Angular Routes" stopProcessing="true">
+          <match url=".*" />
+          <conditions logicalGrouping="MatchAll">
+            <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+            <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+          </conditions>
+          <action type="Rewrite" url="./index.html" />
+        </rule>
+      </rules>
+    </rewrite>
+  </system.webServer>
+</configuration>
+```
+
+#### Nginx Configuration
+
+```nginx
+server {
+    listen       80;
+    listen  [::]:80;
+    server_name  _;
+
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+        try_files $uri $uri/ /index.html =404;
+    }
+
+    location /getEnvConfig {
+        default_type 'application/json';
+        add_header 'Access-Control-Allow-Origin' '*' always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS' always;
+        add_header 'Content-Type' 'application/json';
+        root   /usr/share/nginx/html;
+        try_files $uri /dynamic-env.json;
+    }
+
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+}
+```
+
+## Configure Core Provider with Environment
 
 `environment` variable comes from angular host application.
 
 ```js
 import { environment } from '../environments/environment';
 
-@NgModule({
-  imports: [
-    //...other imports
-    CoreModule.forRoot({
-      environment
-    }),
-  ]
-})
+export const appConfig: ApplicationConfig = {
+  providers: [
+    ...
+    provideAbpCore(
+      withOptions({
+        environment,
+        ...
+      })
+    ),
+    ...
+  ],
+};
+
 ```
+
 ## EnvironmentService
 
 ` EnvironmentService` is a singleton service, i.e. provided in root level of your application, and keeps the environment in the internal store.
@@ -126,13 +213,14 @@ import { environment } from '../environments/environment';
 In order to use the `EnvironmentService` you must inject it in your class as a dependency.
 
 ```js
-import { EnvironmentService } from '@abp/ng.core';
+import { EnvironmentService } from '@abp/ng.core';
+import { inject } from '@angular/core';
 
 @Component({
   /* class metadata here */
 })
 class DemoComponent {
-  constructor(private environment: EnvironmentService) {}
+  private environment = inject(EnvironmentService);
 }
 ```
 

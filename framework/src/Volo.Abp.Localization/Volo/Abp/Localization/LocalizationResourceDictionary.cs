@@ -6,7 +6,7 @@ namespace Volo.Abp.Localization;
 
 public class LocalizationResourceDictionary : Dictionary<string, LocalizationResourceBase>
 {
-    private readonly Dictionary<Type, LocalizationResourceBase> _resourcesByTypes = new();
+    private readonly Dictionary<Type, LocalizationResourceBase> _resourcesByTypes = [];
 
     public LocalizationResource Add<TResouce>(string? defaultCultureName = null)
     {

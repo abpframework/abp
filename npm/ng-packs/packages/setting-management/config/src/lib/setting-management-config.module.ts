@@ -1,13 +1,10 @@
-import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { CoreModule } from '@abp/ng.core';
-import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { EmailSettingGroupComponent } from './components/email-setting-group/email-setting-group.component';
 import { provideSettingManagementConfig } from './providers';
 
 @NgModule({
-  imports: [CoreModule, ThemeSharedModule, NgxValidateCoreModule],
-  declarations: [EmailSettingGroupComponent],
+  imports: [EmailSettingGroupComponent],
+  declarations: [],
   exports: [EmailSettingGroupComponent],
 })
 export class SettingManagementConfigModule {

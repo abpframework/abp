@@ -9,8 +9,13 @@ namespace Volo.Abp.Authorization.Permissions;
 public class NullDynamicPermissionDefinitionStore : IDynamicPermissionDefinitionStore, ISingletonDependency
 {
     private readonly static Task<PermissionDefinition?> CachedPermissionResult = Task.FromResult((PermissionDefinition?)null);
-    
+
     private readonly static Task<IReadOnlyList<PermissionDefinition>> CachedPermissionsResult =
+        Task.FromResult((IReadOnlyList<PermissionDefinition>)Array.Empty<PermissionDefinition>().ToImmutableList());
+
+    private readonly static Task<PermissionDefinition?> CachedResourcePermissionResult = Task.FromResult((PermissionDefinition?)null);
+
+    private readonly static Task<IReadOnlyList<PermissionDefinition>> CachedResourcePermissionsResult =
         Task.FromResult((IReadOnlyList<PermissionDefinition>)Array.Empty<PermissionDefinition>().ToImmutableList());
 
     private readonly static Task<IReadOnlyList<PermissionGroupDefinition>> CachedGroupsResult =
@@ -24,6 +29,16 @@ public class NullDynamicPermissionDefinitionStore : IDynamicPermissionDefinition
     public Task<IReadOnlyList<PermissionDefinition>> GetPermissionsAsync()
     {
         return CachedPermissionsResult;
+    }
+
+    public Task<PermissionDefinition?> GetResourcePermissionOrNullAsync(string resourceName, string name)
+    {
+        return CachedResourcePermissionResult;
+    }
+
+    public Task<IReadOnlyList<PermissionDefinition>> GetResourcePermissionsAsync()
+    {
+        return CachedResourcePermissionsResult;
     }
 
     public Task<IReadOnlyList<PermissionGroupDefinition>> GetGroupsAsync()

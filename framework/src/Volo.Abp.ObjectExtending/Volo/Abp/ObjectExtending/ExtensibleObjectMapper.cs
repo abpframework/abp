@@ -188,7 +188,7 @@ public static class ExtensibleObjectMapper
             return false;
         }
 
-        if (definitionChecks != null)
+        if (definitionChecks != null && definitionChecks.Value != MappingPropertyDefinitionChecks.Null)
         {
             if (definitionChecks.Value.HasFlag(MappingPropertyDefinitionChecks.Source))
             {

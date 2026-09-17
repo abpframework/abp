@@ -29,6 +29,7 @@
     "FullSearch": "Buscar en documentos",
     "Volo.Docs.Domain:010001": "Búsqueda elástica no habilida",
     "MultipleVersionDocumentInfo": "Este documento tiene múltiple versiones. Selecciona las opciones que más te interesan.",
+    "DocumentOptions": "Opciones del documento",
     "New": "Nuevo",
     "Upd": "Upd",
     "NewExplanation": "Creado en las últimas dos semanas.",
@@ -38,6 +39,7 @@
     "Search": "Buscar",
     "SearchResults": "Resultados de la búsqueda",
     "SearchInTheAllDocuments": "Buscar en todos los documentos",
-    "GoogleTranslate": "Traducir con Google"
+    "GoogleTranslate": "Traducir con Google",
+    "DownloadPDF": "Descargar PDF"
   }
 }

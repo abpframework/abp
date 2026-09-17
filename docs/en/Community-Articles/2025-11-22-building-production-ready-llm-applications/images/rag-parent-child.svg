@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500">
+  <!-- Background -->
+  <rect width="1000" height="500" fill="#f8f9fa"/>
+  
+  <!-- Title -->
+  <text x="500" y="30" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle" fill="#0066cc">
+    Parent-Child RAG Pattern: Search Small, Respond Large
+  </text>
+  
+  <!-- Original Document -->
+  <rect x="50" y="60" width="180" height="200" fill="#e3f2fd" stroke="#1976d2" stroke-width="2" rx="5"/>
+  <text x="140" y="85" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#0d47a1">Original Document</text>
+  
+  <!-- Parent chunks -->
+  <rect x="60" y="100" width="160" height="50" fill="#90caf9" stroke="#1976d2" stroke-width="1" rx="3"/>
+  <text x="140" y="125" font-family="Arial" font-size="11" text-anchor="middle" fill="#0d47a1">Parent 1 (800 token)</text>
+  
+  <rect x="60" y="160" width="160" height="50" fill="#90caf9" stroke="#1976d2" stroke-width="1" rx="3"/>
+  <text x="140" y="185" font-family="Arial" font-size="11" text-anchor="middle" fill="#0d47a1">Parent 2 (800 token)</text>
+  
+  <rect x="60" y="220" width="160" height="30" fill="#90caf9" stroke="#1976d2" stroke-width="1" rx="3"/>
+  <text x="140" y="237" font-family="Arial" font-size="11" text-anchor="middle" fill="#0d47a1">Parent 3...</text>
+  
+  <!-- Arrow to Child chunks -->
+  <defs>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#1976d2"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#388e3c"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#d32f2f"/>
+    </marker>
+  </defs>
+  
+  <line x1="230" y1="125" x2="300" y2="125" stroke="#1976d2" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  
+  <!-- Child Chunks (Vector DB) -->
+  <rect x="300" y="60" width="200" height="200" fill="#c8e6c9" stroke="#388e3c" stroke-width="2" rx="5"/>
+  <text x="400" y="85" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#1b5e20">Child Chunks</text>
+  <text x="400" y="100" font-family="Arial" font-size="10" text-anchor="middle" fill="#1b5e20">(In Vector DB)</text>
+  
+  <!-- Child chunk items -->
+  <g id="child1">
+    <rect x="310" y="110" width="180" height="25" fill="#a5d6a7" stroke="#66bb6a" stroke-width="1" rx="3"/>
+    <text x="400" y="126" font-family="Arial" font-size="10" text-anchor="middle" fill="#1b5e20">Child 1.1 (100 token) [ParentID=1]</text>
+  </g>
+  
+  <g id="child2">
+    <rect x="310" y="140" width="180" height="25" fill="#a5d6a7" stroke="#66bb6a" stroke-width="1" rx="3"/>
+    <text x="400" y="156" font-family="Arial" font-size="10" text-anchor="middle" fill="#1b5e20">Child 1.2 (100 token) [ParentID=1]</text>
+  </g>
+  
+  <g id="child3">
+    <rect x="310" y="170" width="180" height="25" fill="#a5d6a7" stroke="#66bb6a" stroke-width="1" rx="3"/>
+    <text x="400" y="186" font-family="Arial" font-size="10" text-anchor="middle" fill="#1b5e20">Child 1.3 (100 token) [ParentID=1]</text>
+  </g>
+  
+  <g id="child4">
+    <rect x="310" y="200" width="180" height="25" fill="#a5d6a7" stroke="#66bb6a" stroke-width="1" rx="3"/>
+    <text x="400" y="216" font-family="Arial" font-size="10" text-anchor="middle" fill="#1b5e20">Child 2.1 (100 token) [ParentID=2]</text>
+  </g>
+  
+  <g id="child5">
+    <rect x="310" y="230" width="180" height="20" fill="#a5d6a7" stroke="#66bb6a" stroke-width="1" rx="3"/>
+    <text x="400" y="243" font-family="Arial" font-size="10" text-anchor="middle" fill="#1b5e20">Child 2.2...</text>
+  </g>
+  
+  <!-- User Query -->
+  <rect x="50" y="320" width="180" height="80" fill="#fff3cd" stroke="#ffc107" stroke-width="2" rx="5"/>
+  <text x="140" y="345" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#856404">User Query</text>
+  <text x="140" y="365" font-family="Arial" font-size="11" text-anchor="middle" fill="#856404">"What was Contoso's</text>
+  <text x="140" y="380" font-family="Arial" font-size="11" text-anchor="middle" fill="#856404">2024 revenue?"</text>
+  
+  <!-- Arrow to Vector Search -->
+  <line x1="230" y1="360" x2="300" y2="200" stroke="#388e3c" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrowGreen)"/>
+  <text x="265" y="270" font-family="Arial" font-size="11" fill="#1b5e20">1. Vector Search</text>
+  <text x="265" y="285" font-family="Arial" font-size="11" fill="#1b5e20">(On Child chunks)</text>
+  
+  <!-- Best Match -->
+  <rect x="520" y="150" width="180" height="60" fill="#ffccbc" stroke="#ff5722" stroke-width="2" rx="5"/>
+  <text x="610" y="175" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle" fill="#bf360c">Best Match</text>
+  <text x="610" y="195" font-family="Arial" font-size="10" text-anchor="middle" fill="#bf360c">Child 1.2 (Score: 0.95)</text>
+  
+  <line x1="500" y1="152" x2="520" y2="180" stroke="#ff5722" stroke-width="2" marker-end="url(#arrowRed)"/>
+  
+  <!-- Arrow to Parent Retrieval -->
+  <line x1="700" y1="180" x2="750" y2="180" stroke="#d32f2f" stroke-width="2" marker-end="url(#arrowRed)"/>
+  <text x="690" y="230" font-family="Arial" font-size="11" fill="#b71c1c">2. Fetch Parent via</text>
+  <text x="690" y="240" font-family="Arial" font-size="11" fill="#b71c1c">ParentID</text>
+  
+  <!-- Retrieved Parent -->
+  <rect x="750" y="140" width="200" height="80" fill="#ffebee" stroke="#d32f2f" stroke-width="3" rx="5"/>
+  <text x="850" y="165" font-family="Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#b71c1c">Retrieved Parent Chunk</text>
+  <text x="850" y="185" font-family="Arial" font-size="10" text-anchor="middle" fill="#b71c1c">Parent 1 (800 tokens)</text>
+  <text x="850" y="200" font-family="Arial" font-size="10" text-anchor="middle" fill="#b71c1c">Full context + details</text>
+  
+  <!-- Arrow to LLM -->
+  <line x1="850" y1="220" x2="850" y2="290" stroke="#0066cc" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <text x="880" y="255" font-family="Arial" font-size="11" fill="#0d47a1">3. Send to LLM</text>
+  
+  <!-- LLM Response -->
+  <rect x="750" y="290" width="200" height="100" fill="#e3f2fd" stroke="#1976d2" stroke-width="3" rx="5"/>
+  <text x="850" y="320" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#0d47a1">LLM Response</text>
+  <text x="850" y="340" font-family="Arial" font-size="10" text-anchor="middle" fill="#0d47a1">"Contoso's 2024</text>
+  <text x="850" y="355" font-family="Arial" font-size="10" text-anchor="middle" fill="#0d47a1">revenue was $2.5 billion</text>
+  <text x="850" y="370" font-family="Arial" font-size="10" text-anchor="middle" fill="#0d47a1">as reported."</text>
+  
+  <!-- Benefit Box -->
+  <rect x="50" y="430" width="900" height="60" fill="#d1f2eb" stroke="#00695c" stroke-width="2" rx="5"/>
+  <text x="500" y="455" font-family="Arial" font-size="13" font-weight="bold" text-anchor="middle" fill="#004d40">
+    ✅ Benefit: Precise search (Child) + Rich context (Parent) = Optimal quality
+  </text>
+  <text x="500" y="475" font-family="Arial" font-size="11" text-anchor="middle" fill="#004d40">
+    Alternative: Only large chunks → Lower precision | Only small chunks → Insufficient context
+  </text>
+</svg>

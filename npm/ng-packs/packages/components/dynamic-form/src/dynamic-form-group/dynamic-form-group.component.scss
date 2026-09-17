@@ -1,0 +1,26 @@
+.form-group-container {
+  border-left: 3px solid var(--bs-primary, #007bff);
+  padding-left: 1rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--bs-border-color, #dee2e6);
+  border-radius: 0.375rem;
+  padding: 1rem;
+  background-color: var(--bs-light, #f8f9fa);
+  
+  // Nested groups get lighter styling
+  .form-group-container {
+    border-left-color: var(--bs-secondary, #6c757d);
+    padding-left: 0.75rem;
+    background-color: var(--bs-white, #fff);
+  }
+}
+
+.form-group-legend {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--bs-primary, #007bff);
+  margin-bottom: 1rem;
+  padding: 0 0.5rem;
+  float: none;
+  width: auto;
+}

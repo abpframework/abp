@@ -26,9 +26,9 @@
           "name": "AbpDddDomainModule"
         },
         {
-          "declaringAssemblyName": "Volo.Abp.AutoMapper",
-          "namespace": "Volo.Abp.AutoMapper",
-          "name": "AbpAutoMapperModule"
+          "declaringAssemblyName": "Volo.Abp.Mapperly",
+          "namespace": "Volo.Abp.Mapperly",
+          "name": "AbpMapperlyModule"
         },
         {
           "declaringAssemblyName": "Volo.Abp.Caching",
@@ -121,6 +121,12 @@
           "namespace": "Volo.Abp.Domain.Entities",
           "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
           "fullName": "Volo.Abp.Domain.Entities.IEntity"
+        },
+        {
+          "name": "IKeyedObject",
+          "namespace": "Volo.Abp",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.IKeyedObject"
         },
         {
           "name": "IEntity<Guid>",
@@ -613,6 +619,60 @@
       ],
       "contentType": "repositoryInterface",
       "name": "ITenantRepository",
+      "summary": null
+    },
+    {
+      "eventHandlerType": "Local",
+      "namespace": "Volo.Abp.TenantManagement",
+      "subscribedEvents": [
+        {
+          "underlyingType": {
+            "name": "Tenant",
+            "namespace": "Volo.Abp.TenantManagement",
+            "declaringAssemblyName": "Volo.Abp.TenantManagement.Domain",
+            "fullName": "Volo.Abp.TenantManagement.Tenant"
+          },
+          "name": "EntityChangedEventData`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain",
+          "fullName": "Volo.Abp.Domain.Entities.Events.EntityChangedEventData`1"
+        },
+        {
+          "underlyingType": null,
+          "name": "TenantChangedEvent",
+          "namespace": "Volo.Abp.MultiTenancy",
+          "declaringAssemblyName": "Volo.Abp.MultiTenancy.Abstractions",
+          "fullName": "Volo.Abp.MultiTenancy.TenantChangedEvent"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "ILocalEventHandler<EntityChangedEventData`1>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<EntityChangedEventData`1>"
+        },
+        {
+          "name": "IEventHandler",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.IEventHandler"
+        },
+        {
+          "name": "ILocalEventHandler<TenantChangedEvent>",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.ILocalEventHandler<TenantChangedEvent>"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "eventHandler",
+      "name": "TenantConfigurationCacheItemInvalidator",
       "summary": null
     }
   ]

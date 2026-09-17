@@ -1,0 +1,39 @@
+<Solution>
+  <Folder Name="/app/">
+    <Project Path="app/Volo.BloggingTestApp.EntityFrameworkCore/Volo.BloggingTestApp.EntityFrameworkCore.csproj" />
+    <Project Path="app/Volo.BloggingTestApp.MongoDB/Volo.BloggingTestApp.MongoDB.csproj" />
+    <Project Path="app/Volo.BloggingTestApp/Volo.BloggingTestApp.csproj" />
+  </Folder>
+  <Folder Name="/src/" />
+  <Folder Name="/src/admin-app/">
+    <Project Path="src/Volo.Blogging.Admin.Application.Contracts/Volo.Blogging.Admin.Application.Contracts.csproj" />
+    <Project Path="src/Volo.Blogging.Admin.Application/Volo.Blogging.Admin.Application.csproj" />
+    <Project Path="src/Volo.Blogging.Admin.HttpApi.Client/Volo.Blogging.Admin.HttpApi.Client.csproj" />
+    <Project Path="src/Volo.Blogging.Admin.HttpApi/Volo.Blogging.Admin.HttpApi.csproj" />
+    <Project Path="src/Volo.Blogging.Admin.Web/Volo.Blogging.Admin.Web.csproj" />
+  </Folder>
+  <Folder Name="/src/domain/">
+    <Project Path="src/Volo.Blogging.Domain.Shared/Volo.Blogging.Domain.Shared.csproj" />
+    <Project Path="src/Volo.Blogging.Domain/Volo.Blogging.Domain.csproj" />
+    <Project Path="src/Volo.Blogging.EntityFrameworkCore/Volo.Blogging.EntityFrameworkCore.csproj" />
+    <Project Path="src/Volo.Blogging.MongoDB/Volo.Blogging.MongoDB.csproj" />
+  </Folder>
+  <Folder Name="/src/public-app/">
+    <Project Path="src/Volo.Blogging.Application.Contracts/Volo.Blogging.Application.Contracts.csproj" />
+    <Project Path="src/Volo.Blogging.Application/Volo.Blogging.Application.csproj" />
+    <Project Path="src/Volo.Blogging.HttpApi.Client/Volo.Blogging.HttpApi.Client.csproj" />
+    <Project Path="src/Volo.Blogging.HttpApi/Volo.Blogging.HttpApi.csproj" />
+    <Project Path="src/Volo.Blogging.Web/Volo.Blogging.Web.csproj" />
+  </Folder>
+  <Folder Name="/src/Shared/">
+    <Project Path="src/Volo.Blogging.Application.Contracts.Shared/Volo.Blogging.Application.Contracts.Shared.csproj" />
+    <Project Path="src/Volo.Blogging.Installer/Volo.Blogging.Installer.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Volo.Blogging.Application.Tests/Volo.Blogging.Application.Tests.csproj" />
+    <Project Path="test/Volo.Blogging.Domain.Tests/Volo.Blogging.Domain.Tests.csproj" />
+    <Project Path="test/Volo.Blogging.EntityFrameworkCore.Tests/Volo.Blogging.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="test/Volo.Blogging.MongoDB.Tests/Volo.Blogging.MongoDB.Tests.csproj" />
+    <Project Path="test/Volo.Blogging.TestBase/Volo.Blogging.TestBase.csproj" />
+  </Folder>
+</Solution>

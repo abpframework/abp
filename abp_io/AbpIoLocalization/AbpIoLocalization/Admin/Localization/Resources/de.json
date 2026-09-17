@@ -261,7 +261,7 @@
     "Enum:EntityChangeType:0": "Erstellt",
     "Enum:EntityChangeType:1": "Aktualisiert",
     "Enum:EntityChangeType:2": "Gelöscht",
-    "TenantId": "Mieter-ID",
+    "TenantId": "Mandanten-ID",
     "ChangeTime": "Zeit ändern",
     "EntityTypeFullName": "Vollständiger Name des Entitätstyps",
     "AuditLogsFor{0}Organization": "Audit-Logs für die Organisation \"{0}\"",

@@ -15,7 +15,7 @@ public class TZConvertTimezoneProvider : ITimezoneProvider, ITransientDependency
 
     public virtual List<NameValue> GetIanaTimezones()
     {
-        return TZConvert.KnownIanaTimeZoneNames.OrderBy(x => x).Select(x => new NameValue(x, x)).ToList();
+        return TZConvert.KnownIanaTimeZoneNames.OrderBy(x => x).Where(x => x.Contains("/") && !x.Contains("Etc") || x == "UTC").Select(x => new NameValue(x, x)).ToList();
     }
 
     public virtual string WindowsToIana(string windowsTimeZoneId)

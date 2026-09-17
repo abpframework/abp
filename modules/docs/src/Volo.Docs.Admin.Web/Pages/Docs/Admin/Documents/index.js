@@ -6,10 +6,11 @@ $(function () {
         return $datePicker.data('date');
     };
 
-	moment.localeData().preparse = (s)=>s;
+    moment.localeData().preparse = (s)=>s;
     moment.localeData().postformat = (s)=>s;
-	
-    $('.singledatepicker').daterangepicker({
+
+    var singleDatePicker = $('#DocumentsContainer .singledatepicker');
+    singleDatePicker.daterangepicker({
         "singleDatePicker": true,
         "showDropdowns": true,
         "autoUpdateInput": false,
@@ -20,16 +21,16 @@ $(function () {
         "maxYear": 2199,
     });
 
-    $('.singledatepicker').attr('autocomplete', 'off');
+    singleDatePicker.attr('autocomplete', 'off');
 
-    $('.singledatepicker').on('apply.daterangepicker', function (ev, picker) {
+    singleDatePicker.on('apply.daterangepicker', function (ev, picker) {
         $(this).val(picker.startDate.format('l'));
         $(this).data('date', picker.startDate.locale('en').format('YYYY-MM-DD'));
     });
 
 
     var comboboxItems = [];
-    
+
     service.getFilterItems()
         .then(function (result) {
             comboboxItems = result;
@@ -44,13 +45,13 @@ $(function () {
     $projectId.on('change', function () {
         fillOptions();
     });
-    
+
     var comboboxs = {
         version: $('#Version'),
         languageCode: $('#LanguageCode'),
         format: $('#Format')
     };
-    
+
     for (var key in comboboxs) {
         comboboxs[key].on('change', function () {
             fillOptions();
@@ -65,7 +66,7 @@ $(function () {
             comboboxs[key].empty();
         }
     }
-    
+
     function getSelectedItem() {
         var item = {};
         for (var key in comboboxs) {
@@ -73,13 +74,13 @@ $(function () {
         }
         return item;
     }
-    
+
     function SetComboboxsValues(item) {
         for (var key in comboboxs) {
             comboboxs[key].val(item[key]);
         }
     }
-    
+
     function addComboboxsEmptyItem() {
         for (var key in comboboxs) {
             comboboxs[key].append($('<option/>').val('').text(''));
@@ -87,17 +88,17 @@ $(function () {
     }
 
     function fillOptions() {
-        
+
         selectedItem = getSelectedItem();
-        
+
         var selectedProjectId = $projectId.val();
 
         emptyComboboxs();
-        
+
         addComboboxsEmptyItem();
 
         var selectedProjectItems = comboboxItems.filter((item) => !selectedProjectId || item.projectId === selectedProjectId);
-        
+
         for (var key in selectedItem) {
             var item = selectedProjectItems.find((item) => item[key] === selectedItem[key]);
             if (item) {
@@ -106,14 +107,14 @@ $(function () {
                 selectedItem[key] = '';
             }
         }
-        
+
 
         selectedProjectItems.forEach(function (item) {
             for (var key in comboboxs) {
                 appendComboboxItem(comboboxs[key], item, key);
             }
         });
-        
+
         SetComboboxsValues(selectedItem);
     }
     function appendComboboxItem($combobox, item , key) {
@@ -130,22 +131,24 @@ $(function () {
 
 
     var getFilter = function () {
+        $('#DocumentsContainer').handleDatepicker('.singledatepicker');
         return {
             projectId: $('#ProjectId').val(),
             name: $('#Name').val(),
             version: $('#Version').val(),
             languageCode: $('#LanguageCode').val(),
             format: $('#Format').val(),
-            creationTimeMin: getFormattedDate($('#CreationTimeMin')),
-            creationTimeMax: getFormattedDate($('#CreationTimeMax')),
-            lastUpdatedTimeMin: getFormattedDate($('#LastUpdatedTimeMin')),
-            lastUpdatedTimeMax: getFormattedDate($('#LastUpdatedTimeMax')),
-            lastSignificantUpdateTimeMin: getFormattedDate($('#LastSignificantUpdateTimeMin')),
-            lastSignificantUpdateTimeMax: getFormattedDate($('#LastSignificantUpdateTimeMax')),
-            lastCachedTimeMin: getFormattedDate($('#LastCachedTimeMin')),
-            lastCachedTimeMax: getFormattedDate($('#LastCachedTimeMax')),
+            creationTimeMin: getFormattedDate($('#DocumentsContainer').find('input[name="CreationTimeMin"]')),
+            creationTimeMax: getFormattedDate($('#DocumentsContainer').find('input[name="CreationTimeMax"]')),
+            lastUpdatedTimeMin: getFormattedDate($('#DocumentsContainer').find('input[name="LastUpdatedTimeMin"]')),
+            lastUpdatedTimeMax: getFormattedDate($('#DocumentsContainer').find('input[name="LastUpdatedTimeMax"]')),
+            lastSignificantUpdateTimeMin: getFormattedDate($('#DocumentsContainer').find('input[name="LastSignificantUpdateTimeMin"]')),
+            lastSignificantUpdateTimeMax: getFormattedDate($('#DocumentsContainer').find('input[name="LastSignificantUpdateTimeMax"]')),
+            lastCachedTimeMin: getFormattedDate($('#DocumentsContainer').find('input[name="LastCachedTimeMin"]')),
+            lastCachedTimeMax: getFormattedDate($('#DocumentsContainer').find('input[name="LastCachedTimeMax"]')),
         };
     };
+
 
     var parseDateToLocaleDateString = function (date) {
         var parsedDate = Date.parse(date);

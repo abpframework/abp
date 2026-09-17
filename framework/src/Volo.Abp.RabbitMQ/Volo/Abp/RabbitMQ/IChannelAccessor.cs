@@ -10,7 +10,7 @@ public interface IChannelAccessor : IDisposable
     /// Never dispose the <see cref="Channel"/> object.
     /// Instead, dispose the <see cref="IChannelAccessor"/> after usage.
     /// </summary>
-    IModel Channel { get; }
+    IChannel Channel { get; }
 
     /// <summary>
     /// Name of the channel.

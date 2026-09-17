@@ -67,7 +67,7 @@ public class MongoEntityTagRepository : MongoDbRepository<ICmsKitMongoDbContext,
         CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
-        var entityTagQueryable = await GetMongoQueryableAsync(GetCancellationToken(cancellationToken));
+        var entityTagQueryable = await GetQueryableAsync(GetCancellationToken(cancellationToken));
         var tagQueryable = dbContext.Tags.AsQueryable();
 
         var resultQueryable = entityTagQueryable

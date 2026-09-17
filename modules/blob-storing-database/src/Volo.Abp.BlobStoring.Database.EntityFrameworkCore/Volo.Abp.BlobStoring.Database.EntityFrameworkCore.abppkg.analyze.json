@@ -67,7 +67,20 @@
     {
       "namespace": "Volo.Abp.BlobStoring.Database.EntityFrameworkCore",
       "connectionStringName": "AbpBlobStoring",
-      "databaseTables": [],
+      "databaseTables": [
+        {
+          "entityFullName": "Volo.Abp.BlobStoring.Database.DatabaseBlobContainer",
+          "contentType": "databaseTable",
+          "name": "BlobContainers",
+          "summary": null
+        },
+        {
+          "entityFullName": "Volo.Abp.BlobStoring.Database.DatabaseBlob",
+          "contentType": "databaseTable",
+          "name": "Blobs",
+          "summary": null
+        }
+      ],
       "replacedDbContexts": [],
       "modelBuilderExtensionMethods": [
         {

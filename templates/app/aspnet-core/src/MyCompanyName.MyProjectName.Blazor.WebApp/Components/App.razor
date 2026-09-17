@@ -1,8 +1,8 @@
-﻿@using Volo.Abp.Localization
+@using Volo.Abp.Localization
 @using System.Globalization
 @using Microsoft.Extensions.Hosting
-@using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme.Bundling
-@using Volo.Abp.AspNetCore.Components.Web.Theming.Bundling
+@using Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme.Bundling
+@using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Bundling
 @inject IHostEnvironment Env
 @{
     var rtl = CultureHelper.IsRtl ? "rtl" : string.Empty;
@@ -17,7 +17,8 @@
     <title>MyCompanyName.MyProjectName.Blazor.Server</title>
     <base href="/" />
 
-    <AbpStyles BundleName="@BlazorLeptonXLiteThemeBundles.Styles.Global" WebAssemblyStyleFiles="GlobalStyles" @rendermode="InteractiveAuto" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <AbpStyles BundleName="@BlazorMudBlazorBasicThemeBundles.Styles.Global" WebAssemblyStyleFiles="GlobalStyles" />
 
     <HeadOutlet @rendermode="InteractiveAuto" />
 
@@ -26,7 +27,7 @@
 
     <Routes @rendermode="InteractiveAuto" />
 
-    <AbpScripts BundleName="@BlazorLeptonXLiteThemeBundles.Scripts.Global" WebAssemblyScriptFiles="GlobalScripts" @rendermode="InteractiveAuto" />
+    <AbpScripts BundleName="@BlazorMudBlazorBasicThemeBundles.Scripts.Global" WebAssemblyScriptFiles="GlobalScripts" />
 
     <script src="_framework/blazor.web.js"></script>
 

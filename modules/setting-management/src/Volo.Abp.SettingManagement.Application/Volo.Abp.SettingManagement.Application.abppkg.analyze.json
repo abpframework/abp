@@ -85,6 +85,47 @@
       "summary": null
     },
     {
+      "eventHandlerType": "Distributed",
+      "namespace": "Volo.Abp.SettingManagement",
+      "subscribedEvents": [
+        {
+          "underlyingType": {
+            "name": "UserEto",
+            "namespace": "Volo.Abp.Users",
+            "declaringAssemblyName": "Volo.Abp.Users.Abstractions",
+            "fullName": "Volo.Abp.Users.UserEto"
+          },
+          "name": "EntityDeletedEto`1",
+          "namespace": "Volo.Abp.Domain.Entities.Events.Distributed",
+          "declaringAssemblyName": "Volo.Abp.Ddd.Domain.Shared",
+          "fullName": "Volo.Abp.Domain.Entities.Events.Distributed.EntityDeletedEto`1"
+        }
+      ],
+      "implementingInterfaces": [
+        {
+          "name": "IDistributedEventHandler<EntityDeletedEto`1>",
+          "namespace": "Volo.Abp.EventBus.Distributed",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.Distributed.IDistributedEventHandler<EntityDeletedEto`1>"
+        },
+        {
+          "name": "IEventHandler",
+          "namespace": "Volo.Abp.EventBus",
+          "declaringAssemblyName": "Volo.Abp.EventBus.Abstractions",
+          "fullName": "Volo.Abp.EventBus.IEventHandler"
+        },
+        {
+          "name": "ITransientDependency",
+          "namespace": "Volo.Abp.DependencyInjection",
+          "declaringAssemblyName": "Volo.Abp.Core",
+          "fullName": "Volo.Abp.DependencyInjection.ITransientDependency"
+        }
+      ],
+      "contentType": "eventHandler",
+      "name": "UserDeletedEventHandler",
+      "summary": null
+    },
+    {
       "namespace": "Volo.Abp.SettingManagement",
       "baseClass": {
         "name": "SettingManagementAppServiceBase",

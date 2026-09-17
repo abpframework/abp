@@ -1,9 +1,17 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to implement the LeptonX Lite Blazor UI for your ABP applications, featuring easy installation and professional design."
+}
+```
+
 # LeptonX Lite Blazor UI
 
 ````json
 //[doc-params]
 {
-    "UI": ["Blazor", "BlazorServer"]
+    "UI": ["Blazor", "BlazorServer"],
+    "BlazorUI": ["Blazorise", "MudBlazor"]
 }
 ````
 
@@ -13,6 +21,19 @@ LeptonX Lite has implementation for the ABP Blazor WebAssembly & Blazor Server. 
 
 > See the [Theming document](../../framework/ui/mvc-razor-pages/theming.md) to learn about themes.
 
+{{if BlazorUI == "MudBlazor"}}
+
+> **MudBlazor Variant** — When the `--blazor-ui-library mudblazor` option is used, the LeptonX Lite theme ships as a MudBlazor variant. Replace `LeptonXLiteTheme` with `MudBlazorLeptonXLiteTheme` everywhere in this document (package names, module type names and namespaces). The installation steps, layout customization API and override mechanism are the same; only the package and namespace prefix change. The component implementations use MudBlazor primitives (`MudAppBar`, `MudDrawer`, `MudNavLink`, etc.) instead of Blazorise components.
+>
+> Concrete package names you will see when using the MudBlazor variant:
+>
+> * `Volo.Abp.AspNetCore.Components.{Server,WebAssembly}.MudBlazorLeptonXLiteTheme`
+> * `Volo.Abp.AspNetCore.Components.{Server,WebAssembly}.MudBlazorLeptonXLiteTheme.Bundling`
+> * Module types: `Abp{...}MudBlazorLeptonXLiteThemeModule`, `Abp{...}MudBlazorLeptonXLiteThemeBundlingModule`
+> * Layout namespace: `Volo.Abp.AspNetCore.Components.{Server,WebAssembly}.MudBlazorLeptonXLiteTheme.Themes.MudBlazorLeptonXLite`
+
+{{end}}
+
 ## Installation
 
 This theme is **already installed** when you create a new solution using the startup templates. If you are using any other template, you can install this theme by following the steps below:
@@ -21,7 +42,27 @@ This theme is **already installed** when you create a new solution using the sta
 - Complete the [MVC Razor Pages Installation](asp-net-core.md#installation) for the **HttpApi.Host** application first. _If the solution is tiered/micro-service, complete the MVC steps for all MVC applications such as **HttpApi.Host** and if Auth Server is separated, install to the **OpenIddict**_.
 
 
-- Add **Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme** package to your **Blazor WebAssembly** application with the following command:
+- Add **Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme.Bundling** package to your **Blazor** application with the following command:
+
+  ```bash
+  dotnet add package Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme.Bundling --prerelease
+  ```
+
+- Remove **Volo.Abp.AspNetCore.Components.WebAssembly.BasicTheme.Bundling** reference from the project since it's not necessary after switching to LeptonX Lite.
+
+- Remove the old theme from the **DependsOn** attribute in your module class and add the **AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeBundlingModule** type to the **DependsOn** attribute.
+
+```diff
+[DependsOn(
+     // Remove BasicTheme module from DependsOn attribute
+-    typeof(AbpAspNetCoreComponentsWebAssemblyBasicThemeBundlingModule),
+
+    // Add LeptonX Lite module to DependsOn attribute
++    typeof(AbpAspNetCoreComponentsWebAssemblyLeptonXLiteThemeBundlingModule),
+)]
+```
+
+- Add **Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme** package to your **Blazor.Client** application with the following command:
 
   ```bash
   dotnet add package Volo.Abp.AspNetCore.Components.WebAssembly.LeptonXLiteTheme --prerelease
@@ -41,14 +82,21 @@ This theme is **already installed** when you create a new solution using the sta
 )]
 ```
 
-- Change startup App component with the LeptonX one.
+Update `Routes.razor` file in `Blazor.Client` project as below:
 
-```csharp
-// Make sure the 'App' comes from 'Volo.Abp.AspNetCore.Components.Web.LeptonXLiteTheme.Themes.LeptonXLite' namespace.
-builder.RootComponents.Add<App>("#ApplicationContainer");
-```
-
-- Run the `abp bundle` command in your **Blazor** application folder.
+````csharp
+@using Volo.Abp.AspNetCore.Components.Web.LeptonXLiteTheme.Themes.LeptonXLite
+@using Volo.Abp.AspNetCore.Components.WebAssembly.WebApp
+<Router AppAssembly="typeof(Program).Assembly" AdditionalAssemblies="WebAppAdditionalAssembliesHelper.GetAssemblies<YourBlazorClientModule>()">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)">
+            <NotAuthorized>
+                <RedirectToLogin />
+            </NotAuthorized>
+        </AuthorizeRouteView>
+    </Found>
+</Router>
+````
 
 {{end}}
 
@@ -93,27 +141,37 @@ builder.RootComponents.Add<App>("#ApplicationContainer");
     });
   ```
 
-- Update `_Host.cshtml` file. _(located under **Pages** folder by default.)_
-
-  - Add following usings to Locate **App** and **BlazorLeptonXLiteThemeBundles** classes.
+- Update `App.razor` file. _(located under **Components** folder by default.)_
+  - Add following namespace at the top of the page.
     ```csharp
-    @using Volo.Abp.AspNetCore.Components.Web.LeptonXLiteTheme.Themes.LeptonXLite
-    @using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme.Bundling
+    @ using Volo.Abp.AspNetCore.Components.Server.LeptonXLiteTheme.Bundling
     ```
-  - Then replace script & style bundles as following:
-    ```diff
-    // Remove following line
-    - <abp-style-bundle name="@BlazorBasicThemeBundles.Styles.Global" />
-    // Add following line instead
-    + <abp-style-bundle name="@BlazorLeptonXLiteThemeBundles.Styles.Global" />
+  - Then replace script & style bunles as following
+    ```
+    <AbpStyles BundleName="@BlazorLeptonXLiteThemeBundles.Styles.Global" />
     ```
 
-    ```diff
-    // Remove following line
-    - <abp-script-bundle name="@BlazorBasicThemeBundles.Scripts.Global" />
-    // Add following line instead
-    + <abp-script-bundle name="@BlazorLeptonXLiteThemeBundles.Scripts.Global" />
     ```
+    <AbpScripts BundleName="@BlazorLeptonXLiteThemeBundles.Scripts.Global" />
+    ```
+
+Update `Routes.razor` file as below:
+
+````csharp
+@using Volo.Abp.AspNetCore.Components.Web.LeptonXLiteTheme.Themes.LeptonXLite
+@using Volo.Abp.AspNetCore.Components.Web.Theming.Routing
+@using Microsoft.Extensions.Options
+@inject IOptions<AbpRouterOptions> RouterOptions
+<Router AppAssembly="typeof(Program).Assembly" AdditionalAssemblies="RouterOptions.Value.AdditionalAssemblies">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)">
+            <NotAuthorized>
+                <RedirectToLogin />
+            </NotAuthorized>
+        </AuthorizeRouteView>
+    </Found>
+</Router>
+````
 
 {{end}}
 

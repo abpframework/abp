@@ -14,6 +14,11 @@
           "declaringAssemblyName": "Volo.CmsKit.Common.Web",
           "namespace": "Volo.CmsKit.Web",
           "name": "CmsKitCommonWebModule"
+        },
+        {
+          "declaringAssemblyName": "Volo.Abp.SettingManagement.Web",
+          "namespace": "Volo.Abp.SettingManagement.Web",
+          "name": "AbpSettingManagementWebModule"
         }
       ],
       "implementingInterfaces": [
@@ -152,6 +157,12 @@
       "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs",
       "contentType": "webPage",
       "name": "CreateModalModel",
+      "summary": null
+    },
+    {
+      "namespace": "Volo.CmsKit.Admin.Web.Pages.CmsKit.Blogs",
+      "contentType": "webPage",
+      "name": "DeleteBlogModal",
       "summary": null
     },
     {

@@ -1,12 +1,19 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to switch your ABP Microservice project to MongoDB, replacing EF Core references and updating dependencies for seamless integration."
+}
+```
+
 # Change Microservice project to use MongoDB Provider
 
-This guide explains how to change Microservice project to use MongoDB as the database provider.
+This guide explains how to change the Microservice project to use MongoDB as the database provider.
 
 ## Create a new Microservice project
 
-Use the ABP Suite to create a new Microservice project, in this guide we use `BookStore` as project name.
+> You can use [ABP Studio](../studio/index.md) to create a new Microservice project. In this guide, we assume that you have already created a microservice solution and used `BookStore` as your project name.
 
-You will get the solution as shown below:
+Currently, your microservice solution should be similar to that in the figure below:
 
 ![microservce-mongodb-project](../images/microservice-mongodb.png)
 
@@ -16,9 +23,9 @@ You need to replace all EF Core references with MongoDB and update module depend
 
 Example:
 
-* Remove `Volo.Abp.EntityFrameworkCore.SqlServer` Nuget package reference.
-* Remove `Microsoft.EntityFrameworkCore.Tools` Nuget package reference
-* Remove `AbpEntityFrameworkCoreSqlServerModule` depend.
+* Remove `Volo.Abp.EntityFrameworkCore.SqlServer` NuGet package reference. (instead use `Volo.Abp.MongoDB` NuGet package and also add the relevant depends on statement)
+* Remove `Microsoft.EntityFrameworkCore.Tools` NuGet package reference.
+* Remove `AbpEntityFrameworkCoreSqlServerModule` dependency.
 * Replace `Volo.Abp.PermissionManagement.EntityFrameworkCore` with `Volo.Abp.PermissionManagement.MongoDB`.
 * Update `AbpPermissionManagementEntityFrameworkCoreModule` to `AbpPermissionManagementMongoDbModule`.
 
@@ -43,9 +50,9 @@ Here we use `BookStore.ProductService` project as an example:
         protected override void CreateModel(IMongoModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>(b =>
-        {
-            b.CollectionName = ProductServiceDbProperties.DbTablePrefix + "Products";
-        });
+            {
+               b.CollectionName = ProductServiceDbProperties.DbTablePrefix + "Products";
+            });
         }
     }
     ```
@@ -97,9 +104,9 @@ Here we use `BookStore.ProductService` project as an example:
             int skipCount = 0,
             CancellationToken cancellationToken = default)
         {
-            var query = ApplyFilter(await GetMongoQueryableAsync(cancellationToken), filterText, name, priceMin, priceMax);
+            var query = ApplyFilter(await GetQueryableAsync(cancellationToken), filterText, name, priceMin, priceMax);
             query = query.OrderBy(string.IsNullOrWhiteSpace(sorting) ? ProductConsts.GetDefaultSorting(false) : sorting);
-            return await query.As<IMongoQueryable<Product>>().PageBy<Product, IMongoQueryable<Product>>(skipCount, maxResultCount).ToListAsync(cancellationToken);
+            return await query.PageBy(skipCount, maxResultCount).ToListAsync(cancellationToken);
         }
 
         public async Task<long> GetCountAsync(
@@ -109,8 +116,8 @@ Here we use `BookStore.ProductService` project as an example:
             float? priceMax = null,
             CancellationToken cancellationToken = default)
         {
-            var query = ApplyFilter(await GetMongoQueryableAsync(cancellationToken), filterText, name, priceMin, priceMax);
-            return await query.As<IMongoQueryable<Product>>().LongCountAsync(GetCancellationToken(cancellationToken));
+            var query = ApplyFilter(await GetQueryableAsync(cancellationToken), filterText, name, priceMin, priceMax);
+            return await query.LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
         protected virtual IQueryable<Product> ApplyFilter(

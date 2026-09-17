@@ -32,8 +32,6 @@ public class MedallionAbpDistributedLock : IAbpDistributedLock, ITransientDepend
     {
         Check.NotNullOrWhiteSpace(name, nameof(name));
         var key = DistributedLockKeyNormalizer.NormalizeKey(name);
-        
-        CancellationTokenProvider.FallbackToProvider(cancellationToken);
 
         var handle = await DistributedLockProvider.TryAcquireLockAsync(
             key,

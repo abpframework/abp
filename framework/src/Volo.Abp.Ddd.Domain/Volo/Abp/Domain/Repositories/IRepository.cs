@@ -8,11 +8,15 @@ using Volo.Abp.Domain.Entities;
 namespace Volo.Abp.Domain.Repositories;
 
 /// <summary>
-/// Just to mark a class as repository.
+/// The base interface to implement a repository for an entity.
 /// </summary>
 public interface IRepository
 {
     bool? IsChangeTrackingEnabled { get; }
+
+    string? EntityName { get; set; }
+    
+    string ProviderName { get; }
 }
 
 public interface IRepository<TEntity> : IReadOnlyRepository<TEntity>, IBasicRepository<TEntity>

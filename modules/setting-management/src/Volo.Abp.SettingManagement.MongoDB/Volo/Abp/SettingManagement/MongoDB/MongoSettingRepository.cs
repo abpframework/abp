@@ -24,7 +24,7 @@ public class MongoSettingRepository : MongoDbRepository<ISettingManagementMongoD
         string providerKey,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .OrderBy(x => x.Id)
             .FirstOrDefaultAsync(
                 s => s.Name == name && s.ProviderName == providerName && s.ProviderKey == providerKey,
@@ -36,7 +36,7 @@ public class MongoSettingRepository : MongoDbRepository<ISettingManagementMongoD
         string providerKey,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .Where(s => s.ProviderName == providerName && s.ProviderKey == providerKey)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
@@ -47,8 +47,8 @@ public class MongoSettingRepository : MongoDbRepository<ISettingManagementMongoD
         string providerKey,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
-            .Where(s => names.Contains(s.Name) && s.ProviderName == providerName && s.ProviderKey == providerKey)
+        return await (await GetQueryableAsync(cancellationToken))
+            .Where(s => names.AsEnumerable().Contains(s.Name) && s.ProviderName == providerName && s.ProviderKey == providerKey)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 }

@@ -19,6 +19,12 @@ public class MethodParameterApiDescriptionModel
 
     public object? DefaultValue { get; set; }
 
+    public string? Summary { get; set; }
+
+    public string? Description { get; set; }
+
+    public string? DisplayName { get; set; }
+
     public MethodParameterApiDescriptionModel()
     {
 

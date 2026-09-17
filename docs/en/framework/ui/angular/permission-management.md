@@ -1,6 +1,13 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to manage user permissions in ABP Framework with practical examples and methods for effective authorization control."
+}
+```
+
 # Permission Management
 
-A permission is a simple policy that is granted or prohibited for a particular user, role or client. You can read more about [authorization in ABP](../../fundamentals/authorization.md) document.
+A permission is a simple policy that is granted or prohibited for a particular user, role or client. You can read more about [authorization in ABP](../../fundamentals/authorization/index.md) document.
 
 You can get permission of authenticated user using `getGrantedPolicy` or `getGrantedPolicy$` method of `PermissionService`.
 
@@ -8,9 +15,10 @@ You can get permission as boolean value:
 
 ```js
 import { PermissionService } from '@abp/ng.core';
+import { inject } from '@angular/core';
 
 export class YourComponent {
-  constructor(private permissionService: PermissionService) {}
+  private permissionService = inject(PermissionService);
 
   ngOnInit(): void {
     const canCreate = this.permissionService.getGrantedPolicy('AbpIdentity.Roles.Create');
@@ -34,7 +42,8 @@ const hasIdentityOrAccountPermission = this.permissionService.getGrantedPolicy(
 
 Please consider the following **rules** when creating your permission selectors:
 
-- Maximum 2 keys can be combined.
+- Two or more keys can be combined with the same operator.
+- Do not mix `&&` and `||` in the same selector.
 - `&&` operator looks for both keys.
 - `||` operator looks for either key.
 - Empty string `''` as key will return `true`
@@ -81,18 +90,14 @@ In some cases, a custom permission management may be needed. All you need to do 
 
 - First, create a service of your own. Let's call it `CustomPermissionService` and extend `PermissionService` from `@abp/ng.core` as follows:
 
-```js
-import { ConfigStateService, PermissionService } from '@abp/ng.core';
+```ts
+import { PermissionService } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CustomPermissionService extends PermissionService {
-  constructor(configStateService: ConfigStateService) {
-    super(configStateService);
-  }
-
   // This is an example to show how to override the methods
   getGrantedPolicy$(key: string) {
     return super.getGrantedPolicy$(key);
@@ -100,11 +105,10 @@ export class CustomPermissionService extends PermissionService {
 }
 ```
 
-- Then, in `app.module.ts`, provide this service as follows: 
+- Then, in `app.config.ts`, provide this service as follows: 
 
 ```js
-@NgModule({
-  // ...
+export const appConfig: ApplicationConfig = {
   providers: [
     // ...
     {
@@ -112,9 +116,7 @@ export class CustomPermissionService extends PermissionService {
       useExisting: CustomPermissionService,
     },
   ],
-  // ...
-})
-export class AppModule {}
+};
 ```
 
 That's it. Now, when a directive/guard asks for `PermissionService` from angular, it will inject your service.

@@ -24,29 +24,29 @@ public class MongoIdentityUserDelegationRepository : MongoDbRepository<IAbpIdent
     public virtual async Task<List<IdentityUserDelegation>> GetListAsync(Guid? sourceUserId, Guid? targetUserId,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        return await (await GetQueryableAsync(cancellationToken))
             .WhereIf(sourceUserId.HasValue, x => x.SourceUserId == sourceUserId)
             .WhereIf(targetUserId.HasValue, x => x.TargetUserId == targetUserId)
-            .As<IMongoQueryable<IdentityUserDelegation>>()
             .ToListAsync(cancellationToken: cancellationToken);
     }
 
     public virtual async Task<List<IdentityUserDelegation>> GetActiveDelegationsAsync(Guid targetUserId, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        var now = Clock.Now;
+        return await (await GetQueryableAsync(cancellationToken))
             .Where(x => x.TargetUserId == targetUserId)
-            .Where(x => x.StartTime <= Clock.Now && x.EndTime >= Clock.Now)
-            .As<IMongoQueryable<IdentityUserDelegation>>()
+            .Where(x => x.StartTime <= now && x.EndTime >= now)
             .ToListAsync(cancellationToken: cancellationToken);
     }
 
     public virtual async Task<IdentityUserDelegation> FindActiveDelegationByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await (await GetMongoQueryableAsync(cancellationToken))
+        var now = Clock.Now;
+        return await (await GetQueryableAsync(cancellationToken))
             .FirstOrDefaultAsync(x =>
                     x.Id == id &&
-                    x.StartTime <= Clock.Now &&
-                    x.EndTime >= Clock.Now
+                    x.StartTime <= now &&
+                    x.EndTime >= now
                 , cancellationToken: GetCancellationToken(cancellationToken));
     }
 }

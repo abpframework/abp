@@ -1,8 +1,9 @@
-@using Volo.Abp
+@using Microsoft.AspNetCore.Components
 @implements IDisposable
 @inject IComponentBundleManager BundleManager
-@inject PersistentComponentState PersistentComponentState
-
+@inject PersistentComponentState ApplicationState
+@inject NavigationManager NavigationManager
+@inject IComponentBundleUrlBuilder BundleUrlBuilder
 @if (StyleFiles != null)
 {
     foreach (var file in StyleFiles)
@@ -12,45 +13,72 @@
 }
 
 @code {
+
+    private const string PrerenderedKey = "abp_style_prerendered";
+
     [Parameter]
     public List<string>? WebAssemblyStyleFiles { get; set; }
 
     [Parameter]
     public string? BundleName { get; set; }
 
+    [Parameter]
+    public string? AppBasePath { get; set; }
+
     private List<string>? StyleFiles { get; set; }
 
-    private PersistingComponentStateSubscription persistingSubscription;
+    private PersistingComponentStateSubscription _persistingSubscription;
 
     protected override async Task OnInitializedAsync()
     {
-        if (BundleName == null)
+        _persistingSubscription = ApplicationState.RegisterOnPersisting(Callback);
+        if (!ApplicationState.TryTakeFromJson<List<string>>(PrerenderedKey, out var scriptFiles))
         {
-            throw new AbpException("The BundleName parameter of the AbpStyles component can not be null!");
-        }
-
-        persistingSubscription = PersistentComponentState.RegisterOnPersisting(PersistStyleFiles);
-
-        if (PersistentComponentState.TryTakeFromJson<List<string>>(nameof(StyleFiles), out var restoredStyleFiles))
-        {
-            StyleFiles = restoredStyleFiles;
+            // We are in prerendering mode
+            if (!BundleName.IsNullOrWhiteSpace())
+            {
+                var rawFiles = await BundleManager.GetStyleBundleFilesAsync(BundleName!);
+                StyleFiles = await ResolveAsync(rawFiles);
+            }
         }
         else
         {
-            StyleFiles = (await BundleManager.GetStyleBundleFilesAsync(BundleName!)).ToList();
-        }
-
-        if (OperatingSystem.IsBrowser() && WebAssemblyStyleFiles != null)
-        {
-            StyleFiles?.AddRange(WebAssemblyStyleFiles);
+            StyleFiles = scriptFiles;
+            if (OperatingSystem.IsBrowser() && StyleFiles != null && WebAssemblyStyleFiles != null)
+            {
+                StyleFiles.AddIfNotContains(await ResolveAsync(WebAssemblyStyleFiles));
+            }
         }
     }
 
-    private Task PersistStyleFiles()
+    private bool _hasRemoveServerStyle = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        PersistentComponentState.PersistAsJson(nameof(StyleFiles), StyleFiles);
+        if (!_hasRemoveServerStyle && OperatingSystem.IsBrowser() && WebAssemblyStyleFiles != null)
+        {
+            _hasRemoveServerStyle = true;
+            await Task.Delay(3000);
+            StyleFiles = await ResolveAsync(WebAssemblyStyleFiles);
+            StateHasChanged();
+        }
+    }
+
+    private async Task<List<string>> ResolveAsync(IReadOnlyList<string> files)
+    {
+        var resolved = new List<string>(files.Count);
+        foreach (var file in files)
+        {
+            resolved.Add(await BundleUrlBuilder.BuildAsync(file, AppBasePath, NavigationManager.BaseUri));
+        }
+        return resolved;
+    }
+
+    private Task Callback()
+    {
+        ApplicationState.PersistAsJson(PrerenderedKey, StyleFiles);
         return Task.CompletedTask;
     }
 
-    public void Dispose() => persistingSubscription.Dispose();
+    public void Dispose() => _persistingSubscription.Dispose();
 }

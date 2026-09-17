@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Explore sample commands to create ABP solutions using the ABP CLI, including Angular projects and database options for developers."
+}
+```
+
 # ABP CLI - New Solution Sample Commands 
 
 The `abp new` command creates an ABP solution or other artifacts based on an ABP template. [ABP CLI](../cli/index.md) has several parameters to create a new ABP solution. In this document we will show you some sample commands to create a new solution. All the project names are `Acme.BookStore`. Currently, the available mobile projects are `React Native` and `MAUI` mobile app (they are *available for* ***Team*** *or higher licenses*). Available database providers are `Entity Framework Core` and `MongoDB`. All the commands starts with `abp new`.
@@ -21,7 +28,7 @@ The following commands are for creating Angular UI projects:
 * **Entity Framework Core**,  **custom connection string**, creates the project in a new folder:
 
   ```bash
-  abp new Acme.BookStore -u angular -csf --connection-string Server=localhost;Database=MyDatabase;Trusted_Connection=True
+  abp new Acme.BookStore -u angular -csf --connection-string "Server=localhost;Database=MyDatabase;Trusted_Connection=True"
   ```
 
 * **MongoDB**, default app template, mobile project included, creates solution in `C:\MyProjects\Acme.BookStore`
@@ -164,7 +171,7 @@ It's a template of a basic .NET console application with ABP module architecture
 * This project consists of the following files: `Acme.BookStore.csproj`, `appsettings.json`, `BookStoreHostedService.cs`, `BookStoreModule.cs`, `HelloWorldService.cs` and `Program.cs`.
 
   ```bash
-  abp new Acme.BookStore -t console -csf
+  abp new Acme.BookStore -t console -csf --old
   ```
 
 ## Module
@@ -220,6 +227,79 @@ As seen below, ABP libraries are local project references.
 	<ProjectReference Include="..\Acme.BookStore.EntityFrameworkCore\Acme.BookStore.EntityFrameworkCore.csproj" />
 </ItemGroup>    
 ```
+
+## Using Existing Configuration
+
+If you want to programmaticaly create solutions, you can use an existing configuration instead of passing parameters to CLI one by one. ABP Studio keeps the solution creation history locally in `(UserProfile)\.abp\studio\solution-creation-history.json` file, there you can find the configurations of the solutions created in your machine.
+
+### Using a Solution Id
+
+In `*.abpsln` file of the solutions, there is an ID field that you can use to recreate a solution. To do this, pass the id to cli using `-shi or --solution-history-id` parameters.
+
+```bash
+abp new -shi dbb1afa9-190e-419a-842d-2780bb1bad1f
+abp new -shi dbb1afa9-190e-419a-842d-2780bb1bad1f -o D:\test\Acme.BookStore
+```
+
+### Using a JSON Configuration File
+
+You can also use a configuration file to create solutions. You need to use `-rcp or ready-config-path` parameters to do that.
+
+```bash
+abp new -rcp MyTests\config.json
+abp new -rcp D:\MyTests\config.json
+abp new -rcp D:\MyTests\config.json -o D:\test\Acme.BookStore
+```
+
+To prepare a config file, you can check the records in `solution-creation-history.json` file mentioned above. An example config file would look like that:
+
+```json
+{
+        "solutionName": {
+          "fullName": "Acme.BookStore",
+          "companyName": "Acme",
+          "projectName": "BookStore"
+        },
+        "pro": true,
+        "useOpenSourceTemplate": false,
+        "booksSample": false,
+        "databaseProvider": "ef",
+        "createInitialMigration": true,
+        "runDbMigrator": true,
+        "uiFramework": "angular",
+        "theme": "leptonx",
+        "themeStyle": "system",
+        "mobileFramework": "none",
+        "databaseManagementSystem": "sqlserver",
+        "databaseManagementSystemBuilderExtensionMethod": "UseSqlServer",
+        "connectionString": "Server=(LocalDb)\\\\MSSQLLocalDB;Database=BookStore;Trusted_Connection=True;TrustServerCertificate=true",
+        "mauiBlazorApplicationIdGuid": "d3499a09-f3d4-4bb7-9d58-4c7b1caee331",
+        "tiered": false,
+        "publicWebsite": false,
+        "cmskit": false,
+        "openIddictAdmin": true,
+        "languageManagement": true,
+        "textTemplateManagement": true,
+        "multiTenancy": true,
+        "auditLogging": false,
+        "gdpr": true,
+        "chat": false,
+        "fileManagement": false,
+        "socialLogins": true,
+        "includeTests": true,
+        "distributedEventBus": "none",
+        "publicRedis": false,
+        "separateTenantSchema": false,
+        "progressiveWebApp": false,
+        "runProgressiveWebAppSupport": false,
+        "runInstallLibs": false,
+        "runBundling": false,
+        "kubernetesConfiguration": true,
+        "templateName": "app"
+      }
+```
+
+
 
 ## See Also
 

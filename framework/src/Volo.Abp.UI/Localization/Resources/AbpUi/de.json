@@ -60,6 +60,9 @@
     "AddNew": "Neue hinzufügen",
     "ProfilePicture": "Profilbild",
     "Theme": "Thema",
-    "NotAssigned": "Nicht zugeordnet"
+    "NotAssigned": "Nicht zugeordnet",
+    "EntityActionsDisabledTooltip": "Sie haben keine Berechtigung, Aktionen auszuführen.",
+    "ResourcePermissions": "Berechtigungen",
+    "ShowPassword": "Passwort anzeigen"
   }
 }

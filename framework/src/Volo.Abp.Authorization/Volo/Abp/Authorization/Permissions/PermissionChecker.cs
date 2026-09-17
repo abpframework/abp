@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -48,7 +49,7 @@ public class PermissionChecker : IPermissionChecker, ITransientDependency
         {
             return false;
         }
-    
+
         if (!permission.IsEnabled)
         {
             return false;
@@ -92,12 +93,12 @@ public class PermissionChecker : IPermissionChecker, ITransientDependency
         return isGranted;
     }
 
-    public async Task<MultiplePermissionGrantResult> IsGrantedAsync(string[] names)
+    public virtual async Task<MultiplePermissionGrantResult> IsGrantedAsync(string[] names)
     {
         return await IsGrantedAsync(PrincipalAccessor.Principal, names);
     }
 
-    public async Task<MultiplePermissionGrantResult> IsGrantedAsync(ClaimsPrincipal? claimsPrincipal, string[] names)
+    public virtual async Task<MultiplePermissionGrantResult> IsGrantedAsync(ClaimsPrincipal? claimsPrincipal, string[] names)
     {
         Check.NotNull(names, nameof(names));
 
@@ -110,11 +111,15 @@ public class PermissionChecker : IPermissionChecker, ITransientDependency
         var multiTenancySide = claimsPrincipal?.GetMultiTenancySide() ??
                                CurrentTenant.GetMultiTenancySide();
 
+        var allPermissions = (await PermissionDefinitionManager.GetPermissionsAsync())
+            .ToDictionary(p => p.Name, StringComparer.Ordinal);
+
+        var pendingStateCheck = new List<PermissionDefinition>();
         var permissionDefinitions = new List<PermissionDefinition>();
+
         foreach (var name in names)
         {
-            var permission = await PermissionDefinitionManager.GetOrNullAsync(name);
-            if (permission == null)
+            if (!allPermissions.TryGetValue(name, out var permission))
             {
                 result.Result.Add(name, PermissionGrantResult.Prohibited);
                 continue;
@@ -122,11 +127,23 @@ public class PermissionChecker : IPermissionChecker, ITransientDependency
 
             result.Result.Add(name, PermissionGrantResult.Undefined);
 
-            if (permission.IsEnabled &&
-                await StateCheckerManager.IsEnabledAsync(permission) &&
-                permission.MultiTenancySide.HasFlag(multiTenancySide))
+            if (!permission.IsEnabled || !permission.MultiTenancySide.HasFlag(multiTenancySide))
             {
-                permissionDefinitions.Add(permission);
+                continue;
+            }
+
+            pendingStateCheck.Add(permission);
+        }
+
+        if (pendingStateCheck.Count > 0)
+        {
+            var stateCheckResult = await StateCheckerManager.IsEnabledAsync(pendingStateCheck.ToArray());
+            foreach (var item in stateCheckResult)
+            {
+                if (item.Value)
+                {
+                    permissionDefinitions.Add(item.Key);
+                }
             }
         }
 
@@ -146,16 +163,27 @@ public class PermissionChecker : IPermissionChecker, ITransientDependency
                 claimsPrincipal);
 
             var multipleResult = await provider.CheckAsync(context);
-            foreach (var grantResult in multipleResult.Result.Where(grantResult =>
-                result.Result.ContainsKey(grantResult.Key) &&
-                result.Result[grantResult.Key] == PermissionGrantResult.Undefined &&
-                grantResult.Value != PermissionGrantResult.Undefined))
+
+            foreach (var grantResult in multipleResult.Result.Where(x => result.Result.ContainsKey(x.Key)))
             {
-                result.Result[grantResult.Key] = grantResult.Value;
-                permissionDefinitions.RemoveAll(x => x.Name == grantResult.Key);
+                switch (grantResult.Value)
+                {
+                    case PermissionGrantResult.Granted:
+                    {
+                        if (result.Result[grantResult.Key] != PermissionGrantResult.Prohibited)
+                        {
+                            result.Result[grantResult.Key] = PermissionGrantResult.Granted;
+                        }
+                        break;
+                    }
+                    case PermissionGrantResult.Prohibited:
+                        result.Result[grantResult.Key] = PermissionGrantResult.Prohibited;
+                        permissionDefinitions.RemoveAll(x => x.Name == grantResult.Key);
+                        break;
+                }
             }
 
-            if (result.AllGranted || result.AllProhibited)
+            if (result.AllProhibited)
             {
                 break;
             }

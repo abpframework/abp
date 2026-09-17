@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Discover how to implement multi-tenancy in ABP Framework's microservice solutions, enabling seamless tenant isolation and management."
+}
+```
+
 # Microservice Solution: Multi-Tenancy
 
 ````json

@@ -11,6 +11,7 @@
     "InvalidUsername": "Napačno uporabniško ime ali geslo!",
     "InvalidAuthenticatorCode": "Neveljavna koda za preverjanje pristnosti!",
     "InvalidRecoveryCode": "Neveljavna obnovitvena koda!",
-    "TheTargetUserIsNotLinkedToYou": "Ciljni uporabnik ni povezan z vami!"
+    "TheTargetUserIsNotLinkedToYou": "Ciljni uporabnik ni povezan z vami!",
+    "ClientResourcePermissionProviderKeyLookupService": "Odjemalec"
   }
 }

@@ -1,4 +1,5 @@
 using System;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EventBus;
 using Volo.Abp.Modularity;
@@ -21,5 +22,10 @@ public class AbpAspNetCoreMvcClientModule : AbpModule
                 options.ApplicationConfigurationDtoCacheAbsoluteExpiration = TimeSpan.FromSeconds(5);
             });
         }
+    }
+
+    public override void PostConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.PostConfigureAll<CookieAuthenticationOptions>(cookieOptions => cookieOptions.ValidateRemoteDynamicClaims());
     }
 }

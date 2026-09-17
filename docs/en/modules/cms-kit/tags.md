@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to manage tags in CMS Kit, enabling you to categorize resources like blog posts and products effectively."
+}
+```
+
 # CMS Kit: Tag Management
 
 CMS Kit provides a **tag** system to tag any kind of resources, like a blog post.
@@ -142,7 +149,7 @@ This module follows the [Domain Services Best Practices & Conventions](../../fra
 
 ##### Table / Collection prefix & schema
 
-All tables/collections use the `Cms` prefix by default. Set static properties on the `CmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
+All tables/collections use the `Cms` prefix by default. Set static properties on the `AbpCmsKitDbProperties` class if you need to change the table prefix or set a schema name (if supported by your database provider).
 
 ##### Connection string
 

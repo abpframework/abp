@@ -68,6 +68,8 @@
     "AccessDenied": "Quyền truy cập bị từ chối!",
     "AccessDeniedMessage": "Bạn không có quyền truy cập vào tài nguyên này.",
     "OrRegisterWith": "Hoặc đăng ký bằng:",
-    "RegisterUsingYourProviderAccount": "Đăng ký bằng tài khoản {0} của bạn"
+    "RegisterUsingYourProviderAccount": "Đăng ký bằng tài khoản {0} của bạn",
+    "RequireMigrateSeedTitle": "Không thể tìm thấy người dùng quản trị",
+    "RequireMigrateSeedMessage": "Vui lòng đảm bảo rằng seed cơ sở dữ liệu được thực thi. Xem <a target=\"_blank\" href=\"https://abp.io/kb/0003\">tài liệu</a> để biết các giải pháp có thể."
   }
 }

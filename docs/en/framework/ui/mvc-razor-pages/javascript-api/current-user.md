@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to use the `abp.currentUser` JavaScript API to access current user information in your ASP.NET Core MVC/Razor Pages applications."
+}
+```
+
 # ASP.NET Core MVC / Razor Pages UI: JavaScript CurrentUser API
 
 `abp.currentUser` is an object that contains information about the current user of the application.

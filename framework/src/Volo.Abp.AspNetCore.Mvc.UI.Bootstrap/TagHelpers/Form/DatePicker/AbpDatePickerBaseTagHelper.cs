@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Options;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form.DatePicker;
 
@@ -45,9 +46,9 @@ public abstract class
 
     public bool AddMarginBottomClass  { get; set; } = true;
 
-    protected AbpDatePickerBaseTagHelper(AbpDatePickerBaseTagHelperService<TTagHelper> service) : base(service)
+    protected AbpDatePickerBaseTagHelper(AbpDatePickerBaseTagHelperService<TTagHelper> service, IOptionsFactory<AbpDatePickerOptions> optionsFactory) : base(service)
     {
-        _abpDatePickerOptionsImplementation = new AbpDatePickerOptions();
+        _abpDatePickerOptionsImplementation = optionsFactory.Create(string.Empty);
     }
 
     public void SetDatePickerOptions(IAbpDatePickerOptions options)

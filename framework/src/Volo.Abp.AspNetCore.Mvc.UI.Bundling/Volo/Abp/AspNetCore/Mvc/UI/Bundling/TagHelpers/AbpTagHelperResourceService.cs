@@ -10,6 +10,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Bundling;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers;

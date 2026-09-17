@@ -60,6 +60,9 @@
     "AddNew": "Új hozzáadása",
     "ProfilePicture": "Profil kép",
     "Theme": "Téma",
-    "NotAssigned": "Nem kijelölt"
+    "NotAssigned": "Nem kijelölt",
+    "EntityActionsDisabledTooltip": "Nincs jogosultsága bármely művelethez.",
+    "ResourcePermissions": "Engedélyek",
+    "ShowPassword": "Jelszó megjelenítése"
   }
 }

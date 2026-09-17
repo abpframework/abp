@@ -89,7 +89,9 @@
     "Permission:BlogPostManagement.Publish": "Publica",
     "Permission:CmsKit": "CmsKit",
     "Permission:Comments": "Administrarea comentariilor",
-    "Permission:Comments.Delete": "Şterge",
+    "Permission:Comments.Delete": "Șterge",
+    "Permission:Comments.Update": "Actualizare",
+    "Permission:Comments.SettingManagement": "Gestionare setări",
     "Permission:Contents": "Administrarea conţinutului",
     "Permission:Contents.Create": "Creează conţinut",
     "Permission:Contents.Delete": "Şterge conţinut",
@@ -227,6 +229,13 @@
     "CssClass": "Clasa CSS",
     "TagsHelpText": "Etichetele ar trebui să fie separate prin virgulă (de exemplu: tag1, tag2, tag3)",
     "ThisPartOfContentCouldntBeLoaded": "Această parte a conţinutului nu a putut fi încărcată.",
-    "DuplicateCommentAttemptMessage": "A fost detectată o încercare de postare de comentarii duplicată. Comentariul dvs. a fost deja trimis."
+    "DuplicateCommentAttemptMessage": "A fost detectată o încercare de postare de comentarii duplicată. Comentariul dvs. a fost deja trimis.",
+    "ChooseAnActionForBlog": "Alegeţi o acţiune pentru blog",
+    "AssignBlogPostsToOtherBlog": "Atribuiţi postările de blog la alt blog",
+    "SelectAnBlogToAssign": "Selectaţi un blog pentru a atribui postările de blog",
+    "DeleteAllBlogPostsOfThisBlog": "Ştergeţi toate postările de blog ale acestui blog",
+    "RequiredPermissionName": "Numele permisiunii necesare",
+    "AllPosts": "Toate postările",
+    "IsReadOnly": "Doar citire"
   }
 }

@@ -6,23 +6,24 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.StaticDefinitions;
 
 namespace Volo.Abp.Settings;
 
 public class StaticSettingDefinitionStore : IStaticSettingDefinitionStore, ISingletonDependency
 {
-    protected Lazy<IDictionary<string, SettingDefinition>> SettingDefinitions { get; }
-
-    protected AbpSettingOptions Options { get; }
-
     protected IServiceProvider ServiceProvider { get; }
+    protected AbpSettingOptions Options { get; }
+    protected IStaticDefinitionCache<SettingDefinition, Dictionary<string, SettingDefinition>> DefinitionCache { get; }
 
-    public StaticSettingDefinitionStore(IOptions<AbpSettingOptions> options, IServiceProvider serviceProvider)
+    public StaticSettingDefinitionStore(
+        IServiceProvider serviceProvider,
+        IOptions<AbpSettingOptions> options,
+        IStaticDefinitionCache<SettingDefinition, Dictionary<string, SettingDefinition>> definitionCache)
     {
         ServiceProvider = serviceProvider;
         Options = options.Value;
-
-        SettingDefinitions = new Lazy<IDictionary<string, SettingDefinition>>(CreateSettingDefinitions, true);
+        DefinitionCache = definitionCache;
     }
 
     public virtual async Task<SettingDefinition> GetAsync(string name)
@@ -39,17 +40,24 @@ public class StaticSettingDefinitionStore : IStaticSettingDefinitionStore, ISing
         return setting;
     }
 
-    public virtual Task<IReadOnlyList<SettingDefinition>> GetAllAsync()
+    public virtual async Task<IReadOnlyList<SettingDefinition>> GetAllAsync()
     {
-        return Task.FromResult<IReadOnlyList<SettingDefinition>>(SettingDefinitions.Value.Values.ToImmutableList());
+        var defs = await GetSettingDefinitionsAsync();
+        return defs.Values.ToImmutableList();
     }
 
-    public virtual Task<SettingDefinition?> GetOrNullAsync(string name)
+    public virtual async Task<SettingDefinition?> GetOrNullAsync(string name)
     {
-        return Task.FromResult(SettingDefinitions.Value.GetOrDefault(name));
+        var defs = await GetSettingDefinitionsAsync();
+        return defs.GetOrDefault(name);
     }
 
-    protected virtual IDictionary<string, SettingDefinition> CreateSettingDefinitions()
+    protected virtual async Task<Dictionary<string, SettingDefinition>> GetSettingDefinitionsAsync()
+    {
+        return await DefinitionCache.GetOrCreateAsync(CreateSettingDefinitionsAsync);
+    }
+
+    protected virtual Task<Dictionary<string, SettingDefinition>> CreateSettingDefinitionsAsync()
     {
         var settings = new Dictionary<string, SettingDefinition>();
 
@@ -66,6 +74,6 @@ public class StaticSettingDefinitionStore : IStaticSettingDefinitionStore, ISing
             }
         }
 
-        return settings;
+        return Task.FromResult(settings);
     }
 }

@@ -1,16 +1,20 @@
-import { Directive, ElementRef, Input, inject } from '@angular/core';
+import { Directive, ElementRef, effect, inject, input } from '@angular/core';
 
 @Directive({
-  standalone: true,
   selector: '[abpShowPassword]',
 })
 export class ShowPasswordDirective {
   protected readonly elementRef = inject(ElementRef);
 
-  @Input() set abpShowPassword(visible: boolean) {
-    const element = this.elementRef.nativeElement as HTMLInputElement;
-    if (!element) return;
+  readonly abpShowPassword = input(false);
 
-    element.type = visible ? 'text' : 'password';
+  constructor() {
+    effect(() => {
+      const visible = this.abpShowPassword();
+      const element = this.elementRef.nativeElement as HTMLInputElement;
+      if (!element) return;
+
+      element.type = visible ? 'text' : 'password';
+    });
   }
 }

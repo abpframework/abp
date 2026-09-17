@@ -26,6 +26,12 @@ public class AbpNoContentActionFilter : IAsyncActionFilter, IAbpFilter, ITransie
             var returnType = context.ActionDescriptor.GetReturnType();
             if (returnType == typeof(Task) || returnType == typeof(void))
             {
+                if (context.HttpContext.Response.Body.CanSeek && context.HttpContext.Response.Body.Length != 0)
+                {
+                    // Body has been written, so we should not change the status code.
+                    return;
+                }
+
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NoContent;
             }
         }

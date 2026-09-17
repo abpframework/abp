@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dashboard-filter-descriptor.schema.json",
+  "title": "DashboardFilterDescriptor",
+  "description": "Static filter applied to a dashboard visualization or KPI item.",
+  "markdownDescription": "AI guidance: use dashboard filters to constrain the data behind a visualization, for example only active records or only records above a threshold. Each condition property must exist on the visualization/item entity. Combine conditions with `operator: \"and\"` or `operator: \"or\"`. `isNull`, `isNotNull`, and relative-date filter types such as `thisMonth` do not need a `value`.",
+  "type": "object",
+  "properties": {
+    "operator": {
+      "type": "string",
+      "enum": ["and", "or"],
+      "default": "and"
+    },
+    "conditions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "stableId": {
+            "type": "string",
+            "description": "Optional stable identifier assigned by the designer so model history and mutations can address this condition. Omit in hand-written descriptors; the runtime generates one when missing.",
+            "minLength": 1
+          },
+          "property": {
+            "type": "string",
+            "description": "Property name to filter on. Must exist on the visualization/item entityName."
+          },
+          "filterType": {
+            "type": "string",
+            "description": "Comparison applied to the property. Prefer lower-camel-case values; PascalCase aliases are accepted for compatibility.",
+            "enum": [
+              "equal",
+              "notEqual",
+              "contains",
+              "notContains",
+              "startsWith",
+              "endsWith",
+              "greaterThan",
+              "greaterThanOrEqual",
+              "lessThan",
+              "lessThanOrEqual",
+              "between",
+              "isNull",
+              "isNotNull",
+              "in",
+              "notIn",
+              "thisWeek",
+              "lastWeek",
+              "thisMonth",
+              "lastMonth",
+              "thisYear",
+              "lastYear",
+              "today",
+              "beforeToday",
+              "Equal",
+              "NotEqual",
+              "Contains",
+              "NotContains",
+              "StartsWith",
+              "EndsWith",
+              "GreaterThan",
+              "GreaterThanOrEqual",
+              "LessThan",
+              "LessThanOrEqual",
+              "Between",
+              "IsNull",
+              "IsNotNull",
+              "In",
+              "NotIn",
+              "ThisWeek",
+              "LastWeek",
+              "ThisMonth",
+              "LastMonth",
+              "ThisYear",
+              "LastYear",
+              "Today",
+              "BeforeToday"
+            ],
+            "default": "equal"
+          },
+          "value": {
+            "type": ["string", "number", "boolean", "null"],
+            "description": "Filter value, stored as a string in descriptor JSON. Shape depends on filterType and target property type; omit for isNull/isNotNull and relative-date filter types."
+          }
+        },
+        "required": ["property", "filterType"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["conditions"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "operator": "and",
+      "conditions": [
+        { "property": "Status", "filterType": "equal", "value": "1" },
+        { "property": "StartDate", "filterType": "thisMonth" }
+      ]
+    }
+  ]
+}

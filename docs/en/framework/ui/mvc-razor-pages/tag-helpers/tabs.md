@@ -1,3 +1,10 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to effectively use the `abp-tab` component for seamless tab navigation in your ABP Framework applications with practical examples."
+}
+```
+
 # Tabs
 
 ## Introduction

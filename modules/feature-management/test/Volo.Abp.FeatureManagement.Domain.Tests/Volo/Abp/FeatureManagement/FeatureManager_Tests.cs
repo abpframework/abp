@@ -217,7 +217,118 @@ public class FeatureManager_Tests : FeatureManagementDomainTestBase
         {
             await _featureManager.SetAsync(TestFeatureDefinitionProvider.EmailSupport, "true", "UndefinedProvider", "Test");
         });
-        
+
         exception.Message.ShouldBe("Unknown feature value provider: UndefinedProvider");
+    }
+
+    [Fact]
+    public async Task Set_Should_Throw_Exception_If_Provider_Not_In_AllowedProviders()
+    {
+        var exception = await Assert.ThrowsAsync<AbpException>(async () =>
+        {
+            await _featureManager.SetAsync(
+                TestFeatureDefinitionProvider.TenantOnlyFeature,
+                "true",
+                EditionFeatureValueProvider.ProviderName,
+                TestEditionIds.Enterprise.ToString());
+        });
+
+        exception.Message.ShouldContain(TestFeatureDefinitionProvider.TenantOnlyFeature);
+        exception.Message.ShouldContain(EditionFeatureValueProvider.ProviderName);
+    }
+
+    [Fact]
+    public async Task Set_Should_Allow_Setting_For_Provider_In_AllowedProviders()
+    {
+        var tenantId = Guid.NewGuid();
+
+        await _featureManager.SetAsync(
+            TestFeatureDefinitionProvider.TenantOnlyFeature,
+            "true",
+            TenantFeatureValueProvider.ProviderName,
+            tenantId.ToString());
+
+        (await _featureManager.GetOrNullForTenantAsync(
+            TestFeatureDefinitionProvider.TenantOnlyFeature,
+            tenantId)).ShouldBe("true");
+    }
+
+    [Fact]
+    public async Task GetAllWithProvider_Should_Not_Return_Features_With_Disallowed_Provider()
+    {
+        var editionFeatures = await _featureManager.GetAllWithProviderAsync(
+            EditionFeatureValueProvider.ProviderName,
+            TestEditionIds.Enterprise.ToString());
+
+        editionFeatures.ShouldNotContain(x => x.Name == TestFeatureDefinitionProvider.TenantOnlyFeature);
+
+        var tenantId = Guid.NewGuid();
+        await _featureManager.SetForTenantAsync(
+            tenantId,
+            TestFeatureDefinitionProvider.TenantOnlyFeature,
+            "true");
+
+        var tenantFeatures = await _featureManager.GetAllWithProviderAsync(
+            TenantFeatureValueProvider.ProviderName,
+            tenantId.ToString());
+
+        tenantFeatures.ShouldContain(x =>
+            x.Name == TestFeatureDefinitionProvider.TenantOnlyFeature && x.Value == "true");
+    }
+
+    [Fact]
+    public async Task GetOrNullWithProvider_Should_Not_Read_From_Disallowed_Provider()
+    {
+        var editionId = TestEditionIds.Enterprise.ToString();
+        await _featureValueRepository.InsertAsync(new FeatureValue(
+            Guid.NewGuid(),
+            TestFeatureDefinitionProvider.TenantOnlyFeature,
+            "true",
+            EditionFeatureValueProvider.ProviderName,
+            editionId));
+
+        var value = await _featureManager.GetOrNullWithProviderAsync(
+            TestFeatureDefinitionProvider.TenantOnlyFeature,
+            EditionFeatureValueProvider.ProviderName,
+            editionId);
+
+        value.Value.ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task GetOrNullForEdition_Should_Read_Value_For_Edition_Only_Feature()
+    {
+        var editionId = Guid.NewGuid();
+
+        await _featureManager.SetForEditionAsync(
+            editionId,
+            TestFeatureDefinitionProvider.EditionOnlyFeature,
+            "true");
+
+        (await _featureManager.GetOrNullForEditionAsync(
+            TestFeatureDefinitionProvider.EditionOnlyFeature,
+            editionId)).ShouldBe("true");
+    }
+
+    [Fact]
+    public async Task Set_Should_Not_Clear_Tenant_Value_Due_To_Stale_Disallowed_Provider_Fallback()
+    {
+        var tenantId = Guid.NewGuid();
+
+        await _featureValueRepository.InsertAsync(new FeatureValue(
+            Guid.NewGuid(),
+            TestFeatureDefinitionProvider.TenantOnlyFeature,
+            "true",
+            EditionFeatureValueProvider.ProviderName,
+            null));
+
+        await _featureManager.SetForTenantAsync(
+            tenantId,
+            TestFeatureDefinitionProvider.TenantOnlyFeature,
+            "true");
+
+        (await _featureManager.GetOrNullForTenantAsync(
+            TestFeatureDefinitionProvider.TenantOnlyFeature,
+            tenantId)).ShouldBe("true");
     }
 }

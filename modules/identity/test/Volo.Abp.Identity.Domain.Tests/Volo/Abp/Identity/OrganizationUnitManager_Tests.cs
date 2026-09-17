@@ -1,8 +1,18 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Shouldly;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
+using Volo.Abp.Security.Claims;
+using Volo.Abp.Identity.Localization;
+using Volo.Abp.Caching;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.Guids;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 using Xunit;
 
@@ -17,6 +27,8 @@ public class OrganizationUnitManager_Tests : AbpIdentityDomainTestBase
     private readonly ILookupNormalizer _lookupNormalizer;
     private readonly IUnitOfWorkManager _unitOfWorkManager;
     private readonly IGuidGenerator _guidGenerator;
+    private readonly ICurrentTenant _currentTenant;
+    private readonly IDataFilter _dataFilter;
     public OrganizationUnitManager_Tests()
     {
         _organizationUnitManager = GetRequiredService<OrganizationUnitManager>();
@@ -26,6 +38,8 @@ public class OrganizationUnitManager_Tests : AbpIdentityDomainTestBase
         _testData = GetRequiredService<IdentityTestData>();
         _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
         _guidGenerator = GetService<IGuidGenerator>();
+        _currentTenant = GetRequiredService<ICurrentTenant>();
+        _dataFilter = GetRequiredService<IDataFilter>();
     }
 
     [Fact]
@@ -116,5 +130,192 @@ public class OrganizationUnitManager_Tests : AbpIdentityDomainTestBase
         await _organizationUnitManager.RemoveRoleFromOrganizationUnitAsync(adminRole.Id, ou.Id);
         ou = await _organizationUnitRepository.GetAsync("OU1", includeDetails: true);
         ou.Roles.FirstOrDefault(r => r.RoleId == adminRole.Id).ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task Should_Not_Create_Organization_Unit_With_Cross_Tenant_Parent()
+    {
+        var hostOu = await _organizationUnitRepository.GetAsync("OU1");
+
+        using (_currentTenant.Change(Guid.NewGuid()))
+        {
+            var newOu = new OrganizationUnit(_guidGenerator.Create(), "Cross", hostOu.Id, _currentTenant.Id);
+
+            var ex = await Assert.ThrowsAsync<BusinessException>(
+                async () => await _organizationUnitManager.CreateAsync(newOu));
+
+            ex.Code.ShouldBe(IdentityErrorCodes.OrganizationUnitParentTenantMismatch);
+        }
+    }
+
+    [Fact]
+    public async Task Should_Not_Move_Organization_Unit_To_Cross_Tenant_Parent()
+    {
+        var hostOu1 = await _organizationUnitRepository.GetAsync("OU1");
+
+        OrganizationUnit tenantOu;
+        var tenantId = Guid.NewGuid();
+        using (_currentTenant.Change(tenantId))
+        {
+            tenantOu = new OrganizationUnit(_guidGenerator.Create(), "TenantRoot", null, tenantId);
+            await _organizationUnitManager.CreateAsync(tenantOu);
+
+            var ex = await Assert.ThrowsAsync<BusinessException>(
+                async () => await _organizationUnitManager.MoveAsync(tenantOu.Id, hostOu1.Id));
+
+            ex.Code.ShouldBe(IdentityErrorCodes.OrganizationUnitParentTenantMismatch);
+        }
+    }
+
+    [Fact]
+    public async Task Should_Reject_Cross_Tenant_Parent_When_Multi_Tenancy_Filter_Disabled()
+    {
+        var hostOu = await _organizationUnitRepository.GetAsync("OU1");
+
+        using (_dataFilter.Disable<IMultiTenant>())
+        {
+            var tenantId = Guid.NewGuid();
+            using (_currentTenant.Change(tenantId))
+            {
+                var newOu = new OrganizationUnit(_guidGenerator.Create(), "Cross", hostOu.Id, tenantId);
+
+                var ex = await Assert.ThrowsAsync<BusinessException>(
+                    async () => await _organizationUnitManager.CreateAsync(newOu));
+
+                ex.Code.ShouldBe(IdentityErrorCodes.OrganizationUnitParentTenantMismatch);
+            }
+        }
+    }
+
+    [Fact]
+    public async Task CreateManyAsync()
+    {
+        List<OrganizationUnit> organizationUnits;
+
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            var lastRootCode = (await _organizationUnitRepository.GetChildrenAsync(null))
+                .OrderBy(x => x.Code).Last().Code;
+
+            organizationUnits = Enumerable.Range(0, 5)
+                .Select(_ => new OrganizationUnit(_guidGenerator.Create(), $"batch-{Guid.NewGuid():N}"))
+                .ToList();
+
+            await _organizationUnitManager.CreateManyAsync(organizationUnits);
+            await uow.CompleteAsync();
+
+            foreach (var organizationUnit in organizationUnits)
+            {
+                lastRootCode = OrganizationUnit.CalculateNextCode(lastRootCode);
+                organizationUnit.Code.ShouldBe(lastRootCode);
+            }
+        }
+
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            foreach (var organizationUnit in organizationUnits)
+            {
+                (await _organizationUnitRepository.GetAsync(organizationUnit.Id)).Code.ShouldBe(organizationUnit.Code);
+            }
+
+            await uow.CompleteAsync();
+        }
+    }
+
+    [Fact]
+    public async Task CreateManyAsync_Should_Not_Allow_Duplicate_Display_Name_In_The_Batch()
+    {
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            var displayName = $"batch-duplicate-{Guid.NewGuid():N}";
+
+            await Should.ThrowAsync<BusinessException>(async () =>
+                await _organizationUnitManager.CreateManyAsync([
+                    new OrganizationUnit(_guidGenerator.Create(), displayName),
+                    new OrganizationUnit(_guidGenerator.Create(), displayName)
+                ]));
+
+            await uow.CompleteAsync();
+        }
+    }
+
+    [Fact]
+    public async Task CreateManyAsync_Should_Not_Create_Organization_Units_Of_Another_Tenant()
+    {
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            await Should.ThrowAsync<AbpException>(async () =>
+                await _organizationUnitManager.CreateManyAsync([
+                    new OrganizationUnit(_guidGenerator.Create(), "another-tenant", null, Guid.NewGuid())
+                ]));
+
+            await uow.CompleteAsync();
+        }
+    }
+
+    [Fact]
+    public async Task CreateManyAsync_Should_Use_The_Overridden_Extension_Points()
+    {
+        var manager = new TestOrganizationUnitManager(
+            _organizationUnitRepository,
+            GetRequiredService<IStringLocalizer<IdentityResource>>(),
+            _identityRoleRepository,
+            GetRequiredService<IDistributedCache<AbpDynamicClaimCacheItem>>(),
+            GetRequiredService<ICancellationTokenProvider>())
+        {
+            LazyServiceProvider = GetRequiredService<IAbpLazyServiceProvider>()
+        };
+
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            await Should.ThrowAsync<BusinessException>(async () =>
+                await manager.CreateManyAsync([new OrganizationUnit(_guidGenerator.Create(), "rejected-by-the-override")]));
+
+            await manager.CreateManyAsync([
+                new OrganizationUnit(_guidGenerator.Create(), $"extension-point-1-{Guid.NewGuid():N}"),
+                new OrganizationUnit(_guidGenerator.Create(), $"extension-point-2-{Guid.NewGuid():N}")
+            ]);
+
+            await uow.CompleteAsync();
+        }
+
+        //Every organization unit is validated, the code generator is only used for the first one of a parent.
+        //Both calls above created a root organization unit, so the code generator was used twice.
+        manager.ValidateCallCount.ShouldBe(3);
+        manager.GetNextChildCodeCallCount.ShouldBe(2);
+    }
+
+    public class TestOrganizationUnitManager : OrganizationUnitManager
+    {
+        public int ValidateCallCount { get; private set; }
+        public int GetNextChildCodeCallCount { get; private set; }
+
+        public TestOrganizationUnitManager(
+            IOrganizationUnitRepository organizationUnitRepository,
+            IStringLocalizer<IdentityResource> localizer,
+            IIdentityRoleRepository identityRoleRepository,
+            IDistributedCache<AbpDynamicClaimCacheItem> dynamicClaimCache,
+            ICancellationTokenProvider cancellationTokenProvider)
+            : base(organizationUnitRepository, localizer, identityRoleRepository, dynamicClaimCache, cancellationTokenProvider)
+        {
+        }
+
+        public override async Task<string> GetNextChildCodeAsync(Guid? parentId)
+        {
+            GetNextChildCodeCallCount++;
+            return await base.GetNextChildCodeAsync(parentId);
+        }
+
+        protected override async Task ValidateOrganizationUnitAsync(OrganizationUnit organizationUnit, List<OrganizationUnit> siblings)
+        {
+            ValidateCallCount++;
+
+            if (organizationUnit.DisplayName == "rejected-by-the-override")
+            {
+                throw new BusinessException(IdentityErrorCodes.DuplicateOrganizationUnitDisplayName);
+            }
+
+            await base.ValidateOrganizationUnitAsync(organizationUnit, siblings);
+        }
     }
 }

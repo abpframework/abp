@@ -27,7 +27,7 @@ public class AbpModalHeaderTagHelperService : AbpTagHelperService<AbpModalHeader
     {
         var title = new TagBuilder("h5");
         title.AddCssClass("modal-title");
-        title.InnerHtml.AppendHtml(TagHelper.Title);
+        title.InnerHtml.Append(TagHelper.Title);
 
         return title.ToHtmlString();
     }

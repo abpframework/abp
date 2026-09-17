@@ -1,8 +1,15 @@
+```json
+//[doc-seo]
+{
+    "Description": "Learn how to implement the domain layer for authors in your web app using ABP Framework, enhancing your development efficiency and structure."
+}
+```
+
 # Web Application Development Tutorial - Part 6: Authors: Domain Layer
 ````json
 //[doc-params]
 {
-    "UI": ["MVC","Blazor","BlazorServer","NG"],
+    "UI": ["MVC","Blazor","BlazorServer", "BlazorWebApp", "NG", "MAUIBlazor"],
     "DB": ["EF","Mongo"]
 }
 ````
@@ -41,7 +48,6 @@ Create an `Authors` folder (namespace) in the `Acme.BookStore.Domain` project an
 
 ````csharp
 using System;
-using JetBrains.Annotations;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 
@@ -115,7 +121,6 @@ Created this class inside the `Acme.BookStore.Domain.Shared` project since we wi
 ````csharp
 using System;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using Volo.Abp;
 using Volo.Abp.Domain.Services;
 

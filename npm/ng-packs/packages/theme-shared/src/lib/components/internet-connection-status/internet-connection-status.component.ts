@@ -1,18 +1,18 @@
-import { Component, inject } from '@angular/core';
-import { InternetConnectionService, LocalizationModule } from '@abp/ng.core';
+import {Component, inject, ChangeDetectionStrategy,} from '@angular/core';
+import { InternetConnectionService, LocalizationPipe } from '@abp/ng.core';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'abp-internet-status',
-  standalone: true,
-  imports: [LocalizationModule, NgbTooltip],
+  imports: [LocalizationPipe, NgbTooltip],
   template: `
     @if (!isOnline()) {
       <div class="status-icon">
         <i
           ngbTooltip="{{ 'AbpUi::InternetConnectionInfo' | abpLocalization }}"
           container="body"
-          placement="left-top" 
+          placement="left-top"
           class="fa fa-wifi text-blinking blink"
         >
         </i>
