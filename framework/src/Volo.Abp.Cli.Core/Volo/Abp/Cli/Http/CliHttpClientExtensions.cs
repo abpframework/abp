@@ -57,7 +57,7 @@ public static class CliHttpClientExtensions
         using var delayEnumerator = sleepDurations.GetEnumerator();
 
         return await RetryHelper.ExecuteAsync(
-            _ => httpClient.GetAsync(url, cancellationToken.Value),
+            retryCancellationToken => httpClient.GetAsync(url, retryCancellationToken),
             new RetryOptions<HttpResponseMessage>
             {
                 MaxRetryCount = int.MaxValue,
