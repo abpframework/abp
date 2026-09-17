@@ -615,6 +615,64 @@
         "boolean",
         "null"
       ]
+    },
+    "lookupFields": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "description": "Omit for standard FK choices. When configured, only listed root FK fields are allowed. Each returns name, value and selected data fields. Server filters also apply to selected keys.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "fieldName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "displayPropertyName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "dataFields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "sortProperty": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sortDescending": {
+            "type": "boolean"
+          },
+          "maxResultCount": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "backendFilter": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/filterExpression"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "fieldName",
+          "displayPropertyName",
+          "dataFields",
+          "maxResultCount"
+        ],
+        "additionalProperties": false
+      }
     }
   },
   "required": [
