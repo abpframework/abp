@@ -9,6 +9,10 @@
 
 ## 10.8.0-rc.1
 
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| Npgsql.EntityFrameworkCore.PostgreSQL | 10.0.3 | 10.0.0 | #26169 |
+
 **Removed:**
 
 | Package | Version | PR |
@@ -21,6 +25,7 @@
 | Package | Old Version | New Version | PR |
 |---------|-------------|-------------|-----|
 | MongoDB.Driver | 3.11.1 | 3.11.2 | #26155 |
+| Npgsql.EntityFrameworkCore.PostgreSQL | 10.0.0 | 10.0.3 | #26176 |
 
 ## 10.7.0-rc.3
 
