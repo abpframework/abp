@@ -73,7 +73,8 @@ public class FileSystemBlobProvider : BlobProviderBase, ITransientDependency
                 MaxRetryCount = 2,
                 DelayFactory = retryCount => TimeSpan.FromSeconds(retryCount),
                 ShouldRetryOnException = ex => ex is IOException && (sourcePosition >= 0 || !targetOpened)
-            });
+            },
+            args.CancellationToken);
     }
 
     public override Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
@@ -104,7 +105,8 @@ public class FileSystemBlobProvider : BlobProviderBase, ITransientDependency
                 MaxRetryCount = 2,
                 DelayFactory = retryCount => TimeSpan.FromSeconds(retryCount),
                 ShouldRetryOnException = ex => ex is IOException
-            });
+            },
+            args.CancellationToken);
     }
 
     protected virtual Stream OpenFileStream(string filePath, FileMode fileMode)

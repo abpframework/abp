@@ -51,6 +51,22 @@ public class CliHttpClientExtensions_Tests
         }
     }
 
+    [Fact]
+    public async Task Should_Cancel_While_Waiting_Between_Retries()
+    {
+        using var cancellationTokenSource = new CancellationTokenSource();
+        using var httpClient = new HttpClient(
+            new DelegateHttpMessageHandler(_ => new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)));
+
+        var requestTask = httpClient.GetHttpResponseMessageWithRetryAsync<CliHttpClientExtensions_Tests>(
+            "https://abp.io",
+            cancellationTokenSource.Token,
+            sleepDurations: new[] { TimeSpan.FromSeconds(1) });
+        await cancellationTokenSource.CancelAsync();
+
+        await Should.ThrowAsync<OperationCanceledException>(async () => await requestTask);
+    }
+
     private static IEnumerable<TimeSpan> ThrowWhenEnumerated()
     {
         throw new InvalidOperationException("The delay sequence must remain untouched.");

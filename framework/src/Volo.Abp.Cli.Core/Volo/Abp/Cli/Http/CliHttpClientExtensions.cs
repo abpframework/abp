@@ -82,6 +82,7 @@ public static class CliHttpClientExtensions
                     }
                     return Task.CompletedTask;
                 }
-            });
+            },
+            cancellationToken.Value);
     }
 }
