@@ -47,6 +47,8 @@ To create a genuine multi-arch manifest list, your CI/CD pipeline still requires
 
 If your enterprise strictly enforces rootless, daemonless CI/CD agents, .NET 11 is a game changer. Historically, using Podman required brittle `DOCKER_HOST` socket mapping hacks.
 
+![podman](./3-podman.jpeg)
+
 In testing, completely removing Docker from the `PATH` and installing only Podman resulted in flawless execution. The SDK automatically detects Podman and pushes directly to its local image store. You can finally adopt rootless Podman on RHEL/Ubuntu GitHub Action runners without modifying your `dotnet publish` commands.
 
 ## 4. Supply-Chain Security: The Reproducibility Illusion
@@ -73,3 +75,5 @@ Continue using `docker manifest` in your pipeline to aggregate the lightning-fas
 
 4. **Switch to Podman Agents:** Zero-config rootless builds.
 Upgrade your self-hosted runners to Podman to immediately benefit from rootless container execution without updating build scripts.
+
+![5-checklist](./5-checklist.jpeg)
