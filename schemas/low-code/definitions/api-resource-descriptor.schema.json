@@ -148,8 +148,77 @@
       "description": "Conditions the submitted input must satisfy for create/update/replace; violating payloads are rejected."
     },
     "permissionConfig": {
-      "$ref": "page-permission-config.schema.json",
-      "description": "Per-operation permission configuration. Omitted operations use auto-generated defaults based on the API resource."
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Independent permission for each operation. Omitted, null or default uses operation-specific resource grants. Disabled operations always deny access.",
+      "properties": {
+        "query": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "get": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "create": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "update": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "replace": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "delete": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "lookup": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "export": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "import": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "files": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "attachments": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
     },
     "interceptors": {
       "type": "array",
