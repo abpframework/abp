@@ -350,10 +350,18 @@
           "type": "object",
           "properties": {
             "kind": {
-              "enum": [
-                "all",
-                "createdByCurrentUser",
-                "assignedToCurrentUser"
+              "anyOf": [
+                {
+                  "enum": [
+                    "all",
+                    "createdByCurrentUser",
+                    "assignedToCurrentUser"
+                  ]
+                },
+                {
+                  "type": "string",
+                  "pattern": "^host:.+$"
+                }
               ]
             },
             "userProperty": {
@@ -372,10 +380,18 @@
           "type": "object",
           "properties": {
             "kind": {
-              "enum": [
-                "all",
-                "createdByCurrentUser",
-                "assignedToCurrentUser"
+              "anyOf": [
+                {
+                  "enum": [
+                    "all",
+                    "createdByCurrentUser",
+                    "assignedToCurrentUser"
+                  ]
+                },
+                {
+                  "type": "string",
+                  "pattern": "^host:.+$"
+                }
               ]
             },
             "userProperty": {
@@ -394,10 +410,18 @@
           "type": "object",
           "properties": {
             "kind": {
-              "enum": [
-                "all",
-                "createdByCurrentUser",
-                "assignedToCurrentUser"
+              "anyOf": [
+                {
+                  "enum": [
+                    "all",
+                    "createdByCurrentUser",
+                    "assignedToCurrentUser"
+                  ]
+                },
+                {
+                  "type": "string",
+                  "pattern": "^host:.+$"
+                }
               ]
             },
             "userProperty": {
@@ -416,10 +440,18 @@
           "type": "object",
           "properties": {
             "kind": {
-              "enum": [
-                "all",
-                "createdByCurrentUser",
-                "assignedToCurrentUser"
+              "anyOf": [
+                {
+                  "enum": [
+                    "all",
+                    "createdByCurrentUser",
+                    "assignedToCurrentUser"
+                  ]
+                },
+                {
+                  "type": "string",
+                  "pattern": "^host:.+$"
+                }
               ]
             },
             "userProperty": {
@@ -438,10 +470,18 @@
           "type": "object",
           "properties": {
             "kind": {
-              "enum": [
-                "all",
-                "createdByCurrentUser",
-                "assignedToCurrentUser"
+              "anyOf": [
+                {
+                  "enum": [
+                    "all",
+                    "createdByCurrentUser",
+                    "assignedToCurrentUser"
+                  ]
+                },
+                {
+                  "type": "string",
+                  "pattern": "^host:.+$"
+                }
               ]
             },
             "userProperty": {
@@ -460,10 +500,18 @@
           "type": "object",
           "properties": {
             "kind": {
-              "enum": [
-                "all",
-                "createdByCurrentUser",
-                "assignedToCurrentUser"
+              "anyOf": [
+                {
+                  "enum": [
+                    "all",
+                    "createdByCurrentUser",
+                    "assignedToCurrentUser"
+                  ]
+                },
+                {
+                  "type": "string",
+                  "pattern": "^host:.+$"
+                }
               ]
             },
             "userProperty": {
@@ -482,10 +530,18 @@
           "type": "object",
           "properties": {
             "kind": {
-              "enum": [
-                "all",
-                "createdByCurrentUser",
-                "assignedToCurrentUser"
+              "anyOf": [
+                {
+                  "enum": [
+                    "all",
+                    "createdByCurrentUser",
+                    "assignedToCurrentUser"
+                  ]
+                },
+                {
+                  "type": "string",
+                  "pattern": "^host:.+$"
+                }
               ]
             },
             "userProperty": {
@@ -504,10 +560,18 @@
           "type": "object",
           "properties": {
             "kind": {
-              "enum": [
-                "all",
-                "createdByCurrentUser",
-                "assignedToCurrentUser"
+              "anyOf": [
+                {
+                  "enum": [
+                    "all",
+                    "createdByCurrentUser",
+                    "assignedToCurrentUser"
+                  ]
+                },
+                {
+                  "type": "string",
+                  "pattern": "^host:.+$"
+                }
               ]
             },
             "userProperty": {
@@ -526,10 +590,18 @@
           "type": "object",
           "properties": {
             "kind": {
-              "enum": [
-                "all",
-                "createdByCurrentUser",
-                "assignedToCurrentUser"
+              "anyOf": [
+                {
+                  "enum": [
+                    "all",
+                    "createdByCurrentUser",
+                    "assignedToCurrentUser"
+                  ]
+                },
+                {
+                  "type": "string",
+                  "pattern": "^host:.+$"
+                }
               ]
             },
             "userProperty": {
@@ -548,10 +620,18 @@
           "type": "object",
           "properties": {
             "kind": {
-              "enum": [
-                "all",
-                "createdByCurrentUser",
-                "assignedToCurrentUser"
+              "anyOf": [
+                {
+                  "enum": [
+                    "all",
+                    "createdByCurrentUser",
+                    "assignedToCurrentUser"
+                  ]
+                },
+                {
+                  "type": "string",
+                  "pattern": "^host:.+$"
+                }
               ]
             },
             "userProperty": {
