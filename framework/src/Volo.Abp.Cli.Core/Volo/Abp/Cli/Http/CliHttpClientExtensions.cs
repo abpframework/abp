@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -55,16 +54,18 @@ public static class CliHttpClientExtensions
             cancellationToken = cancellationTokenSource.Token;
         }
 
-        var delays = sleepDurations.ToArray();
+        using var delayEnumerator = sleepDurations.GetEnumerator();
 
         return await RetryHelper.ExecuteAsync(
             _ => httpClient.GetAsync(url, cancellationToken.Value),
             new RetryOptions<HttpResponseMessage>
             {
-                MaxRetryCount = delays.Length,
-                DelayFactory = retryCount => delays[retryCount - 1],
-                ShouldRetryOnException = exception => exception is HttpRequestException,
-                ShouldRetryOnResult = response => !response.IsSuccessStatusCode,
+                MaxRetryCount = int.MaxValue,
+                DelayFactory = _ => delayEnumerator.Current,
+                ShouldRetryOnException = exception =>
+                    exception is HttpRequestException && delayEnumerator.MoveNext(),
+                ShouldRetryOnResult = response =>
+                    !response.IsSuccessStatusCode && delayEnumerator.MoveNext(),
                 OnRetry = attempt =>
                 {
                     if (attempt.Exception != null)
