@@ -9,10 +9,6 @@
 
 ## 10.8.0-rc.1
 
-| Package | Old Version | New Version | PR |
-|---------|-------------|-------------|-----|
-| Npgsql.EntityFrameworkCore.PostgreSQL | 10.0.3 | 10.0.0 | #26169 |
-
 **Removed:**
 
 | Package | Version | PR |
