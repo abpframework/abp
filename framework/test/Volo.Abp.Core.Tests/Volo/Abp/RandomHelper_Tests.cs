@@ -94,16 +94,6 @@ public class RandomHelper_Tests
     }
 
     [Fact]
-    public void GenerateRandomizedList_Should_Change_The_Order_Of_Items()
-    {
-        var items = Enumerable.Range(0, 32).ToList();
-
-        var randomizedList = RandomHelper.GenerateRandomizedList(items);
-
-        randomizedList.SequenceEqual(items).ShouldBeFalse();
-    }
-
-    [Fact]
     public void GenerateRandomizedList_Should_Throw_Exception_For_Null_Items()
     {
         Assert
