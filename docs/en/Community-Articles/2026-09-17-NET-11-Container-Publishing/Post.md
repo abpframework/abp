@@ -33,10 +33,12 @@ By passing `-r linux-arm64`, the SDK cross-compiles the Intermediate Language (I
 
 **The Pipeline Gotcha:** You cannot rely on the SDK to build a true multi-architecture tag (a single `latest` tag that resolves correctly on both architectures). If you run consecutive publish commands for `linux-x64` and `linux-arm64` pointing to the same registry tag, the second push **completely overwrites** the first manifest.
 
+![conflict](./2-conflict.jpeg)
 ---
 
 To create a genuine multi-arch manifest list, your CI/CD pipeline still requires a manual step.
 
+![manifest](./2-manifest.jpeg)
 ---
 
 > **Key insight:** Build and push architecture-specific tags (`latest-amd64`, `latest-arm64`) with the SDK, then use `docker manifest create` or `buildah manifest` at the end of your pipeline to bind them together.
