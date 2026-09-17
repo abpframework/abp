@@ -1,0 +1,23 @@
+{
+  "culture": "pt",
+  "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "Já existe um cliente com o nome: {Name}",
+    "Menu:TenantManagement": "Gestão de clientes",
+    "Tenants": "Clientes",
+    "NewTenant": "Novo cliente",
+    "TenantName": "Nome do cliente",
+    "DisplayName:TenantName": "Nome do cliente",
+    "TenantDeletionConfirmationMessage": "O cliente '{0}' será eliminado. Confirma esta ação?",
+    "ConnectionStrings": "Strings de ligação",
+    "DisplayName:DefaultConnectionString": "String de ligação predefinida",
+    "DisplayName:UseSharedDatabase": "Utilizar a base de dados partilhada",
+    "Permission:TenantManagement": "Gestão de clientes",
+    "Permission:Create": "Criar",
+    "Permission:Edit": "Editar",
+    "Permission:Delete": "Eliminar",
+    "Permission:ManageConnectionStrings": "Gerir strings de ligação",
+    "Permission:ManageFeatures": "Funcionalidades",
+    "DisplayName:AdminEmailAddress": "Endereço de email do administrador",
+    "DisplayName:AdminPassword": "Palavra-passe do administrador"
+  }
+}

@@ -86,6 +86,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
         var eventType = EventTypes.GetOrDefault(eventName);
         object eventData;
+        Guid? tenantId = null;
 
         if (eventType != null)
         {
@@ -94,7 +95,8 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         else if (DynamicHandlerFactories.ContainsKey(eventName))
         {
             var rawBytes = message.Body.ToArray();
-            eventData = new DynamicEventData(eventName, Serializer.Deserialize<object>(rawBytes));
+            tenantId = GetTenantIdFromMessage(message);
+            eventData = CreateDynamicEventData(eventName, Serializer.Deserialize<object>(rawBytes), tenantId);
             eventType = typeof(DynamicEventData);
         }
         else
@@ -102,7 +104,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             return;
         }
 
-        if (await AddToInboxAsync(message.MessageId, eventName, eventType, eventData, message.CorrelationId))
+        if (await AddToInboxAsync(message.MessageId, eventName, eventType, eventData, message.CorrelationId, tenantId))
         {
             return;
         }
@@ -199,7 +201,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
     {
         var eventType = EventTypes.GetOrDefault(eventName);
-        var dynamicEventData = eventData as DynamicEventData ?? new DynamicEventData(eventName, eventData);
+        var dynamicEventData = CreateDynamicEventDataForPublishing(eventName, eventData);
 
         if (eventType != null)
         {
@@ -212,7 +214,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
         var (eventName, resolvedData) = ResolveEventForPublishing(eventType, eventData);
-        await PublishAsync(eventName, resolvedData);
+        await PublishAsync(eventName, resolvedData, GetTenantIdToPropagate(eventType, eventData));
     }
 
     protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
@@ -222,7 +224,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     public async override Task PublishFromOutboxAsync(OutgoingEventInfo outgoingEvent, OutboxConfig outboxConfig)
     {
-        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, outgoingEvent.GetCorrelationId(), outgoingEvent.Id);
+        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, outgoingEvent.GetCorrelationId(), outgoingEvent.Id, outgoingEvent.GetTenantId());
 
         using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
         {
@@ -255,6 +257,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             }
 
             message.CorrelationId = outgoingEvent.GetCorrelationId();
+            SetTenantIdProperty(message, outgoingEvent.GetTenantId());
 
             if (!messageBatch.TryAddMessage(message))
             {
@@ -290,7 +293,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         }
         else if (DynamicHandlerFactories.ContainsKey(incomingEvent.EventName))
         {
-            eventData = new DynamicEventData(incomingEvent.EventName, Serializer.Deserialize<object>(incomingEvent.EventData));
+            eventData = CreateDynamicEventData(incomingEvent, Serializer.Deserialize<object>(incomingEvent.EventData));
             eventType = typeof(DynamicEventData);
         }
         else
@@ -313,18 +316,36 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         return Serializer.Serialize(eventData);
     }
 
-    protected virtual Task PublishAsync(string eventName, object eventData)
+    protected virtual Task PublishAsync(string eventName, object eventData, Guid? tenantId = null)
     {
         var body = Serializer.Serialize(eventData);
 
-        return PublishAsync(eventName, body, CorrelationIdProvider.Get(), null);
+        return PublishAsync(eventName, body, CorrelationIdProvider.Get(), null, tenantId);
+    }
+
+    protected virtual void SetTenantIdProperty(ServiceBusMessage message, Guid? tenantId)
+    {
+        if (tenantId == null)
+        {
+            return;
+        }
+
+        message.ApplicationProperties[EventBusConsts.TenantIdHeaderName] = tenantId.Value.ToString();
+    }
+
+    protected virtual Guid? GetTenantIdFromMessage(ServiceBusReceivedMessage message)
+    {
+        return message.ApplicationProperties.TryGetValue(EventBusConsts.TenantIdHeaderName, out var value)
+            ? EventBusTenantIdHelper.Parse(value?.ToString())
+            : null;
     }
 
     protected virtual async Task PublishAsync(
         string eventName,
         byte[] body,
         string? correlationId,
-        Guid? eventId)
+        Guid? eventId,
+        Guid? tenantId = null)
     {
         var message = new ServiceBusMessage(body)
         {
@@ -337,6 +358,7 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         }
 
         message.CorrelationId = correlationId;
+        SetTenantIdProperty(message, tenantId);
 
         var publisher = await PublisherPool.GetAsync(
             Options.TopicName,

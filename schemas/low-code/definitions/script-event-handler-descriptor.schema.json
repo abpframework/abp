@@ -15,6 +15,12 @@
       "description": "Unique identifier for the handler. Prefer a descriptive name such as 'NotifyWhenEventCompleted'.",
       "minLength": 1
     },
+    "app": {
+      "type": "string",
+      "description": "Name of the low-code app that owns this handler. Omit for the default app. Must match an apps[].name.",
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
     "eventName": {
       "type": "string",
       "description": "Distributed event name to subscribe to. Must exactly match the publisher's event name.",
@@ -28,9 +34,25 @@
     "description": {
       "type": "string",
       "description": "Optional description for designer documentation and model health context."
+    },
+    "extendsLowerLayer": {
+      "type": "boolean",
+      "description": "When true, this descriptor overrides selected fields of a handler with the same name defined in a lower model layer; eventName and javascript become optional.",
+      "default": false
+    },
+    "metadata": {
+      "$ref": "descriptor-metadata.schema.json"
     }
   },
-  "required": ["name", "eventName", "javascript"],
+  "required": ["name"],
+  "if": {
+    "properties": { "extendsLowerLayer": { "const": true } },
+    "required": ["extendsLowerLayer"]
+  },
+  "then": {},
+  "else": {
+    "required": ["eventName", "javascript"]
+  },
   "additionalProperties": false,
   "examples": [
     {

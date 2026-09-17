@@ -22,6 +22,36 @@ Both kinds can participate in filtering, sorting, paging, count, projection, gro
 
 Calculated and rollup properties can be authored in a writable Runtime JSON-backed layer that supports direct model changes. The corresponding commands are disabled when the selected Designer layer does not support them.
 
+## Model definition
+
+A formula definition stores only the expression and its result type. Dev JSON does not require generated identifiers, definition hashes, or a dependency list:
+
+```json
+{
+  "name": "LineTotal",
+  "type": "decimal",
+  "isMappedToDbField": false,
+  "formula": {
+    "expression": "UnitPrice * Quantity",
+    "resultType": "decimal"
+  }
+}
+```
+
+The equivalent code-layer definition is also minimal:
+
+```csharp
+property.Formula = new EntityFormulaDescriptor
+{
+    Expression = "UnitPrice * Quantity",
+    ResultType = EntityPropertyType.Decimal
+};
+```
+
+The model loader parses the expression and derives its dependencies whenever the layer is loaded or refreshed. Do not persist `formulaId`, `definitionVersion`, or `dependencies`; they are not authored model fields.
+
+Rollups likewise store only their source entity, foreign key, optional value property, and operation. They do not use generated identifiers, definition versions, or authored dependency lists.
+
 ## Create a calculated property
 
 In the Low-Code Designer:

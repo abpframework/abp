@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "presentation-icon-reference.schema.json",
+  "title": "PresentationIconReference",
+  "description": "References an icon used by enum value and boolean value presentations.",
+  "markdownDescription": "AI guidance: prefer `kind: \"class\"` with a FontAwesome class list such as `fa-solid fa-check` for source-controlled descriptors. `blob` references an icon uploaded through the designer and is only valid in the runtime model layer. `dataUrl` embeds a base64 PNG/WebP image (`data:image/png;base64,...`). `path` references a root-relative application path such as `/images/icons/ok.svg`.",
+  "type": "object",
+  "properties": {
+    "kind": {
+      "type": "string",
+      "description": "Icon source kind. 'class' is a CSS class list; 'blob' is a designer-uploaded icon blob name (64 hex chars plus .png/.webp); 'dataUrl' is an inline base64 PNG/WebP data URL; 'path' is a root-relative application path.",
+      "enum": ["class", "Class", "blob", "Blob", "dataUrl", "DataUrl", "path", "Path"]
+    },
+    "value": {
+      "type": "string",
+      "description": "Icon value matching kind: a CSS class list, blob name, data URL, or root-relative path.",
+      "minLength": 1
+    }
+  },
+  "required": ["kind", "value"],
+  "additionalProperties": false,
+  "examples": [
+    { "kind": "class", "value": "fa-solid fa-check" },
+    { "kind": "path", "value": "/images/icons/approved.svg" }
+  ]
+}
