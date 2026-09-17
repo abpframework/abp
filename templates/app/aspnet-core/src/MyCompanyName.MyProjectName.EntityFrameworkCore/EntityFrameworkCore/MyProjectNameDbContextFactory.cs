@@ -30,9 +30,41 @@ public class MyProjectNameDbContextFactory : IDesignTimeDbContextFactory<MyProje
     private static IConfigurationRoot BuildConfiguration()
     {
         var builder = new ConfigurationBuilder()
-            .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../MyCompanyName.MyProjectName.DbMigrator/"))
+            .SetBasePath(GetDbMigratorProjectFolderPath())
             .AddJsonFile("appsettings.json", optional: false);
 
         return builder.Build();
+    }
+
+    private static string GetDbMigratorProjectFolderPath()
+    {
+        var slnDirectoryPath = GetSolutionDirectoryPath();
+
+        if (string.IsNullOrEmpty(slnDirectoryPath))
+        {
+            throw new Exception("Solution folder not found!");
+        }
+
+        var srcDirectoryPath = Path.Combine(slnDirectoryPath, "src");
+
+        return Directory.GetDirectories(srcDirectoryPath)
+            .FirstOrDefault(d => d.EndsWith(".DbMigrator")) ?? string.Empty;
+    }
+
+    private static string GetSolutionDirectoryPath()
+    {
+        var currentDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
+
+        while (currentDirectory != null && Directory.GetParent(currentDirectory.FullName) != null)
+        {
+            currentDirectory = Directory.GetParent(currentDirectory.FullName);
+
+            if (currentDirectory != null && Directory.GetFiles(currentDirectory.FullName).FirstOrDefault(f => f.EndsWith(".sln") || f.EndsWith(".slnx")) != null)
+            {
+                return currentDirectory.FullName;
+            }
+        }
+
+        return string.Empty;
     }
 }
