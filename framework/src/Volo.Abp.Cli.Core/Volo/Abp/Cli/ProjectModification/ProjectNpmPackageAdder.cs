@@ -187,7 +187,7 @@ public class ProjectNpmPackageAdder : ITransientDependency
         using (DirectoryHelper.ChangeCurrentDirectory(directory))
         {
             Logger.LogInformation("yarn remove " + npmPackage.Name);
-            CmdHelper.RunCmd("npx yarn remove " + npmPackage.Name);
+            CmdHelper.RunCmd(NpmHelper.GetYarnCommand(directory, "remove " + npmPackage.Name));
 
             if (skipInstallingLibs)
             {
