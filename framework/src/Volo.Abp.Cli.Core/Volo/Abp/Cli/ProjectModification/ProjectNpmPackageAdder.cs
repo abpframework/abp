@@ -174,6 +174,8 @@ public class ProjectNpmPackageAdder : ITransientDependency
     public async Task RemoveMvcPackageAsync(string directory, NpmPackageInfo npmPackage,
         bool skipInstallingLibs = false)
     {
+        NpmHelper.EnsureSafePackageName(npmPackage.Name);
+
         var packageJsonFilePath = Path.Combine(directory, "package.json");
         if (!File.Exists(packageJsonFilePath) ||
             !File.ReadAllText(packageJsonFilePath).Contains($"\"{npmPackage.Name}\""))
