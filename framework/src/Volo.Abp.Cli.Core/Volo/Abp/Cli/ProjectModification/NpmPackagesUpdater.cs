@@ -403,7 +403,7 @@ public class NpmPackagesUpdater : ITransientDependency
     protected virtual void RunYarn(string fileDirectory)
     {
         Logger.LogInformation($"Running Yarn on {fileDirectory}");
-        CmdHelper.RunCmd($"npx yarn {NpmHelper.GetYarnIgnoreScriptsOption(fileDirectory)}", fileDirectory);
+        CmdHelper.RunCmd(NpmHelper.GetYarnCommand(fileDirectory), fileDirectory);
     }
 
     protected virtual void RunNpmInstall(string fileDirectory)
