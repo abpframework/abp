@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Physical threads and the logical async call chain</title>
+  <desc id="desc">An async operation starts on thread 12, suspends for I/O, and resumes on thread 27. The logical request chain crosses both physical stacks, which is why async-aware profiling is needed.</desc>
+  <defs><style>
+    .bg{fill:#f7f9fc}.title{font:700 35px Arial,sans-serif;fill:#172033}.sub{font:400 21px Arial,sans-serif;fill:#5d6a7f}.lane{stroke:#b7c1d0;stroke-width:3}.thread{font:700 24px Arial,sans-serif;fill:#243248}.block{fill:#eaf5ff;stroke:#3487d5;stroke-width:3}.io{fill:#fff8df;stroke:#d7a928;stroke-width:3}.resume{fill:#eaf8ef;stroke:#35a663;stroke-width:3}.txt{font:700 20px Arial,sans-serif;fill:#243248}.small{font:400 18px Arial,sans-serif;fill:#44536a}.logical{stroke:#8a55c5;stroke-width:6;stroke-dasharray:12 9;fill:none;marker-end:url(#p)}.event{stroke:#8290a6;stroke-width:3;fill:none;marker-end:url(#a)}.legend{fill:#fff;stroke:#d9e1ec;stroke-width:2}
+  </style><marker id="a" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#8290a6"/></marker><marker id="p" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#8a55c5"/></marker></defs>
+  <rect class="bg" width="1600" height="900"/>
+  <text class="title" x="800" y="58" text-anchor="middle">A logical async operation can cross physical threads</text>
+  <text class="sub" x="800" y="96" text-anchor="middle">A normal CPU stack sees the current thread; an async-aware profiler reconstructs the request story.</text>
+  <text class="thread" x="80" y="210">Thread 12</text><line class="lane" x1="230" y1="202" x2="1510" y2="202"/>
+  <text class="thread" x="80" y="430">I/O</text><line class="lane" x1="230" y1="422" x2="1510" y2="422"/>
+  <text class="thread" x="80" y="650">Thread 27</text><line class="lane" x1="230" y1="642" x2="1510" y2="642"/>
+  <rect class="block" x="290" y="155" width="360" height="94" rx="14"/><text class="txt" x="470" y="193" text-anchor="middle">Request → service → repository</text><text class="small" x="470" y="225" text-anchor="middle">Physical stack exists on Thread 12</text>
+  <path class="event" d="M650 202 C720 202 720 422 800 422"/>
+  <rect class="io" x="800" y="375" width="310" height="94" rx="14"/><text class="txt" x="955" y="413" text-anchor="middle">Socket or database wait</text><text class="small" x="955" y="445" text-anchor="middle">Thread 12 is free to do other work</text>
+  <path class="event" d="M1110 422 C1190 422 1190 642 1260 642"/>
+  <rect class="resume" x="1210" y="595" width="300" height="94" rx="14"/><text class="txt" x="1360" y="633" text-anchor="middle">Continuation resumes</text><text class="small" x="1360" y="665" text-anchor="middle">Physical stack is now on Thread 27</text>
+  <path class="logical" d="M310 285 C560 340 760 535 1250 555"/>
+  <rect class="legend" x="330" y="730" width="940" height="110" rx="16"/><line class="logical" x1="380" y1="775" x2="540" y2="775"/><text class="txt" x="575" y="783">Logical async call chain</text><text class="small" x="575" y="816">It connects work that no longer shares one physical thread stack.</text>
+</svg>
