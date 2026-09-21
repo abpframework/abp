@@ -7,6 +7,15 @@
 
 # Package Version Changes
 
+## 10.8.0-rc.1
+
+**Removed:**
+
+| Package | Version | PR |
+|---------|---------|-----|
+| Polly | 8.6.3 | #26169 |
+| Polly.Extensions.Http | 3.0.0 | #26169 |
+
 ## 10.7.0-rc.4
 
 | Package | Old Version | New Version | PR |

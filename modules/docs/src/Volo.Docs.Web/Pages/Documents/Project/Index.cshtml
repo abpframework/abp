@@ -10,7 +10,6 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Anchor
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Clipboard
-@using Volo.Abp.AspNetCore.Mvc.UI.Packages.MalihuCustomScrollbar
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Popper
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
@@ -38,7 +37,6 @@
 @section styles {
     <abp-style-bundle name="@typeof(IndexModel).FullName">
         <abp-style type="@typeof(PrismjsStyleBundleContributor)"/>
-        <abp-style type="@typeof(MalihuCustomScrollbarPluginStyleBundleContributor)"/>
         <abp-style src="/Pages/Documents/Shared/Styles/vs.css"/>
         <abp-style src="/Pages/Documents/Project/index.css"/>
         @if (DocsUiOptions.Value.EnableEnlargeImage)
@@ -64,7 +62,6 @@
                 }
         </script>
         <abp-script-bundle name="@typeof(IndexModel).FullName">
-            <abp-script type="@typeof(MalihuCustomScrollbarPluginScriptBundleContributor)"/>
             <abp-script type="@typeof(ClipboardScriptBundleContributor)"/>
             <abp-script type="@typeof(AnchorJsScriptBundleContributor)"/>
             <abp-script type="@typeof(PrismjsScriptBundleContributor)"/>
@@ -306,7 +303,7 @@
         <div class="docs-content">
             <div class="top-container mb-3">
                 <div class="w-100">
-                    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" class="mCustomScrollbar-1">
+                    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                         <ol class="breadcrumb" id="document-node-wrapper">
                             <li class="breadcrumb-item">
                                 <a href="@Model.CreateVersionLink(Model.LatestVersionInfo, Model.GetSpecificVersionOrLatest())"><i class="fa fa-home"></i></a>

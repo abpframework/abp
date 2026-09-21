@@ -7,9 +7,9 @@ Here's the summary of .NET 8 features and enhancements:
 
 ## What's new in .NET 8
 
-### .NET Aspire
+### Aspire
 
-[.NET Aspire](https://learn.microsoft.com/en-us/dotnet/aspire/) is a tool to observe and manage distributed web applications. It's still preview version. You can manage your containers, executables, logs, traces and metrics of your running web application. For more information see this article https://devblogs.microsoft.com/dotnet/introducing-dotnet-aspire-simplifying-cloud-native-development-with-dotnet-8/
+[Aspire](https://aspire.dev/) is a tool to observe and manage distributed web applications. It's still preview version. You can manage your containers, executables, logs, traces and metrics of your running web application. For more information see this article https://devblogs.microsoft.com/dotnet/introducing-dotnet-aspire-simplifying-cloud-native-development-with-dotnet-8/
 
 ### Serialization
 
