@@ -61,8 +61,6 @@
         };
 
         $(document).ready(function () {
-            handleCustomScrolls();
-
             var $myNav = $('#docs-sticky-index');
 
             if ($myNav.length === 0) {
@@ -123,29 +121,7 @@
             initMenuToggle();
             scrollToHashLink();
         });
-
-        $(window).resize(function () {
-            handleCustomScrolls();
-        });
     });
-
-    function handleCustomScrolls() {
-        $('#sidebar-scroll').mCustomScrollbar({
-            theme: 'minimal',
-            alwaysShowScrollbar: 0,
-        });
-
-        $('#scroll-index').mCustomScrollbar({
-            theme: 'minimal-dark',
-            alwaysShowScrollbar: 0,
-        });
-
-        $('.mCustomScrollbar-1').mCustomScrollbar({
-            theme: 'minimal-dark',
-            alwaysShowScrollbar: 0,
-            horizontalScroll: true,
-        });
-    }
 
      function initMenuToggle() {
         $('li:not(.last-link) a.tree-toggle').off('click');

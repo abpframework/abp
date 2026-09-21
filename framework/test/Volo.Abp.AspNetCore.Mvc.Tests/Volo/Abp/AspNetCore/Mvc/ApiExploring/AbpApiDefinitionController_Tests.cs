@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.TestApp.Application;
 using Xunit;
 
 namespace Volo.Abp.AspNetCore.Mvc.ApiExploring;
@@ -73,6 +74,20 @@ public class AbpApiDefinitionController_Tests : AspNetCoreMvcTestBase
         action.AuthorizeDatas.Count.ShouldBe(2);
         action.AuthorizeDatas.ShouldContain(a => a.Policy == "TestPolicy" && a.Roles == "Admin");
         action.AuthorizeDatas.ShouldContain(a => a.Policy == "TestPolicy2" && a.Roles == "Manager");
+    }
+
+    [Fact]
+    public async Task Should_Include_FluentValidation_Rules_In_Types()
+    {
+        var model = await GetResponseAsObjectAsync<ApplicationApiDescriptionModel>("/api/abp/api-definition?includeTypes=true");
+
+        var property = model.Types[typeof(FluentValidationTestInput).FullName!]
+            .Properties!
+            .Single(p => p.Name == nameof(FluentValidationTestInput.Name));
+
+        property.IsRequired.ShouldBeTrue();
+        property.MinLength.ShouldBe(3);
+        property.MaxLength.ShouldBe(10);
     }
 
     private static ControllerApiDescriptionModel GetPeopleController(ApplicationApiDescriptionModel model)

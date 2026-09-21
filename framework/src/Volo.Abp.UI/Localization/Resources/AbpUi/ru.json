@@ -62,6 +62,7 @@
     "Theme": "Тема",
     "NotAssigned": "Не назначен",
     "EntityActionsDisabledTooltip": "У вас нет прав на выполнение каких-либо действий.",
-    "ResourcePermissions": "Разрешения"
+    "ResourcePermissions": "Разрешения",
+    "ShowPassword": "Показать пароль"
   }
 }

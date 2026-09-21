@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "enum-value-presentation.schema.json",
+  "title": "EnumValuePresentation",
+  "description": "How an enum value is rendered by runtime pages. Prefer lower-case values in descriptor JSON; PascalCase aliases are accepted for compatibility.",
+  "markdownDescription": "`text` renders the display name as plain text. `badge` renders a colored badge using `color`. `iconOnly` renders only the `icon` (with the display name as tooltip).",
+  "type": "string",
+  "enum": ["text", "Text", "badge", "Badge", "iconOnly", "IconOnly"],
+  "enumDescriptions": [
+    "Plain text display name.",
+    "Plain text display name.",
+    "Colored badge.",
+    "Colored badge.",
+    "Icon only, display name as tooltip.",
+    "Icon only, display name as tooltip."
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "culture": "ko",
+  "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "테넌트 이름이 이미 존재합니다: {Name}",
+    "Menu:TenantManagement": "테넌트 관리",
+    "Tenants": "테넌트",
+    "NewTenant": "새 테넌트",
+    "TenantName": "테넌트 이름",
+    "DisplayName:TenantName": "테넌트 이름",
+    "TenantDeletionConfirmationMessage": "테넌트 '{0}'이(가) 삭제됩니다. 계속하시겠습니까?",
+    "ConnectionStrings": "연결 문자열",
+    "DisplayName:DefaultConnectionString": "기본 연결 문자열",
+    "DisplayName:UseSharedDatabase": "공유 데이터베이스 사용",
+    "Permission:TenantManagement": "테넌트 관리",
+    "Permission:Create": "생성",
+    "Permission:Edit": "편집",
+    "Permission:Delete": "삭제",
+    "Permission:ManageConnectionStrings": "연결 문자열 관리",
+    "Permission:ManageFeatures": "기능",
+    "DisplayName:AdminEmailAddress": "관리자 이메일 주소",
+    "DisplayName:AdminPassword": "관리자 비밀번호"
+  }
+}

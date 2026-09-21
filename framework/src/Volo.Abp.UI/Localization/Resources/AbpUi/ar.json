@@ -62,6 +62,7 @@
     "Theme": "سمة",
     "NotAssigned": "غيرمعتمد",
     "EntityActionsDisabledTooltip": "ليس لديك إذن لتنفيذ أي إجراء.",
-    "ResourcePermissions": "أذونات"
+    "ResourcePermissions": "أذونات",
+    "ShowPassword": "عرض كلمة المرور"
   }
 }

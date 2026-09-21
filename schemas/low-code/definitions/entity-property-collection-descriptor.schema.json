@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "entity-property-collection-descriptor.schema.json",
+  "title": "EntityPropertyCollectionDescriptor",
+  "description": "Turns a scalar entity property into an ordered primitive collection (a list of values of the property type).",
+  "markdownDescription": "AI guidance: add `collection` to store a list of values such as tags, scores, enum flags, or multiple files/images. The element type is the property `type`; supported element types are string, int, long, decimal, money, datetime, date, time, boolean, guid, enum, file, and image. Collections are stored in normalized collection tables, so `isMappedToDbField` does not apply. `uniqueItems` must be decided explicitly. A collection cannot be combined with `foreignKey`, `formula`, or `rollup`.",
+  "type": "object",
+  "properties": {
+    "maxCount": {
+      "type": ["integer", "null"],
+      "description": "Maximum number of items allowed. Omit or null for no limit.",
+      "minimum": 1
+    },
+    "uniqueItems": {
+      "type": "boolean",
+      "description": "Whether duplicate values are rejected. Required; choose true for tag-like lists and false for repeatable values."
+    }
+  },
+  "required": ["uniqueItems"],
+  "additionalProperties": false,
+  "examples": [
+    { "uniqueItems": true },
+    { "maxCount": 10, "uniqueItems": false }
+  ]
+}
