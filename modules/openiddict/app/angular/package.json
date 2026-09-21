@@ -20,7 +20,7 @@
     "@abp/ng.setting-management": "~10.7.0-rc.4",
     "@abp/ng.tenant-management": "~10.7.0-rc.4",
     "@abp/ng.theme.shared": "~10.7.0-rc.4",
-    "@abp/ng.theme.lepton-x": "~5.7.0-rc.4",
+    "@abp/ng.theme.lepton-x": "~5.7.0-rc.5",
     "@angular/animations": "^15.0.1",
     "@angular/common": "^15.0.1",
     "@angular/compiler": "^15.0.1",
@@ -36,7 +36,7 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@abp/ng.schematics": "~10.7.0-rc.4",
+    "@abp/ng.schematics": "~10.7.0-rc.5",
     "@angular-devkit/build-angular": "^15.0.1",
     "@angular-eslint/builder": "~15.1.0",
     "@angular-eslint/eslint-plugin": "~15.1.0",
