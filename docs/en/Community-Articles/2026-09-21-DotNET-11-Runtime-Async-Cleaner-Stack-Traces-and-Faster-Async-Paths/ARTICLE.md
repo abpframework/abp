@@ -1,11 +1,5 @@
 # .NET 11 Runtime Async: Cleaner Stack Traces and Faster Async Paths
 
-**By Mansur Besleney**  
-**Draft for the ABP.IO Community**  
-**Technical status checked against .NET 11 RC1 on September 16, 2026**
-
-> .NET 11 is in Release Candidate 1 at the time of writing. General availability is expected in November 2026. Runtime Async is still a preview feature for application code, so details can change before or after the final .NET 11 release.
-
 ## Introduction
 
 Asynchronous code is everywhere in a modern .NET application.
