@@ -30,7 +30,7 @@ A naive `@foreach` over those events runs into trouble on several fronts at once
 
 - **DOM size.** In the sample, 100,000 simple three-cell rows produced 400,078 DOM elements. Layout, style recalculation, and memory all grow with that number, and richer rows are worse.
 - **Render cost.** Blazor has to diff and describe every row. On **Blazor Server**, that description is a render batch sent over SignalR. On **Blazor WebAssembly**, it runs on the browser's main thread.
-- **Prerendered HTML.** With prerendering, which the Blazor Web App template has on by default, every row is also rendered into the initial HTML document. The `foreach` version of the sample's 100,000-item list produced a **28.6 MB** HTML response, compared with **11.7 KB** for the virtualized version. The `foreach` page also took almost two minutes to become interactive ([section 12](#12-performance-what-i-measured)).
+- **Prerendered HTML.** With prerendering, which the Blazor Web App template has on by default, every row is also rendered into the initial HTML document. The `foreach` version of the sample's 100,000-item list produced a **28.6 MB** HTML response, compared with **11.7 KB** for the virtualized version. The `foreach` page also took almost two minutes to become interactive ([section 12](#performance-what-i-measured)).
 - **Constant change.** Feeds, chats, and log viewers change while people read them. Prepending an item or expanding a card above the viewport moves the content under the reader's eyes.
 
 Three separate ideas are at play here. Real apps usually need all three, but they solve different problems:
