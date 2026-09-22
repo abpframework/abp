@@ -153,7 +153,7 @@ More overscan means fewer blank moments during fast scrolling and more items to 
 - **Bigger `ItemsProvider` requests.** With 15 items before and after the visible range, a request asks for roughly `visible + 30` items instead of `visible + 6`.
 - **No breaking-change notice.** The change isn't listed on the .NET 11 or ASP.NET Core 11 breaking-changes pages, so check for it yourself when you upgrade.
 
-`QuickGrid` deliberately keeps `OverscanCount = 3`, because grid rows are heavier. See [section 13](#13-choosing-itemsize-and-overscancount) for how to choose.
+`QuickGrid` deliberately keeps `OverscanCount = 3`, because grid rows are heavier. See [section 13](#choosing-itemsize-and-overscancount) for how to choose.
 
 ## The sample application: LiveStream
 
