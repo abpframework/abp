@@ -185,7 +185,7 @@ samples/LiveStream/
 
 Technical choices:
 
-- **Interactive Server** keeps the sample easy to run. The virtualization code is the same on WebAssembly. [Section 17](#17-browser-and-layout-caveats) covers the differences.
+- **Interactive Server** keeps the sample easy to run. The virtualization code is the same on WebAssembly. [Section 17](#browser-and-layout-caveats) covers the differences.
 - **`net11.0`**, with the SDK pinned in `global.json`.
 - **100,000 records**, with messages ranging from one to six lines. About 18% have an expandable diagnostics block.
 - **150–400 ms simulated latency** in the feed's provider, with cancellation.
