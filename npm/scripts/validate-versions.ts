@@ -80,7 +80,7 @@ async function compareDependencies(
       packageName.match(/@(abp|volo)/)?.length &&
       version !== cleanCompareVersion
     ) {
-      throwError(filePath, entry[0], cleanCompareVersion);
+      throwError(filePath, entry[0], version);
     }
   }
 }
