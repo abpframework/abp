@@ -88,7 +88,7 @@ becomes this:
 - With an `ItemsProvider`, the provider isn't called during prerendering, so both spacers are 0 px. The sample's `/feed` and `/grid` pages prerender `data-blazor-virtualize-reserved-height="0"` twice.
 - One exception in RC1: with in-memory `Items` and `InitialItemIndex` greater than 0, the window moves to the target before the first render. Up to `2 × OverscanCount + 1` items around it are then prerendered. The sample's `/chat` page prerenders messages #99,985–#100,000.
 
-If you need all items in the initial HTML, for SEO or for no-JS clients, virtualization isn't the right tool. See [section 20](#20-when-not-to-use-virtualize).
+If you need all items in the initial HTML, for SEO or for no-JS clients, virtualization isn't the right tool. See [section 20](#when-not-to-use-virtualize).
 
 ## What changed in .NET 11
 
