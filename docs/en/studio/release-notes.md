@@ -9,7 +9,12 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 3.1.2 (2026-09-22) Latest
+## 3.1.3 (2026-09-22) Latest
+
+* Upgrade Studio to Avalonia 12
+* Bump ABP Studio version to 3.1.3 and update related properties
+
+## 3.1.2 (2026-09-22)
 
 * UI/UX Improvements
 * Auto-merge forward rel-3.0 → rel-3.1 by: //github.com/volosoft/abp-studio/pull/5335
