@@ -102,7 +102,7 @@ If you need all items in the initial HTML, for SEO or for no-JS clients, virtual
 | Open at / jump to an item | Hand-written JS | `InitialItemIndex`, `ScrollToItemAsync` | Preview 6 (renamed in Preview 7) |
 | Strict `style-src 'self'` | Spacers render `style="height:…"`, which the policy blocks | Spacer sizes rendered as `data-*` attributes and applied via CSSOM | Preview 6 |
 
-To avoid relying only on the docs, I dumped the public surface from the RC1 shared framework with reflection (`tools/ApiSurface.cs` in the sample). Abridged output, with `TItem` shown generically:
+To avoid relying only on the docs, I dumped the public surface from the RC1 shared framework with reflection, using a small file-based C# app. Abridged output, with `TItem` shown generically:
 
 ```text
 Assembly: Microsoft.AspNetCore.Components.Web 11.0.0-rc.1.26425.128
@@ -157,12 +157,12 @@ More overscan means fewer blank moments during fast scrolling and more items to 
 
 ## The sample application: LiveStream
 
-The sample is a Blazor Web App (Interactive Server) that renders a deterministic dataset of 100,000 synthetic events. Every scenario in this article is a page in it.
+The sample is a Blazor Web App (Interactive Server) that renders a deterministic dataset of 100,000 synthetic events. Every scenario in this article is a page in it. The sample isn't published with this article. The code blocks below are excerpts from it, and the layout shows where each excerpt lives.
 
 ![LiveStream home page showing scenario cards, the runtime version 11.0.0-rc.1, and the strict Content-Security-Policy](images/01-home.png)
 
 ```text
-samples/LiveStream/
+LiveStream/
 ├── global.json                      # pins the .NET 11 RC1 SDK
 ├── src/LiveStream/
 │   ├── Components/
@@ -191,12 +191,15 @@ Technical choices:
 - **150–400 ms simulated latency** in the feed's provider, with cancellation.
 - **A strict CSP header on every page:** `style-src 'self'` and a per-request nonce for the one inline script (the import map). A badge in the corner counts violations live.
 
-To run it:
+To try the ideas yourself, start from the Blazor Web App template on the .NET 11 SDK:
 
 ```bash
-cd samples/LiveStream
-dotnet run --project src/LiveStream --urls http://localhost:5261
+dotnet new blazor --interactivity Server --all-interactive -o LiveStream
+cd LiveStream
+dotnet run
 ```
+
+Then add the pieces from the excerpts: the model and provider ([next section](#the-data-model-and-the-itemsprovider)), the feed and chat pages, and the CSP middleware ([Content Security Policy](#content-security-policy-why-virtualization-used-to-break)).
 
 ## The data model and the `ItemsProvider`
 
@@ -419,7 +422,7 @@ export function stickToBottom(element, tolerance) {
 }
 ```
 
-With the guard on (the sample's default), the same 10× run passed **all 40 chat tests, including 30/30 follow checks, in every engine**. Add `?guard=false` to the URL, or run the tests with `CHAT_GUARD=false`, to observe `AnchorMode.End` on its own. An End-anchoring fix is already merged for RC2 ([dotnet/aspnetcore#69388](https://github.com/dotnet/aspnetcore/pull/69388)). It changes exactly the condition that decides when to pin, so retest before you keep or remove a workaround like this. Playwright's WebKit on Windows is also not Safari on macOS or iOS, so test on real devices too.
+With the guard on (the sample's default), the same 10× run passed **all 40 chat tests, including 30/30 follow checks, in every engine**. The guard-off numbers above were measured with the guard disabled, to observe `AnchorMode.End` on its own. An End-anchoring fix is already merged for RC2 ([dotnet/aspnetcore#69388](https://github.com/dotnet/aspnetcore/pull/69388)). It changes exactly the condition that decides when to pin, so retest before you keep or remove a workaround like this. Playwright's WebKit on Windows is also not Safari on macOS or iOS, so test on real devices too.
 
 ## Understanding every `AnchorMode`, measured
 
@@ -579,7 +582,7 @@ private async Task JumpAsync()
   - The index is a **position in the list**, not a database identity. If your provider's ordering isn't stable, the jump can land on a different record.
 - **An RC1 issue with `InitialItemIndex`:** When the grid opened with `?row=75000`, the *next* ordinary render (expanding a visible row) moved the rows by **82 px in Chrome, −53 px in Firefox, and 63 px in WebKit**, in 3/3 runs each, while `scrollTop` stayed the same. The top spacer is recomputed once positioning ends. After `ScrollToItemAsync` the same action moved them 0 px. RC2 freezes the spacer item size during initial positioning ([dotnet/aspnetcore#69170](https://github.com/dotnet/aspnetcore/pull/69170)).
 - **Size `ItemSize` for the real rows.** The grid's rows average about 62 px (38.6–122 px), because messages wrap. The sample keeps the short columns on one line (`white-space: nowrap`) so that only the message column wraps.
-- **`<table>` layouts use the manual compensation path.** See the measurements in [section 10](#10-variable-heights-and-expansion).
+- **`<table>` layouts use the manual compensation path.** See the measurements in [section 10](#variable-heights-and-expansion).
 
 **QuickGrid** forwards `InitialItemIndex` and `ScrollToItemAsync` in .NET 11. Its `AnchorMode` and `ItemComparer` parameters are marked `[Experimental("ASP0030")]` in RC1, and that attribute has already been removed for RC2. It keeps `OverscanCount = 3`. Two QuickGrid issues filed against RC1 are still open: Start anchoring drifts after prepends in Server render modes, and the grid sends duplicate provider requests ([#69380](https://github.com/dotnet/aspnetcore/issues/69380), [#69381](https://github.com/dotnet/aspnetcore/issues/69381)). If you rely on QuickGrid anchoring, test it specifically.
 
@@ -597,7 +600,7 @@ I didn't want illustrative numbers here, so the sample's **Perf lab** (`/lab/per
 | `Virtualize` `Items`, variable heights, overscan 15 | 11.7 KB | 109 ms | **128 ms** | 256 | 44 | 2.7 MB | 34 KB |
 | `Virtualize` `ItemsProvider`, variable heights, overscan 15 | 11.7 KB | 108 ms | **125 ms** | 256 | 44 | 2.7 MB | 34 KB |
 
-*Published Release build, Production environment, Blazor Server on localhost. Chrome 153 on an AMD Ryzen 9 5900HX. Median of 3 fresh browser contexts per variant. "Interactive" is the time from navigation until the first interactive render batch was applied. JS heap is in MiB; HTML and WebSocket sizes use decimal units (1 MB = 1,000,000 bytes). Raw data: `e2e/results/perf.json`.*
+*Published Release build, Production environment, Blazor Server on localhost. Chrome 153 on an AMD Ryzen 9 5900HX. Median of 3 fresh browser contexts per variant. "Interactive" is the time from navigation until the first interactive render batch was applied. JS heap is in MiB; HTML and WebSocket sizes use decimal units (1 MB = 1,000,000 bytes).*
 
 What the numbers say:
 
@@ -862,22 +865,13 @@ The integration tests also check the prerendered HTML without a browser, using `
 | Browsers | Google Chrome 153.0.8010.50, Playwright Firefox, Playwright WebKit 26.6 (Playwright 1.63.0) |
 | Dataset | 100,000 generated records (deterministic seed) |
 
-**Prerequisites and commands**
+**How it was verified**
 
-You need the .NET 11 RC1 SDK. The .NET 10 baseline also needs the .NET 10 SDK: `baseline/global.json` pins 10.0.301, so run the baseline from its own folder. The browser tests need Node.js 20+ and Google Chrome.
+The sample was checked at three levels:
 
-```bash
-cd samples/LiveStream
-dotnet build            # 0 warnings, 0 errors
-dotnet test             # xUnit + WebApplicationFactory
-
-cd e2e
-npm install
-npx playwright install firefox webkit
-npx playwright test     # starts both apps; Chrome, Firefox, WebKit
-```
-
-`e2e/playwright.config.js` starts the .NET 11 app with `$DOTNET11`. If that isn't set, it uses `~/.dotnet11/dotnet` when that exists, and plain `dotnet` otherwise. It starts the baseline from its folder, so that its `global.json` applies.
+- `dotnet build` for the app and the test project.
+- xUnit tests (`dotnet test`), including `WebApplicationFactory` integration tests that inspect the prerendered HTML and the CSP headers.
+- Playwright browser tests in Chrome, Firefox, and WebKit against the running .NET 11 app and the .NET 10 baseline. The baseline ran on the .NET 10 SDK.
 
 **Results**
 
@@ -901,9 +895,7 @@ npx playwright test     # starts both apps; Chrome, Firefox, WebKit
 | Strict CSP (`style-src 'self'`) | No virtualization style violations | **Pass**: 0 violations, 5 pages × 3 engines; error pages keep the header and markup nonces in sync |
 | Same CSP on .NET 10.0.10 | (baseline for comparison) | 5 `style-src-attr` violations; the list collapsed to 1,227 px (all engines) |
 | Fast scrolling with latency | Stale provider calls are canceled | **Pass**: canceled calls > 0 (all engines) |
-| Performance, 100,000 items | `Virtualize` ≪ `foreach` | 125 ms vs 112.4 s to interactive; 256 vs 400,078 DOM elements ([section 12](#12-performance-what-i-measured)) |
-
-All raw data is in `samples/LiveStream/e2e/results/`: `EVIDENCE.md`, `perf.json`, `anchor-matrix.json`, `chat-follow-summary.json`, and `final-e2e.json`.
+| Performance, 100,000 items | `Virtualize` ≪ `foreach` | 125 ms vs 112.4 s to interactive; 256 vs 400,078 DOM elements ([section 12](#performance-what-i-measured)) |
 
 ## When not to use `Virtualize`
 
