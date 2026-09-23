@@ -313,6 +313,41 @@ public class CSharpServiceProxyGenerator_Tests : IDisposable
     }
 
     [Fact]
+    public async Task Should_Generate_Same_Named_Generic_Types_Of_Different_Namespaces_Into_Separate_Files_In_A_Single_Folder()
+    {
+        _generator.Model = CreateModel(
+            CreateServiceController(OrderAppService,
+                CreateMethod("GetGenericBoxAsync", "MyCompany.Generic.Box<MyCompany.Shared.TagDto>"),
+                CreateMethod("GetSharedBoxAsync", "MyCompany.Shared.Box<MyCompany.Shared.TagDto>")));
+        AddGenericType(_generator.Model, "MyCompany.Shared.Box<T0>", new[] { "T" },
+            ("Items", "[T]"));
+
+        await _generator.GenerateProxyAsync(CreateArgs(folder: "Proxies"));
+
+        var folder = Path.Combine(_workDirectory, "Proxies");
+        var genericBox = await File.ReadAllTextAsync(Path.Combine(folder, "MyCompany.Generic.Box{T}.cs"));
+        genericBox.ShouldContain("namespace MyCompany.Generic;");
+        genericBox.ShouldContain("public class Box<T>");
+        genericBox.ShouldContain("public T Content { get; set; }");
+
+        var sharedBox = await File.ReadAllTextAsync(Path.Combine(folder, "MyCompany.Shared.Box{T}.cs"));
+        sharedBox.ShouldContain("namespace MyCompany.Shared;");
+        sharedBox.ShouldContain("public class Box<T>");
+        sharedBox.ShouldContain("public T[] Items { get; set; }");
+
+        File.Exists(Path.Combine(folder, "Box.cs")).ShouldBeFalse();
+        File.Exists(Path.Combine(folder, "Box{T}.cs")).ShouldBeFalse();
+
+        var serviceInterface = await File.ReadAllTextAsync(Path.Combine(folder, "IOrderAppService.cs"));
+        serviceInterface.ShouldContain("Task<global::MyCompany.Generic.Box<TagDto>> GetGenericBoxAsync()");
+        serviceInterface.ShouldContain("Task<global::MyCompany.Shared.Box<TagDto>> GetSharedBoxAsync()");
+
+        var clientProxy = await File.ReadAllTextAsync(Path.Combine(folder, "OrderClientProxy.Generated.cs"));
+        clientProxy.ShouldContain("return await RequestAsync<global::MyCompany.Generic.Box<TagDto>>(nameof(GetGenericBoxAsync));");
+        clientProxy.ShouldContain("return await RequestAsync<global::MyCompany.Shared.Box<TagDto>>(nameof(GetSharedBoxAsync));");
+    }
+
+    [Fact]
     public async Task Should_Use_Full_Names_For_Same_Named_Types_Of_Different_Namespaces()
     {
         _generator.Model = CreateModel(
