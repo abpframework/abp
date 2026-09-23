@@ -200,6 +200,8 @@ A filter value can be:
 
 Built-in providers cover the current user ID, username, first name, surname, email, email verification, phone number, phone verification, roles, and current tenant ID. Applications can register additional typed providers with `AbpLowCodePageBackendFilterOptions`.
 
+If a JavaScript filter value fails, including a script that calls an [error helper](scripting-api.md#error-helpers), no filter value is produced and the query fails instead of returning unfiltered data. The error is answered like any other script error.
+
 Backend filters are combined with search and user-selected filters. They are not sent as editable client state, so do not replace them with a hidden React filter when the rule is security-sensitive.
 
 ## Page and Relationship Permissions

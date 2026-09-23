@@ -444,7 +444,7 @@ Other page-level fields:
 | `enumPresentations` | Page-level overrides of enum value label, presentation, color, and icon |
 | `relationships` | Reverse relationships (related records that point back to the page record). See [Data Modeling and Page Behavior](data-modeling.md#reverse-relationships) |
 | `backendFilter` | Server-enforced filter expression. See [Filters](#filters) |
-| `interceptors` | Page-scoped Create/Update/Delete interceptors with an `entityExecutionOrder` of `entityFirst`, `pageFirst`, or `skipEntity`. See [Interceptors](interceptors.md) |
+| `interceptors` | Page-scoped Create/Update/Delete interceptors. By default the page interceptor runs before the entity interceptor; set `entityExecutionOrder` to `entityFirst` to run the entity interceptor first, or `skipEntity` to skip it (`pageFirst` is the default). See [Page Interceptors and Execution Order](interceptors.md#page-interceptors-and-execution-order) |
 
 Page column and filter `propertyName` values may follow foreign keys, for example `CustomerId.CountryId.Name`. Related paths are limited by the configured query depth and return only the requested projection. Page columns can also define boolean presentation metadata with `booleanPresentation` and `booleanValues`. See [Data Modeling and Page Behavior](data-modeling.md).
 
