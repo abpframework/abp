@@ -23,8 +23,8 @@ In this article, we'll start with the simplest possible usage of each feature, l
 Here's what we'll cover:
 
 - Where .NET 11 and C# 15 stand today
-- Closed hierarchies: the two-minute version
-- Union types: the two-minute version
+- Closed hierarchies: a simple example and the rules
+- Union types: a simple example and what they compile to
 - How they compare with enums, abstract base classes, interfaces, and result wrappers
 - A realistic scenario: an order API with exhaustive states and results
 - Going further: JSON contracts, a generic `Result<T>`, `default` values, and versioning
@@ -44,7 +44,7 @@ A quick status check first, because it affects everything else in this article:
 
 > **For ABP developers:** the latest stable ABP release on NuGet at the time of writing is **10.6.1**, and ABP 10.x packages target up to `net10.0`. You need a `net11.0` project to use C# 15. As usual, ABP will ship a **.NET 11-based ABP 11** release, so you'll get first-class .NET 11 support there. Until then, I tested ABP 10.6.1 packages inside a `net11.0` app, and you'll find the results in the [ABP section](#using-these-features-in-an-abp-solution) below.
 
-## Closed Hierarchies: The Two-Minute Version
+## Closed Hierarchies: A Simple Example
 
 Let's start with the easier one. You add the `closed` modifier to a class (or a record class), and from then on, **only code in the same assembly can derive directly from it**:
 
@@ -84,7 +84,7 @@ Here are the rules I think are worth remembering. The ones with error codes are 
 
 So what does the compiler actually emit? I checked with reflection. `OrderState` becomes a regular **abstract class** marked with `[IsClosedType]`, and its constructors are `protected` and marked `[CompilerFeatureRequired("ClosedClasses")]`. That last attribute is how the restriction survives compilation: a compiler that doesn't understand closed classes refuses to call those constructors, so it can't derive from the type either.
 
-## Union Types: The Two-Minute Version
+## Union Types: A Simple Example
 
 A union is a value that is **exactly one of a fixed list of case types**. The case types already exist, and the union just groups them:
 
