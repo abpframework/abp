@@ -361,6 +361,24 @@ public class CSharpServiceProxyGenerator_Tests : IDisposable
         (await File.ReadAllTextAsync(orderStatusFile)).ShouldContain("public enum OrderStatus");
     }
 
+    [Fact]
+    public async Task Should_Use_Full_Names_For_Same_Named_Types_Without_Contracts()
+    {
+        _generator.Model = CreateModel(
+            CreateServiceController(OrderAppService,
+                CreateMethod("GetOrderStateAsync", "MyCompany.Orders.StateDto"),
+                CreateMethod("GetSharedStateAsync", "MyCompany.Shared.StateDto")));
+        _generator.Model.Types.Clear();
+
+        await _generator.GenerateProxyAsync(CreateArgs(withoutContracts: true));
+
+        var clientProxy = await File.ReadAllTextAsync(GetProxyFilePath("MyCompany/Orders/Application/OrderClientProxy.Generated.cs"));
+        clientProxy.ShouldContain("using MyCompany.Orders;");
+        clientProxy.ShouldContain("using MyCompany.Shared;");
+        clientProxy.ShouldContain("public virtual async Task<global::MyCompany.Orders.StateDto> GetOrderStateAsync()");
+        clientProxy.ShouldContain("public virtual async Task<global::MyCompany.Shared.StateDto> GetSharedStateAsync()");
+    }
+
     private async Task GenerateOtherModuleAsync()
     {
         var model = _generator.Model;
@@ -491,7 +509,14 @@ public class CSharpServiceProxyGenerator_Tests : IDisposable
             {
                 new() { Type = serviceInterface, Name = serviceName, Methods = methods }
             },
-            Actions = new Dictionary<string, ActionApiDescriptionModel>()
+            Actions = methods.ToDictionary(x => x.Name, x => new ActionApiDescriptionModel
+            {
+                Name = x.Name,
+                ImplementFrom = serviceInterface,
+                ParametersOnMethod = x.ParametersOnMethod,
+                Parameters = new List<ParameterApiDescriptionModel>(),
+                ReturnValue = x.ReturnValue
+            })
         };
     }
 

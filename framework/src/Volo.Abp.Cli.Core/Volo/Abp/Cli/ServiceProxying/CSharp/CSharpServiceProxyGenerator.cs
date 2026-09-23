@@ -436,25 +436,8 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
 
     protected virtual List<string> GetTypesToGenerate(ApplicationApiDescriptionModel applicationApiDescriptionModel)
     {
-        var signatureTypeNames = new List<string>();
-        foreach (var controller in applicationApiDescriptionModel.Modules.Values.SelectMany(x => x.Controllers.Values).Where(ShouldGenerateController))
-        {
-            var appServiceType = controller.Interfaces.Last();
-            foreach (var method in appServiceType.Methods)
-            {
-                signatureTypeNames.AddRange(method.ParametersOnMethod.Select(x => x.Type));
-                signatureTypeNames.Add(method.ReturnValue.Type);
-            }
-
-            foreach (var action in controller.Actions.Values.Where(x => ShouldGenerateMethod(appServiceType.Type, x)))
-            {
-                signatureTypeNames.AddRange(action.ParametersOnMethod.Select(x => x.Type));
-                signatureTypeNames.Add(action.ReturnValue.Type);
-            }
-        }
-
         var types = new HashSet<string>();
-        var pendingTypeKeys = new Queue<string>(signatureTypeNames.SelectMany(GetReferencedTypeKeys));
+        var pendingTypeKeys = new Queue<string>(GetSignatureTypeNames(applicationApiDescriptionModel).SelectMany(GetReferencedTypeKeys));
         while (pendingTypeKeys.Count > 0)
         {
             var typeKey = pendingTypeKeys.Dequeue();
@@ -475,6 +458,28 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
         }
 
         return types.OrderBy(x => x).ToList();
+    }
+
+    private List<string> GetSignatureTypeNames(ApplicationApiDescriptionModel applicationApiDescriptionModel)
+    {
+        var signatureTypeNames = new List<string>();
+        foreach (var controller in applicationApiDescriptionModel.Modules.Values.SelectMany(x => x.Controllers.Values).Where(ShouldGenerateController))
+        {
+            var appServiceType = controller.Interfaces.Last();
+            foreach (var method in appServiceType.Methods)
+            {
+                signatureTypeNames.AddRange(method.ParametersOnMethod.Select(x => x.Type));
+                signatureTypeNames.Add(method.ReturnValue.Type);
+            }
+
+            foreach (var action in controller.Actions.Values.Where(x => ShouldGenerateMethod(appServiceType.Type, x)))
+            {
+                signatureTypeNames.AddRange(action.ParametersOnMethod.Select(x => x.Type));
+                signatureTypeNames.Add(action.ReturnValue.Type);
+            }
+        }
+
+        return signatureTypeNames;
     }
 
     private static IEnumerable<string> GetReferencedTypeKeys(string typeName)
@@ -689,13 +694,13 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
 
         // The file system is case insensitive on Windows and macOS, an existing file keeps its casing when it is overwritten.
         var pathComparison = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
-        var expectedFiles = new HashSet<string>(StringComparer.FromComparison(pathComparison));
+        var expectedFiles = new HashSet<string>(pathComparison == StringComparison.Ordinal ? StringComparer.Ordinal : StringComparer.OrdinalIgnoreCase);
         foreach (var jsonFile in Directory.GetFiles(directory, $"*{GeneratedJsonFileSuffix}"))
         {
             ApplicationApiDescriptionModel applicationApiDescriptionModel;
             try
             {
-                applicationApiDescriptionModel = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(await File.ReadAllTextAsync(jsonFile));
+                applicationApiDescriptionModel = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(await FileHelper.ReadAllTextAsync(jsonFile));
             }
             catch (Exception ex)
             {
@@ -779,15 +784,18 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
         return GetRealTypeName(typeName, usingNamespaceList, _ambiguousTypeNames);
     }
 
-    private static HashSet<string> GetAmbiguousTypeNames(ApplicationApiDescriptionModel applicationApiDescriptionModel)
+    private HashSet<string> GetAmbiguousTypeNames(ApplicationApiDescriptionModel applicationApiDescriptionModel)
     {
-        return (applicationApiDescriptionModel.Types?.Keys ?? [])
+        // Types are not requested with --without-contracts, so the names used by the signatures are collected as well.
+        var typeNames = (applicationApiDescriptionModel.Types?.Keys ?? [])
             .Select(x => x.Split('<')[0])
+            .Concat(GetSignatureTypeNames(applicationApiDescriptionModel).SelectMany(x => ParseTypeNames(x).Select(t => t.Name)))
             .Distinct()
             .GroupBy(x => x.Split('.').Last())
             .Where(x => x.Count() > 1)
-            .SelectMany(x => x)
-            .ToHashSet();
+            .SelectMany(x => x);
+
+        return new HashSet<string>(typeNames);
     }
 
     private static string GetRealTypeName(string typeName, List<string> usingNamespaceList = null, ICollection<string> ambiguousTypeNames = null)
@@ -799,7 +807,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
 
         if (typeName.StartsWith("{") && typeName.EndsWith("}") && typeName.Contains(":"))
         {
-            var dic = typeName.Substring(1, typeName.Length - 2).Split(':', 2);
+            var dic = typeName.Substring(1, typeName.Length - 2).Split(new[] { ':' }, 2);
             var key = GetRealTypeName(dic[0], usingNamespaceList, ambiguousTypeNames);
             var value = GetRealTypeName(dic[1], usingNamespaceList, ambiguousTypeNames);
             return $"Dictionary<{key}, {value}>";
