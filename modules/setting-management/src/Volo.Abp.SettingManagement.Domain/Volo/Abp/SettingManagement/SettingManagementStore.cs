@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
@@ -11,6 +13,8 @@ namespace Volo.Abp.SettingManagement;
 
 public class SettingManagementStore : ISettingManagementStore, ITransientDependency
 {
+    public ILogger<SettingManagementStore> Logger { get; set; }
+
     protected IDistributedCache<SettingCacheItem> Cache { get; }
     protected ISettingDefinitionManager SettingDefinitionManager { get; }
     protected ISettingRepository SettingRepository { get; }
@@ -26,6 +30,7 @@ public class SettingManagementStore : ISettingManagementStore, ITransientDepende
         GuidGenerator = guidGenerator;
         Cache = cache;
         SettingDefinitionManager = settingDefinitionManager;
+        Logger = NullLogger<SettingManagementStore>.Instance;
     }
 
     [UnitOfWork]
@@ -37,7 +42,7 @@ public class SettingManagementStore : ISettingManagementStore, ITransientDepende
     [UnitOfWork]
     public virtual async Task SetAsync(string name, string value, string providerName, string providerKey)
     {
-        var setting = await SettingRepository.FindAsync(name, providerName, providerKey);
+        var setting = await FindAndDeleteDuplicatesAsync(name, providerName, providerKey);
         if (setting == null)
         {
             setting = new Setting(GuidGenerator.Create(), name, value, providerName, providerKey);
@@ -55,16 +60,22 @@ public class SettingManagementStore : ISettingManagementStore, ITransientDepende
     public virtual async Task<List<SettingValue>> GetListAsync(string providerName, string providerKey)
     {
         var settings = await SettingRepository.GetListAsync(providerName, providerKey);
-        return settings.Select(s => new SettingValue(s.Name, s.Value)).ToList();
+        return (await CreateSettingValueDictionaryAsync(settings, providerName, providerKey))
+            .Select(s => new SettingValue(s.Key, s.Value))
+            .ToList();
     }
 
     [UnitOfWork]
     public virtual async Task DeleteAsync(string name, string providerName, string providerKey)
     {
-        var setting = await SettingRepository.FindAsync(name, providerName, providerKey);
-        if (setting != null)
+        var settings = await SettingRepository.GetListAsync(new[] { name }, providerName, providerKey);
+        if (settings.Any())
         {
-            await SettingRepository.DeleteAsync(setting, true);
+            foreach (var setting in settings)
+            {
+                await SettingRepository.DeleteAsync(setting, true);
+            }
+
             await Cache.RemoveAsync(CalculateCacheKey(name, providerName, providerKey), considerUow: true);
         }
     }
@@ -93,8 +104,10 @@ public class SettingManagementStore : ISettingManagementStore, ITransientDepende
         SettingCacheItem currentCacheItem)
     {
         var settingDefinitions = await SettingDefinitionManager.GetAllAsync();
-        var settingsDictionary = (await SettingRepository.GetListAsync(providerName, providerKey))
-            .ToDictionary(s => s.Name, s => s.Value);
+        var settingsDictionary = await CreateSettingValueDictionaryAsync(
+            await SettingRepository.GetListAsync(providerName, providerKey),
+            providerName,
+            providerKey);
 
         var cacheItems = new List<KeyValuePair<string, SettingCacheItem>>();
 
@@ -179,8 +192,10 @@ public class SettingManagementStore : ISettingManagementStore, ITransientDepende
         var settingNames = new HashSet<string>(notCacheKeys.Select(GetSettingNameFormCacheKeyOrNull));
         var settingDefinitions = (await SettingDefinitionManager.GetAllAsync()).Where(x => settingNames.Contains(x.Name));
 
-        var settingsDictionary = (await SettingRepository.GetListAsync(settingNames.ToArray(), providerName, providerKey))
-            .ToDictionary(s => s.Name, s => s.Value);
+        var settingsDictionary = await CreateSettingValueDictionaryAsync(
+            await SettingRepository.GetListAsync(settingNames.ToArray(), providerName, providerKey),
+            providerName,
+            providerKey);
 
         var cacheItems = new List<KeyValuePair<string, SettingCacheItem>>();
 
@@ -200,6 +215,55 @@ public class SettingManagementStore : ISettingManagementStore, ITransientDepende
         return cacheItems;
     }
 
+
+    protected virtual async Task<Setting> FindAndDeleteDuplicatesAsync(string name, string providerName, string providerKey)
+    {
+        var settings = await SettingRepository.GetListAsync(new[] { name }, providerName, providerKey);
+        if (settings.Count <= 1)
+        {
+            return settings.FirstOrDefault();
+        }
+
+        var setting = await SettingRepository.FindAsync(name, providerName, providerKey);
+        if (setting == null)
+        {
+            return null;
+        }
+
+        foreach (var duplicate in settings.Where(x => x.Id != setting.Id))
+        {
+            await SettingRepository.DeleteAsync(duplicate, true);
+        }
+
+        return setting;
+    }
+
+    protected virtual async Task<Dictionary<string, string>> CreateSettingValueDictionaryAsync(
+        List<Setting> settings,
+        string providerName,
+        string providerKey)
+    {
+        var settingsDictionary = new Dictionary<string, string>();
+
+        foreach (var settingGroup in settings.GroupBy(s => s.Name))
+        {
+            if (settingGroup.Count() == 1)
+            {
+                settingsDictionary[settingGroup.Key] = settingGroup.First().Value;
+                continue;
+            }
+
+            // FindAsync returns the same record that SetAsync updates, so reads and writes agree until the duplicates are deleted.
+            Logger.LogWarning(
+                "Found {Count} setting records for Name = {Name}, ProviderName = {ProviderName}, ProviderKey = {ProviderKey}. The duplicates will be deleted the next time the setting is saved.",
+                settingGroup.Count(), settingGroup.Key, providerName, providerKey);
+
+            var setting = await SettingRepository.FindAsync(settingGroup.Key, providerName, providerKey);
+            settingsDictionary[settingGroup.Key] = (setting ?? settingGroup.First()).Value;
+        }
+
+        return settingsDictionary;
+    }
 
     protected virtual string CalculateCacheKey(string name, string providerName, string providerKey)
     {

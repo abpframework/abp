@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
@@ -11,6 +13,8 @@ namespace Volo.Abp.FeatureManagement;
 
 public class FeatureManagementStore : IFeatureManagementStore, ITransientDependency
 {
+    public ILogger<FeatureManagementStore> Logger { get; set; }
+
     protected IDistributedCache<FeatureValueCacheItem> Cache { get; }
     protected IFeatureDefinitionManager FeatureDefinitionManager { get; }
     protected IFeatureValueRepository FeatureValueRepository { get; }
@@ -26,6 +30,7 @@ public class FeatureManagementStore : IFeatureManagementStore, ITransientDepende
         GuidGenerator = guidGenerator;
         Cache = cache;
         FeatureDefinitionManager = featureDefinitionManager;
+        Logger = NullLogger<FeatureManagementStore>.Instance;
     }
 
     [UnitOfWork]
@@ -38,7 +43,7 @@ public class FeatureManagementStore : IFeatureManagementStore, ITransientDepende
     [UnitOfWork]
     public virtual async Task SetAsync(string name, string value, string providerName, string providerKey)
     {
-        var featureValue = await FeatureValueRepository.FindAsync(name, providerName, providerKey);
+        var featureValue = await FindAndDeleteDuplicatesAsync(name, providerName, providerKey);
         if (featureValue == null)
         {
             featureValue = new FeatureValue(GuidGenerator.Create(), name, value, providerName, providerKey);
@@ -88,8 +93,10 @@ public class FeatureManagementStore : IFeatureManagementStore, ITransientDepende
         FeatureValueCacheItem currentCacheItem)
     {
         var featureDefinitions = await FeatureDefinitionManager.GetAllAsync();
-        var featuresDictionary = (await FeatureValueRepository.GetListAsync(providerName, providerKey))
-            .ToDictionary(s => s.Name, s => s.Value);
+        var featuresDictionary = await CreateFeatureValueDictionaryAsync(
+            await FeatureValueRepository.GetListAsync(providerName, providerKey),
+            providerName,
+            providerKey);
 
         var cacheItems = new List<KeyValuePair<string, FeatureValueCacheItem>>();
 
@@ -111,6 +118,55 @@ public class FeatureManagementStore : IFeatureManagementStore, ITransientDepende
         }
 
         await Cache.SetManyAsync(cacheItems, considerUow: true);
+    }
+
+    protected virtual async Task<FeatureValue> FindAndDeleteDuplicatesAsync(string name, string providerName, string providerKey)
+    {
+        var featureValues = await FeatureValueRepository.FindAllAsync(name, providerName, providerKey);
+        if (featureValues.Count <= 1)
+        {
+            return featureValues.FirstOrDefault();
+        }
+
+        var featureValue = await FeatureValueRepository.FindAsync(name, providerName, providerKey);
+        if (featureValue == null)
+        {
+            return null;
+        }
+
+        foreach (var duplicate in featureValues.Where(x => x.Id != featureValue.Id))
+        {
+            await FeatureValueRepository.DeleteAsync(duplicate, true);
+        }
+
+        return featureValue;
+    }
+
+    protected virtual async Task<Dictionary<string, string>> CreateFeatureValueDictionaryAsync(
+        List<FeatureValue> featureValues,
+        string providerName,
+        string providerKey)
+    {
+        var featuresDictionary = new Dictionary<string, string>();
+
+        foreach (var featureValueGroup in featureValues.GroupBy(s => s.Name))
+        {
+            if (featureValueGroup.Count() == 1)
+            {
+                featuresDictionary[featureValueGroup.Key] = featureValueGroup.First().Value;
+                continue;
+            }
+
+            // FindAsync returns the same record that SetAsync updates, so reads and writes agree until the duplicates are deleted.
+            Logger.LogWarning(
+                "Found {Count} feature value records for Name = {Name}, ProviderName = {ProviderName}, ProviderKey = {ProviderKey}. The duplicates will be deleted the next time the feature value is saved.",
+                featureValueGroup.Count(), featureValueGroup.Key, providerName, providerKey);
+
+            var featureValue = await FeatureValueRepository.FindAsync(featureValueGroup.Key, providerName, providerKey);
+            featuresDictionary[featureValueGroup.Key] = (featureValue ?? featureValueGroup.First()).Value;
+        }
+
+        return featuresDictionary;
     }
 
     protected virtual string CalculateCacheKey(string name, string providerName, string providerKey)
