@@ -122,19 +122,15 @@ public class FeatureManagementStore : IFeatureManagementStore, ITransientDepende
 
     protected virtual async Task<FeatureValue> FindAndDeleteDuplicatesAsync(string name, string providerName, string providerKey)
     {
-        var featureValues = await FeatureValueRepository.FindAllAsync(name, providerName, providerKey);
-        if (featureValues.Count <= 1)
-        {
-            return featureValues.FirstOrDefault();
-        }
-
         var featureValue = await FeatureValueRepository.FindAsync(name, providerName, providerKey);
         if (featureValue == null)
         {
             return null;
         }
 
-        foreach (var duplicate in featureValues.Where(x => x.Id != featureValue.Id))
+        var duplicates = (await FeatureValueRepository.FindAllAsync(name, providerName, providerKey))
+            .Where(x => x.Id != featureValue.Id);
+        foreach (var duplicate in duplicates)
         {
             await FeatureValueRepository.DeleteAsync(duplicate, true);
         }

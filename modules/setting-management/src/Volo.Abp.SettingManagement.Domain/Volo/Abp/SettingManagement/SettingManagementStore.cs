@@ -218,19 +218,15 @@ public class SettingManagementStore : ISettingManagementStore, ITransientDepende
 
     protected virtual async Task<Setting> FindAndDeleteDuplicatesAsync(string name, string providerName, string providerKey)
     {
-        var settings = await SettingRepository.GetListAsync(new[] { name }, providerName, providerKey);
-        if (settings.Count <= 1)
-        {
-            return settings.FirstOrDefault();
-        }
-
         var setting = await SettingRepository.FindAsync(name, providerName, providerKey);
         if (setting == null)
         {
             return null;
         }
 
-        foreach (var duplicate in settings.Where(x => x.Id != setting.Id))
+        var duplicates = (await SettingRepository.GetListAsync(new[] { name }, providerName, providerKey))
+            .Where(x => x.Id != setting.Id);
+        foreach (var duplicate in duplicates)
         {
             await SettingRepository.DeleteAsync(duplicate, true);
         }
