@@ -289,7 +289,7 @@ Entities describe the persisted data model. UI is not configured with legacy pro
 | `isUnique` | Unique value validation |
 | `serverOnly` | Hidden from clients, API responses, and UI metadata |
 | `allowSetByClients` | Whether create/update clients may set this value |
-| `isMappedToDbField` | `true` stores a dynamic scalar property in a dedicated physical column, `false` stores it in the entity's `Data` JSON column, and omitted follows the `UseJsonDataStorage` default |
+| `isMappedToDbField` | `true` stores a dynamic scalar property in a dedicated physical column, `false` stores it in the entity's `Data` JSON column, and omitted also stores it in the `Data` JSON column. Model changes write the flag on new properties from the `UseJsonDataStorage` option |
 | `decimalPlaces` | Decimal scale for `decimal` and `money` properties |
 | `currencySymbol` | Optional UI currency symbol for `money` properties |
 | `collection` | Primitive collection settings: optional `maxCount` and required `uniqueItems` |

@@ -17,9 +17,9 @@ Scalar properties keep their values in one of two places: a physical column of t
 |---------------------|-----------------------------|
 | `true` | A physical column of its own |
 | `false` | The entity's `Data` JSON column |
-| Omitted | The current default, set by `UseJsonDataStorage` |
+| Omitted | The entity's `Data` JSON column |
 
-The default is the module option `AbpLowCodeEntityFrameworkCoreOptions.UseJsonDataStorage`. It is `true`, which stores properties in the `Data` column. Set it to `false` when the database provider does not support the JSON column mapping, queries, and updates that Low-Code needs, so that new properties get columns of their own:
+The storage of a new property comes from the module option `AbpLowCodeEntityFrameworkCoreOptions.UseJsonDataStorage`. It is `true`, which stores new properties in the `Data` column. Set it to `false` when the database provider does not support the JSON column mapping, queries, and updates that Low-Code needs, so that new properties get columns of their own:
 
 ```csharp
 Configure<AbpLowCodeEntityFrameworkCoreOptions>(options =>
@@ -30,7 +30,7 @@ Configure<AbpLowCodeEntityFrameworkCoreOptions>(options =>
 
 `builder.ConfigureDynamicEntities(useJsonDataStorage: false)` sets the same option while configuring EF Core. Low-Code does not infer the option from the provider.
 
-A property created in the Designer, through MCP, or through any other model change records the storage chosen at that moment: its `isMappedToDbField` is set from the default. Changing `UseJsonDataStorage` later therefore affects only new properties, and existing entities keep working. Only a property whose descriptor omits `isMappedToDbField`, such as one written by hand in a descriptor file, follows the current default. Low-Code does not move existing values between the `Data` column and individual columns when the option changes.
+A property created in the Designer, through MCP, or through any other model change records the storage chosen at that moment: its `isMappedToDbField` is set from the default. Changing `UseJsonDataStorage` later therefore affects only new properties, and existing entities keep working. A property whose descriptor omits `isMappedToDbField`, such as one created before the option existed or written by hand in a descriptor file, is stored in the `Data` column under either value. On a database without JSON support, set `isMappedToDbField: true` on such properties. Low-Code does not move existing values between the `Data` column and individual columns when the option changes.
 
 A dynamic entity's table has the `Data` column only while at least one of its properties is stored there. An entity whose properties all have their own columns has no `Data` column, so it works on databases without JSON column support. The column is added when a property first needs it and is not removed afterwards.
 
