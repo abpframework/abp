@@ -1,0 +1,796 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "api-resource-descriptor.schema.json",
+  "title": "ApiResourceDescriptor",
+  "description": "Describes a named, reusable entity API exposed without a page. One entity may have multiple API resources; each defines its own operations, field policies, filters, permissions, and interceptors.",
+  "markdownDescription": "AI guidance: `name` is the stable API route key and should be URL-safe kebab-case (for example `orders-api`). `entityName` must reference an existing entity. API resources expose REST endpoints at `api/low-code/api-resources/{name}` (or `api/low-code/apps/{app}/api-resources/{name}`). Use `operations` to disable individual operations, `responseFields` to project returned properties per operation, `writableFields` to allowlist submitted properties per write operation, `backendFilter` to scope Query and Export, `inputFilter` to reject write payloads that violate conditions, and `interceptors` for JavaScript hooks on command (Create, Update, Replace, Delete) and query (Query, Get) pipelines.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional schema reference used when this descriptor is stored as a model descriptor file."
+    },
+    "name": {
+      "type": "string",
+      "description": "Stable URL-safe API resource identifier. Prefer kebab-case, for example 'orders-api' or 'customer-lookup'. This becomes part of the runtime route.",
+      "minLength": 1
+    },
+    "app": {
+      "type": "string",
+      "description": "Name of the app this API resource belongs to. Omit for the default app.",
+      "minLength": 1
+    },
+    "entityName": {
+      "type": "string",
+      "description": "Full name of the entity this API resource exposes. Required unless extendsLowerLayer is set.",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional human-readable description of the API resource."
+    },
+    "extendsLowerLayer": {
+      "type": "boolean",
+      "description": "When true, this descriptor extends an API resource with the same name defined in a lower model layer instead of replacing it."
+    },
+    "operations": {
+      "type": "object",
+      "description": "Per-operation enablement switches. Omitted operations stay enabled; 'replace' falls back to 'update' when not authored.",
+      "properties": {
+        "get": {
+          "type": "boolean",
+          "description": "Enable the single-record endpoint."
+        },
+        "create": {
+          "type": "boolean",
+          "description": "Enable record creation."
+        },
+        "update": {
+          "type": "boolean",
+          "description": "Enable record updates."
+        },
+        "replace": {
+          "type": "boolean",
+          "description": "Enable full replacement (PUT). Falls back to the 'update' flag when omitted."
+        },
+        "delete": {
+          "type": "boolean",
+          "description": "Enable record deletion."
+        },
+        "lookup": {
+          "type": "boolean",
+          "description": "Enable lookup endpoints used by foreign-key selectors."
+        },
+        "export": {
+          "type": "boolean",
+          "description": "Enable export endpoints."
+        },
+        "import": {
+          "type": "boolean",
+          "description": "Enable import endpoints."
+        },
+        "files": {
+          "type": "boolean",
+          "description": "Enable file upload/download endpoints."
+        },
+        "attachments": {
+          "type": "boolean",
+          "description": "Enable attachment endpoints."
+        },
+        "query": {
+          "type": "boolean",
+          "description": "Enable the Query endpoint."
+        }
+      },
+      "additionalProperties": false
+    },
+    "responseFields": {
+      "type": "object",
+      "description": "Per-operation response projection (entity property names). Only the listed properties are returned for that operation; omitted operations return all properties.",
+      "properties": {
+        "get": {
+          "$ref": "#/$defs/propertyNameList",
+          "description": "Properties returned by the single-record endpoint."
+        },
+        "create": {
+          "$ref": "#/$defs/propertyNameList",
+          "description": "Properties returned after create."
+        },
+        "update": {
+          "$ref": "#/$defs/propertyNameList",
+          "description": "Properties returned after update."
+        },
+        "replace": {
+          "$ref": "#/$defs/propertyNameList",
+          "description": "Properties returned after replace."
+        },
+        "query": {
+          "$ref": "#/$defs/propertyNameList",
+          "description": "Properties returned by the list endpoint."
+        }
+      },
+      "additionalProperties": false
+    },
+    "writableFields": {
+      "type": "object",
+      "description": "Per-operation input allowlist (entity property names). Submitted properties outside the list are rejected for that operation; omitted operations accept all writable properties. 'replace' falls back to 'update' when not authored.",
+      "properties": {
+        "create": {
+          "$ref": "#/$defs/propertyNameList",
+          "description": "Properties accepted on create."
+        },
+        "update": {
+          "$ref": "#/$defs/propertyNameList",
+          "description": "Properties accepted on update."
+        },
+        "replace": {
+          "$ref": "#/$defs/propertyNameList",
+          "description": "Properties accepted on replace."
+        }
+      },
+      "additionalProperties": false
+    },
+    "defaultSortProperty": {
+      "type": "string",
+      "description": "Property name used for default sorting. Must reference a sortable scalar property on entityName.",
+      "minLength": 1
+    },
+    "defaultSortDescending": {
+      "type": "boolean",
+      "description": "Whether the default sort is descending."
+    },
+    "backendFilter": {
+      "$ref": "#/$defs/filterExpression",
+      "description": "Backend filter applied to read queries and to update/delete/file scoping."
+    },
+    "inputFilter": {
+      "$ref": "#/$defs/filterExpression",
+      "description": "Conditions the submitted input must satisfy for create/update/replace; violating payloads are rejected."
+    },
+    "permissionConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Independent permission for each operation. Omitted, null or default uses operation-specific resource grants. Disabled operations always deny access.",
+      "properties": {
+        "query": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "get": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "create": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "update": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "replace": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "delete": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "lookup": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "export": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "import": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "files": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "attachments": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "interceptors": {
+      "type": "array",
+      "description": "JavaScript interceptors for api-resource commands and queries. At most one interceptor per (commandName, type).",
+      "items": {
+        "type": "object",
+        "properties": {
+          "commandName": {
+            "type": "string",
+            "description": "Operation to intercept: Create, Update, Replace, or Delete run on the command pipeline; Query and Get run on the query pipeline.",
+            "enum": [
+              "Create",
+              "Update",
+              "Replace",
+              "Delete",
+              "Query",
+              "Get",
+              "Export",
+              "Import",
+              "Files",
+              "Attachments"
+            ]
+          },
+          "type": {
+            "$ref": "interceptor-type.schema.json",
+            "description": "Whether the script runs before or after the operation."
+          },
+          "javascript": {
+            "type": "string",
+            "description": "JavaScript code to execute. For Pre command interceptors, set globalError to block the operation."
+          },
+          "entityExecutionOrder": {
+            "type": "string",
+            "enum": [
+              "entityFirst",
+              "pageFirst",
+              "skipEntity",
+              "apiResourceFirst"
+            ],
+            "description": "How this interceptor orders relative to entity interceptors on the command pipeline. Only meaningful for command commands."
+          }
+        },
+        "required": [
+          "commandName",
+          "type",
+          "javascript"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Arbitrary key/value metadata carried with the descriptor.",
+      "additionalProperties": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "resultType": {
+      "type": "string",
+      "description": "Query result shape. Custom executes queryJavascript and returns its projected, bounded list.",
+      "enum": [
+        "paged",
+        "list",
+        "aggregate",
+        "groupedAggregate",
+        "groupedRecords",
+        "custom"
+      ],
+      "default": "paged"
+    },
+    "groupByProperty": {
+      "type": "string",
+      "description": "Group by property"
+    },
+    "aggregationType": {
+      "type": "string",
+      "description": "Aggregation",
+      "enum": [
+        "count",
+        "sum",
+        "average",
+        "min",
+        "max",
+        "percentFilled",
+        "percentEmpty"
+      ],
+      "default": "count"
+    },
+    "aggregationProperty": {
+      "type": "string",
+      "description": "Aggregate property"
+    },
+    "dateGrouping": {
+      "type": "string",
+      "description": "Date grouping",
+      "enum": [
+        "year",
+        "quarter",
+        "month",
+        "week",
+        "day"
+      ]
+    },
+    "inputValidation": {
+      "type": "object",
+      "description": "Per-operation constraints on the resulting record, in addition to shared inputFilter and entity validation.",
+      "properties": {
+        "create": {
+          "$ref": "#/$defs/filterExpression"
+        },
+        "update": {
+          "$ref": "#/$defs/filterExpression"
+        },
+        "replace": {
+          "$ref": "#/$defs/filterExpression"
+        }
+      },
+      "additionalProperties": false
+    },
+    "recordScopes": {
+      "type": "object",
+      "description": "Independent operation scopes. Identity is always read from the server session. Missing scope means all records permitted by the resource and tenant.",
+      "additionalProperties": false,
+      "properties": {
+        "query": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "all",
+                "createdByCurrentUser",
+                "assignedToCurrentUser"
+              ]
+            },
+            "userProperty": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        "get": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "all",
+                "createdByCurrentUser",
+                "assignedToCurrentUser"
+              ]
+            },
+            "userProperty": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        "update": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "all",
+                "createdByCurrentUser",
+                "assignedToCurrentUser"
+              ]
+            },
+            "userProperty": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        "replace": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "all",
+                "createdByCurrentUser",
+                "assignedToCurrentUser"
+              ]
+            },
+            "userProperty": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        "delete": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "all",
+                "createdByCurrentUser",
+                "assignedToCurrentUser"
+              ]
+            },
+            "userProperty": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        "lookup": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "all",
+                "createdByCurrentUser",
+                "assignedToCurrentUser"
+              ]
+            },
+            "userProperty": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        "export": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "all",
+                "createdByCurrentUser",
+                "assignedToCurrentUser"
+              ]
+            },
+            "userProperty": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        "import": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "all",
+                "createdByCurrentUser",
+                "assignedToCurrentUser"
+              ]
+            },
+            "userProperty": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        "files": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "all",
+                "createdByCurrentUser",
+                "assignedToCurrentUser"
+              ]
+            },
+            "userProperty": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        },
+        "attachments": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "all",
+                "createdByCurrentUser",
+                "assignedToCurrentUser"
+              ]
+            },
+            "userProperty": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "kind"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "getResultType": {
+      "type": "string",
+      "enum": [
+        "record",
+        "custom"
+      ],
+      "default": "record"
+    },
+    "queryJavascript": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Custom result JavaScript. Return the supplied filtered query after projection; do not materialize it. Query returns a bounded list and Get returns a single object."
+    },
+    "getJavascript": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Custom result JavaScript. Return the supplied filtered query after projection; do not materialize it. Query returns a bounded list and Get returns a single object."
+    },
+    "exportFields": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "properties": {
+          "propertyName": {
+            "type": "string"
+          },
+          "label": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "propertyName"
+        ],
+        "additionalProperties": false
+      },
+      "description": "Allowed export columns in output order, with optional header labels. Null uses Query response fields."
+    },
+    "importFields": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "fileFields": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "importModes": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string",
+        "enum": [
+          "append",
+          "merge"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "fileActions": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string",
+        "enum": [
+          "upload",
+          "download"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "attachmentActions": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string",
+        "enum": [
+          "list",
+          "upload",
+          "download",
+          "delete"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "allowFileBundleExport": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "lookupFields": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "description": "Omit for standard FK choices. When configured, only listed root FK fields are allowed. Each returns name, value and selected data fields. Server filters also apply to selected keys.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "fieldName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "displayPropertyName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "dataFields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "sortProperty": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sortDescending": {
+            "type": "boolean"
+          },
+          "maxResultCount": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "backendFilter": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/filterExpression"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "fieldName",
+          "displayPropertyName",
+          "dataFields",
+          "maxResultCount"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "name",
+    "entityName"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "propertyNameList": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "filterExpression": {
+      "description": "A single condition object or a group with an 'items' array. Non-first items inside a group must declare 'logic' ('and' or 'or'). A condition carries 'propertyName', optional 'operator', and exactly one value source: 'value', 'valueProvider', or 'javaScript'.",
+      "type": "object",
+      "properties": {
+        "logic": {
+          "type": "string",
+          "enum": [
+            "and",
+            "or"
+          ]
+        },
+        "propertyName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "operator": {
+          "type": "string"
+        },
+        "value": {},
+        "valueProvider": {
+          "type": "string"
+        },
+        "javaScript": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/filterExpression"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
