@@ -52,7 +52,7 @@ To undo a delete together with everything the delete changed, use history instea
 
 ### Adding a Deleted Name Again
 
-When you add an entity or a property in the Designer under a name whose data is still kept, the Designer offers to restore the deleted object instead. **Restore** brings it back as it was. Creating a new one leaves the deleted data on the **Deleted objects** page, and the new object starts without that data.
+When you add an entity or a property in the Designer under a name whose data is still kept, the Designer offers to restore the deleted object instead. **Restore** brings it back as it was. For a property, the dialog then lists the places it was used before, as the **Deleted objects** page does. Creating a new one leaves the deleted data on the **Deleted objects** page, and the new object starts without that data.
 
 ### Purge
 
