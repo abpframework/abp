@@ -11,20 +11,54 @@ The Low-Code Designer can model more than scalar fields and basic CRUD pages. Th
 
 ## Property Storage
 
-Scalar properties use one of two storage shapes:
+Scalar properties keep their values in one of two places: a physical column of their own, or the entity's JSON `Data` column. `isMappedToDbField` on the property decides which:
 
-* `isMappedToDbField: true` maps the property to its own physical column.
-* An omitted or `false` `isMappedToDbField` stores the property through the entity's dynamic data mapping.
+| `isMappedToDbField` | Where the values are stored |
+|---------------------|-----------------------------|
+| `true` | A physical column of its own |
+| `false` | The entity's `Data` JSON column |
+| Omitted | The current default, set by `UseJsonDataStorage` |
 
-By default, dynamic data mapping uses the entity's JSON `Data` column. Applications that need individual columns for those properties can disable JSON data storage while configuring EF Core:
+The default is the module option `AbpLowCodeEntityFrameworkCoreOptions.UseJsonDataStorage`. It is `true`, which stores properties in the `Data` column. Set it to `false` when the database provider does not support the JSON column mapping, queries, and updates that Low-Code needs, so that new properties get columns of their own:
 
 ```csharp
-builder.ConfigureDynamicEntities(useJsonDataStorage: false);
+Configure<AbpLowCodeEntityFrameworkCoreOptions>(options =>
+{
+    options.UseJsonDataStorage = false;
+});
 ```
 
-The equivalent module option is `AbpLowCodeEntityFrameworkCoreOptions.UseJsonDataStorage`. Its verified default is `true`.
+`builder.ConfigureDynamicEntities(useJsonDataStorage: false)` sets the same option while configuring EF Core. Low-Code does not infer the option from the provider.
 
-Changing the storage mode or `isMappedToDbField` affects the physical schema. Decide the storage strategy before creating production tables, then use the normal migration or runtime schema workflow for later changes. Formulas and rollups are virtual and do not create physical scalar columns.
+A property created in the Designer, through MCP, or through any other model change records the storage chosen at that moment: its `isMappedToDbField` is set from the default. Changing `UseJsonDataStorage` later therefore affects only new properties, and existing entities keep working. Only a property whose descriptor omits `isMappedToDbField`, such as one written by hand in a descriptor file, follows the current default. Low-Code does not move existing values between the `Data` column and individual columns when the option changes.
+
+A dynamic entity's table has the `Data` column only while at least one of its properties is stored there. An entity whose properties all have their own columns has no `Data` column, so it works on databases without JSON column support. The column is added when a property first needs it and is not removed afterwards.
+
+Formulas, rollups, and primitive collections are not stored in either place: formulas and rollups are virtual, and collections have their own tables.
+
+### Physical Name Length
+
+Runtime entities and mapped properties become tables and columns named after them, and a non-default app adds its name to the table name. Databases limit how long such names can be; PostgreSQL, for example, accepts 63 bytes. A model change that would create a longer table or column name is refused before the schema is touched, with `LowCode:PhysicalTableNameTooLong` or `LowCode:PhysicalColumnNameTooLong`. The error names the entity or property; use a shorter entity, app, or property name. The limit comes from the configured EF Core provider, and a table name must leave room for its primary key name (`PK_` followed by the table name).
+
+Names that Low-Code derives for primitive collection tables and their keys and indexes are shortened with a stable suffix instead.
+
+### Default Values
+
+A property's `defaultValue` must fit the property type. A value that cannot be converted, such as `"not-a-number"` on an `int` property, is refused together with the model change that sets it.
+
+### Adding a Required Property to Existing Data
+
+When you add a required property to an entity that already has records, choose how the existing rows get a value. In the Designer, this is the **Existing Records** setting on the property dialog's **Advanced** tab. A model change sets it through the operation's options:
+
+| Option | Effect |
+|--------|--------|
+| `existingDataMode: "none"` | Existing rows are not filled |
+| `existingDataMode: "fixed"` with `existingDataValue` | Every existing row gets the same value |
+| `existingDataMode: "formula"` with `existingDataExpression` | Each existing row gets the result of an [expression](expression-language.md) |
+
+Fixed values and formulas work for properties stored in the `Data` column and for properties mapped to their own column. The fill is part of the model change, not of the property: `backfillValue` is not a property attribute, and a model change that sets it on a property is refused with the existing-data options to use instead.
+
+### Table Prefixes
 
 Source-model and runtime-model dynamic tables can use separate prefixes:
 
@@ -199,6 +233,56 @@ A filter value can be:
 * Resolved by a registered provider through `valueProvider`.
 
 Built-in providers cover the current user ID, username, first name, surname, email, email verification, phone number, phone verification, roles, and current tenant ID. Applications can register additional typed providers with `AbpLowCodePageBackendFilterOptions`.
+
+### Filters on List Fields
+
+A property that stores multiple values (a [primitive collection](#primitive-collections)) keeps its values in rows of its own table. A backend filter on such a property matches over those rows, and it works on every EF Core provider. The operator depends on both the property and the value source:
+
+| Property | Value | Operators |
+|----------|-------|-----------|
+| Single value | One value | Every operator the property type supports |
+| Single value | Multiple values | `in` (is any of), `notIn` (is none of) |
+| List | One value | `equal` (contains), `notEqual` (does not contain), `in`, `notIn` |
+| List | Multiple values | `in` (contains any of), `notIn` (contains none of) |
+| List | None | `hasValue` (`true`: has items, `false`: is empty) |
+
+A multiple-value source is a static array, JavaScript that returns an array, or a value provider registered with `cardinality: PageBackendFilterValueCardinality.Multiple`. A multiple-value provider can be used only with `in` and `notIn`. Other operators on a list field, such as `contains`, `startsWith`, `greaterThan`, or `between`, are refused when the model is saved, and the error names the allowed operators. The Designer offers only the valid operators and sources for the selected field.
+
+An empty value list never removes the condition: `in` with no values matches no records, and `notIn` with no values excludes none.
+
+The following filter shows records shared with any of the current user's teams. `AudienceTeamIds` is a list field, and `CurrentUserTeamIds` is an application-registered provider that returns several IDs:
+
+```json
+{
+  "backendFilter": {
+    "propertyName": "AudienceTeamIds",
+    "operator": "in",
+    "valueProvider": "CurrentUserTeamIds"
+  }
+}
+```
+
+```csharp
+Configure<AbpLowCodePageBackendFilterOptions>(options =>
+{
+    options.AddOrReplaceValueProvider(
+        "CurrentUserTeamIds",
+        LocalizableString.Create<MyResource>("BackendFilter:CurrentUserTeamIds"),
+        typeof(CurrentUserTeamIdsBackendFilterValueProvider),
+        [EntityPropertyType.Guid],
+        groupPath: ["Current user"],
+        cardinality: PageBackendFilterValueCardinality.Multiple,
+        supportedOperators: ["in", "notIn"]);
+});
+```
+
+`AddOrReplaceValueProvider` accepts either a plain display name or an `ILocalizableString`; the Designer lists sources by their localized names.
+
+### What a Backend Filter Scopes
+
+A backend filter limits the existing records that the page reads, including lists, single-record reads, and exports, and the records that update and delete can find. A record outside the filter cannot be read, updated, or deleted through the page.
+
+A backend filter does not check the payload of a create request and never assigns a value. To set a scoped field such as an owner on new records, leave it out of the create form and set it in a Create `Pre` [interceptor](interceptors.md), for example with `context.commandArgs.setValue('OwnerId', context.currentUser.id);`.
 
 If a JavaScript filter value fails, including a script that calls an [error helper](scripting-api.md#error-helpers), no filter value is produced and the query fails instead of returning unfiltered data. The error is answered like any other script error.
 

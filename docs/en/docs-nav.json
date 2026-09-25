@@ -2166,6 +2166,10 @@
           "path": "low-code/model-history.md"
         },
         {
+          "text": "Deleted Objects",
+          "path": "low-code/deleted-objects.md"
+        },
+        {
           "text": "Calculated and Rollup Properties",
           "path": "low-code/formula-properties.md"
         },
