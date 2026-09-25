@@ -373,6 +373,8 @@ Use entity `attachments` when each record can have multiple arbitrary files:
 
 `entityName` can point to another dynamic entity or a registered [reference entity](reference-entities.md). Use `dependsOn` (`propertyName` and `filterPropertyName`) for cascading lookups. Reverse access from the referenced entity side is not configured on the foreign key; define a page `relationships[]` entry on the target entity's page instead. See [Foreign Access](foreign-access.md).
 
+Lookups check access: the caller needs view permission on the referenced entity, and a foreign key marked `serverOnly` has no lookup. A foreign key that clients cannot set (`allowSetByClients: false`) offers choices only where a page shows it as a column or filter.
+
 ### Validators
 
 ```json
