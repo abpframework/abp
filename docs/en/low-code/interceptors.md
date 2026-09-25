@@ -176,6 +176,58 @@ globalError = 'Cannot delete this entity!';
 
 ![Interceptor validation error displayed in the UI](images/interceptor-error.png)
 
+`globalError` is answered like `userFriendlyError(message)`. To choose the kind of error, call one of the [error helpers](scripting-api.md#error-helpers) instead. They abort the operation immediately, and ABP exception handling decides the HTTP status and the error response:
+
+```javascript
+// 400 with a validation error for the Quantity field
+if (context.commandArgs.getValue('Quantity') < 0) {
+    validationError('Quantity cannot be negative.', [{ message: 'Quantity cannot be negative.', members: ['Quantity'] }]);
+}
+
+// 403 with a coded business error; the caller sees the code's localized text
+if (!context.currentUser.isInRole('admin')) {
+    businessError('Only administrators can close orders.', 'Acme.Orders:CloseRequiresAdmin');
+}
+```
+
+Any other failure, such as an uncaught `throw new Error(...)`, aborts the operation with the `LowCode:ScriptExecutionFailed` error and HTTP status `500`, without the script's message. See [Runtime Failures](scripting-api.md#runtime-failures).
+
+## Page Interceptors and Execution Order
+
+A page can define its own `Create`, `Update`, and `Delete` interceptors in its `interceptors` array. They run when the operation comes through that page. Each page interceptor can set `entityExecutionOrder` to control how it is combined with the entity interceptor of the same command and type:
+
+| `entityExecutionOrder` | Behavior |
+|------------------------|----------|
+| Not set (default) | The page interceptor runs first, then the entity interceptor |
+| `pageFirst` | Same as the default |
+| `entityFirst` | The entity interceptor runs first, then the page interceptor |
+| `skipEntity` | Only the page interceptor runs; the entity interceptor is skipped |
+
+The order applies to both `Pre` and `Post` interceptors. Because the page interceptor runs first by default, it can set a value, such as an owner field, before the entity interceptor validates it. The entity interceptor is the rule shared by every write path, so it runs last unless a page interceptor asks for `entityFirst`.
+
+A `Replace` interceptor of the page runs instead of the entity's `Replace` interceptor. `entityExecutionOrder` only affects `Pre` and `Post` interceptors.
+
+```json
+{
+  "name": "my-campaigns",
+  "type": "dataGrid",
+  "entityName": "Acme.Campaigns.Campaign",
+  "interceptors": [
+    {
+      "commandName": "Create",
+      "type": "Pre",
+      "javascript": "context.commandArgs.setValue('OwnerId', context.currentUser.id);"
+    },
+    {
+      "commandName": "Delete",
+      "type": "Pre",
+      "entityExecutionOrder": "entityFirst",
+      "javascript": "context.log('Deleting ' + context.commandArgs.entityId);"
+    }
+  ]
+}
+```
+
 ## Examples
 
 ### Pre-Create: Validation
