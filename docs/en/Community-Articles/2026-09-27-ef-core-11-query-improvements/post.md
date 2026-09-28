@@ -4,7 +4,7 @@ Every December, music streaming apps ship the same ritual: a personalized, share
 
 That's the premise of this article. EF Core 11 (currently shipping as `11.0.0-rc.1`) ships a handful of LINQ-to-SQL translation improvements that sound small on paper but remove real friction from everyday reporting code: a native `FullJoin`, a smarter translation for `GroupBy` combined with a per-group `MaxBy`/`MinBy`, and a split-query optimization that stops a to-one navigation from leaking a join into collection statements it doesn't belong in. The official release notes describe *that* these exist. Some come with a short SQL sample; others, like the `GroupBy` enhancements, are covered by a paragraph and a list of GitHub PRs. None of them answer the one question every EF developer actually cares about: does this really collapse into one round-trip, or am I about to ship an N+1?
 
-To answer that with evidence instead of trust, we built a small, deliberately "boring" business domain around a subject everyone already understands: an end-of-year music listening report in the style of the year-end listening recaps most streaming apps publish. We called it **YearSound Wrapped**. It's a plain ASP.NET Core Blazor Server app on a Clean Architecture layout (Domain / Application / Infrastructure / Web, no extra framework on top), backed by SQL Server, seeded with 40 artists and roughly 15,000 play events across two years. Every query in this article runs against that real dataset, and every SQL snippet below is a real captured execution (`ToQueryString()` or logged `DbCommand` text) rather than a guess.
+To answer that with evidence instead of trust, we built a small, deliberately "boring" business domain around a subject everyone already understands: an end-of-year music listening report in the style of the year-end listening recaps most streaming apps publish. We called it **YearSound Wrapped**. It's a plain ASP.NET Core Blazor Server app on a Clean Architecture layout (Domain / Application / Infrastructure / Web, no extra framework on top), backed by SQL Server, seeded with 42 artists, 286 tracks and roughly 15,000 play events across two years. Every query in this article runs against that real dataset, and every SQL snippet below is a real captured execution (`ToQueryString()` or logged `DbCommand` text) rather than a guess.
 
 ![YearSound Wrapped home screen](home.png)
 
@@ -274,7 +274,9 @@ public async Task<string?> GetHiddenGemTrackTitleAsync(CancellationToken ct = de
 
 ### The generated SQL
 
-Both compile to a `TOP(1) ... ORDER BY` query with the comparison key computed as a correlated subquery. No client evaluation is involved:
+Both compile to a `TOP(1) ... ORDER BY` query with the comparison key computed as a correlated subquery. No client evaluation is involved.
+
+Top artist (`MaxByAsync`):
 
 ```sql
 DECLARE @p int = 1;
@@ -286,6 +288,22 @@ ORDER BY (
     INNER JOIN [PlayEvents] AS [p] ON [t].[Id] = [p].[TrackId]
     WHERE [a].[Id] = [t].[ArtistId]) DESC
 ```
+
+Hidden gem (`MinByAsync`):
+
+```sql
+DECLARE @p int = 1;
+
+SELECT TOP(@p) [t].[Id], [t].[ArtistId], [t].[Duration], [t].[Title]
+FROM [FavoriteTracks] AS [f]
+INNER JOIN [Tracks] AS [t] ON [f].[TrackId] = [t].[Id]
+ORDER BY (
+    SELECT COUNT(*)
+    FROM [PlayEvents] AS [p]
+    WHERE [t].[Id] = [p].[TrackId])
+```
+
+The shape is the same; the only difference is the sort direction. `MaxByAsync` orders the key `DESC`, while `MinByAsync` keeps the default ascending order, so `TOP(1)` picks the favorite with the fewest plays.
 
 ### Edge case: empty sequences
 
