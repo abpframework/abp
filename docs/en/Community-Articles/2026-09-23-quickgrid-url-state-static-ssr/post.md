@@ -10,7 +10,7 @@
 
 - **Static SSR works.** Sorting and paging are functional on pages with no interactivity at all — headers and the paginator are `<a>` links carrying `sort`, `direction`, and `page` query parameters.
 - **The URL is the state store.** Refresh, Back/Forward, bookmarks, and "copy link" all preserve the grid state because the state is the address.
-- **Your own parameters coexist.** A `[SupplyParameterFromQuery]` filter like `?country=Germany` is preserved inside QuickGrid's generated links, and vice versa.
+- **Your own parameters coexist.** A `[SupplyParameterFromQuery]` filter like `?country=Germany` is preserved inside QuickGrid's generated links; your own links decide whether to keep the grid's.
 - **Multiple grids need distinct parameter names.** The new `QueryParameterNameOptions` parameter renames `sort`/`direction`/`page` per grid (e.g. `?c_sort=Name&c_page=2`). Two grids sharing the defaults fight over the same keys.
 - **`page` is 1-based in the URL** even though `PaginationState.CurrentPageIndex` stays 0-based.
 - **Renamed during previews.** Preview 5–6 shipped `QueryParameterNamePrefix` and an `order` parameter; Preview 7 replaced it with `QueryParameterNameOptions` and renamed `order` → `direction`. Code written against Preview 5/6 articles won't compile unchanged on RC1.
@@ -41,7 +41,7 @@ In the browser, `blazor.web.js` intercepts these clicks as **enhanced navigation
 
 ## The sample app
 
-The sample is a Blazor Web App with **no interactivity on its pages** — the scenario that was impossible before .NET 11:
+The sample is a Blazor Web App whose main pages are **static SSR — no interactive render mode** — the scenario that was impossible before .NET 11. (One page later opts into `InteractiveServer` to compare behavior.)
 
 ```bash
 dotnet new blazor -n QuickGridUrlState --interactivity None --empty
@@ -334,7 +334,7 @@ Because everything is real markup, most of the accessibility story comes free:
 
 - **`<a>` vs `<button>`.** Sort headers are true links now (they navigate), which is the right element for the job — screen readers announce "link", and open-in-new-tab works. Disabled paginator links carry `aria-disabled="true"` and `tabindex="-1"`.
 - **`aria-sort`** shows up on the sorted `<th>` (`ascending`/`descending`, `none` elsewhere) and `scope="col"` on all headers — table semantics are intact.
-- **Focus.** The template's `FocusOnNavigate` moves focus to `h1` on navigation, which keeps enhanced-nav clicks sane for keyboard users.
+- **Focus stays put.** `FocusOnNavigate` only moves focus to `h1` when the *path* changes (it compares origin + pathname, per RC1's `blazor.web.js`), and sort/page links only change the query string — so focus stays on the clicked link instead of being yanked to the heading on every click. That's what keyboard users want here; just keep the link text/`aria-label`s meaningful, since there's no separate announcement of the new state.
 - **SEO/no-JS.** The full sorted, paged table is in the HTML response — crawlers and link unfurlers see real rows, and every sort/page permutation is a crawlable URL. Two things to watch: `?page=999` returns **200 with clamped content** rather than a redirect (add a `canonical` link if soft-duplicates worry you), and `IsDefaultSortColumn` makes the bare URL and `?sort=X&direction=Y` render identical content, so pick one canonical form for links you publish.
 
 ## Opting out
@@ -383,14 +383,14 @@ QueryParameterNameOptions (sealed)
   string Sort, Direction, Page                                      // settable
 ```
 
-> **Docs lag the RC1 rename.** The QuickGrid docs page and several preview-era blog posts still show `QueryParameterNamePrefix` and `?order=`. On RC1 that parameter doesn't exist and `order` is ignored — use `QueryParameterNameOptions` and `direction`.
+> **Reading older preview-era content?** The [QuickGrid docs](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/quickgrid) were updated mid-September and describe the current API — but blog posts written against Preview 5/6 still show `QueryParameterNamePrefix` and `?order=`. On RC1 that parameter doesn't exist and `order` is ignored — use `QueryParameterNameOptions` and `direction`.
 
 ## Known issues and production readiness
 
 - **Go-live, not GA.** RC1 is production-supported under Microsoft's go-live license (window ends October 13, 2026 — plan to move to RC2/GA). .NET 11 is an **STS** release (support through November 9, 2028); .NET 10 remains **LTS** (November 14, 2028). The support windows end in the same month, so choose on features and risk, not longevity.
 - **Duplicate provider calls on `?page=` requests** ([observed above](#server-side-paging-with-griditemsprovider)) — budget for it or use `Items` for small tables. See also [dotnet/aspnetcore#69381](https://github.com/dotnet/aspnetcore/issues/69381).
 - **Markup breaking change.** `button.col-title` → `a.col-title` and paginator `button` → `a`. CSS selectors and Playwright/Selenium locators targeting `button` need updating; `aria-disabled` replaces `:disabled` for the disabled paginator state.
-- **`Paginator.OnParametersSet` → `OnParametersSetAsync`.** Binary-compatible but behaviorally breaking for `Paginator` subclasses that overrode the sync method — they silently stop being called.
+- **`Paginator`'s own work moved into `OnParametersSetAsync`.** Sync `OnParametersSet` overrides in subclasses still run — `ComponentBase` invokes both callbacks on every parameter set — but they now run *before* the paginator reads `page` from the URL, so ordering changes if your override depends on `CurrentPageIndex`. And if you override `OnParametersSetAsync`, call `await base.OnParametersSetAsync()` or the URL sync is skipped entirely.
 - **`sort` uses `Title`.** Renaming a column title breaks published/bookmarked URLs; give `TemplateColumn`s a `Title` to make them URL-sortable.
 - **Sorting does not reset the page** — sorting while on page 12 keeps page 12 (with clamping). If your UX expects "back to page 1 on re-sort," note the behavior.
 
@@ -412,7 +412,7 @@ The tests assert the contract directly: sort headers are `<a>` links, `?sort=Nam
 - [ ] Verify sortable columns have meaningful `Title`s — they become the public `?sort=` values and bookmark identifiers.
 - [ ] Set `QueryParameterNameOptions` prefixes on every grid after the first on a page.
 - [ ] Update CSS/JS/E2E selectors from `button.col-title` / `nav button` to `a.col-title` / `nav a`; check `aria-disabled` instead of `:disabled`.
-- [ ] If you subclass `Paginator`, move `OnParametersSet` overrides to `OnParametersSetAsync`.
+- [ ] If you subclass `Paginator`: sync `OnParametersSet` overrides still run, but before the URL sync — override `OnParametersSetAsync` and `await base` when you need the resolved page.
 - [ ] Decide deliberately whether sorting should reset the page — it doesn't, out of the box.
 - [ ] Keep filter/search params in the query string (`[SupplyParameterFromQuery]`) — the grid preserves them for free.
 - [ ] For `GridItemsProvider`, measure the duplicate `?page=` invocation on RC1 and re-check after upgrading.
@@ -422,7 +422,7 @@ The tests assert the contract directly: sort headers are `<a>` links, `?sort=Nam
 ## References
 
 - [What's new in ASP.NET Core in .NET 11](https://learn.microsoft.com/en-us/aspnet/core/release-notes/aspnetcore-11)
-- [QuickGrid component](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/quickgrid) — note the preview-era `QueryParameterNamePrefix`/`order` naming
+- [QuickGrid component](https://learn.microsoft.com/en-us/aspnet/core/blazor/components/quickgrid) — current docs describe `QueryParameterNameOptions`; beware pre-Preview-7 blog posts showing `QueryParameterNamePrefix`/`order`
 - [ASP.NET Core Blazor routing](https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/routing) and [enhanced navigation](https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/navigation#enhanced-navigation-and-form-handling)
 - dotnet/aspnetcore: PR [#65451](https://github.com/dotnet/aspnetcore/pull/65451) (SSR support), issue [#66830](https://github.com/dotnet/aspnetcore/issues/66830) (API proposal), PR [#67733](https://github.com/dotnet/aspnetcore/pull/67733) (API rename), issue [#69381](https://github.com/dotnet/aspnetcore/issues/69381) (duplicate provider requests)
 - [.NET 11 downloads](https://dotnet.microsoft.com/en-us/download/dotnet/11.0) and the [.NET support policy](https://dotnet.microsoft.com/platform/support/policy/dotnet-core)
