@@ -27,7 +27,7 @@ Before the markup, it's worth being clear about what problem this solves. A data
 | `Session`/`TempData` | No | Yes | No | Yes, but per-user | Server store + cookies |
 | **Query string (.NET 11)** | **Yes** | **Yes** | **Yes** | **Yes** | **None** |
 
-The query string is the only option that's shareable, refresh-safe, history-friendly, SSR-compatible, and stateless on the server all at once. Every state transition is just a GET: no session affinity, no circuit to hold open, no memory to expire. It's also what the rest of the web already does for list views — GitHub's issue lists, NuGet's search results, and every e-commerce category page encode `?sort=&page=` in the address bar.
+The query string is the only option that's shareable, refresh-safe, history-friendly, SSR-compatible, and stateless on the server all at once. Every state transition is just a GET: no session affinity, no circuit to hold open, no memory to expire. It's also what the rest of the web already does for list views — search results and e-commerce category pages have encoded `?sort=&page=` in the address bar for decades.
 
 The mechanism, per request:
 
@@ -347,7 +347,7 @@ AppContext.SetSwitch(
     false);
 ```
 
-I verified this on RC1: with the switch off, headers and paginator render `<button type="button">` again — **but the URL state is still read**. `/people?sort=Name&direction=desc&page=2` still renders sorted page 2; the buttons just can't change it in SSR. So the switch is a compatibility escape hatch for interactive apps (custom `button.col-title` CSS/JS, `Paginator` subclasses relying on the sync `OnParametersSet`), not a way to turn URL state off. In static SSR it leaves you with dead controls.
+I verified this on RC1: with the switch off, headers and paginator render `<button type="button">` again — **but the URL state is still read**. `/people?sort=Name&direction=desc&page=2` still renders sorted page 2; the buttons just can't change it in SSR. So the switch is a compatibility escape hatch for interactive apps with custom `button.col-title`/`nav button` CSS or JS, not a way to turn URL state off — and it doesn't undo the `Paginator` lifecycle change covered below. In static SSR it leaves you with dead controls.
 
 ## .NET 10 vs .NET 11, and the preview trail
 
