@@ -25,7 +25,10 @@ namespace Volo.Blogging.Users
                 query = query.Where(x => x.UserName.Contains(filter));
             }
 
-            return await query.Take(maxCount).ToListAsync(GetCancellationToken(cancellationToken));
+            return await query
+                .OrderBy(x => x.UserName)
+                .Take(maxCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
     }
 }

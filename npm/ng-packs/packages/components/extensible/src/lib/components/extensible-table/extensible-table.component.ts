@@ -1,8 +1,10 @@
 import {
+  afterNextRender,
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   inject,
   Injector,
   LOCALE_ID,
@@ -17,9 +19,10 @@ import {
   contentChild,
   viewChild,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AsyncPipe, isPlatformBrowser, NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
 
-import { Observable, filter, map, Subject, debounceTime, distinctUntilChanged } from 'rxjs';
+import { Observable, map, Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -92,6 +95,7 @@ const DEFAULT_ACTIONS_COLUMN_WIDTH = 150;
 })
 export class ExtensibleTableComponent<R = any> implements AfterViewInit, OnDestroy {
   readonly #injector = inject(Injector);
+  readonly #destroyRef = inject(DestroyRef);
   readonly getInjected = this.#injector.get.bind(this.#injector);
   protected readonly locale = inject(LOCALE_ID);
   protected readonly config = inject(ConfigStateService);
@@ -186,6 +190,10 @@ export class ExtensibleTableComponent<R = any> implements AfterViewInit, OnDestr
     },
   );
 
+  private horizontalScrollOffset = 0;
+
+  private hasPendingHorizontalScrollOffset = false;
+
   hasAtLeastOnePermittedAction: boolean;
 
   readonly propList: EntityPropList<R>;
@@ -232,6 +240,7 @@ export class ExtensibleTableComponent<R = any> implements AfterViewInit, OnDestr
       }
 
       this._data.set(dataValue.map((record, index) => this.prepareRecord(record, index)));
+      this.restoreHorizontalScrollOffset();
     });
   }
 
@@ -363,11 +372,64 @@ export class ExtensibleTableComponent<R = any> implements AfterViewInit, OnDestr
   ngAfterViewInit(): void {
     if (!this.infiniteScroll()) {
       this.list()
-        ?.requestStatus$?.pipe(filter(status => status === 'loading'))
-        .subscribe(() => {
-          this._data.set([]);
+        ?.requestStatus$?.pipe(takeUntilDestroyed(this.#destroyRef))
+        .subscribe(status => {
+          if (status === 'loading') {
+            this.rememberHorizontalScrollOffset();
+            this._data.set([]);
+            return;
+          }
+
+          // A failed request never reaches the data input, restore from here instead
+          if (status === 'error') {
+            this.restoreHorizontalScrollOffset();
+          }
         });
     }
+  }
+
+  private getBodyElement(): HTMLElement | null {
+    if (!this.isBrowser) {
+      return null;
+    }
+
+    return this.table()?.element?.querySelector('datatable-body') ?? null;
+  }
+
+  // The element carrying the column width is gone while loading without rows, so the browser
+  // resets the horizontal scroll position and the header keeps the offset it had before
+  private rememberHorizontalScrollOffset(): void {
+    const body = this.getBodyElement();
+    this.hasPendingHorizontalScrollOffset = true;
+
+    // Not scrollable while a previous request is still in flight, keep the offset taken back then
+    if (body && body.scrollWidth > body.clientWidth) {
+      this.horizontalScrollOffset = body.scrollLeft;
+    }
+  }
+
+  private restoreHorizontalScrollOffset(): void {
+    if (!this.hasPendingHorizontalScrollOffset) {
+      return;
+    }
+
+    this.hasPendingHorizontalScrollOffset = false;
+
+    afterNextRender(
+      () => {
+        const body = this.getBodyElement();
+
+        if (!body) {
+          return;
+        }
+
+        body.scrollLeft = this.horizontalScrollOffset;
+
+        // The header only follows a scroll event, scrolling to the same position does not raise one
+        body.dispatchEvent(new Event('scroll'));
+      },
+      { injector: this.#injector },
+    );
   }
 
   ngOnDestroy(): void {

@@ -197,10 +197,10 @@ public class MongoBlogPostRepository : MongoDbRepository<CmsKitMongoDbContext, B
     public virtual async Task<List<CmsUser>> GetAuthorsHasBlogPostsAsync(int skipCount, int maxResultCount, string sorting, string filter, CancellationToken cancellationToken = default)
     {
         var queryable = (await CreateAuthorsQueryableAsync(cancellationToken))
-                        .Skip(skipCount)
-                        .Take(maxResultCount)
+                        .WhereIf(!filter.IsNullOrEmpty(), x => x.UserName.Contains(filter.ToLower()))
                         .OrderBy(sorting.IsNullOrEmpty() ? nameof(CmsUser.UserName) : sorting)
-                        .WhereIf(!filter.IsNullOrEmpty(), x => x.UserName.Contains(filter.ToLower()));
+                        .Skip(skipCount)
+                        .Take(maxResultCount);
 
         return await AsyncExecuter.ToListAsync(queryable, GetCancellationToken(cancellationToken));
     }

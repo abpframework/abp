@@ -22,8 +22,19 @@ internal class ChildUnitOfWork : IUnitOfWork
 
     public string? ReservationName => _parent.ReservationName;
 
-    public event EventHandler<UnitOfWorkFailedEventArgs> Failed = default!;
-    public event EventHandler<UnitOfWorkEventArgs> Disposed = default!;
+    // Forwarded directly to the parent, so a child does not have to subscribe
+    // (and leak) a handler on the parent for its own lifetime.
+    public event EventHandler<UnitOfWorkFailedEventArgs> Failed
+    {
+        add => _parent.Failed += value;
+        remove => _parent.Failed -= value;
+    }
+
+    public event EventHandler<UnitOfWorkEventArgs> Disposed
+    {
+        add => _parent.Disposed += value;
+        remove => _parent.Disposed -= value;
+    }
 
     public IServiceProvider ServiceProvider => _parent.ServiceProvider;
 
@@ -38,9 +49,6 @@ internal class ChildUnitOfWork : IUnitOfWork
 
         _parent = parent;
         _parent.IncrementActiveChildUnitOfWorkCount();
-
-        _parent.Failed += (sender, args) => { Failed.InvokeSafely(sender!, args); };
-        _parent.Disposed += (sender, args) => { Disposed.InvokeSafely(sender!, args); };
     }
 
     public void SetOuter(IUnitOfWork? outer)

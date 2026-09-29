@@ -191,10 +191,10 @@ Just like the password, you can also set the admin email (use the `AdminEmail` k
 
 ### AbpIdentityAspNetCoreOptions
 
-`AbpIdentityAspNetCoreOptions` can be configured in the UI layer, in the `ConfigureServices` method of your [module](../framework/architecture/modularity/basics.md). Example:
+`AbpIdentityAspNetCoreOptions` is read while the services are being registered, so it has to be set in the `PreConfigureServices` method of your [module](../framework/architecture/modularity/basics.md). Example:
 
 ````csharp
-Configure<AbpIdentityAspNetCoreOptions>(options =>
+PreConfigure<AbpIdentityAspNetCoreOptions>(options =>
 {
     //Set options here...
 });

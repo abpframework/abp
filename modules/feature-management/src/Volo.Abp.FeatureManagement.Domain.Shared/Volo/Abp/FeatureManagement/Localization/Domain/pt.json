@@ -1,0 +1,17 @@
+{
+  "culture": "pt",
+  "texts": {
+    "Features": "Funcionalidades",
+    "NoFeatureFoundMessage": "Não existe nenhuma funcionalidade disponível.",
+    "ManageHostFeatures": "Gerir funcionalidades do host",
+    "ManageHostFeaturesText": "Pode gerir as funcionalidades do lado do host clicando no botão seguinte.",
+    "Permission:FeatureManagement": "Gestão de funcionalidades",
+    "Permission:FeatureManagement.ManageHostFeatures": "Gerir funcionalidades do host",
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "O valor da funcionalidade {0} não é válido!",
+    "Menu:FeatureManagement": "Gestão de funcionalidades",
+    "ResetToDefault": "Repor predefinição",
+    "ResetedToDefault": "Reposto para a predefinição",
+    "AreYouSure": "Tem a certeza?",
+    "AreYouSureToResetToDefault": "Tem a certeza de que pretende repor a predefinição?"
+  }
+}

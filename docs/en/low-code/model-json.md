@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Define ABP Low-Code descriptor metadata and descriptor schemas for dynamic entities, pages, forms, filters, permissions, script endpoints, event handlers, background jobs, and workers."
+    "Description": "Define ABP Low-Code descriptor metadata and descriptor schemas for apps, dynamic entities, pages, forms, filters, permissions, script endpoints, event handlers, background jobs, and workers."
 }
 ```
 
@@ -40,10 +40,11 @@ Keep the whole `_Dynamic` folder and the generated initializer in source control
 
 Layout conventions:
 
-* `entities/` and `enums/` usually follow namespace-like folders such as `entities/Acme/Catalog/Product.json`.
+* `entities/`, `enums/`, and `permissions/` usually follow namespace-like folders such as `entities/Acme/Catalog/Product.json`.
 * `pageGroups/` usually stays flat as `pageGroups/{groupName}.json`.
-* `pages/` stays flat as `pages/{pageName}.json`, even when the page belongs to a page group or is a dashboard.
+* `pages/` stays flat as `pages/{pageName}.json` for the default app, even when the page belongs to a page group or is a dashboard.
 * Dashboard pages live in `pages/`; there is no separate dashboard descriptor folder.
+* `apps/` holds one file per [app](#apps), for example `apps/crm.json`. Descriptors that belong to a non-default app get one extra app-level folder directly under their category and then follow the same layout rules: `entities/crm/Acme/Crm/Contact.json`, `pages/crm/contacts.json`, `forms/crm/contact-form.json`.
 * The runtime scans the directory tree directly. Do not add a combined index file next to `model/`.
 
 ## Example Files and Validation
@@ -83,15 +84,16 @@ The schema files live in the ABP repository under `schemas/low-code`. Use the br
 The schema manifest is published at:
 
 ```text
-https://raw.githubusercontent.com/abpframework/abp/rel-10.5/schemas/low-code/manifest.json
+https://raw.githubusercontent.com/abpframework/abp/rel-10.8/schemas/low-code/manifest.json
 ```
 
-For another version, replace `rel-10.5` with the matching ABP branch or tag.
+For another version, replace `rel-10.8` with the matching ABP branch or tag. The runtime writes the same `rel-{major}.{minor}` branch into the `$schema` reference of generated descriptor files.
 
 The manifest maps each descriptor collection to its descriptor schema:
 
 | Descriptor collection | Descriptor schema |
 |-----------------------|-------------------|
+| `apps` | `definitions/app-descriptor.schema.json` |
 | `enums` | `definitions/enum-descriptor.schema.json` |
 | `entities` | `definitions/entity-descriptor.schema.json` |
 | `endpoints` | `definitions/endpoint-descriptor.schema.json` |
@@ -109,7 +111,7 @@ Use the descriptor schema directly when a descriptor is stored as its own JSON f
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/abpframework/abp/rel-10.5/schemas/low-code/definitions/entity-descriptor.schema.json",
+  "$schema": "https://raw.githubusercontent.com/abpframework/abp/rel-10.8/schemas/low-code/definitions/entity-descriptor.schema.json",
   "name": "Acme.Catalog.Product",
   "displayName": "Products",
   "properties": []
@@ -126,6 +128,7 @@ When descriptor metadata is viewed as an aggregate document, the logical section
 
 ```json
 {
+  "apps": [],
   "enums": [],
   "entities": [],
   "endpoints": [],
@@ -141,6 +144,7 @@ When descriptor metadata is viewed as an aggregate document, the logical section
 
 | Section | Description |
 |---------|-------------|
+| `apps` | Named app scopes that partition the model; descriptors reference them through `app` |
 | `enums` | Reusable enum definitions |
 | `entities` | Dynamic entities, properties, relations, attachments, validations, and interceptors |
 | `endpoints` | JavaScript-backed custom HTTP endpoints |
@@ -152,6 +156,47 @@ When descriptor metadata is viewed as an aggregate document, the logical section
 | `forms` | Named form definitions referenced by pages |
 | `permissions` | Custom permission definitions referenced by pages and endpoints |
 
+Every descriptor also accepts these common fields:
+
+| Field | Description |
+|-------|-------------|
+| `app` | Name of the owning [app](#apps). Omit for the default app |
+| `metadata` | Free-form string key/value annotations for tooling and documentation. Values must be strings or `null` |
+| `extendsLowerLayer` | When `true`, the descriptor extends a descriptor with the same name from a lower model layer (for example code-first attributes) instead of defining a new one; only the overridden fields are required |
+
+## Apps
+
+Apps split one low-code model into independently named scopes. The default app is implicit: descriptors without an `app` field belong to it. Create an app descriptor only when a group of entities, pages, forms, and scripts should be isolated under its own name.
+
+```json
+{
+  "name": "crm",
+  "displayName": "CRM",
+  "description": "Customer relationship management app.",
+  "isArchived": false
+}
+```
+
+| Field | Description |
+|-------|-------------|
+| `name` | Required lowercase kebab-case identifier (maximum 64 characters), for example `crm` or `field-service`. `default` is reserved for the implicit default app |
+| `displayName` | Required user-facing title (maximum 128 characters) |
+| `description` | Optional description |
+| `isArchived` | Hides the app from active app lists without deleting its descriptors |
+
+Descriptors reference the app by name:
+
+```json
+{
+  "name": "Acme.Crm.Contact",
+  "app": "crm",
+  "displayName": "Contacts",
+  "properties": []
+}
+```
+
+App-scoped entities are addressed at runtime as `<app>:<EntityName>`, app-scoped endpoints can publish beneath `/api/low-code/apps/<app>/endpoints` with `routeScope: "app"`, and permission children inherit the parent `app` when they do not set their own.
+
 ## Enums
 
 Define enums before properties that reference them:
@@ -161,16 +206,19 @@ Define enums before properties that reference them:
   "enums": [
     {
       "name": "Acme.Catalog.ProductStatus",
+      "displayName": "Product Status",
       "values": [
         { "name": "Draft", "value": 0 },
-        { "name": "Active", "value": 1 },
+        { "name": "Active", "value": 1, "presentation": "badge", "color": "#16A34A" },
         { "name": "Paused", "value": 2 },
-        { "name": "Completed", "value": 3 }
+        { "name": "Completed", "value": 3, "presentation": "iconOnly", "icon": { "kind": "class", "value": "fa-solid fa-check" } }
       ]
     }
   ]
 }
 ```
+
+Enum values accept optional `displayName`, `presentation` (`text`, `badge`, or `iconOnly`), `color`, and `icon` display metadata. See [Data Modeling and Page Behavior](data-modeling.md#enum-and-boolean-presentation) for page-level overrides.
 
 Use the enum from a property with `type: "enum"` and `enumType`:
 
@@ -202,6 +250,8 @@ Entities describe the persisted data model. UI is not configured with legacy pro
 |-------|-------------|
 | `name` | Required stable full entity name, for example `Acme.Catalog.Product` |
 | `displayName` | Default plural/screen label |
+| `description` | Optional designer documentation text |
+| `order` | Optional designer/list sort order |
 | `displayProperty` | Property shown in lookups and foreign key display values |
 | `parent` | Parent entity name for child/detail entities |
 | `attachments` | Record-level attachment settings |
@@ -240,9 +290,13 @@ Entities describe the persisted data model. UI is not configured with legacy pro
 | `isMappedToDbField` | Whether a dynamic scalar property uses a dedicated physical column instead of dynamic data storage |
 | `decimalPlaces` | Decimal scale for `decimal` and `money` properties |
 | `currencySymbol` | Optional UI currency symbol for `money` properties |
-| `collection` | Primitive collection settings: `maxCount`, required `uniqueItems`, and stable `storageKey` |
+| `collection` | Primitive collection settings: optional `maxCount` and required `uniqueItems` |
+| `formula` | Virtual calculated value: `expression` and `resultType` |
+| `rollup` | Virtual aggregate over related records: `sourceEntityName`, `foreignKeyPropertyName`, `operation`, and optional `valuePropertyName` |
 | `foreignKey` | Lookup relation metadata |
 | `validators` | Backend/UI validation rules |
+
+`collection`, `formula`, `rollup`, and `foreignKey` are mutually exclusive on one property. Formula and rollup properties are read-only and never persisted; the runtime forces `isMappedToDbField`, `allowSetByClients`, `isRequired`, and `isUnique` to `false` for them.
 
 `isMappedToDbField: true` creates a dedicated scalar column. Other dynamic scalar properties use the configured dynamic data mapping, which is JSON storage by default and can be configured as individual columns. Primitive collections use normalized collection tables. See [Data Modeling and Page Behavior](data-modeling.md) for storage, collections, related fields, presentations, and backend filters.
 
@@ -261,7 +315,7 @@ For virtual calculated fields and related-record aggregates, see [Calculated and
 | `enum` | Integer-backed enum; requires `enumType` |
 | `file`, `image` | Upload metadata handled by the low-code file pipeline |
 
-Add `collection` to any supported primitive type to store an ordered value list. Do not hand-edit a generated `storageKey` after data exists.
+Add `collection` to any supported primitive type to store an ordered value list.
 
 ### File, Image, and Attachments
 
@@ -310,13 +364,12 @@ Use entity `attachments` when each record can have multiple arbitrary files:
   "type": "guid",
   "foreignKey": {
     "entityName": "Volo.Abp.Identity.IdentityUser",
-    "displayPropertyName": "UserName",
-    "access": "none"
+    "displayPropertyName": "UserName"
   }
 }
 ```
 
-`entityName` can point to another dynamic entity or a registered [reference entity](reference-entities.md). `access` controls [Foreign Access](foreign-access.md) behavior for dynamic entity relations.
+`entityName` can point to another dynamic entity or a registered [reference entity](reference-entities.md). Use `dependsOn` (`propertyName` and `filterPropertyName`) for cascading lookups. Reverse access from the referenced entity side is not configured on the foreign key; define a page `relationships[]` entry on the target entity's page instead. See [Foreign Access](foreign-access.md).
 
 ### Validators
 
@@ -377,12 +430,23 @@ Page export settings:
 
 | Field | Default | Purpose |
 |-------|---------|---------|
-| `defaultFileExportMode` | `0` | Default spreadsheet output for file/image fields. `0` = file name, `1` = metadata columns, `2` = temporary download-link columns |
+| `defaultFileExportMode` | `0` | Default spreadsheet output for file/image fields. `0` = file name, `1` = metadata columns, `2` = temporary download-link columns, `3` = file name with download link |
 | `allowFileBundleExport` | `true` | Allows **Files (.zip)** export for exportable file/image columns on the page |
 
 `importEnabled` controls whether the React runtime exposes guided Excel/CSV import for the page. See [Data Import](data-import.md) for mapping and merge behavior.
 
-Page column and filter `propertyName` values may follow foreign keys, for example `CustomerId.CountryId.Name`. Related paths are limited by the configured query depth and return only the requested projection. Page columns can also define enum and boolean presentation metadata. See [Data Modeling and Page Behavior](data-modeling.md).
+Other page-level fields:
+
+| Field | Purpose |
+|-------|---------|
+| `showInMenu` | Set `false` for pages reached only through relationships, `saveSuccessPageName`, or direct links |
+| `galleryImagePresentation` | `coverLightbox` or `inlineSlider` for gallery pages; `inlineSlider` suits image collection properties |
+| `enumPresentations` | Page-level overrides of enum value label, presentation, color, and icon |
+| `relationships` | Reverse relationships (related records that point back to the page record). See [Data Modeling and Page Behavior](data-modeling.md#reverse-relationships) |
+| `backendFilter` | Server-enforced filter expression. See [Filters](#filters) |
+| `interceptors` | Page-scoped Create/Update/Delete interceptors with an `entityExecutionOrder` of `entityFirst`, `pageFirst`, or `skipEntity`. See [Interceptors](interceptors.md) |
+
+Page column and filter `propertyName` values may follow foreign keys, for example `CustomerId.CountryId.Name`. Related paths are limited by the configured query depth and return only the requested projection. Page columns can also define boolean presentation metadata with `booleanPresentation` and `booleanValues`. See [Data Modeling and Page Behavior](data-modeling.md).
 
 ZIP file bundle export only includes selected page columns that are file or image fields and are exportable. The ZIP contains `manifest.csv` plus files under `files/{recordId}/{fieldName}/{safeFileName}`.
 
@@ -456,14 +520,14 @@ Filters are page-owned. Use `control: "auto"` unless you need a specific control
 |---------------|-------------------|
 | `string` | `contains`, `equal`, `notEqual`, `startsWith`, `endsWith`, `notContains`, `hasValue` |
 | `int`, `long`, `decimal`, `money` | `between`, `equal`, `notEqual`, `greaterThan`, `greaterThanOrEqual`, `lessThan`, `lessThanOrEqual`, `hasValue` |
-| `date`, `dateTime`, `time` | `between`, `equal`, `greaterThan`, `greaterThanOrEqual`, `lessThan`, `lessThanOrEqual`, `hasValue` |
+| `date`, `dateTime`, `time` | `between`, `equal`, `greaterThan`, `greaterThanOrEqual`, `lessThan`, `lessThanOrEqual`, `hasValue`, and the relative-date operators `today`, `beforeToday`, `thisWeek`, `lastWeek`, `thisMonth`, `lastMonth`, `thisYear`, `lastYear` |
 | `boolean` | `All / Yes / No` value selector |
 | `enum`, lookup, `guid` | `equal`, `notEqual`, `in`, `notIn`, `hasValue` |
 | `file`, `image` | `hasValue` with `All / Yes / No` |
 
-`hasValue` is a UI alias. At runtime, `Yes` maps to `IsNotNull`, `No` maps to `IsNull`, and `All` does not add a filter.
+`hasValue` is a UI alias. At runtime, `Yes` maps to `IsNotNull`, `No` maps to `IsNull`, and `All` does not add a filter. Relative-date operators need no value; the server resolves the range at query time.
 
-Use a page `backendFilter` when a condition must always be applied by the server. The recursive expression supports `and`/`or` groups and static, JavaScript, or registered-provider values. Backend filters are combined with the filters above and are not removable client state. See [Data Modeling and Page Behavior](data-modeling.md#backend-filters).
+Use a page `backendFilter` when a condition must always be applied by the server. The root is a single condition or a group with `items`; inside a group the first item has no `logic` and every following item sets `logic` to `and` or `or`. Each condition names a `propertyName`, an explicit `operator`, and exactly one value source: a static `value`, a registered `valueProvider`, or a `javaScript` expression. `isNull`/`isNotNull` take no value source and `hasValue` takes a static boolean `value`; `default` and the relative-date operators are not available in backend filters. Backend filters are combined with the filters above and are not removable client state. See [Data Modeling and Page Behavior](data-modeling.md#backend-filters).
 
 ## Permissions
 
@@ -510,6 +574,7 @@ See [Interceptors](interceptors.md) and [Scripting API](scripting-api.md).
     {
       "name": "GetProductStats",
       "route": "/api/custom/products/stats",
+      "routeScope": "global",
       "method": "GET",
       "requireAuthentication": true,
       "useResourceAuthorization": false,
@@ -520,7 +585,7 @@ See [Interceptors](interceptors.md) and [Scripting API](scripting-api.md).
 }
 ```
 
-See [Custom Endpoints](custom-endpoints.md).
+`routeScope` defaults to `global`, which publishes `route` unchanged. Endpoints that belong to an [app](#apps) can set `routeScope: "app"` to publish beneath `/api/low-code/apps/<app>/endpoints`. See [Custom Endpoints](custom-endpoints.md).
 
 ### Event Handlers, Jobs, and Workers
 

@@ -15,8 +15,14 @@
       "description": "Unique identifier for the background worker.",
       "minLength": 1
     },
+    "app": {
+      "type": "string",
+      "description": "Name of the low-code app that owns this worker. Omit for the default app. Must match an apps[].name.",
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
     "period": {
-      "type": "integer",
+      "type": ["integer", "null"],
       "description": "Execution period in milliseconds. Example: 300000 for every 5 minutes.",
       "minimum": 1
     },
@@ -32,14 +38,48 @@
     "description": {
       "type": "string",
       "description": "Optional description for designer documentation and model health context."
+    },
+    "extendsLowerLayer": {
+      "type": "boolean",
+      "description": "When true, this descriptor overrides selected fields of a worker with the same name defined in a lower model layer; javascript and the schedule become optional.",
+      "default": false
+    },
+    "metadata": {
+      "$ref": "descriptor-metadata.schema.json"
     }
   },
-  "required": ["name", "javascript"],
-  "anyOf": [
-    {
-      "required": ["period"],
-      "not": {
+  "required": ["name"],
+  "if": {
+    "properties": { "extendsLowerLayer": { "const": true } },
+    "required": ["extendsLowerLayer"]
+  },
+  "then": {},
+  "else": {
+    "required": ["javascript"],
+    "anyOf": [
+      {
+        "required": ["period"],
+        "properties": {
+          "period": { "type": "integer", "minimum": 1 }
+        },
+        "not": {
+          "required": ["cronExpression"],
+          "properties": {
+            "cronExpression": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      {
         "required": ["cronExpression"],
+        "not": {
+          "required": ["period"],
+          "properties": {
+            "period": { "type": "integer" }
+          }
+        },
         "properties": {
           "cronExpression": {
             "type": "string",
@@ -47,24 +87,19 @@
           }
         }
       }
-    },
-    {
-      "required": ["cronExpression"],
-      "not": { "required": ["period"] },
-      "properties": {
-        "cronExpression": {
-          "type": "string",
-          "minLength": 1
-        }
-      }
-    }
-  ],
+    ]
+  },
   "additionalProperties": false,
   "examples": [
     {
       "name": "CleanupExpiredEvents",
       "period": 3600000,
       "javascript": "context.log('Running expired event cleanup.');"
+    },
+    {
+      "name": "NightlySummary",
+      "cronExpression": "0 2 * * *",
+      "javascript": "context.log('Building nightly summary.');"
     }
   ]
 }

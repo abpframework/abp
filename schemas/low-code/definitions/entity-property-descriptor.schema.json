@@ -2,8 +2,8 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "entity-property-descriptor.schema.json",
   "title": "EntityPropertyDescriptor",
-  "description": "Describes one dynamic entity property. Properties define persisted data fields, enum fields, foreign keys, upload fields, server-only fields, defaults, uniqueness, and validators.",
-  "markdownDescription": "AI guidance: use PascalCase property names. Use `type` for primitive fields, `type: \"enum\"` with `enumType` for enum fields, and a `foreignKey` object for lookup fields. FK property names should normally end with `Id`. Keep sensitive values `serverOnly: true`. Do not add legacy UI configuration here; page columns/filters and form fields own UI behavior.",
+  "description": "Describes one dynamic entity property. Properties define persisted data fields, enum fields, foreign keys, upload fields, primitive collections, calculated formulas, rollups, server-only fields, defaults, uniqueness, and validators.",
+  "markdownDescription": "AI guidance: use PascalCase property names. Use `type` for primitive fields, `type: \"enum\"` with `enumType` for enum fields, and a `foreignKey` object for lookup fields. FK property names should normally end with `Id`. Add `collection` for ordered value lists, `formula` for virtual calculated values, and `rollup` for aggregates over related records; these three and `foreignKey` are mutually exclusive. Keep sensitive values `serverOnly: true`. Do not add legacy UI configuration here; page columns/filters and form fields own UI behavior.",
   "type": "object",
   "properties": {
     "name": {
@@ -13,7 +13,7 @@
     },
     "type": {
       "$ref": "entity-property-type.schema.json",
-      "description": "Primitive or special property type. If omitted, runtime treats the property as string. Use 'enum' only with enumType; use 'file'/'image' for first-class upload fields."
+      "description": "Primitive or special property type. If omitted, runtime treats the property as string (or enum when enumType is set). Use 'enum' only with enumType; use 'file'/'image' for first-class upload fields."
     },
     "displayName": {
       "type": "string",
@@ -22,11 +22,11 @@
     },
     "enumType": {
       "type": "string",
-      "description": "Name of a JSON-defined enum from top-level enums or a full type name for code enums. Required when type is 'enum'."
+      "description": "Name of a JSON-defined enum from the enums collection or a full type name for code enums. Required when type is 'enum'; setting it without type implies 'enum'."
     },
     "allowSetByClients": {
       "type": "boolean",
-      "description": "Controls whether create/update clients may set the property. Use false for server-computed or protected fields that can still be returned to clients."
+      "description": "Controls whether create/update clients may set the property. Use false for server-computed or protected fields that can still be returned to clients. Forced to false for formula and rollup properties."
     },
     "serverOnly": {
       "type": "boolean",
@@ -34,11 +34,11 @@
     },
     "isMappedToDbField": {
       "type": "boolean",
-      "description": "Whether this property is mapped to a database column. Keep true or omit for normal persisted fields. Use false for computed/transient fields supplied by scripts or backend logic."
+      "description": "Whether this property uses a dedicated physical column. Omitted/false scalar properties use the configured dynamic data storage (JSON by default). Forced to false for formula and rollup properties; not applicable to collections."
     },
     "defaultValue": {
       "type": ["string", "null"],
-      "description": "Default value for new records. Stored as a string in descriptor JSON and converted to the declared property type at runtime. Examples: '0' for int/enum, 'true' for boolean, '2026-05-18T09:00:00Z' for datetime."
+      "description": "Default value for new records. Stored as a string in descriptor JSON and converted to the declared property type at runtime. Examples: '0' for int/enum, 'true' for boolean, '2026-05-18T09:00:00Z' for datetime. Ignored for formula and rollup properties."
     },
     "isUnique": {
       "type": "boolean",
@@ -77,8 +77,30 @@
     },
     "imageResizeMode": {
       "type": "string",
-      "description": "How uploaded images should be resized when image dimensions are configured. 'fit' preserves the full image inside the bounds; 'fill' crops/fills the target bounds.",
+      "description": "How uploaded images should be resized when image dimensions are configured. 'fit' preserves the full image inside the bounds; 'fill' crops/fills the target bounds (requires both imageMaxWidth and imageMaxHeight).",
       "enum": ["fit", "fill"]
+    },
+    "decimalPlaces": {
+      "type": "integer",
+      "description": "Decimal scale for 'decimal' and 'money' properties. Controls storage precision and default UI formatting. Defaults to 2 when omitted.",
+      "minimum": 0
+    },
+    "currencySymbol": {
+      "type": "string",
+      "description": "Optional currency symbol or code displayed by money-aware controls for 'money' properties, for example '$' or 'EUR'.",
+      "minLength": 1
+    },
+    "collection": {
+      "$ref": "entity-property-collection-descriptor.schema.json",
+      "description": "Turns this property into an ordered list of values of the declared type. Cannot be combined with foreignKey, formula, or rollup."
+    },
+    "formula": {
+      "$ref": "entity-formula-descriptor.schema.json",
+      "description": "Virtual calculated value evaluated from other properties of the same record. Makes the property read-only and non-persisted."
+    },
+    "rollup": {
+      "$ref": "entity-rollup-descriptor.schema.json",
+      "description": "Virtual aggregate over related records that reference this record. Makes the property read-only and non-persisted."
     },
     "validators": {
       "type": "array",
@@ -91,11 +113,23 @@
   "required": [
     "name"
   ],
+  "allOf": [
+    { "not": { "required": ["formula", "rollup"] } },
+    { "not": { "required": ["formula", "foreignKey"] } },
+    { "not": { "required": ["rollup", "foreignKey"] } },
+    { "not": { "required": ["collection", "foreignKey"] } },
+    { "not": { "required": ["collection", "formula"] } },
+    { "not": { "required": ["collection", "rollup"] } }
+  ],
   "additionalProperties": false,
   "examples": [
     { "name": "Name", "type": "string", "isRequired": true, "validators": [{ "type": "maxLength", "length": 128 }] },
     { "name": "Status", "type": "enum", "enumType": "Acme.Events.EventStatus", "defaultValue": "0" },
     { "name": "CustomerId", "foreignKey": { "entityName": "Acme.Crm.Customer", "displayPropertyName": "Name" } },
-    { "name": "CoverImage", "type": "image", "fileAllowedContentTypes": ["image/*"], "fileMaxSizeBytes": 5242880, "imageResizeMode": "fit" }
+    { "name": "CoverImage", "type": "image", "fileAllowedContentTypes": ["image/*"], "fileMaxSizeBytes": 5242880, "imageResizeMode": "fit" },
+    { "name": "Price", "type": "money", "decimalPlaces": 2, "currencySymbol": "$" },
+    { "name": "Tags", "type": "string", "collection": { "maxCount": 20, "uniqueItems": true } },
+    { "name": "Total", "type": "decimal", "formula": { "expression": "Round(UnitPrice * Quantity, 2)", "resultType": "decimal" } },
+    { "name": "OrderCount", "type": "long", "rollup": { "sourceEntityName": "Acme.Crm.Order", "foreignKeyPropertyName": "CustomerId", "operation": "count" } }
   ]
 }

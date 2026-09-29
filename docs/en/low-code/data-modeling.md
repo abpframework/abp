@@ -104,7 +104,7 @@ A foreign key defines the schema direction. A page relationship defines how reco
 }
 ```
 
-`access` can be `none`, `view`, or `edit`. The generated modes build the related page or form from the source entity; the explicit modes reuse named page and form descriptors.
+`access` can be `view` or `edit`; omit the relationship entirely when the foreign key should stay lookup-only. `relatedPageMode`, `createFormMode`, and `editFormMode` are required. The generated modes build the related page or form from the source entity; the explicit modes reuse named page and form descriptors, and `inherit` reuses the related page's own forms.
 
 See [Foreign Access](foreign-access.md) for the runtime APIs and UI behavior used by these relationships.
 

@@ -68,4 +68,26 @@ When you see the "New Version Available" window, follow these steps to upgrade A
 
 ## Installing a Specific Version
 
-There is no official support for installing an older version of ABP Studio yet. But, if you want to install an older version of ABP Studio, you can use approach explanined here [https://github.com/enisn/AbpDevTools?tab=readme-ov-file#switch-abp-studio-version](https://github.com/enisn/AbpDevTools?tab=readme-ov-file#switch-abp-studio-version)
+There is no official support for installing an older version of ABP Studio yet. But, if you want to install an older version of ABP Studio, you can use approach explained here [https://github.com/enisn/AbpDevTools?tab=readme-ov-file#switch-abp-studio-version](https://github.com/enisn/AbpDevTools?tab=readme-ov-file#switch-abp-studio-version)
+
+## Troubleshooting
+
+### Shell Environment Detection (macOS and Linux)
+
+ABP Studio normally detects the shell environment automatically, so you do not need to configure the following variables. Use them only if Studio cannot find a tool that is available in your terminal, such as a user-managed .NET or Node.js installation.
+
+On macOS and Linux, ABP Studio starts a shell during application startup and imports the environment variables printed by it. By default, Studio starts the shell as an interactive login shell and runs `env`.
+
+| Variable | Description | Fallback |
+|---|---|---|
+| `ABP_STUDIO_SHELL` | Overrides the shell executable used to load the environment. Set it to a valid, non-empty executable path. | When unset, `SHELL`, then `/bin/zsh` on macOS or `/bin/bash` on Linux |
+| `ABP_STUDIO_SHELL_ARGS` | Replaces the complete argument string passed to the selected shell. | When unset or empty, `-i -l -c 'env'` |
+
+Set these variables in the environment that launches ABP Studio, then restart the application. Usually, you only need to override the shell executable. For example:
+
+```bash
+export ABP_STUDIO_SHELL=/bin/bash
+export ABP_STUDIO_SHELL_ARGS="-i -l -c 'env'"
+```
+
+> **Note:** Custom `ABP_STUDIO_SHELL_ARGS` must make the shell exit successfully and print the environment to standard output as newline-separated `NAME=value` entries. These settings have no effect on Windows.

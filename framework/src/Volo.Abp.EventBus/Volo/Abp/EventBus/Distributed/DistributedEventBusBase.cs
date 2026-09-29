@@ -113,7 +113,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         bool useOutbox = true)
     {
         var eventType = GetEventTypeByEventName(eventName);
-        var dynamicEventData = eventData as DynamicEventData ?? new DynamicEventData(eventName, eventData);
+        var dynamicEventData = CreateDynamicEventDataForPublishing(eventName, eventData);
 
         if (eventType != null)
         {
@@ -146,6 +146,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         }
 
         var addedToOutbox = false;
+        var tenantId = GetTenantIdToPropagate(eventType, eventData);
 
         foreach (var outboxConfig in AbpDistributedEventBusOptions.Outboxes.Values.OrderBy(x => x.Selector is null))
         {
@@ -169,6 +170,8 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
                     outgoingEventInfo.SetCorrelationId(correlationId);
                 }
 
+                outgoingEventInfo.SetTenantId(tenantId);
+
                 await eventOutbox.EnqueueAsync(outgoingEventInfo);
                 addedToOutbox = true;
             }
@@ -187,7 +190,8 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         string eventName,
         Type eventType,
         object eventData,
-        string? correlationId)
+        string? correlationId,
+        Guid? tenantId = null)
     {
         if (AbpDistributedEventBusOptions.Inboxes.Count <= 0)
         {
@@ -224,6 +228,7 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
                         Clock.Now
                     );
                     incomingEventInfo.SetCorrelationId(correlationId!);
+                    incomingEventInfo.SetTenantId(tenantId);
                     await eventInbox.EnqueueAsync(incomingEventInfo);
                     addToInbox = true;
                 }
@@ -291,6 +296,42 @@ public abstract class DistributedEventBusBase : EventBusBase, IDistributedEventB
         }
 
         return EventNameAttribute.GetNameOrDefault(eventType);
+    }
+
+    protected virtual DynamicEventData CreateDynamicEventDataForPublishing(string eventName, object eventData)
+    {
+        var dynamicEventData = eventData as DynamicEventData ?? new DynamicEventData(eventName, eventData);
+        return dynamicEventData.SetTenantId(CurrentTenant.Id);
+    }
+
+    protected virtual Guid? GetTenantIdToPropagate(Type eventType, object eventData)
+    {
+        if (eventType != typeof(DynamicEventData))
+        {
+            return null;
+        }
+
+        return eventData is DynamicEventData dynamicEventData && dynamicEventData.IsMultiTenant(out var tenantId)
+            ? tenantId
+            : CurrentTenant.Id;
+    }
+
+    protected virtual DynamicEventData CreateDynamicEventData(string eventName, object data, Guid? tenantId)
+    {
+        var dynamicEventData = new DynamicEventData(eventName, data);
+        return tenantId == null
+            ? dynamicEventData
+            : dynamicEventData.SetTenantId(tenantId);
+    }
+
+    protected virtual DynamicEventData CreateDynamicEventData(OutgoingEventInfo outgoingEvent, object data)
+    {
+        return CreateDynamicEventData(outgoingEvent.EventName, data, outgoingEvent.GetTenantId());
+    }
+
+    protected virtual DynamicEventData CreateDynamicEventData(IncomingEventInfo incomingEvent, object data)
+    {
+        return CreateDynamicEventData(incomingEvent.EventName, data, incomingEvent.GetTenantId());
     }
 
     protected virtual object GetEventData(object eventData)
