@@ -364,10 +364,15 @@ public class PdfSharpHtmlToPdfRenderer : IHtmlToPdfRenderer, ITransientDependenc
             images[args.Src] = image;
         }
 
+        // A failed image is not handed back to HtmlRenderer, so its own downloader can not load it without the limits above.
+        args.Handled = true;
         if (image != null)
         {
-            args.Handled = true;
             args.Callback(image);
+        }
+        else
+        {
+            args.Callback();
         }
     }
 

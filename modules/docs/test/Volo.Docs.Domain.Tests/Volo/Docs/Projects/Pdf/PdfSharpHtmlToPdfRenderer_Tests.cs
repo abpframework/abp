@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
@@ -176,6 +178,40 @@ public class PdfSharpHtmlToPdfRenderer_Tests : DocsDomainTestBase
     }
 
     [Fact]
+    public async Task Should_Not_Download_A_Failed_Image_Again()
+    {
+        var gif = System.Convert.FromBase64String("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
+        var port = GetFreePort();
+        using var listener = new HttpListener();
+        listener.Prefixes.Add($"http://localhost:{port}/");
+        listener.Start();
+        var requestCount = 0;
+        _ = Task.Run(async () =>
+        {
+            while (listener.IsListening)
+            {
+                try
+                {
+                    var context = await listener.GetContextAsync();
+                    Interlocked.Increment(ref requestCount);
+                    await context.Response.OutputStream.WriteAsync(gif);
+                    context.Response.Close();
+                }
+                catch (HttpListenerException)
+                {
+                    return;
+                }
+            }
+        });
+
+        var renderer = new FailingDownloadPdfSharpHtmlToPdfRenderer(GetRequiredService<IHttpClientFactory>());
+        var html = $"<!DOCTYPE html><html><body><div class='page' id='first'><img src='http://localhost:{port}/image.gif' /></div></body></html>";
+        await using var stream = await renderer.RenderAsync("Test", html, [new PdfDocument { Title = "First", Id = "first" }]);
+
+        requestCount.ShouldBe(0);
+    }
+
+    [Fact]
     public void Should_Convert_Gif_Images()
     {
         var gif = System.Convert.FromBase64String("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
@@ -237,6 +273,27 @@ public class PdfSharpHtmlToPdfRenderer_Tests : DocsDomainTestBase
     private static int GetPageNumber(PdfSharp.Pdf.PdfDocument pdf, PdfItem pageReference)
     {
         return pdf.Pages.Cast<PdfPage>().ToList().FindIndex(x => x.Reference == pageReference) + 1;
+    }
+
+    private static int GetFreePort()
+    {
+        using var socket = new System.Net.Sockets.TcpListener(IPAddress.Loopback, 0);
+        socket.Start();
+        return ((IPEndPoint)socket.LocalEndpoint).Port;
+    }
+
+    [DisableConventionalRegistration]
+    private class FailingDownloadPdfSharpHtmlToPdfRenderer : PdfSharpHtmlToPdfRenderer
+    {
+        public FailingDownloadPdfSharpHtmlToPdfRenderer(IHttpClientFactory httpClientFactory)
+            : base(httpClientFactory)
+        {
+        }
+
+        protected override Task<byte[]> DownloadImageAsync(Uri uri)
+        {
+            throw new HttpRequestException("The host does not allow this request.");
+        }
     }
 
     [DisableConventionalRegistration]
