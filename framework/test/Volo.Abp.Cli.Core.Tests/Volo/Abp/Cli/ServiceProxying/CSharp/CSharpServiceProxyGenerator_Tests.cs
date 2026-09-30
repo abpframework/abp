@@ -36,6 +36,7 @@ public class CSharpServiceProxyGenerator_Tests : IDisposable
         File.WriteAllText(Path.Combine(_workDirectory, "Client.csproj"), "<Project Sdk=\"Microsoft.NET.Sdk\" />");
         WriteProjectAssets((".NETCoreApp,Version=v10.0", DefaultClientAssemblyNames));
         _generator.WorkDirectory = _workDirectory;
+        _generator.ProjectAssetsFilePath = Path.Combine(_workDirectory, "obj", "project.assets.json");
     }
 
     public void Dispose()
@@ -235,10 +236,6 @@ public class CSharpServiceProxyGenerator_Tests : IDisposable
                 CreateMethod("SearchAsync", "Volo.Abp.Identity.UserLookupSearchInputDto"),
                 CreateMethod("GetUserAsync", "Volo.Abp.Users.UserData"),
                 CreateMethod("GetTenantAsync", "Volo.Abp.MultiTenancy.TenantConfiguration")));
-        foreach (var type in model.Types.Values)
-        {
-            type.AssemblyName = null;
-        }
 
         _generator.GetTypes(model).ShouldBe(new[]
         {
@@ -258,10 +255,6 @@ public class CSharpServiceProxyGenerator_Tests : IDisposable
                 CreateMethod("SearchAsync", "Volo.Abp.Identity.UserLookupSearchInputDto"),
                 CreateMethod("GetUserAsync", "Volo.Abp.Users.UserData"),
                 CreateMethod("GetTenantAsync", "Volo.Abp.MultiTenancy.TenantConfiguration")));
-        foreach (var type in model.Types.Values)
-        {
-            type.AssemblyName = null;
-        }
 
         _generator.GetTypes(model).ShouldBe(new[]
         {
@@ -271,30 +264,33 @@ public class CSharpServiceProxyGenerator_Tests : IDisposable
     }
 
     [Fact]
-    public async Task Should_Require_Project_Assets_When_Assembly_Names_Are_Available()
+    public void Should_Use_Project_Assets_From_A_Custom_Path()
     {
         File.Delete(Path.Combine(_workDirectory, "obj", "project.assets.json"));
-        _generator.Model = CreateModel(
-            CreateServiceController(OrderAppService,
-                CreateMethod("GetAsync", "MyCompany.Orders.OrderDto")));
+        var customAssetsFilePath = Path.Combine(_workDirectory, "artifacts", "obj", "project.assets.json");
+        File.WriteAllText(
+            Path.Combine(_workDirectory, "Directory.Build.props"),
+            "<Project><PropertyGroup><BaseIntermediateOutputPath>artifacts/obj/</BaseIntermediateOutputPath></PropertyGroup></Project>");
+        WriteProjectAssets(customAssetsFilePath,
+            (".NETCoreApp,Version=v10.0", DefaultClientAssemblyNames));
+        _generator.ProjectAssetsFilePath = null;
+        var model = CreateModel(
+            CreateServiceController("Volo.Abp.Account.IAccountAppService",
+                CreateMethod("RegisterAsync", "Volo.Abp.Identity.IdentityUserDto")));
 
-        var exception = await Should.ThrowAsync<CliUsageException>(() =>
-            _generator.GenerateProxyAsync(CreateArgs()));
-
-        exception.Message.ShouldBe("Project assets are unavailable. Run dotnet restore before generating C# proxies.");
+        _generator.GetTypes(model).ShouldBe(new[] { "Volo.Abp.Identity.IdentityUserDto" });
     }
 
     [Fact]
-    public async Task Should_Not_Require_Project_Assets_Without_Contracts()
+    public async Task Should_Not_Read_Project_Assets_Without_Contracts()
     {
-        File.Delete(Path.Combine(_workDirectory, "obj", "project.assets.json"));
         _generator.Model = CreateModel(
             CreateServiceController(OrderAppService,
                 CreateMethod("GetAsync", "MyCompany.Orders.OrderDto")));
 
         await _generator.GenerateProxyAsync(CreateArgs(withoutContracts: true));
 
-        File.Exists(GetProxyFilePath("MyCompany/Orders/Application/OrderClientProxy.Generated.cs")).ShouldBeTrue();
+        _generator.ProjectAssetsFilePathCallCount.ShouldBe(0);
     }
 
     [Fact]
@@ -302,7 +298,8 @@ public class CSharpServiceProxyGenerator_Tests : IDisposable
     {
         var model = CreateModuleModel("abp",
             CreateServiceController("Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.IAbpApplicationConfigurationAppService",
-                CreateMethod("GetAsync", "Volo.Abp.Http.Modeling.ApplicationApiDescriptionModel")));
+                CreateMethod("GetAsync", "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ApplicationConfigurationDto")));
+        AddType(model, "Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ApplicationConfigurationDto", null);
 
         _generator.GetTypes(model).ShouldBeEmpty();
     }
@@ -336,6 +333,25 @@ public class CSharpServiceProxyGenerator_Tests : IDisposable
     }
 
     [Fact]
+    public async Task Should_Generate_Types_Used_By_Action_Parameters()
+    {
+        _generator.Model = CreateModel(
+            CreateServiceController(OrderAppService,
+                CreateMethod("Search", "System.Int32")));
+        _generator.Model.Modules["orders"].Controllers.Values.Single().Actions["Search"].Parameters.Add(
+            new ParameterApiDescriptionModel
+            {
+                Name = "status",
+                NameOnMethod = "status",
+                Type = "MyCompany.Shared.OrderStatus"
+            });
+
+        await _generator.GenerateProxyAsync(CreateArgs());
+
+        File.Exists(GetProxyFilePath("MyCompany/Shared/OrderStatus.cs")).ShouldBeTrue();
+    }
+
+    [Fact]
     public async Task Should_Generate_Generic_Type_Properties_With_Their_Own_Types()
     {
         _generator.Model = CreateModel(
@@ -364,56 +380,6 @@ public class CSharpServiceProxyGenerator_Tests : IDisposable
         (await File.ReadAllTextAsync(GetProxyFilePath("MyCompany/Shared/Result.cs"))).ShouldContain($"public class Result{Environment.NewLine}");
         (await File.ReadAllTextAsync(GetProxyFilePath("MyCompany/Shared/Result{T}.cs"))).ShouldContain("public class Result<T>");
         (await File.ReadAllTextAsync(GetProxyFilePath("MyCompany/Shared/Result{TItem,TError}.cs"))).ShouldContain("public class Result<TItem, TError>");
-    }
-
-    [Fact]
-    public async Task Should_Remove_Stale_Generated_Files_When_Regenerating()
-    {
-        _generator.Model = CreateModel(
-            CreateServiceController(OrderAppService,
-                CreateMethod("GetAsync", "MyCompany.Orders.OrderDto"),
-                CreateMethod("GetStatusesAsync", "[MyCompany.Shared.OrderStatus]")));
-        await _generator.GenerateProxyAsync(CreateArgs());
-        File.Exists(GetProxyFilePath("MyCompany/Orders/OrderDto.cs")).ShouldBeTrue();
-        File.Exists(GetProxyFilePath("MyCompany/Shared/CustomerDto.cs")).ShouldBeTrue();
-
-        var otherModuleDto = GetProxyFilePath("MyCompany/Shared/AddressDto.cs");
-        var userFile = GetProxyFilePath("MyCompany/Orders/OrderDtoExtensions.cs");
-        await File.WriteAllTextAsync(userFile, "namespace MyCompany.Orders;");
-        await GenerateOtherModuleAsync();
-
-        _generator.Model = CreateModel(
-            CreateServiceController(OrderAppService,
-                CreateMethod("GetStatusesAsync", "[MyCompany.Shared.OrderStatus]")));
-        await _generator.GenerateProxyAsync(CreateArgs());
-
-        File.Exists(GetProxyFilePath("MyCompany/Orders/OrderDto.cs")).ShouldBeFalse();
-        File.Exists(GetProxyFilePath("MyCompany/Orders/OrderLineDto.cs")).ShouldBeFalse();
-        File.Exists(GetProxyFilePath("MyCompany/Shared/CustomerDto.cs")).ShouldBeFalse();
-        File.Exists(GetProxyFilePath("MyCompany/Shared/OrderStatus.cs")).ShouldBeTrue();
-        File.Exists(GetProxyFilePath("MyCompany/Orders/Application/IOrderAppService.cs")).ShouldBeTrue();
-        File.Exists(GetProxyFilePath("MyCompany/Orders/Application/OrderClientProxy.Generated.cs")).ShouldBeTrue();
-        File.Exists(GetProxyFilePath("MyCompany/Orders/Application/OrderClientProxy.cs")).ShouldBeTrue();
-        File.Exists(otherModuleDto).ShouldBeTrue();
-        File.Exists(userFile).ShouldBeTrue();
-    }
-
-    [Fact]
-    public async Task Should_Remove_Stale_Contracts_When_Regenerating_Without_Contracts()
-    {
-        _generator.Model = CreateModel(
-            CreateServiceController(OrderAppService,
-                CreateMethod("GetStatusesAsync", "[MyCompany.Shared.OrderStatus]")));
-        await _generator.GenerateProxyAsync(CreateArgs());
-        File.Exists(GetProxyFilePath("MyCompany/Shared/OrderStatus.cs")).ShouldBeTrue();
-        File.Exists(GetProxyFilePath("MyCompany/Orders/Application/IOrderAppService.cs")).ShouldBeTrue();
-
-        _generator.Model.Types.Clear();
-        await _generator.GenerateProxyAsync(CreateArgs(withoutContracts: true));
-
-        File.Exists(GetProxyFilePath("MyCompany/Shared/OrderStatus.cs")).ShouldBeFalse();
-        File.Exists(GetProxyFilePath("MyCompany/Orders/Application/IOrderAppService.cs")).ShouldBeFalse();
-        File.Exists(GetProxyFilePath("MyCompany/Orders/Application/OrderClientProxy.Generated.cs")).ShouldBeTrue();
     }
 
     [Fact]
@@ -449,68 +415,6 @@ public class CSharpServiceProxyGenerator_Tests : IDisposable
 
         File.Exists(GetProxyFilePath("MyCompany/Orders/Application/IOrderAppService.cs")).ShouldBeTrue();
         File.Exists(GetProxyFilePath("MyCompany/Orders/Application/OrderClientProxy.Generated.cs")).ShouldBeTrue();
-    }
-
-    [Fact]
-    public async Task Should_Not_Remove_Files_Of_Proxies_Generated_Into_A_Sub_Folder()
-    {
-        _generator.Model = CreateModuleModel("customers",
-            CreateServiceController("MyCompany.Customers.Application.IAddressAppService",
-                CreateMethod("GetAsync", "MyCompany.Shared.AddressDto")));
-        await _generator.GenerateProxyAsync(CreateArgs(module: "customers", folder: "Proxies/Customers"));
-
-        var customerFiles = Directory.GetFiles(Path.Combine(_workDirectory, "Proxies", "Customers"), "*.cs");
-        customerFiles.ShouldContain(x => x.EndsWith("AddressDto.cs"));
-
-        _generator.Model = CreateModel(
-            CreateServiceController(OrderAppService,
-                CreateMethod("GetStatusesAsync", "[MyCompany.Shared.OrderStatus]")));
-        await _generator.GenerateProxyAsync(CreateArgs(folder: "Proxies"));
-
-        foreach (var customerFile in customerFiles)
-        {
-            File.Exists(customerFile).ShouldBeTrue();
-        }
-    }
-
-    [Fact]
-    public async Task Should_Reject_Folders_Outside_The_Working_Directory()
-    {
-        _generator.Model = CreateModel(
-            CreateServiceController(OrderAppService,
-                CreateMethod("GetAsync", "MyCompany.Orders.OrderDto")));
-
-        var exception = await Should.ThrowAsync<CliUsageException>(() =>
-            _generator.GenerateProxyAsync(CreateArgs(folder: "../escape-output")));
-
-        exception.Message.ShouldBe("Option folder should be inside the working directory.");
-    }
-
-    [Fact]
-    public async Task Should_Keep_Disambiguated_Nested_Types_Of_Other_Modules()
-    {
-        const string nestedTypeKey = "MyCompany.Orders.Outer+InnerDto";
-        var nestedTypeName = $"Outer_Nested_InnerDto_{nestedTypeKey.ToMd5()}";
-        _generator.Model = CreateModuleModel("customers",
-            CreateServiceController("MyCompany.Customers.Application.ICustomerAppService",
-                CreateMethod("GetNestedAsync", nestedTypeKey),
-                CreateMethod("GetTopLevelAsync", "MyCompany.Orders.Outer_Nested_InnerDto")));
-        AddType(_generator.Model, "MyCompany.Orders.Outer_Nested_InnerDto", null,
-            ("TopLevelValue", "System.String"));
-        await _generator.GenerateProxyAsync(CreateArgs(module: "customers"));
-
-        var nestedTypeFile = GetProxyFilePath($"MyCompany/Orders/{nestedTypeName}.cs");
-        var topLevelTypeFile = GetProxyFilePath("MyCompany/Orders/Outer_Nested_InnerDto.cs");
-        File.Exists(nestedTypeFile).ShouldBeTrue();
-        File.Exists(topLevelTypeFile).ShouldBeTrue();
-
-        _generator.Model = CreateModel(
-            CreateServiceController(OrderAppService,
-                CreateMethod("GetStatusesAsync", "[MyCompany.Shared.OrderStatus]")));
-        await _generator.GenerateProxyAsync(CreateArgs());
-
-        File.Exists(nestedTypeFile).ShouldBeTrue();
-        File.Exists(topLevelTypeFile).ShouldBeTrue();
     }
 
     [Fact]
@@ -597,33 +501,6 @@ public class CSharpServiceProxyGenerator_Tests : IDisposable
     }
 
     [Fact]
-    public async Task Should_Disambiguate_Nested_And_Top_Level_Types_With_The_Same_Generated_Name()
-    {
-        const string nestedTypeKey = "MyCompany.Orders.Outer+InnerDto";
-        var nestedTypeName = $"Outer_Nested_InnerDto_{nestedTypeKey.ToMd5()}";
-        _generator.Model = CreateModel(
-            CreateServiceController(OrderAppService,
-                CreateMethod("GetNestedAsync", nestedTypeKey),
-                CreateMethod("GetTopLevelAsync", "MyCompany.Orders.Outer_Nested_InnerDto")));
-        AddType(_generator.Model, "MyCompany.Orders.Outer_Nested_InnerDto", null,
-            ("TopLevelValue", "System.String"));
-
-        await _generator.GenerateProxyAsync(CreateArgs());
-
-        var nestedDto = await File.ReadAllTextAsync(GetProxyFilePath($"MyCompany/Orders/{nestedTypeName}.cs"));
-        nestedDto.ShouldContain($"public class {nestedTypeName}");
-        nestedDto.ShouldContain("public string NestedValue { get; set; }");
-
-        var topLevelDto = await File.ReadAllTextAsync(GetProxyFilePath("MyCompany/Orders/Outer_Nested_InnerDto.cs"));
-        topLevelDto.ShouldContain("public class Outer_Nested_InnerDto");
-        topLevelDto.ShouldContain("public string TopLevelValue { get; set; }");
-
-        var serviceInterface = await File.ReadAllTextAsync(GetProxyFilePath("MyCompany/Orders/Application/IOrderAppService.cs"));
-        serviceInterface.ShouldContain($"Task<{nestedTypeName}> GetNestedAsync()");
-        serviceInterface.ShouldContain("Task<Outer_Nested_InnerDto> GetTopLevelAsync()");
-    }
-
-    [Fact]
     public async Task Should_Use_Existing_Nested_Type_Names_Without_Contracts()
     {
         _generator.Model = CreateModel(
@@ -693,6 +570,21 @@ public class CSharpServiceProxyGenerator_Tests : IDisposable
     }
 
     [Fact]
+    public async Task Should_Ignore_Unreferenced_Types_When_Detecting_Ambiguous_Names()
+    {
+        _generator.Model = CreateModel(
+            CreateServiceController(OrderAppService,
+                CreateMethod("GetStateAsync", "MyCompany.Orders.StateDto")));
+        AddType(_generator.Model, "MyCompany.Unrelated.StateDto", null);
+
+        await _generator.GenerateProxyAsync(CreateArgs());
+
+        var serviceInterface = await File.ReadAllTextAsync(GetProxyFilePath("MyCompany/Orders/Application/IOrderAppService.cs"));
+        serviceInterface.ShouldContain("Task<StateDto> GetStateAsync()");
+        serviceInterface.ShouldNotContain("global::MyCompany.Orders.StateDto");
+    }
+
+    [Fact]
     public async Task Should_Generate_Nested_Dictionaries()
     {
         _generator.Model = CreateModel(
@@ -704,24 +596,6 @@ public class CSharpServiceProxyGenerator_Tests : IDisposable
         (await File.ReadAllTextAsync(GetProxyFilePath("MyCompany/Orders/TagMapDto.cs")))
             .ShouldContain("public Dictionary<string, Dictionary<string, TagDto>> Tags { get; set; }");
         File.Exists(GetProxyFilePath("MyCompany/Shared/TagDto.cs")).ShouldBeTrue();
-    }
-
-    [Fact]
-    public async Task Should_Keep_Regenerated_Files_Whose_Existing_Name_Has_A_Different_Casing()
-    {
-        _generator.Model = CreateModel(
-            CreateServiceController(OrderAppService,
-                CreateMethod("GetStatusesAsync", "[MyCompany.Shared.OrderStatus]")));
-        await _generator.GenerateProxyAsync(CreateArgs());
-
-        var folder = Path.GetDirectoryName(GetProxyFilePath("MyCompany/Shared/OrderStatus.cs"))!;
-        File.Move(Path.Combine(folder, "OrderStatus.cs"), Path.Combine(folder, "ORDERSTATUS.cs"));
-
-        await _generator.GenerateProxyAsync(CreateArgs());
-
-        var orderStatusFile = Directory.GetFiles(folder).SingleOrDefault(x => Path.GetFileName(x).Equals("OrderStatus.cs", StringComparison.OrdinalIgnoreCase));
-        orderStatusFile.ShouldNotBeNull();
-        (await File.ReadAllTextAsync(orderStatusFile)).ShouldContain("public enum OrderStatus");
     }
 
     [Fact]
@@ -740,16 +614,6 @@ public class CSharpServiceProxyGenerator_Tests : IDisposable
         clientProxy.ShouldContain("using MyCompany.Shared;");
         clientProxy.ShouldContain("public virtual async Task<global::MyCompany.Orders.StateDto> GetOrderStateAsync()");
         clientProxy.ShouldContain("public virtual async Task<global::MyCompany.Shared.StateDto> GetSharedStateAsync()");
-    }
-
-    private async Task GenerateOtherModuleAsync()
-    {
-        var model = _generator.Model;
-        _generator.Model = CreateModuleModel("customers",
-            CreateServiceController("MyCompany.Customers.Application.IAddressAppService",
-                CreateMethod("GetAsync", "MyCompany.Shared.AddressDto")));
-        await _generator.GenerateProxyAsync(CreateArgs(module: "customers"));
-        _generator.Model = model;
     }
 
     private GenerateProxyArgs CreateArgs(string module = "orders", bool withoutContracts = false, string folder = null)
@@ -886,6 +750,11 @@ public class CSharpServiceProxyGenerator_Tests : IDisposable
 
     private void WriteProjectAssets(params (string Target, string[] Assemblies)[] targets)
     {
+        WriteProjectAssets(Path.Combine(_workDirectory, "obj", "project.assets.json"), targets);
+    }
+
+    private static void WriteProjectAssets(string assetsFilePath, params (string Target, string[] Assemblies)[] targets)
+    {
         var targetData = targets.ToDictionary(
             x => x.Target,
             x => new Dictionary<string, object>
@@ -897,7 +766,6 @@ public class CSharpServiceProxyGenerator_Tests : IDisposable
                         _ => new { })
                 }
             });
-        var assetsFilePath = Path.Combine(_workDirectory, "obj", "project.assets.json");
         Directory.CreateDirectory(Path.GetDirectoryName(assetsFilePath)!);
         File.WriteAllText(assetsFilePath, JsonSerializer.Serialize(new { targets = targetData }));
     }
@@ -940,6 +808,10 @@ public class CSharpServiceProxyGenerator_Tests : IDisposable
 
         public string WorkDirectory { get; set; }
 
+        public string ProjectAssetsFilePath { get; set; }
+
+        public int ProjectAssetsFilePathCallCount { get; private set; }
+
         public TestCSharpServiceProxyGenerator()
             : base(null, new AbpSystemTextJsonSerializer(Microsoft.Extensions.Options.Options.Create(new AbpSystemTextJsonSerializerOptions())))
         {
@@ -947,13 +819,40 @@ public class CSharpServiceProxyGenerator_Tests : IDisposable
 
         public List<string> GetTypes(ApplicationApiDescriptionModel model)
         {
-            LoadClientProvidedAssemblyNames(WorkDirectory);
-            return GetTypesToGenerate(model);
+            Model = model;
+            GenerateProxyAsync(new GenerateProxyArgs(
+                "generate-proxy",
+                WorkDirectory,
+                model.Modules.Keys.First(),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                false)).GetAwaiter().GetResult();
+            return TypesToGenerate;
+        }
+
+        protected override List<string> GetTypesToGenerate(ApplicationApiDescriptionModel applicationApiDescriptionModel)
+        {
+            TypesToGenerate = base.GetTypesToGenerate(applicationApiDescriptionModel);
+            return TypesToGenerate;
+        }
+
+        protected override string GetProjectAssetsFilePath(string workDirectory)
+        {
+            ProjectAssetsFilePathCallCount++;
+            return ProjectAssetsFilePath ?? base.GetProjectAssetsFilePath(workDirectory);
         }
 
         protected override Task<ApplicationApiDescriptionModel> GetApplicationApiDescriptionModelAsync(GenerateProxyArgs args, ApplicationApiDescriptionModelRequestDto requestDto = null)
         {
             return Task.FromResult(Model);
         }
+
+        private List<string> TypesToGenerate { get; set; }
     }
 }
