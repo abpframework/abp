@@ -14,6 +14,7 @@
 | Package | Version | PR |
 |---------|---------|-----|
 | Elastic.Clients.Elasticsearch | 8.19.27 | #26216 |
+| HtmlAgilityPack | 1.12.3 | #26216 |
 | HtmlRenderer.PdfSharp | 1.6.1 | #26216 |
 | PDFsharp | 6.2.4 | #26216 |
 
