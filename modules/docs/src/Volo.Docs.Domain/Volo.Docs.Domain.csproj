@@ -21,7 +21,9 @@
     <PackageReference Include="Octokit" />
     <PackageReference Include="Elastic.Clients.Elasticsearch" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" />       
+    <PackageReference Include="HtmlAgilityPack" />
     <PackageReference Include="HtmlRenderer.PdfSharp" PrivateAssets="compile" />
+    <PackageReference Include="SkiaSharp" />
     <PackageReference Include="Markdig.Signed" />
   </ItemGroup>
 

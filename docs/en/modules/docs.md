@@ -485,6 +485,10 @@ Configure<DocsProjectPdfGeneratorOptions>(options =>
 
 `PdfSharpHtmlToPdfRenderer` is the default `IHtmlToPdfRenderer` implementation. It renders the HTML with HtmlRenderer.PdfSharp, starts every document on a new page and adds the PDF outline and the links between documents. It supports CSS 2 level styles, so `HtmlStyle` should not depend on flexbox or grid layouts. Replace `IHtmlToPdfRenderer` to use a different rendering engine.
 
+GIF and WebP images are converted to PNG with [SkiaSharp](https://github.com/mono/SkiaSharp), and an animated GIF shows its first frame. SVG images are rendered as links. On Linux, add the `SkiaSharp.NativeAssets.Linux.NoDependencies` package to your host project; otherwise these images are not rendered and a warning is logged. Do not use `SkiaSharp.NativeAssets.Linux` for this, because it loads fontconfig and can crash the process on servers where fontconfig is installed.
+
+HtmlRenderer.PdfSharp sets PDFsharp's global font resolver the first time it renders. An application that sets its own PDFsharp font resolver can not use the default renderer, so replace `IHtmlToPdfRenderer` in that case.
+
 The renderer uses the fonts installed on the server. The default `HtmlStyle` uses Arial and falls back to Liberation Sans or DejaVu Sans, so install one of these font packages on Linux servers or containers. The renderer does not fall back to another font for a single missing character. For Chinese, Japanese or Korean documents, install a TrueType (`.ttf`) font that contains both Latin and these characters, and put it first in the `font-family` of `HtmlStyle`. Font collections (`.ttc`) are not loaded.
 
 ```csharp

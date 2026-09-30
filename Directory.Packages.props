@@ -37,6 +37,7 @@
     <PackageVersion Include="DistributedLock.Core" Version="1.0.8" />
     <PackageVersion Include="DistributedLock.Redis" Version="1.1.0" />
     <PackageVersion Include="DeepL.net" Version="1.15.0" />
+    <PackageVersion Include="HtmlAgilityPack" Version="1.12.3" />
     <PackageVersion Include="HtmlRenderer.PdfSharp" Version="1.6.1" />
     <PackageVersion Include="PDFsharp" Version="6.2.4" />
     <PackageVersion Include="MongoSandbox.Core" Version="2.0.0" />

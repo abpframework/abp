@@ -1,10 +1,16 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
+using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.Advanced;
 using PdfSharp.Pdf.IO;
+using HtmlAgilityPack;
 using Shouldly;
+using SkiaSharp;
 using Volo.Abp.DependencyInjection;
 using Xunit;
 
@@ -85,13 +91,104 @@ public class PdfSharpHtmlToPdfRenderer_Tests : DocsDomainTestBase
     [Fact]
     public void Should_Keep_Html_Entities_As_Single_Words()
     {
-        var html = new TestPdfSharpHtmlToPdfRenderer().Preserve(
+        var html = CreateTestRenderer().PreserveEntities(
             "<style>a::after { content: '&amp;'; }</style><a href='?a=1&amp;b=2' title='&quot;'>Tips &amp; Tricks &lt;T&gt;</a>");
 
         html.ShouldBe(
             "<style>a::after { content: '&amp;'; }</style><a href='?a=1&amp;b=2' title='&quot;'>Tips " +
             "<span style=\"word-break: normal\">&amp;</span> Tricks " +
             "<span style=\"word-break: normal\">&lt;</span>T<span style=\"word-break: normal\">&gt;</span></a>");
+    }
+
+    [Fact]
+    public async Task Should_Link_To_An_Anchor_On_The_Same_Page()
+    {
+        var pdf = await RenderAsync(
+            "<div class='page' id='first'><a href='#details'>Details</a><h2 id='details'>Details</h2></div>",
+            [new PdfDocument { Title = "First", Id = "first" }]);
+
+        GetAnnotations(pdf, pdf.Pages[0]).ShouldBe(["page:1"]);
+    }
+
+    [Fact]
+    public async Task Should_Link_To_An_Anchor_Written_By_The_Markdown_Converter()
+    {
+        var pdf = await RenderAsync(
+            "<div class='page' id='first'><a href='##details'>Details</a><h2 id='details'>Details</h2></div>",
+            [new PdfDocument { Title = "First", Id = "first" }]);
+
+        GetAnnotations(pdf, pdf.Pages[0]).ShouldBe(["page:1"]);
+    }
+
+    [Fact]
+    public async Task Should_Keep_Every_Line_Of_A_Wrapped_Link_Clickable()
+    {
+        var pdf = await RenderAsync(
+            $"<div class='page' id='first'><a href='https://abp.io'>{string.Join(" ", Enumerable.Repeat("LINK", 60))}</a></div>",
+            [new PdfDocument { Title = "First", Id = "first" }]);
+
+        GetAnnotations(pdf, pdf.Pages[0]).Count.ShouldBe(60);
+    }
+
+    [Fact]
+    public void Should_Split_Multi_Word_Links_Only()
+    {
+        var renderer = CreateTestRenderer();
+
+        renderer.SplitLinks("<a href='#a'>Tips &amp; Tricks</a>").ShouldBe("<a href='#a'>Tips</a> <a href='#a'>&amp;</a> <a href='#a'>Tricks</a>");
+        renderer.SplitLinks("<a href='#a'>Single</a>").ShouldBe("<a href='#a'>Single</a>");
+        renderer.SplitLinks("<a id='x' href='#a'>Two words</a>").ShouldBe("<a id='x' href='#a'>Two words</a>");
+        renderer.SplitLinks("<a href='#a'><code>Two words</code></a>").ShouldBe("<a href='#a'><code>Two words</code></a>");
+    }
+
+    [Fact]
+    public void Should_Replace_Svg_Images_With_Links()
+    {
+        CreateTestRenderer().ReplaceImages("<img src=\"https://abp.io/diagram.svg?v=1\" alt=\"Diagram\" /><img src=\"https://abp.io/logo.png\" />")
+            .ShouldBe("<a href=\"https://abp.io/diagram.svg?v=1\">Diagram</a><img src=\"https://abp.io/logo.png\">");
+    }
+
+    [Fact]
+    public async Task Should_Not_Load_Local_Images()
+    {
+        var imagePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N") + ".png");
+        using (var bitmap = new SKBitmap(3, 3))
+        using (var data = bitmap.Encode(SKEncodedImageFormat.Png, 100))
+        {
+            await File.WriteAllBytesAsync(imagePath, data.ToArray());
+        }
+
+        try
+        {
+            var pdf = await RenderAsync(
+                $"<div class='page' id='first'><img src='{new Uri(imagePath).AbsoluteUri}' /><img src='{imagePath}' /><p>Text</p></div>",
+                [new PdfDocument { Title = "First", Id = "first" }]);
+
+            var images = pdf.Pages[0].Resources.Elements.GetDictionary("/XObject")?.Elements.Values
+                .Select(x => (PdfDictionary)((PdfReference)x).Value)
+                .ToList() ?? [];
+            images.ShouldNotContain(x => x.Elements.GetInteger("/Width") == 3);
+        }
+        finally
+        {
+            File.Delete(imagePath);
+        }
+    }
+
+    [Fact]
+    public void Should_Convert_Gif_Images()
+    {
+        var gif = System.Convert.FromBase64String("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
+
+        var image = CreateTestRenderer().CreatePdfImage(gif);
+
+        image.PixelWidth.ShouldBe(1);
+        image.PixelHeight.ShouldBe(1);
+    }
+
+    private TestPdfSharpHtmlToPdfRenderer CreateTestRenderer()
+    {
+        return new TestPdfSharpHtmlToPdfRenderer(GetRequiredService<IHttpClientFactory>());
     }
 
     private async Task<PdfSharp.Pdf.PdfDocument> RenderAsync(string content, List<PdfDocument> documents)
@@ -145,9 +242,37 @@ public class PdfSharpHtmlToPdfRenderer_Tests : DocsDomainTestBase
     [DisableConventionalRegistration]
     private class TestPdfSharpHtmlToPdfRenderer : PdfSharpHtmlToPdfRenderer
     {
-        public string Preserve(string html)
+        public TestPdfSharpHtmlToPdfRenderer(IHttpClientFactory httpClientFactory)
+            : base(httpClientFactory)
         {
-            return PreserveHtmlEntities(html);
+        }
+
+        public string PreserveEntities(string html)
+        {
+            return Transform(html, PreserveHtmlEntities);
+        }
+
+        public string SplitLinks(string html)
+        {
+            return Transform(html, SplitMultiWordLinks);
+        }
+
+        public string ReplaceImages(string html)
+        {
+            return Transform(html, ReplaceUnsupportedImages);
+        }
+
+        private static string Transform(string html, Action<HtmlDocument> action)
+        {
+            var htmlDocument = new HtmlDocument();
+            htmlDocument.LoadHtml(html);
+            action(htmlDocument);
+            return htmlDocument.DocumentNode.OuterHtml;
+        }
+
+        public XImage CreatePdfImage(byte[] image)
+        {
+            return CreateImage(image);
         }
     }
 }
