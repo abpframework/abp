@@ -37,9 +37,9 @@
     <PackageVersion Include="DistributedLock.Core" Version="1.0.8" />
     <PackageVersion Include="DistributedLock.Redis" Version="1.1.0" />
     <PackageVersion Include="DeepL.net" Version="1.15.0" />
-    <PackageVersion Include="itext.bouncy-castle-adapter" Version="9.3.0" />
-    <PackageVersion Include="itext7" Version="9.3.0" />
-    <PackageVersion Include="itext7.pdfhtml" Version="6.2.1" />
+    <PackageVersion Include="HtmlAgilityPack" Version="1.12.3" />
+    <PackageVersion Include="HtmlRenderer.PdfSharp" Version="1.6.1" />
+    <PackageVersion Include="PDFsharp" Version="6.2.4" />
     <PackageVersion Include="MongoSandbox.Core" Version="2.0.0" />
     <PackageVersion Include="MongoSandbox8.runtime.linux-x64" Version="2.0.0" />
     <PackageVersion Include="MongoSandbox8.runtime.osx-arm64" Version="2.0.0" />
@@ -125,7 +125,7 @@
     <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.19.2" />
     <PackageVersion Include="Minio" Version="6.0.5" />
     <PackageVersion Include="MongoDB.Driver" Version="3.12.0" />
-    <PackageVersion Include="NEST" Version="7.17.5" />
+    <PackageVersion Include="Elastic.Clients.Elasticsearch" Version="8.19.27" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageVersion Include="Nito.AsyncEx.Context" Version="5.1.2" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
