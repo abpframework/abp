@@ -40,7 +40,7 @@ public class PdfSharpHtmlToPdfRenderer : IHtmlToPdfRenderer, ITransientDependenc
 
     public virtual Task<Stream> RenderAsync(string title, string html, List<PdfDocument> documents)
     {
-        var pdfDocument = new PdfSharpDocument();
+        using var pdfDocument = new PdfSharpDocument();
         pdfDocument.Info.Title = title;
 
         var config = CreatePdfGenerateConfig();
