@@ -133,6 +133,24 @@ public class PdfSharpHtmlToPdfRenderer_Tests : DocsDomainTestBase
     }
 
     [Fact]
+    public void Should_Only_Let_Long_Words_Break_Anywhere()
+    {
+        var renderer = CreateTestRenderer();
+        var longWord = new string('a', 41);
+
+        renderer.BreakWords($"<p>Short words {longWord} end</p>")
+            .ShouldBe($"<p>Short words <span style=\"word-break: break-all\">{longWord}</span> end</p>");
+        renderer.BreakWords("<p>" + new string('a', 40) + "</p>").ShouldBe("<p>" + new string('a', 40) + "</p>");
+        renderer.BreakWords($"<pre><code>{longWord}</code></pre>").ShouldBe($"<pre><code>{longWord}</code></pre>");
+        renderer.BreakWords("<table><tr><td>Confirmation</td><td>IsEnabledForGetRequests</td><td>x</td></tr></table>")
+            .ShouldBe("<table><tr><td>Confirmation</td><td><span style=\"word-break: break-all\">IsEnabledForGetRequests</span></td><td>x</td></tr></table>");
+        renderer.BreakWords("<table><tr><td>x</td><td colspan='5'>Confirmation</td></tr></table>")
+            .ShouldBe("<table><tr><td>x</td><td colspan='5'><span style=\"word-break: break-all\">Confirmation</span></td></tr></table>");
+        renderer.BreakWords("<table><tr><td>AIManagement.Workspace</td><td><code>AIManagement.Workspace</code></td></tr></table>")
+            .ShouldBe("<table><tr><td>AIManagement.Workspace</td><td><code><span style=\"word-break: break-all\">AIManagement.Workspace</span></code></td></tr></table>");
+    }
+
+    [Fact]
     public void Should_Split_Multi_Word_Links_Only()
     {
         var renderer = CreateTestRenderer();
@@ -312,6 +330,11 @@ public class PdfSharpHtmlToPdfRenderer_Tests : DocsDomainTestBase
         public string SplitLinks(string html)
         {
             return Transform(html, SplitMultiWordLinks);
+        }
+
+        public string BreakWords(string html)
+        {
+            return Transform(html, BreakLongWords);
         }
 
         public string ReplaceImages(string html)

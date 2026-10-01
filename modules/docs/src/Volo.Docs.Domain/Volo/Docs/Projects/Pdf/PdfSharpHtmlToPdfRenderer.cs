@@ -54,6 +54,7 @@ public class PdfSharpHtmlToPdfRenderer : IHtmlToPdfRenderer, ITransientDependenc
         htmlDocument.LoadHtml(html.Replace("\t", "    "));
         ReplaceUnsupportedImages(htmlDocument);
         SplitMultiWordLinks(htmlDocument);
+        BreakLongWords(htmlDocument);
         PreserveHtmlEntities(htmlDocument);
 
         // HtmlRenderer ignores "page-break-after", so every document is laid out separately to start on a new page.
@@ -154,6 +155,64 @@ public class PdfSharpHtmlToPdfRenderer : IHtmlToPdfRenderer, ITransientDependenc
 
             link.Remove();
         }
+    }
+
+    protected virtual void BreakLongWords(HtmlDocument htmlDocument)
+    {
+        // HtmlRenderer does not support "overflow-wrap: break-word": a word wider than its line is clipped, and "word-break: break-all" breaks every word.
+        // So only the words that can not fit are allowed to break anywhere.
+        foreach (var textNode in htmlDocument.DocumentNode.Descendants().OfType<HtmlTextNode>().ToList())
+        {
+            if (textNode.ParentNode.Name is "style" or "script" or "title" || textNode.Ancestors("pre").Any())
+            {
+                continue;
+            }
+
+            var maxWordLength = GetMaxWordLength(textNode);
+            var parts = SplitWords(textNode.Text);
+            if (!parts.Any(part => IsLongWord(part, maxWordLength)))
+            {
+                continue;
+            }
+
+            foreach (var part in parts)
+            {
+                if (!IsLongWord(part, maxWordLength))
+                {
+                    textNode.ParentNode.InsertBefore(htmlDocument.CreateTextNode(part), textNode);
+                    continue;
+                }
+
+                var span = htmlDocument.CreateElement("span");
+                span.SetAttributeValue("style", "word-break: break-all");
+                span.AppendChild(htmlDocument.CreateTextNode(part));
+                textNode.ParentNode.InsertBefore(span, textNode);
+            }
+
+            textNode.Remove();
+        }
+    }
+
+    protected virtual int GetMaxWordLength(HtmlNode textNode)
+    {
+        // A line of the default style holds about 90 characters, but table columns are not equally wide and code uses a wider font.
+        var cell = textNode.Ancestors().FirstOrDefault(node => node.Name is "td" or "th");
+        if (cell == null)
+        {
+            return 40;
+        }
+
+        var columnCount = cell.ParentNode.ChildNodes
+            .Where(node => node.Name is "td" or "th")
+            .Sum(node => Math.Max(node.GetAttributeValue("colspan", 1), 1));
+        var maxLength = Math.Max(45 / columnCount, 6);
+
+        return textNode.Ancestors("code").Any() ? maxLength * 3 / 4 : maxLength;
+    }
+
+    private static bool IsLongWord(string text, int maxLength)
+    {
+        return !text.IsNullOrWhiteSpace() && HtmlEntity.DeEntitize(text).Length > maxLength;
     }
 
     protected virtual void PreserveHtmlEntities(HtmlDocument htmlDocument)

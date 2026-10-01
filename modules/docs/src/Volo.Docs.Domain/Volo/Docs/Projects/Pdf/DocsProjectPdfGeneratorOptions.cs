@@ -60,8 +60,8 @@ public class DocsProjectPdfGeneratorOptions
 
         HtmlStyle = @"
         body { margin: 15px; line-height: 1.5; font-family: Arial, 'Liberation Sans', 'DejaVu Sans', sans-serif;}
-        a { text-decoration: none; word-break: break-all; overflow-wrap: break-word;}
-        li { word-break: break-all; overflow-wrap: break-word; }
+        a { text-decoration: none; overflow-wrap: break-word;}
+        li { overflow-wrap: break-word; }
         .page {
             page-break-after: always;
             margin-bottom: 30px;
@@ -77,7 +77,6 @@ public class DocsProjectPdfGeneratorOptions
             background: #f8fafc;
             white-space: pre-wrap;
             word-wrap: break-word;
-            word-break: break-all;
         }
         pre code { padding: 0; border: none; }
         code {
@@ -88,6 +87,7 @@ public class DocsProjectPdfGeneratorOptions
         }
         pre {
             position: relative;
+            word-break: break-all;
             padding: 16px;
             border-radius: 8px;
             border: 1px solid #e2e8f0;
@@ -104,7 +104,6 @@ public class DocsProjectPdfGeneratorOptions
         th, td {
           border: 1px solid #333;
           padding: 6px 10px;
-          word-break: break-all;
           overflow-wrap: break-word;
         }";
         
