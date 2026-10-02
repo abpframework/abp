@@ -112,6 +112,39 @@ Response kinds are:
 | `text` | Plain text |
 | `binaryBase64` | Base64-encoded binary payload |
 
+## Error Responses
+
+An endpoint script can answer an error in two ways:
+
+* **Return a response helper** such as `badRequest(message)` or `notFound(message)`. The response is written as returned, with the status from the helper table above.
+* **Call an [error helper](scripting-api.md#error-helpers)** such as `validationError`, `entityNotFound`, or `userFriendlyError`. The endpoint is answered exactly like an application service that throws the same exception. ABP exception handling logs the error, chooses the HTTP status, and writes the standard ABP error response body. The endpoint's database changes are rolled back.
+
+```javascript
+var campaign = await db.get('Acme.Campaigns.Campaign', route.id);
+if (!campaign) {
+    entityNotFound('Acme.Campaigns.Campaign', route.id); // 404
+}
+if (campaign.Status === 2) {
+    userFriendlyError('The campaign is already published.', 'Acme.Campaigns:AlreadyPublished'); // 403 by default
+}
+return ok({ id: campaign.Id, name: campaign.Name });
+```
+
+An error helper produces the same error body as the rest of the application. For the `userFriendlyError` call above, when the code has no localized text, the body is:
+
+```json
+{
+  "error": {
+    "code": "Acme.Campaigns:AlreadyPublished",
+    "message": "The campaign is already published."
+  }
+}
+```
+
+Because the status comes from ABP exception handling, error code mappings configured with `AbpExceptionHttpStatusCodeOptions` also apply to endpoint scripts. For example, mapping `Acme.Campaigns:AlreadyPublished` to `HttpStatusCode.Conflict` makes the endpoint above answer `409`. See [HTTP Status Code Mapping](scripting-api.md#http-status-code-mapping).
+
+If the script fails on its own, for example with an uncaught `throw new Error(...)`, a syntax error, or a timeout, the endpoint answers `500` with the `LowCode:ScriptExecutionFailed` error. The script's own message is written to the server log, not sent to the caller. See [Runtime Failures](scripting-api.md#runtime-failures).
+
 ## Script Services
 
 Custom endpoint scripts use the same common [Scripting API](scripting-api.md) services as other low-code scripts:
@@ -182,7 +215,7 @@ The dry-run request editor lets you provide:
 * Body JSON
 * Outbound HTTP mocks
 
-Dry-run execution evaluates the endpoint descriptor, request context, script, authentication metadata, and required permissions against the current user. It returns the same response shape that a real endpoint execution would return.
+Dry-run execution evaluates the endpoint descriptor, request context, script, authentication metadata, and required permissions against the current user. It returns the same response shape that a real endpoint execution would return. When the script fails, the result shows the HTTP status and the error response body that a caller would receive, including status code mappings. See [Testing Error Responses](scripting-api.md#testing-error-responses).
 
 Side effects are captured instead of being sent to external systems:
 

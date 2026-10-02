@@ -391,8 +391,13 @@ Global helpers are also available:
 | Helper | Description |
 |--------|-------------|
 | `guid()` | Generates a GUID string |
-| `userFriendlyError(message)` | Throws a `UserFriendlyException` |
-| `businessError(message, code?)` | Throws a `BusinessException` |
+| `userFriendlyError(message, code?, details?, data?)` | Throws a `UserFriendlyException` |
+| `businessError(message, code?, details?, data?)` | Throws a `BusinessException`, or a `UserFriendlyException` when no code is given |
+| `validationError(message, errors?)` | Throws an `AbpValidationException` |
+| `entityNotFound(entityName?, id?)` | Throws an `EntityNotFoundException` |
+| `authorizationError(message?, code?, data?)` | Throws an `AbpAuthorizationException` |
+
+The error helpers are described in [Error Handling](#error-handling).
 
 ### Interceptor Context
 
@@ -409,11 +414,19 @@ Interceptors add `args` and `commandArgs`:
 | `commandArgs.hasValue(name)` | Check whether the input contains a property |
 | `commandArgs.removeValue(name)` | Remove a property from the input |
 
-Set `globalError` to abort an operation with a user-facing error:
+Set `globalError` to abort an operation with a user-facing error. It is answered like `userFriendlyError(message)`:
 
 ```javascript
 if (!args.getValue('Name')) {
     globalError = 'Name is required.';
+}
+```
+
+To reject invalid input with a `400` response, use `validationError`:
+
+```javascript
+if (!args.getValue('Name')) {
+    validationError('Name is required.', [{ message: 'Name is required.', members: ['Name'] }]);
 }
 ```
 
@@ -577,7 +590,7 @@ if (email.isAvailable) {
 
 The Designer can run JavaScript without saving it where the **Test JavaScript** panel is available. The built-in dry-run panel supports custom endpoints, interceptors, event handlers, background jobs, and background workers.
 
-Dry-run execution returns the endpoint response or script status, logs, captured side effects, duration, and error diagnostics.
+Dry-run execution returns the endpoint response or script status, logs, captured side effects, duration, and error diagnostics. When the script fails, the result also shows the HTTP status and the error response body that a caller would receive. See [Testing Error Responses](#testing-error-responses).
 
 | Operation | Dry-run behavior |
 |-----------|------------------|
@@ -588,7 +601,7 @@ Dry-run execution returns the endpoint response or script status, logs, captured
 | Background job enqueue | Captured as a `job` side effect; no job is enqueued |
 | Outbound HTTP | Resolved from configured HTTP mocks; no real HTTP request is sent |
 | Logs | Returned in the result |
-| Errors | Returned with type, message, and diagnostics when available |
+| Errors | Returned with type, message, and diagnostics when available, plus the HTTP status and error response body |
 
 For endpoint dry runs, the request method, path, route values, query values, headers, and body are supplied by the test panel. Endpoint authentication and permission metadata are checked against the current user. For interceptor dry runs, the test panel supplies command metadata and command data. For event handler dry runs, it supplies `eventData`. For background job and worker dry runs, it supplies the job or worker input JSON.
 
@@ -711,18 +724,125 @@ The following are **not allowed** inside lambda expressions: `typeof`, `instance
 
 ## Error Handling
 
+Scripts report an error by calling one of the error helpers. Each helper throws the ABP exception it is named after, so a script error is handled exactly like the same exception thrown by application code: ABP [exception handling](../framework/fundamentals/exception-handling.md) decides the HTTP status and the error response body, localizes error codes, and applies your status code mappings.
+
+### Error Helpers
+
+| Helper | Exception | Default HTTP status |
+|--------|-----------|--------------------|
+| `userFriendlyError(message, code?, details?, data?)` | `UserFriendlyException` | `403` |
+| `businessError(message, code?, details?, data?)` | `BusinessException`; `UserFriendlyException` when `code` is omitted | `403` |
+| `validationError(message, errors?)` | `AbpValidationException` | `400` |
+| `entityNotFound(entityName?, id?)` | `EntityNotFoundException` | `404` |
+| `authorizationError(message?, code?, data?)` | `AbpAuthorizationException` | `401` when the user is not signed in, `403` otherwise |
+
+The default statuses are the ones ABP assigns to these exception types. The helpers stop the script; you don't need to `throw` their result.
+
+`userFriendlyError` shows `message` to the user. `details` adds more text to the error response. When `code` is given and has localized text, the localized text is shown instead of `message`:
+
 ```javascript
-// Abort operation with error
-if (!context.commandArgs.getValue('Email').includes('@')) {
-    throw new Error('Valid email is required');
+if (campaign.Status === 2) {
+    userFriendlyError('The campaign is already published.', null, 'Create a new campaign to make changes.');
 }
+```
 
-// User-friendly ABP exception
-userFriendlyError('The campaign is not ready to publish.');
+`businessError` with a `code` throws a `BusinessException`. The caller sees the localized text of the error code, and the values in `data` fill its `{name}` placeholders. `message` is written to the server log. Define the text in a localization resource mapped to the code's namespace (see [Using Error Codes](../framework/fundamentals/exception-handling.md#using-error-codes)); a code without localized text is answered with ABP's generic error message. Without a `code`, `businessError` works like `userFriendlyError` and shows `message`:
 
-// Business exception with a code
-businessError('Budget is exceeded.', 'Acme.Campaigns:BudgetExceeded');
+```javascript
+if (order.Total > budget.Remaining) {
+    businessError('Budget is exceeded.', 'Acme.Campaigns:BudgetExceeded', null, {
+        remaining: budget.Remaining
+    });
+}
+```
 
+`validationError` returns `400` with the listed validation errors. Each error has a `message` and the `members` (input names) it applies to. A plain string is also accepted. When `errors` is omitted, `message` becomes the only validation error:
+
+```javascript
+var errors = [];
+if (!body.name) {
+    errors.push({ message: 'Name is required.', members: ['name'] });
+}
+if (body.budget < 0) {
+    errors.push({ message: 'Budget cannot be negative.', members: ['budget'] });
+}
+if (errors.length > 0) {
+    validationError('The campaign is not valid.', errors);
+}
+```
+
+`entityNotFound` returns `404` with ABP's not-found message for the given entity name and id:
+
+```javascript
+var campaign = await db.get('Acme.Campaigns.Campaign', route.id);
+if (!campaign) {
+    entityNotFound('Acme.Campaigns.Campaign', route.id);
+}
+```
+
+`authorizationError` is handled like any ABP authorization failure: `401` for an anonymous caller and `403` for a signed-in user by default:
+
+```javascript
+if (!(await auth.isGrantedAsync('Acme.Campaigns.Publish'))) {
+    authorizationError('You are not allowed to publish campaigns.');
+}
+```
+
+`data` is an object. Its properties are added to the exception data, the same way `WithData(name, value)` adds them in C#.
+
+### HTTP Status Code Mapping
+
+An error code can be mapped to another HTTP status with `AbpExceptionHttpStatusCodeOptions`. The mapping applies to script errors wherever a script answers an HTTP request, including interceptors and custom endpoints:
+
+```csharp
+Configure<AbpExceptionHttpStatusCodeOptions>(options =>
+{
+    options.Map("Acme.Campaigns:BudgetExceeded", HttpStatusCode.Conflict);
+});
+```
+
+With this mapping, `businessError('Budget is exceeded.', 'Acme.Campaigns:BudgetExceeded')` returns `409` instead of `403`. See [HTTP Status Code Mapping](../framework/fundamentals/exception-handling.md#http-status-code-mapping).
+
+### Where Script Errors Go
+
+Every script type handles a failed script the same way. The script type does not choose the status or the error body; ABP exception handling does:
+
+| Script type | Result of a failed script |
+|-------------|---------------------------|
+| Interceptors | The operation is aborted and the request is answered with the error, like an exception thrown by an application service |
+| Custom endpoints | The request is answered with the same status and error body as an application service, and the endpoint's database changes are rolled back |
+| Page backend filter scripts | The query fails; no filter value is produced, so no unfiltered data is returned |
+| Event handlers, background jobs, and background workers | The exception is passed to the event bus, job, or worker infrastructure, which logs it and, where supported, retries; there is no HTTP response |
+
+### Runtime Failures
+
+A script that fails on its own is reported with the error code `LowCode:ScriptExecutionFailed` and HTTP status `500`, unless that code is mapped to another status. This includes:
+
+* An uncaught JavaScript error, such as `throw new Error('...')` or reading a property of `undefined`
+* A syntax error
+* A script longer than `MaxScriptLength`
+* The timeout, memory, statement count, or recursion depth limit
+* A result that the script type cannot use
+* An unexpected failure in a script service, such as an outgoing HTTP call that timed out
+
+The caller receives only the `LowCode:ScriptExecutionFailed` code and its localized message. The original message, the failure reason, and the script line and column are written to the server log and shown by **Test JavaScript**. They are not sent to the caller unless the application sends exception details to clients (`AbpExceptionHandlingOptions.SendExceptionsDetailsToClients`).
+
+Use an error helper for any error whose message the user should see. `throw new Error('Valid email is required')` is a runtime failure, so the caller gets a `500` response without that message.
+
+Exceptions that ABP already handles pass through unchanged. These include the error helpers' exceptions, a database concurrency conflict (`409`), and any exception that has its own HTTP status.
+
+### Testing Error Responses
+
+When a script fails in **Test JavaScript**, the result keeps the error diagnostics (type, code, message, line, column, details, validation errors, and data) and also shows:
+
+* The HTTP status that the application's exception handling gives the error, including status code mappings
+* The error response body that a caller receives (`code`, `message`, `details`, `data`, and `validationErrors`)
+
+For a failed custom endpoint test, the endpoint response shows the same status and error message. The status of an authorization error is resolved from the current user (`401` or `403`), even if the application's authorization handler would answer a real request differently, for example with a redirect to the login page.
+
+### Catching Errors
+
+```javascript
 // Try-catch for safe execution
 try {
     var query = await db.query('Entity');
@@ -756,8 +876,10 @@ var product = await productQuery
     .where(x => x.Id === productId)
     .first();
 
-if (!product) { throw new Error('Product not found'); }
-if (product.StockCount < quantity) { throw new Error('Insufficient stock'); }
+if (!product) { entityNotFound('LowCodeDemo.Products.Product', productId); }
+if (product.StockCount < quantity) {
+    userFriendlyError('Only ' + product.StockCount + ' items are in stock.');
+}
 
 context.commandArgs.setValue('TotalAmount', product.Price * quantity);
 ```

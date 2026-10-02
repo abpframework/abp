@@ -177,7 +177,7 @@ Use **Health** before shipping changes. It helps catch missing display propertie
 
 When **Runtime JSON** is selected, the Designer exposes runtime model undo, redo, history details, comparisons, and save points. History actions are previewed against a concurrency stamp and require explicit confirmation before destructive physical schema changes.
 
-Entity deletion also uses a reviewed plan. You must resolve dependent relationships and choose whether Designer-managed physical data is kept or deleted. An entity deleted with retained physical data can be restored only from a fresh schema and concurrency preview. See [Model History and Recovery](model-history.md).
+Entity deletion also uses a reviewed plan in which you resolve dependent relationships. Deleting an entity, property, or collection keeps its data: the **Deleted objects** page lists it and can restore it, under its old name or a new one, or purge it for good. History undo, redo, and save point restore bring deleted data back too. See [Model History and Recovery](model-history.md) and [Deleted Objects](deleted-objects.md).
 
 ## MCP Integration
 

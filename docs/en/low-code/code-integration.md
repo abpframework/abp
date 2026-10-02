@@ -138,18 +138,18 @@ Use `GetData(...)` and `SetData(...)` for normal read/write code. Use the indexe
 |-----|------------|
 | `entity.GetData<T>("FieldName")` | General read API; it resolves CLR properties, mapped fields, and extra properties through one call |
 | `entity.SetData("FieldName", value)` | General write API; it chooses the mapped field or `Data` dictionary automatically |
-| `entity["FieldName"]` | Direct access to a dynamic property with `isMappedToDbField: true` |
-| `entity.Data["FieldName"]` | Direct access to a dynamic property without `isMappedToDbField: true` |
+| `entity["FieldName"]` | Direct access to a dynamic property stored in its own column |
+| `entity.Data["FieldName"]` | Direct access to a dynamic property stored in the `Data` column |
 
 ### Query Expressions: `entity["Field"]` vs `entity.Data["Field"]`
 
-For materialized entities, `GetData(...)` is the safest read API because it hides the storage details. For `IQueryable` expressions, use the access form that matches the property's storage shape so EF Core and the low-code query layer can translate it correctly:
+For materialized entities, `GetData(...)` is the safest read API because it hides the storage details. For `IQueryable` expressions, use the access form that matches the property's storage shape so EF Core and the low-code query layer can translate it correctly. See [Property Storage](data-modeling.md#property-storage) for how `isMappedToDbField` and `UseJsonDataStorage` decide where a property is stored:
 
 | Property shape | Query form |
 |----------------|------------|
 | Normal CLR property | `x.PropertyName` |
-| Dynamic property with `isMappedToDbField: true` | `x["PropertyName"]` |
-| Dynamic property without `isMappedToDbField: true` | `x.Data["PropertyName"]` |
+| Dynamic property stored in its own column | `x["PropertyName"]` |
+| Dynamic property stored in the `Data` column | `x.Data["PropertyName"]` |
 
 The low-code demo uses both patterns in the same query. In `LowCodeDemo.Orders.OrderLine`, `ProductId` is mapped to a DB field, while `Amount` stays in the `Data` dictionary:
 
