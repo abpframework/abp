@@ -46,7 +46,7 @@ public class BlogModule : AbpModule
 }
 ````
 
-You can register dependencies one by one as stated in Microsoft's [documentation](../../fundamentals/dependency-injection.md). But ABP has a **conventional dependency registration system** which automatically registers all services in your assembly. See the [dependency Injection](../../fundamentals/dependency-injection.md) documentation for more about the dependency injection system.
+You can register dependencies one by one as stated in Microsoft's [documentation](../../fundamentals/dependency-injection.md). But ABP has a **conventional dependency registration system** which automatically registers all services in your assembly. See the [dependency injection](../../fundamentals/dependency-injection.md) documentation for more about the dependency injection system.
 
 You can also configure other services and modules in this way. Example:
 
