@@ -182,7 +182,7 @@ Apps split one low-code model into independently named scopes. The default app i
 | `name` | Required lowercase kebab-case identifier (maximum 64 characters), for example `crm` or `field-service`. `default` is reserved for the implicit default app |
 | `displayName` | Required user-facing title (maximum 128 characters) |
 | `description` | Optional description |
-| `isArchived` | Hides the app from active app lists without deleting its descriptors |
+| `isArchived` | Takes the app out of use without deleting anything: it is hidden from runtime navigation and its pages, endpoints, event handlers, jobs, and workers do not run. Descriptors, permissions, history, and data are kept |
 
 Descriptors reference the app by name:
 
@@ -197,7 +197,7 @@ Descriptors reference the app by name:
 
 App-scoped entities are addressed at runtime as `<app>:<EntityName>`, app-scoped endpoints can publish beneath `/api/low-code/apps/<app>/endpoints` with `routeScope: "app"`, and permission children inherit the parent `app` when they do not set their own.
 
-Deleting an app removes its data too. The deletion runs in the background, and the app name stays reserved until it completes. See [Deleting an App](deleted-objects.md#deleting-an-app).
+Deleting an app removes its data too. The deletion runs in the background, and the app name stays reserved until it completes. An app being deleted is marked with `isDeleting` in the runtime model only; a model file that sets `isDeleting` fails to load with `LowCode:ModelFileRuntimeOnlyProperty`. See [Deleting an App](deleted-objects.md#deleting-an-app).
 
 ## Enums
 
@@ -282,7 +282,7 @@ Entities describe the persisted data model. UI is not configured with legacy pro
 |-------|-------------|
 | `name` | Required PascalCase property name |
 | `type` | Property type; omitted means `string` |
-| `displayName` | Default field label; pages/forms can override it |
+| `displayName` | Default field label; pages/forms can override it. When omitted, the UI shows a readable form of the name (`CustomerId` is shown as "Customer") |
 | `enumType` | Enum name when `type` is `enum` |
 | `defaultValue` | Default value for new records, stored as a string and converted at runtime; a value that does not fit the property type is refused |
 | `isRequired` | Required/not nullable backend and UI validation |
@@ -373,7 +373,7 @@ Use entity `attachments` when each record can have multiple arbitrary files:
 
 `entityName` can point to another dynamic entity or a registered [reference entity](reference-entities.md). Use `dependsOn` (`propertyName` and `filterPropertyName`) for cascading lookups. Reverse access from the referenced entity side is not configured on the foreign key; define a page `relationships[]` entry on the target entity's page instead. See [Foreign Access](foreign-access.md).
 
-Lookups check access: the caller needs view permission on the referenced entity, and a foreign key marked `serverOnly` has no lookup. A foreign key that clients cannot set (`allowSetByClients: false`) offers choices only where a page shows it as a column or filter.
+Lookups check access to the referenced records. The caller must be able to read the referenced entity through the app's access grant, through a page of the app bound to that entity that grants view (including a page open to `authenticated` users), or, for a reference entity, through its view permission; otherwise the lookup fails with an authorization error that names the entity. A foreign key marked `serverOnly` has no lookup. On a page, a foreign key that clients cannot set (`allowSetByClients: false`) offers choices only where the page shows it as a column or filter.
 
 ### Validators
 

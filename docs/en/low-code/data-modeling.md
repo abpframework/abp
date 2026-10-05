@@ -28,11 +28,11 @@ Configure<AbpLowCodeEntityFrameworkCoreOptions>(options =>
 });
 ```
 
-`builder.ConfigureDynamicEntities(useJsonDataStorage: false)` sets the same option while configuring EF Core. Low-Code does not infer the option from the provider.
+Set the option rather than passing `useJsonDataStorage` to `builder.ConfigureDynamicEntities(...)` in your `DbContext`. The module maps dynamic entities with the option's value, and every read, write, filter, sort, and formula decides a property's storage from the same option, so a different value passed to that call changes only the EF Core mapping. Low-Code does not infer the option from the provider.
 
 A property created in the Designer, through MCP, or through any other model change records the storage chosen at that moment: its `isMappedToDbField` is set from the default. Changing `UseJsonDataStorage` later therefore affects only new properties, and existing entities keep working. A property whose descriptor omits `isMappedToDbField`, such as one written by hand in a model JSON file or defined in code, follows the option. Low-Code does not move existing values between the `Data` column and individual columns when the option changes. If you change `UseJsonDataStorage` while entities already hold data, first set `isMappedToDbField` explicitly on the existing descriptors that omit it (in model JSON files, in code, and on properties created before the Designer recorded the flag), so they keep their current storage. Otherwise they move to the other storage and their existing values are no longer read.
 
-While `UseJsonDataStorage` is `false`, a model change cannot give an entity that keeps no `Data` document a property stored there; it is refused with `LowCode:JsonDataStorageDisabled`. An entity that already keeps a `Data` document keeps working as before.
+While `UseJsonDataStorage` is `false`, a model change cannot give an entity that keeps no `Data` document a property stored there; it is refused with `LowCode:JsonDataStorageDisabled`. In the Designer, the property dialog then starts with **Map to database field** checked and locked. An entity that already keeps a `Data` document keeps working as before. Model files and code are not refused when they are loaded, and history actions and restores are never refused for this reason.
 
 A dynamic entity's table has the `Data` column only while at least one of its properties is stored there. An entity whose properties all have their own columns has no `Data` column, so it works on databases without JSON column support. The column is added when a property first needs it and is not removed afterwards.
 
@@ -59,6 +59,14 @@ When you add a required property to an entity that already has records, choose h
 | `existingDataMode: "formula"` with `existingDataExpression` | Each existing row gets the result of an [expression](expression-language.md) |
 
 Fixed values and formulas work for properties stored in the `Data` column and for properties mapped to their own column. The fill is part of the model change, not of the property: `backfillValue` is not a property attribute, and a model change that sets it on a property is refused with the existing-data options to use instead.
+
+### Date and Time Values
+
+A `DateTime` value that a client sends without an offset, such as `2026-10-02T10:00` from a date-time picker, is read as a time in the current user's time zone and stored as UTC, the same way ABP reads an offset-less `DateTime` of an application service DTO. This applies to single values and to primitive collections. It uses `IClock`, so it shifts values only when the clock supports multiple time zones (`AbpClockOptions.Kind` is `DateTimeKind.Utc`); otherwise the value is stored as sent. A value with an offset or a `Z` already names its instant and is never shifted. Clients that relied on offset-less values being read as UTC must send an explicit offset.
+
+### Labels of Properties Without a Display Name
+
+When a property has no `displayName`, it is labeled with a readable form of its name in tables, forms, details, kanban and gallery views, filters, validation messages, and import match options. `OrderDate` is shown as "Order Date", and a foreign key drops its `Id` suffix, so `CustomerId` is shown as "Customer". A localized text keyed by the property name still takes precedence. Server list and form responses are unchanged.
 
 ### Table Prefixes
 
@@ -235,6 +243,8 @@ A filter value can be:
 * Resolved by a registered provider through `valueProvider`.
 
 Built-in providers cover the current user ID, username, first name, surname, email, email verification, phone number, phone verification, roles, and current tenant ID. Applications can register additional typed providers with `AbpLowCodePageBackendFilterOptions`.
+
+Each operator is checked against the property type and the value source when the model is saved, using the same rules the query applies at runtime. An operator the query cannot resolve, such as a relative-date operator like `today`, is refused at save time instead of failing when the page is read.
 
 ### Filters on List Fields
 

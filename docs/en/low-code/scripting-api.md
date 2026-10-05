@@ -746,7 +746,7 @@ if (campaign.Status === 2) {
 }
 ```
 
-`businessError` with a `code` throws a `BusinessException`. The caller sees the localized text of the error code, and the values in `data` fill its `{name}` placeholders. `message` is written to the server log. Define the text in a localization resource mapped to the code's namespace (see [Using Error Codes](../framework/fundamentals/exception-handling.md#using-error-codes)); a code without localized text is answered with ABP's generic error message. Without a `code`, `businessError` works like `userFriendlyError` and shows `message`:
+`businessError` with a `code` throws a `BusinessException`. The caller sees the localized text of the error code, and the values in `data` fill its `{name}` placeholders. `message` is written to the server log. Define the text in a localization resource mapped to the code's namespace (see [Using Error Codes](../framework/fundamentals/exception-handling.md#using-error-codes)); a code without localized text is answered with ABP's generic error message. When the script's own message should reach the caller together with a code, use `userFriendlyError(message, code)` instead. Without a `code`, `businessError` works like `userFriendlyError` and shows `message`:
 
 ```javascript
 if (order.Total > budget.Remaining) {
@@ -756,7 +756,7 @@ if (order.Total > budget.Remaining) {
 }
 ```
 
-`validationError` returns `400` with the listed validation errors. Each error has a `message` and the `members` (input names) it applies to. A plain string is also accepted. When `errors` is omitted, `message` becomes the only validation error:
+`validationError` returns `400` with the listed validation errors. Each error is an object with a `message` and the `members` (input names) it applies to, or a plain string. A single error object can be passed instead of a list, and `members` can be a single name. When `errors` is omitted or lists nothing, `message` becomes the only validation error; when `message` is empty too, the error reads "The request is not valid.":
 
 ```javascript
 var errors = [];
@@ -809,10 +809,12 @@ Every script type handles a failed script the same way. The script type does not
 
 | Script type | Result of a failed script |
 |-------------|---------------------------|
-| Interceptors | The operation is aborted and the request is answered with the error, like an exception thrown by an application service |
+| Entity, page, and API resource interceptors | The operation is aborted and the request is answered with the error, like an exception thrown by an application service. This includes the API resource `Query`, `Get`, `Export`, `Import`, `Files`, and `Attachments` interceptors |
 | Custom endpoints | The request is answered with the same status and error body as an application service, and the endpoint's database changes are rolled back |
-| Page backend filter scripts | The query fails; no filter value is produced, so no unfiltered data is returned |
+| Page and API resource backend filter scripts | The query fails; no filter value is produced, so no unfiltered data is returned |
 | Event handlers, background jobs, and background workers | The exception is passed to the event bus, job, or worker infrastructure, which logs it and, where supported, retries; there is no HTTP response |
+
+Calculated and rollup properties are compiled [expressions](expression-language.md), not scripts, so these rules do not apply to them.
 
 ### Runtime Failures
 

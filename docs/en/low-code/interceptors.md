@@ -207,6 +207,10 @@ The order applies to both `Pre` and `Post` interceptors. Because the page interc
 
 A `Replace` interceptor of the page runs instead of the entity's `Replace` interceptor. `entityExecutionOrder` only affects `Pre` and `Post` interceptors.
 
+API resource interceptors of `Create`, `Update`, and `Delete` are combined with the entity interceptor the same way. Their default order is `apiResourceFirst`; `pageFirst` is refused on an API resource, and `apiResourceFirst` on a page.
+
+> Earlier versions ran page and API resource interceptors after the entity interceptor by default. An interceptor saved without `entityExecutionOrder` now runs first; set `entityFirst` on the interceptors that must keep the old order.
+
 ```json
 {
   "name": "my-campaigns",

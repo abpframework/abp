@@ -52,6 +52,8 @@ Authorization is resolved in this order:
 
 Permission checks require an authorized user even when `requireAuthentication` is set to `false`. Keep endpoints authenticated by default and use `requireAuthentication: false` only for intentionally public APIs without named or resource authorization.
 
+`requiredPermissions` can name permissions defined in the model or by the application, but not a permission that Low-Code generates for a page or relationship. Such a change is refused with `LowCode:EndpointGeneratedPermissionNotAllowed`; define a permission explicitly and require that one instead. The Designer's permission picker offers only permissions an endpoint can require.
+
 ## Route and Request Data
 
 Use `{paramName}` syntax for route parameters. Endpoint scripts can read request data through globals:
