@@ -1,4 +1,4 @@
-import { Import, Interface, Model, Property, PropertyDef, Type, TypeWithEnum } from '../models';
+import { Interface, Model, Property, PropertyDef, Type, TypeWithEnum } from '../models';
 import {
   extractGenerics,
   generateRefWithPlaceholders,
@@ -67,18 +67,22 @@ export function createImportRefsToModelReducer(params: ModelGeneratorParams) {
 
     models.forEach(model => {
       const toBeImported: TypeWithEnum[] = [];
+      // Types mapped to a package proxy are not generated locally (see above), so they still
+      // need an import even when they share this model's namespace.
+      const isDeclaredInModel = (type: string) =>
+        parseNamespace(solution, type) === model.namespace && !VOLO_PACKAGE_PROXY_IMPORTS.has(type);
 
       model.interfaces.forEach(_interface => {
         const { baseType } = types[_interface.ref];
 
-        if (baseType && parseNamespace(solution, baseType) !== model.namespace) {
+        if (baseType) {
           const baseTypeWithGenericParams = parseBaseTypeWithGenericTypes(baseType);
           baseTypeWithGenericParams.forEach(t => {
-            // A generic argument of the base type (e.g. T in PagedResultDto<T>) may live in the
+            // The base type or its generic argument (e.g. T in PagedResultDto<T>) may live in the
             // same namespace as this model, which means it is generated into the same models.ts
             // file. Importing it would produce an invalid self-import (`from './models'`), so we
             // skip same-namespace types here, mirroring the property handling below. See #25080.
-            if (parseNamespace(solution, t) === model.namespace) {
+            if (isDeclaredInModel(t)) {
               return;
             }
 
@@ -98,7 +102,7 @@ export function createImportRefsToModelReducer(params: ModelGeneratorParams) {
 
             if (propType.isEnum) {
               toBeImported.push({ type: ref, isEnum: true });
-            } else if (parseNamespace(solution, ref) !== model.namespace) {
+            } else if (!isDeclaredInModel(ref)) {
               toBeImported.push({ type: ref, isEnum: false });
             }
           });
@@ -220,15 +224,6 @@ export function parseBaseTypeWithGenericTypes(type: string): string[] {
 export function resolveAbpPackages(models: Model[]) {
   for (const model of models) {
     renamePropForTenant(model.interfaces);
-
-    model.imports.forEach((imp, i) => {
-      for (const ref of imp.refs) {
-        const path = VOLO_PACKAGE_PROXY_IMPORTS.get(ref);
-        if (path) {
-          model.imports[i] = new Import({ ...imp, path });
-        }
-      }
-    });
   }
 }
 

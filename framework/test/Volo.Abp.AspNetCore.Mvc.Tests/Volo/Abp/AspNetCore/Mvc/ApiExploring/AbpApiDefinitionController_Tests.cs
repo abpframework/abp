@@ -24,6 +24,7 @@ public class AbpApiDefinitionController_Tests : AspNetCoreMvcTestBase
         var model = await GetResponseAsObjectAsync<ApplicationApiDescriptionModel>("/api/abp/api-definition?includeTypes=true");
         model.ShouldNotBeNull();
         model.Types.IsNullOrEmpty().ShouldBeFalse();
+        model.Types.Values.ShouldAllBe(x => !string.IsNullOrWhiteSpace(x.AssemblyName));
     }
 
     [Fact]
