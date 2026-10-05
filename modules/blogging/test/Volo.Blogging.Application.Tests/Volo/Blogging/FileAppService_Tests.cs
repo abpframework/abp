@@ -92,6 +92,19 @@ namespace Volo.Blogging
             await _blobContainer.DidNotReceiveWithAnyArgs().SaveAsync(default, default(Stream), default, default);
         }
 
+        [Fact]
+        public async Task Should_Not_Upload_Image_With_Invalid_Name()
+        {
+            _authorizationService.GrantedPolicies.Add(BloggingPermissions.Posts.Create);
+
+            var input = CreateUploadInput();
+            input.Name = "my-image.png\\my-folder";
+
+            await Should.ThrowAsync<AbpValidationException>(() => _fileAppService.CreateAsync(input));
+
+            await _blobContainer.DidNotReceiveWithAnyArgs().SaveAsync(default, default(Stream), default, default);
+        }
+
         private static FileUploadInputDto CreateUploadInput()
         {
             var stream = new MemoryStream();

@@ -105,6 +105,7 @@ namespace Volo.Blogging.Files
             }
 
             var uniqueFileName = GenerateUniqueFileName(Path.GetExtension(input.Name));
+            ValidateFileName(uniqueFileName);
 
             await BlobContainer.SaveAsync(uniqueFileName, input.File.GetStream());
 
