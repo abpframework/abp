@@ -9,7 +9,18 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 3.1.3 (2026-09-22) Latest
+## 3.1.4 (2026-10-05) Latest
+
+* Update built-in AI Assistant default models
+* Fix sidebar flyout backdrop so Switch branch dimming works
+* Support running several ABP Studio instances side
+* Show .abpignore paths to the AI without exposing contents
+* Open macOS folders in Finder instead of Terminal
+* Fix Containers Start staying disabled after bind
+* Fix missing scroll on the browser start page application list
+* Use classic console colors for the light-theme terminal palette
+
+## 3.1.3 (2026-09-22)
 
 * Upgrade Studio to Avalonia 12
 * Bump ABP Studio version to 3.1.3 and update related properties
