@@ -74,7 +74,7 @@ public class AbpQuartzModule : AbpModule
 
     public async override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)
     {
-        if (_scheduler.IsStarted)
+        if (!_scheduler.IsShutdown)
         {
             await _scheduler.Shutdown();
         }
