@@ -18,6 +18,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Volo.Abp.AspNetCore.MultiTenancy.Views;
 using Volo.Abp.AspNetCore.RazorViews;
+using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Http;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Threading;
@@ -76,7 +77,10 @@ public class AbpAspNetCoreMultiTenancyOptions
             }
             else if (context.Request.IsAjax())
             {
-                var error = new RemoteServiceErrorResponse(new RemoteServiceErrorInfo(exception.Message, exception is BusinessException businessException ? businessException.Details : string.Empty));
+                var error = new RemoteServiceErrorResponse(new RemoteServiceErrorInfo(
+                    exception.Message,
+                    exception is BusinessException businessException ? businessException.Details : string.Empty,
+                    (exception as IHasErrorCode)?.Code));
 
                 var jsonSerializerOptions = context.RequestServices.GetRequiredService<IOptions<JsonOptions>>().Value.SerializerOptions;
 
