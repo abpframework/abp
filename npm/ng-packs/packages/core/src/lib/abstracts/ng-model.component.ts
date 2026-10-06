@@ -60,5 +60,6 @@ export class AbstractNgModelComponent<T = any, U = T> implements ControlValueAcc
 
   setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
+    this.cdRef.markForCheck();
   }
 }
