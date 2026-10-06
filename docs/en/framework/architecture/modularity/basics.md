@@ -13,7 +13,7 @@ ABP was designed to support to build fully modular applications and systems wher
 * The [modular monolith application development tutorial](../../../tutorials/modular-crm/index.md) explains and demonstrates how to build **modular monolith applications** with ABP.
 * [Pre-built application modules](../../../modules/index.md) are **ready to use** in any kind of application.
 * [Module startup template](../../../solution-templates/application-module/index.md) is a jump start way to **create a new reusable application module**.
-* [Module development best practice guide](../best-practices/index.md) explains some **best practices** to develop **re-usable application modules** based on **DDD** principles and layers. A module designed based on this guide will be **database independent** and can be deployed as a **microservice** if needed.
+* [Module development best practice guide](../best-practices/index.md) explains some **best practices** to develop **re-usable application modules** based on **DDD** principles and layers. A module designed based on this guide will be **database-independent** and can be deployed as a **microservice** if needed.
 * [ABP CLI](../../../cli/index.md) has commands to support modular development.
 * All other framework features are compatible to the modularity system.
 
@@ -46,7 +46,7 @@ public class BlogModule : AbpModule
 }
 ````
 
-You can register dependencies one by one as stated in Microsoft's [documentation](../../fundamentals/dependency-injection.md). But ABP has a **conventional dependency registration system** which automatically register all services in your assembly. See the [dependency Injection](../../fundamentals/dependency-injection.md) documentation for more about the dependency injection system.
+You can register dependencies one by one as stated in Microsoft's [documentation](../../fundamentals/dependency-injection.md). But ABP has a **conventional dependency registration system** which automatically registers all services in your assembly. See the [dependency injection](../../fundamentals/dependency-injection.md) documentation for more about the dependency injection system.
 
 You can also configure other services and modules in this way. Example:
 
@@ -186,7 +186,7 @@ Contributor order is the order of the `Contributors` list. The four built-in con
 
 Lastly, you can override ``OnApplicationShutdown`` method if you want to execute some code while application is being shutdown.
 
-> This methods has asynchronous version too. If you want to make asynchronous calls inside this method, override the asynchronous version instead of the synchronous one.
+> This method has an asynchronous version too. If you want to make asynchronous calls inside this method, override the asynchronous version instead of the synchronous one.
 
 ## Module Dependencies
 
@@ -201,7 +201,7 @@ public class BlogModule
 }
 ````
 
-You can use multiple ``DependsOn`` attribute or pass multiple module types to a single ``DependsOn`` attribute depending on your preference.
+You can use multiple ``DependsOn`` attributes or pass multiple module types to a single ``DependsOn`` attribute depending on your preference.
 
 A depended module may depend on another module, but you only need to define your direct dependencies. ABP investigates the dependency graph for the application at startup and initializes/shutdowns modules in the correct order.
 
@@ -224,13 +224,13 @@ In this example, we assume that the `BlogService` class is inside one assembly (
 
 Notice that `BlogService` is only an arbitrary selected type in the target assembly. It is just used to indicate the related assembly. You could use any type in the assembly.
 
-> WARNING: If you need to use the `AdditionalAssembly`, be sure that you don't design your system in a wrong way. With this example above, the `BlogService` class' assembly should normally have its own module class and the `BlogModule` should depend on it using the `DependsOn` attribute. Do not use the `AdditionalAssembly` attribute when you can already use the `DependsOn` attribute.
+> WARNING: If you need to use the `AdditionalAssembly`, be sure that you don't design your system in a wrong way. With the example above, the `BlogService` class' assembly should normally have its own module class and the `BlogModule` should depend on it using the `DependsOn` attribute. Do not use the `AdditionalAssembly` attribute when you can already use the `DependsOn` attribute.
 
 ## Framework Modules vs Application Modules
 
 There are **two types of modules.** They don't have any structural difference but categorized by functionality and purpose:
 
-- **Framework modules**: These are **core modules of the framework** like caching, emailing, theming, security, serialization, validation, EF Core integration, MongoDB integration... etc. They do not have application/business functionalities but makes your daily development easier by providing common infrastructure, integration and abstractions.
+- **Framework modules**: These are **core modules of the framework** like caching, emailing, theming, security, serialization, validation, EF Core integration, MongoDB integration... etc. They do not have application/business functionalities but make your daily development easier by providing common infrastructure, integration and abstractions.
 - **Application modules**: These modules implement **specific application/business functionalities** like blogging, document management, identity management, tenant management... etc. They generally have their own entities, services, APIs and UI components. See [pre-built application modules](../../../modules).
 
 ## See Also
