@@ -1,10 +1,11 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "name": "ABP Low-Code Model Descriptor Schemas",
-  "version": "10.5",
-  "publicBaseUrl": "https://raw.githubusercontent.com/abpframework/abp/rel-10.5/schemas/low-code",
+  "version": "10.8",
+  "publicBaseUrl": "https://raw.githubusercontent.com/abpframework/abp/rel-10.8/schemas/low-code",
   "definitionsPath": "definitions",
   "descriptorSchemas": {
+    "apps": "definitions/app-descriptor.schema.json",
     "enums": "definitions/enum-descriptor.schema.json",
     "entities": "definitions/entity-descriptor.schema.json",
     "endpoints": "definitions/endpoint-descriptor.schema.json",

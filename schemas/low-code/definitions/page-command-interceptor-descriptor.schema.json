@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "page-command-interceptor-descriptor.schema.json",
+  "title": "PageCommandInterceptorDescriptor",
+  "description": "Describes a JavaScript interceptor that runs for Create, Update, or Delete commands issued through a specific page, in addition to the entity-level interceptors.",
+  "markdownDescription": "AI guidance: use page interceptors when a rule applies only to commands sent from one page (for example a simplified public form) and entity interceptors for rules that must always apply. The script contract is the same as entity interceptors: inspect `context.commandArgs`, set `globalError` to block a Pre interceptor, and use host services on `context`. `entityExecutionOrder` controls how the page interceptor is ordered relative to the entity interceptor of the same command and phase: `entityFirst` (default), `pageFirst`, or `skipEntity` to suppress the entity interceptor for this page. It is ignored for `Replace` interceptors.",
+  "type": "object",
+  "properties": {
+    "commandName": {
+      "type": "string",
+      "description": "Entity command to intercept: Create, Update, Delete, or a registered custom command name.",
+      "minLength": 1
+    },
+    "type": {
+      "$ref": "interceptor-type.schema.json",
+      "description": "Whether the script runs before, after, or instead of the command."
+    },
+    "javascript": {
+      "type": "string",
+      "description": "JavaScript code to execute. For Pre interceptors, set globalError to block the command."
+    },
+    "entityExecutionOrder": {
+      "type": ["string", "null"],
+      "description": "Order relative to the entity interceptor with the same command and type. 'entityFirst' runs the entity interceptor first (default), 'pageFirst' runs this page interceptor first, 'skipEntity' skips the entity interceptor for this page. Not applicable to Replace interceptors.",
+      "enum": ["entityFirst", "EntityFirst", "pageFirst", "PageFirst", "skipEntity", "SkipEntity", null]
+    }
+  },
+  "required": ["commandName", "type", "javascript"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "commandName": "Create",
+      "type": "Pre",
+      "javascript": "if (!context.commandArgs.data['Source']) { context.commandArgs.data['Source'] = 'public-form'; }",
+      "entityExecutionOrder": "pageFirst"
+    }
+  ]
+}

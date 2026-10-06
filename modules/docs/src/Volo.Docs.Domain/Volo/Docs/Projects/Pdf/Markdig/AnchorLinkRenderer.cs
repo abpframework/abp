@@ -4,6 +4,7 @@ using Markdig.Renderers;
 using Markdig.Renderers.Html.Inlines;
 using Markdig.Syntax.Inlines;
 using Volo.Docs.Utils;
+using MarkdigHtmlRenderer = Markdig.Renderers.HtmlRenderer;
 
 namespace Volo.Docs.Projects.Pdf.Markdig;
 
@@ -16,7 +17,7 @@ public class AnchorLinkRenderer : LinkInlineRenderer
         _document = document;
     }
     
-    protected override void Write(HtmlRenderer renderer, LinkInline link)
+    protected override void Write(MarkdigHtmlRenderer renderer, LinkInline link)
     {
         if (UrlHelper.IsExternalLink(link.Url) || link.Url.IsNullOrWhiteSpace() || link.IsImage)
         {

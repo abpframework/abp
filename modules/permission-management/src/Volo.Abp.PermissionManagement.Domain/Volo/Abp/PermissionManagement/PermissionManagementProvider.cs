@@ -78,12 +78,10 @@ public abstract class PermissionManagementProvider : IPermissionManagementProvid
 
     protected virtual async Task RevokeAsync(string name, string providerKey)
     {
-        var permissionGrant = await PermissionGrantRepository.FindAsync(name, Name, providerKey);
-        if (permissionGrant == null)
+        var permissionGrants = await PermissionGrantRepository.GetListAsync(new[] { name }, Name, providerKey);
+        foreach (var permissionGrant in permissionGrants)
         {
-            return;
+            await PermissionGrantRepository.DeleteAsync(permissionGrant, true);
         }
-
-        await PermissionGrantRepository.DeleteAsync(permissionGrant, true);
     }
 }

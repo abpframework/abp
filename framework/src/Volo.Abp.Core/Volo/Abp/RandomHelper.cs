@@ -11,7 +11,9 @@ namespace Volo.Abp;
 /// </summary>
 public static class RandomHelper
 {
+#if NETSTANDARD2_0 || NETSTANDARD2_1
     private static readonly Random Rnd = new Random();
+#endif
 
     /// <summary>
     /// Returns a random number within a specified range.
@@ -25,10 +27,14 @@ public static class RandomHelper
     /// </returns>
     public static int GetRandom(int minValue, int maxValue)
     {
+#if NETSTANDARD2_0 || NETSTANDARD2_1
         lock (Rnd)
         {
             return Rnd.Next(minValue, maxValue);
         }
+#else
+        return Random.Shared.Next(minValue, maxValue);
+#endif
     }
 
     /// <summary>
@@ -42,10 +48,14 @@ public static class RandomHelper
     /// </returns>
     public static int GetRandom(int maxValue)
     {
+#if NETSTANDARD2_0 || NETSTANDARD2_1
         lock (Rnd)
         {
             return Rnd.Next(maxValue);
         }
+#else
+        return Random.Shared.Next(maxValue);
+#endif
     }
 
     /// <summary>
@@ -54,10 +64,14 @@ public static class RandomHelper
     /// <returns>A 32-bit signed integer greater than or equal to zero and less than <see cref="int.MaxValue"/>.</returns>
     public static int GetRandom()
     {
+#if NETSTANDARD2_0 || NETSTANDARD2_1
         lock (Rnd)
         {
             return Rnd.Next();
         }
+#else
+        return Random.Shared.Next();
+#endif
     }
 
     /// <summary>
@@ -93,16 +107,16 @@ public static class RandomHelper
     {
         Check.NotNull(items, nameof(items));
 
-        var currentList = new List<T>(items);
-        var randomList = new List<T>();
-
-        while (currentList.Any())
+        var array = items.ToArray();
+#if NETSTANDARD2_0 || NETSTANDARD2_1
+        for (var i = array.Length - 1; i > 0; i--)
         {
-            var randomIndex = RandomHelper.GetRandom(0, currentList.Count);
-            randomList.Add(currentList[randomIndex]);
-            currentList.RemoveAt(randomIndex);
+            var j = GetRandom(i + 1);
+            (array[i], array[j]) = (array[j], array[i]);
         }
-
-        return randomList;
+#else
+        Random.Shared.Shuffle(array);
+#endif
+        return array.ToList();
     }
 }

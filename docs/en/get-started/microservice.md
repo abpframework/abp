@@ -110,11 +110,11 @@ In this step, you can choose which languages your application will support.
 
 * Click Add Custom Language if you want to add a language that is not listed.
 
-Click the Next button to see *.NET Aspire* configuration selection:
+Click the Next button to see *Aspire* configuration selection:
 
 ![abp-studio-new-solution-dialog-aspire-configuration](images/abp-studio-new-solution-dialog-aspire-configuration-microservice.png)
 
-In this step, you can enable or disable the .NET Aspire integration for your solution. If you enable it, the solution will be pre-configured to work with .NET Aspire for easier microservice development and deployment. See the [Aspire Integration](../solution-templates/microservice/aspire-integration.md) document for more information about this feature.
+In this step, you can enable or disable the Aspire integration for your solution. If you enable it, the solution will be pre-configured to work with Aspire for easier microservice development and deployment. See the [Aspire Integration](../solution-templates/microservice/aspire-integration.md) document for more information about this feature.
 
 Click the Next button to see *Additional Options* selection:
 

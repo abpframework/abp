@@ -36,16 +36,21 @@
       "items": {
         "type": "object",
         "properties": {
+          "stableId": {
+            "type": "string",
+            "description": "Optional stable identifier assigned by the designer so model history and mutations can address this series. Omit in hand-written descriptors; the runtime generates one when missing.",
+            "minLength": 1
+          },
           "aggregation": {
             "$ref": "dashboard-aggregation-type.schema.json"
           },
           "property": {
             "type": ["string", "null"],
-          "description": "Property name for sum/average/min/max/percent aggregations. Omit for count."
+            "description": "Property name for sum/average/min/max/percent aggregations. Omit for count."
           },
           "label": {
             "type": ["string", "null"],
-          "description": "Display label for this series. Omit to derive from aggregation/property."
+            "description": "Display label for this series. Omit to derive from aggregation/property."
           },
           "color": {
             "type": ["string", "null"]

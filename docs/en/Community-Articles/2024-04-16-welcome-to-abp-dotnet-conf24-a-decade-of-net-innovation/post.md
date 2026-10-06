@@ -50,7 +50,7 @@ As we always be careful with topics we choose on our regular **[ABP Community Ta
 * 🎙️[Adora Nwodo](https://abp.io/conference/2024/speakers/adora-nwodo), Designing Secure Cloud Native Apps with .NET and Azure
 * 🎙️[Nicola Iarocci](https://abp.io/conference/2024/speakers/nicola-iarocci), C# 12 What's new and interesting
 * 🎙️[Jimmy Engström](https://abp.io/conference/2024/speakers/jimmy-engstrom), Connecting gadgets to Blazor
-* 🎙️[Juergen Gutsch](https://abp.io/conference/2024/speakers/juergen-gutsch), Building cloud native applications with .NET Aspire
+* 🎙️[Juergen Gutsch](https://abp.io/conference/2024/speakers/juergen-gutsch), Building cloud native applications with Aspire
 * 🎙️[Halil Ibrahim Kalkan](https://abp.io/conference/2024/speakers/halil-ibrahim-kalkan), Designing Modular Monolith for Microservice Architecture
 * 🎙️[Shaun Lawrence](https://abp.io/conference/2024/speakers/shaun-lawrance), Building games in .NET MAUI
 * 🎙️[Jamie Taylor](https://abp.io/conference/2024/speakers/jamie-taylor), Empathy, Sympathy and Compassion

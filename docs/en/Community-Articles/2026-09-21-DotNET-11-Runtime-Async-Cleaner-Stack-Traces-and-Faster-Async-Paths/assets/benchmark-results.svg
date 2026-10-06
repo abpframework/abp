@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="980" viewBox="0 0 1600 980" role="img" aria-labelledby="title desc">
+  <title id="title">Runtime Async benchmark results from the included sample</title>
+  <desc id="desc">On .NET 11 RC1, the included two-layer benchmark measured classic and Runtime Async completed paths at 84.99 and 15.83 nanoseconds, and yielding paths at 678.15 and 314.50 nanoseconds. Allocations were 144 versus 0 bytes and 248 versus 168 bytes.</desc>
+  <defs><style>
+    .bg{fill:#f7f9fc}.panel{fill:#fff;stroke:#d9e1ec;stroke-width:2}.title{font:700 35px Arial,sans-serif;fill:#172033}.sub{font:400 20px Arial,sans-serif;fill:#5d6a7f}.head{font:700 25px Arial,sans-serif;fill:#172033}.axis{stroke:#aeb9c8;stroke-width:2}.classic{fill:#e97451}.runtime{fill:#3487d5}.label{font:400 19px Arial,sans-serif;fill:#334158}.value{font:700 19px Arial,sans-serif;fill:#172033}.legend{font:700 20px Arial,sans-serif;fill:#243248}.foot{font:400 18px Arial,sans-serif;fill:#637188}
+  </style></defs>
+  <rect class="bg" width="1600" height="980"/>
+  <text class="title" x="800" y="58" text-anchor="middle">Included microbenchmark: time and managed allocation</text>
+  <text class="sub" x="800" y="96" text-anchor="middle">.NET 11 RC1 · Release · two async layers · shared Linux test host</text>
+  <rect class="classic" x="590" y="120" width="24" height="24" rx="4"/><text class="legend" x="625" y="140">Classic</text><rect class="runtime" x="790" y="120" width="24" height="24" rx="4"/><text class="legend" x="825" y="140">Runtime Async</text>
+
+  <rect class="panel" x="70" y="180" width="700" height="330" rx="18"/><text class="head" x="110" y="225">Synchronously completed path — mean time</text><text class="sub" x="110" y="258">Lower is better · scale: 0–100 ns</text>
+  <text class="label" x="110" y="325">Classic</text><rect class="classic" x="250" y="294" width="424" height="44" rx="7"/><text class="value" x="690" y="323">84.99 ns</text>
+  <text class="label" x="110" y="398">Runtime</text><rect class="runtime" x="250" y="367" width="79" height="44" rx="7"/><text class="value" x="345" y="396">15.83 ns</text>
+  <line class="axis" x1="250" y1="445" x2="700" y2="445"/><text class="sub" x="250" y="475">0</text><text class="sub" x="700" y="475" text-anchor="end">100 ns</text>
+
+  <rect class="panel" x="830" y="180" width="700" height="330" rx="18"/><text class="head" x="870" y="225">Synchronously completed path — allocation</text><text class="sub" x="870" y="258">Lower is better · scale: 0–160 B</text>
+  <text class="label" x="870" y="325">Classic</text><rect class="classic" x="1010" y="294" width="405" height="44" rx="7"/><text class="value" x="1430" y="323">144 B</text>
+  <text class="label" x="870" y="398">Runtime</text><rect class="runtime" x="1010" y="367" width="4" height="44" rx="2"/><text class="value" x="1030" y="396">0 B</text>
+  <line class="axis" x1="1010" y1="445" x2="1460" y2="445"/><text class="sub" x="1010" y="475">0</text><text class="sub" x="1460" y="475" text-anchor="end">160 B</text>
+
+  <rect class="panel" x="70" y="550" width="700" height="330" rx="18"/><text class="head" x="110" y="595">Path with Task.Yield — mean time</text><text class="sub" x="110" y="628">Lower is better · scale: 0–750 ns</text>
+  <text class="label" x="110" y="695">Classic</text><rect class="classic" x="250" y="664" width="407" height="44" rx="7"/><text class="value" x="673" y="693">678.15 ns</text>
+  <text class="label" x="110" y="768">Runtime</text><rect class="runtime" x="250" y="737" width="189" height="44" rx="7"/><text class="value" x="455" y="766">314.50 ns</text>
+  <line class="axis" x1="250" y1="815" x2="700" y2="815"/><text class="sub" x="250" y="845">0</text><text class="sub" x="700" y="845" text-anchor="end">750 ns</text>
+
+  <rect class="panel" x="830" y="550" width="700" height="330" rx="18"/><text class="head" x="870" y="595">Path with Task.Yield — allocation</text><text class="sub" x="870" y="628">Lower is better · scale: 0–280 B</text>
+  <text class="label" x="870" y="695">Classic</text><rect class="classic" x="1010" y="664" width="399" height="44" rx="7"/><text class="value" x="1425" y="693">248 B</text>
+  <text class="label" x="870" y="768">Runtime</text><rect class="runtime" x="1010" y="737" width="270" height="44" rx="7"/><text class="value" x="1296" y="766">168 B</text>
+  <line class="axis" x1="1010" y1="815" x2="1460" y2="815"/><text class="sub" x="1010" y="845">0</text><text class="sub" x="1460" y="845" text-anchor="end">280 B</text>
+  <text class="foot" x="800" y="925" text-anchor="middle">Microbenchmark results vary by hardware and runtime build. Re-run the included project on your target environment.</text>
+  <text class="foot" x="800" y="952" text-anchor="middle">The classic and Runtime Async methods ran in the same .NET 11 process to isolate the lowering strategy.</text>
+</svg>

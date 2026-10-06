@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="980" viewBox="0 0 1600 980" role="img" aria-labelledby="title desc">
+  <title id="title">Live stack trace comparison</title>
+  <desc id="desc">Classic lowering displays 13 live stack frames including async infrastructure. Runtime Async displays 5 application frames for the same program.</desc>
+  <defs><style>
+    .bg{fill:#f7f9fc}.box{fill:#fff;stroke:#d7dfeb;stroke-width:2}.title{font:700 35px Arial,sans-serif;fill:#172033}.sub{font:400 21px Arial,sans-serif;fill:#5b687d}.head{font:700 26px Arial,sans-serif;fill:#172033}.code{font:400 18px Consolas,'Liberation Mono',monospace;fill:#243248}.plumb{font:400 18px Consolas,'Liberation Mono',monospace;fill:#b14a3b}.appbg{fill:#eaf5ff}.plumbbg{fill:#fff0ed}.pillA{fill:#e97451}.pillB{fill:#3487d5}.pill{font:700 18px Arial,sans-serif;fill:#fff}.note{font:700 21px Arial,sans-serif;fill:#22643d}
+  </style></defs>
+  <rect class="bg" width="1600" height="980"/>
+  <text class="title" x="800" y="58" text-anchor="middle">The same code, a much cleaner live stack</text>
+  <text class="sub" x="800" y="96" text-anchor="middle">Measured with .NET 11 RC1 and new StackTrace(fNeedFileInfo: true)</text>
+  <rect class="box" x="60" y="135" width="720" height="760" rx="18"/>
+  <rect class="box" x="820" y="135" width="720" height="760" rx="18"/>
+  <text class="head" x="100" y="185">Classic lowering</text><rect class="pillA" x="620" y="155" width="115" height="42" rx="21"/><text class="pill" x="677" y="183" text-anchor="middle">13 frames</text>
+  <text class="head" x="860" y="185">Runtime Async</text><rect class="pillB" x="1380" y="155" width="115" height="42" rx="21"/><text class="pill" x="1437" y="183" text-anchor="middle">5 frames</text>
+
+  <rect class="appbg" x="90" y="222" width="660" height="38" rx="6"/><text class="code" x="108" y="248">InnerAsync() : line 24</text>
+  <rect class="plumbbg" x="90" y="270" width="660" height="38" rx="6"/><text class="plumb" x="108" y="296">AsyncMethodBuilderCore.Start(...)</text>
+  <rect class="plumbbg" x="90" y="318" width="660" height="38" rx="6"/><text class="plumb" x="108" y="344">InnerAsync() infrastructure entry</text>
+  <rect class="appbg" x="90" y="366" width="660" height="38" rx="6"/><text class="code" x="108" y="392">MiddleAsync() : line 18</text>
+  <rect class="plumbbg" x="90" y="414" width="660" height="38" rx="6"/><text class="plumb" x="108" y="440">AsyncMethodBuilderCore.Start(...)</text>
+  <rect class="plumbbg" x="90" y="462" width="660" height="38" rx="6"/><text class="plumb" x="108" y="488">MiddleAsync() infrastructure entry</text>
+  <rect class="appbg" x="90" y="510" width="660" height="38" rx="6"/><text class="code" x="108" y="536">OuterAsync() : line 12</text>
+  <rect class="plumbbg" x="90" y="558" width="660" height="38" rx="6"/><text class="plumb" x="108" y="584">AsyncMethodBuilderCore.Start(...)</text>
+  <rect class="plumbbg" x="90" y="606" width="660" height="38" rx="6"/><text class="plumb" x="108" y="632">OuterAsync() infrastructure entry</text>
+  <rect class="appbg" x="90" y="654" width="660" height="38" rx="6"/><text class="code" x="108" y="680">Main() : line 7</text>
+  <rect class="plumbbg" x="90" y="702" width="660" height="38" rx="6"/><text class="plumb" x="108" y="728">AsyncMethodBuilderCore.Start(...)</text>
+  <rect class="plumbbg" x="90" y="750" width="660" height="38" rx="6"/><text class="plumb" x="108" y="776">Main() infrastructure entry</text>
+  <rect class="appbg" x="90" y="798" width="660" height="38" rx="6"/><text class="code" x="108" y="824">Main(string[] args)</text>
+
+  <rect class="appbg" x="850" y="222" width="660" height="68" rx="8"/><text class="code" x="878" y="263">InnerAsync() : line 24</text>
+  <rect class="appbg" x="850" y="310" width="660" height="68" rx="8"/><text class="code" x="878" y="351">MiddleAsync() : line 18</text>
+  <rect class="appbg" x="850" y="398" width="660" height="68" rx="8"/><text class="code" x="878" y="439">OuterAsync() : line 12</text>
+  <rect class="appbg" x="850" y="486" width="660" height="68" rx="8"/><text class="code" x="878" y="527">Main() : line 7</text>
+  <rect class="appbg" x="850" y="574" width="660" height="68" rx="8"/><text class="code" x="878" y="615">Main(string[] args)</text>
+  <text class="note" x="1180" y="727" text-anchor="middle">The application call chain is visible directly.</text>
+  <text class="sub" x="1180" y="768" text-anchor="middle">Useful in debugger call stacks, live diagnostic</text>
+  <text class="sub" x="1180" y="801" text-anchor="middle">logging, and supported profiling tools.</text>
+  <text class="sub" x="800" y="942" text-anchor="middle">This comparison is about live stacks. Caught exception stack traces were already cleaned up by the existing async infrastructure.</text>
+</svg>

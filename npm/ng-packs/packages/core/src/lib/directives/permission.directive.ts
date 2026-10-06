@@ -52,7 +52,9 @@ export class PermissionDirective implements OnDestroy, OnChanges, AfterViewInit 
           if (!this.rendered) {
             this.cdrSubject.next();
           } else {
-            this.cdRef.detectChanges();
+            // Defer via queue — sync detectChanges during ApplicationRef.tick
+            // (e.g. post-login permission/config refresh) can contribute to NG0101.
+            this.queue.add(() => this.cdRef.detectChanges());
           }
         } else {
           this.cdRef.markForCheck();

@@ -59,9 +59,9 @@ public class DocsProjectPdfGeneratorOptions
         </html>";
 
         HtmlStyle = @"
-        body { margin: 15px; line-height: 1.5; font-family: Arial, sans-serif;}
-        a { text-decoration: none; word-break: break-all; overflow-wrap: break-word;}
-        li { word-break: break-all; overflow-wrap: break-word; }
+        body { margin: 15px; line-height: 1.5; font-family: Arial, 'Liberation Sans', 'DejaVu Sans', sans-serif;}
+        a { text-decoration: none; overflow-wrap: break-word;}
+        li { overflow-wrap: break-word; }
         .page {
             page-break-after: always;
             margin-bottom: 30px;
@@ -83,10 +83,11 @@ public class DocsProjectPdfGeneratorOptions
             padding: 2px 6px;
             border-radius: 4px;
             border: 1px solid #e2e8f0;
-            font-family: Consolas, monospace;
+            font-family: Consolas, 'Courier New', 'Liberation Mono', 'DejaVu Sans Mono', monospace;
         }
         pre {
             position: relative;
+            word-break: break-all;
             padding: 16px;
             border-radius: 8px;
             border: 1px solid #e2e8f0;
@@ -103,9 +104,7 @@ public class DocsProjectPdfGeneratorOptions
         th, td {
           border: 1px solid #333;
           padding: 6px 10px;
-          word-break: break-all;
           overflow-wrap: break-word;
-          width: 100%;
         }";
         
         CalculatePdfFileName = (project, version, languageCode) => $"{project.ShortName}-{version}-{languageCode}.zip";

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "boolean-value-display-descriptor.schema.json",
+  "title": "BooleanValueDisplayDescriptor",
+  "description": "Display metadata for one boolean state (true, false, or null) of a page column.",
+  "markdownDescription": "AI guidance: set only the fields you want to override. `displayName` replaces the default Yes/No/empty label, `color` is used by badge presentation (hex or CSS color), and `icon` is used by badge/iconOnly presentation. A `null` value for a field explicitly clears an inherited value when the page extends a lower model layer.",
+  "type": "object",
+  "properties": {
+    "displayName": {
+      "type": ["string", "null"],
+      "description": "Label for this boolean state, for example 'Active' or 'Inactive'."
+    },
+    "color": {
+      "type": ["string", "null"],
+      "description": "Badge color for this state, for example '#16A34A'."
+    },
+    "icon": {
+      "oneOf": [
+        { "$ref": "presentation-icon-reference.schema.json" },
+        { "type": "null" }
+      ],
+      "description": "Icon for this state used by badge and iconOnly presentations."
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    { "displayName": "Active", "color": "#16A34A", "icon": { "kind": "class", "value": "fa-solid fa-check" } }
+  ]
+}
