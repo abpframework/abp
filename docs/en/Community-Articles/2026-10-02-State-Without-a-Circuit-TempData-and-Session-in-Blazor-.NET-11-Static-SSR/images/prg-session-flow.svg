@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 650" role="img" aria-labelledby="title desc">
+  <title id="title">TempData cookie and server session across POST, redirect, and refresh</title>
+  <desc id="desc">A form POST writes the flash into an encrypted TempData cookie and the wizard draft into the server session cache. The redirect GET shows both. Refresh drops the flash and keeps the draft.</desc>
+  <style>
+    text { font-family: "Segoe UI", "Avenir Next", sans-serif; fill: #1c1915; }
+    .h { font-size: 16px; font-weight: 700; }
+    .s { font-size: 14px; fill: #3d3832; }
+    .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 11px; fill: #5c564c; }
+  </style>
+  <rect width="980" height="650" fill="#f6f1e8"/>
+
+  <rect x="20" y="16" width="460" height="40" rx="20" fill="#fff6e8" stroke="#e2b56a"/>
+  <text class="s" x="36" y="41">TempData cookie: flash sits in the browser</text>
+  <rect x="500" y="16" width="460" height="40" rx="20" fill="#e7f5ee" stroke="#0f6e56"/>
+  <text class="s" x="516" y="41">Session cache: cookie carries only the id</text>
+
+  <text class="h" x="36" y="92">1. POST</text>
+  <rect x="20" y="104" width="300" height="72" rx="12" fill="#fffdf8" stroke="#e3d9c8"/>
+  <text class="s" x="36" y="134">Browser sends the form.</text>
+  <text class="s" x="36" y="156">The page is not shown yet.</text>
+  <path d="M170 176 v16" stroke="#1c1915" stroke-width="1.6" marker-end="url(#a)"/>
+  <rect x="20" y="196" width="300" height="88" rx="12" fill="#fffdf8" stroke="#1c1915"/>
+  <text class="s" x="36" y="228">Static SSR writes both</text>
+  <text class="s" x="36" y="250">stores, then redirects.</text>
+  <path d="M170 284 v16" stroke="#7a4e09" stroke-width="1.6" marker-end="url(#b)"/>
+  <rect x="20" y="304" width="300" height="108" rx="12" fill="#fff6e8" stroke="#e2b56a"/>
+  <text class="mono" x="36" y="330">.AspNetCore.Components.TempData</text>
+  <text class="s" x="36" y="358">Encrypted cookie.</text>
+  <text class="s" x="36" y="380">Flash: Thanks...</text>
+  <path d="M170 412 v16" stroke="#0f6e56" stroke-width="1.6" marker-end="url(#c)"/>
+  <rect x="20" y="432" width="300" height="112" rx="12" fill="#e7f5ee" stroke="#0f6e56"/>
+  <text class="mono" x="36" y="458">.AspNetCore.Session</text>
+  <text class="s" x="36" y="486">Cookie: id only.</text>
+  <text class="s" x="36" y="508">Cache: name and step.</text>
+
+  <text class="h" x="356" y="92">2. Redirect GET</text>
+  <rect x="340" y="104" width="300" height="72" rx="12" fill="#fffdf8" stroke="#e3d9c8"/>
+  <text class="s" x="356" y="134">Browser GETs the page</text>
+  <text class="s" x="356" y="156">and sends both cookies.</text>
+  <path d="M490 176 v16" stroke="#1c1915" stroke-width="1.6" marker-end="url(#a)"/>
+  <rect x="340" y="196" width="300" height="88" rx="12" fill="#fffdf8" stroke="#1c1915"/>
+  <text class="s" x="356" y="228">Renders the banner</text>
+  <text class="s" x="356" y="250">and the name.</text>
+  <path d="M490 284 v16" stroke="#7a4e09" stroke-width="1.6" marker-end="url(#b)"/>
+  <rect x="340" y="304" width="300" height="108" rx="12" fill="#fff6e8" stroke="#e2b56a"/>
+  <text class="mono" x="356" y="330">Read once, then cleared</text>
+  <text class="s" x="356" y="358">Banner text is copied out.</text>
+  <text class="s" x="356" y="380">Write-back stores null.</text>
+  <path d="M490 412 v16" stroke="#0f6e56" stroke-width="1.6" marker-end="url(#c)"/>
+  <rect x="340" y="432" width="300" height="112" rx="12" fill="#e7f5ee" stroke="#0f6e56"/>
+  <text class="s" x="356" y="470">Same draft is read</text>
+  <text class="s" x="356" y="492">and written back.</text>
+  <text class="s" x="356" y="514">Name stays on the page.</text>
+
+  <text class="h" x="676" y="92">3. F5</text>
+  <rect x="660" y="104" width="300" height="72" rx="12" fill="#fffdf8" stroke="#e3d9c8"/>
+  <text class="s" x="676" y="134">Browser requests</text>
+  <text class="s" x="676" y="156">the same URL again.</text>
+  <path d="M810 176 v16" stroke="#1c1915" stroke-width="1.6" marker-end="url(#a)"/>
+  <rect x="660" y="196" width="300" height="88" rx="12" fill="#fffdf8" stroke="#1c1915"/>
+  <text class="s" x="676" y="228">Renders the name.</text>
+  <text class="s" x="676" y="250">The banner is absent.</text>
+  <path d="M810 284 v16" stroke="#7a4e09" stroke-width="1.6" marker-end="url(#b)"/>
+  <rect x="660" y="304" width="300" height="108" rx="12" fill="#fff6e8" stroke="#e2b56a"/>
+  <text class="s" x="676" y="348">No flash in the cookie.</text>
+  <text class="s" x="676" y="372">The banner stays gone.</text>
+  <path d="M810 412 v16" stroke="#0f6e56" stroke-width="1.6" marker-end="url(#c)"/>
+  <rect x="660" y="432" width="300" height="112" rx="12" fill="#e7f5ee" stroke="#0f6e56"/>
+  <text class="s" x="676" y="478">Draft is still in the cache.</text>
+  <text class="s" x="676" y="502">The name is still shown.</text>
+
+  <text class="s" x="20" y="590">Finish is a later POST. It sets name, company, and step to null, and the cache entries are removed.</text>
+  <text class="s" x="20" y="618">Amber boxes are the TempData cookie. Green boxes are the server session. They are not the same store.</text>
+
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+      <path d="M0 0 L8 4 L0 8 Z" fill="#1c1915"/>
+    </marker>
+    <marker id="b" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+      <path d="M0 0 L8 4 L0 8 Z" fill="#7a4e09"/>
+    </marker>
+    <marker id="c" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+      <path d="M0 0 L8 4 L0 8 Z" fill="#0f6e56"/>
+    </marker>
+  </defs>
+</svg>

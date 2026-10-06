@@ -7,6 +7,28 @@
 
 # Package Version Changes
 
+## 10.8.0-rc.1
+
+**Added:**
+
+| Package | Version | PR |
+|---------|---------|-----|
+| Elastic.Clients.Elasticsearch | 8.19.27 | #26216 |
+| HtmlAgilityPack | 1.12.3 | #26216 |
+| HtmlRenderer.PdfSharp | 1.6.1 | #26216 |
+| PDFsharp | 6.2.4 | #26216 |
+
+**Removed:**
+
+| Package | Version | PR |
+|---------|---------|-----|
+| NEST | 7.17.5 | #26216 |
+| Polly | 8.6.3 | #26169 |
+| Polly.Extensions.Http | 3.0.0 | #26169 |
+| itext.bouncy-castle-adapter | 9.3.0 | #26216 |
+| itext7 | 9.3.0 | #26216 |
+| itext7.pdfhtml | 6.2.1 | #26216 |
+
 ## 10.7.0-rc.4
 
 | Package | Old Version | New Version | PR |

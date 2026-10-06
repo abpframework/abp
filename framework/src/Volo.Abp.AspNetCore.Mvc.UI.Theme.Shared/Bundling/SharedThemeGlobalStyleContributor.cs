@@ -5,7 +5,6 @@ using Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDaterangepicker;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Core;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.DatatablesNetBs5;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.FontAwesome;
-using Volo.Abp.AspNetCore.Mvc.UI.Packages.MalihuCustomScrollbar;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Select2;
 using Volo.Abp.Modularity;
 
@@ -16,7 +15,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling;
     typeof(BootstrapStyleContributor),
     typeof(FontAwesomeStyleContributor),
     typeof(Select2StyleContributor),
-    typeof(MalihuCustomScrollbarPluginStyleBundleContributor),
     typeof(DatatablesNetBs5StyleContributor),
     typeof(BootstrapDatepickerStyleContributor),
     typeof(BootstrapDaterangepickerStyleContributor)

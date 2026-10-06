@@ -1,0 +1,29 @@
+{
+  "culture": "ko",
+  "texts": {
+    "Permissions": "권한",
+    "OnlyProviderPermissons": "이 프로바이더만",
+    "All": "모두",
+    "SelectAllInAllTabs": "모든 권한 부여",
+    "SelectAllInThisTab": "모두 선택",
+    "SaveWithoutAnyPermissionsWarningMessage": "권한을 하나도 부여하지 않고 저장하시겠습니까?",
+    "PermissionGroup": "권한 그룹",
+    "Filter": "필터",
+    "ResourcePermissions": "권한",
+    "ResourcePermissionTarget": "대상",
+    "ResourcePermissionPermissions": "권한",
+    "AddResourcePermission": "권한 추가",
+    "ResourcePermissionDeletionConfirmationMessage": "모든 권한을 삭제하시겠습니까?",
+    "UpdateResourcePermission": "권한 업데이트",
+    "GrantAllResourcePermissions": "모두 부여",
+    "NoResourceProviderKeyLookupServiceFound": "프로바이더 키 조회 서비스를 찾을 수 없습니다.",
+    "NoResourcePermissionFound": "정의된 권한이 없습니다.",
+    "UpdatePermission": "권한 업데이트",
+    "NoPermissionsAssigned": "할당된 권한이 없습니다.",
+    "SelectProvider": "프로바이더 선택",
+    "SearchProviderKey": "프로바이더 키 검색",
+    "Provider": "프로바이더",
+    "ErrorLoadingPermissions": "권한을 불러오는 중 오류가 발생했습니다.",
+    "PleaseSelectProviderAndPermissions": "프로바이더와 권한을 선택해 주세요."
+  }
+}

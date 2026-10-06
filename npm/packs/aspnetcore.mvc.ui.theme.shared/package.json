@@ -19,7 +19,6 @@
     "@abp/jquery-validation-unobtrusive": "~10.7.0",
     "@abp/lodash": "~10.7.0",
     "@abp/luxon": "~10.7.0",
-    "@abp/malihu-custom-scrollbar-plugin": "~10.7.0",
     "@abp/moment": "~10.7.0",
     "@abp/select2": "~10.7.0",
     "@abp/sweetalert2": "~10.7.0",

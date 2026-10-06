@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Runtime.InteropServices;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -144,23 +143,16 @@ public class MyProjectNameDbMigrationService : ITransientDependency
     {
         Logger.LogInformation("Creating initial migration...");
 
-        string argumentPrefix;
-        string fileName;
-
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        var procStartInfo = new ProcessStartInfo
         {
-            argumentPrefix = "-c";
-            fileName = "/bin/bash";
-        }
-        else
-        {
-            argumentPrefix = "/C";
-            fileName = "cmd.exe";
-        }
-
-        var procStartInfo = new ProcessStartInfo(fileName,
-            $"{argumentPrefix} \"abp create-migration-and-run-migrator \"{GetEntityFrameworkCoreProjectFolderPath()}\" --nolayers\""
-        );
+            FileName = "abp",
+            ArgumentList =
+            {
+                "create-migration-and-run-migrator",
+                GetEntityFrameworkCoreProjectFolderPath(),
+                "--nolayers"
+            }
+        };
 
         try
         {

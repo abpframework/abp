@@ -15,6 +15,10 @@
       "type": "string",
       "description": "Display title for this KPI."
     },
+    "order": {
+      "type": ["integer", "null"],
+      "description": "Order of this item inside the container. When omitted, array order is used."
+    },
     "entityName": {
       "type": "string",
       "description": "Entity this number item sources data from. Must match an entity descriptor or known reference entity.",
@@ -38,8 +42,8 @@
       "description": "Display color name (blue, green, red, purple, orange, indigo, amber, teal)"
     },
     "globalDateFilterProperty": {
-      "type": "string",
-      "description": "Date/DateTime property used to apply dashboard global date filters. Defaults to CreationTime when omitted."
+      "type": ["string", "null"],
+      "description": "Date/DateTime property used to apply dashboard global date filters. Defaults to CreationTime when omitted or null."
     },
     "filter": {
       "oneOf": [
