@@ -13,14 +13,19 @@ internal static class ProxyScriptingHelper
 
     public static string GenerateUrlWithParameters(ActionApiDescriptionModel action)
     {
+        return GenerateUrlWithParameters(action, action.Parameters);
+    }
+
+    public static string GenerateUrlWithParameters(ActionApiDescriptionModel action, IList<ParameterApiDescriptionModel> parameters)
+    {
         // The ASP.NET Core route value provider and query string value provider:
         //  Treat values as invariant culture.
         //  Expect that URLs are culture-invariant.
         using (CultureHelper.Use(CultureInfo.InvariantCulture))
         {
             //TODO: Can be optimized using StringBuilder?
-            var url = ReplacePathVariables(action.Url, action.Parameters);
-            url = AddQueryStringParameters(url, action.Parameters);
+            var url = ReplacePathVariables(action.Url, parameters);
+            url = AddQueryStringParameters(url, parameters);
             return url;
         }
     }
