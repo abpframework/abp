@@ -13,7 +13,7 @@
 
 ## Entities
 
-Every aggregate root is also an entity. So, these rules are valid for aggregate roots too unless aggregate root rules override them.
+Every aggregate root is also an entity. So, these rules are valid for aggregate roots too, unless aggregate root rules override them.
 
 - **Do** define entities in the **domain layer**.
 
@@ -22,7 +22,7 @@ Every aggregate root is also an entity. So, these rules are valid for aggregate 
 * **Do** define a **primary constructor** that ensures the validity of the entity on creation. Primary constructors are used to create a new instance of the entity by the application code.
 
 - **Do** define primary constructor as `public`, `internal` or `protected internal` based on the requirements. If it's not public, the entity is expected to be created by a domain service.
-- **Do** always initialize sub collections in the primary constructor.
+- **Do** always initialize sub-collections in the primary constructor.
 - **Do not** generate `Guid` keys inside the constructor. Get it as a parameter, so the calling code will use `IGuidGenerator` to generate a new `Guid` value.
 
 ### Parameterless Constructor
@@ -55,7 +55,7 @@ Every aggregate root is also an entity. So, these rules are valid for aggregate 
 
 ### Aggregate Boundary
 
-* **Do** keep aggregates **as small as possible**. Most of the aggregates will only have primitive properties and will not have sub collections. Consider these as design decisions:
+* **Do** keep aggregates **as small as possible**. Most aggregates will have only primitive properties and no sub-collections. Consider these as design decisions:
   * **Performance** & **memory** cost of loading & saving aggregates (keep in mind that an aggregate is normally loaded & saved as a single unit). Larger aggregates will consume more CPU & memory.
   * **Consistency** & **validity** boundary.
 
@@ -75,9 +75,9 @@ public class Issue : FullAuditedAggregateRoot<Guid> //Using Guid as the key/iden
 
     protected Issue()
     {
-        /* This constructor is for ORMs to be used while getting the entity from database.
+        /* This constructor is for ORMs to be used while getting the entity from the database.
          * - No need to initialize the Labels collection
-             since it will be overrided from the database.
+             since it will be overridden from the database.
            - It's protected since proxying and deserialization tools
              may not work with private constructors.
          */
@@ -104,7 +104,7 @@ public class Issue : FullAuditedAggregateRoot<Guid> //Using Guid as the key/iden
         return this;
     }
     
-    /* AddLabel & RemoveLabel methods manages the Labels collection
+    /* AddLabel & RemoveLabel methods manage the Labels collection
      * in a safe way (prevents adding the same label twice) */
 
     public virtual Issue AddLabel(Guid labelId)
