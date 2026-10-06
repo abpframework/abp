@@ -4,7 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
+using Volo.Abp.Authorization;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Content;
 using Volo.Abp.Validation;
@@ -24,7 +26,7 @@ namespace Volo.Blogging.Files
 
         public virtual async Task<RawFileDto> GetAsync(string name)
         {
-            Check.NotNullOrWhiteSpace(name, nameof(name));
+            ValidateFileName(name);
 
             return new RawFileDto
             {
@@ -34,8 +36,21 @@ namespace Volo.Blogging.Files
 
         public virtual async Task<IRemoteStreamContent> GetFileAsync(string name)
         {
+            ValidateFileName(name);
+
             var fileStream = await BlobContainer.GetAsync(name);
             return new RemoteStreamContent(fileStream, name, GetByExtension(Path.GetExtension(name)), disposeStream: true);
+        }
+
+        protected virtual void ValidateFileName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name) ||
+                name.IndexOfAny(new[] { '/', '\\' }) >= 0 ||
+                name == "." ||
+                name == "..")
+            {
+                ThrowValidationException("Invalid file name!", nameof(name));
+            }
         }
 
         private static string GetByExtension(string extension)
@@ -61,6 +76,11 @@ namespace Volo.Blogging.Files
 
         public virtual async Task<FileUploadOutputDto> CreateAsync(FileUploadInputDto input)
         {
+            if (!await AuthorizationService.IsGrantedAnyAsync(BloggingPermissions.Posts.Create, BloggingPermissions.Posts.Update))
+            {
+                throw new AbpAuthorizationException();
+            }
+
             if (input.File == null)
             {
                 ThrowValidationException("Bytes of file can not be null or empty!", nameof(input.File));
@@ -85,6 +105,7 @@ namespace Volo.Blogging.Files
             }
 
             var uniqueFileName = GenerateUniqueFileName(Path.GetExtension(input.Name));
+            ValidateFileName(uniqueFileName);
 
             await BlobContainer.SaveAsync(uniqueFileName, input.File.GetStream());
 
