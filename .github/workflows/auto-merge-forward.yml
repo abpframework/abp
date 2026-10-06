@@ -189,14 +189,17 @@ jobs:
             "cc ${MENTIONS[*]}")"
           gh pr comment "$FORWARD_BRANCH" --body "$COMMENT"
 
-      # BOT_SECRET, not github.token: a merge performed with the default token produces a push
-      # that triggers no workflow, which would stop the chain at the first hop.
+      # Approve with github.token: BOT_SECRET opened the PR, and GitHub rejects a review
+      # from the author ("Can not approve your own pull request"). The merge stays on
+      # BOT_SECRET: a merge performed with the default token produces a push that
+      # triggers no workflow, which would stop the chain at the first hop.
       - name: Approve and auto-merge
         if: steps.target.outputs.skip != 'true' && steps.merge.outputs.conflict != 'true'
         env:
           GH_TOKEN: ${{ secrets.BOT_SECRET }}
+          APPROVE_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           FORWARD_BRANCH="${{ steps.merge.outputs.branch }}"
-          gh pr review "$FORWARD_BRANCH" --approve
+          GH_TOKEN="$APPROVE_TOKEN" gh pr review "$FORWARD_BRANCH" --approve
           gh pr merge "$FORWARD_BRANCH" --merge --auto --delete-branch
