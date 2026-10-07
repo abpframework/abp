@@ -200,6 +200,10 @@ Configure either `period` or `cronExpression`.
 }
 ```
 
+## Errors
+
+Event handlers, background jobs, and background workers report errors with the same [error helpers](scripting-api.md#error-helpers) as other scripts. A failed script has no HTTP response: the exception is passed to the event bus, background job, or background worker infrastructure. It is logged and, where the infrastructure supports it, retried, like any other failed handler, job, or worker. A script that fails on its own, such as an uncaught `throw new Error(...)` or a timeout, is reported with the `LowCode:ScriptExecutionFailed` error code. See [Runtime Failures](scripting-api.md#runtime-failures).
+
 ## Test JavaScript
 
 Where the Designer shows **Test JavaScript**, you can run the current editor content without saving it. The built-in dry-run panel is available for custom endpoints, interceptors, event handlers, background jobs, and background workers.
@@ -228,7 +232,7 @@ Dry-run behavior:
 | Background job enqueue | Captured as a `job` side effect; no job is enqueued |
 | Outbound HTTP | Matched against HTTP mocks; no real HTTP call is made |
 | Logs | Returned in the test result |
-| Errors | Returned with type, message, and diagnostics when available |
+| Errors | Returned with type, message, and diagnostics when available, plus the HTTP status and error response body a caller would receive |
 
 Dry-run results can include:
 
@@ -236,7 +240,7 @@ Dry-run results can include:
 * Execution status and duration
 * Logs
 * Captured side effects
-* Error details
+* Error details, with the HTTP status and error response body a caller would receive (see [Testing Error Responses](scripting-api.md#testing-error-responses))
 
 The endpoint dry-run still evaluates the endpoint authentication and permission metadata against the current user. If the test user is not authenticated or does not have the required permission, the dry-run returns the corresponding `401` or `403` endpoint response.
 

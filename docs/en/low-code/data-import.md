@@ -33,7 +33,7 @@ The wizard reports mappings as compatible, convertible, warning, or incompatible
 * A matching record is updated.
 * A non-matching row creates a record.
 * The match property must be included in the column mapping.
-* When the selected property can match multiple records, choose either **Error** or **Use first**. **Use first** also requires a deterministic sort property and direction.
+* When the selected property can match multiple records, choose either **Error** or **Use first**. **Use first** also requires a deterministic sort property and direction. With **Error**, only the rows whose key matches multiple records fail; the other rows are still imported.
 
 Use an ID or unique business key whenever possible. A non-unique merge key makes the result depend on the selected multiple-match rule.
 

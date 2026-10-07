@@ -34,7 +34,7 @@
     },
     "isMappedToDbField": {
       "type": "boolean",
-      "description": "Whether this property uses a dedicated physical column. Omitted/false scalar properties use the configured dynamic data storage (JSON by default). Forced to false for formula and rollup properties; not applicable to collections."
+      "description": "Where a scalar property keeps its values. true: a dedicated physical column. false: the entity's JSON Data column. Omitted: follows the UseJsonDataStorage option (the JSON Data column by default, a dedicated column when the option is false). Forced to false for formula and rollup properties; not applicable to collections."
     },
     "defaultValue": {
       "type": ["string", "null"],

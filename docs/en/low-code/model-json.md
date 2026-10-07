@@ -182,7 +182,7 @@ Apps split one low-code model into independently named scopes. The default app i
 | `name` | Required lowercase kebab-case identifier (maximum 64 characters), for example `crm` or `field-service`. `default` is reserved for the implicit default app |
 | `displayName` | Required user-facing title (maximum 128 characters) |
 | `description` | Optional description |
-| `isArchived` | Hides the app from active app lists without deleting its descriptors |
+| `isArchived` | Takes the app out of use without deleting anything: it is hidden from runtime navigation and its pages, endpoints, event handlers, jobs, and workers do not run. Descriptors, permissions, history, and data are kept |
 
 Descriptors reference the app by name:
 
@@ -196,6 +196,8 @@ Descriptors reference the app by name:
 ```
 
 App-scoped entities are addressed at runtime as `<app>:<EntityName>`, app-scoped endpoints can publish beneath `/api/low-code/apps/<app>/endpoints` with `routeScope: "app"`, and permission children inherit the parent `app` when they do not set their own.
+
+Deleting an app removes its data too. The deletion runs in the background, and the app name stays reserved until it completes. An app being deleted is marked with `isDeleting` in the runtime model only; a model file that sets `isDeleting` fails to load with `LowCode:ModelFileRuntimeOnlyProperty`. See [Deleting an App](deleted-objects.md#deleting-an-app).
 
 ## Enums
 
@@ -280,14 +282,14 @@ Entities describe the persisted data model. UI is not configured with legacy pro
 |-------|-------------|
 | `name` | Required PascalCase property name |
 | `type` | Property type; omitted means `string` |
-| `displayName` | Default field label; pages/forms can override it |
+| `displayName` | Default field label; pages/forms can override it. When omitted, the UI shows a readable form of the name (`CustomerId` is shown as "Customer") |
 | `enumType` | Enum name when `type` is `enum` |
-| `defaultValue` | Default value for new records, stored as a string and converted at runtime |
+| `defaultValue` | Default value for new records, stored as a string and converted at runtime; a value that does not fit the property type is refused |
 | `isRequired` | Required/not nullable backend and UI validation |
 | `isUnique` | Unique value validation |
 | `serverOnly` | Hidden from clients, API responses, and UI metadata |
 | `allowSetByClients` | Whether create/update clients may set this value |
-| `isMappedToDbField` | Whether a dynamic scalar property uses a dedicated physical column instead of dynamic data storage |
+| `isMappedToDbField` | `true` stores a dynamic scalar property in a dedicated physical column, `false` stores it in the entity's `Data` JSON column, and omitted follows the `UseJsonDataStorage` option. Model changes write the flag on new properties from that option |
 | `decimalPlaces` | Decimal scale for `decimal` and `money` properties |
 | `currencySymbol` | Optional UI currency symbol for `money` properties |
 | `collection` | Primitive collection settings: optional `maxCount` and required `uniqueItems` |
@@ -298,7 +300,7 @@ Entities describe the persisted data model. UI is not configured with legacy pro
 
 `collection`, `formula`, `rollup`, and `foreignKey` are mutually exclusive on one property. Formula and rollup properties are read-only and never persisted; the runtime forces `isMappedToDbField`, `allowSetByClients`, `isRequired`, and `isUnique` to `false` for them.
 
-`isMappedToDbField: true` creates a dedicated scalar column. Other dynamic scalar properties use the configured dynamic data mapping, which is JSON storage by default and can be configured as individual columns. Primitive collections use normalized collection tables. See [Data Modeling and Page Behavior](data-modeling.md) for storage, collections, related fields, presentations, and backend filters.
+`isMappedToDbField: true` creates a dedicated scalar column and `false` keeps the property in the `Data` JSON column. A property created through the Designer or another model change records its storage there; a hand-written property that omits it follows the `UseJsonDataStorage` default. Primitive collections use normalized collection tables. See [Data Modeling and Page Behavior](data-modeling.md) for storage, collections, related fields, presentations, and backend filters.
 
 For virtual calculated fields and related-record aggregates, see [Calculated and Rollup Properties](formula-properties.md). The [Low-Code Expression Language](expression-language.md) reference documents the scalar syntax used by calculated properties and formula backfills.
 
@@ -370,6 +372,8 @@ Use entity `attachments` when each record can have multiple arbitrary files:
 ```
 
 `entityName` can point to another dynamic entity or a registered [reference entity](reference-entities.md). Use `dependsOn` (`propertyName` and `filterPropertyName`) for cascading lookups. Reverse access from the referenced entity side is not configured on the foreign key; define a page `relationships[]` entry on the target entity's page instead. See [Foreign Access](foreign-access.md).
+
+Lookups check access to the referenced records. The caller must be able to read the referenced entity through the app's access grant, through a page of the app bound to that entity that grants view (including a page open to `authenticated` users), or, for a reference entity, through its view permission; otherwise the lookup fails with an authorization error that names the entity. A foreign key marked `serverOnly` has no lookup. On a page, a foreign key that clients cannot set (`allowSetByClients: false`) offers choices only where the page shows it as a column or filter.
 
 ### Validators
 
@@ -444,7 +448,7 @@ Other page-level fields:
 | `enumPresentations` | Page-level overrides of enum value label, presentation, color, and icon |
 | `relationships` | Reverse relationships (related records that point back to the page record). See [Data Modeling and Page Behavior](data-modeling.md#reverse-relationships) |
 | `backendFilter` | Server-enforced filter expression. See [Filters](#filters) |
-| `interceptors` | Page-scoped Create/Update/Delete interceptors with an `entityExecutionOrder` of `entityFirst`, `pageFirst`, or `skipEntity`. See [Interceptors](interceptors.md) |
+| `interceptors` | Page-scoped Create/Update/Delete interceptors. By default the page interceptor runs before the entity interceptor; set `entityExecutionOrder` to `entityFirst` to run the entity interceptor first, or `skipEntity` to skip it (`pageFirst` is the default). See [Page Interceptors and Execution Order](interceptors.md#page-interceptors-and-execution-order) |
 
 Page column and filter `propertyName` values may follow foreign keys, for example `CustomerId.CountryId.Name`. Related paths are limited by the configured query depth and return only the requested projection. Page columns can also define boolean presentation metadata with `booleanPresentation` and `booleanValues`. See [Data Modeling and Page Behavior](data-modeling.md).
 
