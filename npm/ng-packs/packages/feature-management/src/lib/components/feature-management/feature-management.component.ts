@@ -89,7 +89,7 @@ export class FeatureManagementComponent {
   // Internal state
   protected readonly _visible = signal(false);
 
-  protected readonly selectedGroupDisplayName = signal<string | undefined>(undefined);
+  protected readonly selectedGroupName = signal<string | undefined>(undefined);
 
   protected readonly groups = signal<Pick<FeatureGroupDto, 'name' | 'displayName'>[]>([]);
 
@@ -147,7 +147,7 @@ export class FeatureManagementComponent {
       if (!res.groups?.length) return;
       const groups = res.groups.map(({ name, displayName }) => ({ name, displayName }));
       this.groups.set(groups);
-      this.selectedGroupDisplayName.set(groups[0].displayName);
+      this.selectedGroupName.set(groups[0].name);
       this.features.set(
         res.groups.reduce(
           (acc, val) => ({
@@ -292,7 +292,7 @@ export class FeatureManagementComponent {
   }
 
   private getCurrentGroup() {
-    const selectedGroup = this.selectedGroupDisplayName();
+    const selectedGroup = this.selectedGroupName();
     return selectedGroup ? this.features()[selectedGroup] ?? [] : [];
   }
 
