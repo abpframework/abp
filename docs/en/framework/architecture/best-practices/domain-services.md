@@ -29,7 +29,7 @@ public class IssueManager : DomainService
 
 - **Do not** define `GET` methods. `GET` methods do not change the state of an entity. Hence, use the repository directly in the Application Service instead of Domain Service method.
 
-- **Do** define methods that only mutate data; change the state of an entity or an aggregate root.
+- **Do** define methods that mutate data by changing the state of an entity or an aggregate root.
 
 - **Do not** define methods with generic names (like `UpdateIssueAsync`). 
 
