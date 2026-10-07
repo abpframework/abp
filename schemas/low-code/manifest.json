@@ -14,6 +14,7 @@
     "backgroundWorkers": "definitions/script-background-worker-descriptor.schema.json",
     "pageGroups": "definitions/page-group-descriptor.schema.json",
     "pages": "definitions/page-descriptor.schema.json",
+    "apiResources": "definitions/api-resource-descriptor.schema.json",
     "forms": "definitions/form-descriptor.schema.json",
     "permissions": "definitions/permission-descriptor.schema.json"
   }
