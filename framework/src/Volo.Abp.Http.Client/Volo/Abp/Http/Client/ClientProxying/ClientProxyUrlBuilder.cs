@@ -93,7 +93,7 @@ public class ClientProxyUrlBuilder : ITransientDependency
                 }
                 else if (pathParameter.DefaultValue != null)
                 {
-                    urlBuilder = urlBuilder.Replace($"{{{pathParameter.Name}}}", await ConvertValueToStringAsync(pathParameter.DefaultValue));
+                    urlBuilder = urlBuilder.Replace($"{{{pathParameter.Name}}}", EncodePathValue(await ConvertValueToStringAsync(pathParameter.DefaultValue)));
                 }
                 else
                 {
@@ -124,9 +124,15 @@ public class ClientProxyUrlBuilder : ITransientDependency
                     }
                 }
 
-                urlBuilder = urlBuilder.Replace($"{{{pathParameter.Name}}}", await ConvertValueToStringAsync(value));
+                urlBuilder = urlBuilder.Replace($"{{{pathParameter.Name}}}", EncodePathValue(await ConvertValueToStringAsync(value)));
             }
         }
+    }
+
+    protected virtual string EncodePathValue(string value)
+    {
+        // Keep "/" unencoded so catch-all route parameters still receive multiple segments.
+        return string.Join("/", value.Split('/').Select(Uri.EscapeDataString));
     }
 
     protected virtual async Task AddQueryStringParametersAsync(StringBuilder urlBuilder, ActionApiDescriptionModel action, IReadOnlyDictionary<string, object?> methodArguments, ApiVersionInfo apiVersion)
