@@ -93,7 +93,7 @@ public class ClientProxyUrlBuilder : ITransientDependency
                 }
                 else if (pathParameter.DefaultValue != null)
                 {
-                    urlBuilder = urlBuilder.Replace($"{{{pathParameter.Name}}}", await ConvertValueToStringAsync(pathParameter.DefaultValue));
+                    urlBuilder = urlBuilder.Replace($"{{{pathParameter.Name}}}", EncodePathValue(pathParameter, await ConvertValueToStringAsync(pathParameter.DefaultValue)));
                 }
                 else
                 {
@@ -124,9 +124,24 @@ public class ClientProxyUrlBuilder : ITransientDependency
                     }
                 }
 
-                urlBuilder = urlBuilder.Replace($"{{{pathParameter.Name}}}", await ConvertValueToStringAsync(value));
+                urlBuilder = urlBuilder.Replace($"{{{pathParameter.Name}}}", EncodePathValue(pathParameter, await ConvertValueToStringAsync(value)));
             }
         }
+    }
+
+    protected virtual string EncodePathValue(ParameterApiDescriptionModel pathParameter, string value)
+    {
+        // Keep "/" unencoded so catch-all route parameters still receive multiple segments.
+        return string.Join("/", value.Split('/').Select(segment =>
+        {
+            // Dot segments are removed by URI normalization even when percent-encoded, so the request would go to another endpoint.
+            if (segment is "." or "..")
+            {
+                throw new AbpException($"Path parameter value for {pathParameter.Name} ({pathParameter.NameOnMethod}) cannot contain \".\" or \"..\" segments.");
+            }
+
+            return Uri.EscapeDataString(segment);
+        }));
     }
 
     protected virtual async Task AddQueryStringParametersAsync(StringBuilder urlBuilder, ActionApiDescriptionModel action, IReadOnlyDictionary<string, object?> methodArguments, ApiVersionInfo apiVersion)

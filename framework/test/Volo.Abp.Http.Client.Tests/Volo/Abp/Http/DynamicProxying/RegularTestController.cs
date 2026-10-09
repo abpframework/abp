@@ -196,6 +196,27 @@ public class RegularTestController : AbpController, IRegularTestController
         return Task.FromResult(bodyValue);
     }
 
+    [HttpGet]
+    [Route("get-with-string-path/{name}")]
+    public Task<string> GetWithStringPathAsync(string name)
+    {
+        return Task.FromResult(name);
+    }
+
+    [HttpGet]
+    [Route("get-with-catch-all-path/{**path}")]
+    public Task<string> GetWithCatchAllPathAsync(string path)
+    {
+        return Task.FromResult(path);
+    }
+
+    [HttpGet]
+    [Route("get-with-single-star-catch-all-path/{*path}")]
+    public Task<string> GetWithSingleStarCatchAllPathAsync(string path)
+    {
+        return Task.FromResult(path);
+    }
+
     [HttpPut]
     [Route("put-with-body")]
     public Task<string> PutValueWithBodyAsync([FromBody] string bodyValue)
