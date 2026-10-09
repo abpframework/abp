@@ -166,10 +166,28 @@ public class RegularTestControllerClientProxy_Tests : AbpHttpClientTestBase
     [InlineData("a%23b")]
     [InlineData("rvA-a&b#<q>")]
     [InlineData("ä😀")]
+    [InlineData("...")]
+    [InlineData(".hidden")]
     public async Task GetWithStringPathAsync(string name)
     {
         var result = await _controller.GetWithStringPathAsync(name);
         result.ShouldBe(name);
+    }
+
+    [Theory]
+    [InlineData("../increment")]
+    [InlineData("..")]
+    public async Task GetWithStringPathAsync_Should_Not_Send_Dot_Segments(string name)
+    {
+        var exception = await Should.ThrowAsync<AbpException>(() => _controller.GetWithStringPathAsync(name));
+        exception.ShouldBeOfType<AbpException>();
+    }
+
+    [Fact]
+    public async Task GetWithCatchAllPathAsync_Should_Not_Send_Dot_Segments()
+    {
+        var exception = await Should.ThrowAsync<AbpException>(() => _controller.GetWithCatchAllPathAsync("a/../../increment"));
+        exception.ShouldBeOfType<AbpException>();
     }
 
     [Theory]

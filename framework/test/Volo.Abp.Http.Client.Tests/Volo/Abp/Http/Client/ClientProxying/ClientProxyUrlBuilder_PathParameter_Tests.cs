@@ -31,6 +31,10 @@ public class ClientProxyUrlBuilder_PathParameter_Tests
     [InlineData("a/b#c", "api/files/a/b%23c")]
     [InlineData("rvA-a&b#<q>", "api/files/rvA-a%26b%23%3Cq%3E")]
     [InlineData("ä😀", "api/files/%C3%A4%F0%9F%98%80")]
+    [InlineData("...", "api/files/...")]
+    [InlineData("a..b", "api/files/a..b")]
+    [InlineData(".hidden", "api/files/.hidden")]
+    [InlineData("%2E%2E", "api/files/%252E%252E")]
     public async Task Should_Encode_Path_Value(string value, string expectedUrl)
     {
         var action = BuildAction(PathParam("name"));
@@ -38,6 +42,28 @@ public class ClientProxyUrlBuilder_PathParameter_Tests
         var url = await _builder.GenerateUrlWithParametersAsync(action, new Dictionary<string, object?> { ["name"] = value }, PathApiVersion);
 
         url.ShouldBe(expectedUrl);
+    }
+
+    [Theory]
+    [InlineData(".")]
+    [InlineData("..")]
+    [InlineData("../admin")]
+    [InlineData("a/../b")]
+    [InlineData("a/./b")]
+    [InlineData("a/..")]
+    public async Task Should_Reject_Dot_Segments(string value)
+    {
+        var exception = await Should.ThrowAsync<AbpException>(() => GenerateUrlAsync(value));
+
+        exception.Message.ShouldContain("name");
+    }
+
+    [Fact]
+    public async Task Should_Reject_Dot_Segments_In_Default_Path_Value()
+    {
+        var action = BuildAction(PathParam("name", defaultValue: "../admin"));
+
+        await Should.ThrowAsync<AbpException>(() => _builder.GenerateUrlWithParametersAsync(action, new Dictionary<string, object?>(), PathApiVersion));
     }
 
     [Fact]
