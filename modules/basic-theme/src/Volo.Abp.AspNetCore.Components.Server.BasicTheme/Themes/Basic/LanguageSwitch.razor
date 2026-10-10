@@ -7,17 +7,17 @@
 @inject IAbpRequestLocalizationOptionsProvider RequestLocalizationOptionsProvider
 @if (_otherLanguages != null && _otherLanguages.Any())
 {
-    <BarDropdown RightAligned="true">
-        <BarDropdownToggle>
+    <Dropdown EndAligned="true">
+        <DropdownToggle Color="Color.Default">
             @_currentLanguage.DisplayName
-        </BarDropdownToggle>
-        <BarDropdownMenu>
+        </DropdownToggle>
+        <DropdownMenu>
             @foreach (var language in _otherLanguages)
             {
-                <BarDropdownItem Clicked="() => ChangeLanguage(language)">@language.DisplayName</BarDropdownItem>
+                <DropdownItem Clicked="() => ChangeLanguage(language)">@language.DisplayName</DropdownItem>
             }
-        </BarDropdownMenu>
-    </BarDropdown>
+        </DropdownMenu>
+    </Dropdown>
 }
 @code {
     private IReadOnlyList<LanguageInfo> _otherLanguages;
