@@ -33,6 +33,7 @@ public class RegularTestControllerStaticClientProxy_Tests : AbpHttpClientTestBas
     [Theory]
     [InlineData("../increment")]
     [InlineData("..")]
+    [InlineData("..\\increment")]
     public async Task GetWithStringPathAsync_Should_Not_Send_Dot_Segments(string name)
     {
         var exception = await Should.ThrowAsync<AbpException>(() => _proxy.GetWithStringPathAsync(name));

@@ -35,6 +35,8 @@ public class ClientProxyUrlBuilder_PathParameter_Tests
     [InlineData("a..b", "api/files/a..b")]
     [InlineData(".hidden", "api/files/.hidden")]
     [InlineData("%2E%2E", "api/files/%252E%252E")]
+    [InlineData("..%2Fadmin", "api/files/..%252Fadmin")]
+    [InlineData("a\\b", "api/files/a%5Cb")]
     public async Task Should_Encode_Path_Value(string value, string expectedUrl)
     {
         var action = BuildAction(PathParam("name"));
@@ -51,6 +53,8 @@ public class ClientProxyUrlBuilder_PathParameter_Tests
     [InlineData("a/../b")]
     [InlineData("a/./b")]
     [InlineData("a/..")]
+    [InlineData("..\\admin")]
+    [InlineData("a\\..\\b")]
     public async Task Should_Reject_Dot_Segments(string value)
     {
         var exception = await Should.ThrowAsync<AbpException>(() => GenerateUrlAsync(value));
@@ -132,6 +136,9 @@ public class ClientProxyUrlBuilder_PathParameter_Tests
     [InlineData("a/%2e%2E/b")]
     [InlineData("..\\admin")]
     [InlineData("a/%2e%2e\\b")]
+    [InlineData("%2e%2e%2fadmin")]
+    [InlineData("%2e%2e%5cadmin")]
+    [InlineData("a%2F..%2Fb")]
     [InlineData("a/..?q=1")]
     [InlineData("a/..#f")]
     [InlineData(".. ")]
@@ -147,8 +154,6 @@ public class ClientProxyUrlBuilder_PathParameter_Tests
     [Theory]
     [InlineData("%252E%252E")]
     [InlineData("a%2Fb")]
-    [InlineData("%2e%2e%2fadmin")]
-    [InlineData("%2e%2e%5cadmin")]
     [InlineData("...")]
     [InlineData(".hidden")]
     [InlineData("a..b")]

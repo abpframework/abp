@@ -148,14 +148,11 @@ public class ClientProxyUrlBuilder : ITransientDependency
             path = path.Substring(0, pathEnd);
         }
 
-        foreach (var segment in path.Split('/', '\\'))
+        // Dot segments are removed by URI normalization even when percent-encoded, so the request would go to another endpoint.
+        // Encoded separators are decoded too, because a server or proxy may treat them as separators.
+        if (Uri.UnescapeDataString(path).Split('/', '\\').Any(segment => segment is "." or ".."))
         {
-            // Dot segments are removed by URI normalization even when percent-encoded, so the request would go to another endpoint.
-            // Decode each segment only once, so an encoded separator does not start a new segment.
-            if (Uri.UnescapeDataString(segment) is "." or "..")
-            {
-                throw new AbpException($"Path parameter value for {pathParameter.Name} ({pathParameter.NameOnMethod}) cannot contain \".\" or \"..\" segments.");
-            }
+            throw new AbpException($"Path parameter value for {pathParameter.Name} ({pathParameter.NameOnMethod}) cannot contain \".\" or \"..\" segments.");
         }
     }
 
