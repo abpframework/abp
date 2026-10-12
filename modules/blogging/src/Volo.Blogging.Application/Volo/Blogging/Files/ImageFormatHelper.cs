@@ -1,30 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats;
+using SkiaSharp;
 
 namespace Volo.Blogging.Areas.Blog.Helpers
 {
     public class ImageFormatHelper
     {
-        public static IImageFormat GetImageRawFormat(Stream stream)
+        public static SKEncodedImageFormat? GetImageRawFormat(Stream stream)
         {
-            using (var image = Image.Load(stream))
+            // Only the image header is parsed, the pixels are not decoded.
+            // SKManagedStream rewinds to the absolute start of the stream, so the remaining bytes are copied
+            // to give the codec an independent buffer that starts at the current position.
+            using (var memoryStream = new MemoryStream())
             {
-                return image.Metadata.DecodedImageFormat;
+                stream.CopyTo(memoryStream);
+
+                using (var data = SKData.CreateCopy(memoryStream.GetBuffer(), (ulong)memoryStream.Length))
+                using (var codec = SKCodec.Create(data))
+                {
+                    return codec?.EncodedFormat;
+                }
             }
         }
 
-        public static bool IsValidImage(Stream stream, ICollection<IImageFormat> validFormats)
+        public static bool IsValidImage(Stream stream, ICollection<SKEncodedImageFormat> validFormats)
         {
             try
             {
                 var imageFormat = GetImageRawFormat(stream);
-                
-                return validFormats.Contains(imageFormat);
+
+                return imageFormat.HasValue && validFormats.Contains(imageFormat.Value);
             }
-            catch (Exception e)
+            catch (Exception e) when (e is not DllNotFoundException && e is not TypeInitializationException)
             {
                 return false;
             }
