@@ -10,8 +10,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "~10.7.0",
-    "@abp/popper.js": "~10.7.0",
+    "@abp/core": "~10.6.2",
+    "@abp/popper.js": "~10.6.2",
     "bootstrap": "^5.3.8"
   },
   "gitHead": "bb4ea17d5996f01889134c138d00b6c8f858a431",
