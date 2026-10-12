@@ -7,7 +7,7 @@
     "url": "https://github.com/abpframework/abp.git"
   },
   "dependencies": {
-    "@abp/utils": "~10.7.0",
+    "@abp/utils": "~10.6.2",
     "just-clone": "^6.0.0",
     "just-compare": "^2.0.0",
     "ts-toolbelt": "^9.0.0",
