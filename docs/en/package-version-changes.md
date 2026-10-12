@@ -17,6 +17,7 @@
 | HtmlAgilityPack | 1.12.3 | #26216 |
 | HtmlRenderer.PdfSharp | 1.6.1 | #26216 |
 | PDFsharp | 6.2.4 | #26216 |
+| SkiaSharp.NativeAssets.Linux.NoDependencies | 3.119.0 | #26264 |
 
 **Removed:**
 
