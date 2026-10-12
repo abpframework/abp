@@ -5,6 +5,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
@@ -217,23 +218,17 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
 
         foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
         {
-            foreach (var factory in handlerFactory.Value)
+            foreach (var factory in handlerFactory.Value.Locking(factories => factories.ToList()))
             {
-                handlerFactoryList.Add(new Tuple<IEventHandlerFactory, Type, int>(
-                    factory,
-                    handlerFactory.Key,
-                    ReflectionHelper.GetAttributesOfMemberOrDeclaringType<LocalEventHandlerOrderAttribute>(factory.GetHandler().EventHandler.GetType()).FirstOrDefault()?.Order ?? 0));
+                handlerFactoryList.Add(new Tuple<IEventHandlerFactory, Type, int>(factory, handlerFactory.Key, GetHandlerOrder(factory)));
             }
         }
 
         foreach (var handlerFactory in DynamicEventHandlerFactories.Where(aehf => eventNames.Contains(aehf.Key)))
         {
-            foreach (var factory in handlerFactory.Value)
+            foreach (var factory in handlerFactory.Value.Locking(factories => factories.ToList()))
             {
-                handlerFactoryList.Add(new Tuple<IEventHandlerFactory, Type, int>(
-                    factory,
-                    typeof(DynamicEventData),
-                    ReflectionHelper.GetAttributesOfMemberOrDeclaringType<LocalEventHandlerOrderAttribute>(factory.GetHandler().EventHandler.GetType()).FirstOrDefault()?.Order ?? 0));
+                handlerFactoryList.Add(new Tuple<IEventHandlerFactory, Type, int>(factory, typeof(DynamicEventData), GetHandlerOrder(factory)));
             }
         }
 
@@ -252,21 +247,100 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
 
         foreach (var handlerFactory in DynamicEventHandlerFactories.Where(aehf => aehf.Key == eventName))
         {
-            foreach (var factory in handlerFactory.Value)
+            foreach (var factory in handlerFactory.Value.Locking(factories => factories.ToList()))
             {
-                using var handler = factory.GetHandler();
-                var handlerType = handler.EventHandler.GetType();
-                handlerFactoryList.Add(new Tuple<IEventHandlerFactory, Type, int>(
-                    factory,
-                    typeof(DynamicEventData),
-                    ReflectionHelper
-                        .GetAttributesOfMemberOrDeclaringType<LocalEventHandlerOrderAttribute>(handlerType)
-                        .FirstOrDefault()?.Order ?? 0));
+                handlerFactoryList.Add(new Tuple<IEventHandlerFactory, Type, int>(factory, typeof(DynamicEventData), GetHandlerOrder(factory)));
             }
         }
 
         return handlerFactoryList.OrderBy(x => x.Item3).Select(x =>
             new EventTypeWithEventHandlerFactories(x.Item2, new List<IEventHandlerFactory> { x.Item1 })).ToArray();
+    }
+
+    private static readonly ConditionalWeakTable<Type, StrongBox<int>> HandlerOrders = new();
+
+    /// <summary>
+    /// Disposes a handler the bus created for itself, so that a failure there neither fails the publish nor replaces
+    /// the exception that failed it.
+    /// </summary>
+    private void DisposeQuietly(IDisposable disposable, string message)
+    {
+        try
+        {
+            disposable.Dispose();
+        }
+        catch (Exception ex)
+        {
+            try
+            {
+                Logger.LogWarning(ex, message);
+            }
+            catch
+            {
+                // A failing logger must not replace the exception that failed the publish.
+            }
+        }
+    }
+
+    /// <summary>
+    /// Gets the <see cref="LocalEventHandlerOrderAttribute"/> order of the handler the factory creates.
+    /// When the handler type is known without creating a handler (the built-in factories of a fixed type, and an
+    /// IoC handler whose registration in the container fixes its type), the order is read from that type.
+    /// Otherwise the handler is created to read its type and is disposed at once, on each publish. Callers
+    /// enumerate a snapshot of the factories, since that dispose runs handler code which may unsubscribe.
+    /// </summary>
+    protected virtual int GetHandlerOrder(IEventHandlerFactory factory)
+    {
+        var handlerType = GetFixedHandlerTypeOrNull(factory);
+        if (handlerType == null)
+        {
+            var handler = factory.GetHandler();
+            try
+            {
+                handlerType = handler.EventHandler.GetType();
+            }
+            finally
+            {
+                DisposeQuietly(handler, "Could not dispose an event handler created to read its order.");
+            }
+        }
+
+        return GetHandlerOrderOfType(handlerType);
+    }
+
+    /// <summary>
+    /// The order is read from a type's attributes once and kept with the type, which may still be unloaded.
+    /// </summary>
+    private static int GetHandlerOrderOfType(Type handlerType)
+    {
+        return HandlerOrders.GetValue(handlerType, static type => new StrongBox<int>(ReflectionHelper
+            .GetAttributesOfMemberOrDeclaringType<LocalEventHandlerOrderAttribute>(type)
+            .FirstOrDefault()?.Order ?? 0)).Value;
+    }
+
+    private static Type? GetFixedHandlerTypeOrNull(IEventHandlerFactory factory)
+    {
+        var factoryType = factory.GetType();
+
+        if (factoryType == typeof(SingleInstanceHandlerFactory))
+        {
+            return ((SingleInstanceHandlerFactory)factory).HandlerInstance.GetType();
+        }
+
+        // Only the built-in transient factories: a derived one may override how the handler is created.
+        if (factoryType == typeof(TransientEventHandlerFactory) ||
+            factoryType.IsGenericType && factoryType.GetGenericTypeDefinition() == typeof(TransientEventHandlerFactory<>))
+        {
+            return ((TransientEventHandlerFactory)factory).HandlerType;
+        }
+
+        // Only the built-in IoC factory, for the same reason.
+        if (factoryType == typeof(IocEventHandlerFactory))
+        {
+            return ((IocEventHandlerFactory)factory).GetImplementationTypeOrNull();
+        }
+
+        return null;
     }
 
     protected override Type? GetEventTypeByEventName(string eventName)
