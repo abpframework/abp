@@ -40,6 +40,17 @@ namespace Volo.Blogging
             stream.CanRead.ShouldBeTrue();
         }
 
+        [Theory]
+        [InlineData(SKEncodedImageFormat.Png, SKEncodedImageFormat.Png)]
+        [InlineData(SKEncodedImageFormat.Jpeg, SKEncodedImageFormat.Jpeg)]
+        [InlineData(SKEncodedImageFormat.Webp, null)]
+        public void Should_Get_Valid_Image_Format(SKEncodedImageFormat format, SKEncodedImageFormat? expected)
+        {
+            using var stream = new MemoryStream(CreateImage(format));
+
+            ImageFormatHelper.GetValidImageFormat(stream, FileUploadConsts.AllowedImageUploadFormats).ShouldBe(expected);
+        }
+
         [Fact]
         public void Should_Return_Null_For_Non_Image_Content()
         {

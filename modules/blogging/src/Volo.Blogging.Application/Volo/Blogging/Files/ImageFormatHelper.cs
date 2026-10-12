@@ -26,15 +26,20 @@ namespace Volo.Blogging.Areas.Blog.Helpers
 
         public static bool IsValidImage(Stream stream, ICollection<SKEncodedImageFormat> validFormats)
         {
+            return GetValidImageFormat(stream, validFormats).HasValue;
+        }
+
+        public static SKEncodedImageFormat? GetValidImageFormat(Stream stream, ICollection<SKEncodedImageFormat> validFormats)
+        {
             try
             {
                 var imageFormat = GetImageRawFormat(stream);
 
-                return imageFormat.HasValue && validFormats.Contains(imageFormat.Value);
+                return imageFormat.HasValue && validFormats.Contains(imageFormat.Value) ? imageFormat : null;
             }
             catch (Exception e) when (e is not DllNotFoundException && e is not TypeInitializationException)
             {
-                return false;
+                return null;
             }
         }
     }

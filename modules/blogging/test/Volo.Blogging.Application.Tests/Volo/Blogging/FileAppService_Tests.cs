@@ -15,6 +15,7 @@ using Volo.Abp;
 using Volo.Abp.Authorization;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Content;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Validation;
 using Volo.Blogging.Files;
 using Xunit;
@@ -135,15 +136,57 @@ namespace Volo.Blogging
         }
 
         [Theory]
-        [InlineData(GifImageBase64)]
-        [InlineData(BmpImageBase64)]
-        public async Task Should_Upload_Gif_And_Bmp_Images(string imageBase64)
+        [InlineData(SKEncodedImageFormat.Png, "my-image.html", ".png", "image/png")]
+        [InlineData(SKEncodedImageFormat.Jpeg, "my-image.png", ".jpg", "image/jpeg")]
+        [InlineData(SKEncodedImageFormat.Jpeg, "my-image", ".jpg", "image/jpeg")]
+        [InlineData(SKEncodedImageFormat.Gif, "my-image.png", ".gif", "image/gif")]
+        [InlineData(SKEncodedImageFormat.Bmp, "my-image.png", ".bmp", "image/bmp")]
+        [InlineData(SKEncodedImageFormat.Png, "my-image.png\\my-folder", ".png", "image/png")]
+        [InlineData(SKEncodedImageFormat.Png, "my-image./../my-folder", ".png", "image/png")]
+        public async Task Should_Save_Image_With_Extension_Of_Detected_Format(SKEncodedImageFormat format, string name, string expectedExtension, string expectedContentType)
         {
             _authorizationService.GrantedPolicies.Add(BloggingPermissions.Posts.Create);
 
-            await _fileAppService.CreateAsync(CreateUploadInput(Convert.FromBase64String(imageBase64)));
+            var savedBlobs = new Dictionary<string, byte[]>();
+            _blobContainer
+                .When(x => x.SaveAsync(Arg.Any<string>(), Arg.Any<Stream>(), Arg.Any<bool>(), Arg.Any<CancellationToken>()))
+                .Do(callInfo =>
+                {
+                    using var memoryStream = new MemoryStream();
+                    callInfo.ArgAt<Stream>(1).CopyTo(memoryStream);
+                    savedBlobs[callInfo.ArgAt<string>(0)] = memoryStream.ToArray();
+                });
+            _blobContainer.GetAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+                .Returns(callInfo => new MemoryStream(savedBlobs[callInfo.ArgAt<string>(0)]));
 
-            await _blobContainer.ReceivedWithAnyArgs(1).SaveAsync(default, default(Stream), default, default);
+            var imageBytes = GetImageBytes(format);
+            var input = CreateUploadInput(imageBytes);
+            input.Name = name;
+
+            var output = await _fileAppService.CreateAsync(input);
+
+            output.Name.ShouldMatch("^[0-9a-f]{32}\\.[a-z]+$");
+            Path.GetExtension(output.Name).ShouldBe(expectedExtension);
+            savedBlobs.Keys.ShouldBe(new[] { output.Name });
+
+            (await _fileAppService.GetAsync(output.Name)).Bytes.ShouldBe(imageBytes);
+
+            var file = await _fileAppService.GetFileAsync(output.Name);
+            file.ContentType.ShouldBe(expectedContentType);
+            using var downloadedStream = new MemoryStream();
+            await file.GetStream().CopyToAsync(downloadedStream);
+            downloadedStream.ToArray().ShouldBe(imageBytes);
+        }
+
+        [Theory]
+        [InlineData(SKEncodedImageFormat.Webp, ".webp", "image/webp")]
+        [InlineData(SKEncodedImageFormat.Ico, ".ico", "application/octet-stream")]
+        public void Should_Get_Extension_And_Content_Type_Of_Other_Image_Formats(SKEncodedImageFormat format, string expectedExtension, string expectedContentType)
+        {
+            var fileAppService = new TestFileAppService(_blobContainer);
+
+            fileAppService.GetExtensionForTest(format).ShouldBe(expectedExtension);
+            fileAppService.GetContentTypeForTest(expectedExtension).ShouldBe(expectedContentType);
         }
 
         [Fact]
@@ -178,19 +221,6 @@ namespace Volo.Blogging
             await _blobContainer.DidNotReceiveWithAnyArgs().SaveAsync(default, default(Stream), default, default);
         }
 
-        [Fact]
-        public async Task Should_Not_Upload_Image_With_Invalid_Name()
-        {
-            _authorizationService.GrantedPolicies.Add(BloggingPermissions.Posts.Create);
-
-            var input = CreateUploadInput();
-            input.Name = "my-image.png\\my-folder";
-
-            await Should.ThrowAsync<AbpValidationException>(() => _fileAppService.CreateAsync(input));
-
-            await _blobContainer.DidNotReceiveWithAnyArgs().SaveAsync(default, default(Stream), default, default);
-        }
-
         private static FileUploadInputDto CreateUploadInput()
         {
             return CreateUploadInput(CreateImage(SKEncodedImageFormat.Png));
@@ -214,6 +244,38 @@ namespace Volo.Blogging
             using (var data = image.Encode(format, 100))
             {
                 return data.ToArray();
+            }
+        }
+
+        private static byte[] GetImageBytes(SKEncodedImageFormat format)
+        {
+            switch (format)
+            {
+                case SKEncodedImageFormat.Gif:
+                    return Convert.FromBase64String(GifImageBase64);
+                case SKEncodedImageFormat.Bmp:
+                    return Convert.FromBase64String(BmpImageBase64);
+                default:
+                    return CreateImage(format);
+            }
+        }
+
+        [DisableConventionalRegistration]
+        private class TestFileAppService : FileAppService
+        {
+            public TestFileAppService(IBlobContainer<BloggingFileContainer> blobContainer)
+                : base(blobContainer)
+            {
+            }
+
+            public string GetExtensionForTest(SKEncodedImageFormat imageFormat)
+            {
+                return GetExtension(imageFormat);
+            }
+
+            public string GetContentTypeForTest(string extension)
+            {
+                return GetContentType(extension);
             }
         }
 
