@@ -154,16 +154,29 @@ public class PermissionStore : IPermissionStore, ITransientDependency
 
         var newCacheItems = await SetCacheItemsAsync(providerName, providerKey, notCacheKeys);
 
+        var newCacheItemsByKey = new Dictionary<string, PermissionGrantCacheItem>();
+        foreach (var newCacheItem in newCacheItems)
+        {
+            if (!newCacheItemsByKey.ContainsKey(newCacheItem.Key))
+            {
+                newCacheItemsByKey[newCacheItem.Key] = newCacheItem.Value;
+            }
+        }
+
+        var cacheItemsByKey = new Dictionary<string, PermissionGrantCacheItem>();
+        foreach (var cacheItem in cacheItems)
+        {
+            if (!cacheItemsByKey.ContainsKey(cacheItem.Key))
+            {
+                cacheItemsByKey[cacheItem.Key] = cacheItem.Value;
+            }
+        }
+
         var result = new List<KeyValuePair<string, PermissionGrantCacheItem>>();
         foreach (var key in cacheKeys)
         {
-            var item = newCacheItems.FirstOrDefault(x => x.Key == key);
-            if (item.Value == null)
-            {
-                item = cacheItems.FirstOrDefault(x => x.Key == key);
-            }
-
-            result.Add(new KeyValuePair<string, PermissionGrantCacheItem>(key, item.Value));
+            var item = newCacheItemsByKey.GetOrDefault(key) ?? cacheItemsByKey.GetOrDefault(key);
+            result.Add(new KeyValuePair<string, PermissionGrantCacheItem>(key, item));
         }
 
         return result;

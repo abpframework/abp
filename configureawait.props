@@ -6,4 +6,22 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       </PackageReference>
   </ItemGroup>
+
+  <!-- The xsd only feeds editor completion and Fody rewrites it on every run. -->
+  <PropertyGroup>
+      <FodyGenerateXsd>false</FodyGenerateXsd>
+  </PropertyGroup>
+
+  <!-- Component assemblies keep their own FodyWeavers.xml: their lifecycle methods must
+       resume on the renderer's synchronization context. Unconditional because a solution
+       build compiles cross-solution project references with the default configuration. -->
+  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Bundling'))
+                            Or (!$(MSBuildProjectName.Contains('Blazor'))
+                                And !$(MSBuildProjectName.Contains('AspNetCore.Components')))">
+      <WeaverConfiguration Condition="'$(WeaverConfiguration)' == ''">
+          <Weavers>
+              <ConfigureAwait ContinueOnCapturedContext="false" />
+          </Weavers>
+      </WeaverConfiguration>
+  </PropertyGroup>
 </Project>

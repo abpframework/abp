@@ -62,10 +62,3 @@
 .table-responsive .dropdown-menu-position-strategy-fixed {
     position: fixed !important;
 }
-
-/* 
-    blazorise picker workaround for https://github.com/Megabit/Blazorise/issues/4917
-*/
-.card .flatpickr-calendar.static {
-    top: unset !important;
-}

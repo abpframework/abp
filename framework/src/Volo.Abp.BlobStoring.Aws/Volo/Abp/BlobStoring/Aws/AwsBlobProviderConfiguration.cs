@@ -94,7 +94,7 @@ public class AwsBlobProviderConfiguration
     }
 
     /// <summary>
-    /// When true, payload signing is disabled on PutObject upload requests so the SDK sends
+    /// When true, payload signing is disabled on PutObject and UploadPart upload requests so the SDK sends
     /// <c>x-amz-content-sha256: UNSIGNED-PAYLOAD</c> instead of the streaming chunked signature
     /// (<c>STREAMING-AWS4-HMAC-SHA256-PAYLOAD</c>) that AWS SDK v4 uses by default. Required for
     /// Cloudflare R2 and other S3-compatible services that do not implement streaming signing.

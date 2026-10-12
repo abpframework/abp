@@ -121,3 +121,86 @@ public class AppEntityWithNavigationsForeign : AggregateRoot<Guid>
 
     public virtual List<AppEntityWithNavigations> OneToMany { get; set; }
 }
+
+/// <summary>
+/// Has no navigation property to <see cref="AppEntityWithForeignKeyOnlyChild"/>,
+/// the relation is only a foreign key on the child.
+/// </summary>
+public class AppEntityWithForeignKeyOnly : AggregateRoot<Guid>
+{
+    protected AppEntityWithForeignKeyOnly()
+    {
+
+    }
+
+    public AppEntityWithForeignKeyOnly(Guid id, string name)
+        : base(id)
+    {
+        Name = name;
+    }
+
+    public string Name { get; set; }
+}
+
+public class AppEntityWithForeignKeyOnlyChild : AggregateRoot<Guid>
+{
+    protected AppEntityWithForeignKeyOnlyChild()
+    {
+
+    }
+
+    public AppEntityWithForeignKeyOnlyChild(Guid id, Guid appEntityWithForeignKeyOnlyId, string name)
+        : base(id)
+    {
+        AppEntityWithForeignKeyOnlyId = appEntityWithForeignKeyOnlyId;
+        Name = name;
+    }
+
+    public Guid AppEntityWithForeignKeyOnlyId { get; set; }
+
+    public string Name { get; set; }
+}
+
+public class AppEntityWithForeignKeyOnlyOwner : AggregateRoot<Guid>
+{
+    protected AppEntityWithForeignKeyOnlyOwner()
+    {
+
+    }
+
+    public AppEntityWithForeignKeyOnlyOwner(Guid id, string name)
+        : base(id)
+    {
+        Name = name;
+    }
+
+    public string Name { get; set; }
+
+    public virtual List<AppEntityWithForeignKeyOnlyEntityChild> Children { get; set; }
+}
+
+/// <summary>
+/// Belongs to the <see cref="AppEntityWithForeignKeyOnlyOwner"/> aggregate,
+/// but references the <see cref="AppEntityWithForeignKeyOnly"/> aggregate root with a foreign key only.
+/// </summary>
+public class AppEntityWithForeignKeyOnlyEntityChild : Entity<Guid>
+{
+    protected AppEntityWithForeignKeyOnlyEntityChild()
+    {
+
+    }
+
+    public AppEntityWithForeignKeyOnlyEntityChild(Guid id, Guid ownerId, Guid appEntityWithForeignKeyOnlyId, string name)
+        : base(id)
+    {
+        OwnerId = ownerId;
+        AppEntityWithForeignKeyOnlyId = appEntityWithForeignKeyOnlyId;
+        Name = name;
+    }
+
+    public Guid OwnerId { get; set; }
+
+    public Guid AppEntityWithForeignKeyOnlyId { get; set; }
+
+    public string Name { get; set; }
+}

@@ -33,6 +33,11 @@ public class AbpValidationAttributeAdapterProvider : IValidationAttributeAdapter
             return new DynamicRangeAttributeAdapter((DynamicRangeAttribute)attribute, stringLocalizer);
         }
 
+        if (type == typeof(EnumDataTypeAttribute))
+        {
+            return new EnumDataTypeAttributeAdapter((EnumDataTypeAttribute)attribute, stringLocalizer);
+        }
+
         return _defaultAdapter.GetAttributeAdapter(attribute, stringLocalizer);
     }
 }

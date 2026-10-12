@@ -98,6 +98,14 @@ public class RegularTestControllerClientProxy_Tests : AbpHttpClientTestBase
     }
 
     [Fact]
+    public async Task QueryObjectWithBodyAsync()
+    {
+        var result = await _controller.QueryObjectWithBodyAsync(new Car { Year = 1976, Model = "Ford", FirstReleaseDate = new DateTime(1976, 02, 22, 15, 0, 6, 22) });
+        result.Year.ShouldBe(1976);
+        result.Model.ShouldBe("Ford");
+    }
+
+    [Fact]
     public async Task PostObjectWithQueryAsync_With_Different_Culture()
     {
         using (CultureHelper.Use("tr"))
@@ -147,6 +155,61 @@ public class RegularTestControllerClientProxy_Tests : AbpHttpClientTestBase
         var result = await _controller.GetObjectAndIdWithQueryAsync(42, new Car { Year = 1976, Model = "Ford", FirstReleaseDate = new DateTime(1976, 02, 22, 15, 0, 6, 22) });
         result.Year.ShouldBe(42);
         result.Model.ShouldBe("Ford");
+    }
+
+    [Theory]
+    [InlineData("plain")]
+    [InlineData("a&b#c")]
+    [InlineData("a?b=c")]
+    [InlineData("50% off")]
+    [InlineData("a+b")]
+    [InlineData("a%23b")]
+    [InlineData("rvA-a&b#<q>")]
+    [InlineData("ä😀")]
+    [InlineData("...")]
+    [InlineData(".hidden")]
+    public async Task GetWithStringPathAsync(string name)
+    {
+        var result = await _controller.GetWithStringPathAsync(name);
+        result.ShouldBe(name);
+    }
+
+    [Theory]
+    [InlineData("../increment")]
+    [InlineData("..")]
+    [InlineData("..\\increment")]
+    public async Task GetWithStringPathAsync_Should_Not_Send_Dot_Segments(string name)
+    {
+        var exception = await Should.ThrowAsync<AbpException>(() => _controller.GetWithStringPathAsync(name));
+        exception.ShouldBeOfType<AbpException>();
+    }
+
+    [Fact]
+    public async Task GetWithCatchAllPathAsync_Should_Not_Send_Dot_Segments()
+    {
+        var exception = await Should.ThrowAsync<AbpException>(() => _controller.GetWithCatchAllPathAsync("a/../../increment"));
+        exception.ShouldBeOfType<AbpException>();
+    }
+
+    [Theory]
+    [InlineData("a")]
+    [InlineData("a/b")]
+    [InlineData("a/b#c?d")]
+    [InlineData("a b/c&d")]
+    public async Task GetWithCatchAllPathAsync(string path)
+    {
+        var result = await _controller.GetWithCatchAllPathAsync(path);
+        result.ShouldBe(path);
+    }
+
+    [Theory]
+    [InlineData("a")]
+    [InlineData("a/b")]
+    [InlineData("a/b#c?d")]
+    public async Task GetWithSingleStarCatchAllPathAsync(string path)
+    {
+        var result = await _controller.GetWithSingleStarCatchAllPathAsync(path);
+        result.ShouldBe(path);
     }
 
     [Fact]

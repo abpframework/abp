@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
+using Microsoft.JSInterop;
 using Microsoft.Extensions.Options;
 using MudBlazor;
 using Volo.Abp.AspNetCore.Components.Messages;
@@ -43,6 +44,14 @@ public partial class FeatureManagementModal
     protected Dictionary<string, bool> ToggleValues = new();
 
     protected Dictionary<string, string> SelectionStringValues = new();
+
+    protected const int MaxFocusRenderCount = 5;
+
+    protected ElementReference _firstGroupContainer;
+
+    protected bool _shouldFocusFirstGroup;
+
+    protected int _focusRenderCount;
 
     public virtual async Task OpenAsync(string providerName, string? providerKey = null, string? providerKeyDisplayName = null)
     {
@@ -89,11 +98,58 @@ public partial class FeatureManagementModal
             }
 
             _isVisible = true;
+            // The previous reference points to an element that is gone by now.
+            _firstGroupContainer = default;
+            _shouldFocusFirstGroup = Groups.Any();
+            _focusRenderCount = 0;
             await InvokeAsync(StateHasChanged);
         }
         catch (Exception ex)
         {
             await HandleErrorAsync(ex);
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (!_shouldFocusFirstGroup)
+        {
+            return;
+        }
+
+        if (!_isVisible)
+        {
+            _shouldFocusFirstGroup = false;
+            return;
+        }
+
+        // The dialog provider renders the content in a later batch, so rendering again is what brings
+        // this method back once the container is bound.
+        if (_firstGroupContainer.Id.IsNullOrEmpty())
+        {
+            if (_focusRenderCount++ < MaxFocusRenderCount)
+            {
+                await InvokeAsync(StateHasChanged);
+            }
+            else
+            {
+                _shouldFocusFirstGroup = false;
+            }
+
+            return;
+        }
+
+        _shouldFocusFirstGroup = false;
+
+        try
+        {
+            await _firstGroupContainer.MudFocusFirstAsync();
+        }
+        catch (JSException)
+        {
+            // The dialog was closed before the focus call reached the element.
         }
     }
 

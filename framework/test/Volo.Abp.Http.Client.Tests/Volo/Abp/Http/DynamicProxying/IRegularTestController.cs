@@ -43,6 +43,8 @@ public interface IRegularTestController
 
     Task<Car> PostObjectWithQueryAsync(Car bodyValue);
 
+    Task<Car> QueryObjectWithBodyAsync(Car bodyValue);
+
     Task<Car> GetObjectWithUrlAsync(Car bodyValue);
 
     Task<Car> GetObjectandIdAsync(int id, Car bodyValue);
@@ -52,6 +54,12 @@ public interface IRegularTestController
     Task<Car> GetObjectandCountAsync(int count, Car bodyValue);
 
     Task<Car> GetObjectAndIdWithQueryAsync(int id, Car bodyValue);
+
+    Task<string> GetWithStringPathAsync(string name);
+
+    Task<string> GetWithCatchAllPathAsync(string path);
+
+    Task<string> GetWithSingleStarCatchAllPathAsync(string path);
 
     Task<string> PutValueWithBodyAsync(string bodyValue);
 

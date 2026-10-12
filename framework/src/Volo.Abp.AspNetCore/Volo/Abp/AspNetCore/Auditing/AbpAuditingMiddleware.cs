@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Middleware;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http;
 using Volo.Abp.Uow;
 using Volo.Abp.Users;
 
@@ -135,8 +136,9 @@ public class AbpAuditingMiddleware : AbpMiddlewareBase, ITransientDependency
         }
 
         if (!AuditingOptions.IsEnabledForGetRequests &&
-            (string.Equals(httpContext.Request.Method, HttpMethods.Get, StringComparison.OrdinalIgnoreCase) ||
-             string.Equals(httpContext.Request.Method, HttpMethods.Head, StringComparison.OrdinalIgnoreCase)))
+            (HttpMethodHelper.IsGet(httpContext.Request.Method) ||
+             HttpMethodHelper.IsHead(httpContext.Request.Method) ||
+             HttpMethodHelper.IsQuery(httpContext.Request.Method)))
         {
             return false;
         }

@@ -5,5 +5,6 @@ export interface GenerateProxyGeneratorSchema {
   target: string;
   url: string;
   serviceType: string;
+  resourceApi: boolean;
   entryPoint: string;
 }

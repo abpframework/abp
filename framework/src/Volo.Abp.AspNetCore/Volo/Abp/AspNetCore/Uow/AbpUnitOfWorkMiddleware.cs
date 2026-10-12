@@ -37,8 +37,36 @@ public class AbpUnitOfWorkMiddleware : AbpMiddlewareBase, ITransientDependency
 
         using (var uow = _unitOfWorkManager.Reserve(UnitOfWork.UnitOfWorkReservationName))
         {
+            var completionStarted = false;
+
+            if (!context.Response.HasStarted && ShouldCompleteOnResponseStarting(context))
+            {
+                context.Response.OnStarting(async () =>
+                {
+                    // Skip if the completion has already been started at the end of the pipeline;
+                    // the response is then being started from inside that completion (e.g. by an
+                    // event handler writing to the response), so completing again would fail.
+                    // A nested (requiresNew) unit of work that is current and an active child
+                    // unit of work scope are left to their owners; the request unit of work then
+                    // completes at the end of the pipeline as usual.
+                    if (!completionStarted &&
+                        _unitOfWorkManager.Current == uow &&
+                        !uow.HasActiveChildUnitOfWorks())
+                    {
+                        // Set before completing so a post-commit failure isn't masked by the completion below.
+                        completionStarted = true;
+                        await uow.CompleteAsync(_cancellationTokenProvider.Token);
+                    }
+                });
+            }
+
             await next(context);
-            await uow.CompleteAsync(_cancellationTokenProvider.Token);
+
+            if (!completionStarted)
+            {
+                completionStarted = true;
+                await uow.CompleteAsync(_cancellationTokenProvider.Token);
+            }
         }
     }
 
@@ -46,6 +74,13 @@ public class AbpUnitOfWorkMiddleware : AbpMiddlewareBase, ITransientDependency
     {
         return context.Request.Path.Value != null &&
                _options.IgnoredUrls.Any(x => context.Request.Path.Value.StartsWith(x, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private bool ShouldCompleteOnResponseStarting(HttpContext context)
+    {
+        return _options.CompleteUnitOfWorkOnResponseStarting ||
+               (context.Request.Path.Value != null &&
+                _options.CompleteUnitOfWorkOnResponseStartingUrls.Any(x => context.Request.Path.Value.StartsWith(x, StringComparison.OrdinalIgnoreCase)));
     }
 
     protected async override Task<bool> ShouldSkipAsync(HttpContext context, RequestDelegate next)
