@@ -118,6 +118,7 @@ public class ClientProxyUrlBuilder : ITransientDependency
 
                         if (path != null)
                         {
+                            ValidatePathValue(pathParameter, path);
                             urlBuilder = urlBuilder.Replace($"{{{pathParameter.Name}}}", path);
                         }
                         continue;
@@ -132,16 +133,30 @@ public class ClientProxyUrlBuilder : ITransientDependency
     protected virtual string EncodePathValue(ParameterApiDescriptionModel pathParameter, string value)
     {
         // Keep "/" unencoded so catch-all route parameters still receive multiple segments.
-        return string.Join("/", value.Split('/').Select(segment =>
+        var path = string.Join("/", value.Split('/').Select(Uri.EscapeDataString));
+        ValidatePathValue(pathParameter, path);
+        return path;
+    }
+
+    protected virtual void ValidatePathValue(ParameterApiDescriptionModel pathParameter, string value)
+    {
+        // HTTP URIs ignore trailing whitespace and treat "\" as a path separator.
+        var path = value.TrimEnd(' ', '\t', '\r', '\n');
+        var pathEnd = path.IndexOfAny(new[] { '?', '#' });
+        if (pathEnd >= 0)
+        {
+            path = path.Substring(0, pathEnd);
+        }
+
+        foreach (var segment in path.Split('/', '\\'))
         {
             // Dot segments are removed by URI normalization even when percent-encoded, so the request would go to another endpoint.
-            if (segment is "." or "..")
+            // Decode each segment only once, so an encoded separator does not start a new segment.
+            if (Uri.UnescapeDataString(segment) is "." or "..")
             {
                 throw new AbpException($"Path parameter value for {pathParameter.Name} ({pathParameter.NameOnMethod}) cannot contain \".\" or \"..\" segments.");
             }
-
-            return Uri.EscapeDataString(segment);
-        }));
+        }
     }
 
     protected virtual async Task AddQueryStringParametersAsync(StringBuilder urlBuilder, ActionApiDescriptionModel action, IReadOnlyDictionary<string, object?> methodArguments, ApiVersionInfo apiVersion)

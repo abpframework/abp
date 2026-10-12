@@ -117,14 +117,53 @@ public class ClientProxyUrlBuilder_PathParameter_Tests
     [Fact]
     public async Task Should_Not_Encode_Path_Converter_Result()
     {
-        var builder = CreateBuilder(
-            services => services.AddTransient<PreEncodedPathValueToPath>(),
-            options => options.PathConverts.Add(typeof(PreEncodedPathValue), typeof(PreEncodedPathValueToPath)));
-        var action = BuildAction(PathParam("name"));
+        (await GenerateUrlWithPathConverterAsync("a%23b/c")).ShouldBe("api/files/a%23b/c");
+    }
 
-        var url = await builder.GenerateUrlWithParametersAsync(action, new Dictionary<string, object?> { ["name"] = new PreEncodedPathValue("a%23b/c") }, PathApiVersion);
+    [Theory]
+    [InlineData(".")]
+    [InlineData("..")]
+    [InlineData("../admin")]
+    [InlineData("a/../b")]
+    [InlineData("%2E")]
+    [InlineData("%2E%2E")]
+    [InlineData("%2e.")]
+    [InlineData(".%2e")]
+    [InlineData("a/%2e%2E/b")]
+    [InlineData("..\\admin")]
+    [InlineData("a/%2e%2e\\b")]
+    [InlineData("a/..?q=1")]
+    [InlineData("a/..#f")]
+    [InlineData(".. ")]
+    [InlineData("..\t")]
+    [InlineData("..\r\n")]
+    public async Task Should_Reject_Dot_Segments_In_Path_Converter_Result(string value)
+    {
+        var exception = await Should.ThrowAsync<AbpException>(() => GenerateUrlWithPathConverterAsync(value));
 
-        url.ShouldBe("api/files/a%23b/c");
+        exception.Message.ShouldContain("name");
+    }
+
+    [Theory]
+    [InlineData("%252E%252E")]
+    [InlineData("a%2Fb")]
+    [InlineData("%2e%2e%2fadmin")]
+    [InlineData("%2e%2e%5cadmin")]
+    [InlineData("...")]
+    [InlineData(".hidden")]
+    [InlineData("a..b")]
+    [InlineData("")]
+    [InlineData("a//b")]
+    [InlineData("a?x=/../admin")]
+    [InlineData("a#../admin")]
+    [InlineData("a/%zz/b")]
+    [InlineData("a/..;x/b")]
+    [InlineData("..%20")]
+    [InlineData("..%09")]
+    [InlineData(".\t.")]
+    public async Task Should_Keep_Path_Converter_Result_Unchanged(string value)
+    {
+        (await GenerateUrlWithPathConverterAsync(value)).ShouldBe("api/files/" + value);
     }
 
     [Fact]
@@ -150,6 +189,15 @@ public class ClientProxyUrlBuilder_PathParameter_Tests
     private Task<string> GenerateUrlAsync(object value)
     {
         return _builder.GenerateUrlWithParametersAsync(BuildAction(PathParam("name")), new Dictionary<string, object?> { ["name"] = value }, PathApiVersion);
+    }
+
+    private static Task<string> GenerateUrlWithPathConverterAsync(string converterResult)
+    {
+        var builder = CreateBuilder(
+            services => services.AddTransient<PreEncodedPathValueToPath>(),
+            options => options.PathConverts.Add(typeof(PreEncodedPathValue), typeof(PreEncodedPathValueToPath)));
+
+        return builder.GenerateUrlWithParametersAsync(BuildAction(PathParam("name")), new Dictionary<string, object?> { ["name"] = new PreEncodedPathValue(converterResult) }, PathApiVersion);
     }
 
     private static ClientProxyUrlBuilder CreateBuilder(Action<IServiceCollection>? configureServices = null, Action<AbpHttpClientProxyingOptions>? configureOptions = null)
