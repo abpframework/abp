@@ -254,6 +254,8 @@ public class ReportAppService : ApplicationService
 }
 ```
 
+`Lazy<T>` only defers the cost. When one application service calls another just to reuse some logic, the better fix is to move that logic into a domain service, as ABP's [application service best practices](https://abp.io/docs/latest/framework/architecture/best-practices/application-services) recommend.
+
 A registry takes `Lazy<IEnumerable<T>>` and builds its index on first use, or resolves one implementation by key with a keyed service. Enumerating all three code host providers (GitHub, GitLab, Azure DevOps) cost about 2,000 resolve requests per scope. Resolving only the one we need costs a few.
 
 Two more costs came with `DbContext`, and we took a different path for each. In [Volobox](https://volobox.io)'s Identity Pro setup, the compiled-query cache key now comes from a small provider that reads the same values directly, which saved about 570 resolve requests for every `DbContext`. The first save on a `DbContext` built the audit store, even outside an audit scope. Now it is resolved only when a log is written, which saved about 120 resolve requests per `DbContext`.
@@ -431,7 +433,7 @@ A HAR file of a page refresh showed six configuration and sign-in requests runni
 - The page draws the outline of the workbench (top bar, sidebars, home cards) in plain HTML before the React app starts.
 - A refresh in the same signed-in tab reuses its valid access token, and the OIDC discovery document is cached, so the sign-in round trips are gone from a normal refresh.
 - Pages, editors and language files load on demand. This step cut statically imported JavaScript by about 60% (gzip). The active language loads first, and the English fallback loads in the background.
-- Home page data is kept in IndexedDB and shown at once, then refreshed from the server.
+- Home page data is kept in IndexedDB for each user, cleared on sign-out, and shown at once, then refreshed from the server.
 
 A Playwright script with a simulated network delay timed the first paint, the greeting and the first task card for each change. With a 300 ms simulated delay and gzip, a normal refresh now shows the home page in 0.8 seconds, about 70% faster.
 
