@@ -6,7 +6,7 @@ The location was San José, in the heart of Silicon Valley and the scale was imp
 
 I was there as one of the speakers, so here are some impressions from the conference, this time from both sides of the stage 😊
 
-![image-20261009193336745](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261009193336745.png)
+![image-20261009193336745](image-20261009193336745.png)
 
 ## San José, Developers Everywhere
 
@@ -29,7 +29,7 @@ The next important questions are:
 
 
 
-![image-20261009195239178](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261009195239178.png)
+![image-20261009195239178](image-20261009195239178.png)
 
 
 
@@ -60,7 +60,7 @@ And there was a lot to choose from.
 
 The speaker lineup included people such as Thomas Dohmke (former GitHub CEO), Mark Cavage (President of Docker), Erran Berger (CTO of LinkedIn), Amjad Masad (Replit CEO), Kelsey Hightower (Google Distinguished Engineer),  Justin Boitano (VP of NVIDIA), Prashanth Chandrasekar (CEO Stack Overflow), Eric Simons (Founder Bolt.New), Neel Sundaresan (General Manager AI Products IBM)
 
-![image-20261009195303929](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261009195303929.png)
+![image-20261009195303929](image-20261009195303929.png)
 
 ## The Best Part Is Still the People
 
@@ -82,7 +82,7 @@ With more than 10,000 people in the same place, there were plenty of opportuniti
 
 And those are usually the moments I remember much longer than individual slides or keynotes.
 
-![image-20261009195315021](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261009195315021.png)
+![image-20261009195315021](image-20261009195315021.png)
 
 ## What I Learnt From the Talks
 
@@ -98,11 +98,11 @@ In his session “Who Tests the AI?”, [Himraj Singh](https://www.linkedin.com/
 
 ## Manufacturing Trust: Speed and Safety in the Age of Agents 🧑 Mark Cavage, President of Docker 
 
-![image-20261008194727172](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261008194727172.png)
+![image-20261008194727172](image-20261008194727172.png)
 
 AI agents can dramatically accelerate software development but they need deterministic security boundaries, explicit permissions and reproducible environments to operate safely at scale.
 
-![bf6c9bb8-5869-46ca-9d58-5096e9de3a93](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\bf6c9bb8-5869-46ca-9d58-5096e9de3a93.png)
+![bf6c9bb8-5869-46ca-9d58-5096e9de3a93](bf6c9bb8-5869-46ca-9d58-5096e9de3a93.png)
 
 #### Takeaways
 
@@ -114,7 +114,7 @@ AI agents can dramatically accelerate software development but they need determi
 
 **The four requirements of an AI agent factory**
 
-![image-20261008193826119](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261008193826119.png)
+![image-20261008193826119](image-20261008193826119.png)
 
 The following images are retrieved from https://www.docker.com/blog/coding-agent-horror-stories-the-29-million-secret-problem/
 
@@ -144,11 +144,11 @@ The following images are retrieved from https://www.docker.com/blog/coding-agent
 
 6. **Capture organizational knowledge through agents: ** Experiment with turning successful development workflows into reusable skills, while requiring approval before sharing sensitive organizational knowledge.
 
-![image-20261008195346170](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261008195346170.png)
+![image-20261008195346170](image-20261008195346170.png)
 
-![image-20261008195527905](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261008195527905.png)
+![image-20261008195527905](image-20261008195527905.png)
 
-![image-20261008200008969](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261008200008969.png)
+![image-20261008200008969](image-20261008200008969.png)
 
 
 
@@ -159,7 +159,7 @@ The following images are retrieved from https://www.docker.com/blog/coding-agent
 | OpenShell | Open-source software              | Isolates AI agents and controls their permissions and API access. https://github.com/NVIDIA/OpenShell |
 | Sentry    | Hardware-backed security software | Runs on NVIDIA BlueField-4 DPU to provide independent security monitoring and enforcement. |
 
-![image-20261014003620685](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261014003620685.png)
+![image-20261014003620685](image-20261014003620685.png)
 
 ---
 
@@ -169,7 +169,7 @@ The following images are retrieved from https://www.docker.com/blog/coding-agent
 
 🧑**Speakers:** Amjad Shaikh (VP Platform ServiceNow)
 
-![image-20261009150813966](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261009150813966.png)
+![image-20261009150813966](image-20261009150813966.png)
 
 ###  Key takeaways
 
@@ -180,17 +180,17 @@ The following images are retrieved from https://www.docker.com/blog/coding-agent
 - As the world changes, artificial intelligence models degrade. Continuous monitoring for data and concept drift is necessary after deployment.
 - Accountability remains with the organization. Delegating a decision to AI does not transfer legal or operational responsibility to the model.
 
-![image-20261009152831092](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261009152831092.png)
+![image-20261009152831092](image-20261009152831092.png)
 
 ### AI Decisions Factors
 
-![image-20261009151732552](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261009151732552.png)
+![image-20261009151732552](image-20261009151732552.png)
 
 
 
 ### Three Layers of AI Decision Observability
 
-![image-20261009152024726](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261009152024726.png)
+![image-20261009152024726](image-20261009152024726.png)
 
 1. **Capture**: Record decisions, inputs, data lineage, model versions, policies and configurations at decision time.
 
@@ -221,11 +221,11 @@ AI coding agents are cool but the real revolution isn't getting Claude or Codex 
 
 
 
-![image-20261009153157480](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261009153157480.png)
+![image-20261009153157480](image-20261009153157480.png)
 
 [Entire](https://entire.io/) is created by Thomas Dohmke the former CEO of GitHub and it focuses on AI Agents + Human collaboration in software development.
 
-![image-20261009152937844](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261009152937844.png)
+![image-20261009152937844](image-20261009152937844.png)
 
 
 
@@ -247,7 +247,7 @@ AI coding agents are cool but the real revolution isn't getting Claude or Codex 
 
 **A software factory is more than a bunch of agents**
 
-![image-20261009154003347](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261009154003347.png)
+![image-20261009154003347](image-20261009154003347.png)
 
 
 
@@ -294,7 +294,7 @@ Thomas explained that traditional Git workflows were designed for human collabor
 
 🧑**Speakers:**  Darko Mesaros (Distinguished Developer Advocate AWS)
 
-![image-20261009155220391](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261009155220391.png)
+![image-20261009155220391](image-20261009155220391.png)
 
 The problem isn't that AI agents make mistakes. It's that developers give them too much freedom without building proper controls around them.
 
@@ -311,7 +311,7 @@ And I especially liked the point about not giving one giant agent 150 tools and 
 - Avoid building one giant agent with 150 tools. Use specialized subagents with granular permissions.
 - Trust the architecture surrounding the agent, not the agent itself.
 
-![image-20261009182127593](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261009182127593.png)
+![image-20261009182127593](image-20261009182127593.png)
 
 
 
@@ -407,19 +407,19 @@ Each agent should receive only the tools and permissions it needs.
 
 This makes agents easier to secure, evaluate and debug.
 
-![image-20261009182139355](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261009182139355.png)
+![image-20261009182139355](image-20261009182139355.png)
 
 **Security Layers Architecture** 
 
 
 
-![image-20261009182212869](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261009182212869.png)
+![image-20261009182212869](image-20261009182212869.png)
 
-![image-20261009182259531](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261009182259531.png)
+![image-20261009182259531](image-20261009182259531.png)
 
 
 
-![image-20261009182348881](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261009182348881.png)
+![image-20261009182348881](image-20261009182348881.png)
 
 ## Most interesting
 
@@ -438,7 +438,7 @@ This makes agents easier to secure, evaluate and debug.
 
 🧑**Speaker:**  Abdel Fane (Founder OpenA2A)
 
-![image-20261014004734473](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261014004734473.png)
+![image-20261014004734473](image-20261014004734473.png)
 
 AI agents should be secured through infrastructure, not system prompts, because LLMs are unpredictable and vulnerable to prompt injection. The speaker recommends three essential security layers: 
 
@@ -460,7 +460,7 @@ He demonstrates how a malicious website can trick an AI agent into leaking sensi
 
 🧑**Speakers:**  Borko Djurkovic (Member of Technical Staff Cohere)
 
-![image-20261014005347668](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261014005347668.png)
+![image-20261014005347668](image-20261014005347668.png)
 
 AI agents must operate under Zero-Trust security principles, especially in multi-user enterprise environments. The speaker highlights three critical areas:
 
@@ -476,7 +476,7 @@ AI agents must operate under Zero-Trust security principles, especially in multi
 
 🧑**Speakers:** Sachin Malhotra (Platform Engineer Anthropic)
 
-![image-20261014010315592](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261014010315592.png)
+![image-20261014010315592](image-20261014010315592.png)
 
 AI agents shouldn't receive unlimited permissions, even when performing legitimate tasks. Instead, give them controlled budgets for what they can do, how often and with what level of risk. Sachin Malhotra from Anthropic shares a real incident where Claude accidentally deleted 200 workloads belonging to 20 engineers in just 90 seconds. He recommends rate limits (restrict destructive actions per hour), asymmetric permissions (allow low-risk actions but require approval for dangerous ones), tripwires (monitor unusual behavior) and the Undo Test (if an action cannot be safely reversed, require human approval). Crucially, permissions must be enforced by infrastructure using independently verified agent identities, not prompts or agent-controlled credentials. The takeaway for ABP Studio AI Agent and Volobox: Give every agent its own identity, enforce action limits, monitor behavior and require human approval for high-risk operations. The goal isn't to eliminate every mistake but to limit the damage an agent can cause while preserving its autonomy.
 
@@ -488,7 +488,7 @@ AI agents shouldn't receive unlimited permissions, even when performing legitima
 
 🧑**Speakers:** Viktoria Semaan (Principal Technical Evangelist at Databricks)
 
-![image-20261014010740705](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261014010740705.png)
+![image-20261014010740705](image-20261014010740705.png)
 
 Using the most powerful LLM for every task is expensive and often unnecessary. Instead, AI systems should automatically select the most cost-effective model based on task complexity, quality, speed and cost. Victoria Ziman from Databricks recommends three approaches: 
 
@@ -502,7 +502,7 @@ Using the most powerful LLM for every task is expensive and often unnecessary. I
 
 She also demonstrates [Omnigen](https://omnigent.ai/), a meta-harness that coordinates coding agents, selects models and controls execution budgets and retry limits.
 
-![image-20261014011228086](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261014011228086.png)
+![image-20261014011228086](image-20261014011228086.png)
 
 > Implement intelligent model routing, per-agent budgets and continuous evaluation to reduce AI costs without significantly compromising quality. The goal isn't to use the best model everywhere, but the best model for each task.
 
@@ -514,7 +514,7 @@ She also demonstrates [Omnigen](https://omnigent.ai/), a meta-harness that coord
 
 🧑**Speakers:** Aparna Dhinakaran (Founder Arize), Rukmini Reddy (VP of Engineering PagerDuty), Tamar Bercovici (VP of Engineering Box)
 
-![image-20261014011432422](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261014011432422.png)
+![image-20261014011432422](image-20261014011432422.png)
 
 AI is transforming software engineering from writing code to orchestrating AI agents, evaluating their outputs and ensuring production reliability. As code generation becomes cheaper and faster, engineering teams must rethink their workflows, responsibilities and infrastructure. 
 The panel highlights four major shifts:
@@ -536,7 +536,7 @@ The speakers also emphasize that engineers should treat agents like new team mem
 
 🧑 Speaker: Guillaume Lebedev (Co-founder & CTO, StackOne)
 
-![image-20261014013431823](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261014013431823.png)
+![image-20261014013431823](image-20261014013431823.png)
 
 Adding more MCP tools doesn't necessarily make AI agents more capable. It can actually break them by overwhelming their context windows, reducing tool-selection accuracy and increasing security risks. Guillaume Lebedev shows what happens when an agent is connected to 1,000 MCP tools and recommends four approaches:
 
@@ -557,7 +557,7 @@ He also demonstrates that tool discovery and prompt injection detection are clas
 
 🧑 Speaker: Emre (Solutions Architect at OpenAI)
 
-![image-20261014013748342](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261014013748342.png)
+![image-20261014013748342](image-20261014013748342.png)
 
 Context engineering is about providing AI agents with the right information at the right time, rather than filling their context windows with everything available. The speaker explains that long-running agents accumulate unnecessary tokens, outdated information and conflicting context, which can reduce accuracy and increase costs. He introduces three core strategies:
 
@@ -575,7 +575,7 @@ He also emphasizes that memory should evolve rather than grow indefinitely. Agen
 
 **🧑 Speaker:** Ashok Prakash (Staff ML Engineer Apple)
 
-![image-20261014014342669](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261014014342669.png)
+![image-20261014014342669](image-20261014014342669.png)
 
 Building an AI agent is easy, but making it safe, controllable, observable and production-ready requires a complete infrastructure architecture. The speaker identifies four major production risks: black-box decisions, silent model drift, unsafe actions and uncontrolled costs. He proposes an open-source, Zero-Trust reference architecture with five essential principles:
 
@@ -595,7 +595,7 @@ The speaker also highlights KServe and vLLM for model serving, caching, autoscal
 
 🧑 Speakers: Ben Helle (Chief Product Officer, Webflow), Han Wang (Co-founder, Mintlify), Sam Bhagwat (Founder & CEO, Mastra)
 
-![image-20261014014755824](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261014014755824.png)
+![image-20261014014755824](image-20261014014755824.png)
 
 AI agents are becoming primary users of developer tools, forcing companies to rethink product design, documentation, APIs and developer experience. Webflow reports that the majority of its MCP-driven content development activity now involves agents, while Mintlify reports that agent traffic increased from approximately 2–3% in early 2025 to 67%. The speakers highlight four major shifts:
 
@@ -616,7 +616,7 @@ The panel also discusses how AI dramatically reduces the cost of building softwa
 
 🧑 Speaker: Ben Smith (Staff Developer Advocate at Stripe)
 
- ![image-20261014015141785](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261014015141785.png)
+ ![image-20261014015141785](image-20261014015141785.png)
 
 AI agents are becoming economic actors: they will not only discover and purchase products on behalf of humans, but also autonomously pay for APIs, tools, compute and services to complete tasks. Traditional websites and checkout flows are designed for humans, while agents need structured data, discoverable APIs, standardized protocols and secure payment mechanisms. Ben Smith from Stripe highlights four major developments:
 
@@ -635,7 +635,7 @@ The speaker demonstrates an AI shopping assistant that discovers products, recom
 
 🧑 Speakers: Ajit Varma (Head of Firefox, Mozilla), Will Burke (Founder & CEO, Exa), Julia Love (Technology Reporter, Bloomberg , Moderator)
 
-![image-20261014015602329](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261014015602329.png)
+![image-20261014015602329](image-20261014015602329.png)
 
 Browsers are evolving from tools humans use to navigate websites into AI runtimes where agents search, understand and interact with the internet on our behalf. Mozilla and Exa envision an open, agent-friendly web where users can choose their AI models, preserve their browsing context and avoid dependence on a single AI provider. The speakers highlight four major shifts:
 
@@ -659,7 +659,7 @@ The panel also emphasizes open web standards, publisher consent, source attribut
 
 🧑 Speaker: Jenny Huang (Director of User Research, GitHub)
 
-![image-20261014020250963](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261014020250963.png)
+![image-20261014020250963](image-20261014020250963.png)
 
 AI coding agents have removed the bottleneck of writing code, but the bottleneck has shifted to coordination, context switching and deciding what to build. Jenny Huang explains that software productivity is no longer just about generating code faster. It's about connecting information, reducing fragmented workflows and helping people move from ideas to valuable outcomes. She demonstrates three practical applications of the GitHub Copilot app:
 
@@ -677,7 +677,7 @@ She emphasizes that AI-powered workflows should extend beyond developers to prod
 
 🧑**Speakers:** Lee Edwards (General Partner at Root Ventures), Mang-Git Ng (CEO of Anvil), Richard Robinson (Chief Evangelist at UnqorkAI)
 
-![image-20261009182548395](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261009182548395.png)
+![image-20261009182548395](image-20261009182548395.png)
 
 AI is making software cheaper to build but not necessarily cheaper to operate, secure, scale and maintain. That's where software companies can still win.
 
@@ -799,7 +799,7 @@ Suddenly, documentation, APIs, CLI and MCP integrations become part of your mark
 
 ## NETWORKING
 
-![image-20261009184812166](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261009184812166.png)
+![image-20261009184812166](image-20261009184812166.png)
 
 
 
@@ -807,7 +807,7 @@ Suddenly, documentation, APIs, CLI and MCP integrations become part of your mark
 
 What's actually breaking in production agent deployments, from visibility and governance to cost control at scale and what a real governance layer for agentic AI needs to look like. We gathered to talk the topic: "Running AI Agents at Scale".  We were 15 senior engineering and technical leaders facing the same problems. It was hosted by James Everingham, CEO and Co-founder of Guild.ai. I couldn't remember everyone's name in the meeting but as I remember there were Ankit Patel from NVIDIA, Yifei Liu from Vectra AI, Phani Pendurthi from Mastercard, from Oracle and Devin AI.
 
-![image-20261009185237161](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261009185237161.png)
+![image-20261009185237161](image-20261009185237161.png)
 
 ### Roughly We Talked About
 
@@ -881,7 +881,7 @@ I also have chance to explain our new product [Volobox.io](https://volobox.io) t
 
 AI models are getting smarter. But the real game-changer is context. That's why Volobox  brings chats, meetings, tasks, files and AI agents into one shared context. No need to copy-paste from different apps, environments. Just AI agents that understand your work; Get things done...
 
-![image-20261009192927320](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261009192927320.png)
+![image-20261009192927320](image-20261009192927320.png)
 
 
 
@@ -891,4 +891,4 @@ Some pictures from my trip.
 
 ![usa-trip](usa-trip-moments.png)
 
-![image-20261014022128876](C:\Users\alper\Desktop\WeAreDevelopers-USA-2026\blog-post\image-20261014022128876.png)
+![image-20261014022128876](image-20261014022128876.png)
