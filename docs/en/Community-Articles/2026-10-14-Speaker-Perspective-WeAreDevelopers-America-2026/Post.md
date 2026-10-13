@@ -1,5 +1,7 @@
 # A Speaker’s Perspective: WeAreDevelopers World Congress North America 2026 with Lots Of AI
 
+![image-20261014024659737](D:\github\volosoft\abp\docs\en\Community-Articles\2026-10-14-Speaker-Perspective-WeAreDevelopers-America-2026\image-20261014024659737.png)
+
 I’ve been to quite a few developer conferences over the years but this one was a little different: **WeAreDevelopers World Congress had arrived in North America for the first time.** I traveled from Istanbul to San Francisco which took 14 hours of flying. It was exhausting but it worth. Conference was 2 days plus 1 day pre-conf. The dates are September 23–25, 2026. Host venue was San Jose McEnery Convention Center.
 
 The location was San José, in the heart of Silicon Valley and the scale was impressive. As I learnt the first day 9000 developers registered and took their badges. AI builders, architects and technology leaders came together for three days of talks, workshops, networking and probably more technical conversations than anyone could keep track of.
