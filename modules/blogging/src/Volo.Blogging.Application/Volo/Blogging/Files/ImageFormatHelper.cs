@@ -10,8 +10,8 @@ namespace Volo.Blogging.Areas.Blog.Helpers
         public static SKEncodedImageFormat? GetImageRawFormat(Stream stream)
         {
             // Only the image header is parsed, the pixels are not decoded.
-            // SKManagedStream rewinds to the absolute start of the stream, so the remaining bytes are copied
-            // to give the codec an independent buffer that starts at the current position.
+            // SKCodec.Create(Stream) takes the ownership of the stream and disposes it, so the remaining bytes
+            // are copied to give the codec its own buffer and keep the stream open for the caller.
             using (var memoryStream = new MemoryStream())
             {
                 stream.CopyTo(memoryStream);
@@ -37,10 +37,18 @@ namespace Volo.Blogging.Areas.Blog.Helpers
 
                 return imageFormat.HasValue && validFormats.Contains(imageFormat.Value) ? imageFormat : null;
             }
-            catch (Exception e) when (e is not DllNotFoundException && e is not TypeInitializationException)
+            catch (Exception e) when (!IsNativeLibraryException(e))
             {
                 return null;
             }
+        }
+
+        private static bool IsNativeLibraryException(Exception e)
+        {
+            return e is DllNotFoundException
+                or EntryPointNotFoundException
+                or BadImageFormatException
+                or TypeInitializationException;
         }
     }
 }

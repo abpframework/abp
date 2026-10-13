@@ -77,12 +77,19 @@ namespace Volo.Blogging
             stream.CanRead.ShouldBeTrue();
         }
 
-        [Fact]
-        public void Should_Not_Hide_Native_Library_Loading_Errors()
+        [Theory]
+        [InlineData(typeof(DllNotFoundException))]
+        [InlineData(typeof(EntryPointNotFoundException))]
+        [InlineData(typeof(BadImageFormatException))]
+        [InlineData(typeof(TypeInitializationException))]
+        public void Should_Not_Hide_Native_Library_Loading_Errors(Type exceptionType)
         {
-            using var stream = new NonSeekableStream(CreateImage(SKEncodedImageFormat.Png), new DllNotFoundException());
+            var exception = exceptionType == typeof(TypeInitializationException)
+                ? new TypeInitializationException("SkiaSharp.SKObject", new DllNotFoundException())
+                : (Exception)Activator.CreateInstance(exceptionType);
+            using var stream = new NonSeekableStream(CreateImage(SKEncodedImageFormat.Png), exception);
 
-            Should.Throw<DllNotFoundException>(() => ImageFormatHelper.IsValidImage(stream, FileUploadConsts.AllowedImageUploadFormats));
+            Should.Throw(() => ImageFormatHelper.IsValidImage(stream, FileUploadConsts.AllowedImageUploadFormats), exceptionType);
         }
 
         private static byte[] CreateImage(SKEncodedImageFormat format)
