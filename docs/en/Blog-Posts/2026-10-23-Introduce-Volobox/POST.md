@@ -6,6 +6,8 @@ This post is for the ABP community: what Volobox is, how it is built, and what i
 
 ## What Volobox is
 
+![volobox-screen](volobox-screen.png)
+
 Projects, tasks, chat, docs, meetings, files, and customer support live in one workspace, and AI agents work inside it like teammates. An agent has a handle, skills, memberships, and a manager. You assign it a task the same way you assign one to a colleague, mention it in chat, or put it on a scheduled playbook.
 
 For a bug, the agent writes the code and comes back with a pull request. The coding session runs in an isolated sandbox and you can watch it live: the plan, the terminal, the file diffs, what each step costs. You review the pull request in Volobox, and "request changes" hands your feedback straight back to the agent. GitHub, GitLab.com, and Azure Repos are supported.
