@@ -50,7 +50,7 @@ That shift feels important. The industry is no longer only experimenting with AI
 
 My session was on Stage 6 on Friday 09:40. It was the first time the audience listened to me via headphones while I was speaking on stage. It was a somewhat interesting experience. :) And I made this talk before in different countries but the USA audience was very interested in my topic. They asked many questions after the session. The conversations continued even after the talk and I made some new friends there.
 
-![MyTalk](D:\github\volosoft\abp\docs\en\Community-Articles\2026-10-14-Speaker-Perspective-WeAreDevelopers-America-2026\MyTalk.png)
+![MyTalk](MyTalk.png)
 
 ### Being a speaker creates a funny problem at conferences
 
