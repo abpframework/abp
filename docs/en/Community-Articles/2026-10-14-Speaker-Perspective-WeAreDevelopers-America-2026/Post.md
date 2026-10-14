@@ -1,4 +1,4 @@
-# A Speaker’s Perspective: WeAreDevelopers World Congress North America 2026 with Lots Of AI
+# A Speaker’s Perspective: WeAreDevelopers World Congress North America 2026 (Lots Of AI)
 
 ![image-20261014024659737](image-20261014024659737.png)
 
