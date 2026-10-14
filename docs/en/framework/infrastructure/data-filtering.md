@@ -224,9 +224,9 @@ protected override bool ShouldFilterEntity<TEntity>(IMutableEntityType entityTyp
     return base.ShouldFilterEntity<TEntity>(entityType);
 }
 
-protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>(ModelBuilder modelBuilder)
+protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>(ModelBuilder modelBuilder, EntityTypeBuilder<TEntity> entityTypeBuilder)
 {
-    var expression = base.CreateFilterExpression<TEntity>(modelBuilder);
+    var expression = base.CreateFilterExpression<TEntity>(modelBuilder, entityTypeBuilder);
 
     if (typeof(IIsActive).IsAssignableFrom(typeof(TEntity)))
     {
@@ -274,9 +274,9 @@ protected override bool ShouldFilterEntity<TEntity>(IMutableEntityType entityTyp
     return base.ShouldFilterEntity<TEntity>(entityType);
 }
 
-protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>(ModelBuilder modelBuilder)
+protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>(ModelBuilder modelBuilder, EntityTypeBuilder<TEntity> entityTypeBuilder)
 {
-    var expression = base.CreateFilterExpression<TEntity>(modelBuilder);
+    var expression = base.CreateFilterExpression<TEntity>(modelBuilder, entityTypeBuilder);
 
     if (typeof(IIsActive).IsAssignableFrom(typeof(TEntity)))
     {
@@ -304,13 +304,13 @@ protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntit
                         return new SqlBinaryExpression(
                             ExpressionType.Equal,
                             isActive,
-                            new SqlConstantExpression(Expression.Constant(true), boolParam.TypeMapping),
+                            new SqlConstantExpression(true, typeof(bool), boolParam.TypeMapping),
                             boolParam.Type,
                             boolParam.TypeMapping);
                     }
 
                     // empty where sql
-                    return new SqlConstantExpression(Expression.Constant(true), boolParam.TypeMapping);
+                    return new SqlConstantExpression(true, typeof(bool), boolParam.TypeMapping);
                 });
         }
 
@@ -350,7 +350,7 @@ Include any other values read at compilation time in the cache key as well. Keep
 
 The filter state is read while EF Core translates the query. ABP can only provide it for queries that run through `AbpEntityQueryProvider`, such as normal LINQ queries.
 
-Compiled queries (`EF.CompileQuery` and `EF.CompileAsyncQuery`) are always translated without it, even when they first run inside another query, so ABP throws an `AbpException` for them instead of running them without the data filters. Run such queries as normal LINQ queries, or set `UseDbFunction` of `AbpEfCoreGlobalFilterOptions` to `false`. Your custom `HasTranslation` callbacks should also throw when `AbpEfCoreCurrentDbContext.Context` is `null`, as the example above does.
+Compiled queries (`EF.CompileQuery` and `EF.CompileAsyncQuery`) are always translated without it, even when they first run inside another query. So if a compiled query needs one of these filters, ABP throws an `AbpException` instead of running it without the filter. Compiled queries on entities without these filters, or with `IgnoreQueryFilters()`, work as before. Run such queries as normal LINQ queries, or set `UseDbFunction` of `AbpEfCoreGlobalFilterOptions` to `false`. Your custom `HasTranslation` callbacks should also throw when `AbpEfCoreCurrentDbContext.Context` is `null`, as the example above does.
 
 ##### Make User-defined function mapping compatible with [DevExtreme.AspNet.Data's](https://github.com/DevExpress/DevExtreme.AspNet.Data) `IAsyncAdapter`
 

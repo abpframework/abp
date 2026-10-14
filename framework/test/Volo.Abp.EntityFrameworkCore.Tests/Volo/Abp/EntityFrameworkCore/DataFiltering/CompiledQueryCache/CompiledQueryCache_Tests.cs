@@ -48,6 +48,23 @@ public class CompiledQueryCache_Tests : CompiledQueryCacheTestBase<CompiledQuery
     }
 
     [Fact]
+    public async Task Should_Not_Run_Compiled_Async_Query_First_Run_Inside_Another_Query_Without_Filters()
+    {
+        var countRowsAsync = EF.CompileAsyncQuery((CompiledQueryCacheTestDbContext db) => db.Rows.Count());
+
+        var exception = await Should.ThrowAsync<InvalidOperationException>(() =>
+            RunInTenantAsync(CompiledQueryCacheTestModuleBase.TenantA, db =>
+                Task.FromResult(db.Rows
+                    .Where(row => row.Name.Length > countRowsAsync(db).GetAwaiter().GetResult())
+                    .Select(row => row.Name)
+                    .ToList())));
+        exception.InnerException.ShouldBeOfType<AbpException>();
+
+        await Should.ThrowAsync<AbpException>(() =>
+            RunInTenantAsync(CompiledQueryCacheTestModuleBase.TenantA, async db => new[] { (await countRowsAsync(db)).ToString() }.ToList()));
+    }
+
+    [Fact]
     public async Task Should_Not_Run_Compiled_Async_Query_Without_Filters()
     {
         var query = EF.CompileAsyncQuery((CompiledQueryCacheTestDbContext db) => db.Rows.Select(x => x.Name));
