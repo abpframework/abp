@@ -327,6 +327,21 @@ public override string GetCompiledQueryCacheKey()
 }
 ````
 
+The `HasTranslation` callback runs only when EF Core compiles the query, and the generated SQL is cached. That's why the example adds `IsActiveFilterEnabled` to the cache key.
+
+The default compiled-query cache key does not include the tenant ID. ABP's built-in tenant filter uses a runtime parameter, so queries can be reused across tenants.
+
+> If your custom `HasTranslation` callbacks read tenant-specific values at compilation time or generate different SQL by tenant, add the tenant ID to the cache key. Otherwise, another tenant can reuse SQL compiled for the first tenant.
+
+````csharp
+public override string GetCompiledQueryCacheKey()
+{
+    return $"{base.GetCompiledQueryCacheKey()}:{IsActiveFilterEnabled}:{CurrentTenantId?.ToString() ?? "Null"}";
+}
+````
+
+Include any other values read at compilation time in the cache key as well. Keep the call to `base.GetCompiledQueryCacheKey()` to preserve ABP's filter-state keys.
+
 ##### Make User-defined function mapping compatible with [DevExtreme.AspNet.Data's](https://github.com/DevExpress/DevExtreme.AspNet.Data) `IAsyncAdapter`
 
 If you are using [DevExtreme.AspNet.Data](https://github.com/DevExpress/DevExtreme.AspNet.Data) and `User-defined function mapping`, You need to create a custom adapter to compatible with `IAsyncAdapter`.
