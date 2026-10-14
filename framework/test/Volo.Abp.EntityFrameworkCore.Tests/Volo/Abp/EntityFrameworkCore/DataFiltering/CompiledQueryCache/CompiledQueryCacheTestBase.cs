@@ -154,4 +154,29 @@ public abstract class CompiledQueryCacheTestBase<TStartupModule> : TestAppTestBa
         (counter.Count - before).ShouldBe(1);
         await uow.CompleteAsync();
     }
+
+    protected async Task<List<string>> RunInTenantAsync(
+        Guid? tenantId,
+        Func<CompiledQueryCacheTestDbContext, Task<List<string>>> query)
+    {
+        using var uow = GetRequiredService<IUnitOfWorkManager>().Begin();
+        using var tenant = GetRequiredService<ICurrentTenant>().Change(tenantId);
+        var context = GetRequiredService<CompiledQueryCacheTestDbContext>();
+        context.UseDbFunction().ShouldBe(UseDbFunction);
+
+        var names = await query(context);
+        await uow.CompleteAsync();
+        return names;
+    }
+
+    protected static async Task<List<string>> ToListAsync(IAsyncEnumerable<string> source)
+    {
+        var names = new List<string>();
+        await foreach (var name in source)
+        {
+            names.Add(name);
+        }
+
+        return names;
+    }
 }

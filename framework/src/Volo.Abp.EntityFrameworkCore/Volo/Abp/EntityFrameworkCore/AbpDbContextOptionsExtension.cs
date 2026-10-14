@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.EntityFrameworkCore.GlobalFilters;
@@ -25,6 +26,9 @@ public class AbpDbContextOptionsExtension : IDbContextOptionsExtension
         }
 
         services.Replace(ServiceDescriptor.Scoped<IAsyncQueryProvider, AbpEntityQueryProvider>());
+#pragma warning disable EF1001
+        services.Replace(ServiceDescriptor.Scoped<IQueryCompiler, AbpQueryCompiler>());
+#pragma warning restore EF1001
         services.AddSingleton(typeof(AbpEfCoreCurrentDbContext));
     }
 

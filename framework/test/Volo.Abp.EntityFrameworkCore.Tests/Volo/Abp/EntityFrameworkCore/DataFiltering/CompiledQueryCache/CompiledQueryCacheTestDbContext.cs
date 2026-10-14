@@ -6,6 +6,10 @@ public class CompiledQueryCacheTestDbContext : AbpDbContext<CompiledQueryCacheTe
 {
     public DbSet<CompiledQueryCacheTestRow> Rows { get; set; }
 
+    public DbSet<CompiledQueryCacheSoftDeleteRow> SoftDeleteRows { get; set; }
+
+    public DbSet<CompiledQueryCacheMultiTenantRow> MultiTenantRows { get; set; }
+
     public CompiledQueryCacheTestDbContext(DbContextOptions<CompiledQueryCacheTestDbContext> options)
         : base(options)
     {

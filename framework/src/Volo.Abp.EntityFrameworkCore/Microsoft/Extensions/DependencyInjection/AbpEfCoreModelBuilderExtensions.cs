@@ -19,7 +19,7 @@ public static class AbpEfCoreModelBuilderExtensions
                 var isDeleted = args[0];
                 var boolParam = args[1];
 
-                if (abpEfCoreCurrentDbContext.Context?.DataFilter.IsEnabled<ISoftDelete>() == true)
+                if (GetCurrentDbContext(abpEfCoreCurrentDbContext).DataFilter.IsEnabled<ISoftDelete>())
                 {
                     // IsDeleted == false. Use the column's TypeMapping so any ValueConverter is applied to the literal.
                     return new SqlBinaryExpression(
@@ -47,7 +47,7 @@ public static class AbpEfCoreModelBuilderExtensions
                 var currentTenantId = args[1];
                 var boolParam = args[2];
 
-                if (abpEfCoreCurrentDbContext.Context?.DataFilter.IsEnabled<IMultiTenant>() == true)
+                if (GetCurrentDbContext(abpEfCoreCurrentDbContext).DataFilter.IsEnabled<IMultiTenant>())
                 {
                     // TenantId == CurrentTenantId
                     return new SqlBinaryExpression(
@@ -63,5 +63,14 @@ public static class AbpEfCoreModelBuilderExtensions
             });
 
         return modelBuilder;
+    }
+
+    // The filter state is read while EF Core translates the query, and only AbpEntityQueryProvider sets the current DbContext for that.
+    // Queries compiled without it, such as EF.CompileQuery, must fail instead of running without the data filters.
+    private static IAbpEfCoreDbFunctionContext GetCurrentDbContext(AbpEfCoreCurrentDbContext abpEfCoreCurrentDbContext)
+    {
+        return abpEfCoreCurrentDbContext.Context ?? throw new AbpException(
+            "The data filters cannot be applied to a query that is compiled outside of AbpEntityQueryProvider, such as EF.CompileQuery or EF.CompileAsyncQuery. " +
+            "Run it as a normal LINQ query, or set 'UseDbFunction' of 'AbpEfCoreGlobalFilterOptions' to false.");
     }
 }
