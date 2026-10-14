@@ -997,6 +997,6 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
     public virtual string GetCompiledQueryCacheKey()
     {
-        return $"{CurrentTenantId?.ToString() ?? "Null"}:{IsSoftDeleteFilterEnabled}:{IsMultiTenantFilterEnabled}";
+        return $"{IsSoftDeleteFilterEnabled}:{IsMultiTenantFilterEnabled}";
     }
 }
