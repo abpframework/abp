@@ -869,6 +869,12 @@ When the agent requests access, the system evaluates these predefined policies a
 - Shift developers' focus from writing code to orchestrating agents, solving problems and making architectural decisions.
 - Keep investing in junior developers and human expertise, because judgment, creativity and understanding what to build remain essential.
 
+And lastly, I agree 100% to the following saying.
+
+> **AI LEARNT CODING NOW IT'S CHEAP. LET'S LEARN MARKETING**
+
+![image-20261014141622229](image-20261014141622229.png)
+
 
 
 ---
