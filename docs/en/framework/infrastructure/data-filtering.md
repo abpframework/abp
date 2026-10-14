@@ -294,11 +294,8 @@ protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntit
                     var isActive = args[0];
                     var boolParam = args[1];
 
-                    // Never treat a missing DbContext as "filter disabled", otherwise the query runs without the filter.
-                    var dbContext = abpEfCoreCurrentDbContext.Context
-                        ?? throw new AbpException("The data filter cannot be applied to a query that is compiled outside of AbpEntityQueryProvider.");
-
-                    if (dbContext.DataFilter.IsEnabled<IIsActive>())
+                    // Throws when there is no current DbContext, instead of running the query without the filter.
+                    if (abpEfCoreCurrentDbContext.GetRequiredContext().DataFilter.IsEnabled<IIsActive>())
                     {
                         // isActive == true
                         return new SqlBinaryExpression(
@@ -350,7 +347,7 @@ Include any other values read at compilation time in the cache key as well. Keep
 
 The filter state is read while EF Core translates the query. ABP can only provide it for queries that run through `AbpEntityQueryProvider`, such as normal LINQ queries.
 
-Compiled queries (`EF.CompileQuery` and `EF.CompileAsyncQuery`) are always translated without it, even when they first run inside another query. So if a compiled query needs one of these filters, ABP throws an `AbpException` instead of running it without the filter. Compiled queries on entities without these filters, or with `IgnoreQueryFilters()`, work as before. Run such queries as normal LINQ queries, or set `UseDbFunction` of `AbpEfCoreGlobalFilterOptions` to `false`. Your custom `HasTranslation` callbacks should also throw when `AbpEfCoreCurrentDbContext.Context` is `null`, as the example above does.
+Compiled queries (`EF.CompileQuery` and `EF.CompileAsyncQuery`) are always translated without it, even when they first run inside another query. So if a compiled query needs one of these filters, ABP throws an `AbpException` instead of running it without the filter. Compiled queries on entities without these filters, or with `IgnoreQueryFilters()`, work as before. Run such queries as normal LINQ queries, or set `UseDbFunction` of `AbpEfCoreGlobalFilterOptions` to `false`. Your custom `HasTranslation` callbacks should read the filter state through `AbpEfCoreCurrentDbContext.GetRequiredContext()`, as the example above does, so they throw in the same case.
 
 ##### Make User-defined function mapping compatible with [DevExtreme.AspNet.Data's](https://github.com/DevExpress/DevExtreme.AspNet.Data) `IAsyncAdapter`
 
