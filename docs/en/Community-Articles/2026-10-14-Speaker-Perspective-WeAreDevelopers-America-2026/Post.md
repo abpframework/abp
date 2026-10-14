@@ -1,6 +1,6 @@
 # A Speaker’s Perspective: WeAreDevelopers World Congress North America 2026 with Lots Of AI
 
-![image-20261014024659737](D:\github\volosoft\abp\docs\en\Community-Articles\2026-10-14-Speaker-Perspective-WeAreDevelopers-America-2026\image-20261014024659737.png)
+![image-20261014024659737](image-20261014024659737.png)
 
 I’ve been to quite a few developer conferences over the years but this one was a little different: **WeAreDevelopers World Congress had arrived in North America for the first time.** I traveled from Istanbul to San Francisco which took 14 hours of flying. It was exhausting but it worth. Conference was 2 days plus 1 day pre-conf. The dates are September 23–25, 2026. Host venue was San Jose McEnery Convention Center.
 
@@ -10,7 +10,7 @@ I was there as one of the speakers, so here are some impressions from the confer
 
 ![image-20261009193336745](image-20261009193336745.png)
 
-## San José, Developers Everywhere
+## San José, Heart of Silicon Valley
 
 One thing WeAreDevelopers does very well is scale. This isn’t the kind of conference where you walk into a single hall, watch ten talks, drink a few coffees and go home. Almost 10.000 attendees came to the conf. More than 600 speakers... 8 stages were running in parallel alongside workshops, expo areas, networking spaces and even an outdoor stage and lounge.
 And, of course, in 2026, you can probably guess the main topic:
@@ -50,9 +50,7 @@ That shift feels important. The industry is no longer only experimenting with AI
 
 My session was on Stage 6 on Friday 09:40. It was the first time the audience listened to me via headphones while I was speaking on stage. It was a somewhat interesting experience. :) And I made this talk before in different countries but the USA audience was very interested in my topic. They asked many questions after the session. The conversations continued even after the talk and I made some new friends there.
 
-----> MY PHOTOS <-----
-
-
+![MyTalk](D:\github\volosoft\abp\docs\en\Community-Articles\2026-10-14-Speaker-Perspective-WeAreDevelopers-America-2026\MyTalk.png)
 
 ### Being a speaker creates a funny problem at conferences
 
