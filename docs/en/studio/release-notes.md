@@ -9,7 +9,18 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 3.1.4 (2026-10-05) Latest
+## 3.1.5 (2026-10-15) Latest
+
+* Pin jQuery 4.0.0 in solution templates
+* Sync role delete reassignment to the React admin console template
+* Render object extension properties in the admin console
+* Sync React Admin Console time zone support to templates
+* Make the "Back to the application" links leave the admin console
+* Upgrade Blazorise to version 2.3.0 in solution templates
+* Focus the first input of MudBlazor dialogs in the sample CRUD pages
+* Update the React Admin Console claims modal
+
+## 3.1.4 (2026-10-05)
 
 * Update built-in AI Assistant default models
 * Fix sidebar flyout backdrop so Switch branch dimming works
