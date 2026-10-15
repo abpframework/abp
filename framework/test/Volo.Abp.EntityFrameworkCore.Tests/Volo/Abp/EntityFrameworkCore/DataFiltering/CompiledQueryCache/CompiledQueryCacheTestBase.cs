@@ -154,4 +154,50 @@ public abstract class CompiledQueryCacheTestBase<TStartupModule> : TestAppTestBa
         (counter.Count - before).ShouldBe(1);
         await uow.CompleteAsync();
     }
+
+    [Fact]
+    public async Task Should_Apply_Filters_To_Other_Query_Entry_Points()
+    {
+        var names = await RunInTenantAsync(CompiledQueryCacheTestModuleBase.TenantA, async db =>
+        {
+            (await db.Rows.IgnoreQueryFilters().CountAsync()).ShouldBe(CompiledQueryCacheTestModuleBase.Rows.Length);
+            db.Rows.Select(row => row.Name).ToQueryString().ShouldContain("IsDeleted");
+
+            (await db.Rows.Where(row => row.Name == "B-live").ExecuteUpdateAsync(s => s.SetProperty(row => row.Name, "B-updated"))).ShouldBe(0);
+            (await db.Rows.Where(row => row.Name == "A-live").ExecuteUpdateAsync(s => s.SetProperty(row => row.Name, "A-updated"))).ShouldBe(1);
+
+            var row = await db.Rows.SingleAsync();
+            row.Name = "A-saved";
+            await db.SaveChangesAsync();
+
+            return await db.Rows.AsNoTracking().Select(x => x.Name).ToListAsync();
+        });
+
+        names.ShouldBe(new[] { "A-saved" });
+    }
+
+    protected async Task<List<string>> RunInTenantAsync(
+        Guid? tenantId,
+        Func<CompiledQueryCacheTestDbContext, Task<List<string>>> query)
+    {
+        using var uow = GetRequiredService<IUnitOfWorkManager>().Begin();
+        using var tenant = GetRequiredService<ICurrentTenant>().Change(tenantId);
+        var context = GetRequiredService<CompiledQueryCacheTestDbContext>();
+        context.UseDbFunction().ShouldBe(UseDbFunction);
+
+        var names = await query(context);
+        await uow.CompleteAsync();
+        return names;
+    }
+
+    protected static async Task<List<string>> ToListAsync(IAsyncEnumerable<string> source)
+    {
+        var names = new List<string>();
+        await foreach (var name in source)
+        {
+            names.Add(name);
+        }
+
+        return names;
+    }
 }

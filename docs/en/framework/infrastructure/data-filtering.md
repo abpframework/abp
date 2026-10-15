@@ -224,9 +224,9 @@ protected override bool ShouldFilterEntity<TEntity>(IMutableEntityType entityTyp
     return base.ShouldFilterEntity<TEntity>(entityType);
 }
 
-protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>(ModelBuilder modelBuilder)
+protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>(ModelBuilder modelBuilder, EntityTypeBuilder<TEntity> entityTypeBuilder)
 {
-    var expression = base.CreateFilterExpression<TEntity>(modelBuilder);
+    var expression = base.CreateFilterExpression<TEntity>(modelBuilder, entityTypeBuilder);
 
     if (typeof(IIsActive).IsAssignableFrom(typeof(TEntity)))
     {
@@ -274,9 +274,9 @@ protected override bool ShouldFilterEntity<TEntity>(IMutableEntityType entityTyp
     return base.ShouldFilterEntity<TEntity>(entityType);
 }
 
-protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>(ModelBuilder modelBuilder)
+protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntity>(ModelBuilder modelBuilder, EntityTypeBuilder<TEntity> entityTypeBuilder)
 {
-    var expression = base.CreateFilterExpression<TEntity>(modelBuilder);
+    var expression = base.CreateFilterExpression<TEntity>(modelBuilder, entityTypeBuilder);
 
     if (typeof(IIsActive).IsAssignableFrom(typeof(TEntity)))
     {
@@ -294,19 +294,19 @@ protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntit
                     var isActive = args[0];
                     var boolParam = args[1];
 
-                    if (abpEfCoreCurrentDbContext.Context?.DataFilter.IsEnabled<IIsActive>() == true)
+                    if (abpEfCoreCurrentDbContext.GetRequiredContext().DataFilter.IsEnabled<IIsActive>())
                     {
                         // isActive == true
                         return new SqlBinaryExpression(
                             ExpressionType.Equal,
                             isActive,
-                            new SqlConstantExpression(Expression.Constant(true), boolParam.TypeMapping),
+                            new SqlConstantExpression(true, typeof(bool), isActive.TypeMapping ?? boolParam.TypeMapping),
                             boolParam.Type,
                             boolParam.TypeMapping);
                     }
 
                     // empty where sql
-                    return new SqlConstantExpression(Expression.Constant(true), boolParam.TypeMapping);
+                    return new SqlConstantExpression(true, typeof(bool), boolParam.TypeMapping);
                 });
         }
 
@@ -341,6 +341,27 @@ public override string GetCompiledQueryCacheKey()
 ````
 
 Include any other values read at compilation time in the cache key as well. Keep the call to `base.GetCompiledQueryCacheKey()` to preserve ABP's filter-state keys.
+
+##### Compiled queries
+
+When user-defined function mapping is enabled, `EF.CompileQuery` and `EF.CompileAsyncQuery` cannot use the soft delete and multi-tenant filters, or your own filters that call `AbpEfCoreCurrentDbContext.GetRequiredContext()`. Queries that need these filters throw an `AbpException`. Queries that don't need them, for example with `IgnoreQueryFilters()`, are not affected.
+
+Run these queries as normal LINQ queries, or disable user-defined function mapping:
+
+````csharp
+Configure<AbpEfCoreGlobalFilterOptions>(options =>
+{
+    options.UseDbFunction = false;
+});
+````
+
+The data filters still apply when `UseDbFunction` is `false`. Use this setting if a third-party library compiles filtered queries itself.
+
+In custom `HasTranslation` callbacks, use `AbpEfCoreCurrentDbContext.GetRequiredContext()` instead of `Context`, as shown above.
+
+Don't replace `ICompiledQueryCacheKeyGenerator` or `IDatabase` with `ReplaceService` while user-defined function mapping is enabled. If you need to replace either service, set `UseDbFunction` to `false` and don't add `AbpDbContextOptionsExtension` yourself.
+
+If you build EF Core's internal service provider yourself, call `new AbpDbContextOptionsExtension().ApplyServices(services)` after registering the database provider services.
 
 ##### Make User-defined function mapping compatible with [DevExtreme.AspNet.Data's](https://github.com/DevExpress/DevExtreme.AspNet.Data) `IAsyncAdapter`
 
