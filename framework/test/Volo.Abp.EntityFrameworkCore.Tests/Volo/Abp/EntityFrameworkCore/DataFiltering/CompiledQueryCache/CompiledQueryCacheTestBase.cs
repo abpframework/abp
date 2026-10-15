@@ -155,6 +155,27 @@ public abstract class CompiledQueryCacheTestBase<TStartupModule> : TestAppTestBa
         await uow.CompleteAsync();
     }
 
+    [Fact]
+    public async Task Should_Apply_Filters_To_Other_Query_Entry_Points()
+    {
+        var names = await RunInTenantAsync(CompiledQueryCacheTestModuleBase.TenantA, async db =>
+        {
+            (await db.Rows.IgnoreQueryFilters().CountAsync()).ShouldBe(CompiledQueryCacheTestModuleBase.Rows.Length);
+            db.Rows.Select(row => row.Name).ToQueryString().ShouldContain("IsDeleted");
+
+            (await db.Rows.Where(row => row.Name == "B-live").ExecuteUpdateAsync(s => s.SetProperty(row => row.Name, "B-updated"))).ShouldBe(0);
+            (await db.Rows.Where(row => row.Name == "A-live").ExecuteUpdateAsync(s => s.SetProperty(row => row.Name, "A-updated"))).ShouldBe(1);
+
+            var row = await db.Rows.SingleAsync();
+            row.Name = "A-saved";
+            await db.SaveChangesAsync();
+
+            return await db.Rows.AsNoTracking().Select(x => x.Name).ToListAsync();
+        });
+
+        names.ShouldBe(new[] { "A-saved" });
+    }
+
     protected async Task<List<string>> RunInTenantAsync(
         Guid? tenantId,
         Func<CompiledQueryCacheTestDbContext, Task<List<string>>> query)

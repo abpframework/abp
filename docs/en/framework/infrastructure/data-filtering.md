@@ -294,14 +294,13 @@ protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntit
                     var isActive = args[0];
                     var boolParam = args[1];
 
-                    // Throws when there is no current DbContext, instead of running the query without the filter.
                     if (abpEfCoreCurrentDbContext.GetRequiredContext().DataFilter.IsEnabled<IIsActive>())
                     {
                         // isActive == true
                         return new SqlBinaryExpression(
                             ExpressionType.Equal,
                             isActive,
-                            new SqlConstantExpression(true, typeof(bool), boolParam.TypeMapping),
+                            new SqlConstantExpression(true, typeof(bool), isActive.TypeMapping ?? boolParam.TypeMapping),
                             boolParam.Type,
                             boolParam.TypeMapping);
                     }
@@ -343,11 +342,26 @@ public override string GetCompiledQueryCacheKey()
 
 Include any other values read at compilation time in the cache key as well. Keep the call to `base.GetCompiledQueryCacheKey()` to preserve ABP's filter-state keys.
 
-##### Limitations of User-defined function mapping
+##### Compiled queries
 
-The filter state is read while EF Core translates the query. ABP can only provide it for queries that run through `AbpEntityQueryProvider`, such as normal LINQ queries.
+When user-defined function mapping is enabled, `EF.CompileQuery` and `EF.CompileAsyncQuery` cannot use the soft delete and multi-tenant filters, or your own filters that call `AbpEfCoreCurrentDbContext.GetRequiredContext()`. Queries that need these filters throw an `AbpException`. Queries that don't need them, for example with `IgnoreQueryFilters()`, are not affected.
 
-Compiled queries (`EF.CompileQuery` and `EF.CompileAsyncQuery`) are always translated without it, even when they first run inside another query. So if a compiled query needs one of these filters, ABP throws an `AbpException` instead of running it without the filter. Compiled queries on entities without these filters, or with `IgnoreQueryFilters()`, work as before. Run such queries as normal LINQ queries, or set `UseDbFunction` of `AbpEfCoreGlobalFilterOptions` to `false`. Your custom `HasTranslation` callbacks should read the filter state through `AbpEfCoreCurrentDbContext.GetRequiredContext()`, as the example above does, so they throw in the same case.
+Run these queries as normal LINQ queries, or disable user-defined function mapping:
+
+````csharp
+Configure<AbpEfCoreGlobalFilterOptions>(options =>
+{
+    options.UseDbFunction = false;
+});
+````
+
+The data filters still apply when `UseDbFunction` is `false`. Use this setting if a third-party library compiles filtered queries itself.
+
+In custom `HasTranslation` callbacks, use `AbpEfCoreCurrentDbContext.GetRequiredContext()` instead of `Context`, as shown above.
+
+Don't replace `ICompiledQueryCacheKeyGenerator` or `IDatabase` with `ReplaceService` while user-defined function mapping is enabled. If you need to replace either service, set `UseDbFunction` to `false` and don't add `AbpDbContextOptionsExtension` yourself.
+
+If you build EF Core's internal service provider yourself, call `new AbpDbContextOptionsExtension().ApplyServices(services)` after registering the database provider services.
 
 ##### Make User-defined function mapping compatible with [DevExtreme.AspNet.Data's](https://github.com/DevExpress/DevExtreme.AspNet.Data) `IAsyncAdapter`
 
