@@ -801,7 +801,7 @@ Suddenly, documentation, APIs, CLI and MCP integrations become part of your mark
 
 ![image-20261009184812166](image-20261009184812166.png)
 
-
+![collage-2](fka-security-guys.png)
 
 ## ROUNDTABLE: Running AI Agents at Scale
 
