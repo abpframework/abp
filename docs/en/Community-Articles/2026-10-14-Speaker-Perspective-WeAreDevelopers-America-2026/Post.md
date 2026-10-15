@@ -4,7 +4,7 @@
 
 I’ve been to quite a few developer conferences over the years but this one was a little different: **WeAreDevelopers World Congress had arrived in North America for the first time.** I traveled from Istanbul to San Francisco which took 14 hours of flying. It was exhausting but it worth. Conference was 2 days plus 1 day pre-conf. The dates are September 23–25, 2026. Host venue was San Jose McEnery Convention Center.
 
-The location was San José, in the heart of Silicon Valley and the scale was impressive. As I learnt the first day 9000 developers registered and took their badges. AI builders, architects and technology leaders came together for three days of talks, workshops, networking and probably more technical conversations than anyone could keep track of.
+The location was San José, in the heart of Silicon Valley and the scale was impressive. As I learnt the first day 9.000 developers registered and took their badges. AI builders, architects and technology leaders came together for three days of talks, workshops, networking and probably more technical conversations than anyone could keep track of.
 
 I was there as one of the speakers, so here are some impressions from the conference, this time from both sides of the stage 😊
 
@@ -12,7 +12,7 @@ I was there as one of the speakers, so here are some impressions from the confer
 
 ## San José, Heart of Silicon Valley
 
-One thing WeAreDevelopers does very well is scale. This isn’t the kind of conference where you walk into a single hall, watch ten talks, drink a few coffees and go home. Almost 10.000 attendees came to the conf. More than 600 speakers... 8 stages were running in parallel alongside workshops, expo areas, networking spaces and even an outdoor stage and lounge.
+One thing WeAreDevelopers does very well is scale. This isn’t the kind of conference where you walk into a single hall, watch ten talks, drink a few coffees and go home. Almost **10.000 attendees** came to the conf. More than **600 speakers**... **8 stages** were running in parallel alongside workshops, expo areas, networking spaces and even an outdoor stage and lounge.
 And, of course, in 2026, you can probably guess the main topic:
 
 > **AI... Lots of AI 🙂**
@@ -26,25 +26,21 @@ The next important questions are:
 * **Who's responsible for the AI made results?**
 * **How much effort do humans and AI expend?**
 * **When will human take part if AI is doing everything?**
-* **While AI agents are writing code, how can we make more deterministic apps?**
+* **While indeterministic AI agents are writing code, how can we make more deterministic apps?**
 * **Are sandboxes getting more more important?**
 
-
-
 ![image-20261009195239178](image-20261009195239178.png)
-
-
 
 >  *We've reached a point where none of us truly understands the internals of our own software anymore!*
 
 Sessions covered AI agents, AI-generated software, security for autonomous systems, testing non-deterministic behavior, developer infrastructure, data and software architecture.
 
-That shift feels important. The industry is no longer only experimenting with AI. Developers are trying to figure out how to make it 
+That shift feels important. The industry is no longer only experimenting with AI. Developers are trying to figure out how to make it:
 
 * **reliable**
 * **secure**
 * **maintainable**
-* **genuinely useful.**
+* **really useful**
 
 ## My Talk: Chat with Your Data
 
@@ -54,47 +50,49 @@ My session was on Stage 6 on Friday 09:40. It was the first time the audience li
 
 ### Being a speaker creates a funny problem at conferences
 
- Before your session, a small part of your brain is always thinking about your slides, your demo and all the things that could theoretically go wrong. After the talk, suddenly the conference becomes much more relaxing. 🙂
+Before your session, a small part of your brain is always thinking about your slides, your demo and all the things that could theoretically go wrong. After the talk, suddenly the conference becomes much more relaxing. 🙂
 
 And there was a lot to choose from.
 
-The speaker lineup included people such as Thomas Dohmke (former GitHub CEO), Mark Cavage (President of Docker), Erran Berger (CTO of LinkedIn), Amjad Masad (Replit CEO), Kelsey Hightower (Google Distinguished Engineer),  Justin Boitano (VP of NVIDIA), Prashanth Chandrasekar (CEO Stack Overflow), Eric Simons (Founder Bolt.New), Neel Sundaresan (General Manager AI Products IBM)
+The speaker lineup included people such as Thomas Dohmke (**former GitHub CEO**), Mark Cavage (President of **Docker**), Erran Berger (CTO of **LinkedIn**), Amjad Masad (**Replit** CEO), Kelsey Hightower (**Google** Distinguished Engineer),  Justin Boitano (VP of **NVIDIA**), Prashanth Chandrasekar (CEO **StackOverflow**), Eric Simons (Founder **Bolt.New**), Neel Sundaresan (General Manager AI Products **IBM**).
 
 ![image-20261009195303929](image-20261009195303929.png)
 
 ## The Best Part Is Still the People
 
 Technology conferences are supposedly about technology.
-
 But after attending enough of them, I think the real value is often somewhere **between the sessions**.
-
 You meet somebody after your talk.
-
 A five-minute conversation becomes thirty minutes.
-
 Someone tells you how they solved a problem completely differently.
-
 Someone has been using a project you’ve worked on for years.
-
 Or you finally meet someone you’ve known online for a long time.
-
 With more than 10,000 people in the same place, there were plenty of opportunities for those accidental conversations.
-
 And those are usually the moments I remember much longer than individual slides or keynotes.
 
 ![image-20261009195315021](image-20261009195315021.png)
 
-## What I Learnt From the Talks
+## WHAT I LEARNT FROM THE TALKS
+
+[Jeff An](https://www.linkedin.com/in/jeff-an/) Co-founder of **Momentic.ai**  → *How to Trust Code You Didn't Write*:
 
 > A model reviewing its own work tends to overlook the same mistakes. 
-> [Jeff An](https://www.linkedin.com/in/jeff-an/) Co-founder of Momentic.ai says benchmarks showed that a leading coding agent detected only 15% of the bugs it had introduced.
+> says benchmarks showed that a leading coding agent detected only 15% of the bugs it had introduced.
 > So, we should avoid assigning the same agent to both write and review the code.
 
-[Julia Furst Morgado](https://www.linkedin.com/in/juliafmorgado/): "Your Agents Need Observability Before They Need Better Models" 
+[Julia Furst Morgado](https://www.linkedin.com/in/juliafmorgado/) from **Dash0** → *Your Agents Need Observability Before They Need Better Models*: 
 
-**Evolution of Software Development** : Procedural Programming → Object-Oriented Programming → Frameworks & Design Patterns → Microservices → Cloud-Native & Serverless → Agentic Software Engineering
+> Your Agents Need Observability Before They Need Better Models
 
-In his session “Who Tests the AI?”, [Himraj Singh](https://www.linkedin.com/in/himraj-singh-5048a266/) emphasized that the same inputs can now produce different outputs, making traditional testing necessary but far from sufficient.
+[Himraj Singh](https://www.linkedin.com/in/himraj-singh-5048a266/) from **PayPal** → *Who Tests the AI?*:
+
+> The same inputs can now produce different outputs, making traditional testing necessary but far from sufficient.
+
+**Milestonres of the Software Development**
+
+Procedural Programming → Object-Oriented Programming → Frameworks & Design Patterns → Microservices → Cloud-Native & Serverless → Agentic Software Engineering
+
+
 
 ## Manufacturing Trust: Speed and Safety in the Age of Agents 🧑 Mark Cavage, President of Docker 
 
@@ -112,54 +110,46 @@ AI agents can dramatically accelerate software development but they need determi
 - Agent teams need engineering processes. Multiple collaborating agents require clearly defined roles, responsibilities, handoffs, reviews and approval gates.
 - Portability and reproducibility are essential. Agent environments should work consistently across developers' laptops, teams and cloud infrastructure.
 
-**The four requirements of an AI agent factory**
+**The 4 Requirements of an AI Agent Factory**
 
 ![image-20261008193826119](image-20261008193826119.png)
 
-The following images are retrieved from https://www.docker.com/blog/coding-agent-horror-stories-the-29-million-secret-problem/
+The following images are retrieved from https://www.docker.com/blog/coding-agent-horror-stories-the-29-million-secret-problem/. And finally the secrets are being  encoded and the malware commits it to your public GitHub repo. 2349 secrets leaked. Stolen GitHub tokens made 5.500 private repos as public
 
 ![img](https://www.docker.com/app/uploads/2026/07/image2-1.png)
 
-![img](https://www.docker.com/app/uploads/2026/07/image1-1.png)
-
- 
-
 **Docker's Products:** 
 
-- **Docker SBX**: Free local microVM-based sandboxing for autonomous agents
-- **Docker Sandbox Kits**: Reproducible specifications for agent environments, models, MCP tools, networks and permissions
-- **Docker Cloud Sandboxes**: Cloud-hosted sandboxes using the same configuration and security approach as local environments
+- **Docker SBX**: Free local microVM-based sandboxing for autonomous agents. https://www.docker.com/products/docker-sandboxes/
+- **Docker Sandbox Kits**: Reproducible specifications for agent environments, models, MCP tools, networks and permissions. https://www.docker.com/blog/docker-sandbox-kit-spec/
+- **Docker Cloud Sandboxes**: Cloud-hosted sandboxes using the same configuration and security approach as local environments. https://agentic-platform.docker.com/
 
 **Actionable Insights**
 
 1. **Audit your current AI agent permissions:** Identify which agents can access repositories, production systems, customer data, credentials and external APIs. Eliminate unnecessary access.
 
-2. **Introduce sandboxing for coding agents: ** Test isolated environments for Claude Code, Codex, or other coding agents. Avoid mounting sensitive host resources into agent environments.
+2. **Introduce sandboxing for coding agents: **Test isolated environments for Claude Code, Codex or other coding agents. **Avoid mounting** sensitive host resources into agent environments.
 
-3. **Design a structured multi-agent development workflow:** Define separate responsibilities for planning, implementation, testing, security review and final human approval.
+3. **Design a structured multi-agent development workflow:**Define separate responsibilities for planning, implementation, testing, security review and final human approval.
 
-4. **Standardize environments across the team: ** Store agent configurations, policies, tools and dependencies in version-controlled files to make workflows reproducible.
+4. **Standardize environments across the team: **Store agent configurations, policies, tools and dependencies in version-controlled files to make workflows reproducible.
 
-5. **Measure trust alongside productivity: ** Track not only completed tasks and development speed but also permission violations, human interventions, security incidents, token costs and escaped defects.
+5. **Measure trust alongside productivity:** Track not only completed tasks and development speed but also permission violations, human interventions, security incidents, token costs and escaped defects.
 
-6. **Capture organizational knowledge through agents: ** Experiment with turning successful development workflows into reusable skills, while requiring approval before sharing sensitive organizational knowledge.
+6. **Capture organizational knowledge through agents:** Experiment with turning successful development workflows into reusable skills, while requiring approval before sharing sensitive organizational knowledge.
+
+For example, in the following example, even if the Builder Agent installs an infected NPM package, the malicious software cannot read emails and CRM records. Naturally secure! In software development this approach is called "**Principle of Least Privilege**".
 
 ![image-20261008195346170](image-20261008195346170.png)
 
-![image-20261008195527905](image-20261008195527905.png)
-
 ![image-20261008200008969](image-20261008200008969.png)
-
-
 
 **Nvidia Unveils AI Agent Safety Platform With Hardware-Based Watchdog**
 
-| Component | Type                              | Function                                                     |
-| --------- | --------------------------------- | ------------------------------------------------------------ |
-| OpenShell | Open-source software              | Isolates AI agents and controls their permissions and API access. https://github.com/NVIDIA/OpenShell |
-| Sentry    | Hardware-backed security software | Runs on NVIDIA BlueField-4 DPU to provide independent security monitoring and enforcement. |
+Nvidia introduces 2 solutions: 
 
-![image-20261014003620685](image-20261014003620685.png)
+1. **OpenShell**: An open-source software. Isolates AI agents and controls their permissions and API access. https://github.com/NVIDIA/OpenShell
+2. **Sentry**: Hardware-backed security software. Runs on NVIDIA BlueField-4 DPU to provide independent security monitoring and enforcement.![image-20261014003620685](image-20261014003620685.png)
 
 ---
 
@@ -173,20 +163,31 @@ The following images are retrieved from https://www.docker.com/blog/coding-agent
 
 ###  Key takeaways
 
-- AI decisions require different levels of control. Automatically routing a support ticket is fundamentally different from rejecting a loan application. Autonomy should depend on risk, impact and reversibility.
-- Traditional logs are insufficient. Knowing what an AI system did is not the same as understanding why it made a particular decision.
-- Organizations must know which information, model versions, configurations and policies influenced an AI decision.
-- AI performance must be measured against business outcomes. A technically correct prediction can still produce a poor business result.
-- As the world changes, artificial intelligence models degrade. Continuous monitoring for data and concept drift is necessary after deployment.
-- Accountability remains with the organization. Delegating a decision to AI does not transfer legal or operational responsibility to the model.
+- AI decisions require different levels of control. Automatically **routing a support ticket** is fundamentally different from **rejecting a loan application**. 
+
+  > Autonomy should depend on risk, impact and reversibility.
+- Traditional logs are insufficient. Knowing what an AI system did is not the same as understanding **why it made a particular decision**.
+- Organizations must know which **information**, **model version**, **configuration** and **policies** made an AI decision.
+- AI performance must be measured against business outcomes. A technically correct prediction can still produce a poor business result. So what should we measure in terms of business outcome?
+
+  | Metric       | Business outcome           |
+  |---------------------|-----------------------------|
+  | Prediction accuracy | Revenue uplift              |
+  | Tasks completed     | Net time saved              |
+  | Code generated      | Maintenance cost            |
+  | Response speed      | Customer satisfaction       |
+  | Automation rate     | Cost per successful outcome |
+
+- **As the world changes, AI models degrade**. Continuous monitoring for data and concept drift is necessary after deployment.
+- Accountability remains with the organization. Delegating a decision to AI does not transfer legal or operational responsibility to the model. 
 
 ![image-20261009152831092](image-20261009152831092.png)
 
 ### AI Decisions Factors
 
+When should we use human in the loop? When should we allow AI agent to perform?
+
 ![image-20261009151732552](image-20261009151732552.png)
-
-
 
 ### Three Layers of AI Decision Observability
 
@@ -198,24 +199,39 @@ The following images are retrieved from https://www.docker.com/blog/coding-agent
 
 3. **Govern**: Preserve tamper-evident evidence, enforce accountability and support audits and investigations.
 
+**Practical Example: An AI Sales Agent recommends a 20% discount to a potential customer.**
+
+1. **Capture: What happened?**
+   Which customer received the offer? What data and AI model were used? What discount policies applied?
+2. **Interpret: Why did it happen?**
+   The AI recommended 20% because similar customers converted with discounts. But what if this customer was already willing to pay full price?
+3. **Govern: Can we defend it?**
+   What if the AI offered 40% when company policy allows a maximum of 25%? Who approved it and why wasn't it blocked?
+4. **Business Impact: Did it create value?**
+   The AI may have increased conversion rates but reduced profit margins by offering unnecessary discounts.
+
+> An AI decision can be technically correct, explainable and compliant, yet still produce a poor business outcome.
+
+
+
 ### Practical Implementation Checklist 
 
-✔ Figure out what decisions your AI is making and how risky they actually are. Some mistakes are easy to fix, others can cause serious problems.
-✔ Be clear about what AI can handle on its own and what still needs a human to sign off.
-✔ Log what goes into each AI decision, what comes out, which model was used and what information it relied on. You'll thank yourself later.
-✔ Don't just track AI accuracy. Look at whether it's actually improving things like resolution times, customer satisfaction, or costs.
-✔ Keep an eye on how your AI behaves in production. Models can get worse over time, especially when the data changes.
-✔ Test how AI decisions would change under different scenarios and check for potential bias when those decisions affect people.
-✔ Keep sensitive logs and decision records secure. Make sure you know who can access them and how long they're stored.
-✔ Decide which information sources your AI should trust first. You don't want it treating some random outdated document as the ultimate source of truth.
+✔ **Figure out what decisions your AI is making and how risky they actually are.** Some mistakes are easy to fix, others can cause serious problems.
+✔ **Be clear about what AI can handle on its own** and what still needs a human to sign off.
+✔ **Log what goes into each AI decision, what comes out,** which model was used and what information it relied on. You'll thank yourself later.
+✔ **Don't just track AI accuracy.** Look at whether it's actually improving things like resolution times, customer satisfaction or costs.
+✔ **Keep an eye on how your AI behaves in production**. Models can get worse over time, especially when the data changes.
+✔ **Test how AI decisions would change under different scenarios** and check for potential bias when those decisions affect people.
+✔ **Keep sensitive logs and decision records secure.** Make sure you know who can access them and how long they're stored.
+✔ **Decide which information sources your AI should trust first.** You don't want it treating some random outdated document as the ultimate source of truth.
 
 ---
 
 ## Building the Agentic Software Factory
 
-🧑**Speakers:**  Thomas Dohmke (Founder of [Entire](https://entire.io/)) and Matan Grinberg (Cofounder of [Factory](https://factory.com/)) 
+🧑**Speakers:**  Thomas Dohmke (Founder of [Entire.io](https://entire.io/)) and Matan Grinberg (Cofounder of [Factory.com](https://factory.com/)) 
 
-**Agentic Software Factory:** AI-powered software development system where autonomous AI agents collaborate to design, build, test, deploy and maintain software applications with minimal human intervention.
+Before starting let's learn this term: **Agentic Software Factory**. AI-powered software development system where autonomous AI agents collaborate to design, build, test, deploy and maintain software applications with minimal human intervention.
 
 AI coding agents are cool but the real revolution isn't getting Claude or Codex to write more code. It's building an entire software development system that can plan, code, test, review, deploy and improve products with minimal human intervention.
 
@@ -231,62 +247,32 @@ AI coding agents are cool but the real revolution isn't getting Claude or Codex 
 
 ## Key takeaways
 
-- We're moving from AI coding assistants to autonomous software factories. Instead of developers prompting agents for individual tasks, the goal is a continuous loop that turns customer feedback, incidents and product requirements into deployed improvements.
+- **We're moving from AI coding assistants to autonomous software factories.** Instead of developers prompting agents for individual tasks, the goal is a continuous loop that turns customer feedback, incidents and product requirements into deployed improvements.
 
-- Developers will increasingly build the factory, not just the software. Engineering shifts toward designing workflows, orchestrating agents, establishing quality controls and deciding what deserves human attention.
+- **Developers will increasingly build the factory, not just the software.** Engineering shifts toward designing workflows orchestrating agents, establishing quality controls and deciding what deserves human attention.
 
-- Code review is the biggest bottleneck. Agents can generate hundreds of pull requests but humans can't realistically review them all. More generated code doesn't automatically mean more delivered value.
+- **AI-generated PR spam is a real problem.** Agents can generate hundreds of pull requests but humans can't realistically review them all. More generated code doesn't automatically mean more delivered value.
 
-- Full autonomy is technically possible today but business readiness is another story. New projects can be designed for autonomous development. Legacy enterprise systems are much harder because of complexity, security, compliance and organizational processes.
+- **Full autonomy is technically possible today but business readiness is another story.** New projects can be designed for autonomous development. Legacy enterprise systems are much harder because of complexity, security, compliance and organizational processes.
 
-- Token economics matter. Spending $5,000 on AI tokens to complete a task a developer could finish in five seconds is obviously ridiculous. Successful factories will optimize for business outcomes, not agent activity.
+- **Token economics matter.** Spending $5,000 on AI tokens to complete a task a developer could finish in five seconds is obviously ridiculous. Successful factories will optimize for business outcomes, not agent activity.
 
-- Human oversight isn't disappearing. The goal is to automate routine checks and low-risk changes while keeping engineers involved in critical architectural, security and product decisions.
+- **Human oversight isn't disappearing.** The goal is to automate routine checks and low-risk changes while keeping engineers involved in critical architectural, security and product decisions.
 
-- Experience alone is becoming less of a differentiator. Curiosity, problem-solving, initiative and adaptability may matter more than years spent mastering a particular programming language
-
-**A software factory is more than a bunch of agents**
-
-![image-20261009154003347](image-20261009154003347.png)
-
-
-
-Don't automate every PR equally. Automate predictable, low-risk changes first and concentrate human expertise where mistakes could be expensive.
-
-
-
-🩸**AI-generated PR spam is a real problem**
-
-Agents can create hundreds or thousands of PRs, potentially overwhelming maintainers.
-
-**🩸Developers aren't necessarily going away but their jobs are changing**
-
-The panel's optimistic argument is that software engineers are fundamentally problem solvers, not just people who know programming syntax.AI removes some implementation barriers, letting engineers work on bigger problems. Some developers still genuinely enjoy writing code. The panel acknowledges that the craft doesn't have to disappear just because machines can automate much of it.
-
-**🩸Agent infrastructure needs to evolve**
-
-Thomas explained that traditional Git workflows were designed for human collaboration. Autonomous agents introduce much higher activity levels and new interaction patterns:
-
-- Human-to-agent collaboration
-- Agent-to-agent coordination
-- Shared memory across agent sessions
-- Traceability between agent actions and commits
+- **Developers aren't necessarily going away but their jobs are changing:** Curiosity, problem-solving, initiative and adaptability may matter more than years spent mastering a particular programming language.
 
 ### Key Takeaways
 
-- Start with one repetitive workflow. Pick something like dependency updates, test generation, bug triage or documentation. Don't try to automate your entire engineering department overnight.
-
-- Build an agent workflow, not just a prompt library. Define the inputs, expected outputs, tools, tests, review criteria and conditions for escalation to a human.
+- **Build an agent workflow, not just a prompt library.** Define the inputs, expected outputs, tools, tests, review criteria and conditions for escalation to a human.
 
 - Introduce **risk-based auto-merging**. Allow well-tested, low-risk changes to merge automatically in a controlled pilot. Require human approval for security-sensitive, architectural and business-critical changes.
 
-- Measure ROI (Return on Investment) instead of token consumption. Track engineering hours saved, cost per accepted PR, deployment frequency, defect rates and review time.
+- **Measure ROI (Return on Investment) instead of token consumption.** Track engineering hours saved, cost per accepted PR, deployment frequency, defect rates and review time.
 
-- Connect agents to real customer signals. Support tickets, telemetry, bug reports and feature requests should feed a prioritized engineering pipeline, not just sit in separate dashboards.
+- **Connect agents to real customer signals.** Support tickets, telemetry, bug reports and feature requests should feed a prioritized engineering pipeline, not just sit in separate dashboards.
 
-- Teach developers agent orchestration. The emerging skill isn't just prompt engineering. It's designing systems where agents can operate for extended periods without constant intervention.
+- **Make failures improve the factory.** When an agent makes a mistake, add a regression test, architectural rule or automated check so the same mistake is less likely to recur.
 
-- Make failures improve the factory. When an agent makes a mistake, add a regression test, architectural rule or automated check so the same mistake is less likely to recur.
 
 ---
 
@@ -317,25 +303,23 @@ And I especially liked the point about not giving one giant agent 150 tools and 
 
 ### 1. Prompt engineering is not security
 
-You can tell an agent "Never refund more than $500" but that doesn't guarantee it will obey.
+You can tell an agent "*Never refund more than $500*" but that **doesn't guarantee it will obey**.
 
-The speaker identifies three failure modes:
+He identifies three failure modes:
 
-- Says something wrong: Hallucinates information or promises something it cannot deliver.
-- Does something wrong: Refunds money, deletes data, or accesses the wrong customer's account.
-- Gets manipulated: Prompt injection causes unintended behavior.
+- **Says something wrong:** Hallucinates information or promises something it cannot deliver.
+- **Does something wrong:** Refunds money, deletes data or accesses the wrong customer's account.
+- **Gets manipulated:** Prompt injection causes unintended behavior.
 
 The solution is defense in depth: several independent protection layers rather than trusting the LLM.
 
 ### 2. Steering agents act as reviewers
 
-A steering agent is a second LLM that evaluates the main agent's response before it reaches the customer.
+**A steering agent is a second LLM** that evaluates the main agent's response before it reaches the customer.
 
 For example, if the agent claims to have created a shortened return-label URL that it cannot actually generate, the steering agent rejects the response and provides corrective guidance.
 
-Interesting takeaway: You don't necessarily need a smarter main model. Sometimes adding an independent reviewer is more effective.
-
-One caveat: a steering agent is still probabilistic, so it shouldn't replace deterministic security controls.
+> You don't necessarily need a smarter main model. Sometimes adding an independent reviewer is more effective.
 
 ### 3. Never trust LLM-generated tool parameters
 
@@ -354,11 +338,9 @@ Instead:
 - Enforce authorization deterministically in the backend.
 - Return only data that customer is permitted to access.
 
-The speaker demonstrates this with Amazon Bedrock AgentCore Gateway MCP interceptors.
-
 ### 4. Put policy enforcement in front of tools
 
-The speaker demonstrates the Dogwood policy language to enforce business rules before MCP tools execute.
+The speaker demonstrates the [Dogwood policy language](https://aws.amazon.com/blogs/opensource/introducing-dogwood-runtime-verification-for-ai-agents/) to enforce business rules before MCP tools execute. This is an open-source AI security framework created by AWS https://github.com/dogwood-policy
 
 Examples:
 
@@ -371,9 +353,7 @@ Examples:
 
 The particularly interesting part is temporal policies.
 
-For example, the `generate_return_label` tool cannot execute unless `check_return_eligibility` has successfully run within the previous hour.
-
-That's much stronger than asking an LLM to remember the correct workflow.
+For example, the `generate_return_label` tool cannot execute unless `check_return_eligibility` has successfully run within the previous hour. That's much stronger than asking an LLM to remember the correct workflow.
 
 ### 5. Observability is essential
 
@@ -387,7 +367,7 @@ The speaker recommends tracking:
 - Task success rates
 - Harmful or incorrect outputs
 
-He also recommends periodically evaluating historical conversations, especially after changing prompts, models, or tools.
+He also recommends periodically evaluating historical conversations, especially after changing prompts, models or tools.
 
 The key point: An agent's behavior can change even when your business logic hasn't.
 
@@ -442,11 +422,11 @@ This makes agents easier to secure, evaluate and debug.
 
 AI agents should be secured through infrastructure, not system prompts, because LLMs are unpredictable and vulnerable to prompt injection. The speaker recommends three essential security layers: 
 
-1. Identity (every agent needs a verifiable identity tied to its owner)
+1. **Identity** (every agent needs a verifiable identity tied to its owner)
 
-2. Capabilities (strict permissions defining exactly what tools, data and actions an agent can access)
+2. **Capabilities** (strict permissions defining exactly what tools, data and actions an agent can access)
 
-3. Audit Trails (tracking every action, including blocked attempts). 
+3. **Audit Trails** (tracking every action, including blocked attempts). 
 
    
 
@@ -465,8 +445,12 @@ He demonstrates how a malicious website can trick an AI agent into leaking sensi
 AI agents must operate under Zero-Trust security principles, especially in multi-user enterprise environments. The speaker highlights three critical areas:
 
 1. **User authorization:** Combine RBAC (Role-Based Access Control) with ReBAC (Relationship-Based Access Control, using tools like OpenFGA) to control exactly which agents, models and tools each user can access. 
+
 2. **Secure third-party integrations:** Use OAuth, delegated credentials and controlled MCP tool access so agents never exceed the permissions of the users they represent. 
-3. **Secure RAG:** Remove sensitive information before indexing documents and enforce document- or chunk-level permissions during retrieval. The main takeaway for ABP Studio AI Agent and Volobox: An agent must inherit the user's permissions, not bypass them. Every tool call and retrieved document should be independently authorized, regardless of what the LLM decides to do.
+
+3. **Secure RAG:** Remove sensitive information before indexing documents and enforce document- or chunk-level permissions during retrieval. 
+
+   > An agent must inherit the user's permissions, not bypass them. Every tool call and retrieved document should be independently authorized, regardless of what the LLM decides to do.
 
 
 
@@ -478,7 +462,9 @@ AI agents must operate under Zero-Trust security principles, especially in multi
 
 ![image-20261014010315592](image-20261014010315592.png)
 
-AI agents shouldn't receive unlimited permissions, even when performing legitimate tasks. Instead, give them controlled budgets for what they can do, how often and with what level of risk. Sachin Malhotra from Anthropic shares a real incident where Claude accidentally deleted 200 workloads belonging to 20 engineers in just 90 seconds. He recommends rate limits (restrict destructive actions per hour), asymmetric permissions (allow low-risk actions but require approval for dangerous ones), tripwires (monitor unusual behavior) and the Undo Test (if an action cannot be safely reversed, require human approval). Crucially, permissions must be enforced by infrastructure using independently verified agent identities, not prompts or agent-controlled credentials. The takeaway for ABP Studio AI Agent and Volobox: Give every agent its own identity, enforce action limits, monitor behavior and require human approval for high-risk operations. The goal isn't to eliminate every mistake but to limit the damage an agent can cause while preserving its autonomy.
+AI agents shouldn't receive unlimited permissions, even when performing legitimate tasks. Instead, give them controlled budgets for what they can do, how often and with what level of risk. Sachin Malhotra from Anthropic shares **a real incident where Claude accidentally deleted 200 workloads** belonging to 20 engineers in just 90 seconds. He recommends rate limits (restrict destructive actions per hour), asymmetric permissions (allow low-risk actions but require approval for dangerous ones), tripwires (monitor unusual behavior) and the Undo Test (if an action cannot be safely reversed, require human approval). Crucially, permissions must be enforced by infrastructure using independently verified agent identities, not prompts or agent-controlled credentials. 
+
+> Give every agent its own identity, enforce action limits, monitor behavior and require human approval for high-risk operations. The goal isn't to eliminate every mistake but to limit the damage an agent can cause while preserving its autonomy.
 
 
 
@@ -516,15 +502,14 @@ She also demonstrates [Omnigen](https://omnigent.ai/), a meta-harness that coord
 
 ![image-20261014011432422](image-20261014011432422.png)
 
-AI is transforming software engineering from writing code to orchestrating AI agents, evaluating their outputs and ensuring production reliability. As code generation becomes cheaper and faster, engineering teams must rethink their workflows, responsibilities and infrastructure. 
-The panel highlights four major shifts:
+AI is transforming software engineering from writing code to orchestrating AI agents, evaluating their outputs and ensuring production reliability. As code generation becomes cheaper and faster, engineering teams must rethink their workflows, responsibilities and infrastructure. The panel highlights four major shifts:
 
 1. **AI Software Factory:** Engineering teams are moving beyond individual coding assistants toward shared platforms where agents generate code, investigate bugs, analyze logs, create PRs and automate development workflows.
 2. **Agent Harness & Evaluation:** Building reliable AI products requires adaptable agent harnesses, continuous evaluations, shared context, reusable skills and intelligent model selection. Teams must measure output quality rather than relying solely on traditional unit tests.
 3. **AI-Powered Observability:** As AI-generated code increases, human code reviews alone cannot scale. AI agents can review other agents' activities, analyze traces, detect anomalies and identify production issues. Guardrails and controls to limit the impact of failures remain essential.
 4. **Build vs. Buy:** AI makes custom software easier to build, but maintaining production-grade reliability, security, compliance and observability remains challenging. Companies should focus engineering resources on differentiating capabilities and consider buying specialized infrastructure.
 
-The speakers also emphasize that engineers should treat agents like new team members: when an agent produces poor results, improve its context, tools, instructions and skills rather than simply abandoning the task.
+The speakers also emphasize that e**ngineers should treat agents like new team members**: when an agent produces poor results, improve its context, tools, instructions and skills rather than simply abandoning the task.
 
 > Move beyond AI-powered code generation toward an AI Software Factory with shared agent skills, reusable context, continuous evaluations, automated code reviews and production observability. The real competitive advantage is not generating more code but building a reliable system where humans and AI agents can continuously develop, test, deploy and maintain software together.
 
@@ -543,7 +528,7 @@ Adding more MCP tools doesn't necessarily make AI agents more capable. It can ac
 1. **Tool Search & Lazy Loading:** Instead of loading every MCP tool definition into the LLM's context, dynamically discover and load only relevant tools. His demo shows that loading hundreds of tools can consume approximately 440K tokens before the agent even starts working.
 2. **Semantic Tool Discovery:** Traditional keyword-based search (BM25) can miss relevant tools or their prerequisites. Vector embeddings, semantic search and dependency graphs improve tool discovery accuracy and help agents find the correct sequence of operations.
 3. **Context Optimization:** Use techniques such as Code Mode and Recursive Language Models (RLM) to process large tool responses without filling the agent's context window. This helps agents work efficiently with large amounts of external data.
-4. **Prompt Injection Defense:** Every MCP tool response should be treated as potentially untrusted. Malicious instructions hidden in emails, CRM notes, meeting transcripts, or support tickets can hijack agents. Combining specialized classifiers with LLM-based detection improves protection, but no detection method is perfect.
+4. **Prompt Injection Defense:** Every MCP tool response should be treated as potentially untrusted. Malicious instructions hidden in emails, CRM notes, meeting transcripts or support tickets can hijack agents. Combining specialized classifiers with LLM-based detection improves protection, but no detection method is perfect.
 
 He also demonstrates that tool discovery and prompt injection detection are classification problems, where specialized models can outperform simple keyword matching. However, the strongest protection remains deterministic access policies that prevent agents from calling unauthorized tools or accessing sensitive data.
 
@@ -694,7 +679,7 @@ AI is making software cheaper to build but not necessarily cheaper to operate, s
 
 Historically, buying software was often cheaper than building and maintaining it. AI is shifting that calculation.
 
-This is particularly concerning for developer tools that primarily monetize convenience, hosting, or ease of setup.
+This is particularly concerning for developer tools that primarily monetize convenience, hosting or ease of setup.
 
 However, the panel agrees that building something and operating it reliably are very different problems.
 
@@ -816,8 +801,8 @@ What's actually breaking in production agent deployments, from visibility and go
 * Permissions are crucial! Agents must be allowed with scoped access to the tools, data, APIs.
 * Agents should have role-based authentication.
 * AI firewalls are another security layer which protect how AI agents interact with users, tools, data and other systems. For example [Cloudflare AI Security](https://www.cloudflare.com/solutions/ai-security/) What an AI firewall does:
-  * Prompt Injection: Block malicious instructions hidden in documents, emails, or web pages.
-  * Data Leakage: Prevent agents from exposing API keys, credentials, or sensitive customer information.
+  * Prompt Injection: Block malicious instructions hidden in documents, emails or web pages.
+  * Data Leakage: Prevent agents from exposing API keys, credentials or sensitive customer information.
   * Tool Call Validation: Block unauthorized or suspicious MCP tool calls.
   * Content Filtering: Detect harmful or policy-violating inputs and outputs.
   * Anomaly Detection: Flag unusual agent behavior, such as excessive API calls or bulk data exports.
