@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -19,6 +20,10 @@ namespace Volo.Abp.Domain.Entities.Events;
 public class EntityChangeEventHelper : IEntityChangeEventHelper, ITransientDependency
 {
     private const string UnitOfWorkEventRecordEntityPropName = "_Abp_Entity";
+
+    // Holds each constructor, so its compiled invoke stub stays alive. With Activator.CreateInstance, once many entity
+    // types are in use, a GC can drop the stub, and it is generated and compiled again on the next call.
+    private static readonly ConditionalWeakTable<Type, Func<object, object>> EventDataFactories = new();
 
     public ILogger<EntityChangeEventHelper> Logger { get; set; }
     public ILocalEventBus LocalEventBus { get; set; }
@@ -129,7 +134,7 @@ public class EntityChangeEventHelper : IEntityChangeEventHelper, ITransientDepen
     {
         var entityType = ProxyHelper.UnProxy(entityOrEto).GetType();
         var eventType = genericEventType.MakeGenericType(entityType);
-        var eventData = Activator.CreateInstance(eventType, entityOrEto)!;
+        var eventData = CreateEventData(eventType, entityOrEto);
         var currentUow = UnitOfWorkManager.Current;
 
         if (currentUow == null)
@@ -165,6 +170,22 @@ public class EntityChangeEventHelper : IEntityChangeEventHelper, ITransientDepen
                 otherRecord => IsSameEntityEventRecord(eventRecord, otherRecord)
             );
         }
+    }
+
+    private static object CreateEventData(Type eventType, object entityOrEto)
+    {
+        return EventDataFactories.GetValue(eventType, static type =>
+        {
+            var constructors = type.GetConstructors();
+            if (constructors.Length != 1 ||
+                Array.Exists(constructors[0].GetParameters(), static parameter => parameter.IsDefined(typeof(ParamArrayAttribute), false)))
+            {
+                return entity => Activator.CreateInstance(type, entity)!;
+            }
+
+            var constructor = constructors[0];
+            return entity => constructor.Invoke(new[] { entity });
+        })(entityOrEto);
     }
 
     public bool IsSameEntityEventRecord(UnitOfWorkEventRecord record1, UnitOfWorkEventRecord record2)
