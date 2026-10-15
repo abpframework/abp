@@ -88,7 +88,7 @@ And those are usually the moments I remember much longer than individual slides 
 
 > The same inputs can now produce different outputs, making traditional testing necessary but far from sufficient.
 
-**Milestonres of the Software Development**
+**Milestones of the Software Development**
 
 Procedural Programming → Object-Oriented Programming → Frameworks & Design Patterns → Microservices → Cloud-Native & Serverless → Agentic Software Engineering
 
