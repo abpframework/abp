@@ -128,11 +128,11 @@ The following images are retrieved from https://www.docker.com/blog/coding-agent
 
 1. **Audit your current AI agent permissions:** Identify which agents can access repositories, production systems, customer data, credentials and external APIs. Eliminate unnecessary access.
 
-2. **Introduce sandboxing for coding agents: **Test isolated environments for Claude Code, Codex or other coding agents. **Avoid mounting** sensitive host resources into agent environments.
+2. **Introduce sandboxing for coding agents:** Test isolated environments for Claude Code, Codex or other coding agents. **Avoid mounting** sensitive host resources into agent environments.
 
-3. **Design a structured multi-agent development workflow:**Define separate responsibilities for planning, implementation, testing, security review and final human approval.
+3. **Design a structured multi-agent development workflow:** Define separate responsibilities for planning, implementation, testing, security review and final human approval.
 
-4. **Standardize environments across the team: **Store agent configurations, policies, tools and dependencies in version-controlled files to make workflows reproducible.
+4. **Standardize environments across the team:** Store agent configurations, policies, tools and dependencies in version-controlled files to make workflows reproducible.
 
 5. **Measure trust alongside productivity:** Track not only completed tasks and development speed but also permission violations, human interventions, security incidents, token costs and escaped defects.
 
