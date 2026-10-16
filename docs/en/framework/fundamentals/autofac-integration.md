@@ -105,3 +105,17 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 ````
 
 > You should install the [Volo.Abp.Autofac](https://www.nuget.org/packages/Volo.Abp.Autofac) nuget package to the project that you want to use the Autofac API.
+
+## Dynamic Proxy Modules
+
+ABP uses Castle DynamicProxy to create the proxy classes of the services that have [interceptors](../infrastructure/interceptors.md) (like unit of work, auditing, validation and authorization). Generating a new proxy class gets slower as its dynamic module grows, so ABP distributes the proxy classes into 16 dynamic modules by default. You can change this number by setting the `AbpInterceptionRegistrationExtensions.ShardCount` property.
+
+**Example: Set the number of dynamic modules in the `Program.cs` file**
+
+````csharp
+AbpInterceptionRegistrationExtensions.ShardCount = 8;
+
+var builder = WebApplication.CreateBuilder(args);
+````
+
+> Set this property before the application is created. It can not be changed after the first proxy class is generated.
