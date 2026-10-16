@@ -1,4 +1,5 @@
 @namespace Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme.Themes.Basic
+@using Volo.Abp.AspNetCore.Components.Web
 @using Volo.Abp.Users
 @using Volo.Abp.MultiTenancy
 @using Microsoft.Extensions.Localization
@@ -39,7 +40,7 @@
                     }
                     else
                     {
-                        <MudMenuItem Href="@menuItem.Url?.TrimStart('/', '~')" Target="@menuItem.Target">@menuItem.DisplayName</MudMenuItem>
+                        <MudMenuItem Href="@MenuItemUrlHelper.ToBaseRelativeUrl(menuItem.Url)" Target="@menuItem.Target">@menuItem.DisplayName</MudMenuItem>
                     }
                 }
             }
