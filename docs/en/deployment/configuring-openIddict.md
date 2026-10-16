@@ -51,6 +51,8 @@ You can use the `dotnet dev-certs https -v -ep openiddict.pfx -p 00000000-0000-0
 
 > `00000000-0000-0000-0000-000000000000` is the password of the certificate, you can change it to any password you want.
 
+> The solutions created by ABP Studio read the password of the certificate from the `AuthServer:CertificatePassPhrase` setting in the `appsettings.json` file. Use that value as the password if you generate the certificate again.
+
 >  Also, please remember to copy `openiddict.pfx` to the [Content Root Folder](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.hosting.ihostingenvironment.contentrootpath?view=aspnetcore-7.0) of the `AuthServer` website.
 
 > It is recommended to use **two** RSA certificates, distinct from the certificate(s) used for HTTPS: one for encryption, one for signing.

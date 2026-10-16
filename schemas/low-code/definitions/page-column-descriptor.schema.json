@@ -3,12 +3,12 @@
   "$id": "page-column-descriptor.schema.json",
   "title": "PageColumnDescriptor",
   "description": "Describes a property displayed by an entity page list, card, calendar event, or gallery item.",
-  "markdownDescription": "AI guidance: use page columns/card fields to control runtime page visibility. Each `propertyName` must match a property on the page entity. Keep this separate from entity property definitions so the same entity can have different views on different pages.",
+  "markdownDescription": "AI guidance: use page columns/card fields to control runtime page visibility. Each `propertyName` must match a property on the page entity or a dot-separated related path such as `CustomerId.Name`. Keep this separate from entity property definitions so the same entity can have different views on different pages. For boolean properties, `booleanPresentation` and `booleanValues` control how true/false/null render on this page.",
   "type": "object",
   "properties": {
     "propertyName": {
       "type": "string",
-      "description": "Property displayed by this column/card field. Must match a property on the page entityName.",
+      "description": "Property displayed by this column/card field. Must match a property on the page entityName or a related path such as 'CustomerId.CountryId.Name'.",
       "minLength": 1
     },
     "label": {
@@ -30,6 +30,38 @@
       "description": "Optional CSS width for tabular columns, for example '160px', '12rem', or '20%'.",
       "minLength": 1
     },
+    "booleanPresentation": {
+      "oneOf": [
+        { "$ref": "boolean-value-presentation.schema.json" },
+        { "type": "null" }
+      ],
+      "description": "How a boolean property is rendered on this page: text, checkbox, badge, or iconOnly. Only meaningful for boolean properties."
+    },
+    "booleanValues": {
+      "type": ["object", "null"],
+      "description": "Per-state display metadata for boolean properties. Keys are 'true', 'false', and 'null'.",
+      "properties": {
+        "true": {
+          "oneOf": [
+            { "$ref": "boolean-value-display-descriptor.schema.json" },
+            { "type": "null" }
+          ]
+        },
+        "false": {
+          "oneOf": [
+            { "$ref": "boolean-value-display-descriptor.schema.json" },
+            { "type": "null" }
+          ]
+        },
+        "null": {
+          "oneOf": [
+            { "$ref": "boolean-value-display-descriptor.schema.json" },
+            { "type": "null" }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
     "visible": {
       "type": "boolean",
       "description": "Whether the field is visible by default on this page.",
@@ -45,6 +77,16 @@
   "additionalProperties": false,
   "examples": [
     { "propertyName": "Title", "label": "Title", "order": 0, "exportOrder": 0, "width": "240px", "visible": true },
-    { "propertyName": "InternalNotes", "visible": false, "exportable": false }
+    { "propertyName": "InternalNotes", "visible": false, "exportable": false },
+    { "propertyName": "CustomerId.Name", "label": "Customer", "order": 1 },
+    {
+      "propertyName": "IsActive",
+      "booleanPresentation": "badge",
+      "booleanValues": {
+        "true": { "displayName": "Active", "color": "#16A34A" },
+        "false": { "displayName": "Inactive", "color": "#DC2626" },
+        "null": { "displayName": "Not set", "color": "#6B7280" }
+      }
+    }
   ]
 }

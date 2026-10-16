@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "page-relationship-descriptor.schema.json",
+  "title": "PageRelationshipDescriptor",
+  "description": "Describes a reverse relationship shown on an entity page: records of a source entity whose foreign key points back to the host page record.",
+  "markdownDescription": "AI guidance: a foreign key on the source entity defines the schema direction; a page relationship defines how related records are shown from the host (target) page. `sourceEntityName`/`sourcePropertyName` identify the FK property that points at the page entity. Use `access: \"view\"` for read-only related lists and `access: \"edit\"` for CRUD. Use `generated` modes to let the runtime build the related page/forms from the source entity, `page`/`form` modes to reuse named descriptors, and `inherit` to reuse the related page's own create/edit forms. Set `useSeparatePermission: true` when child access must not inherit the host page permissions.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Stable identifier unique within the page, for example 'customer-orders'. Used by relationship permissions and runtime routes.",
+      "minLength": 1
+    },
+    "sourceEntityName": {
+      "type": "string",
+      "description": "Full name of the entity that owns the foreign key pointing at this page's entity.",
+      "minLength": 1
+    },
+    "sourcePropertyName": {
+      "type": "string",
+      "description": "Foreign key property on sourceEntityName that references the page entity.",
+      "minLength": 1
+    },
+    "access": {
+      "type": "string",
+      "description": "Access level from the host page: 'view' shows related records read-only; 'edit' allows create, update, and delete.",
+      "enum": ["view", "View", "edit", "Edit"],
+      "default": "view"
+    },
+    "relatedPageMode": {
+      "type": "string",
+      "description": "How the related list is rendered. 'generated' builds a list from the source entity; 'page' reuses the page named by relatedPageName.",
+      "enum": ["generated", "Generated", "page", "Page"]
+    },
+    "relatedPageName": {
+      "type": ["string", "null"],
+      "description": "Existing page name for the source entity. Required when relatedPageMode is 'page'."
+    },
+    "createFormMode": {
+      "type": "string",
+      "description": "Form used to create related records. 'generated' builds a form from the source entity; 'inherit' reuses the related page's create form; 'form' uses createFormName.",
+      "enum": ["generated", "Generated", "inherit", "Inherit", "form", "Form"]
+    },
+    "createFormName": {
+      "type": ["string", "null"],
+      "description": "Form descriptor name for the source entity. Required when createFormMode is 'form'."
+    },
+    "editFormMode": {
+      "type": "string",
+      "description": "Form used to edit related records. 'generated' builds a form from the source entity; 'inherit' reuses the related page's edit form; 'form' uses editFormName.",
+      "enum": ["generated", "Generated", "inherit", "Inherit", "form", "Form"]
+    },
+    "editFormName": {
+      "type": ["string", "null"],
+      "description": "Form descriptor name for the source entity. Required when editFormMode is 'form'."
+    },
+    "useSeparatePermission": {
+      "type": "boolean",
+      "description": "When true, relationship view/create/update/delete permissions are resolved for the host page and relationship id instead of inheriting the host page decision.",
+      "default": false
+    },
+    "permissionConfig": {
+      "$ref": "page-permission-config.schema.json",
+      "description": "Optional relationship permission overrides used when useSeparatePermission is true."
+    }
+  },
+  "required": ["id", "sourceEntityName", "sourcePropertyName", "relatedPageMode", "createFormMode", "editFormMode"],
+  "allOf": [
+    {
+      "if": { "properties": { "relatedPageMode": { "enum": ["page", "Page"] } }, "required": ["relatedPageMode"] },
+      "then": { "required": ["relatedPageName"], "properties": { "relatedPageName": { "type": "string", "minLength": 1 } } }
+    },
+    {
+      "if": { "properties": { "createFormMode": { "enum": ["form", "Form"] } }, "required": ["createFormMode"] },
+      "then": { "required": ["createFormName"], "properties": { "createFormName": { "type": "string", "minLength": 1 } } }
+    },
+    {
+      "if": { "properties": { "editFormMode": { "enum": ["form", "Form"] } }, "required": ["editFormMode"] },
+      "then": { "required": ["editFormName"], "properties": { "editFormName": { "type": "string", "minLength": 1 } } }
+    }
+  ],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "id": "customer-orders",
+      "sourceEntityName": "Acme.Orders.Order",
+      "sourcePropertyName": "CustomerId",
+      "access": "edit",
+      "relatedPageMode": "page",
+      "relatedPageName": "orders",
+      "createFormMode": "generated",
+      "editFormMode": "generated"
+    },
+    {
+      "id": "author-books",
+      "sourceEntityName": "Acme.Books.Book",
+      "sourcePropertyName": "AuthorId",
+      "access": "edit",
+      "relatedPageMode": "generated",
+      "createFormMode": "generated",
+      "editFormMode": "form",
+      "editFormName": "book-edit-for-author",
+      "useSeparatePermission": true,
+      "permissionConfig": { "view": "default", "create": "Acme.Books.Create" }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "culture": "pt",
+  "texts": {
+    "Permissions": "Permissões",
+    "OnlyProviderPermissons": "Apenas este fornecedor",
+    "All": "Todos",
+    "SelectAllInAllTabs": "Conceder todas as permissões",
+    "SelectAllInThisTab": "Selecionar tudo",
+    "SaveWithoutAnyPermissionsWarningMessage": "Tem a certeza de que pretende guardar sem quaisquer permissões?",
+    "PermissionGroup": "Grupo de permissões",
+    "Filter": "Filtrar",
+    "ResourcePermissions": "Permissões",
+    "ResourcePermissionTarget": "Destino",
+    "ResourcePermissionPermissions": "Permissões",
+    "AddResourcePermission": "Adicionar permissão",
+    "ResourcePermissionDeletionConfirmationMessage": "Tem a certeza de que pretende eliminar todas as permissões?",
+    "UpdateResourcePermission": "Atualizar permissão",
+    "GrantAllResourcePermissions": "Conceder todas",
+    "NoResourceProviderKeyLookupServiceFound": "Não foi encontrado nenhum serviço de consulta de chave do fornecedor",
+    "NoResourcePermissionFound": "Não existe nenhuma permissão definida.",
+    "UpdatePermission": "Atualizar permissão",
+    "NoPermissionsAssigned": "Nenhuma permissão atribuída",
+    "SelectProvider": "Selecione o fornecedor",
+    "SearchProviderKey": "Pesquisar chave do fornecedor",
+    "Provider": "Fornecedor",
+    "ErrorLoadingPermissions": "Erro ao carregar as permissões",
+    "PleaseSelectProviderAndPermissions": "Selecione o fornecedor e as permissões"
+  }
+}

@@ -1,6 +1,7 @@
 using Markdig;
 using Markdig.Renderers;
 using Markdig.Renderers.Html.Inlines;
+using MarkdigHtmlRenderer = Markdig.Renderers.HtmlRenderer;
 
 namespace Volo.Docs.Projects.Pdf.Markdig;
 
@@ -19,7 +20,7 @@ public class AnchorLinkResolverExtension : IMarkdownExtension
 
     public void Setup(MarkdownPipeline pipeline, IMarkdownRenderer renderer)
     {
-        if (renderer is HtmlRenderer htmlRenderer)
+        if (renderer is MarkdigHtmlRenderer htmlRenderer)
         {
             htmlRenderer.ObjectRenderers.Replace<LinkInlineRenderer>(new AnchorLinkRenderer(_document));
         }

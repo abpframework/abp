@@ -19,8 +19,6 @@
     <PackageReference Include="NuGet.Versioning" />
     <PackageReference Include="System.Security.Permissions" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
-    <PackageReference Include="Polly" />
-    <PackageReference Include="Polly.Extensions.Http" />
     <PackageReference Include="LibGit2Sharp" />
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="StackExchange.Redis" />
