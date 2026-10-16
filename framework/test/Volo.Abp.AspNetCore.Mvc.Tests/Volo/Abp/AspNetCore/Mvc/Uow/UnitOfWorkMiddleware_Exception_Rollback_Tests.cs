@@ -3,7 +3,9 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using Shouldly;
+using Volo.Abp.AspNetCore.Uow;
 using Volo.Abp.Http;
 using Volo.Abp.Json;
 using Volo.Abp.Uow;
@@ -36,6 +38,20 @@ public class UnitOfWorkMiddleware_Exception_Rollback_Tests : AspNetCoreMvcTestBa
         var resultAsString = await response.Content.ReadAsStringAsync();
 
         var result = ServiceProvider.GetRequiredService<IJsonSerializer>().Deserialize<RemoteServiceErrorResponse>(resultAsString);
+
+        result.Error.ShouldNotBeNull();
+        result.Error.Message.ShouldBe(TestUnitOfWorkConfig.ExceptionOnCompleteMessage);
+    }
+
+    [Fact]
+    public async Task Should_Return_The_Error_When_Completing_Fails_After_An_Object_Result_Without_The_Middleware()
+    {
+        const string url = "/api/unitofwork-test/ObjectResultExceptionOnComplete";
+
+        // The request runs as if the pipeline only had app.UseAbpExceptionHandling().
+        ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreUnitOfWorkOptions>>().Value.IgnoredUrls.Add(url);
+
+        var result = await GetResponseAsObjectAsync<RemoteServiceErrorResponse>(url, HttpStatusCode.Forbidden);
 
         result.Error.ShouldNotBeNull();
         result.Error.Message.ShouldBe(TestUnitOfWorkConfig.ExceptionOnCompleteMessage);
