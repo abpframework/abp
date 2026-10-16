@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="11.0.0-rc.1.26425.128">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="11.0.0-rc.2.26504.105">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>

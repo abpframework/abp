@@ -34,4 +34,8 @@
     <PackageReference Include="MyCSharp.HttpUserAgentParser" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="buildTransitive\Volo.Abp.AspNetCore.targets" Pack="true" PackagePath="buildTransitive\" />
+  </ItemGroup>
+
 </Project>

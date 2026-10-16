@@ -80,11 +80,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="11.0.0-rc.1.26425.128" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="11.0.0-rc.2.26504.105" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="11.0.0-rc.1.26425.128">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="11.0.0-rc.2.26504.105">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>compile; contentFiles; build; buildMultitargeting; buildTransitive; analyzers; native</PrivateAssets>
     </PackageReference>
