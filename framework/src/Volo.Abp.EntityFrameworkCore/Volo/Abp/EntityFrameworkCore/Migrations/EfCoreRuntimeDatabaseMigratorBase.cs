@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DistributedLocking;
@@ -16,6 +17,8 @@ namespace Volo.Abp.EntityFrameworkCore.Migrations;
 public abstract class EfCoreRuntimeDatabaseMigratorBase<TDbContext> : ITransientDependency 
     where TDbContext : DbContext, IEfCoreDbContext
 {
+    private bool _isAppliedDatabaseMigrationsEventPending;
+
     protected int MinValueToWaitOnFailure { get; set; } = 5000;
     protected int MaxValueToWaitOnFailure { get; set; } = 15000;
 
@@ -56,6 +59,8 @@ public abstract class EfCoreRuntimeDatabaseMigratorBase<TDbContext> : ITransient
 
     public virtual async Task CheckAndApplyDatabaseMigrationsAsync()
     {
+        // The pending event is only retried within this call.
+        _isAppliedDatabaseMigrationsEventPending = false;
         await TryAsync(LockAndApplyDatabaseMigrationsAsync);
     }
 
@@ -69,6 +74,12 @@ public abstract class EfCoreRuntimeDatabaseMigratorBase<TDbContext> : ITransient
         {
             if (handle is null)
             {
+                if (_isAppliedDatabaseMigrationsEventPending)
+                {
+                    // Throw to retry, so the pending event is not silently lost.
+                    throw new AbpException($"Distributed lock could not be acquired to save the {nameof(AppliedDatabaseMigrationsEto)} for database migration: {DatabaseName}.");
+                }
+
                 Logger.LogInformation($"Distributed lock could not be acquired for database migration: {DatabaseName}. Operation cancelled.");
                 return;
             }
@@ -100,19 +111,49 @@ public abstract class EfCoreRuntimeDatabaseMigratorBase<TDbContext> : ITransient
 
             await SeedAsync();
             
-            if (schemaMigrated || AlwaysSeedTenantDatabases)
+            if (schemaMigrated || AlwaysSeedTenantDatabases || _isAppliedDatabaseMigrationsEventPending)
             {
-                await DistributedEventBus.PublishAsync(
-                    new AppliedDatabaseMigrationsEto
-                    {
-                        DatabaseName = DatabaseName,
-                        TenantId = null
-                    }
-                );
+                await PublishAppliedDatabaseMigrationsEventAsync();
             }
         }
         
         Logger.LogInformation($"Distributed lock has been released for database migration: {DatabaseName}...");
+    }
+
+    protected virtual async Task PublishAppliedDatabaseMigrationsEventAsync()
+    {
+        var eventData = new AppliedDatabaseMigrationsEto
+        {
+            DatabaseName = DatabaseName,
+            TenantId = null
+        };
+
+        if (UnitOfWorkManager.Current != null || !IsOutboxConfiguredFor(typeof(AppliedDatabaseMigrationsEto)))
+        {
+            await DistributedEventBus.PublishAsync(eventData);
+            return;
+        }
+
+        // Saving to the outbox lets the application start without waiting for the message broker.
+        // Not transactional, to work with retrying execution strategies. The pending flag makes TryAsync save it again if it fails.
+        _isAppliedDatabaseMigrationsEventPending = true;
+
+        using (CurrentTenant.Change(null))
+        {
+            using (var uow = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: false))
+            {
+                await DistributedEventBus.PublishAsync(eventData);
+                await uow.CompleteAsync();
+            }
+        }
+
+        _isAppliedDatabaseMigrationsEventPending = false;
+    }
+
+    protected virtual bool IsOutboxConfiguredFor(Type eventType)
+    {
+        var options = ServiceProvider.GetRequiredService<IOptions<AbpDistributedEventBusOptions>>().Value;
+        return options.Outboxes.Values.Any(outboxConfig => outboxConfig.Selector == null || outboxConfig.Selector(eventType));
     }
 
     protected virtual Task SeedAsync()
