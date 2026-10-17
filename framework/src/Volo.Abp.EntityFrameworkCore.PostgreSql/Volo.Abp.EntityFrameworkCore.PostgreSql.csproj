@@ -22,6 +22,9 @@
 
   <ItemGroup>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <!-- Npgsql.EntityFrameworkCore.PostgreSQL 11.0.0-rc.1.1 pins EF Core RC 1. Remove these once Npgsql ships an RC 2 build. -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
   </ItemGroup>
 
 </Project>

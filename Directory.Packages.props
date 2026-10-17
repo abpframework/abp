@@ -128,7 +128,9 @@
     <PackageVersion Include="Elastic.Clients.Elasticsearch" Version="8.19.27" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageVersion Include="Nito.AsyncEx.Context" Version="5.1.2" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
+    <!-- Npgsql has no EF Core 11 RC 2 build yet; 11.0.0-rc.1.1 pins EF Core RC 1, so Volo.Abp.EntityFrameworkCore.PostgreSql
+         references EF Core directly to lift it to RC 2. Revert both once a matching Npgsql release is available. -->
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="11.0.0-rc.1.1" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
     <PackageVersion Include="NuGet.Versioning" Version="6.14.0" />
     <PackageVersion Include="NUglify" Version="1.21.17" />
