@@ -697,6 +697,9 @@ body.scrolledMore:has(#abp-chatbot-container) .alert-criteria .options-header .t
   margin-left: 15px;
   border-left: 1px solid #eee;
 }
+.docs-page .docs-page-index .docs-inner-anchors .navbar .nav-pills .nav-item {
+  min-width: 0;
+}
 .docs-page .docs-page-index .docs-inner-anchors .navbar .nav-pills .nav-link {
   padding: 3px 14px 4px;
   color: #726d6d;
@@ -709,6 +712,10 @@ body.scrolledMore:has(#abp-chatbot-container) .alert-criteria .options-header .t
   margin-bottom: 1px;
   transition: 0.2s;
   font-weight: normal;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .docs-page .docs-page-index .docs-inner-anchors .navbar .nav-pills .nav-link.active {
   border-left: 1px solid #E83090;
@@ -724,9 +731,15 @@ body.scrolledMore:has(#abp-chatbot-container) .alert-criteria .options-header .t
 }
 .docs-page .docs-page-index .docs-inner-anchors .index-scroll {
   margin-left: -30px;
+  flex-wrap: nowrap;
+}
+.docs-page .docs-page-index .docs-inner-anchors .index-scroll > .nav-pills {
+  flex: 1 1 0;
+  min-width: 0;
 }
 .docs-page .docs-page-index #scroll-index {
   max-height: 38vh;
+  overflow-x: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
 }

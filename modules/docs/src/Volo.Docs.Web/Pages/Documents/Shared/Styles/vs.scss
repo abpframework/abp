@@ -862,6 +862,10 @@ body {
                     margin-left: 15px;
                     border-left: 1px solid #eee;
 
+                    .nav-item {
+                        min-width: 0;
+                    }
+
                     .nav-link {
                         padding: 3px 14px 4px;
                         color: #726d6d;
@@ -874,6 +878,11 @@ body {
                         margin-bottom: 1px;
                         transition: 0.2s;
                         font-weight: normal;
+                        // Truncate long headings visually; the full text stays in the HTML.
+                        display: block;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
 
                         &.active {
                             border-left: 1px solid #E83090;
@@ -903,11 +912,18 @@ body {
 
             .index-scroll {
                 margin-left: -30px;
+                flex-wrap: nowrap;
+
+                > .nav-pills {
+                    flex: 1 1 0;
+                    min-width: 0;
+                }
             }
         }
 
         #scroll-index {
             max-height: 38vh;
+            overflow-x: hidden;
             overflow-y: auto;
             scrollbar-width: thin;
         }
