@@ -11,6 +11,8 @@
     "UserLockedOutMessage": "Das Benutzerkonto wurde aufgrund ungültiger Anmeldeversuche gesperrt. Bitte warten Sie eine Weile und versuchen Sie es erneut.",
     "InvalidUserNameOrPassword": "Ungültiger Benutzername oder Passwort!",
     "LoginIsNotAllowed": "Sie dürfen sich nicht anmelden! Ihr Konto ist inaktiv oder muss Ihre E-Mail-/Telefonnummer bestätigen.",
+    "ExternalLoginPasswordChangeRequired": "Sie dürfen sich nicht anmelden! Ihr Passwort muss geändert werden, was bei einer externen Anmeldung jedoch nicht möglich ist. Bitte wenden Sie sich an Ihren Administrator.",
+    "RegisteredButLoginIsNotAllowed": "Ihr Konto wurde erstellt, aber Sie dürfen sich noch nicht anmelden!",
     "SelfRegistrationDisabledMessage": "Die Selbstregistrierung ist für diese Anwendung deaktiviert. Bitte wenden Sie sich an den Anwendungsadministrator, um einen neuen Benutzer zu registrieren.",
     "LocalLoginDisabledMessage": "Die lokale Anmeldung ist für diese Anwendung deaktiviert.",
     "Login": "Anmelden",

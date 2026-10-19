@@ -11,6 +11,8 @@
     "UserLockedOutMessage": "Používateľské konto bolo uzamknuté z dôvodu neplatných pokusov o prihlásenie. Chvíľu počkajte a skúste to znova.",
     "InvalidUserNameOrPassword": "Neplatné používateľské meno alebo heslo!",
     "LoginIsNotAllowed": "Nemáte povolenie sa prihlásiť! Váš účet je neaktívny alebo potrebuje potvrdiť váš e -mail/telefónne číslo.",
+    "ExternalLoginPasswordChangeRequired": "Nemáte povolenie sa prihlásiť! Vaše heslo musí byť zmenené, čo však pri externom prihlásení nie je možné. Kontaktujte prosím svojho správcu.",
+    "RegisteredButLoginIsNotAllowed": "Váš účet bol vytvorený, ale zatiaľ nemáte povolenie sa prihlásiť!",
     "SelfRegistrationDisabledMessage": "Samostatná registrácia je pre túto aplikáciu vypnutá. Ak chcete zaregistrovať nového používateľa, obráťte sa na správcu aplikácie.",
     "LocalLoginDisabledMessage": "Lokálne prihlásenie je pre túto aplikáciu zakázané.",
     "Login": "Prihlásiť",

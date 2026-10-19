@@ -10,6 +10,8 @@
     "UserLockedOutMessage": "Brugerkontoen er blevet låst grundet forkerte login forsøg. Vent venligst og prøv igen.",
     "InvalidUserNameOrPassword": "Forkert brugernavn eller kodeord!",
     "LoginIsNotAllowed": "Du kan ikke logge ind! Du skal bekræfte den angivne email/telefonnummer.",
+    "ExternalLoginPasswordChangeRequired": "Du kan ikke logge ind! Dit kodeord skal ændres, men det er ikke muligt med et eksternt login. Kontakt venligst din administrator.",
+    "RegisteredButLoginIsNotAllowed": "Din konto er oprettet, men du kan ikke logge ind endnu!",
     "SelfRegistrationDisabledMessage": "Selvregistrering er deaktiveret for denne applikation. Kontakt venligst applikationens administrator for at registrere en ny bruger.",
     "LocalLoginDisabledMessage": "Lokalt login er deaktiveret for denne appliaktion.",
     "Login": "Login",
