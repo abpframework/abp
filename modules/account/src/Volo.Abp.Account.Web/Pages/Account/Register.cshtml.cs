@@ -43,6 +43,8 @@ public class RegisterModel : AccountPageModel
     public bool IsExternalLoginOnly => EnableLocalRegister == false && ExternalProviders?.Count() == 1;
     public string ExternalLoginScheme => IsExternalLoginOnly ? ExternalProviders?.SingleOrDefault()?.AuthenticationScheme : null;
 
+    protected bool IsRegisteredUserNotAllowedToSignIn { get; set; }
+
     protected IAuthenticationSchemeProvider SchemeProvider { get; }
 
     protected AbpAccountOptions AccountOptions { get; }
@@ -137,6 +139,12 @@ public class RegisterModel : AccountPageModel
                 await RegisterLocalUserAsync();
             }
 
+            if (IsRegisteredUserNotAllowedToSignIn)
+            {
+                Alerts.Warning(L["RegisteredButLoginIsNotAllowed"]);
+                return Page();
+            }
+
             return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
         }
         catch (BusinessException e)
@@ -161,10 +169,7 @@ public class RegisterModel : AccountPageModel
         );
 
         var user = await UserManager.GetByIdAsync(userDto.Id);
-        await SignInManager.SignInAsync(user, isPersistent: true);
-
-        // Clear the dynamic claims cache.
-        await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
+        await SignInRegisteredUserAsync(user);
     }
 
     protected virtual async Task RegisterExternalUserAsync(ExternalLoginInfo externalLoginInfo, string userName, string emailAddress)
@@ -190,7 +195,20 @@ public class RegisterModel : AccountPageModel
             ))).CheckErrors();
         }
 
-        await SignInManager.SignInAsync(user, isPersistent: true, ExternalLoginAuthSchema);
+        await SignInRegisteredUserAsync(user, ExternalLoginAuthSchema);
+    }
+
+    protected virtual async Task SignInRegisteredUserAsync(IdentityUser user, string authenticationMethod = null)
+    {
+        if (await CheckUserSignInAsync(user) != null)
+        {
+            // The user is registered but has to sign in later, for example after confirming the email.
+            Logger.LogWarning($"The registered user is not allowed to sign in! (username: \"{user.UserName}\", id:\"{user.Id}\")");
+            IsRegisteredUserNotAllowedToSignIn = true;
+            return;
+        }
+
+        await SignInManager.SignInAsync(user, isPersistent: true, authenticationMethod);
 
         // Clear the dynamic claims cache.
         await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);

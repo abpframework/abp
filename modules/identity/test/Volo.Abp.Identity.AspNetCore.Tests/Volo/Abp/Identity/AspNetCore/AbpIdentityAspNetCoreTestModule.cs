@@ -29,6 +29,7 @@ public class AbpIdentityAspNetCoreTestModule : AbpModule
         Configure<AbpIdentityOptions>(options =>
         {
             options.ExternalLoginProviders.Add<FakeExternalLoginProvider>(FakeExternalLoginProvider.Name);
+            options.ExternalLoginProviders.Add<DisabledFakeExternalLoginProvider>(DisabledFakeExternalLoginProvider.Name);
         });
 
         Configure<AbpClaimsPrincipalFactoryOptions>(options =>
