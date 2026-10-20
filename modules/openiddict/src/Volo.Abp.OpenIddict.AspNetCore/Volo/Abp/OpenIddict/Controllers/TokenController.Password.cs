@@ -55,7 +55,8 @@ public partial class TokenController
                         var externalLoginProvider = (IExternalLoginProvider)scope.ServiceProvider
                             .GetRequiredService(externalLoginProviderInfo.Type);
 
-                        if (await externalLoginProvider.TryAuthenticateAsync(request.Username, request.Password))
+                        if (await externalLoginProvider.IsEnabledAsync() &&
+                            await externalLoginProvider.TryAuthenticateAsync(request.Username, request.Password))
                         {
                             user = await UserManager.FindSharedUserByNameAsync(request.Username);
                             if (user == null)
@@ -72,7 +73,7 @@ public partial class TokenController
 
                             using (CurrentTenant.Change(user.TenantId))
                             {
-                                return await SetSuccessResultAsync(request, user);
+                                return await HandleExternalLoginAsync(request, user);
                             }
                         }
                     }
@@ -137,23 +138,33 @@ public partial class TokenController
                             {
                                 Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", request.Username);
 
-                                if (user.ShouldChangePasswordOnNextLogin)
+                                if (await PreSignInCheckAsync(user))
                                 {
-                                    return await HandleShouldChangePasswordOnNextLoginAsync(request, user, request.Password);
+                                    if (user.ShouldChangePasswordOnNextLogin)
+                                    {
+                                        return await HandleShouldChangePasswordOnNextLoginAsync(request, user, request.Password);
+                                    }
+
+                                    if (await UserManager.ShouldPeriodicallyChangePasswordAsync(user))
+                                    {
+                                        return await HandlePeriodicallyChangePasswordAsync(request, user, request.Password);
+                                    }
                                 }
 
-                                if (await UserManager.ShouldPeriodicallyChangePasswordAsync(user))
+                                if (user.IsActive && await SignInManager.CanSignInAsync(user) && await UserManager.IsLockedOutAsync(user))
                                 {
-                                    return await HandlePeriodicallyChangePasswordAsync(request, user, request.Password);
+                                    errorCode = AbpOpenIddictErrors.AccountLocked;
+                                    errorDescription = "The user account has been locked out due to invalid login attempts. Please wait a while and try again.";
                                 }
-
-                                if (user.IsActive)
+                                else if (user.IsActive)
                                 {
                                     return await HandleConfirmUserAsync(request, user);
                                 }
-
-                                errorCode = AbpOpenIddictErrors.AccountInactive;
-                                errorDescription = "You are not allowed to login! Your account is inactive or needs to confirm your email/phone number.";
+                                else
+                                {
+                                    errorCode = AbpOpenIddictErrors.AccountInactive;
+                                    errorDescription = "You are not allowed to login! Your account is inactive or needs to confirm your email/phone number.";
+                                }
                             }
                         }
                         else
@@ -180,6 +191,76 @@ public partial class TokenController
                 }
             }
         }
+    }
+
+    protected virtual async Task<IActionResult> HandleExternalLoginAsync(OpenIddictRequest request, IdentityUser user)
+    {
+        await IdentityOptions.SetAsync();
+
+        if (!await PreSignInCheckAsync(user))
+        {
+            var canSignIn = await SignInManager.CanSignInAsync(user);
+            var isLockedOut = user.IsActive && canSignIn && await UserManager.IsLockedOutAsync(user);
+
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+            {
+                Identity = OpenIddictSecurityLogIdentityConsts.OpenIddict,
+                Action = isLockedOut ? OpenIddictSecurityLogActionConsts.LoginLockedout : OpenIddictSecurityLogActionConsts.LoginNotAllowed,
+                UserName = request.Username,
+                ClientId = request.ClientId
+            });
+
+            if (isLockedOut)
+            {
+                Logger.LogInformation("Authentication failed for username: {username}, reason: locked out", request.Username);
+
+                return Forbid(new AuthenticationProperties(new Dictionary<string, string>
+                {
+                    [OpenIddictServerAspNetCoreConstants.Properties.Error] = AbpOpenIddictErrors.AccountLocked,
+                    [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The user account has been locked out due to invalid login attempts. Please wait a while and try again."
+                }), OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+            }
+
+            Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", request.Username);
+
+            if (user.IsActive && !canSignIn)
+            {
+                return await HandleConfirmUserAsync(request, user);
+            }
+
+            return Forbid(new AuthenticationProperties(new Dictionary<string, string>
+            {
+                [OpenIddictServerAspNetCoreConstants.Properties.Error] = AbpOpenIddictErrors.AccountInactive,
+                [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "You are not allowed to login! Your account is inactive or needs to confirm your email/phone number."
+            }), OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        }
+
+        // The change password challenge is not returned, because the password of the external login provider can't be used to change the local password.
+        if (user.ShouldChangePasswordOnNextLogin || await UserManager.ShouldPeriodicallyChangePasswordAsync(user))
+        {
+            Logger.LogInformation("Authentication failed for username: {username}, reason: {reason}", request.Username, AbpErrorDescriptionConsts.ExternalLoginPasswordChangeRequired);
+
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+            {
+                Identity = OpenIddictSecurityLogIdentityConsts.OpenIddict,
+                Action = OpenIddictSecurityLogActionConsts.LoginNotAllowed,
+                UserName = request.Username,
+                ClientId = request.ClientId
+            });
+
+            return Forbid(new AuthenticationProperties(new Dictionary<string, string>
+            {
+                [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
+                [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = AbpErrorDescriptionConsts.ExternalLoginPasswordChangeRequired
+            }), OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        }
+
+        if (await IsTfaEnabledAsync(user))
+        {
+            return await HandleTwoFactorLoginAsync(request, user);
+        }
+
+        return await SetSuccessResultAsync(request, user);
     }
 
     protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds(OpenIddictRequest request)
