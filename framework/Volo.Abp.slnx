@@ -231,6 +231,7 @@
     <Project Path="test/Volo.Abp.GlobalFeatures.Tests/Volo.Abp.GlobalFeatures.Tests.csproj" />
     <Project Path="test/Volo.Abp.Http.Client.IdentityModel.Web.Tests/Volo.Abp.Http.Client.IdentityModel.Web.Tests.csproj" />
     <Project Path="test/Volo.Abp.Http.Client.Tests/Volo.Abp.Http.Client.Tests.csproj" />
+    <Project Path="test/Volo.Abp.Http.Client.Web.Tests/Volo.Abp.Http.Client.Web.Tests.csproj" />
     <Project Path="test/Volo.Abp.Http.FluentValidation.Tests/Volo.Abp.Http.FluentValidation.Tests.csproj" />
     <Project Path="test/Volo.Abp.Http.Tests/Volo.Abp.Http.Tests.csproj" />
     <Project Path="test/Volo.Abp.IdentityModel.Tests/Volo.Abp.IdentityModel.Tests.csproj" />
