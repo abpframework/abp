@@ -47,4 +47,20 @@ public class OutgoingEventInfo : IOutgoingEventInfo
     {
         return ExtraProperties.GetOrDefault(EventBusConsts.CorrelationIdHeaderName)?.ToString();
     }
+
+    public void SetTenantId(Guid? tenantId)
+    {
+        if (tenantId == null)
+        {
+            ExtraProperties.Remove(EventBusConsts.TenantIdHeaderName);
+            return;
+        }
+
+        ExtraProperties[EventBusConsts.TenantIdHeaderName] = tenantId.Value.ToString();
+    }
+
+    public Guid? GetTenantId()
+    {
+        return EventBusTenantIdHelper.Parse(ExtraProperties.GetOrDefault(EventBusConsts.TenantIdHeaderName)?.ToString());
+    }
 }

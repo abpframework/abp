@@ -19,6 +19,11 @@ public class AbpSignInManager : SignInManager<IdentityUser>
     protected ICurrentTenant CurrentTenant { get; }
     protected IOptions<IdentityOptions> IdentityOptionsAccessor { get; }
 
+    /// <summary>
+    /// Set while <see cref="CallPreSignInCheckWithoutPasswordAsync"/> checks a user with a shared password.
+    /// </summary>
+    protected bool IsPasswordChangePeriodIgnored { get; set; }
+
     public AbpSignInManager(
         IdentityUserManager userManager,
         IHttpContextAccessor contextAccessor,
@@ -57,7 +62,8 @@ public class AbpSignInManager : SignInManager<IdentityUser>
             var externalLoginProvider = (IExternalLoginProvider)Context.RequestServices
                 .GetRequiredService(externalLoginProviderInfo.Type);
 
-            if (await externalLoginProvider.TryAuthenticateAsync(userName, password))
+            if (await externalLoginProvider.IsEnabledAsync() &&
+                await externalLoginProvider.TryAuthenticateAsync(userName, password))
             {
                 user = await FindByNameAsync(userName);
                 if (user == null)
@@ -89,6 +95,20 @@ public class AbpSignInManager : SignInManager<IdentityUser>
                 using (CurrentTenant.Change(user.TenantId))
                 {
                     await IdentityOptionsAccessor.SetAsync();
+
+                    var error = await PreSignInCheck(user);
+                    if (error != null)
+                    {
+                        if (user.IsActive &&
+                            (user.ShouldChangePasswordOnNextLogin || await IdentityUserManager.ShouldPeriodicallyChangePasswordAsync(user)))
+                        {
+                            // The password change is checked before the confirmation and the lockout of the user.
+                            return await base.PreSignInCheck(user) ?? AbpSignInResult.ExternalLoginPasswordChangeRequired;
+                        }
+
+                        return error;
+                    }
+
                     return await SignInOrTwoFactorAsync(user, isPersistent);
                 }
             }
@@ -211,6 +231,29 @@ public class AbpSignInManager : SignInManager<IdentityUser>
         return await PreSignInCheck(user);
     }
 
+    /// <summary>
+    /// Checks a user that is signed in without validating the password of this user, for example
+    /// the user of another tenant or a linked user.
+    /// With shared user accounts, the periodic password change is not checked: the password is synchronized
+    /// to the other users of the account, but the time of the last password change is only set for the user
+    /// that changed the password.
+    /// </summary>
+    /// <param name="user">The user</param>
+    /// <returns>Null if the user should be allowed to sign in, otherwise the SignInResult why they should be denied.</returns>
+    public virtual async Task<SignInResult> CallPreSignInCheckWithoutPasswordAsync(IdentityUser user)
+    {
+        var isPasswordChangePeriodIgnored = IsPasswordChangePeriodIgnored;
+        IsPasswordChangePeriodIgnored = IdentityUserManager.IsUserSharingEnabled();
+        try
+        {
+            return await PreSignInCheck(user);
+        }
+        finally
+        {
+            IsPasswordChangePeriodIgnored = isPasswordChangePeriodIgnored;
+        }
+    }
+
     protected override async Task<SignInResult> PreSignInCheck(IdentityUser user)
     {
         if (!user.IsActive)
@@ -225,7 +268,7 @@ public class AbpSignInManager : SignInManager<IdentityUser>
             return SignInResult.NotAllowed;
         }
 
-        if (await IdentityUserManager.ShouldPeriodicallyChangePasswordAsync(user))
+        if (!IsPasswordChangePeriodIgnored && await IdentityUserManager.ShouldPeriodicallyChangePasswordAsync(user))
         {
             return SignInResult.NotAllowed;
         }

@@ -38,6 +38,10 @@
       "path": "test/Volo.Abp.Account.Application.Tests/Volo.Abp.Account.Application.Tests.abppkg",
       "folder": "test"
     },
+    "Volo.Abp.Account.Web.Tests": {
+      "path": "test/Volo.Abp.Account.Web.Tests/Volo.Abp.Account.Web.Tests.abppkg",
+      "folder": "test"
+    },
     "Volo.Abp.Account.Blazor": {
       "path": "src/Volo.Abp.Account.Blazor/Volo.Abp.Account.Blazor.abppkg",
       "folder": "src"

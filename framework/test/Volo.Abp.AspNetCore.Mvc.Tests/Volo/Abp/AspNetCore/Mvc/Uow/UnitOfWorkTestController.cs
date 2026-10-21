@@ -75,6 +75,15 @@ public class UnitOfWorkTestController : AbpController
     }
 
     [HttpGet]
+    [Route("ObjectResultExceptionOnComplete")]
+    public object ObjectResultExceptionOnComplete()
+    {
+        _testUnitOfWorkConfig.ThrowExceptionOnComplete = true;
+
+        return new { Value = 42 };
+    }
+
+    [HttpGet]
     [Route("CommitBeforeResponseFlush")]
     public async Task CommitBeforeResponseFlush()
     {

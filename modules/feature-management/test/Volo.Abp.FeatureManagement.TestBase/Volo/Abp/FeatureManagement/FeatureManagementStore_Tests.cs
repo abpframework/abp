@@ -141,4 +141,52 @@ public abstract class FeatureManagementStore_Tests<TStartupModule> : FeatureMana
                 TestEditionIds.Regular.ToString())).ShouldBeNull();
         }
     }
+
+    [Fact]
+    public async Task GetOrNullAsync_Should_Not_Fail_When_Duplicate_Host_Values_Exist()
+    {
+        // Arrange
+        await InsertDuplicateHostFeatureValuesAsync(TestFeatureDefinitionProvider.SocialLogins);
+
+        // Act & Assert
+        (await FeatureManagementStore.GetOrNullAsync(TestFeatureDefinitionProvider.UserCount,
+            TenantFeatureValueProvider.ProviderName,
+            null)).ShouldBeNull();
+
+        (await FeatureManagementStore.GetOrNullAsync(TestFeatureDefinitionProvider.SocialLogins,
+            TenantFeatureValueProvider.ProviderName,
+            null)).ShouldBe((await FeatureValueRepository.FindAsync(TestFeatureDefinitionProvider.SocialLogins,
+            TenantFeatureValueProvider.ProviderName,
+            null)).Value);
+    }
+
+    [Fact]
+    public async Task SetAsync_Should_Remove_Duplicate_Host_Values()
+    {
+        // Arrange
+        await InsertDuplicateHostFeatureValuesAsync(TestFeatureDefinitionProvider.SocialLogins);
+
+        // Act
+        await FeatureManagementStore.SetAsync(TestFeatureDefinitionProvider.SocialLogins,
+            false.ToString().ToUpperInvariant(),
+            TenantFeatureValueProvider.ProviderName,
+            null);
+
+        // Assert
+        var featureValues = await FeatureValueRepository.FindAllAsync(TestFeatureDefinitionProvider.SocialLogins,
+            TenantFeatureValueProvider.ProviderName,
+            null);
+        featureValues.Count.ShouldBe(1);
+        featureValues[0].Value.ShouldBe(false.ToString().ToUpperInvariant());
+    }
+
+    private async Task InsertDuplicateHostFeatureValuesAsync(string name)
+    {
+        await FeatureValueRepository.InsertAsync(new FeatureValue(Guid.NewGuid(), name,
+            true.ToString().ToLowerInvariant(), TenantFeatureValueProvider.ProviderName, null));
+        await FeatureValueRepository.InsertAsync(new FeatureValue(Guid.NewGuid(), name,
+            false.ToString().ToLowerInvariant(), TenantFeatureValueProvider.ProviderName, null));
+
+        (await FeatureValueRepository.FindAllAsync(name, TenantFeatureValueProvider.ProviderName, null)).Count.ShouldBe(2);
+    }
 }

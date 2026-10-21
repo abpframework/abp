@@ -22,6 +22,6 @@
 
     <ItemGroup>
         <PackageReference Include="Devart.Data.Oracle.EFCore" />
-        </ItemGroup>
+    </ItemGroup>
 
 </Project>

@@ -80,3 +80,75 @@ describe('proxy generation - self-import for generic base type argument (#25080)
     expect(importsPagedResultDto).toBe(true);
   });
 });
+
+describe('proxy generation - generic argument of a same-namespace base type', () => {
+  const solution = 'MyApp';
+
+  // OrderResultDto : ResultBase<CustomerDto>, where ResultBase<T> lives in MyApp.Orders and
+  // CustomerDto lives in MyApp.Customers.
+  const types: Record<string, Type> = {
+    'MyApp.Customers.CustomerDto': {
+      baseType: null,
+      isEnum: false,
+      enumNames: null,
+      enumValues: null,
+      genericArguments: null,
+      properties: [
+        {
+          name: 'Name',
+          jsonName: null,
+          type: 'System.String',
+          typeSimple: 'string',
+          isRequired: false,
+          isNullable: false,
+        },
+      ],
+    },
+    'MyApp.Orders.ResultBase<T0>': {
+      baseType: null,
+      isEnum: false,
+      enumNames: null,
+      enumValues: null,
+      genericArguments: ['T'],
+      properties: [
+        {
+          name: 'Items',
+          jsonName: null,
+          type: '[T]',
+          typeSimple: '[T]',
+          isRequired: false,
+          isNullable: false,
+        },
+      ],
+    },
+    'MyApp.Orders.OrderResultDto': {
+      baseType: 'MyApp.Orders.ResultBase<MyApp.Customers.CustomerDto>',
+      isEnum: false,
+      enumNames: null,
+      enumValues: null,
+      genericArguments: null,
+      properties: [],
+    },
+  };
+
+  const params: ModelGeneratorParams = {
+    targetPath: 'src/app/proxy',
+    solution,
+    types,
+    serviceImports: {},
+    modelImports: {},
+  };
+
+  it('imports a generic argument that lives in another namespace', () => {
+    const reduce = createImportRefsToModelReducer(params);
+    const models = reduce([], ['MyApp.Orders.OrderResultDto']);
+
+    const model = models.find(m => m.namespace === 'Orders');
+    expect(model).toBeDefined();
+
+    expect(model!.imports.find(i => i.path === '../customers/models')?.specifiers).toEqual([
+      'CustomerDto',
+    ]);
+    expect(model!.imports.some(i => i.path === './models')).toBe(false);
+  });
+});

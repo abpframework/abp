@@ -31,6 +31,8 @@ public static class TestEntityExtensionConfigurator
                     "Established"
                 ).MapEfCoreProperty<City, Guid>(
                     "Guid"
+                ).MapEfCoreProperty<City, decimal>(
+                    "Area"
                 ).MapEfCoreProperty<City, ExtraProperties_Tests.Color?>(
                     "EnumNumber"
                 ).MapEfCoreProperty<City, ExtraProperties_Tests.Color>(

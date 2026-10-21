@@ -39,6 +39,8 @@ public class AbpCompiledQueryCacheKeyGenerator : ICompiledQueryCacheKeyGenerator
                 }
             }
 
+            CurrentContext.Context.GetService<AbpEfCoreCurrentDbContext>().AuthorizeQueryCompilation(abpEfCoreDbFunctionContext, query);
+
             return new AbpCompiledQueryCacheKey(cacheKey, abpCacheKey);
         }
 

@@ -35,7 +35,6 @@ if ($full -eq "-f")
 		"../templates/app/aspnet-core",
 		"../templates/console",
 		"../templates/app-nolayers/aspnet-core",
-		"../abp_io/AbpIoLocalization",
 		"../source-code"
 	)
 	if ($env:OS -eq "Windows_NT") {

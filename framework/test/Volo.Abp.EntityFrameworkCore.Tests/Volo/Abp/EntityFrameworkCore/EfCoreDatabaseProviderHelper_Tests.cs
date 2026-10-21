@@ -16,7 +16,7 @@ public class EfCoreDatabaseProviderHelper_Tests
             .ShouldBe(EfCoreDatabaseProvider.SqlServer);
     }
 
-    [Fact(Skip = "Npgsql has no EF Core 11 build yet; UseNpgsql throws MissingMethodException. Remove the skip once the provider ships.")]
+    [Fact]
     public void Should_Detect_PostgreSql_From_Real_Assembly()
     {
         var builder = new DbContextOptionsBuilder<EmptyDbContext>();
