@@ -1147,9 +1147,8 @@ Now, we can add a modal that will be opened when we click the button.
 Open the `Books.razor` and add the following code to the end of the page:
 
 ````xml
-<Modal @ref="@CreateModal">
-    <ModalBackdrop />
-    <ModalContent IsCentered="true">
+<Modal @ref="@CreateModal" Centered="true">
+    <ModalContent>
         <Form>
             <ModalHeader>
                 <ModalTitle>@L["NewBook"]</ModalTitle>
@@ -1160,16 +1159,16 @@ Open the `Books.razor` and add the following code to the end of the page:
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
                             <FieldLabel>@L["Name"]</FieldLabel>
-                            <TextEdit @bind-Text="@NewEntity.Name">
+                            <TextInput @bind-Value="@NewEntity.Name">
                                 <Feedback>
                                     <ValidationError/>
                                 </Feedback>
-                            </TextEdit>
+                            </TextInput>
                         </Field>
                     </Validation>
                     <Field>
                         <FieldLabel>@L["Type"]</FieldLabel>
-                        <Select TValue="BookType" @bind-SelectedValue="@NewEntity.Type">
+                        <Select TValue="BookType" @bind-Value="@NewEntity.Type">
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
@@ -1180,11 +1179,11 @@ Open the `Books.razor` and add the following code to the end of the page:
                     </Field>
                     <Field>
                         <FieldLabel>@L["PublishDate"]</FieldLabel>
-                        <DateEdit TValue="DateTime" @bind-Date="NewEntity.PublishDate"/>
+                        <DateInput TValue="DateTime" @bind-Value="NewEntity.PublishDate"/>
                     </Field>
                     <Field>
                         <FieldLabel>@L["Price"]</FieldLabel>
-                        <NumericEdit TValue="float" @bind-Value="NewEntity.Price"/>
+                        <NumericInput TValue="float" @bind-Value="NewEntity.Price"/>
                     </Field>
                 </Validations>
             </ModalBody>
@@ -1236,7 +1235,7 @@ Open the `Books.razor` and add the following code to the end of the page:
                         <MudSelectItem Value="@bookTypeValue">@L[$"Enum:BookType.{(int)bookTypeValue}"]</MudSelectItem>
                     }
                 </MudSelect>
-                <MudDatePicker @bind-Date="@NewEntity.PublishDate"
+                <MudDatePicker @bind-Date="@NewEntityPublishDate"
                                Label="@L["PublishDate"]" />
                 <MudNumericField T="float"
                                  @bind-Value="@NewEntity.Price"
@@ -1257,7 +1256,30 @@ Open the `Books.razor` and add the following code to the end of the page:
 * The `_createDialog` field, `CloseCreateDialogAsync`, `CreateFormRef` and `CreateEntityAsync` are all defined in `AbpMudCrudPageBase`. Check the [MudBlazor documentation](https://mudblazor.com/components/dialog) if you want to understand the `MudDialog` and other components.
 * `MudDialog.Options` widens the dialog (`MaxWidth.Medium` + `FullWidth`) so the form fields are not cramped.
 * `MudStack` with `Spacing="3"` keeps the inputs visually separated; without it MudBlazor inputs render flush against each other.
-* `MudDatePicker.@bind-Date` requires a nullable `DateTime?`. If your DTO uses non-nullable `DateTime`, change it to `DateTime?` (`public DateTime? PublishDate { get; set; }`) when using the MudBlazor variant.
+* `MudDatePicker.@bind-Date` requires a nullable `DateTime?`, while `CreateUpdateBookDto.PublishDate` is a non-nullable `DateTime`. So the date picker binds to the `NewEntityPublishDate` wrapper property below.
+
+Add the following property to the `@code` block of the `Books.razor` file:
+
+````csharp
+// MudDatePicker requires nullable DateTime, while CreateUpdateBookDto.PublishDate is non-nullable.
+// Bind to a nullable wrapper and sync back to the DTO.
+private DateTime? NewEntityPublishDate
+{
+    get => NewEntity?.PublishDate;
+    set { if (NewEntity != null && value.HasValue) NewEntity.PublishDate = value.Value; }
+}
+````
+
+`AbpMudCrudPageBase` reloads its own `AbpMudExtensibleDataGrid` after creating a book. Override the `OnCreatedEntityAsync` method in the `@code` block to reload the `MudDataGrid` of this page instead:
+
+````csharp
+protected override async Task OnCreatedEntityAsync()
+{
+    await InvokeAsync(() => _booksDataGrid.ReloadServerData());
+    await CloseCreateDialogAsync();
+    Snackbar.Add(GetCreateMessage(), Severity.Success);
+}
+````
 
 {{end}}
 
@@ -1281,7 +1303,7 @@ Open the `Books.razor` and add the following `DataGridEntityActionsColumn` secti
         <EntityActions TItem="BookDto" EntityActionsColumn="@EntityActionsColumn">
             <EntityAction TItem="BookDto"
                           Text="@L["Edit"]"
-                          Clicked="() => OpenEditModalAsync(context)" />
+                          Clicked="() => OpenEditModalAsync(context.Item)" />
         </EntityActions>
     </DisplayTemplate>
 </DataGridEntityActionsColumn>
@@ -1324,29 +1346,28 @@ We can now define a modal to edit the book. Add the following code to the end of
 {{if BlazorUI == "Blazorise"}}
 
 ````xml
-<Modal @ref="@EditModal">
-    <ModalBackdrop />
-    <ModalContent IsCentered="true">
+<Modal @ref="@EditModal" Centered="true">
+    <ModalContent>
         <Form>
             <ModalHeader>
                 <ModalTitle>@EditingEntity.Name</ModalTitle>
                 <CloseButton Clicked="CloseEditModalAsync"/>
             </ModalHeader>
             <ModalBody>
-                <Validations @ref="@EditValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="false">
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
                             <FieldLabel>@L["Name"]</FieldLabel>
-                            <TextEdit @bind-Text="@EditingEntity.Name">
+                            <TextInput @bind-Value="@EditingEntity.Name">
                                 <Feedback>
                                     <ValidationError/>
                                 </Feedback>
-                            </TextEdit>
+                            </TextInput>
                         </Field>
                     </Validation>
                     <Field>
                         <FieldLabel>@L["Type"]</FieldLabel>
-                        <Select TValue="BookType" @bind-SelectedValue="@EditingEntity.Type">
+                        <Select TValue="BookType" @bind-Value="@EditingEntity.Type">
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
@@ -1357,11 +1378,11 @@ We can now define a modal to edit the book. Add the following code to the end of
                     </Field>
                     <Field>
                         <FieldLabel>@L["PublishDate"]</FieldLabel>
-                        <DateEdit TValue="DateTime" @bind-Date="EditingEntity.PublishDate"/>
+                        <DateInput TValue="DateTime" @bind-Value="EditingEntity.PublishDate"/>
                     </Field>
                     <Field>
                         <FieldLabel>@L["Price"]</FieldLabel>
-                        <NumericEdit TValue="float" @bind-Value="EditingEntity.Price"/>
+                        <NumericInput TValue="float" @bind-Value="EditingEntity.Price"/>
                     </Field>
                 </Validations>
             </ModalBody>
@@ -1402,7 +1423,7 @@ We can now define a modal to edit the book. Add the following code to the end of
                         <MudSelectItem Value="@bookTypeValue">@L[$"Enum:BookType.{(int)bookTypeValue}"]</MudSelectItem>
                     }
                 </MudSelect>
-                <MudDatePicker @bind-Date="@EditingEntity.PublishDate"
+                <MudDatePicker @bind-Date="@EditingEntityPublishDate"
                                Label="@L["PublishDate"]" />
                 <MudNumericField T="float"
                                  @bind-Value="@EditingEntity.Price"
@@ -1419,6 +1440,27 @@ We can now define a modal to edit the book. Add the following code to the end of
 </MudDialog>
 ````
 
+Add the following property to the `@code` block of the `Books.razor` file, as the edit dialog's date picker binds to it:
+
+````csharp
+private DateTime? EditingEntityPublishDate
+{
+    get => EditingEntity?.PublishDate;
+    set { if (EditingEntity != null && value.HasValue) EditingEntity.PublishDate = value.Value; }
+}
+````
+
+Also override the `OnUpdatedEntityAsync` method to reload the grid after updating a book:
+
+````csharp
+protected override async Task OnUpdatedEntityAsync()
+{
+    await InvokeAsync(() => _booksDataGrid.ReloadServerData());
+    await CloseEditDialogAsync();
+    Snackbar.Add(GetUpdateMessage(), Severity.Success);
+}
+````
+
 {{end}}
 
 ### Mapperly Configuration
@@ -1430,6 +1472,7 @@ Open the `BookStoreBlazorMappers` inside the {{ if UI == "BlazorServer" }}`Acme.
 ```csharp
 using Riok.Mapperly.Abstractions;
 using Volo.Abp.Mapperly;
+using Acme.BookStore.Books;
 
 {{ if UI == "BlazorServer" }}namespace Acme.BookStore.Blazor; {{ else if UI == "MAUIBlazor" }}namespace Acme.BookStore.MauiBlazor; {{ else }}namespace Acme.BookStore.Blazor.Client;{{ end }}
 
@@ -1461,8 +1504,8 @@ Add the following `EntityAction` code under the "Edit" action inside `EntityActi
 ````xml
 <EntityAction TItem="BookDto"
               Text="@L["Delete"]"
-              Clicked="() => DeleteEntityAsync(context)"
-              ConfirmationMessage="() => GetDeleteConfirmationMessage(context)" />
+              Clicked="() => DeleteEntityAsync(context.Item)"
+              ConfirmationMessage="() => GetDeleteConfirmationMessage(context.Item)" />
 ````
 
 {{end}}
@@ -1472,14 +1515,30 @@ Add the following `EntityAction` code under the "Edit" action inside `EntityActi
 Add the following `MudMenuItem` after the "Edit" item inside the actions `MudMenu`:
 
 ````razor
-<MudMenuItem OnClick="@(async () => {
-    if (await Message.Confirm(GetDeleteConfirmationMessage(context.Item)))
-    {
-        await DeleteEntityAsync(context.Item);
-    }
-})">
+<MudMenuItem OnClick="@(() => DeleteEntityAsync(context.Item))">
     @L["Delete"]
 </MudMenuItem>
+````
+
+`DeleteEntityAsync` asks the user to confirm (with the message returned by `GetDeleteConfirmationMessage`) before deleting the book.
+
+Override the `OnDeletedEntityAsync` method to reload the grid after deleting a book (and go back to the previous page if the current page becomes empty):
+
+````csharp
+protected override async Task OnDeletedEntityAsync()
+{
+    // Go back to the previous page if the deleted book was the only one on the current page
+    if (_booksDataGrid.CurrentPage > 0 && _booksDataGrid.ServerItems.Count() == 1)
+    {
+        await InvokeAsync(() => _booksDataGrid.NavigateTo(Page.Previous));
+    }
+    else
+    {
+        await InvokeAsync(() => _booksDataGrid.ReloadServerData());
+    }
+
+    Snackbar.Add(GetDeleteMessage(), Severity.Success);
+}
 ````
 
 {{end}}
@@ -1526,7 +1585,7 @@ Here's the complete code to create the book management CRUD page, that has been 
         <DataGrid TItem="BookDto"
                   Data="Entities"
                   ReadData="OnDataGridReadAsync"
-                  CurrentPage="CurrentPage"
+                  Page="CurrentPage"
                   TotalItems="TotalCount"
                   ShowPager="true"
                   PageSize="PageSize">
@@ -1536,11 +1595,11 @@ Here's the complete code to create the book management CRUD page, that has been 
                         <EntityActions TItem="BookDto" EntityActionsColumn="@EntityActionsColumn">
                             <EntityAction TItem="BookDto"
                                           Text="@L["Edit"]"
-                                          Clicked="() => OpenEditModalAsync(context)" />
+                                          Clicked="() => OpenEditModalAsync(context.Item)" />
                             <EntityAction TItem="BookDto"
                                           Text="@L["Delete"]"
-                                          Clicked="() => DeleteEntityAsync(context)"
-                                          ConfirmationMessage="()=>GetDeleteConfirmationMessage(context)" />
+                                          Clicked="() => DeleteEntityAsync(context.Item)"
+                                          ConfirmationMessage="()=>GetDeleteConfirmationMessage(context.Item)" />
                         </EntityActions>
                     </DisplayTemplate>
                 </DataGridEntityActionsColumn>
@@ -1551,14 +1610,14 @@ Here's the complete code to create the book management CRUD page, that has been 
                                 Field="@nameof(BookDto.Type)"
                                 Caption="@L["Type"]">
                     <DisplayTemplate>
-                        @L[$"Enum:BookType.{context.Type:D}"]
+                        @L[$"Enum:BookType.{(int)context.Item.Type}"]
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="BookDto"
                                 Field="@nameof(BookDto.PublishDate)"
                                 Caption="@L["PublishDate"]">
                     <DisplayTemplate>
-                        @context.PublishDate.ToShortDateString()
+                        @context.Item.PublishDate.ToShortDateString()
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="BookDto"
@@ -1569,7 +1628,7 @@ Here's the complete code to create the book management CRUD page, that has been 
                                 Field="@nameof(BookDto.CreationTime)"
                                 Caption="@L["CreationTime"]">
                     <DisplayTemplate>
-                        @context.CreationTime.ToLongDateString()
+                        @context.Item.CreationTime.ToLongDateString()
                     </DisplayTemplate>
                 </DataGridColumn>
             </DataGridColumns>
@@ -1577,9 +1636,8 @@ Here's the complete code to create the book management CRUD page, that has been 
     </CardBody>
 </Card>
 
-<Modal @ref="@CreateModal">
-    <ModalBackdrop />
-    <ModalContent IsCentered="true">
+<Modal @ref="@CreateModal" Centered="true">
+    <ModalContent>
         <Form>
             <ModalHeader>
                 <ModalTitle>@L["NewBook"]</ModalTitle>
@@ -1590,16 +1648,16 @@ Here's the complete code to create the book management CRUD page, that has been 
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
                             <FieldLabel>@L["Name"]</FieldLabel>
-                            <TextEdit @bind-Text="@NewEntity.Name">
+                            <TextInput @bind-Value="@NewEntity.Name">
                                 <Feedback>
                                     <ValidationError/>
                                 </Feedback>
-                            </TextEdit>
+                            </TextInput>
                         </Field>
                     </Validation>
                     <Field>
                         <FieldLabel>@L["Type"]</FieldLabel>
-                        <Select TValue="BookType" @bind-SelectedValue="@NewEntity.Type">
+                        <Select TValue="BookType" @bind-Value="@NewEntity.Type">
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
@@ -1610,11 +1668,11 @@ Here's the complete code to create the book management CRUD page, that has been 
                     </Field>
                     <Field>
                         <FieldLabel>@L["PublishDate"]</FieldLabel>
-                        <DateEdit TValue="DateTime" @bind-Date="NewEntity.PublishDate"/>
+                        <DateInput TValue="DateTime" @bind-Value="NewEntity.PublishDate"/>
                     </Field>
                     <Field>
                         <FieldLabel>@L["Price"]</FieldLabel>
-                        <NumericEdit TValue="float" @bind-Value="NewEntity.Price"/>
+                        <NumericInput TValue="float" @bind-Value="NewEntity.Price"/>
                     </Field>
                 </Validations>
             </ModalBody>
@@ -1630,29 +1688,28 @@ Here's the complete code to create the book management CRUD page, that has been 
     </ModalContent>
 </Modal>
 
-<Modal @ref="@EditModal">
-    <ModalBackdrop />
-    <ModalContent IsCentered="true">
+<Modal @ref="@EditModal" Centered="true">
+    <ModalContent>
         <Form>
             <ModalHeader>
                 <ModalTitle>@EditingEntity.Name</ModalTitle>
                 <CloseButton Clicked="CloseEditModalAsync"/>
             </ModalHeader>
             <ModalBody>
-                <Validations @ref="@EditValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="false">
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
                             <FieldLabel>@L["Name"]</FieldLabel>
-                            <TextEdit @bind-Text="@EditingEntity.Name">
+                            <TextInput @bind-Value="@EditingEntity.Name">
                                 <Feedback>
                                     <ValidationError/>
                                 </Feedback>
-                            </TextEdit>
+                            </TextInput>
                         </Field>
                     </Validation>
                     <Field>
                         <FieldLabel>@L["Type"]</FieldLabel>
-                        <Select TValue="BookType" @bind-SelectedValue="@EditingEntity.Type">
+                        <Select TValue="BookType" @bind-Value="@EditingEntity.Type">
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
@@ -1663,11 +1720,11 @@ Here's the complete code to create the book management CRUD page, that has been 
                     </Field>
                     <Field>
                         <FieldLabel>@L["PublishDate"]</FieldLabel>
-                        <DateEdit TValue="DateTime" @bind-Date="EditingEntity.PublishDate"/>
+                        <DateInput TValue="DateTime" @bind-Value="EditingEntity.PublishDate"/>
                     </Field>
                     <Field>
                         <FieldLabel>@L["Price"]</FieldLabel>
-                        <NumericEdit TValue="float" @bind-Value="EditingEntity.Price"/>
+                        <NumericInput TValue="float" @bind-Value="EditingEntity.Price"/>
                     </Field>
                 </Validations>
             </ModalBody>
@@ -1716,15 +1773,17 @@ Here's the complete code to create the book management CRUD page, that has been 
         </CardHeaderActions>
     </MudCardHeader>
     <MudCardContent>
-        <MudDataGrid T="BookDto"
+        <MudDataGrid @ref="_booksDataGrid"
+                     T="BookDto"
                      ServerData="OnDataGridReadAsync"
-                     RowsPerPage="@PageSize">
+                     RowsPerPage="@PageSize"
+                     SortMode="SortMode.None">
             <Columns>
                 <TemplateColumn T="BookDto" Title="@L["Actions"]" Sortable="false">
                     <CellTemplate>
                         <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true">
                             <MudMenuItem OnClick="@(() => OpenEditDialogAsync(context.Item))">@L["Edit"]</MudMenuItem>
-                            <MudMenuItem OnClick="@(async () => { if (await Message.Confirm(GetDeleteConfirmationMessage(context.Item))) { await DeleteEntityAsync(context.Item); } })">@L["Delete"]</MudMenuItem>
+                            <MudMenuItem OnClick="@(() => DeleteEntityAsync(context.Item))">@L["Delete"]</MudMenuItem>
                         </MudMenu>
                     </CellTemplate>
                 </TemplateColumn>
@@ -1746,6 +1805,9 @@ Here's the complete code to create the book management CRUD page, that has been 
                     </CellTemplate>
                 </PropertyColumn>
             </Columns>
+            <PagerContent>
+                <MudDataGridPager T="BookDto" />
+            </PagerContent>
         </MudDataGrid>
     </MudCardContent>
 </MudCard>
@@ -1769,7 +1831,7 @@ Here's the complete code to create the book management CRUD page, that has been 
                         <MudSelectItem Value="@bookTypeValue">@L[$"Enum:BookType.{(int)bookTypeValue}"]</MudSelectItem>
                     }
                 </MudSelect>
-                <MudDatePicker @bind-Date="@NewEntity.PublishDate"
+                <MudDatePicker @bind-Date="@NewEntityPublishDate"
                                Label="@L["PublishDate"]" />
                 <MudNumericField T="float"
                                  @bind-Value="@NewEntity.Price"
@@ -1804,7 +1866,7 @@ Here's the complete code to create the book management CRUD page, that has been 
                         <MudSelectItem Value="@bookTypeValue">@L[$"Enum:BookType.{(int)bookTypeValue}"]</MudSelectItem>
                     }
                 </MudSelect>
-                <MudDatePicker @bind-Date="@EditingEntity.PublishDate"
+                <MudDatePicker @bind-Date="@EditingEntityPublishDate"
                                Label="@L["PublishDate"]" />
                 <MudNumericField T="float"
                                  @bind-Value="@EditingEntity.Price"
@@ -1822,6 +1884,51 @@ Here's the complete code to create the book management CRUD page, that has been 
 
 @code
 {
+    // MudDatePicker requires nullable DateTime, while CreateUpdateBookDto.PublishDate is non-nullable.
+    // Bind to a nullable wrapper and sync back to the DTO.
+    private DateTime? NewEntityPublishDate
+    {
+        get => NewEntity?.PublishDate;
+        set { if (NewEntity != null && value.HasValue) NewEntity.PublishDate = value.Value; }
+    }
+
+    private DateTime? EditingEntityPublishDate
+    {
+        get => EditingEntity?.PublishDate;
+        set { if (EditingEntity != null && value.HasValue) EditingEntity.PublishDate = value.Value; }
+    }
+
+    private MudDataGrid<BookDto> _booksDataGrid = default!;
+
+    protected override async Task OnCreatedEntityAsync()
+    {
+        await InvokeAsync(() => _booksDataGrid.ReloadServerData());
+        await CloseCreateDialogAsync();
+        Snackbar.Add(GetCreateMessage(), Severity.Success);
+    }
+
+    protected override async Task OnUpdatedEntityAsync()
+    {
+        await InvokeAsync(() => _booksDataGrid.ReloadServerData());
+        await CloseEditDialogAsync();
+        Snackbar.Add(GetUpdateMessage(), Severity.Success);
+    }
+
+    protected override async Task OnDeletedEntityAsync()
+    {
+        // Go back to the previous page if the deleted book was the only one on the current page
+        if (_booksDataGrid.CurrentPage > 0 && _booksDataGrid.ServerItems.Count() == 1)
+        {
+            await InvokeAsync(() => _booksDataGrid.NavigateTo(Page.Previous));
+        }
+        else
+        {
+            await InvokeAsync(() => _booksDataGrid.ReloadServerData());
+        }
+
+        Snackbar.Add(GetDeleteMessage(), Severity.Success);
+    }
+
     public Books() // Constructor
     {
         LocalizationResource = typeof(BookStoreResource);
