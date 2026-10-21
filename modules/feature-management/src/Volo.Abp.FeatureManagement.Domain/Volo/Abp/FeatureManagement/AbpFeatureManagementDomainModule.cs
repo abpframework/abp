@@ -65,6 +65,11 @@ public class AbpFeatureManagementDomainModule : AbpModule
         await initializer.InitializeAsync(true, _cancellationTokenSource.Token);
     }
 
+    public override void OnApplicationShutdown(ApplicationShutdownContext context)
+    {
+        AsyncHelper.RunSync(() => OnApplicationShutdownAsync(context));
+    }
+
     public override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)
     {
         _cancellationTokenSource.Cancel();
