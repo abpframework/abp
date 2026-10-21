@@ -15,6 +15,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Abp.Http.Client.StaticProxying;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Http.Client.Web.Conventions;
@@ -73,7 +74,34 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
 
             ConfigureClientProxySelector(controller);
             ConfigureClientProxyApiExplorer(controller);
+            ConfigureClientProxyParameters(controller);
             ConfigureParameters(controller);
+        }
+    }
+
+    protected virtual void ConfigureClientProxyParameters(ControllerModel controller)
+    {
+        foreach (var action in controller.Actions)
+        {
+            var actionApiDescriptionModel = FindActionApiDescriptionModel(controller, action);
+            if (actionApiDescriptionModel == null)
+            {
+                continue;
+            }
+
+            foreach (var prm in action.Parameters)
+            {
+                if (prm.BindingInfo != null)
+                {
+                    continue;
+                }
+
+                // Clients send the parameter where the remote action reads it, so a primitive [FromBody] parameter has to be read from the body here too.
+                if (actionApiDescriptionModel.Parameters.Any(x => x.NameOnMethod == prm.ParameterName && x.BindingSourceId == ParameterBindingSources.Body))
+                {
+                    prm.BindingInfo = BindingInfo.GetBindingInfo(new[] { new FromBodyAttribute() });
+                }
+            }
         }
     }
 
