@@ -1,17 +1,23 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Shouldly;
+using Volo.Abp.Application.Services;
+using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Content;
+using Volo.Abp.Http.Client.ClientProxying;
 using Xunit;
 
-namespace Volo.Abp.Http.Client.Web;
+namespace Volo.Abp.Http.Client.Web.Conventions;
 
 public class AbpHttpClientProxyServiceConvention_Tests : AbpHttpClientWebTestBase
 {
@@ -282,5 +288,290 @@ public class AbpHttpClientProxyServiceConvention_Tests : AbpHttpClientWebTestBas
             .Where(x => x.GroupName == groupName)
             .SelectMany(x => x.Items)
             .ToArray();
+    }
+}
+
+public interface IClientProxyTestAppService : IApplicationService
+{
+    Task<string> GetFromBodyAsync(string value);
+
+    Task<string> GetFromQueryAsync(string value);
+
+    Task<int> GetNumberFromBodyAsync(int value);
+
+    Task<string> GetFromExplicitQueryAsync(string value);
+
+    Task<string> GetQueryParametersAsync(int number, bool flag, Guid guid);
+
+    Task<string> CreateAsync(ClientProxyTestInput input);
+
+    Task<string> UpdateAsync(Guid id, ClientProxyTestInput input);
+
+    Task<string> GetListAsync(ClientProxyTestInput input);
+
+    Task<string> GetByQueryTypeAsync(ClientProxyTestQueryInput input);
+
+    Task<string> UploadAsync(IRemoteStreamContent file);
+
+    Task<string> GetHiddenAsync();
+
+    Task<string> GetNotDescribedAsync();
+
+    Task<string> GetDisabledAsync();
+
+    Task<string> GetDisabledWithVerbAsync();
+
+    Task<string> GetNotDescribedWithRemoteServiceAsync();
+
+    Task<string> GetNotDescribedWithVerbAsync();
+
+    Task<string> GetNotDescribedHiddenAsync();
+
+    Task<string> GetNotDescribedIgnoredAsync();
+
+    Task<string> GetDisabledWithRouteAsync();
+
+    Task<string> GetNotDescribedWithRouteAsync();
+
+    Task<string> GetDisabledWithVerbAndRouteAsync();
+}
+
+// Returns the received values instead of calling a remote service, so the tests can see what the proxy controller bound.
+public class ClientProxyTestAppServiceClientProxy : ClientProxyBase<IClientProxyTestAppService>, IClientProxyTestAppService
+{
+    public virtual Task<string> GetFromBodyAsync(string value)
+    {
+        return Task.FromResult(value);
+    }
+
+    public virtual Task<string> GetFromQueryAsync(string value)
+    {
+        return Task.FromResult(value);
+    }
+
+    public virtual Task<int> GetNumberFromBodyAsync(int value)
+    {
+        return Task.FromResult(value);
+    }
+
+    public virtual Task<string> GetFromExplicitQueryAsync([FromQuery] string value)
+    {
+        return Task.FromResult(value);
+    }
+
+    public virtual Task<string> GetQueryParametersAsync(int number, bool flag, Guid guid)
+    {
+        return Task.FromResult($"{number}:{flag}:{guid}");
+    }
+
+    public virtual Task<string> CreateAsync(ClientProxyTestInput input)
+    {
+        return Task.FromResult($"{input.Name}:{input.Value}");
+    }
+
+    public virtual Task<string> UpdateAsync(Guid id, ClientProxyTestInput input)
+    {
+        return Task.FromResult($"{id}:{input.Name}:{input.Value}");
+    }
+
+    public virtual Task<string> GetListAsync(ClientProxyTestInput input)
+    {
+        return Task.FromResult($"{input.Name}:{input.Value}");
+    }
+
+    public virtual Task<string> GetByQueryTypeAsync(ClientProxyTestQueryInput input)
+    {
+        return Task.FromResult($"{input.Name}:{input.Value}");
+    }
+
+    public virtual async Task<string> UploadAsync(IRemoteStreamContent file)
+    {
+        using var reader = new StreamReader(file.GetStream());
+        return $"{file.FileName}:{await reader.ReadToEndAsync()}";
+    }
+
+    [RemoteService(IsMetadataEnabled = false)]
+    public virtual Task<string> GetHiddenAsync()
+    {
+        return Task.FromResult("hidden");
+    }
+
+    public virtual Task<string> GetNotDescribedAsync()
+    {
+        return Task.FromResult("not-described");
+    }
+
+    [RemoteService(false)]
+    public virtual Task<string> GetDisabledAsync()
+    {
+        return Task.FromResult("disabled");
+    }
+
+    [RemoteService(false)]
+    [HttpGet]
+    public virtual Task<string> GetDisabledWithVerbAsync()
+    {
+        return Task.FromResult("disabled-with-verb");
+    }
+
+    [RemoteService]
+    public virtual Task<string> GetNotDescribedWithRemoteServiceAsync()
+    {
+        return Task.FromResult("not-described-with-remote-service");
+    }
+
+    [HttpGet]
+    public virtual Task<string> GetNotDescribedWithVerbAsync()
+    {
+        return Task.FromResult("not-described-with-verb");
+    }
+
+    [RemoteService(IsMetadataEnabled = false)]
+    public virtual Task<string> GetNotDescribedHiddenAsync()
+    {
+        return Task.FromResult("not-described-hidden");
+    }
+
+    [ApiExplorerSettings(IgnoreApi = true)]
+    public virtual Task<string> GetNotDescribedIgnoredAsync()
+    {
+        return Task.FromResult("not-described-ignored");
+    }
+
+    [RemoteService(false)]
+    [HttpGet("api/client-proxy-test/disabled-with-route")]
+    public virtual Task<string> GetDisabledWithRouteAsync()
+    {
+        return Task.FromResult("disabled-with-route");
+    }
+
+    [HttpGet("api/client-proxy-test/not-described-with-route")]
+    public virtual Task<string> GetNotDescribedWithRouteAsync()
+    {
+        return Task.FromResult("not-described-with-route");
+    }
+
+    [RemoteService(false)]
+    [HttpGet]
+    [HttpPost("api/client-proxy-test/disabled-with-verb-and-route")]
+    public virtual Task<string> GetDisabledWithVerbAndRouteAsync()
+    {
+        return Task.FromResult("disabled-with-verb-and-route");
+    }
+}
+
+public class ClientProxyTestInput
+{
+    public string Name { get; set; }
+
+    public int Value { get; set; }
+}
+
+public class ClientProxyTestQueryInput
+{
+    public string Name { get; set; }
+
+    public int Value { get; set; }
+}
+
+public interface IClientProxyNoGroupNameAppService : IApplicationService
+{
+    Task<string> GetAsync();
+}
+
+public class ClientProxyNoGroupNameAppServiceClientProxy : ClientProxyBase<IClientProxyNoGroupNameAppService>, IClientProxyNoGroupNameAppService
+{
+    public virtual Task<string> GetAsync()
+    {
+        return Task.FromResult("no-group-name");
+    }
+}
+
+public interface IClientProxyDuplicatedAppService : IApplicationService
+{
+    Task<string> GetAsync();
+}
+
+public class ClientProxyDuplicatedAppServiceClientProxy : ClientProxyBase<IClientProxyDuplicatedAppService>, IClientProxyDuplicatedAppService
+{
+    public virtual Task<string> GetAsync()
+    {
+        return Task.FromResult("proxy");
+    }
+}
+
+[Route("api/client-proxy-duplicated")]
+public class ClientProxyDuplicatedController : AbpControllerBase, IClientProxyDuplicatedAppService
+{
+    [HttpGet]
+    public virtual Task<string> GetAsync()
+    {
+        return Task.FromResult("controller");
+    }
+}
+
+public interface IClientProxyDisabledAppService : IApplicationService
+{
+    Task<string> GetAsync();
+
+    Task<string> GetWithRouteAsync();
+}
+
+[RemoteService(false)]
+public class ClientProxyDisabledAppServiceClientProxy : ClientProxyBase<IClientProxyDisabledAppService>, IClientProxyDisabledAppService
+{
+    public virtual Task<string> GetAsync()
+    {
+        return Task.FromResult("disabled");
+    }
+
+    [HttpGet("api/client-proxy-disabled/with-route")]
+    public virtual Task<string> GetWithRouteAsync()
+    {
+        return Task.FromResult("disabled-with-route");
+    }
+}
+
+public interface IClientProxyDisabledActionAppService : IApplicationService
+{
+    Task<string> GetAsync();
+}
+
+public class ClientProxyDisabledActionAppServiceClientProxy : ClientProxyBase<IClientProxyDisabledActionAppService>, IClientProxyDisabledActionAppService
+{
+    [RemoteService(false)]
+    public virtual Task<string> GetAsync()
+    {
+        return Task.FromResult("disabled-action");
+    }
+}
+
+public interface IClientProxyMetadataDisabledAppService : IApplicationService
+{
+    Task<string> GetAsync();
+}
+
+[RemoteService(IsMetadataEnabled = false)]
+public class ClientProxyMetadataDisabledAppServiceClientProxy : ClientProxyBase<IClientProxyMetadataDisabledAppService>, IClientProxyMetadataDisabledAppService
+{
+    public virtual Task<string> GetAsync()
+    {
+        return Task.FromResult("metadata-disabled");
+    }
+}
+
+public interface IClientProxyControllerRouteAppService : IApplicationService
+{
+    Task<string> GetAsync();
+}
+
+[Route("api/client-proxy-controller-route")]
+public class ClientProxyControllerRouteAppServiceClientProxy : ClientProxyBase<IClientProxyControllerRouteAppService>, IClientProxyControllerRouteAppService
+{
+    [RemoteService(false)]
+    [HttpGet]
+    public virtual Task<string> GetAsync()
+    {
+        return Task.FromResult("controller-route");
     }
 }

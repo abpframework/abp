@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Autofac;
 using Volo.Abp.Http.Client.StaticProxying;
+using Volo.Abp.Http.Client.Web.Conventions;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 

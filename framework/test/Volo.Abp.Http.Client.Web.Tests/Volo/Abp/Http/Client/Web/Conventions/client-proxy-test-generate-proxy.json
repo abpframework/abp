@@ -4,16 +4,16 @@
       "rootPath": "clientProxyTest",
       "remoteServiceName": "Default",
       "controllers": {
-        "Volo.Abp.Http.Client.Web.ClientProxyTestController": {
+        "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestController": {
           "controllerName": "ClientProxyTest",
           "controllerGroupName": "ClientProxyTest",
           "isRemoteService": true,
           "isIntegrationService": false,
           "apiVersion": null,
-          "type": "Volo.Abp.Http.Client.Web.ClientProxyTestController",
+          "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestController",
           "interfaces": [
             {
-              "type": "Volo.Abp.Http.Client.Web.IClientProxyTestAppService",
+              "type": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService",
               "name": "IClientProxyTestAppService",
               "methods": []
             }
@@ -54,7 +54,7 @@
                 "typeSimple": "string"
               },
               "allowAnonymous": null,
-              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyTestAppService"
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
             },
             "GetFromQueryAsyncByValue": {
               "uniqueName": "GetFromQueryAsyncByValue",
@@ -91,7 +91,7 @@
                 "typeSimple": "string"
               },
               "allowAnonymous": null,
-              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyTestAppService"
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
             },
             "GetNumberFromBodyAsyncByValue": {
               "uniqueName": "GetNumberFromBodyAsyncByValue",
@@ -128,7 +128,7 @@
                 "typeSimple": "string"
               },
               "allowAnonymous": null,
-              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyTestAppService"
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
             },
             "GetFromExplicitQueryAsyncByValue": {
               "uniqueName": "GetFromExplicitQueryAsyncByValue",
@@ -165,7 +165,7 @@
                 "typeSimple": "string"
               },
               "allowAnonymous": null,
-              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyTestAppService"
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
             },
             "GetQueryParametersAsyncByNumberAndFlagAndGuid": {
               "uniqueName": "GetQueryParametersAsyncByNumberAndFlagAndGuid",
@@ -242,7 +242,7 @@
                 "typeSimple": "string"
               },
               "allowAnonymous": null,
-              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyTestAppService"
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
             },
             "CreateAsyncByInput": {
               "uniqueName": "CreateAsyncByInput",
@@ -253,9 +253,9 @@
               "parametersOnMethod": [
                 {
                   "name": "input",
-                  "typeAsString": "Volo.Abp.Http.Client.Web.ClientProxyTestInput, Volo.Abp.Http.Client.Web.Tests",
-                  "type": "Volo.Abp.Http.Client.Web.ClientProxyTestInput",
-                  "typeSimple": "Volo.Abp.Http.Client.Web.ClientProxyTestInput",
+                  "typeAsString": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput, Volo.Abp.Http.Client.Web.Tests",
+                  "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput",
+                  "typeSimple": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput",
                   "isOptional": false,
                   "defaultValue": null
                 }
@@ -265,8 +265,8 @@
                   "nameOnMethod": "input",
                   "name": "input",
                   "jsonName": null,
-                  "type": "Volo.Abp.Http.Client.Web.ClientProxyTestInput",
-                  "typeSimple": "Volo.Abp.Http.Client.Web.ClientProxyTestInput",
+                  "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput",
+                  "typeSimple": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput",
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
@@ -279,7 +279,7 @@
                 "typeSimple": "string"
               },
               "allowAnonymous": null,
-              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyTestAppService"
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
             },
             "UpdateAsyncByIdAndInput": {
               "uniqueName": "UpdateAsyncByIdAndInput",
@@ -298,9 +298,9 @@
                 },
                 {
                   "name": "input",
-                  "typeAsString": "Volo.Abp.Http.Client.Web.ClientProxyTestInput, Volo.Abp.Http.Client.Web.Tests",
-                  "type": "Volo.Abp.Http.Client.Web.ClientProxyTestInput",
-                  "typeSimple": "Volo.Abp.Http.Client.Web.ClientProxyTestInput",
+                  "typeAsString": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput, Volo.Abp.Http.Client.Web.Tests",
+                  "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput",
+                  "typeSimple": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput",
                   "isOptional": false,
                   "defaultValue": null
                 }
@@ -322,8 +322,8 @@
                   "nameOnMethod": "input",
                   "name": "input",
                   "jsonName": null,
-                  "type": "Volo.Abp.Http.Client.Web.ClientProxyTestInput",
-                  "typeSimple": "Volo.Abp.Http.Client.Web.ClientProxyTestInput",
+                  "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput",
+                  "typeSimple": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput",
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
@@ -336,7 +336,7 @@
                 "typeSimple": "string"
               },
               "allowAnonymous": null,
-              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyTestAppService"
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
             },
             "GetListAsyncByInput": {
               "uniqueName": "GetListAsyncByInput",
@@ -347,9 +347,9 @@
               "parametersOnMethod": [
                 {
                   "name": "input",
-                  "typeAsString": "Volo.Abp.Http.Client.Web.ClientProxyTestInput, Volo.Abp.Http.Client.Web.Tests",
-                  "type": "Volo.Abp.Http.Client.Web.ClientProxyTestInput",
-                  "typeSimple": "Volo.Abp.Http.Client.Web.ClientProxyTestInput",
+                  "typeAsString": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput, Volo.Abp.Http.Client.Web.Tests",
+                  "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput",
+                  "typeSimple": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput",
                   "isOptional": false,
                   "defaultValue": null
                 }
@@ -385,7 +385,7 @@
                 "typeSimple": "string"
               },
               "allowAnonymous": null,
-              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyTestAppService"
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
             },
             "GetByQueryTypeAsyncByInput": {
               "uniqueName": "GetByQueryTypeAsyncByInput",
@@ -396,9 +396,9 @@
               "parametersOnMethod": [
                 {
                   "name": "input",
-                  "typeAsString": "Volo.Abp.Http.Client.Web.ClientProxyTestQueryInput, Volo.Abp.Http.Client.Web.Tests",
-                  "type": "Volo.Abp.Http.Client.Web.ClientProxyTestQueryInput",
-                  "typeSimple": "Volo.Abp.Http.Client.Web.ClientProxyTestQueryInput",
+                  "typeAsString": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestQueryInput, Volo.Abp.Http.Client.Web.Tests",
+                  "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestQueryInput",
+                  "typeSimple": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestQueryInput",
                   "isOptional": false,
                   "defaultValue": null
                 }
@@ -434,7 +434,7 @@
                 "typeSimple": "string"
               },
               "allowAnonymous": null,
-              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyTestAppService"
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
             },
             "UploadAsyncByFile": {
               "uniqueName": "UploadAsyncByFile",
@@ -471,7 +471,7 @@
                 "typeSimple": "string"
               },
               "allowAnonymous": null,
-              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyTestAppService"
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
             },
             "GetHiddenAsync": {
               "uniqueName": "GetHiddenAsync",
@@ -486,7 +486,7 @@
                 "typeSimple": "string"
               },
               "allowAnonymous": null,
-              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyTestAppService"
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
             },
             "GetDisabledAsync": {
               "uniqueName": "GetDisabledAsync",
@@ -501,7 +501,7 @@
                 "typeSimple": "string"
               },
               "allowAnonymous": null,
-              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyTestAppService"
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
             },
             "GetDisabledWithVerbAsync": {
               "uniqueName": "GetDisabledWithVerbAsync",
@@ -516,20 +516,20 @@
                 "typeSimple": "string"
               },
               "allowAnonymous": null,
-              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyTestAppService"
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
             }
           }
         },
-        "Volo.Abp.Http.Client.Web.ClientProxyNoGroupNameController": {
+        "Volo.Abp.Http.Client.Web.Conventions.ClientProxyNoGroupNameController": {
           "controllerName": "ClientProxyNoGroupName",
           "controllerGroupName": "",
           "isRemoteService": true,
           "isIntegrationService": false,
           "apiVersion": null,
-          "type": "Volo.Abp.Http.Client.Web.ClientProxyNoGroupNameController",
+          "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyNoGroupNameController",
           "interfaces": [
             {
-              "type": "Volo.Abp.Http.Client.Web.IClientProxyNoGroupNameAppService",
+              "type": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyNoGroupNameAppService",
               "name": "IClientProxyNoGroupNameAppService",
               "methods": []
             }
@@ -548,20 +548,20 @@
                 "typeSimple": "string"
               },
               "allowAnonymous": null,
-              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyNoGroupNameAppService"
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyNoGroupNameAppService"
             }
           }
         },
-        "Volo.Abp.Http.Client.Web.ClientProxyDuplicatedController": {
+        "Volo.Abp.Http.Client.Web.Conventions.ClientProxyDuplicatedController": {
           "controllerName": "ClientProxyDuplicated",
           "controllerGroupName": "ClientProxyDuplicated",
           "isRemoteService": true,
           "isIntegrationService": false,
           "apiVersion": null,
-          "type": "Volo.Abp.Http.Client.Web.ClientProxyDuplicatedController",
+          "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyDuplicatedController",
           "interfaces": [
             {
-              "type": "Volo.Abp.Http.Client.Web.IClientProxyDuplicatedAppService",
+              "type": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyDuplicatedAppService",
               "name": "IClientProxyDuplicatedAppService",
               "methods": []
             }
@@ -580,20 +580,20 @@
                 "typeSimple": "string"
               },
               "allowAnonymous": null,
-              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyDuplicatedAppService"
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyDuplicatedAppService"
             }
           }
         },
-        "Volo.Abp.Http.Client.Web.ClientProxyDisabledController": {
+        "Volo.Abp.Http.Client.Web.Conventions.ClientProxyDisabledController": {
           "controllerName": "ClientProxyDisabled",
           "controllerGroupName": "ClientProxyDisabled",
           "isRemoteService": true,
           "isIntegrationService": false,
           "apiVersion": null,
-          "type": "Volo.Abp.Http.Client.Web.ClientProxyDisabledController",
+          "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyDisabledController",
           "interfaces": [
             {
-              "type": "Volo.Abp.Http.Client.Web.IClientProxyDisabledAppService",
+              "type": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyDisabledAppService",
               "name": "IClientProxyDisabledAppService",
               "methods": []
             }
@@ -612,20 +612,20 @@
                 "typeSimple": "string"
               },
               "allowAnonymous": null,
-              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyDisabledAppService"
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyDisabledAppService"
             }
           }
         },
-        "Volo.Abp.Http.Client.Web.ClientProxyDisabledActionController": {
+        "Volo.Abp.Http.Client.Web.Conventions.ClientProxyDisabledActionController": {
           "controllerName": "ClientProxyDisabledAction",
           "controllerGroupName": "ClientProxyDisabledAction",
           "isRemoteService": true,
           "isIntegrationService": false,
           "apiVersion": null,
-          "type": "Volo.Abp.Http.Client.Web.ClientProxyDisabledActionController",
+          "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyDisabledActionController",
           "interfaces": [
             {
-              "type": "Volo.Abp.Http.Client.Web.IClientProxyDisabledActionAppService",
+              "type": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyDisabledActionAppService",
               "name": "IClientProxyDisabledActionAppService",
               "methods": []
             }
@@ -644,20 +644,20 @@
                 "typeSimple": "string"
               },
               "allowAnonymous": null,
-              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyDisabledActionAppService"
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyDisabledActionAppService"
             }
           }
         },
-        "Volo.Abp.Http.Client.Web.ClientProxyMetadataDisabledController": {
+        "Volo.Abp.Http.Client.Web.Conventions.ClientProxyMetadataDisabledController": {
           "controllerName": "ClientProxyMetadataDisabled",
           "controllerGroupName": "ClientProxyMetadataDisabled",
           "isRemoteService": true,
           "isIntegrationService": false,
           "apiVersion": null,
-          "type": "Volo.Abp.Http.Client.Web.ClientProxyMetadataDisabledController",
+          "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyMetadataDisabledController",
           "interfaces": [
             {
-              "type": "Volo.Abp.Http.Client.Web.IClientProxyMetadataDisabledAppService",
+              "type": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyMetadataDisabledAppService",
               "name": "IClientProxyMetadataDisabledAppService",
               "methods": []
             }
@@ -676,20 +676,20 @@
                 "typeSimple": "string"
               },
               "allowAnonymous": null,
-              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyMetadataDisabledAppService"
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyMetadataDisabledAppService"
             }
           }
         },
-        "Volo.Abp.Http.Client.Web.ClientProxyControllerRouteController": {
+        "Volo.Abp.Http.Client.Web.Conventions.ClientProxyControllerRouteController": {
           "controllerName": "ClientProxyControllerRoute",
           "controllerGroupName": "ClientProxyControllerRoute",
           "isRemoteService": true,
           "isIntegrationService": false,
           "apiVersion": null,
-          "type": "Volo.Abp.Http.Client.Web.ClientProxyControllerRouteController",
+          "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyControllerRouteController",
           "interfaces": [
             {
-              "type": "Volo.Abp.Http.Client.Web.IClientProxyControllerRouteAppService",
+              "type": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyControllerRouteAppService",
               "name": "IClientProxyControllerRouteAppService",
               "methods": []
             }
@@ -708,7 +708,7 @@
                 "typeSimple": "string"
               },
               "allowAnonymous": null,
-              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyControllerRouteAppService"
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyControllerRouteAppService"
             }
           }
         }
