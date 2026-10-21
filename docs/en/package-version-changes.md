@@ -7,7 +7,7 @@
 
 # Package Version Changes
 
-## 10.8.0-rc.1
+## 11.0.0-rc.1
 
 | Package | Old Version | New Version | PR |
 |---------|-------------|-------------|-----|
@@ -72,6 +72,8 @@
 | System.Text.Encoding.CodePages | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
 | System.Text.Encodings.Web | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
 | System.Text.Json | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+
+## 10.8.0-rc.1
 
 **Added:**
 
