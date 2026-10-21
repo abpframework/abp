@@ -175,9 +175,13 @@ Use **Health** before shipping changes. It helps catch missing display propertie
 
 ## History and Recovery
 
-When **Runtime JSON** is selected, the Designer exposes runtime model undo, redo, history details, comparisons, and save points. History actions are previewed against a concurrency stamp and require explicit confirmation before destructive physical schema changes.
+When **Runtime JSON** is selected, the Designer exposes runtime model undo, redo, history details, comparisons, and save points. History actions are previewed against a concurrency stamp before they are applied. They never drop data: an entity, property, or collection that an action removes keeps its data, as a delete does.
 
-Entity deletion also uses a reviewed plan. You must resolve dependent relationships and choose whether Designer-managed physical data is kept or deleted. An entity deleted with retained physical data can be restored only from a fresh schema and concurrency preview. See [Model History and Recovery](model-history.md).
+Each save carries the concurrency stamp the editor loaded. When the change touches something another person changed since then, the Designer shows a **Model changed** dialog with what changed, and you can **Reload latest**, **Keep editing**, or **Apply anyway**. Concurrent edits of different objects are merged without asking.
+
+Entity deletion also uses a reviewed plan in which you resolve dependent relationships. Deleting an entity, property, or collection keeps its data: the **Deleted objects** page lists it and can restore it, under its old name or a new one, or purge it for good. History undo, redo, and save point restore bring deleted data back too. See [Model History and Recovery](model-history.md) and [Deleted Objects](deleted-objects.md).
+
+An app's **App settings** page can archive the app, which keeps everything and stops its pages, endpoints, event handlers, jobs, and workers, or delete it with all of its data. Deleting an app requires the **Delete Apps** permission. See [Deleting an App](deleted-objects.md#deleting-an-app).
 
 ## MCP Integration
 

@@ -15,6 +15,12 @@
       "description": "Stable unique form identifier. Prefer kebab-case, for example 'customer-form' or 'event-form'. Pages reference this value.",
       "minLength": 1
     },
+    "app": {
+      "type": "string",
+      "description": "Name of the low-code app that owns this form. Omit for the default app. Must match an apps[].name.",
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
     "entityName": {
       "type": "string",
       "description": "Full name of the entity this form is bound to. Must match the page entityName that uses this form.",
@@ -42,9 +48,25 @@
       "items": {
         "$ref": "form-rule-descriptor.schema.json"
       }
+    },
+    "extendsLowerLayer": {
+      "type": "boolean",
+      "description": "When true, this descriptor overrides selected fields of a form with the same name defined in a lower model layer; entityName, fields, and layout become optional.",
+      "default": false
+    },
+    "metadata": {
+      "$ref": "descriptor-metadata.schema.json"
     }
   },
-  "required": ["name", "entityName", "fields", "layout"],
+  "required": ["name"],
+  "if": {
+    "properties": { "extendsLowerLayer": { "const": true } },
+    "required": ["extendsLowerLayer"]
+  },
+  "then": {},
+  "else": {
+    "required": ["entityName", "fields", "layout"]
+  },
   "additionalProperties": false,
   "examples": [
     {

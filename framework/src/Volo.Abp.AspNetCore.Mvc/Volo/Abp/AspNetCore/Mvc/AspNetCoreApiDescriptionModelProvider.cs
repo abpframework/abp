@@ -34,19 +34,22 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
     private readonly AbpAspNetCoreMvcOptions _abpAspNetCoreMvcOptions;
     private readonly AbpApiDescriptionModelOptions _modelOptions;
     private readonly IXmlDocumentationProvider _xmlDocProvider;
+    private readonly IPropertyApiDescriptionModelContributor[] _propertyContributors;
 
     public AspNetCoreApiDescriptionModelProvider(
         IOptions<AspNetCoreApiDescriptionModelProviderOptions> options,
         IApiDescriptionGroupCollectionProvider descriptionProvider,
         IOptions<AbpAspNetCoreMvcOptions> abpAspNetCoreMvcOptions,
         IOptions<AbpApiDescriptionModelOptions> modelOptions,
-        IXmlDocumentationProvider xmlDocProvider)
+        IXmlDocumentationProvider xmlDocProvider,
+        IEnumerable<IPropertyApiDescriptionModelContributor> propertyContributors)
     {
         _options = options.Value;
         _descriptionProvider = descriptionProvider;
         _abpAspNetCoreMvcOptions = abpAspNetCoreMvcOptions.Value;
         _modelOptions = modelOptions.Value;
         _xmlDocProvider = xmlDocProvider;
+        _propertyContributors = propertyContributors.ToArray();
 
         Logger = NullLogger<AspNetCoreApiDescriptionModelProvider>.Instance;
     }
@@ -321,11 +324,40 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
             await PopulateTypeDescriptionsAsync(applicationModel.Types[typeName], type);
         }
 
+        await ContributeToPropertiesAsync(applicationModel.Types[typeName], type);
+
         await AddCustomTypesToModelAsync(applicationModel, type.BaseType, includeDescriptions);
 
         foreach (var propertyInfo in type.GetProperties().Where(p => p.DeclaringType == type))
         {
             await AddCustomTypesToModelAsync(applicationModel, propertyInfo.PropertyType, includeDescriptions);
+        }
+    }
+
+    protected virtual async Task ContributeToPropertiesAsync(TypeApiDescriptionModel typeModel, Type type)
+    {
+        if (_propertyContributors.IsNullOrEmpty() || typeModel.Properties.IsNullOrEmpty())
+        {
+            return;
+        }
+
+        var propertyInfos = type
+            .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+            .Where(p => p.DeclaringType == type)
+            .ToDictionary(p => p.Name, p => p);
+
+        foreach (var propertyModel in typeModel.Properties!)
+        {
+            if (!propertyInfos.TryGetValue(propertyModel.Name, out var propertyInfo))
+            {
+                continue;
+            }
+
+            var context = new PropertyApiDescriptionModelContributionContext(propertyModel, propertyInfo, type);
+            foreach (var contributor in _propertyContributors)
+            {
+                await contributor.ContributeAsync(context);
+            }
         }
     }
 

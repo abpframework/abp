@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "page-enum-presentation-descriptor.schema.json",
+  "title": "PageEnumPresentationDescriptor",
+  "description": "Page-level overrides for how the values of one enum property are displayed. The shared enum descriptor keeps the default presentation; this object changes it for a single page.",
+  "markdownDescription": "AI guidance: use page enum presentations when one page needs different labels, badges, colors, or icons for an enum property without changing the enum used by other pages. `propertyName` must be an enum property of the page entity and must be unique within `enumPresentations`. Each `values[]` item targets one integer enum `value`; only the fields present are overridden. A field set to `null` clears the value inherited from the enum or a lower model layer.",
+  "type": "object",
+  "properties": {
+    "propertyName": {
+      "type": "string",
+      "description": "Enum property on the page entity whose value presentation is overridden.",
+      "minLength": 1
+    },
+    "values": {
+      "type": "array",
+      "description": "Per-value overrides. Each integer value may appear once.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "integer",
+            "description": "Integer enum value to override."
+          },
+          "displayName": {
+            "type": ["string", "null"],
+            "description": "Page-specific label for this value."
+          },
+          "presentation": {
+            "oneOf": [
+              { "$ref": "enum-value-presentation.schema.json" },
+              { "type": "null" }
+            ],
+            "description": "Page-specific presentation: text, badge, or iconOnly."
+          },
+          "color": {
+            "type": ["string", "null"],
+            "description": "Page-specific badge color, for example '#F59E0B'."
+          },
+          "icon": {
+            "oneOf": [
+              { "$ref": "presentation-icon-reference.schema.json" },
+              { "type": "null" }
+            ],
+            "description": "Page-specific icon."
+          }
+        },
+        "required": ["value"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["propertyName"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "propertyName": "Status",
+      "values": [
+        { "value": 10, "displayName": "Awaiting review", "presentation": "badge", "color": "#F59E0B" }
+      ]
+    }
+  ]
+}

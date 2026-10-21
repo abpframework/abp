@@ -90,16 +90,16 @@ var doc = doc || {};
             var filterDocumentItems = function (filterText) {
                 
                 $navigation
-                    .find('.mCSB_container .opened')
+                    .find('.opened')
                     .removeClass('opened');
                 $navigation
-                    .find('.mCSB_container > li, .mCSB_container > li ul')
+                    .find('> li, > li ul')
                     .hide();
 
                 if (!filterText) {
-                    $navigation.find('.mCSB_container > li').show();
+                    $navigation.find('> li').show();
                     $navigation
-                        .find('.mCSB_container .selected-tree > ul')
+                        .find('.selected-tree > ul')
                         .show();
                     $searchAllDocument.hide();
                     return;

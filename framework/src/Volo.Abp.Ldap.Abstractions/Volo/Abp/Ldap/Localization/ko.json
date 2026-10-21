@@ -1,0 +1,19 @@
+{
+  "culture": "ko",
+  "texts": {
+    "DisplayName:Abp.Ldap.Ldaps": "SSL을 통한 LDAP",
+    "Description:Abp.Ldap.Ldaps": "SSL을 통한 LDAP",
+    "DisplayName:Abp.Ldap.ServerHost": "서버 호스트",
+    "Description:Abp.Ldap.ServerHost": "서버 호스트",
+    "DisplayName:Abp.Ldap.ServerPort": "서버 포트",
+    "Description:Abp.Ldap.ServerPort": "서버 포트",
+    "DisplayName:Abp.Ldap.BaseDc": "기본 도메인 구성 요소",
+    "Description:Abp.Ldap.BaseDc": "기본 도메인 구성 요소",
+    "DisplayName:Abp.Ldap.Domain": "도메인",
+    "Description:Abp.Ldap.Domain": "도메인",
+    "DisplayName:Abp.Ldap.UserName": "사용자 이름",
+    "Description:Abp.Ldap.UserName": "사용자 이름",
+    "DisplayName:Abp.Ldap.Password": "비밀번호",
+    "Description:Abp.Ldap.Password": "비밀번호"
+  }
+}

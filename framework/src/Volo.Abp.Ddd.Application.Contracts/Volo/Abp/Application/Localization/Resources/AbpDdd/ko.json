@@ -1,0 +1,6 @@
+{
+  "culture": "ko",
+  "texts": {
+    "MaxResultCountExceededExceptionMessage": "{0}은(는) {1}보다 클 수 없습니다! 더 많은 결과를 허용하려면 서버 측에서 {2}.{3}을(를) 늘리십시오."
+  }
+}

@@ -44,8 +44,8 @@
       "description": "Entity this visualization sources data from. Required for chart and list visualizations; numberContainer items define their own entityName."
     },
     "globalDateFilterProperty": {
-      "type": "string",
-      "description": "Date/DateTime property used to apply dashboard global date filters to this visualization. Defaults to CreationTime when omitted."
+      "type": ["string", "null"],
+      "description": "Date/DateTime property used to apply dashboard global date filters to this visualization. Defaults to CreationTime when omitted or null."
     },
     "filter": {
       "oneOf": [

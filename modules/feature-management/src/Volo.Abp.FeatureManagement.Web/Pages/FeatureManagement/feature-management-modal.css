@@ -4,8 +4,12 @@
 
 .custom-scroll-content {
     max-height: 400px;
+    overflow-y: auto;
+    scrollbar-width: thin;
 }
 
 .custom-scroll-container > .col-md-4 {
     max-height: 500px;
+    overflow-y: auto;
+    scrollbar-width: thin;
 }

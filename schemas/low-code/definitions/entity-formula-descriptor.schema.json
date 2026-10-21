@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "entity-formula-descriptor.schema.json",
+  "title": "EntityFormulaDescriptor",
+  "description": "Defines a virtual calculated property evaluated from other properties of the same record with the Low-Code Expression Language.",
+  "markdownDescription": "AI guidance: a formula property is read-only and never stored: the runtime forces `isMappedToDbField: false`, `allowSetByClients: false`, `isRequired: false`, `isUnique: false`, and clears `defaultValue`. `expression` uses the Low-Code Expression Language (for example `If(Quantity = 0, 0, Total / Quantity)` or `FirstName & \" \" & LastName`) and may reference other scalar, formula, or rollup properties of the entity. `resultType` must match the property `type`. Formulas cannot be combined with `foreignKey`, `rollup`, or `collection`.",
+  "type": "object",
+  "properties": {
+    "expression": {
+      "type": "string",
+      "description": "Low-Code Expression Language expression evaluated against the current record, for example 'Round(UnitPrice * Quantity, 2)'.",
+      "minLength": 1
+    },
+    "resultType": {
+      "$ref": "entity-property-type.schema.json",
+      "description": "Type of the evaluated value. Should match the owning property type."
+    }
+  },
+  "required": ["expression", "resultType"],
+  "additionalProperties": false,
+  "examples": [
+    { "expression": "Round(UnitPrice * Quantity, 2)", "resultType": "decimal" },
+    { "expression": "FirstName & \" \" & LastName", "resultType": "string" }
+  ]
+}
