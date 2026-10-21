@@ -35,6 +35,7 @@
     "NewExplanation": "تم إنشاؤه في الأسبوعين الماضيين.",
     "UpdatedExplanation": "تم التحديث في الأسبوعين الماضيين.",
     "Volo.Docs.Domain:010002": "الاسم المختصر {ShortName} موجود بالفعل.",
+    "Volo.Docs.Domain:010003": "عفواً، الوثيقة المطلوبة غير موجودة!",
     "Preview": "معاينة",
     "Search": "بحث",
     "SearchResults": "نتائج البحث",

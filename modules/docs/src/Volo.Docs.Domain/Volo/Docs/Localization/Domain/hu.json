@@ -35,6 +35,7 @@
     "NewExplanation": "Az elmúlt két hétben készült.",
     "UpdatedExplanation": "Az elmúlt két hétben frissült.",
     "Volo.Docs.Domain:010002": "Rövid név {ShortName} már létezik.",
+    "Volo.Docs.Domain:010003": "Hoppá, a kért dokumentum nem található!",
     "Preview": "előnézet",
     "Search": "Keresés",
     "SearchResults": "Keresési eredmények",
