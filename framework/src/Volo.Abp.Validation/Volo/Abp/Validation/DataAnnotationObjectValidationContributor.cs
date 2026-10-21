@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -30,11 +32,13 @@ public class DataAnnotationObjectValidationContributor : IObjectValidationContri
     public Task AddErrorsAsync(ObjectValidationContext context)
     {
 #if NET11_0_OR_GREATER
-        return ValidateObjectRecursivelyAsync(context.Errors, context.ValidatingObject, currentDepth: 1);
-#else
+        if (!OverridesOnlySynchronousWalk(GetType()))
+        {
+            return ValidateObjectRecursivelyAsync(context.Errors, context.ValidatingObject, currentDepth: 1);
+        }
+#endif
         ValidateObjectRecursively(context.Errors, context.ValidatingObject, currentDepth: 1);
         return Task.CompletedTask;
-#endif
     }
 
     protected virtual void ValidateObjectRecursively(List<ValidationResult> errors, object? validatingObject, int currentDepth)
@@ -139,6 +143,26 @@ public class DataAnnotationObjectValidationContributor : IObjectValidationContri
     }
 
 #if NET11_0_OR_GREATER
+    private static readonly ConcurrentDictionary<Type, bool> OverridesOnlySynchronousWalkCache = new();
+
+    /* A contributor written before the asynchronous walk existed customizes ValidateObjectRecursively; keep
+     * calling it, as the asynchronous walk would skip the override without any error. */
+    private static bool OverridesOnlySynchronousWalk(Type contributorType)
+    {
+        return OverridesOnlySynchronousWalkCache.GetOrAdd(contributorType, type =>
+            GetWalkDeclaringType(type, nameof(ValidateObjectRecursively)) != typeof(DataAnnotationObjectValidationContributor) &&
+            GetWalkDeclaringType(type, nameof(ValidateObjectRecursivelyAsync)) == typeof(DataAnnotationObjectValidationContributor));
+    }
+
+    private static Type? GetWalkDeclaringType(Type type, string methodName)
+    {
+        return type.GetMethod(
+            methodName,
+            BindingFlags.Instance | BindingFlags.NonPublic,
+            [typeof(List<ValidationResult>), typeof(object), typeof(int)]
+        )?.DeclaringType;
+    }
+
     /* Mirrors the synchronous walk above. Attributes deriving from AsyncValidationAttribute and
      * objects implementing IAsyncValidatableObject only produce results when awaited, so the
      * synchronous path either throws or silently validates nothing for them. */
@@ -233,6 +257,13 @@ public class DataAnnotationObjectValidationContributor : IObjectValidationContri
         var validationAttributes = property.Attributes.OfType<ValidationAttribute>().ToArray();
         if (validationAttributes.IsNullOrEmpty())
         {
+            return;
+        }
+
+        // Without an asynchronous attribute the property validates as before, so an AddPropertyErrors override still runs.
+        if (!validationAttributes.OfType<AsyncValidationAttribute>().Any())
+        {
+            AddPropertyErrors(validatingObject, property, errors);
             return;
         }
 
