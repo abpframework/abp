@@ -234,6 +234,19 @@ Configure<AbpSignalROptions>(options =>
 });
 ```
 
+### Auditing
+
+Use `AbpAspNetCoreAuditingOptions.IgnoredHubTypes` to ignore a hub (and the hubs derived from it) for [audit logging](../infrastructure/audit-logging.md):
+
+```csharp
+Configure<AbpAspNetCoreAuditingOptions>(options =>
+{
+    options.IgnoredHubTypes.Add(typeof(MessagingHub));
+});
+```
+
+The audited services called by an ignored hub are still audit logged. The hub of Blazor Server (and the interactive server render mode of Blazor Web App) is ignored by default.
+
 ### UserIdProvider
 
 ABP implements SignalR's `IUserIdProvider` interface to provide the current user id from the `ICurrentUser` service of the ABP (see [the current user service](../infrastructure/current-user.md)), so it will be integrated to the authentication system of your application. The implementing class is the `AbpSignalRUserIdProvider`, if you want to change/override it.
