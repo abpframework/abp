@@ -35,6 +35,7 @@
     "NewExplanation": "Creat în ultimele două săptămâni.",
     "UpdatedExplanation": "Actualizat în ultimele două săptămâni.",
     "Volo.Docs.Domain:010002": "Numele pe scurt {ShortName} există deja.",
+    "Volo.Docs.Domain:010003": "Oops, documentul dorit nu a fost găsit!",
     "Preview": "previzualizare",
     "Search": "Caută",
     "SearchResults": "Rezultatele căutării",

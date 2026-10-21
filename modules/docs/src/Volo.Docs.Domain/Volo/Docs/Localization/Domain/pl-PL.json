@@ -35,6 +35,7 @@
     "NewExplanation": "Utworzony w ciągu ostatnich dwóch tygodni.",
     "UpdatedExplanation": "Zaktualizowany w ciągu ostatnich dwóch tygodni.",
     "Volo.Docs.Domain:010002": "ShortName {ShortName} już istnieje.",
+    "Volo.Docs.Domain:010003": "Oops, żądany dokument nie istnieje!",
     "Preview": "zapowiedź",
     "Search": "Szukaj",
     "SearchResults": "Wyniki wyszukiwania",
