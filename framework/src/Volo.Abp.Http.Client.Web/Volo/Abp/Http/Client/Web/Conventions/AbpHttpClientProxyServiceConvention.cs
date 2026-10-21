@@ -73,6 +73,7 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
             }
 
             ConfigureClientProxySelector(controller);
+            RemoveConventionalSelectors(controller);
             ConfigureClientProxyApiExplorer(controller);
             ConfigureClientProxyParameters(controller);
             ConfigureParameters(controller);
@@ -229,6 +230,22 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
         }
     }
 
+    protected virtual void RemoveConventionalSelectors(ControllerModel controller)
+    {
+        if (controller.Selectors.Any(selector => selector.AttributeRouteModel != null))
+        {
+            return;
+        }
+
+        foreach (var action in controller.Actions)
+        {
+            action.Selectors
+                .Where(selector => selector.AttributeRouteModel == null)
+                .ToList()
+                .ForEach(selector => action.Selectors.Remove(selector));
+        }
+    }
+
     protected virtual void ConfigureClientProxyApiExplorer(ControllerModel controller)
     {
         if (ControllerWithAttributeRoute.Contains(controller))
@@ -246,10 +263,7 @@ public class AbpHttpClientProxyServiceConvention : AbpServiceConvention
 
         foreach (var action in controller.Actions)
         {
-            if (ActionWithAttributeRoute.Contains(action))
-            {
-                ConfigureApiExplorer(action);
-            }
+            ConfigureApiExplorer(action);
         }
     }
 

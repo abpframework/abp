@@ -487,6 +487,36 @@
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyTestAppService"
+            },
+            "GetDisabledAsync": {
+              "uniqueName": "GetDisabledAsync",
+              "name": "GetDisabledAsync",
+              "httpMethod": "GET",
+              "url": "api/client-proxy-test/disabled",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyTestAppService"
+            },
+            "GetDisabledWithVerbAsync": {
+              "uniqueName": "GetDisabledWithVerbAsync",
+              "name": "GetDisabledWithVerbAsync",
+              "httpMethod": "GET",
+              "url": "api/client-proxy-test/disabled-with-verb",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyTestAppService"
             }
           }
         },
@@ -551,6 +581,134 @@
               },
               "allowAnonymous": null,
               "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyDuplicatedAppService"
+            }
+          }
+        },
+        "Volo.Abp.Http.Client.Web.ClientProxyDisabledController": {
+          "controllerName": "ClientProxyDisabled",
+          "controllerGroupName": "ClientProxyDisabled",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.Abp.Http.Client.Web.ClientProxyDisabledController",
+          "interfaces": [
+            {
+              "type": "Volo.Abp.Http.Client.Web.IClientProxyDisabledAppService",
+              "name": "IClientProxyDisabledAppService",
+              "methods": []
+            }
+          ],
+          "actions": {
+            "GetAsync": {
+              "uniqueName": "GetAsync",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/client-proxy-disabled",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyDisabledAppService"
+            }
+          }
+        },
+        "Volo.Abp.Http.Client.Web.ClientProxyDisabledActionController": {
+          "controllerName": "ClientProxyDisabledAction",
+          "controllerGroupName": "ClientProxyDisabledAction",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.Abp.Http.Client.Web.ClientProxyDisabledActionController",
+          "interfaces": [
+            {
+              "type": "Volo.Abp.Http.Client.Web.IClientProxyDisabledActionAppService",
+              "name": "IClientProxyDisabledActionAppService",
+              "methods": []
+            }
+          ],
+          "actions": {
+            "GetAsync": {
+              "uniqueName": "GetAsync",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/client-proxy-disabled-action",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyDisabledActionAppService"
+            }
+          }
+        },
+        "Volo.Abp.Http.Client.Web.ClientProxyMetadataDisabledController": {
+          "controllerName": "ClientProxyMetadataDisabled",
+          "controllerGroupName": "ClientProxyMetadataDisabled",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.Abp.Http.Client.Web.ClientProxyMetadataDisabledController",
+          "interfaces": [
+            {
+              "type": "Volo.Abp.Http.Client.Web.IClientProxyMetadataDisabledAppService",
+              "name": "IClientProxyMetadataDisabledAppService",
+              "methods": []
+            }
+          ],
+          "actions": {
+            "GetAsync": {
+              "uniqueName": "GetAsync",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/client-proxy-metadata-disabled",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyMetadataDisabledAppService"
+            }
+          }
+        },
+        "Volo.Abp.Http.Client.Web.ClientProxyControllerRouteController": {
+          "controllerName": "ClientProxyControllerRoute",
+          "controllerGroupName": "ClientProxyControllerRoute",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.Abp.Http.Client.Web.ClientProxyControllerRouteController",
+          "interfaces": [
+            {
+              "type": "Volo.Abp.Http.Client.Web.IClientProxyControllerRouteAppService",
+              "name": "IClientProxyControllerRouteAppService",
+              "methods": []
+            }
+          ],
+          "actions": {
+            "GetAsync": {
+              "uniqueName": "GetAsync",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/client-proxy-controller-route-json",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.IClientProxyControllerRouteAppService"
             }
           }
         }

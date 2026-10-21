@@ -159,13 +159,74 @@ public class AbpHttpClientProxyServiceConvention_Tests : AbpHttpClientWebTestBas
         action.RouteValues["area"].ShouldBe("clientProxyTest");
     }
 
-    [Fact]
-    public void Should_Not_Expose_Action_Not_In_Api_Description()
+    [Theory]
+    [InlineData(nameof(IClientProxyTestAppService.GetNotDescribedAsync))]
+    [InlineData(nameof(IClientProxyTestAppService.GetNotDescribedWithRemoteServiceAsync))]
+    [InlineData(nameof(IClientProxyTestAppService.GetNotDescribedWithVerbAsync))]
+    [InlineData(nameof(IClientProxyTestAppService.GetNotDescribedHiddenAsync))]
+    [InlineData(nameof(IClientProxyTestAppService.GetNotDescribedIgnoredAsync))]
+    [InlineData(nameof(IClientProxyTestAppService.GetDisabledAsync))]
+    [InlineData(nameof(IClientProxyTestAppService.GetDisabledWithVerbAsync))]
+    public async Task Should_Not_Expose_Action_Without_Route(string methodName)
     {
-        GetActions()
-            .Any(x => x.ControllerTypeInfo.AsType() == typeof(ClientProxyTestAppServiceClientProxy) &&
-                      x.MethodInfo.Name == nameof(IClientProxyTestAppService.GetNotDescribedAsync))
-            .ShouldBeFalse();
+        FindProxyAction<ClientProxyTestAppServiceClientProxy>(methodName).ShouldBeNull();
+
+        var response = await Client.GetAsync($"/clientProxyTest/ClientProxyTest/{methodName.RemovePostFix("Async")}");
+        response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task Should_Not_Expose_Action_Without_Route_When_Controller_Has_No_Other_Route()
+    {
+        FindProxyAction<ClientProxyDisabledActionAppServiceClientProxy>(nameof(IClientProxyDisabledActionAppService.GetAsync)).ShouldBeNull();
+
+        (await Client.GetAsync("/clientProxyTest/ClientProxyDisabledAction/Get")).StatusCode.ShouldBe(HttpStatusCode.NotFound);
+        (await Client.GetAsync("/api/client-proxy-disabled-action")).StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task Should_Not_Expose_Actions_Of_Disabled_Client_Proxy_Without_Explicit_Route()
+    {
+        FindProxyAction<ClientProxyDisabledAppServiceClientProxy>(nameof(IClientProxyDisabledAppService.GetAsync)).ShouldBeNull();
+
+        (await Client.GetAsync("/clientProxyTest/ClientProxyDisabled/Get")).StatusCode.ShouldBe(HttpStatusCode.NotFound);
+        (await Client.GetAsync("/api/client-proxy-disabled")).StatusCode.ShouldBe(HttpStatusCode.NotFound);
+        (await Client.GetStringAsync("/api/client-proxy-disabled/with-route")).ShouldBe("disabled-with-route");
+    }
+
+    [Theory]
+    [InlineData(nameof(IClientProxyTestAppService.GetDisabledWithRouteAsync), "api/client-proxy-test/disabled-with-route", false)]
+    [InlineData(nameof(IClientProxyTestAppService.GetNotDescribedWithRouteAsync), "api/client-proxy-test/not-described-with-route", true)]
+    public async Task Should_Keep_Explicit_Action_Route(string methodName, string url, bool visibleInApiExplorer)
+    {
+        GetProxyAction<ClientProxyTestAppServiceClientProxy>(methodName).AttributeRouteInfo.Template.ShouldBe(url);
+
+        (await Client.GetAsync($"/{url}")).StatusCode.ShouldBe(HttpStatusCode.OK);
+        GetApiDescriptions("ClientProxyTest").Any(x => x.RelativePath == url).ShouldBe(visibleInApiExplorer);
+    }
+
+    [Fact]
+    public async Task Should_Keep_Only_Explicit_Route_Of_Action_With_Multiple_Selectors()
+    {
+        var action = GetProxyAction<ClientProxyTestAppServiceClientProxy>(nameof(IClientProxyTestAppService.GetDisabledWithVerbAndRouteAsync));
+        action.AttributeRouteInfo.Template.ShouldBe("api/client-proxy-test/disabled-with-verb-and-route");
+
+        (await Client.PostAsync("/api/client-proxy-test/disabled-with-verb-and-route", null)).StatusCode.ShouldBe(HttpStatusCode.OK);
+        (await Client.GetAsync("/clientProxyTest/ClientProxyTest/GetDisabledWithVerbAndRoute")).StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task Should_Keep_Explicit_Controller_Route()
+    {
+        (await Client.GetStringAsync("/api/client-proxy-controller-route")).ShouldBe("controller-route");
+        (await Client.GetAsync("/api/client-proxy-controller-route-json")).StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task Should_Hide_Client_Proxy_With_Disabled_Metadata_From_Api_Explorer()
+    {
+        (await Client.GetStringAsync("/api/client-proxy-metadata-disabled")).ShouldBe("metadata-disabled");
+        GetApiDescriptions("ClientProxyMetadataDisabled").ShouldBeEmpty();
     }
 
     [Fact]
@@ -207,6 +268,11 @@ public class AbpHttpClientProxyServiceConvention_Tests : AbpHttpClientWebTestBas
     private ControllerActionDescriptor GetProxyAction<TClientProxy>(string methodName)
     {
         return GetActions().Single(x => x.ControllerTypeInfo.AsType() == typeof(TClientProxy) && x.MethodInfo.Name == methodName);
+    }
+
+    private ControllerActionDescriptor FindProxyAction<TClientProxy>(string methodName)
+    {
+        return GetActions().SingleOrDefault(x => x.ControllerTypeInfo.AsType() == typeof(TClientProxy) && x.MethodInfo.Name == methodName);
     }
 
     private ApiDescription[] GetApiDescriptions(string groupName)

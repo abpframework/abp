@@ -71,4 +71,62 @@ public class ClientProxyTestAppServiceClientProxy : ClientProxyBase<IClientProxy
     {
         return Task.FromResult("not-described");
     }
+
+    [RemoteService(false)]
+    public virtual Task<string> GetDisabledAsync()
+    {
+        return Task.FromResult("disabled");
+    }
+
+    [RemoteService(false)]
+    [HttpGet]
+    public virtual Task<string> GetDisabledWithVerbAsync()
+    {
+        return Task.FromResult("disabled-with-verb");
+    }
+
+    [RemoteService]
+    public virtual Task<string> GetNotDescribedWithRemoteServiceAsync()
+    {
+        return Task.FromResult("not-described-with-remote-service");
+    }
+
+    [HttpGet]
+    public virtual Task<string> GetNotDescribedWithVerbAsync()
+    {
+        return Task.FromResult("not-described-with-verb");
+    }
+
+    [RemoteService(IsMetadataEnabled = false)]
+    public virtual Task<string> GetNotDescribedHiddenAsync()
+    {
+        return Task.FromResult("not-described-hidden");
+    }
+
+    [ApiExplorerSettings(IgnoreApi = true)]
+    public virtual Task<string> GetNotDescribedIgnoredAsync()
+    {
+        return Task.FromResult("not-described-ignored");
+    }
+
+    [RemoteService(false)]
+    [HttpGet("api/client-proxy-test/disabled-with-route")]
+    public virtual Task<string> GetDisabledWithRouteAsync()
+    {
+        return Task.FromResult("disabled-with-route");
+    }
+
+    [HttpGet("api/client-proxy-test/not-described-with-route")]
+    public virtual Task<string> GetNotDescribedWithRouteAsync()
+    {
+        return Task.FromResult("not-described-with-route");
+    }
+
+    [RemoteService(false)]
+    [HttpGet]
+    [HttpPost("api/client-proxy-test/disabled-with-verb-and-route")]
+    public virtual Task<string> GetDisabledWithVerbAndRouteAsync()
+    {
+        return Task.FromResult("disabled-with-verb-and-route");
+    }
 }

@@ -30,4 +30,22 @@ public interface IClientProxyTestAppService : IApplicationService
     Task<string> GetHiddenAsync();
 
     Task<string> GetNotDescribedAsync();
+
+    Task<string> GetDisabledAsync();
+
+    Task<string> GetDisabledWithVerbAsync();
+
+    Task<string> GetNotDescribedWithRemoteServiceAsync();
+
+    Task<string> GetNotDescribedWithVerbAsync();
+
+    Task<string> GetNotDescribedHiddenAsync();
+
+    Task<string> GetNotDescribedIgnoredAsync();
+
+    Task<string> GetDisabledWithRouteAsync();
+
+    Task<string> GetNotDescribedWithRouteAsync();
+
+    Task<string> GetDisabledWithVerbAndRouteAsync();
 }
