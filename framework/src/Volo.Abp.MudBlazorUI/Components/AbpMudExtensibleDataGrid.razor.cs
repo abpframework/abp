@@ -31,6 +31,11 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
     /// </summary>
     private readonly Dictionary<Func<TItem, object?>, string> _sortFuncToPropertyMap = new();
 
+    /// <summary>
+    /// Keeps one sort function per column, so re-renders don't compile new ones and grow <see cref="_sortFuncToPropertyMap"/>.
+    /// </summary>
+    private readonly Dictionary<TableColumn, Func<TItem, object?>> _columnSortFuncs = new();
+
     [Parameter] public Func<GridState<TItem>, CancellationToken, Task<GridData<TItem>>>? ServerData { get; set; }
 
     [Parameter] public bool Loading { get; set; }
@@ -200,6 +205,11 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
             return null;
         }
 
+        if (_columnSortFuncs.TryGetValue(column, out var cachedSortFunc))
+        {
+            return cachedSortFunc;
+        }
+
         // Determine the property path for sorting
         string? propertyPath = null;
         if (!string.IsNullOrEmpty(column.PropertyName))
@@ -244,6 +254,7 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
 
         // Register the mapping so we can resolve property name from SortDefinition.SortFunc later
         _sortFuncToPropertyMap[sortFunc] = propertyPath;
+        _columnSortFuncs[column] = sortFunc;
 
         return sortFunc;
     }
@@ -253,6 +264,11 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
         if (!column.Sortable || string.IsNullOrWhiteSpace(column.Data))
         {
             return null;
+        }
+
+        if (_columnSortFuncs.TryGetValue(column, out var cachedSortFunc))
+        {
+            return cachedSortFunc;
         }
 
         var match = ExtensionPropertiesRegex.Match(column.Data);
@@ -270,6 +286,7 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
 
         // Register the mapping so we can resolve property name from SortDefinition.SortFunc later
         _sortFuncToPropertyMap[sortFunc] = propertyName;
+        _columnSortFuncs[column] = sortFunc;
 
         return sortFunc;
     }
