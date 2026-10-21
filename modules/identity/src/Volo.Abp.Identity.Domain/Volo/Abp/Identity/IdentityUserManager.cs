@@ -689,9 +689,14 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         throw new AbpIdentityResultException(IdentityResult.Failed(ErrorDescriber.InvalidUserName(userName)));
     }
 
+    public virtual bool IsUserSharingEnabled()
+    {
+        return MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Shared;
+    }
+
     public virtual async Task<IdentityUser> FindSharedUserByEmailAsync(string email)
     {
-        if (MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Isolated)
+        if (!IsUserSharingEnabled())
         {
             return await base.FindByEmailAsync(email);
         }
@@ -722,7 +727,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
     public virtual async Task<IdentityUser> FindSharedUserByNameAsync(string userName)
     {
-        if (MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Isolated)
+        if (!IsUserSharingEnabled())
         {
             return await base.FindByNameAsync(userName);
         }
@@ -753,7 +758,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
     public virtual async Task<IdentityUser> FindSharedUserByLoginAsync(string loginProvider, string providerKey)
     {
-        if (MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Isolated)
+        if (!IsUserSharingEnabled())
         {
             return await base.FindByLoginAsync(loginProvider, providerKey);
         }
@@ -783,7 +788,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
     public virtual async Task<IdentityUser> FindSharedUserByPasskeyIdAsync(byte[] credentialId)
     {
-        if (MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Isolated)
+        if (!IsUserSharingEnabled())
         {
             return await base.FindByPasskeyIdAsync(credentialId);
         }
@@ -813,7 +818,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
     public virtual async Task<IdentityUser> FindSharedUserByIdAsync(string userId)
     {
-        if (MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Isolated)
+        if (!IsUserSharingEnabled())
         {
             return await base.FindByIdAsync(userId);
         }

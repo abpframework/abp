@@ -11,6 +11,8 @@
     "UserLockedOutMessage": "L'account utente è stato bloccato a causa di troppi tentativi di accesso non validi. Attendi qualche istante e riprova.",
     "InvalidUserNameOrPassword": "Username o password non validi!",
     "LoginIsNotAllowed": "Non sei autorizzato ad accedere! Il tuo account non è attivo o devi confermare la tua e-mail/numero di telefono.",
+    "ExternalLoginPasswordChangeRequired": "Non sei autorizzato ad accedere! La tua password deve essere modificata, ma ciò non è possibile con un accesso esterno. Contatta il tuo amministratore.",
+    "RegisteredButLoginIsNotAllowed": "Il tuo account è stato creato, ma non sei ancora autorizzato ad accedere!",
     "SelfRegistrationDisabledMessage": "L'auto-registrazione è disabilitata per questa applicazione. Contatta l'amministratore dell'applicazione per richiedere la registrazione.",
     "LocalLoginDisabledMessage": "L'accesso locale è disabilitato per questa applicazione.",
     "Login": "Accedi",
