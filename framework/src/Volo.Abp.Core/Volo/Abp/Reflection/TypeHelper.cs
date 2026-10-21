@@ -106,11 +106,50 @@ public static class TypeHelper
                 return (TProperty)Enum.Parse(conversionType, value.ToString()!);
             }
 
-            return (TProperty)Convert.ChangeType(value, conversionType, CultureInfo.InvariantCulture);
+            return (TProperty)ChangeType(value, conversionType);
         }
 
         throw new AbpException("ChangeTypePrimitiveExtended<TProperty> does not support non-primitive types. Use non-generic GetProperty method and handle type casting manually.");
     }
+
+    /// <summary>
+    /// Converts the value like <see cref="Convert.ChangeType(object, Type, IFormatProvider)"/> with the invariant culture.
+    /// A float or double converted to decimal is rounded to the 7 or 15 significant digits the type holds, which is what
+    /// earlier .NET versions returned for amounts (0.1d is 0.1m).
+    /// </summary>
+    public static object ChangeType(object value, Type conversionType)
+    {
+#if NET11_0_OR_GREATER
+        // Since .NET 11 the conversion keeps the binary error: 0.1d became 0.1000000000000000055511151231m, so an amount
+        // read back from JSON (where it is a double) would no longer equal the decimal that was saved.
+        if (conversionType == typeof(decimal))
+        {
+            switch (value)
+            {
+                case double doubleValue:
+                    return ToDecimal(doubleValue, doubleValue.ToString("G15", CultureInfo.InvariantCulture));
+                case float floatValue:
+                    return ToDecimal(floatValue, floatValue.ToString("G7", CultureInfo.InvariantCulture));
+            }
+        }
+#endif
+
+        return Convert.ChangeType(value, conversionType, CultureInfo.InvariantCulture);
+    }
+
+#if NET11_0_OR_GREATER
+    private static decimal ToDecimal(double value, string roundedValue)
+    {
+        // Convert.ChangeType throws OverflowException for NaN, infinity and values outside the decimal range; parsing the
+        // rounded text would instead throw FormatException or round a value just past the range back into it.
+        if (!(Math.Abs(value) < 7.922816251426434E+28))
+        {
+            throw new OverflowException("Value was either too large or too small for a Decimal.");
+        }
+
+        return decimal.Parse(roundedValue, NumberStyles.Float, CultureInfo.InvariantCulture);
+    }
+#endif
 
     public static bool IsNullable(Type type)
     {
