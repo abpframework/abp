@@ -32,9 +32,10 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
     private readonly Dictionary<Func<TItem, object?>, string> _sortFuncToPropertyMap = new();
 
     /// <summary>
-    /// Keeps one sort function per column, so re-renders don't compile new ones and grow <see cref="_sortFuncToPropertyMap"/>.
+    /// Keeps one sort function per sort path, so re-renders reuse it instead of growing <see cref="_sortFuncToPropertyMap"/>.
+    /// Keyed by path rather than by column, because a column's data can change between renders.
     /// </summary>
-    private readonly Dictionary<TableColumn, Func<TItem, object?>> _columnSortFuncs = new();
+    private readonly Dictionary<string, Func<TItem, object?>> _sortFuncsByPath = new();
 
     [Parameter] public Func<GridState<TItem>, CancellationToken, Task<GridData<TItem>>>? ServerData { get; set; }
 
@@ -205,11 +206,6 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
             return null;
         }
 
-        if (_columnSortFuncs.TryGetValue(column, out var cachedSortFunc))
-        {
-            return cachedSortFunc;
-        }
-
         // Determine the property path for sorting
         string? propertyPath = null;
         if (!string.IsNullOrEmpty(column.PropertyName))
@@ -224,6 +220,12 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
         if (string.IsNullOrEmpty(propertyPath))
         {
             return null;
+        }
+
+        var cacheKey = "property:" + propertyPath;
+        if (_sortFuncsByPath.TryGetValue(cacheKey, out var cachedSortFunc))
+        {
+            return cachedSortFunc;
         }
 
         var properties = propertyPath.Split('.');
@@ -254,7 +256,7 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
 
         // Register the mapping so we can resolve property name from SortDefinition.SortFunc later
         _sortFuncToPropertyMap[sortFunc] = propertyPath;
-        _columnSortFuncs[column] = sortFunc;
+        _sortFuncsByPath[cacheKey] = sortFunc;
 
         return sortFunc;
     }
@@ -266,11 +268,6 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
             return null;
         }
 
-        if (_columnSortFuncs.TryGetValue(column, out var cachedSortFunc))
-        {
-            return cachedSortFunc;
-        }
-
         var match = ExtensionPropertiesRegex.Match(column.Data);
         if (!match.Success)
         {
@@ -278,6 +275,12 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
         }
 
         var propertyName = match.Groups[1].Value;
+        var cacheKey = "extension:" + propertyName;
+        if (_sortFuncsByPath.TryGetValue(cacheKey, out var cachedSortFunc))
+        {
+            return cachedSortFunc;
+        }
+
         Func<TItem, object?> sortFunc = item =>
         {
             var entity = item as IHasExtraProperties;
@@ -286,7 +289,7 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
 
         // Register the mapping so we can resolve property name from SortDefinition.SortFunc later
         _sortFuncToPropertyMap[sortFunc] = propertyName;
-        _columnSortFuncs[column] = sortFunc;
+        _sortFuncsByPath[cacheKey] = sortFunc;
 
         return sortFunc;
     }
