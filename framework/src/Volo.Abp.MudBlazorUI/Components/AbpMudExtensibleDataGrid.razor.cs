@@ -37,6 +37,8 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
     /// </summary>
     private readonly Dictionary<string, Func<TItem, object?>> _sortFuncsByPath = new();
 
+    private Task? _serverDataTask;
+
     [Parameter] public Func<GridState<TItem>, CancellationToken, Task<GridData<TItem>>>? ServerData { get; set; }
 
     [Parameter] public bool Loading { get; set; }
@@ -70,6 +72,30 @@ public partial class AbpMudExtensibleDataGrid<TItem> : ComponentBase
         {
             await InvokeAsync(() => _dataGrid.ReloadServerData());
         }
+    }
+
+    /// <summary>
+    /// Waits for the server data load that is in progress, such as the one the data grid starts by itself
+    /// when <see cref="CurrentPage"/> changes. Completes immediately if there is no load in progress.
+    /// </summary>
+    public virtual async Task WaitForServerDataAsync()
+    {
+        if (_serverDataTask != null)
+        {
+            await _serverDataTask;
+        }
+    }
+
+    protected virtual Func<GridState<TItem>, CancellationToken, Task<GridData<TItem>>>? GetServerDataFunc()
+    {
+        return ServerData == null ? null : LoadServerDataAsync;
+    }
+
+    private Task<GridData<TItem>> LoadServerDataAsync(GridState<TItem> state, CancellationToken cancellationToken)
+    {
+        var task = ServerData!(state, cancellationToken);
+        _serverDataTask = task;
+        return task;
     }
 
     /// <summary>

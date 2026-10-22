@@ -603,9 +603,13 @@ public abstract class AbpMudCrudPageBase<
     {
         if (Entities.Count == 1 && CurrentPage > 1)
         {
-            // The data grid loads the previous page when it receives the new CurrentPage
+            // The data grid loads the previous page by itself when it receives the new CurrentPage
             CurrentPage -= 1;
             await InvokeAsync(StateHasChanged);
+            if (_dataGrid != null)
+            {
+                await InvokeAsync(() => _dataGrid.WaitForServerDataAsync());
+            }
         }
         else if (_dataGrid != null)
         {

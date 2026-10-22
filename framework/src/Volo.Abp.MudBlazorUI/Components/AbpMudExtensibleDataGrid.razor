@@ -2,7 +2,7 @@
 @using MudBlazor
 @using Volo.Abp.Data
 
-<MudDataGrid @ref="_dataGrid" T="TItem" ServerData="@ServerData" Loading="@Loading" Dense="true" Striped="true"
+<MudDataGrid @ref="_dataGrid" T="TItem" ServerData="@GetServerDataFunc()" Loading="@Loading" Dense="true" Striped="true"
     Bordered="false" Hover="true" Class="@Class" RowsPerPage="@PageSize" CurrentPage="@ZeroBasedCurrentPage">
     <LoadingContent>
         <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
