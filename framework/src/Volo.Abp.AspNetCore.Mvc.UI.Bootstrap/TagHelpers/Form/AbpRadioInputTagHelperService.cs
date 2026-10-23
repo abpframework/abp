@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 using Volo.Abp.Localization;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 
@@ -56,7 +57,7 @@ public class AbpRadioInputTagHelperService : AbpTagHelperService<AbpRadioInputTa
         else
         {
             output.TagName = "div";
-            output.Attributes.Clear();
+            output.Attributes.Add("class", "mb-3");
             output.TagMode = TagMode.StartTagAndEndTag;
             output.Content.SetHtmlContent(html);
         }
@@ -68,24 +69,29 @@ public class AbpRadioInputTagHelperService : AbpTagHelperService<AbpRadioInputTa
         var label = await GetLabelAsHtmlAsync(context, output);
         var infoText = GetInfoAsHtml(context, output);
 
-        var tagBuilder = new TagBuilder("div");
-        tagBuilder.AddCssClass("mb-3");
-        tagBuilder.InnerHtml.AppendHtml(label);
-        tagBuilder.InnerHtml.AppendHtml(radioGroupHtml);
-        tagBuilder.InnerHtml.AppendHtml(infoText);
-
-        return tagBuilder.ToHtmlString();
+        return label + Environment.NewLine + radioGroupHtml + Environment.NewLine + infoText;
     }
 
     protected virtual string GetHtml(TagHelperContext context, TagHelperOutput output, List<SelectListItem> selectItems)
     {
+        var wrapper = new TagBuilder("div");
+        var innerHtml = (TagHelper.ButtonStyle)
+            ? GetButtonsHtml(selectItems)
+            : GetFormCheckHtml(selectItems);
+
+        wrapper.InnerHtml.AppendHtml(innerHtml);
+        return wrapper.ToHtmlString();
+    }
+
+    protected virtual string GetFormCheckHtml(List<SelectListItem> selectItems)
+    {
         var html = new StringBuilder("");
+        var name = TagHelper.AspFor.Name;
 
         foreach (var selectItem in selectItems)
         {
             var inlineClass = (TagHelper.Inline ?? false) ? " form-check-inline" : "";
-            var id = TagHelper.AspFor.Name + "Radio" + selectItem.Value;
-            var name = TagHelper.AspFor.Name;
+            var id = name + "Radio" + selectItem.Value;
 
             var input = new TagBuilder("input");
             input.AddCssClass("form-check-input");
@@ -117,11 +123,66 @@ public class AbpRadioInputTagHelperService : AbpTagHelperService<AbpRadioInputTa
             html.AppendLine(wrapper.ToHtmlString());
         }
 
-        var div = new TagBuilder("div");
-        div.AddCssClass("mb-1");
-        div.InnerHtml.AppendHtml(html.ToString());
+        return html.ToString();
+    }
 
-        return div.ToHtmlString();
+    protected virtual string GetButtonsHtml(List<SelectListItem> selectItems)
+    {
+        var name = TagHelper.AspFor.Name;
+        var buttonClass = $"btn btn-{TagHelper.ButtonType.ToString().ToLowerInvariant().Replace("_", "-")} "
+            + TagHelper.ButtonSize.ToClassName();
+
+        if (TagHelper.Inline != true)
+        {
+            buttonClass += " mb-1 d-block";
+        }
+
+        if (!TagHelper.UseButtonGroup)
+        {
+            buttonClass += " me-1 mb-1";
+        }
+
+        var btnGroup = new TagBuilder("div");
+
+        if (TagHelper.UseButtonGroup)
+        {
+            btnGroup.AddCssClass("btn-group");
+        }
+        btnGroup.Attributes.Add("role", "group");
+        btnGroup.Attributes.Add("aria-label", name);
+
+        foreach (var selectItem in selectItems)
+        {
+            var id = name + "Radio" + selectItem.Value;
+
+            var input = new TagBuilder("input");
+            input.AddCssClass("btn-check");
+            input.Attributes.Add("type", "radio");
+            input.Attributes.Add("id", id);
+            input.Attributes.Add("name", name);
+            input.Attributes.Add("value", selectItem.Value);
+            input.Attributes.Add("autocomplete", "off");
+
+            if (selectItem.Selected)
+            {
+                input.Attributes.Add("checked", "checked");
+            }
+
+            if (TagHelper.Disabled ?? false)
+            {
+                input.Attributes.Add("disabled", "disabled");
+            }
+
+            var label = new TagBuilder("label");
+            label.AddCssClass(buttonClass);
+            label.Attributes.Add("for", id);
+            label.InnerHtml.Append(selectItem.Text);
+
+            btnGroup.InnerHtml.AppendHtml(input);
+            btnGroup.InnerHtml.AppendHtml(label);
+        }
+
+        return btnGroup.ToHtmlString();
     }
 
     protected virtual async Task<string> GetLabelAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
