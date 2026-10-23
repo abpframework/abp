@@ -18,6 +18,10 @@ namespace Volo.Abp.EventBus;
 
 public abstract class EventBusBase : IEventBus
 {
+    // Holds each constructor, so its compiled invoke stub stays alive. With Activator.CreateInstance, once many types are
+    // in use, a GC can drop the stub, and it is generated and compiled again on the next call.
+    private static readonly ConditionalWeakTable<Type, Func<object[], object>> BaseEventDataFactories = new();
+
     protected IServiceScopeFactory ServiceScopeFactory { get; }
 
     protected ICurrentTenant CurrentTenant { get; }
@@ -185,10 +189,26 @@ public abstract class EventBusBase : IEventBus
             {
                 var baseEventType = actualEventType.GetGenericTypeDefinition().MakeGenericType(baseArg);
                 var constructorArgs = ((IEventDataWithInheritableGenericArgument)resolvedEventData).GetConstructorArgs();
-                var baseEventData = Activator.CreateInstance(baseEventType, constructorArgs)!;
+                var baseEventData = CreateBaseEventData(baseEventType, constructorArgs);
                 await PublishToEventBusAsync(baseEventType, baseEventData);
             }
         }
+    }
+
+    private static object CreateBaseEventData(Type baseEventType, object[] constructorArgs)
+    {
+        return BaseEventDataFactories.GetValue(baseEventType, static type =>
+        {
+            var constructors = type.GetConstructors();
+            if (constructors.Length != 1 ||
+                Array.Exists(constructors[0].GetParameters(), static parameter => parameter.IsDefined(typeof(ParamArrayAttribute), false)))
+            {
+                return args => Activator.CreateInstance(type, args)!;
+            }
+
+            var constructor = constructors[0];
+            return args => constructor.Invoke(args);
+        })(constructorArgs);
     }
 
     protected virtual (List<EventTypeWithEventHandlerFactories> Factories, Type? ActualEventType) ResolveHandlerFactories(
