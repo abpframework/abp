@@ -63,6 +63,7 @@
 | Microsoft.Extensions.Options | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
 | Microsoft.Extensions.Options.ConfigurationExtensions | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
 | Microsoft.Maui.Controls | 10.0.51 | 11.0.0-rc.2.26505.5 | #26147 |
+| MongoDB.Driver | 3.12.0 | 3.13.0 | #26334 |
 | Npgsql.EntityFrameworkCore.PostgreSQL | 10.0.3 | 11.0.0-rc.1.1 | #26147 |
 | Oracle.EntityFrameworkCore | 10.23.26000 | 10.23.26301 | #26147 |
 | System.Collections.Immutable | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
@@ -95,12 +96,6 @@
 | itext.bouncy-castle-adapter | 9.3.0 | #26216 |
 | itext7 | 9.3.0 | #26216 |
 | itext7.pdfhtml | 6.2.1 | #26216 |
-
-## 10.7.1
-
-| Package | Old Version | New Version | PR |
-|---------|-------------|-------------|-----|
-| MongoDB.Driver | 3.12.0 | 3.13.0 | #26332 |
 
 ## 10.7.0-rc.4
 
