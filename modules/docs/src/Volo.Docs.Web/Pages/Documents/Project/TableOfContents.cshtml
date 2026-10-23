@@ -11,7 +11,7 @@
     @foreach (var item in Model)
     {
         <li class="nav-item @(item.Children.Any() ? "toc-item-has-children" : "")">
-            <a class="nav-link" href="#@item.Heading.Id">@item.Heading.Text</a>
+            <a class="nav-link" href="#@item.Heading.Id" title="@item.Heading.Text">@item.Heading.Text</a>
             
             @if (item.Children.Any())
             {
@@ -28,7 +28,7 @@
             @foreach (var child in children)
             {
                 <li class="nav-item @(child.Children.Any() ? "toc-item-has-children" : "")">
-                    <a class="nav-link" href="#@child.Heading.Id">@child.Heading.Text</a>
+                    <a class="nav-link" href="#@child.Heading.Id" title="@child.Heading.Text">@child.Heading.Text</a>
                 
                     @if (child.Children.Any())
                     {
