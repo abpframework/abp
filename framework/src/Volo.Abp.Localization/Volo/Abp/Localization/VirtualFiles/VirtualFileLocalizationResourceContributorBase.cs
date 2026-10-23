@@ -16,7 +16,8 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
     public bool IsDynamic => false;
 
     private readonly string _virtualPath;
-    private IVirtualFileProvider _virtualFileProvider = default!;
+    private IServiceProvider _serviceProvider = default!;
+    private IVirtualFileProvider? _virtualFileProvider;
     private Dictionary<string, ILocalizationDictionary>? _dictionaries;
     private bool _subscribedForChanges;
     private readonly object _syncObj = new object();
@@ -28,8 +29,14 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
 
     public virtual void Initialize(LocalizationResourceInitializationContext context)
     {
-        _virtualFileProvider = context.ServiceProvider.GetRequiredService<IVirtualFileProvider>();
+        // The provider is resolved on first use, outside any lock: Initialize runs while the localizer factory holds
+        // its lock, and resolving a singleton under a lock deadlocks with a thread that creates that singleton and
+        // reads localized texts.
+        _serviceProvider = context.ServiceProvider;
     }
+
+    private IVirtualFileProvider VirtualFileProvider =>
+        _virtualFileProvider ??= _serviceProvider.GetRequiredService<IVirtualFileProvider>();
 
     public virtual LocalizedString? GetOrNull(string cultureName, string name)
     {
@@ -60,6 +67,8 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
             return dictionaries;
         }
 
+        var virtualFileProvider = VirtualFileProvider;
+
         lock (_syncObj)
         {
             dictionaries = _dictionaries;
@@ -70,7 +79,7 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
 
             if (!_subscribedForChanges)
             {
-                ChangeToken.OnChange(() => _virtualFileProvider.Watch(_virtualPath.EnsureEndsWith('/') + "*.*"),
+                ChangeToken.OnChange(() => virtualFileProvider.Watch(_virtualPath.EnsureEndsWith('/') + "*.*"),
                     () =>
                     {
                         _dictionaries = null;
@@ -89,7 +98,7 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
     {
         var rawDictionaries = new Dictionary<string, Dictionary<string, LocalizedString>>();
 
-        foreach (var file in _virtualFileProvider.GetDirectoryContents(_virtualPath)
+        foreach (var file in VirtualFileProvider.GetDirectoryContents(_virtualPath)
                      .Where(f => !f.IsDirectory && CanParseFile(f))
                      .OrderBy(f => f.Name, StringComparer.Ordinal))
         {
