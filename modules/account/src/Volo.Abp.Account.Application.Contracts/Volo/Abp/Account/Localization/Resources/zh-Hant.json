@@ -11,6 +11,8 @@
     "UserLockedOutMessage": "登入失敗,使用者帳號已被鎖定.請稍後再試.",
     "InvalidUserNameOrPassword": "使用者名稱或密碼錯誤!",
     "LoginIsNotAllowed": "無法登入!你的帳號未啟用或者需要驗證電子郵件地址/手機號碼.",
+    "ExternalLoginPasswordChangeRequired": "無法登入!你的密碼必須變更,但無法透過外部登入完成.請聯絡管理員.",
+    "RegisteredButLoginIsNotAllowed": "帳號已建立,但你暫時無法登入!",
     "SelfRegistrationDisabledMessage": "應用程式未開放註冊,請聯絡管理員以加入新使用者.",
     "LocalLoginDisabledMessage": "應用程式未開放本地帳戶登入.",
     "Login": "登入",

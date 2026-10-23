@@ -1,9 +1,7 @@
 using System;
 using System.Net.Http;
-using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using MyCompanyName.MyProjectName.Blazor.WebApp.Tiered.Client.Menus;
 using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Routing;
@@ -68,8 +66,6 @@ public class MyProjectNameBlazorClientModule : AbpModule
 
     private static void ConfigureAuthentication(WebAssemblyHostBuilder builder)
     {
-        //TODO: Remove SignOutSessionStateManager in new version.
-        builder.Services.TryAddScoped<SignOutSessionStateManager>();
         builder.Services.AddBlazorWebAppTieredServices();
     }
 

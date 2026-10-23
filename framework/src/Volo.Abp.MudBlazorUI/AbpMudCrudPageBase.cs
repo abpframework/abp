@@ -180,6 +180,7 @@ public abstract class AbpMudCrudPageBase<
 
     protected virtual int PageSize { get; set; } = LimitedResultRequestDto.DefaultMaxResultCount;
 
+    protected IReadOnlyList<TListViewModel> Entities = Array.Empty<TListViewModel>();
     protected int CurrentPage = 1;
     protected string CurrentSorting = default!;
     protected TGetListInput GetListInput = new TGetListInput();
@@ -349,6 +350,7 @@ public abstract class AbpMudCrudPageBase<
             await UpdateGetListInputAsync();
             var result = await AppService.GetListAsync(GetListInput);
             var items = MapToListViewModel(result.Items);
+            Entities = items;
 
             await InvokeAsync(StateHasChanged);
 
@@ -599,7 +601,17 @@ public abstract class AbpMudCrudPageBase<
 
     protected virtual async Task OnDeletedEntityAsync()
     {
-        if (_dataGrid != null)
+        if (Entities.Count == 1 && CurrentPage > 1)
+        {
+            // The data grid loads the previous page by itself when it receives the new CurrentPage
+            CurrentPage -= 1;
+            await InvokeAsync(StateHasChanged);
+            if (_dataGrid != null)
+            {
+                await InvokeAsync(() => _dataGrid.WaitForServerDataAsync());
+            }
+        }
+        else if (_dataGrid != null)
         {
             await InvokeAsync(() => _dataGrid.ReloadServerDataAsync());
         }

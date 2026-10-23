@@ -17,6 +17,7 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.EventBus.Local;
+using Volo.Abp.Http.Client;
 using Volo.Docs.Common;
 using Volo.Docs.Common.Documents;
 using Volo.Docs.Common.Projects;
@@ -200,7 +201,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 }
 
             }
-            catch (EntityNotFoundException e)
+            catch (Exception e) when (e is EntityNotFoundException || IsRemoteNotFound(e))
             {
                 Logger.LogWarning(e.Message);
                 ProjectFound = false;
@@ -516,10 +517,21 @@ namespace Volo.Docs.Pages.Documents.Project
                     }
                 );
             }
-            catch (DocumentNotFoundException) //TODO: What if called on a remote service which may return 404
+            catch (Exception e) when (IsDocumentNotFound(e))
             {
                 return;
             }
+        }
+
+        private static bool IsDocumentNotFound(Exception exception)
+        {
+            return exception is DocumentNotFoundException ||
+                   exception is AbpRemoteCallException { Code: DocsDomainErrorCodes.DocumentNotFound };
+        }
+
+        private static bool IsRemoteNotFound(Exception exception)
+        {
+            return exception is AbpRemoteCallException { HttpStatusCode: (int)HttpStatusCode.NotFound };
         }
         
         private void SetDocumentPageTitle()
@@ -571,7 +583,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
                     return true;
                 }
-                catch (DocumentNotFoundException e)
+                catch (Exception e) when (IsDocumentNotFound(e))
                 {
                     Logger.LogWarning(e.Message);
                 }
