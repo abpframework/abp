@@ -26,7 +26,8 @@ public static class IdentityUserPasskeyExtensions
             passkey.Data.AttestationObject,
             passkey.Data.ClientDataJson)
         {
-            Name = passkey.Data.Name
+            Name = passkey.Data.Name,
+            Aaguid = passkey.Data.Aaguid
         };
     }
 }

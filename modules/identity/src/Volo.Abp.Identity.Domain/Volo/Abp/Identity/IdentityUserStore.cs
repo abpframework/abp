@@ -1157,6 +1157,7 @@ public class IdentityUserStore :
                 IsBackedUp = passkey.IsBackedUp,
                 AttestationObject = passkey.AttestationObject,
                 ClientDataJson = passkey.ClientDataJson,
+                Aaguid = passkey.Aaguid,
             });
         }
     }
