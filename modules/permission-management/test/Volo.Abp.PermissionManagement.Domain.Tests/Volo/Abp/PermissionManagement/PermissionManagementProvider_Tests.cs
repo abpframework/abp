@@ -75,4 +75,19 @@ public class PermissionManagementProvider_Tests : PermissionTestBase
             "Test")).ShouldBeNull();
     }
 
+    [Fact]
+    public async Task SetAsync_Should_Revoke_Duplicate_Host_Grants()
+    {
+        await _permissionGrantRepository.InsertAsync(new PermissionGrant(Guid.NewGuid(), "MyPermission1", "Test", "Test"));
+        await _permissionGrantRepository.InsertAsync(new PermissionGrant(Guid.NewGuid(), "MyPermission1", "Test", "Test"));
+        (await _permissionGrantRepository.GetListAsync(new[] { "MyPermission1" }, "Test", "Test")).Count.ShouldBe(2);
+
+        await _permissionManagementProvider.SetAsync("MyPermission1",
+            "Test",
+            false);
+
+        (await _permissionGrantRepository.FindAsync("MyPermission1",
+            "Test",
+            "Test")).ShouldBeNull();
+    }
 }

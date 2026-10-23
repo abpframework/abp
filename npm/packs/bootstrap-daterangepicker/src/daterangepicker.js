@@ -4,6 +4,8 @@
 * @copyright: Copyright (c) 2012-2019 Dan Grossman. All rights reserved.
 * @license: Licensed under the MIT license. See http://www.opensource.org/licenses/mit-license.php
 * @website: http://www.daterangepicker.com/
+* Patched copy: autoApply works together with timePicker, predefined ranges start at the beginning of the day,
+* and Function.prototype.bind is used instead of the jQuery.proxy API deprecated in jQuery 4.
 */
 // Following the UMD template https://github.com/umdjs/umd/blob/master/templates/returnExportsGlobal.js
 (function (root, factory) {

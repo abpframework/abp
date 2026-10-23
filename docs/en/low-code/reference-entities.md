@@ -82,6 +82,28 @@ public void Add<TEntity>(
 
 > The entity type must implement `IEntity<Guid>`.
 
+### Display and Search Properties
+
+`Add<TEntity>` returns the `ReferenceEntityDescriptor`, which can declare how a lookup shows and finds records:
+
+````csharp
+AbpDynamicEntityConfig.ReferencedEntityList.Add<IdentityUser>(
+        "UserName",
+        "UserName",
+        "Name",
+        "Surname",
+        "Email")
+    .WithDisplayProperties("Name", "Surname")
+    .WithSearchProperties("Email");
+````
+
+| Method | Description |
+|--------|-------------|
+| `WithDisplayProperties(...)` | The shown value is the non-empty values of these properties joined with a space, for example "John Smith". When all of them are empty, the default display property is shown. Lookups are ordered by the shown value |
+| `WithSearchProperties(...)` | Further properties the lookup search text matches, besides the shown value |
+
+The lookup search matches the default display property, the display properties, and the search properties, ignoring case. When the search text has several words, every word must match one of them. Without display or search properties, only the default display property is searched. The search stays within the lookup's normal page size. All of these must be `string` properties of the entity; a lookup over a non-string property fails.
+
 ## Using Reference Entities in JSON Descriptors
 
 Reference a registered entity in a foreign key definition:
@@ -117,6 +139,8 @@ The `ReferenceEntityDescriptor` class stores metadata about the reference entity
 * `Name` — Full CLR type name
 * `Type` — The actual CLR type
 * `DefaultDisplayPropertyName` — Display property for lookups
+* `DisplayPropertyNames` — Properties joined to form the shown value (optional)
+* `SearchPropertyNames` — Further properties the lookup search matches (optional)
 * `Properties` — List of `ReferenceEntityPropertyDescriptor` entries
 
 When a foreign key points to a reference entity, the `ForeignKeyDescriptor` populates its `ReferencedEntityDescriptor` and `ReferencedDisplayPropertyDescriptor` instead of the standard `EntityDescriptor` fields.

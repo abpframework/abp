@@ -6,7 +6,7 @@
   },
   "dependencies": {
     "@abp/aspnetcore.mvc.ui.theme.shared": "~10.7.0",
-    "@abp/owl.carousel": "~10.7.0",
+    "@abp/swiper": "~10.7.0",
     "@abp/prismjs": "~10.7.0",
     "@abp/tui-editor": "~10.7.0"
   },

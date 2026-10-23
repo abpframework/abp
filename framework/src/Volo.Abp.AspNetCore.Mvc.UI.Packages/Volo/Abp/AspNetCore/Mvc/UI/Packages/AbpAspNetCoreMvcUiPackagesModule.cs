@@ -2,7 +2,6 @@
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.BootstrapDatepicker;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryValidation;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Moment;
-using Volo.Abp.AspNetCore.Mvc.UI.Packages.Timeago;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 
@@ -37,11 +36,6 @@ public class AbpAspNetCoreMvcUiPackagesModule : AbpModule
                 new NameValue("zh-Hans", "zh-cn"),
                 new NameValue("zh-Hant", "zh-tw"),
                 new NameValue("de-DE", "de"));
-
-            //Timeago
-            options.AddLanguageFilesMapOrUpdate(TimeagoScriptContributor.PackageName,
-                new NameValue("zh-Hans", "zh-CN"),
-                new NameValue("zh-Hant", "zh-TW"));
 
             //JQueryValidation
             options.AddLanguageFilesMapOrUpdate(JQueryValidationScriptContributor.PackageName,

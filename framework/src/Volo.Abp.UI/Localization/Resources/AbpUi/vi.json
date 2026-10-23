@@ -62,6 +62,7 @@
     "Theme": "chủ đề",
     "NotAssigned": "Không được chỉ định",
     "EntityActionsDisabledTooltip": "Bạn không có quyền thực hiện bất kỳ hành động nào.",
-    "ResourcePermissions": "Quyền"
+    "ResourcePermissions": "Quyền",
+    "ShowPassword": "Hiện mật khẩu"
   }
 }

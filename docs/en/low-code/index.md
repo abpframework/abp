@@ -106,7 +106,7 @@ The designer is the day-to-day entry point.
 5. Use **Actions** and **Interceptors** when the standard CRUD flow needs custom logic, endpoints, event handlers, jobs, or workers.
 6. Use **Health** to review model issues before publishing changes.
 
-Runtime JSON changes also have model history, undo/redo, comparisons, and save points. Entity deletion uses a reviewed impact plan and can retain Designer-managed physical data for later restoration. See [Model History and Recovery](model-history.md).
+Runtime JSON changes also have model history, undo/redo, comparisons, and save points. Entity deletion uses a reviewed impact plan, and deleted entities, properties, and collections keep their data for later restoration. See [Model History and Recovery](model-history.md) and [Deleted Objects](deleted-objects.md).
 
 The screens below follow that common designer flow from data to page setup to forms:
 
@@ -181,7 +181,8 @@ The designer stores and reads the same descriptor metadata described in the refe
 | [Designer](designer.md) | Admin Console tabs, entity/page/form setup, permissions, and health |
 | [Data Modeling and Page Behavior](data-modeling.md) | Property storage, primitive collections, related fields, presentations, backend filters, and relationship permissions |
 | [Data Import](data-import.md) | Excel/CSV mapping, append and merge, foreign-key matching, remote files, and invalid rows |
-| [Model History and Recovery](model-history.md) | Runtime undo/redo, save points, comparison, safe deletion, and retained-data restore |
+| [Model History and Recovery](model-history.md) | Runtime undo/redo, save points, comparison, change summaries, history extension points, and safe deletion |
+| [Deleted Objects](deleted-objects.md) | Kept data of deleted entities, properties, and collections, restore and purge, and app deletion |
 | [Calculated and Rollup Properties](formula-properties.md) | Virtual scalar formulas and related-record aggregates authored in the Designer |
 | [Low-Code Expression Language](expression-language.md) | Provider-safe scalar syntax used by calculated properties and formula backfills |
 | [Add Low-Code to an Existing Solution](add-to-existing-solution.md) | Retrofitting an existing EF Core solution with Studio import plus manual backend and React wiring |

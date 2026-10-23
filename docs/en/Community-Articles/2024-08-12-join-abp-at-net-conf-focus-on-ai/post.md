@@ -17,7 +17,7 @@ Get ready for deep dives into AI integration, practical examples, and insights f
 ### Session Highlights
 
 * **Getting Started with AI in .NET** by *Stephen Toub* 
-* **NET Aspire and Semantic Kernel** by *Steve Sanderson* and *Matthew Bolanos* 
+* **Aspire and Semantic Kernel** by *Steve Sanderson* and *Matthew Bolanos*
 * **Interactive AI with Blazor and .NET** by *Dan Roth*
 * **AI Models in .NET: From Local to Cloud** by *Bruno Capuano*
 * **RAG with .NET and Azure SQL** by *Davide Mauri*
