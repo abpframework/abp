@@ -356,6 +356,9 @@ body.scrolledMore:has(#abp-chatbot-container) .alert-criteria .options-header .t
   padding: 4px 0;
   display: block;
   border-bottom: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .docs-page .docs-sidebar .docs-tree-list ul li a:hover {
   color: #fff;

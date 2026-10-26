@@ -437,6 +437,10 @@ body {
                         padding: 4px 0;
                         display: block;
                         border-bottom: 0;
+                        // Truncate long titles visually; the full text stays in the HTML.
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
 
                         &:hover {
                             color: #fff;
