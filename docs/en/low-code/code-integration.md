@@ -7,8 +7,6 @@
 
 # Code Integration
 
-> **Preview:** Low-Code integration APIs are part of the preview Low-Code System. Registration details, repository behavior, and page service contracts may change before general availability.
-
 Use the [Low-Code Designer](designer.md) and [React Runtime](react-runtime.md) for standard CRUD screens. This page covers the integration points for the cases where low-code models and regular application code need to reach each other directly.
 
 ## Choose the Right Integration Path
