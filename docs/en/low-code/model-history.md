@@ -70,7 +70,7 @@ Comparison and history actions are protected by entry, operation, and serialized
 
 ## Change Summary
 
-`POST /api/lowcode/model/history/change-summary` lists what changed between two history points, one row per changed object: an entity, a property, a page, a form, an API resource, a script, an enum, a permission, and so on. It takes the same `from` and `to` points as history comparison (`Current`, `SavePoint`, `SaveBefore`, `SaveAfter`, or `Checkpoint`).
+`POST /api/lowcode/model/history/change-summary` lists what changed between two history points, one row per changed object: an entity, a property, a page, a form, a script, an enum, a permission, and so on. It takes the same `from` and `to` points as history comparison (`Current`, `SavePoint`, `SaveBefore`, `SaveAfter`, or `Checkpoint`).
 
 Each object row reports one of these change kinds:
 
