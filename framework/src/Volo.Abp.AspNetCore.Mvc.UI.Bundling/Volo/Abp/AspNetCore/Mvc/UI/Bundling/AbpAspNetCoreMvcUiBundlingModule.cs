@@ -80,9 +80,10 @@ public class AbpAspNetCoreMvcUiBundlingModule : AbpModule
                 var fileContent = await fileInfo.ReadAsStringAsync();
                 if (!bundleManager.IsBundlingEnabled())
                 {
+                    var webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
                     fileContent = CssRelativePath.Adjust(fileContent,
-                        file.FileName,
-                        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"));
+                        Path.Combine(webRootPath, file.FileName.RemovePreFix("/")),
+                        Path.Combine(webRootPath, bundlingOptions.GlobalAssets.CssFileName));
 
                     styles += $"/*{file.FileName}*/{Environment.NewLine}{fileContent}{Environment.NewLine}{Environment.NewLine}";
                 }

@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Polly;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -57,6 +56,11 @@ public class AbpSettingManagementDomainModule : AbpModule
         var rootServiceProvider = context.ServiceProvider.GetRequiredService<IRootServiceProvider>();
         var initializer = rootServiceProvider.GetRequiredService<SettingDynamicInitializer>();
         await initializer.InitializeAsync(true, _cancellationTokenSource.Token);
+    }
+
+    public override void OnApplicationShutdown(ApplicationShutdownContext context)
+    {
+        AsyncHelper.RunSync(() => OnApplicationShutdownAsync(context));
     }
 
     public override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)

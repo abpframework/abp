@@ -70,6 +70,7 @@ interface MockBody {
   responseTypeWithNamespace: string;
   httpResponseType?: string;
   acceptHeader?: string;
+  contentTypeHeader?: string;
   body?: string;
   params: string[];
   dictParamVar?: string;
@@ -85,6 +86,7 @@ function makeBody(overrides: Partial<MockBody>): MockBody {
     responseTypeWithNamespace: 'any',
     httpResponseType: undefined,
     acceptHeader: undefined,
+    contentTypeHeader: undefined,
     body: undefined,
     params: [],
     dictParamVar: undefined,
@@ -104,6 +106,33 @@ describe('proxy service template — rendered output', () => {
     expect(output).toContain("method: 'GET'");
     expect(output).not.toContain('responseType:');
     expect(output).not.toContain('headers:');
+  });
+
+  test('string body emits a content type header and a JSON encoded body', () => {
+    const output = render(buildContext({
+      method: 'POST',
+      body: 'JSON.stringify(connectionString)',
+      contentTypeHeader: 'application/json',
+      responseType: 'boolean',
+      responseTypeWithNamespace: 'boolean',
+    }));
+
+    expect(output).toContain("headers: { 'Content-Type': 'application/json' }");
+    expect(output).toContain('body: JSON.stringify(connectionString)');
+  });
+
+  test('accept and content type headers are emitted together', () => {
+    const output = render(buildContext({
+      method: 'POST',
+      body: 'JSON.stringify(value)',
+      contentTypeHeader: 'application/json',
+      acceptHeader: 'text/plain',
+      httpResponseType: 'text',
+      responseType: 'string',
+      responseTypeWithNamespace: 'string',
+    }));
+
+    expect(output).toContain("headers: { Accept: 'text/plain', 'Content-Type': 'application/json' }");
   });
 
   test('resource api mode emits requestResource helper for GET methods', () => {

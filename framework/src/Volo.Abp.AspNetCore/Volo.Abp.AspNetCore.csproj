@@ -4,7 +4,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net11.0</TargetFramework>
     <Nullable>enable</Nullable>
     <WarningsAsErrors>Nullable</WarningsAsErrors>
     <AssemblyName>Volo.Abp.AspNetCore</AssemblyName>
@@ -32,6 +32,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" />
     <PackageReference Include="Duende.IdentityModel" />
     <PackageReference Include="MyCSharp.HttpUserAgentParser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="buildTransitive\Volo.Abp.AspNetCore.targets" Pack="true" PackagePath="buildTransitive\" />
   </ItemGroup>
 
 </Project>

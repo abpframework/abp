@@ -9,8 +9,6 @@
 
 > You must have an ABP Team or a higher license to use this module.
 
-> **Preview:** The Low-Code System is currently in preview. APIs, designer behavior, generated metadata, and React runtime details may change before general availability. Use it for evaluation and controlled projects, and review release notes before upgrading.
-
 The ABP Low-Code System lets you build data-driven admin screens from metadata. The primary workflow is the **Low-Code Designer** in ABP Admin Console, backed by the **React runtime** in your application.
 
 Use the designer to model entities, enums, properties, relations, pages, forms, filters, permissions, actions, and health checks. The runtime uses the same metadata to provide:
@@ -22,6 +20,7 @@ Use the designer to model entities, enums, properties, relations, pages, forms, 
 * React data grid, kanban, calendar, gallery, form, and dashboard pages
 * Create and edit forms
 * Advanced filters
+* Guided Excel and CSV import with append or merge behavior
 * Excel, CSV, and file bundle export
 
 No DTO, repository, application service, controller, or React CRUD page is required for the standard flow.
@@ -98,12 +97,14 @@ The generated startup project accepts `--model-directory <path-to-_Dynamic/model
 
 The designer is the day-to-day entry point.
 
-1. Use **Data** to create entities, enums, properties, and relations.
-2. Use **Pages** to choose a page type, menu placement, fields, default sorting, filters, dashboards, and linked forms.
+1. Use **Data** to create entities, enums, properties, primitive collections, and relations.
+2. Use **Pages** to choose a page type, menu placement, related fields, default sorting, visible and backend filters, import, dashboards, and linked forms.
 3. Use **Forms** to arrange create and edit forms with tabs, groups, controls, validations, and actions.
 4. Use **Permissions** to review generated permissions and control access.
 5. Use **Actions** and **Interceptors** when the standard CRUD flow needs custom logic, endpoints, event handlers, jobs, or workers.
 6. Use **Health** to review model issues before publishing changes.
+
+Runtime JSON changes also have model history, undo/redo, comparisons, and save points. Entity deletion uses a reviewed impact plan, and deleted entities, properties, and collections keep their data for later restoration. See [Model History and Recovery](model-history.md) and [Deleted Objects](deleted-objects.md).
 
 The screens below follow that common designer flow from data to page setup to forms:
 
@@ -176,6 +177,10 @@ The designer stores and reads the same descriptor metadata described in the refe
 | Topic | Use it for |
 |-------|------------|
 | [Designer](designer.md) | Admin Console tabs, entity/page/form setup, permissions, and health |
+| [Data Modeling and Page Behavior](data-modeling.md) | Property storage, primitive collections, related fields, presentations, backend filters, and relationship permissions |
+| [Data Import](data-import.md) | Excel/CSV mapping, append and merge, foreign-key matching, remote files, and invalid rows |
+| [Model History and Recovery](model-history.md) | Runtime undo/redo, save points, comparison, change summaries, history extension points, and safe deletion |
+| [Deleted Objects](deleted-objects.md) | Kept data of deleted entities, properties, and collections, restore and purge, and app deletion |
 | [Calculated and Rollup Properties](formula-properties.md) | Virtual scalar formulas and related-record aggregates authored in the Designer |
 | [Low-Code Expression Language](expression-language.md) | Provider-safe scalar syntax used by calculated properties and formula backfills |
 | [Add Low-Code to an Existing Solution](add-to-existing-solution.md) | Retrofitting an existing EF Core solution with Studio import plus manual backend and React wiring |
@@ -209,6 +214,9 @@ The generated pages are powered by these services:
 ## See Also
 
 * [Low-Code Designer](designer.md)
+* [Data Modeling and Page Behavior](data-modeling.md)
+* [Data Import](data-import.md)
+* [Model History and Recovery](model-history.md)
 * [Calculated and Rollup Properties](formula-properties.md)
 * [Low-Code Expression Language](expression-language.md)
 * [Add Low-Code to an Existing Solution](add-to-existing-solution.md)

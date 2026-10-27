@@ -29,8 +29,8 @@
       "minLength": 1
     },
     "message": {
-      "type": "string",
-      "description": "Optional custom validation message"
+      "type": ["string", "null"],
+      "description": "Optional custom validation message. Omit or null to use the default localized message."
     }
   },
   "required": ["propertyName", "operator", "otherPropertyName"],

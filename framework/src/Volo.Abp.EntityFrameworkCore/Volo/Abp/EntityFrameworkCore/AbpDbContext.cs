@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -668,7 +667,7 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                     }
                     else
                     {
-                        entryProperty.CurrentValue = Convert.ChangeType(entityProperty, conversionType, CultureInfo.InvariantCulture);
+                        entryProperty.CurrentValue = TypeHelper.ChangeType(entityProperty, conversionType);
                     }
                 }
             }
@@ -997,6 +996,6 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
 
     public virtual string GetCompiledQueryCacheKey()
     {
-        return $"{CurrentTenantId?.ToString() ?? "Null"}:{IsSoftDeleteFilterEnabled}:{IsMultiTenantFilterEnabled}";
+        return $"{IsSoftDeleteFilterEnabled}:{IsMultiTenantFilterEnabled}";
     }
 }

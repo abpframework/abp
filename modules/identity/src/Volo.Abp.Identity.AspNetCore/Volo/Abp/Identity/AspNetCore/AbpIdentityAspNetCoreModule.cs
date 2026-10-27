@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -18,14 +19,6 @@ public class AbpIdentityAspNetCoreModule : AbpModule
         PreConfigure<IdentityBuilder>(builder =>
         {
             builder
-                .AddDefaultTokenProviders()
-                .AddTokenProvider<AbpDefaultTokenProvider>(TokenOptions.DefaultProvider)
-                .AddTokenProvider<LinkUserTokenProvider>(LinkUserTokenProviderConsts.LinkUserTokenProviderName)
-                .AddTokenProvider<AbpPasswordResetTokenProvider>(AbpPasswordResetTokenProvider.ProviderName)
-                .AddTokenProvider<AbpEmailConfirmationTokenProvider>(AbpEmailConfirmationTokenProvider.ProviderName)
-                .AddTokenProvider<AbpChangeEmailTokenProvider>(AbpChangeEmailTokenProvider.ProviderName)
-                .AddTokenProvider<AbpEmailTwoFactorTokenProvider>(TokenOptions.DefaultEmailProvider)
-                .AddTokenProvider<AbpPhoneNumberTwoFactorTokenProvider>(TokenOptions.DefaultPhoneProvider)
                 .AddSignInManager<AbpSignInManager>()
                 .AddUserValidator<AbpIdentityUserValidator>();
         });
@@ -33,12 +26,7 @@ public class AbpIdentityAspNetCoreModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<IdentityOptions>(options =>
-        {
-            options.Tokens.PasswordResetTokenProvider = AbpPasswordResetTokenProvider.ProviderName;
-            options.Tokens.EmailConfirmationTokenProvider = AbpEmailConfirmationTokenProvider.ProviderName;
-            options.Tokens.ChangeEmailTokenProvider = AbpChangeEmailTokenProvider.ProviderName;
-        });
+        context.Services.AddHttpContextAccessor();
 
         //(TODO: Extract an extension method like IdentityBuilder.AddAbpSecurityStampValidator())
         context.Services.AddScoped<AbpSecurityStampValidator>();
@@ -61,6 +49,9 @@ public class AbpIdentityAspNetCoreModule : AbpModule
 
     public override void PostConfigureServices(ServiceConfigurationContext context)
     {
+        context.Services.PostConfigure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme,
+            cookieOptions => cookieOptions.ValidateIdentitySession());
+
         // Replace the default UserValidator with AbpIdentityUserValidator
         context.Services.RemoveAll(x => x.ServiceType == typeof(IUserValidator<IdentityUser>) && x.ImplementationType == typeof(UserValidator<IdentityUser>));
         context.Services.AddAbpOptions<SecurityStampValidatorOptions>()

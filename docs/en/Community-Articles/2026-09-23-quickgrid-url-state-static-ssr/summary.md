@@ -1,0 +1,1 @@
+.NET 11 puts QuickGrid's sort and page state in the URL (`?sort=Name&direction=desc&page=2`), so sorting and paging finally work on statically rendered Blazor pages — and every grid state becomes a link you can share, bookmark, or go Back to. A working static-SSR sample, tested edge cases, and the RC1 caveats to know before adopting it.

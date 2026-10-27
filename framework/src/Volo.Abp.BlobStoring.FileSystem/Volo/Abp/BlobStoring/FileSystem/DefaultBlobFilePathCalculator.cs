@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 
@@ -16,7 +18,7 @@ public class DefaultBlobFilePathCalculator : IBlobFilePathCalculator, ITransient
     public virtual string Calculate(BlobProviderArgs args)
     {
         var fileSystemConfiguration = args.Configuration.GetFileSystemConfiguration();
-        var blobPath = fileSystemConfiguration.BasePath;
+        var blobPath = Path.GetFullPath(fileSystemConfiguration.BasePath);
 
         if (CurrentTenant.Id == null)
         {
@@ -29,11 +31,33 @@ public class DefaultBlobFilePathCalculator : IBlobFilePathCalculator, ITransient
 
         if (fileSystemConfiguration.AppendContainerNameToBasePath)
         {
-            blobPath = Path.Combine(blobPath, args.ContainerName);
+            blobPath = CombineRelativePath(blobPath, args.ContainerName, nameof(args.ContainerName));
         }
 
-        blobPath = Path.Combine(blobPath, args.BlobName);
+        return CombineRelativePath(blobPath, args.BlobName, nameof(args.BlobName));
+    }
 
-        return blobPath;
+    protected virtual string CombineRelativePath(string rootPath, string relativePath, string parameterName)
+    {
+        if (Path.IsPathRooted(relativePath))
+        {
+            throw new ArgumentException($"The {parameterName} must be a relative path.", parameterName);
+        }
+
+        var segments = relativePath.Split(new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries);
+        if (segments.Any(segment => segment == "." || segment == ".."))
+        {
+            throw new ArgumentException($"The {parameterName} must not contain '.' or '..' segments.", parameterName);
+        }
+
+        var fullRootPath = Path.GetFullPath(rootPath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        var fullPath = Path.GetFullPath(Path.Combine(fullRootPath, relativePath));
+
+        if (!fullPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).StartsWith(fullRootPath + Path.DirectorySeparatorChar, StringComparison.Ordinal))
+        {
+            throw new ArgumentException($"The {parameterName} must point to a location inside the storage directory.", parameterName);
+        }
+
+        return fullPath;
     }
 }

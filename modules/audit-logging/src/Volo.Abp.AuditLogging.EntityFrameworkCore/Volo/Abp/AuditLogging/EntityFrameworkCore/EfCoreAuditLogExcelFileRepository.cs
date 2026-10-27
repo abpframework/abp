@@ -15,12 +15,17 @@ public class EfCoreAuditLogExcelFileRepository : EfCoreRepository<IAuditLoggingD
     {
     }
 
-    public async Task<List<AuditLogExcelFile>> GetListCreationTimeBeforeAsync(
+    public virtual async Task<List<AuditLogExcelFile>> GetListCreationTimeBeforeAsync(
         DateTime creationTimeBefore,
         int maxResultCount = 50,
         CancellationToken cancellationToken = default)
     {
         var queryable = await GetQueryableAsync();
-        return await queryable.Where(x => x.CreationTime < creationTimeBefore).Take(maxResultCount).ToListAsync(cancellationToken);
+        return await queryable
+            .Where(x => x.CreationTime < creationTimeBefore)
+            .OrderBy(x => x.CreationTime)
+            .ThenBy(x => x.Id)
+            .Take(maxResultCount)
+            .ToListAsync(GetCancellationToken(cancellationToken));
     }
 }

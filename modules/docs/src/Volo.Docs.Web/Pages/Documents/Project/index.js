@@ -31,6 +31,7 @@ var doc = doc || {};
                 
                 var dataKeywords =  node.keywords ? `data-keywords="${node.keywords}"` : "";
                 $li.append(`<span class="plus-icon"> <i class="fa fa-${node.hasChildItems ? 'chevron-right' : node.path === "javascript:;" ? 'has-link' : 'no-link'}"></i></span><a href="${node.path}" ${dataKeywords} class="${textCss}">${node.text}</a>`)
+                $li.children("a").attr("title", node.text);
 
                 if(node.isLazyExpandable){
                     $li.addClass("lazy-expand");
@@ -90,16 +91,16 @@ var doc = doc || {};
             var filterDocumentItems = function (filterText) {
                 
                 $navigation
-                    .find('.mCSB_container .opened')
+                    .find('.opened')
                     .removeClass('opened');
                 $navigation
-                    .find('.mCSB_container > li, .mCSB_container > li ul')
+                    .find('> li, > li ul')
                     .hide();
 
                 if (!filterText) {
-                    $navigation.find('.mCSB_container > li').show();
+                    $navigation.find('> li').show();
                     $navigation
-                        .find('.mCSB_container .selected-tree > ul')
+                        .find('.selected-tree > ul')
                         .show();
                     $searchAllDocument.hide();
                     return;

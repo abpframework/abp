@@ -384,6 +384,7 @@ public static class AbpStringExtensions
 
     public static string ToMd5(this string str)
     {
+#if NETSTANDARD2_0 || NETSTANDARD2_1
         using (var md5 = MD5.Create())
         {
             var inputBytes = Encoding.UTF8.GetBytes(str);
@@ -397,10 +398,14 @@ public static class AbpStringExtensions
 
             return sb.ToString();
         }
+#else
+        return Convert.ToHexString(MD5.HashData(Encoding.UTF8.GetBytes(str)));
+#endif
     }
 
     public static string ToSha256(this string str)
     {
+#if NETSTANDARD2_0 || NETSTANDARD2_1
         using (var sha = SHA256.Create())
         {
             var data = sha.ComputeHash(Encoding.UTF8.GetBytes(str));
@@ -412,10 +417,14 @@ public static class AbpStringExtensions
             }
             return sb.ToString();
         }
+#else
+        return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(str))).ToLowerInvariant();
+#endif
     }
 
     public static string ToSha512(this string str)
     {
+#if NETSTANDARD2_0 || NETSTANDARD2_1
         using (var sha = SHA512.Create())
         {
             var data = sha.ComputeHash(Encoding.UTF8.GetBytes(str));
@@ -427,6 +436,9 @@ public static class AbpStringExtensions
             }
             return sb.ToString();
         }
+#else
+        return Convert.ToHexString(SHA512.HashData(Encoding.UTF8.GetBytes(str))).ToLowerInvariant();
+#endif
     }
 
     /// <summary>

@@ -21,7 +21,6 @@
             </MudItem>
             <MudItem xs="12" sm="4" Class="d-flex align-items-center">
                 <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default" T="bool?"
-                            TriState="true"
                             Disabled="@_selectAllDisabled"
                             Value="@(GrantAny ? (bool?)null : (bool?)GrantAll)"
                             ValueChanged="@(async (bool? b) => await GrantAllAsync(b == true))"
@@ -44,7 +43,6 @@
                             <div>
                                 <MudCheckBox Color="Color.Primary" UncheckedColor="Color.Default"
                                             T="bool?"
-                                            TriState="true"
                                             Disabled="@(IsPermissionGroupDisabled(group))"
                                             Value="@(group.Permissions.Any(x => x.IsGranted) && !group.Permissions.All(x => x.IsGranted)
                                                 ? (bool?)null

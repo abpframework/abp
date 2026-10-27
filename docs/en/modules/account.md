@@ -29,7 +29,7 @@ This section introduces the main pages provided by this module.
 
 ![account-module-login](../images/account-module-login.png)
 
-Social/external login buttons becomes visible if you setup it. See the *Social/External Logins* section below. Register and Forgot password and links redirect to the pages explained in the next sections.
+Social/external login buttons become visible if you set them up. See the *Social/External Logins* section below. Register and Forgot password and links redirect to the pages explained in the next sections.
 
 ### Register
 
@@ -41,7 +41,7 @@ New users receive every Identity role marked as `Default`.
 
 ### Forgot Password & Reset Password
 
-`/Account/ForgotPassword` page provides a way of sending password reset link to user's email address. The user then clicks to the link and determines a new password.
+`/Account/ForgotPassword` page provides a way to send a password reset link to the user's email address. The user then clicks the link and sets a new password.
 
 ![account-module-forgot-password](../images/account-module-forgot-password.png)
 
@@ -49,7 +49,7 @@ New users receive every Identity role marked as `Default`.
 
 ### Account Management
 
-`/Account/Manage` page is used to change password and personal information of the user.
+`/Account/Manage` page is used to change the user's password and personal information.
 
 ![account-module-manage-account](../images/account-module-manage-account.png)
 
@@ -87,11 +87,11 @@ The Angular `createRoutes` function accepts three module-specific options: `redi
 
 ## IdentityServer Integration
 
-[Volo.Abp.Account.Web.IdentityServer](https://www.nuget.org/packages/Volo.Abp.Account.Web.IdentityServer) package provides integration for the [IdentityServer](https://github.com/IdentityServer). This package comes as installed with the [application startup template](../solution-templates/layered-web-application/index.md). See the [IdentityServer Module](./identity-server.md) documentation.
+[Volo.Abp.Account.Web.IdentityServer](https://www.nuget.org/packages/Volo.Abp.Account.Web.IdentityServer) package provides integration for the [IdentityServer](https://github.com/IdentityServer). This package comes installed with the [application startup template](../solution-templates/layered-web-application/index.md). See the [IdentityServer Module](./identity-server.md) documentation.
 
 ## Social/External Logins
 
-The Account Module has already configured to handle social or external logins out of the box. You can follow the ASP.NET Core documentation to add a social/external login provider to your application.
+The Account Module is already configured to handle social or external logins out of the box. You can follow the ASP.NET Core documentation to add a social/external login provider to your application.
 
 The MVC login and registration pages also recognize a Windows authentication scheme. `AbpAccountOptions.WindowsAuthenticationSchemeName` identifies that scheme and defaults to `"Windows"`. Set it when the registered scheme uses another name:
 

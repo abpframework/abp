@@ -56,9 +56,13 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 	context.Services.Configure<ForwardedHeadersOptions>(options =>
 	{
 		options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+		options.KnownNetworks.Clear();
+		options.KnownProxies.Clear();
 	});
 }
 ```
+
+> `ForwardedHeadersOptions` trusts only loopback addresses out of the box: `KnownNetworks` contains `127.0.0.0/8` and `KnownProxies` contains the IPv6 loopback. When the reverse proxy connects from any other address, the middleware ignores the forwarded headers without raising an error and `HttpContext.Connection.RemoteIpAddress` keeps returning the address of the proxy. Clearing both lists as above is the usual choice for container and PaaS deployments, where the proxy address is assigned dynamically and the application is only reachable through that proxy. If the proxy has a stable address, add it to `KnownProxies` (or its network to `KnownNetworks`) instead of clearing the lists. Once both lists are empty the middleware stops checking who it received the request from, so it accepts `X-Forwarded-For` from anything that can reach the application. Only clear them when the application is not reachable except through the proxy, otherwise a caller that bypasses the proxy can spoof its client IP address.
 
 2. In the `OnApplicationInitialization` method of your module, add the middleware:
 

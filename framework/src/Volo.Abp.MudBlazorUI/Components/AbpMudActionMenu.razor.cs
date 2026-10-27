@@ -130,7 +130,7 @@ public partial class AbpMudActionMenu : ComponentBase
     {
         if (_menu != null)
         {
-            await _menu.CloseAllMenusAsync();
+            await InvokeAsync(() => _menu.CloseAllMenusAsync());
         }
     }
 }

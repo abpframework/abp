@@ -31,7 +31,7 @@ public class FakeExternalLoginProvider : ExternalLoginProviderBase, ITransientDe
     public override Task<bool> TryAuthenticateAsync(string userName, string plainPassword)
     {
         return Task.FromResult(
-            userName == "ext_user" && plainPassword == "abc"
+            (userName == "ext_user" || userName == "ext_2fa_user") && plainPassword == "abc"
         );
     }
 
@@ -42,6 +42,18 @@ public class FakeExternalLoginProvider : ExternalLoginProviderBase, ITransientDe
 
     protected override Task<ExternalLoginUserInfo> GetUserInfoAsync(string userName)
     {
+        if (userName == "ext_2fa_user")
+        {
+            // TwoFactorEnabled is not set, so the two factor state of the user is left untouched.
+            return Task.FromResult(
+                new ExternalLoginUserInfo("ext_2fa_user@test.com")
+                {
+                    EmailConfirmed = true,
+                    ProviderKey = "456"
+                }
+            );
+        }
+
         if (userName != "ext_user")
         {
             throw new ArgumentException();

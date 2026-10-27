@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -24,6 +24,12 @@ namespace Volo.Abp.Identity;
 
 public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 {
+    /// <summary>
+    /// The base class keeps its own map private, and the provider it picks for a token provider key is
+    /// only reachable through an internal API when the key carries providers for more than one user type.
+    /// </summary>
+    private readonly Dictionary<string, IUserTwoFactorTokenProvider<IdentityUser>> _registeredTokenProviders = new();
+
     protected IIdentityRoleRepository RoleRepository { get; }
     protected IIdentityUserRepository UserRepository { get; }
     protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
@@ -83,6 +89,20 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         DataFilter = dataFilter;
         UnitOfWorkManager = unitOfWorkManager;
         CancellationTokenProvider = cancellationTokenProvider;
+    }
+
+    public override void RegisterTokenProvider(string providerName, IUserTwoFactorTokenProvider<IdentityUser> provider)
+    {
+        base.RegisterTokenProvider(providerName, provider);
+        _registeredTokenProviders[providerName] = provider;
+    }
+
+    /// <summary>
+    /// The token provider this manager uses for <paramref name="providerName"/>, or null when the key has none.
+    /// </summary>
+    public virtual IUserTwoFactorTokenProvider<IdentityUser>? FindTokenProvider(string providerName)
+    {
+        return _registeredTokenProviders.GetOrDefault(providerName);
     }
 
     public virtual async Task<IdentityResult> CreateAsync(IdentityUser user, string password, bool validatePassword)
@@ -669,9 +689,14 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         throw new AbpIdentityResultException(IdentityResult.Failed(ErrorDescriber.InvalidUserName(userName)));
     }
 
+    public virtual bool IsUserSharingEnabled()
+    {
+        return MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Shared;
+    }
+
     public virtual async Task<IdentityUser> FindSharedUserByEmailAsync(string email)
     {
-        if (MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Isolated)
+        if (!IsUserSharingEnabled())
         {
             return await base.FindByEmailAsync(email);
         }
@@ -702,7 +727,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
     public virtual async Task<IdentityUser> FindSharedUserByNameAsync(string userName)
     {
-        if (MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Isolated)
+        if (!IsUserSharingEnabled())
         {
             return await base.FindByNameAsync(userName);
         }
@@ -733,7 +758,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
     public virtual async Task<IdentityUser> FindSharedUserByLoginAsync(string loginProvider, string providerKey)
     {
-        if (MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Isolated)
+        if (!IsUserSharingEnabled())
         {
             return await base.FindByLoginAsync(loginProvider, providerKey);
         }
@@ -763,7 +788,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
     public virtual async Task<IdentityUser> FindSharedUserByPasskeyIdAsync(byte[] credentialId)
     {
-        if (MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Isolated)
+        if (!IsUserSharingEnabled())
         {
             return await base.FindByPasskeyIdAsync(credentialId);
         }
@@ -793,7 +818,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 
     public virtual async Task<IdentityUser> FindSharedUserByIdAsync(string userId)
     {
-        if (MultiTenancyOptions.Value.UserSharingStrategy == TenantUserSharingStrategy.Isolated)
+        if (!IsUserSharingEnabled())
         {
             return await base.FindByIdAsync(userId);
         }

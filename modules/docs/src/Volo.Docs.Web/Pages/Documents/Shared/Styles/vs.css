@@ -46,12 +46,6 @@ body div.code-toolbar > .toolbar span {
 body div.code-toolbar > .toolbar a {
   cursor: copy;
 }
-body .mCS-autoHide > .mCustomScrollBox > .mCSB_scrollTools,
-body .mCS-autoHide > .mCustomScrollBox ~ .mCSB_scrollTools {
-  opacity: 1 !important;
-  filter: "alpha(opacity=1)";
-  -ms-filter: "alpha(opacity=1)";
-}
 body .alert-criteria .options-header {
   display: none;
 }
@@ -338,6 +332,8 @@ body.scrolledMore:has(#abp-chatbot-container) .alert-criteria .options-header .t
   display: block;
   height: calc(100vh - 350px);
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
   margin-right: -4px !important;
   margin-top: 20px !important;
 }
@@ -360,6 +356,9 @@ body.scrolledMore:has(#abp-chatbot-container) .alert-criteria .options-header .t
   padding: 4px 0;
   display: block;
   border-bottom: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .docs-page .docs-sidebar .docs-tree-list ul li a:hover {
   color: #fff;
@@ -420,9 +419,6 @@ body.scrolledMore:has(#abp-chatbot-container) .alert-criteria .options-header .t
 .docs-page .docs-sidebar .docs-tree-list ul li.selected-tree.last-link > span .fa {
   transform: rotate(0deg);
 }
-.docs-page .docs-sidebar .docs-tree-list .mCSB_scrollTools {
-  right: -20px;
-}
 .docs-page .docs-content {
   display: inline-block;
   overflow-x: scroll;
@@ -449,6 +445,7 @@ body.scrolledMore:has(#abp-chatbot-container) .alert-criteria .options-header .t
   margin-bottom: 0;
   flex-wrap: nowrap;
   overflow-x: auto;
+  scrollbar-width: thin;
   white-space: nowrap;
   padding-bottom: 10px;
 }
@@ -702,6 +699,7 @@ body.scrolledMore:has(#abp-chatbot-container) .alert-criteria .options-header .t
   font-size: 0.92em;
   margin-left: 15px;
   border-left: 1px solid #eee;
+  flex-wrap: nowrap;
 }
 .docs-page .docs-page-index .docs-inner-anchors .navbar .nav-pills .nav-link {
   padding: 3px 14px 4px;
@@ -715,6 +713,10 @@ body.scrolledMore:has(#abp-chatbot-container) .alert-criteria .options-header .t
   margin-bottom: 1px;
   transition: 0.2s;
   font-weight: normal;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .docs-page .docs-page-index .docs-inner-anchors .navbar .nav-pills .nav-link.active {
   border-left: 1px solid #E83090;
@@ -730,9 +732,17 @@ body.scrolledMore:has(#abp-chatbot-container) .alert-criteria .options-header .t
 }
 .docs-page .docs-page-index .docs-inner-anchors .index-scroll {
   margin-left: -30px;
+  flex-wrap: nowrap;
+}
+.docs-page .docs-page-index .docs-inner-anchors .index-scroll > .nav-pills {
+  flex: 1 1 0;
+  min-width: 0;
 }
 .docs-page .docs-page-index #scroll-index {
   max-height: 38vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 .docs-page .docs-page-index .scroll-top-btn {
   display: none;

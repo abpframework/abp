@@ -7,11 +7,174 @@
 
 # Package Version Changes
 
-## 10.8.0-rc.1
+## 11.0.0-rc.1
 
 | Package | Old Version | New Version | PR |
 |---------|-------------|-------------|-----|
-| MongoDB.Driver | 3.10.0 | 3.11.0 | #25979 |
+| Devart.Data.Oracle.EFCore | 11.0.0.9 | 11.2.192.10 | #26147 |
+| Microsoft.AspNetCore.Authentication.JwtBearer | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.AspNetCore.Authentication.OpenIdConnect | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.AspNetCore.Authorization | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.AspNetCore.Components | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.AspNetCore.Components.Authorization | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.AspNetCore.Components.Web | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.AspNetCore.Components.WebAssembly | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.AspNetCore.Components.WebAssembly.Authentication | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.AspNetCore.Components.WebAssembly.DevServer | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.AspNetCore.Components.WebAssembly.Server | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.AspNetCore.Components.WebView.Maui | 10.0.51 | 11.0.0-rc.2.26505.5 | #26147 |
+| Microsoft.AspNetCore.DataProtection | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.AspNetCore.DataProtection.StackExchangeRedis | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.AspNetCore.Mvc.NewtonsoftJson | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.AspNetCore.Mvc.Testing | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.AspNetCore.TestHost | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.AspNetCore.WebUtilities | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Bcl.AsyncInterfaces | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Data.Sqlite | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.EntityFrameworkCore | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.EntityFrameworkCore.Design | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.EntityFrameworkCore.InMemory | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.EntityFrameworkCore.Proxies | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.EntityFrameworkCore.Relational | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.EntityFrameworkCore.SqlServer | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.EntityFrameworkCore.Sqlite | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.EntityFrameworkCore.Tools | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Extensions.Caching.Memory | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Extensions.Caching.StackExchangeRedis | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Extensions.Configuration.Binder | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Extensions.Configuration.CommandLine | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Extensions.Configuration.EnvironmentVariables | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Extensions.Configuration.UserSecrets | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Extensions.DependencyInjection | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Extensions.DependencyInjection.Abstractions | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Extensions.FileProviders.Composite | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Extensions.FileProviders.Embedded | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Extensions.FileProviders.Physical | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Extensions.FileSystemGlobbing | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Extensions.Hosting | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Extensions.Hosting.Abstractions | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Extensions.Http | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Extensions.Identity.Core | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Extensions.Localization | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Extensions.Logging | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Extensions.Logging.Abstractions | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Extensions.Logging.Console | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Extensions.Options | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Extensions.Options.ConfigurationExtensions | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| Microsoft.Maui.Controls | 10.0.51 | 11.0.0-rc.2.26505.5 | #26147 |
+| MongoDB.Driver | 3.12.0 | 3.13.0 | #26334 |
+| Npgsql.EntityFrameworkCore.PostgreSQL | 10.0.3 | 11.0.0-rc.1.1 | #26147 |
+| Oracle.EntityFrameworkCore | 10.23.26000 | 10.23.26301 | #26147 |
+| System.Collections.Immutable | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| System.Management | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| System.Security.Cryptography.Xml | 10.0.10 | 11.0.0-rc.2.26504.105 | #26147 |
+| System.Security.Permissions | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| System.Text.Encoding.CodePages | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| System.Text.Encodings.Web | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+| System.Text.Json | 10.0.11 | 11.0.0-rc.2.26504.105 | #26147 |
+
+## 10.8.0-rc.1
+
+**Added:**
+
+| Package | Version | PR |
+|---------|---------|-----|
+| Elastic.Clients.Elasticsearch | 8.19.27 | #26216 |
+| HtmlAgilityPack | 1.12.3 | #26216 |
+| HtmlRenderer.PdfSharp | 1.6.1 | #26216 |
+| PDFsharp | 6.2.4 | #26216 |
+| SkiaSharp.NativeAssets.Linux.NoDependencies | 3.119.0 | #26264 |
+
+**Removed:**
+
+| Package | Version | PR |
+|---------|---------|-----|
+| NEST | 7.17.5 | #26216 |
+| Polly | 8.6.3 | #26169 |
+| Polly.Extensions.Http | 3.0.0 | #26169 |
+| itext.bouncy-castle-adapter | 9.3.0 | #26216 |
+| itext7 | 9.3.0 | #26216 |
+| itext7.pdfhtml | 6.2.1 | #26216 |
+
+## 10.7.0-rc.4
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| MongoDB.Driver | 3.11.1 | 3.12.0 | #26155, #26191 |
+| Npgsql.EntityFrameworkCore.PostgreSQL | 10.0.0 | 10.0.3 | #26176 |
+
+## 10.7.0-rc.3
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| AWSSDK.S3 | 4.0.7.2 | 4.0.102.3 | #26040 |
+| AWSSDK.SecurityToken | 4.0.2.2 | 4.0.100.10 | #26040 |
+| Microsoft.AspNetCore.Authentication.JwtBearer | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Authentication.OpenIdConnect | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Authorization | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Components | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Components.Authorization | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Components.Web | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Components.WebAssembly | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Components.WebAssembly.Authentication | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Components.WebAssembly.DevServer | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Components.WebAssembly.Server | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.DataProtection | 10.0.9 | 10.0.11 | #26113, #26135 |
+| Microsoft.AspNetCore.DataProtection.StackExchangeRedis | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Mvc.NewtonsoftJson | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.Mvc.Testing | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.TestHost | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.AspNetCore.WebUtilities | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Bcl.AsyncInterfaces | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Data.Sqlite | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.EntityFrameworkCore | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.EntityFrameworkCore.Design | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.EntityFrameworkCore.InMemory | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.EntityFrameworkCore.Proxies | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.EntityFrameworkCore.Relational | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.EntityFrameworkCore.SqlServer | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.EntityFrameworkCore.Sqlite | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.EntityFrameworkCore.Tools | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Caching.Memory | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Caching.StackExchangeRedis | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Configuration.Binder | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Configuration.CommandLine | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Configuration.EnvironmentVariables | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Configuration.UserSecrets | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.DependencyInjection | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.DependencyInjection.Abstractions | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.FileProviders.Composite | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.FileProviders.Embedded | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.FileProviders.Physical | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.FileSystemGlobbing | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Hosting | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Hosting.Abstractions | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Http | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Identity.Core | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Localization | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Logging | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Logging.Abstractions | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Logging.Console | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Options | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.Extensions.Options.ConfigurationExtensions | 10.0.9 | 10.0.11 | #26135 |
+| Microsoft.IdentityModel.JsonWebTokens | 8.19.1 | 8.19.2 | #26135 |
+| Microsoft.IdentityModel.Protocols.OpenIdConnect | 8.19.1 | 8.19.2 | #26135 |
+| Microsoft.IdentityModel.Tokens | 8.19.1 | 8.19.2 | #26135 |
+| MongoDB.Driver | 3.10.0 | 3.11.1 | #26103 |
+| OpenIddict.Abstractions | 7.5.0 | 7.7.0 | #26135 |
+| OpenIddict.Core | 7.5.0 | 7.7.0 | #26135 |
+| OpenIddict.Server.AspNetCore | 7.5.0 | 7.7.0 | #26135 |
+| OpenIddict.Validation.AspNetCore | 7.5.0 | 7.7.0 | #26135 |
+| OpenIddict.Validation.ServerIntegration | 7.5.0 | 7.7.0 | #26135 |
+| System.Collections.Immutable | 10.0.9 | 10.0.11 | #26135 |
+| System.IdentityModel.Tokens.Jwt | 8.19.1 | 8.19.2 | #26135 |
+| System.Management | 10.0.9 | 10.0.11 | #26135 |
+| System.Security.Permissions | 10.0.9 | 10.0.11 | #26135 |
+| System.Text.Encoding.CodePages | 10.0.9 | 10.0.11 | #26135 |
+| System.Text.Encodings.Web | 10.0.9 | 10.0.11 | #26135 |
+| System.Text.Json | 10.0.9 | 10.0.11 | #26135 |
 
 ## 10.7.0-rc.2
 

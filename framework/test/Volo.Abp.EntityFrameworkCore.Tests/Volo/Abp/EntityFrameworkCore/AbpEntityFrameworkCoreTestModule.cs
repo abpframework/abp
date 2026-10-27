@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.EntityFrameworkCore.Applications;
 using Volo.Abp.EntityFrameworkCore.Domain;
 using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.EntityFrameworkCore.TestApp.FifthContext;
@@ -92,6 +93,7 @@ public class AbpEntityFrameworkCoreTestModule : AbpModule
             options.Configure(abpDbContextConfigurationContext =>
             {
                 abpDbContextConfigurationContext.UseSqlite().AddAbpDbContextOptionsExtension();
+                abpDbContextConfigurationContext.DbContextOptions.AddInterceptors(new SqlCommandCapture());
             });
         });
     }
@@ -103,7 +105,6 @@ public class AbpEntityFrameworkCoreTestModule : AbpModule
 
     public override void OnPreApplicationInitialization(ApplicationInitializationContext context)
     {
-        context.ServiceProvider.GetRequiredService<SecondDbContext>().Database.Migrate();
         using (var scope = context.ServiceProvider.CreateScope())
         {
             var categoryRepository = scope.ServiceProvider.GetRequiredService<IBasicRepository<Category, Guid>>();

@@ -25,6 +25,10 @@ public class AspNetCoreSignalRAuditLogContributor : AuditLogContributor, ITransi
             return;
         }
 
+        // The HTTP method of a non WebSocket transport (like the GET request of Server-Sent Events) belongs to the
+        // connection, not to the hub method call. Otherwise, the audit logs of the hub method calls are treated as GET requests.
+        context.AuditInfo.HttpMethod = null;
+
         var clientInfoProvider = context.ServiceProvider.GetRequiredService<IWebClientInfoProvider>();
         if (context.AuditInfo.ClientIpAddress == null)
         {
