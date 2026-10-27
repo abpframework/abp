@@ -78,19 +78,28 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
                 .Where(x => !x.Providers.Any() || x.Providers.Contains(providerName))
                 .Where(x => x.MultiTenancySide.HasFlag(multiTenancySide));
 
-            var neededCheckPermissions = new List<PermissionDefinition>();
-            foreach (var permission in permissions)
-            {
-                if (permission.Parent != null && !neededCheckPermissions.Contains(permission.Parent))
-                {
-                    continue;
-                }
+            var candidatePermissions = permissions.Distinct().ToArray();
+            var childrenByParent = candidatePermissions
+                .Where(x => x.Parent != null)
+                .GroupBy(x => x.Parent!)
+                .ToDictionary(x => x.Key, x => x.ToArray());
 
-                if (await SimpleStateCheckerManager.IsEnabledAsync(permission))
-                {
-                    neededCheckPermissions.Add(permission);
-                }
+            /* The state checkers of a permission only run when its parent is enabled,
+               so each tree level is checked in its own batch. */
+            var enabledPermissions = new HashSet<PermissionDefinition>();
+            var currentLevel = candidatePermissions.Where(x => x.Parent == null).ToArray();
+            while (currentLevel.Any())
+            {
+                var levelResult = await SimpleStateCheckerManager.IsEnabledAsync(currentLevel);
+                var enabledLevelPermissions = currentLevel.Where(x => levelResult[x]).ToArray();
+                enabledPermissions.UnionWith(enabledLevelPermissions);
+
+                currentLevel = enabledLevelPermissions
+                    .SelectMany(x => childrenByParent.GetOrDefault(x) ?? Array.Empty<PermissionDefinition>())
+                    .ToArray();
             }
+
+            var neededCheckPermissions = candidatePermissions.Where(enabledPermissions.Contains).ToList();
 
             if (!neededCheckPermissions.Any())
             {
@@ -106,11 +115,20 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
             providerName,
             providerKey);
 
+        var grantInfoByName = new Dictionary<string, PermissionWithGrantedProviders>();
+        foreach (var grantInfo in multipleGrantInfo.Result)
+        {
+            if (!grantInfoByName.ContainsKey(grantInfo.Name))
+            {
+                grantInfoByName[grantInfo.Name] = grantInfo;
+            }
+        }
+
         foreach (var permissionGroup in permissionGroups)
         {
             foreach (var permission in permissionGroup.Permissions)
             {
-                var grantInfo = multipleGrantInfo.Result.FirstOrDefault(x => x.Name == permission.Name);
+                var grantInfo = grantInfoByName.GetOrDefault(permission.Name);
                 if (grantInfo == null)
                 {
                     continue;

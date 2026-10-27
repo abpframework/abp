@@ -32,6 +32,8 @@ public class SwitchToNightlyCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("");
         sb.AppendLine("Options:");
         sb.AppendLine("-d|--directory");
+        sb.AppendLine("-i|--include                 (optional) comma-separated list of Directory.Packages.props-style files to also update for Central Package Management");
+        sb.AppendLine("-ep|--exclude-packages       (optional) comma-separated list of package ids to never touch in --include files");
         sb.AppendLine("");
         sb.AppendLine("See the documentation for more info: https://abp.io/docs/latest/cli");
 

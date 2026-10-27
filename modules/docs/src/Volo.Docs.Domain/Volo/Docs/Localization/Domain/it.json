@@ -35,6 +35,7 @@
     "NewExplanation": "Creato nelle ultime due settimane.",
     "UpdatedExplanation": "Aggiornato nelle ultime due settimane.",
     "Volo.Docs.Domain:010002": "Abbreviazione {ShortName} esiste già.",
+    "Volo.Docs.Domain:010003": "Ops, il documento richiesto non è stato trovato!",
     "Preview": "anteprima",
     "Search": "Ricerca",
     "SearchResults": "Risultati della ricerca",

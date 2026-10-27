@@ -11,6 +11,8 @@
     "UserLockedOutMessage": "Käyttäjätili on lukittu virheellisten kirjautumisyritysten vuoksi. Odota hetki ja yritä uudelleen.",
     "InvalidUserNameOrPassword": "Väärä käyttäjänimi tai salasana!",
     "LoginIsNotAllowed": "Et saa kirjautua sisään! Tilisi on passiivinen tai sinun on vahvistettava sähköpostiosoitteesi/puhelinnumerosi.",
+    "ExternalLoginPasswordChangeRequired": "Et saa kirjautua sisään! Salasanasi on vaihdettava, mutta se ei ole mahdollista ulkoisella kirjautumisella. Ota yhteyttä järjestelmänvalvojaan.",
+    "RegisteredButLoginIsNotAllowed": "Tilisi on luotu, mutta et saa vielä kirjautua sisään!",
     "SelfRegistrationDisabledMessage": "Itserekisteröinti on poistettu käytöstä tälle sovellukselle. Rekisteröi uusi käyttäjä ottamalla yhteyttä sovelluksen järjestelmänvalvojaan.",
     "LocalLoginDisabledMessage": "Paikallinen sisäänkirjautuminen on poistettu käytöstä tälle sovellukselle.",
     "Login": "Kirjaudu sisään",

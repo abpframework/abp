@@ -7,8 +7,6 @@
 
 # MCP Integration
 
-> **Preview:** The low-code MCP surface is part of the preview Low-Code System. Endpoint behavior, authorization requirements, and mutation metadata may change before general availability.
-
 The Low-Code Designer exposes a **remote Model Context Protocol (MCP) server** from the running ABP HTTP API host. It is not a local `stdio` tool package. MCP clients connect to your application over HTTP, authenticate with an OpenIddict access token, and work against the same **runtime database-backed** model that the Designer edits in the **Runtime JSON** layer.
 
 Use [Model Descriptor Files](model-json.md) when you need source-controlled `_Dynamic/model/**/*.json` files. Use MCP when an agent or automation needs authenticated, structured runtime access that the Designer can immediately show.
@@ -41,6 +39,8 @@ The endpoint requires the Low-Code Designer permission group:
 | `AbpLowCodeDesigner.Default` | Connecting and reading runtime model metadata |
 | `AbpLowCodeDesigner.Edit` | Validating and applying runtime model changes |
 | `AbpLowCodeDesigner.ScriptTest` | Running script dry-runs through MCP |
+
+The `AbpLowCodeDesigner.PurgeDeleted` and `AbpLowCodeDesigner.DeleteApp` permissions are not needed: MCP has no tools for purging deleted data or deleting apps. MCP can list, find, and restore [deleted objects](deleted-objects.md), and it can archive an app.
 
 Grant these permissions to the **OpenIddict application/client** that will request the token, not only to a user or role. In Admin Console, use the permission action on the OpenIddict application row and grant the required Low-Code Designer permissions for the client.
 

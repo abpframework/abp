@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -98,6 +100,35 @@ public abstract class AbpTagHelperResourceService : ITransientDependency
     protected virtual void AddErrorScript(ViewContext viewContext, TagHelper tagHelper, TagHelperContext context, TagHelperOutput output, BundleFile file, string bundleName)
     {
         output.Content.AppendHtml($"<script>console.log(\"%cCould not find the bundle file '{file.FileName}' for the bundle '{bundleName}'!\", 'background: yellow; color: black; font-size:20px;');</script>{Environment.NewLine}");
+    }
+
+    /// <summary>
+    /// External files are not bundled, but an external file given as a local path ("/x" or "~/x")
+    /// is still served by this application, so it needs the request's PathBase like the other files.
+    /// A "/x" path that already starts with the PathBase is kept as is, so URLs that were prefixed manually keep working.
+    /// </summary>
+    protected virtual string GetExternalFileUrl(ViewContext viewContext, BundleFile file)
+    {
+        var fileName = file.FileName;
+        if (fileName.StartsWith("~/", StringComparison.Ordinal))
+        {
+            return viewContext.GetUrlHelper().Content(fileName);
+        }
+
+        if (fileName.StartsWith("/", StringComparison.Ordinal) && !fileName.StartsWith("//", StringComparison.Ordinal))
+        {
+            var pathBase = viewContext.HttpContext.Request.PathBase;
+            var queryIndex = fileName.IndexOfAny(['?', '#']);
+            var path = new PathString(queryIndex < 0 ? fileName : fileName.Substring(0, queryIndex));
+            if (pathBase.HasValue && path.StartsWithSegments(pathBase))
+            {
+                return fileName;
+            }
+
+            return viewContext.GetUrlHelper().Content("~" + fileName);
+        }
+
+        return fileName;
     }
 
     protected virtual string GenerateBundleName(List<BundleTagHelperItem> bundleItems)

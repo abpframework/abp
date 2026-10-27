@@ -39,4 +39,23 @@ public class PermissionStore_Tests : PermissionTestBase
         result.Result.FirstOrDefault(x => x.Key == "MyPermission1").Value.ShouldBe(PermissionGrantResult.Granted);
         result.Result.FirstOrDefault(x => x.Key == "MyPermission1NotExist").Value.ShouldBe(PermissionGrantResult.Undefined);
     }
+
+    [Fact]
+    public async Task IsGranted_Multiple_Should_Combine_Cached_And_Uncached_Permissions()
+    {
+        (await _permissionStore.IsGrantedAsync("MyPermission1",
+            UserPermissionValueProvider.ProviderName,
+            PermissionTestDataBuilder.User1Id.ToString())).ShouldBeTrue();
+
+        var result = await _permissionStore.IsGrantedAsync(
+            new[] { "MyPermission3", "MyPermission1", "MyPermission1NotExist" },
+            UserPermissionValueProvider.ProviderName,
+            PermissionTestDataBuilder.User1Id.ToString());
+
+        result.Result.Count.ShouldBe(3);
+
+        result.Result.FirstOrDefault(x => x.Key == "MyPermission3").Value.ShouldBe(PermissionGrantResult.Granted);
+        result.Result.FirstOrDefault(x => x.Key == "MyPermission1").Value.ShouldBe(PermissionGrantResult.Granted);
+        result.Result.FirstOrDefault(x => x.Key == "MyPermission1NotExist").Value.ShouldBe(PermissionGrantResult.Undefined);
+    }
 }

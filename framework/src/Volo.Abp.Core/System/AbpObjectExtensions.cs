@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Volo.Abp.Reflection;
 
 namespace System;
 
@@ -38,7 +38,7 @@ public static class AbpObjectExtensions
             return (T)TypeDescriptor.GetConverter(typeof(T)).ConvertFromInvariantString(obj.ToString()!)!;
         }
 
-        return (T)Convert.ChangeType(obj, typeof(T), CultureInfo.InvariantCulture);
+        return (T)TypeHelper.ChangeType(obj, typeof(T));
     }
 
     /// <summary>

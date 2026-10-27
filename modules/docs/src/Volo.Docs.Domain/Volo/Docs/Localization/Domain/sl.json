@@ -35,6 +35,7 @@
     "NewExplanation": "Ustvarjeno v zadnjih dveh tednih.",
     "UpdatedExplanation": "Posodobljeno v zadnjih dveh tednih.",
     "Volo.Docs.Domain:010002": "ShortName {ShortName} že obstaja.",
+    "Volo.Docs.Domain:010003": "Ups, zahtevanega dokumenta ni bilo mogoče najti!",
     "Preview": "predogled",
     "Search": "Iskanje",
     "SearchResults": "Rezultati iskanja",

@@ -22,6 +22,7 @@ public class AbpPermissionManagementTestModule : AbpModule
     {
         context.Services.AddEntityFrameworkInMemoryDatabase();
 
+
         var databaseName = Guid.NewGuid().ToString();
 
         Configure<AbpDbContextOptions>(options =>

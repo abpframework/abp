@@ -1,16 +1,14 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.Ui.Branding;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Branding;
 
 public static class UrlHelperBrandingExtensions
 {
     /// <summary>
-    /// Resolves a branding url of <see cref="Volo.Abp.Ui.Branding.IBrandingProvider"/> for the current request.
-    /// "logo.svg", "/logo.svg" and "~/logo.svg" all mean the same application relative url and keep working
-    /// under a non-root <see cref="Microsoft.AspNetCore.Http.HttpRequest.PathBase"/>.
-    /// External urls ("http://", "https://" and "//host/") are returned as they are.
-    /// Returns null when <paramref name="url"/> is null or white space.
+    /// Resolves a branding url of <see cref="IBrandingProvider"/>: "logo.svg", "/logo.svg" and
+    /// "~/logo.svg" all keep working under a non-root <see cref="Microsoft.AspNetCore.Http.HttpRequest.PathBase"/>.
     /// </summary>
     public static string? ResolveBrandingUrl(this IUrlHelper urlHelper, string? url)
     {
@@ -19,22 +17,31 @@ public static class UrlHelperBrandingExtensions
             return null;
         }
 
-        if (IsExternalUrl(url!))
+        var brandingUrl = url!.Trim();
+
+        if (BrandingUrlHelper.IsExternalUrl(brandingUrl))
         {
-            return url;
+            return brandingUrl;
         }
 
-        var applicationRelativeUrl = url!.StartsWith("~/", StringComparison.Ordinal)
-            ? url
-            : "~/" + url.TrimStart('/');
+        var relativeUrl = BrandingUrlHelper.RemoveApplicationRelativePrefix(brandingUrl);
 
-        return urlHelper.Content(applicationRelativeUrl);
+        // "/http://host/logo.svg" would become a local path that does not exist.
+        if (BrandingUrlHelper.IsExternalUrl(relativeUrl))
+        {
+            return brandingUrl;
+        }
+
+        return urlHelper.Content("~/" + relativeUrl);
     }
 
-    private static bool IsExternalUrl(string url)
+    /// <summary>
+    /// Same as <see cref="ResolveBrandingUrl"/>, escaped for url('...') in css.
+    /// </summary>
+    public static string? ResolveBrandingCssUrl(this IUrlHelper urlHelper, string? url)
     {
-        return url.StartsWith("http://", StringComparison.OrdinalIgnoreCase)
-               || url.StartsWith("https://", StringComparison.OrdinalIgnoreCase)
-               || url.StartsWith("//", StringComparison.Ordinal);
+        var resolvedUrl = urlHelper.ResolveBrandingUrl(url);
+
+        return resolvedUrl == null ? null : BrandingUrlHelper.EscapeCssValue(resolvedUrl);
     }
 }

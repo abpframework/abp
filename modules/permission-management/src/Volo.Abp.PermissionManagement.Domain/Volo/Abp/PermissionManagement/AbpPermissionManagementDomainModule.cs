@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Polly;
 using Volo.Abp.Authorization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Caching;
@@ -54,6 +53,11 @@ public class AbpPermissionManagementDomainModule : AbpModule
             var initializer = rootServiceProvider.GetRequiredService<PermissionDynamicInitializer>();
             await initializer.InitializeAsync(true, _cancellationTokenSource.Token);
         }
+    }
+
+    public override void OnApplicationShutdown(ApplicationShutdownContext context)
+    {
+        AsyncHelper.RunSync(() => OnApplicationShutdownAsync(context));
     }
 
     public override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)
