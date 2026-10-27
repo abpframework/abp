@@ -26,7 +26,7 @@ public class AbpEnumLocalizer : IAbpEnumLocalizer, ITransientDependency
 
     protected virtual string GetStringInternal(Type enumType, object enumValue, params IStringLocalizer?[] specifyLocalizers)
     {
-        var memberName = enumType.GetEnumName(enumValue)!;
+        var memberName = enumType.GetEnumName(enumValue) ?? Enum.ToObject(enumType, enumValue).ToString()!;
         var localizedString = GetStringOrNull(
             specifyLocalizers,
             new[]
