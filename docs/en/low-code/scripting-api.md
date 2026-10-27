@@ -7,8 +7,6 @@
 
 # Scripting API
 
-> **Preview:** The Low-Code scripting API is a preview server-side JavaScript surface. Available globals, helper methods, limits, and sandbox behavior may change before general availability.
-
 The designer and React runtime cover the standard CRUD, form, filter, and export workflows. Use the scripting API when an interceptor, action, or custom endpoint needs server-side JavaScript.
 
 The Low-Code System provides a server-side JavaScript scripting engine for executing custom business logic within [interceptors](interceptors.md), [custom endpoints](custom-endpoints.md), event handlers, background jobs, and background workers. Scripts run in a sandboxed environment with access to a database API backed by EF Core.

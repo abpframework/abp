@@ -7,8 +7,6 @@
 
 # Custom Endpoints
 
-> **Preview:** Custom endpoint descriptors and scripting helpers are part of the preview Low-Code System. Names, validation rules, and runtime behavior may change before general availability.
-
 Use generated page CRUD APIs for normal dynamic entity pages. Custom endpoints are an advanced option for exposing small model-owned REST APIs that do not map to standard list, get, create, update, delete, export, file, or attachment operations.
 
 Custom endpoints are defined in JSON descriptor files or through the Low-Code Designer. Each endpoint executes server-side JavaScript and is registered as an ASP.NET Core route.
