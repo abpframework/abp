@@ -36,7 +36,6 @@ Deleting a property also takes it out of the places that show it, so the model s
 
 * The page columns and page filters that show the property
 * The form fields bound to it, together with their layout placements
-* The API resource field lists that name it (response, writable, import, export, file, and related-name lists)
 
 These removals are part of the same change: the deleted-object record lists them, and undo puts them back. A form field that the same change binds to another property is kept, for example when a text property is replaced by a lookup and its form field is re-bound to the new key.
 
@@ -65,8 +64,8 @@ Restore always runs against a fresh read of the object. The request repeats the 
 
 Restoring from **Deleted objects** brings back the object and its data only. It does not put the object back into the places it was used:
 
-* A restored property is not added back to the API resource field lists, page columns, page filters, or form fields it was removed from when it was deleted. The restore result lists the places that still exist, and the page shows them, so you can add the property back where it is still wanted.
-* A restored entity does not bring back the pages, forms, and API resources that used it.
+* A restored property is not added back to the page columns, page filters, or form fields it was removed from when it was deleted. The restore result lists the places that still exist, and the page shows them, so you can add the property back where it is still wanted.
+* A restored entity does not bring back the pages and forms that used it.
 
 To undo a delete together with everything the delete changed, use history instead. See [Deleted Data and History](#deleted-data-and-history).
 
@@ -96,7 +95,7 @@ Files are deleted after the table or column is gone, by a cleanup that is picked
 * An object was restored under a new name.
 * A JSON-stored property was renamed. Its values move with the rename and move back on undo.
 
-Undoing a property delete also puts the property back into the API resource field lists, page columns, page filters, and form fields that the delete removed it from, because those changes are part of the same history batch.
+Undoing a property delete also puts the property back into the page columns, page filters, and form fields that the delete removed it from, because those changes are part of the same history batch.
 
 Once an object is purged, history can no longer bring its data back.
 
@@ -159,7 +158,7 @@ The **Deleted objects** page uses these Designer endpoints under `/api/lowcode/m
 
 Like other Designer model endpoints, these requests name the model layer in the `X-LowCode-Layer` header and a non-default app in the `X-LowCode-App` header. The purge endpoints require the **Purge Deleted Objects** permission. Restore requires the Designer edit permission, and the read endpoints require the Designer view permission.
 
-A successful property restore returns `formerUsages`: the API resource, page, and form lists the property was taken out of when it was deleted and that still exist, each with its `kind` (`apiResource`, `page`, or `form`), `name`, and `list`.
+A successful property restore returns `formerUsages`: the page and form lists the property was taken out of when it was deleted and that still exist, each with its `kind` (`page` or `form`), `name`, and `list`.
 
 [MCP](mcp.md) clients can list, find, and restore deleted objects with the `lowcode_designer_get_deleted_objects`, `lowcode_designer_find_deleted_object`, and `lowcode_designer_restore_deleted_object` tools. There are no MCP tools for purging data or deleting apps.
 
