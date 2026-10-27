@@ -53,5 +53,24 @@ public class MultiTenantUrlProivder_Tests : MultiTenancyTestBase
             (await _multiTenantUrlProvider.GetUrlAsync(hostUrl)).ShouldBe(hostUrl);
         }
     }
-    
+
+    [Fact]
+    public async Task GetUrlAsync_With_PlaceHolder_Not_Followed_By_Dot()
+    {
+        var tenantNameHolderUrl = "https://abp.io/{{tenantName}}/login";
+        var tenantIdHolderUrl = "https://abp.io/{{tenantId}}/login";
+        var tenantHolderUrl = "https://abp.io/{0}/login";
+        var mixedHolderUrl = "https://{0}.abp.io/{0}/login";
+
+        using (_currentTenant.Change(_tenantAId))
+        {
+            (await _multiTenantUrlProvider.GetUrlAsync(tenantNameHolderUrl)).ShouldBe("https://abp.io/TenantA/login");
+            (await _multiTenantUrlProvider.GetUrlAsync(tenantIdHolderUrl)).ShouldBe("https://abp.io/" + _tenantAId + "/login");
+            (await _multiTenantUrlProvider.GetUrlAsync(tenantHolderUrl)).ShouldBe("https://abp.io/TenantA/login");
+            (await _multiTenantUrlProvider.GetUrlAsync(mixedHolderUrl)).ShouldBe("https://TenantA.abp.io/TenantA/login");
+        }
+
+        (await _multiTenantUrlProvider.GetUrlAsync(mixedHolderUrl)).ShouldBe("https://abp.io//login");
+    }
+
 }
