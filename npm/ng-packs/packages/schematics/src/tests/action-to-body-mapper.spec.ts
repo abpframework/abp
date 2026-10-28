@@ -617,7 +617,7 @@ describe('proxy service template emission', () => {
   });
 
   test('emits Accept header conditional', () => {
-    expect(template).toMatch(/headers:\s*\{\s*Accept:/);
+    expect(template).toMatch(/headerEntries\.push\("Accept: '"/);
   });
 
   test('emits responseType only for non-json httpResponseType', () => {
@@ -708,7 +708,7 @@ describe('createActionToBodyMapper — multipart FormData uploads', () => {
       buildAction({
         httpMethod: 'POST',
         parameters: [
-          { name: 'Name', nameOnMethod: 'name', type: 'System.String', typeSimple: 'string', bindingSourceId: eBindingSourceId.Body } as any,
+          { name: 'Name', nameOnMethod: 'name', type: 'My.Project.UserDto', typeSimple: 'My.Project.UserDto', bindingSourceId: eBindingSourceId.Body } as any,
         ],
       } as Partial<Action>),
     );
