@@ -69,12 +69,21 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
     {
         var handlerFactories = GetOrCreateHandlerFactories(eventType);
 
-        if (factory.IsInFactories(handlerFactories))
+        var added = handlerFactories.Locking(factories =>
+        {
+            if (factory.IsInFactories(factories))
+            {
+                return false;
+            }
+
+            factories.Add(factory);
+            return true;
+        });
+
+        if (!added)
         {
             return NullDisposable.Instance;
         }
-
-        handlerFactories.Add(factory);
 
         return new EventHandlerFactoryUnregistrar(this, eventType, factory);
     }
@@ -273,7 +282,7 @@ public class DaprDistributedEventBus : DistributedEventBusBase, ISingletonDepend
 
         foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
         {
-            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
+            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value.Locking(factories => factories.ToList())));
         }
 
         return handlerFactoryList.ToArray();
