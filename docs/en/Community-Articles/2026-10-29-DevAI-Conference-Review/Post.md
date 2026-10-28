@@ -571,7 +571,7 @@ METR measuring the length of software tasks that AI models can complete successf
 
 > The language model is only one component of a coding agent. Its effectiveness also depends on the surrounding tools, instructions and workflows. Developers should learn how to configure and use these capabilities instead of relying exclusively on natural-language prompts.
 
-
+---
 
 # City Life, Culture, History in Poland
 
