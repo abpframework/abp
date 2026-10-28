@@ -1,7 +1,7 @@
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/vitest';
-import { of } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { AbpApplicationConfigurationService } from '../proxy/volo/abp/asp-net-core/mvc/application-configurations/abp-application-configuration.service';
 import {
   ApplicationConfigurationDto,
@@ -353,5 +353,43 @@ describe('ConfigStateService', () => {
         expect(data).toBe(false)
       );
     });
+  });
+});
+
+describe('ConfigStateService refresh', () => {
+  const configs: Subject<any>[] = [];
+  const localizations: Subject<any>[] = [];
+
+  const createService = createServiceFactory({
+    service: ConfigStateService,
+    providers: [
+      provideHttpClient(),
+      provideHttpClientTesting(),
+      { provide: CORE_OPTIONS, useValue: { skipGetAppConfiguration: true } },
+      {
+        provide: AbpApplicationConfigurationService,
+        useValue: { get: () => configs[configs.push(new Subject()) - 1] },
+      },
+      {
+        provide: AbpApplicationLocalizationService,
+        useValue: { get: () => localizations[localizations.push(new Subject()) - 1] },
+      },
+      IncludeLocalizationResourcesProvider,
+    ],
+  });
+
+  it('should not publish an older configuration after a newer refresh started', () => {
+    const configState = createService().service;
+    const results: string[] = [];
+    configState.createOnUpdateStream(state => state).subscribe(state => results.push(state.name));
+
+    configState.refreshAppState();
+    configs[0].next({ ...CONFIG_STATE_DATA, name: 'old' });
+    configState.refreshAppState();
+    localizations[0].next(APPLICATION_LOCALIZATION_DATA);
+    configs[1].next({ ...CONFIG_STATE_DATA, name: 'new' });
+    localizations[1].next(APPLICATION_LOCALIZATION_DATA);
+
+    expect(results).toEqual(['new']);
   });
 });
