@@ -807,9 +807,9 @@ Every script type handles a failed script the same way. The script type does not
 
 | Script type | Result of a failed script |
 |-------------|---------------------------|
-| Entity, page, and API resource interceptors | The operation is aborted and the request is answered with the error, like an exception thrown by an application service. This includes the API resource `Query`, `Get`, `Export`, `Import`, `Files`, and `Attachments` interceptors |
+| Entity and page interceptors | The operation is aborted and the request is answered with the error, like an exception thrown by an application service |
 | Custom endpoints | The request is answered with the same status and error body as an application service, and the endpoint's database changes are rolled back |
-| Page and API resource backend filter scripts | The query fails; no filter value is produced, so no unfiltered data is returned |
+| Page backend filter scripts | The query fails; no filter value is produced, so no unfiltered data is returned |
 | Event handlers, background jobs, and background workers | The exception is passed to the event bus, job, or worker infrastructure, which logs it and, where supported, retries; there is no HTTP response |
 
 Calculated and rollup properties are compiled [expressions](expression-language.md), not scripts, so these rules do not apply to them.

@@ -1,8 +1,8 @@
 <Project>
-  <!-- SDK 11.0.100-rc.2 adds a build-only dotnet-watch JS initializer to every Web SDK project, and a Debug
+  <!-- SDK 11.0.100 RC 2 and RC 3 add a build-only dotnet-watch JS initializer to every Web SDK project, and a Debug
        build of a Web SDK project fails when it references a Web SDK library that contributes one.
        Remove this file once ABP targets an SDK that no longer has this regression. -->
-  <PropertyGroup Condition="$(NETCoreSdkVersion.StartsWith('11.0.100-rc.2.')) and '$(Configuration)' == 'Debug' and '$(UsingMicrosoftNETSdkWeb)' == 'true' and '$(OutputType)' == 'Library' and '$(EnableHotReloadInRuntimeConfigDevFile)' == ''">
+  <PropertyGroup Condition="$(NETCoreSdkVersion.StartsWith('11.0.100-rc.')) and '$(Configuration)' == 'Debug' and '$(UsingMicrosoftNETSdkWeb)' == 'true' and '$(OutputType)' == 'Library' and '$(EnableHotReloadInRuntimeConfigDevFile)' == ''">
     <EnableHotReloadInRuntimeConfigDevFile>false</EnableHotReloadInRuntimeConfigDevFile>
   </PropertyGroup>
 </Project>
