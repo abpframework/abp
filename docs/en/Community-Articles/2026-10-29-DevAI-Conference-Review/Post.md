@@ -573,7 +573,7 @@ METR measuring the length of software tasks that AI models can complete successf
 
 
 
-# City Life, Culture, History
+# City Life, Culture, History in Poland
 
 After the conference, I spent some time walking around Warsaw and Krakow and most of that time went to museums. As a Turk, I was surprised by how much Ottoman history I found there. Poland and the Ottoman Empire were neighbors for centuries. They fought wars, signed peace treaties, traded and influenced each other's culture, and you can see this everywhere: in paintings, armor, tents, carpets and even in a metro station.
 
@@ -587,12 +587,16 @@ After the conference, I spent some time walking around Warsaw and Krakow and mos
 
 ## Royal Castle, Warsaw
 
-The first museum was the Royal Castle in Warsaw, the former residence of the Polish kings. The royal apartments have a surprising number of Ottoman-themed works.
+Royal Castle is equivalent to Topkapı Palace in Istanbul. The first museum was the Royal Castle in Warsaw, the former residence of the Polish kings. The royal apartments have a surprising number of Ottoman-themed works.
 
 ![image-20261028194035176](image-20261028194035176.png)
 
 An 18th-century painting in the "Turquerie" style, which was very popular in European courts at that time. An Ottoman gentleman sits on a fur next to a woman holding a long pipe, while a girl in front of them plays mangala, the traditional Turkish board game. 
-More info about mangala game https://en.wikipedia.org/wiki/Mangala_(game)
+More info about mangala game https://en.wikipedia.org/wiki/Mangala_(game).
+
+**When and Why Happened This Turquerie Period?**
+
+After the 1683 Siege of Vienna: With the retreat of the Ottoman military threat, the dread and fear once felt toward the Turks across Europe gave way to intense aesthetic curiosity and fascination. War spoils captured from Ottoman camps such as grand tents, coffee supplies, tulip bulbs and luxurious textiles, planted the initial seeds of this cultural vogue.  The 1721 Paris Embassy of Yirmisekiz Mehmed Çelebi: The arrival of the Ottoman diplomatic delegation in Paris caused a sensation; their distinct sartorial elegance, manners and demeanor sparked a widespread Ottoman craze (*Turquerie*) within both the French royal court and the broader public.
 
 ---
 
@@ -610,8 +614,6 @@ On the plate it's written in Ottoman language as below:
 > "The King of Poland presents these gifts to the Sultan of the Ottoman dynasty as a token of his deepest affection and sincere good wishes. From the capital city of Warsaw"
 
 ---
-
-**
 
 ![image-20261028194239145](image-20261028194239145.png)
 
