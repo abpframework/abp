@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -19,7 +19,7 @@ public class EfCoreResourcePermissionGrantRepository : EfCoreRepository<IPermiss
 
     public virtual async Task<ResourcePermissionGrant> FindAsync(string name, string resourceName, string resourceKey, string providerName, string providerKey, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .OrderBy(x => x.Id)
             .FirstOrDefaultAsync(s =>
                     s.Name == name &&
@@ -33,7 +33,7 @@ public class EfCoreResourcePermissionGrantRepository : EfCoreRepository<IPermiss
 
     public virtual async Task<List<ResourcePermissionGrant>> GetListAsync(string resourceName, string resourceKey, string providerName, string providerKey, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .Where(s =>
                 s.ResourceName == resourceName &&
                 s.ResourceKey == resourceKey &&
@@ -44,7 +44,7 @@ public class EfCoreResourcePermissionGrantRepository : EfCoreRepository<IPermiss
 
     public virtual async Task<List<ResourcePermissionGrant>> GetListAsync(string[] names, string resourceName, string resourceKey, string providerName, string providerKey, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .Where(s =>
                 names.Contains(s.Name) &&
                 s.ResourceName == resourceName &&
@@ -56,7 +56,7 @@ public class EfCoreResourcePermissionGrantRepository : EfCoreRepository<IPermiss
 
     public virtual async Task<List<ResourcePermissionGrant>> GetListAsync(string providerName, string providerKey, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .Where(s =>
                 s.ProviderName == providerName &&
                 s.ProviderKey == providerKey
@@ -65,7 +65,7 @@ public class EfCoreResourcePermissionGrantRepository : EfCoreRepository<IPermiss
 
     public virtual async Task<List<ResourcePermissionGrant>> GetPermissionsAsync(string resourceName, string resourceKey, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .Where(s =>
                 s.ResourceName == resourceName &&
                 s.ResourceKey == resourceKey
@@ -74,7 +74,7 @@ public class EfCoreResourcePermissionGrantRepository : EfCoreRepository<IPermiss
 
     public virtual async Task<List<ResourcePermissionGrant>> GetResourceKeys(string resourceName, string name, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .Where(s =>
                 s.ResourceName == resourceName &&
                 s.Name == name

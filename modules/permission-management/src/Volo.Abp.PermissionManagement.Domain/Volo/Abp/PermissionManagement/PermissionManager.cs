@@ -127,34 +127,93 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
 
     public virtual async Task SetAsync(string permissionName, string providerName, string providerKey, bool isGranted)
     {
-        var permission = await PermissionDefinitionManager.GetOrNullAsync(permissionName);
-        if (permission == null)
+        await SetAsync(
+            new[] { new KeyValuePair<string, bool>(permissionName, isGranted) },
+            providerName,
+            providerKey
+        );
+    }
+
+    public virtual async Task SetAsync(
+        IEnumerable<KeyValuePair<string, bool>> permissions,
+        string providerName,
+        string providerKey)
+    {
+        Check.NotNull(permissions, nameof(permissions));
+
+        /* Each name is resolved only once, even if it is passed more than once. */
+        var permissionDefinitions = new Dictionary<string, PermissionDefinition>();
+        var permissionsToSet = new List<KeyValuePair<PermissionDefinition, bool>>();
+        foreach (var permission in permissions)
         {
-            /* Silently ignore undefined permissions,
-               maybe they were removed from dynamic permission definition store */
+            Check.NotNull(permission.Key, "permissionName");
+
+            if (!permissionDefinitions.TryGetValue(permission.Key, out var permissionDefinition))
+            {
+                permissionDefinition = await PermissionDefinitionManager.GetOrNullAsync(permission.Key);
+                permissionDefinitions[permission.Key] = permissionDefinition;
+            }
+
+            if (permissionDefinition == null)
+            {
+                /* Silently ignore undefined permissions,
+                   maybe they were removed from dynamic permission definition store */
+                continue;
+            }
+
+            permissionsToSet.Add(new KeyValuePair<PermissionDefinition, bool>(permissionDefinition, permission.Value));
+        }
+
+        if (!permissionsToSet.Any())
+        {
             return;
         }
 
-        if (!permission.IsEnabled || !await SimpleStateCheckerManager.IsEnabledAsync(permission))
+        var distinctPermissions = permissionsToSet.Select(x => x.Key).Distinct().ToArray();
+
+        var enabledPermissions = distinctPermissions.Where(x => x.IsEnabled).ToArray();
+        var stateCheckResult = enabledPermissions.Any()
+            ? await SimpleStateCheckerManager.IsEnabledAsync(enabledPermissions)
+            : new SimpleStateCheckerResult<PermissionDefinition>();
+
+        foreach (var permission in distinctPermissions)
         {
-            //TODO: BusinessException
-            throw new ApplicationException($"The permission named '{permission.Name}' is disabled!");
+            if (!permission.IsEnabled || !stateCheckResult[permission])
+            {
+                //TODO: BusinessException
+                throw new ApplicationException($"The permission named '{permission.Name}' is disabled!");
+            }
+
+            if (permission.Providers.Any() && !permission.Providers.Contains(providerName))
+            {
+                //TODO: BusinessException
+                throw new ApplicationException($"The permission named '{permission.Name}' is not compatible with the provider named '{providerName}'");
+            }
+
+            if (!permission.MultiTenancySide.HasFlag(CurrentTenant.GetMultiTenancySide()))
+            {
+                //TODO: BusinessException
+                throw new ApplicationException($"The permission named '{permission.Name}' has multitenancy side '{permission.MultiTenancySide}' which is not compatible with the current multitenancy side '{CurrentTenant.GetMultiTenancySide()}'");
+            }
         }
 
-        if (permission.Providers.Any() && !permission.Providers.Contains(providerName))
+        var currentGrantInfo = await GetInternalAsync(distinctPermissions, providerName, providerKey);
+        var currentGrants = currentGrantInfo.Result.ToDictionary(x => x.Name, x => x.IsGranted);
+
+        /* The last state wins when the same permission is passed more than once. */
+        var requestedGrants = new Dictionary<string, bool>();
+        foreach (var permission in permissionsToSet)
         {
-            //TODO: BusinessException
-            throw new ApplicationException($"The permission named '{permission.Name}' is not compatible with the provider named '{providerName}'");
+            requestedGrants[permission.Key.Name] = permission.Value;
         }
 
-        if (!permission.MultiTenancySide.HasFlag(CurrentTenant.GetMultiTenancySide()))
-        {
-            //TODO: BusinessException
-            throw new ApplicationException($"The permission named '{permission.Name}' has multitenancy side '{permission.MultiTenancySide}' which is not compatible with the current multitenancy side '{CurrentTenant.GetMultiTenancySide()}'");
-        }
+        var changedPermissions = distinctPermissions
+            .Select(x => x.Name)
+            .Where(x => currentGrants[x] != requestedGrants[x])
+            .Select(x => new KeyValuePair<string, bool>(x, requestedGrants[x]))
+            .ToList();
 
-        var currentGrantInfo = await GetInternalAsync(permission, providerName, providerKey);
-        if (currentGrantInfo.IsGranted == isGranted)
+        if (!changedPermissions.Any())
         {
             return;
         }
@@ -166,7 +225,10 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
             throw new AbpException("Unknown permission management provider: " + providerName);
         }
 
-        await provider.SetAsync(permissionName, providerKey, isGranted);
+        foreach (var changedPermission in changedPermissions)
+        {
+            await provider.SetAsync(changedPermission.Key, providerKey, changedPermission.Value);
+        }
     }
 
     public virtual async Task<PermissionGrant> UpdateProviderKeyAsync(PermissionGrant permissionGrant, string providerKey)

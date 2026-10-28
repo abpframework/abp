@@ -30,6 +30,12 @@ public interface IPermissionManager
         bool isGranted
     );
 
+    Task SetAsync(
+        [NotNull] IEnumerable<KeyValuePair<string, bool>> permissions,
+        string providerName,
+        string providerKey
+    );
+
     Task<PermissionGrant> UpdateProviderKeyAsync(
         PermissionGrant permissionGrant,
         string providerKey

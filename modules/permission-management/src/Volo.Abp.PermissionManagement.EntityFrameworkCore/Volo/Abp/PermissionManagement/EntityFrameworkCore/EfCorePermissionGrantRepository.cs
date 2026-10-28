@@ -25,7 +25,7 @@ public class EfCorePermissionGrantRepository :
         string providerKey,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .OrderBy(x => x.Id)
             .FirstOrDefaultAsync(s =>
                 s.Name == name &&
@@ -40,7 +40,7 @@ public class EfCorePermissionGrantRepository :
         string providerKey,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .Where(s =>
                 s.ProviderName == providerName &&
                 s.ProviderKey == providerKey
@@ -50,7 +50,7 @@ public class EfCorePermissionGrantRepository :
     public virtual async Task<List<PermissionGrant>> GetListAsync(string[] names, string providerName, string providerKey,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .Where(s =>
                 names.Contains(s.Name) &&
                 s.ProviderName == providerName &&

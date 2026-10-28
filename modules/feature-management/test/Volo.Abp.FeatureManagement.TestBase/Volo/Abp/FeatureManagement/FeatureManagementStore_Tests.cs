@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp.Domain.Entities.Events;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.Features;
 using Volo.Abp.Modularity;
 using Volo.Abp.Uow;
@@ -14,12 +16,14 @@ public abstract class FeatureManagementStore_Tests<TStartupModule> : FeatureMana
     private IFeatureManagementStore FeatureManagementStore { get; set; }
     private IFeatureValueRepository FeatureValueRepository { get; set; }
     private IUnitOfWorkManager UnitOfWorkManager { get; set; }
+    private ILocalEventBus LocalEventBus { get; set; }
 
     protected FeatureManagementStore_Tests()
     {
         FeatureManagementStore = GetRequiredService<IFeatureManagementStore>();
         FeatureValueRepository = GetRequiredService<IFeatureValueRepository>();
         UnitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
+        LocalEventBus = GetRequiredService<ILocalEventBus>();
     }
 
     [Fact]
@@ -72,6 +76,75 @@ public abstract class FeatureManagementStore_Tests<TStartupModule> : FeatureMana
         (await FeatureValueRepository.FindAsync(TestFeatureDefinitionProvider.SocialLogins,
             EditionFeatureValueProvider.ProviderName,
             TestEditionIds.Regular.ToString())).Value.ShouldBe(false.ToString().ToUpperInvariant());
+    }
+
+    [Fact]
+    public async Task Set_Should_Not_Update_The_Entity_When_The_Value_Is_Not_Changed()
+    {
+        // Arrange
+        var currentValue = (await FeatureValueRepository.FindAsync(TestFeatureDefinitionProvider.SocialLogins,
+            EditionFeatureValueProvider.ProviderName,
+            TestEditionIds.Regular.ToString())).Value;
+
+        var updatedEventCount = 0;
+        using (LocalEventBus.Subscribe<EntityUpdatedEventData<FeatureValue>>(_ =>
+               {
+                   updatedEventCount++;
+                   return Task.CompletedTask;
+               }))
+        {
+            // Act
+            await FeatureManagementStore.SetAsync(TestFeatureDefinitionProvider.SocialLogins,
+                currentValue,
+                EditionFeatureValueProvider.ProviderName,
+                TestEditionIds.Regular.ToString());
+        }
+
+        // Assert
+        updatedEventCount.ShouldBe(0);
+
+        (await FeatureValueRepository.FindAsync(TestFeatureDefinitionProvider.SocialLogins,
+            EditionFeatureValueProvider.ProviderName,
+            TestEditionIds.Regular.ToString())).Value.ShouldBe(currentValue);
+
+        (await FeatureManagementStore.GetOrNullAsync(TestFeatureDefinitionProvider.SocialLogins,
+            EditionFeatureValueProvider.ProviderName,
+            TestEditionIds.Regular.ToString())).ShouldBe(currentValue);
+    }
+
+    [Fact]
+    public async Task Set_Should_Update_The_Entity_When_The_Value_Is_Changed()
+    {
+        // Arrange
+        var newValue = false.ToString().ToUpperInvariant();
+        (await FeatureValueRepository.FindAsync(TestFeatureDefinitionProvider.SocialLogins,
+            EditionFeatureValueProvider.ProviderName,
+            TestEditionIds.Regular.ToString())).Value.ShouldNotBe(newValue);
+
+        var updatedEventCount = 0;
+        using (LocalEventBus.Subscribe<EntityUpdatedEventData<FeatureValue>>(_ =>
+               {
+                   updatedEventCount++;
+                   return Task.CompletedTask;
+               }))
+        {
+            // Act
+            await FeatureManagementStore.SetAsync(TestFeatureDefinitionProvider.SocialLogins,
+                newValue,
+                EditionFeatureValueProvider.ProviderName,
+                TestEditionIds.Regular.ToString());
+        }
+
+        // Assert
+        updatedEventCount.ShouldBe(1);
+
+        (await FeatureValueRepository.FindAsync(TestFeatureDefinitionProvider.SocialLogins,
+            EditionFeatureValueProvider.ProviderName,
+            TestEditionIds.Regular.ToString())).Value.ShouldBe(newValue);
+
+        (await FeatureManagementStore.GetOrNullAsync(TestFeatureDefinitionProvider.SocialLogins,
+            EditionFeatureValueProvider.ProviderName,
+            TestEditionIds.Regular.ToString())).ShouldBe(newValue);
     }
 
     [Fact]
