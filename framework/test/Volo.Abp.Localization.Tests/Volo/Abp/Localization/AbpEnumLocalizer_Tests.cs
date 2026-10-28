@@ -37,6 +37,24 @@ public class AbpEnumLocalizer_Tests : AbpIntegratedTest<AbpLocalizationTestModul
             _enumLocalizer.GetString<BookType>(BookType.Biography, specifyLocalizer).ShouldBe("Biography from ValidationResource");
         }
     }
+
+    [Fact]
+    public void GetString_With_Undefined_Value_Test()
+    {
+        using (CultureHelper.Use("en"))
+        {
+            _enumLocalizer.GetString<BookType>(42).ShouldBe("42");
+            _enumLocalizer.GetString<BookType>((BookType)42).ShouldBe("42");
+            _enumLocalizer.GetString<BookPermissions>(BookPermissions.Read | BookPermissions.Write).ShouldBe("Read, Write");
+            _enumLocalizer.GetString<BookPermissions>(3).ShouldBe("Read, Write");
+
+            var specifyLocalizer = new[]
+            {
+                GetRequiredService<IStringLocalizerFactory>().Create<LocalizationTestValidationResource>()
+            };
+            _enumLocalizer.GetString<BookType>(42, specifyLocalizer).ShouldBe("42");
+        }
+    }
 }
 
 enum BookType
@@ -44,4 +62,12 @@ enum BookType
     Undefined,
     Adventure,
     Biography,
+}
+
+[System.Flags]
+enum BookPermissions
+{
+    None = 0,
+    Read = 1,
+    Write = 2,
 }
