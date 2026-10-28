@@ -579,60 +579,60 @@ METR measuring the length of software tasks that AI models can complete successf
 
 
 
-![image-20261028194035176](D:\alper\photos\conf-photos\devai-warsaw-2026\pics\article\image-20261028194035176.png)
+![image-20261028194035176](image-20261028194035176.png)
 
 
 
-![image-20261028194132013](D:\alper\photos\conf-photos\devai-warsaw-2026\pics\article\image-20261028194132013.png)
+![image-20261028194132013](image-20261028194132013.png)
 
-![image-20261028194158435](D:\alper\photos\conf-photos\devai-warsaw-2026\pics\article\image-20261028194158435.png)
+![image-20261028194158435](image-20261028194158435.png)
 
-![image-20261028194239145](D:\alper\photos\conf-photos\devai-warsaw-2026\pics\article\image-20261028194239145.png)
+![image-20261028194239145](image-20261028194239145.png)
 
-![image-20261028193240037](D:\alper\photos\conf-photos\devai-warsaw-2026\pics\article\image-20261028193240037.png)
-
-
-
-
-
-![image-20261028193344487](D:\alper\photos\conf-photos\devai-warsaw-2026\pics\article\image-20261028193344487.png)
-
-![image-20261028193446603](D:\alper\photos\conf-photos\devai-warsaw-2026\pics\article\image-20261028193446603.png)
-
-![image-20261028193459653](D:\alper\photos\conf-photos\devai-warsaw-2026\pics\article\image-20261028193459653.png)
+![image-20261028193240037](image-20261028193240037.png)
 
 
 
 
 
-![image-20261028193532292](D:\alper\photos\conf-photos\devai-warsaw-2026\pics\article\image-20261028193532292.png)
+![image-20261028193344487](image-20261028193344487.png)
+
+![image-20261028193446603](image-20261028193446603.png)
+
+![image-20261028193459653](image-20261028193459653.png)
 
 
 
-![image-20261028193551122](D:\alper\photos\conf-photos\devai-warsaw-2026\pics\article\image-20261028193551122.png)
+
+
+![image-20261028193532292](image-20261028193532292.png)
 
 
 
-![image-20261028193559288](D:\alper\photos\conf-photos\devai-warsaw-2026\pics\article\image-20261028193559288.png)
+![image-20261028193551122](image-20261028193551122.png)
 
-![image-20261028193604573](D:\alper\photos\conf-photos\devai-warsaw-2026\pics\article\image-20261028193604573.png)
 
-![image-20261028193625516](D:\alper\photos\conf-photos\devai-warsaw-2026\pics\article\image-20261028193625516.png)
 
-![image-20261028193638094](D:\alper\photos\conf-photos\devai-warsaw-2026\pics\article\image-20261028193638094.png)
+![image-20261028193559288](image-20261028193559288.png)
 
-![image-20261028193659087](D:\alper\photos\conf-photos\devai-warsaw-2026\pics\article\image-20261028193659087.png)
+![image-20261028193604573](image-20261028193604573.png)
 
-![image-20261028193824741](D:\alper\photos\conf-photos\devai-warsaw-2026\pics\article\image-20261028193824741.png)
+![image-20261028193625516](image-20261028193625516.png)
 
-![image-20261028193722271](D:\alper\photos\conf-photos\devai-warsaw-2026\pics\article\image-20261028193722271.png)
+![image-20261028193638094](image-20261028193638094.png)
 
-![image-20261028193733622](D:\alper\photos\conf-photos\devai-warsaw-2026\pics\article\image-20261028193733622.png)
+![image-20261028193659087](image-20261028193659087.png)
 
-![image-20261028193801000](D:\alper\photos\conf-photos\devai-warsaw-2026\pics\article\image-20261028193801000.png)
+![image-20261028193824741](image-20261028193824741.png)
 
-![image-20261028193845135](D:\alper\photos\conf-photos\devai-warsaw-2026\pics\article\image-20261028193845135.png)
+![image-20261028193722271](image-20261028193722271.png)
 
-![image-20261028193855490](D:\alper\photos\conf-photos\devai-warsaw-2026\pics\article\image-20261028193855490.png)
+![image-20261028193733622](image-20261028193733622.png)
 
-![image-20261028193925526](D:\alper\photos\conf-photos\devai-warsaw-2026\pics\article\image-20261028193925526.png)
+![image-20261028193801000](image-20261028193801000.png)
+
+![image-20261028193845135](image-20261028193845135.png)
+
+![image-20261028193855490](image-20261028193855490.png)
+
+![image-20261028193925526](image-20261028193925526.png)
