@@ -3,12 +3,15 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Volo.Abp;
 
 public static class ObjectHelper
 {
-    private static readonly ConcurrentDictionary<string, PropertyInfo?> _cachedObjectProperties = new();
+    // Keyed by the object's type itself, since different types can share a full name (such as proxies from different
+    // generators), and weakly, so a collectible type can still be unloaded.
+    private static readonly ConditionalWeakTable<Type, ConcurrentDictionary<string, PropertyInfo?>> _cachedObjectProperties = new();
 
     public static void TrySetProperty<TObject, TValue>(
         TObject obj,
@@ -25,10 +28,16 @@ public static class ObjectHelper
         Func<TObject, TValue> valueFactory,
         params Type[]? ignoreAttributeTypes)
     {
-        var cacheKey =
-            $"{obj?.GetType().FullName}-{propertySelector}-{(ignoreAttributeTypes != null ? "-" + string.Join("-", ignoreAttributeTypes.Select(x => x.FullName)) : "")}";
+        if (obj == null)
+        {
+            return;
+        }
 
-        var property = _cachedObjectProperties.GetOrAdd(cacheKey, PropertyFactory);
+        var cacheKey = $"{propertySelector}-{(ignoreAttributeTypes != null ? "-" + string.Join("-", ignoreAttributeTypes.Select(x => x.FullName)) : "")}";
+
+        var property = _cachedObjectProperties
+            .GetValue(obj.GetType(), _ => new ConcurrentDictionary<string, PropertyInfo?>())
+            .GetOrAdd(cacheKey, PropertyFactory);
 
         property?.SetValue(obj, valueFactory(obj));
         return;
