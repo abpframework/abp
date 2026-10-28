@@ -46,6 +46,13 @@ public class AbpEnumLocalizer_Tests : AbpIntegratedTest<AbpLocalizationTestModul
             _enumLocalizer.GetString<BookType>(42).ShouldBe("42");
             _enumLocalizer.GetString<BookType>((BookType)42).ShouldBe("42");
             _enumLocalizer.GetString<BookPermissions>(BookPermissions.Read | BookPermissions.Write).ShouldBe("Read, Write");
+            _enumLocalizer.GetString<BookPermissions>(3).ShouldBe("Read, Write");
+
+            var specifyLocalizer = new[]
+            {
+                GetRequiredService<IStringLocalizerFactory>().Create<LocalizationTestValidationResource>()
+            };
+            _enumLocalizer.GetString<BookType>(42, specifyLocalizer).ShouldBe("42");
         }
     }
 }
