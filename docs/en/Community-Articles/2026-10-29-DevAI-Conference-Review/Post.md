@@ -575,64 +575,181 @@ METR measuring the length of software tasks that AI models can complete successf
 
 # City Life, Culture, History
 
+After the conference, I spent some time walking around Warsaw and Krakow and most of that time went to museums. As a Turk, I was surprised by how much Ottoman history I found there. Poland and the Ottoman Empire were neighbors for centuries. They fought wars, signed peace treaties, traded and influenced each other's culture, and you can see this everywhere: in paintings, armor, tents, carpets and even in a metro station.
+
 ![image-20261028193122774](image-20261028193122774.png)
 
+*A tile panel of the Panorama Istanbul. [Warsaw Metro Politechnika Station](https://www.flickr.com/photos/129661548@N06/17071403919/). Built on 24.04.2015. Turkey gave it to Poland to celebrate 600 years of diplomatic relations, which started in 1414. The sign says "Old Friends, New Leaders", which I think sums up the relationship between the two countries*
 
+---
+
+
+
+## Royal Castle, Warsaw
+
+The first museum was the Royal Castle in Warsaw, the former residence of the Polish kings. The royal apartments have a surprising number of Ottoman-themed works.
 
 ![image-20261028194035176](image-20261028194035176.png)
 
+An 18th-century painting in the "Turquerie" style, which was very popular in European courts at that time. An Ottoman gentleman sits on a fur next to a woman holding a long pipe, while a girl in front of them plays mangala, the traditional Turkish board game. 
+More info about mangala game https://en.wikipedia.org/wiki/Mangala_(game)
 
+---
 
 ![image-20261028194132013](image-20261028194132013.png)
 
+Another Turquerie painting: an Ottoman man and women resting in a garden while Şerbet (chilled sweet drink) is served. European aristocrats were fascinated by Ottoman clothing, coffee and Şerbet culture and daily life, and paintings like this were made to decorate palaces.
+
+---
+
 ![image-20261028194158435](image-20261028194158435.png)
+
+[This porcelain plate](https://kolekcja.zamek-krolewski.pl/obiekt-11210-podstawka-pod-owalny-koszyk-azurowy-z-serwisu-sultanskiego) was part of the famous sultan's service ordered from the Royal Farfur Factory in Belvedere by Stanisław August in 1776. It was a diplomatic gift from the "Polish King II. Stanisław August" to "I. Sultan Abdül Hamid". The Turkish ambassador in Poland, Numan Bey delivered it in 1777 to Ottoman Topkapı Palace. Most probably a collationer brought the item to Poland again. 
+On the plate it's written in Ottoman language as below:
+
+> "The King of Poland presents these gifts to the Sultan of the Ottoman dynasty as a token of his deepest affection and sincere good wishes. From the capital city of Warsaw"
+
+---
+
+**
 
 ![image-20261028194239145](image-20261028194239145.png)
 
+[The Peace of Khotyn (Hotin) 1621](https://zbiory.mnk.pl/pl/najcenniejsze/katalog/319308). Painting by Italian Marcello Bacciarelli after 160 years of the war. It shows Polish and Ottoman envoys shaking hands after the Battle of Khotyn. The battle is between Ottoman Sultan Osman II (Genc Osman) led a military campaign against the Polish–Lithuanian Commonwealth. After weeks of intense fighting, neither side achieved a decisive victory. And they're making an agreement. On the left side shaking hand is Ottoman Grand Vizier Dilaver Paşa (Osmanlı Sadrazamı). On the right side shaking hand is Stanisław Lubomirski the commander of Poland (Lehistan). The painting underwent restoration funded by the Turkish Embassy in Warsaw with support from the Turkish Cooperation and Coordination Agency (TİKA).
+
+---
+
 ![image-20261028193240037](image-20261028193240037.png)
 
+This painting shows the grand arrival of the Polish ambassador in Istanbul in 29 April 1790, during Sultan Selim III's reign. The Ottomans welcomed him with a magnificent ceremony, including Janissaries, horses and hundreds of attendants. At that time, Poland was looking to the Ottoman Empire for support against Russia. A fascinating piece of Turkish-Polish history! [Click here for more info](https://wilanow-palac.pl/pasaz-wiedzy/o-strojach-uczestnikow-ostatniego-polskiego-poselstwa-w-stambule-w-1790-roku).
 
+---
 
 
 
 ![image-20261028193344487](image-20261028193344487.png)
 
+This massive painting shows the Battle of Lepanto in 1571, when the Ottoman navy suffered a major defeat against a Christian alliance (Holy League). I took the photo in Wawel Castle / Krakow. Painted by Italian artist Tommaso Dolabella around 1632. It shows the naval battle on the right and a religious procession on the left. Interestingly, the painting is also linked to the 1621 Battle of Khotyn (Inebahtı Deniz Muharebesi) between the Ottomans and the Polish-Lithuanian forces. 
+
+
+
+
 ![image-20261028193446603](image-20261028193446603.png)
+
+This sea war started by Papa V. Pius because at that time Ottomans were very powerful with Barbaros Hayrettin Pasa and going to invade Cyprus. Then Papa started the Holy League which consists of Spain, Venice ve Vatican. At that time Poland was not in that union but later Bractwo Różańcowe requested this painting to show the Catholics union and painted in Dominiken Church in Poznań. A detail from the Lepanto painting. The painter used it as propaganda: devils drag Ottoman sailors into a boat, while archers keep fighting on the galleys. 
 
 ![image-20261028193459653](image-20261028193459653.png)
 
+Another detail from the same painting: burning galleys, Ottoman flags with crescents and stars, and sailors falling into the sea. The level of detail is impressive considering how old the canvas is. In this war, the Ottoman general and commander Müezzinzade Ali Paşa was died.
+
+![image-20261028220940161](image-20261028220940161.png)
+
+And on the left side of the painting Catholic priests pray for victory in the foreground. There's a message on this area of the painting: the victory over the Ottoman fleet was attributed not only to military strength but also to prayer and divine intervention. [Click here to read more about it.](https://wawel.krakow.pl/wydarzenie/bitwy-pod-lepanto-i-pod-chocimiem-obraz-tomasza-dolabelli-w-zbiorach-zamku-krolewskiego-na-wawelu-i-jego-ikonografia)
 
 
 
+---
 
 ![image-20261028193532292](image-20261028193532292.png)
 
+This painting shows the Battle of Vienna in 1683, one of the biggest turning points in Ottoman history. The Ottoman army, led by Kara Mustafa Pasha (Sadrazam Merzifonlu Kara Mustafa Paşa), was defeated by a European coalition led by Polish King Jan III Sobieski. The painting captures the chaos of the battle, with cavalry fighting, fallen soldiers and Ottoman military banners. This defeat marked the beginning of a long period of Ottoman territorial losses in Europe. Painted in the Netherlands shortly after 1683, it is now displayed at Wawel Royal Castle in Kraków, Poland. Original and better contrast of this painting: https://upload.wikimedia.org/wikipedia/commons/6/6c/Pauwel_Casteels_-_Battle_of_Vienna_-_Google_Art_Project.jpg
 
+![image-20261028224912415](park-ottoman.png)
+
+And here you can see it's the statue of Polish King Jan III Sobieski, who defeated the Ottoman army at the Battle of Vienna in 1683. I took the picture in Łazienki Royal Park, Warsaw. The king is riding over two fallen Ottoman soldiers, symbolizing his victory. Created by Franciszek Pinck in 1788, the monument also had a political purpose. Interestingly, Poland was trying to build an alliance with Russia against the Ottomans at that time. Just two years later, Poland changed direction and sought Ottoman support against Russia! For more info about this statue: https://www.lazienki-krolewskie.pl/pl/pomniki/pomnik-jana-iii-sobieskiego
+
+Interestingly, the king of Austria I. Leopold, called Poland to the Vienna battle because he said it's a Christian & Islam war. But after 100 years, Poland was invaded the country which they helped Austria and Russia & Prussia (1772). In 1795, Poland disappeared from the map of Europe for 123 years! Interestingly, the Ottoman Empire never formally recognized the partitions of Poland. In 1842, the Ottomans allowed Polish refugees to establish a settlement near Istanbul, called Adampol (today's [Polonezköy](https://en.wikipedia.org/wiki/Polonezk%C3%B6y)). And from that time, it's a fascinating piece of Turkish-Polish friendship that continues to this day! 
+
+---
 
 ![image-20261028193551122](image-20261028193551122.png)
 
+Ottoman mail-and-plate armor. The steel plates on the chest are engraved with Arabic inscriptions and floral patterns. It looks heavy, but it was designed to give a horseman flexibility. I took these pictures in Wavel Castle in Krakow. In the Arabic texts are from (Surah Al-Fath / Fetih Suresi) and names of Allah:
 
+- **"الفتاح"** (*el-Fettâh*) : The Granter of Victory
+- **"العالم"** (*el-Âlim*):  The All-Knowing
+- **"الحاكم"** (*el-Hâkim*): The Ruler
+- **"الملك"** (*el-Melik*): The King
+- **الغالب** (*el-Gâlib*):  The Conqueror
+
+You can visit this gallery virtually at https://3d.wawel.krakow.pl/namioty-tureckie/index.htm (SSL doesn't work, continue unsafe). And for the other ottoman items see https://wawel.krakow.pl/en/exhibition-constant/ottoman-tukish-tents.
 
 ![image-20261028193559288](image-20261028193559288.png)
 
-![image-20261028193604573](image-20261028193604573.png)
+Ottoman turban helmets and Pair of Buturluks (Greaves) from the early 16th century and a pair of vambraces (arm guards) covered with engraved calligraphy. Many objects like these reached Poland as war trophies and others came through trade and diplomacy. This is very nice buturluks and probably owned by a higher Ottoman comander. On the items you can see the Arabic text: 
+
+* **"الخلد"** (*el-Huld*) from this surah: **"خلّد الله ملكه وسلطانه"** (*Halladallâhu mülkehû ve sultâneh*. In Turkish: "Allah mülkünü ve saltanatını ebedî kılsın") 
+* **"السلطان"** (*es-Sultân*)
+* **"العادل"** (*el-Âdil*) 
+* **"المجاهد... المؤيد"** (*el-Mücâhid... el-Müeyyed* — "Cihad eden, Allah tarafından desteklenen/muzaffer kılınan") 
+* **"العطاء"** (*el-Atâ* — İhsan, bağış)
+* **"العظمة لله"** (*el-Azametü lillâh* — "Büyüklük/azamet Allah'a mahsustur")
+* **"نصر من الله وفتح قريب"** (*Nasrun minallâhi ve fethun karîb* — Saff Suresi 13: "Allah'tan bir yardım ve yakın bir fetih") 
+
+---
+
+![Broken Ottoman Turban Helmet](turban-helment.png)
+
+A close-up of the turban helmet. The fluted dome imitates the folds of a turban, and the engraved band at the bottom is still clearly visible after 500 years. On these helmets mostly written **Âyetü'l-Kürsî** from Quran (*Allâhu lâ ilâhe illâ hüve'l-hayyu'l-kayyûm...*). The helmet was broken most probably with the hammer as you see on the right side, in the Polish army it's called [Nadziak](https://pl.wikipedia.org/wiki/Nadziak).
+
+---
 
 ![image-20261028193625516](image-20261028193625516.png)
 
+A painting that most likely shows the meeting of the Polish King John III Sobieski and the Holy Roman Emperor Leopold I after the Battle of Vienna in 1683. In the background you can see the spire of Vienna and the remains of the Ottoman camp.
+
+---
+
 ![image-20261028193638094](image-20261028193638094.png)
+
+This 17th-century blade of the Ottoman Grand Vizier Merzifonlu Kara Mustafa Pasha, is crafted from watered Damascus steel with gold koftgari inlay. It notably features a rare spine groove containing free-rolling lead pellets designed to shift the balance forward upon impact and emit an intimidating sound during a strike. The blade bears classical Islamic inscriptions: along the spine's gold cartouche is an Arabic prayer of devotion, reading **"عماد فضل الله تعالى العلي الملك"** / **"توكلت على الله الملك"** (*Turkish: "Yüce ve Mülk sahibi olan Allah’ın lütfuna sığındım / Allah'a tevekkül ettim"*; *English: "Reliance upon the grace of Allah, the Sublime, the Sovereign"*), while the cartouche at the base bears the maker's mark traditionally inscribed as **"عمل أسد الله"** (*Amel-i Esedullâh* / *Türkçe: "Esedullah'ın eseri/işi"*; *English: "Work of Asadullah"*), invoking the renowned 17th-century master swordsmith.   
+
+![image-20261028233506227](image-20261028233506227.png)
+
+![image-20261028235530330](image-20261028235530330.png)
 
 ![image-20261028193659087](image-20261028193659087.png)
 
+A close-up of the blade: an inscription inlaid with gold and an engraved ornament below it. This sword was taken from Vienna Battle in 1683 from the Ottoman commander. Kara Mustafa Paşa was a very ambitious man, his goal was to bring Central Europe entirely under Ottoman rule and to conquer Vienna, it's called Kızıl Elma regarded as the "Red Apple" which means conquer never stops until Ottoman finishes conquering the next targetted country. 
+
+---
+
 ![image-20261028193824741](image-20261028193824741.png)
+
+Me in front of a 17th-century Ottoman tent (Otağ-ı Hümayun). These tents were captured at the Battle of Vienna in 1683 and brought to Poland as trophies. Standing in front of one in person is something else: they are huge and beautifully embroidered.
 
 ![image-20261028193722271](image-20261028193722271.png)
 
+Tent's outer surfaces were typically made linen or canvas, materials resistant to wind, sun and rain; their interiors, meanwhile, were decorated much like a room in a grand mansion. An Ottoman commander's tent was basically a mobile palace. These structures were generally vast complexes, comprising elements such as a main living area, a *divanhane* (reception hall), a *hamam* (bathhouse) and a *haremlik* (private quarters) and all interconnected by corridors.
+
 ![image-20261028193733622](image-20261028193733622.png)
+
+An Anatolian prayer rug (seccade) inside the tent. The niche (mihrab) design points toward the qibla (where Prophet Mohammed's graveyard). This prayer carpet is mostly probably from the city of Gördes/Manisa or Uşak in Turkey. This carpet is probably 350 years old still its colors are amazingly shining.
+
+---
 
 ![image-20261028193801000](image-20261028193801000.png)
 
+A showcase of Eastern armor: a Persian "four mirrors" (chahar-aina) armor, gold-decorated shields from India and Persia, and two pairs of 17th-century Turkish vambraces. The Polish nobility loved this style, and it strongly influenced their own fashion and military equipment.
+
+---
+
 ![image-20261028193845135](image-20261028193845135.png)
+
+---
+
+An Ottoman saddle with a velvet seat and a saddle cloth embroidered with metal thread, together with a saber. Horses were central to both the Ottoman and the Polish armies and their equipment was as decorated as the riders' clothes.
 
 ![image-20261028193855490](image-20261028193855490.png)
 
+Mail-and-plate armor shirts displayed in front of a prayer rug. Seeing a whole row of them together gives you an idea of what an Ottoman cavalry unit looked like.
+
+---
+
 ![image-20261028193925526](image-20261028193925526.png)
+
+And finally, from the museums back to the streets: a Turkish flag on a historic building on Krakowskie Przedmieście, next to Kino Kultura in Warsaw. This is the only foreign flag I see on the kings road to the old town of Warsaw. This building is used for Turkish and Polish cultural events. It was nice to see our flag in the heart of the city, 600 years after the two countries first established relations. 
+
+**This conference trip was a great mix of AI and technical learning, along with cultural and historical discoveries.**
+
+See you next time, somewhere else in the world!
