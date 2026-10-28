@@ -62,6 +62,15 @@
         "index": 5
       },
       "x-prompt": "Please enter target Angular project to place the generated code. (default: workspace \"defaultProject\")"
+    },
+    "serviceType": {
+      "description": "Service type to the generated code",
+      "type": "string",
+      "enum": [
+        "application",
+        "integration",
+        "all"
+      ]
     }
   },
   "required": []
