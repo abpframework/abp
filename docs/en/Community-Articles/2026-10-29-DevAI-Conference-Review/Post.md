@@ -585,55 +585,62 @@ After the conference, I spent some time walking around Warsaw and Krakow and mos
 
 
 
-## Royal Castle, Warsaw
+## ROYAL CASTLE, WARSAW
 
-Royal Castle is equivalent to Topkapı Palace in Istanbul. The first museum was the Royal Castle in Warsaw, the former residence of the Polish kings. The royal apartments have a surprising number of Ottoman-themed works.
+Royal Castle is equivalent to Topkapı Palace in Istanbul. The first museum was the Royal Castle in Warsaw, the former residence of the Polish kings. The royal apartments have a surprising number of Ottoman-themed works. The official website of Royal Castle is https://www.zamek-krolewski.pl/
 
 ![image-20261028194035176](image-20261028194035176.png)
 
-An 18th-century painting in the "Turquerie" style, which was very popular in European courts at that time. An Ottoman gentleman sits on a fur next to a woman holding a long pipe, while a girl in front of them plays mangala, the traditional Turkish board game. 
-More info about mangala game https://en.wikipedia.org/wiki/Mangala_(game).
+An 18th-century painting in the "[Turquerie](https://en.wikipedia.org/wiki/Turquerie)" style, which was very popular in European courts at that time. An Ottoman gentleman sits on a fur next to a woman holding a long pipe, while a girl in front of them plays mangala, the traditional Turkish board game. 
+[More info about mangala game](https://en.wikipedia.org/wiki/Mangala_(game)). Painter: Johann Samuel Mock, a German painter works in Polish palace. Painted in 1730–1735. Title: Mangala players. [Click here for Wikipedia information](https://commons.wikimedia.org/wiki/File:Mock_Mangala_players.jpg).
 
-**When and Why Happened This Turquerie Period?**
+**When and Why Happened Turquerie Period?**
 
-After the 1683 Siege of Vienna: With the retreat of the Ottoman military threat, the dread and fear once felt toward the Turks across Europe gave way to intense aesthetic curiosity and fascination. War spoils captured from Ottoman camps such as grand tents, coffee supplies, tulip bulbs and luxurious textiles, planted the initial seeds of this cultural vogue.  The 1721 Paris Embassy of Yirmisekiz Mehmed Çelebi: The arrival of the Ottoman diplomatic delegation in Paris caused a sensation; their distinct sartorial elegance, manners and demeanor sparked a widespread Ottoman craze (*Turquerie*) within both the French royal court and the broader public.
+After the 1683 Siege of Vienna: With the retreat of the Ottoman military threat, the dread and fear once felt toward the Turks across Europe gave way to intense aesthetic curiosity and fascination. War spoils captured from Ottoman camps such as grand tents, coffee supplies, tulip bulbs and luxurious textiles, planted the initial seeds of this cultural vogue.
+The 1721 Paris Embassy of Yirmisekiz Mehmed Çelebi: The arrival of the Ottoman diplomatic delegation in Paris caused a sensation; their distinct sartorial elegance, manners and demeanor sparked a widespread Ottoman craze (*Turquerie*) within both the French royal court and the broader public.
 
 ---
+
+## ROYAL CASTLE, WARSAW
 
 ![image-20261028194132013](image-20261028194132013.png)
 
-Another Turquerie painting: an Ottoman man and women resting in a garden while Şerbet (chilled sweet drink) is served. European aristocrats were fascinated by Ottoman clothing, coffee and Şerbet culture and daily life, and paintings like this were made to decorate palaces.
+Another Turquerie painting called: "Harem Scene with Drinking Coffee.". Painted in 1730-1735. An Ottoman man and women resting in a garden while drinking Turkish coffee. Painter: [Johann Samuel Mock](https://www.wikidata.org/wiki/Q11727772). European aristocrats were fascinated by Ottoman clothing, coffee culture and daily life and paintings like this were made to decorate palaces. [Wikipedia information](https://commons.wikimedia.org/wiki/File:Johann_Samuel_Mock_-_Scena_haremowa_przy_kawie.jpg)
 
 ---
+
+## ROYAL CASTLE, WARSAW
 
 ![image-20261028194158435](image-20261028194158435.png)
 
 [This porcelain plate](https://kolekcja.zamek-krolewski.pl/obiekt-11210-podstawka-pod-owalny-koszyk-azurowy-z-serwisu-sultanskiego) was part of the famous sultan's service ordered from the Royal Farfur Factory in Belvedere by Stanisław August in 1776. It was a diplomatic gift from the "Polish King II. Stanisław August" to "I. Sultan Abdül Hamid". The Turkish ambassador in Poland, Numan Bey delivered it in 1777 to Ottoman Topkapı Palace. Most probably a collationer brought the item to Poland again. 
 On the plate it's written in Ottoman language as below:
 
-> "The King of Poland presents these gifts to the Sultan of the Ottoman dynasty as a token of his deepest affection and sincere good wishes. From the capital city of Warsaw"
+> *"The King of Poland presents these gifts to the Sultan of the Ottoman dynasty as a token of his deepest affection and sincere good wishes. From the capital city of Warsaw"*
 
 ---
+
+## ROYAL CASTLE, WARSAW
 
 ![image-20261028194239145](image-20261028194239145.png)
 
-[The Peace of Khotyn (Hotin) 1621](https://zbiory.mnk.pl/pl/najcenniejsze/katalog/319308). Painting by Italian Marcello Bacciarelli after 160 years of the war. It shows Polish and Ottoman envoys shaking hands after the Battle of Khotyn. The battle is between Ottoman Sultan Osman II (Genc Osman) led a military campaign against the Polish–Lithuanian Commonwealth. After weeks of intense fighting, neither side achieved a decisive victory. And they're making an agreement. On the left side shaking hand is Ottoman Grand Vizier Dilaver Paşa (Osmanlı Sadrazamı). On the right side shaking hand is Stanisław Lubomirski the commander of Poland (Lehistan). The painting underwent restoration funded by the Turkish Embassy in Warsaw with support from the Turkish Cooperation and Coordination Agency (TİKA).
+[The Peace of Khotyn (Hotin) 1621](https://zbiory.mnk.pl/pl/najcenniejsze/katalog/319308). Painting by Italian Marcello Bacciarelli after 160 years of the war. It shows Polish and Ottoman envoys shaking hands after the Battle of Khotyn. The battle is between Ottoman Sultan Osman II (Genc Osman) led a military campaign against the Polish–Lithuanian Commonwealth. After weeks of intense fighting, neither side achieved a decisive victory. And they're making an agreement. On the left side shaking hand is [Ottoman Grand Vizier Dilaver Pasha](https://en.wikipedia.org/wiki/Dilaver_Pasha) (Osmanlı Sadrazamı). On the right side shaking hand is Stanisław Lubomirski the commander of Poland (Lehistan). The painting underwent restoration funded by the Turkish Embassy in Warsaw with support from the Turkish Cooperation and Coordination Agency (TİKA).
 
 ---
+
+## Wilanów Palace Museum of King Jan III, WARSAW
 
 ![image-20261028193240037](image-20261028193240037.png)
 
-This painting shows the grand arrival of the Polish ambassador in Istanbul in 29 April 1790, during Sultan Selim III's reign. The Ottomans welcomed him with a magnificent ceremony, including Janissaries, horses and hundreds of attendants. At that time, Poland was looking to the Ottoman Empire for support against Russia. A fascinating piece of Turkish-Polish history! [Click here for more info](https://wilanow-palac.pl/pasaz-wiedzy/o-strojach-uczestnikow-ostatniego-polskiego-poselstwa-w-stambule-w-1790-roku).
+This painting shows the grand arrival of the Polish ambassador in Istanbul in 29 April 1790, during Sultan Selim III's reign. The Ottomans welcomed him with a magnificent ceremony, including Janissaries, horses and hundreds of attendants. At that time, Poland was looking to the Ottoman Empire for support against Russia. A fascinating piece of Turkish-Polish history, [click here for more info](https://wilanow-palac.pl/pasaz-wiedzy/o-strojach-uczestnikow-ostatniego-polskiego-poselstwa-w-stambule-w-1790-roku). Wilanov museum official website is https://wilanow-palac.pl/
 
 ---
 
-
+## WAVEL ROYAL CASTLE, KRAKOW
 
 ![image-20261028193344487](image-20261028193344487.png)
 
 This massive painting shows the Battle of Lepanto in 1571, when the Ottoman navy suffered a major defeat against a Christian alliance (Holy League). I took the photo in Wawel Castle / Krakow. Painted by Italian artist Tommaso Dolabella around 1632. It shows the naval battle on the right and a religious procession on the left. Interestingly, the painting is also linked to the 1621 Battle of Khotyn (Inebahtı Deniz Muharebesi) between the Ottomans and the Polish-Lithuanian forces. 
-
-
 
 
 ![image-20261028193446603](image-20261028193446603.png)
@@ -652,9 +659,11 @@ And on the left side of the painting Catholic priests pray for victory in the fo
 
 ---
 
+## WAVEL ROYAL CASTLE, KRAKOW
+
 ![image-20261028193532292](image-20261028193532292.png)
 
-This painting shows the Battle of Vienna in 1683, one of the biggest turning points in Ottoman history. The Ottoman army, led by Kara Mustafa Pasha (Sadrazam Merzifonlu Kara Mustafa Paşa), was defeated by a European coalition led by Polish King Jan III Sobieski. The painting captures the chaos of the battle, with cavalry fighting, fallen soldiers and Ottoman military banners. This defeat marked the beginning of a long period of Ottoman territorial losses in Europe. Painted in the Netherlands shortly after 1683, it is now displayed at Wawel Royal Castle in Kraków, Poland. Original and better contrast of this painting: https://upload.wikimedia.org/wikipedia/commons/6/6c/Pauwel_Casteels_-_Battle_of_Vienna_-_Google_Art_Project.jpg
+This painting shows the Battle of Vienna in 1683, one of the biggest turning points in Ottoman history. The Ottoman army, led by Kara Mustafa Pasha (Sadrazam Merzifonlu Kara Mustafa Paşa), was defeated by a European coalition led by Polish King Jan III Sobieski. The painting captures the chaos of the battle, with cavalry fighting, fallen soldiers and Ottoman military banners. This defeat marked the beginning of a long period of Ottoman territorial losses in Europe. Painted in the Netherlands shortly after 1683, it is now displayed at Wawel Royal Castle in Kraków, Poland. [Original and better contrast of this painting](https://upload.wikimedia.org/wikipedia/commons/6/6c/Pauwel_Casteels_-_Battle_of_Vienna_-_Google_Art_Project.jpg). For more info about this painting https://cyfrowy.wawel.krakow.pl/obiekt/6114eff470d6cc8c120730fe
 
 ![image-20261028224912415](park-ottoman.png)
 
@@ -663,6 +672,8 @@ And here you can see it's the statue of Polish King Jan III Sobieski, who defeat
 Interestingly, the king of Austria I. Leopold, called Poland to the Vienna battle because he said it's a Christian & Islam war. But after 100 years, Poland was invaded the country which they helped Austria and Russia & Prussia (1772). In 1795, Poland disappeared from the map of Europe for 123 years! Interestingly, the Ottoman Empire never formally recognized the partitions of Poland. In 1842, the Ottomans allowed Polish refugees to establish a settlement near Istanbul, called Adampol (today's [Polonezköy](https://en.wikipedia.org/wiki/Polonezk%C3%B6y)). And from that time, it's a fascinating piece of Turkish-Polish friendship that continues to this day! 
 
 ---
+
+## WAVEL ROYAL CASTLE, KRAKOW 
 
 ![image-20261028193551122](image-20261028193551122.png)
 
@@ -690,17 +701,23 @@ Ottoman turban helmets and Pair of Buturluks (Greaves) from the early 16th centu
 
 ---
 
+## WAVEL ROYAL CASTLE, KRAKOW 
+
 ![Broken Ottoman Turban Helmet](turban-helment.png)
 
 A close-up of the turban helmet. The fluted dome imitates the folds of a turban, and the engraved band at the bottom is still clearly visible after 500 years. On these helmets mostly written **Âyetü'l-Kürsî** from Quran (*Allâhu lâ ilâhe illâ hüve'l-hayyu'l-kayyûm...*). The helmet was broken most probably with the hammer as you see on the right side, in the Polish army it's called [Nadziak](https://pl.wikipedia.org/wiki/Nadziak).
 
 ---
 
+## WAVEL ROYAL CASTLE, KRAKOW
+
 ![image-20261028193625516](image-20261028193625516.png)
 
 A painting that most likely shows the meeting of the Polish King John III Sobieski and the Holy Roman Emperor Leopold I after the Battle of Vienna in 1683. In the background you can see the spire of Vienna and the remains of the Ottoman camp.
 
 ---
+
+## WAVEL ROYAL CASTLE, KRAKOW 
 
 ![image-20261028193638094](image-20261028193638094.png)
 
@@ -716,6 +733,8 @@ A close-up of the blade: an inscription inlaid with gold and an engraved ornamen
 
 ---
 
+## WAVEL ROYAL CASTLE, KRAKOW 
+
 ![image-20261028193824741](image-20261028193824741.png)
 
 Me in front of a 17th-century Ottoman tent (Otağ-ı Hümayun). These tents were captured at the Battle of Vienna in 1683 and brought to Poland as trophies. Standing in front of one in person is something else: they are huge and beautifully embroidered.
@@ -730,11 +749,15 @@ An Anatolian prayer rug (seccade) inside the tent. The niche (mihrab) design poi
 
 ---
 
+## WAVEL ROYAL CASTLE, KRAKOW 
+
 ![image-20261028193801000](image-20261028193801000.png)
 
 A showcase of Eastern armor: a Persian "four mirrors" (chahar-aina) armor, gold-decorated shields from India and Persia, and two pairs of 17th-century Turkish vambraces. The Polish nobility loved this style, and it strongly influenced their own fashion and military equipment.
 
 ---
+
+## WAVEL ROYAL CASTLE, KRAKOW 
 
 ![image-20261028193845135](image-20261028193845135.png)
 
