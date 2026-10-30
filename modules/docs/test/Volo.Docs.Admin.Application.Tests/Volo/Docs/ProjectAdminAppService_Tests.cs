@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Data;
 using Volo.Docs.Admin.Projects;
 using Volo.Docs.Projects;
 using Xunit;
@@ -29,6 +30,7 @@ namespace Volo.Docs
             projects.ShouldNotBeNull();
             projects.TotalCount.ShouldBe(1);
             projects.Items.ShouldContain(x => x.Name == "ABP vNext");
+            projects.Items.Single().GetProperty<string>("GitHubAccessToken").ShouldBe("123456");
         }
 
         [Fact]
@@ -37,6 +39,7 @@ namespace Volo.Docs
             var project = await _projectAdminAppService.GetAsync(_testData.ProjectId);
             project.ShouldNotBeNull();
             project.Id.ShouldBe(_testData.ProjectId);
+            project.GetProperty<string>("GitHubAccessToken").ShouldBe("123456");
         }
 
         [Fact]
@@ -77,6 +80,7 @@ namespace Volo.Docs
             projectDto.DocumentStoreType.ShouldBe(createProjectDto.DocumentStoreType);
 
             projectDto.ExtraProperties.Except(createProjectDto.ExtraProperties).Any().ShouldBe(false);
+            projectDto.GetProperty<string>("GitHubAccessToken").ShouldBe("123456");
         }
 
         [Fact]
@@ -109,6 +113,7 @@ namespace Volo.Docs
             projectDto.MainWebsiteUrl.ShouldBe(updateProjectDto.MainWebsiteUrl);
             projectDto.LatestVersionBranchName.ShouldBe(updateProjectDto.LatestVersionBranchName);
             projectDto.ExtraProperties.ShouldContainKey("test");
+            projectDto.GetProperty<string>("GitHubAccessToken").ShouldBe("123456");
         }
 
         [Fact]
