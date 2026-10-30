@@ -100,24 +100,91 @@ Some tools require explicit permission before execution.
 
 Permission choices include allow once, allow always, and skip. "Allow always" persists in the AI Agent settings and is reused by future sessions.
 
+## Pull Request Attribution
+
+The **Attribute pull requests to ABP Agent** setting in **Settings > Others** is enabled by default. When it is enabled, pull requests that the agent opens with the GitHub CLI (`gh pr create`, or a `gh api` POST request to `repos/{owner}/{repo}/pulls`) end with a `[Made with ABP Agent](https://abp.io/studio/ai-agent)` link in the description. The agent is also instructed to add this link when it writes a pull request description. If the command needs your approval, the permission prompt shows it with the link added.
+
+When the setting is disabled, the agent does not add the link and shell commands are not modified. Pull request descriptions are published exactly as written.
+
+The setting is stored as `attributeAgentPullRequests` in `agent-settings.json`. The default location is `~/.abp/studio/agent-settings.json` (`%USERPROFILE%\.abp\studio\agent-settings.json` on Windows). If the `ABP_STUDIO_ROOT` environment variable is set, the file is under that folder instead. For headless usage with `abp agent`, for example on CI or on a server where the ABP Studio UI is not available, turn the attribution off by adding the property to the existing JSON object in that file, alongside the other settings:
+
+```json
+{
+  "attributeAgentPullRequests": false
+}
+```
+
+A running `abp agent` server or daemon reads the settings at startup, so restart it after changing the file.
+
 ## MCP Tool Connections
 
-ABP Studio can connect to user-configured Model Context Protocol (MCP) servers and expose their tools to Agent mode. This is an MCP client integration for the AI Agent. ABP Studio AI Agent does not expose itself as an MCP server for external AI clients.
+ABP Studio can connect to user-configured Model Context Protocol (MCP) servers and expose their tools to Agent mode. This section is about that MCP client integration. For the other direction, where external AI clients connect to ABP Studio and use its own tools, see the [Model Context Protocol (MCP)](model-context-protocol.md) documentation.
 
-MCP server connections can be configured with:
+### Adding an Integration
+
+Open **Settings > MCP Servers** and select **Add integration** to browse the curated integration gallery. Integrations that require settings open a configuration form for values such as an optional Context7 API key, a Microsoft Learn response limit, or a local timezone. You can open the same form later to change or remove those values.
+
+New integrations are added disabled. Review the server and its tools before enabling it.
+
+MCP server connections use one of these transports:
 
 | Transport | Configuration |
 | --- | --- |
 | Stdio | Command, arguments, and environment variables. |
 | HTTP | URL and headers. |
 
-Studio imports MCP server configuration from Cursor, Claude, VS Code, Windsurf, and bare MCP server JSON formats. Studio exports MCP server configuration in the standard `mcpServers` JSON shape.
+### Editing the Complete JSON Configuration
+
+Select **Edit JSON** to edit the complete MCP server collection as one document. Studio validates and saves the collection together. Servers omitted from the document are removed, and an empty `mcpServers` object removes all servers.
+
+Studio writes the conventional `mcpServers` document shape:
+
+```json
+{
+  "mcpServers": {
+    "Context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ]
+    },
+    "Microsoft Learn": {
+      "url": "https://learn.microsoft.com/api/mcp"
+    }
+  }
+}
+```
+
+The server name is the key under `mcpServers`. A stdio server requires `command` and can include `args` and `env`. An HTTP server requires `url` and can include `headers`. The JSON document does not contain server IDs or enabled state; enable or disable each server from the MCP Servers page.
+
+The editor accepts strict JSON and rejects unknown server properties or root metadata that Studio cannot preserve. New servers and servers whose command, arguments, or URL changed are saved disabled.
+
+### MCP Secrets
+
+Values entered under `env` or `headers` are stored separately from the AI Agent settings. When you reopen **Edit JSON**, an existing secret is represented by a placeholder such as:
+
+```json
+"CONTEXT7_API_KEY": "${secret:CONTEXT7_API_KEY}"
+```
+
+- Keep the placeholder unchanged to retain the stored value.
+- Replace it with a literal value to update the stored secret.
+- Remove the property to delete the stored secret.
+
+Do not create placeholders manually. A placeholder is valid only when it refers to an existing stored value for the same property. Command arguments and URLs are not secret fields and are saved as plain text; use stdio environment variables or HTTP headers for credentials.
+
+MCP secrets use the platform credential storage available to ABP Studio:
+
+| Platform | Storage |
+| --- | --- |
+| Windows | Windows Data Protection API (DPAPI), scoped to the current user. |
+| macOS | A generic password in Keychain under the `AbpStudio` service. |
+| Linux and secure-storage fallback | An encrypted file in the user's `.abp/studio` directory with owner-only read/write permissions. |
 
 Connected MCP servers show their connection status, tool count, tools, and resources. Individual MCP tools can be disabled. Disabled MCP tools are omitted from Agent mode. MCP resources can be opened from settings for inspection.
 
 MCP tools are added only for connected and enabled servers. Plan and Ask modes do not receive MCP tools.
-
-![mcp-servers-settings](./images/ai-agent/mcp-servers-settings.png)
 
 ## `.abpignore`
 

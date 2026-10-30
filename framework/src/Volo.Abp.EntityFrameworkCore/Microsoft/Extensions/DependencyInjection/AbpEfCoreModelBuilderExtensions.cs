@@ -19,7 +19,7 @@ public static class AbpEfCoreModelBuilderExtensions
                 var isDeleted = args[0];
                 var boolParam = args[1];
 
-                if (abpEfCoreCurrentDbContext.Context?.DataFilter.IsEnabled<ISoftDelete>() == true)
+                if (abpEfCoreCurrentDbContext.GetRequiredContext().DataFilter.IsEnabled<ISoftDelete>())
                 {
                     // IsDeleted == false. Use the column's TypeMapping so any ValueConverter is applied to the literal.
                     return new SqlBinaryExpression(
@@ -47,7 +47,7 @@ public static class AbpEfCoreModelBuilderExtensions
                 var currentTenantId = args[1];
                 var boolParam = args[2];
 
-                if (abpEfCoreCurrentDbContext.Context?.DataFilter.IsEnabled<IMultiTenant>() == true)
+                if (abpEfCoreCurrentDbContext.GetRequiredContext().DataFilter.IsEnabled<IMultiTenant>())
                 {
                     // TenantId == CurrentTenantId
                     return new SqlBinaryExpression(

@@ -104,6 +104,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         var eventName = ea.RoutingKey;
         var eventType = EventTypes.GetOrDefault(eventName);
         object eventData;
+        Guid? tenantId = null;
 
         if (eventType != null)
         {
@@ -113,7 +114,8 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         {
             var rawBytes = ea.Body.ToArray();
             eventType = typeof(DynamicEventData);
-            eventData = new DynamicEventData(eventName, Serializer.Deserialize<object>(rawBytes));
+            tenantId = GetTenantIdFromHeaders(ea.BasicProperties.Headers);
+            eventData = CreateDynamicEventData(eventName, Serializer.Deserialize<object>(rawBytes), tenantId);
         }
         else
         {
@@ -121,7 +123,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         }
 
         var correlationId = ea.BasicProperties.CorrelationId;
-        if (await AddToInboxAsync(ea.BasicProperties.MessageId, eventName, eventType, eventData, correlationId))
+        if (await AddToInboxAsync(ea.BasicProperties.MessageId, eventName, eventType, eventData, correlationId, tenantId))
         {
             return;
         }
@@ -136,12 +138,21 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
     {
         var handlerFactories = GetOrCreateHandlerFactories(eventType);
 
-        if (factory.IsInFactories(handlerFactories))
+        var added = handlerFactories.Locking(factories =>
+        {
+            if (factory.IsInFactories(factories))
+            {
+                return false;
+            }
+
+            factories.Add(factory);
+            return true;
+        });
+
+        if (!added)
         {
             return NullDisposable.Instance;
         }
-
-        handlerFactories.Add(factory);
 
         if (handlerFactories.Count == 1) //TODO: Multi-threading!
         {
@@ -155,13 +166,22 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
     public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
     {
         var handlerFactories = GetOrCreateDynamicHandlerFactories(eventName);
-        
-        if (handler.IsInFactories(handlerFactories))
+
+        var added = handlerFactories.Locking(factories =>
+        {
+            if (handler.IsInFactories(factories))
+            {
+                return false;
+            }
+
+            factories.Add(handler);
+            return true;
+        });
+
+        if (!added)
         {
             return NullDisposable.Instance;
         }
-        
-        handlerFactories.Add(handler);
         
         if (handlerFactories.Count == 1) //TODO: Multi-threading!
         {
@@ -229,7 +249,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
     public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
     {
         var eventType = EventTypes.GetOrDefault(eventName);
-        var dynamicEventData = eventData as DynamicEventData ?? new DynamicEventData(eventName, eventData);
+        var dynamicEventData = CreateDynamicEventDataForPublishing(eventName, eventData);
 
         if (eventType != null)
         {
@@ -241,7 +261,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
 
     protected async override Task PublishToEventBusAsync(Type eventType, object eventData)
     {
-        await PublishAsync(eventType, eventData, correlationId: CorrelationIdProvider.Get());
+        await PublishAsync(eventType, eventData, correlationId: CorrelationIdProvider.Get(), tenantId: GetTenantIdToPropagate(eventType, eventData));
     }
 
     protected override void AddToUnitOfWork(IUnitOfWork unitOfWork, UnitOfWorkEventRecord eventRecord)
@@ -253,7 +273,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         OutgoingEventInfo outgoingEvent,
         OutboxConfig outboxConfig)
     {
-        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, eventId: outgoingEvent.Id, correlationId: outgoingEvent.GetCorrelationId());
+        await PublishAsync(outgoingEvent.EventName, outgoingEvent.EventData, eventId: outgoingEvent.Id, correlationId: outgoingEvent.GetCorrelationId(), tenantId: outgoingEvent.GetTenantId());
 
         using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
         {
@@ -282,7 +302,8 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
                     outgoingEvent.EventName,
                     outgoingEvent.EventData,
                     eventId: outgoingEvent.Id,
-                    correlationId: outgoingEvent.GetCorrelationId());
+                    correlationId: outgoingEvent.GetCorrelationId(),
+                    tenantId: outgoingEvent.GetTenantId());
 
                 using (CorrelationIdProvider.Change(outgoingEvent.GetCorrelationId()))
                 {
@@ -310,7 +331,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         }
         else if (DynamicHandlerFactories.ContainsKey(incomingEvent.EventName))
         {
-            eventData = new DynamicEventData(incomingEvent.EventName, Serializer.Deserialize<object>(incomingEvent.EventData));
+            eventData = CreateDynamicEventData(incomingEvent, Serializer.Deserialize<object>(incomingEvent.EventData));
             eventType = typeof(DynamicEventData);
         }
         else
@@ -338,12 +359,13 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         object eventData,
         Dictionary<string, object>? headersArguments = null,
         Guid? eventId = null,
-        string? correlationId = null)
+        string? correlationId = null,
+        Guid? tenantId = null)
     {
         var (eventName, resolvedData) = ResolveEventForPublishing(eventType, eventData);
         var body = Serializer.Serialize(resolvedData);
 
-        return PublishAsync(eventName, body, headersArguments, eventId, correlationId);
+        return PublishAsync(eventName, body, headersArguments, eventId, correlationId, tenantId);
     }
 
     protected virtual async Task PublishAsync(
@@ -351,11 +373,12 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         byte[] body,
         Dictionary<string, object>? headersArguments = null,
         Guid? eventId = null,
-        string? correlationId = null)
+        string? correlationId = null,
+        Guid? tenantId = null)
     {
         using (var channel = await (await ConnectionPool.GetAsync(AbpRabbitMqEventBusOptions.ConnectionName)).CreateChannelAsync())
         {
-            await PublishAsync(channel, eventName, body, headersArguments, eventId, correlationId);
+            await PublishAsync(channel, eventName, body, headersArguments, eventId, correlationId, tenantId);
         }
     }
 
@@ -365,7 +388,8 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         byte[] body,
         Dictionary<string, object>? headersArguments = null,
         Guid? eventId = null,
-        string? correlationId = null)
+        string? correlationId = null,
+        Guid? tenantId = null)
     {
         await EnsureExchangeExistsAsync(channel);
 
@@ -385,6 +409,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
         }
 
         SetEventMessageHeaders(properties, headersArguments);
+        SetTenantIdHeader(properties, tenantId);
 
         await channel.BasicPublishAsync(
             exchange: AbpRabbitMqEventBusOptions.ExchangeName,
@@ -418,6 +443,29 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
             );
         }
         _exchangeCreated = true;
+    }
+
+    protected virtual void SetTenantIdHeader(IBasicProperties properties, Guid? tenantId)
+    {
+        if (tenantId == null)
+        {
+            return;
+        }
+
+        properties.Headers ??= new Dictionary<string, object?>();
+        properties.Headers[EventBusConsts.TenantIdHeaderName] = tenantId.Value.ToString();
+    }
+
+    protected virtual Guid? GetTenantIdFromHeaders(IDictionary<string, object?>? headers)
+    {
+        if (headers == null || !headers.TryGetValue(EventBusConsts.TenantIdHeaderName, out var value))
+        {
+            return null;
+        }
+
+        return EventBusTenantIdHelper.Parse(value is byte[] bytes
+            ? System.Text.Encoding.UTF8.GetString(bytes)
+            : value?.ToString());
     }
 
     protected virtual void SetEventMessageHeaders(IBasicProperties properties, Dictionary<string, object>? headersArguments)
@@ -464,12 +512,12 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
 
         foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
         {
-            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
+            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value.Locking(factories => factories.ToList())));
         }
 
         foreach (var handlerFactory in DynamicHandlerFactories.Where(aehf => eventNames.Contains(aehf.Key)))
         {
-            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value));
+            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value.Locking(factories => factories.ToList())));
         }
 
         return handlerFactoryList.ToArray();
@@ -518,7 +566,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
 
         foreach (var handlerFactory in DynamicHandlerFactories.Where(hf => hf.Key == eventName))
         {
-            result.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value));
+            result.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value.Locking(factories => factories.ToList())));
         }
 
         return result;

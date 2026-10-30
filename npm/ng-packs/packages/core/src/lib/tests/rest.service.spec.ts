@@ -1,4 +1,6 @@
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { effect, signal } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { createHttpFactory, HttpMethod, SpectatorHttp, SpyObject } from '@ngneat/spectator/vitest';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { of, throwError } from 'rxjs';
@@ -90,6 +92,20 @@ describe('HttpClient testing', () => {
     spectator.flushAll([req], [{}]);
 
     await completionPromise;
+  });
+
+  test('should create a resource-based request that still uses the ABP request pipeline', () => {
+    const resource = TestBed.runInInjectionContext(() => {
+      const resource = spectator.service.requestResource(signal({ method: HttpMethod.GET, url: '/test' }));
+      effect(() => {
+        resource.value();
+      });
+      return resource;
+    });
+
+    expect(typeof resource.reload).toBe('function');
+    expect(typeof resource.value).toBe('function');
+    expect(typeof resource.hasValue).toBe('function');
   });
 
   test('should handle the error', () => {

@@ -38,6 +38,14 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
 
     public DbSet<AppEntityWithNavigationsForeign> AppEntityWithNavigationsForeign { get; set; }
 
+    public DbSet<AppEntityWithForeignKeyOnly> AppEntityWithForeignKeyOnly { get; set; }
+
+    public DbSet<AppEntityWithForeignKeyOnlyChild> AppEntityWithForeignKeyOnlyChild { get; set; }
+
+    public DbSet<AppEntityWithForeignKeyOnlyOwner> AppEntityWithForeignKeyOnlyOwner { get; set; }
+
+    public DbSet<AppEntityWithForeignKeyOnlyEntityChild> AppEntityWithForeignKeyOnlyEntityChild { get; set; }
+
     public DbSet<Blog> Blogs { get; set; }
     public DbSet<BlogPost> BlogPosts { get; set; }
 
@@ -160,6 +168,31 @@ public class TestMigrationsDbContext : AbpDbContext<TestMigrationsDbContext>
         modelBuilder.Entity<AppEntityWithNavigationsForeign>(b =>
         {
             b.ConfigureByConvention();
+        });
+
+        modelBuilder.Entity<AppEntityWithForeignKeyOnly>(b =>
+        {
+            b.ConfigureByConvention();
+        });
+
+        modelBuilder.Entity<AppEntityWithForeignKeyOnlyChild>(b =>
+        {
+            b.ConfigureByConvention();
+            // No navigation property on both sides, only a foreign key.
+            b.HasOne<AppEntityWithForeignKeyOnly>().WithMany().HasForeignKey(x => x.AppEntityWithForeignKeyOnlyId);
+        });
+
+        modelBuilder.Entity<AppEntityWithForeignKeyOnlyOwner>(b =>
+        {
+            b.ConfigureByConvention();
+            b.HasMany(x => x.Children).WithOne().HasForeignKey(x => x.OwnerId);
+        });
+
+        modelBuilder.Entity<AppEntityWithForeignKeyOnlyEntityChild>(b =>
+        {
+            b.ConfigureByConvention();
+            // The owner has a navigation, the referenced aggregate root has not.
+            b.HasOne<AppEntityWithForeignKeyOnly>().WithMany().HasForeignKey(x => x.AppEntityWithForeignKeyOnlyId);
         });
 
         modelBuilder.Entity<Blog>(b =>

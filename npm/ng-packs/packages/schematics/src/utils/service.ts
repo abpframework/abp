@@ -4,6 +4,7 @@ import {
   Controller,
   Import,
   Method,
+  ParameterInBody,
   Property,
   Service,
   ServiceGeneratorParams,
@@ -35,6 +36,7 @@ export function createControllerToServiceMapper({
   solution,
   types,
   apiName,
+  resourceApi,
 }: ServiceGeneratorParams) {
   const mapActionToMethod = createActionToMethodMapper();
 
@@ -49,11 +51,26 @@ export function createControllerToServiceMapper({
     );
     imports.push(new Import({ path: '@abp/ng.core', specifiers: ['RestService', 'Rest'] }));
     imports.push(new Import({ path: '@angular/core', specifiers: ['Injectable', 'inject'] }));
+    if (resourceApi) {
+      appendImportSpec(imports, '@angular/core', 'computed');
+      appendImportSpec(imports, '@angular/core', 'Signal');
+      appendImportSpec(imports, '@angular/core', 'ResourceRef');
+    }
     sortImports(imports);
     const methods = actions.map(mapActionToMethod);
     sortMethods(methods);
     return new Service({ apiName, imports, methods, name, namespace });
   };
+}
+
+function appendImportSpec(imports: Import[], path: string, specifier: string) {
+  const existing = imports.find(x => x.path === path);
+  if (!existing) {
+    imports.push(new Import({ path, specifiers: [specifier] }));
+    return;
+  }
+
+  existing.specifiers = [...new Set([...existing.specifiers, specifier])];
 }
 
 function getTypesWithoutIRemoteStreamContent(types: Record<string, Type>) {
@@ -82,7 +99,9 @@ export function createActionToMethodMapper() {
 export function createActionToBodyMapper() {
   const adaptType = createTypeAdapter();
 
-  return ({ httpMethod, parameters, returnValue, url }: Action) => {
+  return (action: Action) => {
+    const { httpMethod, returnValue, url } = action;
+    const parameters = bindVersionParameterToSignature(action);
     let responseType = adaptType(returnValue.typeSimple);
     if (responseType.includes('enum')) {
       const type = returnValue.typeSimple.replace('enum', returnValue.type);
@@ -307,20 +326,36 @@ function getMethodNameFromAction(action: Action): string {
   return action.uniqueName.split('Async')[0];
 }
 
-function getVersionParameter(action: Action) {
-  const versionParameter = action.parameters.find(
-    p =>
-      (p.name == 'apiVersion' && p.bindingSourceId == eBindingSourceId.Path) ||
-      (p.name == 'api-version' && p.bindingSourceId == eBindingSourceId.Query),
+function isVersionParameter(parameter: ParameterInBody) {
+  return (
+    (parameter.name == 'apiVersion' && parameter.bindingSourceId == eBindingSourceId.Path) ||
+    (parameter.name == 'api-version' && parameter.bindingSourceId == eBindingSourceId.Query)
   );
+}
+
+function getVersionParameter(action: Action) {
+  const versionParameter = action.parameters.find(isVersionParameter);
   const bestVersion = findBestApiVersion(action);
   return versionParameter && bestVersion
     ? {
         ...versionParameter,
         name: camelizeHyphen(versionParameter.name),
-        defaultValue: `"${bestVersion}"`,
+        defaultValue: bestVersion,
       }
     : null;
+}
+
+// The API definition reports the input DTO as `nameOnMethod` of the version parameter when the
+// action takes a DTO, so the value has to come from the `apiVersion` argument of the signature.
+function bindVersionParameterToSignature(action: Action) {
+  const versionParameter = getVersionParameter(action);
+  if (!versionParameter) {
+    return action.parameters;
+  }
+
+  return action.parameters.map(p =>
+    isVersionParameter(p) ? { ...p, nameOnMethod: versionParameter.name } : p,
+  );
 }
 
 // Implementation of https://github.com/abpframework/abp/commit/c3f77c1229508279015054a9b4f5586404a88a14#diff-a4dbf6be9a1aa21d8294f11047774949363ee6b601980bf3225e8046c0748c9eR101

@@ -2,7 +2,7 @@
 @using MudBlazor
 @using Volo.Abp.Data
 
-<MudDataGrid @ref="_dataGrid" T="TItem" ServerData="@ServerData" Loading="@Loading" Dense="true" Striped="true"
+<MudDataGrid @ref="_dataGrid" T="TItem" ServerData="@GetServerDataFunc()" Loading="@Loading" Dense="true" Striped="true"
     Bordered="false" Hover="true" Class="@Class" RowsPerPage="@PageSize" CurrentPage="@ZeroBasedCurrentPage">
     <LoadingContent>
         <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
@@ -71,12 +71,12 @@
                             @if (column.ValueConverter == null)
                             {
                                 <PropertyColumn T="TItem" TProperty="object" Property="@(x => GetPropertyValue(x, column.Data))"
-                                    Title="@column.Title" Sortable="@column.Sortable" Hidden="@(!column.Visible)"
+                                    Title="@column.Title" Sortable="@column.Sortable" SortBy="@GetSortByFunc(column)" Hidden="@(!column.Visible)"
                                     CellStyle="@GetColumnStyle(column)" />
                             }
                             else
                             {
-                                <TemplateColumn T="TItem" Title="@column.Title" Sortable="@column.Sortable" Hidden="@(!column.Visible)"
+                                <TemplateColumn T="TItem" Title="@column.Title" Sortable="@column.Sortable" SortBy="@GetSortByFunc(column)" Hidden="@(!column.Visible)"
                                     CellStyle="@GetColumnStyle(column)">
                                     <CellTemplate>
                                         @((MarkupString)GetConvertedFieldValue(context.Item, column))

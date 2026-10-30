@@ -38,10 +38,10 @@ All of these are automatically handled by the ABP.
 
 While the section above explains the UOW as it is database transaction, actually a UOW doesn't have to be transactional. By default;
 
-* **HTTP GET** requests don't start a transactional UOW. They still starts a UOW, but **doesn't create a database transaction**.
+* **HTTP GET** and **HTTP QUERY** requests don't start a transactional UOW. They still start a UOW, but **don't create a database transaction**.
 * All other HTTP request types start a UOW with a database transaction, if database level transactions are supported by the underlying database provider.
 
-This is because an HTTP GET request doesn't (and shouldn't) make any change in the database. You can change this behavior using the options explained below.
+This is because they are safe HTTP methods that don't (and shouldn't) make any change in the database. You can change this behavior using the options explained below.
 
 ## Default Options
 
@@ -360,6 +360,30 @@ Unit of work system is fully integrated to the ASP.NET Core. It properly works w
 app.UseUnitOfWork();
 app.UseConfiguredEndpoints();
 ````
+
+By default, the middleware completes the unit of work at the end of the request pipeline. If the response has already started, a failure (like a transaction commit or a unit of work event handler failure) can not change the status code, so the client may still get a success response.
+
+`UseUnitOfWork` also adds the exception handling middleware. If you don't use `UseUnitOfWork`, add `UseAbpExceptionHandling` to the same place:
+
+````csharp
+app.UseAbpExceptionHandling();
+app.UseConfiguredEndpoints();
+````
+
+#### AbpAspNetCoreUnitOfWorkOptions
+
+`AbpAspNetCoreUnitOfWorkOptions` is used to configure the middleware:
+
+````csharp
+Configure<AbpAspNetCoreUnitOfWorkOptions>(options =>
+{
+    options.IgnoredUrls.Add("/api/my-streaming-endpoint");
+});
+````
+
+* `IgnoredUrls` (`List<string>`): The middleware is disabled for the requests whose path starts with one of these values. It is also disabled for the [SignalR](../../real-time/signalr.md) hub requests.
+* `CompleteUnitOfWorkOnResponseStarting` (`bool`, default: `false`): Completes the unit of work just before the response starts, so a failure can return an error status code (with an empty response body). The changes are committed at that point, so a later failure can not roll them back. It is not suitable for streaming responses.
+* `CompleteUnitOfWorkOnResponseStartingUrls` (`List<string>`): Completes the unit of work just before the response starts for the requests whose path starts with one of these values, even if `CompleteUnitOfWorkOnResponseStarting` is `false`. The [OpenIddict module](../../../modules/openiddict.md) adds some of its server endpoints, like the token endpoint, to this list.
 
 ## See Also
 

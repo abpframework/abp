@@ -35,6 +35,7 @@
     "NewExplanation": "Luotu kahden viime viikon aikana.",
     "UpdatedExplanation": "Päivitetty kahden viime viikon aikana.",
     "Volo.Docs.Domain:010002": "Lyhytnimi {ShortName} on jo olemassa.",
+    "Volo.Docs.Domain:010003": "Hups, pyydettyä asiakirjaa ei löytynyt!",
     "Preview": "esikatselu",
     "Search": "Hae",
     "SearchResults": "Hakutulokset",

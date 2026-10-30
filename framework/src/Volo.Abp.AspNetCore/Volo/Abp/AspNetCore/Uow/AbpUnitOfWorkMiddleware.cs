@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Endpoints;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Middleware;
 using Volo.Abp.DependencyInjection;
@@ -37,8 +38,36 @@ public class AbpUnitOfWorkMiddleware : AbpMiddlewareBase, ITransientDependency
 
         using (var uow = _unitOfWorkManager.Reserve(UnitOfWork.UnitOfWorkReservationName))
         {
+            var completionStarted = false;
+
+            if (!context.Response.HasStarted && ShouldCompleteOnResponseStarting(context))
+            {
+                context.Response.OnStarting(async () =>
+                {
+                    // Skip if the completion has already been started at the end of the pipeline;
+                    // the response is then being started from inside that completion (e.g. by an
+                    // event handler writing to the response), so completing again would fail.
+                    // A nested (requiresNew) unit of work that is current and an active child
+                    // unit of work scope are left to their owners; the request unit of work then
+                    // completes at the end of the pipeline as usual.
+                    if (!completionStarted &&
+                        _unitOfWorkManager.Current == uow &&
+                        !uow.HasActiveChildUnitOfWorks())
+                    {
+                        // Set before completing so a post-commit failure isn't masked by the completion below.
+                        completionStarted = true;
+                        await uow.CompleteAsync(_cancellationTokenProvider.Token);
+                    }
+                });
+            }
+
             await next(context);
-            await uow.CompleteAsync(_cancellationTokenProvider.Token);
+
+            if (!completionStarted)
+            {
+                completionStarted = true;
+                await uow.CompleteAsync(_cancellationTokenProvider.Token);
+            }
         }
     }
 
@@ -48,6 +77,13 @@ public class AbpUnitOfWorkMiddleware : AbpMiddlewareBase, ITransientDependency
                _options.IgnoredUrls.Any(x => context.Request.Path.Value.StartsWith(x, StringComparison.OrdinalIgnoreCase));
     }
 
+    private bool ShouldCompleteOnResponseStarting(HttpContext context)
+    {
+        return _options.CompleteUnitOfWorkOnResponseStarting ||
+               (context.Request.Path.Value != null &&
+                _options.CompleteUnitOfWorkOnResponseStartingUrls.Any(x => context.Request.Path.Value.StartsWith(x, StringComparison.OrdinalIgnoreCase)));
+    }
+
     protected async override Task<bool> ShouldSkipAsync(HttpContext context, RequestDelegate next)
     {
         // Blazor components will render concurrently, so we need to skip the middleware for them.
@@ -55,6 +91,13 @@ public class AbpUnitOfWorkMiddleware : AbpMiddlewareBase, ITransientDependency
         // A second operation started on this context before a previous operation completed.
         // This is usually caused by different threads using the same instance of DbContext.
         if (context.GetEndpoint()?.Metadata?.GetMetadata<RootComponentMetadata>() != null)
+        {
+            return true;
+        }
+
+        // A hub connection request lives as long as the connection. A unit of work reserved for it would be
+        // shared by all the hub method calls of the connection and can not be completed when the client disconnects.
+        if (context.GetEndpoint()?.Metadata?.GetMetadata<HubMetadata>() != null)
         {
             return true;
         }

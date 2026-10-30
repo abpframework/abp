@@ -128,16 +128,32 @@ public class LoginModel : AccountPageModel
             return Page();
         }
 
+        if (result is AbpSignInResult { IsExternalLoginPasswordChangeRequired: true })
+        {
+            Alerts.Warning(L["ExternalLoginPasswordChangeRequired"]);
+            return Page();
+        }
+
         if (result.IsNotAllowed)
         {
-            var notAllowedUser = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress) ??
-                                 await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress);
+            var notAllowedUser = await UserManager.FindSharedUserByNameAsync(LoginInput.UserNameOrEmailAddress) ??
+                                 await UserManager.FindSharedUserByEmailAsync(LoginInput.UserNameOrEmailAddress);
             if (notAllowedUser != null)
             {
                 using (CurrentTenant.Change(notAllowedUser.TenantId))
                 {
                     await IdentityOptions.SetAsync();
-                    if ((notAllowedUser.ShouldChangePasswordOnNextLogin ||
+                    if (notAllowedUser.IsActive && await UserManager.IsLockedOutAsync(notAllowedUser))
+                    {
+                        Alerts.Warning(L["UserLockedOutMessage"]);
+                        return Page();
+                    }
+
+                    // The password is only checked if the password change is the reason of the rejection.
+                    // The user may be authenticated by an external login provider otherwise.
+                    if (notAllowedUser.IsActive &&
+                        await SignInManager.CanSignInAsync(notAllowedUser) &&
+                        (notAllowedUser.ShouldChangePasswordOnNextLogin ||
                             await UserManager.ShouldPeriodicallyChangePasswordAsync(notAllowedUser)) &&
                         !await UserManager.CheckPasswordAsync(notAllowedUser, LoginInput.Password))
                     {
@@ -294,6 +310,19 @@ public class LoginModel : AccountPageModel
                 ExternalLoginAuthSchema = loginInfo.LoginProvider,
                 ReturnUrl = returnUrl
             });
+        }
+
+        var signInCheckResult = await CheckUserSignInAsync(user);
+        if (signInCheckResult != null)
+        {
+            if (signInCheckResult.IsLockedOut)
+            {
+                Logger.LogWarning($"External login callback error: user is locked out!");
+                throw new UserFriendlyException("Cannot proceed because user is locked out!");
+            }
+
+            Logger.LogWarning($"External login callback error: user is not allowed!");
+            throw new UserFriendlyException("Cannot proceed because user is not allowed!");
         }
 
         if (await UserManager.FindByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey) == null)

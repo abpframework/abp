@@ -11,6 +11,8 @@
         "UserLockedOutMessage": "Korisnički račun je zaključan zbog nevažećih pokušaja prijave. Pričekajte malo i pokušajte ponovo.",
         "InvalidUserNameOrPassword": "Neispravno korisničko ime ili lozinka!",
         "LoginIsNotAllowed": "Nemate dopuštenje za prijavu! Vaš račun nije aktivan ili treba potvrditi vašu e-poštu/broj telefona.",
+        "ExternalLoginPasswordChangeRequired": "Nemate dopuštenje za prijavu! Vaša lozinka mora se promijeniti, ali to nije moguće s vanjskom prijavom. Obratite se svom administratoru.",
+        "RegisteredButLoginIsNotAllowed": "Vaš račun je kreiran, ali još nemate dopuštenje za prijavu!",
         "SelfRegistrationDisabledMessage": "Samoregistracija je onemogućena za ovu aplikaciju. Molimo kontaktirajte administratora aplikacije za registraciju novog korisnika.",
         "LocalLoginDisabledMessage": "Lokalna prijava je onemogućena za ovu aplikaciju.",
         "Login": "Prijavi se",

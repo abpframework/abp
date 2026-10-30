@@ -41,8 +41,11 @@ Typical problem classes include:
 * Form layout issues where fields exist but valid placements do not
 * Permission and page configuration mismatches that would affect runtime visibility or access
 * Script assets that exist in the model but still need review in the broader context of entities, pages, and permissions
+* Orphaned upper-layer descriptors whose lower-layer base was removed or disabled
 
 Some of these issues are also enforced by runtime validation and mutation rules. Health gives you a selected-layer review point before users discover the problem in the runtime UI.
+
+When orphan warnings are present, preview the matching inactive-override or disabled-override cleanup before applying it. Cleanup removes only the affected authored deltas from the selected writable layer; review the preview because enabled sibling deltas on the same descriptor are preserved.
 
 ## Use It When
 
@@ -50,10 +53,13 @@ Use Health in these moments:
 
 * After changing entities, pages, forms, page groups, or permissions in the Designer
 * After applying MCP-driven runtime mutations
+* After undo, redo, save-point restore, retained-entity restore, or override cleanup
 * Before publishing a set of runtime changes
 * After copying or importing source-controlled descriptors into an application
 
 If you automate low-code changes through [MCP Integration](mcp.md), re-read the health snapshot after apply and treat that review as part of the success criteria.
+
+For runtime history, safe entity deletion, and retained-data restoration, see [Model History and Recovery](model-history.md).
 
 ## Health and Source-Controlled Models
 
@@ -78,6 +84,7 @@ A useful example is form layout drift: a descriptor can still pass `--check-lowc
 
 * [Low-Code Designer](designer.md)
 * [MCP Integration](mcp.md)
+* [Model History and Recovery](model-history.md)
 * [Model Descriptor Files](model-json.md)
 * [Dashboards](dashboards.md)
 * [Page Groups](page-groups.md)

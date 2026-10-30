@@ -56,6 +56,11 @@ public class AbpPermissionManagementDomainModule : AbpModule
         }
     }
 
+    public override void OnApplicationShutdown(ApplicationShutdownContext context)
+    {
+        AsyncHelper.RunSync(() => OnApplicationShutdownAsync(context));
+    }
+
     public override Task OnApplicationShutdownAsync(ApplicationShutdownContext context)
     {
         _cancellationTokenSource.Cancel();

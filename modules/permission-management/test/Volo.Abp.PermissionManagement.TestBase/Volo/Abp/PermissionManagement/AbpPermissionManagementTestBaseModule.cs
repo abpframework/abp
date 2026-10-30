@@ -4,6 +4,7 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.Modularity;
+using Volo.Abp.SimpleStateChecking;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.PermissionManagement;
@@ -18,6 +19,11 @@ public class AbpPermissionManagementTestBaseModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.Replace(ServiceDescriptor.Singleton<IAbpDistributedLock, NullAbpDistributedLock>());
+
+        context.Services.Configure<AbpSimpleStateCheckerOptions<PermissionDefinition>>(options =>
+        {
+            options.GlobalStateCheckers.Add<TestGlobalPermissionStateChecker>();
+        });
 
         context.Services.Configure<PermissionManagementOptions>(options =>
         {

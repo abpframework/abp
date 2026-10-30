@@ -9,7 +9,18 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 3.1.5 (2026-10-15) Latest
+## 3.1.6 (2026-10-21) Latest
+
+* Fix generated book tests failing on the required author foreign key
+* Replace UseUnitOfWork with UseAbpExceptionHandling in templates
+* Stop initialize scripts from seeding before EF migrations exist
+* Reject solution names that are not valid C# identifiers
+* Use request `PathBase` for Blazor `<base href>` and keep home links app-relative
+* Suggest a random solution name in Development
+* Fix Claude tool arguments, model list loading, monitoring commands, and review notes
+* Fix `NullReferenceException` when editing a run profile in Solution Runner
+
+## 3.1.5 (2026-10-15)
 
 * Pin jQuery 4.0.0 in solution templates
 * Sync role delete reassignment to the React admin console template
@@ -30,7 +41,6 @@ This document contains **brief release notes** for each ABP Studio release. Rele
 * Fix Containers Start staying disabled after bind
 * Fix missing scroll on the browser start page application list
 * Use classic console colors for the light-theme terminal palette
-
 ## 3.1.3 (2026-09-22)
 
 * Upgrade Studio to Avalonia 12

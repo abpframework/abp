@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Net.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.AspNetCore.Uow;
@@ -37,10 +37,8 @@ public class AspNetCoreUnitOfWorkTransactionBehaviourProvider : IUnitOfWorkTrans
                 }
             }
 
-            return !string.Equals(
-                httpContext.Request.Method,
-                HttpMethod.Get.Method, StringComparison.OrdinalIgnoreCase
-            );
+            var method = httpContext.Request.Method;
+            return !(HttpMethodHelper.IsGet(method) || HttpMethodHelper.IsQuery(method));
         }
     }
 

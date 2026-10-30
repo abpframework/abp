@@ -11,6 +11,8 @@
     "UserLockedOutMessage": "Kullanıcı hesabı hatalı giriş denemeleri nedeniyle kilitlenmiştir. Lütfen bir süre bekleyip tekrar deneyin.",
     "InvalidUserNameOrPassword": "Kullanıcı adı ya da şifre geçersiz!",
     "LoginIsNotAllowed": "Giriş yapmanıza izin verilmiyor! Hesabınız etkin değil veya e-postanızı/telefon numaranızı onaylamanız gerekiyor.",
+    "ExternalLoginPasswordChangeRequired": "Giriş yapmanıza izin verilmiyor! Şifrenizin değiştirilmesi gerekiyor, ancak bu harici bir girişle mümkün değil. Lütfen yöneticinizle iletişime geçin.",
+    "RegisteredButLoginIsNotAllowed": "Hesabınız oluşturuldu, ancak henüz giriş yapmanıza izin verilmiyor!",
     "SelfRegistrationDisabledMessage": "Bu uygulama için kullanıcıların kendi kendilerine kaydolmaları engellenmiştir. Yeni bir kullanıcı kaydetmek için lütfen uygulama yöneticisi ile iletişime geçin.",
     "LocalLoginDisabledMessage": "Bu uygulama için local login devre dışı bırakılmıştır.",
     "Login": "Giriş yap",

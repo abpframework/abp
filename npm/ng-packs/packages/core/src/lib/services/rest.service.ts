@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParameterCodec, HttpParams, HttpRequest } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable, Signal, inject } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { Observable, from, of, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { ExternalHttpClient } from '../clients/http.client';
@@ -66,6 +67,18 @@ export class RestService {
         }),
       );
   }
+
+  requestResource<T, R>(
+    request: Signal<Rest.Request<T>>,
+    config?: Rest.Config,
+    api?: string,
+  ) {
+    return rxResource({
+      params: () => request(),
+      stream: ({ params }) => this.request<T, R>(params, config, api),
+    });
+  }
+
   private getHttpClient(isExternal: boolean) {
     return isExternal ? this.externalHttp : this.http;
   }

@@ -65,9 +65,18 @@ public class RolePermissionManagementProvider : PermissionManagementProvider
                 return multiplePermissionValueProviderGrantInfo;
             }
 
+            var permissionGrantsByName = new Dictionary<string, PermissionGrant>();
+            foreach (var permissionGrant in permissionGrants)
+            {
+                if (!permissionGrantsByName.ContainsKey(permissionGrant.Name))
+                {
+                    permissionGrantsByName[permissionGrant.Name] = permissionGrant;
+                }
+            }
+
             foreach (var permissionName in names)
             {
-                var permissionGrant = permissionGrants.FirstOrDefault(x => x.Name == permissionName);
+                var permissionGrant = permissionGrantsByName.GetOrDefault(permissionName);
                 if (permissionGrant != null)
                 {
                     multiplePermissionValueProviderGrantInfo.Result[permissionName] = new PermissionValueProviderGrantInfo(true, permissionGrant.ProviderKey);

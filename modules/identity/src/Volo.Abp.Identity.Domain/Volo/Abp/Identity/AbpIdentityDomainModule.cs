@@ -54,6 +54,15 @@ public class AbpIdentityDomainModule : AbpModule
         });
 
         context.Services.AddObjectAccessor(identityBuilder);
+
+        context.Services.AddDataProtection();
+
+        var tokenProviderOptions = context.Services.ExecutePreConfiguredActions(new AbpIdentityTokenProviderOptions());
+        if (tokenProviderOptions.UseAbpTokenProviders)
+        {
+            identityBuilder.AddAbpTokenProviders();
+        }
+
         context.Services.ExecutePreConfiguredActions(identityBuilder);
 
         Configure<IdentityOptions>(options =>

@@ -76,6 +76,50 @@ describe('createActionToBodyMapper — string return value', () => {
   });
 });
 
+describe('createActionToBodyMapper — body parameters', () => {
+  const mapBody = createActionToBodyMapper();
+
+  test('string body parameter is JSON encoded and gets an application/json content type', () => {
+    const body = mapBody(
+      buildAction({
+        httpMethod: 'POST',
+        parameters: [
+          {
+            nameOnMethod: 'connectionString',
+            name: 'connectionString',
+            type: 'System.String',
+            typeSimple: 'string',
+            bindingSourceId: eBindingSourceId.Body,
+          },
+        ],
+      } as Partial<Action>),
+    );
+
+    expect(body.body).toBe('JSON.stringify(connectionString)');
+    expect(body.contentTypeHeader).toBe('application/json');
+  });
+
+  test('object body parameter is passed as is', () => {
+    const body = mapBody(
+      buildAction({
+        httpMethod: 'POST',
+        parameters: [
+          {
+            nameOnMethod: 'input',
+            name: 'input',
+            type: 'My.Project.UserDto',
+            typeSimple: 'My.Project.UserDto',
+            bindingSourceId: eBindingSourceId.Body,
+          },
+        ],
+      } as Partial<Action>),
+    );
+
+    expect(body.body).toBe('input');
+    expect(body.contentTypeHeader).toBeUndefined();
+  });
+});
+
 describe('createActionToBodyMapper — IRemoteStreamContent return value', () => {
   const mapBody = createActionToBodyMapper();
 
@@ -573,7 +617,7 @@ describe('proxy service template emission', () => {
   });
 
   test('emits Accept header conditional', () => {
-    expect(template).toMatch(/headers:\s*\{\s*Accept:/);
+    expect(template).toMatch(/headerEntries\.push\("Accept: '"/);
   });
 
   test('emits responseType only for non-json httpResponseType', () => {
@@ -664,7 +708,7 @@ describe('createActionToBodyMapper — multipart FormData uploads', () => {
       buildAction({
         httpMethod: 'POST',
         parameters: [
-          { name: 'Name', nameOnMethod: 'name', type: 'System.String', typeSimple: 'string', bindingSourceId: eBindingSourceId.Body } as any,
+          { name: 'Name', nameOnMethod: 'name', type: 'My.Project.UserDto', typeSimple: 'My.Project.UserDto', bindingSourceId: eBindingSourceId.Body } as any,
         ],
       } as Partial<Action>),
     );

@@ -187,13 +187,16 @@
     <Project Path="test/Volo.Abp.AspNetCore.Mvc.PlugIn/Volo.Abp.AspNetCore.Mvc.PlugIn.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.Mvc.Tests/Volo.Abp.AspNetCore.Mvc.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.Mvc.UI.Tests/Volo.Abp.AspNetCore.Mvc.UI.Tests.csproj" />
+    <Project Path="test/Volo.Abp.AspNetCore.Components.Server.Tests/Volo.Abp.AspNetCore.Components.Server.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.Components.Web.Theming.Tests/Volo.Abp.AspNetCore.Components.Web.Theming.Tests.csproj" />
+    <Project Path="test/Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Tests/Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests/Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.Mvc.Versioning.Tests/Volo.Abp.AspNetCore.Mvc.Versioning.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.Mvc.Client.Tests/Volo.Abp.AspNetCore.Mvc.Client.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.Serilog.Tests/Volo.Abp.AspNetCore.Serilog.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.SignalR.Tests/Volo.Abp.AspNetCore.SignalR.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.Tests/Volo.Abp.AspNetCore.Tests.csproj" />
+    <Project Path="test/Volo.Abp.AspNetCore.Uow.Tests/Volo.Abp.AspNetCore.Uow.Tests.csproj" />
     <Project Path="test/Volo.Abp.Auditing.Tests/Volo.Abp.Auditing.Tests.csproj" />
     <Project Path="test/Volo.Abp.Authorization.Tests/Volo.Abp.Authorization.Tests.csproj" />
     <Project Path="test/Volo.Abp.Autofac.Tests/Volo.Abp.Autofac.Tests.csproj" />
@@ -228,6 +231,7 @@
     <Project Path="test/Volo.Abp.GlobalFeatures.Tests/Volo.Abp.GlobalFeatures.Tests.csproj" />
     <Project Path="test/Volo.Abp.Http.Client.IdentityModel.Web.Tests/Volo.Abp.Http.Client.IdentityModel.Web.Tests.csproj" />
     <Project Path="test/Volo.Abp.Http.Client.Tests/Volo.Abp.Http.Client.Tests.csproj" />
+    <Project Path="test/Volo.Abp.Http.Client.Web.Tests/Volo.Abp.Http.Client.Web.Tests.csproj" />
     <Project Path="test/Volo.Abp.Http.Tests/Volo.Abp.Http.Tests.csproj" />
     <Project Path="test/Volo.Abp.IdentityModel.Tests/Volo.Abp.IdentityModel.Tests.csproj" />
     <Project Path="test/Volo.Abp.Imaging.Abstractions.Tests/Volo.Abp.Imaging.Abstractions.Tests.csproj" />
@@ -248,6 +252,7 @@
     <Project Path="test/Volo.Abp.MultiTenancy.Tests/Volo.Abp.MultiTenancy.Tests.csproj" />
     <Project Path="test/Volo.Abp.ObjectExtending.Tests/Volo.Abp.ObjectExtending.Tests.csproj" />
     <Project Path="test/Volo.Abp.ObjectMapping.Tests/Volo.Abp.ObjectMapping.Tests.csproj" />
+    <Project Path="test/Volo.Abp.Quartz.Tests/Volo.Abp.Quartz.Tests.csproj" />
     <Project Path="test/Volo.Abp.RabbitMQ.Tests/Volo.Abp.RabbitMQ.Tests.csproj" />
     <Project Path="test/Volo.Abp.RemoteServices.Tests/Volo.Abp.RemoteServices.Tests.csproj" />
     <Project Path="test/Volo.Abp.Security.Tests/Volo.Abp.Security.Tests.csproj" />

@@ -7,13 +7,13 @@
     {
         if (Primary == false)
         {
-            <MudMenuItem OnClick="@ActionClickedAsync" Disabled="@Disabled">
+            <AbpMudActionMenuItem OnClick="@ActionClickedAsync" Disabled="@Disabled">
                 @if (!string.IsNullOrEmpty(Icon))
                 {
                     <MudIcon Icon="@Icon" Class="me-2" Size="Size.Small" />
                 }
                 @Text
-            </MudMenuItem>
+            </AbpMudActionMenuItem>
         }
     }
     else
