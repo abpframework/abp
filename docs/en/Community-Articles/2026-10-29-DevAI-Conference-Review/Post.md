@@ -1,6 +1,6 @@
 # Reviews of DevAI Conference From a Speaker’s Eye
 
-Last week **I traveled to Poland** for a conference just dedicated to AI. I see that there will more conferences in the future targeting **just AI topics**. This's the trend now! In terms of weather, I catched the last good days in Warsaw before winter comes. So for me it was a conference at the same time getting some cultural information about Poland's history, city life, people and developer's mindset.
+Last week **I traveled to Poland** for a conference just dedicated to AI. I see that there will more conferences in the future targeting **just AI topics**. This's the trend now! I'm happy that, I catched the last good weather period in Warsaw before winter comes. So for me it was a conference at the same time learning some cultural information about Poland's history, city life, people and developer's mindset.
 
 DevAI by Data Science Summit 2026, the official website https://devai.dssconf.pl, took place in two distinct parts: Monday, October 19 online and Tuesday onsite at the [Copernicus Science Centre](https://www.google.com/maps/place/Copernicus+Science+Centre/@52.2418552,21.0287271,17z/data=!3m1!4b1!4m6!3m5!1s0x471ecc5ba250ccd1:0x8d6f1b9b8410960!8m2!3d52.2418552!4d21.0287271!16s%2Fm%2F05mwh1p?entry=ttu&g_ep=EgoyMDI2MTAyMC4wIKXMDSoASAFQAw%3D%3D) in Warsaw. 
 
@@ -17,16 +17,32 @@ I had the chance to talk to several developers at the conference. **One thing th
 Until now, we have been surprised about AI assisted development, tools and AI generated outputs. I guess this time has already completed. Yes we see using AI is productive and impressive but hat happens after an exciting AI-based MVP or demo? We started to ask questions about the following topics:
 
 * observability
+
 * reliability
+
 * security
+
 * cost control
+
 * verification
+
 * human oversight
+
 * production debugging
+
 * deterministic retrieval
+
 * organizational implications
 
-> **The biggest shift is from “WHAT CAN AI BUILD?” 👉 “HOW DO WE MAKE AI-GENERATED WORK TRUSTHWORTHY ENOUGH TO SHIP?**
+  
+
+> **The biggest shift is from “WHAT CAN AI BUILD?” **
+>
+> **👉 “HOW DO WE MAKE AI-GENERATED WORK TRUSTHWORTHY ENOUGH TO SHIP?**
+
+
+
+
 
 ---
 
@@ -38,13 +54,13 @@ My session, “Talk With Your Data: Building AI-Powered Reporting,” ran from 1
 
 ![my-talk](my-talk.png)
 
-
+![first-slide-of-my-presentation](first-slide-of-my-presentation.png)
 
 ---
 
 
 
-## Sessions I Attended:
+## Sessions I Attended and What I Learnt
 
 # How AI-Native Development Is Reshaping Software Teams
 
@@ -56,7 +72,7 @@ My session, “Talk With Your Data: Building AI-Powered Reporting,” ran from 1
 
 ![image-20261028145448700](image-20261028145448700.png)
 
-In their company, they transformed a 10+ year-old Java recruitment system to .NET 10 + Blazor + PostgreSQL stack.
+In their company, they transformed a 10+ year-old Java recruitment system to **.NET 10 + Blazor + PostgreSQL** stack.
 
 - **19 working days** to a functional platform.
 - **10 weeks** to production vs. an estimated 7–9 months traditionally.
@@ -111,14 +127,16 @@ Their project includes **1,531 automated tests** running in approximately 7 seco
 ### 6. Faster Development Creates New Challenges
 
 - **Knowledge management:** Specifications, decisions and an LLM Wiki help teams share knowledge and onboard developers.
+
 - **Scaling:** Add complete, balanced teams (pods) rather than individual developers.
+
 - **Prioritization:** Faster delivery brings back previously postponed ideas, potentially increasing the backlog.
 
-### Key Takeaway
+  
 
-**AI-native development isn't just about generating code faster. It's about redesigning the entire software development process.**
+> **AI-native development isn't just about generating code faster. It's about redesigning the entire software development process.** The biggest gains come from combining structured specifications, standardized architecture, AI agents, automated testing and human oversight.
 
-The biggest gains come from combining structured specifications, standardized architecture, AI agents, automated testing and human oversight.
+
 
 ---
 
