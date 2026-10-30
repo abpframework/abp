@@ -88,6 +88,15 @@ public static class AbpRemoteDynamicClaimsCookieAuthenticationOptionsExtensions
             var tenantId = identity!.FindTenantId();
             using (httpContext.RequestServices.GetRequiredService<ICurrentTenant>().Change(tenantId))
             {
+                var sessionId = identity!.FindSessionId();
+                if (!sessionId.IsNullOrWhiteSpace() && await dynamicClaimsCache.IsSessionRevokedAsync(sessionId!))
+                {
+                    httpContext.RequestServices
+                        .GetRequiredService<ILogger<AbpAspNetCoreMvcClientModule>>()
+                        .LogWarning($"The session: {sessionId} of user: {userId.Value} is revoked, the authentication cookie is rejected.");
+                    return false;
+                }
+
                 await dynamicClaimsCache.GetAsync(userId.Value, tenantId, accessToken);
             }
 

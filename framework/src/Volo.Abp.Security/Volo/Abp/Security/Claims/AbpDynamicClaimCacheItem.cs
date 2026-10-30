@@ -22,4 +22,9 @@ public class AbpDynamicClaimCacheItem
     {
         return $"{tenantId}-{userId}";
     }
+
+    public static string CalculateRevokedSessionCacheKey(string sessionId)
+    {
+        return $"revoked-session:{sessionId}";
+    }
 }
