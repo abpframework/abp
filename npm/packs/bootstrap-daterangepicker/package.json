@@ -1,5 +1,5 @@
 {
-  "version": "10.7.0",
+  "version": "11.0.0-rc.1",
   "name": "@abp/bootstrap-daterangepicker",
   "repository": {
     "type": "git",
@@ -10,7 +10,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@abp/moment": "~10.7.0",
+    "@abp/moment": "~11.0.0-rc.1",
     "jquery": "~4.0.0",
     "moment": "^2.30.1"
   },
