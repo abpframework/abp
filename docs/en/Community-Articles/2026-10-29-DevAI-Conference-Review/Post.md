@@ -173,6 +173,13 @@ Their approach, called **NER-RAG**, combines traditional NLP with LLMs:
 
 This reduces unnecessary LLM calls while making retrieval more predictable.
 
+For example in a prescription the keword "Fentanyl" can be mentioned as many different alternatives like "Fentanylum", "Fentanylium", "Fentanil", "Sufentanil", "Remifentanyl".
+
+Read more about NER: 
+
+- [graphrag.com/reference/preparation/ner/](https://graphrag.com/reference/preparation/ner/)
+- [medium.com/@uaqureshi_61924/what-is-named-entity-recognition-ner-and-why-is-it-used-in-nlp-and-llm-based-ai-applications-c27184992b17](https://medium.com/@uaqureshi_61924/what-is-named-entity-recognition-ner-and-why-is-it-used-in-nlp-and-llm-based-ai-applications-c27184992b17) (*Turkish so translate to your language*)
+
 ![NER-RAG architecture with entity extraction and LLM validation](IMG_25688.png)
 
 ### 4. Significant Cost and Scalability Improvements
@@ -186,9 +193,7 @@ The speaker presented some interesting performance figures from their approach:
 
 ![NER-RAG cost and scalability improvements](IMG_25693.png)
 
-### Key Takeaway
-
-**Not every AI problem needs to be solved entirely with LLMs.**
+> **Not every AI problem needs to be solved entirely with LLMs.**
 
 This session shows how combining traditional NLP, structured entity extraction, hybrid search and selective LLM validation can produce a more deterministic and cost-efficient retrieval system.
 
@@ -202,7 +207,9 @@ The most interesting architectural decision was **moving expensive processing fr
 
 **Speaker:** Borys Stokalski, Global Partnership on AI / OECD.AI
 
-Borys Stokalski discussed the challenges and risks emerging from increasingly autonomous AI systems, particularly in software development. His central argument was that **the biggest challenges of AI adoption may come from how we use, manage and scale these systems rather than from the technology itself.**
+Borys Stokalski is from OECD (Organisation for Economic Co-operation and Development)'s sub-department [OECD.AI](https://oecd.ai/en/) which discusses the challenges and risks emerging from increasingly autonomous AI systems, particularly in software development. By the way OECD.AI (OECD AI Policy Observatory), **started in February 2020 by OECD** in Paris and EU countries + USA + Japan + South Korea + Turkey are also members of this community.
+
+His central argument was that **the biggest challenges of AI adoption may come from how we use, manage and scale these systems rather than from the technology itself.**
 
 ![We Have Met the Enemy and It Is Us](IMG_25712.png)
 
@@ -218,7 +225,7 @@ As AI systems become more autonomous, three major challenges emerge:
 
 ### 2. AI Coding Productivity Doesn't Guarantee Software Quality
 
-One interesting part of the presentation was research showing that AI coding tools can **significantly increase initial development speed** while introducing **long-term maintenance problems.** The speaker referenced a study of 806 GitHub projects that adopted Cursor, compared against 1,380 similar projects.
+One interesting part of the presentation was research showing that AI coding tools can **significantly increase initial development speed** while introducing **long-term maintenance problems.** The speaker referenced a study of **806 GitHub projects** that adopted **Cursor**, compared against **1,380 similar projects**.
 
 The findings presented included:
 
@@ -249,7 +256,7 @@ However, the central question was whether this increased development velocity tr
 
 ![Development Velocity vs Delivery of Value](IMG_25717.png)
 
-**Key takeaway:** We should measure AI-assisted development by delivered business value, software quality and maintainability rather than lines of code or commit counts.
+> We should measure AI-assisted development by delivered business value, software quality and maintainability rather than lines of code or commit counts.
 
 ### 4. Conceptual Entropy: A Hidden Problem in AI Development
 
@@ -289,12 +296,20 @@ He highlighted three interconnected challenges:
 **AI can dramatically accelerate software development, but speed without engineering discipline creates new risks.**
 
 - More generated code doesn't automatically mean more business value.
+
 - AI-assisted development can increase technical debt and complexity.
+
 - Specifications and documentation need consistent terminology and structure.
+
 - Human understanding must keep pace with AI-generated complexity.
+
 - Engineering practices must evolve alongside increasingly autonomous AI systems.
 
-The biggest challenge isn't just making AI agents more capable. It's ensuring that **humans can continue to understand, maintain and control the systems those agents help create.**
+  
+
+> The biggest challenge isn't just making AI agents more capable. It's ensuring that **humans can continue to understand, maintain and control the systems those agents help create.**
+
+
 
 ---
 
