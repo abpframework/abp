@@ -1,6 +1,7 @@
 import program from 'commander';
 import execa from 'execa';
 import fse from 'fs-extra';
+import { join } from 'path';
 import replaceWithPreview from './replace-with-preview';
 const semverParse = require('semver/functions/parse');
 
@@ -74,9 +75,10 @@ program.parse(process.argv);
   try {
     await fse.rename('../lerna.publish.json', '../lerna.json');
 
-    let tag: string;
+    let tag: string | undefined;
     if (program.preview) tag = 'preview';
     else if (semverParse(program.nextVersion).prerelease?.length) tag = 'next';
+    else tag = await resolveMaintenanceDistTag(program.nextVersion, registry);
 
     await execa(
       'yarn',
@@ -116,4 +118,26 @@ async function updateVersion(version: string) {
   await execa('yarn', ['update-version', version], { stdout: 'inherit', cwd: '../' });
 
   await execa('yarn', ['replace-with-tilde']);
+}
+
+// npm refuses to move the "latest" dist-tag to an older version. A patch of a
+// previous release line (10.6.2 while 10.7.0 is latest) must use another tag.
+async function resolveMaintenanceDistTag(version: string, registry: string) {
+  try {
+    const { stdout } = await execa(
+      'node',
+      [
+        join(__dirname, '../../publish-utils.js'),
+        '--distTag',
+        registry,
+        '--customVersion',
+        version,
+      ],
+      { cwd: join(__dirname, '../..') },
+    );
+    return stdout.trim() || undefined;
+  } catch (error) {
+    console.error(error.stderr || error);
+    return undefined;
+  }
 }
