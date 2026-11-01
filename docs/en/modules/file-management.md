@@ -209,7 +209,26 @@ Authenticated clients download a private file in two steps:
 1. Call `GET /api/file-management/file-descriptor/download/{id}/token`. This operation checks the module-wide or resource `View` permission.
 2. Navigate to `GET /api/file-management/file-descriptor/download/{id}?token=...`.
 
-The download endpoint is anonymous because the token is the credential. A token is bound to one file and tenant, expires after 60 seconds and can be reused during that interval. Do not log or expose it. Public shared files use the separate anonymous `GET /api/file-management/file-descriptor/share?shareToken=...` endpoint.
+The download endpoint accepts anonymous requests because the token is the credential. A token is bound to one file and tenant, expires after 60 seconds and can be reused during that interval by default. Do not log or expose it.
+
+`FileManagementDownloadOptions` provides two optional download restrictions. Both are disabled by default:
+
+- `UseSingleUseDownloadTokens`: Allows each token to be used only once.
+- `BindDownloadTokenToUser`: Restricts a token to the user who requested it. Download requests must carry that user's authentication.
+
+Configure these options in your application module:
+
+```csharp
+Configure<FileManagementDownloadOptions>(options =>
+{
+    options.UseSingleUseDownloadTokens = true;
+    options.BindDownloadTokenToUser = true;
+});
+```
+
+For multiple API instances, update all instances before enabling these options. Single-use tokens require a shared cache and [distributed lock provider](../framework/infrastructure/distributed-locking.md).
+
+Public shared files use the separate anonymous `GET /api/file-management/file-descriptor/share?shareToken=...` endpoint and are not affected by these options.
 
 ## Data Seed
 
