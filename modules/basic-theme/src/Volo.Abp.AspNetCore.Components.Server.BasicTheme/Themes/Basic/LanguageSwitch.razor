@@ -11,7 +11,7 @@
         <DropdownToggle Color="Color.Default">
             @_currentLanguage.DisplayName
         </DropdownToggle>
-        <DropdownMenu>
+        <DropdownMenu Style="@MenuStyle">
             @foreach (var language in _otherLanguages)
             {
                 <DropdownItem Clicked="() => ChangeLanguage(language)">@language.DisplayName</DropdownItem>
@@ -22,6 +22,9 @@
 @code {
     private IReadOnlyList<LanguageInfo> _otherLanguages;
     private LanguageInfo _currentLanguage;
+
+    // Blazorise's dropdown-menu-end sets right: 0, which wins over the computed left offset in an RTL layout
+    private static string MenuStyle => CultureHelper.IsRtl ? "right: auto" : null;
 
     protected override async Task OnInitializedAsync()
     {
