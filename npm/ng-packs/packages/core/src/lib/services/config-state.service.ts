@@ -38,15 +38,18 @@ export class ConfigStateService {
   }
 
   private initUpdateStream() {
+    // A new refresh also cancels the localization request of the previous one, so an older
+    // configuration can't arrive after a newer request started.
     this.updateSubject
       .pipe(
         switchMap(() =>
-          this.abpConfigService.get({
-            includeLocalizationResources: !!this.includeLocalizationResources,
-          }),
+          this.abpConfigService
+            .get({
+              includeLocalizationResources: !!this.includeLocalizationResources,
+            })
+            .pipe(switchMap(appState => this.getLocalizationAndCombineWithAppState(appState))),
         ),
       )
-      .pipe(switchMap(appState => this.getLocalizationAndCombineWithAppState(appState)))
       .subscribe(res => this.store.set(res));
   }
 
