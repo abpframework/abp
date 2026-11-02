@@ -10,7 +10,7 @@
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "הערך של התכונה {0} אינו תקין!",
     "Menu:FeatureManagement": "ניהול תכונות",
     "ResetToDefault": "איפוס לברירת המחדל",
-    "ResetedToDefault": "אופס לברירת המחדל",
+    "ResetedToDefault": "האיפוס לברירת המחדל הושלם",
     "AreYouSure": "האם להמשיך?",
     "AreYouSureToResetToDefault": "לאפס לברירת המחדל?"
   }
