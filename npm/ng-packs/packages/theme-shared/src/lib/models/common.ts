@@ -14,6 +14,11 @@ export type ErrorScreenErrorCodes = 0 | 401 | 403 | 404 | 500;
 
 export interface HttpErrorConfig {
   skipHandledErrorCodes?: ErrorScreenErrorCodes[] | number[];
+  /**
+   * Starts the sign-in for a 401 when the user has no access token, and comes back to the current
+   * page. By default the user is signed out instead.
+   */
+  signInWithoutToken?: boolean;
   errorScreen?: {
     component: Type<any>;
     forWhichErrors?: ErrorScreenErrorCodes[];
