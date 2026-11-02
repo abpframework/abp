@@ -113,7 +113,11 @@ export abstract class AuthFlowStrategy {
       .loadDiscoveryDocument()
       .then(() => {
         const isTokenExpire = isTokenExpired(this.oAuthService.getAccessTokenExpiration());
-        if (isTokenExpire && this.oAuthService.getRefreshToken()) {
+        if (
+          isTokenExpire &&
+          this.oAuthService.getRefreshToken() &&
+          !this.hasPendingSignInCallback()
+        ) {
           return this.refreshToken();
         }
 
@@ -174,6 +178,10 @@ export abstract class AuthFlowStrategy {
     }
 
     clearOAuthStorage(this.injector);
+  }
+
+  protected hasPendingSignInCallback(): boolean {
+    return false;
   }
 
   protected getMemoryStorage(): MemoryTokenStorageService | null {

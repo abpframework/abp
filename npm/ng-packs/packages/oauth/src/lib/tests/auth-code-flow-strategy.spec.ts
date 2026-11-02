@@ -307,6 +307,32 @@ describe('AuthFlowStrategy errors', () => {
     });
   }
 
+  it('should not sign out the expired token for the remember-me option on a sign-in callback', () => {
+    const flow: any = Object.create(AuthCodeFlowStrategy.prototype);
+    flow.injector = Injector.create({
+      providers: [{ provide: OAuthStorage, useValue: { removeItem: vi.fn() } }],
+    });
+    flow.rememberMeService = {
+      get: () => false,
+      set: vi.fn(),
+      getFromToken: () => false,
+      remove: vi.fn(),
+    };
+    flow.oAuthService = {
+      getAccessToken: () => 'expired-token',
+      getAccessTokenExpiration: () => Date.now() - 60_000,
+      logOut: vi.fn(),
+    };
+
+    flow.document = { defaultView: { location: { search: '?code=abc&state=xyz', hash: '' } } };
+    flow.checkRememberMeOption();
+    expect(flow.oAuthService.logOut).not.toHaveBeenCalled();
+
+    flow.document = { defaultView: { location: { search: '', hash: '' } } };
+    flow.checkRememberMeOption();
+    expect(flow.oAuthService.logOut).toHaveBeenCalledTimes(1);
+  });
+
   it('should clear the shared tokens when the logout of this tab fails to revoke them', () => {
     const reason = new HttpErrorResponse({ status: 0 });
 
@@ -415,4 +441,41 @@ describe('AuthFlowStrategy errors', () => {
     events.next(new OAuthErrorEvent('token_refresh_error', new HttpErrorResponse({ status: 400 })));
     expect(navigateToLogin).toHaveBeenCalledWith({ returnUrl: '/my-tasks?q=1' });
   });
+
+  for (const [url, refreshes] of [
+    [{ search: '?code=abc&state=xyz', hash: '' }, false],
+    [{ search: '', hash: '#code=abc&state=xyz' }, false],
+    [{ search: '', hash: '#/code=abc&state=xyz' }, false],
+    [{ search: '?%63ode=abc&state=xyz', hash: '' }, false],
+    [{ search: '?error=login_required&state=xyz', hash: '' }, false],
+    [{ search: '?q=1', hash: '' }, true],
+    // Without the state the library doesn't exchange the code, and it ignores the fragment when
+    // the query isn't empty.
+    [{ search: '?code=INVITE-123', hash: '' }, true],
+    [{ search: '?q=1', hash: '#code=abc&state=xyz' }, true],
+  ] as const) {
+    it(`should ${refreshes ? '' : 'not '}refresh the expired shared tokens at ${url.search}${url.hash}`, async () => {
+      const refreshToken = vi.fn(() =>
+        Promise.reject(new HttpErrorResponse({ status: 400, error: { error: 'invalid_grant' } })),
+      );
+      strategy.document = { defaultView: { location: url } };
+      strategy.oAuthConfig = {};
+      strategy.navigateToPreviousUrl = () => {};
+      strategy.catchError = () => {};
+      strategy.oAuthService = {
+        configure: () => {},
+        events: new Subject<any>(),
+        loadDiscoveryDocument: () => Promise.resolve(),
+        getAccessTokenExpiration: () => Date.now() - 60_000,
+        getRefreshToken: () => 'shared-refresh-token',
+        refreshToken,
+      };
+
+      await AuthFlowStrategy.prototype.init.call(strategy);
+
+      expect(refreshToken).toHaveBeenCalledTimes(refreshes ? 1 : 0);
+      // A rejected refresh would remove the nonce and PKCE verifier of the callback.
+      expect(clearSpy).toHaveBeenCalledTimes(refreshes ? 1 : 0);
+    });
+  }
 });

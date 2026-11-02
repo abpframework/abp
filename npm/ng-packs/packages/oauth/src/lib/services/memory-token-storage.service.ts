@@ -3,6 +3,7 @@ import { OAuthStorage } from 'angular-oauth2-oidc';
 import { AbpLocalStorageService } from '@abp/ng.core';
 import { fromEvent } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { getSignInCallback } from '../utils/sign-in-callback';
 
 const LATE_TOKEN_RELOAD_KEY = 'abp-late-token-reload';
 const TOKEN_LOAD_TIMEOUT = 3000;
@@ -61,9 +62,7 @@ export class MemoryTokenStorageService implements OAuthStorage {
 
   constructor() {
     this.ready = new Promise(resolve => (this.resolveReady = resolve));
-    // The OAuth library reads the code from the query, or from the fragment when the query is empty.
-    const location = this._document.defaultView?.location;
-    this.signingIn = /[?&#]code=/.test(`${location?.search ?? ''}${location?.hash ?? ''}`);
+    this.signingIn = !!getSignInCallback(this._document.defaultView?.location)?.code;
     this.initializeStorage();
     this.setupCleanup();
   }

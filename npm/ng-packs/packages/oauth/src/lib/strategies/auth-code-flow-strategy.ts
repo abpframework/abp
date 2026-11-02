@@ -5,6 +5,7 @@ import { filter, firstValueFrom, from, of, take, tap } from 'rxjs';
 import { AuthConfig, OAuthService } from 'angular-oauth2-oidc';
 import { AuthFlowStrategy } from './auth-flow-strategy';
 import { isTokenExpired } from '../utils';
+import { getSignInCallback } from '../utils/sign-in-callback';
 import { isPlatformBrowser } from '@angular/common';
 
 const DEFAULT_OPEN_URI = new AuthConfig().openUri?.toString();
@@ -46,12 +47,25 @@ export class AuthCodeFlowStrategy extends AuthFlowStrategy {
     }
 
     rememberMe = this.rememberMeService.get();
-    // The expired tokens of other tabs aren't signed out from here: that would end their session
-    // and remove the sign-in values of a callback on this page.
-    if (accessToken && isTokenExpire && !rememberMe && !this.hasOnlySharedTokens()) {
+    // The expired tokens of other tabs aren't signed out from here: that would end their session.
+    // A callback on this page replaces the expired token, and a sign-out would remove its nonce
+    // and PKCE verifier.
+    if (
+      accessToken &&
+      isTokenExpire &&
+      !rememberMe &&
+      !this.hasOnlySharedTokens() &&
+      !this.hasPendingSignInCallback()
+    ) {
       this.rememberMeService.remove();
       this.oAuthService.logOut();
     }
+  }
+
+  // The callback stores new tokens. A rejected refresh before it would remove its nonce and PKCE
+  // verifier, so the sign-in would fail.
+  protected override hasPendingSignInCallback(): boolean {
+    return !!getSignInCallback(this.document?.defaultView?.location);
   }
 
   private getCultureParams(queryParams?: Params) {

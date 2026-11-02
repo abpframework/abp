@@ -381,13 +381,19 @@ describe('ConfigStateService refresh', () => {
   it('should not publish an older configuration after a newer refresh started', () => {
     const configState = createService().service;
     const results: string[] = [];
-    configState.createOnUpdateStream(state => state).subscribe(state => results.push(state.name));
+    configState
+      .createOnUpdateStream(state => state.currentUser?.userName)
+      .subscribe(userName => results.push(userName));
+    const withUserName = (userName: string) => ({
+      ...CONFIG_STATE_DATA,
+      currentUser: { ...CONFIG_STATE_DATA.currentUser, userName },
+    });
 
     configState.refreshAppState();
-    configs[0].next({ ...CONFIG_STATE_DATA, name: 'old' });
+    configs[0].next(withUserName('old'));
     configState.refreshAppState();
     localizations[0].next(APPLICATION_LOCALIZATION_DATA);
-    configs[1].next({ ...CONFIG_STATE_DATA, name: 'new' });
+    configs[1].next(withUserName('new'));
     localizations[1].next(APPLICATION_LOCALIZATION_DATA);
 
     expect(results).toEqual(['new']);
