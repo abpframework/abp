@@ -22,7 +22,7 @@
                     <span>@CurrentUser.UserName</span>
                 }
             </DropdownToggle>
-            <DropdownMenu>
+            <DropdownMenu Style="@MenuStyle">
                 @if (Menu != null)
                 {
                     @foreach (var menuItem in Menu.Items)
