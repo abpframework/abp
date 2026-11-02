@@ -5,4 +5,10 @@
   <PropertyGroup Condition="$(NETCoreSdkVersion.StartsWith('11.0.100-rc.')) and '$(Configuration)' == 'Debug' and '$(UsingMicrosoftNETSdkWeb)' == 'true' and '$(OutputType)' == 'Library' and '$(EnableHotReloadInRuntimeConfigDevFile)' == ''">
     <EnableHotReloadInRuntimeConfigDevFile>false</EnableHotReloadInRuntimeConfigDevFile>
   </PropertyGroup>
+
+  <!-- SDK 11.0.100 RC builds give the compressed copies of net11.0 package assets duplicate labels, so a Blazor host fails
+       on startup when two packages have a static asset with the same path. Remove this once the SDK fixes it. -->
+  <PropertyGroup Condition="$(NETCoreSdkVersion.StartsWith('11.0.100-rc.')) and '$(UsingMicrosoftNETSdkWeb)' == 'true' and '$(CompressionEnabled)' == ''">
+    <CompressionEnabled>false</CompressionEnabled>
+  </PropertyGroup>
 </Project>
