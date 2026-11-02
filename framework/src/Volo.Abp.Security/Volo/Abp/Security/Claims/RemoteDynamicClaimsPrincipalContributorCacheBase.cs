@@ -54,6 +54,15 @@ public abstract class RemoteDynamicClaimsPrincipalContributorCacheBase<TContribu
         return dynamicClaims;
     }
 
+    /// <summary>
+    /// Whether the session was revoked (for example by a logout). The dynamic claims are cached per user,
+    /// so a cached user doesn't mean the session of the current token is still valid.
+    /// </summary>
+    public virtual Task<bool> IsSessionRevokedAsync(string sessionId)
+    {
+        return Task.FromResult(false);
+    }
+
     protected abstract Task<AbpDynamicClaimCacheItem?> GetCacheAsync(Guid userId, Guid? tenantId = null);
 
     protected abstract Task RefreshAsync(Guid userId, Guid? tenantId = null);

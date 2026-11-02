@@ -25,7 +25,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .IncludeDetails(includeDetails)
             .OrderBy(x => x.Id)
             .FirstOrDefaultAsync(
@@ -96,7 +96,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
 
     public virtual async Task<IdentityUser> FindByPasskeyIdAsync(byte[] credentialId, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .IncludeDetails(includeDetails)
             .Where(u => u.Passkeys.Any(x => x.CredentialId.SequenceEqual(credentialId)))
             .OrderBy(x => x.Id)
@@ -126,7 +126,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .IncludeDetails(includeDetails)
             .Where(u => u.Logins.Any(login => login.LoginProvider == loginProvider && login.ProviderKey == providerKey))
             .OrderBy(x => x.Id)
@@ -138,7 +138,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .IncludeDetails(includeDetails)
             .OrderBy(x => x.Id)
             .FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail, GetCancellationToken(cancellationToken));
@@ -149,7 +149,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .IncludeDetails(includeDetails)
             .Where(u => u.Claims.Any(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value))
             .ToListAsync(GetCancellationToken(cancellationToken));
@@ -400,7 +400,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .IncludeDetails(includeDetails)
             .FirstOrDefaultAsync(
                 u => u.TenantId == tenantId && u.UserName == userName,
@@ -410,7 +410,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
 
     public virtual async Task<List<IdentityUser>> GetListByIdsAsync(IEnumerable<Guid> ids, bool includeDetails = false, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .IncludeDetails(includeDetails)
             .Where(x => ids.Contains(x.Id))
             .ToListAsync(GetCancellationToken(cancellationToken));
@@ -457,7 +457,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
 
     public virtual async Task<List<IdentityUser>> GetUsersByNormalizedUserNameAsync(string normalizedUserName, bool includeDetails = false, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .IncludeDetails(includeDetails)
             .OrderBy(x => x.Id)
             .Where(u => u.NormalizedUserName == normalizedUserName)
@@ -466,7 +466,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
 
     public virtual async Task<List<IdentityUser>> GetUsersByNormalizedUserNamesAsync(string[] normalizedUserNames, bool includeDetails = false, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .IncludeDetails(includeDetails)
             .OrderBy(x => x.Id)
             .Where(u => normalizedUserNames.Contains(u.NormalizedUserName))
@@ -476,7 +476,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
 
     public virtual async Task<List<IdentityUser>> GetUsersByNormalizedEmailAsync(string normalizedEmail, bool includeDetails = false, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .IncludeDetails(includeDetails)
             .OrderBy(x => x.Id)
             .Where(u => u.NormalizedEmail == normalizedEmail)
@@ -485,7 +485,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
 
     public virtual async Task<List<IdentityUser>> GetUsersByNormalizedEmailsAsync(string[] normalizedEmails, bool includeDetails = false, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .IncludeDetails(includeDetails)
             .OrderBy(x => x.Id)
             .Where(u => normalizedEmails.Contains(u.NormalizedEmail))
@@ -495,7 +495,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
 
     public virtual async Task<List<IdentityUser>> GetUsersByLoginAsync(string loginProvider, string providerKey, bool includeDetails = false, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .IncludeDetails(includeDetails)
             .OrderBy(x => x.Id)
             .Where(u => u.Logins.Any(login => login.LoginProvider == loginProvider && login.ProviderKey == providerKey))
@@ -504,7 +504,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
 
     public virtual async Task<List<IdentityUser>> GetUsersByPasskeyIdAsync(byte[] credentialId, bool includeDetails = false, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .IncludeDetails(includeDetails)
             .Where(u => u.Passkeys.Any(x => x.CredentialId.SequenceEqual(credentialId)))
             .OrderBy(x => x.Id)
@@ -513,7 +513,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
 
     public virtual async Task<IdentityUser> FindByNormalizedUserNameAsync(Guid? tenantId, string normalizedUserName, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .IncludeDetails(includeDetails)
             .OrderBy(x => x.Id)
             .FirstOrDefaultAsync(
@@ -524,7 +524,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
 
     public virtual async Task<IdentityUser> FindByNormalizedEmailAsync(Guid? tenantId, string normalizedEmail, bool includeDetails = true, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .IncludeDetails(includeDetails)
             .OrderBy(x => x.Id)
             .FirstOrDefaultAsync(
