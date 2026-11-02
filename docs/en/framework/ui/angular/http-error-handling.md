@@ -39,6 +39,7 @@ export const appConfig: ApplicationConfig = {
 
 - `ErrorScreenErrorCodes` the error codes that you can pass to `skipHandledErrorCodes` and `forWhichErrors`.
 - `skipHandledErrorCodes` the error codes those you don't want to handle.
+- `signInWithoutToken` when a request returns 401 and the user has no access token, starts the sign-in and comes back to the current page. By default (`false`) the user is signed out.
 - `errorScreen` the screen that you want to show when a route error occurs.
   - `component` component that you want to show.
   - `forWhichErrors` same as `ErrorScreenErrorCodes`
