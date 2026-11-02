@@ -4,7 +4,7 @@ import { Params, Router } from '@angular/router';
 import { from, Observable } from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';
 import { AuthFlowStrategy } from './auth-flow-strategy';
-import { isTokenExpired, pipeToLogin } from '../utils/auth-utils';
+import { isTokenExpired, isTransientTokenError, pipeToLogin } from '../utils/auth-utils';
 import { LoginParams } from '@abp/ng.core';
 import { clearOAuthStorage } from '../utils/clear-o-auth-storage';
 
@@ -42,7 +42,8 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
     const accessToken = this.oAuthService.getAccessToken();
     const isTokenExpire = isTokenExpired(this.oAuthService.getAccessTokenExpiration());
     const rememberMe = this.rememberMeService.get();
-    if (accessToken && isTokenExpire && !rememberMe) {
+    // The expired tokens of other tabs aren't signed out from here: that would end their session.
+    if (accessToken && isTokenExpire && !rememberMe && !this.hasOnlySharedTokens()) {
       this.rememberMeService.remove();
       this.oAuthService.logOut();
     }
@@ -82,7 +83,10 @@ export class AuthPasswordFlowStrategy extends AuthFlowStrategy {
   }
 
   protected refreshToken() {
-    return this.oAuthService.refreshToken().catch(() => {
+    return this.oAuthService.refreshToken().catch(error => {
+      if (isTransientTokenError(error)) {
+        return;
+      }
       clearOAuthStorage(this.injector);
       this.rememberMeService.remove();
     });
