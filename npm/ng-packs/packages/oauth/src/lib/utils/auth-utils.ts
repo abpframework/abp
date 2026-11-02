@@ -1,4 +1,5 @@
 import { Injector } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { pipe } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
@@ -30,6 +31,14 @@ export const pipeToLogin: PipeToLoginFn = function (
     }),
   );
 };
+
+/**
+ * True when a token request failed on the way (no connection or a server error), so the result
+ * doesn't tell whether the tokens are still valid.
+ */
+export function isTransientTokenError(error: unknown): boolean {
+  return error instanceof HttpErrorResponse && (error.status === 0 || error.status >= 500);
+}
 
 //Ref: https://github.com/manfredsteyer/angular-oauth2-oidc/issues/1214
 export function isTokenExpired(expireDate: number): boolean {
