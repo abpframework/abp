@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.RequestLocalization;
+using Volo.Abp.Localization;
 using Volo.Abp.UI.Navigation;
 
 namespace Volo.Abp.AspNetCore.Components.Server.BasicTheme.Themes.Basic;
@@ -17,6 +18,9 @@ public partial class LoginDisplay : IDisposable
     protected IHttpContextAccessor HttpContextAccessor { get; set; }
 
     protected ApplicationMenu Menu { get; set; }
+
+    // Blazorise's dropdown-menu-end sets right: 0, which wins over the computed left offset in an RTL layout
+    protected static string MenuStyle => CultureHelper.IsRtl ? "right: auto" : null;
 
     protected override async Task OnInitializedAsync()
     {
