@@ -453,6 +453,8 @@ describe('AuthFlowStrategy errors', () => {
     // the query isn't empty.
     [{ search: '?code=INVITE-123', hash: '' }, true],
     [{ search: '?q=1', hash: '#code=abc&state=xyz' }, true],
+    [{ search: '', hash: '#/my-tasks?filter=100%25' }, true],
+    [{ search: '?filter=100%', hash: '' }, true],
   ] as const) {
     it(`should ${refreshes ? '' : 'not '}refresh the expired shared tokens at ${url.search}${url.hash}`, async () => {
       const refreshToken = vi.fn(() =>

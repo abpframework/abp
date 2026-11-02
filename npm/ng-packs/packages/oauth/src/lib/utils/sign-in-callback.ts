@@ -10,10 +10,16 @@ export function getSignInCallback(
 ): { code?: string; error?: string } | null {
   const urlHelper = new UrlHelperService();
   let parts: Record<string, string> = {};
-  if (location?.search) {
-    parts = urlHelper.parseQueryString(location.search.substring(1)) as Record<string, string>;
-  } else if (location?.hash) {
-    parts = urlHelper.getHashFragmentParams(location.hash) as Record<string, string>;
+  try {
+    if (location?.search) {
+      parts = urlHelper.parseQueryString(location.search.substring(1)) as Record<string, string>;
+    } else if (location?.hash) {
+      parts = urlHelper.getHashFragmentParams(location.hash) as Record<string, string>;
+    }
+  } catch {
+    // The library decodes the fragment twice, so a valid route such as `#/tasks?filter=100%25`
+    // throws. The library fails to read a callback from such a URL too.
+    return null;
   }
 
   if (!parts['state'] || !(parts['code'] || parts['error'])) {

@@ -188,6 +188,18 @@ describe('MemoryTokenStorageService', () => {
     expect(reload).not.toHaveBeenCalled();
   });
 
+  it('should start on a hash route with an encoded percent', async () => {
+    const storage = create({ hash: '#/my-tasks?filter=100%25' });
+    answerSnapshot();
+    await storage.ready;
+
+    port().receive({ action: 'set', key: 'access_token', value: 'token' });
+    vi.advanceTimersByTime(200);
+
+    // It isn't a sign-in callback, so a token from another tab reloads the tab as before.
+    expect(reload).toHaveBeenCalled();
+  });
+
   it('should record a token from another tab while signing in, without a reload', async () => {
     const storage = create();
     answerSnapshot();
