@@ -1,0 +1,7 @@
+{
+  "culture": "he",
+  "texts": {
+    "DisplayName:Abp.Timing.Timezone": "אזור זמן",
+    "Description:Abp.Timing.Timezone": "אזור הזמן של היישום"
+  }
+}
