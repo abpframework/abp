@@ -1,0 +1,25 @@
+{
+  "culture": "he",
+  "texts": {
+    "DisplayName:Abp.Mailing.DefaultFromAddress": "כתובת השולח המוגדרת כברירת מחדל",
+    "DisplayName:Abp.Mailing.DefaultFromDisplayName": "שם התצוגה של השולח המוגדר כברירת מחדל",
+    "DisplayName:Abp.Mailing.Smtp.Host": "שרת",
+    "DisplayName:Abp.Mailing.Smtp.Port": "פורט",
+    "DisplayName:Abp.Mailing.Smtp.UserName": "שם משתמש",
+    "DisplayName:Abp.Mailing.Smtp.Password": "סיסמה",
+    "DisplayName:Abp.Mailing.Smtp.Domain": "דומיין",
+    "DisplayName:Abp.Mailing.Smtp.EnableSsl": "הפעלת SSL",
+    "DisplayName:Abp.Mailing.Smtp.UseDefaultCredentials": "שימוש בפרטי ההתחברות של ברירת המחדל",
+    "Description:Abp.Mailing.DefaultFromAddress": "כתובת השולח המוגדרת כברירת מחדל",
+    "Description:Abp.Mailing.DefaultFromDisplayName": "שם התצוגה של השולח המוגדר כברירת מחדל",
+    "Description:Abp.Mailing.Smtp.Host": "השם או כתובת ה-IP של השרת שמשמש לתקשורת SMTP.",
+    "Description:Abp.Mailing.Smtp.Port": "הפורט שמשמש לתקשורת SMTP.",
+    "Description:Abp.Mailing.Smtp.UserName": "שם המשתמש של פרטי ההתחברות.",
+    "Description:Abp.Mailing.Smtp.Password": "הסיסמה של שם המשתמש בפרטי ההתחברות.",
+    "Description:Abp.Mailing.Smtp.Domain": "הדומיין או שם המחשב שמאמת את פרטי ההתחברות.",
+    "Description:Abp.Mailing.Smtp.EnableSsl": "האם SmtpClient משתמש ב-Secure Sockets Layer (SSL) כדי להצפין את החיבור.",
+    "Description:Abp.Mailing.Smtp.UseDefaultCredentials": "האם DefaultCredentials נשלחים עם הבקשות.",
+    "TextTemplate:StandardEmailTemplates.Layout": "תבנית הפריסה של אימייל המוגדרת כברירת מחדל",
+    "TextTemplate:StandardEmailTemplates.Message": "תבנית הודעה פשוטה לאימיילים"
+  }
+}

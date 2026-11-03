@@ -1,0 +1,17 @@
+{
+  "culture": "he",
+  "texts": {
+    "Features": "תכונות",
+    "NoFeatureFoundMessage": "אין תכונות זמינות.",
+    "ManageHostFeatures": "ניהול תכונות המארח",
+    "ManageHostFeaturesText": "כדי לנהל את התכונות של צד המארח, לחצו על הכפתור הבא.",
+    "Permission:FeatureManagement": "ניהול תכונות",
+    "Permission:FeatureManagement.ManageHostFeatures": "ניהול תכונות המארח",
+    "Volo.Abp.FeatureManagement:InvalidFeatureValue": "הערך של התכונה {0} אינו תקין!",
+    "Menu:FeatureManagement": "ניהול תכונות",
+    "ResetToDefault": "איפוס לברירת המחדל",
+    "ResetedToDefault": "האיפוס לברירת המחדל הושלם",
+    "AreYouSure": "האם להמשיך?",
+    "AreYouSureToResetToDefault": "לאפס לברירת המחדל?"
+  }
+}

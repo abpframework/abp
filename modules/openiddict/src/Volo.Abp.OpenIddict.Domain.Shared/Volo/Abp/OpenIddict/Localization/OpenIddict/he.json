@@ -1,0 +1,16 @@
+{
+  "culture": "he",
+  "texts": {
+    "TheOpenIDConnectRequestCannotBeRetrieved": "לא ניתן לאחזר את בקשת OpenID Connect.",
+    "TheUserDetailsCannotBbeRetrieved": "לא ניתן לאחזר את פרטי המשתמש.",
+    "TheApplicationDetailsCannotBeFound": "פרטי היישום לא נמצאו.",
+    "DetailsConcerningTheCallingClientApplicationCannotBeFound": "הפרטים על יישום הלקוח הקורא לא נמצאו.",
+    "TheSpecifiedGrantTypeIsNotImplemented": "סוג ההענקה {0} אינו נתמך.",
+    "Authorization": "הרשאה",
+    "DoYouWantToGrantAccessToYourData": "לתת ל-{0} גישה לנתונים שלך?",
+    "ScopesRequested": "היקפים מבוקשים",
+    "Accept": "אישור",
+    "Deny": "דחייה",
+    "ApplicationResourcePermissionProviderKeyLookupService": "לקוח"
+  }
+}
