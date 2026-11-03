@@ -109,7 +109,9 @@ public partial class ResourcePermissionManagementModal
         ProviderKeys = new List<SearchProviderKeyInfo>();
         if (_createFormRef != null)
         {
-            await _createFormRef.ResetAsync();
+            // ResetAsync would clear the radio group too, which feeds back into
+            // OnLookupServiceCheckedValueChanged and wipes CurrentLookupService.
+            await _createFormRef.ResetValidationAsync();
         }
 
         CreateEntity = new CreateModel
@@ -211,7 +213,7 @@ public partial class ResourcePermissionManagementModal
         ProviderKeys = new List<SearchProviderKeyInfo>();
         if (_createFormRef != null)
         {
-            await _createFormRef.ResetAsync();
+            await _createFormRef.ResetValidationAsync();
         }
         await InvokeAsync(StateHasChanged);
     }

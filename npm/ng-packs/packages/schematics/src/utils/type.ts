@@ -1,4 +1,4 @@
-import { SYSTEM_TYPES, VOLO_REGEX } from '../constants';
+import { SYSTEM_TYPES, VOLO_PACKAGE_PROXY_IMPORTS, VOLO_REGEX } from '../constants';
 import { eImportKeyword } from '../enums';
 import { Import, TypeWithEnum } from '../models';
 import { extractSimpleGenerics } from './generics';
@@ -112,6 +112,11 @@ export function createTypeToImportMapper(solution: string, namespace: string) {
 
     if (isEnum) {
       path = relativePathToEnum(namespace, modelNamespace, specifiers[0]);
+    }
+
+    const packagePath = VOLO_PACKAGE_PROXY_IMPORTS.get(refs[0]);
+    if (packagePath) {
+      path = packagePath;
     }
 
     return new Import({ keyword: eImportKeyword.Type, path, refs, specifiers });

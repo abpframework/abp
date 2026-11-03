@@ -76,6 +76,7 @@ Here is the list of all available commands before explaining their details:
 - [clear-download-cache](../cli#clear-download-cache): Clears the templates download cache.
 - [check-extensions](../cli#check-extensions): Checks the latest version of the ABP CLI extensions.
 - [install-old-cli](../cli#install-old-cli): Installs old ABP CLI.
+- [mcp-studio](../cli#mcp-studio): Starts ABP Studio MCP bridge for AI tools (requires ABP Studio running).
 - [generate-razor-page](../cli#generate-razor-page): Generates a page class that you can use it in the ASP NET Core pipeline to return an HTML page.
 - [generate-jwks](../cli#generate-jwks): Generates an RSA key pair (JWKS public key + PEM private key) for OpenIddict `private_key_jwt` client authentication.
 - [mcp](../cli#mcp): Runs a local MCP bridge to the ABP.IO MCP service, so AI coding assistants can search the ABP documentation, articles, support questions and source code.
@@ -810,14 +811,15 @@ abp generate-proxy -t csharp -url https://localhost:44302/
   - `csharp`: C#, work in the `*.HttpApi.Client` project directory. There are some additional options for this client:
     - `--without-contracts`: Avoid generating the application service interface, class, enum and dto types.
     - `--folder`: Folder name to place generated CSharp code in. Default value: `ClientProxies`.
-  - `ng`: Angular. There are some additional options for this client:
-    - `--api-name` or `-a`: The name of the API endpoint defined in the `/src/environments/environment.ts`. Default value: `default`.
-    - `--source` or `-s`: Specifies the Angular project name to resolve the root namespace & API definition URL from. Default value: `defaultProject`.
-    - `--target`: Specifies the Angular project name to place generated code in. Default value: `defaultProject`.
-    - `--module`:  Backend module name. Default value: `app`.
-    - `--entry-point`: Targets the Angular project to place the generated code.
-    - `--url`: Specifies api definition url. Default value is API Name's url in environment file.
-    - `--prompt` or `-p`: Asks the options from the command line prompt (for the unspecified options).
+   - `ng`: Angular. There are some additional options for this client:
+     - `--api-name` or `-a`: The name of the API endpoint defined in the `/src/environments/environment.ts`. Default value: `default`.
+     - `--source` or `-s`: Specifies the Angular project name to resolve the root namespace & API definition URL from. Default value: `defaultProject`.
+     - `--target`: Specifies the Angular project name to place generated code in. Default value: `defaultProject`.
+     - `--module`:  Backend module name. Default value: `app`.
+     - `--entry-point`: Targets the Angular project to place the generated code.
+     - `--url`: Specifies api definition url. Default value is API Name's url in environment file.
+     - `--resource-api`: Generates the `GET` endpoints against the Resource API: they return an `rxResource`-based `ResourceRef` and take their parameters as a single `Signal` (a parameterless endpoint has no signal parameter and the optional `config` argument is unchanged), instead of returning an `Observable`. Off by default. This parameter requires Angular v22 or later.
+     - `--prompt` or `-p`: Asks the options from the command line prompt (for the unspecified options).
   - `js`: JavaScript. work in the `*.Web` project directory. There are some additional options for this client:
     - `--output` or `-o`: JavaScript file path or folder to place generated code in.
 - `--module` or `-m`: Specifies the name of the backend module you wish to generate proxies for. Default value: `app`.
@@ -1102,6 +1104,35 @@ Usage:
 abp install-old-cli [options]
 ```
 
+### mcp-studio
+
+Starts an MCP stdio bridge for AI tools (Cursor, Claude Desktop, VS Code, etc.) that connects to the local ABP Studio instance. ABP Studio must be running for this command to work.
+
+> You do not need to run this command manually. It is invoked automatically by your AI tool once you add the MCP configuration to your IDE. See the [Configuration](../studio/model-context-protocol.md#configuration) examples.
+
+> This command connects to the **local ABP Studio** instance. It is separate from the `abp mcp` command, which connects to the ABP.IO cloud MCP service and requires an active license.
+
+Usage:
+
+```bash
+abp mcp-studio [options]
+```
+
+Options:
+
+- `--endpoint` or `-e`: Overrides ABP Studio MCP endpoint. Default value is `http://localhost:38280/mcp/`.
+
+Example:
+
+```bash
+abp mcp-studio
+abp mcp-studio --endpoint http://localhost:38280/mcp/
+```
+
+For detailed configuration examples (Cursor, Claude Desktop, VS Code) and the full list of available MCP tools, see the [Model Context Protocol (MCP)](../studio/model-context-protocol.md) documentation.
+
+> You can also run `abp help mcp-studio` to see available options and example IDE configuration snippets directly in your terminal.
+
 ### generate-razor-page
 
 `generate-razor-page` command to generate a page class and then use it in the ASP NET Core pipeline to return an HTML page.
@@ -1372,4 +1403,3 @@ args = ["mcp"]
 
 - [Examples for the new command](./new-command-samples.md)
 - [Video tutorial](https://abp.io/video-courses/essentials/abp-cli)
-

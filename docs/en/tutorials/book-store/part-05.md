@@ -80,10 +80,6 @@ public class BookStorePermissionDefinitionProvider : PermissionDefinitionProvide
     {
         var bookStoreGroup = context.AddGroup(BookStorePermissions.GroupName, L("Permission:BookStore"));
         
-        //Dashboard permissions
-        bookStoreGroup.AddPermission(BookStorePermissions.Dashboard.Host, L("Permission:Dashboard"), MultiTenancySides.Host);
-        bookStoreGroup.AddPermission(BookStorePermissions.Dashboard.Tenant, L("Permission:Dashboard"), MultiTenancySides.Tenant);
-
         //Books permissions
         var booksPermission = bookStoreGroup.AddPermission(BookStorePermissions.Books.Default, L("Permission:Books"));
         booksPermission.AddChild(BookStorePermissions.Books.Create, L("Permission:Books.Create"));
@@ -421,19 +417,16 @@ The base `AbpCrudPageBase` class already has the necessary functionality for the
 
 #### Set the Policy (Permission) Names
 
-Add the following code block to the end of the `Books.razor` file:
+Update the constructor in the `@code` block of the `Books.razor` file as shown below:
 
 ````csharp
-@code
+public Books() // Constructor
 {
-    public Books() // Constructor
-    {
-        LocalizationResource = typeof(BookStoreResource);
-        
-        CreatePolicyName = BookStorePermissions.Books.Create;
-        UpdatePolicyName = BookStorePermissions.Books.Edit;
-        DeletePolicyName = BookStorePermissions.Books.Delete;
-    }
+    LocalizationResource = typeof(BookStoreResource);
+
+    CreatePolicyName = BookStorePermissions.Books.Create;
+    UpdatePolicyName = BookStorePermissions.Books.Edit;
+    DeletePolicyName = BookStorePermissions.Books.Delete;
 }
 ````
 
@@ -449,6 +442,8 @@ The base `AbpCrudPageBase` class automatically checks these permissions on the r
 
 Wrap the *New Book* button by an `if` block as shown below:
 
+{{if BlazorUI == "Blazorise"}}
+
 ````xml
 @if (HasCreatePermission)
 {
@@ -457,7 +452,24 @@ Wrap the *New Book* button by an `if` block as shown below:
 }
 ````
 
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+````razor
+@if (HasCreatePermission)
+{
+    <MudButton Variant="Variant.Filled"
+               Color="Color.Primary"
+               OnClick="OpenCreateDialogAsync">@L["NewBook"]</MudButton>
+}
+````
+
+{{end}}
+
 #### Hide the Edit/Delete Actions
+
+{{if BlazorUI == "Blazorise"}}
 
 `EntityAction` component defines `Visible` attribute (parameter) to conditionally show the action.
 
@@ -468,14 +480,35 @@ Update the `EntityActions` section as shown below:
     <EntityAction TItem="BookDto"
                   Text="@L["Edit"]"
                   Visible=HasUpdatePermission
-                  Clicked="() => OpenEditModalAsync(context)" />
+                  Clicked="() => OpenEditModalAsync(context.Item)" />
     <EntityAction TItem="BookDto"
                   Text="@L["Delete"]"
                   Visible=HasDeletePermission
-                  Clicked="() => DeleteEntityAsync(context)"
-                  ConfirmationMessage="()=>GetDeleteConfirmationMessage(context)" />
+                  Clicked="() => DeleteEntityAsync(context.Item)"
+                  ConfirmationMessage="()=>GetDeleteConfirmationMessage(context.Item)" />
 </EntityActions>
 ````
+
+{{end}}
+
+{{if BlazorUI == "MudBlazor"}}
+
+Wrap the menu items inside the actions `MudMenu` by `if` blocks as shown below:
+
+````razor
+<MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true">
+    @if (HasUpdatePermission)
+    {
+        <MudMenuItem OnClick="@(() => OpenEditDialogAsync(context.Item))">@L["Edit"]</MudMenuItem>
+    }
+    @if (HasDeletePermission)
+    {
+        <MudMenuItem OnClick="@(() => DeleteEntityAsync(context.Item))">@L["Delete"]</MudMenuItem>
+    }
+</MudMenu>
+````
+
+{{end}}
 
 #### About the Permission Caching
 

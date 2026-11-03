@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Http;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
@@ -52,6 +53,14 @@ public class AbpAspNetCoreComponentsServerModule : AbpModule
         Configure<AbpAspNetCoreAuditingOptions>(options =>
         {
             options.IgnoredUrls.AddIfNotContains("/_blazor");
+
+            // ComponentHub returns before component event handlers complete, so a hub level audit scope
+            // would be disposed before the application services add their actions and entity changes to it.
+            var componentHubType = typeof(CircuitOptions).Assembly.GetType("Microsoft.AspNetCore.Components.Server.ComponentHub");
+            if (componentHubType != null)
+            {
+                options.IgnoredHubTypes.AddIfNotContains(componentHubType);
+            }
         });
 
         if (!context.Services.ExecutePreConfiguredActions<AbpAspNetCoreComponentsWebOptions>().IsBlazorWebApp)

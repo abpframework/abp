@@ -136,7 +136,7 @@
         *abpVisible="prop.columnVisible(getInjected)"
         [width]="columnWidths()[i] || 200"
         [canAutoResize]="!columnWidths()[i]"
-        [name]="(prop.isExtra ? '::' + prop.displayName : prop.displayName) | abpLocalization"
+        [name]="prop.displayName | abpLocalization"
         [prop]="prop.name"
         [sortable]="prop.sortable"
       >

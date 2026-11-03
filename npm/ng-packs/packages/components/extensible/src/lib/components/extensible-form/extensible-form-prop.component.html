@@ -162,11 +162,7 @@
       @if (prop().displayTextResolver) {
         {{ prop().displayTextResolver(data()) | abpLocalization }}
       } @else {
-        @if (prop().isExtra) {
-          {{ '::' + prop().displayName | abpLocalization }}
-        } @else {
-          {{ prop().displayName | abpLocalization }}
-        }
+        {{ prop().displayName | abpLocalization }}
       }
       {{ asterisk() }}
       @if (prop().tooltip) {

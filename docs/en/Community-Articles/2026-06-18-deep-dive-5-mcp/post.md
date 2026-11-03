@@ -100,26 +100,18 @@ MCP servers are configured under **Settings > MCP Servers**.
 
 When no server is connected, the page is intentionally simple. It is an empty list waiting for the first server. That is important because MCP should be explicit. If I have not connected a server, the agent should not behave as if it has access to that external system.
 
-![The MCP Servers page in ABP Studio, before any server is added](mcp-servers-empty.png)
-
-When I add a server, ABP Studio asks how it should connect.
+**Add integration** opens a curated gallery of common MCP servers. Each entry shows information such as whether it is official, read-only, authenticated by the provider, or runs a local command. If the integration has configurable values, ABP Studio opens a focused setup form and lets me update those values later. New integrations are disabled until I review and enable them.
 
 There are two main connection types:
 
 - **Stdio:** ABP Studio runs the MCP server as a local process. I provide the command, arguments, and environment variables the server needs.
 - **HTTP:** ABP Studio connects to an MCP server over the network. I provide the URL and any required headers.
 
-![Adding an MCP server: pick stdio or HTTP, then provide the command, arguments, and environment variables](add-mcp-server.png)
-
 This is useful because different MCP servers are packaged in different ways. Some are local command-line programs. Some are hosted services. Some need environment variables for tokens or configuration.
 
-In the example below, I am adding an HTTP MCP server named **SEO Analyzer**. It exposes a small set of SEO-related tools through a remote MCP endpoint.
+For integrations outside the gallery, **Edit JSON** opens the complete server collection as one `mcpServers` document. ABP Studio validates and applies the entire document together, so a server omitted from the document is removed. Environment-variable and HTTP-header secrets are stored separately and appear in the editor as `${secret:NAME}` placeholders.
 
-![Adding the SEO Analyzer MCP server over HTTP](add-seo-analyzer-mcp-server.png)
-
-ABP Studio does not require every server to be created manually from scratch. If I already use MCP elsewhere, I can import existing configuration from tools like Cursor, Claude, VS Code, Windsurf, or a plain MCP server JSON file. It can also export configuration in the standard `mcpServers` JSON shape.
-
-That matters because MCP is an open ecosystem. The same server definition can often move between tools. ABP Studio becomes another place where I can use that server, but now in the context of an ABP-aware agent.
+See [ABP Studio: AI Agent Configuration](../../studio/ai-agent-configuration.md#mcp-tool-connections) for the supported JSON fields and secret-storage behavior.
 
 ## What A Connected Server Shows
 

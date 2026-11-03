@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Auditing;
 
 namespace Volo.Abp.TenantManagement;
 
@@ -8,7 +9,7 @@ public interface ITenantAppService : ICrudAppService<TenantDto, Guid, GetTenants
 {
     Task<string> GetDefaultConnectionStringAsync(Guid id);
 
-    Task UpdateDefaultConnectionStringAsync(Guid id, string defaultConnectionString);
+    Task UpdateDefaultConnectionStringAsync(Guid id, [DisableAuditing] string defaultConnectionString);
 
     Task DeleteDefaultConnectionStringAsync(Guid id);
 }

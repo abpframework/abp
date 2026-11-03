@@ -59,6 +59,20 @@ public class AuditTestController_Tests : AspNetCoreMvcTestBase
     }
 
     [Fact]
+    public async Task Should_Disable_AuditLog_For_Query_Requests()
+    {
+        _options.IsEnabledForGetRequests = false;
+
+        using (var requestMessage = new HttpRequestMessage(new HttpMethod("QUERY"), "api/audit-test/audit-success"))
+        {
+            var response = await Client.SendAsync(requestMessage);
+            response.StatusCode.ShouldBe(System.Net.HttpStatusCode.OK);
+        }
+
+        await _auditingStore.Received().DidNotReceive().SaveAsync(Arg.Any<AuditLogInfo>());
+    }
+
+    [Fact]
     public async Task Should_Trigger_Middleware_And_AuditLog_Success_For_GetRequests()
     {
         _options.IsEnabledForGetRequests = true;

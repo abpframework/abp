@@ -13,5 +13,6 @@
   </Folder>
   <Folder Name="/test/">
     <Project Path="test/Volo.Abp.Account.Application.Tests/Volo.Abp.Account.Application.Tests.csproj" />
+    <Project Path="test/Volo.Abp.Account.Web.Tests/Volo.Abp.Account.Web.Tests.csproj" />
   </Folder>
 </Solution>

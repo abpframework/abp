@@ -12,6 +12,7 @@
 @using Volo.Abp.MultiTenancy
 @using Volo.Abp.Localization
 @using Volo.Abp.Ui.Branding
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Branding
 @using Volo.Abp.Ui.LayoutHooks
 @inject IBrandingProvider BrandingProvider
 @inject IOptions<AbpMultiTenancyOptions> MultiTenancyOptions
@@ -64,7 +65,7 @@
         <abp-row>
             <abp-column class="col mx-auto mb-5" style="max-width: 440px">
                 <div class="brand-container">
-                    <img class="brand-logo" src="@(BrandingProvider.LogoUrl ?? Url.Content("~/themes/basic/logo.svg"))" alt="@BrandingProvider.AppName"/>
+                    <img class="brand-logo" src="@(Url.ResolveBrandingUrl(BrandingProvider.LogoUrl) ?? Url.Content("~/themes/basic/logo.svg"))" alt="@BrandingProvider.AppName"/>
                     <h2 class="brand-text">@BrandingProvider.AppName</h2>
                 </div>
                 @if (MultiTenancyOptions.Value.IsEnabled &&

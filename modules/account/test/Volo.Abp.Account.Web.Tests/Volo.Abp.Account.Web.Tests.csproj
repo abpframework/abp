@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="NSubstitute" />
+    <PackageReference Include="Shouldly" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.extensibility.execution" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Volo.Abp.Account.Web\Volo.Abp.Account.Web.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Abp.Account.Web.IdentityServer\Volo.Abp.Account.Web.IdentityServer.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Account.Application.Tests\Volo.Abp.Account.Application.Tests.csproj" />
+  </ItemGroup>
+
+</Project>

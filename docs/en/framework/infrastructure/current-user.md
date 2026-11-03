@@ -198,4 +198,4 @@ public class DepartmentClaimsPrincipalContributor :
 }
 ````
 
-This contributor runs during regular principal creation. Use `IAbpDynamicClaimsPrincipalContributor` when claims need to be refreshed by the [dynamic claims](../fundamentals/dynamic-claims.md) pipeline.
+This contributor runs during regular principal creation. To refresh such a claim through the [dynamic claims](../fundamentals/dynamic-claims.md) system, also add its type to `AbpClaimsPrincipalFactoryOptions.DynamicClaims`. See [Adding a Custom Dynamic Claim](../fundamentals/dynamic-claims.md#adding-a-custom-dynamic-claim).

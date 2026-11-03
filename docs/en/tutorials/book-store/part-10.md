@@ -1160,6 +1160,12 @@ protected override async Task OnInitializedAsync()
 
 * It is essential to call the `base.OnInitializedAsync()` since `AbpCrudPageBase` has some initialization code to be executed.
 
+The code below throws a `UserFriendlyException`, which is defined in the `Volo.Abp` namespace. Add the following line to the top of the `Books.razor` file:
+
+````html
+@using Volo.Abp
+````
+
 {{if BlazorUI == "Blazorise"}}
 
 Override the `OpenCreateModalAsync` method and adding the following code:
@@ -1250,6 +1256,51 @@ The final `@code` block should be the following:
         DeletePolicyName = BookStorePermissions.Books.Delete;
     }
 
+    // MudDatePicker requires nullable DateTime, while CreateUpdateBookDto.PublishDate is non-nullable.
+    // Bind to a nullable wrapper and sync back to the DTO.
+    private DateTime? NewEntityPublishDate
+    {
+        get => NewEntity?.PublishDate;
+        set { if (NewEntity != null && value.HasValue) NewEntity.PublishDate = value.Value; }
+    }
+
+    private DateTime? EditingEntityPublishDate
+    {
+        get => EditingEntity?.PublishDate;
+        set { if (EditingEntity != null && value.HasValue) EditingEntity.PublishDate = value.Value; }
+    }
+
+    private MudDataGrid<BookDto> _booksDataGrid = default!;
+
+    protected override async Task OnCreatedEntityAsync()
+    {
+        await InvokeAsync(() => _booksDataGrid.ReloadServerData());
+        await CloseCreateDialogAsync();
+        Snackbar.Add(GetCreateMessage(), Severity.Success);
+    }
+
+    protected override async Task OnUpdatedEntityAsync()
+    {
+        await InvokeAsync(() => _booksDataGrid.ReloadServerData());
+        await CloseEditDialogAsync();
+        Snackbar.Add(GetUpdateMessage(), Severity.Success);
+    }
+
+    protected override async Task OnDeletedEntityAsync()
+    {
+        // Go back to the previous page if the deleted book was the only one on the current page
+        if (_booksDataGrid.CurrentPage > 0 && _booksDataGrid.ServerItems.Count() == 1)
+        {
+            await InvokeAsync(() => _booksDataGrid.NavigateTo(Page.Previous));
+        }
+        else
+        {
+            await InvokeAsync(() => _booksDataGrid.ReloadServerData());
+        }
+
+        Snackbar.Add(GetDeleteMessage(), Severity.Success);
+    }
+
     //GET AUTHORS ON INITIALIZATION
     protected override async Task OnInitializedAsync()
     {
@@ -1279,7 +1330,7 @@ Finally, add the following field definition into the *Create* modal/dialog, as t
 ````xml
 <Field>
     <FieldLabel>@L["Author"]</FieldLabel>
-    <Select TValue="Guid" @bind-SelectedValue="@NewEntity.AuthorId">
+    <Select TValue="Guid" @bind-Value="@NewEntity.AuthorId">
         @foreach (var author in authorList)
         {
             <SelectItem TValue="Guid" Value="@author.Id">
@@ -1324,7 +1375,7 @@ Add the following field definition into the *Edit* modal/dialog, as the first it
 ````xml
 <Field>
     <FieldLabel>@L["Author"]</FieldLabel>
-    <Select TValue="Guid" @bind-SelectedValue="@EditingEntity.AuthorId">
+    <Select TValue="Guid" @bind-Value="@EditingEntity.AuthorId">
         @foreach (var author in authorList)
         {
             <SelectItem TValue="Guid" Value="@author.Id">

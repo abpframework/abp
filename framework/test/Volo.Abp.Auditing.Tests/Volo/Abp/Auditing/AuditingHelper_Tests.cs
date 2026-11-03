@@ -1,7 +1,9 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using NSubstitute;
+using Shouldly;
 using Volo.Abp.DependencyInjection;
 using Xunit;
 
@@ -125,6 +127,20 @@ public class AuditingHelper_Tests : AbpAuditingTestBase
         }
     }
 
+    [Fact]
+    public async Task Should_Not_Write_Parameter_Value_With_DisableAuditing()
+    {
+        var myAuditedObject = GetRequiredService<MyAuditedObject>();
+
+        await myAuditedObject.DoItWithSecretAsync("MyTenant", "Server=localhost;Password=1q2w3E*");
+
+        var auditLog = (AuditLogInfo)AuditingStore.ReceivedCalls().Last().GetArguments()[0]!;
+        var action = auditLog.Actions.Single(x => x.MethodName == nameof(MyAuditedObject.DoItWithSecretAsync));
+
+        action.Parameters.ShouldContain("MyTenant");
+        action.Parameters.ShouldNotContain("1q2w3E*");
+    }
+
     public interface IMyAuditedObject : ITransientDependency, IAuditingEnabled
     {
     }
@@ -132,6 +148,11 @@ public class AuditingHelper_Tests : AbpAuditingTestBase
     public class MyAuditedObject : IMyAuditedObject
     {
         public virtual Task DoItAsync()
+        {
+            return Task.CompletedTask;
+        }
+
+        public virtual Task DoItWithSecretAsync(string name, [DisableAuditing] string connectionString)
         {
             return Task.CompletedTask;
         }

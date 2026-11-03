@@ -111,29 +111,30 @@ public class JQueryProxyScriptGenerator : IProxyScriptGenerator, ITransientDepen
         var versionParam = action.Parameters.FirstOrDefault(p => p.Name == "apiVersion" && p.BindingSourceId == ParameterBindingSources.Path) ??
                            action.Parameters.FirstOrDefault(p => p.Name == "api-version" && p.BindingSourceId == ParameterBindingSources.Query);
 
+        var urlParameters = action.Parameters;
         if (versionParam != null)
         {
             var version = FindBestApiVersion(action);
-            if (parameterList.Contains("api_version"))
+            var versionVariable = ProxyScriptingJsFuncHelper.GetParamNameInJsFunc(versionParam);
+            if (versionParam.Name == versionParam.NameOnMethod)
             {
-                script.AppendLine($"      var {ProxyScriptingJsFuncHelper.NormalizeJsVariableName(versionParam.Name)} = api_version ? api_version : '{version}';");
+                script.AppendLine($"      {versionVariable} = {versionVariable} ? {versionVariable} : '{version}';");
             }
             else
             {
-                var apiVersion = action.Parameters.FirstOrDefault(p =>
-                    p.BindingSourceId.IsIn(ParameterBindingSources.ModelBinding, ParameterBindingSources.Query) &&
-                    p.Name == "api-version");
-                if (apiVersion != null && parameterList.Contains(apiVersion.NameOnMethod))
-                {
-                    var apiVersionVariable = ProxyScriptingJsFuncHelper.GetParamNameInJsFunc(apiVersion);
-                    script.AppendLine($"      {apiVersionVariable} = {apiVersionVariable} ? {apiVersionVariable} : '{version}';");
-                }
+                // The version is read from the input DTO here, so the default goes to a local container
+                // to keep the caller's object (which may be a FormData) and the other arguments unchanged.
+                var container = GetUniqueJsVariableName(action, "apiVersionContainer");
+                var localVersionParam = CreateLocalVersionParameter(versionParam, container);
+                var versionProperty = ProxyScriptingJsFuncHelper.GetParamNameInJsFunc(localVersionParam).Substring(container.Length + 1);
+                script.AppendLine($"      var {container} = {{ {versionProperty}: {versionVariable} ? {versionVariable} : '{version}' }};");
+                urlParameters = action.Parameters.Select(p => p == versionParam ? localVersionParam : p).ToList();
             }
         }
 
         script.AppendLine("      return abp.ajax($.extend(true, {");
 
-        AddAjaxCallParameters(script, action);
+        AddAjaxCallParameters(script, action, urlParameters);
 
         var hasFormFile = action.Parameters.Any(x => x.BindingSourceId == ParameterBindingSources.FormFile);
         var ajaxParamsIsFromForm = !hasFormFile && action.Parameters.Any(x => x.BindingSourceId == ParameterBindingSources.Form);
@@ -193,6 +194,38 @@ public class JQueryProxyScriptGenerator : IProxyScriptGenerator, ITransientDepen
         return (semi < 0 ? mediaType : mediaType.Substring(0, semi)).Trim().ToLowerInvariant();
     }
 
+    private static string GetUniqueJsVariableName(ActionApiDescriptionModel action, string name)
+    {
+        var usedNames = new HashSet<string>(action.Parameters
+            .Select(p => ProxyScriptingJsFuncHelper.NormalizeJsVariableName(p.NameOnMethod.ToCamelCase())))
+        {
+            "ajaxParams"
+        };
+
+        while (usedNames.Contains(name))
+        {
+            name += "_";
+        }
+
+        return name;
+    }
+
+    private static ParameterApiDescriptionModel CreateLocalVersionParameter(ParameterApiDescriptionModel versionParam, string container)
+    {
+        return new ParameterApiDescriptionModel
+        {
+            Name = versionParam.Name,
+            NameOnMethod = container,
+            JsonName = versionParam.JsonName,
+            Type = versionParam.Type,
+            TypeSimple = versionParam.TypeSimple,
+            IsOptional = versionParam.IsOptional,
+            DefaultValue = versionParam.DefaultValue,
+            ConstraintTypes = versionParam.ConstraintTypes,
+            BindingSourceId = versionParam.BindingSourceId
+        };
+    }
+
     private static string FindBestApiVersion(ActionApiDescriptionModel action)
     {
         //var configuredVersion = GetConfiguredApiVersion(); //TODO: Implement
@@ -211,11 +244,11 @@ public class JQueryProxyScriptGenerator : IProxyScriptGenerator, ITransientDepen
         return action.SupportedVersions.Last(); //TODO: Ensure to get the latest version!
     }
 
-    private static void AddAjaxCallParameters(StringBuilder script, ActionApiDescriptionModel action)
+    private static void AddAjaxCallParameters(StringBuilder script, ActionApiDescriptionModel action, IList<ParameterApiDescriptionModel> urlParameters)
     {
         var httpMethod = action.HttpMethod?.ToUpperInvariant() ?? "POST";
 
-        script.AppendLine("        url: abp.appPath + '" + ProxyScriptingHelper.GenerateUrlWithParameters(action) + "',");
+        script.AppendLine("        url: abp.appPath + '" + ProxyScriptingHelper.GenerateUrlWithParameters(action, urlParameters) + "',");
         script.Append("        type: '" + httpMethod + "'");
 
         if (action.ReturnValue.Type == typeof(void).FullName)

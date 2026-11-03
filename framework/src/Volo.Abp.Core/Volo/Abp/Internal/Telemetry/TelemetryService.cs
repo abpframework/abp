@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
@@ -81,31 +82,36 @@ public class TelemetryService : ITelemetryService, IScopedDependency
                 telemetryActivitySender);
         });
 
-        AppDomain.CurrentDomain.ProcessExit += (_, _) =>
-        {
-            try
-            {
-                telemetryTask.Wait(TimeSpan.FromSeconds(10));
-            }
-            catch
-            {
-                // ignored
-            }
-        };
-        
-        Console.CancelKeyPress += (_, _) =>
-        {
-            try
-            {
-                telemetryTask.Wait(TimeSpan.FromSeconds(10));
-            }
-            catch
-            {
-                // ignored
-            }
-        };
+        WaitForTelemetryTaskOnExit(telemetryTask);
 
         return Task.CompletedTask;
+    }
+
+    private static void WaitForTelemetryTaskOnExit(Task telemetryTask)
+    {
+        EventHandler processExitHandler = (_, _) => WaitForTelemetryTask(telemetryTask);
+        ConsoleCancelEventHandler cancelKeyPressHandler = (_, _) => WaitForTelemetryTask(telemetryTask);
+
+        AppDomain.CurrentDomain.ProcessExit += processExitHandler;
+        Console.CancelKeyPress += cancelKeyPressHandler;
+
+        _ = telemetryTask.ContinueWith(_ =>
+        {
+            AppDomain.CurrentDomain.ProcessExit -= processExitHandler;
+            Console.CancelKeyPress -= cancelKeyPressHandler;
+        }, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
+    }
+
+    private static void WaitForTelemetryTask(Task telemetryTask)
+    {
+        try
+        {
+            telemetryTask.Wait(TimeSpan.FromSeconds(10));
+        }
+        catch
+        {
+            // ignored
+        }
     }
 
     private static async Task BuildAndSendActivityAsync(

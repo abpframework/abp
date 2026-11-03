@@ -33,6 +33,7 @@ public class AspNetCoreMultiTenancy_MultiTenancyMiddlewareErrorPageBuilder_Tests
             var result = await response.Content.ReadAsStringAsync();
             var error = JsonSerializer.Deserialize<RemoteServiceErrorResponse>(result, new JsonSerializerOptions {PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
             error.Error.ShouldNotBeNull();
+            error.Error.Code.ShouldBe("Volo.AbpIo.MultiTenancy:010001");
             error.Error.Message.ShouldBe("Tenant not found!");
             error.Error.Details.ShouldBe("There is no tenant with the tenant id or name: abpio");
         }

@@ -178,7 +178,7 @@ public class AuditingHelper : IAuditingHelper, ITransientDependency
                 ? type.FullName!
                 : "",
             MethodName = method.Name,
-            Parameters = SerializeConvertArguments(arguments),
+            Parameters = SerializeConvertArguments(method, arguments),
             ExecutionTime = Clock.Now
         };
 
@@ -218,6 +218,24 @@ public class AuditingHelper : IAuditingHelper, ITransientDependency
                 }
             }
         }
+    }
+
+    protected virtual string SerializeConvertArguments(MethodInfo method, IDictionary<string, object?> arguments)
+    {
+        var disabledParameters = method.GetParameters()
+            .Where(x => x.IsDefined(typeof(DisableAuditingAttribute), true))
+            .Select(x => x.Name)
+            .ToArray();
+
+        if (disabledParameters.Any())
+        {
+            arguments = arguments.ToDictionary(
+                x => x.Key,
+                x => disabledParameters.Contains(x.Key) ? null : x.Value
+            );
+        }
+
+        return SerializeConvertArguments(arguments);
     }
 
     protected virtual string SerializeConvertArguments(IDictionary<string, object?> arguments)

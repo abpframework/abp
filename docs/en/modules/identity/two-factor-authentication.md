@@ -124,7 +124,7 @@ Configure<CookieAuthenticationOptions>(IdentityConstants.TwoFactorRememberMeSche
 
 ## How the Verification Code Is Generated
 
-The codes delivered by the **Email** and **SMS** verification providers are produced by ABP's built-in single-use token providers, registered in `AbpIdentityAspNetCoreModule`:
+The codes delivered by the **Email** and **SMS** verification providers are produced by ABP's built-in single-use token providers, registered in `AbpIdentityDomainModule`:
 
 - `AbpEmailTwoFactorTokenProvider` is registered under `TokenOptions.DefaultEmailProvider` and replaces ASP.NET Core Identity's TOTP-based `EmailTokenProvider<TUser>`.
 - `AbpPhoneNumberTwoFactorTokenProvider` is registered under `TokenOptions.DefaultPhoneProvider` and replaces ASP.NET Core Identity's TOTP-based `PhoneNumberTokenProvider<TUser>`.
@@ -137,7 +137,7 @@ This persisted, single-use design has the following effects:
 
 1. **A generated code is single-use.** Successful verification removes the stored entry. Re-submitting the same code from a concurrent session fails.
 2. **Generating a new code invalidates the previous one.** `SetToken` overwrites the same `(provider, name)` row, so at most one code is valid at any time. Re-issuing a code (e.g. when the user requests a new one) replaces the stored entry and the previously delivered code stops working.
-3. **The validity window is exactly the configured lifespan (3 minutes by default).** Expiration is captured as an absolute Unix-seconds value at generation time and is not extended at validation — in contrast to TOTP-based providers, which accept the previous timestep as well and effectively give a 3–6 minute window.
+3. **The validity window is exactly the configured lifespan (3 minutes by default).** Expiration is captured as an absolute Unix-seconds value at generation time and is not extended at validation — in contrast to TOTP-based providers, which accept two timesteps on each side of the current one and so keep a fresh code usable for roughly 6 to 9 minutes.
 4. **Failed verification keeps the stored entry in place** so the user can retry until expiration. Rate-limiting incorrect attempts is delegated to ASP.NET Core Identity's lockout settings.
 5. **Concurrent successful verification returns `false` instead of throwing.** Two requests racing to consume the same code go through the user row's `ConcurrencyStamp`; the loser surfaces as a normal validation failure rather than a 500.
 6. **Expired or undecryptable entries are cleaned up on next access.** A stale entry encountered during validation is removed before returning `false`, so the next `GenerateAsync` starts from a clean slate.
@@ -168,7 +168,7 @@ Configure<AbpPhoneNumberTwoFactorTokenProviderOptions>(options =>
 
 ## Replacing the Verification Code Provider
 
-If the built-in single-use behavior does not match your requirements (e.g. you need alphanumeric codes, a different storage backend or a custom delivery policy), you can replace either provider by registering your own `IUserTwoFactorTokenProvider<IdentityUser>` under the same key. `AddTokenProvider` with an existing key replaces the previous descriptor in `TokenOptions.ProviderMap`:
+If the built-in single-use behavior does not match your requirements (e.g. you need alphanumeric codes, a different storage backend or a custom delivery policy), you can replace either provider by registering your own `IUserTwoFactorTokenProvider<IdentityUser>` under the same key. `AddTokenProvider` adds to the descriptor already registered under that key in `TokenOptions.ProviderMap`, and the last registration for the same user type wins:
 
 ```csharp
 PreConfigure<IdentityBuilder>(builder =>

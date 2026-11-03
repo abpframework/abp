@@ -9,5 +9,6 @@ public enum UiFramework
     Blazor = 4,
     BlazorServer = 5,
     MauiBlazor = 6,
-    BlazorWebApp = 7
+    BlazorWebApp = 7,
+    React = 8
 }

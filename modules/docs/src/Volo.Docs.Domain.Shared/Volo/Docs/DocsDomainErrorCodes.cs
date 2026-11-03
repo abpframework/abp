@@ -3,5 +3,7 @@
     public static class DocsDomainErrorCodes
     {
         public const string ElasticSearchNotEnabled = "Volo.Docs.Domain:010001";
+
+        public const string DocumentNotFound = "Volo.Docs.Domain:010003";
     }
 }

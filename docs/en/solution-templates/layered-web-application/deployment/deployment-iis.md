@@ -34,15 +34,25 @@
 
 {{end}}
 
+{{ if UI == "BlazorServer" }}
+
+- Enable the **WebSocket Protocol** feature of IIS. Blazor Server works best with WebSockets. See [Enabling WebSockets on IIS](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/websockets#enabling-websockets-on-iis).
+
+{{end}}
+
 ## Generate an Authentication Certificate
 
-If you're using OpenIddict, you need to generate an authentication certificate. You can execute this command in {{ if Tiered == "Yes" }}AuthServer{{ else if UI == "NG" || UI == "Blazor" }}HttpApi.Host{{ else if UI == "BlazorServer" }}Blazor{{ else }}Web{{ end }} folder.
+If you're using OpenIddict and your authentication server module calls the `AddProductionEncryptionAndSigningCertificate` method, the application loads the `openiddict.pfx` file in the production environment. Check that this file exists in the {{ if Tiered == "Yes" }}AuthServer{{ else if UI == "NG" || UI == "Blazor" }}HttpApi.Host{{ else if UI == "BlazorServer" }}Blazor{{ else }}Web{{ end }} folder before publishing. It is ignored by git, so it doesn't exist after a fresh clone.
+
+> If your authentication server doesn't have a production certificate configuration, see the [Configuring OpenIddict](../../../deployment/configuring-openIddict.md) document.
+
+If the file doesn't exist, you can execute this command in {{ if Tiered == "Yes" }}AuthServer{{ else if UI == "NG" || UI == "Blazor" }}HttpApi.Host{{ else if UI == "BlazorServer" }}Blazor{{ else }}Web{{ end }} folder to create it.
 
 ````bash
-dotnet dev-certs https -v -ep authserver.pfx -p 00000000-0000-0000-0000-000000000000
+dotnet dev-certs https -v -ep openiddict.pfx -p 00000000-0000-0000-0000-000000000000
 ````
 
-> `00000000-0000-0000-0000-000000000000` is the password of the certificate, you can change it to any password you want.
+> Replace `00000000-0000-0000-0000-000000000000` with the password that your module class passes to the `AddProductionEncryptionAndSigningCertificate` method. The solutions created by ABP Studio read it from the `AuthServer:CertificatePassPhrase` setting in the `appsettings.json` file.
 
 ## Creating the Publish Files
 
@@ -170,7 +180,7 @@ Add domain names to hosts file(in Windows: `C:\Windows\System32\drivers\etc\host
 
 ### Update the appsettings
 
-Update the appsettings according to your project type and domain names.
+Update the appsettings according to your project type and domain names. If your `appsettings.json` file has the `AuthServer:CertificatePassPhrase` setting, keep its value.
 
 {{ if Tiered == "Yes" }}
 
@@ -284,7 +294,7 @@ Update the appsettings according to your project type and domain names.
 
 ### Copy the .pfx file
 
-You need to copy pfx file from ./src/{{ if Tiered == "Yes" }}AuthServer{{ else if UI == "NG" || UI == "Blazor" }}HttpApi.Host{{ else if UI == "BlazorServer" }}Blazor{{ else }}Web{{ end }} to ./publish/{{ if Tiered == "Yes" }}authserver{{ else if UI == "NG" || UI == "Blazor" }}apihost{{ else if UI == "BlazorServer" }}blazor{{ else }}web{{ end }} folder.
+If your module loads the `openiddict.pfx` file, make sure it exists in the ./publish/{{ if Tiered == "Yes" }}authserver{{ else if UI == "NG" || UI == "Blazor" }}apihost{{ else if UI == "BlazorServer" }}blazor{{ else }}web{{ end }} folder. If it doesn't, copy it from the {{ if Tiered == "Yes" }}AuthServer{{ else if UI == "NG" || UI == "Blazor" }}HttpApi.Host{{ else if UI == "BlazorServer" }}Blazor{{ else }}Web{{ end }} project folder.
 
 ### Publish the Applications(s)
 

@@ -18,7 +18,7 @@
                 ngTabList
                 orientation="vertical"
                 selectionMode="follow"
-                [(selectedTab)]="selectedGroupDisplayName"
+                [(selectedTab)]="selectedGroupName"
                 class="nav nav-pills flex-column"
               >
                 @for (group of groups(); track group.name) {
@@ -26,7 +26,7 @@
                     ngTab
                     #tab="ngTab"
                     type="button"
-                    [value]="group.displayName"
+                    [value]="group.name"
                     class="nav-link text-start"
                     [class.active]="tab.selected()"
                   >
@@ -43,9 +43,9 @@
 
             <div class="col-md-8">
               @for (group of groups(); track group.name) {
-                <div ngTabPanel [value]="group.displayName">
+                <div ngTabPanel [value]="group.name">
                   <ng-template ngTabContent>
-                    <h4>{{ selectedGroupDisplayName() }}</h4>
+                    <h4>{{ group.displayName }}</h4>
                     <hr class="mt-2 mb-3" />
 
                     @for (

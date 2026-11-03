@@ -1,0 +1,267 @@
+{
+  "modules": {
+    "app": {
+      "rootPath": "app",
+      "remoteServiceName": "Default",
+      "controllers": {
+        "Volo.Abp.Http.DynamicProxying.RegularTestController": {
+          "controllerName": "RegularTest",
+          "controllerGroupName": "RegularTest",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.Abp.Http.DynamicProxying.RegularTestController",
+          "summary": null,
+          "remarks": null,
+          "description": null,
+          "displayName": null,
+          "interfaces": [
+            {
+              "type": "Volo.Abp.Http.DynamicProxying.IRegularTestController",
+              "name": "IRegularTestController",
+              "methods": [
+                {
+                  "name": "GetWithStringPathAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "name",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.String",
+                    "typeSimple": "string",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
+                  }
+                },
+                {
+                  "name": "GetWithCatchAllPathAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "path",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.String",
+                    "typeSimple": "string",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
+                  }
+                },
+                {
+                  "name": "GetWithSingleStarCatchAllPathAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "path",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.String",
+                    "typeSimple": "string",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "GetWithStringPathAsyncByName": {
+              "uniqueName": "GetWithStringPathAsyncByName",
+              "name": "GetWithStringPathAsync",
+              "httpMethod": "GET",
+              "url": "api/regular-test-controller/get-with-string-path/{name}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "name",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "name",
+                  "name": "name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
+              },
+              "allowAnonymous": null,
+              "authorizeDatas": [],
+              "implementFrom": "Volo.Abp.Http.DynamicProxying.IRegularTestController",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
+            },
+            "GetWithCatchAllPathAsyncByPath": {
+              "uniqueName": "GetWithCatchAllPathAsyncByPath",
+              "name": "GetWithCatchAllPathAsync",
+              "httpMethod": "GET",
+              "url": "api/regular-test-controller/get-with-catch-all-path/{path}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "path",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "path",
+                  "name": "path",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
+              },
+              "allowAnonymous": null,
+              "authorizeDatas": [],
+              "implementFrom": "Volo.Abp.Http.DynamicProxying.IRegularTestController",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
+            },
+            "GetWithSingleStarCatchAllPathAsyncByPath": {
+              "uniqueName": "GetWithSingleStarCatchAllPathAsyncByPath",
+              "name": "GetWithSingleStarCatchAllPathAsync",
+              "httpMethod": "GET",
+              "url": "api/regular-test-controller/get-with-single-star-catch-all-path/{path}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "path",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "path",
+                  "name": "path",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
+              },
+              "allowAnonymous": null,
+              "authorizeDatas": [],
+              "implementFrom": "Volo.Abp.Http.DynamicProxying.IRegularTestController",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
+            }
+          }
+        }
+      }
+    }
+  },
+  "types": {}
+}

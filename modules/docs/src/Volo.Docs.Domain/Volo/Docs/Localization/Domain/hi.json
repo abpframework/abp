@@ -35,6 +35,7 @@
     "NewExplanation": "पिछले दो हफ्तों में बनाया गया।",
     "UpdatedExplanation": "पिछले दो हफ्तों में अपडेट किया गया।",
     "Volo.Docs.Domain:010002": "ShortName {ShortName} पहले से मौजूद है।",
+    "Volo.Docs.Domain:010003": "ओह, अनुरोधित दस्तावेज़ नहीं मिला!",
     "Preview": "पूर्व दर्शन",
     "Search": "खोज",
     "SearchResults": "खोज परिणाम",

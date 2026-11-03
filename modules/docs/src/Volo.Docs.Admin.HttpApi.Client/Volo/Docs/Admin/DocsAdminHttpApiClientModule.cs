@@ -6,6 +6,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Docs.Admin
 {
     [DependsOn(
+        typeof(DocsCommonHttpApiClientModule),
         typeof(DocsAdminApplicationContractsModule),
         typeof(AbpHttpClientModule))]
     public class DocsAdminHttpApiClientModule : AbpModule

@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Volo\Abp\Http\Localization\en.json" />
+    <EmbeddedResource Include="Volo\Abp\Http\Client\ClientProxying\regular-test-generate-proxy.json" />
   </ItemGroup>
 
 </Project>

@@ -26,6 +26,8 @@ public partial class PermissionManagementModal
 
     protected string _entityDisplayName;
     protected List<PermissionGroupDto> _allGroups;
+
+    protected Dictionary<string, bool> _loadedPermissionValues = new Dictionary<string, bool>();
     protected List<PermissionGroupDto> _groups;
 
     protected string _selectedTabName;
@@ -57,6 +59,10 @@ public partial class PermissionManagementModal
             _entityDisplayName = entityDisplayName ?? result.EntityDisplayName;
             _allGroups = result.Groups.OrderBy(x => x.DisplayName).ToList();
             _groups = _allGroups.ToList();
+
+            _loadedPermissionValues = _allGroups
+                .SelectMany(x => x.Permissions)
+                .ToDictionary(x => x.Name, x => x.IsGranted);
 
             NormalizePermissionGroup();
 
@@ -121,15 +127,14 @@ public partial class PermissionManagementModal
         try
         {
 
-            var updateDto = new UpdatePermissionsDto
-            {
-                Permissions = _allGroups
-                    .SelectMany(g => g.Permissions)
-                    .Select(p => new UpdatePermissionDto { IsGranted = p.IsGranted, Name = p.Name })
-                    .ToArray()
-            };
+            var permissions = _allGroups.SelectMany(g => g.Permissions).ToList();
 
-            if (!updateDto.Permissions.Any(x => x.IsGranted))
+            var changedPermissions = permissions
+                .Where(p => !_loadedPermissionValues.TryGetValue(p.Name, out var loadedValue) || loadedValue != p.IsGranted)
+                .Select(p => new UpdatePermissionDto { IsGranted = p.IsGranted, Name = p.Name })
+                .ToArray();
+
+            if (!permissions.Any(p => p.IsGranted))
             {
                 if (!await Message.Confirm(L["SaveWithoutAnyPermissionsWarningMessage"].Value))
                 {
@@ -137,15 +142,21 @@ public partial class PermissionManagementModal
                 }
             }
 
-            await PermissionAppService.UpdateAsync(_providerName, _providerKey, updateDto);
-
-            Guid? userId = null;
-            if (_providerName == UserPermissionValueProvider.ProviderName && Guid.TryParse(_providerKey, out var parsedUserId))
+            if (changedPermissions.Any())
             {
-                userId = parsedUserId;
-            }
+                await PermissionAppService.UpdateAsync(_providerName, _providerKey, new UpdatePermissionsDto
+                {
+                    Permissions = changedPermissions
+                });
 
-            await CurrentApplicationConfigurationCacheResetService.ResetAsync(userId);
+                Guid? userId = null;
+                if (_providerName == UserPermissionValueProvider.ProviderName && Guid.TryParse(_providerKey, out var parsedUserId))
+                {
+                    userId = parsedUserId;
+                }
+
+                await CurrentApplicationConfigurationCacheResetService.ResetAsync(userId);
+            }
 
             await InvokeAsync(_modal.Hide);
             await Notify.Success(L["SavedSuccessfully"]);

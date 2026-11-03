@@ -35,6 +35,7 @@
     "NewExplanation": "Stvoreno u posljednja dva tjedna.",
     "UpdatedExplanation": "Ažurirano u posljednja dva tjedna.",
     "Volo.Docs.Domain:010002": "Nadimak {ShortName} već postoji.",
+    "Volo.Docs.Domain:010003": "Ups, traženi dokument nije pronađen!",
     "Preview": "Pretpregled",
     "Search": "Pretraga",
     "SearchResults": "Rezultati pretrage",

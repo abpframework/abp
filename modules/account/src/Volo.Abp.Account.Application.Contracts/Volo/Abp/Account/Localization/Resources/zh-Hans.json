@@ -11,6 +11,8 @@
     "UserLockedOutMessage": "由于尝试登录无效，用户账户已被锁定。请稍候再试。",
     "InvalidUserNameOrPassword": "用户名或密码无效！",
     "LoginIsNotAllowed": "您不能登录！您的帐户未激活或需要确认您的电子邮件/电话号码。",
+    "ExternalLoginPasswordChangeRequired": "您不能登录！您的密码必须更改，但无法通过外部登录完成。请联系管理员。",
+    "RegisteredButLoginIsNotAllowed": "您的帐户已创建，但您暂时不能登录！",
     "SelfRegistrationDisabledMessage": "应用程序未开放注册。请联系应用程序管理员注册新用户。",
     "LocalLoginDisabledMessage": "应用程序禁用本地登录。",
     "Login": "登录",

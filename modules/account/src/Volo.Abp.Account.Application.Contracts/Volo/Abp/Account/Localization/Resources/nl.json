@@ -11,6 +11,8 @@
     "UserLockedOutMessage": "Het gebruikersaccount is geblokkeerd vanwege ongeldige inlogpogingen. Wacht even en probeer het opnieuw.",
     "InvalidUserNameOrPassword": "Ongeldige gebruikersnaam of wachtwoord!",
     "LoginIsNotAllowed": "U mag niet inloggen! Uw account is inactief of moet uw e-mailadres/telefoonnummer bevestigen.",
+    "ExternalLoginPasswordChangeRequired": "U mag niet inloggen! Uw wachtwoord moet worden gewijzigd, maar dit is niet mogelijk met een externe login. Neem contact op met uw beheerder.",
+    "RegisteredButLoginIsNotAllowed": "Uw account is aangemaakt, maar u mag nog niet inloggen!",
     "SelfRegistrationDisabledMessage": "Zelfregistratie is uitgeschakeld voor deze applicatie. Neem contact op met de applicatiebeheerder om een nieuwe gebruiker te registreren.",
     "LocalLoginDisabledMessage": "Lokale aanmelding is uitgeschakeld voor deze applicatie.",
     "Login": "Log in",

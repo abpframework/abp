@@ -313,6 +313,44 @@ Configure<AbpBlobStoringOptions>(options =>
 
 > If your application is not multi-tenant, no worry, it works as expected. You don't need to configure the `IsMultiTenant` option.
 
+## Encrypting BLOBs
+
+The BLOB Storing system can **encrypt BLOBs at rest**, transparently, on top of the configured storage provider:
+
+````csharp
+Configure<AbpBlobStoringOptions>(options =>
+{
+    options.Containers.Configure<ProfilePictureContainer>(container =>
+    {
+        container.UseEncryption();
+    });
+});
+
+// A passphrase must be configured; see the encryption document
+Configure<AbpBlobStoringEncryptionOptions>(options =>
+{
+    options.DefaultPassPhrase = context.Configuration["MyApp:BlobPassPhrase"];
+});
+````
+
+The encryption passphrase can be container-specific or **global**, and per-tenant passphrases can be plugged in over the key provider; every BLOB derives its own encryption key from the passphrase. See the [BLOB Encryption document](./encryption.md) for details.
+
+## Transforming BLOB Content
+
+The BLOB content can be passed through a **pipeline of contributors** (compression, watermarking, content validation...) while it is saved and read, without changing the storage provider:
+
+````csharp
+Configure<AbpBlobStoringOptions>(options =>
+{
+    options.Containers.Configure<ProfilePictureContainer>(container =>
+    {
+        container.PipelineContributors.Add<GZipBlobPipelineContributor>();
+    });
+});
+````
+
+See the [BLOB Content Pipeline document](./pipeline.md) for details.
+
 ## Extending the BLOB Storing System
 
 Most of the times, you won't need to customize the BLOB storage system except [creating a custom BLOB storage provider](./custom-provider.md). However, you can replace any service (injected via [dependency injection](../../fundamentals/dependency-injection.md)), if you need. Here, some other services not mentioned above, but you may want to know:
@@ -328,4 +366,6 @@ If you want to create folders and move files between folders, assign permissions
 
 ## See Also
 
+* [BLOB Content Pipeline](./pipeline.md)
+* [BLOB Encryption](./encryption.md)
 * [Creating a custom BLOB storage provider](./custom-provider.md)

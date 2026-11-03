@@ -1,0 +1,10 @@
+{
+  "culture": "pt",
+  "texts": {
+    "Volo.Authorization:010001": "Falha de autorização! A política especificada não foi concedida.",
+    "Volo.Authorization:010002": "Falha de autorização! A política especificada não foi concedida: {PolicyName}",
+    "Volo.Authorization:010003": "Falha de autorização! A política especificada não foi concedida para o recurso indicado: {ResourceName}",
+    "Volo.Authorization:010004": "Falha de autorização! O requisito especificado não foi concedido para o recurso indicado: {ResourceName}",
+    "Volo.Authorization:010005": "Falha de autorização! Os requisitos especificados não foram concedidos para o recurso indicado: {ResourceName}"
+  }
+}

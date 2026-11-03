@@ -11,6 +11,8 @@
     "UserLockedOutMessage": "Notandareikningnum hefur verið lokað vegna ógildra innskráningartilrauna. Bíddu aðeins og reyndu aftur.",
     "InvalidUserNameOrPassword": "Ógilt notendanafn eða lykilorð!",
     "LoginIsNotAllowed": "Þú hefur ekki leyfi til að skrá þig inn! Þú þarft að staðfesta netfangið þitt/símanúmer.",
+    "ExternalLoginPasswordChangeRequired": "Þú hefur ekki leyfi til að skrá þig inn! Breyta þarf lykilorðinu þínu, en það er ekki hægt með ytri innskráningu. Vinsamlegast hafðu samband við kerfisstjóra.",
+    "RegisteredButLoginIsNotAllowed": "Aðgangurinn þinn hefur verið stofnaður, en þú hefur ekki leyfi til að skrá þig inn ennþá!",
     "SelfRegistrationDisabledMessage": "Sjálfsskráning er óvirk fyrir þetta forrit. Vinsamlegast hafðu samband við umsjónarmann hugbúnaðarins til að skrá nýjan notanda.",
     "LocalLoginDisabledMessage": "Staðbundin innskráning er óvirk fyrir þetta forrit.",
     "Login": "Skrá inn",

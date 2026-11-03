@@ -74,7 +74,57 @@ There are three pre-built implementations of `IAbpDynamicClaimsPrincipalContribu
 
 ### IAbpDynamicClaimsPrincipalContributor
 
-If you want to add your own dynamic claims contributor, you can create a class that implement the `IAbpDynamicClaimsPrincipalContributor` interface (and register it to the [dependency injection](./dependency-injection.md) system. ABP will call the `ContributeAsync` method to get the claims. It better to use a kind of cache to improve the performance since that is a frequently executed method (in every HTTP request).
+If you want to add your own dynamic claims contributor, you can create a class that implements the `IAbpDynamicClaimsPrincipalContributor` interface and register it with the [dependency injection](./dependency-injection.md) system. ABP will call the `ContributeAsync` method to get the claims. It's better to use a cache to improve the performance since this method is executed frequently (in every HTTP request).
+
+A custom `IAbpDynamicClaimsPrincipalContributor` only runs in the application that registers it. The claims it adds aren't written to the Identity module's dynamic claims cache, so other applications (such as the UI application of a tiered solution) don't get them. To add a claim that is cached and shared like the built-in ones, see the next section.
+
+### Adding a Custom Dynamic Claim
+
+The Identity module builds its dynamic claims cache from the claims principal it creates for the user, which also runs the `IAbpClaimsPrincipalContributor` implementations, and only keeps the claim types listed in `AbpClaimsPrincipalFactoryOptions.DynamicClaims`. So, implement an `IAbpClaimsPrincipalContributor` and add the claim type to `DynamicClaims`. Example contributor:
+
+````csharp
+public class MyClaimContributor : IAbpClaimsPrincipalContributor, ITransientDependency
+{
+    public Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
+    {
+        var identity = context.ClaimsPrincipal.Identities.FirstOrDefault();
+        var userId = identity?.FindUserId();
+        if (identity == null || userId == null)
+        {
+            return Task.CompletedTask;
+        }
+
+        // Get the value for userId.Value from your own data source
+        identity.AddOrReplace(new Claim("MyClaim", "MyValue"));
+        return Task.CompletedTask;
+    }
+}
+````
+
+Then add the claim type to `DynamicClaims` in the `ConfigureServices` method of your module:
+
+````csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
+    {
+        options.DynamicClaims.Add("MyClaim");
+    });
+}
+````
+
+Place the contributor and the configuration in a module used by every application that fills the Identity module's dynamic claims cache. In the tiered startup template, both the authentication server and the HttpApi.Host use the Identity module through your solution's `.Domain` project, so your domain module is a good place. The UI application of a tiered solution gets the dynamic claims from the shared cache through the `RemoteDynamicClaimsPrincipalContributor`, so it doesn't need the contributor or the configuration.
+
+Cache entries created before you add the claim type don't contain it, so the claim isn't available for a user until the entry [expires](../../modules/identity.md#dynamic-claims-cache) or is removed (for example, when the user logs in again).
+
+When the claim's source data changes, remove the user's cache entry so the next request rebuilds it. Updating the `IdentityUser` entity already does this. For other data sources, inject `IdentityDynamicClaimsPrincipalContributorCache` and call its `ClearAsync` method. The cache key is also prefixed with the current tenant, so change to the user's tenant if you are not already in it:
+
+````csharp
+using (CurrentTenant.Change(tenantId))
+{
+    await _dynamicClaimsCache.ClearAsync(userId, tenantId);
+}
+````
 
 ## AbpClaimsPrincipalFactoryOptions
 

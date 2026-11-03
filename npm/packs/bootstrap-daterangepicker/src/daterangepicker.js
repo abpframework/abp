@@ -405,31 +405,31 @@
         //
 
         this.container.find('.drp-calendar')
-            .on('click.daterangepicker', '.prev', $.proxy(this.clickPrev, this))
-            .on('click.daterangepicker', '.next', $.proxy(this.clickNext, this))
-            .on('mousedown.daterangepicker', 'td.available', $.proxy(this.clickDate, this))
-            .on('mouseenter.daterangepicker', 'td.available', $.proxy(this.hoverDate, this))
-            .on('change.daterangepicker', 'select.yearselect', $.proxy(this.monthOrYearChanged, this))
-            .on('change.daterangepicker', 'select.monthselect', $.proxy(this.monthOrYearChanged, this))
-            .on('change.daterangepicker', 'select.hourselect,select.minuteselect,select.secondselect,select.ampmselect', $.proxy(this.timeChanged, this));
+            .on('click.daterangepicker', '.prev', this.clickPrev.bind(this))
+            .on('click.daterangepicker', '.next', this.clickNext.bind(this))
+            .on('mousedown.daterangepicker', 'td.available', this.clickDate.bind(this))
+            .on('mouseenter.daterangepicker', 'td.available', this.hoverDate.bind(this))
+            .on('change.daterangepicker', 'select.yearselect', this.monthOrYearChanged.bind(this))
+            .on('change.daterangepicker', 'select.monthselect', this.monthOrYearChanged.bind(this))
+            .on('change.daterangepicker', 'select.hourselect,select.minuteselect,select.secondselect,select.ampmselect', this.timeChanged.bind(this));
 
         this.container.find('.ranges')
-            .on('click.daterangepicker', 'li', $.proxy(this.clickRange, this));
+            .on('click.daterangepicker', 'li', this.clickRange.bind(this));
 
         this.container.find('.drp-buttons')
-            .on('click.daterangepicker', 'button.applyBtn', $.proxy(this.clickApply, this))
-            .on('click.daterangepicker', 'button.cancelBtn', $.proxy(this.clickCancel, this));
+            .on('click.daterangepicker', 'button.applyBtn', this.clickApply.bind(this))
+            .on('click.daterangepicker', 'button.cancelBtn', this.clickCancel.bind(this));
 
         if (this.element.is('input') || this.element.is('button')) {
             this.element.on({
-                'click.daterangepicker': $.proxy(this.show, this),
-                'focus.daterangepicker': $.proxy(this.show, this),
-                'keyup.daterangepicker': $.proxy(this.elementChanged, this),
-                'keydown.daterangepicker': $.proxy(this.keydown, this) //IE 11 compatibility
+                'click.daterangepicker': this.show.bind(this),
+                'focus.daterangepicker': this.show.bind(this),
+                'keyup.daterangepicker': this.elementChanged.bind(this),
+                'keydown.daterangepicker': this.keydown.bind(this) //IE 11 compatibility
             });
         } else {
-            this.element.on('click.daterangepicker', $.proxy(this.toggle, this));
-            this.element.on('keydown.daterangepicker', $.proxy(this.toggle, this));
+            this.element.on('click.daterangepicker', this.toggle.bind(this));
+            this.element.on('keydown.daterangepicker', this.toggle.bind(this));
         }
 
         //
@@ -1115,7 +1115,7 @@
             if (this.isShowing) return;
 
             // Create a click proxy that is private to this instance of datepicker, for unbinding
-            this._outsideClickProxy = $.proxy(function(e) { this.outsideClick(e); }, this);
+            this._outsideClickProxy = (function(e) { this.outsideClick(e); }).bind(this);
 
             // Bind global datepicker mousedown for hiding and
             $(document)
@@ -1128,7 +1128,7 @@
               .on('focusin.daterangepicker', this._outsideClickProxy);
 
             // Reposition the picker if the window is resized while it's open
-            $(window).on('resize.daterangepicker', $.proxy(function(e) { this.move(e); }, this));
+            $(window).on('resize.daterangepicker', (function(e) { this.move(e); }).bind(this));
 
             this.oldStartDate = this.startDate.clone();
             this.oldEndDate = this.endDate.clone();

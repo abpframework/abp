@@ -24,6 +24,7 @@ public class ProjectNpmPackageAdder : ITransientDependency
     public IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
     public IInstallLibsService InstallLibsService { get; }
     public ICmdHelper CmdHelper { get; }
+    public NpmHelper NpmHelper { get; }
     public CliHttpClientFactory CliHttpClientFactory { get; }
     public INpmPackageInfoProvider NpmPackageInfoProvider { get; }
 
@@ -37,7 +38,8 @@ public class ProjectNpmPackageAdder : ITransientDependency
         IInstallLibsService installLibsService,
         ICmdHelper cmdHelper,
         CliHttpClientFactory cliHttpClientFactory,
-        INpmPackageInfoProvider npmPackageInfoProvider)
+        INpmPackageInfoProvider npmPackageInfoProvider,
+        NpmHelper npmHelper)
     {
         JsonSerializer = jsonSerializer;
         SourceCodeDownloadService = sourceCodeDownloadService;
@@ -47,6 +49,7 @@ public class ProjectNpmPackageAdder : ITransientDependency
         CmdHelper = cmdHelper;
         CliHttpClientFactory = cliHttpClientFactory;
         NpmPackageInfoProvider = npmPackageInfoProvider;
+        NpmHelper = npmHelper;
 
         Logger = NullLogger<ProjectNpmPackageAdder>.Instance;
     }
@@ -84,7 +87,7 @@ public class ProjectNpmPackageAdder : ITransientDependency
             using (DirectoryHelper.ChangeCurrentDirectory(directory))
             {
                 Logger.LogInformation("yarn add " + npmPackage.Name + versionPostfix);
-                CmdHelper.RunCmd("npx yarn add " + npmPackage.Name + versionPostfix + " --ignore-scripts");
+                CmdHelper.RunCmd(NpmHelper.GetYarnCommand(directory, "add " + npmPackage.Name + versionPostfix));
             }
         }
         else
@@ -156,7 +159,7 @@ public class ProjectNpmPackageAdder : ITransientDependency
         using (DirectoryHelper.ChangeCurrentDirectory(directory))
         {
             Logger.LogInformation("yarn add " + npmPackage.Name + versionPostfix);
-            CmdHelper.RunCmd("npx yarn add " + npmPackage.Name + versionPostfix + " --ignore-scripts");
+            CmdHelper.RunCmd(NpmHelper.GetYarnCommand(directory, "add " + npmPackage.Name + versionPostfix));
 
             if (skipInstallingLibs)
             {
@@ -171,6 +174,8 @@ public class ProjectNpmPackageAdder : ITransientDependency
     public async Task RemoveMvcPackageAsync(string directory, NpmPackageInfo npmPackage,
         bool skipInstallingLibs = false)
     {
+        NpmHelper.EnsureSafePackageName(npmPackage.Name);
+
         var packageJsonFilePath = Path.Combine(directory, "package.json");
         if (!File.Exists(packageJsonFilePath) ||
             !File.ReadAllText(packageJsonFilePath).Contains($"\"{npmPackage.Name}\""))
@@ -184,7 +189,7 @@ public class ProjectNpmPackageAdder : ITransientDependency
         using (DirectoryHelper.ChangeCurrentDirectory(directory))
         {
             Logger.LogInformation("yarn remove " + npmPackage.Name);
-            CmdHelper.RunCmd("npx yarn remove " + npmPackage.Name);
+            CmdHelper.RunCmd(NpmHelper.GetYarnCommand(directory, "remove " + npmPackage.Name));
 
             if (skipInstallingLibs)
             {

@@ -71,7 +71,8 @@ public class UnitOfWorkManager : IUnitOfWorkManager, ISingletonDependency
         var uow = _ambientUnitOfWork.UnitOfWork;
 
         //Find reserved unit of work starting from current and going to outers
-        while (uow != null && !uow.IsReservedFor(reservationName))
+        //A reservation that has ended can still be the ambient one for the code that outlives it
+        while (uow != null && (!uow.IsReservedFor(reservationName) || uow.IsCompleted || uow.IsDisposed))
         {
             uow = uow.Outer;
         }

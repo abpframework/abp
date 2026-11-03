@@ -30,24 +30,34 @@ public class NpmHelper : ITransientDependency
 
     public bool IsYarnAvailable()
     {
-        var output = CmdHelper.RunCmdAndGetOutput("yarn -v").Trim();
-        var outputLines = output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-        SemanticVersion version = null;
-
-        foreach (var outputLine in outputLines)
-        {
-            if (SemanticVersion.TryParse(outputLine, out version))
-            {
-                break;
-            }
-        }
-
+        var version = FindVersionOrNull(CmdHelper.RunCmdAndGetOutput("yarn -v"));
         if (version == null)
         {
             return false;
         }
         
         return version > SemanticVersion.Parse("1.20.0");
+    }
+
+    public string GetYarnCommand(string directory, string arguments = null)
+    {
+        // Prefer the yarn on PATH, so Corepack and the project's "packageManager" field decide the version.
+        // npx doesn't search PATH and can't see the Corepack shims on Windows, it runs Yarn 1 even in a Yarn 2+ project.
+        var yarn = "yarn";
+        var version = FindVersionOrNull(CmdHelper.RunCmdAndGetOutput("yarn -v", directory));
+        if (version == null)
+        {
+            yarn = "npx yarn";
+            // "--no" keeps npx from waiting on an install prompt the user can't see.
+            // If npx downloads it later, it gets the yarn package, which is Yarn 1.
+            version = FindVersionOrNull(CmdHelper.RunCmdAndGetOutput("npx --no -- yarn -v", directory));
+        }
+
+        // Yarn 2+ rejects --ignore-scripts, --mode=skip-build skips the install scripts there.
+        var ignoreScriptsOption = version != null && version.Major >= 2 ? "--mode=skip-build" : "--ignore-scripts";
+        return string.IsNullOrWhiteSpace(arguments)
+            ? $"{yarn} {ignoreScriptsOption}"
+            : $"{yarn} {arguments} {ignoreScriptsOption}";
     }
 
     [Obsolete("This method is deprecated. Use 'RunYarn' instead (it uses 'npx', so there is no need for 'yarn' to be globally installed.")]
@@ -60,7 +70,7 @@ public class NpmHelper : ITransientDependency
     public void RunYarn(string directory)
     {
         Logger.LogInformation($"Running Yarn on {directory}");
-        CmdHelper.RunCmd($"npx yarn --ignore-scripts", directory);
+        CmdHelper.RunCmd(GetYarnCommand(directory), directory);
     }
 
     [Obsolete("This method is deprecated. Use 'YarnAddPackage' instead (it uses 'npx', so there is no need for 'yarn' to be globally installed.")]
@@ -77,7 +87,7 @@ public class NpmHelper : ITransientDependency
         EnsureSafePackageName(package);
         EnsureSafeVersion(version);
         var packageVersion = !string.IsNullOrWhiteSpace(version) ? $"@{version}" : string.Empty;
-        CmdHelper.RunCmd("npx yarn add " + package + packageVersion + " --ignore-scripts", workingDirectory: directory);
+        CmdHelper.RunCmd(GetYarnCommand(directory, "add " + package + packageVersion), workingDirectory: directory);
     }
 
     private static readonly Regex SafePackageNameRegex = new(
@@ -112,6 +122,20 @@ public class NpmHelper : ITransientDependency
         }
 
         return Regex.Replace(value, @"[\x00-\x1F\x7F]", "?");
+    }
+
+    private static SemanticVersion FindVersionOrNull(string output)
+    {
+        var outputLines = output.Trim().Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+        foreach (var outputLine in outputLines)
+        {
+            if (SemanticVersion.TryParse(outputLine.Trim(), out var version))
+            {
+                return version;
+            }
+        }
+
+        return null;
     }
 
     public string GetInstalledNpmPackages()

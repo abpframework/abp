@@ -7,8 +7,6 @@
 
 # Attributes & Fluent API
 
-> **Preview:** Attributes and Fluent API configuration for the Low-Code System are preview APIs. Prefer the designer for day-to-day modeling work, and review release notes before relying on these APIs in long-lived integrations.
-
 Use the [Low-Code Designer](designer.md) for runtime pages, forms, filters, dashboards, menus, and page groups. The code-first surface documented here is for source-controlled model metadata: entity definitions, property metadata, enums, validation, attachments, relationships, and runtime overrides.
 
 ## What This Surface Configures

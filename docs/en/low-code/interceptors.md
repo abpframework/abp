@@ -7,8 +7,6 @@
 
 # Interceptors
 
-> **Preview:** Interceptors and their JavaScript context are preview extension points. Script context members, validation behavior, and lifecycle hooks may change before general availability.
-
 Use designer actions and descriptor metadata for standard low-code behavior first. Interceptors are an advanced extension point for adding JavaScript lifecycle logic when the generated CRUD flow needs validation, transformation, or replacement behavior.
 
 Interceptors allow you to run custom JavaScript code before, after, or instead of Create, Update, and Delete operations on dynamic entities.

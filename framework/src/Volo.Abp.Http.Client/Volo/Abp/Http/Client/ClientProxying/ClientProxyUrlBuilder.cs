@@ -93,7 +93,7 @@ public class ClientProxyUrlBuilder : ITransientDependency
                 }
                 else if (pathParameter.DefaultValue != null)
                 {
-                    urlBuilder = urlBuilder.Replace($"{{{pathParameter.Name}}}", await ConvertValueToStringAsync(pathParameter.DefaultValue));
+                    urlBuilder = urlBuilder.Replace($"{{{pathParameter.Name}}}", EncodePathValue(pathParameter, await ConvertValueToStringAsync(pathParameter.DefaultValue)));
                 }
                 else
                 {
@@ -118,14 +118,41 @@ public class ClientProxyUrlBuilder : ITransientDependency
 
                         if (path != null)
                         {
+                            ValidatePathValue(pathParameter, path);
                             urlBuilder = urlBuilder.Replace($"{{{pathParameter.Name}}}", path);
                         }
                         continue;
                     }
                 }
 
-                urlBuilder = urlBuilder.Replace($"{{{pathParameter.Name}}}", await ConvertValueToStringAsync(value));
+                urlBuilder = urlBuilder.Replace($"{{{pathParameter.Name}}}", EncodePathValue(pathParameter, await ConvertValueToStringAsync(value)));
             }
+        }
+    }
+
+    protected virtual string EncodePathValue(ParameterApiDescriptionModel pathParameter, string value)
+    {
+        // Keep "/" unencoded so catch-all route parameters still receive multiple segments.
+        var path = string.Join("/", value.Split('/').Select(Uri.EscapeDataString));
+        ValidatePathValue(pathParameter, path);
+        return path;
+    }
+
+    protected virtual void ValidatePathValue(ParameterApiDescriptionModel pathParameter, string value)
+    {
+        // HTTP URIs ignore trailing whitespace and treat "\" as a path separator.
+        var path = value.TrimEnd(' ', '\t', '\r', '\n');
+        var pathEnd = path.IndexOfAny(new[] { '?', '#' });
+        if (pathEnd >= 0)
+        {
+            path = path.Substring(0, pathEnd);
+        }
+
+        // Dot segments are removed by URI normalization even when percent-encoded, so the request would go to another endpoint.
+        // Encoded separators are decoded too, because a server or proxy may treat them as separators.
+        if (Uri.UnescapeDataString(path).Split('/', '\\').Any(segment => segment is "." or ".."))
+        {
+            throw new AbpException($"Path parameter value for {pathParameter.Name} ({pathParameter.NameOnMethod}) cannot contain \".\" or \"..\" segments.");
         }
     }
 

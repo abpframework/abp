@@ -11,12 +11,12 @@ ABP Suite uses templates to generate the code files. You can see the template fi
 
 ![Suite template list](../images/suite-templates-8.1.png)
 
-The are 2 template filters:
+There are 2 template filters:
 
-1. **UI**:  You can switch between `Angular`, `MVC` and `Blazor` templates.
+1. **UI**:  You can switch between `Angular`, `MVC`, `Blazor` and `React` templates.
 2. **Database provider:** You can switch between `EF Core` and `MongoDb` templates.
 
-> **Note:** ABP Suite does not include React UI templates or generate React client-side code. React UI belongs to the modern template system and should be developed in the source-owned [React UI](../framework/ui/react/index.md) application. ABP license holders can use [ABP Studio AI Agent](https://abp.io/studio/ai-agent) with predefined AI credits to generate React pages more easily.
+> **Note:** For modern React UI solutions, the React templates are listed here as well. Customizing one makes ABP Suite generate the React pages from your version instead of the built-in template, the same way as for the Angular, MVC and Blazor UI stacks.
 
 These filters are automatically selected based on your ABP solution. The selected solution is shown on the top right of the page. In the current screenshot it is "Acme.BookStore". 
 
@@ -33,6 +33,7 @@ There's a naming convention for the template files.
 * If the template name has `Frontend.Mvc`  prefix, it's used for razor pages, menus, JavaScript, CSS files.
 * If the template name has `Frontend.Blazor` prefix (no `.MudBlazor` segment), it's used for Blazorise-based razor components.
 * If the template name has `Frontend.Blazor.MudBlazor` prefix, it's used for [MudBlazor](https://mudblazor.com)-based razor components.
+* If the template name has `Frontend.React` prefix, it's used for the modern React UI code generation.
 
 > The template list only shows the variant that matches your solution's [Blazor UI library](index.md#blazor-ui-library) (Blazorise or MudBlazor), so you never see both trees side-by-side and the "outdated" check only flags the active set.
 

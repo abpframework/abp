@@ -39,6 +39,12 @@ public class WebRemoteDynamicClaimsPrincipalContributorCache : RemoteDynamicClai
         return await Cache.GetAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId));
     }
 
+    public async override Task<bool> IsSessionRevokedAsync(string sessionId)
+    {
+        // A failed read must not count as a valid session, so the error isn't hidden.
+        return await Cache.GetAsync(AbpDynamicClaimCacheItem.CalculateRevokedSessionCacheKey(sessionId), hideErrors: false) != null;
+    }
+
     protected async override Task RefreshAsync(Guid userId, Guid? tenantId = null)
     {
         try

@@ -61,19 +61,21 @@ namespace Volo.Docs.Documents
         {
             return await (await GetDbSetAsync())
                 .Where(d => d.ProjectId == projectId)
-                .OrderBy(x => x.LastCachedTime)
                 .GroupBy(x => new { x.Name, x.LanguageCode, x.Version })
-                .Select(group => group.First())
+                .OrderBy(group => group.Key.Name)
+                .ThenBy(group => group.Key.LanguageCode)
+                .ThenBy(group => group.Key.Version)
+                .Select(group => group.OrderBy(x => x.LastCachedTime).ThenBy(x => x.Id).First())
                 .Skip(skipCount)
                 .Take(maxResultCount)
-                .ToListAsync(cancellationToken);
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<long> GetUniqueDocumentCountByProjectIdAsync(Guid projectId, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
                 .Where(d => d.ProjectId == projectId)
-                .GroupBy(x => new {x.FileName, x.Version, x.LanguageCode})
+                .GroupBy(x => new { x.Name, x.LanguageCode, x.Version })
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }
 

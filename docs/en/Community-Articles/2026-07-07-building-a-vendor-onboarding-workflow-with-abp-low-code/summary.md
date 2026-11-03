@@ -1,0 +1,1 @@
+Build a vendor onboarding workflow with ABP Low-Code: model vendor applications in the Designer, let the React runtime render the grid and form, then add a custom endpoint and a typed ABP code bridge for process-level counts.

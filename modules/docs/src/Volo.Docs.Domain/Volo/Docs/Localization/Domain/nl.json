@@ -35,6 +35,7 @@
     "NewExplanation": "Gemaakt in de afgelopen twee weken.",
     "UpdatedExplanation": "Bewerkt in de afgelopen twee weken.",
     "Volo.Docs.Domain:010002": "KorteNaam {ShortName} bestaat al.",
+    "Volo.Docs.Domain:010003": "Oeps, het opgevraagde document is niet gevonden!",
     "Preview": "voorbeeld",
     "Search": "Zoeken",
     "SearchResults": "Zoekresultaten",

@@ -69,7 +69,9 @@ protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntit
                     var isActive = args[0];
                     var boolParam = args[1];
 
-                    if (abpEfCoreCurrentDbContext.Context?.DataFilter.IsEnabled<IIsActive>() == true)
+                    // Context is null when the query is compiled by EF.CompileQuery or EF.CompileAsyncQuery.
+                    var dbContext = abpEfCoreCurrentDbContext.Context ?? throw new InvalidOperationException("The IIsActive filter cannot be applied to EF.CompileQuery or EF.CompileAsyncQuery.");
+                    if (dbContext.DataFilter.IsEnabled<IIsActive>())
                     {
                         // isActive == true
                         return new SqlBinaryExpression(

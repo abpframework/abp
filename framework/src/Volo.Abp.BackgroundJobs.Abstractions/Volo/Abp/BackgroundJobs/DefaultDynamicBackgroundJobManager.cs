@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.BackgroundJobs;
 
@@ -20,18 +21,21 @@ public class DefaultDynamicBackgroundJobManager : IDynamicBackgroundJobManager, 
     protected IDynamicBackgroundJobHandlerRegistry HandlerRegistry { get; }
     protected AbpBackgroundJobOptions BackgroundJobOptions { get; }
     protected IJsonSerializer JsonSerializer { get; }
+    protected ICurrentTenant CurrentTenant { get; }
     public ILogger<DefaultDynamicBackgroundJobManager> Logger { get; set; }
 
     public DefaultDynamicBackgroundJobManager(
         IBackgroundJobManager backgroundJobManager,
         IDynamicBackgroundJobHandlerRegistry handlerRegistry,
         IOptions<AbpBackgroundJobOptions> backgroundJobOptions,
-        IJsonSerializer jsonSerializer)
+        IJsonSerializer jsonSerializer,
+        ICurrentTenant currentTenant)
     {
         BackgroundJobManager = backgroundJobManager;
         HandlerRegistry = handlerRegistry;
         BackgroundJobOptions = backgroundJobOptions.Value;
         JsonSerializer = jsonSerializer;
+        CurrentTenant = currentTenant;
         Logger = NullLogger<DefaultDynamicBackgroundJobManager>.Instance;
     }
 
@@ -99,7 +103,7 @@ public class DefaultDynamicBackgroundJobManager : IDynamicBackgroundJobManager, 
         TimeSpan? delay)
     {
         var jsonData = JsonSerializer.Serialize(args);
-        var dynamicArgs = new DynamicBackgroundJobArgs(jobName, jsonData);
+        var dynamicArgs = new DynamicBackgroundJobArgs(jobName, jsonData, CurrentTenant.Id);
         return BackgroundJobManager.EnqueueAsync(dynamicArgs, priority, delay);
     }
 

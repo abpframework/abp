@@ -7,11 +7,11 @@
 
 # MCP Integration
 
-> **Preview:** The low-code MCP surface is part of the preview Low-Code System. Endpoint behavior, authorization requirements, and mutation metadata may change before general availability.
-
 The Low-Code Designer exposes a **remote Model Context Protocol (MCP) server** from the running ABP HTTP API host. It is not a local `stdio` tool package. MCP clients connect to your application over HTTP, authenticate with an OpenIddict access token, and work against the same **runtime database-backed** model that the Designer edits in the **Runtime JSON** layer.
 
 Use [Model Descriptor Files](model-json.md) when you need source-controlled `_Dynamic/model/**/*.json` files. Use MCP when an agent or automation needs authenticated, structured runtime access that the Designer can immediately show.
+
+MCP uses the same Low-Code feature model as the Designer. Use [Data Modeling and Page Behavior](data-modeling.md), [Data Import](data-import.md), [Calculated and Rollup Properties](formula-properties.md), and [Model History and Recovery](model-history.md) for feature semantics; this page only covers MCP connection and safe automation concerns.
 
 ## Remote Endpoint
 

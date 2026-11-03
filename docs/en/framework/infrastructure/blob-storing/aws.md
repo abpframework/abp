@@ -67,7 +67,7 @@ Configure<AbpBlobStoringOptions>(options =>
 * **ProfilesLocation** (string): The path to the aws credentials file to look at.
 * **Region** (string): The system name of the AWS region (e.g., `us-east-1`). **Required** for real AWS S3. Optional when `ServiceURL` is configured for an S3-compatible service; some services accept any value (or `auto` for Cloudflare R2).
 * **ServiceURL** (string): Custom service URL for S3-compatible APIs (e.g., MinIO, DigitalOcean Spaces, Cloudflare R2). If not specified, the default AWS S3 service URL will be used based on the region. When using S3-compatible services, this should point to your service endpoint (e.g., `https://minio.example.com:9000`). The AWS SDK automatically appends a trailing slash to the configured value.
-* **DisablePayloadSigning** (bool): Default `false`. When set to `true`, the provider sends `x-amz-content-sha256: UNSIGNED-PAYLOAD` on `PutObject` requests instead of the streaming chunked signature (`STREAMING-AWS4-HMAC-SHA256-PAYLOAD`) that the AWS SDK v4 uses by default. Required for Cloudflare R2 and other S3-compatible services that do not implement streaming signing. The endpoint must be HTTPS when this option is enabled. Leave as `false` for real AWS S3.
+* **DisablePayloadSigning** (bool): Default `false`. When set to `true`, the provider sends `x-amz-content-sha256: UNSIGNED-PAYLOAD` on `PutObject` and multipart `UploadPart` requests instead of the streaming chunked signature (`STREAMING-AWS4-HMAC-SHA256-PAYLOAD`) that the AWS SDK v4 uses by default. Required for Cloudflare R2 and other S3-compatible services that do not implement streaming signing. The endpoint must be HTTPS when this option is enabled. Leave as `false` for real AWS S3.
 * **Policy** (string): An IAM policy in JSON format that you want to use as an inline session policy.
 * **DurationSeconds** (int): Validity period(s) of a temporary access certificate,minimum is 900 and the maximum is 3600. **note**: Using sub-accounts operated OSS,if the value is 0.
 * **ContainerName** (string): You can specify the container name in Aws. If this is not specified, it uses the name of the BLOB container defined with the `BlobContainerName` attribute (see the [BLOB storing document](../blob-storing)). Please note that Aws has some **rules for naming containers**. A container name must be a valid DNS name, conforming to the [following naming rules](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html):
@@ -147,7 +147,21 @@ Configure<AbpBlobStoringOptions>(options =>
 
 > **Note**: When using S3-compatible services, the provider automatically enables path-style requests which are required by most S3-compatible implementations.
 
-> **Note on `DisablePayloadSigning`**: AWS SDK v4 sends `PutObject` requests with `x-amz-content-sha256: STREAMING-AWS4-HMAC-SHA256-PAYLOAD`. Cloudflare R2 (and some other S3-compatible services) return `501 NotImplemented` for this signing mode. Setting `DisablePayloadSigning = true` switches to `UNSIGNED-PAYLOAD`, which these services accept. The endpoint must be HTTPS. Leave it `false` for real AWS S3.
+> **Note on `DisablePayloadSigning`**: AWS SDK v4 sends `PutObject` and multipart `UploadPart` requests with `x-amz-content-sha256: STREAMING-AWS4-HMAC-SHA256-PAYLOAD`. Cloudflare R2 (and some other S3-compatible services) return `501 NotImplemented` for this signing mode. Setting `DisablePayloadSigning = true` switches to `UNSIGNED-PAYLOAD` (for the multipart parts too), which these services accept. The endpoint must be HTTPS. Leave it `false` for real AWS S3.
+
+## Non-Seekable Uploads
+
+The AWS SDK can not rewind a non-seekable stream to retry a failed upload. For the containers using the [encryption](./encryption.md) or the [content pipeline](./pipeline.md) (which produce non-seekable streams), the provider compensates for that; containers without these features keep the plain `PutObject` upload they always had, also for non-seekable streams:
+
+* A source with a known length of up to 16 MB is buffered in memory and uploaded as a regular, retryable `PutObject` request.
+* A larger (or unknown-length) source is uploaded as a **multipart upload** (`TransferUtility`), which buffers and retries the upload part by part with constant memory usage.
+
+Notes on the multipart path:
+
+* The `ETag` of a multipart object is not the MD5 of the content.
+* The SDK aborts a failed multipart upload, but an abort can also fail (network cut, process exit); when it does, the abort error is what surfaces (the original upload error is replaced). Configure an [AbortIncompleteMultipartUpload lifecycle rule](https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpu-abort-incomplete-mpu-lifecycle-config.html) on the bucket, so incomplete parts do not accumulate storage costs.
+* A non-seekable multipart upload uses 5 MB parts, which limits a single BLOB to about 48.8 GB (the 10,000 parts limit of S3).
+* Some S3-compatible services do not implement multipart uploads completely; validate your service before enabling encryption or pipeline contributors on large BLOBs. (With a custom `ServiceURL`, the client requests checksums only when required, so no default CRC part checksums are sent.)
 
 ## Aws Blob Name Calculator
 

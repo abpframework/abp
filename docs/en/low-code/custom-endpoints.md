@@ -7,8 +7,6 @@
 
 # Custom Endpoints
 
-> **Preview:** Custom endpoint descriptors and scripting helpers are part of the preview Low-Code System. Names, validation rules, and runtime behavior may change before general availability.
-
 Use generated page CRUD APIs for normal dynamic entity pages. Custom endpoints are an advanced option for exposing small model-owned REST APIs that do not map to standard list, get, create, update, delete, export, file, or attachment operations.
 
 Custom endpoints are defined in JSON descriptor files or through the Low-Code Designer. Each endpoint executes server-side JavaScript and is registered as an ASP.NET Core route.
@@ -41,9 +39,16 @@ Custom endpoints are defined in JSON descriptor files or through the Low-Code De
 | `javascript` | string | Required | JavaScript handler code |
 | `description` | string | null | Optional designer/documentation text |
 | `requireAuthentication` | bool | `true` | Whether the caller must be authenticated |
+| `useResourceAuthorization` | bool | `false` | Whether execution is granted per endpoint name through ABP resource permissions |
 | `requiredPermissions` | string[] | null | Permission names required to call the endpoint |
 
-Permission checks require an authorized user even when `requireAuthentication` is set to `false`. Keep endpoints authenticated by default and use `requireAuthentication: false` only for intentionally public APIs without `requiredPermissions`.
+Authorization is resolved in this order:
+
+1. When `requiredPermissions` contains values, every named permission is required.
+2. Otherwise, `useResourceAuthorization: true` requires the endpoint execute resource permission scoped to the endpoint name, with the global Low-Code endpoint permission as fallback.
+3. Otherwise, `requireAuthentication` selects authenticated or public access.
+
+Permission checks require an authorized user even when `requireAuthentication` is set to `false`. Keep endpoints authenticated by default and use `requireAuthentication: false` only for intentionally public APIs without named or resource authorization.
 
 ## Route and Request Data
 
@@ -223,7 +228,7 @@ Default blocked headers also include hop-by-hop headers such as `Connection`, `T
 ## Security Notes
 
 * Prefer authenticated endpoints with explicit `requiredPermissions`.
-* Treat endpoints with `requireAuthentication: false` and no `requiredPermissions` as public API surface.
+* Treat endpoints with `requireAuthentication: false`, no `requiredPermissions`, and `useResourceAuthorization: false` as public API surface.
 * Keep endpoint scripts small and focused.
 * Validate route, query, and body input before using it.
 * Use `take()` for list queries.

@@ -35,6 +35,7 @@
     "NewExplanation": "Son iki hafta içinde oluşturuldu.",
     "UpdatedExplanation": "Son iki hafta içinde güncellendi.",
     "Volo.Docs.Domain:010002": "ShortName {ShortName} zaten var.",
+    "Volo.Docs.Domain:010003": "Aradığınız döküman bulunamadı!",
     "Preview": "ön izleme",
     "Search": "Arama",
     "SearchResults": "Arama Sonuçları",

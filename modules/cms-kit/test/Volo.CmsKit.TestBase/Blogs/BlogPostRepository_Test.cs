@@ -161,7 +161,55 @@ public abstract class BlogPostRepository_Test<TStartupModule> : CmsKitTestBase<T
         authors.ShouldNotBeEmpty();
         authors.ShouldContain(x => x.Id == testData.User1Id);
     }
-    
+
+    [Fact]
+    public async Task GetAuthorsHasBlogPosts_Should_Filter_And_Sort_Before_Paging()
+    {
+        var user2 = await userRepository.GetAsync(testData.User2Id);
+        var blog = await blogRepository.GetAsync(testData.Blog_Id);
+
+        await blogPostRepository.InsertAsync(await blogPostManager.CreateAsync(
+            user2,
+            blog,
+            testData.BlogPost_1_Title + "user2",
+            testData.BlogPost_1_Slug + "user2",
+            BlogPostStatus.Published,
+            "Short desc 1",
+            "Blog Post 1 Content"
+        ), autoSave: true);
+
+        var filteredAuthors = await blogPostRepository.GetAuthorsHasBlogPostsAsync(0, 1, null, "user2");
+        filteredAuthors.Select(x => x.Id).ShouldBe(new[] { testData.User2Id });
+
+        var firstPage = await blogPostRepository.GetAuthorsHasBlogPostsAsync(0, 1, null, null);
+        firstPage.Select(x => x.Id).ShouldBe(new[] { testData.User1Id });
+
+        var secondPage = await blogPostRepository.GetAuthorsHasBlogPostsAsync(1, 1, null, null);
+        secondPage.Select(x => x.Id).ShouldBe(new[] { testData.User2Id });
+    }
+
+    [Fact]
+    public async Task GetAuthorsHasBlogPosts_Should_Ignore_Authors_Without_Published_Posts()
+    {
+        var user2 = await userRepository.GetAsync(testData.User2Id);
+        var blog = await blogRepository.GetAsync(testData.Blog_Id);
+
+        await blogPostRepository.InsertAsync(await blogPostManager.CreateAsync(
+            user2,
+            blog,
+            testData.BlogPost_1_Title + "draft",
+            testData.BlogPost_1_Slug + "draft",
+            BlogPostStatus.Draft,
+            "Short desc 1",
+            "Blog Post 1 Content"
+        ), autoSave: true);
+
+        var authors = await blogPostRepository.GetAuthorsHasBlogPostsAsync(0, 100, null, null);
+        authors.Select(x => x.Id).ShouldBe(new[] { testData.User1Id });
+        (await blogPostRepository.GetAuthorsHasBlogPostsCountAsync(null)).ShouldBe(1);
+        await Should.ThrowAsync<EntityNotFoundException>(async () => await blogPostRepository.GetAuthorHasBlogPostAsync(testData.User2Id));
+    }
+
     [Fact]
     public async Task ShouldCreateItem_WithDraftStatus()
     {

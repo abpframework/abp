@@ -60,11 +60,15 @@ namespace Volo.Docs.Documents
             return await (await GetQueryableAsync(cancellationToken))
                 .Where(d => d.ProjectId == projectId)
                 .OrderBy(x => x.LastCachedTime)
+                .ThenBy(x => x.Id)
                 .GroupBy(x => new { x.Name, x.LanguageCode, x.Version })
+                .OrderBy(group => group.Key.Name)
+                .ThenBy(group => group.Key.LanguageCode)
+                .ThenBy(group => group.Key.Version)
                 .Select(group => group.First())
                 .Skip(skipCount)
                 .Take(maxResultCount)
-                .ToListAsync(cancellationToken);
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<long> GetUniqueDocumentCountByProjectIdAsync(Guid projectId, CancellationToken cancellationToken = default)

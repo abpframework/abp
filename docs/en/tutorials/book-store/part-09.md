@@ -873,7 +873,7 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the {{ if UI == "B
                   ShowPager="true"
                   PageSize="PageSize">
             <DataGridColumns>
-                <DataGridColumn Width="150px"
+                <DataGridColumn Width="Width.Px(150)"
                                 TItem="AuthorDto"
                                 Field="@nameof(AuthorDto.Id)"
                                 Sortable="false"
@@ -886,13 +886,13 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the {{ if UI == "B
                             <DropdownMenu>
                                 @if (CanEditAuthor)
                                 {
-                                    <DropdownItem Clicked="() => OpenEditAuthorModal(context)">
+                                    <DropdownItem Clicked="() => OpenEditAuthorModal(context.Item)">
                                         @L["Edit"]
                                     </DropdownItem>
                                 }
                                 @if (CanDeleteAuthor)
                                 {
-                                    <DropdownItem Clicked="() => DeleteAuthorAsync(context)">
+                                    <DropdownItem Clicked="() => DeleteAuthorAsync(context.Item)">
                                         @L["Delete"]
                                     </DropdownItem>
                                 }
@@ -907,7 +907,7 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the {{ if UI == "B
                                 Field="@nameof(AuthorDto.BirthDate)"
                                 Caption="@L["BirthDate"]">
                     <DisplayTemplate>
-                        @context.BirthDate.ToShortDateString()
+                        @context.Item.BirthDate.ToShortDateString()
                     </DisplayTemplate>
                 </DataGridColumn>
             </DataGridColumns>
@@ -915,9 +915,8 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the {{ if UI == "B
     </CardBody>
 </Card>
 
-<Modal @ref="CreateAuthorModal">
-    <ModalBackdrop />
-    <ModalContent IsCentered="true">
+<Modal @ref="CreateAuthorModal" Centered="true">
+    <ModalContent>
         <Form>
             <ModalHeader>
                 <ModalTitle>@L["NewAuthor"]</ModalTitle>
@@ -928,25 +927,25 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the {{ if UI == "B
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
                             <FieldLabel>@L["Name"]</FieldLabel>
-                            <TextEdit @bind-Text="@NewAuthor.Name">
+                            <TextInput @bind-Value="@NewAuthor.Name">
                                 <Feedback>
                                     <ValidationError/>
                                 </Feedback>
-                            </TextEdit>
+                            </TextInput>
                         </Field>
                     </Validation>
                     <Field>
                         <FieldLabel>@L["BirthDate"]</FieldLabel>
-                        <DateEdit TValue="DateTime" @bind-Date="@NewAuthor.BirthDate"/>
+                        <DateInput TValue="DateTime" @bind-Value="@NewAuthor.BirthDate"/>
                     </Field>
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
                             <FieldLabel>@L["ShortBio"]</FieldLabel>
-                            <MemoEdit Rows="5" @bind-Text="@NewAuthor.ShortBio">
+                            <MemoInput Rows="5" @bind-Value="@NewAuthor.ShortBio">
                                 <Feedback>
                                     <ValidationError/>
                                 </Feedback>
-                            </MemoEdit>
+                            </MemoInput>
                         </Field>
                     </Validation>
                 </Validations>
@@ -967,9 +966,8 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the {{ if UI == "B
     </ModalContent>
 </Modal>
 
-<Modal @ref="EditAuthorModal">
-    <ModalBackdrop />
-    <ModalContent IsCentered="true">
+<Modal @ref="EditAuthorModal" Centered="true">
+    <ModalContent>
         <Form>
             <ModalHeader>
                         <ModalTitle>@EditingAuthor.Name</ModalTitle>
@@ -980,25 +978,25 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the {{ if UI == "B
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
                             <FieldLabel>@L["Name"]</FieldLabel>
-                            <TextEdit @bind-Text="@EditingAuthor.Name">
+                            <TextInput @bind-Value="@EditingAuthor.Name">
                                 <Feedback>
                                     <ValidationError/>
                                 </Feedback>
-                            </TextEdit>
+                            </TextInput>
                         </Field>
                     </Validation>
                     <Field>
                         <FieldLabel>@L["BirthDate"]</FieldLabel>
-                        <DateEdit TValue="DateTime" @bind-Date="@EditingAuthor.BirthDate"/>
+                        <DateInput TValue="DateTime" @bind-Value="@EditingAuthor.BirthDate"/>
                     </Field>
                     <Validation>
                         <Field>
                             <FieldLabel>@L["ShortBio"]</FieldLabel>
-                            <MemoEdit Rows="5" @bind-Text="@EditingAuthor.ShortBio">
+                            <MemoInput Rows="5" @bind-Value="@EditingAuthor.ShortBio">
                                 <Feedback>
                                     <ValidationError/>
                                 </Feedback>
-                            </MemoEdit>
+                            </MemoInput>
                         </Field>
                     </Validation>
                 </Validations>
@@ -1048,7 +1046,8 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the {{ if UI == "B
         </CardHeaderActions>
     </MudCardHeader>
     <MudCardContent>
-        <MudDataGrid T="AuthorDto"
+        <MudDataGrid @ref="AuthorsGrid"
+                     T="AuthorDto"
                      ServerData="OnDataGridReadAsync"
                      RowsPerPage="@PageSize">
             <Columns>
@@ -1079,6 +1078,9 @@ Create a new Razor Component Page, `/Pages/Authors.razor`, in the {{ if UI == "B
                     </CellTemplate>
                 </PropertyColumn>
             </Columns>
+            <PagerContent>
+                <MudDataGridPager T="AuthorDto" PageSizeSelector="false" />
+            </PagerContent>
         </MudDataGrid>
     </MudCardContent>
 </MudCard>
@@ -1238,26 +1240,26 @@ public partial class Authors
         await InvokeAsync(StateHasChanged);
     }
 
-    private void OpenCreateAuthorModal()
+    private async Task OpenCreateAuthorModal()
     {
-        CreateValidationsRef.ClearAll();
+        await CreateValidationsRef.ClearAll();
         
         NewAuthor = new CreateAuthorDto();
-        CreateAuthorModal.Show();
+        await CreateAuthorModal.Show();
     }
 
-    private void CloseCreateAuthorModal()
+    private async Task CloseCreateAuthorModal()
     {
-        CreateAuthorModal.Hide();
+        await CreateAuthorModal.Hide();
     }
 
-    private void OpenEditAuthorModal(AuthorDto author)
+    private async Task OpenEditAuthorModal(AuthorDto author)
     {
-        EditValidationsRef.ClearAll();
+        await EditValidationsRef.ClearAll();
         
         EditingAuthorId = author.Id;
         EditingAuthor = ObjectMapper.Map<AuthorDto, UpdateAuthorDto>(author);
-        EditAuthorModal.Show();
+        await EditAuthorModal.Show();
     }
 
     private async Task DeleteAuthorAsync(AuthorDto author)
@@ -1279,9 +1281,9 @@ public partial class Authors
         }
     }
 
-    private void CloseEditAuthorModal()
+    private async Task CloseEditAuthorModal()
     {
-        EditAuthorModal.Hide();
+        await EditAuthorModal.Hide();
     }
 
     private async Task CreateAuthorAsync()
@@ -1292,7 +1294,7 @@ public partial class Authors
             {
                 await AuthorAppService.CreateAsync(NewAuthor);
                 await GetAuthorsAsync();
-                CreateAuthorModal.Hide();
+                await CreateAuthorModal.Hide();
             }
         }
         catch(Exception ex)
@@ -1309,7 +1311,7 @@ public partial class Authors
             {
                 await AuthorAppService.UpdateAsync(EditingAuthorId, EditingAuthor);
                 await GetAuthorsAsync();
-                EditAuthorModal.Hide();
+                await EditAuthorModal.Hide();
             }
         }
         catch(Exception ex)
@@ -1328,6 +1330,7 @@ public partial class Authors
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Acme.BookStore.Authors;
 using Acme.BookStore.Permissions;
@@ -1355,6 +1358,8 @@ public partial class Authors
     private Guid EditingAuthorId { get; set; }
     private UpdateAuthorDto EditingAuthor { get; set; }
 
+    private MudDataGrid<AuthorDto> AuthorsGrid { get; set; }
+
     private MudDialog CreateAuthorDialog { get; set; }
     private MudDialog EditAuthorDialog { get; set; }
 
@@ -1365,7 +1370,7 @@ public partial class Authors
     // Bind to a nullable wrapper and sync back to the DTO before saving.
     private DateTime? NewAuthorBirthDate
     {
-        get => NewAuthor?.BirthDate;
+        get => NewAuthor == null || NewAuthor.BirthDate == default ? null : NewAuthor.BirthDate;
         set { if (NewAuthor != null && value.HasValue) NewAuthor.BirthDate = value.Value; }
     }
 
@@ -1414,7 +1419,7 @@ public partial class Authors
         TotalCount = (int)result.TotalCount;
     }
 
-    private async Task<GridData<AuthorDto>> OnDataGridReadAsync(GridState<AuthorDto> state)
+    private async Task<GridData<AuthorDto>> OnDataGridReadAsync(GridState<AuthorDto> state, CancellationToken cancellationToken = default)
     {
         CurrentSorting = state.SortDefinitions
             .Where(s => !string.IsNullOrWhiteSpace(s.SortBy?.ToString()))
@@ -1463,7 +1468,16 @@ public partial class Authors
             }
 
             await AuthorAppService.DeleteAsync(author.Id);
-            await GetAuthorsAsync();
+
+            // Go back to the previous page if the deleted author was the only one on the current page
+            if (AuthorsGrid.CurrentPage > 0 && AuthorsGrid.ServerItems.Count() == 1)
+            {
+                await InvokeAsync(() => AuthorsGrid.NavigateTo(Page.Previous));
+            }
+            else
+            {
+                await InvokeAsync(() => AuthorsGrid.ReloadServerData());
+            }
         }
         catch(Exception ex)
         {
@@ -1475,11 +1489,11 @@ public partial class Authors
     {
         try
         {
-            await CreateFormRef.Validate();
+            await CreateFormRef.ValidateAsync();
             if (CreateFormRef.IsValid)
             {
                 await AuthorAppService.CreateAsync(NewAuthor);
-                await GetAuthorsAsync();
+                await InvokeAsync(() => AuthorsGrid.ReloadServerData());
                 await InvokeAsync(() => CreateAuthorDialog.CloseAsync());
             }
         }
@@ -1493,11 +1507,11 @@ public partial class Authors
     {
         try
         {
-            await EditFormRef.Validate();
+            await EditFormRef.ValidateAsync();
             if (EditFormRef.IsValid)
             {
                 await AuthorAppService.UpdateAsync(EditingAuthorId, EditingAuthor);
-                await GetAuthorsAsync();
+                await InvokeAsync(() => AuthorsGrid.ReloadServerData());
                 await InvokeAsync(() => EditAuthorDialog.CloseAsync());
             }
         }
@@ -1540,11 +1554,11 @@ public partial class AuthorDtoToUpdateAuthorDtoMapper : MapperBase<AuthorDto, Up
 Open the `BookStoreMenuContributor.cs` in the {{ if UI == "BlazorServer" }}`Acme.BookStore.Blazor`{{ else if UI == "MAUIBlazor" }}`Acme.BookStore.MauiBlazor`{{ else }}`Acme.BookStore.Blazor.Client`{{ end }} project and add the following code to the end of the `ConfigureMainMenuAsync` method:
 
 ````csharp
-context.Menu.AddItem(new ApplicationMenuItem(
-        "BooksStore.Authors",
-        l["Menu:Authors"],
-        url: "/authors"
-    ).RequirePermissions(BookStorePermissions.Books.Default));
+bookStoreMenu.AddItem(new ApplicationMenuItem(
+    "BooksStore.Authors",
+    l["Menu:Authors"],
+    url: "/authors"
+).RequirePermissions(BookStorePermissions.Authors.Default));
 ````
 
 ### Localizations

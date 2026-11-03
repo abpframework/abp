@@ -7,11 +7,11 @@
 
 # Foreign Access
 
-> **Preview:** Foreign access metadata is part of the preview Low-Code System. Relation behavior and designer options may change before general availability.
-
 Use the [Low-Code Designer](designer.md) to review relation metadata visually. This page explains the advanced configuration values that control how related dynamic entities can be reached from runtime pages.
 
 Foreign Access controls how related **dynamic entities** can be accessed through foreign key relationships. It determines whether users can view or manage related data directly from the **target entity's** UI.
+
+The foreign key defines the schema relation and default reverse-access level. A page can additionally define a page-specific relationship that selects generated or named related pages/forms and separate authorization. See [Data Modeling and Page Behavior](data-modeling.md#reverse-relationships).
 
 > **Important:** Foreign Access only works between **dynamic entities**. It does not apply to [reference entities](reference-entities.md) because they are read-only and don't have UI pages.
 
@@ -126,9 +126,13 @@ An **action menu item** appears on the target entity's data grid row (e.g., an "
 
 No action menu item is added. The foreign key exists only for data integrity and lookup display.
 
+Self-relations are supported. For example, an `Employee.ManagerId` foreign key can expose direct reports on the employee page, while page columns and filters can follow paths such as `ManagerId.ManagerId.Name` within the configured query-depth limit.
+
 ## Permission Control
 
 Foreign access actions respect the **entity permissions** of the source entity (the entity with the foreign key). For example, if a user does not have the `Delete` permission for `Order`, the delete button will not appear in the foreign access modal, even if the access level is `Edit`.
+
+A generated page relationship can set `useSeparatePermission: true`. In that mode, view/create/update/delete access is resolved for the host page and relationship ID instead of relying only on the source entity permission. Relationship create, update, and delete also require relationship view access.
 
 ## How It Works
 
@@ -146,5 +150,6 @@ The `DynamicEntityAppService` checks these relations when building entity action
 ## See Also
 
 * [Model Descriptor Files](model-json.md)
+* [Data Modeling and Page Behavior](data-modeling.md)
 * [Reference Entities](reference-entities.md)
 * [Attributes & Fluent API](fluent-api.md)

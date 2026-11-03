@@ -7,8 +7,6 @@
 
 # Reference Entities
 
-> **Preview:** Reference entity metadata is part of the preview Low-Code System. Registration APIs, relation options, and designer behavior may change before general availability.
-
 Use the [Low-Code Designer](designer.md) to select reference entities after they are registered in application startup. This page explains the registration and metadata details behind that designer experience.
 
 Reference Entities allow you to create foreign key relationships from **dynamic entities** to **existing C# entities** that live outside the Low-Code System.

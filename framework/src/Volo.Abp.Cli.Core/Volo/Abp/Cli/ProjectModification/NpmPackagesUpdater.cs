@@ -23,6 +23,7 @@ public class NpmPackagesUpdater : ITransientDependency
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
     public IInstallLibsService InstallLibsService { get; }
     public ICmdHelper CmdHelper { get; }
+    public NpmHelper NpmHelper { get; }
 
     private readonly PackageJsonFileFinder _packageJsonFileFinder;
     private readonly NpmGlobalPackagesChecker _npmGlobalPackagesChecker;
@@ -33,13 +34,15 @@ public class NpmPackagesUpdater : ITransientDependency
         NpmGlobalPackagesChecker npmGlobalPackagesChecker,
         ICancellationTokenProvider cancellationTokenProvider,
         IInstallLibsService installLibsService,
-        ICmdHelper cmdHelper)
+        ICmdHelper cmdHelper,
+        NpmHelper npmHelper)
     {
         _packageJsonFileFinder = packageJsonFileFinder;
         _npmGlobalPackagesChecker = npmGlobalPackagesChecker;
         CancellationTokenProvider = cancellationTokenProvider;
         InstallLibsService = installLibsService;
         CmdHelper = cmdHelper;
+        NpmHelper = npmHelper;
         Logger = NullLogger<NpmPackagesUpdater>.Instance;
     }
 
@@ -400,7 +403,7 @@ public class NpmPackagesUpdater : ITransientDependency
     protected virtual void RunYarn(string fileDirectory)
     {
         Logger.LogInformation($"Running Yarn on {fileDirectory}");
-        CmdHelper.RunCmd($"npx yarn --ignore-scripts", fileDirectory);
+        CmdHelper.RunCmd(NpmHelper.GetYarnCommand(fileDirectory), fileDirectory);
     }
 
     protected virtual void RunNpmInstall(string fileDirectory)

@@ -86,6 +86,7 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         var messageId = message.GetMessageId();
         var correlationId = message.GetCorrelationId();
         object eventData;
+        Guid? tenantId = null;
 
         if (eventType != null)
         {
@@ -93,7 +94,8 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         }
         else if (DynamicHandlerFactories.ContainsKey(eventName))
         {
-            eventData = new DynamicEventData(eventName, Serializer.Deserialize<object>(message.Value));
+            tenantId = message.GetTenantId();
+            eventData = CreateDynamicEventData(eventName, Serializer.Deserialize<object>(message.Value), tenantId);
             eventType = typeof(DynamicEventData);
         }
         else
@@ -101,7 +103,7 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
             return;
         }
 
-        if (await AddToInboxAsync(messageId, eventName, eventType, eventData, correlationId))
+        if (await AddToInboxAsync(messageId, eventName, eventType, eventData, correlationId, tenantId))
         {
             return;
         }
@@ -116,12 +118,21 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     {
         var handlerFactories = GetOrCreateHandlerFactories(eventType);
 
-        if (factory.IsInFactories(handlerFactories))
+        var added = handlerFactories.Locking(factories =>
+        {
+            if (factory.IsInFactories(factories))
+            {
+                return false;
+            }
+
+            factories.Add(factory);
+            return true;
+        });
+
+        if (!added)
         {
             return NullDisposable.Instance;
         }
-
-        handlerFactories.Add(factory);
 
         return new EventHandlerFactoryUnregistrar(this, eventType, factory);
     }
@@ -131,12 +142,21 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     {
         var handlerFactories = GetOrCreateDynamicHandlerFactories(eventName);
 
-        if (handler.IsInFactories(handlerFactories))
+        var added = handlerFactories.Locking(factories =>
+        {
+            if (handler.IsInFactories(factories))
+            {
+                return false;
+            }
+
+            factories.Add(handler);
+            return true;
+        });
+
+        if (!added)
         {
             return NullDisposable.Instance;
         }
-
-        handlerFactories.Add(handler);
 
         return new DynamicEventHandlerFactoryUnregistrar(this, eventName, handler);
     }
@@ -199,7 +219,7 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     public override Task PublishAsync(string eventName, object eventData, bool onUnitOfWorkComplete = true)
     {
         var eventType = EventTypes.GetOrDefault(eventName);
-        var dynamicEventData = eventData as DynamicEventData ?? new DynamicEventData(eventName, eventData);
+        var dynamicEventData = CreateDynamicEventDataForPublishing(eventName, eventData);
 
         if (eventType != null)
         {
@@ -220,6 +240,8 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         {
             headers.Add(EventBusConsts.CorrelationIdHeaderName, System.Text.Encoding.UTF8.GetBytes(CorrelationIdProvider.Get()!));
         }
+
+        AddTenantIdHeader(headers, GetTenantIdToPropagate(eventType, eventData));
 
         await PublishAsync(
             AbpKafkaEventBusOptions.TopicName,
@@ -246,6 +268,8 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         {
             headers.Add(EventBusConsts.CorrelationIdHeaderName, System.Text.Encoding.UTF8.GetBytes(outgoingEvent.GetCorrelationId()!));
         }
+
+        AddTenantIdHeader(headers, outgoingEvent.GetTenantId());
 
         var result = await PublishAsync(
             AbpKafkaEventBusOptions.TopicName,
@@ -288,6 +312,8 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
                 headers.Add(EventBusConsts.CorrelationIdHeaderName, System.Text.Encoding.UTF8.GetBytes(outgoingEvent.GetCorrelationId()!));
             }
 
+            AddTenantIdHeader(headers, outgoingEvent.GetTenantId());
+
             var result = await producer.ProduceAsync(
                 AbpKafkaEventBusOptions.TopicName,
                 new Message<string, byte[]>
@@ -327,7 +353,7 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         }
         else if (DynamicHandlerFactories.ContainsKey(incomingEvent.EventName))
         {
-            eventData = new DynamicEventData(incomingEvent.EventName, Serializer.Deserialize<object>(incomingEvent.EventData));
+            eventData = CreateDynamicEventData(incomingEvent, Serializer.Deserialize<object>(incomingEvent.EventData));
             eventType = typeof(DynamicEventData);
         }
         else
@@ -348,6 +374,16 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     protected override byte[] Serialize(object eventData)
     {
         return Serializer.Serialize(eventData);
+    }
+
+    protected virtual void AddTenantIdHeader(Headers headers, Guid? tenantId)
+    {
+        if (tenantId == null)
+        {
+            return;
+        }
+
+        headers.Add(EventBusConsts.TenantIdHeaderName, System.Text.Encoding.UTF8.GetBytes(tenantId.Value.ToString()));
     }
 
     private async Task PublishAsync(string topicName, Type eventType, object eventData, Headers headers)
@@ -409,12 +445,12 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
         foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
         {
-            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
+            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value.Locking(factories => factories.ToList())));
         }
 
         foreach (var handlerFactory in DynamicHandlerFactories.Where(aehf => eventNames.Contains(aehf.Key)))
         {
-            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value));
+            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value.Locking(factories => factories.ToList())));
         }
 
         return handlerFactoryList.ToArray();
@@ -463,7 +499,7 @@ public class KafkaDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
         foreach (var handlerFactory in DynamicHandlerFactories.Where(hf => hf.Key == eventName))
         {
-            result.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value));
+            result.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value.Locking(factories => factories.ToList())));
         }
 
         return result;

@@ -584,14 +584,14 @@ Open the `Books.razor` and replace the content as the following:
                                 Field="@nameof(BookDto.Type)"
                                 Caption="@L["Type"]">
                     <DisplayTemplate>
-                        @L[$"Enum:BookType.{context.Type}"]
+                        @L[$"Enum:BookType.{(int)context.Item.Type}"]
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="BookDto"
                                 Field="@nameof(BookDto.PublishDate)"
                                 Caption="@L["PublishDate"]">
                     <DisplayTemplate>
-                        @context.PublishDate.ToShortDateString()
+                        @context.Item.PublishDate.ToShortDateString()
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="BookDto"
@@ -602,7 +602,7 @@ Open the `Books.razor` and replace the content as the following:
                                 Field="@nameof(BookDto.CreationTime)"
                                 Caption="@L["CreationTime"]">
                     <DisplayTemplate>
-                        @context.CreationTime.ToLongDateString()
+                        @context.Item.CreationTime.ToLongDateString()
                     </DisplayTemplate>
                 </DataGridColumn>
             </DataGridColumns>
@@ -651,9 +651,11 @@ Open the `Books.razor` and replace the content as the following:
         </CardHeaderContent>
     </MudCardHeader>
     <MudCardContent>
-        <MudDataGrid T="BookDto"
+        <MudDataGrid @ref="_booksDataGrid"
+                     T="BookDto"
                      ServerData="OnDataGridReadAsync"
-                     RowsPerPage="@PageSize">
+                     RowsPerPage="@PageSize"
+                     SortMode="SortMode.None">
             <Columns>
                 <PropertyColumn Property="x => x.Name"
                                 Title="@L["Name"]" />
@@ -678,12 +680,17 @@ Open the `Books.razor` and replace the content as the following:
                     </CellTemplate>
                 </PropertyColumn>
             </Columns>
+            <PagerContent>
+                <MudDataGridPager T="BookDto" />
+            </PagerContent>
         </MudDataGrid>
     </MudCardContent>
 </MudCard>
 
 @code
 {
+    private MudDataGrid<BookDto> _booksDataGrid = default!;
+
     public Books() // Constructor
     {
         LocalizationResource = typeof(BookStoreResource);
@@ -697,6 +704,7 @@ Open the `Books.razor` and replace the content as the following:
 * `Entities`, `TotalCount`, `PageSize`, `OnDataGridReadAsync` are defined in the base class.
 * `LocalizationResource` is set to the `BookStoreResource` to localize the texts.
 * This page uses the standard MudBlazor `MudDataGrid` with `<PropertyColumn>` definitions. ABP also ships an `AbpMudExtensibleDataGrid` that integrates with the [data table column extension system](../../framework/ui/blazor/data-table-column-extensions.md) when you need to extend module pages.
+* `AbpMudCrudPageBase` uses its own `AbpMudExtensibleDataGrid` to reload the data and to resolve the sort columns. Since this page uses the standard `MudDataGrid`, it keeps a reference to the grid (`_booksDataGrid`) to reload it after the create, update and delete operations in the next part, and disables sorting with `SortMode.None`.
 
 While the code above is pretty easy to understand, you can check the MudBlazor [Card](https://mudblazor.com/components/card) and [DataGrid](https://mudblazor.com/components/datagrid) documents to understand them better.
 
@@ -712,6 +720,14 @@ You can run the application! The final UI of this part is shown below:
 
 ![blazor-bookstore-book-list](images/blazor-bookstore-book-list-2.png)
 
+{{if BlazorUI == "MudBlazor"}}
+
+This is a fully working, server side paged and localized table of books.
+
+{{else}}
+
 This is a fully working, server side paged, sorted and localized table of books.
+
+{{end}}
 
 {{end # UI }}

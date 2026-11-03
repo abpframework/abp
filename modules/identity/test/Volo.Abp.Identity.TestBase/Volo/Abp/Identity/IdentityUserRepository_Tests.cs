@@ -302,6 +302,30 @@ public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentity
         ou112Users.ShouldContain(x => x.UserName == "neo");
     }
 
+    [Fact]
+    public async Task UpdateLastSignInTimeAsync()
+    {
+        var userManager = ServiceProvider.GetRequiredService<IdentityUserManager>();
+
+        var john = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName("john.nash"));
+        john.LastSignInTime.ShouldBeNull();
+
+        var lastSignInTime = DateTimeOffset.UtcNow;
+        await userManager.UpdateLastSignInTimeAsync(john.Id, lastSignInTime);
+
+        john = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName("john.nash"));
+        john.LastSignInTime.ShouldNotBeNull();
+        john.LastSignInTime.Value.ShouldBe(lastSignInTime, TimeSpan.FromSeconds(1));
+
+        // An older time (e.g. from a concurrent login that lost the race) should not overwrite a newer one.
+        await userManager.UpdateLastSignInTimeAsync(john.Id, lastSignInTime.AddMinutes(-30));
+
+        john = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName("john.nash"));
+        john.LastSignInTime!.Value.ShouldBe(lastSignInTime, TimeSpan.FromSeconds(1));
+
+        await userManager.UpdateLastSignInTimeAsync(Guid.NewGuid());
+    }
+
 
     [Fact]
     public async Task FindByPasskeyIdAsync()

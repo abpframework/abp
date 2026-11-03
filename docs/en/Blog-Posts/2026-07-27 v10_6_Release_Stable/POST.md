@@ -28,7 +28,7 @@ If you are already using the ABP Studio, you can upgrade it to the latest versio
 
 After upgrading the ABP Studio, then you can open your solution in the application, and simply click the **Upgrade ABP Packages** action button to instantly upgrade your solution:
 
-![](upgrade-abp-packages.png)
+![](https://raw.githubusercontent.com/abpframework/abp/dev/docs/en/Blog-Posts/2026-07-27%20v10_6_Release_Stable/upgrade-abp-packages.png)
 
 ### Upgrading via ABP CLI
 

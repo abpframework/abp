@@ -569,11 +569,13 @@ public class AbpEfCoreDomainEvents_IgnoredUpdateAggregateRootSelectors_Test :  A
 {
     protected override void AfterAddApplication(IServiceCollection services)
     {
+        base.AfterAddApplication(services);
+
         services.Configure<AbpEntityChangeOptions>(options =>
         {
-            options.IgnoredUpdateAggregateRootSelectors.Add("AppEntityWithValueObjectAddress", x => x == typeof(AppEntityWithNavigations));
+            // The base class disables it for all entities, the selector has to be the only reason of the expected behavior.
+            options.UpdateAggregateRootWhenNavigationChanges = true;
+            options.IgnoredUpdateAggregateRootSelectors.Add("AppEntityWithNavigations", x => x == typeof(AppEntityWithNavigations));
         });
-
-        base.AfterAddApplication(services);
     }
 }

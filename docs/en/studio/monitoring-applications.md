@@ -11,8 +11,8 @@
 //[doc-nav]
 {
   "Next": {
-    "Name": "AI Agent",
-    "Path": "studio/ai-agent"
+    "Name": "Model Context Protocol (MCP)",
+    "Path": "studio/model-context-protocol"
   }
 }
 ````

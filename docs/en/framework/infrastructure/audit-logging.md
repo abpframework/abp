@@ -48,7 +48,7 @@ Here, a list of the options you can configure:
 * `IsEnabledForAnonymousUsers` (default: `true`): If you want to write audit logs only for the authenticated users, set this to `false`. If you save audit logs for anonymous users, you will see `null` for `UserId` values for these users.
 * `AlwaysLogOnException` (default: `true`): If you set to true, it always saves the audit log on an exception/error case without checking other options (except `IsEnabled`, which completely disables the audit logging).
 * `IsEnabledForIntegrationServices` (default: `false`): Audit Logging is disabled for [integration services](../api-development/integration-services.md) by default. Set this property as `true` to enable it.
-* `IsEnabledForGetRequests` (default: `false`): HTTP GET requests should not make any change in the database normally and audit log system doesn't save audit log objects for GET request. Set this to `true` to enable it also for the GET requests.
+* `IsEnabledForGetRequests` (default: `false`): Safe HTTP methods (GET, HEAD and QUERY) should not make any change in the database normally and the audit log system doesn't save audit log objects for these requests. Set this to `true` to enable it also for the safe requests.
 * `DisableLogActionInfo` (default: `false`):If you set to true, Will no longer log `AuditLogActionInfo`.
 * `ApplicationName`: If multiple applications are saving audit logs into a single database, set this property to your application name, so you can distinguish the logs of different applications. If you don't set, it will set from the `IApplicationInfoAccessor.ApplicationName` value, which is the entry assembly name by default.
 * `IgnoredTypes`: A list of `Type`s to be ignored for audit logging. If this is an entity type, changes for this type of entities will not be saved. This list is also used while serializing the action parameters.
@@ -111,7 +111,9 @@ Configure<AbpAspNetCoreAuditingOptions>(options =>
 });
 ````
 
-`IgnoredUrls` is the only option. It is a list of ignored URLs prefixes. In the preceding example, all URLs starting with `/products` will be ignored for audit logging.
+`IgnoredUrls` is a list of ignored URLs prefixes. In the preceding example, all URLs starting with `/products` will be ignored for audit logging.
+
+`IgnoredHubTypes` is a list of ignored [SignalR](../real-time/signalr.md) hub types. The audited services called by these hubs are still audit logged.
 
 ## AbpAspNetCoreAuditingUrlOptions
 
@@ -165,11 +167,25 @@ public class HomeController : AbpController
 }
 ````
 
+### Hiding Parameter Values
+
+An audited action writes its parameter values into the audit log. Use `[DisableAuditing]` on a parameter when its value is sensitive:
+
+````csharp
+public class HomeController : AbpController
+{
+    public async Task<ActionResult> SetConnectionString([DisableAuditing] string connectionString)
+    {
+        //...
+    }
+}
+````
+
+The action is still audit logged and the parameter name is still written, but its value is replaced with `null`.
+
 ### Enable/Disable for Application Services & Methods
 
 [Application service](../architecture/domain-driven-design/application-services.md) method calls also included into the audit log by default. You can use the `[DisableAuditing]` in service or method level.
-
-> **Blazor Server limitation (Entity history):** In `Blazor Server` applications, entity change history is currently not guaranteed to be complete for every UI interaction. Blazor Server uses SignalR-based event handling, and under some flows the audit scope/action tracking may not align with `DbContext.SaveChanges`, which can cause missing or partial entity change records. This is a known platform-level limitation and not a regular configuration issue. See [#11682](https://github.com/abpframework/abp/issues/11682) for related discussions.
 
 #### Enable/Disable for Other Services
 

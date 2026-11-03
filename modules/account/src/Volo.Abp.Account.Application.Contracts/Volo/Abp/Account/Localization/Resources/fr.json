@@ -11,6 +11,8 @@
     "UserLockedOutMessage": "Le compte utilisateur a été verrouillé en raison de tentatives de connexion non valides. Veuillez patienter un instant et réessayer.",
     "InvalidUserNameOrPassword": "Nom d'utilisateur ou mot de passe invalide!",
     "LoginIsNotAllowed": "Vous n'êtes pas autorisé à vous connecter ! Votre compte est inactif ou doit confirmer votre e-mail/numéro de téléphone.",
+    "ExternalLoginPasswordChangeRequired": "Vous n'êtes pas autorisé à vous connecter ! Votre mot de passe doit être modifié, mais cela n'est pas possible avec une connexion externe. Veuillez contacter votre administrateur.",
+    "RegisteredButLoginIsNotAllowed": "Votre compte a été créé, mais vous n'êtes pas encore autorisé à vous connecter !",
     "SelfRegistrationDisabledMessage": "L'auto-inscription est désactivée pour cette application. Veuillez contacter l'administrateur de l'application pour enregistrer un nouvel utilisateur.",
     "LocalLoginDisabledMessage": "La connexion locale est désactivée pour cette application.",
     "Login": "Connectez-vous",

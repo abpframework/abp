@@ -1,5 +1,4 @@
 using System;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -7,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Filters;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 
@@ -86,7 +86,8 @@ public class AbpUowPageFilter : IAsyncPageFilter, IAbpFilter, ITransientDependen
         {
             var abpUnitOfWorkDefaultOptions = context.GetRequiredService<IOptions<AbpUnitOfWorkDefaultOptions>>().Value;
             options.IsTransactional = abpUnitOfWorkDefaultOptions.CalculateIsTransactional(
-                autoValue: !string.Equals(context.HttpContext.Request.Method, HttpMethod.Get.Method, StringComparison.OrdinalIgnoreCase)
+                autoValue: !(HttpMethodHelper.IsGet(context.HttpContext.Request.Method)
+                             || HttpMethodHelper.IsQuery(context.HttpContext.Request.Method))
             );
         }
 

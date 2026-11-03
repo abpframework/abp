@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Net.Http;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.AspNetCore.Uow;
@@ -20,7 +21,9 @@ public class AspNetCoreUnitOfWorkTransactionBehaviourProvider : IUnitOfWorkTrans
                 return null;
             }
 
-            if (httpContext.WebSockets.IsWebSocketRequest)
+            // HttpContext.WebSockets writes to the feature collection on every read when the request has no
+            // websocket feature, which breaks other threads reading the same HttpContext (e.g. Blazor prerendering).
+            if (httpContext.Features.Get<IHttpWebSocketFeature>()?.IsWebSocketRequest == true)
             {
                 return null;
             }
@@ -37,10 +40,8 @@ public class AspNetCoreUnitOfWorkTransactionBehaviourProvider : IUnitOfWorkTrans
                 }
             }
 
-            return !string.Equals(
-                httpContext.Request.Method,
-                HttpMethod.Get.Method, StringComparison.OrdinalIgnoreCase
-            );
+            var method = httpContext.Request.Method;
+            return !(HttpMethodHelper.IsGet(method) || HttpMethodHelper.IsQuery(method));
         }
     }
 

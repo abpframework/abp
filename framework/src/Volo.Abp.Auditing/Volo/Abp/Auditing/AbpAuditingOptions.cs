@@ -62,6 +62,7 @@ public class AbpAuditingOptions
     //TODO: Move this to asp.net core layer or convert it to a more dynamic strategy?
     /// <summary>
     /// Default: false.
+    /// When false, safe methods (GET, HEAD and QUERY) are excluded from audit logging.
     /// </summary>
     public bool IsEnabledForGetRequests { get; set; }
 

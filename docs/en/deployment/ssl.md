@@ -136,7 +136,7 @@ You will may see the following SSL certificate errors in your browser when you t
 
 ## References
 
-* [ABP IIS Deployment](./index.md)
+* [ABP IIS Deployment](../solution-templates/layered-web-application/deployment/deployment-iis.md)
 * [acme.sh](https://github.com/acmesh-official/acme.sh)
 * [acme.sh DNS API](https://github.com/acmesh-official/acme.sh/wiki/dnsapi#dns_cf)
 * [HTTPS in ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/security/enforcing-ssl)
