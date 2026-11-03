@@ -1,0 +1,19 @@
+{
+  "culture": "he",
+  "texts": {
+    "DisplayName:Abp.Ldap.Ldaps": "LDAP על גבי SSL",
+    "Description:Abp.Ldap.Ldaps": "LDAP על גבי SSL",
+    "DisplayName:Abp.Ldap.ServerHost": "כתובת השרת",
+    "Description:Abp.Ldap.ServerHost": "כתובת השרת",
+    "DisplayName:Abp.Ldap.ServerPort": "פורט השרת",
+    "Description:Abp.Ldap.ServerPort": "פורט השרת",
+    "DisplayName:Abp.Ldap.BaseDc": "רכיב דומיין בסיסי (Base DC)",
+    "Description:Abp.Ldap.BaseDc": "רכיב דומיין בסיסי (Base DC)",
+    "DisplayName:Abp.Ldap.Domain": "דומיין",
+    "Description:Abp.Ldap.Domain": "דומיין",
+    "DisplayName:Abp.Ldap.UserName": "שם משתמש",
+    "Description:Abp.Ldap.UserName": "שם משתמש",
+    "DisplayName:Abp.Ldap.Password": "סיסמה",
+    "Description:Abp.Ldap.Password": "סיסמה"
+  }
+}

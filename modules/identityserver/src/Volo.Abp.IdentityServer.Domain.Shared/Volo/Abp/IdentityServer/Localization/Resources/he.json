@@ -1,0 +1,17 @@
+{
+  "culture": "he",
+  "texts": {
+    "Volo.IdentityServer:DuplicateIdentityResourceName": "שם משאב הזהות כבר קיים: {Name}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "שם משאב ה-API כבר קיים: {Name}",
+    "Volo.IdentityServer:DuplicateApiScopeName": "שם היקף ה-API כבר קיים: {Name}",
+    "Volo.IdentityServer:DuplicateClientId": "מזהה הלקוח (ClientId) כבר קיים: {ClientId}",
+    "UserLockedOut": "חשבון המשתמש ננעל בגלל ניסיונות התחברות כושלים. המתינו זמן מה ונסו שוב.",
+    "InvalidUserNameOrPassword": "שם משתמש או סיסמה שגויים!",
+    "LoginIsNotAllowed": "אין אפשרות להתחבר! החשבון אינו פעיל, או שיש לאמת את כתובת האימייל או את מספר הטלפון.",
+    "InvalidUsername": "שם משתמש או סיסמה שגויים!",
+    "InvalidAuthenticatorCode": "קוד המאמת שגוי!",
+    "InvalidRecoveryCode": "קוד השחזור שגוי!",
+    "TheTargetUserIsNotLinkedToYou": "משתמש היעד אינו מקושר אליך!",
+    "ClientResourcePermissionProviderKeyLookupService": "לקוח"
+  }
+}
