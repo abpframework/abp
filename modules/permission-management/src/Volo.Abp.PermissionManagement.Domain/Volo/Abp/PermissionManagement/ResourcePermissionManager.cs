@@ -375,8 +375,8 @@ public class ResourcePermissionManager : IResourcePermissionManager, ISingletonD
             throw new AbpException($"The resource permission management provider '{providerName}' is not available in the current context.");
         }
 
-        var permissionGrant = await ResourcePermissionGrantRepository.FindAsync(name, resourceName, resourceKey, providerName, providerKey);
-        if (permissionGrant != null)
+        var permissionGrants = await ResourcePermissionGrantRepository.GetListAsync(new[] { name }, resourceName, resourceKey, providerName, providerKey);
+        foreach (var permissionGrant in permissionGrants)
         {
             await ResourcePermissionGrantRepository.DeleteAsync(permissionGrant, true);
         }

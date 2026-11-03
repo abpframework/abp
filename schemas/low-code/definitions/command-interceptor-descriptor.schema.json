@@ -8,8 +8,9 @@
   "properties": {
     "commandName": {
       "type": "string",
-      "description": "Entity command to intercept: Create, Update, or Delete.",
-      "enum": ["Create", "Update", "Delete"]
+      "description": "Entity command to intercept: Create, Update, Delete, or the name of a custom command registered for this entity with [CustomCommand].",
+      "minLength": 1,
+      "examples": ["Create", "Update", "Delete"]
     },
     "type": {
       "$ref": "interceptor-type.schema.json",

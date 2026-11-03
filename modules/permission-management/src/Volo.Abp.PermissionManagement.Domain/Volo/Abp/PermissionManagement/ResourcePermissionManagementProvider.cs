@@ -81,12 +81,10 @@ public abstract class ResourcePermissionManagementProvider : IResourcePermission
 
     protected virtual async Task RevokeAsync(string name, string resourceName,string resourceKey, string providerKey)
     {
-        var resourcePermissionGrants = await ResourcePermissionGrantRepository.FindAsync(name, resourceName, resourceKey, Name, providerKey);
-        if (resourcePermissionGrants == null)
+        var resourcePermissionGrants = await ResourcePermissionGrantRepository.GetListAsync(new[] { name }, resourceName, resourceKey, Name, providerKey);
+        foreach (var resourcePermissionGrant in resourcePermissionGrants)
         {
-            return;
+            await ResourcePermissionGrantRepository.DeleteAsync(resourcePermissionGrant, true);
         }
-
-        await ResourcePermissionGrantRepository.DeleteAsync(resourcePermissionGrants, true);
     }
 }

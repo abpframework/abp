@@ -8,6 +8,8 @@ namespace Volo.Abp.Http.Modeling;
 [Serializable]
 public class TypeApiDescriptionModel
 {
+    public string? AssemblyName { get; set; }
+
     public string? BaseType { get; set; }
 
     public bool IsEnum { get; set; }
@@ -43,6 +45,7 @@ public class TypeApiDescriptionModel
 
         var typeModel = new TypeApiDescriptionModel
         {
+            AssemblyName = type.Assembly.GetName().Name,
             IsEnum = type.IsEnum,
             BaseType = baseType != null ? TypeHelper.GetFullNameHandlingNullableAndGenerics(baseType) : null
         };

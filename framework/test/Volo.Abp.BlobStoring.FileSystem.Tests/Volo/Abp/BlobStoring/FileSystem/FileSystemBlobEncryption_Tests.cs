@@ -344,6 +344,47 @@ public class FileSystemBlobEncryption_Tests : AbpBlobStoringFileSystemTestBase
         fileBytes.SequenceEqual(content).ShouldBeTrue();
     }
 
+    [Fact]
+    public async Task Should_Cancel_A_Save_While_Waiting_Between_Retries()
+    {
+        using var source = new MemoryStream("content".GetBytes());
+        var provider = new FaultingOpenFileSystemBlobProvider(_filePathCalculator, source);
+        using var cancellationTokenSource = new CancellationTokenSource();
+
+        var saveTask = provider.SaveAsync(new BlobProviderSaveArgs(
+            BlobContainerNameAttribute.GetContainerName<TestContainer8>(),
+            _configurationProvider.Get<TestContainer8>(),
+            "fs-retry-cancel-save",
+            source,
+            cancellationToken: cancellationTokenSource.Token));
+        await cancellationTokenSource.CancelAsync();
+
+        await Should.ThrowAsync<OperationCanceledException>(async () => await saveTask);
+
+        provider.OpenAttempts.ShouldBe(1);
+    }
+
+    [Fact]
+    public async Task Should_Cancel_A_Get_While_Waiting_Between_Retries()
+    {
+        var blobName = "fs-retry-cancel-get";
+        var filePath = GetFilePath<TestContainer8>(blobName);
+        Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
+        await File.WriteAllTextAsync(filePath, "content");
+        using var fileLock = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.None);
+        using var cancellationTokenSource = new CancellationTokenSource();
+        var provider = new FileSystemBlobProvider(_filePathCalculator);
+
+        var getTask = provider.GetOrNullAsync(new BlobProviderGetArgs(
+            BlobContainerNameAttribute.GetContainerName<TestContainer8>(),
+            _configurationProvider.Get<TestContainer8>(),
+            blobName,
+            cancellationTokenSource.Token));
+        await cancellationTokenSource.CancelAsync();
+
+        await Should.ThrowAsync<OperationCanceledException>(async () => await getTask);
+    }
+
     [DisableConventionalRegistration]
     private sealed class FaultingOpenFileSystemBlobProvider : FileSystemBlobProvider
     {

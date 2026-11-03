@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-using Nest;
+using Elastic.Clients.Elasticsearch;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Docs.Documents.FullSearch.Elastic
@@ -17,11 +17,11 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
             Options = options.Value;
         }
 
-        public virtual IElasticClient GetClient()
+        public virtual ElasticsearchClient GetClient()
         {
             var node = new Uri(Configuration["ElasticSearch:Url"]);
-            var settings = new ConnectionSettings(node).DefaultIndex(Options.IndexName);
-            return new ElasticClient(Options.Authenticate(settings));
+            var settings = new ElasticsearchClientSettings(node).DefaultIndex(Options.IndexName);
+            return new ElasticsearchClient(Options.Authenticate(settings));
         }
     }
 }

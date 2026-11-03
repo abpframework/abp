@@ -3,7 +3,7 @@
   "$id": "foreign-key-descriptor.schema.json",
   "title": "ForeignKeyDescriptor",
   "description": "Describes a foreign key/lookup relationship from the owning entity property to another entity or reference entity.",
-  "markdownDescription": "AI guidance: put `foreignKey` on the property that stores the related record id. The property name should usually end with `Id`, for example `CustomerId`. `entityName` must match a model entity name or a registered code/reference entity such as `Volo.Abp.Identity.IdentityUser`. Use `displayPropertyName` when the target display field is not obvious. Use `dependsOn` for cascading dropdowns such as City filtered by Country. Use `access` only for reverse access from the referenced entity side: `none`, `view`, or `edit`. Do not use `lookup` as `access`; lookup is a form field/control type.",
+  "markdownDescription": "AI guidance: put `foreignKey` on the property that stores the related record id. The property name should usually end with `Id`, for example `CustomerId`. `entityName` must match a model entity name or a registered code/reference entity such as `Volo.Abp.Identity.IdentityUser`. Use `displayPropertyName` when the target display field is not obvious. Use `dependsOn` for cascading dropdowns such as City filtered by Country. Reverse access from the referenced entity side (showing or editing related records from the target page) is not configured here; define a `relationships[]` entry on the target entity's page descriptor instead. Do not use `lookup` here; lookup is a form field/control type.",
   "type": "object",
   "properties": {
     "entityName": {
@@ -12,15 +12,8 @@
       "minLength": 1
     },
     "displayPropertyName": {
-      "type": "string",
-      "description": "Property name to display from the related entity in lookups/autocomplete. Omit to use the target entity displayProperty.",
-      "minLength": 1
-    },
-    "access": {
-      "type": "string",
-      "description": "Access level for managing this relation from the referenced entity side. 'none' means no reverse access; 'view' allows the referenced entity page to show related records; 'edit' allows managing related records from the referenced side.",
-      "enum": ["none", "None", "view", "View", "edit", "Edit"],
-      "default": "none"
+      "type": ["string", "null"],
+      "description": "Property name to display from the related entity in lookups/autocomplete. Omit to use the target entity displayProperty."
     },
     "dependsOn": {
       "type": "object",

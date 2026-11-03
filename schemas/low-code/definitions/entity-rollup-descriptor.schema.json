@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "entity-rollup-descriptor.schema.json",
+  "title": "EntityRollupDescriptor",
+  "description": "Defines a virtual rollup property that aggregates records of another entity whose foreign key points back to the owning record.",
+  "markdownDescription": "AI guidance: use rollups for counts and sums over child/related records, for example the number of orders per customer or the total amount of order lines per order. `sourceEntityName` is the entity being aggregated and `foreignKeyPropertyName` is the FK property on that entity that references the owning entity. `count` needs no `valuePropertyName`; `sum`, `average`, `min`, and `max` require a numeric/date `valuePropertyName` on the source entity. Rollup properties are read-only and never stored: the runtime forces `isMappedToDbField: false`, `allowSetByClients: false`, and clears required/unique/default settings. Rollups cannot be combined with `foreignKey`, `formula`, or `collection`.",
+  "type": "object",
+  "properties": {
+    "sourceEntityName": {
+      "type": "string",
+      "description": "Full name of the entity whose records are aggregated, for example 'Acme.Orders.Order'.",
+      "minLength": 1
+    },
+    "foreignKeyPropertyName": {
+      "type": "string",
+      "description": "Foreign key property on sourceEntityName that references the owning entity, for example 'CustomerId'.",
+      "minLength": 1
+    },
+    "valuePropertyName": {
+      "type": ["string", "null"],
+      "description": "Property on sourceEntityName to aggregate. Required for sum, average, min, and max; omit for count."
+    },
+    "operation": {
+      "type": "string",
+      "description": "Aggregation operation. Prefer lower-case values; PascalCase aliases are accepted.",
+      "enum": ["count", "Count", "sum", "Sum", "average", "Average", "min", "Min", "max", "Max"]
+    }
+  },
+  "required": ["sourceEntityName", "foreignKeyPropertyName", "operation"],
+  "if": {
+    "properties": { "operation": { "enum": ["sum", "Sum", "average", "Average", "min", "Min", "max", "Max"] } },
+    "required": ["operation"]
+  },
+  "then": {
+    "required": ["valuePropertyName"],
+    "properties": { "valuePropertyName": { "type": "string", "minLength": 1 } }
+  },
+  "additionalProperties": false,
+  "examples": [
+    { "sourceEntityName": "Acme.Orders.Order", "foreignKeyPropertyName": "CustomerId", "operation": "count" },
+    { "sourceEntityName": "Acme.Orders.OrderLine", "foreignKeyPropertyName": "OrderId", "valuePropertyName": "LineTotal", "operation": "sum" }
+  ]
+}

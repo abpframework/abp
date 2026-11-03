@@ -221,6 +221,7 @@ $projects = (
     "framework/src/Volo.Abp.Http.Client.IdentityModel.WebAssembly",
     "framework/src/Volo.Abp.Http.Client.IdentityModel.MauiBlazor",
     "framework/src/Volo.Abp.Http",
+    "framework/src/Volo.Abp.Http.FluentValidation",
     "framework/src/Volo.Abp.IdentityModel",
     "framework/src/Volo.Abp.Imaging.Abstractions",
     "framework/src/Volo.Abp.Imaging.AspNetCore",

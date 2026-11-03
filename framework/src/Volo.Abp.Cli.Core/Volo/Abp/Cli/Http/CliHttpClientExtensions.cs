@@ -6,9 +6,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Duende.IdentityModel.Client;
-using Polly;
-using Polly.Extensions.Http;
 using Volo.Abp.Cli.Auth;
+using Volo.Abp.Threading;
 using Microsoft.Extensions.Logging;
 
 namespace Volo.Abp.Cli.Http;
@@ -55,29 +54,35 @@ public static class CliHttpClientExtensions
             cancellationToken = cancellationTokenSource.Token;
         }
 
-        return await HttpPolicyExtensions
-            .HandleTransientHttpError()
-            .OrResult(msg => !msg.IsSuccessStatusCode)
-            .WaitAndRetryAsync(sleepDurations,
-                (responseMessage, timeSpan, retryCount, context) =>
-                {
-                    if (responseMessage.Exception != null)
-                    {
-                        string httpErrorCode = responseMessage.Result == null ?
-                            httpErrorCode = string.Empty :
-                            "HTTP-" + (int)responseMessage.Result.StatusCode + ", ";
+        using var delayEnumerator = sleepDurations.GetEnumerator();
 
-                        logger?.LogWarning(
-                            $"{retryCount}. HTTP request attempt failed to {url} with an error: {httpErrorCode}{responseMessage.Exception.Message}. " +
-                            $"Waiting {timeSpan.TotalSeconds} secs for the next try...");
-                    }
-                    else if (responseMessage.Result != null)
+        return await RetryHelper.ExecuteAsync(
+            retryCancellationToken => httpClient.GetAsync(url, retryCancellationToken),
+            new RetryOptions<HttpResponseMessage>
+            {
+                MaxRetryCount = int.MaxValue,
+                DelayFactory = _ => delayEnumerator.Current,
+                ShouldRetryOnException = exception =>
+                    exception is HttpRequestException && delayEnumerator.MoveNext(),
+                ShouldRetryOnResult = response =>
+                    !response.IsSuccessStatusCode && delayEnumerator.MoveNext(),
+                OnRetry = attempt =>
+                {
+                    if (attempt.Exception != null)
                     {
                         logger?.LogWarning(
-                            $"{retryCount}. HTTP request attempt failed to {url} with an error: {(int)responseMessage.Result.StatusCode}-{responseMessage.Result.ReasonPhrase}. " +
-                            $"Waiting {timeSpan.TotalSeconds} secs for the next try...");
+                            $"{attempt.RetryCount}. HTTP request attempt failed to {url} with an error: {attempt.Exception.Message}. " +
+                            $"Waiting {attempt.RetryDelay.TotalSeconds} secs for the next try...");
                     }
-                })
-            .ExecuteAsync(async () => await httpClient.GetAsync(url, cancellationToken.Value));
+                    else if (attempt.Result != null)
+                    {
+                        logger?.LogWarning(
+                            $"{attempt.RetryCount}. HTTP request attempt failed to {url} with an error: {(int)attempt.Result.StatusCode}-{attempt.Result.ReasonPhrase}. " +
+                            $"Waiting {attempt.RetryDelay.TotalSeconds} secs for the next try...");
+                    }
+                    return Task.CompletedTask;
+                }
+            },
+            cancellationToken.Value);
     }
 }
