@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -30,7 +31,9 @@ public class AspNetCoreAuditLogContributor : AuditLogContributor, ITransientDepe
             return;
         }
 
-        if (httpContext.WebSockets.IsWebSocketRequest)
+        // HttpContext.WebSockets writes to the feature collection on every read when the request has no
+        // websocket feature, which breaks other threads reading the same HttpContext (e.g. Blazor prerendering).
+        if (httpContext.Features.Get<IHttpWebSocketFeature>()?.IsWebSocketRequest == true)
         {
             return;
         }
