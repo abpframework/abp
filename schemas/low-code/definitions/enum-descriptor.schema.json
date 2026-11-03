@@ -1,56 +1,112 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "enum-descriptor.schema.json",
-    "title": "EnumDescriptor",
-    "description": "Describes an integer-backed enum definition for use in entity properties and select/kanban UI.",
-    "markdownDescription": "AI guidance: define enums before entity properties that reference them. Use a stable namespace-style `name` such as `Acme.Events.EventStatus`. Each value name should be PascalCase and unique within the enum. Use explicit integer `value`s for stable persistence; do not reorder or renumber after data exists.",
-    "type": "object",
-    "properties": {
-        "$schema": {
-            "type": "string",
-            "description": "Optional schema reference used when this descriptor is stored as a model descriptor file."
-        },
-        "name": {
-            "type": "string",
-            "description": "Stable unique enum name. Use a namespace-style name if the enum belongs to a module/domain, for example 'Acme.Events.EventStatus'.",
-            "minLength": 1
-        },
-        "values": {
-            "type": "array",
-            "description": "Ordered list of integer-backed enum values. Values are stored as integers; names are used for display and model readability.",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string",
-                        "description": "PascalCase enum value name, for example 'Draft', 'Scheduled', or 'Completed'."
-                    },
-                    "value": {
-                        "type": "integer",
-                        "description": "Stable integer value. Prefer explicit values starting at 0 so generated descriptor JSON is deterministic."
-                    }
-                },
-                "required": [
-                    "name"
-                ],
-                "additionalProperties": false
-            },
-            "minItems": 1
-        }
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "enum-descriptor.schema.json",
+  "title": "EnumDescriptor",
+  "description": "Describes an integer-backed enum definition for use in entity properties and select/kanban UI, including optional per-value display metadata.",
+  "markdownDescription": "AI guidance: define enums before entity properties that reference them. Use a stable namespace-style `name` such as `Acme.Events.EventStatus`. Each value name should be PascalCase and unique within the enum. Use explicit integer `value`s for stable persistence; do not reorder or renumber after data exists. Add `displayName`, `presentation`, `color`, and `icon` on values when pages should render badges or icons by default; pages can still override them with `enumPresentations`.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional schema reference used when this descriptor is stored as a model descriptor file."
     },
-    "required": [
-        "name",
-        "values"
-    ],
-    "additionalProperties": false,
-    "examples": [
-        {
-            "name": "Acme.Events.EventStatus",
-            "values": [
-                { "name": "Draft", "value": 0 },
-                { "name": "Scheduled", "value": 1 },
-                { "name": "Completed", "value": 2 }
-            ]
-        }
-    ]
+    "name": {
+      "type": "string",
+      "description": "Stable unique enum name. Use a namespace-style name if the enum belongs to a module/domain, for example 'Acme.Events.EventStatus'.",
+      "minLength": 1
+    },
+    "app": {
+      "type": "string",
+      "description": "Name of the low-code app that owns this enum. Omit for the default app. Must match an apps[].name.",
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "displayName": {
+      "type": "string",
+      "description": "User-facing enum title used by the designer, for example 'Event Status'.",
+      "minLength": 1
+    },
+    "order": {
+      "type": "integer",
+      "description": "Optional sort order used when listing enums in the designer. Lower values appear first."
+    },
+    "extendsLowerLayer": {
+      "type": "boolean",
+      "description": "When true, this descriptor extends an enum with the same name defined in a lower model layer (for example a code enum) by adding values or display metadata instead of defining a new enum.",
+      "default": false
+    },
+    "metadata": {
+      "$ref": "descriptor-metadata.schema.json"
+    },
+    "values": {
+      "type": "array",
+      "description": "Ordered list of integer-backed enum values. Values are stored as integers; names are used for display and model readability. The array is always required; it may be empty only when extendsLowerLayer is true and the descriptor changes just displayName/order/metadata.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "PascalCase enum value name, for example 'Draft', 'Scheduled', or 'Completed'.",
+            "minLength": 1
+          },
+          "value": {
+            "type": "integer",
+            "description": "Stable integer value. Prefer explicit values starting at 0 so generated descriptor JSON is deterministic. When omitted, the previous value plus one is assigned."
+          },
+          "displayName": {
+            "type": ["string", "null"],
+            "description": "User-facing label for this value, for example 'In Progress'. Defaults to the value name."
+          },
+          "presentation": {
+            "oneOf": [
+              { "$ref": "enum-value-presentation.schema.json" },
+              { "type": "null" }
+            ],
+            "description": "Default runtime presentation for this value: text, badge, or iconOnly."
+          },
+          "color": {
+            "type": ["string", "null"],
+            "description": "Default badge color for this value, for example '#F59E0B'."
+          },
+          "icon": {
+            "oneOf": [
+              { "$ref": "presentation-icon-reference.schema.json" },
+              { "type": "null" }
+            ],
+            "description": "Default icon for this value, used by badge and iconOnly presentations."
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "name",
+    "values"
+  ],
+  "if": {
+    "properties": { "extendsLowerLayer": { "const": true } },
+    "required": ["extendsLowerLayer"]
+  },
+  "then": {},
+  "else": {
+    "properties": {
+      "values": { "minItems": 1 }
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "name": "Acme.Events.EventStatus",
+      "displayName": "Event Status",
+      "values": [
+        { "name": "Draft", "value": 0 },
+        { "name": "Scheduled", "value": 1, "displayName": "Scheduled", "presentation": "badge", "color": "#2563EB" },
+        { "name": "Completed", "value": 2, "presentation": "badge", "color": "#16A34A", "icon": { "kind": "class", "value": "fa-solid fa-check" } }
+      ]
+    }
+  ]
 }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
@@ -22,7 +22,7 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<IIdentityDbContext,
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .IncludeDetails(includeDetails)
             .OrderBy(x => x.Id)
             .FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, GetCancellationToken(cancellationToken));
@@ -67,14 +67,14 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<IIdentityDbContext,
         IEnumerable<Guid> ids,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .Where(t => ids.Contains(t.Id))
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<IdentityRole>> GetListAsync(IEnumerable<string> names, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .Where(t => names.Contains(t.Name))
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
@@ -82,7 +82,7 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<IIdentityDbContext,
     public virtual async Task<List<IdentityRole>> GetDefaultOnesAsync(
         bool includeDetails = false, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .IncludeDetails(includeDetails)
             .Where(r => r.IsDefault)
             .ToListAsync(GetCancellationToken(cancellationToken));
@@ -92,7 +92,7 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<IIdentityDbContext,
         string filter = null,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .WhereIf(!filter.IsNullOrWhiteSpace(),
                 x => x.Name.Contains(filter) ||
                      x.NormalizedName.Contains(filter))
@@ -121,7 +121,7 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<IIdentityDbContext,
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .IncludeDetails(includeDetails)
             .WhereIf(!filter.IsNullOrWhiteSpace(),
                 x => x.Name.Contains(filter) ||

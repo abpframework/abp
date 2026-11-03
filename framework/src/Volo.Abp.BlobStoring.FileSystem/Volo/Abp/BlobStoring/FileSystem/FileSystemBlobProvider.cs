@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using Polly;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.IO;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.BlobStoring.FileSystem;
 
@@ -48,9 +48,8 @@ public class FileSystemBlobProvider : BlobProviderBase, ITransientDependency
 
         var targetOpened = false;
 
-        await Policy.Handle<IOException>(_ => sourcePosition >= 0 || !targetOpened)
-            .WaitAndRetryAsync(2, retryCount => TimeSpan.FromSeconds(retryCount))
-            .ExecuteAsync(async () =>
+        await RetryHelper.ExecuteAsync(
+            async _ =>
             {
                 if (sourcePosition >= 0)
                 {
@@ -68,7 +67,14 @@ public class FileSystemBlobProvider : BlobProviderBase, ITransientDependency
 
                     await fileStream.FlushAsync();
                 }
-            });
+            },
+            new RetryOptions
+            {
+                MaxRetryCount = 2,
+                DelayFactory = retryCount => TimeSpan.FromSeconds(retryCount),
+                ShouldRetryOnException = ex => ex is IOException && (sourcePosition >= 0 || !targetOpened)
+            },
+            args.CancellationToken);
     }
 
     public override Task<bool> DeleteAsync(BlobProviderDeleteArgs args)
@@ -92,9 +98,15 @@ public class FileSystemBlobProvider : BlobProviderBase, ITransientDependency
             return null;
         }
 
-        return await Policy.Handle<IOException>()
-            .WaitAndRetryAsync(2, retryCount => TimeSpan.FromSeconds(retryCount))
-            .ExecuteAsync(() => Task.FromResult(File.OpenRead(filePath)));
+        return await RetryHelper.ExecuteAsync(
+            _ => Task.FromResult(File.OpenRead(filePath)),
+            new RetryOptions<FileStream>
+            {
+                MaxRetryCount = 2,
+                DelayFactory = retryCount => TimeSpan.FromSeconds(retryCount),
+                ShouldRetryOnException = ex => ex is IOException
+            },
+            args.CancellationToken);
     }
 
     protected virtual Stream OpenFileStream(string filePath, FileMode fileMode)

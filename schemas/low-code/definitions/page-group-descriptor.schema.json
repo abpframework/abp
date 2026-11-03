@@ -15,13 +15,19 @@
       "description": "Unique URL-safe identifier for the group. Prefer kebab-case, for example 'crm' or 'content-studio'.",
       "minLength": 1
     },
+    "app": {
+      "type": "string",
+      "description": "Name of the low-code app that owns this group. Omit for the default app. Must match an apps[].name.",
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
     "title": {
       "type": "string",
       "description": "Display title for the menu group.",
       "minLength": 1
     },
     "icon": {
-      "type": "string",
+      "type": ["string", "null"],
       "description": "FontAwesome icon class, for example 'fa-solid fa-folder' or 'fa-solid fa-calendar-days'."
     },
     "order": {
@@ -30,12 +36,27 @@
       "default": 0
     },
     "parent": {
-      "type": "string",
-      "description": "Name of the parent group for nesting. Must match another pageGroups[].name. Omit for root-level groups.",
-      "minLength": 1
+      "type": ["string", "null"],
+      "description": "Name of the parent group for nesting. Must match another pageGroups[].name. Omit for root-level groups."
+    },
+    "extendsLowerLayer": {
+      "type": "boolean",
+      "description": "When true, this descriptor overrides selected fields of a page group with the same name defined in a lower model layer; title becomes optional.",
+      "default": false
+    },
+    "metadata": {
+      "$ref": "descriptor-metadata.schema.json"
     }
   },
-  "required": ["name", "title"],
+  "required": ["name"],
+  "if": {
+    "properties": { "extendsLowerLayer": { "const": true } },
+    "required": ["extendsLowerLayer"]
+  },
+  "then": {},
+  "else": {
+    "required": ["title"]
+  },
   "additionalProperties": false,
   "examples": [
     { "name": "events", "title": "Events", "icon": "fa-solid fa-calendar-days", "order": 10 },

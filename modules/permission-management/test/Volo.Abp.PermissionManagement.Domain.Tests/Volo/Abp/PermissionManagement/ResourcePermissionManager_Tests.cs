@@ -342,6 +342,41 @@ public class ResourcePermissionManager_Tests : PermissionTestBase
     }
 
     [Fact]
+    public async Task DeleteByNameAsync_Should_Delete_Duplicate_Host_Grants()
+    {
+        for (var i = 0; i < 2; i++)
+        {
+            await _resourcePermissionGrantRepository.InsertAsync(new ResourcePermissionGrant(
+                Guid.NewGuid(),
+                "MyResourcePermission1",
+                TestEntityResource.ResourceName,
+                TestEntityResource.ResourceKey1,
+                "Test",
+                "Test")
+            );
+        }
+        (await _resourcePermissionGrantRepository.GetListAsync(new[] { "MyResourcePermission1" },
+            TestEntityResource.ResourceName,
+            TestEntityResource.ResourceKey1,
+            "Test",
+            "Test")).Count.ShouldBe(2);
+
+        await _resourcePermissionManager.DeleteAsync(
+            "MyResourcePermission1",
+            TestEntityResource.ResourceName,
+            TestEntityResource.ResourceKey1,
+            "Test",
+            "Test");
+
+        (await _resourcePermissionGrantRepository.FindAsync(
+            "MyResourcePermission1",
+            TestEntityResource.ResourceName,
+            TestEntityResource.ResourceKey1,
+            "Test",
+            "Test")).ShouldBeNull();
+    }
+
+    [Fact]
     public async Task GetProviderKeyLookupServicesAsync_Should_Not_Return_Unavailable_Services()
     {
         var lookupServices = await _resourcePermissionManager.GetProviderKeyLookupServicesAsync();
