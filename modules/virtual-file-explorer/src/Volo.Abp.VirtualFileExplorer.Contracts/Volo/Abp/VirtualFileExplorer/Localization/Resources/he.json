@@ -1,0 +1,16 @@
+{
+  "culture": "he",
+  "texts": {
+    "VirtualFileExplorer": "סייר הקבצים הווירטואליים",
+    "VirtualFileType": "סוג הקובץ הווירטואלי",
+    "Menu:VirtualFileExplorer": "סייר הקבצים הווירטואליים",
+    "LastUpdateTime": "זמן העדכון האחרון",
+    "VirtualFileName": "שם הקובץ הווירטואלי",
+    "FileContent": "תוכן הקובץ",
+    "Size": "גודל",
+    "BackToRoot": "חזרה לתיקיית הבסיס",
+    "EmptyFileInfoList": "אין קבצים וירטואליים",
+    "Permission:AbpVirtualFileExplorer": "סייר הקבצים הווירטואליים",
+    "Permission:AbpVirtualFileExplorer:View": "צפייה"
+  }
+}
