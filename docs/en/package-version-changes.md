@@ -12,6 +12,10 @@
 | Package | Old Version | New Version | PR |
 |---------|-------------|-------------|-----|
 | MongoDB.Driver | 3.12.0 | 3.13.0 | #26332 |
+| @swimlane/ngx-datatable | ~22.0.0 | ~25.1.0 | #26380, #26381 |
+| @ng-bootstrap/ng-bootstrap | ~20.0.0 | ~21.0.0 | #26380 |
+| ng-zorro-antd | ~21.3.1 | ~22.1.0 | #26380 |
+| @angular/aria | ~21.2.0 | ~22.0.0 | #26380 |
 
 ## 10.7.0-rc.4
 
