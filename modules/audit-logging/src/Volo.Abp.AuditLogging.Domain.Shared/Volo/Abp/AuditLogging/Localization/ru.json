@@ -113,6 +113,15 @@
     "AuditLogExportCompletedSubject": "Экспорт журнала аудита завершен",
     "DownloadLinkExplanation": "Вы можете скачать файл по ссылке ниже до {0} (UTC)",
     "DownloadNow": "Скачать сейчас",
-    "TryAgainMessage": "Пожалуйста, попробуйте еще раз. Если проблема не исчезнет, обратитесь в службу поддержки."
+    "TryAgainMessage": "Пожалуйста, попробуйте еще раз. Если проблема не исчезнет, обратитесь в службу поддержки.",
+    "Permission:SettingManagement": "Управление настройками",
+    "Action": "Действие",
+    "NoActions": "Нет действий",
+    "MinExecutionDuration": "Мин. продолжительность",
+    "MaxExecutionDuration": "Макс. продолжительность",
+    "NoDataAvailable": "Нет доступных данных",
+    "AuditLogExportFailedSubject": "Экспорт журнала аудита не удался",
+    "EntityChangeExportFailedSubject": "Экспорт изменений сущности не удался",
+    "FileNotFound": "Файл не найден: {0}"
   }
 }

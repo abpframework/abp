@@ -113,6 +113,15 @@
     "AuditLogExportCompletedSubject": "Export av granskningslogg slutförd",
     "DownloadLinkExplanation": "Du kan ladda ner filen via länken nedan fram till {0} (UTC)",
     "DownloadNow": "Ladda ner nu",
-    "TryAgainMessage": "Försök igen. Om problemet kvarstår, kontakta support."
+    "TryAgainMessage": "Försök igen. Om problemet kvarstår, kontakta support.",
+    "Permission:SettingManagement": "Hantering av inställningar",
+    "Action": "Åtgärd",
+    "NoActions": "Inga åtgärder",
+    "MinExecutionDuration": "Min. varaktighet",
+    "MaxExecutionDuration": "Max. varaktighet",
+    "NoDataAvailable": "Inga data tillgängliga",
+    "AuditLogExportFailedSubject": "Export av granskningslogg misslyckades",
+    "EntityChangeExportFailedSubject": "Export av entitetsändringar misslyckades",
+    "FileNotFound": "Filen hittades inte: {0}"
   }
 }
