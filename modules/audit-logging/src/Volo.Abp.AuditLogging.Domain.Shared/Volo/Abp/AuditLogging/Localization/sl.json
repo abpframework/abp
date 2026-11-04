@@ -113,6 +113,15 @@
     "AuditLogExportCompletedSubject": "Izvoz dnevnika revizije dokončan",
     "DownloadLinkExplanation": "Datoteko lahko prenesete s spodnjo povezavo do {0} (UTC)",
     "DownloadNow": "Prenesi zdaj",
-    "TryAgainMessage": "Prosimo, poskusite znova. Če težava vztraja, se obrnite na podporo."
+    "TryAgainMessage": "Prosimo, poskusite znova. Če težava vztraja, se obrnite na podporo.",
+    "Permission:SettingManagement": "Upravljanje nastavitev",
+    "Action": "Dejanje",
+    "NoActions": "Ni dejanj",
+    "MinExecutionDuration": "Najk. trajanje",
+    "MaxExecutionDuration": "Najd. trajanje",
+    "NoDataAvailable": "Ni razpoložljivih podatkov",
+    "AuditLogExportFailedSubject": "Izvoz dnevnika revizije ni uspel",
+    "EntityChangeExportFailedSubject": "Izvoz sprememb entitet ni uspel",
+    "FileNotFound": "Datoteke ni mogoče najti: {0}"
   }
 }

@@ -113,6 +113,15 @@
     "AuditLogExportCompletedSubject": "Tarkastuslokin vienti valmis",
     "DownloadLinkExplanation": "Voit ladata tiedoston alla olevan linkin kautta {0} (UTC) asti",
     "DownloadNow": "Lataa nyt",
-    "TryAgainMessage": "Yritä uudelleen. Jos ongelma jatkuu, ota yhteyttä tukeen."
+    "TryAgainMessage": "Yritä uudelleen. Jos ongelma jatkuu, ota yhteyttä tukeen.",
+    "Permission:SettingManagement": "Asetusten hallinta",
+    "Action": "Toiminto",
+    "NoActions": "Ei toimintoja",
+    "MinExecutionDuration": "Min. kesto",
+    "MaxExecutionDuration": "Maks. kesto",
+    "NoDataAvailable": "Tietoja ei ole saatavilla",
+    "AuditLogExportFailedSubject": "Tarkastuslokin vienti epäonnistui",
+    "EntityChangeExportFailedSubject": "Entiteettimuutosten vienti epäonnistui",
+    "FileNotFound": "Tiedostoa ei löytynyt: {0}"
   }
 }

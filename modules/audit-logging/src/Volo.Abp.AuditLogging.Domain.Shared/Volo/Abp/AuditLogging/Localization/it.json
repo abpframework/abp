@@ -112,6 +112,15 @@
     "AuditLogExportCompletedSubject": "Esportazione log di audit completata",
     "DownloadLinkExplanation": "Puoi scaricare il file utilizzando il link qui sotto fino a {0} (UTC)",
     "DownloadNow": "Scarica ora",
-    "TryAgainMessage": "Per favore riprova. Se il problema persiste, contatta il supporto."
+    "TryAgainMessage": "Per favore riprova. Se il problema persiste, contatta il supporto.",
+    "Permission:SettingManagement": "Gestione delle impostazioni",
+    "Action": "Azione",
+    "NoActions": "Nessuna azione",
+    "MinExecutionDuration": "Durata min.",
+    "MaxExecutionDuration": "Durata max.",
+    "NoDataAvailable": "Nessun dato disponibile",
+    "AuditLogExportFailedSubject": "Esportazione log di audit fallita",
+    "EntityChangeExportFailedSubject": "Esportazione modifiche entità fallita",
+    "FileNotFound": "File non trovato: {0}"
   }
 }
