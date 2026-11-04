@@ -7,13 +7,13 @@
     [list]="list()"
     [selectionType]="selectable() ? selectionType() : undefined"
     (activate)="tableActivate.emit($event)"
-    (select)="onSelect($event)"
+    (selectedChange)="onSelect($event)"
     [selected]="selected()"
     (scroll)="onScroll($event)"
     [scrollbarV]="infiniteScroll()"
     [style.height]="getTableHeight()"
     [loadingIndicator]="infiniteScroll() && isLoading()"
-    [footerHeight]="infiniteScroll() ? false : 50"
+    [footerHeight]="infiniteScroll() ? 0 : 50"
   >
     @if (effectiveRowDetailTemplate) {
       @let detailRowHeight = effectiveRowDetailRowHeight();
