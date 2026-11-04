@@ -113,6 +113,15 @@
     "AuditLogExportCompletedSubject": "Auditlog export voltooid",
     "DownloadLinkExplanation": "U kunt het bestand downloaden via de onderstaande link tot {0} (UTC)",
     "DownloadNow": "Download nu",
-    "TryAgainMessage": "Probeer het opnieuw. Als het probleem aanhoudt, neem dan contact op met de ondersteuning."
+    "TryAgainMessage": "Probeer het opnieuw. Als het probleem aanhoudt, neem dan contact op met de ondersteuning.",
+    "Permission:SettingManagement": "Instellingenbeheer",
+    "Action": "Actie",
+    "NoActions": "Geen acties",
+    "MinExecutionDuration": "Min. duur",
+    "MaxExecutionDuration": "Max. duur",
+    "NoDataAvailable": "Geen gegevens beschikbaar",
+    "AuditLogExportFailedSubject": "Auditlog export mislukt",
+    "EntityChangeExportFailedSubject": "Export van entiteitswijzigingen mislukt",
+    "FileNotFound": "Bestand niet gevonden: {0}"
   }
 }

@@ -113,6 +113,15 @@
     "AuditLogExportCompletedSubject": "Exportação de registos de auditoria concluída",
     "DownloadLinkExplanation": "Pode transferir o ficheiro através do link abaixo até {0} (UTC)",
     "DownloadNow": "Transferir agora",
-    "TryAgainMessage": "Tente novamente. Se o problema persistir, contacte o suporte."
+    "TryAgainMessage": "Tente novamente. Se o problema persistir, contacte o suporte.",
+    "Permission:SettingManagement": "Gestão de definições",
+    "Action": "Ação",
+    "NoActions": "Sem ações",
+    "MinExecutionDuration": "Duração mín.",
+    "MaxExecutionDuration": "Duração máx.",
+    "NoDataAvailable": "Não existem dados disponíveis",
+    "AuditLogExportFailedSubject": "Falha na exportação de registos de auditoria",
+    "EntityChangeExportFailedSubject": "Falha na exportação de alterações de registos",
+    "FileNotFound": "Ficheiro não encontrado: {0}"
   }
 }

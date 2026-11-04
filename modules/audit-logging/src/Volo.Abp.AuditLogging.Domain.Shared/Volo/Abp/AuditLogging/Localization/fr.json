@@ -113,6 +113,15 @@
     "AuditLogExportCompletedSubject": "Exportation du journal d'audit terminée",
     "DownloadLinkExplanation": "Vous pouvez télécharger le fichier en utilisant le lien ci-dessous jusqu'au {0} (UTC)",
     "DownloadNow": "Télécharger maintenant",
-    "TryAgainMessage": "Veuillez réessayer. Si le problème persiste, veuillez contacter le support."
+    "TryAgainMessage": "Veuillez réessayer. Si le problème persiste, veuillez contacter le support.",
+    "Permission:SettingManagement": "Gestion des paramètres",
+    "Action": "Action",
+    "NoActions": "Aucune action",
+    "MinExecutionDuration": "Durée min.",
+    "MaxExecutionDuration": "Durée max.",
+    "NoDataAvailable": "Aucune donnée disponible",
+    "AuditLogExportFailedSubject": "Échec de l'exportation du journal d'audit",
+    "EntityChangeExportFailedSubject": "Échec de l'exportation des changements d'entité",
+    "FileNotFound": "Fichier introuvable : {0}"
   }
 }
