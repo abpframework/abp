@@ -85,6 +85,15 @@
     "TenantId": "Leigutakaauðkenni",
     "DownloadLinkExplanation": "Þú getur sótt skrána með tenglinum hér að neðan til {0} (UTC)",
     "DownloadNow": "Sækja núna",
-    "TryAgainMessage": "Vinsamlegast reyndu aftur. Ef vandamálið er viðvarandi, hafðu samband við þjónustuaðila."
+    "TryAgainMessage": "Vinsamlegast reyndu aftur. Ef vandamálið er viðvarandi, hafðu samband við þjónustuaðila.",
+    "Permission:SettingManagement": "Stillingastjórnun",
+    "Action": "Aðgerð",
+    "NoActions": "Engar aðgerðir",
+    "MinExecutionDuration": "Lágm. lengd",
+    "MaxExecutionDuration": "Hám. lengd",
+    "NoDataAvailable": "Engin gögn tiltæk",
+    "AuditLogExportFailedSubject": "Útflutningur endurskoðunarskrár mistókst",
+    "EntityChangeExportFailedSubject": "Útflutningur einingabreytinga mistókst",
+    "FileNotFound": "Skrá fannst ekki: {0}"
   }
 }

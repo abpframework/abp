@@ -113,6 +113,15 @@
     "AuditLogExportCompletedSubject": "ייצוא יומן הביקורת הושלם",
     "DownloadLinkExplanation": "אפשר להוריד את הקובץ בקישור שלמטה עד {0} (UTC)",
     "DownloadNow": "הורדה עכשיו",
-    "TryAgainMessage": "נסו שוב. אם הבעיה נמשכת, פנו לתמיכה."
+    "TryAgainMessage": "נסו שוב. אם הבעיה נמשכת, פנו לתמיכה.",
+    "Permission:SettingManagement": "ניהול הגדרות",
+    "Action": "פעולה",
+    "NoActions": "אין פעולות",
+    "MinExecutionDuration": "משך מינימלי",
+    "MaxExecutionDuration": "משך מרבי",
+    "NoDataAvailable": "אין נתונים זמינים",
+    "AuditLogExportFailedSubject": "ייצוא יומן הביקורת נכשל",
+    "EntityChangeExportFailedSubject": "ייצוא שינויי הישויות נכשל",
+    "FileNotFound": "הקובץ לא נמצא: {0}"
   }
 }
