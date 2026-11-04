@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Use ABP Low-Code runtime model history, undo and redo, save points, comparison, safe entity deletion, and retained-data restoration."
+    "Description": "Use ABP Low-Code runtime model history, undo and redo, save points, comparison, change summaries, history extension points, and safe entity deletion."
 }
 ```
 
@@ -23,7 +23,7 @@ Each successful model write is recorded as a batch with:
 
 History is model history, not record audit history. It tracks changes to entities, pages, forms, permissions, scripts, and other descriptors; it does not list CRUD changes made to business records.
 
-The history list is paged independently from the save-point list. The verified defaults keep up to 200 history batches and 100 save points per runtime layer. Retention can be changed through `LowCodeRuntimeHistoryOptions`.
+The history list is paged independently from the save-point list. The history panel shows a restore separately from an add. The defaults keep up to 200 history batches and 100 save points for each app of a runtime layer. Retention can be changed through `LowCodeRuntimeHistoryOptions` (`MaxHistoryEntriesPerLayer`, `HistoryCleanupThresholdPerLayer`, and `MaxSavePointsPerLayer`).
 
 ## Undo, Redo, and Targeted Actions
 
@@ -41,6 +41,8 @@ Available history actions are:
 
 Use **Go to save point** when its history cursor is still available. Use **Restore save point** when the exact cursor is no longer retained or when the saved snapshot is the intended source of truth.
 
+When an action brings back an entity, a property, or a collection that was deleted, it restores the object from its kept data instead of creating an empty table or column. A save point restore reads each object's data from where it is kept now. See [Deleted Data and History](deleted-objects.md#deleted-data-and-history).
+
 ## Preview Before Apply
 
 Every history action can be previewed before it writes. The preview reports:
@@ -54,56 +56,44 @@ Every history action can be previewed before it writes. The preview reports:
 
 Apply the action with the same current concurrency stamp used by the reviewed preview. If the model changes between preview and apply, refresh history and preview again.
 
-History actions do not drop physical tables or columns by default. When a preview reports destructive schema impact, the apply request requires explicit destructive confirmation. Review the affected operations and data-loss impact before enabling it.
+History actions never drop data. When an action removes an entity, a property, or a collection, its data is kept under a tombstone name exactly as a delete in the Designer keeps it, and only a purge from the **Deleted objects** page drops it. A history action therefore needs no destructive confirmation: the preview's `requiresDestructiveConfirmation` is always `false` and is kept only for existing clients. See [Deleted Objects](deleted-objects.md).
 
 ## Save Points and Compare
 
 A save point stores a named model snapshot plus its history cursor. Create one before a coordinated set of runtime changes or before a risky schema edit.
 
-History comparison can compare current, save-point, before-save, after-save, and operation-checkpoint states. The result contains forward and inverse operations and reports both general and destructive schema impact without changing the model.
+History comparison can compare current, save-point, before-save, after-save, and operation-checkpoint states. The result contains forward and inverse operations and reports both general and destructive schema impact without changing the model. A list item whose `order` equals its position reads the same as one without an `order`, so a snapshot that names that order explicitly does not show up as a change.
+
+A save point restore is applied as the difference between the current model and the snapshot. When that difference removes a property and binds a form field to another property in the same step, for example when going back from a lookup to the text property it replaced, the form field is kept and re-bound instead of being removed with the property.
 
 Comparison and history actions are protected by entry, operation, and serialized-payload budgets. Old history can be pruned while a save point retains its snapshot for later comparison or restore.
 
-## Safe Entity Deletion
+Batches created by restoring a save point get a **Restore** badge in **History**.
+
+Deleting a save point removes its row from the database. Deleting an app removes its history batches and save points too.
+
+## Deleting Entities and Properties
 
 Entity deletion is a planned operation. Before the Designer deletes an entity, it builds a plan containing:
 
 * Descriptors that will be removed with it
 * Relationships that need resolution
 * Blocking references
-* Affected physical tables
+* Affected physical tables, including the collection tables kept with the entity
 * Whether each table is Designer-managed or migration-managed
 * Current concurrency stamp and a plan fingerprint
 
-For each resolvable relationship, choose one of the actions offered by the plan, such as removing the source property or converting it to a scalar. The apply step rejects stale plans and unreviewed relationship decisions.
+For each resolvable relationship, choose one of the actions offered by the plan, such as removing the source property or converting it to a scalar. The apply step rejects stale plans and unreviewed relationship decisions. Migration-managed entities cannot be physically changed by the runtime Designer; their plan requires the migration path to be acknowledged instead.
 
-Designer-managed tables require an explicit data choice:
-
-* **Keep physical data** removes the model descriptors while retaining the physical table and its file, image, attachment, and collection data.
-* **Delete physical data** drops eligible physical tables and deletes their associated stored data.
-
-Migration-managed entities cannot be physically dropped by the runtime Designer. Their plan requires the migration path to be acknowledged instead.
-
-## Restore Retained Entity Data
-
-When an entity was deleted with **Keep physical data**, the Designer can preview and restore its retained table. The preview reports the table, row count, property shape, retained physical object ID, schema fingerprint, and current concurrency stamp.
-
-Restore only from a fresh preview. The apply request must repeat its exact:
-
-* `retainedPhysicalObjectId`
-* `schemaFingerprint`
-* `concurrencyStamp`
-
-The server rejects a stale concurrency stamp, changed schema, mismatched retained object, or already-restored table. A successful restore recreates the entity descriptor against the retained physical data instead of copying the rows into a new table.
-
-Keeping physical data is not a backup strategy. Retention metadata remains part of the same application database and should be covered by the application's normal backup and recovery process.
+Deleting an entity, a property, or a primitive collection keeps its data under a tombstone name. The **Deleted objects** page lists the kept data and can restore or purge it, and history actions bring the data back with the object. See [Deleted Objects](deleted-objects.md).
 
 ## MCP Automation
 
-The runtime-only [MCP Integration](mcp.md) exposes the same history, comparison, formula/rollup, safe-deletion, and retained-restore service workflows. MCP clients should follow the feature semantics on this page, preview destructive operations, preserve concurrency stamps, and re-read [Health](health.md) after apply.
+The runtime-only [MCP Integration](mcp.md) exposes the same history, comparison, formula/rollup, safe-deletion, and deleted-object restore workflows. Purging deleted data and deleting apps are not available through MCP. MCP clients should follow the feature semantics on this page, preview destructive operations, preserve concurrency stamps, and re-read [Health](health.md) after apply.
 
 ## See Also
 
+* [Deleted Objects](deleted-objects.md)
 * [Low-Code Designer](designer.md)
 * [Health](health.md)
 * [MCP Integration](mcp.md)

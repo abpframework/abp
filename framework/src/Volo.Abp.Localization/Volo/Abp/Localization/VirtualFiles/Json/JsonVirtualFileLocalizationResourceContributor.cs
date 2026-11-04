@@ -19,6 +19,22 @@ public class JsonVirtualFileLocalizationResourceContributor : VirtualFileLocaliz
         return file.Name.EndsWith(".json", StringComparison.OrdinalIgnoreCase);
     }
 
+    protected override string? GetCultureNameOrNull(IFileInfo file)
+    {
+        try
+        {
+            using (var stream = file.CreateReadStream())
+            {
+                return JsonLocalizationDictionaryBuilder.GetCultureNameOrNull(stream);
+            }
+        }
+        catch (Exception)
+        {
+            // All files are parsed as before, which reports the error if there is one.
+            return null;
+        }
+    }
+
     protected override ILocalizationDictionary? CreateDictionaryFromFileContent(string jsonString)
     {
         return JsonLocalizationDictionaryBuilder.BuildFromJsonString(jsonString);

@@ -43,6 +43,11 @@
       "items": {
         "type": "object",
         "properties": {
+          "stableId": {
+            "type": "string",
+            "description": "Optional stable identifier assigned by the designer so model history and mutations can address this action. Omit in hand-written descriptors; the runtime generates one when missing.",
+            "minLength": 1
+          },
           "type": {
             "type": "string",
             "enum": ["hide", "show", "disable", "enable", "setValue"],

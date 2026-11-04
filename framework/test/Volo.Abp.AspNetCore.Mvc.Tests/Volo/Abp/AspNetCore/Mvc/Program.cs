@@ -25,9 +25,9 @@ await builder.RunAbpModuleAsync<AbpAspNetCoreMvcTestModule>(options =>
         if (parentDirectory.Name == "test")
         {
 #if DEBUG
-            plugDllInPath = Path.Combine(parentDirectory.FullName, "Volo.Abp.AspNetCore.Mvc.PlugIn", "bin", "Debug", "net10.0");
+            plugDllInPath = Path.Combine(parentDirectory.FullName, "Volo.Abp.AspNetCore.Mvc.PlugIn", "bin", "Debug", "net11.0");
 #else
-            plugDllInPath = Path.Combine(parentDirectory.FullName, "Volo.Abp.AspNetCore.Mvc.PlugIn", "bin", "Release", "net10.0");
+            plugDllInPath = Path.Combine(parentDirectory.FullName, "Volo.Abp.AspNetCore.Mvc.PlugIn", "bin", "Release", "net11.0");
 #endif
             break;
         }

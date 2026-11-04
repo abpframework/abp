@@ -666,6 +666,7 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
         abpButtonTagHelper.Icon = icon;
 
         abpButtonTagHelper.Disabled = TagHelper.IsDisabled || GetAttribute<DisabledInput>() != null;
+        abpButtonTagHelper.Size = GetButtonSize(context, output);
 
         if (!visible)
         {
@@ -772,6 +773,23 @@ public abstract class AbpDatePickerBaseTagHelperService<TTagHelper> : AbpTagHelp
             AbpFormControlSize.Medium => "form-control-md",
             AbpFormControlSize.Large => "form-control-lg",
             _ => ""
+        };
+    }
+
+    protected virtual AbpButtonSize GetButtonSize(TagHelperContext context, TagHelperOutput output)
+    {
+        var attribute = GetAttribute<FormControlSize>();
+
+        if (attribute != null)
+        {
+            TagHelper.Size = attribute.Size;
+        }
+
+        return TagHelper.Size switch
+        {
+            AbpFormControlSize.Small => AbpButtonSize.Small,
+            AbpFormControlSize.Large => AbpButtonSize.Large,
+            _ => AbpButtonSize.Default
         };
     }
 

@@ -3,7 +3,7 @@
   "$id": "page-descriptor.schema.json",
   "title": "PageDescriptor",
   "description": "Describes a runtime UI page. Pages create menu items and choose how an entity or dashboard is rendered.",
-  "markdownDescription": "AI guidance: `name` is the stable route/menu key and should be URL-safe kebab-case (for example `customers` or `event-calendar`). `title` is user-facing. For entity pages, set `entityName` to an existing entity. Configure list/gallery/card visibility with `columns`, filtering with `filters`, and create/edit UI with form names. For `dashboard` pages, provide `dashboard` and omit entity-only fields unless intentionally supported by the runtime. Do not put page-only settings on entity properties.",
+  "markdownDescription": "AI guidance: `name` is the stable route/menu key and should be URL-safe kebab-case (for example `customers` or `event-calendar`). `title` is user-facing. For entity pages, set `entityName` to an existing entity. Configure list/gallery/card visibility with `columns`, filtering with `filters`, server-enforced scoping with `backendFilter`, related-record access with `relationships`, and create/edit UI with form names. Use `enumPresentations` to override enum display for this page only. For `dashboard` pages, provide `dashboard` and omit entity-only fields unless intentionally supported by the runtime. Do not put page-only settings on entity properties.",
   "type": "object",
   "properties": {
     "$schema": {
@@ -12,8 +12,14 @@
     },
     "name": {
       "type": "string",
-      "description": "Stable URL-safe page identifier. Prefer kebab-case, for example 'customers', 'event-calendar', or 'sales-dashboard'. This becomes part of the runtime route and is referenced by saveSuccessPageName.",
+      "description": "Stable URL-safe page identifier. Prefer kebab-case, for example 'customers', 'event-calendar', or 'sales-dashboard'. This becomes part of the runtime route and is referenced by saveSuccessPageName and relationships.",
       "minLength": 1
+    },
+    "app": {
+      "type": "string",
+      "description": "Name of the low-code app that owns this page. Omit for the default app. Must match an apps[].name.",
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
     },
     "title": {
       "type": "string",
@@ -23,6 +29,11 @@
     "icon": {
       "type": "string",
       "description": "FontAwesome icon class for the menu item, for example 'fa-solid fa-users'."
+    },
+    "showInMenu": {
+      "type": "boolean",
+      "description": "Whether the page gets a menu item. Set false for pages that are only reached through relationships, saveSuccessPageName, or direct links.",
+      "default": true
     },
     "type": {
       "$ref": "page-type.schema.json"
@@ -59,8 +70,13 @@
     },
     "galleryImageProperty": {
       "type": "string",
-      "description": "Optional Image property used as the cover image for gallery pages. The property should have entity property type image.",
+      "description": "Optional Image property used as the cover image for gallery pages. The property should have entity property type image; an image collection property is supported with galleryImagePresentation.",
       "minLength": 1
+    },
+    "galleryImagePresentation": {
+      "type": ["string", "null"],
+      "description": "How gallery cards render galleryImageProperty. 'coverLightbox' shows a cover image that opens a lightbox; 'inlineSlider' shows an inline slider (useful for image collections). Omit for the default cover presentation.",
+      "enum": ["coverLightbox", "CoverLightbox", "inlineSlider", "InlineSlider", null]
     },
     "defaultSortProperty": {
       "type": "string",
@@ -73,28 +89,51 @@
       "default": false
     },
     "defaultFileExportMode": {
-      "type": "integer",
-      "enum": [0, 1, 2],
-      "description": "Default file export mode for file/image columns. 0 exports file names, 1 exports metadata columns, and 2 exports download-link columns."
+      "type": ["integer", "null"],
+      "enum": [0, 1, 2, 3, null],
+      "description": "Default spreadsheet output for file/image columns. 0 exports file names, 1 exports metadata columns, 2 exports temporary download-link columns, and 3 exports file names with download links."
     },
     "allowFileBundleExport": {
       "type": "boolean",
-      "description": "Whether file bundle export is available for this page.",
+      "description": "Whether ZIP file bundle export is available for exportable file/image columns on this page.",
+      "default": true
+    },
+    "importEnabled": {
+      "type": "boolean",
+      "description": "Whether the React runtime exposes guided Excel/CSV import for this page.",
       "default": true
     },
     "columns": {
       "type": "array",
-      "description": "Page-owned column/card field configuration. Use for dataGrid, kanban card fields, calendar event fields, and gallery card fields. Each propertyName must reference a property on entityName.",
+      "description": "Page-owned column/card field configuration. Use for dataGrid, kanban card fields, calendar event fields, and gallery card fields. Each propertyName must reference a property on entityName or a dot-separated related path such as 'CustomerId.Name'.",
       "items": {
         "$ref": "page-column-descriptor.schema.json"
       }
     },
     "filters": {
       "type": "array",
-      "description": "Page-owned filter configuration for filterable page types. Each propertyName must reference a property on entityName. Use this instead of legacy property-level UI filter settings.",
+      "description": "Page-owned filter configuration for filterable page types. Each propertyName must reference a property on entityName or a related path. Use this instead of legacy property-level UI filter settings.",
       "items": {
         "$ref": "page-filter-descriptor.schema.json"
       }
+    },
+    "enumPresentations": {
+      "type": "array",
+      "description": "Page-level overrides for enum value display (label, presentation, color, icon). Each propertyName may appear once.",
+      "items": {
+        "$ref": "page-enum-presentation-descriptor.schema.json"
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "description": "Reverse relationships shown from this page: records of other entities whose foreign key points at the page entity. Each id must be unique within the page.",
+      "items": {
+        "$ref": "page-relationship-descriptor.schema.json"
+      }
+    },
+    "backendFilter": {
+      "$ref": "page-backend-filter-expression.schema.json",
+      "description": "Server-enforced filter expression that is always applied to this page's queries and cannot be removed by the client."
     },
     "order": {
       "type": "integer",
@@ -154,59 +193,82 @@
     "permissionConfig": {
       "$ref": "page-permission-config.schema.json",
       "description": "Optional page operation permission overrides. Omit operations to use generated defaults."
+    },
+    "interceptors": {
+      "type": "array",
+      "description": "Page-scoped Create/Update/Delete command interceptors that run for commands issued through this page, ordered relative to entity interceptors by entityExecutionOrder.",
+      "items": {
+        "$ref": "page-command-interceptor-descriptor.schema.json"
+      }
+    },
+    "extendsLowerLayer": {
+      "type": "boolean",
+      "description": "When true, this descriptor overrides selected fields of a page with the same name defined in a lower model layer; title, entityName, and type-specific required fields become optional.",
+      "default": false
+    },
+    "metadata": {
+      "$ref": "descriptor-metadata.schema.json"
     }
   },
-  "required": ["name", "title", "type"],
-  "allOf": [
-    {
-      "if": {
-        "properties": { "type": { "enum": ["dataGrid", "DataGrid"] } }
+  "required": ["name"],
+  "if": {
+    "properties": { "extendsLowerLayer": { "const": true } },
+    "required": ["extendsLowerLayer"]
+  },
+  "then": {},
+  "else": {
+    "required": ["title", "type"],
+    "allOf": [
+      {
+        "if": {
+          "properties": { "type": { "enum": ["dataGrid", "DataGrid"] } }
+        },
+        "then": {
+          "required": ["entityName"]
+        }
       },
-      "then": {
-        "required": ["entityName"]
-      }
-    },
-    {
-      "if": {
-        "properties": { "type": { "enum": ["kanban", "Kanban"] } }
+      {
+        "if": {
+          "properties": { "type": { "enum": ["kanban", "Kanban"] } }
+        },
+        "then": {
+          "required": ["entityName", "groupByProperty"]
+        }
       },
-      "then": {
-        "required": ["entityName", "groupByProperty"]
-      }
-    },
-    {
-      "if": {
-        "properties": { "type": { "enum": ["calendar", "Calendar"] } }
+      {
+        "if": {
+          "properties": { "type": { "enum": ["calendar", "Calendar"] } }
+        },
+        "then": {
+          "required": ["entityName", "calendarStartProperty"]
+        }
       },
-      "then": {
-        "required": ["entityName", "calendarStartProperty"]
-      }
-    },
-    {
-      "if": {
-        "properties": { "type": { "enum": ["gallery", "Gallery"] } }
+      {
+        "if": {
+          "properties": { "type": { "enum": ["gallery", "Gallery"] } }
+        },
+        "then": {
+          "required": ["entityName"]
+        }
       },
-      "then": {
-        "required": ["entityName"]
-      }
-    },
-    {
-      "if": {
-        "properties": { "type": { "enum": ["form", "Form"] } }
+      {
+        "if": {
+          "properties": { "type": { "enum": ["form", "Form"] } }
+        },
+        "then": {
+          "required": ["entityName", "formName"]
+        }
       },
-      "then": {
-        "required": ["entityName", "formName"]
+      {
+        "if": {
+          "properties": { "type": { "enum": ["dashboard", "Dashboard"] } }
+        },
+        "then": {
+          "required": ["dashboard"]
+        }
       }
-    },
-    {
-      "if": {
-        "properties": { "type": { "enum": ["dashboard", "Dashboard"] } }
-      },
-      "then": {
-        "required": ["dashboard"]
-      }
-    }
-  ],
+    ]
+  },
   "additionalProperties": false,
   "examples": [
     {
@@ -216,11 +278,19 @@
       "entityName": "Acme.Events.Event",
       "columns": [
         { "propertyName": "Title", "order": 0 },
-        { "propertyName": "Status", "order": 1 }
+        { "propertyName": "Status", "order": 1 },
+        { "propertyName": "IsPublished", "order": 2, "booleanPresentation": "badge", "booleanValues": { "true": { "displayName": "Published", "color": "#16A34A" }, "false": { "displayName": "Draft", "color": "#6B7280" } } }
       ],
       "filters": [
         { "propertyName": "Title", "control": "text", "defaultOperator": "contains" }
       ],
+      "enumPresentations": [
+        { "propertyName": "Status", "values": [{ "value": 2, "displayName": "Done", "presentation": "badge", "color": "#16A34A" }] }
+      ],
+      "relationships": [
+        { "id": "event-sessions", "sourceEntityName": "Acme.Events.Session", "sourcePropertyName": "EventId", "access": "edit", "relatedPageMode": "generated", "createFormMode": "generated", "editFormMode": "generated" }
+      ],
+      "backendFilter": { "propertyName": "OrganizerId", "operator": "equal", "valueProvider": "CurrentUserId" },
       "createFormName": "event-form",
       "editFormName": "event-form"
     },
@@ -230,7 +300,8 @@
       "type": "calendar",
       "entityName": "Acme.Events.Event",
       "calendarStartProperty": "StartDate",
-      "calendarEndProperty": "EndDate"
+      "calendarEndProperty": "EndDate",
+      "showInMenu": false
     },
     {
       "name": "event-dashboard",

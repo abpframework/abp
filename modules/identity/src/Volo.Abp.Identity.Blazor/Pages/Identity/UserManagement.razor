@@ -102,8 +102,9 @@
                                                     </TextInput>
                                                 </Addon>
                                                 <Addon AddonType="AddonType.End">
-                                                    <Button Color="Color.Secondary" Clicked="@(() => ChangePasswordTextRole(null))">
-                                                        <Icon Name="ShowPassword ? IconName.Eye : IconName.EyeSlash" />
+                                                    <Button Color="Color.Secondary" Clicked="@(() => ChangePasswordTextRole(null))"
+                                                            aria-label="@UiLocalizer["ShowPassword"]" aria-pressed="@(ShowPassword ? "true" : "false")">
+                                                        <Icon Name="ShowPassword ? IconName.Eye : IconName.EyeSlash" aria-hidden="true" />
                                                     </Button>
                                                 </Addon>
                                             </Addons>
@@ -228,8 +229,9 @@
                                                     </TextInput>
                                                 </Addon>
                                                 <Addon AddonType="AddonType.End">
-                                                    <Button Color="Color.Secondary" Clicked="@(() => ChangePasswordTextRole(null))">
-                                                        <Icon Name="ShowPassword ? IconName.Eye : IconName.EyeSlash" />
+                                                    <Button Color="Color.Secondary" Clicked="@(() => ChangePasswordTextRole(null))"
+                                                            aria-label="@UiLocalizer["ShowPassword"]" aria-pressed="@(ShowPassword ? "true" : "false")">
+                                                        <Icon Name="ShowPassword ? IconName.Eye : IconName.EyeSlash" aria-hidden="true" />
                                                     </Button>
                                                 </Addon>
                                             </Addons>

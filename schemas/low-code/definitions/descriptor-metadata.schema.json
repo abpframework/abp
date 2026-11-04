@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "descriptor-metadata.schema.json",
+  "title": "DescriptorMetadata",
+  "description": "Free-form string key/value metadata attached to a descriptor. Keys are compared case-insensitively and must be unique; values must be strings or null.",
+  "markdownDescription": "AI guidance: use `metadata` for tooling or documentation annotations such as `owner`, `generatedBy`, or `ticket`. The runtime does not interpret metadata; it is merged across model layers and preserved by the designer. Do not store structured data here; values must be plain strings or null.",
+  "type": "object",
+  "propertyNames": {
+    "minLength": 1
+  },
+  "additionalProperties": {
+    "type": ["string", "null"]
+  },
+  "examples": [
+    { "owner": "crm-team", "generatedBy": "abp-studio" }
+  ]
+}
