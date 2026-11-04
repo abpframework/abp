@@ -7,6 +7,13 @@
 
 # Package Version Changes
 
+## 11.1.0-rc.1
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| MySql.EntityFrameworkCore | 10.0.9 | 11.0.0-preview | #26404 |
+| Npgsql.EntityFrameworkCore.PostgreSQL | 11.0.0-rc.1.1 | 11.0.0-rc.3 | #26404 |
+
 ## 11.0.0-rc.1
 
 | Package | Old Version | New Version | PR |
