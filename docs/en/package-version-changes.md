@@ -66,7 +66,8 @@
 | Microsoft.Extensions.Options.ConfigurationExtensions | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
 | Microsoft.Maui.Controls | 10.0.51 | 11.0.0-rc.2.26505.5 | #26147 |
 | MongoDB.Driver | 3.12.0 | 3.13.0 | #26334 |
-| Npgsql.EntityFrameworkCore.PostgreSQL | 10.0.3 | 11.0.0-rc.1.1 | #26147 |
+| MySql.EntityFrameworkCore | 10.0.9 | 11.0.0-preview | #26400 |
+| Npgsql.EntityFrameworkCore.PostgreSQL | 10.0.3 | 11.0.0-rc.3 | #26147, #26400 |
 | Oracle.EntityFrameworkCore | 10.23.26000 | 10.23.26301 | #26147 |
 | System.Collections.Immutable | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
 | System.Management | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
