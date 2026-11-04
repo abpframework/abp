@@ -148,8 +148,13 @@ export class RolesComponent {
     }, 0);
   }
 
-  sort(data: any) {
-    const { prop, dir } = data.sorts[0];
+  sort(data: { sorts?: { prop: string; dir: string }[] } | { prop: string; dir: string }[]) {
+    const sorts = Array.isArray(data) ? data : data?.sorts;
+    if (!sorts?.length) {
+      return;
+    }
+
+    const { prop, dir } = sorts[0];
     this.list.sortKey = prop;
     this.list.sortOrder = dir;
   }
