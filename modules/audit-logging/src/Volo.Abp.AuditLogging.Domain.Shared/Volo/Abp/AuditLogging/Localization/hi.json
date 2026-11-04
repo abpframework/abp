@@ -85,6 +85,15 @@
     "TenantId": "किरायेदार आईडी",
     "DownloadLinkExplanation": "आप {0} (UTC) तक नीचे दिए गए लिंक का उपयोग करके फ़ाइल डाउनलोड कर सकते हैं",
     "DownloadNow": "अभी डाउनलोड करें",
-    "TryAgainMessage": "कृपया पुनः प्रयास करें। यदि समस्या बनी रहती है, तो कृपया सहायता से संपर्क करें।"
+    "TryAgainMessage": "कृपया पुनः प्रयास करें। यदि समस्या बनी रहती है, तो कृपया सहायता से संपर्क करें।",
+    "Permission:SettingManagement": "सेटिंग प्रबंधन",
+    "Action": "कार्रवाई",
+    "NoActions": "कोई कार्रवाई नहीं",
+    "MinExecutionDuration": "न्यूनतम अवधि",
+    "MaxExecutionDuration": "अधिकतम अवधि",
+    "NoDataAvailable": "कोई डेटा उपलब्ध नहीं है",
+    "AuditLogExportFailedSubject": "ऑडिट लॉग निर्यात विफल रहा",
+    "EntityChangeExportFailedSubject": "एंटिटी परिवर्तन निर्यात विफल रहा",
+    "FileNotFound": "फ़ाइल नहीं मिली: {0}"
   }
 }
