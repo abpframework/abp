@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="880" viewBox="0 0 1600 880" role="img" aria-labelledby="title desc">
+  <title id="title">Intermediate Task materialization</title>
+  <desc id="desc">Classic lowering has observable task-like boundaries at each async layer. Runtime Async can link continuations and create a Task only at an observable boundary, when semantics allow it.</desc>
+  <defs><style>
+    .bg{fill:#f7f9fc}.panel{fill:#fff;stroke:#d9e1ec;stroke-width:2}.title{font:700 35px Arial,sans-serif;fill:#172033}.sub{font:400 21px Arial,sans-serif;fill:#5d6a7f}.head{font:700 27px Arial,sans-serif;fill:#172033}.method{fill:#eaf5ff;stroke:#3487d5;stroke-width:3}.task{fill:#fff0ed;stroke:#e97451;stroke-width:3}.cont{fill:#eaf8ef;stroke:#35a663;stroke-width:3}.txt{font:700 22px Arial,sans-serif;fill:#243248}.small{font:400 19px Arial,sans-serif;fill:#425169}.arrow{stroke:#8290a6;stroke-width:4;fill:none;marker-end:url(#a)}.dash{stroke:#35a663;stroke-width:4;stroke-dasharray:10 8;fill:none;marker-end:url(#g)}.note{fill:#fff8df;stroke:#d7a928;stroke-width:2}
+  </style><marker id="a" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#8290a6"/></marker><marker id="g" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#35a663"/></marker></defs>
+  <rect class="bg" width="1600" height="880"/>
+  <text class="title" x="800" y="58" text-anchor="middle">Runtime Async can avoid some intermediate Task objects</text>
+  <text class="sub" x="800" y="96" text-anchor="middle">Example: A() directly awaits B(), and B() directly awaits C().</text>
+  <rect class="panel" x="60" y="140" width="720" height="620" rx="20"/><text class="head" x="420" y="190" text-anchor="middle">Classic lowering</text>
+  <rect class="method" x="115" y="240" width="180" height="75" rx="14"/><text class="txt" x="205" y="286" text-anchor="middle">A()</text>
+  <rect class="task" x="430" y="240" width="230" height="75" rx="14"/><text class="txt" x="545" y="286" text-anchor="middle">Task A</text><path class="arrow" d="M300 277 L420 277"/>
+  <rect class="method" x="115" y="370" width="180" height="75" rx="14"/><text class="txt" x="205" y="416" text-anchor="middle">B()</text>
+  <rect class="task" x="430" y="370" width="230" height="75" rx="14"/><text class="txt" x="545" y="416" text-anchor="middle">Task B</text><path class="arrow" d="M300 407 L420 407"/>
+  <rect class="method" x="115" y="500" width="180" height="75" rx="14"/><text class="txt" x="205" y="546" text-anchor="middle">C()</text>
+  <rect class="task" x="430" y="500" width="230" height="75" rx="14"/><text class="txt" x="545" y="546" text-anchor="middle">Task C</text><path class="arrow" d="M300 537 L420 537"/>
+  <path class="arrow" d="M205 320 L205 360"/><path class="arrow" d="M205 450 L205 490"/>
+  <text class="small" x="420" y="650" text-anchor="middle">Each layer has its own transformed state and task-like result.</text>
+
+  <rect class="panel" x="820" y="140" width="720" height="620" rx="20"/><text class="head" x="1180" y="190" text-anchor="middle">Runtime Async, when the boundary is not observed</text>
+  <rect class="method" x="875" y="240" width="180" height="75" rx="14"/><text class="txt" x="965" y="286" text-anchor="middle">A()</text>
+  <rect class="method" x="875" y="370" width="180" height="75" rx="14"/><text class="txt" x="965" y="416" text-anchor="middle">B()</text>
+  <rect class="method" x="875" y="500" width="180" height="75" rx="14"/><text class="txt" x="965" y="546" text-anchor="middle">C()</text>
+  <path class="dash" d="M965 320 L965 360"/><path class="dash" d="M965 450 L965 490"/>
+  <rect class="cont" x="1160" y="330" width="285" height="155" rx="16"/><text class="txt" x="1302" y="383" text-anchor="middle">Linked continuation</text><text class="small" x="1302" y="420" text-anchor="middle">No intermediate Task</text><text class="small" x="1302" y="450" text-anchor="middle">is required here</text>
+  <rect class="task" x="1160" y="535" width="285" height="75" rx="14"/><text class="txt" x="1302" y="581" text-anchor="middle">Observable root Task</text><path class="arrow" d="M1302 490 L1302 525"/>
+  <rect class="note" x="865" y="650" width="630" height="70" rx="12"/><text class="small" x="1180" y="680" text-anchor="middle">If code stores, inspects, or manually continues a Task,</text><text class="small" x="1180" y="707" text-anchor="middle">the Task remains observable and must still exist.</text>
+  <text class="sub" x="800" y="830" text-anchor="middle">This is an optimization opportunity, not a promise that every asynchronous operation becomes allocation-free.</text>
+</svg>

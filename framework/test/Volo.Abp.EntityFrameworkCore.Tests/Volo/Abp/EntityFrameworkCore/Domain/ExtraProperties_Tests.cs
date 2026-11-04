@@ -49,6 +49,21 @@ public class ExtraProperties_Tests : ExtraProperties_Tests<AbpEntityFrameworkCor
     }
 
     [Fact]
+    public async Task Should_Save_And_Read_Back_Floating_Point_Amounts_As_Written()
+    {
+        var london = await CityRepository.FindByNameAsync("London");
+        // The extra properties of a DTO bound from JSON hold a fractional number as a double.
+        london.ExtraProperties["Area"] = 19.99d;
+        london.ExtraProperties["Budget"] = 0.1m;
+        await CityRepository.UpdateAsync(london);
+
+        var london2 = await CityRepository.FindByNameAsync("London");
+        london2.GetProperty<decimal>("Area").ShouldBe(19.99m);
+        // Not mapped to a column, so it is saved in the JSON column and read back as a double.
+        london2.GetProperty<decimal>("Budget").ShouldBe(0.1m);
+    }
+
+    [Fact]
     public async Task An_Extra_Property_Configured_As_Extension2()
     {
         await WithUnitOfWorkAsync(async () =>

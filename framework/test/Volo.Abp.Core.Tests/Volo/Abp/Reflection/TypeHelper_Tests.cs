@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Shouldly;
 using Xunit;
 
@@ -89,6 +90,52 @@ public class TypeHelper_Tests
         TypeHelper.ConvertFromString<int>("42").ShouldBe(42);
         TypeHelper.ConvertFromString<int?>("42").ShouldBe((int?)42);
         TypeHelper.ConvertFromString<int?>(null).ShouldBeNull();
+    }
+
+    [Theory]
+    [InlineData(0.1, "0.1")]
+    [InlineData(19.99, "19.99")]
+    [InlineData(-2878.8, "-2878.8")]
+    [InlineData(123456.789012, "123456.789012")]
+    public void ChangeTypePrimitiveExtended_Should_Keep_A_Double_As_Written(double value, string expected)
+    {
+        var amount = decimal.Parse(expected, CultureInfo.InvariantCulture);
+
+        TypeHelper.ChangeTypePrimitiveExtended<decimal>(value).ShouldBe(amount);
+        TypeHelper.ChangeTypePrimitiveExtended<decimal?>(value).ShouldBe(amount);
+        value.To<decimal>().ShouldBe(amount);
+    }
+
+    [Theory]
+    [InlineData(19.99f, "19.99")]
+    [InlineData(1299.9f, "1299.9")]
+    [InlineData(-0.01f, "-0.01")]
+    public void ChangeTypePrimitiveExtended_Should_Keep_A_Float_As_Written(float value, string expected)
+    {
+        var amount = decimal.Parse(expected, CultureInfo.InvariantCulture);
+
+        TypeHelper.ChangeTypePrimitiveExtended<decimal>(value).ShouldBe(amount);
+        value.To<decimal>().ShouldBe(amount);
+    }
+
+    [Theory]
+    [InlineData(double.NaN)]
+    [InlineData(double.PositiveInfinity)]
+    [InlineData(double.NegativeInfinity)]
+    [InlineData(1e29)]
+    [InlineData(7.9228162514264338E+28)]
+    public void ChangeTypePrimitiveExtended_Should_Refuse_A_Double_A_Decimal_Cannot_Hold(double value)
+    {
+        Should.Throw<OverflowException>(() => TypeHelper.ChangeTypePrimitiveExtended<decimal>(value));
+    }
+
+    [Fact]
+    public void ChangeTypePrimitiveExtended_Should_Convert_Other_Numbers_As_Before()
+    {
+        TypeHelper.ChangeTypePrimitiveExtended<decimal>(42L).ShouldBe(42m);
+        TypeHelper.ChangeTypePrimitiveExtended<decimal>("19.99").ShouldBe(19.99m);
+        TypeHelper.ChangeTypePrimitiveExtended<double>(0.1m).ShouldBe(0.1d);
+        TypeHelper.ChangeTypePrimitiveExtended<int>(2.0d).ShouldBe(2);
     }
 
     public class MyDictionary : Dictionary<bool, TypeHelper_Tests>

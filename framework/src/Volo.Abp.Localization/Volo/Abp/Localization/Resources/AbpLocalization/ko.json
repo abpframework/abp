@@ -1,0 +1,7 @@
+{
+  "culture": "ko",
+  "texts": {
+    "DisplayName:Abp.Localization.DefaultLanguage": "기본 언어",
+    "Description:Abp.Localization.DefaultLanguage": "애플리케이션의 기본 언어입니다."
+  }
+}

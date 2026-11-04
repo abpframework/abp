@@ -63,13 +63,6 @@ body {
         }
     }
 
-    .mCS-autoHide > .mCustomScrollBox > .mCSB_scrollTools,
-    .mCS-autoHide > .mCustomScrollBox ~ .mCSB_scrollTools {
-        opacity: 1 !important;
-        filter: 'alpha(opacity=1)';
-        -ms-filter: 'alpha(opacity=1)';
-    }
-
     // the options-header only exists to host the floating button; hide it while the bar is inline
     // (non-scrolled), so the inline bar keeps its original look. It reappears once .scrolledMore collapses.
     .alert-criteria .options-header {
@@ -419,6 +412,8 @@ body {
                 display: block;
                 height: calc(100vh - 350px);
                 overflow-y: auto;
+                scrollbar-width: thin;
+                scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
                 margin-right: -4px !important;
                 margin-top: 20px !important;
             }
@@ -442,6 +437,10 @@ body {
                         padding: 4px 0;
                         display: block;
                         border-bottom: 0;
+                        // Truncate long titles visually; the full text stays in the HTML.
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
 
                         &:hover {
                             color: #fff;
@@ -531,9 +530,6 @@ body {
                     }
                 }
             }
-                .mCSB_scrollTools{
-                    right: -20px;
-                }
         }
     }
 
@@ -563,6 +559,7 @@ body {
                     margin-bottom: 0;
                     flex-wrap: nowrap;
                     overflow-x: auto;
+                    scrollbar-width: thin;
                     white-space: nowrap;
                     padding-bottom: 10px;
 
@@ -868,6 +865,8 @@ body {
                     font-size: 0.92em;
                     margin-left: 15px;
                     border-left: 1px solid #eee;
+                    // Without nowrap, items size to their longest heading instead of the panel width.
+                    flex-wrap: nowrap;
 
                     .nav-link {
                         padding: 3px 14px 4px;
@@ -881,6 +880,11 @@ body {
                         margin-bottom: 1px;
                         transition: 0.2s;
                         font-weight: normal;
+                        // Truncate long headings visually; the full text stays in the HTML.
+                        display: block;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
 
                         &.active {
                             border-left: 1px solid #E83090;
@@ -910,11 +914,20 @@ body {
 
             .index-scroll {
                 margin-left: -30px;
+                flex-wrap: nowrap;
+
+                > .nav-pills {
+                    flex: 1 1 0;
+                    min-width: 0;
+                }
             }
         }
 
         #scroll-index {
             max-height: 38vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+            scrollbar-width: thin;
         }
 
         .scroll-top-btn {

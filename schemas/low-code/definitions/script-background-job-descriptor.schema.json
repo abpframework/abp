@@ -15,6 +15,12 @@
       "description": "Unique identifier for the background job. Scripts/enqueuers reference this name.",
       "minLength": 1
     },
+    "app": {
+      "type": "string",
+      "description": "Name of the low-code app that owns this job. Omit for the default app. Must match an apps[].name.",
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
     "javascript": {
       "type": "string",
       "description": "JavaScript code to execute when the job is enqueued/run. Use context payload/job arguments where available and keep retry-safe.",
@@ -23,9 +29,25 @@
     "description": {
       "type": "string",
       "description": "Optional description for designer documentation and model health context."
+    },
+    "extendsLowerLayer": {
+      "type": "boolean",
+      "description": "When true, this descriptor overrides selected fields of a job with the same name defined in a lower model layer; javascript becomes optional.",
+      "default": false
+    },
+    "metadata": {
+      "$ref": "descriptor-metadata.schema.json"
     }
   },
-  "required": ["name", "javascript"],
+  "required": ["name"],
+  "if": {
+    "properties": { "extendsLowerLayer": { "const": true } },
+    "required": ["extendsLowerLayer"]
+  },
+  "then": {},
+  "else": {
+    "required": ["javascript"]
+  },
   "additionalProperties": false,
   "examples": [
     {

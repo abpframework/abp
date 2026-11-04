@@ -1,5 +1,6 @@
 ﻿using System;
-using Nest;
+using Elastic.Clients.Elasticsearch;
+using Elastic.Transport;
 using Volo.Abp;
 
 namespace Volo.Docs.Documents.FullSearch.Elastic
@@ -10,7 +11,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
 
         public string IndexName { get; set; }
 
-        protected Action<ConnectionSettings> AuthenticationAction { get; set; }
+        protected Action<ElasticsearchClientSettings> AuthenticationAction { get; set; }
 
         public DocsElasticSearchOptions()
         {
@@ -25,7 +26,7 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
 
             AuthenticationAction = settings =>
             {
-                settings.BasicAuthentication(username, password);
+                settings.Authentication(new BasicAuthentication(username, password));
             };
 
             return this;
@@ -38,13 +39,13 @@ namespace Volo.Docs.Documents.FullSearch.Elastic
 
             AuthenticationAction = settings =>
             {
-                settings.ApiKeyAuthentication(id, apiKey);
+                settings.Authentication(new Base64ApiKey(id, apiKey));
             };
 
             return this;
         }
 
-        public ConnectionSettings Authenticate(ConnectionSettings connectionSettings)
+        public ElasticsearchClientSettings Authenticate(ElasticsearchClientSettings connectionSettings)
         {
             AuthenticationAction?.Invoke(connectionSettings);
             return connectionSettings;

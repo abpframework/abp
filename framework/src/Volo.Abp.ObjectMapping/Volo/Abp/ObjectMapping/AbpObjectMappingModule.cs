@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
 using Volo.Abp.Reflection;
@@ -18,6 +19,14 @@ public class AbpObjectMappingModule : AbpModule
                     typeof(IObjectMapper<,>)
                 ).ConvertAll(t => new ServiceIdentifier(t))
             );
+
+            //Register types for IQueryProjector<TSource, TDestination> if implements
+            foreach (var serviceType in ReflectionHelper.GetImplementedGenericTypes(
+                         onServiceExposingContext.ImplementationType,
+                         typeof(IQueryProjector<,>)))
+            {
+                onServiceExposingContext.ExposedTypes.AddIfNotContains(new ServiceIdentifier(serviceType));
+            }
         });
     }
 

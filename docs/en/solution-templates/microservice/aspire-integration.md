@@ -1,11 +1,11 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Learn how to integrate .NET Aspire into your ABP-based solution for streamlined development, orchestration, and observability of distributed applications."
+    "Description": "Learn how to integrate Aspire into your ABP-based solution for streamlined development, orchestration, and observability of distributed applications."
 }
 ```
 
-# .NET Aspire Integration
+# Aspire Integration
 
 ````json
 //[doc-nav]
@@ -19,7 +19,7 @@
 
 > You must have an ABP Business or a higher license to be able to create a microservice solution.
 
-## .NET Aspire Overview
+## Aspire Overview
 
 [Aspire](https://aspire.dev/get-started/what-is-aspire/) streamlines building, running, debugging, and deploying distributed apps. Picture your app as a set of services, databases, and frontends—when they’re deployed, they all work together seamlessly, but every time you develop them they need to be individually started and connected. With Aspire, you get a unified toolchain that eliminates complex configs and makes local debugging effortless. Instantly launch and debug your entire app with a single command. Ready to deploy? Aspire lets you publish anywhere—Kubernetes, the cloud, or your own servers. It’s also fully extensible, so you can integrate your favorite tools and services with ease. It provides:
 
@@ -31,7 +31,7 @@
 
 ## ABP Integration
 
-When you enable .NET Aspire in an ABP microservice solution, you get a fully integrated development experience where:
+When you enable Aspire in an ABP microservice solution, you get a fully integrated development experience where:
 
 - All microservices, gateways, and applications are orchestrated through a single entry point (AppHost).
 - Infrastructure containers (databases, Redis, RabbitMQ, Elasticsearch, etc.) are managed as code.
@@ -41,8 +41,8 @@ When you enable .NET Aspire in an ABP microservice solution, you get a fully int
 
 When creating a new microservice solution via ABP Studio:
 
-1. In the solution creation wizard, look for the **".NET Aspire Integration"** step.
-2. Toggle the option to **enable .NET Aspire**.
+1. In the solution creation wizard, look for the **"Aspire Integration"** step.
+2. Toggle the option to **enable Aspire**.
 3. Complete the wizard—Aspire projects will be generated along with your solution.
 
 ![Enable Aspire in ABP Studio](images/aspire-configuration.png)
@@ -55,7 +55,7 @@ When Aspire is enabled, two additional projects are added to your solution:
 
 ### AppHost (Orchestrator)
 
-[`AppHost`](https://aspire.dev/get-started/app-host/) is the .NET Aspire orchestrator project that declares all resources (services, databases, containers, applications) and their dependencies in C# code. All services, gateways, and applications in the solution have their project references added to `AppHost`.
+[`AppHost`](https://aspire.dev/get-started/app-host/) is the Aspire orchestrator project that declares all resources (services, databases, containers, applications) and their dependencies in C# code. All services, gateways, and applications in the solution have their project references added to `AppHost`.
 
 **Why is it added?**
 
@@ -367,6 +367,6 @@ To run your resource in **Solution Runner** profiles(Default or Aspire), add it 
 
 ## Deploying the Application
 
-.NET Aspire supports deployment to Azure Container Apps, Kubernetes, and other cloud platforms. For detailed deployment guidance, see the official documentation: [.NET Aspire Deployment](https://aspire.dev/deployment/overview/)
+Aspire supports deployment to Azure Container Apps, Kubernetes, and other cloud platforms. For detailed deployment guidance, see the official documentation: [Aspire Deployment](https://aspire.dev/deployment/overview/)
 
-To learn more about .NET Aspire, visit: https://aspire.dev/get-started/what-is-aspire/
+To learn more about Aspire, visit: https://aspire.dev/get-started/what-is-aspire/

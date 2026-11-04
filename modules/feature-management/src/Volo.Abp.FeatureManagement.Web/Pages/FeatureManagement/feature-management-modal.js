@@ -100,15 +100,6 @@ var abp = abp || {};
                         });
                     });
             });
-
-            $(function () {
-                $('.custom-scroll-content').mCustomScrollbar({
-                    theme: 'minimal-dark',
-                });
-                $('.custom-scroll-container > .col-md-4').mCustomScrollbar({
-                    theme: 'minimal-dark',
-                });
-            });
         };
     };
 })(jQuery);

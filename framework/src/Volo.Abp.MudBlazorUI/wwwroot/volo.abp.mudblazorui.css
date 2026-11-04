@@ -110,3 +110,24 @@
     padding-inline-end: 16px;
 }
 
+
+
+/* Password visibility toggle: MudBlazor renders the input end-adornment with a hard-coded
+   tabindex="-1", so a toggle placed there can never be reached by keyboard. The toggle is
+   rendered as a normal MudIconButton next to the field and pinned over the input row instead.
+   The offset is measured from the top of the control because the label sits above the input row
+   and validation text is rendered below it, so the control's own height is not a stable anchor. */
+.abp-password-field {
+    position: relative;
+}
+
+.abp-password-field .abp-password-visibility-toggle {
+    position: absolute;
+    inset-inline-end: 0;
+    top: 38px;
+    transform: translateY(-50%);
+}
+
+.abp-password-field .mud-input:not(.mud-select-input) .mud-input-slot.mud-input-root {
+    padding-inline-end: 40px !important;
+}

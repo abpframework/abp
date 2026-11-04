@@ -6,7 +6,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Polly;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Settings;
 using Volo.Abp.Threading;
@@ -96,17 +95,8 @@ public class SettingDynamicInitializer : ITransientDependency
 
         var staticSettingSaver = ServiceProvider.GetRequiredService<IStaticSettingSaver>();
 
-        await Policy
-            .Handle<Exception>()
-            .WaitAndRetryAsync(
-                8,
-                retryAttempt => TimeSpan.FromSeconds(
-                    Volo.Abp.RandomHelper.GetRandom(
-                        (int)Math.Pow(2, retryAttempt) * 8,
-                        (int)Math.Pow(2, retryAttempt) * 12)
-                )
-            )
-            .ExecuteAsync(async _ =>
+        await RetryHelper.ExecuteAsync(
+            async _ =>
             {
                 try
                 {
@@ -115,9 +105,20 @@ public class SettingDynamicInitializer : ITransientDependency
                 catch (Exception ex)
                 {
                     Logger.LogException(ex);
-                    throw; // Polly will catch it
+                    throw; // RetryHelper will catch it
                 }
-            }, cancellationToken);
+            },
+            new RetryOptions
+            {
+                MaxRetryCount = 8,
+                DelayFactory = retryAttempt => TimeSpan.FromSeconds(
+                    Volo.Abp.RandomHelper.GetRandom(
+                        (int)Math.Pow(2, retryAttempt) * 8,
+                        (int)Math.Pow(2, retryAttempt) * 12)
+                ),
+                ShouldRetryOnException = _ => true
+            },
+            cancellationToken);
     }
 
     protected virtual async Task PreCacheDynamicSettingsAsync(
