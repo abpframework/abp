@@ -6,7 +6,7 @@
     "Tenant": "Cliente",
     "Switch": "mudar",
     "Name": "Nome",
-    "SwitchTenantHint": "Deixe o campo do nome em branco para mudar para o lado do anfitrião.",
+    "SwitchTenantHint": "Deixe o campo do nome em branco para mudar para o lado do host.",
     "SwitchTenant": "Mudar de cliente",
     "NotSelected": "Não selecionado"
   }
