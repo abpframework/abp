@@ -113,6 +113,15 @@
     "AuditLogExportCompletedSubject": "Eksport dziennika audytu zakończony",
     "DownloadLinkExplanation": "Możesz pobrać plik, korzystając z poniższego łącza do {0} (UTC)",
     "DownloadNow": "Pobierz teraz",
-    "TryAgainMessage": "Proszę spróbuj ponownie. Jeśli problem nie ustąpi, skontaktuj się z pomocą techniczną."
+    "TryAgainMessage": "Proszę spróbuj ponownie. Jeśli problem nie ustąpi, skontaktuj się z pomocą techniczną.",
+    "Permission:SettingManagement": "Zarządzanie ustawieniami",
+    "Action": "Działanie",
+    "NoActions": "Brak działań",
+    "MinExecutionDuration": "Min. czas trwania",
+    "MaxExecutionDuration": "Maks. czas trwania",
+    "NoDataAvailable": "Brak dostępnych danych",
+    "AuditLogExportFailedSubject": "Eksport dziennika audytu nie powiódł się",
+    "EntityChangeExportFailedSubject": "Eksport zmian encji nie powiódł się",
+    "FileNotFound": "Nie znaleziono pliku: {0}"
   }
 }

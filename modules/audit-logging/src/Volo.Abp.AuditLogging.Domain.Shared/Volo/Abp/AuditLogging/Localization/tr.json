@@ -98,6 +98,15 @@
     "AuditLogExportCompletedSubject": "İşlem log dışa aktarma tamamlandı",
     "DownloadLinkExplanation": "Dosyayı aşağıdaki bağlantıyı kullanarak {0} (UTC) tarihine kadar indirebilirsiniz",
     "DownloadNow": "Şimdi İndir",
-    "TryAgainMessage": "Lütfen tekrar deneyin. Sorun devam ederse, lütfen destek ekibiyle iletişime geçin."
+    "TryAgainMessage": "Lütfen tekrar deneyin. Sorun devam ederse, lütfen destek ekibiyle iletişime geçin.",
+    "Permission:SettingManagement": "Ayar yönetimi",
+    "Action": "Aksiyon",
+    "NoActions": "Aksiyon yok",
+    "MinExecutionDuration": "Min. süre",
+    "MaxExecutionDuration": "Max. süre",
+    "NoDataAvailable": "Veri bulunamadı",
+    "AuditLogExportFailedSubject": "İşlem log dışa aktarma başarısız",
+    "EntityChangeExportFailedSubject": "Entity değişiklik dışa aktarma başarısız",
+    "FileNotFound": "Dosya bulunamadı: {0}"
   }
 }
