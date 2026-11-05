@@ -1,7 +1,9 @@
-﻿@using Volo.Abp.Account.Localization
+﻿@using Localization.Resources.AbpUi
+@using Volo.Abp.Account.Localization
 @using Volo.Abp.Users
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IHtmlLocalizer<AccountResource> L
+@inject IHtmlLocalizer<AbpUiResource> UiL
 @inject ICurrentUser CurrentUser
 @model Volo.Abp.Account.Web.Pages.Account.Components.ProfileManagementGroup.Password.AccountProfilePasswordManagementGroupViewComponent.ChangePasswordInfoModel
 
@@ -13,21 +15,21 @@
             <label asp-for="CurrentPassword" class="form-label"></label>
             <div class="input-group">
                 <input type="password" class="form-control" autocomplete="new-password" asp-for="CurrentPassword"/>
-                <button class="btn btn-secondary password-visibility-button" type="button"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+                <button class="btn btn-secondary password-visibility-button" type="button" aria-label="@UiL["ShowPassword"]" aria-pressed="false"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
             </div>
             <span asp-validation-for="CurrentPassword"></span><br/>
         }
         <label asp-for="NewPassword" class="form-label"></label>
         <div class="input-group">
             <input type="password" class="form-control" autocomplete="new-password" asp-for="NewPassword"/>
-            <button class="btn btn-secondary password-visibility-button" type="button" ><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+            <button class="btn btn-secondary password-visibility-button" type="button" aria-label="@UiL["ShowPassword"]" aria-pressed="false"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
         </div>
         <span asp-validation-for="NewPassword"></span><br/>
     
         <label asp-for="NewPasswordConfirm" class="form-label"></label>
         <div class="input-group">
             <input type="password" class="form-control" autocomplete="new-password" asp-for="NewPasswordConfirm"/>
-            <button class="btn btn-secondary password-visibility-button" type="button"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+            <button class="btn btn-secondary password-visibility-button" type="button" aria-label="@UiL["ShowPassword"]" aria-pressed="false"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
         </div>
         <span asp-validation-for="NewPasswordConfirm"></span>
     </div>

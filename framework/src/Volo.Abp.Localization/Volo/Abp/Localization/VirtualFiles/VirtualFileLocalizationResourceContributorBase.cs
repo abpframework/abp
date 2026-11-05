@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
     private readonly string _virtualPath;
     private IServiceProvider _serviceProvider = default!;
     private IVirtualFileProvider? _virtualFileProvider;
-    private Dictionary<string, ILocalizationDictionary>? _dictionaries;
+    private volatile LocalizationFiles? _files;
     private bool _subscribedForChanges;
     private readonly object _syncObj = new object();
 
@@ -40,12 +41,12 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
 
     public virtual LocalizedString? GetOrNull(string cultureName, string name)
     {
-        return GetDictionaries().GetOrDefault(cultureName)?.GetOrNull(name);
+        return GetDictionaryOrNull(cultureName)?.GetOrNull(name);
     }
 
     public virtual void Fill(string cultureName, Dictionary<string, LocalizedString> dictionary)
     {
-        GetDictionaries().GetOrDefault(cultureName)?.Fill(dictionary);
+        GetDictionaryOrNull(cultureName)?.Fill(dictionary);
     }
 
     public Task FillAsync(string cultureName, Dictionary<string, LocalizedString> dictionary)
@@ -56,25 +57,63 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
 
     public Task<IEnumerable<string>> GetSupportedCulturesAsync()
     {
-        return Task.FromResult((IEnumerable<string>)GetDictionaries().Keys);
+        return Task.FromResult((IEnumerable<string>)GetFiles().CultureNames);
     }
 
-    private Dictionary<string, ILocalizationDictionary> GetDictionaries()
+    private ILocalizationDictionary? GetDictionaryOrNull(string cultureName)
     {
-        var dictionaries = _dictionaries;
-        if (dictionaries != null)
+        var files = GetFiles();
+        if (files.Dictionaries.TryGetValue(cultureName, out var dictionary))
         {
-            return dictionaries;
+            return dictionary;
+        }
+
+        if (files.FilesByCulture == null || !files.FilesByCulture.TryGetValue(cultureName, out var cultureFiles))
+        {
+            return null;
+        }
+
+        lock (_syncObj)
+        {
+            if (files.Dictionaries.TryGetValue(cultureName, out dictionary))
+            {
+                return dictionary;
+            }
+
+            dictionary = CreateDictionaryOrNull(cultureName, cultureFiles);
+            if (dictionary != null)
+            {
+                files.Dictionaries[cultureName] = dictionary;
+                return dictionary;
+            }
+
+            // A file did not contain the culture it was indexed with, so the index can not be trusted.
+            var allDictionaries = CreateAllDictionaries(files.AllFiles);
+            if (ReferenceEquals(_files, files))
+            {
+                _files = allDictionaries;
+            }
+
+            return allDictionaries.Dictionaries.GetOrDefault(cultureName);
+        }
+    }
+
+    private LocalizationFiles GetFiles()
+    {
+        var files = _files;
+        if (files != null)
+        {
+            return files;
         }
 
         var virtualFileProvider = VirtualFileProvider;
 
         lock (_syncObj)
         {
-            dictionaries = _dictionaries;
-            if (dictionaries != null)
+            files = _files;
+            if (files != null)
             {
-                return dictionaries;
+                return files;
             }
 
             if (!_subscribedForChanges)
@@ -82,25 +121,70 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
                 ChangeToken.OnChange(() => virtualFileProvider.Watch(_virtualPath.EnsureEndsWith('/') + "*.*"),
                     () =>
                     {
-                        _dictionaries = null;
+                        _files = null;
                     });
 
                 _subscribedForChanges = true;
             }
 
-            dictionaries = _dictionaries = CreateDictionaries();
+            _files = files = CreateFiles(virtualFileProvider);
         }
 
-        return dictionaries;
+        return files;
     }
 
-    private Dictionary<string, ILocalizationDictionary> CreateDictionaries()
+    private LocalizationFiles CreateFiles(IVirtualFileProvider virtualFileProvider)
+    {
+        var allFiles = virtualFileProvider.GetDirectoryContents(_virtualPath)
+            .Where(f => !f.IsDirectory && CanParseFile(f))
+            .OrderBy(f => f.Name, StringComparer.Ordinal)
+            .ToList();
+
+        var filesByCulture = new Dictionary<string, List<IFileInfo>>();
+
+        foreach (var file in allFiles)
+        {
+            var cultureName = GetCultureNameOrNull(file);
+            if (cultureName.IsNullOrEmpty())
+            {
+                return CreateAllDictionaries(allFiles);
+            }
+
+            if (!filesByCulture.TryGetValue(cultureName!, out var cultureFiles))
+            {
+                cultureFiles = new List<IFileInfo>();
+                filesByCulture[cultureName!] = cultureFiles;
+            }
+
+            cultureFiles.Add(file);
+        }
+
+        return new LocalizationFiles(allFiles, filesByCulture, filesByCulture.Keys.ToList().AsReadOnly());
+    }
+
+    private ILocalizationDictionary? CreateDictionaryOrNull(string cultureName, List<IFileInfo> cultureFiles)
+    {
+        var rawDictionary = new Dictionary<string, LocalizedString>();
+
+        foreach (var file in cultureFiles)
+        {
+            var dictionary = CreateDictionaryFromFile(file);
+            if (dictionary == null || dictionary.CultureName != cultureName)
+            {
+                return null;
+            }
+
+            dictionary.Fill(rawDictionary);
+        }
+
+        return new StaticLocalizationDictionary(cultureName, rawDictionary);
+    }
+
+    private LocalizationFiles CreateAllDictionaries(List<IFileInfo> allFiles)
     {
         var rawDictionaries = new Dictionary<string, Dictionary<string, LocalizedString>>();
 
-        foreach (var file in VirtualFileProvider.GetDirectoryContents(_virtualPath)
-                     .Where(f => !f.IsDirectory && CanParseFile(f))
-                     .OrderBy(f => f.Name, StringComparer.Ordinal))
+        foreach (var file in allFiles)
         {
             var dictionary = CreateDictionaryFromFile(file);
 
@@ -118,13 +202,25 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
             dictionary.Fill(raw);
         }
 
-        return rawDictionaries.ToDictionary(
-            kvp => kvp.Key,
-            kvp => (ILocalizationDictionary)new StaticLocalizationDictionary(kvp.Key, kvp.Value)
-        );
+        var dictionaries = new ConcurrentDictionary<string, ILocalizationDictionary>();
+        foreach (var raw in rawDictionaries)
+        {
+            dictionaries[raw.Key] = new StaticLocalizationDictionary(raw.Key, raw.Value);
+        }
+
+        return new LocalizationFiles(allFiles, null, rawDictionaries.Keys.ToList().AsReadOnly(), dictionaries);
     }
 
     protected abstract bool CanParseFile(IFileInfo file);
+
+    /// <summary>
+    /// Returns the culture of the given file without building its texts, so only the files of the requested cultures
+    /// need to be parsed. Returns null if it can not be determined; then all files are parsed at once.
+    /// </summary>
+    protected virtual string? GetCultureNameOrNull(IFileInfo file)
+    {
+        return null;
+    }
 
     protected virtual ILocalizationDictionary? CreateDictionaryFromFile(IFileInfo file)
     {
@@ -142,4 +238,30 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
     }
 
     protected abstract ILocalizationDictionary? CreateDictionaryFromFileContent(string fileContent);
+
+    private class LocalizationFiles
+    {
+        public List<IFileInfo> AllFiles { get; }
+
+        /// <summary>
+        /// Null when all dictionaries are created at once.
+        /// </summary>
+        public Dictionary<string, List<IFileInfo>>? FilesByCulture { get; }
+
+        public IReadOnlyList<string> CultureNames { get; }
+
+        public ConcurrentDictionary<string, ILocalizationDictionary> Dictionaries { get; }
+
+        public LocalizationFiles(
+            List<IFileInfo> allFiles,
+            Dictionary<string, List<IFileInfo>>? filesByCulture,
+            IReadOnlyList<string> cultureNames,
+            ConcurrentDictionary<string, ILocalizationDictionary>? dictionaries = null)
+        {
+            AllFiles = allFiles;
+            FilesByCulture = filesByCulture;
+            CultureNames = cultureNames;
+            Dictionaries = dictionaries ?? new ConcurrentDictionary<string, ILocalizationDictionary>();
+        }
+    }
 }

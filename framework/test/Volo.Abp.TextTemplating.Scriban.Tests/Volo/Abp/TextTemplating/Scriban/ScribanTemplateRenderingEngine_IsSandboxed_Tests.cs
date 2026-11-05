@@ -43,7 +43,7 @@ public class ScribanTemplateRenderingEngine_IsSandboxed_Tests : AbpTextTemplatin
             ScribanTestTemplateDefinitionProvider.ReflectionEscapeAttempt,
             model: new ReflectionEscapeModel { Name = "John" });
 
-        result.ShouldBe("getType=[]\n");
+        result.ReplaceLineEndings("\n").ShouldBe("getType=[]\n");
         result.ShouldNotContain("RuntimeType");
         result.ShouldNotContain("Volo.Abp.TextTemplating");
     }
@@ -80,7 +80,7 @@ public class ScribanTemplateRenderingEngine_IsSandboxed_Tests : AbpTextTemplatin
             ScribanTestTemplateDefinitionProvider.MethodInvocationAttempt,
             model: new ServiceLikeModel());
 
-        result.ShouldBe("danger=[]\n");
+        result.ReplaceLineEndings("\n").ShouldBe("danger=[]\n");
         result.ShouldNotContain("UNSAFE");
     }
 
@@ -94,7 +94,7 @@ public class ScribanTemplateRenderingEngine_IsSandboxed_Tests : AbpTextTemplatin
             ScribanTestTemplateDefinitionProvider.NestedPropertyAccess,
             model: new OuterModel { Name = "John", Inner = new InnerModel { Email = "j@a.b" } });
 
-        result.ShouldBe("name=[John] email=[j@a.b]\n");
+        result.ReplaceLineEndings("\n").ShouldBe("name=[John] email=[j@a.b]\n");
     }
 
     private class ReflectionEscapeModel

@@ -62,6 +62,7 @@
     "Theme": "Tema",
     "NotAssigned": "Non assegnato",
     "EntityActionsDisabledTooltip": "Non hai i permessi per eseguire alcuna azione.",
-    "ResourcePermissions": "Autorizzazioni"
+    "ResourcePermissions": "Autorizzazioni",
+    "ShowPassword": "Mostra password"
   }
 }

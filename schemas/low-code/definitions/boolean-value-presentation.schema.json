@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "boolean-value-presentation.schema.json",
+  "title": "BooleanValuePresentation",
+  "description": "How a boolean page column is rendered. Prefer lower-case values in descriptor JSON; PascalCase aliases are accepted for compatibility.",
+  "markdownDescription": "`text` renders the configured display names (or Yes/No). `checkbox` renders a read-only check mark. `badge` renders a colored badge. `iconOnly` renders only the configured icon. Per-value labels, colors, and icons come from the column `booleanValues` object.",
+  "type": "string",
+  "enum": ["text", "Text", "checkbox", "Checkbox", "badge", "Badge", "iconOnly", "IconOnly"],
+  "enumDescriptions": [
+    "Plain text display name.",
+    "Plain text display name.",
+    "Read-only checkbox.",
+    "Read-only checkbox.",
+    "Colored badge.",
+    "Colored badge.",
+    "Icon only, display name as tooltip.",
+    "Icon only, display name as tooltip."
+  ]
+}

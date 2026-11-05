@@ -1,24 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using SixLabors.ImageSharp.Formats;
-using SixLabors.ImageSharp.Formats.Bmp;
-using SixLabors.ImageSharp.Formats.Gif;
-using SixLabors.ImageSharp.Formats.Jpeg;
-using SixLabors.ImageSharp.Formats.Png;
+using SkiaSharp;
 
 namespace Volo.Blogging.Files
 {
     public class FileUploadConsts
     {
-        public static readonly ICollection<IImageFormat> AllowedImageUploadFormats = new Collection<IImageFormat>
+        public static readonly ICollection<SKEncodedImageFormat> AllowedImageUploadFormats = new Collection<SKEncodedImageFormat>
         {
-            JpegFormat.Instance, 
-            PngFormat.Instance, 
-            GifFormat.Instance, 
-            BmpFormat.Instance,
+            SKEncodedImageFormat.Jpeg,
+            SKEncodedImageFormat.Png,
+            SKEncodedImageFormat.Gif,
+            SKEncodedImageFormat.Bmp,
         };
 
-        public static string AllowedImageFormatsJoint => string.Join(",", AllowedImageUploadFormats.Select(x => x.Name));
+        public static string AllowedImageFormatsJoint => string.Join(",", AllowedImageUploadFormats.Select(x => x.ToString().ToUpperInvariant()));
     }
 }

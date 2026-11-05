@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -29,6 +31,12 @@ public class DataAnnotationObjectValidationContributor : IObjectValidationContri
 
     public Task AddErrorsAsync(ObjectValidationContext context)
     {
+#if NET11_0_OR_GREATER
+        if (!OverridesOnlySynchronousWalk(GetType()))
+        {
+            return ValidateObjectRecursivelyAsync(context.Errors, context.ValidatingObject, currentDepth: 1);
+        }
+#endif
         ValidateObjectRecursively(context.Errors, context.ValidatingObject, currentDepth: 1);
         return Task.CompletedTask;
     }
@@ -133,4 +141,147 @@ public class DataAnnotationObjectValidationContributor : IObjectValidationContri
             }
         }
     }
+
+#if NET11_0_OR_GREATER
+    private static readonly ConcurrentDictionary<Type, bool> OverridesOnlySynchronousWalkCache = new();
+
+    /* A contributor written before the asynchronous walk existed customizes ValidateObjectRecursively; keep
+     * calling it, as the asynchronous walk would skip the override without any error. */
+    private static bool OverridesOnlySynchronousWalk(Type contributorType)
+    {
+        return OverridesOnlySynchronousWalkCache.GetOrAdd(contributorType, type =>
+            GetWalkDeclaringType(type, nameof(ValidateObjectRecursively)) != typeof(DataAnnotationObjectValidationContributor) &&
+            GetWalkDeclaringType(type, nameof(ValidateObjectRecursivelyAsync)) == typeof(DataAnnotationObjectValidationContributor));
+    }
+
+    private static Type? GetWalkDeclaringType(Type type, string methodName)
+    {
+        return type.GetMethod(
+            methodName,
+            BindingFlags.Instance | BindingFlags.NonPublic,
+            [typeof(List<ValidationResult>), typeof(object), typeof(int)]
+        )?.DeclaringType;
+    }
+
+    /* Mirrors the synchronous walk above. Attributes deriving from AsyncValidationAttribute and
+     * objects implementing IAsyncValidatableObject only produce results when awaited, so the
+     * synchronous path either throws or silently validates nothing for them. */
+    protected virtual async Task ValidateObjectRecursivelyAsync(List<ValidationResult> errors, object? validatingObject, int currentDepth)
+    {
+        if (currentDepth > MaxRecursiveParameterValidationDepth)
+        {
+            return;
+        }
+
+        if (validatingObject == null)
+        {
+            return;
+        }
+
+        await AddErrorsAsync(errors, validatingObject);
+
+        //Validate items of enumerable
+        if (validatingObject is IEnumerable enumerable)
+        {
+            if (!(enumerable is IQueryable))
+            {
+                foreach (var item in enumerable)
+                {
+                    //Do not recursively validate for primitive objects
+                    if (item == null || TypeHelper.IsPrimitiveExtended(item.GetType()))
+                    {
+                        break;
+                    }
+
+                    await ValidateObjectRecursivelyAsync(errors, item, currentDepth + 1);
+                }
+            }
+
+            return;
+        }
+
+        var validatingObjectType = validatingObject.GetType();
+
+        //Do not recursively validate for primitive objects
+        if (TypeHelper.IsPrimitiveExtended(validatingObjectType))
+        {
+            return;
+        }
+
+        if (Options.IgnoredTypes.Any(t => t.IsInstanceOfType(validatingObject)))
+        {
+            return;
+        }
+
+        var properties = TypeDescriptor.GetProperties(validatingObject).Cast<PropertyDescriptor>();
+        foreach (var property in properties)
+        {
+            if (property.Attributes.OfType<DisableValidationAttribute>().Any())
+            {
+                continue;
+            }
+
+            await ValidateObjectRecursivelyAsync(errors, property.GetValue(validatingObject), currentDepth + 1);
+        }
+    }
+
+    public virtual async Task AddErrorsAsync(List<ValidationResult> errors, object validatingObject)
+    {
+        var properties = TypeDescriptor.GetProperties(validatingObject).Cast<PropertyDescriptor>();
+
+        foreach (var property in properties)
+        {
+            await AddPropertyErrorsAsync(validatingObject, property, errors);
+        }
+
+        /* IAsyncValidatableObject extends IValidatableObject, so the asynchronous overload has to win
+         * to avoid running the object twice and to avoid the synchronous Validate that such a type is
+         * expected to throw from. */
+        if (validatingObject is IAsyncValidatableObject asyncValidatableObject)
+        {
+            await foreach (var result in asyncValidatableObject.ValidateAsync(new ValidationContext(asyncValidatableObject, ServiceProvider, null)))
+            {
+                errors.Add(result);
+            }
+        }
+        else if (validatingObject is IValidatableObject validatableObject)
+        {
+            errors.AddRange(
+                validatableObject.Validate(new ValidationContext(validatableObject, ServiceProvider, null))
+            );
+        }
+    }
+
+    protected virtual async Task AddPropertyErrorsAsync(object validatingObject, PropertyDescriptor property, List<ValidationResult> errors)
+    {
+        var validationAttributes = property.Attributes.OfType<ValidationAttribute>().ToArray();
+        if (validationAttributes.IsNullOrEmpty())
+        {
+            return;
+        }
+
+        // Without an asynchronous attribute the property validates as before, so an AddPropertyErrors override still runs.
+        if (!validationAttributes.OfType<AsyncValidationAttribute>().Any())
+        {
+            AddPropertyErrors(validatingObject, property, errors);
+            return;
+        }
+
+        var validationContext = new ValidationContext(validatingObject, ServiceProvider, null)
+        {
+            DisplayName = property.DisplayName,
+            MemberName = property.Name
+        };
+
+        var attributeValidationResultProvider = ServiceProvider.GetRequiredService<IAttributeValidationResultProvider>();
+        foreach (var attribute in validationAttributes)
+        {
+            var result = await attributeValidationResultProvider.GetOrDefaultAsync(attribute, property.GetValue(validatingObject), validationContext);
+            if (result != null)
+            {
+                errors.Add(result);
+            }
+        }
+    }
+#endif
 }

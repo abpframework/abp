@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Classic async lowering compared with .NET 11 Runtime Async</title>
+  <desc id="desc">The classic model creates a compiler-generated state machine before the runtime sees the method. Runtime Async emits compact async-aware IL and lets the runtime and JIT perform the lowering.</desc>
+  <defs>
+    <style>
+      .bg{fill:#f7f9fc}.panel{fill:#fff;stroke:#d9e1ec;stroke-width:2}.head{font:700 34px Arial,sans-serif;fill:#172033}.sub{font:400 22px Arial,sans-serif;fill:#58657a}.label{font:700 25px Arial,sans-serif;fill:#172033}.body{font:400 21px Arial,sans-serif;fill:#334158}.classic{fill:#fff2e8;stroke:#ee8a3b;stroke-width:3}.runtime{fill:#eaf5ff;stroke:#3487d5;stroke-width:3}.good{fill:#eaf8ef;stroke:#35a663;stroke-width:3}.arrow{stroke:#8290a6;stroke-width:4;fill:none;marker-end:url(#arrow)}.badge{font:700 18px Arial,sans-serif;fill:#fff}.foot{font:400 19px Arial,sans-serif;fill:#66748a}
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#8290a6"/></marker>
+  </defs>
+  <rect class="bg" width="1600" height="900"/>
+  <text class="head" x="800" y="62" text-anchor="middle">Who lowers an async method?</text>
+  <text class="sub" x="800" y="100" text-anchor="middle">The C# syntax stays the same; the implementation responsibility moves.</text>
+
+  <rect class="panel" x="70" y="140" width="700" height="680" rx="22"/>
+  <rect class="classic" x="120" y="180" width="600" height="80" rx="16"/>
+  <text class="label" x="420" y="229" text-anchor="middle">.NET 10-style compiler lowering</text>
+  <rect class="classic" x="185" y="315" width="470" height="76" rx="14"/>
+  <text class="body" x="420" y="361" text-anchor="middle">C# async method</text>
+  <path class="arrow" d="M420 392 L420 440"/>
+  <rect class="classic" x="185" y="450" width="470" height="126" rx="14"/>
+  <text class="label" x="420" y="493" text-anchor="middle">C# compiler</text>
+  <text class="body" x="420" y="533" text-anchor="middle">Performs the full transformation</text>
+  <path class="arrow" d="M420 578 L420 626"/>
+  <rect class="classic" x="130" y="636" width="580" height="118" rx="14"/>
+  <text class="body" x="420" y="678" text-anchor="middle">Generated type + MoveNext()</text>
+  <text class="body" x="420" y="715" text-anchor="middle">builder + saved fields + Task boundary</text>
+
+  <rect class="panel" x="830" y="140" width="700" height="680" rx="22"/>
+  <rect class="runtime" x="880" y="180" width="600" height="80" rx="16"/>
+  <text class="label" x="1180" y="229" text-anchor="middle">.NET 11 Runtime Async</text>
+  <rect class="runtime" x="945" y="315" width="470" height="76" rx="14"/>
+  <text class="body" x="1180" y="361" text-anchor="middle">The same C# async method</text>
+  <path class="arrow" d="M1180 392 L1180 440"/>
+  <rect class="runtime" x="945" y="450" width="470" height="126" rx="14"/>
+  <text class="label" x="1180" y="493" text-anchor="middle">C# compiler</text>
+  <text class="body" x="1180" y="533" text-anchor="middle">Emits compact async-aware IL</text>
+  <path class="arrow" d="M1180 578 L1180 626"/>
+  <rect class="good" x="890" y="636" width="580" height="118" rx="14"/>
+  <text class="body" x="1180" y="678" text-anchor="middle">Runtime + JIT manage suspension</text>
+  <text class="body" x="1180" y="715" text-anchor="middle">and materialize Tasks only when needed</text>
+
+  <text class="foot" x="800" y="864" text-anchor="middle">Runtime Async is an implementation change—not a new async/await programming model.</text>
+</svg>
