@@ -7,6 +7,18 @@
 
 # Package Version Changes
 
+## 10.7.2
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| System.Security.Cryptography.Xml | 10.0.10 | 10.0.14 | #26412 |
+
+**Added:**
+
+| Package | Version | PR |
+|---------|---------|-----|
+| System.Security.Cryptography.Pkcs | 10.0.14 | #26412 |
+
 ## 10.7.1
 
 | Package | Old Version | New Version | PR |
