@@ -222,8 +222,7 @@ public partial class UserManagement
                     {
                         Text = L["Delete"],
                         Visible = (data) => HasDeletePermission && CurrentUser.GetId() != data.As<IdentityUserDto>().Id,
-                        Clicked = async (data) => await DeleteEntityAsync(data.As<IdentityUserDto>()),
-                        ConfirmationMessage = (data) => GetDeleteConfirmationMessage(data.As<IdentityUserDto>())
+                        Clicked = async (data) => await DeleteEntityAsync(data.As<IdentityUserDto>())
                     }
             });
 
