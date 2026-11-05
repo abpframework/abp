@@ -176,6 +176,7 @@
     <PackageVersion Include="System.Linq.Dynamic.Core" Version="1.6.7" />
     <PackageVersion Include="System.Linq.Queryable" Version="4.3.0" />
     <PackageVersion Include="System.Runtime.Loader" Version="4.3.0" />
+    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="11.0.0-rc.3.26522.148" />
     <PackageVersion Include="System.Security.Cryptography.Xml" Version="11.0.0-rc.3.26522.148" />
     <PackageVersion Include="System.Security.Permissions" Version="11.0.0-rc.3.26522.148" />
     <PackageVersion Include="System.Security.Principal.Windows" Version="5.0.0" />
