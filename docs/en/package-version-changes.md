@@ -441,11 +441,6 @@
 | OpenIddict.Server.AspNetCore | 7.2.0 | 7.3.0 | #25053 |
 | OpenIddict.Validation.AspNetCore | 7.2.0 | 7.3.0 | #25053 |
 | OpenIddict.Validation.ServerIntegration | 7.2.0 | 7.3.0 | #25053 |
-
-## 10.2.0-rc.3
-
-| Package | Old Version | New Version | PR |
-|---------|-------------|-------------|-----|
 | Scriban | 6.3.0 | 6.6.0 | #25122 |
 
 ## 10.2.0-rc.1
