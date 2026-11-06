@@ -374,7 +374,7 @@ public class VoloNugetPackagesVersionUpdater : ITransientDependency
     {
         var myGetPack = await _myGetPackageListFinder.GetPackagesAsync();
 
-        return myGetPack.Packages.FirstOrDefault(p => p.Id == packageId)?.Versions.LastOrDefault();
+        return myGetPack?.GetLatestVersionOrNull(packageId);
     }
 
     /// <summary>
