@@ -35,9 +35,9 @@ Here is a brief list of titles explained in the next sections:
 
 ABP v11.0 targets .NET 11. Move your solution to .NET 11 if you want to use this version. ABP 11.0 RC references the .NET 11 RC 3 packages (`11.0.0-rc.3`). .NET 11 is a Standard Term Support release, and general availability is planned for November 10, 2026. We will update ABP to the stable .NET 11 SDK after that release.
 
-The Blazor startup templates use the new `BasePath` component. ABP still converts `float` and `double` extra-property values to `decimal`, which is the .NET 10 behavior.
+The Blazor startup templates use the new `BasePath` component. ABP preserves the .NET 10 rounding behavior when `float` or `double` extra-property values are read as `decimal`.
 
-The MySQL and Oracle EF Core providers do not work with EF Core 11 in this RC. `MySql.EntityFrameworkCore` 10.0.9, `Oracle.EntityFrameworkCore`, and `Devart.Data.Oracle.EFCore` fail when the `DbContext` is created. Keep applications that use those providers on ABP v10.x until a compatible provider build is available. PostgreSQL, SQL Server, and SQLite are updated with the .NET 11 RC 3 packages.
+The MySQL and Oracle EF Core provider versions referenced by ABP 11.0.0-rc.1 are not compatible with EF Core 11 RC 3. This includes Pomelo 9.0.0. Keep your existing working ABP and database provider versions before upgrading; see the migration guide for details. SQL Server and SQLite use the EF Core 11 RC 3 packages. The PostgreSQL integration uses `Npgsql.EntityFrameworkCore.PostgreSQL` 11.0.0-rc.1.1 together with EF Core 11 RC 3.
 
 > See the [migration guide](https://abp.io/docs/11.0/release-info/migration-guides/abp-11-0) and [#26147](https://github.com/abpframework/abp/pull/26147).
 
@@ -61,11 +61,27 @@ public class BookProjector : IQueryProjector<Book, BookDto>
 }
 ```
 
+For example, with SQLite, `GetListAsync` runs the following query without a projector:
+
+```sql
+SELECT "b"."Id", "b"."ConcurrencyStamp", "b"."Description", "b"."ExtraProperties", "b"."Name", "b"."Price", "b"."PublishDate", "b"."Type"
+FROM "Books" AS "b"
+ORDER BY "b"."Id" DESC
+LIMIT @p1 OFFSET @p
+```
+
+With the `BookProjector` above, it selects only the DTO columns:
+
+```sql
+SELECT "b"."Id", "b"."Name"
+FROM "Books" AS "b"
+ORDER BY "b"."Id" DESC
+LIMIT @p1 OFFSET @p
+```
+
 Filters, sorting, and paging still run on the entity query before the projection. A projection has to return one row per entity. Override `CreateGetOutputDtoQueryOrNullAsync` or `CreateGetListOutputDtoQueryOrNullAsync` when the projection has to join another aggregate. Override `GetOutputDtoQueryProjector` or `GetListOutputDtoQueryProjector` and return `null` to keep the in-memory mapping for one application service.
 
 > See the [application services](https://abp.io/docs/11.0/framework/architecture/domain-driven-design/application-services) document and [#26016](https://github.com/abpframework/abp/pull/26016).
-
-<!-- TODO: Add a screenshot of a projected query or the generated SQL if we want a visual for this section. -->
 
 ### FluentValidation Rules in the API Definition
 
@@ -112,22 +128,21 @@ Regenerate the proxies after upgrading. If your application compiled against a g
 
 ### Commercial Module Updates
 
-- **Localization:** Korean (`ko`) resources are added for the commercial modules, and Portuguese (`pt`) is added for the Account module ([#26115](https://github.com/abpframework/abp/pull/26115)).
+- **Localization:** Korean (`ko`) resources are added for the commercial modules.
 - **Account:** Password fields have an accessible show/hide control.
-- **CMS Kit Pro:** The Blazor page editor can publish a page and save it as a draft.
-- **AI Management:** An MCP session is recovered after it expires, after the workspace configuration changes, and after the application shuts down.
-- **ABP Suite:** Generated test classes are `partial`, so additional tests can live in a separate file.
+- **CMS Kit Pro:** The Blazor page editor can publish a page and save it as a draft. This update is also available in v10.7.1.
+- **AI Management:** MCP sessions reconnect after expiry and are recreated when the server configuration changes. Active sessions are disposed when the application shuts down. This update is also available in v10.7.1.
+- **ABP Suite:** Generated test classes are `partial`, so additional tests can live in a separate file. This update is also available in v10.7.1.
 
-<!-- TODO: Add screenshots for the password visibility toggle and the CMS Kit Pro Blazor publish/draft actions. -->
+![password-visibility-toggle](password-visibility-toggle.png)
 
 ### Dependency Updates
 
 ABP v11.0 RC also includes these dependency changes:
 
 - Polly is no longer referenced by the framework or by Language Management and Text Template Management. ABP retries with `Volo.Abp.Threading.RetryHelper`. Reference the `Polly` package yourself if your code uses it. ABP referenced Polly 8.6.3 up to v10.7.
-- `MongoDB.Driver` is upgraded to **3.13.0**.
 - The Blogging module detects image formats with SkiaSharp and no longer references ImageSharp.
-- Commercial Angular packages in this RC pick up Angular 22.1.
+- The Angular packages are updated to Angular 22.1.
 
 > Check the [Package Version Changes](https://abp.io/docs/11.0/package-version-changes) document for the full list.
 
@@ -135,8 +150,7 @@ ABP v11.0 RC also includes these dependency changes:
 
 - **Permissions:** `IPermissionManager` can update many permissions in one call. The permission management UI uses that overload, so a custom manager has to implement it. See [#26126](https://github.com/abpframework/abp/pull/26126).
 - **Feature management:** MongoDB no longer raises an entity-updated event when the stored feature value is already the requested value.
-- **Client proxies:** Path values are encoded, and the API version parameter is passed correctly in the Angular and jQuery proxies.
-- **Identity:** Revoked sessions are rejected when remote dynamic claims are refreshed.
+- **Localization:** Portuguese (`pt`) resources are added for the Account module. See [#26115](https://github.com/abpframework/abp/pull/26115).
 
 ## Community News
 
