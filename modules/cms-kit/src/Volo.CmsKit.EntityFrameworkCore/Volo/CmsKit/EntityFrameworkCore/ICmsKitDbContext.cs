@@ -4,6 +4,7 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.GlobalResources;
+using Volo.CmsKit.RobotsTxts;
 using Volo.CmsKit.MarkedItems;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Menus;
@@ -31,5 +32,6 @@ public interface ICmsKitDbContext : IEfCoreDbContext
     DbSet<MediaDescriptor> MediaDescriptors { get; }
     DbSet<MenuItem> MenuItems { get; }
     DbSet<GlobalResource> GlobalResources { get; }
+    DbSet<RobotsTxt> RobotsTxts { get; }
     DbSet<UserMarkedItem> UserMarkedItems { get; }
 }

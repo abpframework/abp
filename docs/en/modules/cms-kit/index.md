@@ -23,6 +23,7 @@ The following features are currently available:
 * Provides a [**rating**](./ratings.md) system to add rating feature to any kind of resource.
 * Provides a [**menu**](./menus.md) system to manage public menus dynamically.
 * Provides a [**global resources**](./global-resources.md) system to add global styles and scripts dynamically.
+* Provides a [**robots.txt**](./robots-txt.md) system to manage a multi-tenant robots.txt dynamically.
 * Provides a [**Dynamic Widget**](./dynamic-widget.md) system to create dynamic widgets for page and blog posts.
 * Provides a [**Marked Item**](./marked-items.md) system to mark any kind of resource, like a blog post or a product, as a favorite, starred, flagged, or bookmarked.
 

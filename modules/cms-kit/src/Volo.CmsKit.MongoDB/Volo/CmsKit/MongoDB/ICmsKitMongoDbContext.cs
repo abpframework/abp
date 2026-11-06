@@ -4,6 +4,7 @@ using Volo.Abp.MongoDB;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.GlobalResources;
+using Volo.CmsKit.RobotsTxts;
 using Volo.CmsKit.MarkedItems;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Menus;
@@ -44,6 +45,8 @@ public interface ICmsKitMongoDbContext : IAbpMongoDbContext
     IMongoCollection<MenuItem> MenuItems { get; }
 
     IMongoCollection<GlobalResource> GlobalResources { get; }
+
+    IMongoCollection<RobotsTxt> RobotsTxts { get; }
 
     IMongoCollection<UserMarkedItem> UserMarkedItems { get; }
 }

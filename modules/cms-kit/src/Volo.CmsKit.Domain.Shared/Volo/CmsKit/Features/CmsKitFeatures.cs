@@ -12,4 +12,5 @@ public static class CmsKitFeatures
     public const string ReactionEnable = GroupName + ".ReactionEnable";
     public const string TagEnable = GroupName + ".TagEnable";
     public const string MarkedItemEnable = GroupName + ".MarkedItemEnable";
+    public const string RobotsTxtEnable = GroupName + ".RobotsTxtEnable";
 }

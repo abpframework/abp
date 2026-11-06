@@ -76,6 +76,9 @@ public class CmsKitAdminPermissionDefinitionProvider : PermissionDefinitionProvi
 
         cmsGroup.AddPermission(CmsKitAdminPermissions.GlobalResources.Default, L("Permission:GlobalResources"))
             .RequireGlobalFeatures(typeof(GlobalResourcesFeature));
+
+        cmsGroup.AddPermission(CmsKitAdminPermissions.RobotsTxt.Default, L("Permission:RobotsTxt"))
+            .RequireGlobalFeatures(typeof(RobotsTxtFeature));
     }
 
     private static LocalizableString L(string name)

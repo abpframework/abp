@@ -2738,6 +2738,10 @@
               "path": "modules/cms-kit/global-resources.md"
             },
             {
+              "text": "Robots.txt",
+              "path": "modules/cms-kit/robots-txt.md"
+            },
+            {
               "text": "Dynamic Widget",
               "path": "modules/cms-kit/dynamic-widget.md"
             },

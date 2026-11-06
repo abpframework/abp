@@ -103,6 +103,16 @@ public class CmsKitAdminMenuContributor : IMenuContributor
             .RequireGlobalFeatures(typeof(GlobalResourcesFeature))
             .RequirePermissions(CmsKitAdminPermissions.GlobalResources.Default));
 
+        cmsMenus.Add(new ApplicationMenuItem(
+                CmsKitAdminMenus.RobotsTxt.RobotsTxtMenu,
+                l["RobotsTxt"],
+                "/Cms/RobotsTxt",
+                "fa fa-robot",
+                order: 8)
+            .RequireFeatures(CmsKitFeatures.RobotsTxtEnable)
+            .RequireGlobalFeatures(typeof(RobotsTxtFeature))
+            .RequirePermissions(CmsKitAdminPermissions.RobotsTxt.Default));
+
         if (cmsMenus.Any())
         {
             var cmsMenu = context.Menu.FindMenuItem(CmsKitAdminMenus.GroupName);

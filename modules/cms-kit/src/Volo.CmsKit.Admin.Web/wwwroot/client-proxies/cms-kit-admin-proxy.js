@@ -415,6 +415,38 @@
 
   })();
 
+  // controller volo.cmsKit.admin.robotsTxts.robotsTxtAdmin
+
+  (function(){
+
+    abp.utils.createNamespace(window, 'volo.cmsKit.admin.robotsTxts.robotsTxtAdmin');
+
+    volo.cmsKit.admin.robotsTxts.robotsTxtAdmin.get = function(ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-admin/robots-txt',
+        type: 'GET'
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.admin.robotsTxts.robotsTxtAdmin.update = function(input, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-admin/robots-txt',
+        type: 'PUT',
+        dataType: null,
+        data: JSON.stringify(input)
+      }, ajaxParams));
+    };
+
+    volo.cmsKit.admin.robotsTxts.robotsTxtAdmin.reset = function(ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/cms-kit-admin/robots-txt',
+        type: 'DELETE',
+        dataType: null
+      }, ajaxParams));
+    };
+
+  })();
+
   // controller volo.cmsKit.admin.tags.entityTagAdmin
 
   (function(){

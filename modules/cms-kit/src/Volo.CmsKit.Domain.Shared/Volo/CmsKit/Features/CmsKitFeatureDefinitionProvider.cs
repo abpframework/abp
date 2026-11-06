@@ -93,6 +93,15 @@ public class CmsKitFeatureDefinitionProvider : FeatureDefinitionProvider
             L("Feature:MarkedItemEnableDescription"),
             new ToggleStringValueType());
         }
+
+        if (GlobalFeatureManager.Instance.IsEnabled<RobotsTxtFeature>())
+        {
+            group.AddFeature(CmsKitFeatures.RobotsTxtEnable,
+            "true",
+            L("Feature:RobotsTxtEnable"),
+            L("Feature:RobotsTxtEnableDescription"),
+            new ToggleStringValueType());
+        }
     }
 
     private static LocalizableString L(string name)

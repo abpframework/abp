@@ -3013,6 +3013,124 @@
             }
           }
         },
+        "Volo.CmsKit.Admin.RobotsTxts.RobotsTxtAdminController": {
+          "controllerName": "RobotsTxtAdmin",
+          "controllerGroupName": "RobotsTxtAdmin",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.CmsKit.Admin.RobotsTxts.RobotsTxtAdminController",
+          "interfaces": [
+            {
+              "type": "Volo.CmsKit.Admin.RobotsTxts.IRobotsTxtAdminAppService",
+              "name": "IRobotsTxtAdminAppService",
+              "methods": [
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "Volo.CmsKit.Admin.RobotsTxts.RobotsTxtDto",
+                    "typeSimple": "Volo.CmsKit.Admin.RobotsTxts.RobotsTxtDto"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.CmsKit.Admin.RobotsTxts.UpdateRobotsTxtDto, Volo.CmsKit.Admin.Application.Contracts",
+                      "type": "Volo.CmsKit.Admin.RobotsTxts.UpdateRobotsTxtDto",
+                      "typeSimple": "Volo.CmsKit.Admin.RobotsTxts.UpdateRobotsTxtDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "ResetAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "GetAsync": {
+              "uniqueName": "GetAsync",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/cms-kit-admin/robots-txt",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Volo.CmsKit.Admin.RobotsTxts.RobotsTxtDto",
+                "typeSimple": "Volo.CmsKit.Admin.RobotsTxts.RobotsTxtDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.CmsKit.Admin.RobotsTxts.IRobotsTxtAdminAppService"
+            },
+            "UpdateAsyncByInput": {
+              "uniqueName": "UpdateAsyncByInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/cms-kit-admin/robots-txt",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.CmsKit.Admin.RobotsTxts.UpdateRobotsTxtDto, Volo.CmsKit.Admin.Application.Contracts",
+                  "type": "Volo.CmsKit.Admin.RobotsTxts.UpdateRobotsTxtDto",
+                  "typeSimple": "Volo.CmsKit.Admin.RobotsTxts.UpdateRobotsTxtDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.CmsKit.Admin.RobotsTxts.UpdateRobotsTxtDto",
+                  "typeSimple": "Volo.CmsKit.Admin.RobotsTxts.UpdateRobotsTxtDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.CmsKit.Admin.RobotsTxts.IRobotsTxtAdminAppService"
+            },
+            "ResetAsync": {
+              "uniqueName": "ResetAsync",
+              "name": "ResetAsync",
+              "httpMethod": "DELETE",
+              "url": "api/cms-kit-admin/robots-txt",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.CmsKit.Admin.RobotsTxts.IRobotsTxtAdminAppService"
+            }
+          }
+        },
         "Volo.CmsKit.Admin.Tags.EntityTagAdminController": {
           "controllerName": "EntityTagAdmin",
           "controllerGroupName": "EntityTagAdmin",

@@ -1,0 +1,53 @@
+﻿@page
+
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.Codemirror
+@using Volo.CmsKit.Admin.RobotsTxts
+@using Volo.CmsKit.Admin.Web.Pages.CmsKit.RobotsTxt
+@using Volo.CmsKit.Admin.Web.Menus
+@using Volo.CmsKit.Localization
+
+@inject IPageLayout PageLayout
+@inject IHtmlLocalizer<CmsKitResource> L
+
+@model IndexModel
+
+@{
+    PageLayout.Content.Title = L["RobotsTxt"].Value;
+    PageLayout.Content.BreadCrumb.Add(L["Menu:CMS"].Value);
+    PageLayout.Content.MenuItemName = CmsKitAdminMenus.RobotsTxt.RobotsTxtMenu;
+}
+
+@section styles{
+    <abp-style type="typeof(CodemirrorStyleContributor)" />
+}
+
+@section scripts {
+    <abp-script-bundle>
+        <abp-script type="typeof(CodemirrorScriptContributor)"/>
+        <abp-script src="/client-proxies/cms-kit-admin-proxy.js"/>
+        <abp-script src="/Pages/CmsKit/RobotsTxt/index.js"/>
+    </abp-script-bundle>
+}
+
+<abp-card>
+    <abp-card-body>
+        <p>
+            @L["RobotsTxtSource"]:
+            <span id="RobotsTxtSourceBadge" class="badge @(Model.Source == RobotsTxtSource.Custom ? "text-bg-primary" : "text-bg-secondary")">@L["RobotsTxtSource:" + Model.Source]</span>
+        </p>
+        @if (Model.Source == RobotsTxtSource.Default)
+        {
+            <p id="RobotsTxtDefaultSourceInfo" class="text-muted">@L["RobotsTxtSource:DefaultDescription"]</p>
+        }
+        <abp-input asp-for="Content" suppress-label="true"></abp-input>
+    </abp-card-body>
+    <abp-card-footer>
+        @if (Model.Source == RobotsTxtSource.Custom)
+        {
+            <abp-button button-type="Outline_Secondary" id="ResetRobotsTxtButton">@L["Reset"]</abp-button>
+        }
+        <abp-button button-type="Primary" id="SaveRobotsTxtButton" class="float-end">@L["SaveChanges"]</abp-button>
+    </abp-card-footer>
+</abp-card>

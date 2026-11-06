@@ -7,6 +7,7 @@ using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.GlobalResources;
+using Volo.CmsKit.RobotsTxts;
 using Volo.CmsKit.MarkedItems;
 using Volo.CmsKit.MediaDescriptors;
 using Volo.CmsKit.Menus;
@@ -287,6 +288,24 @@ public static class CmsKitDbContextModelCreatingExtensions
         else
         {
             builder.Ignore<GlobalResource>();
+        }
+
+        if (GlobalFeatureManager.Instance.IsEnabled<RobotsTxtFeature>())
+        {
+            builder.Entity<RobotsTxt>(b =>
+            {
+                b.ToTable(AbpCmsKitDbProperties.DbTablePrefix + "RobotsTxts", AbpCmsKitDbProperties.DbSchema);
+
+                b.ConfigureByConvention();
+
+                b.Property(x => x.Content).IsRequired().HasMaxLength(RobotsTxtConsts.MaxContentLength);
+
+                b.HasIndex(x => x.TenantId);
+            });
+        }
+        else
+        {
+            builder.Ignore<RobotsTxt>();
         }
 
         if (GlobalFeatureManager.Instance.IsEnabled<MarkedItemsFeature>())

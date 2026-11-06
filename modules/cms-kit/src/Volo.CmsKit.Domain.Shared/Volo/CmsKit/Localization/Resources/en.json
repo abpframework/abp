@@ -285,6 +285,17 @@
     "Enum:PageStatus:0": "Draft",
     "Enum:PageStatus:1": "Publish",
     "AllPosts": "All posts",
-    "IsReadOnly": "Readonly"
+    "IsReadOnly": "Readonly",
+    "RobotsTxt": "Robots.txt",
+    "Permission:RobotsTxt": "Robots.txt",
+    "Feature:RobotsTxtEnable": "Robots.txt",
+    "Feature:RobotsTxtEnableDescription": "CMS Kit's robots.txt feature that allows managing the robots.txt content of the site.",
+    "RobotsTxtSource": "Source",
+    "RobotsTxtSource:Custom": "Custom",
+    "RobotsTxtSource:InheritedFromHost": "Inherited from host",
+    "RobotsTxtSource:Default": "Default",
+    "RobotsTxtSource:DefaultDescription": "No content is saved yet. Each website serves its own static wwwroot/robots.txt file or its configured default content until you save one.",
+    "RobotsTxtResetConfirmationMessage": "The current robots.txt content will be removed and the inherited/default content will be used. Are you sure?",
+    "Reset": "Reset"
   }
 }

@@ -31,6 +31,8 @@ public class GlobalCmsKitFeatures : GlobalModuleFeatures
 
     public MarkedItemsFeature MarkedItemsFeature => GetFeature<MarkedItemsFeature>();
 
+    public RobotsTxtFeature RobotsTxt => GetFeature<RobotsTxtFeature>();
+
     public GlobalCmsKitFeatures([NotNull] GlobalFeatureManager featureManager)
         : base(featureManager)
     {
@@ -46,5 +48,6 @@ public class GlobalCmsKitFeatures : GlobalModuleFeatures
         AddFeature(new GlobalResourcesFeature(this));
         AddFeature(new BlogPostScrollIndexFeature(this));
         AddFeature(new MarkedItemsFeature(this));
+        AddFeature(new RobotsTxtFeature(this));
     }
 }

@@ -67,4 +67,9 @@ public static class CmsKitAdminPermissions
     {
         public const string Default = GroupName + ".GlobalResources";
     }
+
+    public static class RobotsTxt
+    {
+        public const string Default = GroupName + ".RobotsTxt";
+    }
 }
