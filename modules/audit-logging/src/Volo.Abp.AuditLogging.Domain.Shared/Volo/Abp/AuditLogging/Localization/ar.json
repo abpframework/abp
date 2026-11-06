@@ -113,6 +113,15 @@
     "AuditLogExportCompletedSubject": "تم إكمال تصدير سجل التدقيق",
     "DownloadLinkExplanation": "يمكنك تنزيل الملف باستخدام الرابط أدناه حتى {0} (UTC)",
     "DownloadNow": "تنزيل الآن",
-    "TryAgainMessage": "الرجاء المحاولة مرة أخرى. إذا استمرت المشكلة، يرجى الاتصال بالدعم."
+    "TryAgainMessage": "الرجاء المحاولة مرة أخرى. إذا استمرت المشكلة، يرجى الاتصال بالدعم.",
+    "Permission:SettingManagement": "إدارة الإعدادات",
+    "Action": "إجراء",
+    "NoActions": "لا توجد إجراءات",
+    "MinExecutionDuration": "الحد الأدنى للمدة",
+    "MaxExecutionDuration": "الحد الأقصى للمدة",
+    "NoDataAvailable": "لا توجد بيانات متاحة",
+    "AuditLogExportFailedSubject": "فشل تصدير سجل التدقيق",
+    "EntityChangeExportFailedSubject": "فشل تصدير تغييرات الكيان",
+    "FileNotFound": "الملف غير موجود: {0}"
   }
 }

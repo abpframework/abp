@@ -325,7 +325,7 @@ export class ExtensibleTableComponent<R = any> implements AfterViewInit, OnDestr
     return visibleActions.length > 0;
   }
 
-  onSelect({ selected }: { selected: any[] }) {
+  onSelect(selected: any[] = []) {
     const selectedValue = this.selected();
     selectedValue.splice(0, selectedValue.length);
     selectedValue.push(...selected);
@@ -338,8 +338,13 @@ export class ExtensibleTableComponent<R = any> implements AfterViewInit, OnDestr
     }
 
     const table = this.table();
-    const viewportHeight = table.bodyHeight;
-    const scrollHeight = table.bodyComponent.scrollHeight();
+    const viewportHeight = table.bodyHeight();
+    const scroller = table.element.querySelector('datatable-scroller');
+    const scrollHeight = scroller?.scrollHeight ?? 0;
+
+    if (!scroller || scrollHeight <= 0) {
+      return;
+    }
 
     if (scrollEvent.offsetY + viewportHeight >= scrollHeight - this.scrollThreshold()) {
       this.loadMoreSubject.next();

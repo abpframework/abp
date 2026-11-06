@@ -113,6 +113,15 @@
     "AuditLogExportCompletedSubject": "Audit log export completed",
     "DownloadLinkExplanation": "You can download the file using the link below until {0} (UTC)",
     "DownloadNow": "Download now",
-    "TryAgainMessage": "Please try again. If the problem persists, please contact support."
+    "TryAgainMessage": "Please try again. If the problem persists, please contact support.",
+    "Permission:SettingManagement": "Setting management",
+    "Action": "Action",
+    "NoActions": "No actions",
+    "MinExecutionDuration": "Min. duration",
+    "MaxExecutionDuration": "Max. duration",
+    "NoDataAvailable": "No data available",
+    "AuditLogExportFailedSubject": "Audit log export failed",
+    "EntityChangeExportFailedSubject": "Entity change export failed",
+    "FileNotFound": "File not found: {0}"
   }
 }

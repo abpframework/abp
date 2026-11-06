@@ -1,0 +1,7 @@
+{
+  "culture": "he",
+  "texts": {
+    "DisplayName:Abp.Localization.DefaultLanguage": "שפת ברירת המחדל",
+    "Description:Abp.Localization.DefaultLanguage": "שפת ברירת המחדל של היישום."
+  }
+}

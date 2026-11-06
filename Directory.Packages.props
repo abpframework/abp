@@ -128,9 +128,7 @@
     <PackageVersion Include="Elastic.Clients.Elasticsearch" Version="8.19.27" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageVersion Include="Nito.AsyncEx.Context" Version="5.1.2" />
-    <!-- Npgsql has no EF Core 11 RC 3 build yet; 11.0.0-rc.1.1 pins EF Core RC 1, so Volo.Abp.EntityFrameworkCore.PostgreSql
-         references EF Core directly to lift it to RC 3. Revert both once a matching Npgsql release is available. -->
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="11.0.0-rc.1.1" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="11.0.0-rc.3" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
     <PackageVersion Include="NuGet.Versioning" Version="6.14.0" />
     <PackageVersion Include="NUglify" Version="1.21.17" />
@@ -143,7 +141,8 @@
     <PackageVersion Include="OpenIddict.Validation.ServerIntegration" Version="7.7.0" />
     <PackageVersion Include="Oracle.EntityFrameworkCore" Version="10.23.26301" />
     <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
-    <PackageVersion Include="MySql.EntityFrameworkCore" Version="10.0.9" />
+    <!-- MySql.EntityFrameworkCore 10.x fails on EF Core 11. 11.0.0-preview is built on EF Core 11 preview 7; move to the EF Core 11 release once it ships. -->
+    <PackageVersion Include="MySql.EntityFrameworkCore" Version="11.0.0-preview" />
     <PackageVersion Include="Quartz" Version="3.15.0" />
     <PackageVersion Include="Quartz.Extensions.DependencyInjection" Version="3.15.0" />
     <PackageVersion Include="Quartz.Plugins.TimeZoneConverter" Version="3.15.0" />
@@ -177,6 +176,7 @@
     <PackageVersion Include="System.Linq.Dynamic.Core" Version="1.6.7" />
     <PackageVersion Include="System.Linq.Queryable" Version="4.3.0" />
     <PackageVersion Include="System.Runtime.Loader" Version="4.3.0" />
+    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="11.0.0-rc.3.26522.148" />
     <PackageVersion Include="System.Security.Cryptography.Xml" Version="11.0.0-rc.3.26522.148" />
     <PackageVersion Include="System.Security.Permissions" Version="11.0.0-rc.3.26522.148" />
     <PackageVersion Include="System.Security.Principal.Windows" Version="5.0.0" />

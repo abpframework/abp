@@ -1,6 +1,6 @@
 # Reviews of DevAI Conference From a Speaker’s Eye
 
-Last week **I traveled to Poland** for a conference just dedicated to AI. I see that there will more conferences in the future targeting **just AI topics**. This's the trend now! In terms of weather, I catched the last good days in Warsaw before winter comes. So for me it was a conference at the same time getting some cultural information about Poland's history, city life, people and developer's mindset.
+Last week **I traveled to Poland** for a conference just dedicated to AI. I see that there will more conferences in the future targeting **just AI topics**. This's the trend now! I'm happy that, I catched the last good weather period in Warsaw before winter comes. So for me it was a conference at the same time learning some cultural information about Poland's history, city life, people and developer's mindset.
 
 DevAI by Data Science Summit 2026, the official website https://devai.dssconf.pl, took place in two distinct parts: Monday, October 19 online and Tuesday onsite at the [Copernicus Science Centre](https://www.google.com/maps/place/Copernicus+Science+Centre/@52.2418552,21.0287271,17z/data=!3m1!4b1!4m6!3m5!1s0x471ecc5ba250ccd1:0x8d6f1b9b8410960!8m2!3d52.2418552!4d21.0287271!16s%2Fm%2F05mwh1p?entry=ttu&g_ep=EgoyMDI2MTAyMC4wIKXMDSoASAFQAw%3D%3D) in Warsaw. 
 
@@ -17,16 +17,32 @@ I had the chance to talk to several developers at the conference. **One thing th
 Until now, we have been surprised about AI assisted development, tools and AI generated outputs. I guess this time has already completed. Yes we see using AI is productive and impressive but hat happens after an exciting AI-based MVP or demo? We started to ask questions about the following topics:
 
 * observability
+
 * reliability
+
 * security
+
 * cost control
+
 * verification
+
 * human oversight
+
 * production debugging
+
 * deterministic retrieval
+
 * organizational implications
 
-> **The biggest shift is from “WHAT CAN AI BUILD?” 👉 “HOW DO WE MAKE AI-GENERATED WORK TRUSTHWORTHY ENOUGH TO SHIP?**
+  
+
+> **The biggest shift is from “WHAT CAN AI BUILD?” **
+>
+> **👉 “HOW DO WE MAKE AI-GENERATED WORK TRUSTHWORTHY ENOUGH TO SHIP?**
+
+
+
+
 
 ---
 
@@ -38,13 +54,13 @@ My session, “Talk With Your Data: Building AI-Powered Reporting,” ran from 1
 
 ![my-talk](my-talk.png)
 
-
+![first-slide-of-my-presentation](first-slide-of-my-presentation.png)
 
 ---
 
 
 
-## Sessions I Attended:
+## Sessions I Attended and What I Learnt
 
 # How AI-Native Development Is Reshaping Software Teams
 
@@ -56,7 +72,7 @@ My session, “Talk With Your Data: Building AI-Powered Reporting,” ran from 1
 
 ![image-20261028145448700](image-20261028145448700.png)
 
-In their company, they transformed a 10+ year-old Java recruitment system to .NET 10 + Blazor + PostgreSQL stack.
+In their company, they transformed a 10+ year-old Java recruitment system to **.NET 10 + Blazor + PostgreSQL** stack.
 
 - **19 working days** to a functional platform.
 - **10 weeks** to production vs. an estimated 7–9 months traditionally.
@@ -111,14 +127,16 @@ Their project includes **1,531 automated tests** running in approximately 7 seco
 ### 6. Faster Development Creates New Challenges
 
 - **Knowledge management:** Specifications, decisions and an LLM Wiki help teams share knowledge and onboard developers.
+
 - **Scaling:** Add complete, balanced teams (pods) rather than individual developers.
+
 - **Prioritization:** Faster delivery brings back previously postponed ideas, potentially increasing the backlog.
 
-### Key Takeaway
+  
 
-**AI-native development isn't just about generating code faster. It's about redesigning the entire software development process.**
+> **AI-native development isn't just about generating code faster. It's about redesigning the entire software development process.** The biggest gains come from combining structured specifications, standardized architecture, AI agents, automated testing and human oversight.
 
-The biggest gains come from combining structured specifications, standardized architecture, AI agents, automated testing and human oversight.
+
 
 ---
 
@@ -155,6 +173,13 @@ Their approach, called **NER-RAG**, combines traditional NLP with LLMs:
 
 This reduces unnecessary LLM calls while making retrieval more predictable.
 
+For example in a prescription the keword "Fentanyl" can be mentioned as many different alternatives like "Fentanylum", "Fentanylium", "Fentanil", "Sufentanil", "Remifentanyl".
+
+Read more about NER: 
+
+- [graphrag.com/reference/preparation/ner/](https://graphrag.com/reference/preparation/ner/)
+- [medium.com/@uaqureshi_61924/what-is-named-entity-recognition-ner-and-why-is-it-used-in-nlp-and-llm-based-ai-applications-c27184992b17](https://medium.com/@uaqureshi_61924/what-is-named-entity-recognition-ner-and-why-is-it-used-in-nlp-and-llm-based-ai-applications-c27184992b17) (*Turkish so translate to your language*)
+
 ![NER-RAG architecture with entity extraction and LLM validation](IMG_25688.png)
 
 ### 4. Significant Cost and Scalability Improvements
@@ -168,9 +193,7 @@ The speaker presented some interesting performance figures from their approach:
 
 ![NER-RAG cost and scalability improvements](IMG_25693.png)
 
-### Key Takeaway
-
-**Not every AI problem needs to be solved entirely with LLMs.**
+> **Not every AI problem needs to be solved entirely with LLMs.**
 
 This session shows how combining traditional NLP, structured entity extraction, hybrid search and selective LLM validation can produce a more deterministic and cost-efficient retrieval system.
 
@@ -184,7 +207,9 @@ The most interesting architectural decision was **moving expensive processing fr
 
 **Speaker:** Borys Stokalski, Global Partnership on AI / OECD.AI
 
-Borys Stokalski discussed the challenges and risks emerging from increasingly autonomous AI systems, particularly in software development. His central argument was that **the biggest challenges of AI adoption may come from how we use, manage and scale these systems rather than from the technology itself.**
+Borys Stokalski is from OECD (Organisation for Economic Co-operation and Development)'s sub-department [OECD.AI](https://oecd.ai/en/) which discusses the challenges and risks emerging from increasingly autonomous AI systems, particularly in software development. By the way OECD.AI (OECD AI Policy Observatory), **started in February 2020 by OECD** in Paris and EU countries + USA + Japan + South Korea + Turkey are also members of this community.
+
+His central argument was that **the biggest challenges of AI adoption may come from how we use, manage and scale these systems rather than from the technology itself.**
 
 ![We Have Met the Enemy and It Is Us](IMG_25712.png)
 
@@ -200,7 +225,7 @@ As AI systems become more autonomous, three major challenges emerge:
 
 ### 2. AI Coding Productivity Doesn't Guarantee Software Quality
 
-One interesting part of the presentation was research showing that AI coding tools can **significantly increase initial development speed** while introducing **long-term maintenance problems.** The speaker referenced a study of 806 GitHub projects that adopted Cursor, compared against 1,380 similar projects.
+One interesting part of the presentation was research showing that AI coding tools can **significantly increase initial development speed** while introducing **long-term maintenance problems.** The speaker referenced a study of **806 GitHub projects** that adopted **Cursor**, compared against **1,380 similar projects**.
 
 The findings presented included:
 
@@ -231,7 +256,7 @@ However, the central question was whether this increased development velocity tr
 
 ![Development Velocity vs Delivery of Value](IMG_25717.png)
 
-**Key takeaway:** We should measure AI-assisted development by delivered business value, software quality and maintainability rather than lines of code or commit counts.
+> We should measure AI-assisted development by delivered business value, software quality and maintainability rather than lines of code or commit counts.
 
 ### 4. Conceptual Entropy: A Hidden Problem in AI Development
 
@@ -271,12 +296,20 @@ He highlighted three interconnected challenges:
 **AI can dramatically accelerate software development, but speed without engineering discipline creates new risks.**
 
 - More generated code doesn't automatically mean more business value.
+
 - AI-assisted development can increase technical debt and complexity.
+
 - Specifications and documentation need consistent terminology and structure.
+
 - Human understanding must keep pace with AI-generated complexity.
+
 - Engineering practices must evolve alongside increasingly autonomous AI systems.
 
-The biggest challenge isn't just making AI agents more capable. It's ensuring that **humans can continue to understand, maintain and control the systems those agents help create.**
+  
+
+> The biggest challenge isn't just making AI agents more capable. It's ensuring that **humans can continue to understand, maintain and control the systems those agents help create.**
+
+
 
 ---
 

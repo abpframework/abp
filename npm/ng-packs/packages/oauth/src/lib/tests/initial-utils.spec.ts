@@ -69,7 +69,10 @@ describe('InitialUtils', () => {
 
     test('should call logOut fn of OAuthService when token is valid and current user not found', async () => {
       injectorSpy.mockReturnValueOnce({ getDeep: () => false });
-      injectorSpy.mockReturnValueOnce({ hasValidAccessToken: () => true });
+      injectorSpy.mockReturnValueOnce({
+        hasValidAccessToken: () => true,
+        getAccessTokenExpiration: () => Date.now() + 60_000,
+      });
       checkAccessToken(injector);
       expect(clearOAuthStorageSpy).toHaveBeenCalled();
     });

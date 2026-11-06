@@ -64,6 +64,35 @@ public class AbpRemoteDynamicClaimsCookieAuthenticationOptionsExtensions_Tests :
     }
 
     [Fact]
+    public async Task Should_Reject_The_Principal_When_The_Session_Is_Revoked()
+    {
+        var userId = Guid.NewGuid();
+        var cache = GetRequiredService<IDistributedCache<AbpDynamicClaimCacheItem>>();
+        // Another session of the user filled the cache.
+        await cache.SetAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, null), new AbpDynamicClaimCacheItem());
+        await cache.SetAsync(AbpDynamicClaimCacheItem.CalculateRevokedSessionCacheKey("session-a"), new AbpDynamicClaimCacheItem());
+
+        var context = await ValidatePrincipalAsync(userId, sessionId: "session-a");
+
+        context.Principal.ShouldBeNull();
+        _remoteRefreshResponseHandler.ReceivedAccessTokens.ShouldBeEmpty();
+    }
+
+    [Fact]
+    public async Task Should_Keep_The_Principal_Of_Another_Session_When_A_Session_Is_Revoked()
+    {
+        var userId = Guid.NewGuid();
+        var cache = GetRequiredService<IDistributedCache<AbpDynamicClaimCacheItem>>();
+        await cache.SetAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, null), new AbpDynamicClaimCacheItem());
+        await cache.SetAsync(AbpDynamicClaimCacheItem.CalculateRevokedSessionCacheKey("session-a"), new AbpDynamicClaimCacheItem());
+
+        var context = await ValidatePrincipalAsync(userId, sessionId: "session-b");
+
+        context.Principal.ShouldNotBeNull();
+        _remoteRefreshResponseHandler.ReceivedAccessTokens.ShouldBeEmpty();
+    }
+
+    [Fact]
     public async Task Should_Keep_The_Principal_When_There_Is_No_Access_Token()
     {
         var context = await ValidatePrincipalAsync(Guid.NewGuid(), accessToken: null);
@@ -72,13 +101,17 @@ public class AbpRemoteDynamicClaimsCookieAuthenticationOptionsExtensions_Tests :
         _remoteRefreshResponseHandler.ReceivedAccessTokens.ShouldBeEmpty();
     }
 
-    private async Task<CookieValidatePrincipalContext> ValidatePrincipalAsync(Guid userId, string accessToken = "test-access-token")
+    private async Task<CookieValidatePrincipalContext> ValidatePrincipalAsync(Guid userId, string accessToken = "test-access-token", string sessionId = null)
     {
         var options = new CookieAuthenticationOptions().ValidateRemoteDynamicClaims();
 
         var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme, AbpClaimTypes.UserName, AbpClaimTypes.Role);
         identity.AddClaim(new Claim(AbpClaimTypes.UserId, userId.ToString()));
         identity.AddClaim(new Claim(AbpClaimTypes.UserName, "john"));
+        if (sessionId != null)
+        {
+            identity.AddClaim(new Claim(AbpClaimTypes.SessionId, sessionId));
+        }
 
         var properties = new AuthenticationProperties();
         if (accessToken != null)

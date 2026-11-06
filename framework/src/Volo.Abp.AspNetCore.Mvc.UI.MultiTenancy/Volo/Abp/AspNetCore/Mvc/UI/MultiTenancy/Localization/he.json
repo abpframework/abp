@@ -1,0 +1,13 @@
+{
+  "culture": "he",
+  "texts": {
+    "GivenTenantIsNotExist": "הדייר שצוין אינו קיים: {0}",
+    "GivenTenantIsNotAvailable": "הדייר שצוין אינו זמין: {0}",
+    "Tenant": "דייר",
+    "Switch": "החלפה",
+    "Name": "שם",
+    "SwitchTenantHint": "השאירו את שדה השם ריק כדי לעבור לצד המארח.",
+    "SwitchTenant": "החלפת דייר",
+    "NotSelected": "לא נבחר"
+  }
+}

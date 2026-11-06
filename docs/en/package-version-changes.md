@@ -7,10 +7,24 @@
 
 # Package Version Changes
 
+## 10.7.2
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| System.Security.Cryptography.Xml | 10.0.10 | 10.0.14 | #26412 |
+
+**Added:**
+
+| Package | Version | PR |
+|---------|---------|-----|
+| System.Security.Cryptography.Pkcs | 10.0.14 | #26412 |
+
 ## 11.0.0-rc.1
 
 | Package | Old Version | New Version | PR |
 |---------|-------------|-------------|-----|
+| @ng-bootstrap/ng-bootstrap | ~20.0.0 | ~21.0.0 | #26380 |
+| @swimlane/ngx-datatable | ~22.0.0 | ~25.1.0 | #26380, #26381 |
 | Devart.Data.Oracle.EFCore | 11.0.0.9 | 11.2.192.10 | #26147 |
 | Microsoft.AspNetCore.Authentication.JwtBearer | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
 | Microsoft.AspNetCore.Authentication.OpenIdConnect | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
@@ -64,7 +78,8 @@
 | Microsoft.Extensions.Options.ConfigurationExtensions | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
 | Microsoft.Maui.Controls | 10.0.51 | 11.0.0-rc.2.26505.5 | #26147 |
 | MongoDB.Driver | 3.12.0 | 3.13.0 | #26334 |
-| Npgsql.EntityFrameworkCore.PostgreSQL | 10.0.3 | 11.0.0-rc.1.1 | #26147 |
+| MySql.EntityFrameworkCore | 10.0.9 | 11.0.0-preview | #26400 |
+| Npgsql.EntityFrameworkCore.PostgreSQL | 10.0.3 | 11.0.0-rc.3 | #26147, #26400 |
 | Oracle.EntityFrameworkCore | 10.23.26000 | 10.23.26301 | #26147 |
 | System.Collections.Immutable | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
 | System.Management | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
@@ -73,6 +88,7 @@
 | System.Text.Encoding.CodePages | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
 | System.Text.Encodings.Web | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
 | System.Text.Json | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
+| ng-zorro-antd | ~21.3.1 | ~22.1.0 | #26380 |
 
 ## 10.8.0-rc.1
 
@@ -425,11 +441,6 @@
 | OpenIddict.Server.AspNetCore | 7.2.0 | 7.3.0 | #25053 |
 | OpenIddict.Validation.AspNetCore | 7.2.0 | 7.3.0 | #25053 |
 | OpenIddict.Validation.ServerIntegration | 7.2.0 | 7.3.0 | #25053 |
-
-## 10.2.0-rc.3
-
-| Package | Old Version | New Version | PR |
-|---------|-------------|-------------|-----|
 | Scriban | 6.3.0 | 6.6.0 | #25122 |
 
 ## 10.2.0-rc.1
