@@ -148,7 +148,7 @@ The repository includes benchmark summary tables, while the PowerShell runner ge
 
 ## 7. Reproducing the experiment
 
-All benchmark application source code, k6 load-testing scenarios, PowerShell runners, and published result summaries are available in the [abp-net10-vs-net11-benchmark repository](https://github.com/OkanKoca/abp-net10-vs-net11-benchmark). **The commands below refer to that benchmark implementation**, rather than being stand-alone commands. With its source code available, the required .NET SDKs/runtimes, Docker, k6, Node.js, and `dotnet-counters` installed, local OpenIddict certificate settings configured, and test credentials provided, an example run is:
+All benchmark application source code, k6 load-testing scenarios, PowerShell runners, and published result summaries are available in the [AbpNet10vsNet11PerfTest test suite](https://github.com/abpframework/abp/tree/dev/test/AbpNet10vsNet11PerfTest) of the ABP repository. **The commands below refer to that benchmark implementation**, rather than being stand-alone commands. With its source code available, the required .NET SDKs/runtimes, Docker, k6, Node.js, and `dotnet-counters` installed, local OpenIddict certificate settings configured, and test credentials provided, an example run is:
 
 ```powershell
 docker compose up -d
