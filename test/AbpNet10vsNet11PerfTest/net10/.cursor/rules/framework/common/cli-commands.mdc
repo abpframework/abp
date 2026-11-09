@@ -1,0 +1,92 @@
+---
+description: "ABP CLI commands: generate-proxy, install-libs, add-package-ref, new-module, install-module, update, clean, suite generate (CRUD pages)"
+globs:
+  - "**/*.csproj"
+  - "**/appsettings*.json"
+alwaysApply: false
+---
+
+# ABP CLI Commands
+
+> **Full documentation**: https://abp.io/docs/latest/cli
+> Use `abp help [command]` for detailed options.
+
+## Generate Client Proxies
+
+```bash
+# URL flag: `-u` (short) or `--url` (long). Use whichever your team prefers, but keep it consistent.
+#
+# Angular (host must be running)
+abp generate-proxy -t ng
+
+# C# client proxies
+abp generate-proxy -t csharp -u https://localhost:44300
+
+# Integration services only (microservices)
+abp generate-proxy -t csharp -u https://localhost:44300 -st integration
+
+# JavaScript
+abp generate-proxy -t js -u https://localhost:44300
+```
+
+## Install Client-Side Libraries
+
+```bash
+# Install NPM packages for MVC/Blazor Server
+abp install-libs
+```
+
+## Add Package Reference
+
+```bash
+# Add project reference with module dependency
+abp add-package-ref Acme.BookStore.Domain
+abp add-package-ref Acme.BookStore.Domain -t Acme.BookStore.Application
+```
+
+## Module Operations
+
+```bash
+# Create new module in solution
+abp new-module Acme.OrderManagement -t module:ddd
+
+# Install published module
+abp install-module Volo.Blogging
+
+# Add ABP NuGet package
+abp add-package Volo.Abp.Caching.StackExchangeRedis
+```
+
+## Update & Clean
+
+```bash
+abp update                  # Update all ABP packages
+abp update --version 8.0.0  # Specific version
+abp clean                   # Delete bin/obj folders
+```
+
+## ABP Suite (CRUD Generation)
+
+Generate CRUD pages from entity JSON (created via Suite UI):
+
+```bash
+abp suite generate --entity .suite/entities/Book.json --solution ./Acme.BookStore.sln
+```
+
+> **Note**: Entity JSON files are created when you generate an entity via ABP Suite UI. They are stored in `.suite/entities/` folder.
+> **Suite docs**: https://abp.io/docs/latest/suite
+
+## Quick Reference
+
+| Task | Command |
+|------|---------|
+| Angular proxies | `abp generate-proxy -t ng` |
+| C# proxies | `abp generate-proxy -t csharp -u URL` |
+| Install JS libs | `abp install-libs` |
+| Add reference | `abp add-package-ref PackageName` |
+| Create module | `abp new-module ModuleName` |
+| Install module | `abp install-module ModuleName` |
+| Update packages | `abp update` |
+| Clean solution | `abp clean` |
+| Suite CRUD | `abp suite generate -e entity.json -s solution.sln` |
+| Get help | `abp help [command]` |

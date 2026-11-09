@@ -1,0 +1,262 @@
+---
+description: "ABP MVC and Razor Pages UI patterns"
+globs:
+  - "**/*.cshtml"
+  - "**/Pages/**/*.cs"
+  - "**/Views/**/*.cs"
+  - "**/Controllers/**/*.cs"
+alwaysApply: false
+---
+
+# ABP MVC / Razor Pages UI
+
+> **Docs**: https://abp.io/docs/latest/framework/ui/mvc-razor-pages/overall
+
+## Razor Page Model
+```csharp
+public class IndexModel : AbpPageModel
+{
+    private readonly IBookAppService _bookAppService;
+
+    public List<BookDto> Books { get; set; }
+
+    public IndexModel(IBookAppService bookAppService)
+    {
+        _bookAppService = bookAppService;
+    }
+
+    public async Task OnGetAsync()
+    {
+        var result = await _bookAppService.GetListAsync(
+            new PagedAndSortedResultRequestDto()
+        );
+        Books = result.Items.ToList();
+    }
+}
+```
+
+## Razor Page View
+```html
+@page
+@model IndexModel
+
+<abp-card>
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-md="_6">
+                <h2>@L["Books"]</h2>
+            </abp-column>
+            <abp-column size-md="_6" class="text-end">
+                <abp-button button-type="Primary" 
+                            id="NewBookButton"
+                            text="@L["NewBook"].Value" />
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="BooksTable">
+            <thead>
+                <tr>
+                    <th>@L["Name"]</th>
+                    <th>@L["Price"]</th>
+                    <th>@L["Actions"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var book in Model.Books)
+                {
+                    <tr>
+                        <td>@book.Name</td>
+                        <td>@book.Price</td>
+                        <td>
+                            <abp-button button-type="Primary" size="Small" 
+                                        text="@L["Edit"].Value" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </abp-table>
+    </abp-card-body>
+</abp-card>
+```
+
+## ABP Tag Helpers
+
+### Cards
+```html
+<abp-card>
+    <abp-card-header>Header</abp-card-header>
+    <abp-card-body>Content</abp-card-body>
+    <abp-card-footer>Footer</abp-card-footer>
+</abp-card>
+```
+
+### Buttons
+```html
+<abp-button button-type="Primary" text="@L["Save"].Value" />
+<abp-button button-type="Danger" icon="fa fa-trash" />
+```
+
+### Forms
+```html
+<abp-dynamic-form abp-model="Book" asp-page="/Books/CreateModal">
+    <abp-modal>
+        <abp-modal-header title="@L["NewBook"].Value" />
+        <abp-modal-body>
+            <abp-form-content />
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Save | AbpModalButtons.Cancel)" />
+    </abp-modal>
+</abp-dynamic-form>
+```
+
+### Tables
+```html
+<abp-table striped-rows="true" hoverable-rows="true">
+    <!-- content -->
+</abp-table>
+```
+
+## Localization
+```html
+@* In Razor views/pages *@
+<h1>@L["Books"]</h1>
+
+@* With parameters *@
+<p>@L["WelcomeMessage", Model.UserName]</p>
+```
+
+## JavaScript API
+```javascript
+// Localization
+var text = abp.localization.getResource('BookStore')('Books');
+
+// Authorization
+if (abp.auth.isGranted('BookStore.Books.Create')) {
+    // Show create button
+}
+
+// Settings
+var maxCount = abp.setting.get('BookStore.MaxItemCount');
+
+// Ajax with automatic error handling
+abp.ajax({
+    url: '/api/app/book',
+    type: 'POST',
+    data: JSON.stringify(bookData)
+}).then(function(result) {
+    // Success
+});
+
+// Notifications
+abp.notify.success('Book created successfully!');
+abp.notify.error('An error occurred!');
+
+// Confirmation
+abp.message.confirm('Are you sure?').then(function(confirmed) {
+    if (confirmed) {
+        // User confirmed
+    }
+});
+```
+
+## DataTables Integration
+```javascript
+var dataTable = $('#BooksTable').DataTable(
+    abp.libs.datatables.normalizeConfiguration({
+        serverSide: true,
+        paging: true,
+        ajax: abp.libs.datatables.createAjax(bookService.getList),
+        columnDefs: [
+            {
+                title: l('Name'),
+                data: 'name'
+            },
+            {
+                title: l('Price'),
+                data: 'price',
+                render: function(data) {
+                    return data.toFixed(2);
+                }
+            },
+            {
+                title: l('Actions'),
+                rowAction: {
+                    items: [
+                        {
+                            text: l('Edit'),
+                            visible: abp.auth.isGranted('BookStore.Books.Edit'),
+                            action: function(data) {
+                                editModal.open({ id: data.record.id });
+                            }
+                        },
+                        {
+                            text: l('Delete'),
+                            visible: abp.auth.isGranted('BookStore.Books.Delete'),
+                            confirmMessage: function(data) {
+                                return l('BookDeletionConfirmationMessage', data.record.name);
+                            },
+                            action: function(data) {
+                                bookService.delete(data.record.id).then(function() {
+                                    abp.notify.success(l('SuccessfullyDeleted'));
+                                    dataTable.ajax.reload();
+                                });
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    })
+);
+```
+
+## Modal Pages
+**CreateModal.cshtml:**
+```html
+@page
+@model CreateModalModel
+
+<abp-dynamic-form abp-model="Book" asp-page="/Books/CreateModal">
+    <abp-modal>
+        <abp-modal-header title="@L["NewBook"].Value" />
+        <abp-modal-body>
+            <abp-form-content />
+        </abp-modal-body>
+        <abp-modal-footer buttons="@(AbpModalButtons.Save | AbpModalButtons.Cancel)" />
+    </abp-modal>
+</abp-dynamic-form>
+```
+
+**CreateModal.cshtml.cs:**
+```csharp
+public class CreateModalModel : AbpPageModel
+{
+    [BindProperty]
+    public CreateBookDto Book { get; set; }
+
+    private readonly IBookAppService _bookAppService;
+
+    public CreateModalModel(IBookAppService bookAppService)
+    {
+        _bookAppService = bookAppService;
+    }
+
+    public async Task<IActionResult> OnPostAsync()
+    {
+        await _bookAppService.CreateAsync(Book);
+        return NoContent();
+    }
+}
+```
+
+## Bundle & Minification
+```csharp
+Configure<AbpBundlingOptions>(options =>
+{
+    options.StyleBundles.Configure(
+        StandardBundles.Styles.Global,
+        bundle => bundle.AddFiles("/styles/my-styles.css")
+    );
+});
+```

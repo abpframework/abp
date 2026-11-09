@@ -1,0 +1,188 @@
+{
+  "version": "3.0",
+  "recordingPath": "../Recordings/abp-mvc.har",
+  "options": {
+    "loadProfile": {
+      "executor": "ramping-vus",
+      "stages": [
+        {
+          "target": 1,
+          "duration": "10s"
+        }
+      ]
+    },
+    "thinkTime": {
+      "sleepType": "groups",
+      "timing": {
+        "type": "fixed",
+        "value": 1
+      }
+    },
+    "thresholds": [],
+    "cloud": {
+      "loadZones": {
+        "distribution": "even",
+        "zones": []
+      }
+    }
+  },
+  "testData": {
+    "variables": [],
+    "files": []
+  },
+  "rules": [
+    {
+      "id": "a20afe1c-16b7-4ec5-aa39-7785e7163d4a",
+      "enabled": true,
+      "type": "verification",
+      "filter": {
+        "path": ""
+      },
+      "target": "status",
+      "operator": "equals",
+      "value": {
+        "type": "recordedValue"
+      }
+    },
+    {
+      "id": "6b0c1f4e-1a01-4d6e-9b1a-000000000001",
+      "enabled": true,
+      "type": "correlation",
+      "extractor": {
+        "filter": {
+          "path": ""
+        },
+        "selector": {
+          "type": "begin-end",
+          "from": "body",
+          "begin": "name=\"__RequestVerificationToken\" type=\"hidden\" value=\"",
+          "end": "\""
+        },
+        "extractionMode": "multiple"
+      },
+      "replacer": {
+        "filter": {
+          "path": ""
+        }
+      }
+    },
+    {
+      "id": "6b0c1f4e-1a01-4d6e-9b1a-000000000002",
+      "enabled": true,
+      "type": "correlation",
+      "extractor": {
+        "filter": {
+          "path": ""
+        },
+        "selector": {
+          "type": "begin-end",
+          "from": "body",
+          "begin": "name=\"__RequestVerificationToken\" type=\"hidden\" value=\"",
+          "end": "\""
+        },
+        "extractionMode": "multiple"
+      },
+      "replacer": {
+        "filter": {
+          "path": ""
+        },
+        "selector": {
+          "type": "header-name",
+          "from": "headers",
+          "name": "RequestVerificationToken"
+        }
+      }
+    },
+    {
+      "id": "6b0c1f4e-1a01-4d6e-9b1a-000000000003",
+      "enabled": true,
+      "type": "correlation",
+      "extractor": {
+        "filter": {
+          "path": "/api/identity/users?filter=rec_user"
+        },
+        "selector": {
+          "type": "json",
+          "from": "body",
+          "path": "items[0].id"
+        },
+        "extractionMode": "multiple"
+      },
+      "replacer": {
+        "filter": {
+          "path": ""
+        }
+      }
+    },
+    {
+      "id": "6b0c1f4e-1a01-4d6e-9b1a-000000000004",
+      "enabled": true,
+      "type": "correlation",
+      "extractor": {
+        "filter": {
+          "path": "/api/identity/roles"
+        },
+        "selector": {
+          "type": "regex",
+          "from": "body",
+          "regex": "\"name\":\"rec_role\"[^}]*?\"id\":\"([^\"]+)\""
+        },
+        "extractionMode": "multiple"
+      },
+      "replacer": {
+        "filter": {
+          "path": ""
+        }
+      }
+    },
+    {
+      "id": "6b0c1f4e-1a01-4d6e-9b1a-000000000005",
+      "enabled": true,
+      "type": "correlation",
+      "extractor": {
+        "filter": {
+          "path": "/api/multi-tenancy/tenants"
+        },
+        "selector": {
+          "type": "json",
+          "from": "body",
+          "path": "items[0].id"
+        },
+        "extractionMode": "multiple"
+      },
+      "replacer": {
+        "filter": {
+          "path": ""
+        }
+      }
+    },
+    {
+      "id": "6b0c1f4e-1a01-4d6e-9b1a-000000000006",
+      "enabled": true,
+      "type": "correlation",
+      "extractor": {
+        "filter": {
+          "path": ""
+        },
+        "selector": {
+          "type": "regex",
+          "from": "body",
+          "regex": "name=\"(?:\\w+\\.)?ConcurrencyStamp\" value=\"([^\"]+)\""
+        },
+        "extractionMode": "multiple"
+      },
+      "replacer": {
+        "filter": {
+          "path": ""
+        }
+      }
+    }
+  ],
+  "allowlist": [
+    "bench.localtest.me",
+    "bench.localtest.me:44377"
+  ],
+  "includeStaticAssets": false,
+  "scriptName": "abp-mvc-correlated.js",
+  "wizardUsed": false
+}

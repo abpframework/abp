@@ -1,0 +1,6 @@
+  FROM mcr.microsoft.com/dotnet/sdk:10.0
+  USER $APP_UID
+
+  COPY bin/Release/net10.0/publish/ app/
+  WORKDIR /app
+  ENTRYPOINT ["dotnet", "Bench.DbMigrator.dll"]

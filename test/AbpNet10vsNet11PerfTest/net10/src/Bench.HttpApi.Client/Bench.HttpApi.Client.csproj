@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Bench</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bench.Application.Contracts\Bench.Application.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.PermissionManagement.HttpApi.Client" Version="10.7.1" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.HttpApi.Client" Version="10.7.1" />
+    <PackageReference Include="Volo.Abp.SettingManagement.HttpApi.Client" Version="10.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Identity.HttpApi.Client" Version="10.7.1" />
+    <PackageReference Include="Volo.Abp.Account.HttpApi.Client" Version="10.7.1" />
+    <PackageReference Include="Volo.Abp.TenantManagement.HttpApi.Client" Version="10.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="**\*generate-proxy.json" />
+    <Content Remove="**\*generate-proxy.json" />
+  </ItemGroup>
+
+</Project>

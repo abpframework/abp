@@ -1,0 +1,26 @@
+# Files listed here are hidden from ABP Studio AI Assistant.
+# Syntax is identical to .gitignore.
+
+# Secrets and sensitive configuration
+**/appsettings.secrets.json
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Certificates and private keys
+*.pfx
+*.p12
+*.pem
+*.key
+*.p8
+*.mobileprovision
+
+# Local development overrides (may contain credentials)
+**/values.localdev.yaml
+tunnel-config.json
+
+# Temporary signing keys
+tempkey.rsa
+tempkey.jwk
