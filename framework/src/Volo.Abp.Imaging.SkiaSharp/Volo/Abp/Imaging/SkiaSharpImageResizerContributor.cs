@@ -57,7 +57,7 @@ public class SkiaSharpImageResizerContributor : IImageResizerContributor, ITrans
                 return new ImageResizeResult<Stream>(stream, ImageProcessState.Unsupported);
             }
 
-            using var original = SKBitmap.Decode(memoryBitmapStream);
+            using var original = DecodeBitmap(codec);
             if (original == null)
             {
                 return new ImageResizeResult<Stream>(stream, ImageProcessState.Unsupported);
@@ -117,6 +117,11 @@ public class SkiaSharpImageResizerContributor : IImageResizerContributor, ITrans
             memorySkCodecStream.Dispose();
             throw;
         }
+    }
+
+    protected virtual SKBitmap? DecodeBitmap(SKCodec codec)
+    {
+        return SkiaSharpBitmapHelper.DecodeUpright(codec);
     }
 
     protected virtual bool CanResize(string? mimeType)
