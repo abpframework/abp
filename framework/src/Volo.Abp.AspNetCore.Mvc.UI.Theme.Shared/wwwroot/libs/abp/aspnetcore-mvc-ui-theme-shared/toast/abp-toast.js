@@ -1,22 +1,4 @@
 function AbpToastService(globalOptions) {
-    // Static default configuration for all instances
-    if (!AbpToastService.defaultOptions) {
-        AbpToastService.defaultOptions = {
-            closable: true,
-            sticky: false,
-            life: 5000,
-            tapToDismiss: false,
-            containerKey: undefined,
-            iconClass: undefined,
-            position: {
-                top: 'auto',
-                right: '30px',
-                bottom: '30px',
-                left: 'auto'
-            }
-        };
-    }
-
     // Find existing container or create new one
     const containerId = globalOptions?.containerKey ? 
         `toast-container-${globalOptions.containerKey}` : 
@@ -39,6 +21,23 @@ function AbpToastService(globalOptions) {
     this.updateContainerPosition();
 }
 
+// Static default configuration for all instances.
+// Defined up front so setDefaultOptions can be called before the first toast.
+AbpToastService.defaultOptions = {
+    closable: true,
+    sticky: false,
+    life: 5000,
+    tapToDismiss: false,
+    containerKey: undefined,
+    iconClass: undefined,
+    position: {
+        top: 'auto',
+        right: '30px',
+        bottom: '30px',
+        left: 'auto'
+    }
+};
+
 // Deep merge objects
 AbpToastService.prototype.extend = function(target, ...sources) {
     sources.forEach(source => {
@@ -57,6 +56,10 @@ AbpToastService.prototype.extend = function(target, ...sources) {
 AbpToastService.prototype.updateContainerPosition = function() {
     const { position } = this.globalOptions;
     Object.assign(this.container.style, position);
+
+    const isSet = value => value && value !== 'auto';
+    this.container.classList.toggle('abp-toast-container-left', isSet(position?.left) && !isSet(position?.right));
+    this.container.classList.toggle('abp-toast-container-top', isSet(position?.top) && !isSet(position?.bottom));
 };
 
 // Update global options
@@ -188,20 +191,29 @@ AbpToastService.setDefaultOptions = function(options) {
 };
 
 var abp = abp || {};
-(function () {    
+(function () {
+    // All containers are full width on small screens (see abp-toast.css),
+    // so use the default container there to avoid covering each other
+    function createToastService(options) {
+        if (options?.containerKey && window.matchMedia('(max-width: 768px)').matches) {
+            return new AbpToastService({ ...options, containerKey: undefined });
+        }
+        return new AbpToastService(options);
+    }
+
     abp.notify.success = function (message, title, options) {
-        new AbpToastService().success(message, title, options);
+        createToastService(options).success(message, title, options);
     };
 
     abp.notify.info = function (message, title, options) {
-        new AbpToastService().info(message, title, options);
+        createToastService(options).info(message, title, options);
     };
 
     abp.notify.warn = function (message, title, options) {
-        new AbpToastService().warning(message, title, options);
+        createToastService(options).warning(message, title, options);
     };
 
     abp.notify.error = function (message, title, options) {
-        new AbpToastService().error(message, title, options);
+        createToastService(options).error(message, title, options);
     };
 })();

@@ -129,6 +129,40 @@
     animation: toastOut 0.3s ease-in-out forwards;
 }
 
+.abp-toast-container-top {
+    justify-content: flex-start;
+}
+
+@keyframes toastInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes toastOutLeft {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+.abp-toast-container-left .abp-toast {
+    animation-name: toastInLeft;
+}
+
+.abp-toast-container-left .abp-toast.toast-removing {
+    animation-name: toastOutLeft;
+}
+
 @media only screen and (max-width: 768px) {
     .abp-toast-container {
         min-width: 100%;
