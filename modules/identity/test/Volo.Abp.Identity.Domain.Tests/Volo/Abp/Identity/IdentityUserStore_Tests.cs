@@ -790,6 +790,50 @@ public class IdentityUserStore_Tests : AbpIdentityDomainTestBase
     }
 
     [Fact]
+    public async Task AddOrUpdatePasskeyAsync_Should_Persist_Aaguid()
+    {
+        var credentialId = (byte[]) [3, 4];
+        var aaguid = new Guid("fbfc3007-154e-4ecc-8c0b-6e020557d7bd").ToByteArray(bigEndian: true);
+
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            var user = await _identityUserStore.FindByIdAsync(_testData.UserBobId.ToString());
+            var passkey = new UserPasskeyInfo(credentialId, null!, default, 0, null, false, false, false, null!, null!)
+            {
+                Aaguid = aaguid
+            };
+            await _identityUserStore.AddOrUpdatePasskeyAsync(user, passkey, CancellationToken.None);
+
+            await uow.CompleteAsync();
+        }
+
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            var user = await _identityUserStore.FindByIdAsync(_testData.UserBobId.ToString());
+            var passkey = await _identityUserStore.FindPasskeyAsync(user, credentialId, CancellationToken.None);
+            passkey.ShouldNotBeNull();
+            passkey.Aaguid.ShouldBe(aaguid);
+
+            passkey.Name = "My passkey";
+            passkey.Aaguid = null;
+            await _identityUserStore.AddOrUpdatePasskeyAsync(user, passkey, CancellationToken.None);
+
+            await uow.CompleteAsync();
+        }
+
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            var user = await _identityUserStore.FindByIdAsync(_testData.UserBobId.ToString());
+            var passkey = await _identityUserStore.FindPasskeyAsync(user, credentialId, CancellationToken.None);
+            passkey.ShouldNotBeNull();
+            passkey.Name.ShouldBe("My passkey");
+            passkey.Aaguid.ShouldBe(aaguid);
+
+            await uow.CompleteAsync();
+        }
+    }
+
+    [Fact]
     public async Task GetPasskeysAsync()
     {
         using (var uow = _unitOfWorkManager.Begin())
