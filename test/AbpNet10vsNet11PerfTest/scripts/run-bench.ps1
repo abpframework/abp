@@ -4,13 +4,13 @@
 #   -> k6 (pinned to the load-generator cores) -> stop collectors and app.
 #
 # Examples (BENCH_PASSWORD must be set to the seed password; k6 reads it from the environment):
-#   ./scripts/run-bench.ps1 -Mode probe -Repeats 1                                  # capacity probe, net10 + net11
+#   ./scripts/run-bench.ps1 -Mode probe -Repeats 1                                  # capacity probe, abp10 + abp11
 #   ./scripts/run-bench.ps1 -Mode fixed -Rates 6,12,18                              # measured levels
-#   ./scripts/run-bench.ps1 -Mode fixed -Rates 12 -Targets net10,net10-rt11,net11   # runtime-only comparison
+#   ./scripts/run-bench.ps1 -Mode fixed -Rates 12 -Targets abp10,abp10-rt11,abp11   # runtime-only comparison
 #   ./scripts/run-bench.ps1 -Mode fixed -Rates 4 -Repeats 1 -WarmupS 20 -DurationS 30   # dry run
 param(
     [ValidateSet('fixed', 'probe')][string]$Mode = 'fixed',
-    [ValidateSet('net10', 'net11', 'net10-rt11')][string[]]$Targets = @('net10', 'net11'),
+    [ValidateSet('abp10', 'abp11', 'abp10-rt11')][string[]]$Targets = @('abp10', 'abp11'),
     [int[]]$Rates = @(),
     [int]$Repeats = 3,
     [int]$WarmupS = 120,

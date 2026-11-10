@@ -1,11 +1,11 @@
 # Runs the published web app of a target with the shared measurement settings.
-#   net10       ABP 10.7.1 on .NET 10
-#   net11       ABP 11.0.0-rc.1 on .NET 11
-#   net10-rt11  the net10 build rolled forward onto the .NET 11 runtime (isolates the runtime difference)
+#   abp10       ABP 10.7.1 on .NET 10
+#   abp11       ABP 11.0.0-rc.1 on .NET 11
+#   abp10-rt11  the abp10 build rolled forward onto the .NET 11 runtime (isolates the runtime difference)
 # -Affinity <hex mask> pins the process from its start (Server GC sizes its heaps from the startup affinity).
 # Without -LogFile it blocks until stopped; with -LogFile it starts in the background and returns the app's PID.
 param(
-    [Parameter(Mandatory)][ValidateSet('net10', 'net11', 'net10-rt11')][string]$Target,
+    [Parameter(Mandatory)][ValidateSet('abp10', 'abp11', 'abp10-rt11')][string]$Target,
     [string]$Affinity,
     [string]$LogFile
 )
@@ -15,7 +15,7 @@ $port = 44377
 . "$PSScriptRoot/env.ps1"
 
 $build = $Target -replace '-rt11$', ''
-if ($Target -eq 'net10-rt11') {
+if ($Target -eq 'abp10-rt11') {
     # 'Major' only rolls forward when .NET 10 is missing; 'LatestMajor' always picks the newest installed runtime.
     $env:DOTNET_ROLL_FORWARD = 'LatestMajor'
     $env:DOTNET_ROLL_FORWARD_TO_PRERELEASE = '1' # .NET 11 is still a release candidate

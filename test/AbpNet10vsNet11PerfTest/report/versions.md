@@ -4,7 +4,7 @@ Generated: 2026-11-05 11:59 (scripts/versions.ps1)
 
 ## Applications
 
-| | net10 | net11 |
+| | abp10 | abp11 |
 |---|---|---|
 | SDK (global.json) | 10.0.402 | 11.0.100-rc.3.26522.148 |
 | Target framework | net10.0 | net11.0 |

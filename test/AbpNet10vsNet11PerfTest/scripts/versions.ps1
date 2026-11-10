@@ -1,7 +1,7 @@
 # Writes report/versions.md: machine, tools, runtimes and resolved package versions of both published apps.
 $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot -Parent
-$targets = 'net10', 'net11'
+$targets = 'abp10', 'abp11'
 $packages = 'Volo.Abp.Core', 'Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite', 'Volo.Abp.Studio.Client.AspNetCore',
             'Microsoft.EntityFrameworkCore', 'Npgsql.EntityFrameworkCore.PostgreSQL', 'Npgsql', 'OpenIddict.Core'
 $installedRuntimes = dotnet --list-runtimes | ForEach-Object { $n, $v, $null = $_ -split ' '; [pscustomobject]@{ Name = $n; Version = [semver]$v } }
@@ -57,9 +57,9 @@ $md.Add("Generated: $(Get-Date -Format 'yyyy-MM-dd HH:mm') (scripts/versions.ps1
 $md.Add('')
 $md.Add('## Applications')
 $md.Add('')
-$md.Add('| | net10 | net11 |')
+$md.Add('| | abp10 | abp11 |')
 $md.Add('|---|---|---|')
-foreach ($key in $rows['net10'].Keys) { $md.Add("| $key | $($rows['net10'][$key]) | $($rows['net11'][$key]) |") }
+foreach ($key in $rows['abp10'].Keys) { $md.Add("| $key | $($rows['abp10'][$key]) | $($rows['abp11'][$key]) |") }
 $md.Add('')
 $md.Add('## Machine and tools')
 $md.Add('')

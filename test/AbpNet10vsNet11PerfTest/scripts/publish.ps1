@@ -1,5 +1,5 @@
 # Release-publishes the web app and the DbMigrator of each target into publish/<target>/.
-param([ValidateSet('net10', 'net11')][string[]]$Target = @('net10', 'net11'))
+param([ValidateSet('abp10', 'abp11')][string[]]$Target = @('abp10', 'abp11'))
 $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot -Parent
 
