@@ -362,6 +362,8 @@ Finally, add the following entries to the `Localization/BookStore/en.json` insid
 Open the `BookStoreApplicationMappers` class inside the `Acme.BookStore.Application` project and define the following mapping class:
 
 ````csharp
+using Acme.BookStore.Authors;
+
 [Mapper]
 public partial class AuthorToAuthorDtoMapper : MapperBase<Author, AuthorDto>
 {
