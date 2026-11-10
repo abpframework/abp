@@ -1,24 +1,24 @@
 # ABP .NET 10 vs .NET 11 Performance Benchmark
 
-End-to-end load test comparing an empty ABP MVC application on stable ABP 10.7.1 + .NET 10 (`net10`) against preview ABP 11.0.0-rc.1 + .NET 11 (`net11`) under identical hardware, database, data set, and workload conditions:
+End-to-end load test comparing a template-based ABP MVC application on stable ABP 10.7.1 + .NET 10 (`abp10`) against preview ABP 11.0.0-rc.1 + .NET 11 (`abp11`) under identical hardware, database, data set, and workload conditions:
 
 | Target | Application Build | Runtime | Role |
 |---|---|---|---|
-| `net10` | ABP `10.7.1` (`net10.0`) | .NET `10.0.13` | Primary — Stable baseline |
-| `net11` | ABP `11.0.0-rc.1` (`net11.0`) | .NET `11.0.0-rc.3` | Primary — Preview stack |
-| `net10-rt11` | ABP `10.7.1` (`net10.0`) | .NET `11.0.0-rc.3` (`DOTNET_ROLL_FORWARD=LatestMajor`) | Supplementary — Isolates the .NET runtime difference from ABP package changes |
+| `abp10` | ABP `10.7.1` (`net10.0`) | .NET `10.0.13` | Primary — Stable baseline |
+| `abp11` | ABP `11.0.0-rc.1` (`net11.0`) | .NET `11.0.0-rc.3` | Primary — Preview stack |
+| `abp10-rt11` | ABP `10.7.1` (`net10.0`) | .NET `11.0.0-rc.3` (`DOTNET_ROLL_FORWARD=LatestMajor`) | Supplementary — Isolates the .NET runtime difference from ABP package changes |
 
 ![Three-target benchmark design](report/assets/01-three-target-design.png)
 
 ### Key Findings Summary
 
-| Metric / Test | `net10` (ABP 10 + .NET 10) | `net10-rt11` (ABP 10 on .NET 11) | `net11` (ABP 11 + .NET 11) | .NET 11 Advantage |
+| Metric / Test | `abp10` (ABP 10 + .NET 10) | `abp10-rt11` (ABP 10 on .NET 11) | `abp11` (ABP 11 + .NET 11) | .NET 11 Advantage |
 |---|---|---|---|---|
-| **6 it/s p95 Latency (27-run Marathon)** | 38.3 ms | 34.5 ms | **34.7 ms** | **~9.5% faster** |
-| **6 it/s Web CPU Usage** | 55.0% | 50.3% | **50.6%** | **~4.4% CPU saving** |
+| **6 it/s p95 Latency (27-run main-validation batch)** | 38.3 ms | 34.5 ms | **34.7 ms** | **9.4% faster** |
+| **6 it/s Web CPU Usage** | 55% | 50% | **50%** | **5 pp lower** |
 | **6 it/s GC Heap Size** | 355 MB | 321 MB | **311 MB** | **~44 MB less heap** |
-| **7 it/s Saturation Knee (p95)** | 39.5 ms | 40.3 ms | **40.2 ms** | Rock-solid at capacity edge |
-| **ABP 11 Package Overhead** | — | Baseline | **+0.2 ms** (0.5%) | **Zero package regression** |
+| **7 it/s Saturation Knee (p95)** | 39.5 ms | 40.3 ms | **40.2 ms** | Stable at capacity edge (0 errors) |
+| **ABP 11 Package Overhead** | — | Baseline | **+0.2 ms** (0.5%) | **No measurable regression** |
 
 ![Comparison of response time, CPU, and memory usage](report/assets/03-performance-resource-usage.png)
 
@@ -30,15 +30,15 @@ Full benchmark methodology, tool evaluation, scenario correlation analysis, and 
 ```text
 .
 ├── docker-compose.yml               # PostgreSQL 18.6 (digest-pinned) on port 5433
-├── net10/                           # ABP 10.7.1 + .NET 10 MVC project (EF Core, PostgreSQL, LeptonX Lite)
-├── net11/                           # ABP 11.0.0-rc.1 + .NET 11 MVC project (upgraded copy of net10)
+├── abp10/                           # ABP 10.7.1 + .NET 10 MVC project (EF Core, PostgreSQL, LeptonX Lite)
+├── abp11/                           # ABP 11.0.0-rc.1 + .NET 11 MVC project (upgraded copy of abp10)
 ├── k6/
 │   ├── tools/
 │   │   └── summarize.mjs            # Aggregates k6, dotnet-counters, and docker stats into Markdown tables
 │   └── scenario.js                  # Parameterized multi-VU load-test scenario (smoke, probe, fixed modes)
 ├── scripts/
 │   ├── env.ps1                      # Shared Production measurement environment variables
-│   ├── publish.ps1                  # Release-publishes Web and DbMigrator for net10 and net11
+│   ├── publish.ps1                  # Release-publishes Web and DbMigrator for abp10 and abp11
 │   ├── db.ps1                       # Seeds or resets the database from Bench_seed_<target> template DBs
 │   ├── seed-bench-data.sql          # Seeds 1,000 test accounts (bench_vu_1..1000) and global email settings
 │   ├── start-app.ps1                # Starts a target with optional CPU affinity mask and background logging
@@ -48,7 +48,7 @@ Full benchmark methodology, tool evaluation, scenario correlation analysis, and 
     ├── README.md                    # Benchmark report (methodology, tool evaluation, results, limitations)
     ├── versions.md                  # Generated environment, SDK, runtime, and package version table
     ├── probe.md                     # Capacity probe results (2 to 32 it/s)
-    ├── results-main-validation.md   # Full 27-run marathon re-validation (net10 vs net10-rt11 vs net11)
+    ├── results-main-validation.md   # Full 27-run marathon re-validation (abp10 vs abp10-rt11 vs abp11)
     ├── results-runtime.md           # Runtime isolation at 4 it/s
     ├── results-runtime6.md          # Runtime isolation at 6 it/s
     ├── results-verify-knee.md       # Saturation knee validation at 7 it/s (9 runs)
@@ -82,7 +82,7 @@ docker compose up -d
 
 ### 2. Publish Both Projects (Release)
 
-Publishes `Bench.Web` and `Bench.DbMigrator` for both `net10` and `net11` into `publish/<target>/`:
+Publishes `Bench.Web` and `Bench.DbMigrator` for both `abp10` and `abp11` into `publish/<target>/`:
 
 ```powershell
 ./scripts/publish.ps1
@@ -90,11 +90,11 @@ Publishes `Bench.Web` and `Bench.DbMigrator` for both `net10` and `net11` into `
 
 ### 3. Seed Template Databases
 
-Runs `Bench.DbMigrator`, applies `scripts/seed-bench-data.sql` (`bench_vu_1..1000` + global email setting rows), and snapshots the result into `Bench_seed_net10` and `Bench_seed_net11`. Subsequent runs use `-Action reset` to recreate `Bench` from the template in seconds:
+Runs `Bench.DbMigrator`, applies `scripts/seed-bench-data.sql` (`bench_vu_1..1000` + global email setting rows), and snapshots the result into `Bench_seed_abp10` and `Bench_seed_abp11`. Subsequent runs use `-Action reset` to recreate `Bench` from the template in seconds:
 
 ```powershell
-./scripts/db.ps1 -Target net10 -Action seed
-./scripts/db.ps1 -Target net11 -Action seed
+./scripts/db.ps1 -Target abp10 -Action seed
+./scripts/db.ps1 -Target abp11 -Action seed
 ```
 
 ### 4. Generate the Versions Report
@@ -113,11 +113,11 @@ Set the seeded admin/test user password in the environment:
 $env:BENCH_PASSWORD = '<seeded_admin_password>'
 ```
 
-Reset the database and start the desired target (`net10`, `net11`, or `net10-rt11`):
+Reset the database and start the desired target (`abp10`, `abp11`, or `abp10-rt11`):
 
 ```powershell
-./scripts/db.ps1 -Target net10 -Action reset
-./scripts/start-app.ps1 -Target net10
+./scripts/db.ps1 -Target abp10 -Action reset
+./scripts/start-app.ps1 -Target abp10
 ```
 
 In a second terminal, run the load-test scenario with 1 VU (1 iteration) or 20 concurrent VUs:
@@ -141,7 +141,7 @@ Before running measurements:
 
 ### Step 1: Capacity Probe (~32 minutes)
 
-Steps through arrival rates (`2,4,6,8,10,12,14,16,20,24,28,32` iterations/s, 60 s per step) on `net10` and `net11` to find the saturation point:
+Steps through arrival rates (`2,4,6,8,10,12,14,16,20,24,28,32` iterations/s, 60 s per step) on `abp10` and `abp11` to find the saturation point:
 
 ```powershell
 ./scripts/run-bench.ps1 -Mode probe -Repeats 1 -Batch probe
@@ -150,17 +150,17 @@ node k6/tools/summarize.mjs results/probe report/probe.md
 
 Inspect `report/probe.md` and pick three load levels (`a, b, c` iterations/s) corresponding to ~25%, ~50%, and ~75% of the lower saturation threshold before dropped iterations or error spikes occur.
 
-### Step 2: Runtime Isolation — `net10` vs `net10-rt11` vs `net11` (~1 hour 15 minutes)
+### Step 2: Runtime Isolation — `abp10` vs `abp10-rt11` vs `abp11` (~1 hour 15 minutes)
 
 Runs an arrival rate across all three targets × 3 repetitions to separate runtime gains/regressions from ABP package changes:
 
 ```powershell
 # Medium load (4 it/s):
-./scripts/run-bench.ps1 -Mode fixed -Rates 4 -Targets net10,net10-rt11,net11 -Repeats 3 -Batch runtime
+./scripts/run-bench.ps1 -Mode fixed -Rates 4 -Targets abp10,abp10-rt11,abp11 -Repeats 3 -Batch runtime
 node k6/tools/summarize.mjs results/runtime report/results-runtime.md
 
 # High load (6 it/s):
-./scripts/run-bench.ps1 -Mode fixed -Rates 6 -Targets net10,net10-rt11,net11 -Repeats 3 -Batch runtime6
+./scripts/run-bench.ps1 -Mode fixed -Rates 6 -Targets abp10,abp10-rt11,abp11 -Repeats 3 -Batch runtime6
 node k6/tools/summarize.mjs results/runtime6 report/results-runtime6.md
 ```
 
@@ -170,14 +170,14 @@ Targeted validation runs addressing saturation threshold and sustained-load endu
 
 ```powershell
 # Saturation Knee (7 it/s):
-./scripts/run-bench.ps1 -Mode fixed -Rates 7 -Targets net10,net10-rt11,net11 -Repeats 3 -Batch verify-knee
+./scripts/run-bench.ps1 -Mode fixed -Rates 7 -Targets abp10,abp10-rt11,abp11 -Repeats 3 -Batch verify-knee
 node k6/tools/summarize.mjs results/verify-knee report/results-verify-knee.md
 
 # Sustained Marathon (6 it/s):
-./scripts/run-bench.ps1 -Mode fixed -Rates 6 -Targets net10,net10-rt11,net11 -Repeats 3 -Batch verify-marathon6
+./scripts/run-bench.ps1 -Mode fixed -Rates 6 -Targets abp10,abp10-rt11,abp11 -Repeats 3 -Batch verify-marathon6
 node k6/tools/summarize.mjs results/verify-marathon6 report/results-verify-marathon6.md
 
 # Full 3-Target Re-Validation Marathon (Rates 2, 4, 6 it/s, 27 runs, ~3.5 hours):
-./scripts/run-bench.ps1 -Mode fixed -Rates 2,4,6 -Targets net10,net10-rt11,net11 -Repeats 3 -Batch main-validation
+./scripts/run-bench.ps1 -Mode fixed -Rates 2,4,6 -Targets abp10,abp10-rt11,abp11 -Repeats 3 -Batch main-validation
 node k6/tools/summarize.mjs results/main-validation report/results-main-validation.md
 ```
