@@ -11,7 +11,7 @@
 
 Converting your Angular application to a PWA is easy.
 
-> If you created your solution with the **Progressive Web Application** option (in ABP Studio, or with the `-pwa` parameter of the `abp new` command), step 1 has already been done for you. Check the `assets` configuration described at the end of step 1, then continue from [step 2](#2-update-the-web-app-manifest).
+> If you created your solution with the **Progressive Web Application** option (in ABP Studio, or with the `-pwa` parameter of the `abp new` command), step 1 has already been done for you, including the `assets` configuration described at the end of step 1. You can continue from [step 2](#2-update-the-web-app-manifest).
 
 ## 1. Install Angular PWA
 
@@ -47,7 +47,7 @@ So, Angular CLI updates some files and add a few others:
 - **main.ts** (or **app.config.ts**) registers the service worker script with the `provideServiceWorker` provider. In the ABP startup templates, `main.ts` passes the application configuration to `bootstrapApplication` directly, so the provider is added to `main.ts`.
 - **index.html** has a `<link>` element that refers to _manifest.webmanifest_.
 
-The manifest and the icons are placed in the `public` folder. Make sure this folder is copied to the build output. If the `assets` array of your application in `angular.json` does not include it, add it:
+The manifest and the icons are placed in the `public` folder. Make sure this folder is copied to the build output. If the build `assets` array of your application in `angular.json` does not include it, add it (this is done automatically for solutions created with the **Progressive Web Application** option):
 
 ```json
 "assets": [
