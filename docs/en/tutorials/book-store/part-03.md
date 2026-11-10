@@ -583,40 +583,42 @@ In this section, you will learn how to create a new modal dialog form to create 
 Open `/src/app/book/book.component.ts` and replace the content as below:
 
 ```js
-import { ListService, PagedResultDto } from '@abp/ng.core';
-import { Component, OnInit, inject } from '@angular/core';
-import { BookService, BookDto } from '@proxy/books';
+import { CoreModule, ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { ThemeSharedModule } from '@abp/ng.theme.shared';
+import { BookService, BookDto } from '../proxy/books';
 
 @Component({
   selector: 'app-book',
   templateUrl: './book.component.html',
   styleUrls: ['./book.component.scss'],
+  imports: [CoreModule, ThemeSharedModule],
   providers: [ListService],
 })
 export class BookComponent implements OnInit {
-  book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
+  book = signal({ items: [], totalCount: 0 } as PagedResultDto<BookDto>);
 
-  isModalOpen = false;
+  isModalOpen = signal(false);
 
   public readonly list = inject(ListService);
   private readonly bookService = inject(BookService);
 
   ngOnInit() {
-    const bookStreamCreator = (query) => this.bookService.getList(query);
+    const bookStreamCreator = (query: PagedAndSortedResultRequestDto) => this.bookService.getList(query);
 
     this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
-      this.book = response;
+      this.book.set(response);
     });
   }
 
   //add new method
   createBook() {
-    this.isModalOpen = true;
+    this.isModalOpen.set(true);
   }
 }
 ```
 
-* We defined a property called `isModalOpen` and a method called `createBook`.
+* We defined a signal called `isModalOpen` and a method called `createBook`.
 
 
 Open `/src/app/book/book.component.html` and make the following changes:
@@ -676,43 +678,45 @@ You can open your browser and click the **New book** button to see the new modal
 Open `/src/app/book/book.component.ts` and replace the content as below:
 
 ```js
-import { ListService, PagedResultDto } from '@abp/ng.core';
-import { Component, OnInit, inject } from '@angular/core';
-import { BookService, BookDto, bookTypeOptions } from '@proxy/books'; // add bookTypeOptions
+import { CoreModule, ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { ThemeSharedModule } from '@abp/ng.theme.shared';
+import { BookService, BookDto, bookTypeOptions } from '../proxy/books'; // add bookTypeOptions
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // add this
 
 @Component({
   selector: 'app-book',
   templateUrl: './book.component.html',
   styleUrls: ['./book.component.scss'],
+  imports: [CoreModule, ThemeSharedModule],
   providers: [ListService],
 })
 export class BookComponent implements OnInit {
-  book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
+  book = signal({ items: [], totalCount: 0 } as PagedResultDto<BookDto>);
 
-  form: FormGroup; // add this line
+  form!: FormGroup; // add this line
 
   // add bookTypes as a list of BookType enum members
   bookTypes = bookTypeOptions;
 
-  isModalOpen = false;
+  isModalOpen = signal(false);
 
   public readonly list = inject(ListService);
   private readonly bookService = inject(BookService);
   private readonly fb = inject(FormBuilder); // inject FormBuilder
 
   ngOnInit() {
-    const bookStreamCreator = (query) => this.bookService.getList(query);
+    const bookStreamCreator = (query: PagedAndSortedResultRequestDto) => this.bookService.getList(query);
 
     this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
-      this.book = response;
+      this.book.set(response);
     });
   }
 
   // add new method
   createBook() {
     this.buildForm(); // add this line
-    this.isModalOpen = true;
+    this.isModalOpen.set(true);
   }
 
   // add buildForm method
@@ -732,7 +736,7 @@ export class BookComponent implements OnInit {
     }
 
     this.bookService.create(this.form.value).subscribe(() => {
-      this.isModalOpen = false;
+      this.isModalOpen.set(false);
       this.form.reset();
       this.list.get();
     });
@@ -741,7 +745,7 @@ export class BookComponent implements OnInit {
 ```
 
 * Imported `FormGroup`, `FormBuilder` and `Validators` from `@angular/forms`.
-* Added a `form: FormGroup` property.
+* Added a `form: FormGroup` property. The `!` tells TypeScript that the form is created later, in the `buildForm` method.
 * Added a `bookTypes` property as a list of `BookType` enum members. That will be used in form options.
 * Injected the `FormBuilder` with the inject function. [FormBuilder](https://angular.dev/api/forms/FormBuilder) provides convenient methods for generating form controls. It reduces the amount of boilerplate that is needed to build complex forms.
 * Added a `buildForm` method at the end of the file and executed  the `buildForm()` in the `createBook` method.
@@ -812,10 +816,10 @@ We've used [NgBootstrap datepicker](https://ng-bootstrap.github.io/#/components/
 Open `/src/app/book/book.component.ts` and replace the content as below:
 
 ```js
-import { ListService, PagedResultDto } from '@abp/ng.core';
-import { Component, OnInit, inject } from '@angular/core';
-import { BookService, BookDto, bookTypeOptions } from '@proxy/books';
-import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { CoreModule, ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { BookService, BookDto, bookTypeOptions } from '../proxy/books';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbDateNativeAdapter, NgbDateAdapter, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
 
@@ -823,36 +827,36 @@ import { ThemeSharedModule } from '@abp/ng.theme.shared';
   selector: 'app-book',
   templateUrl: './book.component.html',
   styleUrls: ['./book.component.scss'],
-  imports: [ThemeSharedModule, ReactiveFormsModule, NgbDatepickerModule],
+  imports: [CoreModule, ThemeSharedModule, NgbDatepickerModule],
   providers: [
     ListService,
     { provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }
   ],
 })
 export class BookComponent implements OnInit {
-  book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
+  book = signal({ items: [], totalCount: 0 } as PagedResultDto<BookDto>);
 
-  form: FormGroup;
+  form!: FormGroup;
 
   bookTypes = bookTypeOptions;
 
-  isModalOpen = false;
+  isModalOpen = signal(false);
 
   public readonly list = inject(ListService);
   private readonly bookService = inject(BookService);
   private readonly fb = inject(FormBuilder);
 
   ngOnInit() {
-    const bookStreamCreator = (query) => this.bookService.getList(query);
+    const bookStreamCreator = (query: PagedAndSortedResultRequestDto) => this.bookService.getList(query);
 
     this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
-      this.book = response;
+      this.book.set(response);
     });
   }
 
   createBook() {
     this.buildForm();
-    this.isModalOpen = true;
+    this.isModalOpen.set(true);
   }
 
   buildForm() {
@@ -870,7 +874,7 @@ export class BookComponent implements OnInit {
     }
 
     this.bookService.create(this.form.value).subscribe(() => {
-      this.isModalOpen = false;
+      this.isModalOpen.set(false);
       this.form.reset();
       this.list.get();
     });
@@ -878,7 +882,8 @@ export class BookComponent implements OnInit {
 }
 ```
 
-* Imported ` NgbDateNativeAdapter` and `NgbDateAdapter`.
+* Imported ` NgbDateNativeAdapter`, `NgbDateAdapter` and `NgbDatepickerModule`.
+* Added `NgbDatepickerModule` to the `imports` array of the component, so the `ngbDatepicker` directive can be used in the template.
 * We added a new provider `NgbDateAdapter` that converts the Datepicker value to `Date` type. Check out the [datepicker adapters](https://ng-bootstrap.github.io/#/components/datepicker/overview) for more details.
 
 Now, you can open your browser to see the changes:
@@ -890,65 +895,74 @@ Now, you can open your browser to see the changes:
 Open `/src/app/book/book.component.ts` and replace the content as shown below:
 
 ```js
-import { ListService, PagedResultDto } from '@abp/ng.core';
-import { Component, OnInit, inject } from '@angular/core';
-import { BookService, BookDto, bookTypeOptions } from '@proxy/books';
+import { CoreModule, ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { BookService, BookDto, bookTypeOptions } from '../proxy/books';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbDateNativeAdapter,
+  NgbDateAdapter,
+  NgbDatepickerModule,
+  NgbDropdownModule,
+} from '@ng-bootstrap/ng-bootstrap';
+import { ThemeSharedModule } from '@abp/ng.theme.shared';
 
 @Component({
   selector: 'app-book',
   templateUrl: './book.component.html',
   styleUrls: ['./book.component.scss'],
+  imports: [CoreModule, ThemeSharedModule, NgbDatepickerModule, NgbDropdownModule],
   providers: [ListService, { provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }],
 })
 export class BookComponent implements OnInit {
-  book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
+  book = signal({ items: [], totalCount: 0 } as PagedResultDto<BookDto>);
 
-  selectedBook = {} as BookDto; // declare selectedBook
+  selectedBook = signal({} as BookDto); // declare selectedBook
 
-  form: FormGroup;
+  form!: FormGroup;
 
   bookTypes = bookTypeOptions;
 
-  isModalOpen = false;
+  isModalOpen = signal(false);
 
   public readonly list = inject(ListService);
   private readonly bookService = inject(BookService);
   private readonly fb = inject(FormBuilder);
 
   ngOnInit() {
-    const bookStreamCreator = (query) => this.bookService.getList(query);
+    const bookStreamCreator = (query: PagedAndSortedResultRequestDto) => this.bookService.getList(query);
 
     this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
-      this.book = response;
+      this.book.set(response);
     });
   }
 
   createBook() {
-    this.selectedBook = {} as BookDto; // reset the selected book
+    this.selectedBook.set({} as BookDto); // reset the selected book
     this.buildForm();
-    this.isModalOpen = true;
+    this.isModalOpen.set(true);
   }
 
   // Add editBook method
   editBook(id: string) {
     this.bookService.get(id).subscribe((book) => {
-      this.selectedBook = book;
+      this.selectedBook.set(book);
       this.buildForm();
-      this.isModalOpen = true;
+      this.isModalOpen.set(true);
     });
   }
 
   buildForm() {
+    const selectedBook = this.selectedBook();
+
     this.form = this.fb.group({
-      name: [this.selectedBook.name || '', Validators.required],
-      type: [this.selectedBook.type || null, Validators.required],
+      name: [selectedBook.name || '', Validators.required],
+      type: [selectedBook.type || null, Validators.required],
       publishDate: [
-        this.selectedBook.publishDate ? new Date(this.selectedBook.publishDate) : null,
+        selectedBook.publishDate ? new Date(selectedBook.publishDate) : null,
         Validators.required,
       ],
-      price: [this.selectedBook.price || null, Validators.required],
+      price: [selectedBook.price || null, Validators.required],
     });
   }
 
@@ -958,12 +972,14 @@ export class BookComponent implements OnInit {
       return;
     }
 
-    const request = this.selectedBook.id
-      ? this.bookService.update(this.selectedBook.id, this.form.value)
+    const selectedBook = this.selectedBook();
+
+    const request = selectedBook.id
+      ? this.bookService.update(selectedBook.id, this.form.value)
       : this.bookService.create(this.form.value);
 
     request.subscribe(() => {
-      this.isModalOpen = false;
+      this.isModalOpen.set(false);
       this.form.reset();
       this.list.get();
     });
@@ -971,10 +987,12 @@ export class BookComponent implements OnInit {
 }
 ```
 
-* We declared a variable named `selectedBook` as `BookDto`.
-* We added an `editBook`  method. This method fetches the book with the given `id` and sets it to `selectedBook` object.
+* We declared a signal named `selectedBook` that holds a `BookDto`.
+* Added `NgbDropdownModule` to the `imports` array, since the "Actions" dropdown (added below) uses it.
+* We added an `editBook`  method. This method fetches the book with the given `id` and sets it to `selectedBook` signal.
 * We replaced the `buildForm` method so that it creates the form with the `selectedBook` data.
 * We replaced the `createBook` method so it sets `selectedBook` to an empty object.
+* `selectedBook` and `isModalOpen` are signals because they are changed inside `subscribe` callbacks; updating a signal refreshes the view.
 * We changed the `save` method to handle both of create and update operations.
 
 ### Add "Actions" Dropdown to the Table
@@ -1015,7 +1033,7 @@ Also, change the `ng-template #abpHeader` section as shown below:
 
 ```html
 <ng-template #abpHeader>
-    <h3>{%{{{ (selectedBook.id ? '::Edit' : '::NewBook' ) | abpLocalization }}}%}</h3>
+    <h3>{%{{{ (selectedBook().id ? '::Edit' : '::NewBook' ) | abpLocalization }}}%}</h3>
 </ng-template>
 ```
 
@@ -1031,8 +1049,8 @@ Replace the injected services as below:
 // ...
 
 // add new imports
-import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared';
-import { Component, OnInit, inject } from '@angular/core';
+import { ConfirmationService, Confirmation, ThemeSharedModule } from '@abp/ng.theme.shared';
+import { Component, OnInit, inject, signal } from '@angular/core';
 
 // ...
 
@@ -1070,6 +1088,9 @@ Open `/src/app/book/book.component.html` and modify the `ngbDropdownMenu` to add
 
 ```html
 <div ngbDropdownMenu>
+  <button ngbDropdownItem (click)="editBook(row.id)">
+    {%{{{ '::Edit' | abpLocalization }}}%}
+  </button>
   <!-- add the Delete button -->
     <button ngbDropdownItem (click)="delete(row.id)">
         {%{{{ '::Delete' | abpLocalization }}}%}
