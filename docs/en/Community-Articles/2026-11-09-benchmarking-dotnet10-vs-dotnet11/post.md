@@ -2,19 +2,19 @@
 
 How does an ABP application perform after upgrading from **ABP 10 on .NET 10** to **ABP 11 on .NET 11**?
 
-To investigate, I load-tested two **otherwise empty ABP Framework MVC applications**: **ABP 10.7.1 on .NET 10.0.13** (stable baseline) and **ABP 11.0.0-rc.1 on .NET 11.0.0-rc.3** (preview upgrade). Both exercised the same authentication, identity, role, permission, tenant, settings, and localization operations against PostgreSQL. I also ran the unchanged ABP 10 application on the .NET 11 runtime as a **supporting control**, not as a third framework version under comparison.
+To investigate, I load-tested two **template-based ABP Framework MVC applications**: **ABP 10.7.1 on .NET 10.0.13** (stable baseline) and **ABP 11.0.0-rc.1 on .NET 11.0.0-rc.3** (preview upgrade). Both exercised the same authentication, identity, role, permission, tenant, settings, and localization operations against PostgreSQL. I also ran the unchanged ABP 10 application on the .NET 11 runtime as a **supporting control**, not as a third framework version under comparison.
 
 The **main comparison is ABP 10 + .NET 10 versus ABP 11 + .NET 11**, measured by **response time, throughput, errors, CPU, and memory** under the same workload. The additional runtime-control run helps interpret the observed difference, but does not change the two applications being compared.
 
 ## Results at a glance
 
-Across **27 measured runs** (the two main applications plus a supporting runtime-control configuration, tested at three load levels with three repetitions each), the ABP 11 + .NET 11 application produced the following results relative to ABP 10 + .NET 10 at the highest routinely tested load (**6 it/s**, or six complete scenario iterations per second, resulting in approximately **479 HTTP requests per second**):
+Upgrading from **ABP 10 on .NET 10** to **ABP 11 on .NET 11** lowered response times and resource use at the same load. The numbers below come from **27 measured runs** (three configurations, three load levels, three repetitions each) and show the highest routinely tested load: **6 it/s**, or six complete scenario iterations per second, which is about **479 HTTP requests per second**.
 
 - **9.4% lower HTTP p95 latency:** **38.3 ms → 34.7 ms**.
-- **4.4 percentage points lower normalized web-process CPU:** **55.0% → 50.6%** (about 8% lower in relative terms).
+- **5 percentage points lower normalized web-process CPU:** **55% → 50%**.
 - **44 MB lower reported managed GC heap size:** **355 MB → 311 MB**.
 - **21 MB lower process working set:** **759 MB → 738 MB**.
-- **Supporting runtime check:** the unchanged ABP 10 application running on .NET 11 recorded **34.5 ms p95**, close to the upgraded application’s **34.7 ms**.
+- **The same throughput:** **478.1 → 478.8 HTTP requests per second**.
 
 These results come from one controlled environment and workload, using **.NET 11.0.0-rc.3 and ABP 11.0.0-rc.1**. They are observations, not guaranteed improvements for all applications. In particular, **a lower p95 at a fixed offered load does not prove a higher maximum throughput**.
 
@@ -24,19 +24,19 @@ The applications were created from the same ABP MVC/Razor Pages template with **
 
 | Configuration | Application and target framework | Selected .NET runtime | Purpose |
 |---|---|---|---|
-| `net10` | ABP **10.7.1**, `net10.0` | **10.0.13** | Stable baseline |
-| `net10-rt11` | **Same published ABP 10 binary**, `net10.0` | **11.0.0-rc.3** | Runtime-control configuration |
-| `net11` | ABP **11.0.0-rc.1**, `net11.0` | **11.0.0-rc.3** | Upgraded preview stack |
+| `abp10` | ABP **10.7.1**, `net10.0` | **10.0.13** | Stable baseline |
+| `abp10-rt11` | **Same published ABP 10 binary**, `net10.0` | **11.0.0-rc.3** | Runtime-control configuration |
+| `abp11` | ABP **11.0.0-rc.1**, `net11.0` | **11.0.0-rc.3** | Upgraded preview stack |
 
-Throughout the charts and tables, `net10` is the **ABP 10 + .NET 10 baseline** and `net11` is the **ABP 11 + .NET 11 upgrade**. The additional `net10-rt11` series is a **supporting runtime-control measurement**.
+Throughout the charts and tables, `abp10` is the **ABP 10 + .NET 10 baseline** and `abp11` is the **ABP 11 + .NET 11 upgrade**. The additional `abp10-rt11` series is a **supporting runtime-control measurement**.
 
 ![Three-target benchmark design](assets/01-three-target-design.png)
 
-The middle configuration uses the exact same compiled .NET 10 application with a different runtime. The **primary comparison** is between `net10` and `net11`: the stable ABP 10/.NET 10 stack versus the preview ABP 11/.NET 11 stack. As a secondary check, `net10-rt11` shows what happens when the **same ABP 10 application binary** runs on the newer runtime. Moving from `net10-rt11` to `net11` upgrades not only ABP itself, but also the target framework (`net11.0`), EF Core (**10.0.11** to **11.0.0-rc.3**), the Npgsql EF Core provider, and the theme packages.
+The middle configuration uses the exact same compiled .NET 10 application with a different runtime. The **primary comparison** is between `abp10` and `abp11`: the stable ABP 10/.NET 10 stack versus the preview ABP 11/.NET 11 stack. As a secondary check, `abp10-rt11` shows what happens when the **same ABP 10 application binary** runs on the newer runtime. Moving from `abp10-rt11` to `abp11` upgrades not only ABP itself, but also the target framework (`net11.0`), EF Core (**10.0.11** to **11.0.0-rc.3**), the Npgsql EF Core provider, and the theme packages.
 
 ## 2. The application workflow under test
 
-I used **Grafana k6** to replay a recorded HTTP workflow through the built-in pages and features of an otherwise empty ABP application. **k6 Studio** captured the initial browser traffic; the scenario was then adapted to manage dynamic authentication tokens, cookies, and entity identifiers reliably under load. The tool choice matters mainly because the same workflow needed to run consistently against every configuration.
+I used **Grafana k6** to replay a recorded HTTP workflow through the built-in pages and features of a template-based ABP application. **k6 Studio** captured the initial browser traffic; the scenario was then adapted to manage dynamic authentication tokens, cookies, and entity identifiers reliably under load. The tool choice matters mainly because the same workflow needed to run consistently against every configuration.
 
 ### Making the recorded scenario replayable
 
@@ -93,38 +93,38 @@ The table summarizes the repeated measurements at three load levels. **Arrival r
 
 | Arrival rate | Configuration | HTTP req/s | Avg (ms) | p95 (ms) | p99 (ms) | HTTP errors |
 |---|---|---:|---:|---:|---:|---:|
-| **2 it/s** | `net10` | 160.8 | 10.8 | 34.0 | 78.7 | 0.00% |
-| | `net10-rt11` | 160.5 | 10.6 | 33.0 | 77.1 | 0.00% |
-| | `net11` | 160.5 | 10.7 | 33.7 | 80.0 | 0.00% |
-| **4 it/s** | `net10` | 321.1 | 10.0 | 30.2 | 77.8 | 0.00% |
-| | `net10-rt11` | 321.4 | 9.4 | 27.8 | 77.0 | 0.00% |
-| | `net11` | 321.1 | 9.6 | 28.8 | 77.2 | 0.00% |
-| **6 it/s** | `net10` | 478.1 | 12.8 | 38.3 | 102.1 | 0.00% |
-| | `net10-rt11` | 479.1 | 11.7 | 34.5 | 97.0 | 0.00% |
-| | `net11` | 478.8 | 11.6 | **34.7** | **96.7** | 0.00% |
+| **2 it/s** | `abp10` | 160.8 | 10.8 | 34.0 | 78.7 | 0.00% |
+| | `abp10-rt11` | 160.5 | 10.6 | 33.0 | 77.1 | 0.00% |
+| | `abp11` | 160.5 | 10.7 | 33.7 | 80.0 | 0.00% |
+| **4 it/s** | `abp10` | 321.1 | 10.0 | 30.2 | 77.8 | 0.00% |
+| | `abp10-rt11` | 321.4 | 9.4 | 27.8 | 77.0 | 0.00% |
+| | `abp11` | 321.1 | 9.6 | 28.8 | 77.2 | 0.00% |
+| **6 it/s** | `abp10` | 478.1 | 12.8 | 38.3 | 102.1 | 0.00% |
+| | `abp10-rt11` | 479.1 | 11.7 | 34.5 | 97.0 | 0.00% |
+| | `abp11` | 478.8 | 11.6 | **34.7** | **96.7** | 0.00% |
 
 ![HTTP p95 latency at different offered-load levels](assets/02-http-p95-by-load.png)
 
-At light load, the two ABP versions performed similarly. As the load increased, **ABP 11 on .NET 11 generally showed lower p95 response times** than ABP 10 on .NET 10. At the highest repeated load, the upgraded application had **9.4% lower p95 latency** while handling essentially the same number of HTTP requests per second. The supporting runtime-control series followed a similar pattern.
+At light load, the two ABP versions performed similarly. As the load increased, **ABP 11 on .NET 11 generally showed lower p95 response times** than ABP 10 on .NET 10. At the highest repeated load, the upgraded application had **9.4% lower p95 latency** while handling essentially the same number of HTTP requests per second.
 
 ### 4.2 Performance and resource usage
 
 These measurements were taken at the **highest repeated load** (`6 it/s`, six scenario iterations started per second):
 
-| Metric | `net10` | `net10-rt11` | `net11` |
+| Metric | `abp10` | `abp10-rt11` | `abp11` |
 |---|---:|---:|---:|
-| Web-process CPU | 55.0% | 50.3% | 50.6% |
+| Web-process CPU | 55% | 50% | 50% |
 | Process working set | 759 MB | 739 MB | 738 MB |
 | Reported managed GC heap | 355 MB | 321 MB | 311 MB |
 | HTTP p95 | 38.3 ms | 34.5 ms | 34.7 ms |
 
 ![Comparison of response time, CPU, and memory usage](assets/03-performance-resource-usage.png)
 
-The CPU percentages are **normalized to the web process's eight available logical processors**, not the entire machine. Thus **55.0% to 50.6%** is **4.4 percentage points**, or approximately **8% less CPU in relative terms**. Similarly, the GC number is a **sampled managed-heap-size counter**: a 44 MB difference in that counter is not the same as 44 MB fewer allocations, and it is not the total process memory footprint.
+The CPU percentages are **normalized to the web process's eight available logical processors**, not the entire machine. Thus **55% to 50%** is a drop of **5 percentage points**. Similarly, the GC number is a **sampled managed-heap-size counter**: a 44 MB difference in that counter is not the same as 44 MB fewer allocations, and it is not the total process memory footprint.
 
 ### 4.3 Performance across application features
 
-Looking at the application's individual features, **.NET 11 showed lower p95 response times in most groups**, including user, role, and tenant management. Tenant management, user operations, and login had the highest request latencies overall.
+Looking at the application's individual features, **ABP 11 on .NET 11 showed lower p95 response times in eight of the nine groups**, including user, role, and tenant management; only the settings group stayed flat (16.0 ms to 16.2 ms). Tenant management, user operations, and login had the highest request latencies overall.
 
 ![HTTP p95 latency by functional group](assets/04-application-feature-performance.png)
 
@@ -134,11 +134,11 @@ The chart compares **HTTP-request p95 values within each feature group**, rather
 
 In a separate, repeated higher-load test at **7 it/s** (seven scenario iterations per second, approximately **557 HTTP requests per second**), p95 latency remained close: **39.5 ms** for ABP 10 + .NET 10, **40.2 ms** for ABP 11 + .NET 11, and **40.3 ms** for the supporting ABP 10 + .NET 11 runtime control. At **8 it/s**, an exploratory test showed sharply higher latency and dropped iterations; because that load level was not tested repeatedly, it was **not used to rank maximum throughput**.
 
-## 5. Interpreting the ABP 10 vs ABP 11 results
+## 5. What the upgrade to ABP 11 gives
 
-The primary finding is that **ABP 11.0.0-rc.1 on .NET 11 performed at least comparably to, and generally better than, ABP 10.7.1 on .NET 10** in the tested application workflows. At the highest repeated load, its p95 HTTP response time was **34.7 ms**, compared with **38.3 ms** for the stable baseline, while CPU and memory measurements were also lower.
+Upgrading from **ABP 10.7.1 on .NET 10** to **ABP 11.0.0-rc.1 on .NET 11** gave **lower p95 response times at the same throughput**. At the highest repeated load, p95 fell from **38.3 ms** to **34.7 ms**, and CPU and memory use were lower as well. At light load (2 it/s) the two stacks performed similarly.
 
-The supporting runtime-control test helps explain the result: running the **unchanged ABP 10 binary on .NET 11** produced a similar **34.5 ms p95**. This suggests the newer runtime contributed to the improvement and that the full ABP 11 preview stack **did not show a substantial additional performance penalty in this workload**.
+The runtime-control test shows where the gain comes from: the **unchanged ABP 10 binary on .NET 11** reached a similar **34.5 ms p95**. The gain therefore appears to come with the move to .NET 11, and the ABP 11 preview packages **did not add a substantial performance penalty in this workload**.
 
 ## 6. Scope and limitations
 
@@ -148,21 +148,21 @@ The repository includes benchmark summary tables, while the PowerShell runner ge
 
 ## 7. Reproducing the experiment
 
-All benchmark application source code, k6 load-testing scenarios, PowerShell runners, and published result summaries are available in the [abp-net10-vs-net11-benchmark repository](https://github.com/OkanKoca/abp-net10-vs-net11-benchmark). **The commands below refer to that benchmark implementation**, rather than being stand-alone commands. With its source code available, the required .NET SDKs/runtimes, Docker, k6, Node.js, and `dotnet-counters` installed, local OpenIddict certificate settings configured, and test credentials provided, an example run is:
+All benchmark application source code, k6 load-testing scenarios, PowerShell runners, and published result summaries are available in the [AbpNet10vsNet11PerfTest test suite](https://github.com/abpframework/abp/tree/dev/test/AbpNet10vsNet11PerfTest) of the ABP repository. **The commands below refer to that benchmark implementation**, rather than being stand-alone commands. With its source code available, the required .NET SDKs/runtimes, Docker, k6, Node.js, and `dotnet-counters` installed, local OpenIddict certificate settings configured, and test credentials provided, an example run is:
 
 ```powershell
 docker compose up -d
 ./scripts/publish.ps1
 
-./scripts/db.ps1 -Target net10 -Action seed
-./scripts/db.ps1 -Target net11 -Action seed
+./scripts/db.ps1 -Target abp10 -Action seed
+./scripts/db.ps1 -Target abp11 -Action seed
 
 $env:BENCH_PASSWORD = '<seeded_admin_password>'
 
 ./scripts/run-bench.ps1 `
     -Mode fixed `
     -Rates 2,4,6 `
-    -Targets net10,net10-rt11,net11 `
+    -Targets abp10,abp10-rt11,abp11 `
     -Repeats 3 `
     -Batch article-comparison
 
@@ -173,6 +173,6 @@ The `-Batch` value is only a folder name for organizing output, not a distinct b
 
 ## Conclusion
 
-In this benchmark, **ABP 11.0.0-rc.1 on .NET 11 outperformed ABP 10.7.1 on .NET 10 across most tested application features**. At the highest repeated load, the upgraded stack delivered **9.4% lower HTTP p95 latency**, with lower CPU and measured memory usage at essentially the same throughput.
+Upgrading to **ABP 11.0.0-rc.1 on .NET 11** lowered **p95 latency by 9.4%** at the highest repeated load (38.3 ms → 34.7 ms), with lower CPU and memory use at the same throughput. Eight of the nine tested feature groups were faster as well.
 
-As a supporting check, the unchanged ABP 10 application also improved when run on the .NET 11 runtime. Its results were close to those of ABP 11, suggesting that **the ABP 11 preview upgrade preserved the observed runtime-level gains without a substantial additional performance penalty in this workload**. These findings apply to the tested applications and preview dependencies, not to every ABP deployment.
+The unchanged ABP 10 application also improved on the .NET 11 runtime (34.5 ms p95), so the gain comes with the move to .NET 11 and the ABP 11 preview upgrade added no substantial penalty. These findings apply to the tested applications and preview dependencies, not to every ABP deployment.

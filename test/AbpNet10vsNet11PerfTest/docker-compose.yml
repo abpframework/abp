@@ -1,0 +1,9 @@
+services:
+  postgres:
+    image: postgres:18.6@sha256:3a4264520e121176619f54ff867d12774bc81e95e7b84db58d63bccdb6144b81
+    container_name: bench-postgres
+    environment:
+      POSTGRES_USER: bench
+      POSTGRES_PASSWORD: bench
+    ports:
+      - "5433:5432" # 5432 is taken by a local PostgreSQL service

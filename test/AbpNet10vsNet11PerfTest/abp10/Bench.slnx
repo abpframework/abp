@@ -1,0 +1,16 @@
+<Solution>
+    <Configurations>
+        <Platform Name="Any CPU" />
+    </Configurations>
+    <Folder Name="/src/">
+        <Project Path="src/Bench.Domain/Bench.Domain.csproj" />
+        <Project Path="src/Bench.Application/Bench.Application.csproj" />
+        <Project Path="src/Bench.EntityFrameworkCore/Bench.EntityFrameworkCore.csproj" />
+        <Project Path="src/Bench.Web/Bench.Web.csproj" />
+        <Project Path="src/Bench.Domain.Shared/Bench.Domain.Shared.csproj" />
+        <Project Path="src/Bench.Application.Contracts/Bench.Application.Contracts.csproj" />
+        <Project Path="src/Bench.HttpApi/Bench.HttpApi.csproj" />
+        <Project Path="src/Bench.HttpApi.Client/Bench.HttpApi.Client.csproj" />
+        <Project Path="src/Bench.DbMigrator/Bench.DbMigrator.csproj" />
+    </Folder>
+</Solution>

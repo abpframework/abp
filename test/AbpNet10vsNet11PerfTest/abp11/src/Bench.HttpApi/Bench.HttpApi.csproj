@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net11.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Bench</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bench.Application.Contracts\Bench.Application.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.PermissionManagement.HttpApi" Version="11.0.0-rc.1" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.HttpApi" Version="11.0.0-rc.1" />
+    <PackageReference Include="Volo.Abp.SettingManagement.HttpApi" Version="11.0.0-rc.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Identity.HttpApi" Version="11.0.0-rc.1" />
+    <PackageReference Include="Volo.Abp.Account.HttpApi" Version="11.0.0-rc.1" />
+    <PackageReference Include="Volo.Abp.TenantManagement.HttpApi" Version="11.0.0-rc.1" />
+  </ItemGroup>
+
+</Project>

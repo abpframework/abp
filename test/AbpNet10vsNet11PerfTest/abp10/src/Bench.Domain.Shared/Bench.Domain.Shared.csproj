@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Bench</RootNamespace>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.BackgroundJobs.Domain.Shared" Version="10.7.1" />
+    <PackageReference Include="Volo.Abp.AuditLogging.Domain.Shared" Version="10.7.1" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Domain.Shared" Version="10.7.1" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Domain.Shared" Version="10.7.1" />
+    <PackageReference Include="Volo.Abp.SettingManagement.Domain.Shared" Version="10.7.1" />
+    <PackageReference Include="Volo.Abp.BlobStoring.Database.Domain.Shared" Version="10.7.1" />
+    <PackageReference Include="Volo.Abp.GlobalFeatures" Version="10.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.OpenIddict.Domain.Shared" Version="10.7.1" />
+    <PackageReference Include="Volo.Abp.Identity.Domain.Shared" Version="10.7.1" />
+    <PackageReference Include="Volo.Abp.TenantManagement.Domain.Shared" Version="10.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\Bench\*.json" />
+    <Content Remove="Localization\Bench\*.json" />
+  </ItemGroup>
+
+</Project>
