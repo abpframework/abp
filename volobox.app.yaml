@@ -1,0 +1,45 @@
+name: abp-bootstrap-demo
+description: ABP MVC Bootstrap tag helpers demo (no database)
+
+preview:
+  startTimeoutMinutes: 30
+
+prep:
+  - name: restore
+    run: dotnet restore Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.csproj
+    cwd: modules/basic-theme/test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
+    dependsOn: []
+
+  - name: libs
+    run: abp install-libs
+    cwd: modules/basic-theme/test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
+    inputs:
+      - package.json
+      - yarn.lock
+      - abp.resourcemapping.js
+    dependsOn: []
+
+  - name: build
+    run: dotnet build Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.csproj --no-restore -c Release -m:2
+    cwd: modules/basic-theme/test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
+    dependsOn:
+      - restore
+
+verify:
+  - run: dotnet build Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.csproj --no-restore -c Release -m:2
+    cwd: modules/basic-theme/test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
+
+services:
+  - name: web
+    kind: command
+    cwd: modules/basic-theme/test/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
+    command: dotnet run --no-build --no-restore --no-launch-profile -c Release --urls http://0.0.0.0:8080
+    port: 8080
+    primary: true
+    dependsOn: []
+    healthcheck:
+      path: /
+      expectStatus: 2xx
+      timeoutSeconds: 120
+    env:
+      ASPNETCORE_ENVIRONMENT: Development
