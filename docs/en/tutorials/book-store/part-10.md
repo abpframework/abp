@@ -990,7 +990,7 @@ Open the `/src/app/book/book.component.ts` and and change the content as shown b
 
 ````js
 import { ListService, PagedResultDto } from '@abp/ng.core';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { BookService, BookDto, bookTypeOptions, AuthorLookupDto } from '@proxy/books';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
@@ -1023,7 +1023,7 @@ export class BookComponent implements OnInit {
   private readonly confirmation = inject(ConfirmationService);
 
   constructor() {
-    this.authors$ = bookService.getAuthorLookup().pipe(map((r) => r.items));
+    this.authors$ = this.bookService.getAuthorLookup().pipe(map((r) => r.items));
   }
 
   ngOnInit() {
@@ -1089,7 +1089,7 @@ export class BookComponent implements OnInit {
 
 * Added imports for the `AuthorLookupDto`, `Observable` and `map`.
 * Added `authors$: Observable<AuthorLookupDto[]>;` field after the `selectedBook`.
-* Added `this.authors$ = bookService.getAuthorLookup().pipe(map((r) => r.items));` into the constructor.
+* Added `this.authors$ = this.bookService.getAuthorLookup().pipe(map((r) => r.items));` into the constructor.
 * Added ` authorId: [this.selectedBook.authorId || null, Validators.required],` into the `buildForm()` function.
 
 Open the `/src/app/book/book.component.html` and add the following form group just before the book name form group:
