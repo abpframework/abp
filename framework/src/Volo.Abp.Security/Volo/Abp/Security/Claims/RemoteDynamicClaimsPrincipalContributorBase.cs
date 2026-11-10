@@ -30,6 +30,15 @@ public abstract class RemoteDynamicClaimsPrincipalContributorBase<TContributor, 
         AbpDynamicClaimCacheItem dynamicClaims;
         try
         {
+            var sessionId = identity.FindSessionId();
+            if (!sessionId.IsNullOrWhiteSpace() && await dynamicClaimsCache.IsSessionRevokedAsync(sessionId!))
+            {
+                context.ClaimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity());
+                context.GetRequiredService<ILogger<TContributor>>()
+                    .LogWarning($"The session: {sessionId} of user: {userId.Value} is revoked, the claims principal is cleared.");
+                return;
+            }
+
             dynamicClaims = await dynamicClaimsCache.GetAsync(userId.Value, identity.FindTenantId());
         }
         catch (Exception e)

@@ -1,0 +1,29 @@
+{
+  "culture": "he",
+  "texts": {
+    "Permissions": "הרשאות",
+    "OnlyProviderPermissons": "רק ספק זה",
+    "All": "הכול",
+    "SelectAllInAllTabs": "הענקת כל ההרשאות",
+    "SelectAllInThisTab": "בחירת הכול",
+    "SaveWithoutAnyPermissionsWarningMessage": "לשמור בלי אף הרשאה?",
+    "PermissionGroup": "קבוצת הרשאות",
+    "Filter": "סינון",
+    "ResourcePermissions": "הרשאות",
+    "ResourcePermissionTarget": "יעד",
+    "ResourcePermissionPermissions": "הרשאות",
+    "AddResourcePermission": "הוספת הרשאה",
+    "ResourcePermissionDeletionConfirmationMessage": "למחוק את כל ההרשאות?",
+    "UpdateResourcePermission": "עדכון הרשאה",
+    "GrantAllResourcePermissions": "הענקת הכול",
+    "NoResourceProviderKeyLookupServiceFound": "לא נמצא שירות לחיפוש מפתח ספק",
+    "NoResourcePermissionFound": "לא הוגדרו הרשאות.",
+    "UpdatePermission": "עדכון הרשאה",
+    "NoPermissionsAssigned": "לא שויכו הרשאות",
+    "SelectProvider": "בחירת ספק",
+    "SearchProviderKey": "חיפוש מפתח ספק",
+    "Provider": "ספק",
+    "ErrorLoadingPermissions": "שגיאה בטעינת ההרשאות",
+    "PleaseSelectProviderAndPermissions": "יש לבחור ספק והרשאות"
+  }
+}

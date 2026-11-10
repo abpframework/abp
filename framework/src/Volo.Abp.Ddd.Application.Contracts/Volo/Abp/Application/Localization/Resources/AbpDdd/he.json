@@ -1,0 +1,6 @@
+{
+  "culture": "he",
+  "texts": {
+    "MaxResultCountExceededExceptionMessage": "{0} לא יכול להיות גדול מ-{1}! כדי לאפשר יותר תוצאות, הגדילו את {2}.{3} בצד השרת."
+  }
+}

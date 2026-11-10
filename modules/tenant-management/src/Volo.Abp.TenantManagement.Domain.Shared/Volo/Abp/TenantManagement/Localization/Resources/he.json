@@ -1,0 +1,23 @@
+{
+  "culture": "he",
+  "texts": {
+    "Volo.Abp.TenantManagement:DuplicateTenantName": "שם הדייר כבר קיים: {Name}",
+    "Menu:TenantManagement": "ניהול דיירים",
+    "Tenants": "דיירים",
+    "NewTenant": "דייר חדש",
+    "TenantName": "שם הדייר",
+    "DisplayName:TenantName": "שם הדייר",
+    "TenantDeletionConfirmationMessage": "הדייר '{0}' יימחק. להמשיך?",
+    "ConnectionStrings": "מחרוזות חיבור",
+    "DisplayName:DefaultConnectionString": "מחרוזת חיבור ברירת מחדל",
+    "DisplayName:UseSharedDatabase": "שימוש במסד הנתונים המשותף",
+    "Permission:TenantManagement": "ניהול דיירים",
+    "Permission:Create": "יצירה",
+    "Permission:Edit": "עריכה",
+    "Permission:Delete": "מחיקה",
+    "Permission:ManageConnectionStrings": "ניהול מחרוזות חיבור",
+    "Permission:ManageFeatures": "תכונות",
+    "DisplayName:AdminEmailAddress": "כתובת האימייל של המנהל",
+    "DisplayName:AdminPassword": "סיסמת המנהל"
+  }
+}

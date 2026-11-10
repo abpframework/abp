@@ -10,7 +10,7 @@
     "Volo.Abp.FeatureManagement:InvalidFeatureValue": "O valor da funcionalidade {0} não é válido!",
     "Menu:FeatureManagement": "Gestão de funcionalidades",
     "ResetToDefault": "Repor predefinição",
-    "ResetedToDefault": "Reposto para a predefinição",
+    "ResetedToDefault": "Predefinição reposta",
     "AreYouSure": "Tem a certeza?",
     "AreYouSureToResetToDefault": "Tem a certeza de que pretende repor a predefinição?"
   }

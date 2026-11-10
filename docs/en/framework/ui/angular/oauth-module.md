@@ -55,6 +55,22 @@ export const appConfig: ApplicationConfig = {
 
 It also registers the OAuth configuration initializer and the providers from `angular-oauth2-oidc`.
 
+## Token Storage
+
+`MemoryTokenStorageService` keeps the access token and the ID token in memory and shares them between the tabs of the application with a `SharedWorker`. A new tab waits for these tokens (up to 3 seconds) before it initializes the authentication. `nonce`, `PKCE_verifier` and `session_state` are kept in `sessionStorage`, so tabs that sign in at the same time don't overwrite each other's values. The refresh token is kept in `localStorage`.
+
+The `SharedWorker` is created from a `data:` URL. If the application uses a Content Security Policy, allow it with `worker-src data:`. When the worker can't start, each tab keeps its tokens on its own.
+
+An application started with server-side rendering uses cookie storage instead. If you register your own `OAuthStorage` provider (for example `localStorage`), it replaces this storage.
+
+## Signing In Again
+
+Use `authGuard` on the routes that need a signed-in user. The guard starts the sign-in with the current route, so the user comes back to the same page. The default 401 handler of `@abp/ng.theme.shared` does the same when the access token has expired. When there is no access token, it signs the user out by default; set `signInWithoutToken` in [`withHttpErrorConfig`](./http-error-handling.md) to start the sign-in instead (for example when an anonymous page shouldn't call APIs that need a signed-in user). If you replace these, pass the `returnUrl` to `AuthService.navigateToLogin` yourself.
+
+When refreshing the tokens fails because the authorization server can't be reached or returns a server error, the tokens are kept, since they can still be valid. When the server rejects the refresh token, the tokens are removed and the sign-in starts.
+
+With the authorization code flow, `AuthService.navigateToLogin` and `AuthService.login` share one redirect to the login page, until the page leaves. If you open the login page in your own way (a custom `openUri` in the OAuth configuration, a custom `initCodeFlow` or your own strategy), every request is passed to it.
+
 ## API Interceptor
 
 For non-external requests, the OAuth API interceptor adds the `X-Requested-With` header and, when the corresponding values are available, an `Authorization` bearer token, `Accept-Language` and the configured tenant header. Existing authorization, language and tenant headers are preserved. Requests marked with the `IS_EXTERNAL_REQUEST` HTTP context token are sent without those ABP headers. The interceptor also integrates every request with the HTTP wait service.

@@ -74,6 +74,47 @@ public static class JsonLocalizationDictionaryBuilder
         return new StaticLocalizationDictionary(cultureCode, dictionary);
     }
 
+    /// <summary>
+    ///     Reads the culture of a localization json without reading its texts.
+    ///     Returns null if the json has no culture, and throws if it is invalid.
+    /// </summary>
+    internal static string? GetCultureNameOrNull(Stream stream)
+    {
+        var json = new ReadOnlySpan<byte>(stream.GetAllBytes());
+        if (json.StartsWith(Utf8Bom))
+        {
+            json = json.Slice(Utf8Bom.Length);
+        }
+
+        var reader = new Utf8JsonReader(json, new JsonReaderOptions
+        {
+            CommentHandling = JsonCommentHandling.Skip,
+            AllowTrailingCommas = true
+        });
+
+        if (!reader.Read() || reader.TokenType != JsonTokenType.StartObject)
+        {
+            return null;
+        }
+
+        while (reader.Read() && reader.TokenType == JsonTokenType.PropertyName)
+        {
+            var isCulture = string.Equals(reader.GetString(), nameof(JsonLocalizationFile.Culture), StringComparison.OrdinalIgnoreCase);
+            reader.Read();
+
+            if (isCulture)
+            {
+                return reader.TokenType == JsonTokenType.String ? reader.GetString() : null;
+            }
+
+            reader.Skip();
+        }
+
+        return null;
+    }
+
+    private static readonly byte[] Utf8Bom = [0xEF, 0xBB, 0xBF];
+
     private static Dictionary<string, string> FlattenTexts(Dictionary<string, object> texts, string prefix = "")
     {
         var result = new Dictionary<string, string>();

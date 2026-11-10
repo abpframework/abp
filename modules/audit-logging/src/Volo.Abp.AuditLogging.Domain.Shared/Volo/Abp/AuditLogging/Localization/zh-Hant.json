@@ -113,6 +113,15 @@
     "AuditLogExportCompletedSubject": "稽核日誌匯出已完成",
     "DownloadLinkExplanation": "您可以使用下面的連結下載檔案，直到{0}（UTC）",
     "DownloadNow": "立即下載",
-    "TryAgainMessage": "請再試一次。如果問題仍然存在，請聯絡支援人員。"
+    "TryAgainMessage": "請再試一次。如果問題仍然存在，請聯絡支援人員。",
+    "Permission:SettingManagement": "設定管理",
+    "Action": "操作",
+    "NoActions": "無操作",
+    "MinExecutionDuration": "最小持續時間",
+    "MaxExecutionDuration": "最大持續時間",
+    "NoDataAvailable": "無可用資料",
+    "AuditLogExportFailedSubject": "稽核日誌匯出失敗",
+    "EntityChangeExportFailedSubject": "實體變更匯出失敗",
+    "FileNotFound": "找不到檔案：{0}"
   }
 }

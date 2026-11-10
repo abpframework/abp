@@ -58,6 +58,7 @@ This feature depends on the [Dynamic Claims](../../framework/fundamentals/dynami
 * The `IdentitySessionChecker` will check the `sessionid` that exists and update the `LastAccessed` and `IpAddress`  to the cache.
 * The `IdentitySessionManager` is used to get one or a list of sessions and update the` LastAccessed` and `IpAddress` from the cache to the database.
 * The module will remove the session when logging out.
+* When a session is removed, the module also remembers it as revoked in the distributed cache (if dynamic claims are enabled). The applications that use the remote dynamic claims (`WebRemoteDynamicClaimsPrincipalContributor` or `RemoteDynamicClaimsPrincipalContributor`) reject the tokens of a revoked session, even when the dynamic claims of the user are cached for another session. The `RevokedSessionCacheExpiration` property of `IdentitySessionCheckerOptions` sets how long it is remembered and defaults to 2 hours. Keep it longer than your access token lifetime plus the clock skew.
 * The `IdentitySessionCleanupBackgroundWorker` will remove the inactive sessions.
 * Once a new session has been created, we will remove the other sessions based on the `PreventConcurrentLogin` setting.
 * The `IdentitySessionManager` is used to manage/maintain the sessions. Please use this class instead of directly using the repository.

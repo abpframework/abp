@@ -39,6 +39,8 @@ This part explains how to configure the database integration for the `Author` en
 Open the `BookStoreDbContext` in the `Acme.BookStore.EntityFrameworkCore` project and add the following `DbSet` property:
 
 ````csharp
+using Acme.BookStore.Authors;
+
 public DbSet<Author> Authors { get; set; }
 ````
 

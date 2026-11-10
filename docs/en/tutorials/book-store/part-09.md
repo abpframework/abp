@@ -481,20 +481,20 @@ That's all! You can run the application and try to edit an author.
 Run the following command line to create a new component, named `AuthorComponent` in the root folder of the angular application:
 
 ```bash
-yarn ng generate component author
+yarn ng generate component author --type=component
 ```
 
 This command should produce the following output:
 
 ```bash
-> yarn ng generate component author
+> yarn ng generate component author --type=component
 
-yarn run v1.19.1
-$ yarn ng generate component author
-CREATE src/app/author/author.component.html (21 bytes)
-CREATE src/app/author/author.component.spec.ts (628 bytes)
-CREATE src/app/author/author.component.ts (276 bytes)
+yarn run v1.22.22
+$ ng generate component author --type=component
 CREATE src/app/author/author.component.scss (0 bytes)
+CREATE src/app/author/author.component.spec.ts (595 bytes)
+CREATE src/app/author/author.component.ts (216 bytes)
+CREATE src/app/author/author.component.html (21 bytes)
 Done in 2.22s.
 ```
 
@@ -547,42 +547,51 @@ Open the `/src/app/route.provider.ts` and add `'BookStore.Books || BookStore.Aut
 The final `configureRoutes` function declaration should be following:
 
 ```js
-function configureRoutes(routes: RoutesService) {
-  return () => {
-    routes.add([
-      {
-        path: '/',
-        name: '::Menu:Home',
-        iconClass: 'fas fa-home',
-        order: 1,
-        layout: eLayoutType.application,
-      },
-      {
-        path: '/book-store',
-        name: '::Menu:BookStore',
-        iconClass: 'fas fa-book',
-        order: 2,
-        layout: eLayoutType.application,
-        requiredPolicy: 'BookStore.Books || BookStore.Authors',
-      },
-      {
-        path: '/books',
-        name: '::Menu:Books',
-        parentName: '::Menu:BookStore',
-        layout: eLayoutType.application,
-        requiredPolicy: 'BookStore.Books',
-      },
-      {
-        path: '/authors',
-        name: '::Menu:Authors',
-        parentName: '::Menu:BookStore',
-        layout: eLayoutType.application,
-        requiredPolicy: 'BookStore.Authors',
-      },
-    ]);
-  };
+function configureRoutes() {
+  const routes = inject(RoutesService);
+  routes.add([
+    {
+      path: '/',
+      name: '::Menu:Home',
+      iconClass: 'fas fa-home',
+      order: 1,
+      layout: eLayoutType.application,
+    },
+    {
+      path: '/book-store',
+      name: '::Menu:BookStore',
+      iconClass: 'fas fa-book',
+      order: 2,
+      layout: eLayoutType.application,
+      requiredPolicy: 'BookStore.Books || BookStore.Authors',
+    },
+    {
+      path: '/books',
+      name: '::Menu:Books',
+      parentName: '::Menu:BookStore',
+      layout: eLayoutType.application,
+      requiredPolicy: 'BookStore.Books',
+    },
+    {
+      path: '/authors',
+      name: '::Menu:Authors',
+      parentName: '::Menu:BookStore',
+      layout: eLayoutType.application,
+      requiredPolicy: 'BookStore.Authors',
+    },
+  ]);
 }
 ```
+
+Also add a route definition for the new component to the `src/app/app.routes.ts` file:
+
+````js
+{
+  path: 'authors',
+  loadComponent: () => import('./author/author.component').then(c => c.AuthorComponent),
+  canActivate: [authGuard, permissionGuard],
+},
+````
 
 ### Service Proxy Generation
 
@@ -603,27 +612,33 @@ This command generates the service proxy for the author service and the related 
 Open the `/src/app/author/author.component.ts` file and replace the content as below:
 
 ```js
-import { Component, OnInit, inject } from '@angular/core';
-import { ListService, PagedResultDto } from '@abp/ng.core';
-import { AuthorService, AuthorDto } from '@proxy/authors';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { CoreModule, ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
+import { AuthorService, AuthorDto, GetAuthorListDto } from '../proxy/authors';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
-import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared';
+import {
+  NgbDateNativeAdapter,
+  NgbDateAdapter,
+  NgbDatepickerModule,
+  NgbDropdownModule,
+} from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmationService, Confirmation, ThemeSharedModule } from '@abp/ng.theme.shared';
 
 @Component({
   selector: 'app-author',
   templateUrl: './author.component.html',
   styleUrls: ['./author.component.scss'],
+  imports: [CoreModule, ThemeSharedModule, NgbDatepickerModule, NgbDropdownModule],
   providers: [ListService, { provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }],
 })
 export class AuthorComponent implements OnInit {
-  author = { items: [], totalCount: 0 } as PagedResultDto<AuthorDto>;
+  author = signal({ items: [], totalCount: 0 } as PagedResultDto<AuthorDto>);
 
-  isModalOpen = false;
+  isModalOpen = signal(false);
 
-  form: FormGroup;
+  form!: FormGroup;
 
-  selectedAuthor = {} as AuthorDto;
+  selectedAuthor = signal({} as AuthorDto);
 
   public readonly list = inject(ListService);
   private readonly authorService = inject(AuthorService);
@@ -631,36 +646,38 @@ export class AuthorComponent implements OnInit {
   private readonly confirmation = inject(ConfirmationService);
 
   ngOnInit(): void {
-    const authorStreamCreator = (query) => this.authorService.getList(query);
+    const authorStreamCreator = (query: GetAuthorListDto) => this.authorService.getList(query);
 
     this.list.hookToQuery(authorStreamCreator).subscribe((response) => {
-      this.author = response;
+      this.author.set(response);
     });
   }
 
   createAuthor() {
-    this.selectedAuthor = {} as AuthorDto;
+    this.selectedAuthor.set({} as AuthorDto);
     this.buildForm();
-    this.isModalOpen = true;
+    this.isModalOpen.set(true);
   }
 
   editAuthor(id: string) {
     this.authorService.get(id).subscribe((author) => {
-      this.selectedAuthor = author;
+      this.selectedAuthor.set(author);
       this.buildForm();
-      this.isModalOpen = true;
+      this.isModalOpen.set(true);
     });
   }
 
   buildForm() {
+    const selectedAuthor = this.selectedAuthor();
+
     this.form = this.fb.group({
-      name: [this.selectedAuthor.name || '', Validators.required],
+      name: [selectedAuthor.name || '', Validators.required],
       birthDate: [
-        this.selectedAuthor.birthDate ? new Date(this.selectedAuthor.birthDate) : null,
+        selectedAuthor.birthDate ? new Date(selectedAuthor.birthDate) : null,
         Validators.required,
       ],
       shortBio: [
-        this.selectedAuthor.shortBio ? this.selectedAuthor.shortBio : null,
+        selectedAuthor.shortBio ? selectedAuthor.shortBio : null,
         Validators.required,
       ],
     });
@@ -671,17 +688,19 @@ export class AuthorComponent implements OnInit {
       return;
     }
 
-    if (this.selectedAuthor.id) {
+    const selectedAuthor = this.selectedAuthor();
+
+    if (selectedAuthor.id) {
       this.authorService
-        .update(this.selectedAuthor.id, this.form.value)
+        .update(selectedAuthor.id, this.form.value)
         .subscribe(() => {
-          this.isModalOpen = false;
+          this.isModalOpen.set(false);
           this.form.reset();
           this.list.get();
         });
     } else {
       this.authorService.create(this.form.value).subscribe(() => {
-        this.isModalOpen = false;
+        this.isModalOpen.set(false);
         this.form.reset();
         this.list.get();
       });
@@ -721,7 +740,7 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
     </div>
   </div>
   <div class="card-body">
-    <ngx-datatable [rows]="author.items" [count]="author.totalCount" [list]="list" default>
+    <ngx-datatable [rows]="author().items" [count]="author().totalCount" [list]="list" default>
       <ngx-datatable-column
         [name]="'::Actions' | abpLocalization"
         [maxWidth]="150"
@@ -761,7 +780,7 @@ Open the `/src/app/author/author.component.html` and replace the content as belo
 
 <abp-modal [(visible)]="isModalOpen">
   <ng-template #abpHeader>
-    <h3>{%{{{ (selectedAuthor.id ? '::Edit' : '::NewAuthor') | abpLocalization }}}%}</h3>
+    <h3>{%{{{ (selectedAuthor().id ? '::Edit' : '::NewAuthor') | abpLocalization }}}%}</h3>
   </ng-template>
 
   <ng-template #abpBody>
@@ -811,6 +830,7 @@ This page uses some localization keys we need to declare. Open the `en.json` fil
 "Authors": "Authors",
 "AuthorDeletionConfirmationMessage": "Are you sure to delete the author '{0}'?",
 "BirthDate": "Birth date",
+"ShortBio": "Short bio",
 "NewAuthor": "New author"
 ````
 

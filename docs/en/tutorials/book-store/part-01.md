@@ -301,6 +301,8 @@ public class BookDto : AuditedEntityDto<Guid>
 It will be needed to map the `Book` entities to the `BookDto` objects while returning books to the presentation layer. [Mapperly](https://mapperly.riok.app/) library can automate this conversion when you define the proper mapping. The startup template comes with Mapperly pre-configured. So, you can just define the mapping in the `BookStoreApplicationMappers` class in the `Acme.BookStore.Application` project:
 
 ```csharp
+using Acme.BookStore.Books;
+
 [Mapper]
 public partial class BookToBookDtoMapper : MapperBase<Book, BookDto>
 {
@@ -346,6 +348,8 @@ public class CreateUpdateBookDto
 As done to the `BookDto` above, we should define the mapping from the `CreateUpdateBookDto` object to the `Book` entity. The final class will be as shown below:
 
 ```csharp
+using Acme.BookStore.Books;
+
 [Mapper]
 public partial class BookToBookDtoMapper : MapperBase<Book, BookDto>
 {
