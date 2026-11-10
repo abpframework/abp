@@ -113,13 +113,32 @@ internal sealed class TelemetrySolutionInfoEnricher : TelemetryActivityEventEnri
                 continue;
             }
 
-            ExtractModuleImportsInfo(modulePath, modules);
+            ExtractModuleImportsInfo(modulePath, modules, new HashSet<string>(StringComparer.Ordinal));
         }
 
         context.Current[ActivityPropertyNames.InstalledModules] = modules;
     }
 
-    private static void ExtractModuleImportsInfo(string modulePath, List<Dictionary<string, object?>> modules)
+    private static void ExtractModuleImportsInfo(string modulePath, List<Dictionary<string, object?>> modules, HashSet<string> importChain)
+    {
+        // Modules can import each other, so skip a module that is already in the current import chain.
+        var fullModulePath = Path.GetFullPath(modulePath);
+        if (!importChain.Add(fullModulePath))
+        {
+            return;
+        }
+
+        try
+        {
+            ExtractModuleImportsInfoCore(modulePath, modules, importChain);
+        }
+        finally
+        {
+            importChain.Remove(fullModulePath);
+        }
+    }
+
+    private static void ExtractModuleImportsInfoCore(string modulePath, List<Dictionary<string, object?>> modules, HashSet<string> importChain)
     {
         var moduleJsonFileContent = File.ReadAllText(modulePath);
         using var moduleDoc = JsonDocument.Parse(moduleJsonFileContent, new JsonDocumentOptions
@@ -138,7 +157,7 @@ internal sealed class TelemetrySolutionInfoEnricher : TelemetryActivityEventEnri
                 
             if (!importPath.IsNullOrEmpty())
             {
-                ExtractModuleImportsInfo(importPath, modules);
+                ExtractModuleImportsInfo(importPath, modules, importChain);
                 continue;
             }
                 
