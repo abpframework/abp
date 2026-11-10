@@ -1,4 +1,4 @@
-// Load-test scenario for the empty ABP MVC app, built from the k6 Studio recording (k6/recordings/abp-mvc.har).
+// Load-test scenario for the empty ABP MVC app, built from a k6 Studio recording of the browser session (the recording itself is not committed).
 // One iteration visits every page and runs its functions; each virtual user (VU) works only on its own data:
 //  - VU n logs in as bench_vu_n (seeded by scripts/seed-bench-data.sql) and keeps its session across iterations,
 //    logging out and in again every SESSION_ITERATIONS iterations (password hashing would dominate otherwise).

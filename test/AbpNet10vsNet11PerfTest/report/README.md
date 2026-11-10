@@ -100,7 +100,7 @@ One complete scenario iteration visits all pages of the empty ABP MVC applicatio
 ### 4.2 Recording with k6 Studio
 
 * Chrome bypasses local proxies for `localhost`, so the recording was performed via `https://bench.localtest.me:44377` (public DNS resolving to `127.0.0.1`) with proxy SSL verification disabled for the ASP.NET Core developer certificate.
-* The raw recording (`abp-mvc.raw.har`, gitignored) was sanitized via `node k6/tools/sanitize-har.mjs` into [`k6/recordings/abp-mvc.har`](../k6/recordings/abp-mvc.har), retaining only `bench.localtest.me:44377` requests, dropping static asset bodies, and redacting passwords and cookies.
+* The raw recording contained passwords and session cookies and was not committed; the final scenario is [`k6/scenario.js`](../k6/scenario.js).
 
 ### 4.3 Replay Evaluation: Round 1 (Default Export, No Rules)
 
@@ -111,7 +111,7 @@ Exporting the recording from k6 Studio with default settings failed immediately:
 
 ### 4.4 Replay Evaluation: Round 2 (Correlated k6 Studio Generator)
 
-Seven rules were configured in [`k6/studio/abp-mvc-correlated.k6g`](../k6/studio/abp-mvc-correlated.k6g), producing [`k6/studio/abp-mvc-correlated.js`](../k6/studio/abp-mvc-correlated.js):
+Seven rules were configured in a k6 Studio generator (not committed), producing a correlated script:
 
 | # | Rule Type | Source / Filter | Selector | Target | Purpose |
 |---|---|---|---|---|---|
@@ -205,41 +205,9 @@ The capacity probe stepped through 12 arrival rates (`2, 4, 6, 8, 10, 12, 14, 16
 * Both targets reach full CPU saturation (`97.4%`–`97.5%` average CPU across the 8 pinned P-core threads) at **`8 it/s`**, where `net10` peaks at **`625.3 req/s`** (`p95 = 195.8 ms`, `21` dropped iterations) and `net11` peaks at **`588.9 req/s`** (`p95 = 392.9 ms`, `53` dropped iterations).
 * Using `8 it/s` as the saturation ceiling, the three measured load levels (~25%, ~50%, ~75% of capacity) are **`2`, `4`, and `6` iterations/s** (`~162`, `~323`, and `~485 req/s`).
 
-### 6.2 Main Comparison (`net10` vs `net11`)
+### 6.2 Excluded Initial Batch
 
-Command:
-```powershell
-./scripts/run-bench.ps1 -Mode fixed -Rates 2,4,6 -Targets net10,net11 -Repeats 3 -Batch main
-node k6/tools/summarize.mjs results/main report/results-main.md
-```
-
-Median of 3 repetitions (min–max in [`report/results-main.md`](results-main.md)); 120 s warm-up, 300 s measured window; 0.00% HTTP failures and 0 dropped iterations in all 18 runs.
-
-| rate | target | req/s | avg ms | p95 ms | p99 ms | app CPU % | DB CPU % | working set MB | GC pause ms/s |
-|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| 2 it/s | net10 | 160.5 | 10.0 | 28.9 | 90.8 | 14.3 | 16.3 | 593 | 15.7 |
-| 2 it/s | net11 | 160.5 | 10.4 | 30.3 | 89.4 | 15.0 | 16.7 | 593 | 18.6 |
-| 4 it/s | net10 | 321.1 | 11.6 | 34.7 | 101.5 | 35.1 | 40.1 | 670 | 28.6 |
-| 4 it/s | net11 | 320.4 | 11.9 | 34.8 | 104.6 | 38.0 | 39.6 | 686 | 28.4 |
-| 6 it/s | net10 | 477.2 | 20.2 | 62.4 | 176.7 | 79.2 | 77.7 | 838 | 40.2 |
-| 6 it/s | net11 | 477.0 | 36.4 | 132.8 | 341.8 | 79.3 | 79.2 | 872 | 39.4 |
-
-p95 per page group (ms):
-
-| rate | target | 01_login | 02_home | 03_users | 04_roles | 05_tenants | 06_settings | 07_profile | 08_language | 09_logout |
-|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| 2 | net10 | 65.0 | 14.3 | 70.1 | 22.1 | 88.4 | 14.4 | 28.6 | 26.0 | 9.7 |
-| 2 | net11 | 64.4 | 16.0 | 71.1 | 20.8 | 86.0 | 16.4 | 31.8 | 28.3 | 10.4 |
-| 4 | net10 | 77.5 | 10.2 | 83.8 | 28.4 | 97.6 | 13.5 | 30.7 | 31.8 | 10.6 |
-| 4 | net11 | 81.0 | 10.0 | 86.3 | 27.3 | 100.6 | 15.2 | 31.6 | 32.0 | 10.7 |
-| 6 | net10 | 139.4 | 17.1 | 135.8 | 52.9 | 161.3 | 25.6 | 52.1 | 50.7 | 21.7 |
-| 6 | net11 | 156.1 | 40.8 | 163.0 | 104.4 | 174.1 | 81.2 | 129.4 | 167.8 | 38.5 |
-
-**Findings:**
-* At `2` and `4` it/s `net10` and `net11` are within measurement noise (p95 difference at most 1.4 ms).
-* At `6` it/s `net11` has about 2x the average, p95 and p99 latency of `net10` (p95 62.4 ms vs 132.8 ms). The repetition ranges do not overlap (`net10` 58.6–82.5 ms, `net11` 117.2–135.3 ms). Throughput and application CPU are identical, so `net11` completes the same work but queues longer. `6` it/s is close to the saturation point (`8` it/s), where small per-request cost differences amplify into queueing delay.
-* The `6` it/s difference appears in every page group, not in a single page.
-* The cause of the `6` it/s gap (runtime, ABP 11 / EF Core 11 packages, or the Npgsql RC mismatch) is **not established** by this batch; see 6.3.
+The first fixed-rate batch (`net10` vs `net11` at 2, 4, 6 it/s) was measured while the machine was still in use for other work. Its absolute numbers were inflated (the `net10` web process needed ~79% CPU at 6 it/s, versus ~50–55% in every later batch for the same request rate) and `net11` showed an unexplained 2x p95 at 6 it/s. Because the measurement conditions were not controlled, the batch was discarded and is not reported. All results below were measured on a dedicated, otherwise idle machine; the 27-run `main-validation` batch (6.3.5) repeats the full 2, 4, 6 it/s matrix under those conditions.
 
 ### 6.3 Runtime Isolation (`net10` vs `net10-rt11` vs `net11`)
 
@@ -339,7 +307,6 @@ As a complete, uncompromised end-to-end verification, the entire main matrix acr
   * At 4 it/s, .NET 11 and .NET 10-rt11 are faster (p95 27.8–28.8 ms vs 30.2 ms) and leaner on memory.
   * At 7 it/s near the saturation knee, all three targets remain rock solid at ~40 ms p95 with 0 dropped iterations and 0 errors.
 * **ABP 11 vs .NET 11 Separation:** In every single run, `net10-rt11` and `net11` match almost to the microsecond (34.5 ms vs 34.7 ms at 6 it/s; 40.3 ms vs 40.2 ms at 7 it/s; 27.8 ms vs 28.8 ms at 4 it/s), definitively proving that **ABP 11.0.0-rc.1 and EF Core 11 RC packages introduce zero overhead or regression**.
-* **Resolution of the Initial `main` Anomaly:** The 132.8 ms latency on `net11` in the initial `main` batch was an artifact of external thermal/background noise during that specific session. The subsequent targeted batches (`runtime6`, `verify-knee`, `verify-marathon6`, and `main-validation`) unequivocally debunked that regression across over 50 combined validation runs.
 ### 6.4 Structural Bottlenecks & Diagnostic Findings
 
 1. **Heaviest scenario groups (`05_tenants`, `03_users`, `01_login`):**
@@ -349,7 +316,7 @@ As a complete, uncompromised end-to-end verification, the entire main matrix acr
 ![HTTP p95 latency by functional group](assets/04-application-feature-performance.png)
 2. **Thermal & Saturation Knee Sensitivity:**
    * At ~50% CPU load (isolated 6 it/s), latency is flat at ~34 ms p95.
-   * When sustained continuous load pushes CPU to ~79% (as in the 2.5-hour `main` marathon), the system operates near the saturation knee (8 it/s = ~97% CPU), where minor queuing differences cause significant latency amplification.
+   * Near the saturation knee (8 it/s = ~97% CPU) minor queuing differences are amplified into large latency differences (see 6.1).
 3. **`RuntimeBinderException` in `dotnet-counters`:**
    * All three setups showed 10 `RuntimeBinderException` in the first second after startup and 0 for the remainder of the run. Confined strictly to the first second of warm-up; zero impact on the measured window.
    * Likely cause **(inference)**: first-time binding of C# `dynamic` call sites populating DLR cache.
@@ -394,4 +361,4 @@ Combining all validated data across the full load spectrum (2, 4, 6, 7, and 8 it
    * **Pre-Seeded Global Email Settings:** `AbpSettings` stores global settings with `ProviderKey = NULL`. Because PostgreSQL unique indexes treat `NULL` values as distinct unless `NULLS NOT DISTINCT` is specified, concurrent first-time saves of `Abp.Mailing.Smtp.UserName` and `Abp.Mailing.Smtp.Domain` can insert duplicate rows. Seeding those two rows once in `scripts/seed-bench-data.sql` ensures `POST /api/setting-management/emailing` performs deterministic updates under concurrency.
    * **Soft-Deleted Entities & Database Growth:** Deleting users and tenants in ABP performs a soft delete (`IsDeleted = true`), and tenant creation leaves behind the tenant's seeded admin user/role/permission rows. Within a 5-minute run the database grows slightly; resetting `Bench` from `Bench_seed_<target>` before every run prevents cross-run accumulation.
    * **Template Database Statistics:** The first probe run exposed that `Bench_seed_net11` had no planner statistics while `Bench_seed_net10` did (autovacuum timing), which changed query plans and inflated `net11` latency and DB CPU. `VACUUM ANALYZE` was added to `scripts/seed-bench-data.sql` and run on both templates; all results in this report were measured after that fix.
-6. **Run-to-Run Drift Between Batches:** Absolute latencies differ between batches taken at different times (`net10` p95 at `4` it/s: 34.7 ms in `main`, 26.6 ms in `runtime`). Only compare targets within the same batch.
+6. **Run-to-Run Drift Between Batches:** Absolute latencies differ between batches taken at different times (`net10` p95 at `4` it/s: 30.2 ms in `main-validation`, 26.6 ms in `runtime`). Only compare targets within the same batch.

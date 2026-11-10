@@ -17,7 +17,7 @@ partial class BenchDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261105082110_Upgraded_To_Abp_11_0_0_rc_1";
+    public override string LastMigrationId => "20261105081211_Initial";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {

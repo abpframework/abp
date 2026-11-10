@@ -33,13 +33,7 @@ Full benchmark methodology, tool evaluation, scenario correlation analysis, and 
 ├── net10/                           # ABP 10.7.1 + .NET 10 MVC project (EF Core, PostgreSQL, LeptonX Lite)
 ├── net11/                           # ABP 11.0.0-rc.1 + .NET 11 MVC project (upgraded copy of net10)
 ├── k6/
-│   ├── recordings/
-│   │   └── abp-mvc.har              # Sanitized k6 Studio browser recording (passwords/cookies redacted)
-│   ├── studio/
-│   │   ├── abp-mvc-correlated.k6g   # k6 Studio generator with 7 correlation/verification rules
-│   │   └── abp-mvc-correlated.js    # Correlated script exported from k6 Studio
 │   ├── tools/
-│   │   ├── sanitize-har.mjs         # Strips non-app requests, static bodies, and secrets from raw HAR
 │   │   └── summarize.mjs            # Aggregates k6, dotnet-counters, and docker stats into Markdown tables
 │   └── scenario.js                  # Parameterized multi-VU load-test scenario (smoke, probe, fixed modes)
 ├── scripts/
@@ -54,7 +48,6 @@ Full benchmark methodology, tool evaluation, scenario correlation analysis, and 
     ├── README.md                    # Benchmark report (methodology, tool evaluation, results, limitations)
     ├── versions.md                  # Generated environment, SDK, runtime, and package version table
     ├── probe.md                     # Capacity probe results (2 to 32 it/s)
-    ├── results-main.md              # Initial main comparison (net10 vs net11, 2, 4, 6 it/s)
     ├── results-main-validation.md   # Full 27-run marathon re-validation (net10 vs net10-rt11 vs net11)
     ├── results-runtime.md           # Runtime isolation at 4 it/s
     ├── results-runtime6.md          # Runtime isolation at 6 it/s
@@ -73,7 +66,7 @@ Full benchmark methodology, tool evaluation, scenario correlation analysis, and 
 * **Diagnostics:** `dotnet-counters` (`dotnet tool install --global dotnet-counters`)
 * **Database:** Docker Desktop (runs `postgres:18.6` via `docker compose`)
 * **Load Generator:** [Grafana k6](https://grafana.com/docs/k6/latest/set-up/install-k6/) (`v2.3.0+`)
-* **Node.js:** `v20+` (for `k6/tools/summarize.mjs` and `k6/tools/sanitize-har.mjs`)
+* **Node.js:** `v20+` (for `k6/tools/summarize.mjs`)
 
 ---
 
@@ -137,12 +130,6 @@ k6 run -e BENCH_PASSWORD=$env:BENCH_PASSWORD --vus 1 --iterations 1 k6/scenario.
 k6 run -e BENCH_PASSWORD=$env:BENCH_PASSWORD -e THINK_TIME=0 -e SESSION_ITERATIONS=2 --vus 20 --iterations 60 k6/scenario.js
 ```
 
-To run the raw correlated script exported from k6 Studio (requires `bench.localtest.me` resolving to `127.0.0.1`, which works out of the box via public DNS):
-
-```powershell
-k6 run -e BENCH_PASSWORD=$env:BENCH_PASSWORD --insecure-skip-tls-verify --vus 1 --iterations 1 k6/studio/abp-mvc-correlated.js
-```
-
 ---
 
 ## Running the Full Benchmark Suite
@@ -163,16 +150,7 @@ node k6/tools/summarize.mjs results/probe report/probe.md
 
 Inspect `report/probe.md` and pick three load levels (`a, b, c` iterations/s) corresponding to ~25%, ~50%, and ~75% of the lower saturation threshold before dropped iterations or error spikes occur.
 
-### Step 2: Main Comparison — `net10` vs `net11` (~2.5 hours)
-
-Runs 3 load levels × 2 targets × 3 repetitions (120 s warm-up + 300 s measured window per run, alternating target order between repetitions):
-
-```powershell
-./scripts/run-bench.ps1 -Mode fixed -Rates 2,4,6 -Targets net10,net11 -Repeats 3 -Batch main
-node k6/tools/summarize.mjs results/main report/results-main.md
-```
-
-### Step 3: Runtime Isolation — `net10` vs `net10-rt11` vs `net11` (~1 hour 15 minutes)
+### Step 2: Runtime Isolation — `net10` vs `net10-rt11` vs `net11` (~1 hour 15 minutes)
 
 Runs an arrival rate across all three targets × 3 repetitions to separate runtime gains/regressions from ABP package changes:
 
@@ -184,8 +162,9 @@ node k6/tools/summarize.mjs results/runtime report/results-runtime.md
 # High load (6 it/s):
 ./scripts/run-bench.ps1 -Mode fixed -Rates 6 -Targets net10,net10-rt11,net11 -Repeats 3 -Batch runtime6
 node k6/tools/summarize.mjs results/runtime6 report/results-runtime6.md
+```
 
-### Step 4: Verification Batches — Knee & Marathon (~1 hour 15 minutes each)
+### Step 3: Verification Batches — Knee & Marathon (~1 hour 15 minutes each)
 
 Targeted validation runs addressing saturation threshold and sustained-load endurance:
 
