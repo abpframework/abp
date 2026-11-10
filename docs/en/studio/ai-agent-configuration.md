@@ -100,6 +100,22 @@ Some tools require explicit permission before execution.
 
 Permission choices include allow once, allow always, and skip. "Allow always" persists in the AI Agent settings and is reused by future sessions.
 
+## Pull Request Attribution
+
+The **Attribute pull requests to ABP Agent** setting in **Settings > Others** is enabled by default. When it is enabled, pull requests that the agent opens with the GitHub CLI (`gh pr create`, or a `gh api` POST request to `repos/{owner}/{repo}/pulls`) end with a `[Made with ABP Agent](https://abp.io/studio/ai-agent)` link in the description. The agent is also instructed to add this link when it writes a pull request description. If the command needs your approval, the permission prompt shows it with the link added.
+
+When the setting is disabled, the agent does not add the link and shell commands are not modified. Pull request descriptions are published exactly as written.
+
+The setting is stored as `attributeAgentPullRequests` in `agent-settings.json`. The default location is `~/.abp/studio/agent-settings.json` (`%USERPROFILE%\.abp\studio\agent-settings.json` on Windows). If the `ABP_STUDIO_ROOT` environment variable is set, the file is under that folder instead. For headless usage with `abp agent`, for example on CI or on a server where the ABP Studio UI is not available, turn the attribution off by adding the property to the existing JSON object in that file, alongside the other settings:
+
+```json
+{
+  "attributeAgentPullRequests": false
+}
+```
+
+A running `abp agent` server or daemon reads the settings at startup, so restart it after changing the file.
+
 ## MCP Tool Connections
 
 ABP Studio can connect to user-configured Model Context Protocol (MCP) servers and expose their tools to Agent mode. This section is about that MCP client integration. For the other direction, where external AI clients connect to ABP Studio and use its own tools, see the [Model Context Protocol (MCP)](model-context-protocol.md) documentation.

@@ -1,0 +1,719 @@
+{
+  "modules": {
+    "clientProxyTest": {
+      "rootPath": "clientProxyTest",
+      "remoteServiceName": "Default",
+      "controllers": {
+        "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestController": {
+          "controllerName": "ClientProxyTest",
+          "controllerGroupName": "ClientProxyTest",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestController",
+          "interfaces": [
+            {
+              "type": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService",
+              "name": "IClientProxyTestAppService",
+              "methods": []
+            }
+          ],
+          "actions": {
+            "GetFromBodyAsyncByValue": {
+              "uniqueName": "GetFromBodyAsyncByValue",
+              "name": "GetFromBodyAsync",
+              "httpMethod": "POST",
+              "url": "api/client-proxy-test/from-body",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "value",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "value",
+                  "name": "value",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
+            },
+            "GetFromQueryAsyncByValue": {
+              "uniqueName": "GetFromQueryAsyncByValue",
+              "name": "GetFromQueryAsync",
+              "httpMethod": "POST",
+              "url": "api/client-proxy-test/from-query",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "value",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "value",
+                  "name": "value",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
+            },
+            "GetNumberFromBodyAsyncByValue": {
+              "uniqueName": "GetNumberFromBodyAsyncByValue",
+              "name": "GetNumberFromBodyAsync",
+              "httpMethod": "POST",
+              "url": "api/client-proxy-test/number-from-body",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "value",
+                  "typeAsString": "System.Int32, System.Private.CoreLib",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "value",
+                  "name": "value",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
+            },
+            "GetFromExplicitQueryAsyncByValue": {
+              "uniqueName": "GetFromExplicitQueryAsyncByValue",
+              "name": "GetFromExplicitQueryAsync",
+              "httpMethod": "POST",
+              "url": "api/client-proxy-test/from-explicit-query",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "value",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "value",
+                  "name": "value",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
+            },
+            "GetQueryParametersAsyncByNumberAndFlagAndGuid": {
+              "uniqueName": "GetQueryParametersAsyncByNumberAndFlagAndGuid",
+              "name": "GetQueryParametersAsync",
+              "httpMethod": "GET",
+              "url": "api/client-proxy-test/query-parameters",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "number",
+                  "typeAsString": "System.Int32, System.Private.CoreLib",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "flag",
+                  "typeAsString": "System.Boolean, System.Private.CoreLib",
+                  "type": "System.Boolean",
+                  "typeSimple": "boolean",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "guid",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "number",
+                  "name": "number",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "flag",
+                  "name": "flag",
+                  "jsonName": null,
+                  "type": "System.Boolean",
+                  "typeSimple": "boolean",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "guid",
+                  "name": "guid",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
+            },
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/client-proxy-test",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput, Volo.Abp.Http.Client.Web.Tests",
+                  "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput",
+                  "typeSimple": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput",
+                  "typeSimple": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
+            },
+            "UpdateAsyncByIdAndInput": {
+              "uniqueName": "UpdateAsyncByIdAndInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/client-proxy-test/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput, Volo.Abp.Http.Client.Web.Tests",
+                  "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput",
+                  "typeSimple": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput",
+                  "typeSimple": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
+            },
+            "GetListAsyncByInput": {
+              "uniqueName": "GetListAsyncByInput",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/client-proxy-test",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput, Volo.Abp.Http.Client.Web.Tests",
+                  "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput",
+                  "typeSimple": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Value",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
+            },
+            "GetByQueryTypeAsyncByInput": {
+              "uniqueName": "GetByQueryTypeAsyncByInput",
+              "name": "GetByQueryTypeAsync",
+              "httpMethod": "POST",
+              "url": "api/client-proxy-test/by-query-type",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestQueryInput, Volo.Abp.Http.Client.Web.Tests",
+                  "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestQueryInput",
+                  "typeSimple": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyTestQueryInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Name",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Value",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
+            },
+            "UploadAsyncByFile": {
+              "uniqueName": "UploadAsyncByFile",
+              "name": "UploadAsync",
+              "httpMethod": "POST",
+              "url": "api/client-proxy-test/upload",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "file",
+                  "typeAsString": "Volo.Abp.Content.IRemoteStreamContent, Volo.Abp.Core",
+                  "type": "Volo.Abp.Content.IRemoteStreamContent",
+                  "typeSimple": "Volo.Abp.Content.IRemoteStreamContent",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "file",
+                  "name": "file",
+                  "jsonName": null,
+                  "type": "Volo.Abp.Content.IRemoteStreamContent",
+                  "typeSimple": "Volo.Abp.Content.IRemoteStreamContent",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "FormFile",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
+            },
+            "GetHiddenAsync": {
+              "uniqueName": "GetHiddenAsync",
+              "name": "GetHiddenAsync",
+              "httpMethod": "GET",
+              "url": "api/client-proxy-test/hidden",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
+            },
+            "GetDisabledAsync": {
+              "uniqueName": "GetDisabledAsync",
+              "name": "GetDisabledAsync",
+              "httpMethod": "GET",
+              "url": "api/client-proxy-test/disabled",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
+            },
+            "GetDisabledWithVerbAsync": {
+              "uniqueName": "GetDisabledWithVerbAsync",
+              "name": "GetDisabledWithVerbAsync",
+              "httpMethod": "GET",
+              "url": "api/client-proxy-test/disabled-with-verb",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyTestAppService"
+            }
+          }
+        },
+        "Volo.Abp.Http.Client.Web.Conventions.ClientProxyNoGroupNameController": {
+          "controllerName": "ClientProxyNoGroupName",
+          "controllerGroupName": "",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyNoGroupNameController",
+          "interfaces": [
+            {
+              "type": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyNoGroupNameAppService",
+              "name": "IClientProxyNoGroupNameAppService",
+              "methods": []
+            }
+          ],
+          "actions": {
+            "GetAsync": {
+              "uniqueName": "GetAsync",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/client-proxy-no-group-name",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyNoGroupNameAppService"
+            }
+          }
+        },
+        "Volo.Abp.Http.Client.Web.Conventions.ClientProxyDuplicatedController": {
+          "controllerName": "ClientProxyDuplicated",
+          "controllerGroupName": "ClientProxyDuplicated",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyDuplicatedController",
+          "interfaces": [
+            {
+              "type": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyDuplicatedAppService",
+              "name": "IClientProxyDuplicatedAppService",
+              "methods": []
+            }
+          ],
+          "actions": {
+            "GetAsync": {
+              "uniqueName": "GetAsync",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/client-proxy-duplicated-proxy",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyDuplicatedAppService"
+            }
+          }
+        },
+        "Volo.Abp.Http.Client.Web.Conventions.ClientProxyDisabledController": {
+          "controllerName": "ClientProxyDisabled",
+          "controllerGroupName": "ClientProxyDisabled",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyDisabledController",
+          "interfaces": [
+            {
+              "type": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyDisabledAppService",
+              "name": "IClientProxyDisabledAppService",
+              "methods": []
+            }
+          ],
+          "actions": {
+            "GetAsync": {
+              "uniqueName": "GetAsync",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/client-proxy-disabled",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyDisabledAppService"
+            }
+          }
+        },
+        "Volo.Abp.Http.Client.Web.Conventions.ClientProxyDisabledActionController": {
+          "controllerName": "ClientProxyDisabledAction",
+          "controllerGroupName": "ClientProxyDisabledAction",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyDisabledActionController",
+          "interfaces": [
+            {
+              "type": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyDisabledActionAppService",
+              "name": "IClientProxyDisabledActionAppService",
+              "methods": []
+            }
+          ],
+          "actions": {
+            "GetAsync": {
+              "uniqueName": "GetAsync",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/client-proxy-disabled-action",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyDisabledActionAppService"
+            }
+          }
+        },
+        "Volo.Abp.Http.Client.Web.Conventions.ClientProxyMetadataDisabledController": {
+          "controllerName": "ClientProxyMetadataDisabled",
+          "controllerGroupName": "ClientProxyMetadataDisabled",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyMetadataDisabledController",
+          "interfaces": [
+            {
+              "type": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyMetadataDisabledAppService",
+              "name": "IClientProxyMetadataDisabledAppService",
+              "methods": []
+            }
+          ],
+          "actions": {
+            "GetAsync": {
+              "uniqueName": "GetAsync",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/client-proxy-metadata-disabled",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyMetadataDisabledAppService"
+            }
+          }
+        },
+        "Volo.Abp.Http.Client.Web.Conventions.ClientProxyControllerRouteController": {
+          "controllerName": "ClientProxyControllerRoute",
+          "controllerGroupName": "ClientProxyControllerRoute",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Volo.Abp.Http.Client.Web.Conventions.ClientProxyControllerRouteController",
+          "interfaces": [
+            {
+              "type": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyControllerRouteAppService",
+              "name": "IClientProxyControllerRouteAppService",
+              "methods": []
+            }
+          ],
+          "actions": {
+            "GetAsync": {
+              "uniqueName": "GetAsync",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/client-proxy-controller-route-json",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.String",
+                "typeSimple": "string"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Http.Client.Web.Conventions.IClientProxyControllerRouteAppService"
+            }
+          }
+        }
+      }
+    }
+  },
+  "types": {}
+}

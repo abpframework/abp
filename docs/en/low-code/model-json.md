@@ -7,8 +7,6 @@
 
 # Model Descriptor Files
 
-> **Preview:** The Low-Code System is currently in preview. The descriptor format is stable enough for evaluation and source control, but fields may change before general availability.
-
 Low-code metadata is source-controlled as JSON descriptor files used by the Low-Code Designer and React runtime. Current generated projects keep descriptors as split files under `_Dynamic/model`; older projects may still contain an aggregate `_Dynamic/model.json` document. Use the [Low-Code Designer](designer.md) for normal editing. Use this page when you need to review, generate, merge, or source-control the JSON metadata directly.
 
 ## File Location

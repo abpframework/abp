@@ -11,6 +11,8 @@
     "UserLockedOutMessage": "Uporabniški račun je bil zaklenjen zaradi neveljavnih poskusov prijave. Počakajte nekaj časa in poskusite znova.",
     "InvalidUserNameOrPassword": "Napačno uporabniško ime ali geslo!",
     "LoginIsNotAllowed": "Ne smete se prijaviti! Vaš račun je neaktiven ali mora potrditi vaš e -poštni naslov/telefonsko številko.",
+    "ExternalLoginPasswordChangeRequired": "Ne smete se prijaviti! Vaše geslo je treba spremeniti, vendar to z zunanjo prijavo ni mogoče. Obrnite se na skrbnika.",
+    "RegisteredButLoginIsNotAllowed": "Vaš račun je bil ustvarjen, vendar se še ne smete prijaviti!",
     "SelfRegistrationDisabledMessage": "Možnost lastne registracije uporabnika je onemogočena za to aplikacijo. Kontaktirajte skrbnika aplikacije, da registrirate novega uporabnika.",
     "LocalLoginDisabledMessage": "Lokalna prijava za to aplikacijo je onemogočena.",
     "Login": "Prijava",

@@ -208,6 +208,125 @@ public class OpenIddictPasswordGrantPasswordChange_Integration_Tests : OpenIddic
             "ShouldChangePasswordOnNextLogin");
     }
 
+    [Fact]
+    public async Task Required_Password_Change_Should_Not_Be_Offered_To_Inactive_User()
+    {
+        await ConfigurePasswordChangeUserAsync(
+            twoFactorEnabled: false,
+            shouldChangePasswordOnNextLogin: true);
+        await UpdateUserAsync(async (userManager, user) =>
+        {
+            user.SetIsActive(false);
+            (await userManager.UpdateAsync(user)).CheckErrors();
+        });
+
+        var response = await RequestPasswordTokenAsync();
+
+        await AssertNotAllowedAsync(response, AbpOpenIddictErrors.AccountInactive);
+    }
+
+    [Fact]
+    public async Task Required_Password_Change_Should_Not_Be_Completed_By_Inactive_User()
+    {
+        await ConfigurePasswordChangeUserAsync(
+            twoFactorEnabled: false,
+            shouldChangePasswordOnNextLogin: true);
+        string changePasswordToken = null;
+        await UpdateUserAsync(async (userManager, user) =>
+        {
+            changePasswordToken = await userManager.GenerateUserTokenAsync(
+                user,
+                TokenOptions.DefaultProvider,
+                "ShouldChangePasswordOnNextLogin");
+            user.SetIsActive(false);
+            (await userManager.UpdateAsync(user)).CheckErrors();
+        });
+
+        var response = await RequestPasswordTokenAsync(new Dictionary<string, string>
+        {
+            ["NewPassword"] = NewPassword,
+            ["ChangePasswordToken"] = changePasswordToken
+        });
+
+        await AssertNotAllowedAsync(response, AbpOpenIddictErrors.AccountInactive);
+
+        var passwordState = await GetPasswordStateAsync();
+        passwordState.OldPasswordIsValid.ShouldBeTrue();
+        passwordState.NewPasswordIsValid.ShouldBeFalse();
+        passwordState.ShouldChangePasswordOnNextLogin.ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task Required_Password_Change_Should_Not_Be_Offered_To_Locked_Out_User()
+    {
+        await ConfigurePasswordChangeUserAsync(
+            twoFactorEnabled: false,
+            shouldChangePasswordOnNextLogin: true);
+        await UpdateUserAsync(async (userManager, user) =>
+        {
+            (await userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow.AddHours(1))).CheckErrors();
+        });
+
+        var response = await RequestPasswordTokenAsync();
+
+        await AssertNotAllowedAsync(response, AbpOpenIddictErrors.AccountLocked);
+    }
+
+    [Fact]
+    public async Task Required_Password_Change_Should_Not_Be_Offered_To_User_That_Requires_Confirmation()
+    {
+        var settingValueProvider = GetRequiredService<OpenIddictTestSettingValueProvider>();
+        settingValueProvider.Set(IdentitySettingNames.SignIn.RequireConfirmedEmail, true.ToString());
+
+        try
+        {
+            await ConfigurePasswordChangeUserAsync(
+                twoFactorEnabled: false,
+                shouldChangePasswordOnNextLogin: true);
+            await UpdateUserAsync(async (userManager, user) =>
+            {
+                user.SetEmailConfirmed(false);
+                (await userManager.UpdateAsync(user)).CheckErrors();
+            });
+
+            var response = await RequestPasswordTokenAsync();
+
+            await AssertNotAllowedAsync(response, "invalid_grant", AbpErrorDescriptionConsts.RequiresConfirmUser);
+        }
+        finally
+        {
+            settingValueProvider.Clear();
+        }
+    }
+
+    private Task UpdateUserAsync(Func<IdentityUserManager, Volo.Abp.Identity.IdentityUser, Task> action)
+    {
+        return WithUnitOfWorkAsync(async serviceProvider =>
+        {
+            var userManager = serviceProvider.GetRequiredService<IdentityUserManager>();
+            var user = await userManager.FindByNameAsync(OpenIddictPasswordGrantTestData.UserName);
+            await action(userManager, user);
+        });
+    }
+
+    private static async Task AssertNotAllowedAsync(
+        HttpResponseMessage response,
+        string expectedError,
+        string expectedErrorDescription = null)
+    {
+        response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+        using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        var root = document.RootElement;
+        root.GetProperty("error").GetString().ShouldBe(expectedError);
+        if (expectedErrorDescription != null)
+        {
+            root.GetProperty("error_description").GetString().ShouldBe(expectedErrorDescription);
+        }
+
+        root.TryGetProperty("access_token", out _).ShouldBeFalse();
+        root.TryGetProperty("changePasswordToken", out _).ShouldBeFalse();
+    }
+
     private static async Task<string> AssertPasswordChangeChallengeAsync(
         HttpResponseMessage response,
         string expectedErrorDescription)

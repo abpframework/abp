@@ -1,16 +1,14 @@
+@using Microsoft.AspNetCore.Components
 @implements IDisposable
 @inject IComponentBundleManager BundleManager
 @inject PersistentComponentState ApplicationState
+@inject NavigationManager NavigationManager
+@inject IComponentBundleUrlBuilder BundleUrlBuilder
 @if (ScriptFiles != null)
 {
     foreach (var file in ScriptFiles)
     {
-        var src = file;
-        if (!AppBasePath.IsNullOrWhiteSpace())
-        {
-            src = AppBasePath.EnsureEndsWith('/') + file.RemovePreFix("/");
-        }
-        <script src="@src"></script>
+        <script src="@file"></script>
     }
 }
 
@@ -39,16 +37,27 @@
             // We are in prerendering mode
             if (!BundleName.IsNullOrWhiteSpace())
             {
-                ScriptFiles = (await BundleManager.GetScriptBundleFilesAsync(BundleName!)).ToList();
+                var rawFiles = await BundleManager.GetScriptBundleFilesAsync(BundleName!);
+                ScriptFiles = await ResolveAsync(rawFiles);
             }
         }
         else
         {
             if (OperatingSystem.IsBrowser() && WebAssemblyScriptFiles != null)
             {
-                ScriptFiles = WebAssemblyScriptFiles;
+                ScriptFiles = await ResolveAsync(WebAssemblyScriptFiles);
             }
         }
+    }
+
+    private async Task<List<string>> ResolveAsync(IReadOnlyList<string> files)
+    {
+        var resolved = new List<string>(files.Count);
+        foreach (var file in files)
+        {
+            resolved.Add(await BundleUrlBuilder.BuildAsync(file, AppBasePath, NavigationManager.BaseUri));
+        }
+        return resolved;
     }
 
     private Task Callback()

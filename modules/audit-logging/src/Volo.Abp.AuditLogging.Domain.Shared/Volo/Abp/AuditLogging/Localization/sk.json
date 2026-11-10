@@ -113,6 +113,15 @@
     "AuditLogExportCompletedSubject": "Export protokolu auditu dokončený",
     "DownloadLinkExplanation": "Súbor si môžete stiahnuť pomocou odkazu nižšie do {0} (UTC)",
     "DownloadNow": "Stiahnuť teraz",
-    "TryAgainMessage": "Skúste to prosím znova. Ak problém pretrváva, kontaktujte podporu."
+    "TryAgainMessage": "Skúste to prosím znova. Ak problém pretrváva, kontaktujte podporu.",
+    "Permission:SettingManagement": "Správa nastavení",
+    "Action": "Akcia",
+    "NoActions": "Žiadne akcie",
+    "MinExecutionDuration": "Min. trvanie",
+    "MaxExecutionDuration": "Max. trvanie",
+    "NoDataAvailable": "Nie sú k dispozícii žiadne údaje",
+    "AuditLogExportFailedSubject": "Export protokolu auditu sa nepodaril",
+    "EntityChangeExportFailedSubject": "Export zmien entít sa nepodaril",
+    "FileNotFound": "Súbor sa nenašiel: {0}"
   }
 }

@@ -13,8 +13,6 @@ Expressions are not JavaScript. They cannot contain arbitrary code, SQL, network
 
 An expression can contain up to 4096 characters.
 
-> **Preview:** The language profile is preview functionality. The supported syntax and function set may change before general availability.
-
 ## Values and field references
 
 Use invariant numeric literals, quoted strings, Boolean values, and date constructors. Reference a property by name:

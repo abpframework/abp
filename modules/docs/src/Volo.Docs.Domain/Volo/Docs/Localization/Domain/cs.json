@@ -35,6 +35,7 @@
     "NewExplanation": "Vytvořeno v posledních dvou týdnech.",
     "UpdatedExplanation": "Aktualizováno v posledních dvou týdnech.",
     "Volo.Docs.Domain:010002": "ShortName {ShortName} už existuje.",
+    "Volo.Docs.Domain:010003": "Ups, vyžádaný dokument nebyl nalezen!",
     "Preview": "náhled",
     "Search": "Vyhledávání",
     "SearchResults": "Výsledky vyhledávání",

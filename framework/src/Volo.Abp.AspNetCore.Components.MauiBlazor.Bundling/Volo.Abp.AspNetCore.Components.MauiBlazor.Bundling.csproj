@@ -5,7 +5,7 @@
     <Import Project="..\..\..\common.props" />
 
     <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
+        <TargetFramework>net11.0</TargetFramework>
         <Nullable>enable</Nullable>
         <WarningsAsErrors>Nullable</WarningsAsErrors>
         <AssemblyName>Volo.Abp.AspNetCore.Components.MauiBlazor.Bundling</AssemblyName>
@@ -18,7 +18,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" ExcludeAssets="build" />
         <PackageReference Include="Microsoft.Maui.Controls"/>
     </ItemGroup>
 

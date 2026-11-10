@@ -3,7 +3,9 @@ using System.Collections.Specialized;
 using System.Threading.Tasks;
 using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using Volo.Abp.Identity;
 using Volo.Abp.Identity.Settings;
 using Xunit;
 
@@ -174,6 +176,122 @@ public class AbpResourceOwnerPasswordValidatorPasswordChange_Tests : AbpResource
         var retryContext = CreateContext();
         await ValidateAsync(retryContext);
         AssertPasswordChangeChallenge(retryContext, "ShouldChangePasswordOnNextLogin");
+    }
+
+    [Fact]
+    public async Task Required_Password_Change_Should_Not_Be_Offered_To_Inactive_User()
+    {
+        await CreateUserAsync(twoFactorEnabled: false, shouldChangePasswordOnNextLogin: true);
+        await UpdateUserAsync(async (userManager, user) =>
+        {
+            user.SetIsActive(false);
+            (await userManager.UpdateAsync(user)).CheckErrors();
+        });
+        var context = CreateContext();
+
+        await ValidateAsync(context);
+
+        AssertNotAllowed(
+            context,
+            "You are not allowed to login! Your account is inactive or needs to confirm your email/phone number.");
+    }
+
+    [Fact]
+    public async Task Required_Password_Change_Should_Not_Be_Completed_By_Inactive_User()
+    {
+        await CreateUserAsync(twoFactorEnabled: false, shouldChangePasswordOnNextLogin: true);
+        string changePasswordToken = null;
+        await UpdateUserAsync(async (userManager, user) =>
+        {
+            changePasswordToken = await userManager.GenerateUserTokenAsync(
+                user,
+                TokenOptions.DefaultProvider,
+                "ShouldChangePasswordOnNextLogin");
+            user.SetIsActive(false);
+            (await userManager.UpdateAsync(user)).CheckErrors();
+        });
+        var context = CreateContext(new NameValueCollection
+        {
+            ["NewPassword"] = NewPassword,
+            ["ChangePasswordToken"] = changePasswordToken
+        });
+
+        await ValidateAsync(context);
+
+        AssertNotAllowed(
+            context,
+            "You are not allowed to login! Your account is inactive or needs to confirm your email/phone number.");
+
+        var passwordState = await GetPasswordStateAsync();
+        passwordState.OldPasswordIsValid.ShouldBeTrue();
+        passwordState.NewPasswordIsValid.ShouldBeFalse();
+        passwordState.ShouldChangePasswordOnNextLogin.ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task Required_Password_Change_Should_Not_Be_Offered_To_Locked_Out_User()
+    {
+        await CreateUserAsync(twoFactorEnabled: false, shouldChangePasswordOnNextLogin: true);
+        await UpdateUserAsync(async (userManager, user) =>
+        {
+            (await userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow.AddHours(1))).CheckErrors();
+        });
+        var context = CreateContext();
+
+        await ValidateAsync(context);
+
+        AssertNotAllowed(
+            context,
+            "The user account has been locked out due to invalid login attempts. Please wait a while and try again.");
+    }
+
+    [Fact]
+    public async Task Required_Password_Change_Should_Not_Be_Offered_To_User_That_Requires_Confirmation()
+    {
+        var settingValueProvider = GetRequiredService<IdentityServerTestSettingValueProvider>();
+        settingValueProvider.Set(IdentitySettingNames.SignIn.RequireConfirmedEmail, true.ToString());
+
+        try
+        {
+            await CreateUserAsync(twoFactorEnabled: false, shouldChangePasswordOnNextLogin: true);
+            await UpdateUserAsync(async (userManager, user) =>
+            {
+                user.SetEmailConfirmed(false);
+                (await userManager.UpdateAsync(user)).CheckErrors();
+            });
+            var context = CreateContext();
+
+            await ValidateAsync(context);
+
+            AssertNotAllowed(
+                context,
+                "You are not allowed to login! Your account is inactive or needs to confirm your email/phone number.");
+        }
+        finally
+        {
+            settingValueProvider.Clear();
+        }
+    }
+
+    private Task UpdateUserAsync(Func<IdentityUserManager, Volo.Abp.Identity.IdentityUser, Task> action)
+    {
+        return WithUnitOfWorkAsync(async serviceProvider =>
+        {
+            var userManager = serviceProvider.GetRequiredService<IdentityUserManager>();
+            var user = await userManager.FindByNameAsync(UserName);
+            await action(userManager, user);
+        });
+    }
+
+    private static void AssertNotAllowed(
+        ResourceOwnerPasswordValidationContext context,
+        string expectedErrorDescription)
+    {
+        context.Result.IsError.ShouldBeTrue();
+        context.Result.Error.ShouldBe("invalid_grant");
+        context.Result.ErrorDescription.ShouldBe(expectedErrorDescription);
+        context.Result.Subject.ShouldBeNull();
+        (context.Result.CustomResponse?.ContainsKey("changePasswordToken") ?? false).ShouldBeFalse();
     }
 
     private static string AssertPasswordChangeChallenge(

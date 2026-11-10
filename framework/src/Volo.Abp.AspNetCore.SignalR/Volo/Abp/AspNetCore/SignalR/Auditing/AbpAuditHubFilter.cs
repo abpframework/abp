@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Auditing;
 using Volo.Abp.Auditing;
 using Volo.Abp.Uow;
 using Volo.Abp.Users;
@@ -17,7 +18,7 @@ public class AbpAuditHubFilter : IHubFilter
     public virtual async ValueTask<object?> InvokeMethodAsync(HubInvocationContext invocationContext, Func<HubInvocationContext, ValueTask<object?>> next)
     {
         var options = invocationContext.ServiceProvider.GetRequiredService<IOptions<AbpAuditingOptions>>().Value;
-        if (!options.IsEnabled)
+        if (!options.IsEnabled || IsIgnoredHub(invocationContext))
         {
             return await next(invocationContext);
         }
@@ -74,6 +75,13 @@ public class AbpAuditHubFilter : IHubFilter
 
             return result;
         }
+    }
+
+    protected virtual bool IsIgnoredHub(HubInvocationContext invocationContext)
+    {
+        var options = invocationContext.ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreAuditingOptions>>().Value;
+        var hubType = invocationContext.Hub.GetType();
+        return options.IgnoredHubTypes.Any(ignoredHubType => ignoredHubType.IsAssignableFrom(hubType));
     }
 
     private async Task<bool> ShouldWriteAuditLogAsync(AuditLogInfo auditLogInfo, IServiceProvider serviceProvider, bool hasError)

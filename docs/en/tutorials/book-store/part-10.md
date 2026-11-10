@@ -201,7 +201,7 @@ public class BookStoreDataSeederContributor
 
 The only change is that we set the `AuthorId` properties of the `Book` entities.
 
-> Delete existing books or delete the database before executing the `DbMigrator`. See the *Database & Data Migration* section above for more info.
+> Delete existing books and authors (or delete the database) before executing the `DbMigrator`. The new seeder creates the authors again, so it fails with `AuthorAlreadyExistsException` if the authors from the previous part still exist. See the *Database & Data Migration* section above for more info.
 
 {{if DB=="EF"}}
 
@@ -989,12 +989,17 @@ Added the Author dropdown as the first element in the form.
 Open the `/src/app/book/book.component.ts` and and change the content as shown below:
 
 ````js
-import { ListService, PagedResultDto } from '@abp/ng.core';
-import { Component, OnInit } from '@angular/core';
-import { BookService, BookDto, bookTypeOptions, AuthorLookupDto } from '@proxy/books';
+import { CoreModule, ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { BookService, BookDto, bookTypeOptions, AuthorLookupDto } from '../proxy/books';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
-import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared';
+import {
+  NgbDateNativeAdapter,
+  NgbDateAdapter,
+  NgbDatepickerModule,
+  NgbDropdownModule,
+} from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmationService, Confirmation, ThemeSharedModule } from '@abp/ng.theme.shared';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -1002,20 +1007,21 @@ import { map } from 'rxjs/operators';
   selector: 'app-book',
   templateUrl: './book.component.html',
   styleUrls: ['./book.component.scss'],
+  imports: [CoreModule, ThemeSharedModule, NgbDatepickerModule, NgbDropdownModule],
   providers: [ListService, { provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }],
 })
 export class BookComponent implements OnInit {
-  book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
+  book = signal({ items: [], totalCount: 0 } as PagedResultDto<BookDto>);
 
-  form: FormGroup;
+  form!: FormGroup;
 
-  selectedBook = {} as BookDto;
+  selectedBook = signal({} as BookDto);
 
   authors$: Observable<AuthorLookupDto[]>;
 
   bookTypes = bookTypeOptions;
 
-  isModalOpen = false;
+  isModalOpen = signal(false);
 
   public readonly list = inject(ListService);
   private readonly bookService = inject(BookService);
@@ -1023,41 +1029,43 @@ export class BookComponent implements OnInit {
   private readonly confirmation = inject(ConfirmationService);
 
   constructor() {
-    this.authors$ = bookService.getAuthorLookup().pipe(map((r) => r.items));
+    this.authors$ = this.bookService.getAuthorLookup().pipe(map((r) => r.items ?? []));
   }
 
   ngOnInit() {
-    const bookStreamCreator = (query) => this.bookService.getList(query);
+    const bookStreamCreator = (query: PagedAndSortedResultRequestDto) => this.bookService.getList(query);
 
     this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
-      this.book = response;
+      this.book.set(response);
     });
   }
 
   createBook() {
-    this.selectedBook = {} as BookDto;
+    this.selectedBook.set({} as BookDto);
     this.buildForm();
-    this.isModalOpen = true;
+    this.isModalOpen.set(true);
   }
 
   editBook(id: string) {
     this.bookService.get(id).subscribe((book) => {
-      this.selectedBook = book;
+      this.selectedBook.set(book);
       this.buildForm();
-      this.isModalOpen = true;
+      this.isModalOpen.set(true);
     });
   }
 
   buildForm() {
+    const selectedBook = this.selectedBook();
+
     this.form = this.fb.group({
-      authorId: [this.selectedBook.authorId || null, Validators.required],
-      name: [this.selectedBook.name || null, Validators.required],
-      type: [this.selectedBook.type || null, Validators.required],
+      authorId: [selectedBook.authorId || null, Validators.required],
+      name: [selectedBook.name || null, Validators.required],
+      type: [selectedBook.type || null, Validators.required],
       publishDate: [
-        this.selectedBook.publishDate ? new Date(this.selectedBook.publishDate) : null,
+        selectedBook.publishDate ? new Date(selectedBook.publishDate) : null,
         Validators.required,
       ],
-      price: [this.selectedBook.price || null, Validators.required],
+      price: [selectedBook.price || null, Validators.required],
     });
   }
 
@@ -1066,12 +1074,14 @@ export class BookComponent implements OnInit {
       return;
     }
 
-    const request = this.selectedBook.id
-      ? this.bookService.update(this.selectedBook.id, this.form.value)
+    const selectedBook = this.selectedBook();
+
+    const request = selectedBook.id
+      ? this.bookService.update(selectedBook.id, this.form.value)
       : this.bookService.create(this.form.value);
 
     request.subscribe(() => {
-      this.isModalOpen = false;
+      this.isModalOpen.set(false);
       this.form.reset();
       this.list.get();
     });
@@ -1089,8 +1099,8 @@ export class BookComponent implements OnInit {
 
 * Added imports for the `AuthorLookupDto`, `Observable` and `map`.
 * Added `authors$: Observable<AuthorLookupDto[]>;` field after the `selectedBook`.
-* Added `this.authors$ = bookService.getAuthorLookup().pipe(map((r) => r.items));` into the constructor.
-* Added ` authorId: [this.selectedBook.authorId || null, Validators.required],` into the `buildForm()` function.
+* Added `this.authors$ = this.bookService.getAuthorLookup().pipe(map((r) => r.items ?? []));` into the constructor.
+* Added ` authorId: [selectedBook.authorId || null, Validators.required],` into the `buildForm()` function.
 
 Open the `/src/app/book/book.component.html` and add the following form group just before the book name form group:
 
@@ -1159,6 +1169,12 @@ protected override async Task OnInitializedAsync()
 ````
 
 * It is essential to call the `base.OnInitializedAsync()` since `AbpCrudPageBase` has some initialization code to be executed.
+
+The code below throws a `UserFriendlyException`, which is defined in the `Volo.Abp` namespace. Add the following line to the top of the `Books.razor` file:
+
+````html
+@using Volo.Abp
+````
 
 {{if BlazorUI == "Blazorise"}}
 
@@ -1250,6 +1266,51 @@ The final `@code` block should be the following:
         DeletePolicyName = BookStorePermissions.Books.Delete;
     }
 
+    // MudDatePicker requires nullable DateTime, while CreateUpdateBookDto.PublishDate is non-nullable.
+    // Bind to a nullable wrapper and sync back to the DTO.
+    private DateTime? NewEntityPublishDate
+    {
+        get => NewEntity?.PublishDate;
+        set { if (NewEntity != null && value.HasValue) NewEntity.PublishDate = value.Value; }
+    }
+
+    private DateTime? EditingEntityPublishDate
+    {
+        get => EditingEntity?.PublishDate;
+        set { if (EditingEntity != null && value.HasValue) EditingEntity.PublishDate = value.Value; }
+    }
+
+    private MudDataGrid<BookDto> _booksDataGrid = default!;
+
+    protected override async Task OnCreatedEntityAsync()
+    {
+        await InvokeAsync(() => _booksDataGrid.ReloadServerData());
+        await CloseCreateDialogAsync();
+        Snackbar.Add(GetCreateMessage(), Severity.Success);
+    }
+
+    protected override async Task OnUpdatedEntityAsync()
+    {
+        await InvokeAsync(() => _booksDataGrid.ReloadServerData());
+        await CloseEditDialogAsync();
+        Snackbar.Add(GetUpdateMessage(), Severity.Success);
+    }
+
+    protected override async Task OnDeletedEntityAsync()
+    {
+        // Go back to the previous page if the deleted book was the only one on the current page
+        if (_booksDataGrid.CurrentPage > 0 && _booksDataGrid.ServerItems.Count() == 1)
+        {
+            await InvokeAsync(() => _booksDataGrid.NavigateTo(Page.Previous));
+        }
+        else
+        {
+            await InvokeAsync(() => _booksDataGrid.ReloadServerData());
+        }
+
+        Snackbar.Add(GetDeleteMessage(), Severity.Success);
+    }
+
     //GET AUTHORS ON INITIALIZATION
     protected override async Task OnInitializedAsync()
     {
@@ -1279,7 +1340,7 @@ Finally, add the following field definition into the *Create* modal/dialog, as t
 ````xml
 <Field>
     <FieldLabel>@L["Author"]</FieldLabel>
-    <Select TValue="Guid" @bind-SelectedValue="@NewEntity.AuthorId">
+    <Select TValue="Guid" @bind-Value="@NewEntity.AuthorId">
         @foreach (var author in authorList)
         {
             <SelectItem TValue="Guid" Value="@author.Id">
@@ -1324,7 +1385,7 @@ Add the following field definition into the *Edit* modal/dialog, as the first it
 ````xml
 <Field>
     <FieldLabel>@L["Author"]</FieldLabel>
-    <Select TValue="Guid" @bind-SelectedValue="@EditingEntity.AuthorId">
+    <Select TValue="Guid" @bind-Value="@EditingEntity.AuthorId">
         @foreach (var author in authorList)
         {
             <SelectItem TValue="Guid" Value="@author.Id">

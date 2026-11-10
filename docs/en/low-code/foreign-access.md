@@ -7,8 +7,6 @@
 
 # Foreign Access
 
-> **Preview:** Foreign access metadata is part of the preview Low-Code System. Relation behavior and designer options may change before general availability.
-
 Use the [Low-Code Designer](designer.md) to review relation metadata visually. This page explains the advanced configuration values that control how related dynamic entities can be reached from runtime pages.
 
 Foreign Access controls how related **dynamic entities** can be accessed through foreign key relationships. It determines whether users can view or manage related data directly from the **target entity's** UI.

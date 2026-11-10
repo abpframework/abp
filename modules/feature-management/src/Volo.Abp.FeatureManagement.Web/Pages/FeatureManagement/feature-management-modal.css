@@ -2,6 +2,17 @@
     padding-top: 0 !important;
 }
 
+/* The scroll area clips absolutely positioned dropdown lists, so keep them in the flow to make them scrollable. */
+.custom-scroll-content .custom-options-container {
+    position: relative !important;
+    z-index: auto;
+}
+
+/* Clip instead of hide so that scrollIntoView cannot scroll the box behind the custom scrollbar. */
+.custom-scroll-content .mCustomScrollBox {
+    overflow: clip;
+}
+
 .custom-scroll-content {
     max-height: 400px;
     overflow-y: auto;

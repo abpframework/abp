@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Middleware;
 using Volo.Abp.Auditing;
@@ -92,6 +93,17 @@ public class AbpAuditingMiddleware : AbpMiddlewareBase, ITransientDependency
                 }
             }
         }
+    }
+
+    protected async override Task<bool> ShouldSkipAsync(HttpContext context, RequestDelegate next)
+    {
+        var hubType = context.GetEndpoint()?.Metadata?.GetMetadata<HubMetadata>()?.HubType;
+        if (hubType != null && AspNetCoreAuditingOptions.IgnoredHubTypes.Any(ignoredHubType => ignoredHubType.IsAssignableFrom(hubType)))
+        {
+            return true;
+        }
+
+        return await base.ShouldSkipAsync(context, next);
     }
 
     private bool IsIgnoredUrl(HttpContext context)

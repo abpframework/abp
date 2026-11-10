@@ -22,6 +22,11 @@ $IsPrerelease = $(node publish-utils.js --prerelease --customVersion $Version) -
 
 if ($IsPrerelease) {
   $PacksPublishCommand = $PacksPublishCommand.Substring(0, $PacksPublishCommand.Length - 1) + " --tag next'"
+} else {
+  $MaintenanceTag = "$(node publish-utils.js --distTag $Registry --customVersion $Version)".Trim()
+  if ($MaintenanceTag) {
+    $PacksPublishCommand = $PacksPublishCommand.Substring(0, $PacksPublishCommand.Length - 1) + " --tag $MaintenanceTag'"
+  }
 }
 
 $commands = (

@@ -7,8 +7,6 @@
 
 # Add Low-Code to an Existing Solution
 
-> **Preview:** The Low-Code System is currently in preview. APIs, generated files, designer behavior, and React runtime details may change before general availability.
-
 This guide explains how to add the ABP Low-Code System to an existing solution instead of generating a new solution with Low-Code enabled from the beginning.
 
 Keep every ABP and Low-Code package aligned with the ABP version used by the existing solution. When an example contains a version placeholder, replace it with that version instead of copying a version from another solution.

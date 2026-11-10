@@ -55,6 +55,12 @@ public interface IRegularTestController
 
     Task<Car> GetObjectAndIdWithQueryAsync(int id, Car bodyValue);
 
+    Task<string> GetWithStringPathAsync(string name);
+
+    Task<string> GetWithCatchAllPathAsync(string path);
+
+    Task<string> GetWithSingleStarCatchAllPathAsync(string path);
+
     Task<string> PutValueWithBodyAsync(string bodyValue);
 
     Task<string> PatchValueWithBodyAsync(string bodyValue);

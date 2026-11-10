@@ -7,8 +7,6 @@
 
 # React Runtime
 
-> **Preview:** The React low-code runtime is part of the preview Low-Code System. Runtime APIs, generated routes, metadata contracts, and UI behavior may change before general availability.
-
 The React runtime renders low-code pages from backend metadata. Generated low-code React applications include the required package and wiring.
 
 ```json

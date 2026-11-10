@@ -334,29 +334,31 @@ It's time to create something visible and usable! There are some tools that we w
 Run the following command line to create a new component, named `BookComponent` in the root folder of the angular application:
 
 ```bash
-yarn ng generate component book
+yarn ng generate component book --type=component
 ```
+
+> The `--type=component` option keeps the `.component` suffix in the file and class names (`book.component.ts`, `BookComponent`). Newer Angular CLI versions omit this suffix by default, while this tutorial uses it.
 
 This command should produce the following output:
 
 ````bash
-> yarn ng generate component book
+> yarn ng generate component book --type=component
 
 yarn run v1.22.22
-$ ng generate component book
-CREATE src/app/book/book.component.spec.ts (537 bytes)
-CREATE src/app/book/book.component.ts (189 bytes)
+$ ng generate component book --type=component
 CREATE src/app/book/book.component.scss (0 bytes)
-CREATE src/app/book/book.component.html (20 bytes)
+CREATE src/app/book/book.component.spec.ts (581 bytes)
+CREATE src/app/book/book.component.ts (208 bytes)
+CREATE src/app/book/book.component.html (19 bytes)
 Done in 3.88s.
 ````
 
 ### Routing
 
-The generated code places the new route definition to the `src/app/app.routes.ts` file as shown below:
+Open the `src/app/app.routes.ts` file and add a route definition for the new component as shown below:
 
 ````js
-export const routes: Routes = [
+export const APP_ROUTES: Routes = [
   // other route definitions...
   { path : 'books', loadComponent: () => import('./book/book.component').then(c => c.BookComponent) },
 ];
@@ -425,27 +427,29 @@ This command will create the following files under the `/src/app/proxy/books` fo
 Open the `/src/app/book/book.component.ts` file and replace the content as below:
 
 ```js
-import { ListService, PagedResultDto } from '@abp/ng.core';
-import { Component, OnInit, inject } from '@angular/core';
-import { BookService, BookDto } from '@proxy/books';
+import { CoreModule, ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { ThemeSharedModule } from '@abp/ng.theme.shared';
+import { BookService, BookDto } from '../proxy/books';
 
 @Component({
   selector: 'app-book',
   templateUrl: './book.component.html',
   styleUrls: ['./book.component.scss'],
+  imports: [CoreModule, ThemeSharedModule],
   providers: [ListService],
 })
 export class BookComponent implements OnInit {
-  book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
+  book = signal({ items: [], totalCount: 0 } as PagedResultDto<BookDto>);
 
   public readonly list = inject(ListService);
   private readonly bookService = inject(BookService);
 
   ngOnInit() {
-    const bookStreamCreator = (query) => this.bookService.getList(query);
+    const bookStreamCreator = (query: PagedAndSortedResultRequestDto) => this.bookService.getList(query);
 
     this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
-      this.book = response;
+      this.book.set(response);
     });
   }
 }
@@ -453,6 +457,8 @@ export class BookComponent implements OnInit {
 
 * We imported and injected the generated `BookService`.
 * We are using the [ListService](../../framework/ui/angular/list-service.md), a utility service from the ABP which provides easy pagination, sorting and searching.
+* `BookComponent` is a standalone component, so the template dependencies are added to the `imports` array. `CoreModule` provides the `abpLocalization` pipe and the common Angular pipes (like `date` and `currency`), and `ThemeSharedModule` provides the `ngx-datatable` component and the ABP directives used with it.
+* `book` is a [signal](https://angular.dev/guide/signals). Starting with Angular 22, components use the `OnPush` change detection strategy by default, so the view is not refreshed when a plain property is changed inside a `subscribe` callback. Updating a signal refreshes the view.
 
 Open the `/src/app/book/book.component.html` and replace the content as shown below:
 
@@ -469,7 +475,7 @@ Open the `/src/app/book/book.component.html` and replace the content as shown be
     </div>
   </div>
   <div class="card-body">
-    <ngx-datatable [rows]="book.items" [count]="book.totalCount" [list]="list" default>
+    <ngx-datatable [rows]="book().items" [count]="book().totalCount" [list]="list" default>
       <ngx-datatable-column [name]="'::Name' | abpLocalization" prop="name" />
       <ngx-datatable-column [name]="'::Type' | abpLocalization" prop="type">
         <ng-template let-row="row" ngx-datatable-cell-template>
@@ -584,14 +590,14 @@ Open the `Books.razor` and replace the content as the following:
                                 Field="@nameof(BookDto.Type)"
                                 Caption="@L["Type"]">
                     <DisplayTemplate>
-                        @L[$"Enum:BookType.{context.Type}"]
+                        @L[$"Enum:BookType.{(int)context.Item.Type}"]
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="BookDto"
                                 Field="@nameof(BookDto.PublishDate)"
                                 Caption="@L["PublishDate"]">
                     <DisplayTemplate>
-                        @context.PublishDate.ToShortDateString()
+                        @context.Item.PublishDate.ToShortDateString()
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="BookDto"
@@ -602,7 +608,7 @@ Open the `Books.razor` and replace the content as the following:
                                 Field="@nameof(BookDto.CreationTime)"
                                 Caption="@L["CreationTime"]">
                     <DisplayTemplate>
-                        @context.CreationTime.ToLongDateString()
+                        @context.Item.CreationTime.ToLongDateString()
                     </DisplayTemplate>
                 </DataGridColumn>
             </DataGridColumns>
@@ -651,9 +657,11 @@ Open the `Books.razor` and replace the content as the following:
         </CardHeaderContent>
     </MudCardHeader>
     <MudCardContent>
-        <MudDataGrid T="BookDto"
+        <MudDataGrid @ref="_booksDataGrid"
+                     T="BookDto"
                      ServerData="OnDataGridReadAsync"
-                     RowsPerPage="@PageSize">
+                     RowsPerPage="@PageSize"
+                     SortMode="SortMode.None">
             <Columns>
                 <PropertyColumn Property="x => x.Name"
                                 Title="@L["Name"]" />
@@ -678,12 +686,17 @@ Open the `Books.razor` and replace the content as the following:
                     </CellTemplate>
                 </PropertyColumn>
             </Columns>
+            <PagerContent>
+                <MudDataGridPager T="BookDto" />
+            </PagerContent>
         </MudDataGrid>
     </MudCardContent>
 </MudCard>
 
 @code
 {
+    private MudDataGrid<BookDto> _booksDataGrid = default!;
+
     public Books() // Constructor
     {
         LocalizationResource = typeof(BookStoreResource);
@@ -697,6 +710,7 @@ Open the `Books.razor` and replace the content as the following:
 * `Entities`, `TotalCount`, `PageSize`, `OnDataGridReadAsync` are defined in the base class.
 * `LocalizationResource` is set to the `BookStoreResource` to localize the texts.
 * This page uses the standard MudBlazor `MudDataGrid` with `<PropertyColumn>` definitions. ABP also ships an `AbpMudExtensibleDataGrid` that integrates with the [data table column extension system](../../framework/ui/blazor/data-table-column-extensions.md) when you need to extend module pages.
+* `AbpMudCrudPageBase` uses its own `AbpMudExtensibleDataGrid` to reload the data and to resolve the sort columns. Since this page uses the standard `MudDataGrid`, it keeps a reference to the grid (`_booksDataGrid`) to reload it after the create, update and delete operations in the next part, and disables sorting with `SortMode.None`.
 
 While the code above is pretty easy to understand, you can check the MudBlazor [Card](https://mudblazor.com/components/card) and [DataGrid](https://mudblazor.com/components/datagrid) documents to understand them better.
 
@@ -712,6 +726,14 @@ You can run the application! The final UI of this part is shown below:
 
 ![blazor-bookstore-book-list](images/blazor-bookstore-book-list-2.png)
 
+{{if BlazorUI == "MudBlazor"}}
+
+This is a fully working, server side paged and localized table of books.
+
+{{else}}
+
 This is a fully working, server side paged, sorted and localized table of books.
+
+{{end}}
 
 {{end # UI }}

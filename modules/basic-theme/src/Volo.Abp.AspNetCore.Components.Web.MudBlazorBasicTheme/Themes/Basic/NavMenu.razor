@@ -5,7 +5,7 @@
         {
             if (menuItem.Items.IsNullOrEmpty())
             {
-                <MudNavLink Href="@menuItem.Url" Match="@(menuItem.Url != null ? NavLinkMatch.All : NavLinkMatch.Prefix)">
+                <MudNavLink Href="@MenuItemUrlHelper.ToBaseRelativeUrl(menuItem.Url)" Match="@(menuItem.Url != null ? NavLinkMatch.All : NavLinkMatch.Prefix)">
                     <MudIcon Icon="@menuItem.Icon" Size="Size.Small" />
                     <MudText Class="ms-1" Inline="true">@menuItem.DisplayName</MudText>
                 </MudNavLink>

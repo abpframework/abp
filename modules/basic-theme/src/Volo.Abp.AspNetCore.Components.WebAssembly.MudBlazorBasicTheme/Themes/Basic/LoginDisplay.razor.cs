@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.JSInterop;
+using Volo.Abp.AspNetCore.Components.Web;
 using Volo.Abp.AspNetCore.Components.Web.Security;
 using Volo.Abp.UI.Navigation;
 
@@ -47,9 +48,11 @@ public partial class LoginDisplay : IDisposable
 
     private async Task NavigateToAsync(string uri, string target = null)
     {
+        uri = MenuItemUrlHelper.ToBaseRelativeUrl(uri);
+
         if (target == "_blank")
         {
-            await JsRuntime.InvokeVoidAsync("open", uri, target);
+            await JsRuntime.InvokeVoidAsync("open", Navigation.ToAbsoluteUri(uri).ToString(), target);
         }
         else
         {

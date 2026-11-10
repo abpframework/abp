@@ -17,7 +17,7 @@ else
             <ChildContent>
                 @if (MenuItem.Url != null)
                 {
-                    var url = MenuItem.Url == null ? "#" : MenuItem.Url.TrimStart('/', '~');
+                    var url = MenuItemUrlHelper.ToBaseRelativeUrl(MenuItem.Url) ?? "#";
                     <a class="text-white text-decoration-none" href="@url" target="@MenuItem.Target">
                         @if (MenuItem.Icon != null && MenuItem.Icon.StartsWith("fa"))
                         {
@@ -50,7 +50,7 @@ else
                 }
                 else
                 {
-                    var itemUrl = item.Url == null ? "#" : item.Url.TrimStart('/', '~');
+                    var itemUrl = MenuItemUrlHelper.ToBaseRelativeUrl(item.Url) ?? "#";
                     <a class="text-black text-decoration-none" href="@itemUrl">
                         @if (item.Icon != null)
                         {

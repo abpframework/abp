@@ -7,8 +7,6 @@
 
 # Interceptors
 
-> **Preview:** Interceptors and their JavaScript context are preview extension points. Script context members, validation behavior, and lifecycle hooks may change before general availability.
-
 Use designer actions and descriptor metadata for standard low-code behavior first. Interceptors are an advanced extension point for adding JavaScript lifecycle logic when the generated CRUD flow needs validation, transformation, or replacement behavior.
 
 Interceptors allow you to run custom JavaScript code before, after, or instead of Create, Update, and Delete operations on dynamic entities.
@@ -207,9 +205,7 @@ The order applies to both `Pre` and `Post` interceptors. Because the page interc
 
 A `Replace` interceptor of the page runs instead of the entity's `Replace` interceptor. `entityExecutionOrder` only affects `Pre` and `Post` interceptors.
 
-API resource interceptors of `Create`, `Update`, and `Delete` are combined with the entity interceptor the same way. Their default order is `apiResourceFirst`; `pageFirst` is refused on an API resource, and `apiResourceFirst` on a page.
-
-> Earlier versions ran page and API resource interceptors after the entity interceptor by default. An interceptor saved without `entityExecutionOrder` now runs first; set `entityFirst` on the interceptors that must keep the old order.
+> Earlier versions ran page interceptors after the entity interceptor by default. An interceptor saved without `entityExecutionOrder` now runs first; set `entityFirst` on the interceptors that must keep the old order.
 
 ```json
 {

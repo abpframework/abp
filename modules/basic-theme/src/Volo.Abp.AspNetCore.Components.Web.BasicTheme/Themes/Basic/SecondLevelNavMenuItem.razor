@@ -31,7 +31,7 @@ else
                 }
                 else
                 {
-                    var itemUrl = item.Url == null ? "#" : item.Url.TrimStart('/', '~');
+                    var itemUrl = MenuItemUrlHelper.ToBaseRelativeUrl(item.Url) ?? "#";
                     <a class="text-black text-decoration-none" href="@itemUrl">
                         @if (item.Icon != null)
                         {

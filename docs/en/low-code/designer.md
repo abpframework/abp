@@ -7,8 +7,6 @@
 
 # Low-Code Designer
 
-> **Preview:** The Low-Code Designer is part of the preview Low-Code System. Designer screens, metadata fields, and validation rules may change before general availability.
-
 The Low-Code Designer is available in ABP Admin Console. It is the main UI for building and maintaining low-code descriptor metadata.
 
 ```text

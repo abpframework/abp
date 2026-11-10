@@ -35,6 +35,7 @@
     "NewExplanation": "Được tạo trong hai tuần qua.",
     "UpdatedExplanation": "Cập nhật trong hai tuần qua.",
     "Volo.Docs.Domain:010002": "Tên miền ngắn {ShortName} đã tồn tại.",
+    "Volo.Docs.Domain:010003": "Rất tiếc, tài liệu được yêu cầu không tìm thấy!",
     "Preview": "xem trước",
     "Search": "Tìm kiếm",
     "SearchResults": "kết quả tìm kiếm",

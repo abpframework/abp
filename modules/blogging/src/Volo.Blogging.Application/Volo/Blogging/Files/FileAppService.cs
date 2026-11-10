@@ -5,6 +5,7 @@ using System.IO;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using SkiaSharp;
 using Volo.Abp;
 using Volo.Abp.Authorization;
 using Volo.Abp.BlobStoring;
@@ -39,7 +40,7 @@ namespace Volo.Blogging.Files
             ValidateFileName(name);
 
             var fileStream = await BlobContainer.GetAsync(name);
-            return new RemoteStreamContent(fileStream, name, GetByExtension(Path.GetExtension(name)), disposeStream: true);
+            return new RemoteStreamContent(fileStream, name, GetContentType(Path.GetExtension(name)), disposeStream: true);
         }
 
         protected virtual void ValidateFileName(string name)
@@ -53,7 +54,7 @@ namespace Volo.Blogging.Files
             }
         }
 
-        private static string GetByExtension(string extension)
+        protected virtual string GetContentType(string extension)
         {
             extension = extension.RemovePreFix(".").ToLowerInvariant();
 
@@ -66,12 +67,23 @@ namespace Volo.Blogging.Files
                 case "jpg":
                 case "jpeg":
                     return "image/jpeg";
+                case "bmp":
+                    return "image/bmp";
+                case "webp":
+                    return "image/webp";
 
                 //TODO: Add other extensions too..
 
                 default:
                     return "application/octet-stream";
             }
+        }
+
+        protected virtual string GetExtension(SKEncodedImageFormat imageFormat)
+        {
+            return imageFormat == SKEncodedImageFormat.Jpeg
+                ? ".jpg"
+                : "." + imageFormat.ToString().ToLowerInvariant();
         }
 
         public virtual async Task<FileUploadOutputDto> CreateAsync(FileUploadInputDto input)
@@ -93,18 +105,19 @@ namespace Volo.Blogging.Files
 
             var position = input.File.GetStream().Position;
 
-            if (!ImageFormatHelper.IsValidImage(input.File.GetStream(), FileUploadConsts.AllowedImageUploadFormats))
+            var imageFormat = ImageFormatHelper.GetValidImageFormat(input.File.GetStream(), FileUploadConsts.AllowedImageUploadFormats);
+            if (imageFormat == null)
             {
                 throw new UserFriendlyException("Invalid image format!");
             }
 
-            // IsValidImage may change the position of the stream
+            // GetValidImageFormat may change the position of the stream
             if (input.File.GetStream().CanSeek)
             {
                 input.File.GetStream().Position = position;
             }
 
-            var uniqueFileName = GenerateUniqueFileName(Path.GetExtension(input.Name));
+            var uniqueFileName = GenerateUniqueFileName(GetExtension(imageFormat.Value));
             ValidateFileName(uniqueFileName);
 
             await BlobContainer.SaveAsync(uniqueFileName, input.File.GetStream());

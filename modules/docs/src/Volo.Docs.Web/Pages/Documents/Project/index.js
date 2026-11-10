@@ -31,6 +31,7 @@ var doc = doc || {};
                 
                 var dataKeywords =  node.keywords ? `data-keywords="${node.keywords}"` : "";
                 $li.append(`<span class="plus-icon"> <i class="fa fa-${node.hasChildItems ? 'chevron-right' : node.path === "javascript:;" ? 'has-link' : 'no-link'}"></i></span><a href="${node.path}" ${dataKeywords} class="${textCss}">${node.text}</a>`)
+                $li.children("a").attr("title", node.text);
 
                 if(node.isLazyExpandable){
                     $li.addClass("lazy-expand");

@@ -84,6 +84,15 @@
     "TenantId": "Mandanten-ID",
     "DownloadLinkExplanation": "Sie können die Datei über den Link unten bis {0} (UTC) herunterladen",
     "DownloadNow": "Jetzt herunterladen",
-    "TryAgainMessage": "Bitte versuchen Sie es erneut. Wenn das Problem weiterhin besteht, wenden Sie sich bitte an den Support."
+    "TryAgainMessage": "Bitte versuchen Sie es erneut. Wenn das Problem weiterhin besteht, wenden Sie sich bitte an den Support.",
+    "Permission:SettingManagement": "Einstellungsverwaltung",
+    "Action": "Aktion",
+    "NoActions": "Keine Aktionen",
+    "MinExecutionDuration": "Min. Dauer",
+    "MaxExecutionDuration": "Max. Dauer",
+    "NoDataAvailable": "Keine Daten verfügbar",
+    "AuditLogExportFailedSubject": "Audit-Log-Export fehlgeschlagen",
+    "EntityChangeExportFailedSubject": "Entity-Änderungsexport fehlgeschlagen",
+    "FileNotFound": "Datei nicht gefunden: {0}"
   }
 }

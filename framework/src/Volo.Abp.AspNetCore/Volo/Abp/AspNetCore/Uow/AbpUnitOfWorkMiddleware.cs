@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Endpoints;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Middleware;
 using Volo.Abp.DependencyInjection;
@@ -90,6 +91,13 @@ public class AbpUnitOfWorkMiddleware : AbpMiddlewareBase, ITransientDependency
         // A second operation started on this context before a previous operation completed.
         // This is usually caused by different threads using the same instance of DbContext.
         if (context.GetEndpoint()?.Metadata?.GetMetadata<RootComponentMetadata>() != null)
+        {
+            return true;
+        }
+
+        // A hub connection request lives as long as the connection. A unit of work reserved for it would be
+        // shared by all the hub method calls of the connection and can not be completed when the client disconnects.
+        if (context.GetEndpoint()?.Metadata?.GetMetadata<HubMetadata>() != null)
         {
             return true;
         }

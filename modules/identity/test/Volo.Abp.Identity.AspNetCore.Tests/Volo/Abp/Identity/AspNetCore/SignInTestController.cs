@@ -54,6 +54,14 @@ public class SignInTestController : AbpController
     {
         var identity = new ClaimsIdentity(IdentityConstants.TwoFactorUserIdScheme);
         identity.AddClaim(new Claim(ClaimTypes.Name, userId));
+
+        // SignInManager validates the security stamp of the two-factor cookie when reading it back.
+        var user = await HttpContext.RequestServices.GetRequiredService<IdentityUserManager>().FindSharedUserByIdAsync(userId);
+        if (user != null)
+        {
+            identity.AddClaim(new Claim(_signInManager.Options.ClaimsIdentity.SecurityStampClaimType, user.SecurityStamp));
+        }
+
         await HttpContext.SignInAsync(IdentityConstants.TwoFactorUserIdScheme, new ClaimsPrincipal(identity));
         return Content("OK");
     }

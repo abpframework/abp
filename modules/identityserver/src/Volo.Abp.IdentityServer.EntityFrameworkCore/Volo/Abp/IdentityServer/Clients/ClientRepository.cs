@@ -23,7 +23,7 @@ public class ClientRepository : EfCoreRepository<IIdentityServerDbContext, Clien
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .IncludeDetails(includeDetails)
             .OrderBy(x => x.ClientId)
             .FirstOrDefaultAsync(x => x.ClientId == clientId, GetCancellationToken(cancellationToken));
@@ -33,7 +33,7 @@ public class ClientRepository : EfCoreRepository<IIdentityServerDbContext, Clien
         string sorting, int skipCount, int maxResultCount, string filter, bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .IncludeDetails(includeDetails)
             .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter))
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(Client.ClientName) : sorting)
@@ -43,7 +43,7 @@ public class ClientRepository : EfCoreRepository<IIdentityServerDbContext, Clien
 
     public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
+        return await (await GetQueryableAsync())
             .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter))
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
@@ -58,7 +58,7 @@ public class ClientRepository : EfCoreRepository<IIdentityServerDbContext, Clien
 
     public virtual async Task<bool> CheckClientIdExistAsync(string clientId, Guid? expectedId = null, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync()).AnyAsync(c => c.Id != expectedId && c.ClientId == clientId, GetCancellationToken(cancellationToken));
+        return await (await GetQueryableAsync()).AnyAsync(c => c.Id != expectedId && c.ClientId == clientId, GetCancellationToken(cancellationToken));
     }
 
     public async override Task DeleteAsync(Guid id, bool autoSave = false, CancellationToken cancellationToken = default)

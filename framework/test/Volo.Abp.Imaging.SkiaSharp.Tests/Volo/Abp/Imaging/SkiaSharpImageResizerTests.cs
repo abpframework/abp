@@ -189,4 +189,39 @@ public class SkiaSharpImageResizerTests : AbpImagingSkiaSharpTestBase
         (decoded.Width == 120 || decoded.Height == 80).ShouldBeTrue();
         resizedImage.Result.Dispose();
     }
+
+    [Theory]
+    [InlineData(1, 100, 50, "RGBY")]
+    [InlineData(2, 100, 50, "GRYB")]
+    [InlineData(3, 100, 50, "YBGR")]
+    [InlineData(4, 100, 50, "BYRG")]
+    [InlineData(5, 50, 100, "RBGY")]
+    [InlineData(6, 50, 100, "BRYG")]
+    [InlineData(7, 50, 100, "YGBR")]
+    [InlineData(8, 50, 100, "GYRB")]
+    public async Task Should_Apply_Exif_Orientation(ushort orientation, int expectedWidth, int expectedHeight, string expectedQuadrants)
+    {
+        await using var jpegImage = SkiaSharpTestImageHelper.CreateQuadrantJpegWithExifOrientation(orientation);
+        var resizedImage = await ImageResizer.ResizeAsync(jpegImage, new ImageResizeArgs(100, 100, ImageResizeMode.Max));
+
+        resizedImage.State.ShouldBe(ImageProcessState.Done);
+        using var decoded = SKBitmap.Decode(resizedImage.Result);
+        decoded.Width.ShouldBe(expectedWidth);
+        decoded.Height.ShouldBe(expectedHeight);
+        SkiaSharpTestImageHelper.GetQuadrantColors(decoded).ShouldBe(expectedQuadrants);
+        resizedImage.Result.Dispose();
+    }
+
+    [Fact]
+    public async Task Should_Apply_Resize_Box_To_Upright_Image()
+    {
+        await using var jpegImage = SkiaSharpTestImageHelper.CreateQuadrantJpegWithExifOrientation(6);
+        var resizedImage = await ImageResizer.ResizeAsync(jpegImage, new ImageResizeArgs(100, 50, ImageResizeMode.Max));
+
+        resizedImage.State.ShouldBe(ImageProcessState.Done);
+        using var decoded = SKBitmap.Decode(resizedImage.Result);
+        decoded.Width.ShouldBe(25);
+        decoded.Height.ShouldBe(50);
+        resizedImage.Result.Dispose();
+    }
 }

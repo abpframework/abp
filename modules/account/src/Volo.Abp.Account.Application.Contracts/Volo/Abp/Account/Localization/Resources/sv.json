@@ -11,6 +11,8 @@
     "UserLockedOutMessage": "Användarkontot har låsts på grund av ogiltiga inloggningsförsök. Vänligen vänta ett tag och försök igen.",
     "InvalidUserNameOrPassword": "Ogiltigt användarnamn eller lösenord!",
     "LoginIsNotAllowed": "Du kan inte logga in! Ditt konto är inaktivt eller så behöver du bekräfta din e-postadress eller ditt telefonnummer.",
+    "ExternalLoginPasswordChangeRequired": "Du kan inte logga in! Ditt lösenord måste ändras, men det är inte möjligt med en extern inloggning. Kontakta din administratör.",
+    "RegisteredButLoginIsNotAllowed": "Ditt konto har skapats, men du kan inte logga in ännu!",
     "SelfRegistrationDisabledMessage": "Självregistrering är inaktiverat för denna applikation. Vänligen kontakta applikationsadministratören för att registrera en ny användare.",
     "LocalLoginDisabledMessage": "Lokal inloggning är inaktiverad för denna applikation.",
     "Login": "Logga in",

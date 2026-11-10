@@ -111,7 +111,9 @@ Configure<AbpAspNetCoreAuditingOptions>(options =>
 });
 ````
 
-`IgnoredUrls` is the only option. It is a list of ignored URLs prefixes. In the preceding example, all URLs starting with `/products` will be ignored for audit logging.
+`IgnoredUrls` is a list of ignored URLs prefixes. In the preceding example, all URLs starting with `/products` will be ignored for audit logging.
+
+`IgnoredHubTypes` is a list of ignored [SignalR](../real-time/signalr.md) hub types. The audited services called by these hubs are still audit logged.
 
 ## AbpAspNetCoreAuditingUrlOptions
 
@@ -184,8 +186,6 @@ The action is still audit logged and the parameter name is still written, but it
 ### Enable/Disable for Application Services & Methods
 
 [Application service](../architecture/domain-driven-design/application-services.md) method calls also included into the audit log by default. You can use the `[DisableAuditing]` in service or method level.
-
-> **Blazor Server limitation (Entity history):** In `Blazor Server` applications, entity change history is currently not guaranteed to be complete for every UI interaction. Blazor Server uses SignalR-based event handling, and under some flows the audit scope/action tracking may not align with `DbContext.SaveChanges`, which can cause missing or partial entity change records. This is a known platform-level limitation and not a regular configuration issue. See [#11682](https://github.com/abpframework/abp/issues/11682) for related discussions.
 
 #### Enable/Disable for Other Services
 

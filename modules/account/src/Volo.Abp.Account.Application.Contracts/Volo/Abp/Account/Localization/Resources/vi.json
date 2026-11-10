@@ -11,6 +11,8 @@
     "UserLockedOutMessage": "Tài khoản người dùng đã bị khóa do các nỗ lực đăng nhập không hợp lệ. Xin vui lòng chờ một lúc và thử lại.",
     "InvalidUserNameOrPassword": "Sai tên tài khoản hoặc mật khẩu!",
     "LoginIsNotAllowed": "Bạn không được phép đăng nhập! Tài khoản của bạn không hoạt động hoặc cần xác nhận email/số điện thoại của bạn.",
+    "ExternalLoginPasswordChangeRequired": "Bạn không được phép đăng nhập! Mật khẩu của bạn phải được thay đổi, nhưng không thể thực hiện việc này với đăng nhập bên ngoài. Vui lòng liên hệ với quản trị viên của bạn.",
+    "RegisteredButLoginIsNotAllowed": "Tài khoản của bạn đã được tạo, nhưng bạn chưa được phép đăng nhập!",
     "SelfRegistrationDisabledMessage": "Tự đăng ký người dùng bị vô hiệu hóa cho ứng dụng này. Liên hệ với quản trị viên ứng dụng để đăng ký người dùng mới.",
     "LocalLoginDisabledMessage": "Đăng nhập cục bộ bị vô hiệu hóa cho ứng dụng này.",
     "Login": "Đăng nhập",

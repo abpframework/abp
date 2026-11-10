@@ -35,6 +35,7 @@
     "NewExplanation": "最近两周创建。",
     "UpdatedExplanation": "最近两周更新。",
     "Volo.Docs.Domain:010002": "简称 {ShortName} 已经存在。",
+    "Volo.Docs.Domain:010003": "哎呀，没有找到所需的文档！",
     "Preview": "预览",
     "Search": "搜索",
     "SearchResults": "搜索结果",

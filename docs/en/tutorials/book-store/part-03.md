@@ -583,40 +583,42 @@ In this section, you will learn how to create a new modal dialog form to create 
 Open `/src/app/book/book.component.ts` and replace the content as below:
 
 ```js
-import { ListService, PagedResultDto } from '@abp/ng.core';
-import { Component, OnInit, inject } from '@angular/core';
-import { BookService, BookDto } from '@proxy/books';
+import { CoreModule, ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { ThemeSharedModule } from '@abp/ng.theme.shared';
+import { BookService, BookDto } from '../proxy/books';
 
 @Component({
   selector: 'app-book',
   templateUrl: './book.component.html',
   styleUrls: ['./book.component.scss'],
+  imports: [CoreModule, ThemeSharedModule],
   providers: [ListService],
 })
 export class BookComponent implements OnInit {
-  book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
+  book = signal({ items: [], totalCount: 0 } as PagedResultDto<BookDto>);
 
-  isModalOpen = false;
+  isModalOpen = signal(false);
 
   public readonly list = inject(ListService);
   private readonly bookService = inject(BookService);
 
   ngOnInit() {
-    const bookStreamCreator = (query) => this.bookService.getList(query);
+    const bookStreamCreator = (query: PagedAndSortedResultRequestDto) => this.bookService.getList(query);
 
     this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
-      this.book = response;
+      this.book.set(response);
     });
   }
 
   //add new method
   createBook() {
-    this.isModalOpen = true;
+    this.isModalOpen.set(true);
   }
 }
 ```
 
-* We defined a property called `isModalOpen` and a method called `createBook`.
+* We defined a signal called `isModalOpen` and a method called `createBook`.
 
 
 Open `/src/app/book/book.component.html` and make the following changes:
@@ -676,43 +678,45 @@ You can open your browser and click the **New book** button to see the new modal
 Open `/src/app/book/book.component.ts` and replace the content as below:
 
 ```js
-import { ListService, PagedResultDto } from '@abp/ng.core';
-import { Component, OnInit, inject } from '@angular/core';
-import { BookService, BookDto, bookTypeOptions } from '@proxy/books'; // add bookTypeOptions
+import { CoreModule, ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { ThemeSharedModule } from '@abp/ng.theme.shared';
+import { BookService, BookDto, bookTypeOptions } from '../proxy/books'; // add bookTypeOptions
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // add this
 
 @Component({
   selector: 'app-book',
   templateUrl: './book.component.html',
   styleUrls: ['./book.component.scss'],
+  imports: [CoreModule, ThemeSharedModule],
   providers: [ListService],
 })
 export class BookComponent implements OnInit {
-  book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
+  book = signal({ items: [], totalCount: 0 } as PagedResultDto<BookDto>);
 
-  form: FormGroup; // add this line
+  form!: FormGroup; // add this line
 
   // add bookTypes as a list of BookType enum members
   bookTypes = bookTypeOptions;
 
-  isModalOpen = false;
+  isModalOpen = signal(false);
 
   public readonly list = inject(ListService);
   private readonly bookService = inject(BookService);
   private readonly fb = inject(FormBuilder); // inject FormBuilder
 
   ngOnInit() {
-    const bookStreamCreator = (query) => this.bookService.getList(query);
+    const bookStreamCreator = (query: PagedAndSortedResultRequestDto) => this.bookService.getList(query);
 
     this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
-      this.book = response;
+      this.book.set(response);
     });
   }
 
   // add new method
   createBook() {
     this.buildForm(); // add this line
-    this.isModalOpen = true;
+    this.isModalOpen.set(true);
   }
 
   // add buildForm method
@@ -732,7 +736,7 @@ export class BookComponent implements OnInit {
     }
 
     this.bookService.create(this.form.value).subscribe(() => {
-      this.isModalOpen = false;
+      this.isModalOpen.set(false);
       this.form.reset();
       this.list.get();
     });
@@ -741,7 +745,7 @@ export class BookComponent implements OnInit {
 ```
 
 * Imported `FormGroup`, `FormBuilder` and `Validators` from `@angular/forms`.
-* Added a `form: FormGroup` property.
+* Added a `form: FormGroup` property. The `!` tells TypeScript that the form is created later, in the `buildForm` method.
 * Added a `bookTypes` property as a list of `BookType` enum members. That will be used in form options.
 * Injected the `FormBuilder` with the inject function. [FormBuilder](https://angular.dev/api/forms/FormBuilder) provides convenient methods for generating form controls. It reduces the amount of boilerplate that is needed to build complex forms.
 * Added a `buildForm` method at the end of the file and executed  the `buildForm()` in the `createBook` method.
@@ -812,10 +816,10 @@ We've used [NgBootstrap datepicker](https://ng-bootstrap.github.io/#/components/
 Open `/src/app/book/book.component.ts` and replace the content as below:
 
 ```js
-import { ListService, PagedResultDto } from '@abp/ng.core';
-import { Component, OnInit, inject } from '@angular/core';
-import { BookService, BookDto, bookTypeOptions } from '@proxy/books';
-import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { CoreModule, ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { BookService, BookDto, bookTypeOptions } from '../proxy/books';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbDateNativeAdapter, NgbDateAdapter, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
 
@@ -823,36 +827,36 @@ import { ThemeSharedModule } from '@abp/ng.theme.shared';
   selector: 'app-book',
   templateUrl: './book.component.html',
   styleUrls: ['./book.component.scss'],
-  imports: [ThemeSharedModule, ReactiveFormsModule, NgbDatepickerModule],
+  imports: [CoreModule, ThemeSharedModule, NgbDatepickerModule],
   providers: [
     ListService,
     { provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }
   ],
 })
 export class BookComponent implements OnInit {
-  book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
+  book = signal({ items: [], totalCount: 0 } as PagedResultDto<BookDto>);
 
-  form: FormGroup;
+  form!: FormGroup;
 
   bookTypes = bookTypeOptions;
 
-  isModalOpen = false;
+  isModalOpen = signal(false);
 
   public readonly list = inject(ListService);
   private readonly bookService = inject(BookService);
   private readonly fb = inject(FormBuilder);
 
   ngOnInit() {
-    const bookStreamCreator = (query) => this.bookService.getList(query);
+    const bookStreamCreator = (query: PagedAndSortedResultRequestDto) => this.bookService.getList(query);
 
     this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
-      this.book = response;
+      this.book.set(response);
     });
   }
 
   createBook() {
     this.buildForm();
-    this.isModalOpen = true;
+    this.isModalOpen.set(true);
   }
 
   buildForm() {
@@ -870,7 +874,7 @@ export class BookComponent implements OnInit {
     }
 
     this.bookService.create(this.form.value).subscribe(() => {
-      this.isModalOpen = false;
+      this.isModalOpen.set(false);
       this.form.reset();
       this.list.get();
     });
@@ -878,7 +882,8 @@ export class BookComponent implements OnInit {
 }
 ```
 
-* Imported ` NgbDateNativeAdapter` and `NgbDateAdapter`.
+* Imported ` NgbDateNativeAdapter`, `NgbDateAdapter` and `NgbDatepickerModule`.
+* Added `NgbDatepickerModule` to the `imports` array of the component, so the `ngbDatepicker` directive can be used in the template.
 * We added a new provider `NgbDateAdapter` that converts the Datepicker value to `Date` type. Check out the [datepicker adapters](https://ng-bootstrap.github.io/#/components/datepicker/overview) for more details.
 
 Now, you can open your browser to see the changes:
@@ -890,65 +895,74 @@ Now, you can open your browser to see the changes:
 Open `/src/app/book/book.component.ts` and replace the content as shown below:
 
 ```js
-import { ListService, PagedResultDto } from '@abp/ng.core';
-import { Component, OnInit, inject } from '@angular/core';
-import { BookService, BookDto, bookTypeOptions } from '@proxy/books';
+import { CoreModule, ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { BookService, BookDto, bookTypeOptions } from '../proxy/books';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbDateNativeAdapter,
+  NgbDateAdapter,
+  NgbDatepickerModule,
+  NgbDropdownModule,
+} from '@ng-bootstrap/ng-bootstrap';
+import { ThemeSharedModule } from '@abp/ng.theme.shared';
 
 @Component({
   selector: 'app-book',
   templateUrl: './book.component.html',
   styleUrls: ['./book.component.scss'],
+  imports: [CoreModule, ThemeSharedModule, NgbDatepickerModule, NgbDropdownModule],
   providers: [ListService, { provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }],
 })
 export class BookComponent implements OnInit {
-  book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
+  book = signal({ items: [], totalCount: 0 } as PagedResultDto<BookDto>);
 
-  selectedBook = {} as BookDto; // declare selectedBook
+  selectedBook = signal({} as BookDto); // declare selectedBook
 
-  form: FormGroup;
+  form!: FormGroup;
 
   bookTypes = bookTypeOptions;
 
-  isModalOpen = false;
+  isModalOpen = signal(false);
 
   public readonly list = inject(ListService);
   private readonly bookService = inject(BookService);
   private readonly fb = inject(FormBuilder);
 
   ngOnInit() {
-    const bookStreamCreator = (query) => this.bookService.getList(query);
+    const bookStreamCreator = (query: PagedAndSortedResultRequestDto) => this.bookService.getList(query);
 
     this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
-      this.book = response;
+      this.book.set(response);
     });
   }
 
   createBook() {
-    this.selectedBook = {} as BookDto; // reset the selected book
+    this.selectedBook.set({} as BookDto); // reset the selected book
     this.buildForm();
-    this.isModalOpen = true;
+    this.isModalOpen.set(true);
   }
 
   // Add editBook method
   editBook(id: string) {
     this.bookService.get(id).subscribe((book) => {
-      this.selectedBook = book;
+      this.selectedBook.set(book);
       this.buildForm();
-      this.isModalOpen = true;
+      this.isModalOpen.set(true);
     });
   }
 
   buildForm() {
+    const selectedBook = this.selectedBook();
+
     this.form = this.fb.group({
-      name: [this.selectedBook.name || '', Validators.required],
-      type: [this.selectedBook.type || null, Validators.required],
+      name: [selectedBook.name || '', Validators.required],
+      type: [selectedBook.type || null, Validators.required],
       publishDate: [
-        this.selectedBook.publishDate ? new Date(this.selectedBook.publishDate) : null,
+        selectedBook.publishDate ? new Date(selectedBook.publishDate) : null,
         Validators.required,
       ],
-      price: [this.selectedBook.price || null, Validators.required],
+      price: [selectedBook.price || null, Validators.required],
     });
   }
 
@@ -958,12 +972,14 @@ export class BookComponent implements OnInit {
       return;
     }
 
-    const request = this.selectedBook.id
-      ? this.bookService.update(this.selectedBook.id, this.form.value)
+    const selectedBook = this.selectedBook();
+
+    const request = selectedBook.id
+      ? this.bookService.update(selectedBook.id, this.form.value)
       : this.bookService.create(this.form.value);
 
     request.subscribe(() => {
-      this.isModalOpen = false;
+      this.isModalOpen.set(false);
       this.form.reset();
       this.list.get();
     });
@@ -971,10 +987,12 @@ export class BookComponent implements OnInit {
 }
 ```
 
-* We declared a variable named `selectedBook` as `BookDto`.
-* We added an `editBook`  method. This method fetches the book with the given `id` and sets it to `selectedBook` object.
+* We declared a signal named `selectedBook` that holds a `BookDto`.
+* Added `NgbDropdownModule` to the `imports` array, since the "Actions" dropdown (added below) uses it.
+* We added an `editBook`  method. This method fetches the book with the given `id` and sets it to `selectedBook` signal.
 * We replaced the `buildForm` method so that it creates the form with the `selectedBook` data.
 * We replaced the `createBook` method so it sets `selectedBook` to an empty object.
+* `selectedBook` and `isModalOpen` are signals because they are changed inside `subscribe` callbacks; updating a signal refreshes the view.
 * We changed the `save` method to handle both of create and update operations.
 
 ### Add "Actions" Dropdown to the Table
@@ -1015,7 +1033,7 @@ Also, change the `ng-template #abpHeader` section as shown below:
 
 ```html
 <ng-template #abpHeader>
-    <h3>{%{{{ (selectedBook.id ? '::Edit' : '::NewBook' ) | abpLocalization }}}%}</h3>
+    <h3>{%{{{ (selectedBook().id ? '::Edit' : '::NewBook' ) | abpLocalization }}}%}</h3>
 </ng-template>
 ```
 
@@ -1031,8 +1049,8 @@ Replace the injected services as below:
 // ...
 
 // add new imports
-import { ConfirmationService, Confirmation } from '@abp/ng.theme.shared';
-import { Component, OnInit, inject } from '@angular/core';
+import { ConfirmationService, Confirmation, ThemeSharedModule } from '@abp/ng.theme.shared';
+import { Component, OnInit, inject, signal } from '@angular/core';
 
 // ...
 
@@ -1070,6 +1088,9 @@ Open `/src/app/book/book.component.html` and modify the `ngbDropdownMenu` to add
 
 ```html
 <div ngbDropdownMenu>
+  <button ngbDropdownItem (click)="editBook(row.id)">
+    {%{{{ '::Edit' | abpLocalization }}}%}
+  </button>
   <!-- add the Delete button -->
     <button ngbDropdownItem (click)="delete(row.id)">
         {%{{{ '::Delete' | abpLocalization }}}%}
@@ -1147,9 +1168,8 @@ Now, we can add a modal that will be opened when we click the button.
 Open the `Books.razor` and add the following code to the end of the page:
 
 ````xml
-<Modal @ref="@CreateModal">
-    <ModalBackdrop />
-    <ModalContent IsCentered="true">
+<Modal @ref="@CreateModal" Centered="true">
+    <ModalContent>
         <Form>
             <ModalHeader>
                 <ModalTitle>@L["NewBook"]</ModalTitle>
@@ -1160,16 +1180,16 @@ Open the `Books.razor` and add the following code to the end of the page:
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
                             <FieldLabel>@L["Name"]</FieldLabel>
-                            <TextEdit @bind-Text="@NewEntity.Name">
+                            <TextInput @bind-Value="@NewEntity.Name">
                                 <Feedback>
                                     <ValidationError/>
                                 </Feedback>
-                            </TextEdit>
+                            </TextInput>
                         </Field>
                     </Validation>
                     <Field>
                         <FieldLabel>@L["Type"]</FieldLabel>
-                        <Select TValue="BookType" @bind-SelectedValue="@NewEntity.Type">
+                        <Select TValue="BookType" @bind-Value="@NewEntity.Type">
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
@@ -1180,11 +1200,11 @@ Open the `Books.razor` and add the following code to the end of the page:
                     </Field>
                     <Field>
                         <FieldLabel>@L["PublishDate"]</FieldLabel>
-                        <DateEdit TValue="DateTime" @bind-Date="NewEntity.PublishDate"/>
+                        <DateInput TValue="DateTime" @bind-Value="NewEntity.PublishDate"/>
                     </Field>
                     <Field>
                         <FieldLabel>@L["Price"]</FieldLabel>
-                        <NumericEdit TValue="float" @bind-Value="NewEntity.Price"/>
+                        <NumericInput TValue="float" @bind-Value="NewEntity.Price"/>
                     </Field>
                 </Validations>
             </ModalBody>
@@ -1236,7 +1256,7 @@ Open the `Books.razor` and add the following code to the end of the page:
                         <MudSelectItem Value="@bookTypeValue">@L[$"Enum:BookType.{(int)bookTypeValue}"]</MudSelectItem>
                     }
                 </MudSelect>
-                <MudDatePicker @bind-Date="@NewEntity.PublishDate"
+                <MudDatePicker @bind-Date="@NewEntityPublishDate"
                                Label="@L["PublishDate"]" />
                 <MudNumericField T="float"
                                  @bind-Value="@NewEntity.Price"
@@ -1257,7 +1277,30 @@ Open the `Books.razor` and add the following code to the end of the page:
 * The `_createDialog` field, `CloseCreateDialogAsync`, `CreateFormRef` and `CreateEntityAsync` are all defined in `AbpMudCrudPageBase`. Check the [MudBlazor documentation](https://mudblazor.com/components/dialog) if you want to understand the `MudDialog` and other components.
 * `MudDialog.Options` widens the dialog (`MaxWidth.Medium` + `FullWidth`) so the form fields are not cramped.
 * `MudStack` with `Spacing="3"` keeps the inputs visually separated; without it MudBlazor inputs render flush against each other.
-* `MudDatePicker.@bind-Date` requires a nullable `DateTime?`. If your DTO uses non-nullable `DateTime`, change it to `DateTime?` (`public DateTime? PublishDate { get; set; }`) when using the MudBlazor variant.
+* `MudDatePicker.@bind-Date` requires a nullable `DateTime?`, while `CreateUpdateBookDto.PublishDate` is a non-nullable `DateTime`. So the date picker binds to the `NewEntityPublishDate` wrapper property below.
+
+Add the following property to the `@code` block of the `Books.razor` file:
+
+````csharp
+// MudDatePicker requires nullable DateTime, while CreateUpdateBookDto.PublishDate is non-nullable.
+// Bind to a nullable wrapper and sync back to the DTO.
+private DateTime? NewEntityPublishDate
+{
+    get => NewEntity?.PublishDate;
+    set { if (NewEntity != null && value.HasValue) NewEntity.PublishDate = value.Value; }
+}
+````
+
+`AbpMudCrudPageBase` reloads its own `AbpMudExtensibleDataGrid` after creating a book. Override the `OnCreatedEntityAsync` method in the `@code` block to reload the `MudDataGrid` of this page instead:
+
+````csharp
+protected override async Task OnCreatedEntityAsync()
+{
+    await InvokeAsync(() => _booksDataGrid.ReloadServerData());
+    await CloseCreateDialogAsync();
+    Snackbar.Add(GetCreateMessage(), Severity.Success);
+}
+````
 
 {{end}}
 
@@ -1281,7 +1324,7 @@ Open the `Books.razor` and add the following `DataGridEntityActionsColumn` secti
         <EntityActions TItem="BookDto" EntityActionsColumn="@EntityActionsColumn">
             <EntityAction TItem="BookDto"
                           Text="@L["Edit"]"
-                          Clicked="() => OpenEditModalAsync(context)" />
+                          Clicked="() => OpenEditModalAsync(context.Item)" />
         </EntityActions>
     </DisplayTemplate>
 </DataGridEntityActionsColumn>
@@ -1324,29 +1367,28 @@ We can now define a modal to edit the book. Add the following code to the end of
 {{if BlazorUI == "Blazorise"}}
 
 ````xml
-<Modal @ref="@EditModal">
-    <ModalBackdrop />
-    <ModalContent IsCentered="true">
+<Modal @ref="@EditModal" Centered="true">
+    <ModalContent>
         <Form>
             <ModalHeader>
                 <ModalTitle>@EditingEntity.Name</ModalTitle>
                 <CloseButton Clicked="CloseEditModalAsync"/>
             </ModalHeader>
             <ModalBody>
-                <Validations @ref="@EditValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="false">
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
                             <FieldLabel>@L["Name"]</FieldLabel>
-                            <TextEdit @bind-Text="@EditingEntity.Name">
+                            <TextInput @bind-Value="@EditingEntity.Name">
                                 <Feedback>
                                     <ValidationError/>
                                 </Feedback>
-                            </TextEdit>
+                            </TextInput>
                         </Field>
                     </Validation>
                     <Field>
                         <FieldLabel>@L["Type"]</FieldLabel>
-                        <Select TValue="BookType" @bind-SelectedValue="@EditingEntity.Type">
+                        <Select TValue="BookType" @bind-Value="@EditingEntity.Type">
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
@@ -1357,11 +1399,11 @@ We can now define a modal to edit the book. Add the following code to the end of
                     </Field>
                     <Field>
                         <FieldLabel>@L["PublishDate"]</FieldLabel>
-                        <DateEdit TValue="DateTime" @bind-Date="EditingEntity.PublishDate"/>
+                        <DateInput TValue="DateTime" @bind-Value="EditingEntity.PublishDate"/>
                     </Field>
                     <Field>
                         <FieldLabel>@L["Price"]</FieldLabel>
-                        <NumericEdit TValue="float" @bind-Value="EditingEntity.Price"/>
+                        <NumericInput TValue="float" @bind-Value="EditingEntity.Price"/>
                     </Field>
                 </Validations>
             </ModalBody>
@@ -1402,7 +1444,7 @@ We can now define a modal to edit the book. Add the following code to the end of
                         <MudSelectItem Value="@bookTypeValue">@L[$"Enum:BookType.{(int)bookTypeValue}"]</MudSelectItem>
                     }
                 </MudSelect>
-                <MudDatePicker @bind-Date="@EditingEntity.PublishDate"
+                <MudDatePicker @bind-Date="@EditingEntityPublishDate"
                                Label="@L["PublishDate"]" />
                 <MudNumericField T="float"
                                  @bind-Value="@EditingEntity.Price"
@@ -1419,6 +1461,27 @@ We can now define a modal to edit the book. Add the following code to the end of
 </MudDialog>
 ````
 
+Add the following property to the `@code` block of the `Books.razor` file, as the edit dialog's date picker binds to it:
+
+````csharp
+private DateTime? EditingEntityPublishDate
+{
+    get => EditingEntity?.PublishDate;
+    set { if (EditingEntity != null && value.HasValue) EditingEntity.PublishDate = value.Value; }
+}
+````
+
+Also override the `OnUpdatedEntityAsync` method to reload the grid after updating a book:
+
+````csharp
+protected override async Task OnUpdatedEntityAsync()
+{
+    await InvokeAsync(() => _booksDataGrid.ReloadServerData());
+    await CloseEditDialogAsync();
+    Snackbar.Add(GetUpdateMessage(), Severity.Success);
+}
+````
+
 {{end}}
 
 ### Mapperly Configuration
@@ -1430,6 +1493,7 @@ Open the `BookStoreBlazorMappers` inside the {{ if UI == "BlazorServer" }}`Acme.
 ```csharp
 using Riok.Mapperly.Abstractions;
 using Volo.Abp.Mapperly;
+using Acme.BookStore.Books;
 
 {{ if UI == "BlazorServer" }}namespace Acme.BookStore.Blazor; {{ else if UI == "MAUIBlazor" }}namespace Acme.BookStore.MauiBlazor; {{ else }}namespace Acme.BookStore.Blazor.Client;{{ end }}
 
@@ -1461,8 +1525,8 @@ Add the following `EntityAction` code under the "Edit" action inside `EntityActi
 ````xml
 <EntityAction TItem="BookDto"
               Text="@L["Delete"]"
-              Clicked="() => DeleteEntityAsync(context)"
-              ConfirmationMessage="() => GetDeleteConfirmationMessage(context)" />
+              Clicked="() => DeleteEntityAsync(context.Item)"
+              ConfirmationMessage="() => GetDeleteConfirmationMessage(context.Item)" />
 ````
 
 {{end}}
@@ -1472,14 +1536,30 @@ Add the following `EntityAction` code under the "Edit" action inside `EntityActi
 Add the following `MudMenuItem` after the "Edit" item inside the actions `MudMenu`:
 
 ````razor
-<MudMenuItem OnClick="@(async () => {
-    if (await Message.Confirm(GetDeleteConfirmationMessage(context.Item)))
-    {
-        await DeleteEntityAsync(context.Item);
-    }
-})">
+<MudMenuItem OnClick="@(() => DeleteEntityAsync(context.Item))">
     @L["Delete"]
 </MudMenuItem>
+````
+
+`DeleteEntityAsync` asks the user to confirm (with the message returned by `GetDeleteConfirmationMessage`) before deleting the book.
+
+Override the `OnDeletedEntityAsync` method to reload the grid after deleting a book (and go back to the previous page if the current page becomes empty):
+
+````csharp
+protected override async Task OnDeletedEntityAsync()
+{
+    // Go back to the previous page if the deleted book was the only one on the current page
+    if (_booksDataGrid.CurrentPage > 0 && _booksDataGrid.ServerItems.Count() == 1)
+    {
+        await InvokeAsync(() => _booksDataGrid.NavigateTo(Page.Previous));
+    }
+    else
+    {
+        await InvokeAsync(() => _booksDataGrid.ReloadServerData());
+    }
+
+    Snackbar.Add(GetDeleteMessage(), Severity.Success);
+}
 ````
 
 {{end}}
@@ -1526,7 +1606,7 @@ Here's the complete code to create the book management CRUD page, that has been 
         <DataGrid TItem="BookDto"
                   Data="Entities"
                   ReadData="OnDataGridReadAsync"
-                  CurrentPage="CurrentPage"
+                  Page="CurrentPage"
                   TotalItems="TotalCount"
                   ShowPager="true"
                   PageSize="PageSize">
@@ -1536,11 +1616,11 @@ Here's the complete code to create the book management CRUD page, that has been 
                         <EntityActions TItem="BookDto" EntityActionsColumn="@EntityActionsColumn">
                             <EntityAction TItem="BookDto"
                                           Text="@L["Edit"]"
-                                          Clicked="() => OpenEditModalAsync(context)" />
+                                          Clicked="() => OpenEditModalAsync(context.Item)" />
                             <EntityAction TItem="BookDto"
                                           Text="@L["Delete"]"
-                                          Clicked="() => DeleteEntityAsync(context)"
-                                          ConfirmationMessage="()=>GetDeleteConfirmationMessage(context)" />
+                                          Clicked="() => DeleteEntityAsync(context.Item)"
+                                          ConfirmationMessage="()=>GetDeleteConfirmationMessage(context.Item)" />
                         </EntityActions>
                     </DisplayTemplate>
                 </DataGridEntityActionsColumn>
@@ -1551,14 +1631,14 @@ Here's the complete code to create the book management CRUD page, that has been 
                                 Field="@nameof(BookDto.Type)"
                                 Caption="@L["Type"]">
                     <DisplayTemplate>
-                        @L[$"Enum:BookType.{context.Type:D}"]
+                        @L[$"Enum:BookType.{(int)context.Item.Type}"]
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="BookDto"
                                 Field="@nameof(BookDto.PublishDate)"
                                 Caption="@L["PublishDate"]">
                     <DisplayTemplate>
-                        @context.PublishDate.ToShortDateString()
+                        @context.Item.PublishDate.ToShortDateString()
                     </DisplayTemplate>
                 </DataGridColumn>
                 <DataGridColumn TItem="BookDto"
@@ -1569,7 +1649,7 @@ Here's the complete code to create the book management CRUD page, that has been 
                                 Field="@nameof(BookDto.CreationTime)"
                                 Caption="@L["CreationTime"]">
                     <DisplayTemplate>
-                        @context.CreationTime.ToLongDateString()
+                        @context.Item.CreationTime.ToLongDateString()
                     </DisplayTemplate>
                 </DataGridColumn>
             </DataGridColumns>
@@ -1577,9 +1657,8 @@ Here's the complete code to create the book management CRUD page, that has been 
     </CardBody>
 </Card>
 
-<Modal @ref="@CreateModal">
-    <ModalBackdrop />
-    <ModalContent IsCentered="true">
+<Modal @ref="@CreateModal" Centered="true">
+    <ModalContent>
         <Form>
             <ModalHeader>
                 <ModalTitle>@L["NewBook"]</ModalTitle>
@@ -1590,16 +1669,16 @@ Here's the complete code to create the book management CRUD page, that has been 
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
                             <FieldLabel>@L["Name"]</FieldLabel>
-                            <TextEdit @bind-Text="@NewEntity.Name">
+                            <TextInput @bind-Value="@NewEntity.Name">
                                 <Feedback>
                                     <ValidationError/>
                                 </Feedback>
-                            </TextEdit>
+                            </TextInput>
                         </Field>
                     </Validation>
                     <Field>
                         <FieldLabel>@L["Type"]</FieldLabel>
-                        <Select TValue="BookType" @bind-SelectedValue="@NewEntity.Type">
+                        <Select TValue="BookType" @bind-Value="@NewEntity.Type">
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
@@ -1610,11 +1689,11 @@ Here's the complete code to create the book management CRUD page, that has been 
                     </Field>
                     <Field>
                         <FieldLabel>@L["PublishDate"]</FieldLabel>
-                        <DateEdit TValue="DateTime" @bind-Date="NewEntity.PublishDate"/>
+                        <DateInput TValue="DateTime" @bind-Value="NewEntity.PublishDate"/>
                     </Field>
                     <Field>
                         <FieldLabel>@L["Price"]</FieldLabel>
-                        <NumericEdit TValue="float" @bind-Value="NewEntity.Price"/>
+                        <NumericInput TValue="float" @bind-Value="NewEntity.Price"/>
                     </Field>
                 </Validations>
             </ModalBody>
@@ -1630,29 +1709,28 @@ Here's the complete code to create the book management CRUD page, that has been 
     </ModalContent>
 </Modal>
 
-<Modal @ref="@EditModal">
-    <ModalBackdrop />
-    <ModalContent IsCentered="true">
+<Modal @ref="@EditModal" Centered="true">
+    <ModalContent>
         <Form>
             <ModalHeader>
                 <ModalTitle>@EditingEntity.Name</ModalTitle>
                 <CloseButton Clicked="CloseEditModalAsync"/>
             </ModalHeader>
             <ModalBody>
-                <Validations @ref="@EditValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                <Validations @ref="@EditValidationsRef" Model="@EditingEntity" ValidateOnLoad="false">
                     <Validation MessageLocalizer="@LH.Localize">
                         <Field>
                             <FieldLabel>@L["Name"]</FieldLabel>
-                            <TextEdit @bind-Text="@EditingEntity.Name">
+                            <TextInput @bind-Value="@EditingEntity.Name">
                                 <Feedback>
                                     <ValidationError/>
                                 </Feedback>
-                            </TextEdit>
+                            </TextInput>
                         </Field>
                     </Validation>
                     <Field>
                         <FieldLabel>@L["Type"]</FieldLabel>
-                        <Select TValue="BookType" @bind-SelectedValue="@EditingEntity.Type">
+                        <Select TValue="BookType" @bind-Value="@EditingEntity.Type">
                             @foreach (int bookTypeValue in Enum.GetValues(typeof(BookType)))
                             {
                                 <SelectItem TValue="BookType" Value="@((BookType) bookTypeValue)">
@@ -1663,11 +1741,11 @@ Here's the complete code to create the book management CRUD page, that has been 
                     </Field>
                     <Field>
                         <FieldLabel>@L["PublishDate"]</FieldLabel>
-                        <DateEdit TValue="DateTime" @bind-Date="EditingEntity.PublishDate"/>
+                        <DateInput TValue="DateTime" @bind-Value="EditingEntity.PublishDate"/>
                     </Field>
                     <Field>
                         <FieldLabel>@L["Price"]</FieldLabel>
-                        <NumericEdit TValue="float" @bind-Value="EditingEntity.Price"/>
+                        <NumericInput TValue="float" @bind-Value="EditingEntity.Price"/>
                     </Field>
                 </Validations>
             </ModalBody>
@@ -1716,15 +1794,17 @@ Here's the complete code to create the book management CRUD page, that has been 
         </CardHeaderActions>
     </MudCardHeader>
     <MudCardContent>
-        <MudDataGrid T="BookDto"
+        <MudDataGrid @ref="_booksDataGrid"
+                     T="BookDto"
                      ServerData="OnDataGridReadAsync"
-                     RowsPerPage="@PageSize">
+                     RowsPerPage="@PageSize"
+                     SortMode="SortMode.None">
             <Columns>
                 <TemplateColumn T="BookDto" Title="@L["Actions"]" Sortable="false">
                     <CellTemplate>
                         <MudMenu Icon="@Icons.Material.Filled.MoreVert" Dense="true">
                             <MudMenuItem OnClick="@(() => OpenEditDialogAsync(context.Item))">@L["Edit"]</MudMenuItem>
-                            <MudMenuItem OnClick="@(async () => { if (await Message.Confirm(GetDeleteConfirmationMessage(context.Item))) { await DeleteEntityAsync(context.Item); } })">@L["Delete"]</MudMenuItem>
+                            <MudMenuItem OnClick="@(() => DeleteEntityAsync(context.Item))">@L["Delete"]</MudMenuItem>
                         </MudMenu>
                     </CellTemplate>
                 </TemplateColumn>
@@ -1746,6 +1826,9 @@ Here's the complete code to create the book management CRUD page, that has been 
                     </CellTemplate>
                 </PropertyColumn>
             </Columns>
+            <PagerContent>
+                <MudDataGridPager T="BookDto" />
+            </PagerContent>
         </MudDataGrid>
     </MudCardContent>
 </MudCard>
@@ -1769,7 +1852,7 @@ Here's the complete code to create the book management CRUD page, that has been 
                         <MudSelectItem Value="@bookTypeValue">@L[$"Enum:BookType.{(int)bookTypeValue}"]</MudSelectItem>
                     }
                 </MudSelect>
-                <MudDatePicker @bind-Date="@NewEntity.PublishDate"
+                <MudDatePicker @bind-Date="@NewEntityPublishDate"
                                Label="@L["PublishDate"]" />
                 <MudNumericField T="float"
                                  @bind-Value="@NewEntity.Price"
@@ -1804,7 +1887,7 @@ Here's the complete code to create the book management CRUD page, that has been 
                         <MudSelectItem Value="@bookTypeValue">@L[$"Enum:BookType.{(int)bookTypeValue}"]</MudSelectItem>
                     }
                 </MudSelect>
-                <MudDatePicker @bind-Date="@EditingEntity.PublishDate"
+                <MudDatePicker @bind-Date="@EditingEntityPublishDate"
                                Label="@L["PublishDate"]" />
                 <MudNumericField T="float"
                                  @bind-Value="@EditingEntity.Price"
@@ -1822,6 +1905,51 @@ Here's the complete code to create the book management CRUD page, that has been 
 
 @code
 {
+    // MudDatePicker requires nullable DateTime, while CreateUpdateBookDto.PublishDate is non-nullable.
+    // Bind to a nullable wrapper and sync back to the DTO.
+    private DateTime? NewEntityPublishDate
+    {
+        get => NewEntity?.PublishDate;
+        set { if (NewEntity != null && value.HasValue) NewEntity.PublishDate = value.Value; }
+    }
+
+    private DateTime? EditingEntityPublishDate
+    {
+        get => EditingEntity?.PublishDate;
+        set { if (EditingEntity != null && value.HasValue) EditingEntity.PublishDate = value.Value; }
+    }
+
+    private MudDataGrid<BookDto> _booksDataGrid = default!;
+
+    protected override async Task OnCreatedEntityAsync()
+    {
+        await InvokeAsync(() => _booksDataGrid.ReloadServerData());
+        await CloseCreateDialogAsync();
+        Snackbar.Add(GetCreateMessage(), Severity.Success);
+    }
+
+    protected override async Task OnUpdatedEntityAsync()
+    {
+        await InvokeAsync(() => _booksDataGrid.ReloadServerData());
+        await CloseEditDialogAsync();
+        Snackbar.Add(GetUpdateMessage(), Severity.Success);
+    }
+
+    protected override async Task OnDeletedEntityAsync()
+    {
+        // Go back to the previous page if the deleted book was the only one on the current page
+        if (_booksDataGrid.CurrentPage > 0 && _booksDataGrid.ServerItems.Count() == 1)
+        {
+            await InvokeAsync(() => _booksDataGrid.NavigateTo(Page.Previous));
+        }
+        else
+        {
+            await InvokeAsync(() => _booksDataGrid.ReloadServerData());
+        }
+
+        Snackbar.Add(GetDeleteMessage(), Severity.Success);
+    }
+
     public Books() // Constructor
     {
         LocalizationResource = typeof(BookStoreResource);

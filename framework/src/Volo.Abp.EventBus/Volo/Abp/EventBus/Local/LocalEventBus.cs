@@ -218,7 +218,7 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
 
         foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
         {
-            foreach (var factory in handlerFactory.Value.Locking(factories => factories.ToList()))
+            foreach (var factory in handlerFactory.Value.Locking(factories => factories.ToArray()))
             {
                 handlerFactoryList.Add(new Tuple<IEventHandlerFactory, Type, int>(factory, handlerFactory.Key, GetHandlerOrder(factory)));
             }
@@ -226,7 +226,7 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
 
         foreach (var handlerFactory in DynamicEventHandlerFactories.Where(aehf => eventNames.Contains(aehf.Key)))
         {
-            foreach (var factory in handlerFactory.Value.Locking(factories => factories.ToList()))
+            foreach (var factory in handlerFactory.Value.Locking(factories => factories.ToArray()))
             {
                 handlerFactoryList.Add(new Tuple<IEventHandlerFactory, Type, int>(factory, typeof(DynamicEventData), GetHandlerOrder(factory)));
             }
@@ -247,7 +247,7 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
 
         foreach (var handlerFactory in DynamicEventHandlerFactories.Where(aehf => aehf.Key == eventName))
         {
-            foreach (var factory in handlerFactory.Value.Locking(factories => factories.ToList()))
+            foreach (var factory in handlerFactory.Value.Locking(factories => factories.ToArray()))
             {
                 handlerFactoryList.Add(new Tuple<IEventHandlerFactory, Type, int>(factory, typeof(DynamicEventData), GetHandlerOrder(factory)));
             }

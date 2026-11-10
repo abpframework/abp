@@ -235,6 +235,8 @@ Then, you can log in to the Elsa Studio application with the host admin credenti
 
 ![elsa-login](../images/elsa-password-login.png)
 
+The Elsa Identity login applies the sign-in checks of the ABP Identity module: inactive and locked out users can't log in, unconfirmed users can't log in if a confirmation is required, and failed attempts are counted for the account lockout. This login has no second step, so users that must change their password or require two-factor authentication can't log in with it either. It only issues an access token, users log in again when the access token expires. Use the code flow authentication below for these users or to refresh the tokens.
+
 Once you have logged in, you can define and manage workflows and view their execution instances:
 
 ![elsa-main](../images/elsa-main-page.png)

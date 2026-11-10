@@ -12,22 +12,25 @@
 @inject IRouteBasedCultureNavigationHelper CultureNavigationHelper
 @if (_otherLanguages != null && _otherLanguages.Any())
 {
-    <BarDropdown RightAligned="true">
-        <BarDropdownToggle>
+    <Dropdown EndAligned="true">
+        <DropdownToggle Color="Color.Default">
             @_currentLanguage.DisplayName
-        </BarDropdownToggle>
-        <BarDropdownMenu>
+        </DropdownToggle>
+        <DropdownMenu Style="@MenuStyle">
             @foreach (var language in _otherLanguages)
             {
-                <BarDropdownItem Clicked="() => ChangeLanguageAsync(language)">@language.DisplayName</BarDropdownItem>
+                <DropdownItem Clicked="() => ChangeLanguageAsync(language)">@language.DisplayName</DropdownItem>
             }
-        </BarDropdownMenu>
-    </BarDropdown>
+        </DropdownMenu>
+    </Dropdown>
 }
 @code {
     private IReadOnlyList<LanguageInfo> _otherLanguages;
     private LanguageInfo _currentLanguage;
     private bool _useRouteBasedCulture;
+
+    // Blazorise's dropdown-menu-end sets right: 0, which wins over the computed left offset in an RTL layout
+    private static string MenuStyle => CultureHelper.IsRtl ? "right: auto" : null;
 
     protected override async Task OnInitializedAsync()
     {

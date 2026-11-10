@@ -138,12 +138,21 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
     {
         var handlerFactories = GetOrCreateHandlerFactories(eventType);
 
-        if (factory.IsInFactories(handlerFactories))
+        var added = handlerFactories.Locking(factories =>
+        {
+            if (factory.IsInFactories(factories))
+            {
+                return false;
+            }
+
+            factories.Add(factory);
+            return true;
+        });
+
+        if (!added)
         {
             return NullDisposable.Instance;
         }
-
-        handlerFactories.Add(factory);
 
         if (handlerFactories.Count == 1) //TODO: Multi-threading!
         {
@@ -157,13 +166,22 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
     public override IDisposable Subscribe(string eventName, IEventHandlerFactory handler)
     {
         var handlerFactories = GetOrCreateDynamicHandlerFactories(eventName);
-        
-        if (handler.IsInFactories(handlerFactories))
+
+        var added = handlerFactories.Locking(factories =>
+        {
+            if (handler.IsInFactories(factories))
+            {
+                return false;
+            }
+
+            factories.Add(handler);
+            return true;
+        });
+
+        if (!added)
         {
             return NullDisposable.Instance;
         }
-        
-        handlerFactories.Add(handler);
         
         if (handlerFactories.Count == 1) //TODO: Multi-threading!
         {
@@ -494,12 +512,12 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
 
         foreach (var handlerFactory in HandlerFactories.Where(hf => ShouldTriggerEventForHandler(eventType, hf.Key)))
         {
-            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value));
+            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(handlerFactory.Key, handlerFactory.Value.Locking(factories => factories.ToList())));
         }
 
         foreach (var handlerFactory in DynamicHandlerFactories.Where(aehf => eventNames.Contains(aehf.Key)))
         {
-            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value));
+            handlerFactoryList.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value.Locking(factories => factories.ToList())));
         }
 
         return handlerFactoryList.ToArray();
@@ -548,7 +566,7 @@ public class RabbitMqDistributedEventBus : DistributedEventBusBase, IRabbitMqDis
 
         foreach (var handlerFactory in DynamicHandlerFactories.Where(hf => hf.Key == eventName))
         {
-            result.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value));
+            result.Add(new EventTypeWithEventHandlerFactories(typeof(DynamicEventData), handlerFactory.Value.Locking(factories => factories.ToList())));
         }
 
         return result;

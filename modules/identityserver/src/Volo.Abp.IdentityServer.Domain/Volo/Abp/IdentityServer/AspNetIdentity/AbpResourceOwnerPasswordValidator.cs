@@ -30,6 +30,8 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity;
 
 public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
 {
+    public const string ExternalLoginPasswordChangeRequired = "ExternalLoginPasswordChangeRequired";
+
     protected SignInManager<IdentityUser> SignInManager { get; }
     protected IdentityUserManager UserManager { get; }
     protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
@@ -88,7 +90,8 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
                     var externalLoginProvider = (IExternalLoginProvider)scope.ServiceProvider
                         .GetRequiredService(externalLoginProviderInfo.Type);
 
-                    if (await externalLoginProvider.TryAuthenticateAsync(context.UserName, context.Password))
+                    if (await externalLoginProvider.IsEnabledAsync() &&
+                        await externalLoginProvider.TryAuthenticateAsync(context.UserName, context.Password))
                     {
                         user = await UserManager.FindByNameAsync(context.UserName);
                         if (user == null)
@@ -100,7 +103,7 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
                             await externalLoginProvider.UpdateUserAsync(user, externalLoginProviderInfo.Name);
                         }
 
-                        await SetSuccessResultAsync(context, user);
+                        await HandleExternalLoginAsync(context, user);
                         return;
                     }
                 }
@@ -141,19 +144,24 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
                     {
                         Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", context.UserName);
 
-                        if (user.ShouldChangePasswordOnNextLogin)
+                        if (await PreSignInCheckAsync(user))
                         {
-                            await HandleShouldChangePasswordOnNextLoginAsync(context, user, context.Password);
-                            return;
+                            if (user.ShouldChangePasswordOnNextLogin)
+                            {
+                                await HandleShouldChangePasswordOnNextLoginAsync(context, user, context.Password);
+                                return;
+                            }
+
+                            if (await UserManager.ShouldPeriodicallyChangePasswordAsync(user))
+                            {
+                                await HandlePeriodicallyChangePasswordAsync(context, user, context.Password);
+                                return;
+                            }
                         }
 
-                        if (await UserManager.ShouldPeriodicallyChangePasswordAsync(user))
-                        {
-                            await HandlePeriodicallyChangePasswordAsync(context, user, context.Password);
-                            return;
-                        }
-
-                        errorDescription = Localizer["LoginIsNotAllowed"];
+                        errorDescription = user.IsActive && await SignInManager.CanSignInAsync(user) && await UserManager.IsLockedOutAsync(user)
+                            ? Localizer["UserLockedOut"]
+                            : Localizer["LoginIsNotAllowed"];
                     }
                 }
                 else
@@ -186,6 +194,80 @@ public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
 
             context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, errorDescription);
         }
+    }
+
+    protected virtual async Task HandleExternalLoginAsync(ResourceOwnerPasswordValidationContext context, IdentityUser user)
+    {
+        await IdentityOptions.SetAsync();
+
+        if (!await PreSignInCheckAsync(user))
+        {
+            var isLockedOut = user.IsActive && await SignInManager.CanSignInAsync(user) && await UserManager.IsLockedOutAsync(user);
+
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+            {
+                Identity = IdentityServerSecurityLogIdentityConsts.IdentityServer,
+                Action = isLockedOut ? IdentityServerSecurityLogActionConsts.LoginLockedout : IdentityServerSecurityLogActionConsts.LoginNotAllowed,
+                UserName = context.UserName,
+                ClientId = await FindClientIdAsync(context)
+            });
+
+            if (isLockedOut)
+            {
+                Logger.LogInformation("Authentication failed for username: {username}, reason: locked out", context.UserName);
+                context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, Localizer["UserLockedOut"]);
+                return;
+            }
+
+            Logger.LogInformation("Authentication failed for username: {username}, reason: not allowed", context.UserName);
+            context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, Localizer["LoginIsNotAllowed"]);
+            return;
+        }
+
+        // The change password challenge is not returned, because the password of the external login provider can't be used to change the local password.
+        if (user.ShouldChangePasswordOnNextLogin || await UserManager.ShouldPeriodicallyChangePasswordAsync(user))
+        {
+            Logger.LogInformation("Authentication failed for username: {username}, reason: {reason}", context.UserName, ExternalLoginPasswordChangeRequired);
+
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
+            {
+                Identity = IdentityServerSecurityLogIdentityConsts.IdentityServer,
+                Action = IdentityServerSecurityLogActionConsts.LoginNotAllowed,
+                UserName = context.UserName,
+                ClientId = await FindClientIdAsync(context)
+            });
+
+            context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, ExternalLoginPasswordChangeRequired);
+            return;
+        }
+
+        if (await IsTfaEnabledAsync(user))
+        {
+            await HandleTwoFactorLoginAsync(context, user);
+            return;
+        }
+
+        await SetSuccessResultAsync(context, user);
+    }
+
+    protected virtual async Task<bool> PreSignInCheckAsync(IdentityUser user)
+    {
+        if (!user.IsActive)
+        {
+            return false;
+        }
+
+        if (!await SignInManager.CanSignInAsync(user))
+        {
+            return false;
+        }
+
+        if (await UserManager.IsLockedOutAsync(user))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     protected virtual async Task HandleTwoFactorLoginAsync(ResourceOwnerPasswordValidationContext context, IdentityUser user)

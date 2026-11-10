@@ -16,8 +16,6 @@ The Designer supports two kinds of calculated property:
 
 Both kinds can participate in filtering, sorting, paging, count, projection, grouping, and supported aggregates while the work remains in the database provider. The complete entity set is not loaded into application memory to calculate the values.
 
-> **Preview:** Calculated properties, rollups, and the expression profile are preview features. Supported operations and provider translation may change before general availability.
-
 ## Availability
 
 Calculated and rollup properties can be authored in a writable Runtime JSON-backed layer that supports direct model changes. The corresponding commands are disabled when the selected Designer layer does not support them.

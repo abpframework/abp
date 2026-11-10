@@ -1,0 +1,31 @@
+{
+  "culture": "he",
+  "texts": {
+    "InternalServerErrorMessage": "אירעה שגיאה פנימית בזמן הטיפול בבקשה!",
+    "ValidationErrorMessage": "הבקשה אינה תקינה!",
+    "ValidationNarrativeErrorMessageTitle": "השגיאות הבאות נמצאו במהלך האימות.",
+    "DefaultErrorMessage": "אירעה שגיאה!",
+    "DefaultErrorMessageDetail": "השרת לא שלח פרטים על השגיאה.",
+    "DefaultErrorMessage401": "לא בוצעה התחברות!",
+    "DefaultErrorMessage401Detail": "יש להתחבר כדי לבצע פעולה זו.",
+    "DefaultErrorMessage403": "אין לך הרשאה!",
+    "DefaultErrorMessage403Detail": "אין לך הרשאה לבצע פעולה זו!",
+    "DefaultErrorMessage404": "המשאב לא נמצא!",
+    "DefaultErrorMessage404Detail": "המשאב המבוקש לא נמצא בשרת!",
+    "EntityNotFoundErrorMessage": "לא קיימת ישות {0} עם המזהה {1}!",
+    "EntityNotFoundErrorMessageWithoutId": "לא קיימת ישות {0}!",
+    "AbpDbConcurrencyErrorMessage": "הנתונים ששלחת כבר שונו על ידי משתמש אחר. בטלו את השינויים ונסו שוב.",
+    "Error": "שגיאה",
+    "UnhandledException": "חריגה שלא טופלה!",
+    "Authorizing": "בודק הרשאות…",
+    "401Message": "נדרשת התחברות",
+    "403Message": "אין הרשאה",
+    "404Message": "הדף לא נמצא",
+    "500Message": "שגיאת שרת פנימית",
+    "403MessageDetail": "אין לך הרשאה לבצע פעולה זו!",
+    "404MessageDetail": "מצטערים, אין כלום בכתובת הזו.",
+    "Unauthorized": "נדרשת התחברות",
+    "invalid_token": "אסימון לא תקין",
+    "SessionExpired": "תוקף ההתחברות פג. יש להתחבר מחדש כדי להמשיך להשתמש ביישום."
+  }
+}

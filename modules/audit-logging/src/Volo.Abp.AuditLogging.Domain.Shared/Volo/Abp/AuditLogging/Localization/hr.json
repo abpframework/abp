@@ -85,6 +85,15 @@
     "TenantId": "ID stanara",
     "DownloadLinkExplanation": "Datoteku možete preuzeti pomoću veze u nastavku do {0} (UTC)",
     "DownloadNow": "Preuzmi odmah",
-    "TryAgainMessage": "Molimo pokušajte ponovno. Ako se problem nastavi, obratite se podršci."
+    "TryAgainMessage": "Molimo pokušajte ponovno. Ako se problem nastavi, obratite se podršci.",
+    "Permission:SettingManagement": "Upravljanje postavkama",
+    "Action": "Radnja",
+    "NoActions": "Nema radnji",
+    "MinExecutionDuration": "Min. trajanje",
+    "MaxExecutionDuration": "Maks. trajanje",
+    "NoDataAvailable": "Nema dostupnih podataka",
+    "AuditLogExportFailedSubject": "Izvoz zapisnika revizije nije uspio",
+    "EntityChangeExportFailedSubject": "Izvoz promjena entiteta nije uspio",
+    "FileNotFound": "Datoteka nije pronađena: {0}"
   }
 }

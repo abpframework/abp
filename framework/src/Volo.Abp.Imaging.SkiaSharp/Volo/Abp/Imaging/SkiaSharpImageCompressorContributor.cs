@@ -38,7 +38,7 @@ public class SkiaSharpImageCompressorContributor : IImageCompressorContributor, 
                 return new ImageCompressResult<Stream>(stream, ImageProcessState.Unsupported);
             }
 
-            using var bitmap = SKBitmap.Decode(memoryBitmapStream);
+            using var bitmap = DecodeBitmap(codec);
             if (bitmap == null)
             {
                 return new ImageCompressResult<Stream>(stream, ImageProcessState.Unsupported);
@@ -95,6 +95,11 @@ public class SkiaSharpImageCompressorContributor : IImageCompressorContributor, 
         var newBytes = await result.Result.GetAllBytesAsync(cancellationToken);
         result.Result.Dispose();
         return new ImageCompressResult<byte[]>(newBytes, result.State);
+    }
+
+    protected virtual SKBitmap? DecodeBitmap(SKCodec codec)
+    {
+        return SkiaSharpBitmapHelper.DecodeUpright(codec);
     }
 
     protected virtual bool CanCompress(string? mimeType)
