@@ -11,24 +11,26 @@
 
 Converting your Angular application to a PWA is easy.
 
+> If you created your solution with the **Progressive Web Application** option (in ABP Studio, or with the `-pwa` parameter of the `abp new` command), step 1 has already been done for you, including the `assets` configuration described at the end of step 1. You can continue from [step 2](#2-update-the-web-app-manifest).
+
 ## 1. Install Angular PWA
 
-Run the following command in the root folder of your Angular application:
+Run the following command in the root folder of your Angular application. Use the `@angular/pwa` version whose major version matches the `@angular/cli` version in your `package.json` (for example, `@angular/pwa@22` for Angular 22):
 
 ```shell
-yarn ng add @angular/pwa
+yarn ng add @angular/pwa@<angular-major-version>
 ```
 
 ...or...
 
 ```shell
-npm run ng add @angular/pwa
+npx ng add @angular/pwa@<angular-major-version>
 ```
 
 This will install the `@angular/service-worker` package and make your default app a PWA. Alternatively, you may add `project` parameter to target a specific app in your workspace:
 
 ```shell
-yarn ng add @angular/pwa --project MyProjectName
+yarn ng add @angular/pwa@<angular-major-version> --project MyProjectName
 ```
 
 Here is the output of the command:
@@ -38,17 +40,24 @@ Here is the output of the command:
 So, Angular CLI updates some files and add a few others:
 
 - **ngsw-config.json** is where the [service worker configuration](https://angular.dev/ecosystem/service-workers/config) is placed. Not all PWAs have this file. It is specific to Angular.
-- **manifest.webmanifest** is a [web app manifest](https://developer.mozilla.org/en-US/docs/Web/Manifest) and provides information about your app in JSON format.
-- **icons** are placeholder icons that are referred to in your web app manifest. We will replace these in a minute.
-- **angular.json** has following modifications:
-  - `assets` include _manifest.webmanifest_.
-  - `serviceWorker` is `true` in production build.
-  - `ngswConfigPath` refers to _ngsw-config.json_.
+- **public/manifest.webmanifest** is a [web app manifest](https://developer.mozilla.org/en-US/docs/Web/Manifest) and provides information about your app in JSON format.
+- **public/icons** are placeholder icons that are referred to in your web app manifest. We will replace these in a minute.
+- **angular.json** has the `serviceWorker` option set to _ngsw-config.json_ in the production configuration.
 - **package.json** has _@angular/service-worker_ as a new dependency.
-- **app.config.ts** The `provideServiceWorker` provider is imported to register the service worker script.
-- **index.html** has following modifications:
-  - A `<link>` element that refers to _manifest.webmanifest_.
-  - A `<meta>` tag that sets a theme color.
+- **main.ts** (or **app.config.ts**) registers the service worker script with the `provideServiceWorker` provider. In the ABP startup templates, `main.ts` passes the application configuration to `bootstrapApplication` directly, so the provider is added to `main.ts`.
+- **index.html** has a `<link>` element that refers to _manifest.webmanifest_.
+
+The manifest and the icons are placed in the `public` folder. Make sure this folder is copied to the build output. If the build `assets` array of your application in `angular.json` does not include it, add it (this is done automatically for solutions created with the **Progressive Web Application** option):
+
+```json
+"assets": [
+  "src/favicon.ico",
+  "src/assets",
+  { "glob": "**/*", "input": "public" }
+]
+```
+
+Otherwise, the browser cannot find the manifest and the icons, and the application cannot be installed.
 
 ## 2. Update the Web App Manifest
 
@@ -97,7 +106,7 @@ Open the _manifest.webmanifest_ file and update `theme_color` and `background_co
 }
 ```
 
-Then open _index.html_ and change the theme color meta tag as below:
+Then open _index.html_ and add (or update) the theme color meta tag as below:
 
 ```html
 <meta name="theme-color" content="#000000" />
@@ -119,7 +128,7 @@ First, open the _manifest.webmanifest_ file and remove all elements in the `icon
 Then, run the following command in your terminal (changing the path of course):
 
 ```shell
-npx pwa-asset-generator /path/to/your/logo.png ./src/assets/pwa -i ./src/index.html -m ./src/manifest.webmanifest
+npx pwa-asset-generator /path/to/your/logo.png ./public/pwa -i ./src/index.html -m ./public/manifest.webmanifest
 ```
 
 Open the _manifest.webmanifest_ file again. You will see this:
@@ -150,134 +159,134 @@ In addition to updated icons, the library will generate splash screens. However,
 <link
   rel="apple-touch-icon"
   sizes="180x180"
-  href="assets/pwa/apple-icon-180.jpg"
+  href="pwa/apple-icon-180.jpg"
 />
 <link
   rel="apple-touch-icon"
   sizes="167x167"
-  href="assets/pwa/apple-icon-167.jpg"
+  href="pwa/apple-icon-167.jpg"
 />
 <link
   rel="apple-touch-icon"
   sizes="152x152"
-  href="assets/pwa/apple-icon-152.jpg"
+  href="pwa/apple-icon-152.jpg"
 />
 <link
   rel="apple-touch-icon"
   sizes="120x120"
-  href="assets/pwa/apple-icon-120.jpg"
+  href="pwa/apple-icon-120.jpg"
 />
 
 <meta name="apple-mobile-web-app-capable" content="yes" />
 
 <link
   rel="apple-touch-startup-image"
-  href="assets/pwa/apple-splash-2048-2732.jpg"
+  href="pwa/apple-splash-2048-2732.jpg"
   media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
 />
 <link
   rel="apple-touch-startup-image"
-  href="assets/pwa/apple-splash-2732-2048.jpg"
+  href="pwa/apple-splash-2732-2048.jpg"
   media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
 />
 <link
   rel="apple-touch-startup-image"
-  href="assets/pwa/apple-splash-1668-2388.jpg"
+  href="pwa/apple-splash-1668-2388.jpg"
   media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
 />
 <link
   rel="apple-touch-startup-image"
-  href="assets/pwa/apple-splash-2388-1668.jpg"
+  href="pwa/apple-splash-2388-1668.jpg"
   media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
 />
 <link
   rel="apple-touch-startup-image"
-  href="assets/pwa/apple-splash-1536-2048.jpg"
+  href="pwa/apple-splash-1536-2048.jpg"
   media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
 />
 <link
   rel="apple-touch-startup-image"
-  href="assets/pwa/apple-splash-2048-1536.jpg"
+  href="pwa/apple-splash-2048-1536.jpg"
   media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
 />
 <link
   rel="apple-touch-startup-image"
-  href="assets/pwa/apple-splash-1668-2224.jpg"
+  href="pwa/apple-splash-1668-2224.jpg"
   media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
 />
 <link
   rel="apple-touch-startup-image"
-  href="assets/pwa/apple-splash-2224-1668.jpg"
+  href="pwa/apple-splash-2224-1668.jpg"
   media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
 />
 <link
   rel="apple-touch-startup-image"
-  href="assets/pwa/apple-splash-1620-2160.jpg"
+  href="pwa/apple-splash-1620-2160.jpg"
   media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
 />
 <link
   rel="apple-touch-startup-image"
-  href="assets/pwa/apple-splash-2160-1620.jpg"
+  href="pwa/apple-splash-2160-1620.jpg"
   media="(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
 />
 <link
   rel="apple-touch-startup-image"
-  href="assets/pwa/apple-splash-1242-2688.jpg"
+  href="pwa/apple-splash-1242-2688.jpg"
   media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
 />
 <link
   rel="apple-touch-startup-image"
-  href="assets/pwa/apple-splash-2688-1242.jpg"
+  href="pwa/apple-splash-2688-1242.jpg"
   media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
 />
 <link
   rel="apple-touch-startup-image"
-  href="assets/pwa/apple-splash-1125-2436.jpg"
+  href="pwa/apple-splash-1125-2436.jpg"
   media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
 />
 <link
   rel="apple-touch-startup-image"
-  href="assets/pwa/apple-splash-2436-1125.jpg"
+  href="pwa/apple-splash-2436-1125.jpg"
   media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
 />
 <link
   rel="apple-touch-startup-image"
-  href="assets/pwa/apple-splash-828-1792.jpg"
+  href="pwa/apple-splash-828-1792.jpg"
   media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
 />
 <link
   rel="apple-touch-startup-image"
-  href="assets/pwa/apple-splash-1792-828.jpg"
+  href="pwa/apple-splash-1792-828.jpg"
   media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
 />
 <link
   rel="apple-touch-startup-image"
-  href="assets/pwa/apple-splash-1080-1920.jpg"
+  href="pwa/apple-splash-1080-1920.jpg"
   media="(device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
 />
 <link
   rel="apple-touch-startup-image"
-  href="assets/pwa/apple-splash-1920-1080.jpg"
+  href="pwa/apple-splash-1920-1080.jpg"
   media="(device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)"
 />
 <link
   rel="apple-touch-startup-image"
-  href="assets/pwa/apple-splash-750-1334.jpg"
+  href="pwa/apple-splash-750-1334.jpg"
   media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
 />
 <link
   rel="apple-touch-startup-image"
-  href="assets/pwa/apple-splash-1334-750.jpg"
+  href="pwa/apple-splash-1334-750.jpg"
   media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
 />
 <link
   rel="apple-touch-startup-image"
-  href="assets/pwa/apple-splash-640-1136.jpg"
+  href="pwa/apple-splash-640-1136.jpg"
   media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
 />
 <link
   rel="apple-touch-startup-image"
-  href="assets/pwa/apple-splash-1136-640.jpg"
+  href="pwa/apple-splash-1136-640.jpg"
   media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
 />
 ```
