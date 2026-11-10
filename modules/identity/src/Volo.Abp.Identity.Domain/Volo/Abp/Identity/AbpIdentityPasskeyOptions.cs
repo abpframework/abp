@@ -15,6 +15,8 @@ public class AbpIdentityPasskeyOptions
     {
         KnownAuthenticators = new Dictionary<Guid, string>
         {
+            [new Guid("7c30bcef-f035-4e21-9175-5c985b4b239c")] = "TeamPass",
+            [new Guid("6d6f6e69-6361-4d33-a001-706173736b79")] = "Monica Pass",
             [new Guid("a11a5faa-9f32-4b8c-8c5d-2f7d13e8c942")] = "AliasVault",
             [new Guid("ea9b8d66-4d01-1d21-3ce4-b6b48cb575d4")] = "Google Password Manager",
             [new Guid("adce0002-35bc-c60a-648b-0b25f1f05503")] = "Chrome on Mac",
@@ -53,6 +55,7 @@ public class AbpIdentityPasskeyOptions
             [new Guid("d3452668-01fd-4c12-926c-83a4204853aa")] = "Microsoft Password Manager",
             [new Guid("6d212b28-a2c1-4638-b375-5932070f62e9")] = "initial",
             [new Guid("d49b2120-b865-4191-8cea-be84a52b0485")] = "Heimlane Vault",
+            [new Guid("93fea28e-9b08-41d0-b663-20c36b008e70")] = "Share Credentials",
             [new Guid("e8b7f4a2-c3d5-e6f7-890a-b1c2d3e4f567")] = "Sherlocked",
             [new Guid("d9be9d39-e6a6-4c28-a581-32b044d986e4")] = "Sticky Password Manager",
             [new Guid("70617373-7761-6c6c-6669-646f32303236")] = "Passwall",
@@ -72,7 +75,13 @@ public class AbpIdentityPasskeyOptions
             [new Guid("cb6f6666-38ea-4873-9161-ff456a82d316")] = "iPass Secure Auth",
             [new Guid("9c1f2b6e-4d3a-4f7c-8b21-5e6a7d8c9f01")] = "Idira",
             [new Guid("9f8a3b2c-1d4e-4f6a-8b0c-2e1d3c4b5a69")] = "U2 Secured",
-            [new Guid("69840def-9dcf-4632-bf87-6ac2e451b4f5")] = "Keyholm"
+            [new Guid("69840def-9dcf-4632-bf87-6ac2e451b4f5")] = "Keyholm",
+            [new Guid("35d5ea15-ab24-4416-bdd1-f204c9bce1b6")] = "CyberFOX Password Manager",
+            [new Guid("f1d0badc-0def-4f1d-8bad-c0def1d0badc")] = "fidont",
+            [new Guid("c4ed941c-86d3-4532-a6a9-bc42b80d5c38")] = "Authn8",
+            [new Guid("441f5bad-a8ec-4572-8094-ee73a1c7cec7")] = "Fobb Security",
+            [new Guid("16a5a15d-7244-4563-856d-a5167d8b9783")] = "Pleasant Password Server",
+            [new Guid("7c596f1a-3e42-4b8d-9a0f-5d2ce1b84493")] = "Cyclop Passkey"
         };
     }
 }
