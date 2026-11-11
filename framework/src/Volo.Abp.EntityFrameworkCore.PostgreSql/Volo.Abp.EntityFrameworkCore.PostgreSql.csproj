@@ -22,6 +22,10 @@
 
   <ItemGroup>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <!-- The provider has no EF Core 11 release yet and accepts only older EF Core versions.
+         Referencing EF Core directly makes this and the consuming projects use the EF Core version of ABP. -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
   </ItemGroup>
 
 </Project>
