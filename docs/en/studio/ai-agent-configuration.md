@@ -27,15 +27,46 @@ The built-in default model set includes:
 
 | Model | Default role | Context length |
 | --- | --- | --- |
-| Claude Sonnet 4.6 | Main agent | 1,000,000 |
-| Claude Haiku 4.5 | Research and text processing | 200,000 |
-| Claude Opus 4.7 | Optional high-capability model | 1,000,000 |
-| GPT-5.5 | Optional main/review model | 1,050,000 |
-| GLM-5.1 | Optional text/code model without image support | 200,000 |
+| Claude Sonnet 5.5 | Main agent | 1,000,000 |
+| Claude Haiku 5.5 | Research, browser, and text processing | 1,000,000 |
+| Claude Opus 5.5 | Optional high-capability model | 1,000,000 |
+| Claude Fable 5.1 | Optional high-capability model | 1,000,000 |
+| Gemini 4 Argon | Optional main/review model | 1,048,576 |
+| GPT-6 Astra | Optional main/review model | 1,050,000 |
+| GPT-6.1 Sol | Optional main/review model | 1,050,000 |
+| GPT-6 Luna | Optional main/review model | 1,050,000 |
+| GLM-5.3 | Optional text/code model without image support | 1,310,720 |
 
-The available model catalog can be refreshed and is cached locally for a limited period.
+The available model catalog can be refreshed and is cached locally for a limited period. To add models that are not in the default set, select **Add Models** in the model picker, or open **Settings > Models** and use the **Included models** list.
+
+Open the model picker from the model name in the AI Agent chat composer.
 
 ![model-selector-menu](./images/ai-agent/model-selector-menu.png)
+
+The picker contains these items:
+
+- **Auto** turns Auto mode on or off. See [Auto Mode](#auto-mode).
+- **Max** switches the context limit to the model's maximum. See [Context Limit](#context-limit).
+- **Reasoning Effort** opens the list of reasoning levels. See [Reasoning Effort](#reasoning-effort).
+- The list of included models. Select one to use it as the main model.
+- **Add Models** and **Model Settings**.
+
+### Auto Mode
+
+When you use the built-in AI connection, Auto mode picks the model for each message. Studio classifies the task as Easy, Medium, Complex, or Very Complex and uses the model of that tier. Choosing a model manually turns Auto off for the current chat only.
+
+| Tier | Default model |
+| --- | --- |
+| Easy | Claude Haiku 5.5 |
+| Medium | Claude Haiku 5.5 |
+| Complex | Claude Sonnet 5.5 |
+| Very Complex | Claude Opus 5.5 |
+
+While Auto mode is on, the **Max** and **Reasoning Effort** items are hidden because each tier sets its own limits. To change the model of a tier, open **Model Settings** and use the **Auto Mode** tab. **Reset to defaults** restores the table above.
+
+![model-settings-auto-mode](./images/ai-agent/model-settings-auto-mode.png)
+
+> The **Auto Mode** tab is shown only when Auto mode is available, which requires the built-in AI connection.
 
 ## Model Roles
 
@@ -43,32 +74,50 @@ ABP Studio separates model roles so each AI operation can use a model suited to 
 
 | Role | Used by | Default behavior |
 | --- | --- | --- |
-| Main Model | Normal Agent, Plan, and Ask conversations | Uses the active model selected for the agent. |
-| Research Model | Research and ABP documentation subagents | Defaults to Claude Haiku 4.5. Can be set to same as main. |
-| Text Processor Model | Lightweight text processing, error summarization, commit message generation, and lesson consolidation | Defaults to Claude Haiku 4.5. Can be set to same as main. |
+| Main Model | Normal Agent, Plan, and Ask conversations | Claude Sonnet 5.5. |
+| Research Model | Research and ABP documentation subagents | Defaults to Claude Haiku 5.5. Can be set to same as main. |
+| Browser Model | The browser subagent that drives the embedded browser (Agent mode only) | Defaults to Claude Haiku 5.5. Only models with image support are listed, because the subagent sends screenshots to the model. |
+| Text Processor Model | Lightweight text processing, error summarization, commit message generation, and lesson consolidation | Defaults to Claude Haiku 5.5. Can be set to same as main. |
+| Image Model | Image generation and editing | Defaults to Gemini 3 Pro Image. Can be set to "Ask me every time". |
+| Video Model | Video generation | Defaults to Veo 3.1 Lite. Can be set to "Ask me every time". |
 | Git Review Model | AI Review in the Git panel | Defaults to "Ask me every time". Can be set to same as main or a fixed model. |
 
-The Git Review model picker does not change the main conversation model. When "Ask me every time" is selected, Studio asks for a model before each AI Review and passes that model only to the review run.
+To change the roles, select **Model Settings** in the model picker. The window has these tabs:
+
+- **Agents**: Main, Research, Browser, Text Processor, Image, and Video models.
+- **Git Review**: the Git Review model.
+- **Auto Mode**: the model of each Auto mode tier.
 
 ![model-settings-agents](./images/ai-agent/model-settings-agents.png)
 
+The Git Review model picker does not change the main conversation model. When "Ask me every time" is selected, Studio asks for a model before each AI Review and passes that model only to the review run.
+
 ![model-settings-git-review](./images/ai-agent/model-settings-git-review.png)
+
+### Image and Video Models
+
+Image and video generation use their own models. Choose the models that are available in two steps:
+
+1. Open **Settings > Models**. In the **Included models** list, switch between the **Chat**, **Image**, and **Video** segments and add the models you want to the **Image** and **Video** segments. By default, the **Image** segment includes Gemini 3 Pro Image, Gemini 3.1 Flash Image, and GPT Image 2, and the **Video** segment includes Veo 3.1 Lite and Veo 3.1.
+2. Open **Model Settings** and pick the **Image Model** and **Video Model** on the **Agents** tab. Only the models you included are listed. Select "(Ask me every time)" to choose a model before each generation.
+
+> Image and video generation use your ABP AI Credits.
 
 ## Reasoning Effort
 
-Reasoning effort controls the model's reasoning budget where the selected model/provider supports it. Supported values are `none`, `minimal`, `low`, `medium`, `high`, and `xhigh`. The default is `low`.
+Reasoning effort controls the model's reasoning budget where the selected model/provider supports it. Select **Reasoning Effort** in the model picker to change it. Supported values are `none`, `minimal`, `low`, `medium`, `high`, and `xhigh`. The default is `low`.
 
-When the context limit is set to `Max`, Studio uses the maximum context behavior for the model and increases reasoning effort for the run.
+When the context limit is set to `Max`, Studio uses the maximum context behavior for the model and runs with `xhigh` reasoning effort. The **Reasoning Effort** item is hidden in that case.
 
 ## Context Limit
 
-The context limit controls the maximum context size used for agent runs. The default option is `300K`. The `Max` option delegates to the model's maximum context behavior.
+The context limit controls the maximum context size used for agent runs. The default option is `300K`. Select **Max** in the model picker to switch to the `Max` option, which delegates to the model's maximum context behavior. Select it again to return to `300K`.
 
 Large context settings can improve broad solution understanding, but they also increase latency and model cost. Narrow AI scopes and targeted attachments should be preferred when the task is limited to a module or package.
 
 ## Parallel Sessions
 
-ABP Studio can run multiple agent sessions in parallel. The default maximum is 3 concurrent sessions, and the configured range is 1 to 5. Prompts beyond the limit are queued.
+ABP Studio can run multiple agent sessions in parallel. The default maximum is 3 concurrent sessions, and the configured range is 1 to 5. Prompts beyond the limit are queued. The limit is stored as `maxParallelSessions` in `agent-settings.json` (see [Pull Request Attribution](#pull-request-attribution) for the file location). Values above 5 are treated as 5, and values below 1 use the default of 3.
 
 Each running session locks its own model settings and tool snapshot so global settings changes do not mutate an already-running session.
 
@@ -90,15 +139,23 @@ Tools that exist for internal Studio use can be hidden from the AI agent. Hidden
 
 ## Tool Permissions
 
-Some tools require explicit permission before execution.
+Some tools require explicit permission before execution. Open **Settings > Tool Permissions** and choose a **Permission Mode**:
+
+| Mode | Behavior |
+| --- | --- |
+| Safe mode (default) | Studio prompts before every shell command, URL fetch, and file download, unless the command or domain is on the allowlist. |
+| Ask me when important | The AI decides whether an operation is important enough to prompt. Allowlisted commands and domains never prompt, and file downloads always prompt. |
+| Allow everything | Studio never prompts for these tools and does not use the allowlist. Use it only in trusted or isolated environments. |
 
 | Tool category | Permission behavior |
 | --- | --- |
-| Shell commands | Studio prompts before command execution unless the command has been allowed. |
+| Shell commands | Studio prompts before command execution unless the command has been allowed. A command that uses command substitution always prompts, except in Allow everything mode. |
 | URL fetches | Studio prompts per domain unless the domain has been allowed. |
-| File downloads | Studio always asks before downloading. |
+| File downloads | Studio always asks before downloading, except in Allow everything mode. |
 
-Permission choices include allow once, allow always, and skip. "Allow always" persists in the AI Agent settings and is reused by future sessions.
+Permission choices include allow once, allow always, and skip. "Allow always" persists in the AI Agent settings and is reused by future sessions. The allowed commands and domains are listed under **Settings > Tool Permissions**, where you can remove them.
+
+Regardless of the permission mode, Studio asks before the agent reads or writes files outside the active AI scope, opens another solution, or hands the conversation over to the Solution Architect.
 
 ## Pull Request Attribution
 
@@ -125,6 +182,17 @@ ABP Studio can connect to user-configured Model Context Protocol (MCP) servers a
 Open **Settings > MCP Servers** and select **Add integration** to browse the curated integration gallery. Integrations that require settings open a configuration form for values such as an optional Context7 API key, a Microsoft Learn response limit, or a local timezone. You can open the same form later to change or remove those values.
 
 New integrations are added disabled. Review the server and its tools before enabling it.
+
+If the server you need is not in the gallery, select **Add manually** next to the search box. The **Add MCP Server Manually** window asks for:
+
+- **Name**: a name that is not used by another MCP server.
+- **Transport**: **HTTP** or **Stdio**.
+- **Server URL** (HTTP): remote servers must use HTTPS. Plain HTTP is allowed only for localhost.
+- **Command** and **Arguments** (Stdio): separate arguments with spaces and wrap an argument that contains spaces in quotes. Only add commands you trust, because Studio starts them on your machine.
+- **Advanced**: for HTTP, the **HTTP transport** (**Auto-detect**, **Streamable HTTP**, or **Server-Sent Events (SSE, legacy)**) and **Headers**. For Stdio, the **Working directory** and **Environment variables**.
+- **Enable and connect after adding**: selected by default. Clear it to add the server disabled.
+
+Select **Add server** to save it. Header and environment variable values are stored like [MCP secrets](#mcp-secrets).
 
 MCP server connections use one of these transports:
 
