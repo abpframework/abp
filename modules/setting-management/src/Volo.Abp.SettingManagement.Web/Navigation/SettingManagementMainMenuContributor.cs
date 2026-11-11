@@ -24,8 +24,10 @@ public class SettingManagementMainMenuContributor : IMenuContributor
             return;
         }
 
+        /* A contributor can be available and still add no group: the time zone one adds its group only when the
+         * clock supports multiple time zones. Show the item only when the page has a group to show. */
         var settingPageContributorManager = context.ServiceProvider.GetRequiredService<SettingPageContributorManager>();
-        if (!(await settingPageContributorManager.GetAvailableContributors()).Any())
+        if (!(await settingPageContributorManager.ConfigureAsync()).Groups.Any())
         {
             return;
         }
