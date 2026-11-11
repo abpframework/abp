@@ -1,4 +1,6 @@
 using System;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using Castle.Core.Logging;
 using Castle.DynamicProxy;
 
@@ -15,6 +17,11 @@ namespace Volo.Abp.Autofac;
 public class AbpShardedProxyBuilder : IProxyBuilder
 {
     private readonly DefaultProxyBuilder[] _shards;
+
+    // Castle creates a proxy with Activator.CreateInstance, which finds the constructor through the type's reflection
+    // cache. The runtime holds that cache weakly, so after a full GC each proxy type built its constructor invoker again
+    // and compiled a new invoke stub. Holding the constructors keeps the cache, and the stub, for as long as the type.
+    private readonly ConditionalWeakTable<Type, ConstructorInfo[]> _constructors = new();
 
     public AbpShardedProxyBuilder(int shardCount)
     {
@@ -46,27 +53,33 @@ public class AbpShardedProxyBuilder : IProxyBuilder
 
     public Type CreateClassProxyType(Type classToProxy, Type[]? additionalInterfacesToProxy, ProxyGenerationOptions options)
     {
-        return ShardFor(classToProxy).CreateClassProxyType(classToProxy, additionalInterfacesToProxy, options);
+        return RetainConstructors(ShardFor(classToProxy).CreateClassProxyType(classToProxy, additionalInterfacesToProxy, options));
     }
 
     public Type CreateClassProxyTypeWithTarget(Type classToProxy, Type[]? additionalInterfacesToProxy, ProxyGenerationOptions options)
     {
-        return ShardFor(classToProxy).CreateClassProxyTypeWithTarget(classToProxy, additionalInterfacesToProxy, options);
+        return RetainConstructors(ShardFor(classToProxy).CreateClassProxyTypeWithTarget(classToProxy, additionalInterfacesToProxy, options));
     }
 
     public Type CreateInterfaceProxyTypeWithTarget(Type interfaceToProxy, Type[]? additionalInterfacesToProxy, Type targetType, ProxyGenerationOptions options)
     {
-        return ShardFor(interfaceToProxy).CreateInterfaceProxyTypeWithTarget(interfaceToProxy, additionalInterfacesToProxy, targetType, options);
+        return RetainConstructors(ShardFor(interfaceToProxy).CreateInterfaceProxyTypeWithTarget(interfaceToProxy, additionalInterfacesToProxy, targetType, options));
     }
 
     public Type CreateInterfaceProxyTypeWithTargetInterface(Type interfaceToProxy, Type[]? additionalInterfacesToProxy, ProxyGenerationOptions options)
     {
-        return ShardFor(interfaceToProxy).CreateInterfaceProxyTypeWithTargetInterface(interfaceToProxy, additionalInterfacesToProxy, options);
+        return RetainConstructors(ShardFor(interfaceToProxy).CreateInterfaceProxyTypeWithTargetInterface(interfaceToProxy, additionalInterfacesToProxy, options));
     }
 
     public Type CreateInterfaceProxyTypeWithoutTarget(Type interfaceToProxy, Type[]? additionalInterfacesToProxy, ProxyGenerationOptions options)
     {
-        return ShardFor(interfaceToProxy).CreateInterfaceProxyTypeWithoutTarget(interfaceToProxy, additionalInterfacesToProxy, options);
+        return RetainConstructors(ShardFor(interfaceToProxy).CreateInterfaceProxyTypeWithoutTarget(interfaceToProxy, additionalInterfacesToProxy, options));
+    }
+
+    private Type RetainConstructors(Type proxyType)
+    {
+        _constructors.GetValue(proxyType, static type => type.GetConstructors());
+        return proxyType;
     }
 
     private DefaultProxyBuilder ShardFor(Type proxiedType)

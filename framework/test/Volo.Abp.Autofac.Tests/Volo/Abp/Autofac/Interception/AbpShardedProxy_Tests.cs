@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Builder;
@@ -45,6 +46,27 @@ public class AbpShardedProxy_Tests
         builder.CreateInterfaceProxyTypeWithoutTarget(typeof(ICalculator), Type.EmptyTypes, options).ShouldBeSameAs(withoutTarget);
 
         new[] { withTarget, withTargetInterface, withoutTarget }.Select(proxyType => proxyType.FullName).Distinct().Count().ShouldBe(3);
+    }
+
+    [Fact]
+    public void A_Proxy_Type_Should_Keep_Its_Constructors_Across_A_Full_Collection()
+    {
+        var builder = new AbpShardedProxyBuilder(16);
+        var proxyType = builder.CreateInterfaceProxyTypeWithTarget(typeof(ICalculator), Type.EmptyTypes, typeof(Calculator), ProxyGenerationOptions.Default);
+        var constructor = GetConstructorIdentity(proxyType);
+
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
+
+        // Castle creates the proxy through this constructor; a new one would compile its invoke stub again.
+        GetConstructorIdentity(proxyType).ShouldBe(constructor);
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static int GetConstructorIdentity(Type type)
+    {
+        return RuntimeHelpers.GetHashCode(type.GetConstructors()[0]);
     }
 
     [Fact]
