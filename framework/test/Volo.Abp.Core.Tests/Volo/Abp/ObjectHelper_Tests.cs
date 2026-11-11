@@ -1,4 +1,8 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Reflection;
+using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using Shouldly;
 using Xunit;
 
@@ -6,6 +10,62 @@ namespace Volo.Abp;
 
 public class ObjectHelper_Tests
 {
+    [Fact]
+    public void A_Collectible_Type_Should_Not_Be_Kept_Alive_By_The_Property_Cache()
+    {
+        var type = UseCollectibleType();
+
+        for (var i = 0; i < 10 && type.IsAlive; i++)
+        {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
+
+        type.IsAlive.ShouldBeFalse();
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static WeakReference UseCollectibleType()
+    {
+        var builder = AssemblyBuilder
+            .DefineDynamicAssembly(new AssemblyName("Collectible" + Guid.NewGuid().ToString("N")), AssemblyBuilderAccess.RunAndCollect)
+            .DefineDynamicModule("Collectible")
+            .DefineType("CollectibleObject", TypeAttributes.Public, typeof(object), new[] { typeof(IHasValue) });
+        builder.DefineDefaultConstructor(MethodAttributes.Public);
+        var field = builder.DefineField("_value", typeof(int), FieldAttributes.Private);
+        const MethodAttributes accessorAttributes = MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.Final |
+                                                    MethodAttributes.HideBySig | MethodAttributes.NewSlot | MethodAttributes.SpecialName;
+        var getter = builder.DefineMethod("get_Value", accessorAttributes, typeof(int), Type.EmptyTypes);
+        var il = getter.GetILGenerator();
+        il.Emit(OpCodes.Ldarg_0);
+        il.Emit(OpCodes.Ldfld, field);
+        il.Emit(OpCodes.Ret);
+        var setter = builder.DefineMethod("set_Value", accessorAttributes, null, new[] { typeof(int) });
+        il = setter.GetILGenerator();
+        il.Emit(OpCodes.Ldarg_0);
+        il.Emit(OpCodes.Ldarg_1);
+        il.Emit(OpCodes.Stfld, field);
+        il.Emit(OpCodes.Ret);
+        var property = builder.DefineProperty("Value", PropertyAttributes.None, typeof(int), null);
+        property.SetGetMethod(getter);
+        property.SetSetMethod(setter);
+        builder.DefineMethodOverride(getter, typeof(IHasValue).GetProperty(nameof(IHasValue.Value))!.GetMethod!);
+        builder.DefineMethodOverride(setter, typeof(IHasValue).GetProperty(nameof(IHasValue.Value))!.SetMethod!);
+        var type = builder.CreateType()!;
+
+        // The cache keeps the type's own PropertyInfo, which refers back to the type.
+        var instance = (IHasValue)Activator.CreateInstance(type)!;
+        ObjectHelper.TrySetProperty(instance, x => x.Value, () => 42);
+        instance.Value.ShouldBe(42);
+
+        return new WeakReference(type);
+    }
+
+    public interface IHasValue
+    {
+        int Value { get; set; }
+    }
+
     [Fact]
     public void TrySetProperty_Test()
     {
