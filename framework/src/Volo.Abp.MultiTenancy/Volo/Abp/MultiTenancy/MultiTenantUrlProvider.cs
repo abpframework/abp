@@ -47,14 +47,14 @@ public class MultiTenantUrlProvider : IMultiTenantUrlProvider , ITransientDepend
         var placeHolderValue = string.Empty;
         if (CurrentTenant.IsAvailable)
         {
-            placeHolderValue = (placeHolder == TenantIdPlaceHolder ? CurrentTenant.Id!.Value.ToString() : await GetCurrentTenantNameAsync()) + ".";
+            placeHolderValue = placeHolder == TenantIdPlaceHolder ? CurrentTenant.Id!.Value.ToString() : await GetCurrentTenantNameAsync();
         }
-        
-        if (templateUrl.Contains(placeHolder + '.'))
-        {
-            placeHolder += '.';
-        }
-        
+
+        templateUrl = templateUrl.Replace(
+            placeHolder + '.',
+            placeHolderValue.IsNullOrEmpty() ? string.Empty : placeHolderValue + '.'
+        );
+
         templateUrl = templateUrl.Replace(
             placeHolder,
             placeHolderValue

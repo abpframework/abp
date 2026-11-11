@@ -9,7 +9,7 @@ public static class EnumHelper
     [Obsolete("Use IAbpEnumLocalizer instead.")]
     public static string GetLocalizedMemberName(Type enumType, object value, IStringLocalizerFactory stringLocalizerFactory)
     {
-        var memberName = enumType.GetEnumName(value);
+        var memberName = enumType.GetEnumName(value) ?? Enum.ToObject(enumType, value).ToString();
         var localizedMemberName = AbpInternalLocalizationHelper.LocalizeWithFallback(
             new[]
             {
