@@ -25,7 +25,9 @@ public class DynamicClaimsAppService : IdentityAppServiceBase, IDynamicClaimsApp
 
     public virtual async Task RefreshAsync()
     {
-        await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(CurrentUser.GetId(), CurrentUser.TenantId);
+        // Overwrite the cache in place. Do not Clear then refill: parallel refresh requests
+        // would leave a gap where remote clients read null and reject the auth cookie.
+        await IdentityDynamicClaimsPrincipalContributorCache.RefreshAsync(CurrentUser.GetId(), CurrentUser.TenantId);
         await AbpClaimsPrincipalFactory.CreateDynamicAsync(PrincipalAccessor.Principal);
     }
 }
