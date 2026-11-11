@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.StaticAssets;
+using Microsoft.AspNetCore.StaticAssets.Infrastructure;
 using Microsoft.AspNetCore.Timing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -213,7 +214,9 @@ public static class AbpApplicationBuilderExtensions
 
         app.UseVirtualStaticFiles();
 
-        return endpoints.MapStaticAssets(staticAssetsManifestPath);
+        var builder = endpoints.MapStaticAssets(staticAssetsManifestPath);
+        AbpStaticAssetLabelFixer.FixDuplicateLabels(StaticAssetsEndpointDataSourceHelper.ResolveStaticAssetDescriptors(endpoints, staticAssetsManifestPath));
+        return builder;
     }
 
     /// <summary>
