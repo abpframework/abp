@@ -26,68 +26,69 @@
 | @ng-bootstrap/ng-bootstrap | ~20.0.0 | ~21.0.0 | #26380 |
 | @swimlane/ngx-datatable | ~22.0.0 | ~25.1.0 | #26380, #26381 |
 | Devart.Data.Oracle.EFCore | 11.0.0.9 | 11.2.192.10 | #26147 |
-| Microsoft.AspNetCore.Authentication.JwtBearer | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.AspNetCore.Authentication.OpenIdConnect | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.AspNetCore.Authorization | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.AspNetCore.Components | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.AspNetCore.Components.Authorization | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.AspNetCore.Components.Web | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.AspNetCore.Components.WebAssembly | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.AspNetCore.Components.WebAssembly.Authentication | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.AspNetCore.Components.WebAssembly.DevServer | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.AspNetCore.Components.WebAssembly.Server | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.AspNetCore.Components.WebView.Maui | 10.0.51 | 11.0.0-rc.2.26505.5 | #26147 |
-| Microsoft.AspNetCore.DataProtection | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.AspNetCore.DataProtection.StackExchangeRedis | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.AspNetCore.Mvc.NewtonsoftJson | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.AspNetCore.Mvc.Testing | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.AspNetCore.TestHost | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.AspNetCore.WebUtilities | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Bcl.AsyncInterfaces | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Data.Sqlite | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.EntityFrameworkCore | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.EntityFrameworkCore.Design | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.EntityFrameworkCore.InMemory | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.EntityFrameworkCore.Proxies | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.EntityFrameworkCore.Relational | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.EntityFrameworkCore.SqlServer | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.EntityFrameworkCore.Sqlite | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.EntityFrameworkCore.Tools | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Extensions.Caching.Memory | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Extensions.Caching.StackExchangeRedis | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Extensions.Configuration.Binder | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Extensions.Configuration.CommandLine | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Extensions.Configuration.EnvironmentVariables | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Extensions.Configuration.UserSecrets | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Extensions.DependencyInjection | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Extensions.DependencyInjection.Abstractions | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Extensions.FileProviders.Composite | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Extensions.FileProviders.Embedded | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Extensions.FileProviders.Physical | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Extensions.FileSystemGlobbing | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Extensions.Hosting | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Extensions.Hosting.Abstractions | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Extensions.Http | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Extensions.Identity.Core | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Extensions.Localization | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Extensions.Logging | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Extensions.Logging.Abstractions | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Extensions.Logging.Console | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Extensions.Options | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Extensions.Options.ConfigurationExtensions | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| Microsoft.Maui.Controls | 10.0.51 | 11.0.0-rc.2.26505.5 | #26147 |
+| Microsoft.AspNetCore.Authentication.JwtBearer | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.AspNetCore.Authentication.OpenIdConnect | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.AspNetCore.Authorization | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.AspNetCore.Components | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.AspNetCore.Components.Authorization | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.AspNetCore.Components.Web | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.AspNetCore.Components.WebAssembly | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.AspNetCore.Components.WebAssembly.Authentication | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.AspNetCore.Components.WebAssembly.DevServer | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.AspNetCore.Components.WebAssembly.Server | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.AspNetCore.Components.WebView.Maui | 10.0.51 | 11.0.0 | #26147, #26453 |
+| Microsoft.AspNetCore.DataProtection | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.AspNetCore.DataProtection.StackExchangeRedis | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.AspNetCore.Mvc.NewtonsoftJson | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.AspNetCore.Mvc.Testing | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.AspNetCore.TestHost | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.AspNetCore.WebUtilities | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Bcl.AsyncInterfaces | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Data.Sqlite | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.EntityFrameworkCore | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.EntityFrameworkCore.Design | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.EntityFrameworkCore.InMemory | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.EntityFrameworkCore.Proxies | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.EntityFrameworkCore.Relational | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.EntityFrameworkCore.SqlServer | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.EntityFrameworkCore.Sqlite | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.EntityFrameworkCore.Tools | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Extensions.Caching.Memory | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Extensions.Caching.StackExchangeRedis | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Extensions.Configuration.Binder | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Extensions.Configuration.CommandLine | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Extensions.Configuration.EnvironmentVariables | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Extensions.Configuration.UserSecrets | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Extensions.DependencyInjection | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Extensions.DependencyInjection.Abstractions | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Extensions.FileProviders.Composite | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Extensions.FileProviders.Embedded | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Extensions.FileProviders.Physical | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Extensions.FileSystemGlobbing | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Extensions.Hosting | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Extensions.Hosting.Abstractions | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Extensions.Http | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Extensions.Identity.Core | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Extensions.Localization | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Extensions.Logging | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Extensions.Logging.Abstractions | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Extensions.Logging.Console | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Extensions.Options | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Extensions.Options.ConfigurationExtensions | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| Microsoft.Maui.Controls | 10.0.51 | 11.0.0 | #26147, #26453 |
 | MongoDB.Driver | 3.12.0 | 3.13.0 | #26334 |
 | MySql.EntityFrameworkCore | 10.0.9 | 11.0.0-preview | #26400 |
 | Npgsql.EntityFrameworkCore.PostgreSQL | 10.0.3 | 11.0.0-rc.3 | #26147, #26400 |
 | Oracle.EntityFrameworkCore | 10.23.26000 | 10.23.26301 | #26147 |
-| System.Collections.Immutable | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| System.Management | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| System.Security.Cryptography.Xml | 10.0.10 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| System.Security.Permissions | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| System.Text.Encoding.CodePages | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| System.Text.Encodings.Web | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
-| System.Text.Json | 10.0.11 | 11.0.0-rc.3.26522.148 | #26147, #26340 |
+| System.Collections.Immutable | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| System.Management | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| System.Security.Cryptography.Pkcs | 11.0.0-rc.3.26522.148 | 11.0.0 | #26453 |
+| System.Security.Cryptography.Xml | 10.0.10 | 11.0.0 | #26147, #26340, #26453 |
+| System.Security.Permissions | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| System.Text.Encoding.CodePages | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| System.Text.Encodings.Web | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
+| System.Text.Json | 10.0.11 | 11.0.0 | #26147, #26340, #26453 |
 | ng-zorro-antd | ~21.3.1 | ~22.1.0 | #26380 |
 
 ## 10.8.0-rc.1
