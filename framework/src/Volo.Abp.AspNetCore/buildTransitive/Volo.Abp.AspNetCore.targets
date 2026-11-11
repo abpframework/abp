@@ -6,12 +6,4 @@
   <PropertyGroup Condition="$(NETCoreSdkVersion.StartsWith('11.0.1')) and '$(Configuration)' == 'Debug' and '$(UsingMicrosoftNETSdkWeb)' == 'true' and '$(OutputType)' == 'Library' and '$(EnableHotReloadInRuntimeConfigDevFile)' == ''">
     <EnableHotReloadInRuntimeConfigDevFile>false</EnableHotReloadInRuntimeConfigDevFile>
   </PropertyGroup>
-
-  <!-- The 11.0.1xx SDKs give the compressed copies of net11.0 package assets duplicate labels, so a Blazor host fails
-       on startup when two packages have a static asset with the same path. This also turns off build and publish
-       compression in the other Web SDK projects; set CompressionEnabled to true in a project to keep it. Check the
-       regression again before moving to an 11.0.2xx SDK, and remove this PropertyGroup once the SDK fixes it. -->
-  <PropertyGroup Condition="$(NETCoreSdkVersion.StartsWith('11.0.1')) and '$(UsingMicrosoftNETSdkWeb)' == 'true' and '$(CompressionEnabled)' == ''">
-    <CompressionEnabled>false</CompressionEnabled>
-  </PropertyGroup>
 </Project>
