@@ -580,7 +580,11 @@ public sealed class Conversation(Guid id, string ownerId)
     {
         lock (_messages)
         {
-            return _messages.TakeLast(MaxMessagesSentToModel).ToList();
+            // Start at a user message, so a tool result is never sent without its tool call.
+            return _messages
+                .TakeLast(MaxMessagesSentToModel)
+                .SkipWhile(message => message.Role != ChatRole.User)
+                .ToList();
         }
     }
 
@@ -615,7 +619,7 @@ public sealed class ConversationStore
 }
 ```
 
-> The in-memory store and the "last 20 messages" cut are stand-ins. A real application keeps conversations in a database and needs a real strategy for long histories. The library has a `ReducingChatClient` with message-counting and summarizing reducers for this, but they're experimental in 11.0.0.
+> The in-memory store and the "last 20 messages" cut are stand-ins. The cut starts at a user message on purpose: a window that begins with a tool result whose tool call was trimmed away is an invalid history for most providers. A real application keeps conversations in a database and needs a real strategy for long histories. The library has a `ReducingChatClient` with message-counting and summarizing reducers for this, but they're experimental in 11.0.0.
 
 ### Wire Format and Failure Paths
 
@@ -715,6 +719,7 @@ The page needs a message list (`#messages`), a user picker (`#user`), a form (`#
 
     controller = new AbortController();
     $('send').disabled = true; $('stop').disabled = false;
+    $('user').disabled = true;         // no user switch while an answer is streaming
 
     try {
       const response = await fetch('/api/chat', {
@@ -760,6 +765,7 @@ The page needs a message list (`#messages`), a user picker (`#user`), a form (`#
       if (!answer.textContent) answer.remove();
       controller = null;
       $('send').disabled = false; $('stop').disabled = true;
+      $('user').disabled = false;
       $('input').focus();
     }
   }
@@ -783,6 +789,7 @@ The points that are easy to get wrong on the client:
 
 - **A network chunk isn't an event.** One `read()` can return half an event or three events. The reader keeps the incomplete tail in a buffer and only parses complete frames (terminated by a blank line).
 - **A closed stream isn't a finished answer.** If the connection drops, the loop simply ends. The client only treats the answer as complete when it has seen `done`, and shows a message otherwise.
+- **One conversation, one stream.** The user picker is disabled while an answer is streaming. Otherwise a late event from the previous user's request could put that user's conversation id back after the view was reset.
 - **`AbortController` is the Stop button.** Aborting the `fetch` closes the connection, and that's what triggers `RequestAborted` on the server.
 - **Model output is untrusted input.** The script writes it with `textContent`. If you render Markdown, sanitize the resulting HTML. A model can be talked into emitting `<img src=x onerror=...>` just as easily as into emitting a wrong answer.
 - **Proxies like to buffer.** If events arrive in bursts in production but not locally, look at the reverse proxy first (for example, proxy buffering in nginx) and at any response compression you added yourself.
@@ -1372,7 +1379,7 @@ public sealed class DemoAuthHandler(
 
 ### Test Harness
 
-The tests host the real application with `WebApplicationFactory` and replace only the keyed provider, so every request still goes through the real endpoint and the real pipeline:
+The tests host the real application with `WebApplicationFactory<Program>` and replace only the keyed provider, so every request still goes through the real endpoint and the real pipeline. On .NET 10 and later, the `Program` class generated for top-level statements is public, so the test project can reference it as is. On .NET 9 or earlier, add `public partial class Program;` at the end of `Program.cs`.
 
 ```csharp
 using System.Net.Http.Json;
@@ -1566,14 +1573,14 @@ public async Task Provider_failure_mid_stream_becomes_an_error_event_without_det
 
 ### Results
 
-The test project has 30 tests in five groups:
+The test project has 31 tests in five groups:
 
-- **Streaming (13):** event order, provider replacement, server-side history, client abort, mid-stream failure, quiet timeout, partial answers, and the `400`, `401`, `404` and `429` paths.
+- **Streaming (14):** event order, provider replacement, server-side history, history trimming, client abort, mid-stream failure, quiet timeout, partial answers, and the `400`, `401`, `404` and `429` paths.
 - **Tools (11):** the happy path, another user's order, a hijacked model, an unknown tool, a runaway loop, malformed order numbers, result minimization and the tool schema.
 - **Caching (4):** cache hit, cache miss, per-user tool results, and the leaking pipeline order.
 - **Scoped cache keys (1)** and **telemetry (1).**
 
-All 30 passed:
+All 31 passed:
 
 ![All tests passing](images/test-results.png)
 
@@ -1597,7 +1604,7 @@ For an existing .NET application that already calls a model through a vendor SDK
 
 ## Conclusion
 
-`IChatClient` is a small interface, and that's its strength. It moved the vendor decision in this sample into one `switch` expression, let 30 tests run without a model, and let me point the same application at a real model with two environment variables.
+`IChatClient` is a small interface, and that's its strength. It moved the vendor decision in this sample into one `switch` expression, let 31 tests run without a model, and let me point the same application at a real model with two environment variables.
 
 What it doesn't do is make providers identical. The real model was slower by orders of magnitude, spent its output budget on reasoning, and ended a cancelled stream without an exception. The abstraction made that switch cheap to try, and the tests and telemetry around it are what made the differences visible.
 
