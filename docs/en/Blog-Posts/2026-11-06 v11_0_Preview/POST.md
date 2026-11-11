@@ -33,7 +33,7 @@ Here is a brief list of titles explained in the next sections:
 
 ### Upgraded to .NET 11
 
-ABP v11.0 targets .NET 11. Move your solution to .NET 11 if you want to use this version. ABP 11.0 RC references the .NET 11 RC 3 packages (`11.0.0-rc.3`). .NET 11 is a Standard Term Support release, and general availability is planned for November 10, 2026. We will update ABP to the stable .NET 11 SDK after that release.
+ABP v11.0 targets .NET 11. Move your solution to .NET 11 if you want to use this version. ABP 11.0.0-rc.1 references the .NET 11 RC 3 packages (`11.0.0-rc.3`). .NET 11, a Standard Term Support release, was released on November 10, 2026, and we are moving ABP to the stable .NET 11 SDK and packages for the next RC. See the [known issues](#known-issues) below if you use the .NET 11 SDK 11.0.100 with ABP 11.0.0-rc.1.
 
 The Blazor startup templates use the new `BasePath` component. ABP preserves the .NET 10 rounding behavior when `float` or `double` extra-property values are read as `decimal`.
 
@@ -151,6 +151,26 @@ ABP v11.0 RC also includes these dependency changes:
 - **Permissions:** `IPermissionManager` can update many permissions in one call. The permission management UI uses that overload, so a custom manager has to implement it. See [#26126](https://github.com/abpframework/abp/pull/26126).
 - **Feature management:** MongoDB no longer raises an entity-updated event when the stored feature value is already the requested value.
 - **Localization:** Portuguese (`pt`) resources are added for the Account module. See [#26115](https://github.com/abpframework/abp/pull/26115).
+
+## Known Issues
+
+The .NET 11 SDK 11.0.100 still has two issues that affect ABP 11.0.0-rc.1 applications. The next RC handles both of them. Until then, you can use these workarounds:
+
+- A Blazor application fails on startup with `The static asset '...' is already mapped` ([dotnet/sdk#56891](https://github.com/dotnet/sdk/issues/56891)). Turn off static asset compression in the Blazor host project:
+
+```xml
+<PropertyGroup>
+  <CompressionEnabled>false</CompressionEnabled>
+</PropertyGroup>
+```
+
+- A Debug build fails with `The following scoped css bundles do not have matching endpoints` when a Web SDK project references a Web SDK class library project ([dotnet/sdk#56656](https://github.com/dotnet/sdk/issues/56656)). Add this property to the referenced class library project:
+
+```xml
+<PropertyGroup>
+  <EnableHotReloadInRuntimeConfigDevFile>false</EnableHotReloadInRuntimeConfigDevFile>
+</PropertyGroup>
+```
 
 ## Community News
 
