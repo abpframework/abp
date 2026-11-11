@@ -23,7 +23,7 @@ public class EventBus_Order_Test : EventBusTestBase
     }
 
     [Fact]
-    public async Task An_Ioc_Handler_Should_Be_Created_Once_Per_Publish()
+    public async Task An_Ioc_Handler_Created_To_Read_Its_Order_Should_Be_Disposed()
     {
         CountedOrderEventHandler.Reset();
 
@@ -32,22 +32,22 @@ public class EventBus_Order_Test : EventBusTestBase
             await LocalEventBus.PublishAsync(new CountedOrderEventData());
         }
 
-        // Its registration tells its type, so it is not created to read its order.
-        CountedOrderEventHandler.Created.ShouldBe(3);
+        // Each publish creates the handler once to read its order and once to handle the event.
+        CountedOrderEventHandler.Created.ShouldBe(6);
         CountedOrderEventHandler.Handled.ShouldBe(3);
-        CountedOrderEventHandler.Disposed.ShouldBe(3);
+        CountedOrderEventHandler.Disposed.ShouldBe(6);
     }
 
     [Fact]
-    public void Listing_The_Factories_Should_Return_The_Subscribed_Factories_Without_Creating_A_Handler()
+    public void Listing_The_Factories_Should_Dispose_The_Handlers_Created_To_Read_Their_Order()
     {
         CountedOrderEventHandler.Reset();
 
         var factories = ((LocalEventBus)LocalEventBus).GetEventHandlerFactories(typeof(CountedOrderEventData));
 
         factories.SelectMany(x => x.EventHandlerFactories).ShouldContain(x => x is IocEventHandlerFactory);
-        CountedOrderEventHandler.Created.ShouldBe(0);
-        CountedOrderEventHandler.Disposed.ShouldBe(0);
+        CountedOrderEventHandler.Created.ShouldBe(1);
+        CountedOrderEventHandler.Disposed.ShouldBe(1);
         CountedOrderEventHandler.Handled.ShouldBe(0);
     }
 
@@ -168,7 +168,7 @@ public class EventBus_Order_Test : EventBusTestBase
     }
 
     [Fact]
-    public async Task An_Ioc_Handler_Replaced_In_A_Container_That_Can_Not_Tell_Its_Type_Should_Be_Ordered_By_The_Replacement()
+    public async Task An_Ioc_Handler_Replaced_In_The_Container_Should_Be_Ordered_By_The_Replacement()
     {
         var services = new ServiceCollection();
         services.AddTransient<OriginalIocOrderEventHandler, ReplacementIocOrderEventHandler>();
@@ -183,9 +183,33 @@ public class EventBus_Order_Test : EventBusTestBase
         }
 
         HandlerExecuteOrder.ShouldBe("R0");
-        // Microsoft's container does not tell the type, so the handler is also created to read its order.
+        // The handler is also created to read its order.
         ReplacementIocOrderEventHandler.Created.ShouldBe(2);
         ReplacementIocOrderEventHandler.Disposed.ShouldBe(2);
+    }
+
+    [Fact]
+    public async Task An_Ioc_Handler_Should_Be_Ordered_By_The_Type_The_Container_Creates_On_Each_Publish()
+    {
+        var createReplacement = false;
+        var services = new ServiceCollection();
+        services.AddTransient<OriginalIocOrderEventHandler>(_ => createReplacement
+            ? new ReplacementIocOrderEventHandler()
+            : new OriginalIocOrderEventHandler());
+        await using var provider = services.BuildServiceProvider();
+
+        using (LocalEventBus.Subscribe<IocReplacedOrderEventData, ZeroOrderIocEventHandler>())
+        using (LocalEventBus.Subscribe(typeof(IocReplacedOrderEventData), new IocEventHandlerFactory(provider.GetRequiredService<IServiceScopeFactory>(), typeof(OriginalIocOrderEventHandler))))
+        {
+            HandlerExecuteOrder = "";
+            await LocalEventBus.PublishAsync(new IocReplacedOrderEventData());
+            HandlerExecuteOrder.ShouldBe("0O");
+
+            createReplacement = true;
+            HandlerExecuteOrder = "";
+            await LocalEventBus.PublishAsync(new IocReplacedOrderEventData());
+            HandlerExecuteOrder.ShouldBe("R0");
+        }
     }
 
     [Fact]

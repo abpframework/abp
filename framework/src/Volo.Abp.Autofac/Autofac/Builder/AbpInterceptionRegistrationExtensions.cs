@@ -166,7 +166,9 @@ public static class AbpInterceptionRegistrationExtensions
     /// proxies a name of their own instead of one shared by every implementation of a common interface, which keeps them
     /// spread over the proxy builder's modules. It is only preferred when neither interface has a public attribute other
     /// than the compiler's nullable annotations, so the proxy type's attributes stay as they were whatever Castle is
-    /// configured to copy.
+    /// configured to copy. It is not preferred either when the type implements a variant generic interface more than
+    /// once, since a call through a variant interface that matches several of them runs the first one in the proxy's
+    /// interface order.
     /// </remarks>
     private sealed class ProxiedInterfaceSet
     {
@@ -185,7 +187,8 @@ public static class AbpInterceptionRegistrationExtensions
 
             var primary = interfaces[0];
             var own = interfaces.FirstOrDefault(i => i.Name == "I" + type.Name);
-            if (own != null && own != primary && !HasPublicAttributes(primary) && !HasPublicAttributes(own))
+            if (own != null && own != primary && !HasPublicAttributes(primary) && !HasPublicAttributes(own) &&
+                !ImplementsAVariantInterfaceMoreThanOnce(interfaces))
             {
                 primary = own;
             }
@@ -208,6 +211,15 @@ public static class AbpInterceptionRegistrationExtensions
             return interfaceType.CustomAttributes.Any(attribute =>
                 (attribute.AttributeType.IsPublic || attribute.AttributeType.IsNestedPublic) &&
                 !NullableAnnotations.Contains(attribute.AttributeType.FullName));
+        }
+
+        private static bool ImplementsAVariantInterfaceMoreThanOnce(Type[] interfaces)
+        {
+            return interfaces
+                .Where(i => i.IsGenericType && i.GetGenericTypeDefinition().GetGenericArguments()
+                    .Any(argument => (argument.GenericParameterAttributes & GenericParameterAttributes.VarianceMask) != 0))
+                .GroupBy(i => i.GetGenericTypeDefinition())
+                .Any(group => group.Count() > 1);
         }
     }
 

@@ -284,9 +284,9 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
 
     /// <summary>
     /// Gets the <see cref="LocalEventHandlerOrderAttribute"/> order of the handler the factory creates.
-    /// When the handler type is known without creating a handler (the built-in factories of a fixed type, and an
-    /// IoC handler whose registration in the container fixes its type), the order is read from that type.
-    /// Otherwise the handler is created to read its type and is disposed at once, on each publish. Callers
+    /// When the handler type is known without creating a handler (the built-in factories of a fixed type), the order
+    /// is read from that type. Otherwise the handler is created to read its type and is disposed at once, on each
+    /// publish, since what the container creates for a handler can change from one resolve to another. Callers
     /// enumerate a snapshot of the factories, since that dispose runs handler code which may unsubscribe.
     /// </summary>
     protected virtual int GetHandlerOrder(IEventHandlerFactory factory)
@@ -332,12 +332,6 @@ public class LocalEventBus : EventBusBase, ILocalEventBus, ISingletonDependency
             factoryType.IsGenericType && factoryType.GetGenericTypeDefinition() == typeof(TransientEventHandlerFactory<>))
         {
             return ((TransientEventHandlerFactory)factory).HandlerType;
-        }
-
-        // Only the built-in IoC factory, for the same reason.
-        if (factoryType == typeof(IocEventHandlerFactory))
-        {
-            return ((IocEventHandlerFactory)factory).GetImplementationTypeOrNull();
         }
 
         return null;

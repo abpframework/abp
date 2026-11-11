@@ -84,8 +84,8 @@ public class IocEventHandlerFactory_Tests : EventBusTestBase
     [Fact]
     public async Task A_Handler_That_Fails_To_Construct_While_Ordering_Should_Dispose_Both_Without_Invoking_Either()
     {
-        // A Microsoft container of its own: it does not tell the handler types, so both are created to read their
-        // order, and neither is also subscribed to the application's bus by convention.
+        // A Microsoft container of its own, so neither handler is also subscribed to the application's bus by convention.
+        // Both are created to read their order.
         var services = new ServiceCollection();
         AddThrowingHandler(services);
         services.AddTransient<EarlierWorkingHandler>();

@@ -24,9 +24,11 @@ public class Autofac_Interface_Interception_Test : AbpAsyncIntegratedTest<Autofa
     {
         services.AddTransient<SimpleAsyncInterceptor>();
         services.AddTransient<IInterfaceInterceptionTarget, InterfaceInterceptionTarget>();
+        services.AddTransient<IVariantTarget, VariantTarget>();
         services.OnRegistered(registration =>
         {
-            if (typeof(InterfaceInterceptionTarget) == registration.ImplementationType)
+            if (typeof(InterfaceInterceptionTarget) == registration.ImplementationType ||
+                typeof(VariantTarget) == registration.ImplementationType)
             {
                 registration.Interceptors.Add<SimpleAsyncInterceptor>();
             }
@@ -66,6 +68,32 @@ public class Autofac_Interface_Interception_Test : AbpAsyncIntegratedTest<Autofa
 
         // The same key returns the cached type only from the generator that built the resolved proxy.
         target.GetType().ShouldBeSameAs(proxyType);
+    }
+
+    [Fact]
+    public void A_Call_Through_A_Variant_Interface_Should_Run_What_The_Target_Runs()
+    {
+        var target = GetRequiredService<IVariantTarget>();
+
+        ProxyUtil.IsProxy(target).ShouldBeTrue();
+        // IVariant<object> matches both IVariant<string> and IVariant<Version>, so the interface order decides which runs.
+        ((IVariant<object>)target).Get().ShouldBe(((IVariant<object>)ProxyUtil.GetUnproxiedInstance(target)).Get());
+    }
+
+    public interface IVariant<out T>
+    {
+        T Get();
+    }
+
+    public interface IVariantTarget : IVariant<Version>
+    {
+    }
+
+    public class VariantTarget : IVariant<string>, IVariantTarget
+    {
+        string IVariant<string>.Get() => "string";
+
+        Version IVariant<Version>.Get() => new Version(1, 0);
     }
 
     public interface IInterfaceInterceptionTarget : ICanLogOnObject
