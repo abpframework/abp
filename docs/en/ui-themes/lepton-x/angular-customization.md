@@ -190,9 +190,10 @@ this.replaceableComponents.add({
 ![Angular Footer Component](images/angular-footer.png)
 
 The Footer is the section of content at the very bottom of the site. This section of the content can be modified.
+The ABP Studio templates replace the footer with their own component, registered by `FOOTER_PROVIDER` in `app.config.ts` (see the `angular/src/app/footer` directory). To configure the default footer instead, remove that provider first.
 Inject **FooterLinksService** and use the **setFooterInfo** method of **FooterLinksService**
 to assign path or link and description.
-**descUrl** and **footerLinks** are nullable. Constant **footerLinks** are on the right side of the footer.
+**links** is optional and is shown on the right side of the footer. The brand and author parts are shown only when **brandUrl** and **authorUrl** are set, respectively.
 
 ```js
 ///...
@@ -207,9 +208,11 @@ const footerLinks = [
   },
 ];
 const footerInfo: FooterNav = {
-  desc: "Home",
-  descUrl: "/home",
-  footerLinks: footerLinks,
+  brandName: "Home",
+  brandUrl: "/home",
+  authorName: "Volosoft",
+  authorUrl: "https://volosoft.com/",
+  links: footerLinks,
 };
 this.footerLinksService.setFooterInfo(footerInfo);
 ///...
