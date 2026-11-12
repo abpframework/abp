@@ -10,7 +10,6 @@ using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain;
-using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Settings;
 using Volo.Abp.Threading;
@@ -19,7 +18,6 @@ namespace Volo.Abp.SettingManagement;
 
 [DependsOn(
     typeof(AbpSettingsModule),
-    typeof(AbpLocalizationModule),
     typeof(AbpDddDomainModule),
     typeof(AbpSettingManagementDomainSharedModule),
     typeof(AbpCachingModule)

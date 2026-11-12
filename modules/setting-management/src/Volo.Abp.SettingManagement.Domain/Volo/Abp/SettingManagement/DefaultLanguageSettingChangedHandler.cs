@@ -4,6 +4,7 @@ using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Localization;
+using Volo.Abp.Settings;
 
 namespace Volo.Abp.SettingManagement;
 
@@ -20,7 +21,8 @@ public class DefaultLanguageSettingChangedHandler :
 
     public virtual async Task HandleEventAsync(EntityChangedEventData<Setting> eventData)
     {
-        if (eventData.Entity.Name != LocalizationSettingNames.DefaultLanguage)
+        if (eventData.Entity.Name != LocalizationSettingNames.DefaultLanguage ||
+            eventData.Entity.ProviderName == UserSettingValueProvider.ProviderName)
         {
             return;
         }
