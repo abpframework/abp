@@ -63,25 +63,7 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
             return await DynamicClaimCache.GetOrAddAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId), async () =>
             {
                 Logger.LogDebug($"Filling dynamic claims cache for user: {userId}");
-
-                var user = await UserManager.GetByIdAsync(userId);
-                var principal = await UserClaimsPrincipalFactory.CreateAsync(user);
-
-                var dynamicClaims = new AbpDynamicClaimCacheItem();
-                foreach (var claimType in AbpClaimsPrincipalFactoryOptions.Value.DynamicClaims)
-                {
-                    var claims = principal.Claims.Where(x => x.Type == claimType).ToList();
-                    if (claims.Any())
-                    {
-                        dynamicClaims.Claims.AddRange(claims.Select(claim => new AbpDynamicClaim(claimType, claim.Value)));
-                    }
-                    else
-                    {
-                        dynamicClaims.Claims.Add(new AbpDynamicClaim(claimType, null));
-                    }
-                }
-
-                return dynamicClaims;
+                return await CreateCacheItemAsync(userId);
             }, () => new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = CacheOptions.Value.CacheAbsoluteExpiration
@@ -89,9 +71,62 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
         }
     }
 
+    /// <summary>
+    /// Recomputes and overwrites the cached dynamic claims for the user without removing the
+    /// existing item first. Concurrent refresh requests must not observe an empty cache window
+    /// (Clear + refill races reject cookies on tiered / microservice clients).
+    /// </summary>
+    public virtual async Task RefreshAsync(Guid userId, Guid? tenantId = null)
+    {
+        Logger.LogDebug($"Refresh dynamic claims cache for user: {userId}");
+
+        using (CurrentTenant.Change(tenantId))
+        {
+            AbpDynamicClaimCacheItem cacheItem;
+            if (AbpClaimsPrincipalFactoryOptions.Value.DynamicClaims.IsNullOrEmpty())
+            {
+                cacheItem = new AbpDynamicClaimCacheItem();
+            }
+            else
+            {
+                cacheItem = await CreateCacheItemAsync(userId);
+            }
+
+            await DynamicClaimCache.SetAsync(
+                AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId),
+                cacheItem,
+                new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = CacheOptions.Value.CacheAbsoluteExpiration
+                });
+        }
+    }
+
     public virtual async Task ClearAsync(Guid userId, Guid? tenantId = null)
     {
         Logger.LogDebug($"Remove dynamic claims cache for user: {userId}");
         await DynamicClaimCache.RemoveAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId));
+    }
+
+    protected virtual async Task<AbpDynamicClaimCacheItem> CreateCacheItemAsync(Guid userId)
+    {
+        var user = await UserManager.GetByIdAsync(userId);
+        var principal = await UserClaimsPrincipalFactory.CreateAsync(user);
+
+        var dynamicClaims = new AbpDynamicClaimCacheItem();
+        foreach (var claimType in AbpClaimsPrincipalFactoryOptions.Value.DynamicClaims)
+        {
+            var claims = principal.Claims.Where(x => x.Type == claimType).ToList();
+            if (claims.Any())
+            {
+                dynamicClaims.Claims.AddRange(claims.Select(claim => new AbpDynamicClaim(claimType, claim.Value)));
+            }
+            else
+            {
+                dynamicClaims.Claims.Add(new AbpDynamicClaim(claimType, null));
+            }
+        }
+
+        return dynamicClaims;
     }
 }
