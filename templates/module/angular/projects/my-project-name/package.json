@@ -4,7 +4,7 @@
   "peerDependencies": {
     "@angular/common": "~22.1.0",
     "@angular/core": "~22.1.0",
-    "@abp/ng.core": "~10.7.0-rc.4",
+    "@abp/ng.core": "~10.7.1",
     "@abp/ng.theme.shared": "~11.0.0-rc.1"
   },
   "dependencies": {
