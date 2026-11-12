@@ -69,6 +69,13 @@
   dependencies:
     "@abp/utils" "~11.0.0-rc.1"
 
+"@abp/core@~11.0.0-rc.2":
+  version "11.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@abp/core/-/core-11.0.0-rc.2.tgz#06391b0a7f68e4d895d05ac0549b241f43d4ef23"
+  integrity sha512-LEjzRP/PMjR2jaMKJ0CTng/Noh9dp0cxa6kl7tGtqgweL6y6wVnhZYgG67s8M/tgFaYghsXurlIhbgMarlMasg==
+  dependencies:
+    "@abp/utils" "~11.0.0-rc.2"
+
 "@abp/datatables.net-bs5@~11.0.0-rc.1":
   version "11.0.0-rc.1"
   resolved "https://registry.yarnpkg.com/@abp/datatables.net-bs5/-/datatables.net-bs5-11.0.0-rc.1.tgz#1d7e9471c68c0eb64e9476967670d69fa897b7f3"
@@ -93,12 +100,12 @@
     "@abp/core" "~11.0.0-rc.1"
     "@fortawesome/fontawesome-free" "^7.0.1"
 
-"@abp/highlight.js@~11.0.0-rc.1":
-  version "11.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@abp/highlight.js/-/highlight.js-11.0.0-rc.1.tgz#49befae8da1c93df88fab649340cd4720dbc12af"
-  integrity sha512-om2f5p9YhXtDJuDv6bPBS1KojN5it619Wn4VtFZPgJUw9gQzsBH5eZtL/wW1BY727Lnt3MkhABPW0y2hs24Ieg==
+"@abp/highlight.js@~11.0.0-rc.2":
+  version "11.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@abp/highlight.js/-/highlight.js-11.0.0-rc.2.tgz#d0ece51da213f7bde0593c56743437c61560cede"
+  integrity sha512-NfPAlYfuKe8xk9rS3e7nPdPImKQJ1VlQtZ7yPfRhzhFLCyMLFkD/d12vHjWQpNFex80ZhS4vri7H9k/tT07pEQ==
   dependencies:
-    "@abp/core" "~11.0.0-rc.1"
+    "@abp/core" "~11.0.0-rc.2"
     "@highlightjs/cdn-assets" "~11.11.1"
 
 "@abp/jquery-validation-unobtrusive@~11.0.0-rc.1":
@@ -194,6 +201,13 @@
   version "11.0.0-rc.1"
   resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-11.0.0-rc.1.tgz#91ca25e687b0d49195adf808029ba94978156c4a"
   integrity sha512-WjujeW5j9Iqr5kR+8jF4lMk1E2FD9SMsOvivLOinQOE2tdipd7OlmPGX+8cwSXJXXhWJ7Y2TRqzlvn7BoZP0Yw==
+  dependencies:
+    just-compare "^2.3.0"
+
+"@abp/utils@~11.0.0-rc.2":
+  version "11.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-11.0.0-rc.2.tgz#00fa93974465a641ed82160bf22484254fd92790"
+  integrity sha512-73HTrDNJDmpc/R9uJHsK4OvCSkr0tFdaz0pUbyWHX5djyohe0z4ZBRXVlgeXPCrVCi7OrgM1/O9PRxD9Hp7lLQ==
   dependencies:
     just-compare "^2.3.0"
 
