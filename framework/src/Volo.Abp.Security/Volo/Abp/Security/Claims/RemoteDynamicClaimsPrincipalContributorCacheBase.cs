@@ -47,6 +47,24 @@ public abstract class RemoteDynamicClaimsPrincipalContributorCacheBase<TContribu
         dynamicClaims = await GetCacheAsync(userId, tenantId);
         if (dynamicClaims == null)
         {
+            // A concurrent clear (session revoke / claim invalidation) or another refresh can
+            // remove the item between the remote refill and this read. Retry once before failing.
+            Logger.LogDebug($"Dynamic claims cache for user: {userId} is still empty after refresh, retrying once.");
+            try
+            {
+                await refresh();
+            }
+            catch (Exception e)
+            {
+                Logger.LogWarning(e, $"Failed to refresh remote claims for user: {userId}");
+                throw;
+            }
+
+            dynamicClaims = await GetCacheAsync(userId, tenantId);
+        }
+
+        if (dynamicClaims == null)
+        {
             throw new AbpException($"Failed to get dynamic claims for user: {userId} from cache after refreshing, " +
                                    $"Ensure all applications use the same distributed cache and the same cache key prefix.");
         }
