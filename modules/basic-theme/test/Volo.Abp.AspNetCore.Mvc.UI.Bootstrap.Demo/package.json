@@ -5,6 +5,6 @@
   "dependencies": {
     "@abp/aspnetcore.mvc.ui.theme.shared": "~11.0.0-rc.1",
     "@abp/prismjs": "~11.0.0-rc.1",
-    "@abp/highlight.js": "~11.0.0-rc.1"
+    "@abp/highlight.js": "~11.0.0-rc.2"
   }
 }
