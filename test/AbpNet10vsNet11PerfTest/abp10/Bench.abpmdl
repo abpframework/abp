@@ -1,0 +1,93 @@
+{
+  "template": "app",
+  "imports": {
+    "Volo.Abp.LeptonXLiteTheme": {
+      "version": "5.7.0",
+      "isInstalled": true,
+      "creationTime": "11/05/2026 08:11:40 +00:00"
+    },
+    "Volo.Abp.Account": {
+      "version": "10.7.1",
+      "isInstalled": true,
+      "creationTime": "11/05/2026 08:11:40 +00:00"
+    },
+    "Volo.Abp.OpenIddict": {
+      "version": "10.7.1",
+      "isInstalled": true,
+      "creationTime": "11/05/2026 08:11:40 +00:00"
+    },
+    "Volo.Abp.Identity": {
+      "version": "10.7.1",
+      "isInstalled": true,
+      "creationTime": "11/05/2026 08:11:40 +00:00"
+    },
+    "Volo.Abp.TenantManagement": {
+      "version": "10.7.1",
+      "isInstalled": true,
+      "creationTime": "11/05/2026 08:11:40 +00:00"
+    },
+    "Volo.Abp.SettingManagement": {
+      "version": "10.7.1",
+      "isInstalled": true,
+      "creationTime": "11/05/2026 08:11:40 +00:00"
+    },
+    "Volo.Abp.PermissionManagement": {
+      "version": "10.7.1",
+      "isInstalled": true,
+      "creationTime": "11/05/2026 08:11:40 +00:00"
+    },
+    "Volo.Abp.FeatureManagement": {
+      "version": "10.7.1",
+      "isInstalled": true,
+      "creationTime": "11/05/2026 08:11:40 +00:00"
+    },
+    "Volo.Abp.BlobStoring.Database": {
+      "version": "10.7.1",
+      "isInstalled": true,
+      "creationTime": "11/05/2026 08:11:40 +00:00"
+    }
+  },
+  "folders": {
+    "items": {
+      "src": {}
+    }
+  },
+  "packages": {
+    "Bench.Application": {
+      "path": "src/Bench.Application/Bench.Application.abppkg",
+      "folder": "src"
+    },
+    "Bench.Domain.Shared": {
+      "path": "src/Bench.Domain.Shared/Bench.Domain.Shared.abppkg",
+      "folder": "src"
+    },
+    "Bench.Application.Contracts": {
+      "path": "src/Bench.Application.Contracts/Bench.Application.Contracts.abppkg",
+      "folder": "src"
+    },
+    "Bench.HttpApi": {
+      "path": "src/Bench.HttpApi/Bench.HttpApi.abppkg",
+      "folder": "src"
+    },
+    "Bench.HttpApi.Client": {
+      "path": "src/Bench.HttpApi.Client/Bench.HttpApi.Client.abppkg",
+      "folder": "src"
+    },
+    "Bench.Web": {
+      "path": "src/Bench.Web/Bench.Web.abppkg",
+      "folder": "src"
+    },
+    "Bench.EntityFrameworkCore": {
+      "path": "src/Bench.EntityFrameworkCore/Bench.EntityFrameworkCore.abppkg",
+      "folder": "src"
+    },
+    "Bench.DbMigrator": {
+      "path": "src/Bench.DbMigrator/Bench.DbMigrator.abppkg",
+      "folder": "src"
+    },
+    "Bench.Domain": {
+      "path": "src/Bench.Domain/Bench.Domain.abppkg",
+      "folder": "src"
+    }
+  }
+}

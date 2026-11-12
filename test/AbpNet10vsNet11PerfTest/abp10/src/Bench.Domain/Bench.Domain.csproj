@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Bench</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bench.Domain.Shared\Bench.Domain.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Emailing" Version="10.7.1" />
+    <PackageReference Include="Volo.Abp.Caching" Version="10.7.1" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Domain.Identity" Version="10.7.1" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Domain.OpenIddict" Version="10.7.1" />
+    <PackageReference Include="Volo.Abp.BackgroundJobs.Domain" Version="10.7.1" />
+    <PackageReference Include="Volo.Abp.AuditLogging.Domain" Version="10.7.1" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Domain" Version="10.7.1" />
+    <PackageReference Include="Volo.Abp.SettingManagement.Domain" Version="10.7.1" />
+    <PackageReference Include="Volo.Abp.BlobStoring.Database.Domain" Version="10.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.OpenIddict.Domain" Version="10.7.1" />
+    <PackageReference Include="Volo.Abp.Identity.Domain" Version="10.7.1" />
+    <PackageReference Include="Volo.Abp.TenantManagement.Domain" Version="10.7.1" />
+  </ItemGroup>
+
+</Project>
