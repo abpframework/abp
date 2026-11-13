@@ -7,6 +7,12 @@
 
 # Package Version Changes
 
+## 11.0.0-rc.2
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| MongoDB.Driver | 3.13.0 | 3.14.0 | #26481 |
+
 ## 10.7.2
 
 | Package | Old Version | New Version | PR |
