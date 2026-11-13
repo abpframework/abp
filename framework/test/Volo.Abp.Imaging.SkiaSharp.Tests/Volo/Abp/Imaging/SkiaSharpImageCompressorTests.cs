@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using SkiaSharp;
 using Xunit;
 
 namespace Volo.Abp.Imaging;
@@ -175,5 +176,19 @@ public class SkiaSharpImageCompressorTests : AbpImagingSkiaSharpTestBase
             if (disposing) _inner.Dispose();
             base.Dispose(disposing);
         }
+    }
+
+    [Fact]
+    public async Task Should_Apply_Exif_Orientation()
+    {
+        await using var jpegImage = SkiaSharpTestImageHelper.CreateQuadrantJpegWithExifOrientation(6);
+        var compressedImage = await ImageCompressor.CompressAsync(jpegImage);
+
+        compressedImage.State.ShouldBe(ImageProcessState.Done);
+        using var decoded = SKBitmap.Decode(compressedImage.Result);
+        decoded.Width.ShouldBe(100);
+        decoded.Height.ShouldBe(200);
+        SkiaSharpTestImageHelper.GetQuadrantColors(decoded).ShouldBe("BRYG");
+        compressedImage.Result.Dispose();
     }
 }

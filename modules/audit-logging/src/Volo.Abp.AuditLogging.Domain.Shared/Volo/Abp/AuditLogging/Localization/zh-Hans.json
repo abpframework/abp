@@ -113,6 +113,15 @@
     "AuditLogExportCompletedSubject": "审计日志导出已完成",
     "DownloadLinkExplanation": "您可以使用下面的链接下载文件，直到{0}（UTC）",
     "DownloadNow": "立即下载",
-    "TryAgainMessage": "请再试一次。如果问题仍然存在，请联系支持人员。"
+    "TryAgainMessage": "请再试一次。如果问题仍然存在，请联系支持人员。",
+    "Permission:SettingManagement": "设置管理",
+    "Action": "操作",
+    "NoActions": "无操作",
+    "MinExecutionDuration": "最小持续时间",
+    "MaxExecutionDuration": "最大持续时间",
+    "NoDataAvailable": "无可用数据",
+    "AuditLogExportFailedSubject": "审计日志导出失败",
+    "EntityChangeExportFailedSubject": "实体变更导出失败",
+    "FileNotFound": "未找到文件：{0}"
   }
 }

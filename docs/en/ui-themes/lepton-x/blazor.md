@@ -383,19 +383,17 @@ You can add a new `LeptonXFooter.razor` file and override the `Footer` component
 <div class="lpx-footbar-container">
     <div class="lpx-footbar">
         <div class="lpx-footbar-copyright">
-            <span>@DateTime.UtcNow.Year©</span>
-            <a href="https://leptontheme.com/" target="_blank">Lepton ThemeXXX</a>
-            <span>by</span>
-            <a href="https://volosoft.com/" target="_blank">Volosoft</a>
+            <span>@DateTime.UtcNow.Year © MyProjectName</span>
         </div>
         <div class="lpx-footbar-solo-links">
-            <a href="#">About</a>
-            <a href="#">Privacy</a>
-            <a href="#">Contact</a>
+            <a href="/PrivacyPolicy">Privacy</a>
+            <a href="/CookiePolicy">Cookie Policy</a>
         </div>
     </div>
 </div>
 ```
+
+Only include footer links that point at real pages in your solution (for example `/PrivacyPolicy` and `/CookiePolicy` when those pages exist). Do not use placeholder `href="#"` links.
 
 If you are using **Top Menu Layout**, then you can change the namespace as follows:
 

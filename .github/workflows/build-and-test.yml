@@ -16,8 +16,11 @@ on:
       - 'templates/**/*.cshtml'
       - 'templates/**/*.csproj'
       - 'templates/**/*.razor'
+      - 'framework/**/*.targets'
       - 'Directory.Build.props'
+      - 'Directory.Build.targets'
       - 'Directory.Packages.props'
+      - 'global.json'
       - '.github/workflows/build-and-test.yml'
 
   pull_request:
@@ -37,8 +40,11 @@ on:
       - 'templates/**/*.cshtml'
       - 'templates/**/*.csproj'
       - 'templates/**/*.razor'
+      - 'framework/**/*.targets'
       - 'Directory.Build.props'
+      - 'Directory.Build.targets'
       - 'Directory.Packages.props'
+      - 'global.json'
       - '.github/workflows/build-and-test.yml'
     types:
       - opened

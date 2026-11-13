@@ -1,0 +1,9 @@
+{
+  "culture": "he",
+  "texts": {
+    "TenantNotFoundMessage": "הדייר לא נמצא!",
+    "TenantNotFoundDetails": "לא קיים דייר עם המזהה או השם: {0}",
+    "TenantNotActiveMessage": "הדייר אינו פעיל!",
+    "TenantNotActiveDetails": "הדייר אינו פעיל. מזהה או שם הדייר: {0}"
+  }
+}

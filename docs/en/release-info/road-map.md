@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Explore the ABP Platform Road Map for insights on upcoming features, release schedules, and improvements in version 10.7, planned for August 2026."
+    "Description": "Explore the ABP Platform Road Map for insights on upcoming features, release schedules, and improvements in version 11.0, planned for November 2026."
 }
 ```
 
@@ -11,48 +11,27 @@ This document provides a road map, release schedule, and planned features for th
 
 ## Next Versions
 
-### v10.7
+### v11.0
 
-The next planned version will be 10.7, which is scheduled to be released as a stable version in August 2026. Based on the currently open issues and pull requests across the ABP ecosystem, we will be mostly working on the following topics:
+The next planned version will be 11.0, which is scheduled to be released as a stable version by the end of November 2026. We will be mostly working on the following topics:
 
 * Framework
-  * Cookie authentication: refresh token support and distributed locking ([#25011](https://github.com/abpframework/abp/issues/25011))
-  * jQuery 4.x upgrade, or removing jQuery as a dependency ([#25123](https://github.com/abpframework/abp/issues/25123))
-  * AI agent skills distributed as versioned plugins ([#25712](https://github.com/abpframework/abp/issues/25712))
-  * Hybrid UI / page embedding infrastructure ([#23102](https://github.com/abpframework/abp/issues/23102), [#23161](https://github.com/abpframework/abp/issues/23161))
-  * Microsoft Agent Framework migration and native agent skills support ([#24310](https://github.com/abpframework/abp/issues/24310), [#25194](https://github.com/abpframework/abp/issues/25194))
-  * Better ExtraProperties mapping for EF Core ([#23546](https://github.com/abpframework/abp/issues/23546))
-  * Upgrading 3rd-party dependencies and general bug fixing in core framework packages
-
-* ABP Suite
-  * Replace the templating system with Scriban while preserving backward compatibility
-  * Support for additional property types like `DateTimeOffset`, `TimeSpan` and numeric enums
-  * Display names and ordering for properties and navigation properties
-  * Filter on inherited properties and namespace-based UI foldering
-  * Low-Code system integration
-  * Improvements on generated code nullability, master-detail pages and file upload experiences
-
-* ABP Studio
-  * Low-Code platform integration
-  * Theme Builder: live preview, project integration and import/export
-  * Linux support and packaging improvements
-  * Better React / React Native / Thin UI template experience
-  * Better startup, diagnostics, module installation and solution runner experiences
-  * More automation for microservice solution creation and service/module addition
-  * Terminal, browser and built-in developer productivity enhancements
+  * Upgrading to .NET 11 and EF Core 11 ([#26147](https://github.com/abpframework/abp/pull/26147))
+  * Query projection for read-only application services ([#26016](https://github.com/abpframework/abp/pull/26016))
+  * Publishing FluentValidation rules in the API definition ([#26112](https://github.com/abpframework/abp/pull/26112))
+  * Generating only the types used by service signatures in C# client proxies ([#26205](https://github.com/abpframework/abp/pull/26205))
+  * Replacing or removing unmaintained MVC UI libraries (Owl Carousel, malihu custom scrollbar, timeago, jquery-form, toastr)
+  * Removing Polly from the framework and modules ([#26169](https://github.com/abpframework/abp/pull/26169))
+  * Upgrading 3rd-party dependencies (including Angular 22.1) and general bug fixing in core framework packages
 
 * Application Modules
-  * AI Management: chat history
-  * AI Management: multi-tenancy and tenant-scoped workspace capabilities
-  * RAG: Cloudflare `/crawl` endpoint as a data source
-  * New module: Chat with your data
-  * Payment module e-mail notification improvements
-  * CMS Kit and public website improvements
+  * Docs module: PDF rendering without iText and full-text search with the new Elasticsearch client ([#26216](https://github.com/abpframework/abp/pull/26216))
+  * Permission Management: updating many permissions in one call ([#26126](https://github.com/abpframework/abp/pull/26126))
+  * Korean (ko) localization for the commercial modules
   * UI/UX improvements on existing application modules
 
-* Updating existing tutorials & documents (with other UI & DB options)
-  * Documentation updates for modern React, Studio workflows and new CLI capabilities
-  * General refresh for roadmap, tutorials and feature comparison documents
+* Updating existing tutorials & documents
+  * Migration guide for upgrading to 11.0 and .NET 11
 
 ## Backlog Items
 
@@ -63,8 +42,6 @@ The *Next Versions* section above shows the main focus of the planned versions. 
 The ABP framework is [open source](https://github.com/abpframework/abp) and free for everyone. You can see its [public backlog](https://github.com/abpframework/abp/milestone/2). Here are some of the selected backlog items and longer-term topics:
 
 * [#23102](https://github.com/abpframework/abp/issues/23102) / ABP Hybrid UI System: Re-using module UIs in different technologies
-* [#23161](https://github.com/abpframework/abp/issues/23161) / Page Embedding Feature (aka Hybrid UI)
-* [#25123](https://github.com/abpframework/abp/issues/25123) / Upgrade jQuery to 4.x, or consider removing it as dependency
 * [#17093](https://github.com/abpframework/abp/issues/17093) / MVC UI: decouple jQuery
 * [#24310](https://github.com/abpframework/abp/issues/24310) / Migrate Volo.Abp.AI Semantic Kernel to Microsoft Agent Framework
 * [#25194](https://github.com/abpframework/abp/issues/25194) / Integrate Microsoft.Agents.AI for native Agent Skills support

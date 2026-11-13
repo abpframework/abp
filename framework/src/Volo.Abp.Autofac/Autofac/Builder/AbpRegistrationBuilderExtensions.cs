@@ -132,7 +132,7 @@ public static class AbpRegistrationBuilderExtensions
     {
         if (serviceType.IsInterface)
         {
-            registrationBuilder = registrationBuilder.EnableInterfaceInterceptors();
+            registrationBuilder = registrationBuilder.EnableAbpInterfaceInterceptors();
         }
         else
         {
@@ -142,7 +142,7 @@ public static class AbpRegistrationBuilderExtensions
                 return registrationBuilder;
             }
 
-            (registrationBuilder as IRegistrationBuilder<TLimit, ConcreteReflectionActivatorData, TRegistrationStyle>)?.EnableClassInterceptors();
+            (registrationBuilder as IRegistrationBuilder<TLimit, ConcreteReflectionActivatorData, TRegistrationStyle>)?.EnableAbpClassInterceptors();
         }
 
         foreach (var interceptor in interceptors)

@@ -85,6 +85,15 @@
     "TenantId": "ID người thuê",
     "DownloadLinkExplanation": "Bạn có thể tải xuống tệp bằng liên kết bên dưới cho đến {0} (UTC)",
     "DownloadNow": "Tải xuống ngay",
-    "TryAgainMessage": "Vui lòng thử lại. Nếu sự cố vẫn tiếp diễn, vui lòng liên hệ bộ phận hỗ trợ."
+    "TryAgainMessage": "Vui lòng thử lại. Nếu sự cố vẫn tiếp diễn, vui lòng liên hệ bộ phận hỗ trợ.",
+    "Permission:SettingManagement": "Quản lý cài đặt",
+    "Action": "Hành động",
+    "NoActions": "Không có hành động",
+    "MinExecutionDuration": "Thời lượng tối thiểu",
+    "MaxExecutionDuration": "Thời lượng tối đa",
+    "NoDataAvailable": "Không có dữ liệu",
+    "AuditLogExportFailedSubject": "Xuất nhật ký kiểm tra thất bại",
+    "EntityChangeExportFailedSubject": "Xuất thay đổi thực thể thất bại",
+    "FileNotFound": "Không tìm thấy tệp: {0}"
   }
 }

@@ -113,6 +113,15 @@
     "AuditLogExportCompletedSubject": "Audit napló exportálás befejezve",
     "DownloadLinkExplanation": "A fájlt letöltheti az alábbi linken keresztül {0} (UTC) időpontig",
     "DownloadNow": "Letöltés most",
-    "TryAgainMessage": "Kérjük, próbálja újra. Ha a probléma továbbra is fennáll, forduljon az ügyfélszolgálathoz."
+    "TryAgainMessage": "Kérjük, próbálja újra. Ha a probléma továbbra is fennáll, forduljon az ügyfélszolgálathoz.",
+    "Permission:SettingManagement": "Beállításkezelés",
+    "Action": "Művelet",
+    "NoActions": "Nincsenek műveletek",
+    "MinExecutionDuration": "Min. időtartam",
+    "MaxExecutionDuration": "Max. időtartam",
+    "NoDataAvailable": "Nincs elérhető adat",
+    "AuditLogExportFailedSubject": "Audit napló exportálás sikertelen",
+    "EntityChangeExportFailedSubject": "Entitás változás exportálás sikertelen",
+    "FileNotFound": "A fájl nem található: {0}"
   }
 }

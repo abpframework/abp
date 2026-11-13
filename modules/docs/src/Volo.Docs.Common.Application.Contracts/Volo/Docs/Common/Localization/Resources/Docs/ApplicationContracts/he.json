@@ -1,0 +1,7 @@
+{
+  "culture": "he",
+  "texts": {
+    "Permission:DocumentManagement.Common": "ניהול מסמכים משותף",
+    "Permission:PdfDownload": "הורדת PDF"
+  }
+}

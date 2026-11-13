@@ -334,29 +334,31 @@ It's time to create something visible and usable! There are some tools that we w
 Run the following command line to create a new component, named `BookComponent` in the root folder of the angular application:
 
 ```bash
-yarn ng generate component book
+yarn ng generate component book --type=component
 ```
+
+> The `--type=component` option keeps the `.component` suffix in the file and class names (`book.component.ts`, `BookComponent`). Newer Angular CLI versions omit this suffix by default, while this tutorial uses it.
 
 This command should produce the following output:
 
 ````bash
-> yarn ng generate component book
+> yarn ng generate component book --type=component
 
 yarn run v1.22.22
-$ ng generate component book
-CREATE src/app/book/book.component.spec.ts (537 bytes)
-CREATE src/app/book/book.component.ts (189 bytes)
+$ ng generate component book --type=component
 CREATE src/app/book/book.component.scss (0 bytes)
-CREATE src/app/book/book.component.html (20 bytes)
+CREATE src/app/book/book.component.spec.ts (581 bytes)
+CREATE src/app/book/book.component.ts (208 bytes)
+CREATE src/app/book/book.component.html (19 bytes)
 Done in 3.88s.
 ````
 
 ### Routing
 
-The generated code places the new route definition to the `src/app/app.routes.ts` file as shown below:
+Open the `src/app/app.routes.ts` file and add a route definition for the new component as shown below:
 
 ````js
-export const routes: Routes = [
+export const APP_ROUTES: Routes = [
   // other route definitions...
   { path : 'books', loadComponent: () => import('./book/book.component').then(c => c.BookComponent) },
 ];
@@ -425,27 +427,29 @@ This command will create the following files under the `/src/app/proxy/books` fo
 Open the `/src/app/book/book.component.ts` file and replace the content as below:
 
 ```js
-import { ListService, PagedResultDto } from '@abp/ng.core';
-import { Component, OnInit, inject } from '@angular/core';
-import { BookService, BookDto } from '@proxy/books';
+import { CoreModule, ListService, PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { ThemeSharedModule } from '@abp/ng.theme.shared';
+import { BookService, BookDto } from '../proxy/books';
 
 @Component({
   selector: 'app-book',
   templateUrl: './book.component.html',
   styleUrls: ['./book.component.scss'],
+  imports: [CoreModule, ThemeSharedModule],
   providers: [ListService],
 })
 export class BookComponent implements OnInit {
-  book = { items: [], totalCount: 0 } as PagedResultDto<BookDto>;
+  book = signal({ items: [], totalCount: 0 } as PagedResultDto<BookDto>);
 
   public readonly list = inject(ListService);
   private readonly bookService = inject(BookService);
 
   ngOnInit() {
-    const bookStreamCreator = (query) => this.bookService.getList(query);
+    const bookStreamCreator = (query: PagedAndSortedResultRequestDto) => this.bookService.getList(query);
 
     this.list.hookToQuery(bookStreamCreator).subscribe((response) => {
-      this.book = response;
+      this.book.set(response);
     });
   }
 }
@@ -453,6 +457,8 @@ export class BookComponent implements OnInit {
 
 * We imported and injected the generated `BookService`.
 * We are using the [ListService](../../framework/ui/angular/list-service.md), a utility service from the ABP which provides easy pagination, sorting and searching.
+* `BookComponent` is a standalone component, so the template dependencies are added to the `imports` array. `CoreModule` provides the `abpLocalization` pipe and the common Angular pipes (like `date` and `currency`), and `ThemeSharedModule` provides the `ngx-datatable` component and the ABP directives used with it.
+* `book` is a [signal](https://angular.dev/guide/signals). Starting with Angular 22, components use the `OnPush` change detection strategy by default, so the view is not refreshed when a plain property is changed inside a `subscribe` callback. Updating a signal refreshes the view.
 
 Open the `/src/app/book/book.component.html` and replace the content as shown below:
 
@@ -469,7 +475,7 @@ Open the `/src/app/book/book.component.html` and replace the content as shown be
     </div>
   </div>
   <div class="card-body">
-    <ngx-datatable [rows]="book.items" [count]="book.totalCount" [list]="list" default>
+    <ngx-datatable [rows]="book().items" [count]="book().totalCount" [list]="list" default>
       <ngx-datatable-column [name]="'::Name' | abpLocalization" prop="name" />
       <ngx-datatable-column [name]="'::Type' | abpLocalization" prop="type">
         <ng-template let-row="row" ngx-datatable-cell-template>

@@ -1,0 +1,10 @@
+{
+  "culture": "he",
+  "texts": {
+    "Volo.Authorization:010001": "ההרשאה נכשלה! המדיניות הנדרשת לא התקיימה.",
+    "Volo.Authorization:010002": "ההרשאה נכשלה! המדיניות הנדרשת לא התקיימה: {PolicyName}",
+    "Volo.Authorization:010003": "ההרשאה נכשלה! המדיניות הנדרשת לא התקיימה עבור המשאב: {ResourceName}",
+    "Volo.Authorization:010004": "ההרשאה נכשלה! הדרישה לא התקיימה עבור המשאב: {ResourceName}",
+    "Volo.Authorization:010005": "ההרשאה נכשלה! הדרישות לא התקיימו עבור המשאב: {ResourceName}"
+  }
+}
