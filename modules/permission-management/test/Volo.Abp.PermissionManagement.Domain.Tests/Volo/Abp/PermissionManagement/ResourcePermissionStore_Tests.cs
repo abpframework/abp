@@ -58,7 +58,7 @@ public class ResourcePermissionStore_Tests : PermissionTestBase
             TestEntityResource.ResourceName,
             TestEntityResource.ResourceKey1);
 
-        permissions.Result.Count.ShouldBe(10);
+        permissions.Result.Count.ShouldBe(11);
         permissions.Result.ShouldContain(p => p.Key == "MyResourcePermission1" && p.Value == PermissionGrantResult.Granted);
         permissions.Result.ShouldContain(p => p.Key == "MyResourceDisabledPermission1" && p.Value == PermissionGrantResult.Undefined);
         permissions.Result.ShouldContain(p => p.Key == "MyResourcePermission2" && p.Value == PermissionGrantResult.Undefined);
@@ -69,6 +69,7 @@ public class ResourcePermissionStore_Tests : PermissionTestBase
         permissions.Result.ShouldContain(p => p.Key == "MyResourceDisabledPermission2" && p.Value == PermissionGrantResult.Undefined);
         permissions.Result.ShouldContain(p => p.Key == "MyResourcePermission7" && p.Value == PermissionGrantResult.Undefined);
         permissions.Result.ShouldContain(p => p.Key == "MyResourcePermission8" && p.Value == PermissionGrantResult.Undefined);
+        permissions.Result.ShouldContain(p => p.Key == "MyResourcePermission9" && p.Value == PermissionGrantResult.Undefined);
 
         permissions = await _resourcePermissionStore.GetPermissionsAsync(
             TestEntityResource.ResourceName,

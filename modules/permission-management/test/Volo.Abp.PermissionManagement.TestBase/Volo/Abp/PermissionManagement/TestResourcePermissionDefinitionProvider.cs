@@ -24,5 +24,6 @@ public class TestResourcePermissionDefinitionProvider : PermissionDefinitionProv
 
         context.AddResourcePermission("MyResourcePermission7", TestEntityResource.ResourceName, "TestEntityManagementPermission");
         context.AddResourcePermission("MyResourcePermission8", TestEntityResource.ResourceName, "TestEntityManagementPermission");
+        context.AddResourcePermission("MyResourcePermission9", TestEntityResource.ResourceName, "TestEntityManagementPermission").WithProviders("Test");
     }
 }

@@ -42,7 +42,7 @@
                 @foreach (var permission in Model.ResourcePermissionDefinitions.Permissions)
                 {
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="AddModel.Permissions[]" id="@permission.Name.Replace(".", "")" value="@permission.Name">
+                        <input class="form-check-input" type="checkbox" name="AddModel.Permissions[]" id="@permission.Name.Replace(".", "")" value="@permission.Name" data-allowed-providers="@string.Join(",", permission.AllowedProviders ?? new List<string>())">
                         <label class="form-check-label" for="@permission.Name.Replace(".", "")">@permission.DisplayName</label>
                     </div>
                 }
