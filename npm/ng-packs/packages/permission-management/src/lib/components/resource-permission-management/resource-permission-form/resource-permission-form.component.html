@@ -24,7 +24,10 @@
     <abp-provider-key-search [resourceName]="resourceName()" />
   </div>
 
-  <abp-permission-checkbox-list [permissions]="state.permissionDefinitions()" idPrefix="add" />
+  <abp-permission-checkbox-list
+    [permissions]="state.availablePermissionDefinitions()"
+    idPrefix="add"
+  />
 } @else {
   <div class="mb-3" id="permissionList">
     <abp-permission-checkbox-list

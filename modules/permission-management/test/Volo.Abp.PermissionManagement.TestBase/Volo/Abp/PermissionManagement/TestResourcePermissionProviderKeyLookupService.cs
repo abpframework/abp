@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
@@ -24,6 +25,6 @@ public class TestResourcePermissionProviderKeyLookupService : IResourcePermissio
 
     public Task<List<ResourcePermissionProviderKeyInfo>> SearchAsync(string[] keys, CancellationToken cancellationToken = default)
     {
-        throw new System.NotImplementedException();
+        return Task.FromResult(keys.Select(key => new ResourcePermissionProviderKeyInfo(key, key)).ToList());
     }
 }

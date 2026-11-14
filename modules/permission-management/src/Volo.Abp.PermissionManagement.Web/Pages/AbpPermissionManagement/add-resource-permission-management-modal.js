@@ -1,12 +1,31 @@
 var abp = abp || {};
 (function ($) {
     var $all = $("#grantAllresourcePermissions");
-    var $items = $("#permissionList input[type='checkbox']").not("#grantAllresourcePermissions");
+    var $allItems = $("#permissionList input[type='checkbox']").not("#grantAllresourcePermissions");
+    var $items = $allItems;
+
+    function updateGrantAllCheckbox() {
+        $all.prop("checked", $items.length > 0 && $items.length === $items.filter(":checked").length);
+    }
+
+    function filterPermissionsByProvider() {
+        var providerName = $('input[name="AddModel.ProviderName"]:checked').val();
+        $items = $allItems.filter(function () {
+            var allowedProviders = $(this).attr("data-allowed-providers");
+            return !allowedProviders || allowedProviders.split(",").indexOf(providerName) >= 0;
+        });
+        $allItems.not($items).prop("checked", false).closest(".form-check").addClass("d-none");
+        $items.closest(".form-check").removeClass("d-none");
+        updateGrantAllCheckbox();
+    }
+
+    filterPermissionsByProvider();
+
     $all.on("change", function () {
         $items.prop("checked", this.checked);
     });
-    $items.on("change", function () {
-        $all.prop("checked", $items.length === $items.filter(":checked").length);
+    $allItems.on("change", function () {
+        updateGrantAllCheckbox();
     });
 
     var $permissionManagementForm = $("#addResourcePermissionManagementForm");
@@ -47,6 +66,7 @@ var abp = abp || {};
     });
 
     $('input[name="AddModel.ProviderName"]').change(function () {
+        filterPermissionsByProvider();
         $providerKey.val(null).trigger('change');
     });
 
@@ -80,7 +100,7 @@ var abp = abp || {};
                     $checkbox.prop('checked', false);
                 }
             });
-            $all.prop("checked", $items.length === $items.filter(":checked").length);
+            updateGrantAllCheckbox();
         });
     });
 

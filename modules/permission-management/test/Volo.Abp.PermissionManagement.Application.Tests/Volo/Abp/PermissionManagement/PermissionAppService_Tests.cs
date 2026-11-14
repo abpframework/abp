@@ -94,6 +94,16 @@ public class PermissionAppService_Tests : AbpPermissionManagementApplicationTest
     }
 
     [Fact]
+    public async Task Get_Should_Not_Return_Permissions_Not_Allowed_For_The_Provider()
+    {
+        var result = await _permissionAppService.GetAsync("Test", "Test");
+
+        var testGroup = result.Groups.First(g => g.Name == "TestGroup");
+        testGroup.Permissions.ShouldContain(x => x.Name == "MyPermission1");
+        testGroup.Permissions.ShouldNotContain(x => x.Name == "MyPermission4");
+    }
+
+    [Fact]
     public async Task GetByGroupAsync()
     {
         var permissionListResultDto = await _permissionAppService.GetByGroupAsync("TestGroup2", UserPermissionValueProvider.ProviderName,
