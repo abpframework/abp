@@ -100,3 +100,63 @@ public class AbpAutoMapperModule_DisabledMaxDepth_Tests : AbpIntegratedTest<AbpA
         }
     }
 }
+
+public class AbpAutoMapperModule_ConstructorMaxDepth_Tests : AbpIntegratedTest<AbpAutoMapperModule_ConstructorMaxDepth_Tests.TestModule>
+{
+    private readonly IMapper _mapper;
+
+    public AbpAutoMapperModule_ConstructorMaxDepth_Tests()
+    {
+        _mapper = ServiceProvider.GetRequiredService<IMapper>();
+    }
+
+    [Fact]
+    public void Should_Apply_Default_MaxDepth_When_Mapping_Through_Constructor()
+    {
+        var source = new ConstructorNode(null);
+        var current = source;
+        for (var i = 0; i < 100; i++)
+        {
+            current.Next = new ConstructorNode(null);
+            current = current.Next;
+        }
+
+        var destination = _mapper.Map<ConstructorNode>(source);
+
+        var depth = 0;
+        for (var node = destination; node != null; node = node.Next)
+        {
+            depth++;
+        }
+
+        depth.ShouldBe(64);
+    }
+
+    public class ConstructorNode
+    {
+        public ConstructorNode(ConstructorNode next)
+        {
+            Next = next;
+        }
+
+        public ConstructorNode Next { get; set; }
+    }
+
+    [DependsOn(
+        typeof(AbpLuckyPennyAutoMapperModule),
+        typeof(AbpObjectExtendingTestModule)
+    )]
+    public class TestModule : AbpModule
+    {
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.Configurators.Add(ctx =>
+                {
+                    ctx.MapperConfiguration.CreateMap<ConstructorNode, ConstructorNode>();
+                });
+            });
+        }
+    }
+}
