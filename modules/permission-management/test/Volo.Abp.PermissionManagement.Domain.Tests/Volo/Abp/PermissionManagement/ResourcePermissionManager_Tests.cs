@@ -250,6 +250,42 @@ public class ResourcePermissionManager_Tests : PermissionTestBase
     }
 
     [Fact]
+    public async Task Set_Should_Throw_Exception_If_Provider_Not_Allowed()
+    {
+        var exception = await Assert.ThrowsAsync<ApplicationException>(async () =>
+        {
+            await _resourcePermissionManager.SetAsync(
+                "MyResourcePermission4",
+                TestEntityResource.ResourceName,
+                TestEntityResource.ResourceKey7,
+                "Test",
+                "Test",
+                false);
+        });
+
+        exception.Message.ShouldContain("MyResourcePermission4");
+    }
+
+    [Fact]
+    public async Task Set_Should_Grant_Permission_Restricted_To_The_Provider()
+    {
+        await _resourcePermissionManager.SetAsync(
+            "MyResourcePermission9",
+            TestEntityResource.ResourceName,
+            TestEntityResource.ResourceKey7,
+            "Test",
+            "Test",
+            true);
+
+        (await _resourcePermissionGrantRepository.FindAsync(
+            "MyResourcePermission9",
+            TestEntityResource.ResourceName,
+            TestEntityResource.ResourceKey7,
+            "Test",
+            "Test")).ShouldNotBeNull();
+    }
+
+    [Fact]
     public async Task UpdateProviderKey()
     {
         await _resourcePermissionGrantRepository.InsertAsync(new ResourcePermissionGrant(
