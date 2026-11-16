@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -17,6 +18,22 @@ public class RegularTestControllerStaticClientProxy_AsyncEnumerable_Tests : AbpH
         var proxy = ServiceProvider.GetRequiredService<RegularTestControllerStaticClientProxy>();
 
         (await ToListAsync(proxy.GetStreamAsync(3))).ShouldBe(new[] { 1, 2, 3 });
+    }
+
+    [Fact]
+    public async Task Should_Send_The_Arguments_After_A_Leading_CancellationToken()
+    {
+        var proxy = ServiceProvider.GetRequiredService<RegularTestControllerStaticClientProxy>();
+
+        (await ToListAsync(proxy.GetStreamWithLeadingCancellationTokenAsync(CancellationToken.None, 3))).ShouldBe(new[] { 1, 2, 3 });
+    }
+
+    [Fact]
+    public async Task Should_Send_The_Arguments_In_The_Order_Of_The_Request_Parameters()
+    {
+        var proxy = ServiceProvider.GetRequiredService<RegularTestControllerStaticClientProxy>();
+
+        (await proxy.GetWithSwappedQueryNamesAsync(10, 20)).ShouldBe("10-20");
     }
 
     [Fact]

@@ -32,6 +32,18 @@ public class AsyncEnumerableClientProxy_Tests : AbpHttpClientTestBase
     }
 
     [Fact]
+    public async Task Should_Send_The_Arguments_After_A_Leading_CancellationToken()
+    {
+        var items = new List<int>();
+        await foreach (var item in _controller.GetStreamWithLeadingCancellationTokenAsync(CancellationToken.None, 3))
+        {
+            items.Add(item);
+        }
+
+        items.ShouldBe(new[] { 1, 2, 3 });
+    }
+
+    [Fact]
     public async Task Should_Stream_Items()
     {
         var items = new List<int>();

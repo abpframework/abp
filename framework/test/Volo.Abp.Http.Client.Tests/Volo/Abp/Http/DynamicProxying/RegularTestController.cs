@@ -258,6 +258,13 @@ public class RegularTestController : AbpController, IRegularTestController
     }
 
     [HttpGet]
+    [Route("get-with-swapped-query-names")]
+    public Task<string> GetWithSwappedQueryNamesAsync([FromQuery(Name = "second")] int first, [FromQuery(Name = "first")] int second)
+    {
+        return Task.FromResult($"{first}-{second}");
+    }
+
+    [HttpGet]
     [Route("get-with-catch-all-path/{**path}")]
     public Task<string> GetWithCatchAllPathAsync(string path)
     {

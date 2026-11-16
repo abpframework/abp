@@ -135,10 +135,15 @@ public class ClientProxyBase<TService> : ITransientDependency
             actionArguments.RemoveAll(x => x.Key == "api-version" || x.Key == "apiVersion");
         }
 
+        // A CancellationToken argument has no request parameter, so it must not shift the arguments after it.
+        var requestArguments = arguments.Values.Exists(x => x.Key == typeof(CancellationToken))
+            ? arguments.Values.Where(x => x.Key != typeof(CancellationToken)).ToList()
+            : arguments.Values;
+
         return new ClientProxyRequestContext(
             action,
                 actionArguments
-                .Select((x, i) => new KeyValuePair<string, object?>(x.Key, arguments.Values[i].Value))
+                .Select((x, i) => new KeyValuePair<string, object?>(x.Key, requestArguments[i].Value))
                 .ToDictionary(x => x.Key, x => x.Value),
             typeof(TService));
     }

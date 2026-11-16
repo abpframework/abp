@@ -68,6 +68,8 @@ public interface IRegularTestController
 
     Task<string> GetWithStringPathAsync(string name);
 
+    Task<string> GetWithSwappedQueryNamesAsync(int first, int second);
+
     Task<string> GetWithCatchAllPathAsync(string path);
 
     Task<string> GetWithSingleStarCatchAllPathAsync(string path);
