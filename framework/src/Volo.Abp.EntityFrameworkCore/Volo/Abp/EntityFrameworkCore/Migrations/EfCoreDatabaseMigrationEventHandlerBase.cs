@@ -76,6 +76,13 @@ public abstract class EfCoreDatabaseMigrationEventHandlerBase<TDbContext> :
             return;
         }
 
+        if (eventData.TenantId.HasValue && !await TenantExistsAsync(eventData.TenantId.Value))
+        {
+            Logger.LogInformation(
+                $"Skipping the database migrations: the tenant no longer exists. TenantId = {eventData.TenantId}, Database Name = {DatabaseName}.");
+            return;
+        }
+
         var schemaMigrated = false;
         try
         {
@@ -108,6 +115,13 @@ public abstract class EfCoreDatabaseMigrationEventHandlerBase<TDbContext> :
 
     public virtual async Task HandleEventAsync(TenantCreatedEto eventData)
     {
+        if (!await TenantExistsAsync(eventData.Id))
+        {
+            Logger.LogInformation(
+                $"Skipping the tenant created event: the tenant no longer exists. TenantId = {eventData.Id}, TenantName = {eventData.Name}, Database Name = {DatabaseName}.");
+            return;
+        }
+
         var schemaMigrated = false;
         try
         {
@@ -147,6 +161,13 @@ public abstract class EfCoreDatabaseMigrationEventHandlerBase<TDbContext> :
             return;
         }
 
+        if (!await TenantExistsAsync(eventData.Id))
+        {
+            Logger.LogInformation(
+                $"Skipping the tenant connection string updated event: the tenant no longer exists. TenantId = {eventData.Id}, TenantName = {eventData.Name}, Database Name = {DatabaseName}.");
+            return;
+        }
+
         var schemaMigrated = false;
         try
         {
@@ -181,6 +202,20 @@ public abstract class EfCoreDatabaseMigrationEventHandlerBase<TDbContext> :
     protected virtual Task SeedAsync(Guid? tenantId)
     {
         return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// A tenant can be deleted before an event about it is handled (the events are handled asynchronously,
+    /// and each service handles them on its own). Such an event has nothing to migrate or seed.
+    /// </summary>
+    protected virtual async Task<bool> TenantExistsAsync(Guid tenantId)
+    {
+        using (var uow = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: false))
+        {
+            var tenantConfiguration = await TenantStore.FindAsync(tenantId);
+            await uow.CompleteAsync();
+            return tenantConfiguration != null;
+        }
     }
 
     /// <summary>
@@ -238,8 +273,14 @@ public abstract class EfCoreDatabaseMigrationEventHandlerBase<TDbContext> :
                 else
                 {
                     var tenantConfiguration = await TenantStore.FindAsync(tenantId.Value);
-                    if (!tenantConfiguration!.ConnectionStrings!.Default.IsNullOrWhiteSpace() ||
-                        !tenantConfiguration.ConnectionStrings.GetOrDefault(DatabaseName).IsNullOrWhiteSpace())
+                    if (tenantConfiguration == null)
+                    {
+                        Logger.LogInformation(
+                            $"The tenant no longer exists, its database is not migrated. Database Name = {DatabaseName}, TenantId = {tenantId}");
+                    }
+                    else if (tenantConfiguration.ConnectionStrings != null &&
+                             (!tenantConfiguration.ConnectionStrings.Default.IsNullOrWhiteSpace() ||
+                              !tenantConfiguration.ConnectionStrings.GetOrDefault(DatabaseName).IsNullOrWhiteSpace()))
                     {
                         //Migrating the tenant database (only if tenant has a separate database)
                         Logger.LogInformation(
