@@ -11,6 +11,7 @@
 
 | Package | Old Version | New Version | PR |
 |---------|-------------|-------------|-----|
+| Devart.Data.Oracle.EFCore | 11.2.192.10 | 11.3.248.11 | #26497 |
 | Microsoft.IdentityModel.JsonWebTokens | 8.19.2 | 8.23.0 | #26489 |
 | Microsoft.IdentityModel.Protocols.OpenIdConnect | 8.19.2 | 8.23.0 | #26489 |
 | Microsoft.IdentityModel.Tokens | 8.19.2 | 8.23.0 | #26489 |
