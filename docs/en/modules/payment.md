@@ -703,6 +703,121 @@ Instead of configuring options in your module class, you can configure it in you
 
 The domain and MVC gateway modules share `Payment:Payu`, `Payment:PayPal`, `Payment:Iyzico`, `Payment:Stripe`, and `Payment:TwoCheckout`. Alipay MVC options use `Payment:AlipayWeb`.
 
+## Error Notifications
+
+The Payment module can collect the exceptions of failing payment gateway operations and email them as a digest. `IPaymentRequestAppService` reports an error when the gateway's `StartAsync` or `HandleWebhookAsync` throws, or when its `CompleteAsync` throws or returns no payment request.
+
+Exceptions implementing `IUserFriendlyException`, including `UserFriendlyException` and its subclasses, are excluded. This check applies to the thrown exception itself. A technical exception wrapping a user-friendly inner exception still sends a notification. Other exceptions, including `BusinessException`, can send notifications. Iyzico reports every error returned by its API as a `UserFriendlyException`, including configuration errors such as an invalid API key, so these errors aren't reported by default. Override `ShouldReport` (see [Customizing Notifications](#customizing-notifications)) to include them.
+
+Only these gateway calls are covered. Errors outside them, such as an unknown gateway name or a payment request that can't be found in `StartAsync`, don't send a notification. A payment request that ends in the `Failed` state without an exception doesn't send one either. The original exception is always re-thrown. Notification activation or sending failures are logged without replacing it.
+
+Notifications are turned on and off with the `Volo.Payment.ErrorNotification.IsEnabled` setting. It is `false` by default, so no email is sent even when receivers are configured. Set it to `true` and configure at least one valid receiver in `Volo.Payment.ErrorNotification.ReceiverEmailAddresses`. Separate addresses with a semicolon (`;`) or comma (`,`).
+
+```json
+{
+  "Settings": {
+    "Volo.Payment.ErrorNotification.IsEnabled": "true",
+    "Volo.Payment.ErrorNotification.ReceiverEmailAddresses": "accounting@mycompany.com;dev@mycompany.com"
+  }
+}
+```
+
+The module doesn't provide a settings UI for these values. Besides configuration, both settings can be stored globally in code with `ISettingManager` from the [Setting Management module](setting-management.md). Tenant and user level values are ignored because payment requests and their notification settings belong to the host. Invalid receiver addresses are logged and skipped. If notifications are enabled but no valid receiver is configured, a warning is logged for each error and the error isn't collected.
+
+### Digest Emails
+
+Errors aren't emailed one by one. The first reported error starts a batch in the [distributed cache](../framework/fundamentals/caching.md). Later errors with the same stage, gateway, exception type and exception message are counted in a single entry; other errors get their own entry. A [background worker](../framework/infrastructure/background-workers/index.md) checks the batch every hour and, once `BatchWindow` (one day by default) has passed since the first error, sends all entries in a single email and clears the batch. Later errors don't delay the digest, and the next error after it starts a new batch.
+
+* If notifications are turned off, no new errors are collected and the pending digest isn't sent. The collected errors stay in the cache until they expire (see below); if notifications are turned on again before that, they are sent at the next check. The errors are still in the application logs.
+* If the receivers are removed after errors were collected, the batch is kept and sent once a receiver is configured again. A batch that is never sent is removed from the cache `BatchWindow` plus `DigestCheckPeriod` plus one day after its last error.
+* With a background job implementation, the digest is queued for each receiver and failed deliveries are retried by the background job system. A receiver that the digest can't be queued or sent to is logged and retried at the next check, without sending the digest again to the receivers that already got it. Receivers removed from the setting in the meantime aren't retried.
+  Errors reported in the meantime start a new batch, so they are never added to a digest that some receivers already got. A digest that still has failed receivers is retried until the next digest is due. It is then dropped with an error log, and the next digest is sent to all receivers.
+
+Adding an error to the batch holds a short lock only while the batch is updated. The digest is sent without holding it, so a slow email server doesn't delay failing payment requests. If an error can't be added to the batch (the lock can't be acquired within a few seconds or the cache fails), a warning is logged and the error is left out of the digest. The original exception is still thrown and is still in the application logs.
+
+Consider the following when deploying:
+
+* The digest is sent by the background worker, so [background workers](../framework/infrastructure/background-workers/index.md) must be enabled on at least one instance. Instances with workers disabled still add errors to the batch when they share the cache with that instance.
+* With the default in-memory cache, restarting the application loses the errors collected so far. The exceptions are still in the application logs. Use a distributed cache, such as [Redis](../framework/fundamentals/redis-cache.md), to keep the batch across restarts.
+* When the application runs on multiple instances, use a shared distributed cache and a [distributed lock](../framework/infrastructure/distributed-locking.md) provider. Without a shared cache, every instance collects and sends its own digest. Without a distributed lock, instances can overwrite each other's counts or send the same digest twice.
+* Errors whose messages contain unique values (such as an id) aren't grouped, so each gets its own entry. A batch keeps at most `MaxEntryCount` entries; further error types are only counted, and the digest reports how many were left out.
+
+### PaymentErrorNotificationOptions
+
+`PaymentErrorNotificationOptions` controls the digest timing and size:
+
+* `BatchWindow` (default: one day): How long after the first error of a batch the digest is sent.
+* `DigestCheckPeriod` (default: `3600000` milliseconds, one hour): How often the background worker checks whether the digest is due.
+* `MaxEntryCount` (default: `50`): The maximum number of distinct errors kept in a batch.
+
+```csharp
+Configure<PaymentErrorNotificationOptions>(options =>
+{
+    options.BatchWindow = TimeSpan.FromHours(12);
+});
+```
+
+### Email Content and Delivery
+
+Notifications run in the host context, with the caller's tenant restored afterward. The batch is kept in the cache, so it is not affected when the payment unit of work rolls back. The digest is sent with `IEmailSender.QueueAsync`, so configure your application's [email sending](../framework/infrastructure/emailing.md) settings. When a [background job](../framework/infrastructure/background-jobs) implementation is available, a separate unit of work preserves the queued email job even if the surrounding unit of work rolls back. Without a background job implementation, `QueueAsync` falls back to sending synchronously in the host context. Sending failures are logged.
+
+The email starts with the total number of errors, the number of distinct errors and the period they occurred in. Errors are listed from the most frequent. Each entry contains the number of occurrences, the stage (`Start`, `Complete` or `Webhook`), gateway name, exception type and message, the first and last occurrence times with their UTC offset (for example, `2026-11-03 14:05:12 +03:00`), up to five related payment request ids (when known), and the full exception details of the first occurrence (including inner exceptions and available stack traces). Exception messages are truncated to 1,000 characters and exception details to 10,000 characters. Exception text is HTML-escaped and included without automatic redaction. Its body uses the `Payment.ErrorNotification` [text template](../framework/infrastructure/text-templating), which can be overridden like other text templates.
+
+### Customizing Notifications
+
+The module only provides the on/off setting and the options above. To control which errors are reported or how they are delivered, replace `PaymentErrorEmailSender` and override its methods:
+
+* **Filter notifications** by overriding the protected `ShouldReport(PaymentErrorNotificationContext context)` method. It returns `false` for user-friendly exceptions by default; return `true` to report an error or `false` to skip it. The `context` provides `Stage`, `Gateway`, `Exception` and, when known, `PaymentRequestId`. Skipped errors are never added to a batch.
+* **Change the receivers, the email or the delivery** by overriding the protected `SendCoreAsync(PaymentErrorNotificationBatchCacheItem batch, IReadOnlyList<string> receivers)` method. It runs when the digest is due, after the enable check, host context, receiver validation and separate unit of work are applied. In the override you can pass a different receiver list to the base method, change the subject, the body or the template, redact sensitive values, or send the errors to another channel (such as a chat or incident tool) instead of, or in addition to, email. `SendCoreAsync` returns the receivers it couldn't send to, and only those are retried at the next check. If it throws, all receivers of that attempt are retried.
+* **Change how errors are grouped** by overriding the protected `AddOrIncrementEntry` method.
+
+The following example skips webhook errors:
+
+```csharp
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
+using Volo.Abp.Caching;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.DistributedLocking;
+using Volo.Abp.Emailing;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.Settings;
+using Volo.Abp.TextTemplating;
+using Volo.Abp.Timing;
+using Volo.Abp.Uow;
+using Volo.Payment.Emailing;
+using Volo.Payment.Localization;
+
+[Dependency(ReplaceServices = true)]
+[ExposeServices(typeof(PaymentErrorEmailSender))]
+public class MyPaymentErrorEmailSender : PaymentErrorEmailSender
+{
+    public MyPaymentErrorEmailSender(
+        IEmailSender emailSender,
+        ITemplateRenderer templateRenderer,
+        ISettingProvider settingProvider,
+        IUnitOfWorkManager unitOfWorkManager,
+        IStringLocalizer<PaymentResource> stringLocalizer,
+        IClock clock,
+        ICurrentTenant currentTenant,
+        IDistributedCache<PaymentErrorNotificationBatchCacheItem> batchCache,
+        IAbpDistributedLock distributedLock,
+        IOptions<PaymentErrorNotificationOptions> options)
+        : base(emailSender, templateRenderer, settingProvider, unitOfWorkManager,
+            stringLocalizer, clock, currentTenant, batchCache, distributedLock,
+            options)
+    {
+    }
+
+    protected override bool ShouldReport(PaymentErrorNotificationContext context)
+    {
+        return context.Stage != PaymentErrorStage.Webhook && base.ShouldReport(context);
+    }
+}
+```
+
+A failure in an override is logged and does not replace the original gateway exception.
+
 ## Internals
 
 ### Domain layer
