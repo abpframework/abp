@@ -9,7 +9,7 @@
 
 ## Introduction
 
-[AutoMapper](https://automapper.org/) became a commercial product starting from version 15.x. The free open-source version (14.x) contains a [security vulnerability (GHSA-rvv3-g6hj-g44x)](https://github.com/advisories/GHSA-rvv3-g6hj-g44x) — a DoS (Denial of Service) vulnerability — and no patch will be released for the 14.x series. The patched version is only available in the commercial editions (15.x and later).
+[AutoMapper](https://automapper.org/) became a commercial product starting from version 15.x. The free open-source version (14.x) contains DoS (Denial of Service) vulnerabilities ([GHSA-rvv3-g6hj-g44x](https://github.com/advisories/GHSA-rvv3-g6hj-g44x), [GHSA-6vhm-j9h7-f9gh](https://github.com/advisories/GHSA-6vhm-j9h7-f9gh), [GHSA-gpwp-5797-mjff](https://github.com/advisories/GHSA-gpwp-5797-mjff)), and no patch will be released for the 14.x series. The patched versions are only available in the commercial editions. To get all of these fixes, use AutoMapper 16.3.0 or later (or 15.1.4 on the 15.x series).
 
 The existing [Volo.Abp.AutoMapper](https://www.nuget.org/packages/Volo.Abp.AutoMapper) package uses AutoMapper 14.x and remains available for existing users. If you hold a valid [LuckyPenny AutoMapper commercial license](https://automapper.io/), the `Volo.Abp.LuckyPenny.AutoMapper` package provides the same ABP AutoMapper integration built on the patched commercial version.
 
