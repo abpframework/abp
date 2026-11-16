@@ -48,8 +48,15 @@ export class ResourcePermissionStateService {
     readonly isEditMode = computed(() => this.viewMode() === eResourcePermissionViewModes.Edit);
     readonly isListMode = computed(() => this.viewMode() === eResourcePermissionViewModes.List);
 
+    readonly availablePermissionDefinitions = computed(() => {
+        const providerName = this.selectedProviderName();
+        return this.permissionDefinitions().filter(
+            p => !p.allowedProviders?.length || p.allowedProviders.includes(providerName),
+        );
+    });
+
     readonly currentPermissionsList = computed(() =>
-        this.isAddMode() ? this.permissionDefinitions() : this.permissionsWithProvider()
+        this.isAddMode() ? this.availablePermissionDefinitions() : this.permissionsWithProvider(),
     );
 
     readonly allPermissionsSelected = computed(() => {
@@ -116,6 +123,10 @@ export class ResourcePermissionStateService {
     // Provider search methods
     onProviderChange(providerName: string) {
         this.selectedProviderName.set(providerName);
+        const availableNames = this.availablePermissionDefinitions().map(p => p.name || '');
+        this.selectedPermissions.set(
+            this.selectedPermissions().filter(p => availableNames.includes(p)),
+        );
         this.selectedProviderKey.set('');
         this.searchResults.set([]);
         this.searchFilter.set('');

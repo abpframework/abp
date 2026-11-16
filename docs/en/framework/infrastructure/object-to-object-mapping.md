@@ -224,7 +224,7 @@ public class MyProfile : Profile
 }
 ````
 
-> AutoMapper 14.x contains a [known vulnerability (GHSA-rvv3-g6hj-g44x)](https://github.com/advisories/GHSA-rvv3-g6hj-g44x). ABP Framework has applied a code-level mitigation (`MaxDepth = 64`) to address this. If you hold a commercial AutoMapper license, you can use [Volo.Abp.LuckyPenny.AutoMapper](luckypenny-automapper.md) to upgrade to the officially patched version. Alternatively, you can migrate to [Mapperly](../../release-info/migration-guides/AutoMapper-To-Mapperly.md).
+> AutoMapper 14.x contains known DoS vulnerabilities ([GHSA-rvv3-g6hj-g44x](https://github.com/advisories/GHSA-rvv3-g6hj-g44x), [GHSA-6vhm-j9h7-f9gh](https://github.com/advisories/GHSA-6vhm-j9h7-f9gh), [GHSA-gpwp-5797-mjff](https://github.com/advisories/GHSA-gpwp-5797-mjff)), and no patch will be released for the 14.x series. ABP Framework applies `MaxDepth = 64` to all maps as a mitigation, but AutoMapper 14.x doesn't enforce `MaxDepth` on every mapping path, such as destinations created through constructor parameters. If you hold a commercial AutoMapper license, you can use [Volo.Abp.LuckyPenny.AutoMapper](luckypenny-automapper.md) to upgrade to the officially patched version. Alternatively, you can migrate to [Mapperly](../../release-info/migration-guides/AutoMapper-To-Mapperly.md).
 
 The global maximum depth is configured by `AbpAutoMapperOptions.DefaultMaxDepth` and defaults to `64`. It is applied only when a map does not already configure `MaxDepth`. Set it to `null` to disable ABP's global default:
 
@@ -235,7 +235,7 @@ Configure<AbpAutoMapperOptions>(options =>
 });
 ````
 
-> Disabling the global default also removes ABP's mitigation for unbounded mapping depth. Disable it only when every affected map has an explicit safe depth or the application uses an officially patched mapper.
+> Disabling the global default also removes ABP's mitigation for unbounded mapping depth. Disable it only when the application uses an officially patched AutoMapper version.
 
 ## Mapperly Integration
 
