@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,6 +17,59 @@ namespace Volo.Abp.Http.DynamicProxying;
 //[ApiExplorerSettings(IgnoreApi = false)] //alternative
 public class RegularTestController : AbpController, IRegularTestController
 {
+    [HttpGet]
+    [Route("stream")]
+    public virtual async IAsyncEnumerable<int> GetStreamAsync(int count)
+    {
+        for (var i = 1; i <= count; i++)
+        {
+            await Task.Delay(1);
+            yield return i;
+        }
+    }
+
+    [HttpGet]
+    [Route("stream-with-error")]
+    public virtual async IAsyncEnumerable<int> GetStreamWithErrorAsync()
+    {
+        await Task.Delay(1);
+        yield return 1;
+        throw new UserFriendlyException("Stream failed");
+    }
+
+    [HttpGet]
+    [Route("gated-stream")]
+    public virtual async IAsyncEnumerable<string> GetGatedStreamAsync(bool failAfterGate)
+    {
+        yield return "first";
+        await AsyncEnumerableTestGate.WaitAsync(HttpContext.RequestAborted);
+        if (failAfterGate)
+        {
+            throw new UserFriendlyException("Stream failed after response started");
+        }
+
+        yield return "second";
+    }
+
+    [HttpGet]
+    [Route("stream-with-cancellation-token")]
+    public virtual async IAsyncEnumerable<int> GetStreamWithCancellationTokenAsync([EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        await Task.Delay(1, cancellationToken);
+        yield return 1;
+    }
+
+    [HttpGet]
+    [Route("stream-with-leading-cancellation-token")]
+    public virtual async IAsyncEnumerable<int> GetStreamWithLeadingCancellationTokenAsync([EnumeratorCancellation] CancellationToken cancellationToken, int count)
+    {
+        for (var i = 1; i <= count; i++)
+        {
+            await Task.Delay(1, cancellationToken);
+            yield return i;
+        }
+    }
+
     [HttpGet]
     [Route("increment")]
     public Task<int> IncrementValueAsync(int value)

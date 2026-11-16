@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -20,11 +22,18 @@ public class DynamicHttpProxyInterceptor<TService> : AbpInterceptor, ITransientD
     // ReSharper disable once StaticMemberInGenericType
     protected static MethodInfo CallRequestAsyncMethod { get; }
 
+    // ReSharper disable once StaticMemberInGenericType
+    protected static MethodInfo CallRequestAsyncEnumerableMethod { get; }
+
     static DynamicHttpProxyInterceptor()
     {
         CallRequestAsyncMethod = typeof(DynamicHttpProxyInterceptor<TService>)
             .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
             .First(m => m.Name == nameof(CallRequestAsync) && m.IsGenericMethodDefinition);
+
+        CallRequestAsyncEnumerableMethod = typeof(DynamicHttpProxyInterceptor<TService>)
+            .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
+            .First(m => m.Name == nameof(CallRequestAsyncEnumerable) && m.IsGenericMethodDefinition);
     }
 
     public ILogger<DynamicHttpProxyInterceptor<TService>> Logger { get; set; }
@@ -52,6 +61,15 @@ public class DynamicHttpProxyInterceptor<TService> : AbpInterceptor, ITransientD
 
     public override async Task InterceptAsync(IAbpMethodInvocation invocation)
     {
+        var returnType = invocation.Method.ReturnType;
+        if (returnType.IsGenericType && returnType.GetGenericTypeDefinition() == typeof(IAsyncEnumerable<>))
+        {
+            invocation.ReturnValue = CallRequestAsyncEnumerableMethod
+                .MakeGenericMethod(returnType.GenericTypeArguments[0])
+                .Invoke(this, new object[] { invocation, CancellationToken.None })!;
+            return;
+        }
+
         var context = new ClientProxyRequestContext(
             await GetActionApiDescriptionModel(invocation),
             invocation.ArgumentsDictionary,
@@ -65,12 +83,12 @@ public class DynamicHttpProxyInterceptor<TService> : AbpInterceptor, ITransientD
         }
         else
         {
-            var returnType = invocation.Method.ReturnType.GenericTypeArguments[0];
+            var resultType = invocation.Method.ReturnType.GenericTypeArguments[0];
             var result = (Task)CallRequestAsyncMethod
-                .MakeGenericMethod(returnType)
+                .MakeGenericMethod(resultType)
                 .Invoke(this, new object[] { context })!;
 
-            invocation.ReturnValue = await GetResultAsync(result, returnType);
+            invocation.ReturnValue = await GetResultAsync(result, resultType);
         }
     }
 
@@ -92,6 +110,46 @@ public class DynamicHttpProxyInterceptor<TService> : AbpInterceptor, ITransientD
     protected virtual async Task<T> CallRequestAsync<T>(ClientProxyRequestContext context)
     {
         return await InterceptorClientProxy.CallRequestAsync<T>(context);
+    }
+
+    private static CancellationToken GetMethodCancellationToken(IAbpMethodInvocation invocation)
+    {
+        var parameters = invocation.Method.GetParameters();
+        for (var i = 0; i < parameters.Length; i++)
+        {
+            if (parameters[i].ParameterType == typeof(CancellationToken))
+            {
+                return (CancellationToken)invocation.Arguments[i]!;
+            }
+        }
+
+        return default;
+    }
+
+    protected virtual async IAsyncEnumerable<T> CallRequestAsyncEnumerable<T>(IAbpMethodInvocation invocation, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        var methodCancellationToken = GetMethodCancellationToken(invocation);
+        using var linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(methodCancellationToken, cancellationToken);
+
+        ClientProxyRequestContext context;
+        using (InterceptorClientProxy.UseCancellationToken(linkedCancellationTokenSource.Token))
+        {
+            context = new ClientProxyRequestContext(
+                await GetActionApiDescriptionModel(invocation),
+                invocation.ArgumentsDictionary,
+                typeof(TService));
+        }
+
+        if (methodCancellationToken.CanBeCanceled)
+        {
+            // Not necessarily the last argument, which is the only one checked when sending the request.
+            context.CancellationToken = methodCancellationToken;
+        }
+
+        await foreach (var item in InterceptorClientProxy.CallRequestAsyncEnumerable<T>(context).WithCancellation(cancellationToken))
+        {
+            yield return item;
+        }
     }
 
     protected virtual async Task<object> GetResultAsync(Task task, Type resultType)

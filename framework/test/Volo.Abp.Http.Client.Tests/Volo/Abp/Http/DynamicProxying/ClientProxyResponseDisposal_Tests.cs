@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -72,6 +73,61 @@ public class ClientProxyResponseDisposal_Tests : AbpHttpClientTestBase
         });
 
         await _controller.GetException1Async();
+
+        content.Disposed.ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task Async_Enumerable_Response_Should_Dispose_HttpContent_When_Enumeration_Completes()
+    {
+        var content = new TrackingHttpContent("[1,2,3]");
+        _factory.SetStubResponse(() => new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = content
+        });
+
+        var items = new List<int>();
+        await foreach (var item in _controller.GetStreamAsync(3))
+        {
+            items.Add(item);
+        }
+
+        items.ShouldBe(new[] { 1, 2, 3 });
+        content.Disposed.ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task Async_Enumerable_Response_Should_Dispose_HttpContent_When_Consumer_Stops_Early()
+    {
+        var content = new TrackingHttpContent("[1,2,3]");
+        _factory.SetStubResponse(() => new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = content
+        });
+
+        await foreach (var _ in _controller.GetStreamAsync(3))
+        {
+            break;
+        }
+
+        content.Disposed.ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task Async_Enumerable_Response_Should_Dispose_HttpContent_When_Json_Is_Invalid()
+    {
+        var content = new TrackingHttpContent("[1,\"invalid\"]");
+        _factory.SetStubResponse(() => new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = content
+        });
+
+        await Should.ThrowAsync<System.Text.Json.JsonException>(async () =>
+        {
+            await foreach (var _ in _controller.GetStreamAsync(3))
+            {
+            }
+        });
 
         content.Disposed.ShouldBeTrue();
     }

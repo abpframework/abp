@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Content;
@@ -7,6 +8,16 @@ namespace Volo.Abp.Http.DynamicProxying;
 
 public interface IRegularTestController
 {
+    IAsyncEnumerable<int> GetStreamAsync(int count);
+
+    IAsyncEnumerable<int> GetStreamWithErrorAsync();
+
+    IAsyncEnumerable<string> GetGatedStreamAsync(bool failAfterGate);
+
+    IAsyncEnumerable<int> GetStreamWithCancellationTokenAsync(CancellationToken cancellationToken);
+
+    IAsyncEnumerable<int> GetStreamWithLeadingCancellationTokenAsync(CancellationToken cancellationToken, int count);
+
     Task<int> IncrementValueAsync(int value);
 
     Task<string> GetPlainStringAsync();

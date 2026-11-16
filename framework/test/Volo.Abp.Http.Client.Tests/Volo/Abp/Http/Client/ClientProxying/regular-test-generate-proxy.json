@@ -257,6 +257,61 @@
               "remarks": null,
               "description": null,
               "displayName": null
+            },
+            "GetStreamAsyncByCount": {
+              "uniqueName": "GetStreamAsyncByCount",
+              "name": "GetStreamAsync",
+              "httpMethod": "GET",
+              "url": "api/regular-test-controller/stream",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "count",
+                  "typeAsString": "System.Int32, System.Private.CoreLib",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "count",
+                  "name": "count",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "returnValue": {
+                "type": "System.Collections.Generic.IAsyncEnumerable<System.Int32>",
+                "typeSimple": "[number]",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
+              },
+              "allowAnonymous": null,
+              "authorizeDatas": [],
+              "implementFrom": "Volo.Abp.Http.DynamicProxying.IRegularTestController",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             }
           }
         }
