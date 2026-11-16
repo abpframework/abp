@@ -152,6 +152,89 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 }
 ````
 
+## Advanced Topics
+
+### Intercepting Methods Returning IAsyncEnumerable
+
+A method returning `IAsyncEnumerable<T>` is intercepted like a method returning `Task<T>`: the interceptor runs when the method is called, and `invocation.ProceedAsync()` only creates the sequence. The sequence does its work later, when the caller enumerates it, so an interceptor does not cover the enumeration by default. If an interceptor throws (for example, an authorization or validation error), the exception is thrown when the sequence is enumerated.
+
+To also cover the enumeration, inherit your interceptor from `AbpScopeInterceptor` and return an `IAbpInterceptionScope` from the `BeginScope` method. The scope runs around the method call, and a new scope runs around each enumeration of the returned sequence. For example, you can change the `ExecutionTimeLogInterceptor` above as below to also measure the enumerations:
+
+````csharp
+using System;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.DynamicProxy;
+
+public class ExecutionTimeLogInterceptor : AbpScopeInterceptor, ITransientDependency
+{
+    private readonly ILogger<ExecutionTimeLogInterceptor> _logger;
+
+    public ExecutionTimeLogInterceptor(ILogger<ExecutionTimeLogInterceptor> logger)
+    {
+        _logger = logger;
+    }
+
+    protected override IAbpInterceptionScope BeginScope(IAbpMethodInvocation invocation)
+    {
+        return new ExecutionTimeLogScope(_logger, invocation.Method.Name);
+    }
+}
+
+public class ExecutionTimeLogScope : IAbpInterceptionScope
+{
+    private readonly ILogger _logger;
+    private readonly string _methodName;
+    private readonly Stopwatch _stopwatch = Stopwatch.StartNew();
+
+    public ExecutionTimeLogScope(ILogger logger, string methodName)
+    {
+        _logger = logger;
+        _methodName = methodName;
+    }
+
+    public Task CompleteAsync(CancellationToken cancellationToken)
+    {
+        _logger.LogInformation($"Executed {_methodName} in {_stopwatch.ElapsedMilliseconds} ms");
+        return Task.CompletedTask;
+    }
+
+    public Task FailAsync(Exception exception)
+    {
+        _logger.LogWarning($"{_methodName} failed after {_stopwatch.ElapsedMilliseconds} ms");
+        return Task.CompletedTask;
+    }
+
+    public void Dispose()
+    {
+    }
+}
+````
+
+* `CompleteAsync` is called when the method call or the enumeration completes, including when the caller stops enumerating early (for example, with `break`).
+* `FailAsync` is called when the method or the sequence throws an exception.
+* `Dispose` is always called at the end.
+
+`AbpInterceptionScope` is a default implementation that disposes a given object, which is useful to change an ambient value during the scope. For example, `new AbpInterceptionScope(_currentTenant.Change(tenantId))` switches the current tenant during the method call and each enumeration.
+
+If your interceptor can not inherit from `AbpScopeInterceptor`, call the `ProceedInScopeAsync` extension method in the `InterceptAsync` method instead of `invocation.ProceedAsync()`:
+
+````csharp
+public override async Task InterceptAsync(IAbpMethodInvocation invocation)
+{
+    await invocation.ProceedInScopeAsync(() => BeginScope(invocation));
+}
+````
+
+ABP's [Unit of Work](../architecture/domain-driven-design/unit-of-work.md), [Auditing](./audit-logging.md) and entity change tracking interceptors work this way, while the authorization, validation and feature checks are only performed when the method is called.
+
+> `BeginScope` must set its async local values synchronously (for example, it should not be an `async` method). Otherwise, the values are not available to the method and to the enumeration.
+
+> Since the authorization and other checks are performed when the method is called, you should enumerate the returned sequence in the same context (the same user and tenant) as the method call.
+
 ## Restrictions and Important Notes
 
 ### Always use asynchronous methods

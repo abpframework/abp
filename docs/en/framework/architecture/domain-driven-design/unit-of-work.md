@@ -34,6 +34,14 @@ A UOW automatically begins for these methods **except** if there is already a **
 
 All of these are automatically handled by the ABP.
 
+### Methods Returning IAsyncEnumerable
+
+A method returning `IAsyncEnumerable<T>` does its work when the returned sequence is enumerated, after the method has returned. So;
+
+* The method call and each enumeration of the returned sequence run in separate UOWs (or participate in the surrounding UOW, if there is one).
+* The UOW of an enumeration is completed when the enumeration ends, even if the caller stops it early. It is not completed if the sequence throws an exception.
+* Query the database inside the iterator method (the method body containing `yield return`). A `DbContext` or a query obtained while calling the method can not be used after the UOW of the call ends.
+
 ### Database Transaction Behavior
 
 While the section above explains the UOW as it is database transaction, actually a UOW doesn't have to be transactional. By default;

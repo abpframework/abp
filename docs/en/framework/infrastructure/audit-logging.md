@@ -331,6 +331,16 @@ An **audit log object** is created for each **web request** by default. An audit
 
 In addition to the standard properties explained above, `AuditLogInfo`, `AuditLogActionInfo` and `EntityChangeInfo` objects implement the `IHasExtraProperties` interface, so you can add custom properties to these objects.
 
+### Methods Returning IAsyncEnumerable
+
+A method returning `IAsyncEnumerable<T>` does its work when the returned sequence is enumerated. So, if such a method is audited by the auditing interceptor, the method call and each enumeration of the returned sequence are recorded as separate actions:
+
+* The action of the method call is recorded like for other methods.
+* The action of an enumeration has the `AsyncEnumeration` extra property set to `true`, and its `ExecutionDuration` is the duration of the whole enumeration, regardless of the number of items. The exceptions and the entity changes during the enumeration are also recorded.
+* If there is no current audit log scope when the sequence is enumerated (for example, in a background job), the enumeration is saved as a separate audit log.
+
+A controller action (including an [Auto API Controller](../api-development/auto-controllers.md) action) returning `IAsyncEnumerable<T>` is audited by the auditing action filter instead, and recorded as a single action of the audit log of the web request.
+
 ## Audit Log Contributors
 
 You can extend the auditing system by creating a class that is derived from the `AuditLogContributor` class which defines the `PreContribute` and the `PostContribute` methods.
