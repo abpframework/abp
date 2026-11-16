@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,8 +15,12 @@ public class ClientProxyApiDescriptionFinder : IClientProxyApiDescriptionFinder,
 {
     protected IVirtualFileProvider VirtualFileProvider { get; }
     protected IJsonSerializer JsonSerializer { get; }
-    protected Dictionary<string, ActionApiDescriptionModel> ActionApiDescriptionModels { get; }
+    protected ConcurrentDictionary<string, ActionApiDescriptionModel> ActionApiDescriptionModels { get; }
     protected ApplicationApiDescriptionModel ApplicationApiDescriptionModel { get; set; } = default!;
+
+    private readonly List<IFileInfo> _pendingFiles = new();
+    private readonly Dictionary<IFileInfo, List<string>> _fileServiceTypes = new();
+    private readonly object _syncObj = new();
 
     public ClientProxyApiDescriptionFinder(
         IVirtualFileProvider virtualFileProvider,
@@ -23,66 +28,53 @@ public class ClientProxyApiDescriptionFinder : IClientProxyApiDescriptionFinder,
     {
         VirtualFileProvider = virtualFileProvider;
         JsonSerializer = jsonSerializer;
-        ActionApiDescriptionModels = new Dictionary<string, ActionApiDescriptionModel>();
+        ActionApiDescriptionModels = new ConcurrentDictionary<string, ActionApiDescriptionModel>();
 
         Initialize();
     }
 
     public virtual ActionApiDescriptionModel? FindAction(string methodName)
     {
-        return ActionApiDescriptionModels.TryGetValue(methodName, out var model) ? model : null;
+        if (ActionApiDescriptionModels.TryGetValue(methodName, out var model))
+        {
+            return model;
+        }
+
+        lock (_syncObj)
+        {
+            if (ActionApiDescriptionModels.TryGetValue(methodName, out model))
+            {
+                return model;
+            }
+
+            var fileInfos = _pendingFiles
+                .Where(x => GetServiceTypes(x).Any(serviceType => methodName.StartsWith(serviceType + ".", StringComparison.Ordinal)))
+                .ToList();
+
+            LoadFiles(fileInfos);
+            if (ActionApiDescriptionModels.TryGetValue(methodName, out model))
+            {
+                return model;
+            }
+
+            LoadFiles(_pendingFiles.ToList());
+            return ActionApiDescriptionModels.TryGetValue(methodName, out model) ? model : null;
+        }
     }
 
     public virtual ApplicationApiDescriptionModel GetApiDescription()
     {
-        return ApplicationApiDescriptionModel;
+        lock (_syncObj)
+        {
+            LoadFiles(_pendingFiles.ToList());
+            return ApplicationApiDescriptionModel;
+        }
     }
 
     protected virtual void Initialize()
     {
-        ApplicationApiDescriptionModel = GetApplicationApiDescriptionModel();
-        var controllers = ApplicationApiDescriptionModel.Modules.Select(x => x.Value).SelectMany(x => x.Controllers.Values).ToList();
-
-        foreach (var controller in controllers.Where(x => x.Interfaces.Any()))
-        {
-            var appServiceType = controller.Interfaces.Last().Type;
-
-            foreach (var actionItem in controller.Actions.Values)
-            {
-                var actionKey = $"{appServiceType}.{actionItem.Name}.{string.Join("-", actionItem.ParametersOnMethod.Select(x => x.Type))}";
-                if (!ActionApiDescriptionModels.ContainsKey(actionKey))
-                {
-                    ActionApiDescriptionModels.Add(actionKey, actionItem);
-                }
-            }
-        }
-    }
-
-    protected virtual ApplicationApiDescriptionModel GetApplicationApiDescriptionModel()
-    {
-        var applicationApiDescription = ApplicationApiDescriptionModel.Create();
-        var fileInfoList = new List<IFileInfo>();
-        GetGenerateProxyFileInfos(fileInfoList);
-
-        foreach (var fileInfo in fileInfoList)
-        {
-            using (var streamReader = new StreamReader(fileInfo.CreateReadStream()))
-            {
-                var content = streamReader.ReadToEnd();
-
-                var subApplicationApiDescription = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(content);
-
-                foreach (var module in subApplicationApiDescription.Modules)
-                {
-                    if (!applicationApiDescription.Modules.ContainsKey(module.Key))
-                    {
-                        applicationApiDescription.AddModule(module.Value);
-                    }
-                }
-            }
-        }
-
-        return applicationApiDescription;
+        ApplicationApiDescriptionModel = ApplicationApiDescriptionModel.Create();
+        GetGenerateProxyFileInfos(_pendingFiles);
     }
 
     protected virtual void GetGenerateProxyFileInfos(List<IFileInfo> fileInfoList, string path = "")
@@ -101,5 +93,97 @@ public class ClientProxyApiDescriptionFinder : IClientProxyApiDescriptionFinder,
                 }
             }
         }
+    }
+
+    protected virtual void LoadFiles(List<IFileInfo> fileInfos)
+    {
+        foreach (var fileInfo in fileInfos)
+        {
+            var subApplicationApiDescription = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(ReadFile(fileInfo));
+            var modules = subApplicationApiDescription.Modules
+                .Where(x => !ApplicationApiDescriptionModel.Modules.ContainsKey(x.Key))
+                .Select(x => x.Value)
+                .ToList();
+
+            var actions = new List<KeyValuePair<string, ActionApiDescriptionModel>>();
+            foreach (var controller in modules.SelectMany(x => x.Controllers.Values).Where(x => x.Interfaces.Any()))
+            {
+                var appServiceType = controller.Interfaces.Last().Type;
+
+                foreach (var actionItem in controller.Actions.Values)
+                {
+                    var actionKey = $"{appServiceType}.{actionItem.Name}.{string.Join("-", actionItem.ParametersOnMethod.Select(x => x.Type))}";
+                    actions.Add(new KeyValuePair<string, ActionApiDescriptionModel>(actionKey, actionItem));
+                }
+            }
+
+            foreach (var module in modules)
+            {
+                ApplicationApiDescriptionModel.AddModule(module);
+            }
+
+            foreach (var action in actions)
+            {
+                ActionApiDescriptionModels.TryAdd(action.Key, action.Value);
+            }
+
+            _pendingFiles.Remove(fileInfo);
+            _fileServiceTypes.Remove(fileInfo);
+        }
+    }
+
+    protected virtual string ReadFile(IFileInfo fileInfo)
+    {
+        using (var streamReader = new StreamReader(fileInfo.CreateReadStream()))
+        {
+            return streamReader.ReadToEnd();
+        }
+    }
+
+    private List<string> GetServiceTypes(IFileInfo fileInfo)
+    {
+        if (!_fileServiceTypes.TryGetValue(fileInfo, out var serviceTypes))
+        {
+            try
+            {
+                // Deserializing only the interfaces of the controllers costs much less than deserializing the whole file.
+                var file = JsonSerializer.Deserialize<GenerateProxyFile>(ReadFile(fileInfo));
+                serviceTypes = (file.Modules?.Values ?? Enumerable.Empty<GenerateProxyModule>())
+                    .SelectMany(x => x.Controllers?.Values ?? Enumerable.Empty<GenerateProxyController>())
+                    .Select(x => x.Interfaces?.LastOrDefault()?.Type)
+                    .OfType<string>()
+                    .ToList();
+            }
+            catch (Exception)
+            {
+                // For example, the JsonSerializer may not allow the members left out here. FindAction still loads
+                // this file when it doesn't find the action in the other files.
+                serviceTypes = new List<string>();
+            }
+
+            _fileServiceTypes[fileInfo] = serviceTypes;
+        }
+
+        return serviceTypes;
+    }
+
+    private class GenerateProxyFile
+    {
+        public Dictionary<string, GenerateProxyModule>? Modules { get; set; }
+    }
+
+    private class GenerateProxyModule
+    {
+        public Dictionary<string, GenerateProxyController>? Controllers { get; set; }
+    }
+
+    private class GenerateProxyController
+    {
+        public List<GenerateProxyInterface>? Interfaces { get; set; }
+    }
+
+    private class GenerateProxyInterface
+    {
+        public string? Type { get; set; }
     }
 }
