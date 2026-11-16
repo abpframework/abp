@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
+using Volo.Abp.Reflection;
 using Volo.Abp.Uow;
 using Volo.Abp.Users;
 
@@ -14,6 +15,8 @@ namespace Volo.Abp.Auditing;
 
 public class AuditingInterceptor : AbpInterceptor, ITransientDependency
 {
+    public const string AsyncEnumerationPropertyName = "AsyncEnumeration";
+
     private readonly IServiceScopeFactory _serviceScopeFactory;
 
     public AuditingInterceptor(IServiceScopeFactory serviceScopeFactory)
@@ -45,6 +48,11 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
                 var unitOfWorkManager = serviceScope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
                 await ProcessWithNewAuditingScopeAsync(invocation, auditingOptions, currentUser, auditingManager, auditingHelper, unitOfWorkManager);
             }
+        }
+
+        if (TypeHelper.IsAsyncEnumerable(invocation.Method.ReturnType))
+        {
+            WrapAsyncEnumerable(invocation);
         }
     }
 
@@ -162,6 +170,68 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
                     await saveHandle.SaveAsync();
                 }
             }
+        }
+    }
+
+    private void WrapAsyncEnumerable(IAbpMethodInvocation invocation)
+    {
+        invocation.WrapAsyncEnumerable(() => BeginEnumerationScope(invocation));
+    }
+
+    private IAbpInterceptionScope BeginEnumerationScope(IAbpMethodInvocation invocation)
+    {
+        var serviceScope = _serviceScopeFactory.CreateScope();
+        IAuditLogSaveHandle? saveHandle = null;
+        try
+        {
+            var serviceProvider = serviceScope.ServiceProvider;
+            var auditingHelper = serviceProvider.GetRequiredService<IAuditingHelper>();
+            if (!auditingHelper.IsAuditingEnabled())
+            {
+                return new AbpInterceptionScope(serviceScope);
+            }
+
+            var options = serviceProvider.GetRequiredService<IOptions<AbpAuditingOptions>>().Value;
+            var auditingManager = serviceProvider.GetRequiredService<IAuditingManager>();
+
+            if (auditingManager.Current == null)
+            {
+                saveHandle = auditingManager.BeginScope();
+            }
+
+            var auditLog = auditingManager.Current!.Log;
+
+            AuditLogActionInfo? auditLogAction = null;
+            if (!options.DisableLogActionInfo)
+            {
+                auditLogAction = auditingHelper.CreateAuditLogAction(
+                    auditLog,
+                    invocation.TargetObject?.GetType(),
+                    invocation.Method,
+                    invocation.Arguments
+                );
+                auditLogAction.ExtraProperties[AsyncEnumerationPropertyName] = true;
+            }
+
+            return new AuditLogEnumerationScope(
+                serviceScope,
+                auditLog,
+                auditLogAction,
+                saveHandle,
+                hasError => ShouldWriteAuditLogAsync(invocation, auditLog, options, serviceProvider.GetRequiredService<ICurrentUser>(), hasError));
+        }
+        catch
+        {
+            try
+            {
+                saveHandle?.Dispose();
+            }
+            finally
+            {
+                serviceScope.Dispose();
+            }
+
+            throw;
         }
     }
 
