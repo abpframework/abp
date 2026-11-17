@@ -482,7 +482,7 @@ public class BookProjector : IQueryProjector<Book, BookDto>
 }
 ````
 
-You don't have to write the `Select` by hand. Both [Mapperly](https://mapperly.riok.app/) and [AutoMapper](https://docs.automapper.org) can project an `IQueryable`, refer to their own documentation for it and to the [object to object mapping document](../../infrastructure/object-to-object-mapping.md) for their ABP integrations. Your existing maps are not used for the projection, a projector is always a class implementing `IQueryProjector<TSource, TDestination>`.
+You don't have to write the `Select` by hand. Both [Mapperly](https://mapperly.riok.app/) and [AutoMapper](https://docs.automapper.io) can project an `IQueryable`, refer to their own documentation for it and to the [object to object mapping document](../../infrastructure/object-to-object-mapping.md) for their ABP integrations. Your existing maps are not used for the projection, a projector is always a class implementing `IQueryProjector<TSource, TDestination>`.
 
 ABP registers the projectors by convention, you don't need to configure anything else. Implement a projector once for an entity and DTO pair, and use the `ReplaceServices` option of the `DependencyAttribute` to replace an existing one. Filters (like soft delete and multi-tenancy), sorting and paging are still applied to the query before the projection.
 
