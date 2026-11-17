@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,5 +16,12 @@ public class CachedTestObject
     {
         await Task.Delay(5);
         return v;
+    }
+
+    public virtual async IAsyncEnumerable<int> GetValuesAsync(int v)
+    {
+        await Task.Delay(5);
+        yield return v;
+        yield return v + 1;
     }
 }
