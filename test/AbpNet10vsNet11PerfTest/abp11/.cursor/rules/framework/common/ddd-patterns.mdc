@@ -1,0 +1,244 @@
+---
+description: "ABP DDD patterns - Entities, Aggregate Roots, Repositories, Domain Services"
+globs:
+  - "**/*.Domain/**/*.cs"
+  - "**/Domain/**/*.cs"
+  - "**/Entities/**/*.cs"
+alwaysApply: false
+---
+
+# ABP DDD Patterns
+
+> **Docs**: https://abp.io/docs/latest/framework/architecture/domain-driven-design
+
+## Rich Domain Model vs Anemic Domain Model
+
+ABP promotes **Rich Domain Model** pattern where entities contain both data AND behavior:
+
+| Anemic (Anti-pattern) | Rich (Recommended) |
+|----------------------|-------------------|
+| Entity = data only | Entity = data + behavior |
+| Logic in services | Logic in entity methods |
+| Public setters | Private setters with methods |
+| No validation in entity | Entity enforces invariants |
+
+**Encapsulation is key**: Protect entity state by using private setters and exposing behavior through methods.
+
+## Entities
+
+### Entity Example (Rich Model)
+```csharp
+public class OrderLine : Entity<Guid>
+{
+    public Guid ProductId { get; private set; }
+    public int Count { get; private set; }
+    public decimal Price { get; private set; }
+    
+    protected OrderLine() { } // For ORM
+    
+    internal OrderLine(Guid id, Guid productId, int count, decimal price) : base(id)
+    {
+        ProductId = productId;
+        SetCount(count); // Validates through method
+        Price = price;
+    }
+    
+    public void SetCount(int count)
+    {
+        if (count <= 0)
+            throw new BusinessException("Orders:InvalidCount");
+        Count = count;
+    }
+}
+```
+
+## Aggregate Roots
+
+Aggregate roots are consistency boundaries that:
+- Own their child entities
+- Enforce business rules
+- Publish domain events
+
+```csharp
+public class Order : AggregateRoot<Guid>
+{
+    public string OrderNumber { get; private set; }
+    public Guid CustomerId { get; private set; }
+    public OrderStatus Status { get; private set; }
+    public ICollection<OrderLine> Lines { get; private set; }
+
+    protected Order() { } // For ORM
+
+    public Order(Guid id, string orderNumber, Guid customerId) : base(id)
+    {
+        OrderNumber = Check.NotNullOrWhiteSpace(orderNumber, nameof(orderNumber));
+        CustomerId = customerId;
+        Status = OrderStatus.Created;
+        Lines = new List<OrderLine>();
+    }
+
+    public void AddLine(Guid lineId, Guid productId, int count, decimal price)
+    {
+        // Business rule: Can only add lines to created orders
+        if (Status != OrderStatus.Created)
+            throw new BusinessException("Orders:CannotModifyOrder");
+            
+        Lines.Add(new OrderLine(lineId, productId, count, price));
+    }
+
+    public void Complete()
+    {
+        if (Status != OrderStatus.Created)
+            throw new BusinessException("Orders:CannotCompleteOrder");
+        
+        Status = OrderStatus.Completed;
+        
+        // Publish events for side effects
+        AddLocalEvent(new OrderCompletedEvent(Id));           // Same transaction
+        AddDistributedEvent(new OrderCompletedEto { OrderId = Id }); // Cross-service
+    }
+}
+```
+
+### Domain Events
+- `AddLocalEvent()` - Handled within same transaction, can access full entity
+- `AddDistributedEvent()` - Handled asynchronously, use ETOs (Event Transfer Objects)
+
+### Entity Best Practices
+- **Encapsulation**: Private setters, public methods that enforce rules
+- **Primary constructor**: Enforce invariants, accept `id` parameter
+- **Protected parameterless constructor**: Required for ORM
+- **Initialize collections**: In primary constructor
+- **Virtual members**: For ORM proxy compatibility
+- **Reference by Id**: Don't add navigation properties to other aggregates
+- **Don't generate GUID in constructor**: Use `IGuidGenerator` externally
+
+## Repository Pattern
+
+### When to Use Custom Repository
+- **Generic repository** (`IRepository<T, TKey>`): Sufficient for simple CRUD operations
+- **Custom repository**: Only when you need custom query methods
+
+### Interface (Domain Layer)
+```csharp
+// Define custom interface only when custom queries are needed
+public interface IOrderRepository : IRepository<Order, Guid>
+{
+    Task<Order> FindByOrderNumberAsync(string orderNumber, bool includeDetails = false);
+    Task<List<Order>> GetListByCustomerAsync(Guid customerId, bool includeDetails = false);
+}
+```
+
+### Repository Best Practices
+- **One repository per aggregate root only** - Never create repositories for child entities
+- Child entities must be accessed/modified only through their aggregate root
+- Creating repositories for child entities breaks data consistency (bypasses aggregate root's business rules)
+- In ABP, use `AddDefaultRepositories()` without `includeAllEntities: true` to enforce this
+- Define custom repository only when custom queries are needed
+- ABP handles `CancellationToken` automatically; add parameter only for explicit cancellation control
+- Single entity methods: `includeDetails = true` by default
+- List methods: `includeDetails = false` by default
+- Don't return projection classes
+- Interface in Domain, implementation in data layer
+
+```csharp
+// ✅ Correct: Repository for aggregate root (Order)
+public interface IOrderRepository : IRepository<Order, Guid> { }
+
+// ❌ Wrong: Repository for child entity (OrderLine)
+// OrderLine should only be accessed through Order aggregate
+public interface IOrderLineRepository : IRepository<OrderLine, Guid> { } // Don't do this!
+```
+
+## Domain Services
+
+Use domain services for business logic that:
+- Spans multiple aggregates
+- Requires repository queries to enforce rules
+
+```csharp
+public class OrderManager : DomainService
+{
+    private readonly IOrderRepository _orderRepository;
+    private readonly IProductRepository _productRepository;
+
+    public OrderManager(
+        IOrderRepository orderRepository,
+        IProductRepository productRepository)
+    {
+        _orderRepository = orderRepository;
+        _productRepository = productRepository;
+    }
+
+    public async Task<Order> CreateAsync(string orderNumber, Guid customerId)
+    {
+        // Business rule: Order number must be unique
+        var existing = await _orderRepository.FindByOrderNumberAsync(orderNumber);
+        if (existing != null)
+        {
+            throw new BusinessException("Orders:OrderNumberAlreadyExists")
+                .WithData("OrderNumber", orderNumber);
+        }
+
+        return new Order(GuidGenerator.Create(), orderNumber, customerId);
+    }
+
+    public async Task AddProductAsync(Order order, Guid productId, int count)
+    {
+        var product = await _productRepository.GetAsync(productId);
+        order.AddLine(productId, count, product.Price);
+    }
+}
+```
+
+### Domain Service Best Practices
+- Use `*Manager` suffix naming
+- No interface by default (create only if needed)
+- Accept/return domain objects, not DTOs
+- Don't depend on authenticated user - pass values from application layer
+- Use base class properties (`GuidGenerator`, `Clock`) instead of injecting these services
+
+## Domain Events
+
+### Local Events
+```csharp
+// In aggregate
+AddLocalEvent(new OrderCompletedEvent(Id));
+
+// Handler
+public class OrderCompletedEventHandler : ILocalEventHandler<OrderCompletedEvent>, ITransientDependency
+{
+    public async Task HandleEventAsync(OrderCompletedEvent eventData)
+    {
+        // Handle within same transaction
+    }
+}
+```
+
+### Distributed Events (ETO)
+For inter-module/microservice communication:
+```csharp
+// In Domain.Shared
+[EventName("Orders.OrderCompleted")]
+public class OrderCompletedEto
+{
+    public Guid OrderId { get; set; }
+    public string OrderNumber { get; set; }
+}
+```
+
+## Specifications
+
+Reusable query conditions:
+```csharp
+public class CompletedOrdersSpec : Specification<Order>
+{
+    public override Expression<Func<Order, bool>> ToExpression()
+    {
+        return o => o.Status == OrderStatus.Completed;
+    }
+}
+
+// Usage
+var orders = await _orderRepository.GetListAsync(new CompletedOrdersSpec());
+```
