@@ -132,6 +132,38 @@ public class ClientProxyResponseDisposal_Tests : AbpHttpClientTestBase
         content.Disposed.ShouldBeTrue();
     }
 
+    [Fact]
+    public async Task Async_Enumerable_Error_Response_Should_Stop_Reading_The_Error_And_Dispose_HttpContent_When_Canceled()
+    {
+        var content = new PendingHttpContent();
+        _factory.SetStubResponse(() =>
+        {
+            var response = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+            {
+                Content = content
+            };
+            response.Headers.Add(AbpHttpConsts.AbpErrorFormat, "true");
+            return response;
+        });
+
+        using (var cancellationTokenSource = new CancellationTokenSource())
+        {
+            var enumeration = Task.Run(async () =>
+            {
+                await foreach (var _ in _controller.GetStreamAsync(3).WithCancellation(cancellationTokenSource.Token))
+                {
+                }
+            });
+
+            await content.ReadStarted.Task.WaitAsync(TimeSpan.FromSeconds(10));
+            cancellationTokenSource.Cancel();
+
+            var exception = await Should.ThrowAsync<AbpRemoteCallException>(enumeration.WaitAsync(TimeSpan.FromSeconds(10)));
+            exception.InnerException.ShouldBeAssignableTo<OperationCanceledException>();
+            content.Disposed.ShouldBeTrue();
+        }
+    }
+
     class StubProxyHttpClientFactory : IProxyHttpClientFactory
     {
         private readonly ITestServerAccessor _testServerAccessor;
@@ -179,6 +211,37 @@ public class ClientProxyResponseDisposal_Tests : AbpHttpClientTestBase
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             return Task.FromResult(_responseFactory());
+        }
+    }
+
+    // The error never ends unless the reading is canceled.
+    class PendingHttpContent : HttpContent
+    {
+        public TaskCompletionSource ReadStarted { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        public bool Disposed { get; private set; }
+
+        protected override Task SerializeToStreamAsync(Stream stream, TransportContext context)
+        {
+            return SerializeToStreamAsync(stream, context, CancellationToken.None);
+        }
+
+        protected override async Task SerializeToStreamAsync(Stream stream, TransportContext context, CancellationToken cancellationToken)
+        {
+            ReadStarted.TrySetResult();
+            await Task.Delay(Timeout.Infinite, cancellationToken);
+        }
+
+        protected override bool TryComputeLength(out long length)
+        {
+            length = 0;
+            return false;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            Disposed = true;
+            base.Dispose(disposing);
         }
     }
 

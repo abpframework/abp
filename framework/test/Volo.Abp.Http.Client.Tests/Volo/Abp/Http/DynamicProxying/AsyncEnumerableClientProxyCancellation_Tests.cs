@@ -114,16 +114,17 @@ public class AsyncEnumerableClientProxy_Request_Cancellation_Tests : AsyncEnumer
     [Fact]
     public async Task Should_Cancel_Request_Before_Response_Headers_When_Method_Has_Its_Own_Token()
     {
-        using var methodCancellationTokenSource = new CancellationTokenSource();
-        using var enumerationCancellationTokenSource = new CancellationTokenSource();
-
-        await ShouldBeCancelledWhenBlockedAsync(async () =>
+        using (var methodCancellationTokenSource = new CancellationTokenSource())
+        using (var enumerationCancellationTokenSource = new CancellationTokenSource())
         {
-            await foreach (var _ in Controller.GetStreamWithCancellationTokenAsync(methodCancellationTokenSource.Token)
-                               .WithCancellation(enumerationCancellationTokenSource.Token))
+            await ShouldBeCancelledWhenBlockedAsync(async () =>
             {
-            }
-        }, enumerationCancellationTokenSource);
+                await foreach (var _ in Controller.GetStreamWithCancellationTokenAsync(methodCancellationTokenSource.Token)
+                                   .WithCancellation(enumerationCancellationTokenSource.Token))
+                {
+                }
+            }, enumerationCancellationTokenSource);
+        }
     }
 }
 
@@ -142,18 +143,20 @@ public class AsyncEnumerableClientProxy_RequestContext_Cancellation_Tests : Asyn
     public async Task Should_Cancel_Request_With_The_Token_Of_The_Request_Context()
     {
         var action = await GetActionAsync();
-        using var contextCancellationTokenSource = new CancellationTokenSource();
-        var requestContext = new ClientProxyRequestContext(action.Action, action.Arguments, action.ServiceType)
+        using (var contextCancellationTokenSource = new CancellationTokenSource())
         {
-            CancellationToken = contextCancellationTokenSource.Token
-        };
-
-        await ShouldBeCancelledWhenBlockedAsync(async () =>
-        {
-            await foreach (var _ in ClientProxy.CallRequestAsyncEnumerable<int>(requestContext))
+            var requestContext = new ClientProxyRequestContext(action.Action, action.Arguments, action.ServiceType)
             {
-            }
-        }, contextCancellationTokenSource);
+                CancellationToken = contextCancellationTokenSource.Token
+            };
+
+            await ShouldBeCancelledWhenBlockedAsync(async () =>
+            {
+                await foreach (var _ in ClientProxy.CallRequestAsyncEnumerable<int>(requestContext))
+                {
+                }
+            }, contextCancellationTokenSource);
+        }
     }
 
     [Fact]
@@ -162,34 +165,36 @@ public class AsyncEnumerableClientProxy_RequestContext_Cancellation_Tests : Asyn
         var action = await GetActionAsync();
         var requestContext = new ClientProxyRequestContext(action.Action, action.Arguments, action.ServiceType);
         var sequence = ClientProxy.CallRequestAsyncEnumerable<int>(requestContext);
-        using var firstCancellationTokenSource = new CancellationTokenSource();
-        using var secondCancellationTokenSource = new CancellationTokenSource();
+        using (var firstCancellationTokenSource = new CancellationTokenSource())
+        using (var secondCancellationTokenSource = new CancellationTokenSource())
+        {
+            var first = EnumerateAsync(sequence, firstCancellationTokenSource.Token);
+            var second = EnumerateAsync(sequence, secondCancellationTokenSource.Token);
+            await WaitForBlockedRequestsAsync(2);
 
-        var first = EnumerateAsync(sequence, firstCancellationTokenSource.Token);
-        var second = EnumerateAsync(sequence, secondCancellationTokenSource.Token);
-        await WaitForBlockedRequestsAsync(2);
+            firstCancellationTokenSource.Cancel();
+            await ShouldBeCancelledAsync(() => first);
+            await Task.Delay(200);
+            second.IsCompleted.ShouldBeFalse();
 
-        firstCancellationTokenSource.Cancel();
-        await ShouldBeCancelledAsync(() => first);
-        await Task.Delay(200);
-        second.IsCompleted.ShouldBeFalse();
-
-        secondCancellationTokenSource.Cancel();
-        await ShouldBeCancelledAsync(() => second);
-        requestContext.CancellationToken.ShouldBeNull();
+            secondCancellationTokenSource.Cancel();
+            await ShouldBeCancelledAsync(() => second);
+            requestContext.CancellationToken.ShouldBeNull();
+        }
     }
 
     [Fact]
     public async Task Should_Cancel_Request_With_Method_Token_That_Is_Not_The_Last_Argument()
     {
-        using var methodCancellationTokenSource = new CancellationTokenSource();
-
-        await ShouldBeCancelledWhenBlockedAsync(async () =>
+        using (var methodCancellationTokenSource = new CancellationTokenSource())
         {
-            await foreach (var _ in Controller.GetStreamWithLeadingCancellationTokenAsync(methodCancellationTokenSource.Token, 3))
+            await ShouldBeCancelledWhenBlockedAsync(async () =>
             {
-            }
-        }, methodCancellationTokenSource);
+                await foreach (var _ in Controller.GetStreamWithLeadingCancellationTokenAsync(methodCancellationTokenSource.Token, 3))
+                {
+                }
+            }, methodCancellationTokenSource);
+        }
     }
 
     private DynamicHttpProxyInterceptorClientProxy<IRegularTestController> ClientProxy =>
@@ -198,15 +203,17 @@ public class AsyncEnumerableClientProxy_RequestContext_Cancellation_Tests : Asyn
     private async Task<ClientProxyRequestContext> GetActionAsync()
     {
         // The business request is blocked, but RequestAsync records its context before sending it.
-        using var cancellationTokenSource = new CancellationTokenSource();
-        await ShouldBeCancelledWhenBlockedAsync(async () =>
+        using (var cancellationTokenSource = new CancellationTokenSource())
         {
-            await foreach (var _ in Controller.GetStreamAsync(1).WithCancellation(cancellationTokenSource.Token))
+            await ShouldBeCancelledWhenBlockedAsync(async () =>
             {
-            }
-        }, cancellationTokenSource);
+                await foreach (var _ in Controller.GetStreamAsync(1).WithCancellation(cancellationTokenSource.Token))
+                {
+                }
+            }, cancellationTokenSource);
 
-        return ServiceProvider.GetRequiredService<RequestContextRecorder>().Contexts.Last();
+            return ServiceProvider.GetRequiredService<RequestContextRecorder>().Contexts.Last();
+        }
     }
 
     private static async Task EnumerateAsync(IAsyncEnumerable<int> sequence, CancellationToken cancellationToken)
@@ -238,39 +245,42 @@ public class AsyncEnumerableClientProxy_ApiDefinition_Cancellation_Tests : Async
     [Fact]
     public async Task Should_Cancel_Api_Definition_Request_With_Method_Token()
     {
-        using var methodCancellationTokenSource = new CancellationTokenSource();
-
-        await ShouldBeCancelledWhenBlockedAsync(async () =>
+        using (var methodCancellationTokenSource = new CancellationTokenSource())
         {
-            await foreach (var _ in Controller.GetStreamWithCancellationTokenAsync(methodCancellationTokenSource.Token))
+            await ShouldBeCancelledWhenBlockedAsync(async () =>
             {
-            }
-        }, methodCancellationTokenSource);
+                await foreach (var _ in Controller.GetStreamWithCancellationTokenAsync(methodCancellationTokenSource.Token))
+                {
+                }
+            }, methodCancellationTokenSource);
+        }
     }
 
     [Fact]
     public async Task Should_Cancel_Api_Definition_Request_With_Method_Token_That_Is_Not_The_Last_Argument()
     {
-        using var methodCancellationTokenSource = new CancellationTokenSource();
-
-        await ShouldBeCancelledWhenBlockedAsync(async () =>
+        using (var methodCancellationTokenSource = new CancellationTokenSource())
         {
-            await foreach (var _ in Controller.GetStreamWithLeadingCancellationTokenAsync(methodCancellationTokenSource.Token, 3))
+            await ShouldBeCancelledWhenBlockedAsync(async () =>
             {
-            }
-        }, methodCancellationTokenSource);
+                await foreach (var _ in Controller.GetStreamWithLeadingCancellationTokenAsync(methodCancellationTokenSource.Token, 3))
+                {
+                }
+            }, methodCancellationTokenSource);
+        }
     }
 
     [Fact]
     public async Task Should_Cancel_Api_Definition_Request()
     {
-        using var enumerationCancellationTokenSource = new CancellationTokenSource();
-
-        await ShouldBeCancelledWhenBlockedAsync(async () =>
+        using (var enumerationCancellationTokenSource = new CancellationTokenSource())
         {
-            await foreach (var _ in Controller.GetStreamAsync(3).WithCancellation(enumerationCancellationTokenSource.Token))
+            await ShouldBeCancelledWhenBlockedAsync(async () =>
             {
-            }
-        }, enumerationCancellationTokenSource);
+                await foreach (var _ in Controller.GetStreamAsync(3).WithCancellation(enumerationCancellationTokenSource.Token))
+                {
+                }
+            }, enumerationCancellationTokenSource);
+        }
     }
 }

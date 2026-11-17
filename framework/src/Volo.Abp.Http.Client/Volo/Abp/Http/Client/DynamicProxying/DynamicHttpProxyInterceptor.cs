@@ -129,26 +129,27 @@ public class DynamicHttpProxyInterceptor<TService> : AbpInterceptor, ITransientD
     protected virtual async IAsyncEnumerable<T> CallRequestAsyncEnumerable<T>(IAbpMethodInvocation invocation, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var methodCancellationToken = GetMethodCancellationToken(invocation);
-        using var linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(methodCancellationToken, cancellationToken);
-
-        ClientProxyRequestContext context;
-        using (InterceptorClientProxy.UseCancellationToken(linkedCancellationTokenSource.Token))
+        using (var linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(methodCancellationToken, cancellationToken))
         {
-            context = new ClientProxyRequestContext(
-                await GetActionApiDescriptionModel(invocation),
-                invocation.ArgumentsDictionary,
-                typeof(TService));
-        }
+            ClientProxyRequestContext context;
+            using (InterceptorClientProxy.UseCancellationToken(linkedCancellationTokenSource.Token))
+            {
+                context = new ClientProxyRequestContext(
+                    await GetActionApiDescriptionModel(invocation),
+                    invocation.ArgumentsDictionary,
+                    typeof(TService));
+            }
 
-        if (methodCancellationToken.CanBeCanceled)
-        {
-            // Not necessarily the last argument, which is the only one checked when sending the request.
-            context.CancellationToken = methodCancellationToken;
-        }
+            if (methodCancellationToken.CanBeCanceled)
+            {
+                // Not necessarily the last argument, which is the only one checked when sending the request.
+                context.CancellationToken = methodCancellationToken;
+            }
 
-        await foreach (var item in InterceptorClientProxy.CallRequestAsyncEnumerable<T>(context).WithCancellation(cancellationToken))
-        {
-            yield return item;
+            await foreach (var item in InterceptorClientProxy.CallRequestAsyncEnumerable<T>(context).WithCancellation(cancellationToken))
+            {
+                yield return item;
+            }
         }
     }
 

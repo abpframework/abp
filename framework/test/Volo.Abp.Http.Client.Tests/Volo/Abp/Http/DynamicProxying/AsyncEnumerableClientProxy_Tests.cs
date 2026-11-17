@@ -117,23 +117,24 @@ public class AsyncEnumerableClientProxy_Tests : AbpHttpClientTestBase
     public async Task Should_Stop_When_Cancelled_While_Waiting_For_Next_Item()
     {
         var items = new List<string>();
-        using var cancellationTokenSource = new CancellationTokenSource();
-
-        try
+        using (var cancellationTokenSource = new CancellationTokenSource())
         {
-            await Should.ThrowAsync<OperationCanceledException>(
-                ConsumeAsync(_controller.GetGatedStreamAsync(false).WithCancellation(cancellationTokenSource.Token), item =>
-                {
-                    items.Add(item);
-                    cancellationTokenSource.Cancel();
-                }).WaitAsync(Timeout));
-        }
-        finally
-        {
-            AsyncEnumerableTestGate.Open();
-        }
+            try
+            {
+                await Should.ThrowAsync<OperationCanceledException>(
+                    ConsumeAsync(_controller.GetGatedStreamAsync(false).WithCancellation(cancellationTokenSource.Token), item =>
+                    {
+                        items.Add(item);
+                        cancellationTokenSource.Cancel();
+                    }).WaitAsync(Timeout));
+            }
+            finally
+            {
+                AsyncEnumerableTestGate.Open();
+            }
 
-        items.ShouldBe(new[] { "first" });
+            items.ShouldBe(new[] { "first" });
+        }
     }
 
     private static async Task ConsumeAsync<T>(IAsyncEnumerable<T> source, Action<T> onItem)

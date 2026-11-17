@@ -79,37 +79,41 @@ public class ClientProxyBase<TService> : ITransientDependency
 
     protected virtual async IAsyncEnumerable<T> RequestAsyncEnumerable<T>(ClientProxyRequestContext requestContext, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        using var linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(
+        using (var linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(
             requestContext.CancellationToken ?? GetCancellationToken(requestContext.Arguments),
-            cancellationToken);
-        var linkedCancellationToken = linkedCancellationTokenSource.Token;
-
-        HttpContent responseContent;
-        _streamingRequest.Value = new StreamingRequest(requestContext, linkedCancellationToken);
-        try
+            cancellationToken))
         {
-            using (CancellationTokenProvider.Use(linkedCancellationToken))
+            var linkedCancellationToken = linkedCancellationTokenSource.Token;
+
+            HttpContent responseContent;
+            _streamingRequest.Value = new StreamingRequest(requestContext, linkedCancellationToken);
+            try
             {
-                responseContent = await RequestAsync(requestContext);
+                using (CancellationTokenProvider.Use(linkedCancellationToken))
+                {
+                    responseContent = await RequestAsync(requestContext);
+                }
             }
-        }
-        finally
-        {
-            _streamingRequest.Value = null;
-        }
-
-        using (responseContent)
-        {
-            var options = SystemTextJsonSerializerOptions?.Value.JsonSerializerOptions;
-#if NET5_0_OR_GREATER
-            using var stream = await responseContent.ReadAsStreamAsync(linkedCancellationToken);
-#else
-            using var stream = await responseContent.ReadAsStreamAsync();
-#endif
-            var items = System.Text.Json.JsonSerializer.DeserializeAsyncEnumerable<T>(stream, options, linkedCancellationToken);
-            await foreach (var item in items.WithCancellation(linkedCancellationToken))
+            finally
             {
-                yield return item!;
+                _streamingRequest.Value = null;
+            }
+
+            using (responseContent)
+            {
+                var options = SystemTextJsonSerializerOptions?.Value.JsonSerializerOptions;
+#if NET5_0_OR_GREATER
+                using (var stream = await responseContent.ReadAsStreamAsync(linkedCancellationToken))
+#else
+                using (var stream = await responseContent.ReadAsStreamAsync())
+#endif
+                {
+                    var items = System.Text.Json.JsonSerializer.DeserializeAsyncEnumerable<T>(stream, options, linkedCancellationToken);
+                    await foreach (var item in items.WithCancellation(linkedCancellationToken))
+                    {
+                        yield return item!;
+                    }
+                }
             }
         }
     }
@@ -136,16 +140,24 @@ public class ClientProxyBase<TService> : ITransientDependency
         }
 
         // A CancellationToken argument has no request parameter, so it must not shift the arguments after it.
-        var requestArguments = arguments.Values.Exists(x => x.Key == typeof(CancellationToken))
+        var cancellationTokenArgument = arguments.Values.FirstOrDefault(x => x.Key == typeof(CancellationToken));
+        var requestArguments = cancellationTokenArgument.Key != null
             ? arguments.Values.Where(x => x.Key != typeof(CancellationToken)).ToList()
             : arguments.Values;
 
-        return new ClientProxyRequestContext(
+        var requestContext = new ClientProxyRequestContext(
             action,
                 actionArguments
                 .Select((x, i) => new KeyValuePair<string, object?>(x.Key, requestArguments[i].Value))
                 .ToDictionary(x => x.Key, x => x.Value),
             typeof(TService));
+
+        if (cancellationTokenArgument.Value is CancellationToken { CanBeCanceled: true } cancellationToken)
+        {
+            requestContext.CancellationToken = cancellationToken;
+        }
+
+        return requestContext;
     }
 
     protected virtual async Task<T> RequestAsync<T>(ClientProxyRequestContext requestContext)
@@ -245,6 +257,12 @@ public class ClientProxyBase<TService> : ITransientDependency
             );
         }
 
+        // Other requests sent meanwhile (e.g. by an overridden RequestAsync) keep their own token.
+        var streamingRequest = _streamingRequest.Value;
+        var cancellationToken = streamingRequest != null && ReferenceEquals(streamingRequest.Context, requestContext)
+            ? streamingRequest.CancellationToken
+            : requestContext.CancellationToken ?? GetCancellationToken(requestContext.Arguments);
+
         HttpResponseMessage response;
         try
         {
@@ -253,14 +271,10 @@ public class ClientProxyBase<TService> : ITransientDependency
                 preSendAction(clientConfig, requestContext, client);
             }
 
-            // Other requests sent meanwhile (e.g. by an overridden RequestAsync) keep their own token.
-            var streamingRequest = _streamingRequest.Value;
             response = await client.SendAsync(
                 requestMessage,
                 HttpCompletionOption.ResponseHeadersRead /*this will buffer only the headers, the content will be used as a stream*/,
-                streamingRequest != null && ReferenceEquals(streamingRequest.Context, requestContext)
-                    ? streamingRequest.CancellationToken
-                    : requestContext.CancellationToken ?? GetCancellationToken(requestContext.Arguments)
+                cancellationToken
             );
         }
         catch (Exception ex)
@@ -272,7 +286,11 @@ public class ClientProxyBase<TService> : ITransientDependency
         {
             try
             {
-                await ThrowExceptionForResponseAsync(response);
+                // The error is read with the token of the request.
+                using (CancellationTokenProvider.Use(cancellationToken))
+                {
+                    await ThrowExceptionForResponseAsync(response);
+                }
             }
             catch
             {
@@ -361,7 +379,11 @@ public class ClientProxyBase<TService> : ITransientDependency
             try
             {
                 errorResponse = JsonSerializer.Deserialize<RemoteServiceErrorResponse>(
+#if NET5_0_OR_GREATER
+                    await response.Content.ReadAsStringAsync(CancellationTokenProvider.Token)
+#else
                     await response.Content.ReadAsStringAsync()
+#endif
                 );
             }
             catch (Exception ex)
