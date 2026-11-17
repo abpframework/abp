@@ -289,6 +289,30 @@ public class AsyncEnumerable_Interception_Tests : EntityFrameworkCoreTestBase
     }
 
     [Fact]
+    public async Task Should_Roll_Back_The_Unit_Of_Work_Of_A_Consumer_That_Fails()
+    {
+        await InsertPersonAsync("Aaron");
+        var originalAges = await GetAgesAsync();
+
+        await Should.ThrowAsync<InvalidOperationException>(async () =>
+        {
+            using (var unitOfWork = _unitOfWorkManager.Begin(new AbpUnitOfWorkOptions(isTransactional: true), requiresNew: true))
+            {
+                await foreach (var _ in _appService.IncreaseAgesAsync())
+                {
+                    throw new InvalidOperationException("Failed while consuming");
+                }
+
+                await unitOfWork.CompleteAsync();
+            }
+        });
+
+        _tracker.SourceDisposed.ShouldBeTrue();
+        _tracker.UnitOfWorkCompleted.ShouldBeFalse();
+        (await GetAgesAsync()).ShouldBe(originalAges);
+    }
+
+    [Fact]
     public async Task Should_Join_Outer_Unit_Of_Work()
     {
         await WithUnitOfWorkAsync(async () =>

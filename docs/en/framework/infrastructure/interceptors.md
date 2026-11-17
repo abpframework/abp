@@ -235,6 +235,8 @@ ABP's [Unit of Work](../architecture/domain-driven-design/unit-of-work.md), [Aud
 
 > Since the authorization and other checks are performed when the method is called, you should enumerate the returned sequence in the same context (the same user and tenant) as the method call.
 
+> A method with a `ref`, `out` or `in` parameter is intercepted only when it is called, so its enumerations are not covered by a scope.
+
 ## Restrictions and Important Notes
 
 ### Always use asynchronous methods

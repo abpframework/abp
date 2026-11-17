@@ -27,6 +27,8 @@ public abstract class AbpAsyncEnumerableInterceptionTestBase<TStartupModule> : A
         services.AddTransient<AsyncEnumerableGatedTestObject>();
         services.AddTransient<AsyncEnumerableGatedScopedTestObject>();
         services.AddTransient<AsyncEnumerableConcurrentTestObject>();
+        services.AddTransient<ConcurrentScopeTestInterceptor>();
+        services.AddTransient<AsyncEnumerableConcurrentScopedTestObject>();
         services.AddTransient<ScopeTestInterceptor>();
         services.AddSingleton<ScopeEventLog>();
         services.AddTransient<EventLoggingScopeInterceptor>();
@@ -70,6 +72,11 @@ public abstract class AbpAsyncEnumerableInterceptionTestBase<TStartupModule> : A
             {
                 registration.Interceptors.Add<SimpleAsyncInterceptor>();
                 registration.Interceptors.Add<SimpleAsyncInterceptor2>();
+            }
+
+            if (typeof(AsyncEnumerableConcurrentScopedTestObject) == registration.ImplementationType)
+            {
+                registration.Interceptors.Add<ConcurrentScopeTestInterceptor>();
             }
 
             if (typeof(AsyncEnumerableGatedTestObject) == registration.ImplementationType)
@@ -225,18 +232,19 @@ public abstract class AbpAsyncEnumerableInterceptionTestBase<TStartupModule> : A
     {
         var target = ServiceProvider.GetRequiredService<AsyncEnumerableInterceptionTargetClass>();
         var items = new List<int>();
-        using var cancellationTokenSource = new CancellationTokenSource();
-
-        await Should.ThrowAsync<OperationCanceledException>(async () =>
+        using (var cancellationTokenSource = new CancellationTokenSource())
         {
-            await foreach (var item in target.GetOneThenWaitAsync().WithCancellation(cancellationTokenSource.Token))
+            await Should.ThrowAsync<OperationCanceledException>(async () =>
             {
-                items.Add(item);
-                cancellationTokenSource.CancelAfter(50);
-            }
-        }).WaitAsync(TimeSpan.FromSeconds(10));
+                await foreach (var item in target.GetOneThenWaitAsync().WithCancellation(cancellationTokenSource.Token))
+                {
+                    items.Add(item);
+                    cancellationTokenSource.CancelAfter(50);
+                }
+            }).WaitAsync(TimeSpan.FromSeconds(10));
 
-        items.ShouldBe(new[] { 1 });
+            items.ShouldBe(new[] { 1 });
+        }
     }
 
     [Fact]
@@ -263,6 +271,53 @@ public abstract class AbpAsyncEnumerableInterceptionTestBase<TStartupModule> : A
 
         results[0].ShouldBe(new[] { 1, 2, 3 });
         results[1].ShouldBe(new[] { 1, 2, 3 });
+    }
+
+    [Fact]
+    public async Task Should_Keep_The_Scopes_Of_Concurrent_Enumerations_Separate_When_One_Is_Canceled()
+    {
+        var target = ServiceProvider.GetRequiredService<AsyncEnumerableConcurrentScopedTestObject>();
+        var gate = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var sequence = target.GetScopeIdsAsync(gate.Task);
+        var canceledIds = new List<string?>();
+        var completedIds = new List<string?>();
+        var completedFirstItem = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        using (var cancellationTokenSource = new CancellationTokenSource())
+        {
+            var canceled = Task.Run(async () =>
+            {
+                await foreach (var scopeId in sequence.WithCancellation(cancellationTokenSource.Token))
+                {
+                    canceledIds.Add(scopeId);
+                    await completedFirstItem.Task;
+                    cancellationTokenSource.Cancel();
+                }
+            });
+            var completed = Task.Run(async () =>
+            {
+                await foreach (var scopeId in sequence)
+                {
+                    completedIds.Add(scopeId);
+                    completedFirstItem.TrySetResult();
+                }
+            });
+
+            await Should.ThrowAsync<OperationCanceledException>(canceled.WaitAsync(TimeSpan.FromSeconds(10)));
+            gate.SetResult();
+            await completed.WaitAsync(TimeSpan.FromSeconds(10));
+        }
+
+        var canceledScopeId = canceledIds.ShouldHaveSingleItem().ShouldNotBeNull();
+        completedIds.Count.ShouldBe(2);
+        var completedScopeId = completedIds[0].ShouldNotBeNull();
+        completedIds[1].ShouldBe(completedScopeId);
+        completedScopeId.ShouldNotBe(canceledScopeId);
+        ConcurrentScopeTestInterceptor.ScopeId.Value.ShouldBeNull();
+
+        var events = target.Events.ToList();
+        events.Where(e => e.StartsWith(canceledScopeId)).ShouldBe(new[] { $"{canceledScopeId}:Failed", $"{canceledScopeId}:Disposed" });
+        events.Where(e => e.StartsWith(completedScopeId)).ShouldBe(new[] { $"{completedScopeId}:Completed", $"{completedScopeId}:Disposed" });
     }
 
     [Fact]
