@@ -63,6 +63,7 @@ internal static class AbpMvcOptionsExtensions
         options.Filters.AddService(typeof(AbpFeatureActionFilter));
         options.Filters.AddService(typeof(AbpValidationActionFilter));
         options.Filters.AddService(typeof(AbpUowActionFilter));
+        options.Filters.AddService(typeof(AbpInterceptedAsyncEnumerableActionFilter));
         options.Filters.AddService(typeof(AbpExceptionFilter));
     }
 

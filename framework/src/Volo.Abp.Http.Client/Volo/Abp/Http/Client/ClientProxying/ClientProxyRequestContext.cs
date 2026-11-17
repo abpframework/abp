@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using JetBrains.Annotations;
 using Volo.Abp.Http.Modeling;
 
@@ -15,6 +16,11 @@ public class ClientProxyRequestContext
 
     [NotNull]
     public Type ServiceType { get; }
+
+    /// <summary>
+    /// Overrides the token taken from the <see cref="Arguments"/> or the ambient provider.
+    /// </summary>
+    public CancellationToken? CancellationToken { get; set; }
 
     public ClientProxyRequestContext(
         [NotNull] ActionApiDescriptionModel action,

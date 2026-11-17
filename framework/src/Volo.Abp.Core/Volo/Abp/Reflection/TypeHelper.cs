@@ -156,6 +156,11 @@ public static class TypeHelper
         return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
     }
 
+    public static bool IsAsyncEnumerable(Type type)
+    {
+        return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IAsyncEnumerable<>);
+    }
+
     public static bool IsNullableEnum(Type type)
     {
         return type.IsGenericType &&
