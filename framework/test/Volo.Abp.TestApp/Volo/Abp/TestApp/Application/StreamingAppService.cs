@@ -13,6 +13,12 @@ public class StreamingAppService : ApplicationService
         yield return 2;
     }
 
+    public virtual async IAsyncEnumerable<int> GetSlowItemsAsync()
+    {
+        await Task.Delay(50);
+        yield return 1;
+    }
+
     public virtual IAsyncEnumerable<int> GetItemsWithCreationErrorAsync()
     {
         throw new UserFriendlyException("Failed to create the sequence");

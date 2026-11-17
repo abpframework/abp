@@ -34,6 +34,12 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
             if (!ShouldIntercept(invocation, auditingOptions, auditingHelper))
             {
                 await invocation.ProceedAsync();
+
+                if (IsAuditedByCaller(invocation, auditingOptions, auditingHelper))
+                {
+                    WrapAsyncEnumerable(invocation);
+                }
+
                 return;
             }
 
@@ -171,6 +177,21 @@ public class AuditingInterceptor : AbpInterceptor, ITransientDependency
                 }
             }
         }
+    }
+
+    // A caller applying the auditing concern (e.g. the auditing action filter of MVC) audits the method call,
+    // but not the enumeration of the returned sequence, which happens after the call (e.g. when the result is written).
+    private static bool IsAuditedByCaller(
+        IAbpMethodInvocation invocation,
+        AbpAuditingOptions options,
+        IAuditingHelper auditingHelper)
+    {
+        return TypeHelper.IsAsyncEnumerable(invocation.Method.ReturnType) &&
+               options.IsEnabled &&
+               AbpCrossCuttingConcerns.IsApplied(invocation.TargetObject, AbpCrossCuttingConcerns.Auditing) &&
+               auditingHelper.ShouldSaveAudit(
+                   invocation.Method,
+                   ignoreIntegrationServiceAttribute: options.IsEnabledForIntegrationServices);
     }
 
     private void WrapAsyncEnumerable(IAbpMethodInvocation invocation)

@@ -35,7 +35,7 @@ public class StreamingAppService_Auditing_Tests : AspNetCoreMvcTestBase
     }
 
     [Fact]
-    public async Task Should_Audit_Streaming_Action_Once()
+    public async Task Should_Audit_The_Call_And_The_Enumeration_Of_A_Streaming_Action()
     {
         _options.IsEnabledForGetRequests = true;
         ProxyHelper.IsProxy(ServiceProvider.GetRequiredService<StreamingAppService>()).ShouldBeTrue();
@@ -45,7 +45,32 @@ public class StreamingAppService_Auditing_Tests : AspNetCoreMvcTestBase
         result.ShouldBe(new[] { 1, 2 });
         GetRequiredService<AuditingConcernProbe>().Results.ShouldBe(new[] { true });
         _savedAuditLogs.Count.ShouldBe(1);
-        _savedAuditLogs[0].Actions.Count(a => a.MethodName == nameof(StreamingAppService.GetItemsAsync)).ShouldBe(1);
+        var actions = _savedAuditLogs[0].Actions.Where(a => a.MethodName == nameof(StreamingAppService.GetItemsAsync)).ToList();
+        actions.Count.ShouldBe(2);
+        actions.Count(IsEnumeration).ShouldBe(1);
+    }
+
+    [Fact]
+    public async Task Should_Record_The_Duration_Of_The_Enumeration_Of_A_Streaming_Action()
+    {
+        _options.IsEnabledForGetRequests = true;
+
+        var result = await GetResponseAsObjectAsync<List<int>>("/api/app/streaming/slow-items");
+
+        result.ShouldBe(new[] { 1 });
+        var enumeration = _savedAuditLogs.Single().Actions.Single(a => a.MethodName == nameof(StreamingAppService.GetSlowItemsAsync) && IsEnumeration(a));
+        enumeration.ExecutionDuration.ShouldBeGreaterThanOrEqualTo(40);
+    }
+
+    [Fact]
+    public async Task Should_Not_Audit_The_Enumeration_When_The_Streaming_Action_Is_Not_Audited()
+    {
+        _options.IsEnabledForGetRequests = false;
+
+        var result = await GetResponseAsObjectAsync<List<int>>("/api/app/streaming/items");
+
+        result.ShouldBe(new[] { 1, 2 });
+        _savedAuditLogs.SelectMany(x => x.Actions).ShouldNotContain(a => a.MethodName == nameof(StreamingAppService.GetItemsAsync));
     }
 
     [Theory]
@@ -56,10 +81,11 @@ public class StreamingAppService_Auditing_Tests : AspNetCoreMvcTestBase
         _options.IsEnabledForGetRequests = true;
 
         // AbpExceptionFilter only handles exceptions of actions returning IActionResult for AJAX requests.
-        using var response = await GetResponseAsync(url, HttpStatusCode.Forbidden, xmlHttpRequest: true);
-
-        (await response.Content.ReadAsStringAsync()).ShouldContain("Failed to create the sequence");
-        _savedAuditLogs.Single().Exceptions.ShouldContain(e => e.Message == "Failed to create the sequence");
+        using (var response = await GetResponseAsync(url, HttpStatusCode.Forbidden, xmlHttpRequest: true))
+        {
+            (await response.Content.ReadAsStringAsync()).ShouldContain("Failed to create the sequence");
+            _savedAuditLogs.Single().Exceptions.ShouldContain(e => e.Message == "Failed to create the sequence");
+        }
     }
 
     [Fact]
@@ -86,5 +112,10 @@ public class StreamingAppService_Auditing_Tests : AspNetCoreMvcTestBase
         // The interceptors of the sequence (delayed by the probe) run within the action, like for an ObjectResult.
         var controllerAction = _savedAuditLogs.Single().Actions.Single(a => a.ServiceName == typeof(StreamingJsonTestController).FullName);
         controllerAction.ExecutionDuration.ShouldBeGreaterThanOrEqualTo(40);
+    }
+
+    private static bool IsEnumeration(AuditLogActionInfo action)
+    {
+        return action.ExtraProperties.ContainsKey(AuditingInterceptor.AsyncEnumerationPropertyName);
     }
 }

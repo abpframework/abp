@@ -8,7 +8,9 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using Shouldly;
+using Volo.Abp.Auditing.App.Entities;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Uow;
 using Xunit;
 
@@ -122,6 +124,37 @@ public class Auditing_AsyncEnumerable_Tests : AbpAuditingTestBase
         var firstChange = _savedAuditLogs[1].EntityChanges.ShouldHaveSingleItem();
         var secondChange = _savedAuditLogs[2].EntityChanges.ShouldHaveSingleItem();
         firstChange.ShouldNotBeSameAs(secondChange);
+    }
+
+    [Fact]
+    public async Task Should_Record_The_Entity_Changes_Saved_By_The_Unit_Of_Work_Of_The_Enumeration_In_Its_Audit_Log()
+    {
+        var entityId = Guid.NewGuid();
+        var sequence = GetRequiredService<MyStreamingAuditedUnitOfWorkObject>().InsertAndStreamAsync(entityId, fail: false);
+
+        (await ToListAsync(sequence)).ShouldBe(new[] { 1 });
+
+        _savedAuditLogs.Count.ShouldBe(2);
+        _savedAuditLogs[0].EntityChanges.ShouldBeEmpty();
+        IsEnumeration(_savedAuditLogs[1].Actions.ShouldHaveSingleItem()).ShouldBeTrue();
+        var entityChange = _savedAuditLogs[1].EntityChanges.ShouldHaveSingleItem();
+        entityChange.EntityId.ShouldBe(entityId.ToString());
+        entityChange.ChangeType.ShouldBe(EntityChangeType.Created);
+        (await FindAppEntityWithAuditedAsync(entityId)).ShouldNotBeNull();
+    }
+
+    [Fact]
+    public async Task Should_Not_Save_The_Entity_Of_A_Failed_Enumeration_And_Record_The_Exception_In_Its_Audit_Log()
+    {
+        var entityId = Guid.NewGuid();
+        var sequence = GetRequiredService<MyStreamingAuditedUnitOfWorkObject>().InsertAndStreamAsync(entityId, fail: true);
+
+        await Should.ThrowAsync<InvalidOperationException>(ToListAsync(sequence));
+
+        _savedAuditLogs.Count.ShouldBe(2);
+        IsEnumeration(_savedAuditLogs[1].Actions.ShouldHaveSingleItem()).ShouldBeTrue();
+        _savedAuditLogs[1].Exceptions.ShouldContain(e => e.Message == "Stream failed after inserting");
+        (await FindAppEntityWithAuditedAsync(entityId)).ShouldBeNull();
     }
 
     [Fact]
@@ -282,6 +315,16 @@ public class Auditing_AsyncEnumerable_Tests : AbpAuditingTestBase
         }
     }
 
+    private async Task<AppEntityWithAudited?> FindAppEntityWithAuditedAsync(Guid id)
+    {
+        using (var unitOfWork = GetRequiredService<IUnitOfWorkManager>().Begin())
+        {
+            var entity = await GetRequiredService<IBasicRepository<AppEntityWithAudited, Guid>>().FindAsync(id);
+            await unitOfWork.CompleteAsync();
+            return entity;
+        }
+    }
+
     private static bool IsEnumeration(AuditLogActionInfo action)
     {
         return action.ExtraProperties.TryGetValue(AuditingInterceptor.AsyncEnumerationPropertyName, out var value) && value is true;
@@ -296,6 +339,28 @@ public class Auditing_AsyncEnumerable_Tests : AbpAuditingTestBase
         }
 
         return list;
+    }
+
+    public class MyStreamingAuditedUnitOfWorkObject : ITransientDependency, IAuditingEnabled, IUnitOfWorkEnabled
+    {
+        private readonly IBasicRepository<AppEntityWithAudited, Guid> _repository;
+
+        public MyStreamingAuditedUnitOfWorkObject(IBasicRepository<AppEntityWithAudited, Guid> repository)
+        {
+            _repository = repository;
+        }
+
+        // The entity is saved when the unit of work of the enumeration is completed.
+        public virtual async IAsyncEnumerable<int> InsertAndStreamAsync(Guid id, bool fail)
+        {
+            await _repository.InsertAsync(new AppEntityWithAudited(id, "streamed"));
+            yield return 1;
+
+            if (fail)
+            {
+                throw new InvalidOperationException("Stream failed after inserting");
+            }
+        }
     }
 
     public class MyStreamingAuditedObject : ITransientDependency, IAuditingEnabled
