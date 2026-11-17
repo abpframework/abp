@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
@@ -57,19 +58,31 @@ public partial class UiNotificationAlert : ComponentBase, IDisposable
         Title = e.Title;
         Options = e.Options;
 
-        var message = !string.IsNullOrEmpty(Title)
-            ? $"<strong>{Title}</strong><br/>{Message}"
-            : Message;
-
         await InvokeAsync(() =>
         {
-            Snackbar.Add(message, GetSeverity(e.NotificationType), config =>
+            Action<SnackbarOptions> configure = config =>
             {
                 config.RequireInteraction = false;
                 config.ShowCloseIcon = true;
                 config.CloseAfterNavigation = true;
-            });
+            };
+
+            // A string is shown as plain text, so the title's markup must go as a MarkupString.
+            // Title and message are encoded first: they can carry user input (a chat message, a name).
+            if (!string.IsNullOrEmpty(Title))
+            {
+                Snackbar.Add(GetTitledMessage(Title, Message), GetSeverity(e.NotificationType), configure);
+            }
+            else
+            {
+                Snackbar.Add(Message, GetSeverity(e.NotificationType), configure);
+            }
         });
+    }
+
+    protected virtual MarkupString GetTitledMessage(string title, string message)
+    {
+        return new MarkupString($"<strong>{WebUtility.HtmlEncode(title)}</strong><br/>{WebUtility.HtmlEncode(message)}");
     }
 
     public virtual void Dispose()
