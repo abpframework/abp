@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.RequestLocalization;
 using Volo.Abp.AspNetCore.Security.Claims;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Authorization;
+using Volo.Abp.AspNetCore.Mvc.Auditing;
 using Volo.Abp.Autofac;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Localization;
@@ -50,6 +51,14 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
             );
         });
 
+        context.Services.OnRegistered(registration =>
+        {
+            if (registration.ImplementationType == typeof(StreamingAppService))
+            {
+                registration.Interceptors.Add<AuditingConcernProbeInterceptor>();
+            }
+        });
+
         context.Services.PreConfigure<AbpAspNetCoreMvcOptions>(options =>
         {
             options.ConventionalControllers.Create(typeof(TestAppModule).Assembly, opts =>
@@ -59,7 +68,7 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
                         ? "phones"
                         : urlActionNameNormalizerContext.ActionNameInUrl;
 
-                opts.TypePredicate = type => type != typeof(ConventionalAppService);
+                opts.TypePredicate = type => type != typeof(ConventionalAppService) && type != typeof(StreamingAppService);
             });
 
             options.ExposeIntegrationServices = true;
@@ -68,6 +77,15 @@ public class AbpAspNetCoreMvcTestModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        // Configured like the startup templates (not in PreConfigure), so the controller keeps its dynamic proxy.
+        Configure<AbpAspNetCoreMvcOptions>(options =>
+        {
+            options.ConventionalControllers.Create(typeof(TestAppModule).Assembly, opts =>
+            {
+                opts.TypePredicate = type => type == typeof(StreamingAppService);
+            });
+        });
+
         OneTimeRunner.Run(() =>
         {
             GlobalFeatureManager.Instance.Modules.GetOrAdd(AbpAspNetCoreMvcTestFeatures.ModuleName,

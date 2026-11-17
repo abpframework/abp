@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Asp.Versioning;
 using JetBrains.Annotations;
@@ -393,6 +394,7 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
         var methodParameterNames = method
             .GetParameters()
             .Where(IsNotFromServicesParameter)
+            .Where(IsNotCancellationTokenParameter)
             .Select(GetMethodParamName)
             .ToArray();
 
@@ -428,6 +430,12 @@ public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvide
     private static bool IsNotFromServicesParameter(ParameterInfo parameterInfo)
     {
         return !parameterInfo.IsDefined(typeof(FromServicesAttribute), true);
+    }
+
+    // A CancellationToken parameter has no parameter description, so it must not be matched with the next parameter.
+    private static bool IsNotCancellationTokenParameter(ParameterInfo parameterInfo)
+    {
+        return parameterInfo.ParameterType != typeof(CancellationToken);
     }
 
     public string GetMethodParamName(ParameterInfo parameterInfo)
