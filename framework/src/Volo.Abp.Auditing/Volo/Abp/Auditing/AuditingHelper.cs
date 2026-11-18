@@ -83,7 +83,7 @@ public class AuditingHelper : IAuditingHelper, ITransientDependency
             return false;
         }
 
-        var classType = methodInfo.DeclaringType;
+        var classType = methodInfo.ReflectedType ?? methodInfo.DeclaringType;
         if (classType != null)
         {
             var shouldAudit = AuditingInterceptorRegistrar.ShouldAuditTypeByDefaultOrNull(classType, ignoreIntegrationServiceAttribute);
