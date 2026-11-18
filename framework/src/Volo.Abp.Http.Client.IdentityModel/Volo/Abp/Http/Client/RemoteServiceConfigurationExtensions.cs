@@ -7,6 +7,20 @@ public static class RemoteServiceConfigurationExtensions
 {
     public const string IdentityClientName = "IdentityClient";
     public const string UseCurrentAccessTokenName = "UseCurrentAccessToken";
+    public const string AllowClientCredentialsInHttpContextName = "AllowClientCredentialsInHttpContext";
+
+    public static bool GetAllowClientCredentialsInHttpContext([NotNull] this RemoteServiceConfiguration configuration)
+    {
+        Check.NotNullOrEmpty(configuration, nameof(configuration));
+        return bool.Parse(configuration.GetOrDefault(AllowClientCredentialsInHttpContextName) ?? "false");
+    }
+
+    public static RemoteServiceConfiguration SetAllowClientCredentialsInHttpContext(
+        [NotNull] this RemoteServiceConfiguration configuration, bool value)
+    {
+        configuration[AllowClientCredentialsInHttpContextName] = value.ToString().ToLowerInvariant();
+        return configuration;
+    }
 
     public static string? GetIdentityClient([NotNull] this RemoteServiceConfiguration configuration)
     {

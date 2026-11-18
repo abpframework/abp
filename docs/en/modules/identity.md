@@ -172,7 +172,8 @@ Example configuration for the calling application:
 "RemoteServices": {
   "AbpIdentity": {
     "BaseUrl": "https://localhost:44388/",
-    "UseCurrentAccessToken": false
+    "UseCurrentAccessToken": false,
+    "AllowClientCredentialsInHttpContext": true
   }
 },
 "IdentityClients": {
@@ -185,6 +186,8 @@ Example configuration for the calling application:
   }
 }
 ```
+
+With `Volo.Abp.Http.Client.IdentityModel.Web`, set `AllowClientCredentialsInHttpContext=true` to allow application credentials during HTTP requests, including when `UseCurrentAccessToken=false`. This also permits anonymous requests, so authorize privileged endpoints before enabling it.
 
 The exact `ClientId`, `ClientSecret` and `Scope` values depend on the application that hosts the Identity module. See the [Integration Services](../framework/api-development/integration-services.md) and [Synchronous Interservice Communication](../guides/synchronous-interservice-communication.md) documents for the full setup.
 

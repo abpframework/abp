@@ -919,12 +919,13 @@ Since it uses the Internal Gateway, it should also configure the remote endpoint
 "RemoteServices": {
   "Default": {
     "BaseUrl": "http://localhost:65129/",
-    "UseCurrentAccessToken": "false"
+    "UseCurrentAccessToken": "false",
+    "AllowClientCredentialsInHttpContext": true
   }
 }
 ````
 
-When you set `UseCurrentAccessToken` to `false`, ABP ignores the current `access_token` in the current `HttpContext` and authenticates to the AuthServer with the credentials defined above.
+Setting `UseCurrentAccessToken=false` ignores the current user token. A Web host also needs `AllowClientCredentialsInHttpContext=true` to use the application credentials above, including for anonymous requests. Authorize privileged endpoints before enabling it.
 
 Why not using the token of the current user in the current request? Because, the user may not have required permissions on the Identity module, so it can not just pass the current authentication token directly to the Identity service. In addition, some of the blog service APIs are anonymous (not requires authenticated user), so in some cases there is no "current user" in the HTTP request. For these reasons, Blogging service should be defined as a client for the Identity service with its own credentials and permissions.
 
