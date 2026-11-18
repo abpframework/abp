@@ -101,9 +101,9 @@ Once you define mappings described as below, you can use the `IObjectMapper` int
 
 ### Define Mappings
 
-AutoMapper provides multiple ways of defining mapping between classes. Refer to [its own documentation](https://docs.automapper.org) for all details.
+AutoMapper provides multiple ways of defining mapping between classes. Refer to [its own documentation](https://docs.automapper.io) for all details.
 
-One way to define object mappings is creating a [Profile](https://docs.automapper.org/en/stable/Configuration.html#profile-instances) class. Example:
+One way to define object mappings is creating a [Profile](https://docs.automapper.io/en/stable/Configuration.html#profile-instances) class. Example:
 
 ````csharp
 public class MyProfile : Profile
@@ -132,11 +132,11 @@ public class MyModule : AbpModule
 }
 ````
 
-`AddMaps` registers all profile classes defined in the assembly of the given class, typically your module class. It also registers for the [attribute mapping](https://docs.automapper.org/en/stable/Attribute-mapping.html).
+`AddMaps` registers all profile classes defined in the assembly of the given class, typically your module class. It also registers for the [attribute mapping](https://docs.automapper.io/en/stable/Attribute-mapping.html).
 
 ### Configuration Validation
 
-`AddMaps` optionally takes a `bool` parameter to control the [configuration validation](https://docs.automapper.org/en/stable/Configuration-validation.html) for your [module](../architecture/modularity/basics.md):
+`AddMaps` optionally takes a `bool` parameter to control the [configuration validation](https://docs.automapper.io/en/stable/Configuration-validation.html) for your [module](../architecture/modularity/basics.md):
 
 ````csharp
 options.AddMaps<MyModule>(validate: true);
