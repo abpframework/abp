@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Extensions.Logging;
@@ -26,16 +27,37 @@ public class EfCoreMigrationManager : ITransientDependency
         var migrationName = "Added_" + moduleName + "_Module" + GetUniquePostFix();
 
         var tenantDbContextName = FindTenantDbContextName(dbMigrationsProjectFolder);
-        var dbContextName = tenantDbContextName != null ?
-            FindDbContextName(dbMigrationsProjectFolder)
-            : null;
+        var dbContextNames = FindDbContextNames(dbMigrationsProjectFolder);
 
         if (!string.IsNullOrEmpty(tenantDbContextName))
         {
             RunAddMigrationCommand(dbMigrationsProjectFolder, migrationName, tenantDbContextName, "TenantMigrations");
         }
 
-        RunAddMigrationCommand(dbMigrationsProjectFolder, migrationName, dbContextName, "Migrations");
+        if (dbContextNames.Count == 1)
+        {
+            RunAddMigrationCommand(dbMigrationsProjectFolder, migrationName, dbContextNames[0], "Migrations");
+        }
+        else if (dbContextNames.Count > 1)
+        {
+            // Each DbContext needs its own migration with --context, otherwise
+            // `dotnet ef migrations add` fails with "More than one DbContext was found".
+            // The migration name is suffixed with the context name so migrations for
+            // different contexts do not collide in the same output directory.
+            foreach (var dbContextName in dbContextNames)
+            {
+                RunAddMigrationCommand(dbMigrationsProjectFolder, migrationName + "_" + dbContextName, dbContextName, "Migrations");
+            }
+        }
+        else
+        {
+            // No DbContext file could be detected by name. Keep the previous behavior
+            // (no --context) so projects with an unconventionally named single
+            // DbContext still work, but warn: the command fails if the project
+            // actually contains more than one DbContext.
+            Logger.LogWarning("Could not detect a DbContext in {ProjectFolder}. Running 'dotnet ef migrations add' without --context; it will fail if the project contains more than one DbContext.", dbMigrationsProjectFolder);
+            RunAddMigrationCommand(dbMigrationsProjectFolder, migrationName, null, "Migrations");
+        }
     }
 
     protected virtual void RunAddMigrationCommand(
@@ -79,17 +101,25 @@ public class EfCoreMigrationManager : ITransientDependency
 
     protected virtual string FindDbContextName(string dbMigrationsFolder)
     {
-        var dbContext = Directory.GetFiles(dbMigrationsFolder, "*MigrationsDbContext.cs", SearchOption.AllDirectories)
-                            .FirstOrDefault(fp => !fp.EndsWith("TenantMigrationsDbContext.cs")) ??
-                        Directory.GetFiles(dbMigrationsFolder, "*DbContext.cs", SearchOption.AllDirectories)
-                            .FirstOrDefault(fp => !fp.EndsWith("TenantDbContext.cs"));
+        return FindDbContextNames(dbMigrationsFolder).FirstOrDefault();
+    }
 
-        if (dbContext == null)
-        {
-            return null;
-        }
+    /// <summary>
+    /// Finds all non-tenant DbContext names in the given folder, ordered with
+    /// the migrations DbContext (e.g. *MigrationsDbContext) first.
+    /// </summary>
+    protected virtual List<string> FindDbContextNames(string dbMigrationsFolder)
+    {
+        var dbContextFiles = Directory.GetFiles(dbMigrationsFolder, "*DbContext.cs", SearchOption.AllDirectories)
+            .Where(fp => !fp.EndsWith("TenantDbContext.cs") &&
+                         !fp.EndsWith("TenantMigrationsDbContext.cs"))
+            .ToList();
 
-        return Path.GetFileName(dbContext).RemovePostFix(".cs");
+        return dbContextFiles
+            .OrderByDescending(fp => fp.EndsWith("MigrationsDbContext.cs"))
+            .ThenBy(fp => fp, StringComparer.OrdinalIgnoreCase)
+            .Select(fp => Path.GetFileName(fp).RemovePostFix(".cs"))
+            .ToList();
     }
 
     protected virtual string FindTenantDbContextName(string dbMigrationsFolder)
