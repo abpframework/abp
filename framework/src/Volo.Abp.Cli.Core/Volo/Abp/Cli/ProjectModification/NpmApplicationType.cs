@@ -6,5 +6,6 @@ namespace Volo.Abp.Cli.ProjectModification;
 public enum NpmApplicationType
 {
     Mvc = 1,
-    Angular = 2
+    Angular = 2,
+    React = 4
 }

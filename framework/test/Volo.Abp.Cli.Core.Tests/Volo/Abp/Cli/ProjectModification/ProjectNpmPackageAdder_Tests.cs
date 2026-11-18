@@ -57,6 +57,124 @@ public class ProjectNpmPackageAdder_Tests : AbpCliTestBase
         }
     }
 
+    private const string ReactPackageName = "@volo/abp-react-oidc-auth";
+
+    private const string ReactProjectPackageJson =
+        "{ \"dependencies\": { \"react\": \"^19.2.4\", \"@volo/abp-app-config\": \"~10.7.1\" } }";
+
+    private static NpmPackageInfo ReactPackage => new()
+    {
+        Name = ReactPackageName,
+        ApplicationType = NpmApplicationType.React
+    };
+
+    [Theory]
+    [InlineData("package-lock.json", "npm install @volo/abp-react-oidc-auth@~10.7.1 --ignore-scripts")]
+    [InlineData("yarn.lock", "yarn add @volo/abp-react-oidc-auth@~10.7.1 --ignore-scripts")]
+    [InlineData("pnpm-lock.yaml", "pnpm add @volo/abp-react-oidc-auth@~10.7.1 --ignore-scripts")]
+    public async Task AddNpmPackageAsync_Should_Add_React_Package_With_The_Package_Manager_Of_The_Project(
+        string lockFile, string expectedCommand)
+    {
+        using var project = new TemporaryJavaScriptProject(ReactProjectPackageJson, lockFile);
+
+        await GetRequiredService<ProjectNpmPackageAdder>().AddNpmPackageAsync(project.Directory, ReactPackage);
+
+        _cmdHelper.Received(1).RunCmd(expectedCommand, out Arg.Any<int>(), project.Directory);
+    }
+
+    [Fact]
+    public async Task AddNpmPackageAsync_Should_Use_Npm_For_React_Package_When_Project_Has_No_Lock_File()
+    {
+        using var project = new TemporaryJavaScriptProject(ReactProjectPackageJson);
+
+        await GetRequiredService<ProjectNpmPackageAdder>().AddNpmPackageAsync(project.Directory, ReactPackage);
+
+        _cmdHelper.Received(1).RunCmd(
+            "npm install @volo/abp-react-oidc-auth@~10.7.1 --ignore-scripts", out Arg.Any<int>(), project.Directory);
+    }
+
+    [Fact]
+    public async Task AddNpmPackageAsync_Should_Prefer_Given_Version_For_React_Package()
+    {
+        using var project = new TemporaryJavaScriptProject(ReactProjectPackageJson, "package-lock.json");
+
+        await GetRequiredService<ProjectNpmPackageAdder>()
+            .AddNpmPackageAsync(project.Directory, ReactPackage, version: "10.7.0");
+
+        _cmdHelper.Received(1).RunCmd(
+            "npm install @volo/abp-react-oidc-auth@10.7.0 --ignore-scripts", out Arg.Any<int>(), project.Directory);
+    }
+
+    [Theory]
+    [InlineData("{ \"dependencies\": { \"react\": \"^19.2.4\" } }")]
+    [InlineData("{ \"dependencies\": { \"react\": \"^19.2.4\", \"@volo/abp-app-config\": \"file:../../abp/npm/packs/abp-app-config\" } }")]
+    public async Task AddNpmPackageAsync_Should_Add_React_Package_Without_Version_When_Project_Has_No_Usable_Abp_Version(
+        string packageJson)
+    {
+        using var project = new TemporaryJavaScriptProject(packageJson, "package-lock.json");
+
+        await GetRequiredService<ProjectNpmPackageAdder>().AddNpmPackageAsync(project.Directory, ReactPackage);
+
+        _cmdHelper.Received(1).RunCmd(
+            "npm install @volo/abp-react-oidc-auth --ignore-scripts", out Arg.Any<int>(), project.Directory);
+    }
+
+    [Fact]
+    public async Task AddNpmPackageAsync_Should_Not_Add_React_Package_That_Is_Already_Installed()
+    {
+        using var project = new TemporaryJavaScriptProject(
+            "{ \"dependencies\": { \"@volo/abp-react-oidc-auth\": \"~10.7.1\" } }", "package-lock.json");
+
+        await GetRequiredService<ProjectNpmPackageAdder>().AddNpmPackageAsync(project.Directory, ReactPackage);
+
+        _cmdHelper.DidNotReceiveWithAnyArgs().RunCmd(default, out _, default);
+        _cmdHelper.DidNotReceiveWithAnyArgs().RunCmd(default);
+    }
+
+    [Fact]
+    public async Task AddNpmPackageAsync_Should_Reject_Source_Code_Download_For_React_Package()
+    {
+        using var project = new TemporaryJavaScriptProject(ReactProjectPackageJson, "package-lock.json");
+
+        var exception = await Should.ThrowAsync<CliUsageException>(() =>
+            GetRequiredService<ProjectNpmPackageAdder>()
+                .AddNpmPackageAsync(project.Directory, ReactPackage, withSourceCode: true));
+
+        exception.Message.ShouldContain("--with-source-code");
+        _cmdHelper.DidNotReceiveWithAnyArgs().RunCmd(default, out _, default);
+        _cmdHelper.DidNotReceiveWithAnyArgs().RunCmd(default);
+    }
+
+    [Fact]
+    public async Task AddNpmPackageAsync_Should_Fail_When_React_Package_Cannot_Be_Added()
+    {
+        using var project = new TemporaryJavaScriptProject(ReactProjectPackageJson, "package-lock.json");
+        _cmdHelper
+            .When(x => x.RunCmd(Arg.Any<string>(), out Arg.Any<int>(), Arg.Any<string>()))
+            .Do(callInfo => callInfo[1] = 1);
+
+        var exception = await Should.ThrowAsync<AbpException>(() =>
+            GetRequiredService<ProjectNpmPackageAdder>().AddNpmPackageAsync(project.Directory, ReactPackage));
+
+        exception.Message.ShouldContain(ReactPackageName);
+        exception.Message.ShouldContain("exited with code 1");
+    }
+
+    [Fact]
+    public async Task AddNpmPackageAsync_Should_Keep_Using_Yarn_For_Angular_Package()
+    {
+        // The project has an npm lock file on purpose: only React packages follow the project's package manager.
+        using var project = new TemporaryJavaScriptProject(
+            "{ \"dependencies\": { \"@abp/ng.core\": \"~10.7.1\" } }", "package-lock.json");
+
+        await GetRequiredService<ProjectNpmPackageAdder>().AddNpmPackageAsync(
+            project.Directory,
+            new NpmPackageInfo { Name = "@abp/ng.theme.basic", ApplicationType = NpmApplicationType.Angular });
+
+        _cmdHelper.Received(1).RunCmd("yarn add @abp/ng.theme.basic --ignore-scripts");
+        _cmdHelper.DidNotReceiveWithAnyArgs().RunCmd(default, out _, default);
+    }
+
     private static string CreatePackageJsonDirectory(string packageName)
     {
         var directory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));

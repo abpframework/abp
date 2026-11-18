@@ -77,7 +77,7 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
         else if (isNpmPackage)
         {
             await ProjectNpmPackageAdder.AddNpmPackageAsync(
-                GetAngularDirectory(commandLineArgs),
+                GetNpmProjectDirectory(commandLineArgs),
                 commandLineArgs.Target,
                 version,
                 withSourceCode
@@ -101,9 +101,10 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("");
         sb.AppendLine("  -p|--project <project-file>                           Specifies the project file explicitly. (Only available for NuGet packages)");
         sb.AppendLine("  -s|--solution <solution-file>                         Specifies the solution file explicitly. (Only available for NuGet packages)");
-        sb.AppendLine("  --with-source-code                                    Downloads the source code of the Angular NPM/NuGet package and make other projects depends on it.");
+        sb.AppendLine("  --with-source-code                                    Downloads the source code of the Angular NPM/NuGet package and make other projects depends on it. (Not available for React packages)");
         sb.AppendLine("  --add-to-solution-file                                Adds the downloaded project to the .sln file, when source code is downloaded. (Only available for NuGet packages)");
-        sb.AppendLine("  -ad|--angular-directory <angular-project-directory>   Specifies the Angular project directory explicitly. (Only available for Angular packages)");
+        sb.AppendLine("  -wd|--working-directory <project-directory>           Specifies the directory of the project that has the package.json explicitly. (Only available for NPM packages)");
+        sb.AppendLine("  -ad|--angular-directory <angular-project-directory>   Same as --working-directory. Kept for backward compatibility.");
         sb.AppendLine("  -v|--version <version>                                Specifies the version of the package. Default is your project's ABP version or latest ABP version.");
         sb.AppendLine("");
         sb.AppendLine("Examples:");
@@ -112,6 +113,7 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("  abp add-package Volo.Abp.FluentValidation -p Acme.BookStore.Application    Adds the NuGet package to the given project.");
         sb.AppendLine("  abp add-package @abp/signalr                                               Adds the NPM package to the given corresponding project.");
         sb.AppendLine("  abp add-package @abp/ng.theme.basic                                        Adds the NPM package to the given corresponding project.");
+        sb.AppendLine("  abp add-package @volo/abp-react-app-config                                 Adds the NPM package to the React project, using the project's package manager (npm, yarn or pnpm).");
         sb.AppendLine("");
         sb.AppendLine("See the documentation for more info: https://abp.io/docs/latest/cli");
 
@@ -158,6 +160,27 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
             .Concat(Directory.GetFiles(Directory.GetCurrentDirectory(), "*.slnx")).FirstOrDefault();
     }
 
+    protected virtual string GetNpmProjectDirectory(CommandLineArgs commandLineArgs)
+    {
+        var providedWorkingDirectory = PathHelper.NormalizePath(
+            commandLineArgs.Options.GetOrNull(
+                Options.WorkingDirectory.Short,
+                Options.WorkingDirectory.Long
+            )
+        );
+
+        if (!providedWorkingDirectory.IsNullOrWhiteSpace())
+        {
+            return providedWorkingDirectory;
+        }
+
+        return GetAngularDirectory(commandLineArgs);
+    }
+
+    /// <summary>
+    /// Reads the legacy "--angular-directory" option. Use <see cref="GetNpmProjectDirectory"/> instead:
+    /// it also understands "--working-directory", which is not specific to a UI framework.
+    /// </summary>
     protected virtual string GetAngularDirectory(CommandLineArgs commandLineArgs)
     {
         var providedAngularDirectory = PathHelper.NormalizePath(
@@ -187,6 +210,12 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
         {
             public const string Short = "s";
             public const string Long = "solution";
+        }
+
+        public static class WorkingDirectory
+        {
+            public const string Short = "wd";
+            public const string Long = "working-directory";
         }
 
         public static class AngularDirectory

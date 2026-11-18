@@ -68,6 +68,12 @@ public class ProjectNpmPackageAdder : ITransientDependency
     public async Task AddNpmPackageAsync(string directory, NpmPackageInfo npmPackage, string version = null,
         bool withSourceCode = false)
     {
+        if (npmPackage.ApplicationType.HasFlag(NpmApplicationType.React))
+        {
+            AddReactPackage(directory, npmPackage, version, withSourceCode);
+            return;
+        }
+
         var packageJsonFilePath = Path.Combine(directory, "package.json");
         if (!File.Exists(packageJsonFilePath))
         {
@@ -99,6 +105,72 @@ public class ProjectNpmPackageAdder : ITransientDependency
         {
             await AngularSourceCodeAdder.AddAsync(directory, npmPackage);
         }
+    }
+
+    /// <summary>
+    /// React packages are plain NPM dependencies: nothing is registered in the application code.
+    /// The package is added with the package manager of the project and, unless a version is given,
+    /// with the version of the ABP packages the project already uses.
+    /// </summary>
+    protected virtual void AddReactPackage(string directory, NpmPackageInfo npmPackage, string version,
+        bool withSourceCode)
+    {
+        NpmHelper.EnsureSafePackageName(npmPackage.Name);
+        NpmHelper.EnsureSafeVersion(version);
+
+        if (withSourceCode)
+        {
+            throw new CliUsageException(
+                $"Downloading the source code is not supported for React packages. " +
+                $"Run the command without the '--with-source-code' option to add '{npmPackage.Name}' as an NPM dependency."
+            );
+        }
+
+        var packageJsonFilePath = Path.Combine(directory, "package.json");
+        if (!File.Exists(packageJsonFilePath))
+        {
+            Logger.LogError($"package.json not found!");
+            return;
+        }
+
+        Logger.LogInformation($"Installing '{npmPackage.Name}' package to the project '{packageJsonFilePath}'...");
+
+        if (File.ReadAllText(packageJsonFilePath).Contains($"\"{npmPackage.Name}\""))
+        {
+            Logger.LogInformation($"'{npmPackage.Name}' is already installed.");
+            return;
+        }
+
+        version ??= DetectSafeAbpVersionOrNull(packageJsonFilePath);
+
+        var command = NpmHelper.GetAddPackageCommand(directory, npmPackage.Name, version);
+
+        Logger.LogInformation(command);
+        CmdHelper.RunCmd(command, out var exitCode, directory);
+
+        if (exitCode != 0)
+        {
+            throw new AbpException(
+                $"Failed to add '{npmPackage.Name}' to '{packageJsonFilePath}'. '{command}' exited with code {exitCode}."
+            );
+        }
+    }
+
+    private string DetectSafeAbpVersionOrNull(string packageJsonFilePath)
+    {
+        var version = DetectAbpVersionOrNull(packageJsonFilePath);
+        if (version == null || NpmHelper.IsSafeVersion(version))
+        {
+            return version;
+        }
+
+        // For example a local "file:" reference, which cannot be used as a version of another package.
+        Logger.LogWarning(
+            $"Cannot use the ABP package version '{NpmHelper.SanitizeForLog(version)}' of the project. " +
+            "The latest version will be installed."
+        );
+
+        return null;
     }
 
     protected virtual async Task<bool> DownloadAngularSourceCode(string angularDirectory, NpmPackageInfo package,

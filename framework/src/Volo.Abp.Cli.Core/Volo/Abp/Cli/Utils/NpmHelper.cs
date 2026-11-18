@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NuGet.Versioning;
 using Volo.Abp.DependencyInjection;
 
@@ -90,6 +93,86 @@ public class NpmHelper : ITransientDependency
         CmdHelper.RunCmd(GetYarnCommand(directory, "add " + package + packageVersion), workingDirectory: directory);
     }
 
+    /// <summary>
+    /// Finds the package manager of the JavaScript project in the given directory.
+    /// The "packageManager" field of the package.json wins, then the lock file. Falls back to npm.
+    /// </summary>
+    public NodePackageManager DetectPackageManager(string directory)
+    {
+        return FindPackageManagerInPackageJsonOrNull(directory)
+               ?? FindPackageManagerByLockFileOrNull(directory)
+               ?? NodePackageManager.Npm;
+    }
+
+    /// <summary>
+    /// Builds the command that adds a package with the package manager of the project.
+    /// Install scripts are skipped, like in the other commands of this class.
+    /// </summary>
+    public string GetAddPackageCommand(string directory, string package, string version = null)
+    {
+        EnsureSafePackageName(package);
+        EnsureSafeVersion(version);
+
+        var packageWithVersion = string.IsNullOrWhiteSpace(version) ? package : $"{package}@{version}";
+
+        return DetectPackageManager(directory) switch
+        {
+            NodePackageManager.Yarn => GetYarnCommand(directory, "add " + packageWithVersion),
+            NodePackageManager.Pnpm => $"pnpm add {packageWithVersion} --ignore-scripts",
+            _ => $"npm install {packageWithVersion} --ignore-scripts"
+        };
+    }
+
+    private NodePackageManager? FindPackageManagerInPackageJsonOrNull(string directory)
+    {
+        var packageJsonFilePath = Path.Combine(directory, "package.json");
+        if (!File.Exists(packageJsonFilePath))
+        {
+            return null;
+        }
+
+        string packageManager;
+        try
+        {
+            // Example value: "pnpm@9.12.0+sha512.4abf7..."
+            packageManager = JObject.Parse(File.ReadAllText(packageJsonFilePath))["packageManager"]?.ToString();
+        }
+        catch (JsonException ex)
+        {
+            Logger.LogWarning($"Cannot read the \"packageManager\" field of '{packageJsonFilePath}'. {ex.Message}");
+            return null;
+        }
+
+        return packageManager?.Split('@')[0].Trim() switch
+        {
+            "npm" => NodePackageManager.Npm,
+            "yarn" => NodePackageManager.Yarn,
+            "pnpm" => NodePackageManager.Pnpm,
+            _ => null
+        };
+    }
+
+    private static NodePackageManager? FindPackageManagerByLockFileOrNull(string directory)
+    {
+        if (File.Exists(Path.Combine(directory, "package-lock.json")) ||
+            File.Exists(Path.Combine(directory, "npm-shrinkwrap.json")))
+        {
+            return NodePackageManager.Npm;
+        }
+
+        if (File.Exists(Path.Combine(directory, "yarn.lock")))
+        {
+            return NodePackageManager.Yarn;
+        }
+
+        if (File.Exists(Path.Combine(directory, "pnpm-lock.yaml")))
+        {
+            return NodePackageManager.Pnpm;
+        }
+
+        return null;
+    }
+
     private static readonly Regex SafePackageNameRegex = new(
         @"^(@[a-zA-Z0-9][a-zA-Z0-9._-]*/)?[a-zA-Z0-9][a-zA-Z0-9._-]*$",
         RegexOptions.Compiled);
@@ -106,9 +189,14 @@ public class NpmHelper : ITransientDependency
         }
     }
 
+    public static bool IsSafeVersion(string version)
+    {
+        return string.IsNullOrWhiteSpace(version) || SafeVersionRegex.IsMatch(version);
+    }
+
     public static void EnsureSafeVersion(string version)
     {
-        if (!string.IsNullOrWhiteSpace(version) && !SafeVersionRegex.IsMatch(version))
+        if (!IsSafeVersion(version))
         {
             throw new CliUsageException($"Invalid npm package version detected: {SanitizeForLog(version)}");
         }
