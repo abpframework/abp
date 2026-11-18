@@ -60,6 +60,15 @@ public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentity
     }
 
     [Fact]
+    public async Task GetRoleNamesAsync_Should_Return_Empty_For_A_User_That_Does_Not_Exist()
+    {
+        var userId = Guid.NewGuid();
+
+        (await UserRepository.GetRoleNamesAsync(userId)).ShouldBeEmpty();
+        (await UserRepository.GetRoleNamesInOrganizationUnitAsync(userId)).ShouldBeEmpty();
+    }
+
+    [Fact]
     public async Task GetRoleNames_By_UserIds_Async()
     {
         var userRoleNames = await UserRepository.GetRoleNamesAsync(new [] {
