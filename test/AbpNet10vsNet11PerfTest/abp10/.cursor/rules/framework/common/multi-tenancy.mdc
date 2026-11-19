@@ -1,0 +1,165 @@
+---
+description: "ABP Multi-Tenancy patterns - tenant-aware entities, data isolation, and tenant switching"
+globs:
+  - "**/*Tenant*.cs"
+  - "**/*MultiTenant*.cs"
+  - "**/Entities/**/*.cs"
+alwaysApply: false
+---
+
+# ABP Multi-Tenancy
+
+> **Docs**: https://abp.io/docs/latest/framework/architecture/multi-tenancy
+
+## Making Entities Multi-Tenant
+
+Implement `IMultiTenant` interface to make entities tenant-aware:
+
+```csharp
+public class Product : AggregateRoot<Guid>, IMultiTenant
+{
+    public Guid? TenantId { get; set; } // Required by IMultiTenant
+    
+    public string Name { get; private set; }
+    public decimal Price { get; private set; }
+
+    protected Product() { }
+
+    public Product(Guid id, string name, decimal price) : base(id)
+    {
+        Name = name;
+        Price = price;
+        // TenantId is automatically set from CurrentTenant.Id
+    }
+}
+```
+
+**Key points:**
+- `TenantId` is **nullable** - `null` means entity belongs to Host
+- ABP **automatically filters** queries by current tenant
+- ABP **automatically sets** `TenantId` when creating entities
+
+## Accessing Current Tenant
+
+Use `CurrentTenant` property (available in base classes) or inject `ICurrentTenant`:
+
+```csharp
+public class ProductAppService : ApplicationService
+{
+    public async Task DoSomethingAsync()
+    {
+        // Available from base class
+        var tenantId = CurrentTenant.Id;        // Guid? - null for host
+        var tenantName = CurrentTenant.Name;    // string?
+        var isAvailable = CurrentTenant.IsAvailable; // true if Id is not null
+    }
+}
+
+// In other services
+public class MyService : ITransientDependency
+{
+    private readonly ICurrentTenant _currentTenant;
+    public MyService(ICurrentTenant currentTenant) => _currentTenant = currentTenant;
+}
+```
+
+## Switching Tenant Context
+
+Use `CurrentTenant.Change()` to temporarily switch tenant (useful in host context):
+
+```csharp
+public class ProductManager : DomainService
+{
+    private readonly IRepository<Product, Guid> _productRepository;
+
+    public async Task<long> GetProductCountAsync(Guid? tenantId)
+    {
+        // Switch to specific tenant
+        using (CurrentTenant.Change(tenantId))
+        {
+            return await _productRepository.GetCountAsync();
+        }
+        // Automatically restored to previous tenant after using block
+    }
+
+    public async Task DoHostOperationAsync()
+    {
+        // Switch to host context
+        using (CurrentTenant.Change(null))
+        {
+            // Operations here are in host context
+        }
+    }
+}
+```
+
+> **Important**: Always use `Change()` with a `using` statement.
+
+## Disabling Multi-Tenant Filter
+
+To query all tenants' data (only works with single database):
+
+```csharp
+public class ProductManager : DomainService
+{
+    public async Task<long> GetAllProductCountAsync()
+    {
+        // DataFilter is available from base class
+        using (DataFilter.Disable<IMultiTenant>())
+        {
+            return await _productRepository.GetCountAsync();
+            // Returns count from ALL tenants
+        }
+    }
+}
+```
+
+> **Note**: This doesn't work with separate databases per tenant.
+
+## Database Architecture Options
+
+| Approach | Description | Use Case |
+|----------|-------------|----------|
+| Single Database | All tenants share one database | Simple, cost-effective |
+| Database per Tenant | Each tenant has dedicated database | Data isolation, compliance |
+| Hybrid | Mix of shared and dedicated | Flexible, premium tenants |
+
+Connection strings are configured per tenant in Tenant Management module.
+
+## Best Practices
+
+1. **Always implement `IMultiTenant`** for tenant-specific entities
+2. **Never manually filter by `TenantId`** - ABP does it automatically
+3. **Don't change `TenantId` after creation** - it moves entity between tenants
+4. **Use `Change()` scope carefully** - nested scopes are supported
+5. **Test both host and tenant contexts** - ensure proper data isolation
+6. **Consider nullable `TenantId`** - entity may be host-only or shared
+
+## Enabling Multi-Tenancy
+
+```csharp
+Configure<AbpMultiTenancyOptions>(options =>
+{
+    options.IsEnabled = true; // Enabled by default in ABP templates
+});
+```
+
+Check `MultiTenancyConsts.IsEnabled` in your solution for centralized control.
+
+## Tenant Resolution
+
+ABP resolves current tenant from (in order):
+1. Current user's claims
+2. Query string (`?__tenant=...`)
+3. Route (`/{__tenant}/...`)
+4. HTTP header (`__tenant`)
+5. Cookie (`__tenant`)
+6. Domain/subdomain (if configured)
+
+For subdomain-based resolution:
+```csharp
+Configure<AbpTenantResolveOptions>(options =>
+{
+    options.AddDomainTenantResolver("{0}.mydomain.com");
+});
+```

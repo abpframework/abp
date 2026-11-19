@@ -4,6 +4,24 @@ When widely used projects like IdentityServer, AutoMapper, and MediatR move towa
 
 This matters because modern .NET applications are built on layers of third-party dependencies. If one of those layers changes its pricing, support model, or license terms, the impact is not theoretical. It affects procurement, architecture, upgrade strategy, compliance, and long-term maintenance.
 
+**Here's a list of .NET packages that went commercial:**
+
+- IdentityServer4
+- AutoMapper v15
+- MediatR v13
+- Fluent Assertions v8
+- MassTransit v9
+- EPPlus v5
+- EFCore.BulkExtensions
+- NServiceBus v2.5
+- ServiceStack v4
+- SixLabors.ImageSharp v3
+- SixLabors.Fonts v2
+- QuestPDF
+- DocX v1.5
+- Extended WPF Toolkit v3.7
+- iTextSharp v5
+
 ## The pattern is no longer isolated
 
 A few years ago, licensing changes in .NET could still be dismissed as exceptions. That is getting harder.

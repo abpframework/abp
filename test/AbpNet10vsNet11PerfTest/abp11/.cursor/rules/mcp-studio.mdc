@@ -1,0 +1,119 @@
+---
+description: Guide for AI to effectively use ABP Studio MCP tools - workflows, best practices, and tool reference
+alwaysApply: true
+---
+
+# ABP Studio MCP Tools - AI Usage Guide
+
+ABP Studio exposes 14 MCP tools through the `abp mcp-studio` bridge. They let you monitor the running applications, drive the Solution Runner and explore the solution structure.
+
+ABP Studio must be running. The monitoring tools work on their own, the build and solution tools need an open solution, and the application, container and task tools also need a selected run profile.
+
+## Tool Categories at a Glance
+
+| Category | Purpose | Tools |
+|---|---|---|
+| Monitoring | Observe running apps (logs, errors, requests, events) | `get_logs`, `get_exceptions`, `get_requests`, `get_events` |
+| Applications | Start and stop applications | `start_applications`, `stop_applications` |
+| Containers | Start and stop Docker containers | `start_containers`, `stop_containers` |
+| Build | Compile and prepare the solution | `dotnet_build`, `install_libs` |
+| Tasks | Run a configured task | `run_task` |
+| Solution Structure | Explore the solution, modules and packages | `get_solution_info`, `list_modules`, `list_packages` |
+
+---
+
+## Workflows
+
+### 1. Understanding a Solution (Start Here)
+
+Always begin with discovery before taking action:
+
+```
+get_solution_info          -- solution name, path, template, module count, selected run profile
+  -> list_modules          -- see all modules
+  -> list_packages         -- see packages/projects, optionally filtered by module
+```
+
+### 2. Running Applications
+
+```
+start_applications         -- apps: ["<application-name>"], or folder: "Backend/API", or root: true
+stop_applications          -- same targeting options
+```
+
+`start_applications` also restarts: an application that is already running is stopped and started again, so use it after a code change too.
+
+Do not call the monitoring tools right after starting an application. Use them when the user reports a problem or asks what is happening.
+
+### 3. Infrastructure (Docker Containers)
+
+```
+start_containers           -- containers: ["<container-name>"], or omit to start all
+stop_containers            -- containers: [...], or omit to stop all
+```
+
+Containers are typically infrastructure dependencies (databases, Redis, RabbitMQ). Start them before starting applications.
+
+### 4. Building
+
+```
+dotnet_build               -- root: true, or modules: [...], or packages: [...]
+install_libs               -- when wwwroot/libs is missing client-side packages
+```
+
+### 5. Running Tasks
+
+Tasks are one-shot operations (database migrations, seed data, npm install, etc.):
+
+```
+run_task                   -- task: "Migrate Database", timeout_seconds: 300
+```
+
+Task names come from the run profile and can contain spaces. They are matched in full, ignoring case only.
+
+---
+
+## Best Practices
+
+### Discover Before Acting
+
+Call `get_solution_info` first. It returns the selected run profile, which most Solution Runner operations depend on. It does not list the applications, containers or tasks of that profile, so ask the user for the exact name when you don't have it, or read the run profile in ABP Studio.
+
+### Target Applications Explicitly
+
+`start_applications` and `stop_applications` take `apps` (an array of names), `folder` (everything under a folder) or `root: true` (everything from the root). `root` does not affect containers, use the container tools for those.
+
+### Respect Timeouts
+
+`run_task` accepts `timeout_seconds` (default: 300). Increase it for long operations. On timeout the call returns, but the task keeps running in the background.
+
+### Filter Monitor Data
+
+All monitor tools accept `app` to filter by application and `last` to limit the number of entries. `get_logs` also accepts `level`, and `get_requests` accepts `status` and `urlContains`. When debugging a specific service, always filter by app name to reduce noise.
+
+---
+
+## Quick Reference: Common Scenarios
+
+| User Says | Tool Sequence |
+|---|---|
+| "What does this solution look like?" | `get_solution_info` -> `list_modules` -> `list_packages` |
+| "Start the application" | `get_solution_info` -> `start_applications` |
+| "Start infrastructure" | `start_containers` |
+| "What errors are happening?" | `get_exceptions` |
+| "Check application logs" | `get_logs` with `app` and optionally `level: "Error"` |
+| "Show me the API calls" | `get_requests` |
+| "Build and restart" | `dotnet_build` -> `start_applications` |
+| "Run database migration" | `run_task` |
+
+---
+
+## Error Handling
+
+A response is flagged with `isError: true` only when its text starts with `Error:`. A failed build or a failed task comes back as a normal response, so always read the text instead of relying on the flag. Common error patterns:
+
+- **"No solution is open"** -- The user needs to open a solution in ABP Studio first
+- **"No run profile selected"** -- The user needs to select a run profile in ABP Studio
+- **"Applications not found"** / **"Containers not found"** -- The name is wrong, ask the user for the exact one
+- **"Build FAILED."** -- Read the build output in the response, it is not flagged as an error
+- **"Timed out"** -- Increase `timeout_seconds` or check if the operation is stuck

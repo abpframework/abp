@@ -1,0 +1,257 @@
+---
+description: "ABP Entity Framework Core patterns - DbContext, migrations, repositories"
+globs:
+  - "**/*.EntityFrameworkCore/**/*.cs"
+  - "**/EntityFrameworkCore/**/*.cs"
+  - "**/*DbContext*.cs"
+alwaysApply: false
+---
+
+# ABP Entity Framework Core
+
+> **Docs**: https://abp.io/docs/latest/framework/data/entity-framework-core
+
+## DbContext Configuration
+
+```csharp
+[ConnectionStringName("Default")]
+public class MyProjectDbContext : AbpDbContext<MyProjectDbContext>
+{
+    public DbSet<Book> Books { get; set; }
+    public DbSet<Author> Authors { get; set; }
+
+    public MyProjectDbContext(DbContextOptions<MyProjectDbContext> options)
+        : base(options)
+    {
+    }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        // Configure all entities
+        builder.ConfigureMyProject();
+    }
+}
+```
+
+## Entity Configuration
+
+```csharp
+public static class MyProjectDbContextModelCreatingExtensions
+{
+    public static void ConfigureMyProject(this ModelBuilder builder)
+    {
+        Check.NotNull(builder, nameof(builder));
+
+        builder.Entity<Book>(b =>
+        {
+            b.ToTable(MyProjectConsts.DbTablePrefix + "Books", MyProjectConsts.DbSchema);
+            b.ConfigureByConvention(); // ABP conventions (audit, soft-delete, etc.)
+
+            // Property configurations
+            b.Property(x => x.Name)
+                .IsRequired()
+                .HasMaxLength(BookConsts.MaxNameLength);
+
+            b.Property(x => x.Price)
+                .HasColumnType("decimal(18,2)");
+
+            // Indexes
+            b.HasIndex(x => x.Name);
+
+            // Relationships
+            b.HasOne<Author>()
+                .WithMany()
+                .HasForeignKey(x => x.AuthorId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+    }
+}
+```
+
+## Repository Implementation
+
+```csharp
+public class BookRepository : EfCoreRepository<MyProjectDbContext, Book, Guid>, IBookRepository
+{
+    public BookRepository(IDbContextProvider<MyProjectDbContext> dbContextProvider)
+        : base(dbContextProvider)
+    {
+    }
+
+    public async Task<Book> FindByNameAsync(
+        string name, 
+        bool includeDetails = true,
+        CancellationToken cancellationToken = default)
+    {
+        var dbSet = await GetDbSetAsync();
+        
+        return await dbSet
+            .IncludeDetails(includeDetails)
+            .FirstOrDefaultAsync(
+                b => b.Name == name, 
+                GetCancellationToken(cancellationToken));
+    }
+
+    public async Task<List<Book>> GetListByAuthorAsync(
+        Guid authorId,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default)
+    {
+        var dbSet = await GetDbSetAsync();
+
+        return await dbSet
+            .IncludeDetails(includeDetails)
+            .Where(b => b.AuthorId == authorId)
+            .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public override async Task<IQueryable<Book>> WithDetailsAsync()
+    {
+        return (await GetQueryableAsync())
+            .Include(b => b.Reviews);
+    }
+}
+```
+
+## Extension Method for Include
+```csharp
+public static class BookEfCoreQueryableExtensions
+{
+    public static IQueryable<Book> IncludeDetails(
+        this IQueryable<Book> queryable,
+        bool include = true)
+    {
+        if (!include)
+        {
+            return queryable;
+        }
+
+        return queryable
+            .Include(b => b.Reviews);
+    }
+}
+```
+
+## Migration Commands
+
+```bash
+# Navigate to EF Core project
+cd src/MyProject.EntityFrameworkCore
+
+# Add migration
+dotnet ef migrations add MigrationName
+
+# Apply migration (choose one):
+dotnet run --project ../MyProject.DbMigrator   # Recommended - also seeds data
+dotnet ef database update  # EF Core command only
+
+# Remove last migration (if not applied)
+dotnet ef migrations remove
+
+# Generate SQL script
+dotnet ef migrations script
+```
+
+> **Note**: ABP templates include `IDesignTimeDbContextFactory` in the EF Core project, so `-s` (startup project) parameter is not needed.
+
+## Module Configuration
+
+```csharp
+[DependsOn(typeof(AbpEntityFrameworkCoreModule))]
+public class MyProjectEntityFrameworkCoreModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.AddAbpDbContext<MyProjectDbContext>(options =>
+        {
+            // Add default repositories for aggregate roots only (DDD best practice)
+            options.AddDefaultRepositories();
+            // ⚠️ Avoid includeAllEntities: true - it creates repositories for child entities,
+            // allowing them to be modified without going through the aggregate root,
+            // which breaks data consistency
+        });
+
+        Configure<AbpDbContextOptions>(options =>
+        {
+            options.UseSqlServer(); // or UseNpgsql(), UseMySql(), etc.
+        });
+    }
+}
+```
+
+## Best Practices
+
+### Repositories for Aggregate Roots Only
+Don't use `includeAllEntities: true` in `AddDefaultRepositories()`. This creates repositories for child entities, allowing direct modification without going through the aggregate root - breaking DDD data consistency rules.
+
+```csharp
+// ✅ Correct - Only aggregate roots get repositories
+options.AddDefaultRepositories();
+
+// ❌ Avoid - Creates repositories for ALL entities including child entities
+options.AddDefaultRepositories(includeAllEntities: true);
+```
+
+### Always Call ConfigureByConvention
+```csharp
+builder.Entity<MyEntity>(b =>
+{
+    b.ConfigureByConvention(); // Don't forget this!
+    // Other configurations...
+});
+```
+
+### Use Table Prefix
+```csharp
+public static class MyProjectConsts
+{
+    public const string DbTablePrefix = "App";
+    public const string DbSchema = null; // Or "myschema"
+}
+```
+
+### Performance Tips
+- Add explicit indexes for frequently queried fields
+- Use `AsNoTracking()` for read-only queries
+- Avoid N+1 queries with `.Include()` or specifications
+- ABP handles cancellation automatically; use `GetCancellationToken(cancellationToken)` only in custom repository methods
+- Consider query splitting for complex queries with multiple collections
+
+### Accessing Raw DbContext
+```csharp
+public async Task CustomOperationAsync()
+{
+    var dbContext = await GetDbContextAsync();
+    
+    // Raw SQL
+    await dbContext.Database.ExecuteSqlRawAsync(
+        "UPDATE Books SET IsPublished = 1 WHERE AuthorId = {0}",
+        authorId
+    );
+}
+```
+
+## Data Seeding
+
+```csharp
+public class MyProjectDataSeedContributor : IDataSeedContributor, ITransientDependency
+{
+    private readonly IRepository<Book, Guid> _bookRepository;
+    private readonly IGuidGenerator _guidGenerator;
+
+    public async Task SeedAsync(DataSeedContext context)
+    {
+        if (await _bookRepository.GetCountAsync() > 0)
+        {
+            return;
+        }
+
+        await _bookRepository.InsertAsync(
+            new Book(_guidGenerator.Create(), "Sample Book", 19.99m, Guid.Empty),
+            autoSave: true
+        );
+    }
+}
+```

@@ -1,0 +1,7 @@
+NOTES.md
+publish/
+results/
+
+# raw k6 Studio recordings (contain passwords and session cookies)
+*.raw.har
+*.raw.js
