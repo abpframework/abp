@@ -101,9 +101,9 @@ Once you define mappings described as below, you can use the `IObjectMapper` int
 
 ### Define Mappings
 
-AutoMapper provides multiple ways of defining mapping between classes. Refer to [its own documentation](https://docs.automapper.org) for all details.
+AutoMapper provides multiple ways of defining mapping between classes. Refer to [its own documentation](https://docs.automapper.io) for all details.
 
-One way to define object mappings is creating a [Profile](https://docs.automapper.org/en/stable/Configuration.html#profile-instances) class. Example:
+One way to define object mappings is creating a [Profile](https://docs.automapper.io/en/stable/Configuration.html#profile-instances) class. Example:
 
 ````csharp
 public class MyProfile : Profile
@@ -132,11 +132,11 @@ public class MyModule : AbpModule
 }
 ````
 
-`AddMaps` registers all profile classes defined in the assembly of the given class, typically your module class. It also registers for the [attribute mapping](https://docs.automapper.org/en/stable/Attribute-mapping.html).
+`AddMaps` registers all profile classes defined in the assembly of the given class, typically your module class. It also registers for the [attribute mapping](https://docs.automapper.io/en/stable/Attribute-mapping.html).
 
 ### Configuration Validation
 
-`AddMaps` optionally takes a `bool` parameter to control the [configuration validation](https://docs.automapper.org/en/stable/Configuration-validation.html) for your [module](../architecture/modularity/basics.md):
+`AddMaps` optionally takes a `bool` parameter to control the [configuration validation](https://docs.automapper.io/en/stable/Configuration-validation.html) for your [module](../architecture/modularity/basics.md):
 
 ````csharp
 options.AddMaps<MyModule>(validate: true);
@@ -224,7 +224,7 @@ public class MyProfile : Profile
 }
 ````
 
-> AutoMapper 14.x contains a [known vulnerability (GHSA-rvv3-g6hj-g44x)](https://github.com/advisories/GHSA-rvv3-g6hj-g44x). ABP Framework has applied a code-level mitigation (`MaxDepth = 64`) to address this. If you hold a commercial AutoMapper license, you can use [Volo.Abp.LuckyPenny.AutoMapper](luckypenny-automapper.md) to upgrade to the officially patched version. Alternatively, you can migrate to [Mapperly](../../release-info/migration-guides/AutoMapper-To-Mapperly.md).
+> AutoMapper 14.x contains known DoS vulnerabilities ([GHSA-rvv3-g6hj-g44x](https://github.com/advisories/GHSA-rvv3-g6hj-g44x), [GHSA-6vhm-j9h7-f9gh](https://github.com/advisories/GHSA-6vhm-j9h7-f9gh), [GHSA-gpwp-5797-mjff](https://github.com/advisories/GHSA-gpwp-5797-mjff)), and no patch will be released for the 14.x series. ABP Framework applies `MaxDepth = 64` to all maps as a mitigation, but AutoMapper 14.x doesn't enforce `MaxDepth` on every mapping path, such as destinations created through constructor parameters. If you hold a commercial AutoMapper license, you can use [Volo.Abp.LuckyPenny.AutoMapper](luckypenny-automapper.md) to upgrade to the officially patched version. Alternatively, you can migrate to [Mapperly](../../release-info/migration-guides/AutoMapper-To-Mapperly.md).
 
 The global maximum depth is configured by `AbpAutoMapperOptions.DefaultMaxDepth` and defaults to `64`. It is applied only when a map does not already configure `MaxDepth`. Set it to `null` to disable ABP's global default:
 
@@ -235,7 +235,7 @@ Configure<AbpAutoMapperOptions>(options =>
 });
 ````
 
-> Disabling the global default also removes ABP's mitigation for unbounded mapping depth. Disable it only when every affected map has an explicit safe depth or the application uses an officially patched mapper.
+> Disabling the global default also removes ABP's mitigation for unbounded mapping depth. Disable it only when the application uses an officially patched AutoMapper version.
 
 ## Mapperly Integration
 

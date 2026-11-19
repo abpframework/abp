@@ -79,7 +79,7 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
         }
         else
         {
-            var currentUserRoles = await UserManager.GetRolesAsync(await UserManager.GetByIdAsync(CurrentUser.GetId()));
+            var currentUserRoles = await UserManager.GetRolesAsync(await UserManager.GetByIdAsync(GetCurrentUserIdForRoleAssignment()));
             list = (await RoleRepository.GetListAsync(currentUserRoles)).OrderBy(x => x.Name).ToList();
         }
 
@@ -228,7 +228,7 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
 
         var targetCurrentRoleSet = (await UserManager.GetRolesAsync(user)).ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-        var operatorUser = await UserManager.GetByIdAsync(CurrentUser.GetId());
+        var operatorUser = await UserManager.GetByIdAsync(GetCurrentUserIdForRoleAssignment());
         var operatorOwnRoleSet = (await UserManager.GetRolesAsync(operatorUser)).ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         var inputRoleNameSet = new HashSet<string>(inputRoleNames ?? Array.Empty<string>(), StringComparer.OrdinalIgnoreCase);
@@ -245,5 +245,15 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     protected virtual Task<bool> HasAdminRoleAsync()
     {
         return Task.FromResult(CurrentUser.IsInRole(AbpRoleConsts.AdminRoleName));
+    }
+
+    protected virtual Guid GetCurrentUserIdForRoleAssignment()
+    {
+        if (!CurrentUser.Id.HasValue)
+        {
+            throw new BusinessException(IdentityErrorCodes.UserContextRequiredForRoleAssignment);
+        }
+
+        return CurrentUser.Id.Value;
     }
 }

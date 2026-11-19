@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "नाम '{0}' पहले से ही लिया गया है।",
     "Volo.Abp.Identity:010022": "स्थैतिक भूमिकाओं का नाम नहीं बदला जा सकता है।",
     "Volo.Abp.Identity:010023": "स्थैतिक भूमिकाओं को हटाया नहीं जा सकता।",
+    "Volo.Abp.Identity:010024": "असाइन की जा सकने वाली भूमिकाएँ देखने या उपयोगकर्ता की भूमिकाएँ बदलने के लिए उपयोगकर्ता पहचान आवश्यक है।",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "उपयोगकर्ता के लिए अधिकतम अनुमत संगठन इकाई सदस्यता गणना",
     "ThisUserIsNotActiveMessage": "यह उपयोगकर्ता सक्रिय नहीं है।",
     "Permission:IdentityManagement": "पहचान प्रबंधन",

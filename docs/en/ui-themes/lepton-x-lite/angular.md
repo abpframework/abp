@@ -298,9 +298,9 @@ The Mobile User-Profile component key is `eThemeLeptonXComponents.MobileUserProf
 
 The Footer is the section of content at the very bottom of the site. This section of the content can be modified. The ABP Studio templates serve this option by default. You can reach the configurations under `angular/src/app/footer` directory that has a component and a configuration file.
 
-If you still prefer overriding it by yourself, remove the default configuration. Inject **FooterLinksService** and use the **setFooterInfo** method of **FooterLinksService**
+If you still prefer overriding it by yourself, remove the default configuration (the `FOOTER_PROVIDER` registration in `app.config.ts`). Inject **FooterLinksService** and use the **setFooterInfo** method of **FooterLinksService**
 to assign path or link and description.
-The **descUrl** and **footerLinks** are nullable. Constant **footerLinks** are on the right side of footer.
+The **links** property is optional and is shown on the right side of the footer. The brand and author parts are shown only when **brandUrl** and **authorUrl** are set, respectively.
 
 ```js
 ///...
@@ -317,9 +317,11 @@ const footerLinks = [
 ];
 
 const footerInfo: FooterNav = {
-  desc: "Home",
-  descUrl: "/components/home",
-  footerLinks: footerLinks,
+  brandName: "Home",
+  brandUrl: "/components/home",
+  authorName: "Volosoft",
+  authorUrl: "https://volosoft.com/",
+  links: footerLinks,
 };
 
 this.footerLinksService.setFooterInfo(footerInfo);

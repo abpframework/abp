@@ -14,9 +14,22 @@ Also see the following notes about ABP releases:
 - [ABP Studio release notes](../studio/release-notes.md)
 - [Change logs for ABP pro packages](https://abp.io/pro-releases)
 
+## 10.7 (2026-10-06)
+
+See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-7-stable-release-7sv0w8hp)** for the v10.7 release.
+
+- BLOB Storing: Encryption at Rest and Content Pipeline
+- HTTP QUERY Method Support
+- Angular: Resource API Proxies
+- ABP Suite: React CRUD Page Generation
+- ABP Suite: Decimal Precision for Entity Properties
+- ABP Studio: MCP Configuration
+- AI Management: Web Page Data Sources
+- OpenIddict 7.7.0, MudBlazor 9.7.0, and Blazorise 2.3.0 updates
+
 ## 10.6 (2026-07-27)
 
-See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-6-release-candidate-reoq6kzw)** for the v10.6 release.
+See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-6-stable-release-xnnz5p4q)** for the v10.6 release.
 
 - Background Jobs: Dedicated Workers, Parallel Execution, and Successful Job Retention
 - API Definition and Proxy Improvements for Content Types and Multipart Uploads

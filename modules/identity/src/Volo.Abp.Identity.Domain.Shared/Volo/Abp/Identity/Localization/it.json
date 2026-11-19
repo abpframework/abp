@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "Il nome '{0}' è già in uso.",
     "Volo.Abp.Identity:010022": "Non puoi modificare il tipo di richiesta statica.",
     "Volo.Abp.Identity:010023": "Non puoi eliminare il tipo di richiesta statica.",
+    "Volo.Abp.Identity:010024": "È necessaria un'identità utente per visualizzare i ruoli assegnabili o modificare i ruoli dell'utente.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Numero massimo consentito di membri dell'unità organizzativa per un utente",
     "ThisUserIsNotActiveMessage": "Questo utente non è attivo.",
     "Permission:IdentityManagement": "Gestione identità",

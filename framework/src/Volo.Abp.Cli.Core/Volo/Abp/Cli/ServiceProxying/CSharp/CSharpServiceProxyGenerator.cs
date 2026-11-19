@@ -328,7 +328,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
     {
         var methodBuilder = new StringBuilder();
         var returnTypeName = GetTypeReference(action.ReturnValue.Type, usingNamespaceList);
-        if (action.Name.EndsWith("Async"))
+        if (action.Name.EndsWith("Async") || IsAsyncEnumerable(returnTypeName))
         {
             GenerateAsyncClassMethod(action, returnTypeName, methodBuilder, usingNamespaceList);
         }
@@ -364,7 +364,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
         StringBuilder methodBuilder,
         List<string> usingNamespaceList)
     {
-        var isAsyncEnumerable = returnTypeName.StartsWith("IAsyncEnumerable<");
+        var isAsyncEnumerable = IsAsyncEnumerable(returnTypeName);
         var asyncEnumerableTypeName = isAsyncEnumerable
             ? returnTypeName.Substring("IAsyncEnumerable<".Length, returnTypeName.Length - "IAsyncEnumerable<".Length - 1)
             : null;
@@ -413,7 +413,7 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
 
         var returnTypeName = GetTypeReference(action.ReturnValue.Type, usingNamespaceList);
 
-        if (action.Name.EndsWith("Async"))
+        if (action.Name.EndsWith("Async") || IsAsyncEnumerable(returnTypeName))
         {
             GenerateAsyncInterfaceMethod(action, returnTypeName, methodBuilder, usingNamespaceList);
         }
@@ -445,7 +445,9 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
 
     private void GenerateAsyncInterfaceMethod(InterfaceMethodApiDescriptionModel action, string returnTypeName, StringBuilder methodBuilder, List<string> usingNamespaceList)
     {
-        var returnSign = returnTypeName == "void" ? "Task" : $"Task<{returnTypeName}>";
+        var returnSign = IsAsyncEnumerable(returnTypeName)
+            ? returnTypeName
+            : returnTypeName == "void" ? "Task" : $"Task<{returnTypeName}>";
 
         methodBuilder.AppendLine($"{returnSign} {action.Name}(<args>)");
 
@@ -461,6 +463,11 @@ public class CSharpServiceProxyGenerator : ServiceProxyGeneratorBase<CSharpServi
 
         methodBuilder.Replace("<args>", string.Empty);
         methodBuilder.Replace(", )", ");");
+    }
+
+    private static bool IsAsyncEnumerable(string returnTypeName)
+    {
+        return returnTypeName.StartsWith("IAsyncEnumerable<");
     }
 
     private static bool ShouldGenerateController(ControllerApiDescriptionModel controller)

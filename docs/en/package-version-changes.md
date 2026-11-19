@@ -7,6 +7,22 @@
 
 # Package Version Changes
 
+## 11.0.0-rc.2
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| Devart.Data.Oracle.EFCore | 11.2.192.10 | 11.3.248.11 | #26497 |
+| Microsoft.IdentityModel.JsonWebTokens | 8.19.2 | 8.23.0 | #26489 |
+| Microsoft.IdentityModel.Protocols.OpenIdConnect | 8.19.2 | 8.23.0 | #26489 |
+| Microsoft.IdentityModel.Tokens | 8.19.2 | 8.23.0 | #26489 |
+| MongoDB.Driver | 3.13.0 | 3.14.0 | #26481 |
+| OpenIddict.Abstractions | 7.7.0 | 7.9.0 | #26489 |
+| OpenIddict.Core | 7.7.0 | 7.9.0 | #26489 |
+| OpenIddict.Server.AspNetCore | 7.7.0 | 7.9.0 | #26489 |
+| OpenIddict.Validation.AspNetCore | 7.7.0 | 7.9.0 | #26489 |
+| OpenIddict.Validation.ServerIntegration | 7.7.0 | 7.9.0 | #26489 |
+| System.IdentityModel.Tokens.Jwt | 8.19.2 | 8.23.0 | #26489 |
+
 ## 10.7.2
 
 | Package | Old Version | New Version | PR |

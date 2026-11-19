@@ -76,4 +76,4 @@ Thanks to the ABP Community for all the content they have published. You can als
 
 ## About the Next Version
 
-The next feature version will be 10.8. You can follow the [release planning here](https://github.com/abpframework/abp/milestones). Please [submit an issue](https://github.com/abpframework/abp/issues/new) if you have any problems with this version.
+The next feature version will be 11.0. You can follow the [release planning here](https://github.com/abpframework/abp/milestones). Please [submit an issue](https://github.com/abpframework/abp/issues/new) if you have any problems with this version.

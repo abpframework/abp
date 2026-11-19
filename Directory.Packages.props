@@ -33,7 +33,7 @@
     <PackageVersion Include="Dapr.Client" Version="1.16.0" />
     <PackageVersion Include="ModelContextProtocol" Version="0.5.0-preview.1" />
     <PackageVersion Include="MyCSharp.HttpUserAgentParser" Version="3.0.28" />
-    <PackageVersion Include="Devart.Data.Oracle.EFCore" Version="11.2.192.10" />
+    <PackageVersion Include="Devart.Data.Oracle.EFCore" Version="11.3.248.11" />
     <PackageVersion Include="DistributedLock.Core" Version="1.0.8" />
     <PackageVersion Include="DistributedLock.Redis" Version="1.1.0" />
     <PackageVersion Include="DeepL.net" Version="1.15.0" />
@@ -119,12 +119,12 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageVersion Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
-    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.19.2" />
-    <PackageVersion Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="8.19.2" />
-    <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="8.19.2" />
-    <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.19.2" />
+    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.23.0" />
+    <PackageVersion Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="8.23.0" />
+    <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="8.23.0" />
+    <PackageVersion Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.23.0" />
     <PackageVersion Include="Minio" Version="6.0.5" />
-    <PackageVersion Include="MongoDB.Driver" Version="3.13.0" />
+    <PackageVersion Include="MongoDB.Driver" Version="3.14.0" />
     <PackageVersion Include="Elastic.Clients.Elasticsearch" Version="8.19.27" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageVersion Include="Nito.AsyncEx.Context" Version="5.1.2" />
@@ -134,11 +134,11 @@
     <PackageVersion Include="NUglify" Version="1.21.17" />
     <PackageVersion Include="Nullable" Version="1.3.1" />
     <PackageVersion Include="Octokit" Version="14.0.0" />
-    <PackageVersion Include="OpenIddict.Abstractions" Version="7.7.0" />
-    <PackageVersion Include="OpenIddict.Core" Version="7.7.0" />
-    <PackageVersion Include="OpenIddict.Server.AspNetCore" Version="7.7.0" />
-    <PackageVersion Include="OpenIddict.Validation.AspNetCore" Version="7.7.0" />
-    <PackageVersion Include="OpenIddict.Validation.ServerIntegration" Version="7.7.0" />
+    <PackageVersion Include="OpenIddict.Abstractions" Version="7.9.0" />
+    <PackageVersion Include="OpenIddict.Core" Version="7.9.0" />
+    <PackageVersion Include="OpenIddict.Server.AspNetCore" Version="7.9.0" />
+    <PackageVersion Include="OpenIddict.Validation.AspNetCore" Version="7.9.0" />
+    <PackageVersion Include="OpenIddict.Validation.ServerIntegration" Version="7.9.0" />
     <PackageVersion Include="Oracle.EntityFrameworkCore" Version="10.23.26301" />
     <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
     <!-- MySql.EntityFrameworkCore 10.x fails on EF Core 11. 11.0.0-preview is built on EF Core 11 preview 7; move to the EF Core 11 release once it ships. -->
