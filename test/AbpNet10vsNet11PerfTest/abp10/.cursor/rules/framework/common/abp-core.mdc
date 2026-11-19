@@ -1,0 +1,182 @@
+---
+description: "Core ABP Framework conventions - module system, dependency injection, and base classes"
+alwaysApply: true
+---
+
+# ABP Core Conventions
+
+> **Documentation**: https://abp.io/docs/latest
+> **API Reference**: https://abp.io/docs/api/
+
+## Module System
+Every ABP application/module has a module class that configures services:
+
+```csharp
+[DependsOn(
+    typeof(AbpDddDomainModule),
+    typeof(AbpEntityFrameworkCoreModule)
+)]
+public class MyAppModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        // Service registration and configuration
+    }
+}
+```
+
+> **Note**: Middleware configuration (`OnApplicationInitialization`) should only be done in the final host application, not in reusable modules.
+
+## Dependency Injection Conventions
+
+### Automatic Registration
+ABP automatically registers services implementing marker interfaces:
+- `ITransientDependency` → Transient lifetime
+- `ISingletonDependency` → Singleton lifetime
+- `IScopedDependency` → Scoped lifetime
+
+Classes inheriting from `ApplicationService`, `DomainService`, `AbpController` are also auto-registered.
+
+### Repository Usage
+You can use the generic `IRepository<TEntity, TKey>` for simple CRUD operations. Define custom repository interfaces only when you need custom query methods:
+
+```csharp
+// Simple CRUD - Generic repository is fine
+public class BookAppService : ApplicationService
+{
+    private readonly IRepository<Book, Guid> _bookRepository; // ✅ OK for simple operations
+}
+
+// Custom queries needed - Define custom interface
+public interface IBookRepository : IRepository<Book, Guid>
+{
+    Task<Book> FindByNameAsync(string name); // Custom query
+}
+
+public class BookAppService : ApplicationService
+{
+    private readonly IBookRepository _bookRepository; // ✅ Use custom when needed
+}
+```
+
+### Exposing Services
+```csharp
+[ExposeServices(typeof(IMyService))]
+public class MyService : IMyService, ITransientDependency { }
+```
+
+## Important Base Classes
+
+| Base Class | Purpose |
+|------------|---------|
+| `Entity<TKey>` | Basic entity with ID |
+| `AggregateRoot<TKey>` | DDD aggregate root |
+| `DomainService` | Domain business logic |
+| `ApplicationService` | Use case orchestration |
+| `AbpController` | REST API controller |
+
+ABP base classes already inject commonly used services as properties. Before injecting a service, check if it's already available:
+
+| Property | Available In | Description |
+|----------|--------------|-------------|
+| `GuidGenerator` | All base classes | Generate GUIDs |
+| `Clock` | All base classes | Current time (use instead of `DateTime`) |
+| `CurrentUser` | All base classes | Authenticated user info |
+| `CurrentTenant` | All base classes | Multi-tenancy context |
+| `L` (StringLocalizer) | `ApplicationService`, `AbpController` | Localization |
+| `AuthorizationService` | `ApplicationService`, `AbpController` | Permission checks |
+| `FeatureChecker` | `ApplicationService`, `AbpController` | Feature availability |
+| `DataFilter` | All base classes | Data filtering (soft-delete, tenant) |
+| `UnitOfWorkManager` | `ApplicationService`, `DomainService` | Unit of work management |
+| `LoggerFactory` | All base classes | Create loggers |
+| `Logger` | All base classes | Logging (auto-created) |
+| `LazyServiceProvider` | All base classes | Lazy service resolution |
+
+**Useful methods from base classes:**
+- `CheckPolicyAsync()` - Check permission and throw if not granted
+- `IsGrantedAsync()` - Check permission without throwing
+
+## Async Best Practices
+- Use async all the way - never use `.Result` or `.Wait()`
+- All async methods should end with `Async` suffix
+- ABP automatically handles `CancellationToken` in most cases (e.g., from `HttpContext.RequestAborted`)
+- Only pass `CancellationToken` explicitly when implementing custom cancellation logic
+
+## Time Handling
+Never use `DateTime.Now` or `DateTime.UtcNow` directly. Use ABP's `IClock` service:
+
+```csharp
+// In classes inheriting from base classes (ApplicationService, DomainService, etc.)
+public class BookAppService : ApplicationService
+{
+    public void DoSomething()
+    {
+        var now = Clock.Now; // ✅ Already available as property
+    }
+}
+
+// In other services - inject IClock
+public class MyService : ITransientDependency
+{
+    private readonly IClock _clock;
+    
+    public MyService(IClock clock) => _clock = clock;
+    
+    public void DoSomething()
+    {
+        var now = _clock.Now; // ✅ Correct
+        // var now = DateTime.Now; // ❌ Wrong - not testable, ignores timezone settings
+    }
+}
+```
+
+> **Tip**: Before injecting a service, check if it's already available as a property in your base classes.
+
+## Business Exceptions
+Use `BusinessException` for domain rule violations with namespaced error codes:
+
+```csharp
+throw new BusinessException("MyModule:BookNameAlreadyExists")
+    .WithData("Name", bookName);
+```
+
+Configure localization mapping:
+```csharp
+Configure<AbpExceptionLocalizationOptions>(options =>
+{
+    options.MapCodeNamespace("MyModule", typeof(MyModuleResource));
+});
+```
+
+## Localization
+- In base classes (`ApplicationService`, `AbpController`, etc.): Use `L["Key"]` - this is the `IStringLocalizer` property
+- In other services: Inject `IStringLocalizer<TResource>`
+- Always localize user-facing messages and exceptions
+
+**Localization file location**: `*.Domain.Shared/Localization/{ResourceName}/{lang}.json`
+
+```json
+// Example: MyProject.Domain.Shared/Localization/MyProject/en.json
+{
+  "culture": "en",
+  "texts": {
+    "Menu:Home": "Home",
+    "Welcome": "Welcome",
+    "BookName": "Book Name"
+  }
+}
+```
+
+## ❌ Never Use (ABP Anti-Patterns)
+
+| Don't Use | Use Instead |
+|-----------|-------------|
+| Minimal APIs | ABP Controllers or Auto API Controllers |
+| MediatR | Application Services |
+| `DbContext` directly in App Services | `IRepository<T>` |
+| `AddScoped/AddTransient/AddSingleton` | `ITransientDependency`, `ISingletonDependency` |
+| `DateTime.Now` | `IClock` / `Clock.Now` |
+| Custom UnitOfWork | ABP's `IUnitOfWorkManager` |
+| Manual HTTP calls from UI | ABP client proxies (`generate-proxy`) |
+| Hardcoded role checks | Permission-based authorization |
+| Business logic in Controllers | Application Services |
