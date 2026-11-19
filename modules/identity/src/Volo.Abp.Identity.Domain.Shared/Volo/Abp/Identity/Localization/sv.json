@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "Namn finns: '{0}'.",
     "Volo.Abp.Identity:010022": "Kan inte ändra statiskt område.",
     "Volo.Abp.Identity:010023": "Kan inte ta bort statiskt område.",
+    "Volo.Abp.Identity:010024": "En användaridentitet krävs för att visa tilldelningsbara roller eller ändra användarroller.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Högsta tillåtna antal medlemskap i organisationsenheter för en användare",
     "ThisUserIsNotActiveMessage": "Den här användaren är inte aktiv.",
     "Permission:IdentityManagement": "Identitetshantering",

@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "الاسم {0} موجود بالفعل.",
     "Volo.Abp.Identity:010022": "لا يمكن تحديث نوع المطابقة.",
     "Volo.Abp.Identity:010023": "لا يمكن حذف نوع المطابقة.",
+    "Volo.Abp.Identity:010024": "يلزم وجود هوية مستخدم لعرض الأدوار القابلة للتعيين أو تغيير أدوار المستخدم.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "العدد الأقصى المسموح به لعضوية الوحدة التنظيمية للمستخدم",
     "ThisUserIsNotActiveMessage": "هذا المستخدم غير نشط.",
     "Permission:IdentityManagement": "إدارة الهوية",

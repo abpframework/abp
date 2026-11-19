@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "Name exist: '{0}'.",
     "Volo.Abp.Identity:010022": "Can not update a static ClaimType.",
     "Volo.Abp.Identity:010023": "Can not delete a static ClaimType.",
+    "Volo.Abp.Identity:010024": "A user identity is required to view assignable roles or change user roles.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Maximum allowed organization unit membership count for a user",
     "ThisUserIsNotActiveMessage": "This user is not active.",
     "Permission:IdentityManagement": "Identity management",

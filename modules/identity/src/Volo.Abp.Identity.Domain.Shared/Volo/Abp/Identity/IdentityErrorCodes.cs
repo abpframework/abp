@@ -15,4 +15,5 @@ public static class IdentityErrorCodes
     public const string ClaimNameExist = "Volo.Abp.Identity:010021";
     public const string CanNotUpdateStaticClaimType = "Volo.Abp.Identity:010022";
     public const string CanNotDeleteStaticClaimType = "Volo.Abp.Identity:010023";
+    public const string UserContextRequiredForRoleAssignment = "Volo.Abp.Identity:010024";
 }

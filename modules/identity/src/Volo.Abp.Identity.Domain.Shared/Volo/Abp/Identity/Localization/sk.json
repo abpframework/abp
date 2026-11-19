@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "Názov '{0}' sa už používa.",
     "Volo.Abp.Identity:010022": "Nie je možné zmeniť typ statického oprávnenia.",
     "Volo.Abp.Identity:010023": "Nie je možné odstrániť typ statického oprávnenia.",
+    "Volo.Abp.Identity:010024": "Na zobrazenie priraditeľných rolí alebo zmenu rolí používateľa sa vyžaduje identita používateľa.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Maximálny povolený počet členov organizačnej jednotky pre používateľa",
     "ThisUserIsNotActiveMessage": "Tento používateľ nie je aktívny.",
     "Permission:IdentityManagement": "Správa identít",
