@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "Tên '{0}' đã tồn tại.",
     "Volo.Abp.Identity:010022": "Không thể thay đổi kiểu của phát biểu tĩnh.",
     "Volo.Abp.Identity:010023": "Không thể xóa phát biểu tĩnh.",
+    "Volo.Abp.Identity:010024": "Cần có danh tính người dùng để xem các vai trò có thể gán hoặc thay đổi vai trò của người dùng.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Số lượng thành viên đơn vị tổ chức tối đa được phép cho một người dùng",
     "ThisUserIsNotActiveMessage": "Người dùng này không hoạt động.",
     "Permission:IdentityManagement": "Quản lý danh tính",

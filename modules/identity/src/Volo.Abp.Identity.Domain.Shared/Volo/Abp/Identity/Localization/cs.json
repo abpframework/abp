@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "Název '{0}' již existuje.",
     "Volo.Abp.Identity:010022": "Nelze aktualizovat statický typ deklarace.",
     "Volo.Abp.Identity:010023": "Nelze smazat statický typ deklarace.",
+    "Volo.Abp.Identity:010024": "K zobrazení přiřaditelných rolí nebo ke změně rolí uživatele je vyžadována identita uživatele.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Maximální povolený počet členů organizační jednotky pro uživatele",
     "ThisUserIsNotActiveMessage": "Tento uživatel není aktivní.",
     "Permission:IdentityManagement": "Správa identit",

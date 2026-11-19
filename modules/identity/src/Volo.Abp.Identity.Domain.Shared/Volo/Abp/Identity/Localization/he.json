@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "השם כבר קיים: '{0}'.",
     "Volo.Abp.Identity:010022": "אי אפשר לעדכן סוג טענה (ClaimType) סטטי.",
     "Volo.Abp.Identity:010023": "אי אפשר למחוק סוג טענה (ClaimType) סטטי.",
+    "Volo.Abp.Identity:010024": "נדרשת זהות משתמש כדי להציג תפקידים הניתנים להקצאה או לשנות תפקידי משתמש.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "המספר המרבי של יחידות ארגוניות שמשתמש יכול להשתייך אליהן",
     "ThisUserIsNotActiveMessage": "משתמש זה אינו פעיל.",
     "Permission:IdentityManagement": "ניהול זהויות",
