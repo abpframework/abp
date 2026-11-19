@@ -68,14 +68,35 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
             return configuration;
         }
 
-        configuration = (await Cache.GetOrAddAsync(
+        var cached = await Cache.GetAsync(cacheKey);
+        if (cached != null)
+        {
+            if (httpContext != null)
+            {
+                httpContext.Items[cacheKey] = cached;
+            }
+
+            return cached;
+        }
+
+        configuration = await GetRemoteConfigurationAsync();
+
+        // The cache key is the current user's, but the remote call takes its access token from the HttpContext. Work of a
+        // Blazor Server circuit can still run with the user after its request has ended: the call then goes without a token
+        // and gets an anonymous configuration, which must not be kept for that user (no permissions until it expires).
+        if (!IsForCurrentUser(configuration))
+        {
+            return configuration;
+        }
+
+        await Cache.SetAsync(
             cacheKey,
-            async () => await GetRemoteConfigurationAsync(),
-            () => new DistributedCacheEntryOptions
+            configuration,
+            new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = Options.ApplicationConfigurationDtoCacheAbsoluteExpiration
             }
-        ))!;
+        );
 
         if (httpContext != null)
         {
@@ -83,6 +104,17 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
         }
 
         return configuration;
+    }
+
+    protected virtual bool IsForCurrentUser(ApplicationConfigurationDto configuration)
+    {
+        var user = configuration.CurrentUser;
+        if (user == null)
+        {
+            return !CurrentUser.IsAuthenticated;
+        }
+
+        return user.IsAuthenticated == CurrentUser.IsAuthenticated && user.Id == CurrentUser.Id;
     }
 
     protected virtual async Task<ApplicationConfigurationDto> GetRemoteConfigurationAsync()
