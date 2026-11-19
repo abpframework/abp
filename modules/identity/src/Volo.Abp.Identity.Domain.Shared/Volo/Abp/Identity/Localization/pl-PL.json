@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "Nazwa '{0}' już istnieje.",
     "Volo.Abp.Identity:010022": "Nie można zmienić typu statycznej deklaracji.",
     "Volo.Abp.Identity:010023": "Nie można usunąć typu statycznej deklaracji.",
+    "Volo.Abp.Identity:010024": "Do wyświetlania ról możliwych do przypisania lub zmiany ról użytkownika wymagana jest tożsamość użytkownika.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Maksymalna dozwolona liczba członków jednostki organizacyjnej dla użytkownika",
     "ThisUserIsNotActiveMessage": "Ten użytkownik nie jest aktywny.",
     "Permission:IdentityManagement": "Zarządzanie tożsamością",

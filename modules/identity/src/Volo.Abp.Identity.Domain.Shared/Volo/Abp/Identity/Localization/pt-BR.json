@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "Já existe um(a) {0} com o nome.",
     "Volo.Abp.Identity:010022": "Não é possível alterar o tipo de declaração estática.",
     "Volo.Abp.Identity:010023": "Não é possível excluir o tipo de declaração estática.",
+    "Volo.Abp.Identity:010024": "É necessária uma identidade de usuário para visualizar os perfis atribuíveis ou alterar os perfis do usuário.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Contagem máxima permitida de membros da unidade organizacional para um usuário",
     "ThisUserIsNotActiveMessage": "Este usuário não está ativo.",
     "Permission:IdentityManagement": "Acessos",

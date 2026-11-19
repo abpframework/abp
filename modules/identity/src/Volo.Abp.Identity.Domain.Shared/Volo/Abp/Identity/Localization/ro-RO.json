@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "Numele '{0}' este deja luat.",
     "Volo.Abp.Identity:010022": "Nu poate fi schimbată tipul de declaraţie statică.",
     "Volo.Abp.Identity:010023": "Nu poate fi ştersă declaraţia statică.",
+    "Volo.Abp.Identity:010024": "Este necesară o identitate de utilizator pentru a vizualiza rolurile care pot fi atribuite sau pentru a modifica rolurile utilizatorului.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Numărul maxim de unităţi organizaţionale permise pentru un utilizator",
     "ThisUserIsNotActiveMessage": "Acest utilizator nu este activ.",
     "Permission:IdentityManagement": "Administrare identităţii",

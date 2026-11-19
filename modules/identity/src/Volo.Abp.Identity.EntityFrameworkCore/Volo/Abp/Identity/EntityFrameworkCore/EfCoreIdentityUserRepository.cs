@@ -40,10 +40,16 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
     {
         var dbContext = await GetDbContextAsync();
         var query = from userRole in dbContext.Set<IdentityUserRole>()
+                    join user in dbContext.Users on userRole.UserId equals user.Id
                     join role in dbContext.Roles on userRole.RoleId equals role.Id
                     where userRole.UserId == id
                     select role.Name;
-        var organizationUnitIds = dbContext.Set<IdentityUserOrganizationUnit>().Where(q => q.UserId == id).Select(q => q.OrganizationUnitId).ToArray();
+        var organizationUnitIds = await (
+            from userOu in dbContext.Set<IdentityUserOrganizationUnit>()
+            join user in dbContext.Users on userOu.UserId equals user.Id
+            where userOu.UserId == id
+            select userOu.OrganizationUnitId
+        ).ToArrayAsync(GetCancellationToken(cancellationToken));
 
         var organizationRoleIds = await (
             from ouRole in dbContext.Set<OrganizationUnitRole>()
@@ -63,6 +69,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
     {
         var dbContext = await GetDbContextAsync();
         var userRoles = await (from userRole in dbContext.Set<IdentityUserRole>()
+                               join user in dbContext.Users on userRole.UserId equals user.Id
                                join role in dbContext.Roles on userRole.RoleId equals role.Id
                                where userIds.Contains(userRole.UserId)
                                group new {
@@ -77,7 +84,9 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
                                }).ToListAsync(cancellationToken: cancellationToken);
 
         var orgUnitRoles = await (from userOu in dbContext.Set<IdentityUserOrganizationUnit>()
-                                  join roleOu in dbContext.Set<OrganizationUnitRole>() on userOu.OrganizationUnitId equals roleOu.OrganizationUnitId
+                                  join user in dbContext.Users on userOu.UserId equals user.Id
+                                  join ou in dbContext.OrganizationUnits on userOu.OrganizationUnitId equals ou.Id
+                                  join roleOu in dbContext.Set<OrganizationUnitRole>() on ou.Id equals roleOu.OrganizationUnitId
                                   join role in dbContext.Roles on roleOu.RoleId equals role.Id
                                   where userIds.Contains(userOu.UserId)
                                   group new {
@@ -109,6 +118,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
     {
         var dbContext = await GetDbContextAsync();
         var query = from userOu in dbContext.Set<IdentityUserOrganizationUnit>()
+                    join user in dbContext.Users on userOu.UserId equals user.Id
                     join roleOu in dbContext.Set<OrganizationUnitRole>() on userOu.OrganizationUnitId equals roleOu.OrganizationUnitId
                     join ou in dbContext.Set<OrganizationUnit>() on roleOu.OrganizationUnitId equals ou.Id
                     join userOuRoles in dbContext.Roles on roleOu.RoleId equals userOuRoles.Id
@@ -194,8 +204,11 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
 
     public virtual async Task<List<Guid>> GetUserIdListByRoleIdAsync(Guid roleId, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbContextAsync()).Set<IdentityUserRole>().Where(x => x.RoleId == roleId)
-            .Select(x => x.UserId).ToListAsync(GetCancellationToken(cancellationToken));
+        var dbContext = await GetDbContextAsync();
+        return await (from userRole in dbContext.Set<IdentityUserRole>()
+                      join user in dbContext.Users on userRole.UserId equals user.Id
+                      where userRole.RoleId == roleId
+                      select userRole.UserId).ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<IdentityUser>> GetListAsync(
@@ -257,12 +270,14 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         var dbContext = await GetDbContextAsync();
 
         var query = from userRole in dbContext.Set<IdentityUserRole>()
+                    join user in dbContext.Users on userRole.UserId equals user.Id
                     join role in dbContext.Roles.IncludeDetails(includeDetails) on userRole.RoleId equals role.Id
                     where userRole.UserId == id
                     select role;
 
         //TODO: Needs improvement
         var userOrganizationsQuery = from userOrg in dbContext.Set<IdentityUserOrganizationUnit>()
+                                     join user in dbContext.Users on userOrg.UserId equals user.Id
                                      join ou in dbContext.OrganizationUnits.IncludeDetails(includeDetails) on userOrg.OrganizationUnitId equals ou.Id
                                      where userOrg.UserId == id
                                      select ou;
@@ -330,6 +345,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<IIdentityDbContext,
         var dbContext = await GetDbContextAsync();
 
         var query = from userOu in dbContext.Set<IdentityUserOrganizationUnit>()
+                    join user in dbContext.Users on userOu.UserId equals user.Id
                     join ou in dbContext.OrganizationUnits.IncludeDetails(includeDetails) on userOu.OrganizationUnitId equals ou.Id
                     where userOu.UserId == id
                     select ou;

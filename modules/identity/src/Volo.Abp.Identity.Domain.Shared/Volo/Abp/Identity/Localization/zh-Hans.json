@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "名称：'{0}' 已存在",
     "Volo.Abp.Identity:010022": "不能更改静态声明的类型。",
     "Volo.Abp.Identity:010023": "不能删除静态声明的类型。",
+    "Volo.Abp.Identity:010024": "查看可分配的角色或更改用户角色需要用户身份。",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "组织单位最大允许的成员资格计数",
     "ThisUserIsNotActiveMessage": "该用户不可用。",
     "Permission:IdentityManagement": "身份标识管理",

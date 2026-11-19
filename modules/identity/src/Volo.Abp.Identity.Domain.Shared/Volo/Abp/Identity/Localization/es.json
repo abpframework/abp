@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "Ya existe un con el nombre '{0}'",
     "Volo.Abp.Identity:010022": "No se puede actualizar un tipo de reclamación estática.",
     "Volo.Abp.Identity:010023": "No se puede borrar un tipo de reclamación estática.",
+    "Volo.Abp.Identity:010024": "Se requiere una identidad de usuario para ver los roles asignables o cambiar los roles de usuario.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Número máximo de unidades organizativas por usuario",
     "ThisUserIsNotActiveMessage": "Este usuario no está activo.",
     "Permission:IdentityManagement": "Gestión de identidades",
