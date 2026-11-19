@@ -3,6 +3,8 @@ using System.Globalization;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
@@ -17,6 +19,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Client;
 public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigurationClient, ITransientDependency
 {
     private const string HttpContextItemsCacheKeyFormat = "ApplicationConfigurationDto_{0}_{1}_CacheKey";
+
+    public ILogger<MvcCachedApplicationConfigurationClient> Logger { get; set; }
 
     protected IHttpContextAccessor HttpContextAccessor { get; }
     protected AbpApplicationConfigurationClientProxy ApplicationConfigurationAppService { get; }
@@ -35,6 +39,8 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
         AbpApplicationLocalizationClientProxy applicationLocalizationClientProxy,
         IOptions<AbpAspNetCoreMvcClientCacheOptions> options)
     {
+        Logger = NullLogger<MvcCachedApplicationConfigurationClient>.Instance;
+
         ApplicationConfigurationAppService = applicationConfigurationAppService;
         CurrentUser = currentUser;
         HttpContextAccessor = httpContextAccessor;
@@ -81,11 +87,13 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
 
         configuration = await GetRemoteConfigurationAsync();
 
-        // The cache key is the current user's, but the remote call takes its access token from the HttpContext. Work of a
-        // Blazor Server circuit can still run with the user after its request has ended: the call then goes without a token
-        // and gets an anonymous configuration, which must not be kept for that user (no permissions until it expires).
+        // The cache key comes from ICurrentUser, but the access token comes from the HttpContext. A Blazor Server circuit can
+        // still run as the user after its request has ended, so the call goes without a token and gets an anonymous configuration.
         if (!IsForCurrentUser(configuration))
         {
+            Logger.LogWarning(
+                "Not caching the remote application configuration: it is for user {RemoteUserId} (authenticated: {RemoteIsAuthenticated}), not the current user {CurrentUserId}.",
+                configuration.CurrentUser?.Id, configuration.CurrentUser?.IsAuthenticated, CurrentUser.Id);
             return configuration;
         }
 
