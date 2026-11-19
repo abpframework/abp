@@ -16,7 +16,7 @@ Also see the following notes about ABP releases:
 
 ## 11.0 (2026-11-19)
 
-See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-11-0-release-candidate-a77t7jx8)** for the v11.0 release.
+See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-11-0-stable-release-ec5ppci6)** for the v11.0 release.
 
 - Upgraded to .NET 11 and EF Core 11
 - Query Projection for Read-Only Application Services
