@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "Nafnið '{0}' er þegar í notkun.",
     "Volo.Abp.Identity:010022": "Ekki er hægt að breyta static hlutverk.",
     "Volo.Abp.Identity:010023": "Ekki er hægt að eyða static hlutverkum.",
+    "Volo.Abp.Identity:010024": "Notandaauðkenni er nauðsynlegt til að skoða hlutverk sem hægt er að úthluta eða breyta hlutverkum notanda.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Hámarks leyfileg fjöldi aðildar að skipulagseiningu fyrir notanda",
     "ThisUserIsNotActiveMessage": "Þessi notandi er ekki virkur.",
     "Permission:IdentityManagement": "Auðkenninga umsjón",

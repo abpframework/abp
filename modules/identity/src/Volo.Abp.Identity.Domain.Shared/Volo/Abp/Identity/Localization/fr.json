@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "Le nom '{0}' existe déjà.",
     "Volo.Abp.Identity:010022": "Vous ne pouvez pas modifier un type de revendication statique.",
     "Volo.Abp.Identity:010023": "Vous ne pouvez pas supprimer un type de revendication statique.",
+    "Volo.Abp.Identity:010024": "Une identité d'utilisateur est requise pour afficher les rôles attribuables ou modifier les rôles des utilisateurs.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Nombre maximal d’adhésions autorisées à l’unité d’organisation pour un utilisateur",
     "ThisUserIsNotActiveMessage": "Cet utilisateur n'est pas actif.",
     "Permission:IdentityManagement": "Gestion de l’identité",

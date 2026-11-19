@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "{0} isminde bir birim zaten var.",
     "Volo.Abp.Identity:010022": "Bir statik izin tipi değiştirilemez.",
     "Volo.Abp.Identity:010023": "Bir statik izin tipi silinemez.",
+    "Volo.Abp.Identity:010024": "Atanabilir rolleri görüntülemek veya kullanıcı rollerini değiştirmek için bir kullanıcı kimliği gereklidir.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Bir kullanıcı için izin verilen en fazla organizasyon birimi sayısı",
     "ThisUserIsNotActiveMessage": "Bu kullanıcı aktif değil.",
     "Permission:IdentityManagement": "Kimlik yönetimi",

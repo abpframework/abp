@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "O nome já existe: '{0}'.",
     "Volo.Abp.Identity:010022": "Não é possível atualizar um tipo de claim estático.",
     "Volo.Abp.Identity:010023": "Não é possível eliminar um tipo de claim estático.",
+    "Volo.Abp.Identity:010024": "É necessária uma identidade de utilizador para ver os perfis atribuíveis ou alterar os perfis do utilizador.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Número máximo de unidades organizacionais permitido para um utilizador",
     "ThisUserIsNotActiveMessage": "Este utilizador não está ativo.",
     "Permission:IdentityManagement": "Gestão de identidade",
