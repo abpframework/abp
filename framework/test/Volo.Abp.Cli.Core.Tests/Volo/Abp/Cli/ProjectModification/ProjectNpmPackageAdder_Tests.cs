@@ -120,15 +120,64 @@ public class ProjectNpmPackageAdder_Tests : AbpCliTestBase
     }
 
     [Fact]
-    public async Task AddNpmPackageAsync_Should_Not_Add_React_Package_That_Is_Already_Installed()
+    public async Task AddNpmPackageAsync_Should_Use_The_First_Usable_Abp_Version_For_React_Package()
+    {
+        // The first ABP package is a local reference, which is not a version another package can be installed with.
+        using var project = new TemporaryJavaScriptProject(
+            "{ \"dependencies\": { \"react\": \"^19.2.4\", " +
+            "\"@volo/abp-app-config\": \"file:../../abp/npm/packs/abp-app-config\", " +
+            "\"@abp/utils\": \"~10.7.1\" } }",
+            "package-lock.json");
+
+        await GetRequiredService<ProjectNpmPackageAdder>().AddNpmPackageAsync(project.Directory, ReactPackage);
+
+        _cmdHelper.Received(1).RunCmd(
+            "npm install @volo/abp-react-oidc-auth@~10.7.1 --ignore-scripts", out Arg.Any<int>(), project.Directory);
+    }
+
+    [Theory]
+    [InlineData("dependencies")]
+    [InlineData("devDependencies")]
+    [InlineData("optionalDependencies")]
+    public async Task AddNpmPackageAsync_Should_Not_Add_React_Package_That_Is_Already_Installed(
+        string dependencyListName)
     {
         using var project = new TemporaryJavaScriptProject(
-            "{ \"dependencies\": { \"@volo/abp-react-oidc-auth\": \"~10.7.1\" } }", "package-lock.json");
+            $"{{ \"{dependencyListName}\": {{ \"@volo/abp-react-oidc-auth\": \"~10.7.1\" }} }}", "package-lock.json");
 
         await GetRequiredService<ProjectNpmPackageAdder>().AddNpmPackageAsync(project.Directory, ReactPackage);
 
         _cmdHelper.DidNotReceiveWithAnyArgs().RunCmd(default, out _, default);
         _cmdHelper.DidNotReceiveWithAnyArgs().RunCmd(default);
+    }
+
+    [Theory]
+    [InlineData("overrides")]
+    [InlineData("resolutions")]
+    public async Task AddNpmPackageAsync_Should_Add_React_Package_That_Is_Only_Mentioned_Outside_The_Dependencies(
+        string sectionName)
+    {
+        using var project = new TemporaryJavaScriptProject(
+            "{ \"dependencies\": { \"react\": \"^19.2.4\" }, " +
+            $"\"{sectionName}\": {{ \"@volo/abp-react-oidc-auth\": \"10.7.1\" }} }}",
+            "package-lock.json");
+
+        await GetRequiredService<ProjectNpmPackageAdder>().AddNpmPackageAsync(project.Directory, ReactPackage);
+
+        _cmdHelper.Received(1).RunCmd(
+            "npm install @volo/abp-react-oidc-auth --ignore-scripts", out Arg.Any<int>(), project.Directory);
+    }
+
+    [Fact]
+    public async Task AddNpmPackageAsync_Should_Fail_When_The_Package_Json_Of_React_Project_Is_Not_Valid()
+    {
+        using var project = new TemporaryJavaScriptProject("{ this is not json", "package-lock.json");
+
+        var exception = await Should.ThrowAsync<CliUsageException>(() =>
+            GetRequiredService<ProjectNpmPackageAdder>().AddNpmPackageAsync(project.Directory, ReactPackage));
+
+        exception.Message.ShouldContain("is not a valid JSON file");
+        _cmdHelper.DidNotReceiveWithAnyArgs().RunCmd(default, out _, default);
     }
 
     [Fact]

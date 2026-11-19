@@ -6,6 +6,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Volo.Abp.Cli.Commands.Services;
 using Volo.Abp.Cli.Http;
@@ -20,6 +21,13 @@ namespace Volo.Abp.Cli.ProjectModification;
 
 public class ProjectNpmPackageAdder : ITransientDependency
 {
+    private static readonly string[] DirectDependencyListNames =
+    {
+        "dependencies",
+        "devDependencies",
+        "optionalDependencies"
+    };
+
     public IJsonSerializer JsonSerializer { get; }
     public SourceCodeDownloadService SourceCodeDownloadService { get; }
     public AngularSourceCodeAdder AngularSourceCodeAdder { get; }
@@ -143,7 +151,7 @@ public class ProjectNpmPackageAdder : ITransientDependency
 
         Logger.LogInformation($"Installing '{npmPackage.Name}' package to the project '{packageJsonFilePath}'...");
 
-        if (File.ReadAllText(packageJsonFilePath).Contains($"\"{npmPackage.Name}\""))
+        if (IsDirectDependency(packageJsonFilePath, npmPackage.Name))
         {
             Logger.LogInformation($"'{npmPackage.Name}' is already installed.");
             return;
@@ -203,26 +211,64 @@ public class ProjectNpmPackageAdder : ITransientDependency
             $"Specify the one to add '{npmPackage.Name}' to with the '--working-directory' option:" +
             Environment.NewLine +
             reactProjectDirectories
-                .Select(d => "  " + Path.GetRelativePath(directory, d))
+                .Select(d => "  " + GetPathBelow(directory, d))
                 .JoinAsString(Environment.NewLine)
         );
     }
 
-    private string DetectSafeAbpVersionOrNull(string packageJsonFilePath)
+    /// <summary>
+    /// Path.GetRelativePath is not available in .NET Standard 2.0. The sub directories are found by
+    /// searching the directory, so they start with it.
+    /// </summary>
+    private static string GetPathBelow(string directory, string subDirectory)
     {
-        var version = DetectAbpVersionOrNull(packageJsonFilePath);
-        if (version == null || NpmHelper.IsSafeVersion(version))
+        if (!subDirectory.StartsWith(directory, StringComparison.OrdinalIgnoreCase))
         {
-            return version;
+            return subDirectory;
         }
 
-        // For example a local "file:" reference, which cannot be used as a version of another package.
-        Logger.LogWarning(
-            $"Cannot use the ABP package version '{NpmHelper.SanitizeForLog(version)}' of the project. " +
-            "The latest version will be installed."
-        );
+        return subDirectory.Substring(directory.Length)
+            .TrimStart(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+    }
 
-        return null;
+    /// <summary>
+    /// Looks at the dependency lists only: the name of a package can also be in other places of a package.json
+    /// (for example "overrides" or "resolutions") without the package being a dependency of the project.
+    /// </summary>
+    private static bool IsDirectDependency(string packageJsonFilePath, string packageName)
+    {
+        JObject packageJson;
+        try
+        {
+            packageJson = JObject.Parse(File.ReadAllText(packageJsonFilePath));
+        }
+        catch (JsonException ex)
+        {
+            throw new CliUsageException($"'{packageJsonFilePath}' is not a valid JSON file. {ex.Message}");
+        }
+
+        return DirectDependencyListNames.Any(dependencyListName =>
+            packageJson[dependencyListName] is JObject dependencyList &&
+            dependencyList.Property(packageName) != null);
+    }
+
+    private string DetectSafeAbpVersionOrNull(string packageJsonFilePath)
+    {
+        var versions = GetAbpPackageVersions(packageJsonFilePath);
+
+        // A local "file:" or "workspace:" reference cannot be used as a version of another package,
+        // so the first ABP package that has a usable version decides.
+        var version = versions.FirstOrDefault(v => !v.IsNullOrWhiteSpace() && NpmHelper.IsSafeVersion(v));
+
+        if (version == null && versions.Count > 0)
+        {
+            Logger.LogWarning(
+                $"Cannot use the ABP package version '{NpmHelper.SanitizeForLog(versions[0])}' of the project. " +
+                "The latest version will be installed."
+            );
+        }
+
+        return version;
     }
 
     protected virtual async Task<bool> DownloadAngularSourceCode(string angularDirectory, NpmPackageInfo package,
@@ -327,10 +373,20 @@ public class ProjectNpmPackageAdder : ITransientDependency
 
     private string DetectAbpVersionOrNull(string packageJsonFile)
     {
+        return GetAbpPackageVersions(packageJsonFile).FirstOrDefault();
+    }
+
+    /// <summary>
+    /// Returns the versions of the ABP packages in the dependencies of the given package.json, in file order.
+    /// </summary>
+    private List<string> GetAbpPackageVersions(string packageJsonFile)
+    {
+        var versions = new List<string>();
+
         if (string.IsNullOrEmpty(packageJsonFile) ||
             !File.Exists(packageJsonFile))
         {
-            return null;
+            return versions;
         }
 
         try
@@ -341,7 +397,7 @@ public class ProjectNpmPackageAdder : ITransientDependency
 
             if (dependenciesObject == null)
             {
-                return null;
+                return versions;
             }
 
             var packages = dependenciesObject.Children<JProperty>();
@@ -350,7 +406,7 @@ public class ProjectNpmPackageAdder : ITransientDependency
             {
                 if ((package.Name.StartsWith("@abp/") || package.Name.StartsWith("@volo/")) && !package.Name.Contains("leptonx"))
                 {
-                    return package.Value.ToString();
+                    versions.Add(package.Value.ToString());
                 }
             }
         }
@@ -359,7 +415,7 @@ public class ProjectNpmPackageAdder : ITransientDependency
             Logger.LogWarning("Cannot detect ABP package version. " + ex.Message);
         }
 
-        return null;
+        return versions;
     }
 
     private async Task<NpmPackageInfo> FindNpmPackageInfoAsync(string packageName)
