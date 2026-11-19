@@ -132,20 +132,6 @@ public class ProjectNpmPackageAdder_Tests : AbpCliTestBase
     }
 
     [Fact]
-    public async Task AddNpmPackageAsync_Should_Reject_Source_Code_Download_For_React_Package()
-    {
-        using var project = new TemporaryJavaScriptProject(ReactProjectPackageJson, "package-lock.json");
-
-        var exception = await Should.ThrowAsync<CliUsageException>(() =>
-            GetRequiredService<ProjectNpmPackageAdder>()
-                .AddNpmPackageAsync(project.Directory, ReactPackage, withSourceCode: true));
-
-        exception.Message.ShouldContain("--with-source-code");
-        _cmdHelper.DidNotReceiveWithAnyArgs().RunCmd(default, out _, default);
-        _cmdHelper.DidNotReceiveWithAnyArgs().RunCmd(default);
-    }
-
-    [Fact]
     public async Task AddNpmPackageAsync_Should_Fail_When_React_Package_Cannot_Be_Added()
     {
         using var project = new TemporaryJavaScriptProject(ReactProjectPackageJson, "package-lock.json");
@@ -158,6 +144,82 @@ public class ProjectNpmPackageAdder_Tests : AbpCliTestBase
 
         exception.Message.ShouldContain(ReactPackageName);
         exception.Message.ShouldContain("exited with code 1");
+    }
+
+    [Fact]
+    public async Task AddNpmPackageAsync_Should_Find_The_React_Project_Below_The_Given_Directory()
+    {
+        using var solution = new TemporaryDirectory();
+        var reactDirectory = solution.CreateFile(Path.Combine("react", "package.json"), ReactProjectPackageJson);
+        solution.CreateFile(Path.Combine("react", "package-lock.json"));
+        solution.CreateFile(
+            Path.Combine("src", "Acme.Web", "package.json"),
+            "{ \"dependencies\": { \"@abp/aspnetcore.mvc.ui.theme.leptonxlite\": \"~10.7.1\" } }");
+
+        await GetRequiredService<ProjectNpmPackageAdder>().AddNpmPackageAsync(solution.Path, ReactPackage);
+
+        _cmdHelper.Received(1).RunCmd(
+            "npm install @volo/abp-react-oidc-auth@~10.7.1 --ignore-scripts", out Arg.Any<int>(), reactDirectory);
+    }
+
+    [Fact]
+    public async Task AddNpmPackageAsync_Should_Not_Count_Downloaded_Source_Code_As_Another_React_Project()
+    {
+        using var solution = new TemporaryDirectory();
+        var reactDirectory = solution.CreateFile(Path.Combine("react", "package.json"), ReactProjectPackageJson);
+        solution.CreateFile(
+            Path.Combine("react", "projects", "volo-abp-react-lowcode", "package.json"),
+            "{ \"devDependencies\": { \"react\": \"^19.2.4\" } }");
+
+        await GetRequiredService<ProjectNpmPackageAdder>().AddNpmPackageAsync(solution.Path, ReactPackage);
+
+        _cmdHelper.Received(1).RunCmd(
+            "npm install @volo/abp-react-oidc-auth@~10.7.1 --ignore-scripts", out Arg.Any<int>(), reactDirectory);
+    }
+
+    [Fact]
+    public async Task AddNpmPackageAsync_Should_Fail_When_The_Directory_Of_React_Package_Does_Not_Exist()
+    {
+        using var solution = new TemporaryDirectory();
+        var missingDirectory = Path.Combine(solution.Path, "missing");
+
+        var exception = await Should.ThrowAsync<CliUsageException>(() =>
+            GetRequiredService<ProjectNpmPackageAdder>().AddNpmPackageAsync(missingDirectory, ReactPackage));
+
+        exception.Message.ShouldContain(missingDirectory);
+        exception.Message.ShouldContain("--working-directory");
+        _cmdHelper.DidNotReceiveWithAnyArgs().RunCmd(default, out _, default);
+    }
+
+    [Fact]
+    public async Task AddNpmPackageAsync_Should_Not_Guess_Between_Several_React_Projects()
+    {
+        using var solution = new TemporaryDirectory();
+        solution.CreateFile(Path.Combine("react", "package.json"), ReactProjectPackageJson);
+        solution.CreateFile(Path.Combine("react-public-web", "package.json"), ReactProjectPackageJson);
+
+        var exception = await Should.ThrowAsync<CliUsageException>(() =>
+            GetRequiredService<ProjectNpmPackageAdder>().AddNpmPackageAsync(solution.Path, ReactPackage));
+
+        exception.Message.ShouldContain("--working-directory");
+        exception.Message.ShouldContain("  react" + Environment.NewLine);
+        exception.Message.ShouldContain("  react-public-web");
+        _cmdHelper.DidNotReceiveWithAnyArgs().RunCmd(default, out _, default);
+    }
+
+    [Fact]
+    public async Task AddNpmPackageAsync_Should_Fail_When_There_Is_No_React_Project()
+    {
+        using var solution = new TemporaryDirectory();
+        solution.CreateFile(
+            Path.Combine("src", "Acme.Web", "package.json"),
+            "{ \"dependencies\": { \"@abp/aspnetcore.mvc.ui.theme.leptonxlite\": \"~10.7.1\" } }");
+
+        var exception = await Should.ThrowAsync<CliUsageException>(() =>
+            GetRequiredService<ProjectNpmPackageAdder>().AddNpmPackageAsync(solution.Path, ReactPackage));
+
+        exception.Message.ShouldContain("No React project was found");
+        _cmdHelper.DidNotReceiveWithAnyArgs().RunCmd(default, out _, default);
     }
 
     [Fact]

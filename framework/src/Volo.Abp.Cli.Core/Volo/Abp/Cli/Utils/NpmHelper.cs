@@ -105,6 +105,28 @@ public class NpmHelper : ITransientDependency
     }
 
     /// <summary>
+    /// Builds the command that installs the dependencies of a project with its package manager
+    /// (see <see cref="DetectPackageManager"/>: npm when the project declares none).
+    /// </summary>
+    public string GetInstallCommand(string directory)
+    {
+        return DetectPackageManager(directory) switch
+        {
+            NodePackageManager.Yarn => GetYarnCommand(directory),
+            NodePackageManager.Pnpm => "pnpm install --ignore-scripts",
+            _ => "npm install --ignore-scripts"
+        };
+    }
+
+    public void RunInstall(string directory)
+    {
+        var command = GetInstallCommand(directory);
+
+        Logger.LogInformation($"Running '{command}' on {directory}");
+        CmdHelper.RunCmd(command, directory);
+    }
+
+    /// <summary>
     /// Builds the command that adds a package with the package manager of the project.
     /// Install scripts are skipped, like in the other commands of this class.
     /// </summary>

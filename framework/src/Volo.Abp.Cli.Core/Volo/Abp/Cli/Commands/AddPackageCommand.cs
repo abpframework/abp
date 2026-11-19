@@ -101,7 +101,7 @@ public class AddPackageCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("");
         sb.AppendLine("  -p|--project <project-file>                           Specifies the project file explicitly. (Only available for NuGet packages)");
         sb.AppendLine("  -s|--solution <solution-file>                         Specifies the solution file explicitly. (Only available for NuGet packages)");
-        sb.AppendLine("  --with-source-code                                    Downloads the source code of the Angular NPM/NuGet package and make other projects depends on it. (Not available for React packages)");
+        sb.AppendLine("  --with-source-code                                    Downloads the source code of the Angular NPM/NuGet package and make other projects depends on it. (For React packages, the source code is only downloaded)");
         sb.AppendLine("  --add-to-solution-file                                Adds the downloaded project to the .sln file, when source code is downloaded. (Only available for NuGet packages)");
         sb.AppendLine("  -wd|--working-directory <project-directory>           Specifies the directory of the project that has the package.json explicitly. (Only available for NPM packages)");
         sb.AppendLine("  -ad|--angular-directory <angular-project-directory>   Same as --working-directory. Kept for backward compatibility.");

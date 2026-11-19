@@ -89,6 +89,26 @@ public class NpmHelper_Tests
     }
 
     [Theory]
+    [InlineData(null, new[] { "package-lock.json" }, "npm install --ignore-scripts")]
+    [InlineData(null, new[] { "pnpm-lock.yaml" }, "pnpm install --ignore-scripts")]
+    [InlineData(null, new[] { "yarn.lock" }, "yarn --ignore-scripts")]
+    [InlineData("npm@11.4.2", new string[0], "npm install --ignore-scripts")]
+    [InlineData("yarn@1.22.22", new string[0], "yarn --ignore-scripts")]
+    [InlineData(null, new string[0], "npm install --ignore-scripts")]
+    public void GetInstallCommand(string packageManagerField, string[] lockFiles, string expectedCommand)
+    {
+        var packageJson = packageManagerField == null
+            ? "{ \"name\": \"my-app\" }"
+            : $"{{ \"name\": \"my-app\", \"packageManager\": \"{packageManagerField}\" }}";
+
+        using var project = new TemporaryJavaScriptProject(packageJson, lockFiles);
+        var cmdHelper = Substitute.For<ICmdHelper>();
+        cmdHelper.RunCmdAndGetOutput("yarn -v", project.Directory).Returns("1.22.22");
+
+        new NpmHelper(cmdHelper).GetInstallCommand(project.Directory).ShouldBe(expectedCommand);
+    }
+
+    [Theory]
     [InlineData("@volo/abp-react-app-config && calc.exe", "1.0.0")]
     [InlineData("@volo/abp-react-app-config", "1.0.0 && calc.exe")]
     public void GetAddPackageCommand_Should_Reject_Unsafe_Input(string package, string version)
