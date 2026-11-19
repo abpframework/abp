@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Explore the ABP Platform Road Map for insights on upcoming features, release schedules, and improvements in version 11.0, planned for November 2026."
+    "Description": "Explore the ABP Platform Road Map for insights on upcoming features, release schedules, and improvements in version 11.0, released on November 19, 2026."
 }
 ```
 
@@ -13,7 +13,7 @@ This document provides a road map, release schedule, and planned features for th
 
 ### v11.0
 
-The next planned version will be 11.0, which is scheduled to be released as a stable version by the end of November 2026. We will be mostly working on the following topics:
+The latest version is 11.0, which was released as a stable version on November 19, 2026. It mainly covered the following topics:
 
 * Framework
   * Upgrading to .NET 11 and EF Core 11 ([#26147](https://github.com/abpframework/abp/pull/26147))
