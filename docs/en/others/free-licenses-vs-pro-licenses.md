@@ -80,6 +80,7 @@ ABP has many **additional modules** compared to the open-source ABP project. Als
 | [Twilio SMS](../modules/twilio-sms.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
 | [GDPR](../modules/gdpr.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
 | [AI Management](../modules/ai-management/index.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| [Agent Tools](../modules/agent-tools/index.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
 
 Some modules have "Basic" (open-source) and "PRO" (commercial) versions. The next sections show the differences between the basic and the PRO versions.
 

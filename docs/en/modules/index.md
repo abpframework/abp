@@ -18,6 +18,7 @@ There are **two types of modules.** They don't have any structural difference bu
 
 Here are all the free and pro application modules developed and maintained as a part of the ABP platform:
 
+* **[Agent Tools (Pro)](agent-tools/index.md)**: Expose application services as governed tools for AI agents and MCP clients.
 * [**Account**](account.md): Provides UI for the account management and allows user to login/register to the application.
 * **[Account (Pro)](account-pro.md)**: Login, register, forgot password, email activation, social logins and other account related functionalities.
 * [**Audit Logging**](audit-logging.md): Persists audit logs to a database.
