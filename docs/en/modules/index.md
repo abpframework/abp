@@ -20,6 +20,7 @@ Here are all the free and pro application modules developed and maintained as a 
 
 * [**Account**](account.md): Provides UI for the account management and allows user to login/register to the application.
 * **[Account (Pro)](account-pro.md)**: Login, register, forgot password, email activation, social logins and other account related functionalities.
+* **[Agent Tools (Pro)](agent-tools/index.md)**: Expose application services as governed tools for AI agents and MCP clients.
 * [**Audit Logging**](audit-logging.md): Persists audit logs to a database.
 * **[Audit logging (Pro)](audit-logging-pro.md)**: Reporting the user audit logs and entity histories in details.
 * [**Background Jobs**](background-jobs.md): Persist background jobs when using the default background job manager.

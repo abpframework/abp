@@ -1337,6 +1337,12 @@ await _workspaceRepository.InsertAsync(workspace);
 
 > **Tip**: The provider name you use in `AddFactory<TFactory>("ProviderName")` must match the provider name stored in the workspace configuration in the database.
 
+## Agent Tools Integration
+
+The [Agent Tools module](../agent-tools/index.md) turns your application services into governed AI tools: each call is permission-checked, tenant-scoped, audited and subject to a per-tool policy. Its `Volo.AIManagement.AgentTools` package adds the signed-in user's tools to the chat of the workspaces you opt in (read tools only, because the chat has no approval step for them yet), and governs the MCP tools of every workspace with an optional permission per MCP server and a record for every call.
+
+See [Agent Tools: AI Management Integration](../agent-tools/ai-management.md) for the installation and options.
+
 ## Internals
 
 ### Domain Layer
