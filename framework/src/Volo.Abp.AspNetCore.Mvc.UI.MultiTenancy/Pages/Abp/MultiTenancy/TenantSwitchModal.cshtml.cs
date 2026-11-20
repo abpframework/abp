@@ -8,6 +8,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Validation;
 
 namespace Pages.Abp.MultiTenancy;
 
@@ -44,6 +45,8 @@ public class TenantSwitchModalModel : AbpPageModel
 
     public virtual async Task OnPostAsync()
     {
+        ValidateModel();
+
         Guid? tenantId = null;
         if (!Input.Name.IsNullOrEmpty())
         {
@@ -66,6 +69,9 @@ public class TenantSwitchModalModel : AbpPageModel
 
     public class TenantInfoModel
     {
+        public static int MaxNameLength { get; set; } = 256;
+
+        [DynamicStringLength(typeof(TenantInfoModel), nameof(MaxNameLength))]
         [InputInfoText("SwitchTenantHint")]
         public string? Name { get; set; }
     }

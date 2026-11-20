@@ -18,6 +18,24 @@ public static class QueryFilterExpressionHelper
         return Expression.Lambda<Func<T, bool>>(Expression.AndAlso(left!, right!), parameter);
     }
 
+    /// <summary>
+    /// Lifts a filter of a derived entity type to its base type, so that it can be set on the root of the hierarchy.
+    /// Entities that are not of the derived type are not affected: <c>e => !(e is TDerived) || filter((TDerived)e)</c>.
+    /// </summary>
+    public static Expression<Func<T, bool>> ApplyToDerivedType<T, TDerived>(Expression<Func<TDerived, bool>> expression)
+        where TDerived : T
+    {
+        var parameter = Expression.Parameter(typeof(T));
+
+        var visitor = new ReplaceExpressionVisitor(expression.Parameters[0], Expression.Convert(parameter, typeof(TDerived)));
+        var body = visitor.Visit(expression.Body);
+
+        return Expression.Lambda<Func<T, bool>>(
+            Expression.OrElse(Expression.Not(Expression.TypeIs(parameter, typeof(TDerived))), body!),
+            parameter
+        );
+    }
+
     private class ReplaceExpressionVisitor : ExpressionVisitor
     {
         private readonly Expression _oldValue;

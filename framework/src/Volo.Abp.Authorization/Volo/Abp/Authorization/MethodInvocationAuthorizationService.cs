@@ -51,7 +51,8 @@ public class MethodInvocationAuthorizationService : IMethodInvocationAuthorizati
             .GetCustomAttributes(true)
             .OfType<IAuthorizeData>();
 
-        if (methodInfo.IsPublic && methodInfo.DeclaringType != null)
+        // Explicit interface implementations are non-public but still part of the service contract.
+        if ((methodInfo.IsPublic || (methodInfo.IsPrivate && methodInfo.IsVirtual && methodInfo.IsFinal)) && methodInfo.DeclaringType != null)
         {
             attributes = attributes
                 .Union(
