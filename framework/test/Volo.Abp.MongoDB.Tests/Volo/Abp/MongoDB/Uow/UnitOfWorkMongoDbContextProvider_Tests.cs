@@ -3,8 +3,12 @@ using System.Threading.Tasks;
 using MongoDB.Driver;
 using Shouldly;
 using Volo.Abp.Data;
+using Volo.Abp.MongoDB.Clients;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.TestApp.MongoDB;
+using Volo.Abp.Threading;
 using Volo.Abp.Uow;
+using Volo.Abp.Uow.MongoDB;
 using Xunit;
 
 namespace Volo.Abp.MongoDB.Uow;
@@ -49,10 +53,54 @@ public class UnitOfWorkMongoDbContextProvider_Tests : MongoDbTestBase
         {
             await _mongoDbContextProvider.GetDbContextAsync();
 
-            uow.FindTransactionApi($"MongoDb_{mongoUrl}").ShouldBeNull();
-            uow.FindTransactionApi($"MongoDb_{mongoUrl.ToString().ToSha256()}").ShouldNotBeNull();
+            uow.FindTransactionApi($"MongoDb_{mongoUrl.Url}").ShouldBeNull();
+            uow.FindTransactionApi($"MongoDb_{mongoUrl.Url.ToSha256()}").ShouldNotBeNull();
 
             await uow.CompleteAsync();
+        }
+    }
+
+    [Fact]
+    public void Should_Use_Different_Transaction_Api_Keys_For_Different_Credentials()
+    {
+        var provider = new TestUnitOfWorkMongoDbContextProvider(
+            _unitOfWorkManager,
+            _connectionStringResolver,
+            GetRequiredService<ICancellationTokenProvider>(),
+            GetRequiredService<ICurrentTenant>(),
+            GetRequiredService<IMongoDbContextTypeProvider>(),
+            GetRequiredService<IAbpMongoClientFactory>());
+
+        var key1 = provider.GetTransactionApiKeyPublic(new MongoUrl("mongodb://user1:pass1@localhost:27017/db"));
+        var key2 = provider.GetTransactionApiKeyPublic(new MongoUrl("mongodb://user1:pass2@localhost:27017/db"));
+        var key3 = provider.GetTransactionApiKeyPublic(new MongoUrl("mongodb://user1:pass1@localhost/db"));
+
+        key1.ShouldNotBe(key2);
+        key1.ShouldBe(key3);
+    }
+
+    private class TestUnitOfWorkMongoDbContextProvider : UnitOfWorkMongoDbContextProvider<TestAppMongoDbContext>
+    {
+        public TestUnitOfWorkMongoDbContextProvider(
+            IUnitOfWorkManager unitOfWorkManager,
+            IConnectionStringResolver connectionStringResolver,
+            ICancellationTokenProvider cancellationTokenProvider,
+            ICurrentTenant currentTenant,
+            IMongoDbContextTypeProvider dbContextTypeProvider,
+            IAbpMongoClientFactory mongoClientFactory)
+            : base(
+                unitOfWorkManager,
+                connectionStringResolver,
+                cancellationTokenProvider,
+                currentTenant,
+                dbContextTypeProvider,
+                mongoClientFactory)
+        {
+        }
+
+        public string GetTransactionApiKeyPublic(MongoUrl url)
+        {
+            return GetTransactionApiKey(url);
         }
     }
 }
