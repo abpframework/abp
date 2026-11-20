@@ -175,6 +175,13 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
             }
         }
     }
+    
+    protected virtual async Task ProcessCheckBoxGroupAsync(TagHelperContext context, TagHelperOutput output, ModelExpression model)
+    {
+        var abpCheckboxTagHelper = _serviceProvider.GetRequiredService<AbpCheckboxTagHelper>();
+
+        await abpCheckboxTagHelper.RenderAsync(new TagHelperAttributeList(), context, HtmlEncoder, "div", TagMode.StartTagAndEndTag);
+    }
 
     protected virtual async Task ProcessDateGroupAsync(TagHelperContext context, TagHelperOutput output, ModelExpression model)
     {
@@ -250,9 +257,21 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
 
     protected virtual AbpTagHelper GetSelectGroupTagHelper(TagHelperContext context, TagHelperOutput output, ModelExpression model)
     {
-        return IsRadioGroup(model.ModelExplorer) ?
-            GetAbpRadioInputTagHelper(model) :
-            GetSelectTagHelper(model);
+        if (IsRadioGroup(model.ModelExplorer)) return GetAbpRadioInputTagHelper(model);
+        if (IsCheckBoxGroup(model)) return GetAbpCheckboxInputTagHelper(model);
+        return GetSelectTagHelper(model);
+    }
+
+    protected virtual AbpTagHelper GetAbpCheckboxInputTagHelper(ModelExpression model)
+    {
+        var abpCheckboxAttribute = model.ModelExplorer.GetAttribute<AbpCheckbox>()!;
+        var abpCheckboxTagHelper = _serviceProvider.GetRequiredService<AbpCheckboxTagHelper>();
+        abpCheckboxTagHelper.AspFor = model;
+        abpCheckboxTagHelper.AspItems = null;
+        abpCheckboxTagHelper.SuppressLabel = abpCheckboxAttribute.SuppressLabel;
+        abpCheckboxTagHelper.ColumnSize = abpCheckboxAttribute.ColumnSize;
+        abpCheckboxTagHelper.ViewContext = TagHelper.ViewContext;
+        return abpCheckboxTagHelper;
     }
 
     protected virtual AbpTagHelper GetSelectTagHelper(ModelExpression model)
@@ -407,6 +426,11 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
         }
 
         return false;
+    }
+    
+    protected virtual bool IsCheckBoxGroup(ModelExpression model)
+    {
+        return model.ModelExplorer.GetAttribute<AbpCheckbox>() != null;
     }
 
     protected virtual bool IsEnum(ModelExplorer explorer)
