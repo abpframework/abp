@@ -273,7 +273,7 @@ public class UnitOfWorkMongoDbContextProvider<TMongoDbContext> : IMongoDbContext
 
     protected virtual string GetTransactionApiKey(MongoUrl url)
     {
-        return $"MongoDb_{url.ToString().ToSha256()}";
+        return $"MongoDb_{url.Url.ToSha256()}";
     }
 
     protected virtual async Task<string> ResolveConnectionStringAsync(Type dbContextType)
