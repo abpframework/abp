@@ -272,6 +272,11 @@ public class AbpDynamicFormTagHelperService : AbpTagHelperService<AbpDynamicForm
         abpRadioInputTagHelper.AspItems = null;
         abpRadioInputTagHelper.Inline = radioButtonAttribute.Inline;
         abpRadioInputTagHelper.Disabled = radioButtonAttribute.Disabled;
+        abpRadioInputTagHelper.ButtonStyle = radioButtonAttribute.ButtonStyle;
+        abpRadioInputTagHelper.ButtonSize = radioButtonAttribute.ButtonSize;
+        abpRadioInputTagHelper.ButtonType = radioButtonAttribute.ButtonType;
+        abpRadioInputTagHelper.UseButtonGroup = radioButtonAttribute.UseButtonGroup;
+        abpRadioInputTagHelper.SuppressLabel = radioButtonAttribute.SuppressLabel;
         abpRadioInputTagHelper.ViewContext = TagHelper.ViewContext;
         return abpRadioInputTagHelper;
     }
