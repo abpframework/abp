@@ -22,7 +22,7 @@ public class AbpMongoClientFactory : IAbpMongoClientFactory, ISingletonDependenc
         Check.NotNull(mongoUrl, nameof(mongoUrl));
 
         return Task.FromResult(
-            ClientCache.GetOrAdd(mongoUrl.ToString(), _ =>
+            ClientCache.GetOrAdd(mongoUrl.Url, _ =>
             {
                 var mongoClientSettings = MongoClientSettings.FromUrl(mongoUrl);
                 Options.MongoClientSettingsConfigurer?.Invoke(mongoClientSettings);
@@ -34,7 +34,7 @@ public class AbpMongoClientFactory : IAbpMongoClientFactory, ISingletonDependenc
     {
         Check.NotNull(mongoUrl, nameof(mongoUrl));
 
-        return ClientCache.GetOrAdd(mongoUrl.ToString(), _ =>
+        return ClientCache.GetOrAdd(mongoUrl.Url, _ =>
         {
             var mongoClientSettings = MongoClientSettings.FromUrl(mongoUrl);
             Options.MongoClientSettingsConfigurer?.Invoke(mongoClientSettings);
