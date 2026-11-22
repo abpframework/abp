@@ -77,17 +77,9 @@ public class AbpDbContextOptions
     {
         Check.NotNull(action, nameof(action));
 
-        var actions = ConventionActions.GetOrDefault(typeof(TDbContext));
-        if (actions == null)
-        {
-            ConventionActions[typeof(TDbContext)] = new List<object>
-            {
-                new Action<DbContext, ModelConfigurationBuilder>((dbContext, builder) => action((TDbContext)dbContext, builder))
-            };
-            return;
-        }
-
-        actions.Add(action);
+        ConventionActions
+            .GetOrAdd(typeof(TDbContext), () => new List<object>())
+            .Add(new Action<DbContext, ModelConfigurationBuilder>((dbContext, builder) => action((TDbContext)dbContext, builder)));
     }
 
     public void ConfigureDefaultOnModelCreating([NotNull] Action<DbContext, ModelBuilder> action, bool overrideExisting = false)
@@ -109,17 +101,9 @@ public class AbpDbContextOptions
     {
         Check.NotNull(action, nameof(action));
 
-        var actions = OnModelCreatingActions.GetOrDefault(typeof(TDbContext));
-        if (actions == null)
-        {
-            OnModelCreatingActions[typeof(TDbContext)] = new List<object>
-            {
-                new Action<DbContext, ModelBuilder>((dbContext, builder) => action((TDbContext)dbContext, builder))
-            };
-            return;
-        }
-
-        actions.Add(action);
+        OnModelCreatingActions
+            .GetOrAdd(typeof(TDbContext), () => new List<object>())
+            .Add(new Action<DbContext, ModelBuilder>((dbContext, builder) => action((TDbContext)dbContext, builder)));
     }
 
     public void ConfigureDefaultOnConfiguring([NotNull] Action<DbContext, DbContextOptionsBuilder> action, bool overrideExisting = false)
@@ -141,17 +125,9 @@ public class AbpDbContextOptions
     {
         Check.NotNull(action, nameof(action));
 
-        var actions = OnConfiguringActions.GetOrDefault(typeof(TDbContext));
-        if (actions == null)
-        {
-            OnConfiguringActions[typeof(TDbContext)] = new List<object>
-            {
-                new Action<DbContext, DbContextOptionsBuilder>((dbContext, builder) => action((TDbContext)dbContext, builder))
-            };
-            return;
-        }
-
-        actions.Add(action);
+        OnConfiguringActions
+            .GetOrAdd(typeof(TDbContext), () => new List<object>())
+            .Add(new Action<DbContext, DbContextOptionsBuilder>((dbContext, builder) => action((TDbContext)dbContext, builder)));
     }
 
     public bool IsConfiguredDefault()

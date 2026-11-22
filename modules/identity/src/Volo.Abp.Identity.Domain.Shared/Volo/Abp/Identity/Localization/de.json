@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "Der Name existiert bereits {0}",
     "Volo.Abp.Identity:010022": "Der Name kann nicht aktualisiert werden.",
     "Volo.Abp.Identity:010023": "Der Name kann nicht gelöscht werden.",
+    "Volo.Abp.Identity:010024": "Zum Anzeigen zuweisbarer Rollen oder zum Ändern von Benutzerrollen ist eine Benutzeridentität erforderlich.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Maximal zulässige Anzahl an Mitgliedschaften in Organisationseinheiten für einen Benutzer",
     "ThisUserIsNotActiveMessage": "Dieser Benutzer ist nicht aktiv.",
     "Permission:IdentityManagement": "Identitätsverwaltung",

@@ -50,6 +50,7 @@ export interface ProviderInfoDto {
 export interface ResourcePermissionDefinitionDto {
   name?: string;
   displayName?: string;
+  allowedProviders?: string[];
 }
 
 export interface ResourcePermissionGrantInfoDto {

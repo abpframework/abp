@@ -204,6 +204,19 @@ public class MyService : ITransientDependency
 
 This sample injects the `IBookAppService` service interface defined above. The static client proxy implementation makes an HTTP call whenever a service method is called by the client.
 
+### Streaming with IAsyncEnumerable
+
+Service methods returning `IAsyncEnumerable<T>` are also supported. The HTTP request is sent when the returned sequence is enumerated (a new request for each enumeration), and the items are read from the response as they arrive. For example, if `IBookAppService` has an `IAsyncEnumerable<BookDto> GetStreamAsync()` method:
+
+````csharp
+await foreach (var book in _bookService.GetStreamAsync().WithCancellation(cancellationToken))
+{
+    Console.WriteLine($"[BOOK {book.Id}] Name={book.Name}");
+}
+````
+
+You can cancel the request with the token passed to the enumeration, like `WithCancellation` above.
+
 ## Configuration
 
 ### AbpRemoteServiceOptions

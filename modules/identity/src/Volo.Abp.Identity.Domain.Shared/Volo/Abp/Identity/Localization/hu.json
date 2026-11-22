@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "'{0}' nevű már létezik.",
     "Volo.Abp.Identity:010022": "Nem lehet frissíteni a statikus jogosultság típusát.",
     "Volo.Abp.Identity:010023": "Nem lehet törölni a statikus jogosultság típusát.",
+    "Volo.Abp.Identity:010024": "A hozzárendelhető szerepkörök megtekintéséhez vagy a felhasználói szerepkörök módosításához felhasználói identitás szükséges.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "A maximálisan megengedett szervezeti egység tagsági szám egy felhasználó számára",
     "ThisUserIsNotActiveMessage": "Ez a felhasználó nem aktív.",
     "Permission:IdentityManagement": "Identitáskezelés",

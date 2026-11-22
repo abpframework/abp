@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "이름이 이미 존재합니다: '{0}'.",
     "Volo.Abp.Identity:010022": "정적 클레임 유형은 업데이트할 수 없습니다.",
     "Volo.Abp.Identity:010023": "정적 클레임 유형은 삭제할 수 없습니다.",
+    "Volo.Abp.Identity:010024": "할당 가능한 역할을 조회하거나 사용자 역할을 변경하려면 사용자 ID가 필요합니다.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "사용자에게 허용되는 최대 조직 단위 멤버십 수",
     "ThisUserIsNotActiveMessage": "이 사용자는 활성 상태가 아닙니다.",
     "Permission:IdentityManagement": "ID 관리",

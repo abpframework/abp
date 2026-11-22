@@ -112,16 +112,23 @@ public partial class ResourcePermissionManagementModal
 
         CreateEntity = new CreateModel
         {
-            Permissions = ResourcePermissionDefinitions.Permissions.Select(x => new ResourcePermissionModel
-            {
-                Name = x.Name,
-                DisplayName = x.DisplayName,
-                IsGranted = false
-            }).ToList()
+            Permissions = CreatePermissionModelsForCurrentProvider(Array.Empty<string>())
         };
 
         await CreateModal.Show();
         await InvokeAsync(StateHasChanged);
+    }
+
+    protected virtual List<ResourcePermissionModel> CreatePermissionModelsForCurrentProvider(ICollection<string> grantedPermissionNames)
+    {
+        return ResourcePermissionDefinitions.Permissions
+            .Where(x => x.AllowedProviders.IsNullOrEmpty() || x.AllowedProviders.Contains(CurrentLookupService))
+            .Select(x => new ResourcePermissionModel
+            {
+                Name = x.Name,
+                DisplayName = x.DisplayName,
+                IsGranted = grantedPermissionNames.Contains(x.Name)
+            }).ToList();
     }
 
     protected virtual async Task SelectedProviderKeyAsync(string value)
@@ -231,6 +238,8 @@ public partial class ResourcePermissionManagementModal
     protected virtual async Task OnLookupServiceCheckedValueChanged(string value)
     {
         CurrentLookupService = value;
+        CreateEntity.Permissions = CreatePermissionModelsForCurrentProvider(
+            CreateEntity.Permissions.Where(x => x.IsGranted).Select(x => x.Name).ToList());
         ProviderKey = null;
         ProviderDisplayName = null;
         await ProviderKeyAutocompleteRef.Clear();

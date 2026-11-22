@@ -39,7 +39,13 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         CancellationToken cancellationToken = default)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
-        var user = await GetAsync(id, cancellationToken: cancellationToken);
+        var user = await FindAsync(id, cancellationToken: cancellationToken);
+        if (user == null)
+        {
+            // As in the EF Core repository: a user that does not exist (any more) has no roles.
+            return new List<string>();
+        }
+
         var organizationUnitIds = user.OrganizationUnits
             .Select(r => r.OrganizationUnitId)
             .ToList();
@@ -58,7 +64,11 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         CancellationToken cancellationToken = default)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
-        var user = await GetAsync(id, cancellationToken: cancellationToken);
+        var user = await FindAsync(id, cancellationToken: cancellationToken);
+        if (user == null)
+        {
+            return new List<string>();
+        }
 
         var organizationUnitIds = user.OrganizationUnits
             .Select(r => r.OrganizationUnitId)
@@ -214,7 +224,12 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         CancellationToken cancellationToken = default)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
-        var user = await GetAsync(id, cancellationToken: cancellationToken);
+        var user = await FindAsync(id, cancellationToken: cancellationToken);
+        if (user == null)
+        {
+            return new List<IdentityRole>();
+        }
+
         var organizationUnitIds = user.OrganizationUnits
             .Select(r => r.OrganizationUnitId)
             .ToList();
@@ -234,7 +249,12 @@ public class MongoIdentityUserRepository : MongoDbRepository<IAbpIdentityMongoDb
         CancellationToken cancellationToken = default)
     {
         cancellationToken = GetCancellationToken(cancellationToken);
-        var user = await GetAsync(id, cancellationToken: cancellationToken);
+        var user = await FindAsync(id, cancellationToken: cancellationToken);
+        if (user == null)
+        {
+            return new List<OrganizationUnit>();
+        }
+
         var organizationUnitIds = user.OrganizationUnits.Select(r => r.OrganizationUnitId).ToList();
 
         return await (await GetQueryableAsync<OrganizationUnit>(cancellationToken))
