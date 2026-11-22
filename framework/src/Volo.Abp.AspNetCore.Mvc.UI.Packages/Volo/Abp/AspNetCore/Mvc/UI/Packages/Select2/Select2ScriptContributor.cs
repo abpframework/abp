@@ -15,6 +15,10 @@ public class Select2ScriptContributor : BundleContributor
     {
         //TODO: Add select2.full.min.js
         context.Files.AddIfNotContains("/libs/select2/js/select2.min.js");
+        if (context.FileProvider.GetFileInfo("/libs/select2/js/abp.select2.js").Exists)
+        {
+            context.Files.AddIfNotContains("/libs/select2/js/abp.select2.js");
+        }
     }
     public override void ConfigureDynamicResources(BundleConfigurationContext context)
     {
