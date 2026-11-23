@@ -80,6 +80,7 @@ Here is the list of all available commands before explaining their details:
 - [generate-razor-page](../cli#generate-razor-page): Generates a page class that you can use it in the ASP NET Core pipeline to return an HTML page.
 - [generate-jwks](../cli#generate-jwks): Generates an RSA key pair (JWKS public key + PEM private key) for OpenIddict `private_key_jwt` client authentication.
 - [mcp](../cli#mcp): Runs a local MCP bridge to the ABP.IO MCP service, so AI coding assistants can search the ABP documentation, articles, support questions and source code.
+- [test](../cli#test): Runs the ABP Studio UI/UX Test or Security Test of a solution, or sets a GitHub repository up to run them on CI.
 
 ### help
 
@@ -1398,6 +1399,55 @@ args = ["mcp"]
 | `get_relevant_abp_support_questions` | Searches the previously answered support questions. |
 | `search_source_code` | Searches the indexed ABP source code. |
 | `list_abp_github_repositories` | Lists the ABP GitHub repositories available to the source code search. |
+
+### test
+
+Runs the AI-powered [UI/UX Test](../studio/ui-ux-test.md) or [Security Test](../studio/security-test.md) of a solution without the ABP Studio UI, or sets a GitHub repository up to run them on CI. The tests read the same inputs file as ABP Studio (`abp-ui-ux-test.json` or `abp-security.json` in the solution folder).
+
+> This command needs the ABP Studio agent server: `dotnet tool install -g Volo.Abp.Studio.AgentServer`. The tests use AI, so sign in with `abp login` first (on CI, set `ABP_ACCESS_TOKEN`).
+
+Usage:
+
+```bash
+abp test ui-ux [options]
+abp test security [options]
+abp test init-ci [options]
+```
+
+Options of `ui-ux` and `security`:
+
+- `--solution` or `-s`: The `.abpsln` file. Default: the one in the current folder.
+- `--mode`: `codebase` (reviews the code), `runtime` (tests the running applications) or `both`. Default: the inputs file's mode, else `both`.
+- `--url`: The running applications to test, as `Name=<url>[,Name=<url>]`. Default: the `targets` of the inputs file.
+- `--start`: Starts the solution's default run profile (containers, tasks, build and applications) before the test, and stops it afterwards.
+- `--profile`: The run profile `--start` uses.
+- `--changed-since`: Reviews only the code changed since a git ref (`origin/main`), a date (`2026-11-01`) or a time span (`7d`, `2w`).
+- `--model`: The model to test with.
+- `--output`: The report folder. Default: `TestResults/ui-ux` or `TestResults/security`.
+- `--fail-on`: Which findings fail the test. `ui-ux`: `defect` (default), `confirmed`, `high` or `none`. `security`: `high` (default), `any`, `confirmed` or `none`.
+- `--verbose`: Writes detailed logs.
+
+Options of `init-ci`:
+
+- `--solution` or `-s`: The `.abpsln` file.
+- `--repo` or `-r`: The GitHub repository (`owner/name`). Default: the repository of the solution folder.
+- `--mode`: `both` (default) starts the applications and tests them with the code; `codebase` reviews the code only.
+- `--force`: Replaces an existing workflow file.
+- `--show-token`: Prints the CI token when the GitHub CLI (`gh`) is not installed, so you can add the secret yourself.
+
+Exit codes of `ui-ux` and `security`: `0` passed, `1` findings past `--fail-on`, `2` error, `3` the AI stopped the test, `4` the AI cannot be used.
+
+Examples:
+
+```bash
+abp test ui-ux --mode both --start
+abp test security --url Web=https://localhost:44302 --fail-on confirmed
+abp test security --mode codebase --changed-since origin/main
+abp test ui-ux --mode codebase --changed-since 7d
+abp test init-ci
+```
+
+See [Running the AI Tests from the CLI and on CI](../studio/ai-testing-on-ci.md) for the details, the reports and the GitHub Actions workflow.
 
 ## See Also
 
