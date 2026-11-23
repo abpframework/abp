@@ -389,6 +389,27 @@
               ]
             },
             {
+              "text": "AI Testing",
+              "items": [
+                {
+                  "text": "Overview",
+                  "path": "studio/ai-testing.md"
+                },
+                {
+                  "text": "UI/UX Test",
+                  "path": "studio/ui-ux-test.md"
+                },
+                {
+                  "text": "Security Test",
+                  "path": "studio/security-test.md"
+                },
+                {
+                  "text": "Running the AI Tests from the CLI and on CI",
+                  "path": "studio/ai-testing-on-ci.md"
+                }
+              ]
+            },
+            {
               "text": "Concepts",
               "path": "studio/concepts.md"
             },
