@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net11.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <ProjectReference Include="../../src/Volo.Docs.Web/Volo.Docs.Web.csproj" />
+    <ProjectReference Include="../../src/Volo.Docs.Application/Volo.Docs.Application.csproj" />
+    <ProjectReference Include="../../src/Volo.Docs.Common.HttpApi/Volo.Docs.Common.HttpApi.csproj" />
+    <ProjectReference Include="../Volo.Docs.EntityFrameworkCore.Tests/Volo.Docs.EntityFrameworkCore.Tests.csproj" />
+    <ProjectReference Include="../../../../framework/src/Volo.Abp.AspNetCore.TestBase/Volo.Abp.AspNetCore.TestBase.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="Fixtures/**/*" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="Fixtures/**/*.md" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

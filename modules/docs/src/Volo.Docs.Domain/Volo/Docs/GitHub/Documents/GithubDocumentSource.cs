@@ -347,7 +347,7 @@ namespace Volo.Docs.GitHub.Documents
             {
                 Logger.LogWarning("Could not retrieved language list from Github. Using the default language from DocsGithubLanguageOptions.");
 
-                return new LanguageConfig
+                return new FallbackLanguageConfig
                 {
                     Languages = new List<LanguageConfigElement> { _docsGithubLanguageOptions.DefaultLanguage }
                 };

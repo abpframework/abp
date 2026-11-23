@@ -168,7 +168,7 @@ namespace Volo.Docs.Pages.Documents.Project
         public virtual async Task<IActionResult> OnGetAsync()
         {
             var displayUrl = Request.GetDisplayUrl();
-            var decodedUrl = HttpUtility.UrlDecode(displayUrl);
+            var decodedUrl = Uri.UnescapeDataString(displayUrl);
             if (decodedUrl != displayUrl)
             {
                 return Redirect(decodedUrl);
@@ -440,6 +440,10 @@ namespace Volo.Docs.Pages.Documents.Project
                 if(string.Equals(Version, DocsAppConsts.Latest, StringComparison.OrdinalIgnoreCase))
                 {
                     Version = RemoveVersionPrefix(Project.LatestVersionBranchName);
+                }
+                else if (!DocumentVersionHelper.IsValidUnlistedVersionName(Version))
+                {
+                    return false;
                 }
             }
 

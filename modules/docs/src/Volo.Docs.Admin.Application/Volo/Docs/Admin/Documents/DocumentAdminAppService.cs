@@ -28,14 +28,17 @@ namespace Volo.Docs.Admin.Documents
         private readonly IDistributedCache<List<VersionInfo>> _versionCache;
         private readonly IDistributedCache<LanguageConfig> _languageCache;
         private readonly IDocumentFullSearch _elasticSearchService;
+        protected ProjectLanguageCacheKeyProvider ProjectLanguageCacheKeyProvider { get; }
 
-        public DocumentAdminAppService(IProjectRepository projectRepository,
+        public DocumentAdminAppService(
+            IProjectRepository projectRepository,
             IDocumentRepository documentRepository,
             IDocumentSourceFactory documentStoreFactory,
             IDistributedCache<DocumentUpdateInfo> documentUpdateCache,
             IDistributedCache<List<VersionInfo>> versionCache,
             IDistributedCache<LanguageConfig> languageCache,
-            IDocumentFullSearch elasticSearchService)
+            IDocumentFullSearch elasticSearchService,
+            ProjectLanguageCacheKeyProvider projectLanguageCacheKeyProvider)
         {
             _projectRepository = projectRepository;
             _documentRepository = documentRepository;
@@ -44,6 +47,7 @@ namespace Volo.Docs.Admin.Documents
             _versionCache = versionCache;
             _languageCache = languageCache;
             _elasticSearchService = elasticSearchService;
+            ProjectLanguageCacheKeyProvider = projectLanguageCacheKeyProvider;
 
             LocalizationResource = typeof(DocsResource);
             ObjectMapperContext = typeof(DocsAdminApplicationModule);
@@ -52,6 +56,8 @@ namespace Volo.Docs.Admin.Documents
         public virtual async Task ClearCacheAsync(ClearCacheInput input)
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
+
+            await ProjectLanguageCacheKeyProvider.InvalidateAsync(project);
 
             var languageCacheKey = CacheKeyGenerator.GenerateProjectLanguageCacheKey(project);
             await _languageCache.RemoveAsync(languageCacheKey, true);
