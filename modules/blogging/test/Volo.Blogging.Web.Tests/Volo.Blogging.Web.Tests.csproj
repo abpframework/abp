@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net11.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="HtmlSanitizer" />
+    <ProjectReference Include="..\..\src\Volo.Blogging.Web\Volo.Blogging.Web.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\test\AbpTestBase\AbpTestBase.csproj" />
+  </ItemGroup>
+
+</Project>
