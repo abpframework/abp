@@ -406,6 +406,65 @@ public class IdentityUserAppService_Tests : AbpIdentityApplicationTestBase
         roleNames.ShouldNotContain("manager");
     }
 
+    [Fact]
+    public async Task UpdateRolesAsync_Should_Throw_When_There_Is_No_Current_User()
+    {
+        using (_currentPrincipalAccessor.Change(new Claim(AbpClaimTypes.ClientId, "test-client")))
+        {
+            var exception = await Assert.ThrowsAsync<BusinessException>(async () =>
+            {
+                await _userAppService.UpdateRolesAsync(
+                    _testData.UserDavidId,
+                    new IdentityUserUpdateRolesDto
+                    {
+                        RoleNames = new[] { "supporter" }
+                    }
+                );
+            });
+
+            exception.Code.ShouldBe(IdentityErrorCodes.UserContextRequiredForRoleAssignment);
+        }
+
+        var roleNames = await _userRepository.GetRoleNamesAsync(_testData.UserDavidId);
+        roleNames.ShouldNotContain("supporter");
+    }
+
+    [Fact]
+    public async Task CreateAsync_With_Roles_Should_Throw_When_There_Is_No_Current_User()
+    {
+        var input = new IdentityUserCreateDto
+        {
+            UserName = Guid.NewGuid().ToString(),
+            Email = CreateRandomEmail(),
+            Password = "123qwE4r*",
+            RoleNames = new[] { "supporter" }
+        };
+
+        using (_currentPrincipalAccessor.Change(new Claim(AbpClaimTypes.ClientId, "test-client")))
+        {
+            var exception = await Assert.ThrowsAsync<BusinessException>(async () =>
+            {
+                await _userAppService.CreateAsync(input);
+            });
+
+            exception.Code.ShouldBe(IdentityErrorCodes.UserContextRequiredForRoleAssignment);
+        }
+    }
+
+    [Fact]
+    public async Task GetAssignableRolesAsync_Should_Throw_When_There_Is_No_Current_User()
+    {
+        using (_currentPrincipalAccessor.Change(new Claim(AbpClaimTypes.ClientId, "test-client")))
+        {
+            var exception = await Assert.ThrowsAsync<BusinessException>(async () =>
+            {
+                await _userAppService.GetAssignableRolesAsync();
+            });
+
+            exception.Code.ShouldBe(IdentityErrorCodes.UserContextRequiredForRoleAssignment);
+        }
+    }
+
     private static string CreateRandomEmail()
     {
         return Guid.NewGuid().ToString("N").Left(16) + "@abp.io";

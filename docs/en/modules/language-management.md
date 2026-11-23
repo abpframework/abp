@@ -43,8 +43,8 @@ The module defines the following permissions. All of them require the `LanguageM
 | `LanguageManagement.Languages.Edit` | Host | Change a language's display name and enabled state. |
 | `LanguageManagement.Languages.Delete` | Host | Delete a language. |
 | `LanguageManagement.Languages.ChangeDefault` | Host and tenant | Set the default language for the current tenant context. |
-| `LanguageManagement.LanguageTexts` | Host and tenant | View localization texts and restore an override to its default value. |
-| `LanguageManagement.LanguageTexts.Edit` | Host and tenant | Create or update localization-text overrides. |
+| `LanguageManagement.LanguageTexts` | Host and tenant | View localization texts. |
+| `LanguageManagement.LanguageTexts.Edit` | Host and tenant | Create or update localization-text overrides, and restore an override to its default value. |
 
 ### Menu Items
 

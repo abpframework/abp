@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -9,6 +11,7 @@ using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Localization;
+using Volo.Abp.Security.Claims;
 using Xunit;
 
 namespace Volo.Abp.AspNetCore.Mvc.Client;
@@ -164,14 +167,45 @@ public class MvcCachedApplicationConfigurationClient_Tests : AbpAspNetCoreMvcCli
         }
     }
 
-    private static ApplicationConfigurationDto CreateConfigDto(string cultureName)
+    [Fact]
+    public async Task Should_Not_Cache_An_Anonymous_Configuration_For_A_Signed_In_User()
+    {
+        var userId = Guid.NewGuid();
+
+        using (CultureHelper.Use("en"))
+        using (SignIn(userId))
+        {
+            // A call without the user's access token (a Blazor Server circuit after its request ended) is answered anonymously.
+            _configProxy.GetAsync(Arg.Any<ApplicationConfigurationRequestOptions>()).Returns(CreateConfigDto("en"));
+            _localizationProxy.GetAsync(Arg.Any<ApplicationLocalizationRequestDto>()).Returns(new ApplicationLocalizationDto { Resources = new() });
+
+            (await _applicationConfigurationClient.GetAsync()).CurrentUser.IsAuthenticated.ShouldBeFalse();
+
+            // The next call asks again, and keeps the user's own configuration.
+            _configProxy.GetAsync(Arg.Any<ApplicationConfigurationRequestOptions>()).Returns(CreateConfigDto("en", userId));
+
+            (await _applicationConfigurationClient.GetAsync()).CurrentUser.Id.ShouldBe(userId);
+            (await _applicationConfigurationClient.GetAsync()).CurrentUser.Id.ShouldBe(userId);
+
+            await _configProxy.Received(2).GetAsync(Arg.Any<ApplicationConfigurationRequestOptions>());
+        }
+    }
+
+    private IDisposable SignIn(Guid userId)
+    {
+        return GetRequiredService<ICurrentPrincipalAccessor>().Change(new ClaimsPrincipal(new ClaimsIdentity(
+            new[] { new Claim(AbpClaimTypes.UserId, userId.ToString()) }, "Test")));
+    }
+
+    private static ApplicationConfigurationDto CreateConfigDto(string cultureName, Guid? userId = null)
     {
         return new ApplicationConfigurationDto
         {
             Localization =
             {
                 CurrentCulture = new CurrentCultureDto { Name = cultureName }
-            }
+            },
+            CurrentUser = new CurrentUserDto { IsAuthenticated = userId.HasValue, Id = userId }
         };
     }
 }

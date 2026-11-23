@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "Naziv '{0}' že obstaja.",
     "Volo.Abp.Identity:010022": "Ne morete spremeniti tipa statične deklaracije.",
     "Volo.Abp.Identity:010023": "Ne morete izbrisati tipa statične deklaracije.",
+    "Volo.Abp.Identity:010024": "Za ogled vlog, ki jih je mogoče dodeliti, ali spreminjanje vlog uporabnika je potrebna identiteta uporabnika.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Največje dovoljeno število članov v organizacijski enoti za uporabnika",
     "ThisUserIsNotActiveMessage": "Ta uporabnik ni aktiven.",
     "Permission:IdentityManagement": "Upravljanje identitet",

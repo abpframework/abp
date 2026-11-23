@@ -47,6 +47,8 @@ A user can have zero or more roles. Users inherit permissions from their roles. 
 
 Role changes submitted through the general create or update input are applied only when the current user has the `AbpIdentity.Users.Update.ManageRoles` permission; otherwise, the submitted `RoleNames` value is ignored. Role changes performed by the administration workflow are filtered to prevent privilege escalation: except for an operator in the built-in `admin` role, an operator can only add or remove roles that they already have, and roles outside that set are kept unchanged. An operator in the `admin` role can assign any role.
 
+Inviting users and managing pending invitations require the `AbpIdentity.Users` and `AbpIdentity.Users.Create` permissions. Roles submitted with an invitation are kept only when the current user has the `AbpIdentity.Users.Update.ManageRoles` permission, and an operator outside the `admin` role can only pre-assign roles they already have. Inviting an email address that already has a pending invitation replaces the roles of that invitation with the submitted roles. Resending an invitation keeps its roles.
+
 When users edit their own record through the Identity administration service, a submitted `IsActive` change is ignored, and the built-in MVC, Blazor and MudBlazor user interfaces hide that field. The current user also can't delete their own account from this service.
 
 #### Roles

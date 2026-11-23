@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "名稱 '{0}' 已存在.",
     "Volo.Abp.Identity:010022": "無法更改靜態宣告的類型.",
     "Volo.Abp.Identity:010023": "無法刪除靜態宣告的類型.",
+    "Volo.Abp.Identity:010024": "檢視可指派的角色或變更使用者角色需要使用者身分。",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "允許一個使用者至多可隸屬在幾個組織單位",
     "ThisUserIsNotActiveMessage": "該用戶不可用.",
     "Permission:IdentityManagement": "身份識別管理",

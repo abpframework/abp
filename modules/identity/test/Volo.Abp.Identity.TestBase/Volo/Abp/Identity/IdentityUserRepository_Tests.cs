@@ -60,6 +60,35 @@ public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentity
     }
 
     [Fact]
+    public async Task Should_Return_Empty_Roles_And_OrganizationUnits_For_A_User_That_Does_Not_Exist()
+    {
+        var userId = Guid.NewGuid();
+
+        (await UserRepository.GetRoleNamesAsync(userId)).ShouldBeEmpty();
+        (await UserRepository.GetRoleNamesInOrganizationUnitAsync(userId)).ShouldBeEmpty();
+        (await UserRepository.GetRolesAsync(userId)).ShouldBeEmpty();
+        (await UserRepository.GetOrganizationUnitsAsync(userId)).ShouldBeEmpty();
+    }
+
+    [Fact]
+    public async Task Should_Not_Return_Roles_Or_OrganizationUnits_For_A_Soft_Deleted_User()
+    {
+        var john = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName("john.nash"));
+        john.ShouldNotBeNull();
+        var supporterRole = await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("supporter"));
+        supporterRole.ShouldNotBeNull();
+
+        await UserRepository.DeleteAsync(john, autoSave: true);
+
+        (await UserRepository.GetRoleNamesAsync(john.Id)).ShouldBeEmpty();
+        (await UserRepository.GetRoleNamesAsync(new[] { john.Id })).ShouldBeEmpty();
+        (await UserRepository.GetRoleNamesInOrganizationUnitAsync(john.Id)).ShouldBeEmpty();
+        (await UserRepository.GetRolesAsync(john.Id)).ShouldBeEmpty();
+        (await UserRepository.GetOrganizationUnitsAsync(john.Id)).ShouldBeEmpty();
+        (await UserRepository.GetUserIdListByRoleIdAsync(supporterRole.Id)).ShouldNotContain(john.Id);
+    }
+
+    [Fact]
     public async Task GetRoleNames_By_UserIds_Async()
     {
         var userRoleNames = await UserRepository.GetRoleNamesAsync(new [] {

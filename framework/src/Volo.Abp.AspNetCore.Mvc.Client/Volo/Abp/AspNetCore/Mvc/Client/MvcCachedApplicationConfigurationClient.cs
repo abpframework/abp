@@ -4,6 +4,8 @@ using System.Net;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
@@ -19,6 +21,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Client;
 public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigurationClient, ITransientDependency
 {
     private const string HttpContextItemsCacheKeyFormat = "ApplicationConfigurationDto_{0}_{1}_CacheKey";
+
+    public ILogger<MvcCachedApplicationConfigurationClient> Logger { get; set; }
 
     protected IHttpContextAccessor HttpContextAccessor { get; }
     protected AbpApplicationConfigurationClientProxy ApplicationConfigurationAppService { get; }
@@ -37,6 +41,8 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
         AbpApplicationLocalizationClientProxy applicationLocalizationClientProxy,
         IOptions<AbpAspNetCoreMvcClientCacheOptions> options)
     {
+        Logger = NullLogger<MvcCachedApplicationConfigurationClient>.Instance;
+
         ApplicationConfigurationAppService = applicationConfigurationAppService;
         CurrentUser = currentUser;
         HttpContextAccessor = httpContextAccessor;
@@ -70,14 +76,37 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
             return configuration;
         }
 
-        configuration = (await Cache.GetOrAddAsync(
+        var cached = await Cache.GetAsync(cacheKey);
+        if (cached != null)
+        {
+            if (httpContext != null)
+            {
+                httpContext.Items[cacheKey] = cached;
+            }
+
+            return cached;
+        }
+
+        configuration = await GetRemoteConfigurationAsync();
+
+        // The cache key comes from ICurrentUser, but the access token comes from the HttpContext. A Blazor Server circuit can
+        // still run as the user after its request has ended, so the call goes without a token and gets an anonymous configuration.
+        if (!IsForCurrentUser(configuration))
+        {
+            Logger.LogWarning(
+                "Not caching the remote application configuration: it is for user {RemoteUserId} (authenticated: {RemoteIsAuthenticated}), not the current user {CurrentUserId}.",
+                configuration.CurrentUser?.Id, configuration.CurrentUser?.IsAuthenticated, CurrentUser.Id);
+            return configuration;
+        }
+
+        await Cache.SetAsync(
             cacheKey,
-            async () => await GetRemoteConfigurationAsync(),
-            () => new DistributedCacheEntryOptions
+            configuration,
+            new DistributedCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = Options.ApplicationConfigurationDtoCacheAbsoluteExpiration
             }
-        ))!;
+        );
 
         if (httpContext != null)
         {
@@ -85,6 +114,17 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
         }
 
         return configuration;
+    }
+
+    protected virtual bool IsForCurrentUser(ApplicationConfigurationDto configuration)
+    {
+        var user = configuration.CurrentUser;
+        if (user == null)
+        {
+            return !CurrentUser.IsAuthenticated;
+        }
+
+        return user.IsAuthenticated == CurrentUser.IsAuthenticated && user.Id == CurrentUser.Id;
     }
 
     protected virtual async Task<ApplicationConfigurationDto> GetRemoteConfigurationAsync()

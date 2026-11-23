@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "{0} on jo olemassa.",
     "Volo.Abp.Identity:010022": "Staattista väittämätunnusta ei voi päivittää.",
     "Volo.Abp.Identity:010023": "Staattista väittämätunnusta ei voi poistaa.",
+    "Volo.Abp.Identity:010024": "Käyttäjäidentiteetti vaaditaan määritettävissä olevien roolien tarkasteluun tai käyttäjän roolien muuttamiseen.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Suurin sallittu organisaatioyksikön jäsenmäärä käyttäjälle",
     "ThisUserIsNotActiveMessage": "Tämä käyttäjä ei ole aktiivinen.",
     "Permission:IdentityManagement": "Identiteetin hallinta",

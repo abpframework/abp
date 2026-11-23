@@ -14,6 +14,21 @@ Also see the following notes about ABP releases:
 - [ABP Studio release notes](../studio/release-notes.md)
 - [Change logs for ABP pro packages](https://abp.io/pro-releases)
 
+## 11.0 (2026-11-19)
+
+See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-11-0-stable-release-ec5ppci6)** for the v11.0 release.
+
+- Upgraded to .NET 11 and EF Core 11
+- Query Projection for Read-Only Application Services
+- FluentValidation Rules in the API Definition
+- MVC UI: Replacing Unmaintained Client Libraries
+- Docs Module: PDF Rendering without iText and Full-Text Search with the New Elasticsearch Client
+- C# Client Proxies: Generating Only the Types Used by Service Signatures
+- Permission Management: Updating Many Permissions in One Call
+- Removing Polly in Favor of `RetryHelper`
+- Korean Localization for the Commercial Modules
+- Angular 22.1 and OpenIddict 7.9.0 updates
+
 ## 10.7 (2026-10-06)
 
 See the detailed **[blog post / announcement](https://abp.io/community/announcements/announcing-abp-10-7-stable-release-7sv0w8hp)** for the v10.7 release.

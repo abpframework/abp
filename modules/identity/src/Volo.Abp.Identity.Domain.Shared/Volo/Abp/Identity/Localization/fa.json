@@ -81,6 +81,7 @@
     "Volo.Abp.Identity:010021": "نام {0} قبلاً استفاده گردیده است.",
     "Volo.Abp.Identity:010022": "نمی توان نام نقش/وظیفه را تغییر داد.",
     "Volo.Abp.Identity:010023": "نمی توان نقش/وظیفه را حذف کرد.",
+    "Volo.Abp.Identity:010024": "برای مشاهده نقشها و وظایف قابل تخصیص یا تغییر نقشها و وظایف کاربر، هویت کاربر لازم است.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "حداکثر تعداد مجاز عضویت در یک واحد سازمان برای یک کاربر",
     "ThisUserIsNotActiveMessage": "این کاربر غیرفعال میباشد.",
     "Permission:IdentityManagement": "مدیریت هویت",
