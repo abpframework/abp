@@ -136,8 +136,8 @@ To test with test accounts on CI, add each account's password as a repository se
 ```yaml
 - name: UI/UX test
   env:
-    ABP_ACCESS_TOKEN: ${{ secrets.ABP_ACCESS_TOKEN }}
-    ABP_TEST_ADMIN_PASSWORD: ${{ secrets.ABP_TEST_ADMIN_PASSWORD }}
+    ABP_ACCESS_TOKEN: ${%{{{ secrets.ABP_ACCESS_TOKEN }}}%}
+    ABP_TEST_ADMIN_PASSWORD: ${%{{{ secrets.ABP_TEST_ADMIN_PASSWORD }}}%}
 ```
 
 ## See Also
