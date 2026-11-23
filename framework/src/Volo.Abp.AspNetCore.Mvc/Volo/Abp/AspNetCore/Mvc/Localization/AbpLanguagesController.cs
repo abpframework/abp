@@ -1,11 +1,12 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RequestLocalization;
 using Volo.Abp.Auditing;
-using Volo.Abp.Localization;
+using Volo.Abp.Validation;
 
 namespace Volo.Abp.AspNetCore.Mvc.Localization;
 
@@ -17,35 +18,41 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization;
 public class AbpLanguagesController : AbpController
 {
     protected IQueryStringCultureReplacement QueryStringCultureReplacement { get; }
+    protected AbpRequestCultureResolver RequestCultureResolver { get; }
 
-    public AbpLanguagesController(IQueryStringCultureReplacement queryStringCultureReplacement)
+    public AbpLanguagesController(
+        IQueryStringCultureReplacement queryStringCultureReplacement,
+        AbpRequestCultureResolver requestCultureResolver)
     {
         QueryStringCultureReplacement = queryStringCultureReplacement;
+        RequestCultureResolver = requestCultureResolver;
     }
 
     [HttpGet]
     public virtual async Task<IActionResult> Switch(string culture, string uiCulture = "", string returnUrl = "")
     {
-        if (!CultureHelper.IsValidCultureCode(culture))
+        var resolvedCulture = await RequestCultureResolver.ResolveAsync(culture, uiCulture: false);
+        var resolvedUiCulture = await RequestCultureResolver.ResolveAsync(uiCulture, uiCulture: true);
+        if (resolvedCulture == null || resolvedUiCulture == null)
         {
-            throw new AbpException("The selected culture is not valid! Make sure you enter a valid culture code.");
+            throw new AbpValidationException(new[]
+            {
+                new ValidationResult("The selected culture is not supported.",
+                    new[] { resolvedCulture == null ? nameof(culture) : nameof(uiCulture) })
+            });
         }
 
-        if (!CultureHelper.IsValidCultureCode(uiCulture))
-        {
-            throw new AbpException("The selected uiCulture is not valid! Make sure you enter a valid culture code.");
-        }
-
+        var requestCulture = new RequestCulture(resolvedCulture, resolvedUiCulture);
         AbpRequestCultureCookieHelper.SetCultureCookie(
             HttpContext,
-            new RequestCulture(culture, uiCulture)
+            requestCulture
         );
 
         HttpContext.Items[AbpRequestLocalizationMiddleware.HttpContextItemName] = true;
 
         var context = new QueryStringCultureReplacementContext(
             HttpContext,
-            new RequestCulture(culture, uiCulture),
+            requestCulture,
             returnUrl,
             GetCurrentCultureFromRequestCookie());
 

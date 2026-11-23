@@ -3,6 +3,8 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Localization;
 using Shouldly;
 using Xunit;
 
@@ -11,6 +13,12 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization;
 public class AbpLanguagesController_Tests : AspNetCoreMvcTestBase
 {
     private const string SwitchUrl = "/Abp/Languages/Switch";
+
+    protected override void ConfigureServices(IServiceCollection services)
+    {
+        base.ConfigureServices(services);
+        services.Configure<AbpLocalizationOptions>(options => options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans")));
+    }
 
     [Fact]
     public async Task Should_Replace_Route_Culture_In_ReturnUrl_When_Cookie_Is_Set()

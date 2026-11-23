@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Net;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
@@ -8,6 +9,7 @@ using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Http.Client;
 using Volo.Abp.Localization;
 using Volo.Abp.Threading;
 using Volo.Abp.Users;
@@ -104,12 +106,23 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
             }
         );
 
-        await Task.WhenAll(configTask, localizationTask);
+        var retryLocalization = false;
+        try
+        {
+            await Task.WhenAll(configTask, localizationTask);
+        }
+        catch (AbpRemoteCallException exception) when (
+            exception.HttpStatusCode == (int)HttpStatusCode.BadRequest &&
+            configTask.IsCompletedSuccessfully && localizationTask.IsFaulted &&
+            !string.Equals(configTask.Result.Localization.CurrentCulture.Name, cultureName, StringComparison.OrdinalIgnoreCase))
+        {
+            retryLocalization = true;
+        }
 
         var config = configTask.Result;
-        var localizationDto = localizationTask.Result;
+        ApplicationLocalizationDto localizationDto;
 
-        if (!CultureHelper.IsCompatibleCulture(config.Localization.CurrentCulture.Name, cultureName))
+        if (retryLocalization || !CultureHelper.IsCompatibleCulture(config.Localization.CurrentCulture.Name, cultureName))
         {
             localizationDto = await ApplicationLocalizationClientProxy.GetAsync(
                 new ApplicationLocalizationRequestDto
@@ -118,6 +131,10 @@ public class MvcCachedApplicationConfigurationClient : ICachedApplicationConfigu
                     OnlyDynamics = true
                 }
             );
+        }
+        else
+        {
+            localizationDto = localizationTask.Result;
         }
 
         config.Localization.Resources = localizationDto.Resources;

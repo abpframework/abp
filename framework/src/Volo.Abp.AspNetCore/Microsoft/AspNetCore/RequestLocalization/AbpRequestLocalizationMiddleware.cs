@@ -28,11 +28,32 @@ public class AbpRequestLocalizationMiddleware : AbpMiddlewareBase, ITransientDep
 
     public async override Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
+        var options = await _requestLocalizationOptionsProvider.GetLocalizationOptionsAsync();
+        var filteredOptions = new RequestLocalizationOptions
+        {
+            DefaultRequestCulture = options.DefaultRequestCulture,
+            SupportedCultures = options.SupportedCultures,
+            SupportedUICultures = options.SupportedUICultures,
+            FallBackToParentCultures = false,
+            FallBackToParentUICultures = false,
+            CultureInfoUseUserOverride = options.CultureInfoUseUserOverride,
+            ApplyCurrentCultureToResponseHeaders = options.ApplyCurrentCultureToResponseHeaders,
+            RequestCultureProviders = options.RequestCultureProviders?
+                .Select(provider => (IRequestCultureProvider)new AbpRequestCultureProvider(provider, options))
+                .ToList() ?? []
+        };
         var middleware = new RequestLocalizationMiddleware(
-            next,
-            new OptionsWrapper<RequestLocalizationOptions>(
-                await _requestLocalizationOptionsProvider.GetLocalizationOptionsAsync()
-            ),
+            async httpContext =>
+            {
+                var feature = httpContext.Features.Get<IRequestCultureFeature>();
+                if (feature?.Provider is AbpRequestCultureProvider provider)
+                {
+                    httpContext.Features.Set<IRequestCultureFeature>(new RequestCultureFeature(feature.RequestCulture, provider.InnerProvider));
+                }
+
+                await next(httpContext);
+            },
+            new OptionsWrapper<RequestLocalizationOptions>(filteredOptions),
             _loggerFactory
         );
 
