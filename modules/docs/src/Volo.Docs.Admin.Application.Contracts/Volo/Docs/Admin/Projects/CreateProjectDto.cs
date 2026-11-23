@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Volo.Abp.Auditing;
 using Volo.Docs.Projects;
 
 namespace Volo.Docs.Admin.Projects
@@ -25,6 +26,7 @@ namespace Volo.Docs.Admin.Projects
 
         public string DocumentStoreType { get; set; }
 
+        [DisableAuditing]
         public Dictionary<string, object> ExtraProperties { get; set; }
     }
 }
