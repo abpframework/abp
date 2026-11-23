@@ -108,7 +108,7 @@
             "GeneratePdfAsyncByInput": {
               "uniqueName": "GeneratePdfAsyncByInput",
               "name": "GeneratePdfAsync",
-              "httpMethod": "GET",
+              "httpMethod": "POST",
               "url": "api/docs/admin/documents/pdf/generate",
               "supportedVersions": [],
               "parametersOnMethod": [
@@ -124,38 +124,14 @@
               "parameters": [
                 {
                   "nameOnMethod": "input",
-                  "name": "ProjectId",
+                  "name": "input",
                   "jsonName": null,
-                  "type": "System.Guid",
-                  "typeSimple": "string",
+                  "type": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
+                  "typeSimple": "Volo.Docs.Common.Documents.DocumentPdfGeneratorInput",
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                },
-                {
-                  "nameOnMethod": "input",
-                  "name": "Version",
-                  "jsonName": null,
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                },
-                {
-                  "nameOnMethod": "input",
-                  "name": "LanguageCode",
-                  "jsonName": null,
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
+                  "bindingSourceId": "Body",
                   "descriptorName": "input"
                 }
               ],

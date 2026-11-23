@@ -23,9 +23,9 @@ public class DocumentPdfAdminController :  AbpControllerBase, IDocumentPdfAdminA
         _documentPdfAdminAppService = documentPdfAdminAppService;
     }
 
-    [HttpGet]
+    [HttpPost]
     [Route("generate")]
-    public Task GeneratePdfAsync(DocumentPdfGeneratorInput input)
+    public Task GeneratePdfAsync([FromBody] DocumentPdfGeneratorInput input)
     {
         return _documentPdfAdminAppService.GeneratePdfAsync(input);
     }
