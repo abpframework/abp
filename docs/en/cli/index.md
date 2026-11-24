@@ -80,7 +80,7 @@ Here is the list of all available commands before explaining their details:
 - [generate-razor-page](../cli#generate-razor-page): Generates a page class that you can use it in the ASP NET Core pipeline to return an HTML page.
 - [generate-jwks](../cli#generate-jwks): Generates an RSA key pair (JWKS public key + PEM private key) for OpenIddict `private_key_jwt` client authentication.
 - [mcp](../cli#mcp): Runs a local MCP bridge to the ABP.IO MCP service, so AI coding assistants can search the ABP documentation, articles, support questions and source code.
-- [test](../cli#test): Runs the ABP Studio UI/UX Test or Security Test of a solution, or sets a GitHub repository up to run them on CI.
+- [ai-test](../cli#ai-test): Runs the ABP Studio UI/UX Test or Security Test of a solution, or sets a GitHub repository up to run them on CI.
 
 ### help
 
@@ -1400,7 +1400,7 @@ args = ["mcp"]
 | `search_source_code` | Searches the indexed ABP source code. |
 | `list_abp_github_repositories` | Lists the ABP GitHub repositories available to the source code search. |
 
-### test
+### ai-test
 
 Runs the AI-powered [UI/UX Test](../studio/ui-ux-test.md) or [Security Test](../studio/security-test.md) of a solution without the ABP Studio UI, or sets a GitHub repository up to run them on CI. The tests read the same inputs file as ABP Studio (`abp-ui-ux-test.json` or `abp-security.json` in the solution folder).
 
@@ -1409,9 +1409,9 @@ Runs the AI-powered [UI/UX Test](../studio/ui-ux-test.md) or [Security Test](../
 Usage:
 
 ```bash
-abp test ui-ux [options]
-abp test security [options]
-abp test init-ci [options]
+abp ai-test ui-ux [options]
+abp ai-test security [options]
+abp ai-test init-ci [options]
 ```
 
 Options of `ui-ux` and `security`:
@@ -1435,16 +1435,18 @@ Options of `init-ci`:
 - `--force`: Replaces an existing workflow file.
 - `--show-token`: Prints the CI token when the GitHub CLI (`gh`) is not installed, so you can add the secret yourself.
 
-Exit codes of `ui-ux` and `security`: `0` passed, `1` findings past `--fail-on`, `2` error, `3` the AI stopped the test, `4` the AI cannot be used.
+Exit codes of `ui-ux` and `security`: `0` passed, `1` findings past `--fail-on`, `2` error, `3` the test stopped before the end (the AI stopped it, or Ctrl+C), `4` the AI cannot be used.
+
+Ctrl+C stops the test and writes the reports of what it found until then; a second Ctrl+C ends it at once, without reports.
 
 Examples:
 
 ```bash
-abp test ui-ux --mode both --start
-abp test security --url Web=https://localhost:44302 --fail-on confirmed
-abp test security --mode codebase --changed-since origin/main
-abp test ui-ux --mode codebase --changed-since 7d
-abp test init-ci
+abp ai-test ui-ux --mode both --start
+abp ai-test security --url Web=https://localhost:44302 --fail-on confirmed
+abp ai-test security --mode codebase --changed-since origin/main
+abp ai-test ui-ux --mode codebase --changed-since 7d
+abp ai-test init-ci
 ```
 
 See [Running the AI Tests from the CLI and on CI](../studio/ai-testing-on-ci.md) for the details, the reports and the GitHub Actions workflow.
