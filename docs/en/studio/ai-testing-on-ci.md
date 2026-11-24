@@ -81,6 +81,12 @@ Free the applications' ports first: an application already holding one is stoppe
 
 A date and a time span are resolved from the git history, so they also work on CI, where the checkout has the full history (`fetch-depth: 0`). The test prints the commit it counted from.
 
+### Stopping a test
+
+Ctrl+C stops the test after the step it is on, as *Stop Test* does in Studio: the reports are written with what was found until then, and the exit code is `3`. Press Ctrl+C again to end it at once, without reports. Canceling a CI job stops the test the same way.
+
+The reports of a stopped test say so: a line under the title of the Markdown report, `"stoppedEarly": true` and `stopReason` in the JSON report, and the same two fields in the `properties` of the SARIF run. A stopped test cannot be continued from the CLI; the next run starts from the beginning.
+
 ## Reports
 
 | Test | Files |
@@ -95,7 +101,7 @@ A date and a time span are resolved from the git history, so they also work on C
 | `0` | Passed. |
 | `1` | Findings past `--fail-on`. |
 | `2` | Error: the test could not run or finish (for example, the applications did not start, the sign-in failed, or the code review failed). |
-| `3` | The AI stopped the test (for example, no credits left). The report holds what was found until then. |
+| `3` | The test stopped before the end: the AI stopped it (for example, no credits left), or it was stopped with Ctrl+C. The reports hold what was found until then. |
 | `4` | The AI cannot be used: sign in, or check the license. |
 
 ## Setting Up GitHub Actions

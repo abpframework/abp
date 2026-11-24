@@ -51,9 +51,24 @@ Only one of the two tests (or a re-verification) runs at a time.
 4. Optionally pick a model in *Test with*, and click *Configure Inputs* to add test accounts or instructions.
 5. Click *Start Test*.
 
-*Stop Test* ends the test after the step it is on and keeps the findings found so far; the status reads *Stopping…* until then. Clicking *Stop Test* again while it waits, and confirming with *Stop Now*, ends the test at once, and nothing from that run is kept. If the AI can no longer be used (no credits left, a rejected key, or the AI access was lost), the test stops the same way as *Stop Test* and says why.
+*Stop Test* ends the test after the step it is on and keeps the findings found so far; the status reads *Stopping…* until then. Clicking *Stop Test* again while it waits, and confirming with *Stop Now*, ends the test at once, and nothing from that run is kept (except what a [pause](#pausing-a-test) saved). If the AI can no longer be used (no credits left, a rejected key, or the AI access was lost), the test stops the same way as *Stop Test* and says why.
 
 With *Incremental* on, the code review covers only the files changed since the last test, and the findings of the other files are carried over. The running applications are always tested in full.
+
+### Pausing a Test
+
+*Pause* holds the test after the steps it is on; nothing that is running is cut off, and the status reads *Pausing…* until those steps finish. While the test is paused, the findings found so far are listed, can be viewed and exported, and are kept as the last results, so closing Studio loses nothing. *Resume* goes on where the test stopped, and *End Test* ends it and keeps what it found.
+
+Only one test runs or is paused at a time: resume or end a paused test before starting the other one.
+
+### Continuing an Unfinished Test
+
+A test writes down its progress as it goes. If Studio closes or crashes during a test, or the test fails, the AI stops it, or another solution is opened, the test page shows the unfinished test the next time it is opened, with *Resume Test* and *Discard*:
+
+- *Resume Test* puts the page back to the test's own settings (mode, model, applications, screen widths, accounts, login page, instructions and *Incremental*), lists what the earlier run found, and goes on from its last finished step. The applications, pages and files it finished are not tested again, and the progress continues from there. Start the applications it tested first; Studio names them if they are not running.
+- *Discard* drops it, and the next test starts from the beginning. Starting a new test discards it too.
+
+The step that was in progress when the test was cut off (for example, a page or a group of files) runs again. Passwords are not saved with the unfinished test, so an account whose password does not come from an environment variable asks for it again. If the model or ABP Studio's prompts changed in the meantime, the test starts over and says so; if the model is no longer available, discard the test and start a new one. A test ended with *Stop Test* or *Stop Now* is not offered again.
 
 ## Test Inputs
 
@@ -84,6 +99,7 @@ Passwords are never written to the file. Each account names an environment varia
 {
   "mode": "both",
   "model": "anthropic/claude-sonnet-5.5",
+  "incremental": true,
   "targets": [
     { "name": "Web", "url": "https://localhost:44302" }
   ],
@@ -100,6 +116,7 @@ Passwords are never written to the file. Each account names an environment varia
 | --- | --- |
 | `mode` | `both`, `codeReview` or `runtime`. `codebase` is accepted too, as the CLI names it. |
 | `model` | The model to test with. When it is not available, the default model is used. |
+| `incremental` | The *Incremental* setting. Studio only: the CLI reviews the whole code, or the files `--changed-since` names. |
 | `targets` | The running applications to test (`name` and `url`). Used by the CLI; in Studio, the applications are ticked under *Apps to Test*. |
 | `loginUrl` | The login page, as in *Configure Inputs*. |
 | `accounts` | Up to two accounts: `username` and `passwordEnv`, the name of the environment variable that holds the password. |

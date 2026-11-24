@@ -1435,7 +1435,9 @@ Options of `init-ci`:
 - `--force`: Replaces an existing workflow file.
 - `--show-token`: Prints the CI token when the GitHub CLI (`gh`) is not installed, so you can add the secret yourself.
 
-Exit codes of `ui-ux` and `security`: `0` passed, `1` findings past `--fail-on`, `2` error, `3` the AI stopped the test, `4` the AI cannot be used.
+Exit codes of `ui-ux` and `security`: `0` passed, `1` findings past `--fail-on`, `2` error, `3` the test stopped before the end (the AI stopped it, or Ctrl+C), `4` the AI cannot be used.
+
+Ctrl+C stops the test and writes the reports of what it found until then; a second Ctrl+C ends it at once, without reports.
 
 Examples:
 
