@@ -90,7 +90,11 @@ public class NpmPackagesUpdater : ITransientDependency
         {
             var fileDirectory = Path.GetDirectoryName(file.Key).EnsureEndsWith(Path.DirectorySeparatorChar);
 
-            RunYarn(fileDirectory);
+            // React projects are installed by the install-libs step below, with the package manager they declare.
+            if (!ReactProjectFinder.IsReactProject(fileDirectory))
+            {
+                RunYarn(fileDirectory);
+            }
 
             if (!IsAngularProject(fileDirectory))
             {
