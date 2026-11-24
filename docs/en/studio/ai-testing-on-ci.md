@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Run the ABP Studio UI/UX Test and Security Test from the ABP CLI with abp ai-test, and set them up on GitHub Actions with abp ai-test init-ci."
+    "Description": "Run the ABP Studio UI/UX Test and Security Test from the ABP CLI with abp test, and set them up on GitHub Actions with abp test init-ci."
 }
 ```
 
@@ -21,7 +21,7 @@
 }
 ````
 
-The [UI/UX Test](ui-ux-test.md) and the [Security Test](security-test.md) also run without the Studio UI, with the `abp ai-test` command of the [ABP CLI](../cli/index.md). They read the same [inputs files](ai-testing.md#the-inputs-file) as Studio, write their reports to a folder, and end with an exit code, so they can run on a developer machine or on CI.
+The [UI/UX Test](ui-ux-test.md) and the [Security Test](security-test.md) also run without the Studio UI, with the `abp test` command of the [ABP CLI](../cli/index.md). They read the same [inputs files](ai-testing.md#the-inputs-file) as Studio, write their reports to a folder, and end with an exit code, so they can run on a developer machine or on CI.
 
 ## Requirements
 
@@ -39,8 +39,8 @@ The [UI/UX Test](ui-ux-test.md) and the [Security Test](security-test.md) also r
 ## Running a Test
 
 ```bash
-abp ai-test ui-ux --solution MyCompany.MyProject.abpsln --mode both --start
-abp ai-test security --solution MyCompany.MyProject.abpsln --mode both --start
+abp test ui-ux --solution MyCompany.MyProject.abpsln --mode both --start
+abp test security --solution MyCompany.MyProject.abpsln --mode both --start
 ```
 
 | Option | Description |
@@ -106,10 +106,10 @@ The reports of a stopped test say so: a line under the title of the Markdown rep
 
 ## Setting Up GitHub Actions
 
-`abp ai-test init-ci` sets a GitHub repository up to run both tests:
+`abp test init-ci` sets a GitHub repository up to run both tests:
 
 ```bash
-abp ai-test init-ci --solution MyCompany.MyProject.abpsln
+abp test init-ci --solution MyCompany.MyProject.abpsln
 ```
 
 It:
@@ -135,7 +135,7 @@ The workflow runs the UI/UX Test and the Security Test as two jobs:
 
 Each run uses AI credits of the account behind `ABP_ACCESS_TOKEN`. Remove the `schedule` trigger to run the tests on demand and on pull requests only.
 
-> With `--mode both`, the workflow builds and starts the applications of the solution's default run profile on the runner. If they need a database or another service the runner does not have, add it to the workflow, or run `abp ai-test init-ci --mode codebase --force` to review the code only.
+> With `--mode both`, the workflow builds and starts the applications of the solution's default run profile on the runner. If they need a database or another service the runner does not have, add it to the workflow, or run `abp test init-ci --mode codebase --force` to review the code only.
 
 To test with test accounts on CI, add each account's password as a repository secret, and set the environment variable the inputs file names in the test step:
 
@@ -151,4 +151,4 @@ To test with test accounts on CI, add each account's password as a repository se
 - [AI Testing](ai-testing.md)
 - [UI/UX Test](ui-ux-test.md)
 - [Security Test](security-test.md)
-- [ABP CLI](../cli/index.md#ai-test)
+- [ABP CLI](../cli/index.md#test)
