@@ -10,7 +10,7 @@ This document explains how to find and update these calls. See the [jQuery 4.0 u
 
 - `@abp/jquery` depends on jQuery 4.0 since ABP 10.7.
 - `@abp/jquery` no longer depends on `jquery-migrate`, and `JQueryScriptContributor` no longer adds `/libs/jquery-migrate/jquery-migrate.js` to the bundles.
-- `@abp/select2` moves from select2 4.0.13 to 4.1.1. select2 4.0.13 calls the removed `$.isArray` and doesn't work with jQuery 4 without jQuery Migrate.
+- `@abp/select2` moves from select2 4.0.13 to 4.2.0. select2 4.0.13 calls the removed `$.isArray` and doesn't work with jQuery 4 without jQuery Migrate.
 
 The APIs that jQuery 4 only deprecated, such as event shorthands like `.click()` and `.bind()`, still work.
 
@@ -35,8 +35,6 @@ Check the jQuery plugins that your application adds itself, too. In production, 
 ## select2 4.1
 
 select2 4.1 removes and renames some options, for example `containerCssClass` is now `selectionCssClass`, and it changes the selection markup. The Tab key now selects the highlighted option. See the [select2 4.1.0 release notes](https://github.com/select2/select2/releases/tag/4.1.0).
-
-select2 4.1 doesn't read the page direction and renders `dir="undefined"`, so its RTL styles don't apply. `Select2ScriptContributor` adds `/libs/select2/js/abp.select2.js`, which restores the direction lookup. If your pages load select2 without the ABP bundles, load this file right after select2.
 
 ## Update the Client Libraries
 
