@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.FileSystemGlobbing;
 using Microsoft.Extensions.FileSystemGlobbing.Abstractions;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
@@ -41,6 +41,7 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
     public InstallLibsService(NpmHelper npmHelper)
     {
         NpmHelper = npmHelper;
+        Logger = NullLogger<InstallLibsService>.Instance;
     }
 
     public async Task InstallLibsAsync(string directory)
@@ -106,7 +107,18 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
                     };
 
                     Logger.LogInformation($"Installing dependencies for {frameworkName} project: {projectDirectory}");
-                    NpmHelper.RunYarn(projectDirectory);
+
+                    if (frameworkType == JavaScriptFrameworkType.React)
+                    {
+                        // React projects are installed with the package manager they declare (the "packageManager"
+                        // field or a lock file), so no second lock file is created. They get npm when they
+                        // declare none: the React UI and its documentation are based on npm.
+                        NpmHelper.RunInstall(projectDirectory);
+                    }
+                    else
+                    {
+                        NpmHelper.RunYarn(projectDirectory);
+                    }
                 }
             }
         }
@@ -114,59 +126,9 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
 
     private JavaScriptFrameworkType DetectFrameworkTypeFromPackageJson(string packageJsonFilePath)
     {
-        if (!File.Exists(packageJsonFilePath))
-        {
-            return JavaScriptFrameworkType.None;
-        }
-
         try
         {
-            var packageJsonContent = File.ReadAllText(packageJsonFilePath);
-            var packageJson = JObject.Parse(packageJsonContent);
-
-            var dependencies = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            
-            // Check dependencies
-            if (packageJson["dependencies"] is JObject deps)
-            {
-                foreach (var prop in deps.Properties())
-                {
-                    dependencies.Add(prop.Name);
-                }
-            }
-
-            // Check devDependencies
-            if (packageJson["devDependencies"] is JObject devDeps)
-            {
-                foreach (var prop in devDeps.Properties())
-                {
-                    dependencies.Add(prop.Name);
-                }
-            }
-
-            // Check for React Native first (has priority over React)
-            if (dependencies.Contains("react-native"))
-            {
-                return JavaScriptFrameworkType.ReactNative;
-            }
-
-            // Check for other frameworks
-            if (dependencies.Contains("next"))
-            {
-                return JavaScriptFrameworkType.NextJs;
-            }
-
-            if (dependencies.Contains("vue"))
-            {
-                return JavaScriptFrameworkType.Vue;
-            }
-
-            if (dependencies.Contains("react"))
-            {
-                return JavaScriptFrameworkType.React;
-            }
-
-            return JavaScriptFrameworkType.None;
+            return JavaScriptFrameworkDetector.Detect(packageJsonFilePath);
         }
         catch (Exception ex)
         {
