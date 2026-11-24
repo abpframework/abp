@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Authorization.Permissions.Resources;
@@ -40,6 +41,25 @@ public class ResourcePermissionGrantCacheItemInvalidator_Tests : PermissionTestB
             TestEntityResource.ResourceKey1,
             UserPermissionValueProvider.ProviderName,
             PermissionTestDataBuilder.User1Id.ToString()))).ShouldNotBeNull();
+    }
+
+    [Fact]
+    public async Task PermissionStore_IsGrantedAsync_Should_Read_PermissionGrant_From_Cache()
+    {
+        var providerKey = Guid.NewGuid().ToString();
+
+        await _cache.SetAsync(ResourcePermissionGrantCacheItem.CalculateCacheKey("MyResourcePermission1",
+                TestEntityResource.ResourceName,
+                TestEntityResource.ResourceKey1,
+                UserPermissionValueProvider.ProviderName,
+                providerKey),
+            new ResourcePermissionGrantCacheItem(true));
+
+        (await _resourcePermissionStore.IsGrantedAsync("MyResourcePermission1",
+            TestEntityResource.ResourceName,
+            TestEntityResource.ResourceKey1,
+            UserPermissionValueProvider.ProviderName,
+            providerKey)).ShouldBeTrue();
     }
 
     [Fact]
