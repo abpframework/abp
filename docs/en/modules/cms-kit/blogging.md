@@ -76,7 +76,7 @@ You can create and edit an existing blog post on this page. If you enable specif
 
 Blog posts have three statuses: `Draft`, `WaitingForReview` and `Published`. Creating, updating, deleting and publishing posts use separate permissions. The public blog list requests only published posts and can filter them by author, tag or the current user's marked items.
 
-The built-in renderer allows HTML in blog post Markdown. The per-blog **Prevent XSS** feature controls whether the Markdown renderer sanitizes that HTML and is enabled for newly created blogs. Keep it enabled when post authors are not trusted to submit arbitrary HTML.
+The built-in renderer allows HTML in blog post Markdown. The per-blog **Prevent XSS** feature controls whether the Markdown renderer sanitizes that HTML and is enabled for newly created blogs. It also applies to editor previews. Keep it enabled when post authors are not trusted to submit arbitrary HTML.
 
 ## Internals
 

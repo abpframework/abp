@@ -345,7 +345,7 @@ $(function () {
             let content = editor.getMarkdown();
             localStorage.setItem('content', content);
 
-            $.post("/CmsKitCommonWidgets/ContentPreview", { content: content }, function (result) {
+            $.post("/CmsKitCommonWidgets/ContentPreview", { content: content, blogId: $selectBlog.val() }, function (result) {
                 $previewArea = $("#previewArea");
                 $previewArea.attr("srcdoc", result);
             });
