@@ -1098,8 +1098,13 @@ public class IdentityUserStore :
         Check.NotNull(user, nameof(user));
         Check.NotNull(code, nameof(code));
 
+        if (code.IsNullOrWhiteSpace())
+        {
+            return false;
+        }
+
         var mergedCodes = await GetTokenAsync(user, InternalLoginProvider, RecoveryCodeTokenName, cancellationToken) ?? "";
-        var splitCodes = mergedCodes.Split(';');
+        var splitCodes = mergedCodes.Split(';', StringSplitOptions.RemoveEmptyEntries);
         if (splitCodes.Contains(code))
         {
             var updatedCodes = new List<string>(splitCodes.Where(s => s != code));

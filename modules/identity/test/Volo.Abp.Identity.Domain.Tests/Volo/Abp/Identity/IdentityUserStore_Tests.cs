@@ -769,6 +769,28 @@ public class IdentityUserStore_Tests : AbpIdentityDomainTestBase
         }
     }
 
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    public async Task RedeemCodeAsync_Should_Reject_Empty_Codes(string code)
+    {
+        using (var uow = _unitOfWorkManager.Begin())
+        {
+            var user = await _identityUserStore.FindByIdAsync(_testData.UserBobId.ToString());
+            await _identityUserStore.RemoveTokenAsync(user, "[AspNetUserStore]", "RecoveryCodes");
+            (await _identityUserStore.RedeemCodeAsync(user, code)).ShouldBeFalse();
+
+            await _identityUserStore.ReplaceCodesAsync(user, new[] { "valid-code" });
+            (await _identityUserStore.RedeemCodeAsync(user, code)).ShouldBeFalse();
+            (await _identityUserStore.RedeemCodeAsync(user, "valid-code")).ShouldBeTrue();
+            (await _identityUserStore.RedeemCodeAsync(user, "valid-code")).ShouldBeFalse();
+            (await _identityUserStore.RedeemCodeAsync(user, code)).ShouldBeFalse();
+
+            await _identityUserStore.ReplaceCodesAsync(user, new string[0]);
+            (await _identityUserStore.RedeemCodeAsync(user, code)).ShouldBeFalse();
+        }
+    }
+
     [Fact]
     public async Task AddOrUpdatePasskeyAsync()
     {
