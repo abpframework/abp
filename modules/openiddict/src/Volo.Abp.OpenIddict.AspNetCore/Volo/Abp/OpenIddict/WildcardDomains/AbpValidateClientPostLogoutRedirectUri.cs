@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
 using OpenIddict.Server;
 
@@ -12,16 +11,15 @@ public class AbpValidateClientPostLogoutRedirectUri : AbpOpenIddictWildcardDomai
             .AddFilter<OpenIddictServerHandlerFilters.RequireDegradedModeDisabled>()
             .AddFilter<OpenIddictServerHandlerFilters.RequirePostLogoutRedirectUriParameter>()
             .UseScopedHandler<AbpValidateClientPostLogoutRedirectUri>()
-            .SetOrder(OpenIddictServerHandlers.Session.ValidatePostLogoutRedirectUriParameter.Descriptor.Order + 1_000)
+            .SetOrder(OpenIddictServerHandlers.Session.ValidateClientPostLogoutRedirectUri.Descriptor.Order)
             .SetType(OpenIddictServerHandlerType.BuiltIn)
             .Build();
 
     public AbpValidateClientPostLogoutRedirectUri(
-        IOptions<AbpOpenIddictWildcardDomainOptions> wildcardDomainsOptions,
-        IOpenIddictApplicationManager applicationManager)
-        : base(wildcardDomainsOptions, new OpenIddictServerHandlers.Session.ValidateClientPostLogoutRedirectUri(applicationManager))
+        IOpenIddictApplicationManager applicationManager,
+        AbpOpenIddictWildcardDomainValidator wildcardDomainValidator)
+        : base(new OpenIddictServerHandlers.Session.ValidateClientPostLogoutRedirectUri(applicationManager), wildcardDomainValidator)
     {
-        OriginalHandler = new OpenIddictServerHandlers.Session.ValidateClientPostLogoutRedirectUri(applicationManager);
     }
 
     public async override ValueTask HandleAsync(OpenIddictServerEvents.ValidateEndSessionRequestContext context)
@@ -29,7 +27,10 @@ public class AbpValidateClientPostLogoutRedirectUri : AbpOpenIddictWildcardDomai
         Check.NotNull(context, nameof(context));
         Check.NotNullOrEmpty(context.PostLogoutRedirectUri, nameof(context.PostLogoutRedirectUri));
 
-        if (await CheckWildcardDomainAsync(context.PostLogoutRedirectUri))
+        if ((!string.IsNullOrEmpty(context.ClientId) &&
+                await WildcardDomainValidator.IsValidAsync(context.PostLogoutRedirectUri, context.ClientId, postLogout: true)) ||
+            (string.IsNullOrEmpty(context.ClientId) && await WildcardDomainValidator.IsValidPostLogoutAsync(
+                context.PostLogoutRedirectUri, context.IdentityTokenHintPrincipal, context.Options.IgnoreEndpointPermissions)))
         {
             return;
         }

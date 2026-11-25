@@ -138,6 +138,7 @@ public class OpenIddictTokenIntegrationTestModule : AbpModule
         });
 
         app.UseAuthentication();
+        app.UseMultiTenancy();
         app.UseUnitOfWork();
         app.UseAuthorization();
         app.UseConfiguredEndpoints();

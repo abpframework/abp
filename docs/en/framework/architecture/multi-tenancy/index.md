@@ -313,6 +313,8 @@ PreConfigure<AbpOpenIddictWildcardDomainOptions>(options =>
 });
 ```
 
+`{0}` is bound to the current tenant. Register each callback on the parent domain with its exact path and query, in the client's redirect URIs for sign-in and post-logout redirect URIs for sign-out. For example, registering `https://mydomain.com/signin-oidc` allows `https://tenantname.mydomain.com/signin-oidc`; other paths, ports and clients are rejected. Before issuing an authorization code, ABP also checks that the subdomain belongs to the signed-in user's tenant. The tenant is resolved from the authorization request, so the Auth Server must also be served on the tenant subdomains; if all tenants share one Auth Server host, use an explicit `https://*.mydomain.com` format instead. That format trusts every matching subdomain, including other tenants.
+
 You must add this code to the `Configure` method as well.
 
 ```csharp
