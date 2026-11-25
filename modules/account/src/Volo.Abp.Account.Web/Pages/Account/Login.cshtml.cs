@@ -256,13 +256,10 @@ public class LoginModel : AccountPageModel
             bypassTwoFactor: true
         );
 
-        if (!result.Succeeded)
+        if (result.IsLockedOut || result.IsNotAllowed)
         {
-            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
-            {
-                Identity = IdentitySecurityLogIdentityConsts.IdentityExternal,
-                Action = "Login" + result
-            });
+            await SaveExternalLoginSecurityLogAsync(result.ToIdentitySecurityLogAction(),
+                await UserManager.FindSharedUserByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey));
         }
 
         if (result.IsLockedOut)
@@ -280,7 +277,9 @@ public class LoginModel : AccountPageModel
         IdentityUser user;
         if (result.Succeeded)
         {
-            user = await UserManager.FindByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey);
+            user = await UserManager.FindSharedUserByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey);
+            await SaveExternalLoginSecurityLogAsync(IdentitySecurityLogActionConsts.LoginSucceeded, user);
+
             if (user != null)
             {
                 // Clear the dynamic claims cache.
@@ -315,6 +314,8 @@ public class LoginModel : AccountPageModel
         var signInCheckResult = await CheckUserSignInAsync(user);
         if (signInCheckResult != null)
         {
+            await SaveExternalLoginSecurityLogAsync(signInCheckResult.ToIdentitySecurityLogAction(), user);
+
             if (signInCheckResult.IsLockedOut)
             {
                 Logger.LogWarning($"External login callback error: user is locked out!");
@@ -332,17 +333,43 @@ public class LoginModel : AccountPageModel
 
         await SignInManager.SignInAsync(user, false);
 
-        await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
-        {
-            Identity = IdentitySecurityLogIdentityConsts.IdentityExternal,
-            Action = result.ToIdentitySecurityLogAction(),
-            UserName = user.Name
-        });
+        await SaveExternalLoginSecurityLogAsync(IdentitySecurityLogActionConsts.LoginSucceeded, user);
 
         // Clear the dynamic claims cache.
         await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
         return await RedirectSafelyAsync(returnUrl, returnUrlHash);
+    }
+
+    protected virtual async Task SaveExternalLoginSecurityLogAsync(string action, IdentityUser user)
+    {
+        var context = new IdentitySecurityLogContext
+        {
+            Identity = IdentitySecurityLogIdentityConsts.IdentityExternal,
+            Action = action,
+            UserName = user?.UserName
+        };
+
+        if (user == null)
+        {
+            await IdentitySecurityLogManager.SaveAsync(context);
+            return;
+        }
+
+        // Log as the account itself: the request may carry another user's session, and a shared user can come from another tenant.
+        using (LazyServiceProvider.LazyGetRequiredService<ICurrentPrincipalAccessor>().Change(new ClaimsPrincipal(new ClaimsIdentity())))
+        {
+            if (user.TenantId == CurrentTenant.Id)
+            {
+                await IdentitySecurityLogManager.SaveAsync(context);
+                return;
+            }
+
+            using (CurrentTenant.Change(user.TenantId))
+            {
+                await IdentitySecurityLogManager.SaveAsync(context);
+            }
+        }
     }
 
     protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds()
