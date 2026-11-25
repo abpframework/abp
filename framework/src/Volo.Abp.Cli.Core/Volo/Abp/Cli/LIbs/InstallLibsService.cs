@@ -203,7 +203,11 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
 
     private async Task CleanAndCopyResources(string fileDirectory)
     {
-        var mappingFiles = Directory.GetFiles(fileDirectory, "abp.resourcemapping.js", SearchOption.AllDirectories);
+        // Shallowest first: when a package is installed more than once, the copy closest to the root wins.
+        var mappingFiles = Directory.GetFiles(fileDirectory, "abp.resourcemapping.js", SearchOption.AllDirectories)
+            .OrderBy(x => x.Count(c => c == Path.DirectorySeparatorChar))
+            .ThenBy(x => x, StringComparer.Ordinal)
+            .ToArray();
         var resourceMapping = new ResourceMapping
         {
             Clean = new List<string> { LibsDirectory }
@@ -221,6 +225,7 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
                     .Replace("=", string.Empty).Trim().TrimEnd(';'));
 
                 mapping.ReplaceAliases();
+                ResolveDependencyPaths(fileDirectory, Path.GetDirectoryName(mappingFile), mapping);
 
                 mapping.Clean.ForEach(c => resourceMapping.Clean.AddIfNotContains(c));
                 mapping.Aliases.ToList().ForEach(x =>
@@ -238,6 +243,52 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
 
         CleanDirsAndFiles(fileDirectory, resourceMapping);
         CopyResourcesToLibs(fileDirectory, resourceMapping);
+    }
+
+    private static void ResolveDependencyPaths(string projectDirectory, string packageDirectory, ResourceMapping mapping)
+    {
+        mapping.Mappings = mapping.Mappings.ToDictionary(
+            x => ResolveDependencyPath(projectDirectory, packageDirectory, x.Key),
+            x => x.Value);
+    }
+
+    // When the root node_modules has another version of a package's dependency, the package manager nests the
+    // version the package needs under the package's own node_modules. Resolve it the way Node.js does.
+    private static string ResolveDependencyPath(string projectDirectory, string packageDirectory, string pattern)
+    {
+        const string nodeModulesPrefix = "./node_modules/";
+        if (!pattern.StartsWith(nodeModulesPrefix))
+        {
+            return pattern;
+        }
+
+        var path = pattern.Substring(nodeModulesPrefix.Length);
+        var segments = path.Split('/');
+        var nameSegmentCount = segments[0].StartsWith("@") ? 2 : 1;
+        if (segments.Length < nameSegmentCount || segments.Take(nameSegmentCount).Any(x => x.Contains("*")))
+        {
+            return pattern;
+        }
+
+        var packageName = string.Join("/", segments.Take(nameSegmentCount));
+        var root = Path.GetFullPath(projectDirectory).TrimEnd(Path.DirectorySeparatorChar);
+        var directory = Path.GetFullPath(packageDirectory).TrimEnd(Path.DirectorySeparatorChar);
+
+        while (directory != null &&
+               directory.Length > root.Length &&
+               directory.StartsWith(root + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+        {
+            if (!Path.GetFileName(directory).Equals("node_modules", StringComparison.OrdinalIgnoreCase) &&
+                Directory.Exists(Path.Combine(directory, "node_modules", packageName)))
+            {
+                var relativeDirectory = directory.Substring(root.Length + 1).Replace('\\', '/');
+                return $"./{relativeDirectory}/node_modules/{path}";
+            }
+
+            directory = Path.GetDirectoryName(directory);
+        }
+
+        return pattern;
     }
 
     private void EnsureLibsFolderExists(string fileDirectory, string libsDirectory)

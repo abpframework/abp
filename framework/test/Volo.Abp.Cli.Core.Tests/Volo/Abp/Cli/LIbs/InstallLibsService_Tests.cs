@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
+using Shouldly;
 using Volo.Abp.Cli.Utils;
 using Xunit;
 
@@ -66,5 +67,68 @@ public class InstallLibsService_Tests : AbpCliTestBase
 
         _cmdHelper.Received(1).RunCmd("yarn --ignore-scripts", project.Directory);
         _cmdHelper.DidNotReceive().RunCmd("npm install --ignore-scripts", Arg.Any<string>());
+    }
+
+    [Fact]
+    public async Task Should_Copy_The_Dependency_Version_Nested_Under_The_Declaring_Package()
+    {
+        using var project = CreateMvcProjectWithJQueryPack();
+        project.WriteFile("node_modules/jquery/dist/jquery.js", "root");
+        project.WriteFile("node_modules/@abp/jquery/node_modules/jquery/dist/jquery.js", "nested");
+
+        await GetRequiredService<IInstallLibsService>().InstallLibsAsync(project.Directory);
+
+        project.ReadFile("wwwroot/libs/jquery/jquery.js").ShouldBe("nested");
+    }
+
+    [Fact]
+    public async Task Should_Copy_The_Root_Dependency_When_The_Declaring_Package_Has_No_Nested_Copy()
+    {
+        using var project = CreateMvcProjectWithJQueryPack();
+        project.WriteFile("node_modules/jquery/dist/jquery.js", "root");
+
+        await GetRequiredService<IInstallLibsService>().InstallLibsAsync(project.Directory);
+
+        project.ReadFile("wwwroot/libs/jquery/jquery.js").ShouldBe("root");
+    }
+
+    [Fact]
+    public async Task Should_Copy_A_Dependency_That_Exists_Only_Under_The_Declaring_Package()
+    {
+        using var project = CreateMvcProjectWithJQueryPack();
+        project.WriteFile("node_modules/jquery/dist/jquery.js", "root");
+        project.WriteFile("node_modules/@abp/jquery/node_modules/jquery-migrate/dist/jquery-migrate.js", "migrate");
+
+        await GetRequiredService<IInstallLibsService>().InstallLibsAsync(project.Directory);
+
+        project.ReadFile("wwwroot/libs/jquery-migrate/jquery-migrate.js").ShouldBe("migrate");
+        project.ReadFile("wwwroot/libs/abp/jquery/abp.jquery.js").ShouldBe("abp");
+    }
+
+    [Fact]
+    public async Task Should_Copy_From_The_Root_Package_When_The_Package_Is_Installed_More_Than_Once()
+    {
+        using var project = CreateMvcProjectWithJQueryPack();
+        project.WriteFile("node_modules/jquery/dist/jquery.js", "root");
+        project.WriteFile("node_modules/a-package/node_modules/@abp/jquery/abp.resourcemapping.js",
+            "module.exports = { mappings: { \"@node_modules/@abp/jquery/src/*.*\": \"@libs/abp/jquery/\" } }");
+        project.WriteFile("node_modules/a-package/node_modules/@abp/jquery/src/abp.jquery.js", "nested");
+
+        await GetRequiredService<IInstallLibsService>().InstallLibsAsync(project.Directory);
+
+        project.ReadFile("wwwroot/libs/abp/jquery/abp.jquery.js").ShouldBe("abp");
+    }
+
+    private static TemporaryJavaScriptProject CreateMvcProjectWithJQueryPack()
+    {
+        var project = new TemporaryJavaScriptProject("{ \"dependencies\": { \"@abp/jquery\": \"~10.7.1\" } }");
+        project.WriteFile("MyProject.Web.csproj", "<Project Sdk=\"Microsoft.NET.Sdk.Web\"></Project>");
+        project.WriteFile("node_modules/@abp/jquery/abp.resourcemapping.js",
+            "module.exports = { mappings: { " +
+            "\"@node_modules/jquery/dist/jquery.js\": \"@libs/jquery/\", " +
+            "\"@node_modules/jquery-migrate/dist/jquery-migrate.js\": \"@libs/jquery-migrate/\", " +
+            "\"@node_modules/@abp/jquery/src/*.*\": \"@libs/abp/jquery/\" } }");
+        project.WriteFile("node_modules/@abp/jquery/src/abp.jquery.js", "abp");
+        return project;
     }
 }
