@@ -3,12 +3,50 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.CmsKit.Admin.Pages;
+using Volo.Abp.Caching;
+using Volo.Abp.Uow;
+using Volo.CmsKit.Public.Pages;
 using Xunit;
 
 namespace Volo.CmsKit.Pages;
 
 public class PageAdminAppService_Tests : CmsKitApplicationTestBase
 {
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task Should_Keep_The_Public_Page_Cached_Until_The_Admin_Unit_Of_Work_Completes(bool delete)
+    {
+        var publicService = GetRequiredService<IPagePublicAppService>();
+        var cache = GetRequiredService<IDistributedCache<PageCacheItem>>();
+        var page = await publicService.FindBySlugAsync(_data.Page_1_Slug);
+        page.ShouldNotBeNull();
+
+        using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin(requiresNew: true))
+        {
+            if (delete)
+            {
+                await _pageAdminAppService.DeleteAsync(page.Id);
+            }
+            else
+            {
+                await _pageAdminAppService.UpdateAsync(page.Id, new UpdatePageInputDto
+                {
+                    Title = page.Title,
+                    Slug = page.Slug,
+                    Content = page.Content,
+                    Status = PageStatus.Draft
+                });
+            }
+
+            (await cache.GetAsync(PageCacheItem.GetKey(page.Slug))).ShouldNotBeNull();
+            await uow.CompleteAsync();
+        }
+
+        (await cache.GetAsync(PageCacheItem.GetKey(page.Slug))).ShouldBeNull();
+        (await publicService.FindBySlugAsync(page.Slug)).ShouldBeNull();
+    }
+
     private readonly CmsKitTestData _data;
     private readonly IPageAdminAppService _pageAdminAppService;
 
