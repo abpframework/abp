@@ -1,7 +1,7 @@
 ```json
 //[doc-seo]
 {
-    "Description": "Turn the application services and controllers of an ABP application into governed AI tools for chat clients and MCP agents with the ABP Agent Tools module."
+    "Description": "Manage which agent tools the host and each tenant may use with the ABP Agent Tools module: a stored tool policy, a management page, an HTTP API and AI Management integration."
 }
 ```
 
@@ -9,64 +9,56 @@
 
 > You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this module.
 
-The Agent Tools module turns the application services and controllers of an ABP application into governed AI tools. Each tool is one HTTP API action of your application, discovered from ABP's API description model and called in-process through its application service interface. Tools are handed out as [Microsoft.Extensions.AI](../../framework/infrastructure/artificial-intelligence/microsoft-extensions-ai.md) `AIFunction`s, so any `IChatClient` can use them, and they can be served to external agents (such as Claude Code) over the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/).
+The Agent Tools module adds management to ABP's open source [Agent Tools](../../framework/infrastructure/artificial-intelligence/agent-tools/index.md) packages.
 
-Nothing is exposed unless the application opts in.
+The two parts have different responsibilities:
 
-## What a Tool Call Guarantees
+- The **open source packages** turn application services into AI tools: discovery, permission-checked and audited calls, the tool list for your own chat client, the MCP endpoint, the OpenIddict configuration and a tool policy in `appsettings.json`.
+- The **Agent Tools module** manages the policy of these tools per host and tenant.
 
-Every tool call runs through the same ABP infrastructure as an HTTP request to the action:
+Read the [open source documentation](../../framework/infrastructure/artificial-intelligence/agent-tools/index.md) first to expose and use tools.
 
-- **Permissions**: The call runs as the current user. ABP's authorization checks the action's permissions, and the tool list only offers tools the user may call.
-- **Tenant**: The call runs in the current tenant. The MCP endpoint takes the tenant from the access token and refuses requests that name another tenant.
-- **Unit of work**: Each call runs in its own transactional unit of work. A failure rolls the call back.
-- **Audit**: The call is audit-logged with a comment that names the tool and the client. Registered observers receive one record per call.
-- **Policy**: A per-tool policy decides whether a tool is enabled and whether it requires human approval. Host administrators set defaults, and each tenant can override them.
+## Features
 
-By default only read (`GET`) tools run without approval. Every write requires approval, and MCP has no approval step, so the MCP endpoint is read-only until an administrator changes the policy of a write tool.
+- **Tool policy per host and tenant**: whether a tool is enabled and whether it requires approval is stored in the database, with host defaults that each tenant can override per field. Changes apply without a restart. The [configuration policy](../../framework/infrastructure/artificial-intelligence/agent-tools/policy.md) and the code defaults apply to everything that is not stored. See [Tool Policy and Management Page](./policy.md).
+- **Management page**: a page that lists every tool with its policy, its source and what the model sees, for the host and for tenants. See [Management Page](./policy.md#management-page).
+- **Application service and HTTP API** for the policy, with their own permissions. See [HTTP API](./policy.md#http-api).
+- **AI Management integration**: the `Volo.AIManagement.AgentTools` package adds the signed-in user's tools to AI Management chat and governs the MCP tools attached to its workspaces. See [AI Management Integration](./ai-management.md).
+- **MCP client preset**: the OpenIddict Pro UI fills the form for MCP clients. See [MCP Client Preset](./openiddict-preset.md).
 
 ## Packages
 
 | Package | Layer | Purpose |
 | --- | --- | --- |
-| `Volo.AgentTools.Domain.Shared` | Domain.Shared | `[AgentTool]`, `[DisableAgentTool]`, `AgentToolKind`, the feature, error codes and localization. |
-| `Volo.AgentTools.Domain` | Domain | `AbpAgentToolOptions`, the tool abstractions (`IAgentToolProvider`, `IAgentToolInvoker`, `IAgentToolCatalog`, `IAgentToolCallObserver`) and the policy store. Depends on `Microsoft.Extensions.AI.Abstractions`, not on ASP.NET Core MVC. |
-| `Volo.AgentTools.AspNetCore` | Host | The runtime: discovery from the API description model, the invoker and the provider. |
+| `Volo.AgentTools.Domain.Shared` | Domain.Shared | Constants, the policy sources and the localization of the permissions and the page. |
+| `Volo.AgentTools.Domain` | Domain | The policy entity and the stored policy. Depends on `Volo.Abp.AgentTools`. |
 | `Volo.AgentTools.Application.Contracts` | Application.Contracts | `IAgentToolPolicyAppService`, its DTOs and the permissions. |
 | `Volo.AgentTools.Application` | Application | The policy application service. |
-| `Volo.AgentTools.HttpApi` | HttpApi | The policy HTTP API. It depends on `Volo.AgentTools.AspNetCore`. |
+| `Volo.AgentTools.HttpApi` | HttpApi | The policy HTTP API. Depends on `Volo.Abp.AgentTools.AspNetCore`. |
 | `Volo.AgentTools.HttpApi.Client` | HttpApi.Client | Dynamic C# client proxies for the policy HTTP API. |
 | `Volo.AgentTools.EntityFrameworkCore` | EntityFrameworkCore | The policy table and repository. |
 | `Volo.AgentTools.MongoDB` | MongoDB | The policy collection and repository. |
 | `Volo.AgentTools.Web` | Web (MVC) | The **Agent tools** management page. |
-| `Volo.AgentTools.Mcp` | Host | The MCP endpoint for external agents. |
-| `Volo.AgentTools.OpenIddict` | Auth server | OpenIddict configuration for the MCP endpoint: scope, resource, client seeding and a startup check. It keeps the MCP [resource permission](./openiddict.md#the-resource-permission) in step with the `AgentTools` scope, so a web host needs the MCP URL (`App:SelfUrl` or `McpResource`) or, with the sync on (the default), fails at startup. |
 
-A package that only consumes tools (a chat UI, a policy store) can depend on the Domain layer without MVC. Discovery and invocation need the MVC application model, so they are in `Volo.AgentTools.AspNetCore`.
+The attributes, options, MCP endpoint and OpenIddict configuration are in the open source `Volo.Abp.AgentTools.*` and `Volo.Abp.OpenIddict.AgentTools` packages.
 
 ## Relation to AI Management
 
-Agent Tools is a separate module. It does not need [AI Management](../ai-management/index.md): you can use the tools from your own `IChatClient` or serve them over MCP only.
-
-The `Volo.AIManagement.AgentTools` package connects the two modules. It adds the signed-in user's tools to AI Management chat for the workspaces you opt in, and it governs the MCP tools attached to AI Management workspaces. See [AI Management Integration](./ai-management.md).
+Agent Tools does not need [AI Management](../ai-management/index.md): you can use the tools from your own `IChatClient` or serve them over MCP only. The `Volo.AIManagement.AgentTools` package connects the two. See [AI Management Integration](./ai-management.md).
 
 ## User Interface
 
-The module provides an MVC / Razor Pages management page under **Administration** > **Agent tools**. Blazor and Angular UIs are not available yet; the policy HTTP API can be used from any client.
+The module provides an MVC / Razor Pages management page under **Administration** > **Agent tools**, and the [React Admin Console](../../framework/ui/react/admin-console.md) has a page for it when the module is in the host. Blazor and Angular UIs are not available yet; the policy HTTP API can be used from any client.
 
 ## Documentation
 
 - [Installation](./installation.md): packages per layer, module dependencies and the database.
-- [Exposing Tools](./exposing-tools.md): which actions become tools, naming, descriptions, attributes and input schemas.
-- [Tool Policy and Management Page](./policy.md): defaults, host and tenant overrides, permissions, the feature, the page and the HTTP API.
-- [Using Tools from Your Own Chat Client](./chat-clients.md): `IAgentToolProvider`, approvals and call observers.
-- [MCP Endpoint](./mcp.md): serving the tools to external agents.
-- [OpenIddict Setup](./openiddict.md): registering MCP clients such as Claude Code.
+- [Tool Policy and Management Page](./policy.md): host and tenant values, permissions, the feature, the page and the HTTP API.
 - [AI Management Integration](./ai-management.md): the bridge package.
-- [Security Notes and Known Limits](./security.md).
+- [MCP Client Preset](./openiddict-preset.md): registering MCP clients in the OpenIddict Pro UI.
 
 ## See Also
 
-- [Artificial Intelligence Infrastructure](../../framework/infrastructure/artificial-intelligence/index.md)
+- [Agent Tools (open source)](../../framework/infrastructure/artificial-intelligence/agent-tools/index.md)
 - [AI Management Module](../ai-management/index.md)
 - [OpenIddict Module (Pro)](../openiddict-pro.md)

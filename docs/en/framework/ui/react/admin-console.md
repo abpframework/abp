@@ -93,6 +93,7 @@ The backend checks for module application service contracts and returns which mo
 | `openIddict` | `Volo.Abp.OpenIddict.Applications.IApplicationAppService` |
 | `textTemplateManagement` | `Volo.Abp.TextTemplateManagement.TextTemplates.ITemplateDefinitionAppService` |
 | `aiManagement` | AI Management service contracts, with a legacy AI engine fallback. |
+| `agentTools` | `Volo.AgentTools.Policies.IAgentToolPolicyAppService` |
 
 `settingManagement` is always returned as available by the discovery endpoint, while access to pages is still controlled by permissions.
 

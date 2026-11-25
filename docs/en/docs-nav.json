@@ -613,6 +613,40 @@
                 {
                   "text": "Semantic Kernel",
                   "path": "framework/infrastructure/artificial-intelligence/microsoft-semantic-kernel.md"
+                },
+                {
+                  "text": "Agent Tools",
+                  "items": [
+                    {
+                      "text": "Overview",
+                      "path": "framework/infrastructure/artificial-intelligence/agent-tools/index.md",
+                      "isIndex": true
+                    },
+                    {
+                      "text": "Exposing Tools",
+                      "path": "framework/infrastructure/artificial-intelligence/agent-tools/exposing-tools.md"
+                    },
+                    {
+                      "text": "Using Tools from Your Own Chat Client",
+                      "path": "framework/infrastructure/artificial-intelligence/agent-tools/chat-clients.md"
+                    },
+                    {
+                      "text": "Tool Policy",
+                      "path": "framework/infrastructure/artificial-intelligence/agent-tools/policy.md"
+                    },
+                    {
+                      "text": "MCP Endpoint",
+                      "path": "framework/infrastructure/artificial-intelligence/agent-tools/mcp.md"
+                    },
+                    {
+                      "text": "OpenIddict Setup",
+                      "path": "framework/infrastructure/artificial-intelligence/agent-tools/openiddict.md"
+                    },
+                    {
+                      "text": "Security Notes and Known Limits",
+                      "path": "framework/infrastructure/artificial-intelligence/agent-tools/security.md"
+                    }
+                  ]
                 }
               ]
             },
@@ -2684,32 +2718,16 @@
               "path": "modules/agent-tools/installation.md"
             },
             {
-              "text": "Exposing Tools",
-              "path": "modules/agent-tools/exposing-tools.md"
-            },
-            {
               "text": "Tool Policy and Management Page",
               "path": "modules/agent-tools/policy.md"
-            },
-            {
-              "text": "Using Tools from Your Own Chat Client",
-              "path": "modules/agent-tools/chat-clients.md"
-            },
-            {
-              "text": "MCP Endpoint",
-              "path": "modules/agent-tools/mcp.md"
-            },
-            {
-              "text": "OpenIddict Setup",
-              "path": "modules/agent-tools/openiddict.md"
             },
             {
               "text": "AI Management Integration",
               "path": "modules/agent-tools/ai-management.md"
             },
             {
-              "text": "Security Notes and Known Limits",
-              "path": "modules/agent-tools/security.md"
+              "text": "MCP Client Preset",
+              "path": "modules/agent-tools/openiddict-preset.md"
             }
           ]
         },

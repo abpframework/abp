@@ -7,9 +7,7 @@
 
 # Agent Tools: Using Tools from Your Own Chat Client
 
-> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this module.
-
-The tools are [Microsoft.Extensions.AI](../../framework/infrastructure/artificial-intelligence/microsoft-extensions-ai.md) `AIFunction`s, so any `IChatClient` can use them. Your code runs in the host that runs the application services (it needs `AgentToolsAspNetCoreModule`, see [Installation](./installation.md)).
+The tools are [Microsoft.Extensions.AI](../microsoft-extensions-ai.md) `AIFunction`s, so any `IChatClient` can use them. Your code runs in the host that runs the application services (it needs the `Volo.Abp.AgentTools.AspNetCore` package, module class `AbpAgentToolsAspNetCoreModule`; see [First Steps](./index.md#first-steps)). A class library that only consumes the tools can depend on `Volo.Abp.AgentTools` (`AbpAgentToolsModule`), which has no MVC dependency.
 
 ## Getting the Current User's Tools
 
@@ -46,8 +44,8 @@ This service answers a question with the current user's read tools. The `IChatCl
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.AI;
+using Volo.Abp.AgentTools;
 using Volo.Abp.DependencyInjection;
-using Volo.AgentTools;
 
 namespace MyProjectName.Chat;
 
@@ -82,9 +80,9 @@ public class BookAssistant : ITransientDependency
 }
 ```
 
-The tools run as the user and tenant that are current when the model calls them, so call `AskAsync` in the request of the signed-in user. See [Microsoft.Extensions.AI](../../framework/infrastructure/artificial-intelligence/microsoft-extensions-ai.md) for configuring the `IChatClient`.
+The tools run as the user and tenant that are current when the model calls them, so call `AskAsync` in the request of the signed-in user. See [Microsoft.Extensions.AI](../microsoft-extensions-ai.md) for configuring the `IChatClient`.
 
-> Do not expose a class like this as an application service that the catalogue includes: it would become a tool itself. Keep it out of the included remote services, or mark it with `[DisableAgentTool]`.
+> Do not expose a class like this as an application service that the catalog includes: it would become a tool itself. Keep it out of the included remote services, or mark it with `[DisableAgentTool]`.
 
 ## Approvals
 
@@ -117,6 +115,8 @@ if (requests.Count > 0)
 }
 #pragma warning restore MEAI001
 ```
+
+In Microsoft.Extensions.AI 10.4 and later, the type is `ToolApprovalRequestContent`, and `(FunctionCallContent)request.ToolCall` replaces `request.FunctionCall`.
 
 `AskTheUserAsync` stands for your own UI. Setting `SupportsApproval = true` is a promise that your client asks a human for these tools; the module cannot verify it.
 
@@ -196,4 +196,4 @@ context.Services.AddTransient<IAgentToolCallObserver, LoggingAgentToolCallObserv
 
 The record has `ToolName`, `Arguments` (JSON, with sensitive values redacted), `Succeeded`, `ErrorType`, `ErrorCode`, `ErrorMessage`, `StartTime`, `Duration`, `UserId`, `UserName`, `TenantId`, `ClientId` and `ClientName`. An observer that throws is logged and never breaks the call.
 
-When an audit log scope is active (it is in HTTP requests), the invoker also adds the comment `Agent tool <name> (client: <client id>; <client name>)` to the [audit log](../../framework/infrastructure/audit-logging.md).
+When an audit log scope is active (it is in HTTP requests), the invoker also adds the comment `Agent tool <name> (client: <client id>; <client name>)` to the [audit log](../../audit-logging.md).

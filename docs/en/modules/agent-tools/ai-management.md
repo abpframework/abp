@@ -5,25 +5,25 @@
 }
 ```
 
-# Agent Tools: AI Management Integration
+# Agent Tools: AI Management Integration (Pro)
 
 > You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this module.
 
-The `Volo.AIManagement.AgentTools` package connects Agent Tools with the [AI Management module](../ai-management/index.md). It does two things:
+The `Volo.AIManagement.AgentTools` package connects [Agent Tools](../../framework/infrastructure/artificial-intelligence/agent-tools/index.md) with the [AI Management module](../ai-management/index.md). It does two things:
 
-- It adds the signed-in user's Agent Tools tools to AI Management chat, for the workspaces you opt in. Each call is permission-checked, tenant-scoped, audited and subject to the [tool policy](./policy.md), as everywhere else.
-- It governs the MCP tools attached to AI Management workspaces: an optional permission per MCP server, and a [call record](./chat-clients.md#observing-calls) for every call.
+- It adds the signed-in user's agent tools to AI Management chat, for the workspaces you opt in. Each call is permission-checked, tenant-scoped, audited and subject to the [tool policy](../../framework/infrastructure/artificial-intelligence/agent-tools/policy.md), as everywhere else.
+- It governs the MCP tools attached to AI Management workspaces: an optional permission per MCP server, and a [call record](../../framework/infrastructure/artificial-intelligence/agent-tools/chat-clients.md#observing-calls) for every call.
 
 Without the package, AI Management behaves as before.
 
 ## Installation
 
-Add the `Volo.AIManagement.AgentTools` package to the host that runs AI Management's chat, and depend on its module. The Agent Tools runtime must be in the same process, because the tools are called in-process as the current user in the current tenant:
+Add the `Volo.AIManagement.AgentTools` package to the host that runs AI Management's chat, and depend on its module. The Agent Tools runtime (the open source package `Volo.Abp.AgentTools.AspNetCore`) must be in the same process, because the tools are called in-process as the current user in the current tenant:
 
 ```csharp
 [DependsOn(
     typeof(AIManagementAgentToolsModule),
-    typeof(AgentToolsAspNetCoreModule) // the Agent Tools runtime
+    typeof(AbpAgentToolsAspNetCoreModule) // the Agent Tools runtime
 )]
 public class MyProjectNameHttpApiHostModule : AbpModule
 {
@@ -43,6 +43,8 @@ public class MyProjectNameHttpApiHostModule : AbpModule
 ```
 
 When a chat turn needs Agent Tools tools and the runtime is not loaded, the turn fails with an exception that names the missing module.
+
+The package does not need the other packages of the Agent Tools module. Without them, the policy of the tools comes from the [configuration](../../framework/infrastructure/artificial-intelligence/agent-tools/policy.md#configuration) and the code defaults; with them, also from the stored [host and tenant values](./policy.md#defaults-and-inheritance).
 
 ## Options
 
@@ -64,7 +66,7 @@ Configure<AIManagementAgentToolsOptions>(options =>
 
 ## Read-Only in Chat
 
-AI Management's chat UIs have no approval step for these tools yet. So the bridge never offers a tool that is disabled or requires approval: by default the chat gets the read tools only. To offer a write tool in chat, turn its **Requires approval** switch off on the [management page](./policy.md#management-page), or use `[AgentTool(RequiresApproval = false)]`. The same tools then become available over [MCP](./mcp.md) too.
+AI Management's chat UIs have no approval step for these tools yet. So the bridge never offers a tool that is disabled or requires approval: by default the chat gets the read tools only. To offer a write tool in chat, turn its **Requires approval** switch off on the [management page](./policy.md#management-page), set `RequiresApproval` to `false` in the [configuration](../../framework/infrastructure/artificial-intelligence/agent-tools/policy.md#configuration), or use `[AgentTool(RequiresApproval = false)]`. The same tools then become available over [MCP](../../framework/infrastructure/artificial-intelligence/agent-tools/mcp.md) too.
 
 Other rules:
 
@@ -108,7 +110,7 @@ Configure<AIManagementAgentToolsOptions>(options =>
 
 A mistyped id then throws a `FormatException` on the first chat turn, instead of silently not applying. Find a server's id in the AI Management MCP server list or its API.
 
-A turn without a user is not granted any permission, so a permission on every MCP server also keeps anonymous turns away from MCP tools.
+An anonymous turn is not granted any permission, so a permission on every MCP server also keeps anonymous turns away from MCP tools. A turn with a client credentials token has only the permissions granted to the client.
 
 ## Not Covered
 

@@ -7,9 +7,7 @@
 
 # Agent Tools: Exposing Tools
 
-> You must have an [ABP Team or a higher license](https://abp.io/pricing) to use this module.
-
-A tool is one HTTP API action of your application. The module reads the actions from ABP's API description model (the model that conventional controllers and [client proxy generation](../../framework/api-development/dynamic-csharp-clients.md) use), and calls each one in-process through its application service interface. Exposure is opt-in: with nothing included the catalogue is empty.
+The `Volo.Abp.AgentTools.AspNetCore` package (module class `AbpAgentToolsAspNetCoreModule`) turns HTTP API actions of your application into tools; see [First Steps](./index.md#first-steps) to install it. A tool is one action. The module reads the actions from ABP's API description model (the model that conventional controllers and [client proxies](../../../api-development/dynamic-csharp-clients.md) use), and calls each one in-process through its application service interface. Exposure is opt-in: with nothing included the catalog is empty.
 
 ## Choosing What to Expose
 
@@ -38,20 +36,21 @@ An action is a candidate when any include matches. A match in `ExcludedServiceTy
 | `FailOnInvalidSchema` | `false` | A tool whose input schema fails validation makes startup fail instead of being left out with an error log. |
 | `AdditionalSensitiveArgumentNames` | empty | Extra name parts whose argument values are redacted in logs and call records (see [Security Notes](./security.md#redaction)). |
 
-The catalogue is built once, at application startup. `MaxTools` fails fast with an `AbpException` that gives the number of included actions. Narrow the includes, or exclude services, rather than raising the limit: models choose tools less reliably from very large lists.
+The catalog is built once, at application startup. `MaxTools` fails fast with an `AbpException` that gives the number of included actions. Narrow the includes, or exclude services, rather than raising the limit: models choose tools less reliably from very large lists.
 
 ### What Is Never Exposed
 
 - Anonymous actions: `[AllowAnonymous]` on the interface method, the controller action, the implementation method or the implementation class.
 - Integration services (`[IntegrationService]`).
 - Actions with non-JSON input: form binding, file uploads, `Stream`, `IRemoteStreamContent` and `IFormFile`, also as a property of the input class.
+- Actions with a parameter from services or from a header (`[FromServices]`, `[FromKeyedServices]` or `[FromHeader]`), or with a `[FromHeader]` property in a query DTO. Model binders and custom binding sources are no reason to skip an action (see [Security Notes](./security.md#discovery-and-schemas)).
 - Actions that return a stream, a file or an `IActionResult`.
 - Methods, classes and interfaces marked `[DisableAgentTool]`.
 - Controller actions without an application service interface. A hand-written controller is exposed through the application service interface it implements.
 - Service interfaces that are not registered in dependency injection or resolve to a controller.
 - Services with `[RemoteService(false)]`: they are not in the API description model.
 
-Included actions that are skipped are listed in `IAgentToolCatalog.Skipped` with the reason, and logged when the catalogue is built.
+Included actions that are skipped are listed in `IAgentToolCatalog.Skipped` with the reason, and logged when the catalog is built.
 
 ## Names
 
@@ -59,7 +58,7 @@ Included actions that are skipped are listed in `IAgentToolCatalog.Skipped` with
 - Overloads in one controller get the suffixes `_2`, `_3`, ... in interface declaration order.
 - Names are at most 64 characters.
 - `[AgentTool(Name = "...")]` sets the name. It must match `^[A-Za-z0-9_-]{1,64}$`.
-- Two tools with the same name make the application fail at startup, with a message that names both. Rename one with `[AgentTool(Name = ...)]` or exclude it.
+- Names are unique without case. Two tools with the same name, or with names that differ only by case, make the application fail at startup, with a message that names both. Rename one with `[AgentTool(Name = ...)]` or exclude it.
 
 ## Descriptions
 
@@ -84,9 +83,11 @@ The HTTP verb decides a tool's kind, its annotations and whether it requires app
 | PATCH | `Write` | no | no | no | yes |
 | DELETE | `Destructive` | no | yes | yes | yes |
 
-The [tool policy](./policy.md) can change whether a tool is enabled and whether it requires approval, per host and per tenant.
+The [tool policy](./policy.md) can change whether a tool is enabled and whether it requires approval.
 
 ## Attributes
+
+The attributes are in the `Volo.Abp.AgentTools.Abstractions` package (module class `AbpAgentToolsAbstractionsModule`, namespace `Volo.Abp.AgentTools`), which has no ASP.NET Core dependency. Add it to the project that defines the application service interfaces (`{ProjectName}.Application.Contracts`).
 
 ```csharp
 public interface IBookAppService : IApplicationService
@@ -104,7 +105,7 @@ public interface IBookAppService : IApplicationService
 
 ### AgentTool
 
-`[AgentTool]` on a method overrides what the catalogue derives. Its properties are `Name`, `Description`, `RequiresApproval`, `ReadOnly`, `Destructive` and `Idempotent`. A property that is not set keeps the derived value.
+`[AgentTool]` on a method overrides what the catalog derives. Its properties are `Name`, `Description`, `RequiresApproval`, `ReadOnly`, `Destructive` and `Idempotent`. A property that is not set keeps the derived value.
 
 The attribute can be on the interface method, the controller method or the implementation method. The values are merged per property: the implementation method wins over the controller method, which wins over the interface method.
 
@@ -114,13 +115,11 @@ The attribute can be on the interface method, the controller method or the imple
 
 ### DisableAgentTool
 
-`[DisableAgentTool]` on a method, class or interface removes it from the catalogue, whatever the options include. It is checked on the controller, the service interface, the implementation class and their methods.
-
-The module's own `IAgentToolPolicyAppService` carries it, so an agent can never change its own tool policy.
+`[DisableAgentTool]` on a method, class or interface removes it from the catalog, whatever the options include. It is checked on the controller, the service interface, the implementation class and their methods.
 
 ## Input Schemas
 
-Each tool has one JSON schema for its input, built from the interface method's parameters with camelCase names. Chat clients, the MCP tool list and the management page get the same schema.
+Each tool has one JSON schema for its input, built from the interface method's parameters with camelCase names. Chat clients and the MCP tool list get the same schema.
 
 - **Method parameters** are required when they have no default value.
 - **DTO properties** (also in nested objects and collection items) are required when they have `[Required]`, the C# `required` modifier or `[JsonRequired]`, or are bound to a constructor parameter without a default (records).
@@ -134,9 +133,9 @@ Each tool has one JSON schema for its input, built from the interface method's p
 
 ### Schema Validation
 
-One invalid schema makes an AI provider reject every request that carries it. So the catalogue checks each schema when it is built, against the subset that providers accept: valid `type` values, `required` names that exist, numeric bounds that are finite numbers, patterns that parse as .NET regular expressions, and local `$ref`s that resolve.
+One invalid schema makes an AI provider reject every request that carries it. So the catalog checks each schema when it is built, against the subset that providers accept: valid `type` values, `required` names that exist, numeric bounds that are finite numbers, patterns that parse as .NET regular expressions, and local `$ref`s that resolve.
 
-A tool that fails is left out of the catalogue, so neither chat, MCP nor the management page offer it. An error log names the tool and the reason, and the tool is listed in `IAgentToolCatalog.Skipped`. Set `FailOnInvalidSchema` to `true` to make startup fail instead:
+A tool that fails is left out of the catalog, so neither chat clients nor MCP offer it. An error log names the tool and the reason, and the tool is listed in `IAgentToolCatalog.Skipped`. Set `FailOnInvalidSchema` to `true` to make startup fail instead:
 
 ```csharp
 Configure<AbpAgentToolOptions>(options =>
@@ -151,7 +150,7 @@ Providers use ECMAScript-like regular expressions. Keep agent-facing patterns to
 
 An agent that changes one field of an entity sends only that field. With a full-replace input DTO (every property required, as a `CreateUpdate...Dto` usually is), the other fields arrive empty and the update clears them.
 
-When the catalogue is built, a `PUT` or `PATCH` tool whose input object has no optional property besides `id` and `concurrencyStamp` logs a warning that names the tool.
+When the catalog is built, a `PUT` or `PATCH` tool whose input object has no optional property besides `id` and `concurrencyStamp` logs a warning that names the tool.
 
 Use a patch-style DTO for agent tools instead: nullable properties, where `null` means "leave unchanged".
 
